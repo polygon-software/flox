@@ -4,8 +4,6 @@ services:
   backend:
     build:
       context: .
-      target: development
-    command: yarn start:dev
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
