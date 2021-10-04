@@ -1,35 +1,38 @@
 version: '3.7'
 
 services:
-  backend:
+  main:
+    container_name: main
     build:
       context: .
+      target: development
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - 8080:3000
+      - ${SERVER_PORT}:${SERVER_PORT}
+    command: yarn start:dev
+    env_file:
+      - .env
     networks:
       - webnet
     depends_on:
-      - db
-
-  db:
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: my_secret_password
-      MYSQL_DATABASE: app_db
-      MYSQL_USER: db_user
-      MYSQL_PASSWORD: db_user_pass
-    ports:
-      - 8181:3306
-    volumes:
-      - dbdata:/var/lib/mysql
+      - mysql
+  mysql:
+    container_name: mysql
+    image: mysql:8
     networks:
       - webnet
-
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER:  ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - dbdata:/var/lib/mysql
 networks:
   webnet:
-
 volumes:
   dbdata:
