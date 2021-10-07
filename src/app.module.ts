@@ -13,7 +13,7 @@ import { UsersModule } from './users/users.module';
       typePaths: ['./**/*.graphql'],
       definitions: {
         path: join(process.cwd(), 'src/graphql.ts'), // Auto-generates typescript definitions with AST changes
-        outputAs: 'interface', // Alternative: 'class
+        outputAs: 'class', // Alternative: 'interface'
       },
       //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
     }),
