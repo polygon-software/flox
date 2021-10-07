@@ -3,13 +3,12 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      playground: true, // TODO config stuff goes here
+      playground: true,
       debug: true,
       typePaths: ['./**/*.graphql'],
       definitions: {
@@ -18,7 +17,6 @@ import { UsersModule } from './users/users.module';
       },
       //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
     }),
-    UserModule,
     UsersModule,
   ],
   controllers: [AppController],
