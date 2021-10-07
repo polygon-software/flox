@@ -1,4 +1,5 @@
-type User {
+type User{
+  id: Int!
   age: Int
   name: String
 }
