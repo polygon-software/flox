@@ -821,10 +821,10 @@
     "jsonc-parser" "3.0.0"
     "pluralize" "8.0.0"
 
-"@nestjs/testing@^8.0.0":
-  "integrity" "sha512-idFhNESD90jUjDfvePgUS5uJzSXEYRhA8xfpv3snWMr3/4ouR5m+o7Wb3Zr+kDbU0Pi+SemKDLv9QoFWatHDeA=="
-  "resolved" "https://registry.npmjs.org/@nestjs/testing/-/testing-8.0.9.tgz"
-  "version" "8.0.9"
+"@nestjs/testing@^8.0.11":
+  "integrity" "sha512-BYQFsCktbrT/kFNl2uNoUgmNshKxPJLJG2/J+os/+stfX7yeV573I1uo1m4DEPod71cRxVFvxc3Ehc72rOyPmw=="
+  "resolved" "https://registry.npmjs.org/@nestjs/testing/-/testing-8.0.11.tgz"
+  "version" "8.0.11"
   dependencies:
     "optional" "0.1.4"
     "tslib" "2.3.1"
