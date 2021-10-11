@@ -2,9 +2,9 @@
   "type": "mysql",
   "host": "localhost",
   "port": 3306,
-  "username": "root",
-  "password": "root",
-  "database": "my_nestjs_project",
+  "username": "db_user",
+  "password": "db_user_pass",
+  "database": "app_db",
   "entities": ["src/**/**.entity{.ts,.js}"],
   "synchronize": true
 }
