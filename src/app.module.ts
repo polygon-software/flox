@@ -9,8 +9,8 @@ import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault()], // Use Apollo Sandbox instead of graphql-playground
+      playground: true,
+      //plugins: [ApolloServerPluginLandingPageLocalDefault()], // Use Apollo Sandbox instead of graphql-playground
       debug: true,
       typePaths: ['./**/*.graphql'],
       definitions: {
