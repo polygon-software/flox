@@ -2,47 +2,35 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import {GetUserArgs} from "./dto/args/get-user.args";
-import {User} from "../graphql";
-import { v4 as uuidv4 } from "uuid"
 import {GetUsersArgs} from "./dto/args/get-users.args";
 import {DeleteUserInput} from "./dto/input/delete-user.input";
+import {Repository, UpdateResult} from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import {User} from "./entities/user.entity";
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [];
 
-  create(createUserInput: CreateUserInput): User {
-    const user: User = {
-      userId: uuidv4(),
-      ...createUserInput
-    }
+  constructor(@InjectRepository(User) private usersRepository: Repository<User>) { }
 
-    this.users.push(user);
-    return user;
+  async create(createUserInput: CreateUserInput): Promise<User> {
+    return this.usersRepository.create(createUserInput);
   }
 
-  getUsers(getUsersArgs: GetUsersArgs) {
-    return getUsersArgs.userIds.map(userId => this.getUser({ userId }))
+  async getUsers(getUsersArgs: GetUsersArgs): Promise<User[]>  {
+    return await this.usersRepository.findByIds(getUsersArgs.userIds)
   }
 
-  getUser(getUserArgs: GetUserArgs) {
-    return this.users.find(user => user.userId === getUserArgs.userId);
+  async getUser(getUserArgs: GetUserArgs): Promise<User> {
+    return await this.usersRepository.findOne(getUserArgs.userId)
   }
 
-  update(updateUserInput: UpdateUserInput): User {
-    const user = this.users.find(user => user.userId  === updateUserInput.userId)
-
-    // Update given data
-    Object.assign(user, updateUserInput)
-
-    return user;
+  async update(updateUserInput: UpdateUserInput): Promise<UpdateResult> {
+    return await this.usersRepository.update(updateUserInput.userId, updateUserInput);
   }
 
-  remove(deleteUserInput: DeleteUserInput) {
-    const user_index = this.users.findIndex(user => user.userId === deleteUserInput.userId)
-    const user = this.users[user_index];
-    this.users.splice(user_index);
-
-    return user;
+  async remove(deleteUserInput: DeleteUserInput): Promise<User> {
+    const user = await this.usersRepository.findOne(deleteUserInput.userId)
+    return await this.usersRepository.remove(user)
   }
 }
