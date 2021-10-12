@@ -1,23 +1,23 @@
 version: '3.7'
 
 services:
-  main:
-    container_name: main
-    build:
-      context: .
-      target: development
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
-    command: yarn start:dev
-    env_file:
-      - .env
-    networks:
-      - webnet
-    depends_on:
-      - mysql
+#  main:
+#    container_name: main
+#    build:
+#      context: .
+#      target: development
+#    volumes:
+#      - .:/usr/src/app
+#      - /usr/src/app/node_modules
+#    ports:
+#      - ${SERVER_PORT}:${SERVER_PORT}
+#    command: yarn start:dev
+#    env_file:
+#      - .env
+#    networks:
+#      - webnet
+#    depends_on:
+#      - mysql
   mysql:
     container_name: mysql
     image: mysql:8
