@@ -29,7 +29,7 @@ services:
       MYSQL_USER:  ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 3306:3306
+      - ${DB_PORT}:3306
     volumes:
       - dbdata:/var/lib/mysql
 networks:
