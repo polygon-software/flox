@@ -34,7 +34,7 @@
     "fastify": "^3.22.0",
     "graphql": "^15.6.1",
     "graphql-voyager": "^1.0.0-rc.31",
-    "mysql": "^2.18.1",
+    "mysql2": "^2.3.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",

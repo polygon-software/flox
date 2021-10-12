@@ -5,6 +5,7 @@
   "username": "db_user",
   "password": "db_user_pass",
   "database": "app_db",
-  "entities": ["src/**/**.entity{.ts,.js}"],
-  "synchronize": true
+  "entities": ["dist/**/**.entity{.ts,.js}"],
+  "synchronize": true,
+  "encrypt": false
 }

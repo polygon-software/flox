@@ -4,8 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
-import { GlobiModule } from './globi/globi.module';
-import {TypeOrmModule} from "@nestjs/typeorm";
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -19,7 +18,6 @@ import {TypeOrmModule} from "@nestjs/typeorm";
     }),
     TypeOrmModule.forRoot(),
     UsersModule,
-    GlobiModule,
   ],
   controllers: [AppController],
   providers: [AppService],
