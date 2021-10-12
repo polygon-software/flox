@@ -20,6 +20,6 @@ async function bootstrap() {
   // to the same folder as your main bundle or use workerURI property to specify other path.
   // Not sure if this is actually relevant, TODO test
   const configService: ConfigService = app.get(ConfigService);
-  await app.listen(configService.get('server.port'));
+  await app.listen(configService.get('server.port'), '::');
 }
 bootstrap();
