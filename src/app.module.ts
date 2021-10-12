@@ -3,7 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { join } from 'path';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -17,7 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
     }),
     TypeOrmModule.forRoot(),
-    UsersModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
