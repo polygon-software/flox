@@ -1,9 +1,9 @@
-import { ArgsType, Field } from '@nestjs/graphql';
+import { ArgsType, Field, ID } from '@nestjs/graphql';
 import { IsArray } from 'class-validator';
 
 @ArgsType()
 export class GetUsersArgs {
-  @Field(() => [String])
+  @Field(() => [ID], { nullable: true })
   @IsArray()
   userIds: string[];
 }
