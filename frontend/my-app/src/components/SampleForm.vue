@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { useMutation } from '@vue/apollo-composable'
-import {ADD_USER}  from "@/data/MUTATIONS";
+import {CREATE_USER}  from "@/data/MUTATIONS";
 import { ref } from 'vue'
 
 // "ref" needed to pass by reference / make reactive
@@ -40,16 +40,15 @@ let name = ref(null);
 let age = ref(null);
 
 // "Create" Mutation
-const { mutate: createUser } = useMutation(ADD_USER)
+const { mutate: createUser } = useMutation(CREATE_USER)
 
 // Upon submit, send GraphQL mutation
 function onSubmit () {
   console.log("SUBMIT with data", name.value, age.value)
   createUser({
       name: name.value,
-      age: age.value
-  }
-  )
+      age: Number(age.value)
+  })
 }
 
 
