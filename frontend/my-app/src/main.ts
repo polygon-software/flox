@@ -15,7 +15,9 @@ const httpLink = createHttpLink({
 const apolloClient = new ApolloClient({
     link: httpLink,
     cache: new InMemoryCache({
-        addTypename: false // TODO verify caching... setting to "true" breaks mutations!
+        addTypename: false // TODO verify caching auto-updates objects on change...
+        // TODO  But setting to "true" breaks mutations! --> ideally only enable for non-mutations?
+        // TODO see https://github.com/apollographql/apollo-client/issues/1913
     })
 })
 
