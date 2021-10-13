@@ -11,24 +11,33 @@
       <q-page class="flex flex-center column">
         <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
         <div class="row">
-          <TestTable/>
-          <TestForm/>
+          <SampleTable/>
+<!--          <TestForm/>-->
         </div>
       </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
-<script>
-import TestTable from './components/TestTable.vue'
-import TestForm from './components/TestForm.vue'
+<script lang="ts">
+import { defineComponent } from 'vue';
+import SampleTable from "./components/SampleTable.vue"
 
-export default {
-  name: 'LayoutDefault',
-
+export default defineComponent({
+  name: 'App',
   components: {
-    TestTable,
-    TestForm,
-  },
-}
+    SampleTable
+  }
+});
 </script>
+
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
