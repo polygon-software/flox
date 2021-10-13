@@ -12,24 +12,15 @@
 
 <script setup lang="ts">
 import {useQuery} from "@vue/apollo-composable";
-import gql from "graphql-tag";
+import { ALL_USERS } from "@/data/QUERIES";
 
-const { result } = useQuery(gql`
-      query{
-        allUsers{
-          id
-          name
-          age
-        }
-      }
-    `)
+const { result } = useQuery(ALL_USERS)
 
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
-
 
 </script>
 

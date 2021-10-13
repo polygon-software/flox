@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-grey-5">
+  <q-layout view="lHh Lpr lFf" class="bg-grey-4">
     <q-header class="row bg-white shadow-5">
       <img
           alt="Polygon Software"
@@ -12,7 +12,7 @@
         <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
         <div class="row">
           <SampleTable/>
-<!--          <TestForm/>-->
+          <SampleForm/>
         </div>
       </q-page>
     </q-page-container>
@@ -22,11 +22,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import SampleTable from "./components/SampleTable.vue"
+import SampleForm from "./components/SampleForm.vue"
 
 export default defineComponent({
   name: 'App',
   components: {
-    SampleTable
+    SampleTable,
+    SampleForm
   }
 });
 </script>
