@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
 import gql from "graphql-tag";
+import {defineComponent} from "vue";
 
 const result = useQuery(gql`
       query{
@@ -29,6 +30,11 @@ const columns: [
   { name: 'name', required: true, label: 'Name', field: 'name', align: 'left', sortable: true },
   { name: 'age', align: 'center', label: 'Age (years)', field: 'age', sortable: true },
 ];
+
+
+export default defineComponent({
+  name: 'TestTable',
+});
 </script>
 
 <style scoped>
