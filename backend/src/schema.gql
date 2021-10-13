@@ -18,6 +18,7 @@ type Mutation {
 }
 
 type Query {
+  allUsers: [User!]!
   user(userId: ID!): User!
   users(userIds: [ID!]): [User!]!
 }

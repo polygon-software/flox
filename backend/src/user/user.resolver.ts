@@ -16,6 +16,11 @@ export class UserResolver {
     return await this.usersService.getUsers(getUsersArgs);
   }
 
+  @Query(() => [User], { name: 'allUsers' })
+  async getAllUsers(): Promise<User[]> {
+    return await this.usersService.getAllUsers();
+  }
+
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return await this.usersService.getUser(getUserArgs);
