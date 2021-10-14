@@ -3,7 +3,7 @@
     <q-table
         v-if="result && result.allUsers"
        table-header-class="bg-grey-2"
-       title="List of users"
+       title="List of users (with cache)"
        :rows="result.allUsers"
        :columns="columns"
        row-key="id"
@@ -58,6 +58,8 @@ function onDelete(){
   console.log("Delete", selected.value[0])
   deleteUser({
     id: selected.value[0].id
+  }).then(() => {
+    selected.value = []
   })
 }
 
