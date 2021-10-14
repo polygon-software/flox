@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "sync": "npx cap sync",
-    "android": "npx cap run android"
+    "android": "npx cap run android",
+    "ios": "npx cap run ios"
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",
