@@ -11,12 +11,14 @@
     "@apollo/client": "^3.4.16",
     "@quasar/extras": "^1.0.0",
     "@vue/apollo-composable": "^4.0.0-alpha.15",
+    "@vue/test-utils": "^1.2.2",
     "core-js": "^3.6.5",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
     "quasar": "^2.0.0",
     "vue": "^3.0.0",
-    "vue-class-component": "^8.0.0-0"
+    "vue-class-component": "^8.0.0-0",
+    "vue-jest": "^3.0.7"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",
