@@ -65,6 +65,9 @@
     "tsconfig-paths": "^3.10.1",
     "typescript": "^4.4.3"
   },
+  "babel": {
+    "presets": ["@babel/preset-env"]
+  },
   "jest": {
     "moduleFileExtensions": [
       "vue",
@@ -78,7 +81,8 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.{(t|j)s,vue}",
+      "!**/node_modules/**"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
