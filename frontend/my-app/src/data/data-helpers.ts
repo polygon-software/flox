@@ -49,9 +49,12 @@ async function executeMutation(mutationObject: MutationObject, variables: Object
     // Actually execute mutation and handle cache
     const { mutate } = useMutation(mutation, () => ({
         // Get cache and the new or deleted object
-        update: (cache, { data: { change } }) => {
+        update: (cache, { data: changeData }) => {
             affectedQueries.forEach((queryObject) => {
-                console.log("Change:", change)
+
+                // Get actual changed/added/removed object
+                const change = changeData[mutationObject.cacheLocation]
+
                 // Read existing query from cache
                 const data:any = cache.readQuery({ query: queryObject.query })
 
