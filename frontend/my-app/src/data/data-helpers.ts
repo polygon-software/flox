@@ -20,16 +20,20 @@ function executeQuery(queryObject: QueryObject){
 /**
  * Executes a given GraphQL Mutation object, considering cache effects
  * @param {MutationObject} mutationObject
+ * @param {Object} variables
  */
-function executeMutation(mutationObject: MutationObject){
+function executeMutation(mutationObject: MutationObject, variables: Object){
     const mutation =  mutationObject.mutation;
     const tables =  mutationObject.tables;
     const type =  mutationObject.type;
+
+    console.log("Execute:", mutation, tables, type);
 
     const affectedQueries:QueryObject[] = [];
 
     // Find affected queries based on tables for CREATE and DELETE operations
     if(type === MutationTypes.CREATE || type === MutationTypes.DELETE){
+        console.log("Checking for affected!")
         QUERIES.forEach((query) => {
             // If any of the mutation's affected tables are relevant to query, add to list of affected queries
             if(tables.some(t => query.tables.indexOf(t) >= 0)){
@@ -38,8 +42,12 @@ function executeMutation(mutationObject: MutationObject){
         })
     }
 
-    // Execute mutation and handle cache
+    console.log("Affected queries:", affectedQueries)
+
+    // Actually execute mutation and handle cache
     useMutation(mutation, () => ({
+        // Apply variables
+        variables: variables,
         // Get cache and the new or deleted object
         update: (cache, { data: { change } }) => {
             affectedQueries.forEach((queryObject) => {
@@ -48,8 +56,6 @@ function executeMutation(mutationObject: MutationObject){
 
                 // Determine cache location
                 const cacheLocation = queryObject.cacheLocation
-
-                // Add/Remove on cache
                 let newData
 
                 // Case 1: CREATE (adds new object to cache)
@@ -73,4 +79,4 @@ function executeMutation(mutationObject: MutationObject){
 }
 
 
-export {executeQuery}
+export {executeQuery, executeMutation}

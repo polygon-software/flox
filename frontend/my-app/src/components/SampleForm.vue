@@ -31,35 +31,24 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation } from '@vue/apollo-composable'
 import {CREATE_USER}  from "@/data/MUTATIONS";
 import { ref } from 'vue'
-import {ALL_USERS} from "@/data/QUERIES";
+import {executeMutation} from "@/data/data-helpers";
 
 // "ref" needed to pass by reference / make reactive
 let name = ref(null);
 let age = ref(null);
 
-// "Create" Mutation
-const { mutate: createUser } = useMutation(CREATE_USER, () => ({
-  // TODO somewhere else? Generic?
-  update: (cache, { data: { create } }) => {
-    let data = cache.readQuery({ query: ALL_USERS })
-    // Push to cache
-    cache.writeQuery({ query: ALL_USERS, data: {
-        ...data,
-        allUsers: [...data.allUsers, create]
-      }
-    })
-  },
-}))
 
 // Upon submit, send GraphQL mutation
 function onSubmit () {
-  createUser({
+  executeMutation(
+      CREATE_USER,
+      {
       name: name.value,
       age: Number(age.value)
-  })
+      }
+  )
 }
 
 
