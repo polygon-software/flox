@@ -22,4 +22,5 @@ export interface MutationObject {
     mutation: any,          // Actual GraphQL mutation
     tables: string[],       // Affected Tables
     type: MutationTypes     // Type of mutation
+    cacheLocation: string,  // Location in cache (actual GraphQL query name)
 }

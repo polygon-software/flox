@@ -22,7 +22,7 @@ function executeQuery(queryObject: QueryObject){
  * @param {MutationObject} mutationObject
  * @param {Object} variables
  */
-function executeMutation(mutationObject: MutationObject, variables: Object){
+async function executeMutation(mutationObject: MutationObject, variables: Object){
     const mutation =  mutationObject.mutation;
     const tables =  mutationObject.tables;
     const type =  mutationObject.type;
@@ -33,11 +33,13 @@ function executeMutation(mutationObject: MutationObject, variables: Object){
 
     // Find affected queries based on tables for CREATE and DELETE operations
     if(type === MutationTypes.CREATE || type === MutationTypes.DELETE){
-        console.log("Checking for affected!")
+        console.log("Checking for affected queries")
         QUERIES.forEach((query) => {
+            console.log("Checking for query!")
             // If any of the mutation's affected tables are relevant to query, add to list of affected queries
             if(tables.some(t => query.tables.indexOf(t) >= 0)){
                 affectedQueries.push(query)
+                console.log("Is affected!")
             }
         })
     }
@@ -45,27 +47,31 @@ function executeMutation(mutationObject: MutationObject, variables: Object){
     console.log("Affected queries:", affectedQueries)
 
     // Actually execute mutation and handle cache
-    useMutation(mutation, () => ({
-        // Apply variables
-        variables: variables,
+    const { mutate } = useMutation(mutation, () => ({
         // Get cache and the new or deleted object
         update: (cache, { data: { change } }) => {
             affectedQueries.forEach((queryObject) => {
+                console.log("Change:", change)
                 // Read existing query from cache
                 const data:any = cache.readQuery({ query: queryObject.query })
 
                 // Determine cache location
                 const cacheLocation = queryObject.cacheLocation
+                const oldData = data[cacheLocation]
                 let newData
+
+                console.log("old data:", oldData)
 
                 // Case 1: CREATE (adds new object to cache)
                 if(type === MutationTypes.CREATE){
-                    newData = [...data[cacheLocation], change]
+                    newData = [...oldData, change]
                 }
                 // Case 2: DELETE (removes object from cache)
                 else if(type === MutationTypes.DELETE){
-                    newData = data[cacheLocation].filter((dataPoint: any) => dataPoint.id !== change.id)
+                    newData = oldData.filter((dataPoint: any) => dataPoint.id !== change.id)
                 }
+
+                console.log("new data:", newData)
 
                 cache.writeQuery({ query: queryObject.query, data: {
                         ...data,
@@ -76,6 +82,8 @@ function executeMutation(mutationObject: MutationObject, variables: Object){
 
         },
     }))
+
+    await mutate(variables);
 }
 
 
