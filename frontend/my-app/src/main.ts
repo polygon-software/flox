@@ -3,7 +3,7 @@ import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 import {ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client/core";
 import { createApp, provide, h } from 'vue'
-import { DefaultApolloClient } from '@vue/apollo-composable'
+import {DefaultApolloClient, provideApolloClient} from '@vue/apollo-composable'
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
@@ -24,6 +24,7 @@ const apolloClient = new ApolloClient({
 const app = createApp({
     setup () {
         provide(DefaultApolloClient, apolloClient)
+        provideApolloClient(apolloClient)
     },
 
     render: () => h(App),

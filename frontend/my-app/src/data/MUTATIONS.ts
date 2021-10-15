@@ -10,8 +10,9 @@ export const CREATE_USER = {
                 age
             }
         }`,
-    tables: ['users'],
-    type: MutationTypes.CREATE
+    tables: ['user'],
+    type: MutationTypes.CREATE,
+    cacheLocation: 'create'
 }
 
 export const DELETE_USER = gql`
