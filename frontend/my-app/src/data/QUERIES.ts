@@ -10,7 +10,8 @@ export const ALL_USERS = {
             }
         }
         `,
-    tables: ['user']
+    tables: ['user'],
+    cacheLocation: 'allUsers'
 }
 
 
