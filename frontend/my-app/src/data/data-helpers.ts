@@ -14,7 +14,8 @@ function executeQuery(queryObject: QueryObject){
     const query =  queryObject.query;
 
     // Execute query
-    useQuery(query);
+    const { result } = useQuery(query);
+    return result;
 }
 
 /**

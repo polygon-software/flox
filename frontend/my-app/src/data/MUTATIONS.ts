@@ -15,12 +15,16 @@ export const CREATE_USER = {
     cacheLocation: 'create'
 }
 
-export const DELETE_USER = gql`
-    mutation deleteUser($id: ID!){
-        remove (deleteUserInput: {userId: $id}) {
-            id
-        }
-    }
-`
+export const DELETE_USER = {
+    mutation: gql`
+        mutation deleteUser($id: ID!){
+            remove (deleteUserInput: {userId: $id}) {
+                id
+            }
+        }`,
+    tables: ['user'],
+    type: MutationTypes.DELETE,
+    cacheLocation: 'remove'
+}
 
 export const MUTATIONS = [CREATE_USER, DELETE_USER]

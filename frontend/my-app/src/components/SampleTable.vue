@@ -22,12 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import {useMutation, useQuery} from "@vue/apollo-composable";
 import { ALL_USERS } from "@/data/QUERIES";
 import {DELETE_USER} from "@/data/MUTATIONS";
 import {ref} from "vue";
+import {executeMutation, executeQuery} from "@/data/data-helpers";
 
-const { result } = useQuery(ALL_USERS.query)
+const result = executeQuery(ALL_USERS)
 
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
@@ -38,27 +38,16 @@ const columns = [
 // Selection must be an array
 let selected = ref([])
 
-// "Delete" Mutation TODO use func
-const { mutate: deleteUser } = useMutation(DELETE_USER, () => ({
-  update: (cache, { data: { remove } }) => {
-    let data = cache.readQuery({ query: ALL_USERS })
-    // Remove on cache
-    cache.writeQuery({ query: ALL_USERS, data: {
-      ...data,
-        allUsers: data.allUsers.filter(user => user.id !== remove.id)
-      }
-    })
-  },
-}))
-
 /**
  * Deletes the currently selected user
  */
 function onDelete(){
-  console.log("Delete", selected.value[0])
-  deleteUser({
-    id: selected.value[0].id
-  }).then(() => {
+  executeMutation(
+      DELETE_USER,
+      {
+        id: selected.value[0].id
+      }
+  ).then(() => {
     selected.value = []
   })
 }
