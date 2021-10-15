@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import {MutationTypes} from "@/data/data-helpers";
+import {MutationTypes} from "@/data/DATA-DEFINITIONS";
 
 export const CREATE_USER = {
     mutation: gql`
@@ -21,3 +21,5 @@ export const DELETE_USER = gql`
         }
     }
 `
+
+export const MUTATIONS = [CREATE_USER, DELETE_USER]

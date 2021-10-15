@@ -1,9 +1,8 @@
 import {DocumentParameter} from "@vue/apollo-composable/dist/useQuery";
 
 /**
- * TODO docs.
+ * This file contains all data-relevant definitions (GraphQL/Apollo)
  */
-
 
 // Types of mutations
 export enum MutationTypes {
@@ -14,12 +13,13 @@ export enum MutationTypes {
 
 // Interface definitions as used in constant files (e.g. QUERIES.ts, MUTATIONS.ts)
 export interface QueryObject {
-    query: DocumentParameter<any>, // Actual GraphQL query
-    tables: string[],              // Affected Tables
+    query: any,             // Actual GraphQL query
+    tables: string[],       // Affected Tables
+    cacheLocation: string,  // Location in cache (actual GraphQL query name)
 }
 
 export interface MutationObject {
-    mutation: DocumentParameter<any>, // Actual GraphQL mutation
-    tables: string[],              // Affected Tables
-    type: MutationTypes            // Type of mutation
+    mutation: any,          // Actual GraphQL mutation
+    tables: string[],       // Affected Tables
+    type: MutationTypes     // Type of mutation
 }

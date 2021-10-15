@@ -1,8 +1,6 @@
 import {useMutation, useQuery} from "@vue/apollo-composable";
 import {QUERIES} from "@/data/QUERIES";
-import {DocumentParameter} from "@vue/apollo-composable/dist/useQuery";
-import {QueryObject, MutationObject, MutationTypes} from "@/data/DATA-DEFINITIONS";
-import {DELETE_USER} from "@/data/MUTATIONS";
+import {MutationObject, MutationTypes, QueryObject} from "@/data/DATA-DEFINITIONS";
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -28,21 +26,48 @@ function executeMutation(mutationObject: MutationObject){
     const tables =  mutationObject.tables;
     const type =  mutationObject.type;
 
-    // Find affected queries based on tables
-    QUERIES.forEach((QUERY) => {
+    const affectedQueries:QueryObject[] = [];
 
-    })
+    // Find affected queries based on tables for CREATE and DELETE operations
+    if(type === MutationTypes.CREATE || type === MutationTypes.DELETE){
+        QUERIES.forEach((query) => {
+            // If any of the mutation's affected tables are relevant to query, add to list of affected queries
+            if(tables.some(t => query.tables.indexOf(t) >= 0)){
+                affectedQueries.push(query)
+            }
+        })
+    }
 
     // Execute mutation and handle cache
     useMutation(mutation, () => ({
-        update: (cache, { data: { remove } }) => {
-            const data = cache.readQuery({ query: ALL_USERS })
-            // Remove on cache
-            cache.writeQuery({ query: ALL_USERS, data: {
-                    ...data,
-                    allUsers: data.allUsers.filter(user => user.id !== remove.id)
+        // Get cache and the new or deleted object
+        update: (cache, { data: { change } }) => {
+            affectedQueries.forEach((queryObject) => {
+                // Read existing query from cache
+                const data:any = cache.readQuery({ query: queryObject.query })
+
+                // Determine cache location
+                const cacheLocation = queryObject.cacheLocation
+
+                // Add/Remove on cache
+                let newData
+
+                // Case 1: CREATE (adds new object to cache)
+                if(type === MutationTypes.CREATE){
+                    newData = [...data[cacheLocation], change]
                 }
+                // Case 2: DELETE (removes object from cache)
+                else if(type === MutationTypes.DELETE){
+                    newData = data[cacheLocation].filter((dataPoint: any) => dataPoint.id !== change.id)
+                }
+
+                cache.writeQuery({ query: queryObject.query, data: {
+                        ...data,
+                        [cacheLocation]: newData
+                    }
+                })
             })
+
         },
     }))
 }
