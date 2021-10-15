@@ -28,24 +28,21 @@ async function executeMutation(mutationObject: MutationObject, variables: Object
     const tables =  mutationObject.tables;
     const type =  mutationObject.type;
 
-    console.log("Execute:", mutation, tables, type);
+    if([mutation, tables, type, mutationObject.cacheLocation].some(item => item === undefined)){
+        throw new Error("One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'")
+    }
 
     const affectedQueries:QueryObject[] = [];
 
     // Find affected queries based on tables for CREATE and DELETE operations
     if(type === MutationTypes.CREATE || type === MutationTypes.DELETE){
-        console.log("Checking for affected queries")
         QUERIES.forEach((query) => {
-            console.log("Checking for query!")
             // If any of the mutation's affected tables are relevant to query, add to list of affected queries
             if(tables.some(t => query.tables.indexOf(t) >= 0)){
                 affectedQueries.push(query)
-                console.log("Is affected!")
             }
         })
     }
-
-    console.log("Affected queries:", affectedQueries)
 
     // Actually execute mutation and handle cache
     const { mutate } = useMutation(mutation, () => ({
@@ -64,8 +61,6 @@ async function executeMutation(mutationObject: MutationObject, variables: Object
                 const oldData = data[cacheLocation]
                 let newData
 
-                console.log("old data:", oldData)
-
                 // Case 1: CREATE (adds new object to cache)
                 if(type === MutationTypes.CREATE){
                     newData = [...oldData, change]
@@ -74,8 +69,6 @@ async function executeMutation(mutationObject: MutationObject, variables: Object
                 else if(type === MutationTypes.DELETE){
                     newData = oldData.filter((dataPoint: any) => dataPoint.id !== change.id)
                 }
-
-                console.log("new data:", newData)
 
                 cache.writeQuery({ query: queryObject.query, data: {
                         ...data,
@@ -89,6 +82,5 @@ async function executeMutation(mutationObject: MutationObject, variables: Object
 
     await mutate(variables);
 }
-
 
 export {executeQuery, executeMutation}
