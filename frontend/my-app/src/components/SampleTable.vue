@@ -27,7 +27,7 @@ import { ALL_USERS } from "@/data/QUERIES";
 import {DELETE_USER} from "@/data/MUTATIONS";
 import {ref} from "vue";
 
-const { result } = useQuery(ALL_USERS)
+const { result } = useQuery(ALL_USERS.query)
 
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
@@ -38,7 +38,7 @@ const columns = [
 // Selection must be an array
 let selected = ref([])
 
-// "Delete" Mutation
+// "Delete" Mutation TODO use func
 const { mutate: deleteUser } = useMutation(DELETE_USER, () => ({
   update: (cache, { data: { remove } }) => {
     let data = cache.readQuery({ query: ALL_USERS })
