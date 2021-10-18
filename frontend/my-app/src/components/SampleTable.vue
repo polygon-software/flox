@@ -8,9 +8,16 @@
        :columns="columns"
        row-key="id"
        :rows-per-page-options="[10,20, 100]"
+       v-model:selected="selected"
+       selection="single"
     >
       <template v-slot:body="props">
         <q-tr :props="props">
+          <q-td>
+            <q-checkbox
+                v-model="props.selected"
+            />
+          </q-td>
           <q-td key="id" :props="props">
             {{ props.row.id }}
           </q-td>
