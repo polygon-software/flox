@@ -1,0 +1,29 @@
+const AmazonCognitoIdentity = require('amazon-cognito-identity-js')
+
+const poolData = {
+    UserPoolId: "eu-central-1_DGPNZZeuX",
+    ClientId: "***REMOVED***"
+};
+const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
+
+function login(email: string, password: string){
+    const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+        Username: email,
+        Password: password
+    });
+    const userData = {
+        Username: email,
+        Pool: userPool,
+    }
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+    cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: function (result){
+            console.log("access Token: " + result.getAccessToken().getJwtToken())
+            console.log("id Token: " + result.getIdToken().getJwtToken())
+            console.log("refresh Token: " + result.getRefreshToken().getJwtToken())
+        },
+        onFailure: function (err){
+            console.log(err)
+        }
+    })
+}
