@@ -8,9 +8,56 @@
        :columns="columns"
        row-key="id"
        :rows-per-page-options="[10,20, 100]"
-        selection="single"
-        v-model:selected="selected"
-    />
+       v-model:selected="selected"
+       selection="single"
+    >
+      <template v-slot:body="props">
+        <q-tr :props="props">
+          <q-td>
+            <q-checkbox
+                v-model="props.selected"
+            />
+          </q-td>
+          <q-td key="id" :props="props">
+            {{ props.row.id }}
+          </q-td>
+          <q-td key="name" :props="props">
+            {{ props.row.name }}
+            <q-popup-edit
+                :auto-save="true"
+                :model-value="props.row.name"
+                @save="(value) => onUpdate(props.row.id, {name: value})"
+                v-slot="scope"
+            >
+              <q-input
+                  v-model="scope.value"
+                  dense
+                  autofocus
+                  counter
+                  @keyup.enter="scope.set"
+              />
+            </q-popup-edit>
+          </q-td>
+          <q-td key="age" :props="props">
+            {{ props.row.age }}
+            <q-popup-edit
+                :auto-save="true"
+                :model-value="props.row.age"
+                @save="(value) => onUpdate(props.row.id, {age: Number(value)})"
+                v-slot="scope"
+            >
+              <q-input
+                  v-model="scope.value"
+                  dense
+                  autofocus
+                  counter
+                  @keyup.enter="scope.set"
+              />
+            </q-popup-edit>
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
     <q-spinner v-else />
     <q-btn
         label="Löschen"
@@ -23,7 +70,7 @@
 
 <script setup lang="ts">
 import { ALL_USERS } from "@/data/QUERIES";
-import {DELETE_USER} from "@/data/MUTATIONS";
+import {DELETE_USER, UPDATE_USER} from "@/data/MUTATIONS";
 import {ref} from "vue";
 import {executeMutation, executeQuery} from "@/data/data-helpers";
 
@@ -50,6 +97,16 @@ function onDelete(){
   ).then(() => {
     selected.value = []
   })
+}
+
+function onUpdate(id, variables){
+  executeMutation(
+      UPDATE_USER,
+      {
+        id: id,
+        ...variables
+      }
+  )
 }
 
 </script>

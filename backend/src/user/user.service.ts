@@ -20,7 +20,7 @@ export class UserService {
   }
 
   async getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
-    if(getUsersArgs.userIds !== undefined) {
+    if (getUsersArgs.userIds !== undefined) {
       return await this.usersRepository.findByIds(getUsersArgs.userIds);
     } else {
       return await this.usersRepository.find();
@@ -28,7 +28,7 @@ export class UserService {
   }
 
   async getAllUsers(): Promise<User[]> {
-      return await this.usersRepository.find();
+    return await this.usersRepository.find();
   }
 
   async getUser(getUserArgs: GetUserArgs): Promise<User> {
@@ -37,7 +37,7 @@ export class UserService {
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {
     const user = await this.usersRepository.create(updateUserInput);
-    await this.usersRepository.update(updateUserInput.userId, user)
+    await this.usersRepository.update(updateUserInput.userId, user);
     return await this.usersRepository.findOne(updateUserInput.userId);
   }
 
