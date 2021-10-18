@@ -8,7 +8,7 @@ import {MutationObject, MutationTypes, QueryObject} from "@/data/DATA-DEFINITION
 
 /**
  * Executes a given GraphQL Query object
- * @param {QueryObject} queryObject: A query object, containing the 'query' itself and a list of affected tables
+ * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  */
 function executeQuery(queryObject: QueryObject){
     const query =  queryObject.query;
@@ -20,8 +20,8 @@ function executeQuery(queryObject: QueryObject){
 
 /**
  * Executes a given GraphQL Mutation object, considering cache effects
- * @param {MutationObject} mutationObject
- * @param {Object} variables
+ * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
+ * @param {Object} variables - any variables that shall be passed to the mutation
  */
 async function executeMutation(mutationObject: MutationObject, variables: Object){
     const mutation =  mutationObject.mutation;
