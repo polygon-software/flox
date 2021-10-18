@@ -101,16 +101,16 @@ export class AuthenticationService{
      * @param email
      * @param password
      */
-    signUp(username: string, email: string, password: string) {
-        return new Promise((resolve, reject)=>{
+    async signUp(username: string, email: string, password: string) {
+        this.cognitoUser = await new Promise((resolve, reject) => {
             const attributes = [];
             attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: "email", Value: email}))
             // TODO disable requirement on AWS @thommann
             attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: "birthdate", Value: "2000-05-12"}))
-            console.log("userpool:", this.userPool)
-            //@ts-ignore
-            this.userPool.signUp(username, password, attributes, [], (err: Error, result: object)=>{
-                if(err) {
+            console.log(username, password, attributes)
+            //@ts-ignore TODO fix
+            this.userPool.signUp(username, password, attributes, [], (err: Error, result: CognitoUser) => {
+                if (err) {
                     console.log("blubb", err)
                     reject();
                 }
@@ -128,7 +128,7 @@ export class AuthenticationService{
     confirm(code: string,){
         return new Promise((resolve, reject)=>{
             // @ts-ignore
-            this.user.user.confirmRegistration(code, true, (err, result)=>{
+            this.cognitoUser.user.confirmRegistration(code, true, (err, result)=>{
                 if(err){
                     console.error(err)
                     reject()
@@ -147,8 +147,5 @@ export class AuthenticationService{
         this.accessToken = result.getAccessToken()
         this.idToken = result.getIdToken()
         this.accessToken = result.getRefreshToken()
-
-        // TODO test
-        this.cognitoUser = result.user
     }
 }
