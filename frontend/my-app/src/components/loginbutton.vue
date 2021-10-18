@@ -12,10 +12,10 @@
         <q-input v-model="password"/>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat label="Register" v-close-popup @click="async ()=>{user = await signUp(username, email, password); confirm_code = true}"/>
+        <q-btn flat label="Sign Up" v-close-popup @click="onSignup"/>
       </q-card-actions>
       <q-card-actions align="right">
-        <q-btn flat label="login" v-close-popup @click="()=>{user = login(email, password)}"/>
+        <q-btn flat label="Log in" v-close-popup @click="onLogin"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -25,7 +25,7 @@
         <q-input v-model="code"/>
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat label="confirm" v-close-popup @click="()=>{confirm(code, user)}"/>
+        <q-btn flat label="confirm" v-close-popup @click="onConfirmMFACode"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -33,12 +33,12 @@
 </template>
 
 <script setup lang="ts">
-import {login, signUp, confirm} from "@/plugins/auth.ts";
+
 
 import {ref} from "vue";
+import {AuthenticationService} from "@/plugins/auth";
 
-
-let user = ref(null);
+const authenticationService = new AuthenticationService()
 
 let confirm_modal = ref(false);
 let confirm_code = ref(false);
@@ -47,6 +47,17 @@ let username = ref("")
 let password = ref("")
 let code = ref("")
 
+function onLogin(){
+  authenticationService.login(username.value, password.value);
+}
+
+function onSignup(){
+  authenticationService.signUp(username, email, password);
+}
+
+function onConfirmMFACode(){
+  authenticationService.confirm(confirm_code)
+}
 
 </script>
 
