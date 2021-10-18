@@ -1,5 +1,15 @@
 import gql from "graphql-tag";
 
+/**
+ * This file contains all valid GraphQL queries. A query is structure as follows:
+ * - query: the actual GraphQL query. Add __typename to the variables in order for caching to work as expected
+ * (auto-update on edit)
+ * - tables: list of affected tables; when a mutation changes one of these tables, the query is refetched.
+ * - cacheLocation: the actual GraphQL query's name (since cached data will be stored there)
+ *
+ * When adding a new query, also add it to the QUERIES array at the bottom of this file.
+ */
+
 export const ALL_USERS = {
     query: gql`
         query{

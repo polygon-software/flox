@@ -24,9 +24,11 @@ function executeQuery(queryObject: QueryObject){
  * @param {Object} variables - any variables that shall be passed to the mutation
  */
 async function executeMutation(mutationObject: MutationObject, variables: Object){
-    const mutation =  mutationObject.mutation;
-    const tables =  mutationObject.tables;
-    const type =  mutationObject.type;
+    const mutation =  mutationObject.mutation
+    const tables =  mutationObject.tables
+    const type =  mutationObject.type
+
+    console.log("Mutation:", mutation)
 
     if([mutation, tables, type, mutationObject.cacheLocation].some(item => item === undefined)){
         throw new Error("One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'")
