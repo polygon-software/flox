@@ -7,15 +7,12 @@
           style="height: 130px">
       <h4 class="text-black">Hello World! Test Application is running.</h4>
     </q-header>
-    <q-page-container>
-      <q-page class="flex flex-center column">
+
+      <q-page class="flex flex-center">
         <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
-        <div class="row">
           <SampleTable/>
           <SampleForm/>
-        </div>
       </q-page>
-    </q-page-container>
   </q-layout>
 </template>
 
