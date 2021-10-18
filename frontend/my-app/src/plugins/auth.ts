@@ -17,13 +17,25 @@ function login(email: string, password: string){
     }
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
     cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: function (result){
+        onSuccess: function (result: any){
             console.log("access Token: " + result.getAccessToken().getJwtToken())
             console.log("id Token: " + result.getIdToken().getJwtToken())
-            console.log("refresh Token: " + result.getRefreshToken().getJwtToken())
+            console.log("refresh Token: " + result.getRefreshToken())
         },
-        onFailure: function (err){
+        onFailure: function (err: any){
             console.log(err)
         }
     })
 }
+function signUp(email: string, password: string) {
+    return new Promise((resolve, reject)=>{
+        userPool.signUp(email, password, null, null, (err: Error, result: object)=>{
+            if(err) {
+                reject();
+            }
+            resolve(result);
+        })
+    })
+
+}
+export {login, signUp}
