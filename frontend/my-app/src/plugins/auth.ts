@@ -1,4 +1,5 @@
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js')
+import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
+import {CognitoUserAttribute} from "amazon-cognito-identity-js";
 
 const poolData = {
     UserPoolId: "eu-central-1_DGPNZZeuX",
@@ -29,8 +30,9 @@ function login(email: string, password: string){
 }
 function signUp(email: string, password: string) {
     return new Promise((resolve, reject)=>{
-        userPool.signUp(email, password, null, null, (err: Error, result: object)=>{
+        userPool.signUp(email, password, [], [], (err: Error, result: object)=>{
             if(err) {
+                console.log("blubb", err)
                 reject();
             }
             resolve(result);
