@@ -93,7 +93,6 @@ function onDelete(){
 }
 
 function onUpdate(id, variables){
-  console.log("Update user", id, "with", variables)
   executeMutation(
       UPDATE_USER,
       {
