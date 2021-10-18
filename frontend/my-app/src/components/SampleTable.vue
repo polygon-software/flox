@@ -33,12 +33,18 @@
           </q-td>
           <q-td key="age" :props="props">
             {{ props.row.age }}
-            <q-popup-edit :model-value="props.row.age">
+            <q-popup-edit
+                :auto-save="true"
+                :model-value="props.row.age"
+                @save="(value) => onUpdate(props.row.id, {age: Number(value)})"
+                v-slot="scope"
+            >
               <q-input
-                  :model-value="props.row.age"
+                  v-model="scope.value"
                   dense
                   autofocus
                   counter
+                  @keyup.enter="scope.set"
               />
             </q-popup-edit>
           </q-td>

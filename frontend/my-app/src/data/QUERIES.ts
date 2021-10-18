@@ -7,6 +7,7 @@ export const ALL_USERS = {
                 id
                 name
                 age
+                __typename
             }
         }
         `,
