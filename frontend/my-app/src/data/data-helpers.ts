@@ -7,8 +7,8 @@ import {MutationObject, MutationTypes, QueryObject} from "@/data/DATA-DEFINITION
  */
 
 /**
- * Executes a given GraphQL Query object
- * @param {QueryObject} queryObject: A query object, containing the 'query' itself and a list of affected tables
+ * Executes a given GraphQL query object
+ * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  */
 function executeQuery(queryObject: QueryObject){
     const query =  queryObject.query;
@@ -19,14 +19,14 @@ function executeQuery(queryObject: QueryObject){
 }
 
 /**
- * Executes a given GraphQL Mutation object, considering cache effects
- * @param {MutationObject} mutationObject
- * @param {Object} variables
+ * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
+ * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
+ * @param {Object} variables - any variables that shall be passed to the mutation
  */
 async function executeMutation(mutationObject: MutationObject, variables: Object){
-    const mutation =  mutationObject.mutation;
-    const tables =  mutationObject.tables;
-    const type =  mutationObject.type;
+    const mutation =  mutationObject.mutation
+    const tables =  mutationObject.tables
+    const type =  mutationObject.type
 
     if([mutation, tables, type, mutationObject.cacheLocation].some(item => item === undefined)){
         throw new Error("One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'")
@@ -80,6 +80,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Object
         },
     }))
 
+    // Execute mutation
     await mutate(variables);
 }
 

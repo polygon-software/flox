@@ -1,5 +1,3 @@
-import {DocumentParameter} from "@vue/apollo-composable/dist/useQuery";
-
 /**
  * This file contains all data-relevant definitions (GraphQL/Apollo)
  */
