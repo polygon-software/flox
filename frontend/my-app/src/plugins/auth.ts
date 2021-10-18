@@ -3,11 +3,11 @@ import {CognitoUserAttribute} from "amazon-cognito-identity-js";
 
 const poolData = {
     UserPoolId: "eu-central-1_DGPNZZeuX",
-    ClientId: "48k1t49g64el9v2m0ojv5dh0p7"
+    ClientId: "16h7i2r4k0nrea6nt2snm5fbag"
 };
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData)
 
-function login(email: string, password: string){
+function login(email: string, password: string, confirm_mfa: boolean, mfa: Function){
     const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
         Username: email,
         Password: password
@@ -17,6 +17,7 @@ function login(email: string, password: string){
         Pool: userPool,
     }
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
     cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: function (result: any){
             console.log("access Token: " + result.getAccessToken().getJwtToken())
@@ -25,12 +26,47 @@ function login(email: string, password: string){
         },
         onFailure: function (err: any){
             console.log(err)
-        }
+        },
+        mfaSetup: function (){
+          // @ts-ignore
+            cognitoUser.associateSoftwareToken(this)
+        },
+        selectMFAType: function(challengeName, challengeParameters) {
+            cognitoUser.sendMFASelectionAnswer("SOFTWARE_TOKEN_MFA", this);
+        },
+
+        totpRequired: function(secretCode) {
+            const challengeAnswer = prompt('Please input the TOTP code.', '');
+            if (typeof challengeAnswer === "string") {
+                cognitoUser.sendMFACode(challengeAnswer, this, 'SOFTWARE_TOKEN_MFA');
+            }
+        },
+
+        mfaRequired: function(codeDeliveryDetails) {
+            const verificationCode = prompt('Please input verification code', '');
+            if (typeof verificationCode === "string") {
+                cognitoUser.sendMFACode(verificationCode, this);
+            }
+        },
+
+        // @ts-ignore
+        associateSecretCode: function(secretCode) {
+            const challengeAnswer = prompt('Please input the TOTP code.', '');
+            if (typeof challengeAnswer === "string") {
+                cognitoUser.verifySoftwareToken(challengeAnswer, 'My TOTP device', this);
+            }
+        },
+
     })
 }
-function signUp(email: string, password: string) {
+
+function signUp(username: string, email: string, password: string) {
     return new Promise((resolve, reject)=>{
-        userPool.signUp(email, password, [], [], (err: Error, result: object)=>{
+        const attributes = [];
+        attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: "email", Value: email}))
+        attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: "birthdate", Value: "2000-05-12"}))
+        // @ts-ignore
+        userPool.signUp(username, password, attributes, [], (err: Error, result: object)=>{
             if(err) {
                 console.log("blubb", err)
                 reject();
@@ -40,4 +76,19 @@ function signUp(email: string, password: string) {
     })
 
 }
-export {login, signUp}
+
+function confirm(code: string, user: AmazonCognitoIdentity.CognitoUser){
+    console.log(typeof user)
+    console.log(user)
+    return new Promise((resolve, reject)=>{
+        // @ts-ignore
+        user.user.confirmRegistration(code, true, (err, result)=>{
+            if(err){
+                console.error(err)
+                reject()
+            }
+            resolve(result)
+        })
+    })
+}
+export {login, signUp, confirm}
