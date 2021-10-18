@@ -19,45 +19,70 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <q-dialog v-model="confirm_code">
-    <q-card>
-      <q-card-section>
-        <q-input v-model="code"/>
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn flat label="confirm" v-close-popup @click="onConfirmMFACode"/>
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
-
 </template>
 
 <script setup lang="ts">
 
-
 import {ref} from "vue";
 import {AuthenticationService} from "@/plugins/auth";
+import {useQuasar} from "quasar";
+
+const $q = useQuasar()
 
 const authenticationService = new AuthenticationService()
 
 let confirm_modal = ref(false);
-let confirm_code = ref(false);
 let email = ref("")
 let username = ref("")
 let password = ref("")
-let code = ref("")
 
-function onLogin(){
-  authenticationService.login(username.value, password.value);
+async function onLogin(){
+  await authenticationService.login(username.value, password.value);
+  $q.dialog({
+    title: '2FA code',
+    message: 'Please enter your e-mail verification code',
+    cancel: true,
+    persistent: true,
+    prompt: {
+      model: '',
+      isValid: val => val.length >= 6,
+      type: 'text'
+    },
+  }).onOk(input => {
+    onConfirmMFACode(input)
+  })
 }
 
-function onSignup(){
-  authenticationService.signUp(username, email, password);
+/**
+ *
+ * @param code {string} - E-mail verification code
+ */
+function onConfirmMFACode(code){
+  console.log("MFA code:", code)
+  authenticationService.confirm(code)
 }
 
-function onConfirmMFACode(){
-  authenticationService.confirm(confirm_code)
+async function onSignup(){
+  await authenticationService.signUp(username.value, email.value, password.value);
+  $q.dialog({
+    title: 'Verification',
+    message: 'Please enter your e-mail verification code',
+    cancel: true,
+    persistent: true,
+    prompt: {
+      model: '',
+      isValid: val => val.length >= 6,
+      type: 'text'
+    },
+  }).onOk(input => {
+    onConfirmMFACode(input)
+  }).onCancel(() => {
+    // TODO handle @thommann
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
 }
+
 
 </script>
 
