@@ -22,6 +22,7 @@ export const UPDATE_USER = {
                 id
                 name
                 age
+                __typename
             }
         }`,
     tables: ['user'],
