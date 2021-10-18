@@ -19,7 +19,7 @@ function executeQuery(queryObject: QueryObject){
 }
 
 /**
- * Executes a given GraphQL mutation object, considering cache effects
+ * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
  * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
  * @param {Object} variables - any variables that shall be passed to the mutation
  */
