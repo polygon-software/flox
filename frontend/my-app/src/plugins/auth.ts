@@ -28,15 +28,18 @@ function login(email: string, password: string, confirm_mfa: boolean, mfa: Funct
             console.log(err)
         },
         mfaSetup: function (){
+            console.log("Set up MFA!")
           // @ts-ignore
             cognitoUser.associateSoftwareToken(this)
         },
         selectMFAType: function(challengeName, challengeParameters) {
+
+            console.log("Select MFA type!")
             cognitoUser.sendMFASelectionAnswer("SOFTWARE_TOKEN_MFA", this);
         },
 
         totpRequired: function(secretCode) {
-            const challengeAnswer = prompt('Please input the TOTP code.', '');
+            const challengeAnswer = prompt('Please input the TOTP code and random garbage.', '');
             if (typeof challengeAnswer === "string") {
                 cognitoUser.sendMFACode(challengeAnswer, this, 'SOFTWARE_TOKEN_MFA');
             }
@@ -51,6 +54,7 @@ function login(email: string, password: string, confirm_mfa: boolean, mfa: Funct
 
         // @ts-ignore
         associateSecretCode: function(secretCode) {
+            console.log("issa secret", secretCode)
             const challengeAnswer = prompt('Please input the TOTP code.', '');
             if (typeof challengeAnswer === "string") {
                 cognitoUser.verifySoftwareToken(challengeAnswer, 'My TOTP device', this);
