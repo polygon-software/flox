@@ -12,15 +12,25 @@
       </h5>
     </div>
 
-    <q-btn label="Logout" class="text-primary" flat @click="logout"/>
+    <q-btn
+        v-if="props.loggedIn"
+        label="Logout"
+        class="text-primary"
+        flat
+        @click="logout"
+    />
   </q-header>
 </template>
 
 <script setup lang="ts">
 
-import { inject } from 'vue'
+import { inject, defineProps } from 'vue'
 
 const $authService: any = inject('$authService')
+
+const props = defineProps({
+  loggedIn: Boolean
+})
 
 function logout(){
   $authService.logout();

@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-4">
-    <MenuBar/>
+    <MenuBar :logged-in="loggedIn"/>
     <MainPage v-if="loggedIn"/>
     <LoginPage v-else/>
   </q-layout>
