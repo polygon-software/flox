@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 // import MainPage from "./pages/MainPage"
-import LoginPage from "./pages/LoginPage"
+import LoginPage from "./pages/LoginPage.vue"
 import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/plugins/AuthService";
 import {computed, provide, ref} from "vue";

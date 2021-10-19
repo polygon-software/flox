@@ -46,12 +46,14 @@
 
   // eslint-disable-next-line no-unused-vars
   function show(){
-    dialog.value.show()
+    //@ts-ignore
+    dialog.value?.show()
   }
 
   // eslint-disable-next-line no-unused-vars
   function hide(){
-    dialog.value.hide()
+    //@ts-ignore
+    dialog.value?.hide()
   }
 
   function onOk(){
