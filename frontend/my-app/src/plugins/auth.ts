@@ -12,10 +12,19 @@ export class AuthenticationService{
 
     // AWS User Pool
     userPool: AmazonCognitoIdentity.CognitoUserPool
+
+    // Tokens
     accessToken: CognitoAccessToken|null
     idToken: CognitoIdToken|null
     refreshToken: CognitoRefreshToken|null
+
+    // User
     cognitoUser: AmazonCognitoIdentity.CognitoUser|null
+
+    // Application info
+    appName: String
+
+    // Quasar instance
     $q: any
 
     constructor() {
@@ -32,6 +41,7 @@ export class AuthenticationService{
         this.refreshToken = null
         this.cognitoUser = null
         this.$q = useQuasar()
+        this.appName = process.env.VUE_APP_NAME ?? 'App'
     }
 
     /**
@@ -52,6 +62,9 @@ export class AuthenticationService{
             Username: identifier,
             Pool: this.userPool,
         });
+
+        // Store in local variable
+        this.cognitoUser = cognitoUser
 
         // Execute auth function
         return new Promise((resolve, reject) => {
@@ -176,10 +189,13 @@ export class AuthenticationService{
      * @param secretCode
      */
     showQrCodeDialog(secretCode: string){
+        const username = this.cognitoUser?.getUsername()
+        console.log(this.appName, username)
+        const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
         this.$q.dialog({
             component: QrCodeDialog,
             componentProps: {
-                value: secretCode
+                value: codeUrl
             },
         }).onOk(() => {
             console.log('OK')

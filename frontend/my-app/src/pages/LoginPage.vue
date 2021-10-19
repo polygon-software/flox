@@ -26,10 +26,9 @@ const $q = useQuasar()
 const authenticationService = new AuthenticationService()
 
 async function onLogin({username, password}){
-  console.log("LOGIN with", username, password)
   await authenticationService.login(username, password)
 
-  //TODO
+  //TODO don't do if error...
   $q.dialog({
     title: '2FA code',
     message: 'Please enter your e-mail verification code',
