@@ -47,6 +47,13 @@ export class AuthenticationService{
     }
 
     /**
+     * Checks whether the user is currently logged in
+     */
+    isLoggedIn(){
+        return this.userSession?.isValid() ?? false
+    }
+
+    /**
      * Logs into the AWS user pool using the given data
      * @param identifier {string} - the user's identifier (usually E-mail or username)
      * @param password {string} - the user's password
