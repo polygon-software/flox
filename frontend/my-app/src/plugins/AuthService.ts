@@ -268,7 +268,6 @@ export class AuthenticationService{
      */
     showQrCodeDialog(secretCode: string){
         const username = this.cognitoUser?.getUsername()
-        console.log(this.appName, username)
         const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
         this.$q.dialog({
             component: QrCodeDialog,
@@ -297,16 +296,12 @@ export class AuthenticationService{
                     },
                 });
             })
-        }).onCancel(() => {
-            console.log('Cancel')
-        }).onDismiss(() => {
-            console.log('Called on OK or Cancel')
         })
     }
 
     /**
-     * TODO
-     * @param tokenType
+     * Verifies a given 2FA code
+     * @param tokenType {string} - the type of token to verify
      */
     verify2FACode (tokenType: string) {
         // Verify code
@@ -334,10 +329,11 @@ export class AuthenticationService{
 
     /**
      * When login fails, verify whether it is due to the user not having verified their account
-     * @param error
+     * @param error {Error} - the error that caused the login failure
      */
     loginFailure(error: Error){
         if(error.name === "UserNotConfirmedException"){
+            // Show the e-mail verification dialog again and send a new code
             this.showEmailVerificationDialog(true)
         } else {
             this.showErrorDialog(error)
