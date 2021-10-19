@@ -3,6 +3,7 @@ import {CognitoAccessToken, CognitoIdToken, CognitoRefreshToken} from "amazon-co
 import {CognitoUser, CognitoUserSession} from "amazon-cognito-identity-js";
 import QrCodeDialog from '../components/QrCodeDialog.vue'
 import ChangePasswordForm from "../components/forms/ChangePasswordForm.vue"
+import ResetPasswordForm from "../components/forms/ResetPasswordForm.vue"
 
 /**
  * This class is a service that is used for maintaining authentication state as well as signing up, logging in, etc.
@@ -172,10 +173,49 @@ export class AuthenticationService{
 
     resetPasswordDialog(){
         this.$q.dialog({
-            component: ChangePasswordForm,
-            componentProps: {},
-        }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {})
+            title: 'Reset Password',
+            message: 'Please enter your username',
+            cancel: true,
+            persistent: true,
+            prompt: {
+                model: '',
+                isValid: (val: string) => val.length >= 1,
+                type: 'text'
+            },
+        }).onOk((input: string) => {
+            console.log(input)
+            // setup cognitoUser first
+            this.cognitoUser = new CognitoUser({
+                Username: input,
+                Pool: this.userPool
+            });
+
+            // call forgotPassword on cognitoUser
+            this.cognitoUser.forgotPassword({
+                onSuccess: function(result) {
+                    console.log('call result: ' + result);
+                },
+                onFailure: function(err) {
+                    alert(err);
+                },
+                inputVerificationCode: ()=>{this.selectNewPassword();}
+            });
+        })
     }
+
+    selectNewPassword(){
+        this.$q.dialog({
+            component: ResetPasswordForm,
+            componentProps: {},
+        }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
+            this.cognitoUser?.confirmPassword(verificationCode,passwordNew,{
+                onSuccess: (result)=>{console.log(result)},
+                onFailure: (err) => {console.log(err)}
+            })
+        })
+
+    }
+
     /**
      * Shows a dialog for verifying E-Mail
      * @param renew {?boolean} - whether to generate a new verification code
