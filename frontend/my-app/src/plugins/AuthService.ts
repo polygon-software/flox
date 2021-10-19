@@ -1,7 +1,6 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoAccessToken, CognitoIdToken, CognitoRefreshToken} from "amazon-cognito-auth-js";
 import {CognitoUser, CognitoUserSession} from "amazon-cognito-identity-js";
-import {useQuasar} from "quasar";
 import QrCodeDialog from '../components/QrCodeDialog.vue'
 
 /**
@@ -28,7 +27,10 @@ export class AuthenticationService{
     // Quasar instance
     $q: any
 
-    constructor() {
+    constructor(quasar: any) {
+
+        console.log("init!", quasar)
+
         // Set up user pool
         const poolSettings = {
             UserPoolId: process.env.VUE_APP_USER_POOL_ID,
@@ -42,7 +44,7 @@ export class AuthenticationService{
         this.refreshToken = null
         this.cognitoUser = null
         this.userSession = null
-        this.$q = useQuasar()
+        this.$q = quasar
         this.appName = process.env.VUE_APP_NAME ?? 'App'
     }
 

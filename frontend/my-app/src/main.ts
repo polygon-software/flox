@@ -4,6 +4,8 @@ import quasarUserOptions from './quasar-user-options'
 import {ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client/core";
 import { createApp, provide, h } from 'vue'
 import {DefaultApolloClient, provideApolloClient} from '@vue/apollo-composable'
+import {AuthenticationService} from "@/plugins/AuthService";
+import {useQuasar} from "quasar";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
@@ -21,14 +23,19 @@ const apolloClient = new ApolloClient({
     })
 })
 
+const quasar = useQuasar()
+
 const app = createApp({
     setup () {
         provide(DefaultApolloClient, apolloClient)
         provideApolloClient(apolloClient)
     },
+    provide:{
+        $q: quasar,
+        $authService: new AuthenticationService(quasar)
+    },
 
     render: () => h(App),
 })
-
 
 app.use(Quasar, quasarUserOptions).mount('#app')

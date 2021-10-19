@@ -18,15 +18,13 @@
 <script setup lang="ts">
 import LoginForm from "../components/forms/LoginForm"
 import SignupForm from "../components/forms/SignupForm"
+import { inject } from 'vue'
 
-import {useQuasar} from "quasar";
-import {AuthenticationService} from "@/plugins/auth";
-const $q = useQuasar()
-
-const authenticationService = new AuthenticationService()
+let $authService = inject('$authService')
+let $q = inject('$q')
 
 async function onLogin({username, password}){
-  await authenticationService.login(username, password)
+  await $authService.login(username, password)
 
   //TODO don't throw POST error
   $q.dialog({
@@ -49,7 +47,7 @@ async function onLogin({username, password}){
  * @param code {string} - E-mail verification code
  */
 function onVerifyEmail(code){
-  authenticationService.confirm(code)
+  $authService.confirm(code)
 }
 
 /**
@@ -59,7 +57,7 @@ function onVerifyEmail(code){
  * @param password
  */
 async function onSignup({username, email, password}){
-  await authenticationService.signUp(username, email, password);
+  await $authService.signUp(username, email, password);
   $q.dialog({
     title: 'Verification',
     message: 'Please enter your e-mail verification code',
