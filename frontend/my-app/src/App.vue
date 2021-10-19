@@ -1,14 +1,14 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-4">
     <MenuBar/>
-    <!--  <MainPage/> TODO-->
-    <LoginPage/>
+    <MainPage v-if="loggedIn"/>
+    <LoginPage v-else/>
   </q-layout>
 
 </template>
 
 <script setup lang="ts">
-// import MainPage from "./pages/MainPage"
+import MainPage from "./pages/MainPage"
 import LoginPage from "./pages/LoginPage.vue"
 import MenuBar from "./components/menu/MenuBar.vue"
 import {useQuasar} from "quasar";
