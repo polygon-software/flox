@@ -7,7 +7,8 @@ import ResetPasswordForm from "../components/forms/ResetPasswordForm.vue"
 import {ErrorService} from "@/plugins/ErrorService";
 
 /**
- * This is a service that is used for maintaining authentication state as well as signing up, logging in, etc.
+ * This is a service that is used globally throughout the application for maintaining authentication state as well as
+ * signing up, logging in, logging out, changing passwords, and more.
  */
 
 export class AuthenticationService{
@@ -370,7 +371,7 @@ export class AuthenticationService{
      */
     onFailure(error: Error){
         if(error.name === "UserNotConfirmedException"){
-            // Show the e-mail verification dialog again and send a new code
+            // Show the e-mail verification dialog and send a new code
             this.showEmailVerificationDialog(true)
         } else {
             this.$errorService.showErrorDialog(error)

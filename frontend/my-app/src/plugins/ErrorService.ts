@@ -1,7 +1,7 @@
 import AmazonCognitoIdentity from "amazon-cognito-identity-js";
 
 /**
- * This service is a helper for error handling
+ * This is a service that is used globally throughout the application for error handling
  */
 
 export class ErrorService {
