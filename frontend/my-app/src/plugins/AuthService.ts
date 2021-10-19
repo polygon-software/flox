@@ -119,7 +119,7 @@ export class AuthenticationService{
                 },
 
                 // @ts-ignore
-                associateSecretCode: (secret) => {this.showQrCodeDialog(secret)}
+                associateSecretCode: (secret) => {this.showQRCodeDialog(secret)}
             })
         })
     }
@@ -154,7 +154,7 @@ export class AuthenticationService{
     }
 
     /**
-     * todo @joelbarmettlerUZH
+     * Logs out the currently logged in user (if any)
      */
     logout(){
         this.cognitoUser?.signOut(()=>{
@@ -165,23 +165,25 @@ export class AuthenticationService{
 
 
     /**
-     * todo
+     * Shows a dialog for changing password
      */
-    changePasswordDialog(){
+    showChangePasswordDialog(){
         this.$q.dialog({
             component: ChangePasswordForm,
             componentProps: {},
         }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
             this.cognitoUser?.changePassword(passwordOld,passwordNew, (err, result)=>{
                 if(err){
-                    console.log(err);
+                    this.$errorService.showErrorDialog(err)
                 }
-                console.log(result);
             })
         })
     }
 
-    resetPasswordDialog(){
+    /**
+     * Shows a dialog for requesting password reset
+     */
+    showResetPasswordDialog(){
         this.$q.dialog({
             title: 'Reset Password',
             message: 'Please enter your username',
@@ -193,14 +195,13 @@ export class AuthenticationService{
                 type: 'text'
             },
         }).onOk((input: string) => {
-            console.log(input)
-            // setup cognitoUser first
+            // Set up cognitoUser first
             this.cognitoUser = new CognitoUser({
                 Username: input,
                 Pool: this.userPool
             });
 
-            // call forgotPassword on cognitoUser
+            // Call forgotPassword on cognitoUser
             this.cognitoUser.forgotPassword({
                 onSuccess: function(result) {
                     console.log('call result: ' + result);
@@ -208,12 +209,15 @@ export class AuthenticationService{
                 onFailure: function(err) {
                     alert(err);
                 },
-                inputVerificationCode: ()=>{this.selectNewPassword();}
+                inputVerificationCode: ()=>{this.showResetPasswordFormDialog();}
             });
         })
     }
 
-    selectNewPassword(){
+    /**
+     * Show actual password reset form dialog
+     */
+    showResetPasswordFormDialog(){
         this.$q.dialog({
             component: ResetPasswordForm,
             componentProps: {},
@@ -262,45 +266,10 @@ export class AuthenticationService{
     }
 
     /**
-     * Confirm e-mail verification code
-     * @param code
-     * @param user
-     */
-    async verifyEmail(code: string,): Promise<void>{
-        return new Promise((resolve, reject)=>{
-            // @ts-ignore
-            this.cognitoUser.confirmRegistration(code, true, (err, result)=>{
-                if(err){
-                    console.error(err)
-                    reject()
-                }
-                resolve(result)
-            })
-        })
-    }
-
-    /**
-     * When login succeeds
-     * @param userSession {CognitoUserSession} - the currently active Cognito user session
-     */
-    loginSuccess(userSession: CognitoUserSession){
-        // Store locally
-        this.userSession = userSession;
-
-        // Get & store tokens
-        // @ts-ignore
-        this.accessToken = userSession.getAccessToken()
-        // @ts-ignore
-        this.idToken = userSession.getIdToken()
-        // @ts-ignore
-        this.refreshToken = userSession.getRefreshToken()
-    }
-
-    /**
      * Shows a dialog containing a QR code for setting up two factor authentication
      * @param secretCode {string} - the authenticator code to encode in QR code form
      */
-    showQrCodeDialog(secretCode: string){
+    showQRCodeDialog(secretCode: string){
         const username = this.cognitoUser?.getUsername()
         const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
         this.$q.dialog({
@@ -335,6 +304,24 @@ export class AuthenticationService{
     }
 
     /**
+     * Confirm e-mail verification code
+     * @param code
+     * @param user
+     */
+    async verifyEmail(code: string,): Promise<void>{
+        return new Promise((resolve, reject)=>{
+            // @ts-ignore
+            this.cognitoUser.confirmRegistration(code, true, (err, result)=>{
+                if(err){
+                    console.error(err)
+                    reject()
+                }
+                resolve(result)
+            })
+        })
+    }
+
+    /**
      * Verifies a given 2FA code
      * @param tokenType {string} - the type of token to verify
      */
@@ -360,6 +347,23 @@ export class AuthenticationService{
                 },
             }, tokenType);
         });
+    }
+
+    /**
+     * When login succeeds
+     * @param userSession {CognitoUserSession} - the currently active Cognito user session
+     */
+    loginSuccess(userSession: CognitoUserSession){
+        // Store locally
+        this.userSession = userSession;
+
+        // Get & store tokens
+        // @ts-ignore
+        this.accessToken = userSession.getAccessToken()
+        // @ts-ignore
+        this.idToken = userSession.getIdToken()
+        // @ts-ignore
+        this.refreshToken = userSession.getRefreshToken()
     }
 
     /**
