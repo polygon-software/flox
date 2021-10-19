@@ -10,7 +10,7 @@
 <script setup lang="ts">
 // import MainPage from "./pages/MainPage"
 import LoginPage from "./pages/LoginPage.vue"
-import MenuBar from "./components/menu/MenuBar"
+import MenuBar from "./components/menu/MenuBar.vue"
 import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/plugins/AuthService";
 import {computed, provide, ref} from "vue";
@@ -24,6 +24,7 @@ provide("$authService", $authService)
 
 
 // Login state
+// eslint-disable-next-line no-unused-vars
 const loggedIn = computed(() => {
  return $authService.value.isLoggedIn();
 })
