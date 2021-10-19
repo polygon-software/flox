@@ -11,9 +11,6 @@
         <SignupForm @submit="onSignup"/>
       </q-card>
 
-      <!-- TODO lol -->
-      <qrcode-vue value="asdf" level="H" />
-
     </q-page>
   </q-layout>
 </template>
@@ -21,7 +18,6 @@
 <script setup lang="ts">
 import LoginForm from "../components/forms/LoginForm"
 import SignupForm from "../components/forms/SignupForm"
-import QrcodeVue from 'qrcode.vue'
 
 import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/plugins/auth";
@@ -32,9 +28,8 @@ const authenticationService = new AuthenticationService()
 async function onLogin({username, password}){
   console.log("LOGIN with", username, password)
   await authenticationService.login(username, password)
-      .catchError((e) => {
-        showErrorDialog(e)
-      });
+
+  //TODO
   $q.dialog({
     title: '2FA code',
     message: 'Please enter your e-mail verification code',
@@ -78,14 +73,6 @@ async function onSignup({username, email, password}){
     // TODO handle @thommann
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
-  })
-}
-
-function showErrorDialog(error){
-  $q.dialog({
-    title: 'Error',
-    message: error.message,
-    cancel: false,
   })
 }
 
