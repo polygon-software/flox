@@ -10,22 +10,24 @@
       <q-card class="q-pa-md q-ma-md">
         <SignupForm @submit="onSignup"/>
       </q-card>
+      <q-card class="q-pa-md q-ma-md">
+        <q-btn label="Logout" @click="logout"/>
+      </q-card>
 
     </q-page>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import LoginForm from "../components/forms/LoginForm"
-import SignupForm from "../components/forms/SignupForm"
+import LoginForm from "../components/forms/LoginForm.vue"
+import SignupForm from "../components/forms/SignupForm.vue"
 import { inject } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
-let test = inject("test")
-let $authService = inject('$authService')
-let $q = inject('$q')
+let $authService: any = inject('$authService')
+let $q: any = inject('$q')
 
-async function onLogin({username, password}){
+async function onLogin({username, password}: {username: string, password: string}){
   await $authService.login(username, password)
 
   //TODO don't throw POST error
@@ -36,10 +38,10 @@ async function onLogin({username, password}){
     persistent: true,
     prompt: {
       model: '',
-      isValid: val => val.length >= 6,
+      isValid: (val: string ) => val.length >= 6,
       type: 'text'
     },
-  }).onOk(input => {
+  }).onOk((input: string) => {
     onVerifyEmail(input)
   })
 }
@@ -48,7 +50,7 @@ async function onLogin({username, password}){
  * Confirm e-mail verification code
  * @param code {string} - E-mail verification code
  */
-function onVerifyEmail(code){
+function onVerifyEmail(code: string){
   $authService.confirm(code)
 }
 
@@ -58,7 +60,7 @@ function onVerifyEmail(code){
  * @param email
  * @param password
  */
-async function onSignup({username, email, password}){
+async function onSignup({username, email, password}:{username: string, email: string, password:string}){
   await $authService.signUp(username, email, password);
   $q.dialog({
     title: 'Verification',
@@ -67,16 +69,20 @@ async function onSignup({username, email, password}){
     persistent: true,
     prompt: {
       model: '',
-      isValid: val => val.length >= 6,
+      isValid: (val: string) => val.length >= 6,
       type: 'text'
     },
-  }).onOk(input => {
+  }).onOk((input: string) => {
     onVerifyEmail(input)
   }).onCancel(() => {
     // TODO handle @thommann
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+
+function logout(){
+  $authService.logout();
 }
 
 </script>
