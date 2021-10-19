@@ -20,6 +20,8 @@ import LoginForm from "../components/forms/LoginForm"
 import SignupForm from "../components/forms/SignupForm"
 import { inject } from 'vue'
 
+// eslint-disable-next-line no-unused-vars
+let test = inject("test")
 let $authService = inject('$authService')
 let $q = inject('$q')
 
