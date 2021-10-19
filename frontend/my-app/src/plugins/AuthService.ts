@@ -2,6 +2,7 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoAccessToken, CognitoIdToken, CognitoRefreshToken} from "amazon-cognito-auth-js";
 import {CognitoUser, CognitoUserSession} from "amazon-cognito-identity-js";
 import QrCodeDialog from '../components/QrCodeDialog.vue'
+import ChangePasswordForm from "../components/forms/ChangePasswordForm.vue"
 
 /**
  * This class is a service that is used for maintaining authentication state as well as signing up, logging in, etc.
@@ -141,10 +142,39 @@ export class AuthenticationService{
         this.showEmailVerificationDialog()
     }
 
+    /**
+     * todo @joelbarmettlerUZH
+     */
     logout(){
         this.cognitoUser?.signOut(()=>{
-            console.log("Signing out")
+            this.cognitoUser = null;
+            this.userSession = null;
         })
+    }
+
+
+    /**
+     * todo
+     */
+    changePasswordDialog(){
+        this.$q.dialog({
+            component: ChangePasswordForm,
+            componentProps: {},
+        }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
+            this.cognitoUser?.changePassword(passwordOld,passwordNew, (err, result)=>{
+                if(err){
+                    console.log(err);
+                }
+                console.log(result);
+            })
+        })
+    }
+
+    resetPasswordDialog(){
+        this.$q.dialog({
+            component: ChangePasswordForm,
+            componentProps: {},
+        }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {})
     }
     /**
      * Shows a dialog for verifying E-Mail
