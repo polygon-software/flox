@@ -9,19 +9,21 @@
     <q-card class="q-pa-md q-ma-md">
       <SignupForm @submit="onSignup"/>
     </q-card>
-  </q-page>
+<q-card class="q-pa-md q-ma-md">
+        <q-btn label="Logout" @click="logout"/>
+      </q-card>  </q-page>
 </template>
 
 <script setup lang="ts">
-import LoginForm from "../components/forms/LoginForm"
-import SignupForm from "../components/forms/SignupForm"
+import LoginForm from "../components/forms/LoginForm.vue"
+import SignupForm from "../components/forms/SignupForm.vue"
 import { inject } from 'vue'
 
-const $authService = inject('$authService')
+const $authService: any = inject('$authService')
 // const $q = inject('$q')
 
-async function onLogin({username, password}){
-  await $authService.value.login(username, password)
+async function onLogin({username, password}: {username: string, password: string}){
+await $authService.value.login(username, password)
 
   // TODO all to service
   // //TODO don't throw POST error
@@ -47,8 +49,12 @@ async function onLogin({username, password}){
  * @param email {string} - The user's e-mail address
  * @param password {string} - the user's chosen password
  */
-async function onSignup({username, email, password}){
+async function onSignup({username, email, password}:{username: string, email: string, password:string}){
   $authService.value.signUp(username, email, password);
+}
+
+function logout(){
+  $authService.logout();
 }
 
 </script>
