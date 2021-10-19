@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import MainPage from "./pages/MainPage"
+import MainPage from "./pages/MainPage.vue"
 import LoginPage from "./pages/LoginPage.vue"
 import MenuBar from "./components/menu/MenuBar.vue"
 import {useQuasar} from "quasar";
