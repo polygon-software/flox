@@ -108,7 +108,7 @@ export class AuthenticationService{
                 },
 
                 // @ts-ignore
-                associateSecretCode: (secret) => {this.setup2FA(secret)}
+                associateSecretCode: (secret) => {this.showQrCodeDialog(secret)}
             })
         })
     }
@@ -217,15 +217,6 @@ export class AuthenticationService{
         // TODO login success
     }
 
-    setup2FA(secret: string){
-        this.showQrCodeDialog(secret);
-        //     const challengeAnswer = prompt('Please input the TOTP code.', '');
-        //     if (typeof challengeAnswer === "string") {
-        //         cognitoUser.verifySoftwareToken(challengeAnswer, 'My TOTP device', this);
-        //     }
-        // },
-    }
-
     /**
      * TODO helper file
      * @param error
@@ -239,8 +230,8 @@ export class AuthenticationService{
     }
 
     /**
-     * TODO docs
-     * @param secretCode
+     * Shows a dialog containing a QR code for setting up two factor authentication
+     * @param secretCode {string} - the authenticator code to encode in QR code form
      */
     showQrCodeDialog(secretCode: string){
         const username = this.cognitoUser?.getUsername()
