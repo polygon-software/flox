@@ -1,6 +1,6 @@
 <template>
-  <div class="column q-pa-sm" style="width: 250px">
-    <h5 class="q-ma-none" style="margin-bottom: 20px;">Sign up</h5>
+  <div class="column q-pa-sm" style="width: 250px; height: 400px;">
+    <h5 class="q-ma-none" style="margin-bottom: 20px;">Sign Up</h5>
     <!-- TODO enforce password/regex email etc. rules -->
     <q-form
           @submit="onSubmit"
@@ -8,7 +8,6 @@
       >
       <q-input
           dense
-          class="q-pa-none q-ma-none"
           label="Username"
           v-model="username"
           lazy-rules
@@ -17,20 +16,17 @@
       />
       <q-input
           dense
-          class="q-pa-none q-ma-none"
           label="E-Mail"
           v-model="email"
       />
       <q-input
           dense
-          class="q-pa-none q-ma-none"
           label="Password"
           v-model="password"
           type="password"
       />
       <q-input
           dense
-          class="q-pa-none q-ma-none"
           label="Repeat Password"
           v-model="passwordRepeat"
           type="password"
