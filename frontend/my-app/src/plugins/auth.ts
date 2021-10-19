@@ -55,18 +55,20 @@ export class AuthenticationService{
             onFailure: function (err: any){
                 console.log(err) // TODO @thommann
             },
+            // Sets up MFA (only done once after signing up
             mfaSetup: function (){
                 console.log("Set up MFA!")
                 // @ts-ignore
                 cognitoUser.associateSoftwareToken(this)
             },
 
+            // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
             selectMFAType: function(challengeName, challengeParameters) {
-                console.log("Select MFA type!")
+                console.log("Select MFA type!", challengeName, challengeParameters)
                 cognitoUser.sendMFASelectionAnswer("SOFTWARE_TOKEN_MFA", this);
             },
 
-            // Function that is called if time-limited one time password is required
+            // Called if time-limited one time password is required
             totpRequired: function(tokenType) {
                 console.log(tokenType)
                 // TODO dialog
@@ -74,6 +76,7 @@ export class AuthenticationService{
                 if (typeof challengeAnswer === "string") {
                     cognitoUser.sendMFACode(challengeAnswer, this, tokenType);
                 }
+
             },
 
             mfaRequired: function(codeDeliveryDetails) {
