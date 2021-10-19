@@ -14,13 +14,20 @@ import MenuBar from "./components/menu/MenuBar.vue"
 import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/plugins/AuthService";
 import {computed, provide, ref} from "vue";
+import {ErrorService} from "@/plugins/ErrorService";
 
 const $q = useQuasar()
-const $authService = ref(new AuthenticationService($q))
 
-// Global Variables
-provide("$q", $q)
+// Error service
+const $errorService = ref(new ErrorService($q))
+provide("$errorService", $errorService)
+
+// Auth service
+const $authService = ref(new AuthenticationService($q, $errorService))
 provide("$authService", $authService)
+
+// Quasar
+provide("$q", $q)
 
 
 // Login state
