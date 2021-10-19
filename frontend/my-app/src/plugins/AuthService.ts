@@ -52,7 +52,6 @@ export class AuthenticationService{
      * Checks whether the user is currently logged in
      */
     isLoggedIn(){
-        console.log("user sessions:", this.userSession, this.userSession?.isValid())
         return this.userSession?.isValid() ?? false
     }
 
@@ -142,7 +141,11 @@ export class AuthenticationService{
         this.showEmailVerificationDialog()
     }
 
-
+    logout(){
+        this.cognitoUser?.signOut(()=>{
+            console.log("Signing out")
+        })
+    }
     /**
      * Shows a dialog for verifying E-Mail
      * @param renew {?boolean} - whether to generate a new verification code
