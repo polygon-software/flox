@@ -1,14 +1,31 @@
 <template>
-  <div class="column">
-    <b>Log in</b>
-    <q-input label="Username" v-model="username"/>
-    <q-input label="Password" v-model="password" type="password"/>
-    <q-btn
-        style="margin-top: 5px"
-        color="primary"
-        label="Log in"
-        @click="onSubmit"
-    />  </div>
+  <div class="column q-pa-sm" style="width: 250px; height: 400px;">
+    <h5 class="q-ma-none" style="margin-bottom: 20px;">Log In</h5>
+    <q-form
+        @submit="onSubmit"
+        class="q-gutter-md"
+    >
+      <q-input
+          label="Username"
+          v-model="username"
+          lazy-rules
+          :rules="[ val => val && val.length > 0 || 'Please enter your username']"
+      />
+      <q-input
+          label="Password"
+          v-model="password"
+          type="password"
+          lazy-rules
+          :rules="[ val => val && val.length > 0 || 'Please enter your password']"
+      />
+      <q-btn
+          style="margin-top: 5px"
+          color="primary"
+          label="Log in"
+          type="submit"
+      />
+    </q-form>
+  </div>
 </template>
 
 <script setup lang="ts">
