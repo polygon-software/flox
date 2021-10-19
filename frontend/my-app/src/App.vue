@@ -12,9 +12,9 @@ import MainPage from "./pages/MainPage.vue"
 import LoginPage from "./pages/LoginPage.vue"
 import MenuBar from "./components/menu/MenuBar.vue"
 import {useQuasar} from "quasar";
-import {AuthenticationService} from "@/plugins/AuthService";
+import {AuthenticationService} from "@/services/AuthService";
 import {computed, provide, ref} from "vue";
-import {ErrorService} from "@/plugins/ErrorService";
+import {ErrorService} from "@/services/ErrorService";
 
 const $q = useQuasar()
 

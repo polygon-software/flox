@@ -5,14 +5,14 @@ import { AppService } from './app.service';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import configuration from "./config/configuration";
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       playground: true,
-      //plugins: [ApolloServerPluginLandingPageLocalDefault()], // Use Apollo Sandbox instead of graphql-playground
+      //services: [ApolloServerPluginLandingPageLocalDefault()], // Use Apollo Sandbox instead of graphql-playground
       debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
@@ -31,7 +31,7 @@ import configuration from "./config/configuration";
         username: configService.get('database.username'),
         password: configService.get('database.password'),
         database: configService.get('database.database'),
-        entities: ["dist/**/**.entity{.ts,.js}"],
+        entities: ['dist/**/**.entity{.ts,.js}'],
         synchronize: true,
       }),
       inject: [ConfigService],

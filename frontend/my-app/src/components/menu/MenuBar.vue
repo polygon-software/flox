@@ -41,7 +41,7 @@
 <script setup lang="ts">
 
 import { inject, defineProps, ref } from 'vue'
-import {AuthenticationService} from "@/plugins/AuthService";
+import {AuthenticationService} from "@/services/AuthService";
 
 //@ts-ignore
 const $authService: ref<AuthenticationService> = inject('$authService')
