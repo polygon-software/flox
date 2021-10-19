@@ -99,10 +99,11 @@ export class AuthenticationService{
     }
 
     /**
-     * TODO
-     * @param username
-     * @param email
-     * @param password
+     * Signs up by creating a new user using the given Username, e-mail and password.
+     * TODO make adaptable to other parameters via direct handling of {attributes} param
+     * @param username {string} - the chosen username
+     * @param email {string} - the user's e-mail address -> TODO move to attributes
+     * @param password {string} - the new user's chosen password. Must fulfill the set password conditions
      */
     async signUp(username: string, email: string, password: string) {
         this.cognitoUser = await new Promise((resolve, reject) => {
