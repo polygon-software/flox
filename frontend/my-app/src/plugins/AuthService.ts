@@ -4,9 +4,10 @@ import {CognitoUser, CognitoUserSession} from "amazon-cognito-identity-js";
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from "../components/forms/ChangePasswordForm.vue"
 import ResetPasswordForm from "../components/forms/ResetPasswordForm.vue"
+import {ErrorService} from "@/plugins/ErrorService";
 
 /**
- * This class is a service that is used for maintaining authentication state as well as signing up, logging in, etc.
+ * This is a service that is used for maintaining authentication state as well as signing up, logging in, etc.
  */
 
 export class AuthenticationService{
@@ -29,10 +30,10 @@ export class AuthenticationService{
     // Quasar instance
     $q: any
 
-    constructor(quasar: any) {
+    // Error handler service
+    $errorService: any
 
-        console.log("init!", quasar)
-
+    constructor(quasar: any, errorService: ErrorService) {
         // Set up user pool
         const poolSettings = {
             UserPoolId: process.env.VUE_APP_USER_POOL_ID,
@@ -44,10 +45,19 @@ export class AuthenticationService{
         this.accessToken = null
         this.idToken = null
         this.refreshToken = null
+
+        // Set up user & session
         this.cognitoUser = null
         this.userSession = null
+
+        // Quasar & environment variables
         this.$q = quasar
         this.appName = process.env.VUE_APP_NAME ?? 'App'
+
+        // Error service
+        this.$errorService = errorService
+
+        console.log("err service:", this.$errorService)
     }
 
     /**
@@ -225,7 +235,7 @@ export class AuthenticationService{
 
         if(renew){
             if(!this.cognitoUser){
-                this.showErrorDialog(new Error("An error occurred, try logging in again"))
+                this.$errorService.showErrorDialog(new Error("An error occurred, try logging in again"))
                 return
             } else {
                 console.log("Resend confirmation!")
@@ -248,8 +258,6 @@ export class AuthenticationService{
             this.verifyEmail(input)
         }).onCancel(() => {
             // TODO
-        }).onDismiss(() => {
-            // console.log('I am triggered on both OK and Cancel')
         })
     }
 
@@ -272,34 +280,20 @@ export class AuthenticationService{
     }
 
     /**
-     * TODO
-     * @param result {TODO}
+     * When login succeeds
+     * @param userSession {CognitoUserSession} - the currently active Cognito user session
      */
     loginSuccess(userSession: CognitoUserSession){
         // Store locally
         this.userSession = userSession;
 
-        console.log("AUTH success with result", userSession)
+        // Get & store tokens
         // @ts-ignore
         this.accessToken = userSession.getAccessToken()
         // @ts-ignore
         this.idToken = userSession.getIdToken()
         // @ts-ignore
         this.refreshToken = userSession.getRefreshToken()
-
-        // TODO login success
-    }
-
-    /**
-     * TODO helper file
-     * @param error
-     */
-    showErrorDialog(error: Error){
-        this.$q.dialog({
-            title: "Error:" + error.name,
-            message: error.message,
-            cancel: false,
-        })
     }
 
     /**
@@ -327,12 +321,13 @@ export class AuthenticationService{
                     type: 'text'
                 },
             }).onOk((code: string) => {
+                // TODO friendlyDeviceName
                 this.cognitoUser?.verifySoftwareToken(code, 'My TOTP device', {
                     onSuccess: (userSession)=>{
                         this.loginSuccess(userSession)
                     },
                     onFailure: (error)=>{
-                        //TODO
+                        this.$errorService.showErrorDialog(error)
                     },
                 });
             })
@@ -361,7 +356,7 @@ export class AuthenticationService{
                     this.loginSuccess(userSession)
                 },
                 onFailure: (error)=>{
-                    //TODO
+                    this.$errorService.showErrorDialog(error)
                 },
             }, tokenType);
         });
@@ -376,7 +371,7 @@ export class AuthenticationService{
             // Show the e-mail verification dialog again and send a new code
             this.showEmailVerificationDialog(true)
         } else {
-            this.showErrorDialog(error)
+            this.$errorService.showErrorDialog(error)
         }
     }
 }
