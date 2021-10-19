@@ -6,6 +6,16 @@
 <script setup lang="ts">
 // import MainPage from "./pages/MainPage"
 import LoginPage from "./pages/LoginPage"
+import {useQuasar} from "quasar";
+import {AuthenticationService} from "@/plugins/AuthService";
+import {provide} from "vue";
+
+const quasar = useQuasar()
+
+// Global Variables
+provide("$q", quasar)
+provide("$authService", new AuthenticationService(quasar))
+
 </script>
 
 <style lang="scss">
