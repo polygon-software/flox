@@ -1,6 +1,8 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoAccessToken, CognitoIdToken, CognitoRefreshToken} from "amazon-cognito-auth-js";
 import {CognitoUser} from "amazon-cognito-identity-js";
+import {useQuasar} from "quasar";
+import QrCodeDialog from '../components/QrCodeDialog.vue'
 
 /**
  * This class is a service that is used for maintaining authentication state as well as signing up, logging in, etc.
@@ -14,6 +16,7 @@ export class AuthenticationService{
     idToken: CognitoIdToken|null
     refreshToken: CognitoRefreshToken|null
     cognitoUser: AmazonCognitoIdentity.CognitoUser|null
+    $q: any
 
     constructor() {
         // Set up user pool
@@ -28,6 +31,7 @@ export class AuthenticationService{
         this.idToken = null
         this.refreshToken = null
         this.cognitoUser = null
+        this.$q = useQuasar()
     }
 
     /**
@@ -35,7 +39,7 @@ export class AuthenticationService{
      * @param identifier {string} - the user's identifier (usually E-mail or username)
      * @param password {string} - the user's password
      */
-    login(identifier: string, password: string, ){
+    async login(identifier: string, password: string): Promise<void>{
 
         // Generate auth details
         const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
@@ -50,51 +54,44 @@ export class AuthenticationService{
         });
 
         // Execute auth function
-        cognitoUser.authenticateUser(authenticationDetails, {
-            onSuccess: this.authSuccess,
-            onFailure: function (err: Error){
-                throw new Error("scheisse")
-            },
-            // Sets up MFA (only done once after signing up
-            mfaSetup: function (){
-                console.log("Set up MFA!")
+        return new Promise((resolve, reject) => {
+            cognitoUser.authenticateUser(authenticationDetails, {
+                onSuccess: (result)=>{ this.authSuccess(result)},
+                onFailure: (err)=>{this.showErrorDialog(err)},
+                // Sets up MFA (only done once after signing up)
+                mfaSetup: function () {
+                    console.log("Set up MFA!")
+                    // @ts-ignore
+                    cognitoUser.associateSoftwareToken(this)
+                },
+
+                // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
+                selectMFAType: function (challengeName, challengeParameters) {
+                    console.log("Select MFA type!", challengeName, challengeParameters)
+                    cognitoUser.sendMFASelectionAnswer("SOFTWARE_TOKEN_MFA", this);
+                },
+
+                // Called if time-limited one time password is required
+                totpRequired: function (tokenType) {
+                    console.log(tokenType)
+                    // TODO dialog
+                    const challengeAnswer = prompt('Please input the TOTP code and random garbage.', '');
+                    if (typeof challengeAnswer === "string") {
+                        cognitoUser.sendMFACode(challengeAnswer, this, tokenType);
+                    }
+
+                },
+
+                mfaRequired: function (codeDeliveryDetails) {
+                    const verificationCode = prompt('Please input verification code', '');
+                    if (typeof verificationCode === "string") {
+                        cognitoUser.sendMFACode(verificationCode, this);
+                    }
+                },
+
                 // @ts-ignore
-                cognitoUser.associateSoftwareToken(this)
-            },
-
-            // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-            selectMFAType: function(challengeName, challengeParameters) {
-                console.log("Select MFA type!", challengeName, challengeParameters)
-                cognitoUser.sendMFASelectionAnswer("SOFTWARE_TOKEN_MFA", this);
-            },
-
-            // Called if time-limited one time password is required
-            totpRequired: function(tokenType) {
-                console.log(tokenType)
-                // TODO dialog
-                const challengeAnswer = prompt('Please input the TOTP code and random garbage.', '');
-                if (typeof challengeAnswer === "string") {
-                    cognitoUser.sendMFACode(challengeAnswer, this, tokenType);
-                }
-
-            },
-
-            mfaRequired: function(codeDeliveryDetails) {
-                const verificationCode = prompt('Please input verification code', '');
-                if (typeof verificationCode === "string") {
-                    cognitoUser.sendMFACode(verificationCode, this);
-                }
-            },
-
-            // @ts-ignore
-            associateSecretCode: function(secretCode) {
-                console.log("issa secret", secretCode)
-                const challengeAnswer = prompt('Please input the TOTP code.', '');
-                if (typeof challengeAnswer === "string") {
-                    cognitoUser.verifySoftwareToken(challengeAnswer, 'My TOTP device', this);
-                }
-            },
-
+                associateSecretCode: (secret) => {this.setup2FA(secret)}
+            })
         })
     }
 
@@ -151,5 +148,45 @@ export class AuthenticationService{
         this.accessToken = result.getAccessToken()
         this.idToken = result.getIdToken()
         this.accessToken = result.getRefreshToken()
+    }
+
+    setup2FA(secret: string){
+        this.showQrCodeDialog(secret);
+        //     const challengeAnswer = prompt('Please input the TOTP code.', '');
+        //     if (typeof challengeAnswer === "string") {
+        //         cognitoUser.verifySoftwareToken(challengeAnswer, 'My TOTP device', this);
+        //     }
+        // },
+    }
+
+    /**
+     * TODO helper file
+     * @param error
+     */
+    showErrorDialog(error: Error){
+        this.$q.dialog({
+            title: "Error:" + error.name,
+            message: error.message,
+            cancel: false,
+        })
+    }
+
+    /**
+     * TODO helper
+     * @param secretCode
+     */
+    showQrCodeDialog(secretCode: string){
+        this.$q.dialog({
+            component: QrCodeDialog,
+            componentProps: {
+                value: secretCode
+            },
+        }).onOk(() => {
+            console.log('OK')
+        }).onCancel(() => {
+            console.log('Cancel')
+        }).onDismiss(() => {
+            console.log('Called on OK or Cancel')
+        })
     }
 }
