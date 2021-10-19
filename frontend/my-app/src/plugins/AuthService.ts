@@ -138,6 +138,11 @@ export class AuthenticationService{
 
     }
 
+    logout(){
+        this.cognitoUser?.signOut(()=>{
+            console.log("Signing out")
+        })
+    }
     /**
      * TODO
      * @param code
