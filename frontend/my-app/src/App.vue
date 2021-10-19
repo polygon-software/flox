@@ -1,6 +1,10 @@
 <template>
-<!--  <MainPage/>-->
-  <LoginPage/>
+  <div>
+    <h2>state: {{ loggedIn }}</h2>
+
+    <!--  <MainPage/>-->
+    <LoginPage/>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -8,13 +12,20 @@
 import LoginPage from "./pages/LoginPage"
 import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/plugins/AuthService";
-import {provide} from "vue";
+import {computed, provide, ref} from "vue";
 
-const quasar = useQuasar()
+const $q = useQuasar()
+const $authService = ref(new AuthenticationService($q))
 
 // Global Variables
-provide("$q", quasar)
-provide("$authService", new AuthenticationService(quasar))
+provide("$q", $q)
+provide("$authService", $authService)
+
+
+// Login state
+const loggedIn = computed(() => {
+ return $authService.value.isLoggedIn();
+})
 
 </script>
 
