@@ -80,8 +80,8 @@ export class AuthenticationService{
         // Execute auth function
         return new Promise((resolve, reject) => {
             cognitoUser.authenticateUser(authenticationDetails, {
-                onSuccess: (result)=>{ this.authSuccess(result)},
-                onFailure: (err)=>{this.showErrorDialog(err)},
+                onSuccess: (result)=>{ this.loginSuccess(result)},
+                onFailure: (err)=>{ this.loginFailure(err) },
                 // Sets up MFA (only done once after signing up)
                 mfaSetup: function () {
                     console.log("Set up MFA!")
@@ -120,7 +120,7 @@ export class AuthenticationService{
      * @param password {string} - the new user's chosen password. Must fulfill the set password conditions
      */
     async signUp(username: string, email: string, password: string) {
-        this.cognitoUser = await new Promise((resolve, reject) => {
+        const cognitoUserWrapper:any = await new Promise((resolve, reject) => {
             const attributes = [];
             attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: "email", Value: email}))
             // TODO disable requirement on AWS @thommann
@@ -136,6 +136,9 @@ export class AuthenticationService{
             })
         })
 
+        this.cognitoUser = cognitoUserWrapper.user
+
+        this.showEmailVerificationDialog()
     }
 
     logout(){
@@ -144,14 +147,51 @@ export class AuthenticationService{
         })
     }
     /**
-     * TODO
+     * Shows a dialog for verifying E-Mail
+     * @param renew {?boolean} - whether to generate a new verification code
+     */
+    showEmailVerificationDialog(renew = false){
+        console.log("verify email dialog")
+
+        if(renew){
+            if(!this.cognitoUser){
+                this.showErrorDialog(new Error("An error occurred, try logging in again"))
+                return
+            } else {
+                console.log("Resend confirmation!")
+                this.cognitoUser.resendConfirmationCode(() => {})
+            }
+        }
+
+        this.$q.dialog({
+            title: 'Verification',
+            message: 'Please enter your e-mail verification code',
+            cancel: true,
+            persistent: true,
+            prompt: {
+                model: '',
+                isValid: (val: string) => val.length >= 6,
+                type: 'text'
+            },
+        }).onOk((input: string) => {
+            console.log(this.cognitoUser)
+            this.verifyEmail(input)
+        }).onCancel(() => {
+            // TODO
+        }).onDismiss(() => {
+            // console.log('I am triggered on both OK and Cancel')
+        })
+    }
+
+    /**
+     * Confirm e-mail verification code
      * @param code
      * @param user
      */
-    confirm(code: string,){
+    async verifyEmail(code: string,): Promise<void>{
         return new Promise((resolve, reject)=>{
             // @ts-ignore
-            this.cognitoUser.user.confirmRegistration(code, true, (err, result)=>{
+            this.cognitoUser.confirmRegistration(code, true, (err, result)=>{
                 if(err){
                     console.error(err)
                     reject()
@@ -165,7 +205,7 @@ export class AuthenticationService{
      * TODO
      * @param result {TODO}
      */
-    authSuccess(userSession: CognitoUserSession){
+    loginSuccess(userSession: CognitoUserSession){
         // Store locally
         this.userSession = userSession;
 
@@ -229,7 +269,7 @@ export class AuthenticationService{
             }).onOk((code: string) => {
                 this.cognitoUser?.verifySoftwareToken(code, 'My TOTP device', {
                     onSuccess: (userSession)=>{
-                        this.authSuccess(userSession)
+                        this.loginSuccess(userSession)
                     },
                     onFailure: (error)=>{
                         //TODO
@@ -262,12 +302,24 @@ export class AuthenticationService{
         }).onOk((code: string) => {
             this.cognitoUser?.sendMFACode(code, {
                 onSuccess: (userSession: CognitoUserSession)=>{
-                    this.authSuccess(userSession)
+                    this.loginSuccess(userSession)
                 },
                 onFailure: (error)=>{
                     //TODO
                 },
             }, tokenType);
         });
+    }
+
+    /**
+     * When login fails, verify whether it is due to the user not having verified their account
+     * @param error
+     */
+    loginFailure(error: Error){
+        if(error.name === "UserNotConfirmedException"){
+            this.showEmailVerificationDialog(true)
+        } else {
+            this.showErrorDialog(error)
+        }
     }
 }

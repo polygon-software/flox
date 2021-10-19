@@ -23,62 +23,38 @@ import LoginForm from "../components/forms/LoginForm.vue"
 import SignupForm from "../components/forms/SignupForm.vue"
 import { inject } from 'vue'
 
-// eslint-disable-next-line no-unused-vars
-let $authService: any = inject('$authService')
-let $q: any = inject('$q')
+const $authService: any = inject('$authService')
+// const $q = inject('$q')
 
 async function onLogin({username, password}: {username: string, password: string}){
-  await $authService.login(username, password)
+await $authService.value.login(username, password)
 
-  //TODO don't throw POST error
-  $q.dialog({
-    title: '2FA code',
-    message: 'Please enter your e-mail verification code',
-    cancel: true,
-    persistent: true,
-    prompt: {
-      model: '',
-      isValid: (val: string ) => val.length >= 6,
-      type: 'text'
-    },
-  }).onOk((input: string) => {
-    onVerifyEmail(input)
-  })
+  // TODO all to service
+  // //TODO don't throw POST error
+  // $q.dialog({
+  //   title: '2FA code',
+  //   message: 'Please enter your e-mail verification code',
+  //   cancel: true,
+  //   persistent: true,
+  //   prompt: {
+  //     model: '',
+  //     isValid: val => val.length >= 6,
+  //     type: 'text'
+  //   },
+  // }).onOk(input => {
+  //   // onVerifyEmail(input)
+  // })
 }
 
-/**
- * Confirm e-mail verification code
- * @param code {string} - E-mail verification code
- */
-function onVerifyEmail(code: string){
-  $authService.confirm(code)
-}
 
 /**
- * TODO
- * @param username
- * @param email
- * @param password
+ * Registers a new user using the given data and opens the corresponding e-mail verification dialog
+ * @param username {string} - The user's chosen username
+ * @param email {string} - The user's e-mail address
+ * @param password {string} - the user's chosen password
  */
 async function onSignup({username, email, password}:{username: string, email: string, password:string}){
-  await $authService.signUp(username, email, password);
-  $q.dialog({
-    title: 'Verification',
-    message: 'Please enter your e-mail verification code',
-    cancel: true,
-    persistent: true,
-    prompt: {
-      model: '',
-      isValid: (val: string) => val.length >= 6,
-      type: 'text'
-    },
-  }).onOk((input: string) => {
-    onVerifyEmail(input)
-  }).onCancel(() => {
-    // TODO handle @thommann
-  }).onDismiss(() => {
-    // console.log('I am triggered on both OK and Cancel')
-  })
+  $authService.value.signUp(username, email, password);
 }
 
 function logout(){
