@@ -28,7 +28,7 @@ const authenticationService = new AuthenticationService()
 async function onLogin({username, password}){
   await authenticationService.login(username, password)
 
-  //TODO don't do if error...
+  //TODO don't throw POST error
   $q.dialog({
     title: '2FA code',
     message: 'Please enter your e-mail verification code',
@@ -40,21 +40,25 @@ async function onLogin({username, password}){
       type: 'text'
     },
   }).onOk(input => {
-    onConfirmMFACode(input)
+    onVerifyEmail(input)
   })
 }
 
 /**
- * TODO
+ * Confirm e-mail verification code
  * @param code {string} - E-mail verification code
  */
-function onConfirmMFACode(code){
-  console.log("MFA code:", code)
+function onVerifyEmail(code){
   authenticationService.confirm(code)
 }
 
+/**
+ * TODO
+ * @param username
+ * @param email
+ * @param password
+ */
 async function onSignup({username, email, password}){
-  console.log("SIGN UP with", username, email, password) // TODO some stuff here
   await authenticationService.signUp(username, email, password);
   $q.dialog({
     title: 'Verification',
@@ -67,7 +71,7 @@ async function onSignup({username, email, password}){
       type: 'text'
     },
   }).onOk(input => {
-    onConfirmMFACode(input)
+    onVerifyEmail(input)
   }).onCancel(() => {
     // TODO handle @thommann
   }).onDismiss(() => {

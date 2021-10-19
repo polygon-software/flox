@@ -23,13 +23,15 @@
 
 <script setup lang="ts">
   import QrcodeVue from "qrcode.vue";
-  import {defineProps, ref} from "vue";
+  import {defineProps, defineEmits, ref} from "vue";
 
   let dialog = ref(null)
 
   const props = defineProps({
     value: String
   })
+
+  const emit = defineEmits(['ok'])
 
   // eslint-disable-next-line no-unused-vars
   function show(){
@@ -42,6 +44,7 @@
   }
 
   function onOk(){
+    emit('ok')
     hide()
   }
 
