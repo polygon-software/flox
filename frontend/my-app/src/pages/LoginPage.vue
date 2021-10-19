@@ -9,9 +9,7 @@
     <q-card class="q-pa-md q-ma-md">
       <SignupForm @submit="onSignup"/>
     </q-card>
-<q-card class="q-pa-md q-ma-md">
-        <q-btn label="Logout" @click="logout"/>
-      </q-card>  </q-page>
+  </q-page>
 </template>
 
 <script setup lang="ts">
@@ -23,23 +21,7 @@ const $authService: any = inject('$authService')
 // const $q = inject('$q')
 
 async function onLogin({username, password}: {username: string, password: string}){
-await $authService.value.login(username, password)
-
-  // TODO all to service
-  // //TODO don't throw POST error
-  // $q.dialog({
-  //   title: '2FA code',
-  //   message: 'Please enter your e-mail verification code',
-  //   cancel: true,
-  //   persistent: true,
-  //   prompt: {
-  //     model: '',
-  //     isValid: val => val.length >= 6,
-  //     type: 'text'
-  //   },
-  // }).onOk(input => {
-  //   // onVerifyEmail(input)
-  // })
+  await $authService.value.login(username, password)
 }
 
 
@@ -51,10 +33,6 @@ await $authService.value.login(username, password)
  */
 async function onSignup({username, email, password}:{username: string, email: string, password:string}){
   $authService.value.signUp(username, email, password);
-}
-
-function logout(){
-  $authService.logout();
 }
 
 </script>
