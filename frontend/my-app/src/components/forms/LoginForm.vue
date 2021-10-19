@@ -1,7 +1,8 @@
 <template>
   <div class="column">
+    <b>Log in</b>
     <q-input label="Username" v-model="username"/>
-    <q-input label="Password" v-model="password"/>
+    <q-input label="Password" v-model="password" type="password"/>
     <q-btn color="primary" label="Log in" @click="onSubmit"/>
   </div>
 </template>

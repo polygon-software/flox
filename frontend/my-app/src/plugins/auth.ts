@@ -52,8 +52,8 @@ export class AuthenticationService{
         // Execute auth function
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: this.authSuccess,
-            onFailure: function (err: any){
-                console.log(err) // TODO @thommann
+            onFailure: function (err: Error){
+                throw new Error("scheisse")
             },
             // Sets up MFA (only done once after signing up
             mfaSetup: function (){
