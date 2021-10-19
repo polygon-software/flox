@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import {defineEmits} from "vue";
 import {ref} from "vue";
-import {PASSWORD_REGEX} from "@/plugins/Regex"
+import {PASSWORD_REGEX} from "@/helpers/REGEX"
 
 let verificationCode = ref('')
 let password = ref('')

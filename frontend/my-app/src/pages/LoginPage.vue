@@ -18,7 +18,6 @@ import SignupForm from "../components/forms/SignupForm.vue"
 import { inject } from 'vue'
 
 const $authService: any = inject('$authService')
-// const $q = inject('$q')
 
 async function onLogin({username, password}: {username: string, password: string}){
   await $authService.value.login(username, password)

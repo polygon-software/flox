@@ -4,7 +4,7 @@ import {CognitoUser, CognitoUserSession} from "amazon-cognito-identity-js";
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from "../components/forms/ChangePasswordForm.vue"
 import ResetPasswordForm from "../components/forms/ResetPasswordForm.vue"
-import {ErrorService} from "@/plugins/ErrorService";
+import {ErrorService} from "@/services/ErrorService";
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
