@@ -1,15 +1,16 @@
 <template>
-  <div>
-    <h2>state: {{ loggedIn }}</h2>
-
-    <!--  <MainPage/>-->
+  <q-layout view="lHh Lpr lFf" class="bg-grey-4">
+    <MenuBar/>
+    <!--  <MainPage/> TODO-->
     <LoginPage/>
-  </div>
+  </q-layout>
+
 </template>
 
 <script setup lang="ts">
 // import MainPage from "./pages/MainPage"
 import LoginPage from "./pages/LoginPage.vue"
+import MenuBar from "./components/menu/MenuBar"
 import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/plugins/AuthService";
 import {computed, provide, ref} from "vue";
