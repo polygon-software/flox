@@ -26,6 +26,13 @@
         flat
         @click="changePassword"
     />
+    <q-btn
+        v-if="!props.loggedIn"
+        label="Password Forgotten"
+        class="text-primary"
+        flat
+        @click="forgottenPassword"
+    />
   </div>
 
   </q-header>
@@ -50,8 +57,18 @@ function logout(){
   $authService.value.logout();
 }
 
+/**
+ *
+ */
 function changePassword() {
   $authService.value.changePasswordDialog()
+}
+
+/**
+ *
+ */
+function forgottenPassword() {
+  $authService.value.resetPasswordDialog();
 }
 </script>
 
