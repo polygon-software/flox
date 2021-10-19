@@ -1,6 +1,6 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoAccessToken, CognitoIdToken, CognitoRefreshToken} from "amazon-cognito-auth-js";
-import {CognitoUser} from "amazon-cognito-identity-js";
+import {CognitoUser, CognitoUserSession} from "amazon-cognito-identity-js";
 import {useQuasar} from "quasar";
 import QrCodeDialog from '../components/QrCodeDialog.vue'
 
@@ -20,6 +20,7 @@ export class AuthenticationService{
 
     // User
     cognitoUser: AmazonCognitoIdentity.CognitoUser|null
+    userSession: CognitoUserSession|null // TODO check if needed
 
     // Application info
     appName: String
@@ -40,6 +41,7 @@ export class AuthenticationService{
         this.idToken = null
         this.refreshToken = null
         this.cognitoUser = null
+        this.userSession = null
         this.$q = useQuasar()
         this.appName = process.env.VUE_APP_NAME ?? 'App'
     }
@@ -84,17 +86,10 @@ export class AuthenticationService{
                     cognitoUser.sendMFASelectionAnswer("SOFTWARE_TOKEN_MFA", this);
                 },
 
-                // Called if time-limited one time password is required
-                totpRequired: function (tokenType) {
-                    console.log(tokenType)
-                    // TODO dialog
-                    const challengeAnswer = prompt('Please input the TOTP code and random garbage.', '');
-                    if (typeof challengeAnswer === "string") {
-                        cognitoUser.sendMFACode(challengeAnswer, this, tokenType);
-                    }
+                // Called if time-limited one time password is required (only second login or later)
+                totpRequired: (tokenType) => {this.verify2FACode(tokenType)},
 
-                },
-
+                //TODO NANI
                 mfaRequired: function (codeDeliveryDetails) {
                     const verificationCode = prompt('Please input verification code', '');
                     if (typeof verificationCode === "string") {
@@ -156,11 +151,19 @@ export class AuthenticationService{
      * TODO
      * @param result {TODO}
      */
-    authSuccess(result: any){
-        console.log("AUTH success with result", result, typeof result)
-        this.accessToken = result.getAccessToken()
-        this.idToken = result.getIdToken()
-        this.accessToken = result.getRefreshToken()
+    authSuccess(userSession: CognitoUserSession){
+        // Store locally
+        this.userSession = userSession;
+
+        console.log("AUTH success with result", userSession)
+        // @ts-ignore
+        this.accessToken = userSession.getAccessToken()
+        // @ts-ignore
+        this.idToken = userSession.getIdToken()
+        // @ts-ignore
+        this.refreshToken = userSession.getRefreshToken()
+
+        // TODO login success
     }
 
     setup2FA(secret: string){
@@ -185,7 +188,7 @@ export class AuthenticationService{
     }
 
     /**
-     * TODO helper
+     * TODO docs
      * @param secretCode
      */
     showQrCodeDialog(secretCode: string){
@@ -198,11 +201,59 @@ export class AuthenticationService{
                 value: codeUrl
             },
         }).onOk(() => {
-            console.log('OK')
+            // Verify code
+            this.$q.dialog({
+                title: 'Verification',
+                message: 'Please enter your 2FA authenticator code',
+                cancel: true,
+                persistent: true,
+                prompt: {
+                    model: '',
+                    isValid: (val: string) => val.length >= 6,
+                    type: 'text'
+                },
+            }).onOk((code: string) => {
+                this.cognitoUser?.verifySoftwareToken(code, 'My TOTP device', {
+                    onSuccess: (userSession)=>{
+                        this.authSuccess(userSession)
+                    },
+                    onFailure: (error)=>{
+                        //TODO
+                    },
+                });
+            })
         }).onCancel(() => {
             console.log('Cancel')
         }).onDismiss(() => {
             console.log('Called on OK or Cancel')
         })
+    }
+
+    /**
+     * TODO
+     * @param tokenType
+     */
+    verify2FACode (tokenType: string) {
+        // Verify code
+        this.$q.dialog({
+            title: 'Verification',
+            message: 'Please enter your 2FA authenticator code',
+            cancel: true,
+            persistent: true,
+            prompt: {
+                model: '',
+                isValid: (val: string) => val.length >= 6,
+                type: 'text'
+            },
+        }).onOk((code: string) => {
+            this.cognitoUser?.sendMFACode(code, {
+                onSuccess: (userSession: CognitoUserSession)=>{
+                    this.authSuccess(userSession)
+                },
+                onFailure: (error)=>{
+                    //TODO
+                },
+            }, tokenType);
+        });
     }
 }
