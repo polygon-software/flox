@@ -1,18 +1,15 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-grey-4">
-    <q-page class="flex flex-center">
-      <!-- Login Card -->
-      <q-card class="q-pa-md q-ma-md">
-        <LoginForm @submit="onLogin"/>
-      </q-card>
+  <q-page class="flex flex-center">
+    <!-- Login Card -->
+    <q-card class="q-pa-md q-ma-md">
+      <LoginForm @submit="onLogin"/>
+    </q-card>
 
-      <!-- Signup Card -->
-      <q-card class="q-pa-md q-ma-md">
-        <SignupForm @submit="onSignup"/>
-      </q-card>
-
-    </q-page>
-  </q-layout>
+    <!-- Signup Card -->
+    <q-card class="q-pa-md q-ma-md">
+      <SignupForm @submit="onSignup"/>
+    </q-card>
+  </q-page>
 </template>
 
 <script setup lang="ts">
