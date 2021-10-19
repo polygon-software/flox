@@ -11,7 +11,7 @@
         PolygonSoftware Template
       </h5>
     </div>
-
+  <div class="row">
     <q-btn
         v-if="props.loggedIn"
         label="Logout"
@@ -19,21 +19,39 @@
         flat
         @click="logout"
     />
+    <q-btn
+        v-if="props.loggedIn"
+        label="Change Password"
+        class="text-primary"
+        flat
+        @click="changePassword"
+    />
+  </div>
+
   </q-header>
 </template>
 
 <script setup lang="ts">
 
-import { inject, defineProps } from 'vue'
+import { inject, defineProps, ref } from 'vue'
+import {AuthenticationService} from "@/plugins/AuthService";
 
-const $authService: any = inject('$authService')
+//@ts-ignore
+const $authService: ref<AuthenticationService> = inject('$authService')
 
 const props = defineProps({
   loggedIn: Boolean
 })
 
+/**
+ * todo
+ */
 function logout(){
-  $authService.logout();
+  $authService.value.logout();
+}
+
+function changePassword() {
+  $authService.value.changePasswordDialog()
 }
 </script>
 
