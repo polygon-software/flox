@@ -1,5 +1,5 @@
 <template>
-  <div class="column q-pa-sm" style="width: 250px; height: 400px;">
+  <div class="column q-pa-sm" style="width: 250px; height: 430px;">
     <h5 class="q-ma-none" style="margin-bottom: 20px;">Sign Up</h5>
     <!-- TODO enforce password/regex email etc. rules -->
     <q-form
@@ -18,12 +18,19 @@
           dense
           label="E-Mail"
           v-model="email"
+          :rules="[
+              val => EMAIL_REGEX.test(val) || 'Not ok'
+            ]"
+
       />
       <q-input
           dense
           label="Password"
           v-model="password"
           type="password"
+          :rules="[
+              val => PASSWORD_REGEX.test(val) || 'Not ok'
+            ]"
       />
       <q-input
           dense
@@ -48,6 +55,7 @@
 <script setup lang="ts">
 import {defineEmits} from "vue";
 import {ref} from "vue";
+import {PASSWORD_REGEX, EMAIL_REGEX} from "@/plugins/Regex"
 
 let username = ref('')
 let email = ref('')
