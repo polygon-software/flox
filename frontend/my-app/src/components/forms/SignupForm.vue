@@ -1,7 +1,6 @@
 <template>
   <div class="column q-pa-sm" style="width: 250px; height: 430px;">
     <h5 class="q-ma-none" style="margin-bottom: 20px;">Sign Up</h5>
-    <!-- TODO enforce password/regex email etc. rules -->
     <q-form
           @submit="onSubmit"
           class="q-gutter-md"
