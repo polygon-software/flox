@@ -93,7 +93,7 @@ export class AuthenticationService{
         return new Promise((resolve, reject) => {
             cognitoUser.authenticateUser(authenticationDetails, {
                 onSuccess: (result)=>{ this.loginSuccess(result)},
-                onFailure: (err)=>{ this.loginFailure(err) },
+                onFailure: (err)=>{ this.onFailure(err) },
                 // Sets up MFA (only done once after signing up)
                 mfaSetup: function () {
                     console.log("Set up MFA!")
@@ -206,10 +206,8 @@ export class AuthenticationService{
                 onSuccess: function(result) {
                     console.log('call result: ' + result);
                 },
-                onFailure: function(err) {
-                    alert(err);
-                },
-                inputVerificationCode: ()=>{this.showResetPasswordFormDialog();}
+                onFailure: (err) => {this.onFailure(err)},
+                inputVerificationCode: () => {this.showResetPasswordFormDialog()}
             });
         })
     }
@@ -367,10 +365,10 @@ export class AuthenticationService{
     }
 
     /**
-     * When login fails, verify whether it is due to the user not having verified their account
-     * @param error {Error} - the error that caused the login failure
+     * When any operation (mostly login) fails, verify whether it is due to the user not having verified their account
+     * @param error {Error} - the error that caused the failure
      */
-    loginFailure(error: Error){
+    onFailure(error: Error){
         if(error.name === "UserNotConfirmedException"){
             // Show the e-mail verification dialog again and send a new code
             this.showEmailVerificationDialog(true)
