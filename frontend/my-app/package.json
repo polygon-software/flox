@@ -25,6 +25,7 @@
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
     "lodash": "^4.17.21",
+    "qrcode.vue": "^3.3.3",
     "quasar": "^2.0.0",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",

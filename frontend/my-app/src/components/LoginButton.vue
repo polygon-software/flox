@@ -16,6 +16,7 @@
       </q-card-actions>
       <q-card-actions align="right">
         <q-btn flat label="Log in" v-close-popup @click="onLogin"/>
+        <qrcode-vue value="asdf" level="H" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -26,6 +27,7 @@
 import {ref} from "vue";
 import {AuthenticationService} from "@/plugins/auth";
 import {useQuasar} from "quasar";
+import QrcodeVue from 'qrcode.vue'
 
 const $q = useQuasar()
 
