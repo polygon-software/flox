@@ -1,7 +1,7 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoAccessToken, CognitoIdToken, CognitoRefreshToken} from "amazon-cognito-auth-js";
 import {CognitoUser, CognitoUserSession} from "amazon-cognito-identity-js";
-import QrCodeDialog from '../components/QrCodeDialog.vue'
+import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from "../components/forms/ChangePasswordForm.vue"
 import ResetPasswordForm from "../components/forms/ResetPasswordForm.vue"
 
@@ -21,7 +21,7 @@ export class AuthenticationService{
 
     // User
     cognitoUser: AmazonCognitoIdentity.CognitoUser|null
-    userSession: CognitoUserSession|null // TODO check if needed
+    userSession: CognitoUserSession|null
 
     // Application info
     appName: String
