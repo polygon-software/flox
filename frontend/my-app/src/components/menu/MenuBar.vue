@@ -10,6 +10,12 @@
       <h5 class="text-black q-pa-none q-ma-md">
         PolygonSoftware Template
       </h5>
+      <p
+          class="text-grey-7"
+          v-if="props.loggedIn && userName"
+      >
+        Logged in as {{ userName }}
+      </p>
     </div>
   <div class="row">
     <q-btn
@@ -40,7 +46,7 @@
 
 <script setup lang="ts">
 
-import { inject, defineProps, ref } from 'vue'
+import {inject, defineProps, ref, computed} from 'vue'
 import {AuthenticationService} from "@/services/AuthService";
 
 //@ts-ignore
@@ -50,26 +56,38 @@ const props = defineProps({
   loggedIn: Boolean
 })
 
+const userName = computed(() =>
+    {
+      console.log($authService.value.cognitoUser)
+      if($authService.value.cognitoUser){
+        return $authService.value.cognitoUser.username
+      }
+
+      return ''
+    }
+)
+
 /**
- * todo
+ * Logs out the current user
  */
 function logout(){
   $authService.value.logout();
 }
 
 /**
- *
+ * Triggers a password change for the currently logged in user
  */
 function changePassword() {
   $authService.value.changePasswordDialog()
 }
 
 /**
- *
+ * Triggers a password change for a non-logged in user
  */
 function forgottenPassword() {
   $authService.value.resetPasswordDialog();
 }
+
 </script>
 
 <style scoped>

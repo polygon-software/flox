@@ -1,8 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-4">
     <MenuBar :logged-in="loggedIn"/>
-    <MainPage v-if="true"/>
-<!--    TODO change back to loggedIn-->
+    <MainPage v-if="loggedIn"/>
     <LoginPage v-else/>
   </q-layout>
 
