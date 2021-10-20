@@ -22,7 +22,7 @@ import { Context } from 'vm';
       subscriptions: {
         // Use graphql-ws instead of default (subscriptions-transport-ws)
         'graphql-ws': {
-          path: '/graphql',
+          path: '/graphql-ws',
           onConnect: (context: Context) => {
             // TODO token authentication can be done here
             // const { connectionParams } = context;

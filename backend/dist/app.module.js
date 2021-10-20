@@ -29,7 +29,7 @@ AppModule = __decorate([
                 installSubscriptionHandlers: true,
                 subscriptions: {
                     'graphql-ws': {
-                        path: '/graphql',
+                        path: '/graphql-ws',
                         onConnect: (context) => {
                         },
                     },

@@ -40,6 +40,7 @@ export class AuthenticationService{
             UserPoolId: process.env.VUE_APP_USER_POOL_ID,
             ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID
         };
+        // @ts-ignore
         this.userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
 
         // Initialize tokens
