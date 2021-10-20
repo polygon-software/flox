@@ -42,7 +42,7 @@ watch(
 const stop = watch(
     () => initialState.value,
     (newState) => {
-      if(users.value.length <= 0){
+      if(users.value.length <= 0 && newState.allUsers){
         // Set initial state of users array
         users.value = [...newState.allUsers]
         // Stop the watcher as it is no longer needed
