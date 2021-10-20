@@ -23,6 +23,10 @@ type Query {
   users(userIds: [ID!]): [User!]!
 }
 
+type Subscription {
+  userAdded: User!
+}
+
 input UpdateUserInput {
   age: Int
   name: String
