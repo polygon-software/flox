@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
+import { Context } from 'vm';
 
 @Module({
   imports: [
@@ -17,8 +18,24 @@ import configuration from './config/configuration';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
+      installSubscriptionHandlers: true,
       subscriptions: {
-        'graphql-ws': true, // Use graphql-ws instead of default (subscriptions-transport-ws)
+        // Use graphql-ws instead of default (subscriptions-transport-ws)
+        'graphql-ws': {
+          path: '/graphql',
+          onConnect: (context: Context) => {
+            // TODO token authentication can be done here
+            // const { connectionParams } = context;
+            // const authToken = connectionParams.authToken;
+            // if (!isValid(authToken)) {
+            //   throw new Error('Token is not valid');
+            // }
+            // // extract user information from token
+            // const user = parseToken(authToken);
+            // // return user info to add them to the context later
+            // return { user };
+          },
+        },
       },
     }),
     ConfigModule.forRoot({

@@ -26,8 +26,13 @@ AppModule = __decorate([
                 debug: true,
                 autoSchemaFile: (0, path_1.join)(process.cwd(), 'src/schema.gql'),
                 sortSchema: true,
+                installSubscriptionHandlers: true,
                 subscriptions: {
-                    'graphql-ws': true,
+                    'graphql-ws': {
+                        path: '/graphql',
+                        onConnect: (context) => {
+                        },
+                    },
                 },
             }),
             config_1.ConfigModule.forRoot({
