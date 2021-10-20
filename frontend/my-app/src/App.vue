@@ -8,6 +8,7 @@ import {AuthenticationService} from "@/services/AuthService";
 import {provide, ref} from "vue";
 import {ErrorService} from "@/services/ErrorService";
 import { useRouter } from 'vue-router'
+import {ROUTES} from "@/router/ROUTES";
 
 const $q = useQuasar()
 
@@ -26,8 +27,10 @@ provide("$q", $q)
 const router = useRouter()
 
 router.beforeEach((to) => {
-  if(to.path != '/login' && !$authService.value.isLoggedIn()){
-    return '/login'
+  const loginPath = ROUTES.LOGIN.path
+
+  if(to.path != loginPath && !$authService.value.isLoggedIn()){
+    return loginPath
   }
 })
 </script>
