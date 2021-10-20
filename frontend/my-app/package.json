@@ -30,7 +30,8 @@
     "subscriptions-transport-ws": "^0.9.19",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
-    "vue-jest": "^3.0.7"
+    "vue-jest": "^3.0.7",
+    "vue-router": "4"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
