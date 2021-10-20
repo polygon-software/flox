@@ -20,7 +20,7 @@ import { Context } from 'vm';
       //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
       installSubscriptionHandlers: true,
       subscriptions: {
-        // Use graphql-ws instead of default (subscriptions-transport-ws)
+        // Could also use graphql-ws instead of default (subscriptions-transport-ws)
         'subscriptions-transport-ws': {
           path: '/graphql-websocket',
           onConnect: (context: Context) => {
