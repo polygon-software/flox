@@ -58,8 +58,6 @@ export class AuthenticationService{
 
         // Error service
         this.$errorService = errorService
-
-        console.log("err service:", this.$errorService)
     }
 
     /**

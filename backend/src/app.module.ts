@@ -21,9 +21,10 @@ import { Context } from 'vm';
       installSubscriptionHandlers: true,
       subscriptions: {
         // Use graphql-ws instead of default (subscriptions-transport-ws)
-        'graphql-ws': {
-          path: '/graphql-ws',
+        'subscriptions-transport-ws': {
+          path: '/graphql-websocket',
           onConnect: (context: Context) => {
+            console.log('Client connected to GraphQL Websocket!');
             // TODO token authentication can be done here
             // const { connectionParams } = context;
             // const authToken = connectionParams.authToken;

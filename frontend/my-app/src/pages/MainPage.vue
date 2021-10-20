@@ -1,9 +1,16 @@
 <template>
   <q-page class="flex flex-center">
     <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
-    <SampleTable/>
-    <SampleForm/>
-    <SampleSubscriptionTable/>
+    <div class="column">
+      <div class="row q-pa-md">
+        <SampleTable/>
+        <SampleForm/>
+      </div>
+
+      <div class="q-pa-md">
+        <SampleSubscriptionTable/>
+      </div>
+    </div>
   </q-page>
 </template>
 

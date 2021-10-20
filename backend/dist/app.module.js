@@ -28,9 +28,10 @@ AppModule = __decorate([
                 sortSchema: true,
                 installSubscriptionHandlers: true,
                 subscriptions: {
-                    'graphql-ws': {
-                        path: '/graphql-ws',
+                    'subscriptions-transport-ws': {
+                        path: '/graphql-websocket',
                         onConnect: (context) => {
+                            console.log('Client connected to GraphQL Websocket!');
                         },
                     },
                 },
