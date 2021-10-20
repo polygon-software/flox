@@ -7,6 +7,7 @@ import {DefaultApolloClient, provideApolloClient} from '@vue/apollo-composable'
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
 import { createRouter,createWebHashHistory } from 'vue-router'
+import {ROUTES} from "@/router/ROUTES";
 
 // Custom Components TODO move with routes
 import MainPage from "@/pages/MainPage.vue";
@@ -51,16 +52,12 @@ const apolloClient = new ApolloClient({
 })
 
 
-// Routes TODO move to separate file
-const routes = [
-    { path: '/', component: MainPage },
-    { path: '/login', component: LoginPage },
-]
-
 // Router setup
-const router = createRouter({
+const routes = Object.values(ROUTES)
+
+    const router = createRouter({
     history: createWebHashHistory(),
-    routes,
+    routes
 })
 
 const app = createApp({
