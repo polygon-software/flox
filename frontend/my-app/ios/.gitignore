@@ -5,5 +5,5 @@ App/App/public
 DerivedData
 xcuserdata
 
-# Cordova plugins for Capacitor
+# Cordova services for Capacitor
 capacitor-cordova-ios-plugins

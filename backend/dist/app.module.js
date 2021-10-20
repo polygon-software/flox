@@ -26,6 +26,15 @@ AppModule = __decorate([
                 debug: true,
                 autoSchemaFile: (0, path_1.join)(process.cwd(), 'src/schema.gql'),
                 sortSchema: true,
+                installSubscriptionHandlers: true,
+                subscriptions: {
+                    'subscriptions-transport-ws': {
+                        path: '/graphql-websocket',
+                        onConnect: (context) => {
+                            console.log('Client connected to GraphQL Websocket!');
+                        },
+                    },
+                },
             }),
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
@@ -40,7 +49,7 @@ AppModule = __decorate([
                     username: configService.get('database.username'),
                     password: configService.get('database.password'),
                     database: configService.get('database.database'),
-                    entities: ["dist/**/**.entity{.ts,.js}"],
+                    entities: ['dist/**/**.entity{.ts,.js}'],
                     synchronize: true,
                 }),
                 inject: [config_1.ConfigService],
