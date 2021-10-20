@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-pa md" style="width: 300px; margin-left: 10px">
+  <q-card  style="width: 300px; margin-left: 10px">
     <q-form
         @submit="onSubmit"
         class="q-gutter-md"
