@@ -37,6 +37,7 @@ export class UserResolver {
     const newUser = await this.usersService.create(createUserInput);
     // Publish user so subscriptions will auto-update
     await pubSub.publish('userAdded', { userAdded: newUser });
+    console.log('Publishing new user', newUser, 'on PubSub!');
     return newUser;
   }
 

@@ -13,9 +13,9 @@ const httpLink = createHttpLink({
     uri: 'http://localhost:3000/graphql',
 })
 
-// WebSocket link for GraphQL (Subscriptions
+// WebSocket link for GraphQL (Subscriptions)
 const wsLink = new WebSocketLink({
-    uri: `ws://localhost:3000/graphql-ws`,
+    uri: `ws://localhost:3000/graphql-websocket`,
     options: {
         reconnect: true
     }
