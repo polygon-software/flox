@@ -5,6 +5,7 @@ import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from "../components/forms/ChangePasswordForm.vue"
 import ResetPasswordForm from "../components/forms/ResetPasswordForm.vue"
 import {ErrorService} from "@/services/ErrorService";
+import {ref} from "vue";
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as

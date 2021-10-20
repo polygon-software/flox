@@ -1,12 +1,8 @@
 <template>
   <router-view/>
-<!--    <MainPage v-if="$authService.isLoggedIn()"/>-->
-<!--    <LoginPage v-else/>-->
 </template>
 
 <script setup lang="ts">
-// import MainPage from "./pages/MainPage.vue"
-// import LoginPage from "./pages/LoginPage.vue"
 import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/services/AuthService";
 import {provide, ref} from "vue";
@@ -26,12 +22,10 @@ provide("$authService", $authService)
 // Quasar
 provide("$q", $q)
 
-
+// Router navigation guards
 const router = useRouter()
 
-// Navigation guards
 router.beforeEach((to) => {
-  // TODO cleaner
   if(to.path != '/login' && !$authService.value.isLoggedIn()){
     return '/login'
   }
