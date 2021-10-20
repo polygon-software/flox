@@ -1,10 +1,11 @@
 import App from './App.vue'
 import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
-import {ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client/core";
+import {ApolloClient, createHttpLink, InMemoryCache, split} from "@apollo/client/core";
 import { createApp, provide, h } from 'vue'
 import {DefaultApolloClient, provideApolloClient} from '@vue/apollo-composable'
 import {WebSocketLink} from "@apollo/client/link/ws";
+import {getMainDefinition} from "@apollo/client/utilities";
 
 // HTTP link for GraphQL (Queries/Mutations)
 const httpLink = createHttpLink({
@@ -14,7 +15,7 @@ const httpLink = createHttpLink({
 
 // WebSocket link for GraphQL (Subscriptions
 const wsLink = new WebSocketLink({
-    uri: `ws://localhost:3000/graphql-sub`,
+    uri: `ws://localhost:3000/graphql-ws`,
     options: {
         reconnect: true
     }
