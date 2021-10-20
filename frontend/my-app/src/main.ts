@@ -6,6 +6,8 @@ import { createApp, provide, h } from 'vue'
 import {DefaultApolloClient, provideApolloClient} from '@vue/apollo-composable'
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
+import MainPage from "@/pages/MainPage.vue";
+import LoginPage from "@/pages/LoginPage.vue";
 
 // HTTP link for GraphQL (Queries/Mutations)
 const httpLink = createHttpLink({
@@ -35,7 +37,7 @@ const link = split(
     httpLink
 );
 
-// Create the apollo client
+// Apollo Client setup
 const apolloClient = new ApolloClient({
     link: link,
     cache: new InMemoryCache({
@@ -44,6 +46,13 @@ const apolloClient = new ApolloClient({
                             // appropriate. This can be changed in case Apollo implements better behavior for this.
     })
 })
+
+
+// Routes TODO move to separate file
+const routes = [
+    { path: '/', component: MainPage },
+    { path: '/login', component: LoginPage },
+]
 
 
 const app = createApp({

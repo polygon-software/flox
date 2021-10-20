@@ -1,19 +1,14 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-grey-4">
-    <MenuBar :logged-in="loggedIn"/>
-    <MainPage v-if="loggedIn"/>
+    <MainPage v-if="$authService.isLoggedIn()"/>
     <LoginPage v-else/>
-  </q-layout>
-
 </template>
 
 <script setup lang="ts">
 import MainPage from "./pages/MainPage.vue"
 import LoginPage from "./pages/LoginPage.vue"
-import MenuBar from "./components/menu/MenuBar.vue"
 import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/services/AuthService";
-import {computed, provide, ref} from "vue";
+import {provide, ref} from "vue";
 import {ErrorService} from "@/services/ErrorService";
 
 const $q = useQuasar()
@@ -28,13 +23,6 @@ provide("$authService", $authService)
 
 // Quasar
 provide("$q", $q)
-
-
-// Login state
-// eslint-disable-next-line no-unused-vars
-const loggedIn = computed(() => {
- return $authService.value.isLoggedIn();
-})
 
 </script>
 
