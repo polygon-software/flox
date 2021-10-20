@@ -7,7 +7,7 @@ import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/services/AuthService";
 import {provide, ref} from "vue";
 import {ErrorService} from "@/services/ErrorService";
-import {setupRouter} from "@/router/router";
+import {setupRouter} from "@/router/route-helpers";
 
 const $q = useQuasar()
 
