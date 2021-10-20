@@ -38,7 +38,7 @@ let password = ref('')
 const emit = defineEmits(['submit'])
 
 /**
- * TODO
+ * On submit, pass entered data outwards
  */
 function onSubmit(){
   emit('submit', {
