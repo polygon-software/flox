@@ -1,7 +1,7 @@
 <template>
     <q-table
        table-header-class="bg-grey-2"
-       title="List of newly added users (subscription)"
+       title="List of users (with subscription, additions only)"
        :rows="users"
        :columns="columns"
        row-key="id"
@@ -11,14 +11,18 @@
 
 <script setup lang="ts">
 import { USER_ADDED } from "@/data/SUBSCRIPTIONS";
+import { ALL_USERS } from "@/data/QUERIES";
 import { useSubscription } from "@vue/apollo-composable";
+import { executeQuery } from "@/data/data-helpers";
 import {ref, watch} from "vue";
 
 const users = ref([]);
 
-// Set up subscription
-const {result} = useSubscription(USER_ADDED);
+// Set up initial query
+const initialState = executeQuery(ALL_USERS);
 
+// Set up subscription
+const { result } = useSubscription(USER_ADDED);
 
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
@@ -33,6 +37,21 @@ watch(
       users.value.push(newUser.userAdded)
     }
 )
+
+// Watch for initial state change query to go through
+const stop = watch(
+    () => initialState.value,
+    (newState) => {
+      if(users.value.length <= 0){
+        // Set initial state of users array
+        users.value = [...newState.allUsers]
+        // Stop the watcher as it is no longer needed
+        stop()
+      }
+    }
+)
+
+
 </script>
 
 <style scoped>
