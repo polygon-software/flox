@@ -17,6 +17,9 @@ import configuration from './config/configuration';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
+      subscriptions: {
+        'graphql-ws': true, // Use graphql-ws instead of default (subscriptions-transport-ws)
+      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
