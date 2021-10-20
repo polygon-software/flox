@@ -21,6 +21,8 @@ const get_user_args_1 = require("./dto/args/get-user.args");
 const delete_user_input_1 = require("./dto/input/delete-user.input");
 const user_entity_1 = require("./entities/user.entity");
 const get_users_args_1 = require("./dto/args/get-users.args");
+const graphql_subscriptions_1 = require("graphql-subscriptions");
+const pubSub = new graphql_subscriptions_1.PubSub();
 let UserResolver = class UserResolver {
     constructor(usersService) {
         this.usersService = usersService;
@@ -35,13 +37,19 @@ let UserResolver = class UserResolver {
         return await this.usersService.getUser(getUserArgs);
     }
     async create(createUserInput) {
-        return await this.usersService.create(createUserInput);
+        const newUser = await this.usersService.create(createUserInput);
+        await pubSub.publish('userAdded', { userAdded: newUser });
+        console.log('Publishing new user', newUser, 'on PubSub!');
+        return newUser;
     }
     async update(updateUserInput) {
         return await this.usersService.update(updateUserInput);
     }
     async remove(deleteUserInput) {
         return await this.usersService.remove(deleteUserInput);
+    }
+    userAdded() {
+        return pubSub.asyncIterator('userAdded');
     }
 };
 __decorate([
@@ -85,6 +93,12 @@ __decorate([
     __metadata("design:paramtypes", [delete_user_input_1.DeleteUserInput]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "remove", null);
+__decorate([
+    (0, graphql_1.Subscription)((returns) => user_entity_1.User),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], UserResolver.prototype, "userAdded", null);
 UserResolver = __decorate([
     (0, graphql_1.Resolver)(() => user_entity_1.User),
     __metadata("design:paramtypes", [user_service_1.UserService])

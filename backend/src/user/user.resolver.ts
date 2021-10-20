@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
@@ -6,6 +6,10 @@ import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
+import { PubSub } from 'graphql-subscriptions';
+
+// Publish/subscribe handler TODO make global and inject/provice, according to https://docs.nestjs.com/graphql/subscriptions
+const pubSub = new PubSub();
 
 @Resolver(() => User)
 export class UserResolver {
@@ -30,7 +34,11 @@ export class UserResolver {
   async create(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    return await this.usersService.create(createUserInput);
+    const newUser = await this.usersService.create(createUserInput);
+    // Publish user so subscriptions will auto-update
+    await pubSub.publish('userAdded', { userAdded: newUser });
+    console.log('Publishing new user', newUser, 'on PubSub!');
+    return newUser;
   }
 
   @Mutation(() => User)
@@ -45,5 +53,10 @@ export class UserResolver {
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
   ): Promise<User> {
     return await this.usersService.remove(deleteUserInput);
+  }
+
+  @Subscription((returns) => User)
+  userAdded() {
+    return pubSub.asyncIterator('userAdded');
   }
 }

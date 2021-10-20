@@ -14,4 +14,5 @@ export declare class UserResolver {
     create(createUserInput: CreateUserInput): Promise<User>;
     update(updateUserInput: UpdateUserInput): Promise<User>;
     remove(deleteUserInput: DeleteUserInput): Promise<User>;
+    userAdded(): AsyncIterator<unknown, any, undefined>;
 }
