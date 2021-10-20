@@ -8,7 +8,7 @@ import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { PubSub } from 'graphql-subscriptions';
 
-// Publish/subscribe handler
+// Publish/subscribe handler TODO make global and inject/provice, according to https://docs.nestjs.com/graphql/subscriptions
 const pubSub = new PubSub();
 
 @Resolver(() => User)

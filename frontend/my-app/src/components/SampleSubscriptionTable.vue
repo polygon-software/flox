@@ -29,21 +29,21 @@
 
 <script setup lang="ts">
 import { USER_ADDED } from "@/data/SUBSCRIPTIONS";
-import {ALL_USERS} from "@/data/QUERIES";
+// import {ALL_USERS} from "@/data/QUERIES";
 import { useSubscription } from "@vue/apollo-composable";
 import {ref, watch} from "vue";
-import {executeQuery} from "@/data/data-helpers"; //  TODO subscription helper
+// import {executeQuery} from "@/data/data-helpers"; //  TODO subscription helper
 
 const users = ref([]);
 
 
-const initialQuery = executeQuery(ALL_USERS)
+// const initialQuery = executeQuery(ALL_USERS)
 // console.log("Query:", initialQuery)
-users.value = initialQuery.allUsers
+//users.value = initialQuery.allUsers
 // console.log("Blubb initial users:", initialQuery, users.value)
 
 // Set up subscription
-const result = useSubscription(USER_ADDED);
+const {result} = useSubscription(USER_ADDED);
 
 
 const columns = [
@@ -52,16 +52,17 @@ const columns = [
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
 
-// Subscription watcher
+// watchEffect(() => {
+//   console.log("Result:", result)
+// })
+
 watch(
-    result,
-    data => {
-      console.log("New message received:", data);
-    },
-    {
-      lazy: true // Don't immediately execute handler
+    () => result.value,
+    (newUser) => {
+      console.log("juhui", newUser.userAdded)
+      users.value.push(newUser.userAdded)
     }
-);
+)
 </script>
 
 <style scoped>
