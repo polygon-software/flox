@@ -70,6 +70,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Object
                     newData = oldData.filter((dataPoint: any) => dataPoint.id !== change.id)
                 }
 
+                // TODO separate create/delete
                 cache.writeQuery({ query: queryObject.query, data: {
                         ...data,
                         [cacheLocation]: newData
