@@ -6,6 +6,9 @@ import { createApp, provide, h } from 'vue'
 import {DefaultApolloClient, provideApolloClient} from '@vue/apollo-composable'
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
+import { createRouter,createWebHashHistory } from 'vue-router'
+
+// Custom Components TODO move with routes
 import MainPage from "@/pages/MainPage.vue";
 import LoginPage from "@/pages/LoginPage.vue";
 
@@ -54,6 +57,11 @@ const routes = [
     { path: '/login', component: LoginPage },
 ]
 
+// Router setup
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes,
+})
 
 const app = createApp({
     setup () {
@@ -63,4 +71,6 @@ const app = createApp({
     render: () => h(App),
 })
 
-app.use(Quasar, quasarUserOptions).mount('#app')
+app.use(router)
+app.use(Quasar, quasarUserOptions)
+app.mount('#app')

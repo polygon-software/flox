@@ -20,8 +20,9 @@ import LoginForm from "../components/forms/LoginForm.vue"
 import SignupForm from "../components/forms/SignupForm.vue"
 import MenuBar from "../components/menu/MenuBar"
 import {inject} from 'vue'
+import {AuthenticationService} from "@/services/AuthService";
 
-const $authService: any = inject('$authService')
+const $authService: AuthenticationService = inject('$authService')
 
 /**
  * Logs in the given user
