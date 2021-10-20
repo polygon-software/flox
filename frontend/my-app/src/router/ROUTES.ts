@@ -4,6 +4,8 @@ import LoginPage from "@/pages/LoginPage.vue";
 /**
  * This file defines all routes used within the application.
  * Access an individual route's path by using e.g. ROUTES.LOGIN.path
+ * 
+ * When adding a new route, also add it to the ROUTES object.
  */
 
 const MAIN = { path: '/', component: MainPage }

@@ -7,8 +7,7 @@ import {useQuasar} from "quasar";
 import {AuthenticationService} from "@/services/AuthService";
 import {provide, ref} from "vue";
 import {ErrorService} from "@/services/ErrorService";
-import { useRouter } from 'vue-router'
-import {ROUTES} from "@/router/ROUTES";
+import {setupRouter} from "@/router/router";
 
 const $q = useQuasar()
 
@@ -23,16 +22,9 @@ provide("$authService", $authService)
 // Quasar
 provide("$q", $q)
 
-// Router navigation guards
-const router = useRouter()
+// Set up router
+setupRouter($authService.value)
 
-router.beforeEach((to) => {
-  const loginPath = ROUTES.LOGIN.path
-
-  if(to.path != loginPath && !$authService.value.isLoggedIn()){
-    return loginPath
-  }
-})
 </script>
 
 <style lang="scss">
