@@ -1,6 +1,8 @@
 <template>
   <div class="column q-pa-sm" style="width: 250px; height: 430px;">
-    <h5 class="q-ma-none" style="margin-bottom: 20px;">Sign Up</h5>
+    <h5 class="q-ma-none" style="margin-bottom: 20px;">
+      {{ $t('signUp') }}
+    </h5>
     <q-form
           @submit="onSubmit"
           class="q-gutter-md"
@@ -44,7 +46,7 @@
       <q-btn
           style="margin-top: 25px"
           color="primary"
-          label="Sign up"
+          :label="$t('signUp')"
           type="submit"
       />
       </q-form>
