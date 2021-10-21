@@ -1,4 +1,4 @@
-import AmazonCognitoIdentity from 'amazon-cognito-identity-js';
+import {QVueGlobals} from 'quasar';
 
 /**
  * This is a service that is used globally throughout the application for error handling
@@ -7,9 +7,9 @@ import AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 export class ErrorService {
 
     // Quasar instance
-    $q: any
+    $q: QVueGlobals
 
-    constructor(quasar: any) {
+    constructor(quasar: QVueGlobals) {
         this.$q = quasar
     }
 

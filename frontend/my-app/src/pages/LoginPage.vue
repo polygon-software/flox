@@ -37,7 +37,7 @@ async function onLogin({username, password}: {username: string, password: string
  * @param password {string} - the authentication's chosen password
  */
 async function onSignup({username, email, password}:{username: string, email: string, password:string}){
-  $authService.value.signUp(username, email, password);
+  await $authService.value.signUp(username, email, password);
 }
 
 </script>

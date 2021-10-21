@@ -22,7 +22,8 @@ function getUserSession (state: AuthStateInterface): CognitoUserSession|undefine
 const getters: GetterTree<AuthStateInterface, StateInterface> = {
   getLoggedInStatus,
   getCognitoUser,
-  getUserSession
+  getUserSession,
+  getUsername,
 };
 
 export default getters;

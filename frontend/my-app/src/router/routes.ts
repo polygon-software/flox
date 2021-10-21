@@ -1,5 +1,3 @@
-import { RouteRecordRaw } from 'vue-router';
-
 // TODO type
 const ROUTES = {
   'MAIN': {
