@@ -16,7 +16,7 @@ provide('$errorService', $errorService)
 
 // Auth service
 const $authService = ref(new AuthenticationService($q, $errorService))
-provide('$authService', $authService)
+provide<AuthenticationService>('$authService', $authService)
 
 // Quasar
 provide('$q', $q)
