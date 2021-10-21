@@ -14,7 +14,7 @@
           class="text-grey-7"
           v-if="loggedIn && store.getUsername"
       >
-        Logged in as {{ store.getUsername }}
+        {{ $t('loggedin', {username: store.getUsername})}}
       </p>
     </div>
   <div class="row">
