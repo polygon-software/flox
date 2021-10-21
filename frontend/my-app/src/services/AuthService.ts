@@ -5,8 +5,8 @@ import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from '../components/forms/ChangePasswordForm.vue'
 import ResetPasswordForm from '../components/forms/ResetPasswordForm.vue'
 import {ErrorService} from './ErrorService';
-import * as store from '../store/store-old'
-import {QuasarContext} from '@quasar/app/types/configuration/context';
+import {QVueGlobals} from 'quasar';
+import {Store, useStore} from "vuex";
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -27,10 +27,12 @@ export class AuthenticationService {
     appName: string
 
     // Quasar instance
-    $q: QuasarContext
+    $q: QVueGlobals
 
     // Error handler service
     $errorService: ErrorService
+
+    $store: Store<any>
 
     constructor(quasar: never, errorService: ErrorService) {
         // Set up authentication pool
@@ -51,6 +53,8 @@ export class AuthenticationService {
 
         // Error service
         this.$errorService = errorService
+
+        this.$store = useStore()
     }
 
     /**
@@ -73,7 +77,7 @@ export class AuthenticationService {
         });
 
         // Store in local variable
-        store.setCognitoUser(cognitoUser)
+        this.$store.commit('authentication/setCognitoUser', cognitoUser)
 
         // Execute auth function
         return new Promise((resolve, reject) => {
@@ -141,7 +145,7 @@ export class AuthenticationService {
             })
         })
 
-        store.setCognitoUser(cognitoUserWrapper.user)
+      this.$store.commit('authentication/setCognitoUser', cognitoUserWrapper.user)
 
         this.showEmailVerificationDialog()
     }
@@ -150,10 +154,10 @@ export class AuthenticationService {
      * Logs out the currently logged in authentication (if any)
      */
     logout(){
-        store.getCognitoUser.value?.signOut(()=>{
-            store.setCognitoUser(undefined)
-            store.setUserSession(undefined)
-        })
+      this.$store.getters['authentication/getCognitoUser']?.signOut(()=>{
+          this.$store.commit('authentication/setCognitoUser', undefined)
+          this.$store.commit('authentication/setUserSession', undefined)
+      })
     }
 
 
@@ -165,7 +169,7 @@ export class AuthenticationService {
             component: ChangePasswordForm,
             componentProps: {},
         }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
-            store.getCognitoUser.value?.changePassword(passwordOld,passwordNew, (err, result)=>{
+            this.$store.getters['authentication/getCognitoUser']?.changePassword(passwordOld,passwordNew, (err: Error, result: any)=>{
                 if(err){
                     this.$errorService.showErrorDialog(err)
                 }
@@ -189,17 +193,17 @@ export class AuthenticationService {
             },
         }).onOk((input: string) => {
             // Set up cognitoUser first
-            store.setCognitoUser(new CognitoUser({
+            this.$store.commit('authentication/setCognitoUser', new CognitoUser({
                 Username: input,
                 Pool: this.userPool
             }));
 
             // Call forgotPassword on cognitoUser
-            store.getCognitoUser.value?.forgotPassword({
-                onSuccess: function(result) {
+          this.$store.getters['authentication/getCognitoUser']?.forgotPassword({
+                onSuccess: function(result: any) {
                     // TODO
                 },
-                onFailure: (err) => {this.onFailure(err)},
+                onFailure: (err: Error) => {this.onFailure(err)},
                 inputVerificationCode: () => {this.showResetPasswordFormDialog()}
             });
         })
@@ -213,9 +217,9 @@ export class AuthenticationService {
             component: ResetPasswordForm,
             componentProps: {},
         }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
-            store.getCognitoUser.value?.confirmPassword(verificationCode,passwordNew,{
-                onSuccess: (result)=>{console.log(result)},
-                onFailure: (err) => {console.log(err)}
+            this.$store.getters['authentication/getCognitoUser']?.confirmPassword(verificationCode,passwordNew,{
+                onSuccess: (result: any)=>{console.log(result)},
+                onFailure: (err: Error) => {console.log(err)}
             })
         })
 
@@ -234,7 +238,9 @@ export class AuthenticationService {
                 return
             } else {
                 console.log('Resend confirmation!')
-                store.getCognitoUser.value.resendConfirmationCode(() => {})
+                store.getCognitoUser.value.resendConfirmationCode(() => {
+                  // TODO
+                })
             }
         }
 
@@ -249,7 +255,7 @@ export class AuthenticationService {
                 type: 'text'
             },
         }).onOk((input: string) => {
-            this.verifyEmail(input)
+            void this.verifyEmail(input)
         }).onCancel(() => {
             // TODO
         })
@@ -260,7 +266,7 @@ export class AuthenticationService {
      * @param secretCode {string} - the authenticator code to encode in QR code form
      */
     showQRCodeDialog(secretCode: string){
-        const username = store.getCognitoUser.value?.getUsername()
+        const username = store.getCognitoUser.value?.getUsername() ?? ''
         const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
         this.$q.dialog({
             component: QrCodeDialog,
@@ -299,8 +305,9 @@ export class AuthenticationService {
      * @param user
      */
     async verifyEmail(code: string,): Promise<void>{
+      const cognitoUser =
+
         return new Promise((resolve, reject)=>{
-            // @ts-ignore
             this.cognitoUser.confirmRegistration(code, true, (err, result)=>{
                 if(err){
                     console.error(err)

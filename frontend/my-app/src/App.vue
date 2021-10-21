@@ -6,9 +6,9 @@
 import {AuthenticationService} from './services/AuthService';
 import {provide, ref} from 'vue';
 import {ErrorService} from './services/ErrorService';
-// import {setupRouter} from "./router/route-helpers"; TODO
+import {useQuasar} from 'quasar';
 
-// const $q = useQuasar() TODO
+const $q = useQuasar()
 
 // Error service
 const $errorService = ref(new ErrorService($q))
@@ -20,8 +20,5 @@ provide<AuthenticationService>('$authService', $authService)
 
 // Quasar
 provide('$q', $q)
-
-// Set up router
-// setupRouter($authService.value) TODO
 
 </script>
