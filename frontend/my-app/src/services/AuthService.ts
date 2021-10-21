@@ -1,5 +1,4 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
-import {CognitoAccessToken, CognitoIdToken, CognitoRefreshToken} from 'amazon-cognito-auth-js';
 import {CognitoUser, CognitoUserSession, ICognitoUserPoolData, ISignUpResult} from 'amazon-cognito-identity-js';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from '../components/forms/ChangePasswordForm.vue'
@@ -33,7 +32,7 @@ export class AuthenticationService {
     // Error handler service
     $errorService: ErrorService
 
-    $store: Store<any>
+    $store: Store<unknown>
 
     constructor(quasar: QVueGlobals, errorService: ErrorService) {
         // Set up authentication pool
@@ -81,7 +80,7 @@ export class AuthenticationService {
         this.$store.commit('authentication/setCognitoUser', cognitoUser)
 
         // Execute auth function
-        return new Promise((resolve, reject) => {
+        return new Promise(() => {
             cognitoUser.authenticateUser(authenticationDetails, {
                 onSuccess: (result)=>{ this.loginSuccess(result)},
                 onFailure: (err)=>{ this.onFailure(err) },
@@ -98,7 +97,7 @@ export class AuthenticationService {
                 totpRequired: (tokenType) => {this.verify2FACode(tokenType)},
 
                 //TODO check when this appears
-                mfaRequired: function (codeDeliveryDetails) {
+                mfaRequired: function () {
                     const verificationCode = prompt('Please input verification code', '');
                     if (typeof verificationCode === 'string') {
                         cognitoUser.sendMFACode(verificationCode, this);
@@ -130,7 +129,7 @@ export class AuthenticationService {
    * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
    */
   async signUp(username: string, email: string, password: string): Promise<void> {
-      const cognitoUserWrapper:any = await new Promise((resolve, reject) => {
+      const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
           const attributes = [];
           attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
           // TODO disable requirement on AWS @thommann
@@ -142,7 +141,9 @@ export class AuthenticationService {
                   console.log('blubb', err)
                   reject();
               }
-              resolve(result);
+              if(result){
+                resolve(result);
+              }
           })
       })
 
@@ -170,7 +171,7 @@ export class AuthenticationService {
             component: ChangePasswordForm,
             componentProps: {},
         }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
-            this.$store.getters['authentication/getCognitoUser']?.changePassword(passwordOld,passwordNew, (err: Error, result: any)=>{
+            this.$store.getters['authentication/getCognitoUser']?.changePassword(passwordOld,passwordNew, (err: Error)=>{
                 if(err){
                     this.$errorService.showErrorDialog(err)
                 }
@@ -201,7 +202,7 @@ export class AuthenticationService {
 
             // Call forgotPassword on cognitoUser
           this.$store.getters['authentication/getCognitoUser']?.forgotPassword({
-                onSuccess: function(result: any) {
+                onSuccess: function() {
                     // TODO
                 },
                 onFailure: (err: Error) => {this.onFailure(err)},
@@ -219,7 +220,7 @@ export class AuthenticationService {
             componentProps: {},
         }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
             this.$store.getters['authentication/getCognitoUser']?.confirmPassword(verificationCode,passwordNew,{
-                onSuccess: (result: any)=>{console.log(result)},
+                onSuccess: (result: unknown)=>{console.log(result)},
                 onFailure: (err: Error) => {console.log(err)}
             })
         })
@@ -305,15 +306,15 @@ export class AuthenticationService {
      * @param code
      */
     async verifyEmail(code: string,): Promise<void>{
-      const user = this.$store.getters['authentication/getCognitoUser']
+      const user:CognitoUser = this.$store.getters['authentication/getCognitoUser']
 
       return new Promise((resolve, reject)=>{
-          user.confirmRegistration(code, true, (err: Error, result: any)=>{
+          user.confirmRegistration(code, true, (err: Error)=>{
               if(err){
                   console.error(err)
                   reject()
               }
-              resolve(result)
+              resolve()
           })
       })
     }

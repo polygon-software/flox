@@ -47,14 +47,13 @@
 <script setup lang="ts">
 
 import {inject, ref} from 'vue'
-import {AuthenticationService} from '@/services/AuthService';
-import * as store from '../../store/store-old'
+import {AuthenticationService} from '../../services/AuthService';
+import {useStore} from 'src/store';
 
-//@ts-ignore
 const $authService: ref<AuthenticationService> = inject('$authService')
+const $store = useStore()
 
-
-const loggedIn = store.getLoggedInStatus
+const loggedIn = $store.getters['authentication/getLoggedInStatus']
 
 /**
  * Logs out the current authentication
