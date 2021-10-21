@@ -1,7 +1,7 @@
 import { boot } from 'quasar/wrappers'
-import ROUTES from '../router/routes'
 
 export default boot(({ router, store }) => {
+  console.log('TODO apollo', router, store)
   // TODO apollo setup
   // router.beforeEach((to) => {
   //
