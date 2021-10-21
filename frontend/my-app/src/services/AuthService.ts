@@ -5,7 +5,7 @@ import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from "../components/forms/ChangePasswordForm.vue"
 import ResetPasswordForm from "../components/forms/ResetPasswordForm.vue"
 import {ErrorService} from "@/services/ErrorService";
-import {ref} from "vue";
+import * as store from "../store/store"
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -21,10 +21,6 @@ export class AuthenticationService{
     accessToken: CognitoAccessToken|null
     idToken: CognitoIdToken|null
     refreshToken: CognitoRefreshToken|null
-
-    // User
-    cognitoUser: AmazonCognitoIdentity.CognitoUser|null
-    userSession: CognitoUserSession|null
 
     // Application info
     appName: String
@@ -49,23 +45,12 @@ export class AuthenticationService{
         this.idToken = null
         this.refreshToken = null
 
-        // Set up user & session
-        this.cognitoUser = null
-        this.userSession = null
-
         // Quasar & environment variables
         this.$q = quasar
         this.appName = process.env.VUE_APP_NAME ?? 'App'
 
         // Error service
         this.$errorService = errorService
-    }
-
-    /**
-     * Checks whether the user is currently logged in
-     */
-    isLoggedIn(){
-        return this.userSession?.isValid() ?? false
     }
 
     /**
@@ -88,7 +73,7 @@ export class AuthenticationService{
         });
 
         // Store in local variable
-        this.cognitoUser = cognitoUser
+        store.setCognitoUser(cognitoUser)
 
         // Execute auth function
         return new Promise((resolve, reject) => {
@@ -111,7 +96,7 @@ export class AuthenticationService{
                 // Called if time-limited one time password is required (only second login or later)
                 totpRequired: (tokenType) => {this.verify2FACode(tokenType)},
 
-                //TODO NANI
+                //TODO check when this appears
                 mfaRequired: function (codeDeliveryDetails) {
                     const verificationCode = prompt('Please input verification code', '');
                     if (typeof verificationCode === "string") {
@@ -149,7 +134,7 @@ export class AuthenticationService{
             })
         })
 
-        this.cognitoUser = cognitoUserWrapper.user
+        store.setCognitoUser(cognitoUserWrapper.user)
 
         this.showEmailVerificationDialog()
     }
@@ -158,9 +143,9 @@ export class AuthenticationService{
      * Logs out the currently logged in user (if any)
      */
     logout(){
-        this.cognitoUser?.signOut(()=>{
-            this.cognitoUser = null;
-            this.userSession = null;
+        store.getCognitoUser.value?.signOut(()=>{
+            store.setCognitoUser(undefined)
+            store.setUserSession(undefined)
         })
     }
 
@@ -173,7 +158,7 @@ export class AuthenticationService{
             component: ChangePasswordForm,
             componentProps: {},
         }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
-            this.cognitoUser?.changePassword(passwordOld,passwordNew, (err, result)=>{
+            store.getCognitoUser.value?.changePassword(passwordOld,passwordNew, (err, result)=>{
                 if(err){
                     this.$errorService.showErrorDialog(err)
                 }
@@ -197,13 +182,13 @@ export class AuthenticationService{
             },
         }).onOk((input: string) => {
             // Set up cognitoUser first
-            this.cognitoUser = new CognitoUser({
+            store.setCognitoUser(new CognitoUser({
                 Username: input,
                 Pool: this.userPool
-            });
+            }));
 
             // Call forgotPassword on cognitoUser
-            this.cognitoUser.forgotPassword({
+            store.getCognitoUser.value?.forgotPassword({
                 onSuccess: function(result) {
                     console.log('call result: ' + result);
                 },
@@ -221,7 +206,7 @@ export class AuthenticationService{
             component: ResetPasswordForm,
             componentProps: {},
         }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
-            this.cognitoUser?.confirmPassword(verificationCode,passwordNew,{
+            store.getCognitoUser.value?.confirmPassword(verificationCode,passwordNew,{
                 onSuccess: (result)=>{console.log(result)},
                 onFailure: (err) => {console.log(err)}
             })
@@ -237,12 +222,12 @@ export class AuthenticationService{
         console.log("verify email dialog")
 
         if(renew){
-            if(!this.cognitoUser){
+            if(!store.getCognitoUser.value){
                 this.$errorService.showErrorDialog(new Error("An error occurred, try logging in again"))
                 return
             } else {
                 console.log("Resend confirmation!")
-                this.cognitoUser.resendConfirmationCode(() => {})
+                store.getCognitoUser.value.resendConfirmationCode(() => {})
             }
         }
 
@@ -257,7 +242,6 @@ export class AuthenticationService{
                 type: 'text'
             },
         }).onOk((input: string) => {
-            console.log(this.cognitoUser)
             this.verifyEmail(input)
         }).onCancel(() => {
             // TODO
@@ -269,7 +253,7 @@ export class AuthenticationService{
      * @param secretCode {string} - the authenticator code to encode in QR code form
      */
     showQRCodeDialog(secretCode: string){
-        const username = this.cognitoUser?.getUsername()
+        const username = store.getCognitoUser.value?.getUsername()
         const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
         this.$q.dialog({
             component: QrCodeDialog,
@@ -290,7 +274,7 @@ export class AuthenticationService{
                 },
             }).onOk((code: string) => {
                 // TODO friendlyDeviceName
-                this.cognitoUser?.verifySoftwareToken(code, 'My TOTP device', {
+                store.getCognitoUser.value?.verifySoftwareToken(code, 'My TOTP device', {
                     onSuccess: (userSession)=>{
                         this.loginSuccess(userSession)
                     },
@@ -337,7 +321,7 @@ export class AuthenticationService{
                 type: 'text'
             },
         }).onOk((code: string) => {
-            this.cognitoUser?.sendMFACode(code, {
+            store.getCognitoUser.value?.sendMFACode(code, {
                 onSuccess: (userSession: CognitoUserSession)=>{
                     this.loginSuccess(userSession)
                 },
@@ -354,7 +338,7 @@ export class AuthenticationService{
      */
     loginSuccess(userSession: CognitoUserSession){
         // Store locally
-        this.userSession = userSession;
+        store.setUserSession(userSession)
 
         // Get & store tokens
         // @ts-ignore

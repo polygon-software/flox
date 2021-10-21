@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-4">
-    <MenuBar :logged-in="$authService.isLoggedIn()"/>
+    <MenuBar/>
     <q-page class="flex flex-center">
       <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
       <div class="column">
@@ -22,9 +22,6 @@ import SampleTable from "../components/SampleTable"
 import SampleForm from "../components/SampleForm"
 import SampleSubscriptionTable from "../components/SampleSubscriptionTable"
 import MenuBar from "../components/menu/MenuBar"
-import {inject} from "vue";
-
-const $authService: any = inject('$authService')
 </script>
 
 <style scoped>
