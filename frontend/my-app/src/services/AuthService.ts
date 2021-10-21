@@ -32,7 +32,7 @@ export class AuthenticationService {
     $errorService: any
 
     constructor(quasar: any, errorService: ErrorService) {
-        // Set up user pool
+        // Set up authentication pool
         const poolSettings = {
             UserPoolId: process.env.VUE_APP_USER_POOL_ID,
             ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID
@@ -53,9 +53,9 @@ export class AuthenticationService {
     }
 
     /**
-     * Logs into the AWS user pool using the given data
-     * @param identifier {string} - the user's identifier (usually E-mail or username)
-     * @param password {string} - the user's password
+     * Logs into the AWS authentication pool using the given data
+     * @param identifier {string} - the authentication's identifier (usually E-mail or username)
+     * @param password {string} - the authentication's password
      */
     async login(identifier: string, password: string): Promise<void>{
 
@@ -65,7 +65,7 @@ export class AuthenticationService {
             Password: password
         });
 
-        // Actual Cognito user on given pool
+        // Actual Cognito authentication on given pool
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
             Username: identifier,
             Pool: this.userPool,
@@ -108,11 +108,11 @@ export class AuthenticationService {
     }
 
     /**
-     * Signs up by creating a new user using the given Username, e-mail and password.
+     * Signs up by creating a new authentication using the given Username, e-mail and password.
      * TODO make adaptable to other parameters via direct handling of {attributes} param
      * @param username {string} - the chosen username
-     * @param email {string} - the user's e-mail address -> TODO move to attributes
-     * @param password {string} - the new user's chosen password. Must fulfill the set password conditions
+     * @param email {string} - the authentication's e-mail address -> TODO move to attributes
+     * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
      */
     async signUp(username: string, email: string, password: string) {
         const cognitoUserWrapper:any = await new Promise((resolve, reject) => {
@@ -136,7 +136,7 @@ export class AuthenticationService {
     }
 
     /**
-     * Logs out the currently logged in user (if any)
+     * Logs out the currently logged in authentication (if any)
      */
     logout(){
         store.getCognitoUser.value?.signOut(()=>{
@@ -330,7 +330,7 @@ export class AuthenticationService {
 
     /**
      * When login succeeds
-     * @param userSession {CognitoUserSession} - the currently active Cognito user session
+     * @param userSession {CognitoUserSession} - the currently active Cognito authentication session
      */
     loginSuccess(userSession: CognitoUserSession){
         // Store locally
@@ -346,7 +346,7 @@ export class AuthenticationService {
     }
 
     /**
-     * When any operation (mostly login) fails, verify whether it is due to the user not having verified their account
+     * When any operation (mostly login) fails, verify whether it is due to the authentication not having verified their account
      * @param error {Error} - the error that caused the failure
      */
     onFailure(error: Error){

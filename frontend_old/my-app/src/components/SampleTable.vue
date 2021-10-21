@@ -86,7 +86,7 @@ const columns = [
 let selected = ref([])
 
 /**
- * Deletes the currently selected user
+ * Deletes the currently selected authentication
  */
 function onDelete(){
   executeMutation(

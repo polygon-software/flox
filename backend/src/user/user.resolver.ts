@@ -35,9 +35,9 @@ export class UserResolver {
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
     const newUser = await this.usersService.create(createUserInput);
-    // Publish user so subscriptions will auto-update
+    // Publish authentication so subscriptions will auto-update
     await pubSub.publish('userAdded', { userAdded: newUser });
-    console.log('Publishing new user', newUser, 'on PubSub!');
+    console.log('Publishing new authentication', newUser, 'on PubSub!');
     return newUser;
   }
 

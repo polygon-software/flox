@@ -15,8 +15,7 @@ const ROUTES = {
   },
 
 
-  // Always leave this as last one,
-  // but you can also remove it
+  // Wildcard route for non-covered routes
   'WILDCARD': {
     path: '/:catchAll(.*)*',
     component: () => import('pages/Error404.vue'),

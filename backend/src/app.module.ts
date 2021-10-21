@@ -31,10 +31,10 @@ import { Context } from 'vm';
             // if (!isValid(authToken)) {
             //   throw new Error('Token is not valid');
             // }
-            // // extract user information from token
-            // const user = parseToken(authToken);
-            // // return user info to add them to the context later
-            // return { user };
+            // // extract authentication information from token
+            // const authentication = parseToken(authToken);
+            // // return authentication info to add them to the context later
+            // return { authentication };
           },
         },
       },

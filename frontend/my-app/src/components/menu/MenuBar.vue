@@ -57,21 +57,21 @@ const $authService: ref<AuthenticationService> = inject('$authService')
 const loggedIn = store.getLoggedInStatus
 
 /**
- * Logs out the current user
+ * Logs out the current authentication
  */
 function logout(){
   $authService.value.logout();
 }
 
 /**
- * Triggers a password change for the currently logged in user
+ * Triggers a password change for the currently logged in authentication
  */
 function changePassword() {
   $authService.value.changePasswordDialog()
 }
 
 /**
- * Triggers a password change for a non-logged in user
+ * Triggers a password change for a non-logged in authentication
  */
 function forgottenPassword() {
   $authService.value.resetPasswordDialog();

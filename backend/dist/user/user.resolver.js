@@ -39,7 +39,7 @@ let UserResolver = class UserResolver {
     async create(createUserInput) {
         const newUser = await this.usersService.create(createUserInput);
         await pubSub.publish('userAdded', { userAdded: newUser });
-        console.log('Publishing new user', newUser, 'on PubSub!');
+        console.log('Publishing new authentication', newUser, 'on PubSub!');
         return newUser;
     }
     async update(updateUserInput) {
