@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-4">
-    <MenuBar :logged-in="$authService.isLoggedIn()"/>
+    <MenuBar/>
     <q-page class="flex flex-center">
       <!-- Login Card -->
       <q-card class="q-pa-md q-ma-md">
