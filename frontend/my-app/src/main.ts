@@ -77,8 +77,6 @@ const languages = {
     "de": de,
 }
 
-console.log(languages)
-
 // i18n setup
 const i18n = createI18n({
     locale: 'de', // set locale
