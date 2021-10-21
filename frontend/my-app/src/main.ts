@@ -8,6 +8,8 @@ import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
 import { createRouter,createWebHashHistory } from 'vue-router'
 import {ROUTES} from "@/router/ROUTES";
+import en from "./i18n/en.json"
+import de from "./i18n/de.json"
 
 // Custom Components TODO move with routes
 import MainPage from "@/pages/MainPage.vue";
@@ -51,13 +53,24 @@ const apolloClient = new ApolloClient({
     })
 })
 
-
 // Router setup
 const routes = Object.values(ROUTES)
 
     const router = createRouter({
     history: createWebHashHistory(),
     routes
+})
+
+// i18n setup
+const languages = {
+    en,
+    de,
+}
+
+const i18n = VueI18n.createI18n({
+    locale: 'ja', // set locale
+    fallbackLocale: 'en', // set fallback locale
+    languages,
 })
 
 const app = createApp({
