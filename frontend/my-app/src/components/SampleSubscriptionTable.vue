@@ -32,6 +32,8 @@ const columns = [
 
 // Watch for subscription changes
 watch(
+    // TODO fix
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     () => result.value,
     (newUser) => {
       users.value.push(newUser.userAdded)

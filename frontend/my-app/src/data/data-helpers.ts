@@ -55,28 +55,33 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
                 const change = changeData[mutationObject.cacheLocation]
 
                 // Read existing query from cache
-                const data:any = cache.readQuery({ query: queryObject.query })
+                const data:Record<string, Array<unknown>>|null = cache.readQuery({ query: queryObject.query })
 
-                // Determine cache location
-                const cacheLocation = queryObject.cacheLocation
-                const oldData = data[cacheLocation]
-                let newData
+                if(data) {
+                  // Determine cache location
+                  const cacheLocation = queryObject.cacheLocation
+                  const oldData:Array<unknown> = data[cacheLocation]
+                  let newData
 
-                // Case 1: CREATE (adds new object to cache)
-                if(type === MutationTypes.CREATE){
+                  // Case 1: CREATE (adds new object to cache)
+                  if (type === MutationTypes.CREATE) {
                     newData = [...oldData, change]
-                }
-                // Case 2: DELETE (removes object from cache)
-                else if(type === MutationTypes.DELETE){
-                    newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.id !== change.id)
-                }
+                  }
+                  // Case 2: DELETE (removes object from cache)
+                  else if (type === MutationTypes.DELETE) {
+                    // TODO fix...
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    newData = oldData.filter((dataPoint: any) => dataPoint.id !== change.id)
+                  }
 
-                // TODO separate create/delete
-                cache.writeQuery({ query: queryObject.query, data: {
-                        ...data,
-                        [cacheLocation]: newData
+                  // TODO separate create/delete
+                  cache.writeQuery({
+                    query: queryObject.query, data: {
+                      ...data,
+                      [cacheLocation]: newData
                     }
-                })
+                  })
+                }
             })
 
         },
