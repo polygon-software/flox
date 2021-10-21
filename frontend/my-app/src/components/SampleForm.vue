@@ -31,9 +31,9 @@
 </template>
 
 <script setup lang="ts">
-import {CREATE_USER}  from "@/data/MUTATIONS";
+import {CREATE_USER}  from '../data/MUTATIONS';
 import { ref } from 'vue'
-import {executeMutation} from "@/data/data-helpers";
+import {executeMutation} from '../data/data-helpers';
 
 // "ref" needed to pass by reference / make reactive
 let name = ref(null);
