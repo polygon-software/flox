@@ -16,7 +16,7 @@ import { createRouter,createWebHashHistory } from 'vue-router'
 import {ROUTES} from "@/router/ROUTES";
 
 // i18n
-import VueI18n from 'vue-i18n'
+import {createI18n} from 'vue-i18n'
 import en from "./i18n/en.json"
 import de from "./i18n/de.json"
 
@@ -78,7 +78,7 @@ const languages = {
 }
 
 // i18n setup
-const i18n = VueI18n.createI18n({
+const i18n = createI18n({
     locale: 'de', // set locale
     fallbackLocale: 'en', // set fallback locale
     languages,
