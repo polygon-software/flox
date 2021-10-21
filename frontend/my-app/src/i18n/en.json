@@ -1,3 +1,5 @@
 {
-  "loggedIn": "Logged in as $user"
+  "loggedIn": "Logged in as {user}",
+  "login": "Log in",
+  "signUp": "Sign up"
 }
