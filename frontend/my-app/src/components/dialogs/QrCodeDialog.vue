@@ -2,7 +2,7 @@
   <q-dialog
       ref="dialog"
       :persistent="true"
-      title="Blubb"
+      title="QR"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
@@ -33,8 +33,8 @@
 </template>
 
 <script setup lang="ts">
-  import QrcodeVue from "qrcode.vue";
-  import {defineProps, defineEmits, ref} from "vue";
+  import QrcodeVue from 'qrcode.vue';
+  import {defineProps, defineEmits, ref} from 'vue';
 
   let dialog = ref(null)
 
@@ -44,15 +44,7 @@
 
   const emit = defineEmits(['ok'])
 
-  // eslint-disable-next-line no-unused-vars
-  function show(){
-    //@ts-ignore
-    dialog.value?.show()
-  }
-
-  // eslint-disable-next-line no-unused-vars
   function hide(){
-    //@ts-ignore
     dialog.value?.hide()
   }
 

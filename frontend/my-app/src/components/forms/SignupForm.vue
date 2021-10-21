@@ -54,9 +54,9 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from "vue";
-import {ref} from "vue";
-import {PASSWORD_REGEX, EMAIL_REGEX} from "@/helpers/REGEX"
+import {defineEmits} from 'vue';
+import {ref} from 'vue';
+import {PASSWORD_REGEX, EMAIL_REGEX} from '../../helpers/REGEX'
 
 let username = ref('')
 let email = ref('')

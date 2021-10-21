@@ -52,9 +52,9 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from "vue";
-import {ref} from "vue";
-import {PASSWORD_REGEX} from "@/helpers/REGEX"
+import {defineEmits} from 'vue';
+import {ref} from 'vue';
+import {PASSWORD_REGEX} from '../../helpers/REGEX'
 
 let verificationCode = ref('')
 let password = ref('')
@@ -74,15 +74,7 @@ function onSubmit(){
   hide()
 }
 
-// eslint-disable-next-line no-unused-vars
-function show(){
-  //@ts-ignore
-  dialog.value?.show()
-}
-
-// eslint-disable-next-line no-unused-vars
 function hide(){
-  //@ts-ignore
   dialog.value?.hide()
 }
 

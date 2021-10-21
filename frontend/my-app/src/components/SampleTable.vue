@@ -92,7 +92,6 @@ function onDelete(){
   executeMutation(
       DELETE_USER,
       {
-        //@ts-ignore
         id: selected.value[0].id
       }
   ).then(() => {
@@ -100,7 +99,7 @@ function onDelete(){
   })
 }
 
-function onUpdate(id: string, variables: Object){
+function onUpdate(id: string, variables: Record<string, unknown>){
   executeMutation(
       UPDATE_USER,
       {
