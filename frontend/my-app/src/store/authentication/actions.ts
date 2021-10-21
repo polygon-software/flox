@@ -3,9 +3,9 @@ import { StateInterface } from '../index';
 import { AuthStateInterface } from './state';
 
 const actions: ActionTree<AuthStateInterface, StateInterface> = {
-  someAction (/* context */) {
-    // your code
-  }
+  // someAction (/* context */) {
+  //   // your code
+  // }
 };
 
 export default actions;

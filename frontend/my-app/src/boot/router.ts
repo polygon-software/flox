@@ -3,7 +3,8 @@ import ROUTES from '../router/routes'
 
 export default boot(({ router, store }) => {
   router.beforeEach((to) => {
-    // TODO store
+
+    // Verify valid authentication
     if(to.path !== ROUTES.LOGIN.path && !store.getters['authentication/getLoggedInStatus']){
       return Promise.reject({ url: ROUTES.LOGIN.path })
     }

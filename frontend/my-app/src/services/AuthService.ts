@@ -1,11 +1,12 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoAccessToken, CognitoIdToken, CognitoRefreshToken} from 'amazon-cognito-auth-js';
-import {CognitoUser, CognitoUserSession} from 'amazon-cognito-identity-js';
+import {CognitoUser, CognitoUserSession, ICognitoUserPoolData, ISignUpResult} from 'amazon-cognito-identity-js';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from '../components/forms/ChangePasswordForm.vue'
 import ResetPasswordForm from '../components/forms/ResetPasswordForm.vue'
 import {ErrorService} from './ErrorService';
 import * as store from '../store/store-old'
+import {QuasarContext} from '@quasar/app/types/configuration/context';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -18,31 +19,31 @@ export class AuthenticationService {
     userPool: AmazonCognitoIdentity.CognitoUserPool
 
     // Tokens
-    accessToken: CognitoAccessToken|null
-    idToken: CognitoIdToken|null
-    refreshToken: CognitoRefreshToken|null
+    accessToken?: CognitoAccessToken
+    idToken?: CognitoIdToken
+    refreshToken?: CognitoRefreshToken
 
     // Application info
     appName: string
 
     // Quasar instance
-    $q: any
+    $q: QuasarContext
 
     // Error handler service
-    $errorService: any
+    $errorService: ErrorService
 
-    constructor(quasar: any, errorService: ErrorService) {
+    constructor(quasar: never, errorService: ErrorService) {
         // Set up authentication pool
-        const poolSettings = {
-            UserPoolId: process.env.VUE_APP_USER_POOL_ID,
-            ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID
+        const poolSettings:ICognitoUserPoolData = {
+            UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
+            ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
         };
         this.userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
 
         // Initialize tokens
-        this.accessToken = null
-        this.idToken = null
-        this.refreshToken = null
+        this.accessToken = undefined
+        this.idToken = undefined
+        this.refreshToken = undefined
 
         // Quasar & environment variables
         this.$q = quasar
@@ -80,10 +81,7 @@ export class AuthenticationService {
                 onSuccess: (result)=>{ this.loginSuccess(result)},
                 onFailure: (err)=>{ this.onFailure(err) },
                 // Sets up MFA (only done once after signing up)
-                mfaSetup: function () {
-                    console.log('Set up MFA!')
-                    cognitoUser.associateSoftwareToken(this)
-                },
+                mfaSetup: (user) => {this.setupMFA(user)},
 
                 // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
                 selectMFAType: function (challengeName, challengeParameters) {
@@ -102,9 +100,21 @@ export class AuthenticationService {
                     }
                 },
 
-                associateSecretCode: (secret) => {this.showQRCodeDialog(secret)}
+
             })
         })
+    }
+
+
+  /**
+   * Sets up MFA for the given cognito user
+   * @param cognitoUser {CognitoUser} - the user
+   */
+  setupMFA(cognitoUser: CognitoUser){
+      cognitoUser.associateSoftwareToken({
+        associateSecretCode: (secret: string) => {this.showQRCodeDialog(secret)},
+        onFailure: (err) => {this.onFailure(err)}
+      })
     }
 
     /**
@@ -121,8 +131,9 @@ export class AuthenticationService {
             // TODO disable requirement on AWS @thommann
             attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
             console.log(username, password, attributes)
-          this.userPool.signUp(username, password, attributes, [], (err: Error, result: CognitoUser) => {
+          this.userPool.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
                 if (err) {
+                  // TODO
                     console.log('blubb', err)
                     reject();
                 }
@@ -186,7 +197,7 @@ export class AuthenticationService {
             // Call forgotPassword on cognitoUser
             store.getCognitoUser.value?.forgotPassword({
                 onSuccess: function(result) {
-                    console.log('call result: ' + result);
+                    // TODO
                 },
                 onFailure: (err) => {this.onFailure(err)},
                 inputVerificationCode: () => {this.showResetPasswordFormDialog()}
@@ -337,11 +348,8 @@ export class AuthenticationService {
         store.setUserSession(userSession)
 
         // Get & store tokens
-        // @ts-ignore
         this.accessToken = userSession.getAccessToken()
-        // @ts-ignore
         this.idToken = userSession.getIdToken()
-        // @ts-ignore
         this.refreshToken = userSession.getRefreshToken()
     }
 
