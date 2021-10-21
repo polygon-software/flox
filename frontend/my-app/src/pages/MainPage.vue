@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-4">
-    <MenuBar :logged-in="store.getLoggedInStatus"/>
+    <MenuBar/>
     <q-page class="flex flex-center">
       <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
       <div class="column">
@@ -22,8 +22,6 @@ import SampleTable from "../components/SampleTable"
 import SampleForm from "../components/SampleForm"
 import SampleSubscriptionTable from "../components/SampleSubscriptionTable"
 import MenuBar from "../components/menu/MenuBar"
-import * as store from "../store/store"
-
 </script>
 
 <style scoped>
