@@ -1,6 +1,0 @@
-{
-	"appId": "ch.polygonsoftware.sample",
-	"appName": "Sample App",
-	"webDir": "dist",
-	"bundledWebRuntime": false
-}
