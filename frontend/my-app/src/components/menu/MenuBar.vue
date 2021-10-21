@@ -12,28 +12,28 @@
       </h5>
       <p
           class="text-grey-7"
-          v-if="props.loggedIn && userName"
+          v-if="loggedIn && store.getUsername"
       >
-        Logged in as {{ userName }}
+        Logged in as {{ store.getUsername }}
       </p>
     </div>
   <div class="row">
     <q-btn
-        v-if="props.loggedIn"
+        v-if="loggedIn"
         label="Logout"
         class="text-primary"
         flat
         @click="logout"
     />
     <q-btn
-        v-if="props.loggedIn"
+        v-if="loggedIn"
         label="Change Password"
         class="text-primary"
         flat
         @click="changePassword"
     />
     <q-btn
-        v-if="!props.loggedIn"
+        v-if="!loggedIn"
         label="Password Forgotten"
         class="text-primary"
         flat
@@ -46,26 +46,15 @@
 
 <script setup lang="ts">
 
-import {inject, defineProps, ref, computed} from 'vue'
+import {inject, ref} from 'vue'
 import {AuthenticationService} from "@/services/AuthService";
+import * as store from "../../store/store"
 
 //@ts-ignore
 const $authService: ref<AuthenticationService> = inject('$authService')
 
-const props = defineProps({
-  loggedIn: Boolean
-})
 
-const userName = computed(() =>
-    {
-      console.log($authService.value.cognitoUser)
-      if($authService.value.cognitoUser){
-        return $authService.value.cognitoUser.username
-      }
-
-      return ''
-    }
-)
+const loggedIn = store.getLoggedInStatus
 
 /**
  * Logs out the current user

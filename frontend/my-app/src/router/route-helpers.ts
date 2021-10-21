@@ -1,6 +1,7 @@
 import {useRouter} from "vue-router";
 import {ROUTES} from "@/router/ROUTES";
 import {AuthenticationService} from "@/services/AuthService";
+import * as store from "../store/store"
 
 /**
  * This file defines all router-related helper functions.
@@ -17,7 +18,7 @@ export function setupRouter($authService: AuthenticationService){
     router.beforeEach((to) => {
         const loginPath = ROUTES.LOGIN.path
 
-        if(to.path != loginPath && !$authService.isLoggedIn()){
+        if(to.path != loginPath && !store.getLoggedInStatus.value){
             return loginPath
         }
     })
