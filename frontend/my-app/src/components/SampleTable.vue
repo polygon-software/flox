@@ -89,7 +89,7 @@ let selected = ref([])
  * Deletes the currently selected authentication
  */
 function onDelete(){
-  executeMutation(
+  void executeMutation(
       DELETE_USER,
       {
         id: selected.value[0].id
@@ -100,7 +100,7 @@ function onDelete(){
 }
 
 function onUpdate(id: string, variables: Record<string, unknown>){
-  executeMutation(
+  void executeMutation(
       UPDATE_USER,
       {
         id: id,
