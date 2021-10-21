@@ -1,5 +1,5 @@
-import {computed, Ref, ref} from "vue";
-import {CognitoUser, CognitoUserSession} from "amazon-cognito-identity-js";
+import {computed, Ref, ref} from 'vue';
+import {CognitoUser, CognitoUserSession} from 'amazon-cognito-identity-js';
 
 
 // Type definition of state
