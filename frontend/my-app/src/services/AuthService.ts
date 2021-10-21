@@ -5,7 +5,7 @@ import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from "../components/forms/ChangePasswordForm.vue"
 import ResetPasswordForm from "../components/forms/ResetPasswordForm.vue"
 import {ErrorService} from "@/services/ErrorService";
-import {ref} from "vue";
+import * as store from "../store/store"
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -23,8 +23,6 @@ export class AuthenticationService{
     refreshToken: CognitoRefreshToken|null
 
     // User
-    cognitoUser: AmazonCognitoIdentity.CognitoUser|null
-    userSession: CognitoUserSession|null
 
     // Application info
     appName: String
@@ -59,13 +57,6 @@ export class AuthenticationService{
 
         // Error service
         this.$errorService = errorService
-    }
-
-    /**
-     * Checks whether the user is currently logged in
-     */
-    isLoggedIn(){
-        return this.userSession?.isValid() ?? false
     }
 
     /**
@@ -111,7 +102,7 @@ export class AuthenticationService{
                 // Called if time-limited one time password is required (only second login or later)
                 totpRequired: (tokenType) => {this.verify2FACode(tokenType)},
 
-                //TODO NANI
+                //TODO check when this appears
                 mfaRequired: function (codeDeliveryDetails) {
                     const verificationCode = prompt('Please input verification code', '');
                     if (typeof verificationCode === "string") {
