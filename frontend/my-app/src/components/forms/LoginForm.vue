@@ -31,8 +31,8 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from "vue";
-import {ref} from "vue";
+import {defineEmits} from 'vue';
+import {ref} from 'vue';
 
 let username = ref('')
 let password = ref('')

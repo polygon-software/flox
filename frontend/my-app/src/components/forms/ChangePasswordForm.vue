@@ -2,7 +2,7 @@
   <q-dialog
       ref="dialog"
       :persistent="true"
-      title="Blubb"
+      title="Change Password"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
       <b>Change Password</b>
@@ -55,9 +55,9 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from "vue";
-import {ref} from "vue";
-import {PASSWORD_REGEX} from "@/helpers/REGEX"
+import {defineEmits} from 'vue';
+import {ref} from 'vue';
+import {PASSWORD_REGEX} from '../../helpers/REGEX'
 
 let passwordOld = ref('')
 let password = ref('')
@@ -77,15 +77,7 @@ function onSubmit(){
   hide()
 }
 
-// eslint-disable-next-line no-unused-vars
-function show(){
-  //@ts-ignore
-  dialog.value?.show()
-}
-
-// eslint-disable-next-line no-unused-vars
 function hide(){
-  //@ts-ignore
   dialog.value?.hide()
 }
 
