@@ -5,14 +5,14 @@ import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordForm from '../components/forms/ChangePasswordForm.vue'
 import ResetPasswordForm from '../components/forms/ResetPasswordForm.vue'
 import {ErrorService} from './ErrorService';
-import * as store from '../../store/store'
+import * as store from '../store/store-old'
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
  * signing up, logging in, logging out, changing passwords, and more.
  */
 
-export class AuthenticationService{
+export class AuthenticationService {
 
     // AWS User Pool
     userPool: AmazonCognitoIdentity.CognitoUserPool

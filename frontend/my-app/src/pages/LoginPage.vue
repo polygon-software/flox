@@ -1,28 +1,24 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-grey-4">
-    <MenuBar/>
-    <q-page class="flex flex-center">
-      <!-- Login Card -->
-      <q-card class="q-pa-md q-ma-md">
-        <LoginForm @submit="onLogin"/>
-      </q-card>
+  <q-page class="flex flex-center">
+    <!-- Login Card -->
+    <q-card class="q-pa-md q-ma-md">
+      <LoginForm @submit="onLogin"/>
+    </q-card>
 
-      <!-- Signup Card -->
-      <q-card class="q-pa-md q-ma-md">
-        <SignupForm @submit="onSignup"/>
-      </q-card>
-    </q-page>
-  </q-layout>
+    <!-- Signup Card -->
+    <q-card class="q-pa-md q-ma-md">
+      <SignupForm @submit="onSignup"/>
+    </q-card>
+  </q-page>
 </template>
 
 <script setup lang="ts">
-import LoginForm from '../components/forms/LoginForm.vue'
-import SignupForm from '../components/forms/SignupForm.vue'
-import MenuBar from '../components/menu/MenuBar'
+import LoginForm from 'components/forms/LoginForm.vue'
+import SignupForm from 'components/forms/SignupForm.vue'
 import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 
-const $authService: AuthenticationService = inject('$authService')
+const $authService: AuthenticationService = inject<AuthenticationService>('$authService')
 
 /**
  * Logs in the given user
