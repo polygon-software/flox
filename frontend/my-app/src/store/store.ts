@@ -37,7 +37,7 @@ const getUserSession = computed(() => state.value.authentication.userSession)
 function setUserSession(value?: CognitoUserSession){
     state.value.authentication.userSession = value
 }
-function setCognitoUser(value: CognitoUser){
+function setCognitoUser(value?: CognitoUser){
     state.value.authentication.cognitoUser = value
 }
 
@@ -47,6 +47,8 @@ function setCognitoUser(value: CognitoUser){
 export {
     getLoggedInStatus,
     getUsername,
+    getCognitoUser,
+    getUserSession,
     setUserSession,
     setCognitoUser
 }
