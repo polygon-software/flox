@@ -1,15 +1,25 @@
 import App from './App.vue'
+import { createApp, provide, h } from 'vue'
+
+// Quasar
 import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
+
+// Apollo
 import {ApolloClient, createHttpLink, InMemoryCache, split} from "@apollo/client/core";
-import { createApp, provide, h } from 'vue'
 import {DefaultApolloClient, provideApolloClient} from '@vue/apollo-composable'
 import {WebSocketLink} from "@apollo/client/link/ws";
 import {getMainDefinition} from "@apollo/client/utilities";
+
+// Routing
 import { createRouter,createWebHashHistory } from 'vue-router'
 import {ROUTES} from "@/router/ROUTES";
+
+// i18n
+import VueI18n from 'vue-i18n'
 import en from "./i18n/en.json"
 import de from "./i18n/de.json"
+
 
 // Custom Components TODO move with routes
 import MainPage from "@/pages/MainPage.vue";
@@ -61,18 +71,20 @@ const routes = Object.values(ROUTES)
     routes
 })
 
-// i18n setup
+// i18n languages
 const languages = {
     en,
     de,
 }
 
+// i18n setup
 const i18n = VueI18n.createI18n({
-    locale: 'ja', // set locale
+    locale: 'de', // set locale
     fallbackLocale: 'en', // set fallback locale
     languages,
 })
 
+// Set up App itself
 const app = createApp({
     setup () {
         provide(DefaultApolloClient, apolloClient)
@@ -81,6 +93,9 @@ const app = createApp({
     render: () => h(App),
 })
 
+// Apply plugins
 app.use(router)
 app.use(Quasar, quasarUserOptions)
+app.use(i18n)
+
 app.mount('#app')
