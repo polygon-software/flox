@@ -10,11 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import { USER_ADDED } from "@/data/SUBSCRIPTIONS";
-import { ALL_USERS } from "@/data/QUERIES";
-import { useSubscription } from "@vue/apollo-composable";
-import { executeQuery } from "@/data/data-helpers";
-import {ref, watch} from "vue";
+import { USER_ADDED } from '../data/SUBSCRIPTIONS';
+import { ALL_USERS } from '../data/QUERIES';
+import { useSubscription } from '@vue/apollo-composable';
+import { executeQuery } from '../data/data-helpers';
+import {ref, watch} from 'vue';
 
 const users = ref([]);
 
