@@ -23,7 +23,7 @@
       <q-btn
           style="margin-top: 5px"
           color="primary"
-          label="Log in"
+          :label="$t('login')"
           type="submit"
       />
     </q-form>

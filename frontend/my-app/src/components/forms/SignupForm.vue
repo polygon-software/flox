@@ -46,7 +46,7 @@
       <q-btn
           style="margin-top: 25px"
           color="primary"
-          label="Sign up"
+          :label="$t('signUp')"
           type="submit"
       />
       </q-form>
