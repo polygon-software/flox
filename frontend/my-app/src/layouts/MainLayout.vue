@@ -8,5 +8,5 @@
 </template>
 
 <script setup lang="ts">
-
+import MenuBar from '../components/menu/MenuBar'
 </script>
