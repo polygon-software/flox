@@ -18,7 +18,6 @@ import SignupForm from 'components/forms/SignupForm.vue'
 import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
-import {routerInstance} from 'boot/router';
 
 const $authService: AuthenticationService = inject<AuthenticationService>('$authService')
 
