@@ -1,30 +1,56 @@
-import { ApolloClient /*, createHttpLink */ } from '@apollo/client/core'
+import {ApolloClient, createHttpLink, InMemoryCache, split /*, createHttpLink */} from '@apollo/client/core'
 import { ApolloClients } from '@vue/apollo-composable'
 import { boot } from 'quasar/wrappers'
 import { getClientOptions } from 'src/apollo'
+import {WebSocketLink} from '@apollo/client/link/ws';
+import {getMainDefinition} from '@apollo/client/utilities';
 
 export default boot(
-  /* async */ ({ app }) => {
+  ({ app }) => {
+    // HTTP link for GraphQL (Queries/Mutations)
+    const httpLink = createHttpLink({
+      // GraphQL API Link
+      uri: 'http://localhost:3000/graphql',
+    })
+
+    // WebSocket link for GraphQL (Subscriptions)
+    const wsLink = new WebSocketLink({
+      uri: 'ws://localhost:3000/graphql-websocket',
+      options: {
+        reconnect: true
+      }
+    });
+
+    // Depending on operation, use correct link
+    const link = split(
+      // split based on operation type
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
+      },
+      wsLink,
+      httpLink
+    );
+
     // Default client.
-    const options = /* await */ getClientOptions(/* {app, router ...} */)
-    const apolloClient = new ApolloClient(options)
+    const options = getClientOptions(/* {app, router ...} */)
 
-    // // Additional client `clientA`
-    // const optionsA = { ...options }
-    // // Modify options as needed.
-    // optionsA.link = createHttpLink({ uri: 'http://clientA.example.com' })
-    // const clientA = new ApolloClient(optionsA)
-
-    // // Additional client `clientB`
-    // const optionsB = { ...options }
-    // // Modify options as needed.
-    // optionsB.link = createHttpLink({ uri: 'http://clientB.example.com' })
-    // const clientB = new ApolloClient(optionsB)
+    // Apollo Client setup
+    const apolloClient = new ApolloClient({
+      ...options,
+      link: link,
+      cache: new InMemoryCache({
+        addTypename: false, // We disable auto-adding of __typename property, as this breaks mutations expecting
+                            // an object variable. Instead, we manually add __typename in QUERIES/MUTATIONS.ts where
+                            // appropriate. This can be changed in case Apollo implements better behavior for this.
+      })
+    })
 
     const apolloClients: Record<string, ApolloClient<unknown>> = {
       default: apolloClient,
-      // clientA,
-      // clientB,
     }
 
     app.provide(ApolloClients, apolloClients)
