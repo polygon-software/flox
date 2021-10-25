@@ -1,5 +1,11 @@
-// TODO type
-const ROUTES = {
+import {RouteRecordRaw} from 'vue-router';
+
+/**
+ * This file defines the routes available within the application
+ */
+
+// All routes available within the application
+const ROUTES: Record<string, RouteRecordRaw> = {
   'MAIN': {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
@@ -20,4 +26,4 @@ const ROUTES = {
   },
 };
 
-export default ROUTES;
+export default ROUTES
