@@ -17,6 +17,8 @@ import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
 import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
+import ROUTES from 'src/router/routes';
+import {routerInstance} from 'boot/router';
 
 const $authService: AuthenticationService = inject<AuthenticationService>('$authService')
 
@@ -27,6 +29,8 @@ const $authService: AuthenticationService = inject<AuthenticationService>('$auth
  */
 async function onLogin({username, password}: {username: string, password: string}){
   await $authService.value.login(username, password)
+  console.log('blubb')
+  await routerInstance.push(ROUTES.MAIN) // TODO
 }
 
 

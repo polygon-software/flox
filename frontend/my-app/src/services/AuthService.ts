@@ -80,12 +80,12 @@ export class AuthenticationService {
         // Store in local variable
         this.$store.commit('authentication/setCognitoUser', cognitoUser)
         // Execute auth function
-        return new Promise(() => {
+        return new Promise((resolve) => {
             cognitoUser.authenticateUser(authenticationDetails, {
-                onSuccess: (result)=>{ this.loginSuccess(result)},
+                onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
                 onFailure: (err)=>{ this.onFailure(err) },
                 // Sets up MFA (only done once after signing up)
-                mfaSetup: (user) => {this.setupMFA(user)},
+                mfaSetup: (user) => {this.setupMFA(user, resolve)},
 
                 // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
                 selectMFAType: function (challengeName, challengeParameters) {
@@ -94,7 +94,7 @@ export class AuthenticationService {
                 },
 
                 // Called if time-limited one time password is required (only second login or later)
-                totpRequired: (tokenType) => {this.verify2FACode(tokenType)},
+                totpRequired: (tokenType) => {this.verify2FACode(tokenType, resolve)},
 
                 //TODO check when this appears
                 mfaRequired: function () {
@@ -113,10 +113,11 @@ export class AuthenticationService {
   /**
    * Sets up MFA for the given cognito user
    * @param cognitoUser {CognitoUser} - the user
+   * @param resolve {TODO}
    */
-  setupMFA(cognitoUser: CognitoUser): void{
+  setupMFA(cognitoUser: CognitoUser, resolve: any): void{
       cognitoUser.associateSoftwareToken({
-        associateSecretCode: (secret: string) => {this.showQRCodeDialog(secret)},
+        associateSecretCode: (secret: string) => {this.showQRCodeDialog(secret, resolve)},
         onFailure: (err) => {this.onFailure(err)}
       })
     }
@@ -266,8 +267,9 @@ export class AuthenticationService {
     /**
      * Shows a dialog containing a QR code for setting up two factor authentication
      * @param secretCode {string} - the authenticator code to encode in QR code form
+     * @param resolve {TODO}
      */
-    showQRCodeDialog(secretCode: string): void{
+    showQRCodeDialog(secretCode: string, resolve: any): void{
         const username = this.$store.getters['authentication/getUsername']
         const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
         this.$q.dialog({
@@ -291,7 +293,7 @@ export class AuthenticationService {
                 // TODO friendlyDeviceName
                 this.$store.getters['authentication/getCognitoUser']?.verifySoftwareToken(code, 'My TOTP device', {
                     onSuccess: (userSession: CognitoUserSession)=>{
-                        this.loginSuccess(userSession)
+                        this.loginSuccess(userSession, resolve)
                     },
                     onFailure: (error: Error)=>{
                         this.$errorService.showErrorDialog(error)
@@ -323,7 +325,7 @@ export class AuthenticationService {
      * Verifies a given 2FA code
      * @param tokenType {string} - the type of token to verify
      */
-    verify2FACode (tokenType: string): void {
+    verify2FACode (tokenType: string, resolve: any): void {
         // Verify code
         this.$q.dialog({
             title: 'Verification',
@@ -340,7 +342,7 @@ export class AuthenticationService {
           const currentUser = _.cloneDeep(this.$store.getters['authentication/getCognitoUser'])
           currentUser.sendMFACode(code, {
             onSuccess: (userSession: CognitoUserSession)=>{
-                this.loginSuccess(userSession)
+                this.loginSuccess(userSession, resolve)
             },
             onFailure: (error: Error)=>{
                 this.$errorService.showErrorDialog(error)
@@ -352,15 +354,18 @@ export class AuthenticationService {
     /**
      * When login succeeds
      * @param userSession {CognitoUserSession} - the currently active Cognito authentication session
+     * @param resolve {TODO}
      */
-    loginSuccess(userSession: CognitoUserSession): void{
-        // Store locally
-        this.$store.commit('authentication/setUserSession', userSession)
+    loginSuccess(userSession: CognitoUserSession, resolve: any): void{
+      // Store locally
+      this.$store.commit('authentication/setUserSession', userSession)
 
-        // Get & store tokens
-        this.accessToken = userSession.getAccessToken()
-        this.idToken = userSession.getIdToken()
-        this.refreshToken = userSession.getRefreshToken()
+      // Get & store tokens
+      this.accessToken = userSession.getAccessToken()
+      this.idToken = userSession.getIdToken()
+      this.refreshToken = userSession.getRefreshToken()
+
+      resolve()
     }
 
     /**
