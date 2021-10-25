@@ -11,7 +11,8 @@ export default{
   preFetch({store, ssrContext}: {store: any, ssrContext: any}){
     console.log('Prefetch!')
     const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
-    store.commit('authentication/setPersistedState', cookies.get('authentication')) // TODO
+    // TODO
+    //store.commit('authentication/setPersistedData', cookies.get('authentication'))
   }
 }
 
