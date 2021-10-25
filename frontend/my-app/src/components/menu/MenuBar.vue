@@ -47,7 +47,7 @@
 <script setup lang="ts">
 
 import {inject, ref} from 'vue'
-import {AuthenticationService} from '../../services/AuthService';
+import {AuthenticationService} from 'src/services/AuthService';
 import {useStore} from 'src/store';
 
 const $authService: ref<AuthenticationService> = inject('$authService')
