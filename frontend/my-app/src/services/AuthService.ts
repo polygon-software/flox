@@ -7,6 +7,7 @@ import {ErrorService} from './ErrorService';
 import {QVueGlobals} from 'quasar';
 import {useStore} from 'src/store';
 import {Store} from 'vuex';
+import _ from 'lodash';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -78,7 +79,6 @@ export class AuthenticationService {
 
         // Store in local variable
         this.$store.commit('authentication/setCognitoUser', cognitoUser)
-
         // Execute auth function
         return new Promise(() => {
             cognitoUser.authenticateUser(authenticationDetails, {
@@ -336,14 +336,16 @@ export class AuthenticationService {
                 type: 'text'
             },
         }).onOk((code: string) => {
-            this.$store.getters['authentication/getCognitoUser']?.sendMFACode(code, {
-                onSuccess: (userSession: CognitoUserSession)=>{
-                    this.loginSuccess(userSession)
-                },
-                onFailure: (error: Error)=>{
-                    this.$errorService.showErrorDialog(error)
-                },
-            }, tokenType);
+          // Deep copy user so state object does not get altered
+          const currentUser = _.cloneDeep(this.$store.getters['authentication/getCognitoUser'])
+          currentUser.sendMFACode(code, {
+            onSuccess: (userSession: CognitoUserSession)=>{
+                this.loginSuccess(userSession)
+            },
+            onFailure: (error: Error)=>{
+                this.$errorService.showErrorDialog(error)
+            },
+        }, tokenType);
         });
     }
 
