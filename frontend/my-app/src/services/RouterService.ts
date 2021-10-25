@@ -1,4 +1,4 @@
-import {NavigationFailure, Router} from 'vue-router';
+import {NavigationFailure, Router, RouteRecordRaw} from 'vue-router';
 
 /**
  * This is a service that is used globally throughout the application for routing
@@ -16,9 +16,9 @@ export class RouterService {
 
   /**
    * Routes to a given route, as defined in ROUTES constant
-   * @param to {TODO}
+   * @param to {RouteRecordRaw} - the route to go to
    */
-  async routeTo(to: any): Promise<void | NavigationFailure | undefined>{
+  async routeTo(to: RouteRecordRaw): Promise<void | NavigationFailure | undefined>{
       return this.router.push(to)
   }
 }
