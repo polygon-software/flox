@@ -9,6 +9,7 @@ import {ErrorService} from './services/ErrorService';
 import {useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
 import {routerInstance} from 'boot/router';
+import {Cookies} from 'quasar'
 
 const $q = useQuasar()
 
@@ -26,5 +27,11 @@ provide<RouterService>('$routerService', $routerService)
 
 // Quasar
 provide('$q', $q)
+
+// Cookies/Authentication
+preFetch({store, ssrContext}) {
+    const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
+    store.commit('authentication/setPersistedState', cookies.get('authentication')) // TODO
+  }
 
 </script>
