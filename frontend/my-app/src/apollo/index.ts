@@ -2,6 +2,8 @@ import type { ApolloClientOptions } from '@apollo/client/core'
 import { createHttpLink, InMemoryCache } from '@apollo/client/core'
 import type { BootFileParams } from '@quasar/app'
 
+// TODO verify if config should be here or in boot
+
 export /* async */ function getClientOptions(
   /* {app, router, ...} */ options?: Partial<BootFileParams<any>>
 ) {
