@@ -2,7 +2,8 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "octref.vetur"
+    "octref.vetur",
+    "apollographql.vscode-apollo"
   ],
   "unwantedRecommendations": [
     "hookyqr.beautify",

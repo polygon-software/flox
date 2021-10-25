@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@apollo/client@^3.4.16":
+"@apollo/client@^3.3.16", "@apollo/client@^3.4.16":
   version "3.4.16"
   resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.4.16.tgz#67090d5655aa843fa64d26f1913315e384a5fa0f"
   integrity sha512-iF4zEYwvebkri0BZQyv8zfavPfVEafsK0wkOofa6eC2yZu50J18uTutKtC174rjHZ2eyxZ8tV7NvAPKRT+OtZw==
@@ -1438,6 +1438,16 @@
   resolved "https://registry.yarnpkg.com/@quasar/fastclick/-/fastclick-1.1.4.tgz#21ed3e9a4387dcb43022a08af4ef08a5f1abf159"
   integrity sha512-i9wbyV4iT+v4KhtHJynUFhH5LiEPvAEgSnwMqPN4hf/8uRe82nDl5qP5agrp2el1h0HzyBpbvHaW7NB0BPrtvA==
 
+"@quasar/quasar-app-extension-apollo@^2.0.0-beta.3":
+  version "2.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@quasar/quasar-app-extension-apollo/-/quasar-app-extension-apollo-2.0.0-beta.3.tgz#f45f13f81c2d631f6c35e8b1d5967345ad9a5094"
+  integrity sha512-lPAhIt1QzIwzHVR8VjNgasYigtTZmghRSI7vubNxUAbN/u9ENkDki4UZYarjWCpduZX+28G+H/wag4FgO7ZtIA==
+  dependencies:
+    "@apollo/client" "^3.3.16"
+    "@vue/apollo-composable" "^4.0.0-alpha.12"
+    graphql "^15.5.0"
+    graphql-tag "^2.12.4"
+
 "@quasar/ssr-helpers@2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@quasar/ssr-helpers/-/ssr-helpers-2.1.1.tgz#0b0ced671deaf918a4656a35057301b962287a8c"
@@ -1891,7 +1901,7 @@
     "@typescript-eslint/types" "4.33.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vue/apollo-composable@^4.0.0-alpha.15":
+"@vue/apollo-composable@^4.0.0-alpha.12", "@vue/apollo-composable@^4.0.0-alpha.15":
   version "4.0.0-alpha.15"
   resolved "https://registry.yarnpkg.com/@vue/apollo-composable/-/apollo-composable-4.0.0-alpha.15.tgz#4a93417cb112cc1ad9c8fbdf47008909f71fca5b"
   integrity sha512-c/xk/po4nTcAnwIG+ZK0XFwY84BiKJquGnK2T+qolp0Saeb5amoTtHu6CEZ6Xd635otqUTY8SODOoFraoAttNQ==
@@ -6168,14 +6178,14 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
   integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
 
-graphql-tag@^2.12.3, graphql-tag@^2.12.5:
+graphql-tag@^2.12.3, graphql-tag@^2.12.4, graphql-tag@^2.12.5:
   version "2.12.5"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.12.5.tgz#5cff974a67b417747d05c8d9f5f3cb4495d0db8f"
   integrity sha512-5xNhP4063d16Pz3HBtKprutsPrmHZi5IdUGOWRxA2B6VF7BIRGOHZ5WQvDmJXZuPcBg7rYwaFxvQYjqkSdR3TQ==
   dependencies:
     tslib "^2.1.0"
 
-graphql@^15.6.1:
+graphql@^15.5.0, graphql@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.6.1.tgz#9125bdf057553525da251e19e96dab3d3855ddfc"
   integrity sha512-3i5lu0z6dRvJ48QP9kFxBkJ7h4Kso7PS8eahyTFz5Jm6CvQfLtNIE8LX9N6JLnXTuwR+sIYnXzaWp6anOg0QQw==
