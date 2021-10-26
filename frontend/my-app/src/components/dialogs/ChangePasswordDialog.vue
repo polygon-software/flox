@@ -1,7 +1,6 @@
 <template>
   <q-dialog
       ref="dialog"
-      :persistent="true"
       title="Change Password"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
@@ -43,7 +42,7 @@
           <q-btn
               label="Cancel"
               color="primary"
-              type="submit"
+              @click="hide"
           />
         </q-card-actions>
 
@@ -77,6 +76,8 @@ function onSubmit(){
   hide()
 }
 
+// Mandatory - do not remove!
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function show(){
   dialog.value?.show()
 }
