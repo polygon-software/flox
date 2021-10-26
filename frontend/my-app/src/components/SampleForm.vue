@@ -42,13 +42,15 @@ let age = ref(null);
 
 // Upon submit, send GraphQL mutation
 function onSubmit () : void{
-  void executeMutation(
+  if(!process.env.SERVER){
+    void executeMutation(
       CREATE_USER,
       {
-      name: name.value,
-      age: Number(age.value)
+        name: name.value,
+        age: Number(age.value)
       }
-  )
+    )
+  }
 }
 
 

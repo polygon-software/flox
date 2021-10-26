@@ -14,15 +14,36 @@ import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
 import { executeQuery } from '../data/data-helpers';
-import {ref, watch} from 'vue';
+import {defineProps, inject, onMounted, onServerPrefetch, Ref, ref, watch} from 'vue';
+import {useStore} from "src/store";
 
-const users = ref([]);
+const users: Ref<Array<any>> = ref([]);
 
-// Set up initial query
-const initialState = executeQuery(ALL_USERS);
 
-// Set up subscription
-const { result } = useSubscription(USER_ADDED);
+// ----- Props -----
+const props = defineProps({
+  key: String
+});
+
+// ----- Data -----
+const store = useStore();
+let result: Ref<any>;
+
+// ----- Hooks -----
+onServerPrefetch(async () => {
+  const res = await executeQuery(ALL_USERS)
+  store.commit("ssr/setPrefetchedData", {key: props.key, value: res})
+})
+onMounted(()=>{
+
+  users.value = store.getters['ssr/getPrefetchedData'](props.key)?.data.allUsers as Array<any>
+  // Set up subscription
+  result = useSubscription(USER_ADDED).subscription;
+})
+
+
+
+
 
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
@@ -33,8 +54,9 @@ const columns = [
 // Watch for subscription changes
 watch(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    () => result.value,
+    () => result,
     (newUser) => {
+      console.log(newUser)
       users.value.push(newUser.userAdded)
     }
 )
