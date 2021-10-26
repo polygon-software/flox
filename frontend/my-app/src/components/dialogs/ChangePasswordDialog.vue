@@ -67,7 +67,7 @@ const emit = defineEmits(['ok'])
 let dialog = ref(null)
 
 /**
- * TODO
+ * Upon submit, pass entered values outwards
  */
 function onSubmit(){
   emit('ok', {
