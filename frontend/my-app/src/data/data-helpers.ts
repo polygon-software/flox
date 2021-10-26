@@ -69,12 +69,10 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
                   }
                   // Case 2: DELETE (removes object from cache)
                   else if (type === MutationTypes.DELETE) {
-                    // TODO fix...
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     newData = oldData.filter((dataPoint: any) => dataPoint.id !== change.id)
                   }
 
-                  // TODO separate create/delete
+                  // Update data in cache
                   cache.writeQuery({
                     query: queryObject.query, data: {
                       ...data,

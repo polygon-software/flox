@@ -2,7 +2,9 @@ import { ActionTree } from 'vuex';
 import { StateInterface } from '../index';
 import { AuthStateInterface } from './state';
 
-// TODO
+/**
+ * This file contains all authentication actions
+ */
 
 const actions: ActionTree<AuthStateInterface, StateInterface> = {
   // someAction (/* context */) {
