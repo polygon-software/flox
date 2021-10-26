@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm">
-    <h5 class="q-ma-none" style="margin-bottom: 20px;">
+    <h5 class="q-ma-none" style="margin-bottom: 30px;">
       {{ $t('signUp') }}
     </h5>
     <q-form
@@ -26,7 +26,7 @@
               :key="field.key"
               :is="field.component"
               v-bind="field.attributes"
-              v-model="inputs[field.key]"
+              v-model="form_values[field.key]"
               dense
           />
       </q-step>
@@ -43,7 +43,7 @@
               v-if="step < pages.length"
               @click="$refs.stepper.next()"
               color="primary"
-              label="Continue"
+              label="Next"
           />
           <q-btn
               v-if="step === pages.length"
@@ -61,7 +61,6 @@
 <script setup lang="ts">
 import {ref, defineEmits} from "vue";
 import {SIGNUP} from "@/components/forms/FIELDS";
-
 const account_fields = [SIGNUP.EMAIL, SIGNUP.USERNAME, SIGNUP.PASSWORD_REPEAT]
 const pages = [
   {
@@ -97,8 +96,7 @@ const pages = [
 ]
 
 let step = ref(1)
-let inputs = ref({})
-
+let form_values = ref({})
 const emit = defineEmits(['submit'])
 
 
@@ -106,8 +104,7 @@ const emit = defineEmits(['submit'])
  * TODO
 **/
 function onSubmit(){
-  emit('submit', inputs)
-  console.log("hello")
+  emit('submit', form_values)
 }
 
 </script>

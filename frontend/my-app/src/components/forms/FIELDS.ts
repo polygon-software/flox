@@ -9,7 +9,6 @@ export const SIGNUP = {
             attributes: {
                 type: "email",
                 label: "E-Mail",
-
                 lazy_rules: "ondemand",
                 rules: [(val: string) => EMAIL_REGEX.test(val) || 'Please enter a valid e-mail address.']
             },
@@ -42,3 +41,37 @@ export const SIGNUP = {
             }
         },
     }
+
+export const SIGN_IN = {
+    EMAIL: {
+        key: "email",
+        component: QInput,
+        attributes: {
+            type: "email",
+            label: "E-Mail",
+            lazy_rules: "true",
+            rules: [ (val: string) => val && val.length > 0 || 'Please enter your e-mail address']
+        },
+    },
+    USERNAME: {
+        key: "username",
+        component: QInput,
+        attributes: {
+            type: "text",
+            label: "Username",
+            lazy_rules: "true",
+            rules: [(val: string) => val && val.length > 0 || 'Please enter a username']
+        },
+
+    },
+    PASSWORD: {
+        key: "password",
+        component: QInput,
+        attributes: {
+            type: "password",
+            label: "Password",
+            lazy_rules: "true",
+            rules: [(val: string) => val && val.length > 0 || 'Incorrect password']
+        },
+    },
+}
