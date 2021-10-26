@@ -50,7 +50,3 @@ function onSubmit(){
 }
 
 </script>
-
-<style scoped>
-
-</style>

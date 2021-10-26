@@ -54,7 +54,3 @@ const stop = watch(
 
 
 </script>
-
-<style scoped>
-
-</style>
