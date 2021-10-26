@@ -1,77 +1,110 @@
 <template>
-  <div class="column q-pa-sm" style="width: 250px; height: 430px;">
-    <h5 class="q-ma-none" style="margin-bottom: 20px;">
-      {{ $t('signUp') }}
+  <div class="q-pa-sm">
+    <h5 class="q-ma-none" style="margin-bottom: 30px;">
+      {{ $t('signup') }}
     </h5>
     <q-form
-          @submit="onSubmit"
-          class="q-gutter-md"
+        @submit="onSubmit"
+        class="q-gutter-md"
+        >
+    <q-stepper
+        v-model="step"
+        ref="stepper"
+        animated
+        active-color="primary"
+        transition-duration="1000"
+    >
+      <q-step
+          v-for="(page, index) in pages"
+          :key="page.key"
+          :name="index+1"
+          :prefix="index+1"
+          :title="page.label"
       >
-      <q-input
-          dense
-          label="Username"
-          v-model="username"
-          lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please enter a username']"
-
-      />
-      <q-input
-          dense
-          label="E-Mail"
-          v-model="email"
-          :rules="[
-              val => EMAIL_REGEX.test(val) || 'Not ok'
-            ]"
-
-      />
-      <q-input
-          dense
-          label="Password"
-          v-model="password"
-          type="password"
-          :rules="[
-              val => PASSWORD_REGEX.test(val) || 'Not ok'
-            ]"
-      />
-      <q-input
-          dense
-          label="Repeat Password"
-          type="password"
-          lazy-rules
-          :rules="[
-          val => val === password || 'Passwords must be identical',
-        ]"
-      />
-      <q-btn
-          style="margin-top: 25px"
-          color="primary"
-          :label="$t('signUp')"
-          type="submit"
-      />
-      </q-form>
+        <component
+              v-for="field in page.fields"
+              :key="field.key"
+              :is="field.component"
+              v-bind="field.attributes"
+              v-model="form_values[field.key]"
+              dense
+          />
+      </q-step>
+      <template v-slot:navigation>
+        <q-stepper-navigation>
+          <q-btn
+              v-if="step > 1"
+              @click="$refs.stepper.previous()"
+              flat
+              style="margin-right: 30px"
+              color="primary"
+              :label="$t('back')"
+              class="q-ml-sm" />
+          <q-btn
+              v-if="step < pages.length"
+              @click="$refs.stepper.next()"
+              color="primary"
+              :label="$t('next_step')"
+          />
+          <q-btn
+              v-if="step === pages.length"
+              color="primary"
+              :label="$t('finish_signup')"
+              type="submit"
+          />
+        </q-stepper-navigation>
+      </template>
+    </q-stepper>
+    </q-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from 'vue';
-import {ref} from 'vue';
-import {PASSWORD_REGEX, EMAIL_REGEX} from 'src/helpers/REGEX'
+import {ref, defineEmits} from 'vue';
+import {FIELDS} from 'src/data/FIELDS';
+const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
+const pages = [
+  {
+    key: 'account_data',
+    label: 'Account',
+    fields: account_fields,
+  },
+  {
+    key: 'personal_data',
+    label: 'Personal',
+    fields: [],
+  },
+  {
+    key: 'address_data',
+    label: 'Address',
+    fields: [],
+  },
+  {
+    key: 'authentication',
+    label: 'Authentication',
+    fields: [],
+  },
+  {
+    key: 'interests',
+    label: 'Interests',
+    fields: [],
+  },
+]
 
-let username = ref('')
-let email = ref('')
-let password = ref('')
-
+let step = ref(1)
+let form_values = ref({})
 const emit = defineEmits(['submit'])
 
+
 /**
- * On submit, emit entered data outwards
- */
+ * On submit, pass entered data outwards
+**/
 function onSubmit(){
-  emit('submit', {
-    username: username.value,
-    email: email.value,
-    password: password.value,
-  })
+  emit('submit', form_values)
 }
 
 </script>
+
+<style scoped>
+
+</style>
