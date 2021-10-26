@@ -36,7 +36,6 @@
       <q-input
           dense
           label="Repeat Password"
-          v-model="passwordRepeat"
           type="password"
           lazy-rules
           :rules="[
@@ -56,12 +55,11 @@
 <script setup lang="ts">
 import {defineEmits} from 'vue';
 import {ref} from 'vue';
-import {PASSWORD_REGEX, EMAIL_REGEX} from '../../helpers/REGEX'
+import {PASSWORD_REGEX, EMAIL_REGEX} from 'src/helpers/REGEX'
 
 let username = ref('')
 let email = ref('')
 let password = ref('')
-let passwordRepeat = ref('')
 
 const emit = defineEmits(['submit'])
 
@@ -77,7 +75,3 @@ function onSubmit(){
 }
 
 </script>
-
-<style scoped>
-
-</style>

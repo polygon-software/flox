@@ -47,7 +47,3 @@ async function onSignup({username, email, password}:{username: string, email: st
 }
 
 </script>
-
-<style scoped>
-
-</style>
