@@ -1,8 +1,8 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoUser, CognitoUserSession, ICognitoUserPoolData, ISignUpResult} from 'amazon-cognito-identity-js';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
-import ChangePasswordForm from '../components/forms/ChangePasswordForm.vue'
-import ResetPasswordForm from '../components/forms/ResetPasswordForm.vue'
+import ChangePasswordDialog from 'components/dialogs/ChangePasswordDialog.vue'
+import ResetPasswordDialog from 'components/dialogs/ResetPasswordDialog.vue'
 import {ErrorService} from './ErrorService';
 import {QVueGlobals} from 'quasar';
 import {useStore} from 'src/store';
@@ -174,7 +174,7 @@ export class AuthenticationService {
      */
     showChangePasswordDialog(): void{
         this.$q.dialog({
-            component: ChangePasswordForm,
+            component: ChangePasswordDialog,
             componentProps: {},
         }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
             this.$store.getters['authentication/getCognitoUser']?.changePassword(passwordOld,passwordNew, (err: Error)=>{
@@ -213,7 +213,10 @@ export class AuthenticationService {
                 onSuccess: function() {
                     // TODO
                 },
-                onFailure: (err: Error) => {this.onFailure(err)},
+                onFailure: (err: Error) => {
+                  this.$store.commit('authentication/setCognitoUser', undefined);
+                  this.onFailure(err)
+                },
                 inputVerificationCode: () => {this.showResetPasswordFormDialog()}
             });
         })
@@ -224,7 +227,7 @@ export class AuthenticationService {
      */
     showResetPasswordFormDialog(): void{
         this.$q.dialog({
-            component: ResetPasswordForm,
+            component: ResetPasswordDialog,
             componentProps: {},
         }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
             this.$store.getters['authentication/getCognitoUser']?.confirmPassword(verificationCode,passwordNew,{
@@ -240,8 +243,6 @@ export class AuthenticationService {
      * @param renew {?boolean} - whether to generate a new verification code
      */
     showEmailVerificationDialog(renew = false): void{
-        console.log('verify email dialog')
-
         if(renew){
             if(!this.$store.getters['authentication/getCognitoUser']){
                 this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
