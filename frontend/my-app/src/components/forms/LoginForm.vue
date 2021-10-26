@@ -7,21 +7,16 @@
         @submit="onSubmit"
         class="q-gutter-md"
     >
-      <q-input
-          label="Username"
-          v-model="username"
-          lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please enter your username']"
-      />
-      <q-input
-          label="Password"
-          v-model="password"
-          type="password"
-          lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please enter your password']"
+      <component
+          v-for="field in fields"
+          :key="field.key"
+          :is="field.component"
+          v-bind="field.attributes"
+          v-model="form_values[field.key]"
+          dense
       />
       <q-btn
-          style="margin-top: 5px"
+          style="margin-top: 20px"
           color="primary"
           :label="$t('login')"
           type="submit"
@@ -33,20 +28,18 @@
 <script setup lang="ts">
 import {defineEmits} from 'vue';
 import {ref} from 'vue';
+import {FIELDS} from 'src/data/FIELDS';
 
-let username = ref('')
-let password = ref('')
-
+const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
+let form_values = ref({})
 const emit = defineEmits(['submit'])
+
 
 /**
  * On submit, pass entered data outwards
  */
 function onSubmit(){
-  emit('submit', {
-    username: username.value,
-    password: password.value,
-  })
+  emit('submit', form_values)
 }
 
 </script>

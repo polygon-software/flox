@@ -13,12 +13,12 @@ Data functions are usually GraphQL-/Apollo specific helpers for handling GraphQL
 ### Example
 Data constants (in `UPPERCASE`) are usually used as follows within component's `<script setup>` tag:
 ```javascript
-import {CREATE_USER}  from "@/data/MUTATIONS";
+import {CREATE_USER}  from "src/data/MUTATIONS";
 ```
 
 Data functions are imported and used as follows within component's `<script setup>` tag:
 ```javascript
-import {executeMutation} from "@/data/data-helpers";
+import {executeMutation} from "src/data/data-helpers";
 
 executeMutation(
     CREATE_USER,
