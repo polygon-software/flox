@@ -2,6 +2,7 @@ import {useMutation, useQuery} from '@vue/apollo-composable';
 import {QUERIES} from './QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from './DATA-DEFINITIONS';
 import {Ref} from 'vue';
+import {ApolloQueryResult} from "@apollo/client";
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -11,8 +12,12 @@ import {Ref} from 'vue';
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  */
-function executeQuery(queryObject: QueryObject): Ref<unknown> {
-    return useQuery(queryObject.query).result
+function executeQuery(queryObject: QueryObject): Promise<ApolloQueryResult<unknown>> {
+  const resi = useQuery(queryObject.query)
+  return new Promise(((resolve, reject) => {
+    resi.onResult((res)=>{resolve(res)})
+    resi.onError((err)=>{reject(err)})
+  }))
 }
 
 /**

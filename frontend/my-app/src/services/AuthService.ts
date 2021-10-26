@@ -35,8 +35,8 @@ export class AuthenticationService {
           UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
           ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
       };
-      console.log('Store is:', this.$store)
       const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
+      console.log('Userpool is: ', userPool)
       this.$store.commit('authentication/setUserPool', userPool)
 
 
@@ -64,7 +64,8 @@ export class AuthenticationService {
 
 
         const userPool = this.$store.getters['authentication/getUserPool']
-
+        console.log(userPool)
+        console.log(identifier)
           // Actual Cognito authentication on given pool
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
             Username: identifier,
