@@ -6,15 +6,13 @@
 // Cookies/Authentication
 import {Cookies} from 'quasar';
 import {CognitoUserSession} from 'amazon-cognito-identity-js';
-import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import ROUTES from 'src/router/routes';
+import {routerInstance} from 'boot/router';
 
 export default{
 // Prefetch hook
   preFetch({store, ssrContext}: {store: any, ssrContext: any}){
-
-    const $routerService = inject<RouterService>('$routerService')
 
     console.log('Prefetch!')
     // const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
@@ -35,8 +33,7 @@ export default{
           // Set in store
           store.commit('authentication/setUserSession', cognitoUserSession)
           // Redirect
-          console.log('Router:', $routerService)
-          void $routerService?.routeTo(ROUTES.MAIN)
+          void routerInstance.push(ROUTES.MAIN)
         }
       });
     }
