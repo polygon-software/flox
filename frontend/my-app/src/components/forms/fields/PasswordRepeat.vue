@@ -21,7 +21,7 @@
       v-model="passwordRepeat"
       lazy-rules
       :type="isPwdReapeat ? 'password' : 'text'"
-      :rules="[val => val === password || $t('non-matching_password')]"
+      :rules="[val => val === password || $t('non_matching_password')]"
   >
     <template v-slot:append>
       <q-icon

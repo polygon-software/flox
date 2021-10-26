@@ -13,6 +13,7 @@
         animated
         active-color="primary"
         transition-duration="1000"
+        done-icon="done"
     >
       <q-step
           v-for="(page, index) in pages"
@@ -20,6 +21,7 @@
           :name="index+1"
           :prefix="index+1"
           :title="page.label"
+          :done="step > index"
       >
         <component
               v-for="field in page.fields"
@@ -27,6 +29,7 @@
               :is="field.component"
               v-bind="field.attributes"
               v-model="form_values[field.key]"
+              v-model:er="error_values[field.key]"
               dense
           />
       </q-step>
@@ -45,6 +48,7 @@
               @click="$refs.stepper.next()"
               color="primary"
               :label="$t('next_step')"
+
           />
           <q-btn
               v-if="step === pages.length"
@@ -60,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, defineEmits} from 'vue';
+import {ref, defineEmits, computed} from 'vue';
 import {FIELDS} from 'src/data/FIELDS';
 const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
 const pages = [
@@ -91,15 +95,23 @@ const pages = [
   },
 ]
 
-let step = ref(1)
-let form_values = ref({})
+const step = ref(1)
+const form_values = ref({})
+const error_values = ref({})
 const emit = defineEmits(['submit'])
 
+const validFields = computed(() => {
+  if (form_values.keys(myObj).length == 0) {
+    return false
+  }
+  
+
+ })
 
 /**
  * On submit, pass entered data outwards
 **/
-function onSubmit(){
+function onSubmit() {
   emit('submit', form_values)
 }
 

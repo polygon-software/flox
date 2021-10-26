@@ -31,7 +31,7 @@ import {ref} from 'vue';
 import {FIELDS} from 'src/data/FIELDS';
 
 const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
-let form_values = ref({})
+const form_values = ref({})
 const emit = defineEmits(['submit'])
 
 
