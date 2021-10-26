@@ -12,7 +12,7 @@ import {ApolloQueryResult} from "@apollo/client";
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  */
-function executeQuery(queryObject: QueryObject): Promise<ApolloQueryResult<unknown>> {
+async function executeQuery(queryObject: QueryObject): Promise<ApolloQueryResult<any>> {
   const resi = useQuery(queryObject.query)
   return new Promise(((resolve, reject) => {
     resi.onResult((res)=>{resolve(res)})

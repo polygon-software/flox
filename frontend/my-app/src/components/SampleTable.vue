@@ -1,10 +1,10 @@
 <template>
   <div class="column">
     <q-table
-      v-if="result && result.allUsers"
+      v-if="users"
       table-header-class="bg-grey-2"
       title="List of users (with cache)"
-      :rows="result.allUsers"
+      :rows="users"
       :columns="columns"
       row-key="id"
       :rows-per-page-options="[10,20, 100]"
@@ -71,27 +71,42 @@
 <script setup lang="ts">
 import { ALL_USERS } from '../data/QUERIES';
 import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
-import {ref, onServerPrefetch, onMounted} from 'vue';
+import {ref, onServerPrefetch, onMounted, computed, defineProps} from 'vue';
 import {executeMutation, executeQuery} from '../data/data-helpers';
+import {useStore} from 'src/store';
 
-let result = ref({})
+
+// ----- Props -----
+const props = defineProps({
+  key: String
+});
+
+// ----- Data -----
+const store = useStore();
+// Selection must be an array
+let selected = ref([])
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
 
-// Selection must be an array
-let selected = ref([])
-
-onServerPrefetch(()=>{
-  console.log("prefetching")
-  result.value = executeQuery(ALL_USERS)
-  console.log(result.value)
+// ----- Hooks -----
+onServerPrefetch(async () => {
+  const res = await executeQuery(ALL_USERS)
+  store.commit("ssr/setPrefetchedData", {key: props.key, value: res})
 })
-onMounted(()=>{
-  result.value = executeQuery(ALL_USERS).value
+onMounted(async () => {
+  if(users.value?.length === 0){
+    const res = await executeQuery(ALL_USERS)
+    store.commit("ssr/setPrefetchedData", {key: props.key, value: res})
+  }
 
+})
+
+// ----- Computed -----
+let users =  computed(()=>{
+  return store.getters['ssr/getPrefetchedData'](props.key)?.data.allUsers as Array<unknown>
 })
 
 /**
