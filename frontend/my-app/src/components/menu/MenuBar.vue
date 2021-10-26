@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import {useStore} from 'src/store';
-import {computed, inject, ref} from 'vue'
+import {computed, inject} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
