@@ -24,7 +24,6 @@ import {AuthenticationService} from "@/services/AuthService";
 
 const $authService: AuthenticationService = inject('$authService')
 
-
 /**
  * Logs in the given user
  * @param username {string} - the user's username
