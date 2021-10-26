@@ -14,12 +14,12 @@
       />
 
       <q-input
-          filled
-          type="number"
-          v-model="age"
-          label="Age"
-          lazy-rules
-          :rules="[
+        filled
+        type="number"
+        v-model="age"
+        label="Age"
+        lazy-rules
+        :rules="[
           val => val !== null && val !== '' || 'Please type your age',
           val => val > 0 && val < 100 || 'Please type a real age'
         ]"

@@ -1,15 +1,15 @@
 <template>
   <div class="column">
     <q-table
-        v-if="result && result.allUsers"
-       table-header-class="bg-grey-2"
-       title="List of users (with cache)"
-       :rows="result.allUsers"
-       :columns="columns"
-       row-key="id"
-       :rows-per-page-options="[10,20, 100]"
-       v-model:selected="selected"
-       selection="single"
+      v-if="result && result.allUsers"
+      table-header-class="bg-grey-2"
+      title="List of users (with cache)"
+      :rows="result.allUsers"
+      :columns="columns"
+      row-key="id"
+      :rows-per-page-options="[10,20, 100]"
+      v-model:selected="selected"
+      selection="single"
     >
       <template v-slot:body="props">
         <q-tr :props="props">
@@ -71,11 +71,10 @@
 <script setup lang="ts">
 import { ALL_USERS } from '../data/QUERIES';
 import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
-import {ref} from 'vue';
+import {ref, onServerPrefetch, onMounted} from 'vue';
 import {executeMutation, executeQuery} from '../data/data-helpers';
 
-const result = executeQuery(ALL_USERS)
-
+let result = ref({})
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
@@ -84,6 +83,16 @@ const columns = [
 
 // Selection must be an array
 let selected = ref([])
+
+onServerPrefetch(()=>{
+  console.log("prefetching")
+  result.value = executeQuery(ALL_USERS)
+  console.log(result.value)
+})
+onMounted(()=>{
+  result.value = executeQuery(ALL_USERS).value
+
+})
 
 /**
  * Deletes the currently selected authentication

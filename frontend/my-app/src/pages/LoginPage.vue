@@ -15,13 +15,13 @@
 <script setup lang="ts">
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
-import {inject} from 'vue'
+import {inject, Ref} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 
-const $authService: AuthenticationService = inject<AuthenticationService>('$authService')
-const $routerService: RouterService = inject<RouterService>('$routerService')
+const $authService: Ref<AuthenticationService> = inject<Ref<AuthenticationService>>('$authService')
+const $routerService: Ref<RouterService> = inject<Ref<RouterService>>('$routerService')
 
 /**
  * Logs in the given authentication
@@ -29,6 +29,7 @@ const $routerService: RouterService = inject<RouterService>('$routerService')
  * @param password {string} - the authentication's password
  */
 async function onLogin({username, password}: {username: string, password: string}){
+  console.log(username,password)
   await $authService.value.login(username, password)
 
   // Redirect to main page
