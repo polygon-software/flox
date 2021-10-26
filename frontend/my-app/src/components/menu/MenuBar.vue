@@ -88,7 +88,3 @@ function forgottenPassword() {
 }
 
 </script>
-
-<style scoped>
-
-</style>

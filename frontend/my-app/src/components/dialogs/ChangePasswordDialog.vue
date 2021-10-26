@@ -88,7 +88,3 @@ function hide(){
 
 
 </script>
-
-<style scoped>
-
-</style>

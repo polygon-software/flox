@@ -12,11 +12,7 @@ import {Ref} from 'vue';
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  */
 function executeQuery(queryObject: QueryObject): Ref<unknown> {
-    const query =  queryObject.query;
-
-    // Execute query
-    const { result } = useQuery(query);
-    return result;
+    return useQuery(queryObject.query).result
 }
 
 /**
