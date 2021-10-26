@@ -12,9 +12,9 @@
       </h5>
       <p
           class="text-grey-7"
-          v-if="loggedIn && store.getUsername"
+          v-if="loggedIn && username"
       >
-        {{ $t('loggedIn', {user: store.getUsername.value})}}
+        {{ $t('loggedIn', {user: username})}}
       </p>
     </div>
   <div class="row">
@@ -54,6 +54,7 @@ const $authService: ref<AuthenticationService> = inject('$authService')
 const $store = useStore()
 
 const loggedIn = $store.getters['authentication/getLoggedInStatus']
+const username = $store.getters['authentication/getUsername']
 
 /**
  * Logs out the current authentication

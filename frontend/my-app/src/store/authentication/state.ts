@@ -1,13 +1,15 @@
-import {CognitoUser, CognitoUserSession} from 'amazon-cognito-identity-js';
+import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
 
 export interface AuthStateInterface {
   userSession?: CognitoUserSession,
-  cognitoUser?: CognitoUser
+  userPool?: CognitoUserPool,
+  cognitoUser?: CognitoUser,
 }
 
 function state(): AuthStateInterface {
   return {
     userSession: undefined,
+    userPool: undefined,
     cognitoUser: undefined
   }
 };
