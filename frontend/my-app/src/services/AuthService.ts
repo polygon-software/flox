@@ -8,6 +8,7 @@ import {QVueGlobals} from 'quasar';
 import {useStore} from 'src/store';
 import {Store} from 'vuex';
 import _ from 'lodash';
+import {Ref} from 'vue';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -22,11 +23,11 @@ export class AuthenticationService {
     $q: QVueGlobals
 
     // Error handler service
-    $errorService: ErrorService
+    $errorService: Ref<ErrorService>
 
     $store: Store<unknown>
 
-    constructor(quasar: QVueGlobals, errorService: ErrorService) {
+    constructor(quasar: QVueGlobals, errorService: Ref<ErrorService>) {
       // Store
       this.$store = useStore()
 
@@ -35,6 +36,7 @@ export class AuthenticationService {
           UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
           ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
       };
+      console.log('Store is:', this.$store)
       const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
       this.$store.commit('authentication/setUserPool', userPool)
 
@@ -167,7 +169,7 @@ export class AuthenticationService {
         }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
             this.$store.getters['authentication/getCognitoUser']?.changePassword(passwordOld,passwordNew, (err: Error)=>{
                 if(err){
-                    this.$errorService.showErrorDialog(err)
+                    this.$errorService.value.showErrorDialog(err)
                 }
             })
         })
@@ -232,7 +234,7 @@ export class AuthenticationService {
 
         if(renew){
             if(!this.$store.getters['authentication/getCognitoUser']){
-                this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
+                this.$errorService.value.showErrorDialog(new Error('An error occurred, try logging in again'))
                 return
             } else {
                 console.log('Resend confirmation!')
@@ -291,7 +293,7 @@ export class AuthenticationService {
                         this.loginSuccess(userSession, resolve)
                     },
                     onFailure: (error: Error)=>{
-                        this.$errorService.showErrorDialog(error)
+                        this.$errorService.value.showErrorDialog(error)
                     },
                 });
             })
@@ -340,7 +342,7 @@ export class AuthenticationService {
                 this.loginSuccess(userSession, resolve)
             },
             onFailure: (error: Error)=>{
-                this.$errorService.showErrorDialog(error)
+                this.$errorService.value.showErrorDialog(error)
             },
         }, tokenType);
         });
@@ -354,6 +356,7 @@ export class AuthenticationService {
     loginSuccess(userSession: CognitoUserSession, resolve: any): void{
       // Store locally
       this.$store.commit('authentication/setUserSession', userSession)
+
       resolve()
     }
 
@@ -366,7 +369,7 @@ export class AuthenticationService {
             // Show the e-mail verification dialog and send a new code
             this.showEmailVerificationDialog(true)
         } else {
-            this.$errorService.showErrorDialog(error)
+            this.$errorService.value.showErrorDialog(error)
         }
     }
 }

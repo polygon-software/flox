@@ -5,11 +5,17 @@
 <script lang="ts">
 // Cookies/Authentication
 import {Cookies} from 'quasar';
-import {useStore} from 'src/store';
+import {CognitoUserSession} from 'amazon-cognito-identity-js';
+import {RouterService} from 'src/services/RouterService';
+import {inject} from 'vue';
+import ROUTES from 'src/router/routes';
 
 export default{
-  // Prefetch hook
+// Prefetch hook
   preFetch({store, ssrContext}: {store: any, ssrContext: any}){
+
+    const $routerService = inject<RouterService>('$routerService')
+
     console.log('Prefetch!')
     // const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
     // TODO where needed...
@@ -17,7 +23,23 @@ export default{
     const userPool = store.getters['authentication/getUserPool']
 
     const cognitoUser = userPool.getCurrentUser();
-    console.log('WE have a user:', cognitoUser)
+    if(cognitoUser){
+      console.log('WE have a user:', cognitoUser)
+      cognitoUser.getSession(function(err: Error, data: CognitoUserSession) {
+        if (err) {
+          // Prompt the user to reauthenticate by hand...
+          console.log("Can't auto-relogin user!")
+        } else {
+          const cognitoUserSession = data;
+          console.log('Successful relogin with session', data)
+          // Set in store
+          store.commit('authentication/setUserSession', cognitoUserSession)
+          // Redirect
+          console.log('Router:', $routerService)
+          void $routerService?.routeTo(ROUTES.MAIN)
+        }
+      });
+    }
   }
 }
 
