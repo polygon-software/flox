@@ -66,7 +66,7 @@ let passwordRepeat = ref('')
 const emit = defineEmits(['submit'])
 
 /**
- * TODO
+ * On submit, emit entered data outwards
  */
 function onSubmit(){
   emit('submit', {

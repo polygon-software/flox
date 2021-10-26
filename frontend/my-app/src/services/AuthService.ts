@@ -90,7 +90,7 @@ export class AuthenticationService {
                 // Called if time-limited one time password is required (only second login or later)
                 totpRequired: (tokenType) => {this.verify2FACode(tokenType, resolve)},
 
-                //TODO check when this appears
+                //TODO check when/if this appears
                 mfaRequired: function () {
                     const verificationCode = prompt('Please input verification code', '');
                     if (typeof verificationCode === 'string') {
