@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 import { StateInterface } from '../index';
 import { AuthStateInterface } from './state';
-import {CognitoUser, CognitoUserSession} from 'amazon-cognito-identity-js';
+import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
 
 function getLoggedInStatus (state: AuthStateInterface): boolean {
   return state.userSession?.isValid() ?? false
@@ -19,11 +19,16 @@ function getUserSession (state: AuthStateInterface): CognitoUserSession|undefine
   return state.userSession
 }
 
+function getUserPool (state: AuthStateInterface): CognitoUserPool|undefined {
+  return state.userPool
+}
+
 const getters: GetterTree<AuthStateInterface, StateInterface> = {
   getLoggedInStatus,
   getCognitoUser,
   getUserSession,
   getUsername,
+  getUserPool,
 };
 
 export default getters;

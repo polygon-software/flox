@@ -5,14 +5,19 @@
 <script lang="ts">
 // Cookies/Authentication
 import {Cookies} from 'quasar';
+import {useStore} from 'src/store';
 
 export default{
   // Prefetch hook
   preFetch({store, ssrContext}: {store: any, ssrContext: any}){
     console.log('Prefetch!')
-    const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
-    // TODO
-    //store.commit('authentication/setPersistedData', cookies.get('authentication'))
+    // const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
+    // TODO where needed...
+
+    const userPool = store.getters['authentication/getUserPool']
+
+    const cognitoUser = userPool.getCurrentUser();
+    console.log('WE have a user:', cognitoUser)
   }
 }
 

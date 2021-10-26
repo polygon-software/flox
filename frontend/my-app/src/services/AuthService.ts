@@ -15,15 +15,6 @@ import _ from 'lodash';
  */
 
 export class AuthenticationService {
-
-    // AWS User Pool
-    userPool: AmazonCognitoIdentity.CognitoUserPool
-
-    // Tokens
-    accessToken?: AmazonCognitoIdentity.CognitoAccessToken
-    idToken?: AmazonCognitoIdentity.CognitoIdToken
-    refreshToken?: AmazonCognitoIdentity.CognitoRefreshToken
-
     // Application info
     appName: string
 
@@ -36,26 +27,24 @@ export class AuthenticationService {
     $store: Store<unknown>
 
     constructor(quasar: QVueGlobals, errorService: ErrorService) {
-        // Set up authentication pool
-        const poolSettings:ICognitoUserPoolData = {
-            UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
-            ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
-        };
-        this.userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
+      // Store
+      this.$store = useStore()
 
-        // Initialize tokens
-        this.accessToken = undefined
-        this.idToken = undefined
-        this.refreshToken = undefined
+      // Set up authentication user pool
+      const poolSettings:ICognitoUserPoolData = {
+          UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
+          ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
+      };
+      const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
+      this.$store.commit('authentication/setUserPool', userPool)
 
-        // Quasar & environment variables
-        this.$q = quasar
-        this.appName = process.env.VUE_APP_NAME ?? 'App'
 
-        // Error service
-        this.$errorService = errorService
+      // Quasar & environment variables
+      this.$q = quasar
+      this.appName = process.env.VUE_APP_NAME ?? 'App'
 
-        this.$store = useStore()
+      // Error service
+      this.$errorService = errorService
     }
 
     /**
@@ -71,10 +60,13 @@ export class AuthenticationService {
             Password: password
         });
 
-        // Actual Cognito authentication on given pool
+
+        const userPool = this.$store.getters['authentication/getUserPool']
+
+          // Actual Cognito authentication on given pool
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
             Username: identifier,
-            Pool: this.userPool,
+            Pool: userPool,
         });
 
         // Store in local variable
@@ -130,27 +122,28 @@ export class AuthenticationService {
    * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
    */
   async signUp(username: string, email: string, password: string): Promise<void> {
-      const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
-          const attributes = [];
-          attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-          // TODO disable requirement on AWS @thommann
-          attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
-          console.log(username, password, attributes)
-        this.userPool.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
-              if (err) {
-                // TODO
-                  console.log('blubb', err)
-                  reject();
-              }
-              if(result){
-                resolve(result);
-              }
-          })
-      })
+    const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
+        const attributes = [];
+        attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
+        // TODO disable requirement on AWS @thommann
+        attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
+        console.log(username, password, attributes)
+
+      const userPool = this.$store.getters['authentication/getUserPool']
+      userPool.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
+            if (err) {
+              // TODO
+                console.error(err)
+                reject();
+            }
+            if(result){
+              resolve(result);
+            }
+        })
+    })
 
     this.$store.commit('authentication/setCognitoUser', cognitoUserWrapper.user)
-
-      this.showEmailVerificationDialog()
+    this.showEmailVerificationDialog()
   }
 
   /**
@@ -184,7 +177,9 @@ export class AuthenticationService {
      * Shows a dialog for requesting password reset
      */
     showResetPasswordDialog(): void{
-        this.$q.dialog({
+      const userPool = this.$store.getters['authentication/getUserPool']
+
+      this.$q.dialog({
             title: 'Reset Password',
             message: 'Please enter your username',
             cancel: true,
@@ -198,7 +193,7 @@ export class AuthenticationService {
             // Set up cognitoUser first
             this.$store.commit('authentication/setCognitoUser', new CognitoUser({
                 Username: input,
-                Pool: this.userPool
+                Pool: userPool
             }));
 
             // Call forgotPassword on cognitoUser
@@ -359,12 +354,6 @@ export class AuthenticationService {
     loginSuccess(userSession: CognitoUserSession, resolve: any): void{
       // Store locally
       this.$store.commit('authentication/setUserSession', userSession)
-
-      // Get & store tokens
-      this.accessToken = userSession.getAccessToken()
-      this.idToken = userSession.getIdToken()
-      this.refreshToken = userSession.getRefreshToken()
-
       resolve()
     }
 
