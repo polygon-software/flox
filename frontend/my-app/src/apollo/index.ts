@@ -10,27 +10,30 @@ export function getClientOptions() {
     uri: 'http://localhost:3000/graphql',
   })
 
-  // WebSocket link for GraphQL (Subscriptions)
-  const wsLink = new WebSocketLink({
-    uri: 'ws://localhost:3000/graphql-websocket',
-    options: {
-      reconnect: true
-    }
-  });
+  let link = httpLink;
 
-  // Depending on operation, use correct link
-  const link = split(
-    // split based on operation type
-    ({ query }) => {
-      const definition = getMainDefinition(query);
-      return (
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'subscription'
-      );
-    },
-    wsLink,
-    httpLink
-  );
+
+  if(!process.env.SERVER){
+    const wsLink = new WebSocketLink({
+      uri: 'ws://localhost:3000/graphql-websocket',
+      options: {
+        reconnect: true
+      }
+    })
+    link = split(
+      // split based on operation type
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
+      },
+      wsLink,
+      httpLink
+    )
+  }
+
 
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
