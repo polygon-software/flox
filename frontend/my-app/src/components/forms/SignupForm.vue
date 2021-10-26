@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
     <h5 class="q-ma-none" style="margin-bottom: 30px;">
-      {{ $t('signUp') }}
+      {{ $t('signup') }}
     </h5>
     <q-form
         @submit="onSubmit"
@@ -49,7 +49,7 @@
           <q-btn
               v-if="step === pages.length"
               color="primary"
-              :label="$t('finish_signUp')"
+              :label="$t('finish_signup')"
               type="submit"
           />
         </q-stepper-navigation>
