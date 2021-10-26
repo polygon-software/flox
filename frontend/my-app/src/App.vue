@@ -32,7 +32,7 @@ export default{
           console.log('Successful relogin with session', data)
           // Set in store
           store.commit('authentication/setUserSession', cognitoUserSession)
-          // Redirect
+          // Redirect (we use the router instance directly, as it is not provided globally yet)
           void routerInstance.push(ROUTES.MAIN)
         }
       });
