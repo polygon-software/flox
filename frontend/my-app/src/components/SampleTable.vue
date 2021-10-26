@@ -71,7 +71,7 @@
 <script setup lang="ts">
 import { ALL_USERS } from '../data/QUERIES';
 import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
-import {ref, onServerPrefetch, onMounted, computed, defineProps} from 'vue';
+import {ref, onServerPrefetch, computed, defineProps} from 'vue';
 import {executeMutation, executeQuery} from '../data/data-helpers';
 import {useStore} from 'src/store';
 
@@ -95,13 +95,6 @@ const columns = [
 onServerPrefetch(async () => {
   const res = await executeQuery(ALL_USERS)
   store.commit("ssr/setPrefetchedData", {key: props.key, value: res})
-})
-onMounted(async () => {
-  if(users.value?.length === 0){
-    const res = await executeQuery(ALL_USERS)
-    store.commit("ssr/setPrefetchedData", {key: props.key, value: res})
-  }
-
 })
 
 // ----- Computed -----

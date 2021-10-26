@@ -1,8 +1,9 @@
-import {useMutation, useQuery} from '@vue/apollo-composable';
+import {ApolloClients, provideApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {QUERIES} from './QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from './DATA-DEFINITIONS';
-import {Ref} from 'vue';
+import {inject, Ref} from 'vue';
 import {ApolloQueryResult} from "@apollo/client";
+import {ApolloClient} from "@apollo/client/core";
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -85,7 +86,6 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
 
         },
     }))
-
     // Execute mutation
     await mutate(variables);
 }

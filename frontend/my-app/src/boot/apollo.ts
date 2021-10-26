@@ -18,5 +18,6 @@ export default boot(
     }
 
     app.provide(ApolloClients, apolloClients)
+    console.log("apollo Provided")
   }
 )
