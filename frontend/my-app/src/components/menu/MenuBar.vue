@@ -45,36 +45,46 @@
 </template>
 
 <script setup lang="ts">
-
-import {inject, ref} from 'vue'
-import {AuthenticationService} from 'src/services/AuthService';
 import {useStore} from 'src/store';
+import {computed, inject, ref} from 'vue'
+import {AuthenticationService} from 'src/services/AuthService';
+import {RouterService} from 'src/services/RouterService';
+import ROUTES from 'src/router/routes';
+import {Store} from 'vuex';
 
 const $authService: AuthenticationService = inject('$authService')
-const $store = useStore()
+const $routerService: RouterService = inject('$routerService')
+const $store: Store<unknown> = useStore()
 
-const loggedIn = $store.getters['authentication/getLoggedInStatus']
+const loggedIn = computed(() => {
+  // Explicit type
+  const result: boolean = $store.getters['authentication/getLoggedInStatus']
+  return result;
+})
+
+// Username does not need to be reactive, since it won't change between logins
 const username = $store.getters['authentication/getUsername']
 
 /**
  * Logs out the current authentication
  */
-function logout(){
-  $authService.value.logout();
+async function logout(): Promise<void>{
+  await $authService.value.logout();
+  await $routerService.value.routeTo(ROUTES.LOGIN)
 }
 
 /**
  * Triggers a password change for the currently logged in authentication
  */
 function changePassword() {
-  $authService.value.changePasswordDialog()
+  $authService.value.showChangePasswordDialog()
 }
 
 /**
  * Triggers a password change for a non-logged in authentication
  */
 function forgottenPassword() {
-  $authService.value.resetPasswordDialog();
+  $authService.value.showResetPasswordDialog();
 }
 
 </script>

@@ -31,6 +31,7 @@ export default{
           const cognitoUserSession = data;
           console.log('Successful relogin with session', data)
           // Set in store
+          store.commit('authentication/setCognitoUser', cognitoUser)
           store.commit('authentication/setUserSession', cognitoUserSession)
           // Redirect (we use the router instance directly, as it is not provided globally yet)
           void routerInstance.push(ROUTES.MAIN)
