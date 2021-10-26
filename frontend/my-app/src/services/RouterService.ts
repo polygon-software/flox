@@ -19,6 +19,7 @@ export class RouterService {
    * @param to {RouteRecordRaw} - the route to go to
    */
   async routeTo(to: RouteRecordRaw): Promise<void | NavigationFailure | undefined>{
+    console.log('Pushing route', to.path)
       return this.router.push(to)
   }
 }

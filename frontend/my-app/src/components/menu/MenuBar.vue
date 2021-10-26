@@ -50,7 +50,7 @@ import {inject, ref} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {useStore} from 'src/store';
 
-const $authService: ref<AuthenticationService> = inject('$authService')
+const $authService: AuthenticationService = inject('$authService')
 const $store = useStore()
 
 const loggedIn = $store.getters['authentication/getLoggedInStatus']
