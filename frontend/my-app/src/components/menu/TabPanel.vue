@@ -19,13 +19,13 @@
 
     <q-separator />
 
-    <q-tab-panels v-model="tab" animated>
+    <q-tab-panels v-model="currentTab" animated>
       <q-tab-panel
           v-for="tab in props.tabs"
           :key="tab.name"
           :name="tab.name"
           >
-          {{ tab.content }}
+          <slot />
       </q-tab-panel>
     </q-tab-panels>
   </q-card>
@@ -35,7 +35,14 @@
 import {defineProps, ref} from 'vue'
 
 /**
- * The TabPanel component can hold mutiple tabs...
+ * This component will probably be deleted!
+ */
+
+/**
+ * The TabPanel component can hold mutiple tabs. There's always only one active tab.
+ * The component receives an array of objects with the following attributes:
+ * @name: Name of the tab
+ * @label: The displayed name of a tab
  */
 
 const props = defineProps({
@@ -45,6 +52,7 @@ const props = defineProps({
   }
 })
 
+//Indicates which tab is currently opend
 let currentTab = ref(props.tabs[0].name)
 
 </script>

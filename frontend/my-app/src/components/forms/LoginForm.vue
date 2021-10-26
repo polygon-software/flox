@@ -28,9 +28,9 @@
 <script setup lang="ts">
 import {defineEmits} from "vue";
 import {ref} from "vue";
-import {SIGN_IN} from "@/components/forms/FIELDS";
+import {FIELDS} from "@/data/FIELDS";
 
-const fields = [SIGN_IN.USERNAME, SIGN_IN.PASSWORD]
+const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
 let form_values = ref({})
 const emit = defineEmits(['submit'])
 

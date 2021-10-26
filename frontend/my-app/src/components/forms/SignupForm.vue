@@ -38,17 +38,18 @@
               flat
               style="margin-right: 30px"
               color="primary"
-              label="Back" class="q-ml-sm" />
+              :label="$t('back')"
+              class="q-ml-sm" />
           <q-btn
               v-if="step < pages.length"
               @click="$refs.stepper.next()"
               color="primary"
-              label="Next"
+              :label="$t('next_step')"
           />
           <q-btn
               v-if="step === pages.length"
               color="primary"
-              :label="$t('Finish')"
+              :label="$t('finish_signUp')"
               type="submit"
           />
         </q-stepper-navigation>
@@ -60,8 +61,8 @@
 
 <script setup lang="ts">
 import {ref, defineEmits} from "vue";
-import {SIGNUP} from "@/components/forms/FIELDS";
-const account_fields = [SIGNUP.EMAIL, SIGNUP.USERNAME, SIGNUP.PASSWORD_REPEAT]
+import {FIELDS} from "@/data/FIELDS";
+const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
 const pages = [
   {
     key: "account_data",
@@ -70,7 +71,7 @@ const pages = [
   },
   {
     key: "personal_data",
-    label: "Account",
+    label: "Personal",
     fields: [],
   },
   {
@@ -88,11 +89,6 @@ const pages = [
     label: "Interests",
     fields: [],
   },
-  {
-    key: "personal_data",
-    label: "Account",
-    fields: [],
-  }
 ]
 
 let step = ref(1)
@@ -101,7 +97,7 @@ const emit = defineEmits(['submit'])
 
 
 /**
- * TODO
+ * On submit, pass entered data outwards
 **/
 function onSubmit(){
   emit('submit', form_values)
