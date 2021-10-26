@@ -110,7 +110,3 @@ function onUpdate(id: string, variables: Record<string, unknown>){
 }
 
 </script>
-
-<style scoped>
-
-</style>

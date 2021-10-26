@@ -53,7 +53,3 @@ function onSubmit () : void{
 
 
 </script>
-
-<style scoped>
-
-</style>
