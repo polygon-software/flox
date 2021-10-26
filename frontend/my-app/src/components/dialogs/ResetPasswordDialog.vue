@@ -64,7 +64,7 @@ const emit = defineEmits(['ok'])
 let dialog = ref(null)
 
 /**
- * TODO
+ * On submit, emit data outwards
  */
 function onSubmit(){
   emit('ok', {
@@ -74,10 +74,13 @@ function onSubmit(){
   hide()
 }
 
+function show(){
+  dialog.value?.show()
+}
+
 function hide(){
   dialog.value?.hide()
 }
-
 
 </script>
 

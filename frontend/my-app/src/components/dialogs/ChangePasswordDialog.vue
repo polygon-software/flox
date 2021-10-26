@@ -77,6 +77,10 @@ function onSubmit(){
   hide()
 }
 
+function show(){
+  dialog.value?.show()
+}
+
 function hide(){
   dialog.value?.hide()
 }
