@@ -17,8 +17,7 @@ export default{
     // const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
 
     const userPool = store.getters['authentication/getUserPool']
-
-    const cognitoUser = userPool.getCurrentUser();
+    const cognitoUser = userPool?.getCurrentUser();
     if(cognitoUser){
       // Auto-log in user
       cognitoUser.getSession(function(err: Error, data: CognitoUserSession) {
