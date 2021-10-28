@@ -31,11 +31,12 @@ onServerPrefetch(async () => {
   store.commit("ssr/setPrefetchedData", {key: ALL_USERS.cacheLocation, value: temp_res.data[ALL_USERS.cacheLocation]})
 })
 onMounted(()=>{
-  console.log(process.env.MODE)
   if(process.env.MODE === "ssr"){
     users.value = [...store.getters['ssr/getPrefetchedData'](ALL_USERS.cacheLocation) as Array<any>]
   } else {
-    users.value = []
+    void executeQuery(ALL_USERS).then((res)=>{
+      users.value = res.data.allUsers
+    })
   }
   // Set up subscription
   useSubscription(USER_ADDED).onResult((res)=>{
