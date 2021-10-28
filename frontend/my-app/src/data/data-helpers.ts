@@ -1,9 +1,9 @@
-import {ApolloClients, provideApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
+import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {QUERIES} from './QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from './DATA-DEFINITIONS';
-import {inject, Ref} from 'vue';
 import {ApolloQueryResult} from "@apollo/client";
-import {ApolloClient} from "@apollo/client/core";
+import {computed, onMounted, onServerPrefetch, ref} from "vue";
+import {useStore} from "src/store";
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -90,4 +90,49 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     await mutate(variables);
 }
 
-export {executeQuery, executeMutation}
+function subscribeToQuery(query: QueryObject){
+  const store = useStore();
+  const res = ref(undefined)
+
+  const display_res = computed(()=>{
+    if(res.value){
+      return res.value
+    }
+    const store_state = store.getters['ssr/getPrefetchedData'](query.cacheLocation) as Record<string, unknown[]>
+    if(store_state){
+      return store_state;
+    }
+    return undefined
+  })
+
+  // ----- Hooks -----
+  onServerPrefetch(async () => {
+    const temp_res = await executeQuery(query)
+    res.value = temp_res.data;
+    store.commit("ssr/setPrefetchedData", {key: query.cacheLocation, value: res})
+  })
+
+  onMounted( () => {
+    const polo = useApolloClient().resolveClient()
+
+    const store_state = store.getters['ssr/getPrefetchedData'](query.cacheLocation)[query.cacheLocation] as Record<string, unknown>[]
+
+
+
+    polo.writeQuery({
+      query: query.query,
+      data: {
+        [query.cacheLocation]: store_state
+      }
+    })
+    polo.watchQuery({query: query.query}).subscribe({
+      next(value: ApolloQueryResult<any>) {
+        res.value = value.data
+      }
+    })
+  })
+  return display_res;
+}
+
+
+export {executeQuery, executeMutation, subscribeToQuery}

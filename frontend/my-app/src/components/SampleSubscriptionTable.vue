@@ -14,7 +14,7 @@ import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
 import { executeQuery } from '../data/data-helpers';
-import {defineProps, inject, onMounted, onServerPrefetch, Ref, ref, watch} from 'vue';
+import {defineProps, onMounted, onServerPrefetch, Ref, ref, watch} from 'vue';
 import {useStore} from "src/store";
 
 const users: Ref<Array<any>> = ref([]);

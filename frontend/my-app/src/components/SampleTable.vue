@@ -1,10 +1,10 @@
 <template>
   <div class="column">
     <q-table
-      v-if="users"
+      v-if="computedResult"
       table-header-class="bg-grey-2"
       title="List of users (with cache)"
-      :rows="users"
+      :rows="computedResult"
       :columns="columns"
       row-key="id"
       :rows-per-page-options="[10,20, 100]"
@@ -71,18 +71,12 @@
 <script setup lang="ts">
 import { ALL_USERS } from '../data/QUERIES';
 import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
-import {ref, onServerPrefetch, computed, defineProps} from 'vue';
-import {executeMutation, executeQuery} from '../data/data-helpers';
-import {useStore} from 'src/store';
+import {ref, computed, ComputedRef} from 'vue';
+import {executeMutation, subscribeToQuery} from '../data/data-helpers';
 
 
-// ----- Props -----
-const props = defineProps({
-  key: String
-});
 
 // ----- Data -----
-const store = useStore();
 // Selection must be an array
 let selected = ref([])
 const columns = [
@@ -91,16 +85,14 @@ const columns = [
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
 
-// ----- Hooks -----
-onServerPrefetch(async () => {
-  const res = await executeQuery(ALL_USERS)
-  store.commit("ssr/setPrefetchedData", {key: props.key, value: res})
+const queryResult = subscribeToQuery(ALL_USERS) as ComputedRef<Record<string, Array<Record<string, unknown>>>>
+
+const computedResult = computed(()=>{
+    return queryResult.value?.allUsers ?? []
 })
 
-// ----- Computed -----
-let users =  computed(()=>{
-  return store.getters['ssr/getPrefetchedData'](props.key)?.data.allUsers as Array<unknown>
-})
+
+
 
 /**
  * Deletes the currently selected authentication
