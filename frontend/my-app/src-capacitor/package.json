@@ -1,0 +1,11 @@
+{
+  "name": "my-app",
+  "version": "0.0.1",
+  "description": "A Quasar Framework app",
+  "author": "davwys <david.wyss@hotmail.ch>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  }
+}
