@@ -1,10 +1,10 @@
 import {ApolloClient} from '@apollo/client/core'
-import { ApolloClients } from '@vue/apollo-composable'
+import {provideApolloClient} from '@vue/apollo-composable'
 import { boot } from 'quasar/wrappers'
 import { getClientOptions } from 'src/apollo'
 
 export default boot(
-  ({ app }) => {
+  ({ }) => {
 
 
     // Default client.
@@ -13,11 +13,6 @@ export default boot(
     // Apollo Client setup
     const apolloClient = new ApolloClient(options)
 
-    const apolloClients: Record<string, ApolloClient<unknown>> = {
-      default: apolloClient,
-    }
-
-    app.provide(ApolloClients, apolloClients)
-    console.log("apollo Provided")
+    provideApolloClient(apolloClient)
   }
 )
