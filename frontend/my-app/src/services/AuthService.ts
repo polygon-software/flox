@@ -36,7 +36,6 @@ export class AuthenticationService {
           ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
       };
       const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
-      console.log('Userpool is: ', userPool)
       this.$store.commit('authentication/setUserPool', userPool)
 
 
@@ -46,7 +45,6 @@ export class AuthenticationService {
 
       // Error service
       this.$errorService = errorService
-      console.log("Auth's error service is:", errorService)
     }
 
     /**

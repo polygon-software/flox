@@ -1,5 +1,5 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
-import {QUERIES} from './QUERIES';
+import {ALL_USERS, QUERIES} from './QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from './DATA-DEFINITIONS';
 import {ApolloQueryResult} from "@apollo/client";
 import {computed, onMounted, onServerPrefetch, ref} from "vue";
@@ -108,16 +108,13 @@ function subscribeToQuery(query: QueryObject){
   // ----- Hooks -----
   onServerPrefetch(async () => {
     const temp_res = await executeQuery(query)
-    res.value = temp_res.data;
-    store.commit("ssr/setPrefetchedData", {key: query.cacheLocation, value: res})
+    res.value = temp_res.data[query.cacheLocation];
+    store.commit("ssr/setPrefetchedData", {key: query.cacheLocation, value: res.value})
   })
 
   onMounted( () => {
     const polo = useApolloClient().resolveClient()
-
-    const store_state = store.getters['ssr/getPrefetchedData'](query.cacheLocation)[query.cacheLocation] as Record<string, unknown>[]
-
-
+    const store_state = store.getters['ssr/getPrefetchedData'](query.cacheLocation) as Record<string, unknown>[]
 
     polo.writeQuery({
       query: query.query,
@@ -127,7 +124,7 @@ function subscribeToQuery(query: QueryObject){
     })
     polo.watchQuery({query: query.query}).subscribe({
       next(value: ApolloQueryResult<any>) {
-        res.value = value.data
+        res.value = value.data[ALL_USERS.cacheLocation]
       }
     })
   })
