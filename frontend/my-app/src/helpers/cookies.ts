@@ -44,7 +44,6 @@ export function deleteCookies(category: string): void{
   Object.keys(allCookies).forEach((cookieKey: any) => {
     if(cookieKey.startsWith(`${category}.`)){
       Cookies.remove(cookieKey)
-      console.log('Removed', cookieKey)
     }
   })
 }
