@@ -39,7 +39,6 @@ export class UserResolver {
     const newUser = await this.usersService.create(createUserInput);
     // Publish authentication so subscriptions will auto-update
     await pubSub.publish('userAdded', { userAdded: newUser });
-    console.log('Publishing new authentication', newUser, 'on PubSub!');
     return newUser;
   }
 

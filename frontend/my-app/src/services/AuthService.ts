@@ -35,7 +35,6 @@ export class AuthenticationService {
           UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
           ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
       };
-      console.log('Store is:', this.$store)
       const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
       this.$store.commit('authentication/setUserPool', userPool)
 
@@ -46,7 +45,6 @@ export class AuthenticationService {
 
       // Error service
       this.$errorService = errorService
-      console.log("Auth's error service is:", errorService)
     }
 
     /**
@@ -83,7 +81,6 @@ export class AuthenticationService {
 
                 // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
                 selectMFAType: function (challengeName, challengeParameters) {
-                    console.log('Select MFA type!', challengeName, challengeParameters)
                     cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
                 },
 
@@ -129,7 +126,6 @@ export class AuthenticationService {
         attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
         // TODO disable requirement on AWS @thommann
         attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
-        console.log(username, password, attributes)
 
       const userPool = this.$store.getters['authentication/getUserPool']
       userPool.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
@@ -248,7 +244,6 @@ export class AuthenticationService {
                 this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
                 return
             } else {
-                console.log('Resend confirmation!')
                 this.$store.getters['authentication/getCognitoUser'].resendConfirmationCode(() => {
                   // TODO
                 })

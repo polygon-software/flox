@@ -11,7 +11,7 @@ export function getClientOptions() {
     uri: 'http://localhost:3000/graphql',
   })
 
-  // TODO
+  // Authentication middleware for intercepting any GraphQL-related operations
   const authMiddleware = new ApolloLink((operation, forward) => {
     const token = Cookies.get('authentication.idToken')
     // add the authorization to the headers
