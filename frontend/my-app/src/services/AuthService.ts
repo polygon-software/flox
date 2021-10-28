@@ -80,7 +80,7 @@ export class AuthenticationService {
                 mfaSetup: (user) => {this.setupMFA(user, resolve)},
 
                 // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-                selectMFAType: function (challengeName, challengeParameters) {
+                selectMFAType: function () {
                     cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
                 },
 
