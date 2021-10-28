@@ -14,10 +14,10 @@ import {ApolloClient} from "@apollo/client/core";
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  */
 async function executeQuery(queryObject: QueryObject): Promise<ApolloQueryResult<any>> {
-  const resi = useQuery(queryObject.query)
+  const queryResult = useQuery(queryObject.query)
   return new Promise(((resolve, reject) => {
-    resi.onResult((res)=>{resolve(res)})
-    resi.onError((err)=>{reject(err)})
+    queryResult.onResult((res)=>{resolve(res)})
+    queryResult.onError((err)=>{reject(err)})
   }))
 }
 
