@@ -88,7 +88,7 @@ const columns = [
 const queryResult = subscribeToQuery(ALL_USERS) as ComputedRef<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
-    return queryResult.value?.allUsers ?? []
+  return queryResult.value ?? []
 })
 
 

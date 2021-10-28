@@ -14,31 +14,29 @@ import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
 import { executeQuery } from '../data/data-helpers';
-import {defineProps, onMounted, onServerPrefetch, Ref, ref, watch} from 'vue';
+import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
 import {useStore} from "src/store";
 
 const users: Ref<Array<any>> = ref([]);
 
 
-// ----- Props -----
-const props = defineProps({
-  key: String
-});
+
 
 // ----- Data -----
 const store = useStore();
-let result: Ref<any>;
 
 // ----- Hooks -----
 onServerPrefetch(async () => {
-  const res = await executeQuery(ALL_USERS)
-  store.commit("ssr/setPrefetchedData", {key: props.key, value: res})
+  const temp_res = await executeQuery(ALL_USERS)
+  store.commit("ssr/setPrefetchedData", {key: ALL_USERS.cacheLocation, value: temp_res.data[ALL_USERS.cacheLocation]})
 })
 onMounted(()=>{
 
-  users.value = store.getters['ssr/getPrefetchedData'](props.key)?.data.allUsers as Array<any>
+  users.value = [...store.getters['ssr/getPrefetchedData'](ALL_USERS.cacheLocation) as Array<any>]
   // Set up subscription
-  result = useSubscription(USER_ADDED).subscription;
+  useSubscription(USER_ADDED).onResult((res)=>{
+    users.value.push(res.data.userAdded)
+  });
 })
 
 
@@ -50,16 +48,16 @@ const columns = [
   { name: 'name', label: 'Name', field: 'name', sortable: true },
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
-
-// Watch for subscription changes
-watch(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    () => result,
-    (newUser) => {
-      console.log(newUser)
-      users.value.push(newUser.userAdded)
-    }
-)
+//
+// // Watch for subscription changes
+// watch(
+//     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+//     () => result,
+//     (newUser) => {
+//       console.log(newUser)
+//       users.value.push(newUser.userAdded)
+//     }
+// )
 
 // // Watch for initial state change query to go through
 // const stop = watch(

@@ -3,7 +3,7 @@
     <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
     <div class="column">
       <div class="row q-pa-md">
-        <SampleTable ssrKey="Snabeltier"/>
+        <SampleTable/>
         <SampleForm/>
       </div>
 
@@ -18,8 +18,5 @@
 import SampleTable from 'components/SampleTable.vue'
 import SampleForm from 'components/SampleForm.vue'
 import SampleSubscriptionTable from 'components/SampleSubscriptionTable.vue'
-import {onMounted} from "vue";
-onMounted(()=>{
-  console.log("Mounted MainPage")
-})
+
 </script>
