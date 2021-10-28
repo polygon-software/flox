@@ -1,23 +1,27 @@
 import { MutationTree } from 'vuex';
 import { AuthStateInterface } from './state';
 import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
-import { persistToCookies } from 'src/helpers/cookies'
+import {deleteCookies, persistToCookies} from 'src/helpers/cookies'
 
 function setUserSession (state: AuthStateInterface, payload: CognitoUserSession) {
   state.userSession = payload
 
-  // Persist tokens to cookies
-  const idToken = state.userSession.getIdToken().getJwtToken()
-  const refreshToken = state.userSession.getRefreshToken().getToken()
-  const accessToken = state.userSession.getAccessToken().getJwtToken()
-  persistToCookies(
-    'authentication',
-    {
-      idToken,
-      refreshToken,
-      accessToken
-    }
-  )
+  if(state.userSession) {
+    // Persist tokens to cookies
+    const idToken = state.userSession.getIdToken().getJwtToken()
+    const refreshToken = state.userSession.getRefreshToken().getToken()
+    const accessToken = state.userSession.getAccessToken().getJwtToken()
+    persistToCookies(
+      'authentication',
+      {
+        idToken,
+        refreshToken,
+        accessToken
+      }
+    )
+  } else {
+    deleteCookies('authentication')
+  }
 }
 
 function setUserPool (state: AuthStateInterface, payload: CognitoUserPool) {

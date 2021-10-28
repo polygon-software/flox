@@ -12,8 +12,8 @@ export function getClientOptions() {
   })
 
   // TODO
-  const token = Cookies.get('authentication.idToken')
   const authMiddleware = new ApolloLink((operation, forward) => {
+    const token = Cookies.get('authentication.idToken')
     // add the authorization to the headers
     operation.setContext({
       headers: {

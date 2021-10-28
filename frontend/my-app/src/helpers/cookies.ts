@@ -11,14 +11,12 @@ import {Cookies} from 'quasar';
  * @param category {string} - sub-category to store the cookie to
  * @param payload
  */
-export function persistToCookies (category: string, payload: Record<string, any>){
-  console.log('Called persist with', payload)
+export function persistToCookies (category: string, payload: Record<string, any>): void{
   // Set cookie when SSR fetch is done (ie. only browser can set a cookie)
   if (!process.env.SERVER) {
     // Set 'secure' to true for production
     Object.keys(payload).forEach((key: string) => {
       const data: any = payload[key]
-      console.log('Data:', data)
       Cookies.set(
         `authentication.${key}`,
         JSON.stringify(data),
@@ -33,4 +31,19 @@ export function persistToCookies (category: string, payload: Record<string, any>
   // // Copy payload to state
   // state = {...payload}
   // console.log('State new:', state)
+}
+
+/**
+ * Deletes all cookies within a given category
+ * @param category
+ */
+export function deleteCookies(category: string): void{
+  const allCookies = Cookies.getAll()
+
+  Object.keys(allCookies).forEach((cookieKey: any) => {
+    if(cookieKey.startsWith(`${category}.`)){
+      Cookies.remove(cookieKey)
+      console.log('Removed', cookieKey)
+    }
+  })
 }
