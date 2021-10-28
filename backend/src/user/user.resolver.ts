@@ -9,7 +9,7 @@ import { GetUsersArgs } from './dto/args/get-users.args';
 import { PubSub } from 'graphql-subscriptions';
 import { Public } from '../auth/auth.guard';
 
-// Publish/subscribe handler TODO make global and inject/provice, according to https://docs.nestjs.com/graphql/subscriptions
+// Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
 const pubSub = new PubSub();
 
 @Resolver(() => User)
