@@ -26,16 +26,6 @@ import { JwtStrategy } from './auth/jwt.strategy';
           path: '/graphql-websocket',
           onConnect: (context: Context) => {
             console.log('Client connected to GraphQL Websocket!');
-            // TODO token authentication can be done here
-            // const { connectionParams } = context;
-            // const authToken = connectionParams.authToken;
-            // if (!isValid(authToken)) {
-            //   throw new Error('Token is not valid');
-            // }
-            // // extract authentication information from token
-            // const authentication = parseToken(authToken);
-            // // return authentication info to add them to the context later
-            // return { authentication };
           },
         },
       },
