@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { Context } from 'vm';
+import { JwtAuthGuard } from './auth/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [
@@ -25,16 +26,6 @@ import { Context } from 'vm';
           path: '/graphql-websocket',
           onConnect: (context: Context) => {
             console.log('Client connected to GraphQL Websocket!');
-            // TODO token authentication can be done here
-            // const { connectionParams } = context;
-            // const authToken = connectionParams.authToken;
-            // if (!isValid(authToken)) {
-            //   throw new Error('Token is not valid');
-            // }
-            // // extract authentication information from token
-            // const authentication = parseToken(authToken);
-            // // return authentication info to add them to the context later
-            // return { authentication };
           },
         },
       },
@@ -59,7 +50,12 @@ import { Context } from 'vm';
     }),
     UserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
