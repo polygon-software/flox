@@ -7,6 +7,7 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { PubSub } from 'graphql-subscriptions';
+import { Public } from '../auth/auth.guard';
 
 // Publish/subscribe handler TODO make global and inject/provice, according to https://docs.nestjs.com/graphql/subscriptions
 const pubSub = new PubSub();
@@ -15,11 +16,13 @@ const pubSub = new PubSub();
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
+  @Public()
   @Query(() => [User], { name: 'users' })
   async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
     return await this.usersService.getUsers(getUsersArgs);
   }
 
+  @Public()
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
     return await this.usersService.getAllUsers();
@@ -55,6 +58,7 @@ export class UserResolver {
     return await this.usersService.remove(deleteUserInput);
   }
 
+  @Public()
   @Subscription((returns) => User)
   userAdded() {
     return pubSub.asyncIterator('userAdded');
