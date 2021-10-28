@@ -2,7 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 
-const secret = 'schnabeltier';
+const secret = 'schnabeltier'; // TODO get public key from cognito and convert to PEM
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

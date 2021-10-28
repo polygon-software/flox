@@ -1,13 +1,27 @@
 import type { ApolloClientOptions } from '@apollo/client/core'
-import {createHttpLink, InMemoryCache, split} from '@apollo/client/core'
+import {ApolloLink, concat, createHttpLink, InMemoryCache, split} from '@apollo/client/core'
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {getMainDefinition} from '@apollo/client/utilities';
+import {Cookies} from 'quasar';
 
 export function getClientOptions() {
   // HTTP link for GraphQL (Queries/Mutations)
   const httpLink = createHttpLink({
     // GraphQL API Link
     uri: 'http://localhost:3000/graphql',
+  })
+
+  // TODO
+  const token = Cookies.get('authentication.idToken')
+  console.log('token blubb', token)
+  const authMiddleware = new ApolloLink((operation, forward) => {
+    // add the authorization to the headers
+    operation.setContext({
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    })
+    return forward(operation)
   })
 
   // WebSocket link for GraphQL (Subscriptions)
@@ -35,7 +49,7 @@ export function getClientOptions() {
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
-      link,
+      link: concat(authMiddleware, link),
       cache: new InMemoryCache({
         addTypename: false, // We disable auto-adding of __typename property, as this breaks mutations expecting
                             // an object variable. Instead, we manually add __typename in QUERIES/MUTATIONS.ts where

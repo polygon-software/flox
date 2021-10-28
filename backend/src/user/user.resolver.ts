@@ -22,7 +22,6 @@ export class UserResolver {
     return await this.usersService.getUsers(getUsersArgs);
   }
 
-  @Public()
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
     return await this.usersService.getAllUsers();
