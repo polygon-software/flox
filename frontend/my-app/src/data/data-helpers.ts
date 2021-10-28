@@ -116,6 +116,14 @@ function subscribeToQuery(query: QueryObject){
     const polo = useApolloClient().resolveClient()
     const store_state = store.getters['ssr/getPrefetchedData'](query.cacheLocation) as Record<string, unknown>[]
 
+    // PWA
+    if(!store_state){
+      void executeQuery(query).then((fetchedRes)=>{
+        res.value = fetchedRes.data[query.cacheLocation]
+      })
+      return
+    }
+
     polo.writeQuery({
       query: query.query,
       data: {
