@@ -20,21 +20,21 @@
       label="Repeat Password"
       v-model="passwordRepeat"
       lazy-rules
-      :type="isPwdReapeat ? 'password' : 'text'"
+      :type="isPwdRepeat ? 'password' : 'text'"
       :rules="[val => val === password || $t('non_matching_password')]"
   >
     <template v-slot:append>
       <q-icon
-          :name="isPwdReapeat ? 'visibility_off' : 'visibility'"
+          :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"
-          @click="isPwdReapeat = !isPwdReapeat"
+          @click="isPwdRepeat = !isPwdRepeat"
       />
     </template>
   </q-input>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import {IS_VALID_PASSWORD} from 'src/data/RULES';
 
 /**
@@ -44,7 +44,14 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
 let password = ref('')
 let passwordRepeat = ref('')
 const isPwd = ref(true)
-const isPwdReapeat = ref(true)
+const isPwdRepeat = ref(true)
+
+const emit = defineEmits(['change'])
+
+watch(password, (newVal) => {
+  emit('change', newVal)
+})
+
 </script>
 
 <style scoped>
