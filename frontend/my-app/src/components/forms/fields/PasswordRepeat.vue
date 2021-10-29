@@ -49,8 +49,18 @@ const isPwdRepeat = ref(true)
 const emit = defineEmits(['change'])
 
 watch(password, (newVal) => {
-  emit('change', newVal)
+  emitUpdate(newVal)
 })
+
+watch(passwordRepeat, (newVal) => {
+  emitUpdate(newVal)
+})
+
+function emitUpdate(value: string){
+  if(password.value.length > 0 && password.value === passwordRepeat.value){
+    emit('change', value)
+  }
+}
 
 </script>
 
