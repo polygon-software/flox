@@ -29,7 +29,7 @@
               :is="field.component"
               v-bind="field.attributes"
               v-model="form_values[field.key]"
-              v-model:er="error_values[field.key]"
+              @change="(newValue) => {form_values.value[field.key] = newValue}"
               dense
           />
       </q-step>
@@ -48,7 +48,7 @@
               @click="$refs.stepper.next()"
               color="primary"
               :label="$t('next_step')"
-
+              :disable="!validFields"
           />
           <q-btn
               v-if="step === pages.length"
@@ -97,16 +97,20 @@ const pages = [
 
 const step = ref(1)
 const form_values = ref({})
-const error_values = ref({})
 const emit = defineEmits(['submit'])
 
-const validFields = computed(() => {
-  if (form_values.keys(myObj).length == 0) {
-    return false
-  }
-  
 
- })
+const validFields = computed(() => {
+
+  const res = Object.keys(form_values.value).every((key)=>{
+    return FIELDS[key.toUpperCase()].attributes.rules.every((rule:()=>boolean)=>{
+      return typeof rule(form_values.value[key]) === "boolean"
+    })
+  })
+
+  return res && form_values.value["email"] !== undefined
+})
+
 
 /**
  * On submit, pass entered data outwards
@@ -114,6 +118,7 @@ const validFields = computed(() => {
 function onSubmit() {
   emit('submit', form_values)
 }
+
 
 </script>
 
