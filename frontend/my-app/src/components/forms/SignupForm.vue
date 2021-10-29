@@ -29,7 +29,7 @@
               :is="field.component"
               v-bind="field.attributes"
               v-model="form_values[field.key]"
-              @change="(newValue) => {form_values.value[field.key] = newValue}"
+              @change="(newValue) => updateValue(newValue, field.key)"
               dense
           />
       </q-step>
@@ -104,13 +104,18 @@ const validFields = computed(() => {
 
   const res = Object.keys(form_values.value).every((key)=>{
     return FIELDS[key.toUpperCase()].attributes.rules.every((rule:()=>boolean)=>{
-      return typeof rule(form_values.value[key]) === "boolean"
+      return typeof rule(form_values.value[key]) === 'boolean'
     })
   })
 
-  return res && form_values.value["email"] !== undefined
+  return res && form_values.value['email'] !== undefined
 })
 
+
+function updateValue(val: any, key: string){
+    console.log('got new val', val)
+    form_values.value[key] = val
+}
 
 /**
  * On submit, pass entered data outwards
