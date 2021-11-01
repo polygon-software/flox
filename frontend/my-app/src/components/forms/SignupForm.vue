@@ -3,7 +3,7 @@
     <h5 class="q-ma-none" style="margin-bottom: 30px;">
       {{ $t('signup') }}
     </h5>
-    <p>{{form.pageValid}}</p>
+    <p>{{form.pageValid}}, {{form.values}}</p>
     <q-form
         @submit="form.onSubmit"
         class="q-gutter-md"
@@ -17,7 +17,7 @@
         done-icon="done"
     >
       <q-step
-          v-for="(page, index) in pages"
+          v-for="(page, index) in form.pages.value"
           :key="page.key"
           :name="index+1"
           :prefix="index+1"
@@ -45,14 +45,14 @@
               :label="$t('back')"
               class="q-ml-sm" />
           <q-btn
-              v-if="form.step.value < pages.length"
+              v-if="form.step.value < form.pages.value.length"
               @click="$refs.stepper.next()"
               color="primary"
               :label="$t('next_step')"
               :disable="!form.pageValid.value"
           />
           <q-btn
-              v-if="form.step.value === pages.length"
+              v-if="form.step.value === form.pages.value.length"
               color="primary"
               :label="$t('finish_signup')"
               type="submit"
@@ -69,7 +69,8 @@ import {FIELDS} from 'src/data/FIELDS';
 import * as form from 'src/helpers/form-helpers'
 
 const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
-const pages = [
+
+form.pages.value = [
   {
     key: 'account_data',
     label: 'Account',
@@ -78,7 +79,7 @@ const pages = [
   {
     key: 'personal_data',
     label: 'Personal',
-    fields: [FIELDS.EMAIL, FIELDS.USERNAME],
+    fields: [FIELDS.FULL_NAME,],
   },
   {
     key: 'address_data',
