@@ -4,7 +4,7 @@
       {{ $t('login') }}
     </h5>
     <q-form
-        @submit="onSubmit"
+        @submit="signinForm.onSubmit"
         class="q-gutter-md"
     >
       <component
@@ -12,34 +12,30 @@
           :key="field.key"
           :is="field.component"
           v-bind="field.attributes"
-          v-model="form_values[field.key]"
-          dense
+          v-model="signinForm.values.value[field.key]"
+          @change="(newValue) => signinForm.updateValue(field.key, newValue)"
       />
       <q-btn
           style="margin-top: 20px"
           color="primary"
           :label="$t('login')"
           type="submit"
+          :disable="!signinForm.pageValid.value"
       />
     </q-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from 'vue';
-import {ref} from 'vue';
 import {FIELDS} from 'src/data/FIELDS';
+import * as signinForm from 'src/helpers/form-helpers'
 
 const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
-const form_values = ref({})
-const emit = defineEmits(['submit'])
-
-
-/**
- * On submit, pass entered data outwards
- */
-function onSubmit(){
-  emit('submit', form_values.value)
-}
-
+signinForm.pages.value = [
+  {
+    key: 'login',
+    label: 'Login',
+    fields: fields
+  }
+]
 </script>
