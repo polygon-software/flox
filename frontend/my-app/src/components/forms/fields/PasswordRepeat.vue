@@ -41,8 +41,15 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
  * This component contains field to enter a new password, as well as another field to repeat the new password. Both entries need to match.
  */
 
-let password = ref('')
-let passwordRepeat = ref('')
+const props = defineProps({
+  initialValue: {
+    required: false,
+    type: String
+  }
+});
+
+let password = ref(props.initialValue ?? '')
+let passwordRepeat = ref(props.initialValue ?? '')
 const isPwd = ref(true)
 const isPwdRepeat = ref(true)
 
