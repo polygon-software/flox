@@ -41,10 +41,14 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
  * This component contains field to enter a new password, as well as another field to repeat the new password. Both entries need to match.
  */
 
+// TODO possibly generalize
 const props = defineProps({
   initialValue: {
     required: false,
     type: String
+  },
+  rules: {
+    required: false,
   }
 });
 
