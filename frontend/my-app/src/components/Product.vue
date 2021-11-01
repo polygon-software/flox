@@ -19,7 +19,7 @@
     </q-carousel>
 
     <!-- Title and Icons -->
-    <div class="row q-gutter-md">
+    <div class="row q-mt-md q-gutter-md">
       <h5 class="col">{{ title }}</h5>
       <div class="q-gutter-md" style="justify-content: flex-end">
         <q-icon
@@ -49,21 +49,67 @@
       </div>
     </div>
 
-    <!-- Progress Bar -->
-    <div class="row">
-      <p style="color: #21BA45"> {{ covered_amount }}{{ currency }} of {{ total_amount }}{{ currency }} covered</p>
-      <q-linear-progress
-        size="md"
-        :value="progress"
-        color="positive"
-      />
-    </div>
+    <!-- Tabs -->
+    <q-tabs
+      v-model="tab"
+      dense
+      class="q-mt-xs text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      narrow-indicator
+    >
+      <q-tab name="summary" label="Summary" />
+      <q-tab name="description" label="Description" />
+      <q-tab name="tickets" label="Ticket Distribution" />
+    </q-tabs>
+    <q-separator />
+    <q-tab-panels
+      v-model="tab"
+      animated
+    >
+      <!-- Summary Tab -->
+      <q-tab-panel name="summary">
+        <!-- Links -->
+        <div class="row q-gutter-md">
+          <q-btn
+            label="Buy directley"
+            color="primary"
+            v-if="showDirectLink"
+          />
+          <q-btn
+            label="Seller page"
+            color="primary"
+            v-if="showSellerLink"
+          />
+        </div>
 
-    <!-- Winchances -->
-    <div class="row m-p-t-md q-gutter-md">
-      <p> Average chance: {{ average_chance }}</p>
-      <p> Your chance: {{ user_chance }}</p>
-    </div>
+        <!-- Progress Bar -->
+        <div class="row q-mt-lg">
+          <p style="color: #21BA45"> {{ covered_amount }}{{ currency }} of {{ total_amount }}{{ currency }} covered</p>
+          <q-linear-progress
+            size="md"
+            :value="progress"
+            color="positive"
+          />
+        </div>
+
+        <!-- Winchances -->
+        <div class="row q-mt-sm q-gutter-xl">
+          <p> Average chance: {{ average_chance }}</p>
+          <p> Your chance: {{ user_chance }}</p>
+        </div>
+      </q-tab-panel>
+
+      <!-- Description -->
+      <q-tab-panel name="description">
+        {{ productDetails }}
+      </q-tab-panel>
+
+      <!-- Statistics -->
+      <q-tab-panel name="tickets">
+        Enter the statistics component here.
+      </q-tab-panel>
+    </q-tab-panels>
   </q-card>
 </template>
 
@@ -77,21 +123,11 @@ const props = defineProps({
   },
 })
 
+// General
 const title = 'Product Card'
 const slide = ref(1)
 const liked = ref(false)
 const bookmarked = ref(false)
-
-// Progess bar
-const progress = ref(0.4)
-const covered_amount = ref(400)
-const total_amount = 1000
-const currency = ref('$')
-
-// Winchances
-const average_chance = ref('1/10')
-const user_chance = ref('1/8')
-
 const slides = [
   {
     id: 1,
@@ -110,6 +146,29 @@ const slides = [
     url: 'https://cdn.quasar.dev/img/quasar.jpg'
   }
 ]
+
+// Tabs
+const tab = ref('summary')
+
+//Links
+const directLink = "https://www.polygon-software.ch"
+const sellerLink = "https://www.uzh.ch"
+const showSellerLink = ref(true)
+const showDirectLink = ref(true)
+
+// Progess bar
+const progress = ref(0.4)
+const covered_amount = ref(400)
+const total_amount = 1000
+const currency = ref('$')
+
+// Winchances
+const average_chance = ref('1/10')
+const user_chance = ref('1/8')
+
+// Product details
+const productDetails = "Lorem ipsum..."
+
 
 //TODO: Implement methods to fetch product and user attributes from database
 
@@ -132,8 +191,6 @@ function shareProduct() {
   //TODO: open share product
   console.log("Sharing product")
 }
-
-
 </script>
 
 <style scoped>
