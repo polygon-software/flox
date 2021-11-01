@@ -39,7 +39,6 @@ const emit = defineEmits(['submit'])
  * On submit, pass entered data outwards
  */
 function onSubmit(){
-  console.log(form_values)
   emit('submit', form_values.value)
 }
 
