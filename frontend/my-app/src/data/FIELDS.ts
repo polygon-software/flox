@@ -27,7 +27,7 @@ const FIELDS: Record<string, Record<string, any>> = {
               type: 'email',
               label: 'E-Mail',
               lazy_rules: 'ondemand',
-              rules: [(val: string) => IS_EMAIL(val) || 'Please enter a valid e-mail address.']
+              rules: [(val: string): boolean|string  => IS_EMAIL(val) || 'Please enter a valid e-mail address.']
             },
         },
         USERNAME: {
@@ -38,7 +38,7 @@ const FIELDS: Record<string, Record<string, any>> = {
               type: 'text',
               label: 'Username',
               lazy_rules: 'true',
-              rules: [(val: string) => IS_VALID_STRING(val) || 'Please enter a username']
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
             },
         },
         PASSWORD: {
@@ -50,7 +50,7 @@ const FIELDS: Record<string, Record<string, any>> = {
             key: 'password_repeat',
             component: markRaw(PasswordRepeat),
             attributes: {
-              rules: [(val: string) => IS_VALID_PASSWORD(val) || 'Please enter a valid password']
+              rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) || 'Please enter a valid password']
             }
         },
         FULL_NAME: {
@@ -61,7 +61,7 @@ const FIELDS: Record<string, Record<string, any>> = {
             type: 'text',
             label: 'Full name',
             lazy_rules: 'true',
-            rules: [(val: string) => IS_VALID_STRING(val) || 'Please enter your full name']
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || 'Please enter your full name']
           },
 
         },
