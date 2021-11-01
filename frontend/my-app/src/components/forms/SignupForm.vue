@@ -29,7 +29,6 @@
               :is="field.component"
               v-bind="field.attributes"
               v-model="form.values.value[field.key]"
-              :initial-value="form.values.value[field.key]"
               @change="(newValue) => form.updateValue(field.key, newValue)"
           />
       </q-step>
