@@ -17,7 +17,7 @@ import Password from 'components/forms/fields/Password.vue'
  * @rules: Rules that get applied to the input field, e.g. to check if a password is valid.
  */
 
-const FIELDS = {
+const FIELDS: Record<string, Record<string, any>> = {
         EMAIL: {
             key: 'email',
             component: QInput,

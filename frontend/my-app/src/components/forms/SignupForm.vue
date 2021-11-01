@@ -4,11 +4,11 @@
       {{ $t('signup') }}
     </h5>
     <q-form
-        @submit="onSubmit"
+        @submit="form.onSubmit"
         class="q-gutter-md"
         >
     <q-stepper
-        v-model="step"
+        v-model="form.step"
         ref="stepper"
         animated
         active-color="primary"
@@ -21,22 +21,22 @@
           :name="index+1"
           :prefix="index+1"
           :title="page.label"
-          :done="step > index"
+          :done="form.step > index"
       >
         <component
               v-for="field in page.fields"
               :key="field.key"
               :is="field.component"
               v-bind="field.attributes"
-              v-model="form_values[field.key]"
-              @change="(newValue) => updateValue(newValue, field.key)"
+              v-model="form.values[field.key]"
+              @change="(newValue) => form.updateValue(field.key, newValue)"
               dense
           />
       </q-step>
       <template v-slot:navigation>
         <q-stepper-navigation>
           <q-btn
-              v-if="step > 1"
+              v-if="form.step > 1"
               @click="$refs.stepper.previous()"
               flat
               style="margin-right: 30px"
@@ -48,10 +48,10 @@
               @click="$refs.stepper.next()"
               color="primary"
               :label="$t('next_step')"
-              :disable="!validFields"
+              :disable="!form.pageValid"
           />
           <q-btn
-              v-if="step === pages.length"
+              v-if="form.step === pages.length"
               color="primary"
               :label="$t('finish_signup')"
               type="submit"
@@ -64,8 +64,9 @@
 </template>
 
 <script setup lang="ts">
-import {ref, defineEmits, computed} from 'vue';
 import {FIELDS} from 'src/data/FIELDS';
+import * as form from 'src/helpers/form-helpers'
+
 const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
 const pages = [
   {
@@ -94,38 +95,6 @@ const pages = [
     fields: [],
   },
 ]
-
-const step = ref(1)
-const form_values = ref({})
-const emit = defineEmits(['submit'])
-
-
-const validFields = computed(() => {
-
-  const res = Object.keys(form_values.value).every((key)=>{
-    return FIELDS[key.toUpperCase()].attributes.rules.every((rule:()=>boolean)=>{
-      console.log('field:', key, ', value:', rule(form_values.value[key]))
-      // TODO handle for custom component
-      return typeof rule(form_values.value[key]) === 'boolean'
-    })
-  })
-
-  return res && form_values.value['email'] !== undefined
-})
-
-
-function updateValue(val: any, key: string){
-    console.log('got new val', val)
-    form_values.value[key] = val
-}
-
-/**
- * On submit, pass entered data outwards
-**/
-function onSubmit() {
-  emit('submit', form_values.value)
-}
-
 
 </script>
 
