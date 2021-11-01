@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue';
+import {computed, ref, watch} from 'vue';
 import {IS_VALID_PASSWORD} from 'src/data/RULES';
 
 /**
@@ -59,6 +59,9 @@ watch(passwordRepeat, (newVal) => {
 function emitUpdate(value: string){
   if(password.value.length > 0 && password.value === passwordRepeat.value){
     emit('change', value)
+  } else {
+    // Empty emit (input not valid)
+    emit('change', '')
   }
 }
 
