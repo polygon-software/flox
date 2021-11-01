@@ -43,7 +43,7 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
 
 // TODO possibly generalize
 const props = defineProps({
-  initialValue: {
+  modelValue: {
     required: false,
     type: String
   },
@@ -52,8 +52,8 @@ const props = defineProps({
   }
 });
 
-let password = ref(props.initialValue ?? '')
-let passwordRepeat = ref(props.initialValue ?? '')
+let password = ref(props.modelValue ?? '')
+let passwordRepeat = ref(props.modelValue ?? '')
 const isPwd = ref(true)
 const isPwdRepeat = ref(true)
 
