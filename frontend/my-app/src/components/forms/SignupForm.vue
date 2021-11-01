@@ -3,6 +3,7 @@
     <h5 class="q-ma-none" style="margin-bottom: 30px;">
       {{ $t('signup') }}
     </h5>
+    <p>{{form.pageValid}}</p>
     <q-form
         @submit="form.onSubmit"
         class="q-gutter-md"
@@ -28,7 +29,7 @@
               :key="field.key"
               :is="field.component"
               v-bind="field.attributes"
-              v-model="form.values[field.key]"
+              v-model="form.values.value[field.key]"
               @change="(newValue) => form.updateValue(field.key, newValue)"
               dense
           />
@@ -48,7 +49,7 @@
               @click="$refs.stepper.next()"
               color="primary"
               :label="$t('next_step')"
-              :disable="!form.pageValid"
+              :disable="!form.pageValid.value"
           />
           <q-btn
               v-if="form.step.value === pages.length"
@@ -77,7 +78,7 @@ const pages = [
   {
     key: 'personal_data',
     label: 'Personal',
-    fields: [],
+    fields: [FIELDS.EMAIL, FIELDS.USERNAME],
   },
   {
     key: 'address_data',

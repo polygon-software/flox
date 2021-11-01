@@ -1,4 +1,4 @@
-import {IS_EMAIL, IS_VALID_USERNAME} from './RULES'
+import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_USERNAME} from './RULES'
 import {QInput} from 'quasar'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
@@ -42,11 +42,13 @@ const FIELDS: Record<string, Record<string, any>> = {
         PASSWORD: {
             key: 'password',
             component: Password,
+            attributes: {}
         },
         PASSWORD_REPEAT: {
-            key: 'passwordRepeat',
+            key: 'password_repeat',
             component: PasswordRepeat,
             attributes: {
+              rules: [(val: string) => IS_VALID_PASSWORD(val) || 'Please enter a valid password']
             }
         },
     }
