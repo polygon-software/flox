@@ -8,7 +8,7 @@
         class="q-gutter-md"
         >
     <q-stepper
-        v-model="form.step"
+        v-model="form.step.value"
         ref="stepper"
         animated
         active-color="primary"
@@ -21,7 +21,7 @@
           :name="index+1"
           :prefix="index+1"
           :title="page.label"
-          :done="form.step > index"
+          :done="form.step.value > index"
       >
         <component
               v-for="field in page.fields"
@@ -36,7 +36,7 @@
       <template v-slot:navigation>
         <q-stepper-navigation>
           <q-btn
-              v-if="form.step > 1"
+              v-if="form.step.value > 1"
               @click="$refs.stepper.previous()"
               flat
               style="margin-right: 30px"
@@ -44,14 +44,14 @@
               :label="$t('back')"
               class="q-ml-sm" />
           <q-btn
-              v-if="step < pages.length"
+              v-if="form.step.value < pages.length"
               @click="$refs.stepper.next()"
               color="primary"
               :label="$t('next_step')"
               :disable="!form.pageValid"
           />
           <q-btn
-              v-if="form.step === pages.length"
+              v-if="form.step.value === pages.length"
               color="primary"
               :label="$t('finish_signup')"
               type="submit"
