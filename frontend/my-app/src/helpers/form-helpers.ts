@@ -14,7 +14,7 @@ const emit = defineEmits(['submit'])
 const pageValid = computed(() => {
 
   const res = Object.keys(values.value).every((key)=>{
-    return FIELDS[key.toUpperCase()].attributes.rules.every((rule:()=>boolean)=>{
+    return FIELDS[key.toUpperCase()].attributes.rules.every((rule: (valueElement: any)=>boolean)=>{
       console.log('field:', key, ', value:', rule(values.value[key]))
       // TODO handle for custom component
       return typeof rule(values.value[key]) === 'boolean'
