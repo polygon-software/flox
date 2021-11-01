@@ -19,7 +19,7 @@
       dense
       label="Repeat Password"
       v-model="passwordRepeat"
-      lazy-rules
+      lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
       :rules="[val => val === password || $t('non_matching_password')]"
   >

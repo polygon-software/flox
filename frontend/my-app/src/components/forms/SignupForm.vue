@@ -66,6 +66,13 @@
 import {FIELDS} from 'src/data/FIELDS';
 import * as form from 'src/helpers/form-helpers'
 
+/**
+ * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different
+ * steps are defined.The fields a page contains are defined in the fields variable.
+ * Common fields can be found under "src/data/FIELDS".
+ * All fields of a page must be completed before the next page can be accessed.
+ */
+
 const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
 
 form.pages.value = [
