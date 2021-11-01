@@ -100,7 +100,7 @@ const emit = defineEmits(['submit'])
  * On submit, pass entered data outwards
 **/
 function onSubmit(){
-  emit('submit', form_values)
+  emit('submit', form_values.value)
 }
 
 </script>
