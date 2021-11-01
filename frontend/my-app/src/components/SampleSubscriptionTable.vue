@@ -32,10 +32,11 @@ onServerPrefetch(async () => {
 })
 onMounted(()=>{
   if(process.env.MODE === "ssr"){
-    users.value = [...store.getters['ssr/getPrefetchedData'](ALL_USERS.cacheLocation) as Array<any>]
+    users.value = []
+    users.value.push(...store.getters['ssr/getPrefetchedData'](ALL_USERS.cacheLocation))
   } else {
     void executeQuery(ALL_USERS).then((res)=>{
-      users.value = res.data.allUsers
+      users.value = [...res.data.allUsers]
     })
   }
   // Set up subscription
