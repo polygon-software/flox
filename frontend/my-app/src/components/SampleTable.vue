@@ -72,7 +72,7 @@
 import { ALL_USERS } from '../data/QUERIES';
 import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
 import {ref} from 'vue';
-import {executeMutation, executeQuery} from '../data/data-helpers';
+import {executeMutation, executeQuery} from '../helpers/data-helpers';
 
 const result = executeQuery(ALL_USERS)
 
