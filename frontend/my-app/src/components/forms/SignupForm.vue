@@ -3,7 +3,6 @@
     <h5 class="q-ma-none" style="margin-bottom: 30px;">
       {{ $t('signup') }}
     </h5>
-    <p>{{form.pageValid}}, {{form.values}}</p>
     <q-form
         @submit="form.onSubmit"
         class="q-gutter-md"
@@ -32,7 +31,6 @@
               v-model="form.values.value[field.key]"
               :initial-value="form.values.value[field.key]"
               @change="(newValue) => form.updateValue(field.key, newValue)"
-              dense
           />
       </q-step>
       <template v-slot:navigation>

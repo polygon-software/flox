@@ -18,10 +18,8 @@ const pages: Ref<Record<string, any>[]> = ref([])
  * (used to determine whether to allow going to next step within form)
  */
 const pageValid = computed(() => {
-  // If page structure is not built yet, page can't be valid
+  // If page structure does not exist, page can't be valid
   if(pages.value.length === 0) return false
-
-  console.log('Pages built, length', pages.value.length)
 
   // Get keys that should exist in 'values' for this page
   const pageKeys: string[] = []
@@ -30,12 +28,9 @@ const pageValid = computed(() => {
   pageFields.forEach((field: Record<string, any>) => {
     pageKeys.push(field.key)
   })
-  console.log('Keys for this page:', pageKeys) // TODO remove
-
 
   // Validate each field by its "rules" attribute
   return pageKeys.every((key)=>{
-    console.log('CHECKING', key)
     // If no value present at all, stop check
     if(!values.value[key]) return false
 
