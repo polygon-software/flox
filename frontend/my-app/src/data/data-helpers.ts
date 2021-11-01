@@ -121,15 +121,15 @@ function subscribeToQuery(query: QueryObject){
       void executeQuery(query).then((fetchedRes)=>{
         res.value = fetchedRes.data[query.cacheLocation]
       })
-      return
+    } else {
+      polo.writeQuery({
+        query: query.query,
+        data: {
+          [query.cacheLocation]: store_state
+        }
+      })
     }
 
-    polo.writeQuery({
-      query: query.query,
-      data: {
-        [query.cacheLocation]: store_state
-      }
-    })
     polo.watchQuery({query: query.query}).subscribe({
       next(value: ApolloQueryResult<any>) {
         res.value = value.data[ALL_USERS.cacheLocation]
