@@ -1,6 +1,7 @@
 import {Item} from "./Item";
 import {BuyableItem} from "./BuyableItem";
 import {AuctionableItem} from "./AuctionableItem";
+import {TimeableItem} from "./TimeableItem";
 
 // Expected: ok
 console.log(
@@ -9,6 +10,8 @@ console.log(
     name: "Käsestück"
     })
 )
+
+console.log("--------------------")
 
 // Expected: ok
 console.log(
@@ -19,6 +22,18 @@ console.log(
     })
 )
 
+console.log("--------------------")
+
+// Expected: error
+console.log(
+    TimeableItem.validate({
+        name: "keine Id",
+        from: new Date()
+    })
+)
+
+console.log("--------------------")
+
 // Expected: error
 console.log(
     BuyableItem.validate({
@@ -28,6 +43,8 @@ console.log(
     })
 )
 
+console.log("--------------------")
+
 // Expected: ok
 console.log(
     AuctionableItem.validate({
@@ -35,5 +52,16 @@ console.log(
         name: "Massiver Käse",
         price: 128,
         from: new Date()
+    })
+)
+
+console.log("--------------------")
+
+// Expected: error (no from or to given)
+console.log(
+    AuctionableItem.validate({
+        id: "bli-bla-blubb123",
+        name: "Massiver Käse",
+        price: 128,
     })
 )
