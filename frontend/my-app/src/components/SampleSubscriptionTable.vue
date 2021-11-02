@@ -13,7 +13,7 @@
 import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
-import { executeQuery } from '../data/data-helpers';
+import { executeQuery } from '../helpers/data-helpers';
 import {ref, watch} from 'vue';
 
 const users = ref([]);
