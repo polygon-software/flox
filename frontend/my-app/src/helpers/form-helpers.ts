@@ -1,6 +1,14 @@
 import {computed, defineEmits, Ref, ref} from 'vue';
 import {FIELDS} from 'src/data/FIELDS';
 
+/**
+ * The Form class is meant to be used by any form components.
+ * To use its functionality, they must (in their <script setup>) create a new instance and
+ * declare its pages, e.g.:
+ *
+ * const form = new Form()
+ * form.pages.value = [ ... ]
+ */
 export class Form {
   // The current step within a multi-page form
   step: Ref<number>
