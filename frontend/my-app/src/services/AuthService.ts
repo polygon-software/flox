@@ -77,7 +77,10 @@ export class AuthenticationService {
                 onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
                 onFailure: (err)=>{ this.onFailure(err) },
                 // Sets up MFA (only done once after signing up)
-                mfaSetup: (user) => {this.setupMFA(user, resolve)},
+                mfaSetup: (challengeName, user) => {
+                  console.log('WTFuser', user)
+                  this.setupMFA(user, resolve)
+                },
 
                 // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
                 selectMFAType: function () {
@@ -107,6 +110,7 @@ export class AuthenticationService {
    * @param resolve {TODO}
    */
   setupMFA(cognitoUser: CognitoUser, resolve: any): void{
+    console.log('User:', cognitoUser)
       cognitoUser.associateSoftwareToken({
         associateSecretCode: (secret: string) => {this.showQRCodeDialog(secret, resolve)},
         onFailure: (err) => {this.onFailure(err)}
@@ -294,7 +298,8 @@ export class AuthenticationService {
                 },
             }).onOk((code: string) => {
                 // TODO friendlyDeviceName
-                this.$store.getters['authentication/getCognitoUser']?.verifySoftwareToken(code, 'My TOTP device', {
+                const user: CognitoUser = this.$store.getters['authentication/getCognitoUser']
+                user.verifySoftwareToken(code, 'My TOTP device', {
                     onSuccess: (userSession: CognitoUserSession)=>{
                         this.loginSuccess(userSession, resolve)
                     },
