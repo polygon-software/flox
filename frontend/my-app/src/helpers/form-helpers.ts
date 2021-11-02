@@ -1,4 +1,4 @@
-import {computed, defineEmits, Ref, ref} from 'vue';
+import {computed, Ref, ref} from 'vue';
 import {FIELDS} from 'src/data/FIELDS';
 
 /**
@@ -16,16 +16,12 @@ export class Form {
   // The entered values
   values: Ref<Record<string, any>>
 
-  // Events
-  emit: any
-
   // Page definitions
   pages: Ref<Record<string, any>[]>
 
   constructor() {
     this.step = ref(1)
     this.values = ref({})
-    this.emit = defineEmits(['submit'])
     this.pages = ref([])
   }
 
@@ -59,19 +55,14 @@ export class Form {
     })
   })
 
-  /**
-   * Emits the 'submit' event, containing the form's data
-   */
-  onSubmit() {
-    this.emit('submit', this.values.value)
-  }
+
 
   /**
    * Updates a value within the form's values
    * @param key {string}: the value's name
    * @param value {any}: the actual value to add
    */
-  updateValue(key: string, value: any) {
+  updateValue(key: string, value: any): void {
     this.values.value[key] = value
   }
 }

@@ -4,7 +4,7 @@
       {{ $t('signup') }}
     </h5>
     <q-form
-        @submit="form.onSubmit"
+        @submit="onSubmit"
         class="q-gutter-md"
         >
     <q-stepper
@@ -73,6 +73,8 @@ import { Form } from 'src/helpers/form-helpers'
  * All fields of a page must be completed before the next page can be accessed.
  */
 
+const emit = defineEmits(['submit'])
+
 const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
 
 const form = new Form()
@@ -104,6 +106,14 @@ form.pages.value = [
     fields: [],
   },
 ]
+
+/**
+ * Emits the 'submit' event, containing the form's data
+ */
+function onSubmit(): void {
+  emit('submit', form.values.value)
+}
+
 </script>
 
 <style scoped>
