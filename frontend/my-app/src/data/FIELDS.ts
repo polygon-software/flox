@@ -44,7 +44,9 @@ const FIELDS: Record<string, Record<string, any>> = {
         PASSWORD: {
             key: 'password',
             component: markRaw(Password),
-            attributes: {}
+            attributes: {
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
+            }
         },
         PASSWORD_REPEAT: {
             key: 'password_repeat',
