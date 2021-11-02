@@ -69,20 +69,19 @@ export class AuthenticationService {
             Pool: userPool,
         });
 
-        // Store in local variable
-        this.$store.commit('authentication/setCognitoUser', cognitoUser)
         // Execute auth function
         return new Promise((resolve) => {
+          // Store in local variable
+          this.$store.commit('authentication/setCognitoUser', cognitoUser)
+
             cognitoUser.authenticateUser(authenticationDetails, {
                 onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
                 onFailure: (err)=>{ this.onFailure(err) },
                 // Sets up MFA (only done once after signing up)
                 mfaSetup: (challengeName, challengeParameters) => {
 
-                  console.log('challenge:', challengeName, challengeParameters)
-                  const user = _.cloneDeep(this.$store.getters['authentication/getCognitoUser'])
-                  console.log('User:', user)
-                  this.setupMFA(user, resolve)
+                  console.log('challenge:', typeof challengeName, challengeParameters)
+                  this.setupMFA(cognitoUser, resolve)
                 },
 
               // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
@@ -113,8 +112,8 @@ export class AuthenticationService {
    * @param resolve {TODO}
    */
   setupMFA(cognitoUser: CognitoUser, resolve: any): void{
-    console.log('User:', cognitoUser)
-      cognitoUser.associateSoftwareToken({
+    const user = _.cloneDeep(cognitoUser)
+    user.associateSoftwareToken({
         associateSecretCode: (secret: string) => {this.showQRCodeDialog(secret, resolve)},
         onFailure: (err) => {this.onFailure(err)}
       })
