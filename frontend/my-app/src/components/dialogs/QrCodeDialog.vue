@@ -44,6 +44,10 @@
 
   const emit = defineEmits(['ok'])
 
+  function show(){
+    dialog.value?.show()
+  }
+
   function hide(){
     dialog.value?.hide()
   }
