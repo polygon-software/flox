@@ -92,7 +92,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
 
 function subscribeToQuery(query: QueryObject){
   const store = useStore();
-  const res = ref(undefined)
+  const res = ref([])
 
   const display_res = computed(()=>{
     if(res.value){
@@ -108,6 +108,7 @@ function subscribeToQuery(query: QueryObject){
   // ----- Hooks -----
   onServerPrefetch(async () => {
     const temp_res = await executeQuery(query)
+    if(!temp_res.data){ return}
     res.value = temp_res.data[query.cacheLocation];
     store.commit("ssr/setPrefetchedData", {key: query.cacheLocation, value: res.value})
   })
@@ -119,7 +120,11 @@ function subscribeToQuery(query: QueryObject){
     // PWA
     if(!store_state){
       void executeQuery(query).then((fetchedRes)=>{
-        res.value = fetchedRes.data[query.cacheLocation]
+        if(fetchedRes.data){
+          res.value = fetchedRes.data[query.cacheLocation]
+        } else {
+          res.value = []
+        }
       })
     } else {
       polo.writeQuery({

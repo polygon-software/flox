@@ -1,10 +1,10 @@
 import { boot } from 'quasar/wrappers'
-// import ROUTES from '../router/routes'
+import ROUTES from '../router/routes'
 import {Router} from 'vue-router';
 
 let routerInstance: Router
 
-export default boot(({ router}) => {
+export default boot(({ router,store}) => {
   routerInstance = router
   // router.beforeEach((to) => {
   //   // Verify valid authentication
