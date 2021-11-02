@@ -4,7 +4,7 @@
       {{ $t('login') }}
     </h5>
     <q-form
-        @submit="signinForm.onSubmit"
+        @submit="form.onSubmit"
         class="q-gutter-md"
     >
       <component
@@ -12,15 +12,15 @@
           :key="field.key"
           :is="field.component"
           v-bind="field.attributes"
-          v-model="signinForm.values.value[field.key]"
-          @change="(newValue) => signinForm.updateValue(field.key, newValue)"
+          v-model="form.values.value[field.key]"
+          @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
           style="margin-top: 20px"
           color="primary"
           :label="$t('login')"
           type="submit"
-          :disable="!signinForm.pageValid.value"
+          :disable="!form.pageValid.value"
       />
     </q-form>
   </div>
@@ -28,10 +28,12 @@
 
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
-import * as signinForm from 'src/helpers/form-helpers'
+import { Form } from 'src/helpers/form-helpers'
 
 const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
-signinForm.pages.value = [
+
+const form = new Form()
+form.pages.value = [
   {
     key: 'login',
     label: 'Login',
