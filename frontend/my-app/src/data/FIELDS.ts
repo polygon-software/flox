@@ -1,14 +1,15 @@
-import {IS_EMAIL, IS_VALID_USERNAME} from './RULES'
+import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING} from './RULES'
 import {QInput} from 'quasar'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
+import {markRaw} from 'vue';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
  *
  * Required attributes
  * @key: Unique identifier
- * @component: A vue component. Can be custom.
+ * @component: A Vue component, which may also be custom. Must be marked as raw using 'markRaw'
  *
  * Optional attributes
  * @type: A quasar type
@@ -17,37 +18,54 @@ import Password from 'components/forms/fields/Password.vue'
  * @rules: Rules that get applied to the input field, e.g. to check if a password is valid.
  */
 
-const FIELDS = {
+const FIELDS: Record<string, Record<string, any>> = {
         EMAIL: {
             key: 'email',
-            component: QInput,
+            component: markRaw(QInput),
             attributes: {
-                type: 'email',
-                label: 'E-Mail',
-                lazy_rules: 'ondemand',
-                rules: [(val: string) => IS_EMAIL(val) || 'Please enter a valid e-mail address.']
+              dense: true,
+              type: 'email',
+              label: 'E-Mail',
+              lazy_rules: 'ondemand',
+              rules: [(val: string): boolean|string  => IS_EMAIL(val) || 'Please enter a valid e-mail address.']
             },
         },
         USERNAME: {
             key: 'username',
-            component: QInput,
+            component: markRaw(QInput),
             attributes: {
-                type: 'text',
-                label: 'Username',
-                lazy_rules: 'true',
-                rules: [(val: string) => IS_VALID_USERNAME(val) || 'Please enter a username']
+              dense: true,
+              type: 'text',
+              label: 'Username',
+              lazy_rules: 'true',
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
             },
-
         },
         PASSWORD: {
             key: 'password',
-            component: Password,
+            component: markRaw(Password),
+            attributes: {
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
+            }
         },
         PASSWORD_REPEAT: {
-            key: 'passwordRepeat',
-            component: PasswordRepeat,
+            key: 'password_repeat',
+            component: markRaw(PasswordRepeat),
             attributes: {
+              rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) || 'Please enter a valid password']
             }
+        },
+        FULL_NAME: {
+          key: 'full_name',
+          component: markRaw(QInput),
+          attributes: {
+            dense: true,
+            type: 'text',
+            label: 'Full name',
+            lazy_rules: 'true',
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || 'Please enter your full name']
+          },
+
         },
     }
 
