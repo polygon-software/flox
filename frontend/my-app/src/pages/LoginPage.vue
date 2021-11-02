@@ -9,6 +9,10 @@
     <q-card class="q-pa-md q-ma-md">
       <SignupForm @submit="onSignup"/>
     </q-card>
+
+    <q-card class="row q-pa-md q-ma-md">
+      <Inbox db-ref="ref"/>
+    </q-card>
   </q-page>
 </template>
 
@@ -19,6 +23,7 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import Inbox from 'components/notifications/Inbox.vue';
 
 const $authService: AuthenticationService = inject<AuthenticationService>('$authService')
 const $routerService: RouterService = inject<RouterService>('$routerService')
