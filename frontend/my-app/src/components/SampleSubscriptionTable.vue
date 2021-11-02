@@ -28,12 +28,16 @@ const store = useStore();
 // ----- Hooks -----
 onServerPrefetch(async () => {
   const temp_res = await executeQuery(ALL_USERS)
+  if(!temp_res.data){ return}
   store.commit("ssr/setPrefetchedData", {key: ALL_USERS.cacheLocation, value: temp_res.data[ALL_USERS.cacheLocation]})
 })
 onMounted(()=>{
   if(process.env.MODE === "ssr"){
+    const store_state = store.getters['ssr/getPrefetchedData'](ALL_USERS.cacheLocation)
     users.value = []
-    users.value.push(...store.getters['ssr/getPrefetchedData'](ALL_USERS.cacheLocation))
+    if(store_state){
+      users.value.push(store_state)
+    }
   } else {
     void executeQuery(ALL_USERS).then((res)=>{
       users.value = [...res.data.allUsers]

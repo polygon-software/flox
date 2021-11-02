@@ -62,8 +62,6 @@ export class AuthenticationService {
 
 
         const userPool = this.$store.getters['authentication/getUserPool']
-        console.log(userPool)
-        console.log(identifier)
           // Actual Cognito authentication on given pool
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
             Username: identifier,

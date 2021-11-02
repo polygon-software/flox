@@ -3,11 +3,13 @@ import {ApolloLink, concat, createHttpLink, InMemoryCache, split} from '@apollo/
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {Cookies} from 'quasar';
+import {QSsrContext} from "@quasar/app";
 
-export function getClientOptions() {
+export function getClientOptions(ssrContext: QSsrContext |null|undefined) {
   // Authentication middleware for intercepting any GraphQL-related operations
   const authMiddleware = new ApolloLink((operation, forward) => {
-    const token = Cookies.get('authentication.idToken')
+    const cookies = process.env.SERVER && ssrContext? Cookies.parseSSR(ssrContext) : Cookies
+    const token = cookies.get('authentication.idToken')
     // add the authorization to the headers
     operation.setContext({
       headers: {
