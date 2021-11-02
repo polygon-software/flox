@@ -38,7 +38,7 @@
     "graphql-subscriptions": "^1.2.1",
     "graphql-voyager": "^1.0.0-rc.31",
     "jwks-rsa": "^2.0.5",
-    "mysql2": "^2.3.0",
+    "pg": "^8.7.1",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
