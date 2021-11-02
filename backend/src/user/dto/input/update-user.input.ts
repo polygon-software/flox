@@ -5,7 +5,7 @@ import { IsInt, IsNotEmpty, IsUUID } from 'class-validator';
 export class UpdateUserInput {
   @Field(() => ID)
   @IsUUID()
-  userId: string;
+  uuid: string;
 
   @Field(() => Int, { nullable: true })
   @IsInt()

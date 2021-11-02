@@ -22,16 +22,19 @@ export class UserResolver {
     return await this.usersService.getUsers(getUsersArgs);
   }
 
+  @Public()
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
     return await this.usersService.getAllUsers();
   }
 
+  @Public()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return await this.usersService.getUser(getUserArgs);
   }
 
+  @Public()
   @Mutation(() => User)
   async create(
     @Args('createUserInput') createUserInput: CreateUserInput,
@@ -42,6 +45,7 @@ export class UserResolver {
     return newUser;
   }
 
+  @Public()
   @Mutation(() => User)
   async update(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
@@ -49,6 +53,7 @@ export class UserResolver {
     return await this.usersService.update(updateUserInput);
   }
 
+  @Public()
   @Mutation(() => User)
   async remove(
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
@@ -57,7 +62,7 @@ export class UserResolver {
   }
 
   @Public()
-  @Subscription((returns) => User)
+  @Subscription(() => User)
   userAdded() {
     return pubSub.asyncIterator('userAdded');
   }
