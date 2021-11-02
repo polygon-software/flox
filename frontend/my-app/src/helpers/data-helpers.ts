@@ -1,6 +1,6 @@
 import {useMutation, useQuery} from '@vue/apollo-composable';
-import {QUERIES} from './QUERIES';
-import {MutationObject, MutationTypes, QueryObject} from './DATA-DEFINITIONS';
+import {QUERIES} from '../data/QUERIES';
+import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {Ref} from 'vue';
 
 /**

@@ -19,32 +19,62 @@
       dense
       label="Repeat Password"
       v-model="passwordRepeat"
-      lazy-rules
-      :type="isPwdReapeat ? 'password' : 'text'"
-      :rules="[val => val === password || $t('non-matching_password')]"
+      lazy-rules="ondemand"
+      :type="isPwdRepeat ? 'password' : 'text'"
+      :rules="[val => val === password || $t('non_matching_password')]"
   >
     <template v-slot:append>
       <q-icon
-          :name="isPwdReapeat ? 'visibility_off' : 'visibility'"
+          :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"
-          @click="isPwdReapeat = !isPwdReapeat"
+          @click="isPwdRepeat = !isPwdRepeat"
       />
     </template>
   </q-input>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import {IS_VALID_PASSWORD} from 'src/data/RULES';
 
 /**
  * This component contains field to enter a new password, as well as another field to repeat the new password. Both entries need to match.
  */
 
-let password = ref('')
-let passwordRepeat = ref('')
+const props = defineProps({
+  modelValue: {
+    required: false,
+    type: String
+  },
+  rules: {
+    required: false,
+  }
+});
+
+let password = ref(props.modelValue ?? '')
+let passwordRepeat = ref(props.modelValue ?? '')
 const isPwd = ref(true)
-const isPwdReapeat = ref(true)
+const isPwdRepeat = ref(true)
+
+const emit = defineEmits(['change'])
+
+watch(password, (newVal) => {
+  emitUpdate(newVal)
+})
+
+watch(passwordRepeat, (newVal) => {
+  emitUpdate(newVal)
+})
+
+function emitUpdate(value: string){
+  if(password.value.length > 0 && password.value === passwordRepeat.value){
+    emit('change', value)
+  } else {
+    // Empty emit (input not valid)
+    emit('change', '')
+  }
+}
+
 </script>
 
 <style scoped>
