@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 import { AuthStateInterface } from './state';
 import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
-import {deleteCookies, persistToCookies} from 'src/helpers/cookies'
+import {deleteCookies, persistToCookies} from 'src/helpers/cookie-helpers'
 
 function setUserSession (state: AuthStateInterface, payload: CognitoUserSession) {
   state.userSession = payload
