@@ -62,16 +62,16 @@ export class Form {
   /**
    * Emits the 'submit' event, containing the form's data
    */
-  onSubmit() {
+  onSubmit(): void {
     this.emit('submit', this.values.value)
   }
 
   /**
    * Updates a value within the form's values
    * @param key {string}: the value's name
-   * @param value {any}: the actual value to add
+   * @param value {unknown}: the actual value to add
    */
-  updateValue(key: string, value: any) {
+  updateValue(key: string, value: unknown): void {
     this.values.value[key] = value
   }
 }

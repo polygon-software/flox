@@ -3,7 +3,7 @@ import { AuthStateInterface } from './state';
 import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
 import {deleteCookies, persistToCookies} from 'src/helpers/cookie-helpers'
 
-function setUserSession (state: AuthStateInterface, payload: CognitoUserSession) {
+function setUserSession (state: AuthStateInterface, payload: CognitoUserSession): void {
   state.userSession = payload
 
   if(state.userSession) {
@@ -24,11 +24,11 @@ function setUserSession (state: AuthStateInterface, payload: CognitoUserSession)
   }
 }
 
-function setUserPool (state: AuthStateInterface, payload: CognitoUserPool) {
+function setUserPool (state: AuthStateInterface, payload: CognitoUserPool): void {
   state.userPool = payload
 }
 
-function setCognitoUser (state: AuthStateInterface, payload: CognitoUser) {
+function setCognitoUser (state: AuthStateInterface, payload: CognitoUser): void {
   state.cognitoUser = payload
 }
 
