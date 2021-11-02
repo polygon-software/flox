@@ -44,6 +44,8 @@
 
   const emit = defineEmits(['ok'])
 
+  // Required, do not remove
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function show(){
     dialog.value?.show()
   }
