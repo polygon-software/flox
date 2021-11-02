@@ -77,12 +77,15 @@ export class AuthenticationService {
                 onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
                 onFailure: (err)=>{ this.onFailure(err) },
                 // Sets up MFA (only done once after signing up)
-                mfaSetup: (challengeName, user) => {
-                  console.log('WTFuser', user)
+                mfaSetup: (challengeName, challengeParameters) => {
+
+                  console.log('challenge:', challengeName, challengeParameters)
+                  const user = _.cloneDeep(this.$store.getters['authentication/getCognitoUser'])
+                  console.log('User:', user)
                   this.setupMFA(user, resolve)
                 },
 
-                // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
+              // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
                 selectMFAType: function () {
                     cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
                 },
