@@ -79,8 +79,6 @@ module.exports = {
 
     // TypeScript
     quotes: ['warn', 'single', { avoidEscape: true }],
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
 
     // These are not working with VueX getters
     '@typescript-eslint/no-unsafe-member-access': 'off',

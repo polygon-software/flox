@@ -1,7 +1,7 @@
 import { store } from 'quasar/wrappers'
 import { InjectionKey } from 'vue'
 import {
-  createStore,
+  createStore, Store,
   Store as VuexStore,
   useStore as vuexUseStore,
 } from 'vuex'
@@ -50,6 +50,6 @@ export default store(function (/* { ssrContext } */) {
   return Store;
 })
 
-export function useStore() {
+export function useStore(): Store<any> {
   return vuexUseStore(storeKey)
 }

@@ -11,7 +11,7 @@ import {routerInstance} from 'boot/router';
 
 export default{
   // Prefetch hook
-  preFetch({store, /*ssrContext*/}: {store: any, ssrContext: any}){
+  preFetch({store, /*ssrContext*/}: {store: any, ssrContext: any}): void{
 
     // TODO verify working with SSR; otherwise use cookies here
     // const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies

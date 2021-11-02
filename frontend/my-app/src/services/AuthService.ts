@@ -72,7 +72,7 @@ export class AuthenticationService {
         // Store in local variable
         this.$store.commit('authentication/setCognitoUser', cognitoUser)
         // Execute auth function
-        return new Promise((resolve) => {
+        return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
             cognitoUser.authenticateUser(authenticationDetails, {
                 onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
                 onFailure: (err)=>{ this.onFailure(err) },
@@ -104,9 +104,9 @@ export class AuthenticationService {
   /**
    * Sets up MFA for the given cognito user
    * @param cognitoUser {CognitoUser} - the user
-   * @param resolve {TODO}
+   * @param resolve {(value: (void | PromiseLike<void>)) => void}
    */
-  setupMFA(cognitoUser: CognitoUser, resolve: any): void{
+  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
       cognitoUser.associateSoftwareToken({
         associateSecretCode: (secret: string) => {this.showQRCodeDialog(secret, resolve)},
         onFailure: (err) => {this.onFailure(err)}
@@ -270,9 +270,9 @@ export class AuthenticationService {
     /**
      * Shows a dialog containing a QR code for setting up two factor authentication
      * @param secretCode {string} - the authenticator code to encode in QR code form
-     * @param resolve {TODO}
+     * @param resolve { (value: (void | PromiseLike<void>)) => void}
      */
-    showQRCodeDialog(secretCode: string, resolve: any): void{
+    showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void): void{
         const username = this.$store.getters['authentication/getUsername']
         const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
         this.$q.dialog({
@@ -327,8 +327,9 @@ export class AuthenticationService {
     /**
      * Verifies a given 2FA code
      * @param tokenType {string} - the type of token to verify
+     * @param resolve { (value: (void | PromiseLike<void>)) => void}
      */
-    verify2FACode (tokenType: string, resolve: any): void {
+    verify2FACode (tokenType: string, resolve:  (value: (void | PromiseLike<void>)) => void): void {
         // Verify code
         this.$q.dialog({
             title: 'Verification',
@@ -357,9 +358,9 @@ export class AuthenticationService {
     /**
      * When login succeeds
      * @param userSession {CognitoUserSession} - the currently active Cognito authentication session
-     * @param resolve {TODO}
+     * @param resolve {(value: (void | PromiseLike<void>)) => void}
      */
-    loginSuccess(userSession: CognitoUserSession, resolve: any): void{
+    loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
       // Store locally
       this.$store.commit('authentication/setUserSession', userSession)
 
