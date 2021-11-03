@@ -1,16 +1,19 @@
 import { boot } from 'quasar/wrappers'
 import ROUTES from '../router/routes'
 import {Router} from 'vue-router';
+import {useAuth} from 'src/store/authentication';
 
 let routerInstance: Router
 
 export default boot(({ router, store }) => {
+  const $authStore = useAuth()
+
   routerInstance = router
   router.beforeEach((to) => {
     // Verify valid authentication
-    if(to.path !== ROUTES.LOGIN.path && !store.getters['authentication/getLoggedInStatus']){
+    if(to.path !== ROUTES.LOGIN.path && !$authStore.getters.getLoggedInStatus()){
       return(ROUTES.LOGIN)
-    } else if(to.path === ROUTES.LOGIN.path && store.getters['authentication/getLoggedInStatus']){
+    } else if(to.path === ROUTES.LOGIN.path && !$authStore.getters.getLoggedInStatus()){
       // If user is logged in and trying to log in, redirect to main page
       return(ROUTES.MAIN)
     }
