@@ -20,10 +20,9 @@ export function persistToCookies (category: string, payload: Record<string, any>
   if (!process.env.SERVER) {
     // Set 'secure' to true for production
     Object.keys(payload).forEach((key: string) => {
-      const data: any = payload[key]
       Cookies.set(
         `${category}.${key}`,
-        JSON.stringify(data),
+        JSON.stringify(payload[key]),
         {expires: 1, secure: false} // TODO secure: true for production
       )
     })
