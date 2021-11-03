@@ -7,7 +7,7 @@ let routerInstance: Router
 
 export default boot(({ router, store }) => {
 
-  // Get auth module within store
+  // Get auth module within store (useAuth not working here)
   const $authStore = root.context(store).modules.authModule
 
   routerInstance = router
