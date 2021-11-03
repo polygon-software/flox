@@ -49,7 +49,6 @@ import {computed, inject, Ref} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {Store} from 'vuex';
 import {useAuth} from 'src/store/authentication';
 import {Context, Module} from 'vuex-smart-module';
 import AuthState from 'src/store/authentication/state';

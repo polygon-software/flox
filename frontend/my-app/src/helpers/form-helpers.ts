@@ -42,7 +42,7 @@ export class Form {
     // Get keys that should exist in 'values' for this page
     const pageKeys: string[] = []
     // Offset by 1, since step starts at 1
-    const pageFields = this.pages.value[this.step.value - 1].fields
+    const pageFields: Record<string, unknown>[] = this.pages.value[this.step.value - 1].fields
     pageFields.forEach((field: Record<string, any>) => {
       pageKeys.push(field.key)
     })
@@ -52,7 +52,9 @@ export class Form {
       // If no value present at all, stop check
       if (!this.values.value[key]) return false
 
-      return FIELDS[key.toUpperCase()].attributes.rules.every((rule: (valueElement: any) => boolean) => {
+      const fieldAttributes: Record<string, any> = FIELDS[key.toUpperCase()].attributes
+      const rules: Array<(valueElement: any) => boolean|string> = fieldAttributes.rules
+      rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
         return typeof rule(this.values.value[key]) === 'boolean'
       })
