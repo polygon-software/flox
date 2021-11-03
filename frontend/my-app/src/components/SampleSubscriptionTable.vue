@@ -14,9 +14,9 @@ import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
 import { executeQuery } from '../helpers/data-helpers';
-import {ref, watch} from 'vue';
+import {Ref, ref, watch} from 'vue';
 
-const users = ref([]);
+const users: Ref<Record<string, unknown>[]> = ref([]);
 
 // Set up initial query
 const initialState = executeQuery(ALL_USERS);
@@ -34,7 +34,7 @@ const columns = [
 watch(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     () => result.value,
-    (newUser) => {
+    (newUser: Record<string, unknown>) => {
       users.value.push(newUser.userAdded)
     }
 )
@@ -42,7 +42,7 @@ watch(
 // Watch for initial state change query to go through
 const stop = watch(
     () => initialState.value,
-    (newState) => {
+    (newState: Record<string, unknown>) => {
       if(users.value.length <= 0 && newState.allUsers && newState.allUsers.length > 0){
         // Set initial state of users array
         users.value = [...newState.allUsers]
