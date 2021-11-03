@@ -1,11 +1,5 @@
-
-export interface ssrStateInterface {
-  prefetchedData:  Record<string, unknown>
-}
-function state() {
-  return {
-    prefetchedData: {}
-  }
+class SSRState{
+  prefetchedData: Record<string, unknown> = {}
 }
 
-export default state;
+export default SSRState;

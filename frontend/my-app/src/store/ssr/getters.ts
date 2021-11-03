@@ -1,14 +1,14 @@
-import {GetterTree} from "vuex";
-import {StateInterface} from "src/store";
-import {ssrStateInterface} from "src/store/ssr/state";
+import SSRState from 'src/store/ssr/state';
+import {Getters} from 'vuex-smart-module';
 
-function getPrefetchedData(state:ssrStateInterface): (key: string) => unknown | undefined {
-  return (key) => state.prefetchedData[key]
+
+class SSRGetters extends Getters<SSRState>{
+
+  getPrefetchedData(): (key: string) => unknown | undefined {
+    return (key) => this.state.prefetchedData[key]
+  }
 }
 
 
-const getters: GetterTree<ssrStateInterface, StateInterface> = {
-  getPrefetchedData,
-};
 
-export default getters;
+export default SSRGetters;

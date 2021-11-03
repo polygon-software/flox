@@ -78,17 +78,10 @@ module.exports = {
     'prefer-promise-reject-errors': 'off',
 
     // TypeScript
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    quotes: ['warn', 'single', { avoidEscape: true }],
 
-    // These are not working with VueX getters
-    '@typescript-eslint/no-unsafe-member-access': 'off',
-    '@typescript-eslint/no-unsafe-call': 'off',
-    '@typescript-eslint/no-unsafe-assignment': 'off',
-    '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/no-explicit-any': 'off', // Enabling this rule often breaks Quasar-generated boilerplate code
     // allow debugger during development only
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'quotes': "off"
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }

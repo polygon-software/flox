@@ -1,12 +1,10 @@
-import {MutationTree} from 'vuex';
-import {ssrStateInterface} from './state';
+import { Mutations } from 'vuex-smart-module'
+import SSRState from 'src/store/ssr/state';
 
-function setPrefetchedData(state: ssrStateInterface, payload: {key: string, value: Record<string, unknown>}){
-  state.prefetchedData[payload.key] = payload.value;
+class SSRMutations extends Mutations<SSRState>{
+
+  setPrefetchedData(payload: {key: string, value: unknown}): void{
+    this.state.prefetchedData[payload.key] = payload.value;
+  }
 }
-
-const mutations: MutationTree<ssrStateInterface> = {
-  setPrefetchedData,
-};
-
-export default mutations;
+export default SSRMutations;

@@ -15,7 +15,7 @@ export const CREATE_USER = {
     mutation: gql`
         mutation createUser($name: String!, $age: Int!){
             create (createUserInput: {name: $name, age: $age}) {
-                id
+                uuid
                 name
                 age
                 __typename
@@ -28,9 +28,9 @@ export const CREATE_USER = {
 
 export const UPDATE_USER = {
     mutation: gql`
-        mutation updateUser($id: ID!, $name: String, $age: Int){
-            update (updateUserInput: {userId: $id, name: $name, age: $age}) {
-                id
+        mutation updateUser($uuid: ID!, $name: String, $age: Int){
+            update (updateUserInput: {uuid: $uuid, name: $name, age: $age}) {
+                uuid
                 name
                 age
                 __typename
@@ -43,9 +43,9 @@ export const UPDATE_USER = {
 
 export const DELETE_USER = {
     mutation: gql`
-        mutation deleteUser($id: ID!){
-            remove (deleteUserInput: {userId: $id}) {
-                id
+        mutation deleteUser($uuid: ID!){
+            remove (deleteUserInput: {uuid: $uuid}) {
+                uuid
             }
         }`,
     tables: ['user'],
