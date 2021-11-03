@@ -1,34 +1,30 @@
-import { GetterTree } from 'vuex';
-import { StateInterface } from '../index';
-import { AuthStateInterface } from './state';
+import AuthState from './state';
 import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
+import { Getters } from 'vuex-smart-module'
 
-function getLoggedInStatus (state: AuthStateInterface): boolean {
-  return state.userSession?.isValid() ?? false
+// Getters
+class AuthGetters extends Getters<AuthState> {
+
+  getLoggedInStatus (): boolean {
+    return this.state.userSession?.isValid() ?? false
+  }
+
+  getCognitoUser (): CognitoUser|undefined {
+    return  this.state.cognitoUser
+  }
+
+  getUsername (): string|undefined {
+    return this.state.cognitoUser?.getUsername()
+  }
+
+  getUserSession (): CognitoUserSession|undefined {
+    return  this.state.userSession
+  }
+
+  getUserPool (): CognitoUserPool|undefined {
+    return  this.state.userPool
+  }
+
 }
 
-function getCognitoUser (state: AuthStateInterface): CognitoUser|undefined {
-  return state.cognitoUser
-}
-
-function getUsername (state: AuthStateInterface): string|undefined {
-  return state.cognitoUser?.getUsername()
-}
-
-function getUserSession (state: AuthStateInterface): CognitoUserSession|undefined {
-  return state.userSession
-}
-
-function getUserPool (state: AuthStateInterface): CognitoUserPool|undefined {
-  return state.userPool
-}
-
-const getters: GetterTree<AuthStateInterface, StateInterface> = {
-  getLoggedInStatus,
-  getCognitoUser,
-  getUserSession,
-  getUsername,
-  getUserPool,
-};
-
-export default getters;
+export default AuthGetters;

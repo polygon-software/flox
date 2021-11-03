@@ -11902,6 +11902,11 @@ vue@3.2.20, vue@^3.2.20:
     "@vue/server-renderer" "3.2.20"
     "@vue/shared" "3.2.20"
 
+vuex-smart-module@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vuex-smart-module/-/vuex-smart-module-1.0.0.tgz#4243b9b86f9952290ec7a061ca46d607e4cd2d3b"
+  integrity sha512-qqastyZbGIomsqbqoMH1mBmNpPUT1Z/lNoKsUGXqFXUQhnCvzGlE0R31l5vKjEpv9wdVnSkQrogkREvK7xtErw==
+
 vuex@^4.0.1:
   version "4.0.2"
   resolved "https://registry.npmjs.org/vuex/-/vuex-4.0.2.tgz"
