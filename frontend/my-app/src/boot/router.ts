@@ -1,5 +1,5 @@
 import { boot } from 'quasar/wrappers'
-import ROUTES from '../router/routes'
+// import ROUTES from '../router/routes'
 import {Router} from 'vue-router';
 import {root} from 'src/store';
 
@@ -12,6 +12,7 @@ export default boot(({ router,store}) => {
   routerInstance = router
   // router.beforeEach((to) => {
   const loggedIn = $authStore.getters.getLoggedInStatus()//   // Verify valid authentication
+  console.log('Login?', loggedIn)
   //   if(to.path !== ROUTES.LOGIN.path && !loggedIn){
   //     return(ROUTES.LOGIN)
   //   } else if(to.path === ROUTES.LOGIN.path && loggedIn){

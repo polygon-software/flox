@@ -3,7 +3,7 @@ import {ApolloLink, concat, createHttpLink, InMemoryCache, split} from '@apollo/
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {Cookies} from 'quasar';
-import {QSsrContext} from "@quasar/app";
+import {QSsrContext} from '@quasar/app';
 
 export function getClientOptions(ssrContext: QSsrContext |null|undefined): ApolloClientOptions<any> {
   // Authentication middleware for intercepting any GraphQL-related operations

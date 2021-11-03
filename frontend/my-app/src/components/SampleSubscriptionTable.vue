@@ -13,40 +13,41 @@
 import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
-import { executeQuery } from '../data/data-helpers';
 import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
-const users: Ref<Array<any>> = ref([]);
 import { executeQuery } from '../helpers/data-helpers';
-import {Ref, ref, watch} from 'vue';
+import {useSSR} from 'src/store/ssr';
+import {ApolloQueryResult, FetchResult} from '@apollo/client';
 
 const users: Ref<Record<string, unknown>[]> = ref([]);
 
 
 
 // ----- Data -----
-const store = useStore();
+const $ssrStore = useSSR();
 
 // ----- Hooks -----
 onServerPrefetch(async () => {
   const temp_res = await executeQuery(ALL_USERS)
   if(!temp_res.data){ return}
-  store.commit("ssr/setPrefetchedData", {key: ALL_USERS.cacheLocation, value: temp_res.data[ALL_USERS.cacheLocation]})
+  $ssrStore.mutations.setPrefetchedData({key: ALL_USERS.cacheLocation, value: temp_res.data[ALL_USERS.cacheLocation]})
 })
 onMounted(()=>{
-  if(process.env.MODE === "ssr"){
-    const store_state = store.getters['ssr/getPrefetchedData'](ALL_USERS.cacheLocation)
+  if(process.env.MODE === 'ssr'){
+    const store_state = $ssrStore.getters.getPrefetchedData()(ALL_USERS.cacheLocation)
     users.value = []
     if(store_state){
-      users.value.push(store_state)
+      users.value.push(store_state as Record<string, unknown>)
     }
   } else {
-    void executeQuery(ALL_USERS).then((res)=>{
-      users.value = [...res.data.allUsers]
+    void executeQuery(ALL_USERS).then((res: ApolloQueryResult<Record<string, unknown[]>>)=>{
+      users.value = [...res.data.allUsers] as Record<string, unknown>[]
     })
   }
   // Set up subscription
-  useSubscription(USER_ADDED).onResult((res)=>{
-    users.value.push(res.data.userAdded)
+  useSubscription(USER_ADDED).onResult((result: FetchResult<Record<string, Record<string, unknown>>>)=>{
+    if(result && result.data && result.data.userAdded){
+      users.value.push(result.data.userAdded)
+    }
   });
 })
 
