@@ -12,34 +12,41 @@
           :key="field.key"
           :is="field.component"
           v-bind="field.attributes"
-          v-model="form_values[field.key]"
-          dense
+          v-model="form.values.value[field.key]"
+          @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
           style="margin-top: 20px"
           color="primary"
           :label="$t('login')"
           type="submit"
+          :disable="!form.pageValid.value"
       />
     </q-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from 'vue';
-import {ref} from 'vue';
 import {FIELDS} from 'src/data/FIELDS';
+import { Form } from 'src/helpers/form-helpers'
 
-const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
-let form_values = ref({})
 const emit = defineEmits(['submit'])
 
+const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
+
+const form = new Form()
+form.pages.value = [
+  {
+    key: 'login',
+    label: 'Login',
+    fields: fields
+  }
+]
 
 /**
- * On submit, pass entered data outwards
+ * Emits the 'submit' event, containing the form's data
  */
-function onSubmit(){
-  emit('submit', form_values.value)
+function onSubmit(): void {
+  emit('submit', form.values.value)
 }
-
 </script>

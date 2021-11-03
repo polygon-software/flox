@@ -4,7 +4,7 @@
        title="List of users (with subscription, additions only)"
        :rows="users"
        :columns="columns"
-       row-key="id"
+       row-key="uuid"
        :rows-per-page-options="[10,20, 100]"
     />
 </template>
@@ -15,10 +15,11 @@ import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
 import { executeQuery } from '../data/data-helpers';
 import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
-import {useStore} from "src/store";
-
 const users: Ref<Array<any>> = ref([]);
+import { executeQuery } from '../helpers/data-helpers';
+import {Ref, ref, watch} from 'vue';
 
+const users: Ref<Record<string, unknown>[]> = ref([]);
 
 
 
@@ -54,7 +55,7 @@ onMounted(()=>{
 
 
 const columns = [
-  { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
+  { name: 'id', align: 'center', label: 'ID', field: 'uuid', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]

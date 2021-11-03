@@ -5,7 +5,7 @@ import {getMainDefinition} from '@apollo/client/utilities';
 import {Cookies} from 'quasar';
 import {QSsrContext} from "@quasar/app";
 
-export function getClientOptions(ssrContext: QSsrContext |null|undefined) {
+export function getClientOptions(ssrContext: QSsrContext |null|undefined): ApolloClientOptions<any> {
   // Authentication middleware for intercepting any GraphQL-related operations
   const authMiddleware = new ApolloLink((operation, forward) => {
     const cookies = process.env.SERVER && ssrContext? Cookies.parseSSR(ssrContext) : Cookies

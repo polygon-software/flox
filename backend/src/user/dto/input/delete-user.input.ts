@@ -5,5 +5,5 @@ import { IsUUID } from 'class-validator';
 export class DeleteUserInput {
   @Field(() => ID)
   @IsUUID()
-  userId: string;
+  uuid: string;
 }

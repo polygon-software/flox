@@ -31,6 +31,7 @@
     "date-fns": "^2.25.0",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
+    "joi": "^17.4.2",
     "lodash": "^4.17.21",
     "qrcode.vue": "^3.3.3",
     "quasar": "^2.0.0",
@@ -41,7 +42,8 @@
     "vue-jest": "^3.0.7",
     "vue-loader": "^16.8.1",
     "vue-router": "4",
-    "vuex": "^4.0.1"
+    "vuex": "^4.0.1",
+    "vuex-smart-module": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
