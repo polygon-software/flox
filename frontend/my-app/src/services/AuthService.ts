@@ -1,5 +1,5 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
-import {CognitoUser, CognitoUserSession, ICognitoUserPoolData, ISignUpResult} from 'amazon-cognito-identity-js';
+import {CognitoUser, CognitoUserSession, ISignUpResult} from 'amazon-cognito-identity-js';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordDialog from 'components/dialogs/ChangePasswordDialog.vue'
 import ResetPasswordDialog from 'components/dialogs/ResetPasswordDialog.vue'
@@ -27,16 +27,10 @@ export class AuthenticationService {
     $store: Store<unknown>
 
     constructor(quasar: QVueGlobals, errorService: ErrorService) {
+      console.log("initializing auth service")
       // Store
       this.$store = useStore()
 
-      // Set up authentication user pool
-      const poolSettings:ICognitoUserPoolData = {
-          UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
-          ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
-      };
-      const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
-      this.$store.commit('authentication/setUserPool', userPool)
 
 
       // Quasar & environment variables
@@ -361,7 +355,8 @@ export class AuthenticationService {
     loginSuccess(userSession: CognitoUserSession, resolve: any): void{
       // Store locally
       this.$store.commit('authentication/setUserSession', userSession)
-
+      const userPool = this.$store.getters['authentication/getUserPool']
+      console.log(userPool.storage)
       resolve()
     }
 
