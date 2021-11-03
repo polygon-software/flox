@@ -2,6 +2,7 @@ import {useMutation, useQuery} from '@vue/apollo-composable';
 import {QUERIES} from '../data/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {Ref} from 'vue';
+import {ApolloCache} from '@apollo/client';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -42,21 +43,21 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     }
 
     // Actually execute mutation and handle cache
-    const { mutate } = useMutation(mutation, () => ({
+  const { mutate } = useMutation(mutation, () => ({
         // Get cache and the new or deleted object
-        update: (cache, { data: changeData }) => {
+        update: (cache: ApolloCache<any> , { data: changeData }) => {
             affectedQueries.forEach((queryObject) => {
-
+                const changes: Record<string, Record<string, unknown>> = changeData
                 // Get actual changed/added/removed object
-                const change = changeData[mutationObject.cacheLocation]
+                const change: Record<string, unknown> = changes[mutationObject.cacheLocation]
 
                 // Read existing query from cache
-                const data:Record<string, Array<unknown>>|null = cache.readQuery({ query: queryObject.query })
+                const data:Record<string, Array<Record<string, unknown>>>|null = cache.readQuery({ query: queryObject.query })
 
                 if(data) {
                   // Determine cache location
                   const cacheLocation = queryObject.cacheLocation
-                  const oldData:Array<unknown> = data[cacheLocation]
+                  const oldData: Array<Record<string, unknown>> = data[cacheLocation]
                   let newData
 
                   // Case 1: CREATE (adds new object to cache)
@@ -65,7 +66,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
                   }
                   // Case 2: DELETE (removes object from cache)
                   else if (type === MutationTypes.DELETE) {
-                    newData = oldData.filter((dataPoint: any) => dataPoint.id !== change.id)
+                    newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.id !== change.id)
                   }
 
                   // Update data in cache
