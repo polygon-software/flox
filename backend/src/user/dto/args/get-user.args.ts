@@ -5,5 +5,5 @@ import { IsUUID } from 'class-validator';
 export class GetUserArgs {
   @Field(() => ID)
   @IsUUID()
-  userId: string;
+  uuid: string;
 }
