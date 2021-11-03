@@ -3,7 +3,7 @@ import SSRState from 'src/store/ssr/state';
 
 class SSRMutations extends Mutations<SSRState>{
 
-  setPrefetchedData(payload: {key: string, value: Record<string, unknown>}): void{
+  setPrefetchedData(payload: {key: string, value: unknown}): void{
     this.state.prefetchedData[payload.key] = payload.value;
   }
 }
