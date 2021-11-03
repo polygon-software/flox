@@ -1,5 +1,5 @@
 import { store } from 'quasar/wrappers'
-import {createStore} from 'vuex-smart-module'
+import {createStore, Module} from 'vuex-smart-module'
 import authModule from './authentication'
 
 // import example from './module-example'
@@ -32,7 +32,11 @@ import authModule from './authentication'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore(
     // Root module
-    authModule,
+    new Module({
+      modules: {
+        authModule,
+      }
+    }),
 
     // Vuex store options
   {

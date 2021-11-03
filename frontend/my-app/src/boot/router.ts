@@ -5,7 +5,8 @@ import {Router} from 'vue-router';
 
 let routerInstance: Router
 
-export default boot(({ router }) => {
+export default boot(({ router, store }) => {
+  console.log('STORE on boot is', store)
   // const $authStore = useAuth()
   // TODO
   // routerInstance = router
