@@ -1,5 +1,5 @@
 class SSRState{
-  prefetchedData: Record<string, any> = {}
+  prefetchedData: Record<string, unknown> = {}
 }
 
 export default SSRState;
