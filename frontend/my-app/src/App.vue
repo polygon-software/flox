@@ -3,15 +3,11 @@
 </template>
 
 <script lang="ts">
-// Cookies/Authentication
-// import {Cookies} from 'quasar';
-import {CognitoUserSession} from 'amazon-cognito-identity-js';
-import ROUTES from 'src/router/routes';
 import {routerInstance} from 'boot/router';
 
 export default{
   // Prefetch hook
-  preFetch({store, /*ssrContext*/}: {store: any, ssrContext: any}): void{
+  preFetch( /*{store, ssrContext}*/): void{
 
     // TODO verify working with SSR; otherwise use cookies here
     // const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies

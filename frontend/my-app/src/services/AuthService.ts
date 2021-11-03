@@ -1,7 +1,6 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {
   CognitoUser,
-  CognitoUserPool,
   CognitoUserSession,
   ICognitoUserPoolData,
   ISignUpResult
