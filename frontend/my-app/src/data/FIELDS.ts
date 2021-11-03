@@ -22,7 +22,7 @@ export interface Field {
   key: string,
   component: any,
   attributes: {
-    rules: Array<(valueElement: any) => boolean|string>
+    rules: Array<(val: any) => boolean|string>
     [key: string]: any
   },
 
