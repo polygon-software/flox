@@ -1,7 +1,7 @@
-import AuthState, { AuthStateInterface } from './state';
+import AuthState  from './state';
 import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
 import {deleteCookies, persistToCookies} from 'src/helpers/cookie-helpers'
-import { Getters, Mutations, Actions, Module } from 'vuex-smart-module'
+import { Mutations } from 'vuex-smart-module'
 
 
 class AuthMutations extends Mutations<AuthState>{

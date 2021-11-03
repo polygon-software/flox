@@ -1,5 +1,5 @@
-import {Getters, Mutations, Actions, Module, createComposable} from 'vuex-smart-module'
-import AuthState , { AuthStateInterface } from './state';
+import {Module, createComposable} from 'vuex-smart-module'
+import AuthState from './state';
 import AuthActions from './actions';
 import AuthGetters from './getters';
 import AuthMutations from './mutations';

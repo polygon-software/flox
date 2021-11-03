@@ -15,24 +15,24 @@ export default{
 
     // TODO verify working with SSR; otherwise use cookies here
     // const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
-
-    const userPool = store.getters['authentication/getUserPool']
-
-    const cognitoUser = userPool.getCurrentUser();
-    if(cognitoUser){
-      // Auto-log in user
-      cognitoUser.getSession(function(err: Error, data: CognitoUserSession) {
-        if (!err) {
-          const cognitoUserSession = data;
-          // Set in store
-          store.commit('authentication/setCognitoUser', cognitoUser)
-          store.commit('authentication/setUserSession', cognitoUserSession)
-
-          // Redirect (we use the router instance directly, as it is not provided globally yet)
-          void routerInstance.push(ROUTES.MAIN)
-        }
-      });
-    }
+    //
+    // const userPool = store.getters['authentication/getUserPool']
+    //
+    // const cognitoUser = userPool.getCurrentUser();
+    // if(cognitoUser){
+    //   // Auto-log in user
+    //   cognitoUser.getSession(function(err: Error, data: CognitoUserSession) {
+    //     if (!err) {
+    //       const cognitoUserSession = data;
+    //       // Set in store
+    //       store.commit('authentication/setCognitoUser', cognitoUser)
+    //       store.commit('authentication/setUserSession', cognitoUserSession)
+    //
+    //       // Redirect (we use the router instance directly, as it is not provided globally yet)
+    //       void routerInstance.push(ROUTES.MAIN)
+    //     }
+    //   });
+    // }
   }
 }
 
