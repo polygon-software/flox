@@ -42,7 +42,7 @@ watch(
 // Watch for initial state change query to go through
 const stop = watch(
     () => initialState.value,
-    (newState: Record<string, unknown>) => {
+    (newState: Record<string, Record<string, unknown>[]>) => {
       if(users.value.length <= 0 && newState.allUsers && newState.allUsers.length > 0){
         // Set initial state of users array
         users.value = [...newState.allUsers]
