@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from 'vue';
+import {defineEmits, Ref} from 'vue';
 import {ref} from 'vue';
 import {PASSWORD_REGEX} from '../../helpers/REGEX'
 
@@ -61,7 +61,7 @@ let password = ref('')
 let passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
-let dialog = ref(null)
+let dialog: Ref<string|null> = ref(null)
 
 /**
  * On submit, emit data outwards
@@ -77,11 +77,13 @@ function onSubmit(){
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function show(){
-  dialog.value?.show()
+ //  const val: string = dialog.value
+ //
+ // val.show()
 }
 
 function hide(){
-  dialog.value?.hide()
+  // dialog.value?.hide()
 }
 
 </script>
