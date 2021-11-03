@@ -66,7 +66,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
                   }
                   // Case 2: DELETE (removes object from cache)
                   else if (type === MutationTypes.DELETE) {
-                    newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.id !== change.id)
+                    newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.uuid !== change.uuid)
                   }
 
                   // Update data in cache

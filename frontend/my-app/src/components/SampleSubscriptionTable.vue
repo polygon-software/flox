@@ -4,7 +4,7 @@
        title="List of users (with subscription, additions only)"
        :rows="users"
        :columns="columns"
-       row-key="id"
+       row-key="uuid"
        :rows-per-page-options="[10,20, 100]"
     />
 </template>
@@ -25,7 +25,7 @@ const initialState = executeQuery(ALL_USERS);
 const { result } = useSubscription(USER_ADDED);
 
 const columns = [
-  { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: false },
+  { name: 'id', align: 'center', label: 'ID', field: 'uuid', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
