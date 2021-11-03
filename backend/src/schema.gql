@@ -8,7 +8,7 @@ input CreateUserInput {
 }
 
 input DeleteUserInput {
-  userId: ID!
+  uuid: ID!
 }
 
 type Mutation {
@@ -19,8 +19,8 @@ type Mutation {
 
 type Query {
   allUsers: [User!]!
-  user(userId: ID!): User!
-  users(userIds: [ID!]): [User!]!
+  user(uuid: ID!): User!
+  users(uuids: [ID!]): [User!]!
 }
 
 type Subscription {
@@ -30,16 +30,16 @@ type Subscription {
 input UpdateUserInput {
   age: Int
   name: String
-  userId: ID!
+  uuid: ID!
 }
 
 type User {
   """Age"""
   age: Int!
 
-  """UUID"""
-  id: String!
-
   """Name"""
   name: String!
+
+  """UUID"""
+  uuid: ID!
 }

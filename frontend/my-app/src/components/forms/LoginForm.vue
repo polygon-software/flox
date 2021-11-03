@@ -4,7 +4,7 @@
       {{ $t('login') }}
     </h5>
     <q-form
-        @submit="form.onSubmit"
+        @submit="onSubmit"
         class="q-gutter-md"
     >
       <component
@@ -30,6 +30,8 @@
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 
+const emit = defineEmits(['submit'])
+
 const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
 
 const form = new Form()
@@ -40,4 +42,11 @@ form.pages.value = [
     fields: fields
   }
 ]
+
+/**
+ * Emits the 'submit' event, containing the form's data
+ */
+function onSubmit(): void {
+  emit('submit', form.values.value)
+}
 </script>

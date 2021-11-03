@@ -20,8 +20,8 @@ export class UserService {
   }
 
   async getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
-    if (getUsersArgs.userIds !== undefined) {
-      return await this.usersRepository.findByIds(getUsersArgs.userIds);
+    if (getUsersArgs.uuids !== undefined) {
+      return await this.usersRepository.findByIds(getUsersArgs.uuids);
     } else {
       return await this.usersRepository.find();
     }
@@ -32,20 +32,20 @@ export class UserService {
   }
 
   async getUser(getUserArgs: GetUserArgs): Promise<User> {
-    return await this.usersRepository.findOne(getUserArgs.userId);
+    return await this.usersRepository.findOne(getUserArgs.uuid);
   }
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {
     const user = await this.usersRepository.create(updateUserInput);
-    await this.usersRepository.update(updateUserInput.userId, user);
-    return await this.usersRepository.findOne(updateUserInput.userId);
+    await this.usersRepository.update(updateUserInput.uuid, user);
+    return await this.usersRepository.findOne(updateUserInput.uuid);
   }
 
   async remove(deleteUserInput: DeleteUserInput): Promise<User> {
-    const user = await this.usersRepository.findOne(deleteUserInput.userId);
-    const id = user.id;
-    const delUser = await this.usersRepository.remove(user);
-    delUser.id = id;
-    return delUser;
+    const user = await this.usersRepository.findOne(deleteUserInput.uuid);
+    const uuid = user.uuid;
+    const deleted_user = await this.usersRepository.remove(user);
+    deleted_user.uuid = uuid;
+    return deleted_user;
   }
 }

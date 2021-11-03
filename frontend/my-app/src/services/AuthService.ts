@@ -82,17 +82,21 @@ export class AuthenticationService {
             Pool: userPool,
         });
 
-        // Store in local variable
-        this.$authStore.mutations.setCognitoUser(cognitoUser)
         // Execute auth function
         return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
+          // Store in local variable
+          this.$authStore.mutations.setCognitoUser(cognitoUser)
             cognitoUser.authenticateUser(authenticationDetails, {
                 onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
                 onFailure: (err)=>{ this.onFailure(err) },
                 // Sets up MFA (only done once after signing up)
-                mfaSetup: (user) => {this.setupMFA(user, resolve)},
+                mfaSetup: (challengeName, challengeParameters) => {
 
-                // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
+                  console.log('challenge:', typeof challengeName, challengeParameters)
+                  this.setupMFA(cognitoUser, resolve)
+                },
+
+              // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
                 selectMFAType: function () {
                     cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
                 },
@@ -120,7 +124,8 @@ export class AuthenticationService {
    * @param resolve {(value: (void | PromiseLike<void>)) => void}
    */
   setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
-      cognitoUser.associateSoftwareToken({
+    const user = _.cloneDeep(cognitoUser)
+    user.associateSoftwareToken({
         associateSecretCode: (secret: string) => {this.showQRCodeDialog(secret, resolve)},
         onFailure: (err) => {this.onFailure(err)}
       })
