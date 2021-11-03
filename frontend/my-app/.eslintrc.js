@@ -81,7 +81,6 @@ module.exports = {
     quotes: ['warn', 'single', { avoidEscape: true }],
 
     // These are not working with VueX getters
-    '@typescript-eslint/no-unsafe-member-access': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
