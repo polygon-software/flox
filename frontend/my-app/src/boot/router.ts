@@ -5,7 +5,7 @@ import {useAuth} from 'src/store/authentication';
 
 let routerInstance: Router
 
-export default boot(({ router, store }) => {
+export default boot(({ router }) => {
   const $authStore = useAuth()
 
   routerInstance = router
