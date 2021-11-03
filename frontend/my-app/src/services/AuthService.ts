@@ -34,7 +34,7 @@ export class AuthenticationService {
     // Error handler service
     $errorService: ErrorService
 
-    $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions, {}>>
+    $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>>
 
     constructor(quasar: QVueGlobals, errorService: ErrorService) {
       // Store
@@ -71,6 +71,11 @@ export class AuthenticationService {
         });
 
         const userPool = this.$authStore.getters.getUserPool()
+
+        if(userPool === undefined){
+          this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
+          return
+        }
 
         // Actual Cognito authentication on given pool
         const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
@@ -181,7 +186,7 @@ export class AuthenticationService {
             component: ChangePasswordDialog,
             componentProps: {},
         }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
-            this.$authStore.getters.getCognitoUser()?.changePassword(passwordOld,passwordNew, (err: Error)=>{
+            this.$authStore.getters.getCognitoUser()?.changePassword(passwordOld,passwordNew, (err: Error|undefined)=>{
                 if(err){
                     this.$errorService.showErrorDialog(err)
                 }
@@ -194,6 +199,11 @@ export class AuthenticationService {
      */
     showResetPasswordDialog(): void{
       const userPool = this.$authStore.getters.getUserPool()
+
+      if(userPool === undefined){
+        this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
+        return
+      }
 
       this.$q.dialog({
             title: 'Reset Password',
