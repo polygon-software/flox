@@ -1,17 +1,17 @@
-import AuthState  from './state';
 import { Actions } from 'vuex-smart-module'
-import AuthGetters from './getters';
-import AuthMutations from './mutations';
+import SSRState from 'src/store/ssr/state';
+import SSRGetters from 'src/store/ssr/getters';
+import SSRMutations from 'src/store/ssr/mutations';
 
 /**
  * This file contains all authentication actions
  */
 
-class AuthActions extends Actions<
-    AuthState,
-    AuthGetters,
-    AuthMutations,
-    AuthActions
+class SSRActions extends Actions<
+    SSRState,
+    SSRGetters,
+    SSRMutations,
+    SSRActions
   >
 {
   // Actions go here, example...
@@ -27,4 +27,4 @@ class AuthActions extends Actions<
   // }
 }
 
-export default AuthActions
+export default SSRActions

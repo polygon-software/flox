@@ -20,8 +20,8 @@ import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 
-const $authService: Ref<AuthenticationService> = inject<Ref<AuthenticationService>>('$authService')
-const $routerService: Ref<RouterService> = inject<Ref<RouterService>>('$routerService')
+const $authService: Ref<AuthenticationService> = inject('$authService')
+const $routerService: Ref<RouterService> = inject('$routerService')
 
 /**
  * Logs in the given authentication
@@ -41,10 +41,10 @@ async function onLogin({username, password}: {username: string, password: string
  * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
  * @param username {string} - the authentication's chosen username
  * @param email {string} - the authentication's e-mail address
- * @param password {string} - the authentication's chosen password
+ * @param password_repeat {string} - the authentication's chosen password
  */
-async function onSignup({username, email, password}:{username: string, email: string, password:string}){
-  await $authService.value.signUp(username, email, password);
+async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
+  await $authService.value.signUp(username, email, password_repeat);
 }
 
 </script>

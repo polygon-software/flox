@@ -1,9 +1,10 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
-import {ALL_USERS, QUERIES} from './QUERIES';
-import {MutationObject, MutationTypes, QueryObject} from './DATA-DEFINITIONS';
-import {ApolloQueryResult} from "@apollo/client";
-import {computed, onMounted, onServerPrefetch, ref} from "vue";
-import {useStore} from "src/store";
+import {ALL_USERS, QUERIES} from '../data/QUERIES';
+import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
+import {ApolloQueryResult} from '@apollo/client';
+import {computed, ComputedRef, onMounted, onServerPrefetch, Ref, ref} from 'vue';
+import {ApolloCache} from '@apollo/client';
+import {useSSR} from 'src/store/ssr';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -13,7 +14,7 @@ import {useStore} from "src/store";
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  */
-async function executeQuery(queryObject: QueryObject): Promise<ApolloQueryResult<any>> {
+async function executeQuery(queryObject: QueryObject): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
   const queryResult = useQuery(queryObject.query)
   return new Promise(((resolve, reject) => {
     queryResult.onResult((res)=>{resolve(res)})
@@ -48,21 +49,20 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     }
 
     // Actually execute mutation and handle cache
-    const { mutate } = useMutation(mutation, () => ({
+  const { mutate } = useMutation(mutation, () => ({
         // Get cache and the new or deleted object
-        update: (cache, { data: changeData }) => {
+        update: (cache: ApolloCache<any> , { data: changeData}) => {
             affectedQueries.forEach((queryObject) => {
-
-                // Get actual changed/added/removed object
-                const change = changeData[mutationObject.cacheLocation]
+                const changes = changeData as Record<string, Record<string, unknown>>
+                const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
                 // Read existing query from cache
-                const data:Record<string, Array<unknown>>|null = cache.readQuery({ query: queryObject.query })
+                const data:Record<string, Array<Record<string, unknown>>>|null = cache.readQuery({ query: queryObject.query })
 
                 if(data) {
                   // Determine cache location
                   const cacheLocation = queryObject.cacheLocation
-                  const oldData:Array<unknown> = data[cacheLocation]
+                  const oldData: Array<Record<string, unknown>> = data[cacheLocation]
                   let newData
 
                   // Case 1: CREATE (adds new object to cache)
@@ -71,7 +71,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
                   }
                   // Case 2: DELETE (removes object from cache)
                   else if (type === MutationTypes.DELETE) {
-                    newData = oldData.filter((dataPoint: any) => dataPoint.id !== change.id)
+                    newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.uuid !== change.uuid)
                   }
 
                   // Update data in cache
@@ -90,15 +90,15 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     await mutate(variables);
 }
 
-function subscribeToQuery(query: QueryObject){
-  const store = useStore();
-  const res = ref([])
+function subscribeToQuery(query: QueryObject): ComputedRef<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
+  const $ssrStore = useSSR();
+  const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
 
-  const display_res = computed(()=>{
+  const displayRes = computed(()=>{
     if(res.value){
       return res.value
     }
-    const store_state = store.getters['ssr/getPrefetchedData'](query.cacheLocation) as Record<string, unknown[]>
+    const store_state = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, unknown[]>
     if(store_state){
       return store_state;
     }
@@ -107,21 +107,21 @@ function subscribeToQuery(query: QueryObject){
 
   // ----- Hooks -----
   onServerPrefetch(async () => {
-    const temp_res = await executeQuery(query)
-    if(!temp_res.data){ return}
-    res.value = temp_res.data[query.cacheLocation];
-    store.commit("ssr/setPrefetchedData", {key: query.cacheLocation, value: res.value})
+    const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query)
+    if(!tempRes.data){ return}
+    res.value = tempRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+    $ssrStore.mutations.setPrefetchedData({key: query.cacheLocation, value: res.value})
   })
 
   onMounted( () => {
     const polo = useApolloClient().resolveClient()
-    const store_state = store.getters['ssr/getPrefetchedData'](query.cacheLocation) as Record<string, unknown>[]
+    const store_state = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, unknown>[]
 
     // PWA
     if(!store_state){
-      void executeQuery(query).then((fetchedRes)=>{
+      void executeQuery(query).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
         if(fetchedRes.data){
-          res.value = fetchedRes.data[query.cacheLocation]
+          res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
         } else {
           res.value = []
         }
@@ -136,12 +136,12 @@ function subscribeToQuery(query: QueryObject){
     }
 
     polo.watchQuery({query: query.query}).subscribe({
-      next(value: ApolloQueryResult<any>) {
-        res.value = value.data[ALL_USERS.cacheLocation]
+      next(value: ApolloQueryResult<Record<string, unknown>>) {
+        res.value = value.data[ALL_USERS.cacheLocation] as Record<string, Record<string, unknown>[]>[]
       }
     })
   })
-  return display_res;
+  return displayRes;
 }
 
 
