@@ -295,7 +295,7 @@ export class AuthenticationService {
      * @param resolve { (value: (void | PromiseLike<void>)) => void}
      */
     showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void): void{
-        const username = this.$authStore.getters.getUsername()
+        const username = this.$authStore.getters.getUsername() ?? 'user'
         const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
         this.$q.dialog({
             component: QrCodeDialog,
