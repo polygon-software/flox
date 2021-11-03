@@ -76,14 +76,14 @@ function onSubmit(){
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function show(){
- //  const val: string = dialog.value
- //
- // val.show()
+function show(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+ dialog.value.show()
 }
 
-function hide(){
-  // dialog.value?.hide()
+function hide(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.hide()
 }
 
 </script>

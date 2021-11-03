@@ -46,12 +46,14 @@
 
   // Mandatory - do not remove!
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function show(){
-    // dialog.value?.hide()
+  function show(): void{
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    dialog.value?.hide()
   }
 
-  function hide(){
-    // dialog.value?.hide()
+  function hide(): void{
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    dialog.value?.hide()
   }
 
   function onOk(){
