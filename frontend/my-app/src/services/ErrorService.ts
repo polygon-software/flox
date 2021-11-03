@@ -17,7 +17,7 @@ export class ErrorService {
      * Shows a dialog for the given error
      * @param error {Error} - the error that triggered this dialog
      */
-    showErrorDialog(error: Error){
+    showErrorDialog(error: Error): void{
         console.error(error)
         this.$q.dialog({
             title: 'Error: ' + error.name,

@@ -1,11 +1,11 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import {PrimaryGeneratedColumn} from "typeorm";
-import { IsUUID } from "class-validator";
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { PrimaryGeneratedColumn } from 'typeorm';
+import { IsUUID } from 'class-validator';
 
 @ObjectType()
 export class BaseEntity {
-  @Field(() => String, { description: 'UUID' })
+  @Field(() => ID, { description: 'UUID' })
   @PrimaryGeneratedColumn('uuid')
   @IsUUID()
-  id: string;
+  uuid: string;
 }
