@@ -54,9 +54,10 @@ export class Form {
 
       const fieldAttributes: Record<string, any> = FIELDS[key.toUpperCase()].attributes
       const rules: Array<(valueElement: any) => boolean|string> = fieldAttributes.rules
-      rules.every((rule: (valueElement: any) => boolean|string) => {
+      return rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
-        return typeof rule(this.values.value[key]) === 'boolean'
+        const result = typeof rule(this.values.value[key]) === 'boolean'
+        return result
       })
     })
   })
