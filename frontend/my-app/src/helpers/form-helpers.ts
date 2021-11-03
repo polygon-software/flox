@@ -17,7 +17,7 @@ export class Form {
   values: Ref<Record<string, any>>
 
   // Events
-  emit: any
+  emit: {(e: 'submit', values: Record<string, unknown>): void}
 
   // Page definitions
   pages: Ref<Record<string, any>[]>

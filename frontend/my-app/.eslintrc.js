@@ -80,8 +80,6 @@ module.exports = {
     // TypeScript
     quotes: ['warn', 'single', { avoidEscape: true }],
 
-    // These are not working with VueX getters
-    '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/no-explicit-any': 'off', // Enabling this rule often breaks Quasar-generated boilerplate code
