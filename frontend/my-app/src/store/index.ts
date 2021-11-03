@@ -28,15 +28,16 @@ import authModule from './authentication'
 
 // provide typings for `useStore` helper
 // export const storeKey: InjectionKey<VuexStore<StateInterface>> = Symbol('vuex-key')
+export const root = new Module({
+    modules: {
+      authModule,
+    }
+  })
 
 export default store(function (/* { ssrContext } */) {
   const Store = createStore(
     // Root module
-    new Module({
-      modules: {
-        authModule,
-      }
-    }),
+    root,
 
     // Vuex store options
   {
@@ -46,10 +47,3 @@ export default store(function (/* { ssrContext } */) {
 
   return Store;
 })
-
-// Create composable function TODO needed?
-// export const useStore = createComposable(store)
-
-// export function useStore(): VuexStore<StateInterface> {
-//   return vuexUseStore<StateInterface>(storeKey)
-// }
