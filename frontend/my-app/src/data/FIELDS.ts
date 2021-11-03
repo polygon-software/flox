@@ -44,7 +44,9 @@ const FIELDS: Record<string, Record<string, any>> = {
         PASSWORD: {
             key: 'password',
             component: markRaw(Password),
-            attributes: {}
+            attributes: {
+              rules: []
+            }
         },
         PASSWORD_REPEAT: {
             key: 'password_repeat',
