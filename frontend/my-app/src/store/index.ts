@@ -1,5 +1,5 @@
 import { store } from 'quasar/wrappers'
-import {createComposable, createStore} from 'vuex-smart-module'
+import {createStore} from 'vuex-smart-module'
 import authModule from './authentication'
 
 // import example from './module-example'

@@ -41,7 +41,7 @@ export function persistToCookies (category: string, payload: Record<string, any>
 export function deleteCookies(category: string): void{
   const allCookies = Cookies.getAll()
 
-  Object.keys(allCookies).forEach((cookieKey: any) => {
+  Object.keys(allCookies).forEach((cookieKey: string) => {
     if(cookieKey.startsWith(`${category}.`)){
       Cookies.remove(cookieKey)
     }
