@@ -21,8 +21,9 @@ For basic information about how branches work, see the [official GitHub Document
 | ------| ----------- |
 | `master`  | The Bootstrap repository's main branch. Should only contain generalized, well-tested code.  |
 | `dev`  | Development branch, into which feature branches are merged.  |
-| `feature-[name]`  | An individual feature branch.  |
-| `project-[name]`  | Branch for an individual customer project (temporary solution). Should only be merged into from `master`, and never merged into another branch. |
+| `feature-[name]`  | An individual feature branch for the bootstrap repository  |
+| `project-[name]`  | Branch for an individual customer project (temporary solution). Should only be merged into from `master`, and never merged into another branch.|
+| `[name]-feature-[name]`  | An individual feature branch for a customer project. |
 
 The branch structure may look as follows:
 
@@ -33,8 +34,8 @@ master
 │   └── feature-other
 │
 ├── project-blubb
-│   ├── feature-for-project-some
-│   ├── feature-for-project-other
+│   ├── blubb-feature-some
+│   ├── blubb-feature-other
 ...
 ```
 
