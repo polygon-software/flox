@@ -6,8 +6,9 @@
 ## Introduction
 
 The full stack bootstrap repository is intended to provide a solid baseline for starting new projects; it is meant to provide a full, basic setup of all relevant services.
-It includes a Terraform file for setting up the related AWS infrastructure *(in progress)*, as well as a basic Backend, Frontend, Database, and preconfigured connections between them.
-Some basic examples for operations and components are included as well.
+It includes a Terraform file for setting up the related AWS infrastructure *(in progress)*, as well as a basic Backend, Frontend, Database, and preconfigured connections between them. Some basic examples for operations and components are included as well.
+
+It makes sense to read through this document before working with this repository, as it should cover the tech stack pretty well. :tada:
 
 ## Contributing
 
@@ -57,23 +58,31 @@ On a basic level, the tech stack is structured as follows:
 
 | Level  | Technology | Description |
 | ------ | ----------- | ----------- |
-| Server Infrastructure  | [AWS](https://aws.amazon.com/de/)  | TODO description |
-| Database  | [PostgreSQL](https://www.postgresql.org/)  | TODO description |
-| Backend  | [NestJS](https://nestjs.com/)  | TODO description |
-| Frontend  | [Vue 3](https://v3.vuejs.org/) + [Quasar CLI](https://quasar.dev/)  | TODO description |
+| Server Infrastructure  | [AWS](https://aws.amazon.com/de/)  | Architecture where hosting, authentication, etc. happens |
+| Database  | [PostgreSQL](https://www.postgresql.org/)  | Data storage & access |
+| Backend  | [NestJS](https://nestjs.com/)  | Link between frontend and database / other services |
+| Frontend  | [Vue 3](https://v3.vuejs.org/) + [Quasar CLI](https://quasar.dev/)  | User-facing part of the application |
+| Data Definitions  | [Joi](https://joi.dev/) | Data Definitions shared between frontend and backend |
 
 ## Frontend
 
-The Frontend is built using the following technologies: *(TODO add links to docs of each)*
+The Frontend is built using the following technologies. You don't necessarily
+
 | Name  | Description |
 | ------| ----------- |
-| Vue 3  | Progressive JavaScript framework (although we use **TypeScript**)  |
-| Quasar | Framework for Components and many essential functionalities  |
-| i18n | Multilanguage support  |
-| Vuex | State management / modular data store, with type safety provided by `vuex-smart-module` |
+| [Typescript](https://www.typescriptlang.org/)  | Language that is used; JavaScript with syntax for types  |
+| [Vue 3](https://v3.vuejs.org/)  | Progressive JavaScript framework (although we use **TypeScript**)  |
+| [Quasar](https://quasar.dev/) | Framework for components and many essential functionalities  |
+| [AWS Cognito](https://www.npmjs.com/package/amazon-cognito-identity-js) | User authentication & permissions |
+| [Vue Apollo](https://v4.apollo.vuejs.org/) | GraphQL integration  |
+| [GraphQL](https://graphql.org/) | Structured database query language |
+| [Vue i18n](https://vuex.vuejs.org/) | Multilanguage support  |
+| [Vuex](https://vuex.vuejs.org/) | State management / modular data store, with type safety provided by `vuex-smart-module` |
+| [Capacitor](https://capacitorjs.com/) | Native iOS/Android application development |
+| [Lodash](https://lodash.com/) | Utility library for basic functionalities |
+| [date-fns](https://date-fns.org/) | Date manipulation library |
 
-
-TODO basic directory structure here.
+TODO explain basic directory structure here.
 
 ```bash
 ├── dir1
