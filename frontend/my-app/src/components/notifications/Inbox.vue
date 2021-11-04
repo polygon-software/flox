@@ -27,7 +27,7 @@
     <!-- Messages -->
     <div>
       <Message
-        v-for="message in fitleredMessages"
+        v-for="message in filteredMessages"
         :key="message.id"
         :title="message.title"
         :received="message.received"
@@ -100,7 +100,7 @@ const sortedMessages = computed(() => {
 })
 
 // Filter the messages by checking their title and content
-const fitleredMessages = computed(() => {
+const filteredMessages = computed(() => {
   return sortedMessages.value.filter(msg => {
     return msg.title.toLowerCase().includes(search.value.toLowerCase()) || msg.content.toLowerCase().includes(search.value.toLowerCase())
   })
