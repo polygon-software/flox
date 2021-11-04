@@ -43,7 +43,8 @@
     "vue-loader": "^16.8.1",
     "vue-router": "4",
     "vuex": "^4.0.1",
-    "vuex-smart-module": "^1.0.0"
+    "vuex-smart-module": "^1.0.0",
+    "xhr2": "^0.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
