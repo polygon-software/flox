@@ -4,14 +4,6 @@ import AuthActions from './actions';
 import AuthGetters from './getters';
 import AuthMutations from './mutations';
 
-// const authModule: Module<AuthStateInterface, StateInterface> = {
-//   namespaced: true,
-//   actions,
-//   getters,
-//   mutations,
-//   state
-// };
-// Create a module with module asset classes
 const authModule = new Module({
   state: AuthState,
   getters: AuthGetters,
