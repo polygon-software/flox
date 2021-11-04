@@ -6,7 +6,6 @@ import {
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {root} from 'src/store';
 import {Cookies} from 'quasar';
-import {CognitoAccessToken, CognitoRefreshToken} from 'amazon-cognito-auth-js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
 function _interopRequireDefault(obj:unknown) { // @ts-ignore
@@ -42,7 +41,6 @@ export default boot(async ({ store, ssrContext}) => {
     const cookies = Cookies.parseSSR(ssrContext)
     const accessToken = cookies.get('authentication.accessToken')
     if(!accessToken){return}
-    console.log('AccessToken:', accessToken)
     xht.open('POST','https://cognito-idp.eu-central-1.amazonaws.com/')
     xht.setRequestHeader('X-Amz-Target', 'AWSCognitoIdentityProviderService.GetUser');
     xht.setRequestHeader('Accept', 'application/json');
