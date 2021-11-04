@@ -38,7 +38,7 @@ export class AuthenticationService {
       this.$authStore = useAuth()
 
       // Set up authentication user pool
-      const poolSettings:ICognitoUserPoolData = {
+      const poolSettings = {
           UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
           ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
       };
