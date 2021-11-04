@@ -36,8 +36,6 @@ services:
     image: nocodb/nocodb:latest
     networks:
       - webnet
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
     ports:
       - ${NOCODB_PORT}:8080
     volumes:
