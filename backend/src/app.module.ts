@@ -9,6 +9,7 @@ import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { ItemModule } from './item/item.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
         'subscriptions-transport-ws': {
           path: '/graphql-websocket',
           onConnect: (context: Context) => {
-            console.log('Client connected to GraphQL Websocket!');
+            console.log('Client connected to GraphQL Websocket!', context);
           },
         },
       },
@@ -49,6 +50,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
       inject: [ConfigService],
     }),
     UserModule,
+    ItemModule,
   ],
   providers: [
     JwtStrategy,
