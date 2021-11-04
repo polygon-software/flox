@@ -33,13 +33,14 @@ onServerPrefetch(async () => {
 })
 onMounted(()=>{
   if(process.env.MODE === 'ssr'){
-    const store_state = $ssrStore.getters.getPrefetchedData()(ALL_USERS.cacheLocation)
+    const store_state = $ssrStore.getters.getPrefetchedData()(ALL_USERS.cacheLocation) as Record<string, unknown>[]
     users.value = []
     if(store_state){
-      users.value.push(store_state as Record<string, unknown>)
+      users.value.push(...store_state )
     }
   } else {
     void executeQuery(ALL_USERS).then((res: ApolloQueryResult<Record<string, unknown[]>>)=>{
+      console.log(res.data.allUsers)
       users.value = [...res.data.allUsers] as Record<string, unknown>[]
     })
   }
