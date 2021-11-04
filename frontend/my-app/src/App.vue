@@ -27,11 +27,11 @@ provide('$errorService', $errorService)
 
 // Auth service
 const $authService: Ref<AuthenticationService> = ref(new AuthenticationService($q, $errorService))
-provide<AuthenticationService>('$authService', $authService)
+provide<Ref<AuthenticationService>>('$authService', $authService)
 
 // Router service
 const $routerService = ref(new RouterService(routerInstance))
-provide<RouterService>('$routerService', $routerService)
+provide<Ref<unknown>>('$routerService', $routerService)
 
 // Quasar
 provide('$q', $q)
