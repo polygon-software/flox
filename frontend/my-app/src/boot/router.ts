@@ -12,7 +12,6 @@ export default boot(({ router, store}) => {
   routerInstance = router
   router.beforeEach((to) => {
     const loggedIn = $authStore.getters.getLoggedInStatus()//   // Verify valid authentication
-    console.log($authStore.getters.getUserSession())//   // Verify valid authentication
     console.log('Login?', loggedIn)
     if(to.path !== ROUTES.LOGIN.path && !loggedIn){
       return(ROUTES.LOGIN)
