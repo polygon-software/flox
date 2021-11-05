@@ -3,7 +3,7 @@
 # Full Stack Bootstrap Repository
 
 
-## Introduction
+## 0. Introduction
 
 The full stack bootstrap repository is intended to provide a solid baseline for starting new projects; it is meant to provide a full, basic setup of all relevant services.
 It includes a Terraform file for setting up the related AWS infrastructure *(in progress)*, as well as a basic Backend, Frontend, Database, and preconfigured connections between them. Some basic examples for operations and components are included as well.
@@ -12,7 +12,7 @@ It makes sense to read through the entirety of this document before working with
 
 **IMPORTANT: At the moment, customer projects will be created as branches within this repository, more info below. This will however change to Forks in the future. At the current stage, it is therefore vital to maintain a clean branch structure, following the conventions outlined below.**
 
-## Running the application
+## 1. Running the application
 
 To locally run a project built with the full stack bootstrap, the following commands are available (all needed commands are also located in the related `package.json`):
 
@@ -29,7 +29,7 @@ To locally run a project built with the full stack bootstrap, the following comm
 ````
 This will create one container each for backend, database and nocoDB.
 
-## Contributing
+## 2 Contributing
 
 ### Branch Structure
 
@@ -72,7 +72,7 @@ New project branches should always be created from `master`, and only merged int
 3. Once merged, create a PR from `dev` into `master`, which will include any other changes made on `dev`.
 4. Once merged into `master`, you may then merge `master` into the relevant `project-[name]` branch. This ensures that generalized functionality immediately becomes available to all projects that might make use of it.
 
-## Tech Stack
+## 3. Tech Stack
 
 On a basic level, the tech stack is structured as follows:
 
@@ -84,7 +84,7 @@ On a basic level, the tech stack is structured as follows:
 | Frontend  | [Vue 3](https://v3.vuejs.org/) + [Quasar CLI](https://quasar.dev/)  | User-facing part of the application |
 | Data Definitions  | [Joi](https://joi.dev/) | Data Definitions (schemas) shared between frontend and backend |
 
-## Frontend
+## 4. Frontend
 
 The Frontend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
 
@@ -130,7 +130,7 @@ The frontend file structure is as follows:
 ├── src-pwa         // PWA-related files, see https://quasar.dev/quasar-cli/developing-pwa/introduction
 └── src-ssr         // SSR-related files, see https://quasar.dev/quasar-cli/developing-ssr/introduction
 ````
-## Backend
+## 5. Backend
 The Backend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
 
 | Name  | Description |
@@ -158,14 +158,13 @@ The backend file structure is as follows:
 └── test              // e2e tests
 ```
 
-## Database
+## 6. Database
 
-The database uses [PostgreSQL](https://www.postgresql.org/) and is accessed directly from the backend, using TypeORM.
+The database uses [PostgreSQL](https://www.postgresql.org/) and is accessed directly from the backend, using TypeORM. Additionally, [NocoDB](https://www.nocodb.com/) can be used to directly perform operations and look at data on the database. Setting up a NocoDB container is part of the `docker-compose` file for running backend/database, described in (1).
 
-## Server Infrastructure
+## 7. Server Infrastructure
 
 ### Setting up with Terraform
-
 
 [Terraform](https://www.terraform.io/) is an Infrastructure As Code (IAC) tool that allows for automated deployment of the needed AWS server infrastructure within the bootstrap project.
 
