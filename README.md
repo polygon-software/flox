@@ -29,9 +29,9 @@ docker-compose up -b -v
 ````
 This will create one container each for backend, database and nocoDB. *Note:* you must have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running for this command to work. If you are running on a Windows machine, you may need to enable CPU virtualization in BIOS/UEFI.
 
-## 2 Contributing
+## 2. Contributing
 
-### Branch Structure
+### 2.1. Branch Structure
 
 The repository follows a predetermined branch structure, shown in the table below.
 For basic information about how branches work, see the [official GitHub Documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
@@ -58,7 +58,7 @@ master
 ...
 ```
 
-### Pull Requests & Merging
+### 2.2. Pull Requests & Merging
 
 Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon completing a feature, [creating a Pull Request](https://github.com/polygon-software/full-stack-bootstrap/compare) in order to merge the feature back into the development branch.
 
@@ -66,19 +66,28 @@ Once significant features have been merged into the `dev` branch, a Pull Request
 
 New project branches should always be created from `master`, and only merged into from `master`. Project branches should generally never be merged into any other branch.
 
+When creating a Pull Request, make sure to use the appropriate **labels** to identify what project and functionalities the PR belongs to.
+
 **If a project requires a basic functionality not covered by the bootstrap repository, the following workflow should be observed:**
 1. Create a new feature branch from `dev`
 2. Develop the feature on this branch, and create a PR into `dev` once it is finished.
 3. Once merged, create a PR from `dev` into `master`, which will include any other changes made on `dev`.
 4. Once merged into `master`, you may then merge `master` into the relevant `project-[name]` branch. This ensures that generalized functionality immediately becomes available to all projects that might make use of it.
 
+### 2.3. Developing content
+
+When developing project-specific content, you should keep the following points in mind:
+1. *Should this be covered by the Bootstrap repository?* If the functionality or component you need for a project is generic and could be relevant to other projects, it's most likely a good idea to develop it starting from the `dev` branch, such that the new feature can become part of the bootstrap repository.
+2. *Can this be generalized without high effort?* If you are creating e.g. a component that can be written in a generalized way that would make it adaptable to other projects (e.g. a statistics dashboard), consider developing your component in a customizable, parameter-based way, so that it can be reused without making many adjustments.
+3. *Keep inputs standardized*: if your component takes input parameters, it probably makes sense to use reusable, shared interfaces (that can be extended in order to make it project-specific).
+
 ## 3. Tech Stack
 
-On a basic level, the tech stack is structured as follows:
+The technology stack within this repository should cover all aspects of a basic application. On a basic level, it is structured as follows:
 
 | Level  | Technology | Description |
 | ------ | ----------- | ----------- |
-| Server Infrastructure  | [AWS](https://aws.amazon.com/de/)  | Architecture where hosting, authentication, etc. happens |
+| Server Infrastructure  | [AWS](https://aws.amazon.com/de/)  | Infrastructure where hosting, authentication, data storage, etc. happen |
 | Database  | [PostgreSQL](https://www.postgresql.org/)  | Data storage & access |
 | Backend  | [NestJS](https://nestjs.com/)  | Link between frontend and database / other services |
 | Frontend  | [Vue 3](https://v3.vuejs.org/) + [Quasar CLI](https://quasar.dev/)  | User-facing part of the application |
@@ -130,6 +139,7 @@ The frontend file structure is as follows:
 ├── src-pwa         // PWA-related files, see https://quasar.dev/quasar-cli/developing-pwa/introduction
 └── src-ssr         // SSR-related files, see https://quasar.dev/quasar-cli/developing-ssr/introduction
 ````
+
 ## 5. Backend
 The Backend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
 
