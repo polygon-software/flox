@@ -1,6 +1,6 @@
 ![logo](https://polygon-software.ch/_nuxt/optimized/static/images/logo-text-transparent8707ded.svg)
 
-# Fullstack Bootstrap Repository
+# Full Stack Bootstrap Repository
 
 
 ## Introduction
@@ -8,7 +8,9 @@
 The full stack bootstrap repository is intended to provide a solid baseline for starting new projects; it is meant to provide a full, basic setup of all relevant services.
 It includes a Terraform file for setting up the related AWS infrastructure *(in progress)*, as well as a basic Backend, Frontend, Database, and preconfigured connections between them. Some basic examples for operations and components are included as well.
 
-It makes sense to read through this document before working with this repository, as it should cover the tech stack pretty well. :tada:
+It makes sense to read through the entirety of this document before working with this repository, as it should cover the tech stack pretty well. :tada:
+
+**IMPORTANT: At the moment, customer projects will be created as branches within this repository, more info below. This will however change to Forks in the future. At the current stage, it is therefore vital to maintain a clean branch structure, following the conventions outlined below.**
 
 ## Running the application
 
@@ -159,3 +161,23 @@ The backend file structure is as follows:
 ## Database
 
 The database uses [PostgreSQL](https://www.postgresql.org/) and is accessed directly from the backend, using TypeORM.
+
+## Server Infrastructure
+
+### Setting up with Terraform
+
+
+[Terraform](https://www.terraform.io/) is an Infrastructure As Code (IAC) tool that allows for automated deployment of the needed AWS server infrastructure within the bootstrap project.
+
+TODO once finished @johannschwabe
+
+### Structure
+
+The Bootstrap project uses [AWS](https://aws.amazon.com/de/) server infrastructure to host the backend, database, and frontend. The following technologies and services are used throughout:
+
+| Name  | Description |
+| ------| ----------- |
+| [AWS Cognito](https://aws.amazon.com/de/cognito/) | User authentication & permissions |
+| [AWS S3](https://aws.amazon.com/de/s3/)  | File storage |
+| [AWS Elastic Beanstalk](https://aws.amazon.com/de/elasticbeanstalk/) | Auto-scaling backend deployment |
+
