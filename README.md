@@ -18,16 +18,16 @@ To locally run a project built with the full stack bootstrap, the following comm
 
 - Running frontend locally (any of these) within `/frontend`:
 ````bash
-    quasar dev          // running with clientside rendering
-    quasar dev -m pwa   // running as progressive web application
-    quasar dev -m ssr   // running with serverside rendering
+quasar dev          // running with clientside rendering
+quasar dev -m pwa   // running as progressive web application
+quasar dev -m ssr   // running with serverside rendering
 ````
 
 - Runnning backend + database locally within `/backend`:
 ````bash
-    docker-compose up -b -v
+docker-compose up -b -v
 ````
-This will create one container each for backend, database and nocoDB.
+This will create one container each for backend, database and nocoDB. *Note:* you must have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running for this command to work. If you are running on a Windows machine, you may need to enable CPU virtualization in BIOS/UEFI.
 
 ## 2 Contributing
 
@@ -161,6 +161,17 @@ The backend file structure is as follows:
 ## 6. Database
 
 The database uses [PostgreSQL](https://www.postgresql.org/) and is accessed directly from the backend, using TypeORM. Additionally, [NocoDB](https://www.nocodb.com/) can be used to directly perform operations and look at data on the database. Setting up a NocoDB container is part of the `docker-compose` file for running backend/database, described in (1).
+By default, NocoDB runs on `localhost:8080`. To use it, you will initially need to create an account as well as set up your project ("Create new project using an existing database"). Choose "Postgres" as the database type, and enter your database's details, as shown below:
+
+![nocodb](https://github.com/polygon-software/full-stack-bootstrap/blob/master/docs/noco-setup.png?s=100)
+
+Note that the IP adress you have to use may be different. Due to the way networking works between Docker containers, using `localhost` will **NOT** work.
+To find your `database` container's IP, run the following command in your terminal of choice:
+```bash
+docker inspect database
+```
+Look for a field named "IPAddress", and use that value.
+You're now ready to start adding and inspecting data on your database using NocoDB!
 
 ## 7. Server Infrastructure
 
