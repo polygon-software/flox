@@ -10,6 +10,23 @@ It includes a Terraform file for setting up the related AWS infrastructure *(in 
 
 It makes sense to read through this document before working with this repository, as it should cover the tech stack pretty well. :tada:
 
+## Running the application
+
+To locally run a project built with the full stack bootstrap, the following commands are available (all needed commands are also located in the related `package.json`):
+
+- Running frontend locally (any of these) within `/frontend`:
+````bash
+    quasar dev          // running with clientside rendering
+    quasar dev -m pwa   // running as progressive web application
+    quasar dev -m ssr   // running with serverside rendering
+````
+
+- Runnning backend + database locally within `/backend`:
+````bash
+    docker-compose up -b -v
+````
+This will create one container each for backend, database and nocoDB.
+
 ## Contributing
 
 ### Branch Structure
@@ -79,6 +96,7 @@ The Frontend is built using the following technologies. You don't necessarily ne
 | [GraphQL](https://graphql.org/) | Structured database query language |
 | [Vue i18n](https://vuex.vuejs.org/) | Multilanguage support  |
 | [Vuex](https://vuex.vuejs.org/) | State management / modular data store, with type safety provided by `vuex-smart-module` |
+| [Jest](https://jestjs.io/) | Testing framework |
 | [Capacitor](https://capacitorjs.com/) | Native iOS/Android application development |
 | [Lodash](https://lodash.com/) | Utility library for basic functionalities |
 | [date-fns](https://date-fns.org/) | Date manipulation library |
@@ -93,15 +111,10 @@ The frontend file structure is as follows:
 │   ├── assets    
 │   ├── boot        // Quasar Boot files, see https://quasar.dev/quasar-cli/boot-files
 │   ├── components  // Vue components
-│   │   ├── dialogs
-│   │   ├── forms
-│   │   └── menu
 │   ├── css
 │   ├── data        // Files containing constants (e.g. ROUTES) used throughout the app
 │   ├── helpers     // Helper files containing general functionalities
 │   ├── i18n        // i18n translations
-│   │   ├── de
-│   │   └── en
 │   ├── layouts     // Vue Page Layouts (shown within pages)
 │   ├── pages       // Vue Pages
 │   ├── router      // Ruting logic
@@ -116,5 +129,33 @@ The frontend file structure is as follows:
 └── src-ssr         // SSR-related files, see https://quasar.dev/quasar-cli/developing-ssr/introduction
 ````
 ## Backend
+The Backend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
+
+| Name  | Description |
+| ------| ----------- |
+| [Typescript](https://www.typescriptlang.org/)  | Language that is used; JavaScript with syntax for types  |
+| [NestJS](https://nestjs.com/)  | Link between frontend and database / other services |
+| [TypeORM](https://typeorm.io/#/)  | Object-relational-mapping for database access |
+| [GraphQL](https://graphql.org/) | Structured database query language |
+| [Fastify](https://www.fastify.io/) | Low-overhead web framework (used by NestJS) |
+| [Jest](https://jestjs.io/) | Testing framework |
+
+The backend file structure is as follows:
+
+```bash
+├── dist              // Built application output
+├── node_modules      // Dependencies
+├── src
+│   ├── auth          // Authentication logic/rules
+│   ├── base-entity 
+│   ├── config        // Configuration files
+│   ├── item
+│   └── user          // Individual modules
+│       ├── dto       // Data transfer objects
+│       └── entities  // entity definitions
+└── test              // e2e tests
+```
 
 ## Database
+
+The database uses [PostgreSQL](https://www.postgresql.org/) and is accessed directly from the backend, using TypeORM.
