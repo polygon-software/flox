@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
-import Product from 'components/Product.vue'
+import Product from 'src/components/Product/Product.vue'
 import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
