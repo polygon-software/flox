@@ -23,7 +23,7 @@ For basic information about how branches work, see the [official GitHub Document
 | `dev`  | Development branch, into which feature branches are merged.  |
 | `feature-[name]`  | An individual feature branch for the bootstrap repository  |
 | `project-[name]`  | Branch for an individual customer project (temporary solution). Should only be merged into from `master`, and never merged into another branch.|
-| `[name]-feature-[name]`  | An individual feature branch for a customer project. |
+| `[project]-feature-[name]`  | An individual feature branch for a customer project. |
 
 The branch structure may look as follows:
 
@@ -41,7 +41,7 @@ master
 
 ### Pull Requests & Merging
 
-Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon finishing a feature, creating a [Pull Request](https://github.com/polygon-software/full-stack-bootstrap/pulls) in order to merge the feature back into the development branch.
+Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon completing a feature, [creating a Pull Request](https://github.com/polygon-software/full-stack-bootstrap/compare) in order to merge the feature back into the development branch.
 
 Once significant features have been merged into the `dev` branch, a Pull Request into `master` may be created in order to integrate well-tested features into the bootstrap repository.
 
@@ -63,11 +63,11 @@ On a basic level, the tech stack is structured as follows:
 | Database  | [PostgreSQL](https://www.postgresql.org/)  | Data storage & access |
 | Backend  | [NestJS](https://nestjs.com/)  | Link between frontend and database / other services |
 | Frontend  | [Vue 3](https://v3.vuejs.org/) + [Quasar CLI](https://quasar.dev/)  | User-facing part of the application |
-| Data Definitions  | [Joi](https://joi.dev/) | Data Definitions shared between frontend and backend |
+| Data Definitions  | [Joi](https://joi.dev/) | Data Definitions (schemas) shared between frontend and backend |
 
 ## Frontend
 
-The Frontend is built using the following technologies. You don't necessarily
+The Frontend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
 
 | Name  | Description |
 | ------| ----------- |
@@ -83,19 +83,37 @@ The Frontend is built using the following technologies. You don't necessarily
 | [Lodash](https://lodash.com/) | Utility library for basic functionalities |
 | [date-fns](https://date-fns.org/) | Date manipulation library |
 
-TODO explain basic directory structure here.
+The frontend file structure is as follows:
 
 ```bash
-├── dir1
-│   ├── file11.ext
-│   └── file12.ext
-├── dir2
-│   ├── file21.ext
-│   ├── file22.ext
-│   └── file23.ext
-├── dir3
-├── file_in_root.ext
-└── README.md
+├── public
+│   └── icons
+├── src
+│   ├── apollo      // Apollo setup functionalities
+│   ├── assets    
+│   ├── boot        // Quasar Boot files, see https://quasar.dev/quasar-cli/boot-files
+│   ├── components  // Vue components
+│   │   ├── dialogs
+│   │   ├── forms
+│   │   └── menu
+│   ├── css
+│   ├── data        // Files containing constants (e.g. ROUTES) used throughout the app
+│   ├── helpers     // Helper files containing general functionalities
+│   ├── i18n        // i18n translations
+│   │   ├── de
+│   │   └── en
+│   ├── layouts     // Vue Page Layouts (shown within pages)
+│   ├── pages       // Vue Pages
+│   ├── router      // Ruting logic
+│   ├── services    // Services that are shared throughout the app (e.g. AuthenticationService)
+│   └── store       // State management / data store
+│       └── authentication // Individual store modules
+│       └── ...
+├── src-capacitor   // Capacitor (iOS/Android) files
+│   ├── android
+│   └── ios
+├── src-pwa         // PWA-related files, see https://quasar.dev/quasar-cli/developing-pwa/introduction
+└── src-ssr         // SSR-related files, see https://quasar.dev/quasar-cli/developing-ssr/introduction
 ````
 ## Backend
 
