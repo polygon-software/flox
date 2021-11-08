@@ -2,7 +2,7 @@ import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {ALL_USERS, QUERIES} from '../data/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloQueryResult} from '@apollo/client';
-import {computed, ComputedRef, onMounted, onServerPrefetch, Ref, ref} from 'vue';
+import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
 import {ApolloCache} from '@apollo/client';
 import {useSSR} from 'src/store/ssr';
 
@@ -90,20 +90,10 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     await mutate(variables);
 }
 
-function subscribeToQuery(query: QueryObject): ComputedRef<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
+function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
   const $ssrStore = useSSR();
   const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
 
-  const displayRes = computed(()=>{
-    if(res.value){
-      return res.value
-    }
-    const store_state = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, unknown[]>
-    if(store_state){
-      return store_state;
-    }
-    return undefined
-  })
 
   // ----- Hooks -----
   onServerPrefetch(async () => {
@@ -115,10 +105,10 @@ function subscribeToQuery(query: QueryObject): ComputedRef<Record<string, Record
 
   onMounted( () => {
     const polo = useApolloClient().resolveClient()
-    const store_state = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, unknown>[]
+    res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
 
     // PWA
-    if(!store_state){
+    if(!res.value){
       void executeQuery(query).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
         if(fetchedRes.data){
           res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
@@ -130,7 +120,7 @@ function subscribeToQuery(query: QueryObject): ComputedRef<Record<string, Record
       polo.writeQuery({
         query: query.query,
         data: {
-          [query.cacheLocation]: store_state
+          [query.cacheLocation]: res.value
         }
       })
     }
@@ -141,7 +131,7 @@ function subscribeToQuery(query: QueryObject): ComputedRef<Record<string, Record
       }
     })
   })
-  return displayRes;
+  return res;
 }
 
 

@@ -3,13 +3,12 @@
     <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
     <div class="column">
       <div class="row q-pa-md">
-        <SampleSubscriptionTable/>
-
+        <SampleTable/>
         <SampleForm/>
       </div>
 
       <div class="q-pa-md">
-        <SampleTable/>
+        <SampleSubscriptionTable/>
 
       </div>
     </div>
