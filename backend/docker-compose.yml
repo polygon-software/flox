@@ -16,6 +16,7 @@ services:
       - webnet
     depends_on:
       - database
+
   database:
     container_name: database
     image: postgres:14
@@ -29,7 +30,21 @@ services:
       - ${DB_PORT}:5432
     volumes:
       - dbdata:/var/lib/postgresql/data
+
+  nocodb:
+    container_name: nocodb
+    image: nocodb/nocodb:latest
+    networks:
+      - webnet
+    ports:
+      - ${NOCODB_PORT}:8080
+    volumes:
+      - nocodbdata:/usr/app/data
+    depends_on:
+      - database
+
 networks:
   webnet:
 volumes:
   dbdata:
+  nocodbdata:
