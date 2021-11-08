@@ -1,7 +1,6 @@
 <template>
   <div class="column">
     <q-table
-      v-if="computedResult"
       table-header-class="bg-grey-2"
       title="List of users (with cache)"
       :rows="computedResult"
@@ -57,8 +56,10 @@
           </q-td>
         </q-tr>
       </template>
+      <template v-slot:pagination>
+        <p>hello</p>
+      </template>
     </q-table>
-    <q-spinner v-else />
     <q-btn
         label="Löschen"
         color="negative"
@@ -71,7 +72,7 @@
 <script setup lang="ts">
 import { ALL_USERS } from '../data/QUERIES';
 import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
-import {ref, computed, ComputedRef} from 'vue';
+import {ref, computed, Ref} from 'vue';
 import {executeMutation, subscribeToQuery} from '../helpers/data-helpers';
 
 
@@ -85,7 +86,7 @@ const columns = [
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
 
-const queryResult = subscribeToQuery(ALL_USERS) as ComputedRef<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(ALL_USERS) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []

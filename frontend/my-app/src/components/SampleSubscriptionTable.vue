@@ -18,30 +18,32 @@ import { executeQuery } from '../helpers/data-helpers';
 import {useSSR} from 'src/store/ssr';
 import {ApolloQueryResult, FetchResult} from '@apollo/client';
 
-const users: Ref<Record<string, unknown>[]> = ref([]);
-
-
+const users: Ref<Record<string, Record<string, unknown>[]>[]> = ref([]);
 
 // ----- Data -----
 const $ssrStore = useSSR();
 
 // ----- Hooks -----
 onServerPrefetch(async () => {
-  const temp_res = await executeQuery(ALL_USERS)
-  if(!temp_res.data){ return}
-  $ssrStore.mutations.setPrefetchedData({key: ALL_USERS.cacheLocation, value: temp_res.data[ALL_USERS.cacheLocation]})
+  const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(ALL_USERS)
+  if(!tempRes.data){ return}
+  users.value = tempRes.data[ALL_USERS.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+  console.log('Server prefetched: ', users.value)
+  $ssrStore.mutations.setPrefetchedData({key: ALL_USERS.cacheLocation, value: users.value})
 })
 onMounted(()=>{
   if(process.env.MODE === 'ssr'){
-    const store_state = $ssrStore.getters.getPrefetchedData()(ALL_USERS.cacheLocation) as Record<string, unknown>[]
-    users.value = []
+    const store_state = $ssrStore.getters.getPrefetchedData()(ALL_USERS.cacheLocation) as Record<string, Record<string, unknown>[]>[]
     if(store_state){
-      users.value.push(...store_state )
+      users.value = store_state
+      console.log('SSR Mounted: ', users.value)
     }
   } else {
-    void executeQuery(ALL_USERS).then((res: ApolloQueryResult<Record<string, unknown[]>>)=>{
-      console.log(res.data.allUsers)
-      users.value = [...res.data.allUsers] as Record<string, unknown>[]
+    console.log('Not SSR')
+    void executeQuery(ALL_USERS).then((res:ApolloQueryResult<Record<string, unknown>>)=>{
+      users.value = res.data.allUsers as Record<string, Record<string, unknown>[]>[]
+      console.log('not SSR Mounted: ', users.value)
+
     })
   }
   // Set up subscription
