@@ -13,7 +13,7 @@ export class ItemService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async create(createItemInput: CreateItemInput) {
+  async create(createItemInput: CreateItemInput): Promise<Item> {
     let item;
     if (
       createItemInput.userUUID !== null &&
@@ -28,20 +28,21 @@ export class ItemService {
     return this.itemRepository.findOne(item.uuid, { relations: ['user'] });
   }
 
-  findAll() {
+  findAll(): Promise<Item[]> {
     return this.itemRepository.find();
   }
 
-  findOne(uuid: string) {
+  findOne(uuid: string): Promise<Item> {
     return this.itemRepository.findOne(uuid);
   }
 
-  update(uuid: string, updateItemInput: UpdateItemInput) {
+  async update(uuid: string, updateItemInput: UpdateItemInput): Promise<Item> {
     const item = this.itemRepository.create(updateItemInput);
-    return this.itemRepository.update(updateItemInput.uuid, item);
+    await this.itemRepository.update(updateItemInput.uuid, item);
+    return this.itemRepository.findOne(updateItemInput.uuid);
   }
 
-  async remove(uuid: string) {
+  async remove(uuid: string): Promise<Item> {
     const item = await this.itemRepository.findOne(uuid);
     return this.itemRepository.remove(item);
   }

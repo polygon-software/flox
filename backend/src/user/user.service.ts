@@ -16,29 +16,29 @@ export class UserService {
 
   async create(createUserInput: CreateUserInput): Promise<User> {
     const user = await this.usersRepository.create(createUserInput);
-    return await this.usersRepository.save(user);
+    return this.usersRepository.save(user);
   }
 
-  async getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
+  getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
     if (getUsersArgs.uuids !== undefined) {
-      return await this.usersRepository.findByIds(getUsersArgs.uuids);
+      return this.usersRepository.findByIds(getUsersArgs.uuids);
     } else {
-      return await this.usersRepository.find();
+      return this.usersRepository.find();
     }
   }
 
-  async getAllUsers(): Promise<User[]> {
-    return await this.usersRepository.find();
+  getAllUsers(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
-  async getUser(getUserArgs: GetUserArgs): Promise<User> {
-    return await this.usersRepository.findOne(getUserArgs.uuid);
+  getUser(getUserArgs: GetUserArgs): Promise<User> {
+    return this.usersRepository.findOne(getUserArgs.uuid);
   }
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {
     const user = await this.usersRepository.create(updateUserInput);
     await this.usersRepository.update(updateUserInput.uuid, user);
-    return await this.usersRepository.findOne(updateUserInput.uuid);
+    return this.usersRepository.findOne(updateUserInput.uuid);
   }
 
   async remove(deleteUserInput: DeleteUserInput): Promise<User> {
