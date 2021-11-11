@@ -85,7 +85,7 @@ export class AuthenticationService {
           this.$authStore.mutations.setCognitoUser(cognitoUser)
             cognitoUser.authenticateUser(authenticationDetails, {
                 onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
-                onFailure: (err)=>{ this.onFailure(err) },
+                onFailure: (err)=>{this.onFailure(err) },
                 // Sets up MFA (only done once after signing up)
                 mfaSetup: (challengeName, challengeParameters) => {
 
@@ -292,37 +292,39 @@ export class AuthenticationService {
      * @param resolve { (value: (void | PromiseLike<void>)) => void}
      */
     showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void): void{
-        const username = this.$authStore.getters.getUsername() ?? 'user'
-        const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
-        this.$q.dialog({
-            component: QrCodeDialog,
-            componentProps: {
-                value: codeUrl
-            },
-        }).onOk(() => {
-            // Verify code
-            this.$q.dialog({
-                title: 'Verification',
-                message: 'Please enter your 2FA authenticator code',
-                cancel: true,
-                persistent: true,
-                prompt: {
-                    model: '',
-                    isValid: (val: string) => val.length >= 6,
-                    type: 'text'
-                },
-            }).onOk((code: string) => {
-                // TODO friendlyDeviceName
-                this.$authStore.getters.getCognitoUser()?.verifySoftwareToken(code, 'My TOTP device', {
-                    onSuccess: (userSession: CognitoUserSession)=>{
-                        this.loginSuccess(userSession, resolve)
-                    },
-                    onFailure: (error: Error)=>{
-                        this.$errorService.value.showErrorDialog(error)
-                    },
-                });
-            })
-        })
+      const username = this.$authStore.getters.getUsername() ?? 'user'
+
+      const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
+      console.log(this.$q)
+      this.$q.dialog({
+          component: QrCodeDialog,
+          componentProps: {
+              value: codeUrl
+          },
+      }).onOk(() => {
+          // Verify code
+          this.$q.dialog({
+              title: 'Verification',
+              message: 'Please enter your 2FA authenticator code',
+              cancel: true,
+              persistent: true,
+              prompt: {
+                  model: '',
+                  isValid: (val: string) => val.length >= 6,
+                  type: 'text'
+              },
+          }).onOk((code: string) => {
+              // TODO friendlyDeviceName
+              this.$authStore.getters.getCognitoUser()?.verifySoftwareToken(code, 'My TOTP device', {
+                  onSuccess: (userSession: CognitoUserSession)=>{
+                    this.loginSuccess(userSession, resolve)
+                  },
+                  onFailure: (error: Error)=>{
+                    this.onFailure(error)
+                  },
+              });
+          })
+      })
     }
 
     /**
@@ -367,7 +369,7 @@ export class AuthenticationService {
                 this.loginSuccess(userSession, resolve)
             },
             onFailure: (error: Error)=>{
-                this.$errorService.value.showErrorDialog(error)
+                this.onFailure(error)
             },
         }, tokenType);
         });
@@ -390,11 +392,13 @@ export class AuthenticationService {
      * @param error {Error} - the error that caused the failure
      */
     onFailure(error: Error): void{
+      console.error('Error', Error)
         if(error.name === 'UserNotConfirmedException'){
             // Show the e-mail verification dialog and send a new code
             this.showEmailVerificationDialog(true)
         } else {
-            this.$errorService.value.showErrorDialog(error)
+          console.log(this.$errorService)
+          this.$errorService.value.showErrorDialog(error)
         }
     }
 }

@@ -33,32 +33,35 @@
 </template>
 
 <script setup lang="ts">
-  import QrcodeVue from 'qrcode.vue';
-  import {defineProps, defineEmits, ref} from 'vue';
+import QrcodeVue from 'qrcode.vue';
+import {defineProps, defineEmits, ref} from 'vue';
 
-  let dialog = ref(null)
+let dialog = ref(null)
+console.log('QRCodeDialog')
+const props = defineProps({
+  value: String
+})
 
-  const props = defineProps({
-    value: String
-  })
+const emit = defineEmits(['ok'])
 
-  const emit = defineEmits(['ok'])
+// Mandatory - do not remove!
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function show(): void{
+  console.log('hide in show')
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.show()
+}
 
-  // Mandatory - do not remove!
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function show(): void{
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    dialog.value?.hide()
-  }
+function hide(): void{
+  console.log('hide in hide')
 
-  function hide(): void{
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    dialog.value?.hide()
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.hide()
+}
 
-  function onOk(){
-    emit('ok')
-    hide()
-  }
+function onOk(){
+  emit('ok')
+  hide()
+}
 
 </script>
