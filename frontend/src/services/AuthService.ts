@@ -397,7 +397,10 @@ export class AuthenticationService {
             // Show the e-mail verification dialog and send a new code
             this.showEmailVerificationDialog(true)
         } else {
+          console.log('----- Error ------')
+          console.log(this)
           console.log(this.$errorService)
+          console.log(this.$errorService.value)
           this.$errorService.value.showErrorDialog(error)
         }
     }
