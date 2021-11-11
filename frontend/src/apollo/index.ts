@@ -22,7 +22,7 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
   // HTTP link for GraphQL (Queries/Mutations)
   const httpLink = createHttpLink({
     // GraphQL API Link
-    uri: 'http://localhost:3000/graphql',
+    uri: process.env.VUE_APP_GRAPHQL_ENDPOINT,
   })
 
   let link = httpLink;
@@ -30,7 +30,7 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
   // TODO subscriptions in SSR mode, what do
   if(!process.env.SERVER){
     const wsLink = new WebSocketLink({
-      uri: 'ws://localhost:3000/graphql-websocket',
+      uri: process.env.VUE_APP_WS_ENDPOINT || '',
       options: {
         reconnect: true
       }

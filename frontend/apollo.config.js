@@ -4,7 +4,7 @@ module.exports = {
   client: {
     service: {
       name: 'my-service',
-      url: 'http://localhost:3000/graphql',
+      url: process.env.VUE_APP_GRAPHQL_ENDPOINT,
     },
     // Files processed by the extension
     includes: ['src/**/*.vue', 'src/**/*.js', 'src/**/*.ts'],
