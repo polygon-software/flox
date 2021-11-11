@@ -44,7 +44,7 @@ import { ItemModule } from './item/item.module';
         username: configService.get('database.username'),
         password: configService.get('database.password'),
         database: configService.get('database.database'),
-        entities: ['dist/**/**.entity{.ts,.js}'],
+        entities: [configService.get('entities')],
         synchronize: true,
       }),
       inject: [ConfigService],
