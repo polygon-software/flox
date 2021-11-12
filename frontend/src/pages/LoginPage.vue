@@ -1,18 +1,38 @@
 <template>
   <q-page class="flex flex-center">
-    <!-- Login Card -->
-    <q-card class="q-pa-md q-ma-md">
-      <LoginForm @submit="onLogin"/>
-    </q-card>
+    <q-card class="square q-pa-md q-ma-md">
 
-    <!-- Signup Card -->
-    <q-card class="q-pa-md q-ma-md">
-      <SignupForm @submit="onSignup"/>
+      <!-- Login Card -->
+      <q-card-section
+        class="col"
+        v-show="!startSignup"
+      >
+        <LoginForm @submit="onLogin"/>
+      </q-card-section>
+
+      <!-- Signup Card -->
+      <q-card-section class="col">
+        <div v-if="!startSignup">
+          <h5 class="col">Have no account? Sign up here:</h5>
+          <q-btn
+            style="width: 125px"
+            :label="$t('signup')"
+            @click="startSignup = true"
+            color="primary"
+          />
+        </div>
+        <SignupForm
+          @submit="onSignup"
+          v-if="startSignup"
+        />
+      </q-card-section>
+
     </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
 import {inject, Ref} from 'vue'
@@ -22,6 +42,7 @@ import {RouterService} from 'src/services/RouterService';
 
 const $authService: Ref<AuthenticationService> = inject<Ref<AuthenticationService>>('$authService')
 const $routerService: Ref<RouterService> = inject<Ref<RouterService>>('$routerService')
+const startSignup = ref(false)
 
 /**
  * Logs in the given authentication

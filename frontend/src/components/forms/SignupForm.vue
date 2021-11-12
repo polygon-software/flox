@@ -1,8 +1,8 @@
 <template>
-  <div class="q-pa-sm">
-    <h5 class="q-ma-none" style="margin-bottom: 30px;">
-      {{ $t('signup') }}
-    </h5>
+  <div
+    class="column q-pa-sm"
+    style="width: 500px;"
+  >
     <q-form
         @submit="onSubmit"
         class="q-gutter-md"
@@ -12,7 +12,6 @@
         ref="stepper"
         animated
         active-color="primary"
-        transition-duration="1000"
         done-icon="done"
     >
       <q-step
@@ -30,6 +29,7 @@
               v-bind="field.attributes"
               v-model="form.values.value[field.key]"
               @change="(newValue) => form.updateValue(field.key, newValue)"
+              class="q-mb-md"
           />
       </q-step>
       <template v-slot:navigation>
@@ -65,6 +65,7 @@
 <script setup lang="ts">
 import { FIELDS } from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
+import {i18n} from 'boot/i18n';
 
 /**
  * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different
@@ -75,35 +76,23 @@ import { Form } from 'src/helpers/form-helpers'
 
 const emit = defineEmits(['submit'])
 
-const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
+const account_fields = [
+  FIELDS.FULL_NAME,
+  FIELDS.LANGUAGE,
+  FIELDS.LIVING_ADDRESS,
+  FIELDS.CORRESPONDANCE_ADDRESS,
+  FIELDS.PHONE_NUMBER,
+  FIELDS.COMPANY_DATA,
+  FIELDS.CONDITIONS
+]
 
 const form = new Form()
 
 form.pages.value = [
   {
-    key: 'account_data',
-    label: 'Account',
+    key: 'company',
+    label: i18n.global.t('signup'),
     fields: account_fields,
-  },
-  {
-    key: 'personal_data',
-    label: 'Personal',
-    fields: [FIELDS.FULL_NAME,],
-  },
-  {
-    key: 'address_data',
-    label: 'Address',
-    fields: [],
-  },
-  {
-    key: 'authentication',
-    label: 'Authentication',
-    fields: [],
-  },
-  {
-    key: 'interests',
-    label: 'Interests',
-    fields: [],
   },
 ]
 
@@ -111,6 +100,7 @@ form.pages.value = [
  * Emits the 'submit' event, containing the form's data
  */
 function onSubmit(): void {
+  //TODO: Send to SOI
   emit('submit', form.values.value)
 }
 
