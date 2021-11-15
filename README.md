@@ -14,6 +14,11 @@ It makes sense to read through the entirety of this document before working with
 
 ## 1. Running the application
 
+First, install the necessary packages in both the `backend` and the `frontend` folder (note that we use [Yarn](https://yarnpkg.com/getting-started/install) as our package manager instead of NPM):
+````bash
+yarn
+````
+
 To locally run a project built with the full stack bootstrap, the following commands are available (all needed commands are also located in the related `package.json`):
 
 - Running frontend locally (any of these) within `/frontend`:
