@@ -35,6 +35,27 @@
         @click="openMessage(message)"
       >
       </MessagePreview>
+      <q-dialog
+        v-model="showDialog"
+      >
+        <q-card>
+          <q-card-section>
+            <MessageDetail
+              :content="selectedMessage.content"
+              :received="selectedMessage.received"
+              :title="selectedMessage.title"
+              />
+          </q-card-section>
+          <q-card-actions>
+            <q-btn
+              :label="$t('back')"
+              color="primary"
+              flat
+              @click="closeMessage"
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -67,9 +88,10 @@ const options = [
 ]
 
 // Open message
-const selectedMessage = ref(null)
-const showMessage = ref(false)
+const selectedMessage = ref()
+const showDialog = ref(false)
 
+// Needs to be defined somewhere else...
 type Message = {
   id: string,
   title: string,
@@ -78,6 +100,7 @@ type Message = {
   isRead: boolean
 }
 
+// This would be fetched from the DB
 const messages = ref([
   {
     id: '0',
@@ -119,9 +142,16 @@ const filteredMessages = computed(() => {
   })
 })
 
+// Opens the dialog which contains the detail view of a message.
 function openMessage(message: Message) {
   selectedMessage.value = message
-  showMessage.value = true
+  showDialog.value = true
+}
+
+// Closes the dialog which contains the detail view of a message.
+function closeMessage() {
+  selectedMessage.value = null
+  showDialog.value = false
 }
 
 </script>

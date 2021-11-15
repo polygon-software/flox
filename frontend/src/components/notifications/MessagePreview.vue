@@ -13,14 +13,12 @@
     </div>
     <p style="font-size: small"> {{ received }}</p>
   </q-card>
-
-  <!-- How to get prize -->
-
-  <!-- Validation with QR code -->
-
 </template>
 
 <script setup lang="ts">
+/**
+ * This component displays a message item in the message-inbox.
+ */
 
 const props = defineProps( {
   title: {
