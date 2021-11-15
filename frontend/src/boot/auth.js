@@ -13,8 +13,6 @@ import * as _CognitoRefreshToken from 'amazon-cognito-identity-js/lib/CognitoRef
 import axios from 'axios';
 
 export default boot(async ({ store, ssrContext}) => {
-  console.log('auth boot')
-
   const $authStore = root.context(store).modules.authModule
 
   // Set up authentication user pool
@@ -67,7 +65,7 @@ export default boot(async ({ store, ssrContext}) => {
       const cachedSession = new _CognitoUserSession['default'](sessionData);
       $authStore.mutations.setUserSession(cachedSession)
     }).catch((err)=>{
-      console.log("error is:", err)
+      console.error("Authentication error:", err)
     })
 
 

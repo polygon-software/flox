@@ -28,7 +28,6 @@ onServerPrefetch(async () => {
   const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(ALL_USERS)
   if(!tempRes.data){ return}
   users.value = tempRes.data[ALL_USERS.cacheLocation] as Record<string, Record<string, unknown>[]>[]
-  console.log('Server prefetched: ', users.value)
   $ssrStore.mutations.setPrefetchedData({key: ALL_USERS.cacheLocation, value: users.value})
 })
 onMounted(()=>{
@@ -36,14 +35,10 @@ onMounted(()=>{
     const store_state = $ssrStore.getters.getPrefetchedData()(ALL_USERS.cacheLocation) as Record<string, Record<string, unknown>[]>[]
     if(store_state){
       users.value = store_state
-      console.log('SSR Mounted: ', users.value)
     }
   } else {
-    console.log('Not SSR')
     void executeQuery(ALL_USERS).then((res:ApolloQueryResult<Record<string, unknown>>)=>{
       users.value = res.data.allUsers as Record<string, Record<string, unknown>[]>[]
-      console.log('not SSR Mounted: ', users.value)
-
     })
   }
   // Set up subscription
@@ -64,7 +59,7 @@ const columns = [
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
 //
-// // Watch for subscription changes
+// // Watch for subscription changes TODO
 // watch(
 //     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 //     () => result,
