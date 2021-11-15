@@ -7,7 +7,7 @@ export default boot(
   ({ssrContext }) => {
 
     // Default client.
-    const options = getClientOptions(/* {app, router ...} */ssrContext)
+    const options = getClientOptions(ssrContext)
 
     // Apollo Client setup
     const apolloClient = new ApolloClient(options)

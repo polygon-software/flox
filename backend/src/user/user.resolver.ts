@@ -63,7 +63,7 @@ export class UserResolver {
 
   @Public()
   @Subscription(() => User)
-  userAdded() {
+  userAdded(): AsyncIterator<unknown, any, undefined> {
     return pubSub.asyncIterator('userAdded');
   }
 }

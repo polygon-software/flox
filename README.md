@@ -1,4 +1,4 @@
-![logo](https://polygon-software.ch/_nuxt/optimized/static/images/logo-text-transparent8707ded.svg)
+![logo](https://polygon-software.ch/images/banner.svg)
 
 # Full Stack Bootstrap Repository
 
@@ -105,7 +105,7 @@ The Frontend is built using the following technologies. You don't necessarily ne
 | [AWS Cognito](https://www.npmjs.com/package/amazon-cognito-identity-js) | User authentication & permissions |
 | [Vue Apollo](https://v4.apollo.vuejs.org/) | GraphQL integration  |
 | [GraphQL](https://graphql.org/) | Structured database query language |
-| [Vue i18n](https://vuex.vuejs.org/) | Multilanguage support  |
+| [Vue i18n](https://kazupon.github.io/vue-i18n/) | Multilanguage support  |
 | [Vuex](https://vuex.vuejs.org/) | State management / modular data store, with type safety provided by `vuex-smart-module` |
 | [Jest](https://jestjs.io/) | Testing framework |
 | [Capacitor](https://capacitorjs.com/) | Native iOS/Android application development |

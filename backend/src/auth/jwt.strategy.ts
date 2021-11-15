@@ -3,6 +3,16 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { passportJwtSecret } from 'jwks-rsa';
 
+export class JwtStrategyValidationPayload {
+  sub: string;
+  username: string;
+}
+
+export class JwtStrategyValidationResult {
+  userId: string;
+  username: string;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
@@ -19,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
-    return { uuid: payload.sub, username: payload.username };
+  validate(payload: JwtStrategyValidationPayload): JwtStrategyValidationResult {
+    return { userId: payload.sub, username: payload.username };
   }
 }

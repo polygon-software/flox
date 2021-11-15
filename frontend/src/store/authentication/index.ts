@@ -4,7 +4,6 @@ import AuthActions from './actions';
 import AuthGetters from './getters';
 import AuthMutations from './mutations';
 
-
 const authModule = new Module({
   state: AuthState,
   getters: AuthGetters,
