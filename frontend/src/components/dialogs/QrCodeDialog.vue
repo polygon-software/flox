@@ -44,13 +44,15 @@
 
   const emit = defineEmits(['ok'])
 
-  // Required, do not remove
+  // Mandatory - do not remove!
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function show(){
-    dialog.value?.show()
+  function show(): void{
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    dialog.value?.hide()
   }
 
-  function hide(){
+  function hide(): void{
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     dialog.value?.hide()
   }
 

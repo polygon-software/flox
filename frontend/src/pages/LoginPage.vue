@@ -20,8 +20,8 @@ import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 
-const $authService: Ref<AuthenticationService> = inject<Ref<AuthenticationService>>('$authService')
-const $routerService: Ref<RouterService> = inject<Ref<RouterService>>('$routerService')
+const $authService: Ref<AuthenticationService> = inject('$authService')
+const $routerService: Ref<RouterService> = inject('$routerService')
 
 /**
  * Logs in the given authentication

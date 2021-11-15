@@ -18,7 +18,17 @@ import {markRaw} from 'vue';
  * @rules: Rules that get applied to the input field, e.g. to check if a password is valid.
  */
 
-const FIELDS: Record<string, Record<string, any>> = {
+export interface Field {
+  key: string,
+  component: any,
+  attributes: {
+    rules: Array<(val: any) => boolean|string>
+    [key: string]: any
+  },
+
+}
+
+const FIELDS: Record<string, Field> = {
         EMAIL: {
             key: 'email',
             component: markRaw(QInput),
