@@ -93,7 +93,7 @@
 
 <script setup lang="ts">
 import {defineProps, ref} from 'vue'
-import OverviewComponent from './OverviewComponent'
+import OverviewComponent from './OverviewComponent.vue'
 import DescriptionComponent from './DescriptionComponent.vue'
 import TicketDistributionComponent from './TicketDistributionComponent.vue'
 
@@ -109,6 +109,10 @@ const title = 'Product Card'
 const currentImage = ref(1)
 const liked = ref(false)
 const bookmarked = ref(false)
+
+/**
+ * These are the images that will be displayed in the carousell.
+ */
 const images = [
   {
     id: 1,
@@ -128,7 +132,10 @@ const images = [
   }
 ]
 
-// Tabs
+/**
+ * If the product page should be separated into different tabs, they need to be defined here.
+ * The content of each tab will be defined in a separate component.
+ */
 const selectedTab = ref('overview')
 const tabs = [
   {
@@ -154,21 +161,36 @@ const tabs = [
   },
 ]
 
+//TODO: Fetch data from DB
+
+/**
+ * Toggles the "Like" (heart) symbol.
+ */
 function toogleLike() {
   liked.value = !liked.value
   //TODO: emit to database
 }
 
+/**
+ * Toggles the bokmark symbol.
+ */
 function toogleBookmark() {
   bookmarked.value = !bookmarked.value
   //TODO: emit to database
 }
 
+/**
+ * Opens the comment section, so that the user can leave or read comments.
+ */
 function postComment() {
   //TODO: open comment section
   console.log('Open comment section')
 }
 
+
+/**
+ * Allow the user to share this product site via Message Apps, Email, etc.
+ */
 function shareProduct() {
   //TODO: open share product
   console.log('Sharing product')
