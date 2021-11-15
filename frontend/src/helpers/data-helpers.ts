@@ -2,7 +2,7 @@ import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {ALL_USERS, QUERIES} from '../data/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloQueryResult} from '@apollo/client';
-import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
+import {onBeforeMount, onMounted, onServerPrefetch, Ref, ref} from 'vue';
 import {ApolloCache} from '@apollo/client';
 import {useSSR} from 'src/store/ssr/index';
 
@@ -103,8 +103,9 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
     $ssrStore.mutations.setPrefetchedData({key: query.cacheLocation, value: res.value})
   })
 
-  onMounted( () => {
+  onBeforeMount( () => {
     const apolloClient = useApolloClient().resolveClient()
+
     res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
 
     // SPA
