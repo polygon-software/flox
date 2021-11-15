@@ -4,7 +4,7 @@ import {WebSocketLink} from '@apollo/client/link/ws';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {Cookies} from 'quasar';
 
-export function getClientOptions() {
+export function getClientOptions(): ApolloClientOptions<any> {
   // HTTP link for GraphQL (Queries/Mutations)
   const httpLink = createHttpLink({
     // GraphQL API Link
