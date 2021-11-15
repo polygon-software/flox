@@ -30,7 +30,7 @@ const $authService: AuthenticationService = reactive(new AuthenticationService($
 provide<AuthenticationService>('$authService', $authService)
 
 // Router service
-const $routerService: RouterService = ref(new RouterService(routerInstance))
+const $routerService: RouterService = reactive(new RouterService(routerInstance))
 provide<RouterService>('$routerService', $routerService)
 
 // Quasar
