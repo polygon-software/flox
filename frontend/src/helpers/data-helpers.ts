@@ -4,7 +4,7 @@ import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIO
 import {ApolloQueryResult} from '@apollo/client';
 import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
 import {ApolloCache} from '@apollo/client';
-import {useSSR} from 'src/store/ssr';
+import {useSSR} from 'src/store/ssr/index';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
