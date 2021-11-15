@@ -1,7 +1,6 @@
 <template>
   <q-card
     class="q-pa-sm q-mb-md"
-    @click="toggleDetails"
     style="cursor: pointer"
   >
     <div class="flex items-center justify-between">
@@ -9,7 +8,7 @@
       <q-badge
         rounded
         color="red"
-        v-show="!isRead"
+        v-show="!props.isRead"
       />
     </div>
     <p style="font-size: small"> {{ received }}</p>
@@ -22,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 
 const props = defineProps( {
   title: {
@@ -33,22 +31,12 @@ const props = defineProps( {
     required: true,
     type: String,
   },
-  content: {
-    required: true,
-    type: String,
-  },
   isRead: {
     required: true,
-    ype: Boolean
+    type: Boolean
   }
 })
 
-const showDetails = ref(false)
-
-
-function toggleDetails() {
-  showDetails.value = !showDetails.value
-}
 </script>
 
 <style scoped>

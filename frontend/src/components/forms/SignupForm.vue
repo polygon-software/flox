@@ -10,9 +10,7 @@
     <q-stepper
         v-model="form.step.value"
         ref="stepper"
-        animated
         active-color="primary"
-        transition-duration="1000"
         done-icon="done"
     >
       <q-step

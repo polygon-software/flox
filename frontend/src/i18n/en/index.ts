@@ -46,5 +46,8 @@ export default {
   branch_structure: 'Branch Strucutre',
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
-  must_accepts_conditons: 'You have to accept the terms and conditions.'
+  must_accepts_conditons: 'You have to accept the terms and conditions.',
+  messages: 'Messages',
+  newest: 'Newest',
+  oldest: 'Oldest'
 };

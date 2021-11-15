@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue'
+import {defineProps, ref, markRaw} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
 import DescriptionComponent from './DescriptionComponent.vue'
 import TicketDistributionComponent from './TicketDistributionComponent.vue'
@@ -142,21 +142,21 @@ const tabs = [
     name: 'overview',
     label: 'Overview',
     component: {
-      name: OverviewComponent,
+      name: markRaw(OverviewComponent),
     }
   },
   {
     name: 'description',
     label: 'Description',
     component: {
-      name: DescriptionComponent,
+      name: markRaw(DescriptionComponent),
     }
   },
   {
     name: 'tickets',
     label: 'Ticket Distribution',
     component: {
-      name: TicketDistributionComponent,
+      name: markRaw(TicketDistributionComponent),
     }
   },
 ]

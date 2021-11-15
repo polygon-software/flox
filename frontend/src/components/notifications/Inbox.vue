@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5 class="text-center">Messages</h5>
+    <h5 class="text-center"> {{ $t('messages') }}</h5>
 
     <!-- Searchbar -->
     <q-input
@@ -26,22 +26,24 @@
 
     <!-- Messages -->
     <div>
-      <Message
+      <MessagePreview
         v-for="message in filteredMessages"
         :key="message.id"
         :title="message.title"
         :received="message.received"
-        :content="message.content"
-        :isRead="message.isRead"
+        :is-read="message.isRead"
+        @click="openMessage(message)"
       >
-      </Message>
+      </MessagePreview>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from 'vue'
-import Message from 'components/notifications/Message.vue';
+import { computed, ref } from 'vue'
+import { i18n } from 'boot/i18n';
+import MessagePreview from 'components/notifications/MessagePreview.vue';
+import MessageDetail from 'components/notifications/MessageDetail.vue';
 
 const props = defineProps({
   dbRef: {
@@ -55,15 +57,26 @@ const search = ref('')
 const sort = ref('newest')
 const options = [
   {
-    label: 'Newest',
+    label: i18n.global.t('newest'),
     value: 'newest',
   },
   {
-    label: 'Oldest',
+    label: i18n.global.t('oldest'),
     value: 'oldest',
   }
 ]
 
+// Open message
+const selectedMessage = ref(null)
+const showMessage = ref(false)
+
+type Message = {
+  id: string,
+  title: string,
+  received: string,
+  content: string,
+  isRead: boolean
+}
 
 const messages = ref([
   {
@@ -105,5 +118,10 @@ const filteredMessages = computed(() => {
     return msg.title.toLowerCase().includes(search.value.toLowerCase()) || msg.content.toLowerCase().includes(search.value.toLowerCase())
   })
 })
+
+function openMessage(message: Message) {
+  selectedMessage.value = message
+  showMessage.value = true
+}
 
 </script>
