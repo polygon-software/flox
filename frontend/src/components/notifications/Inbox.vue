@@ -1,66 +1,72 @@
 <template>
   <div>
     <h5 class="text-center"> {{ $t('messages') }}</h5>
-
-    <!-- Searchbar -->
-    <q-input
-      v-model="search"
-      dense
-      rounded
-      outlined
-      type="search"
-      class="q-mb-md"
+    <div
+      v-if="showMessageDetail"
     >
-      <template v-slot:append>
-        <q-icon name="search" />
-      </template>
-    </q-input>
-
-    <!-- Sorting -->
-    <q-option-group
-      v-model="sort"
-      :options="options"
-      color="primary"
-      inline
-    />
-
-    <!-- Messages -->
-    <div>
-      <MessagePreview
-        v-for="message in filteredMessages"
-        :key="message.id"
-        :title="message.title"
-        :received="message.received"
-        :is-read="message.isRead"
-        @click="openMessage(message)"
+      <q-card>
+        <q-card-section>
+          <MessageDetail
+            :content="selectedMessage.content"
+            :received="selectedMessage.received"
+            :title="selectedMessage.title"
+          />
+        </q-card-section>
+        <q-card-actions>
+          <q-btn
+            :label="$t('back')"
+            color="primary"
+            flat
+            @click="closeMessage"
+          />
+        </q-card-actions>
+      </q-card>
+    </div>
+    <div
+      v-else
+    >
+      <!-- Searchbar -->
+      <q-input
+        v-model="search"
+        dense
+        rounded
+        outlined
+        type="search"
+        class="q-mb-md"
       >
-      </MessagePreview>
-      <q-dialog
-        v-model="showDialog"
-      >
-        <q-card>
-          <q-card-section>
-            <MessageDetail
-              :content="selectedMessage.content"
-              :received="selectedMessage.received"
-              :title="selectedMessage.title"
-              />
-          </q-card-section>
-          <q-card-actions>
-            <q-btn
-              :label="$t('back')"
-              color="primary"
-              flat
-              @click="closeMessage"
-            />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+        <template v-slot:append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+
+      <!-- Sorting -->
+      <q-option-group
+        v-model="sort"
+        :options="options"
+        color="primary"
+        inline
+      />
+
+      <!-- Messages -->
+      <div>
+        <MessagePreview
+          v-for="message in filteredMessages"
+          :key="message.id"
+          :title="message.title"
+          :received="message.received"
+          :is-read="message.isRead"
+          @click="openMessage(message)"
+        >
+        </MessagePreview>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+/**
+ * This component displays a message inbox, which contains message items. The messages can be filtered and sorted.
+ */
 import { computed, ref } from 'vue'
 import { i18n } from 'boot/i18n';
 import MessagePreview from 'components/notifications/MessagePreview.vue';
@@ -89,7 +95,7 @@ const options = [
 
 // Open message
 const selectedMessage = ref()
-const showDialog = ref(false)
+const showMessageDetail = ref(false)
 
 // Needs to be defined somewhere else...
 type Message = {
@@ -145,13 +151,14 @@ const filteredMessages = computed(() => {
 // Opens the dialog which contains the detail view of a message.
 function openMessage(message: Message) {
   selectedMessage.value = message
-  showDialog.value = true
+  showMessageDetail.value = true
 }
 
-// Closes the dialog which contains the detail view of a message.
+// Closes the dialog which contains the detail view of a message. Also sets the message status to "read"
 function closeMessage() {
+  selectedMessage.value.isRead = true
   selectedMessage.value = null
-  showDialog.value = false
+  showMessageDetail.value = false
 }
 
 </script>

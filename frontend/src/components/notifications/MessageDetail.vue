@@ -1,7 +1,7 @@
 <template>
   <q-card
     flat
-    class="q-pa-md q-ma-md"
+    class="q-ma-md"
   >
     <strong>{{ props.title }}</strong>
     <p>{{ received }}</p>

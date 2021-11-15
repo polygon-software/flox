@@ -26,8 +26,6 @@ const props = defineProps( {
 
 //TODO: Implement methods to fetch message data
 
-
-
 </script>
 
 <style scoped>
