@@ -49,5 +49,6 @@ export default {
   must_accepts_conditons: 'You have to accept the terms and conditions.',
   messages: 'Messages',
   newest: 'Newest',
-  oldest: 'Oldest'
+  oldest: 'Oldest',
+  sort_by: 'Sort by:'
 };

@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <q-card style="width: 250px; height: 500px; overflow: hidden;">
     <h5 class="text-center"> {{ $t('messages') }}</h5>
-    <div
-      v-if="showMessageDetail"
-    >
+
+    <!-- Message Details -->
+    <q-card-section v-if="showMessageDetail">
       <q-card>
         <q-card-section>
           <MessageDetail
@@ -21,8 +21,10 @@
           />
         </q-card-actions>
       </q-card>
-    </div>
-    <div
+    </q-card-section>
+
+    <!-- Message items -->
+    <q-card-section
       v-else
     >
       <!-- Searchbar -->
@@ -40,15 +42,21 @@
       </q-input>
 
       <!-- Sorting -->
-      <q-option-group
+      <q-select
+        class="q-my-md"
+        style="width: 125px"
+        borderless
+        dense
         v-model="sort"
         :options="options"
-        color="primary"
-        inline
+        :label="$t('sort_by')"
       />
 
       <!-- Messages -->
-      <div>
+      <q-scroll-area
+        style="height: 300px;"
+        class="q-pb-md"
+      >
         <MessagePreview
           v-for="message in filteredMessages"
           :key="message.id"
@@ -56,11 +64,12 @@
           :received="message.received"
           :is-read="message.isRead"
           @click="openMessage(message)"
+          style="width: 90%; height: 75px;"
         >
         </MessagePreview>
-      </div>
-    </div>
-  </div>
+      </q-scroll-area>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup lang="ts">
@@ -81,7 +90,7 @@ const props = defineProps({
 
 // Search and sort
 const search = ref('')
-const sort = ref('newest')
+const sort = ref(i18n.global.t('newest'))
 const options = [
   {
     label: i18n.global.t('newest'),
@@ -128,6 +137,13 @@ const messages = ref([
     received: '2021-09-16T07:45:38',
     content: 'Check out...',
     isRead: true,
+  },
+  {
+    id: '3',
+    title: 'Happy Birthday',
+    received: '2021-08-26T00:00:00',
+    content: 'Hey derp, wish you all the best...',
+    isRead: false,
   },
 ])
 

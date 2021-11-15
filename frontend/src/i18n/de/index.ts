@@ -50,5 +50,6 @@ export default {
   must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
   messages: 'Nachrichten',
   newest: 'Neuste',
-  oldest: 'Älteste'
+  oldest: 'Älteste',
+  sort_by: 'Sortieren nach:'
 }
