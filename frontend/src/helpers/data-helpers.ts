@@ -104,10 +104,10 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
   })
 
   onMounted( () => {
-    const polo = useApolloClient().resolveClient()
+    const apolloClient = useApolloClient().resolveClient()
     res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
 
-    // PWA
+    // SSR
     if(!res.value){
       void executeQuery(query).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
         if(fetchedRes.data){
@@ -117,7 +117,7 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
         }
       })
     } else {
-      polo.writeQuery({
+      apolloClient.writeQuery({
         query: query.query,
         data: {
           [query.cacheLocation]: res.value
@@ -125,7 +125,7 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
       })
     }
 
-    polo.watchQuery({query: query.query}).subscribe({
+    apolloClient.watchQuery({query: query.query}).subscribe({
       next(value: ApolloQueryResult<Record<string, unknown>>) {
         res.value = value.data[ALL_USERS.cacheLocation] as Record<string, Record<string, unknown>[]>[]
       }

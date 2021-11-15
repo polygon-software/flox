@@ -37,7 +37,6 @@ import QrcodeVue from 'qrcode.vue';
 import {defineProps, defineEmits, ref} from 'vue';
 
 let dialog = ref(null)
-console.log('QRCodeDialog')
 const props = defineProps({
   value: String
 })
@@ -47,14 +46,11 @@ const emit = defineEmits(['ok'])
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function show(): void{
-  console.log('hide in show')
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show()
 }
 
 function hide(): void{
-  console.log('hide in hide')
-
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }

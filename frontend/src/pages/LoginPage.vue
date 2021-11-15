@@ -29,7 +29,6 @@ const $routerService: Ref<RouterService> = inject('$routerService')
  * @param password {string} - the authentication's password
  */
 async function onLogin({username, password}: {username: string, password: string}){
-  console.log(username,password)
   await $authService.value.login(username, password)
 
   // Redirect to main page
