@@ -8,7 +8,6 @@
     lazy-rules="ondemand"
     :label="$t('company_name')"
     :rules="[(val) => IS_VALID_STRING(val) || $.t('invalid_company_name')]"
-    class="q-mb-md"
   >
   </q-input>
   <q-input
@@ -17,7 +16,6 @@
     type="text"
     lazy-rules="ondemand"
     :label="$t('company_uid')"
-    class="q-mb-md"
   >
 
   </q-input>
@@ -26,7 +24,6 @@
     dense
     :label="$t('branch_structure')"
     :options="options"
-    class="q-mb-md"
   >
   </q-select>
 </div>

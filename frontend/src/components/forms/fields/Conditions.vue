@@ -2,9 +2,11 @@
   <strong>{{ $t('conditions') }}</strong>
   <embed
     :src="pdf_link"
-    frameborder="0"
-    class="q-mt-md"
-    style="width: 100%; height: 300px;"
+    class="q-mt-md q-pa-md"
+    frameBorder="0"
+    scrolling="auto"
+    height="500px"
+    width="100%"
   />
   <q-field
     v-model="accept_conditions"

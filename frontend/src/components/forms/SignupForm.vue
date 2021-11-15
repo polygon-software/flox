@@ -29,7 +29,6 @@
               v-bind="field.attributes"
               v-model="form.values.value[field.key]"
               @change="(newValue) => form.updateValue(field.key, newValue)"
-              class="q-mb-md"
           />
       </q-step>
       <template v-slot:navigation>

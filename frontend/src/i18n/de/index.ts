@@ -41,6 +41,6 @@ export default {
   invalid_phone_number: 'Bitte geben Sie eine gütlige Telefonnummer ein',
   branch_structure: 'Niederlassungsstruktur',
   conditions: 'AGB',
-  accept_conditions: 'I stimme den AGB zu.',
+  accept_conditions: 'Ich stimme den AGB zu.',
   must_accepts_conditons: 'Sie müssen den AGBs zustimmen.'
 }

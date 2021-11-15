@@ -11,10 +11,16 @@
       </q-card-section>
 
       <!-- Signup Card -->
-      <q-card-section class="col">
-        <div v-if="!startSignup">
-          <h5 class="col">Have no account? Sign up here:</h5>
+      <q-card-section
+        class="col">
+        <div
+          class="col"
+          v-if="!startSignup"
+        >
+          <strong class="col">Have no account? Sign up here:</strong>
+          <br>
           <q-btn
+            class="q-ma-md"
             style="width: 125px"
             :label="$t('signup')"
             @click="startSignup = true"
