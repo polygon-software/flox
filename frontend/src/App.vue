@@ -13,7 +13,7 @@ export default{
 
 <script setup lang="ts">
 import {AuthenticationService} from './services/AuthService';
-import {provide, reactive, ref} from 'vue';
+import {provide, reactive} from 'vue';
 import {ErrorService} from './services/ErrorService';
 import {useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
