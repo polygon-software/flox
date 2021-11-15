@@ -52,12 +52,14 @@ const FIELDS: Record<string, Record<string, any>> = {
       key: 'password',
       component: markRaw(Password),
       attributes: {
+        rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_password')]
       }
     },
   PASSWORD_REPEAT: {
       key: 'password_repeat',
       component: markRaw(PasswordRepeat),
       attributes: {
+        rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_password')]
       }
     },
   PHONE_NUMBER: {
