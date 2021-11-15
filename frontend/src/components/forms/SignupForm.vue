@@ -65,6 +65,7 @@
 <script setup lang="ts">
 import { FIELDS } from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
+import { i18n } from 'boot/i18n';
 
 /**
  * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different
@@ -82,27 +83,27 @@ const form = new Form()
 form.pages.value = [
   {
     key: 'account_data',
-    label: 'Account',
+    label: i18n.global.t('account'),
     fields: account_fields,
   },
   {
     key: 'personal_data',
-    label: 'Personal',
+    label: i18n.global.t('personal'),
     fields: [FIELDS.FULL_NAME,],
   },
   {
     key: 'address_data',
-    label: 'Address',
+    label: i18n.global.t('address'),
     fields: [],
   },
   {
     key: 'authentication',
-    label: 'Authentication',
+    label: i18n.global.t('authentication'),
     fields: [],
   },
   {
     key: 'interests',
-    label: 'Interests',
+    label: i18n.global.t('interests'),
     fields: [],
   },
 ]

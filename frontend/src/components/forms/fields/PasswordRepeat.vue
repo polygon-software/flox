@@ -1,7 +1,7 @@
 <template>
   <q-input
       dense
-      label="Password"
+      :label="$t('password')"
       v-model="password"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
@@ -17,7 +17,7 @@
   </q-input>
   <q-input
       dense
-      label="Repeat Password"
+      :label="$t('repeat_password')"
       v-model="passwordRepeat"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
