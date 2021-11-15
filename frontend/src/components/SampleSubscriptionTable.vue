@@ -13,7 +13,7 @@
 import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
-import {onMounted, onServerPrefetch, Ref, ref, watch} from 'vue';
+import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
 import { executeQuery } from '../helpers/data-helpers';
 import {useSSR} from 'src/store/ssr';
 import {ApolloQueryResult, FetchResult} from '@apollo/client';
