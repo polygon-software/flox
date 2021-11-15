@@ -5,34 +5,46 @@ services:
     container_name: main
     build:
       context: .
-      target: development
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
-    command: yarn start:dev
     env_file:
       - .env
     networks:
       - webnet
     depends_on:
-      - mysql
-  mysql:
-    container_name: mysql
-    image: mysql:8
+      - database
+
+  database:
+    container_name: database
+    image: postgres:14
     networks:
       - webnet
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER:  ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER:  ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - ${DB_PORT}:3306
+      - ${DB_PORT}:5432
     volumes:
-      - dbdata:/var/lib/mysql
+      - dbdata:/var/lib/postgresql/data
+
+  nocodb:
+    container_name: nocodb
+    image: nocodb/nocodb:latest
+    networks:
+      - webnet
+    ports:
+      - ${NOCODB_PORT}:8080
+    volumes:
+      - nocodbdata:/usr/app/data
+    depends_on:
+      - database
+
 networks:
   webnet:
 volumes:
   dbdata:
+  nocodbdata:

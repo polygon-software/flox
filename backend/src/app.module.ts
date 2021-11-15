@@ -9,6 +9,7 @@ import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { ItemModule } from './item/item.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
         'subscriptions-transport-ws': {
           path: '/graphql-websocket',
           onConnect: (context: Context) => {
-            console.log('Client connected to GraphQL Websocket!');
+            console.log('Client connected to GraphQL Websocket!', context);
           },
         },
       },
@@ -37,18 +38,19 @@ import { JwtStrategy } from './auth/jwt.strategy';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: configService.get('database.host'),
         port: configService.get('database.port'),
         username: configService.get('database.username'),
         password: configService.get('database.password'),
         database: configService.get('database.database'),
-        entities: ['dist/**/**.entity{.ts,.js}'],
+        entities: [configService.get('entities')],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
     UserModule,
+    ItemModule,
   ],
   providers: [
     JwtStrategy,

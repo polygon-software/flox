@@ -2,44 +2,82 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateItemInput {
+  """Name"""
+  name: String!
+
+  """User UUID"""
+  userUUID: ID
+}
+
 input CreateUserInput {
   age: Int!
   name: String!
 }
 
 input DeleteUserInput {
-  userId: ID!
+  uuid: ID!
+}
+
+type Item {
+  """Name"""
+  name: String!
+
+  """User of the item"""
+  user: User
+
+  """UUID"""
+  uuid: ID!
 }
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
+  createItem(createItemInput: CreateItemInput!): Item!
   remove(deleteUserInput: DeleteUserInput!): User!
+  removeItem(uuid: ID!): Item!
   update(updateUserInput: UpdateUserInput!): User!
+  updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
 type Query {
   allUsers: [User!]!
-  user(userId: ID!): User!
-  users(userIds: [ID!]): [User!]!
+  item(uuid: ID!): Item!
+  items: [Item!]!
+  user(uuid: ID!): User!
+  users(uuids: [ID!]): [User!]!
 }
 
 type Subscription {
   userAdded: User!
 }
 
+input UpdateItemInput {
+  """Name"""
+  name: String
+
+  """User UUID"""
+  userUUID: ID
+
+  """Item UUID"""
+  uuid: ID!
+}
+
 input UpdateUserInput {
   age: Int
   name: String
-  userId: ID!
+  uuid: ID!
 }
 
 type User {
   """Age"""
   age: Int!
 
-  """UUID"""
-  id: String!
+  """Items of the user"""
+  items: [Item!]
 
   """Name"""
   name: String!
+
+  """UUID"""
+  uuid: ID!
 }
