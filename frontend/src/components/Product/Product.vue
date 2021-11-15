@@ -40,17 +40,54 @@
         <q-icon
           tag="comment"
           name="forum"
-          @click="postComment"
+          @click="openCommentSection"
           style="cursor: pointer"
         />
         <q-icon
           tag="share"
           name="share"
-          @click="shareProduct"
+          @click="openShareMenu"
           style="cursor: pointer"
         />
       </div>
     </div>
+    <q-dialog
+      v-model="showComments"
+    >
+      <q-card>
+        <q-card-section>
+          <div>This is the comment section</div>
+        </q-card-section>
+        <q-card-actions>
+          <q-btn
+            :label="$t('back')"
+            @click="closeCommentSection"
+            color="primary"
+            flat
+          />
+        </q-card-actions>
+
+      </q-card>
+    </q-dialog>
+
+    <q-dialog
+      v-model="showShareMenu"
+    >
+      <q-card>
+        <q-card-section>
+          <div>Here you can share this page</div>
+        </q-card-section>
+        <q-card-actions>
+          <q-btn
+            :label="$t('back')"
+            @click="closeShareMenu"
+            color="primary"
+            flat
+          />
+        </q-card-actions>
+
+      </q-card>
+    </q-dialog>
 
     <!-- Tabs -->
     <!-- Tab header -->
@@ -77,6 +114,8 @@
     <q-tab-panels
       v-model="selectedTab"
       animated
+      transition-next="fade"
+      transition-prev="fade"
       >
       <q-tab-panel
         v-for="tab in tabs"
@@ -109,6 +148,8 @@ const title = 'Product Card'
 const currentImage = ref(1)
 const liked = ref(false)
 const bookmarked = ref(false)
+const showComments = ref(false)
+const showShareMenu = ref(false)
 
 /**
  * These are the images that will be displayed in the carousell.
@@ -182,18 +223,25 @@ function toogleBookmark() {
 /**
  * Opens the comment section, so that the user can leave or read comments.
  */
-function postComment() {
-  //TODO: open comment section
-  console.log('Open comment section')
+function openCommentSection() {
+  showComments.value = true
+}
+
+function closeCommentSection() {
+  showComments.value = false
+
 }
 
 
 /**
  * Allow the user to share this product site via Message Apps, Email, etc.
  */
-function shareProduct() {
-  //TODO: open share product
-  console.log('Sharing product')
+function openShareMenu() {
+  showShareMenu.value = true
+}
+
+function closeShareMenu() {
+  showShareMenu.value = false
 }
 
 

@@ -12,6 +12,9 @@
         ref="stepper"
         active-color="primary"
         done-icon="done"
+        animated
+        transition-next="fade"
+        transition-prev="fade"
     >
       <q-step
           v-for="(page, index) in form.pages.value"
