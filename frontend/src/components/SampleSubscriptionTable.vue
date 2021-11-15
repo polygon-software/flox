@@ -13,7 +13,7 @@
 import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
-import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
+import {onMounted, onServerPrefetch, Ref, ref, watch} from 'vue';
 import { executeQuery } from '../helpers/data-helpers';
 import {useSSR} from 'src/store/ssr';
 import {ApolloQueryResult, FetchResult} from '@apollo/client';
@@ -34,7 +34,8 @@ onMounted(()=>{
   if(process.env.MODE === 'ssr'){
     const store_state = $ssrStore.getters.getPrefetchedData()(ALL_USERS.cacheLocation) as Record<string, Record<string, unknown>[]>[]
     if(store_state){
-      users.value = store_state
+      // Prevent altering SSR store state when changes are made to this object
+      users.value = _.cloneDeep(store_state)
     }
   } else {
     void executeQuery(ALL_USERS).then((res:ApolloQueryResult<Record<string, unknown>>)=>{
@@ -55,16 +56,16 @@ const columns = [
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
 
-// // Watch for subscription changes TODO
-// watch(
-//     () => result,
-//     (newUser) => {
-//       console.log(newUser)
-//       users.value.push(newUser.userAdded)
-//     }
-// )
-//
-// // Watch for initial state change query to go through
+// Watch for subscription changes TODO
+watch(
+    users.value,
+    (newUser:  Ref<Record<string, Record<string, unknown>[]>>) => {
+      console.log(newUser)
+      users.value.push(newUser.userAdded)
+    }
+)
+
+// Watch for initial state change query to go through
 // const stop = watch(
 //     () => initialState.value,
 //     (newState) => {
