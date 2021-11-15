@@ -36,7 +36,7 @@ This will create one container each for backend, database and nocoDB. *Note:* yo
 
 ## 2. Contributing
 
-### 2.1. Branch Structure
+### 2.1 Branch Structure
 
 The repository follows a predetermined branch structure, shown in the table below.
 For basic information about how branches work, see the [official GitHub Documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
@@ -63,7 +63,7 @@ master
 ...
 ```
 
-### 2.2. Pull Requests & Merging
+### 2.2 Pull Requests & Merging
 
 Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon completing a feature, [creating a Pull Request](https://github.com/polygon-software/full-stack-bootstrap/compare) in order to merge the feature back into the development branch.
 
@@ -79,7 +79,7 @@ When creating a Pull Request, make sure to use the appropriate **labels** to ide
 3. Once merged, create a PR from `dev` into `master`, which will include any other changes made on `dev`.
 4. Once merged into `master`, you may then merge `master` into the relevant `project-[name]` branch. This ensures that generalized functionality immediately becomes available to all projects that might make use of it.
 
-### 2.3. Developing content
+### 2.3 Developing content
 
 When developing project-specific content, you should keep the following points in mind:
 1. *Should this be covered by the Bootstrap repository?* If the functionality or component you need for a project is generic and could be relevant to other projects, it's most likely a good idea to develop it starting from the `dev` branch, such that the new feature can become part of the bootstrap repository.
@@ -99,6 +99,8 @@ The technology stack within this repository should cover all aspects of a basic 
 | Data Definitions  | [Joi](https://joi.dev/) | Data Definitions (schemas) shared between frontend and backend |
 
 ## 4. Frontend
+
+### 4.1 Structure
 
 The Frontend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
 
@@ -144,6 +146,21 @@ The frontend file structure is as follows:
 ├── src-pwa         // PWA-related files, see https://quasar.dev/quasar-cli/developing-pwa/introduction
 └── src-ssr         // SSR-related files, see https://quasar.dev/quasar-cli/developing-ssr/introduction
 ````
+
+### 4.2 Working with Vue 3
+
+We use Vue 3 with typescript as the chosen language for developing the frontend. Instead of the Options API as used by Vue 3, we now use the newer 
+[Composition API](https://v3.vuejs.org/api/composition-api.html). Make sure to read and understand the Composition API documentation, as it is quite different to what you may be used to from Vue 2.
+
+Most documentation examples use the `setup` function; however, we use the optional [<script setup>](https://v3.vuejs.org/api/sfc-script-setup.html) wherever possible
+
+As oppposed to Vue 2, our `<script>` tag now usually looks as follows:
+````vue
+<script setup lang='ts'>
+  ...
+</script>
+````
+Note that we specify `setup` and `lang='ts'`. The `setup` tag is because we use the [Script Setup](https://v3.vuejs.org/api/sfc-script-setup.html) functionality provided by Vue 3, and the `lang` tag is to specify that we use Typescript instead of Javascript.
 
 ## 5. Backend
 The Backend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
