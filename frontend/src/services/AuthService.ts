@@ -87,8 +87,7 @@ export class AuthenticationService {
               onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
               onFailure: (err)=>{this.onFailure(err) },
               // Sets up MFA (only done once after signing up)
-              mfaSetup: (challengeName, challengeParameters) => {
-
+              mfaSetup: () => {
                 this.setupMFA(cognitoUser, resolve)
               },
 

@@ -30,8 +30,8 @@ const $authService: Ref<AuthenticationService> = ref(new AuthenticationService($
 provide<Ref<AuthenticationService>>('$authService', $authService)
 
 // Router service
-const $routerService = ref(new RouterService(routerInstance))
-provide<Ref<unknown>>('$routerService', $routerService)
+const $routerService: Ref<RouterService> = ref(new RouterService(routerInstance))
+provide<Ref<RouterService>>('$routerService', $routerService)
 
 // Quasar
 provide('$q', $q)

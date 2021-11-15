@@ -11,31 +11,35 @@ export class ItemResolver {
 
   @Public()
   @Mutation(() => Item)
-  createItem(@Args('createItemInput') createItemInput: CreateItemInput) {
+  createItem(
+    @Args('createItemInput') createItemInput: CreateItemInput,
+  ): Promise<Item> {
     return this.itemService.create(createItemInput);
   }
 
   @Public()
   @Query(() => [Item], { name: 'items' })
-  findAll() {
+  findAll(): Promise<Item[]> {
     return this.itemService.findAll();
   }
 
   @Public()
   @Query(() => Item, { name: 'item' })
-  findOne(@Args('uuid', { type: () => ID }) uuid: string) {
+  findOne(@Args('uuid', { type: () => ID }) uuid: string): Promise<Item> {
     return this.itemService.findOne(uuid);
   }
 
   @Public()
   @Mutation(() => Item)
-  updateItem(@Args('updateItemInput') updateItemInput: UpdateItemInput) {
+  updateItem(
+    @Args('updateItemInput') updateItemInput: UpdateItemInput,
+  ): Promise<Item> {
     return this.itemService.update(updateItemInput.uuid, updateItemInput);
   }
 
   @Public()
   @Mutation(() => Item)
-  removeItem(@Args('uuid', { type: () => ID }) uuid: string) {
+  removeItem(@Args('uuid', { type: () => ID }) uuid: string): Promise<Item> {
     return this.itemService.remove(uuid);
   }
 }
