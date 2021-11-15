@@ -15,13 +15,13 @@
 <script setup lang="ts">
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
-import {inject, Ref} from 'vue'
+import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 
-const $authService: Ref<AuthenticationService> = inject('$authService')
-const $routerService: Ref<RouterService> = inject('$routerService')
+const $authService: AuthenticationService = inject('$authService')
+const $routerService: RouterService = inject('$routerService')
 
 /**
  * Logs in the given authentication
@@ -29,10 +29,10 @@ const $routerService: Ref<RouterService> = inject('$routerService')
  * @param password {string} - the authentication's password
  */
 async function onLogin({username, password}: {username: string, password: string}){
-  await $authService.value.login(username, password)
+  await $authService.login(username, password)
 
   // Redirect to main page
-  await $routerService.value.routeTo(ROUTES.MAIN)
+  await $routerService.routeTo(ROUTES.MAIN)
 }
 
 
@@ -43,7 +43,7 @@ async function onLogin({username, password}: {username: string, password: string
  * @param password_repeat {string} - the authentication's chosen password
  */
 async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
-  await $authService.value.signUp(username, email, password_repeat);
+  await $authService.signUp(username, email, password_repeat);
 }
 
 </script>

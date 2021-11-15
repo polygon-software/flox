@@ -14,7 +14,6 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
-import {Ref} from 'vue';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -29,11 +28,11 @@ export class AuthenticationService {
     $q: QVueGlobals
 
     // Error handler service
-    $errorService: Ref<ErrorService>
+    $errorService: ErrorService
 
     $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>>
 
-    constructor(quasar: QVueGlobals, errorService: Ref<ErrorService>) {
+    constructor(quasar: QVueGlobals, errorService: ErrorService) {
       // Store
       this.$authStore = useAuth()
 
@@ -70,7 +69,7 @@ export class AuthenticationService {
         const userPool = this.$authStore.getters.getUserPool()
 
         if(userPool === undefined){
-          this.$errorService.value.showErrorDialog(new Error('User Pool is not defined'))
+          this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
           return
         }
           // Actual Cognito authentication on given pool
@@ -164,7 +163,7 @@ export class AuthenticationService {
     const cognitoUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
 
     if(!cognitoUser){
-      this.$errorService.value.showErrorDialog(new Error('Trying to log out despite not being logged in!'))
+      this.$errorService.showErrorDialog(new Error('Trying to log out despite not being logged in!'))
     } else {
       return new Promise((resolve) => {
         cognitoUser.signOut(() => {
@@ -187,7 +186,7 @@ export class AuthenticationService {
         }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
             this.$authStore.getters.getCognitoUser()?.changePassword(passwordOld,passwordNew, (err: Error|undefined)=>{
                 if(err){
-                    this.$errorService.value.showErrorDialog(err)
+                    this.$errorService.showErrorDialog(err)
                 }
             })
         })
@@ -200,7 +199,7 @@ export class AuthenticationService {
       const userPool = this.$authStore.getters.getUserPool()
 
       if(userPool === undefined){
-        this.$errorService.value.showErrorDialog(new Error('User Pool is not defined'))
+        this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
         return
       }
 
@@ -258,7 +257,7 @@ export class AuthenticationService {
     showEmailVerificationDialog(renew = false): void{
         if(renew){
             if(!this.$authStore.getters.getCognitoUser()){
-                this.$errorService.value.showErrorDialog(new Error('An error occurred, try logging in again'))
+                this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
                 return
             } else {
               console.log('Resend confirmation!')
@@ -395,7 +394,7 @@ export class AuthenticationService {
             // Show the e-mail verification dialog and send a new code
             this.showEmailVerificationDialog(true)
         } else {
-          this.$errorService.value.showErrorDialog(error)
+          this.$errorService.showErrorDialog(error)
         }
     }
 }
