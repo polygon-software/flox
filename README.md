@@ -1,4 +1,4 @@
-![logo](https://polygon-software.ch/_nuxt/optimized/static/images/logo-text-transparent8707ded.svg)
+![logo](https://polygon-software.ch/images/banner.svg)
 
 # Full Stack Bootstrap Repository
 
