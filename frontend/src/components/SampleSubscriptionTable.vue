@@ -13,7 +13,7 @@
 import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
-import {onMounted, onServerPrefetch, Ref, ref} from 'vue';
+import {onMounted, onServerPrefetch, Ref, ref, watch} from 'vue';
 import { executeQuery } from '../helpers/data-helpers';
 import {useSSR} from 'src/store/ssr';
 import {ApolloQueryResult, FetchResult} from '@apollo/client';
@@ -42,33 +42,28 @@ onMounted(()=>{
     })
   }
   // Set up subscription
-  useSubscription(USER_ADDED).onResult((result: FetchResult<Record<string, Record<string, unknown>>>)=>{
+  useSubscription(USER_ADDED).onResult((result: FetchResult<Record<string, Record<string, Record<string, unknown>[]>>>)=>{
     if(result && result.data && result.data.userAdded){
       users.value.push(result.data.userAdded)
     }
   });
 })
 
-
-
-
-
 const columns = [
   { name: 'id', align: 'center', label: 'ID', field: 'uuid', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
-//
+
 // // Watch for subscription changes TODO
 // watch(
-//     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 //     () => result,
 //     (newUser) => {
 //       console.log(newUser)
 //       users.value.push(newUser.userAdded)
 //     }
 // )
-
+//
 // // Watch for initial state change query to go through
 // const stop = watch(
 //     () => initialState.value,
