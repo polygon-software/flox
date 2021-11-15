@@ -57,7 +57,7 @@
         </q-tr>
       </template>
       <template v-slot:pagination>
-        <p>hello</p>
+        <p>blablabla</p>
       </template>
     </q-table>
     <q-btn
@@ -92,11 +92,8 @@ const computedResult = computed(()=>{
   return queryResult.value ?? []
 })
 
-
-
-
 /**
- * Deletes the currently selected authentication
+ * Deletes the currently selected user
  */
 function onDelete(){
   void executeMutation(
@@ -109,6 +106,11 @@ function onDelete(){
   })
 }
 
+/**
+ * Edits the given user
+ * @param {string} id - the user's ID
+ * @param {Record<string, unknown>} variables - the new variables
+ */
 function onUpdate(id: string, variables: Record<string, unknown>){
   void executeMutation(
       UPDATE_USER,

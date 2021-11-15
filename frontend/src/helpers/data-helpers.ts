@@ -107,8 +107,8 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
     const apolloClient = useApolloClient().resolveClient()
     res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
 
-    // SSR
-    if(!res.value){
+    // SPA
+    if(res.value.length <= 0){
       void executeQuery(query).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
         if(fetchedRes.data){
           res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
@@ -117,6 +117,7 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
         }
       })
     } else {
+      // SSR
       apolloClient.writeQuery({
         query: query.query,
         data: {
