@@ -5,10 +5,6 @@
 <script lang="ts">
 import {routerInstance} from 'boot/router';
 
-export default{
-
-}
-
 </script>
 
 <script setup lang="ts">
