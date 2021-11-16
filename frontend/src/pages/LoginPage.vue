@@ -31,6 +31,9 @@
           @submit="onSignup"
           v-if="startSignup"
         />
+        <OkayForm
+          v-if="showOkayPage"
+        />
       </q-card-section>
 
     </q-card>
@@ -41,6 +44,7 @@
 import { ref } from 'vue'
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
+import OkayForm from 'components/forms/OkayForm.vue'
 import {inject, Ref} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
