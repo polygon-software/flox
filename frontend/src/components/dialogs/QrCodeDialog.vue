@@ -1,8 +1,9 @@
 <template>
   <q-dialog
-      ref="dialog"
+      ref="dialogRef"
       :persistent="true"
       title="QR"
+      @hide="onDialogHide"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
@@ -20,12 +21,12 @@
         <q-btn
             label="Abbrechen"
             color="primary"
-            @click="hide"
+            @click="onDialogCancel"
         />
         <q-btn
             label="OK"
             color="primary"
-            @click="onOk"
+            @click="onDialogOK"
         />
       </q-card-actions>
     </q-card>
@@ -34,30 +35,20 @@
 
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
-import {defineProps, defineEmits, ref} from 'vue';
+import { defineProps } from 'vue';
+import { useDialogPluginComponent } from 'quasar'
 
-let dialog = ref(null)
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+// dialogRef      - Vue ref to be applied to QDialog
+// onDialogHide   - Function to be used as handler for @hide on QDialog
+// onDialogOK     - Function to call to settle dialog with "ok" outcome
+//                    example: onDialogOK() - no payload
+//                    example: onDialogOK({ /*.../* }) - with payload
+// onDialogCancel - Function to call to settle dialog with "cancel" outcome
+
 const props = defineProps({
   value: String
 })
-
-const emit = defineEmits(['ok'])
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show()
-}
-
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
-function onOk(){
-  emit('ok')
-  hide()
-}
 
 </script>

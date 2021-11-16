@@ -73,10 +73,6 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
             newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.uuid !== change.uuid)
           }
 
-          else if (type === MutationTypes.UPDATE) {
-            console.log('Mutation detected',change, changes)
-          }
-
           // Update data in cache
           cache.writeQuery({
             query: queryObject.query, data: {

@@ -72,9 +72,6 @@ import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
 import {ref, computed, Ref} from 'vue';
 import {executeMutation, subscribeToQuery} from '../helpers/data-helpers';
 
-
-console.log('Created!')
-
 // ----- Data -----
 // Selection must be an array
 let selected = ref([])
