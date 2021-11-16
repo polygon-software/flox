@@ -1,9 +1,8 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {ALL_USERS, QUERIES} from '../data/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
-import {ApolloQueryResult} from '@apollo/client';
+import {ApolloCache, ApolloQueryResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
-import {ApolloCache} from '@apollo/client';
 import {useSSR} from 'src/store/ssr/index';
 
 /**
@@ -50,41 +49,45 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
 
     // Actually execute mutation and handle cache
   const { mutate } = useMutation(mutation, () => ({
-        // Get cache and the new or deleted object
-        update: (cache: ApolloCache<any> , { data: changeData}) => {
-            affectedQueries.forEach((queryObject) => {
-                const changes = changeData as Record<string, Record<string, unknown>>
-                const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
+      // Get cache and the new or deleted object
+    update: (cache: ApolloCache<any> , { data: changeData}) => {
+      affectedQueries.forEach((queryObject) => {
+        const changes = changeData as Record<string, Record<string, unknown>>
+        const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
-                // Read existing query from cache
-                const data:Record<string, Array<Record<string, unknown>>>|null = cache.readQuery({ query: queryObject.query })
+        // Read existing query from cache
+        const data:Record<string, Array<Record<string, unknown>>>|null = cache.readQuery({ query: queryObject.query })
 
-                if(data) {
-                  // Determine cache location
-                  const cacheLocation = queryObject.cacheLocation
-                  const oldData: Array<Record<string, unknown>> = data[cacheLocation]
-                  let newData
+        if(data) {
+          // Determine cache location
+          const cacheLocation = queryObject.cacheLocation
+          const oldData: Array<Record<string, unknown>> = data[cacheLocation]
+          let newData
 
-                  // Case 1: CREATE (adds new object to cache)
-                  if (type === MutationTypes.CREATE) {
-                    newData = [...oldData, change]
-                  }
-                  // Case 2: DELETE (removes object from cache)
-                  else if (type === MutationTypes.DELETE) {
-                    newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.uuid !== change.uuid)
-                  }
+          // Case 1: CREATE (adds new object to cache)
+          if (type === MutationTypes.CREATE) {
+            newData = [...oldData, change]
+          }
+          // Case 2: DELETE (removes object from cache)
+          else if (type === MutationTypes.DELETE) {
+            newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.uuid !== change.uuid)
+          }
 
-                  // Update data in cache
-                  cache.writeQuery({
-                    query: queryObject.query, data: {
-                      ...data,
-                      [cacheLocation]: newData
-                    }
-                  })
-                }
-            })
+          else if (type === MutationTypes.UPDATE) {
+            console.log('Mutation detected',change, changes)
+          }
 
-        },
+          // Update data in cache
+          cache.writeQuery({
+            query: queryObject.query, data: {
+              ...data,
+              [cacheLocation]: newData
+            }
+          })
+        }
+        })
+
+    },
     }))
     // Execute mutation
     await mutate(variables);
