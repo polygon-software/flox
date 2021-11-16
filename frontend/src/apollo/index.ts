@@ -27,7 +27,7 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
 
   let link = httpLink;
 
-  // TODO subscriptions in SSR mode, what do
+  // Apply only clientside
   if(!process.env.SERVER){
     const wsLink = new WebSocketLink({
       uri: process.env.VUE_APP_WS_ENDPOINT || '',
