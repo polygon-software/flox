@@ -17,7 +17,10 @@ export default ssrMiddleware(({ app, resolve, render, serve }) => {
       })
       .catch(err => {
         // oops, we had an error while rendering the page
-
+        console.log(err)
+        if(!err){
+          serve.error({ err, req, res })
+        }
         // we were told to redirect to another URL
         if (err.url) {
           if (err.code) {

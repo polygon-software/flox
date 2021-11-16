@@ -1,15 +1,14 @@
 <template>
   <div class="column">
     <q-table
-        v-if="result && result.allUsers"
-       table-header-class="bg-grey-2"
-       title="List of users (with cache)"
-       :rows="result.allUsers"
-       :columns="columns"
-       row-key="uuid"
-       :rows-per-page-options="[10,20, 100]"
-       v-model:selected="selected"
-       selection="single"
+      table-header-class="bg-grey-2"
+      title="List of users (with cache)"
+      :rows="computedResult"
+      :columns="columns"
+      row-key="uuid"
+      :rows-per-page-options="[10,20, 100]"
+      v-model:selected="selected"
+      selection="single"
     >
       <template v-slot:body="props">
         <q-tr :props="props">
@@ -58,7 +57,6 @@
         </q-tr>
       </template>
     </q-table>
-    <q-spinner v-else />
     <q-btn
         label="Löschen"
         color="negative"
@@ -71,22 +69,26 @@
 <script setup lang="ts">
 import { ALL_USERS } from '../data/QUERIES';
 import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
-import {ref} from 'vue';
-import {executeMutation, executeQuery} from '../helpers/data-helpers';
+import {ref, computed, Ref} from 'vue';
+import {executeMutation, subscribeToQuery} from '../helpers/data-helpers';
 
-const result = executeQuery(ALL_USERS)
-
+// ----- Data -----
+// Selection must be an array
+let selected = ref([])
 const columns = [
   { name: 'uuid', align: 'center', label: 'ID', field: 'uuid', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
 
-// Selection must be an array
-let selected = ref([])
+const queryResult = subscribeToQuery(ALL_USERS) as Ref<Record<string, Array<Record<string, unknown>>>>
+
+const computedResult = computed(()=>{
+  return queryResult.value ?? []
+})
 
 /**
- * Deletes the currently selected authentication
+ * Deletes the currently selected user
  */
 function onDelete(){
   void executeMutation(
@@ -99,6 +101,11 @@ function onDelete(){
   })
 }
 
+/**
+ * Edits the given user
+ * @param {string} id - the user's ID
+ * @param {Record<string, unknown>} variables - the new variables
+ */
 function onUpdate(id: string, variables: Record<string, unknown>){
   void executeMutation(
       UPDATE_USER,
