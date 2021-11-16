@@ -51,5 +51,20 @@ export default {
   messages: 'Nachrichten',
   newest: 'Neuste',
   oldest: 'Älteste',
-  sort_by: 'Sortieren nach:'
+  sort_by: 'Sortieren nach:',
+
+  //Interests
+  cars: 'Autos',
+  celebrities: 'Celebrities',
+  cooking: 'Kochen',
+  fashion: 'Mode',
+  music: 'Musik',
+  outdoor: 'Outdoor',
+  sports: 'Sport',
+  technology: 'Technologie',
+  tools: 'Werkzeuge',
+  travelling: 'Reisen',
+  watches: 'Uhren',
+  select_interests: 'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
+  amount_selected: '{amount}/{max} gewählt'
 }

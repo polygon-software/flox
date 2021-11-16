@@ -50,5 +50,20 @@ export default {
   messages: 'Messages',
   newest: 'Newest',
   oldest: 'Oldest',
-  sort_by: 'Sort by:'
+  sort_by: 'Sort by:',
+
+  //Interests
+  cars: 'Cars',
+  celebrities: 'Celebrities',
+  cooking: 'Cooking',
+  fashion: 'Fashion',
+  music: 'Music',
+  outdoor: 'Outdoor',
+  sports: 'Sports',
+  technology: 'Technology',
+  tools: 'Tools',
+  travelling: 'Travelling',
+  watches: 'Watches',
+  select_interests: 'Please select up to {max} categories that interest you',
+  amount_selected: '{amount}/{max} selected'
 };

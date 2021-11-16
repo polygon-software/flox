@@ -83,6 +83,11 @@ const form = new Form()
 
 form.pages.value = [
   {
+    key: 'interests',
+    label: i18n.global.t('interests'),
+    fields: [FIELDS.INTERESTS],
+  },
+  {
     key: 'account_data',
     label: i18n.global.t('account'),
     fields: account_fields,
@@ -100,11 +105,6 @@ form.pages.value = [
   {
     key: 'authentication',
     label: i18n.global.t('authentication'),
-    fields: [],
-  },
-  {
-    key: 'interests',
-    label: i18n.global.t('interests'),
     fields: [],
   },
 ]

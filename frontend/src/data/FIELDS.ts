@@ -1,5 +1,6 @@
 import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING} from './RULES'
 import {QInput} from 'quasar'
+import Interests from 'components/forms/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
 import {markRaw} from 'vue';
@@ -66,8 +67,14 @@ const FIELDS: Record<string, Record<string, any>> = {
             lazy_rules: 'true',
             rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
           },
-
         },
+        INTERESTS: {
+          key: 'interests',
+          component: markRaw(Interests),
+          attrbiutes: {
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
+          },
+        }
     }
 
 export {FIELDS}
