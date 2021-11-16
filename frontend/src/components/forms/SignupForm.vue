@@ -53,7 +53,7 @@
               color="primary"
               :label="$t('finish_signup')"
               type="submit"
-              @click="showOkayPage = true"
+              @click="showOkayPage = true; startSignup = false"
           />
         </q-stepper-navigation>
       </template>
@@ -66,7 +66,6 @@
 import { FIELDS } from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import {i18n} from 'boot/i18n';
-import {ref} from 'vue';
 
 /**
  * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different
@@ -74,7 +73,6 @@ import {ref} from 'vue';
  * Common fields can be found under "src/data/FIELDS".
  * All fields of a page must be completed before the next page can be accessed.
  */
-const showOkayPage = ref(false)
 const emit = defineEmits(['submit'])
 
 const account_fields = [
@@ -104,9 +102,6 @@ function onSubmit(): void {
   //TODO: Send to SOI
   emit('submit', form.values.value)
 }
-console.log('hallloo');
-console.log(typeof showOkayPage.value);
-console.log(showOkayPage.value);
 
 </script>
 

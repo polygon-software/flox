@@ -5,7 +5,7 @@
       <!-- Login Card -->
       <q-card-section
         class="col"
-        v-show="!startSignup"
+        v-show="!startSignup && !showOkayPage"
       >
         <LoginForm @submit="onLogin"/>
       </q-card-section>
@@ -15,7 +15,7 @@
         class="col">
         <div
           class="col"
-          v-if="!startSignup"
+          v-if="!startSignup && !showOkayPage"
         >
           <strong class="col">Have no account? Sign up here:</strong>
           <br>
@@ -29,10 +29,24 @@
         </div>
         <SignupForm
           @submit="onSignup"
-          v-if="startSignup"
+          v-if="startSignup && !showOkayPage"
+        />
+        <q-btn
+          v-if="startSignup && !showOkayPage"
+          color="primary"
+          :label="$t('finish_signup')"
+          type="submit"
+          @click="showOkayPage = true; startSignup = false"
         />
         <OkayForm
-          v-if="showOkayPage"
+          v-if="!startSignup && showOkayPage"
+        />
+        <q-btn
+          v-if="!startSignup && showOkayPage"
+          color="primary"
+          label="zurück zu login"
+          type="submit"
+          @click="showOkayPage = false; startSignup = false"
         />
       </q-card-section>
 
@@ -52,6 +66,7 @@ import {RouterService} from 'src/services/RouterService';
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 const startSignup = ref(false)
+const showOkayPage = ref(false)
 
 /**
  * Logs in the given authentication
@@ -75,5 +90,4 @@ async function onLogin({username, password}: {username: string, password: string
 async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
   await $authService.signUp(username, email, password_repeat);
 }
-
 </script>
