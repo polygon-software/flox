@@ -51,6 +51,7 @@ export default {
   newest: 'Newest',
   oldest: 'Oldest',
   sort_by: 'Sort by:',
+  time_expired: 'Expired',
 
   //Interests
   cars: 'Cars',

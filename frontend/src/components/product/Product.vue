@@ -34,7 +34,7 @@
           style="cursor: pointer;"
         />
       </div>
-
+    </div>
     <!-- Dialogs for clickable Icons -->
     <q-dialog
       v-for="dialog in icon_dialogs"

@@ -52,6 +52,7 @@ export default {
   newest: 'Neuste',
   oldest: 'Älteste',
   sort_by: 'Sortieren nach:',
+  time_expired: 'Beendet',
 
   //Interests
   cars: 'Autos',

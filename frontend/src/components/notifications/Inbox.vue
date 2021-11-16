@@ -119,7 +119,7 @@ type Message = {
 const messages = ref([
   {
     id: '0',
-    title: 'You have won Product X',
+    title: 'You have won product X',
     received: '2021-09-27T12:12:03',
     content: 'Dear Derp...',
     isRead: false,

@@ -9,17 +9,21 @@
       <q-card class="q-pa-md q-ma-md">
         <SignupForm @submit="onSignup"/>
       </q-card>
+      <q-card class="q-pa-md q-ma-md">
+        <Countdown :end_date="'Dec 1, 2021 00:00:00'"/>
+      </q-card>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import LoginForm from 'components/forms/LoginForm.vue'
-import SignupForm from 'components/forms/SignupForm.vue'
 import {inject, Ref} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import Countdown from 'components/product/Countdown.vue';
+import LoginForm from 'components/forms/LoginForm.vue'
+import SignupForm from 'components/forms/SignupForm.vue'
 
 const $authService: Ref<AuthenticationService> = inject<Ref<AuthenticationService>>('$authService')
 const $routerService: Ref<RouterService> = inject<Ref<RouterService>>('$routerService')
