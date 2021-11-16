@@ -13,7 +13,7 @@
 import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
-import {onBeforeMount, onServerPrefetch, Ref, ref, watch} from 'vue';
+import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import { executeQuery } from '../helpers/data-helpers';
 import {useSSR} from 'src/store/ssr';
 import {ApolloQueryResult, FetchResult} from '@apollo/client';
@@ -55,28 +55,6 @@ const columns = [
   { name: 'name', label: 'Name', field: 'name', sortable: true },
   { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
-
-// Watch for subscription changes TODO
-watch(
-    users.value,
-    (newUser:  Ref<Record<string, Record<string, unknown>[]>>) => {
-      console.log(newUser)
-      users.value.push(newUser.userAdded)
-    }
-)
-
-// Watch for initial state change query to go through
-// const stop = watch(
-//     () => initialState.value,
-//     (newState) => {
-//       if(users.value.length <= 0 && newState.allUsers && newState.allUsers.length > 0){
-//         // Set initial state of users array
-//         users.value = [...newState.allUsers]
-//         // Stop the watcher as it is no longer needed
-//         stop()
-//       }
-//     }
-// )
 
 
 </script>

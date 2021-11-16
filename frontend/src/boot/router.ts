@@ -2,12 +2,11 @@ import { boot } from 'quasar/wrappers'
 import ROUTES from '../router/routes'
 import {Router} from 'vue-router';
 import {root} from 'src/store';
-//
+
 let routerInstance: Router
-//
+
 export default boot(({ router, store}) => {
-//
-//   // Get auth module within store (useAuth not working here)
+  // Get auth module within store (useAuth not working here)
   const $authStore = root.context(store).modules.authModule
   routerInstance = router
   router.beforeEach((to) => {
@@ -20,6 +19,6 @@ export default boot(({ router, store}) => {
     }
   })
 })
-//
-// // Router instance for use in Vue components
+
+// Router instance for use in Vue components
 export {routerInstance}
