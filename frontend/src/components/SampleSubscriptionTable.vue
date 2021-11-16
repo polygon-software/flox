@@ -13,7 +13,7 @@
 import { USER_ADDED } from '../data/SUBSCRIPTIONS';
 import { ALL_USERS } from '../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
-import {onMounted, onServerPrefetch, Ref, ref, watch} from 'vue';
+import {onBeforeMount, onServerPrefetch, Ref, ref, watch} from 'vue';
 import { executeQuery } from '../helpers/data-helpers';
 import {useSSR} from 'src/store/ssr';
 import {ApolloQueryResult, FetchResult} from '@apollo/client';
@@ -30,7 +30,7 @@ onServerPrefetch(async () => {
   users.value = tempRes.data[ALL_USERS.cacheLocation] as Record<string, Record<string, unknown>[]>[]
   $ssrStore.mutations.setPrefetchedData({key: ALL_USERS.cacheLocation, value: users.value})
 })
-onMounted(()=>{
+onBeforeMount(()=>{
   if(process.env.MODE === 'ssr'){
     const store_state = $ssrStore.getters.getPrefetchedData()(ALL_USERS.cacheLocation) as Record<string, Record<string, unknown>[]>[]
     if(store_state){

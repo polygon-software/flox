@@ -56,9 +56,6 @@
           </q-td>
         </q-tr>
       </template>
-      <template v-slot:pagination>
-        <p>blablabla</p>
-      </template>
     </q-table>
     <q-btn
         label="Löschen"
