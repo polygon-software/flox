@@ -10,10 +10,6 @@
         <SignupForm @submit="onSignup"/>
       </q-card>
     </div>
-    <q-card class="q-pa-md q-ma-md row">
-      <Product db-reference="123-abc"/>
-    </q-card>
-
   </q-page>
 </template>
 
