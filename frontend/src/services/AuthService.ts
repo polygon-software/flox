@@ -288,6 +288,7 @@ export class AuthenticationService {
      * Shows a dialog containing a QR code for setting up two factor authentication
      * @param secretCode {string} - the authenticator code to encode in QR code form
      * @param resolve { (value: (void | PromiseLike<void>)) => void}
+     * @param cognitoUser {CognitoUser} - the cognito user to show the dialog for
      */
     showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void, cognitoUser: CognitoUser): void{
       const username = this.$authStore.getters.getUsername() ?? 'user'
