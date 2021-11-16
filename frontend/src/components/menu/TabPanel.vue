@@ -32,28 +32,31 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue'
+import {defineProps, Ref, ref} from 'vue'
 
 /**
  * This component will probably be deleted!
  */
 
 /**
- * The TabPanel component can hold mutiple tabs. There's always only one active tab.
+ * The TabPanel component can hold multiple tabs. There's always only one active tab.
  * The component receives an array of objects with the following attributes:
  * @name: Name of the tab
  * @label: The displayed name of a tab
  */
 
-const props = defineProps({
+const props: Record<string, any> = defineProps({
   tabs: {
     required: true,
     type: Array,
   }
 })
 
-//Indicates which tab is currently opend
-let currentTab = ref(props.tabs[0].name)
+//Indicates which tab is currently open
+
+const tabs: Record<string, string>[] = props.tabs as Record<string, any>[]
+
+const currentTab: Ref<string> = ref(tabs[0].name)
 
 </script>
 
