@@ -26,66 +26,33 @@
         style="justify-content: flex-end; font-size: x-large"
       >
         <q-icon
-          tag="like"
-          :name="liked ? 'favorite' : 'favorite_border'"
-          @click="toogleLike"
+          v-for="icon in icons"
+          :key="icon.tag"
+          :tag="icon.tag"
+          :name="icon.name"
+          @click="icon.callback()"
           style="cursor: pointer;"
         />
-        <q-icon
-          tag="bookmark"
-          :name="bookmarked ? 'bookmark' : 'bookmark_border'"
-          @click="toogleBookmark"
-          style="cursor: pointer"
-        />
-        <q-icon
-          tag="comment"
-          name="forum"
-          @click="openCommentSection"
-          style="cursor: pointer"
-        />
-        <q-icon
-          tag="share"
-          name="share"
-          @click="openShareMenu"
-          style="cursor: pointer"
-        />
       </div>
-    </div>
+
+    <!-- Dialogs for clickable Icons -->
     <q-dialog
-      v-model="showComments"
+      v-for="dialog in icon_dialogs"
+      :key="dialog.key"
+      v-model="dialog.model"
     >
       <q-card>
         <q-card-section>
-          <div>This is the comment section</div>
+          <div>{{ dialog.content }}</div>
         </q-card-section>
         <q-card-actions>
           <q-btn
             :label="$t('back')"
-            @click="closeCommentSection"
+            @click=dialog.callback
             color="primary"
             flat
           />
         </q-card-actions>
-
-      </q-card>
-    </q-dialog>
-
-    <q-dialog
-      v-model="showShareMenu"
-    >
-      <q-card>
-        <q-card-section>
-          <div>Here you can share this page</div>
-        </q-card-section>
-        <q-card-actions>
-          <q-btn
-            :label="$t('back')"
-            @click="closeShareMenu"
-            color="primary"
-            flat
-          />
-        </q-card-actions>
-
       </q-card>
     </q-dialog>
 
@@ -131,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref, markRaw} from 'vue'
+import {defineProps, ref, markRaw, computed} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
 import DescriptionComponent from './DescriptionComponent.vue'
 import TicketDistributionComponent from './TicketDistributionComponent.vue'
@@ -174,33 +141,78 @@ const images = [
 ]
 
 /**
- * If the product page should be separated into different tabs, they need to be defined here.
- * The content of each tab will be defined in a separate component.
+ * Here are the icons and icon dialogs defined.
  */
-const selectedTab = ref('overview')
-const tabs = [
-  {
-    name: 'overview',
-    label: 'Overview',
-    component: {
-      name: markRaw(OverviewComponent),
+const icons = computed(() => {
+  return [
+    {
+      tag: 'like',
+      name: liked.value ? 'favorite' : 'favorite_border',
+      callback: toogleLike,
+    },
+    {
+      tag: 'bookmark',
+      name: bookmarked.value ? 'bookmark' :' bookmark_border',
+      callback: toogleBookmark
+    },
+    {
+      tag: 'comment',
+      name: 'forum',
+      callback: openCommentSection
+    },
+    {
+      tag: 'share',
+      name: 'share',
+      callback: openShareMenu
     }
-  },
-  {
-    name: 'description',
-    label: 'Description',
-    component: {
-      name: markRaw(DescriptionComponent),
+  ]
+})
+
+const icon_dialogs = computed(() => {
+  return [
+    {
+      key: 'comments',
+      model: showComments.value,
+      content: 'This is the comment section',
+      callback: closeCommentSection
+    },
+    {
+      key: 'share',
+      model: showShareMenu.value,
+      content: 'Here you can share this page',
+      callback: closeShareMenu
     }
-  },
-  {
-    name: 'tickets',
-    label: 'Ticket Distribution',
-    component: {
-      name: markRaw(TicketDistributionComponent),
-    }
-  },
-]
+  ]
+})
+
+  /**
+   * If the product page should be separated into different tabs, they need to be defined here.
+   * The content of each tab will be defined in a separate component.
+   */
+  const selectedTab = ref('overview')
+  const tabs = [
+    {
+      name: 'overview',
+      label: 'Overview',
+      component: {
+        name: markRaw(OverviewComponent),
+      }
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      component: {
+        name: markRaw(DescriptionComponent),
+      }
+    },
+    {
+      name: 'tickets',
+      label: 'Ticket Distribution',
+      component: {
+        name: markRaw(TicketDistributionComponent),
+      }
+    },
+  ]
 
 //TODO: Fetch data from DB
 

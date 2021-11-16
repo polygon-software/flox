@@ -11,12 +11,9 @@
       </q-card>
     </div>
     <q-card class="q-pa-md q-ma-md row">
-      <Product />
+      <Product db-reference="123-abc"/>
     </q-card>
 
-    <q-card class="row q-pa-md q-ma-md">
-      <Inbox db-ref="ref"/>
-    </q-card>
   </q-page>
 </template>
 
@@ -28,7 +25,6 @@ import {inject, Ref} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import Inbox from 'components/notifications/Inbox.vue';
 
 const $authService: Ref<AuthenticationService> = inject<Ref<AuthenticationService>>('$authService')
 const $routerService: Ref<RouterService> = inject<Ref<RouterService>>('$routerService')
