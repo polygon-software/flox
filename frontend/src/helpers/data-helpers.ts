@@ -2,7 +2,7 @@ import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {ALL_USERS, QUERIES} from '../data/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloQueryResult} from '@apollo/client';
-import {onBeforeMount, onMounted, onServerPrefetch, Ref, ref} from 'vue';
+import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {ApolloCache} from '@apollo/client';
 import {useSSR} from 'src/store/ssr/index';
 
