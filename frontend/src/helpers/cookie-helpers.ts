@@ -11,11 +11,6 @@ import {Cookies} from 'quasar';
  * @param payload {Record<string, any>} - the data to persist (in stringified form)
  */
 export function persistToCookies (category: string, payload: Record<string, any>): void{
-
-  // TODO @johannschwabe maybe use this? could work
-  // const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies
-
-
   // Set cookie when SSR fetch is done (ie. only browser can set a cookie)
   if (!process.env.SERVER) {
     // Set 'secure' to true for production
@@ -26,9 +21,6 @@ export function persistToCookies (category: string, payload: Record<string, any>
         {expires: 1, secure: false} // TODO secure: true for production
       )
     })
-  } else {
-    //TODO handle cookie stuff for SSR
-    console.log('TODO called set cookies on server... what do')
   }
 
 }

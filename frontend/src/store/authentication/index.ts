@@ -10,6 +10,7 @@ const authModule = new Module({
   mutations: AuthMutations,
   actions: AuthActions
 })
+
 export default authModule;
 
 // Create composable function
