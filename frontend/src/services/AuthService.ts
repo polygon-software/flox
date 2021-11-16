@@ -260,7 +260,6 @@ export class AuthenticationService {
                 this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
                 return
             } else {
-              console.log('Resend confirmation!')
               this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
                   // TODO
                 })
