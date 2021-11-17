@@ -14,10 +14,13 @@
       <q-card-section
         class="col">
         <div
-          class="col"
+          class="col content-center"
+          style="width: 250px; text-align: center;"
           v-if="!startSignup"
         >
-          <strong class="col">Have no account? Sign up here:</strong>
+          <strong>
+            {{ $t('signup_now') }}
+          </strong>
           <br>
           <q-btn
             class="q-ma-md"
@@ -38,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {ref} from 'vue'
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
 import {inject} from 'vue'
@@ -49,6 +52,7 @@ import {RouterService} from 'src/services/RouterService';
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 const startSignup = ref(false)
+
 
 /**
  * Logs in the given authentication
@@ -61,7 +65,6 @@ async function onLogin({username, password}: {username: string, password: string
   // Redirect to main page
   await $routerService.routeTo(ROUTES.MAIN)
 }
-
 
 /**
  * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
