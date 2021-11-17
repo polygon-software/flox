@@ -2,17 +2,17 @@
   <q-page
     class="flex flex-center">
     <q-card
-      class="square q-pa-md q-ma-md items-center content-center"
+      class="square q-pa-md q-ma-md"
       style="width: 800px">
 
       <p
         class="q-ma-md col text-center"
-        style="font-size: large"
+        style="font-size: x-large"
       >
         {{ $t('chef_dashboard') }}
       </p>
       <q-scroll-area
-        style="height: 400px;"
+        style="height: 350px;"
         class="q-ma-md col"
       >
         <q-card
@@ -24,40 +24,32 @@
         </q-card>
       </q-scroll-area>
 
+      <!-- Register new employee -->
 
-      <!-- Signup Card -->
-      <q-card-section
-        class="col">
-        <div
-          class="col"
-          v-if="!startSignup"
-        >
-          <p class="col" style="font-size: medium">Register a new employee here:</p>
-          <br>
-          <q-btn
-            class="q-ma-md"
-            style="width: 125px"
-            :label="$t('signup')"
-            @click="startSignup = true"
-            color="primary"
-          />
-        </div>
-        <SignupForm
-          @submit="onSignup"
-          v-if="startSignup"
+      <div>
+        <p class="col text-center q-mb-xs" style="font-size: medium">{{ $t('register_new_employee_here') }}</p>
+        <br>
+        <q-btn
+          class="col q-mx-md q-mb-md"
+          style="width: 125px"
+          :label="$t('signup')"
+          @click="routeToRegisterEmployee"
+          color="primary"
         />
-      </q-card-section>
+      </div>
 
     </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { i18n } from 'boot/i18n';
+import {ref} from 'vue'
+import {i18n} from 'boot/i18n';
 
+function routeToRegisterEmployee() {
+  // route to registerEmployeePage
+}
 
-const startSignup = ref(false)
 const employees = ref([
   {
     name: i18n.global.t('Joel Barmettler'),
@@ -72,7 +64,7 @@ const employees = ref([
     model: false,
   },
   {
-    name: i18n.global.t('Daniel Göchter'),
+    name: i18n.global.t('Daniel Gächter'),
     model: false,
   },
   {
@@ -88,7 +80,7 @@ const employees = ref([
     model: false,
   },
   {
-    name: i18n.global.t('Gioiele Monopoli'),
+    name: i18n.global.t('Gioele Monopoli'),
     model: false,
   },
   {
