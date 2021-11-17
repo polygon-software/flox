@@ -42,5 +42,7 @@ export default {
   branch_structure: 'Branch Strucutre',
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
-  must_accepts_conditons: 'You have to accept the terms and conditions.'
+  must_accepts_conditons: 'You have to accept the terms and conditions.',
+  chef_dashboard: 'Chef Dashboard',
+  register_new_employee_here: 'Register a new employee here:'
 };

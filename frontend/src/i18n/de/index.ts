@@ -45,5 +45,5 @@ export default {
   accept_conditions: 'Ich stimme den AGB zu.',
   must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
   chef_dashboard: 'Chef Dashboard',
-  register_new_employee_here: 'Register a new employee here:'
+  register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:'
 }
