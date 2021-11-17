@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
 
 
-const CREATE_USER = {
+export const CREATE_USER = {
   mutation: gql`
     mutation createUser($name: String!, $age: Int!){
       create (createUserInput: {name: $name, age: $age}) {
@@ -17,7 +17,7 @@ const CREATE_USER = {
   cacheLocation: 'create'
 }
 
-const UPDATE_USER = {
+export const UPDATE_USER = {
   mutation: gql`
     mutation updateUser($uuid: ID!, $name: String, $age: Int){
       update (updateUserInput: {uuid: $uuid, name: $name, age: $age}) {
@@ -32,7 +32,7 @@ const UPDATE_USER = {
   cacheLocation: 'update'
 }
 
-const DELETE_USER = {
+export const DELETE_USER = {
   mutation: gql`
     mutation deleteUser($uuid: ID!){
       remove (deleteUserInput: {uuid: $uuid}) {
@@ -44,4 +44,3 @@ const DELETE_USER = {
   cacheLocation: 'remove'
 }
 
-export const USER_MUTATIONS = [CREATE_USER, UPDATE_USER, DELETE_USER]

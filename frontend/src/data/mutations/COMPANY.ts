@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
 
-const CREATE_COMPANY = {
+export const CREATE_COMPANY = {
   mutation: gql`
     mutation createCompany($name: String!, $age: Int!){
       createCompany (createCompanyInput: {company_name: $company_name,person_name: $person_name, language: $language, uid: $uid, domicile_address: $domicile_address, correspondence_address: $correspondence_address, phone: $phone, email: $email, branch_structure: $branch_structure}) {
@@ -22,8 +22,3 @@ const CREATE_COMPANY = {
   type: MutationTypes.CREATE,
   cacheLocation: 'create'
 }
-
-
-export const COMPANY_MUTATIONS = [
-  CREATE_COMPANY
-]
