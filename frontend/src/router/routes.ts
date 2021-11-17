@@ -15,9 +15,14 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'LOGIN': {
     path: '/login',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ChefDashboard.vue') }],
+    children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
+  'MANAGEMENT_DASHBOARD': {
+    path: '/managementDashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ManagementDashboard.vue') }],
+  },
 
   // Wildcard route for non-covered routes
   'WILDCARD': {

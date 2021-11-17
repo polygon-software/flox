@@ -43,6 +43,6 @@ export default {
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
   must_accepts_conditons: 'You have to accept the terms and conditions.',
-  chef_dashboard: 'Chef Dashboard',
+  chef_dashboard: 'Management Dashboard',
   register_new_employee_here: 'Register a new employee here:'
 };

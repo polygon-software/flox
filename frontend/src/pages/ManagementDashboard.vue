@@ -46,9 +46,10 @@ import {ref} from 'vue'
 import {i18n} from 'boot/i18n';
 
 function routeToRegisterEmployee() {
-  // route to registerEmployeePage
+  // TODO: route to registerEmployeePage
 }
 
+// TODO: replace with real data
 const employees = ref([
   {
     name: i18n.global.t('Joel Barmettler'),
