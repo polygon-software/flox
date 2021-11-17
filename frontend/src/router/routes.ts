@@ -18,6 +18,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
+  'SUCCESS': {
+    path: '/success',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SuccessPage.vue') }],
+  },
+
 
   // Wildcard route for non-covered routes
   'WILDCARD': {

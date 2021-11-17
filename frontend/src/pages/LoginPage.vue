@@ -5,7 +5,7 @@
       <!-- Login Card -->
       <q-card-section
         class="col"
-        v-show="!startSignup && !showOkayPage"
+        v-show="!startSignup"
       >
         <LoginForm @submit="onLogin"/>
       </q-card-section>
@@ -15,7 +15,7 @@
         class="col">
         <div
           class="col"
-          v-if="!startSignup && !showOkayPage"
+          v-if="!startSignup"
         >
           <strong class="col">Have no account? Sign up here:</strong>
           <br>
@@ -29,27 +29,9 @@
         </div>
         <SignupForm
           @submit="onSignup"
-          v-if="startSignup && !showOkayPage"
-        />
-        <q-btn
-          v-if="startSignup && !showOkayPage"
-          color="primary"
-          :label="$t('finish_signup')"
-          type="submit"
-          @click="showOkayPage = true; startSignup = false"
-        />
-        <OkayForm
-          v-if="!startSignup && showOkayPage"
-        />
-        <q-btn
-          v-if="!startSignup && showOkayPage"
-          color="primary"
-          label="zurück zu login"
-          type="submit"
-          @click="showOkayPage = false; startSignup = false"
+          v-if="startSignup"
         />
       </q-card-section>
-
     </q-card>
   </q-page>
 </template>
@@ -57,7 +39,6 @@
 <script setup lang="ts">
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
-import OkayForm from 'components/forms/OkayForm.vue'
 import {inject, ref} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
@@ -66,7 +47,6 @@ import {RouterService} from 'src/services/RouterService';
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 const startSignup = ref(false)
-const showOkayPage = ref(false)
 
 /**
  * Logs in the given authentication
@@ -90,8 +70,7 @@ async function onLogin({username, password}: {username: string, password: string
 async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}): Promise<void>{
   // TODO rework for SOI-specific info: Don't actually sign up, but only create on database
   //await $authService.signUp(username, email, password_repeat);
-  await new Promise(resolve => setTimeout(() => resolve(user), 3000))
-  // TODO @Ramize: Redirect to success screen here
+  await $routerService.routeTo(ROUTES.SUCCESS)
   return;
 }
 </script>

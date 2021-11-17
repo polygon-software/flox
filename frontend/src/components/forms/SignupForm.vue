@@ -53,7 +53,6 @@
               color="primary"
               :label="$t('finish_signup')"
               type="submit"
-              @click="showOkayPage = true; startSignup = false"
           />
         </q-stepper-navigation>
       </template>
