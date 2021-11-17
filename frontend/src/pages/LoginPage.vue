@@ -46,7 +46,7 @@ import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {CREATE_USER} from 'src/data/MUTATIONS';
+import * as MUTATIONS from 'src/data/MUTATIONS';
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
@@ -76,8 +76,7 @@ async function onSignup({username, email, password_repeat}:{username: string, em
   await executeMutation(
     CREATE_COMPANY,
     {
-      name: name.value,
-      age: Number(age.value)
+      name: 'testcompany'
     }
   )
   // TODO redirect to success page

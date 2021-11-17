@@ -10,7 +10,7 @@ import {USER_MUTATIONS} from 'src/data/mutations/USER';
  *
  */
 
-export const MUTATIONS = [
+export default {
   ...COMPANY_MUTATIONS, // Company module
   ...USER_MUTATIONS     // User module
-]
+}
