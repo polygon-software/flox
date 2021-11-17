@@ -36,4 +36,4 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 export default ROUTES
 
 // Routes that can be accessed without being logged in
-export const PUBLIC_ROUTES = [ROUTES.LOGIN, ROUTES.SUCCESS]
+export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS]
