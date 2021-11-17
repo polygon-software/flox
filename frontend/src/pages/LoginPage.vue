@@ -5,7 +5,6 @@
       <!-- Login Card -->
       <q-card-section
         class="col"
-        v-show="!startSignup"
       >
         <LoginForm @submit="onLogin"/>
       </q-card-section>
@@ -15,7 +14,6 @@
         class="col">
         <div
           class="col"
-          v-if="!startSignup"
         >
           <strong class="col">Have no account? Sign up here:</strong>
           <br>
@@ -23,14 +21,10 @@
             class="q-ma-md"
             style="width: 125px"
             :label="$t('signup')"
-            @click="startSignup = true"
+            @click="toSignup"
             color="primary"
           />
         </div>
-        <SignupForm
-          @submit="onSignup"
-          v-if="startSignup"
-        />
       </q-card-section>
     </q-card>
   </q-page>
@@ -38,15 +32,13 @@
 
 <script setup lang="ts">
 import LoginForm from 'components/forms/LoginForm.vue'
-import SignupForm from 'components/forms/SignupForm.vue'
-import {inject, ref} from 'vue'
+import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
-const startSignup = ref(false)
 
 /**
  * Logs in the given authentication
@@ -60,17 +52,8 @@ async function onLogin({username, password}: {username: string, password: string
   await $routerService.routeTo(ROUTES.MAIN)
 }
 
-
-/**
- * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
- * @param username {string} - the authentication's chosen username
- * @param email {string} - the authentication's e-mail address
- * @param password_repeat {string} - the authentication's chosen password
- */
-async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}): Promise<void>{
-  // TODO rework for SOI-specific info: Don't actually sign up, but only create on database
-  //await $authService.signUp(username, email, password_repeat);
-  await $routerService.routeTo(ROUTES.SUCCESS)
+async function toSignup({username}:{username: string}): Promise<void>{
+  await $routerService.routeTo(ROUTES.SIGNUP)
   return;
 }
 </script>

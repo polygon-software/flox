@@ -43,5 +43,8 @@ export default {
   branch_structure: 'Niederlassungsstruktur',
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
-  must_accepts_conditons: 'Sie müssen den AGBs zustimmen.'
+  must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
+  confirmed_registration: 'Registrierung bestätigt',
+  redirect_to_login: 'Deine Registrierung wird nun bearbeitet! Du wirst nun automatisch zum Login-Screen zurückgeleitet.',
+  back_to_login: 'Zurück zu Login',
 }
