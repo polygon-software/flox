@@ -9,6 +9,12 @@
     <q-card class="q-pa-md q-ma-md">
       <SignupForm @submit="onSignup"/>
     </q-card>
+
+      <q-btn
+        color="red"
+        label="SEND TEST MAIL"
+        @click="sendMail"
+      />
   </q-page>
 </template>
 
@@ -19,9 +25,16 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {sendEmail} from 'src/helpers/email-helpers';
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
+
+// TODO remove, testing only
+function sendMail(){
+  void sendEmail();
+}
+
 
 /**
  * Logs in the given authentication

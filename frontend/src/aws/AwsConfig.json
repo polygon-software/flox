@@ -1,0 +1,8 @@
+{
+  "accessKeyId": "AKIA5OA2ITKTM3NQNA2Z",
+  "secretAccessKey": "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",
+  "region": "eu-central-1",
+  "apiVersions": {
+    "ses": "2010-12-01"
+  }
+}
