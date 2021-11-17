@@ -91,10 +91,11 @@ form.pages.value = [
 ]
 
 /**
- * Emits the 'submit' event, containing the form's data
+ * Emits the 'submit' event, containing the form's data and redirects somewhere
  */
 function onSubmit(): void {
   //TODO: Send to SOI
+  //TODO: redirect to something ?
   emit('submit', form.values.value)
 }
 
