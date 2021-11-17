@@ -26,12 +26,11 @@
 
       <!-- Register new employee -->
 
-      <div>
-        <p class="col text-center q-mb-xs" style="font-size: medium">{{ $t('register_new_employee_here') }}</p>
-        <br>
+      <div class="flex row justify-center items-center">
+        <p class="col-12 text-center q-mb-xs" style="font-size: medium">{{ $t('register_new_employee_here') }}</p>
         <q-btn
-          class="col q-mx-md q-mb-md"
-          style="width: 125px"
+          class="col-2 q-mx-md q-mb-md q-mt-xs"
+          style="width: 150px"
           :label="$t('signup')"
           @click="routeToRegisterEmployee"
           color="primary"
