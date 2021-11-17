@@ -4,6 +4,8 @@ export default {
   loggedIn: 'Angemeldet als {user}',
   login: 'Anmelden',
   signup: 'Registrieren',
+  signup_now: 'Kein Account? Jetzt registrieren:',
+  forgot_password: 'Passwort vergessen',
   invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
   invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
   invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
