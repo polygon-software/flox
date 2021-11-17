@@ -43,5 +43,6 @@ export default {
   branch_structure: 'Niederlassungsstruktur',
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
-  must_accepts_conditons: 'Sie müssen den AGBs zustimmen.'
+  must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
+  salutation: "Anrede"
 }

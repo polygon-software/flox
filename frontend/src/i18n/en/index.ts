@@ -30,6 +30,7 @@ export default {
   company_uid: 'Company UID (optional)',
   invalid_company_uid: 'Please enter your company\'s UID',
   language: 'Language',
+  salutation: 'Salutation',
   living_address: 'Address',
   correspondence_address: 'Correspondence Address',
   edit_correspondence_address: 'Same as domicile',
