@@ -5,7 +5,6 @@
       style="width: 500px;"
     >
       <q-form
-          @submit="onSubmit"
           class="q-gutter-md"
           >
       <q-stepper
@@ -79,7 +78,6 @@ const $routerService: RouterService = inject('$routerService')
  * Common fields can be found under "src/data/FIELDS".
  * All fields of a page must be completed before the next page can be accessed.
  */
-const emit = defineEmits(['submit'])
 
 const account_fields = [
   FIELDS.FULL_NAME,
@@ -100,14 +98,6 @@ form.pages.value = [
     fields: account_fields,
   },
 ]
-
-/**
- * Emits the 'submit' event, containing the form's data
- */
-function onSubmit(): void {
-  //TODO: Send to SOI
-  emit('submit', form.values.value)
-}
 
 /**
  * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog

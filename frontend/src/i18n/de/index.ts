@@ -45,6 +45,6 @@ export default {
   accept_conditions: 'Ich stimme den AGB zu.',
   must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
   confirmed_registration: 'Registrierung bestätigt',
-  redirect_to_login: 'Deine Registrierung wird nun bearbeitet! Du wirst nun automatisch zum Login-Screen zurückgeleitet.',
+  redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
   back_to_login: 'Zurück zu Login',
 }

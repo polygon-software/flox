@@ -39,8 +39,10 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 const $routerService: RouterService = inject('$routerService')
 
-
-async function backToLogin({username}:{username: string}): Promise<void>{
+/**
+ * Routes back to the Login Page
+ */
+async function backToLogin(): Promise<void>{
   // Redirect to login page
   await $routerService.routeTo(ROUTES.LOGIN)
 }
