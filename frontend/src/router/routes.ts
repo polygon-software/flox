@@ -4,6 +4,7 @@ import {RouteRecordRaw} from 'vue-router';
  * This file defines the routes available within the application
  */
 
+
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
   'MAIN': {
@@ -23,6 +24,19 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/ManagementDashboard.vue') }],
   },
+    
+  'SIGNUP': {
+    path: '/signup',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SignupPage.vue') }],
+  },
+
+  'SUCCESS': {
+    path: '/success',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SuccessPage.vue') }],
+  },
+
 
   // Wildcard route for non-covered routes
   'WILDCARD': {
@@ -32,3 +46,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 };
 
 export default ROUTES
+
+// Routes that can be accessed without being logged in
+export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS, ROUTES.SIGNUP]

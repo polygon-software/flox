@@ -4,6 +4,8 @@ export default {
   loggedIn: 'Angemeldet als {user}',
   login: 'Anmelden',
   signup: 'Registrieren',
+  signup_now: 'Kein Account? Jetzt registrieren:',
+  forgot_password: 'Passwort vergessen',
   invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
   invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
   invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
@@ -46,4 +48,7 @@ export default {
   must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
   chef_dashboard: 'Chef Dashboard',
   register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:'
+  confirmed_registration: 'Registrierung bestätigt',
+  redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
+  back_to_login: 'Zurück zu Login',
 }
