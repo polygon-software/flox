@@ -1,15 +1,26 @@
 import {SESClient, SendEmailCommand, SendEmailCommandOutput} from '@aws-sdk/client-ses';
 
 // Set the AWS Region.
-const REGION = 'eu-central-1'; //e.g. "us-east-1"
-// Create SES service object.
-const sesClient: SESClient = new SESClient({ region: REGION });
+const REGION = 'eu-central-1';
+
+// TODO
+const CREDENTIALS = {
+  accessKeyId: '***REMOVED***',
+  secretAccessKey: 'ZHhTQgfGUFT6uPk8wwi//L7AiuN9ETliaLhFRsEH',
+  // sessionToken: 'TODOASDF'
+}
+
+// Create SES service object
+const sesClient: SESClient = new SESClient({
+  region: REGION,
+  credentials: CREDENTIALS
+});
 
 /**
  * This file contains a collection of helper functions for sending e-mails, using AWS Simple Email Service (SES)
  */
 
-
+// TODO parametrize
 async function sendEmail(): Promise<void|SendEmailCommandOutput>{
   // Set the parameters TODO
   const params = {
@@ -19,6 +30,7 @@ async function sendEmail(): Promise<void|SendEmailCommandOutput>{
         /* more items */
       ],
       ToAddresses: [
+        // TODO NOTE: in sandbox mode, you can only send to verified adresses!
         'david.wyss@hotmail.ch', //RECEIVER_ADDRESS
         /* more To-email addresses */
       ],
@@ -38,12 +50,12 @@ async function sendEmail(): Promise<void|SendEmailCommandOutput>{
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: 'EMAIL_SUBJECT',
+        Data: 'AWS test mail!',
       },
     },
     Source: 'david.wyss@polygon-software.ch', // SENDER_ADDRESS
     ReplyToAddresses: [
-      /* more items */
+      'david.wyss@polygon-software.ch'
     ],
   };
 
@@ -52,7 +64,7 @@ async function sendEmail(): Promise<void|SendEmailCommandOutput>{
     console.log('Success', data);
     return data; // For unit tests.
   } catch (err) {
-    console.log('Error', err);
+    console.error(err);
   }
 
 }
