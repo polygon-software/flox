@@ -99,8 +99,8 @@ const FIELDS: Record<string, Field> = {
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['DE', 'EN', 'FR', 'IT']) || i18n.global.t('invalid_option')]
     },
   },
-  LIVING_ADDRESS: {
-    key: 'living_address',
+  DOMICILE_ADDRESS: {
+    key: 'domicile_address',
     component: markRaw(LivingAddress),
     attributes: {
       rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_address')]

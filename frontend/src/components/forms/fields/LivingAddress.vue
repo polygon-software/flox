@@ -1,5 +1,5 @@
 <template>
-  <strong>{{ $t('living_address') }}</strong>
+  <strong>{{ $t('domicile_address') }}</strong>
   <q-input
     dense
     :label="$t('street')"

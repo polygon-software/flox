@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CompanyResolver } from './company.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/company.entity';
+import { Company } from './entities/company.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([Company])],
   providers: [CompanyResolver, CompanyService],
 })
 export class CompanyModule {}

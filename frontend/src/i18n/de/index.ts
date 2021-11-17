@@ -31,7 +31,7 @@ export default {
   company_uid: 'Firmen UID (optional)',
   invalid_company_uid: 'Bitte geben Sie die UID Ihrer Firma ein',
   language: 'Sprache',
-  living_address: 'Addresse',
+  domicile_address: 'Addresse',
   correspondence_address: 'Korrespondenzaddresse',
   edit_correspondence_address: 'Gleich wie Wohnadresse',
   invalid_address: 'Bitte geben Sie eine gütlige Addresse ein',

@@ -6,46 +6,48 @@ import { GetCompaniesArgs } from './dto/args/get-companies.args';
 import { DeleteCompanyInput } from './dto/input/delete-company.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/company.entity';
+import { Company } from './entities/company.entity';
 
 @Injectable()
 export class CompanyService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(Company) private companyRepository: Repository<Company>,
   ) {}
 
-  async create(createUserInput: CreateCompanyInput): Promise<User> {
-    const user = await this.usersRepository.create(createUserInput);
-    return this.usersRepository.save(user);
+  async create(createCompanyInput: CreateCompanyInput): Promise<Company> {
+    const company = await this.companyRepository.create(createCompanyInput);
+    return this.companyRepository.save(company);
   }
 
-  getUsers(getUsersArgs: GetCompaniesArgs): Promise<User[]> {
-    if (getUsersArgs.uuids !== undefined) {
-      return this.usersRepository.findByIds(getUsersArgs.uuids);
+  getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
+    if (getCompaniesArgs.uuids !== undefined) {
+      return this.companyRepository.findByIds(getCompaniesArgs.uuids);
     } else {
-      return this.usersRepository.find();
+      return this.companyRepository.find();
     }
   }
 
-  getAllUsers(): Promise<User[]> {
-    return this.usersRepository.find();
+  getAllCompanies(): Promise<Company[]> {
+    return this.companyRepository.find();
   }
 
-  getUser(getUserArgs: GetCompanyArgs): Promise<User> {
-    return this.usersRepository.findOne(getUserArgs.uuid);
+  getCompany(getCompanyArgs: GetCompanyArgs): Promise<Company> {
+    return this.companyRepository.findOne(getCompanyArgs.uuid);
   }
 
-  async update(updateUserInput: UpdateCompanyInput): Promise<User> {
-    const user = await this.usersRepository.create(updateUserInput);
-    await this.usersRepository.update(updateUserInput.uuid, user);
-    return this.usersRepository.findOne(updateUserInput.uuid);
+  async update(updateCompanyInput: UpdateCompanyInput): Promise<Company> {
+    const company = await this.companyRepository.create(updateCompanyInput);
+    await this.companyRepository.update(updateCompanyInput.uuid, company);
+    return this.companyRepository.findOne(updateCompanyInput.uuid);
   }
 
-  async remove(deleteUserInput: DeleteCompanyInput): Promise<User> {
-    const user = await this.usersRepository.findOne(deleteUserInput.uuid);
-    const uuid = user.uuid;
-    const deleted_user = await this.usersRepository.remove(user);
-    deleted_user.uuid = uuid;
-    return deleted_user;
+  async remove(deleteCompanyInput: DeleteCompanyInput): Promise<Company> {
+    const company = await this.companyRepository.findOne(
+      deleteCompanyInput.uuid,
+    );
+    const uuid = company.uuid;
+    const deleted_company = await this.companyRepository.remove(company);
+    deleted_company.uuid = uuid;
+    return deleted_company;
   }
 }

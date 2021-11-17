@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyResolver } from './company.resolver';
 import { CompanyService } from './company.service';
 
-describe('UsersResolver', () => {
+describe('CompanyResolver', () => {
   let resolver: CompanyResolver;
 
   beforeEach(async () => {
