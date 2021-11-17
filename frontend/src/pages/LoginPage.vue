@@ -87,7 +87,11 @@ async function onLogin({username, password}: {username: string, password: string
  * @param email {string} - the authentication's e-mail address
  * @param password_repeat {string} - the authentication's chosen password
  */
-async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
-  await $authService.signUp(username, email, password_repeat);
+async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}): Promise<void>{
+  // TODO rework for SOI-specific info: Don't actually sign up, but only create on database
+  //await $authService.signUp(username, email, password_repeat);
+  await new Promise(resolve => setTimeout(() => resolve(user), 3000))
+  // TODO @Ramize: Redirect to success screen here
+  return;
 }
 </script>
