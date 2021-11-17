@@ -14,12 +14,12 @@
       />
 
       <q-input
-          filled
-          type="number"
-          v-model="age"
-          label="Age"
-          lazy-rules
-          :rules="[
+        filled
+        type="number"
+        v-model="age"
+        label="Age"
+        lazy-rules
+        :rules="[
           val => val !== null && val !== '' || 'Please type your age',
           val => val > 0 && val < 100 || 'Please type a real age'
         ]"
@@ -42,13 +42,15 @@ let age = ref(null);
 
 // Upon submit, send GraphQL mutation
 function onSubmit () : void{
-  void executeMutation(
+  if(!process.env.SERVER){
+    void executeMutation(
       CREATE_USER,
       {
-      name: name.value,
-      age: Number(age.value)
+        name: name.value,
+        age: Number(age.value)
       }
-  )
+    )
+  }
 }
 
 

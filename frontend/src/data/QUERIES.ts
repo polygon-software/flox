@@ -15,7 +15,7 @@ export const ALL_USERS = {
     query: gql`
         query{
             allUsers{
-                id
+                uuid
                 name
                 age
                 __typename

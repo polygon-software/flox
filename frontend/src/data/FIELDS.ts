@@ -1,4 +1,4 @@
-import {IS_EMAIL, IS_VALID_STRING} from './RULES'
+import {IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
 import {QInput, QSelect} from 'quasar'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
@@ -25,7 +25,17 @@ import {i18n} from 'boot/i18n';
  * @rules: Rules that get applied to the input field, e.g. to check if a password is valid.
  */
 
-const FIELDS: Record<string, Record<string, any>> = {
+export interface Field {
+  key: string,
+  component: any,
+  attributes: {
+    rules: Array<(val: any) => boolean|string>
+    [key: string]: any
+  },
+
+}
+
+const FIELDS: Record<string, Field> = {
     EMAIL: {
       key: 'email',
       component: markRaw(QInput),
@@ -34,7 +44,7 @@ const FIELDS: Record<string, Record<string, any>> = {
         type: 'email',
         label: 'E-Mail',
         lazy_rules: 'ondemand',
-        rules: [(val: string): boolean|string  => IS_EMAIL(val) || 'Please enter a valid e-mail address.']
+        rules: [(val: string): boolean|string  => IS_VALID_EMAIL(val) || 'Please enter a valid e-mail address.']
       },
     },
     USERNAME: {
@@ -77,6 +87,7 @@ const FIELDS: Record<string, Record<string, any>> = {
     key: 'full_name',
     component: markRaw(FullName),
     attributes: {
+      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
     },
   },
   LANGUAGE: {
@@ -84,32 +95,37 @@ const FIELDS: Record<string, Record<string, any>> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('language'),
-      options: ['DE', 'EN', 'FR', 'IT'],
+      options: ['DE', 'EN', 'FR', 'IT'], // TODO possibly move elsewhere.
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['DE', 'EN', 'FR', 'IT']) || i18n.global.t('invalid_option')]
     },
   },
   LIVING_ADDRESS: {
     key: 'living_address',
     component: markRaw(LivingAddress),
     attributes: {
+      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_address')]
     },
   },
-  CORRESPONDANCE_ADDRESS: {
+  CORRESPONDENCE_ADDRESS: {
     key: 'correspondence_address',
     component: markRaw(CorrespondenceAddress),
     attributes: {
+      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_address')]
     },
   },
   COMPANY_DATA: {
     key: 'company_data',
     component: markRaw(CompanyData),
     attributes: {
+      rules: []
     },
   },
   CONDITIONS: {
       key: 'conditions',
       component: markRaw(Conditions),
       attributes: {
-    }
+        rules: []
+      }
   }
 }
 
