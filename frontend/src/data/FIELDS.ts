@@ -1,8 +1,9 @@
-import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING} from './RULES'
+import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE} from './RULES'
 import {QInput} from 'quasar'
 import Interests from 'components/forms/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
+import LivingAddress from 'components/forms/fields/LivingAddress.vue'
 import {markRaw} from 'vue';
 import { i18n } from 'boot/i18n';
 
@@ -29,6 +30,7 @@ const FIELDS: Record<string, Record<string, any>> = {
               type: 'email',
               label: i18n.global.t('email'),
               lazy_rules: 'ondemand',
+              outlined: true,
               rules: [(val: string): boolean|string  => IS_EMAIL(val) || i18n.global.t('invalid_email')]
             },
         },
@@ -40,6 +42,7 @@ const FIELDS: Record<string, Record<string, any>> = {
               type: 'text',
               label: i18n.global.t('username'),
               lazy_rules: 'true',
+              outlined: true,
               rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_username')]
             },
         },
@@ -74,6 +77,35 @@ const FIELDS: Record<string, Record<string, any>> = {
           attrbiutes: {
             rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
           },
+        },
+        PHONE_NUMBER: {
+          key: 'phone_number',
+          component: markRaw(QInput),
+          attributes: {
+            dense: true,
+            type: 'tel',
+            label: i18n.global.t('phone_number'),
+            lazy_rules: 'ondemand',
+            mask: '### ### ## ##',
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_phone_number')]
+          },
+        },
+        LIVING_ADDRESS: {
+          key: 'living_address',
+          component: markRaw(LivingAddress),
+          attributes: {
+          },
+        },
+        BIRTHDATE: {
+          key: 'birthdate',
+          component: markRaw(QInput),
+          attributes: {
+            dense: true,
+            label: i18n.global.t('birthdate'),
+            lazy_rules: 'ondemand',
+            mask: '##/##/####',
+            rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('invalid_birth_date')]
+          }
         }
     }
 

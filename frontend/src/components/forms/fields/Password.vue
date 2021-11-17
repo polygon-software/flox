@@ -1,6 +1,7 @@
 <template>
   <q-input
       dense
+      outlined
       :label="$t('password')"
       v-model="password"
       lazy-rules="ondemand"

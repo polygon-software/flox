@@ -22,7 +22,9 @@ export default {
   personal: 'Personal',
   street: 'Street',
   number: 'Number',
+  city: 'City',
   zip_code: 'ZIP Code',
+  state: 'State',
   authentication: 'Authentication',
   interests: 'Interests',
   company: 'Company',
@@ -41,6 +43,7 @@ export default {
   invalid_address: 'Please enter a valid address',
   invalid_house_number: 'This number does not exist',
   invalid_zip_code: 'Please enter a valid ZIP code',
+  invalid_city: 'Please enter your city',
   phone_number: 'Phone Number',
   invalid_phone_number: 'Please enter a valid phone number',
   branch_structure: 'Branch Strucutre',
@@ -52,6 +55,8 @@ export default {
   oldest: 'Oldest',
   sort_by: 'Sort by:',
   time_expired: 'Expired',
+  birthdate: 'Date of birth',
+  invalid_birth_date: 'Please enter you date of birth',
 
   //Interests
   cars: 'Cars',

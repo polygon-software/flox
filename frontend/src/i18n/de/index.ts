@@ -23,7 +23,9 @@ export default {
   address: 'Addresse',
   street: 'Strasse',
   number: 'Nummer',
+  city: 'Stadt',
   zip_code: 'Postleitzahl',
+  state: 'Bundestaat',
   authentication: 'Authentifizierung',
   interests: 'Interessen',
   company: 'Firma',
@@ -42,6 +44,7 @@ export default {
   invalid_address: 'Bitte geben Sie eine gütlige Addresse ein',
   invalid_house_number: 'Diese Nummer existiert nicht',
   invalid_zip_code: 'Bitte geben Sie ine gültige Postleitzahl ein',
+  invalid_city: 'Bitte geben Sie Ihren Wohnort an',
   phone_number: 'Telefonnummer',
   invalid_phone_number: 'Bitte geben Sie eine gütlige Telefonnummer ein',
   branch_structure: 'Niederlassungsstruktur',
@@ -53,6 +56,8 @@ export default {
   oldest: 'Älteste',
   sort_by: 'Sortieren nach:',
   time_expired: 'Beendet',
+  birthdate: 'Geburtsdatum',
+  invalid_birth_date: 'Bitte geben Sie ihr Geburtsdatum ein',
 
   //Interests
   cars: 'Autos',

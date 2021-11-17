@@ -1,11 +1,12 @@
 <template>
-  <div class="column q-pa-sm" style="width: 250px; height: 430px;">
-    <h5 class="q-ma-none" style="margin-bottom: 20px;">
-      {{ $t('login') }}
-    </h5>
+  <div
+    class="row q-pa-sm justify-center"
+    style="width: 300px; height: 430px;"
+  >
+    <h5 class="q-mb-none">{{ $t('login') }}</h5>
     <q-form
         @submit="onSubmit"
-        class="q-gutter-md"
+        class="row justify-center"
     >
       <component
           v-for="field in fields"
@@ -14,10 +15,13 @@
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
+          class="q-ma-md"
+          style="width: 90%"
       />
       <q-btn
           style="margin-top: 20px"
           color="primary"
+          text-color="black"
           :label="$t('login')"
           type="submit"
           :disable="!form.pageValid.value"

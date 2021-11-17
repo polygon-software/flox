@@ -77,16 +77,15 @@ import { i18n } from 'boot/i18n';
 
 const emit = defineEmits(['submit'])
 
-const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
+const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD]
+const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER]
+const address_fields  = [FIELDS.LIVING_ADDRESS]
+const authentication_fields = []
+const interest_fields = [FIELDS.INTERESTS]
 
 const form = new Form()
 
 form.pages.value = [
-  {
-    key: 'interests',
-    label: i18n.global.t('interests'),
-    fields: [FIELDS.INTERESTS],
-  },
   {
     key: 'account_data',
     label: i18n.global.t('account'),
@@ -95,17 +94,22 @@ form.pages.value = [
   {
     key: 'personal_data',
     label: i18n.global.t('personal'),
-    fields: [FIELDS.FULL_NAME,],
+    fields: personal_fields,
   },
   {
     key: 'address_data',
     label: i18n.global.t('address'),
-    fields: [],
+    fields: address_fields,
   },
   {
     key: 'authentication',
     label: i18n.global.t('authentication'),
-    fields: [],
+    fields: authentication_fields,
+  },
+  {
+    key: 'interests',
+    label: i18n.global.t('interests'),
+    fields: interest_fields,
   },
 ]
 
