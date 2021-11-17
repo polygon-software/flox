@@ -45,6 +45,8 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {CREATE_USER} from 'src/data/MUTATIONS';
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
@@ -70,7 +72,16 @@ async function onLogin({username, password}: {username: string, password: string
  * @param password_repeat {string} - the authentication's chosen password
  */
 async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
-  await $authService.signUp(username, email, password_repeat);
+
+  await executeMutation(
+    CREATE_COMPANY,
+    {
+      name: name.value,
+      age: Number(age.value)
+    }
+  )
+  // TODO redirect to success page
+  //await $authService.signUp(username, email, password_repeat);
 }
 
 </script>

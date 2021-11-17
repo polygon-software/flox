@@ -1,6 +1,8 @@
 import { Field, ID, InputType, Int } from '@nestjs/graphql';
 import { IsInt, IsNotEmpty, IsUUID } from 'class-validator';
 
+// TODO this file in its entirety
+
 @InputType()
 export class UpdateCompanyInput {
   @Field(() => ID)

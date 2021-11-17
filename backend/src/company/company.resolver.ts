@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CompanyService } from './company.service';
 import { CreateCompanyInput } from './dto/input/create-company.input';
 import { UpdateCompanyInput } from './dto/input/update-company.input';
@@ -6,11 +6,7 @@ import { GetCompanyArgs } from './dto/args/get-company.args';
 import { DeleteCompanyInput } from './dto/input/delete-company.input';
 import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
-import { PubSub } from 'graphql-subscriptions';
 import { Public } from '../auth/auth.guard';
-
-// Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
-const pubSub = new PubSub();
 
 @Resolver(() => Company)
 export class CompanyResolver {
@@ -18,15 +14,15 @@ export class CompanyResolver {
 
   @Public()
   @Query(() => [Company], { name: 'companies' })
-  async getCompanys(
-    @Args() getCompanysArgs: GetCompaniesArgs,
+  async getCompanies(
+    @Args() getCompaniesArgs: GetCompaniesArgs,
   ): Promise<Company[]> {
-    return await this.companyService.getCompanies(getCompanysArgs);
+    return await this.companyService.getCompanies(getCompaniesArgs);
   }
 
   @Public()
   @Query(() => [Company], { name: 'allCompanies' })
-  async getAllCompanys(): Promise<Company[]> {
+  async getAllCompanies(): Promise<Company[]> {
     return await this.companyService.getAllCompanies();
   }
 
@@ -38,18 +34,15 @@ export class CompanyResolver {
 
   @Public()
   @Mutation(() => Company)
-  async create(
+  async createCompany(
     @Args('createCompanyInput') createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
-    const newCompany = await this.companyService.create(createCompanyInput);
-    // Publish authentication so subscriptions will auto-update
-    await pubSub.publish('companyAdded', { companyAdded: newCompany });
-    return newCompany;
+    return await this.companyService.create(createCompanyInput);
   }
 
   @Public()
   @Mutation(() => Company)
-  async update(
+  async updateCompany(
     @Args('updateCompanyInput') updateCompanyInput: UpdateCompanyInput,
   ): Promise<Company> {
     return await this.companyService.update(updateCompanyInput);
@@ -57,15 +50,9 @@ export class CompanyResolver {
 
   @Public()
   @Mutation(() => Company)
-  async remove(
+  async removeCompany(
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
   ): Promise<Company> {
     return await this.companyService.remove(deleteCompanyInput);
-  }
-
-  @Public()
-  @Subscription(() => Company)
-  companyAdded(): AsyncIterator<unknown, any, undefined> {
-    return pubSub.asyncIterator('companyAdded');
   }
 }

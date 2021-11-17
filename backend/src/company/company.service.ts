@@ -16,6 +16,9 @@ export class CompanyService {
 
   async create(createCompanyInput: CreateCompanyInput): Promise<Company> {
     const company = await this.companyRepository.create(createCompanyInput);
+
+    // TODO set document_upload_enabled to false
+
     return this.companyRepository.save(company);
   }
 
