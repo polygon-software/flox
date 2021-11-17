@@ -20,53 +20,45 @@ const sesClient: SESClient = new SESClient({
  * This file contains a collection of helper functions for sending e-mails, using AWS Simple Email Service (SES)
  */
 
-// TODO parametrize
-async function sendEmail(): Promise<void|SendEmailCommandOutput>{
-  // Set the parameters TODO
+/**
+ *
+ * @param {string} from
+ * @param {string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified adresses!
+ * @param {string} subject
+ * @param {string} body - HTML body
+ * @param {string[]} [replyTo]
+ * @param {string[]} [toCC]
+ * @param {string} [textBody] - optional plaintext body
+ */
+async function sendEmail(from: string, to: string[], subject: string, body: string, replyTo?: string[], toCC?: string[], textBody?: string): Promise<void|SendEmailCommandOutput>{
+  // E-Mail parameters
   const params = {
     Destination: {
-      /* required */
-      CcAddresses: [
-        /* more items */
-      ],
-      ToAddresses: [
-        // TODO NOTE: in sandbox mode, you can only send to verified adresses!
-        'david.wyss@hotmail.ch', //RECEIVER_ADDRESS
-        /* more To-email addresses */
-      ],
+      CcAddresses: toCC ?? [],
+      ToAddresses: to
     },
     Message: {
-      /* required */
       Body: {
-        /* required */
         Html: {
           Charset: 'UTF-8',
-          Data: 'HTML_FORMAT_BODY',
+          Data: body,
         },
         Text: {
           Charset: 'UTF-8',
-          Data: 'TEXT_FORMAT_BODY',
+          Data: textBody ?? body,
         },
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: 'AWS test mail!',
+        Data: subject,
       },
     },
-    Source: 'david.wyss@polygon-software.ch', // SENDER_ADDRESS
-    ReplyToAddresses: [
-      'david.wyss@polygon-software.ch'
-    ],
+    Source: from,
+    ReplyToAddresses: replyTo ?? []
   };
 
-  try {
-    const data = await sesClient.send(new SendEmailCommand(params));
-    console.log('Success', data);
-    return data; // For unit tests.
-  } catch (err) {
-    console.error(err);
-  }
-
+  // Send actual e-mail
+  return await sesClient.send(new SendEmailCommand(params));
 }
 
 export {sendEmail}
