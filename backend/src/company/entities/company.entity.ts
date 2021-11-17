@@ -64,9 +64,9 @@ export class Company extends BaseEntity {
   branch_structure: boolean;
 
   // TODO sub-users
-  @Field(() => [Item], { description: 'Items of the user', nullable: true })
-  @OneToMany(() => Item, (item) => item.user)
-  items: Item[];
+  // @Field(() => [Item], { description: 'Items of the user', nullable: true })
+  // @OneToMany(() => Item, (item) => item.user)
+  // items: Item[];
 
   @Field(() => Boolean, {
     description:

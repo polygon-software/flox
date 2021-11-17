@@ -1,13 +1,72 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsInt, IsNotEmpty } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
+import { Column } from 'typeorm';
 
+// TODO
 @InputType()
 export class CreateCompanyInput {
   @Field(() => String)
+  @Column()
+  @IsString()
   @IsNotEmpty()
-  name: string;
+  company_name: string;
 
-  @Field(() => Int)
-  @IsInt()
-  age: number;
+  @Field(() => String)
+  @Column()
+  @IsString()
+  @IsNotEmpty()
+  person_name: string;
+
+  @Field(() => String)
+  @Column()
+  @IsString()
+  @IsNotEmpty()
+  language: string;
+
+  @Field(() => String)
+  @Column()
+  @IsString()
+  @IsOptional()
+  uid: string;
+
+  @Field(() => String)
+  @Column()
+  @IsString()
+  @IsNotEmpty()
+  //@IsAddress() // TODO define
+  domicile_address: string;
+
+  @Field(() => String)
+  @Column()
+  @IsString()
+  @IsNotEmpty()
+  //@IsAddress() // TODO define
+  correspondence_address: string;
+
+  @Field(() => String)
+  @Column()
+  @IsString()
+  @IsNotEmpty()
+  @IsPhoneNumber()
+  phone: string;
+
+  @Field(() => String)
+  @Column()
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @Field(() => Boolean)
+  @Column()
+  @IsBoolean()
+  branch_structure: boolean;
 }
