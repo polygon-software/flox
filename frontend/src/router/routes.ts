@@ -19,6 +19,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
+  'MANAGEMENT_DASHBOARD': {
+    path: '/managementDashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ManagementDashboard.vue') }],
+  },
+
   'SIGNUP': {
     path: '/signup',
     component: () => import('layouts/MainLayout.vue'),
