@@ -4,6 +4,7 @@ export default {
   loggedIn: 'Angemeldet als {user}',
   login: 'Anmelden',
   signup: 'Registrieren',
+  employee_signup: 'Mitarbeitende registrieren',
   invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
   invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
   invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
@@ -44,5 +45,6 @@ export default {
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
   must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
-  salutation: "Anrede"
+  salutation: 'Anrede',
+  company_function: 'Funktion in der Firma'
 }

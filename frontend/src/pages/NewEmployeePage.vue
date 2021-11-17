@@ -35,29 +35,21 @@
               />
             </q-step>
             <template v-slot:navigation>
-              <q-stepper-navigation>
+              <div class="row justify-between">
                 <q-btn
-                  v-if="form.step.value > 1"
-                  @click="$refs.stepper.previous()"
+                  @click="backToManDashboard"
                   flat
-                  style="margin-right: 30px"
+                  style="margin-left: 30px; margin-bottom: 20px"
                   color="primary"
                   :label="$t('back')"
                   class="q-ml-sm"/>
                 <q-btn
-                  v-if="form.step.value < form.pages.value.length"
-                  @click="$refs.stepper.next()"
-                  color="primary"
-                  :label="$t('next_step')"
-                  :disable="!form.pageValid.value"
-                />
-                <q-btn
-                  v-if="form.step.value === form.pages.value.length"
-                  color="primary"
+                  color="green"
+                  style="margin-right: 30px; margin-bottom: 20px"
                   :label="$t('finish_signup')"
                   type="submit"
                 />
-              </q-stepper-navigation>
+              </div>
             </template>
           </q-stepper>
         </q-form>
@@ -83,8 +75,9 @@ const emit = defineEmits(['submit'])
 const account_fields = [
   FIELDS.SALUTATION,
   FIELDS.FULL_NAME,
+  FIELDS.COMPANY_FUNCTION,
   FIELDS.PHONE_NUMBER,
-  FIELDS.COMPANY_DATA,
+  FIELDS.EMAIL,
 ]
 
 const form = new Form()
@@ -92,7 +85,7 @@ const form = new Form()
 form.pages.value = [
   {
     key: 'company',
-    label: i18n.global.t('signup'),
+    label: i18n.global.t('employee_signup'),
     fields: account_fields,
   },
 ]
@@ -105,6 +98,12 @@ function onSubmit(): void {
   emit('submit', form.values.value)
 }
 
+/**
+ * Directs user back to the management dashboard
+ */
+function backToManDashboard(): void {
+  //TODO: Redirect to the management dashboard
+}
 </script>
 
 <style scoped>

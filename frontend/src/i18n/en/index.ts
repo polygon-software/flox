@@ -4,6 +4,7 @@ export default {
   loggedIn: 'Logged in as {user}',
   login: 'Log in',
   signup: 'Sign up',
+  employee_signup: 'Register new Employee',
   invalid_password: 'Please enter a valid password',
   invalid_email: 'Please enter a valid e-mail address',
   invalid_username: 'Please enter a username',
@@ -43,5 +44,7 @@ export default {
   branch_structure: 'Branch Strucutre',
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
-  must_accepts_conditons: 'You have to accept the terms and conditions.'
+  must_accepts_conditons: 'You have to accept the terms and conditions.',
+  company_function: 'Role in the company'
+
 };

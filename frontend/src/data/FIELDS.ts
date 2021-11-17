@@ -108,6 +108,15 @@ const FIELDS: Record<string, Field> = {
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['Herr', 'Frau', 'Divers']) || i18n.global.t('invalid_option')]
     },
   },
+  COMPANY_FUNCTION: {
+    key: 'company_function',
+    component: markRaw(QSelect),
+    attributes: {
+      label: i18n.global.t('company_function'),
+      options: ['CEO', 'Admin', 'Entwickler*in', 'HR', 'Blablabla'], // TODO possibly move elsewhere.
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['CEO', 'Admin', 'Entwickler*in', 'HR', 'Blablabla']) || i18n.global.t('invalid_option')]
+    },
+  },
   LIVING_ADDRESS: {
     key: 'living_address',
     component: markRaw(LivingAddress),
