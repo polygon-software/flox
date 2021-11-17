@@ -4,6 +4,8 @@ export default {
   loggedIn: 'Logged in as {user}',
   login: 'Log in',
   signup: 'Sign up',
+  signup_now: 'No Account? Sign up now:',
+  forgot_password: 'Forgot password',
   invalid_password: 'Please enter a valid password',
   invalid_email: 'Please enter a valid e-mail address',
   invalid_username: 'Please enter a username',

@@ -13,9 +13,12 @@
       <q-card-section
         class="col">
         <div
-          class="col"
+          class="col content-center"
+          style="width: 250px; text-align: center;"
         >
-          <strong class="col">Have no account? Sign up here:</strong>
+          <strong>
+            {{ $t('signup_now') }}
+          </strong>
           <br>
           <q-btn
             class="q-ma-md"
@@ -39,6 +42,7 @@ import {RouterService} from 'src/services/RouterService';
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
+
 
 /**
  * Logs in the given authentication

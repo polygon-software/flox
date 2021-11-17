@@ -1,7 +1,7 @@
 <template>
   <div
     class="column q-pa-sm"
-    style="width: 250px; height: 430px; text-align: center;"
+    style="width: 250px; text-align: center;"
   >
     <h5 class="q-ma-none" style="margin-bottom: 20px;">
       {{ $t('login') }}
@@ -25,6 +25,13 @@
           type="submit"
           :disable="!form.pageValid.value"
       />
+      <q-btn
+        no-caps
+        :label="$t('forgot_password')"
+        class="text-primary"
+        flat
+        @click="forgotPassword"
+      />
     </q-form>
   </div>
 </template>
@@ -32,6 +39,10 @@
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
+import {AuthenticationService} from 'src/services/AuthService';
+import {inject} from 'vue';
+
+const $authService: AuthenticationService = inject('$authService')
 
 const emit = defineEmits(['submit'])
 
@@ -45,6 +56,13 @@ form.pages.value = [
     fields: fields
   }
 ]
+
+/**
+ * Triggers a password change for a non-logged in user
+ */
+function forgotPassword() {
+  $authService.showResetPasswordDialog();
+}
 
 /**
  * Emits the 'submit' event, containing the form's data
