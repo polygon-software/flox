@@ -8,15 +8,19 @@ import {isEmpty} from 'lodash';
 /**
 * Form field Rules
  */
-const IS_EMAIL = (val: string):boolean => {
-  return EMAIL_REGEX.test(val)
-}
+
 const IS_VALID_STRING = (val: string): boolean => {
   return !isEmpty(val) && val.length > 0
 }
 
 const IS_VALID_PASSWORD = (val: string): boolean => {
-  return PASSWORD_REGEX.test(val)
+  const result: boolean = PASSWORD_REGEX.test(val)
+  return result;
+}
+
+const IS_VALID_EMAIL = (val: string): boolean => {
+  const result: boolean =  EMAIL_REGEX.test(val)
+  return result;
 }
 
 const IS_VALID_HOUSE_NUMBER = (val: string): boolean => {
@@ -29,4 +33,9 @@ const IS_VALID_ZIP = (val: string): boolean => {
   return Number.isInteger(parseInt(val, 10))
 }
 
-export {IS_EMAIL, IS_VALID_STRING, IS_VALID_PASSWORD, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP}
+// Checks whether a selection is contained in a list of options
+const IS_VALID_OPTION = (val: any, options: any[]): boolean => {
+  return options.includes(val);
+}
+
+export {IS_VALID_EMAIL, IS_VALID_STRING, IS_VALID_PASSWORD, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP, IS_VALID_OPTION}
