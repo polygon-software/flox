@@ -11,7 +11,7 @@
   />
 </template>
 
-<script>
+<script setup lang="ts">
 import {inject} from 'vue'
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
@@ -21,10 +21,6 @@ const $routerService: RouterService = inject('$routerService')
 async function backToLogin({username}:{username: string}): Promise<void>{
   // Redirect to login page
   await $routerService.routeTo(ROUTES.LOGIN)
-}
-
-export default {
-  name: 'SuccessPage'
 }
 </script>
 
