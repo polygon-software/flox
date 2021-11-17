@@ -14,10 +14,13 @@
       <q-card-section
         class="col">
         <div
-          class="col"
+          class="col content-center"
+          style="width: 250px; text-align: center;"
           v-if="!startSignup"
         >
-          <strong class="col">{{ $t('signup_now') }}</strong>
+          <strong>
+            {{ $t('signup_now') }}
+          </strong>
           <br>
           <q-btn
             class="q-ma-md"

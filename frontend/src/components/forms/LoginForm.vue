@@ -1,7 +1,7 @@
 <template>
   <div
     class="column q-pa-sm"
-    style="width: 250px; height: 430px; text-align: center;"
+    style="width: 250px; text-align: center;"
   >
     <h5 class="q-ma-none" style="margin-bottom: 20px;">
       {{ $t('login') }}
