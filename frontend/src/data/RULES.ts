@@ -14,7 +14,7 @@ const IS_EMAIL = (val: string): boolean => {
 }
 const IS_VALID_STRING = (val: string): boolean => !!(val && val.length > 0)
 
-const IS_VALID_PASSWORD = (val: string) => {
+const IS_VALID_PASSWORD = (val: string): boolean => {
   const result: boolean = PASSWORD_REGEX.test(val)
   return result;
 }
