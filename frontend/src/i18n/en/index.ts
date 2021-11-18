@@ -4,6 +4,8 @@ export default {
   loggedIn: 'Logged in as {user}',
   login: 'Log in',
   signup: 'Sign up',
+  signup_now: 'No Account? Sign up now:',
+  forgot_password: 'Forgot password',
   invalid_password: 'Please enter a valid password',
   invalid_email: 'Please enter a valid e-mail address',
   invalid_username: 'Please enter a username',
@@ -42,5 +44,10 @@ export default {
   branch_structure: 'Branch Strucutre',
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
-  must_accepts_conditons: 'You have to accept the terms and conditions.'
+  must_accepts_conditons: 'You have to accept the terms and conditions.',
+  chef_dashboard: 'Management Dashboard',
+  register_new_employee_here: 'Register a new employee here:',
+  confirmed_registration: 'Registration confirmed',
+  redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
+  back_to_login: 'Back to Login',
 };

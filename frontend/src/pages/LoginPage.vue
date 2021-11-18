@@ -5,7 +5,6 @@
       <!-- Login Card -->
       <q-card-section
         class="col"
-        v-show="!startSignup"
       >
         <LoginForm @submit="onLogin"/>
       </q-card-section>
@@ -14,33 +13,28 @@
       <q-card-section
         class="col">
         <div
-          class="col"
-          v-if="!startSignup"
+          class="col content-center"
+          style="width: 250px; text-align: center;"
         >
-          <strong class="col">Have no account? Sign up here:</strong>
+          <strong>
+            {{ $t('signup_now') }}
+          </strong>
           <br>
           <q-btn
             class="q-ma-md"
             style="width: 125px"
             :label="$t('signup')"
-            @click="startSignup = true"
+            @click="toSignup"
             color="primary"
           />
         </div>
-        <SignupForm
-          @submit="onSignup"
-          v-if="startSignup"
-        />
       </q-card-section>
-
     </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import LoginForm from 'components/forms/LoginForm.vue'
-import SignupForm from 'components/forms/SignupForm.vue'
 import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
@@ -50,7 +44,7 @@ import {CREATE_COMPANY} from 'src/data/mutations/COMPANY';
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
-const startSignup = ref(false)
+
 
 /**
  * Logs in the given authentication
@@ -64,23 +58,12 @@ async function onLogin({username, password}: {username: string, password: string
   await $routerService.routeTo(ROUTES.MAIN)
 }
 
-
 /**
- * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
- * @param username {string} - the authentication's chosen username
- * @param email {string} - the authentication's e-mail address
- * @param password_repeat {string} - the authentication's chosen password
+ * Routes to the Signup Page
  */
-async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
-
-  await executeMutation(
-    CREATE_COMPANY,
-    {
-      name: 'testcompany'
-    }
-  )
-  // TODO redirect to success page
-  //await $authService.signUp(username, email, password_repeat);
+async function toSignup(): Promise<void>{
+  console.log('goto', ROUTES.SIGNUP)
+  await $routerService.routeTo(ROUTES.SIGNUP)
+  return;
 }
-
 </script>
