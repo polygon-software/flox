@@ -1,7 +1,8 @@
 import { ObjectType, Field, InputType } from '@nestjs/graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { IsString } from 'class-validator';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
+import { Company } from './company.entity';
 
 @ObjectType()
 @Entity({ name: 'address' })

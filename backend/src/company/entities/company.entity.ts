@@ -36,12 +36,12 @@ export class Company extends BaseEntity {
 
   @Field(() => Address, { description: 'Domicile address' })
   @JoinColumn()
-  @OneToOne(() => Address)
+  @OneToOne(() => Address, { cascade: true })
   domicile_address: Address;
 
   @Field(() => Address, { description: 'Correspondence address' })
   @JoinColumn()
-  @OneToOne(() => Address)
+  @OneToOne(() => Address, { cascade: true })
   correspondence_address: Address;
 
   @Field(() => String, { description: 'Phone Number' })
