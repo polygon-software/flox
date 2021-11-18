@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import {
   IsString,
@@ -9,6 +9,7 @@ import {
   IsEmail,
 } from 'class-validator';
 import { Item } from '../../item/entities/item.entity';
+import { Address } from '../../address/entities/address.entity';
 
 @ObjectType()
 @Entity({ name: 'company' })
@@ -34,17 +35,15 @@ export class Company extends BaseEntity {
   @IsOptional()
   uid: string;
 
-  @Field(() => String, { description: 'Domicile address' })
-  @Column()
-  @IsString()
-  //@IsAddress() // TODO define
-  domicile_address: string;
+  @Field(() => Address, { description: 'Domicile address' })
+  @JoinColumn()
+  @OneToOne(() => Address)
+  domicile_address: Address;
 
-  @Field(() => String, { description: 'Correspondence address' })
-  @Column()
-  @IsString()
-  //@IsAddress() // TODO define
-  correspondence_address: string;
+  @Field(() => Address, { description: 'Correspondence address' })
+  @JoinColumn()
+  @OneToOne(() => Address)
+  correspondence_address: Address;
 
   @Field(() => String, { description: 'Phone Number' })
   @Column()

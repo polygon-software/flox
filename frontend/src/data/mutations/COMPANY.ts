@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
 import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
+import {Address} from 'src/data/CLASSES';
 
 export const CREATE_COMPANY = {
   mutation: gql`
-    mutation createCompany($company_name: String!, $person_name: String!, $language: String!, $uid: String, $domicile_address: String!, $correspondence_address: String!, $phone: String!, $email: String!, $branch_structure: Boolean!){
+    mutation createCompany($company_name: String!, $person_name: String!, $language: String!, $uid: String, $domicile_address: Address!, $correspondence_address: Address!, $phone: String!, $email: String!, $branch_structure: Boolean!){
       createCompany (createCompanyInput: {company_name: $company_name,person_name: $person_name, language: $language, uid: $uid, domicile_address: $domicile_address, correspondence_address: $correspondence_address, phone: $phone, email: $email, branch_structure: $branch_structure}) {
         uuid
         company_name
