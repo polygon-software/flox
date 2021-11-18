@@ -31,10 +31,10 @@ export class CreateCompanyInput {
   @IsNotEmpty()
   language: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column()
-  @IsString()
   @IsOptional()
+  @IsString()
   uid: string;
 
   @Field(() => String)

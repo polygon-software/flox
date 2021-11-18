@@ -46,7 +46,7 @@ input CreateCompanyInput {
   language: String!
   person_name: String!
   phone: String!
-  uid: String!
+  uid: String
 }
 
 input CreateItemInput {
