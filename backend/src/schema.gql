@@ -31,23 +31,38 @@ type Item {
 }
 
 type Mutation {
-  create(createUserInput: CreateProductInput!): User!
+  create(createProductInput: CreateProductInput!): Product!
   createItem(createItemInput: CreateItemInput!): Item!
-  remove(deleteUserInput: DeleteProductInput!): User!
+  remove(deleteProductInput: DeleteProductInput!): Product!
   removeItem(uuid: ID!): Item!
-  update(updateUserInput: UpdateProductInput!): User!
+  update(updateProductInput: UpdateProductInput!): Product!
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
+type Product {
+  """Age"""
+  age: Int!
+
+  """Name"""
+  name: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Query {
+  allProducts: [Product!]!
   allUsers: [User!]!
   item(uuid: ID!): Item!
   items: [Item!]!
+  product(uuid: ID!): Product!
+  products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
 
 type Subscription {
+  productAdded: Product!
   userAdded: User!
 }
 
