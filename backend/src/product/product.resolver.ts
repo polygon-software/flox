@@ -38,7 +38,7 @@ export class ProductResolver {
 
   @Public()
   @Mutation(() => Product)
-  async create(
+  async createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ): Promise<Product> {
     const newProduct = await this.productsService.create(createProductInput);
@@ -49,7 +49,7 @@ export class ProductResolver {
 
   @Public()
   @Mutation(() => Product)
-  async update(
+  async updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ): Promise<Product> {
     return await this.productsService.update(updateProductInput);
@@ -57,7 +57,7 @@ export class ProductResolver {
 
   @Public()
   @Mutation(() => Product)
-  async remove(
+  async removeProduct(
     @Args('deleteProductInput') deleteProductInput: DeleteProductInput,
   ): Promise<Product> {
     return await this.productsService.remove(deleteProductInput);
