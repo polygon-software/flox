@@ -36,6 +36,7 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
+import Interests from 'components/forms/fields/Interests.vue';
 
 const signup = ref(false)
 const $authService: AuthenticationService = inject('$authService')

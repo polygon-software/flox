@@ -3,7 +3,7 @@
   <q-input
     dense
     :label="$t('street')"
-    v-model="address"
+    v-model="street"
     type="text"
     lazy-rules="ondemand"
     :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
@@ -27,9 +27,8 @@
       v-model="city"
       type="text"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_city')]"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_city')]"
       style="width:40%"
-      mask="######"
     >
     </q-input>
     <q-input
@@ -49,9 +48,8 @@
       v-model="state"
       type="text"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_city')]"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_state')]"
       style="width:40%"
-      mask="######"
     >
     </q-input>
 
@@ -59,11 +57,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { IS_VALID_STRING, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP } from 'src/data/RULES';
-const address = ref('')
-const number = ref(null)
+const street = ref('')
+const number = ref()
 const city = ref('')
-const zip_code = ref(null)
+const zip_code = ref()
 const state = ref('')
+
+const emit = defineEmits(['change'])
+
+watch(street, (newValue) => {
+  emitUpdate(newValue)
+})
+
+watch(number, (newValue) => {
+  emitUpdate(newValue)
+})
+
+watch(city, (newValue) => {
+  emitUpdate(newValue)
+})
+
+watch(zip_code, (newValue) => {
+  emitUpdate(newValue)
+})
+
+watch(state, (newValue) => {
+  emitUpdate(newValue)
+})
+
+function emitUpdate(value: string|number) {
+  if (street.value.length > 0 && number.value > 0 && city.value.length > 0, zip_code.value > 0 && state.value.length > 0) {
+    emit('change', value)
+  }
+  else {
+    emit('change', '')
+  }
+
+}
 </script>

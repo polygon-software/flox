@@ -44,6 +44,7 @@ export default {
   invalid_house_number: 'This number does not exist',
   invalid_zip_code: 'Please enter a valid ZIP code',
   invalid_city: 'Please enter your city',
+  invalid_state: 'Please enter your state',
   phone_number: 'Phone Number',
   invalid_phone_number: 'Please enter a valid phone number',
   branch_structure: 'Branch Strucutre',
