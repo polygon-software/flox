@@ -15,9 +15,10 @@ export class CompanyService {
   ) {}
 
   async create(createCompanyInput: CreateCompanyInput): Promise<Company> {
-    const company = await this.companyRepository.create(createCompanyInput);
-
-    // TODO set document_upload_enabled to false
+    const company = this.companyRepository.create({
+      ...createCompanyInput,
+      document_upload_enabled: false,
+    });
 
     return this.companyRepository.save(company);
   }
@@ -39,7 +40,7 @@ export class CompanyService {
   }
 
   async update(updateCompanyInput: UpdateCompanyInput): Promise<Company> {
-    const company = await this.companyRepository.create(updateCompanyInput);
+    const company = this.companyRepository.create(updateCompanyInput);
     await this.companyRepository.update(updateCompanyInput.uuid, company);
     return this.companyRepository.findOne(updateCompanyInput.uuid);
   }

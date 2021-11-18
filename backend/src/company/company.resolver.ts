@@ -12,7 +12,7 @@ import { Public } from '../auth/auth.guard';
 export class CompanyResolver {
   constructor(private readonly companyService: CompanyService) {}
 
-  @Public()
+  @Public() // TODO SOI role only
   @Query(() => [Company], { name: 'companies' })
   async getCompanies(
     @Args() getCompaniesArgs: GetCompaniesArgs,
@@ -20,13 +20,13 @@ export class CompanyResolver {
     return await this.companyService.getCompanies(getCompaniesArgs);
   }
 
-  @Public()
+  @Public() // TODO SOI role only
   @Query(() => [Company], { name: 'allCompanies' })
   async getAllCompanies(): Promise<Company[]> {
     return await this.companyService.getAllCompanies();
   }
 
-  @Public()
+  @Public() // TODO SOI role only
   @Query(() => Company, { name: 'company' })
   async getCompany(@Args() getCompanyArgs: GetCompanyArgs): Promise<Company> {
     return await this.companyService.getCompany(getCompanyArgs);
