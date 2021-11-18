@@ -112,26 +112,34 @@ async function onSignup(){
 
   console.log('OnSignup with arguments', form.values.value)
 
-  const input: Record<string, Record<string, Record<string, unknown>>> = form.values.value
+  const input: Record<string, Record<string, unknown>> = form.values.value
 
   // If no correspondence given, is same as domicile address
   if(!input.correspondence_address){
     input.correspondence_address = input.domicile_address;
   }
 
+  // Get name object, containing first_name and last_name
+  const person_name_object: Record<string, string> = input.full_name as Record<string, string>
+  const person_name = `${person_name_object.first_name} ${person_name_object.last_name}`
+
+  const branch_structure_object: Record<string, unknown> = input.company_data.branch_structure as Record<string, unknown>
+  console.log('BSO:', branch_structure_object)
+  const branch_structure: boolean = branch_structure_object.value as boolean
+
   // TODO after cleanup
   await executeMutation(
     CREATE_COMPANY,
     {
       company_name: input.company_data.company_name,
-      person_name: input.full_name.toString(), // TODO format
+      person_name: person_name,
       language: input.language,
       uid: input.company_data.uid,
-      domicile_address: input.domicile_address, // TODO format
-      correspondence_address: input.correspondence_address, // TODO format
+      domicile_address: input.domicile_address,
+      correspondence_address: input.correspondence_address,
       phone: input.phone_number,
       email: input.email,
-      branch_structure: input.company_data.branch_structure.value // TODO format
+      branch_structure: branch_structure
     }
   )
   await $routerService?.routeTo(ROUTES.SUCCESS)

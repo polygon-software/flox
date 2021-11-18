@@ -2,7 +2,7 @@ import {IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
 import {QInput, QSelect} from 'quasar'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
-import LivingAddress from 'components/forms/fields/LivingAddress.vue'
+import DomicileAddress from 'components/forms/fields/DomicileAddress.vue'
 import CorrespondenceAddress from 'components/forms/fields/CorrespondenceAddress.vue'
 import CompanyData from 'components/forms/fields/CompanyData.vue'
 import FullName from 'components/forms/fields/FullName.vue'
@@ -101,7 +101,7 @@ const FIELDS: Record<string, Field> = {
   },
   DOMICILE_ADDRESS: {
     key: 'domicile_address',
-    component: markRaw(LivingAddress),
+    component: markRaw(DomicileAddress),
     attributes: {
       rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_address')]
     },

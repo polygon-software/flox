@@ -1,16 +1,17 @@
 <template>
   <strong>{{ $t('domicile_address') }}</strong>
-  <q-input
-    dense
-    :label="$t('street')"
-    v-model="address"
-    type="text"
-    lazy-rules="ondemand"
-    :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
-    @change="emitValue"
-  >
-  </q-input>
+
   <div class="flex justify-between">
+    <q-input
+      dense
+      :label="$t('street')"
+      v-model="address"
+      type="text"
+      lazy-rules="ondemand"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
+      style="width:65%"
+      @change="emitValue"
+    />
     <q-input
       dense
       :label="$t('number')"
@@ -18,8 +19,20 @@
       type="text"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('invalid_house_number')]"
-      style="width:40%"
+      style="width:30%"
       mask="####"
+      @change="emitValue"
+    />
+  </div>
+  <div class="flex justify-between">
+    <q-input
+      dense
+      :label="$t('city')"
+      v-model="city"
+      type="text"
+      lazy-rules="ondemand"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_city')]"
+      style="width:65%"
       @change="emitValue"
     >
     </q-input>
@@ -30,7 +43,7 @@
       type="number"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_zip_code')]"
-      style="width:40%"
+      style="width:30%"
       mask="######"
       @change="emitValue"
     >
@@ -46,14 +59,15 @@ const emit = defineEmits(['change'])
 const address = ref('')
 const number = ref(null)
 const zip_code = ref(null)
+const city = ref(null)
 
 function emitValue(){
   emit('change', {
     street: address.value,
     number: number.value,
-    zip_code: zip_code.value
-    // TODO: City
-    // TODO: Country
+    zip_code: zip_code.value,
+    city: city.value,
+    // TODO: possibly add Country, get format from some class
   })
 }
 

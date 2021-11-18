@@ -9,16 +9,17 @@
   </div>
 
   <div v-if="!show_correspondence">
-    <q-input
-      dense
-      :label="$t('street')"
-      v-model="address"
-      type="text"
-      lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
-    >
-    </q-input>
     <div class="flex justify-between">
+      <q-input
+        dense
+        :label="$t('street')"
+        v-model="address"
+        type="text"
+        lazy-rules="ondemand"
+        :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
+        style="width:65%"
+        @change="emitValue"
+      />
       <q-input
         dense
         :label="$t('number')"
@@ -26,8 +27,21 @@
         type="text"
         lazy-rules="ondemand"
         :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('invalid_house_number')]"
-        style="width:40%"
-        mask="####"
+        style="width:30%"
+        mask="###"
+        @change="emitValue"
+      />
+    </div>
+    <div class="flex justify-between">
+      <q-input
+        dense
+        :label="$t('city')"
+        v-model="city"
+        type="text"
+        lazy-rules="ondemand"
+        :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_city')]"
+        style="width:65%"
+        @change="emitValue"
       >
       </q-input>
       <q-input
@@ -37,8 +51,9 @@
         type="number"
         lazy-rules="ondemand"
         :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_zip_code')]"
-        style="width:40%"
+        style="width:30%"
         mask="######"
+        @change="emitValue"
       >
       </q-input>
     </div>
@@ -54,6 +69,7 @@ const emit = defineEmits(['change'])
 const address = ref('')
 const number = ref(null)
 const zip_code = ref(null)
+const city = ref(null)
 const show_correspondence = ref(true)
 
 // TODO address as class
@@ -61,8 +77,8 @@ function emitValue(){
   emit('change', {
     street: address.value,
     number: number.value,
-    zip_code: zip_code.value
-    // TODO: City
+    zip_code: zip_code.value,
+    city: city.value
     // TODO: Country
   })
 }
