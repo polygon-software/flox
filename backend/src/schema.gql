@@ -2,6 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Address {
+  """City"""
+  city: String!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Zip Code"""
+  zip_code: String!
+}
+
 type Company {
   """Branch structure"""
   branch_structure: Boolean!
@@ -10,13 +27,13 @@ type Company {
   company_name: String!
 
   """Correspondence address"""
-  correspondence_address: String!
+  correspondence_address: Address!
 
   """Whether document upload is enabled (initial request granted by SOI)"""
   document_upload_enabled: Boolean!
 
   """Domicile address"""
-  domicile_address: String!
+  domicile_address: Address!
 
   """E-Mail address"""
   email: String!
@@ -37,11 +54,18 @@ type Company {
   uuid: ID!
 }
 
+input CreateAddressInput {
+  city: String!
+  number: String!
+  street: String!
+  zip_code: String!
+}
+
 input CreateCompanyInput {
   branch_structure: Boolean!
   company_name: String!
-  correspondence_address: String!
-  domicile_address: String!
+  correspondence_address: CreateAddressInput!
+  domicile_address: CreateAddressInput!
   email: String!
   language: String!
   person_name: String!

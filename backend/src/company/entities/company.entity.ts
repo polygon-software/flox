@@ -1,5 +1,5 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import {
   IsString,
@@ -8,8 +8,7 @@ import {
   IsPhoneNumber,
   IsEmail,
 } from 'class-validator';
-import { Item } from '../../item/entities/item.entity';
-import { Address } from '../../address/entities/address.entity';
+import { Address } from './address.entity';
 
 @ObjectType()
 @Entity({ name: 'company' })

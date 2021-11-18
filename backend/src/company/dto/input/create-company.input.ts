@@ -1,15 +1,15 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import {
   IsBoolean,
   IsEmail,
-  IsInt,
   IsNotEmpty,
   IsNotEmptyObject,
   IsOptional,
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
-import { Address } from '../../../address/entities/address.entity';
+import { Address } from '../../entities/address.entity';
+import { CreateAddressInput } from './create-address.input';
 
 // TODO
 @InputType()
@@ -34,13 +34,13 @@ export class CreateCompanyInput {
   @IsString()
   uid: string;
 
-  @Field(() => Address)
+  @Field(() => CreateAddressInput)
   @IsNotEmptyObject()
-  domicile_address: Address;
+  domicile_address: CreateAddressInput;
 
-  @Field(() => Address)
+  @Field(() => CreateAddressInput)
   @IsNotEmptyObject()
-  correspondence_address: Address;
+  correspondence_address: CreateAddressInput;
 
   @Field(() => String)
   @IsString()

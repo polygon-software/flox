@@ -127,8 +127,8 @@ async function onSignup(){
       person_name: input.full_name.toString(), // TODO format
       language: input.language,
       uid: input.company_data.uid,
-      domicile_address: input.domicile_address.toString(), // TODO format
-      correspondence_address: input.correspondence_address.toString(), // TODO format
+      domicile_address: input.domicile_address, // TODO format
+      correspondence_address: input.correspondence_address, // TODO format
       phone: input.phone_number,
       email: input.email,
       branch_structure: input.company_data.branch_structure.value // TODO format
