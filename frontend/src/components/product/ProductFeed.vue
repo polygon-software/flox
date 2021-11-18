@@ -11,25 +11,16 @@
 
 <script setup lang="ts">
 import ProductCard from 'components/product/ProductCard.vue';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {ALL_PRODUCTS} from 'src/data/QUERIES';
+import {computed, Ref} from 'vue';
 
-// TODO get from backend.
-const products = [
-  {
-    uuid: 'abc-1234',
-    name: 'Fancy Watch',
-    value: 12000
-  },
-  {
-    uuid: 'casdf-543',
-    name: 'Cool car',
-    value: 40000
-  },
-  {
-    uuid: 'def-665',
-    name: 'Painting',
-    value: 2000
-  },
-]
+const queryResult = subscribeToQuery(ALL_PRODUCTS) as Ref<Record<string, Array<Record<string, unknown>>>>
+
+const products = computed(()=>{
+  console.log('Prod query:', queryResult.value)
+  return Object.values(queryResult.value) ?? []
+})
 
 </script>
 
