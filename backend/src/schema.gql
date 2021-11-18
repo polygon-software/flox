@@ -10,12 +10,12 @@ input CreateItemInput {
   userUUID: ID
 }
 
-input CreateUserInput {
+input CreateProductInput {
   age: Int!
   name: String!
 }
 
-input DeleteUserInput {
+input DeleteProductInput {
   uuid: ID!
 }
 
@@ -31,11 +31,11 @@ type Item {
 }
 
 type Mutation {
-  create(createUserInput: CreateUserInput!): User!
+  create(createUserInput: CreateProductInput!): User!
   createItem(createItemInput: CreateItemInput!): Item!
-  remove(deleteUserInput: DeleteUserInput!): User!
+  remove(deleteUserInput: DeleteProductInput!): User!
   removeItem(uuid: ID!): Item!
-  update(updateUserInput: UpdateUserInput!): User!
+  update(updateUserInput: UpdateProductInput!): User!
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
@@ -62,7 +62,7 @@ input UpdateItemInput {
   uuid: ID!
 }
 
-input UpdateUserInput {
+input UpdateProductInput {
   age: Int
   name: String
   uuid: ID!
