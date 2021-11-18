@@ -1,25 +1,43 @@
 <template>
   <q-page class="flex flex-center">
-    <!-- Login Card -->
-    <q-card class="q-pa-md q-ma-md">
-      <LoginForm @submit="onLogin"/>
-    </q-card>
+    <q-card
+      class="items-center"
+      style="height: 600px;"
+    >
+      <!-- Login Card -->
+      <LoginForm
+        v-if="!signup"
+        class="row q-pa-md items-center"
+        @submit="onLogin"
+      />
 
-    <!-- Signup Card -->
-    <q-card class="q-pa-md q-ma-md">
-      <SignupForm @submit="onSignup"/>
+      <!-- Signup Card -->
+      <q-card class="row q-pa-md q-ma-md justify-center flex items-center">
+        <SignupForm
+          v-if="signup"
+          @submit="onSignup"
+        />
+        <q-btn
+          v-if="!signup"
+          :label="$t('signup')"
+          color="primary"
+          text-color="black"
+          @click="signup = true"
+        />
+      </q-card>
     </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import LoginForm from 'components/forms/LoginForm.vue'
-import SignupForm from 'components/forms/SignupForm.vue'
-import {inject} from 'vue'
+import {inject, ref, } from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import LoginForm from 'components/forms/LoginForm.vue'
+import SignupForm from 'components/forms/SignupForm.vue'
 
+const signup = ref(false)
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 

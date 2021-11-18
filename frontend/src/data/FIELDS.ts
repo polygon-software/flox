@@ -1,8 +1,11 @@
-import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING} from './RULES'
+import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE} from './RULES'
 import {QInput} from 'quasar'
+import Interests from 'components/forms/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
+import LivingAddress from 'components/forms/fields/LivingAddress.vue'
 import {markRaw} from 'vue';
+import { i18n } from 'boot/i18n';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -35,9 +38,10 @@ const FIELDS: Record<string, Field> = {
             attributes: {
               dense: true,
               type: 'email',
-              label: 'E-Mail',
+              label: i18n.global.t('email'),
               lazy_rules: 'ondemand',
-              rules: [(val: string): boolean|string  => IS_EMAIL(val) || 'Please enter a valid e-mail address.']
+              outlined: true,
+              rules: [(val: string): boolean|string  => IS_EMAIL(val) || i18n.global.t('invalid_email')]
             },
         },
         USERNAME: {
@@ -46,23 +50,24 @@ const FIELDS: Record<string, Field> = {
             attributes: {
               dense: true,
               type: 'text',
-              label: 'Username',
+              label: i18n.global.t('username'),
               lazy_rules: 'true',
-              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
+              outlined: true,
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_username')]
             },
         },
         PASSWORD: {
             key: 'password',
             component: markRaw(Password),
             attributes: {
-              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_password')]
             }
         },
         PASSWORD_REPEAT: {
             key: 'password_repeat',
             component: markRaw(PasswordRepeat),
             attributes: {
-              rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) || 'Please enter a valid password']
+              rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) || i18n.global.t('invalid_password')]
             }
         },
         FULL_NAME: {
@@ -71,12 +76,48 @@ const FIELDS: Record<string, Field> = {
           attributes: {
             dense: true,
             type: 'text',
-            label: 'Full name',
+            label: i18n.global.t('full_name'),
             lazy_rules: 'true',
-            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || 'Please enter your full name']
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
           },
-
         },
+        INTERESTS: {
+          key: 'interests',
+          component: markRaw(Interests),
+          attributes: {
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
+          },
+        },
+        PHONE_NUMBER: {
+          key: 'phone_number',
+          component: markRaw(QInput),
+          attributes: {
+            dense: true,
+            type: 'tel',
+            label: i18n.global.t('phone_number'),
+            lazy_rules: 'ondemand',
+            mask: '### ### ## ##',
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_phone_number')]
+          },
+        },
+        LIVING_ADDRESS: {
+          key: 'living_address',
+          component: markRaw(LivingAddress),
+          attributes: {
+            rules: []
+          },
+        },
+        BIRTHDATE: {
+          key: 'birthdate',
+          component: markRaw(QInput),
+          attributes: {
+            dense: true,
+            label: i18n.global.t('birthdate'),
+            lazy_rules: 'ondemand',
+            mask: '##/##/####',
+            rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('invalid_birth_date')]
+          }
+        }
     }
 
 export {FIELDS}

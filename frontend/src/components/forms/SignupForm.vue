@@ -10,10 +10,11 @@
     <q-stepper
         v-model="form.step.value"
         ref="stepper"
-        animated
         active-color="primary"
-        transition-duration="1000"
         done-icon="done"
+        animated
+        transition-next="fade"
+        transition-prev="fade"
     >
       <q-step
           v-for="(page, index) in form.pages.value"
@@ -65,6 +66,7 @@
 <script setup lang="ts">
 import { FIELDS } from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
+import { i18n } from 'boot/i18n';
 
 /**
  * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different
@@ -75,35 +77,39 @@ import { Form } from 'src/helpers/form-helpers'
 
 const emit = defineEmits(['submit'])
 
-const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
+const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD]
+const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER]
+const address_fields  = [FIELDS.LIVING_ADDRESS]
+const authentication_fields = []
+const interest_fields = [FIELDS.INTERESTS]
 
 const form = new Form()
 
 form.pages.value = [
   {
     key: 'account_data',
-    label: 'Account',
+    label: i18n.global.t('account'),
     fields: account_fields,
   },
   {
     key: 'personal_data',
-    label: 'Personal',
-    fields: [FIELDS.FULL_NAME,],
+    label: i18n.global.t('personal'),
+    fields: personal_fields,
   },
   {
     key: 'address_data',
-    label: 'Address',
-    fields: [],
+    label: i18n.global.t('address'),
+    fields: address_fields,
   },
   {
     key: 'authentication',
-    label: 'Authentication',
-    fields: [],
+    label: i18n.global.t('authentication'),
+    fields: authentication_fields,
   },
   {
     key: 'interests',
-    label: 'Interests',
-    fields: [],
+    label: i18n.global.t('interests'),
+    fields: interest_fields,
   },
 ]
 

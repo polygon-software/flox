@@ -1,4 +1,5 @@
 import {EMAIL_REGEX, PASSWORD_REGEX} from 'src/helpers/REGEX';
+import {isEmpty} from 'lodash';
 
 /**
  * This file contains rules that can be applied to input forms.
@@ -12,9 +13,25 @@ const IS_EMAIL = (val: string): boolean => {
   return result;
 }
 const IS_VALID_STRING = (val: string): boolean => !!(val && val.length > 0)
-const IS_VALID_PASSWORD = (val: string): boolean => {
+
+const IS_VALID_PASSWORD = (val: string) => {
   const result: boolean = PASSWORD_REGEX.test(val)
   return result;
 }
 
-export {IS_EMAIL, IS_VALID_STRING, IS_VALID_PASSWORD}
+const IS_VALID_HOUSE_NUMBER = (val: string): boolean => {
+  //TODO: Add check for house number
+  return Number.isInteger(parseInt(val, 10))
+}
+
+const IS_VALID_ZIP = (val: string): boolean => {
+  //TODO: Add check for ZIP Code
+  return Number.isInteger(parseInt(val, 10))
+}
+
+const IS_VALID_BIRTHDATE = (val: string): boolean => {
+  // TODO
+  return true
+}
+
+export {IS_EMAIL, IS_VALID_STRING, IS_VALID_PASSWORD, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP,IS_VALID_BIRTHDATE}

@@ -10,6 +10,7 @@
       <div class="q-pa-md">
         <SampleSubscriptionTable/>
       </div>
+
     </div>
   </q-page>
 </template>
