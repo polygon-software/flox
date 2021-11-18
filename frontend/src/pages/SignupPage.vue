@@ -107,17 +107,22 @@ form.pages.value = [
  * @param email {string} - the authentication's e-mail address
  * @param password_repeat {string} - the authentication's chosen password
  */
-async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}): Promise<void>{
+async function onSignup({company_name, person_name, language, uid, domicile_address, correspondence_address, phone, email, branch_structure}:{company_name: string, person_name: string, language: string, uid: string, domicile_address: string, correspondence_address: string, phone: string, email: string, branch_structure: string }): Promise<void> {
   // TODO verify AGBs
-  // TODO rework for SOI-specific info: Don't actually sign up, but only create on database
-  //await $authService.signUp(username, email, password_repeat);
-  // await executeMutation(
-  //   CREATE_COMPANY,
-  //   {
-  //     name: 'testcompany'
-  //     // TODO
-  //   }
-  // )
+  await executeMutation(
+    CREATE_COMPANY,
+    {
+      company_name,
+      person_name,
+      language,
+      uid,
+      domicile_address,
+      correspondence_address,
+      phone,
+      email,
+      branch_structure
+    }
+  )
   await $routerService?.routeTo(ROUTES.SUCCESS)
   return;
 }
