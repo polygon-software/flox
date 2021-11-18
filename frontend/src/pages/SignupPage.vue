@@ -29,6 +29,7 @@
                 v-bind="field.attributes"
                 v-model="form.values.value[field.key]"
                 @change="(newValue) => form.updateValue(field.key, newValue)"
+                @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
             />
         </q-step>
         <template v-slot:navigation>
@@ -87,6 +88,7 @@ const account_fields = [
   FIELDS.DOMICILE_ADDRESS,
   FIELDS.CORRESPONDENCE_ADDRESS,
   FIELDS.PHONE_NUMBER,
+  FIELDS.EMAIL,
   FIELDS.COMPANY_DATA,
   FIELDS.CONDITIONS
 ]
@@ -101,26 +103,35 @@ form.pages.value = [
   },
 ]
 
+
 /**
- * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
- * @param username {string} - the authentication's chosen username
- * @param email {string} - the authentication's e-mail address
- * @param password_repeat {string} - the authentication's chosen password
+ * TODO docstrings
  */
-async function onSignup({company_name, person_name, language, uid, domicile_address, correspondence_address, phone, email, branch_structure}:{company_name: string, person_name: string, language: string, uid: string, domicile_address: string, correspondence_address: string, phone: string, email: string, branch_structure: string }): Promise<void> {
-  // TODO verify AGBs
+async function onSignup(){
+  // TODO verify AGBs checked
+
+  console.log('OnSignup with arguments', form.values.value)
+
+  const input: Record<string, Record<string, Record<string, unknown>>> = form.values.value
+
+  // If no correspondence given, is same as domicile address
+  if(!input.correspondence_address){
+    input.correspondence_address = input.domicile_address;
+  }
+
+  // TODO after cleanup
   await executeMutation(
     CREATE_COMPANY,
     {
-      company_name,
-      person_name,
-      language,
-      uid,
-      domicile_address,
-      correspondence_address,
-      phone,
-      email,
-      branch_structure
+      company_name: input.company_data.company_name,
+      person_name: input.full_name.toString(), // TODO format
+      language: input.language,
+      uid: input.company_data.uid,
+      domicile_address: input.domicile_address.toString(), // TODO format
+      correspondence_address: input.correspondence_address.toString(), // TODO format
+      phone: input.phone_number,
+      email: input.email,
+      branch_structure: input.company_data.branch_structure.value // TODO format
     }
   )
   await $routerService?.routeTo(ROUTES.SUCCESS)

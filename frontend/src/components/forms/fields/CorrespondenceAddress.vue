@@ -49,10 +49,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IS_VALID_STRING, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP } from 'src/data/RULES';
+const emit = defineEmits(['change'])
 
 const address = ref('')
 const number = ref(null)
 const zip_code = ref(null)
 const show_correspondence = ref(true)
 
+// TODO address as class
+function emitValue(){
+  emit('change', {
+    street: address.value,
+    number: number.value,
+    zip_code: zip_code.value
+    // TODO: City
+    // TODO: Country
+  })
+}
 </script>

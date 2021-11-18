@@ -8,6 +8,7 @@
     lazy-rules="ondemand"
     :label="$t('company_name')"
     :rules="[(val) => IS_VALID_STRING(val) || i18n.global.t('invalid_company_name')]"
+    @change="emitValue"
   >
   </q-input>
   <q-input
@@ -16,6 +17,7 @@
     type="text"
     lazy-rules="ondemand"
     :label="$t('company_uid')"
+    @change="emitValue"
   >
 
   </q-input>
@@ -24,6 +26,7 @@
     dense
     :label="$t('branch_structure')"
     :options="options"
+    @update:model-value="emitValue"
   >
   </q-select>
 </div>
@@ -35,8 +38,27 @@ import { ref } from 'vue'
 import { IS_VALID_STRING } from 'src/data/RULES';
 import {i18n} from 'boot/i18n';
 
+const emit = defineEmits(['change'])
+
 const company_name = ref('')
 const company_uid = ref('')
 const branch_structure = ref(null)
-const options = [i18n.global.t('yes'), i18n.global.t('no')]
+const options = [
+  {
+    label: i18n.global.t('yes'),
+    value: true
+  },
+  {
+    label:   i18n.global.t('no'),
+    value: false
+  }
+]
+
+function emitValue(){
+  emit('change', {
+    company_name: company_name.value,
+    uid: company_uid.value,
+    branch_structure: branch_structure.value, // TODO
+  })
+}
 </script>

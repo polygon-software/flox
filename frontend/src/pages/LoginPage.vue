@@ -39,8 +39,6 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {executeMutation} from 'src/helpers/data-helpers';
-import {CREATE_COMPANY} from 'src/data/mutations/COMPANY';
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
