@@ -8,7 +8,7 @@
           class="q-ma-sm"
       >
       <h5 class="text-black q-pa-none q-ma-md">
-        PolygonSoftware Template
+        BigABig
       </h5>
       <p
           class="text-grey-7"
