@@ -1,5 +1,4 @@
 import {EMAIL_REGEX, PASSWORD_REGEX} from 'src/helpers/REGEX';
-import {isEmpty} from 'lodash';
 
 /**
  * This file contains rules that can be applied to input forms.
