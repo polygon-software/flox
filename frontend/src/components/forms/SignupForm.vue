@@ -80,7 +80,6 @@ const emit = defineEmits(['submit'])
 const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD]
 const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER]
 const address_fields  = [FIELDS.LIVING_ADDRESS]
-const authentication_fields = []
 const interest_fields = [FIELDS.INTERESTS]
 
 const form = new Form()
@@ -100,11 +99,6 @@ form.pages.value = [
     key: 'address_data',
     label: i18n.global.t('address'),
     fields: address_fields,
-  },
-  {
-    key: 'authentication',
-    label: i18n.global.t('authentication'),
-    fields: authentication_fields,
   },
   {
     key: 'interests',

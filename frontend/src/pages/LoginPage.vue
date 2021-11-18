@@ -26,6 +26,7 @@
         />
       </q-card>
     </q-card>
+    <ProductFeed/>
   </q-page>
 </template>
 
@@ -36,6 +37,7 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
+import ProductFeed from 'components/product/ProductFeed.vue';
 
 const signup = ref(false)
 const $authService: AuthenticationService = inject('$authService')

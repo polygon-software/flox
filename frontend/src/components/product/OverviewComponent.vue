@@ -1,24 +1,23 @@
 <template>
   <div>
     <!-- Links -->
-    <div class="row q-gutter-md">
+    <div class="q-ml-sm">
       <p v-if="showDirectLink">
-        Buy right now: <q-icon name="shopping_cart" style="cursor: pointer" color="primary" @click="followLink(directLink)" />
+        Buy right now: <a :href="directLink">{{ directLink }}</a>
       </p>
       <p v-if="showSellerLink">
-        Find more products: <q-icon name="home" style="cursor: pointer" color="primary" @click="followLink(sellerLink)" />
+        Find more products: <a :href="sellerLink">{{ sellerLink }}</a>
       </p>
     </div>
 
     <!-- Timer -->
-    <b class="q-mt-xs">
-      Time left: <span> 12:00:00 </span>
+    <b class="q-mt-xs q-ml-sm">
+      Time left: <strong> 12:00:00 </strong>
     </b>
 
     <!-- Progress Bar -->
-    <div class="q-mt-md">
+    <div class="q-mt-md q-ml-sm q-mr-sm">
       <q-linear-progress
-        class="q-mt-xs"
         size="md"
         :value="progress"
         color="positive"
@@ -30,7 +29,7 @@
     </div>
 
     <!-- Winchances -->
-    <div class="flex justify-between q-mt-sm">
+    <div class="flex justify-between q-ma-sm">
       <b> Average chance: {{ average_chance }}</b>
       <b> Your chance: {{ user_chance }}</b>
     </div>
@@ -42,7 +41,7 @@ import { ref } from 'vue'
 
 //Links
 const directLink = 'https://polygon-software.ch/'
-const sellerLink = 'https://uzh.ch'
+const sellerLink = 'https://polygon-software.ch/'
 const showSellerLink = ref(true)
 const showDirectLink = ref(true)
 

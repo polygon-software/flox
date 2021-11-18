@@ -4,6 +4,7 @@
       v-for="product in products"
       :key="product.uuid"
       :product="product"
+      class="q-mb-xl"
 
     />
   </q-card>
