@@ -53,7 +53,6 @@ async function onLogin({username, password}: {username: string, password: string
   await $routerService.routeTo(ROUTES.MAIN)
 }
 
-
 /**
  * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
  * @param username {string} - the authentication's chosen username
