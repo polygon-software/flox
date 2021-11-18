@@ -20,7 +20,7 @@
 
     <!-- Title and Icons -->
     <div class="flex justify-between items-center">
-      <h5 class="q-ml-sm">{{ product.name }}</h5>
+      <h5 class="q-ml-sm">{{ product.title }}</h5>
       <div
         class="q-gutter-md"
         style="justify-content: flex-end; font-size: x-large"
