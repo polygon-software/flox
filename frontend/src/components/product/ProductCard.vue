@@ -20,7 +20,7 @@
 
     <!-- Title and Icons -->
     <div class="flex justify-between items-center">
-      <h5 class="col">{{ product.name }}</h5>
+      <h5 class="q-ml-sm">{{ product.name }}</h5>
       <div
         class="q-gutter-md"
         style="justify-content: flex-end; font-size: x-large"
@@ -31,6 +31,7 @@
           :tag="icon.tag"
           :name="icon.name"
           @click="icon.callback()"
+          class="q-mr-sm"
           style="cursor: pointer;"
         />
       </div>
@@ -55,45 +56,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-
-    <!-- Tabs -->
-    <!-- Tab header -->
-    <q-tabs
-      v-model="selectedTab"
-      dense
-      class="q-mt-xs text-grey"
-      active-color="primary"
-      indicator-color="primary"
-      narrow-indicator
-    >
-      <q-tab
-        v-for="tab in tabs"
-        :key="tab.name"
-        :name="tab.name"
-        :label="tab.label"
-      >
-      </q-tab>
-    </q-tabs>
-
-    <q-separator />
-
-    <!-- Tab content -->
-    <q-tab-panels
-      v-model="selectedTab"
-      animated
-      transition-next="fade"
-      transition-prev="fade"
-      >
-      <q-tab-panel
-        v-for="tab in tabs"
-        :key="tab.name"
-        :name="tab.name"
-      >
-        <component
-          :is="tab.component.name"
-        />
-      </q-tab-panel>
-    </q-tab-panels>
+    <OverviewComponent/>
   </q-card>
 </template>
 
