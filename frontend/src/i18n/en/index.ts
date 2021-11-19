@@ -34,7 +34,7 @@ export default {
   invalid_company_uid: 'Please enter your company\'s UID',
   language: 'Language',
   domicile_address: 'Address',
-  correspondence_address: 'Correspondence Address',
+  correspondence_address: 'Correspondence AddressItem',
   edit_correspondence_address: 'Same as domicile',
   invalid_address: 'Please enter a valid address',
   invalid_house_number: 'This number does not exist',

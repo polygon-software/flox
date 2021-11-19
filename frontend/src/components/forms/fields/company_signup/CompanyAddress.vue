@@ -1,6 +1,6 @@
 <template>
 
-  <!-- Domicile Address -->
+  <!-- Domicile AddressItem -->
   <strong>{{ $t('domicile_address') }}</strong>
 
   <AddressField @change="emitValue"/>
@@ -14,36 +14,43 @@
     />
   </div>
 
-  <!-- Correspondence Address -->
+  <!-- Correspondence AddressItem -->
   <div v-if="!hide_correspondence">
     <AddressField @change="emitValue"/>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {computed, ComputedRef, reactive, ref} from 'vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue';
+import {Address} from 'src/data/types/Address';
 const emit = defineEmits(['change'])
 
-const address = ref('')
-const number = ref(null)
-const zip_code = ref(null)
-const city = ref(null)
+const domicile_address = reactive(new Address())
+const correspondence_input = reactive(new Address())
 
 const hide_correspondence = ref(true)
 
 /**
- * TODO
- * @param val
+ * Depending on whether correspondence is set to identical, get correct result
  */
-function emitValue(val){
-  emit('change', {
-    street: address.value,
-    number: number.value,
-    zip_code: zip_code.value,
-    city: city.value,
-    // TODO: possibly add Country, get format from some class
-  })
+const correspondence_address: ComputedRef<Address> = computed(() => {
+  return hide_correspondence.value? domicile_address : correspondence_input
+})
+
+/**
+ * TODO
+ */
+function emitValue(){
+  if(domicile_address.validate() && correspondence_address.value.validate()){
+    emit('change', {
+      domicile_address: domicile_address,
+      correspondence_address: correspondence_address.value
+    })
+  } else {
+    // TODO else
+    console.log('INVALID in some address')
+  }
 }
 
 </script>
