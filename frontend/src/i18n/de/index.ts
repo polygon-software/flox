@@ -25,7 +25,7 @@ export default {
   number: 'Nummer',
   city: 'Stadt',
   zip_code: 'Postleitzahl',
-  state: 'Bundestaat',
+  state: 'Bundesland',
   authentication: 'Authentifizierung',
   interests: 'Interessen',
   company: 'Firma',
@@ -72,5 +72,7 @@ export default {
   travelling: 'Reisen',
   watches: 'Uhren',
   select_interests: 'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
-  amount_selected: '{amount}/{max} gewählt'
+  amount_selected: '{amount}/{max} gewählt',
+  change_password: 'Passwort ändern',
+  forgotten_password: 'Password vergessen?',
 }

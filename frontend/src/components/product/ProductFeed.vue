@@ -4,8 +4,6 @@
       v-for="product in products"
       :key="product.uuid"
       :product="product"
-      class="q-mb-xl"
-
     />
   </q-card>
 </template>
@@ -22,7 +20,6 @@ const products = computed(()=>{
   console.log('Prod query:', queryResult.value)
   return Object.values(queryResult.value) ?? []
 })
-
 </script>
 
 <style scoped>

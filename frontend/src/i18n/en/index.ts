@@ -71,5 +71,7 @@ export default {
   travelling: 'Travelling',
   watches: 'Watches',
   select_interests: 'Please select up to {max} categories that interest you',
-  amount_selected: '{amount}/{max} selected'
+  amount_selected: '{amount}/{max} selected',
+  change_password: 'Change Password',
+  forgotten_password: 'Forgot your password?',
 };

@@ -1,51 +1,88 @@
 <template>
-  <q-header class="row bg-white shadow-5 justify-between">
+  <q-header class="row bg-primary shadow-5 justify-between">
     <div class="row">
       <img
           alt="Polygon Software"
-          src="https://media-exp1.licdn.com/dms/image/C4D0BAQEI1LFXsM4DVA/company-logo_200_200/0/1593964710523?e=2159024400&v=beta&t=k1qIEpVNRq-GBvW1fZt2SKvcuq59WL8J0IuLW0qMSG4"
+          :src="image_path"
           style="height: 50px"
           class="q-ma-sm"
       >
-      <h5 class="text-black q-pa-none q-ma-md">
-        BigABig
-      </h5>
+    </div>
+    <div class="row items-center">
       <p
-          class="text-grey-7"
-          v-if="loggedIn && username"
+        class="text-black"
+        v-if="loggedIn && username"
       >
         {{ $t('loggedIn', {user: username})}}
       </p>
     </div>
+
   <div class="row">
     <q-btn
         v-if="loggedIn"
         label="Logout"
-        class="text-primary"
+        class="text-black"
         flat
         @click="logout"
     />
     <q-btn
         v-if="loggedIn"
-        label="Change Password"
-        class="text-primary"
+        :label="$t('change_password')"
+        class="text-black"
         flat
         @click="changePassword"
     />
     <q-btn
         v-if="!loggedIn"
-        label="Password Forgotten"
-        class="text-primary"
+        :label="$t('forgotten_password')"
+        class="text-black"
         flat
         @click="forgottenPassword"
     />
+    <div
+      v-if="loggedIn"
+      class="row items-center q-mr-md"
+    >
+      <q-btn
+        round
+        icon="notifications"
+        color="black"
+        style="width: 10px; height: 10px"
+        @click="openInbox"
+      >
+        <q-badge
+          floating
+          color="red"
+          rounded
+        />
+      </q-btn>
+    </div>
   </div>
-
   </q-header>
+
+  <q-dialog
+    v-model="showInbox"
+    class="q-pa-xs"
+  >
+    <q-card
+      style="overflow: hidden"
+    >
+      <Inbox db-ref="123"/>
+      <q-card-actions align="center">
+        <q-btn
+          :label="$t('back')"
+          flat
+          color="black"
+          @click="closeInbox"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
 </template>
 
 <script setup lang="ts">
-import {computed, inject} from 'vue'
+import {computed, ComputedRef, inject, ref} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -55,6 +92,7 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
+import Inbox from 'components/notifications/Inbox.vue';
 
 
 const $authService: AuthenticationService = inject('$authService')
@@ -92,4 +130,19 @@ function forgottenPassword() {
   $authService.showResetPasswordDialog();
 }
 
+
+const image_path = computed((): ComputedRef<string> => {
+  // eslint-disable-next-line
+  return require('src/assets/bigabig-logo.svg')
+})
+
+const showInbox = ref(false)
+
+function openInbox() {
+  showInbox.value = true
+}
+
+function closeInbox() {
+  showInbox.value = false
+}
 </script>

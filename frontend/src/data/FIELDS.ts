@@ -1,6 +1,6 @@
 import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE} from './RULES'
 import {QInput} from 'quasar'
-import Interests from 'components/forms/Interests.vue'
+import Interests from 'components/forms/fields/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
 import LivingAddress from 'components/forms/fields/LivingAddress.vue'

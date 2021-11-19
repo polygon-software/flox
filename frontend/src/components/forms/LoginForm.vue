@@ -3,7 +3,6 @@
     class="row q-pa-sm justify-center"
     style="width: 300px; height: 430px;"
   >
-    <h5 class="q-mb-none">{{ $t('login') }}</h5>
     <q-form
         @submit="onSubmit"
         class="row justify-center"

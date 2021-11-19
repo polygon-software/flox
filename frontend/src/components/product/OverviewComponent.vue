@@ -2,10 +2,16 @@
   <div>
     <!-- Links -->
     <div class="q-ml-sm">
-      <p v-if="showDirectLink">
+      <p
+        v-if="showDirectLink"
+        @click.stop
+      >
         Buy right now: <a :href="directLink">{{ directLink }}</a>
       </p>
-      <p v-if="showSellerLink">
+      <p
+        v-if="showSellerLink"
+        @click.stop
+      >
         Find more products: <a :href="sellerLink">{{ sellerLink }}</a>
       </p>
     </div>

@@ -1,9 +1,5 @@
 <template>
-  <q-card
-    style="width: 400px; cursor: pointer"
-    @click="openDetailView()"
-    class="q-mb-xl"
-  >
+  <q-card>
     <!-- Images -->
     <q-carousel
       animated
@@ -32,7 +28,7 @@
           :key="icon.tag"
           :tag="icon.tag"
           :name="icon.name"
-          @click.stop="icon.callback()"
+          @click="icon.callback()"
           class="q-mr-sm"
           style="cursor: pointer;"
         />
@@ -51,45 +47,66 @@
         <q-card-actions>
           <q-btn
             :label="$t('back')"
-            @click.stop=dialog.callback
-            color="black"
+            @click=dialog.callback
+            color="primary"
             flat
           />
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <OverviewComponent/>
-  </q-card>
 
-  <!-- Detail View -->
-  <q-dialog
-    v-model="showDetail"
-  >
-    <q-card class="q-pa-md" style="width: 800px;">
-      <ProductCardDetail :product="product"/>
-      <q-card-actions align="center">
-        <q-btn
-          :label="$t('back')"
-          @click.stop="closeDetailView"
-          color="black"
-          flat
+    <!-- Tab header -->
+    <q-tabs
+      v-model="selectedTab"
+      dense
+      class="q-mt-xs text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      narrow-indicator
+    >
+      <q-tab
+        v-for="tab in tabs"
+        :key="tab.name"
+        :name="tab.name"
+        :label="tab.label"
+      >
+      </q-tab>
+    </q-tabs>
+
+    <q-separator />
+
+    <!-- Tab content -->
+
+    <q-tab-panels
+      v-model="selectedTab"
+      animated
+      transition-next="fade"
+      transition-prev="fade"
+    >
+      <q-tab-panel
+        v-for="tab in tabs"
+        :key="tab.name"
+        :name="tab.name"
+      >
+        <component
+          :is="tab.component.name"
         />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
-  </template>
+      </q-tab-panel>
+    </q-tab-panels>
+  </q-card>
+</template>
 
 <script setup lang="ts">
-import {defineProps, ref, computed} from 'vue'
+import {defineProps, ref, markRaw, computed} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
-import ProductCardDetail from 'components/product/ProductCardDetail.vue';
+import DescriptionComponent from './DescriptionComponent.vue'
+import TicketDistributionComponent from './TicketDistributionComponent.vue'
 
 const props = defineProps({
   // dbReference: {
   //   required: true,
   //   type: String
   // },
-
   product: {
       required: true,
       type: Object,
@@ -170,6 +187,35 @@ const icon_dialogs = computed(() => {
   ]
 })
 
+  /**
+   * If the product page should be separated into different tabs, they need to be defined here.
+   * The content of each tab will be defined in a separate component.
+   */
+  const selectedTab = ref('overview')
+  const tabs = [
+    {
+      name: 'overview',
+      label: 'Overview',
+      component: {
+        name: markRaw(OverviewComponent),
+      }
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      component: {
+        name: markRaw(DescriptionComponent),
+      }
+    },
+    {
+      name: 'tickets',
+      label: 'Ticket Distribution',
+      component: {
+        name: markRaw(TicketDistributionComponent),
+      }
+    },
+  ]
+
 //TODO: Fetch data from DB
 
 /**
@@ -210,15 +256,6 @@ function openShareMenu() {
 
 function closeShareMenu() {
   showShareMenu.value = false
-}
-
-const showDetail = ref(false)
-function openDetailView() {
-  showDetail.value = true
-}
-
-function closeDetailView() {
-  showDetail.value = false
 }
 </script>
 

@@ -1,9 +1,13 @@
 <template>
   <q-page class="flex flex-center">
     <q-card
-      class="items-center"
+      class="items-center text-center"
       style="height: 600px;"
     >
+      <h5
+        style="margin: 0; padding: 0"
+      >
+        Willkommen bei Big A Big</h5>
       <!-- Login Card -->
       <LoginForm
         v-if="!signup"
@@ -11,12 +15,20 @@
         @submit="onLogin"
       />
 
+      <h6
+        v-if="!signup"
+        style="margin: 0; padding: 0"
+      >
+        Noch keinen Account?
+      </h6>
+
       <!-- Signup Card -->
       <q-card class="row q-pa-md q-ma-md justify-center flex items-center">
         <SignupForm
           v-if="signup"
           @submit="onSignup"
-        />
+        >
+        </SignupForm>
         <q-btn
           v-if="!signup"
           :label="$t('signup')"
@@ -26,7 +38,6 @@
         />
       </q-card>
     </q-card>
-    <ProductFeed/>
   </q-page>
 </template>
 
@@ -37,7 +48,6 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
-import ProductFeed from 'components/product/ProductFeed.vue';
 
 const signup = ref(false)
 const $authService: AuthenticationService = inject('$authService')
