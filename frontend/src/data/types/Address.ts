@@ -3,7 +3,6 @@ import Joi from 'joi';
 
 /**
  * A class representing an address
- * TODO: Joi Validation?
  */
 
 export class Address{
