@@ -37,7 +37,7 @@ export class CompanyResolver {
   async createCompany(
     @Args('createCompanyInput') createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.create(createCompanyInput);
+    return await this.companyService.createCompany(createCompanyInput);
   }
 
   @Public() // TODO restrict to appropriate roles
@@ -45,7 +45,7 @@ export class CompanyResolver {
   async updateCompany(
     @Args('updateCompanyInput') updateCompanyInput: UpdateCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.update(updateCompanyInput);
+    return await this.companyService.updateCompany(updateCompanyInput);
   }
 
   @Public() // TODO restrict to appropriate roles
@@ -53,6 +53,6 @@ export class CompanyResolver {
   async removeCompany(
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.remove(deleteCompanyInput);
+    return await this.companyService.deleteCompany(deleteCompanyInput);
   }
 }
