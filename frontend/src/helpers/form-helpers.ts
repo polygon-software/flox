@@ -1,5 +1,6 @@
 import {computed, Ref, ref} from 'vue';
 import {Field, FIELDS} from 'src/data/FIELDS';
+import _ from 'lodash';
 
 /**
  * The Form class is meant to be used by any form components.
@@ -19,10 +20,11 @@ export class Form {
   // Page definitions
   pages: Ref<Record<string, any>[]>
 
-  constructor() {
+
+  constructor(pages?: Array<Record<string, unknown>>) {
     this.step = ref(1)
     this.values = ref({})
-    this.pages = ref([])
+    this.pages = pages? ref(_.cloneDeep(pages)) : ref([])
   }
 
 
@@ -69,6 +71,7 @@ export class Form {
    * @param value {unknown}: the actual value to add
    */
   updateValue(key: string, value: unknown): void {
+    console.log('Get value', key, value)
     this.values.value[key] = value
   }
 }

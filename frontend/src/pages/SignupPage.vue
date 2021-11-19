@@ -6,8 +6,8 @@
     >
       <GenericForm
         :finish_label="$t('finish_signup')"
-        :form="form"
-        :finish="() => onSignup"
+        :pages="pages"
+        @submit="onSignup"
       />
     </div>
   </q-page>
@@ -15,7 +15,6 @@
 
 <script setup lang="ts">
 import { FIELDS } from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form-helpers'
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
@@ -44,10 +43,7 @@ const account_fields = [
   FIELDS.CONDITIONS
 ]
 
-const signup_form = ref(null)
-const form = new Form()
-
-form.pages.value = [
+const pages = [
   {
     key: 'company',
     label: i18n.global.t('signup'),
@@ -58,17 +54,14 @@ form.pages.value = [
 
 /**
  * Upon valid sign-up, creates database entry
+ * @param {Record<string, unknown>} values - form values
  * @async
  */
-async function onSignup(){
-  // TODO verify AGBs checked
-
-  console.log('OnSignup with arguments', form.values.value)
-
-  const input: Record<string, Record<string, unknown>> = form.values.value
+async function onSignup(values: Record<string, Record<string, unknown>>){
+  console.log('OnSignup with arguments', values)
 
   // Addresses
-  const addresses: Record<string, Address> = input.company_address as Record<string, Address>
+  const addresses: Record<string, Address> = values.company_address as Record<string, Address>
   const domicile_address: Address = addresses.domicile_address
   const correspondence_address: Address = addresses.correspondence_address
 
@@ -76,15 +69,15 @@ async function onSignup(){
   await executeMutation(
     CREATE_COMPANY,
     {
-      company_name: input.company_data.company_name,
-      person_name: input.full_name,
-      language: input.language,
-      uid: input.company_data.uid,
+      company_name: values.company_data.company_name,
+      person_name: values.full_name,
+      language: values.language,
+      uid: values.company_data.uid,
       domicile_address: domicile_address,
       correspondence_address: correspondence_address,
-      phone: input.phone_number,
-      email: input.email,
-      branch_structure: input.branch_structure
+      phone: values.phone_number,
+      email: values.email,
+      branch_structure: values.company_data.branch_structure
     }
   )
   await $routerService?.routeTo(ROUTES.SUCCESS)
