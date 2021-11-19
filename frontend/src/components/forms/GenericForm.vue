@@ -50,7 +50,7 @@
             v-if="form.step.value === form.pages.value.length"
             color="primary"
             :label="finish_label ?? $t('finish')"
-            @click="() => {form_ref.validate(); onSubmit()}"
+            @click="onSubmit"
           />
         </q-stepper-navigation>
       </template>
@@ -59,11 +59,12 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue';
+import {defineProps, Ref, ref} from 'vue';
 import {Form} from 'src/helpers/form-helpers';
+import {QForm} from 'quasar';
 const emit = defineEmits(['submit'])
 
-const form_ref = ref(null)
+const form_ref: Ref<QForm|null> = ref(null)
 
 const props = defineProps({
   finish_label: String,
@@ -76,10 +77,16 @@ const _pages = props.pages ? props.pages as Record<string, unknown>[] : undefine
 const form: Form = new Form(_pages)
 
 /**
- * Submits the form, containing all entered values
+ * Validates and, if valid, submits the form with all entered values
+ * @async
  */
-function onSubmit(){
-  emit('submit', form.values.value)
+async function onSubmit(){
+  const is_valid = await form_ref.value?.validate()
+
+  if(is_valid){
+    emit('submit', form.values.value)
+  }
+
 }
 
 
