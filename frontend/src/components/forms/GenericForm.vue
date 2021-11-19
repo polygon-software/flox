@@ -76,7 +76,7 @@ const _pages = props.pages ? props.pages as Record<string, unknown>[] : undefine
 const form: Form = new Form(_pages)
 
 /**
- * TODO
+ * Submits the form, containing all entered values
  */
 function onSubmit(){
   emit('submit', form.values.value)
@@ -84,7 +84,3 @@ function onSubmit(){
 
 
 </script>
-
-<style scoped>
-
-</style>

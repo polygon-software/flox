@@ -58,14 +58,12 @@ const pages = [
  * @async
  */
 async function onSignup(values: Record<string, Record<string, unknown>>){
-  console.log('OnSignup with arguments', values)
-
   // Addresses
   const addresses: Record<string, Address> = values.company_address as Record<string, Address>
   const domicile_address: Address = addresses.domicile_address
   const correspondence_address: Address = addresses.correspondence_address
 
-  // TODO after cleanup
+  // Create signup request (company) on database
   await executeMutation(
     CREATE_COMPANY,
     {
@@ -80,12 +78,10 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
       branch_structure: values.company_data.branch_structure
     }
   )
+
+  // Push to success page
   await $routerService?.routeTo(ROUTES.SUCCESS)
   return;
 }
 
 </script>
-
-<style scoped>
-
-</style>

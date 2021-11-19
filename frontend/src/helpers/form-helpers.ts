@@ -27,8 +27,6 @@ export class Form {
     this.pages = pages? ref(_.cloneDeep(pages)) : ref([])
   }
 
-
-
   /**
    * Determines whether the current page is filled with valid data
    * (used to determine whether to allow going to next step within form)
