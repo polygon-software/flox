@@ -6,6 +6,8 @@
     >
       <q-form
           class="q-gutter-md"
+          ref="signup_form"
+          greedy
           >
       <q-stepper
           v-model="form.step.value"
@@ -53,8 +55,7 @@
                 v-if="form.step.value === form.pages.value.length"
                 color="primary"
                 :label="$t('finish_signup')"
-                @click="onSignup"
-                :disable="!form.pageValid.value"
+                @click="() => {signup_form.validate(); onSignup()}"
             />
           </q-stepper-navigation>
         </template>
@@ -70,7 +71,7 @@ import { Form } from 'src/helpers/form-helpers'
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {inject} from 'vue';
+import {inject, ref} from 'vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_COMPANY} from 'src/data/mutations/COMPANY';
 import {Address} from 'src/data/types/Address';
@@ -94,6 +95,7 @@ const account_fields = [
   FIELDS.CONDITIONS
 ]
 
+const signup_form = ref(null)
 const form = new Form()
 
 form.pages.value = [
@@ -116,10 +118,6 @@ async function onSignup(){
 
   const input: Record<string, Record<string, unknown>> = form.values.value
 
-  // Branch structure
-  const branch_structure_object: Record<string, unknown> = input.company_data.branch_structure as Record<string, unknown>
-  const branch_structure: boolean = branch_structure_object.value as boolean
-
   // Addresses
   const addresses: Record<string, Address> = input.company_address as Record<string, Address>
   const domicile_address: Address = addresses.domicile_address
@@ -137,7 +135,7 @@ async function onSignup(){
       correspondence_address: correspondence_address,
       phone: input.phone_number,
       email: input.email,
-      branch_structure: branch_structure
+      branch_structure: input.branch_structure
     }
   )
   await $routerService?.routeTo(ROUTES.SUCCESS)

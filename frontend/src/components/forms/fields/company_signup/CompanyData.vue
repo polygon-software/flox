@@ -5,7 +5,6 @@
     v-model="company_name"
     dense
     type="text"
-    lazy-rules="ondemand"
     :label="$t('company_name')"
     :rules="[(val) => IS_VALID_STRING(val) || i18n.global.t('invalid_company_name')]"
     @change="emitValue"
@@ -15,20 +14,14 @@
     v-model="company_uid"
     dense
     type="text"
-    lazy-rules="ondemand"
     :label="$t('company_uid')"
     @change="emitValue"
-  >
-
-  </q-input>
-  <q-select
+  />
+  <q-checkbox
     v-model="branch_structure"
-    dense
     :label="$t('branch_structure')"
-    :options="options"
     @update:model-value="emitValue"
-  >
-  </q-select>
+  />
 </div>
 
 </template>
@@ -42,23 +35,13 @@ const emit = defineEmits(['change'])
 
 const company_name = ref('')
 const company_uid = ref('')
-const branch_structure = ref(null)
-const options = [
-  {
-    label: i18n.global.t('yes'),
-    value: true
-  },
-  {
-    label:   i18n.global.t('no'),
-    value: false
-  }
-]
+const branch_structure = ref(false)
 
 function emitValue(){
   emit('change', {
     company_name: company_name.value,
     uid: company_uid.value,
-    branch_structure: branch_structure.value, // TODO
+    branch_structure: branch_structure.value,
   })
 }
 </script>

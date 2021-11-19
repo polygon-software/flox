@@ -48,7 +48,6 @@ export class Form {
 
     // Validate each field by its "rules" attribute
     return pageKeys.every((key) => {
-      console.log('Check attr', key)
       // If no value present at all, stop check
       if (!this.values.value[key]) return false
 
@@ -56,7 +55,6 @@ export class Form {
       const rules: Array<(valueElement: any) => boolean|string> = field.attributes.rules
       return rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
-        console.log('Checking rule for', key, field.key , rule(this.values.value[key]))
         const result = typeof rule(this.values.value[key]) === 'boolean' && rule(this.values.value[key]) === true
         return result
       })

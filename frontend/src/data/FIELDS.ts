@@ -31,7 +31,6 @@ export interface Field {
     rules: Array<(val: any) => boolean|string>
     [key: string]: any
   },
-
 }
 
 const FIELDS: Record<string, Field> = {
