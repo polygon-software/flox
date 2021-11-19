@@ -25,7 +25,7 @@ export interface Field {
   key: string,
   component: any,
   attributes: {
-    rules: Array<(val: any) => boolean|string>
+    rules: Array<(val: any, ...args: any[]) => boolean|string>
     [key: string]: any
   },
 
@@ -60,7 +60,7 @@ const FIELDS: Record<string, Field> = {
             key: 'password',
             component: markRaw(Password),
             attributes: {
-              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_password')]
+              rules: [(val: string): boolean|string => IS_VALID_PASSWORD(val) || i18n.global.t('invalid_password')]
             }
         },
         PASSWORD_REPEAT: {
@@ -85,7 +85,7 @@ const FIELDS: Record<string, Field> = {
           key: 'interests',
           component: markRaw(Interests),
           attributes: {
-            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
+            rules: [(val: Array<number>, max_interests: number): boolean|string => val.length > 0 && val.length < 6 || i18n.global.t('select_interests', {max: max_interests})]
           },
         },
         PHONE_NUMBER: {

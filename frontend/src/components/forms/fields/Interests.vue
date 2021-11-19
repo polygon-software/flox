@@ -54,8 +54,10 @@
 <script setup lang="ts">
 import {computed, defineEmits, ref} from 'vue'
 import { i18n } from 'boot/i18n';
+
 const emit = defineEmits(['change'])
 const search = ref('')
+
 // All available interest categories
 const max_interests = 5
 type interest = {
@@ -108,30 +110,36 @@ const interests = ref([
     model: false,
   },
 ])
+
 const selectedInterests = computed(() => {
   return interests.value.filter(item => {
     return item.model == true
   })
 })
+
 // Sorts the interests alphabetically
 const sortedInterests = computed(() => {
   return interests.value.slice().sort((a, b) => a.name.localeCompare(b.name))
 })
+
 // Filter the interests by checking their name
 const filteredInterests = computed(() => {
   return sortedInterests.value.filter(msg => {
     return msg.name.toLowerCase().includes(search.value.toLowerCase()) || msg.name.toLowerCase().includes(search.value.toLowerCase())
   })
 })
+
 function clickChip(interest: interest) {
   // Deselect is always possible
   if (interest.model) {
     interest.model = false
   }
+
   // Not at maximum number of selected interests
   else if (!interest.model && selectedInterests.value.length < max_interests) {
     interest.model = true
   }
+
   emit('change', selectedInterests)
 }
 </script>

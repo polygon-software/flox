@@ -45,6 +45,7 @@ export default {
   invalid_house_number: 'Diese Nummer existiert nicht',
   invalid_zip_code: 'Bitte geben Sie ine gültige Postleitzahl ein',
   invalid_city: 'Bitte geben Sie Ihren Wohnort an',
+  invalid_state: 'Bitte geben Sie Ihren Bundesstaat an',
   phone_number: 'Telefonnummer',
   invalid_phone_number: 'Bitte geben Sie eine gütlige Telefonnummer ein',
   branch_structure: 'Niederlassungsstruktur',
