@@ -22,7 +22,6 @@
         />
     </template>
   </q-field>
-
 </template>
 
 <script setup lang="ts">
