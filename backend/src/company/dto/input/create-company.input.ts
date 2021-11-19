@@ -8,8 +8,7 @@ import {
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
-import { Address } from '../../../address/entities/address.entity';
-import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
+import { CreateAddressInput } from 'src/address/dto/input/create-address.input';
 
 // TODO
 @InputType()

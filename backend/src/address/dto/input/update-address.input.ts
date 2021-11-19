@@ -1,4 +1,4 @@
-import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
+import { CreateAddressInput } from './create-address.input';
 import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
 import { IsString } from 'class-validator';
 

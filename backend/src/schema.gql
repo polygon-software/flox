@@ -133,8 +133,15 @@ type Subscription {
 }
 
 input UpdateCompanyInput {
-  age: Int
-  name: String
+  branch_structure: Boolean!
+  company_name: String!
+  correspondence_address: CreateAddressInput!
+  domicile_address: CreateAddressInput!
+  email: String!
+  language: String!
+  person_name: String!
+  phone: String!
+  uid: String
   uuid: ID!
 }
 

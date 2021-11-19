@@ -12,7 +12,7 @@ import { Public } from '../auth/auth.guard';
 export class CompanyResolver {
   constructor(private readonly companyService: CompanyService) {}
 
-  @Public() // TODO SOI role only
+  @Public() // TODO restrict to SOI role only
   @Query(() => [Company], { name: 'companies' })
   async getCompanies(
     @Args() getCompaniesArgs: GetCompaniesArgs,
@@ -20,13 +20,13 @@ export class CompanyResolver {
     return await this.companyService.getCompanies(getCompaniesArgs);
   }
 
-  @Public() // TODO SOI role only
+  @Public() // TODO restrict to SOI role only
   @Query(() => [Company], { name: 'allCompanies' })
   async getAllCompanies(): Promise<Company[]> {
     return await this.companyService.getAllCompanies();
   }
 
-  @Public() // TODO SOI role only
+  @Public() // TODO restrict to SOI role only
   @Query(() => Company, { name: 'company' })
   async getCompany(@Args() getCompanyArgs: GetCompanyArgs): Promise<Company> {
     return await this.companyService.getCompany(getCompanyArgs);
@@ -40,7 +40,7 @@ export class CompanyResolver {
     return await this.companyService.create(createCompanyInput);
   }
 
-  @Public()
+  @Public() // TODO restrict to appropriate roles
   @Mutation(() => Company)
   async updateCompany(
     @Args('updateCompanyInput') updateCompanyInput: UpdateCompanyInput,
@@ -48,7 +48,7 @@ export class CompanyResolver {
     return await this.companyService.update(updateCompanyInput);
   }
 
-  @Public()
+  @Public() // TODO restrict to appropriate roles
   @Mutation(() => Company)
   async removeCompany(
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,

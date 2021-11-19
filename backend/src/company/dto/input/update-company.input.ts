@@ -1,7 +1,12 @@
-import { Field, ID, InputType, Int } from '@nestjs/graphql';
-import { IsInt, IsNotEmpty, IsUUID } from 'class-validator';
-
-// TODO this file in its entirety
+import { Field, ID, InputType } from '@nestjs/graphql';
+import {
+  IsBoolean,
+  IsEmail,
+  IsPhoneNumber,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+import { CreateAddressInput } from 'src/address/dto/input/create-address.input';
 
 @InputType()
 export class UpdateCompanyInput {
@@ -9,11 +14,39 @@ export class UpdateCompanyInput {
   @IsUUID()
   uuid: string;
 
-  @Field(() => Int, { nullable: true })
-  @IsInt()
-  age: number;
+  @Field(() => String)
+  @IsString()
+  company_name: string;
+
+  @Field(() => String)
+  @IsString()
+  person_name: string;
+
+  @Field(() => String)
+  @IsString()
+  language: string;
 
   @Field(() => String, { nullable: true })
-  @IsNotEmpty()
-  name: string;
+  @IsString()
+  uid: string;
+
+  @Field(() => CreateAddressInput)
+  domicile_address: CreateAddressInput;
+
+  @Field(() => CreateAddressInput)
+  correspondence_address: CreateAddressInput;
+
+  @Field(() => String)
+  @IsString()
+  @IsPhoneNumber()
+  phone: string;
+
+  @Field(() => String)
+  @IsString()
+  @IsEmail()
+  email: string;
+
+  @Field(() => Boolean)
+  @IsBoolean()
+  branch_structure: boolean;
 }
