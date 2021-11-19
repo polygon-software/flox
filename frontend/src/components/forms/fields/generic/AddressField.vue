@@ -4,7 +4,7 @@
     <q-input
       dense
       :label="$t('street')"
-      v-model="street"
+      v-model="address.street"
       type="text"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
@@ -14,7 +14,7 @@
     <q-input
       dense
       :label="$t('number')"
-      v-model="number"
+      v-model="address.number"
       type="text"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('invalid_house_number')]"
@@ -27,7 +27,7 @@
     <q-input
       dense
       :label="$t('city')"
-      v-model="city"
+      v-model="address.city"
       type="text"
       :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_city')]"
       style="width:65%"
@@ -37,7 +37,7 @@
     <q-input
       dense
       :label="$t('zip_code')"
-      v-model="zip_code"
+      v-model="address.zip_code"
       type="number"
       :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_zip_code')]"
       style="width:30%"
@@ -49,29 +49,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {reactive} from 'vue'
 import { IS_VALID_STRING, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP } from 'src/data/RULES';
+import {Address} from 'src/data/types/Address';
 const emit = defineEmits(['change'])
 
-const street = ref('')
-const number = ref(null)
-const zip_code = ref(null)
-const city = ref(null)
+const address = reactive(new Address())
 
 /**
- * Emits the updated value
+ * Emits the updated value, if it is valid
  */
 function emitValue(){
-  emit('change', {
-    street: street.value,
-    number: number.value,
-    zip_code: zip_code.value,
-    city: city.value,
-    // TODO: possibly add Country, get format from some class
-  })
+  if(address.validate()){
+    emit('change', address)
+  }
+
 }
 </script>
-
-<style scoped>
-
-</style>
