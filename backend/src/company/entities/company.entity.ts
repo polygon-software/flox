@@ -8,7 +8,7 @@ import {
   IsPhoneNumber,
   IsEmail,
 } from 'class-validator';
-import { Address } from './address.entity';
+import { Address } from '../../address/entities/address.entity';
 
 @ObjectType()
 @Entity({ name: 'company' })
