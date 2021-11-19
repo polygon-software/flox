@@ -1,6 +1,6 @@
 <template>
 
-  <!-- Domicile AddressItem -->
+  <!-- Domicile Address -->
   <strong>{{ $t('domicile_address') }}</strong>
 
   <AddressField @change="(val: Address) => {domicile_address.replace(val); emitValue()}"/>
@@ -14,7 +14,7 @@
     />
   </div>
 
-  <!-- Correspondence AddressItem -->
+  <!-- Correspondence Address -->
   <div v-if="!hide_correspondence">
     <AddressField @change="(val) => {correspondence_input.replace(val); emitValue()}"/>
   </div>
@@ -26,9 +26,11 @@ import AddressField from 'components/forms/fields/generic/AddressField.vue';
 import {Address} from 'src/data/types/Address';
 const emit = defineEmits(['change'])
 
+// Addresses
 const domicile_address = ref(new Address())
 const correspondence_input = ref(new Address())
 
+// Whether to hide the correspondence address
 const hide_correspondence = ref(true)
 
 /**
@@ -39,14 +41,9 @@ const correspondence_address: ComputedRef<Address> = computed(() => {
 })
 
 /**
- * TODO
+ * Emits both addresses
  */
-async function emitValue(){
-
-  await new Promise(resolve => setTimeout(resolve, 10));
-
-  console.log('emit addresses:', domicile_address.value, correspondence_address.value)
-
+function emitValue(){
   emit('change', {
     domicile_address: domicile_address.value,
     correspondence_address: correspondence_address.value

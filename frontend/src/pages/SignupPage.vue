@@ -72,6 +72,7 @@ import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_COMPANY} from 'src/data/mutations/COMPANY';
+import {Address} from 'src/data/types/Address';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -113,18 +114,18 @@ async function onSignup(){
 
   const input: Record<string, Record<string, unknown>> = form.values.value
 
-  // If no correspondence given, is same as domicile address
-  if(!input.correspondence_address){
-    input.correspondence_address = input.domicile_address;
-  }
-
-  // Get name object, containing first_name and last_name
+  // Person name
   const person_name_object: Record<string, string> = input.full_name as Record<string, string>
   const person_name = `${person_name_object.first_name} ${person_name_object.last_name}`
 
+  // Branch structure
   const branch_structure_object: Record<string, unknown> = input.company_data.branch_structure as Record<string, unknown>
-  console.log('BSO:', branch_structure_object)
   const branch_structure: boolean = branch_structure_object.value as boolean
+
+  // Addresses
+  const addresses: Record<string, Address> = input.company_address as Record<string, Address>
+  const domicile_address: Address = addresses.domicile_address
+  const correspondence_address: Address = addresses.correspondence_address
 
   // TODO after cleanup
   await executeMutation(
@@ -134,8 +135,8 @@ async function onSignup(){
       person_name: person_name,
       language: input.language,
       uid: input.company_data.uid,
-      domicile_address: input.domicile_address,
-      correspondence_address: input.correspondence_address,
+      domicile_address: domicile_address,
+      correspondence_address: correspondence_address,
       phone: input.phone_number,
       email: input.email,
       branch_structure: branch_structure

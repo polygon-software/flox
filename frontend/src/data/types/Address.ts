@@ -20,7 +20,7 @@ export class Address{
   }
 
   /**
-   * Validates the Address to Joi schema
+   * Validates the address to Joi schema
    */
   validate(): boolean{
     try{
@@ -32,13 +32,13 @@ export class Address{
   }
 
   /**
-   * TODO
-   * @param street
-   * @param number
-   * @param city
-   * @param zip_code
+   * Replaces an address's content
+   * @param {string} street
+   * @param {string} number
+   * @param {string} city
+   * @param {string} zip_code
    */
-  replace({street, number, city, zip_code}: {street: string, number: string, city: string, zip_code: string}){
+  replace({street, number, city, zip_code}: {street: string, number: string, city: string, zip_code: string}): void{
     this.street = street
     this.number = number
     this.city = city
