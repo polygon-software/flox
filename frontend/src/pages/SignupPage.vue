@@ -54,6 +54,7 @@
                 color="primary"
                 :label="$t('finish_signup')"
                 @click="onSignup"
+                :disable="!form.pageValid.value"
             />
           </q-stepper-navigation>
         </template>
@@ -105,7 +106,8 @@ form.pages.value = [
 
 
 /**
- * TODO docstrings
+ * Upon valid sign-up, creates database entry
+ * @async
  */
 async function onSignup(){
   // TODO verify AGBs checked
@@ -113,10 +115,6 @@ async function onSignup(){
   console.log('OnSignup with arguments', form.values.value)
 
   const input: Record<string, Record<string, unknown>> = form.values.value
-
-  // Person name
-  const person_name_object: Record<string, string> = input.full_name as Record<string, string>
-  const person_name = `${person_name_object.first_name} ${person_name_object.last_name}`
 
   // Branch structure
   const branch_structure_object: Record<string, unknown> = input.company_data.branch_structure as Record<string, unknown>
@@ -132,7 +130,7 @@ async function onSignup(){
     CREATE_COMPANY,
     {
       company_name: input.company_data.company_name,
-      person_name: person_name,
+      person_name: input.full_name,
       language: input.language,
       uid: input.company_data.uid,
       domicile_address: domicile_address,

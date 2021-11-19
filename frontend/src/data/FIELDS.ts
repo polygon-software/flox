@@ -102,7 +102,7 @@ const FIELDS: Record<string, Field> = {
     key: 'company_address',
     component: markRaw(CompanyAddress),
     attributes: {
-      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_address')] // TODO
+      rules: [] // Validated by component
     },
   },
   COMPANY_DATA: {
@@ -116,7 +116,7 @@ const FIELDS: Record<string, Field> = {
       key: 'conditions',
       component: markRaw(Conditions),
       attributes: {
-        rules: []
+        rules: [] // Validated by component
       }
   }
 }

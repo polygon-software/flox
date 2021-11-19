@@ -4,7 +4,6 @@
     v-model="first_name"
     :label="$t('first_name')"
     type="text"
-    lazy-rules="ondemand"
     :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_name')]"
     @change="emitValue"
   >
@@ -14,7 +13,6 @@
     v-model="last_name"
     :label="$t('last_name')"
     type="text"
-    lazy-rules="ondemand"
     :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_name')]"
     @change="emitValue"
   />
@@ -29,10 +27,7 @@ const first_name = ref('')
 const last_name = ref('')
 
 function emitValue(){
-  emit('change', {
-    first_name: first_name.value,
-    last_name: last_name.value,
-  })
+  emit('change', `${first_name.value} ${last_name.value}`)
 }
 
 </script>

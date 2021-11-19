@@ -47,7 +47,7 @@ export default {
   branch_structure: 'Niederlassungsstruktur',
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
-  must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
+  must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
   chef_dashboard: 'Chef Dashboard',
   register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
   confirmed_registration: 'Registrierung bestätigt',
