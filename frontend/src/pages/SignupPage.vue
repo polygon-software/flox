@@ -18,7 +18,7 @@ import { FIELDS } from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {inject, ref} from 'vue';
+import {inject} from 'vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_COMPANY} from 'src/data/mutations/COMPANY';
 import {Address} from 'src/data/types/Address';
