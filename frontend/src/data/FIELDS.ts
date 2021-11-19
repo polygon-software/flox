@@ -1,12 +1,11 @@
 import {IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
 import {QInput, QSelect} from 'quasar'
-import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
+import PasswordRepeat from 'components/forms/fields/company_signup/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
-import DomicileAddress from 'components/forms/fields/DomicileAddress.vue'
-import CorrespondenceAddress from 'components/forms/fields/CorrespondenceAddress.vue'
-import CompanyData from 'components/forms/fields/CompanyData.vue'
-import FullName from 'components/forms/fields/FullName.vue'
-import Conditions from 'components/forms/fields/Conditions.vue'
+import CompanyAddress from 'components/forms/fields/company_signup/CompanyAddress.vue'
+import CompanyData from 'components/forms/fields/company_signup/CompanyData.vue'
+import FullName from 'components/forms/fields/company_signup/FullName.vue'
+import Conditions from 'components/forms/fields/company_signup/Conditions.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 
@@ -99,18 +98,11 @@ const FIELDS: Record<string, Field> = {
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['DE', 'EN', 'FR', 'IT']) || i18n.global.t('invalid_option')]
     },
   },
-  DOMICILE_ADDRESS: {
+  COMPANY_ADDRESS: {
     key: 'domicile_address',
-    component: markRaw(DomicileAddress),
+    component: markRaw(CompanyAddress),
     attributes: {
-      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_address')]
-    },
-  },
-  CORRESPONDENCE_ADDRESS: {
-    key: 'correspondence_address',
-    component: markRaw(CorrespondenceAddress),
-    attributes: {
-      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_address')]
+      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_address')] // TODO
     },
   },
   COMPANY_DATA: {

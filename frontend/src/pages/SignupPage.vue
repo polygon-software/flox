@@ -85,8 +85,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
 const account_fields = [
   FIELDS.FULL_NAME,
   FIELDS.LANGUAGE,
-  FIELDS.DOMICILE_ADDRESS,
-  FIELDS.CORRESPONDENCE_ADDRESS,
+  FIELDS.COMPANY_ADDRESS,
   FIELDS.PHONE_NUMBER,
   FIELDS.EMAIL,
   FIELDS.COMPANY_DATA,
