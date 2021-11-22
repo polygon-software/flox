@@ -2,7 +2,7 @@
   <q-card
     style="width: 400px; cursor: pointer"
     @click="openDetailView()"
-    class="q-mb-xl"
+    class="q-mb-xl q-pa-sm"
   >
     <!-- Images -->
     <q-carousel
@@ -80,7 +80,7 @@
   </template>
 
 <script setup lang="ts">
-import {defineProps, ref, computed} from 'vue'
+import {ref, computed} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
 import ProductCardDetail from 'components/product/ProductCardDetail.vue';
 

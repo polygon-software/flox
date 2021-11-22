@@ -98,17 +98,18 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref, markRaw, computed} from 'vue'
+import {ref, markRaw, computed} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
 import DescriptionComponent from './DescriptionComponent.vue'
 import TicketDistributionComponent from './TicketDistributionComponent.vue'
 
+/*
 const props = defineProps({
   dbReference: {
     required: true,
     type: String
   },
-})
+})*/
 
 // General
 const title = 'Product Card'

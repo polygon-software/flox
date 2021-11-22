@@ -14,7 +14,7 @@
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
-          class="q-ma-md"
+          class="q-ma-none"
           style="width: 90%"
       />
       <q-btn
