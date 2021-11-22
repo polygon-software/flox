@@ -1,11 +1,11 @@
 <template>
-  <q-card class="q-pa-sm">
+  <div class="q-pa-sm">
     <ProductCard
       v-for="product in products"
       :key="product.uuid"
       :product="product"
     />
-  </q-card>
+  </div>
 </template>
 
 <script setup lang="ts">
