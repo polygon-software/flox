@@ -56,7 +56,6 @@ import {computed, defineEmits, ref} from 'vue'
 import { i18n } from 'boot/i18n';
 
 const emit = defineEmits(['change'])
-
 const search = ref('')
 
 // All available interest categories
@@ -120,7 +119,7 @@ const selectedInterests = computed(() => {
 
 // Sorts the interests alphabetically
 const sortedInterests = computed(() => {
-    return interests.value.slice().sort((a, b) => a.name.localeCompare(b.name))
+  return interests.value.slice().sort((a, b) => a.name.localeCompare(b.name))
 })
 
 // Filter the interests by checking their name
@@ -129,7 +128,6 @@ const filteredInterests = computed(() => {
     return msg.name.toLowerCase().includes(search.value.toLowerCase()) || msg.name.toLowerCase().includes(search.value.toLowerCase())
   })
 })
-
 
 function clickChip(interest: interest) {
   // Deselect is always possible

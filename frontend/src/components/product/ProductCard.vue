@@ -1,12 +1,13 @@
 <template>
   <q-card
-    style="width: 500px;"
+    style="width: 400px; cursor: pointer"
+    @click="openDetailView(product)"
+    class="q-mb-xl q-pa-sm"
   >
     <!-- Images -->
     <q-carousel
       animated
       v-model="currentImage"
-      arrows
       navigation
       infinite
     >
@@ -20,7 +21,7 @@
 
     <!-- Title and Icons -->
     <div class="flex justify-between items-center">
-      <h5 class="col">{{ title }}</h5>
+      <h5 class="q-ml-sm">{{ product.title }}</h5>
       <div
         class="q-gutter-md"
         style="justify-content: flex-end; font-size: x-large"
@@ -30,7 +31,8 @@
           :key="icon.tag"
           :tag="icon.tag"
           :name="icon.name"
-          @click="icon.callback()"
+          @click.stop="icon.callback()"
+          class="q-mr-sm"
           style="cursor: pointer;"
         />
       </div>
@@ -48,70 +50,38 @@
         <q-card-actions>
           <q-btn
             :label="$t('back')"
-            @click=dialog.callback
-            color="primary"
+            @click.stop=dialog.callback
+            color="black"
             flat
           />
         </q-card-actions>
       </q-card>
     </q-dialog>
-
-    <!-- Tabs -->
-    <!-- Tab header -->
-    <q-tabs
-      v-model="selectedTab"
-      dense
-      class="q-mt-xs text-grey"
-      active-color="primary"
-      indicator-color="primary"
-      narrow-indicator
-    >
-      <q-tab
-        v-for="tab in tabs"
-        :key="tab.name"
-        :name="tab.name"
-        :label="tab.label"
-      >
-      </q-tab>
-    </q-tabs>
-
-    <q-separator />
-
-    <!-- Tab content -->
-    <q-tab-panels
-      v-model="selectedTab"
-      animated
-      transition-next="fade"
-      transition-prev="fade"
-      >
-      <q-tab-panel
-        v-for="tab in tabs"
-        :key="tab.name"
-        :name="tab.name"
-      >
-        <component
-          :is="tab.component.name"
-        />
-      </q-tab-panel>
-    </q-tab-panels>
+    <OverviewComponent/>
   </q-card>
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref, markRaw, computed} from 'vue'
+import {ref, computed} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
-import DescriptionComponent from './DescriptionComponent.vue'
-import TicketDistributionComponent from './TicketDistributionComponent.vue'
+import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
+import {useQuasar} from 'quasar';
 
 const props = defineProps({
-  dbReference: {
-    required: true,
-    type: String
-  },
+  // dbReference: {
+  //   required: true,
+  //   type: String
+  // },
+
+  product: {
+      required: true,
+      type: Object,
+  }
 })
 
+const $q = useQuasar()
+
 // General
-const title = 'Product Card'
 const currentImage = ref(1)
 const liked = ref(false)
 const bookmarked = ref(false)
@@ -158,12 +128,12 @@ const icons = computed(() => {
     {
       tag: 'comment',
       name: 'forum',
-      callback: openCommentSection
+      callback: toggleCommentSection
     },
     {
       tag: 'share',
       name: 'share',
-      callback: openShareMenu
+      callback: toggleShareMenu
     }
   ]
 })
@@ -174,45 +144,16 @@ const icon_dialogs = computed(() => {
       key: 'comments',
       model: showComments.value,
       content: 'This is the comment section',
-      callback: closeCommentSection
+      callback: toggleCommentSection
     },
     {
       key: 'share',
       model: showShareMenu.value,
       content: 'Here you can share this page',
-      callback: closeShareMenu
+      callback: toggleShareMenu
     }
   ]
 })
-
-  /**
-   * If the product page should be separated into different tabs, they need to be defined here.
-   * The content of each tab will be defined in a separate component.
-   */
-  const selectedTab = ref('overview')
-  const tabs = [
-    {
-      name: 'overview',
-      label: 'Overview',
-      component: {
-        name: markRaw(OverviewComponent),
-      }
-    },
-    {
-      name: 'description',
-      label: 'Description',
-      component: {
-        name: markRaw(DescriptionComponent),
-      }
-    },
-    {
-      name: 'tickets',
-      label: 'Ticket Distribution',
-      component: {
-        name: markRaw(TicketDistributionComponent),
-      }
-    },
-  ]
 
 //TODO: Fetch data from DB
 
@@ -235,28 +176,27 @@ function toogleBookmark() {
 /**
  * Opens the comment section, so that the user can leave or read comments.
  */
-function openCommentSection() {
-  showComments.value = true
+function toggleCommentSection() {
+  showComments.value = !showComments.value
 }
-
-function closeCommentSection() {
-  showComments.value = false
-
-}
-
 
 /**
  * Allow the user to share this product site via Message Apps, Email, etc.
  */
-function openShareMenu() {
-  showShareMenu.value = true
+function toggleShareMenu() {
+  showShareMenu.value = !showShareMenu.value
 }
 
-function closeShareMenu() {
-  showShareMenu.value = false
+// Opens the detailed view of a product in dialog
+function openDetailView(product: unknown) {
+  $q.dialog({
+    title: 'DetailView',
+    component: ProductCardDetail,
+    componentProps: {
+      product: product
+    }
+  })
 }
-
-
 </script>
 
 <style scoped>

@@ -72,5 +72,15 @@ export default {
   travelling: 'Travelling',
   watches: 'Watches',
   select_interests: 'Please select up to {max} categories that interest you',
-  amount_selected: '{amount}/{max} selected'
+  amount_selected: '{amount}/{max} selected',
+  change_password: 'Change Password',
+  forgotten_password: 'Forgot your password?',
+  direct_buy_link: 'Buy right now',
+  seller_link: 'Find more products',
+  time_left: 'Ends in',
+  no_account_yet: 'Don\'t have an account?',
+  welcome_bigabig: 'Welcome to Big A Big',
+  player_bet: 'Your bet',
+  average_chance: 'Average chance',
+  player_chance: 'Your chance',
 };

@@ -1,5 +1,5 @@
 <template>
-  <q-card style="width: 250px; height: 500px; overflow: hidden;">
+  <q-card style="width: 350px; height: 500px; overflow: hidden;">
     <h5 class="text-center"> {{ $t('messages') }}</h5>
 
     <!-- Message Details -->
@@ -49,6 +49,8 @@
         dense
         v-model="sort"
         :options="options"
+        map-options
+        emit-value
         :label="$t('sort_by')"
       />
 
@@ -89,8 +91,6 @@ const props = defineProps({
 })
 
 // Search and sort
-const search = ref('')
-const sort = ref(i18n.global.t('newest'))
 const options = [
   {
     label: i18n.global.t('newest'),
@@ -101,6 +101,8 @@ const options = [
     value: 'oldest',
   }
 ]
+const search = ref('')
+const sort = ref(options[0])
 
 // Open message
 const selectedMessage: Ref<Message|null|undefined> = ref()

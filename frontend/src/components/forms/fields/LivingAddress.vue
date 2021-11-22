@@ -65,24 +65,20 @@ const city = ref('')
 const zip_code = ref()
 const state = ref('')
 
+//TODO: Change to a single address to be watched
 const emit = defineEmits(['change'])
-
 watch(street, (newValue) => {
   emitUpdate(newValue)
 })
-
 watch(number, (newValue) => {
   emitUpdate(newValue)
 })
-
 watch(city, (newValue) => {
   emitUpdate(newValue)
 })
-
 watch(zip_code, (newValue) => {
   emitUpdate(newValue)
 })
-
 watch(state, (newValue) => {
   emitUpdate(newValue)
 })
@@ -94,6 +90,5 @@ function emitUpdate(value: string|number) {
   else {
     emit('change', '')
   }
-
 }
 </script>

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
+import { ProductModule } from './product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
@@ -50,6 +51,7 @@ import { ItemModule } from './item/item.module';
       inject: [ConfigService],
     }),
     UserModule,
+    ProductModule,
     ItemModule,
   ],
   providers: [

@@ -10,9 +10,26 @@ input CreateItemInput {
   userUUID: ID
 }
 
+input CreateProductInput {
+  description: String!
+  end: DateTime!
+  start: DateTime!
+  title: String!
+  value: Int!
+}
+
 input CreateUserInput {
   age: Int!
   name: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input DeleteProductInput {
+  uuid: ID!
 }
 
 input DeleteUserInput {
@@ -33,21 +50,48 @@ type Item {
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createItem(createItemInput: CreateItemInput!): Item!
+  createProduct(createProductInput: CreateProductInput!): Product!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeItem(uuid: ID!): Item!
+  removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!
   updateItem(updateItemInput: UpdateItemInput!): Item!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+}
+
+type Product {
+  """Description"""
+  description: String!
+
+  """End Date"""
+  end: DateTime!
+
+  """Start date"""
+  start: DateTime!
+
+  """Title"""
+  title: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Value"""
+  value: Int!
 }
 
 type Query {
+  allProducts: [Product!]!
   allUsers: [User!]!
   item(uuid: ID!): Item!
   items: [Item!]!
+  product(uuid: ID!): Product!
+  products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
 
 type Subscription {
+  productAdded: Product!
   userAdded: User!
 }
 
@@ -59,6 +103,12 @@ input UpdateItemInput {
   userUUID: ID
 
   """Item UUID"""
+  uuid: ID!
+}
+
+input UpdateProductInput {
+  age: Int
+  name: String
   uuid: ID!
 }
 

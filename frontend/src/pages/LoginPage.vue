@@ -1,9 +1,12 @@
 <template>
   <q-page class="flex flex-center">
     <q-card
-      class="items-center"
-      style="height: 600px;"
+      class="items-center text-center"
     >
+      <h5
+        class="q-pa-sm q-ma-none"
+      >
+        {{ $t('welcome_bigabig') }}</h5>
       <!-- Login Card -->
       <LoginForm
         v-if="!signup"
@@ -11,18 +14,27 @@
         @submit="onLogin"
       />
 
+      <b
+        v-if="!signup"
+        style="margin-top: 0; padding: 0"
+      >
+        {{ $t('no_account_yet') }}
+      </b>
+
       <!-- Signup Card -->
       <q-card class="row q-pa-md q-ma-md justify-center flex items-center">
         <SignupForm
           v-if="signup"
           @submit="onSignup"
-        />
+        >
+        </SignupForm>
         <q-btn
           v-if="!signup"
           :label="$t('signup')"
-          color="primary"
-          text-color="black"
+          color="transparent"
+          text-color="primary"
           @click="signup = true"
+          flat
         />
       </q-card>
     </q-card>
@@ -52,7 +64,6 @@ async function onLogin({username, password}: {username: string, password: string
   // Redirect to main page
   await $routerService.routeTo(ROUTES.MAIN)
 }
-
 
 /**
  * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog

@@ -2,6 +2,7 @@
   <q-card
     class="q-pa-sm q-mb-md"
     style="cursor: pointer"
+    bordered
   >
     <div class="flex items-center justify-between">
       <b> {{ title }} </b>

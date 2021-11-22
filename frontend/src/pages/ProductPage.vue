@@ -3,13 +3,19 @@
     <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
     <div class="column">
       <div class="row q-pa-md">
-        <ProductFeed/>
+        <ProductCardDetail :product="product"/>
       </div>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import ProductFeed from 'components/product/ProductFeed.vue';
+import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
+const props = defineProps({
+  product: {
+    required: true,
+    type: Object,
+  }
+})
 
 </script>

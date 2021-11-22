@@ -1,38 +1,43 @@
 <template>
   <div>
     <!-- Links -->
-    <div class="row q-gutter-md">
-      <p v-if="showDirectLink">
-        Buy right now: <q-icon name="shopping_cart" style="cursor: pointer" color="primary" @click="followLink(directLink)" />
+    <div class="q-ml-sm">
+      <p
+        v-if="showDirectLink"
+        @click.stop
+      >
+        {{ $t('direct_buy_link') }}: <a :href="directLink">{{ directLink }}</a>
       </p>
-      <p v-if="showSellerLink">
-        Find more products: <q-icon name="home" style="cursor: pointer" color="primary" @click="followLink(sellerLink)" />
+      <p
+        v-if="showSellerLink"
+        @click.stop
+      >
+        {{ $t('seller_link') }}: <a :href="sellerLink">{{ sellerLink }}</a>
       </p>
     </div>
 
     <!-- Timer -->
-    <b class="q-mt-xs">
-      Time left: <span> 12:00:00 </span>
+    <b class="q-mt-xs q-ml-sm">
+      {{ $t('time_left') }}: <strong> 12:00:00 </strong>
     </b>
 
     <!-- Progress Bar -->
-    <div class="q-mt-md">
+    <div class="q-mt-md q-ml-sm q-mr-sm">
       <q-linear-progress
-        class="q-mt-xs"
         size="md"
         :value="progress"
         color="positive"
       />
       <div class="flex justify-between q-mt-sm">
-        <b style="color: #21BA45"> {{ covered_amount }}{{ currency }} of {{ total_amount }}{{ currency }} covered</b>
-        <b style="color: #21BA45"> Your bet {{ userBet }}{{ currency  }}</b>
+        <b style="color: #21BA45"> {{ covered_amount }}{{ currency }} / {{ total_amount }}{{ currency }}</b>
+        <b style="color: #21BA45"> {{ $t('player_bet') }} {{ userBet }}{{ currency }}</b>
       </div>
     </div>
 
     <!-- Winchances -->
-    <div class="flex justify-between q-mt-sm">
-      <b> Average chance: {{ average_chance }}</b>
-      <b> Your chance: {{ user_chance }}</b>
+    <div class="flex justify-between q-ma-sm">
+      <b> {{ $t('average_chance') }}: {{ average_chance }}</b>
+      <b> {{ $t('player_chance') }}: {{ user_chance }}</b>
     </div>
   </div>
 </template>
@@ -42,7 +47,7 @@ import { ref } from 'vue'
 
 //Links
 const directLink = 'https://polygon-software.ch/'
-const sellerLink = 'https://uzh.ch'
+const sellerLink = 'https://polygon-software.ch/'
 const showSellerLink = ref(true)
 const showDirectLink = ref(true)
 
@@ -59,8 +64,4 @@ const average_chance = ref('1/20')
 const user_chance = ref('1/10')
 
 //TODO: Implement methods to fetch data from database
-
-function followLink(link: string | URL | undefined) {
-  window.open(link)
-}
 </script>

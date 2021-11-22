@@ -1,9 +1,8 @@
 <template>
   <div
-    class="row q-pa-sm justify-center"
-    style="width: 300px; height: 430px;"
+    class="row q-pa-none justify-center"
+    style="width: 300px"
   >
-    <h5 class="q-mb-none">{{ $t('login') }}</h5>
     <q-form
         @submit="onSubmit"
         class="row justify-center"
@@ -15,7 +14,7 @@
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
-          class="q-ma-md"
+          class="q-ma-none"
           style="width: 90%"
       />
       <q-btn

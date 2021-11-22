@@ -29,6 +29,7 @@ const IS_VALID_ZIP = (val: string): boolean => {
 }
 
 const IS_VALID_BIRTHDATE = (val: string): boolean => {
+  console.log('TODO check', val, 'for birthday')
   // TODO
   return true
 }
