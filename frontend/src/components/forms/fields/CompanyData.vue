@@ -15,7 +15,7 @@
     dense
     type="text"
     lazy-rules="ondemand"
-    :label="$t('company_uid')"
+    :label="$t('company_uid') + ' (optional)'"
   >
 
   </q-input>

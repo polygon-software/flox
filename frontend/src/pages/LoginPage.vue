@@ -30,6 +30,9 @@
         </div>
       </q-card-section>
     </q-card>
+    <q-card>
+      <EmployeeDashboard/>
+    </q-card>
   </q-page>
 </template>
 
@@ -39,6 +42,7 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import EmployeeDashboard from "pages/EmployeeDashboard.vue";
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
