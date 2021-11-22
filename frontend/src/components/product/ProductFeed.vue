@@ -17,7 +17,7 @@ import {computed, Ref} from 'vue';
 const queryResult = subscribeToQuery(ALL_PRODUCTS) as Ref<Record<string, Array<Record<string, unknown>>>>|undefined
 
 const products = computed(()=>{
-  return queryResult ? Object.values(queryResult.value) ?? [] : []
+  return queryResult && queryResult.value ? Object.values(queryResult.value) ?? [] : []
 })
 </script>
 <style scoped>

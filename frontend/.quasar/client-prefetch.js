@@ -14,16 +14,6 @@
 
 
 
-import App from 'app/src/App.vue'
-let appPrefetch = typeof App.preFetch === 'function'
-  ? App.preFetch
-  : (
-    // Class components return the component options (and the preFetch hook) inside __c property
-    App.__c !== void 0 && typeof App.__c.preFetch === 'function'
-      ? App.__c.preFetch
-      : false
-    )
-
 
 function getMatchedComponents (to, router) {
   const route = to
@@ -70,11 +60,6 @@ export function addPreFetchHooks (router, store, publicPath) {
       ))
       .map(m => m.c.__c !== void 0 ? m.c.__c.preFetch : m.c.preFetch)
 
-    
-    if (appPrefetch !== false) {
-      preFetchList.unshift(appPrefetch)
-      appPrefetch = false
-    }
     
 
     if (preFetchList.length === 0) {
