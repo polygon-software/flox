@@ -46,7 +46,7 @@ export default {
   branch_structure: 'Branch Strucutre',
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
-  must_accept_conditons: 'You have to accept the terms and conditions.',
+  must_accept_conditions: 'You have to accept the terms and conditions.',
   redirected: 'You will be redirected shortly...',
   successful_application: 'Your application was successful.',
   chef_dashboard: 'Management Dashboard',
