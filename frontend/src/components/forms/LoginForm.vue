@@ -1,7 +1,7 @@
 <template>
   <div
-    class="row q-pa-sm justify-center"
-    style="width: 300px; height: 430px;"
+    class="row q-pa-none justify-center"
+    style="width: 300px"
   >
     <q-form
         @submit="onSubmit"

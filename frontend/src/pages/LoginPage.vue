@@ -2,10 +2,9 @@
   <q-page class="flex flex-center">
     <q-card
       class="items-center text-center"
-      style="height: 600px;"
     >
       <h5
-        style="margin: 0; padding: 0"
+        class="q-pa-sm q-ma-none"
       >
         Willkommen bei Big A Big</h5>
       <!-- Login Card -->
