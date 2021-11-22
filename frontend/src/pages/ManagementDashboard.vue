@@ -16,9 +16,9 @@
         class="q-ma-md col"
       >
         <q-card
-          class="q-pa-md q-ma-md"
           v-for="employee in employees"
           :key="employee.name"
+          class="q-pa-md q-ma-md"
         >
           {{ employee.name }}
         </q-card>
@@ -32,8 +32,8 @@
           class="col-2 q-mx-md q-mb-md q-mt-xs"
           style="width: 150px"
           :label="$t('signup')"
-          @click="routeToRegisterEmployee"
           color="primary"
+          @click="routeToRegisterEmployee"
         />
       </div>
 

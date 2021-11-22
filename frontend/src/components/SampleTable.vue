@@ -1,16 +1,16 @@
 <template>
   <div class="column">
     <q-table
+      v-model:selected="selected"
       table-header-class="bg-grey-2"
       title="List of users (with cache)"
       :rows="computedResult"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
-      v-model:selected="selected"
       selection="single"
     >
-      <template v-slot:body="props">
+      <template #body="props">
         <q-tr :props="props">
           <q-td>
             <q-checkbox
@@ -23,10 +23,10 @@
           <q-td key="name" :props="props">
             {{ props.row.name }}
             <q-popup-edit
+                v-slot="scope"
                 :auto-save="true"
                 :model-value="props.row.name"
                 @save="(value) => onUpdate(props.row.uuid, {name: value})"
-                v-slot="scope"
             >
               <q-input
                   v-model="scope.value"
@@ -40,10 +40,10 @@
           <q-td key="age" :props="props">
             {{ props.row.age }}
             <q-popup-edit
+                v-slot="scope"
                 :auto-save="true"
                 :model-value="props.row.age"
                 @save="(value) => onUpdate(props.row.uuid, {age: Number(value)})"
-                v-slot="scope"
             >
               <q-input
                   v-model="scope.value"

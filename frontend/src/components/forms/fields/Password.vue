@@ -1,13 +1,13 @@
 <template>
   <q-input
+      v-model="password"
       dense
       label="Password"
-      v-model="password"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
       :rules="[(val) => IS_VALID_PASSWORD(val) || $t('invalid_password')]"
   >
-    <template v-slot:append>
+    <template #append>
       <q-icon
           :name="isPwd ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"

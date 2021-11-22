@@ -1,12 +1,12 @@
 <template>
   <q-card  style="width: 300px; margin-left: 10px">
     <q-form
-        @submit="onSubmit"
         class="q-gutter-md"
+        @submit="onSubmit"
     >
       <q-input
-          filled
           v-model="name"
+          filled
           label="Name"
           hint="Name and surname"
           lazy-rules
@@ -14,9 +14,9 @@
       />
 
       <q-input
+        v-model="age"
         filled
         type="number"
-        v-model="age"
         label="Age"
         lazy-rules
         :rules="[

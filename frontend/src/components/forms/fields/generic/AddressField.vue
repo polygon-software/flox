@@ -2,18 +2,18 @@
   <!-- Top Row: Street & house number -->
   <div class="flex justify-between">
     <q-input
+      v-model="address.street"
       dense
       :label="$t('street')"
-      v-model="address.street"
       type="text"
       :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
       style="width:65%"
       @change="emitValue"
     />
     <q-input
+      v-model="address.number"
       dense
       :label="$t('number')"
-      v-model="address.number"
       type="text"
       :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('invalid_house_number')]"
       style="width:30%"
@@ -23,9 +23,9 @@
   <!-- Bottom Row: City & ZIP code -->
   <div class="flex justify-between">
     <q-input
+      v-model="address.city"
       dense
       :label="$t('city')"
-      v-model="address.city"
       type="text"
       :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_city')]"
       style="width:65%"
@@ -33,9 +33,9 @@
     >
     </q-input>
     <q-input
+      v-model="address.zip_code"
       dense
       :label="$t('zip_code')"
-      v-model="address.zip_code"
       type="number"
       :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_zip_code')]"
       style="width:30%"

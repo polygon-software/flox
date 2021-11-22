@@ -1,13 +1,13 @@
 <template>
   <q-input
+      v-model="password"
       dense
       label="Password"
-      v-model="password"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
       :rules="[(val) => IS_VALID_PASSWORD(val) || $t('invalid_password')]"
   >
-    <template v-slot:append>
+    <template #append>
       <q-icon
           :name="isPwd ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"
@@ -16,14 +16,14 @@
     </template>
   </q-input>
   <q-input
+      v-model="passwordRepeat"
       dense
       label="Repeat Password"
-      v-model="passwordRepeat"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
       :rules="[val => val === password || $t('non_matching_password')]"
   >
-    <template v-slot:append>
+    <template #append>
       <q-icon
           :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"
@@ -47,6 +47,7 @@ const props = defineProps({
     type: String
   },
   rules: {
+    type: Array,
     required: false,
   }
 });
