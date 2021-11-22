@@ -46,6 +46,8 @@ export default {
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
   must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
+  redirected: 'Sie werden in Kürze weitergeleitet...',
+  successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
   chef_dashboard: 'Chef Dashboard',
   register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
   confirmed_registration: 'Registrierung bestätigt',

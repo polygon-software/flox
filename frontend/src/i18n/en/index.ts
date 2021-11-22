@@ -45,6 +45,8 @@ export default {
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
   must_accepts_conditons: 'You have to accept the terms and conditions.',
+  redirected: 'You will be redirected shortly...',
+  successful_application: 'Your application was successful.',
   chef_dashboard: 'Management Dashboard',
   register_new_employee_here: 'Register a new employee here:',
   confirmed_registration: 'Registration confirmed',
