@@ -79,5 +79,8 @@ export default {
   seller_link: 'Find more products',
   time_left: 'Ends in',
   no_account_yet: 'Don\'t have an account?',
-  welcome_bigabig: 'Willkommen to Big A Big',
+  welcome_bigabig: 'Welcome to Big A Big',
+  player_bet: 'Your bet',
+  average_chance: 'Average chance',
+  player_chance: 'Your chance',
 };

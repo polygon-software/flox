@@ -116,10 +116,9 @@ import OverviewComponent from '../product/OverviewComponent.vue'
 import DescriptionComponent from '../product/DescriptionComponent.vue'
 import TicketDistributionComponent from '../product/TicketDistributionComponent.vue'
 import { useDialogPluginComponent } from 'quasar'
-import {QVueGlobals} from 'quasar';
 
 // REQUIRED; must be called inside of setup()
-const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
+const { dialogRef, onDialogOK, onDialogHide, onDialogCancel } = useDialogPluginComponent()
 // dialogRef      - Vue ref to be applied to QDialog
 // onDialogHide   - Function to be used as handler for @hide on QDialog
 // onDialogOK     - Function to call to settle dialog with "ok" outcome

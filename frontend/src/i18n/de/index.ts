@@ -81,4 +81,7 @@ export default {
   time_left: 'Endet in',
   no_account_yet: 'Noch keinen Account?',
   welcome_bigabig: 'Willkommen bei Big A Big',
+  player_bet: 'Persönlicher Wetteinsatz',
+  average_chance: 'Durchschnittliche Gewinnchance',
+  player_chance: 'Persönliche Gewinnchance',
 }
