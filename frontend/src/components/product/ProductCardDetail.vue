@@ -76,7 +76,6 @@
     <q-separator />
 
     <!-- Tab content -->
-
     <q-tab-panels
       v-model="selectedTab"
       animated

@@ -211,6 +211,7 @@ function closeShareMenu() {
   showShareMenu.value = false
 }
 
+// Opens the detailed view of a product in dialog
 const showDetail = ref(false)
 function openDetailView() {
   showDetail.value = true

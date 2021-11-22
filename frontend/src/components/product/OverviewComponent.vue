@@ -6,19 +6,19 @@
         v-if="showDirectLink"
         @click.stop
       >
-        Buy right now: <a :href="directLink">{{ directLink }}</a>
+        {{ $t('direct_buy_link') }}:<a :href="directLink">{{ directLink }}</a>
       </p>
       <p
         v-if="showSellerLink"
         @click.stop
       >
-        Find more products: <a :href="sellerLink">{{ sellerLink }}</a>
+        {{ $t('seller_link') }}:<a :href="sellerLink">{{ sellerLink }}</a>
       </p>
     </div>
 
     <!-- Timer -->
     <b class="q-mt-xs q-ml-sm">
-      Time left: <strong> 12:00:00 </strong>
+      {{ $t('time_left') }}: <strong> 12:00:00 </strong>
     </b>
 
     <!-- Progress Bar -->

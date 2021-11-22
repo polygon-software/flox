@@ -75,5 +75,10 @@ export default {
   select_interests: 'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
   amount_selected: '{amount}/{max} gewählt',
   change_password: 'Passwort ändern',
-  forgotten_password: 'Passwort vergessen?',
+  forgotten_password: 'Password vergessen?',
+  direct_buy_link: 'Sofort kaufen',
+  seller_link: 'Mehr Artikel',
+  time_left: 'Endet in',
+  no_account_yet: 'Noch keinen Account?',
+  welcome_bigabig: 'Willkommen bei Big A Big',
 }

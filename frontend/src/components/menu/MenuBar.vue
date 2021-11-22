@@ -60,6 +60,7 @@
   </div>
   </q-header>
 
+  <!-- Notification Inbox -->
   <q-dialog
     v-model="showInbox"
     class="q-pa-xs"
@@ -130,12 +131,19 @@ function forgottenPassword() {
   $authService.showResetPasswordDialog();
 }
 
+// Needed so eslint doesn't complain
+declare function require(name:string): ComputedRef<string>
 
+// Fetch the Big A Big logo
 const image_path = computed((): ComputedRef<string> => {
-  // eslint-disable-next-line
   return require('src/assets/bigabig-logo.svg')
 })
 
+
+/*
+* This section controlls the visibility of the notification inbox popup.
+*  TODO: Change it to a push or rerendering?
+*/
 const showInbox = ref(false)
 
 function openInbox() {
