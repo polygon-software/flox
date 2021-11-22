@@ -102,7 +102,6 @@ import OverviewComponent from './OverviewComponent.vue'
 import DescriptionComponent from './DescriptionComponent.vue'
 import TicketDistributionComponent from './TicketDistributionComponent.vue'
 
-/*
 const props = defineProps({
   // dbReference: {
   //   required: true,
@@ -112,7 +111,7 @@ const props = defineProps({
       required: true,
       type: Object,
   }
-})*/
+})
 
 // General
 const currentImage = ref(1)
