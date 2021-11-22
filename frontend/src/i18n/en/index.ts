@@ -50,4 +50,11 @@ export default {
   confirmed_registration: 'Registration confirmed',
   redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
   back_to_login: 'Back to Login',
+  passport_or_id: 'Passport',
+  commercial_register_extract: 'Commercial Register Extract',
+  execution_register_extract: 'Betreibungsregisterauszug',
+  optional: 'optional',
+  additional_files: 'Additional Documents',
+  submit: 'Submit',
+  missing_file: 'Missing file',
 };

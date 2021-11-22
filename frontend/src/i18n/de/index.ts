@@ -51,4 +51,11 @@ export default {
   confirmed_registration: 'Registrierung bestätigt',
   redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
   back_to_login: 'Zurück zu Login',
+  passport_or_id: 'Ausweiskopie',
+  commercial_register_extract: 'Handelsregisterauszug',
+  execution_register_extract: 'Betreibungsregisterauszug',
+  optional: 'optional',
+  additional_files: 'Weitere Dokumente',
+  submit: 'Senden',
+  missing_file: 'Datei fehlt',
 }
