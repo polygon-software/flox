@@ -64,10 +64,9 @@ import {Form} from 'src/helpers/form-helpers'
 import {i18n} from 'boot/i18n';
 
 /**
- * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different
- * steps are defined.The fields a page contains are defined in the fields variable.
- * Common fields can be found under "src/data/FIELDS".
- * All fields of a page must be completed before the next page can be accessed.
+ * This component allows the management to register new employees, the fields can easily be changed with the
+ * account_fields array. Once a new employee has been registered, the user will be redirected to the management
+ * dashboard.
  */
 
 const emit = defineEmits(['submit'])
