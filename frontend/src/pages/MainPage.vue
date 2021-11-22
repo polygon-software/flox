@@ -10,9 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import SampleTable from 'components/SampleTable.vue'
-import SampleForm from 'components/SampleForm.vue'
-import SampleSubscriptionTable from 'components/SampleSubscriptionTable.vue'
 import ProductFeed from 'components/product/ProductFeed.vue';
 
 </script>

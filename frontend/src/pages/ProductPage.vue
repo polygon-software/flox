@@ -11,12 +11,12 @@
 
 <script setup lang="ts">
 import ProductCardDetail from 'components/product/ProductCardDetail.vue';
-
+/*
 const props = defineProps({
   product: {
     required: true,
     type: Object,
   }
-})
+})*/
 
 </script>

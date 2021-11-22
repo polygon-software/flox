@@ -81,29 +81,6 @@ watch(zip_code, (newValue) => {
 watch(state, (newValue) => {
   emitUpdate(newValue)
 })
-=======
-
-const emit = defineEmits(['change'])
-
-watch(street, (newValue) => {
-  emitUpdate(newValue)
-})
-
-watch(number, (newValue) => {
-  emitUpdate(newValue)
-})
-
-watch(city, (newValue) => {
-  emitUpdate(newValue)
-})
-
-watch(zip_code, (newValue) => {
-  emitUpdate(newValue)
-})
-
-watch(state, (newValue) => {
-  emitUpdate(newValue)
-})
 
 function emitUpdate(value: string|number) {
   if (street.value.length > 0 && number.value > 0 && city.value.length > 0, zip_code.value > 0 && state.value.length > 0) {
