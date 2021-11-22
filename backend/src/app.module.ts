@@ -10,6 +10,7 @@ import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { ItemModule } from './item/item.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ItemModule } from './item/item.module';
       inject: [ConfigService],
     }),
     UserModule,
+    CompanyModule,
     ItemModule,
   ],
   providers: [
