@@ -75,4 +75,9 @@ export default {
   amount_selected: '{amount}/{max} selected',
   change_password: 'Change Password',
   forgotten_password: 'Forgot your password?',
+  direct_buy_link: 'Buy right now',
+  seller_link: 'Find more products',
+  time_left: 'Ends in',
+  no_account_yet: 'Don\'t have an account?',
+  welcome_bigabig: 'Willkommen to Big A Big',
 };

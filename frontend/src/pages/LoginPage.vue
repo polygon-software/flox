@@ -6,7 +6,7 @@
       <h5
         class="q-pa-sm q-ma-none"
       >
-        Willkommen bei Big A Big</h5>
+        {{ $t('welcome_bigabig') }}</h5>
       <!-- Login Card -->
       <LoginForm
         v-if="!signup"
@@ -18,7 +18,7 @@
         v-if="!signup"
         style="margin: 0; padding: 0"
       >
-        Noch keinen Account?
+        {{ $t('no_account_yet') }}Noch keinen Account?
       </h6>
 
       <!-- Signup Card -->

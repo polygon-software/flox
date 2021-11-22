@@ -65,6 +65,7 @@ const city = ref('')
 const zip_code = ref()
 const state = ref('')
 
+//TODO: Change to a single address to be watched
 const emit = defineEmits(['change'])
 watch(street, (newValue) => {
   emitUpdate(newValue)
