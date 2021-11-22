@@ -43,6 +43,6 @@ export default {
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
   must_accepts_conditons: 'Sie müssen den AGBs zustimmen.',
-  redirected: 'You will be redirected shortly...',
-  successful_application: 'Your application was successful.'
+  redirected: 'Sie werden in Kürze weitergeleitet...',
+  successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.'
 }
