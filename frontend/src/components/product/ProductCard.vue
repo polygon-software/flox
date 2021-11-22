@@ -1,7 +1,7 @@
 <template>
   <q-card
     style="width: 400px; cursor: pointer"
-    @click="openDetailView()"
+    @click="openDetailView(product)"
     class="q-mb-xl q-pa-sm"
   >
     <!-- Images -->
@@ -60,29 +60,13 @@
     </q-dialog>
     <OverviewComponent/>
   </q-card>
-
-  <!-- Detail View -->
-  <q-dialog
-    v-model="showDetail"
-  >
-    <q-card class="q-pa-md" style="width: 800px;">
-      <ProductCardDetail :product="product"/>
-      <q-card-actions align="center">
-        <q-btn
-          :label="$t('back')"
-          @click.stop="closeDetailView"
-          color="black"
-          flat
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
-  </template>
+</template>
 
 <script setup lang="ts">
 import {ref, computed} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
-import ProductCardDetail from 'components/product/ProductCardDetail.vue';
+import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
+import {useQuasar} from 'quasar';
 
 const props = defineProps({
   // dbReference: {
@@ -95,6 +79,8 @@ const props = defineProps({
       type: Object,
   }
 })
+
+const $q = useQuasar()
 
 // General
 const currentImage = ref(1)
@@ -213,13 +199,14 @@ function closeShareMenu() {
 }
 
 // Opens the detailed view of a product in dialog
-const showDetail = ref(false)
-function openDetailView() {
-  showDetail.value = true
-}
-
-function closeDetailView() {
-  showDetail.value = false
+function openDetailView(product: unknown) {
+  $q.dialog({
+    title: 'DetailView',
+    component: ProductCardDetail,
+    componentProps: {
+      product: product
+    }
+  })
 }
 </script>
 

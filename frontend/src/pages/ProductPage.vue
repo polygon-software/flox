@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import ProductCardDetail from 'components/product/ProductCardDetail.vue';
+import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
 /*
 const props = defineProps({
   product: {
