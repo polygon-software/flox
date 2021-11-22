@@ -75,5 +75,5 @@ export default {
   select_interests: 'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
   amount_selected: '{amount}/{max} gewählt',
   change_password: 'Passwort ändern',
-  forgotten_password: 'Password vergessen?',
+  forgotten_password: 'Passwort vergessen?',
 }

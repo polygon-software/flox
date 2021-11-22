@@ -80,10 +80,11 @@
   </template>
 
 <script setup lang="ts">
-import {defineProps, ref, computed} from 'vue'
+import {ref, computed} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
 import ProductCardDetail from 'components/product/ProductCardDetail.vue';
 
+/*
 const props = defineProps({
   // dbReference: {
   //   required: true,
@@ -94,7 +95,7 @@ const props = defineProps({
       required: true,
       type: Object,
   }
-})
+})*/
 
 // General
 const currentImage = ref(1)
