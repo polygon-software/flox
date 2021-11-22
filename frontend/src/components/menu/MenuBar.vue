@@ -3,7 +3,7 @@
     <div class="row">
       <img
           alt="Polygon Software"
-          :src="image_path"
+          :src="require('src/assets/bigabig-logo.svg')"
           style="height: 50px"
           class="q-ma-sm"
       >
@@ -130,15 +130,6 @@ function changePassword() {
 function forgottenPassword() {
   $authService.showResetPasswordDialog();
 }
-
-// Needed so eslint doesn't complain
-declare function require(name:string): ComputedRef<string>
-
-// Fetch the Big A Big logo
-const image_path = computed((): ComputedRef<string> => {
-  return require('src/assets/bigabig-logo.svg')
-})
-
 
 /*
 * This section controlls the visibility of the notification inbox popup.
