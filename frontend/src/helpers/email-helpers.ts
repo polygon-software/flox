@@ -1,15 +1,14 @@
 import {SESClient, SendEmailCommand, SendEmailCommandOutput} from '@aws-sdk/client-ses';
-import {CONFIG} from 'src/config/AWS-CONFIG';
 
 // Credentials
 const credentials = {
-  accessKeyId: CONFIG.accessKeyId,
-  secretAccessKey: CONFIG.secretAccessKey,
+  accessKeyId: process.env.VUE_APP_AWS_KEY_ID ??  '',
+  secretAccessKey: process.env.VUE_APP_AWS_SECRET_KEY ?? ''
 }
 
 // Create SES service object
 const sesClient: SESClient = new SESClient({
-  region: CONFIG.region,
+  region: process.env.VUE_APP_AWS_REGION,
   credentials: credentials,
 });
 

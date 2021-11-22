@@ -9,6 +9,10 @@
     <q-card class="q-pa-md q-ma-md">
       <SignupForm @submit="onSignup"/>
     </q-card>
+    <q-btn
+      label="test"
+      @click="() => sendEmail('david.wyss@hotmail.ch', ['david.wyss@polygon-software.ch'], 'Testmail', 'Testbody')"
+    />
   </q-page>
 </template>
 
@@ -19,7 +23,7 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-
+import {sendEmail} from 'src/helpers/email-helpers';
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 
