@@ -26,7 +26,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   'SIGNUP': {
-    path: '/signup',
+    path: '/company_signup',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/SignupPage.vue') }],
   },

@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { USER_ADDED } from '../data/SUBSCRIPTIONS';
-import { ALL_USERS } from '../data/QUERIES';
+import { ALL_USERS } from '../data/queries/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import { executeQuery } from '../helpers/data-helpers';
