@@ -189,12 +189,12 @@ const icons = computed(() => {
     {
       tag: 'comment',
       name: 'forum',
-      callback: openCommentSection
+      callback: toggleCommentSection
     },
     {
       tag: 'share',
       name: 'share',
-      callback: openShareMenu
+      callback: toggleShareMenu
     }
   ]
 })
@@ -205,13 +205,13 @@ const icon_dialogs = computed(() => {
       key: 'comments',
       model: showComments.value,
       content: 'This is the comment section',
-      callback: closeCommentSection
+      callback: toggleCommentSection
     },
     {
       key: 'share',
       model: showShareMenu.value,
       content: 'Here you can share this page',
-      callback: closeShareMenu
+      callback: toggleShareMenu
     }
   ]
 })
@@ -266,26 +266,17 @@ function toogleBookmark() {
 /**
  * Opens the comment section, so that the user can leave or read comments.
  */
-function openCommentSection() {
-  showComments.value = true
+function toggleCommentSection() {
+  showComments.value = !showComments.value
 }
-
-function closeCommentSection() {
-  showComments.value = false
-
-}
-
 
 /**
  * Allow the user to share this product site via Message Apps, Email, etc.
  */
-function openShareMenu() {
-  showShareMenu.value = true
+function toggleShareMenu() {
+  showShareMenu.value = !showShareMenu.value
 }
 
-function closeShareMenu() {
-  showShareMenu.value = false
-}
 </script>
 
 <style scoped>
