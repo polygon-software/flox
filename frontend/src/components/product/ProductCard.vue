@@ -8,7 +8,6 @@
     <q-carousel
       animated
       v-model="currentImage"
-      arrows
       navigation
       infinite
     >
