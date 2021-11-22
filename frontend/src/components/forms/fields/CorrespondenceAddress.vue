@@ -10,30 +10,31 @@
 
   <div v-if="!show_correspondence">
     <q-input
-      dense
-      :label="$t('street')"
       v-model="address"
+      :label="$t('street')"
       type="text"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
+      dense
     >
     </q-input>
     <div class="flex justify-between">
       <q-input
-        dense
-        :label="$t('number')"
         v-model="number"
+
+        :label="$t('number')"
         type="text"
         lazy-rules="ondemand"
         :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('invalid_house_number')]"
         style="width:40%"
         mask="####"
+        dense
       >
       </q-input>
       <q-input
+        v-model="zip_code"
         dense
         :label="$t('zip_code')"
-        v-model="zip_code"
         type="number"
         lazy-rules="ondemand"
         :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_zip_code')]"

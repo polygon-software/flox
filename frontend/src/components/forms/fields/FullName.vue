@@ -1,20 +1,20 @@
 <template>
   <q-input
-    dense
     v-model="first_name"
     :label="$t('first_name')"
     type="text"
     lazy-rules="ondemand"
     :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_name')]"
+    dense
   >
   </q-input>
   <q-input
-    dense
     v-model="last_name"
     :label="$t('last_name')"
     type="text"
     lazy-rules="ondemand"
     :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_name')]"
+    dense
   >
   </q-input>
 </template>
