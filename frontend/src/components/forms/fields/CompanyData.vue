@@ -7,7 +7,7 @@
     type="text"
     lazy-rules="ondemand"
     :label="$t('company_name')"
-    :rules="[(val) => IS_VALID_STRING(val) || $.t('invalid_company_name')]"
+    :rules="[(val) => IS_VALID_STRING(val) || i18n.global.t('invalid_company_name')]"
   >
   </q-input>
   <q-input

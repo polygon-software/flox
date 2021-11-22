@@ -1,5 +1,5 @@
 import {computed, Ref, ref} from 'vue';
-import {FIELDS} from 'src/data/FIELDS';
+import {Field, FIELDS} from 'src/data/FIELDS';
 
 /**
  * The Form class is meant to be used by any form components.
@@ -38,7 +38,10 @@ export class Form {
     // Get keys that should exist in 'values' for this page
     const pageKeys: string[] = []
     // Offset by 1, since step starts at 1
-    const pageFields = this.pages.value[this.step.value - 1].fields
+    const currentPage: Record<string, Record<string, unknown>[]> = this.pages.value[this.step.value - 1]
+
+    // Fields on current page
+    const pageFields: Record<string, unknown>[] = currentPage.fields
     pageFields.forEach((field: Record<string, any>) => {
       pageKeys.push(field.key)
     })
@@ -48,9 +51,12 @@ export class Form {
       // If no value present at all, stop check
       if (!this.values.value[key]) return false
 
-      return FIELDS[key.toUpperCase()].attributes.rules.every((rule: (valueElement: any) => boolean) => {
+      const field: Field = FIELDS[key.toUpperCase()]
+      const rules: Array<(valueElement: any) => boolean|string> = field.attributes.rules
+      return rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
-        return typeof rule(this.values.value[key]) === 'boolean'
+        const result = typeof rule(this.values.value[key]) === 'boolean'
+        return result
       })
     })
   })
@@ -60,9 +66,9 @@ export class Form {
   /**
    * Updates a value within the form's values
    * @param key {string}: the value's name
-   * @param value {any}: the actual value to add
+   * @param value {unknown}: the actual value to add
    */
-  updateValue(key: string, value: any): void {
+  updateValue(key: string, value: unknown): void {
     this.values.value[key] = value
   }
 }
