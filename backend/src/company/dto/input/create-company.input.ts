@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 import { CreateAddressInput } from 'src/address/dto/input/create-address.input';
 
-// TODO
 @InputType()
 export class CreateCompanyInput {
   @Field(() => String)

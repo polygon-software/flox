@@ -69,7 +69,6 @@ export class Form {
    * @param value {unknown}: the actual value to add
    */
   updateValue(key: string, value: unknown): void {
-    console.log('Get value', key, value)
     this.values.value[key] = value
   }
 }

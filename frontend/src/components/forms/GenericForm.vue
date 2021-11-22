@@ -1,15 +1,15 @@
 <template>
   <q-form
-    class="q-gutter-md"
     ref="form_ref"
     greedy
+    class="q-gutter-md"
   >
     <q-stepper
       v-model="form.step.value"
       ref="stepper"
-      animated
       active-color="primary"
       done-icon="done"
+      animated
     >
       <q-step
         v-for="(page, index) in form.pages.value"
@@ -33,18 +33,19 @@
         <q-stepper-navigation>
           <q-btn
             v-if="form.step.value > 1"
-            @click="$refs.stepper.previous()"
-            flat
-            style="margin-right: 30px"
             color="primary"
             :label="$t('back')"
-            class="q-ml-sm" />
+            flat
+            style="margin-right: 30px"
+            class="q-ml-sm"
+            @click="$refs.stepper.previous()"
+          />
           <q-btn
             v-if="form.step.value < form.pages.value.length"
-            @click="$refs.stepper.next()"
             color="primary"
             :label="$t('next_step')"
             :disable="!form.pageValid.value"
+            @click="$refs.stepper.next()"
           />
           <q-btn
             v-if="form.step.value === form.pages.value.length"
