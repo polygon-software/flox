@@ -15,7 +15,7 @@
     borderless
     dense
   >
-    <template v-slot:control>
+    <template #control>
       <q-checkbox
         v-model="accept_conditions"
         :label="$t('accept_conditions')"

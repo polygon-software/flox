@@ -7,16 +7,16 @@
       {{ $t('login') }}
     </h5>
     <q-form
-        @submit="onSubmit"
-        class="q-gutter-md"
+      class="q-gutter-md"
+      @submit="onSubmit"
     >
       <component
-          v-for="field in fields"
-          :key="field.key"
-          :is="field.component"
-          v-bind="field.attributes"
-          v-model="form.values.value[field.key]"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
+        :is="field.component"
+        v-for="field in fields"
+        :key="field.key"
+        v-bind="field.attributes"
+        v-model="form.values.value[field.key]"
+        @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
           style="margin-top: 20px"

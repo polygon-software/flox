@@ -6,29 +6,29 @@
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
       <q-form
-          @submit="onSubmit"
-          class="q-gutter-md"
+        class="q-gutter-md"
+        @submit="onSubmit"
       >
         <b>Reset Password</b>
         <q-input
-            label="Email Verification Code"
-            v-model="verificationCode"
+          v-model="verificationCode"
+          label="Email Verification Code"
         />
         <q-input
-            label="New Password"
-            v-model="password"
-            type="password"
-            :rules="[
-              val => PASSWORD_REGEX.test(val) || 'Not ok'
-            ]"
+          v-model="password"
+          label="New Password"
+          type="password"
+          :rules="[
+            val => PASSWORD_REGEX.test(val) || 'Not ok'
+          ]"
         />
         <q-input
-            label="New Password repeated"
-            v-model="passwordRep"
-            type="password"
-            :rules="[
-              val => val === password || 'Passwords must be identical',
-            ]"
+          v-model="passwordRep"
+          label="New Password repeated"
+          type="password"
+          :rules="[
+            val => val === password || 'Passwords must be identical',
+          ]"
         />
         <q-card-actions align="right">
 
@@ -52,16 +52,25 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, Ref} from 'vue';
+import {defineEmits} from 'vue';
 import {ref} from 'vue';
-import {PASSWORD_REGEX} from '../../helpers/REGEX'
+import {PASSWORD_REGEX} from 'src/helpers/REGEX'
+import {useDialogPluginComponent} from 'quasar';
 
 let verificationCode = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
-let dialog: Ref<string|null> = ref(null)
+
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+// dialogRef      - Vue ref to be applied to QDialog
+// onDialogHide   - Function to be used as handler for @hide on QDialog
+// onDialogOK     - Function to call to settle dialog with "ok" outcome
+//                    example: onDialogOK() - no payload
+//                    example: onDialogOK({ /*.../* }) - with payload
+// onDialogCancel - Function to call to settle dialog with "cancel" outcome
 
 /**
  * On submit, emit data outwards
@@ -71,19 +80,7 @@ function onSubmit(){
     passwordNew: password.value,
     verificationCode: verificationCode.value,
   })
-  hide()
-}
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
- dialog.value.show()
-}
-
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
+  onDialogHide()
 }
 
 </script>
