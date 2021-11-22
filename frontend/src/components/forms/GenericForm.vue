@@ -4,7 +4,9 @@
     greedy
     class="q-gutter-md"
   >
+    <!-- Stepper (for multi-page forms) -->
     <q-stepper
+      v-if="form.pages.value.length > 1"
       v-model="form.step.value"
       ref="stepper"
       active-color="primary"
@@ -56,10 +58,43 @@
         </q-stepper-navigation>
       </template>
     </q-stepper>
+    <!-- Single card (for single-page forms -->
+    <q-card
+      v-else
+      class="q-pa-md"
+    >
+      <div class="row flex flex-center">
+        <b class="text-primary">
+          {{ form.pages.value[0].label }}
+        </b>
+      </div>
+      <q-separator class="q-ma-lg"/>
+      <component
+        v-for="field in form.pages.value[0].fields"
+        :key="field.key"
+        :is="field.component"
+        v-bind="field.attributes"
+        v-model="form.values.value[field.key]"
+        @change="(newValue) => form.updateValue(field.key, newValue)"
+        @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+      />
+      <q-btn
+        color="primary"
+        :label="finish_label ?? $t('finish')"
+        @click="onSubmit"
+      />
+    </q-card>
   </q-form>
 </template>
 
 <script setup lang="ts">
+/**
+ * This component defines a generic form that can have a single or multiple pages.
+ * It takes the following properties:
+ * @param {Object[]} pages - the pages to show, each containing fields, label and key
+ * @param {finish} function - the function to call once the form is completed
+ * @param {string} [finish_label] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
+ */
 import {defineProps, Ref, ref} from 'vue';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
