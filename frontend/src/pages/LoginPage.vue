@@ -18,7 +18,7 @@
         v-if="!signup"
         style="margin-top: 0; padding: 0"
       >
-        {{ $t('no_account_yet') }}Noch keinen Account?
+        {{ $t('no_account_yet') }}
       </b>
 
       <!-- Signup Card -->

@@ -1,7 +1,8 @@
 <template>
   <q-dialog
-    ref="dialogRef"
-    @hide="onDialogHide"
+    ref="dialog"
+    @hide="hide"
+    title="DetailView"
   >
     <q-card class="q-pa-md" style="width: 800px;">
       <q-card-section>
@@ -53,7 +54,7 @@
             <q-card-actions>
               <q-btn
                 :label="$t('back')"
-                @click="onDialogCancel"
+                @click.stop=dialog.callback
                 color="primary"
                 flat
               />
@@ -101,7 +102,7 @@
       <q-card-actions align="center">
         <q-btn
           :label="$t('back')"
-          @click="onDialogCancel"
+          @click="hide"
           color="black"
           flat
         />
@@ -111,20 +112,24 @@
 </template>
 
 <script setup lang="ts">
-import {ref, markRaw, computed} from 'vue'
+import {ref, markRaw, computed, Ref} from 'vue'
 import OverviewComponent from '../product/OverviewComponent.vue'
 import DescriptionComponent from '../product/DescriptionComponent.vue'
 import TicketDistributionComponent from '../product/TicketDistributionComponent.vue'
-import { useDialogPluginComponent } from 'quasar'
 
-// REQUIRED; must be called inside of setup()
-const { dialogRef, onDialogOK, onDialogHide, onDialogCancel } = useDialogPluginComponent()
-// dialogRef      - Vue ref to be applied to QDialog
-// onDialogHide   - Function to be used as handler for @hide on QDialog
-// onDialogOK     - Function to call to settle dialog with "ok" outcome
-//                    example: onDialogOK() - no payload
-//                    example: onDialogOK({ /*.../* }) - with payload
-// onDialogCancel - Function to call to settle dialog with "cancel" outcome
+const dialog: Ref<string|null> = ref(null)
+// Mandatory - do not remove!
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function show(): void{
+  //eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value.show()
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function hide(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.hide()
+}
 
 const props = defineProps({
   // dbReference: {

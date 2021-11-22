@@ -205,8 +205,6 @@ function openDetailView(product: unknown) {
     componentProps: {
       product: product
     }
-  }).onOk(() => {
-    console.log('ok')
   })
 }
 </script>
