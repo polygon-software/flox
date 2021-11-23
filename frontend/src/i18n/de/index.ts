@@ -49,7 +49,7 @@ export default {
   accept_conditions: 'Ich stimme den AGB zu.',
   must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
   accept_condition_truthful:'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
-  must_accept_condition_trthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
+  must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
   redirected: 'Sie werden in Kürze weitergeleitet...',
   successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
   chef_dashboard: 'Chef Dashboard',

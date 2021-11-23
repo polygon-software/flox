@@ -48,7 +48,7 @@ export default {
   accept_conditions: 'I agree to the terms and conditions.',
   must_accept_conditions: 'You have to accept the terms and conditions.',
   accept_condition_truthful:'All information has been filled in truthfully.',
-  must_accept_condition_trthful: 'You must have filled in all information truthfully.',
+  must_accept_condition_truthful: 'You must have filled in all information truthfully.',
   redirected: 'You will be redirected shortly...',
   successful_application: 'Your application was successful.',
   chef_dashboard: 'Management Dashboard',

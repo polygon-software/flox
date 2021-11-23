@@ -24,7 +24,7 @@
   </q-field>
   <q-field
     v-model="accept_condition_truthful"
-    :rules="[(val) => val === true || $t('must_accept_condition_trthful')]"
+    :rules="[(val) => val === true || $t('must_accept_condition_truthful')]"
     borderless
     dense
   >
