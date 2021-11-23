@@ -2,6 +2,77 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Address {
+  """City"""
+  city: String!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Zip Code"""
+  zip_code: String!
+}
+
+type Company {
+  """Branch structure"""
+  branch_structure: Boolean!
+
+  """Company Name"""
+  company_name: String!
+
+  """Correspondence address"""
+  correspondence_address: Address!
+
+  """Whether document upload is enabled (initial request granted by SOI)"""
+  document_upload_enabled: Boolean!
+
+  """Domicile address"""
+  domicile_address: Address!
+
+  """E-Mail address"""
+  email: String!
+
+  """Language"""
+  language: String!
+
+  """Contact person Name"""
+  person_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Company UID"""
+  uid: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
+input CreateAddressInput {
+  city: String!
+  number: String!
+  street: String!
+  zip_code: String!
+}
+
+input CreateCompanyInput {
+  branch_structure: Boolean!
+  company_name: String!
+  correspondence_address: CreateAddressInput!
+  domicile_address: CreateAddressInput!
+  email: String!
+  language: String!
+  person_name: String!
+  phone: String!
+  uid: String
+}
+
 input CreateItemInput {
   """Name"""
   name: String!
@@ -13,6 +84,10 @@ input CreateItemInput {
 input CreateUserInput {
   age: Int!
   name: String!
+}
+
+input DeleteCompanyInput {
+  uuid: ID!
 }
 
 input DeleteUserInput {
@@ -32,15 +107,22 @@ type Item {
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
+  createCompany(createCompanyInput: CreateCompanyInput!): Company!
   createItem(createItemInput: CreateItemInput!): Item!
+  enableCompanyDocumentUpload(uuid: String!): Company!
   remove(deleteUserInput: DeleteUserInput!): User!
+  removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeItem(uuid: ID!): Item!
   update(updateUserInput: UpdateUserInput!): User!
+  updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
 type Query {
+  allCompanies: [Company!]!
   allUsers: [User!]!
+  companies(uuids: [ID!]): [Company!]!
+  company(uuid: ID!): Company!
   item(uuid: ID!): Item!
   items: [Item!]!
   user(uuid: ID!): User!
@@ -49,6 +131,19 @@ type Query {
 
 type Subscription {
   userAdded: User!
+}
+
+input UpdateCompanyInput {
+  branch_structure: Boolean!
+  company_name: String!
+  correspondence_address: CreateAddressInput!
+  domicile_address: CreateAddressInput!
+  email: String!
+  language: String!
+  person_name: String!
+  phone: String!
+  uid: String
+  uuid: ID!
 }
 
 input UpdateItemInput {

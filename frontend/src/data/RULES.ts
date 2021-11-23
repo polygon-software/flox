@@ -34,7 +34,7 @@ const IS_VALID_ZIP = (val: string): boolean => {
 }
 
 // Checks whether a selection is contained in a list of options
-const IS_VALID_OPTION = (val: any, options: any[]): boolean => {
+const IS_VALID_OPTION = (val: unknown, options: unknown[]): boolean => {
   return options.includes(val);
 }
 

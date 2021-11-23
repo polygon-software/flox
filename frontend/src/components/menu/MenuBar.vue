@@ -1,18 +1,12 @@
 <template>
   <q-header class="row bg-white shadow-5 justify-between">
     <div class="row">
-      <img
-          alt="Polygon Software"
-          src="https://media-exp1.licdn.com/dms/image/C4D0BAQEI1LFXsM4DVA/company-logo_200_200/0/1593964710523?e=2159024400&v=beta&t=k1qIEpVNRq-GBvW1fZt2SKvcuq59WL8J0IuLW0qMSG4"
-          style="height: 50px"
-          class="q-ma-sm"
-      >
       <h5 class="text-black q-pa-none q-ma-md">
-        PolygonSoftware Template
+        Strategic Opportunity Investments
       </h5>
       <p
-          class="text-grey-7"
           v-if="loggedIn && username"
+          class="text-grey-7"
       >
         {{ $t('loggedIn', {user: username})}}
       </p>
@@ -31,13 +25,6 @@
         class="text-primary"
         flat
         @click="changePassword"
-    />
-    <q-btn
-        v-if="!loggedIn"
-        label="Password Forgotten"
-        class="text-primary"
-        flat
-        @click="forgottenPassword"
     />
   </div>
 
@@ -83,13 +70,6 @@ async function logout(): Promise<void>{
  */
 function changePassword() {
   $authService.showChangePasswordDialog()
-}
-
-/**
- * Triggers a password change for a non-logged in authentication
- */
-function forgottenPassword() {
-  $authService.showResetPasswordDialog();
 }
 
 </script>

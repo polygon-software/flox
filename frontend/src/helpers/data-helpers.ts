@@ -1,5 +1,5 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
-import {ALL_USERS, QUERIES} from '../data/QUERIES';
+import {ALL_USERS, QUERIES} from '../data/queries/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
@@ -31,7 +31,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     const tables =  mutationObject.tables
     const type =  mutationObject.type
 
-    if([mutation, tables, type, mutationObject.cacheLocation].some(item => item === undefined)){
+    if([mutation, tables, type].some(item => item === undefined)){
         throw new Error("One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'")
     }
 
@@ -53,6 +53,9 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     update: (cache: ApolloCache<any> , { data: changeData}) => {
       affectedQueries.forEach((queryObject) => {
         const changes = changeData as Record<string, Record<string, unknown>>
+        if(!mutationObject.cacheLocation){
+          throw new Error('Cache Location is missing in mutationObject: '+ JSON.stringify(mutationObject))
+        }
         const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
         // Read existing query from cache
