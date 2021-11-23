@@ -11,7 +11,7 @@ import {
 import { Address } from '../../address/entities/address.entity';
 
 /**
- * An entity representing$ a company account
+ * An entity representing a company account
  * Initial status: 'document_upload_enabled' is set to 'false', and enabled once approved by SOI admin
  */
 

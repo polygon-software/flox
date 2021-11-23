@@ -27,5 +27,4 @@ export const ENABLE_COMPANY_DOCUMENT_UPLOAD = {
     }`,
   tables: ['company'],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'enableCompanyDocumentUpload'
 }
