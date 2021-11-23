@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { ItemModule } from './item/item.module';
 import { CompanyModule } from './company/company.module';
+import { EmployeeModule } from './employee/employee.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { CompanyModule } from './company/company.module';
     UserModule,
     CompanyModule,
     ItemModule,
+    EmployeeModule,
   ],
   providers: [
     JwtStrategy,

@@ -73,6 +73,11 @@ input CreateCompanyInput {
   uid: String
 }
 
+input CreateEmployeeInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 input CreateItemInput {
   """Name"""
   name: String!
@@ -94,6 +99,14 @@ input DeleteUserInput {
   uuid: ID!
 }
 
+type Employee {
+  """Example field (placeholder)"""
+  exampleField: Int!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Item {
   """Name"""
   name: String!
@@ -108,12 +121,15 @@ type Item {
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
+  createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
   createItem(createItemInput: CreateItemInput!): Item!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
+  removeEmployee(id: Int!): Employee!
   removeItem(uuid: ID!): Item!
   update(updateUserInput: UpdateUserInput!): User!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
+  updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
@@ -122,6 +138,7 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(uuid: ID!): Company!
+  employee(id: Int!): Employee!
   item(uuid: ID!): Item!
   items: [Item!]!
   user(uuid: ID!): User!
@@ -143,6 +160,12 @@ input UpdateCompanyInput {
   phone: String!
   uid: String
   uuid: ID!
+}
+
+input UpdateEmployeeInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input UpdateItemInput {
