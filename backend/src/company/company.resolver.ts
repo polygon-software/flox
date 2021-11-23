@@ -48,6 +48,14 @@ export class CompanyResolver {
     return await this.companyService.updateCompany(updateCompanyInput);
   }
 
+  @Public() // TODO restrict to SOI admin
+  @Mutation(() => Company)
+  async enableCompanyDocumentUpload(
+    @Args('uuid') uuid: string,
+  ): Promise<Company> {
+    return await this.companyService.enableDocumentUpload(uuid);
+  }
+
   @Public() // TODO restrict to appropriate roles
   @Mutation(() => Company)
   async removeCompany(
