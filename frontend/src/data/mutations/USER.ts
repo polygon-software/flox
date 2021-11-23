@@ -29,7 +29,6 @@ export const UPDATE_USER = {
     }`,
   tables: ['user'],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'updateUser'
 }
 
 export const DELETE_USER = {
