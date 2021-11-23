@@ -54,4 +54,13 @@ export default {
   confirmed_registration: 'Registration confirmed',
   redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
   back_to_login: 'Back to Login',
+  errors: {
+    nothing_here: 'Oops. Nothing here...',
+    user_not_defined: 'User Pool is not defined',
+    missing_properties: 'One or more of the following properties are missing for the given mutation: \'mutation\', \'tables\', \'type\', \'cacheLocation\'',
+    not_logged_in: 'Trying to log out despite not being logged in!',
+    error_occurred: 'An error occurred, try logging in again',
+    cant_find_module: 'Cannot find module ',
+    cache_location_missing: 'Cache Location is missing in mutationObject: ',
+  }
 };
