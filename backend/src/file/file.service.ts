@@ -19,7 +19,10 @@ export class FileService {
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
    */
-  async uploadPublicFile(dataBuffer: Buffer, filename: string,): Promise<PublicFile> {
+  async uploadPublicFile(
+    dataBuffer: Buffer,
+    filename: string,
+  ): Promise<PublicFile> {
     // S3 credentials
     const credentials = {
       region: this.configService.get('AWS_REGION'),
