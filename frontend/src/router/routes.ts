@@ -19,6 +19,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
+  'SET_PASSWORD': {
+    path: '/set-password',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SetPasswordPage.vue') }],
+  },
+
   'MANAGEMENT_DASHBOARD': {
     path: '/managementDashboard',
     component: () => import('layouts/MainLayout.vue'),
@@ -48,4 +54,4 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 export default ROUTES
 
 // Routes that can be accessed without being logged in
-export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS, ROUTES.SIGNUP]
+export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS, ROUTES.SIGNUP, ROUTES.SET_PASSWORD]
