@@ -1,6 +1,5 @@
 <template>
   <q-input
-    dense
     v-model="first_name"
     :label="$t('first_name')"
     type="text"
@@ -9,7 +8,6 @@
   >
   </q-input>
   <q-input
-    dense
     v-model="last_name"
     :label="$t('last_name')"
     type="text"

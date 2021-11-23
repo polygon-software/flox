@@ -24,8 +24,8 @@
             class="q-ma-md"
             style="width: 125px"
             :label="$t('signup')"
-            @click="toSignup"
             color="primary"
+            @click="toSignup"
           />
         </div>
       </q-card-section>
