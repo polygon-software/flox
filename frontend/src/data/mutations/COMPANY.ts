@@ -12,5 +12,20 @@ export const CREATE_COMPANY = {
     }`,
   tables: ['company'],
   type: MutationTypes.CREATE,
-  cacheLocation: 'create'
+  cacheLocation: 'createCompany'
+}
+
+export const ENABLE_COMPANY_DOCUMENT_UPLOAD = {
+  mutation: gql`
+    mutation enableCompanyDocumentUpload($uuid: String!){
+      enableCompanyDocumentUpload (uuid: $uuid) {
+        uuid
+        company_name
+        document_upload_enabled
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: 'enableCompanyDocumentUpload'
 }

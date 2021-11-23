@@ -43,7 +43,6 @@ import {RouterService} from 'src/services/RouterService';
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 
-
 /**
  * Logs in the given authentication
  * @param username {string} - the authentication's username
