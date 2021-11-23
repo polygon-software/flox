@@ -19,6 +19,12 @@
       <q-card-section
         class="col"
       >
+        <p class="col text-center q-mt-md"> {{ $t('redirected') }}  </p>
+      </q-card-section>
+
+      <q-card-section
+        class="col"
+      >
         <div class="flex row justify-center items-center">
           <q-btn
             class="col-2 q-ma-md"
