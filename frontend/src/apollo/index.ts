@@ -13,7 +13,7 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
     // add the authorization to the headers
     operation.setContext({
       headers: {
-        authorization: `Bearer ${token}`
+        authorization: `Bearer ${token ?? ''}`
       }
     })
     return forward(operation)
