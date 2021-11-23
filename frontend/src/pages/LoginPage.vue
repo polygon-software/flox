@@ -30,6 +30,9 @@
         </div>
       </q-card-section>
     </q-card>
+    <q-card class="q-pa-md">
+      <FileUploadForm :pages="pages"/>
+    </q-card>
   </q-page>
 </template>
 
@@ -39,6 +42,9 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import FileUploadForm from 'components/forms/FileUploadForm.vue';
+import {FIELDS} from "src/data/FIELDS";
+import {i18n} from "boot/i18n";
 
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
@@ -63,4 +69,17 @@ async function toSignup(): Promise<void>{
   await $routerService.routeTo(ROUTES.SIGNUP)
   return;
 }
+
+
+const account_fields = [
+  FIELDS.FILE_UPLOAD,
+]
+
+const pages = [
+  {
+    key: 'file_upload',
+    label: i18n.global.t('file_upload'),
+    fields: account_fields,
+  },
+]
 </script>

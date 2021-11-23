@@ -60,7 +60,8 @@ export default {
   commercial_register_extract: 'Commercial Register Extract',
   execution_register_extract: 'Betreibungsregisterauszug',
   optional: 'optional',
-  additional_files: 'Additional Documents',
+  additional_documents: 'Additional Documents',
+  add_additional_documents: 'Add more',
   submit: 'Submit',
   missing_file: 'Missing file',
   application: 'Application | Applications',
@@ -71,5 +72,6 @@ export default {
   unlock_account: 'Unlock account',
   new: 'New',
   documents_missing: 'Documents missing',
-  documents_available: 'Documents available'
+  documents_available: 'Documents available',
+  file_upload: 'File upload',
 };

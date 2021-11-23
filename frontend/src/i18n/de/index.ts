@@ -61,7 +61,8 @@ export default {
   commercial_register_extract: 'Handelsregisterauszug',
   execution_register_extract: 'Betreibungsregisterauszug',
   optional: 'optional',
-  additional_files: 'Weitere Dokumente',
+  additional_documents: 'Weitere Dokumente',
+  add_additional_documents: 'Weitere hinzufügen',
   submit: 'Senden',
   missing_file: 'Datei fehlt',
   application: 'Antrag | Anträge',
@@ -72,5 +73,6 @@ export default {
   unlock_account: 'Konto freischalten',
   new: 'Neu',
   documents_missing: 'Fehlende Dokumente',
-  documents_available: 'Dokumente verfügbar'
+  documents_available: 'Dokumente verfügbar',
+  file_upload: 'Dokumentenupload',
 }

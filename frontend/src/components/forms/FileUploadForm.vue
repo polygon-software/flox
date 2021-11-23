@@ -1,93 +1,73 @@
 <template>
   <q-form
-    @submit="uploadFiles"
+    ref="form_ref"
+    greedy
+    class="q-gutter-md"
   >
-    <!-- Passport or ID -->
-    <q-file
-      class="q-mb-md"
-      outlined
-      v-model="passport"
-      accept="image/*, .pdf"
-      use-chips
-      :label="$t('passport_or_id')"
-      stack-label
-      :rules="[(val) => {val !== null || $t('missing_file')}]"
+    <q-card
+      class="q-pa-md"
     >
-      <template v-slot:prepend>
-        <q-icon name="attach_file" />
-      </template>
-    </q-file>
-
-    <!--- Commercial Register Extract -->
-    <q-file
-      class="q-mb-md"
-      outlined
-      v-model="commercial_register_extract"
-      accept="image/*, .pdf"
-      use-chips
-      :label="`${$t('commercial_register_extract')} (${$t('optional')})`"
-      stack-label
-      :rules="[]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="attach_file" />
-      </template>
-    </q-file>
-
-    <!-- Execution Register Extract -->
-    <q-file
-      class="q-mb-md"
-      outlined
-      v-model="execution_register_extract"
-      accept="image/*, .pdf"
-      use-chips
-      :label="$t('execution_register_extract')"
-      stack-label
-      :rules="[(val) => {val !== null || $t('missing_file')}]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="attach_file" />
-      </template>
-    </q-file>
-
-    <!-- Additional Documents -->
-    <q-file
-      class="q-mb-md"
-      outlined
-      v-model="additional_files"
-      accept="image/*, .pdf"
-      use-chips
-      :label="$t('additional_files')"
-      stack-label
-      multiple
-      :rules="[]"
-    >
-      <template v-slot:prepend>
-        <q-icon name="attach_file" />
-      </template>
-    </q-file>
-
-    <!-- Confirm Button -->
-    <q-btn
-      style="width: 125px"
-      type="submit"
-      :label="$t('submit')"
-      color="primary"
-    />
+      <div class="row flex flex-center">
+        <b class="text-primary">
+          {{ form.pages.value[0].label }}
+        </b>
+      </div>
+      <q-separator class="q-ma-lg"/>
+      <component
+        v-for="field in form.pages.value[0].fields"
+        :key="field.key"
+        :is="field.component"
+        v-bind="field.attributes"
+        v-model="form.values.value[field.key]"
+        @change="(newValue) => form.updateValue(field.key, newValue)"
+        @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+      />
+      <q-btn
+        color="primary"
+        :label="finish_label ?? $t('finish')"
+        @click="onSubmit"
+      />
+    </q-card>
   </q-form>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+/**
+ * This component defines a generic form that can have a single or multiple pages.
+ * It takes the following properties:
+ * @param {Object[]} pages - the pages to show, each containing fields, label and key
+ * @param {finish} function - the function to call once the form is completed
+ * @param {string} [finish_label] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
+ */
+import {defineProps, Ref, ref} from 'vue';
+import {Form} from 'src/helpers/form-helpers';
+import {QForm} from 'quasar';
+const emit = defineEmits(['submit'])
 
-const passport = ref()
-const commercial_register_extract = ref()
-const execution_register_extract = ref()
-const additional_files = ref([])
+const form_ref: Ref<QForm|null> = ref(null)
 
-function uploadFiles() {
+const props = defineProps({
+  finish_label: String,
+  pages: Array,
+  finish: Function,
+})
 
-  //TODO: Commit upload
-  console.log('Files uploaded')
+// Get copy of prop form
+const _pages = props.pages ? props.pages as Record<string, unknown>[] : undefined
+const form: Form = new Form(_pages)
+
+/**
+ * Validates and, if valid, submits the form with all entered values
+ * @async
+ */
+async function onSubmit(){
+  const is_valid = await form_ref.value?.validate()
+
+  if(is_valid){
+    emit('submit', form.values.value)
+  }
+
 }
+
+
 </script>

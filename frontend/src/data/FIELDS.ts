@@ -6,6 +6,7 @@ import CompanyAddressField from 'components/forms/fields/company_signup/CompanyA
 import CompanyDataField from 'components/forms/fields/company_signup/CompanyDataField.vue'
 import FullNameField from 'components/forms/fields/company_signup/FullNameField.vue'
 import ConditionsField from 'components/forms/fields/company_signup/ConditionsField.vue'
+import UploadFields from 'components/forms/fields/fileupload/UploadFields.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 
@@ -108,7 +109,7 @@ const FIELDS: Record<string, Field> = {
     key: 'company_data',
     component: markRaw(CompanyDataField),
     attributes: {
-      rules: []
+      rules: [] // Validated by component
     },
   },
   CONDITIONS: {
@@ -117,7 +118,14 @@ const FIELDS: Record<string, Field> = {
       attributes: {
         rules: [] // Validated by component
       }
-  }
+  },
+  FILE_UPLOAD: {
+      key: 'file_upload',
+      component: markRaw(UploadFields),
+      attributes: {
+          rules: [] // Validated by component
+      }
+  },
 }
 
 export {FIELDS}
