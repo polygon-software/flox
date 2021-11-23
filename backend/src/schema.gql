@@ -39,8 +39,20 @@ type Mutation {
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
+type PublicFile {
+  """S3 File Key"""
+  key: String!
+
+  """Public download URL"""
+  url: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Query {
   allUsers: [User!]!
+  getFile(uuid: ID!): PublicFile!
   item(uuid: ID!): Item!
   items: [Item!]!
   user(uuid: ID!): User!

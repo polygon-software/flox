@@ -5,6 +5,7 @@ import PublicFile from './entities/public_file.entity';
 import { PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
+import { GetFileArgs } from './dto/get-file.args';
 
 @Injectable()
 export class FileService {
@@ -52,5 +53,9 @@ export class FileService {
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
+  }
+
+  async getFile(getFileArgs: GetFileArgs): Promise<PublicFile> {
+    return this.publicFilesRepository.findOne(getFileArgs.uuid);
   }
 }
