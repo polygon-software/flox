@@ -6,8 +6,9 @@ const credentials = {
   secretAccessKey: process.env.VUE_APP_AWS_SECRET_KEY ?? ''
 }
 
-// Create SES service object
-const sesClient: SESClient = new SESClient({
+// Create SES service object (seems to be unrecognized by eslint)
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const sesClient = new SESClient({
   region: process.env.VUE_APP_AWS_REGION,
   credentials: credentials,
 });
@@ -54,7 +55,8 @@ async function sendEmail(from: string, to: string[], subject: string, body: stri
   };
 
   // Send actual e-mail
-  return await sesClient.send(new SendEmailCommand(params));
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
+  return await sesClient.send(new SendEmailCommand(params)) ;
 }
 
 export {sendEmail}
