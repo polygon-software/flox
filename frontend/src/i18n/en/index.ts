@@ -15,6 +15,7 @@ export default {
   incorrect_username: 'Username not found',
   non_matching_password: 'Passwords not matching',
   finish_signup: 'Finish',
+  finish: 'Finish',
   back: 'Back',
   next_step: 'Next',
   account: 'Account',

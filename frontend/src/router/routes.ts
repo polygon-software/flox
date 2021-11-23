@@ -20,7 +20,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   'MANAGEMENT_DASHBOARD': {
-    path: '/managementDashboard',
+    path: '/management_dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/ManagementDashboard.vue') }],
   },
@@ -37,6 +37,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/SuccessPage.vue') }],
   },
 
+  'DOCUMENT_UPLOAD': {
+    path: '/document_upload',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/DocumentUploadPage.vue') }],
+  },
 
   // Wildcard route for non-covered routes
   'WILDCARD': {
@@ -48,4 +53,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 export default ROUTES
 
 // Routes that can be accessed without being logged in
-export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS, ROUTES.SIGNUP]
+export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS, ROUTES.SIGNUP, ROUTES.DOCUMENT_UPLOAD]
+
+//TODO: Add semi-protected routes

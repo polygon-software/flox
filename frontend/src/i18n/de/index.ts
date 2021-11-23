@@ -15,6 +15,7 @@ export default {
   incorrect_username: 'Benutzername wurde nicht gefunden',
   non_matching_password: 'Passwörter stimmen nicht überein',
   finish_signup: 'Abschliessen',
+  finish: 'Abschliessen',
   back: 'Zurück',
   next_step: 'Weiter',
   account: 'Account',

@@ -6,7 +6,7 @@ import CompanyAddressField from 'components/forms/fields/company_signup/CompanyA
 import CompanyDataField from 'components/forms/fields/company_signup/CompanyDataField.vue'
 import FullNameField from 'components/forms/fields/company_signup/FullNameField.vue'
 import ConditionsField from 'components/forms/fields/company_signup/ConditionsField.vue'
-import UploadFields from 'components/forms/fields/fileupload/UploadFields.vue'
+import UploadFields from 'components/forms/fields/documentUpload/UploadFields.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 

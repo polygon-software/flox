@@ -14,9 +14,9 @@
       </div>
       <q-separator class="q-ma-lg"/>
       <component
+        :is="field.component"
         v-for="field in form.pages.value[0].fields"
         :key="field.key"
-        :is="field.component"
         v-bind="field.attributes"
         v-model="form.values.value[field.key]"
         @change="(newValue) => form.updateValue(field.key, newValue)"
@@ -24,7 +24,7 @@
       />
       <q-btn
         color="primary"
-        :label="finish_label ?? $t('finish')"
+        :label="finishLabel"
         @click="onSubmit"
       />
     </q-card>
@@ -40,6 +40,7 @@
  * @param {string} [finish_label] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
  */
 import {defineProps, Ref, ref} from 'vue';
+import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
 const emit = defineEmits(['submit'])
@@ -47,7 +48,10 @@ const emit = defineEmits(['submit'])
 const form_ref: Ref<QForm|null> = ref(null)
 
 const props = defineProps({
-  finish_label: String,
+  finishLabel: {
+    type: String,
+    default: i18n.global.t('finish')
+  },
   pages: Array,
   finish: Function,
 })
