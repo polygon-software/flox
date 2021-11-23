@@ -7,10 +7,13 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import fastify = require('fastify');
+import { Public } from '../auth/auth.guard';
 
-@Controller('tasks')
-export class TasksController {
+@Controller()
+export class FileController {
   constructor(private readonly taskService: FileService) {}
+
+  @Public()
   @Post('/uploadFile')
   async uploadFile(
     @Req() req: fastify.FastifyRequest,
@@ -23,6 +26,10 @@ export class TasksController {
     }
     const file = await req.file();
     const file_buffer = await file.toBuffer();
-    return await this.taskService.uploadPublicFile(file_buffer, file.filename);
+    const new_file = await this.taskService.uploadPublicFile(
+      file_buffer,
+      file.filename,
+    );
+    res.send(new_file);
   }
 }

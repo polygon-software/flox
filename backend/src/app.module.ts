@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { ItemModule } from './item/item.module';
 import * as Joi from 'joi';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import * as Joi from 'joi';
     }),
     UserModule,
     ItemModule,
+    FileModule,
   ],
   providers: [
     JwtStrategy,
