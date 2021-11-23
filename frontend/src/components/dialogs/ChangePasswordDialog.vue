@@ -53,10 +53,10 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from 'vue';
+import {defineEmits, Ref} from 'vue';
 import {ref} from 'vue';
 import {PASSWORD_REGEX} from 'src/helpers/REGEX'
-import {useDialogPluginComponent} from 'quasar';
+import {QDialog, useDialogPluginComponent} from 'quasar';
 
 let passwordOld = ref('')
 let password = ref('')
@@ -73,10 +73,17 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 //                    example: onDialogOK({ /*.../* }) - with payload
 // onDialogCancel - Function to call to settle dialog with "cancel" outcome
 
+const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+
+// Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function show(this: any){
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  this.$refs.dialog.show()
+function show(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.show();
+}
+function hide(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.hide()
 }
 
 /**
@@ -87,7 +94,7 @@ function onSubmit(){
     passwordNew: password.value,
     passwordOld: passwordOld.value,
   })
-  onDialogHide()
+  hide()
 }
 
 
