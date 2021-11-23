@@ -67,15 +67,15 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
   await executeMutation(
     CREATE_COMPANY,
     {
-      company_name: values.companyData.company_name,
+      company_name: values.company_data.company_name,
       person_name: values.full_name,
       language: values.language,
-      uid: values.companyData.uid,
+      uid: values.company_data.uid,
       domicile_address: domicile_address,
       correspondence_address: correspondence_address,
       phone: values.phone_number,
       email: values.email,
-      branch_structure: values.companyData.branch_structure
+      branch_structure: values.company_data.branch_structure
     }
   )
 

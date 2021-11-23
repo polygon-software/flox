@@ -16,7 +16,7 @@
 
   <!-- Correspondence Address -->
   <div v-if="!hide_correspondence">
-    <AddressField @change="(val) => {correspondence_input.replace(val); emitValue()}"/>
+    <AddressField @change="(val) => {}"/>
   </div>
 </template>
 
