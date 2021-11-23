@@ -5,8 +5,8 @@
         Strategic Opportunity Investments
       </h5>
       <p
-          class="text-grey-7"
           v-if="loggedIn && username"
+          class="text-grey-7"
       >
         {{ $t('loggedIn', {user: username})}}
       </p>

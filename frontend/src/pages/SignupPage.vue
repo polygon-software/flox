@@ -5,7 +5,7 @@
       style="width: 500px;"
     >
       <GenericForm
-        :finish_label="$t('finish_signup')"
+          finish-label="$t('finish_signup')"
         :pages="pages"
         @submit="onSignup"
       />

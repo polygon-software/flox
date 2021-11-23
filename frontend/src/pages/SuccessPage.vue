@@ -24,8 +24,8 @@
             class="col-2 q-ma-md"
             style="width: 150px"
             :label="$t('back_to_login')"
-            @click="backToLogin"
             color="primary"
+            @click="backToLogin"
           />
         </div>
       </q-card-section>
