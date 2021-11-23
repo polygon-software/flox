@@ -11,16 +11,18 @@
           {{ props.row.name }}
         </q-td>
         <q-td key="state" :props="props">
-          <q-badge color="green">
-            {{ props.row.state }}
-          </q-badge>
+          {{ getState(props.row.companyData) }}
         </q-td>
         <q-td key="action" :props="props">
           <q-btn
+            v-if="isAction(props.row.companyData)"
             color="primary"
-            :label="props.row.action.label"
-            @click="props.row.action.callback"
+            :label="props.row.companyData.document_upload_enabled ? $t('unlock_account') : $t('enable_upload')"
+            @click="props.row.companyData.document_upload_enabled ? unlockAccount() : enableUpload(props.row.companyData)"
           />
+          <div v-else>
+            {{ $t('documents_missing') }}
+          </div>
         </q-td>
       </q-tr>
     </template>
@@ -31,39 +33,69 @@
 import { ref } from 'vue'
 import { i18n } from 'boot/i18n';
 import SignUpApplicationDialog from 'src/components/dialogs/SignUpApplicationDialog.vue'
-
-
-// Mock data
-const data = {
-  company_name: 'Polygon Software',
-  language: 'DE',
-  uid: 'Polygon2ElectricBoogaloo',
-  person_name: 'Marino Schneider',
-  domicile_address: 'Musterstrasse 1, 800 Zürich',
-  correspondence_address: 'Thurgauerstrasse 117, 8152 Opfikon',
-  phone: '078 456 23 10',
-  email: 'marino.schneider@polygon-software.ch',
-  branch_structure: true
-}
+import { CompanyData } from 'src/data/types/CompanyData'
+import { useQuasar } from 'quasar'
+import {Address} from 'src/data/types/Address';
 
 const $q = useQuasar()
-import { useQuasar } from 'quasar'
+
+// Mock data
+const data1 = new CompanyData(
+  'Polygon Software',
+  'DE',
+  'Polygon2ElectricBoogaloo',
+  'Marino Schneider',
+  new Address('Musterstrasse', '1', 'Zürich', '8000', 'Schweiz'),
+  new Address('Thurgauerstrasse', '117', 'Opfikon', '8152','Schweiz'),
+  '078 456 23 10',
+  'marino.schneider@polygon-software.ch',
+  true,
+  false,
+  []
+)
+
+// Mock data
+const data2 = new CompanyData(
+  'Roche',
+  'FR',
+  'BlubbiBlubbBlubb',
+  'Jane Doe',
+  new Address('Strassenstrasse', '1', 'Basel', '4000', 'Schweiz'),
+  new Address('Wegweg', '25', 'Muttenz', '4132','Pen Island'),
+  '044 256 23 56',
+  'jane.derp@roche.ch',
+  true,
+  true,
+  ['Hello.jpg', 'World.pdf', 'Blubb.pdf']
+)
+
+// Mock data
+const data3 = new CompanyData(
+  'Roche',
+  'FR',
+  'BlubbiBlubbBlubb',
+  'Jane Doe',
+  new Address('Strassenstrasse', '1', 'Basel', '4000', 'Schweiz'),
+  new Address('Wegweg', '25', 'Muttenz', '4132','Pen Island'),
+  '044 256 23 56',
+  'jane.derp@roche.ch',
+  true,
+  true,
+  []
+)
+
 const rows = ref([
   {
     name: 'Antrag 1',
-    state: 'Aktiv',
-    action: {
-      label: '1',
-      callback: action,
-    }
+    companyData: data1,
   },
   {
     name: 'Antrag 2',
-    state: 'Inaktiv',
-    action: {
-      label: '2',
-      callback: action,
-    }
+    companyData: data2,
+  },
+  {
+    name: 'Antrag 3',
+    companyData: data3,
   },
 ])
 
@@ -73,14 +105,50 @@ const columns = [
   {name: 'action', required: true, label: i18n.global.t('action'), align: 'left', field: 'action', sortable: true}
 ]
 
-function action() {
+/**
+ * Opens the dialog to enable the file upload
+ */
+function enableUpload(companyData: CompanyData) {
   $q.dialog({
     title: 'SignUpApplication',
     component: SignUpApplicationDialog,
     componentProps: {
-      company_data: data
+      company_data: companyData
     }
   })
+}
+
+/**
+ * Unlocks a account
+ */
+function unlockAccount() {
+  console.log('Unlock account')
+}
+
+
+/**
+ * Determines if an action button has to be rendered
+ * @param {CompanyData} companyData
+ */
+function isAction(companyData: CompanyData): boolean {
+  if (companyData.document_upload_enabled) {
+    return !(companyData.documents === null || companyData.documents.length === 0);
+  }
+  return true
+}
+
+/**
+* Returns the state of the application.
+* @param {CompanyData} companyData
+ */
+function getState(companyData: CompanyData): string {
+  if (companyData.document_upload_enabled) {
+    if (companyData.documents === null || companyData.documents.length === 0) {
+      return i18n.global.t('documents_missing')
+    }
+    return i18n.global.t('documents_available')
+  }
+  return i18n.global.t('new')
 }
 
 

@@ -9,42 +9,98 @@
           bordered
           separator
         >
-          <q-item-section v-ripple>
-            <p>{{ $t('company_name') }}: {{ props.company_data.company_name }}</p>
-          </q-item-section>
-          <q-item-section>
-            <p>{{ $t('language') }}: {{ props.company_data.language }}</p>
-          </q-item-section>
-          <q-item-section v-ripple>
-            <p>{{ $t('company_uid') }}: {{ props.company_data.uid }}</p>
-          </q-item-section>
-          <q-item-section v-ripple>
-            <p>{{ $t('full_name') }}: {{ props.company_data.person_name }}</p>
-          </q-item-section>
-          <q-item-section v-ripple>
-            <p>{{ $t('living_address') }}: {{ props.company_data.domicile_address }}</p>
-          </q-item-section>
-          <q-item-section v-ripple>
-            <p>{{ $t('correspondence_address') }}: {{ props.company_data.correspondence_address }}</p>
-          </q-item-section>
-          <q-item-section v-ripple>
-            <p>{{ $t('phone_number') }}: {{ props.company_data.phone }}</p>
-          </q-item-section>
-          <q-item-section v-ripple>
-            <p>{{ $t('email') }}: {{ props.company_data.email }}</p>
-          </q-item-section>
-          <q-item-section v-ripple>
-            <p>{{ $t('branch_structure') }}: {{ props.company_data.branch_structure }}</p>
-          </q-item-section>
+          <q-item v-ripple>
+            <q-item-section >
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('company_name') }}:</p>
+                <p class="col-7">{{ props.company_data.company_name }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item v-ripple>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('language') }}:</p>
+                <p class="col-7">{{ props.company_data.language }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item v-ripple>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('company_uid') }}:</p>
+                <p class="col-7">{{ props.company_data.uid }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item v-ripple>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('full_name') }}:</p>
+                <p class="col-7">{{ props.company_data.person_name }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item v-ripple>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('domicile_address') }}:</p>
+                <p class="col-7">{{ props.company_data.domicile_address.prettyString() }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item v-ripple>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('correspondence_address') }}:</p>
+                <p class="col-7">{{ props.company_data.correspondence_address.prettyString() }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item v-ripple>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('phone_number') }}:</p>
+                <p class="col-7">{{ props.company_data.phone }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item v-ripple>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('email') }}:</p>
+                <p class="col-7">{{ props.company_data.email }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item v-ripple>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('branch_structure') }}:</p>
+                <p class="col-7">{{ props.company_data.branch_structure ? $t('yes') : $t('no') }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
         </q-list>
       </q-card-section>
       <q-card-actions>
         <q-btn
-          :label="$t('allow_upload')"
+          class="q-ma-md"
+          :label="$t('enable_upload')"
           color="primary"
           @click="onOkClick"
         />
         <q-btn
+          class="q-ma-md"
           :label="$t('reject')"
           color="negative"
           @click="onCancelClick"
@@ -55,44 +111,18 @@
 </template>
 <script setup lang="ts">
 import {PropType, ref, Ref} from 'vue'
+import { CompanyData } from 'src/data/types/CompanyData'
 
 const dialog: Ref<HTMLElement> = ref<HTMLElement>(null)
 
-type CompanyData = {
-  company_name: {
-    type: string,
-  },
-  langauge: {
-    type: string,
-  },
-  uid: {
-    type: string,
-  },
-  person_name: {
-    type: string
-  },
-  domicile_address: {
-    type: string //TODO: Change to correct type
-  },
-  correspondence_address: {
-    type: string //TODO: Change to correct type
-  },
-  phone: {
-    type: string
-  },
-  email: {
-    type: string
-  },
-  branch_structure: {
-    type: boolean
-  },
-}
+
 const props = defineProps({
   company_data: {
     type: Object as PropType<CompanyData>,
     required: true
   }
 })
+
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function show(): void {

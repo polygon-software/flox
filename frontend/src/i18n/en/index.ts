@@ -66,6 +66,10 @@ export default {
   application: 'Application | Applications',
   state: 'State',
   action: 'Action',
-  allow_upload: 'Allow Upload',
+  enable_upload: 'Enable upload',
   reject: 'Reject',
+  unlock_account: 'Unlock account',
+  new: 'New',
+  documents_missing: 'Documents missing',
+  documents_available: 'Documents available'
 };

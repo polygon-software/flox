@@ -67,6 +67,10 @@ export default {
   application: 'Antrag | Anträge',
   state: 'Status',
   action: 'Aktion',
-  allow_upload: 'Upload freigeben',
+  enable_upload: 'Upload freigeben',
   reject: 'Ablehnen',
+  unlock_account: 'Konto freischalten',
+  new: 'Neu',
+  documents_missing: 'Fehlende Dokumente',
+  documents_available: 'Dokumente verfügbar'
 }
