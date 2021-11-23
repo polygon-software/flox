@@ -50,6 +50,8 @@ export default {
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
   must_accept_conditions: 'You have to accept the terms and conditions.',
+  accept_condition_truthful:'All information has been filled in truthfully.',
+  must_accept_condition_truthful: 'You must have filled in all information truthfully.',
   redirected: 'You will be redirected shortly...',
   successful_application: 'Your application was successful.',
   chef_dashboard: 'Management Dashboard',
@@ -75,4 +77,13 @@ export default {
   documents_missing: 'Documents missing',
   documents_available: 'Documents available',
   file_upload: 'File upload',
+  errors: {
+    nothing_here: 'Oops. Nothing here...',
+    user_not_defined: 'User Pool is not defined',
+    missing_properties: 'One or more of the following properties are missing for the given mutation: \'mutation\', \'tables\', \'type\', \'cacheLocation\'',
+    not_logged_in: 'Trying to log out despite not being logged in!',
+    error_occurred: 'An error occurred, try logging in again',
+    cant_find_module: 'Cannot find module ',
+    cache_location_missing: 'Cache Location is missing in mutationObject: ',
+  }
 };

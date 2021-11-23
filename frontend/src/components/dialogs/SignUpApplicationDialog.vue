@@ -13,7 +13,7 @@
             <q-item-section >
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('company_name') }}:</p>
-                <p class="col-7">{{ props.company_data.company_name }}</p>
+                <p class="col-7">{{ props.companyData.company_name }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -22,7 +22,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('language') }}:</p>
-                <p class="col-7">{{ props.company_data.language }}</p>
+                <p class="col-7">{{ props.companyData.language }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -31,7 +31,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('company_uid') }}:</p>
-                <p class="col-7">{{ props.company_data.uid }}</p>
+                <p class="col-7">{{ props.companyData.uid }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -40,7 +40,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('full_name') }}:</p>
-                <p class="col-7">{{ props.company_data.person_name }}</p>
+                <p class="col-7">{{ props.companyData.person_name }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -49,7 +49,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('domicile_address') }}:</p>
-                <p class="col-7">{{ props.company_data.domicile_address.prettyString() }}</p>
+                <p class="col-7">{{ props.companyData.domicile_address.prettyString() }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -58,7 +58,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('correspondence_address') }}:</p>
-                <p class="col-7">{{ props.company_data.correspondence_address.prettyString() }}</p>
+                <p class="col-7">{{ props.companyData.correspondence_address.prettyString() }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -67,7 +67,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('phone_number') }}:</p>
-                <p class="col-7">{{ props.company_data.phone }}</p>
+                <p class="col-7">{{ props.companyData.phone }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -76,7 +76,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('email') }}:</p>
-                <p class="col-7">{{ props.company_data.email }}</p>
+                <p class="col-7">{{ props.companyData.email }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -85,7 +85,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('branch_structure') }}:</p>
-                <p class="col-7">{{ props.company_data.branch_structure ? $t('yes') : $t('no') }}</p>
+                <p class="col-7">{{ props.companyData.branch_structure ? $t('yes') : $t('no') }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -112,13 +112,19 @@
 <script setup lang="ts">
 import {PropType, ref, Ref} from 'vue'
 import { CompanyData } from 'src/data/types/CompanyData'
+import {executeMutation} from 'src/helpers/data-helpers';
+import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
 
 const dialog: Ref<HTMLElement> = ref<HTMLElement>(null)
 
 
 const props = defineProps({
-  company_data: {
+  companyData: {
     type: Object as PropType<CompanyData>,
+    required: true
+  },
+  uuid: {
+    type: String,
     required: true
   }
 })
@@ -135,9 +141,8 @@ function hide(): void {
   dialog.value.hide()
 }
 
-function onOkClick(): void {
-  //TODO: Send ok
-  console.log('ok')
+async function onOkClick(): Promise<void> {
+  await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: props.uuid})
   hide()
 }
 

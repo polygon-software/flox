@@ -1,32 +1,34 @@
 <template>
-  <q-table
-    :title="$tc('application', 2)"
-    :rows="rows"
-    :columns="columns"
-    row-key="name"
-  >
-    <template v-slot:body="props">
-      <q-tr :props="props">
-        <q-td key="name" :props="props">
-          {{ props.row.name }}
-        </q-td>
-        <q-td key="state" :props="props">
-          {{ getState(props.row.companyData) }}
-        </q-td>
-        <q-td key="action" :props="props">
-          <q-btn
-            v-if="isAction(props.row.companyData)"
-            color="primary"
-            :label="props.row.companyData.document_upload_enabled ? $t('unlock_account') : $t('enable_upload')"
-            @click="props.row.companyData.document_upload_enabled ? unlockAccount() : enableUpload(props.row.companyData)"
-          />
-          <div v-else>
-            {{ $t('documents_missing') }}
-          </div>
-        </q-td>
-      </q-tr>
-    </template>
-  </q-table>
+  <q-page class="flex flex-center">
+    <q-table
+      :title="$tc('application', 2)"
+      :rows="rows"
+      :columns="columns"
+      row-key="name"
+    >
+      <template v-slot:body="props">
+        <q-tr :props="props">
+          <q-td key="name" :props="props">
+            {{ props.row.name }}
+          </q-td>
+          <q-td key="state" :props="props">
+            {{ getState(props.row.companyData) }}
+          </q-td>
+          <q-td key="action" :props="props">
+            <q-btn
+              v-if="isAction(props.row.companyData)"
+              color="primary"
+              :label="props.row.companyData.document_upload_enabled ? $t('unlock_account') : $t('enable_upload')"
+              @click="props.row.companyData.document_upload_enabled ? unlockAccount() : enableUpload(props.row.companyData)"
+            />
+            <div v-else>
+              {{ $t('documents_missing') }}
+            </div>
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
+  </q-page>
 </template>
 
 <script setup lang="ts">
@@ -45,8 +47,8 @@ const data1 = new CompanyData(
   'DE',
   'Polygon2ElectricBoogaloo',
   'Marino Schneider',
-  new Address('Musterstrasse', '1', 'Zürich', '8000', 'Schweiz'),
-  new Address('Thurgauerstrasse', '117', 'Opfikon', '8152','Schweiz'),
+  new Address('Musterstrasse', '1', 'Zürich', '8000'),
+  new Address('Thurgauerstrasse', '117', 'Opfikon', '8152'),
   '078 456 23 10',
   'marino.schneider@polygon-software.ch',
   true,
@@ -60,8 +62,8 @@ const data2 = new CompanyData(
   'FR',
   'BlubbiBlubbBlubb',
   'Jane Doe',
-  new Address('Strassenstrasse', '1', 'Basel', '4000', 'Schweiz'),
-  new Address('Wegweg', '25', 'Muttenz', '4132','Pen Island'),
+  new Address('Strassenstrasse', '1', 'Basel', '4000'),
+  new Address('Wegweg', '25', 'Muttenz', '4132'),
   '044 256 23 56',
   'jane.derp@roche.ch',
   true,
@@ -75,8 +77,8 @@ const data3 = new CompanyData(
   'FR',
   'BlubbiBlubbBlubb',
   'Jane Doe',
-  new Address('Strassenstrasse', '1', 'Basel', '4000', 'Schweiz'),
-  new Address('Wegweg', '25', 'Muttenz', '4132','Pen Island'),
+  new Address('Strassenstrasse', '1', 'Basel', '4000'),
+  new Address('Wegweg', '25', 'Muttenz', '4132'),
   '044 256 23 56',
   'jane.derp@roche.ch',
   true,
@@ -113,7 +115,7 @@ function enableUpload(companyData: CompanyData) {
     title: 'SignUpApplication',
     component: SignUpApplicationDialog,
     componentProps: {
-      company_data: companyData
+      companyData: companyData
     }
   })
 }

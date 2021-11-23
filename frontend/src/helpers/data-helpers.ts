@@ -4,6 +4,7 @@ import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIO
 import {ApolloCache, ApolloQueryResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {useSSR} from 'src/store/ssr/index';
+import {i18n} from "boot/i18n";
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -32,7 +33,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     const type =  mutationObject.type
 
     if([mutation, tables, type].some(item => item === undefined)){
-        throw new Error("One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'")
+        throw new Error(i18n.global.t('errors.missing_properties'))
     }
 
     const affectedQueries:QueryObject[] = [];
@@ -54,7 +55,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
       affectedQueries.forEach((queryObject) => {
         const changes = changeData as Record<string, Record<string, unknown>>
         if(!mutationObject.cacheLocation){
-          throw new Error('Cache Location is missing in mutationObject: '+ JSON.stringify(mutationObject))
+          throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
         }
         const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 

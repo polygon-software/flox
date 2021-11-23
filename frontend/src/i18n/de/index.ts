@@ -51,6 +51,8 @@ export default {
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
   must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
+  accept_condition_truthful:'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
+  must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
   redirected: 'Sie werden in Kürze weitergeleitet...',
   successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
   chef_dashboard: 'Chef Dashboard',
@@ -76,4 +78,13 @@ export default {
   documents_missing: 'Fehlende Dokumente',
   documents_available: 'Dokumente verfügbar',
   file_upload: 'Dokumentenupload',
+  errors: {
+    nothing_here: 'Hoppla. Hier hat es nichts...',
+    user_not_defined: 'Benutzerpool ist nicht definiert',
+    missing_properties: 'Eine oder mehrere der folgenden Eigenschaften fehlen für die angegebene Mutation: \'mutation\', \'tables\', \'type\', \'cacheLocation\'',
+    not_logged_in: 'Versucht, sich abzumelden, obwohl man nicht eingeloggt ist!',
+    error_occurred: 'Ein Fehler ist aufgetreten, versuchen Sie sich erneut anzumelden',
+    cant_find_module: 'Kann Modul nicht finden ',
+    cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
+  }
 }
