@@ -57,4 +57,13 @@ export default {
   confirmed_registration: 'Registrierung bestätigt',
   redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
   back_to_login: 'Zurück zu Login',
+  errors: {
+    nothing_here: 'Hoppla. Hier hat es nichts...',
+    user_not_defined: 'Benutzerpool ist nicht definiert',
+    missing_properties: 'Eine oder mehrere der folgenden Eigenschaften fehlen für die angegebene Mutation: \'mutation\', \'tables\', \'type\', \'cacheLocation\'',
+    not_logged_in: 'Versucht, sich abzumelden, obwohl man nicht eingeloggt ist!',
+    error_occurred: 'Ein Fehler ist aufgetreten, versuchen Sie sich erneut anzumelden',
+    cant_find_module: 'Kann Modul nicht finden ',
+    cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
+  }
 }
