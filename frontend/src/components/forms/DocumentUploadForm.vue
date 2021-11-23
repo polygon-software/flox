@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 /**
- * This component defines a generic form that can have a single or multiple pages.
+ * This component defines a form to upload documents.
  * It takes the following properties:
  * @param {Object[]} pages - the pages to show, each containing fields, label and key
  * @param {finish} function - the function to call once the form is completed

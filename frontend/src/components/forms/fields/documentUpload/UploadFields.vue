@@ -76,7 +76,9 @@
 import {markRaw, ref} from 'vue';
 import {QFile} from 'quasar';
 
-
+/**
+ * This file contains the fields for uploading documents.
+ */
 const props = defineProps({
   maxFileSize: {
     type: Number,
@@ -87,6 +89,10 @@ const props = defineProps({
 const passport = ref()
 const commercial_register_extract = ref()
 const execution_register_extract = ref()
+
+/**
+ * This section handles the addition and deltetion of custom files.
+ */
 const additional_input_fields = ref([
   {
     model: null,
@@ -94,6 +100,9 @@ const additional_input_fields = ref([
   },
 ])
 
+/**
+ * This method gets called whenever a file is added to or deleted from a custom field.
+ */
 function fileChange(): void {
   const size = additional_input_fields.value.length
 
