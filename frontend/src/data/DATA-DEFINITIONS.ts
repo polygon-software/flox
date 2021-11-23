@@ -21,6 +21,6 @@ export interface QueryObject {
 export interface MutationObject {
     mutation: DocumentNode,          // Actual GraphQL mutation
     tables: string[],       // Affected Tables
-    cacheLocation: string,  // Location in cache (actual GraphQL query name)
+    cacheLocation: string|undefined,  // Location in cache (actual GraphQL query name)
     type: MutationTypes     // Type of mutation
 }
