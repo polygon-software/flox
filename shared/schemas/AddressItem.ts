@@ -6,5 +6,5 @@ export const AddressItem = Joi.object({
     number: Joi.string().required(),
     city: Joi.string().required(),
     zip_code: Joi.string().required(),
-    country: Joi.string().required(),
+    country: Joi.string(),
 });

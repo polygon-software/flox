@@ -1,32 +1,34 @@
 <template>
-  <q-table
-    :title="$tc('application', 2)"
-    :rows="rows"
-    :columns="columns"
-    row-key="name"
-  >
-    <template v-slot:body="props">
-      <q-tr :props="props">
-        <q-td key="name" :props="props">
-          {{ props.row.name }}
-        </q-td>
-        <q-td key="state" :props="props">
-          {{ getState(props.row.companyData) }}
-        </q-td>
-        <q-td key="action" :props="props">
-          <q-btn
-            v-if="isAction(props.row.companyData)"
-            color="primary"
-            :label="props.row.companyData.document_upload_enabled ? $t('unlock_account') : $t('enable_upload')"
-            @click="props.row.companyData.document_upload_enabled ? unlockAccount() : enableUpload(props.row.companyData)"
-          />
-          <div v-else>
-            {{ $t('documents_missing') }}
-          </div>
-        </q-td>
-      </q-tr>
-    </template>
-  </q-table>
+  <q-page class="flex flex-center">
+    <q-table
+      :title="$tc('application', 2)"
+      :rows="rows"
+      :columns="columns"
+      row-key="name"
+    >
+      <template v-slot:body="props">
+        <q-tr :props="props">
+          <q-td key="name" :props="props">
+            {{ props.row.name }}
+          </q-td>
+          <q-td key="state" :props="props">
+            {{ getState(props.row.companyData) }}
+          </q-td>
+          <q-td key="action" :props="props">
+            <q-btn
+              v-if="isAction(props.row.companyData)"
+              color="primary"
+              :label="props.row.companyData.document_upload_enabled ? $t('unlock_account') : $t('enable_upload')"
+              @click="props.row.companyData.document_upload_enabled ? unlockAccount() : enableUpload(props.row.companyData)"
+            />
+            <div v-else>
+              {{ $t('documents_missing') }}
+            </div>
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
+  </q-page>
 </template>
 
 <script setup lang="ts">
@@ -113,7 +115,7 @@ function enableUpload(companyData: CompanyData) {
     title: 'SignUpApplication',
     component: SignUpApplicationDialog,
     componentProps: {
-      company_data: companyData
+      companyData: companyData
     }
   })
 }
