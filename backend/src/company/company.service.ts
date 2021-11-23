@@ -80,8 +80,19 @@ export class CompanyService {
       deleteCompanyInput.uuid,
     );
     const uuid = company.uuid;
-    const deleted_company = await this.companyRepository.remove(company);
-    deleted_company.uuid = uuid;
-    return deleted_company;
+    const deletedCompany = await this.companyRepository.remove(company);
+    deletedCompany.uuid = uuid;
+    return deletedCompany;
+  }
+
+  /**
+   * Enables document upload for a company by UUID
+   * @param {string} uuid - the company's uuid
+   */
+  async enableDocumentUpload(uuid: string): Promise<Company> {
+    const company = await this.companyRepository.findOne(uuid);
+    company.document_upload_enabled = true;
+    await this.companyRepository.update(uuid, company);
+    return this.companyRepository.findOne(uuid);
   }
 }

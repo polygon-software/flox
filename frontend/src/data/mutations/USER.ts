@@ -14,7 +14,7 @@ export const CREATE_USER = {
     }`,
   tables: ['user'],
   type: MutationTypes.CREATE,
-  cacheLocation: 'create'
+  cacheLocation: 'createUser'
 }
 
 export const UPDATE_USER = {
@@ -29,7 +29,6 @@ export const UPDATE_USER = {
     }`,
   tables: ['user'],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'update'
 }
 
 export const DELETE_USER = {
@@ -41,6 +40,6 @@ export const DELETE_USER = {
     }`,
   tables: ['user'],
   type: MutationTypes.DELETE,
-  cacheLocation: 'remove'
+  cacheLocation: 'deleteUser'
 }
 
