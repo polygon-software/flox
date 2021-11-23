@@ -109,6 +109,7 @@ type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
   createItem(createItemInput: CreateItemInput!): Item!
+  enableCompanyDocumentUpload(uuid: String!): Company!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeItem(uuid: ID!): Item!

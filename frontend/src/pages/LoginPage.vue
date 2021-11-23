@@ -24,8 +24,8 @@
             class="q-ma-md"
             style="width: 125px"
             :label="$t('signup')"
-            @click="toSignup"
             color="primary"
+            @click="toSignup"
           />
         </div>
       </q-card-section>
@@ -45,7 +45,6 @@ import {RouterService} from 'src/services/RouterService';
 import FileUploadForm from 'components/forms/FileUploadForm.vue';
 import {FIELDS} from "src/data/FIELDS";
 import {i18n} from "boot/i18n";
-
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 
