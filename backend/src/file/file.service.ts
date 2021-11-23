@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import PublicFile from './public_file.entity';
+import PublicFile from './entities/public_file.entity';
 import { PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
@@ -42,12 +42,13 @@ export class FileService {
       Key: key,
       Body: dataBuffer,
     };
-    const uploadResult = await s3.send(new PutObjectCommand(uploadParams));
-    console.log('Successfully uploaded FILE.');
-
+    await s3.send(new PutObjectCommand(uploadParams));
+    const configService = new ConfigService();
     const newFile = this.publicFilesRepository.create({
       key: key,
-      url: `TODO_urlforfile_${key}`,
+      url: `https://${configService.get(
+        'AWS_PUBLIC_BUCKET_NAME',
+      )}.s3.${configService.get('AWS_REGION')}.amazonaws.com/${key}`,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
