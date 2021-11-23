@@ -73,6 +73,12 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 //                    example: onDialogOK({ /*.../* }) - with payload
 // onDialogCancel - Function to call to settle dialog with "cancel" outcome
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function show(this: any){
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+  this.$refs.dialog.show()
+}
+
 /**
  * Upon submit, pass entered values outwards
  */
