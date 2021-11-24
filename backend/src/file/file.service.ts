@@ -6,7 +6,8 @@ import PrivateFile from './entities/private_file.entity';
 import { PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
-import { GetFileArgs } from './dto/get-file.args';
+import { GetPublicFileArgs } from './dto/get-public-file.args';
+import {GetPrivateFileArgs} from "./dto/get-private-file.args";
 
 @Injectable()
 export class FileService {
@@ -82,7 +83,23 @@ export class FileService {
     return newFile;
   }
 
-  async getFile(getFileArgs: GetFileArgs): Promise<PublicFile> {
-    return this.publicFilesRepository.findOne(getFileArgs.uuid);
+  /**
+   * Gets a public file from the database
+   * @param {GetPublicFileArgs} getPublicFileArgs - arguments, containing UUID
+   */
+  async getPublicFile(
+    getPublicFileArgs: GetPublicFileArgs,
+  ): Promise<PublicFile> {
+    return this.publicFilesRepository.findOne(getPublicFileArgs.uuid);
+  }
+
+  /**
+   * Gets a private file from the database
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID TODO more?
+   */
+  async getPrivateFile(
+    getPrivateFileArgs: GetPrivateFileArgs,
+  ): Promise<PrivateFile> {
+    return this.privateFilesRepository.findOne(getPrivateFileArgs.uuid);
   }
 }
