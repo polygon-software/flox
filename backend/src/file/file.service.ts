@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import PublicFile from './entities/public_file.entity';
 import PrivateFile from './entities/private_file.entity';
-import { PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
 export class FileService {
@@ -100,6 +101,47 @@ export class FileService {
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
   ): Promise<PrivateFile> {
-    return this.privateFilesRepository.findOne(getPrivateFileArgs.uuid);
+    const fileInfo = await this.privateFilesRepository.findOne(
+      getPrivateFileArgs.uuid,
+    );
+    // TODO actual authentication
+    if (fileInfo) {
+      // Generate presigned URL
+      const url = await getSignedUrl(
+        this.s3,
+        new GetObjectCommand({
+          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+          Key: fileInfo.key,
+        }),
+      );
+      console.log('Private file URL', url);
+      return this.privateFilesRepository.findOne(getPrivateFileArgs.uuid);
+    }
+
+    throw new NotFoundException();
+  }
+
+  /**
+   * Gets a private file from the database TODO not working yet
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID TODO more?
+   */
+  async getPrivateFileAsStream(
+    getPrivateFileArgs: GetPrivateFileArgs,
+  ): Promise<ReadableStream<unknown>> {
+    const fileInfo = await this.privateFilesRepository.findOne(
+      getPrivateFileArgs.uuid,
+    );
+    // TODO actual authentication
+    if (fileInfo) {
+      const fileStream = await this.s3.getObject({
+        Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+        Key: fileInfo.key,
+      });
+      const stream = fileStream.Body;
+      console.log('GET file stream', stream, 'with info', fileInfo);
+      return stream as ReadableStream; // TODO
+    }
+    throw new NotFoundException();
+    //return this.privateFilesRepository.findOne(getPrivateFileArgs.uuid);
   }
 }
