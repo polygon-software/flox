@@ -60,6 +60,7 @@ export default {
   confirmed_registration: 'Registrierung bestätigt',
   redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
   back_to_login: 'Zurück zu Login',
+  success: 'Hervorragend!',
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
     user_not_defined: 'Benutzerpool ist nicht definiert',

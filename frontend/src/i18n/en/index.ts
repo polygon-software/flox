@@ -59,6 +59,7 @@ export default {
   confirmed_registration: 'Registration confirmed',
   redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
   back_to_login: 'Back to Login',
+  success: 'Great!',
   errors: {
     nothing_here: 'Oops. Nothing here...',
     user_not_defined: 'User Pool is not defined',

@@ -32,9 +32,9 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   'SUCCESS': {
-    path: '/success',
+    path: '/generic_success',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/SuccessPage.vue') }],
+    children: [{ path: '', component: () => import('pages/SuccessAndRedirect.vue') }],
   },
 
   'NEW_EMPLOYEE_PAGE': {

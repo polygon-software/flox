@@ -42,11 +42,14 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import {inject, ref} from 'vue'
 import {i18n} from 'boot/i18n';
 import ROUTES from "src/router/routes";
+import {RouterService} from "src/services/RouterService";
+const $routerService: RouterService = inject('$routerService')
 
-function routeToRegisterEmployee() {
+
+async function routeToRegisterEmployee() {
   await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
   return;
 }
