@@ -48,6 +48,8 @@ export default {
   branch_structure: 'Niederlassungsstruktur',
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
+  salutation: 'Anrede',
+  company_function: 'Funktion in der Firma',
   must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
   accept_condition_truthful:'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
   must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
