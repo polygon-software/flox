@@ -2,6 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Address {
+  """City"""
+  city: String!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Zip Code"""
+  zip_code: String!
+}
+
 input CreateItemInput {
   """Name"""
   name: String!
