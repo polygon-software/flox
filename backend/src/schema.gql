@@ -69,7 +69,7 @@ type PublicFile {
 
 type Query {
   allUsers: [User!]!
-  getFile(uuid: ID!): PublicFile!
+  getPublicFile(uuid: ID!): PublicFile!
   item(uuid: ID!): Item!
   items: [Item!]!
   user(uuid: ID!): User!
