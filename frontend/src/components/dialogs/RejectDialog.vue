@@ -29,7 +29,7 @@
 import {ref, Ref, defineEmits} from 'vue'
 import {QDialog} from 'quasar';
 
-// const emit = defineEmits(['hidepopups'])
+const emit = defineEmits(['Hidepopups'])
 
 const dialog: Ref<QDialog> = ref<QDialog>(null)
 
@@ -47,14 +47,14 @@ function hide(): void {
 
 function onYesReject(): Promise<void> {
   //TODO: implement in backend to really reject it
-  // emit('hidepopups', hidepopups=true)
+  emit('Hidepopups')
   hide()
 }
 
 function onCancel(): void {
   //TODO: Send cancel message
   console.log('cancel')
-  //TODO: an if statement to hide id if 2nd dialog is hided
+  emit('Hidepopups')
   hide()
 }
 </script>

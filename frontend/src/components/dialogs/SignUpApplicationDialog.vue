@@ -152,8 +152,10 @@ function onReject(): void {
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
+  }).onHidepopups(() => {
+    // Hide outer popup
+    hide()
   })
-  hide()
 }
 
 </script>
