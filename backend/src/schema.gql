@@ -56,6 +56,17 @@ type Mutation {
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
+type PrivateFile {
+  """S3 File Key"""
+  key: String!
+
+  """File owner"""
+  owner: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type PublicFile {
   """S3 File Key"""
   key: String!
@@ -69,6 +80,7 @@ type PublicFile {
 
 type Query {
   allUsers: [User!]!
+  getPrivateFile(uuid: ID!): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   item(uuid: ID!): Item!
   items: [Item!]!
