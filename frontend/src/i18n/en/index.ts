@@ -54,5 +54,7 @@ export default {
   confirmed_registration: 'Registration confirmed',
   redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
   back_to_login: 'Back to Login',
-  set_password_description: "Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen."
+  set_password_description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
+  password: 'Password',
+  repeat_password: 'Repeat password'
 };
