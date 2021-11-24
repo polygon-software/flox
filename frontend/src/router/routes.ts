@@ -38,7 +38,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   'NEW_EMPLOYEE_PAGE': {
-    path: '/newEmployeePage',
+    path: '/new_employee_page',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
   },
