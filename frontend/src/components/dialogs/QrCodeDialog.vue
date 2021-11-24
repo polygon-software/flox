@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-      ref="dialogRef"
+      ref="dialog"
       :persistent="true"
       title="QR"
       @hide="onDialogHide"
@@ -35,8 +35,8 @@
 
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
-import { defineProps } from 'vue';
-import { useDialogPluginComponent } from 'quasar'
+import {defineProps, ref, Ref} from 'vue';
+import {QDialog, useDialogPluginComponent} from 'quasar'
 
 // REQUIRED; must be called inside of setup()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
@@ -46,6 +46,19 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 //                    example: onDialogOK() - no payload
 //                    example: onDialogOK({ /*.../* }) - with payload
 // onDialogCancel - Function to call to settle dialog with "cancel" outcome
+
+const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+
+// Mandatory - do not remove!
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function show(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.show();
+}
+function hide(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.hide()
+}
 
 const props = defineProps({
   value: String
