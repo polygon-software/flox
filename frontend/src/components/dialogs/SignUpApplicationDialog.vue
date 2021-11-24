@@ -124,10 +124,6 @@ const props = defineProps({
     type: Object as PropType<Company>,
     required: true
   },
-  uuid: {
-    type: String,
-    required: true
-  }
 })
 
 // Mandatory - do not remove!
@@ -143,7 +139,7 @@ function hide(): void {
 }
 
 async function onOk(): Promise<void> {
-  await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: props.uuid})
+  await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: props.companyData.uuid})
   hide()
 }
 
