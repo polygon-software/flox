@@ -13,9 +13,6 @@ import {FIELDS} from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
 import DocumentUploadForm from 'components/forms/DocumentUploadForm.vue';
 
-
-
-
 const account_fields = [
   FIELDS.FILE_UPLOAD,
 ]
@@ -23,7 +20,7 @@ const account_fields = [
 const pages = [
   {
     key: 'file_upload',
-    label: i18n.global.t('file_upload'),
+    label: i18n.global.t('document_upload'),
     fields: account_fields,
   },
 ]

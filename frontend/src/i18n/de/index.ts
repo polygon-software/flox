@@ -51,7 +51,7 @@ export default {
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
   must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
-  accept_condition_truthful:'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
+  accept_condition_truthful: 'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
   must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
   redirected: 'Sie werden in Kürze weitergeleitet...',
   successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
@@ -77,7 +77,7 @@ export default {
   new: 'Neu',
   documents_missing: 'Fehlende Dokumente',
   documents_available: 'Dokumente verfügbar',
-  file_upload: 'Dokumentenupload',
+  document_upload: 'Dokumentenupload',
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
     user_not_defined: 'Benutzerpool ist nicht definiert',
@@ -86,5 +86,6 @@ export default {
     error_occurred: 'Ein Fehler ist aufgetreten, versuchen Sie sich erneut anzumelden',
     cant_find_module: 'Kann Modul nicht finden ',
     cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
+    missing_attributes: 'Fehlende Attribute',
   }
-}
+};

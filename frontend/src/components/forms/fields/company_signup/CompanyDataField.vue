@@ -14,7 +14,7 @@
     v-model="company_uid"
     dense
     type="text"
-    :label="$t('company_uid') + ' (optional)'"
+    :label="`${$t('company_uid')} (${$t('optional')})`"
     @change="emitValue"
   />
   <q-checkbox

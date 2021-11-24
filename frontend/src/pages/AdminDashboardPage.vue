@@ -35,14 +35,14 @@
 import { ref } from 'vue'
 import { i18n } from 'boot/i18n';
 import SignUpApplicationDialog from 'src/components/dialogs/SignUpApplicationDialog.vue'
-import { CompanyData } from 'src/data/types/CompanyData'
+import { Company } from 'src/data/types/Company'
 import { useQuasar } from 'quasar'
 import {Address} from 'src/data/types/Address';
 
 const $q = useQuasar()
 
 // Mock data
-const data1 = new CompanyData(
+const data1 = new Company(
   'Polygon Software',
   'DE',
   'Polygon2ElectricBoogaloo',
@@ -57,7 +57,7 @@ const data1 = new CompanyData(
 )
 
 // Mock data
-const data2 = new CompanyData(
+const data2 = new Company(
   'Roche',
   'FR',
   'BlubbiBlubbBlubb',
@@ -72,7 +72,7 @@ const data2 = new CompanyData(
 )
 
 // Mock data
-const data3 = new CompanyData(
+const data3 = new Company(
   'Roche',
   'FR',
   'BlubbiBlubbBlubb',
@@ -110,7 +110,7 @@ const columns = [
 /**
  * Opens the dialog to enable the file upload
  */
-function enableUpload(companyData: CompanyData) {
+function enableUpload(companyData: Company) {
   $q.dialog({
     title: 'SignUpApplication',
     component: SignUpApplicationDialog,
@@ -130,20 +130,20 @@ function unlockAccount() {
 
 /**
  * Determines if an action button has to be rendered
- * @param {CompanyData} companyData
+ * @param {Company} companyData
  */
-function isAction(companyData: CompanyData): boolean {
+function isAction(companyData: Company): boolean {
   if (companyData.document_upload_enabled) {
-    return !(companyData.documents === null || companyData.documents.length === 0);
+    return companyData.documents !== null && companyData.documents.length > 0;
   }
   return true
 }
 
 /**
 * Returns the state of the application.
-* @param {CompanyData} companyData
+* @param {Company} companyData
  */
-function getState(companyData: CompanyData): string {
+function getState(companyData: Company): string {
   if (companyData.document_upload_enabled) {
     if (companyData.documents === null || companyData.documents.length === 0) {
       return i18n.global.t('documents_missing')

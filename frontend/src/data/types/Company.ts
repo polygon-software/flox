@@ -5,7 +5,7 @@ import {Address} from 'src/data/types/Address';
  * A class representing a company data object
  */
 
-export class CompanyData {
+export class Company {
   company_name: string|null
   language: string|null
   uid: string|null

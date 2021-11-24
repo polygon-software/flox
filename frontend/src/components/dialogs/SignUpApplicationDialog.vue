@@ -97,13 +97,13 @@
           class="q-ma-md"
           :label="$t('enable_upload')"
           color="primary"
-          @click="onOkClick"
+          @click="onOk"
         />
         <q-btn
           class="q-ma-md"
           :label="$t('reject')"
           color="negative"
-          @click="onCancelClick"
+          @click="onCancel"
         />
       </q-card-actions>
     </q-card>
@@ -111,16 +111,17 @@
 </template>
 <script setup lang="ts">
 import {PropType, ref, Ref} from 'vue'
-import { CompanyData } from 'src/data/types/CompanyData'
+import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
 import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
+import {QDialog} from 'quasar';
 
-const dialog: Ref<HTMLElement> = ref<HTMLElement>(null)
+const dialog: Ref<QDialog> = ref<QDialog>(null)
 
 
 const props = defineProps({
   companyData: {
-    type: Object as PropType<CompanyData>,
+    type: Object as PropType<Company>,
     required: true
   },
   uuid: {
@@ -141,12 +142,12 @@ function hide(): void {
   dialog.value.hide()
 }
 
-async function onOkClick(): Promise<void> {
+async function onOk(): Promise<void> {
   await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: props.uuid})
   hide()
 }
 
-function onCancelClick(): void {
+function onCancel(): void {
   //TODO: Send cancel message
   console.log('cancel')
   hide()

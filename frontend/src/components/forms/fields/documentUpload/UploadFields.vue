@@ -95,7 +95,7 @@ const execution_register_extract = ref(null)
  * Emits the updated value
  */
 function emitValue(){
-  emit('change', [passport, commercial_register_extract, execution_register_extract, additional_input_fields])
+  emit('change', {passport, commercial_register_extract, execution_register_extract, additional_input_fields})
 }
 
 /**
@@ -109,7 +109,7 @@ const additional_input_fields = ref([
 ])
 
 /**
- * This method gets called whenever a file is added to or deleted from a custom field.
+ * Depending on how many additional fields already exist, adds or deletes a file from a custom field.
  */
 function fileChange(): void {
   const size = additional_input_fields.value.length
@@ -130,7 +130,7 @@ function fileChange(): void {
   // Check if there's a field with model value === null
   for (let index=0; index<size; index++) {
     const field = additional_input_fields.value[index]
-    // A file was delted
+    // A file was deleted
     if(field.model === null) {
       // Last field -> do nothing
       if (index === size-1) {

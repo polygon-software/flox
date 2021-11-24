@@ -61,7 +61,7 @@ export default {
   back_to_login: 'Back to Login',
   passport_or_id: 'Passport',
   commercial_register_extract: 'Commercial Register Extract',
-  execution_register_extract: 'Betreibungsregisterauszug',
+  execution_register_extract: 'Excerpt from the debt collection register',
   optional: 'optional',
   additional_documents: 'Additional Documents',
   add_additional_documents: 'Add more',
@@ -76,7 +76,7 @@ export default {
   new: 'New',
   documents_missing: 'Documents missing',
   documents_available: 'Documents available',
-  file_upload: 'File upload',
+  document_upload: 'File upload',
   errors: {
     nothing_here: 'Oops. Nothing here...',
     user_not_defined: 'User Pool is not defined',
@@ -85,5 +85,6 @@ export default {
     error_occurred: 'An error occurred, try logging in again',
     cant_find_module: 'Cannot find module ',
     cache_location_missing: 'Cache Location is missing in mutationObject: ',
+    missing_attributes: 'Missing attributes',
   }
 };
