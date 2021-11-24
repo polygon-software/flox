@@ -84,7 +84,7 @@ type PublicFile {
 type Query {
   allUsers: [User!]!
   getPrivateFile(
-    """URL expiration duration (in seconds)"""
+    """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!

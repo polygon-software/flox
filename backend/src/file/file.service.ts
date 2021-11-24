@@ -68,7 +68,9 @@ export class FileService {
     dataBuffer: Buffer,
     filename: string,
   ): Promise<PrivateFile> {
-    //File upload
+    // Determine owner: if JWT token present, get from there, otherwise owner unknown TODO?
+
+    // File upload
     const key = `${uuid()}-${filename}`;
     const uploadParams = {
       Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),

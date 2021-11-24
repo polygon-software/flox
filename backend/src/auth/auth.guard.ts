@@ -11,6 +11,7 @@ export const Public = (): CustomDecorator => SetMetadata(IS_PUBLIC_KEY, true);
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext): any {
+    console.log('Get request!');
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().req;
   }
