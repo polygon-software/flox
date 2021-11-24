@@ -5,6 +5,7 @@
       style="width: 500px;"
     >
       <GenericForm
+        :finish-label="$t('finish_signup')"
         :pages="pages"
         @submit="onRegister"
       />
@@ -52,7 +53,7 @@ async function onRegister(){
   //TODO: create database entry
   //TODO: redirect to something ?
 
-  await $routerService?.routeTo(ROUTES.SUCCESS)
+  await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)
   return;
 }
 
