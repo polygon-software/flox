@@ -22,6 +22,20 @@
         />
     </template>
   </q-field>
+  <q-field
+    v-model="accept_condition_truthful"
+    :rules="[(val) => val === true || $t('must_accept_condition_truthful')]"
+    borderless
+    dense
+  >
+    <template #control>
+        <q-checkbox
+          v-model="accept_condition_truthful"
+          :label="$t('accept_condition_truthful')"
+          @update:model-value="emitValue"
+        />
+    </template>
+  </q-field>
 </template>
 
 <script setup lang="ts">
@@ -29,6 +43,7 @@ import {Ref, ref} from 'vue'
 const emit = defineEmits(['change'])
 
 const accept_conditions: Ref<boolean> = ref(false)
+const accept_condition_truthful: Ref<boolean> = ref(false)
 const show_error: Ref<boolean> = ref(false)
 const pdf_link = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
 
@@ -36,8 +51,9 @@ const pdf_link = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/
  * Emits the picked value
  */
 function emitValue(){
-  if(accept_conditions.value){
+  if(accept_conditions.value && accept_condition_truthful.value){
     emit('change', accept_conditions.value)
+    emit('change', accept_condition_truthful.value)
   } else {
     show_error.value = true
   }
