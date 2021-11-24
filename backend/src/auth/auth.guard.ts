@@ -10,8 +10,12 @@ export const Public = (): CustomDecorator => SetMetadata(IS_PUBLIC_KEY, true);
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
+  /**
+   * Executed upon receiving a request for a protected endpoint
+   * @param {ExecutionContext} context - the request's context
+   */
   getRequest(context: ExecutionContext): any {
-    console.log('Get request!');
+    console.log('Get request!', context);
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().req;
   }
@@ -20,9 +24,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
+  /**
+   * Determines whether the user can activate a given endpoint
+   * @param {ExecutionContext} context - the request's context
+   */
   public canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    console.log('Getting canActivate for', context.getArgs());
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
