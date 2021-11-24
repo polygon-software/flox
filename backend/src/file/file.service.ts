@@ -2,33 +2,32 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import PublicFile from './entities/public_file.entity';
+import PrivateFile from './entities/private_file.entity';
 import { PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 import { GetFileArgs } from './dto/get-file.args';
-import PrivateFile from './entities/private_file.entity';
 
 @Injectable()
 export class FileService {
+  // S3 credentials
+  private readonly credentials = {
+    region: this.configService.get('AWS_REGION'),
+    accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+  };
+
+  // AWS S3 instance
+  private s3: S3 = new S3({
+    credentials: this.credentials,
+  });
   constructor(
     @InjectRepository(PublicFile)
     private publicFilesRepository: Repository<PublicFile>,
+    @InjectRepository(PrivateFile)
     private privateFilesRepository: Repository<PrivateFile>,
     private readonly configService: ConfigService,
-    private s3: S3,
-  ) {
-    // S3 credentials
-    const credentials = {
-      region: this.configService.get('AWS_REGION'),
-      accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-      secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
-    };
-
-    // AWS S3 instance
-    this.s3 = new S3({
-      credentials: credentials,
-    });
-  }
+  ) {}
 
   /**
    * Uploads a file to the public S3 bucket
@@ -60,8 +59,8 @@ export class FileService {
 
   /**
    * Uploads a file to the private S3 bucket
-   * @param dataBuffer
-   * @param filename
+   * @param {Buffer} dataBuffer - data buffer representation of the file to upload
+   * @param {string} filename - the file's name
    */
   async uploadPrivateFile(
     dataBuffer: Buffer,
