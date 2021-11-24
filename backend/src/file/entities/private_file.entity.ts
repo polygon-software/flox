@@ -15,8 +15,10 @@ export class PrivateFile extends BaseEntity {
   @IsString()
   public key: string;
 
-  @Field(() => String, { description: 'Pre-signed download URL' })
-  @Column()
+  @Field(() => String, {
+    nullable: true,
+    description: 'Pre-signed download URL',
+  })
   @IsOptional()
   @IsUrl()
   public url: string;

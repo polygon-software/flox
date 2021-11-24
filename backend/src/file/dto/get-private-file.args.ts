@@ -7,7 +7,10 @@ export class GetPrivateFileArgs {
   @IsUUID()
   uuid: string;
 
-  @Field(() => [Number], { nullable: true })
+  @Field(() => [Number], {
+    nullable: true,
+    description: 'URL expiration duration (in seconds)',
+  })
   @IsOptional()
   @IsNumber()
   expires;
