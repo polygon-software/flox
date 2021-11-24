@@ -44,9 +44,11 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {i18n} from 'boot/i18n';
+import ROUTES from "src/router/routes";
 
 function routeToRegisterEmployee() {
-  // TODO: route to registerEmployeePage
+  await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
+  return;
 }
 
 // TODO: replace with real data
