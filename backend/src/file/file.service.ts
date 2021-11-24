@@ -106,16 +106,27 @@ export class FileService {
     );
     // TODO actual authentication
     if (fileInfo) {
-      // Generate presigned URL
+      const options: Record<string, unknown> = {};
+      // If expiration duration is set, apply
+      if (getPrivateFileArgs.expires) {
+        options.expiresIn = getPrivateFileArgs.expires;
+      }
+
+      // Generate pre-signed URL
       const url = await getSignedUrl(
         this.s3,
         new GetObjectCommand({
           Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
           Key: fileInfo.key,
         }),
+        options,
       );
-      console.log('Private file URL', url);
-      return this.privateFilesRepository.findOne(getPrivateFileArgs.uuid);
+      const result = this.privateFilesRepository.findOne(
+        getPrivateFileArgs.uuid,
+      );
+
+      // Add URL to result
+      return { ...result, url };
     }
 
     throw new NotFoundException();

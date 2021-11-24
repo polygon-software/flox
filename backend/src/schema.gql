@@ -63,6 +63,9 @@ type PrivateFile {
   """File owner"""
   owner: String!
 
+  """Pre-signed download URL"""
+  url: String!
+
   """UUID"""
   uuid: ID!
 }
@@ -80,7 +83,7 @@ type PublicFile {
 
 type Query {
   allUsers: [User!]!
-  getPrivateFile(uuid: ID!): PrivateFile!
+  getPrivateFile(expires: [Float!], uuid: ID!): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   item(uuid: ID!): Item!
   items: [Item!]!
