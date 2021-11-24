@@ -103,7 +103,7 @@
           class="q-ma-md"
           :label="$t('reject')"
           color="negative"
-          @click="onCancel"
+          @click="onReject"
         />
       </q-card-actions>
     </q-card>
@@ -114,7 +114,10 @@ import {PropType, ref, Ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
 import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
-import {QDialog} from 'quasar';
+import {QDialog, useQuasar} from 'quasar';
+import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
+
+const $q = useQuasar()
 
 const dialog: Ref<QDialog> = ref<QDialog>(null)
 
@@ -143,9 +146,13 @@ async function onOk(): Promise<void> {
   hide()
 }
 
-function onCancel(): void {
+function onReject(): void {
   //TODO: Send cancel message
   console.log('cancel')
+  $q.dialog({
+    title: 'Reject',
+    component: RejectDialog,
+  })
   hide()
 }
 
