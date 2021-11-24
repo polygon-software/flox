@@ -80,7 +80,7 @@
       />
       <q-btn
         color="primary"
-        :label="finishLabel ?? $t('finish')"
+        :label="finishLabel ?? $t('finish_signup')"
         @click="onSubmit"
       />
     </q-card>

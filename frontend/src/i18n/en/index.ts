@@ -37,7 +37,6 @@ export default {
   salutation: 'Salutation',
   correspondence_address: 'Correspondence Address',
   domicile_address: 'Address',
-  correspondence_address: 'Correspondence AddressItem',
   edit_correspondence_address: 'Same as domicile',
   invalid_address: 'Please enter a valid address',
   invalid_house_number: 'This number does not exist',
@@ -49,7 +48,7 @@ export default {
   branch_structure: 'Branch Strucutre',
   conditions: 'Terms and Conditions',
   accept_conditions: 'I agree to the terms and conditions.',
-  company_function: 'Role in the company'
+  company_function: 'Role in the company',
   must_accept_conditions: 'You have to accept the terms and conditions.',
   redirected: 'You will be redirected shortly...',
   successful_application: 'Your application was successful.',

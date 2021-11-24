@@ -49,7 +49,7 @@ export default {
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
   salutation: 'Anrede',
-  company_function: 'Funktion in der Firma'
+  company_function: 'Funktion in der Firma',
   must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
   redirected: 'Sie werden in Kürze weitergeleitet...',
   successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',

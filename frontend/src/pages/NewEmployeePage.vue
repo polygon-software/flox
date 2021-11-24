@@ -1,75 +1,31 @@
 <template>
   <q-page class="flex flex-center">
-    <q-card class="square q-pa-md q-ma-md">
-
-      <div
-        class="column q-pa-sm"
-        style="width: 600px;"
-      >
-        <q-form
-          @submit="onSubmit"
-          class="q-gutter-md"
-        >
-          <q-stepper
-            v-model="form.step.value"
-            ref="stepper"
-            animated
-            active-color="primary"
-            done-icon="done"
-          >
-            <q-step
-              v-for="(page, index) in form.pages.value"
-              :key="page.key"
-              :name="index+1"
-              :prefix="index+1"
-              :title="page.label"
-              :done="form.step.value > index"
-            >
-              <component
-                v-for="field in page.fields"
-                :key="field.key"
-                :is="field.component"
-                v-bind="field.attributes"
-                v-model="form.values.value[field.key]"
-                @change="(newValue) => form.updateValue(field.key, newValue)"
-              />
-            </q-step>
-            <template v-slot:navigation>
-              <div class="row justify-between">
-                <q-btn
-                  @click="backToManDashboard"
-                  flat
-                  style="margin-left: 30px; margin-bottom: 20px"
-                  color="primary"
-                  :label="$t('back')"
-                  class="q-ml-sm"/>
-                <q-btn
-                  color="green"
-                  style="margin-right: 30px; margin-bottom: 20px"
-                  :label="$t('finish_signup')"
-                  type="submit"
-                />
-              </div>
-            </template>
-          </q-stepper>
-        </q-form>
-      </div>
-    </q-card>
+    <div
+      class="column q-pa-sm"
+      style="width: 500px;"
+    >
+      <GenericForm
+        :pages="pages"
+        @submit="onRegister"
+      />
+    </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {FIELDS} from 'src/data/FIELDS';
-import {Form} from 'src/helpers/form-helpers'
+import { FIELDS } from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
+import {inject} from 'vue';
+import GenericForm from 'components/forms/GenericForm.vue';
+
+const $routerService: RouterService|undefined = inject('$routerService')
 
 /**
- * This component allows the management to register new employees, the fields can easily be changed with the
- * account_fields array. Once a new employee has been registered, the user will be redirected to the management
- * dashboard.
- */
-
-const emit = defineEmits(['submit'])
+* This component allows the management to register new employees, the fields can easily be changed with the
+* account_fields array. Once a new employee has been registered, the user will be redirected to the success page.
+*/
 
 const account_fields = [
   FIELDS.SALUTATION,
@@ -79,9 +35,7 @@ const account_fields = [
   FIELDS.EMAIL,
 ]
 
-const form = new Form()
-
-form.pages.value = [
+const pages = [
   {
     key: 'company',
     label: i18n.global.t('employee_signup'),
@@ -89,23 +43,17 @@ form.pages.value = [
   },
 ]
 
+
 /**
- * Emits the 'submit' event, containing the form's data and redirects somewhere
+ * Upon valid registration, creates database entry
+ * @async
  */
-function onSubmit(): void {
-  //TODO: Send to SOI
+async function onRegister(){
+  //TODO: create database entry
   //TODO: redirect to something ?
-  emit('submit', form.values.value)
+
+  await $routerService?.routeTo(ROUTES.SUCCESS)
+  return;
 }
 
-/**
- * Directs user back to the management dashboard
- */
-function backToManDashboard(): void {
-  //TODO: Redirect to the management dashboard
-}
 </script>
-
-<style scoped>
-
-</style>
