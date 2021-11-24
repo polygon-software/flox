@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsString, IsUrl } from 'class-validator';
+import { IsOptional, IsString, IsUrl } from 'class-validator';
 
 @Entity()
 @ObjectType()
@@ -14,6 +14,12 @@ export class PrivateFile extends BaseEntity {
   @Column()
   @IsString()
   public key: string;
+
+  @Field(() => String, { description: 'Pre-signed download URL' })
+  @Column()
+  @IsOptional()
+  @IsUrl()
+  public url: string;
 }
 
 export default PrivateFile;
