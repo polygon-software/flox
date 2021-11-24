@@ -79,7 +79,6 @@ export class FileService {
     const newFile = this.privateFilesRepository.create({
       key: key,
       owner: 'todo', // TODO
-      url: null,
     });
     await this.privateFilesRepository.save(newFile);
     return newFile;
@@ -122,7 +121,7 @@ export class FileService {
         }),
         options,
       );
-      const result = this.privateFilesRepository.findOne(
+      const result = await this.privateFilesRepository.findOne(
         getPrivateFileArgs.uuid,
       );
 
