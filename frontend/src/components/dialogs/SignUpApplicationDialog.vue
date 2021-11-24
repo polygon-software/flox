@@ -114,12 +114,12 @@ import {PropType, ref, Ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
 import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
-import {QDialog, useQuasar} from 'quasar';
+import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 
-const $q = useQuasar()
+const $q: QVueGlobals = useQuasar()
 
-const dialog: Ref<QDialog> = ref<QDialog>(null)
+const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 
 const props = defineProps({
@@ -133,12 +133,12 @@ const props = defineProps({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value.show();
+  dialog.value?.show();
 }
 
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value.hide()
+  dialog.value?.hide()
 }
 
 async function onOk(): Promise<void> {
@@ -152,7 +152,7 @@ function onReject(): void {
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
-  }).onHidepopups(() => {
+  }).onOk(() => {
     // Hide outer popup
     hide()
   })
