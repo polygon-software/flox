@@ -7,7 +7,7 @@ import { PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
-import {GetPrivateFileArgs} from "./dto/get-private-file.args";
+import { GetPrivateFileArgs } from './dto/get-private-file.args';
 
 @Injectable()
 export class FileService {
@@ -79,7 +79,7 @@ export class FileService {
       key: key,
       owner: 'todo', // TODO
     });
-    await this.publicFilesRepository.save(newFile);
+    await this.privateFilesRepository.save(newFile);
     return newFile;
   }
 
