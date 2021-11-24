@@ -79,6 +79,7 @@ export class FileService {
     const newFile = this.privateFilesRepository.create({
       key: key,
       owner: 'todo', // TODO
+      url: null,
     });
     await this.privateFilesRepository.save(newFile);
     return newFile;
