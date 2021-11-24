@@ -66,8 +66,13 @@ export default {
     error_occurred: 'Ein Fehler ist aufgetreten, versuchen Sie sich erneut anzumelden',
     cant_find_module: 'Kann Modul nicht finden ',
     cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
+  },
+  set_password: {
+    description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
+    password: 'Passwort',
+    repeat_password: 'Passwort wiederholen',
+    password_invalid: 'Passwort ist nicht gültig',
+    passwords_not_matching: 'Passwörter stimmen nicht überein',
+    ok: 'OK'
   }
-  set_password_description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
-  password: 'Passwort',
-  repeat_password: 'Passwort wiederholen'
 }
