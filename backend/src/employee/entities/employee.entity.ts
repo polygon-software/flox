@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { IsEmail, IsPhoneNumber, IsString } from 'class-validator';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
