@@ -5,8 +5,8 @@ import {
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
-import { Company } from '../../../company/entities/company.entity';
-import { CreatePersonInput } from '../../../person/dto/create-person.input';
+import { Company } from 'src/company/entities/company.entity';
+import { CreatePersonInput } from 'src/person/dto/create-person.input';
 
 @InputType()
 export class CreateEmployeeInput extends PartialType(CreatePersonInput) {
