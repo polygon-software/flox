@@ -13,7 +13,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext): any {
     console.log('Get request!');
     const ctx = GqlExecutionContext.create(context);
-    console.log(ctx);
     return ctx.getContext().req;
   }
 
@@ -24,7 +23,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   public canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('Checking canActivate for', context);
+    console.log('Checking canActivate');
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
