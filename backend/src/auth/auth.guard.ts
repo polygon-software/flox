@@ -8,7 +8,6 @@ import { IS_PUBLIC_KEY } from './authentication.decorator';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext): any {
-    console.log('Get request!');
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().req;
   }

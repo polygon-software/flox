@@ -3,11 +3,13 @@ import {
   Controller,
   Post,
   Req,
-  Res, UseGuards,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import fastify = require('fastify');
-import {JwtAuthGuard, Public} from '../auth/auth.guard';
+import { Public } from '../auth/authentication.decorator';
+import { JwtAuthGuard } from '../auth/auth.guard';
 
 @Controller()
 export class FileController {
@@ -33,8 +35,7 @@ export class FileController {
     res.send(new_file);
   }
 
-  // @Public() // TODO change?
-  @UseGuards(JwtAuthGuard)
+  @Public() // TODO Application specific: Ensure an owner is assigned to private file, possibly restrict
   @Post('/uploadPrivateFile')
   async uploadPrivateFile(
     @Req() req: fastify.FastifyRequest,
