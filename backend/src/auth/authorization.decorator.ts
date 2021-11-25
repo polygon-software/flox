@@ -5,6 +5,7 @@ import { CustomDecorator, SetMetadata } from '@nestjs/common';
  */
 
 export const IS_MINE_KEY = 'isMine';
+export const ANY_ROLE_KEY = 'anyRole';
 
 // Restrict to specified roles
 export const Roles = (...roles: string[]): CustomDecorator =>
@@ -12,6 +13,9 @@ export const Roles = (...roles: string[]): CustomDecorator =>
 
 // Restrict to admin role
 export const AdminOnly = (): CustomDecorator => SetMetadata('roles', ['admin']);
+
+// Allows access with any role
+export const AnyRole = (): CustomDecorator => SetMetadata(ANY_ROLE_KEY, true);
 
 // TODO: Application-specific role decorators go here
 

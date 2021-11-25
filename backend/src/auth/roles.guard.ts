@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
+import { ANY_ROLE_KEY } from './authorization.decorator';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -29,19 +30,29 @@ export class RolesGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    // If no roles are specified, allow access only on public resources
-    if (!roles) {
-      const isPublic: boolean = this.reflector.getAllAndOverride<boolean>(
-        IS_PUBLIC_KEY,
-        [context.getHandler(), context.getClass()],
-      );
+    // If no roles are specified, allow access only on public resources OR any role
+    if (!roles || roles.length === 0) {
+      // Determine if resource is public
+      const isPublic: boolean =
+        this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+          context.getHandler(),
+          context.getClass(),
+        ]) ?? false;
+
+      // Determine if resource is accessible to any logged-in user
+      const anyRole: boolean =
+        this.reflector.getAllAndOverride<boolean>(ANY_ROLE_KEY, [
+          context.getHandler(),
+          context.getClass(),
+        ]) ?? false;
 
       // For publicly accessible resources, allow access by default
-      return isPublic;
+      return isPublic || anyRole;
     }
     const req = this.getRequest(context);
     const user = req.user;
     user.roles = []; // TODO Application-specific: Determine user's roles here
+    console.log('match!');
     return this.matchRoles(roles, user.roles);
   }
 
