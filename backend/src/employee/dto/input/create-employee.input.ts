@@ -32,7 +32,7 @@ export class CreateEmployeeInput extends PartialType(CreatePersonInput) {
   @IsString()
   gender: string;
 
-  @Field(() => Company, { description: 'Company' })
+  @Field(() => Company, { nullable: true, description: 'Company' })
   @IsNotEmptyObject()
   company: Company;
 }

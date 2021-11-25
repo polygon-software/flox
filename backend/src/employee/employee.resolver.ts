@@ -4,20 +4,35 @@ import { Employee } from './entities/employee.entity';
 import { CreateEmployeeInput } from './dto/input/create-employee.input';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 import { Public } from '../auth/authentication.decorator';
-import { CurrentUser } from '../auth/authorization.decorator';
+import { AnyRole, CurrentUser } from '../auth/authorization.decorator';
+import { CompanyService } from '../company/company.service';
+import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor(
+    private readonly employeeService: EmployeeService,
+    private readonly companyService: CompanyService,
+  ) {}
 
-  @Public() // TODO
+  @AnyRole() // TODO
   @Mutation(() => Employee)
-  createEmployee(
+  async createEmployee(
     @Args('createEmployeeInput') createEmployeeInput: CreateEmployeeInput,
-    @CurrentUser() user: Record<string, unknown>,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<Employee> {
-    console.log('CREATE called by user', user);
-    return this.employeeService.createEmployee(createEmployeeInput);
+    // Get company where user's UUID matches cognitoID
+    const company = await this.companyService.getCompany({
+      cognito_id: user.userId,
+    } as GetCompanyArgs);
+
+    if (!company) {
+      throw new Error(`No company found for ${user.userId}`);
+    }
+    return this.employeeService.createEmployee({
+      ...createEmployeeInput,
+      company,
+    });
   }
 
   @Query(() => [Employee], { name: 'employee' })

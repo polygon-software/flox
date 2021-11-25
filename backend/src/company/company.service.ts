@@ -55,7 +55,13 @@ export class CompanyService {
    * @param {GetCompanyArgs} getCompanyArgs - the arguments to get a company for, containing a UUID
    */
   getCompany(getCompanyArgs: GetCompanyArgs): Promise<Company> {
-    return this.companyRepository.findOne(getCompanyArgs.uuid);
+    if (getCompanyArgs.uuid) {
+      return this.companyRepository.findOne(getCompanyArgs.uuid);
+    } else if (getCompanyArgs.cognito_id) {
+      return this.companyRepository.findOne({
+        cognito_id: getCompanyArgs.cognito_id,
+      });
+    }
   }
 
   /**

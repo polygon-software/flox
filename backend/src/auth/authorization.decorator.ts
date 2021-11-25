@@ -4,6 +4,8 @@ import {
   SetMetadata,
 } from '@nestjs/common';
 
+import { getRequest } from '../helpers';
+
 /**
  * Defines authorization-specific decorators
  */
@@ -27,4 +29,6 @@ export const AnyRole = (): CustomDecorator => SetMetadata(ANY_ROLE_KEY, true);
 export const Mine = (): CustomDecorator => SetMetadata(IS_MINE_KEY, true);
 
 // Access to current user from request
-export const CurrentUser = createParamDecorator((data, req) => req.user);
+export const CurrentUser = createParamDecorator(
+  (data, req) => getRequest(req).user,
+);

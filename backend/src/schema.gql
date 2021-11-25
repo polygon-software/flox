@@ -41,9 +41,6 @@ type Company {
   """E-Mail address"""
   email: String!
 
-  """Employees of the company"""
-  employees: [Employee!]
-
   """First Name"""
   first_name: String!
 
@@ -89,7 +86,7 @@ input CreateCompanyInput {
 
 input CreateEmployeeInput {
   """Company"""
-  company: company!
+  company: company
 
   """E-mail"""
   email: String!
@@ -222,7 +219,7 @@ type Query {
   allCompanies: [Company!]!
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
-  company(uuid: ID!): Company!
+  company(cognito_id: ID, uuid: ID): Company!
   employee(id: Int!): Employee!
   getPrivateFile(
     """URL expiration duration (in seconds)"""
@@ -344,9 +341,6 @@ input company {
 
   """E-Mail address"""
   email: String!
-
-  """Employees of the company"""
-  employees: [employee!]
 
   """Language"""
   language: String!

@@ -73,11 +73,11 @@ export class Company extends Person {
 
   // TODO documents
 
-  @JoinColumn()
-  @Field(() => [Employee], {
-    description: 'Employees of the company',
-    nullable: true,
-  })
-  @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
-  employees: Employee[];
+  // @JoinColumn() TODO re-add
+  // @Field(() => [Employee], {
+  //   description: 'Employees of the company',
+  //   nullable: true,
+  // })
+  // @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
+  // employees: Employee[];
 }
