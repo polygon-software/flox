@@ -62,4 +62,5 @@ async function toSignup(): Promise<void>{
   await $routerService.routeTo(ROUTES.SIGNUP)
   return;
 }
+
 </script>
