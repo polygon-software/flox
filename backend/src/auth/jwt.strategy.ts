@@ -23,6 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
+        // TODO get via env variable
         jwksUri:
           'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_DGPNZZeuX/.well-known/jwks.json',
       }),
@@ -31,6 +32,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   validate(payload: JwtStrategyValidationPayload): JwtStrategyValidationResult {
     console.log('Validate JWT payload for UUID', payload.sub);
-    return { userId: payload.sub, username: payload.username };
+    return { userId: payload.sub, username: payload.name };
   }
 }

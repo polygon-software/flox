@@ -1,6 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -16,8 +17,9 @@ export class RolesGuard implements CanActivate {
     if (!roles) {
       return true;
     }
-    const request = context.switchToHttp().getRequest();
-    const user = request.user;
+    const ctx = GqlExecutionContext.create(context);
+    const user = ctx.getContext().req.user;
+    console.log('User is', user);
     return this.matchRoles(roles, user.roles);
   }
 
@@ -27,6 +29,7 @@ export class RolesGuard implements CanActivate {
    * @param userRoles
    */ // TODO possibly introduce "role" type
   matchRoles(roles: string[], userRoles: string[]) {
+    console.log('matching roles', roles, 'to user', userRoles);
     return userRoles.some((userRole) => roles.includes(userRole));
   }
 }
