@@ -38,11 +38,17 @@ type Company {
   """E-Mail address"""
   email: String!
 
+  """Employees of the company"""
+  employees: [Employee!]
+
+  """First Name"""
+  first_name: String!
+
   """Language"""
   language: String!
 
-  """Contact person Name"""
-  person_name: String!
+  """Last Name"""
+  last_name: String!
 
   """Phone Number"""
   phone: String!
@@ -100,6 +106,9 @@ input DeleteUserInput {
 }
 
 type Employee {
+  """Company"""
+  company: Company!
+
   """E-mail"""
   email: String!
 
@@ -108,6 +117,9 @@ type Employee {
 
   """Function within the company"""
   function: String!
+
+  """Gender"""
+  gender: String!
 
   """Language"""
   language: String!
