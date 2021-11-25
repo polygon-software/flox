@@ -24,6 +24,7 @@ export class CompanyService {
     const company = this.companyRepository.create({
       ...createCompanyInput,
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
+      cognito_id: null,
       // TODO: other default values
     });
 

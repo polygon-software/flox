@@ -16,4 +16,5 @@ export const CompanyItem = Joi.object({
     branch_structure: Joi.boolean().required(),
     document_upload_enabled: Joi.boolean().required(),
     documents: Joi.array(),
+    cognito_id: Joi.string().uuid()
 });

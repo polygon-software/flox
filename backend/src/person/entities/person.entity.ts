@@ -15,7 +15,7 @@ export class Person extends BaseEntity {
   @IsString()
   last_name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String, { nullable: true, description: 'Cognito account ID' })
   @IsOptional()
   @IsString()

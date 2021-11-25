@@ -23,6 +23,9 @@ type Company {
   """Branch structure"""
   branch_structure: Boolean!
 
+  """Cognito account ID"""
+  cognito_id: String
+
   """Company Name"""
   company_name: String!
 
@@ -132,6 +135,9 @@ input DeleteUserInput {
 }
 
 type Employee {
+  """Cognito account ID"""
+  cognito_id: String
+
   """Company"""
   company: Company!
 
