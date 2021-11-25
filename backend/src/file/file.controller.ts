@@ -35,7 +35,7 @@ export class FileController {
     res.send(new_file);
   }
 
-  @Public() // TODO Application specific: Ensure an owner is assigned to private file, possibly restrict
+  @UseGuards(JwtAuthGuard)
   @Post('/uploadPrivateFile')
   async uploadPrivateFile(
     @Req() req: fastify.FastifyRequest,
@@ -46,11 +46,16 @@ export class FileController {
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
+
+    // Get user, as determined by JWT Strategy
+    const owner = req['user'].userId;
+
     const file = await req.file();
     const file_buffer = await file.toBuffer();
     const new_file = await this.taskService.uploadPrivateFile(
       file_buffer,
       file.filename,
+      owner,
     );
     res.send(new_file);
   }

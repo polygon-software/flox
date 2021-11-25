@@ -63,10 +63,12 @@ export class FileService {
    * Uploads a file to the private S3 bucket
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
+   * @param {string} owner - the file owner's UUID
    */
   async uploadPrivateFile(
     dataBuffer: Buffer,
     filename: string,
+    owner: string,
   ): Promise<PrivateFile> {
     //File upload
     const key = `${uuid()}-${filename}`;
@@ -78,7 +80,7 @@ export class FileService {
     await this.s3.send(new PutObjectCommand(uploadParams));
     const newFile = this.privateFilesRepository.create({
       key: key,
-      owner: 'todo', // TODO
+      owner: owner,
     });
     await this.privateFilesRepository.save(newFile);
     return newFile;
