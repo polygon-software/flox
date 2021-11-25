@@ -3,9 +3,9 @@
     ref="dialog"
     title="Application"
   >
-    <q-card>
+    <q-card class="q-pa-md q-ma-md">
       <q-card-section>
-        <h2>{{ $t('sure_to_reject') }}</h2>
+        <h5>{{ $t('sure_to_reject') }}</h5>
       </q-card-section>
       <q-card-actions>
         <q-btn
@@ -17,7 +17,7 @@
         <q-btn
           class="q-ma-md"
           :label="$t('cancel')"
-          color="negative"
+          color="primary"
           @click="onCancel"
         />
       </q-card-actions>

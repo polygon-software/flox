@@ -105,6 +105,13 @@
           color="negative"
           @click="onReject"
         />
+        <q-btn
+          class="q-ma-md"
+          :label="$t('cancel')"
+          color="primary"
+          @click="onCancel"
+          flat
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -148,7 +155,6 @@ async function onOk(): Promise<void> {
 
 function onReject(): void {
   //TODO: Send cancel message
-  console.log('cancel')
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
@@ -156,6 +162,10 @@ function onReject(): void {
     // Hide outer popup
     hide()
   })
+}
+
+function onCancel(): void {
+  hide()
 }
 
 </script>

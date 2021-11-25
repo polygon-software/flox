@@ -6,6 +6,7 @@ export const CompanyItem = Joi.object({
     company_name: Joi.string().required(),
     language: Joi.string().required(),
     uid: Joi.string(),
+    uuid: Joi.string().required(),
     person_name: Joi.string().required(),
     domicile_address: Joi.isSchema(AddressItem), //TODO: add required
     correspondence_address: Joi.isSchema(AddressItem), //TODO: add required
