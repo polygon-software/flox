@@ -19,19 +19,16 @@ export class RolesGuard implements CanActivate {
     }
     const ctx = GqlExecutionContext.create(context);
     const user = ctx.getContext().req.user;
-    console.log('User is', user);
-    // TODO Application-specific: Determine user's roles here
-    user.roles = ['admin', 'peasant'];
+    user.roles = []; // TODO Application-specific: Determine user's roles here
     return this.matchRoles(roles, user.roles);
   }
 
   /**
    * Checks if any of the user's roles have access to the specified resource
-   * @param {string[]} allowedRoles
-   * @param {string[]} userRoles
+   * @param {string[]} allowedRoles - the list of roles that have resource access
+   * @param {string[]} userRoles - the list of the user's roles
    */
   matchRoles(allowedRoles: string[], userRoles: string[]) {
-    console.log('matching roles', allowedRoles, 'to user', userRoles);
     return userRoles.some((userRole) => allowedRoles.includes(userRole));
   }
 }
