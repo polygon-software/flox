@@ -3,11 +3,11 @@ import {
   Controller,
   Post,
   Req,
-  Res,
+  Res, UseGuards,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import fastify = require('fastify');
-import { Public } from '../auth/auth.guard';
+import {JwtAuthGuard, Public} from '../auth/auth.guard';
 
 @Controller()
 export class FileController {
@@ -33,7 +33,8 @@ export class FileController {
     res.send(new_file);
   }
 
-  @Public() // TODO change?
+  // @Public() // TODO change?
+  @UseGuards(JwtAuthGuard)
   @Post('/uploadPrivateFile')
   async uploadPrivateFile(
     @Req() req: fastify.FastifyRequest,
