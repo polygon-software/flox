@@ -6,7 +6,7 @@ import { GetCompanyArgs } from './dto/args/get-company.args';
 import { DeleteCompanyInput } from './dto/input/delete-company.input';
 import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
-import { Public } from '../auth/auth.guard';
+import { Public } from '../auth/authentication.decorator';
 
 @Resolver(() => Company)
 export class CompanyResolver {

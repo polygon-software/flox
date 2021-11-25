@@ -3,7 +3,8 @@ import { EmployeeService } from './employee.service';
 import { Employee } from './entities/employee.entity';
 import { CreateEmployeeInput } from './dto/input/create-employee.input';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
-import { Public } from '../auth/auth.guard';
+import { Public } from '../auth/authentication.decorator';
+import { CurrentUser } from '../auth/authorization.decorator';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
@@ -13,7 +14,9 @@ export class EmployeeResolver {
   @Mutation(() => Employee)
   createEmployee(
     @Args('createEmployeeInput') createEmployeeInput: CreateEmployeeInput,
+    @CurrentUser() user: Record<string, unknown>,
   ): Promise<Employee> {
+    console.log('CREATE called by user', user);
     return this.employeeService.createEmployee(createEmployeeInput);
   }
 
