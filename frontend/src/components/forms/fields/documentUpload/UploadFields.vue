@@ -54,8 +54,7 @@
   </q-file>
 
   <!-- Additional Documents -->
-  <component
-    :is="field.component"
+  <q-file
     v-for="(field, index) in additional_input_fields"
     :key="index"
     v-model="field.model"
@@ -72,12 +71,11 @@
     <template v-slot:prepend>
       <q-icon name="attach_file" />
     </template>
-  </component>
+  </q-file>
 
 </template>
 <script setup lang="ts">
-import {markRaw, ref} from 'vue';
-import {QFile} from 'quasar';
+import {ref} from 'vue';
 
 const emit = defineEmits(['change'])
 const props = defineProps({
@@ -95,7 +93,10 @@ const execution_register_extract = ref(null)
  * Emits the updated value
  */
 function emitValue(){
-  emit('change', {passport, commercial_register_extract, execution_register_extract, additional_input_fields})
+  const valid_additional_input_fields = additional_input_fields.value.filter(field => {
+    return field.model !== null
+  })
+  emit('change', {passport, commercial_register_extract, execution_register_extract, valid_additional_input_fields})
 }
 
 /**
@@ -104,7 +105,6 @@ function emitValue(){
 const additional_input_fields = ref([
   {
     model: null,
-    component: markRaw(QFile),
   },
 ])
 
@@ -122,7 +122,7 @@ function fileChange(): void {
       return;
     }
     // Fille was added -> add new field
-    additional_input_fields.value.push({model: null, component: markRaw(QFile)})
+    additional_input_fields.value.push({model: null})
     emitValue()
     return;
   }
@@ -144,7 +144,7 @@ function fileChange(): void {
     }
   }
   // File was added or updated
-  additional_input_fields.value.push({model: null, component: markRaw(QFile)})
+  additional_input_fields.value.push({model: null})
   emitValue()
 }
 

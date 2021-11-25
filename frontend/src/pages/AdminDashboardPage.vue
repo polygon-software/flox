@@ -46,6 +46,7 @@ const data1 = new Company(
   'Polygon Software',
   'DE',
   'Polygon2ElectricBoogaloo',
+  '123Abc',
   'Marino Schneider',
   new Address('Musterstrasse', '1', 'Zürich', '8000'),
   new Address('Thurgauerstrasse', '117', 'Opfikon', '8152'),
@@ -61,6 +62,7 @@ const data2 = new Company(
   'Roche',
   'FR',
   'BlubbiBlubbBlubb',
+  'Abc123',
   'Jane Doe',
   new Address('Strassenstrasse', '1', 'Basel', '4000'),
   new Address('Wegweg', '25', 'Muttenz', '4132'),
@@ -76,6 +78,7 @@ const data3 = new Company(
   'Roche',
   'FR',
   'BlubbiBlubbBlubb',
+  'Abc123',
   'Jane Doe',
   new Address('Strassenstrasse', '1', 'Basel', '4000'),
   new Address('Wegweg', '25', 'Muttenz', '4132'),
@@ -134,7 +137,7 @@ function unlockAccount() {
  */
 function isAction(companyData: Company): boolean {
   if (companyData.document_upload_enabled) {
-    return companyData.documents !== null && companyData.documents.length > 0;
+    return companyData.documents !== null && companyData.documents.length > 0
   }
   return true
 }
