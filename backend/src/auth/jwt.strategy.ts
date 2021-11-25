@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        // TODO get via env variable
+        // TODO set via env variable
         jwksUri:
           'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_DGPNZZeuX/.well-known/jwks.json',
       }),
