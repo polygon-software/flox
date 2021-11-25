@@ -1,6 +1,6 @@
 import {AddressItem} from '../../../../shared/schemas/AddressItem';
 import Joi from 'joi';
-import {i18n} from "boot/i18n";
+import {i18n} from 'boot/i18n';
 
 /**
  * A class representing an address

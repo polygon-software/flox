@@ -109,8 +109,8 @@
           class="q-ma-md"
           :label="$t('cancel')"
           color="primary"
-          @click="onCancel"
           flat
+          @click="onCancel"
         />
       </q-card-actions>
     </q-card>

@@ -80,7 +80,7 @@
       />
       <q-btn
         color="primary"
-        :label="finishLabel ?? $t('finish')"
+        :label="finishLabel"
         @click="onSubmit"
       />
     </q-card>
@@ -92,10 +92,10 @@
  * This component defines a generic form that can have a single or multiple pages.
  * It takes the following properties:
  * @param {Object[]} pages - the pages to show, each containing fields, label and key
- * @param {finish} function - the function to call once the form is completed
  * @param {string} [finishLabel] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
  */
 import {defineProps, Ref, ref} from 'vue';
+import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
 const emit = defineEmits(['submit'])
@@ -103,9 +103,14 @@ const emit = defineEmits(['submit'])
 const form_ref: Ref<QForm|null> = ref(null)
 
 const props = defineProps({
-  finishLabel: String,
-  pages: Array,
-  finish: Function,
+  finishLabel: {
+    type: String,
+    default: i18n.global.t('finish'),
+  },
+  pages: {
+    type: Array,
+    default: () => [],
+  },
 })
 
 // Get copy of prop form

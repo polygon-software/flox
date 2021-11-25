@@ -8,11 +8,11 @@
     :label="$t('passport_or_id')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
+    :max-file-size="props.maxFileSize"
     :rules="[(val) => val !== null || $t('missing_file')]"
     @change="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -26,11 +26,11 @@
     :label="`${$t('commercial_register_extract')} (${$t('optional')})`"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
+    :max-file-size="props.maxFileSize"
     :rules="[]"
     @change="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -44,11 +44,11 @@
     :label="$t('execution_register_extract')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
+    :max-file-size="props.maxFileSize"
     :rules="[(val) => val !== null || $t('missing_file')]"
     @change="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -64,11 +64,11 @@
     :label="$t('additional_documents')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
+    :max-file-size="props.maxFileSize"
     :rules="[]"
     @update:model-value="fileChange"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
