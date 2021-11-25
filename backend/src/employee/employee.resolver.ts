@@ -3,16 +3,18 @@ import { EmployeeService } from './employee.service';
 import { Employee } from './entities/employee.entity';
 import { CreateEmployeeInput } from './dto/input/create-employee.input';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
+import { Public } from '../auth/auth.guard';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
   constructor(private readonly employeeService: EmployeeService) {}
 
+  @Public() // TODO
   @Mutation(() => Employee)
   createEmployee(
     @Args('createEmployeeInput') createEmployeeInput: CreateEmployeeInput,
-  ) {
-    return this.employeeService.create(createEmployeeInput);
+  ): Promise<Employee> {
+    return this.employeeService.createEmployee(createEmployeeInput);
   }
 
   @Query(() => [Employee], { name: 'employee' })

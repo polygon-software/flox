@@ -34,10 +34,10 @@ export class CompanyResolver {
 
   @Public()
   @Mutation(() => Company)
-  async createCompany(
+  createCompany(
     @Args('createCompanyInput') createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.createCompany(createCompanyInput);
+    return this.companyService.createCompany(createCompanyInput);
   }
 
   @Public() // TODO restrict to appropriate roles
