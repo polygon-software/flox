@@ -1,13 +1,11 @@
 <template>
   <q-page class="flex flex-center">
     <div class="column">
-      <q-card class="q-pa-md">
-        <GenericForm
-          :finish-label="$t('finish_signup')"
-          :pages="pages"
-          @submit="onSubmit"
-        />
-      </q-card>
+      <GenericForm
+        :finish-label="$t('finish_signup')"
+        :pages="pages"
+        @submit="onSubmit"
+      />
     </div>
   </q-page>
 </template>

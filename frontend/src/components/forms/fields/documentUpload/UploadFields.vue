@@ -57,7 +57,7 @@
   <q-file
     v-for="(field, index) in additional_input_fields"
     :key="index"
-    v-model="field.model"
+    v-model="field.value"
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
@@ -94,7 +94,7 @@ const execution_register_extract = ref(null)
  */
 function emitValue(){
   const valid_additional_input_fields = additional_input_fields.value.filter(field => {
-    return field.model !== null
+    return field.value !== null
   })
   emit('change', {passport, commercial_register_extract, execution_register_extract, valid_additional_input_fields})
 }
@@ -102,11 +102,7 @@ function emitValue(){
 /**
  * This section handles the addition and deltetion of custom files.
  */
-const additional_input_fields = ref([
-  {
-    model: null,
-  },
-])
+const additional_input_fields = ref([ref(null)])
 
 /**
  * Depending on how many additional fields already exist, adds or deletes a file from a custom field.
@@ -117,12 +113,12 @@ function fileChange(): void {
   // Only 1 additional field
   if (size === 1) {
     // File was deleted -> do nothing
-    if (additional_input_fields.value[0].model == null) {
+    if (additional_input_fields.value[0].value === null) {
       emitValue()
       return;
     }
-    // Fille was added -> add new field
-    additional_input_fields.value.push({model: null})
+    // File was added -> add new field
+    additional_input_fields.value.push(ref(null))
     emitValue()
     return;
   }
@@ -131,7 +127,7 @@ function fileChange(): void {
   for (let index=0; index<size; index++) {
     const field = additional_input_fields.value[index]
     // A file was deleted
-    if(field.model === null) {
+    if(field.value === null) {
       // Last field -> do nothing
       if (index === size-1) {
         emitValue()
@@ -144,7 +140,7 @@ function fileChange(): void {
     }
   }
   // File was added or updated
-  additional_input_fields.value.push({model: null})
+  additional_input_fields.value.push(ref(null))
   emitValue()
 }
 
