@@ -100,8 +100,23 @@ input DeleteUserInput {
 }
 
 type Employee {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """E-mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Language"""
+  language: String!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
 
   """UUID"""
   uuid: ID!
