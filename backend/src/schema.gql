@@ -80,8 +80,23 @@ input CreateCompanyInput {
 }
 
 input CreateEmployeeInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Company"""
+  company: company!
+
+  """E-mail"""
+  email: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Phone Number"""
+  phone: String!
 }
 
 input CreateItemInput {
@@ -191,9 +206,24 @@ input UpdateCompanyInput {
 }
 
 input UpdateEmployeeInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """Company"""
+  company: company
+
+  """E-mail"""
+  email: String
+
+  """Function within the company"""
+  function: String
+
+  """Gender"""
+  gender: String
   id: Int!
+
+  """Language"""
+  language: String
+
+  """Phone Number"""
+  phone: String
 }
 
 input UpdateItemInput {
@@ -225,4 +255,70 @@ type User {
 
   """UUID"""
   uuid: ID!
+}
+
+input address {
+  """City"""
+  city: String!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """Zip Code"""
+  zip_code: String!
+}
+
+input company {
+  """Branch structure"""
+  branch_structure: Boolean!
+
+  """Company Name"""
+  company_name: String!
+
+  """Correspondence address"""
+  correspondence_address: address!
+
+  """Whether document upload is enabled (initial request granted by SOI)"""
+  document_upload_enabled: Boolean!
+
+  """Domicile address"""
+  domicile_address: address!
+
+  """E-Mail address"""
+  email: String!
+
+  """Employees of the company"""
+  employees: [employee!]
+
+  """Language"""
+  language: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Company UID"""
+  uid: String!
+}
+
+input employee {
+  """Company"""
+  company: company!
+
+  """E-mail"""
+  email: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Phone Number"""
+  phone: String!
 }

@@ -1,4 +1,4 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, InputType } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import {
   IsString,
@@ -17,6 +17,7 @@ import { Employee } from '../../employee/entities/employee.entity';
  */
 
 @ObjectType()
+@InputType('company')
 @Entity({ name: 'company' })
 export class Company extends Person {
   @Field(() => String, { description: 'Company Name' })

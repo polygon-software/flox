@@ -1,10 +1,11 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, InputType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { IsEmail, IsPhoneNumber, IsString } from 'class-validator';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Company } from '../../company/entities/company.entity';
 
 @ObjectType()
+@InputType('employee')
 @Entity({ name: 'employee' })
 export class Employee extends Person {
   @Column()

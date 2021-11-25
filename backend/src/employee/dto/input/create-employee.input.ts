@@ -1,5 +1,4 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-import { Column, JoinColumn, OneToOne } from 'typeorm';
+import { InputType, Field } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmptyObject,
