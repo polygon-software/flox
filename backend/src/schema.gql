@@ -73,8 +73,13 @@ input CreateCompanyInput {
   correspondence_address: CreateAddressInput!
   domicile_address: CreateAddressInput!
   email: String!
+
+  """First Name"""
+  first_name: String
   language: String!
-  person_name: String!
+
+  """Last Name"""
+  last_name: String
   phone: String!
   uid: String
 }
@@ -86,6 +91,9 @@ input CreateEmployeeInput {
   """E-mail"""
   email: String!
 
+  """First Name"""
+  first_name: String
+
   """Function within the company"""
   function: String!
 
@@ -94,6 +102,9 @@ input CreateEmployeeInput {
 
   """Language"""
   language: String!
+
+  """Last Name"""
+  last_name: String
 
   """Phone Number"""
   phone: String!
@@ -212,6 +223,9 @@ input UpdateEmployeeInput {
   """E-mail"""
   email: String
 
+  """First Name"""
+  first_name: String
+
   """Function within the company"""
   function: String
 
@@ -221,6 +235,9 @@ input UpdateEmployeeInput {
 
   """Language"""
   language: String
+
+  """Last Name"""
+  last_name: String
 
   """Phone Number"""
   phone: String

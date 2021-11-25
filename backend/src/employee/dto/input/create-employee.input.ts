@@ -1,4 +1,4 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, PartialType } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmptyObject,
@@ -6,9 +6,10 @@ import {
   IsString,
 } from 'class-validator';
 import { Company } from '../../../company/entities/company.entity';
+import { CreatePersonInput } from '../../../person/dto/create-person.input';
 
 @InputType()
-export class CreateEmployeeInput {
+export class CreateEmployeeInput extends PartialType(CreatePersonInput) {
   @Field(() => String, { description: 'Language' })
   @IsString()
   language: string;
