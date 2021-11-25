@@ -22,8 +22,6 @@ export class FileResolver {
     return await this.fileService.getPublicFile(getPublicFileArgs);
   }
 
-  @UseGuards(JwtAuthGuard) // Allow only logged-in users to access
-  @UseGuards(RolesGuard) // Allow only role-specific access
   @Roles('admin') // TODO application specific: set appropriate guards here
   @Query(() => PrivateFile, { name: 'getPrivateFile' })
   async getPrivateFile(
