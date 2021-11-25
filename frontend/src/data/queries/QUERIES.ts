@@ -26,5 +26,20 @@ export const ALL_USERS = {
     cacheLocation: 'allUsers'
 }
 
+export const ALL_COMPANIES = {
+  query: gql`
+        query{
+            allCompanies{
+                uuid
+                document_upload_enabled
+                documents
+                __typename
+            }
+        }
+        `,
+  tables: ['companies'],
+  cacheLocation: 'allCompanies'
+}
 
-export const QUERIES = [ALL_USERS];
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES];
