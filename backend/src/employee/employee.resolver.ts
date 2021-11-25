@@ -35,9 +35,10 @@ export class EmployeeResolver {
     });
   }
 
+  @Public() // TODO restrict to SOI role only
   @Query(() => [Employee], { name: 'employee' })
-  findAll() {
-    return this.employeeService.findAll();
+  async getAllEmployees(): Promise<Employee[]> {
+    return this.employeeService.getAllEmployees();
   }
 
   @Query(() => Employee, { name: 'employee' })

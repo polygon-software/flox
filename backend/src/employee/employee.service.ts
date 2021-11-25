@@ -24,8 +24,12 @@ export class EmployeeService {
     return this.employeeRepository.save(employee);
   }
 
-  findAll() {
-    return `This action returns all employee`;
+  /**
+   * Returns all employees
+   * TODO also add for a given company/"mine" rule
+   */
+  getAllEmployees(): Promise<Employee[]> {
+    return this.employeeRepository.find();
   }
 
   findOne(id: number) {
