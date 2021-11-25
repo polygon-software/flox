@@ -7,6 +7,10 @@ import { IS_PUBLIC_KEY } from './authentication.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
+  /**
+   * Gets the request from context
+   * @param {ExecutionContext} context
+   */
   getRequest(context: ExecutionContext): any {
     const ctx = GqlExecutionContext.create(context);
     // If call is not from GraphQL, get req regularly

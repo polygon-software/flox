@@ -10,6 +10,7 @@ import { FileService } from './file.service';
 import fastify = require('fastify');
 import { Public } from '../auth/authentication.decorator';
 import { JwtAuthGuard } from '../auth/auth.guard';
+import { AdminOnly } from '../auth/authorization.decorator';
 
 @Controller()
 export class FileController {
@@ -35,8 +36,8 @@ export class FileController {
     res.send(new_file);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('/uploadPrivateFile')
+  @AdminOnly()
   async uploadPrivateFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,

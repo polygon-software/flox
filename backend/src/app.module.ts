@@ -12,6 +12,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import { ItemModule } from './item/item.module';
 import * as Joi from 'joi';
 import { FileModule } from './file/file.module';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -79,6 +80,10 @@ import { FileModule } from './file/file.module';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
