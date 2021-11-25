@@ -47,11 +47,13 @@ const pages = [
 
 /**
  * Upon valid registration, creates database entry
+ * @param {Record<string, unknown>} formData: The form's entered data
  * @async
  */
-async function onRegister(){
+async function onRegister(formData: Record<string, unknown>){
   //TODO: create database entry
   //TODO: redirect to something ?
+  console.log('Create entry for', formData)
 
   await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)
   return;
