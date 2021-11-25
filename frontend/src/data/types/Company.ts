@@ -10,7 +10,8 @@ export class Company {
   language: string|null
   uid: string|null
   uuid: string|null
-  person_name: string|null
+  first_name: string|null
+  last_name: string|null
   domicile_address: Address|null
   correspondence_address: Address|null
   phone: string|null
@@ -19,14 +20,15 @@ export class Company {
   document_upload_enabled: boolean|null
   documents: Array<File>|null
 
-  constructor(company_name?: string, language?: string, uid?: string, uuid?: string, person_name?: string, domicile_address?: Address, correspondance_address?: Address,
+  constructor(company_name?: string, language?: string, uid?: string, uuid?: string, first_name?: string, last_name?: string, domicile_address?: Address, correspondance_address?: Address,
               phone?: string, email?: string, branch_structure?: boolean, document_upload_enabled?: boolean, documents?: Array<File>) {
 
     this.company_name = company_name ?? null
     this.language = language ?? null
     this.uid = uid ?? null
     this.uuid = uuid ?? null
-    this.person_name = person_name ?? null
+    this.first_name = first_name ?? null
+    this.last_name = last_name ?? null
     this.domicile_address = domicile_address ?? null
     this.correspondence_address = correspondance_address ?? null
     this.phone = phone ?? null
@@ -54,7 +56,8 @@ export class Company {
    * @param {string} language
    * @param {string} uid
    * @param {string} uuid
-   * @param {string} person_name
+   * @param {string} first_name
+   * @param {string} last_name
    * @param {Address} domicile_address
    * @param {Address} correspondance_address
    * @param {string} phone
@@ -64,9 +67,9 @@ export class Company {
    * @param {Array<File>} documents
    *
    */
-  replace({company_name, language, uid, uuid, person_name, domicile_address, correspondance_address, phone, email, branch_structure, document_upload_enabled, documents}:
+  replace({company_name, language, uid, uuid, first_name, last_name, domicile_address, correspondance_address, phone, email, branch_structure, document_upload_enabled, documents}:
             {
-              company_name: string, language: string, uid: string, uuid: string, person_name: string, domicile_address: Address, correspondance_address: Address,
+              company_name: string, language: string, uid: string, uuid: string, first_name: string, last_name: string, domicile_address: Address, correspondance_address: Address,
               phone: string, email: string, branch_structure: boolean, document_upload_enabled: boolean, documents: Array<File>
             }): void {
 
@@ -74,7 +77,8 @@ export class Company {
     this.language = language
     this.uid = uid
     this.uuid = uuid
-    this.person_name = person_name
+    this.first_name = first_name
+    this.last_name = last_name
     this.domicile_address = domicile_address
     this.correspondence_address = correspondance_address
     this.phone = phone

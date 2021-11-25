@@ -209,8 +209,9 @@ input UpdateCompanyInput {
   correspondence_address: CreateAddressInput!
   domicile_address: CreateAddressInput!
   email: String!
+  first_name: String!
   language: String!
-  person_name: String!
+  last_name: String!
   phone: String!
   uid: String
   uuid: ID!
