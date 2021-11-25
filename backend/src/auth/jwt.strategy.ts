@@ -31,7 +31,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtStrategyValidationPayload): JwtStrategyValidationResult {
-    console.log('Validate JWT payload for UUID', payload.sub);
-    return { userId: payload.sub, username: payload.name };
+    console.log('Validate JWT payload for UUID', payload);
+    const username = payload['cognito:username'];
+    return { userId: payload.sub, username: username };
   }
 }

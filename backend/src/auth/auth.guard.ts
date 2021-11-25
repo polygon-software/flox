@@ -1,12 +1,9 @@
-import { CustomDecorator, ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { SetMetadata } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
-
-export const IS_PUBLIC_KEY = 'isPublic';
-export const Public = (): CustomDecorator => SetMetadata(IS_PUBLIC_KEY, true);
+import { IS_PUBLIC_KEY } from './authentication.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -23,11 +20,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   public canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('Checking canActivate');
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
+    // For publicly accessible resources, allow access by default
     if (isPublic) {
       return true;
     }

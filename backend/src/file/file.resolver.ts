@@ -2,7 +2,7 @@ import { Args, Resolver, Query } from '@nestjs/graphql';
 import PublicFile from './entities/public_file.entity';
 import { FileService } from './file.service';
 import { JwtAuthGuard, Public } from '../auth/auth.guard';
-import { Roles } from '../auth/roles.decorator';
+import { AdminOnly, Roles } from '../auth/authorization.decorator';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
@@ -21,7 +21,6 @@ export class FileResolver {
     return await this.fileService.getPublicFile(getPublicFileArgs);
   }
 
-  // @Public() // TODO restrict to files owned by me
   @UseGuards(JwtAuthGuard) // Allow only logged-in users to access
   @UseGuards(RolesGuard) // Allow only role-specific access
   @Roles('admin')
