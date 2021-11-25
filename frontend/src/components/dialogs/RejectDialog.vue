@@ -31,18 +31,18 @@ import {QDialog} from 'quasar';
 
 const emit = defineEmits(['ok'])
 
-const dialog: Ref<QDialog> = ref<QDialog>(null)
+const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value.show();
+  dialog.value?.show();
 }
 
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value.hide()
+  dialog.value?.hide()
 }
 
 function onYesReject(): void {
