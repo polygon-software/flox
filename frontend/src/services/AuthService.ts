@@ -14,6 +14,7 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
+import {i18n} from "boot/i18n";
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -69,7 +70,7 @@ export class AuthenticationService {
         const userPool = this.$authStore.getters.getUserPool()
 
         if(userPool === undefined){
-          this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
+          this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
           return
         }
           // Actual Cognito authentication on given pool
@@ -163,7 +164,7 @@ export class AuthenticationService {
     const cognitoUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
 
     if(!cognitoUser){
-      this.$errorService.showErrorDialog(new Error('Trying to log out despite not being logged in!'))
+      this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.not_logged_in')))
     } else {
       return new Promise((resolve) => {
         cognitoUser.signOut(() => {
@@ -199,7 +200,7 @@ export class AuthenticationService {
       const userPool = this.$authStore.getters.getUserPool()
 
       if(userPool === undefined){
-        this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
+        this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
         return
       }
 
@@ -257,7 +258,7 @@ export class AuthenticationService {
     showEmailVerificationDialog(renew = false): void{
         if(renew){
             if(!this.$authStore.getters.getCognitoUser()){
-                this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
+                this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
                 return
             } else {
               this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {

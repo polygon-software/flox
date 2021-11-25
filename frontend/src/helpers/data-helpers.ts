@@ -1,9 +1,10 @@
-import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
+import {useApolloClient, useMutation, useQuery, UseQueryReturn} from '@vue/apollo-composable';
 import {ALL_USERS, QUERIES} from '../data/queries/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {useSSR} from 'src/store/ssr/index';
+import {i18n} from "boot/i18n";
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -12,9 +13,12 @@ import {useSSR} from 'src/store/ssr/index';
 /**
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
+ * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
  */
-async function executeQuery(queryObject: QueryObject): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
-  const queryResult = useQuery(queryObject.query)
+async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
+
+  const queryResult = useQuery(queryObject.query, variables ?? {})
+
   return new Promise(((resolve, reject) => {
     queryResult.onResult((res)=>{resolve(res)})
     queryResult.onError((err)=>{reject(err)})
@@ -24,7 +28,7 @@ async function executeQuery(queryObject: QueryObject): Promise<ApolloQueryResult
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
  * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
- * @param {Object} variables - any variables that shall be passed to the mutation
+ * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutation
  */
 async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<void> {
     const mutation =  mutationObject.mutation
@@ -32,7 +36,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     const type =  mutationObject.type
 
     if([mutation, tables, type].some(item => item === undefined)){
-        throw new Error("One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'")
+        throw new Error(i18n.global.t('errors.missing_properties'))
     }
 
     const affectedQueries:QueryObject[] = [];
@@ -54,7 +58,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
       affectedQueries.forEach((queryObject) => {
         const changes = changeData as Record<string, Record<string, unknown>>
         if(!mutationObject.cacheLocation){
-          throw new Error('Cache Location is missing in mutationObject: '+ JSON.stringify(mutationObject))
+          throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
         }
         const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 

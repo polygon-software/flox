@@ -4,6 +4,7 @@ export default {
   loggedIn: 'Angemeldet als {user}',
   login: 'Anmelden',
   signup: 'Registrieren',
+  employee_signup: 'Mitarbeitende registrieren',
   signup_now: 'Kein Account? Jetzt registrieren:',
   forgot_password: 'Passwort vergessen',
   invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
@@ -47,7 +48,11 @@ export default {
   branch_structure: 'Niederlassungsstruktur',
   conditions: 'AGB',
   accept_conditions: 'Ich stimme den AGB zu.',
+  salutation: 'Anrede',
+  company_function: 'Funktion in der Firma',
   must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
+  accept_condition_truthful:'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
+  must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
   redirected: 'Sie werden in Kürze weitergeleitet...',
   successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
   chef_dashboard: 'Chef Dashboard',
@@ -55,4 +60,13 @@ export default {
   confirmed_registration: 'Registrierung bestätigt',
   redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
   back_to_login: 'Zurück zu Login',
+  errors: {
+    nothing_here: 'Hoppla. Hier hat es nichts...',
+    user_not_defined: 'Benutzerpool ist nicht definiert',
+    missing_properties: 'Eine oder mehrere der folgenden Eigenschaften fehlen für die angegebene Mutation: \'mutation\', \'tables\', \'type\', \'cacheLocation\'',
+    not_logged_in: 'Versucht, sich abzumelden, obwohl man nicht eingeloggt ist!',
+    error_occurred: 'Ein Fehler ist aufgetreten, versuchen Sie sich erneut anzumelden',
+    cant_find_module: 'Kann Modul nicht finden ',
+    cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
+  }
 }
