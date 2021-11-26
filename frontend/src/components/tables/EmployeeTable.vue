@@ -19,7 +19,6 @@ import {ALL_EMPLOYEES} from 'src/data/queries/QUERIES';
 
 // ----- Data -----
 const columns = [
-  { name: 'uuid', align: 'center', label: 'ID', field: 'uuid', sortable: false },
   { name: 'first_name', label: 'First Name', field: 'first_name', sortable: true },
   { name: 'last_name', label: 'Last Name', field: 'last_name', sortable: true },
   { name: 'function', label: 'Function', field: 'function', sortable: true },
