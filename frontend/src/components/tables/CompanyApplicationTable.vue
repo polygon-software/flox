@@ -7,8 +7,8 @@
   >
     <template #body="props">
       <q-tr :props="props">
-        <q-td key="uuid" :props="props">
-          {{ props.row.uuid }}
+        <q-td key="readable_id" :props="props">
+          {{ props.row.readable_id }}
         </q-td>
         <q-td key="company_name" :props="props">
           {{ props.row.company_name }}
@@ -40,13 +40,12 @@ import {i18n} from 'boot/i18n';
 import {Company} from 'src/data/types/Company';
 import SignUpApplicationDialog from 'components/dialogs/SignUpApplicationDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
-import {makeHumanReadable} from 'src/helpers/formatting-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
 // ----- Data -----
 const columns = [
-  { name: 'uuid', label: 'UUID', field: 'uuid', sortable: true },
+  { name: 'readable_id', label: 'ID', field: 'readable_id', sortable: false },
   { name: 'company_name', label: i18n.global.t('company_name'), field: 'company_name', sortable: true },
   {name: 'state', required: true, label: i18n.global.t('state'), align: 'left', field: 'state', sortable: true},
   {name: 'action', required: true, label: i18n.global.t('action'), align: 'left', field: 'action', sortable: true}

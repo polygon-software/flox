@@ -31,6 +31,7 @@ export const ALL_COMPANIES = {
         query{
             allCompanies{
               uuid
+              readable_id
               company_name
               first_name
               last_name
