@@ -20,7 +20,11 @@ export class UpdateCompanyInput {
 
   @Field(() => String)
   @IsString()
-  person_name: string;
+  first_name: string;
+
+  @Field(() => String)
+  @IsString()
+  last_name: string;
 
   @Field(() => String)
   @IsString()

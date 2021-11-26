@@ -4,6 +4,7 @@ import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
 import { ANY_ROLE_KEY } from './authorization.decorator';
+import { getRequest } from '../helpers';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -17,13 +18,7 @@ export class RolesGuard implements CanActivate {
    * @param {ExecutionContext} context
    */
   getRequest(context: ExecutionContext): any {
-    const ctx = GqlExecutionContext.create(context);
-    // If call is not from GraphQL, get req regularly
-    if (!ctx.getContext()) {
-      return context.switchToHttp().getRequest();
-    }
-    // Call is from GraphQL
-    return ctx.getContext().req;
+    return getRequest(context);
   }
 
   canActivate(

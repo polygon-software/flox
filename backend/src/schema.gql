@@ -2,6 +2,114 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Address {
+  """City"""
+  city: String!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Zip Code"""
+  zip_code: String!
+}
+
+type Company {
+  """Branch structure"""
+  branch_structure: Boolean!
+
+  """Cognito account ID"""
+  cognito_id: String
+
+  """Company Name"""
+  company_name: String!
+
+  """Correspondence address"""
+  correspondence_address: Address!
+
+  """Whether document upload is enabled (initial request granted by SOI)"""
+  document_upload_enabled: Boolean!
+
+  """Domicile address"""
+  domicile_address: Address!
+
+  """E-Mail address"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Language"""
+  language: String!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Company UID"""
+  uid: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
+input CreateAddressInput {
+  city: String!
+  number: String!
+  street: String!
+  zip_code: String!
+}
+
+input CreateCompanyInput {
+  branch_structure: Boolean!
+  company_name: String!
+  correspondence_address: CreateAddressInput!
+  domicile_address: CreateAddressInput!
+  email: String!
+
+  """First Name"""
+  first_name: String
+  language: String!
+
+  """Last Name"""
+  last_name: String
+  phone: String!
+  uid: String
+}
+
+input CreateEmployeeInput {
+  """Company"""
+  company: company
+
+  """E-mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Last Name"""
+  last_name: String
+
+  """Phone Number"""
+  phone: String!
+}
+
 input CreateItemInput {
   """Name"""
   name: String!
@@ -15,7 +123,43 @@ input CreateUserInput {
   name: String!
 }
 
+input DeleteCompanyInput {
+  uuid: ID!
+}
+
 input DeleteUserInput {
+  uuid: ID!
+}
+
+type Employee {
+  """Cognito account ID"""
+  cognito_id: String
+
+  """Company"""
+  company: Company!
+
+  """E-mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """UUID"""
   uuid: ID!
 }
 
@@ -32,10 +176,15 @@ type Item {
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
+  createCompany(createCompanyInput: CreateCompanyInput!): Company!
+  createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
   createItem(createItemInput: CreateItemInput!): Item!
+  enableCompanyDocumentUpload(uuid: String!): Company!
   remove(deleteUserInput: DeleteUserInput!): User!
+  removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeItem(uuid: ID!): Item!
   update(updateUserInput: UpdateUserInput!): User!
+  updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
@@ -65,7 +214,11 @@ type PublicFile {
 }
 
 type Query {
+  allCompanies: [Company!]!
+  allEmployees: [Employee!]!
   allUsers: [User!]!
+  companies(uuids: [ID!]): [Company!]!
+  company(cognito_id: ID, uuid: ID): Company!
   getPrivateFile(
     """URL expiration duration (in seconds)"""
     expires: [Float!]
@@ -74,12 +227,27 @@ type Query {
   getPublicFile(uuid: ID!): PublicFile!
   item(uuid: ID!): Item!
   items: [Item!]!
+  myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
 
 type Subscription {
   userAdded: User!
+}
+
+input UpdateCompanyInput {
+  branch_structure: Boolean!
+  company_name: String!
+  correspondence_address: CreateAddressInput!
+  domicile_address: CreateAddressInput!
+  email: String!
+  first_name: String!
+  language: String!
+  last_name: String!
+  phone: String!
+  uid: String
+  uuid: ID!
 }
 
 input UpdateItemInput {
@@ -111,4 +279,67 @@ type User {
 
   """UUID"""
   uuid: ID!
+}
+
+input address {
+  """City"""
+  city: String!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """Zip Code"""
+  zip_code: String!
+}
+
+input company {
+  """Branch structure"""
+  branch_structure: Boolean!
+
+  """Company Name"""
+  company_name: String!
+
+  """Correspondence address"""
+  correspondence_address: address!
+
+  """Whether document upload is enabled (initial request granted by SOI)"""
+  document_upload_enabled: Boolean!
+
+  """Domicile address"""
+  domicile_address: address!
+
+  """E-Mail address"""
+  email: String!
+
+  """Language"""
+  language: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Company UID"""
+  uid: String!
+}
+
+input employee {
+  """Company"""
+  company: company!
+
+  """E-mail"""
+  email: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Phone Number"""
+  phone: String!
 }

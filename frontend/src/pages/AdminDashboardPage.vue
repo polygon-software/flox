@@ -6,7 +6,7 @@
       :columns="columns"
       row-key="name"
     >
-      <template v-slot:body="props">
+      <template #body="props">
         <q-tr :props="props">
           <q-td key="name" :props="props">
             {{ props.row.name }}
