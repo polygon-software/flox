@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import fastify = require('fastify');
-import { Public } from '../auth/auth.guard';
+import { Public } from '../auth/authentication.decorator';
+import { AnyRole } from '../auth/authorization.decorator';
 
 @Controller()
 export class FileController {
@@ -33,8 +34,8 @@ export class FileController {
     res.send(new_file);
   }
 
-  @Public() // TODO change?
   @Post('/uploadPrivateFile')
+  @AnyRole()
   async uploadPrivateFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
@@ -44,11 +45,16 @@ export class FileController {
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
+
+    // Get user, as determined by JWT Strategy
+    const owner = req['user'].userId;
+
     const file = await req.file();
     const file_buffer = await file.toBuffer();
     const new_file = await this.taskService.uploadPrivateFile(
       file_buffer,
       file.filename,
+      owner,
     );
     res.send(new_file);
   }

@@ -13,6 +13,7 @@ import { ItemModule } from './item/item.module';
 import * as Joi from 'joi';
 import { FileModule } from './file/file.module';
 import { CompanyModule } from './company/company.module';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -81,6 +82,10 @@ import { CompanyModule } from './company/company.module';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
