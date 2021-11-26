@@ -73,7 +73,7 @@ export class CompanyResolver {
    * Enables document upload for a given company
    * @param {string} uuid - the company's UUID
    */
-  @AdminOnly()
+  @AnyRole() // TODO set to admin-only once roles implemented on user databse
   @Mutation(() => Company)
   async enableCompanyDocumentUpload(
     @Args('uuid') uuid: string,

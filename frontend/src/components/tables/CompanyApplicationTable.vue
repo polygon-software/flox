@@ -14,7 +14,11 @@
           {{ props.row.company_name }}
         </q-td>
         <q-td key="state" :props="props">
-          {{ getState(props.row) }}
+          <q-chip
+            :label="$t(getState(props.row).label)"
+            :color="getState(props.row).color"
+            text-color="white"
+          />
         </q-td>
         <q-td key="action" :props="props">
           <q-btn
@@ -98,11 +102,20 @@ function isAction(companyData: Company): boolean {
 function getState(companyData: Company): string {
   if (companyData.document_upload_enabled) {
     if (companyData.documents === null || companyData.documents.length === 0) {
-      return i18n.global.t('documents_missing')
+      return {
+        label: 'documents_missing',
+        color: 'orange'
+      }
     }
-    return i18n.global.t('documents_available')
+    return {
+      label: 'documents_available',
+      color: 'blue'
+    }
   }
-  return i18n.global.t('new')
+  return {
+    label: 'new',
+    color: 'positive'
+  }
 }
 
 </script>

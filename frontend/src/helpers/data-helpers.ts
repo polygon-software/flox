@@ -55,6 +55,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
   const { mutate } = useMutation(mutation, () => ({
       // Get cache and the new or deleted object
     update: (cache: ApolloCache<any> , { data: changeData}) => {
+      console.log('Cache state:', cache, changeData)
       affectedQueries.forEach((queryObject) => {
         const changes = changeData as Record<string, Record<string, unknown>>
         if(!mutationObject.cacheLocation){

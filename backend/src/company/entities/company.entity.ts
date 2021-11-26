@@ -77,13 +77,14 @@ export class Company extends Person {
   @IsBoolean()
   document_upload_enabled: boolean;
 
-  @Column({ nullable: true })
+  // TODO ensure type to key
+  @Column('text', { nullable: true, array: true })
   @Field(() => [PrivateFile], {
     nullable: true,
     description: 'Documents of the company',
   })
   @IsArray()
-  documents: boolean;
+  documents: PrivateFile[];
 
   // @Column() TODO: Possibly add employee ID array / determine if needed
   // @Field(() => [Employee], {
