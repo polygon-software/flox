@@ -124,6 +124,7 @@ import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
+import {sendEmail} from 'src/helpers/email-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -164,12 +165,21 @@ function hide(): void {
 }
 
 async function onOk(): Promise<void> {
+  // Enable on database
   await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: props.company.uuid})
+
+  // Send e-mail
+  const from = 'david.wyss@polygon-software.ch' // TODO set from .env
+  const to = props.company.email
+  const subject = 'Your account' // TODO set
+  const body = 'See your account by visiting http://localhost:8080/login'// TODO generate one-time login URL
+  await sendEmail(from, to, subject, body)
+
   hide()
 }
 
 function onReject(): void {
-  //TODO: Send cancel message
+  //TODO: Send rejection message
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
