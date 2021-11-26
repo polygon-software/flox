@@ -8,10 +8,15 @@ export const CREATE_EMPLOYEE = {
         uuid
         first_name
         last_name
+        gender
+        phone
+        email
+        function
+        language
         __typename
       }
     }`,
-  tables: ['company'],
+  tables: ['employee'],
   type: MutationTypes.CREATE,
-  cacheLocation: 'createCompany'
+  cacheLocation: 'createEmployee'
 }
