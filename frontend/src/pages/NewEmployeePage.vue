@@ -54,18 +54,15 @@ const pages = [
  * @async
  */
 async function onRegister(formData: Record<string, Record<string, unknown>>){
-  //TODO: create database entry
-  //TODO: redirect to something ?
-  console.log('Create entry for', formData)
+  // Create database entry
   await executeMutation(CREATE_EMPLOYEE, {
     first_name: formData.full_name.first_name,
     last_name: formData.full_name.last_name,
-    gender: formData.salutation, // TODO better/universal format
+    gender: formData.salutation,
     phone: formData.phone_number,
     email: formData.email,
     function: formData.company_function,
     language: formData.language,
-    // company: // TODO
   })
   await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)
   return;

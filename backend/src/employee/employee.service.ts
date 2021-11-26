@@ -43,15 +43,5 @@ export class EmployeeService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} employee`;
-  }
-
-  update(id: number, updateEmployeeInput: UpdateEmployeeInput) {
-    return `This action updates a #${id} employee`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} employee`;
-  }
+  // TODO: Add remove/update/find functionalities as needed
 }

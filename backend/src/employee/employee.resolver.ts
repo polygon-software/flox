@@ -19,7 +19,12 @@ export class EmployeeResolver {
     private readonly companyService: CompanyService,
   ) {}
 
-  @AnyRole() // TODO
+  /**
+   * Creates a new employee for the user that is currently logged in
+   * @param {CreateEmployeeInput} createEmployeeInput
+   * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   */
+  @AnyRole() // TODO restrict to Management
   @Mutation(() => Employee)
   async createEmployee(
     @Args('createEmployeeInput') createEmployeeInput: CreateEmployeeInput,
@@ -39,6 +44,9 @@ export class EmployeeResolver {
     });
   }
 
+  /**
+   * Gets a list of all employees in the database
+   */
   @AdminOnly()
   @Query(() => [Employee], { name: 'allEmployees' })
   async getAllEmployees(): Promise<Employee[]> {
@@ -63,25 +71,5 @@ export class EmployeeResolver {
     }
 
     return this.employeeService.getEmployees(company);
-  }
-
-  @Query(() => Employee, { name: 'employee' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.employeeService.findOne(id);
-  }
-
-  @Mutation(() => Employee)
-  updateEmployee(
-    @Args('updateEmployeeInput') updateEmployeeInput: UpdateEmployeeInput,
-  ) {
-    return this.employeeService.update(
-      updateEmployeeInput.id,
-      updateEmployeeInput,
-    );
-  }
-
-  @Mutation(() => Employee)
-  removeEmployee(@Args('id', { type: () => Int }) id: number) {
-    return this.employeeService.remove(id);
   }
 }
