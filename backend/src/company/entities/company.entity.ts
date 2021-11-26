@@ -40,12 +40,12 @@ export class Company extends Person {
 
   @Field(() => Address, { description: 'Domicile address' })
   @JoinColumn()
-  @OneToOne(() => Address, { cascade: true })
+  @OneToOne(() => Address, { cascade: true, eager: true })
   domicile_address: Address;
 
   @Field(() => Address, { description: 'Correspondence address' })
   @JoinColumn()
-  @OneToOne(() => Address, { cascade: true })
+  @OneToOne(() => Address, { cascade: true, eager: true })
   correspondence_address: Address;
 
   @Field(() => String, { description: 'Phone Number' })
@@ -81,11 +81,11 @@ export class Company extends Person {
   @IsArray()
   documents: boolean;
 
-  @JoinColumn()
-  @Field(() => [Employee], {
-    description: 'Employees of the company',
-    nullable: true,
-  })
-  @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
-  employees: Employee[];
+  // @Column() TODO: Possibly add employee ID array / determine if needed
+  // @Field(() => [Employee], {
+  //   description: 'Employees of the company',
+  //   nullable: true,
+  // })
+  // @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
+  // employees: Employee[];
 }

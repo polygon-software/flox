@@ -44,9 +44,6 @@ type Company {
   """E-Mail address"""
   email: String!
 
-  """Employees of the company"""
-  employees: [Employee!]
-
   """First Name"""
   first_name: String!
 
@@ -322,9 +319,6 @@ input company {
 
   """E-Mail address"""
   email: String!
-
-  """Employees of the company"""
-  employees: [employee!]
 
   """Language"""
   language: String!
