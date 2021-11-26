@@ -78,7 +78,6 @@ export class Company extends Person {
     nullable: true,
     description: 'Documents of the company',
   })
-  @Column()
   @IsArray()
   documents: boolean;
 
