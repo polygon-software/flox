@@ -81,6 +81,8 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SUCCESS,
   ROUTES.SIGNUP,
   ROUTES.DOCUMENT_UPLOAD,
-  ROUTES.EMPLOYEE_DASHBOARD //TODO: Add security!!!
+  ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
+
+//TODO: Add semi-protected routes
 
