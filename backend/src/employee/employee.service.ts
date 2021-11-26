@@ -21,24 +21,24 @@ export class EmployeeService {
   async createEmployee(
     createEmployeeInput: CreateEmployeeInput,
   ): Promise<Employee> {
-    const employee = this.employeeRepository.create(createEmployeeInput);
+    const employee = await this.employeeRepository.create(createEmployeeInput);
 
-    return this.employeeRepository.save(employee);
+    return await this.employeeRepository.save(employee);
   }
 
   /**
    * Returns all employees within the database
    */
-  getAllEmployees(): Promise<Employee[]> {
-    return this.employeeRepository.find();
+  async getAllEmployees(): Promise<Employee[]> {
+    return await this.employeeRepository.find();
   }
 
   /**
    * Gets a list of companies by UUIDs
    * @param {Company} company - the company whose employees shall be fetched
    */
-  getEmployees(company: Company): Promise<Employee[]> {
-    return this.employeeRepository.find({
+  async getEmployees(company: Company): Promise<Employee[]> {
+    return await this.employeeRepository.find({
       company: company,
     });
   }
