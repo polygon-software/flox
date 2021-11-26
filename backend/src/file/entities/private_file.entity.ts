@@ -1,6 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 
 /**
@@ -10,6 +10,7 @@ import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 
 @Entity()
 @ObjectType()
+@InputType('public_file')
 export class PrivateFile extends BaseEntity {
   @Field(() => String, { description: 'File owner' })
   @Column()

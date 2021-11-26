@@ -6,10 +6,12 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsEmail,
+  IsArray,
 } from 'class-validator';
 import { Address } from '../../address/entities/address.entity';
 import { Person } from '../../person/entities/person.entity';
 import { Employee } from '../../employee/entities/employee.entity';
+import PrivateFile from '../../file/entities/private_file.entity';
 
 /**
  * An entity representing a company account
@@ -71,13 +73,20 @@ export class Company extends Person {
   @IsBoolean()
   document_upload_enabled: boolean;
 
-  // TODO documents
+  @Column({ nullable: true })
+  @Field(() => [PrivateFile], {
+    nullable: true,
+    description: 'Documents of the company',
+  })
+  @Column()
+  @IsArray()
+  documents: boolean;
 
-  // @JoinColumn() TODO re-add
-  // @Field(() => [Employee], {
-  //   description: 'Employees of the company',
-  //   nullable: true,
-  // })
-  // @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
-  // employees: Employee[];
+  @JoinColumn()
+  @Field(() => [Employee], {
+    description: 'Employees of the company',
+    nullable: true,
+  })
+  @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
+  employees: Employee[];
 }

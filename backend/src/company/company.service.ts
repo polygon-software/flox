@@ -25,6 +25,7 @@ export class CompanyService {
       ...createCompanyInput,
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
       cognito_id: null,
+      documents: null,
       // TODO: other default values
     });
 

@@ -35,11 +35,17 @@ type Company {
   """Whether document upload is enabled (initial request granted by SOI)"""
   document_upload_enabled: Boolean!
 
+  """Documents of the company"""
+  documents: [PrivateFile!]
+
   """Domicile address"""
   domicile_address: Address!
 
   """E-Mail address"""
   email: String!
+
+  """Employees of the company"""
+  employees: [Employee!]
 
   """First Name"""
   first_name: String!
@@ -308,11 +314,17 @@ input company {
   """Whether document upload is enabled (initial request granted by SOI)"""
   document_upload_enabled: Boolean!
 
+  """Documents of the company"""
+  documents: [public_file!]
+
   """Domicile address"""
   domicile_address: address!
 
   """E-Mail address"""
   email: String!
+
+  """Employees of the company"""
+  employees: [employee!]
 
   """Language"""
   language: String!
@@ -342,4 +354,23 @@ input employee {
 
   """Phone Number"""
   phone: String!
+}
+
+input private_file {
+  """S3 File Key"""
+  key: String!
+
+  """Public download URL"""
+  url: String!
+}
+
+input public_file {
+  """S3 File Key"""
+  key: String!
+
+  """File owner"""
+  owner: String!
+
+  """Pre-signed download URL"""
+  url: String
 }
