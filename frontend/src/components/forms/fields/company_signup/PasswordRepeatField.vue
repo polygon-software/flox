@@ -2,7 +2,7 @@
   <q-input
       v-model="password"
       dense
-      label="Password"
+      :label="$t('set_password.password')"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
       :rules="[(val) => IS_VALID_PASSWORD(val) || $t('invalid_password')]"
@@ -18,7 +18,7 @@
   <q-input
       v-model="passwordRepeat"
       dense
-      label="Repeat Password"
+      :label="$t('set_password.repeat_password')"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
       :rules="[val => val === password || $t('non_matching_password')]"
@@ -44,11 +44,13 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
 const props = defineProps({
   modelValue: {
     required: false,
-    type: String
+    type: String,
+    default: ''
   },
   rules: {
     type: Array,
     required: false,
+    default: () => []
   }
 });
 

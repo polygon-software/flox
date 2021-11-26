@@ -93,5 +93,13 @@ export default {
     cant_find_module: 'Cannot find module ',
     cache_location_missing: 'Cache Location is missing in mutationObject: ',
     missing_attributes: 'Missing attributes',
+  },
+  set_password: {
+    description: 'Since this is your first login, please set a password.',
+    password: 'Password',
+    repeat_password: 'Repeat password',
+    password_invalid: 'Password is invalid',
+    passwords_not_matching: 'Passwords are not matching',
+    ok: 'OK'
   }
 };
