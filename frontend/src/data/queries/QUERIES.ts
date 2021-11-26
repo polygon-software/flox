@@ -30,10 +30,29 @@ export const ALL_COMPANIES = {
   query: gql`
         query{
             allCompanies{
+              uuid
+              company_name
+              first_name
+              last_name
+              email
+              phone
+              document_upload_enabled
+              domicile_address{
+                street
+                number
+                city
+                zip_code
+              }
+              correspondence_address{
+                street
+                number
+                city
+                zip_code
+              }
+              documents{
                 uuid
-                document_upload_enabled
-                documents
-                __typename
+              }
+              __typename
             }
         }
         `,
