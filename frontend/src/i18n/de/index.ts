@@ -4,6 +4,7 @@ export default {
   loggedIn: 'Angemeldet als {user}',
   login: 'Anmelden',
   signup: 'Registrieren',
+  employees: 'Mitarbeitende',
   employee_signup: 'Mitarbeitende registrieren',
   signup_now: 'Kein Account? Jetzt registrieren:',
   forgot_password: 'Passwort vergessen',
