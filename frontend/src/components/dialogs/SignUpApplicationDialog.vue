@@ -164,15 +164,27 @@ function hide(): void {
   dialog.value?.hide()
 }
 
+/**
+ * On OK, enable document upload for the company and send e-mail
+ */
 async function onOk(): Promise<void> {
+  // Verify all required attributes present
+  const company = props.company
+  if([company, company.uuid, company.email].some((value) => value === undefined || value === null)){
+    throw new Error('Missing data for company; cannot activate account')
+  }
+
   // Enable on database
   await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: props.company.uuid})
 
-  // Send e-mail
+  // Set up e-mail parameters
   const from = 'david.wyss@polygon-software.ch' // TODO set from .env
-  const to = props.company.email
+  const to = company.email
   const subject = 'Your account' // TODO set
-  const body = 'See your account by visiting http://localhost:8080/login'// TODO generate one-time login URL
+  const url = `http://localhost:8080/document_upload?uuid=${company.uuid ?? ''}`
+  const body = `See your account by visiting\n${url}`// TODO HTML mail template
+
+  // Send e-mail
   await sendEmail(from, to, subject, body)
 
   hide()
