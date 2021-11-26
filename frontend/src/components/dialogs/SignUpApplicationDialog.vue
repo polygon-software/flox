@@ -181,7 +181,8 @@ async function onOk(): Promise<void> {
   const from = 'david.wyss@polygon-software.ch' // TODO set from .env
   const to = company.email
   const subject = 'Your account' // TODO set
-  const url = `http://localhost:8080/document_upload?uuid=${company.uuid ?? ''}`
+  const encodedUuid = btoa(company.uuid); // Base64 encode UUID
+  const url = `http://localhost:8080/document_upload?cid=${encodedUuid}`
   const body = `Upload your documents at the following link:\n${url}`// TODO HTML mail template
 
   // Send e-mail
