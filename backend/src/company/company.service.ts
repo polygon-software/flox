@@ -7,6 +7,7 @@ import { DeleteCompanyInput } from './dto/input/delete-company.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
+import { generateHumanReadableId } from '../helpers';
 
 @Injectable()
 export class CompanyService {
@@ -23,6 +24,7 @@ export class CompanyService {
   ): Promise<Company> {
     const company = this.companyRepository.create({
       ...createCompanyInput,
+      readable_id: generateHumanReadableId(),
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
       cognito_id: null,
       documents: null,

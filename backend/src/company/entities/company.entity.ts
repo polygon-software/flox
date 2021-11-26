@@ -1,5 +1,5 @@
 import { ObjectType, Field, InputType } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import {
   IsString,
   IsBoolean,
@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 import { Address } from '../../address/entities/address.entity';
 import { Person } from '../../person/entities/person.entity';
-import { Employee } from '../../employee/entities/employee.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
 
 /**
@@ -22,6 +21,11 @@ import PrivateFile from '../../file/entities/private_file.entity';
 @InputType('company')
 @Entity({ name: 'company' })
 export class Company extends Person {
+  @Field(() => String, { description: 'Human-readable ID' })
+  @Column()
+  @IsString()
+  readable_id: string;
+
   @Field(() => String, { description: 'Company Name' })
   @Column()
   @IsString()

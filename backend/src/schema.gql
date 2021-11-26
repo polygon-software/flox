@@ -56,6 +56,9 @@ type Company {
   """Phone Number"""
   phone: String!
 
+  """Human-readable ID"""
+  readable_id: String!
+
   """Company UID"""
   uid: String!
 
@@ -325,6 +328,9 @@ input company {
 
   """Phone Number"""
   phone: String!
+
+  """Human-readable ID"""
+  readable_id: String!
 
   """Company UID"""
   uid: String!

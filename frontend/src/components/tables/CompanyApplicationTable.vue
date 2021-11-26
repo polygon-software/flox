@@ -40,6 +40,7 @@ import {i18n} from 'boot/i18n';
 import {Company} from 'src/data/types/Company';
 import SignUpApplicationDialog from 'components/dialogs/SignUpApplicationDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
+import {makeHumanReadable} from 'src/helpers/formatting-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
