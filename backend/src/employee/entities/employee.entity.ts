@@ -1,7 +1,7 @@
 import { ObjectType, Field, InputType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { IsEmail, IsPhoneNumber, IsString } from 'class-validator';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Company } from '../../company/entities/company.entity';
 
 @ObjectType()
@@ -37,6 +37,6 @@ export class Employee extends Person {
 
   @Field(() => Company, { description: 'Company' })
   @JoinColumn()
-  @OneToOne(() => Company)
+  @ManyToOne(() => Company)
   company: Company;
 }

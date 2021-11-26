@@ -30,7 +30,6 @@ const columns = [
 const queryResult = subscribeToQuery(ALL_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
-  console.log('Got result:', queryResult.value)
   return queryResult.value ?? []
 })
 
