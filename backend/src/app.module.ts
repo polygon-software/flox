@@ -11,6 +11,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { ItemModule } from './item/item.module';
 import { CompanyModule } from './company/company.module';
+import * as Joi from 'joi';
+import { FileModule } from './file/file.module';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -35,6 +38,25 @@ import { CompanyModule } from './company/company.module';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+      validationSchema: Joi.object({
+        // Database
+        DB_DATABASE: Joi.string().required(),
+        DB_USER: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+        DB_HOST: Joi.string().required(),
+
+        // Ports
+        NOCODB_PORT: Joi.number().required(),
+        SERVER_PORT: Joi.number().required(),
+        DB_PORT: Joi.number().required(),
+
+        // AWS
+        AWS_REGION: Joi.string().required(),
+        AWS_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+        AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
+        AWS_PRIVATE_BUCKET_NAME: Joi.string().required(),
+      }),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -53,12 +75,17 @@ import { CompanyModule } from './company/company.module';
     UserModule,
     CompanyModule,
     ItemModule,
+    FileModule,
   ],
   providers: [
     JwtStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

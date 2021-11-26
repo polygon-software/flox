@@ -23,13 +23,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
+        // TODO set via env variable
         jwksUri:
           'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_DGPNZZeuX/.well-known/jwks.json',
       }),
     });
   }
 
+  /**
+   * Validates the JWT token and appends the user to the Request
+   * @param {JwtStrategyValidationPayload} payload - decoded JSON Web Token (JWT)
+   */
   validate(payload: JwtStrategyValidationPayload): JwtStrategyValidationResult {
-    return { userId: payload.sub, username: payload.username };
+    const username = payload['cognito:username'];
+    return { userId: payload.sub, username: username };
   }
 }
