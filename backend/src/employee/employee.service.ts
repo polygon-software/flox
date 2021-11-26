@@ -4,6 +4,8 @@ import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Employee } from './entities/employee.entity';
+import { GetCompaniesArgs } from '../company/dto/args/get-companies.args';
+import { Company } from '../company/entities/company.entity';
 
 @Injectable()
 export class EmployeeService {
@@ -25,11 +27,20 @@ export class EmployeeService {
   }
 
   /**
-   * Returns all employees
-   * TODO also add for a given company/"mine" rule
+   * Returns all employees within the database
    */
   getAllEmployees(): Promise<Employee[]> {
     return this.employeeRepository.find();
+  }
+
+  /**
+   * Gets a list of companies by UUIDs
+   * @param {Company} company - the company whose employees shall be fetched
+   */
+  getEmployees(company: Company): Promise<Employee[]> {
+    return this.employeeRepository.find({
+      company: company,
+    });
   }
 
   findOne(id: number) {

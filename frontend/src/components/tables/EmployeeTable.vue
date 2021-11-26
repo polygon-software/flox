@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import {computed, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {ALL_EMPLOYEES} from 'src/data/queries/QUERIES';
+import {MY_EMPLOYEES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 
 
@@ -27,7 +27,7 @@ const columns = [
   { name: 'email', label: i18n.global.t('email'), field: 'email', sortable: false },
 ]
 
-const queryResult = subscribeToQuery(ALL_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []

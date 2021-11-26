@@ -4,7 +4,11 @@ import { Employee } from './entities/employee.entity';
 import { CreateEmployeeInput } from './dto/input/create-employee.input';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 import { Public } from '../auth/authentication.decorator';
-import { AnyRole, CurrentUser } from '../auth/authorization.decorator';
+import {
+  AdminOnly,
+  AnyRole,
+  CurrentUser,
+} from '../auth/authorization.decorator';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 
@@ -35,10 +39,30 @@ export class EmployeeResolver {
     });
   }
 
-  @Public() // TODO restrict to SOI role only
+  @AdminOnly()
   @Query(() => [Employee], { name: 'allEmployees' })
   async getAllEmployees(): Promise<Employee[]> {
     return this.employeeService.getAllEmployees();
+  }
+
+  /**
+   * Get the list of employees for the currently logged in company account
+   */
+  @AnyRole() // TODO management only
+  @Query(() => [Employee], { name: 'myEmployees' })
+  async getMyEmployees(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Employee[]> {
+    // Get company where user's UUID matches cognitoID
+    const company = await this.companyService.getCompany({
+      cognito_id: user.userId,
+    } as GetCompanyArgs);
+
+    if (!company) {
+      throw new Error(`No company found for ${user.userId}`);
+    }
+
+    return this.employeeService.getEmployees(company);
   }
 
   @Query(() => Employee, { name: 'employee' })
