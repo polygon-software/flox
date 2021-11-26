@@ -6,13 +6,12 @@ import {NavigationFailure, Router, RouteRecordRaw} from 'vue-router';
 
 export class RouterService {
 
-    // Router instance
-    router: Router
+  // Router instance
+  router: Router
 
-    constructor(router: Router) {
-        this.router = router
-    }
-
+  constructor(router: Router) {
+      this.router = router
+  }
 
   /**
    * Routes to a given route, as defined in ROUTES constant

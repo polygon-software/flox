@@ -2,10 +2,20 @@
   <q-page class="flex flex-center">
     <div class="column">
       <GenericForm
+        v-if="companyUuid"
         :finish-label="$t('finish_signup')"
         :pages="pages"
         @submit="onSubmit"
       />
+      <q-card
+        v-else
+        class="q-pa-md bg-red"
+      >
+        <h2>
+          Error: Invalid link...
+        </h2>
+        <!-- TODO styling -->
+      </q-card>
     </div>
   </q-page>
 </template>
@@ -17,8 +27,14 @@ import {Form} from 'src/helpers/form-helpers';
 import {ref, Ref} from 'vue';
 import {QForm} from 'quasar';
 import GenericForm from 'src/components/forms/GenericForm.vue'
+import {useRoute} from 'vue-router';
 
 const emit = defineEmits(['submit'])
+
+// Get base64-encoded UUID from URL params
+const route = useRoute()
+const companyId = route.query.cid
+const companyUuid: string|null= companyId ? Buffer.from(companyId, 'base64').toString() : null;
 
 const form_ref: Ref<QForm|null> = ref(null)
 
@@ -34,9 +50,7 @@ const pages = [
   },
 ]
 
-// Get copy of prop form
-const _pages = pages ? pages as Record<string, unknown>[] : undefined
-const form: Form = new Form(_pages)
+const form: Form = new Form(pages)
 
 /**
  * Validates and, if valid, submits the form with all entered values
