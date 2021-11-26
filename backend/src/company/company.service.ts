@@ -24,37 +24,49 @@ export class CompanyService {
     const company = this.companyRepository.create({
       ...createCompanyInput,
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
+      cognito_id: null,
       // TODO: other default values
     });
 
-    return this.companyRepository.save(company);
+    return await this.companyRepository.save(company);
   }
 
   /**
    * Gets a list of companies by UUIDs
    * @param {GetCompaniesArgs} getCompaniesArgs - the arguments, containing a list of uuids
    */
-  getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
+  async getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
     if (getCompaniesArgs.uuids !== undefined) {
-      return this.companyRepository.findByIds(getCompaniesArgs.uuids);
+      return await this.companyRepository.findByIds(getCompaniesArgs.uuids);
     } else {
-      return this.companyRepository.find();
+      return await this.companyRepository.find();
     }
   }
 
   /**
    * Returns all companies in the database
    */
-  getAllCompanies(): Promise<Company[]> {
-    return this.companyRepository.find();
+  async getAllCompanies(): Promise<Company[]> {
+    return await this.companyRepository.find();
   }
 
   /**
    * Returns a single company
    * @param {GetCompanyArgs} getCompanyArgs - the arguments to get a company for, containing a UUID
    */
-  getCompany(getCompanyArgs: GetCompanyArgs): Promise<Company> {
-    return this.companyRepository.findOne(getCompanyArgs.uuid);
+  async getCompany(getCompanyArgs: GetCompanyArgs): Promise<Company> {
+    if (!getCompanyArgs.uuid && !getCompanyArgs.cognito_id) {
+      throw new Error('Must specify either uuid or cognito_id on getCompany');
+    }
+    if (getCompanyArgs.uuid) {
+      // Case 1: search by UUID
+      return await this.companyRepository.findOne(getCompanyArgs.uuid);
+    } else if (getCompanyArgs.cognito_id) {
+      // Case 2: search by Cognito account ID
+      return await this.companyRepository.findOne({
+        cognito_id: getCompanyArgs.cognito_id,
+      });
+    }
   }
 
   /**
@@ -66,7 +78,7 @@ export class CompanyService {
   ): Promise<Company> {
     const company = this.companyRepository.create(updateCompanyInput);
     await this.companyRepository.update(updateCompanyInput.uuid, company);
-    return this.companyRepository.findOne(updateCompanyInput.uuid);
+    return await this.companyRepository.findOne(updateCompanyInput.uuid);
   }
 
   /**
@@ -93,6 +105,6 @@ export class CompanyService {
     const company = await this.companyRepository.findOne(uuid);
     company.document_upload_enabled = true;
     await this.companyRepository.update(uuid, company);
-    return this.companyRepository.findOne(uuid);
+    return await this.companyRepository.findOne(uuid);
   }
 }

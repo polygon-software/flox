@@ -49,7 +49,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/AdminDashboardPage.vue') }],
   },
   'NEW_EMPLOYEE_PAGE': {
-    path: '/new_employee_page',
+    path: '/new_employee',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
   },

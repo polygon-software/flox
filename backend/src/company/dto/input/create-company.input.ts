@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, PartialType } from '@nestjs/graphql';
 import {
   IsBoolean,
   IsEmail,
@@ -9,18 +9,14 @@ import {
   IsString,
 } from 'class-validator';
 import { CreateAddressInput } from 'src/address/dto/input/create-address.input';
+import { CreatePersonInput } from '../../../person/dto/create-person.input';
 
 @InputType()
-export class CreateCompanyInput {
+export class CreateCompanyInput extends PartialType(CreatePersonInput) {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
   company_name: string;
-
-  @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
-  person_name: string;
 
   @Field(() => String)
   @IsString()

@@ -1,6 +1,5 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
+import { ObjectType, Field, InputType } from '@nestjs/graphql';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import {
   IsString,
   IsBoolean,
@@ -9,6 +8,8 @@ import {
   IsEmail,
 } from 'class-validator';
 import { Address } from '../../address/entities/address.entity';
+import { Person } from '../../person/entities/person.entity';
+import { Employee } from '../../employee/entities/employee.entity';
 
 /**
  * An entity representing a company account
@@ -16,17 +17,13 @@ import { Address } from '../../address/entities/address.entity';
  */
 
 @ObjectType()
+@InputType('company')
 @Entity({ name: 'company' })
-export class Company extends BaseEntity {
+export class Company extends Person {
   @Field(() => String, { description: 'Company Name' })
   @Column()
   @IsString()
   company_name: string;
-
-  @Field(() => String, { description: 'Contact person Name' })
-  @Column()
-  @IsString()
-  person_name: string;
 
   @Field(() => String, { description: 'Language' })
   @Column()
@@ -66,11 +63,6 @@ export class Company extends BaseEntity {
   @IsBoolean()
   branch_structure: boolean;
 
-  // TODO sub-users
-  // @Field(() => [Item], { description: 'Items of the user', nullable: true })
-  // @OneToMany(() => Item, (item) => item.user)
-  // items: Item[];
-
   @Field(() => Boolean, {
     description:
       'Whether document upload is enabled (initial request granted by SOI)',
@@ -78,4 +70,14 @@ export class Company extends BaseEntity {
   @Column()
   @IsBoolean()
   document_upload_enabled: boolean;
+
+  // TODO documents
+
+  // @JoinColumn() TODO re-add
+  // @Field(() => [Employee], {
+  //   description: 'Employees of the company',
+  //   nullable: true,
+  // })
+  // @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
+  // employees: Employee[];
 }
