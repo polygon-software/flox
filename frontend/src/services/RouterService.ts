@@ -20,6 +20,7 @@ export class RouterService {
    * @param {Record<string, unknown>} [variables] - variables to pass to the route, if any
    */
   async routeTo(to: RouteRecordRaw, variables?: Record<string, unknown>) : Promise<void | NavigationFailure | undefined>{
-      return this.router.push(to)
+    // TODO apply variables
+    return this.router.push(to)
   }
 }
