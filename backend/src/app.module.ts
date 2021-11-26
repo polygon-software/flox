@@ -10,9 +10,10 @@ import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { ItemModule } from './item/item.module';
-import * as Joi from 'joi';
-import { FileModule } from './file/file.module';
 import { CompanyModule } from './company/company.module';
+import { EmployeeModule } from './employee/employee.module';
+import { FileModule } from './file/file.module';
+import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
 
 @Module({
@@ -75,6 +76,7 @@ import { RolesGuard } from './auth/roles.guard';
     UserModule,
     CompanyModule,
     ItemModule,
+    EmployeeModule,
     FileModule,
   ],
   providers: [

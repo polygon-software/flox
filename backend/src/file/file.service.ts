@@ -26,8 +26,10 @@ export class FileService {
   constructor(
     @InjectRepository(PublicFile)
     private publicFilesRepository: Repository<PublicFile>,
+
     @InjectRepository(PrivateFile)
     private privateFilesRepository: Repository<PrivateFile>,
+
     private readonly configService: ConfigService,
   ) {}
 
@@ -100,7 +102,7 @@ export class FileService {
 
   /**
    * Gets a private file from the database
-   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID TODO more?
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID
    */
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
@@ -108,7 +110,7 @@ export class FileService {
     const fileInfo = await this.privateFilesRepository.findOne(
       getPrivateFileArgs.uuid,
     );
-    // TODO actual authentication
+    // TODO Application specific: Verify file ownership or access rights
     if (fileInfo) {
       const options: Record<string, unknown> = {};
       // If expiration duration is set, apply
@@ -134,29 +136,5 @@ export class FileService {
     }
 
     throw new NotFoundException();
-  }
-
-  /**
-   * Gets a private file from the database TODO not working yet
-   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID TODO more?
-   */
-  async getPrivateFileAsStream(
-    getPrivateFileArgs: GetPrivateFileArgs,
-  ): Promise<ReadableStream<unknown>> {
-    const fileInfo = await this.privateFilesRepository.findOne(
-      getPrivateFileArgs.uuid,
-    );
-    // TODO actual authentication
-    if (fileInfo) {
-      const fileStream = await this.s3.getObject({
-        Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
-        Key: fileInfo.key,
-      });
-      const stream = fileStream.Body;
-      console.log('GET file stream', stream, 'with info', fileInfo);
-      return stream as ReadableStream; // TODO
-    }
-    throw new NotFoundException();
-    //return this.privateFilesRepository.findOne(getPrivateFileArgs.uuid);
   }
 }

@@ -24,6 +24,7 @@ export class CompanyService {
     const company = this.companyRepository.create({
       ...createCompanyInput,
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
+      cognito_id: null,
       // TODO: other default values
     });
 
@@ -34,7 +35,7 @@ export class CompanyService {
    * Gets a list of companies by UUIDs
    * @param {GetCompaniesArgs} getCompaniesArgs - the arguments, containing a list of uuids
    */
-  getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
+  async getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
     if (getCompaniesArgs.uuids !== undefined) {
       return this.companyRepository.findByIds(getCompaniesArgs.uuids);
     } else {
@@ -45,7 +46,7 @@ export class CompanyService {
   /**
    * Returns all companies in the database
    */
-  getAllCompanies(): Promise<Company[]> {
+  async getAllCompanies(): Promise<Company[]> {
     return this.companyRepository.find();
   }
 
@@ -53,8 +54,19 @@ export class CompanyService {
    * Returns a single company
    * @param {GetCompanyArgs} getCompanyArgs - the arguments to get a company for, containing a UUID
    */
-  getCompany(getCompanyArgs: GetCompanyArgs): Promise<Company> {
-    return this.companyRepository.findOne(getCompanyArgs.uuid);
+  async getCompany(getCompanyArgs: GetCompanyArgs): Promise<Company> {
+    if (!getCompanyArgs.uuid && !getCompanyArgs.cognito_id) {
+      throw new Error('Must specify either uuid or cognito_id on getCompany');
+    }
+    if (getCompanyArgs.uuid) {
+      // Case 1: search by UUID
+      return this.companyRepository.findOne(getCompanyArgs.uuid);
+    } else if (getCompanyArgs.cognito_id) {
+      // Case 2: search by Cognito account ID
+      return this.companyRepository.findOne({
+        cognito_id: getCompanyArgs.cognito_id,
+      });
+    }
   }
 
   /**

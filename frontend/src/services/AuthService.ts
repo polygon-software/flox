@@ -14,7 +14,7 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
-import {i18n} from "boot/i18n";
+import {i18n} from 'boot/i18n';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as

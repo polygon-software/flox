@@ -37,9 +37,45 @@ export const ALL_COMPANIES = {
             }
         }
         `,
-  tables: ['companies'],
+  tables: ['company'],
   cacheLocation: 'allCompanies'
 }
 
+export const ALL_EMPLOYEES = {
+  query: gql`
+        query{
+            allEmployees{
+              uuid
+              first_name
+              last_name
+              function
+              email
+              phone
+              __typename
+            }
+        }
+        `,
+  tables: ['employee'],
+  cacheLocation: 'allEmployees'
+}
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES];
+export const MY_EMPLOYEES = {
+  query: gql`
+        query{
+            myEmployees{
+              uuid
+              first_name
+              last_name
+              function
+              email
+              phone
+              __typename
+            }
+        }
+        `,
+  tables: ['employee'],
+  cacheLocation: 'myEmployees'
+}
+
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, ALL_EMPLOYEES];

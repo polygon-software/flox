@@ -40,7 +40,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('full_name') }}:</p>
-                <p class="col-7">{{ props.companyData.person_name }}</p>
+                <p class="col-7">{{ props.companyData.first_name }} {{ props.companyData.last_name }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -109,8 +109,8 @@
           class="q-ma-md"
           :label="$t('cancel')"
           color="primary"
-          @click="onCancel"
           flat
+          @click="onCancel"
         />
       </q-card-actions>
     </q-card>

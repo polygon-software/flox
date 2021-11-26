@@ -25,7 +25,10 @@ const first_name = ref('')
 const last_name = ref('')
 
 function emitValue(){
-  emit('change', `${first_name.value} ${last_name.value}`)
+  emit('change', {
+    first_name: first_name.value,
+    last_name: last_name.value
+  })
 }
 
 </script>

@@ -11,6 +11,10 @@ import { Public } from '../auth/authentication.decorator';
 export class FileResolver {
   constructor(private readonly fileService: FileService) {}
 
+  /**
+   * Gets a public file
+   * @param {GetPublicFileArgs} getPublicFileArgs - search arguments, containing UUID
+   */
   @Public()
   @Query(() => PublicFile, { name: 'getPublicFile' })
   async getPublicFile(
@@ -19,7 +23,11 @@ export class FileResolver {
     return await this.fileService.getPublicFile(getPublicFileArgs);
   }
 
-  @AnyRole() // TODO application specific: set appropriate guards here
+  /**
+   * Gets a private file
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - search arguments, containing UUID
+   */
+  @AnyRole() // TODO application specific: set appropriate guards here, restrict to file owner
   @Query(() => PrivateFile, { name: 'getPrivateFile' })
   async getPrivateFile(
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
