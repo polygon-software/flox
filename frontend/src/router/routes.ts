@@ -31,6 +31,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/ManagementDashboardPage.vue') }],
   },
 
+  'EMPLOYEE_DASHBOARD': {
+    path: '/employee-dashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/EmployeeDashboardPage.vue') }],
+  },
+
   'SIGNUP': {
     path: '/company-signup',
     component: () => import('layouts/MainLayout.vue'),
@@ -75,7 +81,6 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SUCCESS,
   ROUTES.SIGNUP,
   ROUTES.DOCUMENT_UPLOAD,
-  ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
+  ROUTES.EMPLOYEE_DASHBOARD //TODO: Add security!!!
 ]
 
-//TODO: Add semi-protected routes
