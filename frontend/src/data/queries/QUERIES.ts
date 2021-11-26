@@ -37,6 +37,8 @@ export const ALL_COMPANIES = {
               last_name
               email
               phone
+              language
+              uid
               document_upload_enabled
               domicile_address{
                 street

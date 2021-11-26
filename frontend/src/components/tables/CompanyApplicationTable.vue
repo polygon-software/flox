@@ -61,12 +61,12 @@ const computedResult = computed(()=>{
 /**
  * Opens the dialog to enable the file upload
  */
-function enableUpload(companyData: Company) {
+function enableUpload(company: Company) {
   $q.dialog({
     title: 'SignUpApplication',
     component: SignUpApplicationDialog,
     componentProps: {
-      companyData: companyData
+      company: company
     }
   })
 }
