@@ -38,7 +38,7 @@ export class EmployeeResolver {
     if (!company) {
       throw new Error(`No company found for ${user.userId}`);
     }
-    return this.employeeService.createEmployee({
+    return await this.employeeService.createEmployee({
       ...createEmployeeInput,
       company,
     });
@@ -50,7 +50,7 @@ export class EmployeeResolver {
   @AdminOnly()
   @Query(() => [Employee], { name: 'allEmployees' })
   async getAllEmployees(): Promise<Employee[]> {
-    return this.employeeService.getAllEmployees();
+    return await this.employeeService.getAllEmployees();
   }
 
   /**
@@ -70,6 +70,6 @@ export class EmployeeResolver {
       throw new Error(`No company found for ${user.userId}`);
     }
 
-    return this.employeeService.getEmployees(company);
+    return await this.employeeService.getEmployees(company);
   }
 }

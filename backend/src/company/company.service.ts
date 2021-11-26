@@ -29,7 +29,7 @@ export class CompanyService {
       // TODO: other default values
     });
 
-    return this.companyRepository.save(company);
+    return await this.companyRepository.save(company);
   }
 
   /**
@@ -38,9 +38,9 @@ export class CompanyService {
    */
   async getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
     if (getCompaniesArgs.uuids !== undefined) {
-      return this.companyRepository.findByIds(getCompaniesArgs.uuids);
+      return await this.companyRepository.findByIds(getCompaniesArgs.uuids);
     } else {
-      return this.companyRepository.find();
+      return await this.companyRepository.find();
     }
   }
 
@@ -48,7 +48,7 @@ export class CompanyService {
    * Returns all companies in the database
    */
   async getAllCompanies(): Promise<Company[]> {
-    return this.companyRepository.find();
+    return await this.companyRepository.find();
   }
 
   /**
@@ -61,10 +61,10 @@ export class CompanyService {
     }
     if (getCompanyArgs.uuid) {
       // Case 1: search by UUID
-      return this.companyRepository.findOne(getCompanyArgs.uuid);
+      return await this.companyRepository.findOne(getCompanyArgs.uuid);
     } else if (getCompanyArgs.cognito_id) {
       // Case 2: search by Cognito account ID
-      return this.companyRepository.findOne({
+      return await this.companyRepository.findOne({
         cognito_id: getCompanyArgs.cognito_id,
       });
     }
@@ -79,7 +79,7 @@ export class CompanyService {
   ): Promise<Company> {
     const company = this.companyRepository.create(updateCompanyInput);
     await this.companyRepository.update(updateCompanyInput.uuid, company);
-    return this.companyRepository.findOne(updateCompanyInput.uuid);
+    return await this.companyRepository.findOne(updateCompanyInput.uuid);
   }
 
   /**
@@ -106,6 +106,6 @@ export class CompanyService {
     const company = await this.companyRepository.findOne(uuid);
     company.document_upload_enabled = true;
     await this.companyRepository.update(uuid, company);
-    return this.companyRepository.findOne(uuid);
+    return await this.companyRepository.findOne(uuid);
   }
 }

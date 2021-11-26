@@ -97,7 +97,7 @@ export class FileService {
   async getPublicFile(
     getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return this.publicFilesRepository.findOne(getPublicFileArgs.uuid);
+    return await this.publicFilesRepository.findOne(getPublicFileArgs.uuid);
   }
 
   /**

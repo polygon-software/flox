@@ -54,7 +54,7 @@ export class CompanyResolver {
   async createCompany(
     @Args('createCompanyInput') createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
-    return this.companyService.createCompany(createCompanyInput);
+    return await this.companyService.createCompany(createCompanyInput);
   }
 
   /**
