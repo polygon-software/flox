@@ -1,5 +1,5 @@
-import {useApolloClient, useMutation, useQuery, UseQueryReturn} from '@vue/apollo-composable';
-import {ALL_USERS, QUERIES} from '../data/queries/QUERIES';
+import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
+import {QUERIES} from '../data/queries/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
@@ -135,7 +135,7 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
 
     apolloClient.watchQuery({query: query.query}).subscribe({
       next(value: ApolloQueryResult<Record<string, unknown>>) {
-        res.value = value.data[ALL_USERS.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+        res.value = value.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
       }
     })
   })

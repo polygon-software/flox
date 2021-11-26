@@ -135,7 +135,6 @@ async function onSubmit(){
   if(is_valid){
     emit('submit', form.values.value)
   }
-
 }
 
 

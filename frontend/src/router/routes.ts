@@ -28,7 +28,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'MANAGEMENT_DASHBOARD': {
     path: '/management-dashboard',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ManagementDashboard.vue') }],
+    children: [{ path: '', component: () => import('pages/ManagementDashboardPage.vue') }],
   },
 
   'SIGNUP': {
@@ -43,12 +43,22 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/SuccessPage.vue') }],
   },
 
+  'DOCUMENT_UPLOAD': {
+    path: '/document-upload',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/DocumentUploadPage.vue') }],
+  },
+
+  'ADMIN_DASHBOARD': {
+    path: '/admin_dashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AdminDashboardPage.vue') }],
+  },
   'NEW_EMPLOYEE_PAGE': {
-    path: '/new-employee-page',
+    path: '/new-employee',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
   },
-
 
   // Wildcard route for non-covered routes
   'WILDCARD': {
@@ -60,4 +70,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 export default ROUTES
 
 // Routes that can be accessed without being logged in
-export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS, ROUTES.SIGNUP]
+export const PUBLIC_ROUTES: RouteRecordRaw[] = [
+  ROUTES.LOGIN,
+  ROUTES.SUCCESS,
+  ROUTES.SIGNUP,
+  ROUTES.DOCUMENT_UPLOAD,
+  ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
+]
+
+//TODO: Add semi-protected routes

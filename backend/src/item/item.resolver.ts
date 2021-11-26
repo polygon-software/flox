@@ -3,7 +3,7 @@ import { ItemService } from './item.service';
 import { Item } from './entities/item.entity';
 import { CreateItemInput } from './dto/create-item.input';
 import { UpdateItemInput } from './dto/update-item.input';
-import { Public } from '../auth/auth.guard';
+import { Public } from '../auth/authentication.decorator';
 
 @Resolver(() => Item)
 export class ItemResolver {
