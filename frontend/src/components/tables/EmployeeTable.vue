@@ -1,5 +1,5 @@
 <template>
-  <div class="column">
+  <div class="column" style="margin-bottom: 32px">
     <q-table
       table-header-class="bg-grey-2"
       title="Employees"
@@ -30,6 +30,7 @@ const columns = [
 const queryResult = subscribeToQuery(ALL_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
+  console.log('Got result:', queryResult.value)
   return queryResult.value ?? []
 })
 

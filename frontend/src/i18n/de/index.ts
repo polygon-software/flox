@@ -58,7 +58,7 @@ export default {
   must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
   redirected: 'Sie werden in Kürze weitergeleitet...',
   successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
-  chef_dashboard: 'Chef Dashboard',
+  management_dashboard: 'Management Dashboard',
   register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
   confirmed_registration: 'Registrierung bestätigt',
   redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',

@@ -9,7 +9,7 @@
         class="q-ma-md col text-center"
         style="font-size: x-large"
       >
-        {{ $t('chef_dashboard') }}
+        {{ $t('management_dashboard') }}
       </p>
 
       <!-- Employee Overview -->

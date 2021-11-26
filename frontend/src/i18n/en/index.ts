@@ -57,7 +57,7 @@ export default {
   must_accept_condition_truthful: 'You must have filled in all information truthfully.',
   redirected: 'You will be redirected shortly...',
   successful_application: 'Your application was successful.',
-  chef_dashboard: 'Management Dashboard',
+  management_dashboard: 'Management Dashboard',
   register_new_employee_here: 'Register a new employee here:',
   confirmed_registration: 'Registration confirmed',
   redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
