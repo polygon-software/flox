@@ -84,6 +84,7 @@ export default {
   documents_missing: 'Documents missing',
   documents_available: 'Documents available',
   document_upload: 'File upload',
+  employee_dashboard: 'Employee Dashboard',
   errors: {
     nothing_here: 'Oops. Nothing here...',
     user_not_defined: 'User Pool is not defined',
