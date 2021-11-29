@@ -110,8 +110,14 @@ export default {
     must_accept_conditions: 'You have to accept the terms and conditions.',
     must_accept_condition_truthful: 'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
+    missing_user_type: 'Please select a user type',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
-  }
+  },
+  user_types: {
+    soi_admin: 'SOI Admin',
+    manager: 'Manager',
+    employee: 'Employee',
+  },
 };

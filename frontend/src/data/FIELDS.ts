@@ -7,8 +7,10 @@ import CompanyDataField from 'components/forms/fields/company_signup/CompanyData
 import FullNameField from 'components/forms/fields/company_signup/FullNameField.vue'
 import ConditionsField from 'components/forms/fields/company_signup/ConditionsField.vue'
 import UploadFields from 'components/forms/fields/documentUpload/UploadFields.vue'
+import UserType from 'components/forms/fields/generic/UserType.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
+import {RouteRecordRaw} from 'vue-router';
 
 
 /**
@@ -144,6 +146,13 @@ const FIELDS: Record<string, Field> = {
           rules: [] // Validated by component
       }
   },
+  ROUTE_TARGET: {
+      key: 'route_target',
+      component: markRaw(UserType),
+      attributes: {
+          rules: [(val: string): boolean|string => val !== null || i18n.global.t('errors.missing_user_type')] // No validation needed
+      }
+  }
 }
 
 export {FIELDS}

@@ -22,7 +22,7 @@ export default {
   account_data: {
     authentication: 'Authentifizierung',
     email: 'E-Mail',
-    username: 'Nutzername',
+    username: 'Benutzername',
     password: 'Passwort',
     repeat_password: 'Passwort wiederholen',
     account: 'Account',
@@ -111,8 +111,14 @@ export default {
     must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
     must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
+    missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
-  }
+  },
+  user_types: {
+    soi_admin: 'SOI Administrator',
+    manager: 'Manager',
+    employee: 'Mitarbeiter',
+  },
 };
