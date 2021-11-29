@@ -3,7 +3,6 @@ export default {
     yes: 'Yes',
     no: 'No',
     new: 'New',
-    ok: 'OK'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -74,6 +73,7 @@ export default {
     next_step: 'Next',
     cancel: 'Cancel',
     submit: 'Submit',
+    ok: 'OK',
   },
   documents: {
     documents_missing: 'Documents missing',

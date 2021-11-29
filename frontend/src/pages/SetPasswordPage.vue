@@ -5,7 +5,7 @@
       style="width: 500px;"
     >
       <GenericForm
-        :finish-label="$t('set_password.ok')"
+        :finish-label="$t('buttons.ok')"
         :pages="pages"
         @submit="submitPassword"
       />
