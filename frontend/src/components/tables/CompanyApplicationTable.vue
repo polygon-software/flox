@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, Ref} from 'vue';
+import {computed, inject, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {ALL_COMPANIES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
@@ -45,8 +45,10 @@ import {Company} from 'src/data/types/Company';
 import SignUpApplicationDialog from 'components/dialogs/SignUpApplicationDialog.vue';
 import ValidateDocumentsDialog from 'components/dialogs/ValidateDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
+import {AuthenticationService} from 'src/services/AuthService';
 
 const $q: QVueGlobals = useQuasar()
+const $authService: AuthenticationService = inject('$authService')
 
 // ----- Data -----
 const columns = [
@@ -84,7 +86,8 @@ function showDocumentValidationDialog(company: Company) {
     title: 'ValidateDocuments',
     component: ValidateDocumentsDialog,
     componentProps: {
-      company: company
+      company: company,
+      authService: $authService
     }
   })
 }

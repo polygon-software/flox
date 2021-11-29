@@ -56,7 +56,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import { PropType, ref, Ref} from 'vue'
+import {inject, PropType, reactive, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
@@ -64,6 +64,7 @@ import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import { openURL } from 'quasar'
+import {AuthenticationService} from 'src/services/AuthService';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -74,6 +75,10 @@ const props = defineProps({
     type: Object as PropType<Company>,
     required: true
   },
+  authService: {
+    type: AuthenticationService,
+    required: true,
+  }
 })
 
 // Clone prop so we can add URLs
@@ -112,10 +117,24 @@ function hide(): void {
 /**
  * On OK, create account and send e-mail
  */
-function onOk(): void {
-  // TODO unlock account
+async function onOk(): Promise<void> {
+  if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){
+    throw new Error('Company missing data') // TODO use ErrorService and show popup
+  }
 
-  //hide()
+  // TODO disable file upload for
+  const password = 'asdfASDF1234&' // TODO randomgenerate
+
+  await props.authService.signUpNewUser(
+    props.company.readable_id ?? '',
+    props.company.email ?? '',
+    password
+  )
+
+  // TODO change file ownership?
+  // TODO show nice confirmation prompt
+
+  hide()
 }
 
 function onReject(): void {

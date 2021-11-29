@@ -156,6 +156,34 @@ export class AuthenticationService {
     this.showEmailVerificationDialog()
   }
 
+
+  /**
+   * TODO description, consolidate with signUp() function
+   * TODO make adaptable to other parameters via direct handling of {attributes} param
+   * @param username {string} - the chosen username
+   * @param email {string} - the authentication's e-mail address -> TODO move to attributes
+   * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
+   */
+  async signUpNewUser(username: string, email: string, password: string): Promise<void> {
+    const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
+      const attributes = [];
+      attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
+      // TODO disable requirement on AWS @thommann
+      attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
+      this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
+        if (err) {
+          // TODO
+          console.error(err)
+          reject();
+        }
+        if(result){
+          resolve(result);
+        }
+      })
+    })
+  }
+
+
   /**
    * Logs out the currently logged in authentication (if any)
    */

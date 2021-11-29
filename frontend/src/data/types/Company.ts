@@ -20,9 +20,10 @@ export class Company {
   document_upload_enabled: boolean|null
   documents: Array<Record<string, unknown>>|null
   cognito_id: string|null
+  readable_id: string|null
 
   constructor(company_name?: string, language?: string, uid?: string, uuid?: string, first_name?: string, last_name?: string, domicile_address?: Address, correspondance_address?: Address,
-              phone?: string, email?: string, branch_structure?: boolean, document_upload_enabled?: boolean, documents?: Array<Record<string, unknown>>, cognito_id?: string) {
+              phone?: string, email?: string, branch_structure?: boolean, document_upload_enabled?: boolean, documents?: Array<Record<string, unknown>>, cognito_id?: string, readable_id?: string) {
 
     this.company_name = company_name ?? null
     this.language = language ?? null
@@ -38,6 +39,7 @@ export class Company {
     this.document_upload_enabled = document_upload_enabled ?? null
     this.documents = documents ?? null
     this.cognito_id = cognito_id ?? null
+    this.readable_id = readable_id ?? null
   }
 
   /**
