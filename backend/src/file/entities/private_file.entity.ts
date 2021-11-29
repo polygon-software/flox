@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
@@ -17,12 +17,12 @@ export class PrivateFile extends BaseEntity {
   @Field(() => String, { description: 'File owner' })
   @Column()
   @IsUUID()
-  public owner: string;
+  owner: string;
 
   @Field(() => String, { description: 'S3 File Key' })
   @Column()
   @IsString()
-  public key: string;
+  key: string;
 
   @Field(() => String, {
     nullable: true,
@@ -30,11 +30,14 @@ export class PrivateFile extends BaseEntity {
   })
   @IsOptional()
   @IsUrl()
-  public url: string;
+  url: string;
 
-  @Field(() => Company, { description: 'Company the file belongs to' })
+  @Field(() => Company, {
+    nullable: true,
+    description: 'Company the file belongs to',
+  })
   @ManyToOne(() => Company, (company) => company.documents)
-  public company: Company;
+  company: Company;
 }
 
 export default PrivateFile;

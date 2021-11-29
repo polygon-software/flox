@@ -31,9 +31,6 @@ export class FileService {
     @InjectRepository(PrivateFile)
     private privateFilesRepository: Repository<PrivateFile>,
 
-    @InjectRepository(Company)
-    private companyRepository: Repository<Company>,
-
     private readonly configService: ConfigService,
   ) {}
 
@@ -75,7 +72,7 @@ export class FileService {
     dataBuffer: Buffer,
     filename: string,
     owner: string,
-    companyUuid?: string,
+    company?: Company,
   ): Promise<PrivateFile> {
     // File upload
     const key = `${uuid()}-${filename}`;
@@ -88,8 +85,8 @@ export class FileService {
     let newFile;
 
     // If file is for company document upload, add ref (otherwise, upload normally)
-    if (companyUuid) {
-      const company = await this.companyRepository.findOne(companyUuid);
+    if (company) {
+      console.log('Create file for', company.uuid);
       newFile = this.privateFilesRepository.create({
         key: key,
         owner: owner,

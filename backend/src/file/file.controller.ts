@@ -10,10 +10,17 @@ import { FileService } from './file.service';
 import fastify = require('fastify');
 import { Public } from '../auth/authentication.decorator';
 import { AnyRole } from '../auth/authorization.decorator';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Company } from '../company/entities/company.entity';
+import { Repository } from 'typeorm';
 
 @Controller()
 export class FileController {
-  constructor(private readonly fileService: FileService) {}
+  constructor(
+    private readonly fileService: FileService,
+    @InjectRepository(Company)
+    private companyRepository: Repository<Company>,
+  ) {}
 
   @Public()
   @Post('/uploadPublicFile')
@@ -82,6 +89,9 @@ export class FileController {
     // TODO: mark file for later owner-change once company has a cognito ID
 
     console.log('Company UUID is', companyUuid, 'from ID', companyId);
+    const company = await this.companyRepository.findOne(companyUuid);
+
+    // TODO: Throw error if invalid company
 
     const file = await req.file();
     const file_buffer = await file.toBuffer();
@@ -89,10 +99,8 @@ export class FileController {
       file_buffer,
       file.filename,
       companyUuid, // Owner; must be changed to cognito ID later
-      companyUuid,
+      company,
     );
-
-    // TODO add to documents array
 
     res.send(new_file);
   }

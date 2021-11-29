@@ -196,7 +196,7 @@ type Mutation {
 
 type PrivateFile {
   """Company the file belongs to"""
-  company: Company!
+  company: Company
 
   """S3 File Key"""
   key: String!
@@ -369,7 +369,7 @@ input private_file {
 
 input public_file {
   """Company the file belongs to"""
-  company: company!
+  company: company
 
   """S3 File Key"""
   key: String!

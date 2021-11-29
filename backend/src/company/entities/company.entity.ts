@@ -82,7 +82,11 @@ export class Company extends Person {
     nullable: true,
     description: 'Documents of the company',
   })
-  @OneToMany(() => PrivateFile, (file) => file.owner, { cascade: true })
+  @OneToMany(() => PrivateFile, (file) => file.company, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinColumn()
   documents: PrivateFile[];
 
   // @Column() TODO: Possibly add employee ID array / determine if needed
