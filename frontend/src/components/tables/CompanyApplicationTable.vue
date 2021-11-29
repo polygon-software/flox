@@ -24,7 +24,7 @@
           <q-btn
             v-if="isAction(props.row)"
             color="primary"
-            :label="props.row.document_upload_enabled ? $t('dashboards.unlock_account') : $t('dashboards.enable_upload')"
+            :label="props.row.document_upload_enabled ? $t('dashboards.view_documents') : $t('dashboards.enable_upload')"
             @click="props.row.document_upload_enabled ? showDocumentValidationDialog(props.row) : showEnableUploadDialog(props.row)"
           />
           <div v-else>
@@ -115,7 +115,7 @@ function getState(companyData: Company): Record<string, string> {
     }
     return {
       label: 'documents.documents_available',
-      color: 'blue'
+      color: 'primary'
     }
   }
   return {

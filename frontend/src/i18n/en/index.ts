@@ -65,6 +65,7 @@ export default {
     sure_to_reject: 'Are you sure you want to decline this request?',
     yes_reject: 'Yes, reject',
     unlock_account: 'Unlock account',
+    view_documents: 'View documents'
   },
   buttons: {
     finish_signup: 'Finish',

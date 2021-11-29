@@ -9,24 +9,23 @@
           bordered
           separator
         >
-          <q-item v-ripple>
-            <q-item-section >
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.company_name') }}:</p>
-                <p class="col-7">{{ props.company.company_name }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
           <q-item
             v-for="document in _company.documents"
             :key="document.uuid"
             v-ripple
           >
-            <q-item-section >
+            <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ document.key }}</p>
-                <p class="col-7">{{ document.url }}</p>
+
+
+<!--                TODO styling -->
+                  <q-btn
+                    v-if="document.url"
+                    color="primary"
+                    label="Herunterladen"
+                    @click="openURL(document.url)"
+                  />
               </div>
             </q-item-section>
           </q-item>
@@ -36,7 +35,7 @@
       <q-card-actions>
         <q-btn
           class="q-ma-md"
-          :label="$t('dashboards.enable_upload')"
+          :label="$t('dashboards.unlock_account')"
           color="primary"
           @click="onOk"
         />
@@ -58,13 +57,14 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {computed, ComputedRef, PropType, ref, Ref} from 'vue'
+import {PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
+import { openURL } from 'quasar'
 
 const $q: QVueGlobals = useQuasar()
 

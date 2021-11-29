@@ -66,6 +66,7 @@ export default {
     reject: 'Ablehnen',
     sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
     yes_reject: 'Ja, ablehnen',
+    view_documents: 'Dokumente ansehen'
   },
   buttons: {
     finish_signup: 'Abschliessen',
