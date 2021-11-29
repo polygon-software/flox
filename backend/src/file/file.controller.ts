@@ -1,7 +1,9 @@
 import {
   BadRequestException,
   Controller,
+  Param,
   Post,
+  Query,
   Req,
   Res,
 } from '@nestjs/common';
@@ -12,7 +14,7 @@ import { AnyRole } from '../auth/authorization.decorator';
 
 @Controller()
 export class FileController {
-  constructor(private readonly taskService: FileService) {}
+  constructor(private readonly fileService: FileService) {}
 
   @Public()
   @Post('/uploadPublicFile')
@@ -27,7 +29,7 @@ export class FileController {
     }
     const file = await req.file();
     const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPublicFile(
+    const new_file = await this.fileService.uploadPublicFile(
       file_buffer,
       file.filename,
     );
@@ -51,11 +53,47 @@ export class FileController {
 
     const file = await req.file();
     const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPrivateFile(
+    const new_file = await this.fileService.uploadPrivateFile(
       file_buffer,
       file.filename,
       owner,
     );
+    res.send(new_file);
+  }
+
+  @Post('/uploadCompanyFile')
+  @Public()
+  async uploadCompanyFile(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+    @Query() query,
+  ): Promise<any> {
+    // Verify that request is multipart
+    if (!req.isMultipart()) {
+      res.send(new BadRequestException('File expected on this endpoint'));
+      return;
+    }
+
+    // Determine company UUID from query param
+    const companyId = query.cid; // Base64 encoded ID from params
+    const companyUuid: string | null = Buffer.from(
+      companyId,
+      'base64',
+    ).toString();
+    // TODO: mark file for later owner-change once company has a cognito ID
+
+    console.log('Company UUID is', companyUuid, 'from ID', companyId);
+
+    const file = await req.file();
+    const file_buffer = await file.toBuffer();
+    const new_file = await this.fileService.uploadPrivateFile(
+      file_buffer,
+      file.filename,
+      companyUuid,
+    );
+
+    // TODO add to documents array
+
     res.send(new_file);
   }
 }

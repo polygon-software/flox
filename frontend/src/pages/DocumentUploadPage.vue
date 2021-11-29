@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div class="column">
       <GenericForm
-        v-if="companyUuid"
+        v-if="companyId"
         :finish-label="$t('finish_signup')"
         :pages="pages"
         @submit="onSubmit"
@@ -34,7 +34,6 @@ const emit = defineEmits(['submit'])
 // Get base64-encoded UUID from URL params
 const route = useRoute()
 const companyId = route.query.cid
-const companyUuid: string|null= companyId ? Buffer.from(companyId, 'base64').toString() : null;
 
 const form_ref: Ref<QForm|null> = ref(null)
 
