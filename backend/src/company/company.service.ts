@@ -26,7 +26,7 @@ export class CompanyService {
       ...createCompanyInput,
       readable_id: generateHumanReadableId(),
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
-      cognito_id: null,
+      cognito_id: '045a024e-66fb-4002-9fe9-60334e318a63', // TODO THIS IS DEMO-ONLY, RE-SET TO NULL
       documents: null,
       // TODO: other default values
     });
