@@ -1,9 +1,9 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
-import {QUERIES} from '../data/queries/QUERIES';
+import {ALL_USERS, QUERIES} from '../data/queries/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
-import {useSSR} from 'src/store/ssr/index';
+import {useSSR} from 'src/store/ssr';
 import {i18n} from 'boot/i18n';
 
 /**

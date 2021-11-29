@@ -5,7 +5,7 @@
       style="width: 500px;"
     >
       <GenericForm
-        :finish-label="$t('finish_signup')"
+        :finish-label="$t('buttons.finish_signup')"
         :pages="pages"
         @submit="onRegister"
       />
@@ -42,7 +42,7 @@ const account_fields = [
 const pages = [
   {
     key: 'company',
-    label: i18n.global.t('employee_signup'),
+    label: i18n.global.t('authentication.employee_signup'),
     fields: account_fields,
   },
 ]

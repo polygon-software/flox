@@ -18,11 +18,11 @@
             <q-btn
               v-if="isAction(props.row.companyData)"
               color="primary"
-              :label="props.row.companyData.document_upload_enabled ? $t('unlock_account') : $t('enable_upload')"
+              :label="props.row.companyData.document_upload_enabled ? $t('dashboards.unlock_account') : $t('dashboards.enable_upload')"
               @click="props.row.companyData.document_upload_enabled ? unlockAccount() : enableUpload(props.row.companyData)"
             />
             <div v-else>
-              {{ $t('documents_missing') }}
+              {{ $t('documents.documents_missing') }}
             </div>
           </q-td>
         </q-tr>
@@ -105,9 +105,9 @@ const rows = ref([
 ])
 
 const columns = [
-  {name: 'name', required: true, label: i18n.global.t('application'), align: 'left', field: 'name', sortable: true},
-  {name: 'state', required: true, label: i18n.global.t('state'), align: 'left', field: 'state', sortable: true},
-  {name: 'action', required: true, label: i18n.global.t('action'), align: 'left', field: 'action', sortable: true}
+  {name: 'name', required: true, label: i18n.global.t('dashboards.application'), align: 'left', field: 'name', sortable: true},
+  {name: 'state', required: true, label: i18n.global.t('dashboards.state'), align: 'left', field: 'state', sortable: true},
+  {name: 'action', required: true, label: i18n.global.t('dashboards.action'), align: 'left', field: 'action', sortable: true}
 ]
 
 /**
@@ -149,12 +149,10 @@ function isAction(companyData: Company): boolean {
 function getState(companyData: Company): string {
   if (companyData.document_upload_enabled) {
     if (companyData.documents === null || companyData.documents.length === 0) {
-      return i18n.global.t('documents_missing')
+      return i18n.global.t('documents.documents_missing')
     }
-    return i18n.global.t('documents_available')
+    return i18n.global.t('documents.documents_available')
   }
-  return i18n.global.t('new')
+  return i18n.global.t('general.new')
 }
-
-
 </script>

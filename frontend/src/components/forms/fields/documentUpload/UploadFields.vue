@@ -5,14 +5,14 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="$t('passport_or_id')"
+    :label="$t('account_data.passport_or_id')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
-    :rules="[(val) => val !== null || $t('missing_file')]"
+    :max-file-size="props.maxFileSize"
+    :rules="[(val) => val !== null || $t('errors.missing_file')]"
     @change="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -23,14 +23,14 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="`${$t('commercial_register_extract')} (${$t('optional')})`"
+    :label="`${$t('account_data.commercial_register_extract')} (${$t('account_data.optional')})`"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
+    :max-file-size="props.maxFileSize"
     :rules="[]"
     @change="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -41,14 +41,14 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="$t('execution_register_extract')"
+    :label="$t('account_data.execution_register_extract')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
-    :rules="[(val) => val !== null || $t('missing_file')]"
+    :max-file-size="props.maxFileSize"
+    :rules="[(val) => val !== null || $t('errors.missing_file')]"
     @change="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -61,14 +61,14 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="$t('additional_documents')"
+    :label="$t('documents.additional_documents')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
+    :max-file-size="props.maxFileSize"
     :rules="[]"
     @update:model-value="fileChange"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
