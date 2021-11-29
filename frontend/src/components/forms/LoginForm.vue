@@ -19,7 +19,7 @@
         @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
-          style="margin-top: 20px"
+          style="margin-top: 20px;"
           color="primary"
           :label="$t('authentication.login')"
           type="submit"
@@ -46,7 +46,7 @@ const $authService: AuthenticationService = inject('$authService')
 
 const emit = defineEmits(['submit'])
 
-const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
+const fields = [FIELDS.USERNAME, FIELDS.PASSWORD, FIELDS.ROUTE_TARGET]
 
 const form = new Form()
 form.pages.value = [
