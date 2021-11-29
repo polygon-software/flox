@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
  * This file contains all valid GraphQL queries. A query is structure as follows
  * (see also DATA-DEFINITIONS.ts):
  * - query: the actual GraphQL query. Add __typename to the variables in order for caching to work as expected
+ *  this is also needed on sub-queries!
  * (auto-update on edit)
  * - tables: list of affected tables; when a mutation changes one of these tables, the query is re-fetched.
  * - cacheLocation: the actual GraphQL query's name (since cached data will be stored there)
@@ -45,16 +46,19 @@ export const ALL_COMPANIES = {
                 number
                 city
                 zip_code
+                __typename
               }
               correspondence_address{
                 street
                 number
                 city
                 zip_code
+                __typename
               }
               documents{
                 uuid
                 key
+                __typename
               }
               __typename
             }

@@ -1,7 +1,7 @@
 <template>
   <q-dialog
     ref="dialog"
-    :title="$t('dashboards.application')"
+    title="Application"
   >
     <q-card>
       <q-card-section>
@@ -14,78 +14,6 @@
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.company_name') }}:</p>
                 <p class="col-7">{{ props.company.company_name }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.language') }}:</p>
-                <p class="col-7">{{ props.company.language }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.company_uid') }}:</p>
-                <p class="col-7">{{ props.company.uid.length > 0 ? props.company.uid : '-' }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.full_name') }}:</p>
-                <p class="col-7">{{ props.company.first_name }} {{ props.company.last_name }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.domicile_address') }}:</p>
-                <p class="col-7">{{ domicile_address.prettyString() }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.correspondence_address') }}:</p>
-                <p class="col-7">{{ correspondence_address.prettyString() }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.phone_number') }}:</p>
-                <p class="col-7">{{ props.company.phone }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.email') }}:</p>
-                <p class="col-7">{{ props.company.email }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.branch_structure') }}:</p>
-                <p class="col-7">{{ props.company.branch_structure ? $t('general.yes') : $t('general.no') }}</p>
               </div>
             </q-item-section>
           </q-item>

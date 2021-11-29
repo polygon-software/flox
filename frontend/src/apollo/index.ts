@@ -60,7 +60,9 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
         // see: https://www.apollographql.com/docs/react/caching/cache-configuration/
         dataIdFromObject(responseObject) {
           const uuid: string = responseObject.uuid?.toString() ?? '';
-          return `${responseObject.__typename ?? ''}:${uuid}`;
+          const result = `${responseObject.__typename ?? ''}:${uuid}`;
+          console.log('output:', result)
+          return result
         },
         addTypename: false, // We disable auto-adding of __typename property, as this breaks mutations expecting
                             // an object variable. Instead, we manually add __typename in QUERIES/MUTATIONS.ts where
