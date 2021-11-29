@@ -26,12 +26,21 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref, defineEmits} from 'vue'
+import {ref, Ref, defineEmits, PropType} from 'vue'
 import {QDialog} from 'quasar';
+import {sendEmail} from 'src/helpers/email-helpers';
+import {Company} from 'src/data/types/Company';
 
 const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+
+const props = defineProps({
+  companyData: {
+    type: Object as PropType<Company>,
+    required: true
+  },
+})
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,8 +54,9 @@ function hide(): void {
   dialog.value?.hide()
 }
 
-function onYesReject(): void {
+async function onYesReject(): Promise<void> {
   //TODO: implement in backend to really reject it
+  await sendEmail(props.companyData.phone)
   emit('ok')
   hide()
 }

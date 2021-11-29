@@ -103,7 +103,7 @@
           class="q-ma-md"
           :label="$t('dashboards.reject')"
           color="negative"
-          @click="onReject"
+          @click="onReject(props.row.companyData)"
         />
         <q-btn
           class="q-ma-md"
@@ -153,11 +153,14 @@ async function onOk(): Promise<void> {
   hide()
 }
 
-function onReject(): void {
+function onReject(companyData: Company): void {
   //TODO: Send cancel message
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
+    componentProps: {
+      companyData: companyData
+    }
   }).onOk(() => {
     // Hide outer popup
     hide()
