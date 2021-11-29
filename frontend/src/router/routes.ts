@@ -56,7 +56,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   'ADMIN_DASHBOARD': {
-    path: '/admin_dashboard',
+    path: '/admin-dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/AdminDashboardPage.vue') }],
   },

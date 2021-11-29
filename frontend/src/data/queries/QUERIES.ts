@@ -54,6 +54,7 @@ export const ALL_COMPANIES = {
               }
               documents{
                 uuid
+                key
               }
               __typename
             }
