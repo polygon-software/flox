@@ -246,15 +246,16 @@ type Subscription {
 }
 
 input UpdateCompanyInput {
-  branch_structure: Boolean!
-  company_name: String!
-  correspondence_address: CreateAddressInput!
-  domicile_address: CreateAddressInput!
-  email: String!
-  first_name: String!
-  language: String!
-  last_name: String!
-  phone: String!
+  branch_structure: Boolean
+  cognito_id: String
+  company_name: String
+  correspondence_address: CreateAddressInput
+  domicile_address: CreateAddressInput
+  email: String
+  first_name: String
+  language: String
+  last_name: String
+  phone: String
   uid: String
   uuid: ID!
 }

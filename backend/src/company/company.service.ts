@@ -26,7 +26,7 @@ export class CompanyService {
       ...createCompanyInput,
       readable_id: generateHumanReadableId(),
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
-      cognito_id: '045a024e-66fb-4002-9fe9-60334e318a63', // TODO THIS IS DEMO-ONLY, RE-SET TO NULL
+      cognito_id: null,
       documents: null,
       // TODO: other default values
     });
@@ -79,8 +79,9 @@ export class CompanyService {
   async updateCompany(
     updateCompanyInput: UpdateCompanyInput,
   ): Promise<Company> {
-    const company = this.companyRepository.create(updateCompanyInput);
-    await this.companyRepository.update(updateCompanyInput.uuid, company);
+    await this.companyRepository.update(updateCompanyInput.uuid, {
+      ...updateCompanyInput, // TODO ensure UUID is immutable
+    });
     return await this.companyRepository.findOne(updateCompanyInput.uuid);
   }
 

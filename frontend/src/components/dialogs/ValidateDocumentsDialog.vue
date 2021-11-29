@@ -61,10 +61,11 @@ import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
-import {executeQuery} from 'src/helpers/data-helpers';
+import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
+import {sendEmail} from 'src/helpers/email-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -125,11 +126,24 @@ async function onOk(): Promise<void> {
   // TODO disable file upload for
   const password = 'asdfASDF1234&' // TODO randomgenerate
 
-  await props.authService.signUpNewUser(
+  const newUser = await props.authService.signUpNewUser(
     props.company.readable_id ?? '',
     props.company.email ?? '',
     password
   )
+
+
+  const link = `http://localhost:8080/set-password?u=${props.company.readable_id ?? ''}&k=${password}` // TODO actual link
+
+  await sendEmail(
+    'david.wyss@polygon-software.ch', // TODO
+    props.company.email ?? '', // TODO
+    'Your Account',
+    `Click the following link: ${link}`
+  )
+
+  // TODO change cognito-id on
+  executeMutation(UPDATE_COMPANY)
 
   // TODO change file ownership?
   // TODO show nice confirmation prompt
