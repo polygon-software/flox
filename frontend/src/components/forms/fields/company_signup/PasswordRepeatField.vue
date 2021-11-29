@@ -2,10 +2,10 @@
   <q-input
       v-model="password"
       dense
-      label="Password"
+      :label="$t('account_data.password')"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
-      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('invalid_password')]"
+      :rules="props.rules"
   >
     <template #append>
       <q-icon
@@ -18,10 +18,10 @@
   <q-input
       v-model="passwordRepeat"
       dense
-      label="Repeat Password"
+      :label="$t('account_data.repeat_password')"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
-      :rules="[val => val === password || $t('non_matching_password')]"
+      :rules="[val => val === password || $t('errors.non_matching_password')]"
   >
     <template #append>
       <q-icon
@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import {ref, watch} from 'vue';
+import {i18n} from 'boot/i18n';
 import {IS_VALID_PASSWORD} from 'src/data/RULES';
 
 /**
@@ -44,16 +45,18 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
 const props = defineProps({
   modelValue: {
     required: false,
-    type: String
+    type: String,
+    default: '',
   },
   rules: {
     type: Array,
     required: false,
+    default: () => [(val: string) => IS_VALID_PASSWORD(val) || i18n.global.t('errors.invalid_password')],
   }
 });
 
-let password = ref(props.modelValue ?? '')
-let passwordRepeat = ref(props.modelValue ?? '')
+let password = ref(props.modelValue)
+let passwordRepeat = ref(props.modelValue)
 const isPwd = ref(true)
 const isPwdRepeat = ref(true)
 

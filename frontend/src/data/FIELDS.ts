@@ -6,6 +6,7 @@ import CompanyAddressField from 'components/forms/fields/company_signup/CompanyA
 import CompanyDataField from 'components/forms/fields/company_signup/CompanyDataField.vue'
 import FullNameField from 'components/forms/fields/company_signup/FullNameField.vue'
 import ConditionsField from 'components/forms/fields/company_signup/ConditionsField.vue'
+import UploadFields from 'components/forms/fields/documentUpload/UploadFields.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 
@@ -40,9 +41,9 @@ const FIELDS: Record<string, Field> = {
       attributes: {
         dense: true,
         type: 'email',
-        label: 'E-Mail',
+        label: i18n.global.t('account_data.email'),
         lazy_rules: 'ondemand',
-        rules: [(val: string): boolean|string  => IS_VALID_EMAIL(val) || 'Please enter a valid e-mail address.']
+        rules: [(val: string): boolean|string  => IS_VALID_EMAIL(val) || i18n.global.t('errors.invalid_email')]
       },
     },
     USERNAME: {
@@ -51,23 +52,23 @@ const FIELDS: Record<string, Field> = {
       attributes: {
         dense: true,
         type: 'text',
-        label: 'Username',
+        label: i18n.global.t('account_data.username'),
         lazy_rules: 'true',
-        rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
+        rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_username')]
       },
     },
     PASSWORD: {
       key: 'password',
       component: markRaw(Password),
       attributes: {
-        rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_password')]
+        rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_password')]
       }
     },
   PASSWORD_REPEAT: {
       key: 'password_repeat',
       component: markRaw(PasswordRepeatField),
       attributes: {
-        rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_password')]
+        rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_password')]
       }
     },
   PHONE_NUMBER: {
@@ -76,43 +77,43 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'tel',
-      label: i18n.global.t('phone_number'),
+      label: i18n.global.t('account_data.phone_number'),
       lazy_rules: 'ondemand',
-      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_phone_number')]
+      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_phone_number')]
     },
   },
   FULL_NAME: {
     key: 'full_name',
     component: markRaw(FullNameField),
     attributes: {
-      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
+      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name')]
     },
   },
   LANGUAGE: {
     key: 'language',
     component: markRaw(QSelect),
     attributes: {
-      label: i18n.global.t('language'),
+      label: i18n.global.t('account_data.language'),
       options: ['DE', 'EN', 'FR', 'IT'], // TODO possibly move elsewhere.
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['DE', 'EN', 'FR', 'IT']) || i18n.global.t('invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['DE', 'EN', 'FR', 'IT']) || i18n.global.t('errors.invalid_option')]
     },
   },
   SALUTATION: {
     key: 'salutation',
     component: markRaw(QSelect),
     attributes: {
-      label: i18n.global.t('salutation'),
+      label: i18n.global.t('account_data.salutation'),
       options: ['Herr', 'Frau', 'Divers'], // TODO possibly move elsewhere.
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['Herr', 'Frau', 'Divers']) || i18n.global.t('invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['Herr', 'Frau', 'Divers']) || i18n.global.t('errors.invalid_option')]
     },
   },
   COMPANY_FUNCTION: {
     key: 'company_function',
     component: markRaw(QSelect),
     attributes: {
-      label: i18n.global.t('company_function'),
+      label: i18n.global.t('account_data.company_function'),
       options: ['CEO', 'Admin', 'Entwickler*in', 'HR', 'Blablabla'], // TODO possibly move elsewhere.
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['CEO', 'Admin', 'Entwickler*in', 'HR', 'Blablabla']) || i18n.global.t('invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['CEO', 'Admin', 'Entwickler*in', 'HR', 'Blablabla']) || i18n.global.t('errors.invalid_option')]
     },
   },
   COMPANY_ADDRESS: {
@@ -126,7 +127,7 @@ const FIELDS: Record<string, Field> = {
     key: 'company_data',
     component: markRaw(CompanyDataField),
     attributes: {
-      rules: []
+      rules: [] // Validated by component
     },
   },
   CONDITIONS: {
@@ -135,7 +136,14 @@ const FIELDS: Record<string, Field> = {
       attributes: {
         rules: [] // Validated by component
       }
-  }
+  },
+  FILE_UPLOAD: {
+      key: 'file_upload',
+      component: markRaw(UploadFields),
+      attributes: {
+          rules: [] // Validated by component
+      }
+  },
 }
 
 export {FIELDS}

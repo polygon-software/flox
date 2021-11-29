@@ -1,5 +1,6 @@
 import {AddressItem} from '../../../../shared/schemas/AddressItem';
 import Joi from 'joi';
+import {i18n} from 'boot/i18n';
 
 /**
  * A class representing an address
@@ -22,7 +23,7 @@ export class Address{
    * Validates the address to Joi schema
    */
   validate(): boolean{
-    try{
+    try {
       Joi.assert(this, AddressItem)
       return true;
     } catch (e) {
@@ -42,6 +43,17 @@ export class Address{
     this.number = number
     this.city = city
     this.zip_code = zip_code
+  }
+
+  /**
+   * Returns a string representation of the address.
+   */
+  prettyString(): string {
+    if ([this.street, this.number, this.city, this.zip_code].every((val) => val !== null)) {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      return `${this.street} ${this.number}, ${this.zip_code} ${this.city}`
+    }
+    return i18n.global.t('errors.missing_attributes')
   }
 
 }

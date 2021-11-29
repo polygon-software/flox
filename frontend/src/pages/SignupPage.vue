@@ -5,7 +5,7 @@
       style="width: 500px;"
     >
       <GenericForm
-        :finish-label="$t('finish_signup')"
+        :finish-label="$t('buttons.finish_signup')"
         :pages="pages"
         @submit="onSignup"
       />
@@ -46,7 +46,7 @@ const account_fields = [
 const pages = [
   {
     key: 'company',
-    label: i18n.global.t('signup'),
+    label: i18n.global.t('authentication.signup'),
     fields: account_fields,
   },
 ]
@@ -68,7 +68,8 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
     CREATE_COMPANY,
     {
       company_name: values.company_data.company_name,
-      person_name: values.full_name,
+      first_name: values.full_name.first_name,
+      last_name: values.full_name.last_name,
       language: values.language,
       uid: values.company_data.uid,
       domicile_address: domicile_address,

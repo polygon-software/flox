@@ -61,7 +61,11 @@ function hide(): void{
 }
 
 const props = defineProps({
-  value: String
+  value: {
+    type: String,
+    required: true,
+    default: '',
+  },
 })
 
 </script>

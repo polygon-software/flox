@@ -1,17 +1,17 @@
 <template>
   <q-input
     v-model="first_name"
-    :label="$t('first_name')"
+    :label="$t('account_data.first_name')"
     type="text"
-    :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_name')]"
+    :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
     @change="emitValue"
   >
   </q-input>
   <q-input
     v-model="last_name"
-    :label="$t('last_name')"
+    :label="$t('account_data.last_name')"
     type="text"
-    :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_name')]"
+    :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
     @change="emitValue"
   />
 </template>
@@ -25,7 +25,10 @@ const first_name = ref('')
 const last_name = ref('')
 
 function emitValue(){
-  emit('change', `${first_name.value} ${last_name.value}`)
+  emit('change', {
+    first_name: first_name.value,
+    last_name: last_name.value
+  })
 }
 
 </script>

@@ -26,5 +26,56 @@ export const ALL_USERS = {
     cacheLocation: 'allUsers'
 }
 
+export const ALL_COMPANIES = {
+  query: gql`
+        query{
+            allCompanies{
+                uuid
+                document_upload_enabled
+                documents
+                __typename
+            }
+        }
+        `,
+  tables: ['company'],
+  cacheLocation: 'allCompanies'
+}
 
-export const QUERIES = [ALL_USERS];
+export const ALL_EMPLOYEES = {
+  query: gql`
+        query{
+            allEmployees{
+              uuid
+              first_name
+              last_name
+              function
+              email
+              phone
+              __typename
+            }
+        }
+        `,
+  tables: ['employee'],
+  cacheLocation: 'allEmployees'
+}
+
+export const MY_EMPLOYEES = {
+  query: gql`
+        query{
+            myEmployees{
+              uuid
+              first_name
+              last_name
+              function
+              email
+              phone
+              __typename
+            }
+        }
+        `,
+  tables: ['employee'],
+  cacheLocation: 'myEmployees'
+}
+
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, ALL_EMPLOYEES];

@@ -5,7 +5,7 @@
       style="width: 500px;"
     >
       <GenericForm
-        :finish-label="$t('finish_signup')"
+        :finish-label="$t('buttons.finish_signup')"
         :pages="pages"
         @submit="onRegister"
       />
@@ -20,6 +20,8 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -31,6 +33,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
 const account_fields = [
   FIELDS.SALUTATION,
   FIELDS.FULL_NAME,
+  FIELDS.LANGUAGE,
   FIELDS.COMPANY_FUNCTION,
   FIELDS.PHONE_NUMBER,
   FIELDS.EMAIL,
@@ -39,7 +42,7 @@ const account_fields = [
 const pages = [
   {
     key: 'company',
-    label: i18n.global.t('employee_signup'),
+    label: i18n.global.t('authentication.employee_signup'),
     fields: account_fields,
   },
 ]
@@ -47,12 +50,20 @@ const pages = [
 
 /**
  * Upon valid registration, creates database entry
+ * @param {Record<string, unknown>} formData: The form's entered data
  * @async
  */
-async function onRegister(){
-  //TODO: create database entry
-  //TODO: redirect to something ?
-
+async function onRegister(formData: Record<string, Record<string, unknown>>){
+  // Create database entry
+  await executeMutation(CREATE_EMPLOYEE, {
+    first_name: formData.full_name.first_name,
+    last_name: formData.full_name.last_name,
+    gender: formData.salutation,
+    phone: formData.phone_number,
+    email: formData.email,
+    function: formData.company_function,
+    language: formData.language,
+  })
   await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)
   return;
 }
