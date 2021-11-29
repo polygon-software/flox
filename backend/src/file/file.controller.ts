@@ -72,7 +72,7 @@ export class FileController {
   async uploadCompanyFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
-    @Query() query,
+    @Query() query: Record<string, string>, // Params
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
@@ -81,17 +81,24 @@ export class FileController {
     }
 
     // Determine company UUID from query param
-    const companyId = query.cid; // Base64 encoded ID from params
+    const companyId: string = query.cid; // Base64 encoded ID from params
     const companyUuid: string | null = Buffer.from(
       companyId,
       'base64',
     ).toString();
-    // TODO: mark file for later owner-change once company has a cognito ID
+
+    // TODO: Do we need to disable file upload link once it's been used?
+    // TODO: Don't forget to change file owner once company has a cognito ID!
 
     console.log('Company UUID is', companyUuid, 'from ID', companyId);
     const company = await this.companyRepository.findOne(companyUuid);
 
-    // TODO: Throw error if invalid company
+    // Throw error if invalid company
+    if (!company) {
+      throw new Error(
+        'No valid company found, the link you used may be invalid.',
+      );
+    }
 
     const file = await req.file();
     const file_buffer = await file.toBuffer();
