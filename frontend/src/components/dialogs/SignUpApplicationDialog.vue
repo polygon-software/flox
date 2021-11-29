@@ -175,13 +175,13 @@ async function onOk(): Promise<void> {
   }
 
   // Enable on database
-  await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: props.company.uuid})
+  await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
 
   // Set up e-mail parameters
   const from = 'david.wyss@polygon-software.ch' // TODO set from .env
-  const to = company.email
+  const to: string = company.email ?? ''
   const subject = 'Your account' // TODO set
-  const encodedUuid = btoa(company.uuid); // Base64 encode UUID
+  const encodedUuid = btoa(company.uuid ?? ''); // Base64 encode UUID
   const url = `http://localhost:8080/document_upload?cid=${encodedUuid}`
   const body = `Upload your documents at the following link:\n${url}`// TODO HTML mail template
 

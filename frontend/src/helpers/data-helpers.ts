@@ -133,7 +133,7 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
       })
     }
 
-    apolloClient.watchQuery({query: query.query}).subscribe({
+    apolloClient.watchQuery({query: query.query, fetchPolicy: 'cache-and-network',}).subscribe({
       next(value: ApolloQueryResult<Record<string, unknown>>) {
         res.value = value.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
       }
