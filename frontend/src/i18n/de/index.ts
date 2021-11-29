@@ -3,6 +3,7 @@ export default {
     yes: 'Ja',
     no: 'Nein',
     new: 'Neu',
+    ok: 'OK',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -56,7 +57,7 @@ export default {
     optional: 'optional',
   },
   dashboards: {
-    chef_dashboard: 'Chef Dashboard',
+    management_dashboard: 'Chef Dashboard',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',
@@ -110,5 +111,8 @@ export default {
     must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
     must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
+  },
+  set_password: {
+    description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
   }
 };

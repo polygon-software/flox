@@ -3,6 +3,7 @@ export default {
     yes: 'Yes',
     no: 'No',
     new: 'New',
+    ok: 'OK'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -55,7 +56,7 @@ export default {
     optional: 'optional',
   },
   dashboards: {
-    chef_dashboard: 'Management Dashboard',
+    management_dashboard: 'Management Dashboard',
     register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',
@@ -109,5 +110,8 @@ export default {
     must_accept_conditions: 'You have to accept the terms and conditions.',
     must_accept_condition_truthful: 'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
+  },
+  set_password: {
+    description: 'Since this is your first login, please set a password.',
   }
 };

@@ -23,6 +23,9 @@ type Company {
   """Branch structure"""
   branch_structure: Boolean!
 
+  """Cognito account ID"""
+  cognito_id: String
+
   """Company Name"""
   company_name: String!
 
@@ -38,11 +41,14 @@ type Company {
   """E-Mail address"""
   email: String!
 
+  """First Name"""
+  first_name: String!
+
   """Language"""
   language: String!
 
-  """Contact person Name"""
-  person_name: String!
+  """Last Name"""
+  last_name: String!
 
   """Phone Number"""
   phone: String!
@@ -67,10 +73,41 @@ input CreateCompanyInput {
   correspondence_address: CreateAddressInput!
   domicile_address: CreateAddressInput!
   email: String!
+
+  """First Name"""
+  first_name: String
   language: String!
-  person_name: String!
+
+  """Last Name"""
+  last_name: String
   phone: String!
   uid: String
+}
+
+input CreateEmployeeInput {
+  """Company"""
+  company: company
+
+  """E-mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Last Name"""
+  last_name: String
+
+  """Phone Number"""
+  phone: String!
 }
 
 input CreateItemInput {
@@ -94,6 +131,38 @@ input DeleteUserInput {
   uuid: ID!
 }
 
+type Employee {
+  """Cognito account ID"""
+  cognito_id: String
+
+  """Company"""
+  company: Company!
+
+  """E-mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Item {
   """Name"""
   name: String!
@@ -108,6 +177,7 @@ type Item {
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
+  createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
   createItem(createItemInput: CreateItemInput!): Item!
   enableCompanyDocumentUpload(uuid: String!): Company!
   remove(deleteUserInput: DeleteUserInput!): User!
@@ -118,13 +188,46 @@ type Mutation {
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
+type PrivateFile {
+  """S3 File Key"""
+  key: String!
+
+  """File owner"""
+  owner: String!
+
+  """Pre-signed download URL"""
+  url: String
+
+  """UUID"""
+  uuid: ID!
+}
+
+type PublicFile {
+  """S3 File Key"""
+  key: String!
+
+  """Public download URL"""
+  url: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Query {
   allCompanies: [Company!]!
+  allEmployees: [Employee!]!
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
-  company(uuid: ID!): Company!
+  company(cognito_id: ID, uuid: ID): Company!
+  getPrivateFile(
+    """URL expiration duration (in seconds)"""
+    expires: [Float!]
+    uuid: ID!
+  ): PrivateFile!
+  getPublicFile(uuid: ID!): PublicFile!
   item(uuid: ID!): Item!
   items: [Item!]!
+  myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
@@ -139,8 +242,9 @@ input UpdateCompanyInput {
   correspondence_address: CreateAddressInput!
   domicile_address: CreateAddressInput!
   email: String!
+  first_name: String!
   language: String!
-  person_name: String!
+  last_name: String!
   phone: String!
   uid: String
   uuid: ID!
@@ -175,4 +279,67 @@ type User {
 
   """UUID"""
   uuid: ID!
+}
+
+input address {
+  """City"""
+  city: String!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """Zip Code"""
+  zip_code: String!
+}
+
+input company {
+  """Branch structure"""
+  branch_structure: Boolean!
+
+  """Company Name"""
+  company_name: String!
+
+  """Correspondence address"""
+  correspondence_address: address!
+
+  """Whether document upload is enabled (initial request granted by SOI)"""
+  document_upload_enabled: Boolean!
+
+  """Domicile address"""
+  domicile_address: address!
+
+  """E-Mail address"""
+  email: String!
+
+  """Language"""
+  language: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Company UID"""
+  uid: String!
+}
+
+input employee {
+  """Company"""
+  company: company!
+
+  """E-mail"""
+  email: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Phone Number"""
+  phone: String!
 }
