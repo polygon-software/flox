@@ -66,6 +66,8 @@ import _ from 'lodash';
 import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
 import {sendEmail} from 'src/helpers/email-helpers';
+import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
+import {CognitoUserSession} from 'amazon-cognito-identity-js';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -142,13 +144,19 @@ async function onOk(): Promise<void> {
     `Click the following link: ${link}`
   )
 
-  // TODO change cognito-id on
-  executeMutation(UPDATE_COMPANY)
+  // newUser.
+
+  // Set cognito ID on company
+  await executeMutation(SET_COGNITO_USER, {
+    uuid: props.company.uuid,
+    cognito_id: 'TODOASDF'
+  })
 
   // TODO change file ownership?
   // TODO show nice confirmation prompt
 
   hide()
+
 }
 
 function onReject(): void {
