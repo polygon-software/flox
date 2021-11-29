@@ -25,7 +25,7 @@
             v-if="isAction(props.row)"
             color="primary"
             :label="props.row.document_upload_enabled ? $t('dashboards.unlock_account') : $t('dashboards.enable_upload')"
-            @click="props.row.document_upload_enabled ? unlockAccount() : enableUpload(props.row)"
+            @click="props.row.document_upload_enabled ? showDocumentValidationDialog(props.row) : showEnableUploadDialog(props.row)"
           />
           <div v-else>
             {{ $t('errors.documents_missing') }}
@@ -43,6 +43,7 @@ import {ALL_COMPANIES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {Company} from 'src/data/types/Company';
 import SignUpApplicationDialog from 'components/dialogs/SignUpApplicationDialog.vue';
+import ValidateDocumentsDialog from 'components/dialogs/ValidateDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 
 const $q: QVueGlobals = useQuasar()
@@ -65,7 +66,7 @@ const computedResult = computed(()=>{
 /**
  * Opens the dialog to enable the file upload
  */
-function enableUpload(company: Company) {
+function showEnableUploadDialog(company: Company) {
   $q.dialog({
     title: 'SignUpApplication',
     component: SignUpApplicationDialog,
@@ -76,11 +77,16 @@ function enableUpload(company: Company) {
 }
 
 /**
- * Unlocks a account
+ * Shows
  */
-function unlockAccount() {
-  // TODO actual functionality
-  console.log('Unlock account')
+function showDocumentValidationDialog(company: Company) {
+  $q.dialog({
+    title: 'ValidateDocuments',
+    component: ValidateDocumentsDialog,
+    componentProps: {
+      company: company
+    }
+  })
 }
 
 

@@ -46,18 +46,13 @@
 </template>
 <script setup lang="ts">
 import {PropType, ref, Ref} from 'vue'
-import { Company } from 'src/data/types/Company'
-import {executeMutation} from 'src/helpers/data-helpers';
-import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
-import {Address} from 'src/data/types/Address';
-import {sendEmail} from 'src/helpers/email-helpers';
+import {Company} from 'src/data/types/Company';
 
 const $q: QVueGlobals = useQuasar()
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-
 
 const props = defineProps({
   company: {
@@ -65,20 +60,6 @@ const props = defineProps({
     required: true
   },
 })
-
-// Convert addresses to actual address instances
-const domicile_address = new Address(
-  props.company.domicile_address.street,
-  props.company.domicile_address.number,
-  props.company.domicile_address.city,
-  props.company.domicile_address.zip_code,
-)
-const correspondence_address = new Address(
-  props.company.correspondence_address.street,
-  props.company.correspondence_address.number,
-  props.company.correspondence_address.city,
-  props.company.correspondence_address.zip_code,
-)
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -93,30 +74,12 @@ function hide(): void {
 }
 
 /**
- * On OK, enable document upload for the company and send e-mail
+ * On OK, create account and send e-mail
  */
-async function onOk(): Promise<void> {
-  // Verify all required attributes present
-  const company = props.company
-  if([company, company.uuid, company.email].some((value) => value === undefined || value === null)){
-    throw new Error('Missing data for company; cannot activate account')
-  }
+function onOk(): void {
+  // TODO unlock account
 
-  // Enable on database
-  await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
-
-  // Set up e-mail parameters
-  const from = 'david.wyss@polygon-software.ch' // TODO set from .env
-  const to: string = company.email ?? ''
-  const subject = 'Your account' // TODO set
-  const encodedUuid = btoa(company.uuid ?? ''); // Base64 encode UUID
-  const url = `http://localhost:8080/document-upload?cid=${encodedUuid}` // TODO path
-  const body = `Upload your documents at the following link:\n${url}`// TODO HTML mail template
-
-  // Send e-mail
-  await sendEmail(from, to, subject, body)
-
-  hide()
+  //hide()
 }
 
 function onReject(): void {

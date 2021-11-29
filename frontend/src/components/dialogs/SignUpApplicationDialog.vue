@@ -130,7 +130,6 @@ const $q: QVueGlobals = useQuasar()
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-
 const props = defineProps({
   company: {
     type: Object as PropType<Company>,
