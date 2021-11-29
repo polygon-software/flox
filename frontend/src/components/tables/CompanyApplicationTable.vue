@@ -15,7 +15,7 @@
         </q-td>
         <q-td key="state" :props="props">
           <q-chip
-            :label="$t(`general.${getState(props.row).label}`)"
+            :label="$t(getState(props.row).label)"
             :color="getState(props.row).color"
             text-color="white"
           />
@@ -99,21 +99,21 @@ function isAction(companyData: Company): boolean {
  * Returns the state of the application.
  * @param {Company} companyData
  */
-function getState(companyData: Company): string {
+function getState(companyData: Company): Record<string, string> {
   if (companyData.document_upload_enabled) {
     if (companyData.documents === null || companyData.documents.length === 0) {
       return {
-        label: 'documents_missing',
+        label: 'documents.documents_missing',
         color: 'orange'
       }
     }
     return {
-      label: 'documents_available',
+      label: 'documents.documents_available',
       color: 'blue'
     }
   }
   return {
-    label: 'new',
+    label: 'general.new',
     color: 'positive'
   }
 }
