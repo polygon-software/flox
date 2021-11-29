@@ -144,7 +144,13 @@ async function onOk(): Promise<void> {
     `Click the following link: ${link}`
   )
 
-  // newUser.
+  newUser.getUserAttributes((attrs) => {
+    console.log('Attrs:', attrs)
+  })
+
+  newUser.getUserData((data) => {
+    console.log('Data:', data)
+  })
 
   // Set cognito ID on company
   await executeMutation(SET_COGNITO_USER, {
