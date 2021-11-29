@@ -62,13 +62,13 @@ async function onSubmit(values: Record<string, Record<string, File>>){
   for(const fileKey of Object.keys(fileObject)) {
     const formData = new FormData();
     const file: File = fileObject[fileKey]
-    // const blob = file as Blob
+    // const blob = file as Blob TODO needed?
 
     console.log('Upload file', fileKey)
     formData.append('file', file)
 
     await axios.post(
-      'localhost:3000/uploadCompanyFile?cid=YmJiMjViYzgtOTM5ZS00ZmJjLTlmOTctNjZkZDhiMjllMjAx', // TODO dynamic, use UUID from param
+      'http://localhost:3000/uploadCompanyFile?cid=YmJiMjViYzgtOTM5ZS00ZmJjLTlmOTctNjZkZDhiMjllMjAx', // TODO dynamic, use UUID from param
       formData,
       {
         headers
