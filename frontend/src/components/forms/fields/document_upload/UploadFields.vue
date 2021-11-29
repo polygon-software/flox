@@ -93,11 +93,12 @@ const execution_register_extract = ref(null)
  * Emits the updated value
  */
 function emitValue(){
+  // TODO give sensible name
   const valid_additional_input_fields = additional_input_fields.value.filter(field => {
     return field.value !== null
   })
   // TODO inner validation?
-  emit('change', {passport, commercial_register_extract, execution_register_extract, valid_additional_input_fields})
+  emit('change', {passport, commercial_register_extract, execution_register_extract, ...valid_additional_input_fields})
 }
 
 /**
