@@ -20,6 +20,7 @@ export default {
     change_password: 'Passwort ändern',
   },
   account_data: {
+    employees: 'Mitarbeitende',
     authentication: 'Authentifizierung',
     email: 'E-Mail',
     username: 'Nutzername',
