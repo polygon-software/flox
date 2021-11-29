@@ -28,6 +28,7 @@ import GenericForm from 'src/components/forms/GenericForm.vue'
 import {useRoute} from 'vue-router';
 import axios from 'axios';
 import {RouterService} from 'src/services/RouterService';
+import ROUTES from 'src/router/routes';
 
 const emit = defineEmits(['submit'])
 const $routerService: RouterService = inject('$routerService')
@@ -64,7 +65,10 @@ async function onSubmit(values: Record<string, Record<string, File|null>>){
       formData.append('file', blob)
 
       // Get ID from route
-      const cid: string = route.params.cid.toString()
+      if(!route.query.cid){
+        throw new Error('Invalid URL')
+      }
+      const cid: string = route.query.cid.toString()
 
       await axios({
         method: 'post',
@@ -78,6 +82,6 @@ async function onSubmit(values: Record<string, Record<string, File|null>>){
   }
 
   // TODO add fitting success message
-  // await $routerService.routeTo(ROUTES.SUCCESS)
+  await $routerService.routeTo(ROUTES.SUCCESS)
 }
 </script>
