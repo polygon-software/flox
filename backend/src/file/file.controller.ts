@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Controller,
-  Param,
   Post,
   Query,
   Req,
@@ -89,6 +88,7 @@ export class FileController {
     const new_file = await this.fileService.uploadPrivateFile(
       file_buffer,
       file.filename,
+      companyUuid, // Owner; must be changed to cognito ID later
       companyUuid,
     );
 

@@ -1,5 +1,5 @@
 import { ObjectType, Field, InputType } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import {
   IsString,
   IsBoolean,
@@ -78,12 +78,11 @@ export class Company extends Person {
   document_upload_enabled: boolean;
 
   // TODO ensure type to key
-  @Column('text', { nullable: true, array: true })
   @Field(() => [PrivateFile], {
     nullable: true,
     description: 'Documents of the company',
   })
-  @IsArray()
+  @OneToMany(() => PrivateFile, (file) => file.owner, { cascade: true })
   documents: PrivateFile[];
 
   // @Column() TODO: Possibly add employee ID array / determine if needed

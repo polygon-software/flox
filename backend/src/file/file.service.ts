@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { Company } from '../company/entities/company.entity';
 
 @Injectable()
 export class FileService {
@@ -29,6 +30,9 @@ export class FileService {
 
     @InjectRepository(PrivateFile)
     private privateFilesRepository: Repository<PrivateFile>,
+
+    @InjectRepository(Company)
+    private companyRepository: Repository<Company>,
 
     private readonly configService: ConfigService,
   ) {}
@@ -71,9 +75,8 @@ export class FileService {
     dataBuffer: Buffer,
     filename: string,
     owner: string,
+    companyUuid?: string,
   ): Promise<PrivateFile> {
-    // Determine owner: if JWT token present, get from there, otherwise owner unknown TODO?
-
     // File upload
     const key = `${uuid()}-${filename}`;
     const uploadParams = {
@@ -81,12 +84,28 @@ export class FileService {
       Key: key,
       Body: dataBuffer,
     };
+
+    let newFile;
+
+    // If file is for company document upload, add ref (otherwise, upload normally)
+    if (companyUuid) {
+      const company = await this.companyRepository.findOne(companyUuid);
+      newFile = this.privateFilesRepository.create({
+        key: key,
+        owner: owner,
+        company: company,
+      });
+    } else {
+      newFile = this.privateFilesRepository.create({
+        key: key,
+        owner: owner,
+      });
+    }
+
     await this.s3.send(new PutObjectCommand(uploadParams));
-    const newFile = this.privateFilesRepository.create({
-      key: key,
-      owner: owner,
-    });
+
     await this.privateFilesRepository.save(newFile);
+
     return newFile;
   }
 

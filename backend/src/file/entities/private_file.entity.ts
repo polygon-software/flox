@@ -1,7 +1,9 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
+import { Company } from '../../company/entities/company.entity';
+import { User } from '../../user/entities/user.entity';
 
 /**
  * Defines a private file within a restricted AWS S3 bucket.
@@ -29,6 +31,10 @@ export class PrivateFile extends BaseEntity {
   @IsOptional()
   @IsUrl()
   public url: string;
+
+  @Field(() => Company, { description: 'Company the file belongs to' })
+  @ManyToOne(() => Company, (company) => company.documents)
+  public company: Company;
 }
 
 export default PrivateFile;
