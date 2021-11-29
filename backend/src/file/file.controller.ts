@@ -100,7 +100,12 @@ export class FileController {
       );
     }
 
+    console.log('Req:', req, 'for company', company.uuid);
     const file = await req.file();
+
+    if (!file) {
+      throw new Error('No valid file sent!');
+    }
     const file_buffer = await file.toBuffer();
     const new_file = await this.fileService.uploadPrivateFile(
       file_buffer,

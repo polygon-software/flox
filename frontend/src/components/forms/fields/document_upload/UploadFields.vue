@@ -101,7 +101,7 @@ function emitValue(){
 }
 
 /**
- * This section handles the addition and deltetion of custom files.
+ * This section handles the addition and deletion of custom files.
  */
 const additional_input_fields = ref([ref(null)])
 
