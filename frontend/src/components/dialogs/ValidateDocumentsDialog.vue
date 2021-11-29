@@ -12,7 +12,6 @@
           <q-item
             v-for="document in _company.documents"
             :key="document.uuid"
-            v-ripple
           >
             <q-item-section>
               <div class="row flex content-center">
@@ -57,7 +56,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {PropType, ref, Ref} from 'vue'
+import { PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
@@ -81,10 +80,11 @@ const props = defineProps({
 const _company = ref(_.cloneDeep(props.company))
 
 // Get URLs
-void getUrls();
+void getUrls()
 
 /**
  * Load all URLs and add to local object
+ * TODO: Verify why this works only once
  */
 async function getUrls(): Promise<void>{
   const documents = _company.value.documents ?? [];

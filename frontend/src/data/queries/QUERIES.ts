@@ -76,14 +76,13 @@ export const COMPANY = {
         documents{
           uuid
           key
-          url
           __typename
         }
         __typename
       }
     }
   `,
-  tables: ['company'],
+  tables: ['company', 'documents'],
   cacheLocation: 'company'
 }
 
