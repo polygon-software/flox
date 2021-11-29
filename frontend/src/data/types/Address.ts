@@ -53,7 +53,7 @@ export class Address{
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       return `${this.street} ${this.number}, ${this.zip_code} ${this.city}`
     }
-    return i18n.global.t('missing_attributes')
+    return i18n.global.t('errors.missing_attributes')
   }
 
 }

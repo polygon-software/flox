@@ -4,7 +4,7 @@
     style="width: 250px; text-align: center;"
   >
     <h5 class="q-ma-none" style="margin-bottom: 20px;">
-      {{ $t('login') }}
+      {{ $t('authentication.login') }}
     </h5>
     <q-form
       class="q-gutter-md"
@@ -21,13 +21,13 @@
       <q-btn
           style="margin-top: 20px"
           color="primary"
-          :label="$t('login')"
+          :label="$t('authentication.login')"
           type="submit"
           :disable="!form.pageValid.value"
       />
       <q-btn
         no-caps
-        :label="$t('forgot_password')"
+        :label="$t('authentication.forgot_password')"
         class="text-primary"
         flat
         @click="forgotPassword"

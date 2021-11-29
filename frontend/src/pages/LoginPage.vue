@@ -17,13 +17,13 @@
           style="width: 250px; text-align: center;"
         >
           <strong>
-            {{ $t('signup_now') }}
+            {{ $t('authentication.signup_now') }}
           </strong>
           <br>
           <q-btn
             class="q-ma-md"
             style="width: 125px"
-            :label="$t('signup')"
+            :label="$t('authentication.signup')"
             color="primary"
             @click="toSignup"
           />

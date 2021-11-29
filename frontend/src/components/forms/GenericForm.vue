@@ -36,7 +36,7 @@
           <q-btn
             v-if="form.step.value > 1"
             color="primary"
-            :label="$t('back')"
+            :label="$t('buttons.back')"
             flat
             style="margin-right: 30px"
             class="q-ml-sm"
@@ -45,14 +45,14 @@
           <q-btn
             v-if="form.step.value < form.pages.value.length"
             color="primary"
-            :label="$t('next_step')"
+            :label="$t('buttons.next_step')"
             :disable="!form.pageValid.value"
             @click="$refs.stepper.next()"
           />
           <q-btn
             v-if="form.step.value === form.pages.value.length"
             color="primary"
-            :label="finishLabel ?? $t('finish')"
+            :label="finishLabel"
             @click="onSubmit"
           />
         </q-stepper-navigation>
@@ -105,7 +105,7 @@ const form_ref: Ref<QForm|null> = ref(null)
 const props = defineProps({
   finishLabel: {
     type: String,
-    default: i18n.global.t('finish'),
+    default: i18n.global.t('buttons.finish'),
   },
   pages: {
     type: Array,

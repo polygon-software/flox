@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div class="column">
       <GenericForm
-        :finish-label="$t('finish_signup')"
+        :finish-label="$t('buttons.finish_signup')"
         :pages="pages"
         @submit="onSubmit"
       />
@@ -29,7 +29,7 @@ const account_fields = [
 const pages = [
   {
     key: 'file_upload',
-    label: i18n.global.t('document_upload'),
+    label: i18n.global.t('documents.document_upload'),
     fields: account_fields,
   },
 ]

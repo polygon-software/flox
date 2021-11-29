@@ -2,10 +2,10 @@
   <q-input
       v-model="password"
       dense
-      label="Password"
+      :label="$t('account_data.password')"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
-      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('invalid_password')]"
+      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('errors.invalid_password')]"
   >
     <template #append>
       <q-icon
