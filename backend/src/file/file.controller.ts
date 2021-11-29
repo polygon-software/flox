@@ -87,7 +87,7 @@ export class FileController {
       'base64',
     ).toString();
 
-    // TODO: Do we need to disable file upload link once it's been used?
+    // TODO: Do we need to disable file upload link once SOI admin has enabled / rejected account
     // TODO: Don't forget to change file owner once company has a cognito ID!
 
     console.log('Company UUID is', companyUuid, 'from ID', companyId);
