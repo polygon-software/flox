@@ -105,7 +105,6 @@ import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
 const emit = defineEmits(['submit'])
-import {i18n} from 'boot/i18n';
 
 const form_ref: Ref<QForm|null> = ref(null)
 
