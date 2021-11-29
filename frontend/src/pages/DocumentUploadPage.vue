@@ -24,18 +24,20 @@
 import {FIELDS} from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
-import {ref, Ref} from 'vue';
+import {inject, ref, Ref} from 'vue';
 import {QForm} from 'quasar';
 import GenericForm from 'src/components/forms/GenericForm.vue'
 import {useRoute} from 'vue-router';
+import axios from 'axios';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
 
 const emit = defineEmits(['submit'])
+const $routerService: RouterService = inject('$routerService')
 
 // Get base64-encoded UUID from URL params
 const route = useRoute()
 const companyId = route.query.cid
-
-const form_ref: Ref<QForm|null> = ref(null)
 
 const account_fields = [
   FIELDS.FILE_UPLOAD,
@@ -49,18 +51,29 @@ const pages = [
   },
 ]
 
-const form: Form = new Form(pages)
-
 /**
- * Validates and, if valid, submits the form with all entered values
- * @async
+ * Uploads the user's files and, if OK, redirects
  */
-async function onSubmit(){
-  const is_valid = await form_ref.value?.validate()
+async function onSubmit(values: Record<string, Blob[]>){
+  const files: Blob[] = values.file_upload // TODO verify type is blob!
+  const headers = { 'Content-Type': 'multipart/form-data' }
 
-  if(is_valid){
-    emit('submit', form.values.value)
+  for(const file of files) {
+    const formData = new FormData();
+    formData.append('file', file)
+
+    await axios.post(
+      'https://cognito-idp.eu-central-1.amazonaws.com/',
+      formData,
+      {
+        headers
+      },
+    ).catch((e: Error) => {
+      throw new Error(`File upload error: ${e.message}`)
+    })
   }
 
+  // TODO add fitting success message
+  await $routerService.routeTo(ROUTES.SUCCESS)
 }
 </script>
