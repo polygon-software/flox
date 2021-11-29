@@ -42,6 +42,7 @@ export class CompanyResolver {
   @Public() // TODO restrict to appropriate roles
   @Query(() => Company, { name: 'company' })
   async getCompany(@Args() getCompanyArgs: GetCompanyArgs): Promise<Company> {
+    console.log('Called with args', getCompanyArgs);
     return await this.companyService.getCompany(getCompanyArgs);
   }
 

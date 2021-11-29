@@ -68,6 +68,25 @@ export const ALL_COMPANIES = {
   cacheLocation: 'allCompanies'
 }
 
+export const COMPANY = {
+  query: gql`
+    query company($uuid: ID){
+      company(uuid: $uuid){
+        uuid
+        documents{
+          uuid
+          key
+          url
+          __typename
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['company'],
+  cacheLocation: 'company'
+}
+
 export const ALL_EMPLOYEES = {
   query: gql`
         query{
@@ -104,5 +123,4 @@ export const MY_EMPLOYEES = {
   cacheLocation: 'myEmployees'
 }
 
-
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, ALL_EMPLOYEES, MY_EMPLOYEES];
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES];

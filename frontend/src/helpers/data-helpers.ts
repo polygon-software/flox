@@ -1,5 +1,5 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
-import {ALL_USERS, QUERIES} from '../data/queries/QUERIES';
+import {QUERIES} from '../data/queries/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
@@ -16,11 +16,12 @@ import {i18n} from 'boot/i18n';
  * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
  */
 async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
-
   const queryResult = useQuery(queryObject.query, variables ?? {})
 
   return new Promise(((resolve, reject) => {
-    queryResult.onResult((res)=>{resolve(res)})
+    queryResult.onResult((res)=>{
+      resolve(res)
+    })
     queryResult.onError((err)=>{reject(err)})
   }))
 }
@@ -96,14 +97,20 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     await mutate(variables);
 }
 
-function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
+// TODO: Ensure variables are working as expected
+/**
+ * Executes a query and subscribes to its changes
+ * @param {QueryObject} query - query to execute
+ * @param {Record<string, unknown>} [variables] - any variables to pass to the query
+ */
+function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
   const $ssrStore = useSSR();
   const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
 
 
   // ----- Hooks -----
   onServerPrefetch(async () => {
-    const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query)
+    const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query, variables)
     if(!tempRes.data){ return}
     res.value = tempRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
     $ssrStore.mutations.setPrefetchedData({key: query.cacheLocation, value: res.value})
@@ -116,7 +123,7 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
 
     // SPA
     if(res.value.length <= 0){
-      void executeQuery(query).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
+      void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
         if(fetchedRes.data){
           res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
         } else {
@@ -129,7 +136,8 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
         query: query.query,
         data: {
           [query.cacheLocation]: res.value
-        }
+        },
+        variables: variables, // TODO verify working
       })
     }
 

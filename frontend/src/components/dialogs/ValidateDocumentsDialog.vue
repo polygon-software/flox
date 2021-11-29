@@ -49,6 +49,8 @@ import {PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {COMPANY} from 'src/data/queries/QUERIES';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -60,6 +62,8 @@ const props = defineProps({
     required: true
   },
 })
+
+const queryResult = executeQuery(COMPANY, {uuid: props.company.uuid})
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
