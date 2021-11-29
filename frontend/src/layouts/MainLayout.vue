@@ -8,5 +8,5 @@
 </template>
 
 <script setup lang="ts">
-import MenuBar from '../components/menu/MenuBar'
+import MenuBar from 'src/components/menu/MenuBar.vue'
 </script>

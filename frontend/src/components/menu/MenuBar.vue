@@ -14,7 +14,7 @@
   <div class="row">
     <q-btn
         v-if="loggedIn"
-        :label="$t('authentication.log_out')"
+        :label="$t('authentication.logout')"
         class="text-primary"
         flat
         @click="logout"
