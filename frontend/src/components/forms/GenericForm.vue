@@ -109,8 +109,7 @@ const props = defineProps({
 })
 
 // Get copy of prop form
-const _pages = props.pages ? props.pages as Record<string, unknown>[] : undefined
-const form: Form = new Form(_pages)
+const form: Form = new Form(pages)
 
 /**
  * Validates and, if valid, submits the form with all entered values

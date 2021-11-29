@@ -34,7 +34,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'SUCCESS': {
     path: '/generic_success',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/SuccessAndRedirect.vue') }],
+    children: [{ path: '', component: () => import('pages/GenericSuccess.vue') }],
   },
 
   'NEW_EMPLOYEE_PAGE': {
@@ -54,4 +54,4 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 export default ROUTES
 
 // Routes that can be accessed without being logged in
-export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS, ROUTES.SIGNUP]
+export const PUBLIC_ROUTES: RouteRecordRaw[] = [ROUTES.LOGIN, ROUTES.SUCCESS, ROUTES.SIGNUP,  ROUTES.SUCCESS]
