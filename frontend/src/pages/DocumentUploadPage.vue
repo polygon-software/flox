@@ -54,16 +54,21 @@ const pages = [
 /**
  * Uploads the user's files and, if OK, redirects
  */
-async function onSubmit(values: Record<string, Blob[]>){
-  const files: Blob[] = values.file_upload // TODO verify type is blob!
+async function onSubmit(values: Record<string, Record<string, File>>){
+  const fileObject: Record<string, File> = values.file_upload // TODO verify type is blob!
+  console.log('Files are:',fileObject)
   const headers = { 'Content-Type': 'multipart/form-data' }
 
-  for(const file of files) {
+  for(const fileKey of Object.keys(fileObject)) {
     const formData = new FormData();
+    const file: File = fileObject[fileKey]
+    // const blob = file as Blob
+
+    console.log('Upload file', fileKey)
     formData.append('file', file)
 
     await axios.post(
-      'https://cognito-idp.eu-central-1.amazonaws.com/',
+      'localhost:3000/uploadCompanyFile?cid=YmJiMjViYzgtOTM5ZS00ZmJjLTlmOTctNjZkZDhiMjllMjAx', // TODO dynamic, use UUID from param
       formData,
       {
         headers
@@ -74,6 +79,6 @@ async function onSubmit(values: Record<string, Blob[]>){
   }
 
   // TODO add fitting success message
-  await $routerService.routeTo(ROUTES.SUCCESS)
+  // await $routerService.routeTo(ROUTES.SUCCESS)
 }
 </script>

@@ -10,9 +10,9 @@
     clearable
     :max-file-size="maxFileSize"
     :rules="[(val) => val !== null || $t('missing_file')]"
-    @change="emitValue"
+    @update:model-value="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -28,9 +28,9 @@
     clearable
     :max-file-size="maxFileSize"
     :rules="[]"
-    @change="emitValue"
+    @update:model-value="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -46,9 +46,9 @@
     clearable
     :max-file-size="maxFileSize"
     :rules="[(val) => val !== null || $t('missing_file')]"
-    @change="emitValue"
+    @update:model-value="emitValue"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -68,7 +68,7 @@
     :rules="[]"
     @update:model-value="fileChange"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="attach_file" />
     </template>
   </q-file>
@@ -96,6 +96,7 @@ function emitValue(){
   const valid_additional_input_fields = additional_input_fields.value.filter(field => {
     return field.value !== null
   })
+  // TODO inner validation?
   emit('change', {passport, commercial_register_extract, execution_register_extract, valid_additional_input_fields})
 }
 
