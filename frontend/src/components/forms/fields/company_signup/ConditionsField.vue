@@ -1,5 +1,5 @@
 <template>
-  <strong>{{ $t('conditions') }}</strong>
+  <strong>{{ $t('account_data.conditions') }}</strong>
   <embed
     :src="pdf_link"
     class="q-mt-md q-pa-md"
@@ -10,28 +10,28 @@
   />
   <q-field
     v-model="accept_conditions"
-    :rules="[(val) => val === true || $t('must_accept_conditions')]"
+    :rules="[(val) => val === true || $t('errors.must_accept_conditions')]"
     borderless
     dense
   >
     <template #control>
         <q-checkbox
           v-model="accept_conditions"
-          :label="$t('accept_conditions')"
+          :label="$t('account_data.accept_conditions')"
           @update:model-value="emitValue"
         />
     </template>
   </q-field>
   <q-field
     v-model="accept_condition_truthful"
-    :rules="[(val) => val === true || $t('must_accept_condition_truthful')]"
+    :rules="[(val) => val === true || $t('errors.must_accept_condition_truthful')]"
     borderless
     dense
   >
     <template #control>
         <q-checkbox
           v-model="accept_condition_truthful"
-          :label="$t('accept_condition_truthful')"
+          :label="$t('account_data.accept_condition_truthful')"
           @update:model-value="emitValue"
         />
     </template>

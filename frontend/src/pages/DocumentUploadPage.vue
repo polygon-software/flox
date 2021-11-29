@@ -3,7 +3,7 @@
     <div class="column">
       <GenericForm
         v-if="companyId"
-        :finish-label="$t('finish_signup')"
+        :finish-label="$t('buttons.finish_signup')"
         :pages="pages"
         @submit="onSubmit"
       />
@@ -23,13 +23,10 @@
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
-import {Form} from 'src/helpers/form-helpers';
-import {inject, ref, Ref} from 'vue';
-import {QForm} from 'quasar';
+import {inject} from 'vue';
 import GenericForm from 'src/components/forms/GenericForm.vue'
 import {useRoute} from 'vue-router';
 import axios from 'axios';
-import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 
 const emit = defineEmits(['submit'])
@@ -46,7 +43,7 @@ const account_fields = [
 const pages = [
   {
     key: 'file_upload',
-    label: i18n.global.t('document_upload'),
+    label: i18n.global.t('documents.document_upload'),
     fields: account_fields,
   },
 ]

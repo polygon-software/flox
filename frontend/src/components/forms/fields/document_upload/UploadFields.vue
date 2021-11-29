@@ -5,11 +5,11 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="$t('passport_or_id')"
+    :label="$t('account_data.passport_or_id')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
-    :rules="[(val) => val !== null || $t('missing_file')]"
+    :max-file-size="props.maxFileSize"
+    :rules="[(val) => val !== null || $t('errors.missing_file')]"
     @update:model-value="emitValue"
   >
     <template #prepend>
@@ -23,10 +23,10 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="`${$t('commercialRegisterExtract')} (${$t('optional')})`"
+    :label="`${$t('account_data.commercial_register_extract')} (${$t('account_data.optional')})`"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
+    :max-file-size="props.maxFileSize"
     :rules="[]"
     @update:model-value="emitValue"
   >
@@ -41,11 +41,11 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="$t('executionRegisterExtract')"
+    :label="$t('account_data.execution_register_extract')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
-    :rules="[(val) => val !== null || $t('missing_file')]"
+    :max-file-size="props.maxFileSize"
+    :rules="[(val) => val !== null || $t('errors.missing_file')]"
     @update:model-value="emitValue"
   >
     <template #prepend>
@@ -61,10 +61,10 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="$t('additional_documents')"
+    :label="$t('documents.additional_documents')"
     stack-label
     clearable
-    :max-file-size="maxFileSize"
+    :max-file-size="props.maxFileSize"
     :rules="[]"
     @update:model-value="fileChange"
   >

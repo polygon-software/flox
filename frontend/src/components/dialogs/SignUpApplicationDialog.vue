@@ -12,7 +12,7 @@
           <q-item v-ripple>
             <q-item-section >
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('company_name') }}:</p>
+                <p class="col-5">{{ $t('account_data.company_name') }}:</p>
                 <p class="col-7">{{ props.company.company_name }}</p>
               </div>
             </q-item-section>
@@ -21,7 +21,7 @@
           <q-item v-ripple>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('language') }}:</p>
+                <p class="col-5">{{ $t('account_data.language') }}:</p>
                 <p class="col-7">{{ props.company.language }}</p>
               </div>
             </q-item-section>
@@ -30,7 +30,7 @@
           <q-item v-ripple>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('company_uid') }}:</p>
+                <p class="col-5">{{ $t('account_data.company_uid') }}:</p>
                 <p class="col-7">{{ props.company.uid.length > 0 ? props.company.uid : '-' }}</p>
               </div>
             </q-item-section>
@@ -39,7 +39,7 @@
           <q-item v-ripple>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('full_name') }}:</p>
+                <p class="col-5">{{ $t('account_data.full_name') }}:</p>
                 <p class="col-7">{{ props.company.first_name }} {{ props.company.last_name }}</p>
               </div>
             </q-item-section>
@@ -48,7 +48,7 @@
           <q-item v-ripple>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('domicile_address') }}:</p>
+                <p class="col-5">{{ $t('account_data.domicile_address') }}:</p>
                 <p class="col-7">{{ domicile_address.prettyString() }}</p>
               </div>
             </q-item-section>
@@ -57,7 +57,7 @@
           <q-item v-ripple>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('correspondence_address') }}:</p>
+                <p class="col-5">{{ $t('account_data.correspondence_address') }}:</p>
                 <p class="col-7">{{ correspondence_address.prettyString() }}</p>
               </div>
             </q-item-section>
@@ -66,7 +66,7 @@
           <q-item v-ripple>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('phone_number') }}:</p>
+                <p class="col-5">{{ $t('account_data.phone_number') }}:</p>
                 <p class="col-7">{{ props.company.phone }}</p>
               </div>
             </q-item-section>
@@ -75,7 +75,7 @@
           <q-item v-ripple>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('email') }}:</p>
+                <p class="col-5">{{ $t('account_data.email') }}:</p>
                 <p class="col-7">{{ props.company.email }}</p>
               </div>
             </q-item-section>
@@ -84,7 +84,7 @@
           <q-item v-ripple>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('branch_structure') }}:</p>
+                <p class="col-5">{{ $t('account_data.branch_structure') }}:</p>
                 <p class="col-7">{{ props.company.branch_structure ? $t('yes') : $t('no') }}</p>
               </div>
             </q-item-section>
@@ -95,19 +95,19 @@
       <q-card-actions>
         <q-btn
           class="q-ma-md"
-          :label="$t('enable_upload')"
+          :label="$t('dashboards.enable_upload')"
           color="primary"
           @click="onOk"
         />
         <q-btn
           class="q-ma-md"
-          :label="$t('reject')"
+          :label="$t('dashboards.reject')"
           color="negative"
           @click="onReject"
         />
         <q-btn
           class="q-ma-md"
-          :label="$t('cancel')"
+          :label="$t('buttons.cancel')"
           color="primary"
           flat
           @click="onCancel"

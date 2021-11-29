@@ -5,18 +5,18 @@
   >
     <q-card class="q-pa-md q-ma-md">
       <q-card-section>
-        <h5>{{ $t('sure_to_reject') }}</h5>
+        <h5>{{ $t('dashboards.sure_to_reject') }}</h5>
       </q-card-section>
       <q-card-actions>
         <q-btn
           class="q-ma-md"
-          :label="$t('yes_reject')"
+          :label="$t('dashboards.yes_reject')"
           color="negative"
           @click="onYesReject"
         />
         <q-btn
           class="q-ma-md"
-          :label="$t('cancel')"
+          :label="$t('buttons.cancel')"
           color="primary"
           @click="onCancel"
         />

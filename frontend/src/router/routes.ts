@@ -19,14 +19,26 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
+  'SET_PASSWORD': {
+    path: '/set-password',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SetPasswordPage.vue') }],
+  },
+
   'MANAGEMENT_DASHBOARD': {
-    path: '/management_dashboard',
+    path: '/management-dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/ManagementDashboardPage.vue') }],
   },
 
+  'EMPLOYEE_DASHBOARD': {
+    path: '/employee-dashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/EmployeeDashboardPage.vue') }],
+  },
+
   'SIGNUP': {
-    path: '/company_signup',
+    path: '/company-signup',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/SignupPage.vue') }],
   },
@@ -38,7 +50,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   'DOCUMENT_UPLOAD': {
-    path: '/document_upload',
+    path: '/document-upload',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/DocumentUploadPage.vue') }],
   },
@@ -49,7 +61,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/AdminDashboardPage.vue') }],
   },
   'NEW_EMPLOYEE_PAGE': {
-    path: '/new_employee',
+    path: '/new-employee',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
   },
@@ -73,3 +85,4 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
 ]
 
 //TODO: Add semi-protected routes
+

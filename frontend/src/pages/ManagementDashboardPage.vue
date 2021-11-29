@@ -9,7 +9,7 @@
         class="q-ma-md col text-center"
         style="font-size: x-large"
       >
-        {{ $t('management_dashboard') }}
+        {{ $t('dashboards.management_dashboard') }}
       </p>
 
       <!-- Employee Overview -->
@@ -17,11 +17,11 @@
 
       <!-- Register new employee -->
       <div class="flex row justify-center items-center">
-        <p class="col-12 text-center q-mb-xs" style="font-size: medium">{{ $t('register_new_employee_here') }}</p>
+        <p class="col-12 text-center q-mb-xs" style="font-size: medium">{{ $t('dashboards.register_new_employee_here') }}</p>
         <q-btn
           class="col-2 q-mx-md q-mb-md q-mt-xs"
           style="width: 150px"
-          :label="$t('signup')"
+          :label="$t('authentication.signup')"
           color="primary"
           @click="routeToRegisterEmployee"
         />

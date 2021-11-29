@@ -8,20 +8,20 @@
           v-if="loggedIn && username"
           class="text-grey-7"
       >
-        {{ $t('loggedIn', {user: username})}}
+        {{ $t('authentication.loggedIn', {user: username})}}
       </p>
     </div>
   <div class="row">
     <q-btn
         v-if="loggedIn"
-        label="Logout"
+        :label="$t('authentication.log_out')"
         class="text-primary"
         flat
         @click="logout"
     />
     <q-btn
         v-if="loggedIn"
-        label="Change Password"
+        :label="$t('authentication.change_password')"
         class="text-primary"
         flat
         @click="changePassword"
