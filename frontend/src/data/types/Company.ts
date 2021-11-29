@@ -18,11 +18,11 @@ export class Company {
   email: string|null
   branch_structure: boolean|null
   document_upload_enabled: boolean|null
-  documents: Array<File>|null
+  documents: Array<Record<string, unknown>>|null
   cognito_id: string|null
 
   constructor(company_name?: string, language?: string, uid?: string, uuid?: string, first_name?: string, last_name?: string, domicile_address?: Address, correspondance_address?: Address,
-              phone?: string, email?: string, branch_structure?: boolean, document_upload_enabled?: boolean, documents?: Array<File>, cognito_id?: string) {
+              phone?: string, email?: string, branch_structure?: boolean, document_upload_enabled?: boolean, documents?: Array<Record<string, unknown>>, cognito_id?: string) {
 
     this.company_name = company_name ?? null
     this.language = language ?? null
@@ -72,7 +72,7 @@ export class Company {
   replace({company_name, language, uid, uuid, first_name, last_name, domicile_address, correspondance_address, phone, email, branch_structure, document_upload_enabled, documents}:
             {
               company_name: string, language: string, uid: string, uuid: string, first_name: string, last_name: string, domicile_address: Address, correspondance_address: Address,
-              phone: string, email: string, branch_structure: boolean, document_upload_enabled: boolean, documents: Array<File>
+              phone: string, email: string, branch_structure: boolean, document_upload_enabled: boolean, documents: Array<Record<string, unknown>>
             }): void {
 
     this.company_name = company_name

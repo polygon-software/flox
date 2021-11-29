@@ -15,7 +15,7 @@ import {i18n} from 'boot/i18n';
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
  */
-async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
+async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown>>> {
   const queryResult = useQuery(queryObject.query, variables ?? {})
 
   return new Promise(((resolve, reject) => {

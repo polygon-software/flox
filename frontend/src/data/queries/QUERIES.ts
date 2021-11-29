@@ -123,4 +123,19 @@ export const MY_EMPLOYEES = {
   cacheLocation: 'myEmployees'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES];
+export const PRIVATE_FILE = {
+  query: gql`
+    query getPrivateFile($uuid: ID!){
+      getPrivateFile(uuid: $uuid){
+        uuid
+        url
+        key
+        __typename
+      }
+    }
+  `,
+  tables: ['private_file'],
+  cacheLocation: 'getPrivateFile'
+}
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];

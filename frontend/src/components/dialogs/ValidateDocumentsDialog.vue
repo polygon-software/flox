@@ -18,6 +18,19 @@
             </q-item-section>
           </q-item>
 
+          <q-item
+            v-for="document in _company.documents"
+            :key="document.uuid"
+            v-ripple
+          >
+            <q-item-section >
+              <div class="row flex content-center">
+                <p class="col-5">{{ document.key }}</p>
+                <p class="col-7">{{ document.url }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
         </q-list>
       </q-card-section>
       <q-card-actions>
@@ -45,12 +58,13 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {PropType, ref, Ref} from 'vue'
+import {computed, ComputedRef, PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
+import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeQuery} from 'src/helpers/data-helpers';
-import {COMPANY} from 'src/data/queries/QUERIES';
+import _ from 'lodash';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -63,7 +77,25 @@ const props = defineProps({
   },
 })
 
-const queryResult = executeQuery(COMPANY, {uuid: props.company.uuid})
+// Clone prop so we can add URLs
+const _company = ref(_.cloneDeep(props.company))
+
+// Get URLs
+void getUrls();
+
+/**
+ * Load all URLs and add to local object
+ */
+async function getUrls(): Promise<void>{
+  const documents = _company.value.documents ?? [];
+  for(const document of documents) {
+    const queryResult = await executeQuery(PRIVATE_FILE, {uuid: document.uuid})
+    const file = queryResult.data.getPrivateFile as Record<string, unknown>
+
+    // Add to copy
+    document.url = file.url;
+  }
+}
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
