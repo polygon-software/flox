@@ -86,7 +86,6 @@ export class Company extends Person {
     cascade: true,
     eager: true,
   })
-  @JoinColumn()
   documents: PrivateFile[];
 
   // @Column() TODO: Possibly add employee ID array / determine if needed

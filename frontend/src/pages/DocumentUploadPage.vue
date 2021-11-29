@@ -51,24 +51,24 @@ const pages = [
 /**
  * Uploads the user's files and, if OK, redirects
  */
-async function onSubmit(values: Record<string, Record<string, File>>){
-  const fileObject: Record<string, File> = values.file_upload // TODO verify type is blob!
+async function onSubmit(values: Record<string, Record<string, File|null>>){
+  const fileObject: Record<string, File|null> = values.file_upload
   console.log('Files are:',fileObject)
   const headers = { 'Content-Type': 'multipart/form-data' }
 
   for(const fileKey of Object.keys(fileObject)) {
     const formData = new FormData();
-    const file: File = fileObject[fileKey]
-    if(file) {
-      // Convert to Blob
-      const blob = file as Blob
-
-      console.log('Upload file', fileKey)
+    if(fileObject[fileKey]) {
+      // Convert to Blob and append
+      const blob = fileObject[fileKey] as Blob
       formData.append('file', blob)
+
+      // Get ID from route
+      const cid: string = route.params.cid.toString()
 
       await axios({
         method: 'post',
-        url: 'http://localhost:3000/uploadCompanyFile?cid=YmJiMjViYzgtOTM5ZS00ZmJjLTlmOTctNjZkZDhiMjllMjAx', // TODO dynamic, use UUID from param
+        url: `http://localhost:3000/uploadCompanyFile?cid=${cid}`, // TODO actual URL from env
         data: formData,
         headers: headers,
       }).catch((e: Error) => {

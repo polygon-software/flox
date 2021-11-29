@@ -85,7 +85,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.branch_structure') }}:</p>
-                <p class="col-7">{{ props.company.branch_structure ? $t('yes') : $t('no') }}</p>
+                <p class="col-7">{{ props.company.branch_structure ? $t('general.yes') : $t('general.no') }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -182,7 +182,7 @@ async function onOk(): Promise<void> {
   const to: string = company.email ?? ''
   const subject = 'Your account' // TODO set
   const encodedUuid = btoa(company.uuid ?? ''); // Base64 encode UUID
-  const url = `http://localhost:8080/document_upload?cid=${encodedUuid}`
+  const url = `http://localhost:8080/document-upload?cid=${encodedUuid}` // TODO path
   const body = `Upload your documents at the following link:\n${url}`// TODO HTML mail template
 
   // Send e-mail

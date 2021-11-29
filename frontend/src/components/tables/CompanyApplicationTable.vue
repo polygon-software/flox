@@ -1,6 +1,6 @@
 <template>
   <q-table
-    :title="$tc('application', 2)"
+    :title="$tc('dashboards.application', 2)"
     :rows="computedResult"
     :columns="columns"
     row-key="uuid"
@@ -15,7 +15,7 @@
         </q-td>
         <q-td key="state" :props="props">
           <q-chip
-            :label="$t(getState(props.row).label)"
+            :label="$t(`general.${getState(props.row).label}`)"
             :color="getState(props.row).color"
             text-color="white"
           />
@@ -24,11 +24,11 @@
           <q-btn
             v-if="isAction(props.row)"
             color="primary"
-            :label="props.row.document_upload_enabled ? $t('unlock_account') : $t('enable_upload')"
+            :label="props.row.document_upload_enabled ? $t('dashboards.unlock_account') : $t('dashboards.enable_upload')"
             @click="props.row.document_upload_enabled ? unlockAccount() : enableUpload(props.row)"
           />
           <div v-else>
-            {{ $t('documents_missing') }}
+            {{ $t('errors.documents_missing') }}
           </div>
         </q-td>
       </q-tr>
@@ -50,9 +50,9 @@ const $q: QVueGlobals = useQuasar()
 // ----- Data -----
 const columns = [
   { name: 'readable_id', label: 'ID', field: 'readable_id', sortable: false },
-  { name: 'company_name', label: i18n.global.t('company_name'), field: 'company_name', sortable: true },
-  {name: 'state', required: true, label: i18n.global.t('state'), align: 'left', field: 'state', sortable: true},
-  {name: 'action', required: true, label: i18n.global.t('action'), align: 'left', field: 'action', sortable: true}
+  { name: 'company_name', label: i18n.global.t('account_data.company_name'), field: 'company_name', sortable: true },
+  {name: 'state', required: true, label: i18n.global.t('dashboards.state'), align: 'left', field: 'state', sortable: true},
+  {name: 'action', required: true, label: i18n.global.t('dashboards.action'), align: 'left', field: 'action', sortable: true}
 ]
 
 const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>>>

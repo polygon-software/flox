@@ -109,7 +109,7 @@ function emitValue(){
   }
 
   // TODO inner validation?
-  emit('change', {passport, commercialRegisterExtract, executionRegisterExtract, additionalFiles})
+  emit('change', {passport, commercialRegisterExtract, executionRegisterExtract, ...additionalFiles})
 }
 
 /**
@@ -146,7 +146,7 @@ function fileChange(): void {
         emitValue()
         return;
       }
-      // Not last elemnt -> delete field
+      // Not last element -> delete field
       additionalInputFields.value.splice(index, 1)
       emitValue()
       return;

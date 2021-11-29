@@ -92,6 +92,7 @@ export class FileController {
 
     console.log('Company UUID is', companyUuid, 'from ID', companyId);
     const company = await this.companyRepository.findOne(companyUuid);
+    console.log('company:', company);
 
     // Throw error if invalid company
     if (!company) {

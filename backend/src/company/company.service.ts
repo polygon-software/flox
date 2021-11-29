@@ -105,9 +105,9 @@ export class CompanyService {
    * @param {string} uuid - the company's uuid
    */
   async enableDocumentUpload(uuid: string): Promise<Company> {
-    const company = await this.companyRepository.findOne(uuid);
-    company.document_upload_enabled = true;
-    await this.companyRepository.update(uuid, company);
+    await this.companyRepository.update(uuid, {
+      document_upload_enabled: true,
+    });
     return await this.companyRepository.findOne(uuid);
   }
 }
