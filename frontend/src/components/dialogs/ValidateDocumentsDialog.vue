@@ -146,7 +146,7 @@ async function onOk(): Promise<void> {
     props.company.email ?? '',
     password
   ).catch((e) => {
-    console.log('gotsta error', e)
+    console.log('gotsta error', e, $errorService) // TODO Error service seems to be undefined here
     $errorService?.showErrorDialog(e)
   })
 
