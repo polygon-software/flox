@@ -69,8 +69,6 @@ async function submitPassword(values: Record<string, string>) {
   // Log in
   await $authService.login(username, password)
 
-  await $authService.showEmailVerificationDialog(true)
-
   // Change password
   $authStore.getters.getCognitoUser()?.changePassword(password, values.password_repeat, (err: Error|undefined)=>{
     if(err){
