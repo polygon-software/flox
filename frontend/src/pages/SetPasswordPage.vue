@@ -44,7 +44,6 @@ const pages = [
  * @param event
  */
 async function submitPassword(event: Record<string, string>) {
-  console.log('new password', event.password_repeat)
   setTimeout(function() {$routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)}, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
 }

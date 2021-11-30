@@ -163,8 +163,9 @@ export class AuthenticationService {
    * @param username {string} - the chosen username
    * @param email {string} - the authentication's e-mail address -> TODO move to attributes
    * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
+   * @returns {string} the user's cognito ID (sub)
    */
-  async signUpNewUser(username: string, email: string, password: string): Promise<CognitoUser> {
+  async signUpNewUser(username: string, email: string, password: string): Promise<string> {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
       const attributes = [];
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
@@ -182,7 +183,7 @@ export class AuthenticationService {
       })
     })
 
-    return cognitoUserWrapper.user
+    return cognitoUserWrapper.userSub
   }
 
 

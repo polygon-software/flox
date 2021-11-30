@@ -128,7 +128,7 @@ async function onOk(): Promise<void> {
   // TODO disable file upload for
   const password = 'asdfASDF1234&' // TODO randomgenerate
 
-  const newUser = await props.authService.signUpNewUser(
+  const newUserId = await props.authService.signUpNewUser(
     props.company.readable_id ?? '',
     props.company.email ?? '',
     password
@@ -144,18 +144,10 @@ async function onOk(): Promise<void> {
     `Click the following link: ${link}`
   )
 
-  newUser.getUserAttributes((attrs) => {
-    console.log('Attrs:', attrs)
-  })
-
-  newUser.getUserData((data) => {
-    console.log('Data:', data)
-  })
-
   // Set cognito ID on company
   await executeMutation(SET_COGNITO_USER, {
     uuid: props.company.uuid,
-    cognito_id: 'TODOASDF'
+    cognito_id: newUserId
   })
 
   // TODO change file ownership?
