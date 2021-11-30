@@ -1,4 +1,8 @@
-
+/**
+ * Generates a random number in given range
+ * @param min
+ * @param max
+ */
 function randomNumber(min:number, max:number) {
   return Math.floor(Math.random() * (max - min) + min)
 }
