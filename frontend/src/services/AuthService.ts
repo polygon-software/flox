@@ -138,8 +138,6 @@ export class AuthenticationService {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
       const attributes = [];
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-      // TODO disable requirement on AWS @thommann
-      attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
       this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
             if (err) {
               // TODO
@@ -169,8 +167,6 @@ export class AuthenticationService {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
       const attributes = [];
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-      // TODO disable requirement on AWS @thommann
-      attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
       this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
         if (err) {
           // TODO
