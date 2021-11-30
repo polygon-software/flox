@@ -45,9 +45,4 @@ export class UpdateEmployeeInput extends PartialType(CreateEmployeeInput) {
   @IsOptional()
   @IsString()
   language: string;
-
-  @Field(() => String, {nullable: true})
-  @IsOptional()
-  @IsUUID()
-  cognito_id: string;
 }

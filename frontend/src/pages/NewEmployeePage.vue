@@ -21,7 +21,7 @@ import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {CREATE_EMPLOYEE, SET_COGNITO_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
+import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {AuthenticationService} from 'src/services/AuthService';
 
@@ -73,7 +73,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
   )
 
   // Create database entry
-  const newEmployee = await executeMutation(CREATE_EMPLOYEE, {
+  await executeMutation(CREATE_EMPLOYEE, {
     first_name: formData.full_name.first_name,
     last_name: formData.full_name.last_name,
     gender: formData.salutation,
@@ -81,10 +81,6 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     email: formData.email,
     function: formData.company_function,
     language: formData.language,
-  }) as Record<string, unknown>
-
-  await executeMutation(SET_COGNITO_EMPLOYEE, {
-    uuid: newEmployee?.uuid,
     cognito_id: newUserId,
   })
 

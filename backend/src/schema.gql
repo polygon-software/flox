@@ -91,6 +91,8 @@ input CreateCompanyInput {
 }
 
 input CreateEmployeeInput {
+  cognito_id: String
+
   """Company"""
   company: company
 
