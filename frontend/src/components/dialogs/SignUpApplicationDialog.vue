@@ -3,7 +3,7 @@
     ref="dialog"
     :title="$t('dashboards.application')"
   >
-    <q-card>
+    <q-card style="width: 600px;">
       <q-card-section>
         <q-list
           bordered

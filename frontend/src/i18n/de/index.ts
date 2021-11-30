@@ -79,7 +79,6 @@ export default {
     ok: 'OK',
   },
   documents: {
-    documents_missing: 'Fehlende Dokumente',
     documents_available: 'Dokumente verfügbar',
     document_upload: 'Dokumentenupload',
     additional_documents: 'Weitere Dokumente',
@@ -114,6 +113,7 @@ export default {
     must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    documents_missing: 'Fehlende Dokumente',
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',

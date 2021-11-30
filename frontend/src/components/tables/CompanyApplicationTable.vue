@@ -118,7 +118,7 @@ function getState(companyData: Company): Record<string, string> {
   if (companyData.document_upload_enabled) {
     if (companyData.documents === null || companyData.documents.length === 0) {
       return {
-        label: 'documents.documents_missing',
+        label: 'errors.documents_missing',
         color: 'orange'
       }
     }
