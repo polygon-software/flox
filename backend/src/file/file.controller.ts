@@ -98,7 +98,6 @@ export class FileController {
       );
     }
 
-    console.log('Req:', req, 'for company', company.uuid);
     const file = await req.file();
 
     if (!file) {
