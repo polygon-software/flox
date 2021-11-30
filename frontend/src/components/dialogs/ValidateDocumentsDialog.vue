@@ -67,9 +67,11 @@ import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
-import {CognitoUserSession} from 'amazon-cognito-identity-js';
+import {ErrorService} from 'src/services/ErrorService';
+import {i18n} from 'boot/i18n';
 
 const $q: QVueGlobals = useQuasar()
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
@@ -122,7 +124,7 @@ function hide(): void {
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){
-    throw new Error('Company missing data') // TODO use ErrorService and show popup
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
   // TODO disable file upload for
