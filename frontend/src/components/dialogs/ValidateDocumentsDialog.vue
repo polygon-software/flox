@@ -56,18 +56,17 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {inject, PropType, reactive, ref, Ref} from 'vue'
+import {PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
-import _, {ceil} from 'lodash';
+import _ from 'lodash';
 import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
-import {CognitoUserSession} from 'amazon-cognito-identity-js';
 import {randomPassword} from 'src/helpers/generator-helpers';
 
 const $q: QVueGlobals = useQuasar()
