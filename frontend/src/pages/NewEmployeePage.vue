@@ -65,7 +65,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
   const password = 'asdfASDF1234--' // TODO randomgenerate
 
   // Create cognito User
-  await $authService.signUpNewUser(
+  const newUserId = await $authService.signUpNewUser(
     email,
     email,
     password
@@ -73,6 +73,8 @@ async function onRegister(formData: Record<string, Record<string, string>>){
 
 
   const link = `http://localhost:8080/set-password?u=${email}&k=${password}&t=emp` // TODO actual link
+
+  // TODO: add newUserId as cognito_id on employee in database (updateEmployee mutation)
 
   // Send one-time login email
   await sendEmail(
