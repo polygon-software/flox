@@ -58,16 +58,12 @@ const type: string|undefined = route.query.t?.toString()
  */
 async function submitPassword(values: Record<string, string>) {
 
-  console.log('set called for', username, 'with pw', password)
-
   if(username === undefined || password === undefined){
     $errorService?.showErrorDialog(new Error('Invalid link')) // TODO i18n
     return
   }
   const decoded_email = atob(username)
   const decoded_pw = atob(password)
-
-  console.log('set called for', decoded_email, 'with pw', decoded_pw)
 
   // Log in
   await $authService.login(decoded_email, decoded_pw)
