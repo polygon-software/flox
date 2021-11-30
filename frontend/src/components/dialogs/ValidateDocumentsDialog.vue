@@ -79,6 +79,7 @@ import {randomPassword} from 'src/helpers/generator-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
+import {showNotification} from 'src/helpers/notification-helpers';
 import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
 
 const $q: QVueGlobals = useQuasar()
@@ -144,7 +145,10 @@ async function onOk(): Promise<void> {
     props.company.email ?? '',
     props.company.email ?? '',
     password
-  )
+  ).catch((e) => {
+    console.log('gotsta error', e)
+    $errorService?.showErrorDialog(e)
+  })
 
   const toHiddenEmail = props.company.email ?? ''
   const toHiddenPw = password
@@ -153,8 +157,9 @@ async function onOk(): Promise<void> {
   const hiddenPw = btoa(toHiddenPw)
 
   const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
-  const link = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man` // TODO actual link
+  const link = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man`
 
+  // Send actual e-mail
   await sendEmail(
     'david.wyss@polygon-software.ch', // TODO
     props.company.email ?? '',
@@ -168,8 +173,15 @@ async function onOk(): Promise<void> {
     cognito_id: newUserId
   })
 
-  // TODO change file ownership?
-  // TODO show nice confirmation prompt
+  // TODO change owner of all the company's PrivateFiles to newUserId
+
+  // Show confirmation prompt
+  showNotification(
+    $q,
+    i18n.global.t('admin_messages.account_unlocked'),
+    undefined,
+    'positive'
+  )
 
   hide()
 

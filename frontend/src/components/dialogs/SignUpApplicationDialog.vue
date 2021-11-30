@@ -126,6 +126,8 @@ import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
 import {sendEmail} from 'src/helpers/email-helpers';
 import ROUTES from 'src/router/routes';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -188,6 +190,14 @@ async function onOk(): Promise<void> {
 
   // Send e-mail
   await sendEmail(from, to, subject, body)
+
+  // Show confirmation prompt
+  showNotification(
+    $q,
+    i18n.global.t('admin_messages.document_upload_enabled'),
+    undefined,
+    'positive'
+  )
 
   hide()
 }

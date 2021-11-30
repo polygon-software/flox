@@ -56,6 +56,10 @@ export default {
     execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
   },
+  admin_messages: {
+    account_unlocked: 'Account erfolgreich freigeschaltet',
+    document_upload_enabled: 'Dokumentupload freigeschaltet',
+  },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
