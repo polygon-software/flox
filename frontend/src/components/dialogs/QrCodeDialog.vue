@@ -3,7 +3,6 @@
       ref="dialog"
       :persistent="true"
       title="QR"
-      @hide="onDialogHide"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
@@ -21,12 +20,12 @@
         <q-btn
             label="Abbrechen"
             color="primary"
-            @click="onDialogCancel"
+            @click="hide"
         />
         <q-btn
             label="OK"
             color="primary"
-            @click="onDialogOK"
+            @click="onOk"
         />
       </q-card-actions>
     </q-card>
@@ -48,6 +47,7 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 // onDialogCancel - Function to call to settle dialog with "cancel" outcome
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+const emit = defineEmits(['ok'])
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -58,6 +58,11 @@ function show(): void{
 function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
+}
+
+function onOk(): void {
+  emit('ok')
+  hide()
 }
 
 const props = defineProps({
