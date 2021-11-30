@@ -69,7 +69,6 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
           } else {
             // Case 2: Response contains a nested object (take first one, because there should only be one in this case)
             const innerObject: Record<string, string> = responseObject[Object.keys(responseObject)[0]] as Record<string, string>
-            // TODO: Ensure that updateCompany caches correctly
             if(!innerObject){
               throw new Error(`Cannot cache response ${responseObject.toString()}`)
             }

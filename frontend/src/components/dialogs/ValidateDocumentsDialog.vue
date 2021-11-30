@@ -65,8 +65,9 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {PropType, ref, Ref} from 'vue'
-import {QDialog, QVueGlobals, useQuasar, openURL} from 'quasar';
+import {inject, PropType, ref, Ref} from 'vue'
+import {QDialog, QVueGlobals, useQuasar} from 'quasar';
+import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
@@ -74,10 +75,14 @@ import _ from 'lodash';
 import {AuthenticationService} from 'src/services/AuthService';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {SET_COGNITO_COMPANY} from 'src/data/mutations/COMPANY';
-import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
+import {randomPassword} from 'src/helpers/generator-helpers';
+import {ErrorService} from 'src/services/ErrorService';
+import {i18n} from 'boot/i18n';
+import ROUTES from 'src/router/routes';
 import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
 
 const $q: QVueGlobals = useQuasar()
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
@@ -130,24 +135,29 @@ function hide(): void {
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){
-    throw new Error('Company missing data') // TODO use ErrorService and show popup
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
   // TODO disable file upload for
-  const password = 'asdfASDF1234--' // TODO randomgenerate
-
+  const password = randomPassword(9)
   const newUserId = await props.authService.signUpNewUser(
     props.company.email ?? '',
     props.company.email ?? '',
     password
   )
 
+  const toHiddenEmail = props.company.email ?? ''
+  const toHiddenPw = password
+  // Encode base64
+  const hiddenEmail = btoa(toHiddenEmail)
+  const hiddenPw = btoa(toHiddenPw)
 
-  const link = `http://localhost:8080/set-password?u=${props.company.email ?? ''}&k=${password}&t=man` // TODO actual link
+  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
+  const link = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man` // TODO actual link
 
   await sendEmail(
     'david.wyss@polygon-software.ch', // TODO
-    props.company.email ?? '', // TODO
+    props.company.email ?? '',
     'Your Account',
     `Click the following link: ${link}`
   )

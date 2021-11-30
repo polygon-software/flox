@@ -125,6 +125,7 @@ import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
 import {sendEmail} from 'src/helpers/email-helpers';
+import ROUTES from 'src/router/routes';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -181,7 +182,8 @@ async function onOk(): Promise<void> {
   const to: string = company.email ?? ''
   const subject = 'Your account' // TODO set
   const encodedUuid = btoa(company.uuid ?? ''); // Base64 encode UUID
-  const url = `http://localhost:8080/document-upload?cid=${encodedUuid}` // TODO path
+  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
+  const url = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?cid=${encodedUuid}`
   const body = `Upload your documents at the following link:\n${url}`// TODO HTML mail template
 
   // Send e-mail
