@@ -58,10 +58,16 @@ const columns = [
   {name: 'action', required: true, label: i18n.global.t('dashboards.action'), align: 'left', field: 'action', sortable: true}
 ]
 
-const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>>[]>
 
 const computedResult = computed(()=>{
-  return queryResult.value ?? []
+  const companies = queryResult.value ?? []
+
+  // Filter out completed applications by hiding those that have an account
+  // TODO filter out rejected applications
+  return companies.filter((company) => {
+    return company.cognito_id === undefined || company.cognito_id === null || company.cognito_id.length === 0
+  })
 })
 
 

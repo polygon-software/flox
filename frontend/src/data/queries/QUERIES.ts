@@ -41,7 +41,9 @@ export const ALL_COMPANIES = {
               language
               uid
               document_upload_enabled
+              cognito_id
               domicile_address{
+                uuid
                 street
                 number
                 city
@@ -49,6 +51,7 @@ export const ALL_COMPANIES = {
                 __typename
               }
               correspondence_address{
+                uuid
                 street
                 number
                 city

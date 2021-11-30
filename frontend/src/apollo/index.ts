@@ -59,8 +59,23 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
         // Use UUID as default key in database. If any table needs different behaviour, this can be changed here,
         // see: https://www.apollographql.com/docs/react/caching/cache-configuration/
         dataIdFromObject(responseObject) {
-          const uuid: string = responseObject.uuid?.toString() ?? '';
-          const result = `${responseObject.__typename ?? ''}:${uuid}`;
+          const uuid: string|undefined = responseObject.uuid?.toString();
+          const typename: string|undefined = responseObject.__typename
+          let result;
+
+          if(uuid && typename){
+            // Case 1: Response contains relevant data at root
+            result = `${typename}:${uuid}`;
+          } else {
+            // Case 2: Response contains a nested object (take first one, because there should only be one in this case)
+            const innerObject: Record<string, string> = responseObject[Object.keys(responseObject)[0]] as Record<string, string>
+            // TODO: Ensure that updateCompany caches correctly
+            if(!innerObject){
+              throw new Error(`Cannot cache response ${responseObject.toString()}`)
+            }
+            result = `${innerObject.__typename ?? ''}:${innerObject.uuid ?? ''}`;
+          }
+
           return result
         },
         addTypename: false, // We disable auto-adding of __typename property, as this breaks mutations expecting
