@@ -250,6 +250,7 @@ input UpdateCompanyInput {
   cognito_id: String
   company_name: String
   correspondence_address: CreateAddressInput
+  document_upload_enabled: Boolean
   domicile_address: CreateAddressInput
   email: String
   first_name: String

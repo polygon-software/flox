@@ -33,7 +33,7 @@ export const ENABLE_COMPANY_DOCUMENT_UPLOAD = {
 export const SET_COGNITO_USER = {
   mutation: gql`
     mutation updateCompany($uuid: ID!, $cognito_id: String!){
-      updateCompany (updateCompanyInput: {uuid: $uuid, cognito_id: $cognito_id}) {
+      updateCompany (updateCompanyInput: {uuid: $uuid, cognito_id: $cognito_id, document_upload_enabled: false}) {
         uuid
         company_name
         cognito_id

@@ -87,15 +87,12 @@ export class FileController {
       'base64',
     ).toString();
 
-    // TODO: Do we need to disable file upload link once SOI admin has enabled / rejected account
     // TODO: Don't forget to change file owner once company has a cognito ID!
 
-    console.log('Company UUID is', companyUuid, 'from ID', companyId);
     const company = await this.companyRepository.findOne(companyUuid);
-    console.log('company:', company);
 
-    // Throw error if invalid company
-    if (!company) {
+    // Throw error if invalid company or document upload not enabled
+    if (!company || !company.document_upload_enabled) {
       throw new Error(
         'No valid company found, the link you used may be invalid.',
       );

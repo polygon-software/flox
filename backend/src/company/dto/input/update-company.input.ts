@@ -65,6 +65,11 @@ export class UpdateCompanyInput {
   @IsBoolean()
   branch_structure: boolean;
 
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  document_upload_enabled: boolean;
+
   @Field(() => String, { nullable: true })
   @IsOptional()
   @IsUUID()
