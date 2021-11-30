@@ -71,6 +71,7 @@ import {randomPassword} from 'src/helpers/generator-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
@@ -144,8 +145,9 @@ async function onOk(): Promise<void> {
   const hiddenPw = btoa(toHiddenPw)
 
   const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
-  const link = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man` // TODO actual link
+  const link = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man`
 
+  // Send actual e-mail
   await sendEmail(
     'david.wyss@polygon-software.ch', // TODO
     props.company.email ?? '',
@@ -161,6 +163,10 @@ async function onOk(): Promise<void> {
 
   // TODO change file ownership?
   // TODO show nice confirmation prompt
+  showNotification(
+    $q,
+    'Great success!', // TODO styling, message, params
+  )
 
   hide()
 

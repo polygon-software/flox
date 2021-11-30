@@ -126,6 +126,7 @@ import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
 import {sendEmail} from 'src/helpers/email-helpers';
 import ROUTES from 'src/router/routes';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
