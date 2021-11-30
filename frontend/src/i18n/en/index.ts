@@ -78,7 +78,6 @@ export default {
     ok: 'OK',
   },
   documents: {
-    documents_missing: 'Documents missing',
     documents_available: 'Documents available',
     document_upload: 'File upload',
     additional_documents: 'Additional Documents',
@@ -113,6 +112,7 @@ export default {
     must_accept_condition_truthful: 'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
+    documents_missing: 'Documents missing',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
