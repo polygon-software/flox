@@ -36,6 +36,7 @@ export const SET_COGNITO_USER = {
       updateCompany (updateCompanyInput: {uuid: $uuid, cognito_id: $cognito_id}) {
         uuid
         company_name
+        cognito_id
         __typename
       }
     }`,

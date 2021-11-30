@@ -58,20 +58,18 @@ const type: string|undefined = route.query.t?.toString()
  */
 async function submitPassword(values: Record<string, string>) {
 
-  console.log('set called for', username, 'with pw', password)
-
   if(username === undefined || password === undefined){
     $errorService?.showErrorDialog(new Error('Invalid link')) // TODO i18n
     return
   }
-
-  console.log('set called for', username, 'with pw', password)
+  const decoded_email = atob(username)
+  const decoded_pw = atob(password)
 
   // Log in
-  await $authService.login(username, password)
+  await $authService.login(decoded_email, decoded_pw)
 
   // Change password
-  $authStore.getters.getCognitoUser()?.changePassword(password, values.password_repeat, (err: Error|undefined)=>{
+  $authStore.getters.getCognitoUser()?.changePassword(decoded_pw, values.password_repeat, (err: Error|undefined)=>{
     if(err){
       $errorService?.showErrorDialog(err)
     }
