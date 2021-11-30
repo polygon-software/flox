@@ -71,8 +71,8 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     password
   )
 
-
-  const link = `http://localhost:8080/set-password?u=${email}&k=${password}&t=emp` // TODO actual link
+  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
+  const link = `${baseUrl}${ROUTES.SET_PASSWORD.path}?u=${email}&k=${password}&t=emp`
 
   // TODO: add newUserId as cognito_id on employee in database (updateEmployee mutation)
 

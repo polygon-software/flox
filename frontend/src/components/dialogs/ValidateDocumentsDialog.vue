@@ -70,6 +70,7 @@ import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
 import {randomPassword} from 'src/helpers/generator-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
+import ROUTES from 'src/router/routes';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
@@ -136,17 +137,18 @@ async function onOk(): Promise<void> {
     password
   )
 
-  const to_hidden_email = props.company.email ?? ''
-  const to_hidden_pw = password
+  const toHiddenEmail = props.company.email ?? ''
+  const toHiddenPw = password
   // Encode base64
-  const hidden_email = btoa(to_hidden_email)
-  const hidden_pw = btoa(to_hidden_pw)
+  const hiddenEmail = btoa(toHiddenEmail)
+  const hiddenPw = btoa(toHiddenPw)
 
-  const link = `http://localhost:8080/set-password?u=${hidden_email}&k=${hidden_pw}&t=man` // TODO actual link
+  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
+  const link = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man` // TODO actual link
 
   await sendEmail(
     'david.wyss@polygon-software.ch', // TODO
-    props.company.email ?? '', // TODO
+    props.company.email ?? '',
     'Your Account',
     `Click the following link: ${link}`
   )
