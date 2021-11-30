@@ -126,7 +126,7 @@ async function onOk(): Promise<void> {
   }
 
   // TODO disable file upload for
-  const password = 'asdfASDF1234&' // TODO randomgenerate
+  const password = 'asdfASDF1234--' // TODO randomgenerate
 
   const newUserId = await props.authService.signUpNewUser(
     props.company.readable_id ?? '',

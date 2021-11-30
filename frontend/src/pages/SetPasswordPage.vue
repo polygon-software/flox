@@ -23,8 +23,15 @@ import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import { FIELDS } from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
+import {useAuth} from 'src/store/authentication';
+import {useRoute} from 'vue-router';
+import {ErrorService} from 'src/services/ErrorService';
+import {AuthenticationService} from 'src/services/AuthService';
 
+const $authStore = useAuth()
 const $routerService: RouterService|undefined = inject('$routerService')
+const $errorService: ErrorService|undefined = inject('$errorService')
+const $authService: AuthenticationService = inject('$authService')
 
 const fields = [FIELDS.PASSWORD_REPEAT]
 
@@ -39,11 +46,38 @@ const pages = [
   },
 ]
 
+// Get one-time signin parameters from URL query
+const route = useRoute()
+const username: string|undefined = route.query.u?.toString()
+const password: string|undefined = route.query.k?.toString()
+
 /**
  * submits the new password and redirects
- * @param event
+ * @param {Record<string, string>} values - the form's values
  */
-async function submitPassword(event: Record<string, string>) {
+async function submitPassword(values: Record<string, string>) {
+
+  console.log('set called for', username, 'with pw', password)
+
+  if(username === undefined || password === undefined){
+    $errorService?.showErrorDialog(new Error('Invalid link')) // TODO i18n
+    return
+  }
+
+  console.log('set called for', username, 'with pw', password)
+
+  // Log in
+  await $authService.login(username, password)
+
+  await $authService.showEmailVerificationDialog(true)
+
+  // Change password
+  $authStore.getters.getCognitoUser()?.changePassword(password, values.password_repeat, (err: Error|undefined)=>{
+    if(err){
+      $errorService?.showErrorDialog(err)
+    }
+  })
+
   setTimeout(function() {$routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)}, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
 }

@@ -356,7 +356,7 @@ export class AuthenticationService {
      * Confirm e-mail verification code
      * @param code
      */
-    async verifyEmail(code: string,): Promise<void>{
+    async verifyEmail(code: string): Promise<void>{
       return new Promise((resolve, reject)=>{
         this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, (err: Error)=>{
               if(err){
