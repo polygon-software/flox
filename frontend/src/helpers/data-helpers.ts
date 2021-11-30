@@ -1,7 +1,7 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {QUERIES} from '../data/queries/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
-import {ApolloCache, ApolloQueryResult} from '@apollo/client';
+import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {useSSR} from 'src/store/ssr';
 import {i18n} from 'boot/i18n';
@@ -29,9 +29,10 @@ async function executeQuery(queryObject: QueryObject, variables?: Record<string,
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
  * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
- * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutation
+ * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutatio
+ * @return {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
  */
-async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<void> {
+async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null> {
     const mutation =  mutationObject.mutation
     const tables =  mutationObject.tables
     const type =  mutationObject.type
@@ -94,7 +95,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     },
     }))
     // Execute mutation
-    await mutate(variables);
+    return await mutate(variables);
 }
 
 // TODO: Ensure variables are working as expected

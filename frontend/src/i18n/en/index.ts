@@ -76,6 +76,8 @@ export default {
     cancel: 'Cancel',
     submit: 'Submit',
     ok: 'OK',
+    download: 'Download',
+    preview: 'Preview',
   },
   documents: {
     documents_available: 'Documents available',

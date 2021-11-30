@@ -3,7 +3,7 @@
     ref="dialog"
     title="Application"
   >
-    <q-card>
+    <q-card style="width: 1000px; max-width: 1200px;">
       <q-card-section>
         <q-list
           bordered
@@ -14,17 +14,26 @@
             :key="document.uuid"
           >
             <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ document.key }}</p>
+              <div class="row flex justify-between content-center">
+                <p class="col-8">{{ document.key }}</p>
 
-
-<!--                TODO styling -->
+                <!-- Buttons -->
+                <div
+                  v-if="document.url"
+                  class="col-4 flex justify-between"
+                >
                   <q-btn
-                    v-if="document.url"
                     color="primary"
-                    label="Herunterladen"
+                    :label="$t('buttons.download')"
                     @click="openURL(document.url)"
                   />
+                  <q-btn
+                    color="primary"
+                    :label="$t('buttons.preview')"
+                    @click="openPreview(document.url)"
+                  />
+                </div>
+
               </div>
             </q-item-section>
           </q-item>
@@ -56,18 +65,17 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {inject, PropType, reactive, ref, Ref} from 'vue'
-import {QDialog, QVueGlobals, useQuasar} from 'quasar';
-import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
+import {PropType, ref, Ref} from 'vue'
+import {QDialog, QVueGlobals, useQuasar, openURL} from 'quasar';
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
-import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
 import {sendEmail} from 'src/helpers/email-helpers';
-import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
-import {CognitoUserSession} from 'amazon-cognito-identity-js';
+import {SET_COGNITO_COMPANY} from 'src/data/mutations/COMPANY';
+import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
+import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
 
 const $q: QVueGlobals = useQuasar()
 
@@ -145,7 +153,7 @@ async function onOk(): Promise<void> {
   )
 
   // Set cognito ID on company
-  await executeMutation(SET_COGNITO_USER, {
+  await executeMutation(SET_COGNITO_COMPANY, {
     uuid: props.company.uuid,
     cognito_id: newUserId
   })
@@ -172,4 +180,13 @@ function onCancel(): void {
   hide()
 }
 
+function openPreview(url: string): void {
+  $q.dialog({
+    title: 'Preview',
+    component: DocumentPreviewDialog,
+    componentProps: {
+      url: url
+    }
+  })
+}
 </script>

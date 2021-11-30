@@ -77,6 +77,8 @@ export default {
     submit: 'Senden',
     cancel: 'Abbrechen',
     ok: 'OK',
+    download: 'Herunterladen',
+    preview: 'Vorschau',
   },
   documents: {
     documents_available: 'Dokumente verfügbar',

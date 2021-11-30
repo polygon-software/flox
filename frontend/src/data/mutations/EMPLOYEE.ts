@@ -20,3 +20,17 @@ export const CREATE_EMPLOYEE = {
   type: MutationTypes.CREATE,
   cacheLocation: 'createEmployee'
 }
+
+export const SET_COGNITO_EMPLOYEE = {
+  mutation: gql`
+    mutation updateEmployee($uuid: ID!, $cognito_id: String!){
+      updateEmployee (updateEmployeeInput: {uuid: $uuid, cognito_id: $cognito_id}) {
+        uuid
+        email
+        __typename
+      }
+    }`,
+  tables: ['employee'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}

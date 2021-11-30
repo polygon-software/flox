@@ -21,7 +21,7 @@ import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
+import {CREATE_EMPLOYEE, SET_COGNITO_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {AuthenticationService} from 'src/services/AuthService';
 
@@ -64,6 +64,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
 
   const password = 'asdfASDF1234--' // TODO randomgenerate
 
+  // TODO: add newUserId as cognito_id on employee in database (updateEmployee mutation)
   // Create cognito User
   const newUserId = await $authService.signUpNewUser(
     email,
@@ -71,10 +72,23 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     password
   )
 
+  // Create database entry
+  const newEmployee = await executeMutation(CREATE_EMPLOYEE, {
+    first_name: formData.full_name.first_name,
+    last_name: formData.full_name.last_name,
+    gender: formData.salutation,
+    phone: formData.phone_number,
+    email: formData.email,
+    function: formData.company_function,
+    language: formData.language,
+  }) as Record<string, unknown>
+
+  await executeMutation(SET_COGNITO_EMPLOYEE, {
+    uuid: newEmployee?.uuid,
+    cognito_id: newUserId,
+  })
 
   const link = `http://localhost:8080/set-password?u=${email}&k=${password}&t=emp` // TODO actual link
-
-  // TODO: add newUserId as cognito_id on employee in database (updateEmployee mutation)
 
   // Send one-time login email
   await sendEmail(
@@ -83,16 +97,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     'Your Account',
     `Click the following link: ${link}`
   )
-  // Create database entry
-  await executeMutation(CREATE_EMPLOYEE, {
-    first_name: formData.full_name.first_name,
-    last_name: formData.full_name.last_name,
-    gender: formData.salutation,
-    phone: formData.phone_number,
-    email: formData.email,
-    function: formData.company_function,
-    language: formData.language,
-  })
+
 
   // Route back
   await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)

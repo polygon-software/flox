@@ -30,7 +30,7 @@ export const ENABLE_COMPANY_DOCUMENT_UPLOAD = {
   cacheLocation: undefined
 }
 
-export const SET_COGNITO_USER = {
+export const SET_COGNITO_COMPANY = {
   mutation: gql`
     mutation updateCompany($uuid: ID!, $cognito_id: String!){
       updateCompany (updateCompanyInput: {uuid: $uuid, cognito_id: $cognito_id}) {

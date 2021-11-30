@@ -191,6 +191,7 @@ type Mutation {
   removeItem(uuid: ID!): Item!
   update(updateUserInput: UpdateUserInput!): User!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
+  updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
@@ -258,6 +259,21 @@ input UpdateCompanyInput {
   phone: String
   uid: String
   uuid: ID!
+}
+
+input UpdateEmployeeInput {
+  cognito_id: String
+
+  """Company"""
+  company: company
+  email: String
+  first_name: String
+  function: String
+  gender: String
+  language: String
+  last_name: String
+  phone: String
+  uuid: ID
 }
 
 input UpdateItemInput {
