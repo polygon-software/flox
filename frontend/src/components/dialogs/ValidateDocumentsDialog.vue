@@ -135,7 +135,7 @@ async function onOk(): Promise<void> {
   )
 
 
-  const link = `http://localhost:8080/set-password?u=${props.company.email ?? ''}&k=${password}` // TODO actual link
+  const link = `http://localhost:8080/set-password?u=${props.company.email ?? ''}&k=${password}&t=man` // TODO actual link
 
   await sendEmail(
     'david.wyss@polygon-software.ch', // TODO

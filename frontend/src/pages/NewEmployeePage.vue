@@ -72,7 +72,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
   )
 
 
-  const link = `http://localhost:8080/set-password?u=${email}&k=${password}` // TODO actual link
+  const link = `http://localhost:8080/set-password?u=${email}&k=${password}&t=emp` // TODO actual link
 
   // Send one-time login email
   await sendEmail(

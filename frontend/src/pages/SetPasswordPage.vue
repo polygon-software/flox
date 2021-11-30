@@ -50,6 +50,7 @@ const pages = [
 const route = useRoute()
 const username: string|undefined = route.query.u?.toString()
 const password: string|undefined = route.query.k?.toString()
+const type: string|undefined = route.query.t?.toString()
 
 /**
  * submits the new password and redirects
@@ -76,7 +77,7 @@ async function submitPassword(values: Record<string, string>) {
     }
   })
 
-  setTimeout(function() {$routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)}, 5000);
+  setTimeout(function() {$routerService?.routeTo(type === 'man' ? ROUTES.MANAGEMENT_DASHBOARD : ROUTES.EMPLOYEE_DASHBOARD)}, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
 }
 </script>
