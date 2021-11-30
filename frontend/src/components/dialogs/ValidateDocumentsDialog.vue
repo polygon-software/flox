@@ -129,13 +129,13 @@ async function onOk(): Promise<void> {
   const password = 'asdfASDF1234--' // TODO randomgenerate
 
   const newUserId = await props.authService.signUpNewUser(
-    props.company.readable_id ?? '',
+    props.company.email ?? '',
     props.company.email ?? '',
     password
   )
 
 
-  const link = `http://localhost:8080/set-password?u=${props.company.readable_id ?? ''}&k=${password}` // TODO actual link
+  const link = `http://localhost:8080/set-password?u=${props.company.email ?? ''}&k=${password}` // TODO actual link
 
   await sendEmail(
     'david.wyss@polygon-software.ch', // TODO
