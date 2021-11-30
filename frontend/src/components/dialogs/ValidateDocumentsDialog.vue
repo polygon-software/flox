@@ -62,12 +62,13 @@ import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
-import _ from 'lodash';
+import _, {ceil} from 'lodash';
 import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
 import {CognitoUserSession} from 'amazon-cognito-identity-js';
+import {randomPassword} from 'src/helpers/generator-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -126,16 +127,20 @@ async function onOk(): Promise<void> {
   }
 
   // TODO disable file upload for
-  const password = 'asdfASDF1234--' // TODO randomgenerate
-
+  const password = randomPassword(9)
+  console.log(password)
   const newUserId = await props.authService.signUpNewUser(
     props.company.email ?? '',
     props.company.email ?? '',
     password
   )
 
+  const to_hidden_email = props.company.email ?? ''
+  const to_hidden_pw = password
+  const hidden_email = btoa(to_hidden_email)
+  const hidden_pw = btoa(to_hidden_pw)
 
-  const link = `http://localhost:8080/set-password?u=${props.company.email ?? ''}&k=${password}&t=man` // TODO actual link
+  const link = `http://localhost:8080/set-password?u=${hidden_email}&k=${hidden_pw}&t=man` // TODO actual link
 
   await sendEmail(
     'david.wyss@polygon-software.ch', // TODO
