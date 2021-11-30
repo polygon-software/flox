@@ -55,6 +55,10 @@ export default {
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
   },
+  admin_messages: {
+    account_unlocked: 'Successfully unlocked account',
+    document_upload_enabled: 'Enabled document upload',
+  },
   dashboards: {
     management_dashboard: 'Management Dashboard',
     register_new_employee_here: 'Register a new employee here:',

@@ -136,7 +136,10 @@ async function onOk(): Promise<void> {
     props.company.email ?? '',
     props.company.email ?? '',
     password
-  )
+  ).catch((e) => {
+    console.log('gotsta error', e)
+    $errorService?.showErrorDialog(e)
+  })
 
   const toHiddenEmail = props.company.email ?? ''
   const toHiddenPw = password
@@ -161,11 +164,14 @@ async function onOk(): Promise<void> {
     cognito_id: newUserId
   })
 
-  // TODO change file ownership?
-  // TODO show nice confirmation prompt
+  // TODO change owner of all the company's PrivateFiles to newUserId
+
+  // Show confirmation prompt
   showNotification(
     $q,
-    'Great success!', // TODO styling, message, params
+    i18n.global.t('admin_messages.account_unlocked'),
+    undefined,
+    'positive'
   )
 
   hide()

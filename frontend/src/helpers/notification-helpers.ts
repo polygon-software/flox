@@ -25,7 +25,6 @@ export function showNotification(
   multiLine = false,
   timeout = 3000
 ): void {
-  console.log('show notif')
   q.notify({
     color,
     textColor,

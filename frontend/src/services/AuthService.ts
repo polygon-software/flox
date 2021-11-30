@@ -169,9 +169,7 @@ export class AuthenticationService {
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
       this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
         if (err) {
-          // TODO
-          console.error(err)
-          reject();
+          reject(err);
         }
         if(result){
           resolve(result);
