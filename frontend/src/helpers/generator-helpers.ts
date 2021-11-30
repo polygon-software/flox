@@ -1,4 +1,8 @@
 /**
+ * This file contains all helper functions for generating random passwords
+ */
+
+/**
  * Generates a random number in given range
  * @param min
  * @param max
@@ -9,8 +13,9 @@ function randomNumber(min:number, max:number) {
 
 /**
  * Generates a random password that is valid for AWS Cognito of at least the given length
+ * @param {number} min_length
  */
-export function randomPassword(min_length:number): string{
+export function randomPassword(min_length: number): string{
   const chars_lower = 'abcdefghijklmnopqrstuvwxyz'
   const chars_upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const numbers = '0123456789'

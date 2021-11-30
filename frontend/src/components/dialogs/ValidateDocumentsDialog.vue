@@ -127,7 +127,6 @@ async function onOk(): Promise<void> {
 
   // TODO disable file upload for
   const password = randomPassword(9)
-  console.log(password)
   const newUserId = await props.authService.signUpNewUser(
     props.company.email ?? '',
     props.company.email ?? '',
@@ -136,6 +135,7 @@ async function onOk(): Promise<void> {
 
   const to_hidden_email = props.company.email ?? ''
   const to_hidden_pw = password
+  // Encode base64
   const hidden_email = btoa(to_hidden_email)
   const hidden_pw = btoa(to_hidden_pw)
 
