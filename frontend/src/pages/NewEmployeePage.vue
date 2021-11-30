@@ -22,8 +22,11 @@ import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
+import {sendEmail} from 'src/helpers/email-helpers';
+import {AuthenticationService} from 'src/services/AuthService';
 
 const $routerService: RouterService|undefined = inject('$routerService')
+const $authService: AuthenticationService = inject('$authService')
 
 /**
 * This component allows the management to register new employees, the fields can easily be changed with the
@@ -53,7 +56,31 @@ const pages = [
  * @param {Record<string, unknown>} formData: The form's entered data
  * @async
  */
-async function onRegister(formData: Record<string, Record<string, unknown>>){
+async function onRegister(formData: Record<string, Record<string, string>>){
+  const email: string = formData.email.toString()
+  if(email === null || email === undefined){
+    throw new Error('Missing E-Mail') // TODO use ErrorService and show popup
+  }
+
+  const password = 'asdfASDF1234--' // TODO randomgenerate
+
+  // Create cognito User
+  await $authService.signUpNewUser(
+    email,
+    email,
+    password
+  )
+
+
+  const link = `http://localhost:8080/set-password?u=${email}&k=${password}` // TODO actual link
+
+  // Send one-time login email
+  await sendEmail(
+    'david.wyss@polygon-software.ch', // TODO
+    email,
+    'Your Account',
+    `Click the following link: ${link}`
+  )
   // Create database entry
   await executeMutation(CREATE_EMPLOYEE, {
     first_name: formData.full_name.first_name,
@@ -64,6 +91,8 @@ async function onRegister(formData: Record<string, Record<string, unknown>>){
     function: formData.company_function,
     language: formData.language,
   })
+
+  // Route back
   await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)
   return;
 }
