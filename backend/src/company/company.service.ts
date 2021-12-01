@@ -22,9 +22,23 @@ export class CompanyService {
   async createCompany(
     createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
+    // Generate human-readable ID and search for existing company with same ID
+    let readableId = generateHumanReadableId();
+    let existingCompany = await this.companyRepository.findOne({
+      readable_id: readableId,
+    });
+
+    // If ID already exists, regenerate
+    while (existingCompany !== null && existingCompany !== undefined) {
+      readableId = generateHumanReadableId();
+      existingCompany = await this.companyRepository.findOne({
+        readable_id: readableId,
+      });
+    }
+
     const company = this.companyRepository.create({
       ...createCompanyInput,
-      readable_id: generateHumanReadableId(), // TODO collision prevention
+      readable_id: readableId,
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
       cognito_id: null,
       documents: null,
