@@ -112,17 +112,18 @@
 </template>
 
 <script setup lang="ts">
-import {ref, markRaw, computed, Ref} from 'vue'
+import {ref, markRaw, computed, Ref, defineProps} from 'vue'
 import OverviewComponent from '../product/OverviewComponent.vue'
 import DescriptionComponent from '../product/DescriptionComponent.vue'
 import TicketDistributionComponent from '../product/TicketDistributionComponent.vue'
+import {QDialog} from 'quasar';
 
-const dialog: Ref<string|null> = ref(null)
+const dialog: Ref<QDialog|null> = ref(null)
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function show(): void{
   //eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value.show()
+  dialog.value?.show()
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

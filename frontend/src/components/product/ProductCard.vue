@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed} from 'vue'
+import {ref, computed, defineProps} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
 import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
 import {useQuasar} from 'quasar';

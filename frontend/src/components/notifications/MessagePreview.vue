@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import {defineProps} from 'vue';
 /**
  * This component displays a message item in the message-inbox.
  */

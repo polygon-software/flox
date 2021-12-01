@@ -69,6 +69,7 @@
 import { FIELDS } from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import { i18n } from 'boot/i18n';
+import {defineEmits} from 'vue';
 
 /**
  * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different

@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, defineProps } from 'vue';
 
 const props = defineProps({
   end_date: {

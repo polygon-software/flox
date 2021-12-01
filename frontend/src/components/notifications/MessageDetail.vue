@@ -12,6 +12,7 @@
 </template>
 
 <script setup lang="ts">
+import {defineProps} from 'vue';
 /**
  * This component displays an opened message.
  */

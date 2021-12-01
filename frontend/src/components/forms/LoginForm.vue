@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
+import {defineEmits} from 'vue';
 
 const emit = defineEmits(['submit'])
 

@@ -10,7 +10,9 @@
 </template>
 
 <script setup lang="ts">
+import {defineProps} from 'vue';
 import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
+
 const props = defineProps({
   product: {
     required: true,

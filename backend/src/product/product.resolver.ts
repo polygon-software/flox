@@ -7,7 +7,7 @@ import { DeleteProductInput } from './dto/input/delete-product.input';
 import { Product } from './entities/product.entity';
 import { GetProductsArgs } from './dto/args/get-products.args';
 import { PubSub } from 'graphql-subscriptions';
-import { Public } from '../auth/auth.guard';
+import { Public } from 'src/auth/authentication.decorator';
 
 // Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
 const pubSub = new PubSub();

@@ -78,7 +78,7 @@
 /**
  * This component displays a message inbox, which contains message items. The messages can be filtered and sorted.
  */
-import {computed, Ref, ref} from 'vue'
+import {computed, Ref, ref, defineProps} from 'vue'
 import { i18n } from 'boot/i18n';
 import MessagePreview from 'components/notifications/MessagePreview.vue';
 import MessageDetail from 'components/notifications/MessageDetail.vue';
