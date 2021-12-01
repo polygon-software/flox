@@ -3,7 +3,7 @@
     ref="dialog"
     title="Application"
   >
-    <q-card style="width: 1000px; max-width: 1200px;">
+    <q-card style="min-width: 600px; max-width: 80%;">
       <q-card-section>
         <q-list
           bordered
@@ -14,23 +14,25 @@
             :key="document.uuid"
           >
             <q-item-section>
-              <div class="row flex justify-between content-center">
-                <p class="col-8">{{ document.key }}</p>
+              <div class="row flex justify-between content-center" style="height: 50px">
+                <!-- File name (Key is composed of UUID + file name, thus remove UUID) -->
+                <p class="col-8">{{ document.key.substring(37) }}</p>
 
                 <!-- Buttons -->
                 <div
                   v-if="document.url"
-                  class="col-4 flex justify-between"
+                  class="col-4"
                 >
-                  <q-btn
-                    color="primary"
-                    :label="$t('buttons.download')"
-                    @click="openURL(document.url)"
-                  />
                   <q-btn
                     color="primary"
                     :label="$t('buttons.preview')"
                     @click="openPreview(document.url)"
+                  />
+                  <q-btn
+                    style="margin-left: 12px"
+                    color="primary"
+                    icon="download"
+                    @click="openURL(document.url)"
                   />
                 </div>
 
@@ -80,6 +82,7 @@ import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
 import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
+import {openURL} from 'quasar';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
