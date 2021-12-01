@@ -100,6 +100,7 @@ export default {
     invalid_password: 'Please enter a valid password',
     invalid_email: 'Please enter a valid e-mail address',
     invalid_username: 'Please enter a username',
+    invalid_link: 'The link you used may be invalid or has already been used.',
     incorrect_password: 'Incorrect password',
     incorrect_email: 'Email address not found',
     incorrect_username: 'Username not found',
@@ -121,6 +122,10 @@ export default {
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
+  },
+  status: {
+    uploading: 'Uploading',
+    loading: 'Loading',
   },
   user_types: {
     soi_admin: 'SOI Admin',

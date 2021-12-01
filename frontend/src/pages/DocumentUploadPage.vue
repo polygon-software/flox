@@ -5,6 +5,8 @@
         v-if="companyId"
         :finish-label="$t('buttons.finish_signup')"
         :pages="pages"
+        :loading="loading"
+        :loading-label="$t('status.uploading') + '...'"
         @submit="onSubmit"
       />
       <q-card
@@ -23,7 +25,7 @@
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
-import {inject} from 'vue';
+import {inject, ref} from 'vue';
 import GenericForm from 'src/components/forms/GenericForm.vue'
 import {useRoute} from 'vue-router';
 import axios from 'axios';
@@ -35,6 +37,9 @@ import {useQuasar} from 'quasar';
 const emit = defineEmits(['submit'])
 const $routerService: RouterService = inject('$routerService')
 const $q = useQuasar()
+
+// Upload loading status
+const loading = ref(false)
 
 // Get base64-encoded UUID from URL params
 const route = useRoute()
@@ -56,6 +61,9 @@ const pages = [
  * Uploads the user's files and, if OK, redirects
  */
 async function onSubmit(values: Record<string, Record<string, File|null>>){
+
+  loading.value = true
+
   const fileObject: Record<string, File|null> = values.file_upload
   const headers = { 'Content-Type': 'multipart/form-data' }
 
@@ -75,7 +83,7 @@ async function onSubmit(values: Record<string, Record<string, File|null>>){
 
       await axios({
         method: 'post',
-        url: `${baseUrl}/uploadCompanyFile?cid=${cid}`, // TODO actual URL from env
+        url: `${baseUrl}/uploadCompanyFile?cid=${cid}`,
         data: formData,
         headers: headers,
       }).catch((e: Error) => {

@@ -59,7 +59,7 @@ const type: string|undefined = route.query.t?.toString()
 async function submitPassword(values: Record<string, string>) {
 
   if(username === undefined || password === undefined){
-    $errorService?.showErrorDialog(new Error('Invalid link')) // TODO i18n
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.invalid_link')))
     return
   }
   const decoded_email = atob(username)

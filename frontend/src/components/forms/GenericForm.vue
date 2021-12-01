@@ -85,9 +85,14 @@
       <q-card-actions align="center">
         <q-btn
           color="primary"
-          :label="finishLabel"
+          :label="!loading ? finishLabel : loadingLabel"
+          :disable="loading"
           @click="onSubmit"
-        />
+        >
+          <q-inner-loading
+            :showing="loading"
+          />
+        </q-btn>
       </q-card-actions>
     </q-card>
   </q-form>
@@ -99,6 +104,7 @@
  * It takes the following properties:
  * @param {Object[]} pages - the pages to show, each containing fields, label and key
  * @param {string} [finishLabel] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
+ * @param {boolean} [loading] - loading status to show on the finish button
  */
 import {defineProps, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
@@ -114,11 +120,21 @@ const props = defineProps({
     type: String,
     default: i18n.global.t('buttons.finish'),
   },
+  loadingLabel: {
+    required: false,
+    type: String,
+    default: i18n.global.t('status.loading') + '...',
+  },
   pages: {
     required: true,
     type: Array,
     default: () => [],
   },
+  loading: {
+    required: false,
+    type: Boolean,
+    default: false
+  }
 })
 
 // Get copy of prop form
