@@ -133,4 +133,8 @@ export default {
     manager: 'Manager',
     employee: 'Mitarbeiter',
   },
+  email: {
+    subject_rejected: 'Abgelehnt',
+    body_rejected: 'Die Applikation wurde abgelehnt'
+  }
 };

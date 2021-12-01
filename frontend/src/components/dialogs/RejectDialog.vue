@@ -30,6 +30,7 @@ import {ref, Ref, defineEmits, PropType} from 'vue'
 import {QDialog} from 'quasar';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {Company} from 'src/data/types/Company';
+import {i18n} from 'boot/i18n';
 
 const emit = defineEmits(['ok'])
 
@@ -56,7 +57,8 @@ function hide(): void {
 
 async function onYesReject(): Promise<void> {
   //TODO: implement in backend to really reject it
-  await sendEmail(props.companyData.phone)
+  const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
+  await sendEmail(sender, props.companyData.email ?? '', i18n.global.t('email.subject_rejected'), i18n.global.t('email.body_rejected'))
   emit('ok')
   hide()
 }
