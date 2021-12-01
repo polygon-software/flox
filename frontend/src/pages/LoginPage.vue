@@ -49,9 +49,11 @@ import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
 
-const signup = ref(false)
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
+
+const signup = ref(false)
+
 
 /**
  * Logs in the given authentication

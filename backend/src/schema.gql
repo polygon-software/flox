@@ -79,9 +79,40 @@ type Product {
   value: Int!
 }
 
+type PrivateFile {
+  """S3 File Key"""
+  key: String!
+
+  """File owner"""
+  owner: String!
+
+  """Pre-signed download URL"""
+  url: String
+
+  """UUID"""
+  uuid: ID!
+}
+
+type PublicFile {
+  """S3 File Key"""
+  key: String!
+
+  """Public download URL"""
+  url: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Query {
   allProducts: [Product!]!
   allUsers: [User!]!
+  getPrivateFile(
+    """URL expiration duration (in seconds)"""
+    expires: [Float!]
+    uuid: ID!
+  ): PrivateFile!
+  getPublicFile(uuid: ID!): PublicFile!
   item(uuid: ID!): Item!
   items: [Item!]!
   product(uuid: ID!): Product!
