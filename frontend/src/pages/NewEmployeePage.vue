@@ -22,11 +22,14 @@ import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
-import {sendEmail} from 'src/helpers/email-helpers';
+import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
 import {AuthenticationService} from 'src/services/AuthService';
+import {ErrorService} from 'src/services/ErrorService';
+import {randomPassword} from 'src/helpers/generator-helpers';
 
 const $routerService: RouterService|undefined = inject('$routerService')
-const $authService: AuthenticationService = inject('$authService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 /**
 * This component allows the management to register new employees, the fields can easily be changed with the
@@ -59,14 +62,13 @@ const pages = [
 async function onRegister(formData: Record<string, Record<string, string>>){
   const email: string = formData.email.toString()
   if(email === null || email === undefined){
-    throw new Error('Missing E-Mail') // TODO use ErrorService and show popup
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  const password = 'asdfASDF1234--' // TODO randomgenerate
+  const password = randomPassword(9)
 
-  // TODO: add newUserId as cognito_id on employee in database (updateEmployee mutation)
   // Create cognito User
-  const newUserId = await $authService.signUpNewUser(
+  const newUserId = await $authService?.signUpNewUser(
     email,
     email,
     password
@@ -84,16 +86,8 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     cognito_id: newUserId,
   })
 
-  const link = `http://localhost:8080/set-password?u=${email}&k=${password}&t=emp` // TODO actual link
-
-  // Send one-time login email
-  await sendEmail(
-    'david.wyss@polygon-software.ch', // TODO
-    email,
-    'Your Account',
-    `Click the following link: ${link}`
-  )
-
+  // Send one-time login e-mail
+  await sendPasswordChangeEmail(email, password)
 
   // Route back
   await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)

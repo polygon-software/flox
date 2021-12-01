@@ -73,12 +73,11 @@ import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import {AuthenticationService} from 'src/services/AuthService';
-import {sendEmail} from 'src/helpers/email-helpers';
+import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
 import {SET_COGNITO_COMPANY} from 'src/data/mutations/COMPANY';
 import {randomPassword} from 'src/helpers/generator-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
-import ROUTES from 'src/router/routes';
 import {showNotification} from 'src/helpers/notification-helpers';
 import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
 
@@ -139,33 +138,19 @@ async function onOk(): Promise<void> {
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  // TODO disable file upload for
+  const email = props.company.email ?? ''
   const password = randomPassword(9)
   const newUserId = await props.authService.signUpNewUser(
-    props.company.email ?? '',
-    props.company.email ?? '',
+    email,
+    email,
     password
   ).catch((e) => {
     console.log('gotsta error', e, $errorService) // TODO Error service seems to be undefined here
     $errorService?.showErrorDialog(e)
   })
 
-  const toHiddenEmail = props.company.email ?? ''
-  const toHiddenPw = password
-  // Encode base64
-  const hiddenEmail = btoa(toHiddenEmail)
-  const hiddenPw = btoa(toHiddenPw)
-
-  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
-  const link = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man`
-
-  // Send actual e-mail
-  await sendEmail(
-    'david.wyss@polygon-software.ch', // TODO
-    props.company.email ?? '',
-    'Your Account',
-    `Click the following link: ${link}`
-  )
+  // Send one-time login e-mail
+  await sendPasswordChangeEmail(email, password)
 
   // Set cognito ID on company
   await executeMutation(SET_COGNITO_COMPANY, {
@@ -178,7 +163,7 @@ async function onOk(): Promise<void> {
   // Show confirmation prompt
   showNotification(
     $q,
-    i18n.global.t('admin_messages.account_unlocked'),
+    i18n.global.t('messages.account_unlocked'),
     undefined,
     'positive'
   )
@@ -187,6 +172,9 @@ async function onOk(): Promise<void> {
 
 }
 
+/**
+ * Triggered upon rejecting a company's application
+ */
 function onReject(): void {
   //TODO: Send rejection message
   $q.dialog({

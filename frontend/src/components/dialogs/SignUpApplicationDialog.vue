@@ -124,7 +124,7 @@ import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
-import {sendEmail} from 'src/helpers/email-helpers';
+import {sendDocumentUploadEmail, sendEmail} from 'src/helpers/email-helpers';
 import ROUTES from 'src/router/routes';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
@@ -179,22 +179,13 @@ async function onOk(): Promise<void> {
   // Enable on database
   await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
 
-  // Set up e-mail parameters
-  const from = 'david.wyss@polygon-software.ch' // TODO set from .env
-  const to: string = company.email ?? ''
-  const subject = 'Your account' // TODO set
-  const encodedUuid = btoa(company.uuid ?? ''); // Base64 encode UUID
-  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
-  const url = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?cid=${encodedUuid}`
-  const body = `Upload your documents at the following link:\n${url}`// TODO HTML mail template
-
-  // Send e-mail
-  await sendEmail(from, to, subject, body)
+  // Send document upload e-mail
+  await sendDocumentUploadEmail(company.email ?? '', company.uuid ?? '')
 
   // Show confirmation prompt
   showNotification(
     $q,
-    i18n.global.t('admin_messages.document_upload_enabled'),
+    i18n.global.t('messages.document_upload_enabled'),
     undefined,
     'positive'
   )
@@ -202,12 +193,22 @@ async function onOk(): Promise<void> {
   hide()
 }
 
+/**
+ * Executed upon rejecting a company application
+ */
 function onReject(): void {
   //TODO: Send rejection message
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
   }).onOk(() => {
+    // Show notification
+    showNotification(
+      $q,
+      i18n.global.t('messages.application_rejected'),
+      undefined,
+      'primary'
+    )
     // Hide outer popup
     hide()
   })

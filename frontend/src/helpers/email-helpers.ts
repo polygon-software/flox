@@ -1,4 +1,6 @@
 import {SESClient, SendEmailCommand, SendEmailCommandOutput} from '@aws-sdk/client-ses';
+import {generatePasswordChangeLink} from 'src/helpers/generator-helpers';
+import ROUTES from 'src/router/routes';
 
 // Credentials
 const credentials = {
@@ -9,7 +11,7 @@ const credentials = {
 // Create SES service object (seems to be unrecognized by eslint)
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const sesClient = new SESClient({
-  region: process.env.VUE_APP_AWS_REGION,
+  region: process.env.VUE_APP_SES_REGION,
   credentials: credentials,
 });
 
@@ -27,7 +29,7 @@ const sesClient = new SESClient({
  * @param {string[]} [toCC] - list of CC recipient's email addresses
  * @param {string} [textBody] - optional plaintext body
  */
-async function sendEmail(from: string, to: string|string[], subject: string, body: string, replyTo?: string[], toCC?: string[], textBody?: string): Promise<void|SendEmailCommandOutput>{
+export async function sendEmail(from: string, to: string|string[], subject: string, body: string, replyTo?: string[], toCC?: string[], textBody?: string): Promise<void|SendEmailCommandOutput>{
   // E-Mail parameters
   const params = {
     Destination: {
@@ -59,4 +61,39 @@ async function sendEmail(from: string, to: string|string[], subject: string, bod
   return await sesClient.send(new SendEmailCommand(params)) ;
 }
 
-export {sendEmail}
+
+/**
+ * Sends an initial login e-mail to the given user, containing a one-time password change link
+ * @param {string} email - the user's e-mail address
+ * @param {string} password - the user's (generated) password
+ */
+export async function sendPasswordChangeEmail(email: string, password: string): Promise<void>{
+  // Generate one-time password change link
+  const link = generatePasswordChangeLink(email, password)
+
+  const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
+
+  // Send login email
+  await sendEmail(
+    sender,
+    email,
+    'Your Account',
+    `Click the following link: ${link}`
+  )
+}
+
+export async function sendDocumentUploadEmail(email: string, companyId: string): Promise<void>{
+  // Set up e-mail parameters
+  const encodedUuid = btoa(companyId); // Base64 encode UUID
+  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
+  const url = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?cid=${encodedUuid}`
+  const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
+
+  // Send e-mail
+  await sendEmail(
+    sender,
+    email,
+    'Your account',
+    `Upload your documents at the following link: ${url}`
+  )
+}

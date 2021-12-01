@@ -56,9 +56,10 @@ export default {
     execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
   },
-  admin_messages: {
+  messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
     document_upload_enabled: 'Dokumentupload freigeschaltet',
+    application_rejected: 'Antrag abgelehnt'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -106,6 +107,7 @@ export default {
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
     invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
+    invalid_link: 'Der Link den Sie verwendet haben ist ungültig oder wurde bereits verwendet.',
     incorrect_password: 'Inkorrektes Passwort',
     invalid_address: 'Bitte geben Sie eine gültige Addresse ein',
     invalid_city: 'Bitte geben Sie einen gültigen Ort ein',
@@ -123,6 +125,10 @@ export default {
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
+  },
+  status: {
+    uploading: 'Hochladen',
+    loading: 'Laden',
   },
   user_types: {
     soi_admin: 'SOI Administrator',

@@ -98,7 +98,6 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     return await mutate(variables);
 }
 
-// TODO: Ensure variables are working as expected
 /**
  * Executes a query and subscribes to its changes
  * @param {QueryObject} query - query to execute
@@ -138,7 +137,7 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
         data: {
           [query.cacheLocation]: res.value
         },
-        variables: variables, // TODO verify working
+        variables: variables,
       })
     }
 
