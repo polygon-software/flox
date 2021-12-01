@@ -1,7 +1,6 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
 import { getRequest } from '../helpers';
@@ -9,8 +8,8 @@ import { getRequest } from '../helpers';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   /**
-   * Gets the request from context
-   * @param {ExecutionContext} context
+   * Executed upon receiving a request for a protected endpoint
+   * @param {ExecutionContext} context - the request's context
    */
   getRequest(context: ExecutionContext): any {
     return getRequest(context);
@@ -20,6 +19,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
+  /**
+   * Determines whether the user can activate a given endpoint
+   * @param {ExecutionContext} context - the request's context
+   */
   public canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {

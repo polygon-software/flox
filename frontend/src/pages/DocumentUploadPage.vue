@@ -2,10 +2,22 @@
   <q-page class="flex flex-center">
     <div class="column">
       <GenericForm
+        v-if="companyId"
         :finish-label="$t('buttons.finish_signup')"
         :pages="pages"
+        :loading="loading"
+        :loading-label="$t('status.uploading') + '...'"
         @submit="onSubmit"
       />
+      <q-card
+        v-else
+        class="q-pa-md bg-red"
+      >
+        <h2>
+          Error: Invalid link...
+        </h2>
+        <!-- TODO styling -->
+      </q-card>
     </div>
   </q-page>
 </template>
@@ -13,14 +25,25 @@
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
-import {Form} from 'src/helpers/form-helpers';
-import {ref, Ref} from 'vue';
-import {QForm} from 'quasar';
+import {inject, ref} from 'vue';
 import GenericForm from 'src/components/forms/GenericForm.vue'
+import {useRoute} from 'vue-router';
+import axios from 'axios';
+import {RouterService} from 'src/services/RouterService';
+import ROUTES from 'src/router/routes';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {useQuasar} from 'quasar';
 
 const emit = defineEmits(['submit'])
+const $routerService: RouterService = inject('$routerService')
+const $q = useQuasar()
 
-const form_ref: Ref<QForm|null> = ref(null)
+// Upload loading status
+const loading = ref(false)
+
+// Get base64-encoded UUID from URL params
+const route = useRoute()
+const companyId = route.query.cid
 
 const account_fields = [
   FIELDS.FILE_UPLOAD,
@@ -34,20 +57,42 @@ const pages = [
   },
 ]
 
-// Get copy of prop form
-const _pages = pages ? pages as Record<string, unknown>[] : undefined
-const form: Form = new Form(_pages)
-
 /**
- * Validates and, if valid, submits the form with all entered values
- * @async
+ * Uploads the user's files and, if OK, redirects
  */
-async function onSubmit(){
-  const is_valid = await form_ref.value?.validate()
+async function onSubmit(values: Record<string, Record<string, File|null>>){
 
-  if(is_valid){
-    emit('submit', form.values.value)
+  loading.value = true
+
+  const fileObject: Record<string, File|null> = values.file_upload
+  const headers = { 'Content-Type': 'multipart/form-data' }
+
+  for(const fileKey of Object.keys(fileObject)) {
+    const formData = new FormData();
+    if(fileObject[fileKey]) {
+      // Convert to Blob and append
+      const blob = fileObject[fileKey] as Blob
+      formData.append('file', blob)
+
+      // Get ID from route
+      if(!route.query.cid){
+        throw new Error('Invalid URL')
+      }
+      const cid: string = route.query.cid.toString()
+      const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
+
+      await axios({
+        method: 'post',
+        url: `${baseUrl}/uploadCompanyFile?cid=${cid}`,
+        data: formData,
+        headers: headers,
+      }).catch((e: Error) => {
+        throw new Error(`File upload error: ${e.message}`)
+      })
+    }
   }
 
+  // TODO add fitting success message
+  await $routerService.routeTo(ROUTES.SUCCESS)
 }
 </script>

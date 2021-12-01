@@ -20,9 +20,10 @@ export default {
     change_password: 'Passwort ändern',
   },
   account_data: {
+    employees: 'Mitarbeitende',
     authentication: 'Authentifizierung',
     email: 'E-Mail',
-    username: 'Nutzername',
+    username: 'Benutzername',
     password: 'Passwort',
     repeat_password: 'Passwort wiederholen',
     account: 'Account',
@@ -55,6 +56,11 @@ export default {
     execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
   },
+  messages: {
+    account_unlocked: 'Account erfolgreich freigeschaltet',
+    document_upload_enabled: 'Dokumentupload freigeschaltet',
+    application_rejected: 'Antrag abgelehnt'
+  },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
@@ -66,6 +72,7 @@ export default {
     reject: 'Ablehnen',
     sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
     yes_reject: 'Ja, ablehnen',
+    view_documents: 'Dokumente ansehen'
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -77,7 +84,6 @@ export default {
     ok: 'OK',
   },
   documents: {
-    documents_missing: 'Fehlende Dokumente',
     documents_available: 'Dokumente verfügbar',
     document_upload: 'Dokumentenupload',
     additional_documents: 'Weitere Dokumente',
@@ -99,6 +105,7 @@ export default {
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
     invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
+    invalid_link: 'Der Link den Sie verwendet haben ist ungültig oder wurde bereits verwendet.',
     incorrect_password: 'Inkorrektes Passwort',
     invalid_address: 'Bitte geben Sie eine gültige Addresse ein',
     invalid_city: 'Bitte geben Sie einen gültigen Ort ein',
@@ -111,8 +118,19 @@ export default {
     must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
     must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
+    missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    documents_missing: 'Fehlende Dokumente',
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
-  }
+  },
+  status: {
+    uploading: 'Hochladen',
+    loading: 'Laden',
+  },
+  user_types: {
+    soi_admin: 'SOI Administrator',
+    manager: 'Manager',
+    employee: 'Mitarbeiter',
+  },
 };

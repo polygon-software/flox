@@ -39,6 +39,7 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 
@@ -47,12 +48,13 @@ const $routerService: RouterService = inject('$routerService')
  * Logs in the given authentication
  * @param username {string} - the authentication's username
  * @param password {string} - the authentication's password
+ * @param route_taget {string} - target route (only for demos)
  */
-async function onLogin({username, password}: {username: string, password: string}){
+async function onLogin({username, password, route_target}: {username: string, password: string, route_target: string}){
   await $authService.login(username, password)
 
   // Redirect to main page
-  await $routerService.routeTo(ROUTES.MAIN)
+  await $routerService.routeTo(route_target)
 }
 
 /**

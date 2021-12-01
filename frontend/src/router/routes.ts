@@ -56,7 +56,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   'ADMIN_DASHBOARD': {
-    path: '/admin_dashboard',
+    path: '/admin-dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/AdminDashboardPage.vue') }],
   },
@@ -80,7 +80,10 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
   ROUTES.SUCCESS,
   ROUTES.SIGNUP,
+  ROUTES.SET_PASSWORD,
   ROUTES.DOCUMENT_UPLOAD,
+  ROUTES.MANAGEMENT_DASHBOARD,
+  ROUTES.EMPLOYEE_DASHBOARD,
   ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
 
