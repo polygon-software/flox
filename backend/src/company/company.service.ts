@@ -24,7 +24,7 @@ export class CompanyService {
   ): Promise<Company> {
     const company = this.companyRepository.create({
       ...createCompanyInput,
-      readable_id: generateHumanReadableId(),
+      readable_id: generateHumanReadableId(), // TODO collision prevention
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
       cognito_id: null,
       documents: null,

@@ -11,7 +11,7 @@ const credentials = {
 // Create SES service object (seems to be unrecognized by eslint)
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const sesClient = new SESClient({
-  region: process.env.VUE_APP_AWS_REGION,
+  region: process.env.VUE_APP_SES_REGION,
   credentials: credentials,
 });
 

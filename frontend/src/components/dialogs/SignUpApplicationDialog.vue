@@ -193,12 +193,22 @@ async function onOk(): Promise<void> {
   hide()
 }
 
+/**
+ * Executed upon rejecting a company application
+ */
 function onReject(): void {
   //TODO: Send rejection message
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
   }).onOk(() => {
+    // Show notification
+    showNotification(
+      $q,
+      i18n.global.t('messages.application_rejected'),
+      undefined,
+      'primary'
+    )
     // Hide outer popup
     hide()
   })
