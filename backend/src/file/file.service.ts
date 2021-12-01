@@ -86,7 +86,6 @@ export class FileService {
 
     // If file is for company document upload, add ref (otherwise, upload normally)
     if (company) {
-      console.log('Create file for', company.uuid);
       newFile = this.privateFilesRepository.create({
         key: key,
         owner: owner,

@@ -37,11 +37,11 @@ export function randomPassword(min_length: number): string{
 }
 
 /**
- * Generates a document upload link containing base64-encoded e-mail and password for a given user
+ * Generates a password change link containing base64-encoded e-mail and password for a given user
  * @param {string} email - user's e-mail address
  * @param {string} password - user's password
  */
-export function generatePasswordChangeLink(email: string, password: string){
+export function generatePasswordChangeLink(email: string, password: string): string{
   // Encode base64
   const hiddenEmail = btoa(email)
   const hiddenPw = btoa(password)

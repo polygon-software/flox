@@ -65,12 +65,11 @@ import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
-import {sendEmail, sendPasswordChangeEmail} from 'src/helpers/email-helpers';
+import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
 import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
-import {generatePasswordChangeLink, randomPassword} from 'src/helpers/generator-helpers';
+import {randomPassword} from 'src/helpers/generator-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
-import ROUTES from 'src/router/routes';
 import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q: QVueGlobals = useQuasar()

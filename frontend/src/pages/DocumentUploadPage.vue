@@ -57,7 +57,6 @@ const pages = [
  */
 async function onSubmit(values: Record<string, Record<string, File|null>>){
   const fileObject: Record<string, File|null> = values.file_upload
-  console.log('Files are:',fileObject)
   const headers = { 'Content-Type': 'multipart/form-data' }
 
   for(const fileKey of Object.keys(fileObject)) {
@@ -72,10 +71,11 @@ async function onSubmit(values: Record<string, Record<string, File|null>>){
         throw new Error('Invalid URL')
       }
       const cid: string = route.query.cid.toString()
+      const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
 
       await axios({
         method: 'post',
-        url: `http://localhost:3000/uploadCompanyFile?cid=${cid}`, // TODO actual URL from env
+        url: `${baseUrl}/uploadCompanyFile?cid=${cid}`, // TODO actual URL from env
         data: formData,
         headers: headers,
       }).catch((e: Error) => {

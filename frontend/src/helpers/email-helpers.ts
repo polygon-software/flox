@@ -1,5 +1,6 @@
 import {SESClient, SendEmailCommand, SendEmailCommandOutput} from '@aws-sdk/client-ses';
 import {generatePasswordChangeLink} from 'src/helpers/generator-helpers';
+import ROUTES from 'src/router/routes';
 
 // Credentials
 const credentials = {
@@ -60,6 +61,7 @@ export async function sendEmail(from: string, to: string|string[], subject: stri
   return await sesClient.send(new SendEmailCommand(params)) ;
 }
 
+
 /**
  * Sends an initial login e-mail to the given user, containing a one-time password change link
  * @param {string} email - the user's e-mail address
@@ -78,3 +80,17 @@ export async function sendPasswordChangeEmail(email: string, password: string): 
   )
 }
 
+export async function sendDocumentUploadEmail(email: string, companyId: string): Promise<void>{
+  // Set up e-mail parameters
+  const encodedUuid = btoa(companyId); // Base64 encode UUID
+  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
+  const url = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?cid=${encodedUuid}`
+
+  // Send e-mail
+  await sendEmail(
+    'david.wyss@polygon-software.ch', // TODO
+    email,
+    'Your account',
+    `Upload your documents at the following link: ${url}`
+  )
+}
