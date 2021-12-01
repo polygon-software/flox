@@ -24,9 +24,12 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {AuthenticationService} from 'src/services/AuthService';
+import {ErrorService} from 'src/services/ErrorService';
+import {generatePasswordChangeLink, randomPassword} from 'src/helpers/generator-helpers';
 
 const $routerService: RouterService|undefined = inject('$routerService')
-const $authService: AuthenticationService = inject('$authService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 /**
 * This component allows the management to register new employees, the fields can easily be changed with the
@@ -59,20 +62,20 @@ const pages = [
 async function onRegister(formData: Record<string, Record<string, string>>){
   const email: string = formData.email.toString()
   if(email === null || email === undefined){
-    throw new Error('Missing E-Mail') // TODO use ErrorService and show popup
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  const password = 'asdfASDF1234--' // TODO randomgenerate
 
+  const password = randomPassword(9)
   // Create cognito User
-  const newUserId = await $authService.signUpNewUser(
+  const newUserId = await $authService?.signUpNewUser(
     email,
     email,
     password
   )
 
-  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
-  const link = `${baseUrl}${ROUTES.SET_PASSWORD.path}?u=${email}&k=${password}&t=emp`
+  // Generate encoded link
+  const link = generatePasswordChangeLink(email, password)
 
   // TODO: add newUserId as cognito_id on employee in database (updateEmployee mutation)
 

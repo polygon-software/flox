@@ -194,7 +194,7 @@ async function onOk(): Promise<void> {
   // Show confirmation prompt
   showNotification(
     $q,
-    i18n.global.t('admin_messages.document_upload_enabled'),
+    i18n.global.t('messages.document_upload_enabled'),
     undefined,
     'positive'
   )

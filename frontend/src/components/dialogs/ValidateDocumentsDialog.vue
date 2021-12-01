@@ -67,7 +67,7 @@ import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
 import {sendEmail} from 'src/helpers/email-helpers';
 import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
-import {randomPassword} from 'src/helpers/generator-helpers';
+import {generatePasswordChangeLink, randomPassword} from 'src/helpers/generator-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
@@ -130,7 +130,6 @@ async function onOk(): Promise<void> {
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  // TODO disable file upload for
   const password = randomPassword(9)
   const newUserId = await props.authService.signUpNewUser(
     props.company.email ?? '',
@@ -141,14 +140,10 @@ async function onOk(): Promise<void> {
     $errorService?.showErrorDialog(e)
   })
 
-  const toHiddenEmail = props.company.email ?? ''
-  const toHiddenPw = password
-  // Encode base64
-  const hiddenEmail = btoa(toHiddenEmail)
-  const hiddenPw = btoa(toHiddenPw)
+  const email = props.company.email ?? ''
 
-  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
-  const link = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man`
+  // Generate encoded link
+  const link = generatePasswordChangeLink(email, password)
 
   // Send actual e-mail
   await sendEmail(
@@ -169,7 +164,7 @@ async function onOk(): Promise<void> {
   // Show confirmation prompt
   showNotification(
     $q,
-    i18n.global.t('admin_messages.account_unlocked'),
+    i18n.global.t('messages.account_unlocked'),
     undefined,
     'positive'
   )

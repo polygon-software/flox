@@ -55,7 +55,7 @@ export default {
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
   },
-  admin_messages: {
+  messages: {
     account_unlocked: 'Successfully unlocked account',
     document_upload_enabled: 'Enabled document upload',
   },

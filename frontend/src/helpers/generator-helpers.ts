@@ -1,6 +1,8 @@
 /**
- * This file contains all helper functions for generating random passwords
+ * This file contains all helper functions for generating content such as passwords, links, etc.
  */
+
+import ROUTES from 'src/router/routes';
 
 /**
  * Generates a random number in given range
@@ -32,4 +34,19 @@ export function randomPassword(min_length: number): string{
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value).join('')
   return res
+}
+
+/**
+ * Generates a document upload link containing base64-encoded e-mail and password for a given user
+ * @param {string} email - user's e-mail address
+ * @param {string} password - user's password
+ */
+export function generatePasswordChangeLink(email: string, password: string){
+  // Encode base64
+  const hiddenEmail = btoa(email)
+  const hiddenPw = btoa(password)
+
+  const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
+  return `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man`
+
 }
