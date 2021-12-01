@@ -71,9 +71,11 @@ export async function sendPasswordChangeEmail(email: string, password: string): 
   // Generate one-time password change link
   const link = generatePasswordChangeLink(email, password)
 
+  const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
+
   // Send login email
   await sendEmail(
-    'david.wyss@polygon-software.ch', // TODO
+    sender,
     email,
     'Your Account',
     `Click the following link: ${link}`
@@ -85,10 +87,11 @@ export async function sendDocumentUploadEmail(email: string, companyId: string):
   const encodedUuid = btoa(companyId); // Base64 encode UUID
   const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
   const url = `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?cid=${encodedUuid}`
+  const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
 
   // Send e-mail
   await sendEmail(
-    'david.wyss@polygon-software.ch', // TODO
+    sender,
     email,
     'Your account',
     `Upload your documents at the following link: ${url}`
