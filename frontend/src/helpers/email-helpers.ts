@@ -1,4 +1,5 @@
 import {SESClient, SendEmailCommand, SendEmailCommandOutput} from '@aws-sdk/client-ses';
+import {generatePasswordChangeLink} from 'src/helpers/generator-helpers';
 
 // Credentials
 const credentials = {
@@ -27,7 +28,7 @@ const sesClient = new SESClient({
  * @param {string[]} [toCC] - list of CC recipient's email addresses
  * @param {string} [textBody] - optional plaintext body
  */
-async function sendEmail(from: string, to: string|string[], subject: string, body: string, replyTo?: string[], toCC?: string[], textBody?: string): Promise<void|SendEmailCommandOutput>{
+export async function sendEmail(from: string, to: string|string[], subject: string, body: string, replyTo?: string[], toCC?: string[], textBody?: string): Promise<void|SendEmailCommandOutput>{
   // E-Mail parameters
   const params = {
     Destination: {
@@ -59,4 +60,21 @@ async function sendEmail(from: string, to: string|string[], subject: string, bod
   return await sesClient.send(new SendEmailCommand(params)) ;
 }
 
-export {sendEmail}
+/**
+ * Sends an initial login e-mail to the given user, containing a one-time password change link
+ * @param {string} email - the user's e-mail address
+ * @param {string} password - the user's (generated) password
+ */
+export async function sendPasswordChangeEmail(email: string, password: string): Promise<void>{
+  // Generate one-time password change link
+  const link = generatePasswordChangeLink(email, password)
+
+  // Send login email
+  await sendEmail(
+    'david.wyss@polygon-software.ch', // TODO
+    email,
+    'Your Account',
+    `Click the following link: ${link}`
+  )
+}
+

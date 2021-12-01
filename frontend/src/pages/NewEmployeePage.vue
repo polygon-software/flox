@@ -22,7 +22,7 @@ import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
-import {sendEmail} from 'src/helpers/email-helpers';
+import {sendEmail, sendPasswordChangeEmail} from 'src/helpers/email-helpers';
 import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
 import {generatePasswordChangeLink, randomPassword} from 'src/helpers/generator-helpers';
@@ -74,18 +74,10 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     password
   )
 
-  // Generate encoded link
-  const link = generatePasswordChangeLink(email, password)
+  // Send one-time login e-mail
+  await sendPasswordChangeEmail(email, password)
 
   // TODO: add newUserId as cognito_id on employee in database (updateEmployee mutation)
-
-  // Send one-time login email
-  await sendEmail(
-    'david.wyss@polygon-software.ch', // TODO
-    email,
-    'Your Account',
-    `Click the following link: ${link}`
-  )
   // Create database entry
   await executeMutation(CREATE_EMPLOYEE, {
     first_name: formData.full_name.first_name,

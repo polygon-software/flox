@@ -65,7 +65,7 @@ import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
-import {sendEmail} from 'src/helpers/email-helpers';
+import {sendEmail, sendPasswordChangeEmail} from 'src/helpers/email-helpers';
 import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
 import {generatePasswordChangeLink, randomPassword} from 'src/helpers/generator-helpers';
 import {ErrorService} from 'src/services/ErrorService';
@@ -130,28 +130,19 @@ async function onOk(): Promise<void> {
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
+  const email = props.company.email ?? ''
   const password = randomPassword(9)
   const newUserId = await props.authService.signUpNewUser(
-    props.company.email ?? '',
-    props.company.email ?? '',
+    email,
+    email,
     password
   ).catch((e) => {
     console.log('gotsta error', e, $errorService) // TODO Error service seems to be undefined here
     $errorService?.showErrorDialog(e)
   })
 
-  const email = props.company.email ?? ''
-
-  // Generate encoded link
-  const link = generatePasswordChangeLink(email, password)
-
-  // Send actual e-mail
-  await sendEmail(
-    'david.wyss@polygon-software.ch', // TODO
-    props.company.email ?? '',
-    'Your Account',
-    `Click the following link: ${link}`
-  )
+  // Send one-time login e-mail
+  await sendPasswordChangeEmail(email, password)
 
   // Set cognito ID on company
   await executeMutation(SET_COGNITO_USER, {
@@ -173,6 +164,9 @@ async function onOk(): Promise<void> {
 
 }
 
+/**
+ * Triggered upon rejecting a company's application
+ */
 function onReject(): void {
   //TODO: Send rejection message
   $q.dialog({
