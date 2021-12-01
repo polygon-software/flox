@@ -92,7 +92,7 @@ async function redirectOnClick(): Promise<void> {
 if (props.autoRedirect) {
   setTimeout(function () {
     $routerService?.routeTo(ROUTES.redirectPath)
-  }, 5000);
+  }, props.autoRedirectDurationMs);
 }
 
 </script>

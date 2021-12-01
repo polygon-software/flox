@@ -51,9 +51,9 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   'SUCCESS': {
     name: 'success',
-    path: '/success',
+    path: '/generic-success',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/GenericSuccess.vue') }],
+    children: [{ path: '', component: () => import('pages/GenericSuccessPage.vue') }],
   },
 
   'DOCUMENT_UPLOAD': {
