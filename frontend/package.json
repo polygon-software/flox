@@ -25,6 +25,7 @@
     "@capacitor/core": "^3.2.5",
     "@capacitor/ios": "^3.2.5",
     "@quasar/extras": "^1.0.0",
+    "@types/mjml": "^4.7.0",
     "@types/mjml-core": "^4.7.1",
     "@vue/apollo-composable": "^4.0.0-alpha.15",
     "@vue/test-utils": "^1.2.2",

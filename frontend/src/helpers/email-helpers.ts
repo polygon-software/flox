@@ -1,5 +1,4 @@
 import {SESClient, SendEmailCommand, SendEmailCommandOutput} from '@aws-sdk/client-ses';
-import mjml2html from 'mjml-core';
 
 // Credentials
 const credentials = {
@@ -10,7 +9,7 @@ const credentials = {
 // Create SES service object (seems to be unrecognized by eslint)
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const sesClient = new SESClient({
-  region: process.env.VUE_APP_AWS_REGION,
+  region: process.env.VUE_APP_SES_REGION,
   credentials: credentials,
 });
 
@@ -24,9 +23,10 @@ const sesClient = new SESClient({
  * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
  * @param {string} subject - E-mail subject
  * @param {string} body - E-mail's HTML body
+ * @param {string} [isMjml] - whether the given body is an MJML language string that needs to be converted to HTML
+ * @param {Record<string, unknown>} [mjmlOptions] - options to pass to MJML parser, if any
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
- * @param {string} [isMjml] - whether the given body is an MJML language string that needs to be converted to HTML
  */
 export async function sendEmail(
   from: string,
@@ -35,12 +35,7 @@ export async function sendEmail(
   body: string,
   replyTo?: string[],
   toCC?: string[],
-  isMjml = false,
-  mjmlOptions: Record<string, unknown> = {}
 ): Promise<void|SendEmailCommandOutput>{
-
-  // If body input is MJML, use MJML to convert to html
-  const mjmlResult = isMjml ? mjml2html(body, mjmlOptions) : null
 
   // E-Mail parameters
   const params = {
@@ -56,7 +51,7 @@ export async function sendEmail(
         },
         Text: {
           Charset: 'UTF-8',
-          Data: isMjml && mjmlResult ? mjmlResult.html : body
+          Data: body
         },
       },
       Subject: {
