@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   main:
-    container_name: main
+    container_name: bigabig_backend
     build:
       context: .
     volumes:
@@ -18,7 +18,7 @@ services:
       - database
 
   database:
-    container_name: database
+    container_name: bigabig_database
     image: postgres:14
     networks:
       - webnet
@@ -31,17 +31,17 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
 
-  nocodb:
-    container_name: nocodb
-    image: nocodb/nocodb:latest
-    networks:
-      - webnet
-    ports:
-      - ${NOCODB_PORT}:8080
-    volumes:
-      - nocodbdata:/usr/app/data
-    depends_on:
-      - database
+#  nocodb:
+#    container_name: nocodb
+#    image: nocodb/nocodb:latest
+#    networks:
+#      - webnet
+#    ports:
+#      - ${NOCODB_PORT}:8080
+#    volumes:
+#      - nocodbdata:/usr/app/data
+#    depends_on:
+#      - database
 
 networks:
   webnet:

@@ -261,7 +261,7 @@ export class AuthenticationService {
                 return
             } else {
               this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
-                  // TODO
+                  console.log('resend code')
                 })
             }
         }
