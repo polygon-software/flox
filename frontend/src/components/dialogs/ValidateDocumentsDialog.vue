@@ -56,7 +56,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {inject, PropType, ref, Ref} from 'vue'
+import { PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
@@ -73,7 +73,6 @@ import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q: QVueGlobals = useQuasar()
-const $errorService: ErrorService|undefined = inject('$errorService')
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
@@ -85,6 +84,10 @@ const props = defineProps({
   authService: {
     type: AuthenticationService,
     required: true,
+  },
+  errorService: {
+    type: ErrorService,
+    required: true
   }
 })
 
@@ -126,7 +129,7 @@ function hide(): void {
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){
-    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
+    props.errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
   const email = props.company.email ?? ''
@@ -136,8 +139,8 @@ async function onOk(): Promise<void> {
     email,
     password
   ).catch((e) => {
-    console.log('gotsta error', e, $errorService) // TODO Error service seems to be undefined here
-    $errorService?.showErrorDialog(e)
+    console.log('gotsta error', e, props.errorService) // TODO Error service seems to be undefined here
+    props.errorService?.showErrorDialog(e)
   })
 
   // Send one-time login e-mail

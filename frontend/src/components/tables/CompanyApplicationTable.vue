@@ -46,9 +46,11 @@ import SignUpApplicationDialog from 'components/dialogs/SignUpApplicationDialog.
 import ValidateDocumentsDialog from 'components/dialogs/ValidateDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {AuthenticationService} from 'src/services/AuthService';
+import {ErrorService} from 'src/services/ErrorService';
 
 const $q: QVueGlobals = useQuasar()
 const $authService: AuthenticationService = inject('$authService')
+const $errorService: ErrorService = inject('$errorService')
 
 // ----- Data -----
 const columns = [
@@ -93,7 +95,8 @@ function showDocumentValidationDialog(company: Company) {
     component: ValidateDocumentsDialog,
     componentProps: {
       company: company,
-      authService: $authService
+      authService: $authService,
+      errorService: $errorService
     }
   })
 }
