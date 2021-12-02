@@ -1,6 +1,6 @@
 import { CreateEmployeeInput } from './create-employee.input';
 import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
-import { IsEmail, IsOptional, IsPhoneNumber, IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsPhoneNumber, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class UpdateEmployeeInput extends PartialType(CreateEmployeeInput) {
@@ -29,12 +29,6 @@ export class UpdateEmployeeInput extends PartialType(CreateEmployeeInput) {
   @IsString()
   @IsPhoneNumber()
   phone: string;
-
-  @Field(() => String, {nullable: true})
-  @IsOptional()
-  @IsString()
-  @IsEmail()
-  email: string;
 
   @Field(() => String, {nullable: true})
   @IsOptional()
