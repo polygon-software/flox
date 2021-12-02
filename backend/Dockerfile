@@ -10,6 +10,6 @@ RUN yarn
 
 COPY . .
 
-RUN yarn build
+RUN rm -r dist
 
 CMD ["yarn", "start:dev"]
