@@ -2,26 +2,27 @@ version: '3.7'
 
 services:
   main:
-    container_name: main
+    container_name: soi_main
     build:
       context: .
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+      - /usr/src/app/dist
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     env_file:
       - .env
     networks:
-      - webnet
+      - soi_webnet
     depends_on:
       - database
 
   database:
-    container_name: database
+    container_name: soi_database
     image: postgres:14
     networks:
-      - webnet
+      - soi_webnet
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER:  ${DB_USER}
@@ -29,22 +30,22 @@ services:
     ports:
       - ${DB_PORT}:5432
     volumes:
-      - dbdata:/var/lib/postgresql/data
+      - soi_dbdata:/var/lib/postgresql/data
 
-  nocodb:
-    container_name: nocodb
-    image: nocodb/nocodb:latest
-    networks:
-      - webnet
-    ports:
-      - ${NOCODB_PORT}:8080
-    volumes:
-      - nocodbdata:/usr/app/data
-    depends_on:
-      - database
+#  nocodb:
+#    container_name: nocodb
+#    image: nocodb/nocodb:latest
+#    networks:
+#      - webnet
+#    ports:
+#      - ${NOCODB_PORT}:8080
+#    volumes:
+#      - soi_nocodbdata:/usr/app/data
+#    depends_on:
+#      - database
 
 networks:
-  webnet:
+  soi_webnet:
 volumes:
-  dbdata:
-  nocodbdata:
+  soi_dbdata:
+  soi_nocodbdata:
