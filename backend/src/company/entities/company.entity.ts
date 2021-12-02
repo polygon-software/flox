@@ -74,7 +74,6 @@ export class Company extends Person {
   })
   @OneToMany(() => PrivateFile, (file) => file.company, {
     cascade: true,
-    eager: true,
   })
   documents: PrivateFile[];
 

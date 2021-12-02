@@ -3,6 +3,8 @@ import { Person } from '../../person/entities/person.entity';
 import { Address } from '../../address/entities/address.entity';
 import { Column, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
+import { Bank } from '../../bank/entities/bank.entity';
+import { STATUS } from '../../ENUM/ENUMS';
 
 @ObjectType()
 export class Dossier extends Person {
@@ -11,10 +13,10 @@ export class Dossier extends Person {
   @OneToOne(() => Address, { cascade: true, eager: true })
   correspondence_address: Address;
 
-  @Field(() => BankEntity, { description: 'Previous Bank of the customer' })
+  @Field(() => Bank, { description: 'Previous Bank of the customer' })
   @JoinColumn()
-  @OneToOne(() => BankEntity, { eager: true })
-  original_bank: BankEntity;
+  @OneToOne(() => Bank)
+  original_bank: Bank;
 
   @Field(() => Date, { description: 'Date of birth of customer' })
   @Column()
@@ -33,12 +35,16 @@ export class Dossier extends Person {
   @Column()
   non_arrangeable: boolean;
 
-  @Field(() => String, { description: 'Status of Dossier' })
-  @Column()
-  status: string;
+  @Field(() => STATUS, { description: 'Status of Dossier' })
+  @Column({
+    type: 'enum',
+    enum: STATUS,
+    default: STATUS.CREATED,
+  })
+  status: STATUS;
 
-  @Field(() => Offer, { description: 'List of Offers' })
+  @Field(() => [Offer], { description: 'List of Offers' })
   @JoinColumn()
-  @OneToMany(() => Offer, (offer) => offer.dossier, { eager: true })
-  offers: Offer;
+  @OneToMany(() => Offer, (offer) => offer.dossier)
+  offers: Offer[];
 }

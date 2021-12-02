@@ -8,11 +8,14 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
 import { generateHumanReadableId } from '../helpers';
+import { User } from '../user/entities/user.entity';
+import { ROLES } from '../ENUM/ENUMS';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectRepository(Company) private companyRepository: Repository<Company>,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
   /**
@@ -40,7 +43,6 @@ export class CompanyService {
       ...createCompanyInput,
       readable_id: readableId,
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
-      cognito_id: null,
       documents: null,
       // TODO: other default values
     });
@@ -80,8 +82,14 @@ export class CompanyService {
       return await this.companyRepository.findOne(getCompanyArgs.uuid);
     } else if (getCompanyArgs.cognito_id) {
       // Case 2: search by Cognito account ID
+      const user = await this.userRepository.findOne({
+        uuid: getCompanyArgs.cognito_id,
+      });
+      if (user.role !== ROLES.COMPANY) {
+        throw Error('User is not a company');
+      }
       return await this.companyRepository.findOne({
-        cognito_id: getCompanyArgs.cognito_id,
+        uuid: user.fk,
       });
     }
   }
