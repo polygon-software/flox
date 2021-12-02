@@ -11,14 +11,6 @@
         <SampleSubscriptionTable/>
       </div>
     </div>
-
-    <q-card>
-      <q-btn
-        color="purple"
-        label="Send Test E-Mail"
-        @click="sendTestEmail"
-      />
-    </q-card>
   </q-page>
 </template>
 
@@ -26,16 +18,4 @@
 import SampleTable from 'components/SampleTable.vue'
 import SampleForm from 'components/SampleForm.vue'
 import SampleSubscriptionTable from 'components/SampleSubscriptionTable.vue'
-import {sendEmail} from 'src/helpers/email-helpers';
-
-
-async function sendTestEmail(): Promise<void>{
-  await sendEmail(
-    'david.wyss@polygon-solutions.ch',
-    'david.wyss@polygon-solutions.ch',
-    'Test E-mail',
-    'Test body',
-  )
-}
-
 </script>
