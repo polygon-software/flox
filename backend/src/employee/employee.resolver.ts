@@ -2,8 +2,7 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { EmployeeService } from './employee.service';
 import { Employee } from './entities/employee.entity';
 import { CreateEmployeeInput } from './dto/input/create-employee.input';
-import { UpdateEmployeeInput } from './dto/input/update-employee.input';
-import { Public } from '../auth/authentication.decorator';
+
 import {
   AdminOnly,
   AnyRole,

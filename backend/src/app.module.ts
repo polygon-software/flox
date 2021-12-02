@@ -9,7 +9,6 @@ import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
-import { ItemModule } from './item/item.module';
 import { CompanyModule } from './company/company.module';
 import { EmployeeModule } from './employee/employee.module';
 import { FileModule } from './file/file.module';
@@ -76,7 +75,6 @@ import { RolesGuard } from './auth/roles.guard';
     }),
     UserModule,
     CompanyModule,
-    ItemModule,
     EmployeeModule,
     FileModule,
   ],
