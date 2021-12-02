@@ -86,7 +86,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     cognito_id: newUserId,
   })
 
-  // Send one-time login e-mail
+  // Send one-time login e-email
   await sendPasswordChangeEmail(email, password, 'emp')
 
   // Route back

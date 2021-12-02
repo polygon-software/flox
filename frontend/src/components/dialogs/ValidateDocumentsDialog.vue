@@ -137,7 +137,7 @@ function hide(): void {
 }
 
 /**
- * On OK, create account and send e-mail
+ * On OK, create account and send e-email
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){
@@ -155,7 +155,7 @@ async function onOk(): Promise<void> {
     props.errorService?.showErrorDialog(e)
   })
 
-  // Send one-time login e-mail
+  // Send one-time login e-email
   await sendPasswordChangeEmail(email, password, 'man')
 
   // Set cognito ID on company
