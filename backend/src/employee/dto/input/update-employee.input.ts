@@ -5,7 +5,6 @@ import { IsOptional, IsPhoneNumber, IsString, IsUUID } from 'class-validator';
 @InputType()
 export class UpdateEmployeeInput extends PartialType(CreateEmployeeInput) {
   @Field(() => ID, {nullable: true})
-  @IsOptional()
   @IsUUID()
   uuid: string;
 

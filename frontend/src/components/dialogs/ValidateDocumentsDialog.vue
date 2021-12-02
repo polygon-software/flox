@@ -193,6 +193,10 @@ function onCancel(): void {
   hide()
 }
 
+/**
+ * Open the a preview of the selected document in a dialog.
+ * @param url {string} The url of the file that should be displayed.
+ */
 function openPreview(url: string): void {
   $q.dialog({
     title: 'Preview',
