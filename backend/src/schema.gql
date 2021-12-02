@@ -2,70 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Address {
-  """City"""
-  city: String!
-
-  """Number"""
-  number: String!
-
-  """Street"""
-  street: String!
-
-  """UUID"""
-  uuid: ID!
-
-  """Zip Code"""
-  zip_code: String!
-}
-
-type Company {
-  """Branch structure"""
-  branch_structure: Boolean!
-
-  """Cognito account ID"""
-  cognito_id: String
-
-  """Company Name"""
-  company_name: String!
-
-  """Correspondence address"""
-  correspondence_address: Address!
-
-  """Whether document upload is enabled (initial request granted by SOI)"""
-  document_upload_enabled: Boolean!
-
-  """Documents of the company"""
-  documents: [PrivateFile!]
-
-  """Domicile address"""
-  domicile_address: Address!
-
-  """E-Mail address"""
-  email: String!
-
-  """First Name"""
-  first_name: String!
-
-  """Language"""
-  language: String!
-
-  """Last Name"""
-  last_name: String!
-
-  """Phone Number"""
-  phone: String!
-
-  """Human-readable ID"""
-  readable_id: String!
-
-  """Company UID"""
-  uid: String!
-
-  """UUID"""
-  uuid: ID!
-}
-
 input CreateItemInput {
   """Name"""
   name: String!
@@ -225,55 +161,6 @@ type User {
 
   """UUID"""
   uuid: ID!
-}
-
-input address {
-  """City"""
-  city: String!
-
-  """Number"""
-  number: String!
-
-  """Street"""
-  street: String!
-
-  """Zip Code"""
-  zip_code: String!
-}
-
-input company {
-  """Branch structure"""
-  branch_structure: Boolean!
-
-  """Company Name"""
-  company_name: String!
-
-  """Correspondence address"""
-  correspondence_address: address!
-
-  """Whether document upload is enabled (initial request granted by SOI)"""
-  document_upload_enabled: Boolean!
-
-  """Documents of the company"""
-  documents: [private_file!]
-
-  """Domicile address"""
-  domicile_address: address!
-
-  """E-Mail address"""
-  email: String!
-
-  """Language"""
-  language: String!
-
-  """Phone Number"""
-  phone: String!
-
-  """Human-readable ID"""
-  readable_id: String!
-
-  """Company UID"""
-  uid: String!
 }
 
 input private_file {
