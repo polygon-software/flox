@@ -1,4 +1,5 @@
 import {SESClient, SendEmailCommand, SendEmailCommandOutput} from '@aws-sdk/client-ses';
+import mjml2html from 'mjml-core';
 
 // Credentials
 const credentials = {
@@ -25,9 +26,22 @@ const sesClient = new SESClient({
  * @param {string} body - E-mail's HTML body
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
- * @param {string} [textBody] - optional plaintext body
+ * @param {string} [isMjml] - whether the given body is an MJML language string that needs to be converted to HTML
  */
-export async function sendEmail(from: string, to: string|string[], subject: string, body: string, replyTo?: string[], toCC?: string[], textBody?: string): Promise<void|SendEmailCommandOutput>{
+export async function sendEmail(
+  from: string,
+  to: string|string[],
+  subject: string,
+  body: string,
+  replyTo?: string[],
+  toCC?: string[],
+  isMjml = false,
+  mjmlOptions: Record<string, unknown> = {}
+): Promise<void|SendEmailCommandOutput>{
+
+  // If body input is MJML, use MJML to convert to html
+  const mjmlResult = isMjml ? mjml2html(body, mjmlOptions) : null
+
   // E-Mail parameters
   const params = {
     Destination: {
@@ -42,7 +56,7 @@ export async function sendEmail(from: string, to: string|string[], subject: stri
         },
         Text: {
           Charset: 'UTF-8',
-          Data: textBody ?? body,
+          Data: isMjml && mjmlResult ? mjmlResult.html : body
         },
       },
       Subject: {
