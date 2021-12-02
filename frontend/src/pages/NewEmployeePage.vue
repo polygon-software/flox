@@ -87,7 +87,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
   })
 
   // Send one-time login e-mail
-  await sendPasswordChangeEmail(email, password)
+  await sendPasswordChangeEmail(email, password, 'emp')
 
   // Route back
   await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)

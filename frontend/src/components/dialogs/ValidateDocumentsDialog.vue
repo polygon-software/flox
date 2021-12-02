@@ -153,7 +153,7 @@ async function onOk(): Promise<void> {
   })
 
   // Send one-time login e-mail
-  await sendPasswordChangeEmail(email, password)
+  await sendPasswordChangeEmail(email, password, 'man')
 
   // Set cognito ID on company
   await executeMutation(SET_COGNITO_COMPANY, {
