@@ -69,7 +69,7 @@ export async function sendEmail(from: string, to: string|string[], subject: stri
  */
 export async function sendPasswordChangeEmail(email: string, password: string): Promise<void>{
   // Generate one-time password change link
-  const link = generatePasswordChangeLink(email, password)
+  const link: string = generatePasswordChangeLink(email, password)
 
   const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
 
