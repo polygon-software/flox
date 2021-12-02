@@ -23,8 +23,6 @@ const sesClient = new SESClient({
  * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
  * @param {string} subject - E-mail subject
  * @param {string} body - E-mail's HTML body
- * @param {string} [isMjml] - whether the given body is an MJML language string that needs to be converted to HTML
- * @param {Record<string, unknown>} [mjmlOptions] - options to pass to MJML parser, if any
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
  */
