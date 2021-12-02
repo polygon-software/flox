@@ -10,6 +10,8 @@ import {
 } from '../auth/authorization.decorator';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
+import {Company} from "../company/entities/company.entity";
+import {UpdateCompanyInput} from "../company/dto/input/update-company.input";
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
@@ -70,5 +72,17 @@ export class EmployeeResolver {
     }
 
     return await this.employeeService.getEmployees(company);
+  }
+
+  /**
+   * Updates an employee's data
+   * @param {UpdateEmployeeInput} updateEmployeeInput - company data to change
+   */
+  @AnyRole() // TODO restrict to appropriate roles
+  @Mutation(() => Employee)
+  async updateEmployee(
+      @Args('updateEmployeeInput') updateEmployeeInput: UpdateEmployeeInput,
+  ): Promise<Employee> {
+    return await this.employeeService.updateEmployee(updateEmployeeInput);
   }
 }

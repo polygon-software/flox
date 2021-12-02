@@ -3,7 +3,7 @@
     ref="dialog"
     title="Application"
   >
-    <q-card>
+    <q-card style="min-width: 600px; max-width: 80%;">
       <q-card-section>
         <q-list
           bordered
@@ -14,17 +14,28 @@
             :key="document.uuid"
           >
             <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ document.key }}</p>
+              <div class="row flex justify-between content-center" style="height: 50px">
+                <!-- File name (Key is composed of UUID + file name, thus remove UUID) -->
+                <p class="col-8">{{ document.key.substring(37) }}</p>
 
-
-<!--                TODO styling -->
+                <!-- Buttons -->
+                <div
+                  v-if="document.url"
+                  class="col-4"
+                >
                   <q-btn
-                    v-if="document.url"
                     color="primary"
-                    label="Herunterladen"
+                    :label="$t('buttons.preview')"
+                    @click="openPreview(document.url)"
+                  />
+                  <q-btn
+                    style="margin-left: 12px"
+                    color="primary"
+                    icon="download"
                     @click="openURL(document.url)"
                   />
+                </div>
+
               </div>
             </q-item-section>
           </q-item>
@@ -63,14 +74,15 @@ import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
-import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
 import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
-import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
+import {SET_COGNITO_COMPANY} from 'src/data/mutations/COMPANY';
 import {randomPassword} from 'src/helpers/generator-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
+import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
+import {openURL} from 'quasar';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -144,10 +156,10 @@ async function onOk(): Promise<void> {
   })
 
   // Send one-time login e-mail
-  await sendPasswordChangeEmail(email, password)
+  await sendPasswordChangeEmail(email, password, 'man')
 
   // Set cognito ID on company
-  await executeMutation(SET_COGNITO_USER, {
+  await executeMutation(SET_COGNITO_COMPANY, {
     uuid: props.company.uuid,
     cognito_id: newUserId
   })
@@ -184,4 +196,17 @@ function onCancel(): void {
   hide()
 }
 
+/**
+ * Open the a preview of the selected document in a dialog.
+ * @param url {string} The url of the file that should be displayed.
+ */
+function openPreview(url: string): void {
+  $q.dialog({
+    title: 'Preview',
+    component: DocumentPreviewDialog,
+    componentProps: {
+      url: url
+    }
+  })
+}
 </script>
