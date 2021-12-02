@@ -66,10 +66,11 @@ export async function sendEmail(from: string, to: string|string[], subject: stri
  * Sends an initial login e-mail to the given user, containing a one-time password change link
  * @param {string} email - the user's e-mail address
  * @param {string} password - the user's (generated) password
+ * @param {string} type - the users type - 'emp' for employee or 'man' for company
  */
-export async function sendPasswordChangeEmail(email: string, password: string): Promise<void>{
+export async function sendPasswordChangeEmail(email: string, password: string, type: string): Promise<void>{
   // Generate one-time password change link
-  const link: string = generatePasswordChangeLink(email, password)
+  const link: string = generatePasswordChangeLink(email, password, type)
 
   const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
 
