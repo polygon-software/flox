@@ -2,12 +2,13 @@ version: '3.7'
 
 services:
   main:
-    container_name: bigabig_backend
+    container_name: bigabig_main
     build:
       context: .
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+      - /usr/src/app/dist
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     env_file:
