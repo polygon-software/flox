@@ -1,5 +1,5 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { IsString } from 'class-validator';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Column } from 'typeorm';
 
@@ -15,10 +15,13 @@ export class Person extends BaseEntity {
   @IsString()
   last_name: string;
 
-  @Column({ nullable: true })
-  @Field(() => String, { nullable: true, description: 'Cognito account ID' })
-  @IsOptional()
+  @Column()
+  @Field(() => String, { description: 'Mail' })
   @IsString()
-  @IsUUID()
-  cognito_id: string;
+  email: string;
+
+  @Field(() => String, { description: 'Human-readable ID' })
+  @Column()
+  @IsString()
+  readable_id: string;
 }

@@ -1,23 +1,20 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { IsInt, IsString } from 'class-validator';
-import { Item } from '../../item/entities/item.entity';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Column, Entity } from 'typeorm';
+import { IsString, IsUUID } from 'class-validator';
 
 @ObjectType()
 @Entity({ name: 'user' })
-export class User extends BaseEntity {
-  @Field(() => String, { description: 'Name' })
+export class User {
+  @Field(() => String, { description: 'Role of the User' })
   @Column()
   @IsString()
-  name: string;
+  role: string;
 
-  @Field(() => Int, { description: 'Age' })
-  @Column()
-  @IsInt()
-  age: number;
+  @Field(() => ID, { description: 'Cognito ID' })
+  @IsUUID()
+  uuid: string;
 
-  @Field(() => [Item], { description: 'Items of the user', nullable: true })
-  @OneToMany(() => Item, (item) => item.user)
-  items: Item[];
+  @Field(() => ID, { description: 'UUID of the specific entity' })
+  @IsUUID()
+  fk: string;
 }

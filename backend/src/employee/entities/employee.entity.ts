@@ -19,12 +19,6 @@ export class Employee extends Person {
   function: string;
 
   @Column()
-  @Field(() => String, { description: 'E-mail' })
-  @IsString()
-  @IsEmail()
-  email: string;
-
-  @Column()
   @Field(() => String, { description: 'Phone Number' })
   @IsString()
   @IsPhoneNumber()

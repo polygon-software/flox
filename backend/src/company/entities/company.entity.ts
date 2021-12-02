@@ -11,6 +11,7 @@ import {
 import { Address } from '../../address/entities/address.entity';
 import { Person } from '../../person/entities/person.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
+import { Employee } from '../../employee/entities/employee.entity';
 
 /**
  * An entity representing a company account
@@ -21,11 +22,6 @@ import PrivateFile from '../../file/entities/private_file.entity';
 @InputType('company')
 @Entity({ name: 'company' })
 export class Company extends Person {
-  @Field(() => String, { description: 'Human-readable ID' })
-  @Column()
-  @IsString()
-  readable_id: string;
-
   @Field(() => String, { description: 'Company Name' })
   @Column()
   @IsString()
@@ -58,12 +54,6 @@ export class Company extends Person {
   @IsPhoneNumber()
   phone: string;
 
-  @Field(() => String, { description: 'E-Mail address' })
-  @Column()
-  @IsString()
-  @IsEmail()
-  email: string;
-
   @Field(() => Boolean, { description: 'Branch structure' })
   @Column()
   @IsBoolean()
@@ -88,11 +78,11 @@ export class Company extends Person {
   })
   documents: PrivateFile[];
 
-  // @Column() TODO: Possibly add employee ID array / determine if needed
-  // @Field(() => [Employee], {
-  //   description: 'Employees of the company',
-  //   nullable: true,
-  // })
-  // @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
-  // employees: Employee[];
+  @Column()
+  @Field(() => [Employee], {
+    description: 'Employees of the company',
+    nullable: true,
+  })
+  @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
+  employees: Employee[];
 }
