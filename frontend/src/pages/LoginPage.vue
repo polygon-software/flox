@@ -75,6 +75,7 @@ async function onLogin({username, password}: {username: string, password: string
  */
 async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
   await $authService.signUp(username, email, password_repeat);
+  // TODO: close signup
 }
 
 </script>
