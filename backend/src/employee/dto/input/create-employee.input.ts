@@ -36,7 +36,7 @@ export class CreateEmployeeInput extends PartialType(CreatePersonInput) {
   @IsNotEmptyObject()
   company: Company;
 
-  @Field(() => String, {nullable: true})
+  @Field(() => String, { description: 'Cognito ID' })
   @IsUUID()
   cognito_id: string;
 }
