@@ -1,7 +1,9 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { IsDate, IsInt, IsString } from 'class-validator';
+import PublicFile from '../../file/entities/public_file.entity';
+import ProductPicture from '../../file/entities/product_picture.entity';
 
 @ObjectType()
 @Entity({ name: 'product' })
@@ -15,8 +17,6 @@ export class Product extends BaseEntity {
   @Column()
   @IsString()
   description: string;
-
-  // TODO: Images
 
   @Field(() => Int, { description: 'Value' })
   @Column()
@@ -32,6 +32,13 @@ export class Product extends BaseEntity {
   @Column()
   @IsDate()
   end: Date;
+
+  @Field(() => [PublicFile], {
+    description: 'Items of the user',
+    nullable: true,
+  })
+  @OneToMany(() => ProductPicture, (picture) => picture.product)
+  pictures: ProductPicture[];
 
   // TODO: Remaining fields from UML
 }
