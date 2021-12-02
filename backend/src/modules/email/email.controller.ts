@@ -1,15 +1,12 @@
 import { Controller, Post, Req, Res } from '@nestjs/common';
-import { EmailService } from './email.service';
 import fastify = require('fastify');
 import { Public } from '../../auth/authentication.decorator';
 import { sendPasswordChangeEmail } from './helper';
 
 @Controller()
 export class EmailController {
-  constructor(private readonly emailService: EmailService) {}
-
   @Public()
-  @Post('/uploadPublicFile')
+  @Post('/sendPasswordChangeEmail')
   async sendPasswordChangeEmail(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
