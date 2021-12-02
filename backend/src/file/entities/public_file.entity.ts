@@ -1,7 +1,8 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsString, IsUrl } from 'class-validator';
+import { Product } from '../../product/entities/product.entity';
 
 /**
  * Defines a public file within a public AWS S3 bucket
@@ -20,6 +21,13 @@ export class PublicFile extends BaseEntity {
   @Column()
   @IsString()
   public key: string;
+
+  @Field(() => Product, {
+    description: 'Product the file belongs to',
+    nullable: true,
+  })
+  @ManyToOne(() => Product, (owner) => owner.pictures)
+  product: Product;
 }
 
 export default PublicFile;

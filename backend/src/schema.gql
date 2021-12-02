@@ -2,14 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateItemInput {
-  """Name"""
-  name: String!
-
-  """User UUID"""
-  userUUID: ID
-}
-
 input CreateProductInput {
   description: String!
   end: DateTime!
@@ -36,26 +28,12 @@ input DeleteUserInput {
   uuid: ID!
 }
 
-type Item {
-  """Name"""
-  name: String!
-
-  """User of the item"""
-  user: User
-
-  """UUID"""
-  uuid: ID!
-}
-
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
-  createItem(createItemInput: CreateItemInput!): Item!
   createProduct(createProductInput: CreateProductInput!): Product!
   remove(deleteUserInput: DeleteUserInput!): User!
-  removeItem(uuid: ID!): Item!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!
-  updateItem(updateItemInput: UpdateItemInput!): Item!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
 }
 
@@ -80,6 +58,9 @@ type Product {
   """End Date"""
   end: DateTime!
 
+  """Pictures for the product"""
+  pictures: [PublicFile!]
+
   """Start date"""
   start: DateTime!
 
@@ -97,6 +78,9 @@ type PublicFile {
   """S3 File Key"""
   key: String!
 
+  """Product the file belongs to"""
+  product: Product
+
   """Public download URL"""
   url: String!
 
@@ -113,8 +97,6 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
-  item(uuid: ID!): Item!
-  items: [Item!]!
   product(uuid: ID!): Product!
   products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!
@@ -124,17 +106,6 @@ type Query {
 type Subscription {
   productAdded: Product!
   userAdded: User!
-}
-
-input UpdateItemInput {
-  """Name"""
-  name: String
-
-  """User UUID"""
-  userUUID: ID
-
-  """Item UUID"""
-  uuid: ID!
 }
 
 input UpdateProductInput {
@@ -152,9 +123,6 @@ input UpdateUserInput {
 type User {
   """Age"""
   age: Int!
-
-  """Items of the user"""
-  items: [Item!]
 
   """Name"""
   name: String!
@@ -174,9 +142,32 @@ input private_file {
   url: String
 }
 
+input product {
+  """Description"""
+  description: String!
+
+  """End Date"""
+  end: DateTime!
+
+  """Pictures for the product"""
+  pictures: [public_file!]
+
+  """Start date"""
+  start: DateTime!
+
+  """Title"""
+  title: String!
+
+  """Value"""
+  value: Int!
+}
+
 input public_file {
   """S3 File Key"""
   key: String!
+
+  """Product the file belongs to"""
+  product: product
 
   """Public download URL"""
   url: String!
