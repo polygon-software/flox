@@ -12,7 +12,7 @@ import { AnyRole } from '../auth/authorization.decorator';
 
 @Controller()
 export class FileController {
-  constructor(private readonly taskService: FileService) {}
+  constructor(private readonly fileService: FileService) {}
 
   @Public()
   @Post('/uploadPublicFile')
@@ -27,7 +27,8 @@ export class FileController {
     }
     const file = await req.file();
     const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPublicFile(
+
+    const new_file = await this.fileService.uploadPublicFile(
       file_buffer,
       file.filename,
     );
@@ -51,7 +52,7 @@ export class FileController {
 
     const file = await req.file();
     const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPrivateFile(
+    const new_file = await this.fileService.uploadPrivateFile(
       file_buffer,
       file.filename,
       owner,

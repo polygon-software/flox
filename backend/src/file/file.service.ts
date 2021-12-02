@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { Product } from '../product/entities/product.entity';
 
 @Injectable()
 export class FileService {
@@ -37,10 +38,12 @@ export class FileService {
    * Uploads a file to the public S3 bucket
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
+   * @param {string} productId - UUID of the corresponding product
    */
   async uploadPublicFile(
     dataBuffer: Buffer,
     filename: string,
+    productId: string,
   ): Promise<PublicFile> {
     // File upload
     const key = `${uuid()}-${filename}`;
@@ -52,10 +55,11 @@ export class FileService {
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
     const newFile = this.publicFilesRepository.create({
-      key: key,
+      key,
       url: `https://${configService.get(
         'AWS_PUBLIC_BUCKET_NAME',
       )}.s3.${configService.get('AWS_REGION')}.amazonaws.com/${key}`,
+      product,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
