@@ -117,6 +117,7 @@ import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
+import {FetchResult} from '@apollo/client';
 
 // Inputs for CREATE_PRODUCT mutation
 const input = reactive({
@@ -149,7 +150,7 @@ async function onSubmit(){
   if(!input.value) throw new Error('thats illegal')
 
   // Create on database
-  const newProduct = await executeMutation(
+  const mutationResult = await executeMutation(
     CREATE_PRODUCT,
     {
       createProductInput: {
@@ -157,21 +158,22 @@ async function onSubmit(){
         value: Number.parseInt(input.value) // Convert 'value' to int
       }
     }
-  ) as Record<string, string>
+  )
 
-  if(!newProduct){
+  if(!mutationResult){
     throw new Error('Product creation failed')
   }
 
-  // Prepare variables for image upload
-  const newProductId = newProduct.uuid
+  // Prepare variables for image upload TODO
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
+  const newProductId: string = mutationResult.data.createProduct.uuid
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
   const headers = { 'Content-Type': 'multipart/form-data' }
 
+  console.log('New prod:', newProductId)
+
   // Upload all images
   for(const picture of pictures.value) {
-    console.log('Upload picture', picture)
-
     const formData = new FormData();
     if (picture.value) {
       // Convert to Blob and append
