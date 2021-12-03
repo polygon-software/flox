@@ -76,7 +76,7 @@ const props = defineProps({
 
   product: {
       required: true,
-      type: Object, // TODO proper typing
+      type: Object, // TODO proper typing with Joi
   }
 })
 
