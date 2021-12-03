@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+enum Category {
+  TECHNOLOGY
+}
+
 input CreateProductInput {
   description: String!
   end: DateTime!
@@ -13,6 +17,12 @@ input CreateProductInput {
 input CreateUserInput {
   age: Int!
   name: String!
+}
+
+enum Currency {
+  CHF
+  EUR
+  USD
 }
 
 """
@@ -52,17 +62,44 @@ type PrivateFile {
 }
 
 type Product {
+  """Brand"""
+  brand: String!
+
+  """Brand link"""
+  brandLink: String!
+
+  """Product category"""
+  category: Category!
+
+  """The currency the value is denoted in"""
+  currency: Currency!
+
   """Description"""
   description: String!
+
+  """Direct Buy link"""
+  directBuyLink: String!
 
   """End Date"""
   end: DateTime!
 
+  """Maximum bet"""
+  maxBet: Float!
+
+  """Minimum bet"""
+  minBet: Float!
+
   """Pictures for the product"""
   pictures: [PublicFile!]
 
+  """Whether the product is sponsored"""
+  sponsored: Boolean!
+
   """Start date"""
   start: DateTime!
+
+  """Status of the product"""
+  status: ProductStatus!
 
   """Title"""
   title: String!
@@ -72,6 +109,13 @@ type Product {
 
   """Value"""
   value: Int!
+}
+
+enum ProductStatus {
+  ACTIVE
+  DRAFT
+  ENDED
+  WON
 }
 
 type PublicFile {
@@ -143,17 +187,44 @@ input private_file {
 }
 
 input product {
+  """Brand"""
+  brand: String!
+
+  """Brand link"""
+  brandLink: String!
+
+  """Product category"""
+  category: Category!
+
+  """The currency the value is denoted in"""
+  currency: Currency!
+
   """Description"""
   description: String!
+
+  """Direct Buy link"""
+  directBuyLink: String!
 
   """End Date"""
   end: DateTime!
 
+  """Maximum bet"""
+  maxBet: Float!
+
+  """Minimum bet"""
+  minBet: Float!
+
   """Pictures for the product"""
   pictures: [public_file!]
 
+  """Whether the product is sponsored"""
+  sponsored: Boolean!
+
   """Start date"""
   start: DateTime!
+
+  """Status of the product"""
+  status: ProductStatus!
 
   """Title"""
   title: String!
