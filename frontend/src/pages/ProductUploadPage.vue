@@ -12,12 +12,14 @@
         <div class="column col-6 q-pa-md">
           <!-- Name -->
           <q-input
+            v-model="input.title"
             label="Product Name"
             outlined
             dense
           />
           <!-- Description -->
           <q-input
+            v-model="input.description"
             label="Product Description"
             outlined
             dense
@@ -42,6 +44,7 @@
 
           <!-- Start date -->
           <q-input
+            v-model="input.start"
             label="Start"
             type="date"
             outlined
@@ -50,6 +53,7 @@
 
           <!-- End date -->
           <q-input
+            v-model="input.end"
             label="End"
             type="date"
             outlined
@@ -59,6 +63,7 @@
           <!-- Value & currency -->
           <div class="row">
             <q-input
+              v-model="input.value"
               label="Value"
               type="number"
               outlined
@@ -82,6 +87,7 @@
         <p>Images</p>
 <!--        TODO -->
         <PictureUpload
+          @change="onPictureChange"
         />
       </q-card>
 
@@ -110,6 +116,7 @@ import {reactive, Ref, ref} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
+import axios from 'axios';
 
 // Inputs for CREATE_PRODUCT mutation
 const input = reactive({
@@ -121,7 +128,15 @@ const input = reactive({
 })
 
 // Picture inputs (separated from input, since these have to be added after product is created)
-const pictures: Ref<File[]> = ref([])
+const pictures: Ref<Array<Ref<File>>> = ref([])
+
+/**
+ * TODO
+ * @param newPictures
+ */
+function onPictureChange(newPictures: Ref<File>[]){
+  pictures.value = newPictures
+}
 
   /**
  * TODO
@@ -129,13 +144,55 @@ const pictures: Ref<File[]> = ref([])
 async function onSubmit(){
   console.log('OnSubmit')
 
+
+  // TODO verify all attrs, at least 1 image
+  if(!input.value) throw new Error('thats illegal')
+
   // Create on database
   const newProduct = await executeMutation(
     CREATE_PRODUCT,
     {
-      createProductInput: input
+      createProductInput: {
+        ...input,
+        value: Number.parseInt(input.value) // Convert 'value' to int
+      }
     }
-  )
+  ) as Record<string, string>
+
+  if(!newProduct){
+    throw new Error('Product creation failed')
+  }
+
+  // Prepare variables for image upload
+  const newProductId = newProduct.uuid
+  const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
+  const headers = { 'Content-Type': 'multipart/form-data' }
+
+  // Upload all images
+  for(const picture of pictures.value) {
+    console.log('Upload picture', picture)
+
+    const formData = new FormData();
+    if (picture.value) {
+      // Convert to Blob and append
+      const blob = picture.value as Blob
+      formData.append('file', blob)
+
+      console.log('POST file') // TODO remove
+
+      await axios({
+        method: 'post',
+        url: `${baseUrl}/uploadPublicFile?productId=${newProductId}`,
+        data: formData,
+        headers: headers,
+      }).catch((e: Error) => {
+        throw new Error(`File upload error: ${e.message}`)
+      })
+    }
+  }
+
+  console.log('Done!')
+
   // // Push to success page
   // setTimeout(function() {$routerService?.routeTo(ROUTES.LOGIN)}, 5000);
   // await $routerService?.routeTo(ROUTES.SUCCESS)

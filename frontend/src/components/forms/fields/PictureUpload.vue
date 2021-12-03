@@ -45,7 +45,7 @@ function emitValue(){
   // Add a name (e.g. 'additional_1') to every additional file
   const additionalFiles: Record<string, File> = {}
   for(let i = 0; i < validPictures.length; i++){
-    const key = `additional_${i+1}`
+    const key = `picture_${i+1}`
     const file = validPictures[i].value
     if(file){
       additionalFiles[key] = file
@@ -53,7 +53,7 @@ function emitValue(){
   }
 
   // TODO inner validation?
-  emit('change', pictures)
+  emit('change', pictures.value)
 }
 
 /**
