@@ -36,6 +36,11 @@ export const ALL_PRODUCTS = {
               value
               start
               end
+              pictures{
+                uuid
+                url
+                __typename
+              }
               __typename
             }
         }
