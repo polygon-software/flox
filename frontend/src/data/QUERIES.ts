@@ -33,9 +33,16 @@ export const ALL_PRODUCTS = {
               uuid
               title
               description
+              brand
               value
+              currency
               start
               end
+              category
+              directBuyLink
+              brandLink
+              minBet
+              maxBet
               pictures{
                 uuid
                 url

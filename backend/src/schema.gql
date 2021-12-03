@@ -73,7 +73,7 @@ type Product {
   brand: String!
 
   """Brand link"""
-  brandLink: String!
+  brandLink: String
 
   """Product category"""
   category: Category!
@@ -85,7 +85,7 @@ type Product {
   description: String!
 
   """Direct Buy link"""
-  directBuyLink: String!
+  directBuyLink: String
 
   """End Date"""
   end: DateTime!
@@ -198,7 +198,7 @@ input product {
   brand: String!
 
   """Brand link"""
-  brandLink: String!
+  brandLink: String
 
   """Product category"""
   category: Category!
@@ -210,7 +210,7 @@ input product {
   description: String!
 
   """Direct Buy link"""
-  directBuyLink: String!
+  directBuyLink: String
 
   """End Date"""
   end: DateTime!

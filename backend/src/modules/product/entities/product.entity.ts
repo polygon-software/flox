@@ -78,13 +78,13 @@ export class Product extends BaseEntity {
   @Column({ default: false })
   sponsored: boolean;
 
-  @Field(() => String, { description: 'Direct Buy link' })
+  @Field(() => String, { description: 'Direct Buy link', nullable: true })
   @Column({ nullable: true })
   @IsString()
   @IsUrl()
   directBuyLink: string;
 
-  @Field(() => String, { description: 'Brand link' })
+  @Field(() => String, { description: 'Brand link', nullable: true })
   @Column({ nullable: true })
   @IsString()
   @IsUrl()

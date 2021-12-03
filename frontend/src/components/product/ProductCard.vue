@@ -58,7 +58,9 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <OverviewComponent/>
+    <OverviewComponent
+      :product="product"
+    />
   </q-card>
 </template>
 

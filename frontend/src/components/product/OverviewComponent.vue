@@ -6,13 +6,13 @@
         v-if="showDirectLink"
         @click.stop
       >
-        {{ $t('direct_buy_link') }}: <a :href="directLink">{{ directLink }}</a>
+        {{ $t('direct_buy_link') }}: <a :href="product.directBuyLink">{{ product.directBuyLink }}</a>
       </p>
       <p
         v-if="showSellerLink"
         @click.stop
       >
-        {{ $t('seller_link') }}: <a :href="sellerLink">{{ sellerLink }}</a>
+        {{ $t('seller_link') }}: <a :href="product.brandLink">{{ product.brandLink }}</a>
       </p>
     </div>
 
@@ -29,7 +29,7 @@
         color="positive"
       />
       <div class="flex justify-between q-mt-sm">
-        <b style="color: #21BA45"> {{ covered_amount }}{{ currency }} / {{ total_amount }}{{ currency }}</b>
+        <b style="color: #21BA45"> {{ covered_amount }}{{ currency }} / {{ product.value }}{{ product.currency }}</b>
         <b style="color: #21BA45"> {{ $t('player_bet') }} {{ userBet }}{{ currency }}</b>
       </div>
     </div>
@@ -43,18 +43,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {defineProps, ref} from 'vue'
 
-//Links
-const directLink = 'https://polygon-software.ch/'
-const sellerLink = 'https://polygon-software.ch/'
+const props = defineProps({
+  product: {
+    required: true,
+    type: Object, // TODO proper typing with Joi
+  }
+})
+
 const showSellerLink = ref(true)
 const showDirectLink = ref(true)
 
 // Progress bar
 const progress = ref(0.4)
 const covered_amount = ref(400)
-const total_amount = 1000
 const userBet = ref(100)
 const currency = ref('$')
 
