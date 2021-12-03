@@ -4,6 +4,7 @@
     @click="openDetailView(product)"
     class="q-mb-xl q-pa-sm"
   >
+
     <!-- Images -->
     <q-carousel
       animated
@@ -12,10 +13,10 @@
       infinite
     >
       <q-carousel-slide
-        v-for="(slide, index) in images"
-        :key="index"
-        :name="slide.id"
-        :img-src="slide.url"
+        v-for="picture in product.pictures"
+        :key="picture.uuid"
+        :name="picture.uuid"
+        :img-src="picture.url"
       />
     </q-carousel>
 
@@ -62,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, defineProps} from 'vue'
+import {ref, computed, defineProps, Ref} from 'vue'
 import OverviewComponent from './OverviewComponent.vue'
 import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
 import {useQuasar} from 'quasar';
@@ -75,40 +76,19 @@ const props = defineProps({
 
   product: {
       required: true,
-      type: Object,
+      type: Object, // TODO proper typing
   }
 })
 
 const $q = useQuasar()
 
 // General
-const currentImage = ref(1)
+const pictures: Ref<Record<string, string>[]> = ref(props.product.pictures) as Ref<Record<string, string>[]>
+const currentImage: Ref<string> = ref(pictures.value[0]?.uuid ?? '')
 const liked = ref(false)
 const bookmarked = ref(false)
 const showComments = ref(false)
 const showShareMenu = ref(false)
-
-/**
- * These are the images that will be displayed in the carousell.
- */
-const images = [
-  {
-    id: 1,
-    url: 'https://cdn.quasar.dev/img/mountains.jpg'
-  },
-  {
-    id: 2,
-    url: 'https://cdn.quasar.dev/img/parallax1.jpg'
-  },
-  {
-    id: 3,
-    url: 'https://cdn.quasar.dev/img/parallax2.jpg'
-  },
-  {
-    id: 4,
-    url: 'https://cdn.quasar.dev/img/quasar.jpg'
-  }
-]
 
 /**
  * Here are the icons and icon dialogs defined.

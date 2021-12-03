@@ -51,7 +51,7 @@ const sellerLink = 'https://polygon-software.ch/'
 const showSellerLink = ref(true)
 const showDirectLink = ref(true)
 
-// Progess bar
+// Progress bar
 const progress = ref(0.4)
 const covered_amount = ref(400)
 const total_amount = 1000
