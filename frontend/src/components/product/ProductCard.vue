@@ -8,7 +8,7 @@
     <!-- Images -->
     <q-carousel
       animated
-      v-model="currentImage"
+      v-model="currentPictureUuid"
       navigation
       infinite
     >
@@ -84,7 +84,7 @@ const $q = useQuasar()
 
 // General
 const pictures: Ref<Record<string, string>[]> = ref(props.product.pictures) as Ref<Record<string, string>[]>
-const currentImage: Ref<string> = ref(pictures.value[0]?.uuid ?? '')
+const currentPictureUuid: Ref<string> = ref(pictures.value[0]?.uuid ?? '')
 const liked = ref(false)
 const bookmarked = ref(false)
 const showComments = ref(false)
