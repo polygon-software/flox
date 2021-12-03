@@ -54,12 +54,13 @@ export class FileService {
     };
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
+
+    // TODO add productId
     const newFile = this.publicFilesRepository.create({
       key,
       url: `https://${configService.get(
         'AWS_PUBLIC_BUCKET_NAME',
       )}.s3.${configService.get('AWS_REGION')}.amazonaws.com/${key}`,
-      product,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;

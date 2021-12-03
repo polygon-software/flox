@@ -37,7 +37,10 @@ export class Product extends BaseEntity {
     description: 'Pictures for the product',
     nullable: true,
   })
-  @OneToMany(() => PublicFile, (picture) => picture.product)
+  @OneToMany(() => PublicFile, (picture) => picture.product, {
+    cascade: true,
+    eager: true,
+  })
   pictures: PublicFile[];
 
   // TODO: Remaining fields from UML

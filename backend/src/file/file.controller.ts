@@ -27,10 +27,13 @@ export class FileController {
     }
     const file = await req.file();
     const file_buffer = await file.toBuffer();
+    const params = req.query as Record<string, string>;
+    const productId = params.productId;
 
     const new_file = await this.fileService.uploadPublicFile(
       file_buffer,
       file.filename,
+      productId,
     );
     res.send(new_file);
   }
