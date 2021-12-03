@@ -75,17 +75,17 @@ export class Product extends BaseEntity {
   category: CATEGORY;
 
   @Field(() => Boolean, { description: 'Whether the product is sponsored' })
-  @Column()
+  @Column({ default: false })
   sponsored: boolean;
 
   @Field(() => String, { description: 'Direct Buy link' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   @IsUrl()
   directBuyLink: string;
 
   @Field(() => String, { description: 'Brand link' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   @IsUrl()
   brandLink: string;
@@ -100,5 +100,5 @@ export class Product extends BaseEntity {
   @IsInt()
   maxBet: number;
 
-  // TODO: Remaining fields from UML
+  // TODO: Remaining fields from UML (tags, repeating sales, comments, likes)
 }

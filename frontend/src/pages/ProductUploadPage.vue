@@ -13,6 +13,7 @@
           <!-- Name -->
           <q-input
             v-model="input.title"
+            class="q-ma-sm"
             label="Product Name"
             outlined
             dense
@@ -20,6 +21,7 @@
           <!-- Description -->
           <q-input
             v-model="input.description"
+            class="q-ma-sm"
             label="Product Description"
             outlined
             dense
@@ -31,11 +33,15 @@
           <!-- Brand & category row -->
           <div class="row">
             <q-input
+              v-model="input.brand"
+              class="q-ma-sm"
               label="Brand"
               outlined
               dense
             />
             <q-input
+              v-model="input.category"
+              class="q-ma-sm"
               label="Category"
               outlined
               dense
@@ -45,6 +51,7 @@
           <!-- Start date -->
           <q-input
             v-model="input.start"
+            class="q-ma-sm"
             label="Start"
             type="date"
             outlined
@@ -54,16 +61,39 @@
           <!-- End date -->
           <q-input
             v-model="input.end"
+            class="q-ma-sm"
             label="End"
             type="date"
             outlined
             dense
           />
 
+          <!-- Min/Max bet -->
+          <div class="row">
+            <q-input
+              v-model="input.minBet"
+              class="q-ma-sm"
+              label="Minimum Bet"
+              type="number"
+              outlined
+              dense
+            />
+
+            <q-input
+              v-model="input.maxBet"
+              class="q-ma-sm"
+              label="Maximum Bet"
+              type="number"
+              outlined
+              dense
+            />
+
+          </div>
           <!-- Value & currency -->
           <div class="row">
             <q-input
               v-model="input.value"
+              class="q-ma-sm"
               label="Value"
               type="number"
               outlined
@@ -122,9 +152,16 @@ import axios from 'axios';
 const input = reactive({
   title: null,
   description: null,
+  brand: null,
+  value: null,
+  currency: 'CHF', // TODO add QDropdown
   start: null,
   end: null,
-  value: null,
+  category: null,
+  directBuyLink: null,
+  brandLink: null,
+  minBet: null,
+  maxBet: null
 })
 
 // Picture inputs (separated from input, since these have to be added after product is created)
@@ -144,7 +181,9 @@ function onPictureChange(newPictures: Ref<File>[]){
 async function onSubmit(){
 
   // TODO verify all attrs, at least 1 image (form validation)
-  if(!input.value) throw new Error('thats illegal')
+  if([input.value, input.minBet, input.maxBet].some((value) => value === undefined || value === null)){
+    throw new Error('thats illegal')
+  }
 
   // Create on database
   const mutationResult = await executeMutation(
@@ -152,7 +191,9 @@ async function onSubmit(){
     {
       createProductInput: {
         ...input,
-        value: Number.parseInt(input.value) // Convert 'value' to int TODO can this be done on QInput directly?
+        value: Number.parseInt(input.value ?? ''), // Convert 'value' to int TODO can this be done on QInput directly?
+        minBet: Number.parseInt(input.minBet ?? ''),
+        maxBet: Number.parseInt(input.maxBet ?? ''),
       }
     }
   )

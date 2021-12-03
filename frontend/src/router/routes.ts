@@ -18,8 +18,8 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
-  'PRODUCT_UPLOAD': {
-    path: '/product-upload',
+  'ADD_PRODUCT': {
+    path: '/add-product',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/ProductUploadPage.vue') }],
   },
@@ -33,7 +33,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 // Routes that can be accessed without being logged in
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
-  ROUTES.PRODUCT_UPLOAD // TODO: change rules
+  ROUTES.ADD_PRODUCT // TODO: change rules
 ]
 
 //TODO: Add semi-protected routes

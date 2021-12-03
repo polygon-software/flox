@@ -7,8 +7,15 @@ enum Category {
 }
 
 input CreateProductInput {
+  brand: String!
+  brandLink: String
+  category: Category!
+  currency: Currency!
   description: String!
+  directBuyLink: String
   end: DateTime!
+  maxBet: Float!
+  minBet: Float!
   start: DateTime!
   title: String!
   value: Int!
