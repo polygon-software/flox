@@ -33,8 +33,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 // Routes that can be accessed without being logged in
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
-  ROUTES.SUCCESS,
-  ROUTES.SIGNUP,
   ROUTES.PRODUCT_UPLOAD // TODO: change rules
 ]
 

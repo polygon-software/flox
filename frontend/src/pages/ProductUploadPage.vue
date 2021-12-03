@@ -80,8 +80,8 @@
         style="border-radius: 20px; border: 1px solid black"
       >
         <p>Images</p>
-        <q-file
-          outlined
+<!--        TODO -->
+        <PictureUpload
         />
       </q-card>
 
@@ -99,6 +99,7 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {reactive} from 'vue';
+import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 
 const form = reactive({
   title: null,
