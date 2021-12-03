@@ -1,14 +1,14 @@
 <template>
   <q-card
     style="width: 400px; cursor: pointer"
-    @click="openDetailView(product)"
     class="q-mb-xl q-pa-sm"
+    @click="openDetailView(product)"
   >
 
     <!-- Images -->
     <q-carousel
-      animated
       v-model="currentPictureUuid"
+      animated
       navigation
       infinite
     >
@@ -32,9 +32,9 @@
           :key="icon.tag"
           :tag="icon.tag"
           :name="icon.name"
-          @click.stop="icon.callback()"
           class="q-mr-sm"
           style="cursor: pointer;"
+          @click.stop="icon.callback()"
         />
       </div>
     </div>
@@ -51,9 +51,9 @@
         <q-card-actions>
           <q-btn
             :label="$t('back')"
-            @click.stop=dialog.callback
             color="black"
             flat
+            @click.stop=dialog.callback
           />
         </q-card-actions>
       </q-card>
@@ -69,11 +69,6 @@ import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
 import {useQuasar} from 'quasar';
 
 const props = defineProps({
-  // dbReference: {
-  //   required: true,
-  //   type: String
-  // },
-
   product: {
       required: true,
       type: Object, // TODO proper typing with Joi

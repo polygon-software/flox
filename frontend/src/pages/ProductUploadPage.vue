@@ -117,9 +117,8 @@ import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
-import {FetchResult} from '@apollo/client';
 
-// Inputs for CREATE_PRODUCT mutation
+// Inputs for CREATE_PRODUCT mutation // TODO define Joi type
 const input = reactive({
   title: null,
   description: null,
@@ -143,10 +142,8 @@ function onPictureChange(newPictures: Ref<File>[]){
  * TODO
  */
 async function onSubmit(){
-  console.log('OnSubmit')
 
-
-  // TODO verify all attrs, at least 1 image
+  // TODO verify all attrs, at least 1 image (form validation)
   if(!input.value) throw new Error('thats illegal')
 
   // Create on database
@@ -155,7 +152,7 @@ async function onSubmit(){
     {
       createProductInput: {
         ...input,
-        value: Number.parseInt(input.value) // Convert 'value' to int
+        value: Number.parseInt(input.value) // Convert 'value' to int TODO can this be done on QInput directly?
       }
     }
   )
