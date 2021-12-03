@@ -1,11 +1,11 @@
 import { Args, Resolver, Query } from '@nestjs/graphql';
 import PublicFile from './entities/public_file.entity';
 import { FileService } from './file.service';
-import { AnyRole } from '../auth/authorization.decorator';
+import { AnyRole } from '../../auth/authorization.decorator';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
-import { Public } from '../auth/authentication.decorator';
+import { Public } from '../../auth/authentication.decorator';
 
 @Resolver(() => PublicFile)
 export class FileResolver {

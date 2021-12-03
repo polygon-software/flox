@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import fastify = require('fastify');
-import { Public } from '../auth/authentication.decorator';
-import { AnyRole } from '../auth/authorization.decorator';
+import { Public } from '../../auth/authentication.decorator';
+import { AnyRole } from '../../auth/authorization.decorator';
 
 @Controller()
 export class FileController {

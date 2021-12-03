@@ -7,7 +7,7 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { PubSub } from 'graphql-subscriptions';
-import { Public } from '../auth/authentication.decorator';
+import { Public } from '../../auth/authentication.decorator';
 
 // Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
 const pubSub = new PubSub();
