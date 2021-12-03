@@ -1,80 +1,102 @@
 <template>
-  <q-page class="flex flex-center">
-      <q-card
-        class="q-pa-md q-ma-md"
-        flat
-        style="width: 100%; height: 500px; border-radius: 20px; border: 1px solid black"
-      >
-        <p>General</p>
-        <div class="row full-width">
-          <!-- Left column -->
-          <div class="column col-6 q-pa-md">
-            <!-- Name -->
-            <q-input
-              label="Product Name"
-              outlined
-              dense
-            />
-            <!-- Description -->
-            <q-input
-              label="Product Description"
-              outlined
-              dense
-            />
+  <q-page class="flex">
+    <!-- General Info -->
+    <q-card
+      class="q-pa-md q-ma-md"
+      flat
+      style="width: 100%; border-radius: 20px; border: 1px solid black"
+    >
+      <p>General</p>
+      <div class="row full-width">
+        <!-- Left column -->
+        <div class="column col-6 q-pa-md">
+          <!-- Name -->
+          <q-input
+            label="Product Name"
+            outlined
+            dense
+          />
+          <!-- Description -->
+          <q-input
+            label="Product Description"
+            outlined
+            dense
+          />
 
-          </div>
-          <!-- Right column -->
-          <div class="column col-6 q-pa-md">
-            <!-- Brand & category row -->
-            <div class="row">
-              <q-input
-                label="Brand"
-                outlined
-                dense
-              />
-              <q-input
-                label="Category"
-                outlined
-                dense
-              />
-            </div>
-
-            <!-- Start date -->
-            <q-input
-              label="Start"
-              type="date"
-              outlined
-              dense
-            />
-
-            <!-- End date -->
-            <q-input
-              label="End"
-              type="date"
-              outlined
-              dense
-            />
-
-            <!-- Value & currency -->
-            <div class="row">
-              <q-input
-                label="Value"
-                type="number"
-                outlined
-                dense
-              />
-              <p>TODO currency</p>
-            </div>
-
-          </div>
         </div>
+        <!-- Right column -->
+        <div class="column col-6 q-pa-md">
+          <!-- Brand & category row -->
+          <div class="row">
+            <q-input
+              label="Brand"
+              outlined
+              dense
+            />
+            <q-input
+              label="Category"
+              outlined
+              dense
+            />
+          </div>
 
+          <!-- Start date -->
+          <q-input
+            label="Start"
+            type="date"
+            outlined
+            dense
+          />
+
+          <!-- End date -->
+          <q-input
+            label="End"
+            type="date"
+            outlined
+            dense
+          />
+
+          <!-- Value & currency -->
+          <div class="row">
+            <q-input
+              label="Value"
+              type="number"
+              outlined
+              dense
+            />
+            <p>TODO currency</p>
+          </div>
+
+        </div>
+      </div>
+
+    </q-card>
+
+    <!-- Images etc. TODO -->
+    <div class="row full-width q-pa-md">
+      <q-card
+        class="q-pa-md column col-6"
+        flat
+        style="border-radius: 20px; border: 1px solid black"
+      >
+        <p>Images</p>
+        <q-file
+          outlined
+        />
       </q-card>
+
+      <q-card
+        class="q-pa-md column col-6"
+        flat
+        style="border-radius: 20px; border: 1px solid black"
+      >
+        <p>TODO</p>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import GenericForm from 'components/forms/GenericForm.vue';
 import {i18n} from 'boot/i18n';
 import {reactive} from 'vue';
 
