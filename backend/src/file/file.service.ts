@@ -31,6 +31,9 @@ export class FileService {
     @InjectRepository(PrivateFile)
     private privateFilesRepository: Repository<PrivateFile>,
 
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
+
     private readonly configService: ConfigService,
   ) {}
 
@@ -55,12 +58,18 @@ export class FileService {
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
 
-    // TODO add productId
+    const product = await this.productRepository.findOne(productId);
+
+    if (!product) {
+      throw new Error(`Product ${productId} does not exist`);
+    }
+
     const newFile = this.publicFilesRepository.create({
       key,
       url: `https://${configService.get(
         'AWS_PUBLIC_BUCKET_NAME',
       )}.s3.${configService.get('AWS_REGION')}.amazonaws.com/${key}`,
+      product: product,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
