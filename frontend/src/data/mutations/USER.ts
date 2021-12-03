@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import {MutationTypes} from './DATA-DEFINITIONS';
+import {MutationTypes} from '../DATA-DEFINITIONS';
 
 /**
  * This file contains all valid GraphQL mutations. A mutation is structure as follows

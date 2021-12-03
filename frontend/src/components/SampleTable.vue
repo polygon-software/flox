@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import { ALL_USERS } from '../data/QUERIES';
-import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
+import {DELETE_USER, UPDATE_USER} from '../data/mutations/USER';
 import {ref, computed, Ref} from 'vue';
 import {executeMutation, subscribeToQuery} from '../helpers/data-helpers';
 
