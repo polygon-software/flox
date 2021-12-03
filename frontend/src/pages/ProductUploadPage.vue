@@ -106,38 +106,34 @@
 </template>
 
 <script setup lang="ts">
-import {i18n} from 'boot/i18n';
-import {reactive} from 'vue';
+import {reactive, Ref, ref} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
+import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 
-const form = reactive({
+// Inputs for CREATE_PRODUCT mutation
+const input = reactive({
   title: null,
   description: null,
-  pictures: [],
+  start: null,
+  end: null,
   value: null,
 })
 
-/**
+// Picture inputs (separated from input, since these have to be added after product is created)
+const pictures: Ref<File[]> = ref([])
+
+  /**
  * TODO
  */
 async function onSubmit(){
   console.log('OnSubmit')
 
-
-  await executeMutation(
+  // Create on database
+  const newProduct = await executeMutation(
     CREATE_PRODUCT,
     {
-      company_name: values.company_data.company_name,
-      first_name: values.full_name.first_name,
-      last_name: values.full_name.last_name,
-      language: values.language,
-      uid: values.company_data.uid,
-      domicile_address: domicile_address,
-      correspondence_address: correspondence_address,
-      phone: values.phone_number,
-      email: values.email,
-      branch_structure: values.company_data.branch_structure
+      createProductInput: input
     }
   )
   // // Push to success page

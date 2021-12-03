@@ -1,9 +1,10 @@
 import {useApolloClient, useMutation, useQuery, UseQueryReturn} from '@vue/apollo-composable';
 import {ALL_USERS, QUERIES} from '../data/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
-import {ApolloCache, ApolloQueryResult} from '@apollo/client';
+import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {useSSR} from 'src/store/ssr/index';
+import {i18n} from 'boot/i18n';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -27,35 +28,39 @@ async function executeQuery(queryObject: QueryObject, variables?: Record<string,
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
  * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
- * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutation
+ * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutatio
+ * @return {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
  */
-async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<void> {
-    const mutation =  mutationObject.mutation
-    const tables =  mutationObject.tables
-    const type =  mutationObject.type
+async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null> {
+  const mutation =  mutationObject.mutation
+  const tables =  mutationObject.tables
+  const type =  mutationObject.type
 
-    if([mutation, tables, type, mutationObject.cacheLocation].some(item => item === undefined)){
-        throw new Error("One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'")
-    }
+  if([mutation, tables, type].some(item => item === undefined)){
+    throw new Error(i18n.global.t('errors.missing_properties'))
+  }
 
-    const affectedQueries:QueryObject[] = [];
+  const affectedQueries:QueryObject[] = [];
 
-    // Find affected queries based on tables for CREATE and DELETE operations
-    if(type === MutationTypes.CREATE || type === MutationTypes.DELETE){
-        QUERIES.forEach((query) => {
-            // If any of the mutation's affected tables are relevant to query, add to list of affected queries
-            if(tables.some(t => query.tables.indexOf(t) >= 0)){
-                affectedQueries.push(query)
-            }
-        })
-    }
+  // Find affected queries based on tables for CREATE and DELETE operations
+  if(type === MutationTypes.CREATE || type === MutationTypes.DELETE){
+    QUERIES.forEach((query) => {
+      // If any of the mutation's affected tables are relevant to query, add to list of affected queries
+      if(tables.some(t => query.tables.indexOf(t) >= 0)){
+        affectedQueries.push(query)
+      }
+    })
+  }
 
-    // Actually execute mutation and handle cache
+  // Actually execute mutation and handle cache
   const { mutate } = useMutation(mutation, () => ({
-      // Get cache and the new or deleted object
+    // Get cache and the new or deleted object
     update: (cache: ApolloCache<any> , { data: changeData}) => {
       affectedQueries.forEach((queryObject) => {
         const changes = changeData as Record<string, Record<string, unknown>>
+        if(!mutationObject.cacheLocation){
+          throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
+        }
         const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
         // Read existing query from cache
@@ -84,12 +89,12 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
             }
           })
         }
-        })
+      })
 
     },
-    }))
-    // Execute mutation
-    await mutate(variables);
+  }))
+  // Execute mutation
+  return await mutate(variables);
 }
 
 function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
