@@ -182,7 +182,7 @@
           <!-- Type -->
           <q-select
             v-model="input.type"
-            :options="types"
+            :options="type"
             class="column q-ma-sm"
             style="width: calc(50% - 25px)"
             :label="$t('products.type')"
@@ -260,7 +260,7 @@
       </q-card>
     </div>
 
-    <!-- Images -->
+    <!-- Images TODO Show already uploaded images-->
     <div class="row full-width">
       <q-card
         class="q-pa-md q-ma-md"
@@ -270,7 +270,6 @@
         <h6 class="q-ma-md">{{ $tc('products.image', 2) }}</h6>
         <!-- TODO -->
         <PictureUpload
-          class="q-ma-md"
           @change="onPictureChange"
         />
       </q-card>
@@ -296,11 +295,17 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
 import {date} from 'quasar';
+import { CURRENCY, PRODUCT_STATUS, PRODUCT_TYPE } from '../../../shared/definitions/ENUM'
 
-//TODO Fetch
-const currencies = ['CHF', 'EUR','USD']
-const status = ['Active', 'Archived', 'Draft ']
-const types = ['Normal', 'Promotion']
+const currencies = Object.keys(CURRENCY).filter((item) => {
+  return isNaN(Number(item))
+})
+const status = Object.values(PRODUCT_STATUS).filter((item) => {
+  return isNaN(Number(item));
+})
+const type = Object.values(PRODUCT_TYPE).filter((item) => {
+  return isNaN(Number(item));
+})
 
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
 const input = reactive({
