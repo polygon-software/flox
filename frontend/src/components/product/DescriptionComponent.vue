@@ -1,13 +1,20 @@
 <template>
   <div>
-    {{ productDetails }}
+    {{ product.description }}
   </div>
 </template>
 
 <script setup lang="ts">
 
-// product details
-const productDetails = 'Lorem ipsum...'
+import {defineProps} from 'vue';
+
+const props = defineProps({
+  product: {
+    required: true,
+    type: Object,
+  }
+})
+
 
 //TODO: Implement methods to fetch data from database
 

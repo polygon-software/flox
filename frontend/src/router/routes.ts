@@ -20,7 +20,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   'ADD_PRODUCT': {
     path: '/add-product',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/PartnerLayout.vue'), // TODO depending on role: admin or partner
     children: [{ path: '', component: () => import('pages/ProductUploadPage.vue') }],
   },
 

@@ -10,12 +10,14 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
   const authMiddleware = new ApolloLink((operation, forward) => {
     const cookies = process.env.SERVER && ssrContext? Cookies.parseSSR(ssrContext) : Cookies
     const token = cookies.get('authentication.idToken')
-    // add the authorization to the headers
-    operation.setContext({
-      headers: {
-        authorization: `Bearer ${token}`
-      }
-    })
+    if(token){
+      // Add the authorization to the headers
+      operation.setContext({
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+    }
     return forward(operation)
   })
 

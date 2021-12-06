@@ -1,24 +1,25 @@
 <template>
   <q-dialog
     ref="dialog"
-    @hide="hide"
     title="DetailView"
+    @hide="hide"
   >
     <q-card class="q-pa-md" style="width: 800px;">
       <q-card-section>
+
         <!-- Images -->
         <q-carousel
+          v-model="currentPictureUuid"
           animated
-          v-model="currentImage"
-          arrows
           navigation
           infinite
+          arrows
         >
           <q-carousel-slide
-            v-for="(slide, index) in images"
-            :key="index"
-            :name="slide.id"
-            :img-src="slide.url"
+            v-for="picture in product.pictures"
+            :key="picture.uuid"
+            :name="picture.uuid"
+            :img-src="picture.url"
           />
         </q-carousel>
 
@@ -95,6 +96,7 @@
           >
             <component
               :is="tab.component.name"
+              :product="product"
             />
           </q-tab-panel>
         </q-tab-panels>
@@ -133,10 +135,6 @@ function hide(): void{
 }
 
 const props = defineProps({
-  // dbReference: {
-  //   required: true,
-  //   type: String
-  // },
   product: {
       required: true,
       type: Object,
@@ -144,33 +142,12 @@ const props = defineProps({
 })
 
 // General
-const currentImage = ref(1)
+const pictures: Ref<Record<string, string>[]> = ref(props.product.pictures) as Ref<Record<string, string>[]>
+const currentPictureUuid: Ref<string> = ref(pictures.value[0]?.uuid ?? '')
 const liked = ref(false)
 const bookmarked = ref(false)
 const showComments = ref(false)
 const showShareMenu = ref(false)
-
-/**
- * These are the images that will be displayed in the carousell.
- */
-const images = [
-  {
-    id: 1,
-    url: 'https://cdn.quasar.dev/img/mountains.jpg'
-  },
-  {
-    id: 2,
-    url: 'https://cdn.quasar.dev/img/parallax1.jpg'
-  },
-  {
-    id: 3,
-    url: 'https://cdn.quasar.dev/img/parallax2.jpg'
-  },
-  {
-    id: 4,
-    url: 'https://cdn.quasar.dev/img/quasar.jpg'
-  }
-]
 
 /**
  * Here are the icons and icon dialogs defined.
