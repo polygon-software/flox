@@ -13,7 +13,8 @@
       </p>
 
       <!-- Employee Overview -->
-      <EmployeeTable/>
+      <EmployeeTable
+      :columns="columns"/>
 
       <!-- Register new employee -->
       <div class="flex row justify-center items-center">
@@ -42,5 +43,11 @@ const $routerService: RouterService = inject('$routerService')
 async function routeToRegisterEmployee(): Promise<void> {
   await $routerService.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
 }
-
+const columns = [
+  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
+  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
+  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
+  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
+  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
+]
 </script>
