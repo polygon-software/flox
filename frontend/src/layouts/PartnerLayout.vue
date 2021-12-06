@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-grey-4">
+  <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <!-- Menu bar header -->
     <MenuBar/>
 
@@ -9,8 +9,8 @@
       show-if-above
       side="left"
       width="200"
-      bordered
       persistent
+      bordered
     >
       <q-item
         v-for="item in menuItems"
