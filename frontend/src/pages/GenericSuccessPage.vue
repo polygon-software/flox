@@ -1,19 +1,19 @@
 <template>
   <q-page class="flex flex-center">
     <q-card style="width: 100%; max-width: 600px">
-      <q-card-section class="bg-green text-white flex flex-center" style="height: 100px">
-        <q-icon name="done" size="70px" color="white" items-center/>
+      <q-card-section class="bg-white text-white flex flex-center q-pb-xs q-mb-xs q-mt-lg" style="height: 180px">
+        <q-icon name="check_circle" size="150px" color="green" style="font-weight: 200;" items-center/>
       </q-card-section>
 
-      <q-card-section align="center" style="height: 200px">
-        <p class="text-h6 q-mb-xs">{{ successMessage }}</p>
+      <q-card-section style="height: 220px; text-align: center;" class="q-pt-xs q-mt-xs">
+        <p class="text-h4 q-mb-xs">{{ successMessage }}</p>
         <p class="text-subtitle1">{{ furtherExplanation }}</p>
         <br/>
         <br/>
         <p v-if="autoRedirect">{{ nextMessage }}</p>
         <q-btn
           else
-          outline style="color: green;"
+          color="blue"
           :label="buttonLabel"
           @click="redirectOnClick"/>
       </q-card-section>
