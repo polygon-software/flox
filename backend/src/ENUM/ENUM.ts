@@ -17,6 +17,7 @@ export enum PRODUCT_STATUS {
   ENDED = 'ended', // TODO proper definitions: what statuses are possible
   WON = 'won',
 }
+
 registerEnumType(CURRENCY, { name: 'Currency' });
 registerEnumType(CATEGORY, { name: 'Category' });
 registerEnumType(PRODUCT_STATUS, { name: 'ProductStatus' });
