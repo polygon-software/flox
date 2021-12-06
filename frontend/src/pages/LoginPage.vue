@@ -6,7 +6,7 @@
       <h5
         class="q-pa-sm q-ma-none"
       >
-        {{ $t('welcome_bigabig') }}</h5>
+        {{ $t('greetings.welcome_bigabig') }}</h5>
       <!-- Login Card -->
       <LoginForm
         v-if="!signup"
@@ -18,7 +18,7 @@
         v-if="!signup"
         style="margin-top: 0; padding: 0"
       >
-        {{ $t('no_account_yet') }}
+        {{ $t('authentication.no_account_yet') }}
       </b>
 
       <!-- Signup Card -->
