@@ -297,6 +297,7 @@ import axios from 'axios';
 import {date} from 'quasar';
 import { CURRENCY, PRODUCT_STATUS, PRODUCT_TYPE } from '../../../shared/definitions/ENUM'
 
+// Read ENUM values and so they can be used as options
 const currencies = Object.keys(CURRENCY).filter((item) => {
   return isNaN(Number(item))
 })

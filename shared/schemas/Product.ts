@@ -1,7 +1,7 @@
 import * as Joi from 'joi'
 
 // Base Item
-export const BigABigItem = Joi.object({
+export const Product = Joi.object({
     id: Joi.string().required().required(),
     name: Joi.string().required().required(),
     description: Joi.string().required(),

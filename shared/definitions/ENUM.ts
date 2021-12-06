@@ -10,14 +10,14 @@ export enum CATEGORY {
 }
 
 export enum PRODUCT_STATUS {
-  DRAFT = 'Draft',
-  ACTIVE = 'Active',
-  ENDED = 'Ended', // TODO proper definitions: what statuses are possible
-  WON = 'Won',
-  ARCHIVED = 'Archived'
+  DRAFT = 'draft',
+  ACTIVE = 'active',
+  ENDED = 'ended', // TODO proper definitions: what statuses are possible
+  WON = 'won',
+  ARCHIVED = 'archived'
 }
 
 export enum PRODUCT_TYPE {
-  NORMAL = 'Normal', // TODO proper definitions: what types are possible
-  PROMOTION = 'Promotion'
+  NORMAL = 'normal', // TODO proper definitions: what types are possible
+  PROMOTION = 'promotion'
 }
