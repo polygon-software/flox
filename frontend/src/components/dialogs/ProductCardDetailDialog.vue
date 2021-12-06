@@ -13,6 +13,7 @@
           animated
           navigation
           infinite
+          arrows
         >
           <q-carousel-slide
             v-for="picture in product.pictures"
