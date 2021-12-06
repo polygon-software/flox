@@ -7,17 +7,13 @@
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
-    :label="$t('image') + ' ' + (index+1).toString()"
+    :label="$t('products.image') + ' ' + (index+1).toString()"
     stack-label
     clearable
     :max-file-size="props.maxFileSize"
     :rules="[]"
     @update:model-value="fileChange"
   >
-    <template #prepend>
-      <q-icon name="attach_file" />
-    </template>
-    <img :src="picture"/>
   </q-file>
 
 </template>

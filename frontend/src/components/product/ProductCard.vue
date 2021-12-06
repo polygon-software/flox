@@ -50,7 +50,7 @@
         </q-card-section>
         <q-card-actions>
           <q-btn
-            :label="$t('back')"
+            :label="$t('buttons.back')"
             color="black"
             flat
             @click.stop=dialog.callback

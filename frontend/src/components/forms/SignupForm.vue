@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
     <h5 class="q-mb-none" style="margin-bottom: 30px;">
-      {{ $t('signup') }}
+      {{ $t('authentication.signup') }}
     </h5>
     <q-form
         @submit="onSubmit"
@@ -42,19 +42,19 @@
               flat
               style="margin-right: 30px"
               color="primary"
-              :label="$t('back')"
+              :label="$t('buttons.back')"
               class="q-ml-sm" />
           <q-btn
               v-if="form.step.value < form.pages.value.length"
               @click="$refs.stepper.next()"
               color="primary"
-              :label="$t('next_step')"
+              :label="$t('buttons.next_step')"
               :disable="!form.pageValid.value"
           />
           <q-btn
               v-if="form.step.value === form.pages.value.length"
               color="primary"
-              :label="$t('finish_signup')"
+              :label="$t('buttons.finish_signup')"
               type="submit"
               :disable="!form.pageValid.value"
           />
@@ -90,22 +90,22 @@ const form = new Form()
 form.pages.value = [
   {
     key: 'account_data',
-    label: i18n.global.t('account'),
+    label: i18n.global.t('account_data.account'),
     fields: account_fields,
   },
   {
     key: 'personal_data',
-    label: i18n.global.t('personal'),
+    label: i18n.global.t('account_data.personal'),
     fields: personal_fields,
   },
   {
     key: 'address_data',
-    label: i18n.global.t('address'),
+    label: i18n.global.t('account_data.address'),
     fields: address_fields,
   },
   {
     key: 'interests',
-    label: i18n.global.t('interests'),
+    label: i18n.global.t('account_data.interests'),
     fields: interest_fields,
   },
 ]

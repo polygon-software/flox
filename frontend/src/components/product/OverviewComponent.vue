@@ -6,19 +6,19 @@
         v-if="showDirectLink"
         @click.stop
       >
-        {{ $t('direct_buy_link') }}: <a :href="product.directBuyLink">{{ product.directBuyLink }}</a>
+        {{ $t('products.direct_buy_link') }}: <a :href="product.directBuyLink">{{ product.directBuyLink }}</a>
       </p>
       <p
         v-if="showSellerLink"
         @click.stop
       >
-        {{ $t('seller_link') }}: <a :href="product.brandLink">{{ product.brandLink }}</a>
+        {{ $t('products.seller_link') }}: <a :href="product.brandLink">{{ product.brandLink }}</a>
       </p>
     </div>
 
     <!-- Timer -->
     <b class="q-mt-xs q-ml-sm">
-      {{ $t('time_left') }}: <strong> 12:00:00 </strong>
+      {{ $t('products.time_left') }}: <strong> 12:00:00 </strong>
     </b>
 
     <!-- Progress Bar -->
@@ -30,14 +30,14 @@
       />
       <div class="flex justify-between q-mt-sm">
         <b style="color: #21BA45"> {{ covered_amount }}{{ currency }} / {{ product.value }}{{ product.currency }}</b>
-        <b style="color: #21BA45"> {{ $t('player_bet') }} {{ userBet }}{{ currency }}</b>
+        <b style="color: #21BA45"> {{ $t('products.player_bet') }} {{ userBet }}{{ currency }}</b>
       </div>
     </div>
 
     <!-- Winchances -->
     <div class="flex justify-between q-ma-sm">
-      <b> {{ $t('average_chance') }}: {{ average_chance }}</b>
-      <b> {{ $t('player_chance') }}: {{ user_chance }}</b>
+      <b> {{ $t('products.average_chance') }}: {{ average_chance }}</b>
+      <b> {{ $t('products.player_chance') }}: {{ user_chance }}</b>
     </div>
   </div>
 </template>

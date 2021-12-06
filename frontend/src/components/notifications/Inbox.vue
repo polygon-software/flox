@@ -14,7 +14,7 @@
         </q-card-section>
         <q-card-actions>
           <q-btn
-            :label="$t('back')"
+            :label="$t('buttons.back')"
             color="primary"
             flat
             @click="closeMessage"
@@ -51,7 +51,7 @@
         :options="options"
         map-options
         emit-value
-        :label="$t('sort_by')"
+        :label="$t('general.sort_by')"
       />
 
       <!-- Messages -->
@@ -93,11 +93,11 @@ const props = defineProps({
 // Search and sort
 const options = [
   {
-    label: i18n.global.t('newest'),
+    label: i18n.global.t('general.newest'),
     value: 'newest',
   },
   {
-    label: i18n.global.t('oldest'),
+    label: i18n.global.t('general.oldest'),
     value: 'oldest',
   }
 ]

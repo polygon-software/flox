@@ -34,9 +34,9 @@
               :key="icon.tag"
               :tag="icon.tag"
               :name="icon.name"
-              @click="icon.callback()"
               class="q-mr-sm"
               style="cursor: pointer;"
+              @click="icon.callback()"
             />
           </div>
         </div>
@@ -53,10 +53,10 @@
             </q-card-section>
             <q-card-actions>
               <q-btn
-                :label="$t('back')"
-                @click.stop=dialog.callback
+                :label="$t('buttons.back')"
                 color="primary"
                 flat
+                @click.stop=dialog.callback
               />
             </q-card-actions>
           </q-card>
@@ -101,10 +101,10 @@
       </q-card-section>
       <q-card-actions align="center">
         <q-btn
-          :label="$t('back')"
-          @click="hide"
+          :label="$t('buttons.back')"
           color="black"
           flat
+          @click="hide"
         />
       </q-card-actions>
     </q-card>

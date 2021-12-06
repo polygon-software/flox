@@ -21,7 +21,7 @@
           style="margin-top: 20px"
           color="primary"
           text-color="black"
-          :label="$t('login')"
+          :label="$t('authentication.login')"
           type="submit"
           :disable="!form.pageValid.value"
       />

@@ -2,53 +2,53 @@
   <strong>{{ $t('living_address') }}</strong>
   <q-input
     dense
-    :label="$t('street')"
+    :label="$t('account_data.street')"
     v-model="street"
     type="text"
     lazy-rules="ondemand"
-    :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
+    :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_address')]"
   >
   </q-input>
   <div class="flex justify-between">
     <q-input
       dense
-      :label="$t('number')"
+      :label="$t('account_data.number')"
       v-model="number"
       type="text"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('invalid_house_number')]"
+      :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('errors.invalid_house_number')]"
       style="width:40%"
       mask="####"
     >
     </q-input>
     <q-input
       dense
-      :label="$t('city')"
+      :label="$t('account_data.city')"
       v-model="city"
       type="text"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_city')]"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
       style="width:40%"
     >
     </q-input>
     <q-input
       dense
-      :label="$t('zip_code')"
+      :label="$t('account_data.zip_code')"
       v-model="zip_code"
       type="number"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_zip_code')]"
+      :rules="[(val) => IS_VALID_ZIP(val) || $t('errors.invalid_zip_code')]"
       style="width:40%"
       mask="######"
     >
     </q-input>
     <q-input
       dense
-      :label="$t('state')"
+      :label="$t('account_data.state')"
       v-model="state"
       type="text"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_state')]"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_state')]"
       style="width:40%"
     >
     </q-input>
