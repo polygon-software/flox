@@ -16,14 +16,15 @@
         v-for="item in menuItems"
         :key="item.name"
         v-ripple
+        clickable
         :label="item.label"
-        @click="onItemClick"
+        @click="() => onItemClick(item.route)"
       >
         <q-item-section avatar>
           <q-icon :name="item.icon"/>
         </q-item-section>
         <q-item-section>
-          <p>{{item.label}}</p>
+          {{item.label}}
         </q-item-section>
       </q-item>
     </q-drawer>
@@ -35,6 +36,13 @@
 
 <script setup lang="ts">
 import MenuBar from 'src/components/menu/MenuBar.vue'
+import {RouterService} from 'src/services/RouterService';
+
+import {inject} from 'vue';
+import ROUTES from 'src/router/routes';
+import {RouteRecordRaw} from 'vue-router';
+
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const showMenu = true
 
@@ -43,35 +51,35 @@ const menuItems = [
   {
     name: 'home',
     label: 'Home',
-    link: '/todo',
+    route: ROUTES.LOGIN, // TODO
     icon: 'home'
   },
   {
     name: 'products',
     label: 'Products',
-    link: '/todo',
+    route: ROUTES.LOGIN, // TODO
     icon: 'local_mall'
   },
   {
     name: 'statistics',
     label: 'Statistics',
-    link: '/todo',
+    route: ROUTES.LOGIN, // TODO
     icon: 'leaderboard'
   },
   {
     name: 'finances',
     label: 'Finances',
-    link: '/todo',
+    route: ROUTES.LOGIN, // TODO
     icon: 'paid'
   },
 ]
 
 /**
- * TODO
- * @param item
+ * Routes to an item's target route
+ * @param {RouteRecordRaw} route - target route
  */
-function onItemClick(item: Record<string, string>){
-  console.log('TODO clicked', item)
+async function onItemClick(route: RouteRecordRaw){
+  await $routerService?.routeTo(route)
 }
 
 </script>
