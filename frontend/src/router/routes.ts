@@ -42,6 +42,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/EmployeeDashboardPage.vue') }],
   },
 
+  'CREDIT_INSTITUTION_DASHBOARD': {
+    name: 'credit_institution_dashboard',
+    path: '/credit-institution-dashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/CreditInstitutionDashboard.vue') }],
+  },
+
   'SIGNUP': {
     name: 'signup',
     path: '/company-signup',
@@ -94,6 +101,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.MANAGEMENT_DASHBOARD,
   ROUTES.EMPLOYEE_DASHBOARD,
+
   ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
 

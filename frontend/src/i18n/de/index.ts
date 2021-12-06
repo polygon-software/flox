@@ -9,6 +9,7 @@ export default {
     login: 'Anmelden',
     logout: 'Abmelden',
     signup: 'Registrieren',
+    credit_institution: 'KREDITINSTITUT ERFASSEN',
     employee_signup: 'Mitarbeitende registrieren',
     signup_now: 'Kein Account? Jetzt registrieren:',
     forgot_password: 'Passwort vergessen',
@@ -57,6 +58,7 @@ export default {
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
+    credit_institution: 'Kreditinstitute',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',

@@ -9,6 +9,7 @@ export default {
     login: 'Log in',
     logout: 'Log out',
     signup: 'Sign up',
+    credit_institution: 'REGISTER CREDIT INSTITUTION',
     employee_signup: 'Register new Employee',
     signup_now: 'No Account? Sign up now:',
     forgot_password: 'Forgot password',
@@ -56,6 +57,7 @@ export default {
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
+    credit_institution: 'Credit Institutions',
     register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',
