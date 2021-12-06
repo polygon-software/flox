@@ -36,11 +36,11 @@ const $routerService: RouterService = inject('$routerService')
  * It takes the following properties:
  * @param {String} redirectPath - this is the redirect path of either the button or the automatic redirection
  * @param {Boolean} autoRedirect - boolean whether the user should be automatically redirected or not
- * @param {String} successMessage - Shows a quick success phrase (default is 'Hervorragend!' or 'Great!')
- * @param {String} furtherExplanation - a quick text (a sentence) to explain what was a success
- * @param {String} nextMessage - if it redirects automatically, this is the text that explains where it will redirect to
- * @param {String} buttonLabel - if it doesn't redirect automatically, this is the label of the button
- * @param {String} autoRedirectDurationMS - optional redirection duration length in milliseconds (default is 5000 milliseconds)
+ * @param {String} [successMessage] - Shows a quick success phrase (default is 'Hervorragend!' or 'Great!')
+ * @param {String} [furtherExplanation] - a quick text (a sentence) to explain what was a success
+ * @param {String} [nextMessage] - if it redirects automatically, this is the text that explains where it will redirect to
+ * @param {String} [buttonLabel] - if it doesn't redirect automatically, this is the label of the button
+ * @param {String} [autoRedirectDurationMS] - optional redirection duration length in milliseconds (default is 5000 milliseconds)
  */
 
 
