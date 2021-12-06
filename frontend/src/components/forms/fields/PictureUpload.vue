@@ -1,9 +1,9 @@
 <template>
   <!-- Image files -->
   <q-file
-    v-for="(field, index) in pictures"
+    v-for="(picture, index) in pictures"
     :key="index"
-    v-model="field.value"
+    v-model="picture.value"
     class="q-mb-md"
     outlined
     accept="image/*, .pdf"
@@ -17,6 +17,7 @@
     <template #prepend>
       <q-icon name="attach_file" />
     </template>
+    <img :src="picture"/>
   </q-file>
 
 </template>
