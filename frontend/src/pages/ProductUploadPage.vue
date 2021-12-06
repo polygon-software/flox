@@ -22,7 +22,7 @@
               dense
             />
 
-            <!-- Description -->
+            <!-- Description TODO Fix field height-->
             <q-input
               v-model="input.description"
               class="q-ma-sm full-width"
