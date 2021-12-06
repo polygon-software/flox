@@ -76,8 +76,8 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/AdminDashboardPage.vue') }],
   },
-  'NEW_EMPLOYEE_PAGE': {
-    name: 'new_employee_page',
+  'NEW_EMPLOYEE': {
+    name: 'new_employee',
     path: '/new-employee',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
@@ -102,7 +102,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.MANAGEMENT_DASHBOARD,
   ROUTES.CREDIT_INSTITUTION_DASHBOARD,
   ROUTES.EMPLOYEE_DASHBOARD,
-
+  ROUTES.NEW_EMPLOYEE,
   ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
 
