@@ -171,21 +171,22 @@
           <!-- Status -->
           <q-select
             v-model="input.status"
-            :options="status"
-            class="column q-ma-sm"
+            :options="status.map(option => option.charAt(0).toUpperCase() + option.slice(1))"
             style="width: calc(50% - 25px)"
             :label="$t('products.status')"
             outlined
             dense
           />
 
-          <!-- Type -->
+          <!-- Sponsored -->
           <q-select
-            v-model="input.type"
-            :options="type"
+            v-model="input.sponsored"
+            :options="sponsored"
+            map-options
+            emit-value
             class="column q-ma-sm"
             style="width: calc(50% - 25px)"
-            :label="$t('products.type')"
+            :label="$t('products.promotion')"
             outlined
             dense
           />
@@ -206,14 +207,14 @@
         <div class="row flex justify-between">
           <!-- Product Page Link -->
           <q-input
-            v-model="input.product_page_link"
+            v-model="input.directBuyLink"
             class="q-ma-sm col-7"
             :label="$t('products.product_page_link')"
             outlined
             dense
           />
           <q-input
-            v-model="input.product_page_max_clicks"
+            v-model="input.directBuyLinkMaxClicks"
             class="q-ma-sm col-2"
             :label="$t('products.max_clicks')"
             type="number"
@@ -221,7 +222,7 @@
             dense
           />
           <q-input
-            v-model="input.product_page_max_cost"
+            v-model="input.directBuyLinkMaxCost"
             class="q-ma-sm col-2"
             :label="$t('products.max_cost')"
             type="number"
@@ -234,14 +235,14 @@
         <div class="row flex justify-between">
           <!-- Seller Page Link -->
           <q-input
-            v-model="input.seller_page_link"
+            v-model="input.brandLink"
             class="q-ma-sm col-7"
             :label="$t('products.seller_page_link')"
             outlined
             dense
           />
           <q-input
-            v-model="input.seller_page_max_clicks"
+            v-model="input.brandLinkMaxClicks"
             class="q-ma-sm col-2"
             :label="$t('products.max_clicks')"
             type="number"
@@ -249,7 +250,7 @@
             dense
           />
           <q-input
-            v-model="input.seller_page_max_cost"
+            v-model="input.brandLinkMaxCost"
             class="q-ma-sm col-2"
             :label="$t('products.max_cost')"
             type="number"
@@ -295,18 +296,19 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
 import {date} from 'quasar';
-import { CURRENCY, PRODUCT_STATUS, PRODUCT_TYPE } from '../../../shared/definitions/ENUM'
+import {i18n} from 'boot/i18n';
+import { CURRENCY, PRODUCT_STATUS } from '../../../shared/definitions/ENUM'
 
 // Read ENUM values and so they can be used as options
 const currencies = Object.keys(CURRENCY).filter((item) => {
   return isNaN(Number(item))
 })
+
 const status = Object.values(PRODUCT_STATUS).filter((item) => {
-  return isNaN(Number(item));
+  return isNaN(Number(item))
 })
-const type = Object.values(PRODUCT_TYPE).filter((item) => {
-  return isNaN(Number(item));
-})
+
+const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
 const input = reactive({
@@ -318,19 +320,17 @@ const input = reactive({
   start: date.formatDate(Date.now(), 'YYYY-MM-DD'),
   end: date.formatDate(date.addToDate(Date.now(), {days: 7}), 'YYYY-MM-DD'),
   category: null,
-  directBuyLink: null,
-  brandLink: null,
   minBet: null,
   maxBet: null,
   tags: null,
   status: null,
-  type: null,
-  seller_page_link: null,
-  seller_page_max_clicks: 0,
-  seller_page_max_cost: 0,
-  product_page_link: null,
-  product_page_max_clicks: 0,
-  product_page_max_cost: 0,
+  sponsored: null,
+  brandLink: null,
+  brandLinkMaxClicks: 0,
+  brandLinkMaxCost: 0,
+  directBuyLink: null,
+  directBuyLinkMaxClicks: 0,
+  directBuyLinkMaxCost: 0,
 })
 
 

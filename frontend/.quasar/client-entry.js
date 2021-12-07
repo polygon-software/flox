@@ -11,7 +11,7 @@
  **/
 
 
-import { createSSRApp } from 'vue'
+import { createApp } from 'vue'
 
 
 
@@ -45,22 +45,16 @@ import { addPreFetchHooks } from './client-prefetch.js'
 
 
 
-console.info('[Quasar] Running SSR.')
+console.info('[Quasar] Running SPA.')
 
 
 
 
 
-const publicPath = `/`
+const publicPath = ``
 
 
 async function start ({ app, router, store, storeKey }, bootFiles) {
-  
-  // prime the store with server-initialized state.
-  // the state is determined during SSR and inlined in the page markup.
-  if (window.__INITIAL_STATE__) {
-    store.replaceState(window.__INITIAL_STATE__)
-  }
   
 
   
@@ -86,7 +80,7 @@ async function start ({ app, router, store, storeKey }, bootFiles) {
     // continue if we didn't fail to resolve the url
     if (href !== null) {
       window.location.href = href
-      
+      window.location.reload()
     }
   }
 
@@ -124,22 +118,22 @@ async function start ({ app, router, store, storeKey }, bootFiles) {
   app.use(store, storeKey)
 
   
+
     
-    // wait until router has resolved all async before hooks
-    // and async components...
-    router.isReady().then(() => {
-      
-      addPreFetchHooks(router, store, publicPath)
-      
+    addPreFetchHooks(router, store)
+    
+
+    
       app.mount('#q-app')
-    })
+    
+
     
 
   
 
 }
 
-createQuasarApp(createSSRApp, quasarUserOptions)
+createQuasarApp(createApp, quasarUserOptions)
 
   .then(app => {
     return Promise.all([

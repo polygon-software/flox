@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsDate, IsInt, IsOptional, IsString, IsUrl } from 'class-validator';
-import { Column } from 'typeorm';
-import { CATEGORY, CURRENCY } from '../../../../ENUM/ENUM';
+import { IsArray, IsBoolean, IsDate, IsInt, IsNumber, IsOptional, IsString, IsUrl} from 'class-validator';
+import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../ENUM/ENUM';
+import PublicFile from '../../../file/entities/public_file.entity';
 
 @InputType()
 export class CreateProductInput {
@@ -16,6 +16,9 @@ export class CreateProductInput {
   @Field(() => String)
   @IsString()
   brand: string;
+
+  @Field(() => CATEGORY)
+  category: CATEGORY;
 
   @Field(() => Int)
   @IsInt()
@@ -32,8 +35,15 @@ export class CreateProductInput {
   @IsDate()
   end: Date;
 
-  @Field(() => CATEGORY)
-  category: CATEGORY;
+  @Field(() => PublicFile)
+  pictures: PublicFile[];
+
+  @Field(() => PRODUCT_STATUS)
+  status: PRODUCT_STATUS;
+
+  @Field(() => Boolean)
+  @IsBoolean()
+  sponsored: boolean;
 
   @Field(() => String, { nullable: true })
   @IsOptional()
@@ -41,11 +51,31 @@ export class CreateProductInput {
   @IsUrl()
   directBuyLink: string;
 
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
+  @IsNumber()
+  directBuyLinkMaxClicks: number;
+
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
+  @IsNumber()
+  directBuyLinkMaxCost: number;
+
   @Field(() => String, { nullable: true })
   @IsOptional()
   @IsString()
   @IsUrl()
   brandLink: string;
+
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
+  @IsNumber()
+  brandLinkMaxClicks: number;
+
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
+  @IsNumber()
+  brandLinkMaxCost: number;
 
   @Field(() => Number)
   @IsInt()
@@ -54,5 +84,11 @@ export class CreateProductInput {
   @Field(() => Number)
   @IsInt()
   maxBet: number;
-  // TODO: Other parameters
+
+  @Field(() => [String])
+  @IsOptional()
+  @IsArray()
+  tags: string[]
+
+  // TODO: Clearify if we need Rrepeating sales
 }

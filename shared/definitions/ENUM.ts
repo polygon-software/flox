@@ -16,8 +16,3 @@ export enum PRODUCT_STATUS {
   WON = 'WON',
   ARCHIVED = 'ARCHIVED'
 }
-
-export enum PRODUCT_TYPE {
-  NORMAL = 'normal', // TODO proper definitions: what types are possible
-  PROMOTION = 'promotion'
-}

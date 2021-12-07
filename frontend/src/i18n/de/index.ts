@@ -166,7 +166,7 @@ export default {
     image: 'Bild | Bilder',
     status: 'Status',
     type: 'Typ',
-    promotion: 'Promotion',
+    promotion: 'Werbung',
     tags: 'Tags',
     tags_hint: 'Geben Sie ein neues Tag ein und drücken Enter',
     product_page_link: 'Produktseite',
