@@ -45,7 +45,7 @@
 import {RouterService} from 'src/services/RouterService';
 import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
-import MyProductsTable from "components/table/MyProductsTable.vue";
+import MyProductsTable from 'components/table/MyProductsTable.vue';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
