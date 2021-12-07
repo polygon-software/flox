@@ -1,3 +1,5 @@
+import { registerEnumType } from '@nestjs/graphql';
+
 export enum STATUS {
   CREATED = 'created',
   ACCECPTED = 'accepted',
@@ -12,3 +14,5 @@ export enum ROLES {
   SOI_EMPLOYEE = 'soi-employee',
   NONE = 'none',
 }
+registerEnumType(STATUS, { name: 'Status' });
+registerEnumType(ROLES, { name: 'Roles' });

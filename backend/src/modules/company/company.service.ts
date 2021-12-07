@@ -10,12 +10,16 @@ import { Company } from './entities/company.entity';
 import { generateHumanReadableId } from '../../helpers';
 import { User } from '../user/entities/user.entity';
 import { ROLES } from '../../ENUM/ENUMS';
+import { createCognitoAccount, randomPassword } from '../../auth/authService';
+import { sendPasswordChangeEmail } from '../../email/helper';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectRepository(Company) private companyRepository: Repository<Company>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    private userService: UserService,
   ) {}
 
   /**
@@ -66,7 +70,7 @@ export class CompanyService {
    * Returns all companies in the database
    */
   async getAllCompanies(): Promise<Company[]> {
-    return await this.companyRepository.find();
+    return await this.companyRepository.find({ relations: ['documents'] });
   }
 
   /**
@@ -132,5 +136,21 @@ export class CompanyService {
       document_upload_enabled: true,
     });
     return await this.companyRepository.findOne(uuid);
+  }
+
+  /**
+   *
+   */
+  async associateUser(uuid: string): Promise<Company> {
+    const company = await this.companyRepository.findOne(uuid);
+    const password = randomPassword(8);
+    const cognitoId = await createCognitoAccount(company.email, password);
+    await sendPasswordChangeEmail(company.email, password, ROLES.COMPANY);
+    await this.userService.create({
+      role: ROLES.COMPANY,
+      uuid: cognitoId,
+      fk: company.uuid,
+    });
+    return company;
   }
 }

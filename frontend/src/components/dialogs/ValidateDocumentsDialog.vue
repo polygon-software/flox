@@ -75,9 +75,7 @@ import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import {AuthenticationService} from 'src/services/AuthService';
-import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
-import {SET_COGNITO_COMPANY} from 'src/data/mutations/COMPANY';
-import {randomPassword} from 'src/helpers/generator-helpers';
+import { ASSOCIATE_USER_TO_COMPANY} from 'src/data/mutations/COMPANY';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
@@ -144,27 +142,10 @@ async function onOk(): Promise<void> {
     props.errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  const email = props.company.email ?? ''
-  const password = randomPassword(9)
-  const newUserId = await props.authService.signUpNewUser(
-    email,
-    email,
-    password
-  ).catch((e) => {
-    console.log('gotsta error', e, props.errorService) // TODO Error service seems to be undefined here
-    props.errorService?.showErrorDialog(e)
+  await executeMutation(ASSOCIATE_USER_TO_COMPANY, {
+    uuid: props.company.uuid
   })
 
-  // Send one-time login e-email
-  await sendPasswordChangeEmail(email, password, 'man')
-
-  // Set cognito ID on company
-  await executeMutation(SET_COGNITO_COMPANY, {
-    uuid: props.company.uuid,
-    cognito_id: newUserId
-  })
-
-  // TODO change owner of all the company's PrivateFiles to newUserId
 
   // Show confirmation prompt
   showNotification(

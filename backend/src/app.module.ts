@@ -34,7 +34,7 @@ import { RolesGuard } from './auth/roles.guard';
           },
         },
       },
-      cors: false, // TODO set appropriate for production
+      cors: true, // TODO set appropriate for production
     }),
     ConfigModule.forRoot({
       isGlobal: true,

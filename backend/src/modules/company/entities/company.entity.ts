@@ -7,6 +7,7 @@ import {
   IsPhoneNumber,
   IsEmail,
   IsArray,
+  IsNumber,
 } from 'class-validator';
 import { Address } from '../../address/entities/address.entity';
 import { Person } from '../../person/entities/person.entity';
@@ -34,7 +35,7 @@ export class Company extends Person {
 
   @Field(() => String, { description: 'Company UID' })
   @Column()
-  @IsString()
+  @IsNumber()
   @IsOptional()
   uid: string;
 
@@ -77,7 +78,6 @@ export class Company extends Person {
   })
   documents: PrivateFile[];
 
-  @Column()
   @Field(() => [Employee], {
     description: 'Employees of the company',
     nullable: true,

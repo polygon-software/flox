@@ -10,8 +10,6 @@ import {
 } from '../../auth/authorization.decorator';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
-import { Company } from '../company/entities/company.entity';
-import { UpdateCompanyInput } from '../company/dto/input/update-company.input';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 
 @Resolver(() => Employee)

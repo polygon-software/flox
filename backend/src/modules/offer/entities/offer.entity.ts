@@ -15,7 +15,7 @@ export class Offer extends BaseEntity {
   @ManyToOne(() => Bank)
   bank: Bank;
 
-  @Field(() => File, { description: 'The Offer as a PDF' })
+  @Field(() => PrivateFile, { description: 'The Offer as a PDF' })
   @OneToOne(() => PrivateFile)
   pdf: PrivateFile;
 }

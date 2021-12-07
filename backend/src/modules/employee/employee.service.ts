@@ -8,6 +8,7 @@ import { Company } from '../company/entities/company.entity';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { UserService } from '../user/user.service';
 import { ROLES } from '../../ENUM/ENUMS';
+import { sendPasswordChangeEmail } from '../../email/helper';
 
 @Injectable()
 export class EmployeeService {
@@ -28,6 +29,11 @@ export class EmployeeService {
     const cognitoId = await createCognitoAccount(
       createEmployeeInput.email,
       password,
+    );
+    await sendPasswordChangeEmail(
+      createEmployeeInput.email,
+      password,
+      ROLES.EMPLOYEE,
     );
     const employee = this.employeeRepository.create(createEmployeeInput);
     await this.userService.create({

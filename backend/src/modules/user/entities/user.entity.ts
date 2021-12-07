@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { IsString, IsUUID } from 'class-validator';
 import { ROLES, STATUS } from '../../../ENUM/ENUMS';
 
@@ -16,7 +16,7 @@ export class User {
   role: ROLES;
 
   @Field(() => ID, { description: 'Cognito ID' })
-  @Column()
+  @PrimaryColumn()
   @IsUUID()
   uuid: string;
 

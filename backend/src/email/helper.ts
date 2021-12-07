@@ -3,7 +3,6 @@ import {
   SendEmailCommand,
   SendEmailCommandOutput,
 } from '@aws-sdk/client-ses';
-import ROUTES from '../../../../frontend/src/router/routes';
 
 /**
  * Sends an e-email using AWS SES, using the given parameters
@@ -14,18 +13,28 @@ import ROUTES from '../../../../frontend/src/router/routes';
  * @param {string[]} [replyTo] - list of e-email addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
  * @param {string} [textBody] - optional plaintext body
- * @param sesClient
  */
 export async function sendEmail(
   from: string,
   to: string | string[],
   subject: string,
   body: string,
-  sesClient: SESClient,
   replyTo?: string[],
   toCC?: string[],
   textBody?: string,
 ): Promise<void | SendEmailCommandOutput> {
+  // Credentials
+  const credentials = {
+    accessKeyId: process.env.AWS_KEY_ID ?? '',
+    secretAccessKey: process.env.AWS_SECRET_KEY ?? '',
+  };
+
+  // Create SES service object (seems to be unrecognized by eslint)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+  const sesClient = new SESClient({
+    region: process.env.SES_REGION,
+    credentials: credentials,
+  });
   // E-Mail parameters
   const params = {
     Destination: {
@@ -62,25 +71,21 @@ export async function sendEmail(
  * @param {string} email - the user's e-email address
  * @param {string} password - the user's (generated) password
  * @param {string} type - the users type - 'emp' for employee or 'man' for company
- * @param {string} baseURL
- * @param {SESClient} sesClient
  */
 export async function sendPasswordChangeEmail(
   email: string,
   password: string,
   type: string,
-  baseURL: string,
-  sesClient: SESClient,
 ): Promise<void> {
   // Generate one-time password change link
   const link: string = generatePasswordChangeLink(
     email,
     password,
     type,
-    baseURL,
+    process.env.BASE_URL,
   );
 
-  const sender = process.env.VUE_APP_EMAIL_SENDER ?? '';
+  const sender = process.env.EMAIL_SENDER ?? '';
 
   // Send login email
   await sendEmail(
@@ -88,7 +93,6 @@ export async function sendPasswordChangeEmail(
     email,
     'Your Account',
     `Click the following link: ${link}`,
-    sesClient,
   );
 }
 
@@ -106,7 +110,7 @@ export function generatePasswordChangeLink(
   baseUrl: string,
 ): string {
   // Encode base64
-  const hiddenEmail = btoa(email);
-  const hiddenPw = btoa(password);
-  return `${baseUrl}${ROUTES.SET_PASSWORD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=${type}`;
+  const hiddenEmail = Buffer.from(email).toString('base64');
+  const hiddenPw = Buffer.from(password).toString('base64');
+  return `${baseUrl}/set-password?u=${hiddenEmail}&k=${hiddenPw}&t=${type}`;
 }

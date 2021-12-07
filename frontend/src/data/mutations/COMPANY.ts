@@ -30,16 +30,15 @@ export const ENABLE_COMPANY_DOCUMENT_UPLOAD = {
   cacheLocation: undefined
 }
 
-export const SET_COGNITO_COMPANY = {
+export const ASSOCIATE_USER_TO_COMPANY ={
   mutation: gql`
-    mutation updateCompany($uuid: ID!, $cognito_id: String!){
-      updateCompany (updateCompanyInput: {uuid: $uuid, cognito_id: $cognito_id, document_upload_enabled: false}) {
+    mutation associateUserToCompany($uuid: ID!){
+      associateUserToCompany(associateUserInput: {uuid: $uuid}) {
         uuid
-        company_name
-        cognito_id
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['company'],
   type: MutationTypes.UPDATE,
   cacheLocation: undefined

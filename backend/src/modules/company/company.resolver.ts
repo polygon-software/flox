@@ -8,6 +8,7 @@ import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
 import { Public } from '../../auth/authentication.decorator';
 import { AdminOnly, AnyRole } from '../../auth/authorization.decorator';
+import { AssociateUserInput } from './dto/input/associate-user.input';
 
 @Resolver(() => Company)
 export class CompanyResolver {
@@ -91,5 +92,17 @@ export class CompanyResolver {
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
   ): Promise<Company> {
     return await this.companyService.deleteCompany(deleteCompanyInput);
+  }
+
+  /**
+   * Associate User and Cognito accout
+   * @param {AssociateUserInput} associateUserInput
+   */
+  @AnyRole() // TODO restrict to appropriate roles
+  @Mutation(() => Company)
+  async associateUserToCompany(
+    @Args('associateUserInput') associateUserInput: AssociateUserInput,
+  ): Promise<Company> {
+    return await this.companyService.associateUser(associateUserInput.uuid);
   }
 }

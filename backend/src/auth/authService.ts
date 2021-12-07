@@ -6,8 +6,8 @@ export async function createCognitoAccount(
 ): Promise<string> {
   // Set up authentication user pool
   const poolSettings = {
-    UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
-    ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? '',
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    ClientId: process.env.USER_POOL_CLIENT_ID ?? '',
   };
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings);
   const cognitoUserWrapper: ISignUpResult = await new Promise(

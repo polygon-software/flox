@@ -13,59 +13,58 @@ import gql from 'graphql-tag';
  */
 
 export const ALL_USERS = {
-    query: gql`
-        query{
-            allUsers{
-                uuid
-                name
-                age
-                __typename
-            }
-        }
-        `,
-    tables: ['user'],
-    cacheLocation: 'allUsers'
+  query: gql`
+    query{
+      allUsers{
+        uuid
+        fk
+        role
+        __typename
+      }
+    }
+      `,
+  tables: ['user'],
+  cacheLocation: 'allUsers'
 }
 
 export const ALL_COMPANIES = {
   query: gql`
-        query{
-            allCompanies{
-              uuid
-              readable_id
-              company_name
-              first_name
-              last_name
-              email
-              phone
-              language
-              uid
-              document_upload_enabled
-              cognito_id
-              domicile_address{
-                uuid
-                street
-                number
-                city
-                zip_code
-                __typename
-              }
-              correspondence_address{
-                uuid
-                street
-                number
-                city
-                zip_code
-                __typename
-              }
-              documents{
-                uuid
-                key
-                __typename
-              }
-              __typename
-            }
+    query{
+      allCompanies{
+        uuid
+        readable_id
+        company_name
+        first_name
+        last_name
+        email
+        phone
+        language
+        uid
+        document_upload_enabled
+        domicile_address{
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
         }
+        correspondence_address{
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
+        }
+        documents{
+          uuid
+          key
+          __typename
+        }
+        __typename
+      }
+    }
         `,
   tables: ['company'],
   cacheLocation: 'allCompanies'

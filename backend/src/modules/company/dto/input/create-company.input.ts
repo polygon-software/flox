@@ -42,12 +42,6 @@ export class CreateCompanyInput extends PartialType(CreatePersonInput) {
   @IsPhoneNumber()
   phone: string;
 
-  @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-
   @Field(() => Boolean)
   @IsBoolean()
   branch_structure: boolean;
