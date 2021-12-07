@@ -57,6 +57,8 @@ export const MY_PRODUCTS = {
               category
               directBuyLink
               brandLink
+              sponsored
+              status
               minBet
               maxBet
               pictures{
