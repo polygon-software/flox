@@ -19,7 +19,7 @@ const $q = useQuasar()
 
 // Error service
 const $errorService: ErrorService = reactive(new ErrorService($q))
-provide('$errorService', $errorService)
+provide<ErrorService>('$errorService', $errorService)
 
 // Auth service
 const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService))

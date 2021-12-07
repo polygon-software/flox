@@ -1,6 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsString, IsUrl } from 'class-validator';
 
 /**
@@ -9,6 +9,7 @@ import { IsString, IsUrl } from 'class-validator';
 
 @Entity()
 @ObjectType()
+@InputType('public_file')
 export class PublicFile extends BaseEntity {
   @Field(() => String, { description: 'Public download URL' })
   @Column()

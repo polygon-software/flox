@@ -9,7 +9,7 @@ export class GetPrivateFileArgs {
 
   @Field(() => [Number], {
     nullable: true,
-    description: 'URL expiration duration (in seconds)',
+    description: 'URL expiration duration (in seconds); defaults to 15min',
   })
   @IsOptional()
   @IsNumber()

@@ -28,7 +28,8 @@ export class CompanyResolver {
   /**
    * Gets all companies within the database
    */
-  @AdminOnly()
+  //@AdminOnly() TODO enable once roles are implemented in User DB
+  @AnyRole()
   @Query(() => [Company], { name: 'allCompanies' })
   async getAllCompanies(): Promise<Company[]> {
     return await this.companyService.getAllCompanies();
@@ -72,7 +73,7 @@ export class CompanyResolver {
    * Enables document upload for a given company
    * @param {string} uuid - the company's UUID
    */
-  @AdminOnly()
+  @AnyRole() // TODO set to admin-only once roles implemented on user databse
   @Mutation(() => Company)
   async enableCompanyDocumentUpload(
     @Args('uuid') uuid: string,

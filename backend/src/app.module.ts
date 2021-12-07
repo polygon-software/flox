@@ -12,8 +12,8 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import { ItemModule } from './item/item.module';
 import { CompanyModule } from './company/company.module';
 import { EmployeeModule } from './employee/employee.module';
-import * as Joi from 'joi';
 import { FileModule } from './file/file.module';
+import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
 
 @Module({
@@ -35,6 +35,7 @@ import { RolesGuard } from './auth/roles.guard';
           },
         },
       },
+      cors: false, // TODO set appropriate for production
     }),
     ConfigModule.forRoot({
       isGlobal: true,
