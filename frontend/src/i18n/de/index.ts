@@ -144,6 +144,7 @@ export default {
     amount_selected: '{amount}/{max} gewählt',
   },
   products: {
+    products: 'Produkte',
     direct_buy_link: 'Sofort kaufen',
     seller_link: 'Mehr Artikel',
     time_left: 'Endet in',

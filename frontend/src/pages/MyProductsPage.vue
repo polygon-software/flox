@@ -6,7 +6,7 @@
       style="height: 20px"
     >
       <!-- TODO styling, language-->
-      <h6>Products</h6>
+      <h6 class="q-ma-none">{{ $t('products.products') }}</h6>
       <q-btn
         color="primary"
         text-color="black"
@@ -15,8 +15,27 @@
         @click="createProduct"
       />
     </div>
+    <!-- Body: Table with tabs etc. -->
     <div class="column">
-      TODO
+      <!-- TODO tabs -->
+
+      <!-- Search bar -->
+      <q-input
+        v-model="search"
+        dense
+        rounded
+        outlined
+        type="search"
+        class="q-mb-md"
+      >
+        <template #append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+
+      <MyProductsTable/>
+
+
     </div>
 
   </q-page>
@@ -24,10 +43,13 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {inject} from 'vue';
+import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 
 const $routerService: RouterService|undefined = inject('$routerService')
+
+// Search term
+const search = ref('')
 
 /**
  * TODO

@@ -11,21 +11,6 @@ import gql from 'graphql-tag';
  * When adding a new query, also add it to the QUERIES array at the bottom of this file.
  */
 
-export const ALL_USERS = {
-    query: gql`
-        query{
-            allUsers{
-                uuid
-                name
-                age
-                __typename
-            }
-        }
-        `,
-    tables: ['user'],
-    cacheLocation: 'allUsers'
-}
-
 export const ALL_PRODUCTS = {
     query: gql`
         query{
@@ -56,5 +41,36 @@ export const ALL_PRODUCTS = {
     cacheLocation: 'allProducts'
 }
 
+// TODO implement on backend; for now, we use allProducts
+export const MY_PRODUCTS = {
+    query: gql`
+        query{
+            allProducts{
+              uuid
+              title
+              description
+              brand
+              value
+              currency
+              start
+              end
+              category
+              directBuyLink
+              brandLink
+              minBet
+              maxBet
+              pictures{
+                uuid
+                url
+                __typename
+              }
+              __typename
+            }
+        }
+        `,
+    tables: ['product'],
+    cacheLocation: 'allProducts'
+}
 
-export const QUERIES = [ALL_USERS, ALL_PRODUCTS];
+
+export const QUERIES = [ALL_PRODUCTS, MY_PRODUCTS];

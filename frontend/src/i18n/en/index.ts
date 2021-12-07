@@ -143,6 +143,7 @@ export default {
     amount_selected: '{amount}/{max} selected',
   },
   products: {
+    products: 'Products',
     direct_buy_link: 'Buy right now',
     seller_link: 'Find more products',
     time_left: 'Ends in',
