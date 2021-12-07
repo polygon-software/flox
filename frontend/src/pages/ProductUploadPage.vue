@@ -171,7 +171,7 @@
           <!-- Status -->
           <q-select
             v-model="input.status"
-            :options="status.map(option => option.charAt(0).toUpperCase() + option.slice(1))"
+            :options="status.map(option => option.slice(0, 1) + option.toLowerCase().slice(1))"
             style="width: calc(50% - 25px)"
             :label="$t('products.status')"
             outlined

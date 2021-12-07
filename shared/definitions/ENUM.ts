@@ -1,11 +1,11 @@
 export enum CURRENCY {
-  CHF = 'chf',
-  EUR = 'eur',
-  USD = 'usd',
+  CHF = 'CHF',
+  EUR = 'EUR',
+  USD = 'USD',
 }
 
 export enum CATEGORY {
-  TECHNOLOGY = 'technology',
+  TECHNOLOGY = 'TECHNOLOGY',
   // TODO others
 }
 
