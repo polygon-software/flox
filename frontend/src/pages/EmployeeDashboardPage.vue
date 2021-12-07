@@ -36,6 +36,7 @@
         <DashboardsTable
           :columns="columns"
           :rows="rows"
+          :options="showOptions()"
         />
       </p>
     </q-card>
@@ -53,6 +54,7 @@ import {RouterService} from 'src/services/RouterService';
 // ----- Data -----
 const columns = [
   { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true },
+  // customer + customer id
   { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true },
   { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true },
   { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true },
@@ -73,6 +75,7 @@ const rows = [
   { name: 'bsp9', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag unterzeichnet zurück', offers: ''},
   { name: 'bsp10', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Produktvereinbarung bestätigt', offers: ''},
   { name: 'bsp11', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Abgeschlossen', offers: ''},
+  { name: 'bsp12', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Nicht vermittelbar', offers: ''},
 ]
 
 // TODO: after Sprint 3 remove the computedResult data with the corresponding data from database
@@ -81,6 +84,22 @@ const rows = [
 /*const rows = computed(()=>{
   return queryResult.value ?? []
 })*/
+
+function showOptions(){
+  // TODO: remove creditor and employee, and check from backend if the logged user is a creditor or an emloyee
+  const creditor = false
+  const employee = true
+  if (creditor){
+    return [
+      'Nicht vermittelbar', 'Offen', 'In Bearbeitung', 'Eingereicht', 'Offeriert', 'Offerte abgelehnt', 'Auftragsblatt hochgeladen', 'Kreditvertrag in Bearbeitung', 'Kreditvertrag versendet', 'Kreditvertrag unterzeichnet zurück', 'Produktvereinbarung bestätigt', 'Abgeschlossen',
+    ]
+  }
+  else if (employee) {
+    return [
+      'Nicht vermittelbar', 'Offen', 'In Bearbeitung', 'Eingereicht', 'Auftragsblatt hochgeladen', 'Produktvereinbarung bestätigt', 'Abgeschlossen',
+    ]
+  }
+}
 
 const emit = defineEmits(['change'])
 
