@@ -35,7 +35,7 @@ export class CreateProductInput {
   @IsDate()
   end: Date;
 
-  @Field(() => PublicFile)
+  @Field(() => PublicFile, {nullable: true})
   pictures: PublicFile[];
 
   @Field(() => PRODUCT_STATUS)

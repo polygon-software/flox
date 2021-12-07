@@ -22,14 +22,14 @@
               dense
             />
 
-            <!-- Description TODO Fix field height-->
+            <!-- Description -->
             <q-input
               v-model="input.description"
               class="q-ma-sm full-width"
               :label="$t('products.product_description')"
               outlined
               dense
-              autogrow
+              type="textarea"
             />
 
           </div>
@@ -47,8 +47,9 @@
               outlined
               dense
             />
-            <q-input
+            <q-select
               v-model="input.category"
+              :options="categories"
               class="q-ma-sm"
               style="width: calc(50% - 25px)"
               :label="$t('products.category')"
@@ -84,6 +85,28 @@
             />
           </div>
 
+          <!-- Value & currency -->
+          <div class="row flex justify-between">
+            <q-input
+              v-model="input.value"
+              class="q-ma-sm"
+              style="width: calc(50% - 25px)"
+              :label="$t('products.value')"
+              type="number"
+              outlined
+              dense
+            />
+            <q-select
+              v-model="input.currency"
+              :options="currencies"
+              class="q-ma-sm"
+              style="width: calc(50% - 25px)"
+              :label="$t('products.currency')"
+              outlined
+              dense
+            />
+          </div>
+
           <!-- Min/Max bet -->
           <div class="row flex justify-between">
             <q-input
@@ -102,28 +125,6 @@
               style="width: calc(50% - 25px)"
               :label="$t('products.max_bet')"
               type="number"
-              outlined
-              dense
-            />
-          </div>
-
-          <!-- Value & currency -->
-          <div class="row flex justify-between">
-            <q-input
-              v-model="input.value"
-              class="q-ma-sm"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.value')"
-              type="number"
-              outlined
-              dense
-            />
-            <q-select
-              v-model="input.currency"
-              :options="currencies"
-              class="q-ma-sm"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.currency')"
               outlined
               dense
             />
@@ -172,7 +173,7 @@
           <!-- Status -->
           <q-select
             v-model="input.status"
-            :options="status.map(option => option.slice(0, 1) + option.toLowerCase().slice(1))"
+            :options="status"
             style="width: calc(50% - 25px)"
             :label="$t('products.status')"
             outlined
@@ -298,10 +299,14 @@ import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
 import {date} from 'quasar';
 import {i18n} from 'boot/i18n';
-import { CURRENCY, PRODUCT_STATUS } from '../../../shared/definitions/ENUM'
+import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 
 // Read ENUM values and so they can be used as options
-const currencies = Object.keys(CURRENCY).filter((item) => {
+const categories = Object.values(CATEGORY).filter((item) => {
+  return isNaN(Number(item))
+})
+
+const currencies = Object.values(CURRENCY).filter((item) => {
   return isNaN(Number(item))
 })
 
@@ -316,7 +321,7 @@ const input = reactive({
   title: null,
   description: null,
   brand: null,
-  value: 0,
+  value: null,
   currency: null, // TODO Fetch last selected or depening on location?
   start: date.formatDate(Date.now(), 'YYYY-MM-DD'),
   end: date.formatDate(date.addToDate(Date.now(), {days: 7}), 'YYYY-MM-DD'),
@@ -327,14 +332,12 @@ const input = reactive({
   status: null,
   sponsored: null,
   brandLink: null,
-  brandLinkMaxClicks: 0,
-  brandLinkMaxCost: 0,
+  brandLinkMaxClicks: null,
+  brandLinkMaxCost: null,
   directBuyLink: null,
-  directBuyLinkMaxClicks: 0,
-  directBuyLinkMaxCost: 0,
+  directBuyLinkMaxClicks: null,
+  directBuyLinkMaxCost: null,
 })
-
-
 
 // Picture inputs (separated from input, since these have to be added after product is created)
 const pictures: Ref<Array<Ref<File>>> = ref([])
@@ -366,6 +369,10 @@ async function onSubmit(){
         value: Number.parseInt(input.value ?? ''), // Convert 'value' to int TODO can this be done on QInput directly?
         minBet: Number.parseInt(input.minBet ?? ''),
         maxBet: Number.parseInt(input.maxBet ?? ''),
+        directBuyLinkMaxClicks: Number.parseInt(input.directBuyLinkMaxClicks ?? ''),
+        directBuyLinkMaxCost: Number.parseInt(input.directBuyLinkMaxCost ?? ''),
+        brandLinkMaxClicks: Number.parseInt(input.brandLinkMaxClicks ?? ''),
+        brandLinkMaxCost: Number.parseInt(input.brandLinkMaxCost ?? ''),
       }
     }
   )

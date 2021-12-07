@@ -11,7 +11,7 @@ export const Product = Joi.object({
     currency: Joi.number().required(),
     start: Joi.date().required(),
     end: Joi.date().required(),
-    picures: Joi.array().items(Joi.string()) ,//TODO How are the images saved?
+    picures: Joi.array(), //TODO How are the images saved?
     status: Joi.string().required(), //TODO Match with ENUMs
     sponsored: Joi.boolean().required(),
     directBuyLink: Joi.string().uri().optional(),
