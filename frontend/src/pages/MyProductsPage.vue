@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex">
+  <q-page class="flex" style="flex-direction: column">
     <!-- Top row: title + add button -->
     <div
       class="row full-width justify-between q-pa-md"
