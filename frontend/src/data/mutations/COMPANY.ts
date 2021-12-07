@@ -44,3 +44,19 @@ export const SET_COGNITO_COMPANY = {
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
+
+
+export const UPDATE_COMPANY_EMAIL = {
+  mutation: gql`
+    mutation updateCompany($uuid: ID!, $email: String!){
+      updateCompany (updateCompanyInput: {uuid: $uuid, email: $email}) {
+        uuid
+        company_name
+        email
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}

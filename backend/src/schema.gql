@@ -91,7 +91,8 @@ input CreateCompanyInput {
 }
 
 input CreateEmployeeInput {
-  cognito_id: String
+  """Cognito ID"""
+  cognito_id: String!
 
   """Company"""
   company: company
@@ -265,6 +266,7 @@ input UpdateCompanyInput {
 }
 
 input UpdateEmployeeInput {
+  """Cognito ID"""
   cognito_id: String
 
   """Company"""
@@ -340,7 +342,7 @@ input company {
   document_upload_enabled: Boolean!
 
   """Documents of the company"""
-  documents: [public_file!]
+  documents: [private_file!]
 
   """Domicile address"""
   domicile_address: address!
@@ -382,14 +384,6 @@ input employee {
 }
 
 input private_file {
-  """S3 File Key"""
-  key: String!
-
-  """Public download URL"""
-  url: String!
-}
-
-input public_file {
   """Company the file belongs to"""
   company: company
 
@@ -401,4 +395,12 @@ input public_file {
 
   """Pre-signed download URL"""
   url: String
+}
+
+input public_file {
+  """S3 File Key"""
+  key: String!
+
+  """Public download URL"""
+  url: String!
 }
