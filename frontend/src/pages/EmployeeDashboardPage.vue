@@ -59,23 +59,24 @@ const columns = [
   { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true },
   { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true },
   { name: 'mortage_amount', label: i18n.global.t('employee_dashboard.mortage_amount'), field: 'mortage_amount', sortable: true },
-  { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false, style: 'padding: 30px; color: white; background-color: #58ACFA; -webkit-background-clip: content-box; background-clip: content-box;' },
+  { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false },
+  { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false },
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false },
 ]
 
 const rows = [
-  { name: 'bsp1', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Luzern', mortage_amount: '620000.00', status: 'Offen', offers: ''},
-  { name: 'bsp2', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Zürich', mortage_amount: '1620000.00', status: 'In Bearbeitung', offers: ''},
-  { name: 'bsp3', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmen', mortage_amount: '620000.00', status: 'Offerte abgelehnt', offers: ''},
-  { name: 'bsp4', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Kriens', mortage_amount: '620000.00', status: 'Eingereicht', offers: ''},
-  { name: 'bsp5', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Offeriert', offers: ''},
-  { name: 'bsp6', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Auftragsblatt hochgeladen', offers: ''},
-  { name: 'bsp7', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag in Bearbeitung', offers: ''},
-  { name: 'bsp8', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag versendet', offers: ''},
-  { name: 'bsp9', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag unterzeichnet zurück', offers: ''},
-  { name: 'bsp10', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Produktvereinbarung bestätigt', offers: ''},
-  { name: 'bsp11', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Abgeschlossen', offers: ''},
-  { name: 'bsp12', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Nicht vermittelbar', offers: ''},
+  { name: 'bsp1', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Luzern', mortage_amount: '620000.00', status: 'Offen', uploads: '', offers: ''},
+  { name: 'bsp2', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Zürich', mortage_amount: '1620000.00', status: 'In Bearbeitung', uploads: '', offers: ''},
+  { name: 'bsp3', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmen', mortage_amount: '620000.00', status: 'Offerte abgelehnt', uploads: '', offers: ''},
+  { name: 'bsp4', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Kriens', mortage_amount: '620000.00', status: 'Eingereicht', uploads: '', offers: ''},
+  { name: 'bsp5', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Offeriert', uploads: '', offers: ''},
+  { name: 'bsp6', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Auftragsblatt hochgeladen', uploads: '', offers: ''},
+  { name: 'bsp7', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag in Bearbeitung', uploads: '', offers: ''},
+  { name: 'bsp8', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag versendet', uploads: '', offers: ''},
+  { name: 'bsp9', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag unterzeichnet zurück', uploads: '', offers: ''},
+  { name: 'bsp10', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Produktvereinbarung bestätigt', uploads: '', offers: ''},
+  { name: 'bsp11', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Abgeschlossen', uploads: '', offers: ''},
+  { name: 'bsp12', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Nicht vermittelbar', uploads: '', offers: ''},
 ]
 
 // TODO: after Sprint 3 remove the computedResult data with the corresponding data from database

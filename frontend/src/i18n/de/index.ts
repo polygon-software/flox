@@ -146,6 +146,8 @@ export default {
     location: 'Ort',
     mortage_amount: 'Hypothekarbetrag CHF',
     status: 'Status',
+    uploads: 'Dokumente',
+    all_documents: 'Alle Dokumente',
     offers: 'Angebote',
   },
 };

@@ -1,15 +1,15 @@
 <template>
   <div class="column" style="margin-bottom: 32px">
     <q-table
+      v-model:selected="selected"
       table-header-class="bg-grey-2"
       :title="title"
       :rows="rows"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
-      v-model:selected="selected"
     >
-    <template v-slot:body="props">
+    <template #body="props">
       <q-tr :props="props">
         <q-td key="date">
           {{ props.row.date }}
@@ -26,19 +26,26 @@
         <q-td key="mortage_amount">
           {{ props.row.mortage_amount }}
         </q-td>
-        <q-td key="status">
+        <q-td key="status" style="padding: 30px; color: white; background-color: #58ACFA; -webkit-background-clip: content-box; background-clip: content-box">
           {{ props.row.status }}
           <q-popup-edit
+            v-slot="scope"
             :auto-save="true"
             :model-value="props.row.status"
             @save="(value) => onUpdate(props.row.status, {name: value})"
-            v-slot="scope"
           >
             <q-select
               v-model="scope.value"
               :options="options"
             />
           </q-popup-edit>
+        </q-td>
+        <q-td key="uploads">
+          {{ props.row.uploads }}
+          <q-btn
+            :label="$t('employee_dashboard.all_documents')"
+            @click="showAllDocuments()"
+          />
         </q-td>
         <q-td key="offers">
           {{ props.row.offers }}
@@ -52,6 +59,11 @@
 <script setup lang="ts">
 import {defineProps} from 'vue';
 import {ref} from 'vue';
+import {executeMutation} from 'src/helpers/data-helpers';
+import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
+import {QVueGlobals, useQuasar} from 'quasar';
+
+const $q: QVueGlobals = useQuasar()
 
 // Selection must be an array
 let selected = ref([])
@@ -78,5 +90,31 @@ const props = defineProps({
     default: () => [],
   }
 })
+
+/**
+ * Edits the given user
+ * @param {string} status - the user's ID
+ * @param {string} variables - the new variables
+ */
+function onUpdate(status: string, variables: Record<string, unknown>){
+  void executeMutation(
+    // todo: mutationobject
+    SET_STATUS,
+    {
+      status: status,
+      ...variables
+    }
+  )
+}
+
+/**
+ * Opens the dialog to show all documents and to upload further documents
+ */
+function showAllDocuments() {
+  $q.dialog({
+    title: 'UploadDocumentsDialog',
+    component: UploadDocumentsDialog,
+  })
+}
 
 </script>
