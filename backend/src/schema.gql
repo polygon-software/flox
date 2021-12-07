@@ -35,6 +35,9 @@ type Company {
   """Whether document upload is enabled (initial request granted by SOI)"""
   document_upload_enabled: Boolean!
 
+  """Documents of the company"""
+  documents: [PrivateFile!]
+
   """Domicile address"""
   domicile_address: Address!
 
@@ -52,6 +55,9 @@ type Company {
 
   """Phone Number"""
   phone: String!
+
+  """Human-readable ID"""
+  readable_id: String!
 
   """Company UID"""
   uid: String!
@@ -85,6 +91,8 @@ input CreateCompanyInput {
 }
 
 input CreateEmployeeInput {
+  cognito_id: String
+
   """Company"""
   company: company
 
@@ -185,10 +193,14 @@ type Mutation {
   removeItem(uuid: ID!): Item!
   update(updateUserInput: UpdateUserInput!): User!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
+  updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
   updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
 type PrivateFile {
+  """Company the file belongs to"""
+  company: Company
+
   """S3 File Key"""
   key: String!
 
@@ -220,7 +232,7 @@ type Query {
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
   getPrivateFile(
-    """URL expiration duration (in seconds)"""
+    """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
@@ -237,17 +249,36 @@ type Subscription {
 }
 
 input UpdateCompanyInput {
-  branch_structure: Boolean!
-  company_name: String!
-  correspondence_address: CreateAddressInput!
-  domicile_address: CreateAddressInput!
-  email: String!
-  first_name: String!
-  language: String!
-  last_name: String!
-  phone: String!
+  branch_structure: Boolean
+  cognito_id: String
+  company_name: String
+  correspondence_address: CreateAddressInput
+  document_upload_enabled: Boolean
+  domicile_address: CreateAddressInput
+  email: String
+  first_name: String
+  language: String
+  last_name: String
+  phone: String
   uid: String
   uuid: ID!
+}
+
+input UpdateEmployeeInput {
+  cognito_id: String
+
+  """Company"""
+  company: company
+
+  """E-mail"""
+  email: String
+  first_name: String
+  function: String
+  gender: String
+  language: String
+  last_name: String
+  phone: String
+  uuid: ID
 }
 
 input UpdateItemInput {
@@ -308,6 +339,9 @@ input company {
   """Whether document upload is enabled (initial request granted by SOI)"""
   document_upload_enabled: Boolean!
 
+  """Documents of the company"""
+  documents: [public_file!]
+
   """Domicile address"""
   domicile_address: address!
 
@@ -319,6 +353,9 @@ input company {
 
   """Phone Number"""
   phone: String!
+
+  """Human-readable ID"""
+  readable_id: String!
 
   """Company UID"""
   uid: String!
@@ -342,4 +379,26 @@ input employee {
 
   """Phone Number"""
   phone: String!
+}
+
+input private_file {
+  """S3 File Key"""
+  key: String!
+
+  """Public download URL"""
+  url: String!
+}
+
+input public_file {
+  """Company the file belongs to"""
+  company: company
+
+  """S3 File Key"""
+  key: String!
+
+  """File owner"""
+  owner: String!
+
+  """Pre-signed download URL"""
+  url: String
 }

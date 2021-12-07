@@ -16,6 +16,7 @@ async function bootstrap() {
 
   // Add GraphQL Voyager as middleware (intended for express, but seems to work on fastify as well)
   app.use('/schema', voyagerMiddleware({ endpointUrl: '/graphql' }));
+  app.enableCors(); // TODO change for production?
 
   // IMPORTANT: make sure to copy voyager.worker.js from node_modules/graphql-voyager/dist
   // to the same folder as your main bundle or use workerURI property to specify other path.

@@ -7,6 +7,7 @@ import { DeleteCompanyInput } from './dto/input/delete-company.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
+import { generateHumanReadableId } from '../helpers';
 
 @Injectable()
 export class CompanyService {
@@ -21,10 +22,26 @@ export class CompanyService {
   async createCompany(
     createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
+    // Generate human-readable ID and search for existing company with same ID
+    let readableId = generateHumanReadableId();
+    let existingCompany = await this.companyRepository.findOne({
+      readable_id: readableId,
+    });
+
+    // If ID already exists, regenerate
+    while (existingCompany !== null && existingCompany !== undefined) {
+      readableId = generateHumanReadableId();
+      existingCompany = await this.companyRepository.findOne({
+        readable_id: readableId,
+      });
+    }
+
     const company = this.companyRepository.create({
       ...createCompanyInput,
+      readable_id: readableId,
       document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
       cognito_id: null,
+      documents: null,
       // TODO: other default values
     });
 
@@ -76,8 +93,9 @@ export class CompanyService {
   async updateCompany(
     updateCompanyInput: UpdateCompanyInput,
   ): Promise<Company> {
-    const company = this.companyRepository.create(updateCompanyInput);
-    await this.companyRepository.update(updateCompanyInput.uuid, company);
+    await this.companyRepository.update(updateCompanyInput.uuid, {
+      ...updateCompanyInput, // TODO ensure UUID is immutable
+    });
     return await this.companyRepository.findOne(updateCompanyInput.uuid);
   }
 
@@ -102,9 +120,9 @@ export class CompanyService {
    * @param {string} uuid - the company's uuid
    */
   async enableDocumentUpload(uuid: string): Promise<Company> {
-    const company = await this.companyRepository.findOne(uuid);
-    company.document_upload_enabled = true;
-    await this.companyRepository.update(uuid, company);
+    await this.companyRepository.update(uuid, {
+      document_upload_enabled: true,
+    });
     return await this.companyRepository.findOne(uuid);
   }
 }

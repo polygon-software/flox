@@ -2,7 +2,7 @@
   <div class="column" style="margin-bottom: 32px">
     <q-table
       table-header-class="bg-grey-2"
-      :title="$t('employees')"
+      :title="$t('account_data.employees')"
       :rows="computedResult"
       :columns="columns"
       row-key="uuid"
@@ -20,11 +20,11 @@ import {i18n} from 'boot/i18n';
 
 // ----- Data -----
 const columns = [
-  { name: 'first_name', label: i18n.global.t('first_name'), field: 'first_name', sortable: true },
-  { name: 'last_name', label: i18n.global.t('last_name'), field: 'last_name', sortable: true },
-  { name: 'function', label: i18n.global.t('company_function'), field: 'function', sortable: true },
-  { name: 'phone', label: i18n.global.t('phone_number'), field: 'phone', sortable: false },
-  { name: 'email', label: i18n.global.t('email'), field: 'email', sortable: false },
+  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
+  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
+  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
+  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
+  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>

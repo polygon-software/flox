@@ -2,6 +2,7 @@ import { Field, ID, InputType } from '@nestjs/graphql';
 import {
   IsBoolean,
   IsEmail,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   IsUUID,
@@ -14,43 +15,63 @@ export class UpdateCompanyInput {
   @IsUUID()
   uuid: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   company_name: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   first_name: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   last_name: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   language: string;
 
   @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   uid: string;
 
-  @Field(() => CreateAddressInput)
+  @Field(() => CreateAddressInput, { nullable: true })
+  @IsOptional()
   domicile_address: CreateAddressInput;
 
-  @Field(() => CreateAddressInput)
+  @Field(() => CreateAddressInput, { nullable: true })
+  @IsOptional()
   correspondence_address: CreateAddressInput;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   @IsPhoneNumber()
   phone: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   @IsEmail()
   email: string;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
   @IsBoolean()
   branch_structure: boolean;
+
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  document_upload_enabled: boolean;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  @IsUUID()
+  cognito_id: string;
 }
