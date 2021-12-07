@@ -1,10 +1,11 @@
 <template>
-  <div class="column">
+  <div class="column full-width">
     <q-table
       :rows="computedResult"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
+      :filter="search"
       flat
       bordered
     >
@@ -42,10 +43,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, Ref} from 'vue';
+import {computed, defineProps, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {MY_PRODUCTS} from 'src/data/queries/QUERIES';
+
+const props = defineProps( {
+  search: {
+    required: true,
+    type: String,
+  }
+})
 
 // TODO i18n
 const columns = [

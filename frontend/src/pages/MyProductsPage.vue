@@ -16,7 +16,9 @@
       />
     </div>
     <!-- Body: Table with tabs etc. -->
-    <div class="column">
+    <div
+      class="column full-height items-start q-pa-md full-width"
+    >
       <!-- TODO tabs -->
 
       <!-- Search bar -->
@@ -33,7 +35,10 @@
         </template>
       </q-input>
 
-      <MyProductsTable/>
+      <!-- Table view of products -->
+      <MyProductsTable
+        :search="search"
+      />
 
 
     </div>

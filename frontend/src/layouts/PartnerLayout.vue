@@ -11,21 +11,41 @@
       width="200"
       persistent
       bordered
-      style="padding-top: 20px"
+      style="padding-top: 20px; display:flex; justify-content: space-between; flex-direction: column"
     >
+      <!-- Main items container -->
+      <div>
+        <q-item
+          v-for="item in menuItems"
+          :key="item.name"
+          v-ripple
+          clickable
+          :label="item.label"
+          @click="() => onItemClick(item.route)"
+        >
+          <q-item-section avatar>
+            <q-icon :name="item.icon"/>
+          </q-item-section>
+          <q-item-section>
+            {{item.label}}
+          </q-item-section>
+        </q-item>
+      </div>
+
+      <!-- Settings (at bottom of drawer) -->
+      <!-- TODO: settings route -->
       <q-item
-        v-for="item in menuItems"
-        :key="item.name"
         v-ripple
         clickable
-        :label="item.label"
-        @click="() => onItemClick(item.route)"
+        label="Settings"
+        style="position: absolute; bottom: 0; left: 0;"
+        @click="() => onItemClick(ROUTES.LOGIN)"
       >
         <q-item-section avatar>
-          <q-icon :name="item.icon"/>
+          <q-icon name="settings"/>
         </q-item-section>
         <q-item-section>
-          {{item.label}}
+          Settings
         </q-item-section>
       </q-item>
     </q-drawer>
@@ -51,25 +71,25 @@ const showMenu = true
 const menuItems = [
   {
     name: 'home',
-    label: 'Home',
+    label: 'Home', // TODO i18n
     route: ROUTES.LOGIN, // TODO
     icon: 'home'
   },
   {
     name: 'products',
-    label: 'Products',
+    label: 'Products', // TODO i18n
     route: ROUTES.MY_PRODUCTS,
     icon: 'local_mall'
   },
   {
     name: 'statistics',
-    label: 'Statistics',
+    label: 'Statistics', // TODO i18n
     route: ROUTES.LOGIN, // TODO
     icon: 'leaderboard'
   },
   {
     name: 'finances',
-    label: 'Finances',
+    label: 'Finances', // TODO i18n
     route: ROUTES.LOGIN, // TODO
     icon: 'paid'
   },
