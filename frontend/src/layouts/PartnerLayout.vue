@@ -49,9 +49,13 @@
         </q-item-section>
       </q-item>
     </q-drawer>
-    <q-page-container>
-      <router-view />
-    </q-page-container>
+
+      <q-page-container class="absolute-full">
+        <q-scroll-area class="fit">
+          <router-view />
+        </q-scroll-area>
+      </q-page-container>
+
   </q-layout>
 </template>
 
