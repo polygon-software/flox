@@ -11,6 +11,7 @@
       width="200"
       persistent
       bordered
+      style="padding-top: 20px"
     >
       <q-item
         v-for="item in menuItems"
@@ -57,7 +58,7 @@ const menuItems = [
   {
     name: 'products',
     label: 'Products',
-    route: ROUTES.LOGIN, // TODO
+    route: ROUTES.MY_PRODUCTS,
     icon: 'local_mall'
   },
   {

@@ -24,6 +24,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/ProductUploadPage.vue') }],
   },
 
+  'MY_PRODUCTS': {
+    path: '/my-products',
+    component: () => import('layouts/PartnerLayout.vue'), // TODO depending on role: admin or partner
+    children: [{ path: '', component: () => import('pages/MyProductsPage.vue') }],
+  },
+
   // Wildcard route for non-covered routes
   'WILDCARD': {
     path: '/:catchAll(.*)*',

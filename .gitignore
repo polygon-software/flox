@@ -37,3 +37,4 @@ lerna-debug.log*
 /backend/node_modules/
 /frontend/node_modules/
 /backend/dist/
+/shared/node_modules/
