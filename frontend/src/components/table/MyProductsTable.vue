@@ -13,6 +13,8 @@
         <q-tr
           :props="props"
           class="q-ma-none q-pa-none"
+          style="cursor: pointer"
+          @click="() => onRowClick(props.row)"
         >
           <q-td key="uuid" :props="props">
             <img
@@ -75,7 +77,7 @@ const computedResult = computed(()=>{
  * Deletes the currently selected user
  */
 function onRowClick(row: Record<string, any>){
-  //TODO
+  //TODO open Edit dialog?
   console.log('row clicked', row)
 }
 

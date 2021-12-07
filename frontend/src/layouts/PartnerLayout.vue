@@ -38,7 +38,7 @@
         v-ripple
         clickable
         label="Settings"
-        style="position: absolute; bottom: 0; left: 0;"
+        style="position: absolute; bottom: 0; width: 100%"
         @click="() => onItemClick(ROUTES.LOGIN)"
       >
         <q-item-section avatar>
