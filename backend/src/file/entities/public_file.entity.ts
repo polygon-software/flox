@@ -9,7 +9,7 @@ import { IsString, IsUrl } from 'class-validator';
 
 @Entity()
 @ObjectType()
-@InputType('private_file')
+@InputType('public_file')
 export class PublicFile extends BaseEntity {
   @Field(() => String, { description: 'Public download URL' })
   @Column()
