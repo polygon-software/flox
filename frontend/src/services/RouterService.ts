@@ -16,7 +16,7 @@ export class RouterService {
   /**
    * Routes to a given route, as defined in ROUTES constant
    * @param to {RouteRecordRaw} - the route to go to
-   * @param {RouteParams} [params] - params to pass to the route, if any
+   // * @param {RouteParams} [params] - params to pass to the route, if any
    */
   async routeTo(to: RouteRecordRaw) : Promise<void | NavigationFailure | undefined>{
     // TODO ensure this works
