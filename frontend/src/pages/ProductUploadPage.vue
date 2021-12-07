@@ -153,6 +153,7 @@
           use-input
           new-value-mode="add"
           stack-label
+          dense
           hide-dropdown-icon
           :label="$t('products.tags')"
           :hint="$t('products.tags_hint')"
@@ -166,7 +167,7 @@
         style="border-radius: 20px; border: 1px solid black; width: calc(50% - 50px)"
       >
         <h6 class="q-ma-md">{{ $t('products.status') }}</h6>
-        <div class="row flex justify-between q-ma-md">
+        <div class="row flex justify-between items-center q-ma-md">
 
           <!-- Status -->
           <q-select
