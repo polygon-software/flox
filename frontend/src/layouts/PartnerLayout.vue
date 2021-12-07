@@ -8,7 +8,7 @@
       v-model="showMenu"
       show-if-above
       side="left"
-      width="200"
+      :width="200"
       persistent
       bordered
       style="padding-top: 20px; display:flex; justify-content: space-between; flex-direction: column"

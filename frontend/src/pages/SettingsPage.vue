@@ -172,8 +172,11 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {useAuth} from 'src/store/authentication';
+import {ErrorService} from 'src/services/ErrorService';
+import {i18n} from 'boot/i18n';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
+const $errorService: ErrorService|undefined = inject('$errorService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const loggedIn = computed(() => {
@@ -186,6 +189,11 @@ const loggedIn = computed(() => {
  * Triggers a password change for the currently logged in authentication
  */
 function changePassword() {
+  if(!loggedIn.value){
+    $errorService?.showErrorDialog(new Error( i18n.global.t('errors.error_occurred')))
+  }
+
   $authService?.showChangePasswordDialog()
+
 }
 </script>
