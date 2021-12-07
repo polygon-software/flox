@@ -72,7 +72,7 @@
             </q-item-section>
           </q-item>
 
-          <q-item v-ripple>
+          <q-item v-ripple clickable>
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.email') }}:</p>
