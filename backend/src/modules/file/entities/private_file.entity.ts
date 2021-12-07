@@ -12,7 +12,7 @@ import { User } from '../../user/entities/user.entity';
 
 @Entity()
 @ObjectType()
-@InputType('public_file')
+@InputType('private_file')
 export class PrivateFile extends BaseEntity {
   @Field(() => String, { description: 'File owner' })
   @Column()
@@ -38,6 +38,8 @@ export class PrivateFile extends BaseEntity {
   })
   @ManyToOne(() => Company, (company) => company.documents)
   company: Company;
+
+  // ToDo Dossier will be added in next backend architecture update
 }
 
 export default PrivateFile;
