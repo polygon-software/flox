@@ -19,8 +19,6 @@
     <div
       class="column full-height items-start q-pa-md full-width"
     >
-      <!-- TODO tabs -->
-
       <!-- Search bar -->
       <q-input
         v-model="search"
