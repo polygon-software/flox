@@ -23,8 +23,7 @@ export function generateHumanReadableId(length = 10): string {
   let result = '';
 
   // Exclude I and l to avoid confusion
-  const alphabet =
-    'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstvwxyz0123456789';
+  const alphabet = '0123456789';
   for (let i = 0; i < length; i++) {
     result += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
   }
