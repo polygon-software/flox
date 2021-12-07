@@ -45,13 +45,18 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, Ref} from 'vue';
+import {computed, defineProps, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {MY_PRODUCTS} from 'src/data/queries/QUERIES';
+import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
 
 const props = defineProps( {
   search: {
+    required: true,
+    type: String,
+  },
+  statusFilter: {
     required: true,
     type: String,
   }
@@ -67,10 +72,18 @@ const columns = [
   { name: 'start', label: 'Start Date', field: 'start', sortable: true },
 ]
 
-const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<Array<Record<string, unknown>>>
 
-const computedResult = computed(()=>{
-  return queryResult.value ?? []
+// Rows, filtered by status (if applicable)
+const computedResult = computed(() => {
+  const val = queryResult.value ?? []
+
+  // Status filter (if any
+  if(props.statusFilter !== 'all') {
+    return val.filter((row) => row.status === props.statusFilter)
+  }
+
+  return val
 })
 
 /**
