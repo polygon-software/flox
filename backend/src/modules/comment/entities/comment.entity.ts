@@ -1,14 +1,17 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import { ManyToOne, Column } from 'typeorm';
+import { ObjectType, Field, InputType } from '@nestjs/graphql';
+import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
+import { ManyToOne, Column, Entity } from 'typeorm';
 import { IsString } from 'class-validator';
 import { Product } from '../../product/entities/product.entity';
 import { User } from '../../user/entities/user.entity';
 
 
 @ObjectType()
-export default class Comment {
+@Entity({ name: 'comment' })
+@InputType('comment')
+export class Comment extends BaseEntity {
   @Field(() => User, { description: 'The user who wrote this comment' })
-  @Column()
+  @ManyToOne(() => User, (user) => user.comments)
   user: User;
 
   @Field(() => String, { description: 'Content' })
@@ -20,3 +23,5 @@ export default class Comment {
   @ManyToOne(() => Product, (product) => product.comments)
   product: Product;
 }
+
+// TODO Add missing fields

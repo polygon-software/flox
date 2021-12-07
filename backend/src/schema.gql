@@ -6,17 +6,39 @@ enum Category {
   TECHNOLOGY
 }
 
+type Comment {
+  """Content"""
+  content: String!
+
+  """The product this a comment belongs to"""
+  product: Product!
+
+  """The user who wrote this comment"""
+  user: User!
+
+  """UUID"""
+  uuid: ID!
+}
+
 input CreateProductInput {
   brand: String!
   brandLink: String
+  brandLinkMaxClicks: Float
+  brandLinkMaxCost: Float
   category: Category!
   currency: Currency!
   description: String!
   directBuyLink: String
+  directBuyLinkMaxClicks: Float
+  directBuyLinkMaxCost: Float
   end: DateTime!
   maxBet: Float!
   minBet: Float!
+  pictures: public_file!
+  sponsored: Boolean!
   start: DateTime!
+  status: ProductStatus!
+  tags: [String!]!
   title: String!
   value: Int!
 }
@@ -75,8 +97,23 @@ type Product {
   """Brand link"""
   brandLink: String
 
+  """Current number of clicks on brand link"""
+  brandLinkClicks: Float
+
+  """Current cost of brand link"""
+  brandLinkCost: Float
+
+  """Maximum number of clicks on brand link"""
+  brandLinkMaxClicks: Float
+
+  """Maximum cost of brand link"""
+  brandLinkMaxCost: Float
+
   """Product category"""
   category: Category!
+
+  """Comments"""
+  comments: [Comment!]!
 
   """The currency the value is denoted in"""
   currency: Currency!
@@ -87,8 +124,23 @@ type Product {
   """Direct Buy link"""
   directBuyLink: String
 
+  """Current number of clicks on direct buy link"""
+  directBuyLinkClicks: Float
+
+  """Current cost of direct buy link"""
+  directBuyLinkCost: Float
+
+  """Maximum number of clicks on direct buy link"""
+  directBuyLinkMaxClicks: Float
+
+  """Maximum cost of direct buy link"""
+  directBuyLinkMaxCost: Float
+
   """End Date"""
   end: DateTime!
+
+  """Number of Likes"""
+  likes: Float!
 
   """Maximum bet"""
   maxBet: Float!
@@ -107,6 +159,9 @@ type Product {
 
   """Status of the product"""
   status: ProductStatus!
+
+  """Product tags"""
+  tags: [String!]
 
   """Title"""
   title: String!
@@ -161,9 +216,33 @@ type Subscription {
 }
 
 input UpdateProductInput {
-  age: Int
-  name: String
+  brand: String!
+  brandLink: String!
+  brandLinkClicks: Float!
+  brandLinkCost: Float!
+  brandLinkMaxClicks: Float!
+  brandLinkMaxCost: Float!
+  category: Category!
+  comments: [comment!]!
+  currency: Currency!
+  description: String!
+  directBuyLink: String!
+  directBuyLinkClicks: Float!
+  directBuyLinkCost: Float!
+  directBuyLinkMaxClicks: Float!
+  directBuyLinkMaxCost: Float!
+  end: DateTime!
+  likes: Float!
+  maxBet: Float!
+  minBet: Float!
+  pictures: public_file!
+  sponsored: Boolean!
+  start: DateTime!
+  status: ProductStatus!
+  tags: [String!]!
+  title: String!
   uuid: ID!
+  value: Int!
 }
 
 input UpdateUserInput {
@@ -176,11 +255,25 @@ type User {
   """Age"""
   age: Int!
 
+  """Comments written by the user"""
+  comments: [Comment!]!
+
   """Name"""
   name: String!
 
   """UUID"""
   uuid: ID!
+}
+
+input comment {
+  """Content"""
+  content: String!
+
+  """The product this a comment belongs to"""
+  product: product!
+
+  """The user who wrote this comment"""
+  user: user!
 }
 
 input private_file {
@@ -201,8 +294,23 @@ input product {
   """Brand link"""
   brandLink: String
 
+  """Current number of clicks on brand link"""
+  brandLinkClicks: Float
+
+  """Current cost of brand link"""
+  brandLinkCost: Float
+
+  """Maximum number of clicks on brand link"""
+  brandLinkMaxClicks: Float
+
+  """Maximum cost of brand link"""
+  brandLinkMaxCost: Float
+
   """Product category"""
   category: Category!
+
+  """Comments"""
+  comments: [comment!]!
 
   """The currency the value is denoted in"""
   currency: Currency!
@@ -213,8 +321,23 @@ input product {
   """Direct Buy link"""
   directBuyLink: String
 
+  """Current number of clicks on direct buy link"""
+  directBuyLinkClicks: Float
+
+  """Current cost of direct buy link"""
+  directBuyLinkCost: Float
+
+  """Maximum number of clicks on direct buy link"""
+  directBuyLinkMaxClicks: Float
+
+  """Maximum cost of direct buy link"""
+  directBuyLinkMaxCost: Float
+
   """End Date"""
   end: DateTime!
+
+  """Number of Likes"""
+  likes: Float!
 
   """Maximum bet"""
   maxBet: Float!
@@ -234,6 +357,9 @@ input product {
   """Status of the product"""
   status: ProductStatus!
 
+  """Product tags"""
+  tags: [String!]
+
   """Title"""
   title: String!
 
@@ -250,4 +376,15 @@ input public_file {
 
   """Public download URL"""
   url: String!
+}
+
+input user {
+  """Age"""
+  age: Int!
+
+  """Comments written by the user"""
+  comments: [comment!]!
+
+  """Name"""
+  name: String!
 }

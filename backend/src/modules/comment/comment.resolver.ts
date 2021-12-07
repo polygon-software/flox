@@ -1,35 +1,72 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { CommentService } from './comment.service';
 import { Comment } from './entities/comment.entity';
-import { CreateCommentInput } from './dto/create-comment.input';
-import { UpdateCommentInput } from './dto/update-comment.input';
+import { CreateCommentInput } from './dto/input/create-comment.input';
+import { UpdateCommentInput } from './dto/input/update-comment.input';
+import { PubSub } from 'graphql-subscriptions';
+import { Public } from '../../auth/authentication.decorator';
+import { GetCommentsArgs } from './dto/args/get-comments-args';
+import { GetCommentArgs } from './dto/args/get-comment-args';
+import { DeleteCommentInput } from './dto/input/delete-comment-input';
+
+// Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
+const pubSub = new PubSub();
+
 
 @Resolver(() => Comment)
 export class CommentResolver {
   constructor(private readonly commentService: CommentService) {}
 
-  @Mutation(() => Comment)
-  createComment(@Args('createCommentInput') createCommentInput: CreateCommentInput) {
-    return this.commentService.create(createCommentInput);
+  @Public()
+  @Query(() => [Comment], { name: 'comments' })
+  async getComments(
+    @Args() getCommentsArgs: GetCommentsArgs,
+  ): Promise<Comment[]> {
+    return await this.commentService.getComments(getCommentsArgs);
   }
 
-  @Query(() => [Comment], { name: 'comment' })
-  findAll() {
-    return this.commentService.findAll();
+  @Public()
+  @Query(() => [Comment], { name: 'allComments' })
+  async getAllComments(): Promise<Comment[]> {
+    return await this.commentService.getAllComments();
   }
 
+  @Public()
   @Query(() => Comment, { name: 'comment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.commentService.findOne(id);
+  async getComment(@Args() getCommentArgs: GetCommentArgs): Promise<Comment> {
+    return await this.commentService.getComment(getCommentArgs);
   }
 
+  @Public()
   @Mutation(() => Comment)
-  updateComment(@Args('updateCommentInput') updateCommentInput: UpdateCommentInput) {
-    return this.commentService.update(updateCommentInput.id, updateCommentInput);
+  async createComment(
+    @Args('createCommentInput') createCommentInput: CreateCommentInput,
+  ): Promise<Comment> {
+    const newComment = await this.commentService.create(createCommentInput);
+    // Publish authentication so subscriptions will auto-update
+    await pubSub.publish('commentAdded', { commentAdded: newComment });
+    return newComment;
   }
 
+  @Public()
   @Mutation(() => Comment)
-  removeComment(@Args('id', { type: () => Int }) id: number) {
-    return this.commentService.remove(id);
+  async updateComment(
+    @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
+  ): Promise<Comment> {
+    return await this.commentService.update(updateCommentInput);
+  }
+
+  @Public()
+  @Mutation(() => Comment)
+  async removeComment(
+    @Args('deleteCommentInput') deleteCommentInput: DeleteCommentInput,
+  ): Promise<Comment> {
+    return await this.commentService.remove(deleteCommentInput);
+  }
+
+  @Public()
+  @Subscription(() => Comment)
+  commentAdded(): AsyncIterator<unknown, any, undefined> {
+    return pubSub.asyncIterator('commentAdded');
   }
 }

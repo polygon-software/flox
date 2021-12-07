@@ -1,9 +1,9 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { IsArray, IsDate, IsInt, IsNumber, IsString, IsUrl, IsUUID } from 'class-validator';
+import { IsArray, IsDate, IsInt, IsNumber, IsString, IsUrl } from 'class-validator';
 import PublicFile from '../../file/entities/public_file.entity';
-import Comment from '../../comment/entities/comment.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../ENUM/ENUM';
 
 
@@ -11,11 +11,6 @@ import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../ENUM/ENUM';
 @Entity({ name: 'product' })
 @InputType('product')
 export class Product extends BaseEntity {
-  @Field(() => String, { description: 'UUID' })
-  @Column()
-  @IsUUID()
-  uuid: string;
-
   @Field(() => String, { description: 'Title' })
   @Column()
   @IsString()
@@ -146,7 +141,7 @@ export class Product extends BaseEntity {
   maxBet: number;
 
   @Field(() => [String], { description: 'Product tags', nullable: true })
-  @Column( { nullable: true, default: [] })
+  @Column( "text", { nullable: true, default: [], array: true })
   @IsArray()
   tags: string[];
 

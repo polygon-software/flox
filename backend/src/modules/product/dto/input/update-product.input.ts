@@ -11,7 +11,7 @@ import {
 } from 'class-validator';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../ENUM/ENUM';
 import PublicFile from '../../../file/entities/public_file.entity';
-import Comment from '../../../comment/entities/comment.entity';
+import { Comment } from '../../../comment/entities/comment.entity';
 
 @InputType()
 export class UpdateProductInput {
