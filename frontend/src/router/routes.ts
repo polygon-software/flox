@@ -46,7 +46,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'SUCCESS': {
     path: '/success',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/SuccessPage.vue') }],
+    children: [{ path: '', component: () => import('pages/GenericSuccessPage.vue') }],
   },
 
   'DOCUMENT_UPLOAD': {
@@ -84,6 +84,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.MANAGEMENT_DASHBOARD,
   ROUTES.EMPLOYEE_DASHBOARD,
+  ROUTES.NEW_EMPLOYEE,
   ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
 
