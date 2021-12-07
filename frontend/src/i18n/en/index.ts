@@ -120,4 +120,17 @@ export default {
     manager: 'Manager',
     employee: 'Employee',
   },
+  employee_dashboard: {
+    title: 'Employee Dashboard',
+    title2: 'Applications',
+    search: 'Search',
+    new_assignment: 'Enter a new assignment',
+    date: 'Date',
+    customer: 'Customer',
+    institute: 'Institute',
+    location: 'Location',
+    mortage_amount: 'Mortage amount CHF',
+    status: 'Status',
+    offers: 'Offers',
+  },
 };

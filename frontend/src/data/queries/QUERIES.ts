@@ -77,5 +77,26 @@ export const MY_EMPLOYEES = {
   cacheLocation: 'myEmployees'
 }
 
+export const MY_CUSTOMERS = {
+  query: gql`
+        query{
+            myCustomers{
+              uuid
+              date
+              first_name
+              last_name
+              institute
+              location
+              mortage_amount
+              status
+              offers
+              __typename
+            }
+        }
+  `,
+  tables: ['customer'],
+  cacheLocation: 'myCustomers'
+}
+
 
 export const QUERIES = [ALL_USERS, ALL_COMPANIES, ALL_EMPLOYEES];

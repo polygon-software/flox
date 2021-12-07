@@ -121,4 +121,17 @@ export default {
     manager: 'Manager',
     employee: 'Mitarbeiter',
   },
+  employee_dashboard: {
+    title: 'Mitarbeiter Dashboard',
+    title2: 'Anträge',
+    search: 'Suche',
+    new_assignment: 'Neuen Auftrag erfassen',
+    date: 'Datum',
+    customer: 'Kunde',
+    institute: 'Institut',
+    location: 'Ort',
+    mortage_amount: 'Hypothekarbetrag CHF',
+    status: 'Status',
+    offers: 'Angebote',
+  },
 };
