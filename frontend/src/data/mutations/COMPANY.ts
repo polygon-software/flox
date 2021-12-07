@@ -44,3 +44,17 @@ export const SET_COGNITO_COMPANY = {
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
+
+export const DELETE_COMPANY = {
+  mutation: gql`
+    mutation removeCompany($uuid: ID!){
+      removeCompany (deleteCompanyInput: {uuid: $uuid}) {
+        uuid
+        company_name
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.DELETE,
+  cacheLocation: 'removeCompany'
+}

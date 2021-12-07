@@ -120,7 +120,7 @@
 import {PropType, ref, Ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
-import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
+import {DELETE_COMPANY, ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
@@ -197,20 +197,23 @@ async function onOk(): Promise<void> {
  * Executed upon rejecting a company application
  */
 function onReject(): void {
-  //TODO: Send rejection message
+  //TODO: Send rejection E-mail
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
   }).onOk(() => {
-    // Show notification
-    showNotification(
-      $q,
-      i18n.global.t('messages.application_rejected'),
-      undefined,
-      'primary'
-    )
-    // Hide outer popup
-    hide()
+    // Remove company application on DB
+    void executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
+      // Show notification
+      showNotification(
+        $q,
+        i18n.global.t('messages.application_rejected'),
+        undefined,
+        'primary'
+      )
+      // Hide outer popup
+      hide()
+    })
   })
 }
 
