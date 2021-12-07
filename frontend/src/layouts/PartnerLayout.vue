@@ -39,7 +39,7 @@
         clickable
         label="Settings"
         style="position: absolute; bottom: 0; width: 100%"
-        @click="() => onItemClick(ROUTES.LOGIN)"
+        @click="() => onItemClick(ROUTES.SETTINGS)"
       >
         <q-item-section avatar>
           <q-icon name="settings"/>
