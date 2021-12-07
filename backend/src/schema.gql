@@ -34,7 +34,7 @@ input CreateProductInput {
   end: DateTime!
   maxBet: Float!
   minBet: Float!
-  pictures: public_file!
+  pictures: public_file
   sponsored: Boolean!
   start: DateTime!
   status: ProductStatus!
