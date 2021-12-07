@@ -2,29 +2,31 @@ import * as Joi from 'joi'
 
 // Base Item
 export const Product = Joi.object({
-    id: Joi.string().required().required(),
-    name: Joi.string().required().required(),
+    uuid: Joi.string().required().required(),
+    title: Joi.string().required().required(),
     description: Joi.string().required(),
     brand: Joi.string().required(),
     category: Joi.string().required(),
-    from: Joi.date().required(),
-    to: Joi.date().required(),
-    minBet: Joi.number().required(),
-    maxBet: Joi.number().required(),
     value: Joi.number().required(),
     currency: Joi.number().required(),
+    start: Joi.date().required(),
+    end: Joi.date().required(),
+    picures: Joi.array().items(Joi.string()) ,//TODO How are the images saved?
+    status: Joi.string().required(), //TODO Match with ENUMs
+    sponsored: Joi.boolean().required(),
+    directBuyLink: Joi.string().uri().optional(),
+    directBuyLinkClicks: Joi.number().optional(),
+    directBuyLinkMaxClicks: Joi.number().optional(),
+    directBuyLinkCost: Joi.number().optional(),
+    directBuyLinkMaxCost: Joi.number().optional(),
+    brandLink: Joi.string().uri().optional(),
+    brandLinkClicks: Joi.number().optional(),
+    brandLinkMaxClicks: Joi.number().optional(),
+    brandLinkCost: Joi.number().optional(),
+    brandLinkMaxCost: Joi.number().optional(),
+    minBet: Joi.number().required(),
+    maxBet: Joi.number().required(),
     tags: Joi.array().items(Joi.string()).optional(),
-    status: Joi.string().required(),
-    type: Joi.string().required(),
-    productPage: Joi.string().uri().optional(),
-    productPageMaxClicks: Joi.number().optional(),
-    productPageClicks: Joi.number().optional(),
-    productPageMaxCost: Joi.number().optional(),
-    productPageCost: Joi.number().optional(),
-    sellerPage: Joi.string().uri().optional(),
-    sellerPageMaxClicks: Joi.number().optional(),
-    sellerPageClicks: Joi.number().optional(),
-    sellerPageMaxCost: Joi.number().optional(),
-    sellerPageCost: Joi.number().optional(),
-    images: Joi.array().items(Joi.string()) //TODO How are the images saved?
+    comments: Joi.array().optional(), //TODO Add verifier .items(isSchema(Comment))
+    likes: Joi.number().optional()
 });

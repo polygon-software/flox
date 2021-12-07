@@ -1,14 +1,21 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { IsDate, IsInt, IsString, IsUrl } from 'class-validator';
+import { IsArray, IsDate, IsInt, IsNumber, IsString, IsUrl, IsUUID } from 'class-validator';
 import PublicFile from '../../file/entities/public_file.entity';
+import Comment from '../../comment/entities/comment.entity';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../ENUM/ENUM';
+
 
 @ObjectType()
 @Entity({ name: 'product' })
 @InputType('product')
 export class Product extends BaseEntity {
+  @Field(() => String, { description: 'UUID' })
+  @Column()
+  @IsUUID()
+  uuid: string;
+
   @Field(() => String, { description: 'Title' })
   @Column()
   @IsString()
@@ -24,14 +31,19 @@ export class Product extends BaseEntity {
   @IsString()
   brand: string;
 
+  @Field(() => CATEGORY, { description: 'Product category' })
+  @Column({
+    type: 'enum',
+    enum: CATEGORY,
+  })
+  category: CATEGORY;
+
   @Field(() => Int, { description: 'Value' })
   @Column()
   @IsInt()
   value: number;
 
-  @Field(() => CURRENCY, {
-    description: 'The currency the value is denoted in',
-  })
+  @Field(() => CURRENCY, { description: 'The currency the value is denoted in' })
   @Column({
     type: 'enum',
     enum: CURRENCY,
@@ -67,13 +79,6 @@ export class Product extends BaseEntity {
   })
   status: PRODUCT_STATUS;
 
-  @Field(() => CATEGORY, { description: 'Product category' })
-  @Column({
-    type: 'enum',
-    enum: CATEGORY,
-  })
-  category: CATEGORY;
-
   @Field(() => Boolean, { description: 'Whether the product is sponsored' })
   @Column({ default: false })
   sponsored: boolean;
@@ -84,11 +89,51 @@ export class Product extends BaseEntity {
   @IsUrl()
   directBuyLink: string;
 
+  @Field(() => Number, { description: 'Current number of clicks on direct buy link', nullable: true})
+  @Column( { nullable: true, default: 0 })
+  @IsNumber()
+  directBuyLinkClicks: number;
+
+  @Field(() => Number, { description: 'Maximum number of clicks on direct buy link', nullable: true})
+  @Column( { nullable: true })
+  @IsNumber()
+  directBuyLinkMaxClicks: number;
+
+  @Field(() => Number, { description: 'Current cost of direct buy link', nullable: true})
+  @Column( { nullable: true, default: 0 })
+  @IsNumber()
+  directBuyLinkCost: number;
+
+  @Field(() => Number, { description: 'Maximum cost of direct buy link', nullable: true})
+  @Column( { nullable: true })
+  @IsNumber()
+  directBuyLinkMaxCost: number;
+
   @Field(() => String, { description: 'Brand link', nullable: true })
   @Column({ nullable: true })
   @IsString()
   @IsUrl()
   brandLink: string;
+
+  @Field(() => Number, { description: 'Current number of clicks on brand link', nullable: true})
+  @Column( { nullable: true, default: 0 })
+  @IsNumber()
+  brandLinkClicks: number;
+
+  @Field(() => Number, { description: 'Maximum number of clicks on brand link', nullable: true})
+  @Column( { nullable: true })
+  @IsNumber()
+  brandLinkMaxClicks: number;
+
+  @Field(() => Number, { description: 'Current cost of brand link', nullable: true})
+  @Column( { nullable: true, default: 0 })
+  @IsNumber()
+  brandLinkCost: number;
+
+  @Field(() => Number, { description: 'Maximum cost of brand link', nullable: true})
+  @Column( { nullable: true })
+  @IsNumber()
+  brandLinkMaxCost: number;
 
   @Field(() => Number, { description: 'Minimum bet' })
   @Column()
@@ -100,5 +145,23 @@ export class Product extends BaseEntity {
   @IsInt()
   maxBet: number;
 
-  // TODO: Remaining fields from UML (tags, repeating sales, comments, likes)
+  @Field(() => [String], { description: 'Product tags', nullable: true })
+  @Column( { nullable: true, default: [] })
+  @IsArray()
+  tags: string[];
+
+  @Field(() => [Comment], { description: 'Comments' })
+  @OneToMany(() => Comment, (comment) => comment.product, {
+    cascade: true,
+    eager: true,
+    nullable: true,
+  })
+  comments: Comment[];
+
+  @Field(() => Number, { description: 'Number of Likes' })
+  @Column({ nullable: true, default: 0 })
+  @IsNumber()
+  likes: number;
+
+  // TODO: Clearify if we need Rrepeating sales
 }

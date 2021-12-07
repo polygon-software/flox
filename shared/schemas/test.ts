@@ -28,7 +28,7 @@ console.log("--------------------")
 console.log(
     TimeableItem.validate({
         name: "keine Id",
-        from: new Date()
+        start: new Date()
     })
 )
 
@@ -51,7 +51,7 @@ console.log(
         id: "bli-bla-blubb123",
         name: "Massiver Käse",
         price: 128,
-        from: new Date()
+        start: new Date()
     })
 )
 
