@@ -13,7 +13,11 @@
       </p>
 
       <!-- Employee Overview -->
-      <EmployeeTable/>
+      <DashboardsTable
+        :columns="columns"
+        :rows="rows"
+        :title="$t('account_data.employees')"
+      />
 
       <!-- Register new employee -->
       <div class="flex row justify-center items-center">
@@ -32,11 +36,30 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue'
+import {computed, inject, Ref, ref} from 'vue'
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import EmployeeTable from 'components/tables/EmployeeTable.vue';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {MY_EMPLOYEES} from 'src/data/queries/QUERIES';
+import DashboardsTable from 'components/tables/DashboardsTable.vue';
+
+
+// ----- Data -----
+const columns = [
+  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
+  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
+  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
+  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
+  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
+]
+const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
+
+const rows = computed(()=>{
+  return queryResult.value ?? []
+})
+
+
 const $routerService: RouterService = inject('$routerService')
 
 async function routeToRegisterEmployee(): Promise<void> {

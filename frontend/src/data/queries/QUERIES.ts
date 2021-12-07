@@ -139,26 +139,26 @@ export const PRIVATE_FILE = {
   tables: ['private_file'],
   cacheLocation: 'getPrivateFile'
 }
-export const MY_CUSTOMERS = {
-  query: gql`
-        query{
-            myCustomers{
-              uuid
-              date
-              first_name
-              last_name
-              institute
-              location
-              mortage_amount
-              status
-              offers
-              __typename
-            }
-        }
-  `,
-  tables: ['customer'],
-  cacheLocation: 'myCustomers'
-}
+// export const MY_CUSTOMERS = {
+//   query: gql`
+//         query{
+//             myCustomers{
+//               uuid
+//               date
+//               first_name
+//               last_name
+//               institute
+//               location
+//               mortage_amount
+//               status
+//               offers
+//               __typename
+//             }
+//         }
+//   `,
+//   tables: ['customer'],
+//   cacheLocation: 'myCustomers'
+// }
 
 
 export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];

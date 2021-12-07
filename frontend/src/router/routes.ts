@@ -65,6 +65,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
   },
+  'NEW_ASSIGNMENT_PAGE': {
+    path: '/new-assignment',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/NewAssignmentPage.vue') }],
+  },
 
   // Wildcard route for non-covered routes
   'WILDCARD': {
@@ -84,7 +89,8 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.MANAGEMENT_DASHBOARD,
   ROUTES.EMPLOYEE_DASHBOARD,
-  ROUTES.NEW_EMPLOYEE,
+  ROUTES.NEW_EMPLOYEE_PAGE,
+  ROUTES.NEW_ASSIGNMENT_PAGE,
   ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
 
