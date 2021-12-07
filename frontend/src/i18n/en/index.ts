@@ -173,6 +173,12 @@ export default {
     max_clicks: 'Maximum number of clicks',
     max_cost: 'Maximum cost',
   },
+  settings: {
+    settings: 'Settings',
+    general: 'General',
+    account: 'Account',
+    personal_data: 'Personal Data'
+  },
   status: {
     loading: 'Loading',
   },

@@ -10,8 +10,8 @@
     </div>
     <div class="row items-center">
       <p
-        class="text-black"
         v-if="loggedIn && username"
+        class="text-black"
       >
         {{ $t('authentication.loggedIn', {user: username})}}
       </p>
@@ -24,13 +24,6 @@
         class="text-black"
         flat
         @click="logout"
-    />
-    <q-btn
-        v-if="loggedIn"
-        :label="$t('authentication.change_password')"
-        class="text-black"
-        flat
-        @click="changePassword"
     />
     <q-btn
         v-if="!loggedIn"
@@ -96,8 +89,8 @@ import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
 
 
-const $authService: AuthenticationService = inject('$authService')
-const $routerService: RouterService = inject('$routerService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const loggedIn = computed(() => {
@@ -113,26 +106,20 @@ const username = $authStore.getters.getUsername()
  * Logs out the current authentication
  */
 async function logout(): Promise<void>{
-  await $authService.logout();
-  await $routerService.routeTo(ROUTES.LOGIN)
+  await $authService?.logout();
+  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
-/**
- * Triggers a password change for the currently logged in authentication
- */
-function changePassword() {
-  $authService.showChangePasswordDialog()
-}
 
 /**
  * Triggers a password change for a non-logged in authentication
  */
 function forgottenPassword() {
-  $authService.showResetPasswordDialog();
+  $authService?.showResetPasswordDialog();
 }
 
 /*
-* This section controlls the visibility of the notification inbox popup.
+* This section controls the visibility of the notification inbox popup.
 *  TODO: Change it to a push or rerendering?
 */
 const showInbox = ref(false)
