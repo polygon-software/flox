@@ -77,6 +77,7 @@ export default {
     sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
     yes_reject: 'Ja, ablehnen',
     view_documents: 'Dokumente ansehen',
+    employee_tasks: 'Mitarbeitendenaufträge'
   },
   buttons: {
     finish_signup: 'Abschliessen',
