@@ -17,24 +17,11 @@
           outlined
           type="search"
           class="q-mb-md"
-          style="margin-right: 30px"
         >
           <template #prepend>
             <q-icon name="search" />
           </template>
         </q-input>
-
-        <!-- Register new employee -->
-        <q-btn
-          icon="add"
-          :label="$t('authentication.employee_signup')"
-          dense
-          color="primary"
-          unelevated
-          padding="8px"
-          style="height: 40px"
-          @click="routeToRegisterEmployee"
-        />
       </div>
     </div>
     <q-table
@@ -60,18 +47,54 @@
             <q-td key="last_name" :props="props">
               {{ props.row.last_name }}
             </q-td>
-            <q-td key="function" :props="props">
-              {{ props.row.function }}
+            <q-td key="tasks" :props="props">
+              <!-- TODO contract number -->
+              4
             </q-td>
-            <q-td key="phone" :props="props">
-              {{ props.row.phone }}
+            <q-td key="volume" :props="props">
+              <!-- TODO volume -->
+              600'000
             </q-td>
-            <q-td key="email" :props="props">
-              {{ props.row.email }}
+            <q-td key="prov_emp" :props="props">
+              <!-- TODO volume -->
+              40'000
+            </q-td>
+            <q-td key="prov_org" :props="props">
+              <!-- TODO volume -->
+              60'000
+            </q-td>
+            <q-td key="prov_ratio" :props="props">
+              <!-- TODO volume -->
+              60'000
             </q-td>
         </q-tr>
+
         <!-- One spacer row per row -->
-        <q-tr style="height: 14px"/>
+        <q-tr
+          style="height: 14px"
+        />
+
+        <!-- Last entry: sum row -->
+        <q-tr v-if="props.rowIndex === computedResult.length-1">
+          <q-td key="first_name"/>
+          <q-td key="last_name"/>
+          <q-td key="tasks"/>
+          <q-td key="volume" :props="props">
+            <!-- TODO volume -->
+            600'000
+          </q-td>
+          <q-td key="prov_emp" :props="props">
+            <!-- TODO volume -->
+            40'000
+          </q-td>
+          <q-td key="prov_org" :props="props">
+            <!-- TODO volume -->
+            60'000
+          </q-td>
+          <q-td key="prov_ratio" :props="props">
+            <!-- TODO volume -->
+            60'000
+          </q-td>        </q-tr>
       </template>
     </q-table>
   </div>
@@ -91,11 +114,14 @@ const search = ref('')
 
 // ----- Data -----
 const columns = [
+  // TODO i18n, column names
   { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
   { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
-  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
-  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
-  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
+  { name: 'tasks', label: 'Aufträge', field: 'tasks', sortable: true },
+  { name: 'volume', label: 'Volumen', field: 'volume', sortable: true },
+  { name: 'prov_emp', label: 'Provision MA', field: 'prov_emp', sortable: true },
+  { name: 'prov_org', label: 'Provision Organisation', field: 'prov_org', sortable: false },
+  { name: 'prov_ratio', label: 'Anteil prov. Vermittler', field: 'prov_ratio', sortable: false },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>

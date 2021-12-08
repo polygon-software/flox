@@ -15,5 +15,6 @@
 
 <script setup lang="ts">
 import EmployeeDataTable from 'components/tables/EmployeeDataTable.vue';
+import CompanyInfoCard from "components/cards/CompanyInfoCard.vue";
 
 </script>
