@@ -1,7 +1,6 @@
 <template>
   <div class="column" style="margin-bottom: 32px">
     <q-table
-      grid
       :rows="computedResult"
       :columns="columns"
       row-key="uuid"

@@ -3,6 +3,7 @@ export default {
     yes: 'Yes',
     no: 'No',
     new: 'New',
+    editable: 'editable'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -21,6 +22,7 @@ export default {
     change_password: 'Change password',
   },
   account_data: {
+    employees: 'Employees',
     authentication: 'Authentication',
     email: 'E-Mail',
     username: 'Username',
@@ -60,6 +62,11 @@ export default {
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
   },
+  messages: {
+    account_unlocked: 'Successfully unlocked account',
+    document_upload_enabled: 'Enabled document upload',
+    application_rejected: 'Application rejected'
+  },
   dashboards: {
     management_dashboard: 'Management Dashboard',
     credit_institution: 'Credit Institutions',
@@ -72,6 +79,7 @@ export default {
     sure_to_reject: 'Are you sure you want to decline this request?',
     yes_reject: 'Yes, reject',
     unlock_account: 'Unlock account',
+    view_documents: 'View documents'
   },
   buttons: {
     finish_signup: 'Finish',
@@ -81,9 +89,10 @@ export default {
     cancel: 'Cancel',
     submit: 'Submit',
     ok: 'OK',
+    download: 'Download',
+    preview: 'Preview',
   },
   documents: {
-    documents_missing: 'Documents missing',
     documents_available: 'Documents available',
     document_upload: 'File upload',
     additional_documents: 'Additional Documents',
@@ -101,6 +110,7 @@ export default {
     invalid_password: 'Please enter a valid password',
     invalid_email: 'Please enter a valid e-mail address',
     invalid_username: 'Please enter a username',
+    invalid_link: 'The link you used may be invalid or has already been used.',
     incorrect_password: 'Incorrect password',
     incorrect_email: 'Email address not found',
     incorrect_username: 'Username not found',
@@ -118,9 +128,14 @@ export default {
     must_accept_condition_truthful: 'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
+    documents_missing: 'Documents missing',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
+  },
+  status: {
+    uploading: 'Uploading',
+    loading: 'Loading',
   },
   user_types: {
     soi_admin: 'SOI Admin',

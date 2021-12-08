@@ -138,8 +138,6 @@ export class AuthenticationService {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
       const attributes = [];
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-      // TODO disable requirement on AWS @thommann
-      attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
       this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
             if (err) {
               // TODO
@@ -155,6 +153,33 @@ export class AuthenticationService {
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
     this.showEmailVerificationDialog()
   }
+
+
+  /**
+   * TODO description, consolidate with signUp() function
+   * TODO make adaptable to other parameters via direct handling of {attributes} param
+   * @param username {string} - the chosen username
+   * @param email {string} - the authentication's e-mail address -> TODO move to attributes
+   * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
+   * @returns {string} the user's cognito ID (sub)
+   */
+  async signUpNewUser(username: string, email: string, password: string): Promise<string> {
+    const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
+      const attributes = [];
+      attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
+      this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
+        if (err) {
+          reject(err);
+        }
+        if(result){
+          resolve(result);
+        }
+      })
+    })
+
+    return cognitoUserWrapper.userSub
+  }
+
 
   /**
    * Logs out the currently logged in authentication (if any)
@@ -329,7 +354,7 @@ export class AuthenticationService {
      * Confirm e-mail verification code
      * @param code
      */
-    async verifyEmail(code: string,): Promise<void>{
+    async verifyEmail(code: string): Promise<void>{
       return new Promise((resolve, reject)=>{
         this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, (err: Error)=>{
               if(err){

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Controller,
   Post,
+  Query,
   Req,
   Res,
 } from '@nestjs/common';
@@ -9,10 +10,17 @@ import { FileService } from './file.service';
 import fastify = require('fastify');
 import { Public } from '../auth/authentication.decorator';
 import { AnyRole } from '../auth/authorization.decorator';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Company } from '../company/entities/company.entity';
+import { Repository } from 'typeorm';
 
 @Controller()
 export class FileController {
-  constructor(private readonly taskService: FileService) {}
+  constructor(
+    private readonly fileService: FileService,
+    @InjectRepository(Company)
+    private companyRepository: Repository<Company>,
+  ) {}
 
   @Public()
   @Post('/uploadPublicFile')
@@ -27,7 +35,7 @@ export class FileController {
     }
     const file = await req.file();
     const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPublicFile(
+    const new_file = await this.fileService.uploadPublicFile(
       file_buffer,
       file.filename,
     );
@@ -51,11 +59,58 @@ export class FileController {
 
     const file = await req.file();
     const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPrivateFile(
+    const new_file = await this.fileService.uploadPrivateFile(
       file_buffer,
       file.filename,
       owner,
     );
+    res.send(new_file);
+  }
+
+  @Post('/uploadCompanyFile')
+  @Public()
+  async uploadCompanyFile(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+    @Query() query: Record<string, string>, // Params
+  ): Promise<any> {
+    // Verify that request is multipart
+    if (!req.isMultipart()) {
+      res.send(new BadRequestException('File expected on this endpoint'));
+      return;
+    }
+
+    // Determine company UUID from query param
+    const companyId: string = query.cid; // Base64 encoded ID from params
+    const companyUuid: string | null = Buffer.from(
+      companyId,
+      'base64',
+    ).toString();
+
+    // TODO: Don't forget to change file owner once company has a cognito ID!
+
+    const company = await this.companyRepository.findOne(companyUuid);
+
+    // Throw error if invalid company or document upload not enabled
+    if (!company || !company.document_upload_enabled) {
+      throw new Error(
+        'No valid company found, the link you used may be invalid.',
+      );
+    }
+
+    const file = await req.file();
+
+    if (!file) {
+      throw new Error('No valid file sent!');
+    }
+    const file_buffer = await file.toBuffer();
+    const new_file = await this.fileService.uploadPrivateFile(
+      file_buffer,
+      file.filename,
+      companyUuid, // Owner; must be changed to cognito ID later
+      company,
+    );
+
     res.send(new_file);
   }
 }

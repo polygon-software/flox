@@ -4,7 +4,6 @@ import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Employee } from './entities/employee.entity';
-import { GetCompaniesArgs } from '../company/dto/args/get-companies.args';
 import { Company } from '../company/entities/company.entity';
 
 @Injectable()
@@ -43,5 +42,17 @@ export class EmployeeService {
     });
   }
 
+  /**
+   * Updates any given values of an employee (by UUID)
+   * @param {UpdateEmployeeInput} updateEmployeeInput - the employee update data
+   */
+  async updateEmployee(
+    updateEmployeeInput: UpdateEmployeeInput,
+  ): Promise<Employee> {
+    await this.employeeRepository.update(updateEmployeeInput.uuid, {
+      ...updateEmployeeInput,
+    });
+    return await this.employeeRepository.findOne(updateEmployeeInput.uuid);
+  }
   // TODO: Add remove/update/find functionalities as needed
 }

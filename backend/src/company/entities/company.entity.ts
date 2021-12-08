@@ -6,10 +6,11 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsEmail,
+  IsArray,
 } from 'class-validator';
 import { Address } from '../../address/entities/address.entity';
 import { Person } from '../../person/entities/person.entity';
-import { Employee } from '../../employee/entities/employee.entity';
+import PrivateFile from '../../file/entities/private_file.entity';
 
 /**
  * An entity representing a company account
@@ -20,6 +21,11 @@ import { Employee } from '../../employee/entities/employee.entity';
 @InputType('company')
 @Entity({ name: 'company' })
 export class Company extends Person {
+  @Field(() => String, { description: 'Human-readable ID' })
+  @Column()
+  @IsString()
+  readable_id: string;
+
   @Field(() => String, { description: 'Company Name' })
   @Column()
   @IsString()
@@ -38,12 +44,12 @@ export class Company extends Person {
 
   @Field(() => Address, { description: 'Domicile address' })
   @JoinColumn()
-  @OneToOne(() => Address, { cascade: true })
+  @OneToOne(() => Address, { cascade: true, eager: true })
   domicile_address: Address;
 
   @Field(() => Address, { description: 'Correspondence address' })
   @JoinColumn()
-  @OneToOne(() => Address, { cascade: true })
+  @OneToOne(() => Address, { cascade: true, eager: true })
   correspondence_address: Address;
 
   @Field(() => String, { description: 'Phone Number' })
@@ -71,9 +77,18 @@ export class Company extends Person {
   @IsBoolean()
   document_upload_enabled: boolean;
 
-  // TODO documents
+  // TODO ensure type to key
+  @Field(() => [PrivateFile], {
+    nullable: true,
+    description: 'Documents of the company',
+  })
+  @OneToMany(() => PrivateFile, (file) => file.company, {
+    cascade: true,
+    eager: true,
+  })
+  documents: PrivateFile[];
 
-  // @JoinColumn() TODO re-add
+  // @Column() TODO: Possibly add employee ID array / determine if needed
   // @Field(() => [Employee], {
   //   description: 'Employees of the company',
   //   nullable: true,

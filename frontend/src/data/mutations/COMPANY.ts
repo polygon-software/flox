@@ -29,3 +29,34 @@ export const ENABLE_COMPANY_DOCUMENT_UPLOAD = {
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
+
+export const SET_COGNITO_COMPANY = {
+  mutation: gql`
+    mutation updateCompany($uuid: ID!, $cognito_id: String!){
+      updateCompany (updateCompanyInput: {uuid: $uuid, cognito_id: $cognito_id, document_upload_enabled: false}) {
+        uuid
+        company_name
+        cognito_id
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
+
+export const UPDATE_COMPANY_EMAIL = {
+  mutation: gql`
+    mutation updateCompany($uuid: ID!, $email: String!){
+      updateCompany (updateCompanyInput: {uuid: $uuid, email: $email}) {
+        uuid
+        company_name
+        email
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
