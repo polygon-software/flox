@@ -80,21 +80,28 @@
           <q-td key="last_name"/>
           <q-td key="tasks"/>
           <q-td key="volume" :props="props">
-            <!-- TODO volume -->
-            600'000
+            <!-- TODO sum -->
+            <b>
+              1'200'000
+            </b>
           </q-td>
           <q-td key="prov_emp" :props="props">
-            <!-- TODO volume -->
-            40'000
-          </q-td>
+            <!-- TODO sum -->
+            <b>
+              80'000
+            </b>          </q-td>
           <q-td key="prov_org" :props="props">
-            <!-- TODO volume -->
-            60'000
-          </q-td>
+            <!-- TODO sum -->
+            <b>
+              120'000
+            </b>          </q-td>
           <q-td key="prov_ratio" :props="props">
-            <!-- TODO volume -->
-            60'000
-          </q-td>        </q-tr>
+            <!-- TODO sum -->
+            <b>
+              120'000
+            </b>
+          </q-td>
+        </q-tr>
       </template>
     </q-table>
   </div>
