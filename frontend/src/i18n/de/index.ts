@@ -59,6 +59,7 @@ export default {
     execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
     status: 'Status',
+    tasks: 'Aufträge',
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
@@ -66,7 +67,6 @@ export default {
     application_rejected: 'Antrag abgelehnt'
   },
   dashboards: {
-    management_dashboard: 'Chef Dashboard',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',

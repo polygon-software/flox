@@ -90,7 +90,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
   await sendPasswordChangeEmail(email, password, 'emp')
 
   // Route back
-  await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)
+  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_DATA)
   return;
 }
 

@@ -58,17 +58,12 @@ const menuItems = [
   {
     name: 'employees',
     label: i18n.global.t('account_data.employees'),
-    route: ROUTES.MANAGEMENT_DASHBOARD,
+    route: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
   },
   {
-    name: 'activities',
-    label: i18n.global.t('account_data.activities'),
-    route: ROUTES.LOGIN, // TODO
-  },
-  { // TODO other options here, this is just a placeholder
-    name: 'company',
-    label: i18n.global.t('account_data.company'),
-    route: ROUTES.LOGIN, // TODO
+    name: 'tasks',
+    label: i18n.global.t('account_data.tasks'),
+    route: ROUTES.MANAGEMENT_EMPLOYEE_TASKS, // TODO
   },
 ]
 /**

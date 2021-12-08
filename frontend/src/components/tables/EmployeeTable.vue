@@ -69,13 +69,6 @@
             <q-td key="email" :props="props">
               {{ props.row.email }}
             </q-td>
-            <q-td key="status" :props="props">
-              <!-- TODO backend implementation of status / conditional styling-->
-              <div
-                class="bg-positive"
-                style="height: 20px; width: 20px; border-radius: 10px"
-              />
-            </q-td>
         </q-tr>
         <!-- One spacer row per row -->
         <q-tr style="height: 14px"/>
@@ -103,7 +96,6 @@ const columns = [
   { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
   { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
-  { name: 'status', label: i18n.global.t('account_data.status'), field: 'status', sortable: false },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>

@@ -58,6 +58,7 @@ export default {
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
     status: 'Status',
+    tasks: 'Tasks',
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',
@@ -65,7 +66,6 @@ export default {
     application_rejected: 'Application rejected'
   },
   dashboards: {
-    management_dashboard: 'Management Dashboard',
     register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',
