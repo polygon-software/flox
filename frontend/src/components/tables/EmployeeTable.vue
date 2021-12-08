@@ -2,11 +2,12 @@
   <div class="column" style="margin-bottom: 32px">
     <q-table
       table-header-class="bg-grey-2"
-      :title="$t('account_data.employees')"
+      :title="$t('account_data.employees') + ' (' + computedResult.length + ')'"
       :rows="computedResult"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
+      flat
     />
   </div>
 </template>

@@ -27,7 +27,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   'MANAGEMENT_DASHBOARD': {
     path: '/management-dashboard',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/ManagementLayout.vue'),
     children: [{ path: '', component: () => import('pages/ManagementDashboardPage.vue') }],
   },
 
