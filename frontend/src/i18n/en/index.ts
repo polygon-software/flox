@@ -4,7 +4,8 @@ export default {
     no: 'No',
     new: 'New',
     editable: 'editable',
-    search: 'Search'
+    search: 'Search',
+    welcome: 'Welcome'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',

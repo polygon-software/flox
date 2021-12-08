@@ -240,6 +240,7 @@ type Query {
   getPublicFile(uuid: ID!): PublicFile!
   item(uuid: ID!): Item!
   items: [Item!]!
+  myCompany: Company!
   myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!

@@ -7,7 +7,12 @@ import { DeleteCompanyInput } from './dto/input/delete-company.input';
 import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
 import { Public } from '../auth/authentication.decorator';
-import { AdminOnly, AnyRole } from '../auth/authorization.decorator';
+import {
+  AdminOnly,
+  AnyRole,
+  CurrentUser,
+} from '../auth/authorization.decorator';
+import { Employee } from '../employee/entities/employee.entity';
 
 @Resolver(() => Company)
 export class CompanyResolver {
@@ -45,6 +50,25 @@ export class CompanyResolver {
     return await this.companyService.getCompany(getCompanyArgs);
   }
 
+  /**
+   * Get the company for the currently logged in company account
+   */
+  @AnyRole() // TODO management only
+  @Query(() => Company, { name: 'myCompany' })
+  async getMyCompany(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Company> {
+    // Get company where user's UUID matches cognitoID
+    const company = await this.companyService.getCompany({
+      cognito_id: user.userId,
+    } as GetCompanyArgs);
+
+    if (!company) {
+      throw new Error(`No company found for ${user.userId}`);
+    }
+
+    return company;
+  }
   /**
    * Adds a new company to the database - will not have a cognito_id by default!
    * @param {CreateCompanyInput} createCompanyInput - data of the new company

@@ -4,7 +4,8 @@ export default {
     no: 'Nein',
     new: 'Neu',
     editable: 'bearbeitbar',
-    search: 'Suche'
+    search: 'Suche',
+    welcome: 'Willkommen'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
