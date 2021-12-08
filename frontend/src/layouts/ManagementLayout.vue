@@ -18,8 +18,7 @@
       <b
         class="text-grey-5 q-pa-md"
       >
-        <!-- TODO i18n -->
-        Aktivitäten
+        {{ $t('dashboards.activities') }}
       </b>
       <!-- Main items container -->
       <q-item
@@ -61,9 +60,9 @@ const menuItems = [
   {
     name: 'employees',
     label: i18n.global.t('account_data.employees'),
-    route: ROUTES.LOGIN, // TODO
+    route: ROUTES.MANAGEMENT_DASHBOARD,
   },
-  { // TODO other options here
+  { // TODO other options here, this is just a placeholder
     name: 'company',
     label: i18n.global.t('account_data.company'),
     route: ROUTES.LOGIN, // TODO

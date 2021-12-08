@@ -3,7 +3,8 @@ export default {
     yes: 'Yes',
     no: 'No',
     new: 'New',
-    editable: 'editable'
+    editable: 'editable',
+    search: 'Search'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -72,7 +73,8 @@ export default {
     sure_to_reject: 'Are you sure you want to decline this request?',
     yes_reject: 'Yes, reject',
     unlock_account: 'Unlock account',
-    view_documents: 'View documents'
+    view_documents: 'View documents',
+    activities: 'Activities'
   },
   buttons: {
     finish_signup: 'Finish',

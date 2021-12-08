@@ -1,33 +1,15 @@
 <template>
   <q-page
     class="flex flex-center">
-    <q-card
-      class="square q-pa-md q-ma-md"
-      style="width: 800px">
-
-      <p
-        class="q-ma-md col text-center"
-        style="font-size: x-large"
-      >
-        {{ $t('dashboards.management_dashboard') }}
-      </p>
+    <div
+      class="q-pa-md"
+      style="width: 800px; display: flex; flex-direction: column"
+    >
 
       <!-- Employee Overview -->
       <EmployeeTable/>
 
-      <!-- Register new employee -->
-      <div class="flex row justify-center items-center">
-        <p class="col-12 text-center q-mb-xs" style="font-size: medium">{{ $t('dashboards.register_new_employee_here') }}</p>
-        <q-btn
-          class="col-2 q-mx-md q-mb-md q-mt-xs"
-          style="width: 150px"
-          :label="$t('authentication.signup')"
-          color="primary"
-          @click="routeToRegisterEmployee"
-        />
-      </div>
-
-    </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -37,10 +19,5 @@ import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import EmployeeTable from 'components/tables/EmployeeTable.vue';
-const $routerService: RouterService|undefined = inject('$routerService')
-
-async function routeToRegisterEmployee(): Promise<void> {
-  await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
-}
 
 </script>
