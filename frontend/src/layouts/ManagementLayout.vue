@@ -1,11 +1,13 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <!-- Menu bar header -->
-    <ManagementMenuBar/>
+    <ManagementMenuBar
+      @toggle="showDrawer = !showDrawer"
+    />
 
     <!-- Side menu -->
     <q-drawer
-      v-model="showMenu"
+      v-model="showDrawer"
       show-if-above
       side="left"
       :width="150"
@@ -16,6 +18,7 @@
       <b
         class="text-grey-5 q-pa-md"
       >
+        <!-- TODO i18n -->
         Aktivitäten
       </b>
       <!-- Main items container -->
@@ -44,13 +47,14 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {inject} from 'vue';
+import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw} from 'vue-router';
 import {i18n} from 'boot/i18n';
 import ManagementMenuBar from 'components/menu/ManagementMenuBar.vue';
 const $routerService: RouterService|undefined = inject('$routerService')
-const showMenu = true
+
+const showDrawer = ref(true)
 
 // Left-side menu items
 const menuItems = [

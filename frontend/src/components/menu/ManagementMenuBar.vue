@@ -1,38 +1,41 @@
 <template>
-  <q-header class="row bg-white shadow-5 justify-between">
-    <div class="row">
-      <h5 class="text-black q-pa-none q-ma-md">
-        Strategic Opportunity Investments
-      </h5>
-      <p
-          v-if="loggedIn && username"
-          class="text-grey-7"
-      >
-        {{ $t('authentication.loggedIn', {user: username})}}
-      </p>
-    </div>
-  <div class="row">
-    <q-btn
-        v-if="loggedIn"
-        :label="$t('authentication.logout')"
-        class="text-primary"
+  <q-header class="row bg-black shadow-5 justify-between">
+    <q-toolbar>
+      <q-btn
         flat
-        @click="logout"
-    />
-    <q-btn
-        v-if="loggedIn"
-        :label="$t('authentication.change_password')"
-        class="text-primary"
-        flat
-        @click="changePassword"
-    />
-  </div>
+        round
+        dense
+        icon="menu"
+        @click="toggleDrawer"
+      />
+      <q-toolbar-title>
+        SOI Chamäleon
+      </q-toolbar-title>
 
+      <q-btn-dropdown
+        dropdown-icon="more_vert"
+        auto-close
+        flat
+        round
+        dense
+        @click="showOptions = !showOptions"
+      >
+        <q-btn
+          v-if="loggedIn"
+          :label="$t('authentication.logout')"
+          class="text-black"
+          flat
+          no-caps
+          @click="logout"
+        />
+      </q-btn-dropdown>
+
+    </q-toolbar>
   </q-header>
 </template>
 
 <script setup lang="ts">
-import {computed, inject} from 'vue'
+import {computed, defineEmits, inject, ref} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -42,20 +45,18 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
-
-
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
+
+const showDrawer = ref(true)
+const emit = defineEmits(['toggle'])
 
 const loggedIn = computed(() => {
   // Explicit type
   const result: boolean = $authStore.getters.getLoggedInStatus()
   return result;
 })
-
-// Username does not need to be reactive, since it won't change between logins
-const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication
@@ -66,10 +67,11 @@ async function logout(): Promise<void>{
 }
 
 /**
- * Triggers a password change for the currently logged in authentication
+ * Toggles the left-hand drawer menu
  */
-function changePassword() {
-  $authService.showChangePasswordDialog()
+function toggleDrawer(): void {
+  showDrawer.value = !showDrawer.value
+  emit('toggle', showDrawer)
 }
 
 </script>
