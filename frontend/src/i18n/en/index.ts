@@ -23,6 +23,7 @@ export default {
   },
   account_data: {
     employees: 'Employees',
+    activities: 'Activities',
     authentication: 'Authentication',
     email: 'E-Mail',
     username: 'Username',
@@ -74,7 +75,6 @@ export default {
     yes_reject: 'Yes, reject',
     unlock_account: 'Unlock account',
     view_documents: 'View documents',
-    activities: 'Activities'
   },
   buttons: {
     finish_signup: 'Finish',

@@ -19,7 +19,7 @@
           class="q-mb-md"
           style="margin-right: 30px"
         >
-          <template #append>
+          <template #prepend>
             <q-icon name="search" />
           </template>
         </q-input>
@@ -42,7 +42,7 @@
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
-      separator="horizontal"
+      separator="none"
       :filter="search"
       flat
     >

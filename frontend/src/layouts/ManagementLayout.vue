@@ -15,11 +15,6 @@
       bordered
       style="padding-top: 20px; display:flex; flex-direction: column"
     >
-      <b
-        class="text-grey-5 q-pa-md"
-      >
-        {{ $t('dashboards.activities') }}
-      </b>
       <!-- Main items container -->
       <q-item
         v-for="item in menuItems"
@@ -29,7 +24,9 @@
         :label="item.label"
         @click="() => onItemClick(item.route)"
       >
-          <p class="text-primary">
+          <p
+            :class="route.path === item.route.path ? 'text-primary' : 'text-grey-5'"
+          >
             {{item.label}}
           </p>
       </q-item>
@@ -48,10 +45,11 @@
 import {RouterService} from 'src/services/RouterService';
 import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
-import {RouteRecordRaw} from 'vue-router';
+import {RouteRecordRaw, useRoute} from 'vue-router';
 import {i18n} from 'boot/i18n';
 import ManagementMenuBar from 'components/menu/ManagementMenuBar.vue';
 const $routerService: RouterService|undefined = inject('$routerService')
+const route = useRoute();
 
 const showDrawer = ref(true)
 
@@ -61,6 +59,11 @@ const menuItems = [
     name: 'employees',
     label: i18n.global.t('account_data.employees'),
     route: ROUTES.MANAGEMENT_DASHBOARD,
+  },
+  {
+    name: 'activities',
+    label: i18n.global.t('account_data.activities'),
+    route: ROUTES.LOGIN, // TODO
   },
   { // TODO other options here, this is just a placeholder
     name: 'company',

@@ -29,6 +29,7 @@ export default {
     password: 'Passwort',
     repeat_password: 'Passwort wiederholen',
     account: 'Account',
+    activities: 'Aktivitäten',
     personal: 'Persönliches',
     address: 'Addresse',
     street: 'Strasse',
@@ -75,7 +76,6 @@ export default {
     sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
     yes_reject: 'Ja, ablehnen',
     view_documents: 'Dokumente ansehen',
-    activities: 'Aktivitäten'
   },
   buttons: {
     finish_signup: 'Abschliessen',

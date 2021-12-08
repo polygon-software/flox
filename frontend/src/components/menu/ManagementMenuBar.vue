@@ -1,5 +1,5 @@
 <template>
-  <q-header class="row bg-black shadow-5 justify-between">
+  <q-header class="row bg-black shadow-2 justify-between">
     <q-toolbar>
       <q-btn
         flat
@@ -15,6 +15,7 @@
       <q-btn-dropdown
         dropdown-icon="more_vert"
         auto-close
+        no-icon-animation
         flat
         round
         dense
