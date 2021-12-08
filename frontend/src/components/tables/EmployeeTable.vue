@@ -30,6 +30,8 @@
           :label="$t('authentication.employee_signup')"
           dense
           color="primary"
+          unelevated
+          padding="8px"
           style="height: 40px"
           @click="routeToRegisterEmployee"
         />
@@ -47,7 +49,11 @@
       flat
     >
       <template #body="props">
-        <q-tr :props="props" style="background-color: white">
+        <q-tr
+          :props="props"
+          style="background-color: white; cursor: pointer"
+          @click="() => onRowClick(props.row)"
+        >
             <q-td key="first_name" :props="props">
               {{ props.row.first_name }}
             </q-td>
@@ -62,6 +68,13 @@
             </q-td>
             <q-td key="email" :props="props">
               {{ props.row.email }}
+            </q-td>
+            <q-td key="status" :props="props">
+              <!-- TODO backend implementation of status / conditional styling-->
+              <div
+                class="bg-positive"
+                style="height: 20px; width: 20px; border-radius: 10px"
+              />
             </q-td>
         </q-tr>
         <!-- One spacer row per row -->
@@ -90,6 +103,7 @@ const columns = [
   { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
   { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
+  { name: 'status', label: i18n.global.t('account_data.status'), field: 'status', sortable: false },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
@@ -97,6 +111,18 @@ const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<R
 const computedResult = computed(()=>{
   return queryResult.value ?? []
 })
+
+/**
+ * Upon clicking a row, opens the employee's dashboard view
+ * @param {Record<string, unknown>} row - the row that was clicked
+ */
+async function onRowClick(row: Record<string, unknown>): Promise<void>{
+  console.log('clicked row', row)
+  // TODO: open employee view
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, {
+    uuid: row.uuid
+  })
+}
 
 /**
  * Routes to the page for registering a new employee

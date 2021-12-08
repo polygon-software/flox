@@ -11,7 +11,7 @@ export default {
     login: 'Log in',
     logout: 'Log out',
     signup: 'Sign up',
-    employee_signup: 'Register new Employee',
+    employee_signup: 'Register employee',
     signup_now: 'No Account? Sign up now:',
     forgot_password: 'Forgot password',
     redirected: 'You will be redirected shortly...',
@@ -57,6 +57,7 @@ export default {
     commercial_register_extract: 'Commercial Register Extract',
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
+    status: 'Status',
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',

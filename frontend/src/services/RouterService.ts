@@ -1,4 +1,4 @@
-import {NavigationFailure, RouteParams, Router, RouteRecordRaw} from 'vue-router';
+import {LocationQueryRaw, NavigationFailure, RouteParams, Router, RouteRecordRaw} from 'vue-router';
 
 /**
  * This is a service that is used globally throughout the application for routing
@@ -16,14 +16,14 @@ export class RouterService {
   /**
    * Routes to a given route, as defined in ROUTES constant
    * @param to {RouteRecordRaw} - the route to go to
-   // * @param {RouteParams} [params] - params to pass to the route, if any
+   * @param {Record<string, unknown>} [queryParams] - params to pass to the route, if any
    */
-  async routeTo(to: RouteRecordRaw) : Promise<void | NavigationFailure | undefined>{
+  async routeTo(to: RouteRecordRaw, queryParams?: Record<string, unknown>) : Promise<void | NavigationFailure | undefined>{
     // TODO ensure this works
-    // if (params !== null && params !== undefined) {
-    //   const toObject = to as unknown as Record<string, unknown>
-    //   return this.router.push({...toObject, params: params})
-    // }
+    if (queryParams !== null && queryParams !== undefined) {
+      const toObject = to as unknown as Record<string, unknown>
+      return this.router.push({...toObject, query: queryParams as LocationQueryRaw})
+    }
     return this.router.push(to)
   }
 }

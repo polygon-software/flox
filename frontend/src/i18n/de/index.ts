@@ -11,7 +11,7 @@ export default {
     login: 'Anmelden',
     logout: 'Abmelden',
     signup: 'Registrieren',
-    employee_signup: 'Mitarbeitende registrieren',
+    employee_signup: 'Mitarbeitende erfassen',
     signup_now: 'Kein Account? Jetzt registrieren:',
     forgot_password: 'Passwort vergessen',
     redirected: 'Sie werden in Kürze weitergeleitet...',
@@ -58,6 +58,7 @@ export default {
     commercial_register_extract: 'Handelsregisterauszug',
     execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
+    status: 'Status',
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
