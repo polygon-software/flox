@@ -21,14 +21,25 @@
         dense
         @click="showOptions = !showOptions"
       >
-        <q-btn
-          v-if="loggedIn"
-          :label="$t('authentication.logout')"
-          class="text-black"
-          flat
-          no-caps
-          @click="logout"
-        />
+        <div class="column">
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('authentication.logout')"
+            class="text-black"
+            flat
+            no-caps
+            @click="logout"
+          />
+
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('authentication.change_password')"
+            class="text-black"
+            flat
+            no-caps
+            @click="changePassword"
+          />
+        </div>
       </q-btn-dropdown>
 
     </q-toolbar>
@@ -65,6 +76,14 @@ const loggedIn = computed(() => {
 async function logout(): Promise<void>{
   await $authService.logout();
   await $routerService.routeTo(ROUTES.LOGIN)
+}
+
+
+/**
+ * Triggers a password change for the currently logged in user
+ */
+function changePassword() {
+  $authService.showChangePasswordDialog()
 }
 
 /**

@@ -119,7 +119,7 @@ const computedResult = computed(()=>{
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
   console.log('clicked row', row)
   // TODO: open employee view
-  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, {
+  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {
     uuid: row.uuid
   })
 }
