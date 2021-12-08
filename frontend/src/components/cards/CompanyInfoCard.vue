@@ -18,7 +18,7 @@
 <script setup lang="ts">
 
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {computed, Ref} from 'vue';
+import {Ref} from 'vue';
 import {MY_COMPANY} from 'src/data/queries/QUERIES';
 
 const company = subscribeToQuery(MY_COMPANY) as Ref<Record<string, Array<Record<string, unknown>>>>
