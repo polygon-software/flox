@@ -1,9 +1,8 @@
 <template>
   <q-page
-    class="flex flex-center">
+    class="flex flex-start q-pa-xl">
     <div
-      class="q-pa-md"
-      style="width: 800px; display: flex; flex-direction: column"
+      class="q-pa-md full-width"
     >
 
       <!-- Employee Overview -->

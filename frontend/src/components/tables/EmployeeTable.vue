@@ -1,5 +1,5 @@
 <template>
-  <div class="column" style="margin-bottom: 32px">
+  <div class="column">
     <div
       class="row justify-between q-ma-none"
     >
@@ -36,15 +36,37 @@
       </div>
     </div>
     <q-table
-      color="transparent"
+      card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
       :rows="computedResult"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
+      separator="horizontal"
+      :filter="search"
       flat
     >
-
+      <template #body="props">
+        <q-tr :props="props" style="background-color: white">
+            <q-td key="first_name" :props="props">
+              {{ props.row.first_name }}
+            </q-td>
+            <q-td key="last_name" :props="props">
+              {{ props.row.last_name }}
+            </q-td>
+            <q-td key="function" :props="props">
+              {{ props.row.function }}
+            </q-td>
+            <q-td key="phone" :props="props">
+              {{ props.row.phone }}
+            </q-td>
+            <q-td key="email" :props="props">
+              {{ props.row.email }}
+            </q-td>
+        </q-tr>
+        <!-- One spacer row per row -->
+        <q-tr style="height: 14px"/>
+      </template>
     </q-table>
   </div>
 </template>
@@ -84,3 +106,22 @@ async function routeToRegisterEmployee(): Promise<void> {
 }
 
 </script>
+
+<style scoped>
+table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  margin-top: -10px; /* correct offset on first border spacing if desired */
+}
+td {
+  padding: 10px;
+}
+td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+td:last-child {
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+</style>
