@@ -107,6 +107,8 @@
                 type="number"
                 outlined
                 dense
+                lazy-rules
+                :rules="[ (val) => IS_VALID_NUMBER(val) || $t('errors.invalid_number')]"
               />
               <q-select
                 v-model="input.currency"
@@ -311,12 +313,11 @@ import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
-import {date} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {IS_VALID_STRING, IS_FUTURE_DATE} from 'src/data/RULES';
+import {IS_VALID_STRING, IS_FUTURE_DATE, IS_SMALLER_THAN_OR_EQUAL, IS_LARGER_THAN_OR_EQUAL, IS_VALID_NUMBER} from 'src/data/RULES';
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Read ENUM values and so they can be used as options
@@ -341,8 +342,8 @@ const input = reactive({
   brand: null,
   value: null,
   currency: null, // TODO Fetch last selected or depening on location?
-  start: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-  end: date.formatDate(date.addToDate(Date.now(), {days: 7}), 'YYYY-MM-DD'),
+  start: null,
+  end: null,
   category: null,
   minBet: null,
   maxBet: null,

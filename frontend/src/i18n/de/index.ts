@@ -101,6 +101,7 @@ export default {
     incorrect_username: 'Benutzername wurde nicht gefunden',
     non_matching_password: 'Passwörter stimmen nicht überein',
     invalid_name: 'Bitte geben Sie Ihren Namen ein',
+    invalid_number: 'Bitte geben Sie eine Zahl ein',
     invalid_input: 'Bitte geben Sie etwas ein',
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gültige E-Mail Adresse ein',
