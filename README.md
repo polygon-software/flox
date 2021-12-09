@@ -155,11 +155,13 @@ We use Vue 3 with typescript as the chosen language for developing the frontend.
 Most documentation examples use the `setup` function; however, we use the optional [<script setup>](https://v3.vuejs.org/api/sfc-script-setup.html) wherever possible
 
 As oppposed to Vue 2, our `<script>` tag now usually looks as follows:
+
 ````vue
 <script setup lang='ts'>
   ...
 </script>
 ````
+
 Note that we specify `setup` and `lang='ts'`. The `setup` tag is because we use the [Script Setup](https://v3.vuejs.org/api/sfc-script-setup.html) functionality provided by Vue 3, and the `lang` tag is to specify that we use Typescript instead of Javascript.
 
 ## 5. Backend
@@ -223,3 +225,32 @@ The Bootstrap project uses [AWS](https://aws.amazon.com/de/) server infrastructu
 | [AWS S3](https://aws.amazon.com/de/s3/)  | File storage |
 | [AWS Elastic Beanstalk](https://aws.amazon.com/de/elasticbeanstalk/) | Auto-scaling backend deployment |
 
+### 8: SonarQube Quality Check
+
+We have a code quality tool enabled which gives feedback on your code quality on every Pull-Request.
+The same feedback can also be integrated into your IDE such that you don't have to correct these changes in post but
+get notified while you are working. 
+
+To enable this setting within WebStorm, click on "File" -> "Settings" -> "Plugins". Search for "SonarLint" and download
+the Plugin. You will need to restart Webstorm.
+
+Once Webstorm is restarted, go to "File" -> "Settings" -> "Tools" -> "SonarLint" and click on the \[+\]-Button. 
+In "Connection Name", enter "PolygonQube", then choose the left option: "sonarcloud". Click on "Next".
+
+Now you are prompted to input a Token. To do this, you must log into [soncarcloud.io](https://sonarcloud.io)
+using your **github account**. Then, visit the [security](https://sonarcloud.io/account/security/) page and generate
+a token called "WebStorm". Copy-Paste the token value back into WebStorm under "Token". Click on "Next". 
+
+Select "PolygonSoftware" and click "Next" again 2 times, then "Finish". 
+
+Now you are almost done. Go again to "File" -> "Tools" -> "SonarLint" -> "Project Settings". Here, under "Connection", 
+select "PolygonQube". For the project key, enter "polygon-software_full-stack-bootstrap". Now you are good to go!
+
+You can now see a new tab on the bottom of your WebStorm IDE called "SonarLint".
+It shows you linting problems of the file you have currently open. It will also show any problems directly within your
+code as your regular linter. However, it will not only show you code formatting problems like eslint, but also
+potential bugs, security vulnerabilities, code smells etc. 
+
+If you open a file for the first time, give SonarQube some time to consult the server for a security analysis. You
+can see that sonarqube is running if on the bottom of WebStorm, you see a "Running SolarLint Analysis on XXX".
+This should not take more than a few seconds per file. 
