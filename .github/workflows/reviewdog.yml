@@ -29,8 +29,6 @@ jobs:
 
       - name: Lint frontend
         uses: reviewdog/action-eslint@v1
-        env:
-          REVIEWDOG_TOKEN: ${{ secrets.REVIEWDOG_TOKEN }}
         with:
           reporter: github-pr-review
           fail_on_error: true
