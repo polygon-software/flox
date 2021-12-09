@@ -1,293 +1,299 @@
 <template>
-  <q-page class="flex justify-center">
-    <!-- General Info -->
-    <q-card
-      class="q-ma-md"
-      flat
-      style="width: 100%; border-radius: 20px; border: 1px solid black"
+  <q-page class="flex justify-start q-pa-none q-ma-none">
+    <q-form
+
     >
-      <h6 class="q-ma-md">{{ $t('products.general') }}</h6>
 
-      <!-- Input fields -->
-      <div class="row">
-        <!-- Left column -->
-        <div class="col-6 q-pa-md">
-          <div class="row flex justify-between">
-            <!-- Name -->
-            <q-input
-              v-model="input.title"
-              class="q-ma-sm full-width"
-              :label="$t('products.product_name')"
-              outlined
-              dense
-            />
+      <!-- General Info -->
+      <q-card
+        class="q-ma-md"
+        flat
+        style="width: 100%; border-radius: 20px; border: 1px solid black"
+      >
+        <h6 class="q-ma-md">{{ $t('products.general') }}</h6>
 
-            <!-- Description -->
-            <q-input
-              v-model="input.description"
-              class="q-ma-sm full-width"
-              :label="$t('products.product_description')"
-              outlined
-              dense
-              type="textarea"
-            />
+        <!-- Input fields -->
+        <div class="row">
+          <!-- Left column -->
+          <div class="col-6 q-pa-md">
+            <div class="row flex justify-between">
+              <!-- Name -->
+              <q-input
+                v-model="input.title"
+                class="q-ma-sm full-width"
+                :label="$t('products.product_name')"
+                outlined
+                dense
+              />
 
+              <!-- Description -->
+              <q-input
+                v-model="input.description"
+                class="q-ma-sm full-width"
+                :label="$t('products.product_description')"
+                outlined
+                dense
+                type="textarea"
+              />
+
+            </div>
+          </div>
+          <!-- Right column -->
+          <div class="col-6 q-pa-md">
+
+            <!-- Brand & category row -->
+            <div class="row flex justify-between">
+              <q-input
+                v-model="input.brand"
+                class="q-ma-sm"
+                style="width: calc(50% - 25px)"
+                :label="$t('products.brand')"
+                outlined
+                dense
+              />
+              <q-select
+                v-model="input.category"
+                :options="categories"
+                class="q-ma-sm"
+                style="width: calc(50% - 25px)"
+                :label="$t('products.category')"
+                outlined
+                dense
+              />
+            </div>
+
+            <!-- Start and End Date TODO Create custom date-time pickerTODO Create custom date-time picker -->
+            <div class="row flex justify-between">
+              <!-- Start date -->
+              <q-input
+                v-model="input.start"
+                class="q-ma-sm"
+                style="width: calc(50% - 25px)"
+                :label="$t('products.start')"
+                stack-label
+                type="date"
+                outlined
+                dense
+              />
+
+              <!-- End date -->
+              <q-input
+                v-model="input.end"
+                class="q-ma-sm"
+                style="width: calc(50% - 25px)"
+                :label="$t('products.end')"
+                stack-label
+                type="date"
+                outlined
+                dense
+              />
+            </div>
+
+            <!-- Value & currency -->
+            <div class="row flex justify-between">
+              <q-input
+                v-model="input.value"
+                class="q-ma-sm"
+                style="width: calc(50% - 25px)"
+                :label="$t('products.value')"
+                type="number"
+                outlined
+                dense
+              />
+              <q-select
+                v-model="input.currency"
+                :options="currencies"
+                class="q-ma-sm"
+                style="width: calc(50% - 25px)"
+                :label="$t('products.currency')"
+                outlined
+                dense
+              />
+            </div>
+
+            <!-- Min/Max bet -->
+            <div class="row flex justify-between">
+              <q-input
+                v-model="input.minBet"
+                class="q-ma-sm"
+                style="width: calc(50% - 25px)"
+                :label="$t('products.min_bet')"
+                type="number"
+                outlined
+                dense
+              />
+
+              <q-input
+                v-model="input.maxBet"
+                class="q-ma-sm"
+                style="width: calc(50% - 25px)"
+                :label="$t('products.max_bet')"
+                type="number"
+                outlined
+                dense
+              />
+            </div>
           </div>
         </div>
-        <!-- Right column -->
-        <div class="col-6 q-pa-md">
 
-          <!-- Brand & category row -->
-          <div class="row flex justify-between">
-            <q-input
-              v-model="input.brand"
-              class="q-ma-sm"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.brand')"
-              outlined
-              dense
-            />
+      </q-card>
+
+      <!-- Tags and Status. TODO -->
+      <div class="row full-width flex justify-between">
+
+        <!-- Tags -->
+        <q-card
+          class="q-pa-md q-ma-md"
+          flat
+          style="border-radius: 20px; border: 1px solid black; width: calc(50% - 50px)"
+        >
+          <h6 class="q-ma-md">{{ $t('products.tags') }}</h6>
+          <q-select
+            ref="ChipInput"
+            v-model="input.tags"
+            class="q-ma-md"
+            outlined
+            multiple
+            use-chips
+            use-input
+            new-value-mode="add"
+            stack-label
+            dense
+            hide-dropdown-icon
+            :label="$t('products.tags')"
+            :hint="$t('products.tags_hint')"
+          />
+        </q-card>
+
+        <!-- Product Status -->
+        <q-card
+          class="q-pa-md q-ma-md"
+          flat
+          style="border-radius: 20px; border: 1px solid black; width: calc(50% - 50px)"
+        >
+          <h6 class="q-ma-md">{{ $t('products.status') }}</h6>
+          <div class="row flex justify-between items-center q-ma-md">
+
+            <!-- Status -->
             <q-select
-              v-model="input.category"
-              :options="categories"
-              class="q-ma-sm"
+              v-model="input.status"
+              :options="status"
               style="width: calc(50% - 25px)"
-              :label="$t('products.category')"
-              outlined
-              dense
-            />
-          </div>
-
-          <!-- Start and End Date TODO Create custom date-time pickerTODO Create custom date-time picker -->
-          <div class="row flex justify-between">
-            <!-- Start date -->
-            <q-input
-              v-model="input.start"
-              class="q-ma-sm"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.start')"
-              stack-label
-              type="date"
+              :label="$t('products.status')"
               outlined
               dense
             />
 
-            <!-- End date -->
-            <q-input
-              v-model="input.end"
-              class="q-ma-sm"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.end')"
-              stack-label
-              type="date"
-              outlined
-              dense
-            />
-          </div>
-
-          <!-- Value & currency -->
-          <div class="row flex justify-between">
-            <q-input
-              v-model="input.value"
-              class="q-ma-sm"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.value')"
-              type="number"
-              outlined
-              dense
-            />
+            <!-- Sponsored -->
             <q-select
-              v-model="input.currency"
-              :options="currencies"
-              class="q-ma-sm"
+              v-model="input.sponsored"
+              :options="sponsored"
+              map-options
+              emit-value
+              class="column q-ma-sm"
               style="width: calc(50% - 25px)"
-              :label="$t('products.currency')"
+              :label="$t('products.promotion')"
               outlined
               dense
             />
           </div>
-
-          <!-- Min/Max bet -->
-          <div class="row flex justify-between">
-            <q-input
-              v-model="input.minBet"
-              class="q-ma-sm"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.min_bet')"
-              type="number"
-              outlined
-              dense
-            />
-
-            <q-input
-              v-model="input.maxBet"
-              class="q-ma-sm"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.max_bet')"
-              type="number"
-              outlined
-              dense
-            />
-          </div>
-        </div>
+        </q-card>
       </div>
 
-    </q-card>
+      <!-- Promotion -->
+      <div class="row full-width">
+        <q-card
+          class="q-pa-md q-ma-md"
+          flat
+          style="width: 100%; border-radius: 20px; border: 1px solid black"
+        >
+          <h6 class="q-ma-md">{{ $t('products.promotion') }}</h6>
 
-    <!-- Tags and Status. TODO -->
-    <div class="row full-width flex justify-between">
+          <!-- Product Page -->
+          <div class="row flex justify-between">
+            <!-- Product Page Link -->
+            <q-input
+              v-model="input.directBuyLink"
+              class="q-ma-sm col-7"
+              :label="$t('products.product_page_link')"
+              outlined
+              dense
+            />
+            <q-input
+              v-model="input.directBuyLinkMaxClicks"
+              class="q-ma-sm col-2"
+              :label="$t('products.max_clicks')"
+              type="number"
+              outlined
+              dense
+            />
+            <q-input
+              v-model="input.directBuyLinkMaxCost"
+              class="q-ma-sm col-2"
+              :label="$t('products.max_cost')"
+              type="number"
+              outlined
+              dense
+            />
+          </div>
 
-      <!-- Tags -->
-      <q-card
-        class="q-pa-md q-ma-md"
-        flat
-        style="border-radius: 20px; border: 1px solid black; width: calc(50% - 50px)"
-      >
-        <h6 class="q-ma-md">{{ $t('products.tags') }}</h6>
-        <q-select
-          ref="ChipInput"
-          v-model="input.tags"
-          class="q-ma-md"
-          outlined
-          multiple
-          use-chips
-          use-input
-          new-value-mode="add"
-          stack-label
-          dense
-          hide-dropdown-icon
-          :label="$t('products.tags')"
-          :hint="$t('products.tags_hint')"
+          <!-- Seller Page -->
+          <div class="row flex justify-between">
+            <!-- Seller Page Link -->
+            <q-input
+              v-model="input.brandLink"
+              class="q-ma-sm col-7"
+              :label="$t('products.seller_page_link')"
+              outlined
+              dense
+            />
+            <q-input
+              v-model="input.brandLinkMaxClicks"
+              class="q-ma-sm col-2"
+              :label="$t('products.max_clicks')"
+              type="number"
+              outlined
+              dense
+            />
+            <q-input
+              v-model="input.brandLinkMaxCost"
+              class="q-ma-sm col-2"
+              :label="$t('products.max_cost')"
+              type="number"
+              outlined
+              dense
+            />
+          </div>
+        </q-card>
+      </div>
+
+      <!-- Images TODO Show already uploaded images-->
+      <div class="row full-width">
+        <q-card
+          class="q-pa-md q-ma-md"
+          flat
+          style="width: 100%; border-radius: 20px; border: 1px solid black"
+        >
+          <h6 class="q-ma-md">{{ $tc('products.image', 2) }}</h6>
+          <!-- TODO -->
+          <PictureUpload
+            @change="onPictureChange"
+          />
+        </q-card>
+      </div>
+
+      <!-- Submit -->
+      <div class="row">
+        <q-btn
+          class="q-ma-md text-black"
+          style="width: 150px; height: 50px;"
+          color="primary"
+          :label="$t('buttons.submit')"
+          @click="onSubmit"
         />
-      </q-card>
+      </div>
 
-      <!-- Product Status -->
-      <q-card
-        class="q-pa-md q-ma-md"
-        flat
-        style="border-radius: 20px; border: 1px solid black; width: calc(50% - 50px)"
-      >
-        <h6 class="q-ma-md">{{ $t('products.status') }}</h6>
-        <div class="row flex justify-between items-center q-ma-md">
-
-          <!-- Status -->
-          <q-select
-            v-model="input.status"
-            :options="status"
-            style="width: calc(50% - 25px)"
-            :label="$t('products.status')"
-            outlined
-            dense
-          />
-
-          <!-- Sponsored -->
-          <q-select
-            v-model="input.sponsored"
-            :options="sponsored"
-            map-options
-            emit-value
-            class="column q-ma-sm"
-            style="width: calc(50% - 25px)"
-            :label="$t('products.promotion')"
-            outlined
-            dense
-          />
-        </div>
-      </q-card>
-    </div>
-
-    <!-- Promotion -->
-    <div class="row full-width">
-      <q-card
-        class="q-pa-md q-ma-md"
-        flat
-        style="width: 100%; border-radius: 20px; border: 1px solid black"
-      >
-        <h6 class="q-ma-md">{{ $t('products.promotion') }}</h6>
-
-        <!-- Product Page -->
-        <div class="row flex justify-between">
-          <!-- Product Page Link -->
-          <q-input
-            v-model="input.directBuyLink"
-            class="q-ma-sm col-7"
-            :label="$t('products.product_page_link')"
-            outlined
-            dense
-          />
-          <q-input
-            v-model="input.directBuyLinkMaxClicks"
-            class="q-ma-sm col-2"
-            :label="$t('products.max_clicks')"
-            type="number"
-            outlined
-            dense
-          />
-          <q-input
-            v-model="input.directBuyLinkMaxCost"
-            class="q-ma-sm col-2"
-            :label="$t('products.max_cost')"
-            type="number"
-            outlined
-            dense
-          />
-        </div>
-
-        <!-- Seller Page -->
-        <div class="row flex justify-between">
-          <!-- Seller Page Link -->
-          <q-input
-            v-model="input.brandLink"
-            class="q-ma-sm col-7"
-            :label="$t('products.seller_page_link')"
-            outlined
-            dense
-          />
-          <q-input
-            v-model="input.brandLinkMaxClicks"
-            class="q-ma-sm col-2"
-            :label="$t('products.max_clicks')"
-            type="number"
-            outlined
-            dense
-          />
-          <q-input
-            v-model="input.brandLinkMaxCost"
-            class="q-ma-sm col-2"
-            :label="$t('products.max_cost')"
-            type="number"
-            outlined
-            dense
-          />
-        </div>
-      </q-card>
-    </div>
-
-    <!-- Images TODO Show already uploaded images-->
-    <div class="row full-width">
-      <q-card
-        class="q-pa-md q-ma-md"
-        flat
-        style="width: 100%; border-radius: 20px; border: 1px solid black"
-      >
-        <h6 class="q-ma-md">{{ $tc('products.image', 2) }}</h6>
-        <!-- TODO -->
-        <PictureUpload
-          @change="onPictureChange"
-        />
-      </q-card>
-    </div>
-
-    <!-- Submit -->
-    <div class="row">
-      <q-btn
-        class="q-ma-md text-black"
-        style="width: 150px; height: 50px;"
-        color="primary"
-        :label="$t('buttons.submit')"
-        @click="onSubmit"
-      />
-    </div>
+    </q-form>
   </q-page>
 </template>
 
