@@ -1,26 +1,26 @@
 docs:
-  - docs/**/*
-  -
+- docs/**/*
+
 frontend:
-  - frontend/**/*
-  - shared/**/*
+- frontend/**/*
+- shared/**/*
 
 backend:
-  - backend/**/*
-  - shared/**/*
+- backend/**/*
+- shared/**/*
 
 tests:
-  - frontend/test/**/*
-  - backend/test/**/*
+- frontend/test/**/*
+- backend/test/**/*
 
 ios/android:
-  - frontend/src-capacitor/**/*
+- frontend/src-capacitor/**/*
 
 ssr:
-  - frontend/src-ssr/**/*
+- frontend/src-ssr/**/*
 
 pwa:
-  - frontend/src-pwa/**/*
+- frontend/src-pwa/**/*
 
 ci/cd:
-  - .github/**/*
+- .github/**/*
