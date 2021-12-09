@@ -1,4 +1,4 @@
-name: Build
+name: "Sonarqube"
 on:
   push:
     branches:
@@ -6,7 +6,10 @@ on:
       - project-soi
       - project-bigabig
   pull_request:
-    types: [opened, synchronize, reopened]
+    types:
+      - opened
+      - synchronize
+      - reopened
 jobs:
   sonarcloud:
     name: SonarCloud
