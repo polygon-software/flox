@@ -1,9 +1,9 @@
-import {useApolloClient, useMutation, useQuery, UseQueryReturn} from '@vue/apollo-composable';
+import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {ALL_USERS, QUERIES} from '../data/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
-import {useSSR} from 'src/store/ssr/index';
+import {useSSR} from 'src/store/ssr';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
