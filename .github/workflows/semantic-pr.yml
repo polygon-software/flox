@@ -8,7 +8,7 @@ on:
       - synchronize
       - reopened
 jobs:
-  main:
+  lint-pr-title:
     runs-on: ubuntu-latest
     steps:
       - name: Semantic Pull Request
@@ -28,3 +28,13 @@ jobs:
           wip: false
           validateSingleCommit: true
 
+  lint-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint branch name
+        uses: lekterable/branchlint-action@v1.0.0
+        with:
+          allowed: |
+            master
+            dev
+            /^([A-Za-z]+-){0,1}feature-([A-Za-z])+$/
