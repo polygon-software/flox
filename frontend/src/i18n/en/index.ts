@@ -5,7 +5,9 @@ export default {
     new: 'New',
     editable: 'editable',
     search: 'Search',
-    welcome: 'Welcome'
+    welcome: 'Welcome',
+    from: 'From',
+    to: 'To'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',

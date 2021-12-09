@@ -9,13 +9,29 @@
 
       <!-- Container for search & adding -->
       <div class="row">
+        <q-input
+          v-model="fromDate"
+          type="date"
+          :label="$t('general.from')"
+          outlined
+          dense
+        />
+        <q-input
+          v-model="toDate"
+          type="date"
+          :label="$t('general.to')"
+          outlined
+          dense
+          style="margin: 0 10px 0 10px"
+        />
+
         <!-- Search bar -->
         <q-input
           v-model="search"
-          dense
           :label="$t('general.search')"
-          outlined
           type="search"
+          outlined
+          dense
           class="q-mb-md"
         >
           <template #prepend>
@@ -118,6 +134,8 @@ const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
 const search = ref('')
+const fromDate = ref(null)
+const toDate = ref(null)
 
 // ----- Data -----
 const columns = [
