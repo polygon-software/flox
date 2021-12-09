@@ -77,9 +77,12 @@
                 type="date"
                 outlined
                 dense
+                lazy-rules
+                :rules="[ (val) => IS_FUTURE_DATE(val) || $t('errors.date_must_be_future')]"
               />
 
               <!-- End date -->
+              <!-- TODO ensure date is at least some time (24h?) after start -->
               <q-input
                 v-model="input.end"
                 class="q-ma-sm"
@@ -89,6 +92,8 @@
                 type="date"
                 outlined
                 dense
+                lazy-rules
+                :rules="[ (val) => IS_FUTURE_DATE(val) || $t('errors.date_must_be_future')]"
               />
             </div>
 
@@ -311,7 +316,7 @@ import {i18n} from 'boot/i18n';
 import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {IS_VALID_STRING} from 'src/data/RULES';
+import {IS_VALID_STRING, IS_FUTURE_DATE} from 'src/data/RULES';
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Read ENUM values and so they can be used as options

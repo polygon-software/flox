@@ -34,4 +34,8 @@ const IS_VALID_BIRTHDATE = (val: string): boolean => {
   return true
 }
 
-export {IS_EMAIL, IS_VALID_STRING, IS_VALID_PASSWORD, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP,IS_VALID_BIRTHDATE}
+const IS_FUTURE_DATE = (val: Date): boolean => {
+  return (new Date() <= new Date(val))
+}
+
+export {IS_EMAIL, IS_VALID_STRING, IS_VALID_PASSWORD, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP,IS_VALID_BIRTHDATE, IS_FUTURE_DATE}
