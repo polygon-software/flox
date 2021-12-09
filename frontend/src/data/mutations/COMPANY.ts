@@ -43,3 +43,33 @@ export const ASSOCIATE_USER_TO_COMPANY ={
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
+
+
+export const UPDATE_COMPANY_EMAIL = {
+  mutation: gql`
+    mutation updateCompany($uuid: ID!, $email: String!){
+      updateCompany (updateCompanyInput: {uuid: $uuid, email: $email}) {
+        uuid
+        company_name
+        email
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
+export const DELETE_COMPANY = {
+  mutation: gql`
+    mutation removeCompany($uuid: ID!){
+      removeCompany (deleteCompanyInput: {uuid: $uuid}) {
+        uuid
+        company_name
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.DELETE,
+  cacheLocation: 'removeCompany'
+}

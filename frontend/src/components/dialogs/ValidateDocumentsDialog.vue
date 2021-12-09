@@ -75,7 +75,7 @@ import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import {AuthenticationService} from 'src/services/AuthService';
-import { ASSOCIATE_USER_TO_COMPANY} from 'src/data/mutations/COMPANY';
+import { DELETE_COMPANY, ASSOCIATE_USER_TO_COMPANY} from 'src/data/mutations/COMPANY';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
@@ -168,8 +168,18 @@ function onReject(): void {
     title: 'Reject',
     component: RejectDialog,
   }).onOk(() => {
-    // Hide outer popup
-    hide()
+    // Remove company application on DB
+    void executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
+      // Show notification
+      showNotification(
+        $q,
+        i18n.global.t('messages.application_rejected'),
+        undefined,
+        'primary'
+      )
+      // Hide outer popup
+      hide()
+    })
   })
 }
 

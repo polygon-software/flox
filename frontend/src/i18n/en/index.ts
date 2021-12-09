@@ -3,6 +3,7 @@ export default {
     yes: 'Yes',
     no: 'No',
     new: 'New',
+    editable: 'editable'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
