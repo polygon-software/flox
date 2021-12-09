@@ -53,17 +53,34 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
 
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
+    // General options.
     <ApolloClientOptions<unknown>>{
       link: concat(authMiddleware, link),
       cache: new InMemoryCache({
+        // Use UUID as default key in database. If any table needs different behaviour, this can be changed here,
+        // see: https://www.apollographql.com/docs/react/caching/cache-configuration/
+        dataIdFromObject(responseObject) {
+          const uuid: string|undefined = responseObject.uuid?.toString();
+          const typename: string|undefined = responseObject.__typename
+          let result;
+
+          if(uuid && typename){
+            // Case 1: Response contains relevant data at root
+            result = `${typename}:${uuid}`;
+          } else {
+            // Case 2: Response contains a nested object (take first one, because there should only be one in this case)
+            const innerObject: Record<string, string> = responseObject[Object.keys(responseObject)[0]] as Record<string, string>
+            if(!innerObject){
+              throw new Error(`Cannot cache response ${responseObject.toString()}`)
+            }
+            result = `${innerObject.__typename ?? ''}:${innerObject.uuid ?? ''}`;
+          }
+
+          return result
+        },
         addTypename: false, // We disable auto-adding of __typename property, as this breaks mutations expecting
                             // an object variable. Instead, we manually add __typename in QUERIES/MUTATIONS.ts where
                             // appropriate. This can be changed in case Apollo implements better behavior for this.
-        typePolicies:{
-          User: {
-            keyFields: ['uuid']
-          }
-        }
       })
     },
 

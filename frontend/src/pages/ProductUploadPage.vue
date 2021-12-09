@@ -292,7 +292,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, Ref, ref} from 'vue';
+import {inject, reactive, Ref, ref} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
@@ -300,6 +300,9 @@ import axios from 'axios';
 import {date} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import {RouterService} from 'src/services/RouterService';
+import ROUTES from 'src/router/routes';
+const $routerService: RouterService|undefined = inject('$routerService')
 
 // Read ENUM values and so they can be used as options
 const categories = Object.values(CATEGORY).filter((item) => {
@@ -360,20 +363,24 @@ async function onSubmit(){
     throw new Error('Wait, thats illegal')
   }
 
+  const createProductInput = {
+    ...input,
+    value: Number.parseInt(input.value ?? ''), // Convert 'value' to int TODO can this be done on QInput directly?
+    minBet: Number.parseInt(input.minBet ?? ''),
+    maxBet: Number.parseInt(input.maxBet ?? ''),
+    directBuyLinkMaxClicks: Number.parseInt(input.directBuyLinkMaxClicks ?? ''),
+    directBuyLinkMaxCost: Number.parseInt(input.directBuyLinkMaxCost ?? ''),
+    brandLinkMaxClicks: Number.parseInt(input.brandLinkMaxClicks ?? ''),
+    brandLinkMaxCost: Number.parseInt(input.brandLinkMaxCost ?? ''),
+  }
+
+  console.log('Input:', createProductInput)
+
   // Create on database
   const mutationResult = await executeMutation(
     CREATE_PRODUCT,
     {
-      createProductInput: {
-        ...input,
-        value: Number.parseInt(input.value ?? ''), // Convert 'value' to int TODO can this be done on QInput directly?
-        minBet: Number.parseInt(input.minBet ?? ''),
-        maxBet: Number.parseInt(input.maxBet ?? ''),
-        directBuyLinkMaxClicks: Number.parseInt(input.directBuyLinkMaxClicks ?? ''),
-        directBuyLinkMaxCost: Number.parseInt(input.directBuyLinkMaxCost ?? ''),
-        brandLinkMaxClicks: Number.parseInt(input.brandLinkMaxClicks ?? ''),
-        brandLinkMaxCost: Number.parseInt(input.brandLinkMaxCost ?? ''),
-      }
+      createProductInput: createProductInput
     }
   )
 
@@ -387,8 +394,6 @@ async function onSubmit(){
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
   const headers = { 'Content-Type': 'multipart/form-data' }
 
-  console.log('New prod:', newProductId)
-
   // Upload all images
   for(const picture of pictures.value) {
     const formData = new FormData();
@@ -396,9 +401,6 @@ async function onSubmit(){
       // Convert to Blob and append
       const blob = picture.value as Blob
       formData.append('file', blob)
-
-      console.log('POST file') // TODO remove
-
       await axios({
         method: 'post',
         url: `${baseUrl}/uploadPublicFile?productId=${newProductId}`,
@@ -410,11 +412,8 @@ async function onSubmit(){
     }
   }
 
-  console.log('Done!')
-
-  // // Push to success page
-  // setTimeout(function() {$routerService?.routeTo(ROUTES.LOGIN)}, 5000);
-  // await $routerService?.routeTo(ROUTES.SUCCESS)
+  // Push to success page
+  await $routerService?.routeTo(ROUTES.MY_PRODUCTS)
   return;
 }
 
