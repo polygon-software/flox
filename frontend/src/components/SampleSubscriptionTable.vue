@@ -17,6 +17,7 @@ import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import { executeQuery } from '../helpers/data-helpers';
 import {useSSR} from 'src/store/ssr';
 import {ApolloQueryResult, FetchResult} from '@apollo/client';
+import _ from 'lodash';
 
 const users: Ref<Record<string, Record<string, unknown>[]>[]> = ref([]);
 
