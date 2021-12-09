@@ -1,7 +1,8 @@
 <template>
   <q-page class="flex justify-start q-pa-none q-ma-none">
     <q-form
-
+      greedy
+      @submit="onSubmit"
     >
 
       <!-- General Info -->
@@ -24,6 +25,8 @@
                 :label="$t('products.product_name')"
                 outlined
                 dense
+                lazy-rules
+                :rules="[ (val) => IS_VALID_STRING(val) || $t('errors.invalid_input')]"
               />
 
               <!-- Description -->
@@ -286,10 +289,10 @@
       <div class="row">
         <q-btn
           class="q-ma-md text-black"
-          style="width: 150px; height: 50px;"
           color="primary"
           :label="$t('buttons.submit')"
-          @click="onSubmit"
+          type="submit"
+          style="width: 150px; height: 50px;"
         />
       </div>
 
@@ -308,6 +311,7 @@ import {i18n} from 'boot/i18n';
 import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {IS_VALID_STRING} from 'src/data/RULES';
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Read ENUM values and so they can be used as options

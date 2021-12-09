@@ -104,6 +104,7 @@ export default {
     incorrect_username: 'Username not found',
     non_matching_password: 'Passwords not matching',
     invalid_name: 'Please enter your name',
+    invalid_input: 'Please enter something',
     invalid_company_name: 'Please enter your company\'s name',
     invalid_company_uid: 'Please enter your company\'s UID',
     invalid_address: 'Please enter a valid address',
