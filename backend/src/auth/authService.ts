@@ -1,5 +1,7 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
+import * as crypto from 'crypto';
+
 export async function createCognitoAccount(
   email: string,
   password: string,
@@ -43,7 +45,7 @@ export async function createCognitoAccount(
  * @param max
  */
 function randomNumber(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min) + min);
+  return crypto.randomInt(max - min) + min;
 }
 
 /**
@@ -64,7 +66,7 @@ export function randomPassword(min_length: number): string {
   });
   res = res
     .split('')
-    .map((value) => ({ value, sort: Math.random() }))
+    .map((value) => ({ value, sort: crypto.randomInt(10000) }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value)
     .join('');
