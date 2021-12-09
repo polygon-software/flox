@@ -3,7 +3,8 @@ on:
   - pull_request
 
 jobs:
-  triage:
+  add-labels:
+    name: Add labels to PR
     runs-on: ubuntu-latest
     steps:
       - uses: actions/labeler@v3

@@ -1,4 +1,4 @@
-name: reviewdog
+name: Reviewdog
 on:
   push:
     branches:
@@ -11,8 +11,8 @@ on:
       - synchronize
       - reopened
 jobs:
-  reviewdog:
-    name: runner / eslint
+  lint-code:
+    name: Lint Code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -9,6 +9,7 @@ on:
       - reopened
 jobs:
   lint-pr-title:
+    name: Lint PR Title
     runs-on: ubuntu-latest
     steps:
       - name: Semantic Pull Request
@@ -29,6 +30,7 @@ jobs:
           validateSingleCommit: true
 
   lint-branch-name:
+    name: Lint Branch Name
     runs-on: ubuntu-latest
     steps:
       - name: Lint branch name
