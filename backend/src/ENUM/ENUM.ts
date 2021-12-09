@@ -1,23 +1,9 @@
 import { registerEnumType } from '@nestjs/graphql';
-
-export enum CURRENCY {
-  CHF = 'CHF',
-  EUR = 'EUR',
-  USD = 'USD',
-}
-
-export enum CATEGORY {
-  TECHNOLOGY = 'TECHNOLOGY',
-  // TODO others
-}
-
-export enum PRODUCT_STATUS {
-  DRAFT = 'DRAFT',
-  ACTIVE = 'ACTIVE',
-  ENDED = 'ENDED', // TODO proper definitions: what statuses are possible
-  WON = 'WON',
-  ARCHIVED = 'ARCHIVED',
-}
+import {
+  CATEGORY,
+  CURRENCY,
+  PRODUCT_STATUS,
+} from '../../../shared/definitions/ENUM';
 
 registerEnumType(CURRENCY, { name: 'Currency' });
 registerEnumType(CATEGORY, { name: 'Category' });

@@ -3,8 +3,10 @@ import {provideApolloClient} from '@vue/apollo-composable'
 import { boot } from 'quasar/wrappers'
 import { getClientOptions } from 'src/apollo'
 
-export default boot(
-  ({ssrContext }) => {
+// TODO figure out why this suddenly is an issue
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export default boot(({ ssrContext }) => {
 
     // Default client.
     const options = getClientOptions(ssrContext)
