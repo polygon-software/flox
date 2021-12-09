@@ -211,7 +211,6 @@ type Query {
 }
 
 type Subscription {
-  productAdded: Product!
   userAdded: User!
 }
 

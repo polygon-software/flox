@@ -6,11 +6,7 @@ import { GetProductArgs } from './dto/args/get-product.args';
 import { DeleteProductInput } from './dto/input/delete-product.input';
 import { Product } from './entities/product.entity';
 import { GetProductsArgs } from './dto/args/get-products.args';
-import { PubSub } from 'graphql-subscriptions';
 import { Public } from 'src/auth/authentication.decorator';
-
-// Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
-const pubSub = new PubSub();
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -41,10 +37,7 @@ export class ProductResolver {
   async createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ): Promise<Product> {
-    const newProduct = await this.productsService.create(createProductInput);
-    // Publish authentication so subscriptions will auto-update
-    await pubSub.publish('productAdded', { productAdded: newProduct });
-    return newProduct;
+    return await this.productsService.create(createProductInput);
   }
 
   @Public()
@@ -61,11 +54,5 @@ export class ProductResolver {
     @Args('deleteProductInput') deleteProductInput: DeleteProductInput,
   ): Promise<Product> {
     return await this.productsService.remove(deleteProductInput);
-  }
-
-  @Public()
-  @Subscription(() => Product)
-  productAdded(): AsyncIterator<unknown, any, undefined> {
-    return pubSub.asyncIterator('productAdded');
   }
 }
