@@ -18,6 +18,7 @@
         >
           <q-td key="uuid" :props="props">
             <img
+              v-if="props.row.pictures[0] && props.row.pictures[0].url"
               :src="props.row.pictures[0].url"
               style="max-width: 120px; height: 90px"
             >
