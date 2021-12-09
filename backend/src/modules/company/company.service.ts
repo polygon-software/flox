@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
 import { generateHumanReadableId } from '../../helpers';
 import { User } from '../user/entities/user.entity';
-import { ROLES } from '../../ENUM/ENUMS';
+import { CREATION_STATE, ROLES } from '../../ENUM/ENUMS';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { UserService } from '../user/user.service';
@@ -46,7 +46,7 @@ export class CompanyService {
     const company = this.companyRepository.create({
       ...createCompanyInput,
       readable_id: readableId,
-      document_upload_enabled: false, // initially disable document upload until manually enabled by SOI admin
+      creation_state: CREATION_STATE.APPLIED, // initially disable document upload until manually enabled by SOI admin
       documents: null,
       // TODO: other default values
     });
@@ -133,7 +133,7 @@ export class CompanyService {
    */
   async enableDocumentUpload(uuid: string): Promise<Company> {
     await this.companyRepository.update(uuid, {
-      document_upload_enabled: true,
+      creation_state: CREATION_STATE.AWAITING_DOCUMENTS,
     });
     return await this.companyRepository.findOne(uuid);
   }
@@ -151,6 +151,8 @@ export class CompanyService {
       uuid: cognitoId,
       fk: company.uuid,
     });
-    return company;
+    company.creation_state = CREATION_STATE.DONE;
+    await this.companyRepository.save(company);
+    return this.companyRepository.findOne(uuid);
   }
 }

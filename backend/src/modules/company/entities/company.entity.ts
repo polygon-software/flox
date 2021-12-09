@@ -10,10 +10,11 @@ import { Address } from '../../address/entities/address.entity';
 import { Person } from '../../person/entities/person.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
 import { Employee } from '../../employee/entities/employee.entity';
+import { CREATION_STATE } from '../../../ENUM/ENUMS';
 
 /**
  * An entity representing a company account
- * Initial status: 'document_upload_enabled' is set to 'false', and enabled once approved by SOI admin
+ * Initial status: 'creation_state' is set to 'applied', and enabled once approved by SOI admin
  */
 
 @ObjectType()
@@ -57,13 +58,15 @@ export class Company extends Person {
   @IsBoolean()
   branch_structure: boolean;
 
-  @Field(() => Boolean, {
-    description:
-      'Whether document upload is enabled (initial request granted by SOI)',
+  @Field(() => CREATION_STATE, {
+    description: 'Stage of the creation process',
   })
-  @Column()
-  @IsBoolean()
-  document_upload_enabled: boolean;
+  @Column({
+    type: 'enum',
+    enum: CREATION_STATE,
+    default: CREATION_STATE.APPLIED,
+  })
+  creation_state: CREATION_STATE;
 
   // TODO ensure type to key
   @Field(() => [PrivateFile], {

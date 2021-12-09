@@ -40,7 +40,7 @@ export const ALL_COMPANIES = {
         phone
         language
         uid
-        document_upload_enabled
+        creation_state
         domicile_address{
           uuid
           street

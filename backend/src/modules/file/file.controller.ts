@@ -7,12 +7,13 @@ import {
   Res,
 } from '@nestjs/common';
 import { FileService } from './file.service';
-import fastify = require('fastify');
 import { Public } from '../../auth/authentication.decorator';
 import { AnyRole } from '../../auth/authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
+import { CREATION_STATE } from '../../ENUM/ENUMS';
+import fastify = require('fastify');
 
 @Controller()
 export class FileController {
@@ -92,7 +93,11 @@ export class FileController {
     const company = await this.companyRepository.findOne(companyUuid);
 
     // Throw error if invalid company or document upload not enabled
-    if (!company || !company.document_upload_enabled) {
+    if (
+      !company ||
+      (company.creation_state !== CREATION_STATE.AWAITING_DOCUMENTS &&
+        company.creation_state !== CREATION_STATE.DOCUMENTS_UPLOADED)
+    ) {
       throw new Error(
         'No valid company found, the link you used may be invalid.',
       );
@@ -110,6 +115,8 @@ export class FileController {
       companyUuid, // Owner; must be changed to cognito ID later
       company,
     );
+    company.creation_state = CREATION_STATE.DOCUMENTS_UPLOADED;
+    await this.companyRepository.save(company);
 
     res.send(new_file);
   }

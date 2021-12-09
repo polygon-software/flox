@@ -8,6 +8,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { CreateAddressInput } from 'src/modules/address/dto/input/create-address.input';
+import { CREATION_STATE } from '../../../../ENUM/ENUMS';
 
 @InputType()
 export class UpdateCompanyInput {
@@ -65,13 +66,7 @@ export class UpdateCompanyInput {
   @IsBoolean()
   branch_structure: boolean;
 
-  @Field(() => Boolean, { nullable: true })
+  @Field(() => CREATION_STATE, { nullable: true })
   @IsOptional()
-  @IsBoolean()
-  document_upload_enabled: boolean;
-
-  @Field(() => String, { nullable: true })
-  @IsOptional()
-  @IsUUID()
-  cognito_id: string;
+  creation_state: CREATION_STATE;
 }

@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { IsString, IsUUID } from 'class-validator';
-import { ROLES, STATUS } from '../../../ENUM/ENUMS';
+import { ROLES } from '../../../ENUM/ENUMS';
 
 @ObjectType()
 @Entity({ name: 'user' })

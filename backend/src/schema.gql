@@ -77,11 +77,11 @@ type Company {
   """Creation date"""
   created_at: DateTime!
 
+  """Stage of the creation process"""
+  creation_state: creationState!
+
   """Date of deletion"""
   deleted_at: DateTime!
-
-  """Whether document upload is enabled (initial request granted by SOI)"""
-  document_upload_enabled: Boolean!
 
   """Documents of the company"""
   documents: [PrivateFile!]
@@ -407,10 +407,9 @@ type Subscription {
 
 input UpdateCompanyInput {
   branch_structure: Boolean
-  cognito_id: String
   company_name: String
   correspondence_address: CreateAddressInput
-  document_upload_enabled: Boolean
+  creation_state: creationState
   domicile_address: CreateAddressInput
   email: String
   first_name: String
@@ -477,8 +476,8 @@ input company {
   """Correspondence address"""
   correspondence_address: address!
 
-  """Whether document upload is enabled (initial request granted by SOI)"""
-  document_upload_enabled: Boolean!
+  """Stage of the creation process"""
+  creation_state: creationState!
 
   """Documents of the company"""
   documents: [private_file!]
@@ -497,6 +496,13 @@ input company {
 
   """Company UID"""
   uid: String!
+}
+
+enum creationState {
+  APPLIED
+  AWAITING_DOCUMENTS
+  DOCUMENTS_UPLOADED
+  DONE
 }
 
 input employee {

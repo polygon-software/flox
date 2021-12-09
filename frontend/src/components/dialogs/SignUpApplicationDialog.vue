@@ -124,8 +124,7 @@ import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
-import {sendDocumentUploadEmail, sendEmail} from 'src/helpers/email-helpers';
-import ROUTES from 'src/router/routes';
+import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 

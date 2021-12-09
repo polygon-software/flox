@@ -21,7 +21,7 @@ export const ENABLE_COMPANY_DOCUMENT_UPLOAD = {
       enableCompanyDocumentUpload (uuid: $uuid) {
         uuid
         company_name
-        document_upload_enabled
+        creation_state
         __typename
       }
     }`,
