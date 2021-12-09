@@ -15,7 +15,7 @@ import {useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
 import {routerInstance} from 'boot/router';
 
-let $q = useQuasar()
+const $q = useQuasar()
 
 // Error service
 const $errorService: ErrorService = reactive(new ErrorService($q))
