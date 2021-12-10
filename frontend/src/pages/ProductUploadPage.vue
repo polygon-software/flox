@@ -355,7 +355,7 @@ const status = Object.values(SELECTABLE_PRODUCT_STATUS).filter((item) => {
 const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
-let input = reactive(
+const input: Record<string, unknown> = reactive(
   {
   title: null,
   description: null,
@@ -386,7 +386,7 @@ watch(queryResult, async (newValue) => {
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
     await new Promise(resolve => setTimeout(resolve, 100));
     Object.keys(newValue).forEach((key) => {
-      input[key] = newValue[key] // TODO fix type errors
+      input[key] = newValue[key]
     })
 
     // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
