@@ -4,7 +4,6 @@
       greedy
       @submit="onSubmit"
     >
-
       <!-- General Info -->
       <q-card
         class="q-ma-md"
@@ -323,7 +322,7 @@
  */
 import {inject, reactive, Ref, ref, watch} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
-import {executeMutation, executeQuery, subscribeToQuery} from 'src/helpers/data-helpers';
+import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
 import {i18n} from 'boot/i18n';
