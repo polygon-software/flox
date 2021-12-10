@@ -237,7 +237,7 @@ the Plugin. You will need to restart Webstorm.
 Once Webstorm is restarted, go to "File" -> "Settings" -> "Tools" -> "SonarLint" and click on the \[+\]-Button. 
 In "Connection Name", enter "PolygonQube", then choose the left option: "sonarcloud". Click on "Next".
 
-Now you are prompted to input a Token. To do this, you must log into [soncarcloud.io](https://sonarcloud.io)
+Now you are prompted to input a Token. To do this, you must log into [sonarcloud.io](https://sonarcloud.io)
 using your **github account**. Then, visit the [security](https://sonarcloud.io/account/security/) page and generate
 a token called "WebStorm". Copy-Paste the token value back into WebStorm under "Token". Click on "Next". 
 
