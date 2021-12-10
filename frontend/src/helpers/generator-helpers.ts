@@ -3,11 +3,11 @@
  */
 
 /**
- * Generates a random number in given range
- * @param min
- * @param max
+ * Generates a random integer in given range
+ * @param {number} [min] - minimum number (defaults to 0)
+ * @param {number} [max] - maximum number (defaults to 100)
  */
-function randomNumber(min:number, max:number) {
+export function randomNumber(min= 0, max = 100): number {
   return Math.floor(Math.random() * (max - min) + min)
 }
 
