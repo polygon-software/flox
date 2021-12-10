@@ -336,7 +336,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
 
 const productId = route.query.id
-const queryResult = productId ? subscribeToQuery(PRODUCT, {uuid: productId}) : ref(null)
+const queryResult = productId ? subscribeToQuery(PRODUCT, {uuid: productId}) as Ref<Record<string, unknown>> : ref(null)
 
 
 // Read ENUM values and so they can be used as options
@@ -357,11 +357,11 @@ const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: f
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
 let input = reactive(
   {
-  title: null,
+  title: '',
   description: null,
   brand: null,
   value: null,
-  currency: null, // TODO Fetch last selected or depening on location?
+  currency: null, // TODO Fetch last selected or depending on location?
   start: null,
   end: null,
   category: null,
@@ -381,12 +381,9 @@ let input = reactive(
 watch(queryResult, (newValue) => {
   console.log('Got result', queryResult.value)
   if(newValue){
-    input = {
-      ...input,
-      ...newValue
-    }
-
-    console.log('input is now', input)
+    Object.keys(newValue).forEach((key) => {
+      input[key] = newValue[key]
+    })
   }
 })
 // Picture inputs (separated from input, since these have to be added after product is created)
