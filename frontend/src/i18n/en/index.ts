@@ -108,7 +108,7 @@ export default {
     cache_location_missing: 'Cache Location is missing in mutationObject: ',
     missing_attributes: 'Missing attributes',
     invalid_password: 'Please enter a valid password',
-    invalid_email: 'Please enter a valid e-mail address',
+    invalid_email: 'Please enter a valid e-email address',
     invalid_username: 'Please enter a username',
     invalid_link: 'The link you used may be invalid or has already been used.',
     incorrect_password: 'Incorrect password',
@@ -129,6 +129,7 @@ export default {
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
     documents_missing: 'Documents missing',
+    unknown: 'Unknown Error'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',

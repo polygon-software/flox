@@ -1,4 +1,4 @@
-import {NavigationFailure, RouteParams, Router, RouteRecordRaw} from 'vue-router';
+import {NavigationFailure, Router, RouteRecordRaw} from 'vue-router';
 
 /**
  * This is a service that is used globally throughout the application for routing

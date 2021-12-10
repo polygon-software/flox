@@ -31,12 +31,8 @@ import {useRoute} from 'vue-router';
 import axios from 'axios';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {showNotification} from 'src/helpers/notification-helpers';
-import {useQuasar} from 'quasar';
 
-const emit = defineEmits(['submit'])
 const $routerService: RouterService = inject('$routerService')
-const $q = useQuasar()
 
 // Upload loading status
 const loading = ref(false)

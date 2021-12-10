@@ -37,8 +37,8 @@ export function randomPassword(min_length: number): string{
 }
 
 /**
- * Generates a password change link containing base64-encoded e-mail and password for a given user
- * @param {string} email - user's e-mail address
+ * Generates a password change link containing base64-encoded e-email and password for a given user
+ * @param {string} email - user's e-email address
  * @param {string} password - user's password
  * @param {string} type - user's type
  */
