@@ -6,6 +6,7 @@ export default {
     newest: 'Newest',
     oldest: 'Oldest',
     sort_by: 'Sort by:',
+    all: 'All',
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
