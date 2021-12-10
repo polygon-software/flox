@@ -61,6 +61,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
         if(!mutationObject.cacheLocation){
           throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
         }
+
         const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
         // Read existing query from cache
