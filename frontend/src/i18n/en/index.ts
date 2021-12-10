@@ -61,6 +61,7 @@ export default {
     commercial_register_extract: 'Commercial Register Extract',
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
+    offer: 'offer'
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',

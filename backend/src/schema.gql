@@ -372,6 +372,7 @@ type PublicFile {
 type Query {
   allCompanies: [Company!]!
   allEmployees: [Employee!]!
+  allBanks: [Bank!]!
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!

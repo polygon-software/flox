@@ -15,14 +15,14 @@
         outlined
         type="search"
         class="q-mb-md"
-        style="margin-left: 800px"
+        style="margin-left: 30px;"
       >
         <template #prepend>
           <q-icon name="search"/>
         </template>
       </q-input>
 
-      <!-- Register new employee -->
+      <!-- Register new bank -->
       <q-btn
         icon="add"
         :label="$t('authentication.credit_institution')"
@@ -31,7 +31,7 @@
         unelevated
         padding="8px"
         style="height: 40px"
-        @click="routeToRegisterEmployee"
+        @click="routeToRegisterBank"
       />
     </div>
 
@@ -52,18 +52,17 @@ import CreditInstitutionTable from 'components/tables/CreditInstitutionTable.vue
 
 const $routerService: RouterService = inject('$routerService')
 
-async function routeToRegisterEmployee(): Promise<void> {
+async function routeToRegisterBank(): Promise<void> {
   await $routerService.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
 }
 
 const columns = [
-  {name: 'id', label: i18n.global.t('account_data.id'), field: 'id', sortable: true},
-  {name: 'institution', label: i18n.global.t('account_data.institution'), field: 'institution', sortable: true},
-  {name: 'supervisor', label: i18n.global.t('account_data.supervisor'), field: 'supervisor', sortable: true},
-  {name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false},
+  {name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true},
+  {name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true},
   {name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false},
-  {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true},
-  {name: 'status', label: i18n.global.t('account_data.status'), field: 'status', sortable: true},
+  {name: 'address', label: i18n.global.t('account_data.address'), field: 'address', sortable: true},
+  {name: 'offer', label: i18n.global.t('account_data.offer'), field: 'offers', sortable: true},
+  {name: 'status', label: i18n.global.t('account_data.status'), field: 'offers.dossier.status', sortable: true},
 ]
 
 </script>

@@ -17,23 +17,20 @@
           style="background-color: white; cursor: pointer"
           @click="() => onRowClick(props.row)"
         >
-          <q-td key="id" :props="props">
-            {{ props.row.id }}
+          <q-td key="first_name" :props="props">
+            {{ props.row.first_name }}
           </q-td>
-          <q-td key="institution" :props="props">
-            {{ props.row.institution }}
-          </q-td>
-          <q-td key="supervisor" :props="props">
-            {{ props.row.supervisor }}
-          </q-td>
-          <q-td key="phone" :props="props">
-            {{ props.row.phone }}
+          <q-td key="last_name" :props="props">
+            {{ props.row.last_name }}
           </q-td>
           <q-td key="email" :props="props">
             {{ props.row.email }}
           </q-td>
-          <q-td key="date" :props="props">
-            {{ props.row.date }}
+          <q-td key="address" :props="props">
+            {{ props.row.address }}
+          </q-td>
+          <q-td key="offers" :props="props">
+            {{ props.row.offers }}
           </q-td>
           <q-td key="status" :props="props">
             <q-icon name="circle" :color="props.row.status? 'green' : 'red'" size="md"/>
@@ -49,9 +46,8 @@
 
 <script setup lang="ts">
 import {ref, computed, defineProps, Ref} from 'vue';
-import {MY_EMPLOYEES} from 'src/data/queries/QUERIES';
-import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';
+import {ALL_BANKS} from 'src/data/queries/QUERIES';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
 
 
 // ----- Data -----
@@ -65,39 +61,10 @@ const props = defineProps({
     default: () => [],
   },
 })
-const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(ALL_BANKS) as Ref<Record<string, Array<Record<string, unknown>>>>
 const computedResult = computed(() => {
   return queryResult.value ?? []
 })
-
-/**
- * Deletes the currently selected user
- */
-function onDelete() {
-  void executeMutation(
-    DELETE_USER,
-    {
-      uuid: selected.value[0].uuid
-    }
-  ).then(() => {
-    selected.value = []
-  })
-}
-
-/**
- * Edits the given user
- * @param {string} id - the user's ID
- * @param {Record<string, unknown>} variables - the new variables
- */
-function onUpdate(id: string, variables: Record<string, unknown>) {
-  void executeMutation(
-    UPDATE_USER,
-    {
-      uuid: id,
-      ...variables
-    }
-  )
-}
 
 
 </script>
