@@ -1,36 +1,54 @@
 <template>
   <q-page
     class="q-px-lg q-ma-md">
-      <div class="flex row justify-center items-center">
-        <p
-          class="q-ma-md col"
-          style="font-size: x-large; align: left"
-        >
-          {{ $t('dashboards.credit_institution') }}
-        </p>
-        <q-btn
-          class="col-2 q-mx-md q-mb-md q-mt-xs"
-          style="align: right"
-          :label="$t('authentication.credit_institution')"
-          color="primary"
-          @click="routeToRegisterEmployee"
-        />
-      </div>
 
-      <!-- Credit institutes Overview -->
-      <EmployeeTable
-        class="q-mt-lg"
-        :columns="columns"/>
+    <!-- Container for search & adding -->
+    <div class="row justify-between q-ma-none">
+      <h5 class="q-ma-none">
+        {{ $t('dashboards.credit_institution') }}
+      </h5>
+      <!-- Search bar -->
+      <q-input
+        v-model="search"
+        dense
+        :label="$t('general.search')"
+        outlined
+        type="search"
+        class="q-mb-md"
+        style="margin-left: 800px"
+      >
+        <template #prepend>
+          <q-icon name="search"/>
+        </template>
+      </q-input>
+
+      <!-- Register new employee -->
+      <q-btn
+        icon="add"
+        :label="$t('authentication.credit_institution')"
+        dense
+        color="primary"
+        unelevated
+        padding="8px"
+        style="height: 40px"
+        @click="routeToRegisterEmployee"
+      />
+    </div>
+
+    <!-- Credit institutes Overview -->
+    <CreditInstitutionTable
+      class="q-mt-lg"
+      :columns="columns"/>
 
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue'
+import {inject} from 'vue'
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import EmployeeTable from 'components/tables/EmployeeTable.vue';
+import CreditInstitutionTable from 'components/tables/CreditInstitutionTable.vue';
 
 const $routerService: RouterService = inject('$routerService')
 
