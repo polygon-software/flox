@@ -311,24 +311,24 @@
 /**
  * A page for uploading products. Can be used to either create new products or existing ones, controlled via props
  */
-import {computed, defineProps, inject, reactive, Ref, ref} from 'vue';
+import {inject, reactive, Ref, ref, watch} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
-import {executeMutation} from 'src/helpers/data-helpers';
+import {executeMutation, executeQuery, subscribeToQuery} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
 import {i18n} from 'boot/i18n';
 import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {IS_VALID_STRING, IS_FUTURE_DATE, IS_SMALLER_THAN_OR_EQUAL, IS_LARGER_THAN_OR_EQUAL, IS_VALID_NUMBER} from 'src/data/RULES';
+import {IS_VALID_STRING, IS_FUTURE_DATE, IS_VALID_NUMBER} from 'src/data/RULES';
+import {useRoute} from 'vue-router';
+import {PRODUCT} from 'src/data/queries/QUERIES';
 const $routerService: RouterService|undefined = inject('$routerService')
+const route = useRoute()
 
-const props = defineProps({
-  product: {
-    required: false,
-    type: Object // TODO
-  },
-});
+const productId = route.query.id
+const queryResult = productId ? subscribeToQuery(PRODUCT, {uuid: productId}) : ref(null)
+
 
 // Read ENUM values and so they can be used as options
 const categories = Object.values(CATEGORY).filter((item) => {
@@ -346,7 +346,7 @@ const statuses = Object.values(PRODUCT_STATUS).filter((item) => {
 const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
-const input = reactive(
+let input = reactive(
   {
   title: null,
   description: null,
@@ -367,11 +367,19 @@ const input = reactive(
   directBuyLink: null,
   directBuyLinkMaxClicks: null,
   directBuyLinkMaxCost: null,
-
-  // If an existing product is given, its values overwrite the defaults
-  ...(props.product ?? {}),
 })
 
+watch(queryResult, (newValue) => {
+  console.log('Got result', queryResult.value)
+  if(newValue){
+    input = {
+      ...input,
+      ...newValue
+    }
+
+    console.log('input is now', input)
+  }
+})
 // Picture inputs (separated from input, since these have to be added after product is created)
 const pictures: Ref<Array<Ref<File>>> = ref([])
 

@@ -98,14 +98,19 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
   return await mutate(variables);
 }
 
-function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
+/**
+ * Subscribes to a graphQL query
+ * @param {QueryObject} query - the graphQL query object
+ * @param {Record<string, unknown>} [variables] - any variables to pass to the query
+ */
+function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
   const $ssrStore = useSSR();
   const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
 
 
   // ----- Hooks -----
   onServerPrefetch(async () => {
-    const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query)
+    const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query, variables)
     if(!tempRes.data){ return}
     res.value = tempRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
     $ssrStore.mutations.setPrefetchedData({key: query.cacheLocation, value: res.value})
@@ -118,7 +123,7 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
 
     // SPA
     if(res.value.length <= 0){
-      void executeQuery(query).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
+      void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
         if(fetchedRes.data){
           res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
         } else {
@@ -129,13 +134,14 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
       // SSR
       apolloClient.writeQuery({
         query: query.query,
+        variables: variables,
         data: {
           [query.cacheLocation]: res.value
         }
       })
     }
 
-    apolloClient.watchQuery({query: query.query}).subscribe({
+    apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
       next(value: ApolloQueryResult<Record<string, unknown>>) {
         res.value = value.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
       }

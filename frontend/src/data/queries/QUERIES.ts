@@ -61,6 +61,7 @@ export const MY_PRODUCTS = {
               sponsored
               status
               minBet
+              tags
               maxBet
               pictures{
                 uuid
@@ -75,5 +76,36 @@ export const MY_PRODUCTS = {
     cacheLocation: 'allProducts'
 }
 
+export const PRODUCT = {
+  query: gql`
+    query product($uuid: ID!){
+      product(uuid: $uuid){
+        uuid
+        title
+        description
+        brand
+        value
+        currency
+        start
+        end
+        category
+        directBuyLink
+        brandLink
+        minBet
+        maxBet
+        tags
+        pictures{
+          uuid
+          url
+          __typename
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['product'],
+  cacheLocation: 'product'
+}
 
-export const QUERIES = [ALL_PRODUCTS, MY_PRODUCTS];
+
+export const QUERIES = [ALL_PRODUCTS, MY_PRODUCTS, PRODUCT];

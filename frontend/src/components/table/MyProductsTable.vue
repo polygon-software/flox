@@ -58,7 +58,10 @@ import {MY_PRODUCTS} from 'src/data/queries/QUERIES';
 import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {useQuasar} from 'quasar';
 const $routerService: RouterService|undefined = inject('$routerService')
+const $q = useQuasar()
 
 const props = defineProps( {
   search: {
@@ -97,15 +100,29 @@ const computedResult = computed(() => {
 
 /**
  * Routes to the product editing page for the given product
- * @param {Record<string, unknown>} product - the product to edit (used for pre-filling form)
+ * TODO: type to Joi type
+ * @param {Record<string, string>} product - the product to edit (used for pre-filling form)
  */
-function editProduct(product: Record<string, unknown>){
+function editProduct(product: Record<string, string>){
   // Notify user for non-editable products
   if(product.status !== PRODUCT_STATUS.DRAFT){
-    // TODO
+    showNotification(
+      $q,
+      'No, thats illegal', // TODO
+      'bottom',
+      'negative'
+
+    )
+  } else {
+    console.log('Update product', product)
+
+    $routerService?.routeTo(
+      ROUTES.ADD_PRODUCT,
+      {
+        id: product.uuid
+      }
+    )
   }
-  console.log('Update product', product)
-  $routerService?.routeTo(ROUTES.ADD_PRODUCT)
 }
 
 /**
