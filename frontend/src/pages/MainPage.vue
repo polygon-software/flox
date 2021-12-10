@@ -11,5 +11,4 @@
 
 <script setup lang="ts">
 import ProductFeed from 'components/product/ProductFeed.vue';
-
 </script>
