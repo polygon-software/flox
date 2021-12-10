@@ -7,6 +7,9 @@ export default {
     oldest: 'Älteste',
     sort_by: 'Sortieren nach:',
     all: 'Alle',
+    edit: 'Bearbeiten',
+    duplicate: 'Duplizieren',
+    view: 'Ansehen',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
