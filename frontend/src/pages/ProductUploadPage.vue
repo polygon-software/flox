@@ -357,7 +357,7 @@ const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: f
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
 let input = reactive(
   {
-  title: '',
+  title: null,
   description: null,
   brand: null,
   value: null,
@@ -378,11 +378,15 @@ let input = reactive(
   directBuyLinkMaxCost: null,
 })
 
-watch(queryResult, (newValue) => {
-  console.log('Got result', queryResult.value)
+/**
+ * Watch result if a product is given
+ */
+watch(queryResult, async (newValue) => {
   if(newValue){
+    // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
+    await new Promise(resolve => setTimeout(resolve, 100));
     Object.keys(newValue).forEach((key) => {
-      input[key] = newValue[key]
+      input[key] = newValue[key] // TODO type errors
     })
   }
 })
