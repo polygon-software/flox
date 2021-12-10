@@ -30,7 +30,12 @@
             {{ props.row.brand }}
           </q-td>
           <q-td key="status" :props="props">
-            {{ props.row.status }}
+            <q-chip
+              :label="$t('product_status.' + props.row.status.toLowerCase())"
+              :color="getChipColor(props.row.status)"
+              text-color="white"
+              style="font-weight: bold"
+            />
           </q-td>
           <q-td key="sponsored" :props="props">
             <!-- TODO i18n -->
@@ -90,9 +95,28 @@ const computedResult = computed(() => {
 /**
  * Deletes the currently selected user
  */
-function onRowClick(row: Record<string, any>){
-  //TODO open Edit dialog?
+function onRowClick(row: Record<string, any>): void {
+  //TODO open Edit view
   console.log('row clicked', row)
+}
+
+/**
+ * Gets the color for the status chip of a product
+ * @param {PRODUCT_STATUS} status - the status of the product
+ */
+function getChipColor(status: string): string|null {
+  switch(status){
+    case PRODUCT_STATUS.DRAFT:
+      return 'primary'
+    case PRODUCT_STATUS.ACTIVE:
+      return 'positive'
+    case PRODUCT_STATUS.ENDED:
+      return 'orange'
+    case PRODUCT_STATUS.ARCHIVED:
+      return 'neutral'
+    default:
+      return null
+  }
 }
 
 

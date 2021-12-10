@@ -186,4 +186,10 @@ export default {
   status: {
     loading: 'Lädt',
   },
+  product_status: {
+    draft: 'Entwurf',
+    active: 'Aktiv',
+    ended: 'Beendet',
+    archived: 'Archiviert'
+  }
 }
