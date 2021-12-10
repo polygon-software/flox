@@ -16,3 +16,8 @@ export enum PRODUCT_STATUS {
   WON = 'WON',
   ARCHIVED = 'ARCHIVED'
 }
+
+export enum SELECTABLE_PRODUCT_STATUS {
+  DRAFT = 'DRAFT',
+  ACTIVE = 'ACTIVE',
+}

@@ -189,7 +189,7 @@
             <!-- Status -->
             <q-select
               v-model="input.status"
-              :options="statuses"
+              :options="status"
               style="width: calc(50% - 25px)"
               :label="$t('products.status')"
               outlined
