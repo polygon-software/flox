@@ -60,6 +60,7 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {useQuasar} from 'quasar';
+import {i18n} from 'boot/i18n';
 const $routerService: RouterService|undefined = inject('$routerService')
 const $q = useQuasar()
 
@@ -106,9 +107,10 @@ const computedResult = computed(() => {
 function editProduct(product: Record<string, string>){
   // Notify user for non-editable products
   if(product.status !== PRODUCT_STATUS.DRAFT){
+    // TODO: Alternatively route to product view?
     showNotification(
       $q,
-      'No, thats illegal', // TODO
+      i18n.global.t('errors.can_only_edit_draft'),
       'bottom',
       'negative'
 

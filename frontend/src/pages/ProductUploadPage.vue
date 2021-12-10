@@ -386,8 +386,11 @@ watch(queryResult, async (newValue) => {
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
     await new Promise(resolve => setTimeout(resolve, 100));
     Object.keys(newValue).forEach((key) => {
-      input[key] = newValue[key] // TODO type errors
+      input[key] = newValue[key] // TODO fix type errors
     })
+
+    // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
+    // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
   }
 })
 // Picture inputs (separated from input, since these have to be added after product is created)

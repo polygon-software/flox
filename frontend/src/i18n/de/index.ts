@@ -121,7 +121,8 @@ export default {
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     invalid_birth_date: 'Bitte geben Sie ihr Geburtsdatum ein',
-    date_must_be_future: 'Bitte wählen Sie ein zukünftiges Datum'
+    date_must_be_future: 'Bitte wählen Sie ein zukünftiges Datum',
+    can_only_edit_draft: 'Bearbeiten fehlgeschlagen (nur Entwürfe können bearbeitet werden)'
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
