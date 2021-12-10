@@ -14,7 +14,7 @@
           :props="props"
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
-          @click="() => onRowClick(props.row)"
+          @click="() => editProduct(props.row)"
         >
           <q-td key="uuid" :props="props">
             <img
@@ -51,11 +51,14 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, ref, Ref} from 'vue';
+import {computed, defineProps, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {MY_PRODUCTS} from 'src/data/queries/QUERIES';
 import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const props = defineProps( {
   search: {
@@ -93,11 +96,16 @@ const computedResult = computed(() => {
 })
 
 /**
- * Deletes the currently selected user
+ * Routes to the product editing page for the given product
+ * @param {Record<string, unknown>} product - the product to edit (used for pre-filling form)
  */
-function onRowClick(row: Record<string, any>): void {
-  //TODO open Edit view
-  console.log('row clicked', row)
+function editProduct(product: Record<string, unknown>){
+  // Notify user for non-editable products
+  if(product.status !== PRODUCT_STATUS.DRAFT){
+    // TODO
+  }
+  console.log('Update product', product)
+  $routerService?.routeTo(ROUTES.ADD_PRODUCT)
 }
 
 /**
