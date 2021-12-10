@@ -131,6 +131,7 @@
                 type="number"
                 outlined
                 dense
+                :rules="[ (val) => IS_VALID_MIN_BET(val, input.maxBet, input.value) || $t('errors.invalid_number')]"
               />
 
               <q-input
@@ -141,6 +142,7 @@
                 type="number"
                 outlined
                 dense
+                :rules="[ (val) => IS_VALID_MAX_BET(val, input.minBet, input.value) || $t('errors.invalid_number')]"
               />
             </div>
           </div>
@@ -228,6 +230,8 @@
               :label="$t('products.product_page_link')"
               outlined
               dense
+              type="url"
+              :rules="[ (val) => !val || IS_URL(val)]"
             />
             <q-input
               v-model="input.directBuyLinkMaxClicks"
@@ -236,6 +240,7 @@
               type="number"
               outlined
               dense
+              :rules="[ (val) => !val || val === 0 || IS_LARGER_THAN(val, 0)]"
             />
             <q-input
               v-model="input.directBuyLinkMaxCost"
@@ -244,6 +249,7 @@
               type="number"
               outlined
               dense
+              :rules="[ (val) => !val || val === 0 || IS_LARGER_THAN(val, 0)]"
             />
           </div>
 
@@ -256,6 +262,8 @@
               :label="$t('products.seller_page_link')"
               outlined
               dense
+              type="url"
+              :rules="[ (val) => !val || IS_URL(val)]"
             />
             <q-input
               v-model="input.brandLinkMaxClicks"
@@ -264,6 +272,7 @@
               type="number"
               outlined
               dense
+              :rules="[ (val) => !val || val === 0 || IS_LARGER_THAN(val, 0)]"
             />
             <q-input
               v-model="input.brandLinkMaxCost"
@@ -272,6 +281,7 @@
               type="number"
               outlined
               dense
+              :rules="[ (val) => !val || val === 0 || IS_LARGER_THAN(val, 0)]"
             />
           </div>
         </q-card>
@@ -314,10 +324,10 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
 import {i18n} from 'boot/i18n';
-import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import {CATEGORY, CURRENCY, SELECTABLE_PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {IS_VALID_STRING, IS_FUTURE_DATE, IS_SMALLER_THAN_OR_EQUAL, IS_LARGER_THAN_OR_EQUAL, IS_VALID_NUMBER} from 'src/data/RULES';
+import {IS_VALID_STRING, IS_FUTURE_DATE, IS_VALID_MIN_BET, IS_VALID_MAX_BET, IS_VALID_NUMBER, IS_LARGER_THAN, IS_URL} from 'src/data/RULES';
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Read ENUM values and so they can be used as options
@@ -329,7 +339,7 @@ const currencies = Object.values(CURRENCY).filter((item) => {
   return isNaN(Number(item))
 })
 
-const status = Object.values(PRODUCT_STATUS).filter((item) => {
+const status = Object.values(SELECTABLE_PRODUCT_STATUS).filter((item) => {
   return isNaN(Number(item))
 })
 
@@ -389,8 +399,6 @@ async function onSubmit(){
     brandLinkMaxClicks: Number.parseInt(input.brandLinkMaxClicks ?? ''),
     brandLinkMaxCost: Number.parseInt(input.brandLinkMaxCost ?? ''),
   }
-
-  console.log('Input:', createProductInput)
 
   // Create on database
   const mutationResult = await executeMutation(
