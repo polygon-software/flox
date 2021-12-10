@@ -1,6 +1,5 @@
 # compiled output
 /dist
-/node_modules
 
 # Logs
 logs
@@ -36,6 +35,5 @@ lerna-debug.log*
 !.vscode/extensions.json
 /backend/node_modules/
 /frontend/node_modules/
+/shared/node_modules/
 /backend/dist/
-/shared/node_modules/
-/shared/node_modules/

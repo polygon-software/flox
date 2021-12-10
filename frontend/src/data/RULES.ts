@@ -1,4 +1,4 @@
-import {EMAIL_REGEX, PASSWORD_REGEX} from 'src/helpers/REGEX';
+import {EMAIL_REGEX, PASSWORD_REGEX, URL_REGEX} from 'src/helpers/REGEX';
 
 /**
  * This file contains rules that can be applied to input forms.
@@ -8,8 +8,11 @@ import {EMAIL_REGEX, PASSWORD_REGEX} from 'src/helpers/REGEX';
 * Form field Rules
  */
 const IS_EMAIL = (val: string): boolean => {
-  const result: boolean =  EMAIL_REGEX.test(val)
-  return result;
+  return EMAIL_REGEX.test(val);
+}
+
+const IS_URL = (val: string): boolean => {
+  return URL_REGEX.test(val)
 }
 
 const IS_VALID_STRING = (val: string): boolean => !!(val && val.length > 0)
@@ -57,8 +60,17 @@ const IS_LARGER_THAN_OR_EQUAL = (val: number, other: number): boolean => {
   return val >= other
 }
 
+const IS_VALID_MIN_BET = (min: number, max: number, value: number): boolean => {
+  return min <= value/20 && value % min === 0 && min < max//TODO Correct parameters for min bet calculation
+}
+
+const IS_VALID_MAX_BET = (max: number, min: number, value: number): boolean => {
+  return max <= value/5 && value % max === 0 && max > min //TODO Correct parameters for max bet calculation
+}
+
 export {
   IS_EMAIL,
+  IS_URL,
   IS_VALID_STRING,
   IS_VALID_INT,
   IS_VALID_NUMBER,
@@ -70,5 +82,7 @@ export {
   IS_SMALLER_THAN,
   IS_LARGER_THAN,
   IS_LARGER_THAN_OR_EQUAL,
-  IS_SMALLER_THAN_OR_EQUAL
+  IS_SMALLER_THAN_OR_EQUAL,
+  IS_VALID_MIN_BET,
+  IS_VALID_MAX_BET,
 }

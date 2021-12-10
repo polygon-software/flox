@@ -19,6 +19,11 @@ export enum PRODUCT_STATUS {
   ARCHIVED = 'ARCHIVED',
 }
 
+export enum SELECTABLE_PRODUCT_STATUS {
+  DRAFT = 'DRAFT',
+  ACTIVE = 'ACTIVE',
+}
+
 registerEnumType(CURRENCY, { name: 'Currency' });
 registerEnumType(CATEGORY, { name: 'Category' });
 registerEnumType(PRODUCT_STATUS, { name: 'ProductStatus' });
