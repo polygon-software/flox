@@ -1,5 +1,5 @@
 import type { ApolloClientOptions } from '@apollo/client/core'
-import {ApolloLink, concat, createHttpLink, InMemoryCache, split} from '@apollo/client/core'
+import {ApolloLink, concat, createHttpLink, defaultDataIdFromObject, InMemoryCache, split} from '@apollo/client/core'
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {Cookies} from 'quasar';
@@ -74,10 +74,10 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
           } else {
             // Case 2: Response contains a nested object (take first one, because there should only be one in this case)
             const innerObject: Record<string, string> = responseObject[Object.keys(responseObject)[0]] as Record<string, string>
+
+            // Cases that we cannot handle (e.g. arrays): use default function
             if (!innerObject || !innerObject.__typename ||!innerObject.uuid) {
-              console.error('Uncacheable:', responseObject)
-              return undefined // TODO
-              // throw new Error(`Cannot cache response ${responseObject.toString()}`)
+              return defaultDataIdFromObject(responseObject)
             }
 
             result = `${innerObject.__typename ?? ''}:${innerObject.uuid ?? ''}`;
