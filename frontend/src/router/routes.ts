@@ -41,7 +41,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     name: 'credit_institution_dashboard',
     path: '/credit-institution-dashboard',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/CreditInstitutionDashboard.vue') }],
+    children: [{ path: '', component: () => import('pages/BankDashboard.vue') }],
   },
 
   'SIGNUP': {
@@ -72,6 +72,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
   },
+  'REGISTER_BANK': {
+    path: '/register-bank',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/RegisterBankPage.vue') }],
+  },
 
   // Wildcard route for non-covered routes
   'WILDCARD': {
@@ -93,6 +98,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.CREDIT_INSTITUTION_DASHBOARD,
   ROUTES.EMPLOYEE_DASHBOARD,
   ROUTES.NEW_EMPLOYEE_PAGE,
+  ROUTES.REGISTER_BANK,
   ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
 

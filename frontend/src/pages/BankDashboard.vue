@@ -5,7 +5,7 @@
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none">
       <h5 class="q-ma-none">
-        {{ $t('dashboards.credit_institution') }}
+        {{ $t('dashboards.bank') }}
       </h5>
       <!-- Search bar -->
       <q-input
@@ -25,7 +25,7 @@
       <!-- Register new bank -->
       <q-btn
         icon="add"
-        :label="$t('authentication.credit_institution')"
+        :label="$t('authentication.bank')"
         dense
         color="primary"
         unelevated
@@ -35,8 +35,8 @@
       />
     </div>
 
-    <!-- Credit institutes Overview -->
-    <CreditInstitutionTable
+    <!-- Bank Overview -->
+    <BankTable
       class="q-mt-lg"
       :columns="columns"/>
 
@@ -48,7 +48,7 @@ import {inject} from 'vue'
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import CreditInstitutionTable from 'components/tables/CreditInstitutionTable.vue';
+import BankTable from 'components/tables/BankTable.vue';
 
 const $routerService: RouterService = inject('$routerService')
 
