@@ -86,6 +86,16 @@ module.exports = {
 
     '@typescript-eslint/no-explicit-any': 'off', // Enabling this rule often breaks Quasar-generated boilerplate code
     // allow debugger during development only
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    "require-jsdoc": ["error", {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true,
+        "ArrowFunctionExpression": false,
+        "FunctionExpression": false
+      }
+    }],
+    'valid-jsdoc': 'error'
   }
 }
