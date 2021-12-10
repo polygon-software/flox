@@ -28,6 +28,7 @@ export const ALL_PRODUCTS = {
               brandLink
               minBet
               maxBet
+              tags
               pictures{
                 uuid
                 url

@@ -1,11 +1,12 @@
 export default {
-  eneral: {
+  general: {
     yes: 'Yes',
     no: 'No',
     new: 'New',
     newest: 'Newest',
     oldest: 'Oldest',
     sort_by: 'Sort by:',
+    all: 'All',
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -185,4 +186,10 @@ export default {
   status: {
     loading: 'Loading',
   },
+  product_status: {
+    draft: 'Draft',
+    active: 'Active',
+    ended: 'Ended',
+    archived: 'Archived'
+  }
 };

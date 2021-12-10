@@ -189,7 +189,7 @@
             <!-- Status -->
             <q-select
               v-model="input.status"
-              :options="status"
+              :options="statuses"
               style="width: calc(50% - 25px)"
               :label="$t('products.status')"
               outlined
@@ -318,7 +318,10 @@
 </template>
 
 <script setup lang="ts">
-import {inject, reactive, Ref, ref} from 'vue';
+/**
+ * A page for uploading products. Can be used to either create new products or existing ones, controlled via props
+ */
+import {computed, defineProps, inject, reactive, Ref, ref} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
@@ -329,6 +332,13 @@ import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {IS_VALID_STRING, IS_FUTURE_DATE, IS_VALID_MIN_BET, IS_VALID_MAX_BET, IS_VALID_NUMBER, IS_LARGER_THAN, IS_URL} from 'src/data/RULES';
 const $routerService: RouterService|undefined = inject('$routerService')
+
+const props = defineProps({
+  product: {
+    required: false,
+    type: Object // TODO
+  },
+});
 
 // Read ENUM values and so they can be used as options
 const categories = Object.values(CATEGORY).filter((item) => {
@@ -346,7 +356,8 @@ const status = Object.values(SELECTABLE_PRODUCT_STATUS).filter((item) => {
 const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
-const input = reactive({
+const input = reactive(
+  {
   title: null,
   description: null,
   brand: null,
@@ -366,6 +377,9 @@ const input = reactive({
   directBuyLink: null,
   directBuyLinkMaxClicks: null,
   directBuyLinkMaxCost: null,
+
+  // If an existing product is given, its values overwrite the defaults
+  ...(props.product ?? {}),
 })
 
 // Picture inputs (separated from input, since these have to be added after product is created)

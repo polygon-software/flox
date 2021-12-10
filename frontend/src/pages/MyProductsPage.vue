@@ -70,6 +70,7 @@ import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import MyProductsTable from 'components/table/MyProductsTable.vue';
 import {PRODUCT_STATUS} from '../../../shared/definitions/ENUM';
+import {i18n} from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -81,19 +82,19 @@ const statusFilter = ref('all')
 const tabs = [
   {
     value: 'all',
-    label: 'All', // TODO
+    label: i18n.global.t('general.all'),
   },
   {
     value: PRODUCT_STATUS.ACTIVE,
-    label: 'Active', // TODO
+    label: i18n.global.t('product_status.active'),
   },
   {
     value: PRODUCT_STATUS.DRAFT,
-    label: 'Draft', // TODO
+    label: i18n.global.t('product_status.draft'),
   },
   {
     value: PRODUCT_STATUS.ARCHIVED,
-    label: 'Archived', // TODO
+    label: i18n.global.t('product_status.archived'),
   },
 ]
 

@@ -3,7 +3,7 @@ import {QUERIES} from '../data/queries/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
-import {useSSR} from 'src/store/ssr/index';
+import {useSSR} from 'src/store/ssr';
 import {i18n} from 'boot/i18n';
 
 /**
@@ -61,6 +61,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
         if(!mutationObject.cacheLocation){
           throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
         }
+
         const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
         // Read existing query from cache

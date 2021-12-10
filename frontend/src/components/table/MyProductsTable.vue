@@ -14,7 +14,7 @@
           :props="props"
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
-          @click="() => onRowClick(props.row)"
+          @click="() => editProduct(props.row)"
         >
           <q-td key="uuid" :props="props">
             <img
@@ -30,7 +30,12 @@
             {{ props.row.brand }}
           </q-td>
           <q-td key="status" :props="props">
-            {{ props.row.status }}
+            <q-chip
+              :label="$t('product_status.' + props.row.status.toLowerCase())"
+              :color="getChipColor(props.row.status)"
+              text-color="white"
+              style="font-weight: bold"
+            />
           </q-td>
           <q-td key="sponsored" :props="props">
             <!-- TODO i18n -->
@@ -46,11 +51,14 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, ref, Ref} from 'vue';
+import {computed, defineProps, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {MY_PRODUCTS} from 'src/data/queries/QUERIES';
 import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const props = defineProps( {
   search: {
@@ -88,11 +96,35 @@ const computedResult = computed(() => {
 })
 
 /**
- * Deletes the currently selected user
+ * Routes to the product editing page for the given product
+ * @param {Record<string, unknown>} product - the product to edit (used for pre-filling form)
  */
-function onRowClick(row: Record<string, any>){
-  //TODO open Edit dialog?
-  console.log('row clicked', row)
+function editProduct(product: Record<string, unknown>){
+  // Notify user for non-editable products
+  if(product.status !== PRODUCT_STATUS.DRAFT){
+    // TODO
+  }
+  console.log('Update product', product)
+  $routerService?.routeTo(ROUTES.ADD_PRODUCT)
+}
+
+/**
+ * Gets the color for the status chip of a product
+ * @param {PRODUCT_STATUS} status - the status of the product
+ */
+function getChipColor(status: string): string|null {
+  switch(status){
+    case PRODUCT_STATUS.DRAFT:
+      return 'primary'
+    case PRODUCT_STATUS.ACTIVE:
+      return 'positive'
+    case PRODUCT_STATUS.ENDED:
+      return 'orange'
+    case PRODUCT_STATUS.ARCHIVED:
+      return 'neutral'
+    default:
+      return null
+  }
 }
 
 

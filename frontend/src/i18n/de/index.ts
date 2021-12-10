@@ -6,6 +6,7 @@ export default {
     newest: 'Neuste',
     oldest: 'Älteste',
     sort_by: 'Sortieren nach:',
+    all: 'Alle',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -186,4 +187,10 @@ export default {
   status: {
     loading: 'Lädt',
   },
+  product_status: {
+    draft: 'Entwurf',
+    active: 'Aktiv',
+    ended: 'Beendet',
+    archived: 'Archiviert'
+  }
 }

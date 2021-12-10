@@ -21,7 +21,7 @@ export const CREATE_PRODUCT = {
         }`,
     tables: ['product'],
     type: MutationTypes.CREATE,
-    cacheLocation: 'create'
+    cacheLocation: 'createProduct'
 }
 
 export const UPDATE_PRODUCT = {
