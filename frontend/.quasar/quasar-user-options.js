@@ -12,9 +12,9 @@
 
 
 
-import {Dialog,Cookies} from 'quasar'
+import {Dialog,Cookies,Notify} from 'quasar'
 
 
 
-export default { config: {},plugins: {Dialog,Cookies} }
+export default { config: {},plugins: {Dialog,Cookies,Notify} }
 
