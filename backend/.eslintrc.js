@@ -23,11 +23,12 @@ module.exports = {
     "require-jsdoc": ["error", {
       "require": {
         "FunctionDeclaration": true,
-        "MethodDefinition": false,
-        "ClassDeclaration": false,
+        "MethodDefinition": true,
+        "ClassDeclaration": true,
         "ArrowFunctionExpression": false,
         "FunctionExpression": false
       }
-    }]
+    }],
+    'valid-jsdoc': 'error'
   },
 };
