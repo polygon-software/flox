@@ -1,9 +1,10 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
-import {ALL_USERS, QUERIES} from '../data/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
-import {ApolloCache, ApolloQueryResult} from '@apollo/client';
+import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {useSSR} from 'src/store/ssr';
+import {i18n} from 'boot/i18n';
+import {QUERIES} from 'src/data/QUERIES';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -13,6 +14,7 @@ import {useSSR} from 'src/store/ssr';
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
+ * @returns {ApolloQueryResult<Record<string, unknown[]>>} - the query's output
  */
 async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
 
@@ -27,35 +29,40 @@ async function executeQuery(queryObject: QueryObject, variables?: Record<string,
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
  * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
- * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutation
+ * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutatio
+ * @returns {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
  */
-async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<void> {
-    const mutation =  mutationObject.mutation
-    const tables =  mutationObject.tables
-    const type =  mutationObject.type
+async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null> {
+  const mutation =  mutationObject.mutation
+  const tables =  mutationObject.tables
+  const type =  mutationObject.type
 
-    if([mutation, tables, type, mutationObject.cacheLocation].some(item => item === undefined)){
-        throw new Error("One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'")
-    }
+  if([mutation, tables, type].some(item => item === undefined)){
+    throw new Error(i18n.global.t('errors.missing_properties'))
+  }
 
-    const affectedQueries:QueryObject[] = [];
+  const affectedQueries:QueryObject[] = [];
 
-    // Find affected queries based on tables for CREATE and DELETE operations
-    if(type === MutationTypes.CREATE || type === MutationTypes.DELETE){
-        QUERIES.forEach((query) => {
-            // If any of the mutation's affected tables are relevant to query, add to list of affected queries
-            if(tables.some(t => query.tables.indexOf(t) >= 0)){
-                affectedQueries.push(query)
-            }
-        })
-    }
+  // Find affected queries based on tables for CREATE and DELETE operations
+  if(type === MutationTypes.CREATE || type === MutationTypes.DELETE){
+    QUERIES.forEach((query) => {
+      // If any of the mutation's affected tables are relevant to query, add to list of affected queries
+      if(tables.some(t => query.tables.indexOf(t) >= 0)){
+        affectedQueries.push(query)
+      }
+    })
+  }
 
-    // Actually execute mutation and handle cache
+  // Actually execute mutation and handle cache
   const { mutate } = useMutation(mutation, () => ({
-      // Get cache and the new or deleted object
+    // Get cache and the new or deleted object
     update: (cache: ApolloCache<any> , { data: changeData}) => {
       affectedQueries.forEach((queryObject) => {
         const changes = changeData as Record<string, Record<string, unknown>>
+        if(!mutationObject.cacheLocation){
+          throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
+        }
+
         const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
         // Read existing query from cache
@@ -84,22 +91,28 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
             }
           })
         }
-        })
+      })
 
     },
-    }))
-    // Execute mutation
-    await mutate(variables);
+  }))
+  // Execute mutation
+  return await mutate(variables);
 }
 
-function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
+/**
+ * Subscribes to a graphQL query
+ * @param {QueryObject} query - the graphQL query object
+ * @param {Record<string, unknown>} [variables] - any variables to pass to the query
+ * @returns {Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>} - the query's output
+ */
+function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
   const $ssrStore = useSSR();
   const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
 
 
   // ----- Hooks -----
   onServerPrefetch(async () => {
-    const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query)
+    const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query, variables)
     if(!tempRes.data){ return}
     res.value = tempRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
     $ssrStore.mutations.setPrefetchedData({key: query.cacheLocation, value: res.value})
@@ -112,7 +125,7 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
 
     // SPA
     if(res.value.length <= 0){
-      void executeQuery(query).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
+      void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
         if(fetchedRes.data){
           res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
         } else {
@@ -123,15 +136,16 @@ function subscribeToQuery(query: QueryObject): Ref<Record<string, Record<string,
       // SSR
       apolloClient.writeQuery({
         query: query.query,
+        variables: variables,
         data: {
           [query.cacheLocation]: res.value
         }
       })
     }
 
-    apolloClient.watchQuery({query: query.query}).subscribe({
+    apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
       next(value: ApolloQueryResult<Record<string, unknown>>) {
-        res.value = value.data[ALL_USERS.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+        res.value = value.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
       }
     })
   })

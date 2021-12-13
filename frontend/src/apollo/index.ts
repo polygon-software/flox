@@ -1,21 +1,28 @@
 import type { ApolloClientOptions } from '@apollo/client/core'
-import {ApolloLink, concat, createHttpLink, InMemoryCache, split} from '@apollo/client/core'
+import {ApolloLink, concat, createHttpLink, defaultDataIdFromObject, InMemoryCache, split} from '@apollo/client/core'
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {getMainDefinition} from '@apollo/client/utilities';
 import {Cookies} from 'quasar';
 import {QSsrContext} from '@quasar/app';
 
-export function getClientOptions(ssrContext: QSsrContext |null|undefined): ApolloClientOptions<any> {
+/**
+ * Get Apollo client options
+ * @param {QSsrContext|null|undefined} ssrContext - quasar ssr context
+ * @returns {ApolloClientOptions<any>} - config options
+ */
+export function getClientOptions(ssrContext: QSsrContext|null|undefined): ApolloClientOptions<any> {
   // Authentication middleware for intercepting any GraphQL-related operations
   const authMiddleware = new ApolloLink((operation, forward) => {
     const cookies = process.env.SERVER && ssrContext? Cookies.parseSSR(ssrContext) : Cookies
     const token = cookies.get('authentication.idToken')
-    // add the authorization to the headers
-    operation.setContext({
-      headers: {
-        authorization: `Bearer ${token}`
-      }
-    })
+    if(token){
+      // Add the authorization to the headers
+      operation.setContext({
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+    }
     return forward(operation)
   })
 
@@ -54,77 +61,50 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
     <ApolloClientOptions<unknown>>{
       link: concat(authMiddleware, link),
       cache: new InMemoryCache({
+        // Use UUID as default key in database. If any table needs different behaviour, this can be changed here,
+        // see: https://www.apollographql.com/docs/react/caching/cache-configuration/
+        dataIdFromObject(responseObject): string|undefined {
+          if(!responseObject || Object.keys(responseObject).length === 0) {
+            throw new Error('Cannot cache empty object')
+          }
+
+          const uuid: string | undefined = responseObject.uuid?.toString();
+          const typename: string | undefined = responseObject.__typename
+          let result;
+
+          if (uuid && typename) {
+            // Case 1: Response contains relevant data at root
+            result = `${typename}:${uuid}`;
+          } else {
+            // Case 2: Response contains a nested object (take first one, because there should only be one in this case)
+            const innerObject: Record<string, string> = responseObject[Object.keys(responseObject)[0]] as Record<string, string>
+
+            // Cases that we cannot handle (e.g. arrays): use default function
+            if (!innerObject || !innerObject.__typename ||!innerObject.uuid) {
+              return defaultDataIdFromObject(responseObject)
+            }
+
+            result = `${innerObject.__typename ?? ''}:${innerObject.uuid ?? ''}`;
+          }
+          return result
+        },
         addTypename: false, // We disable auto-adding of __typename property, as this breaks mutations expecting
                             // an object variable. Instead, we manually add __typename in QUERIES/MUTATIONS.ts where
                             // appropriate. This can be changed in case Apollo implements better behavior for this.
-        typePolicies:{
-          User: {
-            keyFields: ['uuid']
-          }
-        }
       })
     },
-
-    // Specific Quasar mode options.
-    process.env.MODE === 'spa'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'ssr'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'pwa'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'bex'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'cordova'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'capacitor'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'electron'
-      ? {
-          //
-        }
-      : {},
-
-    // dev/prod options.
-    process.env.DEV
-      ? {
-          //
-        }
-      : {},
-    process.env.PROD
-      ? {
-          //
-        }
-      : {},
 
     // For ssr mode, when on server.
     process.env.MODE === 'ssr' && process.env.SERVER
       ? {
-          ssrMode: true,
-        }
+        ssrMode: true,
+      }
       : {},
     // For ssr mode, when on client.
     process.env.MODE === 'ssr' && process.env.CLIENT
       ? {
-          ssrForceFetchDelay: 100,
-        }
+        ssrForceFetchDelay: 100,
+      }
       : {}
   )
 }
