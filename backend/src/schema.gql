@@ -67,9 +67,14 @@ input DeleteUserInput {
   uuid: ID!
 }
 
+input DuplicateProductInput {
+  uuid: ID!
+}
+
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createProduct(createProductInput: CreateProductInput!): Product!
+  duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!
@@ -215,33 +220,33 @@ type Subscription {
 }
 
 input UpdateProductInput {
-  brand: String!
-  brandLink: String!
-  brandLinkClicks: Float!
-  brandLinkCost: Float!
-  brandLinkMaxClicks: Float!
-  brandLinkMaxCost: Float!
-  category: Category!
-  comments: [comment!]!
-  currency: Currency!
-  description: String!
-  directBuyLink: String!
-  directBuyLinkClicks: Float!
-  directBuyLinkCost: Float!
-  directBuyLinkMaxClicks: Float!
-  directBuyLinkMaxCost: Float!
-  end: DateTime!
-  likes: Float!
-  maxBet: Float!
-  minBet: Float!
-  pictures: public_file!
-  sponsored: Boolean!
-  start: DateTime!
-  status: ProductStatus!
-  tags: [String!]!
-  title: String!
+  brand: String
+  brandLink: String
+  brandLinkClicks: Float
+  brandLinkCost: Float
+  brandLinkMaxClicks: Float
+  brandLinkMaxCost: Float
+  category: Category
+  comments: [comment!]
+  currency: Currency
+  description: String
+  directBuyLink: String
+  directBuyLinkClicks: Float
+  directBuyLinkCost: Float
+  directBuyLinkMaxClicks: Float
+  directBuyLinkMaxCost: Float
+  end: DateTime
+  likes: Float
+  maxBet: Float
+  minBet: Float
+  pictures: public_file
+  sponsored: Boolean
+  start: DateTime
+  status: ProductStatus
+  tags: [String!]
+  title: String
   uuid: ID!
-  value: Int!
+  value: Int
 }
 
 input UpdateUserInput {

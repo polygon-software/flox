@@ -15,11 +15,12 @@
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
         >
-          <q-td key="uuid" :props="props">
+          <q-td key="pictures" :props="props">
             <img
               v-if="props.row.pictures[0] && props.row.pictures[0].url"
               :src="props.row.pictures[0].url"
               style="max-width: 120px; height: 90px"
+              :alt="props.row.title"
             >
           </q-td>
           <q-td key="title" :props="props">
@@ -82,7 +83,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => duplicateProduct(props.row)"
+                  @click="() => duplicateProduct(props.row.uuid)"
                 />
               </div>
             </q-btn-dropdown>
@@ -102,8 +103,9 @@ import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {useQuasar} from 'quasar';
-import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
+import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {FetchResult} from '@apollo/client';
+import {sleep} from 'src/helpers/general-helpers';
 const $routerService: RouterService|undefined = inject('$routerService')
 const $q = useQuasar()
 
@@ -120,12 +122,13 @@ const props = defineProps( {
 
 // TODO i18n
 const columns = [
-  { name: 'uuid', label: '', field: 'uuid', sortable: true },
+  { name: 'pictures', label: '', field: 'uuid', sortable: true },
   { name: 'title', label: 'Product', field: 'title', sortable: true },
   { name: 'brand', label: 'Brand', field: 'brand', sortable: true },
   { name: 'status', label: 'Status', field: 'status', sortable: true },
   { name: 'sponsored', label: 'Type', field: 'sponsored', sortable: true },
   { name: 'start', label: 'Start Date', field: 'start', sortable: true },
+  { name: 'tags', label: '', field: 'tags', sortable: false }, // Invisible column, used for filtering only
   { name: 'options', label: '', field: 'options', sortable: false },
 ]
 
@@ -157,56 +160,42 @@ function editProduct(uuid: string): void{
   )
 }
 
-
-
-async function duplicateProduct(product: Record<string, unknown>): Promise<void>{
-
-  // Set up params for new product creation
-  const params = {
-    createProductInput: {
-      title: product.title,
-      description: product.description,
-      brand: product.brand,
-      category: product.category,
-      value: product.value,
-      currency: product.currency,
-      start: product.start, //TODO does not make sense
-      end: product.end, //TODO does not make sense
-      // TODO: Pictures? how to handle...
-      status: PRODUCT_STATUS.DRAFT,
-      sponsored: product.sponsored,
-      directBuyLink: product.directBuyLink,
-      directBuyLinkMaxClicks: product.directBuyLinkMaxClicks,
-      directBuyLinkMaxCost: product.directBuyLinkMaxCost,
-      brandLink: product.brandLink,
-      brandLinkMaxClicks: product.brandLinkMaxClicks,
-      brandLinkMaxCost: product.brandLinkMaxCost,
-      minBet: product.minBet,
-      maxBet: product.maxBet,
-      tags: product.tags
-    }
-  }
+/**
+ * Duplicates a given product, and routes to the page allowing editing
+ * @param {string} uuid - the UUID of the existing product to duplicate
+ */
+async function duplicateProduct(uuid: string): Promise<void>{
 
   // Create new Product
-  const mutationResult: FetchResult<any, Record<string, any>, Record<string, any>> | null = await executeMutation(CREATE_PRODUCT, params) as Record<string, unknown>
-
-  if(!mutationResult || !mutationResult.data){
-    throw new Error('Creation FAILED') // TODO errorservice popup
-  }
+  const mutationResult: FetchResult<any, Record<string, any>, Record<string, any>> | null = await executeMutation(
+    DUPLICATE_PRODUCT,
+    {
+      duplicateProductInput: {
+        uuid
+      }
+    }) as Record<string, unknown>
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const newData: Record<string, Record<string, unknown>> = mutationResult.data;
-  const newProduct: Record<string, unknown> = newData.createProduct;
+  const newProduct: Record<string, unknown> = newData.duplicateProduct;
 
-  console.log('new product:', newProduct)
+  if(!mutationResult || !mutationResult.data || !newProduct || !newProduct.uuid){
+    throw new Error('Creation FAILED') // TODO errorservice popup
+  }
+
   // Ensure product correctly created and route to edit screen
   if(newProduct && newProduct.uuid && typeof newProduct.uuid === 'string'){
+    // Wait briefly before routing
+    await sleep()
+
     $routerService?.routeTo(
       ROUTES.ADD_PRODUCT,
       {
         id: newProduct.uuid
       }
     )
+  } else{
+    throw new Error('TODO something invalid')
   }
 }
 

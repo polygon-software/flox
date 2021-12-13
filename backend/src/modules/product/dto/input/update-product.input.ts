@@ -7,7 +7,7 @@ import {
   IsNumber,
   IsString,
   IsUrl,
-  IsUUID
+  IsUUID,
 } from 'class-validator';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../ENUM/ENUM';
 import PublicFile from '../../../file/entities/public_file.entity';
@@ -19,104 +19,104 @@ export class UpdateProductInput {
   @IsUUID()
   uuid: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   title: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   description: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   brand: string;
 
-  @Field(() => CATEGORY)
+  @Field(() => CATEGORY, { nullable: true })
   category: CATEGORY;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   @IsInt()
   value: number;
 
-  @Field(() => CURRENCY)
+  @Field(() => CURRENCY, { nullable: true })
   currency: CURRENCY;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   @IsDate()
   start: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   @IsDate()
   end: Date;
 
-  @Field(() => PublicFile)
+  @Field(() => PublicFile, { nullable: true })
   pictures: PublicFile[];
 
-  @Field(() => PRODUCT_STATUS)
+  @Field(() => PRODUCT_STATUS, { nullable: true })
   status: PRODUCT_STATUS;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   @IsBoolean()
   sponsored: boolean;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   @IsUrl()
   directBuyLink: string;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   directBuyLinkClicks: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   directBuyLinkMaxClicks: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   directBuyLinkCost: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   directBuyLinkMaxCost: number;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsString()
   @IsUrl()
   brandLink: string;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   brandLinkClicks: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   brandLinkMaxClicks: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   brandLinkCost: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   brandLinkMaxCost: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsInt()
   minBet: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsInt()
   maxBet: number;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @IsArray()
-  tags: string[]
+  tags: string[];
 
-  @Field(() => [Comment])
+  @Field(() => [Comment], { nullable: true })
   @IsArray()
   comments: Comment[];
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   likes: number;
 }

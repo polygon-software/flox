@@ -28,11 +28,24 @@ export const UPDATE_PRODUCT = {
     mutation: gql`
         mutation updateProduct($updateProductInput: UpdateProductInput!){
             updateProduct(updateProductInput: $updateProductInput) {
-                uuid
-                __typename
+              uuid
+              __typename
             }
         }`,
     tables: ['product'],
     type: MutationTypes.UPDATE,
     cacheLocation: undefined
+}
+
+export const DUPLICATE_PRODUCT = {
+    mutation: gql`
+        mutation duplicateProduct($duplicateProductInput: DuplicateProductInput!){
+            duplicateProduct(duplicateProductInput: $duplicateProductInput) {
+              uuid
+              __typename
+            }
+        }`,
+    tables: ['product'],
+    type: MutationTypes.CREATE,
+    cacheLocation: 'duplicateProduct'
 }

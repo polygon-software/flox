@@ -1,5 +1,14 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsArray, IsBoolean, IsDate, IsInt, IsNumber, IsOptional, IsString, IsUrl} from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsDate,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../ENUM/ENUM';
 import PublicFile from '../../../file/entities/public_file.entity';
 
@@ -35,7 +44,7 @@ export class CreateProductInput {
   @IsDate()
   end: Date;
 
-  @Field(() => PublicFile, {nullable: true})
+  @Field(() => PublicFile, { nullable: true })
   pictures: PublicFile[];
 
   @Field(() => PRODUCT_STATUS)
@@ -88,7 +97,7 @@ export class CreateProductInput {
   @Field(() => [String])
   @IsOptional()
   @IsArray()
-  tags: string[]
+  tags: string[];
 
   // TODO: Clearify if we need Rrepeating sales
 }
