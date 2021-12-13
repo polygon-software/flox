@@ -110,13 +110,10 @@ form.pages.value = [
 
 /**
  * Emits the 'submit' event, containing the form's data
+ * @returns {void}
  */
 function onSubmit(): void {
   emit('submit', form.values.value)
 }
 
 </script>
-
-<style scoped>
-
-</style>
