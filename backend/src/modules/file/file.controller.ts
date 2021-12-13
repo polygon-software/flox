@@ -38,6 +38,8 @@ export class FileController {
     res.send(new_file);
   }
 
+
+
   @Post('/uploadPrivateFile')
   @AnyRole()
   async uploadPrivateFile(

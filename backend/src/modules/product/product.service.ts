@@ -9,11 +9,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { PRODUCT_STATUS } from '../../ENUM/ENUM';
 import { DuplicateProductInput } from './dto/input/duplicate-product.input';
+import { FileService } from '../file/file.service';
+import fetch from 'node-fetch';
+import PublicFile from '../file/entities/public_file.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productsRepository: Repository<Product>,
+    @InjectRepository(PublicFile) private fileRepository: Repository<PublicFile>,
+    private fileService: FileService,
   ) {}
 
   async create(createProductInput: CreateProductInput): Promise<Product> {
@@ -49,7 +54,7 @@ export class ProductService {
 
   /**
    * Duplicates an existing product and returns the new Product
-   * @param {string} uuid - the existing product's UUID
+   * @param {DuplicateProductInput} duplicateProductInput - The product input containing the existing product's data
    */
   async duplicate(
     duplicateProductInput: DuplicateProductInput,
@@ -68,9 +73,8 @@ export class ProductService {
       category: existingProduct.category,
       value: existingProduct.value,
       currency: existingProduct.currency,
-      start: existingProduct.start, //TODO does not make sense
-      end: existingProduct.end, //TODO does not make sense
-      // TODO: Pictures? how to handle...
+      start: existingProduct.start, /*TODO shouldn't set the same date*/
+      end: existingProduct.end, /*TODO shouldn't set the same date*/
       status: PRODUCT_STATUS.DRAFT,
       sponsored: existingProduct.sponsored,
       directBuyLink: existingProduct.directBuyLink,
@@ -85,6 +89,33 @@ export class ProductService {
     };
 
     const product = await this.productsRepository.create(createProductInput);
+
+    // Create copy of each picture
+    for (const picture of existingProduct.pictures) {
+      // Create filename
+      const fileName = picture.key.slice(37, picture.key.length);
+
+      await fetch(picture.url).then((res) => {
+        res
+          .blob()
+          .then(async (blob) => {
+            // Convert blob to buffer
+            const arrayBuffer = await blob.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+
+            // Upload new file
+            await this.fileService.uploadPublicFile(
+              buffer,
+              fileName,
+              product.uuid,
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    }
+
     return this.productsRepository.save(product);
   }
 
