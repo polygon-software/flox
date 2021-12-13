@@ -136,6 +136,7 @@ const icon_dialogs = computed(() => {
 
 /**
  * Toggles the "Like" (heart) symbol.
+ * @returns {void}
  */
 function toogleLike() {
   liked.value = !liked.value
@@ -144,6 +145,7 @@ function toogleLike() {
 
 /**
  * Toggles the bokmark symbol.
+ * @returns {void}
  */
 function toogleBookmark() {
   bookmarked.value = !bookmarked.value
@@ -152,6 +154,7 @@ function toogleBookmark() {
 
 /**
  * Opens the comment section, so that the user can leave or read comments.
+ * @returns {void}
  */
 function toggleCommentSection() {
   showComments.value = !showComments.value
@@ -159,13 +162,18 @@ function toggleCommentSection() {
 
 /**
  * Allow the user to share this product site via Message Apps, Email, etc.
+ * @returns {void}
  */
 function toggleShareMenu() {
   showShareMenu.value = !showShareMenu.value
 }
 
-// Opens the detailed view of a product in dialog
-function openDetailView(product: unknown) {
+/**
+ * Opens the detailed view of a product in dialog
+ * @param {Record<string, unknown>} product - the product that was selected
+ * @returns {void}
+ */
+function openDetailView(product: Record<string, unknown>) {
   $q.dialog({
     title: 'DetailView',
     component: ProductCardDetail,

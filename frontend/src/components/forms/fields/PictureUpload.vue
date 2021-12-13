@@ -39,6 +39,7 @@ const urls: Ref<string[]> = ref([])
 
 /**
  * Emits the updated value
+ * @returns {void}
  */
 function emitValue(){
   const validPictures = pictures.value.filter(field => {
@@ -61,6 +62,8 @@ function emitValue(){
 
 /**
  * Depending on how many additional fields already exist, adds or deletes a file from a custom field.
+ * @param {file} newFile - the file that was added
+ * @returns {void}
  */
 function fileChange(newFile: File): void {
   // Generate preview URL for new file

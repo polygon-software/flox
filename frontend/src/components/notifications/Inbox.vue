@@ -36,18 +36,18 @@
         type="search"
         class="q-mb-md"
       >
-        <template v-slot:append>
+        <template #append>
           <q-icon name="search" />
         </template>
       </q-input>
 
       <!-- Sorting -->
       <q-select
+        v-model="sort"
         class="q-my-md"
         style="width: 125px"
         borderless
         dense
-        v-model="sort"
         :options="options"
         map-options
         emit-value
@@ -65,8 +65,8 @@
           :title="message.title"
           :received="message.received"
           :is-read="message.isRead"
-          @click="openMessage(message)"
           style="width: 90%; height: 75px;"
+          @click="openMessage(message)"
         >
         </MessagePreview>
       </q-scroll-area>
@@ -151,7 +151,7 @@ const messages = ref([
 
 // Sorts the messages according to the selected parameter
 const sortedMessages = computed(() => {
-  if (sort.value === 'oldest') {
+  if (sort.value.value === 'oldest') {
     return messages.value.slice().sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
   else {
@@ -166,15 +166,24 @@ const filteredMessages = computed(() => {
   })
 })
 
-// Opens the dialog which contains the detail view of a message.
+/**
+ * Opens the dialog which contains the detail view of a message.
+ * @param {Message} message - the message that was selected
+ * @returns {void}
+ */
 function openMessage(message: Message) {
   selectedMessage.value = message
   showMessageDetail.value = true
 }
 
-// Closes the dialog which contains the detail view of a message. Also sets the message status to "read"
+/**
+ * Closes the dialog which contains the detail view of a message. Also sets the message status to "read"
+ * @returns {void}
+ */
 function closeMessage() {
-  selectedMessage.value.isRead = true
+  if(selectedMessage.value){
+    selectedMessage.value.isRead = true
+  }
   selectedMessage.value = null
   showMessageDetail.value = false
 }

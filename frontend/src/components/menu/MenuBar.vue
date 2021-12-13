@@ -104,6 +104,8 @@ const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication
+ * @async
+ * @returns {void}
  */
 async function logout(): Promise<void>{
   await $authService?.logout();
@@ -113,6 +115,7 @@ async function logout(): Promise<void>{
 
 /**
  * Triggers a password change for a non-logged in authentication
+ * @returns {void}
  */
 function forgottenPassword() {
   $authService?.showResetPasswordDialog();
@@ -124,10 +127,18 @@ function forgottenPassword() {
 */
 const showInbox = ref(false)
 
+/**
+ * Opens the inbox
+ * @returns {void}
+ */
 function openInbox() {
   showInbox.value = true
 }
 
+/**
+ * Closes the inbox
+ * @returns {void}
+ */
 function closeInbox() {
   showInbox.value = false
 }

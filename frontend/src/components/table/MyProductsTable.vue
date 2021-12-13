@@ -150,6 +150,7 @@ const computedResult = computed(() => {
  * Routes to the product editing page for the given product
  * TODO: type to Joi type
  * @param {string} uuid - the product's uuid
+ * @returns {void}
  */
 function editProduct(uuid: string): void{
   $routerService?.routeTo(
@@ -163,6 +164,7 @@ function editProduct(uuid: string): void{
 /**
  * Duplicates a given product, and routes to the page allowing editing
  * @param {string} uuid - the UUID of the existing product to duplicate
+ * @returns {void}
  */
 async function duplicateProduct(uuid: string): Promise<void>{
 
@@ -188,7 +190,7 @@ async function duplicateProduct(uuid: string): Promise<void>{
     // Wait briefly before routing
     await sleep()
 
-    $routerService?.routeTo(
+    await $routerService?.routeTo(
       ROUTES.ADD_PRODUCT,
       {
         id: newProduct.uuid
@@ -202,6 +204,7 @@ async function duplicateProduct(uuid: string): Promise<void>{
 /**
  * Gets the color for the status chip of a product
  * @param {PRODUCT_STATUS} status - the status of the product
+ * @returns {string|null} - the chip's color, if any
  */
 function getChipColor(status: string): string|null {
   switch(status){
