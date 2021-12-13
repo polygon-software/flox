@@ -159,38 +159,14 @@ function editProduct(uuid: string): void{
   )
 }
 
-
-
-async function duplicateProduct(product: Record<string, unknown>): Promise<void>{
-
-  // Set up params for new product creation
-  const params = {
-    createProductInput: {
-      title: product.title,
-      description: product.description,
-      brand: product.brand,
-      category: product.category,
-      value: product.value,
-      currency: product.currency,
-      start: product.start, //TODO does not make sense
-      end: product.end, //TODO does not make sense
-      // TODO: Pictures? how to handle...
-      status: PRODUCT_STATUS.DRAFT,
-      sponsored: product.sponsored,
-      directBuyLink: product.directBuyLink,
-      directBuyLinkMaxClicks: product.directBuyLinkMaxClicks,
-      directBuyLinkMaxCost: product.directBuyLinkMaxCost,
-      brandLink: product.brandLink,
-      brandLinkMaxClicks: product.brandLinkMaxClicks,
-      brandLinkMaxCost: product.brandLinkMaxCost,
-      minBet: product.minBet,
-      maxBet: product.maxBet,
-      tags: product.tags
-    }
-  }
+/**
+ * Duplicates a given product, and routes to the page allowing editing
+ * @param {string} uuid - the UUID of the existing product to duplicate
+ */
+async function duplicateProduct(uuid: Record<string, unknown>): Promise<void>{
 
   // Create new Product
-  const mutationResult: FetchResult<any, Record<string, any>, Record<string, any>> | null = await executeMutation(CREATE_PRODUCT, params) as Record<string, unknown>
+  const mutationResult: FetchResult<any, Record<string, any>, Record<string, any>> | null = await executeMutation(DUPLICATE_PRODUCT, uuid) as Record<string, unknown>
 
   if(!mutationResult || !mutationResult.data){
     throw new Error('Creation FAILED') // TODO errorservice popup

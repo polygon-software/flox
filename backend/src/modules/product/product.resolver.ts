@@ -7,6 +7,7 @@ import { DeleteProductInput } from './dto/input/delete-product.input';
 import { Product } from './entities/product.entity';
 import { GetProductsArgs } from './dto/args/get-products.args';
 import { Public } from 'src/auth/authentication.decorator';
+import { DuplicateProductInput } from './dto/input/duplicate-product.input';
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -17,19 +18,19 @@ export class ProductResolver {
   async getProducts(
     @Args() getProductsArgs: GetProductsArgs,
   ): Promise<Product[]> {
-    return await this.productsService.getProducts(getProductsArgs);
+    return this.productsService.getProducts(getProductsArgs);
   }
 
   @Public()
   @Query(() => [Product], { name: 'allProducts' })
   async getAllProducts(): Promise<Product[]> {
-    return await this.productsService.getAllProducts();
+    return this.productsService.getAllProducts();
   }
 
   @Public()
   @Query(() => Product, { name: 'product' })
   async getProduct(@Args() getProductArgs: GetProductArgs): Promise<Product> {
-    return await this.productsService.getProduct(getProductArgs);
+    return this.productsService.getProduct(getProductArgs);
   }
 
   @Public()
@@ -37,7 +38,7 @@ export class ProductResolver {
   async createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ): Promise<Product> {
-    return await this.productsService.create(createProductInput);
+    return this.productsService.create(createProductInput);
   }
 
   @Public()
@@ -45,7 +46,15 @@ export class ProductResolver {
   async updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ): Promise<Product> {
-    return await this.productsService.update(updateProductInput);
+    return this.productsService.update(updateProductInput);
+  }
+
+  @Public()
+  @Mutation(() => Product)
+  async duplicateProduct(
+    @Args('duplicateProductInput') duplicateProductInput: DuplicateProductInput,
+  ): Promise<Product> {
+    return this.productsService.duplicate(duplicateProductInput);
   }
 
   @Public()
@@ -53,6 +62,6 @@ export class ProductResolver {
   async removeProduct(
     @Args('deleteProductInput') deleteProductInput: DeleteProductInput,
   ): Promise<Product> {
-    return await this.productsService.remove(deleteProductInput);
+    return this.productsService.remove(deleteProductInput);
   }
 }

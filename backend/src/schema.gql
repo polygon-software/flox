@@ -67,9 +67,14 @@ input DeleteUserInput {
   uuid: ID!
 }
 
+input DuplicateProductInput {
+  uuid: ID!
+}
+
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createProduct(createProductInput: CreateProductInput!): Product!
+  duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!

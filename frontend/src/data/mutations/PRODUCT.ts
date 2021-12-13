@@ -36,3 +36,16 @@ export const UPDATE_PRODUCT = {
     type: MutationTypes.UPDATE,
     cacheLocation: undefined
 }
+
+export const DUPLICATE_PRODUCT = {
+    mutation: gql`
+        mutation duplicateProduct($duplicateProductInput: DuplicateProductInput!){
+            duplicateProduct(duplicateProductInput: $duplicateProductInput) {
+              uuid
+              __typename
+            }
+        }`,
+    tables: ['product'],
+    type: MutationTypes.CREATE,
+    cacheLocation: 'duplicateProduct'
+}
