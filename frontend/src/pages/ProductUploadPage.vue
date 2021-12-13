@@ -379,15 +379,12 @@ const input: Record<string, unknown> = reactive(
 })
 
 /**
- * Watch result if a product is given
+ * Watch for first result if a product is given
  */
 const stop = watch(queryResult, async (newValue) => {
-  if(newValue && newValue !== {}){
+  if(newValue && newValue !== {} && !(Array.isArray(newValue) && newValue.length === 0)){
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
     await new Promise(resolve => setTimeout(resolve, 100));
-
-    console.log('Got val', newValue)
-
     // Manually handle each field, since some fields are special
     input.title = newValue.title
     input.description = newValue.description
