@@ -14,6 +14,7 @@ import {i18n} from 'boot/i18n';
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
+ * @returns {ApolloQueryResult<Record<string, unknown[]>>} - the query's output
  */
 async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
 
@@ -29,7 +30,7 @@ async function executeQuery(queryObject: QueryObject, variables?: Record<string,
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
  * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
  * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutatio
- * @return {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
+ * @returns {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
  */
 async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null> {
   const mutation =  mutationObject.mutation
@@ -102,6 +103,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
  * Subscribes to a graphQL query
  * @param {QueryObject} query - the graphQL query object
  * @param {Record<string, unknown>} [variables] - any variables to pass to the query
+ * @returns {Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>} - the query's output
  */
 function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
   const $ssrStore = useSSR();
