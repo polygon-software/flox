@@ -112,6 +112,13 @@ async function logout(): Promise<void>{
   await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
+/**
+ * Triggers a password change for the currently logged in authentication
+ * @returns {void}
+ */
+function changePassword() {
+  $authService?.showChangePasswordDialog()
+}
 
 /**
  * Triggers a password change for a non-logged in authentication

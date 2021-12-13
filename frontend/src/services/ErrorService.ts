@@ -10,10 +10,10 @@ export class ErrorService {
 
   /**
    * Constructor
-   * @param {QVueGlobals} q - quasar instance
+   * @param {QVueGlobals} quasar - quasar instance
    */
-    constructor(q: QVueGlobals) {
-        this.$q = q
+    constructor(quasar: QVueGlobals) {
+        this.$q = quasar
     }
 
     /**

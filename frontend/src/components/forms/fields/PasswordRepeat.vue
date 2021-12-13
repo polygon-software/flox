@@ -83,6 +83,3 @@ function emitUpdate(value: string){
 }
 
 </script>
-
-<style scoped>
-</style>

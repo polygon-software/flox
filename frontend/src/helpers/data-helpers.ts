@@ -1,10 +1,10 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
-import {QUERIES} from '../data/queries/QUERIES';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {useSSR} from 'src/store/ssr';
 import {i18n} from 'boot/i18n';
+import {QUERIES} from 'src/data/QUERIES';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -57,46 +57,63 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
   const { mutate } = useMutation(mutation, () => ({
     // Get cache and the new or deleted object
     update: (cache: ApolloCache<any> , { data: changeData}) => {
-      affectedQueries.forEach((queryObject) => {
-        const changes = changeData as Record<string, Record<string, unknown>>
-        if(!mutationObject.cacheLocation){
-          throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
-        }
-
-        const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
-
-        // Read existing query from cache
-        const data:Record<string, Array<Record<string, unknown>>>|null = cache.readQuery({ query: queryObject.query })
-
-        if(data) {
-          // Determine cache location
-          const cacheLocation = queryObject.cacheLocation
-          const oldData: Array<Record<string, unknown>> = data[cacheLocation]
-          let newData
-
-          // Case 1: CREATE (adds new object to cache)
-          if (type === MutationTypes.CREATE) {
-            newData = [...oldData, change]
-          }
-          // Case 2: DELETE (removes object from cache)
-          else if (type === MutationTypes.DELETE) {
-            newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.uuid !== change.uuid)
-          }
-
-          // Update data in cache
-          cache.writeQuery({
-            query: queryObject.query, data: {
-              ...data,
-              [cacheLocation]: newData
-            }
-          })
-        }
-      })
-
+      updateAffectedQueries(
+        cache,
+        affectedQueries,
+        changeData as Record<string, Record<string, unknown>>,
+        mutationObject
+      )
     },
   }))
   // Execute mutation
   return await mutate(variables);
+}
+
+/**
+ * Updates all queries affected by a mutation
+ * @param {ApolloCache<any>} cache - Apollo cache
+ * @param {QueryObject[]} affectedQueries - all affected queries
+ * @param {Record<string, Record<string, unknown>>} changes - data changes
+ * @param {MutationObject} mutationObject - the mutation that triggered the change
+ * @returns {void}
+ */
+function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryObject[], changes: Record<string, Record<string, unknown>>, mutationObject: MutationObject){
+  affectedQueries.forEach((queryObject) => {
+    if(!mutationObject.cacheLocation){
+      throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
+    }
+
+    const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
+
+    // Read existing query from cache
+    const data:Record<string, Array<Record<string, unknown>>>|null = cache.readQuery({ query: queryObject.query })
+
+    const type =  mutationObject.type
+
+    if(data) {
+      // Determine cache location
+      const cacheLocation = queryObject.cacheLocation
+      const oldData: Array<Record<string, unknown>> = data[cacheLocation]
+      let newData
+
+      // Case 1: CREATE (adds new object to cache)
+      if (type === MutationTypes.CREATE) {
+        newData = [...oldData, change]
+      }
+      // Case 2: DELETE (removes object from cache)
+      else if (type === MutationTypes.DELETE) {
+        newData = oldData.filter((dataPoint: Record<string, unknown>) => dataPoint.uuid !== change.uuid)
+      }
+
+      // Update data in cache
+      cache.writeQuery({
+        query: queryObject.query, data: {
+          ...data,
+          [cacheLocation]: newData
+        }
+      })
+    }
+  })
 }
 
 /**

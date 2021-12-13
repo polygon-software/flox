@@ -130,11 +130,11 @@ const filteredInterests = computed(() => {
 })
 
 /**
- * Toggle a chip's selection
- * @param {interest} interest - the selected interest
+ * On Clicking a chip, toggle it
+ * @param {interest} interest - the chip's content
  * @returns {void}
  */
-function clickChip(interest: interest): void {
+function clickChip(interest: interest) {
   // Deselect is always possible
   if (interest.model) {
     interest.model = false

@@ -227,6 +227,7 @@ const icon_dialogs = computed(() => {
 
 /**
  * Toggles the "Like" (heart) symbol.
+ * @returns {void}
  */
 function toogleLike() {
   liked.value = !liked.value
@@ -244,6 +245,7 @@ function toogleBookmark() {
 
 /**
  * Opens the comment section, so that the user can leave or read comments.
+ * @returns {void}
  */
 function toggleCommentSection() {
   showComments.value = !showComments.value
@@ -251,6 +253,7 @@ function toggleCommentSection() {
 
 /**
  * Allow the user to share this product site via Message Apps, Email, etc.
+ * @returns {void}
  */
 function toggleShareMenu() {
   showShareMenu.value = !showShareMenu.value
