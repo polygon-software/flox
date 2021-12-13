@@ -150,5 +150,6 @@ export default {
     uploads: 'Documents',
     all_documents: 'All documents',
     offers: 'Offers',
+    upload_more_documents: 'Upload further documents'
   },
 };

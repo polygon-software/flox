@@ -44,7 +44,7 @@
           {{ props.row.uploads }}
           <q-btn
             :label="$t('employee_dashboard.all_documents')"
-            @click="showAllDocuments()"
+            @click="showAllDocuments"
           />
         </q-td>
         <q-td key="offers">
@@ -62,6 +62,7 @@ import {ref} from 'vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
+import {SET_DOSSIER_STATUS} from "src/data/mutations/DOSSIER";
 
 const $q: QVueGlobals = useQuasar()
 
@@ -98,9 +99,9 @@ const props = defineProps({
  */
 function onUpdate(status: string, variables: Record<string, unknown>){
   void executeMutation(
-    // todo: mutationobject
-    SET_STATUS,
+    SET_DOSSIER_STATUS,
     {
+      //uuid: props.row.uuid,
       status: status,
       ...variables
     }
@@ -111,6 +112,7 @@ function onUpdate(status: string, variables: Record<string, unknown>){
  * Opens the dialog to show all documents and to upload further documents
  */
 function showAllDocuments() {
+  console.log("halloo")
   $q.dialog({
     title: 'UploadDocumentsDialog',
     component: UploadDocumentsDialog,
