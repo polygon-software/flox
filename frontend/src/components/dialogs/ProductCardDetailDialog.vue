@@ -120,13 +120,13 @@ import {QDialog} from 'quasar';
 
 const dialog: Ref<QDialog|null> = ref(null)
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void{
   //eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show()
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
@@ -250,6 +250,7 @@ const icon_dialogs = computed(() => {
 
 /**
  * Toggles the "Like" (heart) symbol.
+ * @returns {void}
  */
 function toogleLike() {
   liked.value = !liked.value
@@ -257,7 +258,8 @@ function toogleLike() {
 }
 
 /**
- * Toggles the bokmark symbol.
+ * Toggles the bookmark symbol.
+ * @returns {void}
  */
 function toogleBookmark() {
   bookmarked.value = !bookmarked.value
@@ -266,6 +268,7 @@ function toogleBookmark() {
 
 /**
  * Opens the comment section, so that the user can leave or read comments.
+ * @returns {void}
  */
 function toggleCommentSection() {
   showComments.value = !showComments.value
@@ -273,6 +276,7 @@ function toggleCommentSection() {
 
 /**
  * Allow the user to share this product site via Message Apps, Email, etc.
+ * @returns {void}
  */
 function toggleShareMenu() {
   showShareMenu.value = !showShareMenu.value

@@ -113,7 +113,7 @@ const interests = ref([
 
 const selectedInterests = computed(() => {
   return interests.value.filter(item => {
-    return item.model == true
+    return item.model === true
   })
 })
 
@@ -129,6 +129,11 @@ const filteredInterests = computed(() => {
   })
 })
 
+/**
+ * On Clicking a chip, toggle it
+ * @param {interest} interest - the chip's content
+ * @returns {void}
+ */
 function clickChip(interest: interest) {
   // Deselect is always possible
   if (interest.model) {
