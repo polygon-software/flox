@@ -218,6 +218,7 @@ async function onOk(): Promise<void> {
 
 /**
  * Executed upon rejecting a company application
+ * @returns {void}
  */
 function onReject(): void {
   //TODO: Send rejection E-mail
@@ -243,6 +244,8 @@ function onReject(): void {
 /**
  * Changes a company's e-mail address to a new one
  * @param {string} newEmail - the e-mail address to change to
+ * @async
+ * @returns {void}
  */
 async function onChangeEmail(newEmail: string): Promise<void>{
   await executeMutation(
@@ -256,6 +259,7 @@ async function onChangeEmail(newEmail: string): Promise<void>{
   email.value = newEmail
 }
 
+// eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
 }

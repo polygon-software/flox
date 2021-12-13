@@ -41,25 +41,26 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {RouteRecordRaw} from 'vue-router';
 
-const $authService: AuthenticationService = inject('$authService')
-const $routerService: RouterService = inject('$routerService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 
 /**
  * Logs in the given authentication
- * @param username {string} - the authentication's username
- * @param password {string} - the authentication's password
- * @param route_taget {string} - target route (only for demos)
+ * @param {string} username - the authentication's username
+ * @param {string} password - the authentication's password
+ * @param {string} route_target - target route (only for demos)
+ * @returns {void}
  */
 async function onLogin({username, password, route_target}: {username: string, password: string, route_target: string}){
-  await $authService.login(username, password)
+  await $authService?.login(username, password)
   const target_route_mapping: Record<string, RouteRecordRaw> = {
     'admin-dashboard': ROUTES.ADMIN_DASHBOARD,
     'management-dashboard': ROUTES.MANAGEMENT_DASHBOARD,
     'employee-dashboard': ROUTES.EMPLOYEE_DASHBOARD
   }
   // Redirect to main page
-  await $routerService.routeTo(target_route_mapping[route_target])
+  await $routerService?.routeTo(target_route_mapping[route_target])
 }
 
 /**
@@ -68,7 +69,7 @@ async function onLogin({username, password, route_target}: {username: string, pa
  * @returns {void}
  */
 async function toSignup(): Promise<void>{
-  await $routerService.routeTo(ROUTES.SIGNUP)
+  await $routerService?.routeTo(ROUTES.SIGNUP)
 }
 
 </script>

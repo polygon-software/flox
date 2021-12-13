@@ -1,5 +1,5 @@
 import {CompanyItem} from '../../../../shared/schemas/CompanyItem';
-import Joi from 'joi';
+import Joi, {Schema} from 'joi';
 import {Address} from 'src/data/types/Address';
 
 /**
@@ -67,7 +67,7 @@ export class Company {
    */
   validate(): boolean{
     try{
-      Joi.assert(this, CompanyItem)
+      Joi.assert(this, CompanyItem as Schema<any>)
       return true;
     } catch (e) {
       return false

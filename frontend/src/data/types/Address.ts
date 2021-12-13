@@ -1,5 +1,5 @@
 import {AddressItem} from '../../../../shared/schemas/AddressItem';
-import Joi from 'joi';
+import Joi, {Schema} from 'joi';
 import {i18n} from 'boot/i18n';
 
 /**
@@ -31,7 +31,7 @@ export class Address{
    */
   validate(): boolean{
     try {
-      Joi.assert(this, AddressItem)
+      Joi.assert(this, AddressItem as Schema<any>)
       return true;
     } catch (e) {
       return false
