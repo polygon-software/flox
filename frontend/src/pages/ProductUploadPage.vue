@@ -332,6 +332,7 @@ import ROUTES from 'src/router/routes';
 import {useRoute} from 'vue-router';
 import {PRODUCT} from 'src/data/queries/QUERIES';
 import {IS_VALID_STRING, IS_FUTURE_DATE, IS_VALID_MIN_BET, IS_VALID_MAX_BET, IS_VALID_NUMBER, IS_LARGER_THAN, IS_URL} from 'src/data/RULES';
+import {sleep} from 'src/helpers/general-helpers';
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
 
@@ -384,7 +385,8 @@ const input: Record<string, unknown> = reactive(
 const stop = watch(queryResult, async (newValue) => {
   if(newValue && newValue !== {} && !(Array.isArray(newValue) && newValue.length === 0)){
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await sleep(100)
+
     // Manually handle each field, since some fields are special
     input.title = newValue.title
     input.description = newValue.description

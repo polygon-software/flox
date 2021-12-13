@@ -83,7 +83,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => duplicateProduct(props.row)"
+                  @click="() => duplicateProduct(props.row.uuid)"
                 />
               </div>
             </q-btn-dropdown>
@@ -103,8 +103,9 @@ import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {useQuasar} from 'quasar';
-import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
+import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {FetchResult} from '@apollo/client';
+import {sleep} from 'src/helpers/general-helpers';
 const $routerService: RouterService|undefined = inject('$routerService')
 const $q = useQuasar()
 
@@ -163,27 +164,38 @@ function editProduct(uuid: string): void{
  * Duplicates a given product, and routes to the page allowing editing
  * @param {string} uuid - the UUID of the existing product to duplicate
  */
-async function duplicateProduct(uuid: Record<string, unknown>): Promise<void>{
+async function duplicateProduct(uuid: string): Promise<void>{
 
   // Create new Product
-  const mutationResult: FetchResult<any, Record<string, any>, Record<string, any>> | null = await executeMutation(DUPLICATE_PRODUCT, uuid) as Record<string, unknown>
-
-  if(!mutationResult || !mutationResult.data){
-    throw new Error('Creation FAILED') // TODO errorservice popup
-  }
+  const mutationResult: FetchResult<any, Record<string, any>, Record<string, any>> | null = await executeMutation(
+    DUPLICATE_PRODUCT,
+    {
+      duplicateProductInput: {
+        uuid
+      }
+    }) as Record<string, unknown>
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const newData: Record<string, Record<string, unknown>> = mutationResult.data;
-  const newProduct: Record<string, unknown> = newData.createProduct;
+  const newProduct: Record<string, unknown> = newData.duplicateProduct;
+
+  if(!mutationResult || !mutationResult.data || !newProduct || !newProduct.uuid){
+    throw new Error('Creation FAILED') // TODO errorservice popup
+  }
 
   // Ensure product correctly created and route to edit screen
   if(newProduct && newProduct.uuid && typeof newProduct.uuid === 'string'){
+    // Wait briefly before routing
+    await sleep()
+
     $routerService?.routeTo(
       ROUTES.ADD_PRODUCT,
       {
         id: newProduct.uuid
       }
     )
+  } else{
+    throw new Error('TODO something invalid')
   }
 }
 
