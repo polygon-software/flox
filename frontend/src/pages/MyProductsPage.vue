@@ -100,8 +100,10 @@ const tabs = [
 
 /**
  * Routes to the product creation page
+ * @async
+ * @returns {void}
  */
-function createProduct(){
-  $routerService?.routeTo(ROUTES.ADD_PRODUCT)
+async function createProduct(): Promise<void>{
+  await $routerService?.routeTo(ROUTES.ADD_PRODUCT)
 }
 </script>

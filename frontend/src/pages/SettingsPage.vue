@@ -187,6 +187,7 @@ const loggedIn = computed(() => {
 
 /**
  * Triggers a password change for the currently logged in authentication
+ * @returns {void}
  */
 function changePassword() {
   if(!loggedIn.value){

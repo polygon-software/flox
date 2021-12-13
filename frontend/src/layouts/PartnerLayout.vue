@@ -102,6 +102,8 @@ const menuItems = [
 /**
  * Routes to an item's target route
  * @param {RouteRecordRaw} route - target route
+ * @async
+ * @returns {void}
  */
 async function onItemClick(route: RouteRecordRaw){
   await $routerService?.routeTo(route)

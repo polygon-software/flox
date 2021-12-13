@@ -3,21 +3,25 @@ import {NavigationFailure, RouteLocationRaw, Router, RouteRecordRaw} from 'vue-r
 /**
  * This is a service that is used globally throughout the application for routing
  */
-
 export class RouterService {
 
     // Router instance
     router: Router
 
-    constructor(router: Router) {
-        this.router = router
-    }
+  /**
+   * Constructor
+   * @param {Router} router - router instance
+  */
+  constructor(router: Router) {
+      this.router = router
+  }
 
 
   /**
    * Routes to a given route, as defined in ROUTES constant
    * @param {RouteLocationRaw} to - the route to go to
    * @param {Record<string, string>} [query] - props to pass to the component, if any
+   * @returns {void|NavigationFailure|undefined} - the navigation result
    */
   async routeTo(to: RouteRecordRaw, query?: Record<string, string>): Promise<void | NavigationFailure | undefined>{
 

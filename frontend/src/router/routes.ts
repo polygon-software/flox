@@ -50,6 +50,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
 
 /**
  * Returns the layout name for the currently logged in user
+ * @returns {string} - the layout's name
  */
 function getUserRoleLayout(): string{
   return 'PartnerLayout' // TODO actual functionality

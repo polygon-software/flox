@@ -3,19 +3,23 @@ import {QVueGlobals} from 'quasar';
 /**
  * This is a service that is used globally throughout the application for error handling
  */
-
 export class ErrorService {
 
     // Quasar instance
     $q: QVueGlobals
 
-    constructor(quasar: QVueGlobals) {
-        this.$q = quasar
+  /**
+   * Constructor
+   * @param {QVueGlobals} q - quasar instance
+   */
+    constructor(q: QVueGlobals) {
+        this.$q = q
     }
 
     /**
      * Shows a dialog for the given error
-     * @param error {Error} - the error that triggered this dialog
+     * @param {Error} error - the error that triggered this dialog
+     * @returns {void}
      */
     showErrorDialog(error: Error): void{
         console.error(error)

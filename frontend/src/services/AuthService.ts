@@ -375,8 +375,9 @@ export class AuthenticationService {
 
     /**
      * When login succeeds
-     * @param userSession {CognitoUserSession} - the currently active Cognito authentication session
-     * @param resolve {(value: (void | PromiseLike<void>)) => void}
+     * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
+     * @param {(value: (void | PromiseLike<void>)) => void} resolve - resolve function
+     * @returns {void}
      */
     loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
       // Store locally

@@ -423,15 +423,17 @@ const stop = watch(queryResult, async (newValue) => {
 const pictures: Ref<Array<Ref<File>>> = ref([])
 
 /**
- * TODO
- * @param newPictures
+ * On picture change, overwrites the array
+ * @param {Ref<File[]>} newPictures - New pictures
+ * @returns {void}
  */
 function onPictureChange(newPictures: Ref<File>[]){
   pictures.value = newPictures
 }
 
-  /**
- * TODO
+/**
+ * On submit, creates/updates existing product
+ * @returns {void}
  */
 async function onSubmit(){
 
@@ -507,7 +509,6 @@ async function onSubmit(){
 
   // Push to success page
   await $routerService?.routeTo(ROUTES.MY_PRODUCTS)
-  return;
 }
 
 </script>
