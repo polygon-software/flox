@@ -489,6 +489,7 @@ async function onSubmit(){
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
   const headers = { 'Content-Type': 'multipart/form-data' }
 
+    // TODO move to backend in a single call
   // Upload all images
   for(const picture of pictures.value) {
     const formData = new FormData();
