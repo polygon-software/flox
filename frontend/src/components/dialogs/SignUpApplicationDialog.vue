@@ -162,25 +162,26 @@ const email = ref(props.company.email)
 
 // Convert addresses to actual address instances
 const domicile_address = new Address(
-  props.company.domicile_address.street,
-  props.company.domicile_address.number,
-  props.company.domicile_address.city,
-  props.company.domicile_address.zip_code,
+  props.company.domicile_address?.street?? undefined,
+  props.company.domicile_address?.number ?? undefined,
+  props.company.domicile_address?.city ?? undefined,
+  props.company.domicile_address?.zip_code ?? undefined,
 )
 const correspondence_address = new Address(
-  props.company.correspondence_address.street,
-  props.company.correspondence_address.number,
-  props.company.correspondence_address.city,
-  props.company.correspondence_address.zip_code,
+  props.company.correspondence_address?.street ?? undefined,
+  props.company.correspondence_address?.number ?? undefined,
+  props.company.correspondence_address?.city ?? undefined,
+  props.company.correspondence_address?.zip_code ?? undefined,
 )
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show();
 }
 
+// eslint-disable-next-line require-jsdoc
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
@@ -188,6 +189,8 @@ function hide(): void {
 
 /**
  * On OK, enable document upload for the company and send e-mail
+ * @async
+ * @returns {void}
  */
 async function onOk(): Promise<void> {
   // Verify all required attributes present

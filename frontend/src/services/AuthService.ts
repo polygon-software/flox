@@ -167,9 +167,9 @@ export class AuthenticationService {
   /**
    * TODO description, consolidate with signUp() function
    * TODO make adaptable to other parameters via direct handling of {attributes} param
-   * @param username {string} - the chosen username
-   * @param email {string} - the authentication's e-mail address -> TODO move to attributes
-   * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
+   * @param {string} username - the chosen username
+   * @param {string} email - the authentication's e-mail address -> TODO move to attributes
+   * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
    * @returns {string} the user's cognito ID (sub)
    */
   async signUpNewUser(username: string, email: string, password: string): Promise<string> {

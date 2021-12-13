@@ -43,6 +43,7 @@ export function randomPassword(minLength: number): string{
  * @param {string} email - user's e-mail address
  * @param {string} password - user's password
  * @param {string} type - user's type
+ * @returns {string} - the link
  */
 export function generatePasswordChangeLink(email: string, password: string, type: string): string{
   // Encode base64
