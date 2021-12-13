@@ -20,6 +20,7 @@
       <img
         v-if="urls[index]"
         :src="urls[index]"
+        :alt="index"
         class="q-my-md"
         style="max-height: 150px"
       />
