@@ -15,11 +15,12 @@
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
         >
-          <q-td key="uuid" :props="props">
+          <q-td key="pictures" :props="props">
             <img
               v-if="props.row.pictures[0] && props.row.pictures[0].url"
               :src="props.row.pictures[0].url"
               style="max-width: 120px; height: 90px"
+              :alt="props.row.title"
             >
           </q-td>
           <q-td key="title" :props="props">
@@ -120,12 +121,13 @@ const props = defineProps( {
 
 // TODO i18n
 const columns = [
-  { name: 'uuid', label: '', field: 'uuid', sortable: true },
+  { name: 'pictures', label: '', field: 'uuid', sortable: true },
   { name: 'title', label: 'Product', field: 'title', sortable: true },
   { name: 'brand', label: 'Brand', field: 'brand', sortable: true },
   { name: 'status', label: 'Status', field: 'status', sortable: true },
   { name: 'sponsored', label: 'Type', field: 'sponsored', sortable: true },
   { name: 'start', label: 'Start Date', field: 'start', sortable: true },
+  { name: 'tags', label: '', field: 'tags', sortable: false }, // Invisible column, used for filtering only
   { name: 'options', label: '', field: 'options', sortable: false },
 ]
 
@@ -198,7 +200,6 @@ async function duplicateProduct(product: Record<string, unknown>): Promise<void>
   const newData: Record<string, Record<string, unknown>> = mutationResult.data;
   const newProduct: Record<string, unknown> = newData.createProduct;
 
-  console.log('new product:', newProduct)
   // Ensure product correctly created and route to edit screen
   if(newProduct && newProduct.uuid && typeof newProduct.uuid === 'string'){
     $routerService?.routeTo(

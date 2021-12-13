@@ -390,9 +390,6 @@ const stop = watch(queryResult, async (newValue) => {
     input.description = newValue.description
     input.brand = newValue.brand
     input.category = newValue.category
-    // Dates: extract substring for date-only
-    input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
-    input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
     input.value = newValue.value
     input.currency = newValue.currency
     input.minBet = newValue.minBet
@@ -407,10 +404,14 @@ const stop = watch(queryResult, async (newValue) => {
     input.brandLinkMaxClicks = newValue.brandLinkMaxClicks
     input.brandLinkMaxCost = newValue.brandLinkMaxCost
 
+    // Dates: extract substring for date-only
+    input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
+    input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
+
     // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
     // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
 
-    // Stop watcher
+    // Stop watcher, since we already got initial values
     stop()
   }
 })
