@@ -1,5 +1,6 @@
 import {computed, Ref, ref} from 'vue';
 import {Field, FIELDS} from 'src/data/FIELDS';
+import _ from 'lodash';
 
 /**
  * The Form class is meant to be used by any form components.
@@ -19,13 +20,15 @@ export class Form {
   // Page definitions
   pages: Ref<Record<string, any>[]>
 
-  constructor() {
+  /**
+   * Constructor
+   * @param {Array<Record<string, unknown>>} pages - the form's pages
+   */
+  constructor(pages?: Array<Record<string, unknown>>) {
     this.step = ref(1)
     this.values = ref({})
-    this.pages = ref([])
+    this.pages = pages? ref(_.cloneDeep(pages)) : ref([])
   }
-
-
 
   /**
    * Determines whether the current page is filled with valid data
@@ -43,7 +46,7 @@ export class Form {
     // Fields on current page
     const pageFields: Record<string, unknown>[] = currentPage.fields
     pageFields.forEach((field: Record<string, any>) => {
-      pageKeys.push(field.key)
+      pageKeys.push(field.key as string)
     })
 
     // Validate each field by its "rules" attribute
@@ -55,8 +58,7 @@ export class Form {
       const rules: Array<(valueElement: any) => boolean|string> = field.attributes.rules
       return rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
-        const result = typeof rule(this.values.value[key]) === 'boolean'
-        return result
+        return typeof rule(this.values.value[key]) === 'boolean' && rule(this.values.value[key]) === true
       })
     })
   })
@@ -65,8 +67,9 @@ export class Form {
 
   /**
    * Updates a value within the form's values
-   * @param key {string}: the value's name
-   * @param value {unknown}: the actual value to add
+   * @param {string} key: the value's name
+   * @param {unknown} value: the actual value to add
+   * @returns {void}
    */
   updateValue(key: string, value: unknown): void {
     this.values.value[key] = value

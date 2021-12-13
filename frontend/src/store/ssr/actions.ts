@@ -6,7 +6,6 @@ import SSRMutations from 'src/store/ssr/mutations';
 /**
  * This file contains all authentication actions
  */
-
 class SSRActions extends Actions<
     SSRState,
     SSRGetters,

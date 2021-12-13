@@ -57,8 +57,9 @@ const signup = ref(false)
 
 /**
  * Logs in the given authentication
- * @param username {string} - the authentication's username
- * @param password {string} - the authentication's password
+ * @param {string} username - the authentication's username
+ * @param {string} password - the authentication's password
+ * @returns {void}
  */
 async function onLogin({username, password}: {username: string, password: string}){
   await $authService.login(username, password)
@@ -69,9 +70,10 @@ async function onLogin({username, password}: {username: string, password: string
 
 /**
  * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
- * @param username {string} - the authentication's chosen username
- * @param email {string} - the authentication's e-mail address
- * @param password_repeat {string} - the authentication's chosen password
+ * @param {string} username - the authentication's chosen username
+ * @param {string} email - the authentication's e-mail address
+ * @param {string} password_repeat - the authentication's chosen password
+ * @returns {void}
  */
 async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
   await $authService.signUp(username, email, password_repeat);

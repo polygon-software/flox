@@ -96,8 +96,8 @@ import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
 
 
-const $authService: AuthenticationService = inject('$authService')
-const $routerService: RouterService = inject('$routerService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const loggedIn = computed(() => {
@@ -111,24 +111,28 @@ const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication
+ * @async
+ * @returns {void}
  */
 async function logout(): Promise<void>{
-  await $authService.logout();
-  await $routerService.routeTo(ROUTES.LOGIN)
+  await $authService?.logout();
+  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
 /**
  * Triggers a password change for the currently logged in authentication
+ * @returns {void}
  */
 function changePassword() {
-  $authService.showChangePasswordDialog()
+  $authService?.showChangePasswordDialog()
 }
 
 /**
  * Triggers a password change for a non-logged in authentication
+ * @returns {void}
  */
 function forgottenPassword() {
-  $authService.showResetPasswordDialog();
+  $authService?.showResetPasswordDialog();
 }
 
 /*
