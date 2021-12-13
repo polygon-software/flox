@@ -5,9 +5,7 @@ import {isEmpty} from 'lodash';
  * This file contains rules that can be applied to input forms.
  */
 
-/**
-* Form field Rules
- */
+
 
 const IS_VALID_STRING = (val: string): boolean => {
   return !isEmpty(val) && val.length > 0

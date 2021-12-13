@@ -70,6 +70,11 @@ watch(passwordRepeat, (newVal) => {
   emitUpdate(newVal)
 })
 
+/**
+ * Emits an update with new value
+ * @param {string} value - the password
+ * @returns {void}
+ */
 function emitUpdate(value: string){
   if(password.value.length > 0 && password.value === passwordRepeat.value){
     emit('change', value)
@@ -80,6 +85,3 @@ function emitUpdate(value: string){
 }
 
 </script>
-
-<style scoped>
-</style>
