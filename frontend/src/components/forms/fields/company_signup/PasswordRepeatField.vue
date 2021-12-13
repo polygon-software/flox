@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue';
+import {ref, watch, defineProps, defineEmits} from 'vue';
 import {i18n} from 'boot/i18n';
 import {IS_VALID_PASSWORD} from 'src/data/RULES';
 

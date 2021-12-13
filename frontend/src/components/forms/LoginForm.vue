@@ -40,7 +40,7 @@
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import {AuthenticationService} from 'src/services/AuthService';
-import {inject} from 'vue';
+import {inject, defineEmits} from 'vue';
 
 const $authService: AuthenticationService = inject('$authService')
 

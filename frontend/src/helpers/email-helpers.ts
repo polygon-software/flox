@@ -27,9 +27,15 @@ const sesClient = new SESClient({
  * @param {string} body - E-mail's HTML body
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
- * @param {string} [textBody] - optional plaintext body
  */
-export async function sendEmail(from: string, to: string|string[], subject: string, body: string, replyTo?: string[], toCC?: string[], textBody?: string): Promise<void|SendEmailCommandOutput>{
+export async function sendEmail(
+  from: string,
+  to: string|string|string[],
+  subject: string,
+  body: string,
+  replyTo?: string[],
+  toCC?: string[],
+): Promise<void|SendEmailCommandOutput>{
   // E-Mail parameters
   const params = {
     Destination: {
@@ -44,7 +50,7 @@ export async function sendEmail(from: string, to: string|string[], subject: stri
         },
         Text: {
           Charset: 'UTF-8',
-          Data: textBody ?? body,
+          Data: body
         },
       },
       Subject: {
