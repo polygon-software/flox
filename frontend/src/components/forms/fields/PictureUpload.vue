@@ -5,22 +5,25 @@
     v-for="(picture, index) in pictures"
     :key="index"
     v-model="picture.value"
-    class="q-mb-md"
+    class="q-ma-md"
+    style="max-width: 300px;"
     outlined
     accept="image/*"
     :label="$t('products.image') + ' ' + (index+1).toString()"
     stack-label
     clearable
+    display-value=""
     :max-file-size="props.maxFileSize"
     :rules="[]"
-    style="width: 150px; height: 100px; overflow: hidden"
     @update:model-value="fileChange"
   >
-    <img
-      v-if="urls[index]"
-      :src="urls[index]"
-      style="position: absolute; top: 0; left: 0; width: 150px; height: 100px"
-    />
+      <img
+        v-if="urls[index]"
+        :src="urls[index]"
+        :alt="index"
+        class="q-my-md"
+        style="max-height: 150px"
+      />
   </q-file>
   </div>
 </template>
@@ -35,7 +38,7 @@ const props = defineProps({
   }
 })
 const pictures: Ref<Array<Ref<null|File>>> = ref([ref(null)])
-const urls: Ref<string[]> = ref([])
+const urls: Ref<Array<null|ArrayBuffer|string>> = ref([])
 
 /**
  * Emits the updated value
@@ -60,37 +63,49 @@ function emitValue(){
 }
 
 /**
+ * Covert a file to a data url.
+ * @param file {File} The file you want to convert.
+ */
+function toDataUrl(file: File): Promise<string|ArrayBuffer|null> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  })
+}
+
+/**
+ * Updates the image url array so it always matches the image file array.
+ */
+async function updateUrls(): Promise<void> {
+  urls.value = []
+  for (const picture of pictures.value) {
+    if (picture.value) {
+      const url = await toDataUrl(picture.value)
+      urls.value.push(url)
+    }
+  }
+}
+
+/**
  * Depending on how many additional fields already exist, adds or deletes a file from a custom field.
  */
-function fileChange(newFile: File): void {
-  // Generate preview URL for new file
-  if(newFile){
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      if(e && e.target){
-        const url = e.target.result;
-        if(url){
-          urls.value.push(url.toString())
-        }
-      }
-    }
-    reader.readAsDataURL(newFile);
-  }
-
+async function fileChange(): Promise<void> {
   const size = pictures.value.length
 
   // Only 1 additional field
   if (size === 1) {
-    // File was deleted -> do nothing
+    // File was deleted -> remove first url
     if (pictures.value[0].value === null) {
-      // TODO: delete from URLs as well
       emitValue()
+      await updateUrls()
       return;
     }
     // File was added -> add new field
     pictures.value.push(ref(null))
-
     emitValue()
+    await updateUrls()
     return;
   }
 
@@ -99,20 +114,23 @@ function fileChange(newFile: File): void {
     const field = pictures.value[index]
     // A file was deleted
     if(field.value === null) {
-      // Last field -> do nothing
+      // Last field -> delete last url
       if (index === size-1) {
         emitValue()
+        await updateUrls()
         return;
       }
       // Not last element -> delete field
       pictures.value.splice(index, 1)
       emitValue()
+      await updateUrls()
       return;
     }
   }
   // File was added or updated
   pictures.value.push(ref(null))
   emitValue()
+  await updateUrls()
 }
 
 </script>
