@@ -28,8 +28,8 @@ export const UPDATE_PRODUCT = {
     mutation: gql`
         mutation updateProduct($updateProductInput: UpdateProductInput!){
             updateProduct(updateProductInput: $updateProductInput) {
-                uuid
-                __typename
+              uuid
+              __typename
             }
         }`,
     tables: ['product'],

@@ -381,8 +381,8 @@ const input: Record<string, unknown> = reactive(
 /**
  * Watch result if a product is given
  */
-watch(queryResult, async (newValue) => {
-  if(newValue){
+const stop = watch(queryResult, async (newValue) => {
+  if(newValue && newValue !== {}){
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
     await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -412,6 +412,9 @@ watch(queryResult, async (newValue) => {
 
     // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
     // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
+
+    // Stop watcher
+    stop()
   }
 })
 // Picture inputs (separated from input, since these have to be added after product is created)
@@ -476,9 +479,9 @@ async function onSubmit(){
 
     const mutationName = productId ? 'updateProduct' : 'createProduct'
 
-  // Prepare variables for image upload TODO
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
-  const newProductId: string = mutationResult.data[mutationName].uuid
+  // Prepare variables for image upload TODO Update handling...
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const newProductId: string = mutationResult.data[mutationName].uuid as string
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
   const headers = { 'Content-Type': 'multipart/form-data' }
 
