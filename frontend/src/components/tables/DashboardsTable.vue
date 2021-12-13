@@ -1,16 +1,22 @@
 <template>
   <div class="column" style="margin-bottom: 32px">
     <q-table
+      card-style="border-radius: 8px; background-color: transparent"
+      table-header-class="bg-transparent"
       v-model:selected="selected"
-      table-header-class="bg-grey-2"
       :title="title"
       :rows="rows"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
+      separator="none"
+      flat
     >
     <template #body="props">
-      <q-tr :props="props">
+      <q-tr
+        :props="props"
+        style="background-color: white; cursor: pointer"
+      >
         <q-td key="date">
           {{ props.row.date }}
         </q-td>
@@ -56,6 +62,8 @@
           </q-chip>
         </q-td>
       </q-tr>
+      <!-- One spacer row per row -->
+      <q-tr style="height: 14px"/>
     </template>
     </q-table>
   </div>
@@ -125,3 +133,22 @@ function showAllDocuments() {
 }
 
 </script>
+
+<style scoped>
+table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  margin-top: -10px; /* correct offset on first border spacing if desired */
+}
+td {
+  padding: 10px;
+}
+td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+td:last-child {
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+</style>

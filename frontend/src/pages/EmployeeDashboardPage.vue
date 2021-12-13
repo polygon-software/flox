@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-card
       class="square q-pa-md q-ma-md"
-      style="width: 800px"
+      style="width: 1200px"
     >
       <!-- Own info -->
       <CompanyEmployeeId/>
