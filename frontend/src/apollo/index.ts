@@ -53,7 +53,6 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
 
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
-    // General options.
     <ApolloClientOptions<unknown>>{
       link: concat(authMiddleware, link),
       cache: new InMemoryCache({

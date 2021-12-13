@@ -42,6 +42,24 @@ export const DUPLICATE_PRODUCT = {
         mutation duplicateProduct($duplicateProductInput: DuplicateProductInput!){
             duplicateProduct(duplicateProductInput: $duplicateProductInput) {
               uuid
+              title
+              description
+              brand
+              value
+              currency
+              start
+              end
+              category
+              directBuyLink
+              brandLink
+              minBet
+              maxBet
+              tags
+              pictures{
+                uuid
+                url
+                __typename
+              }
               __typename
             }
         }`,
