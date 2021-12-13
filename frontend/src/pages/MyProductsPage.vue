@@ -85,12 +85,12 @@ const tabs = [
     label: i18n.global.t('general.all'),
   },
   {
-    value: PRODUCT_STATUS.ACTIVE,
-    label: i18n.global.t('product_status.active'),
-  },
-  {
     value: PRODUCT_STATUS.DRAFT,
     label: i18n.global.t('product_status.draft'),
+  },
+  {
+    value: PRODUCT_STATUS.ACTIVE,
+    label: i18n.global.t('product_status.active'),
   },
   {
     value: PRODUCT_STATUS.ARCHIVED,

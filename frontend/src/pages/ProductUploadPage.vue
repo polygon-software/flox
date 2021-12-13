@@ -323,10 +323,10 @@
 import {inject, reactive, Ref, ref, watch} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import {CREATE_PRODUCT} from 'src/data/mutations/PRODUCT';
+import {CREATE_PRODUCT, UPDATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import axios from 'axios';
 import {i18n} from 'boot/i18n';
-import {CATEGORY, CURRENCY, SELECTABLE_PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import {CATEGORY, CURRENCY, PRODUCT_STATUS, SELECTABLE_PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {useRoute} from 'vue-router';
@@ -385,9 +385,30 @@ watch(queryResult, async (newValue) => {
   if(newValue){
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
     await new Promise(resolve => setTimeout(resolve, 100));
-    Object.keys(newValue).forEach((key) => {
-      input[key] = newValue[key]
-    })
+
+    console.log('Got val', newValue)
+
+    // Manually handle each field, since some fields are special
+    input.title = newValue.title
+    input.description = newValue.description
+    input.brand = newValue.brand
+    input.category = newValue.category
+    // Dates: extract substring for date-only
+    input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
+    input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
+    input.value = newValue.value
+    input.currency = newValue.currency
+    input.minBet = newValue.minBet
+    input.maxBet = newValue.maxBet
+    input.status = PRODUCT_STATUS.DRAFT // TODO: do not allow user to set this manually
+    input.sponsored = newValue.sponsored
+    input.tags = newValue.tags
+    input.directBuyLink = newValue.directBuyLink
+    input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks
+    input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost
+    input.brandLink = newValue.brandLink
+    input.brandLinkMaxClicks = newValue.brandLinkMaxClicks
+    input.brandLinkMaxCost = newValue.brandLinkMaxCost
 
     // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
     // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
@@ -414,32 +435,50 @@ async function onSubmit(){
     throw new Error('Wait, thats illegal')
   }
 
-  const createProductInput = {
+  // Parameters for creating/updating
+  const params = {
     ...input,
-    value: Number.parseInt(input.value ?? ''), // Convert 'value' to int TODO can this be done on QInput directly?
-    minBet: Number.parseInt(input.minBet ?? ''),
-    maxBet: Number.parseInt(input.maxBet ?? ''),
-    directBuyLinkMaxClicks: Number.parseInt(input.directBuyLinkMaxClicks ?? ''),
-    directBuyLinkMaxCost: Number.parseInt(input.directBuyLinkMaxCost ?? ''),
-    brandLinkMaxClicks: Number.parseInt(input.brandLinkMaxClicks ?? ''),
-    brandLinkMaxCost: Number.parseInt(input.brandLinkMaxCost ?? ''),
+    value: Number.parseInt(input.value as string ?? ''), // Convert 'value' to int TODO can this be done on QInput directly?
+    minBet: Number.parseInt(input.minBet as string ?? ''),
+    maxBet: Number.parseInt(input.maxBet as string ?? ''),
+    directBuyLinkMaxClicks: Number.parseInt(input.directBuyLinkMaxClicks as string ?? ''),
+    directBuyLinkMaxCost: Number.parseInt(input.directBuyLinkMaxCost as string ?? ''),
+    brandLinkMaxClicks: Number.parseInt(input.brandLinkMaxClicks as string ?? ''),
+    brandLinkMaxCost: Number.parseInt(input.brandLinkMaxCost as string ?? ''),
   }
 
-  // Create on database
-  const mutationResult = await executeMutation(
-    CREATE_PRODUCT,
-    {
-      createProductInput: createProductInput
+    let mutationResult
+
+    if(productId){
+      // Case 1: EDIT
+      mutationResult = await executeMutation(
+        UPDATE_PRODUCT,
+        {
+          updateProductInput: {
+            uuid: productId,
+            ...params
+          }
+        }
+      )
+    } else {
+      // Case 2: CREATE
+      mutationResult = await executeMutation(
+        CREATE_PRODUCT,
+        {
+          createProductInput: params
+        }
+      )
     }
-  )
 
-  if(!mutationResult){
-    throw new Error('Product creation failed')
-  }
+    if(!mutationResult){
+      throw new Error('Product creation/update failed')
+    }
+
+    const mutationName = productId ? 'updateProduct' : 'createProduct'
 
   // Prepare variables for image upload TODO
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
-  const newProductId: string = mutationResult.data.createProduct.uuid
+  const newProductId: string = mutationResult.data[mutationName].uuid
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
   const headers = { 'Content-Type': 'multipart/form-data' }
 

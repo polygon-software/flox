@@ -89,8 +89,13 @@ export const PRODUCT = {
         start
         end
         category
+        sponsored
         directBuyLink
+        directBuyLinkMaxClicks
+        directBuyLinkMaxCost
         brandLink
+        brandLinkMaxClicks
+        brandLinkMaxClicks
         minBet
         maxBet
         tags
