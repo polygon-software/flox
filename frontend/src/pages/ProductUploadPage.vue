@@ -432,9 +432,11 @@ function onPictureChange(newPictures: Ref<File>[]){
 }
 
 /**
+ * TODO cleanup, simplify
  * On submit, creates/updates existing product
  * @returns {void}
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity,require-jsdoc
 async function onSubmit(){
 
   // TODO verify all attrs, at least 1 image (form validation)
