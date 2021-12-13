@@ -28,7 +28,7 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {i18n} from 'boot/i18n';
 
-const $routerService: RouterService = inject('$routerService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 
 /**
@@ -83,16 +83,18 @@ const props = defineProps({
 
 /**
  * Routes to  desired path - given through prop
+ * @async
+ * @returns {void}
  */
 async function redirectOnClick(): Promise<void> {
   // Redirect to login page
-  await $routerService.routeTo(ROUTES.redirectPath)
+  await $routerService?.routeTo(ROUTES.redirectPath)
 }
 
 if (props.autoRedirect) {
   setTimeout(function () {
-    $routerService?.routeTo(ROUTES.redirectPath)
-  }, props.autoRedirectDurationMs);
+    void $routerService?.routeTo(ROUTES.redirectPath)
+  }, props.autoRedirectDurationMS);
 }
 
 </script>

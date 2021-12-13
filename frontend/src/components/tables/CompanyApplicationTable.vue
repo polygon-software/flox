@@ -49,8 +49,8 @@ import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
 
 const $q: QVueGlobals = useQuasar()
-const $authService: AuthenticationService = inject('$authService')
-const $errorService: ErrorService = inject('$errorService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 // ----- Data -----
 const columns = [
@@ -75,6 +75,8 @@ const computedResult = computed(()=>{
 
 /**
  * Opens the dialog to enable the file upload
+ * @param {Company} company - the company to show the dialog for
+ * @returns {void}
  */
 function showEnableUploadDialog(company: Company) {
   $q.dialog({
@@ -87,7 +89,9 @@ function showEnableUploadDialog(company: Company) {
 }
 
 /**
- * Shows
+ * Shows a document validation dialog
+ * @param {Company} company - the company to show the dialog for
+ * @returns {void}
  */
 function showDocumentValidationDialog(company: Company) {
   $q.dialog({
@@ -104,22 +108,24 @@ function showDocumentValidationDialog(company: Company) {
 
 /**
  * Determines if an action button has to be rendered
- * @param {Company} companyData
+ * @param {Company} company - company
+ * @returns {boolean} - whether there is an action for the state
  */
-function isAction(companyData: Company): boolean {
-  if (companyData.document_upload_enabled) {
-    return companyData.documents !== null && companyData.documents.length > 0
+function isAction(company: Company): boolean {
+  if (company.document_upload_enabled) {
+    return company.documents !== null && company.documents.length > 0
   }
   return true
 }
 
 /**
  * Returns the state of the application.
- * @param {Company} companyData
+ * @param {Company} company - the company
+ * @returns {Record<string, string>} - the company's state
  */
-function getState(companyData: Company): Record<string, string> {
-  if (companyData.document_upload_enabled) {
-    if (companyData.documents === null || companyData.documents.length === 0) {
+function getState(company: Company): Record<string, string> {
+  if (company.document_upload_enabled) {
+    if (company.documents === null || company.documents.length === 0) {
       return {
         label: 'errors.documents_missing',
         color: 'orange'

@@ -1,10 +1,10 @@
 import {CompanyItem} from '../../../../shared/schemas/CompanyItem';
 import Joi from 'joi';
 import {Address} from 'src/data/types/Address';
+
 /**
  * A class representing a company data object
  */
-
 export class Company {
   company_name: string|null
   language: string|null
@@ -22,6 +22,25 @@ export class Company {
   cognito_id: string|null
   readable_id: string|null
 
+  /**
+   * Constructor
+   * @param company_name
+   * @param language
+   * @param uid
+   * @param uuid
+   * @param first_name
+   * @param last_name
+   * @param domicile_address
+   * @param correspondance_address
+   * @param phone
+   * @param email
+   * @param branch_structure
+   * @param document_upload_enabled
+   * @param documents
+   * @param cognito_id
+   * @param readable_id
+   */
+  // eslint-disable-next-line require-jsdoc
   constructor(company_name?: string, language?: string, uid?: string, uuid?: string, first_name?: string, last_name?: string, domicile_address?: Address, correspondance_address?: Address,
               phone?: string, email?: string, branch_structure?: boolean, document_upload_enabled?: boolean, documents?: Array<Record<string, unknown>>, cognito_id?: string, readable_id?: string) {
 
@@ -44,6 +63,7 @@ export class Company {
 
   /**
    * Validates the company item to Joi schema
+   * @returns {boolean} - whether it's valid
    */
   validate(): boolean{
     try{
@@ -69,8 +89,9 @@ export class Company {
    * @param {boolean} branch_structure
    * @param {boolean} document_upload_enabled
    * @param {Array<File>} documents
-   *
+   * @returns {void}
    */
+  // eslint-disable-next-line require-jsdoc
   replace({company_name, language, uid, uuid, first_name, last_name, domicile_address, correspondance_address, phone, email, branch_structure, document_upload_enabled, documents}:
             {
               company_name: string, language: string, uid: string, uuid: string, first_name: string, last_name: string, domicile_address: Address, correspondance_address: Address,

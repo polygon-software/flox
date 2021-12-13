@@ -35,7 +35,7 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {useQuasar} from 'quasar';
 
 const emit = defineEmits(['submit'])
-const $routerService: RouterService = inject('$routerService')
+const $routerService: RouterService|undefined = inject('$routerService')
 const $q = useQuasar()
 
 // Upload loading status
@@ -59,6 +59,8 @@ const pages = [
 
 /**
  * Uploads the user's files and, if OK, redirects
+ * @param {Record<string, Record<string, File|null>>} values - uploaded files
+ * @returns {void}
  */
 async function onSubmit(values: Record<string, Record<string, File|null>>){
 
