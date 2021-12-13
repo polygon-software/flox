@@ -150,10 +150,11 @@ const computedResult = computed(() => {
  * Routes to the product editing page for the given product
  * TODO: type to Joi type
  * @param {string} uuid - the product's uuid
+ * @async
  * @returns {void}
  */
-function editProduct(uuid: string): void{
-  $routerService?.routeTo(
+async function editProduct(uuid: string): Promise<void>{
+  await $routerService?.routeTo(
     ROUTES.ADD_PRODUCT,
     {
       id: uuid

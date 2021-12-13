@@ -65,7 +65,8 @@ function emitValue(){
 
 /**
  * Covert a file to a data url.
- * @param file {File} The file you want to convert.
+ * @param {File} file The file you want to convert.
+ * @returns {string|ArrayBuffer|null} - the data URL for the file
  */
 function toDataUrl(file: File): Promise<string|ArrayBuffer|null> {
   return new Promise((resolve, reject) => {
@@ -78,6 +79,7 @@ function toDataUrl(file: File): Promise<string|ArrayBuffer|null> {
 
 /**
  * Updates the image url array so it always matches the image file array.
+ * @returns {void}
  */
 async function updateUrls(): Promise<void> {
   urls.value = []

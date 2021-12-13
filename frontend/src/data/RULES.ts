@@ -4,9 +4,6 @@ import {EMAIL_REGEX, PASSWORD_REGEX, URL_REGEX} from 'src/helpers/REGEX';
  * This file contains rules that can be applied to input forms.
  */
 
-/**
-* Form field Rules
- */
 const IS_EMAIL = (val: string): boolean => {
   return EMAIL_REGEX.test(val);
 }

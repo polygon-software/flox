@@ -234,7 +234,8 @@ function toogleLike() {
 }
 
 /**
- * Toggles the bokmark symbol.
+ * Toggles the bookmark symbol.
+ * @returns {void}
  */
 function toogleBookmark() {
   bookmarked.value = !bookmarked.value

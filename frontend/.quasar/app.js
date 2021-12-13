@@ -13,7 +13,7 @@
 
 
 import { Quasar } from 'quasar'
-import RootComponent from 'app/src/App.vue'
+import AppComponent from 'app/src/App.vue'
 
 
 import createStore from 'app/src/store/index'
@@ -23,19 +23,38 @@ import createRouter from 'app/src/router/index'
 
 
 
+import { defineComponent, h, onMounted, getCurrentInstance } from 'vue'
+const RootComponent = defineComponent({
+  name: 'AppWrapper',
+  setup (props) {
+    onMounted(() => {
+      
 
-export default async function (createAppFn, quasarUserOptions) {
+      
+
+      
+      const { proxy: { $q } } = getCurrentInstance()
+      $q.onSSRHydrated !== void 0 && $q.onSSRHydrated()
+      
+    })
+
+    return () => h(AppComponent, props)
+  }
+})
+
+
+export default async function (createAppFn, quasarUserOptions, ssrContext) {
   // create store and router instances
   
   const store = typeof createStore === 'function'
-    ? await createStore({})
+    ? await createStore({ssrContext})
     : createStore
 
   // obtain Vuex injection key in case we use TypeScript
   const { storeKey } = await import('app/src/store/index');
   
   const router = typeof createRouter === 'function'
-    ? await createRouter({store})
+    ? await createRouter({ssrContext,store})
     : createRouter
   
   // make router instance available in store
@@ -50,7 +69,7 @@ export default async function (createAppFn, quasarUserOptions) {
   app.config.devtools = true
   
 
-  app.use(Quasar, quasarUserOptions)
+  app.use(Quasar, quasarUserOptions, ssrContext)
 
   
 
