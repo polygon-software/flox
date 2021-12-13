@@ -36,9 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, Ref, ref} from 'vue'
+import {computed, inject, Ref} from 'vue'
 import {i18n} from 'boot/i18n';
-import {inject} from 'vue'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {subscribeToQuery} from 'src/helpers/data-helpers';

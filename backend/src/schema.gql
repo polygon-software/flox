@@ -147,9 +147,6 @@ input CreateCompanyInput {
 }
 
 input CreateEmployeeInput {
-  """Cognito ID"""
-  cognito_id: String!
-
   """Company"""
   company: company
 
@@ -424,9 +421,6 @@ input UpdateCompanyInput {
 }
 
 input UpdateEmployeeInput {
-  """Cognito ID"""
-  cognito_id: String
-
   """Company"""
   company: company
 
