@@ -150,6 +150,8 @@ export default {
     uploads: 'Documents',
     all_documents: 'All documents',
     offers: 'Offers',
-    upload_more_documents: 'Upload further documents'
+    upload_more_documents: 'Upload further documents',
+    organisation_id: 'Organisation number',
+    employee_id: 'Employee number',
   },
 };

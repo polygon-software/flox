@@ -151,6 +151,8 @@ export default {
     uploads: 'Dokumente',
     all_documents: 'Alle Dokumente',
     offers: 'Angebote',
-    upload_more_documents: 'Weitere Dokumente hochladen'
+    upload_more_documents: 'Weitere Dokumente hochladen',
+    organisation_id: 'Organisationsnummer',
+    employee_id: 'Mitarbeiternummer',
   },
 };
