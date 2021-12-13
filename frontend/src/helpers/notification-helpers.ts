@@ -6,14 +6,15 @@ import {QVueGlobals} from 'quasar';
 
 /**
  * Shows a notification with the given parameters
- * @param q - Quasar instance
- * @param message - message text
+ * @param {QVueGlobals} q - Quasar instance
+ * @param {string} message - message text
  * @param {'top' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'bottom' | 'left' | 'right' | 'center' | undefined} [position] - position of the notification
  * @param {string} [color] - background color
  * @param {string} [textColor] - color of text
  * @param {string} [icon] - the icon to show, if any
  * @param {boolean} [multiLine] - whether the message spans multiple lines
  * @param {number} [timeout] - amount of time (in ms) to display the notification
+ * @returns {void}
  */
 export function showNotification(
   q: QVueGlobals,
