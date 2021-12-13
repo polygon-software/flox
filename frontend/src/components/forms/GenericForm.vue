@@ -141,6 +141,7 @@ const form: Form = new Form(_pages)
 /**
  * Validates and, if valid, submits the form with all entered values
  * @async
+ * @returns {void}
  */
 async function onSubmit(){
   const is_valid = await form_ref.value?.validate()

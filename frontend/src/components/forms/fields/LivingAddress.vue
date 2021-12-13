@@ -1,9 +1,9 @@
 <template>
   <strong>{{ $t('living_address') }}</strong>
   <q-input
+    v-model="street"
     dense
     :label="$t('account_data.street')"
-    v-model="street"
     type="text"
     lazy-rules="ondemand"
     :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_address')]"
@@ -11,9 +11,9 @@
   </q-input>
   <div class="flex justify-between">
     <q-input
+      v-model="number"
       dense
       :label="$t('account_data.number')"
-      v-model="number"
       type="text"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('errors.invalid_house_number')]"
@@ -22,9 +22,9 @@
     >
     </q-input>
     <q-input
+      v-model="city"
       dense
       :label="$t('account_data.city')"
-      v-model="city"
       type="text"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
@@ -32,9 +32,9 @@
     >
     </q-input>
     <q-input
+      v-model="zip_code"
       dense
       :label="$t('account_data.zip_code')"
-      v-model="zip_code"
       type="number"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_ZIP(val) || $t('errors.invalid_zip_code')]"
@@ -43,9 +43,9 @@
     >
     </q-input>
     <q-input
+      v-model="state"
       dense
       :label="$t('account_data.state')"
-      v-model="state"
       type="text"
       lazy-rules="ondemand"
       :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_state')]"
@@ -70,20 +70,25 @@ const emit = defineEmits(['change'])
 watch(street, (newValue) => {
   emitUpdate(newValue)
 })
-watch(number, (newValue) => {
+watch(number, (newValue: string|number) => {
   emitUpdate(newValue)
 })
 watch(city, (newValue) => {
   emitUpdate(newValue)
 })
-watch(zip_code, (newValue) => {
+watch(zip_code, (newValue: string|number) => {
   emitUpdate(newValue)
 })
 watch(state, (newValue) => {
   emitUpdate(newValue)
 })
 
-function emitUpdate(value: string|number) {
+/**
+ * Emits an event with the new values
+ * @param {string|number} value - the address field's value
+ * @returns {void}
+ */
+function emitUpdate(value: string|number): void {
   if (street.value.length > 0 && number.value > 0 && city.value.length > 0, zip_code.value > 0 && state.value.length > 0) {
     emit('change', value)
   }

@@ -13,7 +13,7 @@
       type="search"
       class="q-mb-md"
     >
-      <template v-slot:append>
+      <template #append>
         <q-icon name="search" />
       </template>
     </q-input>
@@ -113,7 +113,7 @@ const interests = ref([
 
 const selectedInterests = computed(() => {
   return interests.value.filter(item => {
-    return item.model == true
+    return item.model === true
   })
 })
 
@@ -125,11 +125,16 @@ const sortedInterests = computed(() => {
 // Filter the interests by checking their name
 const filteredInterests = computed(() => {
   return sortedInterests.value.filter(msg => {
-    return msg.name.toLowerCase().includes(search.value.toLowerCase()) || msg.name.toLowerCase().includes(search.value.toLowerCase())
+    return msg.name.toLowerCase().includes(search.value.toLowerCase())
   })
 })
 
-function clickChip(interest: interest) {
+/**
+ * Toggle a chip's selection
+ * @param {interest} interest - the selected interest
+ * @returns {void}
+ */
+function clickChip(interest: interest): void {
   // Deselect is always possible
   if (interest.model) {
     interest.model = false

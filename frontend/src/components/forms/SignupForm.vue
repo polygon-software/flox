@@ -4,12 +4,12 @@
       {{ $t('authentication.signup') }}
     </h5>
     <q-form
-        @submit="onSubmit"
         class="q-gutter-md"
+        @submit="onSubmit"
         >
     <q-stepper
-        v-model="form.step.value"
         ref="stepper"
+        v-model="form.step.value"
         active-color="primary"
         done-icon="done"
         animated
@@ -26,30 +26,30 @@
           class="flex flex-center"
       >
         <component
+              :is="field.component"
               v-for="field in page.fields"
               :key="field.key"
-              :is="field.component"
               v-bind="field.attributes"
               v-model="form.values.value[field.key]"
               @change="(newValue) => form.updateValue(field.key, newValue)"
           />
       </q-step>
-      <template v-slot:navigation>
+      <template #navigation>
         <q-stepper-navigation>
           <q-btn
               v-if="form.step.value > 1"
-              @click="$refs.stepper.previous()"
               flat
               style="margin-right: 30px"
               color="primary"
               :label="$t('buttons.back')"
-              class="q-ml-sm" />
+              class="q-ml-sm"
+              @click="$refs.stepper.previous()" />
           <q-btn
               v-if="form.step.value < form.pages.value.length"
-              @click="$refs.stepper.next()"
               color="primary"
               :label="$t('buttons.next_step')"
               :disable="!form.pageValid.value"
+              @click="$refs.stepper.next()"
           />
           <q-btn
               v-if="form.step.value === form.pages.value.length"
@@ -112,6 +112,7 @@ form.pages.value = [
 
 /**
  * Emits the 'submit' event, containing the form's data
+ * @returns {void}
  */
 function onSubmit(): void {
   emit('submit', form.values.value)

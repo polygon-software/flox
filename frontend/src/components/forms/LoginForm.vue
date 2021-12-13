@@ -4,18 +4,18 @@
     style="width: 300px"
   >
     <q-form
-        @submit="onSubmit"
         class="row justify-center"
+        @submit="onSubmit"
     >
       <component
+          :is="field.component"
           v-for="field in fields"
           :key="field.key"
-          :is="field.component"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
           class="q-ma-none"
           style="width: 90%"
+          @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
           style="margin-top: 20px"
@@ -49,6 +49,7 @@ form.pages.value = [
 
 /**
  * Emits the 'submit' event, containing the form's data
+ * @returns {void}
  */
 function onSubmit(): void {
   emit('submit', form.values.value)
