@@ -1,9 +1,9 @@
 <template>
   <q-dialog
-      ref="dialogRef"
+      ref="dialog"
       :persistent="true"
       title="QR"
-      @hide="onDialogHide"
+      @hide="hide"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
@@ -21,12 +21,12 @@
         <q-btn
             :label="$t('buttons.cancel')"
             color="primary"
-            @click="onDialogCancel"
+            @click="hide"
         />
         <q-btn
           :label="$t('buttons.ok')"
             color="primary"
-            @click="onDialogOK"
+            @click="hide"
         />
       </q-card-actions>
     </q-card>
@@ -35,17 +35,23 @@
 
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
-import { defineProps } from 'vue';
-import { useDialogPluginComponent } from 'quasar'
+import {defineProps, ref, Ref} from 'vue';
+import {QDialog, useDialogPluginComponent} from 'quasar'
 
-// REQUIRED; must be called inside of setup()
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-// dialogRef      - Vue ref to be applied to QDialog
-// onDialogHide   - Function to be used as handler for @hide on QDialog
-// onDialogOK     - Function to call to settle dialog with "ok" outcome
-//                    example: onDialogOK() - no payload
-//                    example: onDialogOK({ /*.../* }) - with payload
-// onDialogCancel - Function to call to settle dialog with "cancel" outcome
+
+const dialog: Ref<QDialog|null> = ref(null)
+// Mandatory - do not remove!
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
+function show(): void{
+  //eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.show()
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
+function hide(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.hide()
+}
 
 const props = defineProps({
   value: String

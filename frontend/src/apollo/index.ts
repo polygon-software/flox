@@ -5,7 +5,12 @@ import {getMainDefinition} from '@apollo/client/utilities';
 import {Cookies} from 'quasar';
 import {QSsrContext} from '@quasar/app';
 
-export function getClientOptions(ssrContext: QSsrContext |null|undefined): ApolloClientOptions<any> {
+/**
+ * Get Apollo client options
+ * @param {QSsrContext|null|undefined} ssrContext - quasar ssr context
+ * @returns {ApolloClientOptions<any>} - config options
+ */
+export function getClientOptions(ssrContext: QSsrContext|null|undefined): ApolloClientOptions<any> {
   // Authentication middleware for intercepting any GraphQL-related operations
   const authMiddleware = new ApolloLink((operation, forward) => {
     const cookies = process.env.SERVER && ssrContext? Cookies.parseSSR(ssrContext) : Cookies
@@ -88,55 +93,6 @@ export function getClientOptions(ssrContext: QSsrContext |null|undefined): Apoll
                             // appropriate. This can be changed in case Apollo implements better behavior for this.
       })
     },
-
-    // Specific Quasar mode options.
-    process.env.MODE === 'spa'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'ssr'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'pwa'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'bex'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'cordova'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'capacitor'
-      ? {
-          //
-        }
-      : {},
-    process.env.MODE === 'electron'
-      ? {
-          //
-        }
-      : {},
-
-    // dev/prod options.
-    process.env.DEV
-      ? {
-          //
-        }
-      : {},
-    process.env.PROD
-      ? {
-          //
-        }
-      : {},
 
     // For ssr mode, when on server.
     process.env.MODE === 'ssr' && process.env.SERVER

@@ -6,25 +6,25 @@
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
       <q-form
-          @submit="onSubmit"
           class="q-gutter-md"
+          @submit="onSubmit"
       >
         <b>Reset Password</b>
         <q-input
-            label="Email Verification Code"
             v-model="verificationCode"
+            label="Email Verification Code"
         />
         <q-input
-            label="New Password"
             v-model="password"
+            label="New Password"
             type="password"
             :rules="[
               val => PASSWORD_REGEX.test(val) || 'Not ok'
             ]"
         />
         <q-input
-            label="New Password repeated"
             v-model="passwordRep"
+            label="New Password repeated"
             type="password"
             :rules="[
               val => val === password || 'Passwords must be identical',
@@ -55,16 +55,18 @@
 import {defineEmits, Ref} from 'vue';
 import {ref} from 'vue';
 import {PASSWORD_REGEX} from '../../helpers/REGEX'
+import {QDialog} from 'quasar';
 
 let verificationCode = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
-let dialog: Ref<string|null> = ref(null)
+const dialog: Ref<QDialog|null> = ref(null)
 
 /**
  * On submit, emit data outwards
+ * @returns {void}
  */
 function onSubmit(){
   emit('ok', {
@@ -75,12 +77,13 @@ function onSubmit(){
 }
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
- dialog.value.show()
+ dialog.value?.show()
 }
 
+// eslint-disable-next-line require-jsdoc
 function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
