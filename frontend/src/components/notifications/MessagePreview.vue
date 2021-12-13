@@ -7,9 +7,9 @@
     <div class="flex items-center justify-between">
       <b> {{ title }} </b>
       <q-badge
+        v-show="!props.isRead"
         rounded
         color="red"
-        v-show="!props.isRead"
       />
     </div>
     <p style="font-size: small"> {{ received }}</p>

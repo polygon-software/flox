@@ -44,20 +44,20 @@
 
         <!-- Dialogs for clickable Icons -->
         <q-dialog
-          v-for="dialog in icon_dialogs"
-          :key="dialog.key"
-          v-model="dialog.model"
+          v-for="icon_dialog in icon_dialogs"
+          :key="icon_dialog.key"
+          v-model="icon_dialog.model"
         >
           <q-card>
             <q-card-section>
-              <div>{{ dialog.content }}</div>
+              <div>{{ icon_dialog.content }}</div>
             </q-card-section>
             <q-card-actions>
               <q-btn
                 :label="$t('buttons.back')"
                 color="primary"
                 flat
-                @click.stop=dialog.callback
+                @click.stop=icon_dialog.callback
               />
             </q-card-actions>
           </q-card>

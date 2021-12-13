@@ -95,8 +95,7 @@ const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActi
 
 const loggedIn = computed(() => {
   // Explicit type
-  const result: boolean = $authStore.getters.getLoggedInStatus()
-  return result;
+  return $authStore.getters.getLoggedInStatus();
 })
 
 // Username does not need to be reactive, since it won't change between logins

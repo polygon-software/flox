@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, inject, ref, Ref} from 'vue';
+import {computed, defineProps, inject, Ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {MY_PRODUCTS} from 'src/data/queries/QUERIES';

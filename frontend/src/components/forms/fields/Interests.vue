@@ -30,15 +30,15 @@
       class="q-ma-md col"
     >
       <q-chip
-        v-for="interest in filteredInterests"
-        :key="interest.name"
-        :color="interest.model ? 'primary' : 'gray'"
-        :text-color="interest.model ? 'white': 'black'"
+        v-for="interestChip in filteredInterests"
+        :key="interestChip.name"
+        :color="interestChip.model ? 'primary' : 'gray'"
+        :text-color="interestChip.model ? 'white': 'black'"
         style="cursor: pointer;"
         clickable
-        @click="clickChip(interest)"
+        @click="clickChip(interestChip)"
       >
-        {{ interest.name }}
+        {{ interestChip.name }}
       </q-chip>
     </q-scroll-area>
     <p

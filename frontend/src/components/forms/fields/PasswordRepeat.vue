@@ -46,10 +46,12 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
 const props = defineProps({
   modelValue: {
     required: false,
-    type: String
+    type: String,
+    default: '',
   },
   rules: {
     required: false,
+    type: Array,
   }
 });
 
