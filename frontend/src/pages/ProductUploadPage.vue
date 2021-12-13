@@ -130,6 +130,7 @@
                 type="number"
                 outlined
                 dense
+                lazy-rules="ondemand"
                 :rules="[ (val) => IS_VALID_MIN_BET(val, input.maxBet, input.value) || $t('errors.invalid_number')]"
               />
 
@@ -141,6 +142,7 @@
                 type="number"
                 outlined
                 dense
+                lazy-rules="ondemand"
                 :rules="[ (val) => IS_VALID_MAX_BET(val, input.minBet, input.value) || $t('errors.invalid_number')]"
               />
             </div>
