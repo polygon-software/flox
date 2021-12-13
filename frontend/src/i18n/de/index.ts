@@ -3,6 +3,7 @@ export default {
     yes: 'Ja',
     no: 'Nein',
     new: 'Neu',
+    editable: 'bearbeitbar'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -122,6 +123,7 @@ export default {
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     documents_missing: 'Fehlende Dokumente',
+    unknown: 'Unbekannter Fehler'
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',

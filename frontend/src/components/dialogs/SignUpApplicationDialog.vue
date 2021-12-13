@@ -72,11 +72,29 @@
             </q-item-section>
           </q-item>
 
-          <q-item v-ripple>
+          <q-item v-ripple clickable>
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.email') }}:</p>
-                <p class="col-7">{{ props.company.email }}</p>
+                <p class="col-7">
+                  {{ email }}
+                  <q-item-label caption>({{ $t('general.editable') }})</q-item-label>
+                </p>
+                <q-popup-edit
+                  v-slot="scope"
+                  :auto-save="false"
+                  :model-value="email"
+                  buttons
+                  @save="(value) => onChangeEmail(value)"
+                >
+                  <q-input
+                    v-model="scope.value"
+                    dense
+                    autofocus
+                    counter
+                    @keyup.enter="scope.set"
+                  />
+                </q-popup-edit>
               </div>
             </q-item-section>
           </q-item>
@@ -120,12 +138,11 @@
 import {PropType, ref, Ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
-import {ENABLE_COMPANY_DOCUMENT_UPLOAD} from 'src/data/mutations/COMPANY';
+import {DELETE_COMPANY, ENABLE_COMPANY_DOCUMENT_UPLOAD, UPDATE_COMPANY_EMAIL} from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
-import {sendDocumentUploadEmail, sendEmail} from 'src/helpers/email-helpers';
-import ROUTES from 'src/router/routes';
+import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 
@@ -139,6 +156,9 @@ const props = defineProps({
     required: true
   },
 })
+
+// E-mail as a separate value, since it's editable
+const email = ref(props.company.email)
 
 // Convert addresses to actual address instances
 const domicile_address = new Address(
@@ -167,7 +187,7 @@ function hide(): void {
 }
 
 /**
- * On OK, enable document upload for the company and send e-mail
+ * On OK, enable document upload for the company and send e-email
  */
 async function onOk(): Promise<void> {
   // Verify all required attributes present
@@ -179,7 +199,7 @@ async function onOk(): Promise<void> {
   // Enable on database
   await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
 
-  // Send document upload e-mail
+  // Send document upload e-email
   await sendDocumentUploadEmail(company.email ?? '', company.uuid ?? '')
 
   // Show confirmation prompt
@@ -197,21 +217,40 @@ async function onOk(): Promise<void> {
  * Executed upon rejecting a company application
  */
 function onReject(): void {
-  //TODO: Send rejection message
+  //TODO: Send rejection E-mail
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
   }).onOk(() => {
-    // Show notification
-    showNotification(
-      $q,
-      i18n.global.t('messages.application_rejected'),
-      undefined,
-      'primary'
-    )
-    // Hide outer popup
-    hide()
+    // Remove company application on DB
+    void executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
+      // Show notification
+      showNotification(
+        $q,
+        i18n.global.t('messages.application_rejected'),
+        undefined,
+        'primary'
+      )
+      // Hide outer popup
+      hide()
+    })
   })
+}
+
+/**
+ * Changes a company's e-mail address to a new one
+ * @param {string} newEmail - the e-mail address to change to
+ */
+async function onChangeEmail(newEmail: string): Promise<void>{
+  await executeMutation(
+    UPDATE_COMPANY_EMAIL,
+    {
+      uuid: props.company.uuid,
+      email: newEmail
+    })
+
+  // Update in own prop to reflect changed state
+  email.value = newEmail
 }
 
 function onCancel(): void {
