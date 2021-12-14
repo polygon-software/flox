@@ -135,7 +135,7 @@ function hide(): void {
 }
 
 /**
- * On OK, create account and send e-email
+ * On OK, create account and send e-mail
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){

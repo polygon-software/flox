@@ -56,7 +56,7 @@ export class AuthenticationService {
 
     /**
      * Logs into the AWS authentication pool using the given data
-     * @param identifier {string} - the authentication's identifier (usually E-email or username)
+     * @param identifier {string} - the authentication's identifier (usually E-mail or username)
      * @param password {string} - the authentication's password
      */
     async login(identifier: string, password: string): Promise<void>{
@@ -128,10 +128,10 @@ export class AuthenticationService {
     }
 
   /**
-   * Signs up by creating a new authentication using the given Username, e-email and password.
+   * Signs up by creating a new authentication using the given Username, e-mail and password.
    * TODO make adaptable to other parameters via direct handling of {attributes} param
    * @param username {string} - the chosen username
-   * @param email {string} - the authentication's e-email address -> TODO move to attributes
+   * @param email {string} - the authentication's e-mail address -> TODO move to attributes
    * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
    */
   async signUp(username: string, email: string, password: string): Promise<void> {
@@ -159,7 +159,7 @@ export class AuthenticationService {
    * TODO description, consolidate with signUp() function
    * TODO make adaptable to other parameters via direct handling of {attributes} param
    * @param username {string} - the chosen username
-   * @param email {string} - the authentication's e-email address -> TODO move to attributes
+   * @param email {string} - the authentication's e-mail address -> TODO move to attributes
    * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
    * @returns {string} the user's cognito ID (sub)
    */
@@ -294,7 +294,7 @@ export class AuthenticationService {
 
         this.$q.dialog({
             title: 'Verification',
-            message: 'Please enter your e-email verification code',
+            message: 'Please enter your e-mail verification code',
             cancel: true,
             persistent: true,
             prompt: {
@@ -351,7 +351,7 @@ export class AuthenticationService {
     }
 
     /**
-     * Confirm e-email verification code
+     * Confirm e-mail verification code
      * @param code
      */
     async verifyEmail(code: string): Promise<void>{
@@ -417,7 +417,7 @@ export class AuthenticationService {
      */
     onFailure(error: Error): void{
         if(error.name === 'UserNotConfirmedException'){
-            // Show the e-email verification dialog and send a new code
+            // Show the e-mail verification dialog and send a new code
             this.showEmailVerificationDialog(true)
         } else {
           this.$errorService.showErrorDialog(error)

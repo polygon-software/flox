@@ -133,7 +133,7 @@ input CreateCompanyInput {
   correspondence_address: CreateAddressInput!
   domicile_address: CreateAddressInput!
 
-  """E-email"""
+  """E-mail"""
   email: String
 
   """First Name"""
@@ -150,7 +150,7 @@ input CreateEmployeeInput {
   """Company"""
   company: company
 
-  """E-email"""
+  """E-mail"""
   email: String
 
   """First Name"""
@@ -424,7 +424,7 @@ input UpdateEmployeeInput {
   """Company"""
   company: company
 
-  """E-email"""
+  """E-mail"""
   email: String
   first_name: String
   function: String

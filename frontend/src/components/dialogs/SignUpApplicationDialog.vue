@@ -187,7 +187,7 @@ function hide(): void {
 }
 
 /**
- * On OK, enable document upload for the company and send e-email
+ * On OK, enable document upload for the company and send e-mail
  */
 async function onOk(): Promise<void> {
   // Verify all required attributes present
@@ -199,7 +199,7 @@ async function onOk(): Promise<void> {
   // Enable on database
   await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
 
-  // Send document upload e-email
+  // Send document upload e-mail
   await sendDocumentUploadEmail(company.email ?? '', company.uuid ?? '')
 
   // Show confirmation prompt
