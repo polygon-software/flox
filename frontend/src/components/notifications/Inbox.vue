@@ -1,6 +1,6 @@
 <template>
   <q-card style="width: 350px; height: 500px; overflow: hidden;">
-    <h5 class="text-center"> {{ $t('messages') }}</h5>
+    <h5 class="text-center"> {{ $t('notifications.messages') }}</h5>
 
     <!-- Message Details -->
     <q-card-section v-if="showMessageDetail">

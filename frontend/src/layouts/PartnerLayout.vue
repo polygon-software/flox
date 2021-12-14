@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <!-- Menu bar header -->
-    <MenuBar/>
+    <PartnerMenuBar/>
 
     <!-- Side menu -->
     <q-drawer
@@ -60,12 +60,11 @@
 </template>
 
 <script setup lang="ts">
-import MenuBar from 'src/components/menu/MenuBar.vue'
 import {RouterService} from 'src/services/RouterService';
-
 import {inject} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw} from 'vue-router';
+import PartnerMenuBar from 'components/menu/PartnerMenuBar.vue';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
