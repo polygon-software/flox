@@ -10,7 +10,7 @@ type Address {
   created_at: DateTime!
 
   """Date of deletion"""
-  deleted_at: DateTime!
+  deleted_at: DateTime
 
   """Last modification date"""
   last_modified_at: DateTime!
@@ -40,7 +40,7 @@ type Bank {
   created_at: DateTime!
 
   """Date of deletion"""
-  deleted_at: DateTime!
+  deleted_at: DateTime
 
   """Mail"""
   email: String!
@@ -81,7 +81,7 @@ type Company {
   creation_state: creationState!
 
   """Date of deletion"""
-  deleted_at: DateTime!
+  deleted_at: DateTime
 
   """Documents of the company"""
   documents: [PrivateFile!]
@@ -207,7 +207,7 @@ type Dossier {
   created_at: DateTime!
 
   """Date of deletion"""
-  deleted_at: DateTime!
+  deleted_at: DateTime
 
   """Mail"""
   email: String!
@@ -254,7 +254,7 @@ type Employee {
   created_at: DateTime!
 
   """Date of deletion"""
-  deleted_at: DateTime!
+  deleted_at: DateTime
 
   """Mail"""
   email: String!
@@ -308,7 +308,7 @@ type Offer {
   created_at: DateTime!
 
   """Date of deletion"""
-  deleted_at: DateTime!
+  deleted_at: DateTime
 
   """Dossier of Offer"""
   dossier: Dossier!
@@ -331,7 +331,7 @@ type PrivateFile {
   created_at: DateTime!
 
   """Date of deletion"""
-  deleted_at: DateTime!
+  deleted_at: DateTime
 
   """S3 File Key"""
   key: String!
@@ -354,7 +354,7 @@ type PublicFile {
   created_at: DateTime!
 
   """Date of deletion"""
-  deleted_at: DateTime!
+  deleted_at: DateTime
 
   """S3 File Key"""
   key: String!
@@ -442,8 +442,17 @@ input UpdateUserInput {
 }
 
 type User {
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
   """UUID of the specific entity"""
   fk: ID!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
 
   """Role of the User"""
   role: Roles!

@@ -11,7 +11,7 @@ export enum CREATION_STATE {
   DONE = 'DONE',
 }
 
-export enum ROLES {
+export enum ROLE {
   BANK = 'BANK',
   COMPANY = 'COMPANY',
   EMPLOYEE = 'EMPLOYEE',

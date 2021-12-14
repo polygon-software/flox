@@ -9,4 +9,4 @@ import { SoiAdminResolver } from './soi-admin.resolver';
   imports: [TypeOrmModule.forFeature([SoiAdmin])],
   providers: [SoiAdminService, SoiAdminResolver, UserService],
 })
-export class BankModule {}
+export class SoiAdminModule {}

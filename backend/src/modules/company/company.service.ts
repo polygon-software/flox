@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
 import { generateHumanReadableId } from '../../helpers';
 import { User } from '../user/entities/user.entity';
-import { CREATION_STATE, ROLES } from '../../ENUM/ENUMS';
+import { CREATION_STATE, ROLE } from '../../ENUM/ENUMS';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { UserService } from '../user/user.service';
@@ -89,7 +89,7 @@ export class CompanyService {
       const user = await this.userRepository.findOne({
         uuid: getCompanyArgs.cognito_id,
       });
-      if (user.role !== ROLES.COMPANY) {
+      if (user.role !== ROLE.COMPANY) {
         throw Error('User is not a company');
       }
       return await this.companyRepository.findOne({
@@ -132,6 +132,13 @@ export class CompanyService {
    * @param {string} uuid - the company's uuid
    */
   async enableDocumentUpload(uuid: string): Promise<Company> {
+    const company = await this.companyRepository.findOne(uuid);
+    if (company.creation_state !== CREATION_STATE.APPLIED) {
+      throw Error(
+        "Can't enable Document Upload when the current creation state isn't 'APPLIED'. Is: " +
+          company.creation_state,
+      );
+    }
     await this.companyRepository.update(uuid, {
       creation_state: CREATION_STATE.AWAITING_DOCUMENTS,
     });
@@ -139,15 +146,16 @@ export class CompanyService {
   }
 
   /**
-   *
+   * Create a Cognito User and database user an associate them to the given company uuid
+   * @param {string} uuid - The uuid of the company
    */
   async associateUser(uuid: string): Promise<Company> {
     const company = await this.companyRepository.findOne(uuid);
     const password = randomPassword(8);
     const cognitoId = await createCognitoAccount(company.email, password);
-    await sendPasswordChangeEmail(company.email, password, ROLES.COMPANY);
+    await sendPasswordChangeEmail(company.email, password, ROLE.COMPANY);
     await this.userService.create({
-      role: ROLES.COMPANY,
+      role: ROLE.COMPANY,
       uuid: cognitoId,
       fk: company.uuid,
     });

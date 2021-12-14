@@ -13,7 +13,7 @@ export enum CREATION_STATE {
   DONE = 'DONE',
 }
 
-export enum ROLES {
+export enum ROLE {
   BANK = 'BANK',
   COMPANY = 'COMPANY',
   EMPLOYEE = 'EMPLOYEE',
@@ -22,5 +22,5 @@ export enum ROLES {
   NONE = 'NONE',
 }
 registerEnumType(STATUS, { name: 'Status' });
-registerEnumType(ROLES, { name: 'Roles' });
+registerEnumType(ROLE, { name: 'Roles' });
 registerEnumType(CREATION_STATE, { name: 'creationState' });

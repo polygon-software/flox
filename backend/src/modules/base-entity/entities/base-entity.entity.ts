@@ -22,7 +22,7 @@ export class BaseEntity {
   @UpdateDateColumn()
   last_modified_at: Date;
 
-  @Field(() => Date, { description: 'Date of deletion' })
+  @Field(() => Date, { description: 'Date of deletion', nullable: true })
   @DeleteDateColumn()
   deleted_at: Date;
 }
