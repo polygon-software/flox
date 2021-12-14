@@ -19,6 +19,7 @@ export class BankService {
   /**
    * Create a new Bank
    * @param {CreateBankInput} createBankInput - Input needed to create a new Bank
+   * @returns {Promise<Bank>} - new Bank
    */
   async createBank(createBankInput: CreateBankInput): Promise<Bank> {
     // Create a Cognito account with a random password

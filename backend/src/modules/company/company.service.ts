@@ -25,6 +25,7 @@ export class CompanyService {
   /**
    * Creates a new company using the given data, and sets default values
    * @param {CreateCompanyInput} createCompanyInput - the company's data, containing all mandatory fields
+   * @returns {Promise<Company>} - company
    */
   async createCompany(
     createCompanyInput: CreateCompanyInput,
@@ -57,6 +58,7 @@ export class CompanyService {
   /**
    * Gets a list of companies by UUIDs
    * @param {GetCompaniesArgs} getCompaniesArgs - the arguments, containing a list of uuids
+   * @returns {Promise<Company[]>} - companies
    */
   async getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
     if (getCompaniesArgs.uuids !== undefined) {
@@ -68,6 +70,7 @@ export class CompanyService {
 
   /**
    * Returns all companies in the database
+   * @returns {Promise<Company[]>} - company
    */
   async getAllCompanies(): Promise<Company[]> {
     return await this.companyRepository.find({ relations: ['documents'] });
@@ -76,6 +79,7 @@ export class CompanyService {
   /**
    * Returns a single company
    * @param {GetCompanyArgs} getCompanyArgs - the arguments to get a company for, containing a UUID
+   * @returns {Promise<Company>} - company
    */
   async getCompany(getCompanyArgs: GetCompanyArgs): Promise<Company> {
     if (!getCompanyArgs.uuid && !getCompanyArgs.cognito_id) {
@@ -101,6 +105,7 @@ export class CompanyService {
   /**
    * Updates any given values of a company (by UUID)
    * @param {UpdateCompanyInput} updateCompanyInput - the company update data
+   * @returns {Promise<Company>} - company
    */
   async updateCompany(
     updateCompanyInput: UpdateCompanyInput,
@@ -114,6 +119,7 @@ export class CompanyService {
   /**
    * Deletes a company by UUID
    * @param {DeleteCompanyInput} deleteCompanyInput - deletion input, containing UUID
+   * @returns {Promise<Company>} - company
    */
   async deleteCompany(
     deleteCompanyInput: DeleteCompanyInput,
@@ -130,6 +136,7 @@ export class CompanyService {
   /**
    * Enables document upload for a company by UUID
    * @param {string} uuid - the company's uuid
+   * @returns {Promise<Company>} - company
    */
   async enableDocumentUpload(uuid: string): Promise<Company> {
     const company = await this.companyRepository.findOne(uuid);
@@ -148,6 +155,7 @@ export class CompanyService {
   /**
    * Create a Cognito User and database user an associate them to the given company uuid
    * @param {string} uuid - The uuid of the company
+   * @returns {Promise<Company>} - company
    */
   async associateUser(uuid: string): Promise<Company> {
     const company = await this.companyRepository.findOne(uuid);

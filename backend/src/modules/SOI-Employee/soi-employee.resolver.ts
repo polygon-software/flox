@@ -10,7 +10,11 @@ export class SoiEmployeeResolver {
 
   @AnyRole()
   @Mutation(() => SoiEmployee)
-  async createSoiEmployee$(
+  /**
+   * @param {CreateSoiEmployeeInput} createSoiEmployeeInput - Fields for SOI employee
+   * @returns {Promise<SoiEmployee>} - SOI Employee
+   */
+  async createSoiEmployee(
     @Args('createSoiEmployeeInput')
     createSoiEmployeeInput: CreateSoiEmployeeInput,
   ): Promise<SoiEmployee> {

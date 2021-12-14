@@ -1,4 +1,4 @@
-import { Field, ID, InputType, Int } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsString, IsUUID } from 'class-validator';
 import { ROLE } from '../../../../ENUM/ENUMS';
 

@@ -19,6 +19,7 @@ export class SoiAdminService {
   /**
    * Create a new SOI Admin
    * @param {CreateSoiAdminInput} createSoiAdminInput - necessary input to create an soi admin
+   * @returns {Promise<SoiAdmin>} - SOI Admin
    */
   async createSoiAdmin(
     createSoiAdminInput: CreateSoiAdminInput,

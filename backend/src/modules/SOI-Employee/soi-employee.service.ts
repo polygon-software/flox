@@ -19,6 +19,7 @@ export class SoiEmployeeService {
   /**
    * Create a new SOI Employee
    * @param {CreateSoiEmployeeInput} createSoiEmployeeInput - input necessary to create SOI Employee
+   * @returns {Promise<SoiEmployee>} - SOI Employee
    */
   async createSoiEmployee(
     createSoiEmployeeInput: CreateSoiEmployeeInput,
