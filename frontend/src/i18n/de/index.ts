@@ -1,3 +1,5 @@
+import {sharpTransitEnterexit} from "@quasar/extras/material-icons-sharp";
+
 export default {
   general: {
     yes: 'Ja',
@@ -71,7 +73,7 @@ export default {
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
-    bank: 'Kreditinstitute',
+    offer: 'Anfragen',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',
@@ -81,7 +83,13 @@ export default {
     reject: 'Ablehnen',
     sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
     yes_reject: 'Ja, ablehnen',
-    view_documents: 'Dokumente ansehen'
+    view_documents: 'Dokumente ansehen',
+    offer_id: 'Aufr. Nr.',
+    market_value: 'Verkehrswert',
+    mortgage: 'Hypothek',
+    b_degree: 'B-Grad',
+    acceptability_of_risks: 'Tragbarkeit',
+    expiration: 'Ablauf',
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -139,6 +147,18 @@ export default {
   status: {
     uploading: 'Hochladen',
     loading: 'Laden',
+    offered: 'Offeriert',
+    offer_rejected: 'Offerte abgelehnt',
+    offer_withdrawn: 'Offerte zurückziehen',
+    in_progress: 'Kreditvertrag in Bearbeitung',
+    sent: 'Kreditvertrag versendet',
+    signed: 'Kreditvertrag unterzeichnet',
+    completed: 'abgeschlossen',
+    offer: {
+      offered: 'offerieren',
+      withdrawn: 'zurückgezogen',
+      rejected: 'abgelehnt',
+    }
   },
   user_types: {
     soi_admin: 'SOI Administrator',

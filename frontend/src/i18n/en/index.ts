@@ -70,7 +70,7 @@ export default {
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
-    bank: 'Banks/ Credit Institutions',
+    offer: 'Offers',
     register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',
@@ -80,7 +80,13 @@ export default {
     sure_to_reject: 'Are you sure you want to decline this request?',
     yes_reject: 'Yes, reject',
     unlock_account: 'Unlock account',
-    view_documents: 'View documents'
+    view_documents: 'View documents',
+    offer_id: 'Offer Nr.',
+    market_value: 'Market Value',
+    mortgage: 'Mortgage',
+    b_degree: 'B-Degree',
+    acceptability_of_risks: 'Acceptability of risks',
+    expiration: 'Expiration',
   },
   buttons: {
     finish_signup: 'Finish',
@@ -138,6 +144,18 @@ export default {
   status: {
     uploading: 'Uploading',
     loading: 'Loading',
+    offered: 'Offered',
+    offer_rejected: 'Offer rejected',
+    offer_withdrawn: 'Offer withdrawn',
+    in_progress: 'Credit Agreement in progress',
+    sent: 'Credit Agreement sent',
+    signed: 'Credit Agreement signed',
+    completed: 'Completed',
+    offer: {
+      offered: 'offering',
+      withdrawn: 'withdrawn',
+      rejected: 'rejected',
+    }
   },
   user_types: {
     soi_admin: 'SOI Admin',

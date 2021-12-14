@@ -124,57 +124,6 @@ export const MY_EMPLOYEES = {
   cacheLocation: 'myEmployees'
 }
 
-export const ALL_BANKS = {
-  query: gql`
-    query{
-      allBanks{
-        uuid
-        first_name
-        last_name
-        email
-        offers{
-          uuid
-          dossier{
-            loan_sum
-            non_arrangeable
-            status
-            created_at
-            property_address{
-              uuid
-              street
-              number
-              city
-              zip_code
-              __typename
-            }
-            correspondence_address{
-              uuid
-              street
-              number
-              city
-              zip_code
-              __typename
-            }
-            __typename
-          }
-          __typename
-        }
-        address{
-          uuid
-          street
-          number
-          city
-          zip_code
-          __typename
-        }
-        __typename
-      }
-    }
-  `,
-  tables: ['employee'],
-  cacheLocation: 'allEmployees'
-}
-
 export const PRIVATE_FILE = {
   query: gql`
     query getPrivateFile($uuid: ID!){
@@ -190,4 +139,8 @@ export const PRIVATE_FILE = {
   cacheLocation: 'getPrivateFile'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, ALL_BANKS];
+export const ALL_OFFERS = {
+
+}
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];
