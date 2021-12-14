@@ -7,7 +7,7 @@ import { Employee } from './entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { UserService } from '../user/user.service';
-import { ROLES } from '../../ENUM/ENUMS';
+import { ROLE } from '../../ENUM/ENUMS';
 import { sendPasswordChangeEmail } from '../../email/helper';
 
 @Injectable()
@@ -33,11 +33,11 @@ export class EmployeeService {
     await sendPasswordChangeEmail(
       createEmployeeInput.email,
       password,
-      ROLES.EMPLOYEE,
+      ROLE.EMPLOYEE,
     );
     const employee = this.employeeRepository.create(createEmployeeInput);
     await this.userService.create({
-      role: ROLES.EMPLOYEE,
+      role: ROLE.EMPLOYEE,
       uuid: cognitoId,
       fk: employee.uuid,
     });

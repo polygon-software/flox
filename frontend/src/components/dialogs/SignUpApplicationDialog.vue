@@ -162,32 +162,35 @@ const email = ref(props.company.email)
 
 // Convert addresses to actual address instances
 const domicile_address = new Address(
-  props.company.domicile_address.street,
-  props.company.domicile_address.number,
-  props.company.domicile_address.city,
-  props.company.domicile_address.zip_code,
+  props.company.domicile_address?.street?? undefined,
+  props.company.domicile_address?.number ?? undefined,
+  props.company.domicile_address?.city ?? undefined,
+  props.company.domicile_address?.zip_code ?? undefined,
 )
 const correspondence_address = new Address(
-  props.company.correspondence_address.street,
-  props.company.correspondence_address.number,
-  props.company.correspondence_address.city,
-  props.company.correspondence_address.zip_code,
+  props.company.correspondence_address?.street ?? undefined,
+  props.company.correspondence_address?.number ?? undefined,
+  props.company.correspondence_address?.city ?? undefined,
+  props.company.correspondence_address?.zip_code ?? undefined,
 )
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show();
 }
 
+// eslint-disable-next-line require-jsdoc
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
 
 /**
- * On OK, enable document upload for the company and send e-email
+ * On OK, enable document upload for the company and send e-mail
+ * @async
+ * @returns {void}
  */
 async function onOk(): Promise<void> {
   // Verify all required attributes present
@@ -199,7 +202,7 @@ async function onOk(): Promise<void> {
   // Enable on database
   await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
 
-  // Send document upload e-email
+  // Send document upload e-mail
   await sendDocumentUploadEmail(company.email ?? '', company.uuid ?? '')
 
   // Show confirmation prompt
@@ -215,6 +218,7 @@ async function onOk(): Promise<void> {
 
 /**
  * Executed upon rejecting a company application
+ * @returns {void}
  */
 function onReject(): void {
   //TODO: Send rejection E-mail
@@ -240,6 +244,8 @@ function onReject(): void {
 /**
  * Changes a company's e-mail address to a new one
  * @param {string} newEmail - the e-mail address to change to
+ * @async
+ * @returns {void}
  */
 async function onChangeEmail(newEmail: string): Promise<void>{
   await executeMutation(
@@ -253,6 +259,7 @@ async function onChangeEmail(newEmail: string): Promise<void>{
   email.value = newEmail
 }
 
+// eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
 }

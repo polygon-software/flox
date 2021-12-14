@@ -5,14 +5,15 @@ import {
 } from '@aws-sdk/client-ses';
 
 /**
- * Sends an e-email using AWS SES, using the given parameters
- * @param {string} from - the sender's e-email address TODO NOTE: in sandbox mode, you can only send from verified addresses!
+ * Sends an e-mail using AWS SES, using the given parameters
+ * @param {string} from - the sender's e-mail address TODO NOTE: in sandbox mode, you can only send from verified addresses!
  * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
- * @param {string} subject - E-email subject
- * @param {string} body - E-email's HTML body
- * @param {string[]} [replyTo] - list of e-email addresses to reply to (if not specified, 'from' is also the reply address)
+ * @param {string} subject - E-mail subject
+ * @param {string} body - E-mail's HTML body
+ * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
  * @param {string} [textBody] - optional plaintext body
+ * @returns {Promise<void | SendEmailCommandOutput>} - the output from the send email
  */
 export async function sendEmail(
   from: string,
@@ -61,16 +62,17 @@ export async function sendEmail(
     ReplyToAddresses: replyTo ?? [],
   };
 
-  // Send actual e-email
+  // Send actual e-mail
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
   return await sesClient.send(new SendEmailCommand(params));
 }
 
 /**
- * Sends an initial login e-email to the given user, containing a one-time password change link
- * @param {string} email - the user's e-email address
+ * Sends an initial login e-mail to the given user, containing a one-time password change link
+ * @param {string} email - the user's e-mail address
  * @param {string} password - the user's (generated) password
  * @param {string} type - the users type - 'emp' for employee or 'man' for company
+ * @returns {Promise<void>} - void promise
  */
 export async function sendPasswordChangeEmail(
   email: string,
@@ -97,11 +99,12 @@ export async function sendPasswordChangeEmail(
 }
 
 /**
- * Generates a password change link containing base64-encoded e-email and password for a given user
- * @param {string} email - user's e-email address
+ * Generates a password change link containing base64-encoded e-mail and password for a given user
+ * @param {string} email - user's e-mail address
  * @param {string} password - user's password
  * @param {string} type - user's type
  * @param {string} baseUrl - from env file
+ * @returns {string} - a password change link
  */
 export function generatePasswordChangeLink(
   email: string,

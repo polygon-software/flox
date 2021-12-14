@@ -11,6 +11,10 @@ export class BankResolver {
 
   @AnyRole()
   @Mutation(() => Bank)
+  /**
+   * @param {CreateBankInput} createBankInput - Fields for bank
+   * @returns Promise<Bank> - new Bank
+   */
   async createBank(
     @Args('createBankInput') createBankInput: CreateBankInput,
   ): Promise<Bank> {

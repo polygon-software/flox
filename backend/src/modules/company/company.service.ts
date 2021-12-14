@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
 import { generateHumanReadableId } from '../../helpers';
 import { User } from '../user/entities/user.entity';
-import { CREATION_STATE, ROLES } from '../../ENUM/ENUMS';
+import { CREATION_STATE, ROLE } from '../../ENUM/ENUMS';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { UserService } from '../user/user.service';
@@ -25,6 +25,7 @@ export class CompanyService {
   /**
    * Creates a new company using the given data, and sets default values
    * @param {CreateCompanyInput} createCompanyInput - the company's data, containing all mandatory fields
+   * @returns {Promise<Company>} - company
    */
   async createCompany(
     createCompanyInput: CreateCompanyInput,
@@ -57,6 +58,7 @@ export class CompanyService {
   /**
    * Gets a list of companies by UUIDs
    * @param {GetCompaniesArgs} getCompaniesArgs - the arguments, containing a list of uuids
+   * @returns {Promise<Company[]>} - companies
    */
   async getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
     if (getCompaniesArgs.uuids !== undefined) {
@@ -68,6 +70,7 @@ export class CompanyService {
 
   /**
    * Returns all companies in the database
+   * @returns {Promise<Company[]>} - company
    */
   async getAllCompanies(): Promise<Company[]> {
     return await this.companyRepository.find({ relations: ['documents'] });
@@ -76,6 +79,7 @@ export class CompanyService {
   /**
    * Returns a single company
    * @param {GetCompanyArgs} getCompanyArgs - the arguments to get a company for, containing a UUID
+   * @returns {Promise<Company>} - company
    */
   async getCompany(getCompanyArgs: GetCompanyArgs): Promise<Company> {
     if (!getCompanyArgs.uuid && !getCompanyArgs.cognito_id) {
@@ -89,7 +93,7 @@ export class CompanyService {
       const user = await this.userRepository.findOne({
         uuid: getCompanyArgs.cognito_id,
       });
-      if (user.role !== ROLES.COMPANY) {
+      if (user.role !== ROLE.COMPANY) {
         throw Error('User is not a company');
       }
       return await this.companyRepository.findOne({
@@ -101,6 +105,7 @@ export class CompanyService {
   /**
    * Updates any given values of a company (by UUID)
    * @param {UpdateCompanyInput} updateCompanyInput - the company update data
+   * @returns {Promise<Company>} - company
    */
   async updateCompany(
     updateCompanyInput: UpdateCompanyInput,
@@ -114,6 +119,7 @@ export class CompanyService {
   /**
    * Deletes a company by UUID
    * @param {DeleteCompanyInput} deleteCompanyInput - deletion input, containing UUID
+   * @returns {Promise<Company>} - company
    */
   async deleteCompany(
     deleteCompanyInput: DeleteCompanyInput,
@@ -130,8 +136,16 @@ export class CompanyService {
   /**
    * Enables document upload for a company by UUID
    * @param {string} uuid - the company's uuid
+   * @returns {Promise<Company>} - company
    */
   async enableDocumentUpload(uuid: string): Promise<Company> {
+    const company = await this.companyRepository.findOne(uuid);
+    if (company.creation_state !== CREATION_STATE.APPLIED) {
+      throw Error(
+        "Can't enable Document Upload when the current creation state isn't 'APPLIED'. Is: " +
+          company.creation_state,
+      );
+    }
     await this.companyRepository.update(uuid, {
       creation_state: CREATION_STATE.AWAITING_DOCUMENTS,
     });
@@ -139,15 +153,17 @@ export class CompanyService {
   }
 
   /**
-   *
+   * Create a Cognito User and database user an associate them to the given company uuid
+   * @param {string} uuid - The uuid of the company
+   * @returns {Promise<Company>} - company
    */
   async associateUser(uuid: string): Promise<Company> {
     const company = await this.companyRepository.findOne(uuid);
     const password = randomPassword(8);
     const cognitoId = await createCognitoAccount(company.email, password);
-    await sendPasswordChangeEmail(company.email, password, ROLES.COMPANY);
+    await sendPasswordChangeEmail(company.email, password, ROLE.COMPANY);
     await this.userService.create({
-      role: ROLES.COMPANY,
+      role: ROLE.COMPANY,
       uuid: cognitoId,
       fk: company.uuid,
     });

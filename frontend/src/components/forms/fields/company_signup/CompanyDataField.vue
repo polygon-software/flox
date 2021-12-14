@@ -36,6 +36,10 @@ const company_name = ref('')
 const company_uid = ref('')
 const branch_structure = ref(false)
 
+/**
+ * Emits the inputs
+ * @returns {void}
+ */
 function emitValue(){
   emit('change', {
     company_name: company_name.value,

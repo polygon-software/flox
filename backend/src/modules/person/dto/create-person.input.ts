@@ -11,7 +11,7 @@ export class CreatePersonInput {
   @IsUUID()
   last_name: string;
 
-  @Field(() => String, { description: 'E-email' })
+  @Field(() => String, { description: 'E-mail' })
   @IsString()
   @IsNotEmpty()
   @IsEmail()

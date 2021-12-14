@@ -2,6 +2,12 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import * as crypto from 'crypto';
 
+/**
+ * Create a new Cognito Account with the given email address and password.
+ * @param {string} email - The email of the new user
+ * @param {string} password - The password of the new user
+ * @returns {string} - Cognito ID
+ */
 export async function createCognitoAccount(
   email: string,
   password: string,
@@ -41,8 +47,9 @@ export async function createCognitoAccount(
 }
 /**
  * Generates a random number in given range
- * @param min
- * @param max
+ * @param {number} min - start of the range
+ * @param {number} max - end of the range
+ * @returns {number} - a random number
  */
 function randomNumber(min: number, max: number) {
   return crypto.randomInt(max - min) + min;
@@ -50,7 +57,8 @@ function randomNumber(min: number, max: number) {
 
 /**
  * Generates a random password that is valid for AWS Cognito of at least the given length
- * @param {number} min_length
+ * @param {number} min_length - min length
+ * @returns {string} - a random string
  */
 export function randomPassword(min_length: number): string {
   const chars_lower = 'abcdefghijklmnopqrstuvwxyz';

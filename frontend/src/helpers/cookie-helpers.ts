@@ -7,8 +7,9 @@ import {Cookies} from 'quasar';
 
 /**
  * Persists a given payload to one or multiple cookies
- * @param category {string} - sub-category to store the cookie to
- * @param payload {Record<string, any>} - the data to persist (in stringified form)
+ * @param {string} category - sub-category to store the cookie to
+ * @param {Record<string, any>} payload - the data to persist (in stringified form)
+ * @returns {void}
  */
 export function persistToCookies (category: string, payload: Record<string, any>): void{
   // Set cookie when SSR fetch is done (ie. only browser can set a cookie)
@@ -27,7 +28,8 @@ export function persistToCookies (category: string, payload: Record<string, any>
 
 /**
  * Deletes all cookies within a given category
- * @param category {string} - the category within which to delete (e.g. "authentication")
+ * @param {string} category - the category within which to delete (e.g. "authentication")
+ * @returns {void}
  */
 export function deleteCookies(category: string): void{
   const allCookies = Cookies.getAll()

@@ -1,7 +1,7 @@
 export enum STATUS {
   CREATED = 'CREATED',
-  ACCECPTED = 'ACCECPTED',
-  RECJETED = 'RECJETED',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
 }
 
 export enum CREATION_STATE {
@@ -11,7 +11,7 @@ export enum CREATION_STATE {
   DONE = 'DONE',
 }
 
-export enum ROLES {
+export enum ROLE {
   BANK = 'BANK',
   COMPANY = 'COMPANY',
   EMPLOYEE = 'EMPLOYEE',

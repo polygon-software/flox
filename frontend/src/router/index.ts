@@ -23,7 +23,7 @@ export default route(function (/* { store, ssrContext } */) {
 
   const routeArray: RouteRecordRaw[] = Object.values(routes)
 
-  const Router = createRouter({
+  return createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes: routeArray,
 
@@ -34,6 +34,4 @@ export default route(function (/* { store, ssrContext } */) {
       process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
     ),
   });
-
-  return Router;
 });

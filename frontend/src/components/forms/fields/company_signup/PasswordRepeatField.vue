@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue';
+import {ref, watch, defineProps, defineEmits} from 'vue';
 import {i18n} from 'boot/i18n';
 import {IS_VALID_PASSWORD} from 'src/data/RULES';
 
@@ -70,6 +70,11 @@ watch(passwordRepeat, (newVal) => {
   emitUpdate(newVal)
 })
 
+/**
+ * Emits an update with new value
+ * @param {string} value - the password
+ * @returns {void}
+ */
 function emitUpdate(value: string){
   if(password.value.length > 0 && password.value === passwordRepeat.value){
     emit('change', value)
@@ -80,6 +85,3 @@ function emitUpdate(value: string){
 }
 
 </script>
-
-<style scoped>
-</style>

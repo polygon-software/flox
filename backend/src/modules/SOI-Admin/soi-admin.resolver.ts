@@ -10,6 +10,10 @@ export class SoiAdminResolver {
 
   @AnyRole()
   @Mutation(() => SoiAdmin)
+  /**
+   * @param {CreateSoiAdminInput} createSoiAdminInput - Fields for SOI Admin
+   * @returns {Promise<SoiAdmin>} - SOI Admin
+   */
   async createSoiAdmin(
     @Args('createSoiAdminInput') createSoiAdminInput: CreateSoiAdminInput,
   ): Promise<SoiAdmin> {

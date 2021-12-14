@@ -6,7 +6,7 @@ import { SoiAdmin } from './entities/soi-admin.entity';
 import { CreateSoiAdminInput } from './dto/input/create-soi-admin.input';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
-import { ROLES } from '../../ENUM/ENUMS';
+import { ROLE } from '../../ENUM/ENUMS';
 
 @Injectable()
 export class SoiAdminService {
@@ -18,24 +18,30 @@ export class SoiAdminService {
 
   /**
    * Create a new SOI Admin
-   * @param createSoiAdminInput
+   * @param {CreateSoiAdminInput} createSoiAdminInput - necessary input to create an soi admin
+   * @returns {Promise<SoiAdmin>} - SOI Admin
    */
   async createSoiAdmin(
     createSoiAdminInput: CreateSoiAdminInput,
   ): Promise<SoiAdmin> {
+    // Create a Cognito account with a random password
     const password = randomPassword(8);
     const cognitoId = await createCognitoAccount(
       createSoiAdminInput.email,
       password,
     );
+
+    // Send password reset email with the current password embedded
     await sendPasswordChangeEmail(
       createSoiAdminInput.email,
       password,
-      ROLES.SOI_ADMIN,
+      ROLE.SOI_ADMIN,
     );
+
+    // Create the SoiAdmin and User in the database
     const soiAdmin = this.soiAdminRepository.create(createSoiAdminInput);
     await this.userService.create({
-      role: ROLES.SOI_ADMIN,
+      role: ROLE.SOI_ADMIN,
       uuid: cognitoId,
       fk: soiAdmin.uuid,
     });

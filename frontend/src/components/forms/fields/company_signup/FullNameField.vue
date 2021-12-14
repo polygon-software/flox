@@ -24,6 +24,10 @@ const emit = defineEmits(['change'])
 const first_name = ref('')
 const last_name = ref('')
 
+/**
+ * Emits the inputs
+ * @returns {void}
+ */
 function emitValue(){
   emit('change', {
     first_name: first_name.value,

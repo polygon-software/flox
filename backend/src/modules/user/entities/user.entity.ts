@@ -1,19 +1,26 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { IsString, IsUUID } from 'class-validator';
-import { ROLES } from '../../../ENUM/ENUMS';
+import { ROLE } from '../../../ENUM/ENUMS';
 
 @ObjectType()
 @Entity({ name: 'user' })
 export class User {
-  @Field(() => ROLES, { description: 'Role of the User' })
+  @Field(() => ROLE, { description: 'Role of the User' })
   @Column({
     type: 'enum',
-    enum: ROLES,
-    default: ROLES.NONE,
+    enum: ROLE,
+    default: ROLE.NONE,
   })
   @IsString()
-  role: ROLES;
+  role: ROLE;
 
   @Field(() => ID, { description: 'Cognito ID' })
   @PrimaryColumn()
@@ -24,4 +31,16 @@ export class User {
   @Column()
   @IsUUID()
   fk: string;
+
+  @Field(() => Date, { description: 'Creation date' })
+  @CreateDateColumn()
+  created_at: Date;
+
+  @Field(() => Date, { description: 'Last modification date' })
+  @UpdateDateColumn()
+  last_modified_at: Date;
+
+  @Field(() => Date, { description: 'Date of deletion', nullable: true })
+  @DeleteDateColumn()
+  deleted_at: Date;
 }
