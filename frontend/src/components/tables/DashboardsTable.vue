@@ -57,7 +57,7 @@
         </q-td>
         <q-td key="offers">
           <q-chip
-            v-for="(offer, index) in props.row.offers"
+            v-for="(offer, index) in props.row.offers.slice(0,3)"
             :key="index"
           >
             {{ offer }}

@@ -68,21 +68,97 @@ const columns = [
 ]
 
 const rows = [
-  { name: 'bsp1', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Luzern', mortage_amount: '620000.00', status: 'Offen', uploads: '', offers: ['CS', 'UB', 'KZ']},
-  { name: 'bsp2', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Zürich', mortage_amount: '1620000.00', status: 'In Bearbeitung', uploads: '', offers: ['CS']},
-  { name: 'bsp3', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmen', mortage_amount: '620000.00', status: 'Offerte abgelehnt', uploads: '', offers: []},
-  { name: 'bsp4', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Kriens', mortage_amount: '620000.00', status: 'Eingereicht', uploads: '', offers: ['UB']},
-  { name: 'bsp5', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Offeriert', uploads: '', offers: ['KZ']},
-  { name: 'bsp6', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Auftragsblatt hochgeladen', uploads: '', offers: ['UB', 'KZ']},
-  { name: 'bsp7', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag in Bearbeitung', uploads: '', offers: ['CS', 'KZ']},
-  { name: 'bsp8', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag versendet', uploads: '', offers: ['KZ']},
-  { name: 'bsp9', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Kreditvertrag unterzeichnet zurück', uploads: '', offers: []},
-  { name: 'bsp10', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Produktvereinbarung bestätigt', uploads: '', offers: []},
-  { name: 'bsp11', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Abgeschlossen', uploads: '', offers: ['UB']},
-  { name: 'bsp12', date: '22.11.2021', customer: 'Jusuf Amzai', institute: 'ZKB', location: 'Emmenbrücke', mortage_amount: '620000.00', status: 'Nicht vermittelbar', uploads: '', offers: ['CS']},
+  {
+    name: 'bsp1',
+    date: '24.11.2021',
+    customer: 'Jusuf Amzai',
+    institute: 'ZKB',
+    location: 'Luzern',
+    mortage_amount: '620000.00',
+    status: 'Offen',
+    uploads: '',
+    offers: ['CS', 'UB', 'KZ', 'AB']
+  },
+  {
+    name: 'bsp2',
+    date: '22.11.2021',
+    customer: 'Marino',
+    institute: 'ZKB',
+    location: 'Zürich',
+    mortage_amount: '1620000.00',
+    status: 'Kreditvertrag unterzeichnet zurück',
+    uploads: '',
+    offers: ['CS']
+  },
+  {
+    name: 'bsp3',
+    date: '23.11.2021',
+    customer: 'Ramize',
+    institute: 'ZKB',
+    location: 'Emmen',
+    mortage_amount: '620000.00',
+    status: 'Offerte abgelehnt',
+    uploads: '',
+    offers: []
+  },
+  {
+    name: 'bsp4',
+    date: '25.11.2021',
+    customer: 'Elexa',
+    institute: 'ZKB',
+    location: 'Kriens',
+    mortage_amount: '620000.00',
+    status: 'Eingereicht',
+    uploads: '',
+    offers: ['UB']
+  },
+  {
+    name: 'bsp5',
+    date: '26.11.2021',
+    customer: 'David',
+    institute: 'ZKB',
+    location: 'Emmenbrücke',
+    mortage_amount: '620000.00',
+    status: 'Offeriert',
+    uploads: '',
+    offers: ['KZ']
+  },
+  {
+    name: 'bsp6',
+    date: '27.11.2021',
+    customer: 'Christoph',
+    institute: 'ZKB',
+    location: 'Luzern',
+    mortage_amount: '620000.00',
+    status: 'Abgeschlossen',
+    uploads: '',
+    offers: ['UB', 'KZ']
+  },
+  {
+    name: 'bsp7',
+    date: '28.11.2021',
+    customer: 'Joel',
+    institute: 'ZKB',
+    location: 'Zürich',
+    mortage_amount: '620000.00',
+    status: 'Kreditvertrag in Bearbeitung',
+    uploads: '',
+    offers: ['CS', 'KZ']
+  },
+  {
+    name: 'bsp8',
+    date: '29.11.2021',
+    customer: 'Marius',
+    institute: 'ZKB',
+    location: 'Zug',
+    mortage_amount: '620000.00',
+    status: 'Kreditvertrag versendet',
+    uploads: '',
+    offers: ['KZ']
+  },
 ]
 
-// TODO: after Sprint 3 remove the computedResult data with the corresponding data from database
+// after Sprint 3 remove the computedResult data with the corresponding data from database
 // const queryResult = subscribeToQuery(MY_CUSTOMERS) as Ref<Record<string, Array<Record<string, unknown>>>>
 //const rows = computed(()=>{
   //return queryResult.value ?? []
@@ -93,7 +169,7 @@ const rows = [
  * @returns {array} - returns array with all options
  */
 function showOptions(){
-  // TODO: remove creditor and employee, and check from backend if the logged user is a creditor or an emloyee
+  // remove creditor and employee, and check from backend if the logged user is a creditor or an emloyee
   const creditor = false
   const employee = true
   if (creditor){
@@ -133,7 +209,6 @@ const $routerService: RouterService = inject('$routerService')
  * @returns {void}
  */
 async function newAssignment(): Promise<void> {
-  // TODO: to create a new assignment
   await $routerService.routeTo(ROUTES.NEW_ASSIGNMENT_PAGE)
 }
 </script>

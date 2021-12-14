@@ -86,12 +86,12 @@ const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 const files = ref([])
 
-//todo: take the existing files form the backend from dossier table
+//remove this and take the existing files form the backend from dossier table
 const existingFiles = ref([
-  {key: 'Beispiel1', uuid: 1, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
+  {key: 'Beispiel1', uuid: 1, url: 'https://link.springer.com/content/pdf/10.1007/s11576-008-0095-0.pdf'},
   {key: 'Beispiel2', uuid: 2, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
-  {key: 'Beispiel3', uuid: 3, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
-  {key: 'Beispiel4', uuid: 4, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
+  {key: 'Beispiel3', uuid: 3, url: 'https://sisis.rz.htw-berlin.de/inh2009/12372030.pdf'},
+  {key: 'Beispiel4', uuid: 4, url: 'https://cds.cern.ch/record/798228/files/0131456601_TOC.pdf'},
 ])
 
 // Mandatory - do not remove!
