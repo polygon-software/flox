@@ -2,8 +2,8 @@ import { registerEnumType } from '@nestjs/graphql';
 
 export enum STATUS {
   CREATED = 'CREATED',
-  ACCECPTED = 'ACCECPTED',
-  RECJETED = 'RECJETED',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
 }
 
 export enum CREATION_STATE {
