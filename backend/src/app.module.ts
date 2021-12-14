@@ -14,6 +14,7 @@ import { EmployeeModule } from './modules/employee/employee.module';
 import { FileModule } from './modules/file/file.module';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
+import {DossierModule} from "./modules/dossier/dossier.module";
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { RolesGuard } from './auth/roles.guard';
     CompanyModule,
     EmployeeModule,
     FileModule,
+    DossierModule,
   ],
   providers: [
     JwtStrategy,

@@ -6,7 +6,7 @@ import {Bank} from "../../../bank/entities/bank.entity";
 import {Offer} from "../../../offer/entities/offer.entity";
 
 @InputType()
-export class UpdateDossierInput {
+export class CreateDossierInput {
   @Field(() => ID)
   @IsUUID()
   uuid: string;
@@ -34,12 +34,4 @@ export class UpdateDossierInput {
   @Field(() => Boolean, { nullable: true })
   @IsNotEmpty()
   non_arrangeable: boolean;
-
-  @Field(() => String, { nullable: true })
-  @IsNotEmpty()
-  status: STATUS;
-
-  @Field(() => Array, { nullable: true })
-  @IsNotEmpty()
-  offers: Offer[];
 }

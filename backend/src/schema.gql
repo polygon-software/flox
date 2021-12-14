@@ -396,9 +396,9 @@ enum Roles {
 }
 
 enum Status {
-  ACCECPTED
+  ACCEPTED
   CREATED
-  RECJETED
+  REJECTED
 }
 
 type Subscription {
