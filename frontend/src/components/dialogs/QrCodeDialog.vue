@@ -1,9 +1,8 @@
 <template>
   <q-dialog
-      ref="dialogRef"
-      :persistent="true"
-      title="QR"
-      @hide="onDialogHide"
+    ref="dialog"
+    :persistent="true"
+    title="QR"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
@@ -12,21 +11,21 @@
           TODO a description of authenticator setup will go here. Lorem ipsum dolor sit amet bla
         </p>
         <qrcode-vue
-            :value="props.value"
-            :size="180"
+          :value="props.value"
+          :size="180"
         />
       </q-card-section>
       <q-separator dark/>
       <q-card-actions align="right">
         <q-btn
-            label="Abbrechen"
-            color="primary"
-            @click="onDialogCancel"
+          label="Abbrechen"
+          color="primary"
+          @click="hide"
         />
         <q-btn
-            label="OK"
-            color="primary"
-            @click="onDialogOK"
+          label="OK"
+          color="primary"
+          @click="onOk"
         />
       </q-card-actions>
     </q-card>
@@ -35,20 +34,35 @@
 
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
-import { defineProps } from 'vue';
-import { useDialogPluginComponent } from 'quasar'
+import {defineEmits, defineProps, ref, Ref} from 'vue';
+import {QDialog} from 'quasar'
+const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+const emit = defineEmits(['ok'])
+// Mandatory - do not remove!
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
+function show(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.show();
+}
+// eslint-disable-next-line require-jsdoc
+function hide(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.hide()
+}
 
-// REQUIRED; must be called inside of setup()
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-// dialogRef      - Vue ref to be applied to QDialog
-// onDialogHide   - Function to be used as handler for @hide on QDialog
-// onDialogOK     - Function to call to settle dialog with "ok" outcome
-//                    example: onDialogOK() - no payload
-//                    example: onDialogOK({ /*.../* }) - with payload
-// onDialogCancel - Function to call to settle dialog with "cancel" outcome
-
+/**
+ * On Ok, emit ok event
+ * @returns {void}
+ */
+function onOk(): void {
+  emit('ok')
+  hide()
+}
 const props = defineProps({
-  value: String
+  value: {
+    type: String,
+    required: true,
+    default: '',
+  },
 })
-
 </script>
