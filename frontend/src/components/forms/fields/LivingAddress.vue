@@ -70,19 +70,24 @@ const emit = defineEmits(['change'])
 watch(street, (newValue) => {
   emitUpdate(newValue)
 })
-watch(number, (newValue) => {
+watch(number, (newValue: number|string) => {
   emitUpdate(newValue)
 })
 watch(city, (newValue) => {
   emitUpdate(newValue)
 })
-watch(zip_code, (newValue) => {
+watch(zip_code, (newValue: number|string) => {
   emitUpdate(newValue)
 })
 watch(state, (newValue) => {
   emitUpdate(newValue)
 })
 
+/**
+ * Emits an update, containing the new values
+ * @param {string|number} value - the changed value
+ * @returns {void}
+ */
 function emitUpdate(value: string|number) {
   if (street.value.length > 0 && number.value > 0 && city.value.length > 0, zip_code.value > 0 && state.value.length > 0) {
     emit('change', value)

@@ -125,7 +125,7 @@ const sortedInterests = computed(() => {
 // Filter the interests by checking their name
 const filteredInterests = computed(() => {
   return sortedInterests.value.filter(msg => {
-    return msg.name.toLowerCase().includes(search.value.toLowerCase()) || msg.name.toLowerCase().includes(search.value.toLowerCase())
+    return msg.name.toLowerCase().includes(search.value.toLowerCase())
   })
 })
 

@@ -141,10 +141,18 @@ function forgottenPassword() {
 */
 const showInbox = ref(false)
 
+/**
+ * Opens the inbox
+ * @returns {void}
+ */
 function openInbox() {
   showInbox.value = true
 }
 
+/**
+ * Closes the inbox
+ * @returns {void}
+ */
 function closeInbox() {
   showInbox.value = false
 }

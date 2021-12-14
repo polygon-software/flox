@@ -151,7 +151,7 @@ const messages = ref([
 
 // Sorts the messages according to the selected parameter
 const sortedMessages = computed(() => {
-  if (sort.value === 'oldest') {
+  if (sort.value.value === 'oldest') {
     return messages.value.slice().sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
   else {
@@ -166,15 +166,26 @@ const filteredMessages = computed(() => {
   })
 })
 
-// Opens the dialog which contains the detail view of a message.
+
+/**
+ * Opens the dialog which contains the detail view of a message.
+ * @param {message} message - the selected message
+ * @returns {void}
+ */
 function openMessage(message: Message) {
   selectedMessage.value = message
   showMessageDetail.value = true
 }
 
-// Closes the dialog which contains the detail view of a message. Also sets the message status to "read"
+
+/**
+ * Closes the dialog which contains the detail view of a message. Also sets the message status to "read"
+ * @returns {void}
+ */
 function closeMessage() {
-  selectedMessage.value.isRead = true
+  if(selectedMessage.value){
+    selectedMessage.value.isRead = true
+  }
   selectedMessage.value = null
   showMessageDetail.value = false
 }
