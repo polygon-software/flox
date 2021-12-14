@@ -6,9 +6,13 @@ import { GetCompanyArgs } from './dto/args/get-company.args';
 import { DeleteCompanyInput } from './dto/input/delete-company.input';
 import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
-import { Public } from '../../auth/authentication.decorator';
-import { AdminOnly, AnyRole } from '../../auth/authorization.decorator';
 import { AssociateUserInput } from './dto/input/associate-user.input';
+import {
+  AdminOnly,
+  AnyRole,
+  CurrentUser,
+} from '../../auth/authorization.decorator';
+import { Public } from '../../auth/authentication.decorator';
 
 @Resolver(() => Company)
 export class CompanyResolver {
@@ -35,7 +39,7 @@ export class CompanyResolver {
   @AnyRole()
   @Query(() => [Company], { name: 'allCompanies' })
   async getAllCompanies(): Promise<Company[]> {
-    return await this.companyService.getAllCompanies();
+    return this.companyService.getAllCompanies();
   }
 
   /**
@@ -46,9 +50,30 @@ export class CompanyResolver {
   @Public() // TODO restrict to appropriate roles
   @Query(() => Company, { name: 'company' })
   async getCompany(@Args() getCompanyArgs: GetCompanyArgs): Promise<Company> {
-    return await this.companyService.getCompany(getCompanyArgs);
+    return this.companyService.getCompany(getCompanyArgs);
   }
 
+  /**
+   * Get the company for the currently logged in company account
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {void}
+   */
+  @AnyRole() // TODO management only
+  @Query(() => Company, { name: 'myCompany' })
+  async getMyCompany(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Company> {
+    // Get company where user's UUID matches cognitoID
+    const company = await this.companyService.getCompany({
+      cognito_id: user.userId,
+    } as GetCompanyArgs);
+
+    if (!company) {
+      throw new Error(`No company found for ${user.userId}`);
+    }
+
+    return company;
+  }
   /**
    * Adds a new company to the database - will not have a cognito_id by default!
    * @param {CreateCompanyInput} createCompanyInput - data of the new company
@@ -59,7 +84,7 @@ export class CompanyResolver {
   async createCompany(
     @Args('createCompanyInput') createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.createCompany(createCompanyInput);
+    return this.companyService.createCompany(createCompanyInput);
   }
 
   /**
@@ -72,7 +97,7 @@ export class CompanyResolver {
   async updateCompany(
     @Args('updateCompanyInput') updateCompanyInput: UpdateCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.updateCompany(updateCompanyInput);
+    return this.companyService.updateCompany(updateCompanyInput);
   }
 
   /**
@@ -85,7 +110,7 @@ export class CompanyResolver {
   async enableCompanyDocumentUpload(
     @Args('uuid') uuid: string,
   ): Promise<Company> {
-    return await this.companyService.enableDocumentUpload(uuid);
+    return this.companyService.enableDocumentUpload(uuid);
   }
 
   /**
@@ -98,7 +123,7 @@ export class CompanyResolver {
   async removeCompany(
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.deleteCompany(deleteCompanyInput);
+    return this.companyService.deleteCompany(deleteCompanyInput);
   }
 
   /**
@@ -111,6 +136,6 @@ export class CompanyResolver {
   async associateUserToCompany(
     @Args('associateUserInput') associateUserInput: AssociateUserInput,
   ): Promise<Company> {
-    return await this.companyService.associateUser(associateUserInput.uuid);
+    return this.companyService.associateUser(associateUserInput.uuid);
   }
 }
