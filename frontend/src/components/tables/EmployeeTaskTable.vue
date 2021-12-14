@@ -167,15 +167,6 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
   })
 }
 
-/**
- * Routes to the page for registering a new employee
- * @async
- * @returns {void}
- */
-async function routeToRegisterEmployee(): Promise<void> {
-  await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
-}
-
 </script>
 
 <style scoped>
