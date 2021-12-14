@@ -16,6 +16,24 @@ export const CREATE_PRODUCT = {
         mutation createProduct($createProductInput: CreateProductInput!){
             createProduct (createProductInput: $createProductInput) {
               uuid
+              title
+              description
+              brand
+              value
+              currency
+              start
+              end
+              category
+              directBuyLink
+              brandLink
+              minBet
+              maxBet
+              tags
+              pictures{
+                uuid
+                url
+                __typename
+              }
               __typename
             }
         }`,
@@ -29,6 +47,24 @@ export const UPDATE_PRODUCT = {
         mutation updateProduct($updateProductInput: UpdateProductInput!){
             updateProduct(updateProductInput: $updateProductInput) {
               uuid
+              title
+              description
+              brand
+              value
+              currency
+              start
+              end
+              category
+              directBuyLink
+              brandLink
+              minBet
+              maxBet
+              tags
+              pictures{
+                uuid
+                url
+                __typename
+              }
               __typename
             }
         }`,

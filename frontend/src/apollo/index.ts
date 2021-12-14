@@ -49,11 +49,13 @@ function dataIdFromObject(responseObject: Readonly<StoreObject>): string|undefin
 
     // Cases that we cannot handle (e.g. arrays): use default function
     if (!innerObject || !innerObject.__typename ||!innerObject.uuid) {
+      console.log(defaultDataIdFromObject(responseObject), 'return default for', responseObject)
       return defaultDataIdFromObject(responseObject)
     }
 
     result = `${innerObject.__typename ?? ''}:${innerObject.uuid ?? ''}`;
   }
+  console.log('Cache key', result, responseObject)
   return result
 }
 

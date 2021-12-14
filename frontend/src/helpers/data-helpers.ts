@@ -85,6 +85,7 @@ function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryOb
 
     const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
+    console.log('Pushing change', change)
     // Read existing query from cache
     const data:Record<string, Array<Record<string, unknown>>>|null = cache.readQuery({ query: queryObject.query })
 
@@ -136,6 +137,7 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
   })
 
   onBeforeMount( () => {
+    console.log('BEFOREMOUNT')
     const apolloClient = useApolloClient().resolveClient()
 
     res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
@@ -150,14 +152,14 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
         }
       })
     } else {
-      // SSR
-      apolloClient.writeQuery({
-        query: query.query,
-        variables: variables,
-        data: {
-          [query.cacheLocation]: res.value
-        }
-      })
+      // SSR TODO: why does commenting this fix Cache errors?
+      // apolloClient.writeQuery({
+      //   query: query.query,
+      //   variables: variables,
+      //   data: {
+      //     [query.cacheLocation]: res.value
+      //   }
+      // })
     }
 
     apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
