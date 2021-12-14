@@ -10,15 +10,14 @@
     </div>
   <div class="row">
     <!-- Account options -->
-    <!-- TODO position & conditional show-->
     <q-badge
+      v-if="notificationCount > 0"
       floating
       color="red"
       rounded
       style="margin: 10px 5px 0 0; z-index: 10"
     >
-      <!-- TODO count here -->
-      2
+      {{notificationCount}}
     </q-badge>
 
     <q-btn-dropdown
@@ -45,13 +44,13 @@
           @click="openInbox"
         >
           <q-badge
+            v-if="notificationCount > 0"
             floating
             color="red"
             rounded
             style="height: 18px; margin: 13px 10px 0 0; z-index: 10"
           >
-            <!-- TODO count here -->
-            2
+            {{notificationCount}}
           </q-badge>
         </q-btn>
         <q-btn
@@ -129,6 +128,10 @@ const loggedIn = computed(() => {
 
 // Username does not need to be reactive, since it won't change between logins
 const username = $authStore.getters.getUsername()
+
+// TODO get from backend
+// The number of notifications
+const notificationCount = ref(2)
 
 /**
  * Logs out the current authentication
