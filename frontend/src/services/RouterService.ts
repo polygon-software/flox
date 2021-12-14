@@ -19,7 +19,7 @@ export class RouterService {
 
   /**
    * Routes to a given route, as defined in ROUTES constant
-   * @param to {RouteRecordRaw} - the route to go to
+   * @param {RouteRecordRaw} to - the route to go to
    * @param {Record<string, unknown>} [queryParams] - params to pass to the route, if any
    * @returns {void|NavigationFailure|undefined} - Navigation result, if any
    */

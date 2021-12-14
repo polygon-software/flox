@@ -139,7 +139,6 @@ const toDate = ref(null)
 
 // ----- Data -----
 const columns = [
-  // TODO i18n, column names
   { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
   { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
   { name: 'tasks', label: i18n.global.t('account_data.tasks'), field: 'tasks', sortable: true },
@@ -158,10 +157,11 @@ const computedResult = computed(()=>{
 /**
  * Upon clicking a row, opens the employee's dashboard view
  * @param {Record<string, unknown>} row - the row that was clicked
+ * @async
+ * @returns {void}
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
   console.log('clicked row', row)
-  // TODO: open employee view
   await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {
     uuid: row.uuid
   })
@@ -169,6 +169,8 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
 
 /**
  * Routes to the page for registering a new employee
+ * @async
+ * @returns {void}
  */
 async function routeToRegisterEmployee(): Promise<void> {
   await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
