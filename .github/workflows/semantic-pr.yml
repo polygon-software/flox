@@ -39,4 +39,4 @@ jobs:
           allowed: |
             master
             dev
-            /^([A-Za-z]+-){0,1}feature-([A-Za-z])+$/
+            /^([A-Za-z]+-){0,1}feature-([A-Za-z-_])+$/
