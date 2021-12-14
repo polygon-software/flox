@@ -8,37 +8,9 @@
       </h6>
 
       <!-- Container for search & adding -->
-      <div class="row">
-        <q-input
-          v-model="fromDate"
-          type="date"
-          :label="$t('general.from')"
-          outlined
-          dense
-        />
-        <q-input
-          v-model="toDate"
-          type="date"
-          :label="$t('general.to')"
-          outlined
-          dense
-          style="margin: 0 10px 0 10px"
-        />
-
-        <!-- Search bar -->
-        <q-input
-          v-model="search"
-          :label="$t('general.search')"
-          type="search"
-          outlined
-          dense
-          class="q-mb-md"
-        >
-          <template #prepend>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-      </div>
+      <TableFilterSearch
+        @change="updateFilter"
+      />
     </div>
     <q-table
       card-style="border-radius: 8px; background-color: transparent"
@@ -130,12 +102,13 @@ import {MY_EMPLOYEES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
 const search = ref('')
-const fromDate = ref(null)
-const toDate = ref(null)
+const fromDate: Ref<string|null> = ref(null)
+const toDate: Ref<string|null> = ref(null)
 
 // ----- Data -----
 const columns = [
@@ -161,10 +134,20 @@ const computedResult = computed(()=>{
  * @returns {void}
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  console.log('clicked row', row)
   await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {
     uuid: row.uuid
   })
+}
+
+/**
+ * Updates the filter parameters
+ * @param {Record<string, unknown>} input - Input, containing search and from/to dates
+ * @returns {void}
+ */
+function updateFilter(input: Record<string, string>){
+  search.value = input.search
+  fromDate.value = input.fromDate
+  toDate.value = input.toDate
 }
 
 </script>

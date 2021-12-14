@@ -111,7 +111,6 @@ const computedResult = computed(()=>{
  * @returns {void}
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  console.log('clicked row', row)
   await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {
     uuid: row.uuid
   })
