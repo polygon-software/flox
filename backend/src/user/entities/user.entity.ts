@@ -1,23 +1,49 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { IsInt, IsString } from 'class-validator';
-import { Item } from '../../item/entities/item.entity';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { IsString, IsUUID } from 'class-validator';
+import { ROLE } from '../../ENUM/ENUM';
 
 @ObjectType()
 @Entity({ name: 'user' })
-export class User extends BaseEntity {
-  @Field(() => String, { description: 'Name' })
-  @Column()
+/**
+ * An application User
+ */
+export class User {
+  @Field(() => ROLE, { description: 'Role of the User' })
+  @Column({
+    type: 'enum',
+    enum: ROLE,
+    default: ROLE.NONE,
+  })
   @IsString()
-  name: string;
+  role: ROLE;
 
-  @Field(() => Int, { description: 'Age' })
+  @Field(() => ID, { description: 'Cognito ID' })
+  @PrimaryColumn()
+  @IsUUID()
+  uuid: string;
+
+  @Field(() => ID, { description: 'UUID of the specific entity' })
   @Column()
-  @IsInt()
-  age: number;
+  @IsUUID()
+  fk: string;
 
-  @Field(() => [Item], { description: 'Items of the user', nullable: true })
-  @OneToMany(() => Item, (item) => item.user)
-  items: Item[];
+  @Field(() => Date, { description: 'Creation date' })
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field(() => Date, { description: 'Last modification date' })
+  @UpdateDateColumn()
+  lastModifiedAt: Date;
+
+  @Field(() => Date, { description: 'Date of deletion', nullable: true })
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
