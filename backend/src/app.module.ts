@@ -83,7 +83,6 @@ import { SoiEmployeeModule } from './modules/SOI-Employee/soi-employee.module';
     BankModule,
     SoiAdminModule,
     SoiEmployeeModule,
-
   ],
   providers: [
     JwtStrategy,

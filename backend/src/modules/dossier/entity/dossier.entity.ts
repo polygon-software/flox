@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { Address } from '../../address/entities/address.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
@@ -8,6 +8,7 @@ import { STATUS } from '../../../ENUM/ENUMS';
 
 @ObjectType()
 @Entity('dossier')
+@InputType('dossier')
 export class Dossier extends Person {
   @Field(() => Address, { description: 'Address' })
   @JoinColumn()
