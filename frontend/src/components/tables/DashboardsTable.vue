@@ -72,8 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
-import {ref} from 'vue';
+import {defineProps, ref} from 'vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
@@ -82,7 +81,7 @@ import {SET_DOSSIER_STATUS} from "src/data/mutations/DOSSIER";
 const $q: QVueGlobals = useQuasar()
 
 // Selection must be an array
-let selected = ref([])
+const selected = ref([])
 
 const props = defineProps({
   columns: {
@@ -111,6 +110,7 @@ const props = defineProps({
  * Edits the given user
  * @param {string} status - the user's ID
  * @param {string} variables - the new variables
+ * @return {void}
  */
 function onUpdate(status: string, variables: Record<string, unknown>){
   void executeMutation(
@@ -125,6 +125,7 @@ function onUpdate(status: string, variables: Record<string, unknown>){
 
 /**
  * Opens the dialog to show all documents and to upload further documents
+ * @returns {void}
  */
 function showAllDocuments() {
   console.log("halloo")

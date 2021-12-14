@@ -15,7 +15,7 @@
         <p class="q-ma-md col text-center" style="display: flex; justify-content: space-between; align-items: baseline">
           {{ $t('employee_dashboard.title2') }} ({{ rows.length }})
           <q-input
-            v-model="search_employee"
+            v-model="searchEmployees"
             color="purple-12"
             :label="$t('employee_dashboard.search')"
             type="text"
@@ -84,18 +84,22 @@ const rows = [
 
 // TODO: after Sprint 3 remove the computedResult data with the corresponding data from database
 // const queryResult = subscribeToQuery(MY_CUSTOMERS) as Ref<Record<string, Array<Record<string, unknown>>>>
+//const rows = computed(()=>{
+  //return queryResult.value ?? []
+//})
 
-/*const rows = computed(()=>{
-  return queryResult.value ?? []
-})*/
-
+/**
+ * shows an array of options to be selected depending if creditor or employee
+ * @returns {array} - returns array with all options
+ */
 function showOptions(){
   // TODO: remove creditor and employee, and check from backend if the logged user is a creditor or an emloyee
   const creditor = false
   const employee = true
   if (creditor){
     return [
-      'Nicht vermittelbar', 'Offen', 'In Bearbeitung', 'Eingereicht', 'Offeriert', 'Offerte abgelehnt', 'Auftragsblatt hochgeladen', 'Kreditvertrag in Bearbeitung', 'Kreditvertrag versendet', 'Kreditvertrag unterzeichnet zurück', 'Produktvereinbarung bestätigt', 'Abgeschlossen',
+      'Nicht vermittelbar', 'Offen', 'In Bearbeitung', 'Eingereicht', 'Offeriert', 'Offerte abgelehnt', 'Auftragsblatt hochgeladen',
+      'Kreditvertrag in Bearbeitung', 'Kreditvertrag versendet', 'Kreditvertrag unterzeichnet zurück', 'Produktvereinbarung bestätigt', 'Abgeschlossen',
     ]
   }
   else if (employee) {
@@ -103,21 +107,31 @@ function showOptions(){
       'Nicht vermittelbar', 'Offen', 'In Bearbeitung', 'Eingereicht', 'Auftragsblatt hochgeladen', 'Produktvereinbarung bestätigt', 'Abgeschlossen',
     ]
   }
+  return []
 }
 
 const emit = defineEmits(['change'])
 
-const search_employee = ref('')
+const searchEmployees = ref('')
 
+/**
+ * searches employee and emits the event change to show the customers searched in the input search
+ * @returns {void}
+ */
 function searchEmployee(){
   emit('change', {
-    search_employee: search_employee.value,
+    searchEmployees: searchEmployees.value,
   })
 }
 
 
 const $routerService: RouterService = inject('$routerService')
 
+/**
+ * routes to the new assignment page to add more customers
+ * @async
+ * @returns {void}
+ */
 async function newAssignment(): Promise<void> {
   // TODO: to create a new assignment
   await $routerService.routeTo(ROUTES.NEW_ASSIGNMENT_PAGE)

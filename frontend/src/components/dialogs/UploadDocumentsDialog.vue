@@ -13,7 +13,7 @@
           separator
         >
           <q-item
-            v-for="(file, index) in existing_files"
+            v-for="(file, index) in existingFiles"
             :key="file.uuid"
           >
             <q-item-section>
@@ -80,15 +80,14 @@
 </template>
 <script setup lang="ts">
 import {ref, Ref} from "vue";
-import {QDialog} from "quasar";
-import {openURL} from 'quasar';
+import {QDialog, openURL} from "quasar";
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 const files = ref([])
 
 //todo: take the existing files form the backend from dossier table
-const existing_files = ref([
+const existingFiles = ref([
   {key: 'Beispiel1', uuid: 1, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
   {key: 'Beispiel2', uuid: 2, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
   {key: 'Beispiel3', uuid: 3, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
@@ -96,34 +95,41 @@ const existing_files = ref([
 ])
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show();
 }
-
+// eslint-disable-next-line require-jsdoc
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
 
-//todo: implement upload which uploads the selected file and shows it
+/**
+ * uploads the selected files from the desktop
+ * @returns {void}
+ */
 function upload(): void {
-  if (files.value.length !== 0)
-  for (let i=0; i < (files.value.length); i++) {
-    if (existing_files.value.indexOf(files.value[i]) == -1)
-    existing_files.value.push(files.value[i])
+  if (files.value.length !== 0) {
+    for (const i of files.value) {
+      if (existingFiles.value.indexOf(files.value[i]) === -1) {
+        existingFiles.value.push(files.value[i])
+      }
+    }
   }
 }
 
 /**
  * after clicking on the delete icon, removes the file
+ * @param {number} [index] - index number of the file which should be removed
+ * @returns {void}
  */
 function remove(index: number) {
-  existing_files.value.splice(index, 1)
+  existingFiles.value.splice(index, 1)
 }
 
-
+// eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
 }
