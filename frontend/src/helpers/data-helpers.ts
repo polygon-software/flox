@@ -138,6 +138,7 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
   onBeforeMount( () => {
     const apolloClient = useApolloClient().resolveClient()
     const current_cache_state = apolloClient.readQuery({query: query.query, variables}) as Record<string, Record<string, unknown>[]>[] ?? []
+    // Test if the query is already in the cache
     if(Object.values(current_cache_state).length === 0){
       res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
 
