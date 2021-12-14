@@ -7,6 +7,7 @@ export default boot(
   ({ssrContext }) => {
 
     // Default client.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const options = getClientOptions(ssrContext)
 
     // Apollo Client setup

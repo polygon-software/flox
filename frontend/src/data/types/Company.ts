@@ -1,11 +1,11 @@
 import {CompanyItem} from '../../../../shared/schemas/CompanyItem';
-import Joi from 'joi';
+import Joi, {Schema} from 'joi';
 import {Address} from 'src/data/types/Address';
 import {CREATION_STATE} from 'src/data/ENUM/ENUM';
+
 /**
  * A class representing a company data object
  */
-
 export class Company {
   company_name: string|null
   language: string|null
@@ -23,6 +23,25 @@ export class Company {
   cognito_id: string|null
   readable_id: string|null
 
+  /**
+   * Constructor
+   * @param company_name
+   * @param language
+   * @param uid
+   * @param uuid
+   * @param first_name
+   * @param last_name
+   * @param domicile_address
+   * @param correspondance_address
+   * @param phone
+   * @param email
+   * @param branch_structure
+   * @param creation_state
+   * @param documents
+   * @param cognito_id
+   * @param readable_id
+   */
+  // eslint-disable-next-line require-jsdoc
   constructor(company_name?: string, language?: string, uid?: string, uuid?: string, first_name?: string, last_name?: string, domicile_address?: Address, correspondance_address?: Address,
               phone?: string, email?: string, branch_structure?: boolean, creation_state?: CREATION_STATE, documents?: Array<Record<string, unknown>>, cognito_id?: string, readable_id?: string) {
     this.company_name = company_name ?? null
@@ -44,10 +63,11 @@ export class Company {
 
   /**
    * Validates the company item to Joi schema
+   * @returns {boolean} - whether it's valid
    */
   validate(): boolean{
     try{
-      Joi.assert(this, CompanyItem)
+      Joi.assert(this, CompanyItem as Schema<any>)
       return true;
     } catch (e) {
       return false
@@ -69,8 +89,9 @@ export class Company {
    * @param {boolean} branch_structure
    * @param {boolean} document_upload_enabled
    * @param {Array<File>} documents
-   *
+   * @returns {void}
    */
+  // eslint-disable-next-line require-jsdoc
   replace({company_name, language, uid, uuid, first_name, last_name, domicile_address, correspondance_address, phone, email, branch_structure, creation_state, documents}:
             {
               company_name: string, language: string, uid: string, uuid: string, first_name: string, last_name: string, domicile_address: Address, correspondance_address: Address,

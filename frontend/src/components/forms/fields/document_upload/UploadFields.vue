@@ -91,9 +91,9 @@ const executionRegisterExtract = ref(null)
 
 /**
  * Emits the updated value
+ * @returns {void}
  */
 function emitValue(){
-
   const validAdditionalInputFields = additionalInputFields.value.filter(field => {
     return field.value !== null
   })
@@ -119,6 +119,7 @@ const additionalInputFields: Ref<Array<Ref<null|File>>> = ref([ref(null)])
 
 /**
  * Depending on how many additional fields already exist, adds or deletes a file from a custom field.
+ * @returns {void}
  */
 function fileChange(): void {
   const size = additionalInputFields.value.length

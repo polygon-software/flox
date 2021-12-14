@@ -32,7 +32,7 @@ import axios from 'axios';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 
-const $routerService: RouterService = inject('$routerService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 // Upload loading status
 const loading = ref(false)
@@ -55,6 +55,8 @@ const pages = [
 
 /**
  * Uploads the user's files and, if OK, redirects
+ * @param {Record<string, Record<string, File|null>>} values - uploaded files
+ * @returns {void}
  */
 async function onSubmit(values: Record<string, Record<string, File|null>>){
 

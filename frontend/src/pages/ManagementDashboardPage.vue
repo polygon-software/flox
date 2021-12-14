@@ -36,10 +36,15 @@ import {inject} from 'vue'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import EmployeeTable from 'components/tables/EmployeeTable.vue';
-const $routerService: RouterService = inject('$routerService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
+/**
+ * Routes to employee registration
+ * @async
+ * @returns {void}
+ */
 async function routeToRegisterEmployee(): Promise<void> {
-  await $routerService.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
+  await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
 }
 
 </script>

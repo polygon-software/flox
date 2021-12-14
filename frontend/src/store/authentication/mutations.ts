@@ -3,9 +3,16 @@ import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-i
 import {deleteCookies, persistToCookies} from 'src/helpers/cookie-helpers'
 import { Mutations } from 'vuex-smart-module'
 
-
+/**
+ * Auth mutations
+ */
 class AuthMutations extends Mutations<AuthState>{
-  setUserSession (payload: CognitoUserSession|undefined): void {
+  /**
+   * Sets the current user session
+   * @param {CognitoUserSession|undefined} payload - value to set
+   * @returns {void}
+   */
+  setUserSession(payload: CognitoUserSession|undefined): void {
     this.state.userSession = payload
 
     if(this.state.userSession) {
@@ -26,11 +33,21 @@ class AuthMutations extends Mutations<AuthState>{
     }
   }
 
-  setUserPool (payload: CognitoUserPool|undefined): void {
+  /**
+   * Sets the user pool
+   * @param {CognitoUserPool|undefined} payload - value to set
+   * @returns {void}
+   */
+  setUserPool(payload: CognitoUserPool|undefined): void {
     this.state.userPool = payload
   }
 
-  setCognitoUser (payload: CognitoUser|undefined): void {
+  /**
+   * Sets the cognito user
+   * @param {CognitoUser|undefined} payload - value to set
+   * @returns {void}
+   */
+  setCognitoUser(payload: CognitoUser|undefined): void {
     this.state.cognitoUser = payload
   }
 }

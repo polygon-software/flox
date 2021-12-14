@@ -6,7 +6,6 @@ import AuthMutations from './mutations';
 /**
  * This file contains all authentication actions
  */
-
 class AuthActions extends Actions<
     AuthState,
     AuthGetters,
