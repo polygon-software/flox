@@ -5,7 +5,7 @@
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
       <h5 class="q-ma-none">
-        {{ $t('dashboards.offer') + ' (' + mocked_offers.length + ')' }}
+        {{ $t('dashboards.offer') + ' (' + mockedOffers.length + ')' }}
       </h5>
     </div>
 
@@ -14,7 +14,7 @@
       <q-table
         card-style="border-radius: 8px; background-color: transparent"
         table-header-class="bg-transparent"
-        :rows="mocked_offers"
+        :rows="mockedOffers"
         :columns="columns"
         row-key="uuid"
         :rows-per-page-options="[10,20, 100]"
@@ -57,7 +57,7 @@
             </q-td>
             <q-td key="offer_status" :props="props">
               <q-btn-dropdown rounded color="primary" :label="props.row.offer_status" no-caps>
-                <q-list v-for="label in possible_status" :key="label">
+                <q-list v-for="label in possibleStatus" :key="label">
                   <q-item clickable v-close-popup @click="statusChange">
                     <q-item-section>
                       <q-item-label>{{ label }}</q-item-label>
@@ -93,7 +93,7 @@ const $routerService: RouterService = inject('$routerService')
 
 //ToDo: connect to backend
 
-const mocked_offers = [{
+const mockedOffers = [{
   date: new Date(1639489283 * 1000),
   offer_id: 1234,
   city: "Luzern",
@@ -141,8 +141,8 @@ async function statusChange() {
  * @param date {Date}
  * @returns {String} date
  */
-function getDate(date) {
-  return `${date.getUTCDate()}/${date.getUTCMonth()}/${date.getUTCFullYear()}`;
+function getDate(date: Date ) {
+  return `${date.getUTCDate()}.${date.getUTCMonth()}.${date.getUTCFullYear()}`;
 }
 
 const columns = [
@@ -164,7 +164,7 @@ const columns = [
   {name: 'status', label: i18n.global.t('account_data.status'), field: 'status', sortable: true},
 ]
 
-const possible_status = [i18n.global.t('status.offered'),
+const possibleStatus = [i18n.global.t('status.offered'),
   i18n.global.t('status.offer_rejected'),
   i18n.global.t('status.offer_withdrawn'),
   i18n.global.t('status.in_progress'),

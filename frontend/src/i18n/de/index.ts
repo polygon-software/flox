@@ -64,7 +64,8 @@ export default {
     commercial_register_extract: 'Handelsregisterauszug',
     execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
-    offer: 'Antrag'
+    offer: 'Antrag',
+    abbreviation: 'Kürzel'
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',

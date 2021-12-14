@@ -27,29 +27,21 @@ import {CREATE_BANK} from "src/data/mutations/BANK";
 const $routerService: RouterService|undefined = inject('$routerService')
 
 /**
- * This component is a multi-step sign up form for Banks.
- * All fields of a page must be completed before the next page can be accessed.
+ * This component is a sign up form for banks.
  */
 
-const initial_fields = [
+const initialFields = [
   FIELDS.FULL_NAME,
-  FIELDS.COMPANY_ADDRESS,
+  FIELDS.ABBREVIATION,
   FIELDS.EMAIL,
-]
-const doc_fields = [
-  FIELDS.FILE_UPLOAD,
+  FIELDS.COMPANY_ADDRESS,
 ]
 
 const pages = [
   {
     key: 'name',
     label: i18n.global.t('authentication.signup'),
-    fields: initial_fields,
-  },
-  {
-    key: 'docs',
-    label: i18n.global.t('account_data.offer'),
-    fields: doc_fields,
+    fields: initialFields,
   },
 ]
 
@@ -71,13 +63,12 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
     {
       first_name: values.full_name.first_name,
       last_name: values.full_name.last_name,
+      abbreviation: values.abbreviation,
       uid: values.company_data.uid,
       address: address,
       email: values.email,
-      offer: values.offer
     }
   )
-
 
   // Push to success page
   setTimeout(function() {$routerService?.routeTo(ROUTES.LOGIN)}, 5000);
