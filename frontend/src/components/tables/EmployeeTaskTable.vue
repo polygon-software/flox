@@ -142,11 +142,11 @@ const columns = [
   // TODO i18n, column names
   { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
   { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
-  { name: 'tasks', label: 'Aufträge', field: 'tasks', sortable: true },
-  { name: 'volume', label: 'Volumen', field: 'volume', sortable: true },
-  { name: 'prov_emp', label: 'Provision MA', field: 'prov_emp', sortable: true },
-  { name: 'prov_org', label: 'Provision Organisation', field: 'prov_org', sortable: false },
-  { name: 'prov_ratio', label: 'Anteil prov. Vermittler', field: 'prov_ratio', sortable: false },
+  { name: 'tasks', label: i18n.global.t('account_data.tasks'), field: 'tasks', sortable: true },
+  { name: 'volume', label: i18n.global.t('account_data.volume'), field: 'volume', sortable: true },
+  { name: 'prov_emp', label: i18n.global.t('account_data.provision_employee'), field: 'prov_emp', sortable: true },
+  { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false },
+  { name: 'prov_ratio', label: i18n.global.t('account_data.provision_ratio'), field: 'prov_ratio', sortable: false },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>

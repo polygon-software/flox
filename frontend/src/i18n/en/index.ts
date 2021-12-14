@@ -62,6 +62,10 @@ export default {
     optional: 'optional',
     status: 'Status',
     tasks: 'Tasks',
+    volume: 'Volume',
+    provision_employee: 'Emp. Provision',
+    provision_company: 'Company Provision',
+    provision_ratio: 'Prov. Ratio Emp.'
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',

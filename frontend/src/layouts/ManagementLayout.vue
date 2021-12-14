@@ -63,7 +63,7 @@ const menuItems = [
   {
     name: 'tasks',
     label: i18n.global.t('account_data.tasks'),
-    route: ROUTES.MANAGEMENT_EMPLOYEE_TASKS, // TODO
+    route: ROUTES.MANAGEMENT_EMPLOYEE_TASKS,
   },
 ]
 /**

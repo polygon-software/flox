@@ -63,6 +63,10 @@ export default {
     optional: 'optional',
     status: 'Status',
     tasks: 'Aufträge',
+    volume: 'Volumen',
+    provision_employee: 'Provision MA',
+    provision_company: 'Provision Organisation',
+    provision_ratio: 'Anteil prov. Vermittler'
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
