@@ -24,8 +24,8 @@
           <q-btn
             v-if="isAction(props.row)"
             color="primary"
-            :label="props.row.document_upload_enabled ? $t('dashboards.view_documents') : $t('dashboards.enable_upload')"
-            @click="props.row.document_upload_enabled ? showDocumentValidationDialog(props.row) : showEnableUploadDialog(props.row)"
+            :label="action_label[props.row.creation_state]?.text || ''"
+            @click="action_label[props.row.creation_state]?.action(props.row)"
           />
           <div v-else>
             {{ $t('errors.documents_missing') }}
@@ -48,10 +48,11 @@ import {QVueGlobals, useQuasar} from 'quasar';
 import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
 
+import {CREATION_STATE} from 'src/data/ENUM/ENUM';
+
 const $q: QVueGlobals = useQuasar()
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $errorService: ErrorService|undefined = inject('$errorService')
-
 // ----- Data -----
 const columns = [
   { name: 'readable_id', label: 'ID', field: 'readable_id', sortable: false },
@@ -60,15 +61,21 @@ const columns = [
   {name: 'action', required: true, label: i18n.global.t('dashboards.action'), align: 'left', field: 'action', sortable: true}
 ]
 
-const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>>[]>
+
+const action_label = {
+  [`${CREATION_STATE.APPLIED}`]: {text: i18n.global.t('dashboards.enable_upload'), action: showEnableUploadDialog},
+  [`${CREATION_STATE.AWAITING_DOCUMENTS}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog},
+  [`${CREATION_STATE.DOCUMENTS_UPLOADED}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog},
+}
+
+const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>|string>[]>
 
 const computedResult = computed(()=>{
   const companies = queryResult.value ?? []
-
   // Filter out completed applications by hiding those that have an account
   // TODO filter out rejected applications
   return companies.filter((company) => {
-    return company.cognito_id === undefined || company.cognito_id === null || company.cognito_id.length === 0
+    return company.creation_state !== CREATION_STATE.DONE
   })
 })
 
@@ -112,7 +119,7 @@ function showDocumentValidationDialog(company: Company) {
  * @returns {boolean} - whether there is an action for the state
  */
 function isAction(company: Company): boolean {
-  if (company.document_upload_enabled) {
+  if (company.creation_state === CREATION_STATE.AWAITING_DOCUMENTS) {
     return company.documents !== null && company.documents.length > 0
   }
   return true
@@ -124,21 +131,26 @@ function isAction(company: Company): boolean {
  * @returns {Record<string, string>} - the company's state
  */
 function getState(company: Company): Record<string, string> {
-  if (company.document_upload_enabled) {
-    if (company.documents === null || company.documents.length === 0) {
+  switch (company.creation_state) {
+    case CREATION_STATE.APPLIED:
+      return {
+        label: 'general.new',
+        color: 'positive'
+      }
+    case CREATION_STATE.AWAITING_DOCUMENTS:
       return {
         label: 'errors.documents_missing',
         color: 'orange'
       }
-    }
-    return {
-      label: 'documents.documents_available',
-      color: 'primary'
-    }
+    case CREATION_STATE.DOCUMENTS_UPLOADED:
+      return {
+        label: 'documents.documents_available',
+        color: 'primary'
+      }
   }
   return {
-    label: 'general.new',
-    color: 'positive'
+    label: 'errors.unknown',
+    color: 'error'
   }
 }
 

@@ -31,7 +31,7 @@ const sesClient = new SESClient({
  */
 export async function sendEmail(
   from: string,
-  to: string|string|string[],
+  to: string |string[],
   subject: string,
   body: string,
   replyTo?: string[],

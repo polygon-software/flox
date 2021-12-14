@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
@@ -9,10 +9,9 @@ import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
-import { ItemModule } from './item/item.module';
-import { CompanyModule } from './company/company.module';
-import { EmployeeModule } from './employee/employee.module';
-import { FileModule } from './file/file.module';
+import { CompanyModule } from './modules/company/company.module';
+import { EmployeeModule } from './modules/employee/employee.module';
+import { FileModule } from './modules/file/file.module';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
 
@@ -35,7 +34,7 @@ import { RolesGuard } from './auth/roles.guard';
           },
         },
       },
-      cors: false, // TODO set appropriate for production
+      cors: true, // TODO set appropriate for production
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -76,7 +75,6 @@ import { RolesGuard } from './auth/roles.guard';
     }),
     UserModule,
     CompanyModule,
-    ItemModule,
     EmployeeModule,
     FileModule,
   ],
