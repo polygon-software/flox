@@ -107,8 +107,8 @@ const props = defineProps({
 })
 
 /**
- * Edits the given user
- * @param {string} status - the user's ID
+ * Edits the dossier
+ * @param {string} status - the status of the dossier
  * @param {string} variables - the new variables
  * @return {void}
  */
@@ -128,7 +128,6 @@ function onUpdate(status: string, variables: Record<string, unknown>){
  * @returns {void}
  */
 function showAllDocuments() {
-  console.log("halloo")
   $q.dialog({
     title: 'UploadDocumentsDialog',
     component: UploadDocumentsDialog,

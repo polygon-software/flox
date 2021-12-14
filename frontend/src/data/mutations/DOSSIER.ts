@@ -22,9 +22,6 @@ export const CREATE_DOSSIER = {
   cacheLocation: 'createDossier'
 }
 
-/**
- * todo: after the table exists, compare it and change it like it is in the table
- */
 export const SET_DOSSIER_STATUS = {
   mutation: gql`
     mutation updateDossierStatus($first_name: String!, $last_name: String!, $uid: String, $correspondence_address: CreateAddressInput!, $email: String!, $original_bank: Bank!, $born: DateTime!, $property_address: CreateAddressInput!, $loan_sum: Int!, $non_arrangeable: Boolean!, $status: Status!, $offers: Array!){

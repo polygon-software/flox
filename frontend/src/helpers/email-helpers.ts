@@ -20,7 +20,7 @@ const sesClient = new SESClient({
  */
 
 /**
- * Sends an e-email using AWS SES, using the given parameters
+ * Sends an e-mail using AWS SES, using the given parameters
  * @param {string} from - the sender's e-email address TODO NOTE: in sandbox mode, you can only send from verified addresses!
  * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
  * @param {string} subject - E-email subject
