@@ -32,8 +32,10 @@
         <q-td key="mortage_amount">
           {{ props.row.mortage_amount }}
         </q-td>
-        <q-td key="status" style="padding: 30px; color: white; background-color: #58ACFA; -webkit-background-clip: content-box; background-clip: content-box">
-          {{ props.row.status }}
+        <q-td key="status">
+          <q-chip style="color: white; background-color: #58ACFA;">
+            {{ props.row.status }}
+          </q-chip>
           <q-popup-edit
             v-slot="scope"
             :auto-save="true"
