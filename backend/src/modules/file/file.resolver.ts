@@ -14,6 +14,7 @@ export class FileResolver {
   /**
    * Gets a public file
    * @param {GetPublicFileArgs} getPublicFileArgs - search arguments, containing UUID
+   * @returns {Promise<PublicFile>} - PublicFile
    */
   @Public()
   @Query(() => PublicFile, { name: 'getPublicFile' })
@@ -26,6 +27,7 @@ export class FileResolver {
   /**
    * Gets a private file
    * @param {GetPrivateFileArgs} getPrivateFileArgs - search arguments, containing UUID
+   * @returns {Promise<PrivateFile>} - PrivateFile
    */
   @AnyRole() // TODO application specific: set appropriate guards here, restrict to file owner
   @Query(() => PrivateFile, { name: 'getPrivateFile' })

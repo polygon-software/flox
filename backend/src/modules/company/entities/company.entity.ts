@@ -14,7 +14,7 @@ import { CREATION_STATE } from '../../../ENUM/ENUMS';
 
 /**
  * An entity representing a company account
- * Initial status: 'creation_state' is set to 'applied', and enabled once approved by SOI admin
+ * Initial status: 'creation_state' is set to 'APPLIED', and set to AWAITING_DOCUMENTS once approved by SOI admin
  */
 
 @ObjectType()

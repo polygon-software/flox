@@ -110,12 +110,14 @@ void getUrls()
 /**
  * Load all URLs and add to local object
  * TODO: Verify why this works only once
+ * @async
+ * @returns {void}
  */
 async function getUrls(): Promise<void>{
   const documents = _company.value.documents ?? [];
   for(const document of documents) {
     const queryResult = await executeQuery(PRIVATE_FILE, {uuid: document.uuid})
-    const file = queryResult.data.getPrivateFile as Record<string, unknown>
+    const file = queryResult.data.getPrivateFile as unknown as Record<string, unknown>
 
     // Add to copy
     document.url = file.url;
@@ -123,19 +125,22 @@ async function getUrls(): Promise<void>{
 }
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show();
 }
 
+// eslint-disable-next-line require-jsdoc
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
 
 /**
- * On OK, create account and send e-email
+ * On OK, create account and send e-mail
+ * @async
+ * @returns {void}
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){
@@ -161,6 +166,7 @@ async function onOk(): Promise<void> {
 
 /**
  * Triggered upon rejecting a company's application
+ * @returns {void}
  */
 function onReject(): void {
   //TODO: Send rejection message
@@ -183,13 +189,15 @@ function onReject(): void {
   })
 }
 
+// eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
 }
 
 /**
  * Open the a preview of the selected document in a dialog.
- * @param url {string} The url of the file that should be displayed.
+ * @param {string} url - The url of the file that should be displayed.
+ * @returns {void}
  */
 function openPreview(url: string): void {
   $q.dialog({

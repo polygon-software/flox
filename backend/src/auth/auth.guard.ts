@@ -6,22 +6,31 @@ import { IS_PUBLIC_KEY } from './authentication.decorator';
 import { getRequest } from '../helpers';
 
 @Injectable()
+/**
+ * JSON Web token auth guard
+ */
 export class JwtAuthGuard extends AuthGuard('jwt') {
   /**
-   * Executed upon receiving a request for a protected endpoint
-   * @param {ExecutionContext} context - the request's context
+   * Gets the request from context
+   * @param {ExecutionContext} context - execution context of the request
+   * @returns {any} - the request
    */
   getRequest(context: ExecutionContext): any {
     return getRequest(context);
   }
 
+  /**
+   * Constructor
+   * @param {Reflector} reflector - reflector
+   */
   constructor(private reflector: Reflector) {
     super();
   }
 
   /**
-   * Determines whether the user can activate a given endpoint
-   * @param {ExecutionContext} context - the request's context
+   * Determines whether a user can activate the route
+   * @param {ExecutionContext} context - execution context
+   * @returns {boolean} - whether the user can activate
    */
   public canActivate(
     context: ExecutionContext,

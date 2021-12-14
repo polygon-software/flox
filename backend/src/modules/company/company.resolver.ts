@@ -17,6 +17,7 @@ export class CompanyResolver {
   /**
    * Gets a list of companies matching the given criteria
    * @param {GetCompaniesArgs} getCompaniesArgs - search filter (uuids)
+   * @returns {Promise<Company[]>} - companies
    */
   @AdminOnly()
   @Query(() => [Company], { name: 'companies' })
@@ -28,6 +29,7 @@ export class CompanyResolver {
 
   /**
    * Gets all companies within the database
+   * @returns {Promise<Company[]>} - companies
    */
   //@AdminOnly() TODO enable once roles are implemented in User DB
   @AnyRole()
@@ -39,6 +41,7 @@ export class CompanyResolver {
   /**
    * Gets a company from the database
    * @param {GetCompanyArgs} getCompanyArgs - getting arguments (containing either uuid or cognito_id)
+   * @returns {Promise<Company>} - company
    */
   @Public() // TODO restrict to appropriate roles
   @Query(() => Company, { name: 'company' })
@@ -49,6 +52,7 @@ export class CompanyResolver {
   /**
    * Adds a new company to the database - will not have a cognito_id by default!
    * @param {CreateCompanyInput} createCompanyInput - data of the new company
+   * @returns {Promise<Company>} - company
    */
   @Public()
   @Mutation(() => Company)
@@ -61,6 +65,7 @@ export class CompanyResolver {
   /**
    * Updates a company's data
    * @param {UpdateCompanyInput} updateCompanyInput - company data to change
+   * @returns {Promise<Company>} - company
    */
   @AnyRole() // TODO restrict to appropriate roles
   @Mutation(() => Company)
@@ -73,6 +78,7 @@ export class CompanyResolver {
   /**
    * Enables document upload for a given company
    * @param {string} uuid - the company's UUID
+   * @returns {Promise<Company>} - company
    */
   @AnyRole() // TODO set to admin-only once roles implemented on user databse
   @Mutation(() => Company)
@@ -84,7 +90,8 @@ export class CompanyResolver {
 
   /**
    * Removes a company
-   * @param {DeleteCompanyInput} deleteCompanyInput
+   * @param {DeleteCompanyInput} deleteCompanyInput - company uuid
+   * @returns {Promise<Company>} - company
    */
   @Public() // TODO restrict to appropriate roles
   @Mutation(() => Company)
@@ -96,7 +103,8 @@ export class CompanyResolver {
 
   /**
    * Associate User and Cognito accout
-   * @param {AssociateUserInput} associateUserInput
+   * @param {AssociateUserInput} associateUserInput - company uuid
+   * @returns {Promise<Company>} - company
    */
   @AnyRole() // TODO restrict to appropriate roles
   @Mutation(() => Company)

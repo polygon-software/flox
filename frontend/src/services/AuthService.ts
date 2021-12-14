@@ -20,7 +20,6 @@ import {i18n} from 'boot/i18n';
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
  * signing up, logging in, logging out, changing passwords, and more.
  */
-
 export class AuthenticationService {
     // Application info
     appName: string
@@ -33,6 +32,11 @@ export class AuthenticationService {
 
     $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>>
 
+  /**
+   * Constructor
+   * @param {QVueGlobals} quasar - quasar instance
+   * @param {ErrorService} errorService - error service instance
+   */
     constructor(quasar: QVueGlobals, errorService: ErrorService) {
       // Store
       this.$authStore = useAuth()
@@ -56,8 +60,10 @@ export class AuthenticationService {
 
     /**
      * Logs into the AWS authentication pool using the given data
-     * @param identifier {string} - the authentication's identifier (usually E-email or username)
-     * @param password {string} - the authentication's password
+     * @param {string} identifier - the authentication's identifier (usually E-email or username)
+     * @param {string} password - the authentication's password
+     * @async
+     * @returns {void}
      */
     async login(identifier: string, password: string): Promise<void>{
 
@@ -85,7 +91,7 @@ export class AuthenticationService {
           this.$authStore.mutations.setCognitoUser(cognitoUser)
           cognitoUser.authenticateUser(authenticationDetails, {
               onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
-              onFailure: (err)=>{this.onFailure(err) },
+              onFailure: (err: Error)=>{this.onFailure(err) },
               // Sets up MFA (only done once after signing up)
               mfaSetup: () => {
                 this.setupMFA(cognitoUser, resolve)
@@ -97,7 +103,7 @@ export class AuthenticationService {
               },
 
               // Called if time-limited one time password is required (only second login or later)
-              totpRequired: (tokenType) => {this.verify2FACode(tokenType, resolve)},
+              totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
 
               //TODO check when/if this appears
               mfaRequired: function () {
@@ -115,24 +121,27 @@ export class AuthenticationService {
 
   /**
    * Sets up MFA for the given cognito user
-   * @param cognitoUser {CognitoUser} - the user
-   * @param resolve {(value: (void | PromiseLike<void>)) => void}
+   * @param {CognitoUser} cognitoUser - the user
+   * @param {function} resolve - resolve function
+   * @returns {void}
    */
   setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
     cognitoUser.associateSoftwareToken({
         associateSecretCode: (secret: string) => {
           this.$authStore.mutations.setCognitoUser(cognitoUser)
           this.showQRCodeDialog(secret, resolve, cognitoUser)},
-        onFailure: (err) => {this.onFailure(err)}
+        onFailure: (err: Error) => {this.onFailure(err)}
       })
     }
 
   /**
    * Signs up by creating a new authentication using the given Username, e-email and password.
    * TODO make adaptable to other parameters via direct handling of {attributes} param
-   * @param username {string} - the chosen username
-   * @param email {string} - the authentication's e-email address -> TODO move to attributes
-   * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
+   * @param {string} username - the chosen username
+   * @param {string} email - the authentication's e-email address -> TODO move to attributes
+   * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
+   * @async
+   * @returns {void}
    */
   async signUp(username: string, email: string, password: string): Promise<void> {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
@@ -158,9 +167,9 @@ export class AuthenticationService {
   /**
    * TODO description, consolidate with signUp() function
    * TODO make adaptable to other parameters via direct handling of {attributes} param
-   * @param username {string} - the chosen username
-   * @param email {string} - the authentication's e-email address -> TODO move to attributes
-   * @param password {string} - the new authentication's chosen password. Must fulfill the set password conditions
+   * @param {string} username - the chosen username
+   * @param {string} email - the authentication's e-email address -> TODO move to attributes
+   * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
    * @returns {string} the user's cognito ID (sub)
    */
   async signUpNewUser(username: string, email: string, password: string): Promise<string> {
@@ -183,6 +192,7 @@ export class AuthenticationService {
 
   /**
    * Logs out the currently logged in authentication (if any)
+   * @returns {void}
    */
   async logout(): Promise<void>{
     // Deep copy to avoid mutating store state
@@ -204,6 +214,7 @@ export class AuthenticationService {
 
     /**
      * Shows a dialog for changing password
+     * @returns {void}
      */
     showChangePasswordDialog(): void{
         this.$q.dialog({
@@ -220,6 +231,7 @@ export class AuthenticationService {
 
     /**
      * Shows a dialog for requesting password reset
+     * @returns {void}
      */
     showResetPasswordDialog(): void{
       const userPool = this.$authStore.getters.getUserPool()
@@ -262,6 +274,7 @@ export class AuthenticationService {
 
     /**
      * Show actual password reset form dialog
+     * @returns {void}
      */
     showResetPasswordFormDialog(): void{
         this.$q.dialog({
@@ -278,7 +291,8 @@ export class AuthenticationService {
 
     /**
      * Shows a dialog for verifying E-Mail
-     * @param renew {?boolean} - whether to generate a new verification code
+     * @param {boolean} [renew] - whether to generate a new verification code
+     * @returns {void}
      */
     showEmailVerificationDialog(renew = false): void{
         if(renew){
@@ -311,9 +325,10 @@ export class AuthenticationService {
 
     /**
      * Shows a dialog containing a QR code for setting up two factor authentication
-     * @param secretCode {string} - the authenticator code to encode in QR code form
-     * @param resolve { (value: (void | PromiseLike<void>)) => void}
-     * @param cognitoUser {CognitoUser} - the cognito user to show the dialog for
+     * @param {string} secretCode - the authenticator code to encode in QR code form
+     * @param {function} resolve - resolve function
+     * @param {CognitoUser} cognitoUser - the cognito user to show the dialog for
+     * @returns {void}
      */
     showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void, cognitoUser: CognitoUser): void{
       const username = this.$authStore.getters.getUsername() ?? 'user'
@@ -352,7 +367,9 @@ export class AuthenticationService {
 
     /**
      * Confirm e-email verification code
-     * @param code
+     * @param {string} code -verification code
+     * @async
+     * @returns {void}
      */
     async verifyEmail(code: string): Promise<void>{
       return new Promise((resolve, reject)=>{
@@ -368,8 +385,9 @@ export class AuthenticationService {
 
     /**
      * Verifies a given 2FA code
-     * @param tokenType {string} - the type of token to verify
-     * @param resolve { (value: (void | PromiseLike<void>)) => void}
+     * @param {string} tokenType - the type of token to verify
+     * @param {function} resolve - resolve function
+     * @returns {void}
      */
     verify2FACode (tokenType: string, resolve:  (value: (void | PromiseLike<void>)) => void): void {
         // Verify code
@@ -401,8 +419,9 @@ export class AuthenticationService {
 
     /**
      * When login succeeds
-     * @param userSession {CognitoUserSession} - the currently active Cognito authentication session
-     * @param resolve {(value: (void | PromiseLike<void>)) => void}
+     * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
+     * @param {function} resolve - resolve function
+     * @returns {void}
      */
     loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
       // Store locally
@@ -413,7 +432,8 @@ export class AuthenticationService {
 
     /**
      * When any operation (mostly login) fails, verify whether it is due to the authentication not having verified their account
-     * @param error {Error} - the error that caused the failure
+     * @param {Error} error - the error that caused the failure
+     * @returns {void}
      */
     onFailure(error: Error): void{
         if(error.name === 'UserNotConfirmedException'){

@@ -1,12 +1,12 @@
-import { Field, ID, InputType, Int } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsString, IsUUID } from 'class-validator';
-import { ROLES } from '../../../../ENUM/ENUMS';
+import { ROLE } from '../../../../ENUM/ENUMS';
 
 @InputType()
 export class CreateUserInput {
-  @Field(() => ROLES, { description: 'Role of the User' })
+  @Field(() => ROLE, { description: 'Role of the User' })
   @IsString()
-  role: ROLES;
+  role: ROLE;
 
   @Field(() => ID, { description: 'Cognito ID' })
   @IsUUID()

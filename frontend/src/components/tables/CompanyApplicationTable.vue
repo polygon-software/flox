@@ -51,8 +51,8 @@ import {ErrorService} from 'src/services/ErrorService';
 import {CREATION_STATE} from 'src/data/ENUM/ENUM';
 
 const $q: QVueGlobals = useQuasar()
-const $authService: AuthenticationService = inject('$authService')
-const $errorService: ErrorService = inject('$errorService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $errorService: ErrorService|undefined = inject('$errorService')
 // ----- Data -----
 const columns = [
   { name: 'readable_id', label: 'ID', field: 'readable_id', sortable: false },
@@ -82,6 +82,8 @@ const computedResult = computed(()=>{
 
 /**
  * Opens the dialog to enable the file upload
+ * @param {Company} company - the company to show the dialog for
+ * @returns {void}
  */
 function showEnableUploadDialog(company: Company) {
   $q.dialog({
@@ -94,7 +96,9 @@ function showEnableUploadDialog(company: Company) {
 }
 
 /**
- * Shows
+ * Shows a document validation dialog
+ * @param {Company} company - the company to show the dialog for
+ * @returns {void}
  */
 function showDocumentValidationDialog(company: Company) {
   $q.dialog({
@@ -111,21 +115,23 @@ function showDocumentValidationDialog(company: Company) {
 
 /**
  * Determines if an action button has to be rendered
- * @param {Company} companyData
+ * @param {Company} company - company
+ * @returns {boolean} - whether there is an action for the state
  */
-function isAction(companyData: Company): boolean {
-  if (companyData.creation_state === CREATION_STATE.AWAITING_DOCUMENTS) {
-    return companyData.documents !== null && companyData.documents.length > 0
+function isAction(company: Company): boolean {
+  if (company.creation_state === CREATION_STATE.AWAITING_DOCUMENTS) {
+    return company.documents !== null && company.documents.length > 0
   }
   return true
 }
 
 /**
  * Returns the state of the application.
- * @param {Company} companyData
+ * @param {Company} company - the company
+ * @returns {Record<string, string>} - the company's state
  */
-function getState(companyData: Company): Record<string, string> {
-  switch (companyData.creation_state) {
+function getState(company: Company): Record<string, string> {
+  switch (company.creation_state) {
     case CREATION_STATE.APPLIED:
       return {
         label: 'general.new',

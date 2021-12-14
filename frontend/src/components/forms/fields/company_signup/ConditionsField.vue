@@ -49,6 +49,7 @@ const pdf_link = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/
 
 /**
  * Emits the picked value
+ * @returns {void}
  */
 function emitValue(){
   if(accept_conditions.value && accept_condition_truthful.value){

@@ -62,8 +62,13 @@ const rows = computed(()=>{
 
 const $routerService: RouterService = inject('$routerService')
 
+/**
+ * Routes to employee registration
+ * @async
+ * @returns {void}
+ */
 async function routeToRegisterEmployee(): Promise<void> {
-  await $routerService.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
+  await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
 }
 
 </script>

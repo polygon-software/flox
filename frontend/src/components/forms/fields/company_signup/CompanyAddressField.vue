@@ -42,6 +42,7 @@ const correspondence_address: ComputedRef<Address> = computed(() => {
 
 /**
  * Emits both addresses
+ * @returns {void}
  */
 function emitValue(){
   emit('change', {

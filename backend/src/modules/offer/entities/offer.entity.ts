@@ -8,7 +8,7 @@ import PrivateFile from '../../file/entities/private_file.entity';
 @ObjectType()
 export class Offer extends BaseEntity {
   @Field(() => Dossier, { description: 'Dossier of Offer' })
-  @ManyToOne(() => Dossier, (dossi) => dossi.offers)
+  @ManyToOne(() => Dossier, (dossier) => dossier.offers)
   dossier: Dossier;
 
   @Field(() => Bank, { description: 'Bank making the offer' })

@@ -67,11 +67,28 @@ master
 
 Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon completing a feature, [creating a Pull Request](https://github.com/polygon-software/full-stack-bootstrap/compare) in order to merge the feature back into the development branch.
 
+Pull Request naming must adhere to the following schema:
+`type(scope): name`
+     
+| Name  | Description |
+| ------| ----------- | 
+| fix | Fixes an issue |
+| feat | Adds a new feature |
+| doc | Adds documentation |
+| test | Adds tests |
+
+The following Scopes are available:
+- `core`
+- `soi`
+- `bigabig`
+
+E.g. a valid PR name may be `feat(bigabig): Employee Dashboard`
+
 Once significant features have been merged into the `dev` branch, a Pull Request into `master` may be created in order to integrate well-tested features into the bootstrap repository.
 
 New project branches should always be created from `master`, and only merged into from `master`. Project branches should generally never be merged into any other branch.
 
-When creating a Pull Request, make sure to use the appropriate **labels** to identify what project and functionalities the PR belongs to.
+When creating a Pull Request, make sure to use the appropriate **labels** to identify what project and functionalities the PR belongs to. Additionally, autolabeller can automatically add missing labels.
 
 **If a project requires a basic functionality not covered by the bootstrap repository, the following workflow should be observed:**
 1. Create a new feature branch from `dev`
@@ -155,11 +172,13 @@ We use Vue 3 with typescript as the chosen language for developing the frontend.
 Most documentation examples use the `setup` function; however, we use the optional [<script setup>](https://v3.vuejs.org/api/sfc-script-setup.html) wherever possible
 
 As oppposed to Vue 2, our `<script>` tag now usually looks as follows:
+
 ````vue
 <script setup lang='ts'>
   ...
 </script>
 ````
+
 Note that we specify `setup` and `lang='ts'`. The `setup` tag is because we use the [Script Setup](https://v3.vuejs.org/api/sfc-script-setup.html) functionality provided by Vue 3, and the `lang` tag is to specify that we use Typescript instead of Javascript.
 
 ## 5. Backend
@@ -223,3 +242,32 @@ The Bootstrap project uses [AWS](https://aws.amazon.com/de/) server infrastructu
 | [AWS S3](https://aws.amazon.com/de/s3/)  | File storage |
 | [AWS Elastic Beanstalk](https://aws.amazon.com/de/elasticbeanstalk/) | Auto-scaling backend deployment |
 
+### 8: SonarQube Quality Check
+
+We have a code quality tool enabled which gives feedback on your code quality on every Pull-Request.
+The same feedback can also be integrated into your IDE such that you don't have to correct these changes in post but
+get notified while you are working. 
+
+To enable this setting within WebStorm, click on "File" -> "Settings" -> "Plugins". Search for "SonarLint" and download
+the Plugin. You will need to restart Webstorm.
+
+Once Webstorm is restarted, go to "File" -> "Settings" -> "Tools" -> "SonarLint" and click on the \[+\]-Button. 
+In "Connection Name", enter "PolygonQube", then choose the left option: "sonarcloud". Click on "Next".
+
+Now you are prompted to input a Token. To do this, you must log into [sonarcloud.io](https://sonarcloud.io)
+using your **github account**. Then, visit the [security](https://sonarcloud.io/account/security/) page and generate
+a token called "WebStorm". Copy-Paste the token value back into WebStorm under "Token". Click on "Next". 
+
+Select "PolygonSoftware" and click "Next" again 2 times, then "Finish". 
+
+Now you are almost done. Go again to "File" -> "Tools" -> "SonarLint" -> "Project Settings". Here, under "Connection", 
+select "PolygonQube". For the project key, enter "polygon-software_full-stack-bootstrap". Now you are good to go!
+
+You can now see a new tab on the bottom of your WebStorm IDE called "SonarLint".
+It shows you linting problems of the file you have currently open. It will also show any problems directly within your
+code as your regular linter. However, it will not only show you code formatting problems like eslint, but also
+potential bugs, security vulnerabilities, code smells etc. 
+
+If you open a file for the first time, give SonarQube some time to consult the server for a security analysis. You
+can see that sonarqube is running if on the bottom of WebStorm, you see a "Running SolarLint Analysis on XXX".
+This should not take more than a few seconds per file. 
