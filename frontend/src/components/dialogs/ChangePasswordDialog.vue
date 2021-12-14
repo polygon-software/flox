@@ -4,7 +4,7 @@
       title="Change Password"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
-      <b>Change Password</b>
+      <strong>Change Password</strong>
       <q-form
         class="q-gutter-md"
         @submit="onSubmit"

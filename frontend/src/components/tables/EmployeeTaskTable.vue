@@ -97,25 +97,25 @@
           <q-td key="tasks"/>
           <q-td key="volume" :props="props">
             <!-- TODO sum -->
-            <b>
+            <strong>
               1'200'000
-            </b>
+            </strong>
           </q-td>
           <q-td key="prov_emp" :props="props">
             <!-- TODO sum -->
-            <b>
+            <strong>
               80'000
-            </b>          </q-td>
+            </strong>          </q-td>
           <q-td key="prov_org" :props="props">
             <!-- TODO sum -->
-            <b>
+            <strong>
               120'000
-            </b>          </q-td>
+            </strong>          </q-td>
           <q-td key="prov_ratio" :props="props">
             <!-- TODO sum -->
-            <b>
+            <strong>
               120'000
-            </b>
+            </strong>
           </q-td>
         </q-tr>
       </template>
