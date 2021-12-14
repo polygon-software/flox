@@ -25,12 +25,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/SetPasswordPage.vue') }],
   },
 
-  'MANAGEMENT_DASHBOARD': {
-    path: '/management-dashboard',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ManagementDashboardPage.vue') }],
-  },
-
   'EMPLOYEE_DASHBOARD': {
     path: '/employee-dashboard',
     component: () => import('layouts/MainLayout.vue'),

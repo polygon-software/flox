@@ -35,7 +35,7 @@
         </p>
       <p class="q-ma-md col text-center">
         <!-- Customer Overview -->
-        <DashboardsTable
+        <EmployeeDashboardTable
           :columns="columns"
           :rows="rows"
           :options="showOptions()"
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import {inject, ref} from 'vue'
 import {i18n} from 'boot/i18n';
-import DashboardsTable from 'components/tables/DashboardsTable.vue';
+import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CompanyEmployeeId from "components/cards/CompanyEmployeeId.vue";
