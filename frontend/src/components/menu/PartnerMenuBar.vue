@@ -43,7 +43,17 @@
           no-caps
           style="width: 100%"
           @click="openInbox"
-        />
+        >
+          <q-badge
+            floating
+            color="red"
+            rounded
+            style="height: 18px; margin: 13px 10px 0 0; z-index: 10"
+          >
+            <!-- TODO count here -->
+            2
+          </q-badge>
+        </q-btn>
         <q-btn
           v-if="loggedIn"
           :label="$t('authentication.logout')"
