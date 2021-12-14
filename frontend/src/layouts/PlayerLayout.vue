@@ -4,9 +4,11 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <PlayerFooter/>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import PlayerMenuBar from 'components/menu/PlayerMenuBar.vue';
+import PlayerFooter from 'components/menu/PlayerFooter.vue';
 </script>

@@ -2,7 +2,7 @@
   <q-header class="row bg-primary shadow-5 justify-between">
     <div class="row">
       <img
-          alt="Polygon Software"
+          alt="Bigabig"
           :src="require('src/assets/bigabig-logo.svg')"
           style="height: 50px"
           class="q-ma-sm"
