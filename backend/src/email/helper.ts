@@ -13,6 +13,7 @@ import {
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
  * @param {string} [textBody] - optional plaintext body
+ * @return {Promise<void | SendEmailCommandOutput>} - the output from the send email
  */
 export async function sendEmail(
   from: string,
@@ -71,6 +72,7 @@ export async function sendEmail(
  * @param {string} email - the user's e-mail address
  * @param {string} password - the user's (generated) password
  * @param {string} type - the users type - 'emp' for employee or 'man' for company
+ * @return {Promise<void>} - void promise
  */
 export async function sendPasswordChangeEmail(
   email: string,
@@ -102,6 +104,7 @@ export async function sendPasswordChangeEmail(
  * @param {string} password - user's password
  * @param {string} type - user's type
  * @param {string} baseUrl - from env file
+ * @return {string} - a password change link
  */
 export function generatePasswordChangeLink(
   email: string,
