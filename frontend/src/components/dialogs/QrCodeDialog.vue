@@ -34,32 +34,28 @@
 
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
-import {defineProps, ref, Ref} from 'vue';
+import {defineEmits, defineProps, ref, Ref} from 'vue';
 import {QDialog, useDialogPluginComponent} from 'quasar'
-
-// REQUIRED; must be called inside of setup()
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-// dialogRef      - Vue ref to be applied to QDialog
-// onDialogHide   - Function to be used as handler for @hide on QDialog
-// onDialogOK     - Function to call to settle dialog with "ok" outcome
-//                    example: onDialogOK() - no payload
-//                    example: onDialogOK({ /*.../* }) - with payload
-// onDialogCancel - Function to call to settle dialog with "cancel" outcome
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 const emit = defineEmits(['ok'])
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show();
 }
+// eslint-disable-next-line require-jsdoc
 function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
 
+/**
+ * On Ok, emit ok event
+ * @returns {void}
+ */
 function onOk(): void {
   emit('ok')
   hide()

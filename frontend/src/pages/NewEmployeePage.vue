@@ -58,6 +58,7 @@ const pages = [
  * Upon valid registration, creates database entry
  * @param {Record<string, unknown>} formData: The form's entered data
  * @async
+ * @returns {void}
  */
 async function onRegister(formData: Record<string, Record<string, string>>){
   const email: string = formData.email.toString()
@@ -91,7 +92,6 @@ async function onRegister(formData: Record<string, Record<string, string>>){
 
   // Route back
   await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_DATA)
-  return;
 }
 
 </script>

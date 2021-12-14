@@ -56,6 +56,7 @@ const address = reactive(new Address())
 
 /**
  * Emits the updated value, if it is valid
+ * @returns {void}
  */
 function emitValue(){
   if(address.validate()){

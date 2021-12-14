@@ -133,6 +133,7 @@ export default {
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
     documents_missing: 'Documents missing',
+    unknown: 'Unknown Error'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',

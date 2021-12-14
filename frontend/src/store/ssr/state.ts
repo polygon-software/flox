@@ -1,3 +1,6 @@
+/**
+ * State
+ */
 class SSRState{
   prefetchedData: Record<string, unknown> = {}
 }

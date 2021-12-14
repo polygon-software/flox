@@ -31,7 +31,7 @@ import {AuthenticationService} from 'src/services/AuthService';
 const $authStore = useAuth()
 const $routerService: RouterService|undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
-const $authService: AuthenticationService = inject('$authService')
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 const fields = [FIELDS.PASSWORD_REPEAT]
 
@@ -55,6 +55,7 @@ const type: string|undefined = route.query.t?.toString()
 /**
  * submits the new password and redirects
  * @param {Record<string, string>} values - the form's values
+ * @returns {void}
  */
 async function submitPassword(values: Record<string, string>) {
 
@@ -66,7 +67,7 @@ async function submitPassword(values: Record<string, string>) {
   const decoded_pw = atob(password)
 
   // Log in
-  await $authService.login(decoded_email, decoded_pw)
+  await $authService?.login(decoded_email, decoded_pw)
 
   // Change password
   $authStore.getters.getCognitoUser()?.changePassword(decoded_pw, values.password_repeat, (err: Error|undefined)=>{
@@ -75,7 +76,9 @@ async function submitPassword(values: Record<string, string>) {
     }
   })
 
-  setTimeout(function() {$routerService?.routeTo(type === 'man' ? ROUTES.MANAGEMENT_EMPLOYEE_DATA : ROUTES.EMPLOYEE_DASHBOARD)}, 5000);
+  setTimeout(function() {
+    void $routerService?.routeTo(type === 'man' ? ROUTES.MANAGEMENT_EMPLOYEE_DATA : ROUTES.EMPLOYEE_DASHBOARD)
+  }, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
 }
 </script>

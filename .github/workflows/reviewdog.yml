@@ -1,0 +1,43 @@
+name: Reviewdog
+on:
+  push:
+    branches:
+      - master
+      - project-soi
+      - project-bigabig
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+jobs:
+  lint-code:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Yarn install frontend
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: frontend
+
+      - name: yarn install backend
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: backend
+
+      - name: Lint frontend
+        uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-review
+          fail_on_error: true
+          eslint_flags: "--ext .js,.ts,.vue ./"
+          workdir: frontend
+
+      - name: Lint backend
+        uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-review
+          eslint_flags: "{src,apps,libs,test}/**/*.ts"
+          workdir: backend
