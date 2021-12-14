@@ -176,6 +176,7 @@ function openMessage(message: Message) {
   showMessageDetail.value = true
 }
 
+
 /**
  * Closes the dialog which contains the detail view of a message. Also sets the message status to "read"
  * @returns {void}
