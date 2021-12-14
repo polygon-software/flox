@@ -126,7 +126,6 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
   const $ssrStore = useSSR();
   const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
 
-
   // ----- Hooks -----
   onServerPrefetch(async () => {
     const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query, variables)
@@ -152,7 +151,7 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
           }
         })
       } else {
-        // SSR TODO: why does commenting this fix Cache errors?
+        // SSR
         apolloClient.writeQuery({
           query: query.query,
           variables: variables,
@@ -162,7 +161,6 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
         })
       }
     }
-
 
     apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
       next(value: ApolloQueryResult<Record<string, unknown>>) {
