@@ -1,10 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { Address } from '../../address/entities/address.entity';
-import { JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
 
 @ObjectType()
+@InputType('bank')
+@Entity({ name: 'bank' })
 export class Bank extends Person {
   @Field(() => Address, { description: 'Address' })
   @JoinColumn()
