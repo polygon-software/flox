@@ -8,77 +8,77 @@
           class="q-ma-sm"
       >
     </div>
-  <div class="row">
-    <!-- Account options -->
-    <q-badge
-      v-if="notificationCount > 0"
-      floating
-      color="red"
-      rounded
-      style="margin: 10px 5px 0 0; z-index: 10"
-    >
-      {{notificationCount}}
-    </q-badge>
+    <div class="row">
+      <!-- Account options -->
+      <q-badge
+        v-if="notificationCount > 0"
+        floating
+        color="red"
+        rounded
+        style="margin: 10px 5px 0 0; z-index: 10"
+      >
+        {{notificationCount}}
+      </q-badge>
 
-    <q-btn-dropdown
-      dropdown-icon="account_circle"
-      size="xl"
-      color="black"
-      auto-close
-      no-icon-animation
-      flat
-      round
-      dense
-      @click="showOptions = !showOptions"
-    >
-      <div class="column" style="width: 200px">
-        <q-btn
-          v-if="loggedIn"
-          :label="$t('notifications.messages')"
-          icon="notifications"
-          color="black"
-          class="text-black"
-          flat
-          no-caps
-          style="width: 100%"
-          @click="openInbox"
-        >
-          <q-badge
-            v-if="notificationCount > 0"
-            floating
-            color="red"
-            rounded
-            style="height: 18px; margin: 13px 10px 0 0; z-index: 10"
+      <q-btn-dropdown
+        dropdown-icon="account_circle"
+        size="xl"
+        color="black"
+        auto-close
+        no-icon-animation
+        flat
+        round
+        dense
+        @click="showOptions = !showOptions"
+      >
+        <div class="column" style="width: 200px">
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('notifications.messages')"
+            icon="notifications"
+            color="black"
+            class="text-black"
+            flat
+            no-caps
+            style="width: 100%"
+            @click="openInbox"
           >
-            {{notificationCount}}
-          </q-badge>
-        </q-btn>
-        <q-btn
-          v-if="loggedIn"
-          :label="$t('authentication.logout')"
-          icon="logout"
-          color="black"
-          class="text-black"
-          flat
-          no-caps
-          style="width: 100%"
-          @click="logout"
-        />
+            <q-badge
+              v-if="notificationCount > 0"
+              floating
+              color="red"
+              rounded
+              style="height: 18px; margin: 13px 10px 0 0; z-index: 10"
+            >
+              {{notificationCount}}
+            </q-badge>
+          </q-btn>
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('authentication.logout')"
+            icon="logout"
+            color="black"
+            class="text-black"
+            flat
+            no-caps
+            style="width: 100%"
+            @click="logout"
+          />
 
-        <q-btn
-          v-if="loggedIn"
-          :label="$t('authentication.change_password')"
-          icon="lock"
-          color="black"
-          class="text-black"
-          flat
-          no-caps
-          style="width: 100%"
-          @click="changePassword"
-        />
-      </div>
-    </q-btn-dropdown>
-  </div>
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('authentication.change_password')"
+            icon="lock"
+            color="black"
+            class="text-black"
+            flat
+            no-caps
+            style="width: 100%"
+            @click="changePassword"
+          />
+        </div>
+      </q-btn-dropdown>
+    </div>
   </q-header>
 
   <!-- Notification Inbox -->

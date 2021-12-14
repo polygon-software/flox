@@ -8,7 +8,7 @@ import {RouteRecordRaw} from 'vue-router';
 const ROUTES: Record<string, RouteRecordRaw> = {
   'MAIN': {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/PlayerLayout.vue'),
     children: [{ path: '', component: () => import('pages/MainPage.vue') }],
   },
 

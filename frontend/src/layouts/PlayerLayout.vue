@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-1">
-    <MenuBar/>
+    <PlayerMenuBar/>
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -8,5 +8,5 @@
 </template>
 
 <script setup lang="ts">
-import MenuBar from 'src/components/menu/MenuBar.vue'
+import PlayerMenuBar from 'components/menu/PlayerMenuBar.vue';
 </script>
