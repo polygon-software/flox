@@ -4,7 +4,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 /**
  * Gets the request from context
  * @param {ExecutionContext} context - Execution Context
- * @return {Request} - the request
+ * @returns {Request} - the request
  */
 export function getRequest(context: ExecutionContext): any {
   const ctx = GqlExecutionContext.create(context);
@@ -19,7 +19,7 @@ export function getRequest(context: ExecutionContext): any {
 /**
  * Generates a short human-readable ID
  * @param {number} [length] - length of the ID to generate
- * @return {string} - an ID
+ * @returns {string} - an ID
  */
 export function generateHumanReadableId(length = 10): string {
   let result = '';
