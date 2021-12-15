@@ -139,7 +139,7 @@ export default {
   },
   employee_dashboard: {
     title: 'Mitarbeiter Dashboard',
-    title2: 'Anträge',
+    applications: 'Anträge',
     search: 'Suche',
     new_assignment: 'Neuen Auftrag erfassen',
     date: 'Datum',

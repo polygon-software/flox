@@ -24,6 +24,3 @@ const employee = {readable_id: 5517267}
 // const company = subscribeToQuery(COMPANY) as Ref<Record<string, Array<Record<string, unknown>>>>
 // const employee = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 </script>
-
-<style scoped>
-</style>

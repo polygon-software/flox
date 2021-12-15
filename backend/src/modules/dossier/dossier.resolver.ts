@@ -2,7 +2,7 @@ import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { Dossier } from './entity/dossier.entity';
 import { Public } from '../../auth/authentication.decorator';
 import {DossierService} from "./dossier.service";
-import {UpdateDossierStatusInput} from "./dto/input/update-dossier-status.input";
+import {UpdateDossierInput} from "./dto/input/update-dossier.input";
 import {CreateDossierInput} from "./dto/input/create-dossier.input";
 
 @Resolver(() => Dossier)
@@ -12,7 +12,8 @@ export class DossierResolver {
   /**
    * Adds a new dossier to the database
    * @param {CreateDossierInput} createDossierInput - data of the new dossier
-   * @returns {Promise<Dossier>} - dossier
+   * @async
+   * @returns {Dossier} - the Dossier
    */
   @Public()
   @Mutation(() => Dossier)
@@ -22,15 +23,15 @@ export class DossierResolver {
     return await this.dossierService.createDossier(createDossierInput);
   }
   /**
-   * updates the status of a dossier
-   * @param updateDossierStatusInput
+   * Updates the status of a dossier
+   * @param {UpdateDossierInput} updateDossierInput - input, containing new status
    * @returns {Promise<Dossier[]>} - updated status
    */
   @Public()
   @Mutation(() => Dossier)
-  async updateDossierStatus(
-    @Args('UpdateDossierStatusInput') updateDossierStatusInput: UpdateDossierStatusInput,
+  async updateDossier(
+    @Args('UpdateDossierInput') updateDossierInput: UpdateDossierInput,
   ): Promise<Dossier> {
-    return await this.dossierService.updateDossier(updateDossierStatusInput);
+    return await this.dossierService.updateDossier(updateDossierInput);
   }
 }

@@ -107,7 +107,8 @@ function hide(): void {
 }
 
 /**
- * uploads the selected files from the desktop
+ * Uploads the selected files from the desktop to the existing files
+ * for now it is a placeholder function
  * @returns {void}
  */
 function upload(): void {
@@ -121,8 +122,8 @@ function upload(): void {
 }
 
 /**
- * after clicking on the delete icon, removes the file
- * @param {number} [index] - index number of the file which should be removed
+ * After clicking on the delete icon, removes the file
+ * @param {number} index - index number of the file which should be removed
  * @returns {void}
  */
 function remove(index: number) {

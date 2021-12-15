@@ -40,7 +40,7 @@
             v-slot="scope"
             :auto-save="true"
             :model-value="props.row.status"
-            @save="(value) => onUpdate(props.row.status, {name: value})"
+            @save="(value) => onUpdateStatus(props.row.status, {name: value})"
           >
             <q-select
               v-model="scope.value"
@@ -77,6 +77,7 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from "src/data/mutations/DOSSIER";
+import {i18n} from "boot/i18n";
 
 const $q: QVueGlobals = useQuasar()
 
@@ -84,16 +85,6 @@ const $q: QVueGlobals = useQuasar()
 const selected = ref([])
 
 const props = defineProps({
-  columns: {
-    required: true,
-    type: Array,
-    default: () => [],
-  },
-  rows: {
-    required: true,
-    type: Array,
-    default: () => [],
-  },
   title: {
     required: false,
     type: String,
@@ -106,13 +97,123 @@ const props = defineProps({
   }
 })
 
+// ----- Data -----
+const columns = [
+  { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true },
+  // customer + customer id
+  { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true },
+  { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true },
+  { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true },
+  { name: 'mortage_amount', label: i18n.global.t('employee_dashboard.mortage_amount'), field: 'mortage_amount', sortable: true },
+  { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false },
+  { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false },
+  { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false },
+]
+
+const rows = [
+  {
+    name: 'bsp1',
+    date: '24.11.2021',
+    customer: 'Jusuf Amzai',
+    institute: 'ZKB',
+    location: 'Luzern',
+    mortage_amount: '620000.00',
+    status: 'Offen',
+    uploads: '',
+    offers: ['CS', 'UB', 'KZ', 'AB']
+  },
+  {
+    name: 'bsp2',
+    date: '22.11.2021',
+    customer: 'Marino',
+    institute: 'ZKB',
+    location: 'Zürich',
+    mortage_amount: '1620000.00',
+    status: 'Kreditvertrag unterzeichnet zurück',
+    uploads: '',
+    offers: ['CS']
+  },
+  {
+    name: 'bsp3',
+    date: '23.11.2021',
+    customer: 'Ramize',
+    institute: 'ZKB',
+    location: 'Emmen',
+    mortage_amount: '620000.00',
+    status: 'Offerte abgelehnt',
+    uploads: '',
+    offers: []
+  },
+  {
+    name: 'bsp4',
+    date: '25.11.2021',
+    customer: 'Elexa',
+    institute: 'ZKB',
+    location: 'Kriens',
+    mortage_amount: '620000.00',
+    status: 'Eingereicht',
+    uploads: '',
+    offers: ['UB']
+  },
+  {
+    name: 'bsp5',
+    date: '26.11.2021',
+    customer: 'David',
+    institute: 'ZKB',
+    location: 'Emmenbrücke',
+    mortage_amount: '620000.00',
+    status: 'Offeriert',
+    uploads: '',
+    offers: ['KZ']
+  },
+  {
+    name: 'bsp6',
+    date: '27.11.2021',
+    customer: 'Christoph',
+    institute: 'ZKB',
+    location: 'Luzern',
+    mortage_amount: '620000.00',
+    status: 'Abgeschlossen',
+    uploads: '',
+    offers: ['UB', 'KZ']
+  },
+  {
+    name: 'bsp7',
+    date: '28.11.2021',
+    customer: 'Joel',
+    institute: 'ZKB',
+    location: 'Zürich',
+    mortage_amount: '620000.00',
+    status: 'Kreditvertrag in Bearbeitung',
+    uploads: '',
+    offers: ['CS', 'KZ']
+  },
+  {
+    name: 'bsp8',
+    date: '29.11.2021',
+    customer: 'Marius',
+    institute: 'ZKB',
+    location: 'Zug',
+    mortage_amount: '620000.00',
+    status: 'Kreditvertrag versendet',
+    uploads: '',
+    offers: ['KZ']
+  },
+]
+
+// after Sprint 3 remove the computedResult data with the corresponding data from database
+// const queryResult = subscribeToQuery(MY_CUSTOMERS) as Ref<Record<string, Array<Record<string, unknown>>>>
+//const rows = computed(()=>{
+//return queryResult.value ?? []
+//})
+
 /**
- * Edits the dossier
+ * Edits the dossier status and update the status with the selected item
  * @param {string} status - the status of the dossier
  * @param {string} variables - the new variables
- * @return {void}
+ * @returns {void}
  */
-function onUpdate(status: string, variables: Record<string, unknown>){
+function onUpdateStatus(status: string, variables: Record<string, unknown>){
   void executeMutation(
     SET_DOSSIER_STATUS,
     {

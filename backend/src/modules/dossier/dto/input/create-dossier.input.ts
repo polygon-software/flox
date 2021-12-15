@@ -1,5 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import {IsBoolean, IsDate, IsNotEmpty, IsNumber, IsUUID} from 'class-validator';
 import {STATUS} from "../../../../ENUM/ENUMS";
 import {Address} from "../../../address/entities/address.entity";
 import {Bank} from "../../../bank/entities/bank.entity";
@@ -20,7 +20,7 @@ export class CreateDossierInput {
   original_bank: Bank;
 
   @Field(() => Date, { nullable: true })
-  @IsNotEmpty()
+  @IsDate()
   born: Date;
 
   @Field(() => String, { nullable: true })
@@ -28,10 +28,10 @@ export class CreateDossierInput {
   property_address: Address;
 
   @Field(() => Number, { nullable: true })
-  @IsNotEmpty()
+  @IsNumber()
   loan_sum: number;
 
   @Field(() => Boolean, { nullable: true })
-  @IsNotEmpty()
+  @IsBoolean()
   non_arrangeable: boolean;
 }
