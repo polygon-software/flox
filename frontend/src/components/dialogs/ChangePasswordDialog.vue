@@ -6,26 +6,26 @@
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
       <b>Change Password</b>
       <q-form
-          @submit="onSubmit"
           class="q-gutter-md"
+          @submit="onSubmit"
       >
         <q-input
-            label="Old Password"
             v-model="passwordOld"
+            label="Old Password"
             type="password"
 
         />
         <q-input
-            label="New Password"
             v-model="password"
+            label="New Password"
             type="password"
             :rules="[
               val => PASSWORD_REGEX.test(val) || 'Not ok'
             ]"
         />
         <q-input
-            label="New Password repeated"
             v-model="passwordRep"
+            label="New Password repeated"
             type="password"
             :rules="[
               val => val === password || 'Passwords must be identical',

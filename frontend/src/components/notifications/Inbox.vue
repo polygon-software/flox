@@ -1,6 +1,6 @@
 <template>
   <q-card style="width: 350px; height: 500px; overflow: hidden;">
-    <h5 class="text-center"> {{ $t('messages') }}</h5>
+    <h5 class="text-center"> {{ $t('notifications.messages') }}</h5>
 
     <!-- Message Details -->
     <q-card-section v-if="showMessageDetail">
@@ -14,7 +14,7 @@
         </q-card-section>
         <q-card-actions>
           <q-btn
-            :label="$t('back')"
+            :label="$t('buttons.back')"
             color="primary"
             flat
             @click="closeMessage"
@@ -36,22 +36,22 @@
         type="search"
         class="q-mb-md"
       >
-        <template v-slot:append>
+        <template #append>
           <q-icon name="search" />
         </template>
       </q-input>
 
       <!-- Sorting -->
       <q-select
+        v-model="sort"
         class="q-my-md"
         style="width: 125px"
         borderless
         dense
-        v-model="sort"
         :options="options"
         map-options
         emit-value
-        :label="$t('sort_by')"
+        :label="$t('general.sort_by')"
       />
 
       <!-- Messages -->
@@ -65,8 +65,8 @@
           :title="message.title"
           :received="message.received"
           :is-read="message.isRead"
-          @click="openMessage(message)"
           style="width: 90%; height: 75px;"
+          @click="openMessage(message)"
         >
         </MessagePreview>
       </q-scroll-area>
@@ -93,11 +93,11 @@ const props = defineProps({
 // Search and sort
 const options = [
   {
-    label: i18n.global.t('newest'),
+    label: i18n.global.t('general.newest'),
     value: 'newest',
   },
   {
-    label: i18n.global.t('oldest'),
+    label: i18n.global.t('general.oldest'),
     value: 'oldest',
   }
 ]
@@ -166,10 +166,9 @@ const filteredMessages = computed(() => {
   })
 })
 
-
 /**
  * Opens the dialog which contains the detail view of a message.
- * @param {message} message - the selected message
+ * @param {Message} message - the message that was selected
  * @returns {void}
  */
 function openMessage(message: Message) {

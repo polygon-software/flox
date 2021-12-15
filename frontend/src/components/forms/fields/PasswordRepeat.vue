@@ -1,14 +1,14 @@
 <template>
   <q-input
+      v-model="password"
       dense
       outlined
-      :label="$t('password')"
-      v-model="password"
+      :label="$t('account_data.password')"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
-      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('invalid_password')]"
+      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('error.invalid_password')]"
   >
-    <template v-slot:append>
+    <template #append>
       <q-icon
           :name="isPwd ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"
@@ -17,15 +17,15 @@
     </template>
   </q-input>
   <q-input
+      v-model="passwordRepeat"
       dense
       outlined
-      :label="$t('repeat_password')"
-      v-model="passwordRepeat"
+      :label="$t('account_data.repeat_password')"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
-      :rules="[val => val === password || $t('non_matching_password')]"
+      :rules="[val => val === password || $t('error.non_matching_password')]"
   >
-    <template v-slot:append>
+    <template #append>
       <q-icon
           :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"
@@ -46,10 +46,12 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
 const props = defineProps({
   modelValue: {
     required: false,
-    type: String
+    type: String,
+    default: '',
   },
   rules: {
     required: false,
+    type: Array,
   }
 });
 
@@ -69,7 +71,7 @@ watch(passwordRepeat, (newVal) => {
 })
 
 /**
- * Emits an update with new value
+ * Emits an update with the new input value
  * @param {string} value - the password
  * @returns {void}
  */

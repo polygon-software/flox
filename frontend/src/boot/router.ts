@@ -1,5 +1,5 @@
 import { boot } from 'quasar/wrappers'
-import ROUTES from '../router/routes'
+import ROUTES, {PUBLIC_ROUTES} from '../router/routes'
 import {Router} from 'vue-router';
 import {root} from 'src/store';
 
@@ -11,7 +11,7 @@ export default boot(({ router, store}) => {
   routerInstance = router
   router.beforeEach((to) => {
     const loggedIn = $authStore.getters.getLoggedInStatus()//   // Verify valid authentication
-    if(to.path !== ROUTES.LOGIN.path && !loggedIn){
+    if(!loggedIn && !PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)){
       return(ROUTES.LOGIN)
     } else if(to.path === ROUTES.LOGIN.path && loggedIn){
       // If user is logged in and trying to log in, redirect to main page

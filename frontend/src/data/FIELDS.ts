@@ -117,7 +117,7 @@ const FIELDS: Record<string, Field> = {
             mask: '##/##/####',
             rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('invalid_birth_date')]
           }
-        }
+        },
     }
 
 export {FIELDS}

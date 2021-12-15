@@ -6,7 +6,7 @@
       <h5
         class="q-pa-sm q-ma-none"
       >
-        {{ $t('welcome_bigabig') }}</h5>
+        {{ $t('greetings.welcome_bigabig') }}</h5>
       <!-- Login Card -->
       <LoginForm
         v-if="!signup"
@@ -18,7 +18,7 @@
         v-if="!signup"
         style="margin-top: 0; padding: 0"
       >
-        {{ $t('no_account_yet') }}
+        {{ $t('authentication.no_account_yet') }}
       </b>
 
       <!-- Signup Card -->
@@ -33,8 +33,8 @@
           :label="$t('signup')"
           color="transparent"
           text-color="primary"
-          @click="signup = true"
           flat
+          @click="signup = true"
         />
       </q-card>
     </q-card>
@@ -49,8 +49,8 @@ import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
 
-const $authService: AuthenticationService = inject('$authService')
-const $routerService: RouterService = inject('$routerService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const signup = ref(false)
 
@@ -59,13 +59,14 @@ const signup = ref(false)
  * Logs in the given authentication
  * @param {string} username - the authentication's username
  * @param {string} password - the authentication's password
+ * @async
  * @returns {void}
  */
-async function onLogin({username, password}: {username: string, password: string}){
-  await $authService.login(username, password)
+async function onLogin({username, password}: {username: string, password: string}): Promise<void>{
+  await $authService?.login(username, password)
 
   // Redirect to main page
-  await $routerService.routeTo(ROUTES.MAIN)
+  await $routerService?.routeTo(ROUTES.MAIN)
 }
 
 /**
@@ -76,7 +77,7 @@ async function onLogin({username, password}: {username: string, password: string
  * @returns {void}
  */
 async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
-  await $authService.signUp(username, email, password_repeat);
+  await $authService?.signUp(username, email, password_repeat);
   // TODO: close signup
 }
 

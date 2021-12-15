@@ -2,25 +2,55 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateItemInput {
-  """Name"""
-  name: String!
+enum Category {
+  TECHNOLOGY
+}
 
-  """User UUID"""
-  userUUID: ID
+type Comment {
+  """Content"""
+  content: String!
+
+  """The product this a comment belongs to"""
+  product: Product!
+
+  """The user who wrote this comment"""
+  user: User!
+
+  """UUID"""
+  uuid: ID!
 }
 
 input CreateProductInput {
-  description: String!
-  end: DateTime!
-  start: DateTime!
+  brand: String
+  brandLink: String
+  brandLinkMaxClicks: Float
+  brandLinkMaxCost: Float
+  category: Category
+  currency: Currency
+  description: String
+  directBuyLink: String
+  directBuyLinkMaxClicks: Float
+  directBuyLinkMaxCost: Float
+  end: DateTime
+  maxBet: Float
+  minBet: Float
+  sponsored: Boolean
+  start: DateTime
+  status: ProductStatus!
+  tags: [String!]
   title: String!
-  value: Int!
+  value: Int
 }
 
 input CreateUserInput {
   age: Int!
   name: String!
+}
+
+enum Currency {
+  CHF
+  EUR
+  USD
 }
 
 """
@@ -36,26 +66,17 @@ input DeleteUserInput {
   uuid: ID!
 }
 
-type Item {
-  """Name"""
-  name: String!
-
-  """User of the item"""
-  user: User
-
-  """UUID"""
+input DuplicateProductInput {
   uuid: ID!
 }
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
-  createItem(createItemInput: CreateItemInput!): Item!
-  createProduct(createProductInput: CreateProductInput!): Product!
+  createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
+  duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   remove(deleteUserInput: DeleteUserInput!): User!
-  removeItem(uuid: ID!): Item!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!
-  updateItem(updateItemInput: UpdateItemInput!): Item!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
 }
 
@@ -74,14 +95,77 @@ type PrivateFile {
 }
 
 type Product {
+  """Brand"""
+  brand: String
+
+  """Brand link"""
+  brandLink: String
+
+  """Current number of clicks on brand link"""
+  brandLinkClicks: Float
+
+  """Current cost of brand link"""
+  brandLinkCost: Float
+
+  """Maximum number of clicks on brand link"""
+  brandLinkMaxClicks: Float
+
+  """Maximum cost of brand link"""
+  brandLinkMaxCost: Float
+
+  """Product category"""
+  category: Category
+
+  """Comments"""
+  comments: [Comment!]!
+
+  """The currency the value is denoted in"""
+  currency: Currency
+
   """Description"""
-  description: String!
+  description: String
+
+  """Direct Buy link"""
+  directBuyLink: String
+
+  """Current number of clicks on direct buy link"""
+  directBuyLinkClicks: Float
+
+  """Current cost of direct buy link"""
+  directBuyLinkCost: Float
+
+  """Maximum number of clicks on direct buy link"""
+  directBuyLinkMaxClicks: Float
+
+  """Maximum cost of direct buy link"""
+  directBuyLinkMaxCost: Float
 
   """End Date"""
-  end: DateTime!
+  end: DateTime
+
+  """Number of Likes"""
+  likes: Float!
+
+  """Maximum bet"""
+  maxBet: Float
+
+  """Minimum bet"""
+  minBet: Float
+
+  """Pictures for the product"""
+  pictures: [PublicFile!]
+
+  """Whether the product is sponsored"""
+  sponsored: Boolean
 
   """Start date"""
-  start: DateTime!
+  start: DateTime
+
+  """Status of the product"""
+  status: ProductStatus!
+
+  """Product tags"""
+  tags: [String!]
 
   """Title"""
   title: String!
@@ -90,12 +174,23 @@ type Product {
   uuid: ID!
 
   """Value"""
-  value: Int!
+  value: Int
+}
+
+enum ProductStatus {
+  ACTIVE
+  ARCHIVED
+  DRAFT
+  ENDED
+  VALID
 }
 
 type PublicFile {
   """S3 File Key"""
   key: String!
+
+  """Product the file belongs to"""
+  product: Product
 
   """Public download URL"""
   url: String!
@@ -113,8 +208,6 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
-  item(uuid: ID!): Item!
-  items: [Item!]!
   product(uuid: ID!): Product!
   products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!
@@ -122,25 +215,37 @@ type Query {
 }
 
 type Subscription {
-  productAdded: Product!
   userAdded: User!
 }
 
-input UpdateItemInput {
-  """Name"""
-  name: String
-
-  """User UUID"""
-  userUUID: ID
-
-  """Item UUID"""
-  uuid: ID!
-}
-
 input UpdateProductInput {
-  age: Int
-  name: String
+  brand: String
+  brandLink: String
+  brandLinkClicks: Float
+  brandLinkCost: Float
+  brandLinkMaxClicks: Float
+  brandLinkMaxCost: Float
+  category: Category
+  comments: [comment!]
+  currency: Currency
+  description: String
+  directBuyLink: String
+  directBuyLinkClicks: Float
+  directBuyLinkCost: Float
+  directBuyLinkMaxClicks: Float
+  directBuyLinkMaxCost: Float
+  end: DateTime
+  likes: Float
+  maxBet: Float
+  minBet: Float
+  pictures: public_file
+  sponsored: Boolean
+  start: DateTime
+  status: ProductStatus
+  tags: [String!]
+  title: String
   uuid: ID!
+  value: Int
 }
 
 input UpdateUserInput {
@@ -153,14 +258,25 @@ type User {
   """Age"""
   age: Int!
 
-  """Items of the user"""
-  items: [Item!]
+  """Comments written by the user"""
+  comments: [Comment!]!
 
   """Name"""
   name: String!
 
   """UUID"""
   uuid: ID!
+}
+
+input comment {
+  """Content"""
+  content: String!
+
+  """The product this a comment belongs to"""
+  product: product!
+
+  """The user who wrote this comment"""
+  user: user!
 }
 
 input private_file {
@@ -174,10 +290,104 @@ input private_file {
   url: String
 }
 
+input product {
+  """Brand"""
+  brand: String
+
+  """Brand link"""
+  brandLink: String
+
+  """Current number of clicks on brand link"""
+  brandLinkClicks: Float
+
+  """Current cost of brand link"""
+  brandLinkCost: Float
+
+  """Maximum number of clicks on brand link"""
+  brandLinkMaxClicks: Float
+
+  """Maximum cost of brand link"""
+  brandLinkMaxCost: Float
+
+  """Product category"""
+  category: Category
+
+  """Comments"""
+  comments: [comment!]!
+
+  """The currency the value is denoted in"""
+  currency: Currency
+
+  """Description"""
+  description: String
+
+  """Direct Buy link"""
+  directBuyLink: String
+
+  """Current number of clicks on direct buy link"""
+  directBuyLinkClicks: Float
+
+  """Current cost of direct buy link"""
+  directBuyLinkCost: Float
+
+  """Maximum number of clicks on direct buy link"""
+  directBuyLinkMaxClicks: Float
+
+  """Maximum cost of direct buy link"""
+  directBuyLinkMaxCost: Float
+
+  """End Date"""
+  end: DateTime
+
+  """Number of Likes"""
+  likes: Float!
+
+  """Maximum bet"""
+  maxBet: Float
+
+  """Minimum bet"""
+  minBet: Float
+
+  """Pictures for the product"""
+  pictures: [public_file!]
+
+  """Whether the product is sponsored"""
+  sponsored: Boolean
+
+  """Start date"""
+  start: DateTime
+
+  """Status of the product"""
+  status: ProductStatus!
+
+  """Product tags"""
+  tags: [String!]
+
+  """Title"""
+  title: String!
+
+  """Value"""
+  value: Int
+}
+
 input public_file {
   """S3 File Key"""
   key: String!
 
+  """Product the file belongs to"""
+  product: product
+
   """Public download URL"""
   url: String!
+}
+
+input user {
+  """Age"""
+  age: Int!
+
+  """Comments written by the user"""
+  comments: [comment!]!
+
+  """Name"""
+  name: String!
 }
