@@ -381,6 +381,7 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
+  myCompany: Company!
   myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!

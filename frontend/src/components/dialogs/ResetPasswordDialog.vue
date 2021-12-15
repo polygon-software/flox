@@ -6,25 +6,25 @@
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
       <q-form
-          @submit="onSubmit"
           class="q-gutter-md"
+          @submit="onSubmit"
       >
-        <b>Reset Password</b>
+        <strong>Reset Password</strong>
         <q-input
-            label="Email Verification Code"
             v-model="verificationCode"
+            label="Email Verification Code"
         />
         <q-input
-            label="New Password"
             v-model="password"
+            label="New Password"
             type="password"
             :rules="[
               val => PASSWORD_REGEX.test(val) || 'Not ok'
             ]"
         />
         <q-input
-            label="New Password repeated"
             v-model="passwordRep"
+            label="New Password repeated"
             type="password"
             :rules="[
               val => val === password || 'Passwords must be identical',

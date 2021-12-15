@@ -3,14 +3,18 @@ export default {
     yes: 'Yes',
     no: 'No',
     new: 'New',
-    editable: 'editable'
+    editable: 'editable',
+    search: 'Search',
+    welcome: 'Welcome',
+    from: 'From',
+    to: 'To'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
     login: 'Log in',
     logout: 'Log out',
     signup: 'Sign up',
-    employee_signup: 'Register new Employee',
+    employee_signup: 'Register employee',
     signup_now: 'No Account? Sign up now:',
     forgot_password: 'Forgot password',
     redirected: 'You will be redirected shortly...',
@@ -22,6 +26,7 @@ export default {
   },
   account_data: {
     employees: 'Employees',
+    activities: 'Activities',
     authentication: 'Authentication',
     email: 'E-Mail',
     username: 'Username',
@@ -55,6 +60,12 @@ export default {
     commercial_register_extract: 'Commercial Register Extract',
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
+    status: 'Status',
+    tasks: 'Tasks',
+    volume: 'Volume',
+    provision_employee: 'Emp. Provision',
+    provision_company: 'Company Provision',
+    provision_ratio: 'Prov. Ratio Emp.'
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',
@@ -62,7 +73,6 @@ export default {
     application_rejected: 'Application rejected'
   },
   dashboards: {
-    management_dashboard: 'Management Dashboard',
     register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',
@@ -72,7 +82,8 @@ export default {
     sure_to_reject: 'Are you sure you want to decline this request?',
     yes_reject: 'Yes, reject',
     unlock_account: 'Unlock account',
-    view_documents: 'View documents'
+    view_documents: 'View documents',
+    employee_tasks: 'Employee tasks'
   },
   buttons: {
     finish_signup: 'Finish',

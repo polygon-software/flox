@@ -77,7 +77,7 @@ async function submitPassword(values: Record<string, string>) {
   })
 
   setTimeout(function() {
-    void $routerService?.routeTo(type === 'man' ? ROUTES.MANAGEMENT_DASHBOARD : ROUTES.EMPLOYEE_DASHBOARD)
+    void $routerService?.routeTo(type === 'man' ? ROUTES.MANAGEMENT_EMPLOYEE_DATA : ROUTES.EMPLOYEE_DASHBOARD)
   }, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
 }
