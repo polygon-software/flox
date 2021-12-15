@@ -25,10 +25,10 @@
             >
           </q-td>
           <q-td key="title" :props="props">
-            {{ props.row.title }}
+            {{ props.row.title ?? '-' }}
           </q-td>
           <q-td key="brand" :props="props">
-            {{ props.row.brand }}
+            {{ props.row.brand ?? '-' }}
           </q-td>
           <q-td key="status" :props="props">
             <q-chip
@@ -124,14 +124,14 @@ const props = defineProps( {
 
 // TODO i18n
 const columns = [
-  { name: 'pictures', label: '', field: 'uuid', sortable: true },
-  { name: 'title', label: 'Product', field: 'title', sortable: true },
-  { name: 'brand', label: 'Brand', field: 'brand', sortable: true },
-  { name: 'status', label: 'Status', field: 'status', sortable: true },
-  { name: 'sponsored', label: 'Type', field: 'sponsored', sortable: true },
-  { name: 'start', label: 'Start Date', field: 'start', sortable: true },
+  { name: 'pictures', label: '', field: 'uuid', sortable: true, align: 'center'},
+  { name: 'title', label: 'Product', field: 'title', sortable: true, align: 'center' },
+  { name: 'brand', label: 'Brand', field: 'brand', sortable: true, align: 'center' },
+  { name: 'status', label: 'Status', field: 'status', sortable: true, align: 'center' },
+  { name: 'sponsored', label: 'Type', field: 'sponsored', sortable: true, align: 'center' },
+  { name: 'start', label: 'Start Date', field: 'start', sortable: true, align: 'center' },
   { name: 'tags', label: '', field: 'tags', sortable: false }, // Invisible column, used for filtering only
-  { name: 'options', label: '', field: 'options', sortable: false },
+  { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
 const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<Array<Record<string, unknown>>>
