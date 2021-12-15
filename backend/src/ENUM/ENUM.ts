@@ -9,8 +9,17 @@ export enum CURRENCY {
 
 // Product categories / interests
 export enum CATEGORY {
+  CARS = 'CARS',
+  CELEBRITIES = 'CELEBRITIES',
+  COOKING = 'COOKING',
+  FASHION = 'FASHION',
+  MUSIC = 'MUSIC',
+  OUTDOOR = 'OUTDOOR',
+  SPORTS = 'SPORTS',
   TECHNOLOGY = 'TECHNOLOGY',
-  // TODO others
+  TOOLS = 'TOOLS',
+  TRAVELLING = 'TRAVELLING',
+  WATCHES = 'WATCHES',
 }
 
 // Product statuses
