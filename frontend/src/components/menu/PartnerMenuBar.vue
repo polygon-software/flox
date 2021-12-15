@@ -2,11 +2,17 @@
   <q-header class="row bg-primary shadow-5 justify-between">
     <div class="row">
       <img
-          alt="Bigabig"
-          :src="require('src/assets/bigabig-logo.svg')"
-          style="height: 50px"
-          class="q-ma-sm"
+        alt="Bigabig"
+        :src="require('src/assets/bigabig-logo.svg')"
+        style="height: 50px"
+        class="q-ma-sm"
       >
+      <q-btn
+        icon="menu"
+        flat
+        color="black"
+        @click="toggleMenu"
+      />
     </div>
   <div class="row">
     <!-- Account options -->
@@ -104,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, ref} from 'vue'
+import {computed, inject, ref, defineEmits} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -120,6 +126,8 @@ import Inbox from 'components/notifications/Inbox.vue';
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
+
+const emit = defineEmits(['toggleMenu'])
 
 const loggedIn = computed(() => {
   // Explicit type
@@ -151,12 +159,13 @@ function changePassword() {
   $authService?.showChangePasswordDialog()
 }
 
+
 /**
- * Triggers a password change for a non-logged in authentication
+ * Toggles the menu by emitting an event
  * @returns {void}
  */
-function forgottenPassword() {
-  $authService?.showResetPasswordDialog();
+function toggleMenu(){
+  emit('toggleMenu')
 }
 
 /*

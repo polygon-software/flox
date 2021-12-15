@@ -100,7 +100,7 @@ const icons = computed(() => {
     {
       tag: 'bookmark',
       name: bookmarked.value ? 'bookmark' :' bookmark_border',
-      callback: toogleBookmark
+      callback: toggleBookmark
     },
     {
       tag: 'comment',
@@ -147,7 +147,7 @@ function toogleLike() {
  * Toggles the bookmark symbol.
  * @returns {void}
  */
-function toogleBookmark() {
+function toggleBookmark() {
   bookmarked.value = !bookmarked.value
   //TODO: emit to database
 }
@@ -168,9 +168,10 @@ function toggleShareMenu() {
   showShareMenu.value = !showShareMenu.value
 }
 
+
 /**
  * Opens the detailed view of a product in dialog
- * @param {Record<string, unknown>} product - the product that was selected
+ * @param {Record<string, unknown>} product - the selected product
  * @returns {void}
  */
 function openDetailView(product: Record<string, unknown>) {
