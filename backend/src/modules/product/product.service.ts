@@ -109,7 +109,8 @@ export class ProductService {
       tags: existingProduct.tags,
     };
 
-    const product = await this.productsRepository.create(createProductInput);
+    const product = this.productsRepository.create(createProductInput);
+    const savedProduct = await this.productsRepository.save(product);
 
     // Create copy of each picture
     for (const picture of existingProduct.pictures) {
@@ -128,7 +129,7 @@ export class ProductService {
             await this.fileService.uploadPublicFile(
               buffer,
               fileName,
-              product.uuid,
+              savedProduct.uuid,
             );
           })
           .catch((error) => {
@@ -137,7 +138,7 @@ export class ProductService {
       });
     }
 
-    return this.productsRepository.save(product);
+    return savedProduct;
   }
 
   async remove(deleteProductInput: DeleteProductInput): Promise<Product> {
