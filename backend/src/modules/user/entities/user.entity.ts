@@ -49,6 +49,10 @@ export class User {
   })
   comments: Comment[];
 
+  @Field(() => [String], { description: 'User interest categories' })
+  @Column()
+  interests: string[];
+
   @Field(() => Date, { description: 'Last modification date' })
   @UpdateDateColumn()
   lastModifiedAt: Date;
