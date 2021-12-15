@@ -13,9 +13,10 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
 
 export const CREATE_PRODUCT = {
     mutation: gql`
-        mutation createProduct($createProductInput: CreateProductInput!){
-            createProduct (createProductInput: $createProductInput) {
+        mutation createProduct($createProductInput: CreateProductInput!, $pictures: [String!]!){
+            createProduct (createProductInput: $createProductInput, pictures: $pictures) {
               uuid
+              status
               title
               description
               brand
@@ -25,7 +26,11 @@ export const CREATE_PRODUCT = {
               end
               category
               directBuyLink
+              directBuyLinkMaxClicks
+              directBuyLinkMaxCost
               brandLink
+              brandLinkMaxClicks
+              brandLinkMaxCost
               minBet
               maxBet
               tags
@@ -37,7 +42,7 @@ export const CREATE_PRODUCT = {
               __typename
             }
         }`,
-    tables: ['product'],
+    tables: ['product', 'public_file'],
     type: MutationTypes.CREATE,
     cacheLocation: 'createProduct'
 }

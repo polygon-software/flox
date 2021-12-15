@@ -21,26 +21,25 @@ type Comment {
 }
 
 input CreateProductInput {
-  brand: String!
+  brand: String
   brandLink: String
   brandLinkMaxClicks: Float
   brandLinkMaxCost: Float
-  category: Category!
-  currency: Currency!
-  description: String!
+  category: Category
+  currency: Currency
+  description: String
   directBuyLink: String
   directBuyLinkMaxClicks: Float
   directBuyLinkMaxCost: Float
-  end: DateTime!
-  maxBet: Float!
-  minBet: Float!
-  pictures: public_file
-  sponsored: Boolean!
-  start: DateTime!
+  end: DateTime
+  maxBet: Float
+  minBet: Float
+  sponsored: Boolean
+  start: DateTime
   status: ProductStatus!
-  tags: [String!]!
+  tags: [String!]
   title: String!
-  value: Int!
+  value: Int
 }
 
 input CreateUserInput {
@@ -73,7 +72,7 @@ input DuplicateProductInput {
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
-  createProduct(createProductInput: CreateProductInput!): Product!
+  createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
@@ -97,7 +96,7 @@ type PrivateFile {
 
 type Product {
   """Brand"""
-  brand: String!
+  brand: String
 
   """Brand link"""
   brandLink: String
@@ -115,16 +114,16 @@ type Product {
   brandLinkMaxCost: Float
 
   """Product category"""
-  category: Category!
+  category: Category
 
   """Comments"""
   comments: [Comment!]!
 
   """The currency the value is denoted in"""
-  currency: Currency!
+  currency: Currency
 
   """Description"""
-  description: String!
+  description: String
 
   """Direct Buy link"""
   directBuyLink: String
@@ -142,25 +141,25 @@ type Product {
   directBuyLinkMaxCost: Float
 
   """End Date"""
-  end: DateTime!
+  end: DateTime
 
   """Number of Likes"""
   likes: Float!
 
   """Maximum bet"""
-  maxBet: Float!
+  maxBet: Float
 
   """Minimum bet"""
-  minBet: Float!
+  minBet: Float
 
   """Pictures for the product"""
   pictures: [PublicFile!]
 
   """Whether the product is sponsored"""
-  sponsored: Boolean!
+  sponsored: Boolean
 
   """Start date"""
-  start: DateTime!
+  start: DateTime
 
   """Status of the product"""
   status: ProductStatus!
@@ -175,7 +174,7 @@ type Product {
   uuid: ID!
 
   """Value"""
-  value: Int!
+  value: Int
 }
 
 enum ProductStatus {
@@ -183,7 +182,7 @@ enum ProductStatus {
   ARCHIVED
   DRAFT
   ENDED
-  WON
+  VALID
 }
 
 type PublicFile {
@@ -293,7 +292,7 @@ input private_file {
 
 input product {
   """Brand"""
-  brand: String!
+  brand: String
 
   """Brand link"""
   brandLink: String
@@ -311,16 +310,16 @@ input product {
   brandLinkMaxCost: Float
 
   """Product category"""
-  category: Category!
+  category: Category
 
   """Comments"""
   comments: [comment!]!
 
   """The currency the value is denoted in"""
-  currency: Currency!
+  currency: Currency
 
   """Description"""
-  description: String!
+  description: String
 
   """Direct Buy link"""
   directBuyLink: String
@@ -338,25 +337,25 @@ input product {
   directBuyLinkMaxCost: Float
 
   """End Date"""
-  end: DateTime!
+  end: DateTime
 
   """Number of Likes"""
   likes: Float!
 
   """Maximum bet"""
-  maxBet: Float!
+  maxBet: Float
 
   """Minimum bet"""
-  minBet: Float!
+  minBet: Float
 
   """Pictures for the product"""
   pictures: [public_file!]
 
   """Whether the product is sponsored"""
-  sponsored: Boolean!
+  sponsored: Boolean
 
   """Start date"""
-  start: DateTime!
+  start: DateTime
 
   """Status of the product"""
   status: ProductStatus!
@@ -368,7 +367,7 @@ input product {
   title: String!
 
   """Value"""
-  value: Int!
+  value: Int
 }
 
 input public_file {

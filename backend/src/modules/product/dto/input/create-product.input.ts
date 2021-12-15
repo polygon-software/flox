@@ -10,47 +10,52 @@ import {
   IsUrl,
 } from 'class-validator';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../ENUM/ENUM';
-import PublicFile from '../../../file/entities/public_file.entity';
 
 @InputType()
 export class CreateProductInput {
   @Field(() => String)
+  @IsOptional()
   @IsString()
   title: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   description: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   @IsString()
   brand: string;
 
-  @Field(() => CATEGORY)
+  @Field(() => CATEGORY, { nullable: true })
+  @IsOptional()
   category: CATEGORY;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
   @IsInt()
   value: number;
 
-  @Field(() => CURRENCY)
+  @Field(() => CURRENCY, { nullable: true })
+  @IsOptional()
   currency: CURRENCY;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
+  @IsOptional()
   @IsDate()
   start: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
+  @IsOptional()
   @IsDate()
   end: Date;
-
-  @Field(() => PublicFile, { nullable: true })
-  pictures: PublicFile[];
 
   @Field(() => PRODUCT_STATUS)
   status: PRODUCT_STATUS;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
+  @IsOptional()
   @IsBoolean()
   sponsored: boolean;
 
@@ -86,15 +91,17 @@ export class CreateProductInput {
   @IsNumber()
   brandLinkMaxCost: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
   @IsInt()
   minBet: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
   @IsInt()
   maxBet: number;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @IsOptional()
   @IsArray()
   tags: string[];

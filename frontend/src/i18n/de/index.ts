@@ -84,6 +84,7 @@ export default {
     submit: 'Senden',
     cancel: 'Abbrechen',
     ok: 'OK',
+    save_draft: 'Entwurf speichern',
   },
   documents: {
     documents_missing: 'Fehlende Dokumente',
@@ -195,6 +196,7 @@ export default {
     draft: 'Entwurf',
     active: 'Aktiv',
     ended: 'Beendet',
-    archived: 'Archiviert'
+    archived: 'Archiviert',
+    valid: 'Valide',
   }
 }

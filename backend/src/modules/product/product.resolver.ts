@@ -36,9 +36,11 @@ export class ProductResolver {
   @Public()
   @Mutation(() => Product)
   async createProduct(
-    @Args('createProductInput') createProductInput: CreateProductInput,
+    @Args({name: 'createProductInput', type: () => CreateProductInput}) createProductInput: CreateProductInput,
+    @Args({name: 'pictures', type: () => [String]}) pictures: Array<string>,
   ): Promise<Product> {
-    return this.productsService.create(createProductInput);
+
+    return this.productsService.create(createProductInput, pictures);
   }
 
   @Public()

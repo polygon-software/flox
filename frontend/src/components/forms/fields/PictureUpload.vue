@@ -29,6 +29,7 @@
 </template>
 <script setup lang="ts">
 import {Ref, ref, defineEmits, defineProps} from 'vue';
+import {toDataUrl} from 'src/helpers/image-helper';
 
 const emit = defineEmits(['change'])
 const props = defineProps({
@@ -63,19 +64,6 @@ function emitValue(){
   emit('change', pictures.value)
 }
 
-/**
- * Covert a file to a data url.
- * @param {File} file The file you want to convert.
- * @returns {string|ArrayBuffer|null} - the data URL for the file
- */
-function toDataUrl(file: File): Promise<string|ArrayBuffer|null> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  })
-}
 
 /**
  * Updates the image url array so it always matches the image file array.

@@ -211,6 +211,8 @@ function getChipColor(status: string): string|null {
   switch(status){
     case PRODUCT_STATUS.DRAFT:
       return 'primary'
+    case PRODUCT_STATUS.VALID:
+      return 'info'
     case PRODUCT_STATUS.ACTIVE:
       return 'positive'
     case PRODUCT_STATUS.ENDED:

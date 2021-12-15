@@ -16,43 +16,45 @@ export class Product extends BaseEntity {
   @IsString()
   title: string;
 
-  @Field(() => String, { description: 'Description' })
-  @Column()
+  @Field(() => String, { description: 'Description', nullable: true })
+  @Column({ nullable: true })
   @IsString()
   description: string;
 
-  @Field(() => String, { description: 'Brand' })
-  @Column()
+  @Field(() => String, { description: 'Brand', nullable: true })
+  @Column({ nullable: true })
   @IsString()
   brand: string;
 
-  @Field(() => CATEGORY, { description: 'Product category' })
+  @Field(() => CATEGORY, { description: 'Product category', nullable: true })
   @Column({
     type: 'enum',
     enum: CATEGORY,
+    nullable: true,
   })
   category: CATEGORY;
 
-  @Field(() => Int, { description: 'Value' })
-  @Column()
+  @Field(() => Int, { description: 'Value', nullable: true })
+  @Column({ nullable: true })
   @IsInt()
   value: number;
 
-  @Field(() => CURRENCY, { description: 'The currency the value is denoted in' })
+  @Field(() => CURRENCY, { description: 'The currency the value is denoted in', nullable: true })
   @Column({
     type: 'enum',
     enum: CURRENCY,
     default: CURRENCY.CHF,
+    nullable: true,
   })
   currency: CURRENCY;
 
-  @Field(() => Date, { description: 'Start date' })
-  @Column()
+  @Field(() => Date, { description: 'Start date', nullable: true })
+  @Column({ nullable: true })
   @IsDate()
   start: Date;
 
-  @Field(() => Date, { description: 'End Date' })
-  @Column()
+  @Field(() => Date, { description: 'End Date', nullable: true })
+  @Column({ nullable: true })
   @IsDate()
   end: Date;
 
@@ -74,8 +76,8 @@ export class Product extends BaseEntity {
   })
   status: PRODUCT_STATUS;
 
-  @Field(() => Boolean, { description: 'Whether the product is sponsored' })
-  @Column({ default: false })
+  @Field(() => Boolean, { description: 'Whether the product is sponsored', nullable: true })
+  @Column({ default: false, nullable: true })
   sponsored: boolean;
 
   @Field(() => String, { description: 'Direct Buy link', nullable: true })
@@ -130,13 +132,13 @@ export class Product extends BaseEntity {
   @IsNumber()
   brandLinkMaxCost: number;
 
-  @Field(() => Number, { description: 'Minimum bet' })
-  @Column()
+  @Field(() => Number, { description: 'Minimum bet', nullable: true })
+  @Column({ nullable: true })
   @IsInt()
   minBet: number;
 
-  @Field(() => Number, { description: 'Maximum bet' })
-  @Column()
+  @Field(() => Number, { description: 'Maximum bet', nullable: true })
+  @Column({ nullable: true })
   @IsInt()
   maxBet: number;
 

@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({ bodyLimit: 5000000 }),
   );
 
   // Add GraphQL Voyager as middleware (intended for express, but seems to work on fastify as well)

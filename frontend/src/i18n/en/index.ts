@@ -83,6 +83,7 @@ export default {
     cancel: 'Cancel',
     submit: 'Submit',
     ok: 'OK',
+    save_draft: 'Save draft',
   },
   documents: {
     documents_missing: 'Documents missing',
@@ -194,6 +195,7 @@ export default {
     draft: 'Draft',
     active: 'Active',
     ended: 'Ended',
-    archived: 'Archived'
+    archived: 'Archived',
+    valid: 'Valid',
   }
 };

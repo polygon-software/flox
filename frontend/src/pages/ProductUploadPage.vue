@@ -77,7 +77,7 @@
                 outlined
                 dense
                 lazy-rules
-                :rules="[ (val) => IS_FUTURE_DATE(val) || $t('errors.date_must_be_future')]"
+                :rules="[ (val) => (val === null || IS_FUTURE_DATE(val)) || $t('errors.date_must_be_future')]"
               />
 
               <!-- End date -->
@@ -92,7 +92,7 @@
                 outlined
                 dense
                 lazy-rules
-                :rules="[ (val) => IS_FUTURE_DATE(val) || $t('errors.date_must_be_future')]"
+                :rules="[ (val) => (val === null || IS_FUTURE_DATE(val)) || $t('errors.date_must_be_future')]"
               />
             </div>
 
@@ -107,7 +107,7 @@
                 outlined
                 dense
                 lazy-rules
-                :rules="[ (val) => IS_VALID_NUMBER(val) || $t('errors.invalid_number')]"
+                :rules="[ (val) => (val === null || IS_VALID_NUMBER(val)) || $t('errors.invalid_number')]"
               />
               <q-select
                 v-model="input.currency"
@@ -131,7 +131,7 @@
                 outlined
                 dense
                 lazy-rules="ondemand"
-                :rules="[ (val) => IS_VALID_MIN_BET(val, input.maxBet, input.value) || $t('errors.invalid_number')]"
+                :rules="[ (val) => (val === null || IS_VALID_MIN_BET(val, input.maxBet, input.value)) || $t('errors.invalid_number')]"
               />
 
               <q-input
@@ -143,7 +143,7 @@
                 outlined
                 dense
                 lazy-rules="ondemand"
-                :rules="[ (val) => IS_VALID_MAX_BET(val, input.minBet, input.value) || $t('errors.invalid_number')]"
+                :rules="[ (val) => (val === null || IS_VALID_MAX_BET(val, input.minBet, input.value)) || $t('errors.invalid_number')]"
               />
             </div>
           </div>
@@ -151,7 +151,7 @@
 
       </q-card>
 
-      <!-- Tags and Status. TODO -->
+      <!-- Tags. TODO -->
       <div class="row full-width flex justify-between">
 
         <!-- Tags -->
@@ -178,32 +178,21 @@
           />
         </q-card>
 
-        <!-- Product Status -->
+        <!-- Product Type -->
         <q-card
           class="q-pa-md q-ma-md"
           flat
           style="border-radius: 20px; border: 1px solid black; width: calc(50% - 50px)"
         >
-          <h6 class="q-ma-md">{{ $t('products.status') }}</h6>
+          <h6 class="q-ma-md">{{ $t('products.type') }}</h6>
           <div class="row flex justify-between items-center q-ma-md">
-
-            <!-- Status -->
-            <q-select
-              v-model="input.status"
-              :options="status"
-              style="width: calc(50% - 25px)"
-              :label="$t('products.status')"
-              outlined
-              dense
-            />
-
             <!-- Sponsored -->
             <q-select
               v-model="input.sponsored"
               :options="sponsored"
               map-options
               emit-value
-              class="column q-ma-sm"
+              class="column"
               style="width: calc(50% - 25px)"
               :label="$t('products.promotion')"
               outlined
@@ -308,9 +297,9 @@
         <q-btn
           class="q-ma-md text-black"
           color="primary"
-          :label="$t('buttons.submit')"
+          :label="status === PRODUCT_STATUS.VALID ? $t('buttons.submit') : $t('buttons.save_draft')"
           type="submit"
-          style="width: 150px; height: 50px;"
+          style="height: 50px;"
         />
       </div>
 
@@ -322,19 +311,28 @@
 /**
  * A page for uploading products. Can be used to either create new products or existing ones, controlled via props
  */
-import {inject, reactive, Ref, ref, watch} from 'vue';
+import {computed, inject, reactive, Ref, ref, watch} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT, UPDATE_PRODUCT} from 'src/data/mutations/PRODUCT';
-import axios from 'axios';
 import {i18n} from 'boot/i18n';
-import {CATEGORY, CURRENCY, PRODUCT_STATUS, SELECTABLE_PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {useRoute} from 'vue-router';
 import {PRODUCT} from 'src/data/queries/QUERIES';
-import {IS_VALID_STRING, IS_FUTURE_DATE, IS_VALID_MIN_BET, IS_VALID_MAX_BET, IS_VALID_NUMBER, IS_LARGER_THAN, IS_URL} from 'src/data/RULES';
+import {
+  IS_FUTURE_DATE,
+  IS_LARGER_THAN,
+  IS_URL,
+  IS_VALID_MAX_BET,
+  IS_VALID_MIN_BET,
+  IS_VALID_NUMBER,
+  IS_VALID_STRING
+} from 'src/data/RULES';
 import {sleep} from 'src/helpers/general-helpers';
+import {toBase64} from 'src/helpers/image-helper';
+
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
 
@@ -347,15 +345,29 @@ const categories = Object.values(CATEGORY).filter((item) => {
   return isNaN(Number(item))
 })
 
-const currencies = Object.values(CURRENCY).filter((item) => {
-  return isNaN(Number(item))
-})
-
-const status = Object.values(SELECTABLE_PRODUCT_STATUS).filter((item) => {
+const currencies: CURRENCY[] = Object.values(CURRENCY).filter((item) => {
   return isNaN(Number(item))
 })
 
 const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
+
+// Check if all required fields have been filled. If yes, set the product status to valid
+const status = computed(() => {
+  if ([input.title,
+    input.description,
+    input.brand,
+    input.value,
+    input.currency,
+    input.start,
+    input.end,
+    input.category,
+    input.minBet,
+    input.maxBet,
+    input.sponsored].some((value) => {return value === null})) {
+    return PRODUCT_STATUS.DRAFT
+  }
+  return PRODUCT_STATUS.VALID
+})
 
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
 const input: Record<string, unknown> = reactive(
@@ -364,14 +376,14 @@ const input: Record<string, unknown> = reactive(
   description: null,
   brand: null,
   value: null,
-  currency: null, // TODO Fetch last selected or depending on location?
+  currency: currencies[0],
   start: null,
   end: null,
   category: null,
   minBet: null,
   maxBet: null,
   tags: null,
-  status: null,
+  status: status,
   sponsored: null,
   brandLink: null,
   brandLinkMaxClicks: null,
@@ -398,7 +410,6 @@ const stop = watch(queryResult, async (newValue) => {
     input.currency = newValue.currency
     input.minBet = newValue.minBet
     input.maxBet = newValue.maxBet
-    input.status = PRODUCT_STATUS.DRAFT // TODO: do not allow user to set this manually
     input.sponsored = newValue.sponsored
     input.tags = newValue.tags
     input.directBuyLink = newValue.directBuyLink
@@ -438,13 +449,16 @@ function onPictureChange(newPictures: Ref<File>[]){
  */
 // eslint-disable-next-line sonarjs/cognitive-complexity,require-jsdoc
 async function onSubmit(){
-
-  // TODO verify all attrs, at least 1 image (form validation)
-  if([input.value, input.minBet, input.maxBet].some((value) => value === undefined || value === null)){
-    throw new Error('Wait, thats illegal')
+  // Parameters for creating/updating
+  // eslint-disable-next-line sonarjs/no-unused-collection
+  const base64Pictures: Array<string|ArrayBuffer|null> = []
+  for (const picture of pictures.value) {
+    if (picture.value) {
+      const base64String = await toBase64(picture.value)
+      base64Pictures.push(base64String)
+    }
   }
 
-  // Parameters for creating/updating
   const params = {
     ...input,
     value: Number.parseInt(input.value as string ?? ''), // Convert 'value' to int TODO can this be done on QInput directly?
@@ -474,7 +488,8 @@ async function onSubmit(){
       mutationResult = await executeMutation(
         CREATE_PRODUCT,
         {
-          createProductInput: params
+          createProductInput: params,
+          pictures: base64Pictures
         }
       )
     }
@@ -482,33 +497,6 @@ async function onSubmit(){
     if(!mutationResult){
       throw new Error('Product creation/update failed')
     }
-
-    const mutationName = productId ? 'updateProduct' : 'createProduct'
-
-  // Prepare variables for image upload TODO Update handling...
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const newProductId: string = mutationResult.data[mutationName].uuid as string
-  const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
-  const headers = { 'Content-Type': 'multipart/form-data' }
-
-    // TODO move to backend in a single call
-  // Upload all images
-  for(const picture of pictures.value) {
-    const formData = new FormData();
-    if (picture.value) {
-      // Convert to Blob and append
-      const blob = picture.value as Blob
-      formData.append('file', blob)
-      await axios({
-        method: 'post',
-        url: `${baseUrl}/uploadPublicFile?productId=${newProductId}`,
-        data: formData,
-        headers: headers,
-      }).catch((e: Error) => {
-        throw new Error(`File upload error: ${e.message}`)
-      })
-    }
-  }
 
   // Push to success page
   await $routerService?.routeTo(ROUTES.MY_PRODUCTS)

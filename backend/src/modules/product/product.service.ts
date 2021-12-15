@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, Logger} from '@nestjs/common';
 import { CreateProductInput } from './dto/input/create-product.input';
 import { UpdateProductInput } from './dto/input/update-product.input';
 import { GetProductArgs } from './dto/args/get-product.args';
@@ -12,6 +12,7 @@ import { DuplicateProductInput } from './dto/input/duplicate-product.input';
 import { FileService } from '../file/file.service';
 import fetch from 'node-fetch';
 import PublicFile from '../file/entities/public_file.entity';
+import {base64ToBuffer} from "../../helpers/image-helper";
 
 @Injectable()
 export class ProductService {
@@ -21,9 +22,28 @@ export class ProductService {
     private fileService: FileService,
   ) {}
 
-  async create(createProductInput: CreateProductInput): Promise<Product> {
-    const product = await this.productsRepository.create(createProductInput);
-    return this.productsRepository.save(product);
+  async create(
+    createProductInput: CreateProductInput,
+    pictures: Array<string>,
+  ): Promise<Product> {
+    // Create the product
+    const product = this.productsRepository.create(createProductInput);
+    const savedProduct = await this.productsRepository.save(product);
+
+    // Create image objects
+    for (const base64Picture of pictures) {
+      // Convert base64 to buffer
+      const buffer = base64ToBuffer(base64Picture);
+      const index = pictures.indexOf(base64Picture);
+
+      // Upload the image
+      await this.fileService.uploadPublicFile(
+        buffer,
+        `${savedProduct.title}_${index}.jpg`,
+        savedProduct.uuid,
+      );
+    }
+    return savedProduct;
   }
 
   getProducts(getProductsArgs: GetProductsArgs): Promise<Product[]> {
