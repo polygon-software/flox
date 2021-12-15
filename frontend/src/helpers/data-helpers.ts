@@ -127,7 +127,6 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
   const $ssrStore = useSSR();
   const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
 
-
   // ----- Hooks -----
   onServerPrefetch(async () => {
     const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query, variables)
@@ -138,27 +137,30 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
 
   onBeforeMount( () => {
     const apolloClient = useApolloClient().resolveClient()
+    const current_cache_state = apolloClient.readQuery({query: query.query, variables}) as Record<string, Record<string, unknown>[]>[] ?? []
+    // Test if the query is already in the cache
+    if(Object.values(current_cache_state).length === 0){
+      res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
 
-    res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
-
-    // SPA
-    if(res.value.length <= 0){
-      void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
-        if(fetchedRes.data){
-          res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
-        } else {
-          res.value = []
-        }
-      })
-    } else {
-      // SSR TODO: why does commenting this fix Cache errors?
-      // apolloClient.writeQuery({
-      //   query: query.query,
-      //   variables: variables,
-      //   data: {
-      //     [query.cacheLocation]: res.value
-      //   }
-      // })
+      // SPA
+      if(res.value.length <= 0){
+        void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
+          if(fetchedRes.data){
+            res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+          } else {
+            res.value = []
+          }
+        })
+      } else {
+        // SSR
+        apolloClient.writeQuery({
+          query: query.query,
+          variables: variables,
+          data: {
+            [query.cacheLocation]: res.value
+          }
+        })
+      }
     }
 
     apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
