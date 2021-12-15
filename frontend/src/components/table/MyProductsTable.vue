@@ -19,10 +19,17 @@
           <q-td key="pictures" :props="props">
             <img
               v-if="props.row.pictures[0] && props.row.pictures[0].url"
+              class="bg-grey-3"
               :src="props.row.pictures[0].url"
-              style="max-width: 120px; height: 90px"
+              style="min-width: 140px; max-width: 140px; min-height: 90px; max-height: 90px; border-radius: 4px; object-fit: cover"
               :alt="props.row.title"
             >
+            <div
+              v-else
+              style="width: 120px; height: 90px; color: grey"
+            >
+
+            </div>
           </q-td>
           <q-td key="title" :props="props">
             {{ props.row.title ?? '-' }}
@@ -124,7 +131,7 @@ const props = defineProps( {
 
 // TODO i18n
 const columns = [
-  { name: 'pictures', label: '', field: 'uuid', sortable: true, align: 'center'},
+  { name: 'pictures', label: '', field: 'uuid', sortable: false, align: 'center'},
   { name: 'title', label: 'Product', field: 'title', sortable: true, align: 'center' },
   { name: 'brand', label: 'Brand', field: 'brand', sortable: true, align: 'center' },
   { name: 'status', label: 'Status', field: 'status', sortable: true, align: 'center' },
@@ -205,7 +212,7 @@ async function duplicateProduct(uuid: string): Promise<void>{
       }
     )
   } else{
-    throw new Error('TODO something invalid')
+    throw new Error('TODO something invalid') // TODO errorservice popup
   }
 }
 

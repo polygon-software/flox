@@ -300,6 +300,8 @@
           color="primary"
           :label="status === PRODUCT_STATUS.VALID ? $t('buttons.submit') : $t('buttons.save_draft')"
           type="submit"
+          rounded
+          no-caps
           style="height: 50px;"
         />
       </div>
