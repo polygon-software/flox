@@ -11,6 +11,7 @@
     >
       <template #body="props">
         <q-tr
+          v-if="statusFilter ? props.row.status === statusFilter : true"
           :props="props"
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
@@ -137,15 +138,7 @@ const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<Array<Record<string, un
 
 // Rows, filtered by status (if applicable)
 const computedResult = computed(() => {
-  const val = queryResult.value ?? []
-
-  // TODO: Seems to cause SSR issues, do more testing...
-  // Status filter (if any)
-  if(props.statusFilter) {
-    return val.filter((row) => row.status === props.statusFilter)
-  }
-
-  return val
+  return queryResult.value ?? []
 })
 
 /**
