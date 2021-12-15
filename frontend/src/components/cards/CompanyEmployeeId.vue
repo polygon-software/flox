@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {Ref} from 'vue';
-import {COMPANY, MY_EMPLOYEES} from 'src/data/queries/QUERIES';
+// import {subscribeToQuery} from 'src/helpers/data-helpers';
+// import {Ref} from 'vue';
+// import {COMPANY, MY_EMPLOYEES} from 'src/data/queries/QUERIES';
 //todo: after merge write instead of COMPANY -> MY_COMPANY and take just my as an employee my id
 const company = {readable_id: 125367}
 const employee = {readable_id: 5517267}

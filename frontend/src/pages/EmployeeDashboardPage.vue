@@ -13,7 +13,8 @@
           {{ $t('employee_dashboard.title') }}
         </p>
         <p class="q-ma-md col text-center" style="display: flex; justify-content: space-between; align-items: baseline">
-          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})
+          {{ $t('employee_dashboard.applications') }}
+<!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
           <q-input
             v-model="searchEmployees"
             color="purple-12"
