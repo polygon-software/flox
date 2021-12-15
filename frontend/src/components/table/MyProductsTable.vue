@@ -31,8 +31,8 @@
           </q-td>
           <q-td key="status" :props="props">
             <q-chip
-              :label="$t('product_status.' + props.row.status.toLowerCase())"
-              :color="getChipColor(props.row.status)"
+              :label=getChip(props.row).label
+              :color="getChip(props.row).color"
               text-color="white"
               style="font-weight: bold"
             />
@@ -42,7 +42,7 @@
             {{ props.row.sponsored ? 'Sponsored' : 'Normal' }}
           </q-td>
           <q-td key="start" :props="props">
-            {{ formatDate(new Date(props.row.start)) }}
+            {{ props.row.start ? formatDate(new Date(props.row.start)) : '-' }}
           </q-td>
           <q-td key="options" :props="props">
             <q-btn-dropdown
@@ -57,7 +57,7 @@
               <div class="column">
                 <!-- Edit button (drafts only) -->
                 <q-btn
-                  v-if="props.row.status === PRODUCT_STATUS.DRAFT"
+                  v-if="isEditable(props.row)"
                   :label="$t('general.edit')"
                   icon="edit"
                   class="text-black"
@@ -106,6 +106,7 @@ import {useQuasar} from 'quasar';
 import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {FetchResult} from '@apollo/client';
 import {sleep} from 'src/helpers/general-helpers';
+import {i18n} from 'boot/i18n';
 const $routerService: RouterService|undefined = inject('$routerService')
 const $q = useQuasar()
 
@@ -147,8 +148,20 @@ const computedResult = computed(() => {
 })
 
 /**
+ * Determines whether a product should be editable (if it's either a draft, or a valid product that hasn't started yet
+ * TODO: change input type to Joi type
+ * @param {Record<string, unknown>} product - the selected product
+ * @returns {boolean} - whether it's editable
+ */
+function isEditable(product: Record<string, unknown>): boolean{
+  const isDraft =  product.status === PRODUCT_STATUS.DRAFT
+  const isValid = product.status === PRODUCT_STATUS.VALID
+  const hasNotStarted =  product.start !== null && (new Date(product.start) >= new Date())
+  return isDraft || (isValid && hasNotStarted)
+}
+
+/**
  * Routes to the product editing page for the given product
- * TODO: type to Joi type
  * @param {string} uuid - the product's uuid
  * @async
  * @returns {void}
@@ -203,22 +216,37 @@ async function duplicateProduct(uuid: string): Promise<void>{
 }
 
 /**
- * Gets the color for the status chip of a product
- * @param {PRODUCT_STATUS} status - the status of the product
+ * Gets the color & label for the status chip of a product
+ * @param {Record<string, unknown>} product - the product
  * @returns {string|null} - the chip's color, if any
  */
-function getChipColor(status: string): string|null {
-  switch(status){
+function getChip(product: Record<string, unknown>): Record<string,unknown> {
+  switch(product.status){
     case PRODUCT_STATUS.DRAFT:
-      return 'primary'
+      // Draft
+      return {
+        label: i18n.global.t('product_status.draft'),
+        color: 'primary'
+      }
     case PRODUCT_STATUS.VALID:
-      return 'info'
-    case PRODUCT_STATUS.ACTIVE:
-      return 'positive'
-    case PRODUCT_STATUS.ENDED:
-      return 'orange'
+      if(isEditable(product)){
+        // Valid & not yet active
+        return {
+          label: i18n.global.t('product_status.valid'),
+          color: 'primary'
+        }
+      }
+      // Valid & active
+      return {
+        label: i18n.global.t('product_status.active'),
+        color: 'positive'
+      }
     case PRODUCT_STATUS.ARCHIVED:
-      return 'neutral'
+      // Archived
+      return {
+        label: i18n.global.t('product_status.archived'),
+        color: 'neutral'
+      }
     default:
       return null
   }
