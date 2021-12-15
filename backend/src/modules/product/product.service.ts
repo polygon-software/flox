@@ -1,4 +1,4 @@
-import {Injectable, Logger} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateProductInput } from './dto/input/create-product.input';
 import { UpdateProductInput } from './dto/input/update-product.input';
 import { GetProductArgs } from './dto/args/get-product.args';
@@ -12,13 +12,14 @@ import { DuplicateProductInput } from './dto/input/duplicate-product.input';
 import { FileService } from '../file/file.service';
 import fetch from 'node-fetch';
 import PublicFile from '../file/entities/public_file.entity';
-import {base64ToBuffer} from "../../helpers/image-helper";
+import { base64ToBuffer } from '../../helpers/image-helper';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private productsRepository: Repository<Product>,
-    @InjectRepository(PublicFile) private fileRepository: Repository<PublicFile>,
+    @InjectRepository(PublicFile)
+    private fileRepository: Repository<PublicFile>,
     private fileService: FileService,
   ) {}
 
@@ -93,8 +94,8 @@ export class ProductService {
       category: existingProduct.category,
       value: existingProduct.value,
       currency: existingProduct.currency,
-      start: existingProduct.start, /*TODO shouldn't set the same date*/
-      end: existingProduct.end, /*TODO shouldn't set the same date*/
+      start: null, // Set no start/end date, making new copy a draft by default
+      end: null,
       status: PRODUCT_STATUS.DRAFT,
       sponsored: existingProduct.sponsored,
       directBuyLink: existingProduct.directBuyLink,
