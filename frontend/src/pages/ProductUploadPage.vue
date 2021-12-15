@@ -353,7 +353,7 @@ const currencies: CURRENCY[] = Object.values(CURRENCY).filter((item) => {
 const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
 // Check if all required fields have been filled. If yes, set the product status to valid
-const status = computed(() => {
+const status: PRODUCT_STATUS = computed(() => {
   if ([input.title,
     input.description,
     input.brand,
@@ -365,9 +365,9 @@ const status = computed(() => {
     input.minBet,
     input.maxBet,
     input.sponsored].some((value) => {return value === null})) {
-    return PRODUCT_STATUS.DRAFT
+    return PRODUCT_STATUS.DRAFT as PRODUCT_STATUS
   }
-  return PRODUCT_STATUS.VALID
+  return PRODUCT_STATUS.VALID as PRODUCT_STATUS
 })
 
 // Inputs for CREATE_PRODUCT mutation // TODO define Joi type
