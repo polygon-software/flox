@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {inject, ref} from 'vue';
+import {inject, Ref, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import MyProductsTable from 'components/table/MyProductsTable.vue';
 import {PRODUCT_STATUS} from '../../../shared/definitions/ENUM';
@@ -78,10 +78,10 @@ const $routerService: RouterService|undefined = inject('$routerService')
 const search = ref('')
 
 // Selected tab/status filter
-const statusFilter = ref('all')
+const statusFilter: Ref<PRODUCT_STATUS|null> = ref(null)
 const tabs = [
   {
-    value: 'all',
+    value: null,
     label: i18n.global.t('general.all'),
   },
   {
@@ -89,7 +89,7 @@ const tabs = [
     label: i18n.global.t('product_status.draft'),
   },
   {
-    value: PRODUCT_STATUS.ACTIVE,
+    value: PRODUCT_STATUS.VALID,
     label: i18n.global.t('product_status.active'),
   },
   {

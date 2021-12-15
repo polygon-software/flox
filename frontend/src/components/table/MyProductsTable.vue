@@ -116,7 +116,7 @@ const props = defineProps( {
     type: String,
   },
   statusFilter: {
-    required: true,
+    required: false,
     type: String,
   }
 })
@@ -139,8 +139,9 @@ const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<Array<Record<string, un
 const computedResult = computed(() => {
   const val = queryResult.value ?? []
 
-  // Status filter (if any
-  if(props.statusFilter !== 'all') {
+  // TODO: Seems to cause SSR issues, do more testing...
+  // Status filter (if any)
+  if(props.statusFilter) {
     return val.filter((row) => row.status === props.statusFilter)
   }
 
