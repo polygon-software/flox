@@ -1,18 +1,18 @@
 <template>
   <q-header class="row bg-primary shadow-5 justify-between">
     <div class="row">
+      <img
+        alt="Bigabig"
+        :src="require('src/assets/bigabig-logo.svg')"
+        style="height: 50px"
+        class="q-ma-sm"
+      >
       <q-btn
         icon="menu"
         flat
         color="black"
         @click="toggleMenu"
       />
-      <img
-          alt="Bigabig"
-          :src="require('src/assets/bigabig-logo.svg')"
-          style="height: 50px"
-          class="q-ma-sm"
-      >
     </div>
   <div class="row">
     <!-- Account options -->

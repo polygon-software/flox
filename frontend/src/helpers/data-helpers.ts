@@ -137,7 +137,6 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
   })
 
   onBeforeMount( () => {
-    console.log('BEFOREMOUNT')
     const apolloClient = useApolloClient().resolveClient()
 
     res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
