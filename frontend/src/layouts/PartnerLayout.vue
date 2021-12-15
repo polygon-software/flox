@@ -1,7 +1,9 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <!-- Menu bar header -->
-    <PartnerMenuBar/>
+    <PartnerMenuBar
+      @toggleMenu="toggleMenu"
+    />
 
     <!-- Side menu -->
     <q-drawer
@@ -33,7 +35,6 @@
       </div>
 
       <!-- Settings (at bottom of drawer) -->
-      <!-- TODO: settings route -->
       <q-item
         v-ripple
         clickable
@@ -50,7 +51,9 @@
       </q-item>
     </q-drawer>
 
-      <q-page-container class="absolute-full">
+      <q-page-container
+        class="absolute-full"
+      >
         <q-scroll-area class="fit">
           <router-view />
         </q-scroll-area>
@@ -61,14 +64,15 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {inject} from 'vue';
+import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw} from 'vue-router';
 import PartnerMenuBar from 'components/menu/PartnerMenuBar.vue';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
-const showMenu = true
+// Whether to show the left-hand menu drawer
+const showMenu = ref(true)
 
 // Left-side menu items
 const menuItems = [
@@ -106,6 +110,14 @@ const menuItems = [
  */
 async function onItemClick(route: RouteRecordRaw){
   await $routerService?.routeTo(route)
+}
+
+/**
+ * Toggles the left-hand menu drawer
+ * @returns {void}
+ */
+function toggleMenu(){
+  showMenu.value = !showMenu.value
 }
 
 </script>
