@@ -31,8 +31,8 @@
           </q-td>
           <q-td key="status" :props="props">
             <q-chip
-              :label=getChip(props.row).label
-              :color="getChip(props.row).color"
+              :label=getStatusChip(props.row).label
+              :color="getStatusChip(props.row).color"
               text-color="white"
               style="font-weight: bold"
             />
@@ -221,7 +221,7 @@ async function duplicateProduct(uuid: string): Promise<void>{
  * @param {Record<string, unknown>} product - the product
  * @returns {string|null} - the chip's color, if any
  */
-function getChip(product: Record<string, unknown>): Record<string,unknown> {
+function getStatusChip(product: Record<string, unknown>): Record<string,unknown> {
   switch(product.status){
     case PRODUCT_STATUS.DRAFT:
       // Draft

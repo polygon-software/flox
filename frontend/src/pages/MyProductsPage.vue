@@ -10,8 +10,9 @@
       <q-btn
         color="primary"
         text-color="black"
-        label="Add new product"
+        :label="$t('products.add_product')"
         rounded
+        no-caps
         @click="createProduct"
       />
     </div>
