@@ -1,8 +1,8 @@
 <template>
   <q-dialog
-      ref="dialog"
-      :persistent="true"
-      title="QR"
+    ref="dialog"
+    :persistent="true"
+    title="QR"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
@@ -11,21 +11,21 @@
           TODO a description of authenticator setup will go here. Lorem ipsum dolor sit amet bla
         </p>
         <qrcode-vue
-            :value="props.value"
-            :size="180"
+          :value="props.value"
+          :size="180"
         />
       </q-card-section>
       <q-separator dark/>
       <q-card-actions align="right">
         <q-btn
-            label="Abbrechen"
-            color="primary"
-            @click="hide"
+          label="Abbrechen"
+          color="primary"
+          @click="hide"
         />
         <q-btn
-            label="OK"
-            color="primary"
-            @click="onOk"
+          label="OK"
+          color="primary"
+          @click="onOk"
         />
       </q-card-actions>
     </q-card>
@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
 import {defineEmits, defineProps, ref, Ref} from 'vue';
-import {QDialog, useDialogPluginComponent} from 'quasar'
+import {QDialog} from 'quasar'
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 const emit = defineEmits(['ok'])
@@ -68,5 +68,4 @@ const props = defineProps({
     default: '',
   },
 })
-
 </script>
