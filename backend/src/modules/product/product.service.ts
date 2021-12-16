@@ -31,19 +31,7 @@ export class ProductService {
     const product = this.productsRepository.create(createProductInput);
     const savedProduct = await this.productsRepository.save(product);
 
-    // Create image objects
-    for (const base64Picture of pictures) {
-      // Convert base64 to buffer
-      const buffer = base64ToBuffer(base64Picture);
-      const index = pictures.indexOf(base64Picture);
-
-      // Upload the image
-      await this.fileService.uploadPublicFile(
-        buffer,
-        `${savedProduct.title}_${index}.jpg`,
-        savedProduct.uuid,
-      );
-    }
+    await this.createPublicFiles(pictures, savedProduct);
     return savedProduct;
   }
 
@@ -66,11 +54,22 @@ export class ProductService {
   /**
    * Updates an existing product
    * @param {UpdateProductInput} updateProductInput
+   * @param {Array<string>} pictures
    */
-  async update(updateProductInput: UpdateProductInput): Promise<Product> {
-    const product = await this.productsRepository.create(updateProductInput);
+  async update(updateProductInput: UpdateProductInput, pictures: Array<string>): Promise<Product> {
+    // Fetch existing product an delte all pictures
+    const currentProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+    for (const file of currentProduct.pictures) {
+      await this.fileRepository.delete(file.uuid);
+    }
+
+    // Update the product
+    const product = this.productsRepository.create(updateProductInput);
     await this.productsRepository.update(updateProductInput.uuid, product);
-    return this.productsRepository.findOne(updateProductInput.uuid);
+    const updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+
+    await this.createPublicFiles(pictures, updatedProduct);
+    return updatedProduct;
   }
 
   /**
@@ -149,5 +148,27 @@ export class ProductService {
     const deleted_product = await this.productsRepository.remove(product);
     deleted_product.uuid = uuid;
     return deleted_product;
+  }
+
+  /**
+   * Converts an array of b64 strings to pictures, create PublicFile instances and links them to the corresponding Product.
+   * @param {Array<string>} base64Strings The base64 strings to convert
+   * @param {Product} product The product the pictures belong to
+   * @private
+   */
+  private async createPublicFiles(base64Strings: Array<string>, product: Product): Promise<void> {
+    // Create new picure objects
+    for (const base64Picture of base64Strings) {
+      // Convert base64 to buffer
+      const buffer = base64ToBuffer(base64Picture);
+      const index = base64Strings.indexOf(base64Picture);
+
+      // Upload the image
+      await this.fileService.uploadPublicFile(
+        buffer,
+        `${product.title}_${index}.jpg`,
+        product.uuid,
+      );
+    }
   }
 }

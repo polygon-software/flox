@@ -108,7 +108,7 @@
                 outlined
                 dense
                 lazy-rules
-                :rules="[ (val) => (val === null || IS_VALID_NUMBER(val)) || $t('errors.invalid_number')]"
+                :rules="[ (val) => (val === null || val === '' || IS_VALID_NUMBER(val)) || $t('errors.invalid_number')]"
               />
               <q-select
                 v-model="input.currency"
@@ -132,7 +132,7 @@
                 outlined
                 dense
                 lazy-rules="ondemand"
-                :rules="[ (val) => (val === null || IS_VALID_MIN_BET(val, input.maxBet, input.value)) || $t('errors.invalid_number')]"
+                :rules="[ (val) => (val === null || val === '' || IS_VALID_MIN_BET(val, input.maxBet, input.value)) || $t('errors.invalid_number')]"
               />
 
               <q-input
@@ -144,7 +144,7 @@
                 outlined
                 dense
                 lazy-rules="ondemand"
-                :rules="[ (val) => (val === null || IS_VALID_MAX_BET(val, input.minBet, input.value)) || $t('errors.invalid_number')]"
+                :rules="[ (val) => (val === null || val === '' || IS_VALID_MAX_BET(val, input.minBet, input.value)) || $t('errors.invalid_number')]"
               />
             </div>
           </div>
@@ -222,7 +222,7 @@
               outlined
               dense
               type="url"
-              :rules="[ (val) => !val || IS_URL(val)]"
+              :rules="[ (val) => !val || val === '' || IS_URL(val)]"
             />
             <q-input
               v-model="input.directBuyLinkMaxClicks"
@@ -231,7 +231,7 @@
               type="number"
               outlined
               dense
-              :rules="[ (val) => !val || val === 0 || IS_LARGER_THAN(val, 0)]"
+              :rules="[ (val) => !val || val === ''|| val === 0 || IS_LARGER_THAN(val, 0)]"
             />
             <q-input
               v-model="input.directBuyLinkMaxCost"
@@ -240,7 +240,7 @@
               type="number"
               outlined
               dense
-              :rules="[ (val) => !val || val === 0 || IS_LARGER_THAN(val, 0)]"
+              :rules="[ (val) => !val || val === '' || val === 0 || IS_LARGER_THAN(val, 0)]"
             />
           </div>
 
@@ -254,7 +254,7 @@
               outlined
               dense
               type="url"
-              :rules="[ (val) => !val || IS_URL(val)]"
+              :rules="[ (val) => !val || val === '' || IS_URL(val)]"
             />
             <q-input
               v-model="input.brandLinkMaxClicks"
@@ -263,7 +263,7 @@
               type="number"
               outlined
               dense
-              :rules="[ (val) => !val || val === 0 || IS_LARGER_THAN(val, 0)]"
+              :rules="[ (val) => !val || val === '' || val === 0 || IS_LARGER_THAN(val, 0)]"
             />
             <q-input
               v-model="input.brandLinkMaxCost"
@@ -272,7 +272,7 @@
               type="number"
               outlined
               dense
-              :rules="[ (val) => !val || val === 0 || IS_LARGER_THAN(val, 0)]"
+              :rules="[ (val) => !val || val === '' || val === 0 || IS_LARGER_THAN(val, 0)]"
             />
           </div>
         </q-card>
@@ -288,6 +288,7 @@
           <h6 class="q-ma-md">{{ $tc('products.image', 2) }}</h6>
           <!-- TODO -->
           <PictureUpload
+            :pictures="pictures"
             @change="onPictureChange"
           />
         </q-card>
@@ -323,6 +324,7 @@ import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/EN
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {useRoute} from 'vue-router';
+import axios, { AxiosResponse } from 'axios'
 import {PRODUCT} from 'src/data/queries/QUERIES';
 import {
   IS_FUTURE_DATE,
@@ -366,7 +368,7 @@ const status: PRODUCT_STATUS = computed(() => {
     input.category,
     input.minBet,
     input.maxBet,
-    input.sponsored].some((value) => {return value === null})) {
+    input.sponsored].some((value) => {return value === null || value === ''})) {
     return PRODUCT_STATUS.DRAFT as PRODUCT_STATUS
   }
   return PRODUCT_STATUS.VALID as PRODUCT_STATUS
@@ -396,9 +398,13 @@ const input: Record<string, unknown> = reactive(
   directBuyLinkMaxCost: null,
 })
 
+// Picture inputs (separated from input, since these have to be added after product is created)
+const pictures: Ref<Array<Ref<File>>> = ref([])
+
 /**
  * Watch for first result if a product is given
  */
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const stop = watch(queryResult, async (newValue) => {
   if(newValue && newValue !== {} && !(Array.isArray(newValue) && newValue.length === 0)){
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
@@ -409,22 +415,38 @@ const stop = watch(queryResult, async (newValue) => {
     input.description = newValue.description
     input.brand = newValue.brand
     input.category = newValue.category
-    input.value = newValue.value
+    input.value = newValue.value !== '' ? newValue.value : null
     input.currency = newValue.currency
-    input.minBet = newValue.minBet
-    input.maxBet = newValue.maxBet
+    input.minBet = newValue.minBet !== '' ? newValue.minBet : null
+    input.maxBet = newValue.maxBet !== '' ? newValue.maxBet : null
     input.sponsored = newValue.sponsored
     input.tags = newValue.tags
-    input.directBuyLink = newValue.directBuyLink
-    input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks
-    input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost
-    input.brandLink = newValue.brandLink
-    input.brandLinkMaxClicks = newValue.brandLinkMaxClicks
-    input.brandLinkMaxCost = newValue.brandLinkMaxCost
+    input.directBuyLink = newValue.directBuyLink !== '' ? newValue.directBuyLink : null
+    input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks !== '' ? newValue.directBuyLinkMaxClicks : null
+    input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost !== '' ? newValue.directBuyLinkMaxCost : null
+    input.brandLink = newValue.brandLink !== '' ? newValue.brandLink : null
+    input.brandLinkMaxClicks = newValue.brandLinkMaxClicks !== '' ? newValue.brandLinkMaxClicks : null
+    input.brandLinkMaxCost = newValue.brandLinkMaxCost !== '' ? newValue.brandLinkMaxCost : null
 
     // Dates: extract substring for date-only
     input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
     input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
+
+    // Pictures
+    const existingPictures: Array<Ref<File>> = []
+    for (const picture of newValue.pictures) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+      const index: number = newValue.pictures.indexOf(picture);
+      await axios.get(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
+        picture.url,
+        {
+          responseType: 'blob'
+        }).then((res: AxiosResponse<Blob>) => {
+       existingPictures.push(ref(new File([res.data], `${(input as Record<string, string>).title}_${index}`)))
+      });
+    }
+    pictures.value = existingPictures
 
     // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
     // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
@@ -433,8 +455,7 @@ const stop = watch(queryResult, async (newValue) => {
     stop()
   }
 })
-// Picture inputs (separated from input, since these have to be added after product is created)
-const pictures: Ref<Array<Ref<File>>> = ref([])
+
 
 /**
  * On picture change, overwrites the array
@@ -482,7 +503,8 @@ async function onSubmit(){
         {
           updateProductInput: {
             uuid: productId,
-            ...params
+            ...params,
+            pictures
           }
         }
       )
@@ -504,5 +526,4 @@ async function onSubmit(){
   // Push to success page
   await $routerService?.routeTo(ROUTES.MY_PRODUCTS)
 }
-
 </script>

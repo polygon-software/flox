@@ -36,8 +36,7 @@ export class ProductResolver {
   @Public()
   @Mutation(() => Product)
   async createProduct(
-    @Args({ name: 'createProductInput', type: () => CreateProductInput })
-    createProductInput: CreateProductInput,
+    @Args({ name: 'createProductInput', type: () => CreateProductInput }) createProductInput: CreateProductInput,
     @Args({ name: 'pictures', type: () => [String] }) pictures: Array<string>,
   ): Promise<Product> {
     return this.productsService.create(createProductInput, pictures);
@@ -47,8 +46,9 @@ export class ProductResolver {
   @Mutation(() => Product)
   async updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
+    @Args({name: 'pictures', type: () => [String] }) pictures: Array<string>,
   ): Promise<Product> {
-    return this.productsService.update(updateProductInput);
+    return this.productsService.update(updateProductInput, pictures);
   }
 
   @Public()
