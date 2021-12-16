@@ -91,7 +91,7 @@ async function onSignup(formValues: Record<string, string>){
   const cognitoId = await $authService?.signUp(username, email, password);
 
   // Create user in backend
-  const myUser = await executeMutation(CREATE_USER, {
+  await executeMutation(CREATE_USER, {
     createUserInput: {
       uuid: cognitoId,
       username,
@@ -103,8 +103,7 @@ async function onSignup(formValues: Record<string, string>){
     }
   })
 
-  console.log('User successfully created:', myUser)
-  // TODO: close signup
+  // TODO: close signup - make it a separate page, reroute to generic success page (can be copied from SOI)
 }
 
 </script>

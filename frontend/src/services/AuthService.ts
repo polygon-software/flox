@@ -160,9 +160,6 @@ export class AuthenticationService {
 
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
 
-    // TODO: Do this already?
-    // this.showEmailVerificationDialog()
-
     return cognitoUserWrapper.userSub
   }
 

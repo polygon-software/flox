@@ -24,6 +24,7 @@ import { ROLE } from '../../../ENUM/ENUM';
 @InputType('user')
 /**
  * An application User
+ * TODO: add address
  */
 export class User {
   @Field(() => ROLE, { description: 'Role of the User' })

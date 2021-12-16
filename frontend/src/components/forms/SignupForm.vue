@@ -115,7 +115,6 @@ form.pages.value = [
  * @returns {void}
  */
 function onSubmit(): void {
-  console.log('SUBMIT values', form.values.value)
   emit('submit', form.values.value)
 }
 
