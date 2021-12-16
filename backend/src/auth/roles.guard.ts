@@ -35,16 +35,16 @@ export class RolesGuard implements CanActivate {
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // Dev mode: overrides user management:
-    const access_override = process.env.DEV === 'true';
-    const requested_function = context.getHandler().name;
+    const accessOverride = process.env.DEV === 'true';
+    const requestedFunction = context.getHandler().name;
 
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
     const req = this.getRequest(context);
     const user = req.user;
-    const db_user = await this.userRepository.findOne(user.userId);
+    const dbUser = await this.userRepository.findOne(user.userId);
 
     // Admin has access to everything
-    if (db_user.role === ROLE.SOI_ADMIN) {
+    if (dbUser.role === ROLE.SOI_ADMIN) {
       return true;
     }
 
@@ -62,33 +62,33 @@ export class RolesGuard implements CanActivate {
         this.reflector.getAllAndOverride<boolean>(ANY_ROLE_KEY, [
           context.getHandler(),
           context.getClass(),
-        ]) && !!db_user;
+        ]) && !!dbUser;
 
       // For publicly accessible resources, allow access by default
-      if (access_override && !isPublic && !anyRole) {
+      if (accessOverride && !isPublic && !anyRole) {
         console.warn(
-          `Debug override used to access private resource: "${requested_function}"!`,
+          `Debug override used to access private resource: "${requestedFunction}"!`,
         );
         return true;
       }
       return isPublic || anyRole;
     }
 
-    if (!db_user) {
-      if (access_override) {
+    if (!dbUser) {
+      if (accessOverride) {
         console.warn(
-          `Debug override used to access restricted resource: "${requested_function}" without authentication!`,
+          `Debug override used to access restricted resource: "${requestedFunction}" without authentication!`,
         );
         return true;
       }
       return false;
     }
-    const res = roles.includes(db_user.role);
-    if (access_override && !res) {
+    const res = roles.includes(dbUser.role);
+    if (accessOverride && !res) {
       console.warn(
-        `Debug override used to access resource : "${requested_function}" restricted to ${roles.join(
+        `Debug override used to access resource : "${requestedFunction}" restricted to ${roles.join(
           ',',
-        )} as ${db_user.role}!`,
+        )} as ${dbUser.role}!`,
       );
       return true;
     }

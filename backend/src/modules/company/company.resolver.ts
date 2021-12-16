@@ -28,7 +28,7 @@ export class CompanyResolver {
   async getCompanies(
     @Args() getCompaniesArgs: GetCompaniesArgs,
   ): Promise<Company[]> {
-    return await this.companyService.getCompanies(getCompaniesArgs);
+    return this.companyService.getCompanies(getCompaniesArgs);
   }
 
   /**
