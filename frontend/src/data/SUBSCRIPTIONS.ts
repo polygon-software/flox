@@ -9,8 +9,9 @@ export const USER_ADDED = gql`
     subscription onUserAdded {
         userAdded {
             uuid
-            name
-            age
+            fk
+            __typename
+            role
         }
     }
 

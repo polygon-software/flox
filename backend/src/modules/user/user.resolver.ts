@@ -7,7 +7,7 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { PubSub } from 'graphql-subscriptions';
-import { Public } from '../../auth/authentication.decorator';
+import { AdminOnly } from '../../auth/authorization.decorator';
 
 // Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
 const pubSub = new PubSub();
@@ -16,25 +16,25 @@ const pubSub = new PubSub();
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
-  @Public()
+  @AdminOnly()
   @Query(() => [User], { name: 'users' })
   async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
-    return await this.usersService.getUsers(getUsersArgs);
+    return this.usersService.getUsers(getUsersArgs);
   }
 
-  @Public()
+  @AdminOnly()
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
-    return await this.usersService.getAllUsers();
+    return this.usersService.getAllUsers();
   }
 
-  @Public()
+  @AdminOnly()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return await this.usersService.getUser(getUserArgs);
+    return this.usersService.getUser(getUserArgs);
   }
 
-  @Public()
+  @AdminOnly()
   @Mutation(() => User)
   async create(
     @Args('createUserInput') createUserInput: CreateUserInput,
@@ -45,25 +45,25 @@ export class UserResolver {
     return newUser;
   }
 
-  @Public()
+  @AdminOnly()
   @Mutation(() => User)
   async update(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
-    return await this.usersService.update(updateUserInput);
+    return this.usersService.update(updateUserInput);
   }
 
-  @Public()
+  @AdminOnly()
   @Mutation(() => User)
   async remove(
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
   ): Promise<User> {
-    return await this.usersService.remove(deleteUserInput);
+    return this.usersService.remove(deleteUserInput);
   }
 
-  @Public()
+  @AdminOnly()
   @Subscription(() => User)
-  userAdded(): AsyncIterator<unknown, any, undefined> {
+  userAdded(): AsyncIterator<unknown> {
     return pubSub.asyncIterator('userAdded');
   }
 }
