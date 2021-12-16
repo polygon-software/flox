@@ -6,34 +6,34 @@
     >
       <!-- Own info -->
       <CompanyEmployeeId/>
-        <p
-          class="q-ma-md col text-center"
-          style="font-size: x-large"
-        >
-          {{ $t('employee_dashboard.title') }}
-        </p>
-        <p class="q-ma-md col text-center" style="display: flex; justify-content: space-between; align-items: baseline">
-          {{ $t('employee_dashboard.applications') }}
+      <p
+        class="q-ma-md col text-center"
+        style="font-size: x-large"
+      >
+        {{ $t('employee_dashboard.title') }}
+      </p>
+      <p class="q-ma-md col text-center" style="display: flex; justify-content: space-between; align-items: baseline">
+        {{ $t('employee_dashboard.applications') }}
 <!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
-          <q-input
-            v-model="searchEmployees"
-            color="purple-12"
-            :label="$t('employee_dashboard.search')"
-            type="text"
-            @change="searchEmployee"
-          >
-            <template #prepend>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-          <q-btn
-            class="q-ma-md"
-            :label="$t('employee_dashboard.new_assignment')"
-            color="primary"
-            icon="add"
-            @click="newAssignment"
-          />
-        </p>
+        <q-input
+          v-model="searchEmployees"
+          color="purple-12"
+          :label="$t('employee_dashboard.search')"
+          type="text"
+          @change="searchEmployee"
+        >
+          <template #prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+        <q-btn
+          class="q-ma-md"
+          :label="$t('employee_dashboard.new_assignment')"
+          color="primary"
+          icon="add"
+          @click="newAssignment"
+        />
+      </p>
       <p class="q-ma-md col text-center">
         <!-- Dossier Overview -->
         <EmployeeDashboardTable

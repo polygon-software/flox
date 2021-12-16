@@ -20,7 +20,7 @@ export class DossierResolver {
   async createDossier(
     @Args('createDossierInput') createDossierInput: CreateDossierInput,
   ): Promise<Dossier> {
-    return await this.dossierService.createDossier(createDossierInput);
+    return this.dossierService.createDossier(createDossierInput);
   }
   /**
    * Updates the status of a dossier
@@ -32,6 +32,6 @@ export class DossierResolver {
   async updateDossier(
     @Args('UpdateDossierInput') updateDossierInput: UpdateDossierInput,
   ): Promise<Dossier> {
-    return await this.dossierService.updateDossier(updateDossierInput);
+    return this.dossierService.updateDossier(updateDossierInput);
   }
 }

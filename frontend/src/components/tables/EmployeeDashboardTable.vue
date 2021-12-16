@@ -4,7 +4,6 @@
       v-model:selected="selected"
       card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
-      :title="title"
       :rows="rows"
       :columns="columns"
       row-key="uuid"
@@ -44,7 +43,7 @@
           >
             <q-select
               v-model="scope.value"
-              :options="options"
+              :options="props.options"
             />
           </q-popup-edit>
         </q-td>
@@ -85,11 +84,6 @@ const $q: QVueGlobals = useQuasar()
 const selected = ref([])
 
 const props = defineProps({
-  title: {
-    required: false,
-    type: String,
-    default: '',
-  },
   options: {
     required: false,
     type: Array,
