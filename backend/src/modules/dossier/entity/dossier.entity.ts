@@ -8,7 +8,6 @@ import { STATUS } from '../../../ENUM/ENUMS';
 
 @ObjectType()
 @Entity('dossier')
-@InputType('dossier')
 export class Dossier extends Person {
   @Field(() => Address, { description: 'Address' })
   @JoinColumn()

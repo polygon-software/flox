@@ -1,11 +1,15 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import {IsBoolean, IsDate, IsNotEmpty, IsNumber, IsUUID} from 'class-validator';
-import {STATUS} from "../../../../ENUM/ENUMS";
-import {Address} from "../../../address/entities/address.entity";
-import {Bank} from "../../../bank/entities/bank.entity";
-import {Offer} from "../../../offer/entities/offer.entity";
+import {
+  IsBoolean,
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsUUID,
+} from 'class-validator';
+import { Address } from '../../../address/entities/address.entity';
+import { Bank } from '../../../bank/entities/bank.entity';
 
-@InputType()
+@InputType('dossier')
 export class CreateDossierInput {
   @Field(() => ID)
   @IsUUID()

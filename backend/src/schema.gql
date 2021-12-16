@@ -127,19 +127,6 @@ input CreateAddressInput {
   zip_code: String!
 }
 
-input CreateBankInput {
-  address: CreateAddressInput!
-
-  """E-mail"""
-  email: String
-
-  """First Name"""
-  first_name: String
-
-  """Last Name"""
-  last_name: String
-}
-
 input CreateCompanyInput {
   branch_structure: Boolean!
   company_name: String!
@@ -325,8 +312,9 @@ type Employee {
 type Mutation {
   associateUserToCompany(associateUserInput: AssociateUserInput!): Company!
   create(createUserInput: CreateUserInput!): User!
-  createBank(createBankInput: CreateBankInput!): Bank!
+  createBank(createBankInput: bank!): Bank!
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
+  createDossier(createDossierInput: dossier!): Dossier!
   createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
@@ -335,6 +323,7 @@ type Mutation {
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   update(updateUserInput: UpdateUserInput!): User!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
+  updateDossier(UpdateDossierInput: UpdateDossierInput!): Dossier!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
 }
 
@@ -511,6 +500,18 @@ input UpdateCompanyInput {
   uuid: ID!
 }
 
+input UpdateDossierInput {
+  born: DateTime
+  correspondence_address: String
+  loan_sum: Float
+  non_arrangeable: Boolean
+  offers: [offer!]
+  original_bank: bank
+  property_address: String
+  status: String
+  uuid: ID!
+}
+
 input UpdateEmployeeInput {
   """Company"""
   company: company
@@ -567,11 +568,16 @@ input address {
 }
 
 input bank {
-  """Address"""
-  address: address!
+  address: CreateAddressInput!
 
-  """Offers made by Bank"""
-  offers: [offer!]!
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
 }
 
 input company {
@@ -614,29 +620,13 @@ enum creationState {
 }
 
 input dossier {
-  """Date of birth of customer"""
-  born: DateTime!
-
-  """Address"""
-  correspondence_address: address!
-
-  """Money loaned"""
-  loan_sum: Float!
-
-  """ToDo"""
-  non_arrangeable: Boolean!
-
-  """List of Offers"""
-  offers: [offer!]!
-
-  """Previous Bank of the customer"""
-  original_bank: bank!
-
-  """Address of Property"""
-  property_address: address!
-
-  """Status of Dossier"""
-  status: Status!
+  born: DateTime
+  correspondence_address: String
+  loan_sum: Float
+  non_arrangeable: Boolean
+  original_bank: String
+  property_address: String
+  uuid: ID!
 }
 
 input employee {
@@ -662,6 +652,15 @@ input offer {
 
   """Dossier of Offer"""
   dossier: dossier!
+
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
 
   """The Offer as a PDF"""
   pdf: private_file!
