@@ -2,6 +2,32 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Address {
+  """City"""
+  city: String!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Zip Code"""
+  zipCode: String!
+}
+
 enum Category {
   CARS
   CELEBRITIES
@@ -39,6 +65,13 @@ type Comment {
   uuid: ID!
 }
 
+input CreateAddressInput {
+  city: String!
+  number: String!
+  street: String!
+  zipCode: String!
+}
+
 input CreateCommentInput {
   content: String!
   product: product!
@@ -68,6 +101,9 @@ input CreateProductInput {
 }
 
 input CreateUserInput {
+  """User address"""
+  address: CreateAddressInput!
+
   """Date of birth"""
   birthdate: DateTime!
 
@@ -350,6 +386,9 @@ input UpdateUserInput {
 }
 
 type User {
+  """Domicile address"""
+  address: Address!
+
   """Date of birth"""
   birthdate: DateTime!
 
@@ -385,6 +424,20 @@ type User {
 
   """Cognito ID"""
   uuid: ID!
+}
+
+input address {
+  """City"""
+  city: String!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """Zip Code"""
+  zipCode: String!
 }
 
 input comment {
@@ -501,6 +554,9 @@ input public_file {
 }
 
 input user {
+  """Domicile address"""
+  address: address!
+
   """Date of birth"""
   birthdate: DateTime!
 

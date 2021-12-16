@@ -3,12 +3,14 @@ import {
   IsArray,
   IsDate,
   IsEmail,
+  IsNotEmptyObject,
   IsPhoneNumber,
   IsString,
   IsUUID,
 } from 'class-validator';
 import { ROLE } from '../../../../ENUM/ENUM';
 import { Column } from 'typeorm';
+import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
 
 @InputType()
 /**
@@ -45,4 +47,8 @@ export class CreateUserInput {
   @Field(() => [String], { description: 'User interest categories' })
   @IsArray()
   interests: string[];
+
+  @Field(() => CreateAddressInput, { description: 'User address' })
+  @IsNotEmptyObject()
+  address: CreateAddressInput;
 }

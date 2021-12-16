@@ -13,11 +13,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ROLE } from '../../../ENUM/ENUM';
+import { Address } from '../../address/entities/address.entity';
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -40,6 +43,11 @@ export class User {
   @PrimaryColumn()
   @IsUUID()
   uuid: string;
+
+  @Field(() => Address, { description: 'Domicile address' })
+  @JoinColumn()
+  @OneToOne(() => Address, { cascade: true, eager: true })
+  address: Address;
 
   @Field(() => Date, { description: 'Creation date' })
   @CreateDateColumn()

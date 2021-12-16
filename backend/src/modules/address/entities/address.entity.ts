@@ -29,5 +29,5 @@ export class Address extends BaseEntity {
   @Field(() => String, { description: 'Zip Code' })
   @Column()
   @IsString()
-  zip_code: string;
+  zipCode: string;
 }
