@@ -117,3 +117,14 @@ export function generatePasswordChangeLink(
   const hiddenPw = Buffer.from(password).toString('base64');
   return `${baseUrl}/set-password?u=${hiddenEmail}&k=${hiddenPw}&t=${type}`;
 }
+
+/**
+ * Send rejection email to rejected company
+ * @param {string} email - email
+ * @returns {Promise<void>} - email sent
+ */
+export async function sendCompanyRejectEmail(email: string): Promise<void> {
+  const sender = process.env.EMAIL_SENDER ?? '';
+
+  await sendEmail(sender, email, 'Rejected', 'Application is rejected');
+}

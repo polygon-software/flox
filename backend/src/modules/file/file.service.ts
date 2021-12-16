@@ -152,4 +152,10 @@ export class FileService {
 
     throw new NotFoundException();
   }
+
+  async deletePrivateFile(uuid: string): Promise<PrivateFile> {
+    const file = await this.privateFilesRepository.findOne(uuid);
+    await this.publicFilesRepository.delete(file);
+    return file;
+  }
 }

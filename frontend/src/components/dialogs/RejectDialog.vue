@@ -56,15 +56,11 @@ function hide(): void {
   dialog.value?.hide()
 }
 
-async function onYesReject(): Promise<void> {
 /**
  * Reject an application
  * @returns {void}
  */
 function onYesReject(): void {
-  //TODO: implement in backend to really reject it
-  const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
-  await sendEmail(sender, props.companyData.email ?? '', i18n.global.t('email.subject_rejected'), i18n.global.t('email.body_rejected'))
   emit('ok')
   hide()
 }
@@ -75,6 +71,3 @@ function onCancel(): void {
 }
 </script>
 
-<style scoped>
-
-</style>

@@ -11,14 +11,20 @@ import { generateHumanReadableId } from '../../helpers';
 import { User } from '../user/entities/user.entity';
 import { CREATION_STATE, ROLE } from '../../ENUM/ENUMS';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
-import { sendPasswordChangeEmail } from '../../email/helper';
+import {
+  sendCompanyRejectEmail,
+  sendPasswordChangeEmail,
+} from '../../email/helper';
 import { UserService } from '../user/user.service';
+import { FileService } from '../file/file.service';
+import PrivateFile from '../file/entities/private_file.entity';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectRepository(Company) private companyRepository: Repository<Company>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    private fileService: FileService,
     private userService: UserService,
   ) {}
 
@@ -127,6 +133,14 @@ export class CompanyService {
     const company = await this.companyRepository.findOne(
       deleteCompanyInput.uuid,
     );
+    const promiseList: Promise<PrivateFile>[] = [];
+    if (company.documents) {
+      company.documents.forEach((docu) => {
+        promiseList.push(this.fileService.deletePrivateFile(docu.uuid));
+      });
+    }
+
+    await Promise.all(promiseList);
     const uuid = company.uuid;
     const deletedCompany = await this.companyRepository.remove(company);
     deletedCompany.uuid = uuid;
@@ -170,5 +184,15 @@ export class CompanyService {
     company.creation_state = CREATION_STATE.DONE;
     await this.companyRepository.save(company);
     return this.companyRepository.findOne(uuid);
+  }
+
+  async rejectCompany(
+    deleteCompanyInput: DeleteCompanyInput,
+  ): Promise<Company> {
+    const company = await this.companyRepository.findOne(
+      deleteCompanyInput.uuid,
+    );
+    await sendCompanyRejectEmail(company.email);
+    return this.deleteCompany(deleteCompanyInput);
   }
 }
