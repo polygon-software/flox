@@ -21,7 +21,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'LOGIN': {
     path: '/login',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: async () => await getUserRoleLayout(),
+    component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
@@ -51,25 +51,30 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('pages/Error404.vue'),
   },
 };
+
+//TODO: Add semi-protected routes
 // Routes that can be accessed without being logged in
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
-  ROUTES.ADD_PRODUCT // TODO: change rules
 ]
 
 /**
- * Returns the layout name for the currently logged in user
+ * Returns the layout for the currently logged in user
+ * @async
  * @returns {any} - the layout component
  */
 async function getUserRoleLayout(): Promise<any>{
-  // Get user's data
+  // Get user's data from backend
   const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+
+  // Non-logged in: Redirect to 404
+  if(!queryResult?.data?.myUser){
+    return import('pages/Error404.vue')
+  }
+
+
   const userData = queryResult.data.myUser as Record<string, unknown>
   const userRole = userData.role;
-
-  if(!userRole){
-    throw new Error('Not logged in') // TODO redirect to error page
-  }
 
   switch(userRole){
     case ROLE.ADMIN:
@@ -79,9 +84,8 @@ async function getUserRoleLayout(): Promise<any>{
     case ROLE.PLAYER:
       return import('layouts/PlayerLayout.vue')
     default:
-      throw new Error('Not logged in, or no valid role') // TODO redirect to error page
+      return import('pages/Error404.vue') // TODO possibly 403 forbidden page?
     }
 }
 
-//TODO: Add semi-protected routes
 export default ROUTES
