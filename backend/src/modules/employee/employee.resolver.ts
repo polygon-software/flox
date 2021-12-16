@@ -1,30 +1,34 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeService } from './employee.service';
 import { Employee } from './entities/employee.entity';
 import { CreateEmployeeInput } from './dto/input/create-employee.input';
 
 import {
   AdminOnly,
-  AnyRole,
+  CompanyOnly,
   CurrentUser,
 } from '../../auth/authorization.decorator';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
+import { UserService } from '../user/user.service';
+import { ROLE } from '../../ENUM/ENUMS';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly companyService: CompanyService,
+    private readonly userService: UserService,
   ) {}
 
   /**
    * Creates a new employee for the user that is currently logged in
-   * @param {CreateEmployeeInput} createEmployeeInput
+   * @param {CreateEmployeeInput} createEmployeeInput - fields for new employee
    * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   * @returns {Promise<Employee>} - new Employee
    */
-  @AnyRole() // TODO restrict to Management
+  @CompanyOnly()
   @Mutation(() => Employee)
   async createEmployee(
     @Args('createEmployeeInput') createEmployeeInput: CreateEmployeeInput,
@@ -46,6 +50,7 @@ export class EmployeeResolver {
 
   /**
    * Gets a list of all employees in the database
+   * @returns {Promise<Employee[]>} - all employees
    */
   @AdminOnly()
   @Query(() => [Employee], { name: 'allEmployees' })
@@ -55,8 +60,10 @@ export class EmployeeResolver {
 
   /**
    * Get the list of employees for the currently logged in company account
+   * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   * @returns { Promise<Employee[]>} - Employees
    */
-  @AnyRole() // TODO management only
+  @CompanyOnly()
   @Query(() => [Employee], { name: 'myEmployees' })
   async getMyEmployees(
     @CurrentUser() user: Record<string, string>,
@@ -76,12 +83,32 @@ export class EmployeeResolver {
   /**
    * Updates an employee's data
    * @param {UpdateEmployeeInput} updateEmployeeInput - company data to change
+   * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   * @returns {Promise<Employee>} - updated employee
    */
-  @AnyRole() // TODO restrict to appropriate roles
+  @CompanyOnly()
   @Mutation(() => Employee)
   async updateEmployee(
     @Args('updateEmployeeInput') updateEmployeeInput: UpdateEmployeeInput,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<Employee> {
-    return await this.employeeService.updateEmployee(updateEmployeeInput);
+    // Admin has access
+    const db_user = await this.userService.getUser({ uuid: user.userID });
+    if (db_user.role === ROLE.SOI_ADMIN) {
+      return await this.employeeService.updateEmployee(updateEmployeeInput);
+    }
+
+    // Company of employee has access
+    const company = await this.companyService.getCompany({
+      cognito_id: user.userId,
+    } as GetCompanyArgs);
+    const my_employees = await this.employeeService.getEmployees(company);
+    if (
+      my_employees.some(
+        (employee) => employee.uuid === updateEmployeeInput.uuid,
+      )
+    ) {
+      return await this.employeeService.updateEmployee(updateEmployeeInput);
+    }
   }
 }
