@@ -1,9 +1,9 @@
 <template>
   <div class="column" style="margin-bottom: 32px">
     <q-table
+      v-model:selected="selected"
       card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
-      v-model:selected="selected"
       :title="title"
       :rows="rows"
       :columns="columns"
@@ -12,35 +12,35 @@
       separator="none"
       flat
     >
-    <template #body="props">
+    <template #body="props_2">
       <q-tr
-        :props="props"
+        :props="props_2"
         style="background-color: white; cursor: pointer"
       >
         <q-td key="date">
-          {{ props.row.date }}
+          {{ props_2.row.date }}
         </q-td>
         <q-td key="customer">
-          {{ props.row.customer }}
+          {{ props_2.row.customer }}
         </q-td>
         <q-td key="institute">
-          {{ props.row.institute }}
+          {{ props_2.row.institute }}
         </q-td>
         <q-td key="location">
-          {{ props.row.location }}
+          {{ props_2.row.location }}
         </q-td>
         <q-td key="mortage_amount">
-          {{ props.row.mortage_amount }}
+          {{ props_2.row.mortage_amount }}
         </q-td>
         <q-td key="status">
           <q-chip style="color: white; background-color: #58ACFA;">
-            {{ props.row.status }}
+            {{ props_2.row.status }}
           </q-chip>
           <q-popup-edit
             v-slot="scope"
             :auto-save="true"
-            :model-value="props.row.status"
-            @save="(value) => onUpdateStatus(props.row.status, {name: value})"
+            :model-value="props_2.row.status"
+            @save="(value) => onUpdateStatus(props_2.row.status, {name: value})"
           >
             <q-select
               v-model="scope.value"
@@ -49,7 +49,7 @@
           </q-popup-edit>
         </q-td>
         <q-td key="uploads">
-          {{ props.row.uploads }}
+          {{ props_2.row.uploads }}
           <q-btn
             :label="$t('employee_dashboard.all_documents')"
             @click="showAllDocuments"
@@ -57,7 +57,7 @@
         </q-td>
         <q-td key="offers">
           <q-chip
-            v-for="(offer, index) in props.row.offers.slice(0,3)"
+            v-for="(offer, index) in props_2.row.offers.slice(0,3)"
             :key="index"
           >
             {{ offer }}
@@ -76,8 +76,8 @@ import {defineProps, ref} from 'vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
-import {SET_DOSSIER_STATUS} from "src/data/mutations/DOSSIER";
-import {i18n} from "boot/i18n";
+import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
+import {i18n} from 'boot/i18n';
 
 const $q: QVueGlobals = useQuasar()
 

@@ -79,8 +79,8 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {ref, Ref} from "vue";
-import {QDialog, openURL} from "quasar";
+import {ref, Ref} from 'vue';
+import {QDialog, openURL} from 'quasar';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 

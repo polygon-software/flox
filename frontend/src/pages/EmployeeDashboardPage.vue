@@ -49,7 +49,7 @@ import {inject, ref} from 'vue'
 import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import CompanyEmployeeId from "components/cards/CompanyEmployeeId.vue";
+import CompanyEmployeeId from 'components/cards/CompanyEmployeeId.vue';
 
 
 /**
