@@ -1,9 +1,7 @@
 import {RouteRecordRaw} from 'vue-router';
-import {sleep} from 'src/helpers/general-helpers';
-import {QLayout} from 'quasar';
 import {executeQuery} from 'src/helpers/data-helpers';
-import {MY_USER} from 'src/data/queries/QUERIES';
 import {ROLE} from '../../../shared/definitions/ENUM';
+import {MY_USER} from 'src/data/queries/USER';
 
 /**
  * This file defines the routes available within the application

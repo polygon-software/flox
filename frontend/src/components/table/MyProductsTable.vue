@@ -106,7 +106,6 @@
 import {computed, defineProps, inject, Ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import {MY_PRODUCTS} from 'src/data/queries/QUERIES';
 import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
@@ -115,6 +114,7 @@ import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {FetchResult} from '@apollo/client';
 import {sleep} from 'src/helpers/general-helpers';
 import {i18n} from 'boot/i18n';
+import {MY_PRODUCTS} from 'src/data/queries/PRODUCT';
 const $routerService: RouterService|undefined = inject('$routerService')
 const $q = useQuasar()
 

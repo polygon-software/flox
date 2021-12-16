@@ -323,7 +323,6 @@ import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/EN
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {useRoute} from 'vue-router';
-import {PRODUCT} from 'src/data/queries/QUERIES';
 import {
   IS_FUTURE_DATE,
   IS_LARGER_THAN,
@@ -335,6 +334,7 @@ import {
 } from 'src/data/RULES';
 import {sleep} from 'src/helpers/general-helpers';
 import {toBase64} from 'src/helpers/image-helper';
+import {PRODUCT} from 'src/data/queries/PRODUCT';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()

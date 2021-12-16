@@ -11,8 +11,8 @@
 <script setup lang="ts">
 import ProductCard from 'components/product/ProductCard.vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {ALL_PRODUCTS} from 'src/data/queries/QUERIES';
 import {computed, Ref} from 'vue';
+import {ALL_PRODUCTS} from 'src/data/queries/PRODUCT';
 
 const queryResult = subscribeToQuery(ALL_PRODUCTS) as Ref<Record<string, Array<Record<string, unknown>>>>|undefined
 
