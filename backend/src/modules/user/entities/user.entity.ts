@@ -44,6 +44,11 @@ export class User {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Field(() => String, { description: 'Username' })
+  @Column()
+  @IsString()
+  username: string;
+
   @Field(() => String, { description: 'Full name' })
   @Column()
   @IsString()

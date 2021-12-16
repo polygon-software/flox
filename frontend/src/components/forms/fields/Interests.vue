@@ -54,6 +54,7 @@
 <script setup lang="ts">
 import {computed, defineEmits, ref} from 'vue'
 import { i18n } from 'boot/i18n';
+import {CATEGORY} from '../../../../../shared/definitions/ENUM';
 
 const emit = defineEmits(['change'])
 const search = ref('')
@@ -64,57 +65,77 @@ type interest = {
   name: string,
   model: boolean
 }
+
+// TODO: could be done as a loop?
 const interests = ref([
   {
     name: i18n.global.t('interests.cars'),
+    value: CATEGORY.CARS,
     model: false,
   },
   {
     name: i18n.global.t('interests.celebrities'),
+    value: CATEGORY.CELEBRITIES,
     model: false,
   },
   {
     name: i18n.global.t('interests.cooking'),
+    value: CATEGORY.COOKING,
     model: false,
   },
   {
     name: i18n.global.t('interests.fashion'),
+    value: CATEGORY.FASHION,
     model: false,
   },
   {
     name: i18n.global.t('interests.music'),
+    value: CATEGORY.MUSIC,
     model: false,
   },
   {
     name: i18n.global.t('interests.outdoor'),
+    value: CATEGORY.OUTDOOR,
     model: false,
   },
   {
     name: i18n.global.t('interests.sports'),
+    value: CATEGORY.SPORTS,
     model: false,
   },
   {
     name: i18n.global.t('interests.technology'),
+    value: CATEGORY.TECHNOLOGY,
     model: false,
   },
   {
     name: i18n.global.t('interests.tools'),
+    value: CATEGORY.TOOLS,
     model: false,
   },
   {
     name: i18n.global.t('interests.travelling'),
+    value: CATEGORY.TRAVELLING,
     model: false,
   },
   {
     name: i18n.global.t('interests.watches'),
+    value: CATEGORY.WATCHES,
     model: false,
   },
 ])
 
 const selectedInterests = computed(() => {
-  return interests.value.filter(item => {
+  const filteredInterests = interests.value.filter(item => {
     return item.model === true
   })
+
+  const result = []
+  for(const interest of filteredInterests){
+    result.push(interest.value)
+  }
+
+  return result;
 })
 
 // Sorts the interests alphabetically

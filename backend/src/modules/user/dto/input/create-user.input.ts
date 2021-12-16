@@ -19,6 +19,10 @@ export class CreateUserInput {
   @IsUUID()
   uuid: string;
 
+  @Field(() => String, { description: 'Username' })
+  @IsString()
+  username: string;
+
   @Field(() => String, { description: 'Full name of the user' })
   @IsString()
   fullName: string;

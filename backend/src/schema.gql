@@ -83,6 +83,9 @@ input CreateUserInput {
   """phone number"""
   phone: String!
 
+  """Username"""
+  username: String!
+
   """Cognito ID"""
   uuid: ID!
 }
@@ -376,6 +379,9 @@ type User {
   """Role of the User"""
   role: Role!
 
+  """Username"""
+  username: String!
+
   """Cognito ID"""
   uuid: ID!
 }
@@ -523,6 +529,9 @@ input user {
 
   """Role of the User"""
   role: Role!
+
+  """Username"""
+  username: String!
 
   """Cognito ID"""
   uuid: ID!

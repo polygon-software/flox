@@ -97,7 +97,6 @@ async function onSignup(formValues: Record<string, string>){
       username,
       email,
       phone,
-      password,
       fullName,
       birthdate,
       interests
