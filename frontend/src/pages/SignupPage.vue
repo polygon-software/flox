@@ -56,6 +56,7 @@ const pages = [
  * Upon valid sign-up, creates database entry
  * @param {Record<string, unknown>} values - form values
  * @async
+ * @returns {void}
  */
 async function onSignup(values: Record<string, Record<string, unknown>>){
   // Addresses
@@ -82,9 +83,10 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
 
 
   // Push to success page
-  setTimeout(function() {$routerService?.routeTo(ROUTES.LOGIN)}, 5000);
+  setTimeout(function() {
+    void $routerService?.routeTo(ROUTES.LOGIN)
+  }, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
-  return;
 }
 
 </script>

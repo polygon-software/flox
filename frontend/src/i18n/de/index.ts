@@ -3,13 +3,18 @@ export default {
     yes: 'Ja',
     no: 'Nein',
     new: 'Neu',
+    editable: 'bearbeitbar',
+    search: 'Suche',
+    welcome: 'Willkommen',
+    from: 'Von',
+    to: 'Bis'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
     login: 'Anmelden',
     logout: 'Abmelden',
     signup: 'Registrieren',
-    employee_signup: 'Mitarbeitende registrieren',
+    employee_signup: 'Mitarbeitende erfassen',
     signup_now: 'Kein Account? Jetzt registrieren:',
     forgot_password: 'Passwort vergessen',
     redirected: 'Sie werden in Kürze weitergeleitet...',
@@ -27,6 +32,7 @@ export default {
     password: 'Passwort',
     repeat_password: 'Passwort wiederholen',
     account: 'Account',
+    activities: 'Aktivitäten',
     personal: 'Persönliches',
     address: 'Addresse',
     street: 'Strasse',
@@ -55,6 +61,12 @@ export default {
     commercial_register_extract: 'Handelsregisterauszug',
     execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
+    status: 'Status',
+    tasks: 'Aufträge',
+    volume: 'Volumen',
+    provision_employee: 'Provision MA',
+    provision_company: 'Provision Organisation',
+    provision_ratio: 'Anteil prov. Vermittler'
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
@@ -62,7 +74,6 @@ export default {
     application_rejected: 'Antrag abgelehnt'
   },
   dashboards: {
-    management_dashboard: 'Chef Dashboard',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',
@@ -72,7 +83,8 @@ export default {
     reject: 'Ablehnen',
     sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
     yes_reject: 'Ja, ablehnen',
-    view_documents: 'Dokumente ansehen'
+    view_documents: 'Dokumente ansehen',
+    employee_tasks: 'Mitarbeitendenaufträge'
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -82,6 +94,8 @@ export default {
     submit: 'Senden',
     cancel: 'Abbrechen',
     ok: 'OK',
+    download: 'Herunterladen',
+    preview: 'Vorschau',
   },
   documents: {
     documents_available: 'Dokumente verfügbar',
@@ -120,6 +134,7 @@ export default {
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     documents_missing: 'Fehlende Dokumente',
+    unknown: 'Unbekannter Fehler'
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',

@@ -3,7 +3,7 @@
     ref="dialog"
     title="Application"
   >
-    <q-card>
+    <q-card style="min-width: 600px; max-width: 80%;">
       <q-card-section>
         <q-list
           bordered
@@ -14,17 +14,28 @@
             :key="document.uuid"
           >
             <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ document.key }}</p>
+              <div class="row flex justify-between content-center" style="height: 50px">
+                <!-- File name (Key is composed of UUID + file name, thus remove UUID) -->
+                <p class="col-8">{{ document.key.substring(37) }}</p>
 
-
-<!--                TODO styling -->
+                <!-- Buttons -->
+                <div
+                  v-if="document.url"
+                  class="col-4"
+                >
                   <q-btn
-                    v-if="document.url"
                     color="primary"
-                    label="Herunterladen"
+                    :label="$t('buttons.preview')"
+                    @click="openPreview(document.url)"
+                  />
+                  <q-btn
+                    style="margin-left: 12px"
+                    color="primary"
+                    icon="download"
                     @click="openURL(document.url)"
                   />
+                </div>
+
               </div>
             </q-item-section>
           </q-item>
@@ -56,24 +67,22 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {inject, PropType, ref, Ref} from 'vue'
+import { PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
-import { openURL } from 'quasar'
 import {AuthenticationService} from 'src/services/AuthService';
-import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
-import {SET_COGNITO_USER} from 'src/data/mutations/COMPANY';
-import {randomPassword} from 'src/helpers/generator-helpers';
+import { DELETE_COMPANY, ASSOCIATE_USER_TO_COMPANY} from 'src/data/mutations/COMPANY';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
+import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
+import {openURL} from 'quasar';
 
 const $q: QVueGlobals = useQuasar()
-const $errorService: ErrorService|undefined = inject('$errorService')
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
@@ -85,6 +94,10 @@ const props = defineProps({
   authService: {
     type: AuthenticationService,
     required: true,
+  },
+  errorService: {
+    type: ErrorService,
+    required: true
   }
 })
 
@@ -97,12 +110,14 @@ void getUrls()
 /**
  * Load all URLs and add to local object
  * TODO: Verify why this works only once
+ * @async
+ * @returns {void}
  */
 async function getUrls(): Promise<void>{
   const documents = _company.value.documents ?? [];
   for(const document of documents) {
     const queryResult = await executeQuery(PRIVATE_FILE, {uuid: document.uuid})
-    const file = queryResult.data.getPrivateFile as Record<string, unknown>
+    const file = queryResult.data.getPrivateFile as unknown as Record<string, unknown>
 
     // Add to copy
     document.url = file.url;
@@ -110,12 +125,13 @@ async function getUrls(): Promise<void>{
 }
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show();
 }
 
+// eslint-disable-next-line require-jsdoc
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
@@ -123,33 +139,18 @@ function hide(): void {
 
 /**
  * On OK, create account and send e-mail
+ * @async
+ * @returns {void}
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){
-    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
+    props.errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  const email = props.company.email ?? ''
-  const password = randomPassword(9)
-  const newUserId = await props.authService.signUpNewUser(
-    email,
-    email,
-    password
-  ).catch((e) => {
-    console.log('gotsta error', e, $errorService) // TODO Error service seems to be undefined here
-    $errorService?.showErrorDialog(e)
+  await executeMutation(ASSOCIATE_USER_TO_COMPANY, {
+    uuid: props.company.uuid
   })
 
-  // Send one-time login e-mail
-  await sendPasswordChangeEmail(email, password)
-
-  // Set cognito ID on company
-  await executeMutation(SET_COGNITO_USER, {
-    uuid: props.company.uuid,
-    cognito_id: newUserId
-  })
-
-  // TODO change owner of all the company's PrivateFiles to newUserId
 
   // Show confirmation prompt
   showNotification(
@@ -165,6 +166,7 @@ async function onOk(): Promise<void> {
 
 /**
  * Triggered upon rejecting a company's application
+ * @returns {void}
  */
 function onReject(): void {
   //TODO: Send rejection message
@@ -172,13 +174,38 @@ function onReject(): void {
     title: 'Reject',
     component: RejectDialog,
   }).onOk(() => {
-    // Hide outer popup
-    hide()
+    // Remove company application on DB
+    void executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
+      // Show notification
+      showNotification(
+        $q,
+        i18n.global.t('messages.application_rejected'),
+        undefined,
+        'primary'
+      )
+      // Hide outer popup
+      hide()
+    })
   })
 }
 
+// eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
 }
 
+/**
+ * Open the a preview of the selected document in a dialog.
+ * @param {string} url - The url of the file that should be displayed.
+ * @returns {void}
+ */
+function openPreview(url: string): void {
+  $q.dialog({
+    title: 'Preview',
+    component: DocumentPreviewDialog,
+    componentProps: {
+      url: url
+    }
+  })
+}
 </script>

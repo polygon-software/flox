@@ -27,9 +27,16 @@ const sesClient = new SESClient({
  * @param {string} body - E-mail's HTML body
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
- * @param {string} [textBody] - optional plaintext body
+ * @returns {void}
  */
-export async function sendEmail(from: string, to: string|string[], subject: string, body: string, replyTo?: string[], toCC?: string[], textBody?: string): Promise<void|SendEmailCommandOutput>{
+export async function sendEmail(
+  from: string,
+  to: string |string[],
+  subject: string,
+  body: string,
+  replyTo?: string[],
+  toCC?: string[],
+): Promise<void|SendEmailCommandOutput>{
   // E-Mail parameters
   const params = {
     Destination: {
@@ -44,7 +51,7 @@ export async function sendEmail(from: string, to: string|string[], subject: stri
         },
         Text: {
           Charset: 'UTF-8',
-          Data: textBody ?? body,
+          Data: body
         },
       },
       Subject: {
@@ -66,10 +73,13 @@ export async function sendEmail(from: string, to: string|string[], subject: stri
  * Sends an initial login e-mail to the given user, containing a one-time password change link
  * @param {string} email - the user's e-mail address
  * @param {string} password - the user's (generated) password
+ * @param {string} type - the users type - 'emp' for employee or 'man' for company
+ * @async
+ * @returns {void}
  */
-export async function sendPasswordChangeEmail(email: string, password: string): Promise<void>{
+export async function sendPasswordChangeEmail(email: string, password: string, type: string): Promise<void>{
   // Generate one-time password change link
-  const link = generatePasswordChangeLink(email, password)
+  const link: string = generatePasswordChangeLink(email, password, type)
 
   const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
 
@@ -82,6 +92,13 @@ export async function sendPasswordChangeEmail(email: string, password: string): 
   )
 }
 
+/**
+ * Sends an e-mail for document upload
+ * @param {string} email - e-mail address
+ * @param {string} companyId - company UUID
+ * @async
+ * @returns {void}
+ */
 export async function sendDocumentUploadEmail(email: string, companyId: string): Promise<void>{
   // Set up e-mail parameters
   const encodedUuid = btoa(companyId); // Base64 encode UUID

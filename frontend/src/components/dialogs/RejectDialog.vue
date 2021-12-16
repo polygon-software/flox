@@ -44,18 +44,24 @@ const props = defineProps({
 })
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show();
 }
 
+// eslint-disable-next-line require-jsdoc
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
 
 async function onYesReject(): Promise<void> {
+/**
+ * Reject an application
+ * @returns {void}
+ */
+function onYesReject(): void {
   //TODO: implement in backend to really reject it
   const sender = process.env.VUE_APP_EMAIL_SENDER ??  ''
   await sendEmail(sender, props.companyData.email ?? '', i18n.global.t('email.subject_rejected'), i18n.global.t('email.body_rejected'))
@@ -63,6 +69,7 @@ async function onYesReject(): Promise<void> {
   hide()
 }
 
+// eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
 }

@@ -40,9 +40,9 @@
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import {AuthenticationService} from 'src/services/AuthService';
-import {inject} from 'vue';
+import {inject, defineEmits} from 'vue';
 
-const $authService: AuthenticationService = inject('$authService')
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 const emit = defineEmits(['submit'])
 
@@ -59,13 +59,15 @@ form.pages.value = [
 
 /**
  * Triggers a password change for a non-logged in user
+ * @returns {void}
  */
 function forgotPassword() {
-  $authService.showResetPasswordDialog();
+  $authService?.showResetPasswordDialog();
 }
 
 /**
  * Emits the 'submit' event, containing the form's data
+ * @returns {void}
  */
 function onSubmit(): void {
   emit('submit', form.values.value)

@@ -2,11 +2,6 @@
   <router-view />
 </template>
 
-<script lang="ts">
-import {routerInstance} from 'boot/router';
-
-</script>
-
 <script setup lang="ts">
 import {AuthenticationService} from './services/AuthService';
 import {provide, reactive} from 'vue';

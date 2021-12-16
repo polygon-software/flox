@@ -13,59 +13,58 @@ import gql from 'graphql-tag';
  */
 
 export const ALL_USERS = {
-    query: gql`
-        query{
-            allUsers{
-                uuid
-                name
-                age
-                __typename
-            }
-        }
-        `,
-    tables: ['user'],
-    cacheLocation: 'allUsers'
+  query: gql`
+    query{
+      allUsers{
+        uuid
+        fk
+        role
+        __typename
+      }
+    }
+      `,
+  tables: ['user'],
+  cacheLocation: 'allUsers'
 }
 
 export const ALL_COMPANIES = {
   query: gql`
-        query{
-            allCompanies{
-              uuid
-              readable_id
-              company_name
-              first_name
-              last_name
-              email
-              phone
-              language
-              uid
-              document_upload_enabled
-              cognito_id
-              domicile_address{
-                uuid
-                street
-                number
-                city
-                zip_code
-                __typename
-              }
-              correspondence_address{
-                uuid
-                street
-                number
-                city
-                zip_code
-                __typename
-              }
-              documents{
-                uuid
-                key
-                __typename
-              }
-              __typename
-            }
+    query{
+      allCompanies{
+        uuid
+        readable_id
+        company_name
+        first_name
+        last_name
+        email
+        phone
+        language
+        uid
+        creation_state
+        domicile_address{
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
         }
+        correspondence_address{
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
+        }
+        documents{
+          uuid
+          key
+          __typename
+        }
+        __typename
+      }
+    }
         `,
   tables: ['company'],
   cacheLocation: 'allCompanies'
@@ -73,9 +72,12 @@ export const ALL_COMPANIES = {
 
 export const COMPANY = {
   query: gql`
-    query company($uuid: ID){
-      company(uuid: $uuid){
+    query company($uuid: ID, $cognito_id: ID){
+      company(uuid: $uuid, cognito_id: $cognito_id){
         uuid
+        readable_id
+        first_name
+        last_name
         documents{
           uuid
           key
@@ -87,6 +89,22 @@ export const COMPANY = {
   `,
   tables: ['company', 'documents'],
   cacheLocation: 'company'
+}
+
+export const MY_COMPANY = {
+  query: gql`
+    query myCompany{
+      myCompany{
+        uuid
+        readable_id
+        first_name
+        last_name
+        __typename
+      }
+    }
+  `,
+  tables: ['company'],
+  cacheLocation: 'myCompany'
 }
 
 export const ALL_EMPLOYEES = {

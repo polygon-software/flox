@@ -30,6 +30,11 @@ watch(selected_user, (newVal) => {
   emitValue(newVal)
 })
 
+/**
+ * Emits the picked value
+ * @param {string} newVal - chosen user type
+ * @returns {void}
+ */
 function emitValue(newVal: string){
   emit('change', newVal)
 }

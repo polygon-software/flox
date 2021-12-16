@@ -138,12 +138,12 @@ const props = defineProps({
 })
 
 // Get copy of prop form
-const _pages = props.pages ? props.pages as Record<string, unknown>[] : undefined
-const form: Form = new Form(_pages)
+const form: Form = new Form(props.pages as Record<string, unknown>[])
 
 /**
  * Validates and, if valid, submits the form with all entered values
  * @async
+ * @returns {void}
  */
 async function onSubmit(){
   const is_valid = await form_ref.value?.validate()

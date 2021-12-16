@@ -3,7 +3,8 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 
 /**
  * Gets the request from context
- * @param {ExecutionContext} context
+ * @param {ExecutionContext} context - Execution Context
+ * @returns {Request} - the request
  */
 export function getRequest(context: ExecutionContext): any {
   const ctx = GqlExecutionContext.create(context);
@@ -18,13 +19,13 @@ export function getRequest(context: ExecutionContext): any {
 /**
  * Generates a short human-readable ID
  * @param {number} [length] - length of the ID to generate
+ * @returns {string} - an ID
  */
 export function generateHumanReadableId(length = 10): string {
   let result = '';
 
   // Exclude I and l to avoid confusion
-  const alphabet =
-    'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789';
+  const alphabet = '0123456789';
   for (let i = 0; i < length; i++) {
     result += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
   }

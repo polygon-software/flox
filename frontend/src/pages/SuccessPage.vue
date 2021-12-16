@@ -43,14 +43,15 @@
 import {inject} from 'vue'
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-const $routerService: RouterService = inject('$routerService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 /**
  * Routes back to the Login Page
+ * @returns {void}
  */
 async function backToLogin(): Promise<void>{
   // Redirect to login page
-  await $routerService.routeTo(ROUTES.LOGIN)
+  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 </script>
 

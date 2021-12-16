@@ -6,8 +6,9 @@ import ROUTES from 'src/router/routes';
 
 /**
  * Generates a random number in given range
- * @param min
- * @param max
+ * @param {number} min - minimum
+ * @param {number} max - maximum
+ * @returns {number} - a random number
  */
 function randomNumber(min:number, max:number) {
   return Math.floor(Math.random() * (max - min) + min)
@@ -15,18 +16,19 @@ function randomNumber(min:number, max:number) {
 
 /**
  * Generates a random password that is valid for AWS Cognito of at least the given length
- * @param {number} min_length
+ * @param {number} minLength - minimum length
+ * @returns {string} - the random password
  */
-export function randomPassword(min_length: number): string{
+export function randomPassword(minLength: number): string{
   const chars_lower = 'abcdefghijklmnopqrstuvwxyz'
   const chars_upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const numbers = '0123456789'
   const special = '[]{}()?-!><:;+='
-  const required_chars = [chars_lower, chars_upper, numbers, special]
+  const requiredChars = [chars_lower, chars_upper, numbers, special]
   let res = ''
-  required_chars.forEach((required_char)=>{
-    for (let i = 0; i < Math.ceil(min_length/required_chars.length); i++) {
-      res += required_char[randomNumber(0, required_char.length)]
+  requiredChars.forEach((requiredChar)=>{
+    for (let i = 0; i < Math.ceil(minLength/requiredChars.length); i++) {
+      res += requiredChar[randomNumber(0, requiredChar.length)]
     }
   })
   res = res.split('')
@@ -40,13 +42,15 @@ export function randomPassword(min_length: number): string{
  * Generates a password change link containing base64-encoded e-mail and password for a given user
  * @param {string} email - user's e-mail address
  * @param {string} password - user's password
+ * @param {string} type - user's type
+ * @returns {string} - the link
  */
-export function generatePasswordChangeLink(email: string, password: string): string{
+export function generatePasswordChangeLink(email: string, password: string, type: string): string{
   // Encode base64
   const hiddenEmail = btoa(email)
   const hiddenPw = btoa(password)
 
   const baseUrl = process.env.VUE_APP_BASE_URL ??  ''
-  return `${baseUrl}${ROUTES.DOCUMENT_UPLOAD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=man`
+  return `${baseUrl}${ROUTES.SET_PASSWORD.path}?u=${hiddenEmail}&k=${hiddenPw}&t=${type}`
 
 }

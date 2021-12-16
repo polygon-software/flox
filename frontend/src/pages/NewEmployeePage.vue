@@ -58,6 +58,7 @@ const pages = [
  * Upon valid registration, creates database entry
  * @param {Record<string, unknown>} formData: The form's entered data
  * @async
+ * @returns {void}
  */
 async function onRegister(formData: Record<string, Record<string, string>>){
   const email: string = formData.email.toString()
@@ -65,8 +66,8 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-
   const password = randomPassword(9)
+
   // Create cognito User
   const newUserId = await $authService?.signUpNewUser(
     email,
@@ -74,10 +75,6 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     password
   )
 
-  // Send one-time login e-mail
-  await sendPasswordChangeEmail(email, password)
-
-  // TODO: add newUserId as cognito_id on employee in database (updateEmployee mutation)
   // Create database entry
   await executeMutation(CREATE_EMPLOYEE, {
     first_name: formData.full_name.first_name,
@@ -87,11 +84,14 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     email: formData.email,
     function: formData.company_function,
     language: formData.language,
+    cognito_id: newUserId,
   })
 
+  // Send one-time login e-mail
+  await sendPasswordChangeEmail(email, password, 'emp')
+
   // Route back
-  await $routerService?.routeTo(ROUTES.MANAGEMENT_DASHBOARD)
-  return;
+  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_DATA)
 }
 
 </script>
