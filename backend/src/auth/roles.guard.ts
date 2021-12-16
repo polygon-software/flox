@@ -10,11 +10,12 @@ import { ANY_ROLE_KEY } from './authorization.decorator';
  */
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(private readonly reflector: Reflector) {}
 
   /**
    * Gets the request from context
-   * @param {ExecutionContext} context
+   * @param {ExecutionContext} context - request execution context
+   * @returns {any} - the request
    */
   getRequest(context: ExecutionContext): any {
     const ctx = GqlExecutionContext.create(context);
@@ -59,6 +60,7 @@ export class RolesGuard implements CanActivate {
    * Checks if any of the user's roles have access to the specified resource
    * @param {string[]} allowedRoles - the list of roles that have resource access
    * @param {string[]} userRoles - the list of the user's roles
+   * @returns {void}
    */
   matchRoles(allowedRoles: string[], userRoles: string[]) {
     return userRoles.some((userRole) => allowedRoles.includes(userRole));
