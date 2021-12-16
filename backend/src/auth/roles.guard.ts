@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
@@ -7,6 +7,7 @@ import { getRequest } from '../helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { ROLE } from '../ENUM/ENUMS';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -33,7 +34,20 @@ export class RolesGuard implements CanActivate {
    * @returns {boolean | Promise<boolean> | Observable<boolean>} - can activate
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Dev mode: overrides user management:
+    const access_override = process.env.DEV === 'true';
+    const requested_function = context.getHandler().name;
+
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const req = this.getRequest(context);
+    const user = req.user;
+    const db_user = await this.userRepository.findOne(user.userId);
+
+    // Admin has access to everything
+    if (db_user.role === ROLE.SOI_ADMIN) {
+      return true;
+    }
+
     // If no roles are specified, allow access only on public resources OR any role
     if (!roles || roles.length === 0) {
       // Determine if resource is public
@@ -48,19 +62,36 @@ export class RolesGuard implements CanActivate {
         this.reflector.getAllAndOverride<boolean>(ANY_ROLE_KEY, [
           context.getHandler(),
           context.getClass(),
-        ]) ?? false;
+        ]) && !!db_user;
 
       // For publicly accessible resources, allow access by default
+      if (access_override && !isPublic && !anyRole) {
+        console.warn(
+          `Debug override used to access private resource: "${requested_function}"!`,
+        );
+        return true;
+      }
       return isPublic || anyRole;
     }
-    const req = this.getRequest(context);
-    const user = req.user;
-    const db_user = await this.userRepository.findOne(user.userId);
+
     if (!db_user) {
+      if (access_override) {
+        console.warn(
+          `Debug override used to access restricted resource: "${requested_function}" without authentication!`,
+        );
+        return true;
+      }
       return false;
     }
-    const res = roles.includes(db_user.role) || db_user.role === 'SOI_ADMIN';
-    console.log(`${db_user.role} Authenticated: ${res}`);
+    const res = roles.includes(db_user.role);
+    if (access_override && !res) {
+      console.warn(
+        `Debug override used to access resource : "${requested_function}" restricted to ${roles.join(
+          ',',
+        )} as ${db_user.role}!`,
+      );
+      return true;
+    }
     return res;
   }
 
