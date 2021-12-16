@@ -14,6 +14,9 @@ import { EmployeeModule } from './modules/employee/employee.module';
 import { FileModule } from './modules/file/file.module';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
+import { BankModule } from './modules/bank/bank.module';
+import { SoiAdminModule } from './modules/SOI-Admin/soi-admin.module';
+import { SoiEmployeeModule } from './modules/SOI-Employee/soi-employee.module';
 
 @Module({
   imports: [
@@ -77,6 +80,9 @@ import { RolesGuard } from './auth/roles.guard';
     CompanyModule,
     EmployeeModule,
     FileModule,
+    BankModule,
+    SoiAdminModule,
+    SoiEmployeeModule,
   ],
   providers: [
     JwtStrategy,
