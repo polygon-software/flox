@@ -78,7 +78,7 @@ async function onLogin({username, password}: {username: string, password: string
  * @returns {void}
  */
 async function onSignup(formValues: Record<string, string>){
-
+  // Get params from form
   const username = formValues.username
   const email = formValues.email
   const phone = formValues.phone_number
