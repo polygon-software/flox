@@ -1,5 +1,12 @@
 import { ObjectType, Field, InputType, ID } from '@nestjs/graphql';
-import { IsString, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsEmail,
+  IsPhoneNumber,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { Comment } from '../../comment/entities/comment.entity';
 import {
   Column,
@@ -33,14 +40,32 @@ export class User {
   @IsUUID()
   uuid: string;
 
-  @Field(() => ID, { description: 'UUID of the specific entity' })
-  @Column()
-  @IsUUID()
-  fk: string;
-
   @Field(() => Date, { description: 'Creation date' })
   @CreateDateColumn()
   createdAt: Date;
+
+  @Field(() => String, { description: 'Full name' })
+  @Column()
+  @IsString()
+  fullName: string;
+
+  @Field(() => String, { description: 'E-mail' })
+  @Column()
+  @IsString()
+  @IsEmail()
+  email: string;
+
+  @Field(() => String, { description: 'Phone number' })
+  @Column()
+  @IsString()
+  @IsPhoneNumber()
+  phone: string;
+
+  @Field(() => Date, { description: 'Date of birth' })
+  @Column()
+  @IsString()
+  @IsDate()
+  birthDate: Date;
 
   @Field(() => [Comment], { description: 'Comments written by the user' })
   @OneToMany(() => Comment, (comment) => comment.user, {
@@ -50,7 +75,8 @@ export class User {
   comments: Comment[];
 
   @Field(() => [String], { description: 'User interest categories' })
-  @Column()
+  @Column('text', { array: true })
+  @IsArray()
   interests: string[];
 
   @Field(() => Date, { description: 'Last modification date' })

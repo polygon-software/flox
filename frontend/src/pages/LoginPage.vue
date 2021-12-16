@@ -14,12 +14,12 @@
         @submit="onLogin"
       />
 
-      <b
+      <strong
         v-if="!signup"
         style="margin-top: 0; padding: 0"
       >
         {{ $t('authentication.no_account_yet') }}
-      </b>
+      </strong>
 
       <!-- Signup Card -->
       <q-card class="row q-pa-md q-ma-md justify-center flex items-center">
@@ -30,10 +30,11 @@
         </SignupForm>
         <q-btn
           v-if="!signup"
-          :label="$t('signup')"
+          :label="$t('authentication.signup')"
           color="transparent"
           text-color="primary"
           flat
+          rounded
           @click="signup = true"
         />
       </q-card>
@@ -48,6 +49,8 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
+import {executeMutation} from 'src/helpers/data-helpers';
+import {CREATE_USER} from 'src/data/mutations/USER';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -76,8 +79,31 @@ async function onLogin({username, password}: {username: string, password: string
  * @param {string} password_repeat - the authentication's chosen password
  * @returns {void}
  */
-async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
-  await $authService?.signUp(username, email, password_repeat);
+async function onSignup({username, email, phone, password, fullName, birthDate, interests}:{
+  username: string,
+  email: string,
+  phone: string,
+  password: string,
+  fullName: string,
+  birthDate: Date,
+  interests: string[]
+}){
+
+  // Create user in backend
+  const myUser = await executeMutation(CREATE_USER, {
+    createUserInput: {
+      username,
+      email,
+      phone,
+      password,
+      fullName,
+      birthDate,
+      interests
+    }
+  })
+
+  console.log('User successfully created:', myUser)
+  //await $authService?.signUp(username, email, password_repeat);
   // TODO: close signup
 }
 

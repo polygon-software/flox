@@ -3,12 +3,31 @@
 # ------------------------------------------------------
 
 enum Category {
+  CARS
+  CELEBRITIES
+  COOKING
+  FASHION
+  MUSIC
+  OUTDOOR
+  SPORTS
   TECHNOLOGY
+  TOOLS
+  TRAVELLING
+  WATCHES
 }
 
 type Comment {
   """Content"""
   content: String!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """The product this a comment belongs to"""
   product: Product!
@@ -18,6 +37,12 @@ type Comment {
 
   """UUID"""
   uuid: ID!
+}
+
+input CreateCommentInput {
+  content: String!
+  product: product!
+  user: user!
 }
 
 input CreateProductInput {
@@ -43,8 +68,26 @@ input CreateProductInput {
 }
 
 input CreateUserInput {
-  age: Int!
-  name: String!
+  """Date of birth"""
+  birthDate: DateTime!
+
+  """E-mail address"""
+  email: String!
+
+  """Full name of the user"""
+  fullName: String!
+
+  """User interest categories"""
+  interests: [String!]!
+
+  """phone number"""
+  phone: String!
+
+  """Role of the User"""
+  role: Role!
+
+  """Cognito ID"""
+  uuid: ID!
 }
 
 enum Currency {
@@ -57,6 +100,10 @@ enum Currency {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+input DeleteCommentInput {
+  uuid: ID!
+}
 
 input DeleteProductInput {
   uuid: ID!
@@ -72,17 +119,29 @@ input DuplicateProductInput {
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
   createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   remove(deleteUserInput: DeleteUserInput!): User!
+  removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   updateProduct(updateProductInput: UpdateProductInput!): Product!
 }
 
 type PrivateFile {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """File owner"""
   owner: String!
@@ -119,8 +178,14 @@ type Product {
   """Comments"""
   comments: [Comment!]!
 
+  """Creation date"""
+  createdAt: DateTime!
+
   """The currency the value is denoted in"""
   currency: Currency
+
+  """Date of deletion"""
+  deletedAt: DateTime
 
   """Description"""
   description: String
@@ -142,6 +207,9 @@ type Product {
 
   """End Date"""
   end: DateTime
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """Number of Likes"""
   likes: Float!
@@ -186,8 +254,17 @@ enum ProductStatus {
 }
 
 type PublicFile {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """Product the file belongs to"""
   product: Product
@@ -200,8 +277,11 @@ type PublicFile {
 }
 
 type Query {
+  allComments: [Comment!]!
   allProducts: [Product!]!
   allUsers: [User!]!
+  comment(uuid: ID!): Comment!
+  comments(uuids: [ID!]): [Comment!]!
   getPrivateFile(
     """URL expiration duration (in seconds)"""
     expires: [Float!]
@@ -214,8 +294,22 @@ type Query {
   users(uuids: [ID!]): [User!]!
 }
 
+enum Role {
+  ADMIN
+  NONE
+  PARTNER
+  PLAYER
+}
+
 type Subscription {
-  userAdded: User!
+  commentAdded: Comment!
+}
+
+input UpdateCommentInput {
+  content: String!
+  product: product
+  user: user
+  uuid: ID!
 }
 
 input UpdateProductInput {
@@ -255,16 +349,37 @@ input UpdateUserInput {
 }
 
 type User {
-  """Age"""
-  age: Int!
+  """Date of birth"""
+  birthDate: DateTime!
 
   """Comments written by the user"""
   comments: [Comment!]!
 
-  """Name"""
-  name: String!
+  """Creation date"""
+  createdAt: DateTime!
 
-  """UUID"""
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """E-mail"""
+  email: String!
+
+  """Full name"""
+  fullName: String!
+
+  """User interest categories"""
+  interests: [String!]!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """Phone number"""
+  phone: String!
+
+  """Role of the User"""
+  role: Role!
+
+  """Cognito ID"""
   uuid: ID!
 }
 
@@ -382,12 +497,36 @@ input public_file {
 }
 
 input user {
-  """Age"""
-  age: Int!
+  """Date of birth"""
+  birthDate: DateTime!
 
   """Comments written by the user"""
   comments: [comment!]!
 
-  """Name"""
-  name: String!
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """E-mail"""
+  email: String!
+
+  """Full name"""
+  fullName: String!
+
+  """User interest categories"""
+  interests: [String!]!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """Phone number"""
+  phone: String!
+
+  """Role of the User"""
+  role: Role!
+
+  """Cognito ID"""
+  uuid: ID!
 }

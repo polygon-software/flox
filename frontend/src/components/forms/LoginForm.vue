@@ -23,6 +23,7 @@
           text-color="black"
           :label="$t('authentication.login')"
           type="submit"
+          rounded
           :disable="!form.pageValid.value"
       />
     </q-form>
