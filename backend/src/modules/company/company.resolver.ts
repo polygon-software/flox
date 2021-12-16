@@ -35,8 +35,7 @@ export class CompanyResolver {
    * Gets all companies within the database
    * @returns {Promise<Company[]>} - companies
    */
-  //@AdminOnly() TODO enable once roles are implemented in User DB
-  @AnyRole()
+  @AdminOnly() // TODO enable once roles are implemented in User DB
   @Query(() => [Company], { name: 'allCompanies' })
   async getAllCompanies(): Promise<Company[]> {
     return this.companyService.getAllCompanies();

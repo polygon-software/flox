@@ -14,6 +14,11 @@ import { EmployeeModule } from './modules/employee/employee.module';
 import { FileModule } from './modules/file/file.module';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
+import { User } from './modules/user/entities/user.entity';
+import { UserService } from './modules/user/user.service';
+import { Company } from './modules/company/entities/company.entity';
+import { Address } from './modules/address/entities/address.entity';
+import { Employee } from './modules/employee/entities/employee.entity';
 
 @Module({
   imports: [
@@ -73,6 +78,7 @@ import { RolesGuard } from './auth/roles.guard';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([User]),
     UserModule,
     CompanyModule,
     EmployeeModule,
