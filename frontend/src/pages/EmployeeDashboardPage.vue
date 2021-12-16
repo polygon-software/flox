@@ -12,7 +12,7 @@
       >
         {{ $t('employee_dashboard.title') }}
       </p>
-      <p class="q-ma-md col text-center" style="display: flex; justify-content: space-between; align-items: baseline">
+      <div class="q-ma-md col text-center" style="display: flex; justify-content: space-between; align-items: baseline">
         {{ $t('employee_dashboard.applications') }}
 <!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
         <q-input
@@ -33,13 +33,13 @@
           icon="add"
           @click="newAssignment"
         />
-      </p>
-      <p class="q-ma-md col text-center">
+      </div>
+      <div class="q-ma-md col text-center">
         <!-- Dossier Overview -->
         <EmployeeDashboardTable
           :options="showOptions()"
         />
-      </p>
+      </div>
     </q-card>
   </q-page>
 </template>
