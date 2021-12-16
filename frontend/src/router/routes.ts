@@ -3,6 +3,7 @@ import {sleep} from 'src/helpers/general-helpers';
 import {QLayout} from 'quasar';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/QUERIES';
+import {ROLE} from '../../../shared/definitions/ENUM';
 
 /**
  * This file defines the routes available within the application
@@ -61,12 +62,25 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
  * @returns {any} - the layout component
  */
 async function getUserRoleLayout(): Promise<any>{
-  const userRole = await executeQuery(MY_USER)
+  // Get user's data
+  const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+  const userData = queryResult.data.myUser as Record<string, unknown>
+  const userRole = userData.role;
 
-  const layout = 'PartnerLayout' // TODO actual functionality
-  // return 'AdminLayout'
+  if(!userRole){
+    throw new Error('Not logged in') // TODO redirect to error page
+  }
 
-  return import(`layouts/${layout}.vue`)
+  switch(userRole){
+    case ROLE.ADMIN:
+      return import('layouts/AdminLayout.vue')
+    case ROLE.PARTNER:
+      return import('layouts/PartnerLayout.vue')
+    case ROLE.PLAYER:
+      return import('layouts/PlayerLayout.vue')
+    default:
+      throw new Error('Not logged in, or no valid role') // TODO redirect to error page
+    }
 }
 
 //TODO: Add semi-protected routes
