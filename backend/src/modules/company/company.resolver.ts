@@ -91,7 +91,7 @@ export class CompanyResolver {
    * @param {UpdateCompanyInput} updateCompanyInput - company data to change
    * @returns {Promise<Company>} - company
    */
-  @AdminOnly()
+  @SOIOnly()
   @Mutation(() => Company)
   async updateCompany(
     @Args('updateCompanyInput') updateCompanyInput: UpdateCompanyInput,

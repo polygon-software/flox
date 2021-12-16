@@ -6,11 +6,7 @@ import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
-import { PubSub } from 'graphql-subscriptions';
 import { AdminOnly } from '../../auth/authorization.decorator';
-
-// Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
-const pubSub = new PubSub();
 
 @Resolver(() => User)
 export class UserResolver {
@@ -39,10 +35,8 @@ export class UserResolver {
   async create(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    const newUser = await this.usersService.create(createUserInput);
     // Publish authentication so subscriptions will auto-update
-    await pubSub.publish('userAdded', { userAdded: newUser });
-    return newUser;
+    return this.usersService.create(createUserInput);
   }
 
   @AdminOnly()
@@ -59,11 +53,5 @@ export class UserResolver {
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
   ): Promise<User> {
     return this.usersService.remove(deleteUserInput);
-  }
-
-  @AdminOnly()
-  @Subscription(() => User)
-  userAdded(): AsyncIterator<unknown> {
-    return pubSub.asyncIterator('userAdded');
   }
 }

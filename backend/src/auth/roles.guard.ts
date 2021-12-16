@@ -15,8 +15,8 @@ import { ROLE } from '../ENUM/ENUMS';
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(
-    private reflector: Reflector,
-    @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly reflector: Reflector,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
   /**
@@ -29,7 +29,7 @@ export class RolesGuard implements CanActivate {
   }
 
   /**
-   * todo
+   * Validate that the user has appropriate rights to activate API endpoint.
    * @param {ExecutionContext} context - context
    * @returns {boolean | Promise<boolean> | Observable<boolean>} - can activate
    */

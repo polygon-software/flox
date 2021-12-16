@@ -11,7 +11,6 @@ import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Company } from '../company/entities/company.entity';
 import { User } from '../user/entities/user.entity';
-import { ROLE } from '../../ENUM/ENUMS';
 
 @Injectable()
 export class FileService {
