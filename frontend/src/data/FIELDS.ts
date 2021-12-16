@@ -3,7 +3,7 @@ import {QInput} from 'quasar'
 import Interests from 'components/forms/fields/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
-import LivingAddress from 'components/forms/fields/LivingAddress.vue'
+import LivingAddress from 'components/forms/fields/AddressField.vue'
 import {markRaw} from 'vue';
 import { i18n } from 'boot/i18n';
 
@@ -100,8 +100,8 @@ const FIELDS: Record<string, Field> = {
             rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_phone_number')]
           },
         },
-        LIVING_ADDRESS: {
-          key: 'living_address',
+        ADDRESS: {
+          key: 'address',
           component: markRaw(LivingAddress),
           attributes: {
             rules: []

@@ -76,13 +76,14 @@ import {defineEmits} from 'vue';
  * steps are defined.The fields a page contains are defined in the fields variable.
  * Common fields can be found under "src/data/FIELDS".
  * All fields of a page must be completed before the next page can be accessed.
+ * TODO use GenericForm!
  */
 
 const emit = defineEmits(['submit'])
 
 const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
 const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER]
-const address_fields  = [FIELDS.LIVING_ADDRESS]
+const address_fields  = [FIELDS.ADDRESS]
 const interest_fields = [FIELDS.INTERESTS]
 
 const form = new Form()

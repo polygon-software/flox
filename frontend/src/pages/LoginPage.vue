@@ -77,7 +77,7 @@ async function onLogin({username, password}: {username: string, password: string
  * @param {Record<string, string>} formValues - Signup form values
  * @returns {void}
  */
-async function onSignup(formValues: Record<string, string>){
+async function onSignup(formValues: Record<string, string>): Promise<void>{
   // Get params from form
   const username = formValues.username
   const email = formValues.email
@@ -86,6 +86,7 @@ async function onSignup(formValues: Record<string, string>){
   const fullName = formValues.full_name
   const birthdate = formValues.birthdate
   const interests = formValues.interests
+  const address = formValues.address
 
   // Sign up via Cognito
   const cognitoId = await $authService?.signUp(username, email, password);
@@ -99,7 +100,8 @@ async function onSignup(formValues: Record<string, string>){
       phone,
       fullName,
       birthdate,
-      interests
+      interests,
+      address
     }
   })
 
