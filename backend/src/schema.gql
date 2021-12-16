@@ -288,6 +288,7 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
+  myUser: User!
   product(uuid: ID!): Product!
   products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!

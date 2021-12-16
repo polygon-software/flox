@@ -112,5 +112,18 @@ export const PRODUCT = {
   cacheLocation: 'product'
 }
 
+export const MY_USER = {
+  query: gql`
+    query{
+      myUser{
+        uuid
+        role
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'myUser'
+}
 
-export const QUERIES = [ALL_PRODUCTS, MY_PRODUCTS, PRODUCT];
+export const QUERIES = [ALL_PRODUCTS, MY_PRODUCTS, PRODUCT, MY_USER];

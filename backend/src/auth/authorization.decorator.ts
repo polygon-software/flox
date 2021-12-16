@@ -1,4 +1,9 @@
-import { CustomDecorator, SetMetadata } from '@nestjs/common';
+import {
+  createParamDecorator,
+  CustomDecorator,
+  SetMetadata,
+} from '@nestjs/common';
+import { getRequest } from '../helpers';
 
 /**
  * Defines authorization-specific decorators
@@ -21,3 +26,8 @@ export const AnyRole = (): CustomDecorator => SetMetadata(ANY_ROLE_KEY, true);
 
 // Restrict to resources owned by me (where 'owner' is the user's UUID)
 export const Mine = (): CustomDecorator => SetMetadata(IS_MINE_KEY, true);
+
+// Access to current user from request
+export const CurrentUser = createParamDecorator(
+  (data, req) => getRequest(req).user,
+);
