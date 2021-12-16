@@ -69,7 +69,7 @@ input CreateProductInput {
 
 input CreateUserInput {
   """Date of birth"""
-  birthDate: DateTime!
+  birthdate: DateTime!
 
   """E-mail address"""
   email: String!
@@ -82,9 +82,6 @@ input CreateUserInput {
 
   """phone number"""
   phone: String!
-
-  """Role of the User"""
-  role: Role!
 
   """Cognito ID"""
   uuid: ID!
@@ -350,7 +347,7 @@ input UpdateUserInput {
 
 type User {
   """Date of birth"""
-  birthDate: DateTime!
+  birthdate: DateTime!
 
   """Comments written by the user"""
   comments: [Comment!]!
@@ -498,7 +495,7 @@ input public_file {
 
 input user {
   """Date of birth"""
-  birthDate: DateTime!
+  birthdate: DateTime!
 
   """Comments written by the user"""
   comments: [comment!]!

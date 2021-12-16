@@ -15,10 +15,6 @@ import { Column } from 'typeorm';
  * Input for user creation
  */
 export class CreateUserInput {
-  @Field(() => ROLE, { description: 'Role of the User' })
-  @IsString()
-  role: ROLE;
-
   @Field(() => ID, { description: 'Cognito ID' })
   @IsUUID()
   uuid: string;
@@ -40,7 +36,7 @@ export class CreateUserInput {
   @Field(() => Date, { description: 'Date of birth' })
   @IsString()
   @IsDate()
-  birthDate: Date;
+  birthdate: Date;
 
   @Field(() => [String], { description: 'User interest categories' })
   @IsArray()

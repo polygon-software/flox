@@ -74,36 +74,37 @@ async function onLogin({username, password}: {username: string, password: string
 
 /**
  * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
- * @param {string} username - the authentication's chosen username
- * @param {string} email - the authentication's e-mail address
- * @param {string} password_repeat - the authentication's chosen password
+ * @param {Record<string, string>} formValues - Signup form values
  * @returns {void}
  */
-async function onSignup({username, email, phone, password, fullName, birthDate, interests}:{
-  username: string,
-  email: string,
-  phone: string,
-  password: string,
-  fullName: string,
-  birthDate: Date,
-  interests: string[]
-}){
+async function onSignup(formValues: Record<string, string>){
+
+  const username = formValues.username
+  const email = formValues.email
+  const phone = formValues.phone_number
+  const password = formValues.password_repeat
+  const fullName = formValues.full_name
+  const birthdate = formValues.birthdate
+  const interests = formValues.interests
+
+  // Sign up via Cognito
+  const cognitoId = await $authService?.signUp(username, email, password);
 
   // Create user in backend
   const myUser = await executeMutation(CREATE_USER, {
     createUserInput: {
+      uuid: cognitoId,
       username,
       email,
       phone,
       password,
       fullName,
-      birthDate,
+      birthdate,
       interests
     }
   })
 
   console.log('User successfully created:', myUser)
-  //await $authService?.signUp(username, email, password_repeat);
   // TODO: close signup
 }
 

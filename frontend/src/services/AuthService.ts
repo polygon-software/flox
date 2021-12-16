@@ -135,18 +135,16 @@ export class AuthenticationService {
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.
-   * TODO make adaptable to other parameters via direct handling of {attributes} param
    * @param {string} username - the chosen username
-   * @param {string} email - the authentication's e-mail address -> TODO move to attributes
+   * @param {string} email - the authentication's e-mail address
    * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
    * @async
-   * @returns {void}
+   * @returns {string} - the cognito user's UUID
    */
-  async signUp(username: string, email: string, password: string): Promise<void> {
+  async signUp(username: string, email: string, password: string): Promise<string> {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
       const attributes = [];
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-      // TODO disable requirement on AWS @thommann
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
       this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
             if (err) {
@@ -161,7 +159,11 @@ export class AuthenticationService {
     })
 
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
-    this.showEmailVerificationDialog()
+
+    // TODO: Do this already?
+    // this.showEmailVerificationDialog()
+
+    return cognitoUserWrapper.userSub
   }
 
   /**

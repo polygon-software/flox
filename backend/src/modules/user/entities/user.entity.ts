@@ -65,7 +65,7 @@ export class User {
   @Column()
   @IsString()
   @IsDate()
-  birthDate: Date;
+  birthdate: Date;
 
   @Field(() => [Comment], { description: 'Comments written by the user' })
   @OneToMany(() => Comment, (comment) => comment.user, {
