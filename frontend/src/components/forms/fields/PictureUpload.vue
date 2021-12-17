@@ -44,8 +44,12 @@ const props = defineProps({
 })
 
 const pictures: Ref<Array<Ref<null|File>>> = ref([ref(null)])
-watch(() => props.pictures, async () => {
+
+const stop = watch(() => props.pictures, async () => {
   if(props.pictures && props.pictures.length > 0){
+    // Stop after receiving initial value
+    stop()
+
     pictures.value = []
     for(const picture of props.pictures){
       pictures.value.splice(0, 0, picture as Ref<File>)
@@ -78,7 +82,6 @@ function emitValue(){
   // TODO inner validation?
   emit('change', pictures.value)
 }
-
 
 /**
  * Updates the image url array so it always matches the image file array.

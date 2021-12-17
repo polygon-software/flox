@@ -65,7 +65,7 @@
               />
             </div>
 
-            <!-- Start and End Date TODO Create custom date-time pickerTODO Create custom date-time picker -->
+            <!-- Start and End Date TODO Create custom date-time picker -->
             <div class="row flex justify-between">
               <!-- Start date -->
               <q-input
@@ -434,11 +434,11 @@ const stop = watch(queryResult, async (newValue) => {
 
     // Pictures
     const existingPictures: Array<Ref<File>> = []
-    for (const picture of newValue.pictures) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-      const index: number = newValue.pictures.indexOf(picture);
+    const newPictures = newValue.pictures as Array<Record<string, string>>
+
+    for (const picture of newPictures) {
+      const index: number = newPictures.indexOf(picture);
       await axios.get(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         picture.url,
         {
           responseType: 'blob'
@@ -447,9 +447,6 @@ const stop = watch(queryResult, async (newValue) => {
       });
     }
     pictures.value = existingPictures
-
-    // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
-    // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
 
     // Stop watcher, since we already got initial values
     stop()
@@ -463,7 +460,9 @@ const stop = watch(queryResult, async (newValue) => {
  * @returns {void}
  */
 function onPictureChange(newPictures: Ref<File>[]){
-  pictures.value = newPictures
+  if(pictures.value.length !== newPictures.values.length){
+    pictures.value = newPictures
+  }
 }
 
 /**

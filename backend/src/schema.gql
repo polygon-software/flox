@@ -163,7 +163,7 @@ type Mutation {
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  updateProduct(pictures: [String!]!, updateProductInput: UpdateProductInput!): Product!
 }
 
 type PrivateFile {
@@ -369,7 +369,6 @@ input UpdateProductInput {
   likes: Float
   maxBet: Float
   minBet: Float
-  pictures: public_file
   sponsored: Boolean
   start: DateTime
   status: ProductStatus
