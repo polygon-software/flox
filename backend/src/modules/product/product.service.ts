@@ -56,9 +56,14 @@ export class ProductService {
    * @param {UpdateProductInput} updateProductInput
    * @param {Array<string>} pictures
    */
-  async update(updateProductInput: UpdateProductInput, pictures: Array<string>): Promise<Product> {
+  async update(
+    updateProductInput: UpdateProductInput,
+    pictures: Array<string>,
+  ): Promise<Product> {
     // Fetch existing product an delte all pictures
-    const currentProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+    const currentProduct = await this.productsRepository.findOne(
+      updateProductInput.uuid,
+    );
     for (const file of currentProduct.pictures) {
       await this.fileRepository.delete(file.uuid);
     }
@@ -66,7 +71,9 @@ export class ProductService {
     // Update the product
     const product = this.productsRepository.create(updateProductInput);
     await this.productsRepository.update(updateProductInput.uuid, product);
-    const updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+    const updatedProduct = await this.productsRepository.findOne(
+      updateProductInput.uuid,
+    );
 
     await this.createPublicFiles(pictures, updatedProduct);
     return updatedProduct;
@@ -156,14 +163,18 @@ export class ProductService {
    * @param {Product} product The product the pictures belong to
    * @private
    */
-  private async createPublicFiles(base64Strings: Array<string>, product: Product): Promise<void> {
-    // Create new picure objects
+  private async createPublicFiles(
+    base64Strings: Array<string>,
+    product: Product,
+  ): Promise<void> {
+    // Create new picture objects
     for (const base64Picture of base64Strings) {
       // Convert base64 to buffer
       const buffer = base64ToBuffer(base64Picture);
       const index = base64Strings.indexOf(base64Picture);
 
       // Upload the image
+      console.log('UPLOAD PICTURE', `${product.title}_${index}.jpg`);
       await this.fileService.uploadPublicFile(
         buffer,
         `${product.title}_${index}.jpg`,
