@@ -67,6 +67,7 @@ export class ProductService {
     for (const file of currentProduct.pictures) {
       await this.fileRepository.delete(file.uuid);
       // TODO delete on S3 as well
+      // TODO also: only delete/reupload images if they have changed; we should probably set a flag.
     }
 
     // Update the product
