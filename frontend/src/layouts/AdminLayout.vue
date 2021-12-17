@@ -79,26 +79,26 @@ const showMenu = ref(true)
 const menuItems = [
   {
     name: 'home',
-    label: 'Home', // TODO i18n
+    label: i18n.global.t('general.home'),
     route: ROUTES.MAIN,
     icon: 'home'
   },
   {
     name: 'users',
     label: i18n.global.t('admin.players'),
-    route: ROUTES.USERS,
+    route: ROUTES.PLAYERS,
     icon: 'groups'
   },
   {
     name: 'statistics',
-    label: 'Statistics', // TODO i18n
-    route: ROUTES.MAIN, // TODO
+    label: i18n.global.t('admin.statistics'),
+    route: ROUTES.ADMIN_STATISTICS,
     icon: 'leaderboard'
   },
   {
     name: 'finances',
-    label: 'Finances', // TODO i18n
-    route: ROUTES.MAIN, // TODO
+    label: i18n.global.t('admin.finances'),
+    route: ROUTES.ADMIN_FINANCES,
     icon: 'paid'
   },
 ]

@@ -36,10 +36,22 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/MyProductsPage.vue') }],
   },
 
-  'USERS': {
-    path: '/users',
+  'PLAYERS': {
+    path: '/players',
     component: () => import('layouts/AdminLayout.vue'),
     children: [{ path: '', component: () => import('pages/PlayersPage.vue') }],
+  },
+
+  'ADMIN_STATISTICS': {
+    path: '/admin-statistics',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AdminStatisticsPage.vue') }],
+  },
+
+  'ADMIN_FINANCES': {
+    path: '/admin-finances',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AdminFinancesPage.vue') }],
   },
 
   'SETTINGS': {

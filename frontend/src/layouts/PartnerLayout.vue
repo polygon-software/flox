@@ -68,6 +68,7 @@ import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw} from 'vue-router';
 import PartnerMenuBar from 'components/menu/PartnerMenuBar.vue';
+import {i18n} from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -78,7 +79,7 @@ const showMenu = ref(true)
 const menuItems = [
   {
     name: 'home',
-    label: 'Home', // TODO i18n
+    label: i18n.global.t('general.home'),
     route: ROUTES.MAIN,
     icon: 'home'
   },

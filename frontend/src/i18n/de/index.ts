@@ -10,6 +10,7 @@ export default {
     edit: 'Bearbeiten',
     duplicate: 'Duplizieren',
     view: 'Ansehen',
+    home: 'Home',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -209,6 +210,8 @@ export default {
     users: 'Benutzer',
     players: 'Spieler',
     partners: 'Partner',
-    disable_account: 'Account deaktivieren'
+    disable_account: 'Account deaktivieren',
+    statistics: 'Statistik',
+  finances: 'Finanzen',
   },
 }

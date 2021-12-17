@@ -10,6 +10,7 @@ export default {
     edit: 'Edit',
     duplicate: 'Duplicate',
     view: 'View',
+    home: 'Home',
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -208,6 +209,8 @@ export default {
     users: 'Users',
     players: 'Players',
     partners: 'Partners',
-    disable_account: 'Disable account'
+    disable_account: 'Disable account',
+    statistics: 'Statistics',
+    finances: 'Finances',
   }
 };
