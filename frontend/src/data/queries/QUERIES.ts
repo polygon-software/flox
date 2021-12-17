@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
  * This file contains all valid GraphQL queries. A query is structure as follows
  * (see also DATA-DEFINITIONS.ts):
  * - query: the actual GraphQL query. Add __typename to the variables in order for caching to work as expected
+ *  this is also needed on sub-queries!
  * (auto-update on edit)
  * - tables: list of affected tables; when a mutation changes one of these tables, the query is re-fetched.
  * - cacheLocation: the actual GraphQL query's name (since cached data will be stored there)
@@ -12,33 +13,98 @@ import gql from 'graphql-tag';
  */
 
 export const ALL_USERS = {
-    query: gql`
-        query{
-            allUsers{
-                uuid
-                name
-                age
-                __typename
-            }
-        }
-        `,
-    tables: ['user'],
-    cacheLocation: 'allUsers'
+  query: gql`
+    query{
+      allUsers{
+        uuid
+        fk
+        role
+        __typename
+      }
+    }
+      `,
+  tables: ['user'],
+  cacheLocation: 'allUsers'
 }
 
 export const ALL_COMPANIES = {
   query: gql`
-        query{
-            allCompanies{
-                uuid
-                document_upload_enabled
-                documents
-                __typename
-            }
+    query{
+      allCompanies{
+        uuid
+        readable_id
+        company_name
+        first_name
+        last_name
+        email
+        phone
+        language
+        uid
+        creation_state
+        domicile_address{
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
         }
+        correspondence_address{
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
+        }
+        documents{
+          uuid
+          key
+          __typename
+        }
+        __typename
+      }
+    }
         `,
   tables: ['company'],
   cacheLocation: 'allCompanies'
+}
+
+export const COMPANY = {
+  query: gql`
+    query company($uuid: ID, $cognito_id: ID){
+      company(uuid: $uuid, cognito_id: $cognito_id){
+        uuid
+        readable_id
+        first_name
+        last_name
+        documents{
+          uuid
+          key
+          __typename
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['company', 'documents'],
+  cacheLocation: 'company'
+}
+
+export const MY_COMPANY = {
+  query: gql`
+    query myCompany{
+      myCompany{
+        uuid
+        readable_id
+        first_name
+        last_name
+        __typename
+      }
+    }
+  `,
+  tables: ['company'],
+  cacheLocation: 'myCompany'
 }
 
 export const ALL_EMPLOYEES = {
@@ -77,5 +143,40 @@ export const MY_EMPLOYEES = {
   cacheLocation: 'myEmployees'
 }
 
+export const PRIVATE_FILE = {
+  query: gql`
+    query getPrivateFile($uuid: ID!){
+      getPrivateFile(uuid: $uuid){
+        uuid
+        url
+        key
+        __typename
+      }
+    }
+  `,
+  tables: ['private_file'],
+  cacheLocation: 'getPrivateFile'
+}
+// export const MY_CUSTOMERS = {
+//   query: gql`
+//         query{
+//             myCustomers{
+//               uuid
+//               date
+//               first_name
+//               last_name
+//               institute
+//               location
+//               mortage_amount
+//               status
+//               offers
+//               __typename
+//             }
+//         }
+//   `,
+//   tables: ['customer'],
+//   cacheLocation: 'myCustomers'
+// }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, ALL_EMPLOYEES];
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];

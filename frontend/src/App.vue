@@ -2,11 +2,6 @@
   <router-view />
 </template>
 
-<script lang="ts">
-import {routerInstance} from 'boot/router';
-
-</script>
-
 <script setup lang="ts">
 import {AuthenticationService} from './services/AuthService';
 import {provide, reactive} from 'vue';
@@ -19,7 +14,7 @@ const $q = useQuasar()
 
 // Error service
 const $errorService: ErrorService = reactive(new ErrorService($q))
-provide('$errorService', $errorService)
+provide<ErrorService>('$errorService', $errorService)
 
 // Auth service
 const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService))

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
@@ -9,12 +9,15 @@ import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
-import { ItemModule } from './item/item.module';
-import { CompanyModule } from './company/company.module';
-import { EmployeeModule } from './employee/employee.module';
+import { CompanyModule } from './modules/company/company.module';
+import { EmployeeModule } from './modules/employee/employee.module';
 import * as Joi from 'joi';
-import { FileModule } from './file/file.module';
 import { RolesGuard } from './auth/roles.guard';
+import { BankModule } from './modules/bank/bank.module';
+import { SoiAdminModule } from './modules/SOI-Admin/soi-admin.module';
+import { SoiEmployeeModule } from './modules/SOI-Employee/soi-employee.module';
+import { FileModule } from './modules/file/file.module';
+import { DossierModule } from './modules/dossier/dossier.module';
 
 @Module({
   imports: [
@@ -35,6 +38,7 @@ import { RolesGuard } from './auth/roles.guard';
           },
         },
       },
+      cors: true, // TODO set appropriate for production
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -75,9 +79,12 @@ import { RolesGuard } from './auth/roles.guard';
     }),
     UserModule,
     CompanyModule,
-    ItemModule,
     EmployeeModule,
     FileModule,
+    DossierModule,
+    BankModule,
+    SoiAdminModule,
+    SoiEmployeeModule,
   ],
   providers: [
     JwtStrategy,

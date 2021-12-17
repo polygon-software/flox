@@ -5,18 +5,18 @@
   >
     <q-card class="q-pa-md q-ma-md">
       <q-card-section>
-        <h5>{{ $t('sure_to_reject') }}</h5>
+        <h5>{{ $t('dashboards.sure_to_reject') }}</h5>
       </q-card-section>
       <q-card-actions>
         <q-btn
           class="q-ma-md"
-          :label="$t('yes_reject')"
+          :label="$t('dashboards.yes_reject')"
           color="negative"
           @click="onYesReject"
         />
         <q-btn
           class="q-ma-md"
-          :label="$t('cancel')"
+          :label="$t('buttons.cancel')"
           color="primary"
           @click="onCancel"
         />
@@ -34,23 +34,29 @@ const emit = defineEmits(['ok'])
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.show();
 }
 
+// eslint-disable-next-line require-jsdoc
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
 
+/**
+ * Reject an application
+ * @returns {void}
+ */
 function onYesReject(): void {
   //TODO: implement in backend to really reject it
   emit('ok')
   hide()
 }
 
+// eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
 }

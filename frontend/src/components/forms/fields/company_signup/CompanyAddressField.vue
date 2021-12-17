@@ -1,15 +1,15 @@
 <template>
 
   <!-- Domicile Address -->
-  <strong>{{ $t('domicile_address') }}</strong>
+  <strong>{{ $t('account_data.domicile_address') }}</strong>
 
   <AddressField @change="(val: Address) => {domicile_address.replace(val); emitValue()}"/>
 
   <div class="flex justify-between items-center">
-    <strong>{{ $t('correspondence_address') }}</strong>
+    <strong>{{ $t('account_data.correspondence_address') }}</strong>
     <q-checkbox
       v-model="hide_correspondence"
-      :label="$t('edit_correspondence_address')"
+      :label="$t('account_data.edit_correspondence_address')"
       val="xs"
     />
   </div>
@@ -42,6 +42,7 @@ const correspondence_address: ComputedRef<Address> = computed(() => {
 
 /**
  * Emits both addresses
+ * @returns {void}
  */
 function emitValue(){
   emit('change', {

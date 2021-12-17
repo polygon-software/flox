@@ -4,7 +4,7 @@
       title="Change Password"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
-      <b>Change Password</b>
+      <strong>Change Password</strong>
       <q-form
         class="q-gutter-md"
         @submit="onSubmit"
@@ -56,38 +56,18 @@
 import {defineEmits, Ref} from 'vue';
 import {ref} from 'vue';
 import {PASSWORD_REGEX} from 'src/helpers/REGEX'
-import {QDialog, useDialogPluginComponent} from 'quasar';
+import {QDialog} from 'quasar';
 
 let passwordOld = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
-
-// REQUIRED; must be called inside of setup()
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-// dialogRef      - Vue ref to be applied to QDialog
-// onDialogHide   - Function to be used as handler for @hide on QDialog
-// onDialogOK     - Function to call to settle dialog with "ok" outcome
-//                    example: onDialogOK() - no payload
-//                    example: onDialogOK({ /*.../* }) - with payload
-// onDialogCancel - Function to call to settle dialog with "cancel" outcome
-
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
 
 /**
  * Upon submit, pass entered values outwards
+ * @returns {void}
  */
 function onSubmit(){
   emit('ok', {
@@ -95,6 +75,19 @@ function onSubmit(){
     passwordOld: passwordOld.value,
   })
   hide()
+}
+
+// Mandatory - do not remove!
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
+function show(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.show();
+}
+
+// eslint-disable-next-line require-jsdoc
+function hide(): void{
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  dialog.value?.hide()
 }
 
 

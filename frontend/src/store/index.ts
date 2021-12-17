@@ -11,7 +11,7 @@ export const root = new Module({
 })
 
 export default store(function (/* { ssrContext } */) {
-  const Store = createStore(
+  return createStore(
     // Root module
     root,
 
@@ -20,6 +20,4 @@ export default store(function (/* { ssrContext } */) {
       strict: !!process.env.DEBUGGING
     }
   )
-
-  return Store;
 })

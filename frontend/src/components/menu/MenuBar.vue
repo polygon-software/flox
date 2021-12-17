@@ -8,20 +8,20 @@
           v-if="loggedIn && username"
           class="text-grey-7"
       >
-        {{ $t('loggedIn', {user: username})}}
+        {{ $t('authentication.loggedIn', {user: username})}}
       </p>
     </div>
   <div class="row">
     <q-btn
         v-if="loggedIn"
-        label="Logout"
+        :label="$t('authentication.logout')"
         class="text-primary"
         flat
         @click="logout"
     />
     <q-btn
         v-if="loggedIn"
-        label="Change Password"
+        :label="$t('authentication.change_password')"
         class="text-primary"
         flat
         @click="changePassword"
@@ -44,8 +44,8 @@ import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 
 
-const $authService: AuthenticationService = inject('$authService')
-const $routerService: RouterService = inject('$routerService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const loggedIn = computed(() => {
@@ -59,17 +59,19 @@ const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication
+ * @returns {Promise<void>} - done
  */
 async function logout(): Promise<void>{
-  await $authService.logout();
-  await $routerService.routeTo(ROUTES.LOGIN)
+  await $authService?.logout();
+  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
 /**
  * Triggers a password change for the currently logged in authentication
+ * @returns {void}
  */
 function changePassword() {
-  $authService.showChangePasswordDialog()
+  $authService?.showChangePasswordDialog()
 }
 
 </script>

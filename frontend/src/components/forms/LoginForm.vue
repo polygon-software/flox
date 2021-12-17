@@ -4,7 +4,7 @@
     style="width: 250px; text-align: center;"
   >
     <h5 class="q-ma-none" style="margin-bottom: 20px;">
-      {{ $t('login') }}
+      {{ $t('authentication.login') }}
     </h5>
     <q-form
       class="q-gutter-md"
@@ -19,15 +19,15 @@
         @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
-          style="margin-top: 20px"
+          style="margin-top: 20px;"
           color="primary"
-          :label="$t('login')"
+          :label="$t('authentication.login')"
           type="submit"
           :disable="!form.pageValid.value"
       />
       <q-btn
         no-caps
-        :label="$t('forgot_password')"
+        :label="$t('authentication.forgot_password')"
         class="text-primary"
         flat
         @click="forgotPassword"
@@ -40,13 +40,13 @@
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import {AuthenticationService} from 'src/services/AuthService';
-import {inject} from 'vue';
+import {inject, defineEmits} from 'vue';
 
-const $authService: AuthenticationService = inject('$authService')
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 const emit = defineEmits(['submit'])
 
-const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
+const fields = [FIELDS.USERNAME, FIELDS.PASSWORD, FIELDS.ROUTE_TARGET]
 
 const form = new Form()
 form.pages.value = [
@@ -59,13 +59,15 @@ form.pages.value = [
 
 /**
  * Triggers a password change for a non-logged in user
+ * @returns {void}
  */
 function forgotPassword() {
-  $authService.showResetPasswordDialog();
+  $authService?.showResetPasswordDialog();
 }
 
 /**
  * Emits the 'submit' event, containing the form's data
+ * @returns {void}
  */
 function onSubmit(): void {
   emit('submit', form.values.value)

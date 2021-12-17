@@ -2,10 +2,10 @@
   <q-input
       v-model="password"
       dense
-      :label="$t('set_password.password')"
+      :label="$t('account_data.password')"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
-      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('invalid_password')]"
+      :rules="props.rules"
   >
     <template #append>
       <q-icon
@@ -18,10 +18,10 @@
   <q-input
       v-model="passwordRepeat"
       dense
-      :label="$t('set_password.repeat_password')"
+      :label="$t('account_data.repeat_password')"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
-      :rules="[val => val === password || $t('non_matching_password')]"
+      :rules="[val => val === password || $t('errors.non_matching_password')]"
   >
     <template #append>
       <q-icon
@@ -34,7 +34,8 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue';
+import {ref, watch, defineProps, defineEmits} from 'vue';
+import {i18n} from 'boot/i18n';
 import {IS_VALID_PASSWORD} from 'src/data/RULES';
 
 /**
@@ -45,17 +46,17 @@ const props = defineProps({
   modelValue: {
     required: false,
     type: String,
-    default: ''
+    default: '',
   },
   rules: {
     type: Array,
     required: false,
-    default: () => []
+    default: () => [(val: string) => IS_VALID_PASSWORD(val) || i18n.global.t('errors.invalid_password')],
   }
 });
 
-let password = ref(props.modelValue ?? '')
-let passwordRepeat = ref(props.modelValue ?? '')
+let password = ref(props.modelValue)
+let passwordRepeat = ref(props.modelValue)
 const isPwd = ref(true)
 const isPwdRepeat = ref(true)
 
@@ -69,6 +70,11 @@ watch(passwordRepeat, (newVal) => {
   emitUpdate(newVal)
 })
 
+/**
+ * Emits an update with new value
+ * @param {string} value - the password
+ * @returns {void}
+ */
 function emitUpdate(value: string){
   if(password.value.length > 0 && password.value === passwordRepeat.value){
     emit('change', value)
@@ -79,6 +85,3 @@ function emitUpdate(value: string){
 }
 
 </script>
-
-<style scoped>
-</style>

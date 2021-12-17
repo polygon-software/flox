@@ -5,7 +5,7 @@
       style="width: 500px;"
     >
       <GenericForm
-        :finish-label="$t('finish_signup')"
+        :finish-label="$t('buttons.finish_signup')"
         :pages="pages"
         @submit="onSignup"
       />
@@ -46,7 +46,7 @@ const account_fields = [
 const pages = [
   {
     key: 'company',
-    label: i18n.global.t('signup'),
+    label: i18n.global.t('authentication.signup'),
     fields: account_fields,
   },
 ]
@@ -55,7 +55,7 @@ const pages = [
 /**
  * Upon valid sign-up, creates database entry
  * @param {Record<string, unknown>} values - form values
- * @async
+ * @returns {Promise<void>} - done
  */
 async function onSignup(values: Record<string, Record<string, unknown>>){
   // Addresses
@@ -80,10 +80,12 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
     }
   )
 
+
   // Push to success page
-  setTimeout(function() {$routerService?.routeTo(ROUTES.LOGIN)}, 5000);
+  setTimeout(function() {
+    void $routerService?.routeTo(ROUTES.LOGIN)
+  }, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
-  return;
 }
 
 </script>

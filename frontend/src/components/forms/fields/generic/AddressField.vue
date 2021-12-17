@@ -4,18 +4,18 @@
     <q-input
       v-model="address.street"
       dense
-      :label="$t('street')"
+      :label="$t('account_data.street')"
       type="text"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_address')]"
       style="width:65%"
       @change="emitValue"
     />
     <q-input
       v-model="address.number"
       dense
-      :label="$t('number')"
+      :label="$t('account_data.number')"
       type="text"
-      :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('invalid_house_number')]"
+      :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('errors.invalid_house_number')]"
       style="width:30%"
       @change="emitValue"
     />
@@ -25,9 +25,9 @@
     <q-input
       v-model="address.city"
       dense
-      :label="$t('city')"
+      :label="$t('account_data.city')"
       type="text"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_city')]"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
       style="width:65%"
       @change="emitValue"
     >
@@ -35,9 +35,9 @@
     <q-input
       v-model="address.zip_code"
       dense
-      :label="$t('zip_code')"
+      :label="$t('account_data.zip_code')"
       type="number"
-      :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_zip_code')]"
+      :rules="[(val) => IS_VALID_ZIP(val) || $t('errors.invalid_zip_code')]"
       style="width:30%"
       mask="######"
       @change="emitValue"
@@ -56,6 +56,7 @@ const address = reactive(new Address())
 
 /**
  * Emits the updated value, if it is valid
+ * @returns {void}
  */
 function emitValue(){
   if(address.validate()){

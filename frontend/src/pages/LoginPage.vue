@@ -17,13 +17,13 @@
           style="width: 250px; text-align: center;"
         >
           <strong>
-            {{ $t('signup_now') }}
+            {{ $t('authentication.signup_now') }}
           </strong>
           <br>
           <q-btn
             class="q-ma-md"
             style="width: 125px"
-            :label="$t('signup')"
+            :label="$t('authentication.signup')"
             color="primary"
             @click="toSignup"
           />
@@ -39,28 +39,36 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-const $authService: AuthenticationService = inject('$authService')
-const $routerService: RouterService = inject('$routerService')
+import {RouteRecordRaw} from 'vue-router';
+
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 
 /**
  * Logs in the given authentication
- * @param username {string} - the authentication's username
- * @param password {string} - the authentication's password
+ * @param {string} username - the authentication's username
+ * @param {string} password - the authentication's password
+ * @param {string} route_target - target route (only for demos)
+ * @returns {void}
  */
-async function onLogin({username, password}: {username: string, password: string}){
-  await $authService.login(username, password)
-
+async function onLogin({username, password, route_target}: {username: string, password: string, route_target: string}){
+  await $authService?.login(username, password)
+  const target_route_mapping: Record<string, RouteRecordRaw> = {
+    'admin-dashboard': ROUTES.ADMIN_DASHBOARD,
+    'management-dashboard': ROUTES.MANAGEMENT_EMPLOYEE_DATA,
+    'employee-dashboard': ROUTES.EMPLOYEE_DASHBOARD
+  }
   // Redirect to main page
-  await $routerService.routeTo(ROUTES.MAIN)
+  await $routerService?.routeTo(target_route_mapping[route_target])
 }
 
 /**
  * Routes to the Signup Page
+ * @returns {Promise<void>} - done
  */
 async function toSignup(): Promise<void>{
-  await $routerService.routeTo(ROUTES.SIGNUP)
-  return;
+  await $routerService?.routeTo(ROUTES.SIGNUP)
 }
 
 </script>

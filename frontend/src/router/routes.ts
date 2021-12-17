@@ -25,15 +25,27 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/SetPasswordPage.vue') }],
   },
 
-  'MANAGEMENT_DASHBOARD': {
-    path: '/management-dashboard',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ManagementDashboardPage.vue') }],
+  'MANAGEMENT_EMPLOYEE_DATA': {
+    path: '/management-employee-data',
+    component: () => import('layouts/ManagementLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ManagementEmployeeDataPage.vue') }],
+  },
+
+  'MANAGEMENT_EMPLOYEE_TASKS': {
+    path: '/management-employee-tasks',
+    component: () => import('layouts/ManagementLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ManagementEmployeeTaskPage.vue') }],
   },
 
   'EMPLOYEE_DASHBOARD': {
     path: '/employee-dashboard',
     component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/EmployeeDashboardPage.vue') }],
+  },
+
+  'MANAGEMENT_EMPLOYEE_VIEW': {
+    path: '/management-employee-view',
+    component: () => import('layouts/ManagementLayout.vue'),
     children: [{ path: '', component: () => import('pages/EmployeeDashboardPage.vue') }],
   },
 
@@ -46,7 +58,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'SUCCESS': {
     path: '/success',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/SuccessPage.vue') }],
+    children: [{ path: '', component: () => import('pages/GenericSuccessPage.vue') }],
   },
 
   'DOCUMENT_UPLOAD': {
@@ -56,7 +68,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   'ADMIN_DASHBOARD': {
-    path: '/admin_dashboard',
+    path: '/admin-dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/AdminDashboardPage.vue') }],
   },
@@ -64,6 +76,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     path: '/new-employee',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
+  },
+  'NEW_ASSIGNMENT_PAGE': {
+    path: '/new-assignment',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/NewAssignmentPage.vue') }],
   },
 
   // Wildcard route for non-covered routes
@@ -80,7 +97,13 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
   ROUTES.SUCCESS,
   ROUTES.SIGNUP,
+  ROUTES.SET_PASSWORD,
   ROUTES.DOCUMENT_UPLOAD,
+  ROUTES.MANAGEMENT_EMPLOYEE_DATA,
+  ROUTES.MANAGEMENT_EMPLOYEE_TASKS,
+  ROUTES.EMPLOYEE_DASHBOARD,
+  ROUTES.NEW_EMPLOYEE_PAGE,
+  ROUTES.NEW_ASSIGNMENT_PAGE,
   ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
 

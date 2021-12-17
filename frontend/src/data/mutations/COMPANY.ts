@@ -21,11 +21,55 @@ export const ENABLE_COMPANY_DOCUMENT_UPLOAD = {
       enableCompanyDocumentUpload (uuid: $uuid) {
         uuid
         company_name
-        document_upload_enabled
+        creation_state
         __typename
       }
     }`,
   tables: ['company'],
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
+}
+
+export const ASSOCIATE_USER_TO_COMPANY ={
+  mutation: gql`
+    mutation associateUserToCompany($uuid: ID!){
+      associateUserToCompany(associateUserInput: {uuid: $uuid}) {
+        uuid
+        __typename
+      }
+    }
+  `,
+  tables: ['company'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
+
+export const UPDATE_COMPANY_EMAIL = {
+  mutation: gql`
+    mutation updateCompany($uuid: ID!, $email: String!){
+      updateCompany (updateCompanyInput: {uuid: $uuid, email: $email}) {
+        uuid
+        company_name
+        email
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
+export const DELETE_COMPANY = {
+  mutation: gql`
+    mutation removeCompany($uuid: ID!){
+      removeCompany (deleteCompanyInput: {uuid: $uuid}) {
+        uuid
+        company_name
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.DELETE,
+  cacheLocation: 'removeCompany'
 }

@@ -36,7 +36,7 @@
           <q-btn
             v-if="form.step.value > 1"
             color="primary"
-            :label="$t('back')"
+            :label="$t('buttons.back')"
             flat
             style="margin-right: 30px"
             class="q-ml-sm"
@@ -45,7 +45,7 @@
           <q-btn
             v-if="form.step.value < form.pages.value.length"
             color="primary"
-            :label="$t('next_step')"
+            :label="$t('buttons.next_step')"
             :disable="!form.pageValid.value"
             @click="$refs.stepper.next()"
           />
@@ -85,9 +85,14 @@
       <q-card-actions align="center">
         <q-btn
           color="primary"
-          :label="finishLabel"
+          :label="!loading ? finishLabel : loadingLabel"
+          :disable="loading"
           @click="onSubmit"
-        />
+        >
+          <q-inner-loading
+            :showing="loading"
+          />
+        </q-btn>
       </q-card-actions>
     </q-card>
   </q-form>
@@ -98,14 +103,14 @@
  * This component defines a generic form that can have a single or multiple pages.
  * It takes the following properties:
  * @param {Object[]} pages - the pages to show, each containing fields, label and key
- * @param {finish} function - the function to call once the form is completed
  * @param {string} [finishLabel] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
+ * @param {boolean} [loading] - loading status to show on the finish button
  */
 import {defineProps, Ref, ref} from 'vue';
+import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
 const emit = defineEmits(['submit'])
-import {i18n} from 'boot/i18n';
 
 const form_ref: Ref<QForm|null> = ref(null)
 
@@ -113,21 +118,31 @@ const props = defineProps({
   finishLabel: {
     required: false,
     type: String,
-    default: i18n.global.t('finish')
+    default: i18n.global.t('buttons.finish'),
+  },
+  loadingLabel: {
+    required: false,
+    type: String,
+    default: i18n.global.t('status.loading') + '...',
   },
   pages: {
     required: true,
     type: Array,
+    default: () => [],
+  },
+  loading: {
+    required: false,
+    type: Boolean,
+    default: false
   }
 })
 
 // Get copy of prop form
-const _pages = props.pages ? props.pages as Record<string, unknown>[] : undefined
-const form: Form = new Form(_pages)
+const form: Form = new Form(props.pages as Record<string, unknown>[])
 
 /**
  * Validates and, if valid, submits the form with all entered values
- * @async
+ * @returns {Promise<void>} - done
  */
 async function onSubmit(){
   const is_valid = await form_ref.value?.validate()
