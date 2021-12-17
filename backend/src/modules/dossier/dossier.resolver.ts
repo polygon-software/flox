@@ -12,8 +12,7 @@ export class DossierResolver {
   /**
    * Adds a new dossier to the database
    * @param {CreateDossierInput} createDossierInput - data of the new dossier
-   * @async
-   * @returns {Dossier} - the Dossier
+   * @returns {Promise<Dossier>} - the Dossier
    */
   @Public()
   @Mutation(() => Dossier)

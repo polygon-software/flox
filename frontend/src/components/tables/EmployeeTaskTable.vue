@@ -130,8 +130,7 @@ const computedResult = computed(()=>{
 /**
  * Upon clicking a row, opens the employee's dashboard view
  * @param {Record<string, unknown>} row - the row that was clicked
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - completed
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
   await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {

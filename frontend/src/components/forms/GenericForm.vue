@@ -142,8 +142,7 @@ const form: Form = new Form(props.pages as Record<string, unknown>[])
 
 /**
  * Validates and, if valid, submits the form with all entered values
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onSubmit(){
   const is_valid = await form_ref.value?.validate()

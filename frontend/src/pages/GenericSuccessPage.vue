@@ -83,8 +83,7 @@ const props = defineProps({
 
 /**
  * Routes to  desired path - given through prop
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function redirectOnClick(): Promise<void> {
   // Redirect to login page

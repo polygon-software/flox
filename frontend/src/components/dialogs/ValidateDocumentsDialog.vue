@@ -110,8 +110,7 @@ void getUrls()
 /**
  * Load all URLs and add to local object
  * TODO: Verify why this works only once
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function getUrls(): Promise<void>{
   const documents = _company.value.documents ?? [];
@@ -139,8 +138,7 @@ function hide(): void {
 
 /**
  * On OK, create account and send e-mail
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){

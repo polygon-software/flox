@@ -93,8 +93,7 @@ const $routerService: RouterService = inject('$routerService') as RouterService
 
 /**
  * Routes to the new assignment page to add more customers
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function newAssignment(): Promise<void> {
   await $routerService.routeTo(ROUTES.NEW_ASSIGNMENT_PAGE)

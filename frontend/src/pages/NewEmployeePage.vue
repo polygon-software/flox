@@ -57,8 +57,7 @@ const pages = [
 /**
  * Upon valid registration, creates database entry
  * @param {Record<string, unknown>} formData: The form's entered data
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onRegister(formData: Record<string, Record<string, string>>){
   const email: string = formData.email.toString()

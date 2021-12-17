@@ -15,8 +15,7 @@ export class DossierService {
   /**
    * Creates a new dossier using the given data, and sets default values
    * @param {CreateDossierInput} createDossierInput - the dossier's data, containing all mandatory fields
-   * @async
-   * @returns {Dossier} - dossier
+   * @returns {Promise<Dossier>} - dossier
    */
   async createDossier(
     createDossierInput: CreateDossierInput,
@@ -34,8 +33,7 @@ export class DossierService {
   /**
    * Updates a dossier using with the given data
    * @param {UpdateDossierInput} updateDossierInput - the dossier's data, containing all mandatory fields
-   * @async
-   * @returns {Dossier} - dossier
+   * @returns {Promise<Dossier>} - dossier
    */
   async updateDossier(
     updateDossierInput: UpdateDossierInput,

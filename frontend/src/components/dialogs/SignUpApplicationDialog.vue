@@ -189,8 +189,7 @@ function hide(): void {
 
 /**
  * On OK, enable document upload for the company and send e-mail
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onOk(): Promise<void> {
   // Verify all required attributes present
@@ -244,8 +243,7 @@ function onReject(): void {
 /**
  * Changes a company's e-mail address to a new one
  * @param {string} newEmail - the e-mail address to change to
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onChangeEmail(newEmail: string): Promise<void>{
   await executeMutation(

@@ -72,8 +72,7 @@ const loggedIn = computed(() => {
 
 /**
  * Logs out the current authentication
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function logout(): Promise<void>{
   await $authService?.logout();

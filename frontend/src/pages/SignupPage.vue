@@ -55,8 +55,7 @@ const pages = [
 /**
  * Upon valid sign-up, creates database entry
  * @param {Record<string, unknown>} values - form values
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onSignup(values: Record<string, Record<string, unknown>>){
   // Addresses
