@@ -205,6 +205,8 @@ export default {
     disabled: 'disabled'
   },
   admin: {
-    users: 'Benutzer'
+    users: 'Users',
+    players: 'Players',
+    partners: 'Partners'
   }
 };

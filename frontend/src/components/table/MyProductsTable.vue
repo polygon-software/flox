@@ -168,7 +168,6 @@ function isEditable(product: Record<string, unknown>): boolean{
  * @returns {void}
  */
 async function editProduct(uuid: string): Promise<void>{
-  console.log($routerService, 'goto')
   await $routerService?.routeTo(
     ROUTES.ADD_PRODUCT,
     {
@@ -250,7 +249,10 @@ function getStatusChip(product: Record<string, unknown>): Record<string,unknown>
         color: 'neutral'
       }
     default:
-      return null
+      return {
+        label: '-',
+        color: null
+      }
   }
 }
 

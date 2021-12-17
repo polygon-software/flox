@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex" style="flex-direction: column">
     <!-- Top row: title -->
-    <h6 class="q-ma-md">{{ $t('admin.users') }}</h6>
+    <h6 class="q-ma-md">{{ $t('admin.players') }}</h6>
 
     <!-- Body: Table with tabs etc. -->
     <div
@@ -43,11 +43,10 @@
       </div>
 
       <!-- Table view of products -->
-      <p>TODO table</p>
-<!--      <MyProductsTable-->
-<!--        :search="search"-->
-<!--        :status-filter="statusFilter"-->
-<!--      />-->
+      <PlayersTable
+        :search="search"
+        :status-filter="statusFilter"
+      />
     </div>
 
   </q-page>
@@ -57,9 +56,9 @@
 import {RouterService} from 'src/services/RouterService';
 import {inject, Ref, ref} from 'vue';
 import ROUTES from 'src/router/routes';
-import MyProductsTable from 'components/table/MyProductsTable.vue';
 import {i18n} from 'boot/i18n';
 import {USER_STATUS} from '../../../shared/definitions/ENUM';
+import PlayersTable from 'components/table/PlayersTable.vue';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 

@@ -19,4 +19,37 @@ export const MY_USER = {
   cacheLocation: 'myUser'
 }
 
-export const USER_QUERIES: QueryObject[] = [MY_USER]
+// TODO: actually implement separate query for players
+export const ALL_PLAYERS = {
+  query: gql`
+    query{
+      allUsers{
+        uuid
+        role
+        createdAt
+        fullName
+        username
+        email
+        phone
+        birthdate
+        status
+        address {
+          uuid
+          street
+          number
+          city
+          zipCode
+          __typename
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'allUsers'
+}
+
+export const USER_QUERIES: QueryObject[] = [
+  MY_USER,
+  ALL_PLAYERS
+]

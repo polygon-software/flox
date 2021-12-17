@@ -68,6 +68,7 @@ import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw} from 'vue-router';
 import AdminMenuBar from 'components/menu/AdminMenuBar.vue';
+import {i18n} from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -84,7 +85,7 @@ const menuItems = [
   },
   {
     name: 'users',
-    label: 'Users', // TODO i18n
+    label: i18n.global.t('admin.players'),
     route: ROUTES.USERS,
     icon: 'groups'
   },

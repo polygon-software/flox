@@ -39,7 +39,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'USERS': {
     path: '/users',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/UsersPage.vue') }],
+    children: [{ path: '', component: () => import('pages/PlayersPage.vue') }],
   },
 
   'SETTINGS': {
