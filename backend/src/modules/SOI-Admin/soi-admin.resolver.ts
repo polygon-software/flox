@@ -1,5 +1,5 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { AnyRole } from '../../auth/authorization.decorator';
+import { AdminOnly } from '../../auth/authorization.decorator';
 import { SoiAdmin } from './entities/soi-admin.entity';
 import { CreateSoiAdminInput } from './dto/input/create-soi-admin.input';
 import { SoiAdminService } from './soi-admin.service';
@@ -8,7 +8,7 @@ import { SoiAdminService } from './soi-admin.service';
 export class SoiAdminResolver {
   constructor(private readonly soiAdminService: SoiAdminService) {}
 
-  @AnyRole()
+  @AdminOnly()
   @Mutation(() => SoiAdmin)
   /**
    * @param {CreateSoiAdminInput} createSoiAdminInput - Fields for SOI Admin

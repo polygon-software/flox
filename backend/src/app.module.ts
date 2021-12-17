@@ -13,6 +13,7 @@ import { CompanyModule } from './modules/company/company.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
+import { User } from './modules/user/entities/user.entity';
 import { BankModule } from './modules/bank/bank.module';
 import { SoiAdminModule } from './modules/SOI-Admin/soi-admin.module';
 import { SoiEmployeeModule } from './modules/SOI-Employee/soi-employee.module';
@@ -76,6 +77,7 @@ import { FileModule } from './modules/file/file.module';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([User]),
     UserModule,
     CompanyModule,
     EmployeeModule,

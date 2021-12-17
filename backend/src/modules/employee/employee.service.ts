@@ -21,6 +21,7 @@ export class EmployeeService {
   /**
    * Creates a new employee using the given data, and sets default values
    * @param {CreateEmployeeInput} createEmployeeInput - the company's data, containing all mandatory fields
+   * @returns {Promise<Employee>} - new employee
    */
   async createEmployee(
     createEmployeeInput: CreateEmployeeInput,
@@ -47,6 +48,7 @@ export class EmployeeService {
 
   /**
    * Returns all employees within the database
+   * @returns {Promise<Employee[]>} - employees
    */
   async getAllEmployees(): Promise<Employee[]> {
     return await this.employeeRepository.find();
@@ -55,9 +57,10 @@ export class EmployeeService {
   /**
    * Gets a list of companies by UUIDs
    * @param {Company} company - the company whose employees shall be fetched
+   * @returns {Promise<Employee[]>} - employees of company
    */
   async getEmployees(company: Company): Promise<Employee[]> {
-    return await this.employeeRepository.find({
+    return this.employeeRepository.find({
       company: company,
     });
   }
@@ -65,6 +68,7 @@ export class EmployeeService {
   /**
    * Updates any given values of an employee (by UUID)
    * @param {UpdateEmployeeInput} updateEmployeeInput - the employee update data
+   * @returns {Promise<Employee>} - updated Employee
    */
   async updateEmployee(
     updateEmployeeInput: UpdateEmployeeInput,
@@ -73,6 +77,15 @@ export class EmployeeService {
       ...updateEmployeeInput,
     });
     return await this.employeeRepository.findOne(updateEmployeeInput.uuid);
+  }
+
+  /**
+   * get a specific employee
+   * @param {string} uuid - uuid
+   * @returns {Promise<Employee>} - employee
+   */
+  async getEmployee(uuid: string): Promise<Employee> {
+    return this.employeeRepository.findOne(uuid);
   }
   // TODO: Add remove/update/find functionalities as needed
 }

@@ -493,10 +493,6 @@ enum Status {
   REJECTED
 }
 
-type Subscription {
-  userAdded: User!
-}
-
 input UpdateCompanyInput {
   branch_structure: Boolean
   company_name: String
