@@ -133,14 +133,6 @@ export class CompanyService {
     const company = await this.companyRepository.findOne(
       deleteCompanyInput.uuid,
     );
-    const promiseList: Promise<PrivateFile>[] = [];
-    if (company.documents) {
-      company.documents.forEach((docu) => {
-        promiseList.push(this.fileService.deletePrivateFile(docu.uuid));
-      });
-    }
-
-    await Promise.all(promiseList);
     const uuid = company.uuid;
     const deletedCompany = await this.companyRepository.remove(company);
     deletedCompany.uuid = uuid;

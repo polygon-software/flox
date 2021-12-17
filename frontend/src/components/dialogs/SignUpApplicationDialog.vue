@@ -121,7 +121,7 @@
           class="q-ma-md"
           :label="$t('dashboards.reject')"
           color="negative"
-          @click="onReject(props.row.companyData)"
+          @click="onReject"
         />
         <q-btn
           class="q-ma-md"
@@ -139,7 +139,6 @@ import {PropType, ref, Ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
 import {
-  DELETE_COMPANY,
   ENABLE_COMPANY_DOCUMENT_UPLOAD,
   REJECT_COMPANY,
   UPDATE_COMPANY_EMAIL
@@ -223,16 +222,15 @@ async function onOk(): Promise<void> {
 
 /**
  * Executed upon rejecting a company application
- * @param {Company} companyData - Company
  * @returns {void}
  */
-function onReject(companyData: Company): void {
+function onReject(): void {
   //TODO: Send rejection E-mail
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
     componentProps: {
-      companyData: companyData
+      companyData: props.company
     }
   }).onOk(() => {
     // Remove company application on DB

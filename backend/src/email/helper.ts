@@ -61,7 +61,6 @@ export async function sendEmail(
     Source: from,
     ReplyToAddresses: replyTo ?? [],
   };
-
   // Send actual e-mail
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
   return await sesClient.send(new SendEmailCommand(params));
