@@ -26,20 +26,12 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref, defineEmits, PropType} from 'vue'
+import {ref, Ref, defineEmits} from 'vue'
 import {QDialog} from 'quasar';
-import {Company} from 'src/data/types/Company';
 
 const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-
-defineProps({
-  companyData: {
-    type: Object as PropType<Company>,
-    required: true
-  },
-})
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

@@ -130,7 +130,7 @@ export class CompanyResolver {
    * @param {DeleteCompanyInput} deleteCompanyInput - company uuid
    * @returns {Promise<Company>} - company
    */
-  @Public() // TODO restrict to appropriate roles
+  @SOIOnly() // TODO restrict to appropriate roles
   @Mutation(() => Company)
   async rejectCompany(
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,

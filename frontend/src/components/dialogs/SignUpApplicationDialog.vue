@@ -229,9 +229,6 @@ function onReject(): void {
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
-    componentProps: {
-      companyData: props.company
-    }
   }).onOk(() => {
     // Remove company application on DB
     void executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {

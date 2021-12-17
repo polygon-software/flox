@@ -12,16 +12,7 @@ import PrivateFile from '../file/entities/private_file.entity';
 import PublicFile from '../file/entities/public_file.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Company,
-      Address,
-      Employee,
-      User,
-      PrivateFile,
-      PublicFile,
-    ]),
-  ],
-  providers: [CompanyResolver, CompanyService, UserService, FileService],
+  imports: [TypeOrmModule.forFeature([Company, Address, Employee, User])],
+  providers: [CompanyResolver, CompanyService, UserService],
 })
 export class CompanyModule {}

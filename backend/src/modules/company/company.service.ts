@@ -16,15 +16,12 @@ import {
   sendPasswordChangeEmail,
 } from '../../email/helper';
 import { UserService } from '../user/user.service';
-import { FileService } from '../file/file.service';
-import PrivateFile from '../file/entities/private_file.entity';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectRepository(Company) private companyRepository: Repository<Company>,
     @InjectRepository(User) private userRepository: Repository<User>,
-    private fileService: FileService,
     private userService: UserService,
   ) {}
 
@@ -178,6 +175,11 @@ export class CompanyService {
     return this.companyRepository.findOne(uuid);
   }
 
+  /**
+   * Send rejection email and delete company
+   * @param {DeleteCompanyInput} deleteCompanyInput - uuid of company
+   * @returns {Promise<Company>} - deleted company
+   */
   async rejectCompany(
     deleteCompanyInput: DeleteCompanyInput,
   ): Promise<Company> {
