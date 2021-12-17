@@ -69,17 +69,12 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, inject, Ref} from 'vue';
+import {computed, defineProps, Ref} from 'vue';
 import { subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
-import {RouterService} from 'src/services/RouterService';
-import {useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {ALL_PLAYERS} from 'src/data/queries/USER';
-
-const $routerService: RouterService|undefined = inject('$routerService')
-const $q = useQuasar()
 
 const props = defineProps( {
   search: {
@@ -88,6 +83,7 @@ const props = defineProps( {
   },
   statusFilter: {
     required: false,
+    default: null,
     type: String,
   }
 })
@@ -99,7 +95,7 @@ const columns = [
   { name: 'fullName', label: 'Full Name', field: 'fullName', sortable: true, align: 'center' },
   { name: 'email', label: 'E-Mail', field: 'email', sortable: true, align: 'center' },
   { name: 'phone', label: 'Phone', field: 'phone', sortable: true, align: 'center' },
-  { name: 'birthdate', label: 'Birth Date', field: 'birthdate', sortable: true, align: 'center' },
+  { name: 'birthdate', label: 'Date of Birth', field: 'birthdate', sortable: true, align: 'center' },
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
@@ -157,6 +153,5 @@ function getStatusChip(status: USER_STATUS): Record<string,unknown>|null {
       }
   }
 }
-
 
 </script>
