@@ -315,7 +315,7 @@
 /**
  * A page for uploading products. Can be used to either create new products or existing ones, controlled via props
  */
-import {computed, inject, reactive, Ref, ref, watch} from 'vue';
+import {computed, ComputedRef, inject, reactive, Ref, ref, watch} from 'vue';
 import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT, UPDATE_PRODUCT} from 'src/data/mutations/PRODUCT';
@@ -357,7 +357,7 @@ const currencies: CURRENCY[] = Object.values(CURRENCY).filter((item) => {
 const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
 // Check if all required fields have been filled. If yes, set the product status to valid
-const status: PRODUCT_STATUS = computed(() => {
+const status: ComputedRef<PRODUCT_STATUS> = computed(() => {
   if ([input.title,
     input.description,
     input.brand,
@@ -470,10 +470,8 @@ function onPictureChange(newPictures: Ref<File>[]){
  * On submit, creates/updates existing product
  * @returns {void}
  */
-// eslint-disable-next-line sonarjs/cognitive-complexity,require-jsdoc
 async function onSubmit(){
   // Parameters for creating/updating
-  // eslint-disable-next-line sonarjs/no-unused-collection
   const base64Pictures: Array<string|ArrayBuffer|null> = []
   for (const picture of pictures.value) {
     if (picture.value) {

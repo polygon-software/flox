@@ -45,6 +45,7 @@ const props = defineProps({
 
 const pictures: Ref<Array<Ref<null|File>>> = ref([ref(null)])
 
+// Watcher for pre-existing picture input; triggered only once!
 const stop = watch(() => props.pictures, async () => {
   if(props.pictures && props.pictures.length > 0){
     // Stop after receiving initial value
