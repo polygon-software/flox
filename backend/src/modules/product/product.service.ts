@@ -171,12 +171,13 @@ export class ProductService {
     product: Product,
   ): Promise<void> {
     // Create new picture objects
-    for (const base64Picture of base64Strings) {
+    for (let base64Picture of base64Strings) {
+      // Remove prepended string TODO cleaner fix! (on edit, this is present and must be removed)
+      base64Picture = base64Picture.replace('stream;base64,', '');
+
       // Convert base64 to buffer
       const buffer = base64ToBuffer(base64Picture);
       const index = base64Strings.indexOf(base64Picture);
-
-      // TODO: seems broken on product edit...
 
       // Upload the image
       await this.fileService.uploadPublicFile(
