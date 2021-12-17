@@ -188,7 +188,7 @@ async function duplicateProduct(uuid: string): Promise<void>{
     DUPLICATE_PRODUCT,
     {
       duplicateProductInput: {
-        uuid
+        uuid,
       }
     }) as Record<string, unknown>
 
@@ -221,7 +221,7 @@ async function duplicateProduct(uuid: string): Promise<void>{
  * @param {Record<string, unknown>} product - the product
  * @returns {string|null} - the chip's color, if any
  */
-function getStatusChip(product: Record<string, unknown>): Record<string,unknown> {
+function getStatusChip(product: Record<string, unknown>): Record<string,unknown>|null {
   switch(product.status){
     case PRODUCT_STATUS.DRAFT:
       // Draft

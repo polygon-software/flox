@@ -28,7 +28,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import {Ref, ref, defineEmits, defineProps} from 'vue';
+import {Ref, ref, defineEmits, defineProps, watch} from 'vue';
 import {toDataUrl} from 'src/helpers/image-helper';
 
 const emit = defineEmits(['change'])
@@ -36,9 +36,24 @@ const props = defineProps({
   maxFileSize: {
     type: Number,
     default: 5e7
+  },
+  pictures: {
+    type: Array,
+    default: () => [],
+  },
+})
+
+const pictures: Ref<Array<Ref<null|File>>> = ref([ref(null)])
+watch(() => props.pictures, async () => {
+  if(props.pictures && props.pictures.length > 0){
+    pictures.value = []
+    for(const picture of props.pictures){
+      pictures.value.splice(0, 0, picture as Ref<File>)
+      await fileChange()
+    }
   }
 })
-const pictures: Ref<Array<Ref<null|File>>> = ref([ref(null)])
+
 const urls: Ref<Array<null|ArrayBuffer|string>> = ref([])
 
 /**
@@ -81,7 +96,6 @@ async function updateUrls(): Promise<void> {
 
 /**
  * Depending on how many additional fields already exist, adds or deletes a file from a custom field.
- * @param {file} newFile - the file that was added
  * @returns {void}
  */
 async function fileChange(): Promise<void> {

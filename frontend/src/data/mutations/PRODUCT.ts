@@ -49,9 +49,10 @@ export const CREATE_PRODUCT = {
 
 export const UPDATE_PRODUCT = {
     mutation: gql`
-        mutation updateProduct($updateProductInput: UpdateProductInput!){
-            updateProduct(updateProductInput: $updateProductInput) {
+        mutation updateProduct($updateProductInput: UpdateProductInput!, $pictures: [String!]!){
+            updateProduct(updateProductInput: $updateProductInput, pictures: $pictures) {
               uuid
+              status
               title
               description
               brand
@@ -61,7 +62,11 @@ export const UPDATE_PRODUCT = {
               end
               category
               directBuyLink
+              directBuyLinkMaxClicks
+              directBuyLinkMaxCost
               brandLink
+              brandLinkMaxClicks
+              brandLinkMaxCost
               minBet
               maxBet
               tags
@@ -73,7 +78,7 @@ export const UPDATE_PRODUCT = {
               __typename
             }
         }`,
-    tables: ['product'],
+    tables: ['product', 'public_file'],
     type: MutationTypes.UPDATE,
     cacheLocation: undefined
 }
