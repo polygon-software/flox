@@ -10,6 +10,7 @@ import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Company } from '../company/entities/company.entity';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class FileService {
@@ -21,15 +22,15 @@ export class FileService {
   };
 
   // AWS S3 instance
-  private s3: S3 = new S3({
+  private readonly s3: S3 = new S3({
     credentials: this.credentials,
   });
   constructor(
     @InjectRepository(PublicFile)
-    private publicFilesRepository: Repository<PublicFile>,
+    private readonly publicFilesRepository: Repository<PublicFile>,
 
     @InjectRepository(PrivateFile)
-    private privateFilesRepository: Repository<PrivateFile>,
+    private readonly privateFilesRepository: Repository<PrivateFile>,
 
     private readonly configService: ConfigService,
   ) {}
@@ -38,6 +39,7 @@ export class FileService {
    * Uploads a file to the public S3 bucket
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
+   * @returns {Promise<PublicFile>} - file
    */
   async uploadPublicFile(
     dataBuffer: Buffer,
@@ -67,6 +69,8 @@ export class FileService {
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
    * @param {string} owner - the file owner's UUID
+   * @param {Company} company - The company the file should be associated with
+   * @returns {Promise<PrivateFile>} - file
    */
   async uploadPrivateFile(
     dataBuffer: Buffer,
@@ -108,24 +112,28 @@ export class FileService {
   /**
    * Gets a public file from the database
    * @param {GetPublicFileArgs} getPublicFileArgs - arguments, containing UUID
+   * @returns {Promise<PublicFile>} - file
    */
   async getPublicFile(
     getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return await this.publicFilesRepository.findOne(getPublicFileArgs.uuid);
+    return this.publicFilesRepository.findOne(getPublicFileArgs.uuid);
   }
 
   /**
    * Gets a private file from the database
    * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID
+   * @param {User} dbUser - user requesting file
+   * @returns {Promise<PrivateFile>} - file
    */
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
+    dbUser: User,
   ): Promise<PrivateFile> {
-    const fileInfo = await this.privateFilesRepository.findOne(
-      getPrivateFileArgs.uuid,
-    );
-    // TODO Application specific: Verify file ownership or access rights
+    const fileInfo = await this.privateFilesRepository.findOne({
+      uuid: getPrivateFileArgs.uuid,
+      owner: dbUser.fk,
+    });
     if (fileInfo) {
       const options: Record<string, unknown> = {};
       // If expiration duration is set, apply
