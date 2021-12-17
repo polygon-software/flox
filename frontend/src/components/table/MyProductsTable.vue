@@ -18,7 +18,7 @@
         >
           <q-td key="pictures" :props="props">
             <img
-              v-if="props.row.pictures[0] && props.row.pictures[0].url"
+              v-if="props.row.pictures && props.row.pictures[0] && props.row.pictures[0].url"
               class="bg-grey-3"
               :src="props.row.pictures[0].url"
               style="min-width: 140px; max-width: 140px; min-height: 90px; max-height: 90px; border-radius: 4px; object-fit: cover"
