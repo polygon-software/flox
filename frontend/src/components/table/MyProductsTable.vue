@@ -168,6 +168,7 @@ function isEditable(product: Record<string, unknown>): boolean{
  * @returns {void}
  */
 async function editProduct(uuid: string): Promise<void>{
+  console.log($routerService, 'goto')
   await $routerService?.routeTo(
     ROUTES.ADD_PRODUCT,
     {

@@ -12,7 +12,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'MAIN': {
     path: '/',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: async () => await getUserRoleLayout(),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/MainPage.vue') }],
   },
 
@@ -26,7 +26,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'ADD_PRODUCT': {
     path: '/add-product',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: async () => await getUserRoleLayout(),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/ProductUploadPage.vue') }],
   },
 
@@ -39,7 +39,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'SETTINGS': {
     path: '/settings',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: async () => await getUserRoleLayout(),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/SettingsPage.vue') }],
   },
 

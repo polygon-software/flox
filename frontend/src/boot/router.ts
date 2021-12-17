@@ -11,9 +11,15 @@ export default boot(({ router, store}) => {
   routerInstance = router
   router.beforeEach((to) => {
     const loggedIn = $authStore.getters.getLoggedInStatus()//   // Verify valid authentication
+    console.log('before to', loggedIn)
+
+    // Not logged in, and going to non-public route
     if(!loggedIn && !PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)){
       return(ROUTES.LOGIN)
-    } else if(to.path === ROUTES.LOGIN.path && loggedIn){
+    }
+
+    // Logged in, and going to /login
+    if(to.path === ROUTES.LOGIN.path && loggedIn){
       // If user is logged in and trying to log in, redirect to main page
       return(ROUTES.MAIN)
     }

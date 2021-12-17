@@ -79,7 +79,7 @@ const menuItems = [
   {
     name: 'home',
     label: 'Home', // TODO i18n
-    route: ROUTES.LOGIN, // TODO
+    route: ROUTES.MAIN,
     icon: 'home'
   },
   {
@@ -91,13 +91,13 @@ const menuItems = [
   {
     name: 'statistics',
     label: 'Statistics', // TODO i18n
-    route: ROUTES.LOGIN, // TODO
+    route: ROUTES.MAIN, // TODO
     icon: 'leaderboard'
   },
   {
     name: 'finances',
     label: 'Finances', // TODO i18n
-    route: ROUTES.LOGIN, // TODO
+    route: ROUTES.MAIN, // TODO
     icon: 'paid'
   },
 ]
@@ -109,6 +109,7 @@ const menuItems = [
  * @returns {void}
  */
 async function onItemClick(route: RouteRecordRaw){
+  console.log('Router:', $routerService)
   await $routerService?.routeTo(route)
 }
 

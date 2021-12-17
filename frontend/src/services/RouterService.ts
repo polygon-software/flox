@@ -25,11 +25,12 @@ export class RouterService {
    */
   async routeTo(to: RouteRecordRaw, query?: Record<string, string>): Promise<void | NavigationFailure | undefined>{
 
+    console.log('RouteTo', to.path, query)
 
     if(query){
       return this.router.push({path: to.path, query})
     }
 
-    return this.router.push(to)
+    return this.router.push({path: to.path})
   }
 }

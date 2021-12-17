@@ -17,12 +17,22 @@ import {QUERIES} from 'src/data/queries/QUERIES';
  * @returns {ApolloQueryResult<Record<string, unknown[]>>} - the query's output
  */
 async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
-
   const queryResult = useQuery(queryObject.query, variables ?? {})
 
+  if(queryResult.result.value){
+    return {
+      data: queryResult.result.value as Record<string, unknown[]>,
+      loading: false,
+    } as ApolloQueryResult<Record<string, unknown[]>>
+  }
+
   return new Promise(((resolve, reject) => {
-    queryResult.onResult((res)=>{resolve(res)})
-    queryResult.onError((err)=>{reject(err)})
+    queryResult.onResult((res)=>{
+      resolve(res)
+    })
+    queryResult.onError((err)=>{
+      reject(err)
+    })
   }))
 }
 
