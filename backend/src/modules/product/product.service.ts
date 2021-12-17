@@ -52,19 +52,21 @@ export class ProductService {
 
   /**
    * Updates an existing product
-   * @param {UpdateProductInput} updateProductInput
-   * @param {Array<string>} pictures
+   * @param {UpdateProductInput} updateProductInput - input data, including uuid
+   * @param {Array<string>} pictures - pictures for the product
+   * @returns {Promise<Product>} - the product, once updated
    */
   async update(
     updateProductInput: UpdateProductInput,
     pictures: Array<string>,
   ): Promise<Product> {
-    // Fetch existing product an delte all pictures
+    // Fetch existing product an delete all pictures
     const currentProduct = await this.productsRepository.findOne(
       updateProductInput.uuid,
     );
     for (const file of currentProduct.pictures) {
       await this.fileRepository.delete(file.uuid);
+      // TODO delete on S3 as well
     }
 
     // Update the product
@@ -81,6 +83,7 @@ export class ProductService {
   /**
    * Duplicates an existing product and returns the new Product
    * @param {DuplicateProductInput} duplicateProductInput - The product input containing the existing product's data
+   * @returns {Promise<Product>} - the product, once duplicated
    */
   async duplicate(
     duplicateProductInput: DuplicateProductInput,
