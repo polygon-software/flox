@@ -314,6 +314,7 @@ type PublicFile {
 
 type Query {
   allComments: [Comment!]!
+  allPlayers: [User!]!
   allProducts: [Product!]!
   allUsers: [User!]!
   comment(uuid: ID!): Comment!

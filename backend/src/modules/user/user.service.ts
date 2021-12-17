@@ -41,6 +41,12 @@ export class UserService {
     return this.usersRepository.find();
   }
 
+  getAllPlayers(): Promise<User[]> {
+    return this.usersRepository.find({
+      role: ROLE.PLAYER,
+    });
+  }
+
   getUser(getUserArgs: GetUserArgs): Promise<User> {
     return this.usersRepository.findOne(getUserArgs.uuid);
   }

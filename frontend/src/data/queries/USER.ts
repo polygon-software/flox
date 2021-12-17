@@ -19,11 +19,10 @@ export const MY_USER = {
   cacheLocation: 'myUser'
 }
 
-// TODO: actually implement separate query for players
 export const ALL_PLAYERS = {
   query: gql`
     query{
-      allUsers{
+      allPlayers{
         uuid
         role
         createdAt
@@ -46,7 +45,7 @@ export const ALL_PLAYERS = {
     }
   `,
   tables: ['user'],
-  cacheLocation: 'allUsers'
+  cacheLocation: 'allPlayers'
 }
 
 export const USER_QUERIES: QueryObject[] = [
