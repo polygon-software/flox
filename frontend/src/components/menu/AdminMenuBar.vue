@@ -14,7 +14,7 @@
         @click="toggleMenu"
       />
       <h5 class="text-black q-ma-none q-pa-md">
-        Admin Dashboard
+        {{ $t('dashboards.admin_dashboard') }}
       </h5>
     </div>
   <div class="row">

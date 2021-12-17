@@ -66,16 +66,8 @@ export default {
     optional: 'optional',
   },
   dashboards: {
-    management_dashboard: 'Management Dashboard',
-    register_new_employee_here: 'Register a new employee here:',
-    application: 'Application | Applications',
-    state: 'State',
-    action: 'Action',
-    enable_upload: 'Enable upload',
-    reject: 'Reject',
-    sure_to_reject: 'Are you sure you want to decline this request?',
-    yes_reject: 'Yes, reject',
-    unlock_account: 'Unlock account',
+    admin_dashboard: 'Admin Dashboard',
+    partner_dashboard: 'Partner Dashboard',
   },
   buttons: {
     finish_signup: 'Finish',

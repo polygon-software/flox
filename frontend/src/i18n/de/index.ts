@@ -67,16 +67,8 @@ export default {
     optional: 'optional',
   },
   dashboards: {
-    management_dashboard: 'Chef Dashboard',
-    register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
-    application: 'Antrag | Anträge',
-    state: 'Status',
-    action: 'Aktion',
-    enable_upload: 'Upload freigeben',
-    unlock_account: 'Konto freischalten',
-    reject: 'Ablehnen',
-    sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
-    yes_reject: 'Ja, ablehnen',
+    admin_dashboard: 'Admin Dashboard',
+    partner_dashboard: 'Partner Dashboard',
   },
   buttons: {
     finish_signup: 'Abschliessen',

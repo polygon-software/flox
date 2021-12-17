@@ -13,6 +13,9 @@
         color="black"
         @click="toggleMenu"
       />
+      <h5 class="text-black q-ma-none q-pa-md">
+        {{ $t('dashboards.partner_dashboard') }}
+      </h5>
     </div>
   <div class="row">
     <!-- Account options -->
