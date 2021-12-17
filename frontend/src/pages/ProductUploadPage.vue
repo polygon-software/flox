@@ -460,13 +460,10 @@ const stop = watch(queryResult, async (newValue) => {
  * @returns {void}
  */
 function onPictureChange(newPictures: Ref<File>[]){
-  if(pictures.value.length !== newPictures.values.length){
-    pictures.value = newPictures
-  }
+  pictures.value = newPictures
 }
 
 /**
- * TODO cleanup, simplify
  * On submit, creates/updates existing product
  * @returns {void}
  */

@@ -30,7 +30,6 @@ export class ProductService {
     // Create the product
     const product = this.productsRepository.create(createProductInput);
     const savedProduct = await this.productsRepository.save(product);
-
     await this.createPublicFiles(pictures, savedProduct);
     return savedProduct;
   }
