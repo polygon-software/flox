@@ -53,7 +53,7 @@
                 <!-- Disable button -->
                 <q-btn
                   :label="$t('general.disable')"
-                  icon="edit"
+                  icon="block"
                   class="text-black"
                   flat
                   no-caps
@@ -70,14 +70,11 @@
 
 <script setup lang="ts">
 import {computed, defineProps, inject, Ref} from 'vue';
-import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
+import { subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import {PRODUCT_STATUS, USER_STATUS} from '../../../../shared/definitions/ENUM';
-import ROUTES from 'src/router/routes';
+import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {RouterService} from 'src/services/RouterService';
 import {useQuasar} from 'quasar';
-import {FetchResult} from '@apollo/client';
-import {sleep} from 'src/helpers/general-helpers';
 import {i18n} from 'boot/i18n';
 import {ALL_PLAYERS} from 'src/data/queries/USER';
 
@@ -97,13 +94,12 @@ const props = defineProps( {
 
 // TODO i18n
 const columns = [
-  { name: 'pictures', label: '', field: 'uuid', sortable: false, align: 'center'},
-  { name: 'title', label: 'Product', field: 'title', sortable: true, align: 'center' },
-  { name: 'brand', label: 'Brand', field: 'brand', sortable: true, align: 'center' },
   { name: 'status', label: 'Status', field: 'status', sortable: true, align: 'center' },
-  { name: 'sponsored', label: 'Type', field: 'sponsored', sortable: true, align: 'center' },
-  { name: 'start', label: 'Start Date', field: 'start', sortable: true, align: 'center' },
-  { name: 'tags', label: '', field: 'tags', sortable: false }, // Invisible column, used for filtering only
+  { name: 'username', label: 'Username', field: 'username', sortable: true, align: 'center' },
+  { name: 'fullName', label: 'Full Name', field: 'fullName', sortable: true, align: 'center' },
+  { name: 'email', label: 'E-Mail', field: 'email', sortable: true, align: 'center' },
+  { name: 'phone', label: 'Phone', field: 'phone', sortable: true, align: 'center' },
+  { name: 'birthdate', label: 'Birth Date', field: 'birthdate', sortable: true, align: 'center' },
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
