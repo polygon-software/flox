@@ -498,8 +498,8 @@ async function onSubmit(){
           updateProductInput: {
             uuid: productId,
             ...params,
-            pictures
-          }
+          },
+          pictures: base64Pictures
         }
       )
     } else {

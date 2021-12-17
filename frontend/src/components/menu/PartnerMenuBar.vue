@@ -137,9 +137,6 @@ const loggedIn = computed(() => {
   return $authStore.getters.getLoggedInStatus();
 })
 
-// Username does not need to be reactive, since it won't change between logins
-const username = $authStore.getters.getUsername()
-
 // TODO get from backend
 // The number of notifications
 const notificationCount = ref(2)
