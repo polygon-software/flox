@@ -109,7 +109,6 @@ const menuItems = [
  * @returns {void}
  */
 async function onItemClick(route: RouteRecordRaw){
-  console.log('Router:', $routerService)
   await $routerService?.routeTo(route)
 }
 

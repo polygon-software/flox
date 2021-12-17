@@ -173,7 +173,6 @@ export class ProductService {
       const index = base64Strings.indexOf(base64Picture);
 
       // Upload the image
-      console.log('UPLOAD PICTURE', `${product.title}_${index}.jpg`);
       await this.fileService.uploadPublicFile(
         buffer,
         `${product.title}_${index}.jpg`,

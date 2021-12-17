@@ -24,9 +24,6 @@ export class RouterService {
    * @returns {void|NavigationFailure|undefined} - the navigation result
    */
   async routeTo(to: RouteRecordRaw, query?: Record<string, string>): Promise<void | NavigationFailure | undefined>{
-
-    console.log('RouteTo', to.path, query)
-
     if(query){
       return this.router.push({path: to.path, query})
     }
