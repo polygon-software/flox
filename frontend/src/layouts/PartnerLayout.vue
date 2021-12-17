@@ -38,7 +38,6 @@
       <q-item
         v-ripple
         clickable
-        label="Settings"
         style="position: absolute; bottom: 0; width: 100%"
         @click="() => onItemClick(ROUTES.SETTINGS)"
       >
@@ -46,7 +45,7 @@
           <q-icon name="settings"/>
         </q-item-section>
         <q-item-section>
-          Settings
+          {{ $t('general.settings') }}
         </q-item-section>
       </q-item>
     </q-drawer>
@@ -85,20 +84,20 @@ const menuItems = [
   },
   {
     name: 'products',
-    label: 'Products', // TODO i18n
+    label: i18n.global.t('products.products'),
     route: ROUTES.MY_PRODUCTS,
     icon: 'local_mall'
   },
   {
     name: 'statistics',
-    label: 'Statistics', // TODO i18n
-    route: ROUTES.MAIN, // TODO
+    label: i18n.global.t('admin.statistics'),
+    route: ROUTES.PARTNER_STATISTICS,
     icon: 'leaderboard'
   },
   {
     name: 'finances',
-    label: 'Finances', // TODO i18n
-    route: ROUTES.MAIN, // TODO
+    label: i18n.global.t('admin.finances'),
+    route: ROUTES.PARTNER_FINANCES,
     icon: 'paid'
   },
 ]

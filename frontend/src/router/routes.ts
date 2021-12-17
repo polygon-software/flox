@@ -54,6 +54,18 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/AdminFinancesPage.vue') }],
   },
 
+  'PARTNER_STATISTICS': {
+    path: '/partner-statistics',
+    component: () => import('layouts/PartnerLayout.vue'),
+    children: [{ path: '', component: () => import('pages/PartnerStatisticsPage.vue') }],
+  },
+
+  'PARTNER_FINANCES': {
+    path: '/partner-finances',
+    component: () => import('layouts/PartnerLayout.vue'),
+    children: [{ path: '', component: () => import('pages/PartnerFinancesPage.vue') }],
+  },
+
   'SETTINGS': {
     path: '/settings',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

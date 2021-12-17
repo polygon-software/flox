@@ -38,7 +38,6 @@
       <q-item
         v-ripple
         clickable
-        label="Settings"
         style="position: absolute; bottom: 0; width: 100%"
         @click="() => onItemClick(ROUTES.SETTINGS)"
       >
@@ -46,7 +45,7 @@
           <q-icon name="settings"/>
         </q-item-section>
         <q-item-section>
-          Settings
+          {{ $t('general.settings') }}
         </q-item-section>
       </q-item>
     </q-drawer>

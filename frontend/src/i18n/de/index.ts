@@ -11,6 +11,7 @@ export default {
     duplicate: 'Duplizieren',
     view: 'Ansehen',
     home: 'Home',
+    settings: 'Einstellungen'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
