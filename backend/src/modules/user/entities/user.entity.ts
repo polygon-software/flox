@@ -19,7 +19,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ROLE } from '../../../ENUM/ENUM';
+import { ROLE, USER_STATUS } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
 
 @ObjectType()
@@ -27,7 +27,6 @@ import { Address } from '../../address/entities/address.entity';
 @InputType('user')
 /**
  * An application User
- * TODO: add address
  */
 export class User {
   @Field(() => ROLE, { description: 'Role of the User' })
@@ -38,6 +37,15 @@ export class User {
   })
   @IsString()
   role: ROLE;
+
+  @Field(() => USER_STATUS, { description: 'Status of the user account' })
+  @Column({
+    type: 'enum',
+    enum: USER_STATUS,
+    default: USER_STATUS.NONE,
+  })
+  @IsString()
+  status: USER_STATUS;
 
   @Field(() => ID, { description: 'Cognito ID' })
   @PrimaryColumn()

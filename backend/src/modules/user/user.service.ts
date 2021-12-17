@@ -7,7 +7,7 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { ROLE } from '../../ENUM/ENUM';
+import { ROLE, USER_STATUS } from '../../ENUM/ENUM';
 
 @Injectable()
 export class UserService {
@@ -23,7 +23,8 @@ export class UserService {
   async create(createUserInput: CreateUserInput): Promise<User> {
     const user = this.usersRepository.create({
       ...createUserInput,
-      role: ROLE.PLAYER, // TODO role handling
+      role: ROLE.PLAYER,
+      status: USER_STATUS.APPLIED, // Default status: applied
     });
     return this.usersRepository.save(user);
   }

@@ -1,21 +1,8 @@
 <template>
   <q-page class="flex" style="flex-direction: column">
-    <!-- Top row: title + add button -->
-    <div
-      class="row full-width justify-between q-pa-md"
-      style="height: 20px"
-    >
-      <!-- TODO styling, language-->
-      <h6 class="q-ma-none">{{ $t('admin.users') }}</h6>
-      <q-btn
-        color="primary"
-        text-color="black"
-        :label="$t('products.add_product')"
-        rounded
-        no-caps
-        @click="createProduct"
-      />
-    </div>
+    <!-- Top row: title -->
+    <h6 class="q-ma-md">{{ $t('admin.users') }}</h6>
+
     <!-- Body: Table with tabs etc. -->
     <div
       class="column full-height items-start q-pa-md full-width"
@@ -56,10 +43,11 @@
       </div>
 
       <!-- Table view of products -->
-      <MyProductsTable
-        :search="search"
-        :status-filter="statusFilter"
-      />
+      <p>TODO table</p>
+<!--      <MyProductsTable-->
+<!--        :search="search"-->
+<!--        :status-filter="statusFilter"-->
+<!--      />-->
     </div>
 
   </q-page>

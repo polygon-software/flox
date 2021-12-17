@@ -33,7 +33,8 @@ export enum PRODUCT_STATUS {
 export enum USER_STATUS {
   APPLIED = 'APPLIED',
   ACTIVE = 'ACTIVE',
-  DISABLED = 'DISABLED'
+  DISABLED = 'DISABLED',
+  NONE = 'NONE'
 }
 
 // User roles

@@ -36,6 +36,7 @@ export enum USER_STATUS {
   APPLIED = 'APPLIED',
   ACTIVE = 'ACTIVE',
   DISABLED = 'DISABLED',
+  NONE = 'NONE',
 }
 
 // User roles
@@ -50,3 +51,4 @@ registerEnumType(CURRENCY, { name: 'Currency' });
 registerEnumType(CATEGORY, { name: 'Category' });
 registerEnumType(PRODUCT_STATUS, { name: 'ProductStatus' });
 registerEnumType(ROLE, { name: 'Role' });
+registerEnumType(USER_STATUS, { name: 'UserStatus' });
