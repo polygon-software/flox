@@ -164,6 +164,7 @@ export class ProductService {
    * @param {Array<string>} base64Strings The base64 strings to convert
    * @param {Product} product The product the pictures belong to
    * @private
+   * @returns {Promise<void>} - creation end
    */
   private async createPublicFiles(
     base64Strings: Array<string>,
@@ -174,6 +175,8 @@ export class ProductService {
       // Convert base64 to buffer
       const buffer = base64ToBuffer(base64Picture);
       const index = base64Strings.indexOf(base64Picture);
+
+      // TODO: seems broken on product edit...
 
       // Upload the image
       await this.fileService.uploadPublicFile(
