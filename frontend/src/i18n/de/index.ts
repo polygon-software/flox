@@ -69,6 +69,8 @@ export default {
   dashboards: {
     admin_dashboard: 'Admin Dashboard',
     partner_dashboard: 'Partner Dashboard',
+    statistics: 'Statistiken',
+    finances: 'Finanzen',
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -204,7 +206,5 @@ export default {
     players: 'Spieler',
     partners: 'Partner',
     disable_account: 'Account deaktivieren',
-    statistics: 'Statistik',
-  finances: 'Finanzen',
   },
 }

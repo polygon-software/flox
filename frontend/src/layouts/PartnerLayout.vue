@@ -90,13 +90,13 @@ const menuItems = [
   },
   {
     name: 'statistics',
-    label: i18n.global.t('admin.statistics'),
+    label: i18n.global.t('dashboards.statistics'),
     route: ROUTES.PARTNER_STATISTICS,
     icon: 'leaderboard'
   },
   {
     name: 'finances',
-    label: i18n.global.t('admin.finances'),
+    label: i18n.global.t('dashboards.finances'),
     route: ROUTES.PARTNER_FINANCES,
     icon: 'paid'
   },

@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex" style="flex-direction: column">
     <!-- Top row: title -->
-    <h6 class="q-ma-md">{{ $t('admin.statistics') }}</h6>
+    <h6 class="q-ma-md">{{ $t('dashboards.statistics') }}</h6>
 
     <!-- Body: Table with tabs etc. -->
     <div
