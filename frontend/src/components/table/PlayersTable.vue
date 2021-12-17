@@ -52,7 +52,7 @@
               <div class="column">
                 <!-- Disable button -->
                 <q-btn
-                  :label="$t('general.disable')"
+                  :label="$t('admin.disable_account')"
                   icon="block"
                   class="text-black"
                   flat

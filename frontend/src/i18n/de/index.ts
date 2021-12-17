@@ -208,6 +208,7 @@ export default {
   admin: {
     users: 'Benutzer',
     players: 'Spieler',
-    partners: 'Partner'
+    partners: 'Partner',
+    disable_account: 'Account deaktivieren'
   },
 }
