@@ -23,6 +23,7 @@ export const CREATE_PRODUCT = {
               value
               currency
               start
+              sponsored
               end
               category
               directBuyLink
@@ -53,6 +54,7 @@ export const UPDATE_PRODUCT = {
             updateProduct(updateProductInput: $updateProductInput, pictures: $pictures) {
               uuid
               status
+              sponsored
               title
               description
               brand
@@ -88,6 +90,8 @@ export const DUPLICATE_PRODUCT = {
         mutation duplicateProduct($duplicateProductInput: DuplicateProductInput!){
             duplicateProduct(duplicateProductInput: $duplicateProductInput) {
               uuid
+              status
+              sponsored
               title
               description
               brand
@@ -97,7 +101,11 @@ export const DUPLICATE_PRODUCT = {
               end
               category
               directBuyLink
+              directBuyLinkMaxClicks
+              directBuyLinkMaxCost
               brandLink
+              brandLinkMaxClicks
+              brandLinkMaxCost
               minBet
               maxBet
               tags
