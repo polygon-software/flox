@@ -85,7 +85,7 @@ const menuItems = [
   {
     name: 'users',
     label: 'Users', // TODO i18n
-    route: ROUTES.MY_PRODUCTS,
+    route: ROUTES.USERS,
     icon: 'groups'
   },
   {

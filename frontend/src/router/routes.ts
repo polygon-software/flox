@@ -36,6 +36,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/MyProductsPage.vue') }],
   },
 
+  'USERS': {
+    path: '/users',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/UsersPage.vue') }],
+  },
+
   'SETTINGS': {
     path: '/settings',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

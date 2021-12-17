@@ -199,5 +199,13 @@ export default {
     ended: 'Beendet',
     archived: 'Archiviert',
     valid: 'Valide',
-  }
+  },
+  user_status: {
+    applied: 'Angefragt',
+    active: 'Aktiv',
+    disabled: 'Deaktiviert'
+  },
+  admin: {
+    users: 'Benutzer'
+  },
 }

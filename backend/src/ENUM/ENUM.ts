@@ -31,6 +31,13 @@ export enum PRODUCT_STATUS {
   ARCHIVED = 'ARCHIVED',
 }
 
+// User statuses
+export enum USER_STATUS {
+  APPLIED = 'APPLIED',
+  ACTIVE = 'ACTIVE',
+  DISABLED = 'DISABLED',
+}
+
 // User roles
 export enum ROLE {
   PLAYER = 'PLAYER',

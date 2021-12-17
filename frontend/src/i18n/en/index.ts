@@ -198,5 +198,13 @@ export default {
     ended: 'Ended',
     archived: 'Archived',
     valid: 'Valid',
+  },
+  user_status: {
+    applied: 'applied',
+    active: 'active',
+    disabled: 'disabled'
+  },
+  admin: {
+    users: 'Benutzer'
   }
 };
