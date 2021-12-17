@@ -17,7 +17,7 @@ import { BankModule } from './modules/bank/bank.module';
 import { SoiAdminModule } from './modules/SOI-Admin/soi-admin.module';
 import { SoiEmployeeModule } from './modules/SOI-Employee/soi-employee.module';
 import { FileModule } from './modules/file/file.module';
-import {DossierModule} from "./modules/dossier/dossier.module";
+import { DossierModule } from './modules/dossier/dossier.module';
 
 @Module({
   imports: [
