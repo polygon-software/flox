@@ -40,6 +40,10 @@ import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {RouteRecordRaw} from 'vue-router';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/QUERIES';
+import {User} from '../../../backend/src/modules/user/entities/user.entity';
+import {ROLE} from 'src/data/ENUM/ENUM';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -49,18 +53,20 @@ const $routerService: RouterService|undefined = inject('$routerService')
  * Logs in the given authentication
  * @param {string} username - the authentication's username
  * @param {string} password - the authentication's password
- * @param {string} route_target - target route (only for demos)
  * @returns {void}
  */
-async function onLogin({username, password, route_target}: {username: string, password: string, route_target: string}){
+async function onLogin({username, password}: {username: string, password: string}){
   await $authService?.login(username, password)
+  const queryRes = await executeQuery(MY_USER)
+  const user = queryRes.data[MY_USER.cacheLocation]
+  console.log(user)
   const target_route_mapping: Record<string, RouteRecordRaw> = {
-    'admin-dashboard': ROUTES.ADMIN_DASHBOARD,
-    'management-dashboard': ROUTES.MANAGEMENT_EMPLOYEE_DATA,
-    'employee-dashboard': ROUTES.EMPLOYEE_DASHBOARD
+    [ROLE.SOI_ADMIN]: ROUTES.ADMIN_DASHBOARD,
+    [ROLE.EMPLOYEE]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
+    [ROLE.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD
   }
   // Redirect to main page
-  await $routerService?.routeTo(target_route_mapping[route_target])
+  await $routerService?.routeTo(target_route_mapping[user?.role])
 }
 
 /**

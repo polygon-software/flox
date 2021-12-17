@@ -6,7 +6,7 @@ import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
-import { AdminOnly } from '../../auth/authorization.decorator';
+import { AdminOnly, CurrentUser } from '../../auth/authorization.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -28,6 +28,11 @@ export class UserResolver {
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return this.usersService.getUser(getUserArgs);
+  }
+
+  @Query(() => User, { name: 'getMyUser' })
+  async getMyUser(@CurrentUser() user: Record<string, string>): Promise<User> {
+    return this.usersService.getUser({ uuid: user.userId });
   }
 
   @AdminOnly()

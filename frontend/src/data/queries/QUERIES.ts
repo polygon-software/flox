@@ -158,4 +158,19 @@ export const PRIVATE_FILE = {
   cacheLocation: 'getPrivateFile'
 }
 
+export const MY_USER = {
+  query: gql`
+    query{
+      getMyUser{
+        uuid
+        role
+        fk
+        __typename
+      }
+    }
+    `,
+  tables: ['user'],
+  cacheLocation: 'getMyUser'
+}
+
 export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];
