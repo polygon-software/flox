@@ -28,15 +28,13 @@
 <script setup lang="ts">
 import {ref, Ref, defineEmits, PropType} from 'vue'
 import {QDialog} from 'quasar';
-import {sendEmail} from 'src/helpers/email-helpers';
 import {Company} from 'src/data/types/Company';
-import {i18n} from 'boot/i18n';
 
 const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const props = defineProps({
+defineProps({
   companyData: {
     type: Object as PropType<Company>,
     required: true
