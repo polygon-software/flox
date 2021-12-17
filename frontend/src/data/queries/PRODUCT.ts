@@ -16,6 +16,8 @@ export const ALL_PRODUCTS = {
         value
         currency
         start
+        status
+        sponsored
         end
         category
         directBuyLink
@@ -83,6 +85,7 @@ export const PRODUCT = {
         start
         end
         category
+        status
         sponsored
         directBuyLink
         directBuyLinkMaxClicks
