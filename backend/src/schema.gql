@@ -324,6 +324,7 @@ type Mutation {
   update(updateUserInput: UpdateUserInput!): User!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(UpdateDossierInput: UpdateDossierInput!): Dossier!
+  updateDossierStatus(UpdateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
 }
 
@@ -509,6 +510,11 @@ input UpdateDossierInput {
   original_bank: bank
   property_address: String
   status: String
+  uuid: ID!
+}
+
+input UpdateDossierStatusInput {
+  status: String!
   uuid: ID!
 }
 

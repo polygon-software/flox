@@ -4,6 +4,7 @@ import { Public } from '../../auth/authentication.decorator';
 import { DossierService } from './dossier.service';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
+import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -22,9 +23,9 @@ export class DossierResolver {
     return this.dossierService.createDossier(createDossierInput);
   }
   /**
-   * Updates the status of a dossier
+   * Updates the anything of a dossier
    * @param {UpdateDossierInput} updateDossierInput - input, containing new status
-   * @returns {Promise<Dossier[]>} - updated status
+   * @returns {Promise<Dossier[]>} - updated dossier
    */
   @Public()
   @Mutation(() => Dossier)
@@ -32,5 +33,19 @@ export class DossierResolver {
     @Args('UpdateDossierInput') updateDossierInput: UpdateDossierInput,
   ): Promise<Dossier> {
     return this.dossierService.updateDossier(updateDossierInput);
+  }
+
+  /**
+   * Updates the status of a dossier
+   * @param {UpdateDossierStatusInput} updateDossierStatusInput - input, containing new status
+   * @returns {Promise<Dossier[]>} - updated dossier
+   */
+  @Public()
+  @Mutation(() => Dossier)
+  async updateDossierStatus(
+    @Args('UpdateDossierStatusInput')
+    updateDossierStatusInput: UpdateDossierStatusInput,
+  ): Promise<Dossier> {
+    return this.dossierService.updateDossierStatus(updateDossierStatusInput);
   }
 }
