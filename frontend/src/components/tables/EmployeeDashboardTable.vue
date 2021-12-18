@@ -11,35 +11,35 @@
       separator="none"
       flat
     >
-    <template #body="props_2">
+    <template #body="props">
       <q-tr
-        :props="props_2"
+        :props="props"
         style="background-color: white; cursor: pointer"
       >
         <q-td key="date">
-          {{ props_2.row.date }}
+          {{ props.row.date }}
         </q-td>
         <q-td key="customer">
-          {{ props_2.row.customer }}
+          {{ props.row.customer }}
         </q-td>
         <q-td key="institute">
-          {{ props_2.row.institute }}
+          {{ props.row.institute }}
         </q-td>
         <q-td key="location">
-          {{ props_2.row.location }}
+          {{ props.row.location }}
         </q-td>
         <q-td key="mortage_amount">
-          {{ props_2.row.mortage_amount }}
+          {{ props.row.mortage_amount }}
         </q-td>
         <q-td key="status">
-          <q-chip style="color: white; background-color: #58ACFA;">
-            {{ props_2.row.status }}
+          <q-chip :style="chipStyle(props.row.status)">
+            {{ $t('employee_dashboard.' +props.row.status) }}
           </q-chip>
           <q-popup-edit
             v-slot="scope"
             :auto-save="true"
-            :model-value="props_2.row.status"
-            @save="(value) => onUpdateStatus(props_2.row.status, {name: value})"
+            :model-value="props.row.status"
+            @save="(value) => onUpdateStatus(props.row.status, {name: value})"
           >
             <q-select
               v-model="scope.value"
@@ -48,7 +48,7 @@
           </q-popup-edit>
         </q-td>
         <q-td key="uploads">
-          {{ props_2.row.uploads }}
+          {{ props.row.uploads }}
           <q-btn
             :label="$t('employee_dashboard.all_documents')"
             @click="showAllDocuments"
@@ -56,7 +56,7 @@
         </q-td>
         <q-td key="offers">
           <q-chip
-            v-for="(offer, index) in props_2.row.offers.slice(0,3)"
+            v-for="(offer, index) in props.row.offers.slice(0,3)"
             :key="index"
           >
             {{ offer }}
@@ -77,13 +77,14 @@ import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
+import {STATUS} from 'src/data/ENUM/ENUM';
 
 const $q: QVueGlobals = useQuasar()
 
 // Selection must be an array
 const selected = ref([])
 
-const props = defineProps({
+defineProps({
   options: {
     required: false,
     type: Array,
@@ -112,7 +113,7 @@ const rows = [
     institute: 'ZKB',
     location: 'Luzern',
     mortage_amount: '620000.00',
-    status: 'Offen',
+    status: STATUS.OPEN,
     uploads: '',
     offers: ['CS', 'UB', 'KZ', 'AB']
   },
@@ -123,7 +124,7 @@ const rows = [
     institute: 'ZKB',
     location: 'Zürich',
     mortage_amount: '1620000.00',
-    status: 'Kreditvertrag unterzeichnet zurück',
+    status: STATUS.SIGNED,
     uploads: '',
     offers: ['CS']
   },
@@ -134,7 +135,7 @@ const rows = [
     institute: 'ZKB',
     location: 'Emmen',
     mortage_amount: '620000.00',
-    status: 'Offerte abgelehnt',
+    status: STATUS.REJECTED,
     uploads: '',
     offers: []
   },
@@ -145,7 +146,7 @@ const rows = [
     institute: 'ZKB',
     location: 'Kriens',
     mortage_amount: '620000.00',
-    status: 'Eingereicht',
+    status: STATUS.SUBMITTED,
     uploads: '',
     offers: ['UB']
   },
@@ -156,7 +157,7 @@ const rows = [
     institute: 'ZKB',
     location: 'Emmenbrücke',
     mortage_amount: '620000.00',
-    status: 'Offeriert',
+    status: STATUS.OFFERED,
     uploads: '',
     offers: ['KZ']
   },
@@ -167,7 +168,7 @@ const rows = [
     institute: 'ZKB',
     location: 'Luzern',
     mortage_amount: '620000.00',
-    status: 'Abgeschlossen',
+    status: STATUS.COMPLETED,
     uploads: '',
     offers: ['UB', 'KZ']
   },
@@ -178,7 +179,7 @@ const rows = [
     institute: 'ZKB',
     location: 'Zürich',
     mortage_amount: '620000.00',
-    status: 'Kreditvertrag in Bearbeitung',
+    status: STATUS.IN_PROCESS,
     uploads: '',
     offers: ['CS', 'KZ']
   },
@@ -189,7 +190,7 @@ const rows = [
     institute: 'ZKB',
     location: 'Zug',
     mortage_amount: '620000.00',
-    status: 'Kreditvertrag versendet',
+    status: STATUS.SENT,
     uploads: '',
     offers: ['KZ']
   },
@@ -216,6 +217,35 @@ function onUpdateStatus(status: string, variables: Record<string, unknown>){
       ...variables
     }
   )
+}
+
+
+/**
+ * ToDo Fix colors
+ * Chip color depending on the status
+ * @param {STATUS} status - status of Dossier
+ * @returns {string} - style
+ */
+function chipStyle(status: STATUS){
+  const color = 'color: white; background-color: '
+  switch (status) {
+    case STATUS.OPEN:
+      return color + '#58ACFA;'
+    case STATUS.SIGNED:
+      return color + '#52130A;'
+    case STATUS.REJECTED:
+      return color + '#A82CF0;'
+    case STATUS.SUBMITTED:
+      return color + '#4126F9;'
+    case STATUS.OFFERED:
+      return color + '#378F23;'
+    case STATUS.COMPLETED:
+      return color + '#1FB06C;'
+    case STATUS.IN_PROCESS:
+      return color + '#A22736;'
+    case STATUS.SENT:
+      return color + '#F829F3;'
+  }
 }
 
 /**

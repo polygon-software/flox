@@ -166,5 +166,13 @@ export default {
     organisation_id: 'Organisationsnummer',
     employee_id: 'Mitarbeiternummer',
     role: 'Rolle',
+    OPEN: 'Offen',
+    SIGNED: 'Kreditvertrag unterzeichnet zurück',
+    REJECTED: 'Offerte abgelehnt',
+    SUBMITTED: 'Eingereicht',
+    OFFERED: 'Offeriert',
+    COMPLETED: 'Abgeschlossen',
+    IN_PROCESS: 'Kreditvertrag in Bearbeitung',
+    SENT: 'Kreditvertrag versendet',
   },
 };

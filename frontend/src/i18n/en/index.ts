@@ -164,6 +164,14 @@ export default {
     upload_more_documents: 'Upload further documents',
     organisation_id: 'Organisation number',
     employee_id: 'Employee number',
-    role: 'Role'
+    role: 'Role',
+    OPEN: 'Open',
+    SIGNED: 'Credit contract signed',
+    REJECTED: 'Offer rejected',
+    SUBMITTED: 'Submitted',
+    OFFERED: 'Offered',
+    COMPLETED: 'Completed',
+    IN_PROCESS: 'Credit contract in process',
+    SENT: 'Credit contract sent',
   },
 };
