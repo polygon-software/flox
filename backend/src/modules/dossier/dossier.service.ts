@@ -24,7 +24,7 @@ export class DossierService {
     const dossier = this.dossierRepository.create({
       ...createDossierInput,
       offers: [],
-      status: STATUS.CREATED,
+      status: STATUS.IN_PROCESS,
       // TODO: other default values
     });
 

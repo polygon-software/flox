@@ -28,8 +28,8 @@
         <q-td key="location">
           {{ props.row.location }}
         </q-td>
-        <q-td key="mortage_amount">
-          {{ props.row.mortage_amount }}
+        <q-td key="mortgage_amount">
+          {{ props.row.mortgage_amount }}
         </q-td>
         <q-td key="status">
           <q-chip :style="chipStyle(props.row.status)">
@@ -99,7 +99,7 @@ const columns = [
   { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true },
   { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true },
   { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true },
-  { name: 'mortage_amount', label: i18n.global.t('employee_dashboard.mortage_amount'), field: 'mortage_amount', sortable: true },
+  { name: 'mortgage_amount', label: i18n.global.t('employee_dashboard.mortgage_amount'), field: 'mortgage_amount', sortable: true },
   { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false },
   { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false },
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false },
@@ -112,7 +112,7 @@ const rows = [
     customer: 'Jusuf Amzai',
     institute: 'ZKB',
     location: 'Luzern',
-    mortage_amount: '620000.00',
+    mortgage_amount: 620000.00,
     status: STATUS.OPEN,
     uploads: '',
     offers: ['CS', 'UB', 'KZ', 'AB']
@@ -123,7 +123,7 @@ const rows = [
     customer: 'Marino',
     institute: 'ZKB',
     location: 'Zürich',
-    mortage_amount: '1620000.00',
+    mortgage_amount: 620000.00,
     status: STATUS.SIGNED,
     uploads: '',
     offers: ['CS']
@@ -134,7 +134,7 @@ const rows = [
     customer: 'Ramize',
     institute: 'ZKB',
     location: 'Emmen',
-    mortage_amount: '620000.00',
+    mortgage_amount: 620000.00,
     status: STATUS.REJECTED,
     uploads: '',
     offers: []
@@ -145,7 +145,7 @@ const rows = [
     customer: 'Elexa',
     institute: 'ZKB',
     location: 'Kriens',
-    mortage_amount: '620000.00',
+    mortgage_amount: 620000.00,
     status: STATUS.SUBMITTED,
     uploads: '',
     offers: ['UB']
@@ -156,7 +156,7 @@ const rows = [
     customer: 'David',
     institute: 'ZKB',
     location: 'Emmenbrücke',
-    mortage_amount: '620000.00',
+    mortgage_amount: 620000.00,
     status: STATUS.OFFERED,
     uploads: '',
     offers: ['KZ']
@@ -167,7 +167,7 @@ const rows = [
     customer: 'Christoph',
     institute: 'ZKB',
     location: 'Luzern',
-    mortage_amount: '620000.00',
+    mortgage_amount: 620000.00,
     status: STATUS.COMPLETED,
     uploads: '',
     offers: ['UB', 'KZ']
@@ -178,7 +178,7 @@ const rows = [
     customer: 'Joel',
     institute: 'ZKB',
     location: 'Zürich',
-    mortage_amount: '620000.00',
+    mortgage_amount: 620000.00,
     status: STATUS.IN_PROCESS,
     uploads: '',
     offers: ['CS', 'KZ']
@@ -189,14 +189,14 @@ const rows = [
     customer: 'Marius',
     institute: 'ZKB',
     location: 'Zug',
-    mortage_amount: '620000.00',
+    mortgage_amount: 620000.00,
     status: STATUS.SENT,
     uploads: '',
     offers: ['KZ']
   },
 ]
 
-// after Sprint 3 remove the computedResult data with the corresponding data from database
+// Todo: after Sprint 3 remove the computedResult data with the corresponding data from database
 // const queryResult = subscribeToQuery(MY_CUSTOMERS) as Ref<Record<string, Array<Record<string, unknown>>>>
 //const rows = computed(()=>{
 //return queryResult.value ?? []

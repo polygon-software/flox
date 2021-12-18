@@ -157,7 +157,7 @@ export default {
     customer: 'Kunde',
     institute: 'Institut',
     location: 'Ort',
-    mortage_amount: 'Hypothekarbetrag CHF',
+    mortgage_amount: 'Hypothekarbetrag CHF',
     status: 'Status',
     uploads: 'Dokumente',
     all_documents: 'Alle Dokumente',

@@ -479,9 +479,14 @@ type SoiEmployee {
 }
 
 enum Status {
-  ACCEPTED
-  CREATED
+  COMPLETED
+  IN_PROCESS
+  OFFERED
+  OPEN
   REJECTED
+  SENT
+  SIGNED
+  SUBMITTED
 }
 
 input UpdateCompanyInput {
@@ -625,12 +630,23 @@ enum creationState {
 
 input dossier {
   born: DateTime
-  correspondence_address: String
+  correspondence_address: CreateAddressInput
+
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
   loan_sum: Float
   non_arrangeable: Boolean
-  original_bank: String
-  property_address: String
-  uuid: ID!
+  original_bank: bank
+  property_address: CreateAddressInput
+
+  """Status of Dossier"""
+  status: Status!
 }
 
 input employee {
