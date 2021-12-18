@@ -11,7 +11,10 @@ import { generateHumanReadableId } from '../../helpers';
 import { User } from '../user/entities/user.entity';
 import { CREATION_STATE, ROLE } from '../../ENUM/ENUMS';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
-import { sendPasswordChangeEmail } from '../../email/helper';
+import {
+  sendCompanyRejectEmail,
+  sendPasswordChangeEmail,
+} from '../../email/helper';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -170,5 +173,20 @@ export class CompanyService {
     company.creation_state = CREATION_STATE.DONE;
     await this.companyRepository.save(company);
     return this.companyRepository.findOne(uuid);
+  }
+
+  /**
+   * Send rejection email and delete company
+   * @param {DeleteCompanyInput} deleteCompanyInput - uuid of company
+   * @returns {Promise<Company>} - deleted company
+   */
+  async rejectCompany(
+    deleteCompanyInput: DeleteCompanyInput,
+  ): Promise<Company> {
+    const company = await this.companyRepository.findOne(
+      deleteCompanyInput.uuid,
+    );
+    await sendCompanyRejectEmail(company.email);
+    return this.deleteCompany(deleteCompanyInput);
   }
 }

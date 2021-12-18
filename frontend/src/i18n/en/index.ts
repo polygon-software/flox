@@ -147,4 +147,8 @@ export default {
     manager: 'Manager',
     employee: 'Employee',
   },
+  email: {
+    subject_rejected: 'Rejected',
+    body_rejected: 'Application is rejected'
+  }
 };

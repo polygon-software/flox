@@ -61,7 +61,6 @@ export async function sendEmail(
     Source: from,
     ReplyToAddresses: replyTo ?? [],
   };
-
   // Send actual e-mail
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
   return await sesClient.send(new SendEmailCommand(params));
@@ -116,4 +115,15 @@ export function generatePasswordChangeLink(
   const hiddenEmail = Buffer.from(email).toString('base64');
   const hiddenPw = Buffer.from(password).toString('base64');
   return `${baseUrl}/set-password?u=${hiddenEmail}&k=${hiddenPw}&t=${type}`;
+}
+
+/**
+ * Send rejection email to rejected company
+ * @param {string} email - email
+ * @returns {Promise<void>} - email sent
+ */
+export async function sendCompanyRejectEmail(email: string): Promise<void> {
+  const sender = process.env.EMAIL_SENDER ?? '';
+
+  await sendEmail(sender, email, 'Rejected', 'Application is rejected');
 }

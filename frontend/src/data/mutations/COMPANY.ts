@@ -73,3 +73,18 @@ export const DELETE_COMPANY = {
   type: MutationTypes.DELETE,
   cacheLocation: 'removeCompany'
 }
+
+
+export const REJECT_COMPANY = {
+  mutation: gql`
+    mutation rejectCompany($uuid: ID!){
+      rejectCompany (deleteCompanyInput: {uuid: $uuid}) {
+        uuid
+        company_name
+        __typename
+      }
+    }`,
+  tables: ['company'],
+  type: MutationTypes.DELETE,
+  cacheLocation: 'rejectCompany'
+}

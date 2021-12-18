@@ -8,7 +8,6 @@ import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
 import { AssociateUserInput } from './dto/input/associate-user.input';
 import {
-  AdminOnly,
   CompanyOnly,
   CurrentUser,
   SOIOnly,
@@ -123,6 +122,19 @@ export class CompanyResolver {
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
   ): Promise<Company> {
     return this.companyService.deleteCompany(deleteCompanyInput);
+  }
+
+  /**
+   * Removes a company
+   * @param {DeleteCompanyInput} deleteCompanyInput - company uuid
+   * @returns {Promise<Company>} - company
+   */
+  @SOIOnly()
+  @Mutation(() => Company)
+  async rejectCompany(
+    @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
+  ): Promise<Company> {
+    return this.companyService.rejectCompany(deleteCompanyInput);
   }
 
   /**
