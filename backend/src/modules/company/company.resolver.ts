@@ -8,7 +8,6 @@ import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
 import { AssociateUserInput } from './dto/input/associate-user.input';
 import {
-  AdminOnly,
   CompanyOnly,
   CurrentUser,
   SOIOnly,
@@ -130,7 +129,7 @@ export class CompanyResolver {
    * @param {DeleteCompanyInput} deleteCompanyInput - company uuid
    * @returns {Promise<Company>} - company
    */
-  @SOIOnly() // TODO restrict to appropriate roles
+  @SOIOnly()
   @Mutation(() => Company)
   async rejectCompany(
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
