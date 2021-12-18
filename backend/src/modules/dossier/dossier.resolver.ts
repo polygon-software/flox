@@ -15,7 +15,7 @@ export class DossierResolver {
    * @param {CreateDossierInput} createDossierInput - data of the new dossier
    * @returns {Promise<Dossier>} - the Dossier
    */
-  @Public()
+  @Public() //ToDo
   @Mutation(() => Dossier)
   async createDossier(
     @Args('createDossierInput') createDossierInput: CreateDossierInput,
@@ -27,7 +27,7 @@ export class DossierResolver {
    * @param {UpdateDossierInput} updateDossierInput - input, containing new status
    * @returns {Promise<Dossier[]>} - updated dossier
    */
-  @Public()
+  @Public() //ToDo
   @Mutation(() => Dossier)
   async updateDossier(
     @Args('UpdateDossierInput') updateDossierInput: UpdateDossierInput,
@@ -40,7 +40,7 @@ export class DossierResolver {
    * @param {UpdateDossierStatusInput} updateDossierStatusInput - input, containing new status
    * @returns {Promise<Dossier[]>} - updated dossier
    */
-  @Public()
+  @Public() //ToDo
   @Mutation(() => Dossier)
   async updateDossierStatus(
     @Args('UpdateDossierStatusInput')

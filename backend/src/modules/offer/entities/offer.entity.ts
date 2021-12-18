@@ -17,6 +17,6 @@ export class Offer extends BaseEntity {
   bank: Bank;
 
   @Field(() => PrivateFile, { description: 'The Offer as a PDF' })
-  @OneToOne(() => PrivateFile)
+  @OneToOne(() => PrivateFile, { nullable: true })
   pdf: PrivateFile;
 }

@@ -665,7 +665,7 @@ input offer {
   last_name: String
 
   """The Offer as a PDF"""
-  pdf: private_file!
+  pdf: private_file
 }
 
 input private_file {

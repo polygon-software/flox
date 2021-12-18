@@ -14,6 +14,9 @@ export class CreateOfferInput extends PartialType(CreatePersonInput) {
   @Field(() => CreateBankInput, { description: 'Bank making the offer' })
   bank: Bank;
 
-  @Field(() => PrivateFile, { description: 'The Offer as a PDF' })
+  @Field(() => PrivateFile, {
+    description: 'The Offer as a PDF',
+    nullable: true,
+  })
   pdf: PrivateFile;
 }
