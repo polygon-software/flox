@@ -165,5 +165,6 @@ export default {
     upload_more_documents: 'Weitere Dokumente hochladen',
     organisation_id: 'Organisationsnummer',
     employee_id: 'Mitarbeiternummer',
+    role: 'Rolle',
   },
 };

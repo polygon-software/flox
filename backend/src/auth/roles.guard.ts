@@ -41,11 +41,14 @@ export class RolesGuard implements CanActivate {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
     const req = this.getRequest(context);
     const user = req.user;
-    const dbUser = await this.userRepository.findOne(user.userId);
+    let dbUser = undefined;
+    if (user) {
+      dbUser = await this.userRepository.findOne(user.userId);
 
-    // Admin has access to everything
-    if (dbUser.role === ROLE.SOI_ADMIN) {
-      return true;
+      // Admin has access to everything
+      if (dbUser && dbUser.role === ROLE.SOI_ADMIN) {
+        return true;
+      }
     }
 
     // If no roles are specified, allow access only on public resources OR any role

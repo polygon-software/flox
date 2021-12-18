@@ -143,6 +143,22 @@ export const MY_EMPLOYEES = {
   cacheLocation: 'myEmployees'
 }
 
+export const MY_EMPLOYEE = {
+  query: gql`
+    query{
+      myEmployee{
+        uuid
+        first_name
+        last_name
+        readable_id
+        email
+      }
+    }
+    `,
+  tables: ['employee'],
+  cacheLocation: 'myEmployee'
+}
+
 export const PRIVATE_FILE = {
   query: gql`
     query getPrivateFile($uuid: ID!){
@@ -157,6 +173,22 @@ export const PRIVATE_FILE = {
   tables: ['private_file'],
   cacheLocation: 'getPrivateFile'
 }
+
+export const MY_USER = {
+  query: gql`
+    query{
+      getMyUser{
+        uuid
+        role
+        fk
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'getMyUser'
+}
+
 // export const MY_CUSTOMERS = {
 //   query: gql`
 //         query{

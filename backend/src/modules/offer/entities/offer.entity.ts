@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Entity, ManyToOne, OneToOne } from 'typeorm';
 import { Dossier } from '../../dossier/entity/dossier.entity';

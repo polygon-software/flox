@@ -403,6 +403,7 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getMyUser: User!
   getPrivateFile(
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
@@ -410,6 +411,7 @@ type Query {
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   myCompany: Company!
+  myEmployee: Employee!
   myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!

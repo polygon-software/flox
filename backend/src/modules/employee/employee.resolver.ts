@@ -13,6 +13,7 @@ import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUMS';
+import { Public } from '../../auth/authentication.decorator';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
@@ -78,6 +79,23 @@ export class EmployeeResolver {
     }
 
     return await this.employeeService.getEmployees(company);
+  }
+
+  /**
+   * Get the currently logged in employee, if he is an employee
+   * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   * @returns {Promise<Employee>} - The Employee
+   */
+  @Public()
+  @Query(() => Employee, { name: 'myEmployee' })
+  async getMyEmployee(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Employee> {
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    if (!dbUser || dbUser.role !== ROLE.EMPLOYEE) {
+      return undefined;
+    }
+    return this.employeeService.getEmployee(dbUser.fk);
   }
 
   /**

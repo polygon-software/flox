@@ -8,11 +8,11 @@ import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
 import { AssociateUserInput } from './dto/input/associate-user.input';
 import {
-  AdminOnly,
   CompanyOnly,
   CurrentUser,
   SOIOnly,
 } from '../../auth/authorization.decorator';
+import { Public } from '../../auth/authentication.decorator';
 
 @Resolver(() => Company)
 export class CompanyResolver {
@@ -78,7 +78,7 @@ export class CompanyResolver {
    * @param {CreateCompanyInput} createCompanyInput - data of the new company
    * @returns {Promise<Company>} - company
    */
-  @SOIOnly()
+  @Public()
   @Mutation(() => Company)
   async createCompany(
     @Args('createCompanyInput') createCompanyInput: CreateCompanyInput,
