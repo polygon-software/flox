@@ -45,7 +45,7 @@ export class EmployeeResolver {
     }
     return await this.employeeService.createEmployee({
       ...createEmployeeInput,
-      company,
+      company_uuid: company.uuid,
     });
   }
 

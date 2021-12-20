@@ -5,16 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Employee } from './entities/employee.entity';
 import { CompanyService } from '../company/company.service';
-import { CompanyModule } from '../company/company.module';
 import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Company, Employee, User, Dossier]),
-    CompanyModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Company, Employee, User, Dossier])],
   providers: [EmployeeResolver, EmployeeService, CompanyService, UserService],
 })
 export class EmployeeModule {}

@@ -43,29 +43,4 @@ export class UserResolver {
     }
     return this.usersService.getUser({ uuid: user.userId });
   }
-
-  @AdminOnly()
-  @Mutation(() => User)
-  async create(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<User> {
-    // Publish authentication so subscriptions will auto-update
-    return this.usersService.create(createUserInput);
-  }
-
-  @AdminOnly()
-  @Mutation(() => User)
-  async update(
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
-  ): Promise<User> {
-    return this.usersService.update(updateUserInput);
-  }
-
-  @AdminOnly()
-  @Mutation(() => User)
-  async remove(
-    @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
-  ): Promise<User> {
-    return this.usersService.remove(deleteUserInput);
-  }
 }

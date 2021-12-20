@@ -9,6 +9,7 @@ import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUMS';
 import { sendPasswordChangeEmail } from '../../email/helper';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class EmployeeService {
@@ -16,6 +17,7 @@ export class EmployeeService {
     @InjectRepository(Employee)
     private employeeRepository: Repository<Employee>,
     private userService: UserService,
+    private readonly companyService: CompanyService,
   ) {}
 
   /**
@@ -26,6 +28,14 @@ export class EmployeeService {
   async createEmployee(
     createEmployeeInput: CreateEmployeeInput,
   ): Promise<Employee> {
+    const company = await this.companyService.getCompany({
+      uuid: createEmployeeInput.company_uuid,
+      cognito_id: null,
+    });
+    if (!company) {
+      throw new Error('No company found for company_uuid');
+    }
+
     const password = randomPassword(8);
     const cognitoId = await createCognitoAccount(
       createEmployeeInput.email,
@@ -36,8 +46,16 @@ export class EmployeeService {
       password,
       ROLE.EMPLOYEE,
     );
+
     const employee = this.employeeRepository.create({
-      ...createEmployeeInput,
+      language: createEmployeeInput.language,
+      function: createEmployeeInput.function,
+      phone: createEmployeeInput.phone,
+      gender: createEmployeeInput.gender,
+      first_name: createEmployeeInput.first_name,
+      last_name: createEmployeeInput.last_name,
+      email: createEmployeeInput.email,
+      company,
       dossiers: [],
     });
     await this.userService.create({

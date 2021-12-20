@@ -6,7 +6,7 @@ import PrivateFile from '../../../file/entities/private_file.entity';
 import { CreateDossierInput } from '../../../dossier/dto/input/create-dossier.input';
 import { CreateBankInput } from '../../../bank/dto/input/create-bank.input';
 
-@InputType('offer')
+@InputType()
 export class CreateOfferInput extends PartialType(CreatePersonInput) {
   @Field(() => CreateDossierInput, { description: 'Dossier of Offer' })
   dossier: Dossier;

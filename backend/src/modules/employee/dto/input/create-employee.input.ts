@@ -1,6 +1,5 @@
 import { InputType, Field, PartialType } from '@nestjs/graphql';
-import { IsNotEmptyObject, IsPhoneNumber, IsString } from 'class-validator';
-import { Company } from 'src/modules/company/entities/company.entity';
+import { IsPhoneNumber, IsString, IsUUID } from 'class-validator';
 import { CreatePersonInput } from 'src/modules/person/dto/create-person.input';
 
 @InputType()
@@ -22,7 +21,7 @@ export class CreateEmployeeInput extends PartialType(CreatePersonInput) {
   @IsString()
   gender: string;
 
-  @Field(() => Company, { nullable: true, description: 'Company' })
-  @IsNotEmptyObject()
-  company: Company;
+  @Field(() => String, { description: 'Company uuid' })
+  @IsUUID()
+  company_uuid: string;
 }

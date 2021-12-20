@@ -4,7 +4,7 @@ import { Company } from '../../../company/entities/company.entity';
 import { Dossier } from '../../../dossier/entity/dossier.entity';
 import { Person } from '../../../person/entities/person.entity';
 
-@InputType('EmployeeInput')
+@InputType()
 export class EmployeeInput extends Person {
   @Field(() => String, { description: 'Language' })
   @IsString()
