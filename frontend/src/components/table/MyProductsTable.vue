@@ -156,8 +156,9 @@ const computedResult = computed(() => {
  * @returns {boolean} - whether it's editable
  */
 function isEditable(product: Record<string, unknown>): boolean{
-  const isDraft =  product.status === PRODUCT_STATUS.DRAFT
-  const isValid = product.status === PRODUCT_STATUS.VALID
+  const status: PRODUCT_STATUS = product.status as PRODUCT_STATUS
+  const isDraft =  status === PRODUCT_STATUS.DRAFT
+  const isValid = status === PRODUCT_STATUS.VALID
   const hasNotStarted =  product.start !== null && (new Date(product.start as string) >= new Date())
   return isDraft || (isValid && hasNotStarted)
 }

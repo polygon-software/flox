@@ -5,7 +5,7 @@
     bordered
   >
     <div class="flex items-center justify-between">
-      <b> {{ title }} </b>
+      <strong> {{ title }} </strong>
       <q-badge
         v-show="!props.isRead"
         rounded

@@ -36,8 +36,8 @@
 
     <!-- Winchances -->
     <div class="flex justify-between q-ma-sm">
-      <b> {{ $t('products.average_chance') }}: {{ average_chance }}</b>
-      <b> {{ $t('products.player_chance') }}: {{ user_chance }}</b>
+      <strong> {{ $t('products.average_chance') }}: {{ average_chance }}</strong>
+      <strong> {{ $t('products.player_chance') }}: {{ user_chance }}</strong>
     </div>
   </div>
 </template>
