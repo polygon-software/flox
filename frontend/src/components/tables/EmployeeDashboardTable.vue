@@ -71,8 +71,8 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue';
-import {executeMutation} from 'src/helpers/data-helpers';
+import {computed, defineProps, Ref, ref} from 'vue';
+import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
@@ -105,102 +105,11 @@ const columns = [
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false },
 ]
 
-const rows = [
-  {
-    name: 'bsp1',
-    date: '24.11.2021',
-    customer: 'Jusuf Amzai',
-    institute: 'ZKB',
-    location: 'Luzern',
-    mortgage_amount: 620000.00,
-    status: STATUS.OPEN,
-    uploads: '',
-    offers: ['CS', 'UB', 'KZ', 'AB']
-  },
-  {
-    name: 'bsp2',
-    date: '22.11.2021',
-    customer: 'Marino',
-    institute: 'ZKB',
-    location: 'Zürich',
-    mortgage_amount: 620000.00,
-    status: STATUS.SIGNED,
-    uploads: '',
-    offers: ['CS']
-  },
-  {
-    name: 'bsp3',
-    date: '23.11.2021',
-    customer: 'Ramize',
-    institute: 'ZKB',
-    location: 'Emmen',
-    mortgage_amount: 620000.00,
-    status: STATUS.REJECTED,
-    uploads: '',
-    offers: []
-  },
-  {
-    name: 'bsp4',
-    date: '25.11.2021',
-    customer: 'Elexa',
-    institute: 'ZKB',
-    location: 'Kriens',
-    mortgage_amount: 620000.00,
-    status: STATUS.SUBMITTED,
-    uploads: '',
-    offers: ['UB']
-  },
-  {
-    name: 'bsp5',
-    date: '26.11.2021',
-    customer: 'David',
-    institute: 'ZKB',
-    location: 'Emmenbrücke',
-    mortgage_amount: 620000.00,
-    status: STATUS.OFFERED,
-    uploads: '',
-    offers: ['KZ']
-  },
-  {
-    name: 'bsp6',
-    date: '27.11.2021',
-    customer: 'Christoph',
-    institute: 'ZKB',
-    location: 'Luzern',
-    mortgage_amount: 620000.00,
-    status: STATUS.COMPLETED,
-    uploads: '',
-    offers: ['UB', 'KZ']
-  },
-  {
-    name: 'bsp7',
-    date: '28.11.2021',
-    customer: 'Joel',
-    institute: 'ZKB',
-    location: 'Zürich',
-    mortgage_amount: 620000.00,
-    status: STATUS.IN_PROCESS,
-    uploads: '',
-    offers: ['CS', 'KZ']
-  },
-  {
-    name: 'bsp8',
-    date: '29.11.2021',
-    customer: 'Marius',
-    institute: 'ZKB',
-    location: 'Zug',
-    mortgage_amount: 620000.00,
-    status: STATUS.SENT,
-    uploads: '',
-    offers: ['KZ']
-  },
-]
 
-// Todo: after Sprint 3 remove the computedResult data with the corresponding data from database
-// const queryResult = subscribeToQuery(MY_CUSTOMERS) as Ref<Record<string, Array<Record<string, unknown>>>>
-//const rows = computed(()=>{
-//return queryResult.value ?? []
-//})
+const queryResult = subscribeToQuery(ALL_D) as Ref<Record<string, Array<Record<string, unknown>>>>
+const rows = computed(()=>{
+  return queryResult.value ?? []
+})
 
 /**
  * Edits the dossier status and update the status with the selected item

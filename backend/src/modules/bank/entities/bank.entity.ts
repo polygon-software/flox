@@ -5,8 +5,8 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
 import { Dossier } from '../../dossier/entity/dossier.entity';
 
+@Entity()
 @ObjectType()
-@Entity('bank')
 export class Bank extends Person {
   @Field(() => String, { description: 'Name of the Bank' })
   @Column({ unique: true })

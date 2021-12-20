@@ -7,22 +7,29 @@ import { UpdateDossierInput } from './dto/input/update-dossier.input';
 import { STATUS } from '../../ENUM/ENUMS';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import { BankService } from '../bank/bank.service';
+import { generateHumanReadableId } from '../../helpers';
+import { EmployeeService } from '../employee/employee.service';
 
 @Injectable()
 export class DossierService {
   constructor(
     @InjectRepository(Dossier) private dossierRepository: Repository<Dossier>,
-    private bankService: BankService,
+    private readonly employeeService: EmployeeService,
+    private readonly bankService: BankService,
   ) {}
 
   /**
    * Creates a new dossier using the given data, and sets default values
    * @param {CreateDossierInput} createDossierInput - the dossier's data, containing all mandatory fields
+   * @param {string} cognitoId - uuid of user
    * @returns {Promise<Dossier>} - dossier
    */
   async createDossier(
     createDossierInput: CreateDossierInput,
+    cognitoId: string,
   ): Promise<Dossier> {
+    const employee = await this.employeeService.getMyEmployee(cognitoId);
+
     let originalBank = await this.bankService.findBankByName(
       createDossierInput.original_bank_name,
     );
@@ -41,6 +48,11 @@ export class DossierService {
       non_arrangeable: false,
       offers: [],
       status: STATUS.IN_PROCESS,
+      first_name: createDossierInput.first_name,
+      last_name: createDossierInput.last_name,
+      email: createDossierInput.email,
+      readable_id: generateHumanReadableId(),
+      employee: employee,
     });
 
     return await this.dossierRepository.save(dossier);
@@ -73,5 +85,13 @@ export class DossierService {
       status: updateDossierStatusInput.status,
     });
     return this.dossierRepository.findOne(updateDossierStatusInput.uuid);
+  }
+
+  /**
+   * todo
+   */
+  async myDossiers(cognito_id: string): Promise<Dossier[]> {
+    const employee = await this.employeeService.getMyEmployee(cognito_id);
+    return employee.dossiers;
   }
 }

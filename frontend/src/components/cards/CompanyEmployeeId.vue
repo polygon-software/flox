@@ -28,6 +28,10 @@ let employee_readable_id = ref('')
 let company_readable_id = ref('')
 let other = ref('')
 void executeQuery(MY_USER).then((user_resp)=>{
+  if(!user_resp.data){
+    other.value = 'Unauthenticated'
+    return
+  }
   const user = user_resp.data[MY_USER.cacheLocation]  as User
   if(user.role === ROLE.EMPLOYEE){
     void executeQuery(MY_EMPLOYEE).then((employee_resp)=>{

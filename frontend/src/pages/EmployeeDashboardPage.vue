@@ -47,9 +47,10 @@
 <script setup lang="ts">
 import {inject, ref} from 'vue'
 import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue';
-import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CompanyEmployeeId from 'components/cards/CompanyEmployeeId.vue';
+import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
+import {executeMutation} from 'src/helpers/data-helpers';
 
 
 /**
@@ -96,6 +97,49 @@ const $routerService: RouterService = inject('$routerService') as RouterService
  * @returns {Promise<void>} - done
  */
 async function newAssignment(): Promise<void> {
-  await $routerService.routeTo(ROUTES.NEW_ASSIGNMENT_PAGE)
+  // await $routerService.routeTo(ROUTES.NEW_ASSIGNMENT_PAGE) Todo Re-enable once create dossier form is added
+  // correspondence Address
+  const correspondence_address = {
+    street: 'Irrelevant Street',
+    number: '6',
+    city: 'Unimportant City',
+    zip_code: '8620'
+  }
+
+  //original Bank
+  const options = [{abbreviation: 'ZKB', name: 'Züricher Kantonal Bank'}, {abbreviation: 'UBS', name: 'UBS Schweit'},{abbreviation: 'LNT', name: 'Bank Lindt'}, {abbreviation: 'PST', name: 'Postfinance'}]
+  const bank = options[Math.floor(Math.random() * options.length)]
+
+  //born
+  const born = new Date(2021 - Math.floor(Math.random()*100), Math.floor(Math.random()*24) , Math.floor(Math.random()*28))
+
+  //Property Address
+  const property_address = {
+    street: 'Unknown Street',
+    number: '7',
+    city: 'bla City',
+    zip_code: '8720'
+  }
+
+  //loan
+  const loan_sum = Math.random() * 100000
+
+  // Person
+  const first_name = 'Tobias'
+  const last_name = 'Hertiger'
+  const email = 'email@email.email'
+
+  const res = await executeMutation(CREATE_DOSSIER, {
+    first_name,
+    last_name,
+    correspondence_address,
+    original_bank_name: bank.name,
+    original_bank_abbreviation: bank.abbreviation,
+    born,
+    property_address,
+    loan_sum,
+    email
+  })
+  console.log(res)
 }
 </script>

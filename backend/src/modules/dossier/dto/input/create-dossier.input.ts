@@ -1,17 +1,10 @@
 import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
-import {
-  IsBoolean,
-  IsDate,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-} from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Address } from '../../../address/entities/address.entity';
 import { CreatePersonInput } from '../../../person/dto/create-person.input';
 import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
-import { STATUS } from '../../../../ENUM/ENUMS';
 
-@InputType('dossier')
+@InputType('Dossier')
 export class CreateDossierInput extends PartialType(CreatePersonInput) {
   @Field(() => CreateAddressInput)
   @IsNotEmpty()
@@ -36,7 +29,4 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
   @Field(() => Number, { nullable: true })
   @IsNumber()
   loan_sum: number;
-
-  @Field(() => STATUS, { description: 'Status of Dossier' })
-  status: STATUS;
 }

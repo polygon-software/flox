@@ -3,8 +3,8 @@ import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
 
 export const CREATE_DOSSIER = {
   mutation: gql`
-    mutation createDossier($first_name: String!, $last_name: String!, $correspondence_address: CreateAddressInput!, $email: String!, $original_bank_name: String!, $original_bank_abbreviation: String!, $born: DateTime!, $property_address: CreateAddressInput!, $loan_sum: Float!, $non_arrangeable: Boolean!, $status: Status!){
-      createDossier (createDossierInput: {first_name: $first_name, last_name: $last_name, correspondence_address: $correspondence_address, email: $email, original_bank_name: $original_bank_name,original_bank_abbreviation: $original_bank_abbreviation, born: $born, property_address: $property_address, loan_sum: $loan_sum, non_arrangeable: $non_arrangeable, status: $status}) {
+    mutation createDossier($first_name: String!, $last_name: String!, $correspondence_address: CreateAddressInput!, $email: String!, $original_bank_name: String!, $original_bank_abbreviation: String!, $born: DateTime!, $property_address: CreateAddressInput!, $loan_sum: Float!){
+      createDossier (createDossierInput: {first_name: $first_name, last_name: $last_name, correspondence_address: $correspondence_address, email: $email, original_bank_name: $original_bank_name,original_bank_abbreviation: $original_bank_abbreviation, born: $born, property_address: $property_address, loan_sum: $loan_sum}) {
         uuid
         correspondence_address {
           uuid
@@ -40,8 +40,8 @@ export const CREATE_DOSSIER = {
 
 export const SET_DOSSIER_STATUS = {
   mutation: gql`
-    mutation updateDossier($uuid: ID!, $first_name: String, $last_name: String, $email: String!, $born: DateTime!, $loan_sum: Float!, $non_arrangeable: Boolean!, $status: Status!){
-      updateDossier (updateDossierInput: {uuid: $uuid, first_name: $first_name, last_name: $last_name, email: $email, born: $born, loan_sum: $loan_sum, non_arrangeable: $non_arrangeable, status: $status}) {
+    mutation updateDossier($uuid: ID!, $first_name: String, $last_name: String, $email: String!, $born: DateTime!, $loan_sum: Float!, $status: Status!){
+      updateDossier (updateDossierInput: {uuid: $uuid, first_name: $first_name, last_name: $last_name, email: $email, born: $born, loan_sum: $loan_sum, status: $status}) {
         uuid
         status
         non_arrangeable

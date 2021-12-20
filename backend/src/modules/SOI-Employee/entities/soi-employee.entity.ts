@@ -1,7 +1,7 @@
-import { ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { Entity } from 'typeorm';
+import { ObjectType } from '@nestjs/graphql';
 
+@Entity()
 @ObjectType()
-@Entity('soiemployee')
 export class SoiEmployee extends Person {}

@@ -1,10 +1,11 @@
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { Dossier } from './entity/dossier.entity';
 import { Public } from '../../auth/authentication.decorator';
 import { DossierService } from './dossier.service';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
+import { CurrentUser } from '../../auth/authorization.decorator';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -13,14 +14,16 @@ export class DossierResolver {
   /**
    * Adds a new dossier to the database
    * @param {CreateDossierInput} createDossierInput - data of the new dossier
+   * @param {Record<string, string>} user - the current request's user
    * @returns {Promise<Dossier>} - the Dossier
    */
   @Public() //ToDo
   @Mutation(() => Dossier)
   async createDossier(
     @Args('createDossierInput') createDossierInput: CreateDossierInput,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier> {
-    return this.dossierService.createDossier(createDossierInput);
+    return this.dossierService.createDossier(createDossierInput, user.userId);
   }
   /**
    * Updates the anything of a dossier
@@ -47,5 +50,16 @@ export class DossierResolver {
     updateDossierStatusInput: UpdateDossierStatusInput,
   ): Promise<Dossier> {
     return this.dossierService.updateDossierStatus(updateDossierStatusInput);
+  }
+
+  /**
+   * Todo
+   */
+  @Public() // Todo
+  @Query(() => [Dossier])
+  async myDossiers(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier[]> {
+    return this.dossierService.myDossiers(user.userId);
   }
 }

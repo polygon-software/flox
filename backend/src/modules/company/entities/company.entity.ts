@@ -1,4 +1,4 @@
-import { ObjectType, Field, InputType } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import {
   IsString,
@@ -17,9 +17,8 @@ import { CREATION_STATE } from '../../../ENUM/ENUMS';
  * Initial status: 'creation_state' is set to 'APPLIED', and set to AWAITING_DOCUMENTS once approved by SOI admin
  */
 
+@Entity()
 @ObjectType()
-@InputType('company')
-@Entity({ name: 'company' })
 export class Company extends Person {
   @Field(() => String, { description: 'Company Name' })
   @Column()
@@ -82,6 +81,8 @@ export class Company extends Person {
     description: 'Employees of the company',
     nullable: true,
   })
-  @OneToMany(() => Employee, (employee) => employee.company, { cascade: true })
+  @OneToMany(() => Employee, (employee) => employee.company, {
+    cascade: true,
+  })
   employees: Employee[];
 }

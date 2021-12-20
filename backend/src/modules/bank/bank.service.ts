@@ -8,6 +8,7 @@ import { sendPasswordChangeEmail } from '../../email/helper';
 import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
 import { CreateUserlessBankInput } from './dto/input/create-userless-bank.input';
+import { generateHumanReadableId } from '../../helpers';
 
 @Injectable()
 export class BankService {
@@ -51,6 +52,7 @@ export class BankService {
       first_name: '-',
       last_name: '-',
       email: '-',
+      readable_id: generateHumanReadableId(),
     });
     return this.bankRepository.save(newBank);
   }

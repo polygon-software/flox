@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { Address } from '../../address/entities/address.entity';
 import {
@@ -12,9 +12,10 @@ import {
 import { Offer } from '../../offer/entities/offer.entity';
 import { Bank } from '../../bank/entities/bank.entity';
 import { STATUS } from '../../../ENUM/ENUMS';
+import { Employee } from '../../employee/entities/employee.entity';
 
+@Entity()
 @ObjectType()
-@Entity('dossier')
 export class Dossier extends Person {
   @Field(() => Address, { description: 'Address' })
   @JoinColumn()
@@ -35,7 +36,7 @@ export class Dossier extends Person {
   property_address: Address;
 
   @Field(() => Number, { description: 'Money loaned' })
-  @Column()
+  @Column({ type: 'real' })
   loan_sum: number;
 
   @Field(() => Boolean, { description: 'ToDo' })
@@ -54,4 +55,8 @@ export class Dossier extends Person {
   @JoinColumn()
   @OneToMany(() => Offer, (offer) => offer.dossier)
   offers: Offer[];
+
+  @Field(() => Employee, { description: 'Employee who created the Dossier' })
+  @ManyToOne(() => Employee, (employee) => employee.dossiers)
+  employee: Employee;
 }

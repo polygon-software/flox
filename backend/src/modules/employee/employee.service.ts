@@ -36,7 +36,10 @@ export class EmployeeService {
       password,
       ROLE.EMPLOYEE,
     );
-    const employee = this.employeeRepository.create(createEmployeeInput);
+    const employee = this.employeeRepository.create({
+      ...createEmployeeInput,
+      dossiers: [],
+    });
     await this.userService.create({
       role: ROLE.EMPLOYEE,
       uuid: cognitoId,
@@ -88,4 +91,12 @@ export class EmployeeService {
     return this.employeeRepository.findOne(uuid);
   }
   // TODO: Add remove/update/find functionalities as needed
+
+  async getMyEmployee(cognitoId: string): Promise<Employee> {
+    const user = await this.userService.getUser({ uuid: cognitoId });
+    if (user && user.role === ROLE.EMPLOYEE) {
+      return this.employeeRepository.findOne(user.fk);
+    }
+    throw new Error('User is not an Employee');
+  }
 }

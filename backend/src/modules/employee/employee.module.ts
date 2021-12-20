@@ -8,9 +8,13 @@ import { CompanyService } from '../company/company.service';
 import { CompanyModule } from '../company/company.module';
 import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
+import { Dossier } from '../dossier/entity/dossier.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Company, Employee, User]), CompanyModule],
+  imports: [
+    TypeOrmModule.forFeature([Company, Employee, User, Dossier]),
+    CompanyModule,
+  ],
   providers: [EmployeeResolver, EmployeeService, CompanyService, UserService],
 })
 export class EmployeeModule {}
