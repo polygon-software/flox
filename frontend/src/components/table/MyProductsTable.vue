@@ -110,7 +110,6 @@ import {MY_PRODUCTS} from 'src/data/queries/QUERIES';
 import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {useQuasar} from 'quasar';
 import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {FetchResult} from '@apollo/client';
 import {sleep} from 'src/helpers/general-helpers';
