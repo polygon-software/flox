@@ -5,7 +5,6 @@ import { IsString } from 'class-validator';
 import { Product } from '../../product/entities/product.entity';
 import { User } from '../../user/entities/user.entity';
 
-
 @ObjectType()
 @Entity({ name: 'comment' })
 @InputType('comment')
@@ -19,9 +18,7 @@ export class Comment extends BaseEntity {
   @IsString()
   content: string;
 
-  @Field(() => Product, { description: 'The product this a comment belongs to' })
+  @Field(() => Product, { description: 'The product this comment belongs to' })
   @ManyToOne(() => Product, (product) => product.comments)
   product: Product;
 }
-
-// TODO Add missing fields

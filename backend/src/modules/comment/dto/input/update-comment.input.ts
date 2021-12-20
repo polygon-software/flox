@@ -12,5 +12,3 @@ export class UpdateCommentInput extends PartialType(CreateCommentInput) {
   @IsString()
   content: string;
 }
-
-//TODO: Add missing operations

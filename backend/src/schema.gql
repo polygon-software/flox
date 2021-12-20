@@ -10,7 +10,7 @@ type Comment {
   """Content"""
   content: String!
 
-  """The product this a comment belongs to"""
+  """The product this comment belongs to"""
   product: Product!
 
   """The user who wrote this comment"""
@@ -178,10 +178,8 @@ type Product {
 }
 
 enum ProductStatus {
-  ACTIVE
   ARCHIVED
   DRAFT
-  ENDED
   VALID
 }
 
@@ -271,7 +269,7 @@ input comment {
   """Content"""
   content: String!
 
-  """The product this a comment belongs to"""
+  """The product this comment belongs to"""
   product: product!
 
   """The user who wrote this comment"""
