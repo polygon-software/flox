@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import LoginForm from 'components/forms/LoginForm.vue'
 import {inject} from 'vue'
-import {AuthenticationService} from '../services/AuthService';
+import {AuthenticationService} from '../../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {RouteRecordRaw} from 'vue-router';
@@ -55,7 +55,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
 async function onLogin({username, password, route_target}: {username: string, password: string, route_target: string}){
   await $authService?.login(username, password)
   const target_route_mapping: Record<string, RouteRecordRaw> = {
-    'admin-dashboard': ROUTES.ADMIN_DASHBOARD,
+    'admin-dashboard': ROUTES.ADMIN_EMPLOYEES,
     'management-dashboard': ROUTES.MANAGEMENT_EMPLOYEE_DATA,
     'employee-dashboard': ROUTES.EMPLOYEE_DASHBOARD
   }

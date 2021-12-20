@@ -17,7 +17,7 @@
 /**
  * this page lets you set a password using the SetPassword component
  */
-import GenericForm from '../components/forms/GenericForm.vue';
+import GenericForm from 'components/forms/GenericForm.vue';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
