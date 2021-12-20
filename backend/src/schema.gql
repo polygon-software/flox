@@ -33,6 +33,9 @@ input AssociateUserInput {
 }
 
 type Bank {
+  """Three letter abbreviation of the Bank"""
+  abbreviation: String!
+
   """Address"""
   address: Address!
 
@@ -54,8 +57,14 @@ type Bank {
   """Last Name"""
   last_name: String!
 
+  """Name of the Bank"""
+  name: String!
+
   """Offers made by Bank"""
   offers: [Offer!]!
+
+  """Dossier where the mortgage originally belongs to the bank"""
+  own_mortgages: [Dossier!]!
 
   """Human-readable ID"""
   readable_id: String!
@@ -323,8 +332,8 @@ type Mutation {
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   update(updateUserInput: UpdateUserInput!): User!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
-  updateDossier(UpdateDossierInput: UpdateDossierInput!): Dossier!
-  updateDossierStatus(UpdateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
+  updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
+  updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
 }
 
@@ -506,13 +515,18 @@ input UpdateCompanyInput {
 
 input UpdateDossierInput {
   born: DateTime
-  correspondence_address: String
+
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
   loan_sum: Float
   non_arrangeable: Boolean
-  offers: [offer!]
-  original_bank: bank
-  property_address: String
-  status: String
+  status: Status
   uuid: ID!
 }
 
@@ -630,7 +644,7 @@ enum creationState {
 
 input dossier {
   born: DateTime
-  correspondence_address: CreateAddressInput
+  correspondence_address: CreateAddressInput!
 
   """E-mail"""
   email: String
@@ -642,8 +656,9 @@ input dossier {
   last_name: String
   loan_sum: Float
   non_arrangeable: Boolean
-  original_bank: bank
-  property_address: CreateAddressInput
+  original_bank_abbreviation: String!
+  original_bank_name: String!
+  property_address: CreateAddressInput!
 
   """Status of Dossier"""
   status: Status!
@@ -664,26 +679,6 @@ input employee {
 
   """Phone Number"""
   phone: String!
-}
-
-input offer {
-  """Bank making the offer"""
-  bank: bank!
-
-  """Dossier of Offer"""
-  dossier: dossier!
-
-  """E-mail"""
-  email: String
-
-  """First Name"""
-  first_name: String
-
-  """Last Name"""
-  last_name: String
-
-  """The Offer as a PDF"""
-  pdf: private_file
 }
 
 input private_file {

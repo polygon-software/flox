@@ -3,12 +3,30 @@ import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
 
 export const CREATE_DOSSIER = {
   mutation: gql`
-    mutation createDossier($first_name: String!, $last_name: String!, $correspondence_address: CreateAddressInput!, $email: String!, $original_bank: CreateBankInput!, $born: DateTime!, $property_address: CreateAddressInput!, $loan_sum: Int!, $non_arrangeable: Boolean!, $status: Status!){
-      createDossier (createDossierInput: {first_name: $first_name, last_name: $last_name, correspondence_address: $correspondence_address, email: $email, original_bank: $original_bank, born: $born, property_address: $property_address, loan_sum: $loan_sum, non_arrangeable: $non_arrangeable, status: $status}) {
-        correspondence_address
-        original_bank
+    mutation createDossier($first_name: String!, $last_name: String!, $correspondence_address: CreateAddressInput!, $email: String!, $original_bank_name: String!, $original_bank_abbreviation: String!, $born: DateTime!, $property_address: CreateAddressInput!, $loan_sum: Float!, $non_arrangeable: Boolean!, $status: Status!){
+      createDossier (createDossierInput: {first_name: $first_name, last_name: $last_name, correspondence_address: $correspondence_address, email: $email, original_bank_name: $original_bank_name,original_bank_abbreviation: $original_bank_abbreviation, born: $born, property_address: $property_address, loan_sum: $loan_sum, non_arrangeable: $non_arrangeable, status: $status}) {
+        uuid
+        correspondence_address {
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
+        }
+        original_bank {
+          uuid
+          __typename
+        }
         born
-        property_address
+        property_address {
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
+        }
         loan_sum
         non_arrangeable
         status
@@ -22,10 +40,16 @@ export const CREATE_DOSSIER = {
 
 export const SET_DOSSIER_STATUS = {
   mutation: gql`
-    mutation updateDossier($first_name: String!, $last_name: String!, $uid: String, $correspondence_address: CreateAddressInput!, $email: String!, $original_bank: Bank!, $born: DateTime!, $property_address: CreateAddressInput!, $loan_sum: Int!, $non_arrangeable: Boolean!, $status: Status!, $offers: Array!){
-      updateDossier (updateDossierInput: {first_name: $first_name, last_name: $last_name, uid: $uid, correspondence_address: $correspondence_address, email: $email, original_bank: $original_bank, born: $born, property_address: $property_address, loan_sum: $loan_sum, non_arrangeable: $non_arrangeable, status: $status, offers: $offers}) {
+    mutation updateDossier($uuid: ID!, $first_name: String, $last_name: String, $email: String!, $born: DateTime!, $loan_sum: Float!, $non_arrangeable: Boolean!, $status: Status!){
+      updateDossier (updateDossierInput: {uuid: $uuid, first_name: $first_name, last_name: $last_name, email: $email, born: $born, loan_sum: $loan_sum, non_arrangeable: $non_arrangeable, status: $status}) {
         uuid
         status
+        non_arrangeable
+        loan_sum
+        born
+        first_name
+        last_name
+        email
         __typename
       }
     }`,

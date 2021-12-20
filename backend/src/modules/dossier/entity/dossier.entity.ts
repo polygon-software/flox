@@ -1,7 +1,14 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { Address } from '../../address/entities/address.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
 import { Bank } from '../../bank/entities/bank.entity';
 import { STATUS } from '../../../ENUM/ENUMS';
@@ -15,8 +22,7 @@ export class Dossier extends Person {
   correspondence_address: Address;
 
   @Field(() => Bank, { description: 'Previous Bank of the customer' })
-  @JoinColumn()
-  @OneToOne(() => Bank)
+  @ManyToOne(() => Bank)
   original_bank: Bank;
 
   @Field(() => Date, { description: 'Date of birth of customer' })

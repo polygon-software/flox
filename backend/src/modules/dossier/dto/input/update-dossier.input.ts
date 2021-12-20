@@ -1,6 +1,5 @@
-import { Field, ID, InputType } from '@nestjs/graphql';
+import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
 import {
-  IsArray,
   IsBoolean,
   IsDate,
   IsNotEmpty,
@@ -8,33 +7,17 @@ import {
   IsUUID,
 } from 'class-validator';
 import { STATUS } from '../../../../ENUM/ENUMS';
-import { Address } from '../../../address/entities/address.entity';
-import { Bank } from '../../../bank/entities/bank.entity';
-import { Offer } from '../../../offer/entities/offer.entity';
-import { CreateOfferInput } from '../../../offer/dto/input/create-offer.input';
-import { CreateBankInput } from '../../../bank/dto/input/create-bank.input';
+import { CreatePersonInput } from '../../../person/dto/create-person.input';
 
 @InputType()
-export class UpdateDossierInput {
+export class UpdateDossierInput extends PartialType(CreatePersonInput) {
   @Field(() => ID)
   @IsUUID()
   uuid: string;
 
-  @Field(() => String, { nullable: true })
-  @IsNotEmpty()
-  correspondence_address: Address;
-
-  @Field(() => CreateBankInput, { nullable: true })
-  @IsNotEmpty()
-  original_bank: Bank;
-
   @Field(() => Date, { nullable: true })
   @IsDate()
   born: Date;
-
-  @Field(() => String, { nullable: true })
-  @IsNotEmpty()
-  property_address: Address;
 
   @Field(() => Number, { nullable: true })
   @IsNumber()
@@ -44,11 +27,7 @@ export class UpdateDossierInput {
   @IsBoolean()
   non_arrangeable: boolean;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => STATUS, { nullable: true })
   @IsNotEmpty()
   status: STATUS;
-
-  @Field(() => [CreateOfferInput], { nullable: true })
-  @IsArray()
-  offers: Offer[];
 }

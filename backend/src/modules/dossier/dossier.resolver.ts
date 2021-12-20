@@ -30,7 +30,7 @@ export class DossierResolver {
   @Public() //ToDo
   @Mutation(() => Dossier)
   async updateDossier(
-    @Args('UpdateDossierInput') updateDossierInput: UpdateDossierInput,
+    @Args('updateDossierInput') updateDossierInput: UpdateDossierInput,
   ): Promise<Dossier> {
     return this.dossierService.updateDossier(updateDossierInput);
   }
@@ -43,7 +43,7 @@ export class DossierResolver {
   @Public() //ToDo
   @Mutation(() => Dossier)
   async updateDossierStatus(
-    @Args('UpdateDossierStatusInput')
+    @Args('updateDossierStatusInput')
     updateDossierStatusInput: UpdateDossierStatusInput,
   ): Promise<Dossier> {
     return this.dossierService.updateDossierStatus(updateDossierStatusInput);
