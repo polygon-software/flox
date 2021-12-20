@@ -27,6 +27,7 @@ import {useAuth} from 'src/store/authentication';
 import {useRoute} from 'vue-router';
 import {ErrorService} from 'src/services/ErrorService';
 import {AuthenticationService} from 'src/services/AuthService';
+import {ROLE} from 'src/data/ENUM/ENUM';
 
 const $authStore = useAuth()
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -59,25 +60,41 @@ const type: string|undefined = route.query.t?.toString()
  */
 async function submitPassword(values: Record<string, string>) {
 
-  if(username === undefined || password === undefined){
+  if(username === undefined || password === undefined || type === undefined){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.invalid_link')))
     return
   }
-  const decoded_email = atob(username)
-  const decoded_pw = atob(password)
+  const decodedEmail = atob(username)
+  const decodedPw = atob(password)
 
   // Log in
-  await $authService?.login(decoded_email, decoded_pw)
+  await $authService?.login(decodedEmail, decodedPw)
 
   // Change password
-  $authStore.getters.getCognitoUser()?.changePassword(decoded_pw, values.password_repeat, (err: Error|undefined)=>{
+  $authStore.getters.getCognitoUser()?.changePassword(decodedPw, values.password_repeat, (err: Error|undefined)=>{
     if(err){
       $errorService?.showErrorDialog(err)
     }
   })
 
   setTimeout(function() {
-    void $routerService?.routeTo(type === 'man' ? ROUTES.MANAGEMENT_EMPLOYEE_DATA : ROUTES.EMPLOYEE_DASHBOARD)
+    let target;
+    switch(type){
+      case ROLE.EMPLOYEE:
+        target = ROUTES.EMPLOYEE_DASHBOARD
+        break;
+      case ROLE.SOI_EMPLOYEE:
+        target = ROUTES.EMPLOYEE_DASHBOARD // TODO change to soi-employee dashboard once split! (Do before PR!)
+        break;
+      case ROLE.COMPANY:
+        target = ROUTES.MANAGEMENT_EMPLOYEE_DATA
+        break;
+      default:
+        target = ROUTES.WILDCARD // Should never happen; redirect to 404 page
+        return;
+    }
+
+    void $routerService?.routeTo(target)
   }, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
 }
