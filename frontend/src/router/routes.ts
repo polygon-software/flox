@@ -25,10 +25,16 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/SetPasswordPage.vue') }],
   },
 
-  'MANAGEMENT_DASHBOARD': {
-    path: '/management-dashboard',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ManagementDashboardPage.vue') }],
+  'MANAGEMENT_EMPLOYEE_DATA': {
+    path: '/management-employee-data',
+    component: () => import('layouts/ManagementLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ManagementEmployeeDataPage.vue') }],
+  },
+
+  'MANAGEMENT_EMPLOYEE_TASKS': {
+    path: '/management-employee-tasks',
+    component: () => import('layouts/ManagementLayout.vue'),
+    children: [{ path: '', component: () => import('pages/ManagementEmployeeTaskPage.vue') }],
   },
 
   'EMPLOYEE_DASHBOARD': {
@@ -42,6 +48,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     path: '/credit-institution-dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/BankDashboard.vue') }],
+  },
+
+  'MANAGEMENT_EMPLOYEE_VIEW': {
+    path: '/management-employee-view',
+    component: () => import('layouts/ManagementLayout.vue'),
+    children: [{ path: '', component: () => import('pages/EmployeeDashboardPage.vue') }],
   },
 
   'SIGNUP': {
@@ -94,7 +106,8 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SIGNUP,
   ROUTES.SET_PASSWORD,
   ROUTES.DOCUMENT_UPLOAD,
-  ROUTES.MANAGEMENT_DASHBOARD,
+  ROUTES.MANAGEMENT_EMPLOYEE_DATA,
+  ROUTES.MANAGEMENT_EMPLOYEE_TASKS,
   ROUTES.CREDIT_INSTITUTION_DASHBOARD,
   ROUTES.EMPLOYEE_DASHBOARD,
   ROUTES.NEW_EMPLOYEE_PAGE,

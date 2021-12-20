@@ -11,10 +11,13 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { CompanyModule } from './modules/company/company.module';
 import { EmployeeModule } from './modules/employee/employee.module';
-import { FileModule } from './modules/file/file.module';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
-import {BankModule} from "./modules/bank/bank.module";
+import { User } from './modules/user/entities/user.entity';
+import { BankModule } from './modules/bank/bank.module';
+import { SoiAdminModule } from './modules/SOI-Admin/soi-admin.module';
+import { SoiEmployeeModule } from './modules/SOI-Employee/soi-employee.module';
+import { FileModule } from './modules/file/file.module';
 
 @Module({
   imports: [
@@ -74,11 +77,14 @@ import {BankModule} from "./modules/bank/bank.module";
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([User]),
     UserModule,
     CompanyModule,
     EmployeeModule,
     FileModule,
     BankModule,
+    SoiAdminModule,
+    SoiEmployeeModule,
   ],
   providers: [
     JwtStrategy,

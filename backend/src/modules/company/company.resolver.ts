@@ -6,9 +6,12 @@ import { GetCompanyArgs } from './dto/args/get-company.args';
 import { DeleteCompanyInput } from './dto/input/delete-company.input';
 import { Company } from './entities/company.entity';
 import { GetCompaniesArgs } from './dto/args/get-companies.args';
-import { Public } from '../../auth/authentication.decorator';
-import { AdminOnly, AnyRole } from '../../auth/authorization.decorator';
 import { AssociateUserInput } from './dto/input/associate-user.input';
+import {
+  CompanyOnly,
+  CurrentUser,
+  SOIOnly,
+} from '../../auth/authorization.decorator';
 
 @Resolver(() => Company)
 export class CompanyResolver {
@@ -19,23 +22,22 @@ export class CompanyResolver {
    * @param {GetCompaniesArgs} getCompaniesArgs - search filter (uuids)
    * @returns {Promise<Company[]>} - companies
    */
-  @AdminOnly()
+  @SOIOnly()
   @Query(() => [Company], { name: 'companies' })
   async getCompanies(
     @Args() getCompaniesArgs: GetCompaniesArgs,
   ): Promise<Company[]> {
-    return await this.companyService.getCompanies(getCompaniesArgs);
+    return this.companyService.getCompanies(getCompaniesArgs);
   }
 
   /**
    * Gets all companies within the database
    * @returns {Promise<Company[]>} - companies
    */
-  //@AdminOnly() TODO enable once roles are implemented in User DB
-  @AnyRole()
+  @SOIOnly()
   @Query(() => [Company], { name: 'allCompanies' })
   async getAllCompanies(): Promise<Company[]> {
-    return await this.companyService.getAllCompanies();
+    return this.companyService.getAllCompanies();
   }
 
   /**
@@ -43,23 +45,44 @@ export class CompanyResolver {
    * @param {GetCompanyArgs} getCompanyArgs - getting arguments (containing either uuid or cognito_id)
    * @returns {Promise<Company>} - company
    */
-  @Public() // TODO restrict to appropriate roles
+  @SOIOnly()
   @Query(() => Company, { name: 'company' })
   async getCompany(@Args() getCompanyArgs: GetCompanyArgs): Promise<Company> {
-    return await this.companyService.getCompany(getCompanyArgs);
+    return this.companyService.getCompany(getCompanyArgs);
   }
 
+  /**
+   * Get the company for the currently logged in company account
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {void}
+   */
+  @CompanyOnly()
+  @Query(() => Company, { name: 'myCompany' })
+  async getMyCompany(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Company> {
+    // Get company where user's UUID matches cognitoID
+    const company = await this.companyService.getCompany({
+      cognito_id: user.userId,
+    } as GetCompanyArgs);
+
+    if (!company) {
+      throw new Error(`No company found for ${user.userId}`);
+    }
+
+    return company;
+  }
   /**
    * Adds a new company to the database - will not have a cognito_id by default!
    * @param {CreateCompanyInput} createCompanyInput - data of the new company
    * @returns {Promise<Company>} - company
    */
-  @Public()
+  @SOIOnly()
   @Mutation(() => Company)
   async createCompany(
     @Args('createCompanyInput') createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.createCompany(createCompanyInput);
+    return this.companyService.createCompany(createCompanyInput);
   }
 
   /**
@@ -67,12 +90,12 @@ export class CompanyResolver {
    * @param {UpdateCompanyInput} updateCompanyInput - company data to change
    * @returns {Promise<Company>} - company
    */
-  @AnyRole() // TODO restrict to appropriate roles
+  @SOIOnly()
   @Mutation(() => Company)
   async updateCompany(
     @Args('updateCompanyInput') updateCompanyInput: UpdateCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.updateCompany(updateCompanyInput);
+    return this.companyService.updateCompany(updateCompanyInput);
   }
 
   /**
@@ -80,12 +103,12 @@ export class CompanyResolver {
    * @param {string} uuid - the company's UUID
    * @returns {Promise<Company>} - company
    */
-  @AnyRole() // TODO set to admin-only once roles implemented on user databse
+  @SOIOnly()
   @Mutation(() => Company)
   async enableCompanyDocumentUpload(
     @Args('uuid') uuid: string,
   ): Promise<Company> {
-    return await this.companyService.enableDocumentUpload(uuid);
+    return this.companyService.enableDocumentUpload(uuid);
   }
 
   /**
@@ -93,12 +116,25 @@ export class CompanyResolver {
    * @param {DeleteCompanyInput} deleteCompanyInput - company uuid
    * @returns {Promise<Company>} - company
    */
-  @Public() // TODO restrict to appropriate roles
+  @SOIOnly()
   @Mutation(() => Company)
   async removeCompany(
     @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
   ): Promise<Company> {
-    return await this.companyService.deleteCompany(deleteCompanyInput);
+    return this.companyService.deleteCompany(deleteCompanyInput);
+  }
+
+  /**
+   * Removes a company
+   * @param {DeleteCompanyInput} deleteCompanyInput - company uuid
+   * @returns {Promise<Company>} - company
+   */
+  @SOIOnly()
+  @Mutation(() => Company)
+  async rejectCompany(
+    @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
+  ): Promise<Company> {
+    return this.companyService.rejectCompany(deleteCompanyInput);
   }
 
   /**
@@ -106,11 +142,11 @@ export class CompanyResolver {
    * @param {AssociateUserInput} associateUserInput - company uuid
    * @returns {Promise<Company>} - company
    */
-  @AnyRole() // TODO restrict to appropriate roles
+  @SOIOnly()
   @Mutation(() => Company)
   async associateUserToCompany(
     @Args('associateUserInput') associateUserInput: AssociateUserInput,
   ): Promise<Company> {
-    return await this.companyService.associateUser(associateUserInput.uuid);
+    return this.companyService.associateUser(associateUserInput.uuid);
   }
 }

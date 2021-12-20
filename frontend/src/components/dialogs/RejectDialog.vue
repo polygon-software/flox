@@ -51,7 +51,6 @@ function hide(): void {
  * @returns {void}
  */
 function onYesReject(): void {
-  //TODO: implement in backend to really reject it
   emit('ok')
   hide()
 }
@@ -62,6 +61,3 @@ function onCancel(): void {
 }
 </script>
 
-<style scoped>
-
-</style>

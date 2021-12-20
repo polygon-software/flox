@@ -3,7 +3,11 @@ export default {
     yes: 'Yes',
     no: 'No',
     new: 'New',
-    editable: 'editable'
+    editable: 'editable',
+    search: 'Search',
+    welcome: 'Welcome',
+    from: 'From',
+    to: 'To'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -11,7 +15,7 @@ export default {
     logout: 'Log out',
     signup: 'Sign up',
     bank: 'REGISTER A NEW BANK',
-    employee_signup: 'Register new Employee',
+    employee_signup: 'Register employee',
     signup_now: 'No Account? Sign up now:',
     forgot_password: 'Forgot password',
     redirected: 'You will be redirected shortly...',
@@ -23,6 +27,7 @@ export default {
   },
   account_data: {
     employees: 'Employees',
+    activities: 'Activities',
     authentication: 'Authentication',
     email: 'E-Mail',
     username: 'Username',
@@ -61,6 +66,11 @@ export default {
     commercial_register_extract: 'Commercial Register Extract',
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
+    tasks: 'Tasks',
+    volume: 'Volume',
+    provision_employee: 'Emp. Provision',
+    provision_company: 'Company Provision',
+    provision_ratio: 'Prov. Ratio Emp.',
     offer: 'offer',
     abbreviation: 'Abbreviation'
   },
@@ -82,6 +92,7 @@ export default {
     yes_reject: 'Yes, reject',
     unlock_account: 'Unlock account',
     view_documents: 'View documents',
+    employee_tasks: 'Employee tasks',
     offer_id: 'Offer Nr.',
     market_value: 'Market Value',
     mortgage: 'Mortgage',
@@ -163,4 +174,8 @@ export default {
     manager: 'Manager',
     employee: 'Employee',
   },
+  email: {
+    subject_rejected: 'Rejected',
+    body_rejected: 'Application is rejected'
+  }
 };

@@ -127,6 +127,19 @@ input CreateAddressInput {
   zip_code: String!
 }
 
+input CreateBankInput {
+  address: CreateAddressInput!
+
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
+}
+
 input CreateCompanyInput {
   branch_structure: Boolean!
   company_name: String!
@@ -170,6 +183,28 @@ input CreateEmployeeInput {
 
   """Phone Number"""
   phone: String!
+}
+
+input CreateSoiAdminInput {
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
+}
+
+input CreateSoiEmployeeInput {
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
 }
 
 input CreateUserInput {
@@ -290,9 +325,13 @@ type Employee {
 type Mutation {
   associateUserToCompany(associateUserInput: AssociateUserInput!): Company!
   create(createUserInput: CreateUserInput!): User!
+  createBank(createBankInput: CreateBankInput!): Bank!
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
   createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
+  createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
+  createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
   enableCompanyDocumentUpload(uuid: String!): Company!
+  rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   update(updateUserInput: UpdateUserInput!): User!
@@ -381,6 +420,7 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
+  myCompany: Company!
   myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
@@ -395,14 +435,62 @@ enum Roles {
   SOI_EMPLOYEE
 }
 
+type SoiAdmin {
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
+type SoiEmployee {
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 enum Status {
   ACCEPTED
   CREATED
   REJECTED
-}
-
-type Subscription {
-  userAdded: User!
 }
 
 input UpdateCompanyInput {
@@ -475,6 +563,14 @@ input address {
   zip_code: String!
 }
 
+input bank {
+  """Address"""
+  address: address!
+
+  """Offers made by Bank"""
+  offers: [offer!]!
+}
+
 input company {
   """Branch structure"""
   branch_structure: Boolean!
@@ -514,6 +610,32 @@ enum creationState {
   DONE
 }
 
+input dossier {
+  """Date of birth of customer"""
+  born: DateTime!
+
+  """Address"""
+  correspondence_address: address!
+
+  """Money loaned"""
+  loan_sum: Float!
+
+  """ToDo"""
+  non_arrangeable: Boolean!
+
+  """List of Offers"""
+  offers: [offer!]!
+
+  """Previous Bank of the customer"""
+  original_bank: bank!
+
+  """Address of Property"""
+  property_address: address!
+
+  """Status of Dossier"""
+  status: Status!
+}
+
 input employee {
   """Company"""
   company: company!
@@ -529,6 +651,17 @@ input employee {
 
   """Phone Number"""
   phone: String!
+}
+
+input offer {
+  """Bank making the offer"""
+  bank: bank!
+
+  """Dossier of Offer"""
+  dossier: dossier!
+
+  """The Offer as a PDF"""
+  pdf: private_file!
 }
 
 input private_file {

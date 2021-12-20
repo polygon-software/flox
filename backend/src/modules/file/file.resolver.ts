@@ -1,15 +1,19 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import PublicFile from './entities/public_file.entity';
 import { FileService } from './file.service';
-import { AnyRole } from '../../auth/authorization.decorator';
+import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
 import { Public } from '../../auth/authentication.decorator';
+import { UserService } from '../user/user.service';
 
 @Resolver(() => PublicFile)
 export class FileResolver {
-  constructor(private readonly fileService: FileService) {}
+  constructor(
+    private readonly fileService: FileService,
+    private readonly userService: UserService,
+  ) {}
 
   /**
    * Gets a public file
@@ -21,19 +25,23 @@ export class FileResolver {
   async getPublicFile(
     @Args() getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return await this.fileService.getPublicFile(getPublicFileArgs);
+    return this.fileService.getPublicFile(getPublicFileArgs);
   }
 
   /**
    * Gets a private file
    * @param {GetPrivateFileArgs} getPrivateFileArgs - search arguments, containing UUID
+   * @param {Record<string, string>} user - the current request's user
    * @returns {Promise<PrivateFile>} - PrivateFile
    */
-  @AnyRole() // TODO application specific: set appropriate guards here, restrict to file owner
+  @AnyRole()
   @Query(() => PrivateFile, { name: 'getPrivateFile' })
   async getPrivateFile(
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<PrivateFile> {
-    return await this.fileService.getPrivateFile(getPrivateFileArgs);
+    const dbUser = await this.userService.getUser({ uuid: user.userID });
+
+    return this.fileService.getPrivateFile(getPrivateFileArgs, dbUser);
   }
 }

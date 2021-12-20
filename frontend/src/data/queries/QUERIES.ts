@@ -72,9 +72,12 @@ export const ALL_COMPANIES = {
 
 export const COMPANY = {
   query: gql`
-    query company($uuid: ID){
-      company(uuid: $uuid){
+    query company($uuid: ID, $cognito_id: ID){
+      company(uuid: $uuid, cognito_id: $cognito_id){
         uuid
+        readable_id
+        first_name
+        last_name
         documents{
           uuid
           key
@@ -86,6 +89,22 @@ export const COMPANY = {
   `,
   tables: ['company', 'documents'],
   cacheLocation: 'company'
+}
+
+export const MY_COMPANY = {
+  query: gql`
+    query myCompany{
+      myCompany{
+        uuid
+        readable_id
+        first_name
+        last_name
+        __typename
+      }
+    }
+  `,
+  tables: ['company'],
+  cacheLocation: 'myCompany'
 }
 
 export const ALL_EMPLOYEES = {
