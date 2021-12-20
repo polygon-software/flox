@@ -12,10 +12,12 @@ export default {
   authentication: {
     loggedIn: 'Angemeldet als {user}',
     login: 'Anmelden',
+    main_text: 'Wir verbinden die Welt der unabhängigen Finanzdienstleister mit der Welt der Hypotheken',
+    sign_in: 'Melden Sie sich mit eurem Konto an',
     logout: 'Abmelden',
     signup: 'Registrieren',
     employee_signup: 'Mitarbeitende erfassen',
-    signup_now: 'Kein Account? Jetzt registrieren:',
+    signup_now: 'Sie sind neu hier? Hier geht\'s zur Registrierung',
     forgot_password: 'Passwort vergessen',
     redirected: 'Sie werden in Kürze weitergeleitet...',
     successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',

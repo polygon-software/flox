@@ -11,23 +11,16 @@
 
       <!-- Signup Card -->
       <q-card-section
-        class="col">
-        <div
-          class="col content-center"
-          style="width: 250px; text-align: center;"
-        >
-          <strong>
-            {{ $t('authentication.signup_now') }}
-          </strong>
-          <br>
+        style="text-align: center"
+      >
           <q-btn
             class="q-ma-md"
-            style="width: 125px"
-            :label="$t('authentication.signup')"
+            flat
             color="primary"
+            style="width: 400px"
+            :label="$t('authentication.signup_now')"
             @click="toSignup"
           />
-        </div>
       </q-card-section>
     </q-card>
   </q-page>

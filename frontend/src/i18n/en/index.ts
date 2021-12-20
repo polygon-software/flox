@@ -12,10 +12,12 @@ export default {
   authentication: {
     loggedIn: 'Logged in as {user}',
     login: 'Log in',
+    main_text: 'We connect the world of independent financial service providers with the world of mortgages',
+    sign_in: 'Sign in to your account',
     logout: 'Log out',
     signup: 'Sign up',
     employee_signup: 'Register employee',
-    signup_now: 'No Account? Sign up now:',
+    signup_now: 'You are new here? Register here',
     forgot_password: 'Forgot password',
     redirected: 'You will be redirected shortly...',
     successful_application: 'Your application was successful.',

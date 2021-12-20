@@ -1,13 +1,17 @@
 <template>
   <div
     class="column q-pa-sm"
-    style="width: 250px; text-align: center;"
+    style="width: 600px; text-align: center;"
   >
     <h5 class="q-ma-none" style="margin-bottom: 20px;">
-      {{ $t('authentication.login') }}
+      {{ $t('authentication.main_text') }}
     </h5>
+    <p class="q-ma-none" style="margin-bottom: 20px;">
+      {{ $t('authentication.sign_in') }}
+    </p>
     <q-form
       class="q-gutter-md"
+      style="width: 300px; align-self: center"
       @submit="onSubmit"
     >
       <component
@@ -19,18 +23,19 @@
         @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
-          style="margin-top: 20px;"
-          color="primary"
-          :label="$t('authentication.login')"
-          type="submit"
-          :disable="!form.pageValid.value"
-      />
-      <q-btn
         no-caps
         :label="$t('authentication.forgot_password')"
         class="text-primary"
         flat
         @click="forgotPassword"
+      />
+      <br>
+      <q-btn
+          style="margin-top: 20px;"
+          color="primary"
+          :label="$t('authentication.login')"
+          type="submit"
+          :disable="!form.pageValid.value"
       />
     </q-form>
   </div>
@@ -46,7 +51,7 @@ const $authService: AuthenticationService|undefined = inject('$authService')
 
 const emit = defineEmits(['submit'])
 
-const fields = [FIELDS.USERNAME, FIELDS.PASSWORD, FIELDS.ROUTE_TARGET]
+const fields = [FIELDS.EMAIL, FIELDS.PASSWORD, FIELDS.ROUTE_TARGET]
 
 const form = new Form()
 form.pages.value = [
