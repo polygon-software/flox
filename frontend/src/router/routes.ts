@@ -67,6 +67,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/company/DocumentUploadPage.vue') }],
   },
 
+  // Company: New employee
+  'NEW_EMPLOYEE_PAGE': {
+    path: '/new-employee',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/company/NewEmployeePage.vue') }],
+  },
+
   // SOI Admin: SOI Employees
   'ADMIN_EMPLOYEES': {
     path: '/admin-employees',
@@ -75,17 +82,10 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   // SOI Admin: Applications
-  'APPLICATIONS': {
-    path: '/applications',
-    component: () => import('layouts/SOIAdminLayout.vue'), // TODO dynamic for SOI Employees as well?
-    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminEmployeePage.vue') }], // TODO Rename
-  },
-
-
-  'NEW_EMPLOYEE_PAGE': {
-    path: '/new-employee',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/company/NewEmployeePage.vue') }],
+  'ADMIN_APPLICATIONS': {
+    path: '/admin-applications',
+    component: () => import('layouts/SOIAdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminApplicationPagePage.vue') }], // TODO Rename
   },
 
   // Wildcard route for non-covered routes

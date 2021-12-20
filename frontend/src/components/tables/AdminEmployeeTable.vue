@@ -24,7 +24,7 @@
           </template>
         </q-input>
 
-        <!-- Register new employee -->
+        <!-- Register new employee TODO adapt to admin-->
         <q-btn
           icon="add"
           :label="$t('authentication.employee_signup')"
@@ -84,7 +84,6 @@ import {MY_EMPLOYEES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
@@ -99,7 +98,7 @@ const columns = [
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
 ]
 
-const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []

@@ -1,10 +1,9 @@
 <template>
   <q-page class="flex flex-center">
-    <CompanyApplicationTable/>
+    TODO
   </q-page>
 </template>
 
 <script setup lang="ts">
-import CompanyApplicationTable from 'components/tables/CompanyApplicationTable.vue';
 
 </script>
