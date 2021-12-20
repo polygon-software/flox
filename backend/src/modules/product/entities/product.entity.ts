@@ -1,11 +1,17 @@
 import { ObjectType, Field, Int, InputType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { IsArray, IsDate, IsInt, IsNumber, IsString, IsUrl } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsInt,
+  IsNumber,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 import PublicFile from '../../file/entities/public_file.entity';
 import { Comment } from '../../comment/entities/comment.entity';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../ENUM/ENUM';
-
 
 @ObjectType()
 @Entity({ name: 'product' })
@@ -39,7 +45,10 @@ export class Product extends BaseEntity {
   @IsInt()
   value: number;
 
-  @Field(() => CURRENCY, { description: 'The currency the value is denoted in', nullable: true })
+  @Field(() => CURRENCY, {
+    description: 'The currency the value is denoted in',
+    nullable: true,
+  })
   @Column({
     type: 'enum',
     enum: CURRENCY,
@@ -76,7 +85,10 @@ export class Product extends BaseEntity {
   })
   status: PRODUCT_STATUS;
 
-  @Field(() => Boolean, { description: 'Whether the product is sponsored', nullable: true })
+  @Field(() => Boolean, {
+    description: 'Whether the product is sponsored',
+    nullable: true,
+  })
   @Column({ default: false, nullable: true })
   sponsored: boolean;
 
@@ -86,23 +98,35 @@ export class Product extends BaseEntity {
   @IsUrl()
   directBuyLink: string;
 
-  @Field(() => Number, { description: 'Current number of clicks on direct buy link', nullable: true})
-  @Column( { nullable: true, default: 0 })
+  @Field(() => Number, {
+    description: 'Current number of clicks on direct buy link',
+    nullable: true,
+  })
+  @Column({ nullable: true, default: 0 })
   @IsNumber()
   directBuyLinkClicks: number;
 
-  @Field(() => Number, { description: 'Maximum number of clicks on direct buy link', nullable: true})
-  @Column( { nullable: true })
+  @Field(() => Number, {
+    description: 'Maximum number of clicks on direct buy link',
+    nullable: true,
+  })
+  @Column({ nullable: true })
   @IsNumber()
   directBuyLinkMaxClicks: number;
 
-  @Field(() => Number, { description: 'Current cost of direct buy link', nullable: true})
-  @Column( { nullable: true, default: 0 })
+  @Field(() => Number, {
+    description: 'Current cost of direct buy link',
+    nullable: true,
+  })
+  @Column({ nullable: true, default: 0 })
   @IsNumber()
   directBuyLinkCost: number;
 
-  @Field(() => Number, { description: 'Maximum cost of direct buy link', nullable: true})
-  @Column( { nullable: true })
+  @Field(() => Number, {
+    description: 'Maximum cost of direct buy link',
+    nullable: true,
+  })
+  @Column({ nullable: true })
   @IsNumber()
   directBuyLinkMaxCost: number;
 
@@ -112,23 +136,35 @@ export class Product extends BaseEntity {
   @IsUrl()
   brandLink: string;
 
-  @Field(() => Number, { description: 'Current number of clicks on brand link', nullable: true})
-  @Column( { nullable: true, default: 0 })
+  @Field(() => Number, {
+    description: 'Current number of clicks on brand link',
+    nullable: true,
+  })
+  @Column({ nullable: true, default: 0 })
   @IsNumber()
   brandLinkClicks: number;
 
-  @Field(() => Number, { description: 'Maximum number of clicks on brand link', nullable: true})
-  @Column( { nullable: true })
+  @Field(() => Number, {
+    description: 'Maximum number of clicks on brand link',
+    nullable: true,
+  })
+  @Column({ nullable: true })
   @IsNumber()
   brandLinkMaxClicks: number;
 
-  @Field(() => Number, { description: 'Current cost of brand link', nullable: true})
-  @Column( { nullable: true, default: 0 })
+  @Field(() => Number, {
+    description: 'Current cost of brand link',
+    nullable: true,
+  })
+  @Column({ nullable: true, default: 0 })
   @IsNumber()
   brandLinkCost: number;
 
-  @Field(() => Number, { description: 'Maximum cost of brand link', nullable: true})
-  @Column( { nullable: true })
+  @Field(() => Number, {
+    description: 'Maximum cost of brand link',
+    nullable: true,
+  })
+  @Column({ nullable: true })
   @IsNumber()
   brandLinkMaxCost: number;
 
@@ -143,7 +179,7 @@ export class Product extends BaseEntity {
   maxBet: number;
 
   @Field(() => [String], { description: 'Product tags', nullable: true })
-  @Column( "text", { nullable: true, default: [], array: true })
+  @Column('text', { nullable: true, default: [], array: true })
   @IsArray()
   tags: string[];
 
@@ -160,5 +196,5 @@ export class Product extends BaseEntity {
   @IsNumber()
   likes: number;
 
-  // TODO: Clearify if we need Rrepeating sales
+  // TODO: Clearify if we need repeating sales
 }

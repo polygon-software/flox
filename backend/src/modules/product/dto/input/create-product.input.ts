@@ -106,5 +106,5 @@ export class CreateProductInput {
   @IsArray()
   tags: string[];
 
-  // TODO: Clearify if we need Rrepeating sales
+  // TODO: Clearify if we need repeating sales
 }

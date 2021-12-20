@@ -49,10 +49,6 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  rules: {
-    required: false,
-    type: Array,
-  }
 });
 
 let password = ref(props.modelValue ?? '')
