@@ -85,7 +85,6 @@ function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryOb
 
     const change: Record<string, unknown> = changes[mutationObject.cacheLocation] ?? {}
 
-    console.log('Pushing change', change)
     // Read existing query from cache
     const data:Record<string, Array<Record<string, unknown>>>|null = cache.readQuery({ query: queryObject.query })
 
