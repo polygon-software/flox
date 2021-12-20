@@ -98,10 +98,11 @@ const columns = [
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
 ]
 
-const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
+// TODO
+// const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
-  return queryResult.value ?? []
+  return []// queryResult.value ?? []
 })
 
 /**

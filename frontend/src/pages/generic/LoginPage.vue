@@ -55,7 +55,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
 async function onLogin({username, password, route_target}: {username: string, password: string, route_target: string}){
   await $authService?.login(username, password)
   const target_route_mapping: Record<string, RouteRecordRaw> = {
-    'admin-dashboard': ROUTES.ADMIN_EMPLOYEES,
+    'admin-dashboard': ROUTES.ADMIN_DOSSIERS,
     'management-dashboard': ROUTES.MANAGEMENT_EMPLOYEE_DATA,
     'employee-dashboard': ROUTES.EMPLOYEE_DASHBOARD
   }

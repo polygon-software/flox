@@ -1,10 +1,9 @@
 <template>
   <q-page class="flex flex-center">
-    <AdminEmployeeTable/>
+    TODO: Dossiers table, copied from employee but filtered for three rejections
   </q-page>
 </template>
 
 <script setup lang="ts">
 
-import AdminEmployeeTable from 'components/tables/AdminEmployeeTable.vue';
 </script>

@@ -83,7 +83,8 @@ export default {
     yes_reject: 'Yes, reject',
     unlock_account: 'Unlock account',
     view_documents: 'View documents',
-    employee_tasks: 'Employee tasks'
+    employee_tasks: 'Employee tasks',
+    dossier: 'Dossier | Dossiers',
   },
   buttons: {
     finish_signup: 'Finish',

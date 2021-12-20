@@ -84,7 +84,8 @@ export default {
     sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
     yes_reject: 'Ja, ablehnen',
     view_documents: 'Dokumente ansehen',
-    employee_tasks: 'Mitarbeitendenaufträge'
+    employee_tasks: 'Mitarbeitendenaufträge',
+    dossier: 'Dossier | Dossiers',
   },
   buttons: {
     finish_signup: 'Abschliessen',

@@ -78,14 +78,21 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'ADMIN_EMPLOYEES': {
     path: '/admin-employees',
     component: () => import('layouts/SOIAdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminEmployeePage.vue') }], // TODO
+    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminEmployeePage.vue') }],
+  },
+
+  // SOI Admin: Dossiers
+  'ADMIN_DOSSIERS': {
+    path: '/admin-dossiers',
+    component: () => import('layouts/SOIAdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminDossierPage.vue') }],
   },
 
   // SOI Admin: Applications
   'ADMIN_APPLICATIONS': {
     path: '/admin-applications',
     component: () => import('layouts/SOIAdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminApplicationPage.vue') }], // TODO Rename
+    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminApplicationPage.vue') }],
   },
 
   // Wildcard route for non-covered routes
