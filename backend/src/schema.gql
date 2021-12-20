@@ -474,11 +474,17 @@ type SoiEmployee {
   """First Name"""
   first_name: String!
 
+  """Gender"""
+  gender: String!
+
   """Last modification date"""
   last_modified_at: DateTime!
 
   """Last Name"""
   last_name: String!
+
+  """Phone Number"""
+  phone: String!
 
   """Human-readable ID"""
   readable_id: String!

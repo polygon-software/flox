@@ -26,6 +26,7 @@ import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
 import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
 import {randomPassword} from 'src/helpers/generator-helpers';
+import {CREATE_SOI_EMPLOYEE} from 'src/data/mutations/SOIEMPLOYEE';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const $authService: AuthenticationService|undefined = inject('$authService')
@@ -39,8 +40,6 @@ const $errorService: ErrorService|undefined = inject('$errorService')
 const account_fields = [
   FIELDS.SALUTATION,
   FIELDS.FULL_NAME,
-  FIELDS.LANGUAGE,
-  FIELDS.COMPANY_FUNCTION,
   FIELDS.PHONE_NUMBER,
   FIELDS.EMAIL,
 ]
@@ -66,32 +65,17 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  const password = randomPassword(9)
-
-  // Create cognito User
-  const newUserId = await $authService?.signUpNewUser(
-    email,
-    email,
-    password
-  )
-
-  // Create database entry
-  await executeMutation(CREATE_EMPLOYEE, {
+  // Create account (automatically sends one-time login e-mail as well)
+  await executeMutation(CREATE_SOI_EMPLOYEE, {
     first_name: formData.full_name.first_name,
     last_name: formData.full_name.last_name,
     gender: formData.salutation,
     phone: formData.phone_number,
     email: formData.email,
-    function: formData.company_function,
-    language: formData.language,
-    cognito_id: newUserId,
   })
 
-  // Send one-time login e-mail
-  await sendPasswordChangeEmail(email, password, 'emp')
-
   // Route back
-  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_DATA)
+  await $routerService?.routeTo(ROUTES.ADMIN_EMPLOYEES)
 }
 
 </script>
