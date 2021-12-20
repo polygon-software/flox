@@ -181,7 +181,8 @@ export default {
     seller_page_link: 'Seller page',
     max_clicks: 'Maximum number of clicks',
     max_cost: 'Maximum cost',
-    add_product: 'Add new Product'
+    add_product: 'Add new Product',
+    title: 'Title'
   },
   settings: {
     settings: 'Settings',

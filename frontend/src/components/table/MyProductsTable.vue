@@ -116,27 +116,27 @@ import {FetchResult} from '@apollo/client';
 import {sleep} from 'src/helpers/general-helpers';
 import {i18n} from 'boot/i18n';
 const $routerService: RouterService|undefined = inject('$routerService')
-const $q = useQuasar()
 
 const props = defineProps( {
   search: {
     required: true,
     type: String,
+    default: null,
   },
   statusFilter: {
     required: false,
     type: String,
+    default: null,
   }
 })
 
-// TODO i18n
 const columns = [
   { name: 'pictures', label: '', field: 'uuid', sortable: false, align: 'center'},
-  { name: 'title', label: 'Product', field: 'title', sortable: true, align: 'center' },
-  { name: 'brand', label: 'Brand', field: 'brand', sortable: true, align: 'center' },
-  { name: 'status', label: 'Status', field: 'status', sortable: true, align: 'center' },
-  { name: 'sponsored', label: 'Type', field: 'sponsored', sortable: true, align: 'center' },
-  { name: 'start', label: 'Start Date', field: 'start', sortable: true, align: 'center' },
+  { name: 'title', label: i18n.global.t('products.title'), field: 'title', sortable: true, align: 'center' },
+  { name: 'brand', label: i18n.global.t('products.brand'), field: 'brand', sortable: true, align: 'center' },
+  { name: 'status', label: i18n.global.t('products.status'), field: 'status', sortable: true, align: 'center' },
+  { name: 'sponsored', label: i18n.global.t('products.type'), field: 'sponsored', sortable: true, align: 'center' },
+  { name: 'start', label: i18n.global.t('products.start'), field: 'start', sortable: true, align: 'center' },
   { name: 'tags', label: '', field: 'tags', sortable: false }, // Invisible column, used for filtering only
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
@@ -157,7 +157,7 @@ const computedResult = computed(() => {
 function isEditable(product: Record<string, unknown>): boolean{
   const isDraft =  product.status === PRODUCT_STATUS.DRAFT
   const isValid = product.status === PRODUCT_STATUS.VALID
-  const hasNotStarted =  product.start !== null && (new Date(product.start) >= new Date())
+  const hasNotStarted =  product.start !== null && (new Date(product.start as string) >= new Date())
   return isDraft || (isValid && hasNotStarted)
 }
 
