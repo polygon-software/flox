@@ -115,7 +115,9 @@ import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {FetchResult} from '@apollo/client';
 import {sleep} from 'src/helpers/general-helpers';
 import {i18n} from 'boot/i18n';
+import {ErrorService} from 'src/services/ErrorService';
 const $routerService: RouterService|undefined = inject('$routerService')
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 const props = defineProps( {
   search: {
@@ -192,12 +194,13 @@ async function duplicateProduct(uuid: string): Promise<void>{
       }
     }) as Record<string, unknown>
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const newData: Record<string, Record<string, unknown>> = mutationResult.data;
+  const newData: Record<string, Record<string, unknown>> = mutationResult.data as Record<string, Record<string, unknown>>;
   const newProduct: Record<string, unknown> = newData.duplicateProduct;
 
   if(!mutationResult || !mutationResult.data || !newProduct || !newProduct.uuid){
-    throw new Error('Creation FAILED') // TODO errorservice popup
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.duplication_error'))
+    )
   }
 
   // Ensure product correctly created and route to edit screen
@@ -212,7 +215,9 @@ async function duplicateProduct(uuid: string): Promise<void>{
       }
     )
   } else{
-    throw new Error('TODO something invalid') // TODO errorservice popup
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.duplication_error'))
+    )
   }
 }
 
@@ -252,6 +257,4 @@ function getStatusChip(product: Record<string, unknown>): Record<string,unknown>
       return null
   }
 }
-
-
 </script>

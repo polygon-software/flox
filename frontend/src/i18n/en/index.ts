@@ -125,7 +125,8 @@ export default {
     missing_user_type: 'Please select a user type',
     invalid_birth_date: 'Please enter you date of birth',
     date_must_be_future: 'Please choose a future date',
-    can_only_edit_draft: 'Cannot edit (only drafts can be edited)'
+    can_only_edit_draft: 'Cannot edit (only drafts can be edited)',
+    duplication_error: 'An error occurred while duplicating, please try again.'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',

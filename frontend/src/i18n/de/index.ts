@@ -183,7 +183,8 @@ export default {
     max_clicks: 'Maximale Anzahl Klicks',
     max_cost: 'Maximale Kosten',
     add_product: 'Produkt hinzufügen',
-    title: 'Titel'
+    title: 'Titel',
+    duplication_error: 'Beim Duplizieren ist ein Fehler aufgetreten, bitte versuchen Sie es erneut.'
   },
   settings: {
     settings: 'Einstellungen',
