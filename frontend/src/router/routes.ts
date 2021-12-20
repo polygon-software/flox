@@ -85,7 +85,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'ADMIN_APPLICATIONS': {
     path: '/admin-applications',
     component: () => import('layouts/SOIAdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminApplicationPagePage.vue') }], // TODO Rename
+    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminApplicationPage.vue') }], // TODO Rename
   },
 
   // Wildcard route for non-covered routes

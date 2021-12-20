@@ -7,4 +7,5 @@
 <script setup lang="ts">
 import CompanyApplicationTable from 'components/tables/CompanyApplicationTable.vue';
 
+// TODO filter by non-vermittleable
 </script>

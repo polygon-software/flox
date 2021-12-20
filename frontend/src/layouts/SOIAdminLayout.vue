@@ -58,7 +58,7 @@ const menuItems = [
   {
     name: 'applications',
     label: i18n.global.tc('dashboards.application', 2),
-    route: ROUTES.APPLICATIONS,
+    route: ROUTES.ADMIN_APPLICATIONS,
   },
   {
     name: 'employees',
