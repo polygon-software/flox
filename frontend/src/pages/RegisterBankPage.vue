@@ -57,6 +57,7 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
   const addresses: Record<string, Address> = values.company_address as Record<string, Address>
   const address: Address = addresses.address
 
+
   // Create signup request (company) on database
   await executeMutation(
     CREATE_BANK,
@@ -64,7 +65,6 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
       first_name: values.full_name.first_name,
       last_name: values.full_name.last_name,
       abbreviation: values.abbreviation,
-      uid: values.company_data.uid,
       address: address,
       email: values.email,
     }

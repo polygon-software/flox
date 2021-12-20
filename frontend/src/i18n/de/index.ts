@@ -1,5 +1,3 @@
-import {sharpTransitEnterexit} from "@quasar/extras/material-icons-sharp";
-
 export default {
   general: {
     yes: 'Ja',
@@ -71,7 +69,6 @@ export default {
     optional: 'optional',
     offer: 'Antrag',
     abbreviation: 'Kürzel',
-    status: 'Status',
     tasks: 'Aufträge',
     volume: 'Volumen',
     provision_employee: 'Provision MA',

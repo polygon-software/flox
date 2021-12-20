@@ -43,9 +43,9 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/EmployeeDashboardPage.vue') }],
   },
 
-  'CREDIT_INSTITUTION_DASHBOARD': {
-    name: 'credit_institution_dashboard',
-    path: '/credit-institution-dashboard',
+  'BANK_DASHBOARD': {
+    name: 'bank_dashboard',
+    path: '/bank-dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/BankDashboard.vue') }],
   },
@@ -108,7 +108,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.MANAGEMENT_EMPLOYEE_DATA,
   ROUTES.MANAGEMENT_EMPLOYEE_TASKS,
-  ROUTES.CREDIT_INSTITUTION_DASHBOARD,
+  ROUTES.BANK_DASHBOARD,
   ROUTES.EMPLOYEE_DASHBOARD,
   ROUTES.NEW_EMPLOYEE_PAGE,
   ROUTES.REGISTER_BANK,
