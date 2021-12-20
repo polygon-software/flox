@@ -8,6 +8,7 @@ import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { ROLE } from '../../ENUM/ENUMS';
 import { generateHumanReadableId } from '../../helpers';
+import { Employee } from '../employee/entities/employee.entity';
 
 @Injectable()
 export class SoiEmployeeService {
@@ -41,14 +42,14 @@ export class SoiEmployeeService {
 
     // Generate human-readable ID and search for existing company with same ID
     let readableId = generateHumanReadableId();
-    let existingCompany = await this.soiEmployeeRepository.findOne({
+    let existingEmployee = await this.soiEmployeeRepository.findOne({
       readable_id: readableId,
     });
 
     // If ID already exists, regenerate
-    while (existingCompany !== null && existingCompany !== undefined) {
+    while (existingEmployee !== null && existingEmployee !== undefined) {
       readableId = generateHumanReadableId();
-      existingCompany = await this.soiEmployeeRepository.findOne({
+      existingEmployee = await this.soiEmployeeRepository.findOne({
         readable_id: readableId,
       });
     }
@@ -68,5 +69,13 @@ export class SoiEmployeeService {
     });
 
     return soiEmployeeEntry;
+  }
+
+  /**
+   * Returns all SOI employees within the database
+   * @returns {Promise<SoiEmployee[]>} - employees
+   */
+  async getAllSoiEmployees(): Promise<SoiEmployee[]> {
+    return this.soiEmployeeRepository.find();
   }
 }

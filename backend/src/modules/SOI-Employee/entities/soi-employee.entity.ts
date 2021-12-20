@@ -4,7 +4,7 @@ import { Column, Entity } from 'typeorm';
 import { IsPhoneNumber, IsString } from 'class-validator';
 
 @ObjectType()
-@Entity('soiemployee')
+@Entity()
 export class SoiEmployee extends Person {
   @Column()
   @Field(() => String, { description: 'Phone Number' })

@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {MY_EMPLOYEES} from 'src/data/queries/QUERIES';
+import {MY_EMPLOYEES, SOI_EMPLOYEES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -98,11 +98,10 @@ const columns = [
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
 ]
 
-// TODO
-// const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(SOI_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
-  return []// queryResult.value ?? []
+  return queryResult.value ?? []
 })
 
 /**
