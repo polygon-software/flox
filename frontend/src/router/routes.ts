@@ -74,6 +74,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/company/NewEmployeePage.vue') }],
   },
 
+  // SOI: New employee
+  'NEW_SOI_EMPLOYEE_PAGE': {
+    path: '/new-soi-employee',
+    component: () => import('layouts/SOIAdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/soiadmin/NewSOIEmployeePage.vue') }],
+  },
+
   // SOI Admin: SOI Employees
   'ADMIN_EMPLOYEES': {
     path: '/admin-employees',
