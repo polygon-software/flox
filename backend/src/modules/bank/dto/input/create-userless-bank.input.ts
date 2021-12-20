@@ -4,10 +4,7 @@ import { CreateAddressInput } from '../../../address/dto/input/create-address.in
 import { IsNotEmptyObject } from 'class-validator';
 
 @InputType('bank')
-export class CreateBankInput extends PartialType(CreatePersonInput) {
-  @Field(() => CreateAddressInput)
-  address: CreateAddressInput;
-
+export class CreateUserlessBankInput {
   @Field(() => String)
   name: string;
 

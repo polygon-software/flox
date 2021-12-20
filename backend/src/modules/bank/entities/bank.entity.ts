@@ -18,7 +18,7 @@ export class Bank extends Person {
 
   @Field(() => Address, { description: 'Address' })
   @JoinColumn()
-  @OneToOne(() => Address, { cascade: true, eager: true })
+  @OneToOne(() => Address, { cascade: true, eager: true, nullable: true })
   address: Address;
 
   @Field(() => [Offer], { description: 'Offers made by Bank' })

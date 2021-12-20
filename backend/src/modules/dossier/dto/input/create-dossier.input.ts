@@ -37,10 +37,6 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
   @IsNumber()
   loan_sum: number;
 
-  @Field(() => Boolean, { nullable: true })
-  @IsBoolean()
-  non_arrangeable: boolean;
-
   @Field(() => STATUS, { description: 'Status of Dossier' })
   status: STATUS;
 }
