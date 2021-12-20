@@ -60,9 +60,6 @@
             <q-td key="last_name" :props="props">
               {{ props.row.last_name }}
             </q-td>
-            <q-td key="function" :props="props">
-              {{ props.row.function }}
-            </q-td>
             <q-td key="phone" :props="props">
               {{ props.row.phone }}
             </q-td>
@@ -93,7 +90,6 @@ const search = ref('')
 const columns = [
   { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
   { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
-  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
   { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
 ]
