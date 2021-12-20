@@ -34,6 +34,17 @@ export class RolesGuard implements CanActivate {
    * @returns {boolean | Promise<boolean> | Observable<boolean>} - can activate
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Determine if resource is public
+    const isPublic: boolean =
+      this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+        context.getHandler(),
+        context.getClass(),
+      ]) ?? false;
+
+    if (isPublic) {
+      return true;
+    }
+
     // Dev mode: overrides user management:
     const accessOverride = process.env.DEV === 'true';
     const requestedFunction = context.getHandler().name;
@@ -50,13 +61,6 @@ export class RolesGuard implements CanActivate {
 
     // If no roles are specified, allow access only on public resources OR any role
     if (!roles || roles.length === 0) {
-      // Determine if resource is public
-      const isPublic: boolean =
-        this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-          context.getHandler(),
-          context.getClass(),
-        ]) ?? false;
-
       // Determine if resource is accessible to any logged-in user
       const anyRole: boolean =
         this.reflector.getAllAndOverride<boolean>(ANY_ROLE_KEY, [
@@ -71,7 +75,7 @@ export class RolesGuard implements CanActivate {
         );
         return true;
       }
-      return isPublic || anyRole;
+      return anyRole;
     }
 
     if (!dbUser) {
