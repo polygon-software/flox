@@ -73,7 +73,7 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
 
   // Push to success page
   setTimeout(function() {
-    await $routerService?.routeTo(ROUTES.LOGIN)
+    void $routerService?.routeTo(ROUTES.LOGIN)
   }, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
 }

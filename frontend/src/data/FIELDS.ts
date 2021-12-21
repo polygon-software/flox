@@ -104,6 +104,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       label: i18n.global.t('account_data.language'),
       options: ['DE', 'EN', 'FR', 'IT'], // TODO possibly move elsewhere.
+      // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['DE', 'EN', 'FR', 'IT']) || i18n.global.t('errors.invalid_option')]
     },
   },

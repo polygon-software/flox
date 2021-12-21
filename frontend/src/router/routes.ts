@@ -47,7 +47,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     name: 'bank_dashboard',
     path: '/bank-dashboard',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/BankDashboard.vue') }],
+    children: [{ path: '', component: () => import('pages/bank/BankDashboard.vue') }],
   },
 
   'MANAGEMENT_EMPLOYEE_VIEW': {
@@ -118,7 +118,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'REGISTER_BANK': {
     path: '/register-bank',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/RegisterBankPage.vue') }],
+    children: [{ path: '', component: () => import('pages/soi/RegisterBankPage.vue') }],
   },
 
   // Wildcard route for non-covered routes
