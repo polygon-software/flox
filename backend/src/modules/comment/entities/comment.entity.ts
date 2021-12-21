@@ -22,3 +22,5 @@ export class Comment extends BaseEntity {
   @ManyToOne(() => Product, (product) => product.comments)
   product: Product;
 }
+
+//TODO Add missing fields (likes, replies, etc.)

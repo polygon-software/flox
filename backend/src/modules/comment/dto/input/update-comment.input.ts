@@ -12,3 +12,5 @@ export class UpdateCommentInput extends PartialType(CreateCommentInput) {
   @IsString()
   content: string;
 }
+
+//TODO Add missing fields (likes, replies, etc.)
