@@ -33,7 +33,7 @@
         </q-td>
         <q-td key="status">
           <q-chip :style="dossierChipStyle(props.row.status)">
-            {{ $t('employee_dashboard.' + props.row.status) }}
+            {{ $t('dossier_status_enum.' + props.row.status) }}
           </q-chip>
           <q-popup-edit
             v-slot="scope"
@@ -43,7 +43,7 @@
           >
             <q-select
               v-model="scope.value"
-              :option-label="(status)=>$t('employee_dashboard.' + status)"
+              :option-label="(status)=>$t('dossier_status_enum.' + status)"
               :options="Object.keys(STATUS)"
             />
           </q-popup-edit>
@@ -55,7 +55,7 @@
             @click="showAllDocuments"
           />
         </q-td>
-        <q-td key="offers">
+        <q-td key="offers" @click="()=>expandOffers(props.row.uuid)">
           <q-chip
             v-for="(offer, index) in props.row.offers"
             :key="index"
@@ -68,7 +68,26 @@
           <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
         </q-td>
       </q-tr>
-      <!-- One spacer row per row -->
+      <div v-if="expanded[props.row.uuid]"
+      >
+        <q-tr v-for="offer in props.row.offers"
+              :key="offer.uuid"
+              :props="props"
+              style="background-color: white; cursor: pointer"
+        >
+          <q-td key="date"> --></q-td>
+          <q-td>{{offer.bank.name}}</q-td>
+          <q-td>
+            <q-chip
+              :style="offerChipStyle(offer.status)"
+            >
+              {{ $t('offer_status_enum.' + offer.status) }}
+            </q-chip>
+          </q-td>
+        </q-tr>
+      </div>
+
+      <!-- one spacer row per row -->
       <q-tr style="height: 14px"/>
     </template>
     </q-table>
@@ -84,6 +103,7 @@ import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
+import {watch} from 'fs';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -117,6 +137,8 @@ const dossiers = subscribeToQuery(MY_DOSSIERS) as Ref<Record<string, Array<Recor
 const rows = computed(()=>{
   return dossiers.value ?? []
 })
+
+const expanded: Ref<Record<string, boolean>> = ref({})
 
 
 /**
@@ -204,7 +226,14 @@ function dateString(date:string){
   return `${real_date.getDay()}.${real_date.getMonth()}.${real_date.getFullYear()}`
 }
 
-
+/**
+ * Expand row
+ * @param {string} uuid - uuid of dossier to expand offers on
+ * @returns {void}
+ */
+function expandOffers(uuid:string): void{
+  expanded.value[uuid]= !expanded.value[uuid]
+}
 
 
 </script>

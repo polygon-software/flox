@@ -166,6 +166,9 @@ export default {
     organisation_id: 'Organisation number',
     employee_id: 'Employee number',
     role: 'Role',
+
+  },
+  dossier_status_enum: {
     OPEN: 'Open',
     SIGNED: 'Credit contract signed',
     REJECTED: 'Offer rejected',
@@ -175,4 +178,11 @@ export default {
     IN_PROCESS: 'Credit contract in process',
     SENT: 'Credit contract sent',
   },
+  offer_status_enum: {
+    INTERESTED: 'Interested',
+    RETRACTED: 'Retracted',
+    ACCEPTED: 'Accepted',
+    IN_PROCESS: 'In Process'
+  }
+
 };
