@@ -86,6 +86,7 @@ export default {
     submit: 'Submit',
     ok: 'OK',
     save_draft: 'Save draft',
+    edit: 'Edit',
   },
   documents: {
     documents_missing: 'Documents missing',

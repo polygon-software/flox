@@ -29,6 +29,7 @@ export const ALL_PRODUCTS = {
               minBet
               maxBet
               tags
+              status
               pictures{
                 uuid
                 url
@@ -99,6 +100,7 @@ export const PRODUCT = {
         minBet
         maxBet
         tags
+        status
         pictures{
           uuid
           url

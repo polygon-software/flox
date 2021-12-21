@@ -87,6 +87,7 @@ export default {
     cancel: 'Abbrechen',
     ok: 'OK',
     save_draft: 'Entwurf speichern',
+    edit: 'Bearbeiten',
   },
   documents: {
     documents_missing: 'Fehlende Dokumente',
