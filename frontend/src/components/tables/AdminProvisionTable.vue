@@ -93,19 +93,13 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, ref, Ref} from 'vue';
+import {computed, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {ALL_COMPANIES, MY_EMPLOYEES} from 'src/data/queries/QUERIES';
+import {ALL_COMPANIES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
-import {RouterService} from 'src/services/RouterService';
-import ROUTES from 'src/router/routes';
-import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
-const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
 const search = ref('')
-const fromDate: Ref<string|null> = ref(null)
-const toDate: Ref<string|null> = ref(null)
 
 // ----- Data -----
 const columns = [
@@ -115,24 +109,12 @@ const columns = [
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
 ]
 
-// TODO: Include provisions in query once impelmented on backend
+// TODO: Include provisions in query once implemented on backend
 const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []
 })
-
-/**
- * Upon clicking a row, opens the employee's dashboard view
- * @param {Record<string, unknown>} row - the row that was clicked
- * @async
- * @returns {void}
- */
-async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {
-    uuid: row.uuid
-  })
-}
 
 /**
  * Updates the search value
