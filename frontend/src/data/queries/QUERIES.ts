@@ -172,7 +172,7 @@ export const SOI_EMPLOYEES = {
     }
   `,
   tables: ['user'],
-  cacheLocation: 'allUsers'
+  cacheLocation: 'allSoiEmployees'
 }
 
 export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];
