@@ -36,7 +36,9 @@ export class PrivateFile extends BaseEntity {
     nullable: true,
     description: 'Company the file belongs to',
   })
-  @ManyToOne(() => Company, (company) => company.documents)
+  @ManyToOne(() => Company, (company) => company.documents, {
+    onDelete: 'CASCADE',
+  })
   company: Company;
 
   // ToDo Dossier will be added in next backend architecture update

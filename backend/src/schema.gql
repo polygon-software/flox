@@ -331,6 +331,7 @@ type Mutation {
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
   enableCompanyDocumentUpload(uuid: String!): Company!
+  rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   update(updateUserInput: UpdateUserInput!): User!
