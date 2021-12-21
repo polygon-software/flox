@@ -69,6 +69,9 @@
             <q-td key="email" :props="props">
               {{ props.row.email }}
             </q-td>
+            <q-td key="date" :props="props">
+              {{ formatDate(new Date(props.row.created_at)) }}
+            </q-td>
         </q-tr>
         <!-- One spacer row per row -->
         <q-tr style="height: 14px"/>
@@ -80,10 +83,12 @@
 <script setup lang="ts">
 import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {MY_EMPLOYEES, SOI_EMPLOYEES} from 'src/data/queries/QUERIES';
+import {SOI_EMPLOYEES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {formatDate} from 'src/helpers/format-helpers';
+
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
@@ -91,10 +96,11 @@ const search = ref('')
 
 // ----- Data -----
 const columns = [
-  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
-  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
-  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
-  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
+  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true, align: 'center' },
+  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true, align: 'center' },
+  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false, align: 'center' },
+  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false, align: 'center' },
+  { name: 'date', label: i18n.global.t('general.date'), field: 'created_at', sortable: true, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(SOI_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>

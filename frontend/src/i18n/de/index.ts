@@ -7,7 +7,8 @@ export default {
     search: 'Suche',
     welcome: 'Willkommen',
     from: 'Von',
-    to: 'Bis'
+    to: 'Bis',
+    date: 'Datum',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',

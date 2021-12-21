@@ -167,6 +167,7 @@ export const SOI_EMPLOYEES = {
         last_name
         email
         phone
+        created_at
         __typename
       }
     }
