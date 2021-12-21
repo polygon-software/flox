@@ -149,10 +149,11 @@ async function newAssignment(): Promise<void> {
   const dossier_uuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
 
   const nr_of_banks = Math.floor(Math.random()*4)
-  const bank_uuids = ['4a9dafb1-493d-4c54-8db6-272a70329093',
-    '26a5ceae-619e-4e81-a727-a754c67adcda',
-    '555ec9e5-7f09-4f3b-8939-51c8cfdea3b3',
-    'fb006413-854f-447b-aa89-e3707c81113e'
+  const bank_uuids = ['0d239c36-668e-493d-8050-7b060fc87975',
+    'c3abeb5d-9c73-46a0-9a6d-4d651bbf8fff',
+    '99ce3554-4680-4eea-b47a-3c39164b62f3',
+    '60023505-baf4-45c2-91f3-59b3dbc1240a',
+
   ]
   const chosen: Array<string> = []
   while (chosen.length < nr_of_banks){
