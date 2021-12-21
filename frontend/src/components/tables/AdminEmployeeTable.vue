@@ -1,5 +1,8 @@
 <template>
-  <div class="column">
+  <div
+    class="column full-width"
+    style="max-width: 900px"
+  >
     <div
       class="row justify-between q-ma-none"
     >
