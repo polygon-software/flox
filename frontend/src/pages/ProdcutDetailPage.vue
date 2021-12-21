@@ -306,7 +306,7 @@ import {toDataUrl} from 'src/helpers/image-helper';
 import {i18n} from 'src/boot/i18n';
 import {toPascalCase} from 'src/helpers/string-helpers';
 import {PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
-import ROUTES from "src/router/routes";
+import ROUTES from 'src/router/routes';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
