@@ -51,30 +51,7 @@ import {RouterService} from 'src/services/RouterService';
 import CompanyEmployeeId from 'components/cards/CompanyEmployeeId.vue';
 import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
-
-
-/**
- * Shows an array of options to be selected depending if creditor or employee
- * @returns {string[]} - returns a string as array with all options
- */
-function showOptions(){
-  // TODO: remove creditor and employee, and check from backend if the logged user is a creditor or an emloyee
-  const creditor = false
-  const employee = true
-  if (creditor){
-    return [
-      'Nicht vermittelbar', 'Offen', 'In Bearbeitung', 'Eingereicht', 'Offeriert', 'Offerte abgelehnt', 'Auftragsblatt hochgeladen',
-      'Kreditvertrag in Bearbeitung', 'Kreditvertrag versendet', 'Kreditvertrag unterzeichnet zurück', 'Produktvereinbarung bestätigt', 'Abgeschlossen',
-    ]
-  }
-  else if (employee) {
-    return [
-      'Nicht vermittelbar', 'Offen', 'In Bearbeitung', 'Eingereicht', 'Auftragsblatt hochgeladen', 'Produktvereinbarung bestätigt', 'Abgeschlossen',
-    ]
-  }
-  return []
-}
+import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
 
 const emit = defineEmits(['change'])
 

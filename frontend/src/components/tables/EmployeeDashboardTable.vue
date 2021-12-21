@@ -110,13 +110,6 @@ const $q: QVueGlobals = useQuasar()
 // Selection must be an array
 const selected = ref([])
 
-defineProps({
-  options: {
-    required: false,
-    type: Array,
-    default: () => [],
-  }
-})
 
 // ----- Data -----
 const columns = [
