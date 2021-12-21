@@ -133,6 +133,7 @@ export default ROUTES
 // Routes that can be accessed without being logged in
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
+  ROUTES.SIGNUP,
 ]
 
 //TODO: Add semi-protected routes
