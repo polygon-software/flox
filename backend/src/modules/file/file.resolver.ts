@@ -1,4 +1,4 @@
-import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
+import { Args, Resolver, Query } from '@nestjs/graphql';
 import PublicFile from './entities/public_file.entity';
 import { FileService } from './file.service';
 import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';

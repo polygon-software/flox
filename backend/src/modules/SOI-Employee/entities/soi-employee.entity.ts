@@ -1,4 +1,4 @@
-import { InputType, ObjectType } from '@nestjs/graphql';
+import { ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { Entity } from 'typeorm';
 
