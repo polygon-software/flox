@@ -17,9 +17,9 @@
     </div>
 
     <!-- Timer -->
-    <b class="q-mt-xs q-ml-sm">
+    <strong class="q-mt-xs q-ml-sm">
       {{ $t('products.time_left') }}: <strong> 12:00:00 </strong>
-    </b>
+    </strong>
 
     <!-- Progress Bar -->
     <div class="q-mt-md q-ml-sm q-mr-sm">
@@ -29,8 +29,8 @@
         color="positive"
       />
       <div class="flex justify-between q-mt-sm">
-        <b style="color: #21BA45"> {{ covered_amount }}{{ currency }} / {{ product.value }}{{ product.currency }}</b>
-        <b style="color: #21BA45"> {{ $t('products.player_bet') }} {{ userBet }}{{ currency }}</b>
+        <strong style="color: #21BA45"> {{ covered_amount }}{{ currency }} / {{ product.value }}{{ product.currency }}</strong>
+        <strong style="color: #21BA45"> {{ $t('products.player_bet') }} {{ userBet }}{{ currency }}</strong>
       </div>
     </div>
 
