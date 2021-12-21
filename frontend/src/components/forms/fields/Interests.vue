@@ -13,7 +13,7 @@
       type="search"
       class="q-mb-md"
     >
-      <template v-slot:append>
+      <template #append>
         <q-icon name="search" />
       </template>
     </q-input>
@@ -23,29 +23,29 @@
       class="q-ma-md col"
       style="font-size: medium"
     >
-      {{ $t('select_interests', {max: max_interests}) }}
+      {{ $t('interests.select_interests', {max: max_interests}) }}
     </p>
     <q-scroll-area
       style="height: 125px;"
       class="q-ma-md col"
     >
       <q-chip
-        v-for="interest in filteredInterests"
-        :key="interest.name"
-        :color="interest.model ? 'primary' : 'gray'"
-        :text-color="interest.model ? 'white': 'black'"
+        v-for="interestChip in filteredInterests"
+        :key="interestChip.name"
+        :color="interestChip.model ? 'primary' : 'gray'"
+        :text-color="interestChip.model ? 'white': 'black'"
         style="cursor: pointer;"
         clickable
-        @click="clickChip(interest)"
+        @click="clickChip(interestChip)"
       >
-        {{ interest.name }}
+        {{ interestChip.name }}
       </q-chip>
     </q-scroll-area>
     <p
       class="q-ma-md col"
       style="font-size: medium"
     >
-      {{ $t('amount_selected', { amount: selectedInterests.length, max: max_interests }) }}
+      {{ $t('interests.amount_selected', { amount: selectedInterests.length, max: max_interests }) }}
     </p>
   </q-card>
 
@@ -66,47 +66,47 @@ type interest = {
 }
 const interests = ref([
   {
-    name: i18n.global.t('cars'),
+    name: i18n.global.t('interests.cars'),
     model: false,
   },
   {
-    name: i18n.global.t('celebrities'),
+    name: i18n.global.t('interests.celebrities'),
     model: false,
   },
   {
-    name: i18n.global.t('cooking'),
+    name: i18n.global.t('interests.cooking'),
     model: false,
   },
   {
-    name: i18n.global.t('fashion'),
+    name: i18n.global.t('interests.fashion'),
     model: false,
   },
   {
-    name: i18n.global.t('music'),
+    name: i18n.global.t('interests.music'),
     model: false,
   },
   {
-    name: i18n.global.t('outdoor'),
+    name: i18n.global.t('interests.outdoor'),
     model: false,
   },
   {
-    name: i18n.global.t('sports'),
+    name: i18n.global.t('interests.sports'),
     model: false,
   },
   {
-    name: i18n.global.t('technology'),
+    name: i18n.global.t('interests.technology'),
     model: false,
   },
   {
-    name: i18n.global.t('tools'),
+    name: i18n.global.t('interests.tools'),
     model: false,
   },
   {
-    name: i18n.global.t('travelling'),
+    name: i18n.global.t('interests.travelling'),
     model: false,
   },
   {
-    name: i18n.global.t('watches'),
+    name: i18n.global.t('interests.watches'),
     model: false,
   },
 ])

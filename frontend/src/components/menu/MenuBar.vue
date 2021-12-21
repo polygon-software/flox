@@ -10,31 +10,24 @@
     </div>
     <div class="row items-center">
       <p
-        class="text-black"
         v-if="loggedIn && username"
+        class="text-black"
       >
-        {{ $t('loggedIn', {user: username})}}
+        {{ $t('authentication.loggedIn', {user: username})}}
       </p>
     </div>
 
   <div class="row">
     <q-btn
         v-if="loggedIn"
-        label="Logout"
+        :label="$t('authentication.logout')"
         class="text-black"
         flat
         @click="logout"
     />
     <q-btn
-        v-if="loggedIn"
-        :label="$t('change_password')"
-        class="text-black"
-        flat
-        @click="changePassword"
-    />
-    <q-btn
         v-if="!loggedIn"
-        :label="$t('forgotten_password')"
+        :label="$t('authentication.forgot_password')"
         class="text-black"
         flat
         @click="forgottenPassword"
@@ -71,7 +64,7 @@
       <Inbox db-ref="123"/>
       <q-card-actions align="center">
         <q-btn
-          :label="$t('back')"
+          :label="$t('buttons.back')"
           flat
           color="black"
           @click="closeInbox"
@@ -83,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ComputedRef, inject, ref} from 'vue'
+import {computed, inject, ref} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -102,8 +95,7 @@ const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActi
 
 const loggedIn = computed(() => {
   // Explicit type
-  const result: boolean = $authStore.getters.getLoggedInStatus()
-  return result;
+  return $authStore.getters.getLoggedInStatus();
 })
 
 // Username does not need to be reactive, since it won't change between logins
@@ -136,7 +128,7 @@ function forgottenPassword() {
 }
 
 /*
-* This section controlls the visibility of the notification inbox popup.
+* This section controls the visibility of the notification inbox popup.
 *  TODO: Change it to a push or rerendering?
 */
 const showInbox = ref(false)

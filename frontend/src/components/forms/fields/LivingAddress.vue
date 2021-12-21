@@ -1,54 +1,54 @@
 <template>
   <strong>{{ $t('living_address') }}</strong>
   <q-input
-    dense
-    :label="$t('street')"
     v-model="street"
+    dense
+    :label="$t('account_data.street')"
     type="text"
     lazy-rules="ondemand"
-    :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_address')]"
+    :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_address')]"
   >
   </q-input>
   <div class="flex justify-between">
     <q-input
-      dense
-      :label="$t('number')"
       v-model="number"
+      dense
+      :label="$t('account_data.number')"
       type="text"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('invalid_house_number')]"
+      :rules="[(val) => IS_VALID_HOUSE_NUMBER(val) || $t('errors.invalid_house_number')]"
       style="width:40%"
       mask="####"
     >
     </q-input>
     <q-input
-      dense
-      :label="$t('city')"
       v-model="city"
+      dense
+      :label="$t('account_data.city')"
       type="text"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_city')]"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
       style="width:40%"
     >
     </q-input>
     <q-input
-      dense
-      :label="$t('zip_code')"
       v-model="zip_code"
+      dense
+      :label="$t('account_data.zip_code')"
       type="number"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_ZIP(val) || $t('invalid_zip_code')]"
+      :rules="[(val) => IS_VALID_ZIP(val) || $t('errors.invalid_zip_code')]"
       style="width:40%"
       mask="######"
     >
     </q-input>
     <q-input
-      dense
-      :label="$t('state')"
       v-model="state"
+      dense
+      :label="$t('account_data.state')"
       type="text"
       lazy-rules="ondemand"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('invalid_state')]"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_state')]"
       style="width:40%"
     >
     </q-input>
@@ -70,13 +70,13 @@ const emit = defineEmits(['change'])
 watch(street, (newValue) => {
   emitUpdate(newValue)
 })
-watch(number, (newValue: number|string) => {
+watch(number, (newValue: string|number) => {
   emitUpdate(newValue)
 })
 watch(city, (newValue) => {
   emitUpdate(newValue)
 })
-watch(zip_code, (newValue: number|string) => {
+watch(zip_code, (newValue: string|number) => {
   emitUpdate(newValue)
 })
 watch(state, (newValue) => {
@@ -84,11 +84,11 @@ watch(state, (newValue) => {
 })
 
 /**
- * Emits an update, containing the new values
- * @param {string|number} value - the changed value
+ * Emits an event with the new values
+ * @param {string|number} value - the address field's value
  * @returns {void}
  */
-function emitUpdate(value: string|number) {
+function emitUpdate(value: string|number): void {
   if (street.value.length > 0 && number.value > 0 && city.value.length > 0, zip_code.value > 0 && state.value.length > 0) {
     emit('change', value)
   }

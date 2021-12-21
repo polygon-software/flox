@@ -4,24 +4,24 @@
     style="width: 300px"
   >
     <q-form
-        @submit="onSubmit"
         class="row justify-center"
+        @submit="onSubmit"
     >
       <component
+          :is="field.component"
           v-for="field in fields"
           :key="field.key"
-          :is="field.component"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
           class="q-ma-none"
           style="width: 90%"
+          @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
           style="margin-top: 20px"
           color="primary"
           text-color="black"
-          :label="$t('login')"
+          :label="$t('authentication.login')"
           type="submit"
           :disable="!form.pageValid.value"
       />

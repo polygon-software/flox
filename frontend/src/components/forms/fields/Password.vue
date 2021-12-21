@@ -1,18 +1,18 @@
 <template>
   <q-input
-      dense
-      outlined
-      :label="$t('password')"
-      v-model="password"
-      lazy-rules="ondemand"
-      :type="isPwd ? 'password' : 'text'"
-      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('invalid_password')]"
+    v-model="password"
+    dense
+    outlined
+    :label="$t('account_data.password')"
+    lazy-rules="ondemand"
+    :type="isPwd ? 'password' : 'text'"
+    :rules="[(val) => IS_VALID_PASSWORD(val) || $t('error.invalid_password')]"
   >
-    <template v-slot:append>
+    <template #append>
       <q-icon
-          :name="isPwd ? 'visibility_off' : 'visibility'"
-          class="cursor-pointer"
-          @click="isPwd = !isPwd"
+        :name="isPwd ? 'visibility_off' : 'visibility'"
+        class="cursor-pointer"
+        @click="isPwd = !isPwd"
       />
     </template>
   </q-input>
