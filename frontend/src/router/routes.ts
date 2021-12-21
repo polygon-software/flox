@@ -43,6 +43,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/EmployeeDashboardPage.vue') }],
   },
 
+  'BANK_DASHBOARD': {
+    name: 'bank_dashboard',
+    path: '/bank-dashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/BankDashboard.vue') }],
+  },
+
   'MANAGEMENT_EMPLOYEE_VIEW': {
     path: '/management-employee-view',
     component: () => import('layouts/ManagementLayout.vue'),
@@ -77,6 +84,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewEmployeePage.vue') }],
   },
+  'REGISTER_BANK': {
+    path: '/register-bank',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/RegisterBankPage.vue') }],
+  },
 
   // Wildcard route for non-covered routes
   'WILDCARD': {
@@ -96,8 +108,10 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.MANAGEMENT_EMPLOYEE_DATA,
   ROUTES.MANAGEMENT_EMPLOYEE_TASKS,
+  ROUTES.BANK_DASHBOARD,
   ROUTES.EMPLOYEE_DASHBOARD,
   ROUTES.NEW_EMPLOYEE_PAGE,
+  ROUTES.REGISTER_BANK,
   ROUTES.ADMIN_DASHBOARD //TODO: Add security!!!
 ]
 
