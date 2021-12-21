@@ -4,7 +4,7 @@ import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { Dossier } from '../../dossier/entity/dossier.entity';
 import { Bank } from '../../bank/entities/bank.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
-import { STATUS } from '../../../ENUM/ENUMS';
+import { OFFER_STATUS } from '../../../ENUM/ENUMS';
 
 @Entity()
 @ObjectType()
@@ -21,11 +21,11 @@ export class Offer extends BaseEntity {
   @OneToOne(() => PrivateFile, { nullable: true })
   pdf: PrivateFile;
 
-  @Field(() => STATUS, { description: 'Status of Dossier' })
+  @Field(() => OFFER_STATUS, { description: 'Status of Dossier' })
   @Column({
     type: 'enum',
-    enum: STATUS,
-    default: STATUS.IN_PROCESS,
+    enum: OFFER_STATUS,
+    default: OFFER_STATUS.INTERESTED,
   })
-  status: STATUS;
+  status: OFFER_STATUS;
 }

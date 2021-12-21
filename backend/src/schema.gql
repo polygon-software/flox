@@ -214,7 +214,7 @@ input CreateEmployeeInput {
 input CreateOfferInput {
   bank_uuid: String!
   dossier_uuid: String!
-  status: Status!
+  status: OfferStatus!
 }
 
 input CreateSoiAdminInput {
@@ -382,10 +382,17 @@ type Offer {
   pdf: PrivateFile!
 
   """Status of Dossier"""
-  status: Status!
+  status: OfferStatus!
 
   """UUID"""
   uuid: ID!
+}
+
+enum OfferStatus {
+  ACCEPTED
+  INTERESTED
+  IN_PROCESS
+  RETRACTED
 }
 
 type PrivateFile {

@@ -32,8 +32,8 @@
           {{ props.row.loan_sum }}
         </q-td>
         <q-td key="status">
-          <q-chip :style="chipStyle(props.row.status)">
-            {{ $t('employee_dashboard.' +props.row.status) }}
+          <q-chip :style="dossierChipStyle(props.row.status)">
+            {{ $t('employee_dashboard.' + props.row.status) }}
           </q-chip>
           <q-popup-edit
             v-slot="scope"
@@ -59,12 +59,13 @@
           <q-chip
             v-for="(offer, index) in props.row.offers"
             :key="index"
+            :style="offerChipStyle(offer.status)"
           >
             {{ offer.bank.abbreviation }}
           </q-chip>
         </q-td>
         <q-td key="non-arrangeable">
-          <q-icon name="close"/>
+          <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
         </q-td>
       </q-tr>
       <!-- One spacer row per row -->
@@ -81,7 +82,7 @@ import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
-import {STATUS} from 'src/data/ENUM/ENUM';
+import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
 
 const $q: QVueGlobals = useQuasar()
@@ -108,7 +109,7 @@ const columns = [
   { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false },
   { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false },
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false },
-  { name: 'non-arrangeable', label: i18n.global.t('employee_dashboard.non-arrangeable'), field: '\'non-arrangeable\'', sortable: true },
+  { name: 'non-arrangeable', label:'', field: '\'non-arrangeable\'', sortable: true },
 ]
 
 
@@ -133,7 +134,26 @@ function onUpdateStatus(status: string, uuid:string){
     }
   )
 }
+/**
+ * ToDo Fix colors
+ * Chip color depending on the status
+ * @param {STATUS} status - status of Dossier
+ * @returns {string} - style
+ */
+function offerChipStyle(status: OFFER_STATUS){
+  const color = 'color: white; background-color: '
+  switch (status) {
+    case OFFER_STATUS.INTERESTED:
+      return color + '#f0b000;'
+    case OFFER_STATUS.IN_PROCESS:
+      return color + '#040f85;'
+    case OFFER_STATUS.RETRACTED:
+      return color + '#c92002;'
+    case OFFER_STATUS.ACCEPTED:
+      return color + '#16630a;'
 
+  }
+}
 
 /**
  * ToDo Fix colors
@@ -141,7 +161,7 @@ function onUpdateStatus(status: string, uuid:string){
  * @param {STATUS} status - status of Dossier
  * @returns {string} - style
  */
-function chipStyle(status: STATUS){
+function dossierChipStyle(status: STATUS){
   const color = 'color: white; background-color: '
   switch (status) {
     case STATUS.OPEN:

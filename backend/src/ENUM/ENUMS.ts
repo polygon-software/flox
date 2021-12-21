@@ -11,6 +11,13 @@ export enum STATUS {
   SENT = 'SENT',
 }
 
+export enum OFFER_STATUS {
+  INTERESTED = 'INTERESTED',
+  RETRACTED = 'RETRACTED',
+  ACCEPTED = 'ACCEPTED',
+  IN_PROCESS = 'IN_PROCESS',
+}
+
 export enum CREATION_STATE {
   APPLIED = 'APPLIED',
   AWAITING_DOCUMENTS = 'AWAITING_DOCUMENTS',
@@ -27,5 +34,6 @@ export enum ROLE {
   NONE = 'NONE',
 }
 registerEnumType(STATUS, { name: 'Status' });
+registerEnumType(OFFER_STATUS, { name: 'OfferStatus' });
 registerEnumType(ROLE, { name: 'Roles' });
 registerEnumType(CREATION_STATE, { name: 'creationState' });

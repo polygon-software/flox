@@ -203,6 +203,8 @@ export const MY_DOSSIERS = {
               created_at
               first_name
               last_name
+              __typename
+              non_arrangeable
               original_bank{
                 __typename
                 uuid
@@ -219,6 +221,7 @@ export const MY_DOSSIERS = {
               offers{
                 __typename
                 uuid
+                status
                 bank {
                   __typename
                   uuid
@@ -226,7 +229,6 @@ export const MY_DOSSIERS = {
                   abbreviation
                 }
               }
-              __typename
             }
         }
   `,

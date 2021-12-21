@@ -16,6 +16,14 @@ export enum CREATION_STATE {
   DONE = 'DONE',
 }
 
+
+export enum OFFER_STATUS {
+  INTERESTED = 'INTERESTED',
+  RETRACTED = 'RETRACTED',
+  ACCEPTED = 'ACCEPTED',
+  IN_PROCESS = 'IN_PROCESS',
+}
+
 export enum ROLE {
   BANK = 'BANK',
   COMPANY = 'COMPANY',

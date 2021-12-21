@@ -54,7 +54,7 @@ export const SET_DOSSIER_STATUS = {
 
 export const CREATE_OFFER = {
   mutation: gql`
-    mutation createOffer($bank_uuid: String!, $dossier_uuid: String!, $status: Status!){
+    mutation createOffer($bank_uuid: String!, $dossier_uuid: String!, $status: OfferStatus!){
       createOffer(createOfferInput: {bank_uuid: $bank_uuid, dossier_uuid:$dossier_uuid, status: $status}){
         uuid
         __typename
@@ -73,6 +73,6 @@ export const CREATE_OFFER = {
     }
     `,
   tables: ['dossier', 'offer'],
-  type: MutationTypes.CREATE,
+  type: MutationTypes.UPDATE,
   cacheLocation: 'createOffer'
 }

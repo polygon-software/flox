@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-card
       class="square q-pa-md q-ma-md"
-      style="width: 1400px"
+      style="width: 1600px"
     >
       <!-- Own info -->
       <CompanyEmployeeId/>
@@ -51,7 +51,7 @@ import {RouterService} from 'src/services/RouterService';
 import CompanyEmployeeId from 'components/cards/CompanyEmployeeId.vue';
 import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {STATUS} from 'src/data/ENUM/ENUM';
+import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
 
 
 /**
@@ -149,16 +149,21 @@ async function newAssignment(): Promise<void> {
   const dossier_uuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
 
   const nr_of_banks = Math.floor(Math.random()*4)
-  const bank_uuids = ['38a0d1f8-00e9-4a42-841b-1531f649f476', '1f6d0f3b-220c-480c-bb06-270330ec4496', '46b86c1d-ad7f-402c-ada1-6242060bbed6', '91c8ee38-66ed-4477-b698-5987665038e8']
+  const bank_uuids = ['4a9dafb1-493d-4c54-8db6-272a70329093',
+    '26a5ceae-619e-4e81-a727-a754c67adcda',
+    '555ec9e5-7f09-4f3b-8939-51c8cfdea3b3',
+    'fb006413-854f-447b-aa89-e3707c81113e'
+  ]
   const chosen: Array<string> = []
   while (chosen.length < nr_of_banks){
+    const status = Object.keys(OFFER_STATUS)[Math.floor(Math.random() * Object.keys(OFFER_STATUS).length)]
     const next = bank_uuids[Math.floor(Math.random()*bank_uuids.length)]
     if(!(chosen.includes(next))){
       chosen.push(next)
       await executeMutation(CREATE_OFFER, {
         bank_uuid: next,
         dossier_uuid,
-        status: STATUS.OFFERED
+        status: status
       })
     }
   }

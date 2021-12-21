@@ -111,6 +111,6 @@ export class EmployeeService {
         ],
       });
     }
-    throw new Error('User is not an Employee');
+    throw new Error('User is not an Employee but an ' + user.role);
   }
 }
