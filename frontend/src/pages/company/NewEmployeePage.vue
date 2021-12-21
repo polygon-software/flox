@@ -22,13 +22,9 @@ import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
-import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
-import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
-import {randomPassword} from 'src/helpers/generator-helpers';
 
 const $routerService: RouterService|undefined = inject('$routerService')
-const $authService: AuthenticationService|undefined = inject('$authService')
 const $errorService: ErrorService|undefined = inject('$errorService')
 
 /**

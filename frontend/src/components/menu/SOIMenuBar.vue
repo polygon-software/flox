@@ -81,6 +81,7 @@ const loggedIn = computed(() => {
   return result;
 })
 
+//eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   admin: {
     type: boolean,

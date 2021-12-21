@@ -32,7 +32,7 @@
           color="primary"
           unelevated
           padding="8px"
-          style="height: 40px"
+          style="height: 40px; border-radius: 8px"
           @click="routeToRegisterEmployee"
         />
       </div>

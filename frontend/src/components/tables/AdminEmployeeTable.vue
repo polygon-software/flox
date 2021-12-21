@@ -27,7 +27,7 @@
           </template>
         </q-input>
 
-        <!-- Register new employee TODO adapt to admin-->
+        <!-- Register new employee -->
         <q-btn
           icon="add"
           :label="$t('authentication.employee_signup')"
@@ -35,7 +35,7 @@
           color="primary"
           unelevated
           padding="8px"
-          style="height: 40px"
+          style="height: 40px; border-radius: 8px"
           @click="routeToRegisterEmployee"
         />
       </div>
@@ -49,7 +49,7 @@
       :rows-per-page-options="[10,20, 100]"
       separator="none"
       :filter="search"
-      flat
+      flatd
     >
       <template #body="props">
         <q-tr
