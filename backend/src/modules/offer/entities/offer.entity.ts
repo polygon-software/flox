@@ -7,7 +7,7 @@ import PrivateFile from '../../file/entities/private_file.entity';
 
 @ObjectType()
 @InputType('offer')
-@Entity('offer')
+@Entity({ name: 'offer' })
 export class Offer extends BaseEntity {
   @Field(() => Dossier, { description: 'Dossier of Offer' })
   @ManyToOne(() => Dossier, (dossier) => dossier.offers)

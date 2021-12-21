@@ -36,14 +36,14 @@
 <script setup lang="ts">
 import LoginForm from 'components/forms/LoginForm.vue'
 import {inject} from 'vue'
-import {AuthenticationService} from '../services/AuthService';
+import {AuthenticationService} from 'src/services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {RouteRecordRaw} from 'vue-router';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/QUERIES';
-import {User} from '../../../backend/src/modules/user/entities/user.entity';
 import {ROLE} from 'src/data/ENUM/ENUM';
+
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -58,7 +58,6 @@ const $routerService: RouterService|undefined = inject('$routerService')
 async function onLogin({username, password}: {username: string, password: string}){
   await $authService?.login(username, password)
   const queryRes = await executeQuery(MY_USER)
-  console.log(queryRes)
   if(!queryRes || !queryRes.data){
     return
   }
@@ -68,10 +67,10 @@ async function onLogin({username, password}: {username: string, password: string
   }
   const role = user.role as ROLE
   const target_route_mapping: Record<ROLE, RouteRecordRaw> = {
-    [ROLE.SOI_ADMIN]: ROUTES.ADMIN_DASHBOARD,
+    [ROLE.SOI_ADMIN]: ROUTES.ADMIN_DOSSIERS,
     [ROLE.COMPANY]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
     [ROLE.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD,
-    [ROLE.SOI_EMPLOYEE]: ROUTES.ADMIN_DASHBOARD, //Todo
+    [ROLE.SOI_EMPLOYEE]: ROUTES.APPLICATIONS, //Todo
     [ROLE.BANK]: ROUTES.WILDCARD, //ToDo
     [ROLE.NONE]: ROUTES.WILDCARD,
   }

@@ -173,4 +173,22 @@ export const MY_USER = {
   cacheLocation: 'getMyUser'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];
+export const SOI_EMPLOYEES = {
+  query: gql`
+    query allSoiEmployees{
+      allSoiEmployees{
+        uuid
+        first_name
+        last_name
+        email
+        phone
+        created_at
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'allSoiEmployees'
+}
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_USER, SOI_EMPLOYEES];

@@ -1,7 +1,6 @@
 import { Field, InputType, PartialType } from '@nestjs/graphql';
 import {
   IsBoolean,
-  IsEmail,
   IsNotEmpty,
   IsNotEmptyObject,
   IsOptional,

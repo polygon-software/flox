@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { AdminOnly } from '../../auth/authorization.decorator';
 import { SoiEmployee } from './entities/soi-employee.entity';
 import { CreateSoiEmployeeInput } from './dto/input/create-soi-employee.input';
@@ -19,5 +19,15 @@ export class SoiEmployeeResolver {
     createSoiEmployeeInput: CreateSoiEmployeeInput,
   ): Promise<SoiEmployee> {
     return this.soiEmployeeService.createSoiEmployee(createSoiEmployeeInput);
+  }
+
+  /**
+   * Gets a list of all SOI employees in the database
+   * @returns {Promise<SoiEmployee[]>} - all employees
+   */
+  @AdminOnly()
+  @Query(() => [SoiEmployee], { name: 'allSoiEmployees' })
+  async getAllSoiEmployees(): Promise<SoiEmployee[]> {
+    return this.soiEmployeeService.getAllSoiEmployees();
   }
 }

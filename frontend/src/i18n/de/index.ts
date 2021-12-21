@@ -7,13 +7,15 @@ export default {
     search: 'Suche',
     welcome: 'Willkommen',
     from: 'Von',
-    to: 'Bis'
+    to: 'Bis',
+    date: 'Datum',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
     login: 'Anmelden',
     logout: 'Abmelden',
     signup: 'Registrieren',
+    bank_signup: 'Kreditinstitut erfassen',
     employee_signup: 'Mitarbeitende erfassen',
     signup_now: 'Kein Account? Jetzt registrieren:',
     forgot_password: 'Passwort vergessen',
@@ -27,6 +29,7 @@ export default {
   account_data: {
     employees: 'Mitarbeitende',
     authentication: 'Authentifizierung',
+    broker: 'Broker',
     email: 'E-Mail',
     username: 'Benutzername',
     password: 'Passwort',
@@ -46,6 +49,11 @@ export default {
     full_name: 'Name',
     company_name: 'Firmenname',
     company_uid: 'Firmen UID',
+    id: 'ID',
+    institution: 'Institut',
+    supervisor: 'Verantworliche*r',
+    date: 'Datum',
+    status: 'Status',
     language: 'Sprache',
     domicile_address: 'Addresse',
     correspondence_address: 'Korrespondenzaddresse',
@@ -61,11 +69,15 @@ export default {
     commercial_register_extract: 'Handelsregisterauszug',
     execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
-    status: 'Status',
+    offer: 'Antrag',
+    abbreviation: 'Kürzel',
     tasks: 'Aufträge',
     volume: 'Volumen',
+    mortgage_volume: 'Hypothekarvolumen',
+    provision: 'Provision | Provisionen',
     provision_employee: 'Provision MA',
     provision_company: 'Provision Organisation',
+    provision_soi: 'Provision SOI',
     provision_ratio: 'Anteil prov. Vermittler'
   },
   messages: {
@@ -74,6 +86,8 @@ export default {
     application_rejected: 'Antrag abgelehnt'
   },
   dashboards: {
+    management_dashboard: 'Chef Dashboard',
+    offer: 'Anfragen',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',
@@ -84,7 +98,14 @@ export default {
     sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
     yes_reject: 'Ja, ablehnen',
     view_documents: 'Dokumente ansehen',
-    employee_tasks: 'Mitarbeitendenaufträge'
+    employee_tasks: 'Mitarbeitendenaufträge',
+    dossier: 'Dossier | Dossiers',
+    offer_id: 'Auftr. Nr.',
+    market_value: 'Verkehrswert',
+    mortgage: 'Hypothek',
+    b_degree: 'B-Grad',
+    acceptability_of_risks: 'Tragbarkeit',
+    expiration: 'Ablauf',
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -115,6 +136,7 @@ export default {
     incorrect_email: 'E-Mail Adresse wurde nicht gefunden',
     incorrect_username: 'Benutzername wurde nicht gefunden',
     non_matching_password: 'Passwörter stimmen nicht überein',
+    invalid_abbreviation: 'Bitte geben Sie ein gültiges Kürzel ein',
     invalid_name: 'Bitte geben Sie Ihren Namen ein',
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
@@ -142,6 +164,18 @@ export default {
   status: {
     uploading: 'Hochladen',
     loading: 'Laden',
+    offered: 'Offeriert',
+    offer_rejected: 'Offerte abgelehnt',
+    offer_withdrawn: 'Offerte zurückziehen',
+    in_progress: 'Kreditvertrag in Bearbeitung',
+    sent: 'Kreditvertrag versendet',
+    signed: 'Kreditvertrag unterzeichnet',
+    completed: 'abgeschlossen',
+    offer: {
+      offered: 'offerieren',
+      withdrawn: 'zurückgezogen',
+      rejected: 'abgelehnt',
+    }
   },
   user_types: {
     soi_admin: 'SOI Administrator',
