@@ -1,5 +1,8 @@
 <template>
-  <div class="column">
+  <div
+    class="column full-width"
+    style="max-width: 900px"
+  >
     <div
       class="row justify-between q-ma-none"
     >
@@ -92,11 +95,11 @@ const search = ref('')
 
 // ----- Data -----
 const columns = [
-  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
-  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
-  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
-  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
-  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
+  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true, align: 'center' },
+  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true, align: 'center' },
+  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true, align: 'center' },
+  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false, align: 'center' },
+  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject) as Ref<Record<string, Array<Record<string, unknown>>>>

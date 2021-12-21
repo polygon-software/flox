@@ -49,7 +49,7 @@
       :rows-per-page-options="[10,20, 100]"
       separator="none"
       :filter="search"
-      flatd
+      flat
     >
       <template #body="props">
         <q-tr

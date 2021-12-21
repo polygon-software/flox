@@ -1,5 +1,8 @@
 <template>
-  <div class="column">
+  <div
+    class="column full-width"
+    style="max-width: 900px"
+  >
     <div
       class="row justify-between q-ma-none"
     >
@@ -112,13 +115,13 @@ const toDate: Ref<string|null> = ref(null)
 
 // ----- Data -----
 const columns = [
-  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
-  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
-  { name: 'tasks', label: i18n.global.t('account_data.tasks'), field: 'tasks', sortable: true },
-  { name: 'volume', label: i18n.global.t('account_data.volume'), field: 'volume', sortable: true },
-  { name: 'prov_emp', label: i18n.global.t('account_data.provision_employee'), field: 'prov_emp', sortable: true },
-  { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false },
-  { name: 'prov_ratio', label: i18n.global.t('account_data.provision_ratio'), field: 'prov_ratio', sortable: false },
+  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true, align: 'center' },
+  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true, align: 'center' },
+  { name: 'tasks', label: i18n.global.t('account_data.tasks'), field: 'tasks', sortable: true, align: 'center' },
+  { name: 'volume', label: i18n.global.t('account_data.volume'), field: 'volume', sortable: true, align: 'center' },
+  { name: 'prov_emp', label: i18n.global.t('account_data.provision_employee'), field: 'prov_emp', sortable: true, align: 'center' },
+  { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
+  { name: 'prov_ratio', label: i18n.global.t('account_data.provision_ratio'), field: 'prov_ratio', sortable: false, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>

@@ -4,6 +4,8 @@
     :rows="computedResult"
     :columns="columns"
     row-key="uuid"
+    class="full-width"
+    style="max-width: 900px"
   >
     <template #body="props">
       <q-tr :props="props">
@@ -25,6 +27,8 @@
             v-if="isAction(props.row)"
             color="primary"
             :label="action_label[props.row.creation_state]?.text || ''"
+            style="border-radius: 8px"
+            no-caps
             @click="action_label[props.row.creation_state]?.action(props.row)"
           />
           <div v-else>
@@ -55,10 +59,10 @@ const $authService: AuthenticationService|undefined = inject('$authService')
 const $errorService: ErrorService|undefined = inject('$errorService')
 // ----- Data -----
 const columns = [
-  { name: 'readable_id', label: 'ID', field: 'readable_id', sortable: false },
-  { name: 'company_name', label: i18n.global.t('account_data.company_name'), field: 'company_name', sortable: true },
-  {name: 'state', required: true, label: i18n.global.t('dashboards.state'), align: 'left', field: 'state', sortable: true},
-  {name: 'action', required: true, label: i18n.global.t('dashboards.action'), align: 'left', field: 'action', sortable: true}
+  { name: 'readable_id', label: 'ID', field: 'readable_id', align: 'center', sortable: false },
+  { name: 'company_name', label: i18n.global.t('account_data.company_name'), align: 'center', field: 'company_name', sortable: true },
+  {name: 'state', required: true, label: i18n.global.t('dashboards.state'), align: 'center', field: 'state', sortable: true},
+  {name: 'action', required: true, label: i18n.global.t('dashboards.action'), align: 'center', field: 'action', sortable: true}
 ]
 
 
