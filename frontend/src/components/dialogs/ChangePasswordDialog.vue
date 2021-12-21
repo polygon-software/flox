@@ -56,7 +56,7 @@
 import {defineEmits, Ref} from 'vue';
 import {ref} from 'vue';
 import {PASSWORD_REGEX} from 'src/helpers/REGEX'
-import {QDialog, useDialogPluginComponent} from 'quasar';
+import {QDialog} from 'quasar';
 
 let passwordOld = ref('')
 let password = ref('')

@@ -14,6 +14,7 @@ import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
 import { CREATION_STATE } from '../../ENUM/ENUMS';
 import fastify = require('fastify');
+import { ERRORS } from '../../error/ERRORS';
 
 @Controller()
 export class FileController {
@@ -31,7 +32,7 @@ export class FileController {
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
-      res.send(new BadRequestException('File expected on this endpoint'));
+      res.send(new BadRequestException(ERRORS.file_expected));
       return;
     }
     const file = await req.file();
@@ -51,7 +52,7 @@ export class FileController {
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
-      res.send(new BadRequestException('File expected on this endpoint'));
+      res.send(new BadRequestException(ERRORS.file_expected));
       return;
     }
 
@@ -77,7 +78,7 @@ export class FileController {
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
-      res.send(new BadRequestException('File expected on this endpoint'));
+      res.send(new BadRequestException(ERRORS.file_expected));
       return;
     }
 
@@ -98,15 +99,13 @@ export class FileController {
       (company.creation_state !== CREATION_STATE.AWAITING_DOCUMENTS &&
         company.creation_state !== CREATION_STATE.DOCUMENTS_UPLOADED)
     ) {
-      throw new Error(
-        'No valid company found, the link you used may be invalid.',
-      );
+      throw new Error(ERRORS.no_valid_company);
     }
 
     const file = await req.file();
 
     if (!file) {
-      throw new Error('No valid file sent!');
+      throw new Error(ERRORS.no_valid_file);
     }
     const file_buffer = await file.toBuffer();
     const new_file = await this.fileService.uploadPrivateFile(

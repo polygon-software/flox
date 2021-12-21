@@ -7,7 +7,8 @@ export default {
     search: 'Suche',
     welcome: 'Willkommen',
     from: 'Von',
-    to: 'Bis'
+    to: 'Bis',
+    date: 'Datum',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -28,6 +29,7 @@ export default {
   account_data: {
     employees: 'Mitarbeitende',
     authentication: 'Authentifizierung',
+    broker: 'Broker',
     email: 'E-Mail',
     username: 'Benutzername',
     password: 'Passwort',
@@ -71,8 +73,11 @@ export default {
     abbreviation: 'Kürzel',
     tasks: 'Aufträge',
     volume: 'Volumen',
+    mortgage_volume: 'Hypothekarvolumen',
+    provision: 'Provision | Provisionen',
     provision_employee: 'Provision MA',
     provision_company: 'Provision Organisation',
+    provision_soi: 'Provision SOI',
     provision_ratio: 'Anteil prov. Vermittler'
   },
   messages: {
@@ -94,6 +99,7 @@ export default {
     yes_reject: 'Ja, ablehnen',
     view_documents: 'Dokumente ansehen',
     employee_tasks: 'Mitarbeitendenaufträge',
+    dossier: 'Dossier | Dossiers',
     offer_id: 'Auftr. Nr.',
     market_value: 'Verkehrswert',
     mortgage: 'Hypothek',

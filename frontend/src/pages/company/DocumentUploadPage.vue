@@ -26,7 +26,7 @@
 import {FIELDS} from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
 import {inject, ref} from 'vue';
-import GenericForm from 'src/components/forms/GenericForm.vue'
+import GenericForm from 'components/forms/GenericForm.vue'
 import {useRoute} from 'vue-router';
 import axios from 'axios';
 import {RouterService} from 'src/services/RouterService';

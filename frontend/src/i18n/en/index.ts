@@ -7,7 +7,8 @@ export default {
     search: 'Search',
     welcome: 'Welcome',
     from: 'From',
-    to: 'To'
+    to: 'To',
+    date: 'Datum',
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -29,6 +30,7 @@ export default {
     employees: 'Employees',
     activities: 'Activities',
     authentication: 'Authentication',
+    broker: 'Broker',
     email: 'E-Mail',
     username: 'Username',
     password: 'Password',
@@ -68,8 +70,11 @@ export default {
     optional: 'optional',
     tasks: 'Tasks',
     volume: 'Volume',
+    mortgage_volume: 'Mortgage Volume',
+    provision: 'Provision | Provisions',
     provision_employee: 'Emp. Provision',
     provision_company: 'Company Provision',
+    provision_soi: 'Provision SOI',
     provision_ratio: 'Prov. Ratio Emp.',
     offer: 'offer',
     abbreviation: 'Abbreviation'
@@ -93,6 +98,7 @@ export default {
     unlock_account: 'Unlock account',
     view_documents: 'View documents',
     employee_tasks: 'Employee tasks',
+    dossier: 'Dossier | Dossiers',
     offer_id: 'Offer Nr.',
     market_value: 'Market Value',
     mortgage: 'Mortgage',

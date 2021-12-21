@@ -43,7 +43,7 @@ export class EmployeeService {
       fk: employee.uuid,
     });
 
-    return await this.employeeRepository.save(employee);
+    return this.employeeRepository.save(employee);
   }
 
   /**
