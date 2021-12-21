@@ -6,5 +6,5 @@ import { Entity } from 'typeorm';
 /**
  * An Admin with SOI
  */
-@Entity('soiadmin')
+@Entity('soi')
 export class SoiAdmin extends Person {}

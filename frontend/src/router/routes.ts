@@ -78,28 +78,28 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'NEW_SOI_EMPLOYEE_PAGE': {
     path: '/new-soi-employee',
     component: () => import('layouts/SOIAdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/soiadmin/NewSOIEmployeePage.vue') }],
+    children: [{ path: '', component: () => import('pages/soi/NewSOIEmployeePage.vue') }],
   },
 
   // SOI Admin: SOI Employees
   'ADMIN_EMPLOYEES': {
     path: '/admin-employees',
     component: () => import('layouts/SOIAdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminEmployeePage.vue') }],
+    children: [{ path: '', component: () => import('pages/soi/SOIAdminEmployeePage.vue') }],
   },
 
   // SOI Admin: Dossiers
   'ADMIN_DOSSIERS': {
     path: '/admin-dossiers',
     component: () => import('layouts/SOIAdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminDossierPage.vue') }],
+    children: [{ path: '', component: () => import('pages/soi/SOIAdminDossierPage.vue') }],
   },
 
-  // SOI Admin: Applications
-  'ADMIN_APPLICATIONS': {
-    path: '/admin-applications',
-    component: () => import('layouts/SOIAdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/soiadmin/SOIAdminApplicationPage.vue') }],
+  // SOI Employee: Applications
+  'APPLICATIONS': {
+    path: '/applications',
+    component: () => import('layouts/SOIEmployeeLayout.vue'),
+    children: [{ path: '', component: () => import('pages/soi/SOIApplicationPage.vue') }],
   },
 
   // Wildcard route for non-covered routes

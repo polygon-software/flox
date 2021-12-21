@@ -2,7 +2,6 @@
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
     <!-- Menu bar header -->
     <SOIMenuBar
-      :admin="true"
       @toggle="showDrawer = !showDrawer"
     />
 

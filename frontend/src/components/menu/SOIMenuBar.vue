@@ -1,6 +1,7 @@
 <template>
-  <q-header class="row bg-black shadow-2 justify-between">
-    <q-toolbar>
+  <q-header class="row bg-black shadow-2 full-width">
+    <q-toolbar class="full-width justify-between">
+      <div class="row">
       <q-btn
         flat
         round
@@ -8,9 +9,18 @@
         icon="menu"
         @click="toggleDrawer"
       />
-      <q-toolbar-title>
-        SOI Chamäleon
-      </q-toolbar-title>
+        <q-toolbar-title>
+          SOI Chamäleon
+        </q-toolbar-title>
+        <q-chip
+          v-if="admin"
+          label="Admin"
+          color="primary"
+          text-color="white"
+          :clickable="false"
+          :ripple="false"
+        />
+      </div>
 
       <q-btn-dropdown
         dropdown-icon="more_vert"
@@ -57,6 +67,7 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
+import {boolean} from 'joi';
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
@@ -68,6 +79,14 @@ const loggedIn = computed(() => {
   // Explicit type
   const result: boolean = $authStore.getters.getLoggedInStatus()
   return result;
+})
+
+const props = defineProps({
+  admin: {
+    type: boolean,
+    required: false,
+    default: false,
+  }
 })
 
 /**
