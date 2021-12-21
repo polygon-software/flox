@@ -112,7 +112,7 @@ import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
 const emit = defineEmits(['submit'])
 
-const form_ref: Ref<QForm|null> = ref(null)
+const formRef: Ref<QForm|null> = ref(null)
 
 const props = defineProps({
   finishLabel: {
@@ -145,9 +145,9 @@ const form: Form = new Form(props.pages as Record<string, unknown>[])
  * @returns {Promise<void>} - done
  */
 async function onSubmit(){
-  const is_valid = await form_ref.value?.validate()
+  const isValid = await formRef.value?.validate()
 
-  if(is_valid){
+  if(isValid){
     emit('submit', form.values.value)
   }
 }

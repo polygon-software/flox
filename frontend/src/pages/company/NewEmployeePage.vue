@@ -32,7 +32,7 @@ const $errorService: ErrorService|undefined = inject('$errorService')
 * account_fields array. Once a new employee has been registered, the user will be redirected to the success page.
 */
 
-const account_fields = [
+const accountFields = [
   FIELDS.SALUTATION,
   FIELDS.FULL_NAME,
   FIELDS.LANGUAGE,
@@ -45,7 +45,7 @@ const pages = [
   {
     key: 'company',
     label: i18n.global.t('authentication.employee_signup'),
-    fields: account_fields,
+    fields: accountFields,
   },
 ]
 

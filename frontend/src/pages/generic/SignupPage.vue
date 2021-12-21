@@ -33,7 +33,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
  * All fields of a page must be completed before the next page can be accessed.
  */
 
-const account_fields = [
+const accountFields = [
   FIELDS.FULL_NAME,
   FIELDS.LANGUAGE,
   FIELDS.COMPANY_ADDRESS,
@@ -47,7 +47,7 @@ const pages = [
   {
     key: 'company',
     label: i18n.global.t('authentication.signup'),
-    fields: account_fields,
+    fields: accountFields,
   },
 ]
 
@@ -60,8 +60,8 @@ const pages = [
 async function onSignup(values: Record<string, Record<string, unknown>>){
   // Addresses
   const addresses: Record<string, Address> = values.company_address as Record<string, Address>
-  const domicile_address: Address = addresses.domicile_address
-  const correspondence_address: Address = addresses.correspondence_address
+  const domicileAddress: Address = addresses.domicile_address
+  const correspondenceAddress: Address = addresses.correspondence_address
 
   // Create signup request (company) on database
   await executeMutation(
@@ -72,8 +72,8 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
       last_name: values.full_name.last_name,
       language: values.language,
       uid: values.company_data.uid,
-      domicile_address: domicile_address,
-      correspondence_address: correspondence_address,
+      domicile_address: domicileAddress,
+      correspondence_address: correspondenceAddress,
       phone: values.phone_number,
       email: values.email,
       branch_structure: values.company_data.branch_structure

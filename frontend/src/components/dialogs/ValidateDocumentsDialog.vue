@@ -68,7 +68,7 @@
 </template>
 <script setup lang="ts">
 import { PropType, ref, Ref} from 'vue'
-import {QDialog, QVueGlobals, useQuasar} from 'quasar';
+import {QDialog, QVueGlobals, useQuasar, openURL} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
@@ -80,7 +80,6 @@ import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
 import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
-import {openURL} from 'quasar';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -173,7 +172,7 @@ function onReject(): void {
     component: RejectDialog,
   }).onOk(() => {
     // Remove company application on DB
-    void executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
+    executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
       // Show notification
       showNotification(
         $q,
@@ -183,6 +182,8 @@ function onReject(): void {
       )
       // Hide outer popup
       hide()
+    }).catch((error)=>{
+      console.error(error) // Todo Toast
     })
   })
 }

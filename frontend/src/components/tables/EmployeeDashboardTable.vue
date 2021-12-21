@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, Ref, ref} from 'vue';
+import {computed, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
@@ -103,7 +103,6 @@ import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
-import {watch} from 'fs';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -141,13 +140,17 @@ const expanded: Ref<Record<string, boolean>> = ref({})
  * @returns {void}
  */
 function onUpdateStatus(status: string, uuid:string){
-  void executeMutation(
+  executeMutation(
     SET_DOSSIER_STATUS,
     {
       uuid: uuid,
       status: status,
     }
-  )
+  ).then(()=>{
+    console.log('updated') // todo toast?
+  }).catch(()=>{
+    console.error('update Failed') // todo Toast
+  })
 }
 /**
  * ToDo Fix colors
@@ -166,8 +169,8 @@ function offerChipStyle(status: OFFER_STATUS){
       return color + '#c92002;'
     case OFFER_STATUS.ACCEPTED:
       return color + '#16630a;'
-
   }
+  return color + '#000000;'
 }
 
 /**
@@ -196,6 +199,7 @@ function dossierChipStyle(status: STATUS){
     case STATUS.SENT:
       return color + '#F829F3;'
   }
+  return color + '#000000;'
 }
 
 /**
@@ -215,8 +219,8 @@ function showAllDocuments() {
  * @returns {string} - date string
  */
 function dateString(date:string){
-  const real_date = new Date(Date.parse(date))
-  return `${real_date.getDay()}.${real_date.getMonth()}.${real_date.getFullYear()}`
+  const realDate = new Date(Date.parse(date))
+  return `${realDate.getDay()}.${realDate.getMonth()}.${realDate.getFullYear()}`
 }
 
 /**

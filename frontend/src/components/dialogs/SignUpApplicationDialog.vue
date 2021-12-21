@@ -49,7 +49,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.domicile_address') }}:</p>
-                <p class="col-7">{{ domicile_address.prettyString() }}</p>
+                <p class="col-7">{{ domicileAddress.prettyString() }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -58,7 +58,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.correspondence_address') }}:</p>
-                <p class="col-7">{{ correspondence_address.prettyString() }}</p>
+                <p class="col-7">{{ correspondenceAddress.prettyString() }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -165,13 +165,13 @@ const props = defineProps({
 const email = ref(props.company.email)
 
 // Convert addresses to actual address instances
-const domicile_address = new Address(
+const domicileAddress = new Address(
   props.company.domicile_address?.street?? undefined,
   props.company.domicile_address?.number ?? undefined,
   props.company.domicile_address?.city ?? undefined,
   props.company.domicile_address?.zip_code ?? undefined,
 )
-const correspondence_address = new Address(
+const correspondenceAddress = new Address(
   props.company.correspondence_address?.street ?? undefined,
   props.company.correspondence_address?.number ?? undefined,
   props.company.correspondence_address?.city ?? undefined,
@@ -230,7 +230,7 @@ function onReject(): void {
     component: RejectDialog,
   }).onOk(() => {
     // Remove company application on DB
-    void executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {
+    executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {
       // Show notification
       showNotification(
         $q,
@@ -240,6 +240,8 @@ function onReject(): void {
       )
       // Hide outer popup
       hide()
+    }).catch((error)=>{
+      console.error(error) // Todo Toast
     })
   })
 }

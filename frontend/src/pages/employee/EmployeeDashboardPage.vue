@@ -77,7 +77,7 @@ const $routerService: RouterService = inject('$routerService') as RouterService
 async function newAssignment(): Promise<void> {
   // await $routerService.routeTo(ROUTES.NEW_ASSIGNMENT_PAGE) Todo Re-enable once create dossier form is added
   // correspondence Address
-  const correspondence_address = {
+  const correspondenceAddress = {
     street: 'Irrelevant Street',
     number: '6',
     city: 'Unimportant City',
@@ -85,14 +85,19 @@ async function newAssignment(): Promise<void> {
   }
 
   //original Bank
-  const options = [{abbreviation: 'ZKB', name: 'Züricher Kantonal Bank'}, {abbreviation: 'UBS', name: 'UBS Schweiz'},{abbreviation: 'LNT', name: 'Bank Lindt'}, {abbreviation: 'PST', name: 'Postfinance'}]
+  const options = [
+    {abbreviation: 'ZKB', name: 'Züricher Kantonal Bank'},
+    {abbreviation: 'UBS', name: 'UBS Schweiz'},
+    {abbreviation: 'LNT', name: 'Bank Lindt'},
+    {abbreviation: 'PST', name: 'Postfinance'}
+  ]
   const bank = options[Math.floor(Math.random() * options.length)]
 
   //born
   const born = new Date(2021 - Math.floor(Math.random()*100), Math.floor(Math.random()*24) , Math.floor(Math.random()*28))
   const cities = ['Zürich', 'Basel', 'Genf', 'Bern', 'Winterthur', 'Zug', 'Sion']
   //Property Address
-  const property_address = {
+  const propertyAddress = {
     street: 'Unknown Street',
     number: '7',
     city: cities[Math.floor(Math.random()*cities.length)]
@@ -101,46 +106,45 @@ async function newAssignment(): Promise<void> {
   }
 
   //loan
-  const loan_sum = Math.random() * 100000
-
+  const loanSum = Math.random() * 100000
   // Person
-  const first_names = ['Tobias', 'Tim', 'Fritz', 'Robin', 'Bob', 'Samuel', 'Ester']
-  const last_names = ['Züricher', 'Mühler', 'Goldstein', 'Bauer', 'Schweizer', 'Kündig', 'Rothorn']
-  const first_name = first_names[Math.floor(Math.random()*first_names.length)]
-  const last_name = last_names[Math.floor(Math.random()*last_names.length)]
+  const firstNames = ['Tobias', 'Tim', 'Fritz', 'Robin', 'Bob', 'Samuel', 'Ester']
+  const lastNames = ['Züricher', 'Mühler', 'Goldstein', 'Bauer', 'Schweizer', 'Kündig', 'Rothorn']
+  const firstName = firstNames[Math.floor(Math.random()*firstNames.length)]
+  const lastName = lastNames[Math.floor(Math.random()*lastNames.length)]
   const email = 'email@email.email'
 
   const res = await executeMutation(CREATE_DOSSIER, {
-    first_name,
-    last_name,
-    correspondence_address,
+    first_name: firstName,
+    last_name: lastName,
+    correspondence_address: correspondenceAddress,
     original_bank_name: bank.name,
     original_bank_abbreviation: bank.abbreviation,
     born,
-    property_address,
-    loan_sum,
+    property_address: propertyAddress,
+    loan_sum: loanSum,
     email
   })
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const dossier_uuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
+  const dossierUuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
 
-  const nr_of_banks = Math.floor(Math.random()*4)
-  const bank_uuids = ['0d239c36-668e-493d-8050-7b060fc87975',
+  const nrOfBanks = Math.floor(Math.random()*4)
+  const bankUuids = ['0d239c36-668e-493d-8050-7b060fc87975',
     'c3abeb5d-9c73-46a0-9a6d-4d651bbf8fff',
     '99ce3554-4680-4eea-b47a-3c39164b62f3',
     '60023505-baf4-45c2-91f3-59b3dbc1240a',
 
   ]
   const chosen: Array<string> = []
-  while (chosen.length < nr_of_banks){
+  while (chosen.length < nrOfBanks){
     const status = Object.keys(OFFER_STATUS)[Math.floor(Math.random() * Object.keys(OFFER_STATUS).length)]
-    const next = bank_uuids[Math.floor(Math.random()*bank_uuids.length)]
+    const next = bankUuids[Math.floor(Math.random()*bankUuids.length)]
     if(!(chosen.includes(next))){
       chosen.push(next)
       await executeMutation(CREATE_OFFER, {
         bank_uuid: next,
-        dossier_uuid,
+        dossier_uuid: dossierUuid,
         status: status
       })
     }
