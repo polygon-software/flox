@@ -19,6 +19,7 @@ export default {
     employee_signup: 'Mitarbeitende registrieren',
     signup_now: 'Kein Account? Jetzt registrieren:',
     forgot_password: 'Passwort vergessen',
+    reset_password: 'Passwort zurücksetzen',
     redirected: 'Sie werden in Kürze weitergeleitet...',
     successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
     confirmed_registration: 'Registrierung bestätigt',
@@ -26,6 +27,7 @@ export default {
     back_to_login: 'Zurück zu Login',
     change_password: 'Passwort ändern',
     no_account_yet: 'Noch keinen Account?',
+    please_enter_username: 'Bitte geben Sie ihren Benutzernamen ein',
   },
   account_data: {
     authentication: 'Authentifizierung',

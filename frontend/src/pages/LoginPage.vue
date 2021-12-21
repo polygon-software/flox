@@ -14,12 +14,12 @@
         @submit="onLogin"
       />
 
-      <b
+      <strong
         v-if="!signup"
         style="margin-top: 0; padding: 0"
       >
         {{ $t('authentication.no_account_yet') }}
-      </b>
+      </strong>
 
       <!-- Signup Card -->
       <q-card class="row q-pa-md q-ma-md justify-center flex items-center">
@@ -30,7 +30,7 @@
         </SignupForm>
         <q-btn
           v-if="!signup"
-          :label="$t('signup')"
+          :label="$t('authentication.signup')"
           color="transparent"
           text-color="primary"
           flat

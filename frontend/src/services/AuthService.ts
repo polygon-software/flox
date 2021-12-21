@@ -14,6 +14,7 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
+import {i18n} from 'boot/i18n';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -216,9 +217,15 @@ export class AuthenticationService {
       }
 
       this.$q.dialog({
-            title: 'Reset Password',
-            message: 'Please enter your username',
-            cancel: true,
+            title: i18n.global.t('authentication.reset_password'),
+            message: i18n.global.t('authentication.please_enter_username'),
+            cancel: {
+              label: i18n.global.t('buttons.cancel'),
+              flat: true,
+            },
+            ok: {
+              label: i18n.global.t('buttons.ok'),
+            },
             persistent: true,
             prompt: {
                 model: '',

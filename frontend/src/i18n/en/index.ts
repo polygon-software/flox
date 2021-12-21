@@ -19,6 +19,7 @@ export default {
     employee_signup: 'Register new Employee',
     signup_now: 'No Account? Sign up now:',
     forgot_password: 'Forgot password',
+    reset_password: 'Reset password',
     redirected: 'You will be redirected shortly...',
     successful_application: 'Your application was successful.',
     confirmed_registration: 'Registration confirmed',
@@ -26,6 +27,7 @@ export default {
     back_to_login: 'Back to Login',
     change_password: 'Change password',
     no_account_yet: 'Don\'t have an account?',
+    please_enter_username: 'Please enter your username',
   },
   account_data: {
     authentication: 'Authentication',
