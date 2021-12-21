@@ -53,7 +53,7 @@ export class SoiEmployeeService {
       });
     }
 
-    // Create the SoiAdmin and User in the database
+    // Create the SoiEmployee and User in the database
     const soiEmployee = this.soiEmployeeRepository.create({
       ...createSoiEmployeeInput,
       readable_id: readableId,
