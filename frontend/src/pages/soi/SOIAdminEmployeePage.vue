@@ -10,6 +10,5 @@
 </template>
 
 <script setup lang="ts">
-
 import AdminEmployeeTable from 'components/tables/AdminEmployeeTable.vue';
 </script>

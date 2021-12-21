@@ -10,10 +10,21 @@
         {{ $tc('account_data.provision', 2) + ' (' + computedResult.length + ')' }}
       </h6>
 
-      <!-- Container for search & adding -->
-      <TableFilterSearch
-        @change="updateFilter"
-      />
+      <!-- Search bar -->
+      <q-input
+        v-model="search"
+        :label="$t('general.search')"
+        type="search"
+        outlined
+        dense
+        class="q-mb-md"
+        @change="updateSearch"
+      >
+        <template #prepend>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+
     </div>
     <q-table
       card-style="border-radius: 8px; background-color: transparent"
@@ -32,29 +43,18 @@
           style="background-color: white; cursor: pointer"
           @click="() => onRowClick(props.row)"
         >
-            <q-td key="first_name" :props="props">
-              {{ props.row.first_name }}
-            </q-td>
-            <q-td key="last_name" :props="props">
-              {{ props.row.last_name }}
-            </q-td>
-            <q-td key="tasks" :props="props">
-              <!-- TODO contract number -->
-              4
+            <q-td key="company_name" :props="props">
+              {{ props.row.company_name }}
             </q-td>
             <q-td key="volume" :props="props">
               <!-- TODO volume -->
               600'000
             </q-td>
-            <q-td key="prov_emp" :props="props">
+            <q-td key="prov_soi" :props="props">
               <!-- TODO volume -->
               40'000
             </q-td>
             <q-td key="prov_org" :props="props">
-              <!-- TODO volume -->
-              60'000
-            </q-td>
-            <q-td key="prov_ratio" :props="props">
               <!-- TODO volume -->
               60'000
             </q-td>
@@ -67,26 +67,20 @@
 
         <!-- Last entry: sum row -->
         <q-tr v-if="props.rowIndex === computedResult.length-1">
-          <q-td key="first_name"/>
-          <q-td key="last_name"/>
-          <q-td key="tasks"/>
+          <q-td key="company_name"/>
           <q-td key="volume" :props="props">
             <!-- TODO sum -->
             <strong>
               1'200'000
             </strong>
           </q-td>
-          <q-td key="prov_emp" :props="props">
+          <q-td key="prov_soi" :props="props">
             <!-- TODO sum -->
             <strong>
               80'000
-            </strong>          </q-td>
+            </strong>
+          </q-td>
           <q-td key="prov_org" :props="props">
-            <!-- TODO sum -->
-            <strong>
-              120'000
-            </strong>          </q-td>
-          <q-td key="prov_ratio" :props="props">
             <!-- TODO sum -->
             <strong>
               120'000
@@ -115,13 +109,10 @@ const toDate: Ref<string|null> = ref(null)
 
 // ----- Data -----
 const columns = [
-  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true, align: 'center' },
-  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true, align: 'center' },
-  { name: 'tasks', label: i18n.global.t('account_data.tasks'), field: 'tasks', sortable: true, align: 'center' },
-  { name: 'volume', label: i18n.global.t('account_data.volume'), field: 'volume', sortable: true, align: 'center' },
-  { name: 'prov_emp', label: i18n.global.t('account_data.provision_employee'), field: 'prov_emp', sortable: true, align: 'center' },
+  { name: 'company_name', label: i18n.global.t('account_data.broker'), field: 'company_name', sortable: true, align: 'center' },
+  { name: 'volume', label: i18n.global.t('account_data.mortgage_volume'), field: 'volume', sortable: true, align: 'center' },
+  { name: 'prov_soi', label: i18n.global.t('account_data.provision_soi'), field: 'prov_soi', sortable: true, align: 'center' },
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
-  { name: 'prov_ratio', label: i18n.global.t('account_data.provision_ratio'), field: 'prov_ratio', sortable: false, align: 'center' },
 ]
 
 // TODO: Include provisions in query once impelmented on backend
@@ -144,14 +135,12 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
 }
 
 /**
- * Updates the filter parameters
- * @param {Record<string, unknown>} input - Input, containing search and from/to dates
+ * Updates the search value
+ * @param {string} input - new search input
  * @returns {void}
  */
-function updateFilter(input: Record<string, string>){
-  search.value = input.search
-  fromDate.value = input.fromDate
-  toDate.value = input.toDate
+function updateSearch(input: string){
+  search.value = input
 }
 
 </script>

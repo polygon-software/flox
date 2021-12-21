@@ -29,6 +29,7 @@ export default {
     employees: 'Employees',
     activities: 'Activities',
     authentication: 'Authentication',
+    broker: 'Broker',
     email: 'E-Mail',
     username: 'Username',
     password: 'Password',
@@ -64,9 +65,11 @@ export default {
     status: 'Status',
     tasks: 'Tasks',
     volume: 'Volume',
+    mortgage_volume: 'Mortgage Volume',
     provision: 'Provision | Provisions',
     provision_employee: 'Emp. Provision',
     provision_company: 'Company Provision',
+    provision_soi: 'Provision SOI',
     provision_ratio: 'Prov. Ratio Emp.'
   },
   messages: {

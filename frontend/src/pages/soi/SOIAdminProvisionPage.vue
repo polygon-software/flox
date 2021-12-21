@@ -1,6 +1,11 @@
 <template>
-  <q-page class="flex flex-center">
-    <AdminProvisionTable/>
+  <q-page class="flex flex-start">
+    <div
+      class="q-pa-lg full-width row justify-center"
+      style="margin-top: 50px"
+    >
+      <AdminProvisionTable/>
+    </div>
   </q-page>
 </template>
 
