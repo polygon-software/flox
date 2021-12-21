@@ -84,7 +84,7 @@ async function submitPassword(values: Record<string, string>) {
         target = ROUTES.EMPLOYEE_DASHBOARD
         break;
       case ROLE.SOI_EMPLOYEE:
-        target = ROUTES.EMPLOYEE_DASHBOARD // TODO change to soi-employee dashboard once split! (Do before PR!)
+        target = ROUTES.APPLICATIONS
         break;
       case ROLE.COMPANY:
         target = ROUTES.MANAGEMENT_EMPLOYEE_DATA

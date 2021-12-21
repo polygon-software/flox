@@ -77,7 +77,6 @@ const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<
 const computedResult = computed(()=>{
   const companies = queryResult.value ?? []
   // Filter out completed applications by hiding those that have an account
-  // TODO filter out rejected applications
   return companies.filter((company) => {
     return company.creation_state !== CREATION_STATE.DONE
   })
