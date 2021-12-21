@@ -117,7 +117,7 @@ async function getUrls(): Promise<void>{
   const documents = _company.value.documents ?? [];
   for(const document of documents) {
     const queryResult = await executeQuery(PRIVATE_FILE, {uuid: document.uuid})
-    const file = queryResult.data.getPrivateFile as unknown as Record<string, unknown>
+    const file = queryResult.data.getPrivateFile as Record<string, unknown>
 
     // Add to copy
     document.url = file.url;

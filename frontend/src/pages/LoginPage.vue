@@ -58,12 +58,15 @@ const $routerService: RouterService|undefined = inject('$routerService')
 async function onLogin({username, password}: {username: string, password: string}){
   await $authService?.login(username, password)
   const queryRes = await executeQuery(MY_USER)
+  console.log(queryRes)
+  if(!queryRes || !queryRes.data){
+    return
+  }
   const user = queryRes.data[MY_USER.cacheLocation] as Record<string, unknown>
   if (!user){
     return
   }
   const role = user.role as ROLE
-  console.log(user)
   const target_route_mapping: Record<ROLE, RouteRecordRaw> = {
     [ROLE.SOI_ADMIN]: ROUTES.ADMIN_DASHBOARD,
     [ROLE.COMPANY]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
