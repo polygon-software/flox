@@ -8,7 +8,6 @@ import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { ROLE } from '../../ENUM/ENUMS';
 import { generateHumanReadableId } from '../../helpers';
-import { Employee } from '../employee/entities/employee.entity';
 
 @Injectable()
 export class SoiEmployeeService {
