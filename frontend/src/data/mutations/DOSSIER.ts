@@ -40,16 +40,10 @@ export const CREATE_DOSSIER = {
 
 export const SET_DOSSIER_STATUS = {
   mutation: gql`
-    mutation updateDossier($uuid: ID!, $first_name: String, $last_name: String, $email: String!, $born: DateTime!, $loan_sum: Float!, $status: Status!){
-      updateDossier (updateDossierInput: {uuid: $uuid, first_name: $first_name, last_name: $last_name, email: $email, born: $born, loan_sum: $loan_sum, status: $status}) {
+    mutation updateDossierStatus($uuid: ID!, $status: Status!){
+      updateDossierStatus (updateDossierStatusInput: {uuid: $uuid, status: $status}) {
         uuid
         status
-        non_arrangeable
-        loan_sum
-        born
-        first_name
-        last_name
-        email
         __typename
       }
     }`,

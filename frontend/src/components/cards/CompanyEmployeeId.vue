@@ -35,12 +35,11 @@ void executeQuery(MY_USER).then((user_resp)=>{
   const user = user_resp.data[MY_USER.cacheLocation]  as User
   if(user.role === ROLE.EMPLOYEE){
     void executeQuery(MY_EMPLOYEE).then((employee_resp)=>{
-      const employee = employee_resp.data[MY_EMPLOYEE.cacheLocation] as Record<string, unknown >;
-      employee_readable_id.value = employee.readable_id as string
-      void executeQuery(COMPANY, {uuid:employee.company_id}).then((company_resp)=>{
-        const company = company_resp.data[MY_COMPANY.cacheLocation] as Record<string, unknown >;
-        company_readable_id.value = company.readable_id as string
-      })
+      console.log(employee_resp)
+      // const employee = employee_resp.data[MY_EMPLOYEE.cacheLocation] as Record<string, unknown >;
+      // employee_readable_id.value = employee.readable_id as string
+      // company_readable_id.value = employee.company.readable_id;
+
 
     })
   } else if(user.role === ROLE.COMPANY){

@@ -5,7 +5,11 @@ import { DossierService } from './dossier.service';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
-import { CurrentUser } from '../../auth/authorization.decorator';
+import {
+  AnyRole,
+  CurrentUser,
+  EmployeeOnly,
+} from '../../auth/authorization.decorator';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -17,7 +21,7 @@ export class DossierResolver {
    * @param {Record<string, string>} user - the current request's user
    * @returns {Promise<Dossier>} - the Dossier
    */
-  @Public() //ToDo
+  @EmployeeOnly() //ToDo
   @Mutation(() => Dossier)
   async createDossier(
     @Args('createDossierInput') createDossierInput: CreateDossierInput,
@@ -30,7 +34,7 @@ export class DossierResolver {
    * @param {UpdateDossierInput} updateDossierInput - input, containing new status
    * @returns {Promise<Dossier[]>} - updated dossier
    */
-  @Public() //ToDo
+  @AnyRole() //ToDo
   @Mutation(() => Dossier)
   async updateDossier(
     @Args('updateDossierInput') updateDossierInput: UpdateDossierInput,
@@ -43,7 +47,7 @@ export class DossierResolver {
    * @param {UpdateDossierStatusInput} updateDossierStatusInput - input, containing new status
    * @returns {Promise<Dossier[]>} - updated dossier
    */
-  @Public() //ToDo
+  @AnyRole() //ToDo
   @Mutation(() => Dossier)
   async updateDossierStatus(
     @Args('updateDossierStatusInput')
@@ -55,8 +59,8 @@ export class DossierResolver {
   /**
    * Todo
    */
-  @Public() // Todo
-  @Query(() => [Dossier])
+  @AnyRole() // Todo
+  @Query(() => [Dossier], { nullable: true })
   async myDossiers(
     @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier[]> {

@@ -20,12 +20,13 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
-import {executeMutation} from 'src/helpers/data-helpers';
+import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
 import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
 import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
 import {randomPassword} from 'src/helpers/generator-helpers';
+import {MY_USER} from 'src/data/queries/QUERIES';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const $authService: AuthenticationService|undefined = inject('$authService')
@@ -60,19 +61,10 @@ const pages = [
  * @returns {Promise<void>} - done
  */
 async function onRegister(formData: Record<string, Record<string, string>>){
-  const email: string = formData.email.toString()
-  if(email === null || email === undefined){
+  const email: string|null  = formData.email.toString()
+  if(!email || email.length === 0){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
-
-  const password = randomPassword(9)
-
-  // Create cognito User
-  const newUserId = await $authService?.signUpNewUser(
-    email,
-    email,
-    password
-  )
 
   // Create database entry
   await executeMutation(CREATE_EMPLOYEE, {
@@ -83,11 +75,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     email: formData.email,
     function: formData.company_function,
     language: formData.language,
-    cognito_id: newUserId,
   })
-
-  // Send one-time login e-mail
-  await sendPasswordChangeEmail(email, password, 'emp')
 
   // Route back
   await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_DATA)

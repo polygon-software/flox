@@ -88,7 +88,8 @@ export class DossierService {
   }
 
   /**
-   * todo
+   * @param {string} cognito_id - id of user of employee
+   * @returns {Promise<Dossier[]>} - dossiers of employee
    */
   async myDossiers(cognito_id: string): Promise<Dossier[]> {
     const employee = await this.employeeService.getMyEmployee(cognito_id);

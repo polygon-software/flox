@@ -20,7 +20,6 @@ export class Company {
   branch_structure: boolean|null
   creation_state: CREATION_STATE
   documents: Array<Record<string, unknown>>|null
-  cognito_id: string|null
   readable_id: string|null
 
   /**
@@ -38,12 +37,11 @@ export class Company {
    * @param branch_structure
    * @param creation_state
    * @param documents
-   * @param cognito_id
    * @param readable_id
    */
   // eslint-disable-next-line require-jsdoc
   constructor(company_name?: string, language?: string, uid?: string, uuid?: string, first_name?: string, last_name?: string, domicile_address?: Address, correspondance_address?: Address,
-              phone?: string, email?: string, branch_structure?: boolean, creation_state?: CREATION_STATE, documents?: Array<Record<string, unknown>>, cognito_id?: string, readable_id?: string) {
+              phone?: string, email?: string, branch_structure?: boolean, creation_state?: CREATION_STATE, documents?: Array<Record<string, unknown>>, readable_id?: string) {
     this.company_name = company_name ?? null
     this.language = language ?? null
     this.uid = uid ?? null
@@ -57,7 +55,6 @@ export class Company {
     this.branch_structure = branch_structure ?? null
     this.creation_state = creation_state ?? CREATION_STATE.APPLIED
     this.documents = documents ?? null
-    this.cognito_id = cognito_id ?? null
     this.readable_id = readable_id ?? null
   }
 

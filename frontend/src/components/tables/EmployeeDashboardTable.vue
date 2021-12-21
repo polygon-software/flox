@@ -17,19 +17,19 @@
         style="background-color: white; cursor: pointer"
       >
         <q-td key="date">
-          {{ props.row.date }}
+          {{ dateString(props.row.created_at) }}
         </q-td>
         <q-td key="customer">
-          {{ props.row.customer }}
+          {{ props.row.first_name + " " + props.row.last_name }}
         </q-td>
         <q-td key="institute">
-          {{ props.row.institute }}
+          {{ props.row.original_bank.name }}
         </q-td>
         <q-td key="location">
-          {{ props.row.location }}
+          {{ props.row.property_address.city }}
         </q-td>
         <q-td key="mortgage_amount">
-          {{ props.row.mortgage_amount }}
+          {{ props.row.loan_sum }}
         </q-td>
         <q-td key="status">
           <q-chip :style="chipStyle(props.row.status)">
@@ -39,11 +39,12 @@
             v-slot="scope"
             :auto-save="true"
             :model-value="props.row.status"
-            @save="(value) => onUpdateStatus(props.row.status, {name: value})"
+            @save="(value) => onUpdateStatus(value, props.row.uuid)"
           >
             <q-select
               v-model="scope.value"
-              :options="props.options"
+              :option-label="(status)=>$t('employee_dashboard.' + status)"
+              :options="Object.keys(STATUS)"
             />
           </q-popup-edit>
         </q-td>
@@ -56,10 +57,10 @@
         </q-td>
         <q-td key="offers">
           <q-chip
-            v-for="(offer, index) in props.row.offers.slice(0,3)"
+            v-for="(offer, index) in props.row.offers"
             :key="index"
           >
-            {{ offer }}
+            {{ offer.abbreviation }}
           </q-chip>
         </q-td>
       </q-tr>
@@ -78,6 +79,7 @@ import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {STATUS} from 'src/data/ENUM/ENUM';
+import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -106,24 +108,24 @@ const columns = [
 ]
 
 
-const queryResult = subscribeToQuery(ALL_D) as Ref<Record<string, Array<Record<string, unknown>>>>
+const dossiers = subscribeToQuery(MY_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
 const rows = computed(()=>{
-  return queryResult.value ?? []
+  return dossiers.value ?? []
 })
+
 
 /**
  * Edits the dossier status and update the status with the selected item
  * @param {string} status - the status of the dossier
- * @param {string} variables - the new variables
+ * @param {string} uuid - the uuid
  * @returns {void}
  */
-function onUpdateStatus(status: string, variables: Record<string, unknown>){
+function onUpdateStatus(status: string, uuid:string){
   void executeMutation(
     SET_DOSSIER_STATUS,
     {
-      //uuid: props.row.uuid,
+      uuid: uuid,
       status: status,
-      ...variables
     }
   )
 }
@@ -167,6 +169,19 @@ function showAllDocuments() {
     component: UploadDocumentsDialog,
   })
 }
+
+/**
+ * Date to string function
+ * @param {Date} date - date
+ * @returns {string} - date string
+ */
+function dateString(date:string){
+  const real_date = new Date(Date.parse(date))
+  return `${real_date.getDay()}.${real_date.getMonth()}.${real_date.getFullYear()}`
+}
+
+
+
 
 </script>
 

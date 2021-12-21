@@ -8,7 +8,7 @@ export class UpdateDossierStatusInput {
   @IsUUID()
   uuid: string;
 
-  @Field(() => String, { nullable: false })
+  @Field(() => STATUS, { nullable: false })
   @IsNotEmpty()
   status: STATUS;
 }

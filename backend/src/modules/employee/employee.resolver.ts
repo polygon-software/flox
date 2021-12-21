@@ -7,6 +7,7 @@ import {
   AdminOnly,
   CompanyOnly,
   CurrentUser,
+  EmployeeOnly,
 } from '../../auth/authorization.decorator';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
@@ -43,10 +44,10 @@ export class EmployeeResolver {
     if (!company) {
       throw new Error(`No company found for ${user.userId}`);
     }
-    return await this.employeeService.createEmployee({
-      ...createEmployeeInput,
-      company_uuid: company.uuid,
-    });
+    return await this.employeeService.createEmployee(
+      createEmployeeInput,
+      company,
+    );
   }
 
   /**
@@ -86,7 +87,7 @@ export class EmployeeResolver {
    * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
    * @returns {Promise<Employee>} - The Employee
    */
-  @Public()
+  @EmployeeOnly()
   @Query(() => Employee, { name: 'myEmployee' })
   async getMyEmployee(
     @CurrentUser() user: Record<string, string>,
@@ -111,7 +112,7 @@ export class EmployeeResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<Employee> {
     // Admin has access
-    const db_user = await this.userService.getUser({ uuid: user.userID });
+    const db_user = await this.userService.getUser({ uuid: user.userId });
     if (db_user.role === ROLE.SOI_ADMIN) {
       return await this.employeeService.updateEmployee(updateEmployeeInput);
     }

@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { IsUUID } from 'class-validator';
 
+@ObjectType()
 export class BaseEntity {
   @Field(() => ID, { description: 'UUID' })
   @PrimaryGeneratedColumn('uuid')

@@ -152,6 +152,12 @@ export const MY_EMPLOYEE = {
         last_name
         readable_id
         email
+        company{
+          __typename
+          uuid
+          readable_id
+        }
+        __typename
       }
     }
     `,
@@ -194,20 +200,38 @@ export const MY_DOSSIERS = {
         query{
             myDossiers{
               uuid
-              date
+              created_at
               first_name
               last_name
-              institute
-              location
-              mortage_amount
+              original_bank{
+                __typename
+                uuid
+                name
+                abbreviation
+              }
+              property_address{
+                __typename
+                uuid
+                city
+              }
+              loan_sum
               status
-              offers
+              offers{
+                __typename
+                uuid
+                bank {
+                  __typename
+                  uuid
+                  name
+                  abbreviation
+                }
+              }
               __typename
             }
         }
   `,
-  tables: ['customer'],
-  cacheLocation: 'myCustomers'
+  tables: ['dossier'],
+  cacheLocation: 'myDossiers'
 }
 
 

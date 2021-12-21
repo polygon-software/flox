@@ -10,6 +10,7 @@ import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUMS';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { CompanyService } from '../company/company.service';
+import { generateHumanReadableId } from '../../helpers';
 
 @Injectable()
 export class EmployeeService {
@@ -22,20 +23,14 @@ export class EmployeeService {
 
   /**
    * Creates a new employee using the given data, and sets default values
-   * @param {CreateEmployeeInput} createEmployeeInput - the company's data, containing all mandatory fields
+   * @param {CreateEmployeeInput} createEmployeeInput - the employee's data, containing all mandatory fields
+   * @param {Company} company - the company
    * @returns {Promise<Employee>} - new employee
    */
   async createEmployee(
     createEmployeeInput: CreateEmployeeInput,
+    company: Company,
   ): Promise<Employee> {
-    const company = await this.companyService.getCompany({
-      uuid: createEmployeeInput.company_uuid,
-      cognito_id: null,
-    });
-    if (!company) {
-      throw new Error('No company found for company_uuid');
-    }
-
     const password = randomPassword(8);
     const cognitoId = await createCognitoAccount(
       createEmployeeInput.email,
@@ -46,25 +41,18 @@ export class EmployeeService {
       password,
       ROLE.EMPLOYEE,
     );
-
     const employee = this.employeeRepository.create({
-      language: createEmployeeInput.language,
-      function: createEmployeeInput.function,
-      phone: createEmployeeInput.phone,
-      gender: createEmployeeInput.gender,
-      first_name: createEmployeeInput.first_name,
-      last_name: createEmployeeInput.last_name,
-      email: createEmployeeInput.email,
+      ...createEmployeeInput,
       company,
-      dossiers: [],
+      readable_id: generateHumanReadableId(), //Todo Collision Prevention
     });
+    const newEmployee = await this.employeeRepository.save(employee);
     await this.userService.create({
       role: ROLE.EMPLOYEE,
       uuid: cognitoId,
-      fk: employee.uuid,
+      fk: newEmployee.uuid,
     });
-
-    return await this.employeeRepository.save(employee);
+    return newEmployee;
   }
 
   /**
@@ -106,14 +94,22 @@ export class EmployeeService {
    * @returns {Promise<Employee>} - employee
    */
   async getEmployee(uuid: string): Promise<Employee> {
-    return this.employeeRepository.findOne(uuid);
+    return this.employeeRepository.findOne(uuid, { relations: ['company'] });
   }
   // TODO: Add remove/update/find functionalities as needed
 
   async getMyEmployee(cognitoId: string): Promise<Employee> {
     const user = await this.userService.getUser({ uuid: cognitoId });
     if (user && user.role === ROLE.EMPLOYEE) {
-      return this.employeeRepository.findOne(user.fk);
+      return this.employeeRepository.findOne(user.fk, {
+        relations: [
+          'company',
+          'dossiers',
+          'dossiers.original_bank',
+          'dossiers.offers',
+          'dossiers.offers.bank',
+        ],
+      });
     }
     throw new Error('User is not an Employee');
   }

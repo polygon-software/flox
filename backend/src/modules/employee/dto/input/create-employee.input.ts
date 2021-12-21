@@ -20,8 +20,4 @@ export class CreateEmployeeInput extends PartialType(CreatePersonInput) {
   @Field(() => String, { description: 'Gender' })
   @IsString()
   gender: string;
-
-  @Field(() => String, { description: 'Company uuid' })
-  @IsUUID()
-  company_uuid: string;
 }
