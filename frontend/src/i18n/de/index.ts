@@ -65,6 +65,7 @@ export default {
     status: 'Status',
     tasks: 'Aufträge',
     volume: 'Volumen',
+    provision: 'Provision | Provisionen',
     provision_employee: 'Provision MA',
     provision_company: 'Provision Organisation',
     provision_ratio: 'Anteil prov. Vermittler'

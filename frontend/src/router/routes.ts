@@ -95,6 +95,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/soi/SOIAdminDossierPage.vue') }],
   },
 
+  // SOI Admin: Provisions
+  'ADMIN_PROVISION': {
+    path: '/admin-provision',
+    component: () => import('layouts/SOIAdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/soi/SOIAdminProvisionPage.vue') }],
+  },
+
   // SOI Employee: Applications
   'APPLICATIONS': {
     path: '/applications',

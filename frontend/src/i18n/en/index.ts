@@ -64,6 +64,7 @@ export default {
     status: 'Status',
     tasks: 'Tasks',
     volume: 'Volume',
+    provision: 'Provision | Provisions',
     provision_employee: 'Emp. Provision',
     provision_company: 'Company Provision',
     provision_ratio: 'Prov. Ratio Emp.'

@@ -66,6 +66,11 @@ const menuItems = [
     label: i18n.global.t('account_data.employees'),
     route: ROUTES.ADMIN_EMPLOYEES,
   },
+  {
+    name: 'provision',
+    label: i18n.global.tc('account_data.provision', 2),
+    route: ROUTES.ADMIN_PROVISION,
+  },
 ]
 /**
  * Routes to an item's target route
