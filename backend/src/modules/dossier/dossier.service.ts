@@ -9,11 +9,14 @@ import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.inpu
 import { BankService } from '../bank/bank.service';
 import { generateHumanReadableId } from '../../helpers';
 import { EmployeeService } from '../employee/employee.service';
+import { CreateOfferInput } from './dto/input/create-offer.input';
+import { Offer } from '../offer/entities/offer.entity';
 
 @Injectable()
 export class DossierService {
   constructor(
     @InjectRepository(Dossier) private dossierRepository: Repository<Dossier>,
+    @InjectRepository(Offer) private offerRepository: Repository<Offer>,
     private readonly employeeService: EmployeeService,
     private readonly bankService: BankService,
   ) {}
@@ -94,5 +97,22 @@ export class DossierService {
   async myDossiers(cognito_id: string): Promise<Dossier[]> {
     const employee = await this.employeeService.getMyEmployee(cognito_id);
     return employee.dossiers;
+  }
+
+  async createOffer(createOfferInput: CreateOfferInput): Promise<Dossier> {
+    const dossier = await this.dossierRepository.findOne(
+      createOfferInput.dossier_uuid,
+    );
+    const bank = await this.bankService.findBank(createOfferInput.bank_uuid);
+    const new_offer = await this.offerRepository.create({
+      dossier,
+      bank,
+      status: createOfferInput.status,
+      pdf: null,
+    });
+    await this.offerRepository.save(new_offer);
+    return this.dossierRepository.findOne(createOfferInput.dossier_uuid, {
+      relations: ['offers', 'offers.bank'],
+    });
   }
 }

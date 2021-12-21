@@ -1,9 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { Entity, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { Dossier } from '../../dossier/entity/dossier.entity';
 import { Bank } from '../../bank/entities/bank.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
+import { STATUS } from '../../../ENUM/ENUMS';
 
 @Entity()
 @ObjectType()
@@ -19,4 +20,12 @@ export class Offer extends BaseEntity {
   @Field(() => PrivateFile, { description: 'The Offer as a PDF' })
   @OneToOne(() => PrivateFile, { nullable: true })
   pdf: PrivateFile;
+
+  @Field(() => STATUS, { description: 'Status of Dossier' })
+  @Column({
+    type: 'enum',
+    enum: STATUS,
+    default: STATUS.IN_PROCESS,
+  })
+  status: STATUS;
 }

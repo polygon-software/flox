@@ -7,9 +7,11 @@ import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import {
   AnyRole,
+  BankOnly,
   CurrentUser,
   EmployeeOnly,
 } from '../../auth/authorization.decorator';
+import { CreateOfferInput } from './dto/input/create-offer.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -57,13 +59,26 @@ export class DossierResolver {
   }
 
   /**
-   * Todo
+   * Dossiers of currently logged in employee
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier[]>} - dossiers of currently logged in employee
    */
-  @AnyRole() // Todo
+  @EmployeeOnly() // Todo
   @Query(() => [Dossier], { nullable: true })
   async myDossiers(
     @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier[]> {
     return this.dossierService.myDossiers(user.userId);
+  }
+
+  /**
+   * Todo
+   */
+  @BankOnly()
+  @Mutation(() => Dossier)
+  async createOffer(
+    @Args('createOfferInput') createOfferInput: CreateOfferInput,
+  ): Promise<Dossier> {
+    return this.dossierService.createOffer(createOfferInput);
   }
 }

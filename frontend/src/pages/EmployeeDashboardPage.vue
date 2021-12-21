@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-card
       class="square q-pa-md q-ma-md"
-      style="width: 1200px"
+      style="width: 1400px"
     >
       <!-- Own info -->
       <CompanyEmployeeId/>
@@ -49,8 +49,9 @@ import {inject, ref} from 'vue'
 import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue';
 import {RouterService} from 'src/services/RouterService';
 import CompanyEmployeeId from 'components/cards/CompanyEmployeeId.vue';
-import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
+import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
 import {executeMutation} from 'src/helpers/data-helpers';
+import {STATUS} from 'src/data/ENUM/ENUM';
 
 
 /**
@@ -107,17 +108,18 @@ async function newAssignment(): Promise<void> {
   }
 
   //original Bank
-  const options = [{abbreviation: 'ZKB', name: 'Züricher Kantonal Bank'}, {abbreviation: 'UBS', name: 'UBS Schweit'},{abbreviation: 'LNT', name: 'Bank Lindt'}, {abbreviation: 'PST', name: 'Postfinance'}]
+  const options = [{abbreviation: 'ZKB', name: 'Züricher Kantonal Bank'}, {abbreviation: 'UBS', name: 'UBS Schweiz'},{abbreviation: 'LNT', name: 'Bank Lindt'}, {abbreviation: 'PST', name: 'Postfinance'}]
   const bank = options[Math.floor(Math.random() * options.length)]
 
   //born
   const born = new Date(2021 - Math.floor(Math.random()*100), Math.floor(Math.random()*24) , Math.floor(Math.random()*28))
-
+  const cities = ['Zürich', 'Basel', 'Genf', 'Bern', 'Winterthur', 'Zug', 'Sion']
   //Property Address
   const property_address = {
     street: 'Unknown Street',
     number: '7',
-    city: 'bla City',
+    city: cities[Math.floor(Math.random()*cities.length)]
+    ,
     zip_code: '8720'
   }
 
@@ -125,8 +127,10 @@ async function newAssignment(): Promise<void> {
   const loan_sum = Math.random() * 100000
 
   // Person
-  const first_name = 'Tobias'
-  const last_name = 'Hertiger'
+  const first_names = ['Tobias', 'Tim', 'Fritz', 'Robin', 'Bob', 'Samuel', 'Ester']
+  const last_names = ['Züricher', 'Mühler', 'Goldstein', 'Bauer', 'Schweizer', 'Kündig', 'Rothorn']
+  const first_name = first_names[Math.floor(Math.random()*first_names.length)]
+  const last_name = last_names[Math.floor(Math.random()*last_names.length)]
   const email = 'email@email.email'
 
   const res = await executeMutation(CREATE_DOSSIER, {
@@ -140,6 +144,23 @@ async function newAssignment(): Promise<void> {
     loan_sum,
     email
   })
-  console.log(res)
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const dossier_uuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
+
+  const nr_of_banks = Math.floor(Math.random()*4)
+  const bank_uuids = ['38a0d1f8-00e9-4a42-841b-1531f649f476', '1f6d0f3b-220c-480c-bb06-270330ec4496', '46b86c1d-ad7f-402c-ada1-6242060bbed6', '91c8ee38-66ed-4477-b698-5987665038e8']
+  const chosen: Array<string> = []
+  while (chosen.length < nr_of_banks){
+    const next = bank_uuids[Math.floor(Math.random()*bank_uuids.length)]
+    if(!(chosen.includes(next))){
+      chosen.push(next)
+      await executeMutation(CREATE_OFFER, {
+        bank_uuid: next,
+        dossier_uuid,
+        status: STATUS.OFFERED
+      })
+    }
+  }
 }
 </script>

@@ -44,6 +44,19 @@ export class BankService {
     return this.bankRepository.save(bank);
   }
 
+  /**
+   * @param {string} uuid - uuid of bank
+   * @return {Promise<Bank>} - bank if found
+   */
+  async findBank(uuid: string) {
+    return this.bankRepository.findOne(uuid);
+  }
+
+  /**
+   * Create a bank without an associated user
+   * @param {CreateUserlessBankInput} createBankInput - mimimal info for new bank
+   * @return {Promise<Bank>} - new Bank
+   */
   async createUserlessBank(
     createBankInput: CreateUserlessBankInput,
   ): Promise<Bank> {

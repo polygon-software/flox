@@ -162,6 +162,7 @@ export default {
     uploads: 'Dokumente',
     all_documents: 'Alle Dokumente',
     offers: 'Angebote',
+    'non-arrangeable': 'Nicht vermittelbar',
     upload_more_documents: 'Weitere Dokumente hochladen',
     organisation_id: 'Organisationsnummer',
     employee_id: 'Mitarbeiternummer',

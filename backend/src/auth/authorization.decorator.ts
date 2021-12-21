@@ -32,6 +32,8 @@ export const CompanyOnly = (): CustomDecorator =>
 export const EmployeeOnly = (): CustomDecorator =>
   SetMetadata('roles', [ROLE.EMPLOYEE]);
 
+export const BankOnly = (): CustomDecorator =>
+  SetMetadata('roles', [ROLE.BANK]);
 // Access to current user from request
 export const CurrentUser = createParamDecorator(
   (data, req) => getRequest(req).user,

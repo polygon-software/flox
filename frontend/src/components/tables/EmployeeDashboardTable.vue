@@ -60,8 +60,11 @@
             v-for="(offer, index) in props.row.offers"
             :key="index"
           >
-            {{ offer.abbreviation }}
+            {{ offer.bank.abbreviation }}
           </q-chip>
+        </q-td>
+        <q-td key="non-arrangeable">
+          <q-icon name="close"/>
         </q-td>
       </q-tr>
       <!-- One spacer row per row -->
@@ -105,6 +108,7 @@ const columns = [
   { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false },
   { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false },
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false },
+  { name: 'non-arrangeable', label: i18n.global.t('employee_dashboard.non-arrangeable'), field: '\'non-arrangeable\'', sortable: true },
 ]
 
 

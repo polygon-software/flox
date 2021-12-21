@@ -211,6 +211,12 @@ input CreateEmployeeInput {
   phone: String!
 }
 
+input CreateOfferInput {
+  bank_uuid: String!
+  dossier_uuid: String!
+  status: Status!
+}
+
 input CreateSoiAdminInput {
   """E-mail"""
   email: String
@@ -345,6 +351,7 @@ type Mutation {
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
   createDossier(createDossierInput: CreateDossierInput!): Dossier!
   createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
+  createOffer(createOfferInput: CreateOfferInput!): Dossier!
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
   enableCompanyDocumentUpload(uuid: String!): Company!
@@ -373,6 +380,9 @@ type Offer {
 
   """The Offer as a PDF"""
   pdf: PrivateFile!
+
+  """Status of Dossier"""
+  status: Status!
 
   """UUID"""
   uuid: ID!
