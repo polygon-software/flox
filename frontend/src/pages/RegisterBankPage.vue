@@ -22,7 +22,7 @@ import {inject} from 'vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {Address} from 'src/data/types/Address';
 import GenericForm from 'components/forms/GenericForm.vue';
-import {CREATE_BANK} from "src/data/mutations/BANK";
+import {CREATE_BANK} from 'src/data/mutations/BANK';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -57,8 +57,7 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
   const addresses: Record<string, Address> = values.company_address as Record<string, Address>
   const address: Address = addresses.address
 
-
-  // Create signup request (company) on database
+  // Sign up bank on database
   await executeMutation(
     CREATE_BANK,
     {
@@ -70,8 +69,12 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
     }
   )
 
+  // TODO: Admin must get popup with bank credentials here, so they can be sent via e-mail (not automatically)
+
   // Push to success page
-  setTimeout(function() {$routerService?.routeTo(ROUTES.LOGIN)}, 5000);
+  setTimeout(function() {
+    await $routerService?.routeTo(ROUTES.LOGIN)
+  }, 5000);
   await $routerService?.routeTo(ROUTES.SUCCESS)
 }
 

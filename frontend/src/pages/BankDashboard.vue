@@ -44,10 +44,10 @@
               {{ props.row.mortgage }}
             </q-td>
             <q-td key="b_degree" :props="props">
-              {{ props.row.b_degree }}
+              {{ props.row.b_degree.toString() }}%
             </q-td>
             <q-td key="acceptability_of_risks" :props="props">
-              {{ props.row.acceptability_of_risks }}
+              {{ props.row.acceptability_of_risks.toString() }}%
             </q-td>
             <q-td key="expiration" :props="props">
               {{ getDate(props.row.expiration) }}
@@ -58,7 +58,7 @@
             <q-td key="offer_status" :props="props">
               <q-btn-dropdown rounded color="primary" :label="props.row.offer_status" no-caps>
                 <q-list v-for="label in possibleStatus" :key="label">
-                  <q-item clickable v-close-popup @click="statusChange">
+                  <q-item v-close-popup clickable @click="statusChange">
                     <q-item-section>
                       <q-item-label>{{ label }}</q-item-label>
                     </q-item-section>
@@ -80,43 +80,34 @@
 </template>
 
 <script setup lang="ts">
-import {inject} from 'vue'
 import {i18n} from 'boot/i18n';
-import {RouterService} from 'src/services/RouterService';
-
-
-/**
- * Injects RouterService
- * @returns {void}
- */
-const $routerService: RouterService = inject('$routerService')
 
 //ToDo: connect to backend
 
 const mockedOffers = [{
   date: new Date(1639489283 * 1000),
   offer_id: 1234,
-  city: "Luzern",
+  city: 'Luzern',
   market_value: 12341234.00,
   mortgage: 109333.00,
-  b_degree: "32%",
-  acceptability_of_risks: "66%",
+  b_degree: 32,
+  acceptability_of_risks: 66,
   expiration: new Date(1639489283 * 1000),
-  download: "file",
-  offer_status: "offeriert",
+  download: 'file',
+  offer_status: 'offeriert',
   status: true
 },
   {
     date: new Date(1639489283 * 1000),
     offer_id: 5677,
-    city: "Zürich",
+    city: 'Zürich',
     market_value: 1234.00,
     mortgage: 133.00,
-    b_degree: "11%",
-    acceptability_of_risks: "12%",
+    b_degree: 11,
+    acceptability_of_risks: 12,
     expiration: new Date(1639489283 * 1000),
-    download: "file",
-    offer_status: "abgelehnt",
+    download: 'file',
+    offer_status: 'abgelehnt',
     status: false
   }]
 
@@ -137,8 +128,8 @@ async function statusChange() {
 }
 
 /**
- * Return date in a nice way
- * @param date {Date}
+ * Return date in a nice way // TODO replace once helper file is merged
+ * @param {Date} date - date to format
  * @returns {String} date
  */
 function getDate(date: Date ) {

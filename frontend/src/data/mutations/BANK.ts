@@ -16,17 +16,3 @@ export const CREATE_BANK = {
   type: MutationTypes.CREATE,
   cacheLocation: 'createBank'
 }
-
-export const ASSOCIATE_USER_TO_BANK ={
-  mutation: gql`
-    mutation associateUserToCompany($uuid: ID!){
-      associateUserToCompany(associateUserInput: {uuid: $uuid}) {
-        uuid
-        __typename
-      }
-    }
-  `,
-  tables: ['bank'],
-  type: MutationTypes.UPDATE,
-  cacheLocation: undefined
-}

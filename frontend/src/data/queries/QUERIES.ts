@@ -158,8 +158,4 @@ export const PRIVATE_FILE = {
   cacheLocation: 'getPrivateFile'
 }
 
-export const ALL_OFFERS = {
-
-}
-
 export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];
