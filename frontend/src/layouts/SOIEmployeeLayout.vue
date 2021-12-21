@@ -56,14 +56,9 @@ const showDrawer = ref(true)
 // Left-side menu items
 const menuItems = [
   {
-    name: 'dossiers',
-    label: i18n.global.tc('dashboards.dossier', 2),
-    route: ROUTES.ADMIN_DOSSIERS,
-  },
-  {
-    name: 'employees',
-    label: i18n.global.t('account_data.employees'),
-    route: ROUTES.ADMIN_EMPLOYEES,
+    name: 'applications',
+    label: i18n.global.tc('dashboards.application', 2),
+    route: ROUTES.APPLICATIONS,
   },
 ]
 /**
