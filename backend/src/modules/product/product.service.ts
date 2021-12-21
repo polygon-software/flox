@@ -54,21 +54,30 @@ export class ProductService {
   /**
    * Updates an existing product
    * @param {UpdateProductInput} updateProductInput
-   * @param {Array<string>} pictures
+   * @param {Array<string>|null} pictures
    */
-  async update(updateProductInput: UpdateProductInput, pictures: Array<string>): Promise<Product> {
-    // Fetch existing product an delte all pictures
+  async update(updateProductInput: UpdateProductInput, pictures: Array<string>|null): Promise<Product> {
     const currentProduct = await this.productsRepository.findOne(updateProductInput.uuid);
-    for (const file of currentProduct.pictures) {
-      await this.fileRepository.delete(file.uuid);
+    let updatedProduct;
+
+    // Check if pictures have changed
+    if (pictures !== null) {
+      // Fetch existing product an delete all pictures
+      for (const file of currentProduct.pictures) {
+        await this.fileRepository.delete(file.uuid);
+      }
+
+      // Update the product
+      const product = this.productsRepository.create(updateProductInput);
+      await this.productsRepository.update(updateProductInput.uuid, product);
+      updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+      await this.createPublicFiles(pictures, updatedProduct);
+    } else {
+      // Update the product
+      const product = this.productsRepository.create(updateProductInput);
+      await this.productsRepository.update(updateProductInput.uuid, product);
+      updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
     }
-
-    // Update the product
-    const product = this.productsRepository.create(updateProductInput);
-    await this.productsRepository.update(updateProductInput.uuid, product);
-    const updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
-
-    await this.createPublicFiles(pictures, updatedProduct);
     return updatedProduct;
   }
 
@@ -155,10 +164,19 @@ export class ProductService {
    * @param {Array<string>} base64Strings The base64 strings to convert
    * @param {Product} product The product the pictures belong to
    * @private
+   * @returns {Promise<void>} - creation end
    */
-  private async createPublicFiles(base64Strings: Array<string>, product: Product): Promise<void> {
-    // Create new picure objects
-    for (const base64Picture of base64Strings) {
+  private async createPublicFiles(
+    base64Strings: Array<string>,
+    product: Product,
+  ): Promise<void> {
+    // Create new picture objects
+    for (let base64Picture of base64Strings) {
+      // Remove prepended string
+      if (base64Picture.startsWith('stream;base64')) {
+        base64Picture = base64Picture.replace('stream;base64,', '');
+      }
+
       // Convert base64 to buffer
       const buffer = base64ToBuffer(base64Picture);
       const index = base64Strings.indexOf(base64Picture);

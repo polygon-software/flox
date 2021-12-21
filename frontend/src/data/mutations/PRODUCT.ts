@@ -49,7 +49,7 @@ export const CREATE_PRODUCT = {
 
 export const UPDATE_PRODUCT = {
     mutation: gql`
-        mutation updateProduct($updateProductInput: UpdateProductInput!, $pictures: [String!]!){
+        mutation updateProduct($updateProductInput: UpdateProductInput!, $pictures: [String!]){
             updateProduct(updateProductInput: $updateProductInput, pictures: $pictures) {
               uuid
               status

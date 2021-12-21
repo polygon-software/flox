@@ -400,6 +400,7 @@ const input: Record<string, unknown> = reactive(
 
 // Picture inputs (separated from input, since these have to be added after product is created)
 const pictures: Ref<Array<Ref<File>>> = ref([])
+const oldPictures: Ref<Array<string|ArrayBuffer|null>> = ref([])
 
 /**
  * Watch for first result if a product is given
@@ -442,11 +443,19 @@ const stop = watch(queryResult, async (newValue) => {
         picture.url,
         {
           responseType: 'blob'
-        }).then((res: AxiosResponse<Blob>) => {
-       existingPictures.push(ref(new File([res.data], `${(input as Record<string, string>).title}_${index}`)))
+        }).then(async (res: AxiosResponse<Blob>) => {
+          const file = new File([res.data], `${(input as Record<string, string>).title}_${index}`)
+          existingPictures.push(ref(file))
+
+          // This array is used to remember which pictures currently exist
+          const b64Picture = await toBase64(file)
+          if (!oldPictures.value.includes(b64Picture)) {
+            oldPictures.value.push(b64Picture)
+          }
       });
     }
     pictures.value = existingPictures
+
 
     // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
     // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
@@ -471,10 +480,8 @@ function onPictureChange(newPictures: Ref<File>[]){
  * On submit, creates/updates existing product
  * @returns {void}
  */
-// eslint-disable-next-line sonarjs/cognitive-complexity,require-jsdoc
 async function onSubmit(){
   // Parameters for creating/updating
-  // eslint-disable-next-line sonarjs/no-unused-collection
   const base64Pictures: Array<string|ArrayBuffer|null> = []
   for (const picture of pictures.value) {
     if (picture.value) {
@@ -504,8 +511,8 @@ async function onSubmit(){
           updateProductInput: {
             uuid: productId,
             ...params,
-            pictures
-          }
+          },
+          pictures: compareArrays(base64Pictures, oldPictures.value) ? null : base64Pictures,
         }
       )
     } else {
@@ -525,5 +532,23 @@ async function onSubmit(){
 
   // Push to success page
   await $routerService?.routeTo(ROUTES.MY_PRODUCTS)
+}
+
+/**
+ * Compares two arrays containing pictures as b64 strings an returns if they are the same of not.
+ * @param {Array<Promise<string>>} array1 First array
+ * @param {Array<Promise<string>>} array2 Second array
+ * @return {boolean} True if arrays are the same
+ */
+function compareArrays(array1: Array<string|ArrayBuffer|null>, array2: Array<string|ArrayBuffer|null>): boolean {
+  if (array1.length === array2.length) {
+    for (let i=0; i<array1.length; i++) {
+      if (array1[i] !== array2[i]) {
+        return false
+      }
+    }
+    return true
+  }
+  return false
 }
 </script>
