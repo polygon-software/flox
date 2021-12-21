@@ -1,6 +1,11 @@
 <template>
-  <q-page class="flex flex-center">
-    <AdminEmployeeTable/>
+  <q-page class="flex flex-start">
+    <div
+      class="q-pa-md full-width"
+      style="margin-top: 50px"
+    >
+      <AdminEmployeeTable/>
+    </div>
   </q-page>
 </template>
 
