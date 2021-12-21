@@ -5,7 +5,6 @@
     style="margin-bottom: 20px; text-align: center"
     flat
   >
-    <!-- TODO -->
     <q-item-label>
       {{ $t('general.welcome') }}, {{ company.first_name }} {{ company.last_name }}!
     </q-item-label>

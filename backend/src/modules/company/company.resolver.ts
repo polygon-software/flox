@@ -126,6 +126,19 @@ export class CompanyResolver {
   }
 
   /**
+   * Removes a company
+   * @param {DeleteCompanyInput} deleteCompanyInput - company uuid
+   * @returns {Promise<Company>} - company
+   */
+  @SOIOnly()
+  @Mutation(() => Company)
+  async rejectCompany(
+    @Args('deleteCompanyInput') deleteCompanyInput: DeleteCompanyInput,
+  ): Promise<Company> {
+    return this.companyService.rejectCompany(deleteCompanyInput);
+  }
+
+  /**
    * Associate User and Cognito accout
    * @param {AssociateUserInput} associateUserInput - company uuid
    * @returns {Promise<Company>} - company

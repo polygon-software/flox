@@ -11,7 +11,10 @@ import { generateHumanReadableId } from '../../helpers';
 import { User } from '../user/entities/user.entity';
 import { CREATION_STATE, ROLE } from '../../ENUM/ENUMS';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
-import { sendPasswordChangeEmail } from '../../email/helper';
+import {
+  sendCompanyRejectEmail,
+  sendPasswordChangeEmail,
+} from '../../email/helper';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -62,9 +65,9 @@ export class CompanyService {
    */
   async getCompanies(getCompaniesArgs: GetCompaniesArgs): Promise<Company[]> {
     if (getCompaniesArgs.uuids !== undefined) {
-      return await this.companyRepository.findByIds(getCompaniesArgs.uuids);
+      return this.companyRepository.findByIds(getCompaniesArgs.uuids);
     } else {
-      return await this.companyRepository.find();
+      return this.companyRepository.find();
     }
   }
 
@@ -73,7 +76,7 @@ export class CompanyService {
    * @returns {Promise<Company[]>} - company
    */
   async getAllCompanies(): Promise<Company[]> {
-    return await this.companyRepository.find({ relations: ['documents'] });
+    return this.companyRepository.find({ relations: ['documents'] });
   }
 
   /**
@@ -87,7 +90,7 @@ export class CompanyService {
     }
     if (getCompanyArgs.uuid) {
       // Case 1: search by UUID
-      return await this.companyRepository.findOne(getCompanyArgs.uuid);
+      return this.companyRepository.findOne(getCompanyArgs.uuid);
     } else if (getCompanyArgs.cognito_id) {
       // Case 2: search by Cognito account ID
       const user = await this.userRepository.findOne({
@@ -96,7 +99,7 @@ export class CompanyService {
       if (user.role !== ROLE.COMPANY) {
         throw Error('User is not a company');
       }
-      return await this.companyRepository.findOne({
+      return this.companyRepository.findOne({
         uuid: user.fk,
       });
     }
@@ -113,7 +116,7 @@ export class CompanyService {
     await this.companyRepository.update(updateCompanyInput.uuid, {
       ...updateCompanyInput, // TODO ensure UUID is immutable
     });
-    return await this.companyRepository.findOne(updateCompanyInput.uuid);
+    return this.companyRepository.findOne(updateCompanyInput.uuid);
   }
 
   /**
@@ -149,7 +152,7 @@ export class CompanyService {
     await this.companyRepository.update(uuid, {
       creation_state: CREATION_STATE.AWAITING_DOCUMENTS,
     });
-    return await this.companyRepository.findOne(uuid);
+    return this.companyRepository.findOne(uuid);
   }
 
   /**
@@ -170,5 +173,20 @@ export class CompanyService {
     company.creation_state = CREATION_STATE.DONE;
     await this.companyRepository.save(company);
     return this.companyRepository.findOne(uuid);
+  }
+
+  /**
+   * Send rejection email and delete company
+   * @param {DeleteCompanyInput} deleteCompanyInput - uuid of company
+   * @returns {Promise<Company>} - deleted company
+   */
+  async rejectCompany(
+    deleteCompanyInput: DeleteCompanyInput,
+  ): Promise<Company> {
+    const company = await this.companyRepository.findOne(
+      deleteCompanyInput.uuid,
+    );
+    await sendCompanyRejectEmail(company.email);
+    return this.deleteCompany(deleteCompanyInput);
   }
 }

@@ -44,7 +44,7 @@ function show(): void {
   dialog.value?.show();
 }
 
-// eslint-disable-next-line require-jsdoc
+// eslint-disable-next-line require-jsdoc,@typescript-eslint/no-unused-vars
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()

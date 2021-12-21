@@ -138,7 +138,11 @@
 import {PropType, ref, Ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
-import {DELETE_COMPANY, ENABLE_COMPANY_DOCUMENT_UPLOAD, UPDATE_COMPANY_EMAIL} from 'src/data/mutations/COMPANY';
+import {
+  ENABLE_COMPANY_DOCUMENT_UPLOAD,
+  REJECT_COMPANY,
+  UPDATE_COMPANY_EMAIL
+} from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
 import {Address} from 'src/data/types/Address';
@@ -226,7 +230,7 @@ function onReject(): void {
     component: RejectDialog,
   }).onOk(() => {
     // Remove company application on DB
-    void executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
+    void executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {
       // Show notification
       showNotification(
         $q,

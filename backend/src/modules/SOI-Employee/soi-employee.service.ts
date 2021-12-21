@@ -7,13 +7,14 @@ import { CreateSoiEmployeeInput } from './dto/input/create-soi-employee.input';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { ROLE } from '../../ENUM/ENUMS';
+import { generateHumanReadableId } from '../../helpers';
 
 @Injectable()
 export class SoiEmployeeService {
   constructor(
     @InjectRepository(SoiEmployee)
-    private soiEmployeeRepository: Repository<SoiEmployee>,
-    private userService: UserService,
+    private readonly soiEmployeeRepository: Repository<SoiEmployee>,
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -38,15 +39,42 @@ export class SoiEmployeeService {
       ROLE.SOI_EMPLOYEE,
     );
 
-    // Create the SoiAdmin and User in the database
-    const soiEmployee = this.soiEmployeeRepository.create(
-      createSoiEmployeeInput,
-    );
+    // Generate human-readable ID and search for existing company with same ID
+    let readableId = generateHumanReadableId();
+    let existingEmployee = await this.soiEmployeeRepository.findOne({
+      readable_id: readableId,
+    });
+
+    // If ID already exists, regenerate
+    while (existingEmployee !== null && existingEmployee !== undefined) {
+      readableId = generateHumanReadableId();
+      existingEmployee = await this.soiEmployeeRepository.findOne({
+        readable_id: readableId,
+      });
+    }
+
+    // Create the SoiEmployee and User in the database
+    const soiEmployee = this.soiEmployeeRepository.create({
+      ...createSoiEmployeeInput,
+      readable_id: readableId,
+    });
+
+    const soiEmployeeEntry = await this.soiEmployeeRepository.save(soiEmployee);
+
     await this.userService.create({
       role: ROLE.SOI_EMPLOYEE,
       uuid: cognitoId,
-      fk: soiEmployee.uuid,
+      fk: soiEmployeeEntry.uuid,
     });
-    return this.soiEmployeeRepository.save(soiEmployee);
+
+    return soiEmployeeEntry;
+  }
+
+  /**
+   * Returns all SOI employees within the database
+   * @returns {Promise<SoiEmployee[]>} - employees
+   */
+  async getAllSoiEmployees(): Promise<SoiEmployee[]> {
+    return this.soiEmployeeRepository.find();
   }
 }

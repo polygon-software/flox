@@ -1,5 +1,6 @@
 import { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import * as crypto from 'crypto';
 
 /**
  * Gets the request from context
@@ -27,7 +28,7 @@ export function generateHumanReadableId(length = 10): string {
   // Exclude I and l to avoid confusion
   const alphabet = '0123456789';
   for (let i = 0; i < length; i++) {
-    result += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    result += alphabet.charAt(crypto.randomInt(alphabet.length));
   }
 
   return result;

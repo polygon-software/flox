@@ -52,7 +52,8 @@ export class EmployeeService {
       uuid: cognitoId,
       fk: newEmployee.uuid,
     });
-    return newEmployee;
+
+    return this.employeeRepository.save(employee);
   }
 
   /**

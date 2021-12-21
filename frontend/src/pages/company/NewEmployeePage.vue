@@ -20,16 +20,11 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';
-import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
+import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_EMPLOYEE} from 'src/data/mutations/EMPLOYEE';
-import {sendPasswordChangeEmail} from 'src/helpers/email-helpers';
-import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
-import {randomPassword} from 'src/helpers/generator-helpers';
-import {MY_USER} from 'src/data/queries/QUERIES';
 
 const $routerService: RouterService|undefined = inject('$routerService')
-const $authService: AuthenticationService|undefined = inject('$authService')
 const $errorService: ErrorService|undefined = inject('$errorService')
 
 /**
@@ -66,7 +61,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  // Create database entry
+  // Create account (automatically sends one-time login e-mail as well)
   await executeMutation(CREATE_EMPLOYEE, {
     first_name: formData.full_name.first_name,
     last_name: formData.full_name.last_name,
