@@ -15,6 +15,7 @@ export default {
     login: 'Log in',
     logout: 'Log out',
     signup: 'Sign up',
+    bank_signup: 'Register bank',
     employee_signup: 'Register employee',
     signup_now: 'No Account? Sign up now:',
     forgot_password: 'Forgot password',
@@ -47,6 +48,11 @@ export default {
     full_name: 'Name',
     company_name: 'Company Name',
     company_uid: 'Company UID',
+    id: 'ID',
+    institution: 'Institution',
+    supervisor: 'Supervisor',
+    date: 'Date',
+    status: 'Status',
     language: 'Language',
     salutation: 'Salutation',
     correspondence_address: 'Correspondence Address',
@@ -57,12 +63,11 @@ export default {
     conditions: 'Terms and Conditions',
     accept_conditions: 'I agree to the terms and conditions.',
     company_function: 'Role in the company',
-    accept_condition_truthful:'All information has been filled in truthfully.',
+    accept_condition_truthful: 'All information has been filled in truthfully.',
     passport_or_id: 'Passport',
     commercial_register_extract: 'Commercial Register Extract',
     execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
-    status: 'Status',
     tasks: 'Tasks',
     volume: 'Volume',
     mortgage_volume: 'Mortgage Volume',
@@ -70,7 +75,9 @@ export default {
     provision_employee: 'Emp. Provision',
     provision_company: 'Company Provision',
     provision_soi: 'Provision SOI',
-    provision_ratio: 'Prov. Ratio Emp.'
+    provision_ratio: 'Prov. Ratio Emp.',
+    offer: 'offer',
+    abbreviation: 'Abbreviation'
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',
@@ -78,6 +85,8 @@ export default {
     application_rejected: 'Application rejected'
   },
   dashboards: {
+    management_dashboard: 'Management Dashboard',
+    offer: 'Offers',
     register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',
@@ -90,6 +99,12 @@ export default {
     view_documents: 'View documents',
     employee_tasks: 'Employee tasks',
     dossier: 'Dossier | Dossiers',
+    offer_id: 'Offer Nr.',
+    market_value: 'Market Value',
+    mortgage: 'Mortgage',
+    b_degree: 'B-Degree',
+    acceptability_of_risks: 'Acceptability of risks',
+    expiration: 'Expiration',
   },
   buttons: {
     finish_signup: 'Finish',
@@ -117,6 +132,7 @@ export default {
     cant_find_module: 'Cannot find module ',
     cache_location_missing: 'Cache Location is missing in mutationObject: ',
     missing_attributes: 'Missing attributes',
+    invalid_abbreviation: 'Please enter a valid abbreviation',
     invalid_password: 'Please enter a valid password',
     invalid_email: 'Please enter a valid e-mail address',
     invalid_username: 'Please enter a username',
@@ -147,6 +163,18 @@ export default {
   status: {
     uploading: 'Uploading',
     loading: 'Loading',
+    offered: 'Offered',
+    offer_rejected: 'Offer rejected',
+    offer_withdrawn: 'Offer withdrawn',
+    in_progress: 'Credit Agreement in progress',
+    sent: 'Credit Agreement sent',
+    signed: 'Credit Agreement signed',
+    completed: 'Completed',
+    offer: {
+      offered: 'offering',
+      withdrawn: 'withdrawn',
+      rejected: 'rejected',
+    }
   },
   user_types: {
     soi_admin: 'SOI Admin',

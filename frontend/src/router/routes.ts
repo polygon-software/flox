@@ -43,6 +43,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/employee/EmployeeDashboardPage.vue') }],
   },
 
+  'BANK_DASHBOARD': {
+    name: 'bank_dashboard',
+    path: '/bank-dashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/BankDashboard.vue') }],
+  },
+
   'MANAGEMENT_EMPLOYEE_VIEW': {
     path: '/management-employee-view',
     component: () => import('layouts/ManagementLayout.vue'),
@@ -108,6 +115,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/SOIEmployeeLayout.vue'),
     children: [{ path: '', component: () => import('pages/soi/SOIApplicationPage.vue') }],
   },
+  'REGISTER_BANK': {
+    path: '/register-bank',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/RegisterBankPage.vue') }],
+  },
 
   // Wildcard route for non-covered routes
   'WILDCARD': {
@@ -121,14 +133,6 @@ export default ROUTES
 // Routes that can be accessed without being logged in
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
-  ROUTES.SUCCESS,
-  ROUTES.SIGNUP,
-  ROUTES.SET_PASSWORD,
-  ROUTES.DOCUMENT_UPLOAD,
-  ROUTES.MANAGEMENT_EMPLOYEE_DATA,
-  ROUTES.MANAGEMENT_EMPLOYEE_TASKS,
-  ROUTES.EMPLOYEE_DASHBOARD,
-  ROUTES.NEW_EMPLOYEE_PAGE,
 ]
 
 //TODO: Add semi-protected routes

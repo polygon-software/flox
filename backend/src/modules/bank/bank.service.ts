@@ -12,8 +12,8 @@ import { UserService } from '../user/user.service';
 export class BankService {
   constructor(
     @InjectRepository(Bank)
-    private bankRepository: Repository<Bank>,
-    private userService: UserService,
+    private readonly bankRepository: Repository<Bank>,
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -29,8 +29,7 @@ export class BankService {
       password,
     );
 
-    // Send password reset email with the current password embedded
-    await sendPasswordChangeEmail(createBankInput.email, password, ROLE.BANK);
+    // TODO return password/credentials in some way, so admin can be shown a popup
 
     // Create the SoiAdmin and User in the database
     const bank = this.bankRepository.create({ ...createBankInput, offers: [] });

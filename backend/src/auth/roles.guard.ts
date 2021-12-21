@@ -41,7 +41,9 @@ export class RolesGuard implements CanActivate {
         context.getClass(),
       ]) ?? false;
 
-    if (isPublic) return true;
+    if (isPublic) {
+      return true;
+    }
 
     // Dev mode: overrides user management:
     const accessOverride = process.env.DEV === 'true';

@@ -89,13 +89,21 @@ const FIELDS: Record<string, Field> = {
       rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name')]
     },
   },
+  ABBREVIATION: {
+    key: 'abbreviation',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      label: i18n.global.t('account_data.abbreviation'),
+      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_abbreviation')]
+    },
+  },
   LANGUAGE: {
     key: 'language',
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('account_data.language'),
       options: ['DE', 'EN', 'FR', 'IT'], // TODO possibly move elsewhere.
-      // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['DE', 'EN', 'FR', 'IT']) || i18n.global.t('errors.invalid_option')]
     },
   },
