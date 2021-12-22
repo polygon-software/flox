@@ -1,5 +1,5 @@
 /**
- * This file contains all helper functions for handling itrings
+ * This file contains all helper functions for handling strings
  */
 
 /**

@@ -283,7 +283,7 @@
           v-if="input.status === PRODUCT_STATUS.DRAFT || input.status === PRODUCT_STATUS.VALID"
           class="q-ma-md text-black"
           color="primary"
-          :label="$t('buttons.edit')"
+          :label="$t('general.edit')"
           rounded
           no-caps
           style="height: 50px;"
@@ -341,56 +341,76 @@ const input: Record<string, unknown> = reactive(
 /**
 * Watch for first result if a product is given
 */
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const stop = watch(queryResult, async (newValue) => {
   if(newValue && newValue !== {} && !(Array.isArray(newValue) && newValue.length === 0)){
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
     await sleep(100)
 
     // Manually handle each field, since some fields are special
-    input.uuid = newValue.uuid
-    input.title = newValue.title
-    input.description = newValue.description
-    input.brand = newValue.brand
-    input.category = toPascalCase(newValue.category)
-    input.value = newValue.value !== '' ? newValue.value : null
-    input.currency = newValue.currency
-    input.minBet = newValue.minBet !== '' ? newValue.minBet : null
-    input.maxBet = newValue.maxBet !== '' ? newValue.maxBet : null
-    input.sponsored = newValue.sponsored ? i18n.global.t('general.yes') : i18n.global.t('general.mo')
-    input.tags = newValue.tags
-    input.status = newValue.status as PRODUCT_STATUS
-    input.directBuyLink = newValue.directBuyLink !== '' ? newValue.directBuyLink : null
-    input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks !== '' ? newValue.directBuyLinkMaxClicks : null
-    input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost !== '' ? newValue.directBuyLinkMaxCost : null
-    input.brandLink = newValue.brandLink !== '' ? newValue.brandLink : null
-    input.brandLinkMaxClicks = newValue.brandLinkMaxClicks !== '' ? newValue.brandLinkMaxClicks : null
-    input.brandLinkMaxCost = newValue.brandLinkMaxCost !== '' ? newValue.brandLinkMaxCost : null
+    mapValuesToInput(newValue)
 
-    // Dates: extract substring for date-only
-    input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
-    input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
     // Pictures
-    const existingPictures: Array<string|ArrayBuffer|null> = []
-    for (const picture of newValue.pictures) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-      const index: number = newValue.pictures.indexOf(picture);
-      await axios.get(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
-        picture.url,
-        {
-          responseType: 'blob'
-        }).then(async (res: AxiosResponse<Blob>) => {
-        const file = new File([res.data], `${(input as Record<string, string>).title}_${index}`)
-        const url = await toDataUrl(file)
-        existingPictures.push(url)
-      });
-    }
-    pictures.value = existingPictures
+    pictures.value = await mapPicturesToInput(newValue)
+
     // Stop watcher, since we already got initial values
     stop()
   }
 })
+
+/**
+ * Maps the data fetched from the DB to the input object.
+ * @param {Record<string, unknown>} newValue Data object loaded from DB
+ * @return {void}
+ */
+function mapValuesToInput(newValue: Record<string, unknown>): void {
+  input.uuid = newValue.uuid
+  input.title = newValue.title
+  input.description = newValue.description
+  input.brand = newValue.brand
+  input.category = newValue.category ? toPascalCase(newValue.category) : null
+  input.value = newValue.value !== '' ? newValue.value : null
+  input.currency = newValue.currency
+  input.minBet = newValue.minBet !== '' ? newValue.minBet : null
+  input.maxBet = newValue.maxBet !== '' ? newValue.maxBet : null
+  input.sponsored = newValue.sponsored ? i18n.global.t('general.yes') : i18n.global.t('general.no')
+  input.tags = newValue.tags
+  input.status = newValue.status as PRODUCT_STATUS
+  input.directBuyLink = newValue.directBuyLink !== '' ? newValue.directBuyLink : null
+  input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks !== '' ? newValue.directBuyLinkMaxClicks : null
+  input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost !== '' ? newValue.directBuyLinkMaxCost : null
+  input.brandLink = newValue.brandLink !== '' ? newValue.brandLink : null
+  input.brandLinkMaxClicks = newValue.brandLinkMaxClicks !== '' ? newValue.brandLinkMaxClicks : null
+  input.brandLinkMaxCost = newValue.brandLinkMaxCost !== '' ? newValue.brandLinkMaxCost : null
+
+  // Dates: extract substring for date-only
+  input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
+  input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
+}
+
+/**
+ * Maps the pictures fetched from the DB to the input object.
+ * @param {Record<string, unknown>} newValue Data object loaded from DB
+ * @async
+ * @return {Promise<Array<string|ArrayBuffer|null>>} Pictures loaded from DB as data urls
+ */
+async function mapPicturesToInput(newValue: Record<string, unknown>): Promise<Array<string | ArrayBuffer | null>> {
+  const existingPictures: Array<string|ArrayBuffer|null> = []
+  for (const picture of newValue.pictures) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+    const index: number = newValue.pictures.indexOf(picture);
+    await axios.get(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
+      picture.url,
+      {
+        responseType: 'blob'
+      }).then(async (res: AxiosResponse<Blob>) => {
+      const file = new File([res.data], `${(input as Record<string, string>).title}_${index}`)
+      const url = await toDataUrl(file)
+      existingPictures.push(url)
+    });
+  }
+  return existingPictures
+}
 
 /**
  * Routes to the product editing page for the given product
@@ -399,7 +419,6 @@ const stop = watch(queryResult, async (newValue) => {
  * @returns {void}
  */
 async function editProduct(uuid: string): Promise<void>{
-  //TODO Pass props, to that not everything needs to be fetched again
   await $routerService?.routeTo(
     ROUTES.ADD_PRODUCT,
     {

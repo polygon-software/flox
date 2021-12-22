@@ -178,10 +178,8 @@ type Product {
 }
 
 enum ProductStatus {
-  ACTIVE
   ARCHIVED
   DRAFT
-  ENDED
   VALID
 }
 

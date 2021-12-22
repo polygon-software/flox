@@ -336,7 +336,8 @@ import {
   IS_VALID_STRING
 } from 'src/data/RULES';
 import {sleep} from 'src/helpers/general-helpers';
-import {toBase64} from 'src/helpers/image-helper';
+import {toBase64, toDataUrl} from 'src/helpers/image-helper';
+import {toPascalCase} from "src/helpers/string-helpers";
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
@@ -411,52 +412,10 @@ const stop = watch(queryResult, async (newValue) => {
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
     await sleep(100)
 
-    // Manually handle each field, since some fields are special
-    input.title = newValue.title
-    input.description = newValue.description
-    input.brand = newValue.brand
-    input.category = newValue.category
-    input.value = newValue.value !== '' ? newValue.value : null
-    input.currency = newValue.currency
-    input.minBet = newValue.minBet !== '' ? newValue.minBet : null
-    input.maxBet = newValue.maxBet !== '' ? newValue.maxBet : null
-    input.sponsored = newValue.sponsored
-    input.tags = newValue.tags
-    input.directBuyLink = newValue.directBuyLink !== '' ? newValue.directBuyLink : null
-    input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks !== '' ? newValue.directBuyLinkMaxClicks : null
-    input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost !== '' ? newValue.directBuyLinkMaxCost : null
-    input.brandLink = newValue.brandLink !== '' ? newValue.brandLink : null
-    input.brandLinkMaxClicks = newValue.brandLinkMaxClicks !== '' ? newValue.brandLinkMaxClicks : null
-    input.brandLinkMaxCost = newValue.brandLinkMaxCost !== '' ? newValue.brandLinkMaxCost : null
-
-    // Dates: extract substring for date-only
-    input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
-    input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
+    mapValuesToInput(newValue)
 
     // Pictures
-    const existingPictures: Array<Ref<File>> = []
-    for (const picture of newValue.pictures) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-      const index: number = newValue.pictures.indexOf(picture);
-      await axios.get(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
-        picture.url,
-        {
-          responseType: 'blob'
-        }).then(async (res: AxiosResponse<Blob>) => {
-          const file = new File([res.data], `${(input as Record<string, string>).title}_${index}`)
-          existingPictures.push(ref(file))
-
-          // This array is used to remember which pictures currently exist
-          const b64Picture = await toBase64(file)
-          if (!oldPictures.value.includes(b64Picture)) {
-            oldPictures.value.push(b64Picture)
-          }
-      });
-    }
-    pictures.value = existingPictures
-
-
+    pictures.value = await mapPicturesToInput(newValue)
     // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
     // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
 
@@ -465,6 +424,64 @@ const stop = watch(queryResult, async (newValue) => {
   }
 })
 
+/**
+ * Maps the data fetched from the DB to the input object.
+ * @param {Record<string, unknown>} newValue Data object loaded from DB
+ * @return {void}
+ */
+function mapValuesToInput(newValue: Record<string, unknown>): void {
+  // Manually handle each field, since some fields are special
+  input.title = newValue.title
+  input.description = newValue.description
+  input.brand = newValue.brand
+  input.category = newValue.category
+  input.value = newValue.value !== '' ? newValue.value : null
+  input.currency = newValue.currency
+  input.minBet = newValue.minBet !== '' ? newValue.minBet : null
+  input.maxBet = newValue.maxBet !== '' ? newValue.maxBet : null
+  input.sponsored = newValue.sponsored
+  input.tags = newValue.tags
+  input.directBuyLink = newValue.directBuyLink !== '' ? newValue.directBuyLink : null
+  input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks !== '' ? newValue.directBuyLinkMaxClicks : null
+  input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost !== '' ? newValue.directBuyLinkMaxCost : null
+  input.brandLink = newValue.brandLink !== '' ? newValue.brandLink : null
+  input.brandLinkMaxClicks = newValue.brandLinkMaxClicks !== '' ? newValue.brandLinkMaxClicks : null
+  input.brandLinkMaxCost = newValue.brandLinkMaxCost !== '' ? newValue.brandLinkMaxCost : null
+
+  // Dates: extract substring for date-only
+  input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
+  input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
+}
+
+/**
+ * Maps the pictures fetched from the DB to the input object.
+ * @param {Record<string, unknown>} newValue Data object loaded from DB
+ * @async
+ * @return {Promise<Array<Ref<File>>>} Pictures loaded from DB as data urls
+ */
+async function mapPicturesToInput(newValue: Record<string, unknown>): Promise<Array<Ref<File>>> {
+  const existingPictures: Array<Ref<File>> = []
+  for (const picture of newValue.pictures) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+    const index: number = newValue.pictures.indexOf(picture);
+    await axios.get(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
+      picture.url,
+      {
+        responseType: 'blob'
+      }).then(async (res: AxiosResponse<Blob>) => {
+      const file = new File([res.data], `${(input as Record<string, string>).title}_${index}`)
+      existingPictures.push(ref(file))
+
+      // This array is used to remember which pictures currently exist
+      const b64Picture = await toBase64(file)
+      if (!oldPictures.value.includes(b64Picture)) {
+        oldPictures.value.push(b64Picture)
+      }
+    });
+  }
+  return existingPictures
+}
 
 /**
  * On picture change, overwrites the array
