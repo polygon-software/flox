@@ -252,7 +252,7 @@ function showAllDocuments() {
  */
 function dateString(date:string){
   const realDate = new Date(Date.parse(date))
-  return `${realDate.getDay()}.${realDate.getMonth()}.${realDate.getFullYear()}`
+  return formatDate(realDate)
 }
 
 /**
