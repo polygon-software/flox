@@ -1,8 +1,8 @@
 <template>
   <q-page class="flex flex-center">
-    <q-card
-      class="square q-pa-md q-ma-md"
-      style="width: 900px"
+    <div
+      class="q-pa-md q-ma-md"
+      style="width: 1200px"
     >
       <!-- Own info -->
       <CompanyEmployeeId/>
@@ -38,7 +38,7 @@
         <!-- Dossier Overview -->
         <EmployeeDashboardTable/>
       </div>
-    </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -128,11 +128,10 @@ async function newAssignment(): Promise<void> {
   const dossierUuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
 
   const nrOfBanks = Math.floor(Math.random()*4)
-  const bankUuids = ['0d239c36-668e-493d-8050-7b060fc87975',
-    'c3abeb5d-9c73-46a0-9a6d-4d651bbf8fff',
-    '99ce3554-4680-4eea-b47a-3c39164b62f3',
-    '60023505-baf4-45c2-91f3-59b3dbc1240a',
-
+  const bankUuids = [
+    '99295c95-e736-4fe4-a806-082e6db5fe4e',
+   'fc39b098-60b6-4390-aa2a-de6b80c6d499',
+   'c3cad835-1223-4cf5-b26b-4dd25dc394e3'
   ]
   const chosen: Array<string> = []
   while (chosen.length < nrOfBanks){

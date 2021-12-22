@@ -33,7 +33,6 @@ executeQuery(MY_USER).then((userResp)=>{
     return
   }
   const user = userResp.data[MY_USER.cacheLocation]  as User
-  console.log(user)
   if(user.role === ROLE.EMPLOYEE){
     executeQuery(MY_EMPLOYEE).then((employeeResp)=>{
       const employee = employeeResp.data[MY_EMPLOYEE.cacheLocation] as Record<string, unknown >;

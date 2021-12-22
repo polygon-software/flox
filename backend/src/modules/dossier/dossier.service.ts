@@ -58,7 +58,7 @@ export class DossierService {
       employee: employee,
     });
 
-    return await this.dossierRepository.save(dossier);
+    return this.dossierRepository.save(dossier);
   }
 
   /**
