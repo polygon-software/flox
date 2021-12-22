@@ -124,8 +124,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
   'REGISTER_BANK': {
     path: '/register-bank',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/SOIAdminLayout.vue'),
     children: [{ path: '', component: () => import('pages/soi/RegisterBankPage.vue') }],
+  },
+  'NEW_DOSSIER_PAGE': {
+    path: '/new-dossier',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/NewDossierPage.vue') }],
   },
 
   // Wildcard route for non-covered routes

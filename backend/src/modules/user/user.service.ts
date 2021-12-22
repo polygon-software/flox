@@ -11,7 +11,7 @@ import { User } from './entities/user.entity';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
   /**
@@ -60,7 +60,7 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   async update(updateUserInput: UpdateUserInput): Promise<User> {
-    const user = await this.usersRepository.create(updateUserInput);
+    const user = this.usersRepository.create(updateUserInput);
     await this.usersRepository.update(updateUserInput.uuid, user);
     return this.usersRepository.findOne(updateUserInput.uuid);
   }
@@ -73,8 +73,8 @@ export class UserService {
   async remove(deleteUserInput: DeleteUserInput): Promise<User> {
     const user = await this.usersRepository.findOne(deleteUserInput.uuid);
     const uuid = user.uuid;
-    const deleted_user = await this.usersRepository.remove(user);
-    deleted_user.uuid = uuid;
-    return deleted_user;
+    const deletedUser = await this.usersRepository.remove(user);
+    deletedUser.uuid = uuid;
+    return deletedUser;
   }
 }

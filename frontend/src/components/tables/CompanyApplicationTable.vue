@@ -26,10 +26,10 @@
           <q-btn
             v-if="isAction(props.row)"
             color="primary"
-            :label="action_label[props.row.creation_state]?.text || ''"
+            :label="actionLabel[props.row.creation_state]?.text || ''"
             style="border-radius: 8px"
             no-caps
-            @click="action_label[props.row.creation_state]?.action(props.row)"
+            @click="actionLabel[props.row.creation_state]?.action(props.row)"
           />
           <div v-else>
             {{ $t('errors.documents_missing') }}
@@ -66,7 +66,7 @@ const columns = [
 ]
 
 
-const action_label = {
+const actionLabel = {
   [`${CREATION_STATE.APPLIED}`]: {text: i18n.global.t('dashboards.enable_upload'), action: showEnableUploadDialog},
   [`${CREATION_STATE.AWAITING_DOCUMENTS}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog},
   [`${CREATION_STATE.DOCUMENTS_UPLOADED}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog},

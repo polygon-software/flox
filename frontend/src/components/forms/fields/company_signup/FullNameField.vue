@@ -1,6 +1,6 @@
 <template>
   <q-input
-    v-model="first_name"
+    v-model="firstName"
     :label="$t('account_data.first_name')"
     type="text"
     :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
@@ -8,7 +8,7 @@
   >
   </q-input>
   <q-input
-    v-model="last_name"
+    v-model="lastName"
     :label="$t('account_data.last_name')"
     type="text"
     :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_name')]"
@@ -21,8 +21,8 @@ import { ref } from 'vue'
 import { IS_VALID_STRING } from 'src/data/RULES';
 const emit = defineEmits(['change'])
 
-const first_name = ref('')
-const last_name = ref('')
+const firstName = ref('')
+const lastName = ref('')
 
 /**
  * Emits the inputs
@@ -30,8 +30,8 @@ const last_name = ref('')
  */
 function emitValue(){
   emit('change', {
-    first_name: first_name.value,
-    last_name: last_name.value
+    first_name: firstName.value,
+    last_name: lastName.value
   })
 }
 

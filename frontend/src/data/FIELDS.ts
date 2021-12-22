@@ -8,6 +8,7 @@ import FullNameField from 'components/forms/fields/company_signup/FullNameField.
 import ConditionsField from 'components/forms/fields/company_signup/ConditionsField.vue'
 import UploadFields from 'components/forms/fields/document_upload/UploadFields.vue'
 import UserType from 'components/forms/fields/generic/UserType.vue'
+import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 
@@ -57,6 +58,17 @@ const FIELDS: Record<string, Field> = {
         rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_username')]
       },
     },
+    COMPANY_NAME: {
+    key: 'company_name',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'text',
+      label: i18n.global.t('account_data.company'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_company_name')]
+    },
+  },
     PASSWORD: {
       key: 'password',
       component: markRaw(Password),
@@ -96,6 +108,13 @@ const FIELDS: Record<string, Field> = {
       dense: true,
       label: i18n.global.t('account_data.abbreviation'),
       rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_abbreviation')]
+    },
+  },
+  ADDRESS: {
+    key: 'address',
+    component: markRaw(AddressField),
+    attributes: {
+      rules: [] // Validated by component
     },
   },
   LANGUAGE: {

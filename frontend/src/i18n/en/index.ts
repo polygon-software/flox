@@ -25,6 +25,7 @@ export default {
     redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
     back_to_login: 'Back to Login',
     change_password: 'Change password',
+    unauthenticated: 'Unauthenticated'
   },
   account_data: {
     employees: 'Employees',
@@ -83,7 +84,11 @@ export default {
   messages: {
     account_unlocked: 'Successfully unlocked account',
     document_upload_enabled: 'Enabled document upload',
-    application_rejected: 'Application rejected'
+    application_rejected: 'Application rejected',
+    login_failed: 'Login has failed',
+    rejection_failed: 'An Error occurred while rejecting',
+    success: 'Success',
+    failure: 'Failure'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -182,6 +187,44 @@ export default {
     manager: 'Manager',
     employee: 'Employee',
   },
+  employee_dashboard: {
+    title: 'Employee Dashboard',
+    applications: 'Applications',
+    search: 'Search',
+    new_assignment: 'Enter a new assignment',
+    date: 'Date',
+    customer: 'Customer',
+    institute: 'Institute',
+    location: 'Location',
+    mortgage_amount: 'Mortage amount CHF',
+    status: 'Status',
+    uploads: 'Documents',
+    all_documents: 'All documents',
+    offers: 'Offers',
+    'non-arrangeable': 'Not arrangeable',
+    upload_more_documents: 'Upload further documents',
+    organisation_id: 'Organisation number',
+    employee_id: 'Employee number',
+    role: 'Role',
+
+  },
+  dossier_status_enum: {
+    OPEN: 'Open',
+    SIGNED: 'Credit contract signed',
+    REJECTED: 'Offer rejected',
+    SUBMITTED: 'Submitted',
+    OFFERED: 'Offered',
+    COMPLETED: 'Completed',
+    IN_PROGRESS: 'Credit contract in process',
+    SENT: 'Credit contract sent',
+  },
+  offer_status_enum: {
+    INTERESTED: 'Interested',
+    RETRACTED: 'Retracted',
+    ACCEPTED: 'Accepted',
+    IN_PROCESS: 'In Process'
+  },
+
   email: {
     subject_rejected: 'Rejected',
     body_rejected: 'Application is rejected'

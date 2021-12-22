@@ -1,12 +1,12 @@
-import { ObjectType, Field, InputType } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { IsPhoneNumber, IsString } from 'class-validator';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Company } from '../../company/entities/company.entity';
+import { Dossier } from '../../dossier/entity/dossier.entity';
 
+@Entity()
 @ObjectType()
-@InputType('employee')
-@Entity({ name: 'employee' })
 export class Employee extends Person {
   @Column()
   @Field(() => String, { description: 'Language' })
@@ -33,4 +33,8 @@ export class Employee extends Person {
   @JoinColumn()
   @ManyToOne(() => Company)
   company: Company;
+
+  @Field(() => [Dossier], { description: 'Dossiers of employee' })
+  @OneToMany(() => Dossier, (dossier) => dossier.employee)
+  dossiers: Dossier[];
 }

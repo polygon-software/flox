@@ -25,6 +25,8 @@ export default {
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
     back_to_login: 'Zurück zu Login',
     change_password: 'Passwort ändern',
+    unauthenticated: 'Nicht Angemeldet'
+
   },
   account_data: {
     employees: 'Mitarbeitende',
@@ -84,7 +86,12 @@ export default {
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
     document_upload_enabled: 'Dokumentupload freigeschaltet',
-    application_rejected: 'Antrag abgelehnt'
+    application_rejected: 'Antrag abgelehnt',
+    rejection_failed: 'Ein Fehler ist beim Ablehnen aufgetreten',
+    success: 'Erfolgreich',
+    failure: 'Fehlgeschlagen',
+    login_failed: 'Login hat fehlgeschlagen',
+
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -182,6 +189,42 @@ export default {
     soi_admin: 'SOI Administrator',
     manager: 'Manager',
     employee: 'Mitarbeiter',
+  },
+  employee_dashboard: {
+    title: 'Mitarbeiter Dashboard',
+    applications: 'Anträge',
+    search: 'Suche',
+    new_assignment: 'Neuen Auftrag erfassen',
+    date: 'Datum',
+    customer: 'Kunde',
+    institute: 'Institut',
+    location: 'Ort',
+    mortgage_amount: 'Hypothekarbetrag CHF',
+    status: 'Status',
+    uploads: 'Dokumente',
+    all_documents: 'Alle Dokumente',
+    offers: 'Angebote',
+    'non-arrangeable': 'Nicht vermittelbar',
+    upload_more_documents: 'Weitere Dokumente hochladen',
+    organisation_id: 'Organisationsnummer',
+    employee_id: 'Mitarbeiternummer',
+    role: 'Rolle',
+  },
+  dossier_status_enum: {
+    OPEN: 'Offen',
+    SIGNED: 'Kreditvertrag unterzeichnet zurück',
+    REJECTED: 'Offerte abgelehnt',
+    SUBMITTED: 'Eingereicht',
+    OFFERED: 'Offeriert',
+    COMPLETED: 'Abgeschlossen',
+    IN_PROGRESS: 'Kreditvertrag in Bearbeitung',
+    SENT: 'Kreditvertrag versendet',
+  },
+  offer_status_enum: {
+    INTERESTED: 'Interessiert',
+    RETRACTED: 'Zurückgezogen',
+    ACCEPTED: 'Akzeptiert',
+    IN_PROCESS: 'In Bearbeitung'
   },
   email: {
     subject_rejected: 'Abgelehnt',

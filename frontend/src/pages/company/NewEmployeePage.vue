@@ -32,7 +32,7 @@ const $errorService: ErrorService|undefined = inject('$errorService')
 * account_fields array. Once a new employee has been registered, the user will be redirected to the success page.
 */
 
-const account_fields = [
+const accountFields = [
   FIELDS.SALUTATION,
   FIELDS.FULL_NAME,
   FIELDS.LANGUAGE,
@@ -45,7 +45,7 @@ const pages = [
   {
     key: 'company',
     label: i18n.global.t('authentication.employee_signup'),
-    fields: account_fields,
+    fields: accountFields,
   },
 ]
 
@@ -53,12 +53,11 @@ const pages = [
 /**
  * Upon valid registration, creates database entry
  * @param {Record<string, unknown>} formData: The form's entered data
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onRegister(formData: Record<string, Record<string, string>>){
-  const email: string = formData.email.toString()
-  if(email === null || email === undefined){
+  const email: string|null  = formData.email.toString()
+  if(!email || email.length === 0){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 

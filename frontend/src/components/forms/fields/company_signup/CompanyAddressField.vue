@@ -3,20 +3,20 @@
   <!-- Domicile Address -->
   <strong>{{ $t('account_data.domicile_address') }}</strong>
 
-  <AddressField @change="(val: Address) => {domicile_address.replace(val); emitValue()}"/>
+  <AddressField @change="(val: Address) => {domicileAddress.replace(val); emitValue()}"/>
 
   <div class="flex justify-between items-center">
     <strong>{{ $t('account_data.correspondence_address') }}</strong>
     <q-checkbox
-      v-model="hide_correspondence"
+      v-model="hideCorrespondence"
       :label="$t('account_data.edit_correspondence_address')"
       val="xs"
     />
   </div>
 
   <!-- Correspondence Address -->
-  <div v-if="!hide_correspondence">
-    <AddressField @change="(val) => {correspondence_input.replace(val); emitValue()}"/>
+  <div v-if="!hideCorrespondence">
+    <AddressField @change="(val) => {correspondenceInput.replace(val); emitValue()}"/>
   </div>
 </template>
 
@@ -27,17 +27,17 @@ import {Address} from 'src/data/types/Address';
 const emit = defineEmits(['change'])
 
 // Addresses
-const domicile_address = ref(new Address())
-const correspondence_input = ref(new Address())
+const domicileAddress = ref(new Address())
+const correspondenceInput = ref(new Address())
 
 // Whether to hide the correspondence address
-const hide_correspondence = ref(true)
+const hideCorrespondence = ref(true)
 
 /**
  * Depending on whether correspondence is set to identical, get correct result
  */
-const correspondence_address: ComputedRef<Address> = computed(() => {
-  return hide_correspondence.value? domicile_address.value : correspondence_input.value
+const correspondenceAddress: ComputedRef<Address> = computed(() => {
+  return hideCorrespondence.value? domicileAddress.value : correspondenceInput.value
 })
 
 /**
@@ -46,8 +46,8 @@ const correspondence_address: ComputedRef<Address> = computed(() => {
  */
 function emitValue(){
   emit('change', {
-    domicile_address: domicile_address.value,
-    correspondence_address: correspondence_address.value
+    domicile_address: domicileAddress.value,
+    correspondence_address: correspondenceAddress.value
   })
 }
 
