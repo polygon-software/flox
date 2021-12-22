@@ -472,6 +472,7 @@ type PublicFile {
 
 type Query {
   allCompanies: [Company!]!
+  allDossiersBank: [Dossier!]!
   allEmployees: [Employee!]!
   allSoiEmployees: [SoiEmployee!]!
   allUsers: [User!]!

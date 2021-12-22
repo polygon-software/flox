@@ -96,4 +96,23 @@ export class BankService {
   allBanks(): Promise<Bank[]> {
     return this.bankRepository.find();
   }
+
+  /**
+   * Get the bank of the logged in user
+   * @param {string} cognitoId - the banks users id
+   * @returns {Promise<Bank>} - the bank
+   */
+  async getMyBank(cognitoId: string): Promise<Bank> {
+    const bank = await this.userService.getUser({ uuid: cognitoId });
+    if (bank && bank.role === ROLE.BANK) {
+      return this.bankRepository.findOne(bank.fk, {
+        relations: ['offers', 'own_mortgages'],
+      });
+    }
+    throw new Error(
+      `User is not an Bank but a ${
+        bank ? String(bank.role) : 'unauthenticated'
+      }`,
+    );
+  }
 }

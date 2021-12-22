@@ -89,7 +89,7 @@ async function onLogin({username, password}: {username: string, password: string
     [ROLE.COMPANY]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
     [ROLE.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD,
     [ROLE.SOI_EMPLOYEE]: ROUTES.APPLICATIONS,
-    [ROLE.BANK]: ROUTES.WILDCARD,
+    [ROLE.BANK]: ROUTES.BANK_DASHBOARD,
     [ROLE.NONE]: ROUTES.WILDCARD,
   }
   // Redirect to main page

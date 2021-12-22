@@ -81,8 +81,11 @@
 
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {DOSSIERS_BANK} from 'src/data/queries/QUERIES';
 
 //ToDo: connect to backend
+const dossiers = subscribeToQuery(DOSSIERS_BANK, {})
 
 const mockedOffers = [{
   date: new Date(1639489283 * 1000),

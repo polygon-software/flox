@@ -109,4 +109,17 @@ export class DossierResolver {
   ): Promise<Dossier> {
     return this.dossierService.createOffer(createOfferInput);
   }
+
+  /**
+   * All dossiers, where the requesting bank isn't the original_bank
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier[]>} - All dossiers, where the requesting bank isn't the original_bank
+   */
+  @BankOnly()
+  @Query(() => [Dossier])
+  async allDossiersBank(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier[]> {
+    return this.dossierService.allDossiersBank(user.userId);
+  }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
@@ -178,5 +178,15 @@ export class DossierService {
     return this.dossierRepository.findOne(resetDossierInput.uuid, {
       relations: ['offers', 'original_bank'],
     });
+  }
+
+  /**
+   * All dossiers, where the requesting bank isn't the original_bank
+   * @param {string} cognitoId - the the banks users id
+   * @returns {Promise<Dossier[]>} - the dossiers
+   */
+  async allDossiersBank(cognitoId: string): Promise<Dossier[]> {
+    const bank = this.bankService.getMyBank(cognitoId);
+    return this.dossierRepository.find({ where: { original_bank: Not(bank) } });
   }
 }

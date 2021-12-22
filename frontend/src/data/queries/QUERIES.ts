@@ -316,4 +316,27 @@ export const ALL_BANKS = {
   cacheLocation: 'getBanks'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS, MY_USER, ALL_BANKS , REJECTED_DOSSIERS];
+export const DOSSIERS_BANK = {
+  query: gql`
+    query allDossiersBank {
+      allDossiersBank{
+        uuid
+        __typename
+        first_name
+        last_name
+        created_at
+        correspondence_address {
+          __typename
+          uuid
+          city
+          zip_code
+        }
+        loan_sum
+      }
+    }
+    `,
+  tables: ['dossier'],
+  cacheLocation: 'allDossiersBank'
+}
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS, MY_USER, ALL_BANKS , REJECTED_DOSSIERS, DOSSIERS_BANK];
