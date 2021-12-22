@@ -7,7 +7,6 @@ import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.inpu
 import { ROLE } from '../../ENUM/ENUMS';
 import {
   AdminOnly,
-  AnyRole,
   Roles,
   BankOnly,
   CurrentUser,
