@@ -67,7 +67,7 @@ type Bank {
   own_mortgages: [Dossier!]!
 
   """Phone Number"""
-  phone: String!
+  phone: String
 
   """Human-readable ID"""
   readable_id: String!

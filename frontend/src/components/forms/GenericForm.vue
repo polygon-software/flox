@@ -1,6 +1,6 @@
 <template>
   <q-form
-    ref="form_ref"
+    ref="formRef"
     greedy
     class="q-gutter-md"
   >
@@ -146,7 +146,6 @@ const form: Form = new Form(props.pages as Record<string, unknown>[])
  */
 async function onSubmit(){
   const isValid = await formRef.value?.validate()
-
   if(isValid){
     emit('submit', form.values.value)
   }

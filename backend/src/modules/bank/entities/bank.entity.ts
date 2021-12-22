@@ -4,6 +4,7 @@ import { Address } from '../../address/entities/address.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
 import { Dossier } from '../../dossier/entity/dossier.entity';
+import { IsPhoneNumber, IsString } from 'class-validator';
 
 @Entity()
 @ObjectType()
@@ -15,6 +16,12 @@ export class Bank extends Person {
   @Field(() => String, { description: 'Three letter abbreviation of the Bank' })
   @Column({ unique: true })
   abbreviation: string;
+
+  @Column()
+  @Field(() => String, { description: 'Phone Number', nullable: true })
+  @IsString()
+  @IsPhoneNumber()
+  phone: string;
 
   @Field(() => Address, { description: 'Address' })
   @JoinColumn()

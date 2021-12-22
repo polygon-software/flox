@@ -54,6 +54,7 @@ const pages = [
  * @returns {void}
  */
 async function onSignup(values: Record<string, Record<string, unknown>>){
+  console.log('signuo')
   // Sign up bank on database
   await executeMutation(
     CREATE_BANK,
