@@ -16,9 +16,10 @@
         <q-tr
           :props="props"
           style="background-color: white; cursor: pointer"
+          @click="()=>onRowClick(props.row)"
         >
           <q-td key="date">
-            {{ dateString(props.row.created_at) }}
+            {{ formatDate(props.row.created_at) }}
           </q-td>
           <q-td key="customer">
             {{ props.row.first_name + " " + props.row.last_name }}
@@ -36,18 +37,6 @@
             <q-chip :style="dossierChipStyle(props.row.status)">
               {{ $t('dossier_status_enum.' + props.row.status) }}
             </q-chip>
-            <q-popup-edit
-              v-slot="scope"
-              :auto-save="true"
-              :model-value="props.row.status"
-              @save="(value) => onUpdateStatus(value, props.row.uuid)"
-            >
-              <q-select
-                v-model="scope.value"
-                :option-label="(status)=>$t('dossier_status_enum.' + status)"
-                :options="Object.keys(STATUS)"
-              />
-            </q-popup-edit>
           </q-td>
           <q-td key="uploads">
             {{ props.row.uploads }}
@@ -58,7 +47,7 @@
               @click="showAllDocuments"
             />
           </q-td>
-          <q-td key="offers" @click="()=>expandOffers(props.row.uuid)">
+          <q-td key="offers">
             <q-chip
               v-for="(offer, index) in props.row.offers"
               :key="index"
@@ -71,25 +60,6 @@
             <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
           </q-td>
         </q-tr>
-        <div v-if="expanded[props.row.uuid]"
-        >
-          <q-tr v-for="offer in props.row.offers"
-                :key="offer.uuid"
-                :props="props"
-                style="background-color: white; cursor: pointer"
-          >
-            <q-td key="date"> --></q-td>
-            <q-td>{{offer.bank.name}}</q-td>
-            <q-td>
-              <q-chip
-                :style="offerChipStyle(offer.status)"
-              >
-                {{ $t('offer_status_enum.' + offer.status) }}
-              </q-chip>
-            </q-td>
-          </q-tr>
-        </div>
-
         <!-- one spacer row per row -->
         <q-tr style="height: 14px"/>
       </template>
@@ -99,13 +69,13 @@
 
 <script setup lang="ts">
 import {computed, Ref, ref} from 'vue';
-import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
-import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
-import {MY_DOSSIERS, REJECTED_DOSSIERS} from 'src/data/queries/QUERIES';
+import {REJECTED_DOSSIERS} from 'src/data/queries/QUERIES';
+import {formatDate} from 'src/helpers/format-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -131,28 +101,6 @@ const rows = computed(()=>{
   return dossiers.value ?? []
 })
 
-const expanded: Ref<Record<string, boolean>> = ref({})
-
-
-/**
- * Edits the dossier status and update the status with the selected item
- * @param {string} status - the status of the dossier
- * @param {string} uuid - the uuid
- * @returns {void}
- */
-function onUpdateStatus(status: string, uuid:string){
-  executeMutation(
-    SET_DOSSIER_STATUS,
-    {
-      uuid: uuid,
-      status: status,
-    }
-  ).then(()=>{
-    console.log('updated') // todo toast?
-  }).catch(()=>{
-    console.error('update Failed') // todo Toast
-  })
-}
 /**
  * ToDo Fix colors
  * Chip color depending on the status
@@ -215,22 +163,12 @@ function showAllDocuments() {
 }
 
 /**
- * Date to string function
- * @param {Date} date - date
- * @returns {string} - date string
- */
-function dateString(date:string){
-  const realDate = new Date(Date.parse(date))
-  return `${realDate.getDay()}.${realDate.getMonth()}.${realDate.getFullYear()}`
-}
-
-/**
- * Expand row
- * @param {string} uuid - uuid of dossier to expand offers on
+ * Upon clicking a row, show dialog to re-enable dossier
+ * @param {Record<string, unknown>} dossier - dossier that was clicked
  * @returns {void}
  */
-function expandOffers(uuid:string): void{
-  expanded.value[uuid]= !expanded.value[uuid]
+function onRowClick(dossier: Record<string, unknown>): void{
+  // TODO: re-enable, how is this supposed to work?
 }
 
 

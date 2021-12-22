@@ -124,13 +124,13 @@ export class DossierService {
       createOfferInput.dossier_uuid,
     );
     const bank = await this.bankService.findBank(createOfferInput.bank_uuid);
-    const new_offer = this.offerRepository.create({
+    const newOffer = this.offerRepository.create({
       dossier,
       bank,
       status: createOfferInput.status,
       pdf: null,
     });
-    await this.offerRepository.save(new_offer);
+    await this.offerRepository.save(newOffer);
     return this.dossierRepository.findOne(createOfferInput.dossier_uuid, {
       relations: ['offers', 'offers.bank'],
     });

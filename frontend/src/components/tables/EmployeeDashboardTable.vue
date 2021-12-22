@@ -18,7 +18,7 @@
         style="background-color: white; cursor: pointer"
       >
         <q-td key="date">
-          {{ dateString(props.row.created_at) }}
+          {{ formatDate(props.row.created_at) }}
         </q-td>
         <q-td key="customer">
           {{ props.row.first_name + " " + props.row.last_name }}
@@ -106,6 +106,7 @@ import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
+import {formatDate} from 'src/helpers/format-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -214,16 +215,6 @@ function showAllDocuments() {
     title: 'UploadDocumentsDialog',
     component: UploadDocumentsDialog,
   })
-}
-
-/**
- * Date to string function
- * @param {Date} date - date
- * @returns {string} - date string
- */
-function dateString(date:string){
-  const realDate = new Date(Date.parse(date))
-  return `${realDate.getDay()}.${realDate.getMonth()}.${realDate.getFullYear()}`
 }
 
 /**
