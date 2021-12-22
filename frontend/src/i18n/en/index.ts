@@ -25,6 +25,7 @@ export default {
     redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
     back_to_login: 'Back to Login',
     change_password: 'Change password',
+    unauthenticated: 'Unauthenticated'
   },
   account_data: {
     employees: 'Employees',
@@ -83,6 +84,10 @@ export default {
     account_unlocked: 'Successfully unlocked account',
     document_upload_enabled: 'Enabled document upload',
     application_rejected: 'Application rejected',
+    login_failed: 'Login has failed',
+    rejection_failed: 'An Error occurred while rejecting',
+    success: 'Success',
+    failure: 'Failure',
     dossier_reset: 'Successfully reset dossier',
   },
   dashboards: {
@@ -214,7 +219,7 @@ export default {
     SUBMITTED: 'Submitted',
     OFFERED: 'Offered',
     COMPLETED: 'Completed',
-    IN_PROCESS: 'Credit contract in process',
+    IN_PROGRESS: 'Credit contract in process',
     SENT: 'Credit contract sent',
   },
   offer_status_enum: {

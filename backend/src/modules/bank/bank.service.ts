@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Bank } from './entities/bank.entity';
 import { CreateBankInput } from './dto/input/create-bank.input';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
-import { sendPasswordChangeEmail } from '../../email/helper';
 import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
 import { CreateUserlessBankInput } from './dto/input/create-userless-bank.input';
@@ -53,7 +52,7 @@ export class BankService {
 
   /**
    * Create a bank without an associated user
-   * @param {CreateUserlessBankInput} createBankInput - mimimal info for new bank
+   * @param {createUserlessBankInput} createBankInput - mimimal info for new bank
    * @return {Promise<Bank>} - new Bank
    */
   async createUserlessBank(
@@ -72,9 +71,18 @@ export class BankService {
   /**
    * Find a bank
    * @param {String} name - name of bank
-   * @returns {Promise<Bank>} - banke
+   * @returns {Promise<Bank>} - bank
    */
   findBankByName(name: string): Promise<Bank> {
     return this.bankRepository.findOne({ name });
+  }
+
+  /**
+   * Find a bank
+   * @param {String} abbreviation - abbreviation of bank
+   * @returns {Promise<Bank>} - bank
+   */
+  findBankByAbbreviation(abbreviation: string): Promise<Bank> {
+    return this.bankRepository.findOne({ abbreviation });
   }
 }

@@ -52,8 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, Ref} from 'vue';
-import {ref} from 'vue';
+import {defineEmits, Ref, ref} from 'vue';
 import {PASSWORD_REGEX} from '../../helpers/REGEX'
 import {QDialog} from 'quasar';
 

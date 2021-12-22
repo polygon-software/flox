@@ -97,7 +97,7 @@ import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.
 import ResetDossierDialog from 'src/components/dialogs/ResetDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
-import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
+import {OFFER_STATUS, DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {REJECTED_DOSSIERS} from 'src/data/queries/QUERIES';
 import {formatDate} from 'src/helpers/format-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
@@ -155,21 +155,21 @@ function offerChipStyle(status: OFFER_STATUS){
 function dossierChipStyle(status: STATUS){
   const color = 'color: white; background-color: '
   switch (status) {
-    case STATUS.OPEN:
+    case DOSSIER_STATUS.OPEN:
       return color + '#58ACFA;'
-    case STATUS.SIGNED:
+    case DOSSIER_STATUS.SIGNED:
       return color + '#52130A;'
-    case STATUS.REJECTED:
+    case DOSSIER_STATUS.REJECTED:
       return color + '#A82CF0;'
-    case STATUS.SUBMITTED:
+    case DOSSIER_STATUS.SUBMITTED:
       return color + '#4126F9;'
-    case STATUS.OFFERED:
+    case DOSSIER_STATUS.OFFERED:
       return color + '#378F23;'
-    case STATUS.COMPLETED:
+    case DOSSIER_STATUS.COMPLETED:
       return color + '#1FB06C;'
-    case STATUS.IN_PROCESS:
+    case DOSSIER_STATUS.IN_PROGRESS:
       return color + '#A22736;'
-    case STATUS.SENT:
+    case DOSSIER_STATUS.SENT:
       return color + '#F829F3;'
   }
   return color + '#000000;'

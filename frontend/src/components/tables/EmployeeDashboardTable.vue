@@ -7,50 +7,52 @@
       color="transparent"
       :rows="rows"
       :columns="columns"
+      :filter="props.search"
+      :filter-method="filter"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
       flat
     >
-    <template #body="props">
+    <template #body="_props">
       <q-tr
-        :props="props"
+        :props="_props"
         style="background-color: white; cursor: pointer"
       >
         <q-td key="date">
-          {{ formatDate(props.row.created_at) }}
+          {{ formatDate(_props.row.created_at) }}
         </q-td>
         <q-td key="customer">
-          {{ props.row.first_name + " " + props.row.last_name }}
+          {{ _props.row.first_name + " " + _props.row.last_name }}
         </q-td>
         <q-td key="institute">
-          {{ props.row.original_bank.name }}
+          {{ _props.row.original_bank.name }}
         </q-td>
         <q-td key="location">
-          {{ props.row.property_address.city }}
+          {{ _props.row.property_address.city }}
         </q-td>
         <q-td key="mortgage_amount">
-          {{ props.row.loan_sum }}
+          {{ _props.row.loan_sum }}
         </q-td>
         <q-td key="status">
-          <q-chip :style="dossierChipStyle(props.row.status)">
-            {{ $t('dossier_status_enum.' + props.row.status) }}
+          <q-chip :style="dossierChipStyle(_props.row.status)">
+            {{ $t('dossier_status_enum.' + _props.row.status) }}
           </q-chip>
           <q-popup-edit
             v-slot="scope"
             :auto-save="true"
-            :model-value="props.row.status"
-            @save="(value) => onUpdateStatus(value, props.row.uuid)"
+            :model-value="_props.row.status"
+            @save="(value) => onUpdateStatus(value, _props.row.uuid)"
           >
             <q-select
               v-model="scope.value"
               :option-label="(status)=>$t('dossier_status_enum.' + status)"
-              :options="Object.keys(STATUS)"
+              :options="Object.keys(DOSSIER_STATUS)"
             />
           </q-popup-edit>
         </q-td>
         <q-td key="uploads">
-          {{ props.row.uploads }}
+          {{ _props.row.uploads }}
           <q-btn
             icon="picture_as_pdf"
             color="primary"
@@ -58,9 +60,9 @@
             @click="showAllDocuments"
           />
         </q-td>
-        <q-td key="offers" @click="()=>expandOffers(props.row.uuid)">
+        <q-td key="offers" @click="()=>expandOffers(_props.row.uuid)">
           <q-chip
-            v-for="(offer, index) in props.row.offers"
+            v-for="(offer, index) in _props.row.offers"
             :key="index"
             :style="offerChipStyle(offer.status)"
           >
@@ -68,14 +70,14 @@
           </q-chip>
         </q-td>
         <q-td key="non-arrangeable">
-          <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
+          <q-icon v-if="_props.row.non_arrangeable" name="warning" size="30px" color="red"/>
         </q-td>
       </q-tr>
-      <div v-if="expanded[props.row.uuid]"
+      <div v-if="expanded[_props.row.uuid]"
       >
-        <q-tr v-for="offer in props.row.offers"
+        <q-tr v-for="offer in _props.row.offers"
               :key="offer.uuid"
-              :props="props"
+              :props="_props"
               style="background-color: white; cursor: pointer"
         >
           <q-td key="date"> --></q-td>
@@ -104,15 +106,24 @@ import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
-import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
+import {OFFER_STATUS, DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
+import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
+import {deepFilter} from 'src/helpers/filter-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
 // Selection must be an array
 const selected = ref([])
 
+const props = defineProps({
+    search: {
+      type: String,
+      default: ''
+    }
+  }
+)
 
 // ----- Data -----
 const columns = [
@@ -130,12 +141,21 @@ const columns = [
 
 
 const dossiers = subscribeToQuery(MY_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
-const rows = computed(()=>{
+const rows = computed( () => {
   return dossiers.value ?? []
 })
 
 const expanded: Ref<Record<string, boolean>> = ref({})
 
+/**
+ * Search Filter
+ * @param {Record<string, unknown>[]} rows - rows
+ * @param {string} terms - search key
+ * @returns {Record<string, unknown>[]} - filtered rows
+ */
+function filter(rows:Record<string, unknown>[], terms:string){
+  return rows.filter((row)=>deepFilter(row, terms))
+}
 
 /**
  * Edits the dossier status and update the status with the selected item
@@ -143,7 +163,7 @@ const expanded: Ref<Record<string, boolean>> = ref({})
  * @param {string} uuid - the uuid
  * @returns {void}
  */
-function onUpdateStatus(status: string, uuid:string){
+function onUpdateStatus(status: DOSSIER_STATUS, uuid:string){
   executeMutation(
     SET_DOSSIER_STATUS,
     {
@@ -151,15 +171,25 @@ function onUpdateStatus(status: string, uuid:string){
       status: status,
     }
   ).then(()=>{
-    console.log('updated') // todo toast?
+    showNotification(
+      $q,
+      i18n.global.t('messages.success'),
+      undefined,
+      'positive'
+    )
   }).catch(()=>{
-    console.error('update Failed') // todo Toast
+    showNotification(
+      $q,
+      i18n.global.t('messages.failure'),
+      undefined,
+      'negative'
+    )
   })
 }
 /**
  * ToDo Fix colors
  * Chip color depending on the status
- * @param {STATUS} status - status of Dossier
+ * @param  {DOSSIER_STATUS} status - status of Dossier
  * @returns {string} - style
  */
 function offerChipStyle(status: OFFER_STATUS){
@@ -180,27 +210,27 @@ function offerChipStyle(status: OFFER_STATUS){
 /**
  * ToDo Fix colors
  * Chip color depending on the status
- * @param {STATUS} status - status of Dossier
+ * @param  {DOSSIER_STATUS} status - status of Dossier
  * @returns {string} - style
  */
-function dossierChipStyle(status: STATUS){
+function dossierChipStyle(status: DOSSIER_STATUS){
   const color = 'color: white; background-color: '
   switch (status) {
-    case STATUS.OPEN:
+    case DOSSIER_STATUS.OPEN:
       return color + '#58ACFA;'
-    case STATUS.SIGNED:
+    case DOSSIER_STATUS.SIGNED:
       return color + '#52130A;'
-    case STATUS.REJECTED:
+    case DOSSIER_STATUS.REJECTED:
       return color + '#A82CF0;'
-    case STATUS.SUBMITTED:
+    case DOSSIER_STATUS.SUBMITTED:
       return color + '#4126F9;'
-    case STATUS.OFFERED:
+    case DOSSIER_STATUS.OFFERED:
       return color + '#378F23;'
-    case STATUS.COMPLETED:
+    case DOSSIER_STATUS.COMPLETED:
       return color + '#1FB06C;'
-    case STATUS.IN_PROCESS:
+    case  DOSSIER_STATUS.IN_PROGRESS:
       return color + '#A22736;'
-    case STATUS.SENT:
+    case DOSSIER_STATUS.SENT:
       return color + '#F829F3;'
   }
   return color + '#000000;'

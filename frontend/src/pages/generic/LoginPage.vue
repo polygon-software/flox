@@ -36,10 +36,18 @@
 <script setup lang="ts">
 import LoginForm from 'components/forms/LoginForm.vue'
 import {inject} from 'vue'
-import {AuthenticationService} from '../../services/AuthService';
+import {AuthenticationService} from 'src/services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {RouteRecordRaw} from 'vue-router';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/QUERIES';
+import {ROLE} from 'src/data/ENUM/ENUM';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
+import {QVueGlobals, useQuasar} from 'quasar';
+
+const $q: QVueGlobals = useQuasar()
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -49,19 +57,43 @@ const $routerService: RouterService|undefined = inject('$routerService')
  * Logs in the given authentication
  * @param {string} username - the authentication's username
  * @param {string} password - the authentication's password
- * @param {string} route_target - target route (only for demos)
  * @returns {void}
  */
-async function onLogin({username, password, route_target}: {username: string, password: string, route_target: string}){
+async function onLogin({username, password}: {username: string, password: string}){
   await $authService?.login(username, password)
-  const targetRouteMapping: Record<string, RouteRecordRaw> = {
-    'admin-dashboard': ROUTES.ADMIN_DOSSIERS,
-    'management-dashboard': ROUTES.MANAGEMENT_EMPLOYEE_DATA,
-    'employee-dashboard': ROUTES.EMPLOYEE_DASHBOARD,
-    'soiemployee-dashboard': ROUTES.APPLICATIONS
+  const queryRes = await executeQuery(MY_USER)
+  if(!queryRes || !queryRes.data){
+    await $authService?.logout()
+    // Show error prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.login_failed'),
+      undefined,
+      'negative'
+    )
+  }
+  const user = queryRes.data[MY_USER.cacheLocation] as Record<string, unknown>
+  if (!user){
+    await $authService?.logout()
+    // Show error prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.login_failed'),
+      undefined,
+      'negative'
+    )
+  }
+  const role = user.role as ROLE
+  const targetRouteMapping: Record<ROLE, RouteRecordRaw> = {
+    [ROLE.SOI_ADMIN]: ROUTES.ADMIN_DOSSIERS,
+    [ROLE.COMPANY]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
+    [ROLE.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD,
+    [ROLE.SOI_EMPLOYEE]: ROUTES.APPLICATIONS,
+    [ROLE.BANK]: ROUTES.WILDCARD,
+    [ROLE.NONE]: ROUTES.WILDCARD,
   }
   // Redirect to main page
-  await $routerService?.routeTo(targetRouteMapping[route_target])
+  await $routerService?.routeTo(targetRouteMapping[role])
 }
 
 /**

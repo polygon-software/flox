@@ -93,8 +93,8 @@ export const COMPANY = {
 
 export const MY_COMPANY = {
   query: gql`
-    query myCompany{
-      myCompany{
+    query getMyCompany{
+      getMyCompany{
         uuid
         readable_id
         first_name
@@ -104,12 +104,12 @@ export const MY_COMPANY = {
     }
   `,
   tables: ['company'],
-  cacheLocation: 'myCompany'
+  cacheLocation: 'getMyCompany'
 }
 
 export const ALL_EMPLOYEES = {
   query: gql`
-        query{
+        query allEmployees{
             allEmployees{
               uuid
               first_name
@@ -127,8 +127,8 @@ export const ALL_EMPLOYEES = {
 
 export const MY_EMPLOYEES = {
   query: gql`
-        query{
-            myEmployees{
+        query getMyEmployees{
+            getMyEmployees{
               uuid
               first_name
               last_name
@@ -140,7 +140,29 @@ export const MY_EMPLOYEES = {
         }
         `,
   tables: ['employee'],
-  cacheLocation: 'myEmployees'
+  cacheLocation: 'getMyEmployees'
+}
+
+export const MY_EMPLOYEE = {
+  query: gql`
+    query getMyEmployee{
+      getMyEmployee{
+        uuid
+        first_name
+        last_name
+        readable_id
+        email
+        company{
+          __typename
+          uuid
+          readable_id
+        }
+        __typename
+      }
+    }
+    `,
+  tables: ['employee'],
+  cacheLocation: 'getMyEmployee'
 }
 
 export const MY_EMPLOYEE = {
@@ -198,7 +220,7 @@ export const MY_USER = {
 export const MY_DOSSIERS = {
   query: gql`
         query{
-            myDossiers{
+            getMyDossiers{
               uuid
               created_at
               first_name
@@ -233,7 +255,7 @@ export const MY_DOSSIERS = {
         }
   `,
   tables: ['dossier'],
-  cacheLocation: 'myDossiers'
+  cacheLocation: 'getMyDossiers'
 }
 
 export const REJECTED_DOSSIERS = {
@@ -295,4 +317,4 @@ export const SOI_EMPLOYEES = {
   cacheLocation: 'allSoiEmployees'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS];
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS, REJECTED_DOSSIERS];

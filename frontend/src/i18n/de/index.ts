@@ -25,6 +25,8 @@ export default {
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
     back_to_login: 'Zurück zu Login',
     change_password: 'Passwort ändern',
+    unauthenticated: 'Nicht Angemeldet'
+
   },
   account_data: {
     employees: 'Mitarbeitende',
@@ -84,6 +86,10 @@ export default {
     account_unlocked: 'Account erfolgreich freigeschaltet',
     document_upload_enabled: 'Dokumentupload freigeschaltet',
     application_rejected: 'Antrag abgelehnt',
+    rejection_failed: 'Ein Fehler ist beim Ablehnen aufgetreten',
+    success: 'Erfolgreich',
+    failure: 'Fehlgeschlagen',
+    login_failed: 'Login hat fehlgeschlagen',
     dossier_reset: 'Dossier erfolgreich zurückgesetzt',
   },
   dashboards: {
@@ -214,7 +220,7 @@ export default {
     SUBMITTED: 'Eingereicht',
     OFFERED: 'Offeriert',
     COMPLETED: 'Abgeschlossen',
-    IN_PROCESS: 'Kreditvertrag in Bearbeitung',
+    IN_PROGRESS: 'Kreditvertrag in Bearbeitung',
     SENT: 'Kreditvertrag versendet',
   },
   offer_status_enum: {

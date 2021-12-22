@@ -58,7 +58,7 @@ export class CompanyResolver {
    * @returns {void}
    */
   @CompanyOnly()
-  @Query(() => Company, { name: 'myCompany' })
+  @Query(() => Company, { name: 'getMyCompany' })
   async getMyCompany(
     @CurrentUser() user: Record<string, string>,
   ): Promise<Company> {

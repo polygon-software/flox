@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
 import { Bank } from '../../bank/entities/bank.entity';
-import { STATUS } from '../../../ENUM/ENUMS';
+import { DOSSIER_STATUS } from '../../../ENUM/ENUMS';
 import { Employee } from '../../employee/entities/employee.entity';
 
 @Entity()
@@ -43,13 +43,13 @@ export class Dossier extends Person {
   @Column()
   non_arrangeable: boolean;
 
-  @Field(() => STATUS, { description: 'Status of Dossier' })
+  @Field(() => DOSSIER_STATUS, { description: 'Status of Dossier' })
   @Column({
     type: 'enum',
-    enum: STATUS,
-    default: STATUS.IN_PROCESS,
+    enum: DOSSIER_STATUS,
+    default: DOSSIER_STATUS.IN_PROGRESS,
   })
-  status: STATUS;
+  status: DOSSIER_STATUS;
 
   @Field(() => [Offer], { description: 'List of Offers' })
   @JoinColumn()

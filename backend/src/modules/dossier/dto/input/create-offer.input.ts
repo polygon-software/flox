@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsUUID } from 'class-validator';
-import { OFFER_STATUS, STATUS } from '../../../../ENUM/ENUMS';
+import { OFFER_STATUS } from '../../../../ENUM/ENUMS';
 
 @InputType()
 export class CreateOfferInput {
@@ -12,6 +12,6 @@ export class CreateOfferInput {
   @IsUUID()
   dossier_uuid: string;
 
-  @Field(() => OFFER_STATUS) //Todo correct status or other status
+  @Field(() => OFFER_STATUS) //todo remove
   status: OFFER_STATUS;
 }

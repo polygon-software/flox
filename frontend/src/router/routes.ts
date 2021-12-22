@@ -115,15 +115,19 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/SOIEmployeeLayout.vue'),
     children: [{ path: '', component: () => import('pages/soi/SOIApplicationPage.vue') }],
   },
+
+  // SOI Admin: Register a bank
   'REGISTER_BANK': {
     path: '/register-bank',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/SOIAdminLayout.vue'),
     children: [{ path: '', component: () => import('pages/soi/RegisterBankPage.vue') }],
   },
+
+  // Employee: Add new dossier
   'NEW_DOSSIER_PAGE': {
-    path: '/new-assignment',
+    path: '/new-dossier',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/NewAssignmentPage.vue') }],
+    children: [{ path: '', component: () => import('pages/NewDossierPage.vue') }],
   },
 
   // Wildcard route for non-covered routes

@@ -1,12 +1,14 @@
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Dossier } from './entity/dossier.entity';
 import { DossierService } from './dossier.service';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
+import { ROLE } from '../../ENUM/ENUMS';
 import {
   AdminOnly,
   AnyRole,
+  Roles,
   BankOnly,
   CurrentUser,
   EmployeeOnly,
@@ -24,7 +26,7 @@ export class DossierResolver {
    * @param {Record<string, string>} user - the current request's user
    * @returns {Promise<Dossier>} - the Dossier
    */
-  @EmployeeOnly() //ToDo
+  @EmployeeOnly()
   @Mutation(() => Dossier)
   async createDossier(
     @Args('createDossierInput') createDossierInput: CreateDossierInput,
@@ -32,12 +34,13 @@ export class DossierResolver {
   ): Promise<Dossier> {
     return this.dossierService.createDossier(createDossierInput, user.userId);
   }
+
   /**
-   * Updates the anything of a dossier
+   * Updates the data of a dossier
    * @param {UpdateDossierInput} updateDossierInput - input, containing new status
    * @returns {Promise<Dossier[]>} - updated dossier
    */
-  @AnyRole() //ToDo
+  @EmployeeOnly()
   @Mutation(() => Dossier)
   async updateDossier(
     @Args('updateDossierInput') updateDossierInput: UpdateDossierInput,
@@ -50,7 +53,7 @@ export class DossierResolver {
    * @param {UpdateDossierStatusInput} updateDossierStatusInput - input, containing new status
    * @returns {Promise<Dossier[]>} - updated dossier
    */
-  @AnyRole() //ToDo
+  @Roles(ROLE.EMPLOYEE, ROLE.BANK, ROLE.SOI_ADMIN)
   @Mutation(() => Dossier)
   async updateDossierStatus(
     @Args('updateDossierStatusInput')
@@ -64,8 +67,8 @@ export class DossierResolver {
    * @param {Record<string, string>} user - the current request's user
    * @returns {Promise<Dossier[]>} - dossiers of currently logged in employee
    */
-  @EmployeeOnly() // Todo
-  @Query(() => [Dossier], { nullable: true })
+  @EmployeeOnly()
+  @Query(() => [Dossier], { nullable: true, name: 'getMyDossiers' })
   async myDossiers(
     @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier[]> {
@@ -96,7 +99,9 @@ export class DossierResolver {
   }
 
   /**
-   * Todo
+   * Creates an offer from a given bank to a given dossier
+   * @param {CreateOfferInput} createOfferInput - the two uuids and the status
+   * @returns {Dossier} - the updated dossier
    */
   @BankOnly()
   @Mutation(() => Dossier)

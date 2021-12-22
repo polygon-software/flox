@@ -16,8 +16,8 @@ import { generateHumanReadableId } from '../../helpers';
 export class EmployeeService {
   constructor(
     @InjectRepository(Employee)
-    private employeeRepository: Repository<Employee>,
-    private userService: UserService,
+    private readonly employeeRepository: Repository<Employee>,
+    private readonly userService: UserService,
     private readonly companyService: CompanyService,
   ) {}
 
@@ -53,7 +53,7 @@ export class EmployeeService {
       fk: newEmployee.uuid,
     });
 
-    return this.employeeRepository.save(employee);
+    return newEmployee;
   }
 
   /**
@@ -61,7 +61,7 @@ export class EmployeeService {
    * @returns {Promise<Employee[]>} - employees
    */
   async getAllEmployees(): Promise<Employee[]> {
-    return await this.employeeRepository.find();
+    return this.employeeRepository.find();
   }
 
   /**
@@ -86,7 +86,7 @@ export class EmployeeService {
     await this.employeeRepository.update(updateEmployeeInput.uuid, {
       ...updateEmployeeInput,
     });
-    return await this.employeeRepository.findOne(updateEmployeeInput.uuid);
+    return this.employeeRepository.findOne(updateEmployeeInput.uuid);
   }
 
   /**
@@ -97,8 +97,12 @@ export class EmployeeService {
   async getEmployee(uuid: string): Promise<Employee> {
     return this.employeeRepository.findOne(uuid, { relations: ['company'] });
   }
-  // TODO: Add remove/update/find functionalities as needed
 
+  /**
+   * Get the Employee of the currently logged in user
+   * @param {string} cognitoId - the employees users id
+   * @returns {Promise<Employee>} - The employee
+   */
   async getMyEmployee(cognitoId: string): Promise<Employee> {
     const user = await this.userService.getUser({ uuid: cognitoId });
     if (user && user.role === ROLE.EMPLOYEE) {
@@ -112,6 +116,10 @@ export class EmployeeService {
         ],
       });
     }
-    throw new Error('User is not an Employee but an ' + user.role);
+    throw new Error(
+      `User is not an Employee but a ${
+        user ? String(user.role) : 'unauthenticated'
+      }`,
+    );
   }
 }

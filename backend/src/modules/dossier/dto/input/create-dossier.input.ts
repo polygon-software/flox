@@ -1,4 +1,4 @@
-import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
+import { Field, InputType, PartialType } from '@nestjs/graphql';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Address } from '../../../address/entities/address.entity';
 import { CreatePersonInput } from '../../../person/dto/create-person.input';

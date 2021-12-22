@@ -538,9 +538,9 @@ type SoiEmployee {
   uuid: ID!
 }
 
-enum Status {
+enum DossierStatus {
   COMPLETED
-  IN_PROCESS
+  IN_PROGRESS
   OFFERED
   OPEN
   REJECTED

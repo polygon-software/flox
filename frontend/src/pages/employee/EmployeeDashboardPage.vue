@@ -18,13 +18,12 @@
         </h6>
         <div class="row q-ma-none q-pa-none">
           <q-input
-            v-model="searchEmployees"
+            v-model="search"
             :label="$t('general.search')"
             type="search"
             outlined
             dense
             class="q-mb-md"
-            @change="searchEmployee"
           >
             <template #prepend>
               <q-icon name="search" />
@@ -44,40 +43,28 @@
       </div>
       <div class="q-ma-md col text-center">
         <!-- Dossier Overview -->
-        <EmployeeDashboardTable/>
+        <EmployeeDashboardTable
+          :search="search"
+        />
       </div>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue'
+import {ref} from 'vue'
 import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue';
-import {RouterService} from 'src/services/RouterService';
-import CompanyEmployeeId from 'components/cards/CompanyEmployeeId.vue';
+import CompanyEmployeeId from 'components/cards/CompanyEmployeeIdCard.vue';
 import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
 
-const emit = defineEmits(['change'])
+const search = ref('')
 
-const searchEmployees = ref('')
-
-/**
- * Searches employee and emits the event change to show the customers searched in the input search
- * @returns {void}
- */
-function searchEmployee(){
-  emit('change', {
-    searchEmployees: searchEmployees.value,
-  })
-}
-
-
-const $routerService: RouterService = inject('$routerService') as RouterService
+// const $routerService: RouterService = inject('$routerService') as RouterService Todo Re-enable once create dossier form is added
 
 /**
- * Routes to the new assignment page to add more customers
+ * Routes to the new assignment page to add more dossiers
  * @returns {Promise<void>} - done
  */
 async function newAssignment(): Promise<void> {
@@ -138,8 +125,8 @@ async function newAssignment(): Promise<void> {
   const nrOfBanks = Math.floor(Math.random()*4)
   const bankUuids = [
     '99295c95-e736-4fe4-a806-082e6db5fe4e',
-   'fc39b098-60b6-4390-aa2a-de6b80c6d499',
-   'c3cad835-1223-4cf5-b26b-4dd25dc394e3'
+    'fc39b098-60b6-4390-aa2a-de6b80c6d499',
+    'c3cad835-1223-4cf5-b26b-4dd25dc394e3'
   ]
   const chosen: Array<string> = []
   while (chosen.length < nrOfBanks){

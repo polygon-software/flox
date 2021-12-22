@@ -28,9 +28,9 @@ export default boot(async ({ store, ssrContext}) => {
     const cookies = Cookies.parseSSR(ssrContext)
 
     //Tokens
-    const accessToken = cookies.get('authentication.accessToken') //Todo Banane?!?
-    const idToken = cookies.get('authentication.accessToken')
-    const refreshToken = cookies.get('authentication.accessToken')
+    const accessToken = cookies.get('authentication.accessToken')
+    const idToken = cookies.get('authentication.idToken')
+    const refreshToken = cookies.get('authentication.refreshToken')
 
     if(!accessToken){
       return

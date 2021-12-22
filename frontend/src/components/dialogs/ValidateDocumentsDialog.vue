@@ -75,7 +75,7 @@ import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import {AuthenticationService} from 'src/services/AuthService';
-import { DELETE_COMPANY, ASSOCIATE_USER_TO_COMPANY} from 'src/data/mutations/COMPANY';
+import {ASSOCIATE_USER_TO_COMPANY, REJECT_COMPANY} from 'src/data/mutations/COMPANY';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
@@ -166,13 +166,12 @@ async function onOk(): Promise<void> {
  * @returns {void}
  */
 function onReject(): void {
-  //TODO: Send rejection message
   $q.dialog({
     title: 'Reject',
     component: RejectDialog,
   }).onOk(() => {
     // Remove company application on DB
-    executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
+    executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {
       // Show notification
       showNotification(
         $q,
@@ -183,7 +182,14 @@ function onReject(): void {
       // Hide outer popup
       hide()
     }).catch((error)=>{
-      console.error(error) // Todo Toast
+      console.error(error)
+      // Show confirmation prompt
+      showNotification(
+        $q,
+        i18n.global.t('messages.rejection_failed'),
+        undefined,
+        'negative'
+      )
     })
   })
 }
