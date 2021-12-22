@@ -2,16 +2,21 @@
   <q-page class="flex flex-center">
     <div
       class="q-pa-md q-ma-md"
-      style="width: 1200px"
+      style="max-width: 1200px"
     >
       <!-- Own info -->
       <CompanyEmployeeId/>
-      <div class="row q-ma-md q-pa-none full-width justify-between">
-        <h5>
+
+      <!-- Title + search + button row -->
+      <div
+        class="row justify-between q-ma-none"
+        style="height: 40px"
+      >
+        <h6 class="q-ma-none">
           {{ $t('employee_dashboard.applications') }}
           <!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
-        </h5>
-        <div class="row">
+        </h6>
+        <div class="row q-ma-none q-pa-none">
           <q-input
             v-model="searchEmployees"
             :label="$t('general.search')"
@@ -26,14 +31,13 @@
             </template>
           </q-input>
           <q-btn
-            class="q-ma-md"
             :label="$t('employee_dashboard.new_assignment')"
             color="primary"
             icon="add"
             dense
             unelevated
             padding="8px"
-            style="height: 40px; border-radius: 8px"
+            style="height: 40px; border-radius: 8px; margin-left: 12px"
             @click="newAssignment"
           />
         </div>
