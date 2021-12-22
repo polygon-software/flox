@@ -8,7 +8,7 @@
       :rows="rows"
       :columns="columns"
       :filter="props.search"
-      :filter-method="filter"
+      :filter-method="tableFilter"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
@@ -35,7 +35,9 @@
           {{ _props.row.loan_sum }}
         </q-td>
         <q-td key="status">
-          <q-chip :style="dossierChipStyle(_props.row.status)">
+          <q-chip
+            :style="dossierChipStyle(_props.row.status)"
+          >
             {{ $t('dossier_status_enum.' + _props.row.status) }}
           </q-chip>
           <q-popup-edit
@@ -106,11 +108,12 @@ import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
-import {OFFER_STATUS, DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
+import {DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import {deepFilter} from 'src/helpers/filter-helpers';
+import {tableFilter} from 'src/helpers/filter-helpers';
+import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -147,15 +150,6 @@ const rows = computed( () => {
 
 const expanded: Ref<Record<string, boolean>> = ref({})
 
-/**
- * Search Filter
- * @param {Record<string, unknown>[]} rows - rows
- * @param {string} terms - search key
- * @returns {Record<string, unknown>[]} - filtered rows
- */
-function filter(rows:Record<string, unknown>[], terms:string){
-  return rows.filter((row)=>deepFilter(row, terms))
-}
 
 /**
  * Edits the dossier status and update the status with the selected item
@@ -185,55 +179,6 @@ function onUpdateStatus(status: DOSSIER_STATUS, uuid:string){
       'negative'
     )
   })
-}
-/**
- * ToDo Fix colors
- * Chip color depending on the status
- * @param  {DOSSIER_STATUS} status - status of Dossier
- * @returns {string} - style
- */
-function offerChipStyle(status: OFFER_STATUS){
-  const color = 'color: white; background-color: '
-  switch (status) {
-    case OFFER_STATUS.INTERESTED:
-      return color + '#f0b000;'
-    case OFFER_STATUS.IN_PROCESS:
-      return color + '#040f85;'
-    case OFFER_STATUS.RETRACTED:
-      return color + '#c92002;'
-    case OFFER_STATUS.ACCEPTED:
-      return color + '#16630a;'
-  }
-  return color + '#000000;'
-}
-
-/**
- * ToDo Fix colors
- * Chip color depending on the status
- * @param  {DOSSIER_STATUS} status - status of Dossier
- * @returns {string} - style
- */
-function dossierChipStyle(status: DOSSIER_STATUS){
-  const color = 'color: white; background-color: '
-  switch (status) {
-    case DOSSIER_STATUS.OPEN:
-      return color + '#58ACFA;'
-    case DOSSIER_STATUS.SIGNED:
-      return color + '#52130A;'
-    case DOSSIER_STATUS.REJECTED:
-      return color + '#A82CF0;'
-    case DOSSIER_STATUS.SUBMITTED:
-      return color + '#4126F9;'
-    case DOSSIER_STATUS.OFFERED:
-      return color + '#378F23;'
-    case DOSSIER_STATUS.COMPLETED:
-      return color + '#1FB06C;'
-    case  DOSSIER_STATUS.IN_PROGRESS:
-      return color + '#A22736;'
-    case DOSSIER_STATUS.SENT:
-      return color + '#F829F3;'
-  }
-  return color + '#000000;'
 }
 
 /**

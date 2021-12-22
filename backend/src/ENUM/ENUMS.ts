@@ -35,6 +35,5 @@ export enum ROLE {
 }
 registerEnumType(DOSSIER_STATUS, { name: 'DossierStatus' });
 registerEnumType(OFFER_STATUS, { name: 'OfferStatus' });
-registerEnumType(OFFER_STATUS, { name: 'OfferStatus' });
 registerEnumType(ROLE, { name: 'Roles' });
 registerEnumType(CREATION_STATE, { name: 'creationState' });

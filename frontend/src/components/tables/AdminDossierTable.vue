@@ -30,6 +30,7 @@
       :columns="columns"
       row-key="uuid"
       :filter="search"
+      :filter-method="tableFilter"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
       flat
@@ -56,7 +57,9 @@
             {{ props.row.loan_sum }}
           </q-td>
           <q-td key="status">
-            <q-chip :style="dossierChipStyle(props.row.status)">
+            <q-chip
+              :style="dossierChipStyle(props.row.status)"
+            >
               {{ $t('dossier_status_enum.' + props.row.status) }}
             </q-chip>
           </q-td>
@@ -96,11 +99,12 @@ import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.
 import ResetDossierDialog from 'src/components/dialogs/ResetDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
-import {OFFER_STATUS, DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {REJECTED_DOSSIERS} from 'src/data/queries/QUERIES';
 import {formatDate} from 'src/helpers/format-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
+import {tableFilter} from 'src/helpers/filter-helpers';
+import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -124,56 +128,6 @@ const dossiers = subscribeToQuery(REJECTED_DOSSIERS) as Ref<Record<string, Array
 const rows = computed(()=>{
   return dossiers.value ?? []
 })
-
-/**
- * ToDo Fix colors
- * Chip color depending on the status
- * @param {STATUS} status - status of Dossier
- * @returns {string} - style
- */
-function offerChipStyle(status: OFFER_STATUS){
-  const color = 'color: white; background-color: '
-  switch (status) {
-    case OFFER_STATUS.INTERESTED:
-      return color + '#f0b000;'
-    case OFFER_STATUS.IN_PROCESS:
-      return color + '#040f85;'
-    case OFFER_STATUS.RETRACTED:
-      return color + '#c92002;'
-    case OFFER_STATUS.ACCEPTED:
-      return color + '#16630a;'
-  }
-  return color + '#000000;'
-}
-
-/**
- * ToDo Fix colors
- * Chip color depending on the status
- * @param {STATUS} status - status of Dossier
- * @returns {string} - style
- */
-function dossierChipStyle(status: STATUS){
-  const color = 'color: white; background-color: '
-  switch (status) {
-    case DOSSIER_STATUS.OPEN:
-      return color + '#58ACFA;'
-    case DOSSIER_STATUS.SIGNED:
-      return color + '#52130A;'
-    case DOSSIER_STATUS.REJECTED:
-      return color + '#A82CF0;'
-    case DOSSIER_STATUS.SUBMITTED:
-      return color + '#4126F9;'
-    case DOSSIER_STATUS.OFFERED:
-      return color + '#378F23;'
-    case DOSSIER_STATUS.COMPLETED:
-      return color + '#1FB06C;'
-    case DOSSIER_STATUS.IN_PROGRESS:
-      return color + '#A22736;'
-    case DOSSIER_STATUS.SENT:
-      return color + '#F829F3;'
-  }
-  return color + '#000000;'
-}
 
 /**
  * Opens the dialog to show all documents and to upload further documents
@@ -204,8 +158,13 @@ function onRowClick(dossier: Record<string, unknown>): void{
         undefined,
         'primary'
       )
-    }).catch((error)=>{
-      console.error(error) // Todo Toast
+    }).catch(()=>{
+      showNotification(
+        $q,
+        i18n.global.t('messages.dossier_reset_failed'),
+        undefined,
+        'negative'
+      )
     })
   })}
 

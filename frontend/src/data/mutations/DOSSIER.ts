@@ -82,12 +82,6 @@ export const RESET_DOSSIER = {
           __typename
           uuid
           status
-          bank {
-            __typename
-            uuid
-            name
-            abbreviation
-          }
         }
         loan_sum
         non_arrangeable

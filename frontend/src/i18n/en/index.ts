@@ -89,6 +89,7 @@ export default {
     success: 'Success',
     failure: 'Failure',
     dossier_reset: 'Successfully reset dossier',
+    dossier_reset_failed: 'Dossier reset failed',
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',

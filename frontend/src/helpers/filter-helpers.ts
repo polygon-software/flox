@@ -1,6 +1,16 @@
 import {formatDate} from 'src/helpers/format-helpers';
 
 /**
+ * Search Filter for Quasar <q-table>s
+ * @param {Record<string, unknown>[]} rows - rows
+ * @param {string} terms - search key
+ * @returns {Record<string, unknown>[]} - filtered rows
+ */
+export function tableFilter(rows:Record<string, unknown>[], terms:string){
+  return rows.filter((row)=>deepFilter(row, terms))
+}
+
+/**
  * Preprocessor for search, to be used in q-tables as :filter-method
  * @param {unknown} target - where to search
  * @param {string} term - what to search

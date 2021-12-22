@@ -91,6 +91,7 @@ export default {
     failure: 'Fehlgeschlagen',
     login_failed: 'Login hat fehlgeschlagen',
     dossier_reset: 'Dossier erfolgreich zurückgesetzt',
+    dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
