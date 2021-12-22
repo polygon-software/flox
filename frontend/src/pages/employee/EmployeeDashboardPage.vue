@@ -1,46 +1,53 @@
 <template>
   <q-page class="flex flex-center">
-    <q-card
-      class="square q-pa-md q-ma-md"
-      style="width: 1600px"
+    <div
+      class="q-pa-md q-ma-md"
+      style="max-width: 1200px"
     >
       <!-- Own info -->
       <CompanyEmployeeId/>
-      <p
-        class="q-ma-md col text-center"
-        style="font-size: x-large"
+
+      <!-- Title + search + button row -->
+      <div
+        class="row justify-between q-ma-none"
+        style="height: 40px"
       >
-        {{ $t('employee_dashboard.title') }}
-      </p>
-      <div class="q-ma-md col text-center" style="display: flex; justify-content: space-between; align-items: baseline">
-        {{ $t('employee_dashboard.applications') }}
-<!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
-        <q-input
-          v-model="searchDossier"
-          color="purple-12"
-          :label="$t('employee_dashboard.search')"
-          type="text"
-          @change="search"
-        >
-          <template #prepend>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-        <q-btn
-          class="q-ma-md"
-          :label="$t('employee_dashboard.new_assignment')"
-          color="primary"
-          icon="add"
-          @click="newAssignment"
-        />
+        <h6 class="q-ma-none">
+          {{ $t('employee_dashboard.applications') }}
+          <!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
+        </h6>
+        <div class="row q-ma-none q-pa-none">
+          <q-input
+            v-model="search"
+            :label="$t('general.search')"
+            type="search"
+            outlined
+            dense
+            class="q-mb-md"
+          >
+            <template #prepend>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+          <q-btn
+            :label="$t('employee_dashboard.new_assignment')"
+            color="primary"
+            icon="add"
+            dense
+            unelevated
+            padding="8px"
+            style="height: 40px; border-radius: 8px; margin-left: 12px"
+            @click="newAssignment"
+          />
+        </div>
       </div>
       <div class="q-ma-md col text-center">
         <!-- Dossier Overview -->
         <EmployeeDashboardTable
-          :search="dossierSearched"
+          :search="search"
         />
       </div>
-    </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -52,17 +59,7 @@ import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
 
-const searchDossier = ref('')
-const dossierSearched = ref('')
-
-/**
- * Searches employee and emits the event change to show the customers searched in the input search
- * @returns {void}
- */
-function search(){
-  dossierSearched.value = searchDossier.value
-}
-
+const search = ref('')
 
 // const $routerService: RouterService = inject('$routerService') as RouterService Todo Re-enable once create dossier form is added
 
@@ -127,12 +124,10 @@ async function newAssignment(): Promise<void> {
 
   const nrOfBanks = Math.floor(Math.random()*4)
   const bankUuids = [
-    'd1bc4fe3-444d-40f7-99bd-249d0ada187c',
-    '8e2cb0a1-97c3-49cd-924d-e7bb6d990804',
-    'c9cb6cd3-7ac9-4051-9128-1d626eb72845',
-    '625de230-5c8d-4080-8ae2-cb946a20f843',
-
-
+    '99295c95-e736-4fe4-a806-082e6db5fe4e',
+    'fc39b098-60b6-4390-aa2a-de6b80c6d499',
+    'c3cad835-1223-4cf5-b26b-4dd25dc394e3',
+    '4e33c212-32de-40b4-9bc5-948327379b70'
   ]
   const chosen: Array<string> = []
   while (chosen.length < nrOfBanks){

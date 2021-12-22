@@ -84,7 +84,7 @@ async function onLogin({username, password}: {username: string, password: string
     )
   }
   const role = user.role as ROLE
-  const target_route_mapping: Record<ROLE, RouteRecordRaw> = {
+  const targetRouteMapping: Record<ROLE, RouteRecordRaw> = {
     [ROLE.SOI_ADMIN]: ROUTES.ADMIN_DOSSIERS,
     [ROLE.COMPANY]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
     [ROLE.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD,
@@ -93,7 +93,7 @@ async function onLogin({username, password}: {username: string, password: string
     [ROLE.NONE]: ROUTES.WILDCARD,
   }
   // Redirect to main page
-  await $routerService?.routeTo(target_route_mapping[role])
+  await $routerService?.routeTo(targetRouteMapping[role])
 }
 
 /**

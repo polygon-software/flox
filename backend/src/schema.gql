@@ -383,6 +383,7 @@ type Mutation {
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
+  resetDossier(resetDossierInput: ResetDossierInput!): Dossier!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
@@ -487,8 +488,13 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
+  getRejectedDossiers: [Dossier!]
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
+}
+
+input ResetDossierInput {
+  uuid: ID!
 }
 
 enum Roles {

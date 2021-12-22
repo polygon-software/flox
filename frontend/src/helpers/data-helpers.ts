@@ -16,7 +16,7 @@ import {QUERIES} from 'src/data/queries/QUERIES';
  * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
  * @returns {Promise<ApolloQueryResult<Record<string, unknown[] | unknown>>>} - the query's output
  */
-async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[] |unknown>>> {
+async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[] | unknown>>> {
   const queryResult = useQuery(queryObject.query, variables ?? {})
 
   // If we have a cached result, return immediately

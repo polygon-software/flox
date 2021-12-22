@@ -88,7 +88,9 @@ export default {
     login_failed: 'Login has failed',
     rejection_failed: 'An Error occurred while rejecting',
     success: 'Success',
-    failure: 'Failure'
+    failure: 'Failure',
+    dossier_reset: 'Successfully reset dossier',
+    dossier_reset_failed: 'Dossier reset failed',
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -128,6 +130,10 @@ export default {
     document_upload: 'File upload',
     additional_documents: 'Additional Documents',
     add_additional_documents: 'Add more',
+  },
+  dossier: {
+    reset_dossier: 'Reset dossier',
+    reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',

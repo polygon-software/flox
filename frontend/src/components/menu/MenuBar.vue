@@ -1,17 +1,9 @@
 <template>
-  <q-header class="row bg-white shadow-5 justify-between">
+  <q-header class="row bg-black shadow-5 justify-between">
+    <h5 class="text-white q-pa-none q-ma-md">
+      Strategic Opportunity Investments
+    </h5>
     <div class="row">
-      <h5 class="text-black q-pa-none q-ma-md">
-        Strategic Opportunity Investments
-      </h5>
-      <p
-          v-if="loggedIn && username"
-          class="text-grey-7"
-      >
-        {{ $t('authentication.loggedIn', {user: username})}}
-      </p>
-    </div>
-  <div class="row">
     <q-btn
         v-if="loggedIn"
         :label="$t('authentication.logout')"
