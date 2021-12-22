@@ -52,7 +52,9 @@
         <q-td key="uploads">
           {{ props.row.uploads }}
           <q-btn
-            :label="$t('employee_dashboard.all_documents')"
+            icon="picture_as_pdf"
+            color="primary"
+            round
             @click="showAllDocuments"
           />
         </q-td>
