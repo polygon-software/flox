@@ -336,8 +336,7 @@ import {
   IS_VALID_STRING
 } from 'src/data/RULES';
 import {sleep} from 'src/helpers/general-helpers';
-import {toBase64, toDataUrl} from 'src/helpers/image-helper';
-import {toPascalCase} from "src/helpers/string-helpers";
+import {toBase64} from 'src/helpers/image-helper';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
