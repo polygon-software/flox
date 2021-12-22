@@ -15,7 +15,7 @@ export default {
     login: 'Anmelden',
     logout: 'Abmelden',
     signup: 'Registrieren',
-    bank_signup: 'Kreditinstitut erfassen',
+    bank_signup: 'Bank erfassen',
     employee_signup: 'Mitarbeitende erfassen',
     signup_now: 'Kein Account? Jetzt registrieren:',
     forgot_password: 'Passwort vergessen',
@@ -78,7 +78,8 @@ export default {
     provision_employee: 'Provision MA',
     provision_company: 'Provision Organisation',
     provision_soi: 'Provision SOI',
-    provision_ratio: 'Anteil prov. Vermittler'
+    provision_ratio: 'Anteil prov. Vermittler',
+    bank: "Banken",
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',

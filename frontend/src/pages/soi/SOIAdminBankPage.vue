@@ -1,13 +1,15 @@
 <template>
-$END$
+  <q-page class="flex flex-start">
+    <div
+      class="q-pa-lg full-width row justify-center"
+      style="margin-top: 50px"
+    >
+      <AdminBankTable/>
+    </div>
+  </q-page>
 </template>
 
-<script>
-export default {
-name: "SOIAdminBankPaage"
-}
+<script setup lang="ts">
+import AdminBankTable from "components/tables/AdminBankTable.vue";
+
 </script>
-
-<style scoped>
-
-</style>
