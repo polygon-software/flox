@@ -32,9 +32,10 @@ const $routerService: RouterService|undefined = inject('$routerService')
 
 const initialFields = [
   FIELDS.FULL_NAME,
+  FIELDS.COMPANY_NAME,
   FIELDS.ABBREVIATION,
   FIELDS.EMAIL,
-  FIELDS.COMPANY_ADDRESS,
+  FIELDS.ADDRESS,
 ]
 
 const pages = [
@@ -53,10 +54,6 @@ const pages = [
  * @returns {void}
  */
 async function onSignup(values: Record<string, Record<string, unknown>>){
-  // Addresses
-  const addresses: Record<string, Address> = values.company_address as Record<string, Address>
-  const address: Address = addresses.address
-
   // Sign up bank on database
   await executeMutation(
     CREATE_BANK,
@@ -64,7 +61,7 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
       first_name: values.full_name.first_name,
       last_name: values.full_name.last_name,
       abbreviation: values.abbreviation,
-      address: address,
+      address: values.address,
       email: values.email,
     }
   )
