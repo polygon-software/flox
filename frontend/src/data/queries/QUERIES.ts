@@ -254,4 +254,24 @@ export const SOI_EMPLOYEES = {
   cacheLocation: 'allSoiEmployees'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS, MY_USER];
+export const ALL_BANKS = {
+  query: gql`
+    query getBanks{
+      getBanks{
+        uuid
+        __typename
+        name
+        abbreviation
+        first_name
+        last_name
+        email
+        readable_id
+        created_at
+      }
+    }
+    `,
+  tables: ['bank'],
+  cacheLocation: 'getBanks'
+}
+
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS, MY_USER, ALL_BANKS];

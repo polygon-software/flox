@@ -85,4 +85,12 @@ export class BankService {
   findBankByAbbreviation(abbreviation: string): Promise<Bank> {
     return this.bankRepository.findOne({ abbreviation });
   }
+
+  /**
+   * All banks
+   * @returns {Promise<Bank[]>} - all Banks
+   */
+  allBanks(): Promise<Bank[]> {
+    return this.bankRepository.find();
+  }
 }

@@ -66,6 +66,9 @@ type Bank {
   """Dossier where the mortgage originally belongs to the bank"""
   own_mortgages: [Dossier!]!
 
+  """Phone Number"""
+  phone: String!
+
   """Human-readable ID"""
   readable_id: String!
 
@@ -149,6 +152,9 @@ input CreateBankInput {
   """Last Name"""
   last_name: String
   name: String!
+
+  """Phone Number"""
+  phone: String!
 }
 
 input CreateCompanyInput {
@@ -293,6 +299,9 @@ type Dossier {
 
   """Previous Bank of the customer"""
   original_bank: Bank!
+
+  """Phone Number"""
+  phone: String!
 
   """Address of Property"""
   property_address: Address!
@@ -466,6 +475,7 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getBanks: [Bank!]!
   getMyCompany: Company!
   getMyDossiers: [Dossier!]
   getMyEmployee: Employee!
@@ -508,6 +518,9 @@ type SoiAdmin {
 
   """Last Name"""
   last_name: String!
+
+  """Phone Number"""
+  phone: String!
 
   """Human-readable ID"""
   readable_id: String!

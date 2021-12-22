@@ -58,13 +58,13 @@
           @click="() => onRowClick(props.row)"
         >
           <q-td key="id" :props="props">
-            {{ props.row.id }}
+            {{ props.row.readable_id }}
           </q-td>
           <q-td key="company_name" :props="props">
-            {{ props.row.company_name }}
+            {{ props.row.name }}
           </q-td>
           <q-td key="supervisor" :props="props">
-            {{ props.row.supervisor }}
+            {{ props.row.first_name }} {{ props.row.last_name }}
           </q-td>
           <q-td key="phone" :props="props">
             {{ props.row.phone }}
@@ -86,7 +86,7 @@
 <script setup lang="ts">
 import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {SOI_EMPLOYEES} from 'src/data/queries/QUERIES';
+import {ALL_BANKS, SOI_EMPLOYEES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -100,14 +100,14 @@ const search = ref('')
 // ----- Data -----
 const columns = [
   { name: 'id', label: i18n.global.t('account_data.id'), field: 'id', sortable: true, align: 'center' },
-  { name: 'company_name', label: i18n.global.t('account_data.company_name'), field: 'company_name', sortable: true, align: 'center' },
+  { name: 'company_name', label: i18n.global.t('account_data.company_name'), field: 'name', sortable: true, align: 'center' },
   { name: 'supervisor', label: i18n.global.t('account_data.supervisor'), field: 'supervisor', sortable: true, align: 'center' },
   { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false, align: 'center' },
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false, align: 'center' },
   { name: 'date', label: i18n.global.t('general.date'), field: 'created_at', sortable: true, align: 'center' },
 ]
 
-const queryResult = subscribeToQuery(SOI_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(ALL_BANKS) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []
