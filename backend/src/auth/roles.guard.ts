@@ -117,7 +117,7 @@ export class RolesGuard implements CanActivate {
   /**
    * Checks if the user is logged in and the access control is "anyRole"
    * @param {ExecutionContext} context - context
-   * @param {string[]} roles - the list of the user's roles
+   * @param {string[]} roles - whitelisted roles
    * @param {User} dbUser - the requesting user
    * @returns {boolean} - whether any user can activate
    */
