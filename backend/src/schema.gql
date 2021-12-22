@@ -301,10 +301,21 @@ type Dossier {
   readable_id: String!
 
   """Status of Dossier"""
-  status: Status!
+  status: DossierStatus!
 
   """UUID"""
   uuid: ID!
+}
+
+enum DossierStatus {
+  COMPLETED
+  IN_PROGRESS
+  OFFERED
+  OPEN
+  REJECTED
+  SENT
+  SIGNED
+  SUBMITTED
 }
 
 type Employee {
@@ -363,6 +374,7 @@ type Mutation {
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
+  resetDossier(resetDossierInput: ResetDossierInput!): Dossier!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
@@ -455,6 +467,10 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getMyCompany: Company!
+  getMyDossiers: [Dossier!]
+  getMyEmployee: Employee!
+  getMyEmployees: [Employee!]!
   getMyUser: User!
   getPrivateFile(
     """URL expiration duration (in seconds); defaults to 15min"""
@@ -463,12 +479,12 @@ type Query {
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   getRejectedDossiers: [Dossier!]
-  myCompany: Company!
-  myDossiers: [Dossier!]
-  myEmployee: Employee!
-  myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
+}
+
+input ResetDossierInput {
+  uuid: ID!
 }
 
 enum Roles {
@@ -538,17 +554,6 @@ type SoiEmployee {
   uuid: ID!
 }
 
-enum DossierStatus {
-  COMPLETED
-  IN_PROGRESS
-  OFFERED
-  OPEN
-  REJECTED
-  SENT
-  SIGNED
-  SUBMITTED
-}
-
 input UpdateCompanyInput {
   branch_structure: Boolean
   company_name: String
@@ -577,12 +582,12 @@ input UpdateDossierInput {
   last_name: String
   loan_sum: Float
   non_arrangeable: Boolean
-  status: Status
+  status: DossierStatus
   uuid: ID!
 }
 
 input UpdateDossierStatusInput {
-  status: Status!
+  status: DossierStatus!
   uuid: ID!
 }
 
