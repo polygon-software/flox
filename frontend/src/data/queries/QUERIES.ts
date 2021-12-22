@@ -236,6 +236,47 @@ export const MY_DOSSIERS = {
   cacheLocation: 'myDossiers'
 }
 
+export const REJECTED_DOSSIERS = {
+  query: gql`
+    query{
+      rejectedDossiers{
+        uuid
+        created_at
+        first_name
+        last_name
+        __typename
+        non_arrangeable
+        original_bank{
+          __typename
+          uuid
+          name
+          abbreviation
+        }
+        property_address{
+          __typename
+          uuid
+          city
+        }
+        loan_sum
+        status
+        offers{
+          __typename
+          uuid
+          status
+          bank {
+            __typename
+            uuid
+            name
+            abbreviation
+          }
+        }
+      }
+    }
+  `,
+  tables: ['dossier'],
+  cacheLocation: 'rejectedDossiers'
+}
+
 export const SOI_EMPLOYEES = {
   query: gql`
     query allSoiEmployees{

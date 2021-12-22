@@ -99,6 +99,14 @@ export class DossierService {
     return employee.dossiers;
   }
 
+  /**
+   * Returns all triple-rejected dossiers
+   * @returns {Promise<Dossier[]>} - dossiers
+   */
+  async rejectedDossiers(): Promise<Dossier[]> {
+    return this.dossierRepository.find(); // TODO
+  }
+
   async createOffer(createOfferInput: CreateOfferInput): Promise<Dossier> {
     const dossier = await this.dossierRepository.findOne(
       createOfferInput.dossier_uuid,

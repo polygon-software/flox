@@ -6,6 +6,7 @@ import { UpdateDossierInput } from './dto/input/update-dossier.input';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import {
+  AdminOnly,
   AnyRole,
   BankOnly,
   CurrentUser,
@@ -69,6 +70,16 @@ export class DossierResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier[]> {
     return this.dossierService.myDossiers(user.userId);
+  }
+
+  /**
+   * Dossiers that have been rejected by three banks
+   * @returns {Promise<Dossier[]>} - all rejected dossiers
+   */
+  @AdminOnly()
+  @Query(() => [Dossier], { nullable: true })
+  async rejectedDossiers(): Promise<Dossier[]> {
+    return this.dossierService.rejectedDossiers();
   }
 
   /**

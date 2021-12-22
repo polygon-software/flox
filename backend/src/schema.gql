@@ -235,8 +235,14 @@ input CreateSoiEmployeeInput {
   """First Name"""
   first_name: String
 
+  """Gender"""
+  gender: String!
+
   """Last Name"""
   last_name: String
+
+  """Phone Number"""
+  phone: String!
 }
 
 """
@@ -355,6 +361,7 @@ type Mutation {
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
   enableCompanyDocumentUpload(uuid: String!): Company!
+  rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
@@ -444,6 +451,7 @@ type PublicFile {
 type Query {
   allCompanies: [Company!]!
   allEmployees: [Employee!]!
+  allSoiEmployees: [SoiEmployee!]!
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
@@ -458,6 +466,7 @@ type Query {
   myDossiers: [Dossier!]
   myEmployee: Employee!
   myEmployees: [Employee!]!
+  rejectedDossiers: [Dossier!]
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
@@ -510,11 +519,17 @@ type SoiEmployee {
   """First Name"""
   first_name: String!
 
+  """Gender"""
+  gender: String!
+
   """Last modification date"""
   last_modified_at: DateTime!
 
   """Last Name"""
   last_name: String!
+
+  """Phone Number"""
+  phone: String!
 
   """Human-readable ID"""
   readable_id: String!
