@@ -79,7 +79,7 @@ export default {
     provision_company: 'Provision Organisation',
     provision_soi: 'Provision SOI',
     provision_ratio: 'Anteil prov. Vermittler',
-    bank: "Banken",
+    bank: 'Banken',
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',

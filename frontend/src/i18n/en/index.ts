@@ -78,7 +78,7 @@ export default {
     provision_ratio: 'Prov. Ratio Emp.',
     offer: 'offer',
     abbreviation: 'Abbreviation',
-    bank: "Banks",
+    bank: 'Banks',
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',

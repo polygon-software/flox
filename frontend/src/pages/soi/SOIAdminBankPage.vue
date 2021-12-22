@@ -10,6 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import AdminBankTable from "components/tables/AdminBankTable.vue";
+import AdminBankTable from 'components/tables/AdminBankTable.vue';
 
 </script>
