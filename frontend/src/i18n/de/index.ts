@@ -88,7 +88,9 @@ export default {
     application_rejected: 'Antrag abgelehnt',
     rejection_failed: 'Ein Fehler ist beim Ablehnen aufgetreten',
     success: 'Erfolgreich',
-    failure: 'Fehlgeschlagen'
+    failure: 'Fehlgeschlagen',
+    login_failed: 'Login hat fehlgeschlagen',
+
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',

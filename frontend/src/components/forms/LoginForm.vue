@@ -46,7 +46,7 @@ const $authService: AuthenticationService|undefined = inject('$authService')
 
 const emit = defineEmits(['submit'])
 
-const fields = [FIELDS.USERNAME, FIELDS.PASSWORD, FIELDS.ROUTE_TARGET]
+const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
 
 const form = new Form()
 form.pages.value = [
