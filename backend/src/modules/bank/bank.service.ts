@@ -6,7 +6,7 @@ import { CreateBankInput } from './dto/input/create-bank.input';
 import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
-import { createUserlessBankInput } from './dto/input/create-userless-bank.input';
+import { CreateUserlessBankInput } from './dto/input/create-userless-bank.input';
 import { generateHumanReadableId } from '../../helpers';
 
 @Injectable()
@@ -56,7 +56,7 @@ export class BankService {
    * @return {Promise<Bank>} - new Bank
    */
   async createUserlessBank(
-    createBankInput: createUserlessBankInput,
+    createBankInput: CreateUserlessBankInput,
   ): Promise<Bank> {
     const newBank = this.bankRepository.create({
       ...createBankInput,

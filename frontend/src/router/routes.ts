@@ -115,11 +115,15 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/SOIEmployeeLayout.vue'),
     children: [{ path: '', component: () => import('pages/soi/SOIApplicationPage.vue') }],
   },
+
+  // SOI Admin: Register a bank
   'REGISTER_BANK': {
     path: '/register-bank',
     component: () => import('layouts/SOIAdminLayout.vue'),
     children: [{ path: '', component: () => import('pages/soi/RegisterBankPage.vue') }],
   },
+
+  // Employee: Add new dossier
   'NEW_DOSSIER_PAGE': {
     path: '/new-dossier',
     component: () => import('layouts/MainLayout.vue'),
@@ -139,7 +143,9 @@ export default ROUTES
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
   ROUTES.SIGNUP,
-  ROUTES.SUCCESS
+  ROUTES.SUCCESS,
+  ROUTES.DOCUMENT_UPLOAD,
+  ROUTES.SET_PASSWORD
 ]
 
 //TODO: Add semi-protected routes

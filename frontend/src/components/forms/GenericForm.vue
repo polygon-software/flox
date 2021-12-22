@@ -1,6 +1,6 @@
 <template>
   <q-form
-    ref="form_ref"
+    ref="formRef"
     greedy
     class="q-gutter-md"
   >

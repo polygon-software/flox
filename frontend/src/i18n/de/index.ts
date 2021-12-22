@@ -90,7 +90,8 @@ export default {
     success: 'Erfolgreich',
     failure: 'Fehlgeschlagen',
     login_failed: 'Login hat fehlgeschlagen',
-
+    dossier_reset: 'Dossier erfolgreich zurückgesetzt',
+    dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -130,6 +131,10 @@ export default {
     document_upload: 'Dokumentenupload',
     additional_documents: 'Weitere Dokumente',
     add_additional_documents: 'Weitere hinzufügen',
+  },
+  dossier: {
+    reset_dossier: 'Dossier zurücksetzen',
+    reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

@@ -4,14 +4,16 @@ import { DossierService } from './dossier.service';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
+import { ROLE } from '../../ENUM/ENUMS';
 import {
+  AdminOnly,
+  Roles,
   BankOnly,
   CurrentUser,
   EmployeeOnly,
-  Roles,
 } from '../../auth/authorization.decorator';
 import { CreateOfferInput } from './dto/input/create-offer.input';
-import { ROLE } from '../../ENUM/ENUMS';
+import { ResetDossierInput } from './dto/input/reset-dossier.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -70,6 +72,29 @@ export class DossierResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier[]> {
     return this.dossierService.myDossiers(user.userId);
+  }
+
+  /**
+   * Dossiers that have been rejected by three banks
+   * @returns {Promise<Dossier[]>} - all rejected dossiers
+   */
+  @AdminOnly()
+  @Query(() => [Dossier], { nullable: true })
+  async getRejectedDossiers(): Promise<Dossier[]> {
+    return this.dossierService.getRejectedDossiers();
+  }
+
+  /**
+   * Resets a dossier, changing its state and deleting any open offers
+   * @param {ResetDossierInput} resetDossierInput - input, containing uuid
+   * @returns {Promise<Dossier>} - the dossier after being reset
+   */
+  @AdminOnly()
+  @Mutation(() => Dossier)
+  async resetDossier(
+    @Args('resetDossierInput') resetDossierInput: ResetDossierInput,
+  ): Promise<Dossier> {
+    return this.dossierService.resetDossier(resetDossierInput);
   }
 
   /**

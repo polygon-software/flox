@@ -49,6 +49,7 @@
       :rows-per-page-options="[10,20, 100]"
       separator="none"
       :filter="search"
+      :filter-method="tableFilter"
       flat
     >
       <template #body="props">
@@ -88,6 +89,7 @@ import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {formatDate} from 'src/helpers/format-helpers';
+import {tableFilter} from 'src/helpers/filter-helpers';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 

@@ -59,7 +59,6 @@ const pages = [
  * @returns {void}
  */
 async function onSubmit(values: Record<string, Record<string, File|null>>){
-
   loading.value = true
 
   const fileObject: Record<string, File|null> = values.file_upload
