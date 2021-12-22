@@ -107,7 +107,7 @@ import {OFFER_STATUS, DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import {recursiveFilter} from 'src/helpers/filter-helpers';
+import {deepFilter} from 'src/helpers/filter-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -152,7 +152,7 @@ const expanded: Ref<Record<string, boolean>> = ref({})
  * @returns {Record<string, unknown>[]} - filtered rows
  */
 function filter(rows:Record<string, unknown>[], terms:string){
-  return rows.filter((row)=>recursiveFilter(row, terms))
+  return rows.filter((row)=>deepFilter(row, terms))
 }
 
 /**
