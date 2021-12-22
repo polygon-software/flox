@@ -126,7 +126,8 @@ async function newAssignment(): Promise<void> {
   const bankUuids = [
     '99295c95-e736-4fe4-a806-082e6db5fe4e',
     'fc39b098-60b6-4390-aa2a-de6b80c6d499',
-    'c3cad835-1223-4cf5-b26b-4dd25dc394e3'
+    'c3cad835-1223-4cf5-b26b-4dd25dc394e3',
+    '4e33c212-32de-40b4-9bc5-948327379b70'
   ]
   const chosen: Array<string> = []
   while (chosen.length < nrOfBanks){

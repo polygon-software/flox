@@ -36,7 +36,7 @@ export class User{
   }
 
   /**
-   * Replaces an user's content
+   * Replaces a user's content
    * @param {string} fk - uuid of specific user
    * @param {ROLE} role - role of user
    * @param {string} uuid - user of user
@@ -47,5 +47,4 @@ export class User{
     this.role = role
     this.uuid = uuid
   }
-
 }
