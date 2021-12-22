@@ -139,7 +139,8 @@ export default ROUTES
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
   ROUTES.SIGNUP,
-  ROUTES.SUCCESS
+  ROUTES.SUCCESS,
+  ROUTES.DOCUMENT_UPLOAD
 ]
 
 //TODO: Add semi-protected routes
