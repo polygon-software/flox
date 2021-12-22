@@ -35,6 +35,7 @@ const initialFields = [
   FIELDS.COMPANY_NAME,
   FIELDS.ABBREVIATION,
   FIELDS.EMAIL,
+  FIELDS.PHONE_NUMBER,
   FIELDS.ADDRESS,
 ]
 
@@ -54,13 +55,14 @@ const pages = [
  * @returns {void}
  */
 async function onSignup(values: Record<string, Record<string, unknown>>){
-  console.log('signuo')
   // Sign up bank on database
   await executeMutation(
     CREATE_BANK,
     {
       first_name: values.full_name.first_name,
       last_name: values.full_name.last_name,
+      name: values.company_name,
+      phone: values.phone_number,
       abbreviation: values.abbreviation,
       address: values.address,
       email: values.email,

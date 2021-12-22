@@ -3,8 +3,8 @@ import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
 
 export const CREATE_BANK = {
   mutation: gql`
-    mutation createBank($first_name: String!, $last_name: String!, $address: CreateAddressInput!, $email: String!){
-      createBank (createBankInput: {first_name: $first_name, last_name: $last_name, address: $address, email: $email}) {
+    mutation createBank($first_name: String!, $last_name: String!, $address: CreateAddressInput!, $email: String!, $abbreviation: String!, $phone: String!, $name: String!){
+      createBank (createBankInput: {first_name: $first_name, last_name: $last_name, address: $address, email: $email, abbreviation: $abbreviation, phone: $phone, name: $name}) {
         uuid
         first_name
         last_name
