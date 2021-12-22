@@ -405,7 +405,6 @@ const oldPictures: Ref<Array<string|ArrayBuffer|null>> = ref([])
 /**
  * Watch for first result if a product is given
  */
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const stop = watch(queryResult, async (newValue) => {
   if(newValue && newValue !== {} && !(Array.isArray(newValue) && newValue.length === 0)){
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
