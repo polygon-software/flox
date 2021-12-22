@@ -11,6 +11,7 @@ import { generateHumanReadableId } from '../../helpers';
 import { EmployeeService } from '../employee/employee.service';
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { Offer } from '../offer/entities/offer.entity';
+import { ResetDossierInput } from './dto/input/reset-dossier.input';
 
 @Injectable()
 export class DossierService {
@@ -105,7 +106,7 @@ export class DossierService {
    * Returns all triple-rejected dossiers
    * @returns {Promise<Dossier[]>} - dossiers
    */
-  async rejectedDossiers(): Promise<Dossier[]> {
+  async getRejectedDossiers(): Promise<Dossier[]> {
     const allDossiers = await this.dossierRepository.find({
       relations: ['offers', 'offers.bank', 'original_bank'],
     });
@@ -117,6 +118,22 @@ export class DossierService {
 
       return retractedOffers.length === 3;
     });
+  }
+
+  /**
+   * Resets a dossier, changing its state and deleting any open offers
+   * @param {ResetDossierInput} resetDossierInput - input, containing uuid
+   * @returns {Promise<Dossier>} - the dossier after being reset
+   */
+  async resetDossier(resetDossierInput: ResetDossierInput): Promise<Dossier> {
+    // Find dossier
+    const dossier = this.dossierRepository.findOne({
+      uuid: resetDossierInput.uuid,
+    });
+
+    // Remove all offers
+
+    // Change status
   }
 
   async createOffer(createOfferInput: CreateOfferInput): Promise<Dossier> {

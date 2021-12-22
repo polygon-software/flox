@@ -239,7 +239,7 @@ export const MY_DOSSIERS = {
 export const REJECTED_DOSSIERS = {
   query: gql`
     query{
-      rejectedDossiers{
+      getRejectedDossiers{
         uuid
         created_at
         first_name
@@ -274,7 +274,7 @@ export const REJECTED_DOSSIERS = {
     }
   `,
   tables: ['dossier'],
-  cacheLocation: 'rejectedDossiers'
+  cacheLocation: 'getRejectedDossiers'
 }
 
 export const SOI_EMPLOYEES = {

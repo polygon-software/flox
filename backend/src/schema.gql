@@ -462,11 +462,11 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
+  getRejectedDossiers: [Dossier!]
   myCompany: Company!
   myDossiers: [Dossier!]
   myEmployee: Employee!
   myEmployees: [Employee!]!
-  rejectedDossiers: [Dossier!]
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }

@@ -12,6 +12,7 @@ import {
   EmployeeOnly,
 } from '../../auth/authorization.decorator';
 import { CreateOfferInput } from './dto/input/create-offer.input';
+import { ResetDossierInput } from './dto/input/reset-dossier.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -77,8 +78,21 @@ export class DossierResolver {
    */
   @AdminOnly()
   @Query(() => [Dossier], { nullable: true })
-  async rejectedDossiers(): Promise<Dossier[]> {
-    return this.dossierService.rejectedDossiers();
+  async getRejectedDossiers(): Promise<Dossier[]> {
+    return this.dossierService.getRejectedDossiers();
+  }
+
+  /**
+   * Resets a dossier, changing its state and deleting any open offers
+   * @param {ResetDossierInput} resetDossierInput - input, containing uuid
+   * @returns {Promise<Dossier>} - the dossier after being reset
+   */
+  @AdminOnly()
+  @Mutation(() => Dossier)
+  async resetDossier(
+    @Args('resetDossierInput') resetDossierInput: ResetDossierInput,
+  ): Promise<Dossier> {
+    return this.dossierService.resetDossier(resetDossierInput);
   }
 
   /**
