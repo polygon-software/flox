@@ -1,5 +1,28 @@
 <template>
   <div class="column" style="margin-bottom: 32px">
+    <div
+      class="row justify-between q-ma-none"
+    >
+      <h6 class="q-ma-none">
+        {{ $tc('dashboards.dossier', 2) + ' (' + rows.length + ')' }}
+      </h6>
+
+      <!-- Search bar -->
+      <q-input
+        v-model="search"
+        dense
+        :label="$t('general.search')"
+        outlined
+        type="search"
+        class="q-mb-md"
+      >
+        <template #prepend>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+
+    </div>
+
     <q-table
       v-model:selected="selected"
       card-style="border-radius: 8px; background-color: transparent"
@@ -8,6 +31,7 @@
       :rows="rows"
       :columns="columns"
       row-key="uuid"
+      :filter="search"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
       flat
@@ -79,8 +103,6 @@ import {formatDate} from 'src/helpers/format-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
-const search = ref('')
-
 // ----- Data -----
 const columns = [
   { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true, align: 'center' },
@@ -95,6 +117,7 @@ const columns = [
   { name: 'non-arrangeable', label:'', field: 'non-arrangeable', sortable: true, align: 'center' },
 ]
 
+const search = ref('')
 
 const dossiers = subscribeToQuery(REJECTED_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
 const rows = computed(()=>{
