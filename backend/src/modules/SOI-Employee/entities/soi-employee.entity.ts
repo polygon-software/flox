@@ -1,5 +1,5 @@
-import { Field, ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity } from 'typeorm';
 import { IsPhoneNumber, IsString } from 'class-validator';
 

@@ -13,7 +13,7 @@ import { ROLE } from '../ENUM/ENUMS';
 export const ANY_ROLE_KEY = 'anyRole';
 
 // Restrict to specified roles
-export const Roles = (...roles: string[]): CustomDecorator =>
+export const Roles = (...roles: ROLE[]): CustomDecorator =>
   SetMetadata('roles', roles);
 
 // Restrict to admin role
@@ -32,6 +32,8 @@ export const CompanyOnly = (): CustomDecorator =>
 export const EmployeeOnly = (): CustomDecorator =>
   SetMetadata('roles', [ROLE.EMPLOYEE]);
 
+export const BankOnly = (): CustomDecorator =>
+  SetMetadata('roles', [ROLE.BANK]);
 // Access to current user from request
 export const CurrentUser = createParamDecorator(
   (data, req) => getRequest(req).user,

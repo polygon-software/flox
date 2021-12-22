@@ -98,8 +98,7 @@ async function onLogin({username, password}: {username: string, password: string
 
 /**
  * Routes to the Signup Page
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function toSignup(): Promise<void>{
   await $routerService?.routeTo(ROUTES.SIGNUP)

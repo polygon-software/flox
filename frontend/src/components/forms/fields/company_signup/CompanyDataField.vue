@@ -2,7 +2,7 @@
 <div>
   <strong>{{ $t('account_data.company') }}</strong>
   <q-input
-    v-model="company_name"
+    v-model="companyName"
     dense
     type="text"
     :label="$t('account_data.company_name')"
@@ -11,14 +11,14 @@
   >
   </q-input>
   <q-input
-    v-model="company_uid"
+    v-model="companyUid"
     dense
     type="text"
     :label="`${$t('account_data.company_uid')} (${$t('account_data.optional')})`"
     @change="emitValue"
   />
   <q-checkbox
-    v-model="branch_structure"
+    v-model="branchStructure"
     :label="$t('account_data.branch_structure')"
     @update:model-value="emitValue"
   />
@@ -32,9 +32,9 @@ import { IS_VALID_STRING } from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
 
-const company_name = ref('')
-const company_uid = ref('')
-const branch_structure = ref(false)
+const companyName = ref('')
+const companyUid = ref('')
+const branchStructure = ref(false)
 
 /**
  * Emits the inputs
@@ -42,9 +42,9 @@ const branch_structure = ref(false)
  */
 function emitValue(){
   emit('change', {
-    company_name: company_name.value,
-    uid: company_uid.value,
-    branch_structure: branch_structure.value,
+    company_name: companyName.value,
+    uid: companyUid.value,
+    branch_structure: branchStructure.value,
   })
 }
 </script>

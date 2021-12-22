@@ -7,6 +7,7 @@ import {
   AdminOnly,
   CompanyOnly,
   CurrentUser,
+  EmployeeOnly,
 } from '../../auth/authorization.decorator';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
@@ -42,10 +43,7 @@ export class EmployeeResolver {
     if (!company) {
       throw new Error(`No company found for ${user.userId}`);
     }
-    return this.employeeService.createEmployee({
-      ...createEmployeeInput,
-      company,
-    });
+    return this.employeeService.createEmployee(createEmployeeInput, company);
   }
 
   /**
@@ -64,7 +62,7 @@ export class EmployeeResolver {
    * @returns { Promise<Employee[]>} - Employees
    */
   @CompanyOnly()
-  @Query(() => [Employee], { name: 'myEmployees' })
+  @Query(() => [Employee], { name: 'getMyEmployees' })
   async getMyEmployees(
     @CurrentUser() user: Record<string, string>,
   ): Promise<Employee[]> {
@@ -77,7 +75,24 @@ export class EmployeeResolver {
       throw new Error(`No company found for ${user.userId}`);
     }
 
-    return await this.employeeService.getEmployees(company);
+    return this.employeeService.getEmployees(company);
+  }
+
+  /**
+   * Get the currently logged in employee, if he is an employee
+   * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   * @returns {Promise<Employee>} - The Employee
+   */
+  @EmployeeOnly()
+  @Query(() => Employee, { name: 'getMyEmployee' })
+  async getMyEmployee(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Employee> {
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    if (!dbUser || dbUser.role !== ROLE.EMPLOYEE) {
+      throw new Error('User is not an Employee');
+    }
+    return this.employeeService.getEmployee(dbUser.fk);
   }
 
   /**
@@ -93,22 +108,20 @@ export class EmployeeResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<Employee> {
     // Admin has access
-    const db_user = await this.userService.getUser({ uuid: user.userID });
-    if (db_user.role === ROLE.SOI_ADMIN) {
-      return await this.employeeService.updateEmployee(updateEmployeeInput);
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    if (dbUser.role === ROLE.SOI_ADMIN) {
+      return this.employeeService.updateEmployee(updateEmployeeInput);
     }
 
     // Company of employee has access
     const company = await this.companyService.getCompany({
       cognito_id: user.userId,
     } as GetCompanyArgs);
-    const my_employees = await this.employeeService.getEmployees(company);
+    const myEmployees = await this.employeeService.getEmployees(company);
     if (
-      my_employees.some(
-        (employee) => employee.uuid === updateEmployeeInput.uuid,
-      )
+      myEmployees.some((employee) => employee.uuid === updateEmployeeInput.uuid)
     ) {
-      return await this.employeeService.updateEmployee(updateEmployeeInput);
+      return this.employeeService.updateEmployee(updateEmployeeInput);
     }
   }
 }

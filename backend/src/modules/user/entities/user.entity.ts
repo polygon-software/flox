@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -10,8 +10,8 @@ import {
 import { IsString, IsUUID } from 'class-validator';
 import { ROLE } from '../../../ENUM/ENUMS';
 
+@Entity()
 @ObjectType()
-@Entity({ name: 'user' })
 export class User {
   @Field(() => ROLE, { description: 'Role of the User' })
   @Column({

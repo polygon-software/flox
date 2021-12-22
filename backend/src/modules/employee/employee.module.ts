@@ -7,6 +7,7 @@ import { Employee } from './entities/employee.entity';
 import { CompanyService } from '../company/company.service';
 import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
+import { Dossier } from '../dossier/entity/dossier.entity';
 import { FileService } from '../file/file.service';
 import PrivateFile from '../file/entities/private_file.entity';
 import PublicFile from '../file/entities/public_file.entity';
@@ -20,6 +21,7 @@ import PublicFile from '../file/entities/public_file.entity';
       Company,
       PrivateFile,
       PublicFile,
+      Dossier,
     ]),
   ],
   providers: [

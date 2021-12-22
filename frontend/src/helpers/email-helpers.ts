@@ -74,8 +74,7 @@ export async function sendEmail(
  * @param {string} email - the user's e-mail address
  * @param {string} password - the user's (generated) password
  * @param {string} type - the users type - 'emp' for employee or 'man' for company
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 export async function sendPasswordChangeEmail(email: string, password: string, type: string): Promise<void>{
   // Generate one-time password change link
@@ -96,8 +95,7 @@ export async function sendPasswordChangeEmail(email: string, password: string, t
  * Sends an e-mail for document upload
  * @param {string} email - e-mail address
  * @param {string} companyId - company UUID
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 export async function sendDocumentUploadEmail(email: string, companyId: string): Promise<void>{
   // Set up e-mail parameters

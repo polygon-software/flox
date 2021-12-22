@@ -1,14 +1,21 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { Address } from '../../address/entities/address.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
 import { Bank } from '../../bank/entities/bank.entity';
-import { STATUS } from '../../../ENUM/ENUMS';
+import { DOSSIER_STATUS } from '../../../ENUM/ENUMS';
+import { Employee } from '../../employee/entities/employee.entity';
 
+@Entity()
 @ObjectType()
-@InputType('dossier')
-@Entity({ name: 'dossier' })
 export class Dossier extends Person {
   @Field(() => Address, { description: 'Address' })
   @JoinColumn()
@@ -16,8 +23,7 @@ export class Dossier extends Person {
   correspondence_address: Address;
 
   @Field(() => Bank, { description: 'Previous Bank of the customer' })
-  @JoinColumn()
-  @OneToOne(() => Bank)
+  @ManyToOne(() => Bank)
   original_bank: Bank;
 
   @Field(() => Date, { description: 'Date of birth of customer' })
@@ -30,23 +36,27 @@ export class Dossier extends Person {
   property_address: Address;
 
   @Field(() => Number, { description: 'Money loaned' })
-  @Column()
+  @Column({ type: 'real' })
   loan_sum: number;
 
   @Field(() => Boolean, { description: 'ToDo' })
   @Column()
   non_arrangeable: boolean;
 
-  @Field(() => STATUS, { description: 'Status of Dossier' })
+  @Field(() => DOSSIER_STATUS, { description: 'Status of Dossier' })
   @Column({
     type: 'enum',
-    enum: STATUS,
-    default: STATUS.CREATED,
+    enum: DOSSIER_STATUS,
+    default: DOSSIER_STATUS.IN_PROGRESS,
   })
-  status: STATUS;
+  status: DOSSIER_STATUS;
 
   @Field(() => [Offer], { description: 'List of Offers' })
   @JoinColumn()
   @OneToMany(() => Offer, (offer) => offer.dossier)
   offers: Offer[];
+
+  @Field(() => Employee, { description: 'Employee who created the Dossier' })
+  @ManyToOne(() => Employee, (employee) => employee.dossiers)
+  employee: Employee;
 }

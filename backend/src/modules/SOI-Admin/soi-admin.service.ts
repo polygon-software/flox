@@ -12,8 +12,8 @@ import { ROLE } from '../../ENUM/ENUMS';
 export class SoiAdminService {
   constructor(
     @InjectRepository(SoiAdmin)
-    private soiAdminRepository: Repository<SoiAdmin>,
-    private userService: UserService,
+    private readonly soiAdminRepository: Repository<SoiAdmin>,
+    private readonly userService: UserService,
   ) {}
 
   /**
