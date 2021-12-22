@@ -23,7 +23,6 @@
     </div>
 
     <q-table
-      v-model:selected="selected"
       card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
       color="transparent"
@@ -79,7 +78,7 @@
               {{ offer.bank.abbreviation }}
             </q-chip>
           </q-td>
-          <q-td key="non-arrangeable">
+          <q-td key="non-non_arrangeable">
             <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
           </q-td>
         </q-tr>
@@ -116,7 +115,7 @@ const columns = [
   { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false, align: 'center' },
   { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false, align: 'center' },
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false, align: 'center' },
-  { name: 'non-arrangeable', label:'', field: 'non-arrangeable', sortable: true, align: 'center' },
+  { name: 'non_arrangeable', label: ' ', field: 'non_arrangeable', sortable: true, align: 'center' },
 ]
 
 const search = ref('')

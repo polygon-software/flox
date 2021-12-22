@@ -69,7 +69,7 @@
             {{ offer.bank.abbreviation }}
           </q-chip>
         </q-td>
-        <q-td key="non-arrangeable">
+        <q-td key="non_arrangeable">
           <q-icon v-if="_props.row.non_arrangeable" name="warning" size="30px" color="red"/>
         </q-td>
       </q-tr>
@@ -136,7 +136,7 @@ const columns = [
   { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false, align: 'center' },
   { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false, align: 'center' },
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false, align: 'center' },
-  { name: 'non-arrangeable', label:'', field: 'non-arrangeable', sortable: true, align: 'center' },
+  { name: 'non_arrangeable', label: ' ', field: 'non_arrangeable', sortable: true, align: 'center' },
 ]
 
 

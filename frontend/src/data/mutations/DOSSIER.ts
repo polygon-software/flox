@@ -78,6 +78,17 @@ export const RESET_DOSSIER = {
           zip_code
           __typename
         }
+        offers{
+          __typename
+          uuid
+          status
+          bank {
+            __typename
+            uuid
+            name
+            abbreviation
+          }
+        }
         loan_sum
         non_arrangeable
         status
@@ -85,8 +96,8 @@ export const RESET_DOSSIER = {
       }
     }`,
   tables: ['dossier'],
-  type: MutationTypes.UPDATE,
-  cacheLocation: undefined
+  type: MutationTypes.DELETE, // Is a delete, since offers are deleted
+  cacheLocation: 'resetDossier'
 }
 
 export const CREATE_OFFER = {
