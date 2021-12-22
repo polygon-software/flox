@@ -25,6 +25,7 @@ export default {
     redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
     back_to_login: 'Back to Login',
     change_password: 'Change password',
+    unauthenticated: 'Unauthenticated'
   },
   account_data: {
     employees: 'Employees',
@@ -82,7 +83,10 @@ export default {
   messages: {
     account_unlocked: 'Successfully unlocked account',
     document_upload_enabled: 'Enabled document upload',
-    application_rejected: 'Application rejected'
+    application_rejected: 'Application rejected',
+    rejection_failed: 'An Error occurred when rejecting',
+    success: 'Success',
+    failure: 'Failure'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',

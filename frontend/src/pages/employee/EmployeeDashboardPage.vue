@@ -45,10 +45,9 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue'
+import {ref} from 'vue'
 import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue';
-import {RouterService} from 'src/services/RouterService';
-import CompanyEmployeeId from 'components/cards/CompanyEmployeeId.vue';
+import CompanyEmployeeId from 'components/cards/CompanyEmployeeIdCard.vue';
 import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
@@ -68,10 +67,10 @@ function searchEmployee(){
 }
 
 
-// const $routerService: RouterService = inject('$routerService') as RouterService
+// const $routerService: RouterService = inject('$routerService') as RouterService Todo Re-enable once create dossier form is added
 
 /**
- * Routes to the new assignment page to add more customers
+ * Routes to the new assignment page to add more dossiers
  * @returns {Promise<void>} - done
  */
 async function newAssignment(): Promise<void> {

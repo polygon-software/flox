@@ -25,6 +25,8 @@ export default {
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
     back_to_login: 'Zurück zu Login',
     change_password: 'Passwort ändern',
+    unauthenticated: 'Nicht Angemeldet'
+
   },
   account_data: {
     employees: 'Mitarbeitende',
@@ -83,7 +85,11 @@ export default {
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
     document_upload_enabled: 'Dokumentupload freigeschaltet',
-    application_rejected: 'Antrag abgelehnt'
+    application_rejected: 'Antrag abgelehnt',
+    rejection_failed: 'Ein Fehler ist beim ablehnen aufgetreten',
+    success: 'Erfolgreifch',
+    failure: 'Fehlgeschlagen'
+
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',

@@ -22,14 +22,17 @@ import {MY_COMPANY, MY_EMPLOYEE, MY_USER} from 'src/data/queries/QUERIES';
 import {ROLE} from 'src/data/ENUM/ENUM';
 import {User} from 'src/data/types/User';
 import {ref} from 'vue';
+import {i18n} from 'boot/i18n';
 
 
 const employeeReadableId = ref('')
 const companyReadableId = ref('')
 const other = ref('')
+const errorString = i18n.global.t('authentication.unauthenticated')
+
 executeQuery(MY_USER).then((userResp)=>{
   if(!userResp.data){
-    other.value = 'Unauthenticated'
+    other.value = errorString
     return
   }
   const user = userResp.data[MY_USER.cacheLocation]  as User
@@ -41,7 +44,7 @@ executeQuery(MY_USER).then((userResp)=>{
       const company = employee.company as Record<string, string >
       companyReadableId.value = company.readable_id;
     }).catch((error)=>{
-      other.value = user.role || 'Unauthenticated'
+      other.value = user.role || errorString
       console.error(error)
     })
   } else if(user.role === ROLE.COMPANY){
@@ -49,16 +52,14 @@ executeQuery(MY_USER).then((userResp)=>{
       const company = companyResp.data[MY_COMPANY.cacheLocation] as Record<string, unknown >;
       companyReadableId.value = company.readable_id as string
     }).catch((error)=>{
-      other.value = user.role || 'Unauthenticated'
+      other.value = user.role || errorString
       console.error(error)
     })
   } else {
-    other.value = user.role || 'Unauthenticated'
+    other.value = user.role || errorString
   }
 }).catch((error)=>{
-  other.value = 'Unauthenticated'
+  other.value = errorString
   console.error(error)
 })
-
-// const employee = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 </script>

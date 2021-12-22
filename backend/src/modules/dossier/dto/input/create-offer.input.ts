@@ -12,6 +12,6 @@ export class CreateOfferInput {
   @IsUUID()
   dossier_uuid: string;
 
-  @Field(() => OFFER_STATUS) //Todo correct status or other status
+  @Field(() => OFFER_STATUS)
   status: OFFER_STATUS;
 }

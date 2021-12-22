@@ -93,8 +93,8 @@ export const COMPANY = {
 
 export const MY_COMPANY = {
   query: gql`
-    query myCompany{
-      myCompany{
+    query getMyCompany{
+      getMyCompany{
         uuid
         readable_id
         first_name
@@ -104,12 +104,12 @@ export const MY_COMPANY = {
     }
   `,
   tables: ['company'],
-  cacheLocation: 'myCompany'
+  cacheLocation: 'getMyCompany'
 }
 
 export const ALL_EMPLOYEES = {
   query: gql`
-        query{
+        query allEmployees{
             allEmployees{
               uuid
               first_name
@@ -127,8 +127,8 @@ export const ALL_EMPLOYEES = {
 
 export const MY_EMPLOYEES = {
   query: gql`
-        query{
-            myEmployees{
+        query getMyEmployees{
+            getMyEmployees{
               uuid
               first_name
               last_name
@@ -140,13 +140,13 @@ export const MY_EMPLOYEES = {
         }
         `,
   tables: ['employee'],
-  cacheLocation: 'myEmployees'
+  cacheLocation: 'getMyEmployees'
 }
 
 export const MY_EMPLOYEE = {
   query: gql`
-    query{
-      myEmployee{
+    query getMyEmployee{
+      getMyEmployee{
         uuid
         first_name
         last_name
@@ -162,7 +162,7 @@ export const MY_EMPLOYEE = {
     }
     `,
   tables: ['employee'],
-  cacheLocation: 'myEmployee'
+  cacheLocation: 'getMyEmployee'
 }
 
 export const PRIVATE_FILE = {
@@ -198,7 +198,7 @@ export const MY_USER = {
 export const MY_DOSSIERS = {
   query: gql`
         query{
-            myDossiers{
+            getMyDossiers{
               uuid
               created_at
               first_name
@@ -233,7 +233,7 @@ export const MY_DOSSIERS = {
         }
   `,
   tables: ['dossier'],
-  cacheLocation: 'myDossiers'
+  cacheLocation: 'getMyDossiers'
 }
 
 export const SOI_EMPLOYEES = {

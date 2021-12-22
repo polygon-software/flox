@@ -53,7 +53,7 @@ export class EmployeeService {
       fk: newEmployee.uuid,
     });
 
-    return this.employeeRepository.save(employee);
+    return newEmployee;
   }
 
   /**
@@ -97,8 +97,12 @@ export class EmployeeService {
   async getEmployee(uuid: string): Promise<Employee> {
     return this.employeeRepository.findOne(uuid, { relations: ['company'] });
   }
-  // TODO: Add remove/update/find functionalities as needed
 
+  /**
+   * Get the Employee of the currently logged in user
+   * @param {string} cognitoId - the employees users id
+   * @returns {Promise<Employee>} - The employee
+   */
   async getMyEmployee(cognitoId: string): Promise<Employee> {
     const user = await this.userService.getUser({ uuid: cognitoId });
     if (user && user.role === ROLE.EMPLOYEE) {
@@ -112,6 +116,8 @@ export class EmployeeService {
         ],
       });
     }
-    throw new Error('User is not an Employee but an ' + user.role);
+    throw new Error(
+      'User is not an Employee but an ' + user ? user.role : 'unauthenticated',
+    );
   }
 }

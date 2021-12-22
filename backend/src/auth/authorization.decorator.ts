@@ -13,7 +13,7 @@ import { ROLE } from '../ENUM/ENUMS';
 export const ANY_ROLE_KEY = 'anyRole';
 
 // Restrict to specified roles
-export const Roles = (...roles: string[]): CustomDecorator =>
+export const Roles = (...roles: ROLE[]): CustomDecorator =>
   SetMetadata('roles', roles);
 
 // Restrict to admin role

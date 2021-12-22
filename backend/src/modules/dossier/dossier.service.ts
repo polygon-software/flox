@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
-import { STATUS } from '../../ENUM/ENUMS';
+import { DOSSIER_STATUS } from '../../ENUM/ENUMS';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import { BankService } from '../bank/bank.service';
 import { generateHumanReadableId } from '../../helpers';
@@ -35,8 +35,8 @@ export class DossierService {
   ): Promise<Dossier> {
     const employee = await this.employeeService.getMyEmployee(cognitoId);
 
-    let originalBank = await this.bankService.findBankByName(
-      createDossierInput.original_bank_name,
+    let originalBank = await this.bankService.findBankByAbbreviation(
+      createDossierInput.original_bank_abbreviation,
     );
     if (!originalBank) {
       originalBank = await this.bankService.createUserlessBank({
@@ -52,7 +52,7 @@ export class DossierService {
       loan_sum: createDossierInput.loan_sum,
       non_arrangeable: false,
       offers: [],
-      status: STATUS.IN_PROCESS,
+      status: DOSSIER_STATUS.IN_PROGRESS,
       first_name: createDossierInput.first_name,
       last_name: createDossierInput.last_name,
       email: createDossierInput.email,
@@ -64,13 +64,14 @@ export class DossierService {
   }
 
   /**
-   * Updates a dossier using with the given data
+   * Updates a dossier using the given data
    * @param {UpdateDossierInput} updateDossierInput - the dossier's data, containing all mandatory fields
    * @returns {Promise<Dossier>} - dossier
    */
   async updateDossier(
     updateDossierInput: UpdateDossierInput,
   ): Promise<Dossier> {
+    await this.dossierRepository.findOneOrFail(updateDossierInput.uuid);
     await this.dossierRepository.update(
       updateDossierInput.uuid,
       updateDossierInput,
@@ -80,7 +81,7 @@ export class DossierService {
 
   /**
    * Updates a dossier to the given status
-   * @param {UpdateDossierStatusInput} updateDossierStatusInput - the dossier's data, containing all mandatory fields
+   * @param {UpdateDossierStatusInput} updateDossierStatusInput - the dossier's data, containing the new status
    * @returns {Promise<Dossier>} - dossier
    */
   async updateDossierStatus(
@@ -101,11 +102,19 @@ export class DossierService {
     return employee.dossiers;
   }
 
+  /**
+   * Creates a new offer
+   * @param {CreateOfferInput} createOfferInput - fields needed for a new offer
+   * @returns {Promise<Dossier>} - updated dossier
+   */
   async createOffer(createOfferInput: CreateOfferInput): Promise<Dossier> {
     const dossier = await this.dossierRepository.findOne(
       createOfferInput.dossier_uuid,
     );
     const bank = await this.bankService.findBank(createOfferInput.bank_uuid);
+    if (!dossier || !bank) {
+      throw new Error('Bank or dossier could not be found');
+    }
     const newOffer = this.offerRepository.create({
       dossier,
       bank,

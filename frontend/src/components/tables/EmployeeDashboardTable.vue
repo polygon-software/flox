@@ -44,7 +44,7 @@
             <q-select
               v-model="scope.value"
               :option-label="(status)=>$t('dossier_status_enum.' + status)"
-              :options="Object.keys(STATUS)"
+              :options="Object.keys (DOSSIER_STATUS)"
             />
           </q-popup-edit>
         </q-td>
@@ -101,8 +101,9 @@ import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
-import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
+import {OFFER_STATUS, DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -139,7 +140,7 @@ const expanded: Ref<Record<string, boolean>> = ref({})
  * @param {string} uuid - the uuid
  * @returns {void}
  */
-function onUpdateStatus(status: string, uuid:string){
+function onUpdateStatus(status: DOSSIER_STATUS, uuid:string){
   executeMutation(
     SET_DOSSIER_STATUS,
     {
@@ -147,15 +148,25 @@ function onUpdateStatus(status: string, uuid:string){
       status: status,
     }
   ).then(()=>{
-    console.log('updated') // todo toast?
+    showNotification(
+      $q,
+      i18n.global.t('messages.success'),
+      undefined,
+      'positiv'
+    )
   }).catch(()=>{
-    console.error('update Failed') // todo Toast
+    showNotification(
+      $q,
+      i18n.global.t('messages.failure'),
+      undefined,
+      'red-7'
+    )
   })
 }
 /**
  * ToDo Fix colors
  * Chip color depending on the status
- * @param {STATUS} status - status of Dossier
+ * @param  {DOSSIER_STATUS} status - status of Dossier
  * @returns {string} - style
  */
 function offerChipStyle(status: OFFER_STATUS){
@@ -176,27 +187,27 @@ function offerChipStyle(status: OFFER_STATUS){
 /**
  * ToDo Fix colors
  * Chip color depending on the status
- * @param {STATUS} status - status of Dossier
+ * @param  {DOSSIER_STATUS} status - status of Dossier
  * @returns {string} - style
  */
-function dossierChipStyle(status: STATUS){
+function dossierChipStyle(status: DOSSIER_STATUS){
   const color = 'color: white; background-color: '
   switch (status) {
-    case STATUS.OPEN:
+    case DOSSIER_STATUS.OPEN:
       return color + '#58ACFA;'
-    case STATUS.SIGNED:
+    case DOSSIER_STATUS.SIGNED:
       return color + '#52130A;'
-    case STATUS.REJECTED:
+    case DOSSIER_STATUS.REJECTED:
       return color + '#A82CF0;'
-    case STATUS.SUBMITTED:
+    case DOSSIER_STATUS.SUBMITTED:
       return color + '#4126F9;'
-    case STATUS.OFFERED:
+    case DOSSIER_STATUS.OFFERED:
       return color + '#378F23;'
-    case STATUS.COMPLETED:
+    case DOSSIER_STATUS.COMPLETED:
       return color + '#1FB06C;'
-    case STATUS.IN_PROCESS:
+    case  DOSSIER_STATUS.IN_PROGRESS:
       return color + '#A22736;'
-    case STATUS.SENT:
+    case DOSSIER_STATUS.SENT:
       return color + '#F829F3;'
   }
   return color + '#000000;'

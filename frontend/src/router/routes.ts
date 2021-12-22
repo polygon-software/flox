@@ -123,7 +123,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'NEW_DOSSIER_PAGE': {
     path: '/new-assignment',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/NewAssignmentPage.vue') }],
+    children: [{ path: '', component: () => import('pages/NewDossierPage.vue') }],
   },
 
   // Wildcard route for non-covered routes

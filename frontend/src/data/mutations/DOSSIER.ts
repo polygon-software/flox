@@ -40,7 +40,7 @@ export const CREATE_DOSSIER = {
 
 export const SET_DOSSIER_STATUS = {
   mutation: gql`
-    mutation updateDossierStatus($uuid: ID!, $status: Status!){
+    mutation updateDossierStatus($uuid: ID!, $status: DossierStatus!){
       updateDossierStatus (updateDossierStatusInput: {uuid: $uuid, status: $status}) {
         uuid
         status

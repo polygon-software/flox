@@ -6,7 +6,7 @@ import {
   IsNumber,
   IsUUID,
 } from 'class-validator';
-import { STATUS } from '../../../../ENUM/ENUMS';
+import { DOSSIER_STATUS } from '../../../../ENUM/ENUMS';
 import { CreatePersonInput } from '../../../person/dto/create-person.input';
 
 @InputType()
@@ -27,7 +27,7 @@ export class UpdateDossierInput extends PartialType(CreatePersonInput) {
   @IsBoolean()
   non_arrangeable: boolean;
 
-  @Field(() => STATUS, { nullable: true })
+  @Field(() => DOSSIER_STATUS, { nullable: true })
   @IsNotEmpty()
-  status: STATUS;
+  status: DOSSIER_STATUS;
 }

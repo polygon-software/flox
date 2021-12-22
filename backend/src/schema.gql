@@ -235,8 +235,14 @@ input CreateSoiEmployeeInput {
   """First Name"""
   first_name: String
 
+  """Gender"""
+  gender: String!
+
   """Last Name"""
   last_name: String
+
+  """Phone Number"""
+  phone: String!
 }
 
 """
@@ -295,10 +301,21 @@ type Dossier {
   readable_id: String!
 
   """Status of Dossier"""
-  status: Status!
+  status: DossierStatus!
 
   """UUID"""
   uuid: ID!
+}
+
+enum DossierStatus {
+  COMPLETED
+  IN_PROGRESS
+  OFFERED
+  OPEN
+  REJECTED
+  SENT
+  SIGNED
+  SUBMITTED
 }
 
 type Employee {
@@ -355,6 +372,7 @@ type Mutation {
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
   enableCompanyDocumentUpload(uuid: String!): Company!
+  rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
@@ -444,9 +462,14 @@ type PublicFile {
 type Query {
   allCompanies: [Company!]!
   allEmployees: [Employee!]!
+  allSoiEmployees: [SoiEmployee!]!
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getMyCompany: Company!
+  getMyDossiers: [Dossier!]
+  getMyEmployee: Employee!
+  getMyEmployees: [Employee!]!
   getMyUser: User!
   getPrivateFile(
     """URL expiration duration (in seconds); defaults to 15min"""
@@ -454,10 +477,6 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
-  myCompany: Company!
-  myDossiers: [Dossier!]
-  myEmployee: Employee!
-  myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
@@ -510,28 +529,23 @@ type SoiEmployee {
   """First Name"""
   first_name: String!
 
+  """Gender"""
+  gender: String!
+
   """Last modification date"""
   last_modified_at: DateTime!
 
   """Last Name"""
   last_name: String!
 
+  """Phone Number"""
+  phone: String!
+
   """Human-readable ID"""
   readable_id: String!
 
   """UUID"""
   uuid: ID!
-}
-
-enum Status {
-  COMPLETED
-  IN_PROCESS
-  OFFERED
-  OPEN
-  REJECTED
-  SENT
-  SIGNED
-  SUBMITTED
 }
 
 input UpdateCompanyInput {
@@ -562,12 +576,12 @@ input UpdateDossierInput {
   last_name: String
   loan_sum: Float
   non_arrangeable: Boolean
-  status: Status
+  status: DossierStatus
   uuid: ID!
 }
 
 input UpdateDossierStatusInput {
-  status: Status!
+  status: DossierStatus!
   uuid: ID!
 }
 

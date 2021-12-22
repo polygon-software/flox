@@ -62,7 +62,7 @@ export class EmployeeResolver {
    * @returns { Promise<Employee[]>} - Employees
    */
   @CompanyOnly()
-  @Query(() => [Employee], { name: 'myEmployees' })
+  @Query(() => [Employee], { name: 'getMyEmployees' })
   async getMyEmployees(
     @CurrentUser() user: Record<string, string>,
   ): Promise<Employee[]> {
@@ -75,7 +75,7 @@ export class EmployeeResolver {
       throw new Error(`No company found for ${user.userId}`);
     }
 
-    return await this.employeeService.getEmployees(company);
+    return this.employeeService.getEmployees(company);
   }
 
   /**
@@ -84,13 +84,13 @@ export class EmployeeResolver {
    * @returns {Promise<Employee>} - The Employee
    */
   @EmployeeOnly()
-  @Query(() => Employee, { name: 'myEmployee' })
+  @Query(() => Employee, { name: 'getMyEmployee' })
   async getMyEmployee(
     @CurrentUser() user: Record<string, string>,
   ): Promise<Employee> {
     const dbUser = await this.userService.getUser({ uuid: user.userId });
     if (!dbUser || dbUser.role !== ROLE.EMPLOYEE) {
-      return undefined;
+      throw new Error('User is not an Employee');
     }
     return this.employeeService.getEmployee(dbUser.fk);
   }

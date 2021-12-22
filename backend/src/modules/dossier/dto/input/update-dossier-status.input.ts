@@ -1,6 +1,6 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsNotEmpty, IsUUID } from 'class-validator';
-import { STATUS } from '../../../../ENUM/ENUMS';
+import { DOSSIER_STATUS } from '../../../../ENUM/ENUMS';
 
 @InputType()
 export class UpdateDossierStatusInput {
@@ -8,7 +8,7 @@ export class UpdateDossierStatusInput {
   @IsUUID()
   uuid: string;
 
-  @Field(() => STATUS, { nullable: false })
+  @Field(() => DOSSIER_STATUS, { nullable: false })
   @IsNotEmpty()
-  status: STATUS;
+  status: DOSSIER_STATUS;
 }
