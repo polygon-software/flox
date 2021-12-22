@@ -67,7 +67,7 @@
               icon="picture_as_pdf"
               color="primary"
               round
-              @click="showAllDocuments"
+              @click.stop="showAllDocuments"
             />
           </q-td>
           <q-td key="offers">
