@@ -9,6 +9,7 @@ export default {
     from: 'From',
     to: 'To',
     date: 'Datum',
+    return: 'Return'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -212,7 +213,6 @@ export default {
     organisation_id: 'Organisation number',
     employee_id: 'Employee number',
     role: 'Role',
-
   },
   dossier_status_enum: {
     OPEN: 'Open',
@@ -234,5 +234,9 @@ export default {
   email: {
     subject_rejected: 'Rejected',
     body_rejected: 'Application is rejected'
+  },
+
+  bank: {
+    new_user: 'New user'
   }
 };

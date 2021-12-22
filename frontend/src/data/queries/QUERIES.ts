@@ -308,6 +308,7 @@ export const ALL_BANKS = {
         email
         readable_id
         created_at
+        phone
       }
     }
     `,

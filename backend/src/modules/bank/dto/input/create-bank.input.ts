@@ -18,4 +18,7 @@ export class CreateBankInput extends PartialType(CreatePersonInput) {
   @IsString()
   @IsPhoneNumber()
   phone: string;
+
+  @Field(() => String)
+  password: string;
 }

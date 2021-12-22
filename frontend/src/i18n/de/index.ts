@@ -9,6 +9,7 @@ export default {
     from: 'Von',
     to: 'Bis',
     date: 'Datum',
+    return: 'Zurück'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -234,5 +235,9 @@ export default {
   email: {
     subject_rejected: 'Abgelehnt',
     body_rejected: 'Die Applikation wurde abgelehnt'
+  },
+
+  bank: {
+    new_user: 'Neuer Benutzer'
   }
 };

@@ -20,26 +20,29 @@ export class BankService {
   /**
    * Create a new Bank
    * @param {CreateBankInput} createBankInput - Input needed to create a new Bank
-   * @returns {Promise<Bank>} - new Bank
+   * @returns {Promise<{bank:Bank, password: string}>} - new Bank
    */
   async createBank(createBankInput: CreateBankInput): Promise<Bank> {
     // Create a Cognito account with a random password
-    const password = randomPassword(8);
     const cognitoId = await createCognitoAccount(
       createBankInput.email,
-      password,
+      createBankInput.password,
     );
 
-    // TODO return password/credentials in some way, so admin can be shown a popup
-
     // Create the SoiAdmin and User in the database
-    const bank = this.bankRepository.create({ ...createBankInput, offers: [] });
+    const bank = this.bankRepository.create({
+      ...createBankInput,
+      offers: [],
+      own_mortgages: [],
+      readable_id: generateHumanReadableId(),
+    });
+    const savedBank = await this.bankRepository.save(bank);
     await this.userService.create({
       role: ROLE.BANK,
       uuid: cognitoId,
       fk: bank.uuid,
     });
-    return this.bankRepository.save(bank);
+    return savedBank;
   }
 
   /**

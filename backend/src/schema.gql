@@ -152,6 +152,7 @@ input CreateBankInput {
   """Last Name"""
   last_name: String
   name: String!
+  password: String!
 
   """Phone Number"""
   phone: String!
