@@ -82,7 +82,8 @@ export default {
   messages: {
     account_unlocked: 'Successfully unlocked account',
     document_upload_enabled: 'Enabled document upload',
-    application_rejected: 'Application rejected'
+    application_rejected: 'Application rejected',
+    login_failed: 'Login has failed',
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',

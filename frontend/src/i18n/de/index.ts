@@ -83,7 +83,9 @@ export default {
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
     document_upload_enabled: 'Dokumentupload freigeschaltet',
-    application_rejected: 'Antrag abgelehnt'
+    application_rejected: 'Antrag abgelehnt',
+    login_failed: 'Login hat fehlgeschlagen',
+
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',

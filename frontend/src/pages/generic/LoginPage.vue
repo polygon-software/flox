@@ -43,7 +43,11 @@ import {RouteRecordRaw} from 'vue-router';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/QUERIES';
 import {ROLE} from 'src/data/ENUM/ENUM';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
+import {QVueGlobals, useQuasar} from 'quasar';
 
+const $q: QVueGlobals = useQuasar()
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -59,19 +63,33 @@ async function onLogin({username, password}: {username: string, password: string
   await $authService?.login(username, password)
   const queryRes = await executeQuery(MY_USER)
   if(!queryRes || !queryRes.data){
-    return
+    await $authService?.logout()
+    // Show error prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.login_failed'),
+      undefined,
+      'negative'
+    )
   }
   const user = queryRes.data[MY_USER.cacheLocation] as Record<string, unknown>
   if (!user){
-    return
+    await $authService?.logout()
+    // Show error prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.login_failed'),
+      undefined,
+      'negative'
+    )
   }
   const role = user.role as ROLE
   const target_route_mapping: Record<ROLE, RouteRecordRaw> = {
     [ROLE.SOI_ADMIN]: ROUTES.ADMIN_DOSSIERS,
     [ROLE.COMPANY]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
     [ROLE.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD,
-    [ROLE.SOI_EMPLOYEE]: ROUTES.APPLICATIONS, //Todo
-    [ROLE.BANK]: ROUTES.WILDCARD, //ToDo
+    [ROLE.SOI_EMPLOYEE]: ROUTES.APPLICATIONS,
+    [ROLE.BANK]: ROUTES.WILDCARD,
     [ROLE.NONE]: ROUTES.WILDCARD,
   }
   // Redirect to main page
