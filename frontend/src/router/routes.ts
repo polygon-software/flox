@@ -117,7 +117,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
   'REGISTER_BANK': {
     path: '/register-bank',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/SOIAdminLayout.vue'),
     children: [{ path: '', component: () => import('pages/soi/RegisterBankPage.vue') }],
   },
 
