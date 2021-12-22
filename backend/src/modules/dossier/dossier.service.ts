@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
-import { STATUS } from '../../ENUM/ENUMS';
+import { OFFER_STATUS, STATUS } from '../../ENUM/ENUMS';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import { BankService } from '../bank/bank.service';
 import { generateHumanReadableId } from '../../helpers';
@@ -15,8 +15,10 @@ import { Offer } from '../offer/entities/offer.entity';
 @Injectable()
 export class DossierService {
   constructor(
-    @InjectRepository(Dossier) private dossierRepository: Repository<Dossier>,
-    @InjectRepository(Offer) private offerRepository: Repository<Offer>,
+    @InjectRepository(Dossier)
+    private readonly dossierRepository: Repository<Dossier>,
+    @InjectRepository(Offer)
+    private readonly offerRepository: Repository<Offer>,
     private readonly employeeService: EmployeeService,
     private readonly bankService: BankService,
   ) {}
@@ -91,11 +93,11 @@ export class DossierService {
   }
 
   /**
-   * @param {string} cognito_id - id of user of employee
+   * @param {string} cognitoId - id of user of employee
    * @returns {Promise<Dossier[]>} - dossiers of employee
    */
-  async myDossiers(cognito_id: string): Promise<Dossier[]> {
-    const employee = await this.employeeService.getMyEmployee(cognito_id);
+  async myDossiers(cognitoId: string): Promise<Dossier[]> {
+    const employee = await this.employeeService.getMyEmployee(cognitoId);
     return employee.dossiers;
   }
 
@@ -104,7 +106,17 @@ export class DossierService {
    * @returns {Promise<Dossier[]>} - dossiers
    */
   async rejectedDossiers(): Promise<Dossier[]> {
-    return this.dossierRepository.find(); // TODO
+    const allDossiers = await this.dossierRepository.find({
+      relations: ['offers', 'offers.bank', 'original_bank'],
+    });
+
+    return allDossiers.filter((dossier: Dossier) => {
+      const retractedOffers = dossier.offers.filter((offer: Offer) => {
+        return offer.status === OFFER_STATUS.RETRACTED;
+      });
+
+      return retractedOffers.length === 3;
+    });
   }
 
   async createOffer(createOfferInput: CreateOfferInput): Promise<Dossier> {
@@ -112,7 +124,7 @@ export class DossierService {
       createOfferInput.dossier_uuid,
     );
     const bank = await this.bankService.findBank(createOfferInput.bank_uuid);
-    const new_offer = await this.offerRepository.create({
+    const new_offer = this.offerRepository.create({
       dossier,
       bank,
       status: createOfferInput.status,

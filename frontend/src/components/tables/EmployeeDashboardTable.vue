@@ -115,16 +115,16 @@ const selected = ref([])
 
 // ----- Data -----
 const columns = [
-  { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true },
+  { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true, align: 'center' },
   // customer + customer id
-  { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true },
-  { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true },
-  { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true },
-  { name: 'mortgage_amount', label: i18n.global.t('employee_dashboard.mortgage_amount'), field: 'mortgage_amount', sortable: true },
-  { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false },
-  { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false },
-  { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false },
-  { name: 'non-arrangeable', label:'', field: '\'non-arrangeable\'', sortable: true },
+  { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true, align: 'center' },
+  { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true, align: 'center' },
+  { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true, align: 'center' },
+  { name: 'mortgage_amount', label: i18n.global.t('employee_dashboard.mortgage_amount'), field: 'mortgage_amount', sortable: true, align: 'center' },
+  { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false, align: 'center' },
+  { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false, align: 'center' },
+  { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false, align: 'center' },
+  { name: 'non-arrangeable', label:'', field: 'non-arrangeable', sortable: true, align: 'center' },
 ]
 
 

@@ -1,35 +1,10 @@
 <template>
-  <div
-    class="column full-width"
-    style="max-width: 900px"
-  >
-    <div
-      class="row justify-between q-ma-none"
-    >
-      <h6 class="q-ma-none">
-        {{ $t('dashboards.dossier') + ' (' + rows.length + ')' }}
-      </h6>
-      <!-- Search bar -->
-      <q-input
-        v-model="search"
-        dense
-        :label="$t('general.search')"
-        outlined
-        type="search"
-        class="q-mb-md"
-        style="margin-right: 30px"
-      >
-        <template #prepend>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-
-    </div>
-
+  <div class="column" style="margin-bottom: 32px">
     <q-table
       v-model:selected="selected"
       card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
+      color="transparent"
       :rows="rows"
       :columns="columns"
       row-key="uuid"
@@ -37,85 +12,87 @@
       separator="none"
       flat
     >
-    <template #body="props">
-      <q-tr
-        :props="props"
-        style="background-color: white; cursor: pointer"
-      >
-        <q-td key="date">
-          {{ dateString(props.row.created_at) }}
-        </q-td>
-        <q-td key="customer">
-          {{ props.row.first_name + " " + props.row.last_name }}
-        </q-td>
-        <q-td key="institute">
-          {{ props.row.original_bank.name }}
-        </q-td>
-        <q-td key="location">
-          {{ props.row.property_address.city }}
-        </q-td>
-        <q-td key="mortgage_amount">
-          {{ props.row.loan_sum }}
-        </q-td>
-        <q-td key="status">
-          <q-chip :style="dossierChipStyle(props.row.status)">
-            {{ $t('dossier_status_enum.' + props.row.status) }}
-          </q-chip>
-          <q-popup-edit
-            v-slot="scope"
-            :auto-save="true"
-            :model-value="props.row.status"
-            @save="(value) => onUpdateStatus(value, props.row.uuid)"
-          >
-            <q-select
-              v-model="scope.value"
-              :option-label="(status)=>$t('dossier_status_enum.' + status)"
-              :options="Object.keys(STATUS)"
-            />
-          </q-popup-edit>
-        </q-td>
-        <q-td key="uploads">
-          {{ props.row.uploads }}
-          <q-btn
-            :label="$t('employee_dashboard.all_documents')"
-            @click="showAllDocuments"
-          />
-        </q-td>
-        <q-td key="offers" @click="()=>expandOffers(props.row.uuid)">
-          <q-chip
-            v-for="(offer, index) in props.row.offers"
-            :key="index"
-            :style="offerChipStyle(offer.status)"
-          >
-            {{ offer.bank.abbreviation }}
-          </q-chip>
-        </q-td>
-        <q-td key="non-arrangeable">
-          <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
-        </q-td>
-      </q-tr>
-      <div v-if="expanded[props.row.uuid]"
-      >
-        <q-tr v-for="offer in props.row.offers"
-              :key="offer.uuid"
-              :props="props"
-              style="background-color: white; cursor: pointer"
+      <template #body="props">
+        <q-tr
+          :props="props"
+          style="background-color: white; cursor: pointer"
         >
-          <q-td key="date"> --></q-td>
-          <q-td>{{offer.bank.name}}</q-td>
-          <q-td>
+          <q-td key="date">
+            {{ dateString(props.row.created_at) }}
+          </q-td>
+          <q-td key="customer">
+            {{ props.row.first_name + " " + props.row.last_name }}
+          </q-td>
+          <q-td key="institute">
+            {{ props.row.original_bank.name }}
+          </q-td>
+          <q-td key="location">
+            {{ props.row.property_address.city }}
+          </q-td>
+          <q-td key="mortgage_amount">
+            {{ props.row.loan_sum }}
+          </q-td>
+          <q-td key="status">
+            <q-chip :style="dossierChipStyle(props.row.status)">
+              {{ $t('dossier_status_enum.' + props.row.status) }}
+            </q-chip>
+            <q-popup-edit
+              v-slot="scope"
+              :auto-save="true"
+              :model-value="props.row.status"
+              @save="(value) => onUpdateStatus(value, props.row.uuid)"
+            >
+              <q-select
+                v-model="scope.value"
+                :option-label="(status)=>$t('dossier_status_enum.' + status)"
+                :options="Object.keys(STATUS)"
+              />
+            </q-popup-edit>
+          </q-td>
+          <q-td key="uploads">
+            {{ props.row.uploads }}
+            <q-btn
+              icon="picture_as_pdf"
+              color="primary"
+              round
+              @click="showAllDocuments"
+            />
+          </q-td>
+          <q-td key="offers" @click="()=>expandOffers(props.row.uuid)">
             <q-chip
+              v-for="(offer, index) in props.row.offers"
+              :key="index"
               :style="offerChipStyle(offer.status)"
             >
-              {{ $t('offer_status_enum.' + offer.status) }}
+              {{ offer.bank.abbreviation }}
             </q-chip>
           </q-td>
+          <q-td key="non-arrangeable">
+            <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
+          </q-td>
         </q-tr>
-      </div>
+        <div v-if="expanded[props.row.uuid]"
+        >
+          <q-tr v-for="offer in props.row.offers"
+                :key="offer.uuid"
+                :props="props"
+                style="background-color: white; cursor: pointer"
+          >
+            <q-td key="date"> --></q-td>
+            <q-td>{{offer.bank.name}}</q-td>
+            <q-td>
+              <q-chip
+                :style="offerChipStyle(offer.status)"
+              >
+                {{ $t('offer_status_enum.' + offer.status) }}
+              </q-chip>
+            </q-td>
+          </q-tr>
+        </div>
 
-      <!-- one spacer row per row -->
-      <q-tr style="height: 14px"/>
-    </template>
+        <!-- one spacer row per row -->
+        <q-tr style="height: 14px"/>
+      </template>
     </q-table>
   </div>
 </template>
@@ -136,16 +113,16 @@ const search = ref('')
 
 // ----- Data -----
 const columns = [
-  { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true },
+  { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true, align: 'center' },
   // customer + customer id
-  { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true },
-  { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true },
-  { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true },
-  { name: 'mortgage_amount', label: i18n.global.t('employee_dashboard.mortgage_amount'), field: 'mortgage_amount', sortable: true },
-  { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false },
-  { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false },
-  { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false },
-  { name: 'non-arrangeable', label:'', field: '\'non-arrangeable\'', sortable: true },
+  { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true, align: 'center' },
+  { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true, align: 'center' },
+  { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true, align: 'center' },
+  { name: 'mortgage_amount', label: i18n.global.t('employee_dashboard.mortgage_amount'), field: 'mortgage_amount', sortable: true, align: 'center' },
+  { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false, align: 'center' },
+  { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false, align: 'center' },
+  { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false, align: 'center' },
+  { name: 'non-arrangeable', label:'', field: 'non-arrangeable', sortable: true, align: 'center' },
 ]
 
 
