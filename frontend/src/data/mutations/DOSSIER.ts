@@ -49,7 +49,44 @@ export const SET_DOSSIER_STATUS = {
     }`,
   tables: ['dossier'],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'updateDossierStatus'
+  cacheLocation: undefined
+}
+
+export const RESET_DOSSIER = {
+  mutation: gql`
+    mutation resetDossier($uuid: ID!){
+      resetDossier (resetDossierInput: {uuid: $uuid}) {
+        uuid
+        correspondence_address {
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
+        }
+        original_bank {
+          uuid
+          __typename
+        }
+        born
+        property_address {
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
+        }
+        loan_sum
+        non_arrangeable
+        status
+        __typename
+      }
+    }`,
+  tables: ['dossier'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
 }
 
 export const CREATE_OFFER = {

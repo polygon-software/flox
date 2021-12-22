@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
-import { OFFER_STATUS, DOSSIER_STATUS } from '../../ENUM/ENUMS';
+import { DOSSIER_STATUS, OFFER_STATUS } from '../../ENUM/ENUMS';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import { BankService } from '../bank/bank.service';
 import { generateHumanReadableId } from '../../helpers';
@@ -153,11 +153,30 @@ export class DossierService {
    */
   async resetDossier(resetDossierInput: ResetDossierInput): Promise<Dossier> {
     // Find dossier
-    return this.dossierRepository.findOne({
-      uuid: resetDossierInput.uuid,
-    }); // TODO finish function
-    // Remove all offers
+    const dossier = await this.dossierRepository.findOne(
+      resetDossierInput.uuid,
+      {
+        relations: ['offers', 'original_bank'],
+      },
+    );
 
-    // Change status
+    if (!dossier) {
+      throw new Error(`No dossier found for ${resetDossierInput.uuid}`);
+    }
+
+    // Remove all offers
+    for (const offer of dossier.offers) {
+      await this.offerRepository.remove(offer);
+    }
+
+    // Change status back to IN_PROGRESS
+    await this.updateDossierStatus({
+      uuid: resetDossierInput.uuid,
+      status: DOSSIER_STATUS.IN_PROGRESS,
+    });
+
+    return this.dossierRepository.findOne(resetDossierInput.uuid, {
+      relations: ['offers', 'original_bank'],
+    });
   }
 }

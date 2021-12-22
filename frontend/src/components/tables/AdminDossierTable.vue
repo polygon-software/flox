@@ -92,7 +92,7 @@
 
 <script setup lang="ts">
 import {computed, Ref, ref} from 'vue';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import ResetDossierDialog from 'src/components/dialogs/ResetDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
@@ -101,6 +101,7 @@ import {OFFER_STATUS, DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {REJECTED_DOSSIERS} from 'src/data/queries/QUERIES';
 import {formatDate} from 'src/helpers/format-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -195,24 +196,18 @@ function onRowClick(dossier: Record<string, unknown>): void{
   $q.dialog({
     component: ResetDossierDialog,
   }).onOk(() => {
-    showNotification(
+    // Delete all offers & reset status
+    executeMutation(RESET_DOSSIER, {uuid: dossier.uuid}).then(() => {
+      // Show notification
+      showNotification(
         $q,
         i18n.global.t('messages.dossier_reset'),
         undefined,
-        'positive'
+        'primary'
       )
-    // // Delete all offers & reset status
-    // // executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => { TODO
-    //   // Show notification
-    //   showNotification(
-    //     $q,
-    //     i18n.global.t('messages.dossier_reset'),
-    //     undefined,
-    //     'primary'
-    //   )
-    // }).catch((error)=>{
-    //   console.error(error) // Todo Toast
-    // })
+    }).catch((error)=>{
+      console.error(error) // Todo Toast
+    })
   })}
 
 
