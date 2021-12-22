@@ -1,7 +1,7 @@
 import {formatDate} from 'src/helpers/format-helpers';
 
 /**
- * Preprocessor for search
+ * Preprocessor for search, to be used in q-tables as :filter-method
  * @param {unknown} target - where to search
  * @param {string} term - what to search
  * @param {number} depthLimit - search limit
@@ -10,7 +10,6 @@ import {formatDate} from 'src/helpers/format-helpers';
 export function deepFilter(target:any, term:string, depthLimit=5):boolean{
   const cleanTerm = term.trim()
   return cleanTerm.split(' ').every((part)=>{
-    console.log(part.toLowerCase())
     return recursiveFilter(target, part.toLowerCase(), depthLimit)
   })
 }
