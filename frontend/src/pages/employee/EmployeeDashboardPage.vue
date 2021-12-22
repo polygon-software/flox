@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <q-card
       class="square q-pa-md q-ma-md"
-      style="width: 1600px"
+      style="width: 900px"
     >
       <!-- Own info -->
       <CompanyEmployeeId/>
@@ -36,9 +36,7 @@
       </div>
       <div class="q-ma-md col text-center">
         <!-- Dossier Overview -->
-        <EmployeeDashboardTable
-          :options="showOptions()"
-        />
+        <EmployeeDashboardTable/>
       </div>
     </q-card>
   </q-page>
