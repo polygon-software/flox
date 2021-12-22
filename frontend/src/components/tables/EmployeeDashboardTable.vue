@@ -7,6 +7,7 @@
       :rows="rows"
       :columns="columns"
       :filter="props.search"
+      :filter-method="filter"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
@@ -105,6 +106,8 @@ import {i18n} from 'boot/i18n';
 import {OFFER_STATUS, DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {formatDate} from 'src/helpers/format-helpers';
+import {recursiveFilter} from 'src/helpers/filter-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -142,6 +145,15 @@ const rows = computed( () => {
 
 const expanded: Ref<Record<string, boolean>> = ref({})
 
+/**
+ * Search Filter
+ * @param {Record<string, unknown>[]} rows - rows
+ * @param {string} terms - search key
+ * @returns {Record<string, unknown>[]} - filtered rows
+ */
+function filter(rows:Record<string, unknown>[], terms:string){
+  return rows.filter((row)=>recursiveFilter(row, terms))
+}
 
 /**
  * Edits the dossier status and update the status with the selected item
