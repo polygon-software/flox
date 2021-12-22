@@ -83,7 +83,8 @@ export default {
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
     document_upload_enabled: 'Dokumentupload freigeschaltet',
-    application_rejected: 'Antrag abgelehnt'
+    application_rejected: 'Antrag abgelehnt',
+    dossier_reset: 'Dossier erfolgreich zurückgesetzt',
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -123,6 +124,10 @@ export default {
     document_upload: 'Dokumentenupload',
     additional_documents: 'Weitere Dokumente',
     add_additional_documents: 'Weitere hinzufügen',
+  },
+  dossier: {
+    reset_dossier: 'Dossier zurücksetzen',
+    reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -201,8 +206,6 @@ export default {
     organisation_id: 'Organisationsnummer',
     employee_id: 'Mitarbeiternummer',
     role: 'Rolle',
-
-
   },
   dossier_status_enum: {
     OPEN: 'Offen',

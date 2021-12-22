@@ -20,7 +20,6 @@
           <q-icon name="search" />
         </template>
       </q-input>
-
     </div>
 
     <q-table
@@ -95,11 +94,13 @@
 import {computed, Ref, ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
+import ResetDossierDialog from 'src/components/dialogs/ResetDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {OFFER_STATUS, STATUS} from 'src/data/ENUM/ENUM';
 import {REJECTED_DOSSIERS} from 'src/data/queries/QUERIES';
 import {formatDate} from 'src/helpers/format-helpers';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -191,8 +192,28 @@ function showAllDocuments() {
  * @returns {void}
  */
 function onRowClick(dossier: Record<string, unknown>): void{
-  // TODO: re-enable, how is this supposed to work?
-}
+  $q.dialog({
+    component: ResetDossierDialog,
+  }).onOk(() => {
+    showNotification(
+        $q,
+        i18n.global.t('messages.dossier_reset'),
+        undefined,
+        'positive'
+      )
+    // // Delete all offers & reset status
+    // // executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => { TODO
+    //   // Show notification
+    //   showNotification(
+    //     $q,
+    //     i18n.global.t('messages.dossier_reset'),
+    //     undefined,
+    //     'primary'
+    //   )
+    // }).catch((error)=>{
+    //   console.error(error) // Todo Toast
+    // })
+  })}
 
 
 </script>

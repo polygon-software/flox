@@ -82,7 +82,8 @@ export default {
   messages: {
     account_unlocked: 'Successfully unlocked account',
     document_upload_enabled: 'Enabled document upload',
-    application_rejected: 'Application rejected'
+    application_rejected: 'Application rejected',
+    dossier_reset: 'Successfully reset dossier',
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -122,6 +123,10 @@ export default {
     document_upload: 'File upload',
     additional_documents: 'Additional Documents',
     add_additional_documents: 'Add more',
+  },
+  dossier: {
+    reset_dossier: 'Reset dossier',
+    reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
