@@ -41,7 +41,7 @@ const loading = ref(false)
 const route = useRoute()
 const companyId = route.query.cid
 
-const account_fields = [
+const accountFields = [
   FIELDS.FILE_UPLOAD,
 ]
 
@@ -49,7 +49,7 @@ const pages = [
   {
     key: 'file_upload',
     label: i18n.global.t('documents.document_upload'),
-    fields: account_fields,
+    fields: accountFields,
   },
 ]
 

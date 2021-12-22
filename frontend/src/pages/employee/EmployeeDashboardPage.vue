@@ -2,21 +2,150 @@
   <q-page class="flex flex-center">
     <q-card
       class="square q-pa-md q-ma-md"
-      style="width: 800px"
+      style="width: 1600px"
     >
-        <p
-          class="q-ma-md col text-center"
-          style="font-size: x-large"
+      <!-- Own info -->
+      <CompanyEmployeeId/>
+      <p
+        class="q-ma-md col text-center"
+        style="font-size: x-large"
+      >
+        {{ $t('employee_dashboard.title') }}
+      </p>
+      <div class="q-ma-md col text-center" style="display: flex; justify-content: space-between; align-items: baseline">
+        {{ $t('employee_dashboard.applications') }}
+<!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
+        <q-input
+          v-model="searchDossier"
+          color="purple-12"
+          :label="$t('employee_dashboard.search')"
+          type="text"
+          @change="search"
         >
-          {{ $t('employee_dashboard') }}
-        </p>
-        <p class="q-ma-md col text-center">
-          Hello World!
-        </p>
+          <template #prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+        <q-btn
+          class="q-ma-md"
+          :label="$t('employee_dashboard.new_assignment')"
+          color="primary"
+          icon="add"
+          @click="newAssignment"
+        />
+      </div>
+      <div class="q-ma-md col text-center">
+        <!-- Dossier Overview -->
+        <EmployeeDashboardTable
+          :search="dossierSearched"
+        />
+      </div>
     </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue'
+import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue';
+import CompanyEmployeeId from 'components/cards/CompanyEmployeeIdCard.vue';
+import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
 
+const searchDossier = ref('')
+const dossierSearched = ref('')
+
+/**
+ * Searches employee and emits the event change to show the customers searched in the input search
+ * @returns {void}
+ */
+function search(){
+  dossierSearched.value = searchDossier.value
+}
+
+
+// const $routerService: RouterService = inject('$routerService') as RouterService Todo Re-enable once create dossier form is added
+
+/**
+ * Routes to the new assignment page to add more dossiers
+ * @returns {Promise<void>} - done
+ */
+async function newAssignment(): Promise<void> {
+  // await $routerService.routeTo(ROUTES.NEW_ASSIGNMENT_PAGE) Todo Re-enable once create dossier form is added
+  // correspondence Address
+  const correspondenceAddress = {
+    street: 'Irrelevant Street',
+    number: '6',
+    city: 'Unimportant City',
+    zip_code: '8620'
+  }
+
+  //original Bank
+  const options = [
+    {abbreviation: 'ZKB', name: 'Züricher Kantonal Bank'},
+    {abbreviation: 'UBS', name: 'UBS Schweiz'},
+    {abbreviation: 'LNT', name: 'Bank Lindt'},
+    {abbreviation: 'PST', name: 'Postfinance'}
+  ]
+  const bank = options[Math.floor(Math.random() * options.length)]
+
+  //born
+  const born = new Date(2021 - Math.floor(Math.random()*100), Math.floor(Math.random()*24) , Math.floor(Math.random()*28))
+  const cities = ['Zürich', 'Basel', 'Genf', 'Bern', 'Winterthur', 'Zug', 'Sion']
+  //Property Address
+  const propertyAddress = {
+    street: 'Unknown Street',
+    number: '7',
+    city: cities[Math.floor(Math.random()*cities.length)]
+    ,
+    zip_code: '8720'
+  }
+
+  //loan
+  const loanSum = Math.random() * 100000
+  // Person
+  const firstNames = ['Tobias', 'Tim', 'Fritz', 'Robin', 'Bob', 'Samuel', 'Ester']
+  const lastNames = ['Züricher', 'Mühler', 'Goldstein', 'Bauer', 'Schweizer', 'Kündig', 'Rothorn']
+  const firstName = firstNames[Math.floor(Math.random()*firstNames.length)]
+  const lastName = lastNames[Math.floor(Math.random()*lastNames.length)]
+  const email = 'email@email.email'
+
+  const res = await executeMutation(CREATE_DOSSIER, {
+    first_name: firstName,
+    last_name: lastName,
+    correspondence_address: correspondenceAddress,
+    original_bank_name: bank.name,
+    original_bank_abbreviation: bank.abbreviation,
+    born,
+    property_address: propertyAddress,
+    loan_sum: loanSum,
+    email
+  })
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const dossierUuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
+
+  const nrOfBanks = Math.floor(Math.random()*4)
+  const bankUuids = [
+    'd1bc4fe3-444d-40f7-99bd-249d0ada187c',
+    '8e2cb0a1-97c3-49cd-924d-e7bb6d990804',
+    'c9cb6cd3-7ac9-4051-9128-1d626eb72845',
+    '625de230-5c8d-4080-8ae2-cb946a20f843',
+
+
+  ]
+  const chosen: Array<string> = []
+  while (chosen.length < nrOfBanks){
+    const status = Object.keys(OFFER_STATUS)[Math.floor(Math.random() * Object.keys(OFFER_STATUS).length)]
+    const next = bankUuids[Math.floor(Math.random()*bankUuids.length)]
+    if(!(chosen.includes(next))){
+      chosen.push(next)
+      await executeMutation(CREATE_OFFER, {
+        bank_uuid: next,
+        dossier_uuid: dossierUuid,
+        status: status
+      })
+    }
+  }
+}
 </script>

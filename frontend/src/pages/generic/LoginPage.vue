@@ -54,20 +54,19 @@ const $routerService: RouterService|undefined = inject('$routerService')
  */
 async function onLogin({username, password, route_target}: {username: string, password: string, route_target: string}){
   await $authService?.login(username, password)
-  const target_route_mapping: Record<string, RouteRecordRaw> = {
+  const targetRouteMapping: Record<string, RouteRecordRaw> = {
     'admin-dashboard': ROUTES.ADMIN_DOSSIERS,
     'management-dashboard': ROUTES.MANAGEMENT_EMPLOYEE_DATA,
     'employee-dashboard': ROUTES.EMPLOYEE_DASHBOARD,
     'soiemployee-dashboard': ROUTES.APPLICATIONS
   }
   // Redirect to main page
-  await $routerService?.routeTo(target_route_mapping[route_target])
+  await $routerService?.routeTo(targetRouteMapping[route_target])
 }
 
 /**
  * Routes to the Signup Page
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function toSignup(): Promise<void>{
   await $routerService?.routeTo(ROUTES.SIGNUP)

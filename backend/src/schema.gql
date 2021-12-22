@@ -33,6 +33,9 @@ input AssociateUserInput {
 }
 
 type Bank {
+  """Three letter abbreviation of the Bank"""
+  abbreviation: String!
+
   """Address"""
   address: Address!
 
@@ -54,8 +57,14 @@ type Bank {
   """Last Name"""
   last_name: String!
 
+  """Name of the Bank"""
+  name: String!
+
   """Offers made by Bank"""
   offers: [Offer!]!
+
+  """Dossier where the mortgage originally belongs to the bank"""
+  own_mortgages: [Dossier!]!
 
   """Human-readable ID"""
   readable_id: String!
@@ -128,6 +137,7 @@ input CreateAddressInput {
 }
 
 input CreateBankInput {
+  abbreviation: String!
   address: CreateAddressInput!
 
   """E-mail"""
@@ -138,6 +148,7 @@ input CreateBankInput {
 
   """Last Name"""
   last_name: String
+  name: String!
 }
 
 input CreateCompanyInput {
@@ -159,10 +170,25 @@ input CreateCompanyInput {
   uid: String
 }
 
-input CreateEmployeeInput {
-  """Company"""
-  company: company
+input CreateDossierInput {
+  born: DateTime
+  correspondence_address: CreateAddressInput!
 
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
+  loan_sum: Float
+  original_bank_abbreviation: String!
+  original_bank_name: String!
+  property_address: CreateAddressInput!
+}
+
+input CreateEmployeeInput {
   """E-mail"""
   email: String
 
@@ -183,6 +209,12 @@ input CreateEmployeeInput {
 
   """Phone Number"""
   phone: String!
+}
+
+input CreateOfferInput {
+  bank_uuid: String!
+  dossier_uuid: String!
+  status: OfferStatus!
 }
 
 input CreateSoiAdminInput {
@@ -213,27 +245,12 @@ input CreateSoiEmployeeInput {
   phone: String!
 }
 
-input CreateUserInput {
-  """ID of Person"""
-  fk: ID!
-
-  """Role of the User"""
-  role: Roles!
-
-  """Cognito ID"""
-  uuid: ID!
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
 input DeleteCompanyInput {
-  uuid: ID!
-}
-
-input DeleteUserInput {
   uuid: ID!
 }
 
@@ -252,6 +269,9 @@ type Dossier {
 
   """Mail"""
   email: String!
+
+  """Employee who created the Dossier"""
+  employee: Employee!
 
   """First Name"""
   first_name: String!
@@ -281,10 +301,21 @@ type Dossier {
   readable_id: String!
 
   """Status of Dossier"""
-  status: Status!
+  status: DossierStatus!
 
   """UUID"""
   uuid: ID!
+}
+
+enum DossierStatus {
+  COMPLETED
+  IN_PROGRESS
+  OFFERED
+  OPEN
+  REJECTED
+  SENT
+  SIGNED
+  SUBMITTED
 }
 
 type Employee {
@@ -296,6 +327,9 @@ type Employee {
 
   """Date of deletion"""
   deleted_at: DateTime
+
+  """Dossiers of employee"""
+  dossiers: [Dossier!]!
 
   """Mail"""
   email: String!
@@ -330,18 +364,19 @@ type Employee {
 
 type Mutation {
   associateUserToCompany(associateUserInput: AssociateUserInput!): Company!
-  create(createUserInput: CreateUserInput!): User!
   createBank(createBankInput: CreateBankInput!): Bank!
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
+  createDossier(createDossierInput: CreateDossierInput!): Dossier!
   createEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
+  createOffer(createOfferInput: CreateOfferInput!): Dossier!
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
-  remove(deleteUserInput: DeleteUserInput!): User!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
-  update(updateUserInput: UpdateUserInput!): User!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
+  updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
+  updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
 }
 
@@ -364,8 +399,18 @@ type Offer {
   """The Offer as a PDF"""
   pdf: PrivateFile!
 
+  """Status of Dossier"""
+  status: OfferStatus!
+
   """UUID"""
   uuid: ID!
+}
+
+enum OfferStatus {
+  ACCEPTED
+  INTERESTED
+  IN_PROCESS
+  RETRACTED
 }
 
 type PrivateFile {
@@ -421,14 +466,17 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getMyCompany: Company!
+  getMyDossiers: [Dossier!]
+  getMyEmployee: Employee!
+  getMyEmployees: [Employee!]!
+  getMyUser: User!
   getPrivateFile(
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
-  myCompany: Company!
-  myEmployees: [Employee!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
@@ -500,12 +548,6 @@ type SoiEmployee {
   uuid: ID!
 }
 
-enum Status {
-  ACCEPTED
-  CREATED
-  REJECTED
-}
-
 input UpdateCompanyInput {
   branch_structure: Boolean
   company_name: String
@@ -521,10 +563,29 @@ input UpdateCompanyInput {
   uuid: ID!
 }
 
-input UpdateEmployeeInput {
-  """Company"""
-  company: company
+input UpdateDossierInput {
+  born: DateTime
 
+  """E-mail"""
+  email: String
+
+  """First Name"""
+  first_name: String
+
+  """Last Name"""
+  last_name: String
+  loan_sum: Float
+  non_arrangeable: Boolean
+  status: DossierStatus
+  uuid: ID!
+}
+
+input UpdateDossierStatusInput {
+  status: DossierStatus!
+  uuid: ID!
+}
+
+input UpdateEmployeeInput {
   """E-mail"""
   email: String
   first_name: String
@@ -534,12 +595,6 @@ input UpdateEmployeeInput {
   last_name: String
   phone: String
   uuid: ID
-}
-
-input UpdateUserInput {
-  age: Int
-  name: String
-  uuid: ID!
 }
 
 type User {
@@ -562,139 +617,9 @@ type User {
   uuid: ID!
 }
 
-input address {
-  """City"""
-  city: String!
-
-  """Number"""
-  number: String!
-
-  """Street"""
-  street: String!
-
-  """Zip Code"""
-  zip_code: String!
-}
-
-input bank {
-  """Address"""
-  address: address!
-
-  """Offers made by Bank"""
-  offers: [offer!]!
-}
-
-input company {
-  """Branch structure"""
-  branch_structure: Boolean!
-
-  """Company Name"""
-  company_name: String!
-
-  """Correspondence address"""
-  correspondence_address: address!
-
-  """Stage of the creation process"""
-  creation_state: creationState!
-
-  """Documents of the company"""
-  documents: [private_file!]
-
-  """Domicile address"""
-  domicile_address: address!
-
-  """Employees of the company"""
-  employees: [employee!]
-
-  """Language"""
-  language: String!
-
-  """Phone Number"""
-  phone: String!
-
-  """Company UID"""
-  uid: String!
-}
-
 enum creationState {
   APPLIED
   AWAITING_DOCUMENTS
   DOCUMENTS_UPLOADED
   DONE
-}
-
-input dossier {
-  """Date of birth of customer"""
-  born: DateTime!
-
-  """Address"""
-  correspondence_address: address!
-
-  """Money loaned"""
-  loan_sum: Float!
-
-  """ToDo"""
-  non_arrangeable: Boolean!
-
-  """List of Offers"""
-  offers: [offer!]!
-
-  """Previous Bank of the customer"""
-  original_bank: bank!
-
-  """Address of Property"""
-  property_address: address!
-
-  """Status of Dossier"""
-  status: Status!
-}
-
-input employee {
-  """Company"""
-  company: company!
-
-  """Function within the company"""
-  function: String!
-
-  """Gender"""
-  gender: String!
-
-  """Language"""
-  language: String!
-
-  """Phone Number"""
-  phone: String!
-}
-
-input offer {
-  """Bank making the offer"""
-  bank: bank!
-
-  """Dossier of Offer"""
-  dossier: dossier!
-
-  """The Offer as a PDF"""
-  pdf: private_file!
-}
-
-input private_file {
-  """Company the file belongs to"""
-  company: company
-
-  """S3 File Key"""
-  key: String!
-
-  """File owner"""
-  owner: String!
-
-  """Pre-signed download URL"""
-  url: String
-}
-
-input public_file {
-  """S3 File Key"""
-  key: String!
-
-  """Public download URL"""
-  url: String!
 }

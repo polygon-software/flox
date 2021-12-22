@@ -93,8 +93,8 @@ export const COMPANY = {
 
 export const MY_COMPANY = {
   query: gql`
-    query myCompany{
-      myCompany{
+    query getMyCompany{
+      getMyCompany{
         uuid
         readable_id
         first_name
@@ -104,12 +104,12 @@ export const MY_COMPANY = {
     }
   `,
   tables: ['company'],
-  cacheLocation: 'myCompany'
+  cacheLocation: 'getMyCompany'
 }
 
 export const ALL_EMPLOYEES = {
   query: gql`
-        query{
+        query allEmployees{
             allEmployees{
               uuid
               first_name
@@ -127,8 +127,8 @@ export const ALL_EMPLOYEES = {
 
 export const MY_EMPLOYEES = {
   query: gql`
-        query{
-            myEmployees{
+        query getMyEmployees{
+            getMyEmployees{
               uuid
               first_name
               last_name
@@ -140,7 +140,29 @@ export const MY_EMPLOYEES = {
         }
         `,
   tables: ['employee'],
-  cacheLocation: 'myEmployees'
+  cacheLocation: 'getMyEmployees'
+}
+
+export const MY_EMPLOYEE = {
+  query: gql`
+    query getMyEmployee{
+      getMyEmployee{
+        uuid
+        first_name
+        last_name
+        readable_id
+        email
+        company{
+          __typename
+          uuid
+          readable_id
+        }
+        __typename
+      }
+    }
+    `,
+  tables: ['employee'],
+  cacheLocation: 'getMyEmployee'
 }
 
 export const PRIVATE_FILE = {
@@ -156,6 +178,62 @@ export const PRIVATE_FILE = {
   `,
   tables: ['private_file'],
   cacheLocation: 'getPrivateFile'
+}
+
+export const MY_USER = {
+  query: gql`
+    query{
+      getMyUser{
+        uuid
+        role
+        fk
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'getMyUser'
+}
+
+export const MY_DOSSIERS = {
+  query: gql`
+        query{
+            getMyDossiers{
+              uuid
+              created_at
+              first_name
+              last_name
+              __typename
+              non_arrangeable
+              original_bank{
+                __typename
+                uuid
+                name
+                abbreviation
+              }
+              property_address{
+                __typename
+                uuid
+                city
+              }
+              loan_sum
+              status
+              offers{
+                __typename
+                uuid
+                status
+                bank {
+                  __typename
+                  uuid
+                  name
+                  abbreviation
+                }
+              }
+            }
+        }
+  `,
+  tables: ['dossier'],
+  cacheLocation: 'getMyDossiers'
 }
 
 export const SOI_EMPLOYEES = {
@@ -176,4 +254,4 @@ export const SOI_EMPLOYEES = {
   cacheLocation: 'allSoiEmployees'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];
+export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS, MY_USER];

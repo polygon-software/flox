@@ -1,12 +1,13 @@
-import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
+import { Resolver, Query, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { CreateUserInput } from './dto/input/create-user.input';
-import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
-import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
-import { AdminOnly } from '../../auth/authorization.decorator';
+import {
+  AdminOnly,
+  AnyRole,
+  CurrentUser,
+} from '../../auth/authorization.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -30,28 +31,12 @@ export class UserResolver {
     return this.usersService.getUser(getUserArgs);
   }
 
-  @AdminOnly()
-  @Mutation(() => User)
-  async create(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<User> {
-    // Publish authentication so subscriptions will auto-update
-    return this.usersService.create(createUserInput);
-  }
-
-  @AdminOnly()
-  @Mutation(() => User)
-  async update(
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
-  ): Promise<User> {
-    return this.usersService.update(updateUserInput);
-  }
-
-  @AdminOnly()
-  @Mutation(() => User)
-  async remove(
-    @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
-  ): Promise<User> {
-    return this.usersService.remove(deleteUserInput);
+  @AnyRole()
+  @Query(() => User, { name: 'getMyUser' })
+  async getMyUser(@CurrentUser() user: Record<string, string>): Promise<User> {
+    if (!user) {
+      throw new Error('No User authenticated');
+    }
+    return this.usersService.getUser({ uuid: user.userId });
   }
 }

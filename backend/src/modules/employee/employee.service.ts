@@ -9,22 +9,27 @@ import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUMS';
 import { sendPasswordChangeEmail } from '../../email/helper';
+import { CompanyService } from '../company/company.service';
+import { generateHumanReadableId } from '../../helpers';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     @InjectRepository(Employee)
-    private employeeRepository: Repository<Employee>,
-    private userService: UserService,
+    private readonly employeeRepository: Repository<Employee>,
+    private readonly userService: UserService,
+    private readonly companyService: CompanyService,
   ) {}
 
   /**
    * Creates a new employee using the given data, and sets default values
-   * @param {CreateEmployeeInput} createEmployeeInput - the company's data, containing all mandatory fields
+   * @param {CreateEmployeeInput} createEmployeeInput - the employee's data, containing all mandatory fields
+   * @param {Company} company - the company
    * @returns {Promise<Employee>} - new employee
    */
   async createEmployee(
     createEmployeeInput: CreateEmployeeInput,
+    company: Company,
   ): Promise<Employee> {
     const password = randomPassword(8);
     const cognitoId = await createCognitoAccount(
@@ -36,14 +41,19 @@ export class EmployeeService {
       password,
       ROLE.EMPLOYEE,
     );
-    const employee = this.employeeRepository.create(createEmployeeInput);
+    const employee = this.employeeRepository.create({
+      ...createEmployeeInput,
+      company,
+      readable_id: generateHumanReadableId(), //Todo Collision Prevention
+    });
+    const newEmployee = await this.employeeRepository.save(employee);
     await this.userService.create({
       role: ROLE.EMPLOYEE,
       uuid: cognitoId,
-      fk: employee.uuid,
+      fk: newEmployee.uuid,
     });
 
-    return this.employeeRepository.save(employee);
+    return newEmployee;
   }
 
   /**
@@ -51,7 +61,7 @@ export class EmployeeService {
    * @returns {Promise<Employee[]>} - employees
    */
   async getAllEmployees(): Promise<Employee[]> {
-    return await this.employeeRepository.find();
+    return this.employeeRepository.find();
   }
 
   /**
@@ -76,7 +86,7 @@ export class EmployeeService {
     await this.employeeRepository.update(updateEmployeeInput.uuid, {
       ...updateEmployeeInput,
     });
-    return await this.employeeRepository.findOne(updateEmployeeInput.uuid);
+    return this.employeeRepository.findOne(updateEmployeeInput.uuid);
   }
 
   /**
@@ -85,7 +95,31 @@ export class EmployeeService {
    * @returns {Promise<Employee>} - employee
    */
   async getEmployee(uuid: string): Promise<Employee> {
-    return this.employeeRepository.findOne(uuid);
+    return this.employeeRepository.findOne(uuid, { relations: ['company'] });
   }
-  // TODO: Add remove/update/find functionalities as needed
+
+  /**
+   * Get the Employee of the currently logged in user
+   * @param {string} cognitoId - the employees users id
+   * @returns {Promise<Employee>} - The employee
+   */
+  async getMyEmployee(cognitoId: string): Promise<Employee> {
+    const user = await this.userService.getUser({ uuid: cognitoId });
+    if (user && user.role === ROLE.EMPLOYEE) {
+      return this.employeeRepository.findOne(user.fk, {
+        relations: [
+          'company',
+          'dossiers',
+          'dossiers.original_bank',
+          'dossiers.offers',
+          'dossiers.offers.bank',
+        ],
+      });
+    }
+    throw new Error(
+      `User is not an Employee but a ${
+        user ? String(user.role) : 'unauthenticated'
+      }`,
+    );
+  }
 }

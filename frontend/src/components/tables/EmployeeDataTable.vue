@@ -110,8 +110,7 @@ const computedResult = computed(()=>{
 
 /**
  * Routes to the page for registering a new employee
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function routeToRegisterEmployee(): Promise<void> {
   await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
@@ -120,8 +119,7 @@ async function routeToRegisterEmployee(): Promise<void> {
 /**
  * Upon clicking a row, opens the employee's dashboard view
  * @param {Record<string, unknown>} row - the row that was clicked
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
   await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {

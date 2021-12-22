@@ -29,10 +29,12 @@ export default boot(async ({ store, ssrContext}) => {
 
     //Tokens
     const accessToken = cookies.get('authentication.accessToken')
-    const idToken = cookies.get('authentication.accessToken')
-    const refreshToken = cookies.get('authentication.accessToken')
+    const idToken = cookies.get('authentication.idToken')
+    const refreshToken = cookies.get('authentication.refreshToken')
 
-    if(!accessToken){return}
+    if(!accessToken){
+      return
+    }
     await axios.post('https://cognito-idp.eu-central-1.amazonaws.com/', {
       'AccessToken':accessToken
     }, {headers: {
