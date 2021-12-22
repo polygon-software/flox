@@ -36,9 +36,7 @@
       </div>
       <div class="q-ma-md col text-center">
         <!-- Dossier Overview -->
-        <EmployeeDashboardTable
-          :options="showOptions()"
-        />
+        <EmployeeDashboardTable/>
       </div>
     </q-card>
   </q-page>
@@ -129,10 +127,12 @@ async function newAssignment(): Promise<void> {
   const dossierUuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
 
   const nrOfBanks = Math.floor(Math.random()*4)
-  const bankUuids = ['0d239c36-668e-493d-8050-7b060fc87975',
-    'c3abeb5d-9c73-46a0-9a6d-4d651bbf8fff',
-    '99ce3554-4680-4eea-b47a-3c39164b62f3',
-    '60023505-baf4-45c2-91f3-59b3dbc1240a',
+  const bankUuids = [
+    'd1bc4fe3-444d-40f7-99bd-249d0ada187c',
+    '8e2cb0a1-97c3-49cd-924d-e7bb6d990804',
+    'c9cb6cd3-7ac9-4051-9128-1d626eb72845',
+    '625de230-5c8d-4080-8ae2-cb946a20f843',
+
 
   ]
   const chosen: Array<string> = []

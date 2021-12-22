@@ -56,8 +56,12 @@ export class RolesGuard implements CanActivate {
     }
 
     const anyRole = this.isAnyRole(context, roles, dbUser);
+    if (anyRole) {
+      return true;
+    }
+
     // For publicly accessible resources, allow access by default
-    if (accessOverride && !anyRole) {
+    if (accessOverride && !roles) {
       console.warn(
         `Debug override used to access private resource: "${requestedFunction}"!`,
       );
@@ -73,10 +77,10 @@ export class RolesGuard implements CanActivate {
       }
       return false;
     }
-    const res = roles.includes(dbUser.role);
+    const res = roles ? roles.includes(dbUser.role) : false;
     if (accessOverride && !res) {
       console.warn(
-        `Debug override used to access resource : "${requestedFunction}" restricted to ${roles.join(
+        `Debug override used to access resource : "${requestedFunction}" restricted to ${roles?.join(
           ',',
         )} as ${dbUser.role}!`,
       );

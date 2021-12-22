@@ -117,7 +117,9 @@ export class EmployeeService {
       });
     }
     throw new Error(
-      'User is not an Employee but an ' + user ? user.role : 'unauthenticated',
+      `User is not an Employee but a ${
+        user ? String(user.role) : 'unauthenticated'
+      }`,
     );
   }
 }
