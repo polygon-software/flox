@@ -186,7 +186,13 @@ export class DossierService {
    * @returns {Promise<Dossier[]>} - the dossiers
    */
   async allDossiersBank(cognitoId: string): Promise<Dossier[]> {
-    const bank = this.bankService.getMyBank(cognitoId);
-    return this.dossierRepository.find({ where: { original_bank: Not(bank) } });
+    const bank = await this.bankService.getMyBank(cognitoId);
+    return this.dossierRepository.find({
+      where: {
+        original_bank: {
+          uuid: Not(bank.uuid),
+        },
+      },
+    });
   }
 }

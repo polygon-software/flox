@@ -301,9 +301,6 @@ type Dossier {
   """Previous Bank of the customer"""
   original_bank: Bank!
 
-  """Phone Number"""
-  phone: String!
-
   """Address of Property"""
   property_address: Address!
 
@@ -526,9 +523,6 @@ type SoiAdmin {
 
   """Last Name"""
   last_name: String!
-
-  """Phone Number"""
-  phone: String!
 
   """Human-readable ID"""
   readable_id: String!

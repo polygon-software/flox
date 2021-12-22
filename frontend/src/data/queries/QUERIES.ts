@@ -325,6 +325,8 @@ export const DOSSIERS_BANK = {
         first_name
         last_name
         created_at
+        readable_id
+        status
         correspondence_address {
           __typename
           uuid

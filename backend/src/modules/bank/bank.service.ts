@@ -66,6 +66,7 @@ export class BankService {
       first_name: '-',
       last_name: '-',
       email: '-',
+      phone: '-',
       readable_id: generateHumanReadableId(),
     });
     return this.bankRepository.save(newBank);

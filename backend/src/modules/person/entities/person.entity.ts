@@ -24,10 +24,4 @@ export class Person extends BaseEntity {
   @Column()
   @IsString()
   readable_id: string;
-
-  @Field(() => String, { description: 'Phone Number' })
-  @Column()
-  @IsString()
-  @IsPhoneNumber()
-  phone: string;
 }

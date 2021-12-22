@@ -17,10 +17,8 @@ export class Bank extends Person {
   @Column({ unique: true })
   abbreviation: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => String, { description: 'Phone Number', nullable: true })
-  @IsString()
-  @IsPhoneNumber()
   phone: string;
 
   @Field(() => Address, { description: 'Address' })
