@@ -13,35 +13,35 @@
       separator="none"
       flat
     >
-    <template #body="props">
+    <template #body="_props">
       <q-tr
-        :props="props"
+        :props="_props"
         style="background-color: white; cursor: pointer"
       >
         <q-td key="date">
-          {{ dateString(props.row.created_at) }}
+          {{ dateString(_props.row.created_at) }}
         </q-td>
         <q-td key="customer">
-          {{ props.row.first_name + " " + props.row.last_name }}
+          {{ _props.row.first_name + " " + _props.row.last_name }}
         </q-td>
         <q-td key="institute">
-          {{ props.row.original_bank.name }}
+          {{ _props.row.original_bank.name }}
         </q-td>
         <q-td key="location">
-          {{ props.row.property_address.city }}
+          {{ _props.row.property_address.city }}
         </q-td>
         <q-td key="mortgage_amount">
-          {{ props.row.loan_sum }}
+          {{ _props.row.loan_sum }}
         </q-td>
         <q-td key="status">
-          <q-chip :style="dossierChipStyle(props.row.status)">
-            {{ $t('dossier_status_enum.' + props.row.status) }}
+          <q-chip :style="dossierChipStyle(_props.row.status)">
+            {{ $t('dossier_status_enum.' + _props.row.status) }}
           </q-chip>
           <q-popup-edit
             v-slot="scope"
             :auto-save="true"
-            :model-value="props.row.status"
-            @save="(value) => onUpdateStatus(value, props.row.uuid)"
+            :model-value="_props.row.status"
+            @save="(value) => onUpdateStatus(value, _props.row.uuid)"
           >
             <q-select
               v-model="scope.value"
@@ -51,15 +51,15 @@
           </q-popup-edit>
         </q-td>
         <q-td key="uploads">
-          {{ props.row.uploads }}
+          {{ _props.row.uploads }}
           <q-btn
             :label="$t('employee_dashboard.all_documents')"
             @click="showAllDocuments"
           />
         </q-td>
-        <q-td key="offers" @click="()=>expandOffers(props.row.uuid)">
+        <q-td key="offers" @click="()=>expandOffers(_props.row.uuid)">
           <q-chip
-            v-for="(offer, index) in props.row.offers"
+            v-for="(offer, index) in _props.row.offers"
             :key="index"
             :style="offerChipStyle(offer.status)"
           >
@@ -67,14 +67,14 @@
           </q-chip>
         </q-td>
         <q-td key="non-arrangeable">
-          <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
+          <q-icon v-if="_props.row.non_arrangeable" name="warning" size="30px" color="red"/>
         </q-td>
       </q-tr>
-      <div v-if="expanded[props.row.uuid]"
+      <div v-if="expanded[_props.row.uuid]"
       >
-        <q-tr v-for="offer in props.row.offers"
+        <q-tr v-for="offer in _props.row.offers"
               :key="offer.uuid"
-              :props="props"
+              :props="_props"
               style="background-color: white; cursor: pointer"
         >
           <q-td key="date"> --></q-td>
@@ -121,7 +121,6 @@ const props = defineProps({
     }
   }
 )
-
 
 // ----- Data -----
 const columns = [
