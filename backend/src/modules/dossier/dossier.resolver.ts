@@ -5,7 +5,6 @@ import { UpdateDossierInput } from './dto/input/update-dossier.input';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import {
-  AnyRole,
   BankOnly,
   CurrentUser,
   EmployeeOnly,

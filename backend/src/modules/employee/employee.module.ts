@@ -21,7 +21,7 @@ import PublicFile from '../file/entities/public_file.entity';
       Company,
       PrivateFile,
       PublicFile,
-      Dossier
+      Dossier,
     ]),
   ],
   providers: [
