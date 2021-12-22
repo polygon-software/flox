@@ -16,8 +16,8 @@ import { generateHumanReadableId } from '../../helpers';
 export class EmployeeService {
   constructor(
     @InjectRepository(Employee)
-    private employeeRepository: Repository<Employee>,
-    private userService: UserService,
+    private readonly employeeRepository: Repository<Employee>,
+    private readonly userService: UserService,
     private readonly companyService: CompanyService,
   ) {}
 
@@ -61,7 +61,7 @@ export class EmployeeService {
    * @returns {Promise<Employee[]>} - employees
    */
   async getAllEmployees(): Promise<Employee[]> {
-    return await this.employeeRepository.find();
+    return this.employeeRepository.find();
   }
 
   /**
@@ -86,7 +86,7 @@ export class EmployeeService {
     await this.employeeRepository.update(updateEmployeeInput.uuid, {
       ...updateEmployeeInput,
     });
-    return await this.employeeRepository.findOne(updateEmployeeInput.uuid);
+    return this.employeeRepository.findOne(updateEmployeeInput.uuid);
   }
 
   /**

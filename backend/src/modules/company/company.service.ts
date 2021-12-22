@@ -20,9 +20,10 @@ import { UserService } from '../user/user.service';
 @Injectable()
 export class CompanyService {
   constructor(
-    @InjectRepository(Company) private companyRepository: Repository<Company>,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    private userService: UserService,
+    @InjectRepository(Company)
+    private readonly companyRepository: Repository<Company>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -55,7 +56,7 @@ export class CompanyService {
       // TODO: other default values
     });
 
-    return await this.companyRepository.save(company);
+    return this.companyRepository.save(company);
   }
 
   /**

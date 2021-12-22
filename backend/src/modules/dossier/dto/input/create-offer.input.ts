@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsUUID } from 'class-validator';
-import { OFFER_STATUS, STATUS } from '../../../../ENUM/ENUMS';
+import { OFFER_STATUS } from '../../../../ENUM/ENUMS';
 
 @InputType()
 export class CreateOfferInput {

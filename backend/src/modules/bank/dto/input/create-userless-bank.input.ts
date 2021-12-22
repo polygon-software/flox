@@ -1,7 +1,4 @@
-import { Field, InputType, PartialType } from '@nestjs/graphql';
-import { CreatePersonInput } from '../../../person/dto/create-person.input';
-import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
-import { IsNotEmptyObject } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateUserlessBankInput {

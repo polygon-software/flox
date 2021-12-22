@@ -1,5 +1,4 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
 import { ANY_ROLE_KEY } from './authorization.decorator';
@@ -31,16 +30,10 @@ export class RolesGuard implements CanActivate {
   /**
    * Validate that the user has appropriate rights to activate API endpoint.
    * @param {ExecutionContext} context - context
-   * @returns {boolean | Promise<boolean> | Observable<boolean>} - can activate
+   * @returns {boolean | Promise<boolean>} - can activate
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // Determine if resource is public
-    const isPublic: boolean =
-      this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-        context.getHandler(),
-        context.getClass(),
-      ]) ?? false;
-
+    const isPublic = this.isPublic(context);
     if (isPublic) {
       return true;
     }
@@ -62,23 +55,13 @@ export class RolesGuard implements CanActivate {
       }
     }
 
-    // If no roles are specified, allow access only on public resources OR any role
-    if (!roles || roles.length === 0) {
-      // Determine if resource is accessible to any logged-in user
-      const anyRole: boolean =
-        this.reflector.getAllAndOverride<boolean>(ANY_ROLE_KEY, [
-          context.getHandler(),
-          context.getClass(),
-        ]) && !!dbUser;
-
-      // For publicly accessible resources, allow access by default
-      if (accessOverride && !isPublic && !anyRole) {
-        console.warn(
-          `Debug override used to access private resource: "${requestedFunction}"!`,
-        );
-        return true;
-      }
-      return anyRole;
+    const anyRole = this.isAnyRole(context, roles, dbUser);
+    // For publicly accessible resources, allow access by default
+    if (accessOverride && !anyRole) {
+      console.warn(
+        `Debug override used to access private resource: "${requestedFunction}"!`,
+      );
+      return true;
     }
 
     if (!dbUser) {
@@ -110,5 +93,41 @@ export class RolesGuard implements CanActivate {
    */
   matchRoles(allowedRoles: string[], userRoles: string[]): boolean {
     return userRoles.some((userRole) => allowedRoles.includes(userRole));
+  }
+
+  /**
+   * whether endpoint is Public
+   * @param {ExecutionContext} context - context
+   * @returns {boolean} - is public
+   */
+  isPublic(context: ExecutionContext) {
+    // Determine if resource is public
+    return (
+      this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+        context.getHandler(),
+        context.getClass(),
+      ]) ?? false
+    );
+  }
+
+  /**
+   * Checks if user is an Admin
+   * @param {ExecutionContext} context - context
+   * @param {string[]} roles - the list of the user's roles
+   * @param {User} dbUser - the requesting user
+   * @returns {boolean} - whether any user can activate
+   */
+  isAnyRole(context: ExecutionContext, roles: string[], dbUser) {
+    // If no roles are specified, allow access only on public resources OR any role
+    if (!roles || roles.length === 0) {
+      // Determine if resource is accessible to any logged-in user
+      return (
+        this.reflector.getAllAndOverride<boolean>(ANY_ROLE_KEY, [
+          context.getHandler(),
+          context.getClass(),
+        ]) && !!dbUser
+      );
+    }
+    return false;
   }
 }

@@ -21,7 +21,7 @@ export class FileController {
   constructor(
     private readonly fileService: FileService,
     @InjectRepository(Company)
-    private companyRepository: Repository<Company>,
+    private readonly companyRepository: Repository<Company>,
   ) {}
 
   @Public()
@@ -36,12 +36,12 @@ export class FileController {
       return;
     }
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.fileService.uploadPublicFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.fileService.uploadPublicFile(
+      fileBuffer,
       file.filename,
     );
-    res.send(new_file);
+    res.send(newFile);
   }
 
   @Post('/uploadPrivateFile')
@@ -60,13 +60,13 @@ export class FileController {
     const owner = req['user'].userId;
 
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.fileService.uploadPrivateFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.fileService.uploadPrivateFile(
+      fileBuffer,
       file.filename,
       owner,
     );
-    res.send(new_file);
+    res.send(newFile);
   }
 
   @Post('/uploadCompanyFile')
@@ -107,9 +107,9 @@ export class FileController {
     if (!file) {
       throw new Error(ERRORS.no_valid_file);
     }
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.fileService.uploadPrivateFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.fileService.uploadPrivateFile(
+      fileBuffer,
       file.filename,
       companyUuid, // Owner; must be changed to cognito ID later
       company,
@@ -117,6 +117,6 @@ export class FileController {
     company.creation_state = CREATION_STATE.DOCUMENTS_UPLOADED;
     await this.companyRepository.save(company);
 
-    res.send(new_file);
+    res.send(newFile);
   }
 }

@@ -1,9 +1,6 @@
-import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
+import { Resolver, Query, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { CreateUserInput } from './dto/input/create-user.input';
-import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
-import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import {
@@ -11,7 +8,6 @@ import {
   AnyRole,
   CurrentUser,
 } from '../../auth/authorization.decorator';
-import { Public } from '../../auth/authentication.decorator';
 
 @Resolver(() => User)
 export class UserResolver {

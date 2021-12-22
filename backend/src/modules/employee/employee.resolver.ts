@@ -14,7 +14,6 @@ import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUMS';
-import { Public } from '../../auth/authentication.decorator';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
@@ -44,10 +43,7 @@ export class EmployeeResolver {
     if (!company) {
       throw new Error(`No company found for ${user.userId}`);
     }
-    return this.employeeService.createEmployee(
-      createEmployeeInput,
-      company,
-    );
+    return this.employeeService.createEmployee(createEmployeeInput, company);
   }
 
   /**
@@ -112,22 +108,20 @@ export class EmployeeResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<Employee> {
     // Admin has access
-    const db_user = await this.userService.getUser({ uuid: user.userId });
-    if (db_user.role === ROLE.SOI_ADMIN) {
-      return await this.employeeService.updateEmployee(updateEmployeeInput);
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    if (dbUser.role === ROLE.SOI_ADMIN) {
+      return this.employeeService.updateEmployee(updateEmployeeInput);
     }
 
     // Company of employee has access
     const company = await this.companyService.getCompany({
       cognito_id: user.userId,
     } as GetCompanyArgs);
-    const my_employees = await this.employeeService.getEmployees(company);
+    const myEmployees = await this.employeeService.getEmployees(company);
     if (
-      my_employees.some(
-        (employee) => employee.uuid === updateEmployeeInput.uuid,
-      )
+      myEmployees.some((employee) => employee.uuid === updateEmployeeInput.uuid)
     ) {
-      return await this.employeeService.updateEmployee(updateEmployeeInput);
+      return this.employeeService.updateEmployee(updateEmployeeInput);
     }
   }
 }
