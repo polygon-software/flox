@@ -1,5 +1,4 @@
 import Joi, {Schema} from 'joi';
-import {i18n} from 'boot/i18n';
 import {ROLE} from 'src/data/ENUM/ENUM';
 import {UserItem} from '../../../../shared/schemas/UserItem';
 
