@@ -188,7 +188,7 @@ function onReject(): void {
         $q,
         i18n.global.t('messages.rejection_failed'),
         undefined,
-        'red-7'
+        'negative'
       )
     })
   })

@@ -121,7 +121,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/soi/RegisterBankPage.vue') }],
   },
   'NEW_DOSSIER_PAGE': {
-    path: '/new-assignment',
+    path: '/new-dossier',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/NewDossierPage.vue') }],
   },

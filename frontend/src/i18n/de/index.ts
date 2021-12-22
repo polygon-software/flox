@@ -86,10 +86,9 @@ export default {
     account_unlocked: 'Account erfolgreich freigeschaltet',
     document_upload_enabled: 'Dokumentupload freigeschaltet',
     application_rejected: 'Antrag abgelehnt',
-    rejection_failed: 'Ein Fehler ist beim ablehnen aufgetreten',
-    success: 'Erfolgreifch',
+    rejection_failed: 'Ein Fehler ist beim Ablehnen aufgetreten',
+    success: 'Erfolgreich',
     failure: 'Fehlgeschlagen'
-
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -207,8 +206,6 @@ export default {
     organisation_id: 'Organisationsnummer',
     employee_id: 'Mitarbeiternummer',
     role: 'Rolle',
-
-
   },
   dossier_status_enum: {
     OPEN: 'Offen',
@@ -217,7 +214,7 @@ export default {
     SUBMITTED: 'Eingereicht',
     OFFERED: 'Offeriert',
     COMPLETED: 'Abgeschlossen',
-    IN_PROCESS: 'Kreditvertrag in Bearbeitung',
+    IN_PROGRESS: 'Kreditvertrag in Bearbeitung',
     SENT: 'Kreditvertrag versendet',
   },
   offer_status_enum: {

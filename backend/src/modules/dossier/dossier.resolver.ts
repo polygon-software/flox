@@ -31,6 +31,7 @@ export class DossierResolver {
   ): Promise<Dossier> {
     return this.dossierService.createDossier(createDossierInput, user.userId);
   }
+
   /**
    * Updates the data of a dossier
    * @param {UpdateDossierInput} updateDossierInput - input, containing new status

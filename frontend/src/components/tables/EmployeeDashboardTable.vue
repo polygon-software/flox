@@ -6,6 +6,7 @@
       table-header-class="bg-transparent"
       :rows="rows"
       :columns="columns"
+      :filter="props.search"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
@@ -110,13 +111,21 @@ const $q: QVueGlobals = useQuasar()
 // Selection must be an array
 const selected = ref([])
 
+const props = defineProps({
+    search: {
+      type: String,
+      default: ''
+    }
+  }
+)
+
 
 // ----- Data -----
 const columns = [
   { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true },
   // customer + customer id
-  { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true },
-  { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true },
+  { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'first_name', sortable: true },
+  { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'original_bank.name', sortable: true },
   { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true },
   { name: 'mortgage_amount', label: i18n.global.t('employee_dashboard.mortgage_amount'), field: 'mortgage_amount', sortable: true },
   { name: 'status', label: i18n.global.t('employee_dashboard.status'), field: 'status', sortable: false },
@@ -127,7 +136,7 @@ const columns = [
 
 
 const dossiers = subscribeToQuery(MY_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
-const rows = computed(()=>{
+const rows = computed( () => {
   return dossiers.value ?? []
 })
 
@@ -152,14 +161,14 @@ function onUpdateStatus(status: DOSSIER_STATUS, uuid:string){
       $q,
       i18n.global.t('messages.success'),
       undefined,
-      'positiv'
+      'positive'
     )
   }).catch(()=>{
     showNotification(
       $q,
       i18n.global.t('messages.failure'),
       undefined,
-      'red-7'
+      'negative'
     )
   })
 }

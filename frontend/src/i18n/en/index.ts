@@ -84,7 +84,7 @@ export default {
     account_unlocked: 'Successfully unlocked account',
     document_upload_enabled: 'Enabled document upload',
     application_rejected: 'Application rejected',
-    rejection_failed: 'An Error occurred when rejecting',
+    rejection_failed: 'An Error occurred while rejecting',
     success: 'Success',
     failure: 'Failure'
   },
@@ -213,7 +213,7 @@ export default {
     SUBMITTED: 'Submitted',
     OFFERED: 'Offered',
     COMPLETED: 'Completed',
-    IN_PROCESS: 'Credit contract in process',
+    IN_PROGRESS: 'Credit contract in process',
     SENT: 'Credit contract sent',
   },
   offer_status_enum: {

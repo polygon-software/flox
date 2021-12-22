@@ -115,14 +115,13 @@ export class RolesGuard implements CanActivate {
   }
 
   /**
-   * Checks if user is an Admin
+   * Checks if the user is logged in and the access control is "anyRole"
    * @param {ExecutionContext} context - context
    * @param {string[]} roles - the list of the user's roles
    * @param {User} dbUser - the requesting user
    * @returns {boolean} - whether any user can activate
    */
   isAnyRole(context: ExecutionContext, roles: string[], dbUser) {
-    // If no roles are specified, allow access only on public resources OR any role
     if (!roles || roles.length === 0) {
       // Determine if resource is accessible to any logged-in user
       return (

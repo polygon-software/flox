@@ -16,11 +16,11 @@
         {{ $t('employee_dashboard.applications') }}
 <!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
         <q-input
-          v-model="searchEmployees"
+          v-model="searchDossier"
           color="purple-12"
           :label="$t('employee_dashboard.search')"
           type="text"
-          @change="searchEmployee"
+          @change="search"
         >
           <template #prepend>
             <q-icon name="search" />
@@ -36,7 +36,9 @@
       </div>
       <div class="q-ma-md col text-center">
         <!-- Dossier Overview -->
-        <EmployeeDashboardTable/>
+        <EmployeeDashboardTable
+          :search="dossierSearched"
+        />
       </div>
     </q-card>
   </q-page>
@@ -50,18 +52,15 @@ import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
 
-const emit = defineEmits(['change'])
-
-const searchEmployees = ref('')
+const searchDossier = ref('')
+const dossierSearched = ref('')
 
 /**
  * Searches employee and emits the event change to show the customers searched in the input search
  * @returns {void}
  */
-function searchEmployee(){
-  emit('change', {
-    searchEmployees: searchEmployees.value,
-  })
+function search(){
+  dossierSearched.value = searchDossier.value
 }
 
 
