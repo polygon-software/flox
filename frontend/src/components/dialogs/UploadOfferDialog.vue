@@ -11,6 +11,8 @@
           {{ $t('dossier.upload_offer') }}
         </h5>
         <q-separator style="margin-top: 24px"/>
+
+        TODO: Document upload fields will go here.
       </q-card-section>
       <q-card-actions>
         <q-btn

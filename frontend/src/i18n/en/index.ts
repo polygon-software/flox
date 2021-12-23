@@ -95,7 +95,7 @@ export default {
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
-    offer: 'Offers',
+    offer: 'Offer | Offers',
     register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',

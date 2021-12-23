@@ -5,7 +5,7 @@
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
       <h5 class="q-ma-none">
-        {{ $t('dashboards.offer') + ' (' + computedResult.length + ')' }}
+        {{ $tc('dashboards.dossier', 2) + ' (' + computedResult.length + ')' }}
       </h5>
       <!-- Search bar -->
       <q-input
@@ -202,7 +202,7 @@ function showAllDocuments() {
 }
 
 /**
- * Changes an offer's status
+ * Hanldes offer status update by either changing directly or showing appropriate popup
  * @param {string} dossierUuid - the dossier's UUID
  * @param {string} offerUuid - the offer's UUID
  * @param {OFFER_STATUS} status - new status
@@ -215,26 +215,39 @@ async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OF
       title: 'UploadOfferDialog',
       component: UploadOfferDialog,
       persistent: true
-    }).onOk(() => {
-      // TODO
-      console.log('SUCCESS, todo change status')
+    }).onOk((files) => {
+      // TODO upload files
+      console.log('SUCCESS, todo change status and upload files', files)
+
+      // Change offer status TODO .then on mutation that uploads files
+      void changeOfferStatus(dossierUuid, offerUuid, status)
     })
   } else {
-    // TODO handle possible other cases in the future
-    // Change offer status
-    await executeMutation(SET_OFFER_STATUS, {
-      dossier_uuid: dossierUuid,
-      offer_uuid: offerUuid,
-      status: status
-    }).catch(() => {
-      showNotification(
-        $q,
-        i18n.global.t('messages.failure'),
-        undefined,
-        'negative'
-      )
-    })
+    await changeOfferStatus(dossierUuid, offerUuid, status)
   }
+}
+
+/**
+ * Changes an offer's status
+ * @param {string} dossierUuid - the dossier's UUID
+ * @param {string} offerUuid - the offer's UUID
+ * @param {OFFER_STATUS} status - new status
+ * @returns {Promise<void>} - done
+ */
+async function changeOfferStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS){
+  // Change offer status
+  await executeMutation(SET_OFFER_STATUS, {
+    dossier_uuid: dossierUuid,
+    offer_uuid: offerUuid,
+    status: status
+  }).catch(() => {
+    showNotification(
+      $q,
+      i18n.global.t('messages.failure'),
+      undefined,
+      'negative'
+    )
+  })
 }
 
 const columns = [

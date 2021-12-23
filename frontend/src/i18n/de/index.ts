@@ -97,7 +97,7 @@ export default {
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
-    offer: 'Anfragen',
+    offer: 'Offerte | Offerten',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',
