@@ -27,7 +27,6 @@
           <q-tr
             :props="props"
             style="background-color: white; cursor: pointer"
-            @click="() => onRowClick(props.row)"
           >
             <q-td key="date" :props="props">
               {{ formatDate(props.row.created_at) }}
@@ -74,16 +73,15 @@
                 :label="$t('offer_status_enum.' + (ownOfferForDossier(props.row).status))"
               />
 
-              <!-- Case 2: no offer yet: show button to mark interest TODO create offer on click -->
+              <!-- Case 2: no offer yet: show button to mark interest -->
               <q-chip
                 v-else
                 color="primary"
                 text-color="white"
                 :label=" $t('dossier.offer')"
+                clickable
+                @click="createOfferForDossier(props.row)"
               />
-            </q-td>
-            <q-td key="status" :props="props">
-              <q-icon name="circle" :color="props.row.status? 'green' : 'red'" size="md"/>
             </q-td>
           </q-tr>
           <!-- One spacer row per row -->
@@ -97,16 +95,20 @@
 
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {DOSSIERS_BANK, MY_BANK} from 'src/data/queries/QUERIES';
-import {computed} from 'vue';
+import {computed, inject} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import UploadDocumentsDialog from 'components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {offerChipStyle} from 'src/helpers/chip-helpers';
+import {CREATE_OFFER} from 'src/data/mutations/DOSSIER';
+import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
+import {ErrorService} from 'src/services/ErrorService';
 
 const $q: QVueGlobals = useQuasar()
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 const dossiers = subscribeToQuery(DOSSIERS_BANK, {})
 const computedResult = computed(()=>{
@@ -132,6 +134,25 @@ function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, un
 }
 
 /**
+ * Creates a new offer for a dossier
+ * @param {Record<string, unknown>} dossier - the dossier
+ * @returns {Promise<void>} - done
+ */
+async function createOfferForDossier(dossier: Record<string, unknown>){
+  if(!myBank.value || !dossier || !myBank.value.uuid){
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
+    return
+  }
+
+  // Create actual offer
+  await executeMutation(CREATE_OFFER, {
+    bank_uuid: myBank.value.uuid,
+    dossier_uuid: dossier.uuid,
+    status: OFFER_STATUS.INTERESTED // TODO remove once no mock-data present anymore
+  })
+}
+
+/**
  * Function to download all the files corresponding to the certain offer
  * @returns {void}
  */
@@ -151,32 +172,23 @@ async function statusChange() {
   //ToDo: create function to change the status
 }
 
-/**
- * Upon Row click, opens popup to create offer
- * @param {Record<string, unknown>} dossier - the dossier that was clicked
- * @returns {void}
- */
-function onRowClick(dossier: Record<string, unknown>){
-  // TODO
-}
-
 const columns = [
-  {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true},
-  {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'offer_id', sortable: true},
-  {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: false},
-  {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: true},
-  {name: 'mortgage', label: i18n.global.t('dashboards.mortgage'), field: 'mortgage', sortable: true},
-  {name: 'b_degree', label: i18n.global.t('dashboards.b_degree'), field: 'b_degree', sortable: true},
+  {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true, align: 'center'},
+  {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'offer_id', sortable: true, align: 'center'},
+  {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: false, align: 'center'},
+  {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: true, align: 'center'},
+  {name: 'mortgage', label: i18n.global.t('dashboards.mortgage'), field: 'mortgage', sortable: true, align: 'center'},
+  {name: 'b_degree', label: i18n.global.t('dashboards.b_degree'), field: 'b_degree', sortable: true, align: 'center'},
   {
     name: 'acceptability_of_risks',
     label: i18n.global.t('dashboards.acceptability_of_risks'),
     field: 'acceptability_of_risks',
-    sortable: true
+    sortable: true,
+    align: 'center'
   },
-  {name: 'expiration', label: i18n.global.t('dashboards.expiration'), field: 'expiration', sortable: true},
-  {name: 'download', label: ' ', field: 'download', sortable: true},
-  {name: 'offer_status', label: ' ', field: 'offer_status', sortable: true},
-  {name: 'status', label: i18n.global.t('account_data.status'), field: 'status', sortable: true},
+  {name: 'expiration', label: i18n.global.t('dashboards.expiration'), field: 'expiration', sortable: true, align: 'center'},
+  {name: 'download', label: ' ', field: 'download', sortable: true, align: 'center'},
+  {name: 'offer_status', label: ' ', field: 'offer_status', sortable: true, align: 'center'},
 ]
 
 
