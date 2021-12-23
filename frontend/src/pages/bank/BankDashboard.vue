@@ -113,7 +113,7 @@ import {DOSSIERS_BANK, MY_BANK} from 'src/data/queries/QUERIES';
 import {computed, inject} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import UploadDocumentsDialog from 'components/dialogs/UploadDocumentsDialog.vue';
+import DownloadDocumentsDialog from 'components/dialogs/DownloadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {offerChipStyle} from 'src/helpers/chip-helpers';
 import {CREATE_OFFER, SET_OFFER_STATUS} from 'src/data/mutations/DOSSIER';
@@ -180,8 +180,8 @@ async function createOfferForDossier(dossier: Record<string, unknown>){
 function showAllDocuments() {
   //ToDo: Create a separate dialog for download without any upload possibility
   $q.dialog({
-    title: 'UploadDocumentsDialog',
-    component: UploadDocumentsDialog,
+    title: 'DownloadDocumentsDialog',
+    component: DownloadDocumentsDialog,
   })
 }
 
