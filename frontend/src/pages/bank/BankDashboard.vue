@@ -226,6 +226,8 @@ async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OF
         void changeOfferStatus(dossierUuid, offerUuid, status)
       })
       break;
+
+    // If retracted: prompt Bank to enter reason
     case OFFER_STATUS.RETRACTED:
       $q.dialog({
         title: 'RejectDossierDialog',
@@ -239,6 +241,7 @@ async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OF
       })
       break;
 
+    // Default case: just change status
     default:
       await changeOfferStatus(dossierUuid, offerUuid, status)
   }
