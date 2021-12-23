@@ -210,8 +210,6 @@ function showAllDocuments() {
  * @returns {Promise<void>} - done
  */
 async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS) {
-  // TODO if status is "Accepted", prompt user to upload document or otherwise cancel status change
-
   switch(status){
     // If accepted: prompt Bank to upload offer documents
     case OFFER_STATUS.ACCEPTED:
