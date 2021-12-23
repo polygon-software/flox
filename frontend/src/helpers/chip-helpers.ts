@@ -41,6 +41,7 @@ export function dossierChipStyle(status: DOSSIER_STATUS){
  * @returns {string} - style
  */
 export function offerChipStyle(status: OFFER_STATUS){
+  console.log('called with', status)
   const color = 'color: white; background-color: '
   switch (status) {
     case OFFER_STATUS.INTERESTED:

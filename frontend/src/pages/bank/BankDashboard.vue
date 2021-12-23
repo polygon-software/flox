@@ -66,40 +66,21 @@
               />
             </q-td>
             <q-td key="offer_status" :props="props">
-              {{
-                props.row.offers
-              }}              <!-- If no offer yet: show button to mark interest -->
-<!--              <q-chip-->
-<!--                v-if="() => ownOfferForDossier(props.row)"-->
-<!--                text-color="white"-->
-<!--                :style="() => offerChipStyle(ownOfferForDossier(props.row))"-->
-<!--                :label="() => ownOfferForDossier(props.row)"-->
-<!--              />-->
+            <!-- Case 1: we have an offer on this dossier -->
+              <q-chip
+                v-if="ownOfferForDossier(props.row)"
+                text-color="white"
+                :style="offerChipStyle(ownOfferForDossier(props.row).status)"
+                :label="$t('offer_status_enum.' + (ownOfferForDossier(props.row).status))"
+              />
 
-<!--              <q-chip-->
-<!--                v-else-->
-<!--                color="primary"-->
-<!--                text-color="white"-->
-<!--                :label=" $t('dossier.offer')"-->
-<!--              />-->
-<!--              <q-chip-->
-<!--                :style="offerChipStyle(props.row.status)"-->
-<!--              >-->
-<!--                {{ props.row.status }}-->
-<!--                &lt;!&ndash; TODO status &ndash;&gt;-->
-<!--              </q-chip>-->
-<!--              <q-popup-edit-->
-<!--                v-slot="scope"-->
-<!--                :auto-save="true"-->
-<!--                :model-value="props.row.status"-->
-<!--                @save="(value) => statusChange(value, props.row.uuid)"-->
-<!--              >-->
-<!--                <q-select-->
-<!--                  v-model="scope.value"-->
-<!--                  :option-label="(status)=>$t('dossier_status_enum.' + status)"-->
-<!--                  :options="Object.keys(DOSSIER_STATUS)"-->
-<!--                />-->
-<!--              </q-popup-edit>-->
+              <!-- Case 2: no offer yet: show button to mark interest TODO create offer on click -->
+              <q-chip
+                v-else
+                color="primary"
+                text-color="white"
+                :label=" $t('dossier.offer')"
+              />
             </q-td>
             <q-td key="status" :props="props">
               <q-icon name="circle" :color="props.row.status? 'green' : 'red'" size="md"/>
@@ -132,7 +113,6 @@ const computedResult = computed(()=>{
   return dossiers.value ?? []
 })
 
-
 const myBank = subscribeToQuery(MY_BANK, {})
 
 /**
@@ -140,18 +120,16 @@ const myBank = subscribeToQuery(MY_BANK, {})
  * @param {Record<string, unknown>} dossier - the dossier
  * @returns {Record<string, unknown>} - the offer, if any
  */
-// function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, unknown>|null{
-//   if(!myBank || !myBank.offers){
-//     return null;
-//   }
-//
-//   const myOffers = myBank.offers as Record<string, unknown>[]
-//
-//   // Search own offers for one that matches the given dossier
-//   return myOffers.find((offer: Record<string, unknown>) => {
-//     return offer.dossier.uuid === dossier.uuid
-//   });
-// }
+function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, unknown>|null{
+  // Check for missing data
+  if([dossier, dossier.offers, myBank.value, myBank.value.uuid].some((val) => val === undefined || val === null)){
+    return null;
+  }
+
+  const offers = dossier.offers as Record<string, unknown>[]
+  // Search offers for one that is made by own bank
+  return offers.find((offer: Record<string, unknown>) => offer.bank.uuid === myBank.value.uuid) ?? null
+}
 
 /**
  * Function to download all the files corresponding to the certain offer

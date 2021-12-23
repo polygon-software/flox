@@ -335,6 +335,7 @@ export const DOSSIERS_BANK = {
         }
         offers {
           uuid
+          status
           bank {
             uuid
             __typename
