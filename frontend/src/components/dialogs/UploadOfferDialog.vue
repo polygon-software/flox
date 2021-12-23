@@ -5,24 +5,27 @@
   >
     <q-card style="width: 600px;">
       <q-card-section>
-        <p>
+        <h5
+          class="q-ma-md"
+        >
           {{ $t('dossier.upload_offer') }}
-        </p>
+        </h5>
+        <q-separator style="margin-top: 24px"/>
       </q-card-section>
       <q-card-actions>
-        <q-btn
-          class="q-ma-md"
-          :label="$t('dossier.send_offer')"
-          color="primary"
-          @click="onOk"
-        />
-
         <q-btn
           class="q-ma-md"
           :label="$t('buttons.cancel')"
           color="primary"
           flat
           @click="onCancel"
+        />
+        <q-btn
+          class="q-ma-md"
+          :label="$t('dossier.send_offer')"
+          color="primary"
+          style="border-radius: 8px"
+          @click="onOk"
         />
       </q-card-actions>
     </q-card>
