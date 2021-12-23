@@ -24,7 +24,6 @@ import GenericForm from 'components/forms/GenericForm.vue';
 import {CREATE_BANK} from 'src/data/mutations/BANK';
 import {QVueGlobals, useQuasar} from 'quasar';
 import NewBankLoginDialog from 'components/dialogs/NewBankLoginDialog.vue'
-import {FetchResult} from '@apollo/client';
 import {randomPassword} from 'src/helpers/generator-helpers';
 
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -61,7 +60,7 @@ const pages = [
 async function onSignup(values: Record<string, Record<string, unknown>>){
   const pw = randomPassword(8)
   // Sign up bank on database
-  const res = await executeMutation(
+  await executeMutation(
     CREATE_BANK,
     {
       first_name: values.full_name.first_name,

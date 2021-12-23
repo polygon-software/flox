@@ -7,7 +7,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $t('account_data.bank') + ' (' + computedResult.length + ')' }}
+        {{ $tc('account_data.bank', 2) + ' (' + computedResult.length + ')' }}
       </h6>
 
       <!-- Container for search & adding -->
@@ -55,7 +55,6 @@
         <q-tr
           :props="props"
           style="background-color: white; cursor: pointer"
-          @click="() => onRowClick(props.row)"
         >
           <q-td key="id" :props="props">
             {{ props.row.readable_id }}
@@ -86,7 +85,7 @@
 <script setup lang="ts">
 import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {ALL_BANKS, SOI_EMPLOYEES} from 'src/data/queries/QUERIES';
+import {ALL_BANKS} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -120,17 +119,6 @@ const computedResult = computed(()=>{
  */
 async function routeToRegisterBank(): Promise<void> {
   await $routerService?.routeTo(ROUTES.REGISTER_BANK)
-}
-/**
- * Upon clicking a row, opens the employee's dashboard view
- * @param {Record<string, unknown>} row - the row that was clicked
- * @async
- * @returns {void}
- */
-async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {
-    uuid: row.uuid
-  })
 }
 
 </script>
