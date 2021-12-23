@@ -118,3 +118,27 @@ export const CREATE_OFFER = {
   type: MutationTypes.UPDATE,
   cacheLocation: 'createOffer'
 }
+
+export const SET_OFFER_STATUS = {
+  mutation: gql`
+    mutation updateOfferStatus($dossier_uuid: ID!, $offer_uuid: ID!, $status: OfferStatus!){
+      updateOfferStatus (updateOfferStatusInput: {dossier_uuid: $dossier_uuid, offer_uuid: $offer_uuid, status: $status}) {
+        uuid
+        __typename
+        offers{
+            __typename
+            uuid
+            status
+            bank{
+                name
+                abbreviation
+                __typename
+                uuid
+            }
+        }
+      }
+    }`,
+  tables: ['dossier', 'offer'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}

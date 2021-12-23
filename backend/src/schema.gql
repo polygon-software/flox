@@ -386,6 +386,7 @@ type Mutation {
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
+  updateOfferStatus(updateOfferStatusInput: UpdateOfferStatusInput!): Dossier!
 }
 
 type Offer {
@@ -611,6 +612,12 @@ input UpdateEmployeeInput {
   last_name: String
   phone: String
   uuid: ID
+}
+
+input UpdateOfferStatusInput {
+  dossier_uuid: ID!
+  offer_uuid: ID!
+  status: OfferStatus!
 }
 
 type User {

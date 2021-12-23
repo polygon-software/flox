@@ -76,7 +76,7 @@
                   v-slot="scope"
                   :auto-save="true"
                   :model-value="ownOfferForDossier(_props.row).status"
-                  @save="(value) => onUpdateStatus(value, _props.row.uuid)"
+                  @save="(value) => onUpdateStatus(_props.row.uuid, ownOfferForDossier(_props.row).uuid, value)"
                 >
                   <q-select
                     v-model="scope.value"
@@ -116,9 +116,10 @@ import {formatDate} from 'src/helpers/format-helpers';
 import UploadDocumentsDialog from 'components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {offerChipStyle} from 'src/helpers/chip-helpers';
-import {CREATE_OFFER} from 'src/data/mutations/DOSSIER';
+import {CREATE_OFFER, SET_OFFER_STATUS} from 'src/data/mutations/DOSSIER';
 import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
 import {ErrorService} from 'src/services/ErrorService';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
@@ -186,12 +187,25 @@ function showAllDocuments() {
 
 /**
  * Changes an offer's status
+ * @param {string} dossierUuid - the dossier's UUID
  * @param {string} offerUuid - the offer's UUID
  * @param {OFFER_STATUS} status - new status
  * @returns {Promise<void>} - done
  */
-async function onUpdateStatus(offerUuid: string, status: OFFER_STATUS) {
-  //ToDo: create function to change the status
+async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS) {
+  // Change offer status
+  await executeMutation(SET_OFFER_STATUS, {
+    dossier_uuid: dossierUuid,
+    offer_uuid: offerUuid,
+    status: status
+  }).catch(() => {
+    showNotification(
+      $q,
+      i18n.global.t('messages.failure'),
+      undefined,
+      'negative'
+    )
+  })
 }
 
 const columns = [

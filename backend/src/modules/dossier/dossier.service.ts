@@ -12,6 +12,7 @@ import { EmployeeService } from '../employee/employee.service';
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { Offer } from '../offer/entities/offer.entity';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
+import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 
 @Injectable()
 export class DossierService {
@@ -193,6 +194,43 @@ export class DossierService {
           uuid: Not(bank.uuid),
         },
       },
+      relations: ['offers', 'offers.bank'],
+    });
+  }
+
+  /**
+   * Updates an offer to the given status
+   * @param {UpdateOfferStatusInput} updateOfferStatusInput - contains dossier & offer UUID and new status
+   * @returns {Promise<Dossier>} - updated dossier
+   */
+  async updateOfferStatus(
+    updateOfferStatusInput: UpdateOfferStatusInput,
+  ): Promise<Dossier> {
+    const dossier = await this.dossierRepository.findOne(
+      updateOfferStatusInput.dossier_uuid,
+      {
+        relations: ['offers'],
+      },
+    );
+
+    // Check if dossier & offer exist and belong together
+    if (
+      !dossier ||
+      !dossier.offers ||
+      !dossier.offers.find(
+        (offer) => (offer.uuid = updateOfferStatusInput.offer_uuid),
+      )
+    ) {
+      throw new Error('Invalid updateOfferStatus input!');
+    }
+
+    // Update offer status
+    await this.offerRepository.update(updateOfferStatusInput.offer_uuid, {
+      status: updateOfferStatusInput.status,
+    });
+
+    // Return updated dossier
+    return this.dossierRepository.findOne(updateOfferStatusInput.dossier_uuid, {
       relations: ['offers', 'offers.bank'],
     });
   }
