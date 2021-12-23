@@ -45,30 +45,51 @@
               {{ props.row.loan_sum }}
             </q-td>
             <q-td key="b_degree" :props="props">
-              unknown
+              <!-- TODO -->
+              -
             </q-td>
             <q-td key="acceptability_of_risks" :props="props">
-              unknown
+              <!-- TODO -->
+              -
             </q-td>
             <q-td key="expiration" :props="props">
-              unknown
+              <!-- TODO -->
+              -
             </q-td>
-            <q-td key="download" :props="props">
-              <q-icon name="download" size="md" @click="downloadDocs"/>
+            <q-td key="download">
+              <q-icon
+                name="download"
+                color="primary"
+                size="md"
+                round
+                @click.stop="showAllDocuments"
+              />
             </q-td>
             <q-td key="offer_status" :props="props">
-              <q-popup-edit
-                v-slot="scope"
-                :auto-save="true"
-                :model-value="props.row.status"
-                @save="(value) => statusChange(value, props.row.uuid)"
-              >
-                <q-select
-                  v-model="scope.value"
-                  :option-label="(status)=>$t('dossier_status_enum.' + status)"
-                  :options="Object.keys(DOSSIER_STATUS)"
-                />
-              </q-popup-edit>
+              <!-- If no offer yet: show button to mark interest -->
+              <q-chip
+                color="primary"
+                text-color="white"
+                :label=" $t('dossier.offer')"
+              />
+<!--              <q-chip-->
+<!--                :style="offerChipStyle(props.row.status)"-->
+<!--              >-->
+<!--                {{ props.row.status }}-->
+<!--                &lt;!&ndash; TODO status &ndash;&gt;-->
+<!--              </q-chip>-->
+<!--              <q-popup-edit-->
+<!--                v-slot="scope"-->
+<!--                :auto-save="true"-->
+<!--                :model-value="props.row.status"-->
+<!--                @save="(value) => statusChange(value, props.row.uuid)"-->
+<!--              >-->
+<!--                <q-select-->
+<!--                  v-model="scope.value"-->
+<!--                  :option-label="(status)=>$t('dossier_status_enum.' + status)"-->
+<!--                  :options="Object.keys(DOSSIER_STATUS)"-->
+<!--                />-->
+<!--              </q-popup-edit>-->
             </q-td>
             <q-td key="status" :props="props">
               <q-icon name="circle" :color="props.row.status? 'green' : 'red'" size="md"/>
@@ -86,11 +107,14 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {DOSSIERS_BANK} from 'src/data/queries/QUERIES';
+import {DOSSIERS_BANK, MY_BANK} from 'src/data/queries/QUERIES';
 import {computed} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import {DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
+import UploadDocumentsDialog from 'components/dialogs/UploadDocumentsDialog.vue';
+import {QVueGlobals, useQuasar} from 'quasar';
+
+const $q: QVueGlobals = useQuasar()
 
 //ToDo: connect to backend
 const dossiers = subscribeToQuery(DOSSIERS_BANK, {})
@@ -98,12 +122,30 @@ const computedResult = computed(()=>{
   return dossiers.value ?? []
 })
 
+
+const myBank = subscribeToQuery(MY_BANK, {})
+
+
+
+/**
+ * Checks whether we have an own offer on a dossier
+ * @param {Record<string, unknown>} dossier - the dossier
+ * @returns {Record<string, unknown>} - the offer, if any
+ */
+function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, unknown>{
+  // TODO
+}
+
 /**
  * Function to download all the files corresponding to the certain offer
  * @returns {void}
  */
-async function downloadDocs() {
-  //ToDo: Create a download docs function
+function showAllDocuments() {
+  //ToDo: Create a separate dialog for download without any upload possibility
+  $q.dialog({
+    title: 'UploadDocumentsDialog',
+    component: UploadDocumentsDialog,
+  })
 }
 
 /**
@@ -114,6 +156,14 @@ async function statusChange() {
   //ToDo: create function to change the status
 }
 
+/**
+ * Upon Row click, opens popup to create offer
+ * @param {Record<string, unknown>} dossier - the dossier that was clicked
+ * @returns {void}
+ */
+function onRowClick(dossier: Record<string, unknown>){
+  // TODO
+}
 
 const columns = [
   {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true},

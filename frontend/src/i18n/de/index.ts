@@ -136,7 +136,8 @@ export default {
   },
   dossier: {
     reset_dossier: 'Dossier zurücksetzen',
-    reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.'
+    reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.',
+    offer: 'offerieren',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

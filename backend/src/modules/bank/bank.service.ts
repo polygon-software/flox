@@ -107,7 +107,7 @@ export class BankService {
     const bank = await this.userService.getUser({ uuid: cognitoId });
     if (bank && bank.role === ROLE.BANK) {
       return this.bankRepository.findOne(bank.fk, {
-        relations: ['offers', 'own_mortgages'],
+        relations: ['offers', 'own_mortgages', 'offers.dossier'],
       });
     }
     throw new Error(

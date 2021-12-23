@@ -341,4 +341,43 @@ export const DOSSIERS_BANK = {
   cacheLocation: 'allDossiersBank'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS, MY_USER, ALL_BANKS , REJECTED_DOSSIERS, DOSSIERS_BANK];
+export const MY_BANK = {
+  query: gql`
+    query getMyBank{
+      getMyBank{
+        uuid
+        first_name
+        last_name
+        readable_id
+        email
+        offers{
+          __typename
+          uuid
+          status
+          dossier {
+            uuid
+            __typename
+          }
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['bank', 'offer'],
+  cacheLocation: 'getMyBank'
+}
+
+export const QUERIES = [
+  ALL_USERS,
+  ALL_COMPANIES,
+  COMPANY,
+  ALL_EMPLOYEES,
+  MY_EMPLOYEES,
+  PRIVATE_FILE,
+  MY_DOSSIERS,
+  MY_USER,
+  ALL_BANKS,
+  REJECTED_DOSSIERS,
+  DOSSIERS_BANK,
+  MY_BANK
+];

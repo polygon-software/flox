@@ -476,6 +476,7 @@ type Query {
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
   getBanks: [Bank!]!
+  getMyBank: Bank!
   getMyCompany: Company!
   getMyDossiers: [Dossier!]
   getMyEmployee: Employee!

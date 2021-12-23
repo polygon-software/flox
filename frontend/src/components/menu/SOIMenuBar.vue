@@ -51,7 +51,6 @@
           />
         </div>
       </q-btn-dropdown>
-
     </q-toolbar>
   </q-header>
 </template>

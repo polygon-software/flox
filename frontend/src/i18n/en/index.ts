@@ -134,7 +134,8 @@ export default {
   },
   dossier: {
     reset_dossier: 'Reset dossier',
-    reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.'
+    reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.',
+    offer: 'offer',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
