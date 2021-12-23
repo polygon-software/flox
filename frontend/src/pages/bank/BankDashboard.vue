@@ -7,9 +7,22 @@
       <h5 class="q-ma-none">
         {{ $t('dashboards.offer') + ' (' + computedResult.length + ')' }}
       </h5>
+      <!-- Search bar -->
+      <q-input
+        v-model="search"
+        dense
+        :label="$t('general.search')"
+        outlined
+        type="search"
+        class="q-mb-md"
+      >
+        <template #prepend>
+          <q-icon name="search" />
+        </template>
+      </q-input>
     </div>
 
-    <!-- Offers Overview -->
+    <!-- Dossiers Overview -->
     <div class="column" style="margin-bottom: 32px">
       <q-table
         card-style="border-radius: 8px; background-color: transparent"
@@ -57,6 +70,7 @@
             </q-td>
             <q-td key="download">
               <q-icon
+                v-if="ownOfferForDossier(_props.row)"
                 name="download"
                 color="primary"
                 size="md"
@@ -110,7 +124,7 @@
 import {i18n} from 'boot/i18n';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {DOSSIERS_BANK, MY_BANK} from 'src/data/queries/QUERIES';
-import {computed, inject} from 'vue';
+import {computed, inject, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import DownloadDocumentsDialog from 'components/dialogs/DownloadDocumentsDialog.vue';
@@ -128,6 +142,8 @@ const dossiers = subscribeToQuery(DOSSIERS_BANK, {})
 const computedResult = computed(()=>{
   return dossiers.value ?? []
 })
+
+const search = ref('')
 
 const myBank = subscribeToQuery(MY_BANK, {})
 

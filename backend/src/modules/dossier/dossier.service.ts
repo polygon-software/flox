@@ -182,19 +182,33 @@ export class DossierService {
   }
 
   /**
-   * All dossiers, where the requesting bank isn't the original_bank
+   * All dossiers, where the requesting bank isn't the original_bank and there are either open offer spots, or
+   * we have already created an offer
    * @param {string} cognitoId - the the banks users id
    * @returns {Promise<Dossier[]>} - the dossiers
    */
   async allDossiersBank(cognitoId: string): Promise<Dossier[]> {
     const bank = await this.bankService.getMyBank(cognitoId);
-    return this.dossierRepository.find({
+    const dossiers = await this.dossierRepository.find({
       where: {
         original_bank: {
           uuid: Not(bank.uuid),
         },
       },
       relations: ['offers', 'offers.bank'],
+    });
+
+    // Return only those that have less than three offers or an own offer
+    return dossiers.filter((dossier) => {
+      // Whether there are any open offer spots
+      const freeSpots = dossier.offers.length < 3;
+
+      // Whether we already have an offer on this dossier
+      const ownOffer = !!dossier.offers.find(
+        (offer) => offer.bank.uuid === bank.uuid,
+      );
+
+      return freeSpots || ownOffer;
     });
   }
 
