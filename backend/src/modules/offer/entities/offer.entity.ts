@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Dossier } from '../../dossier/entity/dossier.entity';
 import { Bank } from '../../bank/entities/bank.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
@@ -18,6 +18,7 @@ export class Offer extends BaseEntity {
   bank: Bank;
 
   @Field(() => PrivateFile, { description: 'The Offer as a PDF' })
+  @JoinColumn()
   @OneToOne(() => PrivateFile, { nullable: true })
   pdf: PrivateFile;
 

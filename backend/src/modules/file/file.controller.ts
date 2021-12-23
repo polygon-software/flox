@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  Inject,
   Post,
   Query,
   Req,
@@ -8,13 +9,14 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { Public } from '../../auth/authentication.decorator';
-import { AnyRole } from '../../auth/authorization.decorator';
+import { AnyRole, BankOnly } from '../../auth/authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
 import { CREATION_STATE } from '../../ENUM/ENUMS';
 import fastify = require('fastify');
 import { ERRORS } from '../../error/ERRORS';
+import { Offer } from '../offer/entities/offer.entity';
 
 @Controller()
 export class FileController {
@@ -22,6 +24,9 @@ export class FileController {
     private readonly fileService: FileService,
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
+
+    @InjectRepository(Offer)
+    private readonly offerRepository: Repository<Offer>,
   ) {}
 
   @Public()
@@ -116,6 +121,48 @@ export class FileController {
     );
     company.creation_state = CREATION_STATE.DOCUMENTS_UPLOADED;
     await this.companyRepository.save(company);
+
+    res.send(newFile);
+  }
+
+  @Post('/uploadOfferFile')
+  @Public()
+  async uploadOfferFile(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+    @Query() query: Record<string, string>, // Params
+  ): Promise<any> {
+    // Verify that request is multipart
+    if (!req.isMultipart()) {
+      res.send(new BadRequestException(ERRORS.file_expected));
+      return;
+    }
+
+    // Determine offer UUID from query param
+    const offerUuid: string = query.oid; // Base64 encoded ID from params
+    console.log(req['user']);
+    const offer = await this.offerRepository.findOne(offerUuid);
+
+    // Throw error if invalid offer or document upload not enabled
+    if (!offer) {
+      throw new Error('Todo');
+    }
+
+    const file = await req.file();
+
+    if (!file) {
+      throw new Error(ERRORS.no_valid_file);
+    }
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.fileService.uploadPrivateFile(
+      fileBuffer,
+      file.filename,
+      req['user'].userId,
+      undefined,
+      offer,
+    );
+    offer.pdf = newFile;
+    await this.offerRepository.save(offer);
 
     res.send(newFile);
   }

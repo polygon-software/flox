@@ -155,14 +155,18 @@ const myBank = subscribeToQuery(MY_BANK, {})
  * @returns {Record<string, unknown>} - the offer, if any
  */
 function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, unknown>|null{
+  if(!myBank.value){
+    return null;
+  }
+  const myBankValue = myBank.value as Record<string, string|unknown>
   // Check for missing data
-  if([dossier, dossier.offers, myBank.value, myBank.value.uuid].some((val) => val === undefined || val === null)){
+  if([dossier, dossier.offers, myBank.value, myBankValue.uuid].some((val) => val === undefined || val === null)){
     return null;
   }
 
-  const offers = dossier.offers as Record<string, unknown>[]
+  const offers = dossier.offers as Record<string, Record<string, string>>[]
   // Search offers for one that is made by own bank
-  return offers.find((offer: Record<string, unknown>) => offer.bank.uuid === myBank.value.uuid) ?? null
+  return offers.find((offer: Record<string, Record<string, string>>) => offer.bank.uuid === myBankValue.uuid) ?? null
 }
 
 /**
@@ -171,8 +175,12 @@ function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, un
  * @returns {Promise<void>} - done
  */
 async function createOfferForDossier(dossier: Record<string, unknown>){
+  if(!myBank.value){
+    return null;
+  }
+  const myBankValue = myBank.value as Record<string, string|unknown>
   // Ensure no missing values
-  if(!myBank.value || !dossier || !myBank.value.uuid){
+  if(!myBank.value || !dossier || !myBankValue.uuid){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
     return
   }
@@ -185,7 +193,7 @@ async function createOfferForDossier(dossier: Record<string, unknown>){
 
   // Create actual offer
   await executeMutation(CREATE_OFFER, {
-    bank_uuid: myBank.value.uuid,
+    bank_uuid: myBankValue.uuid,
     dossier_uuid: dossier.uuid,
     status: OFFER_STATUS.INTERESTED // TODO remove once no mock-data present anymore
   })
@@ -211,15 +219,18 @@ function showAllDocuments() {
  */
 async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS) {
   switch(status){
+
     // If accepted: prompt Bank to upload offer documents
     case OFFER_STATUS.ACCEPTED:
+
       $q.dialog({
       title: 'UploadOfferDialog',
       component: UploadOfferDialog,
-        persistent: true
-      }).onOk((files) => {
-        // TODO upload files
-        console.log('upload offer files', files)
+      persistent: true,
+      componentProps:{
+        offerUuid,
+      }
+      }).onOk(() => {
         // Change offer status TODO .then on mutation that uploads files
         void changeOfferStatus(dossierUuid, offerUuid, status)
       })

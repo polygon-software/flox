@@ -437,6 +437,7 @@ type PrivateFile {
 
   """Last modification date"""
   last_modified_at: DateTime!
+  offer: Offer
 
   """File owner"""
   owner: String!

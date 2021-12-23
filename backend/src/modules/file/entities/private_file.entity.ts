@@ -1,8 +1,11 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 import { Company } from '../../company/entities/company.entity';
+import { Dossier } from '../../dossier/entity/dossier.entity';
+import { Offer } from '../../offer/entities/offer.entity';
+import { of } from 'rxjs';
 
 /**
  * Defines a private file within a restricted AWS S3 bucket.
@@ -38,6 +41,10 @@ export class PrivateFile extends BaseEntity {
     onDelete: 'CASCADE',
   })
   company: Company;
+
+  @Field(() => Offer, { nullable: true })
+  @OneToOne(() => Offer, (offer) => offer.pdf)
+  offer: Offer;
 
   // ToDo Dossier will be added in next backend architecture update
 }

@@ -11,6 +11,7 @@ import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Company } from '../company/entities/company.entity';
 import { User } from '../user/entities/user.entity';
+import { Offer } from '../offer/entities/offer.entity';
 
 @Injectable()
 export class FileService {
@@ -70,6 +71,7 @@ export class FileService {
    * @param {string} filename - the file's name
    * @param {string} owner - the file owner's UUID
    * @param {Company} company - The company the file should be associated with
+   * @param {Offer} offer - The offer the file should be associated with
    * @returns {Promise<PrivateFile>} - file
    */
   async uploadPrivateFile(
@@ -77,6 +79,7 @@ export class FileService {
     filename: string,
     owner: string,
     company?: Company,
+    offer?: Offer,
   ): Promise<PrivateFile> {
     // File upload
     const key = `${uuid()}-${filename}`;
@@ -94,6 +97,12 @@ export class FileService {
         key: key,
         owner: owner,
         company: company,
+      });
+    } else if (offer) {
+      this.privateFilesRepository.create({
+        key: key,
+        owner: owner,
+        offer,
       });
     } else {
       newFile = this.privateFilesRepository.create({
