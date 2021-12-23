@@ -64,10 +64,10 @@
             </q-chip>
           </q-td>
           <q-td key="uploads">
-            {{ props.row.uploads }}
-            <q-btn
-              icon="picture_as_pdf"
+            <q-icon
+              name="download"
               color="primary"
+              size="md"
               round
               @click.stop="showAllDocuments"
             />
@@ -95,7 +95,6 @@
 <script setup lang="ts">
 import {computed, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import ResetDossierDialog from 'src/components/dialogs/ResetDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
@@ -105,6 +104,7 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
+import DownloadDocumentsDialog from 'components/dialogs/DownloadDocumentsDialog.vue';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -130,13 +130,13 @@ const rows = computed(()=>{
 })
 
 /**
- * Opens the dialog to show all documents and to upload further documents
+ * Shows a dialog for downloading any dossier files
  * @returns {void}
  */
 function showAllDocuments() {
   $q.dialog({
-    title: 'UploadDocumentsDialog',
-    component: UploadDocumentsDialog,
+    title: 'DownloadDocumentsDialog',
+    component: DownloadDocumentsDialog,
   })
 }
 

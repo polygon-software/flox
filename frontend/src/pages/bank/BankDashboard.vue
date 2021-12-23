@@ -174,11 +174,10 @@ async function createOfferForDossier(dossier: Record<string, unknown>){
 }
 
 /**
- * Function to download all the files corresponding to the certain offer
+ * Shows a dialog for downloading any dossier files
  * @returns {void}
  */
 function showAllDocuments() {
-  //ToDo: Create a separate dialog for download without any upload possibility
   $q.dialog({
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,
