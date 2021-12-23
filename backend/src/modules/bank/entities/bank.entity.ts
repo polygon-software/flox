@@ -4,7 +4,6 @@ import { Address } from '../../address/entities/address.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
 import { Dossier } from '../../dossier/entity/dossier.entity';
-import { IsPhoneNumber, IsString } from 'class-validator';
 
 @Entity()
 @ObjectType()

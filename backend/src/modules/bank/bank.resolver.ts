@@ -9,7 +9,6 @@ import {
 } from '../../auth/authorization.decorator';
 import { CreateBankInput } from './dto/input/create-bank.input';
 import { Query } from '@nestjs/graphql';
-import { Employee } from '../employee/entities/employee.entity';
 import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
 
@@ -43,9 +42,9 @@ export class BankResolver {
   }
 
   /**
-   * Get the currently logged in employee, if he is an employee
+   * Get the currently logged in bank, if he is a bank
    * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
-   * @returns {Promise<Employee>} - The Employee
+   * @returns {Promise<Bank>} - The bank
    */
   @BankOnly()
   @Query(() => Bank, { name: 'getMyBank' })
