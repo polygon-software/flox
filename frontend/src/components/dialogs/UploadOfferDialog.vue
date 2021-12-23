@@ -12,8 +12,9 @@
         </h5>
         <q-separator style="margin: 24px 0 24px 0"/>
 
-        <OfferUploadFields/>
-<!--          @change=""-->
+        <OfferUploadFields
+          @change="onFilesChange"
+        />
       </q-card-section>
       <q-card-actions>
         <q-btn
@@ -36,13 +37,15 @@
 </template>
 <script setup lang="ts">
 import {ref, Ref} from 'vue';
-import {QDialog, openURL} from 'quasar';
+import {QDialog} from 'quasar';
 import OfferUploadFields from 'components/forms/fields/document_upload/OfferUploadFields.vue';
+import axios from 'axios';
 
 const emit = defineEmits(['ok'])
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const files = ref([])
+// Uploaded files (key: filename, value: file)
+const files = ref({})
 
 
 // Mandatory - do not remove!
@@ -58,18 +61,42 @@ function hide(): void {
 }
 
 /**
+ * When files in form change, update
+ * @param {Record<string, File>} newFiles - the new state of the files
+ * @returns {void}
+ */
+function onFilesChange(newFiles: Record<string, File>){
+  console.log('Files.', newFiles)
+  files.value = newFiles
+}
+
+/**
  * Uploads the selected files and sends the offer
  * @returns {void}
  */
 function onOk(): void {
+
   // TODO upload files
-  // if (files.value.length !== 0) {
-  //   for (const i of files.value) {
-  //     if (existingFiles.value.indexOf(files.value[i]) === -1) {
-  //       existingFiles.value.push(files.value[i])
-  //     }
+  // for(const fileKey of Object.keys(files.value)) {
+  //   const formData = new FormData();
+  //   if(files.value[fileKey]) {
+  //     // Convert to Blob and append
+  //     const blob = files.value[fileKey] as Blob
+  //     formData.append('file', blob)
+  //
+  //
+  //     const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
+  //
+  //     await axios({
+  //       method: 'post',
+  //       url: `${baseUrl}/uploadPrivateFile`,
+  //       data: formData,
+  //       headers: headers,
+  //     }).catch((e: Error) => {
+  //       throw new Error(`File upload error: ${e.message}`)
+  //     })
   //   }
-  // }
+
   emit('ok')
   hide()
 }
