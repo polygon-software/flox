@@ -221,7 +221,7 @@ async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OF
         persistent: true
       }).onOk((files) => {
         // TODO upload files
-
+        console.log('upload offer files', files)
         // Change offer status TODO .then on mutation that uploads files
         void changeOfferStatus(dossierUuid, offerUuid, status)
       })
