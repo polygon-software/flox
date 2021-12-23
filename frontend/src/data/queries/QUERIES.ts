@@ -333,6 +333,14 @@ export const DOSSIERS_BANK = {
           city
           zip_code
         }
+        offers {
+          uuid
+          bank {
+            uuid
+            __typename
+          }
+          __typename
+        }
         loan_sum
       }
     }

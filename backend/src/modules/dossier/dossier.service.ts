@@ -193,6 +193,7 @@ export class DossierService {
           uuid: Not(bank.uuid),
         },
       },
+      relations: ['offers', 'offers.bank'],
     });
   }
 }

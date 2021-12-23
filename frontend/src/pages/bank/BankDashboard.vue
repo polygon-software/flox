@@ -66,12 +66,22 @@
               />
             </q-td>
             <q-td key="offer_status" :props="props">
-              <!-- If no offer yet: show button to mark interest -->
-              <q-chip
-                color="primary"
-                text-color="white"
-                :label=" $t('dossier.offer')"
-              />
+              {{
+                props.row.offers
+              }}              <!-- If no offer yet: show button to mark interest -->
+<!--              <q-chip-->
+<!--                v-if="() => ownOfferForDossier(props.row)"-->
+<!--                text-color="white"-->
+<!--                :style="() => offerChipStyle(ownOfferForDossier(props.row))"-->
+<!--                :label="() => ownOfferForDossier(props.row)"-->
+<!--              />-->
+
+<!--              <q-chip-->
+<!--                v-else-->
+<!--                color="primary"-->
+<!--                text-color="white"-->
+<!--                :label=" $t('dossier.offer')"-->
+<!--              />-->
 <!--              <q-chip-->
 <!--                :style="offerChipStyle(props.row.status)"-->
 <!--              >-->
@@ -113,10 +123,10 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import UploadDocumentsDialog from 'components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
+import {offerChipStyle} from 'src/helpers/chip-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
-//ToDo: connect to backend
 const dossiers = subscribeToQuery(DOSSIERS_BANK, {})
 const computedResult = computed(()=>{
   return dossiers.value ?? []
@@ -125,16 +135,23 @@ const computedResult = computed(()=>{
 
 const myBank = subscribeToQuery(MY_BANK, {})
 
-
-
 /**
  * Checks whether we have an own offer on a dossier
  * @param {Record<string, unknown>} dossier - the dossier
  * @returns {Record<string, unknown>} - the offer, if any
  */
-function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, unknown>{
-  // TODO
-}
+// function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, unknown>|null{
+//   if(!myBank || !myBank.offers){
+//     return null;
+//   }
+//
+//   const myOffers = myBank.offers as Record<string, unknown>[]
+//
+//   // Search own offers for one that matches the given dossier
+//   return myOffers.find((offer: Record<string, unknown>) => {
+//     return offer.dossier.uuid === dossier.uuid
+//   });
+// }
 
 /**
  * Function to download all the files corresponding to the certain offer
