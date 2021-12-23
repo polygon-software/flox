@@ -29,6 +29,7 @@
           :label="$t('dossier.send_offer')"
           color="primary"
           style="border-radius: 8px"
+          :disable="Object.keys(files).length === 0"
           @click="onOk"
         />
       </q-card-actions>
@@ -39,7 +40,6 @@
 import {ref, Ref} from 'vue';
 import {QDialog} from 'quasar';
 import OfferUploadFields from 'components/forms/fields/document_upload/OfferUploadFields.vue';
-import axios from 'axios';
 
 const emit = defineEmits(['ok'])
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
@@ -66,7 +66,6 @@ function hide(): void {
  * @returns {void}
  */
 function onFilesChange(newFiles: Record<string, File>){
-  console.log('Files.', newFiles)
   files.value = newFiles
 }
 
@@ -75,8 +74,7 @@ function onFilesChange(newFiles: Record<string, File>){
  * @returns {void}
  */
 function onOk(): void {
-
-  // TODO upload files
+  // TODO upload files here or emit and upload in BankDashboard
   // for(const fileKey of Object.keys(files.value)) {
   //   const formData = new FormData();
   //   if(files.value[fileKey]) {

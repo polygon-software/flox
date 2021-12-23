@@ -141,6 +141,8 @@ export default {
     offer: 'offerieren',
     send_offer: 'Offerte senden',
     upload_offer: 'Offertendokumente hochladen',
+    reject_dossier: 'Dossier ablehnen',
+    reject_reason: 'Ablehnungsgrund'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

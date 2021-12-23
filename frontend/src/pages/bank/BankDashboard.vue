@@ -129,6 +129,7 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import DownloadDocumentsDialog from 'components/dialogs/DownloadDocumentsDialog.vue';
 import UploadOfferDialog from 'components/dialogs/UploadOfferDialog.vue';
+import RejectDossierDialog from 'components/dialogs/RejectDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {offerChipStyle} from 'src/helpers/chip-helpers';
 import {CREATE_OFFER, SET_OFFER_STATUS} from 'src/data/mutations/DOSSIER';
@@ -210,20 +211,36 @@ function showAllDocuments() {
  */
 async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS) {
   // TODO if status is "Accepted", prompt user to upload document or otherwise cancel status change
-  if(status === OFFER_STATUS.ACCEPTED){
-    $q.dialog({
+
+  switch(status){
+    // If accepted: prompt Bank to upload offer documents
+    case OFFER_STATUS.ACCEPTED:
+      $q.dialog({
       title: 'UploadOfferDialog',
       component: UploadOfferDialog,
-      persistent: true
-    }).onOk((files) => {
-      // TODO upload files
-      console.log('SUCCESS, todo change status and upload files', files)
+        persistent: true
+      }).onOk((files) => {
+        // TODO upload files
 
-      // Change offer status TODO .then on mutation that uploads files
-      void changeOfferStatus(dossierUuid, offerUuid, status)
-    })
-  } else {
-    await changeOfferStatus(dossierUuid, offerUuid, status)
+        // Change offer status TODO .then on mutation that uploads files
+        void changeOfferStatus(dossierUuid, offerUuid, status)
+      })
+      break;
+    case OFFER_STATUS.RETRACTED:
+      $q.dialog({
+        title: 'RejectDossierDialog',
+        component: RejectDossierDialog,
+        persistent: true
+      }).onOk((reason: string) => {
+        // TODO save reject reason
+
+        // Change offer status TODO .then on mutation that uploads files
+        void changeOfferStatus(dossierUuid, offerUuid, status)
+      })
+      break;
+
+    default:
+      await changeOfferStatus(dossierUuid, offerUuid, status)
   }
 }
 
@@ -240,6 +257,13 @@ async function changeOfferStatus(dossierUuid: string, offerUuid: string, status:
     dossier_uuid: dossierUuid,
     offer_uuid: offerUuid,
     status: status
+  }).then(() => {
+    showNotification(
+      $q,
+      i18n.global.t('messages.success'),
+      undefined,
+      'positive'
+    )
   }).catch(() => {
     showNotification(
       $q,

@@ -139,6 +139,8 @@ export default {
     offer: 'offer',
     send_offer: 'Send offer',
     upload_offer: 'Upload offer documents',
+    reject_dossier: 'Reject dossier',
+    reject_reason: 'Reason for rejection'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
