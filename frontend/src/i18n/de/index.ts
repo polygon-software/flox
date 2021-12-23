@@ -138,6 +138,8 @@ export default {
     reset_dossier: 'Dossier zurücksetzen',
     reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.',
     offer: 'offerieren',
+    send_offer: 'Offerte senden',
+    upload_offer: 'Offertendokumente hochladen',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

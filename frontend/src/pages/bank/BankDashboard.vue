@@ -128,6 +128,7 @@ import {computed, inject, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import DownloadDocumentsDialog from 'components/dialogs/DownloadDocumentsDialog.vue';
+import UploadOfferDialog from 'components/dialogs/UploadOfferDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {offerChipStyle} from 'src/helpers/chip-helpers';
 import {CREATE_OFFER, SET_OFFER_STATUS} from 'src/data/mutations/DOSSIER';
@@ -208,19 +209,32 @@ function showAllDocuments() {
  * @returns {Promise<void>} - done
  */
 async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS) {
-  // Change offer status
-  await executeMutation(SET_OFFER_STATUS, {
-    dossier_uuid: dossierUuid,
-    offer_uuid: offerUuid,
-    status: status
-  }).catch(() => {
-    showNotification(
-      $q,
-      i18n.global.t('messages.failure'),
-      undefined,
-      'negative'
-    )
-  })
+  // TODO if status is "Accepted", prompt user to upload document or otherwise cancel status change
+  if(status === OFFER_STATUS.ACCEPTED){
+    $q.dialog({
+      title: 'UploadOfferDialog',
+      component: UploadOfferDialog,
+      persistent: true
+    }).onOk(() => {
+      // TODO
+      console.log('SUCCESS, todo change status')
+    })
+  } else {
+    // TODO handle possible other cases in the future
+    // Change offer status
+    await executeMutation(SET_OFFER_STATUS, {
+      dossier_uuid: dossierUuid,
+      offer_uuid: offerUuid,
+      status: status
+    }).catch(() => {
+      showNotification(
+        $q,
+        i18n.global.t('messages.failure'),
+        undefined,
+        'negative'
+      )
+    })
+  }
 }
 
 const columns = [

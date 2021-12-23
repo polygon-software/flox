@@ -136,6 +136,8 @@ export default {
     reset_dossier: 'Reset dossier',
     reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.',
     offer: 'offer',
+    send_offer: 'Send offer',
+    upload_offer: 'Upload offer documents',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
