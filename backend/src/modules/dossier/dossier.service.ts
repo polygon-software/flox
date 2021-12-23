@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
@@ -12,6 +12,7 @@ import { EmployeeService } from '../employee/employee.service';
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { Offer } from '../offer/entities/offer.entity';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
+import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 
 @Injectable()
 export class DossierService {
@@ -177,6 +178,74 @@ export class DossierService {
 
     return this.dossierRepository.findOne(resetDossierInput.uuid, {
       relations: ['offers', 'original_bank'],
+    });
+  }
+
+  /**
+   * All dossiers, where the requesting bank isn't the original_bank and there are either open offer spots, or
+   * we have already created an offer
+   * @param {string} cognitoId - the the banks users id
+   * @returns {Promise<Dossier[]>} - the dossiers
+   */
+  async allDossiersBank(cognitoId: string): Promise<Dossier[]> {
+    const bank = await this.bankService.getMyBank(cognitoId);
+    const dossiers = await this.dossierRepository.find({
+      where: {
+        original_bank: {
+          uuid: Not(bank.uuid),
+        },
+      },
+      relations: ['offers', 'offers.bank'],
+    });
+
+    // Return only those that have less than three offers or an own offer
+    return dossiers.filter((dossier) => {
+      // Whether there are any open offer spots
+      const freeSpots = dossier.offers.length < 3;
+
+      // Whether we already have an offer on this dossier
+      const ownOffer = !!dossier.offers.find(
+        (offer) => offer.bank.uuid === bank.uuid,
+      );
+
+      return freeSpots || ownOffer;
+    });
+  }
+
+  /**
+   * Updates an offer to the given status
+   * @param {UpdateOfferStatusInput} updateOfferStatusInput - contains dossier & offer UUID and new status
+   * @returns {Promise<Dossier>} - updated dossier
+   */
+  async updateOfferStatus(
+    updateOfferStatusInput: UpdateOfferStatusInput,
+  ): Promise<Dossier> {
+    const dossier = await this.dossierRepository.findOne(
+      updateOfferStatusInput.dossier_uuid,
+      {
+        relations: ['offers'],
+      },
+    );
+
+    // Check if dossier & offer exist and belong together
+    if (
+      !dossier ||
+      !dossier.offers ||
+      !dossier.offers.find(
+        (offer) => (offer.uuid = updateOfferStatusInput.offer_uuid),
+      )
+    ) {
+      throw new Error('Invalid updateOfferStatus input!');
+    }
+
+    // Update offer status
+    await this.offerRepository.update(updateOfferStatusInput.offer_uuid, {
+      status: updateOfferStatusInput.status,
+    });
+
+    // Return updated dossier
+    return this.dossierRepository.findOne(updateOfferStatusInput.dossier_uuid, {
+      relations: ['offers', 'offers.bank'],
     });
   }
 }

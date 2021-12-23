@@ -5,69 +5,110 @@
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
       <h5 class="q-ma-none">
-        {{ $t('dashboards.offer') + ' (' + mockedOffers.length + ')' }}
+        {{ $tc('dashboards.dossier', 2) + ' (' + computedResult.length + ')' }}
       </h5>
+      <!-- Search bar -->
+      <q-input
+        v-model="search"
+        dense
+        :label="$t('general.search')"
+        outlined
+        type="search"
+        class="q-mb-md"
+      >
+        <template #prepend>
+          <q-icon name="search" />
+        </template>
+      </q-input>
     </div>
 
-    <!-- Offers Overview -->
+    <!-- Dossiers Overview -->
     <div class="column" style="margin-bottom: 32px">
       <q-table
         card-style="border-radius: 8px; background-color: transparent"
         table-header-class="bg-transparent"
-        :rows="mockedOffers"
+        :rows="computedResult"
         :columns="columns"
         row-key="uuid"
         :rows-per-page-options="[10,20, 100]"
         separator="none"
         :filter="search"
+        :filter-method="tableFilter"
         flat
       >
-        <template #body="props">
+        <template #body="_props">
           <q-tr
-            :props="props"
+            :props="_props"
             style="background-color: white; cursor: pointer"
-            @click="() => onRowClick(props.row)"
           >
-            <q-td key="date" :props="props">
-              {{ getDate(props.row.date) }}
+            <q-td key="date" :props="_props">
+              {{ formatDate(_props.row.created_at) }}
             </q-td>
-            <q-td key="offer_id" :props="props">
-              {{ props.row.offer_id }}
+            <q-td key="offer_id" :props="_props">
+              {{ _props.row.readable_id }}
             </q-td>
-            <q-td key="city" :props="props">
-              {{ props.row.city }}
+            <q-td key="city" :props="_props">
+              {{ _props.row.correspondence_address.city }}
             </q-td>
-            <q-td key="market_value" :props="props">
-              {{ props.row.market_value }}
+            <q-td key="market_value" :props="_props">
+              unknown
             </q-td>
-            <q-td key="mortgage" :props="props">
-              {{ props.row.mortgage }}
+            <q-td key="mortgage" :props="_props">
+              {{ _props.row.loan_sum }}
             </q-td>
-            <q-td key="b_degree" :props="props">
-              {{ props.row.b_degree.toString() }}%
+            <q-td key="b_degree" :props="_props">
+              <!-- TODO -->
+              -
             </q-td>
-            <q-td key="acceptability_of_risks" :props="props">
-              {{ props.row.acceptability_of_risks.toString() }}%
+            <q-td key="acceptability_of_risks" :props="_props">
+              <!-- TODO -->
+              -
             </q-td>
-            <q-td key="expiration" :props="props">
-              {{ getDate(props.row.expiration) }}
+            <q-td key="expiration" :props="_props">
+              <!-- TODO -->
+              -
             </q-td>
-            <q-td key="download" :props="props">
-              <q-icon name="download" size="md" @click="downloadDocs"/>
+            <q-td key="download">
+              <q-icon
+                v-if="ownOfferForDossier(_props.row)"
+                name="download"
+                color="primary"
+                size="md"
+                round
+                @click.stop="showAllDocuments"
+              />
             </q-td>
-            <q-td key="offer_status" :props="props">
-              <q-btn-dropdown rounded color="primary" :label="props.row.offer_status" no-caps>
-                <q-list v-for="label in possibleStatus" :key="label">
-                  <q-item v-close-popup clickable @click="statusChange">
-                    <q-item-section>
-                      <q-item-label>{{ label }}</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
-            </q-td>
-            <q-td key="status" :props="props">
-              <q-icon name="circle" :color="props.row.status? 'green' : 'red'" size="md"/>
+            <q-td key="offer_status" :props="_props">
+            <!-- Case 1: we have an offer on this dossier -->
+              <q-chip
+                v-if="ownOfferForDossier(_props.row)"
+                text-color="white"
+                :style="offerChipStyle(ownOfferForDossier(_props.row).status)"
+                :label="$t('offer_status_enum.' + (ownOfferForDossier(_props.row).status))"
+              >
+                <q-popup-edit
+                  v-slot="scope"
+                  :auto-save="true"
+                  :model-value="ownOfferForDossier(_props.row).status"
+                  @save="(value) => onUpdateStatus(_props.row.uuid, ownOfferForDossier(_props.row).uuid, value)"
+                >
+                  <q-select
+                    v-model="scope.value"
+                    :option-label="(status)=>$t('offer_status_enum.' + status)"
+                    :options="Object.keys(OFFER_STATUS)"
+                  />
+                </q-popup-edit>
+              </q-chip>
+
+              <!-- Case 2: no offer yet: show button to mark interest -->
+              <q-chip
+                v-else
+                color="primary"
+                text-color="white"
+                :label=" $t('dossier.offer')"
+                clickable
+                @click="createOfferForDossier(_props.row)"
+              />
             </q-td>
           </q-tr>
           <!-- One spacer row per row -->
@@ -81,87 +122,177 @@
 
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
+import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
+import {DOSSIERS_BANK, MY_BANK} from 'src/data/queries/QUERIES';
+import {computed, inject, ref} from 'vue';
+import {tableFilter} from 'src/helpers/filter-helpers';
+import {formatDate} from 'src/helpers/format-helpers';
+import DownloadDocumentsDialog from 'components/dialogs/DownloadDocumentsDialog.vue';
+import UploadOfferDialog from 'components/dialogs/UploadOfferDialog.vue';
+import RejectDossierDialog from 'components/dialogs/RejectDossierDialog.vue';
+import {QVueGlobals, useQuasar} from 'quasar';
+import {offerChipStyle} from 'src/helpers/chip-helpers';
+import {CREATE_OFFER, SET_OFFER_STATUS} from 'src/data/mutations/DOSSIER';
+import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
+import {ErrorService} from 'src/services/ErrorService';
+import {showNotification} from 'src/helpers/notification-helpers';
 
-//ToDo: connect to backend
+const $q: QVueGlobals = useQuasar()
+const $errorService: ErrorService|undefined = inject('$errorService')
 
-const mockedOffers = [{
-  date: new Date(1639489283 * 1000),
-  offer_id: 1234,
-  city: 'Luzern',
-  market_value: 12341234.00,
-  mortgage: 109333.00,
-  b_degree: 32,
-  acceptability_of_risks: 66,
-  expiration: new Date(1639489283 * 1000),
-  download: 'file',
-  offer_status: 'offeriert',
-  status: true
-},
-  {
-    date: new Date(1639489283 * 1000),
-    offer_id: 5677,
-    city: 'Zürich',
-    market_value: 1234.00,
-    mortgage: 133.00,
-    b_degree: 11,
-    acceptability_of_risks: 12,
-    expiration: new Date(1639489283 * 1000),
-    download: 'file',
-    offer_status: 'abgelehnt',
-    status: false
-  }]
+const dossiers = subscribeToQuery(DOSSIERS_BANK, {})
+const computedResult = computed(()=>{
+  return dossiers.value ?? []
+})
+
+const search = ref('')
+
+const myBank = subscribeToQuery(MY_BANK, {})
 
 /**
- * Function to download all the files corresponding to the certain offer
- * @returns {void}
+ * Checks whether we have an own offer on a dossier
+ * @param {Record<string, unknown>} dossier - the dossier
+ * @returns {Record<string, unknown>} - the offer, if any
  */
-async function downloadDocs() {
-  //ToDo: Create a download docs function
+function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, unknown>|null{
+  // Check for missing data
+  if([dossier, dossier.offers, myBank.value, myBank.value.uuid].some((val) => val === undefined || val === null)){
+    return null;
+  }
+
+  const offers = dossier.offers as Record<string, unknown>[]
+  // Search offers for one that is made by own bank
+  return offers.find((offer: Record<string, unknown>) => offer.bank.uuid === myBank.value.uuid) ?? null
 }
 
 /**
- * Changes the status of the offer
- * @returns {void}
+ * Creates a new offer for a dossier
+ * @param {Record<string, unknown>} dossier - the dossier
+ * @returns {Promise<void>} - done
  */
-async function statusChange() {
-  //ToDo: create function to change the status
+async function createOfferForDossier(dossier: Record<string, unknown>){
+  // Ensure no missing values
+  if(!myBank.value || !dossier || !myBank.value.uuid){
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
+    return
+  }
+
+  // Ensure no offer present yet
+  if(ownOfferForDossier(dossier)){
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.offer_already_present')))
+    return
+  }
+
+  // Create actual offer
+  await executeMutation(CREATE_OFFER, {
+    bank_uuid: myBank.value.uuid,
+    dossier_uuid: dossier.uuid,
+    status: OFFER_STATUS.INTERESTED // TODO remove once no mock-data present anymore
+  })
 }
 
 /**
- * Return date in a nice way // TODO replace once helper file is merged
- * @param {Date} date - date to format
- * @returns {String} date
+ * Shows a dialog for downloading any dossier files
+ * @returns {void}
  */
-function getDate(date: Date ) {
-  return `${date.getUTCDate()}.${date.getUTCMonth()}.${date.getUTCFullYear()}`;
+function showAllDocuments() {
+  $q.dialog({
+    title: 'DownloadDocumentsDialog',
+    component: DownloadDocumentsDialog,
+  })
+}
+
+/**
+ * Hanldes offer status update by either changing directly or showing appropriate popup
+ * @param {string} dossierUuid - the dossier's UUID
+ * @param {string} offerUuid - the offer's UUID
+ * @param {OFFER_STATUS} status - new status
+ * @returns {Promise<void>} - done
+ */
+async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS) {
+  switch(status){
+    // If accepted: prompt Bank to upload offer documents
+    case OFFER_STATUS.ACCEPTED:
+      $q.dialog({
+      title: 'UploadOfferDialog',
+      component: UploadOfferDialog,
+        persistent: true
+      }).onOk((files) => {
+        // TODO upload files
+        console.log('upload offer files', files)
+        // Change offer status TODO .then on mutation that uploads files
+        void changeOfferStatus(dossierUuid, offerUuid, status)
+      })
+      break;
+
+    // If retracted: prompt Bank to enter reason
+    case OFFER_STATUS.RETRACTED:
+      $q.dialog({
+        title: 'RejectDossierDialog',
+        component: RejectDossierDialog,
+        persistent: true
+      }).onOk((reason: string) => {
+        // TODO save reject reason
+        console.log('reject with reason', reason)
+        // Change offer status TODO .then on mutation that uploads files
+        void changeOfferStatus(dossierUuid, offerUuid, status)
+      })
+      break;
+
+    // Default case: just change status
+    default:
+      await changeOfferStatus(dossierUuid, offerUuid, status)
+  }
+}
+
+/**
+ * Changes an offer's status
+ * @param {string} dossierUuid - the dossier's UUID
+ * @param {string} offerUuid - the offer's UUID
+ * @param {OFFER_STATUS} status - new status
+ * @returns {Promise<void>} - done
+ */
+async function changeOfferStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS){
+  // Change offer status
+  await executeMutation(SET_OFFER_STATUS, {
+    dossier_uuid: dossierUuid,
+    offer_uuid: offerUuid,
+    status: status
+  }).then(() => {
+    showNotification(
+      $q,
+      i18n.global.t('messages.success'),
+      undefined,
+      'positive'
+    )
+  }).catch(() => {
+    showNotification(
+      $q,
+      i18n.global.t('messages.failure'),
+      undefined,
+      'negative'
+    )
+  })
 }
 
 const columns = [
-  {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true},
-  {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'offer_id', sortable: true},
-  {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: false},
-  {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: true},
-  {name: 'mortgage', label: i18n.global.t('dashboards.mortgage'), field: 'mortgage', sortable: true},
-  {name: 'b_degree', label: i18n.global.t('dashboards.b_degree'), field: 'b_degree', sortable: true},
+  {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true, align: 'center'},
+  {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'offer_id', sortable: true, align: 'center'},
+  {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: false, align: 'center'},
+  {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: true, align: 'center'},
+  {name: 'mortgage', label: i18n.global.t('dashboards.mortgage'), field: 'mortgage', sortable: true, align: 'center'},
+  {name: 'b_degree', label: i18n.global.t('dashboards.b_degree'), field: 'b_degree', sortable: true, align: 'center'},
   {
     name: 'acceptability_of_risks',
     label: i18n.global.t('dashboards.acceptability_of_risks'),
     field: 'acceptability_of_risks',
-    sortable: true
+    sortable: true,
+    align: 'center'
   },
-  {name: 'expiration', label: i18n.global.t('dashboards.expiration'), field: 'expiration', sortable: true},
-  {name: 'download', label: ' ', field: 'download', sortable: true},
-  {name: 'offer_status', label: ' ', field: 'offer_status', sortable: true},
-  {name: 'status', label: i18n.global.t('account_data.status'), field: 'status', sortable: true},
+  {name: 'expiration', label: i18n.global.t('dashboards.expiration'), field: 'expiration', sortable: true, align: 'center'},
+  {name: 'download', label: ' ', field: 'download', sortable: true, align: 'center'},
+  {name: 'offer_status', label: ' ', field: 'offer_status', sortable: true, align: 'center'},
 ]
 
-const possibleStatus = [i18n.global.t('status.offered'),
-  i18n.global.t('status.offer_rejected'),
-  i18n.global.t('status.offer_withdrawn'),
-  i18n.global.t('status.in_progress'),
-  i18n.global.t('status.sent'),
-  i18n.global.t('status.signed'),
-  i18n.global.t('status.completed'),
-]
 
 </script>

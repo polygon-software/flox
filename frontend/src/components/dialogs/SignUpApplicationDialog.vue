@@ -144,7 +144,7 @@ import {
   UPDATE_COMPANY_EMAIL
 } from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
-import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
+import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Address} from 'src/data/types/Address';
 import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
@@ -227,7 +227,7 @@ function onReject(): void {
   //TODO: Send rejection E-mail
   $q.dialog({
     title: 'Reject',
-    component: RejectDialog,
+    component: RejectApplicationDialog,
   }).onOk(() => {
     // Remove company application on DB
     executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {

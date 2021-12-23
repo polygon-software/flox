@@ -3,23 +3,36 @@
     <h5 class="text-white q-pa-none q-ma-md">
       Strategic Opportunity Investments
     </h5>
-    <div class="row">
-    <q-btn
-        v-if="loggedIn"
-        :label="$t('authentication.logout')"
-        class="text-primary"
+    <q-btn-dropdown
+        dropdown-icon="more_vert"
+        auto-close
+        no-icon-animation
         flat
-        @click="logout"
-    />
-    <q-btn
-        v-if="loggedIn"
-        :label="$t('authentication.change_password')"
-        class="text-primary"
-        flat
-        @click="changePassword"
-    />
-  </div>
+        round
+        dense
+        style="margin-right: 4px"
+        @click="showOptions = !showOptions"
+      >
+        <div class="column">
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('authentication.logout')"
+            class="text-black"
+            flat
+            no-caps
+            @click="logout"
+          />
 
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('authentication.change_password')"
+            class="text-black"
+            flat
+            no-caps
+            @click="changePassword"
+          />
+        </div>
+    </q-btn-dropdown>
   </q-header>
 </template>
 
@@ -46,8 +59,6 @@ const loggedIn = computed(() => {
   return result;
 })
 
-// Username does not need to be reactive, since it won't change between logins
-const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication

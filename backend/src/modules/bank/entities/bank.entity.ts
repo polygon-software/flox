@@ -16,6 +16,10 @@ export class Bank extends Person {
   @Column({ unique: true })
   abbreviation: string;
 
+  @Column({ nullable: true })
+  @Field(() => String, { description: 'Phone Number', nullable: true })
+  phone: string;
+
   @Field(() => Address, { description: 'Address' })
   @JoinColumn()
   @OneToOne(() => Address, { cascade: true, eager: true, nullable: true })

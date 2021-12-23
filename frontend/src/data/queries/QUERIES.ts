@@ -295,4 +295,98 @@ export const SOI_EMPLOYEES = {
   cacheLocation: 'allSoiEmployees'
 }
 
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE, MY_DOSSIERS, REJECTED_DOSSIERS];
+export const ALL_BANKS = {
+  query: gql`
+    query getBanks{
+      getBanks{
+        uuid
+        __typename
+        name
+        abbreviation
+        first_name
+        last_name
+        email
+        readable_id
+        created_at
+        phone
+      }
+    }
+    `,
+  tables: ['bank'],
+  cacheLocation: 'getBanks'
+}
+
+export const DOSSIERS_BANK = {
+  query: gql`
+    query allDossiersBank {
+      allDossiersBank{
+        uuid
+        __typename
+        first_name
+        last_name
+        created_at
+        readable_id
+        status
+        correspondence_address {
+          __typename
+          uuid
+          city
+          zip_code
+        }
+        offers {
+          uuid
+          status
+          bank {
+            uuid
+            __typename
+          }
+          __typename
+        }
+        loan_sum
+      }
+    }
+    `,
+  tables: ['dossier'],
+  cacheLocation: 'allDossiersBank'
+}
+
+export const MY_BANK = {
+  query: gql`
+    query getMyBank{
+      getMyBank{
+        uuid
+        first_name
+        last_name
+        readable_id
+        email
+        offers{
+          __typename
+          uuid
+          status
+          dossier {
+            uuid
+            __typename
+          }
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['bank', 'offer'],
+  cacheLocation: 'getMyBank'
+}
+
+export const QUERIES = [
+  ALL_USERS,
+  ALL_COMPANIES,
+  COMPANY,
+  ALL_EMPLOYEES,
+  MY_EMPLOYEES,
+  PRIVATE_FILE,
+  MY_DOSSIERS,
+  MY_USER,
+  ALL_BANKS,
+  REJECTED_DOSSIERS,
+  DOSSIERS_BANK,
+  MY_BANK
+];

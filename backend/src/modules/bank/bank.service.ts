@@ -20,26 +20,29 @@ export class BankService {
   /**
    * Create a new Bank
    * @param {CreateBankInput} createBankInput - Input needed to create a new Bank
-   * @returns {Promise<Bank>} - new Bank
+   * @returns {Promise<{bank:Bank, password: string}>} - new Bank
    */
   async createBank(createBankInput: CreateBankInput): Promise<Bank> {
     // Create a Cognito account with a random password
-    const password = randomPassword(8);
     const cognitoId = await createCognitoAccount(
       createBankInput.email,
-      password,
+      createBankInput.password,
     );
 
-    // TODO return password/credentials in some way, so admin can be shown a popup
-
     // Create the SoiAdmin and User in the database
-    const bank = this.bankRepository.create({ ...createBankInput, offers: [] });
+    const bank = this.bankRepository.create({
+      ...createBankInput,
+      offers: [],
+      own_mortgages: [],
+      readable_id: generateHumanReadableId(),
+    });
+    const savedBank = await this.bankRepository.save(bank);
     await this.userService.create({
       role: ROLE.BANK,
       uuid: cognitoId,
       fk: bank.uuid,
     });
-    return this.bankRepository.save(bank);
+    return savedBank;
   }
 
   /**
@@ -63,6 +66,7 @@ export class BankService {
       first_name: '-',
       last_name: '-',
       email: '-',
+      phone: '-',
       readable_id: generateHumanReadableId(),
     });
     return this.bankRepository.save(newBank);
@@ -84,5 +88,32 @@ export class BankService {
    */
   findBankByAbbreviation(abbreviation: string): Promise<Bank> {
     return this.bankRepository.findOne({ abbreviation });
+  }
+
+  /**
+   * All banks
+   * @returns {Promise<Bank[]>} - all Banks
+   */
+  allBanks(): Promise<Bank[]> {
+    return this.bankRepository.find();
+  }
+
+  /**
+   * Get the bank of the logged in user
+   * @param {string} cognitoId - the banks users id
+   * @returns {Promise<Bank>} - the bank
+   */
+  async getMyBank(cognitoId: string): Promise<Bank> {
+    const bank = await this.userService.getUser({ uuid: cognitoId });
+    if (bank && bank.role === ROLE.BANK) {
+      return this.bankRepository.findOne(bank.fk, {
+        relations: ['offers', 'own_mortgages', 'offers.dossier'],
+      });
+    }
+    throw new Error(
+      `User is not an Bank but a ${
+        bank ? String(bank.role) : 'unauthenticated'
+      }`,
+    );
   }
 }

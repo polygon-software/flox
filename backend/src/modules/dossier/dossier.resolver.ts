@@ -14,6 +14,7 @@ import {
 } from '../../auth/authorization.decorator';
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
+import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -50,7 +51,7 @@ export class DossierResolver {
   /**
    * Updates the status of a dossier
    * @param {UpdateDossierStatusInput} updateDossierStatusInput - input, containing new status
-   * @returns {Promise<Dossier[]>} - updated dossier
+   * @returns {Promise<Dossier>} - updated dossier
    */
   @Roles(ROLE.EMPLOYEE, ROLE.BANK, ROLE.SOI_ADMIN)
   @Mutation(() => Dossier)
@@ -108,5 +109,32 @@ export class DossierResolver {
     @Args('createOfferInput') createOfferInput: CreateOfferInput,
   ): Promise<Dossier> {
     return this.dossierService.createOffer(createOfferInput);
+  }
+
+  /**
+   * All dossiers, where the requesting bank isn't the original_bank
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier[]>} - All dossiers, where the requesting bank isn't the original_bank
+   */
+  @BankOnly()
+  @Query(() => [Dossier])
+  async allDossiersBank(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier[]> {
+    return this.dossierService.allDossiersBank(user.userId);
+  }
+
+  /**
+   * Updates the status of an offer
+   * @param {UpdateOfferStatusInput} updateOfferStatusInput - input, containing dossier & offer uuid and new status
+   * @returns {Promise<Dossier>} - updated dossier
+   */
+  @Roles(ROLE.EMPLOYEE, ROLE.BANK, ROLE.SOI_ADMIN)
+  @Mutation(() => Dossier)
+  async updateOfferStatus(
+    @Args('updateOfferStatusInput')
+    updateOfferStatusInput: UpdateOfferStatusInput,
+  ): Promise<Dossier> {
+    return this.dossierService.updateOfferStatus(updateOfferStatusInput);
   }
 }

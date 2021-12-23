@@ -61,6 +61,9 @@ const $routerService: RouterService|undefined = inject('$routerService')
  */
 async function onLogin({username, password}: {username: string, password: string}){
   await $authService?.login(username, password)
+
+  // TODO: handle errors in login, such as incorrect 2FA code
+
   const queryRes = await executeQuery(MY_USER)
   if(!queryRes || !queryRes.data){
     await $authService?.logout()
@@ -89,7 +92,7 @@ async function onLogin({username, password}: {username: string, password: string
     [ROLE.COMPANY]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
     [ROLE.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD,
     [ROLE.SOI_EMPLOYEE]: ROUTES.APPLICATIONS,
-    [ROLE.BANK]: ROUTES.WILDCARD,
+    [ROLE.BANK]: ROUTES.BANK_DASHBOARD,
     [ROLE.NONE]: ROUTES.WILDCARD,
   }
   // Redirect to main page

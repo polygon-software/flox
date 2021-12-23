@@ -43,7 +43,7 @@ async function executeQuery(queryObject: QueryObject, variables?: Record<string,
  * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutatio
  * @returns {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
  */
-async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null> {
+async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult | null> {
   const mutation =  mutationObject.mutation
   const tables =  mutationObject.tables
   const type =  mutationObject.type

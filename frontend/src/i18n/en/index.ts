@@ -9,6 +9,7 @@ export default {
     from: 'From',
     to: 'To',
     date: 'Datum',
+    return: 'Return'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -78,7 +79,8 @@ export default {
     provision_soi: 'Provision SOI',
     provision_ratio: 'Prov. Ratio Emp.',
     offer: 'offer',
-    abbreviation: 'Abbreviation'
+    abbreviation: 'Abbreviation',
+    bank: 'Bank | Banks',
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',
@@ -93,7 +95,7 @@ export default {
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
-    offer: 'Offers',
+    offer: 'Offer | Offers',
     register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',
@@ -125,6 +127,7 @@ export default {
     preview: 'Preview',
   },
   documents: {
+    choose_documents: 'Choose documents',
     documents_available: 'Documents available',
     document_upload: 'File upload',
     additional_documents: 'Additional Documents',
@@ -132,7 +135,12 @@ export default {
   },
   dossier: {
     reset_dossier: 'Reset dossier',
-    reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.'
+    reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.',
+    offer: 'offer',
+    send_offer: 'Send offer',
+    upload_offer: 'Upload offer documents',
+    reject_dossier: 'Reject dossier',
+    reject_reason: 'Reason for rejection'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -166,6 +174,7 @@ export default {
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
     documents_missing: 'Documents missing',
+    offer_already_present: 'You have already marked this dossier.',
     unknown: 'Unknown Error'
   },
   set_password: {
@@ -211,7 +220,6 @@ export default {
     organisation_id: 'Organisation number',
     employee_id: 'Employee number',
     role: 'Role',
-
   },
   dossier_status_enum: {
     OPEN: 'Open',
@@ -233,5 +241,9 @@ export default {
   email: {
     subject_rejected: 'Rejected',
     body_rejected: 'Application is rejected'
+  },
+
+  bank: {
+    new_user: 'New user'
   }
 };

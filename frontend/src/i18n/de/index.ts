@@ -9,13 +9,14 @@ export default {
     from: 'Von',
     to: 'Bis',
     date: 'Datum',
+    return: 'Zurück'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
     login: 'Anmelden',
     logout: 'Abmelden',
     signup: 'Registrieren',
-    bank_signup: 'Kreditinstitut erfassen',
+    bank_signup: 'Bank erfassen',
     employee_signup: 'Mitarbeitende erfassen',
     signup_now: 'Kein Account? Jetzt registrieren:',
     forgot_password: 'Passwort vergessen',
@@ -80,7 +81,8 @@ export default {
     provision_employee: 'Provision MA',
     provision_company: 'Provision Organisation',
     provision_soi: 'Provision SOI',
-    provision_ratio: 'Anteil prov. Vermittler'
+    provision_ratio: 'Anteil prov. Vermittler',
+    bank: 'Bank | Banken',
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
@@ -95,7 +97,7 @@ export default {
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
-    offer: 'Anfragen',
+    offer: 'Offerte | Offerten',
     register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',
@@ -127,6 +129,7 @@ export default {
     preview: 'Vorschau',
   },
   documents: {
+    choose_documents: 'Dokumente wählen',
     documents_available: 'Dokumente verfügbar',
     document_upload: 'Dokumentenupload',
     additional_documents: 'Weitere Dokumente',
@@ -134,7 +137,12 @@ export default {
   },
   dossier: {
     reset_dossier: 'Dossier zurücksetzen',
-    reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.'
+    reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.',
+    offer: 'offerieren',
+    send_offer: 'Offerte senden',
+    upload_offer: 'Offertendokumente hochladen',
+    reject_dossier: 'Dossier ablehnen',
+    reject_reason: 'Ablehnungsgrund'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -168,6 +176,7 @@ export default {
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     documents_missing: 'Fehlende Dokumente',
+    offer_already_present: 'Sie haben dieses Dossier bereits markiert.',
     unknown: 'Unbekannter Fehler'
   },
   set_password: {
@@ -233,5 +242,9 @@ export default {
   email: {
     subject_rejected: 'Abgelehnt',
     body_rejected: 'Die Applikation wurde abgelehnt'
+  },
+
+  bank: {
+    new_user: 'Neuer Benutzer'
   }
 };

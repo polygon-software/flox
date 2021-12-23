@@ -146,7 +146,6 @@ const form: Form = new Form(props.pages as Record<string, unknown>[])
  */
 async function onSubmit(){
   const isValid = await formRef.value?.validate()
-
   if(isValid){
     emit('submit', form.values.value)
   }

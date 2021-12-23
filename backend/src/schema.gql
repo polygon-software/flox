@@ -66,6 +66,9 @@ type Bank {
   """Dossier where the mortgage originally belongs to the bank"""
   own_mortgages: [Dossier!]!
 
+  """Phone Number"""
+  phone: String
+
   """Human-readable ID"""
   readable_id: String!
 
@@ -149,6 +152,10 @@ input CreateBankInput {
   """Last Name"""
   last_name: String
   name: String!
+  password: String!
+
+  """Phone Number"""
+  phone: String!
 }
 
 input CreateCompanyInput {
@@ -379,6 +386,7 @@ type Mutation {
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
+  updateOfferStatus(updateOfferStatusInput: UpdateOfferStatusInput!): Dossier!
 }
 
 type Offer {
@@ -462,11 +470,14 @@ type PublicFile {
 
 type Query {
   allCompanies: [Company!]!
+  allDossiersBank: [Dossier!]!
   allEmployees: [Employee!]!
   allSoiEmployees: [SoiEmployee!]!
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getBanks: [Bank!]!
+  getMyBank: Bank!
   getMyCompany: Company!
   getMyDossiers: [Dossier!]
   getMyEmployee: Employee!
@@ -601,6 +612,12 @@ input UpdateEmployeeInput {
   last_name: String
   phone: String
   uuid: ID
+}
+
+input UpdateOfferStatusInput {
+  dossier_uuid: ID!
+  offer_uuid: ID!
+  status: OfferStatus!
 }
 
 type User {

@@ -120,14 +120,16 @@ async function newAssignment(): Promise<void> {
   })
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const dossierUuid = res?.data[CREATE_DOSSIER.cacheLocation].uuid as string
+  const dossierUuid = res?.data?.[CREATE_DOSSIER.cacheLocation].uuid as string
 
   const nrOfBanks = Math.floor(Math.random()*4)
   const bankUuids = [
-    '99295c95-e736-4fe4-a806-082e6db5fe4e',
-    'fc39b098-60b6-4390-aa2a-de6b80c6d499',
-    'c3cad835-1223-4cf5-b26b-4dd25dc394e3',
-    '4e33c212-32de-40b4-9bc5-948327379b70'
+    'bd256b28-0e7c-4d79-8902-44d9fb782888',
+    'affaba8d-45cc-4ba2-bc9f-7c32be021340',
+    '296b551e-0e56-434e-920c-94948c55a16e',
+    '97c7d658-95be-4988-8cf6-5e1b0adbc775',
+    '578d0a96-e4d2-4f10-90c8-0a2759273582',
+
   ]
   const chosen: Array<string> = []
   while (chosen.length < nrOfBanks){

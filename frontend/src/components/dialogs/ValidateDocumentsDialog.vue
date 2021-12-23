@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar, openURL} from 'quasar';
-import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
+import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
@@ -168,7 +168,7 @@ async function onOk(): Promise<void> {
 function onReject(): void {
   $q.dialog({
     title: 'Reject',
-    component: RejectDialog,
+    component: RejectApplicationDialog,
   }).onOk(() => {
     // Remove company application on DB
     executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {
