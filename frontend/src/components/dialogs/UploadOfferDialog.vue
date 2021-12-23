@@ -89,9 +89,15 @@ async function onOk(): Promise<void> {
       // Convert to Blob and append
       const blob = files.value[fileKey] as Blob
       formData.append('file', blob)
-      const headers = { 'Content-Type': 'multipart/form-data' }
+      const token = localStorage?.getItem('CognitoIdentityServiceProvider.5h4fcam55ktksdcd0cskqidcsj.8362789d-b4b1-4afc-a0a2-5a83285e4ad5.idToken')
+      if(!token){
+        throw new Error('Authentification Failure')
+      }
 
-
+      console.log(token)
+      const headers = { 'Content-Type': 'multipart/form-data',
+        'Authorization' : `Bearer ${token}`
+      }
       const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ?? ''
       await axios({
         method: 'post',

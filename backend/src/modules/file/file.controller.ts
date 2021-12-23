@@ -75,7 +75,7 @@ export class FileController {
   }
 
   @Post('/uploadCompanyFile')
-  @Public()
+  @BankOnly()
   async uploadCompanyFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
