@@ -61,6 +61,9 @@ const $routerService: RouterService|undefined = inject('$routerService')
  */
 async function onLogin({username, password}: {username: string, password: string}){
   await $authService?.login(username, password)
+
+  // TODO: handle errors in login, such as incorrect 2FA code
+
   const queryRes = await executeQuery(MY_USER)
   if(!queryRes || !queryRes.data){
     await $authService?.logout()
