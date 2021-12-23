@@ -171,6 +171,7 @@ export default {
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     documents_missing: 'Fehlende Dokumente',
+    offer_already_present: 'Sie haben dieses Dossier bereits markiert.',
     unknown: 'Unbekannter Fehler'
   },
   set_password: {

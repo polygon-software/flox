@@ -23,35 +23,35 @@
         :filter-method="tableFilter"
         flat
       >
-        <template #body="props">
+        <template #body="_props">
           <q-tr
-            :props="props"
+            :props="_props"
             style="background-color: white; cursor: pointer"
           >
-            <q-td key="date" :props="props">
-              {{ formatDate(props.row.created_at) }}
+            <q-td key="date" :props="_props">
+              {{ formatDate(_props.row.created_at) }}
             </q-td>
-            <q-td key="offer_id" :props="props">
-              {{ props.row.readable_id }}
+            <q-td key="offer_id" :props="_props">
+              {{ _props.row.readable_id }}
             </q-td>
-            <q-td key="city" :props="props">
-              {{ props.row.correspondence_address.city }}
+            <q-td key="city" :props="_props">
+              {{ _props.row.correspondence_address.city }}
             </q-td>
-            <q-td key="market_value" :props="props">
+            <q-td key="market_value" :props="_props">
               unknown
             </q-td>
-            <q-td key="mortgage" :props="props">
-              {{ props.row.loan_sum }}
+            <q-td key="mortgage" :props="_props">
+              {{ _props.row.loan_sum }}
             </q-td>
-            <q-td key="b_degree" :props="props">
+            <q-td key="b_degree" :props="_props">
               <!-- TODO -->
               -
             </q-td>
-            <q-td key="acceptability_of_risks" :props="props">
+            <q-td key="acceptability_of_risks" :props="_props">
               <!-- TODO -->
               -
             </q-td>
-            <q-td key="expiration" :props="props">
+            <q-td key="expiration" :props="_props">
               <!-- TODO -->
               -
             </q-td>
@@ -64,14 +64,27 @@
                 @click.stop="showAllDocuments"
               />
             </q-td>
-            <q-td key="offer_status" :props="props">
+            <q-td key="offer_status" :props="_props">
             <!-- Case 1: we have an offer on this dossier -->
               <q-chip
-                v-if="ownOfferForDossier(props.row)"
+                v-if="ownOfferForDossier(_props.row)"
                 text-color="white"
-                :style="offerChipStyle(ownOfferForDossier(props.row).status)"
-                :label="$t('offer_status_enum.' + (ownOfferForDossier(props.row).status))"
-              />
+                :style="offerChipStyle(ownOfferForDossier(_props.row).status)"
+                :label="$t('offer_status_enum.' + (ownOfferForDossier(_props.row).status))"
+              >
+                <q-popup-edit
+                  v-slot="scope"
+                  :auto-save="true"
+                  :model-value="ownOfferForDossier(_props.row).status"
+                  @save="(value) => onUpdateStatus(value, _props.row.uuid)"
+                >
+                  <q-select
+                    v-model="scope.value"
+                    :option-label="(status)=>$t('offer_status_enum.' + status)"
+                    :options="Object.keys(OFFER_STATUS)"
+                  />
+                </q-popup-edit>
+              </q-chip>
 
               <!-- Case 2: no offer yet: show button to mark interest -->
               <q-chip
@@ -80,7 +93,7 @@
                 text-color="white"
                 :label=" $t('dossier.offer')"
                 clickable
-                @click="createOfferForDossier(props.row)"
+                @click="createOfferForDossier(_props.row)"
               />
             </q-td>
           </q-tr>
@@ -139,8 +152,15 @@ function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, un
  * @returns {Promise<void>} - done
  */
 async function createOfferForDossier(dossier: Record<string, unknown>){
+  // Ensure no missing values
   if(!myBank.value || !dossier || !myBank.value.uuid){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
+    return
+  }
+
+  // Ensure no offer present yet
+  if(ownOfferForDossier(dossier)){
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.offer_already_present')))
     return
   }
 
@@ -165,10 +185,12 @@ function showAllDocuments() {
 }
 
 /**
- * Changes the status of the offer
- * @returns {void}
+ * Changes an offer's status
+ * @param {string} offerUuid - the offer's UUID
+ * @param {OFFER_STATUS} status - new status
+ * @returns {Promise<void>} - done
  */
-async function statusChange() {
+async function onUpdateStatus(offerUuid: string, status: OFFER_STATUS) {
   //ToDo: create function to change the status
 }
 

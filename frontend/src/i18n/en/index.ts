@@ -169,6 +169,7 @@ export default {
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
     documents_missing: 'Documents missing',
+    offer_already_present: 'You have already marked this dossier.',
     unknown: 'Unknown Error'
   },
   set_password: {
