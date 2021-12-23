@@ -10,9 +10,10 @@
         >
           {{ $t('dossier.upload_offer') }}
         </h5>
-        <q-separator style="margin-top: 24px"/>
+        <q-separator style="margin: 24px 0 24px 0"/>
 
-        TODO: Document upload fields will go here.
+        <OfferUploadFields/>
+<!--          @change=""-->
       </q-card-section>
       <q-card-actions>
         <q-btn
@@ -36,6 +37,7 @@
 <script setup lang="ts">
 import {ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
+import OfferUploadFields from 'components/forms/fields/document_upload/OfferUploadFields.vue';
 
 const emit = defineEmits(['ok'])
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)

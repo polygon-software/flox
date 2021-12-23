@@ -127,6 +127,7 @@ export default {
     preview: 'Preview',
   },
   documents: {
+    choose_documents: 'Choose documents',
     documents_available: 'Documents available',
     document_upload: 'File upload',
     additional_documents: 'Additional Documents',
