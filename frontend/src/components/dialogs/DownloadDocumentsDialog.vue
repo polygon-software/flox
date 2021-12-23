@@ -51,7 +51,8 @@ import {QDialog, openURL} from 'quasar';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const files = ref([])
+// TODO actual implementation for dossier files @johannschwabe
+// const files = ref([])
 
 //remove this and take the existing files form the backend from dossier table
 const existingFiles = ref([
@@ -71,21 +72,6 @@ function show(): void {
 function hide(): void {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
-}
-
-/**
- * Uploads the selected files from the desktop to the existing files
- * for now it is a placeholder function
- * @returns {void}
- */
-function upload(): void {
-  if (files.value.length !== 0) {
-    for (const i of files.value) {
-      if (existingFiles.value.indexOf(files.value[i]) === -1) {
-        existingFiles.value.push(files.value[i])
-      }
-    }
-  }
 }
 
 // eslint-disable-next-line require-jsdoc
