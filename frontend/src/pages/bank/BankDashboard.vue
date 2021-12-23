@@ -233,7 +233,7 @@ async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OF
         persistent: true
       }).onOk((reason: string) => {
         // TODO save reject reason
-
+        console.log('reject with reason', reason)
         // Change offer status TODO .then on mutation that uploads files
         void changeOfferStatus(dossierUuid, offerUuid, status)
       })
