@@ -18,24 +18,19 @@
           >
             <q-item-section>
               <div class="row flex justify-between content-center" style="height: 50px">
-                <p class="col-8">{{ file.key }}</p>
-                <div
-                  v-if="file.url"
-                  class="col-4"
-                >
-                  <q-btn
-                    style="margin-left: 12px"
-                    color="primary"
-                    icon="download"
-                    @click="openURL(file.url)"
-                  />
-                  <q-btn
-                    style="margin-left: 12px"
-                    color="primary"
-                    icon="delete"
-                    @click="remove(index)"
-                  />
-                </div>
+                <p class="col-8">{{ file.key.substring(32) }}</p>
+                <q-btn
+                  style="margin-left: 12px"
+                  color="primary"
+                  icon="download"
+                  @click="loadFile(file)"
+                />
+                <q-btn
+                  style="margin-left: 12px"
+                  color="primary"
+                  icon="delete"
+                  @click="remove(index)"
+                />
               </div>
             </q-item-section>
           </q-item>
@@ -61,7 +56,6 @@
             :label="$t('status.uploading')"
             color="primary"
             flat
-            disable
             @click="upload"
           />
         </div>
@@ -81,10 +75,13 @@
 <script setup lang="ts">
 import {ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
+import {uploadFiles} from 'src/helpers/file-helpers';
+import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
+import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const files = ref([])
+const files = ref([]) as Ref<Array<File>>
 
 const props = defineProps({
   entity: {
@@ -111,7 +108,12 @@ function hide(): void {
  * @returns {void}
  */
 async function upload(): Promise<void> {
-  // await uploadFiles(files.value, `/uploadOfferFile?oid=${props.entity.uuid}`)
+  const dossier = props.entity as Record<string, string>
+  const reformatted:Record<string, File> = {}
+  files.value.forEach((file)=>{
+    reformatted[file.name] = file
+  })
+  await uploadFiles(reformatted, `/uploadDossierFile?did=${dossier.uuid}`, ['private_file'])
 
 }
 
@@ -122,6 +124,17 @@ async function upload(): Promise<void> {
  */
 function remove(index: number) {
   console.log(index)
+}
+
+/**
+ * open File based on URL
+ * @param {Record<string, string>} file - file to open
+ * @returns {Promise<void>} - done
+ */
+async function loadFile(file: Record<string, string>) {
+  const queryResult = await executeQuery(PRIVATE_FILE, {uuid: file.uuid})
+  const loadedFile = queryResult.data[PRIVATE_FILE.cacheLocation] as Record<string, string>
+  openURL(loadedFile.url)
 }
 
 // eslint-disable-next-line require-jsdoc

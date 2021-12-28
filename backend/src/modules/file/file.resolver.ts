@@ -40,8 +40,7 @@ export class FileResolver {
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
     @CurrentUser() user: Record<string, string>,
   ): Promise<PrivateFile> {
-    const dbUser = await this.userService.getUser({ uuid: user.userID });
-
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
     return this.fileService.getPrivateFile(getPrivateFileArgs, dbUser);
   }
 }

@@ -23,6 +23,7 @@ import fastify = require('fastify');
 import { ERRORS } from '../../error/ERRORS';
 import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
+import { User } from '../user/entities/user.entity';
 
 @Controller()
 export class FileController {
@@ -36,6 +37,9 @@ export class FileController {
 
     @InjectRepository(Dossier)
     private readonly dossierRepository: Repository<Dossier>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   @Public()
@@ -118,7 +122,6 @@ export class FileController {
     }
 
     const file = await req.file();
-
     if (!file) {
       throw new Error(ERRORS.no_valid_file);
     }
@@ -135,7 +138,7 @@ export class FileController {
     res.send(newFile);
   }
 
-  @Options(['/uploadOfferFile', ' /uploadDossierFile']) //Todo Find better way to allow Preflight requests
+  @Options(['/uploadOfferFile', '/uploadDossierFile']) //Todo Find better way to allow Preflight requests
   @Options() //Todo Find better way to allow Preflight requests
   @Public()
   async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {
@@ -170,8 +173,9 @@ export class FileController {
       throw new Error('Todo');
     }
 
-    const file = await req.file();
+    const user = await this.userRepository.findOne(req['user'].userId);
 
+    const file = await req.file();
     if (!file) {
       throw new Error(ERRORS.no_valid_file);
     }
@@ -179,7 +183,7 @@ export class FileController {
     const newFile = await this.fileService.uploadPrivateFile(
       fileBuffer,
       file.filename,
-      req['user'].userId,
+      user.fk,
       { offer },
     );
     if (offer.pdf) {
@@ -216,8 +220,9 @@ export class FileController {
       throw new Error('Todo');
     }
 
-    const file = await req.file();
+    const user = await this.userRepository.findOne(req['user'].userId);
 
+    const file = await req.file();
     if (!file) {
       throw new Error(ERRORS.no_valid_file);
     }
@@ -225,7 +230,7 @@ export class FileController {
     const newFile = await this.fileService.uploadPrivateFile(
       fileBuffer,
       file.filename,
-      req['user'].userId,
+      user.fk,
       { dossier },
     );
     dossier.documents.push(newFile);
