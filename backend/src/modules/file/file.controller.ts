@@ -152,7 +152,9 @@ export class FileController {
 
     // Determine offer UUID from query param
     const offerUuid: string = query.oid; // Base64 encoded ID from params
-    const offer = await this.offerRepository.findOne(offerUuid);
+    const offer = await this.offerRepository.findOne(offerUuid, {
+      relations: ['pdf'],
+    });
     // Throw error if invalid offer or document upload not enabled
     if (!offer) {
       throw new Error('Todo');
@@ -171,6 +173,11 @@ export class FileController {
       undefined,
       offer,
     );
+    if (offer.pdf) {
+      // Todo is this expected behaviour?
+      console.log(offer.pdf.uuid);
+      await this.fileService.deletePrivateFile(offer.pdf.uuid);
+    }
     offer.pdf = newFile;
     await this.offerRepository.save(offer);
     res.header('access-control-allow-origin', '*');

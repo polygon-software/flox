@@ -176,7 +176,8 @@ export class FileService {
    */
   async deletePrivateFile(fileUuid: string): Promise<PrivateFile> {
     const file = await this.privateFilesRepository.findOne(fileUuid);
-    await this.privateFilesRepository.delete(file);
+    console.log(file);
+    await this.privateFilesRepository.delete(file.uuid);
     return file;
   }
 }

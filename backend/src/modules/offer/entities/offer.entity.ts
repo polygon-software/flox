@@ -19,7 +19,11 @@ export class Offer extends BaseEntity {
 
   @Field(() => PrivateFile, { description: 'The Offer as a PDF' })
   @JoinColumn()
-  @OneToOne(() => PrivateFile, { nullable: true })
+  @OneToOne(() => PrivateFile, {
+    nullable: true,
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   pdf: PrivateFile;
 
   @Field(() => OFFER_STATUS, { description: 'Status of Dossier' })
