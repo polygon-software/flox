@@ -99,7 +99,7 @@ export class FileService {
         company: company,
       });
     } else if (offer) {
-      this.privateFilesRepository.create({
+      newFile = this.privateFilesRepository.create({
         key: key,
         owner: owner,
         offer,
@@ -112,7 +112,6 @@ export class FileService {
     }
 
     await this.s3.send(new PutObjectCommand(uploadParams));
-
     await this.privateFilesRepository.save(newFile);
 
     return newFile;

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Controller,
   Inject,
+  Options,
   Post,
   Query,
   Req,
@@ -75,7 +76,7 @@ export class FileController {
   }
 
   @Post('/uploadCompanyFile')
-  @BankOnly()
+  @Public()
   async uploadCompanyFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
@@ -125,8 +126,19 @@ export class FileController {
     res.send(newFile);
   }
 
-  @Post('/uploadOfferFile')
+  @Options('/uploadOfferFile') //Todo Find better way to allow Preflight requests
   @Public()
+  async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {
+    res.headers({
+      'access-control-allow-headers': 'authorization, content-type',
+      'access-control-allow-methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      'access-control-allow-origin': '*',
+    });
+    res.send();
+  }
+
+  @Post('/uploadOfferFile')
+  @AnyRole()
   async uploadOfferFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
@@ -140,9 +152,7 @@ export class FileController {
 
     // Determine offer UUID from query param
     const offerUuid: string = query.oid; // Base64 encoded ID from params
-    console.log(req['user']);
     const offer = await this.offerRepository.findOne(offerUuid);
-
     // Throw error if invalid offer or document upload not enabled
     if (!offer) {
       throw new Error('Todo');
@@ -163,7 +173,7 @@ export class FileController {
     );
     offer.pdf = newFile;
     await this.offerRepository.save(offer);
-
+    res.header('access-control-allow-origin', '*');
     res.send(newFile);
   }
 }
