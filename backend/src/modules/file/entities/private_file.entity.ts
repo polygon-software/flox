@@ -46,6 +46,16 @@ export class PrivateFile extends BaseEntity {
   @OneToOne(() => Offer, (offer) => offer.pdf)
   offer: Offer;
 
+  @Field(() => Dossier, {
+    nullable: true,
+    description: 'Dossier the file belongs to',
+  })
+  @ManyToOne(() => Dossier, (company) => company.documents, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  dossier: Dossier;
+
   // ToDo Dossier will be added in next backend architecture update
 }
 

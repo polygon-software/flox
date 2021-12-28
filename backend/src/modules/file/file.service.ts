@@ -12,6 +12,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Company } from '../company/entities/company.entity';
 import { User } from '../user/entities/user.entity';
 import { Offer } from '../offer/entities/offer.entity';
+import { Dossier } from '../dossier/entity/dossier.entity';
 
 @Injectable()
 export class FileService {
@@ -70,16 +71,14 @@ export class FileService {
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
    * @param {string} owner - the file owner's UUID
-   * @param {Company} company - The company the file should be associated with
-   * @param {Offer} offer - The offer the file should be associated with
+   * @param {Record<string, Company|Offer|Dossier>} association - the entity the file is associated to
    * @returns {Promise<PrivateFile>} - file
    */
   async uploadPrivateFile(
     dataBuffer: Buffer,
     filename: string,
     owner: string,
-    company?: Company,
-    offer?: Offer,
+    association: Record<string, Company | Offer | Dossier>,
   ): Promise<PrivateFile> {
     // File upload
     const key = `${uuid()}-${filename}`;
@@ -89,27 +88,13 @@ export class FileService {
       Body: dataBuffer,
     };
 
-    let newFile;
+    const fileInput = {
+      key: key,
+      owner: owner,
+      ...association,
+    };
 
-    // If file is for company document upload, add ref (otherwise, upload normally)
-    if (company) {
-      newFile = this.privateFilesRepository.create({
-        key: key,
-        owner: owner,
-        company: company,
-      });
-    } else if (offer) {
-      newFile = this.privateFilesRepository.create({
-        key: key,
-        owner: owner,
-        offer,
-      });
-    } else {
-      newFile = this.privateFilesRepository.create({
-        key: key,
-        owner: owner,
-      });
-    }
+    const newFile = this.privateFilesRepository.create(fileInput);
 
     await this.s3.send(new PutObjectCommand(uploadParams));
     await this.privateFilesRepository.save(newFile);

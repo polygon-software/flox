@@ -10,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { Public } from '../../auth/authentication.decorator';
-import { AnyRole, BankOnly } from '../../auth/authorization.decorator';
+import {
+  AnyRole,
+  BankOnly,
+  EmployeeOnly,
+} from '../../auth/authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
@@ -18,6 +22,7 @@ import { CREATION_STATE } from '../../ENUM/ENUMS';
 import fastify = require('fastify');
 import { ERRORS } from '../../error/ERRORS';
 import { Offer } from '../offer/entities/offer.entity';
+import { Dossier } from '../dossier/entity/dossier.entity';
 
 @Controller()
 export class FileController {
@@ -28,6 +33,9 @@ export class FileController {
 
     @InjectRepository(Offer)
     private readonly offerRepository: Repository<Offer>,
+
+    @InjectRepository(Dossier)
+    private readonly dossierRepository: Repository<Dossier>,
   ) {}
 
   @Public()
@@ -71,6 +79,7 @@ export class FileController {
       fileBuffer,
       file.filename,
       owner,
+      {},
     );
     res.send(newFile);
   }
@@ -118,7 +127,7 @@ export class FileController {
       fileBuffer,
       file.filename,
       companyUuid, // Owner; must be changed to cognito ID later
-      company,
+      { company },
     );
     company.creation_state = CREATION_STATE.DOCUMENTS_UPLOADED;
     await this.companyRepository.save(company);
@@ -126,7 +135,8 @@ export class FileController {
     res.send(newFile);
   }
 
-  @Options('/uploadOfferFile') //Todo Find better way to allow Preflight requests
+  @Options(['/uploadOfferFile', ' /uploadDossierFile']) //Todo Find better way to allow Preflight requests
+  @Options() //Todo Find better way to allow Preflight requests
   @Public()
   async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {
     res.headers({
@@ -138,7 +148,7 @@ export class FileController {
   }
 
   @Post('/uploadOfferFile')
-  @AnyRole()
+  @BankOnly()
   async uploadOfferFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
@@ -151,7 +161,7 @@ export class FileController {
     }
 
     // Determine offer UUID from query param
-    const offerUuid: string = query.oid; // Base64 encoded ID from params
+    const offerUuid: string = query.oid;
     const offer = await this.offerRepository.findOne(offerUuid, {
       relations: ['pdf'],
     });
@@ -170,8 +180,7 @@ export class FileController {
       fileBuffer,
       file.filename,
       req['user'].userId,
-      undefined,
-      offer,
+      { offer },
     );
     if (offer.pdf) {
       // Todo is this expected behaviour?
@@ -180,6 +189,47 @@ export class FileController {
     }
     offer.pdf = newFile;
     await this.offerRepository.save(offer);
+    res.header('access-control-allow-origin', '*');
+    res.send(newFile);
+  }
+
+  @Post('/uploadDossierFile')
+  @EmployeeOnly()
+  async uploadDossierFile(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+    @Query() query: Record<string, string>, // Params
+  ): Promise<any> {
+    // Verify that request is multipart
+    if (!req.isMultipart()) {
+      res.send(new BadRequestException(ERRORS.file_expected));
+      return;
+    }
+
+    // Determine offer UUID from query param
+    const dossierUuid: string = query.did;
+    const dossier = await this.dossierRepository.findOne(dossierUuid, {
+      relations: ['documents'],
+    });
+    // Throw error if invalid offer or document upload not enabled
+    if (!dossier) {
+      throw new Error('Todo');
+    }
+
+    const file = await req.file();
+
+    if (!file) {
+      throw new Error(ERRORS.no_valid_file);
+    }
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.fileService.uploadPrivateFile(
+      fileBuffer,
+      file.filename,
+      req['user'].userId,
+      { dossier },
+    );
+    dossier.documents.push(newFile);
+    await this.dossierRepository.save(dossier);
     res.header('access-control-allow-origin', '*');
     res.send(newFile);
   }

@@ -274,6 +274,9 @@ type Dossier {
   """Date of deletion"""
   deleted_at: DateTime
 
+  """Documents of the company"""
+  documents: [PrivateFile!]
+
   """Mail"""
   email: String!
 
@@ -431,6 +434,9 @@ type PrivateFile {
 
   """Date of deletion"""
   deleted_at: DateTime
+
+  """Dossier the file belongs to"""
+  dossier: Dossier
 
   """S3 File Key"""
   key: String!
