@@ -59,7 +59,7 @@
             icon="picture_as_pdf"
             color="primary"
             round
-            @click="showAllDocuments"
+            @click="()=>showAllDocuments(_props.row)"
           />
         </q-td>
         <q-td key="offers" @click="()=>expandOffers(_props.row.uuid)">
@@ -183,12 +183,16 @@ function onUpdateStatus(status: DOSSIER_STATUS, uuid:string){
 
 /**
  * Opens the dialog to show all documents and to upload further documents
+ * @param {Record<string, unknown>} entity - the dossier
  * @returns {void}
  */
-function showAllDocuments() {
+function showAllDocuments(entity: Record<string, unknown>) {
   $q.dialog({
     title: 'UploadDocumentsDialog',
     component: UploadDocumentsDialog,
+    componentProps: {
+      entity
+    }
   })
 }
 

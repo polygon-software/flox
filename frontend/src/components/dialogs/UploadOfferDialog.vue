@@ -40,7 +40,7 @@
 import {ref, Ref} from 'vue';
 import {QDialog} from 'quasar';
 import OfferUploadFields from 'components/forms/fields/document_upload/OfferUploadFields.vue';
-import axios from 'axios';
+import {uploadFiles} from 'src/helpers/file-helpers';
 
 const emit = defineEmits(['ok'])
 const props = defineProps({
@@ -81,38 +81,9 @@ function onFilesChange(newFiles: Record<string, File>){
  * @returns {void}
  */
 async function onOk(): Promise<void> {
-  // TODO upload files here or emit and upload in BankDashboard
-  console.log(files.value)
-  for (const fileKey of Object.keys(files.value)) {
-    const formData = new FormData();
-    if (files.value[fileKey]) {
-      // Convert to Blob and append
-      const blob = files.value[fileKey] as Blob
-      formData.append('file', blob)
-      const token = localStorage?.getItem('CognitoIdentityServiceProvider.5h4fcam55ktksdcd0cskqidcsj.8362789d-b4b1-4afc-a0a2-5a83285e4ad5.idToken')
-      if(!token){
-        throw new Error('Authentication Failure')
-      }
-
-      console.log(token)
-      const headers = {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`
-      }
-      const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ?? ''
-      await axios({
-        method: 'post',
-        url: `${baseUrl}/uploadOfferFile?oid=${props.offerUuid}`,
-        data: formData,
-        headers: headers,
-      }).catch((e: Error) => {
-        throw new Error(`File upload error: ${e.message}`)
-      })
-    }
-
-    emit('ok')
-    hide()
-  }
+  await uploadFiles(files.value, `/uploadOfferFile?oid=${props.offerUuid}`)
+  emit('ok')
+  hide()
 }
 
 // eslint-disable-next-line require-jsdoc
