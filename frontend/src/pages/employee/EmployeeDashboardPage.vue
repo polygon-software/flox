@@ -124,12 +124,10 @@ async function newAssignment(): Promise<void> {
 
   const nrOfBanks = Math.floor(Math.random()*4)
   const bankUuids = [
-    'bd256b28-0e7c-4d79-8902-44d9fb782888',
-    'affaba8d-45cc-4ba2-bc9f-7c32be021340',
-    '296b551e-0e56-434e-920c-94948c55a16e',
-    '97c7d658-95be-4988-8cf6-5e1b0adbc775',
-    '578d0a96-e4d2-4f10-90c8-0a2759273582',
-
+    '0cd9ad22-f414-45a9-8594-152c04f6a560',
+    '89fe6300-b0c4-4c85-aa31-310a33e24ff9',
+    '5652fe9f-845d-48de-bb93-53fecb6c2076',
+    '6d67b018-6e4f-44ec-8d65-425e7b62412c',
   ]
   const chosen: Array<string> = []
   while (chosen.length < nrOfBanks){

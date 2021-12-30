@@ -139,7 +139,6 @@ export class FileController {
   }
 
   @Options(['/uploadOfferFile', '/uploadDossierFile']) //Todo Find better way to allow Preflight requests
-  @Options() //Todo Find better way to allow Preflight requests
   @Public()
   async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {
     res.headers({
