@@ -96,6 +96,8 @@ async function onLogin({username, password}: {username: string, password: string
     [ROLE.NONE]: ROUTES.WILDCARD,
   }
   // Redirect to main page
+  console.log(role)
+  console.log(targetRouteMapping[role])
   await $routerService?.routeTo(targetRouteMapping[role])
 }
 

@@ -41,6 +41,7 @@ import {ref, Ref} from 'vue';
 import {QDialog} from 'quasar';
 import OfferUploadFields from 'components/forms/fields/document_upload/OfferUploadFields.vue';
 import {uploadFiles} from 'src/helpers/file-helpers';
+import {useApolloClient} from '@apollo/client';
 
 const emit = defineEmits(['ok'])
 const props = defineProps({
@@ -81,7 +82,7 @@ function onFilesChange(newFiles: Record<string, File>){
  * @returns {void}
  */
 async function onOk(): Promise<void> {
-  await uploadFiles(files.value, `/uploadOfferFile?oid=${props.offerUuid}`)
+  await uploadFiles(files.value, `/uploadOfferFile?oid=${props.offerUuid}`, 'pdf')
   emit('ok')
   hide()
 }

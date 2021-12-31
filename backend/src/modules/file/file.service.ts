@@ -13,6 +13,8 @@ import { Company } from '../company/entities/company.entity';
 import { User } from '../user/entities/user.entity';
 import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
+import { ERRORS } from '../../error/ERRORS';
+import { MultipartFile } from 'fastify-multipart';
 
 @Injectable()
 export class FileService {
@@ -33,6 +35,15 @@ export class FileService {
 
     @InjectRepository(PrivateFile)
     private readonly privateFilesRepository: Repository<PrivateFile>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Offer)
+    private readonly offerRepository: Repository<Offer>,
+
+    @InjectRepository(Dossier)
+    private readonly dossierRepository: Repository<Dossier>,
 
     private readonly configService: ConfigService,
   ) {}
@@ -163,5 +174,73 @@ export class FileService {
     const file = await this.privateFilesRepository.findOne(fileUuid);
     await this.privateFilesRepository.delete(file.uuid);
     return file;
+  }
+
+  /**
+   * Creates a private file from given file
+   * Sets the owner based on the incoming cognitoId
+   * Adds the file to an entity given by the associationUuid in the repository given by repositoryName
+   * at the field given by location.onAssociation. If the location is an array, the new file is appended.
+   * Otherwise the field is overwritten.
+   * Adds the entity to the file at the field given by location.onFile
+   * @param {MultipartFile} file - The file
+   * @param {string} associationUuid - The Id of the entity to associate with
+   * @param {string} repositoryName - The name of the repository where the entity can be found. Needs to be injected.
+   * @param {Record<'onAssociation' | 'onFile', string>} location - Where the file and entity link to each other
+   * @param {string} ownerUuid - Cognito Id of owner. //Todo describe how to add on axios request
+   * @returns {unknown} - The updated entity
+   */
+  async uploadAssociatedFile(
+    file: MultipartFile,
+    associationUuid: string,
+    repositoryName: string,
+    location: Record<'onAssociation' | 'onFile', string>,
+    ownerUuid: string,
+  ): Promise<unknown> {
+    if (!file) {
+      throw new Error(ERRORS.no_valid_file);
+    }
+
+    const associatedEntity = await this[repositoryName].findOne(
+      associationUuid,
+      {
+        relations: [location.onAssociation],
+      },
+    );
+    // Throw error if invalid offer or document upload not enabled
+    if (!associatedEntity) {
+      throw new Error(ERRORS.no_valid_association);
+    }
+
+    const user = await this.userRepository.findOne(ownerUuid);
+    if (!user) {
+      throw new Error(ERRORS.no_user_found);
+    }
+
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.uploadPrivateFile(
+      fileBuffer,
+      file.filename,
+      user.fk,
+      { [location.onFile]: associatedEntity },
+    );
+    if (
+      // Empty location -> add
+      associatedEntity[location.onAssociation] === null ||
+      associatedEntity[location.onAssociation] === undefined
+    ) {
+      associatedEntity[location.onAssociation] = newFile;
+    } else if (Array.isArray(associatedEntity[location.onAssociation])) {
+      // Location is an Array -> extend
+      associatedEntity[location.onAssociation].push(newFile);
+    } else {
+      // File found on location -> delete existing file and override
+      await this.deletePrivateFile(
+        associatedEntity[location.onAssociation].uuid,
+      );
+      associatedEntity[location.onAssociation] = newFile;
+    }
+    await this[repositoryName].save(associatedEntity);
+    return associatedEntity;
   }
 }

@@ -150,7 +150,7 @@ export class FileController {
   }
 
   @Post('/uploadOfferFile')
-  @BankOnly()
+  @AnyRole()
   async uploadOfferFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
@@ -164,36 +164,18 @@ export class FileController {
 
     // Determine offer UUID from query param
     const offerUuid: string = query.oid;
-    const offer = await this.offerRepository.findOne(offerUuid, {
-      relations: ['pdf'],
-    });
-    // Throw error if invalid offer or document upload not enabled
-    if (!offer) {
-      throw new Error('Todo');
-    }
-
-    const user = await this.userRepository.findOne(req['user'].userId);
-
     const file = await req.file();
-    if (!file) {
-      throw new Error(ERRORS.no_valid_file);
-    }
-    const fileBuffer = await file.toBuffer();
-    const newFile = await this.fileService.uploadPrivateFile(
-      fileBuffer,
-      file.filename,
-      user.fk,
-      { offer },
+
+    const updatedOffer = await this.fileService.uploadAssociatedFile(
+      file,
+      offerUuid,
+      'offerRepository',
+      { onFile: 'offer', onAssociation: 'pdf' },
+      req['user'].userId,
     );
-    if (offer.pdf) {
-      // Todo is this expected behaviour?
-      console.log(offer.pdf.uuid);
-      await this.fileService.deletePrivateFile(offer.pdf.uuid);
-    }
-    offer.pdf = newFile;
-    await this.offerRepository.save(offer);
+
     res.header('access-control-allow-origin', '*');
-    res.send(newFile);
+    res.send(updatedOffer);
   }
 
   @Post('/uploadDossierFile')
@@ -211,30 +193,16 @@ export class FileController {
 
     // Determine offer UUID from query param
     const dossierUuid: string = query.did;
-    const dossier = await this.dossierRepository.findOne(dossierUuid, {
-      relations: ['documents'],
-    });
-    // Throw error if invalid offer or document upload not enabled
-    if (!dossier) {
-      throw new Error('Todo');
-    }
-
-    const user = await this.userRepository.findOne(req['user'].userId);
-
     const file = await req.file();
-    if (!file) {
-      throw new Error(ERRORS.no_valid_file);
-    }
-    const fileBuffer = await file.toBuffer();
-    const newFile = await this.fileService.uploadPrivateFile(
-      fileBuffer,
-      file.filename,
-      user.fk,
-      { dossier },
+    const updatedDossier = await this.fileService.uploadAssociatedFile(
+      file,
+      dossierUuid,
+      'dossierRepository',
+      { onFile: 'dossier', onAssociation: 'documents' },
+      req['user'].userId,
     );
-    dossier.documents.push(newFile);
-    await this.dossierRepository.save(dossier);
+
     res.header('access-control-allow-origin', '*');
-    res.send(newFile);
+    res.send(updatedDossier);
   }
 }

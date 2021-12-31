@@ -5,7 +5,6 @@ import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 import { Company } from '../../company/entities/company.entity';
 import { Dossier } from '../../dossier/entity/dossier.entity';
 import { Offer } from '../../offer/entities/offer.entity';
-import { of } from 'rxjs';
 
 /**
  * Defines a private file within a restricted AWS S3 bucket.
