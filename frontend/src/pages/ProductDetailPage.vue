@@ -369,19 +369,19 @@ function mapValuesToInput(newValue: Record<string, string|unknown>): void {
   input.description = newValue.description
   input.brand = newValue.brand
   input.category = newValue.category ? toPascalCase(newValue.category as string) : null
-  input.value = newValue.value !== '' ? newValue.value : null
+  input.value = newValue.value as string !== '' ? newValue.value : null
   input.currency = newValue.currency
-  input.minBet = newValue.minBet !== '' ? newValue.minBet : null
-  input.maxBet = newValue.maxBet !== '' ? newValue.maxBet : null
+  input.minBet = newValue.minBet as string !== '' ? newValue.minBet : null
+  input.maxBet = newValue.maxBet as string !== '' ? newValue.maxBet : null
   input.sponsored = newValue.sponsored ? i18n.global.t('general.yes') : i18n.global.t('general.no')
   input.tags = newValue.tags
   input.status = newValue.status as PRODUCT_STATUS
-  input.directBuyLink = newValue.directBuyLink !== '' ? newValue.directBuyLink : null
-  input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks !== '' ? newValue.directBuyLinkMaxClicks : null
-  input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost !== '' ? newValue.directBuyLinkMaxCost : null
-  input.brandLink = newValue.brandLink !== '' ? newValue.brandLink : null
-  input.brandLinkMaxClicks = newValue.brandLinkMaxClicks !== '' ? newValue.brandLinkMaxClicks : null
-  input.brandLinkMaxCost = newValue.brandLinkMaxCost !== '' ? newValue.brandLinkMaxCost : null
+  input.directBuyLink = newValue.directBuyLink as string !== '' ? newValue.directBuyLink : null
+  input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks as string !== '' ? newValue.directBuyLinkMaxClicks : null
+  input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost as string !== '' ? newValue.directBuyLinkMaxCost : null
+  input.brandLink = newValue.brandLink as string !== '' ? newValue.brandLink : null
+  input.brandLinkMaxClicks = newValue.brandLinkMaxClicks as string !== '' ? newValue.brandLinkMaxClicks : null
+  input.brandLinkMaxCost = newValue.brandLinkMaxCost as string !== '' ? newValue.brandLinkMaxCost : null
 
   // Dates: extract substring for date-only
   input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
