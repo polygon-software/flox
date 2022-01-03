@@ -426,7 +426,7 @@ export class AuthenticationService {
         this.$q.dialog({
             component: AccountLockedDialog,
             componentProps: {
-              // TODO until-date
+              // TODO get until-date for temporarily disabled users
             }
           }
         )
