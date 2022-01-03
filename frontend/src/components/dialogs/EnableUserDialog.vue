@@ -9,34 +9,34 @@
           bordered
           separator
         >
-          <q-item v-ripple>
+          <q-item>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.language') }}:</p>
-                <p class="col-7">{{ props.user.language }}</p>
+                <p class="col-5">{{ $t('account_data.username') }}:</p>
+                <p class="col-7">{{ props.user.username }}</p>
               </div>
             </q-item-section>
           </q-item>
 
-          <q-item v-ripple>
+          <q-item>
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.full_name') }}:</p>
-                <p class="col-7">{{ props.user.first_name }} {{ props.user.last_name }}</p>
+                <p class="col-7">{{ props.user.fullName }}</p>
               </div>
             </q-item-section>
           </q-item>
 
-          <q-item v-ripple>
+          <q-item>
             <q-item-section>
               <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.domicile_address') }}:</p>
+                <p class="col-5">{{ $t('account_data.address') }}:</p>
                 <p class="col-7">{{ address.prettyString() }}</p>
               </div>
             </q-item-section>
           </q-item>
 
-          <q-item v-ripple>
+          <q-item>
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.phone_number') }}:</p>
@@ -45,12 +45,23 @@
             </q-item-section>
           </q-item>
 
-          <q-item v-ripple clickable>
+          <q-item>
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.email') }}:</p>
                 <p class="col-7">
                   {{ props.user.email }}
+                </p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item>
+            <q-item-section>
+              <div class="row flex content-center">
+                <p class="col-5">{{ $t('account_data.birthdate') }}:</p>
+                <p class="col-7">
+                  {{ formatDate(props.user.birthdate) }}
                 </p>
               </div>
             </q-item-section>
@@ -86,6 +97,7 @@ import {defineProps, defineEmits, ref, Ref, PropType} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import {Address} from 'src/data/types/Address';
 import {User} from 'src/data/types/User';
+import {formatDate} from 'src/helpers/format-helpers';
 
 const $q: QVueGlobals = useQuasar()
 const emit = defineEmits(['ok'])
