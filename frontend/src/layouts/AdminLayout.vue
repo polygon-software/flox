@@ -89,6 +89,12 @@ const menuItems = [
     icon: 'groups'
   },
   {
+    name: 'partners',
+    label: i18n.global.t('admin.partners'),
+    route: ROUTES.PARTNERS,
+    icon: 'business'
+  },
+  {
     name: 'statistics',
     label: i18n.global.t('dashboards.statistics'),
     route: ROUTES.ADMIN_STATISTICS,

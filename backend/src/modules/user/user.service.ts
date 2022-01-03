@@ -47,6 +47,12 @@ export class UserService {
     });
   }
 
+  getAllPartners(): Promise<User[]> {
+    return this.usersRepository.find({
+      role: ROLE.PARTNER,
+    });
+  }
+
   getUser(getUserArgs: GetUserArgs): Promise<User> {
     return this.usersRepository.findOne(getUserArgs.uuid);
   }

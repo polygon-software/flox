@@ -13,70 +13,76 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     path: '/',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/MainPage.vue') }],
+    children: [{ path: '', component: () => import('pages/generic/MainPage.vue') }],
   },
 
   'LOGIN': {
     path: '/login',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
+    children: [{ path: '', component: () => import('pages/generic/LoginPage.vue') }],
   },
 
   'ADD_PRODUCT': {
     path: '/add-product',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/ProductUploadPage.vue') }],
+    children: [{ path: '', component: () => import('pages/partner/ProductUploadPage.vue') }],
   },
 
   'MY_PRODUCTS': {
     path: '/my-products',
     component: () => import('layouts/PartnerLayout.vue'),
-    children: [{ path: '', component: () => import('pages/MyProductsPage.vue') }],
+    children: [{ path: '', component: () => import('pages/partner/MyProductsPage.vue') }],
   },
 
   'PLAYERS': {
     path: '/players',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/PlayersPage.vue') }],
+    children: [{ path: '', component: () => import('pages/admin/PlayersPage.vue') }],
+  },
+
+  'PARTNERS': {
+    path: '/partners',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/admin/PartnersPage.vue') }],
   },
 
   'ADMIN_STATISTICS': {
     path: '/admin-statistics',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/AdminStatisticsPage.vue') }],
+    children: [{ path: '', component: () => import('pages/admin/AdminStatisticsPage.vue') }],
   },
 
   'ADMIN_FINANCES': {
     path: '/admin-finances',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/AdminFinancesPage.vue') }],
+    children: [{ path: '', component: () => import('pages/admin/AdminFinancesPage.vue') }],
   },
 
   'PARTNER_STATISTICS': {
     path: '/partner-statistics',
     component: () => import('layouts/PartnerLayout.vue'),
-    children: [{ path: '', component: () => import('pages/PartnerStatisticsPage.vue') }],
+    children: [{ path: '', component: () => import('pages/partner/PartnerStatisticsPage.vue') }],
   },
 
   'PARTNER_FINANCES': {
     path: '/partner-finances',
     component: () => import('layouts/PartnerLayout.vue'),
-    children: [{ path: '', component: () => import('pages/PartnerFinancesPage.vue') }],
+    children: [{ path: '', component: () => import('pages/partner/PartnerFinancesPage.vue') }],
   },
 
   'SETTINGS': {
     path: '/settings',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/SettingsPage.vue') }],
+    children: [{ path: '', component: () => import('pages/generic/SettingsPage.vue') }],
   },
 
   // Wildcard route for non-covered routes
   'WILDCARD': {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue'),
+    component: () => import('pages/generic/Error404.vue'),
   },
 };
 
@@ -97,7 +103,7 @@ async function getUserRoleLayout(): Promise<any>{
 
   // Non-logged in: Redirect to 404
   if(!queryResult?.data?.myUser){
-    return import('pages/Error404.vue')
+    return import('pages/generic/Error404.vue')
   }
 
 
@@ -112,7 +118,7 @@ async function getUserRoleLayout(): Promise<any>{
     case ROLE.PLAYER:
       return import('layouts/PlayerLayout.vue')
     default:
-      return import('pages/Error404.vue') // TODO possibly 403 forbidden page?
+      return import('pages/generic/Error404.vue') // TODO possibly 403 forbidden page?
     }
 }
 

@@ -267,6 +267,7 @@ type PublicFile {
 
 type Query {
   allComments: [Comment!]!
+  allPartners: [User!]!
   allPlayers: [User!]!
   allProducts: [Product!]!
   allUsers: [User!]!

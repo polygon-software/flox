@@ -48,7 +48,37 @@ export const ALL_PLAYERS = {
   cacheLocation: 'allPlayers'
 }
 
+export const ALL_PARTNERS = {
+  query: gql`
+    query{
+      allPartners{
+        uuid
+        role
+        createdAt
+        fullName
+        username
+        email
+        phone
+        birthdate
+        status
+        address {
+          uuid
+          street
+          number
+          city
+          zipCode
+          __typename
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'allPartners'
+}
+
 export const USER_QUERIES: QueryObject[] = [
   MY_USER,
-  ALL_PLAYERS
+  ALL_PLAYERS,
+  ALL_PARTNERS
 ]

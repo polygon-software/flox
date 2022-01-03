@@ -320,7 +320,7 @@ import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT, UPDATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {i18n} from 'boot/i18n';
-import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {useRoute} from 'vue-router';

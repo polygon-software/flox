@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex" style="flex-direction: column">
     <!-- Top row: title -->
-    <h6 class="q-ma-md">{{ $t('admin.players') }}</h6>
+    <h6 class="q-ma-md">{{ $t('admin.partners') }}</h6>
 
     <!-- Body: Table with tabs etc. -->
     <div
@@ -43,7 +43,7 @@
       </div>
 
       <!-- Table view of products -->
-      <PlayersTable
+      <PartnersTable
         :search="search"
         :status-filter="statusFilter"
       />
@@ -53,14 +53,10 @@
 </template>
 
 <script setup lang="ts">
-import {RouterService} from 'src/services/RouterService';
-import {inject, Ref, ref} from 'vue';
-import ROUTES from 'src/router/routes';
+import {Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
-import {USER_STATUS} from '../../../shared/definitions/ENUM';
-import PlayersTable from 'components/table/PlayersTable.vue';
-
-const $routerService: RouterService|undefined = inject('$routerService')
+import {USER_STATUS} from '../../../../shared/definitions/ENUM';
+import PartnersTable from 'components/table/PartnersTable.vue';
 
 // Search term
 const search = ref('')
@@ -88,12 +84,4 @@ const tabs = [
   },
 ]
 
-/**
- * Routes to the product creation page
- * @async
- * @returns {void}
- */
-async function createProduct(): Promise<void>{
-  await $routerService?.routeTo(ROUTES.ADD_PRODUCT)
-}
 </script>

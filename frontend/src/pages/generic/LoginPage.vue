@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import {inject, ref, } from 'vue'
-import {AuthenticationService} from '../services/AuthService';
+import {AuthenticationService} from '../../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'
