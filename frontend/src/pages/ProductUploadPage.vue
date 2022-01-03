@@ -428,7 +428,7 @@ const stop = watch(queryResult, async (newValue) => {
  * @param {Record<string, unknown>} newValue Data object loaded from DB
  * @return {void}
  */
-function mapValuesToInput(newValue: Record<string, unknown>): void {
+function mapValuesToInput(newValue: Record<string, string|unknown>): void {
   // Manually handle each field, since some fields are special
   input.title = newValue.title
   input.description = newValue.description
