@@ -5,7 +5,6 @@ import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
-import { GetUsersArgs } from './dto/args/get-users.args';
 import { Public } from '../../auth/authentication.decorator';
 import {
   AdminOnly,
@@ -42,7 +41,7 @@ export class UserResolver {
    */
   @AdminOnly()
   @Mutation(() => User)
-  async enableAccount(@Args('uuid') uuid: string): Promise<User> {
+  async enableUser(@Args('uuid') uuid: string): Promise<User> {
     return this.usersService.enableUser(uuid);
   }
 
@@ -53,7 +52,7 @@ export class UserResolver {
    */
   @AdminOnly()
   @Mutation(() => User)
-  async disableAccount(@Args('uuid') uuid: string): Promise<User> {
+  async disableUser(@Args('uuid') uuid: string): Promise<User> {
     return this.usersService.disableUser(uuid);
   }
 

@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 import {computed, defineProps, Ref} from 'vue';
-import { subscribeToQuery} from 'src/helpers/data-helpers';
+import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
@@ -96,6 +96,7 @@ import {ALL_PLAYERS} from 'src/data/queries/USER';
 import {useQuasar} from 'quasar';
 import EnableUserDialog from 'components/dialogs/EnableUserDialog.vue';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {ENABLE_USER} from 'src/data/mutations/USER';
 
 const $q = useQuasar()
 
@@ -159,13 +160,29 @@ function enableUser(user: Record<string, unknown>): void{
       user: user
     }
   }).onOk(() => {
-    // Show confirmation prompt
-    showNotification(
-      $q,
-      i18n.global.t('messages.account_enabled'),
-      undefined,
-      'positive'
-    )
+
+    executeMutation(
+      ENABLE_USER,
+      {
+        uuid: user.uuid
+      }
+    ).then(() => {
+      // Show confirmation prompt
+      showNotification(
+        $q,
+        i18n.global.t('messages.account_enabled'),
+        undefined,
+        'positive'
+      )
+    }).catch(() => {
+      // Show error prompt
+      showNotification(
+        $q,
+        i18n.global.t('errors.error_occurred'),
+        undefined,
+        'negative'
+      )
+    })
   })
 }
 

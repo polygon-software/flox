@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
-import { GetUsersArgs } from './dto/args/get-users.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';

@@ -140,9 +140,9 @@ type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
-  disableAccount(uuid: String!): User!
+  disableUser(uuid: String!): User!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
-  enableAccount(uuid: String!): User!
+  enableUser(uuid: String!): User!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
