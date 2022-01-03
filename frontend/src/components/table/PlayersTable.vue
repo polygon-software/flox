@@ -96,7 +96,7 @@ import {ALL_PLAYERS} from 'src/data/queries/USER';
 import {useQuasar} from 'quasar';
 import EnableUserDialog from 'components/dialogs/EnableUserDialog.vue';
 import {showNotification} from 'src/helpers/notification-helpers';
-import {ENABLE_USER} from 'src/data/mutations/USER';
+import {DISABLE_USER, ENABLE_USER} from 'src/data/mutations/USER';
 
 const $q = useQuasar()
 
@@ -138,14 +138,29 @@ const computedResult = computed(() => {
  * @returns {Promise<void>} - if the user was disabled
  */
 function disableUser(user: Record<string, unknown>): void{
-  console.log('Disable user', user)
-  // TODO actual functionality
-  // await $routerService?.routeTo(
-  //   ROUTES.ADD_PRODUCT,
-  //   {
-  //     id: uuid
-  //   }
-  // )
+  // Enable account on backend
+  executeMutation(
+    DISABLE_USER,
+    {
+      uuid: user.uuid
+    }
+  ).then(() => {
+    // Show confirmation prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.account_disabled'),
+      undefined,
+      'negative'
+    )
+  }).catch(() => {
+    // Show error prompt
+    showNotification(
+      $q,
+      i18n.global.t('errors.error_while_disabling'),
+      undefined,
+      'negative'
+    )
+  })
 }
 
 /**
@@ -160,7 +175,7 @@ function enableUser(user: Record<string, unknown>): void{
       user: user
     }
   }).onOk(() => {
-
+    // Enable account on backend
     executeMutation(
       ENABLE_USER,
       {
@@ -178,7 +193,7 @@ function enableUser(user: Record<string, unknown>): void{
       // Show error prompt
       showNotification(
         $q,
-        i18n.global.t('errors.error_occurred'),
+        i18n.global.t('errors.error_while_enabling'),
         undefined,
         'negative'
       )
