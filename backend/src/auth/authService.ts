@@ -44,3 +44,27 @@ export async function createCognitoAccount(
   );
   return cognitoUserWrapper.userSub;
 }
+
+/**
+ * Disables (locks) a cognito account by UUID
+ * @param {string} uuid - The account's UUID
+ * @returns {Promise<void>} - done
+ */
+export async function disableCognitoAccount(uuid: string): Promise<void> {
+  // Set up authentication user pool
+  const poolSettings = {
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    ClientId: process.env.USER_POOL_CLIENT_ID ?? '',
+  };
+  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings);
+
+  // TODO
+  // new AmazonCognitoIdentity.cognitoProvider.adminDisableUser(params, function (
+  //   err,
+  //   data,
+  // ) {
+  //   if (err) console.log(err, err.stack);
+  //   // an error occurred
+  //   else console.log(data); // successful response
+  // });
+}
