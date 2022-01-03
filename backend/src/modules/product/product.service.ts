@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateProductInput } from './dto/input/create-product.input';
 import { UpdateProductInput } from './dto/input/update-product.input';
 import { GetProductArgs } from './dto/args/get-product.args';
@@ -30,6 +30,7 @@ export class ProductService {
     // Create the product
     const product = this.productsRepository.create(createProductInput);
     const savedProduct = await this.productsRepository.save(product);
+
     await this.createPublicFiles(pictures, savedProduct);
     return savedProduct;
   }
@@ -52,39 +53,37 @@ export class ProductService {
 
   /**
    * Updates an existing product
-   * @param {UpdateProductInput} updateProductInput - input data, including uuid
-   * @param {Array<string>} pictures - pictures for the product
-   * @returns {Promise<Product>} - the product, once updated
+   * @param {UpdateProductInput} updateProductInput
+   * @param {Array<string>|null} pictures
    */
-  async update(
-    updateProductInput: UpdateProductInput,
-    pictures: Array<string>,
-  ): Promise<Product> {
-    // Fetch existing product an delete all pictures
-    const currentProduct = await this.productsRepository.findOne(
-      updateProductInput.uuid,
-    );
-    for (const file of currentProduct.pictures) {
-      await this.fileRepository.delete(file.uuid);
-      // TODO delete on S3 as well
-      // TODO also: only delete/reupload images if they have changed; we should probably set a flag.
+  async update(updateProductInput: UpdateProductInput, pictures: Array<string>|null): Promise<Product> {
+    const currentProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+    let updatedProduct;
+
+    // Check if pictures have changed
+    if (pictures !== null) {
+      // Fetch existing product an delete all pictures
+      for (const file of currentProduct.pictures) {
+        await this.fileRepository.delete(file.uuid);
+      }
+
+      // Update the product
+      const product = this.productsRepository.create(updateProductInput);
+      await this.productsRepository.update(updateProductInput.uuid, product);
+      updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+      await this.createPublicFiles(pictures, updatedProduct);
+    } else {
+      // Update the product
+      const product = this.productsRepository.create(updateProductInput);
+      await this.productsRepository.update(updateProductInput.uuid, product);
+      updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
     }
-
-    // Update the product
-    const product = this.productsRepository.create(updateProductInput);
-    await this.productsRepository.update(updateProductInput.uuid, product);
-    const updatedProduct = await this.productsRepository.findOne(
-      updateProductInput.uuid,
-    );
-
-    await this.createPublicFiles(pictures, updatedProduct);
     return updatedProduct;
   }
 
   /**
    * Duplicates an existing product and returns the new Product
    * @param {DuplicateProductInput} duplicateProductInput - The product input containing the existing product's data
-   * @returns {Promise<Product>} - the product, once duplicated
    */
   async duplicate(
     duplicateProductInput: DuplicateProductInput,
@@ -173,8 +172,10 @@ export class ProductService {
   ): Promise<void> {
     // Create new picture objects
     for (let base64Picture of base64Strings) {
-      // Remove prepended string TODO cleaner fix! (on edit, this is present and must be removed)
-      base64Picture = base64Picture.replace('stream;base64,', '');
+      // Remove prepended string
+      if (base64Picture.startsWith('stream;base64')) {
+        base64Picture = base64Picture.replace('stream;base64,', '');
+      }
 
       // Convert base64 to buffer
       const buffer = base64ToBuffer(base64Picture);

@@ -6,15 +6,6 @@ type Address {
   """City"""
   city: String!
 
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
-
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
   """Number"""
   number: String!
 
@@ -46,16 +37,7 @@ type Comment {
   """Content"""
   content: String!
 
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
-
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
-  """The product this a comment belongs to"""
+  """The product this comment belongs to"""
   product: Product!
 
   """The user who wrote this comment"""
@@ -163,21 +145,12 @@ type Mutation {
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
-  updateProduct(pictures: [String!]!, updateProductInput: UpdateProductInput!): Product!
+  updateProduct(pictures: [String!] = null, updateProductInput: UpdateProductInput!): Product!
 }
 
 type PrivateFile {
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
-
   """S3 File Key"""
   key: String!
-
-  """Last modification date"""
-  lastModifiedAt: DateTime!
 
   """File owner"""
   owner: String!
@@ -214,14 +187,8 @@ type Product {
   """Comments"""
   comments: [Comment!]!
 
-  """Creation date"""
-  createdAt: DateTime!
-
   """The currency the value is denoted in"""
   currency: Currency
-
-  """Date of deletion"""
-  deletedAt: DateTime
 
   """Description"""
   description: String
@@ -243,9 +210,6 @@ type Product {
 
   """End Date"""
   end: DateTime
-
-  """Last modification date"""
-  lastModifiedAt: DateTime!
 
   """Number of Likes"""
   likes: Float!
@@ -282,25 +246,14 @@ type Product {
 }
 
 enum ProductStatus {
-  ACTIVE
   ARCHIVED
   DRAFT
-  ENDED
   VALID
 }
 
 type PublicFile {
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
-
   """S3 File Key"""
   key: String!
-
-  """Last modification date"""
-  lastModifiedAt: DateTime!
 
   """Product the file belongs to"""
   product: Product
@@ -454,7 +407,7 @@ input comment {
   """Content"""
   content: String!
 
-  """The product this a comment belongs to"""
+  """The product this comment belongs to"""
   product: product!
 
   """The user who wrote this comment"""

@@ -24,8 +24,6 @@ export enum CATEGORY {
 export enum PRODUCT_STATUS {
   DRAFT = 'DRAFT',
   VALID = 'VALID',
-  ACTIVE = 'ACTIVE',
-  ENDED = 'ENDED', // TODO proper definitions: what statuses are possible
   ARCHIVED = 'ARCHIVED',
 }
 

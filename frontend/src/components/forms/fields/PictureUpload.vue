@@ -2,7 +2,7 @@
   <!-- Image files -->
   <div class="row">
     <q-file
-    v-for="(picture, index) in pictures"
+      v-for="(picture, index) in pictures"
     :key="index"
     v-model="picture.value"
     class="q-ma-md"
@@ -60,7 +60,6 @@ const stop = watch(() => props.pictures, async () => {
 })
 
 const urls: Ref<Array<null|ArrayBuffer|string>> = ref([])
-
 /**
  * Emits the updated value
  * @returns {void}
@@ -83,7 +82,6 @@ function emitValue(){
   // TODO inner validation?
   emit('change', pictures.value)
 }
-
 /**
  * Updates the image url array so it always matches the image file array.
  * @returns {void}

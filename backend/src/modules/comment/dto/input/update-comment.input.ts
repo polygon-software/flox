@@ -13,4 +13,4 @@ export class UpdateCommentInput extends PartialType(CreateCommentInput) {
   content: string;
 }
 
-//TODO: Add missing operations
+//TODO Add missing fields (likes, replies, etc.)

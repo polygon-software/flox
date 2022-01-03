@@ -368,7 +368,7 @@ const status: ComputedRef<PRODUCT_STATUS> = computed(() => {
     input.category,
     input.minBet,
     input.maxBet,
-    input.sponsored].some((value) => {return value === null || value === ''})) {
+    input.sponsored].some((value) => {return value === null || value === undefined || (typeof value === 'string' && value === '')})) {
     return PRODUCT_STATUS.DRAFT as PRODUCT_STATUS
   }
   return PRODUCT_STATUS.VALID as PRODUCT_STATUS
@@ -400,6 +400,7 @@ const input: Record<string, unknown> = reactive(
 
 // Picture inputs (separated from input, since these have to be added after product is created)
 const pictures: Ref<Array<Ref<File>>> = ref([])
+const oldPictures: Ref<Array<string|ArrayBuffer|null>> = ref([])
 
 /**
  * Watch for first result if a product is given
@@ -434,19 +435,30 @@ const stop = watch(queryResult, async (newValue) => {
 
     // Pictures
     const existingPictures: Array<Ref<File>> = []
-    const newPictures = newValue.pictures as Array<Record<string, string>>
-
-    for (const picture of newPictures) {
-      const index: number = newPictures.indexOf(picture);
+    for (const picture of newValue.pictures) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+      const index: number = newValue.pictures.indexOf(picture);
       await axios.get(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         picture.url,
         {
           responseType: 'blob'
-        }).then((res: AxiosResponse<Blob>) => {
-       existingPictures.push(ref(new File([res.data], `${(input as Record<string, string>).title}_${index}`)))
+        }).then(async (res: AxiosResponse<Blob>) => {
+          const file = new File([res.data], `${(input as Record<string, string>).title}_${index}`)
+          existingPictures.push(ref(file))
+
+          // This array is used to remember which pictures currently exist
+          const b64Picture = await toBase64(file)
+          if (!oldPictures.value.includes(b64Picture)) {
+            oldPictures.value.push(b64Picture)
+          }
       });
     }
     pictures.value = existingPictures
+
+
+    // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
+    // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
 
     // Stop watcher, since we already got initial values
     stop()
@@ -464,6 +476,7 @@ function onPictureChange(newPictures: Ref<File>[]){
 }
 
 /**
+ * TODO cleanup, simplify
  * On submit, creates/updates existing product
  * @returns {void}
  */
@@ -499,7 +512,7 @@ async function onSubmit(){
             uuid: productId,
             ...params,
           },
-          pictures: base64Pictures
+          pictures: compareArrays(base64Pictures, oldPictures.value) ? null : base64Pictures,
         }
       )
     } else {
@@ -519,5 +532,23 @@ async function onSubmit(){
 
   // Push to success page
   await $routerService?.routeTo(ROUTES.MY_PRODUCTS)
+}
+
+/**
+ * Compares two arrays containing pictures as b64 strings an returns if they are the same of not.
+ * @param {Array<Promise<string>>} array1 First array
+ * @param {Array<Promise<string>>} array2 Second array
+ * @return {boolean} True if arrays are the same
+ */
+function compareArrays(array1: Array<string|ArrayBuffer|null>, array2: Array<string|ArrayBuffer|null>): boolean {
+  if (array1.length === array2.length) {
+    for (let i=0; i<array1.length; i++) {
+      if (array1[i] !== array2[i]) {
+        return false
+      }
+    }
+    return true
+  }
+  return false
 }
 </script>

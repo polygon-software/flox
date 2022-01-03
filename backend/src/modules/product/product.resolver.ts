@@ -46,9 +46,14 @@ export class ProductResolver {
   @Public()
   @Mutation(() => Product)
   async updateProduct(
-    @Args({ name: 'updateProductInput', type: () => UpdateProductInput })
-    updateProductInput: UpdateProductInput,
-    @Args({ name: 'pictures', type: () => [String] }) pictures: Array<string>,
+    @Args('updateProductInput') updateProductInput: UpdateProductInput,
+    @Args({
+      name: 'pictures',
+      type: () => [String],
+      nullable: true,
+      defaultValue: null,
+    })
+    pictures: Array<string> | null,
   ): Promise<Product> {
     return this.productsService.update(updateProductInput, pictures);
   }

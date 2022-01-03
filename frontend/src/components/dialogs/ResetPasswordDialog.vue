@@ -9,7 +9,7 @@
           class="q-gutter-md"
           @submit="onSubmit"
       >
-        <b>Reset Password</b>
+        <strong>Reset Password</strong>
         <q-input
             v-model="verificationCode"
             label="Email Verification Code"

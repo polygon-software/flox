@@ -65,9 +65,9 @@
     >
       <q-card-section>
         <div class="row flex flex-center">
-          <b class="text-primary">
+          <strong class="text-primary">
             {{ form.pages.value[0].label }}
-          </b>
+          </strong>
         </div>
       </q-card-section>
       <q-separator class="q-ma-lg"/>
