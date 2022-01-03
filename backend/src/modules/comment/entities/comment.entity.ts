@@ -5,7 +5,6 @@ import { IsString } from 'class-validator';
 import { Product } from '../../product/entities/product.entity';
 import { User } from '../../user/entities/user.entity';
 
-
 @ObjectType()
 @Entity({ name: 'comment' })
 @InputType('comment')
