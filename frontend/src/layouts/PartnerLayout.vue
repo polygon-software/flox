@@ -38,7 +38,6 @@
       <q-item
         v-ripple
         clickable
-        label="Settings"
         style="position: absolute; bottom: 0; width: 100%"
         @click="() => onItemClick(ROUTES.SETTINGS)"
       >
@@ -46,7 +45,7 @@
           <q-icon name="settings"/>
         </q-item-section>
         <q-item-section>
-          Settings
+          {{ $t('general.settings') }}
         </q-item-section>
       </q-item>
     </q-drawer>
@@ -68,6 +67,7 @@ import {inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw} from 'vue-router';
 import PartnerMenuBar from 'components/menu/PartnerMenuBar.vue';
+import {i18n} from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -78,26 +78,26 @@ const showMenu = ref(true)
 const menuItems = [
   {
     name: 'home',
-    label: 'Home', // TODO i18n
-    route: ROUTES.LOGIN, // TODO
+    label: i18n.global.t('general.home'),
+    route: ROUTES.MAIN,
     icon: 'home'
   },
   {
     name: 'products',
-    label: 'Products', // TODO i18n
+    label: i18n.global.t('products.products'),
     route: ROUTES.MY_PRODUCTS,
     icon: 'local_mall'
   },
   {
     name: 'statistics',
-    label: 'Statistics', // TODO i18n
-    route: ROUTES.LOGIN, // TODO
+    label: i18n.global.t('dashboards.statistics'),
+    route: ROUTES.PARTNER_STATISTICS,
     icon: 'leaderboard'
   },
   {
     name: 'finances',
-    label: 'Finances', // TODO i18n
-    route: ROUTES.LOGIN, // TODO
+    label: i18n.global.t('dashboards.finances'),
+    route: ROUTES.PARTNER_FINANCES,
     icon: 'paid'
   },
 ]

@@ -8,15 +8,6 @@
           class="q-ma-sm"
       >
     </div>
-    <div class="row items-center">
-      <p
-        v-if="loggedIn && username"
-        class="text-black"
-      >
-        {{ $t('authentication.loggedIn', {user: username})}}
-      </p>
-    </div>
-
   <div class="row">
     <q-btn
         v-if="loggedIn"

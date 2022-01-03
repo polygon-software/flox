@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
@@ -6,11 +6,8 @@ import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
-import { PubSub } from 'graphql-subscriptions';
 import { Public } from '../../auth/authentication.decorator';
-
-// Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
-const pubSub = new PubSub();
+import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -19,19 +16,31 @@ export class UserResolver {
   @Public()
   @Query(() => [User], { name: 'users' })
   async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
-    return await this.usersService.getUsers(getUsersArgs);
+    return this.usersService.getUsers(getUsersArgs);
   }
 
   @Public()
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
-    return await this.usersService.getAllUsers();
+    return this.usersService.getAllUsers();
+  }
+
+  @Public()
+  @Query(() => [User], { name: 'allPlayers' })
+  async getAllPlayers(): Promise<User[]> {
+    return this.usersService.getAllPlayers();
+  }
+
+  @Public()
+  @Query(() => [User], { name: 'allPartners' })
+  async getAllPartners(): Promise<User[]> {
+    return this.usersService.getAllPartners();
   }
 
   @Public()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return await this.usersService.getUser(getUserArgs);
+    return this.usersService.getUser(getUserArgs);
   }
 
   @Public()
@@ -39,10 +48,7 @@ export class UserResolver {
   async create(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    const newUser = await this.usersService.create(createUserInput);
-    // Publish authentication so subscriptions will auto-update
-    await pubSub.publish('userAdded', { userAdded: newUser });
-    return newUser;
+    return this.usersService.create(createUserInput);
   }
 
   @Public()
@@ -50,7 +56,7 @@ export class UserResolver {
   async update(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
-    return await this.usersService.update(updateUserInput);
+    return this.usersService.update(updateUserInput);
   }
 
   @Public()
@@ -58,12 +64,27 @@ export class UserResolver {
   async remove(
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
   ): Promise<User> {
-    return await this.usersService.remove(deleteUserInput);
+    return this.usersService.remove(deleteUserInput);
   }
 
-  @Public()
-  @Subscription(() => User)
-  userAdded(): AsyncIterator<unknown, any, undefined> {
-    return pubSub.asyncIterator('userAdded');
+  /**
+   * Get the DB user for the currently logged in cognito user
+   * @param {Record<string, string>}  user - currently logged-in user from request
+   * @async
+   * @returns {User} - the user, if any
+   */
+  @AnyRole()
+  @Query(() => User, { name: 'myUser' })
+  async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
+    // Get company where user's UUID matches cognitoID
+    const myUser = await this.usersService.getUser({
+      uuid: user.userId,
+    } as GetUserArgs);
+
+    if (!myUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+
+    return myUser;
   }
 }

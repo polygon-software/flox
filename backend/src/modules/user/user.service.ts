@@ -7,15 +7,25 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { ROLE, USER_STATUS } from '../../ENUM/ENUM';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
+  /**
+   * Creates a new user on the database
+   * @param {CreateUserInput} createUserInput - input values
+   * @returns {User} - the database user
+   */
   async create(createUserInput: CreateUserInput): Promise<User> {
-    const user = await this.usersRepository.create(createUserInput);
+    const user = this.usersRepository.create({
+      ...createUserInput,
+      role: ROLE.PLAYER,
+      status: USER_STATUS.APPLIED, // Default status: applied
+    });
     return this.usersRepository.save(user);
   }
 
@@ -29,6 +39,18 @@ export class UserService {
 
   getAllUsers(): Promise<User[]> {
     return this.usersRepository.find();
+  }
+
+  getAllPlayers(): Promise<User[]> {
+    return this.usersRepository.find({
+      role: ROLE.PLAYER,
+    });
+  }
+
+  getAllPartners(): Promise<User[]> {
+    return this.usersRepository.find({
+      role: ROLE.PARTNER,
+    });
   }
 
   getUser(getUserArgs: GetUserArgs): Promise<User> {

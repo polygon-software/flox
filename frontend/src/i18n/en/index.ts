@@ -10,6 +10,8 @@ export default {
     edit: 'Edit',
     duplicate: 'Duplicate',
     view: 'View',
+    home: 'Home',
+    settings: 'Settings'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -66,16 +68,10 @@ export default {
     optional: 'optional',
   },
   dashboards: {
-    management_dashboard: 'Management Dashboard',
-    register_new_employee_here: 'Register a new employee here:',
-    application: 'Application | Applications',
-    state: 'State',
-    action: 'Action',
-    enable_upload: 'Enable upload',
-    reject: 'Reject',
-    sure_to_reject: 'Are you sure you want to decline this request?',
-    yes_reject: 'Yes, reject',
-    unlock_account: 'Unlock account',
+    admin_dashboard: 'Admin Dashboard',
+    partner_dashboard: 'Partner Dashboard',
+    statistics: 'Statistics',
+    finances: 'Finances',
   },
   buttons: {
     finish_signup: 'Finish',
@@ -127,8 +123,7 @@ export default {
     missing_user_type: 'Please select a user type',
     invalid_birth_date: 'Please enter you date of birth',
     date_must_be_future: 'Please choose a future date',
-    can_only_edit_draft: 'Cannot edit (only drafts can be edited)',
-    duplication_error: 'An error occurred while duplicating, please try again.'
+    can_only_edit_draft: 'Cannot edit (only drafts can be edited)'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -202,5 +197,16 @@ export default {
     ended: 'Ended',
     archived: 'Archived',
     valid: 'Valid',
+  },
+  user_status: {
+    applied: 'applied',
+    active: 'active',
+    disabled: 'disabled'
+  },
+  admin: {
+    users: 'Users',
+    players: 'Players',
+    partners: 'Partners',
+    disable_account: 'Disable account',
   }
 };

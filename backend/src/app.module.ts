@@ -13,6 +13,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import * as Joi from 'joi';
 import { FileModule } from './modules/file/file.module';
 import { RolesGuard } from './auth/roles.guard';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { RolesGuard } from './auth/roles.guard';
     UserModule,
     ProductModule,
     FileModule,
+    CommentModule,
   ],
   providers: [
     JwtStrategy,
@@ -88,4 +90,8 @@ import { RolesGuard } from './auth/roles.guard';
     },
   ],
 })
+
+/**
+ * Main Module
+ */
 export class AppModule {}

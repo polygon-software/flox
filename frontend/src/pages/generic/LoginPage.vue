@@ -34,6 +34,7 @@
           color="transparent"
           text-color="primary"
           flat
+          rounded
           @click="signup = true"
         />
       </q-card>
@@ -43,11 +44,13 @@
 
 <script setup lang="ts">
 import {inject, ref, } from 'vue'
-import {AuthenticationService} from '../services/AuthService';
+import {AuthenticationService} from '../../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'
 import SignupForm from 'components/forms/SignupForm.vue'
+import {executeMutation} from 'src/helpers/data-helpers';
+import {CREATE_USER} from 'src/data/mutations/USER';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -71,14 +74,38 @@ async function onLogin({username, password}: {username: string, password: string
 
 /**
  * Registers a new authentication using the given data and opens the corresponding e-mail verification dialog
- * @param {string} username - the authentication's chosen username
- * @param {string} email - the authentication's e-mail address
- * @param {string} password_repeat - the authentication's chosen password
+ * @param {Record<string, string>} formValues - Signup form values
  * @returns {void}
  */
-async function onSignup({username, email, password_repeat}:{username: string, email: string, password_repeat:string}){
-  await $authService?.signUp(username, email, password_repeat);
-  // TODO: close signup
+async function onSignup(formValues: Record<string, string>): Promise<void>{
+  // Get params from form
+  const username = formValues.username
+  const email = formValues.email
+  const phone = formValues.phone_number
+  const password = formValues.password_repeat
+  const fullName = formValues.full_name
+  const birthdate = formValues.birthdate
+  const interests = formValues.interests
+  const address = formValues.address
+
+  // Sign up via Cognito
+  const cognitoId = await $authService?.signUp(username, email, password);
+
+  // Create user in backend
+  await executeMutation(CREATE_USER, {
+    createUserInput: {
+      uuid: cognitoId,
+      username,
+      email,
+      phone,
+      fullName,
+      birthdate,
+      interests,
+      address
+    }
+  })
+
+  // TODO: close signup - make it a separate page, reroute to generic success page (can be copied from SOI)
 }
 
 </script>

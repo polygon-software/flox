@@ -3,7 +3,7 @@ import {QInput} from 'quasar'
 import Interests from 'components/forms/fields/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
-import LivingAddress from 'components/forms/fields/LivingAddress.vue'
+import LivingAddress from 'components/forms/fields/AddressField.vue'
 import {markRaw} from 'vue';
 import { i18n } from 'boot/i18n';
 
@@ -38,10 +38,10 @@ const FIELDS: Record<string, Field> = {
             attributes: {
               dense: true,
               type: 'email',
-              label: i18n.global.t('email'),
+              label: i18n.global.t('account_data.email'),
               lazy_rules: 'ondemand',
               outlined: true,
-              rules: [(val: string): boolean|string  => IS_EMAIL(val) || i18n.global.t('invalid_email')]
+              rules: [(val: string): boolean|string  => IS_EMAIL(val) || i18n.global.t('errors.invalid_email')]
             },
         },
         USERNAME: {
@@ -50,24 +50,24 @@ const FIELDS: Record<string, Field> = {
             attributes: {
               dense: true,
               type: 'text',
-              label: i18n.global.t('username'),
+              label: i18n.global.t('account_data.username'),
               lazy_rules: 'true',
               outlined: true,
-              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('invalid_username')]
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_username')]
             },
         },
         PASSWORD: {
             key: 'password',
             component: markRaw(Password),
             attributes: {
-              rules: [(val: string): boolean|string => IS_VALID_PASSWORD(val) || i18n.global.t('invalid_password')]
+              rules: [(val: string): boolean|string => IS_VALID_PASSWORD(val) || i18n.global.t('errors.invalid_password')]
             }
         },
         PASSWORD_REPEAT: {
             key: 'password_repeat',
             component: markRaw(PasswordRepeat),
             attributes: {
-              rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) || i18n.global.t('invalid_password')]
+              rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) || i18n.global.t('errors.invalid_password')]
             }
         },
         FULL_NAME: {
@@ -76,16 +76,16 @@ const FIELDS: Record<string, Field> = {
           attributes: {
             dense: true,
             type: 'text',
-            label: i18n.global.t('full_name'),
+            label: i18n.global.t('account_data.full_name'),
             lazy_rules: 'true',
-            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_name')]
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name')]
           },
         },
         INTERESTS: {
           key: 'interests',
           component: markRaw(Interests),
           attributes: {
-            rules: [(val: Array<number>, max_interests: number): boolean|string => val.length > 0 && val.length < 6 || i18n.global.t('select_interests', {max: max_interests})]
+            rules: [(val: Array<number>, max_interests: number): boolean|string => val.length > 0 && val.length < 6 || i18n.global.t('interests.select_interests', {max: max_interests})]
           },
         },
         PHONE_NUMBER: {
@@ -94,14 +94,14 @@ const FIELDS: Record<string, Field> = {
           attributes: {
             dense: true,
             type: 'tel',
-            label: i18n.global.t('phone_number'),
+            label: i18n.global.t('account_data.phone_number'),
             lazy_rules: 'ondemand',
             mask: '### ### ## ##',
-            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('invalid_phone_number')]
+            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_phone_number')]
           },
         },
-        LIVING_ADDRESS: {
-          key: 'living_address',
+        ADDRESS: {
+          key: 'address',
           component: markRaw(LivingAddress),
           attributes: {
             rules: []
@@ -112,10 +112,10 @@ const FIELDS: Record<string, Field> = {
           component: markRaw(QInput),
           attributes: {
             dense: true,
-            label: i18n.global.t('birthdate'),
+            label: i18n.global.t('account_data.birthdate'),
             lazy_rules: 'ondemand',
             mask: '##/##/####',
-            rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('invalid_birth_date')]
+            rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('errors.invalid_birth_date')]
           }
         },
     }

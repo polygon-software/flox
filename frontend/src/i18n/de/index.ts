@@ -10,6 +10,8 @@ export default {
     edit: 'Bearbeiten',
     duplicate: 'Duplizieren',
     view: 'Ansehen',
+    home: 'Home',
+    settings: 'Einstellungen'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -67,16 +69,10 @@ export default {
     optional: 'optional',
   },
   dashboards: {
-    management_dashboard: 'Chef Dashboard',
-    register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
-    application: 'Antrag | Anträge',
-    state: 'Status',
-    action: 'Aktion',
-    enable_upload: 'Upload freigeben',
-    unlock_account: 'Konto freischalten',
-    reject: 'Ablehnen',
-    sure_to_reject: 'Sind Sie sicher, dass Sie diese Anfrage ablehnen möchten?',
-    yes_reject: 'Ja, ablehnen',
+    admin_dashboard: 'Admin Dashboard',
+    partner_dashboard: 'Partner Dashboard',
+    statistics: 'Statistiken',
+    finances: 'Finanzen',
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -184,9 +180,7 @@ export default {
     seller_page_link: 'Verkäuferseite',
     max_clicks: 'Maximale Anzahl Klicks',
     max_cost: 'Maximale Kosten',
-    add_product: 'Produkt hinzufügen',
-    title: 'Titel',
-    duplication_error: 'Beim Duplizieren ist ein Fehler aufgetreten, bitte versuchen Sie es erneut.'
+    add_product: 'Produkt hinzufügen'
   },
   settings: {
     settings: 'Einstellungen',
@@ -203,5 +197,16 @@ export default {
     ended: 'Beendet',
     archived: 'Archiviert',
     valid: 'Valide',
-  }
+  },
+  user_status: {
+    applied: 'Angefragt',
+    active: 'Aktiv',
+    disabled: 'Deaktiviert'
+  },
+  admin: {
+    users: 'Benutzer',
+    players: 'Spieler',
+    partners: 'Partner',
+    disable_account: 'Account deaktivieren',
+  },
 }
