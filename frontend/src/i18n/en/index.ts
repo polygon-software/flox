@@ -120,6 +120,9 @@ export default {
     can_only_edit_draft: 'Cannot edit (only drafts can be edited)',
     error_while_enabling: 'An error occurred while enabling the account.',
     error_while_disabling: 'An error occurred while disabling the account.',
+    account_locked: 'Account locked',
+    account_locked_permanently: 'This account has been locked permanently.',
+    account_locked_until: 'This account has been locked until {date}.'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',

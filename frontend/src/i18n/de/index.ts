@@ -120,6 +120,9 @@ export default {
     can_only_edit_draft: 'Bearbeiten fehlgeschlagen (nur Entwürfe können bearbeitet werden)',
     error_while_enabling: 'Beim Aktivieren ist ein Fehler aufgetreten.',
     error_while_disabling: 'Beim Deaktivieren ist ein Fehler aufgetreten.',
+    account_locked: 'Account gesperrt',
+    account_locked_permanently: 'Dieser Account wurde dauerhaft gesperrt.',
+    account_locked_until: 'Dieser Account wurde bis {date} gesperrt.'
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',

@@ -15,6 +15,7 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {i18n} from 'boot/i18n';
+import AccountLockedDialog from 'components/dialogs/AccountLockedDialog.vue';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -416,11 +417,22 @@ export class AuthenticationService {
      * @returns {void}
      */
     onFailure(error: Error): void{
-        if(error.name === 'UserNotConfirmedException'){
-            // Show the e-mail verification dialog and send a new code
-            this.showEmailVerificationDialog(true)
-        } else {
-          this.$errorService.showErrorDialog(error)
-        }
+      // Depending on error, show appropriate dialog
+      if(error.name === 'UserNotConfirmedException'){
+        // Show the e-mail verification dialog and send a new code
+        this.showEmailVerificationDialog(true)
+      } else if(error.name === 'NotAuthorizedException' && error.message === 'User is disabled.') {
+        // User disabled, show appropriate dialog
+        this.$q.dialog({
+            component: AccountLockedDialog,
+            componentProps: {
+              // TODO until-date
+            }
+          }
+        )
+      } else {
+        // Generic error
+        this.$errorService.showErrorDialog(error)
+      }
     }
 }
