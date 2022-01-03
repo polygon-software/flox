@@ -208,5 +208,7 @@ export default {
     players: 'Spieler',
     partners: 'Partner',
     disable_account: 'Account deaktivieren',
+    enable_account: 'Account aktivieren',
+    re_enable_account: 'Account reaktivieren',
   },
 }

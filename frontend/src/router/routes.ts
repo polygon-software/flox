@@ -33,7 +33,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'PRODUCT_DETAIL': {
     path: '/product-detail',
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/ProductDetailPage.vue') }],
+    children: [{ path: '', component: () => import('pages/generic/ProductDetailPage.vue') }],
   },
 
   'MY_PRODUCTS': {

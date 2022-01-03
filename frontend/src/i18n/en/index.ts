@@ -208,5 +208,7 @@ export default {
     players: 'Players',
     partners: 'Partners',
     disable_account: 'Disable account',
+    enable_account: 'Enable account',
+    re_enable_account: 'Re-enable account',
   }
 };

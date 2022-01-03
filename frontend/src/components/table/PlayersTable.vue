@@ -50,8 +50,9 @@
               @click="showOptions = !showOptions"
             >
               <div class="column">
-                <!-- Disable button -->
+                <!-- 'Disable' button for active accounts -->
                 <q-btn
+                  v-if="_props.row.status === USER_STATUS.ACTIVE"
                   :label="$t('admin.disable_account')"
                   icon="block"
                   class="text-black"
@@ -59,6 +60,23 @@
                   no-caps
                   @click="() => disableUser(_props.row)"
                 />
+
+                <!-- 'Enable'/'Re-enable' button for inactive accounts -->
+                <q-btn
+                  v-else
+                  :label="$t(
+                    _props.row.status === USER_STATUS.DISABLED ?
+                    'admin.re_enable_account'
+                    :
+                    'admin.enable_account'
+                    )"
+                  icon="lock_open"
+                  class="text-black"
+                  flat
+                  no-caps
+                  @click="() => enableUser(_props.row)"
+                />
+
               </div>
             </q-btn-dropdown>
           </q-td>
@@ -75,6 +93,12 @@ import {formatDate} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
 import {ALL_PLAYERS} from 'src/data/queries/USER';
+import {useQuasar} from 'quasar';
+import EnableUserDialog from 'components/dialogs/EnableUserDialog.vue';
+import {showNotification} from 'src/helpers/notification-helpers';
+
+const $q = useQuasar()
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -108,7 +132,7 @@ const computedResult = computed(() => {
 })
 
 /**
- * TODO docs
+ * Disables a given user's account
  * @param {Record<string, unknown>} user - the user to disable
  * @returns {Promise<void>} - if the user was disabled
  */
@@ -121,6 +145,27 @@ function disableUser(user: Record<string, unknown>): void{
   //     id: uuid
   //   }
   // )
+}
+
+/**
+ * Opens a dialog for enabling a user's account
+ * @param {Record<string, unknown>} user - the user to enable
+ * @returns {Promise<void>} - if the user was enabled
+ */
+function enableUser(user: Record<string, unknown>): void{
+  $q.dialog({
+    component: EnableUserDialog,
+    componentProps: {
+      user: user
+    }
+  }).onOk(() => {
+    // Show confirmation prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.account_enabled'), // TODO add in 18n
+      undefined,
+      'positive'
+    )  })
 }
 
 /**

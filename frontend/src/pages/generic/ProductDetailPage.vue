@@ -303,9 +303,9 @@ import {sleep} from 'src/helpers/general-helpers';
 import axios, {AxiosResponse} from 'axios';
 import {RouterService} from 'src/services/RouterService';
 import {toDataUrl} from 'src/helpers/image-helper';
-import {i18n} from 'src/boot/i18n';
+import {i18n} from 'boot/i18n';
 import {toPascalCase} from 'src/helpers/string-helpers';
-import {PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM'
 import ROUTES from 'src/router/routes';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 
