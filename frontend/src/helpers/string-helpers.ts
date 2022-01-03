@@ -9,5 +9,5 @@
  */
 export function toPascalCase(text: string): string {
   return text.replace(/(\w)(\w*)/g, (g0: string, g1: string, g2: string) => {
-    return g1.toUpperCase() + g2.toLowerCase();});
+    return g1.toUpperCase() + g2;});
 }

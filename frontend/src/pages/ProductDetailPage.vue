@@ -307,11 +307,12 @@ import {i18n} from 'src/boot/i18n';
 import {toPascalCase} from 'src/helpers/string-helpers';
 import {PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
 import ROUTES from 'src/router/routes';
+import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
-const productId = route.query.id
-const queryResult = productId ? subscribeToQuery(PRODUCT, {uuid: productId}) as Ref<Record<string, unknown>> : ref(null)
+const productId = route.query.id // TODO: Error handling if no ID given
+const queryResult = productId ? subscribeToQuery(PRODUCT as QueryObject, {uuid: productId}) as Ref<Record<string, unknown>> : ref(null)
 const pictures: Ref<Array<string|ArrayBuffer|null>> = ref([])
 const input: Record<string, unknown> = reactive(
   {
@@ -367,7 +368,7 @@ function mapValuesToInput(newValue: Record<string, unknown>): void {
   input.title = newValue.title
   input.description = newValue.description
   input.brand = newValue.brand
-  input.category = newValue.category ? toPascalCase(newValue.category) : null
+  input.category = newValue.category ? toPascalCase(newValue.category as string) : null
   input.value = newValue.value !== '' ? newValue.value : null
   input.currency = newValue.currency
   input.minBet = newValue.minBet !== '' ? newValue.minBet : null
@@ -395,11 +396,11 @@ function mapValuesToInput(newValue: Record<string, unknown>): void {
  */
 async function mapPicturesToInput(newValue: Record<string, unknown>): Promise<Array<string | ArrayBuffer | null>> {
   const existingPictures: Array<string|ArrayBuffer|null> = []
-  for (const picture of newValue.pictures) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-    const index: number = newValue.pictures.indexOf(picture);
+
+  const newPictures = newValue.pictures as Record<string, string>[]
+  for (const picture of newPictures) {
+    const index: number = newPictures.indexOf(picture);
     await axios.get(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
       picture.url,
       {
         responseType: 'blob'

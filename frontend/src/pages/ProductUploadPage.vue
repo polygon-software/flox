@@ -337,12 +337,13 @@ import {
 } from 'src/data/RULES';
 import {sleep} from 'src/helpers/general-helpers';
 import {toBase64} from 'src/helpers/image-helper';
+import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
 
 const productId = route.query.id
-const queryResult = productId ? subscribeToQuery(PRODUCT, {uuid: productId}) as Ref<Record<string, unknown>> : ref(null)
+const queryResult = productId ? subscribeToQuery(PRODUCT as QueryObject, {uuid: productId}) as Ref<Record<string, unknown>> : ref(null)
 
 
 // Read ENUM values and so they can be used as options
@@ -459,11 +460,10 @@ function mapValuesToInput(newValue: Record<string, unknown>): void {
  */
 async function mapPicturesToInput(newValue: Record<string, unknown>): Promise<Array<Ref<File>>> {
   const existingPictures: Array<Ref<File>> = []
-  for (const picture of newValue.pictures) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-    const index: number = newValue.pictures.indexOf(picture);
+  const newPictures = newValue.pictures as Record<string, string>[]
+  for (const picture of newPictures) {
+    const index: number = newPictures.indexOf(picture);
     await axios.get(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
       picture.url,
       {
         responseType: 'blob'
