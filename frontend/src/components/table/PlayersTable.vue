@@ -112,7 +112,7 @@ const computedResult = computed(() => {
  * @param {Record<string, unknown>} user - the user to disable
  * @returns {Promise<void>} - if the user was disabled
  */
-async function disableUser(user: Record<string, unknown>): Promise<void>{
+function disableUser(user: Record<string, unknown>): void{
   console.log('Disable user', user)
   // TODO actual functionality
   // await $routerService?.routeTo(
