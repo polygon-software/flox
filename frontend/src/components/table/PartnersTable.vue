@@ -9,37 +9,37 @@
       flat
       bordered
     >
-      <template #body="props">
+      <template #body="_props">
         <q-tr
-          v-if="statusFilter ? props.row.status === statusFilter : true"
-          :props="props"
+          v-if="statusFilter ? _props.row.status === statusFilter : true"
+          :props="_props"
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
         >
-          <q-td key="status" :props="props">
+          <q-td key="status" :props="_props">
             <q-chip
-              :label=getStatusChip(props.row.status).label
-              :color="getStatusChip(props.row.status).color"
+              :label=getStatusChip(_props.row.status).label
+              :color="getStatusChip(_props.row.status).color"
               text-color="white"
               style="font-weight: bold"
             />
           </q-td>
-          <q-td key="username" :props="props">
-            {{ props.row.username}}
+          <q-td key="username" :props="_props">
+            {{ _props.row.username}}
           </q-td>
-          <q-td key="fullName" :props="props">
-            {{ props.row.fullName}}
+          <q-td key="fullName" :props="_props">
+            {{ _props.row.fullName}}
           </q-td>
-          <q-td key="email" :props="props">
-            {{ props.row.email}}
+          <q-td key="email" :props="_props">
+            {{ _props.row.email}}
           </q-td>
-          <q-td key="phone" :props="props">
-            {{ props.row.phone}}
+          <q-td key="phone" :props="_props">
+            {{ _props.row.phone}}
           </q-td>
-          <q-td key="birthdate" :props="props">
-            {{ props.row.birthdate ? formatDate(new Date(props.row.birthdate)) : '-' }}
+          <q-td key="birthdate" :props="_props">
+            {{ _props.row.birthdate ? formatDate(new Date(_props.row.birthdate)) : '-' }}
           </q-td>
-          <q-td key="options" :props="props">
+          <q-td key="options" :props="_props">
             <q-btn-dropdown
               dropdown-icon="more_vert"
               auto-close
@@ -57,7 +57,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => disableUser(props.row)"
+                  @click="() => disableUser(_props.row)"
                 />
               </div>
             </q-btn-dropdown>
@@ -74,8 +74,9 @@ import { subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
-import {ALL_PARTNERS, ALL_PLAYERS} from 'src/data/queries/USER';
+import {ALL_PARTNERS} from 'src/data/queries/USER';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
   search: {
     required: true,
@@ -112,6 +113,7 @@ const computedResult = computed(() => {
  * @returns {Promise<void>} - if the user was disabled
  */
 async function disableUser(user: Record<string, unknown>): Promise<void>{
+  console.log('Disable user', user)
   // TODO actual functionality
   // await $routerService?.routeTo(
   //   ROUTES.ADD_PRODUCT,
