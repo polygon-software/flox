@@ -9,7 +9,6 @@ import {
   IsUUID,
 } from 'class-validator';
 import { ROLE } from '../../../../ENUM/ENUM';
-import { Column } from 'typeorm';
 import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
 
 @InputType()
@@ -20,6 +19,9 @@ export class CreateUserInput {
   @Field(() => ID, { description: 'Cognito ID' })
   @IsUUID()
   uuid: string;
+
+  @Field(() => ROLE, { nullable: true })
+  role: ROLE;
 
   @Field(() => String, { description: 'Username' })
   @IsString()
