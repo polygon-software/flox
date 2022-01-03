@@ -13,7 +13,7 @@ export enum CATEGORY {
 
 export enum PRODUCT_STATUS {
   DRAFT = 'DRAFT',
-  VALID = 'VALID',
+  VALID = 'VALID', // TODO proper definitions: what statuses are possible
   ARCHIVED = 'ARCHIVED',
 }
 
