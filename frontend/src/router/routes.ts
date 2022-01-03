@@ -66,6 +66,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/admin/AdminFinancesPage.vue') }],
   },
 
+  'ANNOUNCEMENTS': {
+    path: '/announcements',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/admin/AnnouncementsPage.vue') }],
+  },
+
   'PARTNER_STATISTICS': {
     path: '/partner-statistics',
     component: () => import('layouts/PartnerLayout.vue'),

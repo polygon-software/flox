@@ -152,7 +152,7 @@ function onOk(): void{
  * @returns {void}
  */
 function onReject(): void {
-  // TODO
+  // TODO actually reject application
   hide()
 
   // Show reject confirmation prompt

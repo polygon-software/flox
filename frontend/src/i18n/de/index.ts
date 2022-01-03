@@ -65,6 +65,7 @@ export default {
     partner_dashboard: 'Partner Dashboard',
     statistics: 'Statistiken',
     finances: 'Finanzen',
+    announcements: 'Ankündigungen'
   },
   buttons: {
     finish_signup: 'Abschliessen',
