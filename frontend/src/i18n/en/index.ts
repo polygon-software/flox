@@ -203,5 +203,6 @@ export default {
     disable_account: 'Disable account',
     enable_account: 'Enable account',
     re_enable_account: 'Re-enable account',
+    reject_application: 'Reject'
   }
 };

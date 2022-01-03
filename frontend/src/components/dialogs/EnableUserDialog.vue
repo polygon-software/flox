@@ -5,6 +5,11 @@
   >
     <q-card style="width: 600px;">
       <q-card-section>
+        <h5 class="q-ma-none q-pa-none">
+          {{ $t('admin.enable_account') }}
+        </h5>
+      </q-card-section>
+      <q-card-section>
         <q-list
           bordered
           separator
@@ -72,12 +77,12 @@
         <q-btn
           class="q-ma-md"
           :label="$t('admin.enable_account')"
-          color="primary"
+          color="positive"
           @click="onOk"
         />
         <q-btn
           class="q-ma-md"
-          :label="$t('dashboards.reject')"
+          :label="$t('admin.reject_application')"
           color="negative"
           @click="onReject"
         />

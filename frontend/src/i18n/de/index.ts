@@ -202,5 +202,6 @@ export default {
     disable_account: 'Account deaktivieren',
     enable_account: 'Account aktivieren',
     re_enable_account: 'Account reaktivieren',
+    reject_application: 'Ablehnen'
   },
 }
