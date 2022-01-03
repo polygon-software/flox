@@ -29,30 +29,80 @@ export class UserService {
     return this.usersRepository.save(user);
   }
 
-  getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
-    if (getUsersArgs.uuids !== undefined) {
-      return this.usersRepository.findByIds(getUsersArgs.uuids);
-    } else {
-      return this.usersRepository.find();
+  /**
+   * Enables a given user's account
+   * @param {string} uuid - user's database & cognito UUID
+   * @returns {Promise<User>} - the user after editing
+   */
+  async enableUser(uuid: string): Promise<User> {
+    const user = await this.usersRepository.findOne(uuid);
+
+    // Error checks
+    if (!user) {
+      throw new Error(`Cannot find user for UUID ${uuid}`);
     }
+    if (user.status === USER_STATUS.ACTIVE) {
+      throw new Error(`User with UUID ${uuid} is already enabled`);
+    }
+
+    // TODO also enable cognito account & send e-mail
+
+    await this.usersRepository.update(uuid, {
+      status: USER_STATUS.ACTIVE,
+    });
+    return this.usersRepository.findOne(uuid);
   }
 
-  getAllUsers(): Promise<User[]> {
-    return this.usersRepository.find();
+  /**
+   * Disables a given user's account
+   * @param {string} uuid - user's database & cognito UUID
+   * @returns {Promise<User>} - the user after editing
+   */
+  async disableUser(uuid: string): Promise<User> {
+    const user = await this.usersRepository.findOne(uuid);
+
+    // Error checks
+    if (!user) {
+      throw new Error(`Cannot find user for UUID ${uuid}`);
+    }
+    if (user.status !== USER_STATUS.ACTIVE) {
+      throw new Error(`User with UUID ${uuid} is not active`);
+    }
+
+    await this.usersRepository.update(uuid, {
+      status: USER_STATUS.DISABLED,
+    });
+
+    // TODO disable cognito account as well
+
+    return this.usersRepository.findOne(uuid);
   }
 
+  /**
+   * Returns all Players
+   * @returns {Promise<User[]>} - all partner users
+   */
   getAllPlayers(): Promise<User[]> {
     return this.usersRepository.find({
       role: ROLE.PLAYER,
     });
   }
 
+  /**
+   * Returns all Partners
+   * @returns {Promise<User[]>} - all partner users
+   */
   getAllPartners(): Promise<User[]> {
     return this.usersRepository.find({
       role: ROLE.PARTNER,
     });
   }
 
+  /**
+   * Fetches a single user
+   * @param {GetUserArgs} getUserArgs - search arguments, containing UUID
+   * @returns {Promise<User>} - the user
+   */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
     return this.usersRepository.findOne(getUserArgs.uuid);
   }

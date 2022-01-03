@@ -7,23 +7,15 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { Public } from '../../auth/authentication.decorator';
-import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
+import {
+  AdminOnly,
+  AnyRole,
+  CurrentUser,
+} from '../../auth/authorization.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
-
-  @Public()
-  @Query(() => [User], { name: 'users' })
-  async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
-    return this.usersService.getUsers(getUsersArgs);
-  }
-
-  @Public()
-  @Query(() => [User], { name: 'allUsers' })
-  async getAllUsers(): Promise<User[]> {
-    return this.usersService.getAllUsers();
-  }
 
   @Public()
   @Query(() => [User], { name: 'allPlayers' })
@@ -41,6 +33,28 @@ export class UserResolver {
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return this.usersService.getUser(getUserArgs);
+  }
+
+  /**
+   * Enables a given user's account
+   * @param {string} uuid - user's database & cognito UUID
+   * @returns {Promise<User>} - the user after editing
+   */
+  @AdminOnly()
+  @Mutation(() => User)
+  async enableAccount(@Args('uuid') uuid: string): Promise<User> {
+    return this.usersService.enableUser(uuid);
+  }
+
+  /**
+   * Disables a given user's account
+   * @param {string} uuid - user's database & cognito UUID
+   * @returns {Promise<User>} - the user after editing
+   */
+  @AdminOnly()
+  @Mutation(() => User)
+  async disableAccount(@Args('uuid') uuid: string): Promise<User> {
+    return this.usersService.disableUser(uuid);
   }
 
   @Public()

@@ -140,7 +140,9 @@ type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
+  disableAccount(uuid: String!): User!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
+  enableAccount(uuid: String!): User!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
@@ -271,7 +273,6 @@ type Query {
   allPartners: [User!]!
   allPlayers: [User!]!
   allProducts: [Product!]!
-  allUsers: [User!]!
   comment(uuid: ID!): Comment!
   comments(uuids: [ID!]): [Comment!]!
   getPrivateFile(
@@ -284,7 +285,6 @@ type Query {
   product(uuid: ID!): Product!
   products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!
-  users(uuids: [ID!]): [User!]!
 }
 
 enum Role {
