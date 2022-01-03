@@ -103,6 +103,8 @@ import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import {Address} from 'src/data/types/Address';
 import {User} from 'src/data/types/User';
 import {formatDate} from 'src/helpers/format-helpers';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
 
 const $q: QVueGlobals = useQuasar()
 const emit = defineEmits(['ok'])
@@ -151,6 +153,15 @@ function onOk(): void{
  */
 function onReject(): void {
   // TODO
+  hide()
+
+  // Show reject confirmation prompt
+  showNotification(
+    $q,
+    i18n.global.t('messages.account_rejected'),
+    undefined,
+    'negative'
+  )
 }
 
 // eslint-disable-next-line require-jsdoc

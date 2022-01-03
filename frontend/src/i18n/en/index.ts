@@ -127,6 +127,10 @@ export default {
   notifications: {
     messages: 'Messages',
   },
+  messages:{
+    account_enabled: 'Account enabled',
+    account_rejected: 'Account rejected',
+  },
   interests: {
     cars: 'Cars',
     celebrities: 'Celebrities',

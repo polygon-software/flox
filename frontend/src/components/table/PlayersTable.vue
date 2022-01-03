@@ -162,10 +162,11 @@ function enableUser(user: Record<string, unknown>): void{
     // Show confirmation prompt
     showNotification(
       $q,
-      i18n.global.t('messages.account_enabled'), // TODO add in 18n
+      i18n.global.t('messages.account_enabled'),
       undefined,
       'positive'
-    )  })
+    )
+  })
 }
 
 /**
