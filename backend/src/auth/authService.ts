@@ -1,5 +1,11 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+
+// Set up cognito admin provider
+const provider = new CognitoIdentityProvider({
+  region: process.env.AWS_REGION ?? '',
+});
 
 /**
  * Create a new Cognito Account with the given email address and password.
@@ -46,25 +52,44 @@ export async function createCognitoAccount(
 }
 
 /**
- * Disables (locks) a cognito account by UUID
- * @param {string} uuid - The account's UUID
+ * Disables (locks) a cognito account by username
+ * @param {string} username - The account's username
  * @returns {Promise<void>} - done
  */
-export async function disableCognitoAccount(uuid: string): Promise<void> {
-  // Set up authentication user pool
-  const poolSettings = {
+export async function disableCognitoAccount(username: string): Promise<void> {
+  // Request parameters
+  const params = {
     UserPoolId: process.env.USER_POOL_ID ?? '',
-    ClientId: process.env.USER_POOL_CLIENT_ID ?? '',
+    Username: username,
   };
-  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings);
 
-  // TODO
-  // new AmazonCognitoIdentity.cognitoProvider.adminDisableUser(params, function (
-  //   err,
-  //   data,
-  // ) {
-  //   if (err) console.log(err, err.stack);
-  //   // an error occurred
-  //   else console.log(data); // successful response
-  // });
+  return provider.adminDisableUser(params, handleOperation);
+}
+
+/**
+ * Enables a cognito account by username
+ * @param {string} username - The account's username
+ * @returns {Promise<void>} - done
+ */
+export async function enableCognitoAccount(username: string): Promise<void> {
+  // Request parameters
+  const params = {
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    Username: username,
+  };
+
+  return provider.adminEnableUser(params, handleOperation);
+}
+
+/**
+ * Handles Cognito operation
+ * @param {Error|undefined} err - errors that occurred
+ * @param {unknown|undefined} data - output data
+ * @returns {void}
+ */
+function handleOperation(err: Error | undefined, data: unknown | undefined) {
+  if (err) {
+    throw err;
+  }
+  return data;
 }

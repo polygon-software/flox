@@ -7,6 +7,10 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { ROLE, USER_STATUS } from '../../ENUM/ENUM';
+import {
+  disableCognitoAccount,
+  enableCognitoAccount,
+} from '../../auth/authService';
 
 @Injectable()
 export class UserService {
@@ -44,8 +48,14 @@ export class UserService {
       throw new Error(`User with UUID ${uuid} is already enabled`);
     }
 
-    // TODO also enable cognito account & send e-mail
+    const username = user.username;
 
+    // Enable cognito account
+    await enableCognitoAccount(username).catch((error: Error) => {
+      throw error;
+    });
+
+    // Enable on database
     await this.usersRepository.update(uuid, {
       status: USER_STATUS.ACTIVE,
     });
@@ -68,11 +78,17 @@ export class UserService {
       throw new Error(`User with UUID ${uuid} is not active`);
     }
 
+    const username = user.username;
+
+    // Disable cognito account
+    await disableCognitoAccount(username).catch((error: Error) => {
+      throw error;
+    });
+
+    // Disable on database
     await this.usersRepository.update(uuid, {
       status: USER_STATUS.DISABLED,
     });
-
-    // TODO disable cognito account as well
 
     return this.usersRepository.findOne(uuid);
   }
