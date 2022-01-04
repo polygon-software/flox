@@ -16,5 +16,5 @@ export function formatDate(date: Date|string): string{
     actualDate = date
   }
 
-  return `${actualDate.getDate()}/${actualDate.getMonth()+1}/${actualDate.getFullYear()}`
+  return `${actualDate.getDate()}.${actualDate.getMonth()+1}.${actualDate.getFullYear()}`
 }

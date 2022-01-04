@@ -51,7 +51,7 @@ export class UserService {
 
     const username = user.username;
 
-    // Enable cognito account
+    // Enable cognito account (not strictly necessary for temporarily disabled users, but doesn't cause any issues either)
     await enableCognitoAccount(username).catch((error: Error) => {
       throw error;
     });
@@ -59,6 +59,7 @@ export class UserService {
     // Enable on database
     await this.usersRepository.update(uuid, {
       status: USER_STATUS.ACTIVE,
+      disabledUntil: null,
     });
     return this.usersRepository.findOne(uuid);
   }
