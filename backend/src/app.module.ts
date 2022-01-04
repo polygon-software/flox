@@ -14,6 +14,7 @@ import * as Joi from 'joi';
 import { FileModule } from './modules/file/file.module';
 import { RolesGuard } from './auth/roles.guard';
 import { CommentModule } from './modules/comment/comment.module';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { CommentModule } from './modules/comment/comment.module';
     ProductModule,
     FileModule,
     CommentModule,
+    NotificationModule,
   ],
   providers: [
     JwtStrategy,

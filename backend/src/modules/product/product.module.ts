@@ -9,7 +9,9 @@ import { FileService } from '../file/file.service';
 import PrivateFile from '../file/entities/private_file.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, Comment, PublicFile, PrivateFile])],
+  imports: [
+    TypeOrmModule.forFeature([Product, Comment, PublicFile, PrivateFile]),
+  ],
   providers: [ProductResolver, ProductService, FileService],
 })
 export class ProductModule {}
