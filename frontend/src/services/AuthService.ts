@@ -16,6 +16,8 @@ import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {i18n} from 'boot/i18n';
 import AccountLockedDialog from 'components/dialogs/AccountLockedDialog.vue';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/USER';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -404,9 +406,18 @@ export class AuthenticationService {
      * @param {function} resolve - resolve function
      * @returns {void}
      */
-    loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
+    async loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
+      // Upon login, fetch my user to check status
+      const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
 
-      // TODO check disabled status
+      // No valid user: show error
+      if(!queryResult?.data?.myUser){
+        // TODO go to error page or throw some error
+      }
+      const userData = queryResult.data.myUser as Record<string, unknown>
+      const userRole = userData.role;
+
+      // if(myUser.status = ) TODO
 
       // Store locally
       this.$authStore.mutations.setUserSession(userSession)
