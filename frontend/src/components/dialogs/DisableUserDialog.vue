@@ -35,16 +35,27 @@
 
         <div class="column" style="margin-top: 10px">
           <!-- Permanent -->
-          <q-radio v-model="permanent" :val="true" :label="$t('admin.permanent')" />
+          <q-radio
+            v-model="permanent"
+            :val="true"
+            :label="$t('admin.permanent')"
+            @click="untilDate = null"
+          />
 
           <!-- Temporary: with datetime picker TODO use new DateTime picker once implemented -->
           <div class="row">
-            <q-radio v-model="permanent" :val="false" :label="$t('admin.temporary')" />
+            <q-radio
+              v-model="permanent"
+              :val="false"
+              :label="$t('admin.temporary')"
+            />
             <q-input
+              v-model="untilDate"
               type="date"
               outlined
               dense
               style="margin-left: 32px"
+              @change="permanent = false"
             />
           </div>
         </div>
@@ -55,6 +66,7 @@
           class="q-ma-md"
           :label="$t('admin.disable_account')"
           color="negative"
+          :disable="!permanent && !untilDate"
           @click="onOk"
         />
         <q-btn
@@ -83,6 +95,9 @@ const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 // Permanent/Temporary toggle
 const permanent = ref(true)
 
+// End date (if any)
+const untilDate: Ref<Date|null> = ref(null)
+
 const props = defineProps({
   user: {
     type: Object as PropType<User>,
@@ -108,8 +123,12 @@ function hide(): void {
  * @returns {void}
  */
 function onOk(): void{
-  // TODO duration if applicable
-  emit('ok')
+  // Emit with duration (if applicable)
+  if(permanent.value){
+    emit('ok')
+  } else {
+    emit('ok', untilDate.value)
+  }
   hide()
 }
 
