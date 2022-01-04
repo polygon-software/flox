@@ -287,4 +287,11 @@ export class FileService {
     }
     throw new NotFoundException();
   }
+
+  async getOffersFile(
+    getPrivateFileArgs: GetPrivateFileArgs,
+    dbUser: User,
+  ): Promise<PrivateFile> {
+    //todo
+  }
 }

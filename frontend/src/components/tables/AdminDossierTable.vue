@@ -137,6 +137,9 @@ function showAllDocuments() {
   $q.dialog({
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,
+    componentProps:{
+      // ToDo
+    }
   })
 }
 

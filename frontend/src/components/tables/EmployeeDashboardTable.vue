@@ -54,7 +54,6 @@
           </q-popup-edit>
         </q-td>
         <q-td key="uploads">
-          {{ _props.row.uploads }}
           <q-btn
             icon="picture_as_pdf"
             color="primary"
@@ -82,7 +81,7 @@
               :props="_props"
               style="background-color: white; cursor: pointer"
         >
-          <q-td key="date"> --></q-td>
+          <q-td> --></q-td>
           <q-td>{{offer.bank.name}}</q-td>
           <q-td>
             <q-chip
@@ -90,6 +89,14 @@
             >
               {{ $t('offer_status_enum.' + offer.status) }}
             </q-chip>
+          </q-td>
+          <q-td>
+            <q-btn
+              icon="picture_as_pdf"
+              color="primary"
+              round
+              @click="()=>showOfferDocuments(offer)"
+            />
           </q-td>
         </q-tr>
       </div>
@@ -105,11 +112,12 @@
 import {computed, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
+import DownloadDocumentsDialog from 'src/components/dialogs/DownloadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
-import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
+import {DOSSIER_FILE, MY_DOSSIERS} from 'src/data/queries/QUERIES';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
@@ -192,6 +200,22 @@ function showAllDocuments(entity: Record<string, unknown>) {
     component: UploadDocumentsDialog,
     componentProps: {
       entity
+    }
+  })
+}
+
+/**
+ * Show pdf of Offer
+ * @param {Offer} offer - an offer
+ * @returns {void} - void
+ */
+function showOfferDocuments(offer: Record<string, unknown>): void {
+  const files = offer.pdf ? [offer.pdf]: []
+  $q.dialog({
+    title: 'DownloadDocumentsDialog',
+    component: DownloadDocumentsDialog,
+    componentProps: {
+      files,
     }
   })
 }

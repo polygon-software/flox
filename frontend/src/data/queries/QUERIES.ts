@@ -243,6 +243,11 @@ export const MY_DOSSIERS = {
             name
             abbreviation
           }
+          pdf{
+            uuid
+            __typename
+            key
+          }
         }
         documents{
           uuid
@@ -418,5 +423,6 @@ export const QUERIES = [
   ALL_BANKS,
   REJECTED_DOSSIERS,
   DOSSIERS_BANK,
-  MY_BANK
+  MY_BANK,
+  DOSSIER_FILE
 ];

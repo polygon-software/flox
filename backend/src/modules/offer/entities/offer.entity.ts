@@ -26,6 +26,7 @@ export class Offer extends BaseEntity {
     nullable: true,
     cascade: true,
     onDelete: 'CASCADE',
+    eager: true,
   })
   pdf: PrivateFile;
 

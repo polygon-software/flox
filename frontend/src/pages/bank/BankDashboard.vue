@@ -123,7 +123,7 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import {DOSSIERS_BANK, MY_BANK} from 'src/data/queries/QUERIES';
+import {DOSSIER_FILE, DOSSIERS_BANK, MY_BANK} from 'src/data/queries/QUERIES';
 import {computed, inject, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
@@ -209,7 +209,8 @@ function showAllDocuments(dossier: Record<string, unknown>) {
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,
     componentProps: {
-      files:dossier.documents
+      files:dossier.documents,
+      query: DOSSIER_FILE
     }
   })
 }

@@ -45,16 +45,21 @@ import {ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {DOSSIER_FILE, MY_USER, PRIVATE_FILE} from 'src/data/queries/QUERIES';
+import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-// TODO actual implementation for dossier files @johannschwabe
-// const files = ref([])
 const props = defineProps({
   files: {
     type: Array,
     required: true
+  },
+  query: {
+    type: Object,
+    required: false,
+    default: PRIVATE_FILE
   }
+
 })
 
 // Mandatory - do not remove!
@@ -80,8 +85,9 @@ function onCancel(): void {
  * @returns {Promise<void>} - done
  */
 async function openFile(fileUuid: string): Promise<void> {
-  const queryRes = await executeQuery(DOSSIER_FILE, {uuid: fileUuid})
-  const file = queryRes.data[DOSSIER_FILE.cacheLocation] as Record<string, unknown>
+  const query = props.query as QueryObject
+  const queryRes = await executeQuery(query, {uuid: fileUuid})
+  const file = queryRes.data[query.cacheLocation] as Record<string, unknown>
   openURL(file.url as string)
 }
 
