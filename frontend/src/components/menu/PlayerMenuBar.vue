@@ -138,14 +138,15 @@ const notifications = computed(() => {
     record.title as string,
     new Date(record.received as string),
     record.content as string,
-    record.isRead as boolean
+    record.isRead as boolean,
+    record.uuid as string,
   )));
   return notifications;
 })
 
 // The number of notifications
 const notificationCount = computed(() => {
-  return notifications.value.length;
+  return notifications.value.filter(notification => !notification.isRead).length;
 })
 
 /**

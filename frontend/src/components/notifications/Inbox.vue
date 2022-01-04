@@ -65,7 +65,8 @@
           :title="message.title"
           :received="message.received"
           :is-read="message.isRead"
-          style="width: 90%; height: 75px;"
+          :content="message.content"
+          style="width: 300px; height: 75px;"
           @click="openMessage(message)"
         >
         </MessagePreview>
@@ -103,7 +104,7 @@ const options = [
   }
 ]
 const search = ref('')
-const sort = ref(options[0])
+const sort = ref(options[0].value)
 
 // Open message
 const selectedMessage: Ref<Notification|null|undefined> = ref()
@@ -112,7 +113,8 @@ const showMessageDetail: Ref<boolean> = ref(false)
 // Sorts the messages according to the selected parameter
 const sortedMessages = computed(() => {
   const notifications = props.notifications as Array<Notification>
-  if (sort.value.value === 'oldest') {
+  console.log(sort);
+  if (sort.value === 'oldest') {
     return notifications.slice().sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
   else {

@@ -12,6 +12,7 @@
         color="red"
       />
     </div>
+    <q-item-label :lines="1" style="width: 90%"> {{ content }}</q-item-label>
     <p style="font-size: small"> {{ received.toLocaleString() }}</p>
   </q-card>
 </template>
@@ -33,8 +34,12 @@ const props = defineProps( {
   },
   isRead: {
     required: true,
-    type: Boolean
-  }
+    type: Boolean,
+  },
+  content: {
+    required: true,
+    type: String,
+  },
 })
 
 </script>

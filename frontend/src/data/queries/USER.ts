@@ -11,6 +11,13 @@ export const MY_USER = {
       myUser{
         uuid
         role
+        notifications {
+          uuid
+          title
+          received
+          content
+          isRead
+        }
         __typename
       }
     }

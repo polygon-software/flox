@@ -12,7 +12,7 @@
 import {defineProps} from 'vue';
 import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
 
-const props = defineProps({
+defineProps({
   product: {
     required: true,
     type: Object,

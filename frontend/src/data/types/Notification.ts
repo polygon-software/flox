@@ -9,6 +9,7 @@ export class Notification{
   received: Date
   content: string
   isRead: boolean
+  uuid: string | null
   user: Record<string, unknown> | null
 
   /**
@@ -17,13 +18,15 @@ export class Notification{
    * @param {Date} received - received
    * @param {string} content - content
    * @param {boolean} isRead - is read
+   * @param {string} uuid - uuid
    * @param {Record<string, unknown>} user - user
    */
-  constructor(title?: string, received?: Date, content?: string, isRead?: boolean, user?: Record<string, unknown>) {
+  constructor(title?: string, received?: Date, content?: string, isRead?: boolean, uuid?: string, user?: Record<string, unknown>) {
     this.title = title ?? ''
     this.received = received ?? new Date()
     this.content = content ?? ''
     this.isRead = isRead ?? false
+    this.uuid = uuid ?? null
     this.user = user ?? null
   }
 

@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import {defineProps, ref} from 'vue'
 
-const props = defineProps({
+defineProps({
   product: {
     required: true,
     type: Object, // TODO proper typing with Joi
