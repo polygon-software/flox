@@ -58,7 +58,7 @@ export class UserResolver {
   }
 
   /**
-   * Disables a given user's account
+   * Temporarily disables a given user's account
    * @param {TempDisableUserInput} tempDisableUserInput - disable input, containing UUID and end date
    * @returns {Promise<User>} - the user after editing
    */
@@ -103,7 +103,7 @@ export class UserResolver {
   @AnyRole()
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
-    // Get company where user's UUID matches cognitoID
+    // Get user where user's UUID matches cognitoID
     const myUser = await this.usersService.getUser({
       uuid: user.userId,
     } as GetUserArgs);

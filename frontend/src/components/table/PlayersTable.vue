@@ -95,8 +95,9 @@ import {i18n} from 'boot/i18n';
 import {ALL_PLAYERS} from 'src/data/queries/USER';
 import {useQuasar} from 'quasar';
 import EnableUserDialog from 'components/dialogs/EnableUserDialog.vue';
+import DisableUserDialog from 'components/dialogs/DisableUserDialog.vue';
 import {showNotification} from 'src/helpers/notification-helpers';
-import {DISABLE_USER, ENABLE_USER} from 'src/data/mutations/USER';
+import {DISABLE_USER, ENABLE_USER, TEMP_DISABLE_USER} from 'src/data/mutations/USER';
 
 const $q = useQuasar()
 
@@ -138,28 +139,46 @@ const computedResult = computed(() => {
  * @returns {Promise<void>} - if the user was disabled
  */
 function disableUser(user: Record<string, unknown>): void{
-  // Enable account on backend
-  executeMutation(
-    DISABLE_USER,
-    {
-      uuid: user.uuid
+  // Show dialog for choosing disable type (permanent or temporary)
+  $q.dialog({
+    component: DisableUserDialog,
+    componentProps: {
+      user: user
     }
-  ).then(() => {
-    // Show confirmation prompt
-    showNotification(
-      $q,
-      i18n.global.t('messages.account_disabled'),
-      undefined,
-      'negative'
-    )
-  }).catch(() => {
-    // Show error prompt
-    showNotification(
-      $q,
-      i18n.global.t('errors.error_while_disabling'),
-      undefined,
-      'negative'
-    )
+  }).onOk((until: Date|null) => {
+    // Depending on whether an 'until' date is given, disable temporarily or permanently
+    const mutation = until? TEMP_DISABLE_USER : DISABLE_USER
+
+    const variables: Record<string, unknown> = {
+        uuid: user.uuid
+      }
+
+    // Add end date if given
+    if(until){
+      variables.until = until
+    }
+
+    // Disable account on backend
+    executeMutation(
+      mutation,
+      variables
+    ).then(() => {
+      // Show confirmation prompt
+      showNotification(
+        $q,
+        i18n.global.t('messages.account_disabled'),
+        undefined,
+        'negative'
+      )
+    }).catch(() => {
+      // Show error prompt
+      showNotification(
+        $q,
+        i18n.global.t('errors.error_while_disabling'),
+        undefined,
+        'negative'
+      )
+    })
   })
 }
 
@@ -169,6 +188,7 @@ function disableUser(user: Record<string, unknown>): void{
  * @returns {Promise<void>} - if the user was enabled
  */
 function enableUser(user: Record<string, unknown>): void{
+  // Show info dialog for enabling account
   $q.dialog({
     component: EnableUserDialog,
     componentProps: {

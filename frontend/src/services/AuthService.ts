@@ -405,6 +405,9 @@ export class AuthenticationService {
      * @returns {void}
      */
     loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
+
+      // TODO check disabled status
+
       // Store locally
       this.$authStore.mutations.setUserSession(userSession)
 

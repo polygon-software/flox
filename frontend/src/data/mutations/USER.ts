@@ -54,7 +54,7 @@ export const ENABLE_USER = {
         }`,
     tables: ['user'],
     type: MutationTypes.UPDATE,
-    cacheLocation: 'update'
+    cacheLocation: undefined
 }
 
 export const DISABLE_USER = {
@@ -68,7 +68,22 @@ export const DISABLE_USER = {
         }`,
     tables: ['user'],
     type: MutationTypes.UPDATE,
-    cacheLocation: 'update'
+    cacheLocation: undefined
+}
+
+export const TEMP_DISABLE_USER = {
+    mutation: gql`
+        mutation temporarilyDisableUser($uuid: ID!, $until: DateTime!){
+            temporarilyDisableUser(tempDisableUserInput: {uuid: $uuid, until: $until }) {
+              uuid
+              status
+              disabledUntil
+              __typename
+            }
+        }`,
+    tables: ['user'],
+    type: MutationTypes.UPDATE,
+    cacheLocation: undefined
 }
 
 export const DELETE_USER = {
