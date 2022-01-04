@@ -76,7 +76,7 @@
 import {ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
 import {uploadFiles} from 'src/helpers/file-helpers';
-import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
+import { executeQuery} from 'src/helpers/data-helpers';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
