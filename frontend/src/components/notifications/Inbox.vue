@@ -124,7 +124,7 @@ const sortedMessages = computed(() => {
 // Filter the messages by checking their title and content
 const filteredMessages = computed(() => {
   return sortedMessages.value.filter(msg => {
-    return msg.title?.toLowerCase().includes(search.value.toLowerCase()) || msg.content.toLowerCase().includes(search.value.toLowerCase())
+    return msg.title.toLowerCase().includes(search.value.toLowerCase()) || msg.content.toLowerCase().includes(search.value.toLowerCase())
   })
 })
 
