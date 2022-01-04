@@ -166,7 +166,7 @@ function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, un
 
   const offers = dossier.offers as Record<string, Record<string, string>>[]
   // Search offers for one that is made by own bank
-  return offers.find((offer: Record<string, Record<string, string>>) => offer.bank.uuid === myBankValue.uuid) ?? null
+  return offers.find((offer: Record<string, Record<string, string>>) => offer.bank.uuid === myBankValue.uuid as string) ?? null
 }
 
 /**
