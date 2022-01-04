@@ -1,6 +1,6 @@
 import * as Joi from 'joi'
 
-// Base Item
+// Notification Item
 export const NotificationItem = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
