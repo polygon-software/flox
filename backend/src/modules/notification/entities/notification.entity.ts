@@ -31,7 +31,7 @@ export class Notification extends BaseEntity {
   @IsBoolean()
   isRead: boolean;
 
-  @Field(() => User, { description: 'The user this notification is for.' })
+  @Field(() => User, { description: 'The user this notification is for' })
   @ManyToOne(() => User, (user) => user.notifications)
   user: User;
 }

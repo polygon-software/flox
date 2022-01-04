@@ -184,7 +184,7 @@ type Notification {
   """Title"""
   title: String!
 
-  """The user this notification is for."""
+  """The user this notification is for"""
   user: User!
 
   """UUID"""
@@ -494,7 +494,7 @@ input notification {
   """Title"""
   title: String!
 
-  """The user this notification is for."""
+  """The user this notification is for"""
   user: user!
 }
 
