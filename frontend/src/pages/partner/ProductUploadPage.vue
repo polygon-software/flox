@@ -65,7 +65,7 @@
               />
             </div>
 
-            <!-- Start and End Date TODO Create custom date-time pickerTODO Create custom date-time picker -->
+            <!-- Start and End Date TODO Create custom date-time picker -->
             <div class="row flex justify-between">
               <!-- Start date -->
               <q-input
@@ -320,12 +320,11 @@ import PictureUpload from 'components/forms/fields/PictureUpload.vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {CREATE_PRODUCT, UPDATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {i18n} from 'boot/i18n';
-import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../../shared/definitions/ENUM'
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {useRoute} from 'vue-router';
 import axios, { AxiosResponse } from 'axios'
-import {PRODUCT} from 'src/data/queries/QUERIES';
 import {
   IS_FUTURE_DATE,
   IS_LARGER_THAN,
@@ -337,6 +336,7 @@ import {
 } from 'src/data/RULES';
 import {sleep} from 'src/helpers/general-helpers';
 import {toBase64} from 'src/helpers/image-helper';
+import {PRODUCT} from 'src/data/queries/PRODUCT';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 
 const $routerService: RouterService|undefined = inject('$routerService')

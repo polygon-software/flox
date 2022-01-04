@@ -1,21 +1,8 @@
 <template>
   <q-page class="flex" style="flex-direction: column">
-    <!-- Top row: title + add button -->
-    <div
-      class="row full-width justify-between q-pa-md"
-      style="height: 20px"
-    >
-      <!-- TODO styling, language-->
-      <h6 class="q-ma-none">{{ $t('products.products') }}</h6>
-      <q-btn
-        color="primary"
-        text-color="black"
-        :label="$t('products.add_product')"
-        rounded
-        no-caps
-        @click="createProduct"
-      />
-    </div>
+    <!-- Top row: title -->
+    <h6 class="q-ma-md">{{ $t('admin.partners') }}</h6>
+
     <!-- Body: Table with tabs etc. -->
     <div
       class="column full-height items-start q-pa-md full-width"
@@ -56,7 +43,7 @@
       </div>
 
       <!-- Table view of products -->
-      <MyProductsTable
+      <PartnersTable
         :search="search"
         :status-filter="statusFilter"
       />
@@ -66,45 +53,35 @@
 </template>
 
 <script setup lang="ts">
-import {RouterService} from 'src/services/RouterService';
-import {inject, Ref, ref} from 'vue';
-import ROUTES from 'src/router/routes';
-import MyProductsTable from 'components/table/MyProductsTable.vue';
-import {PRODUCT_STATUS} from '../../../shared/definitions/ENUM';
+import {Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
-
-const $routerService: RouterService|undefined = inject('$routerService')
+import {USER_STATUS} from '../../../../shared/definitions/ENUM';
+import PartnersTable from 'components/table/PartnersTable.vue';
 
 // Search term
 const search = ref('')
 
 // Selected tab/status filter
-const statusFilter: Ref<PRODUCT_STATUS|null> = ref(null)
+const statusFilter: Ref<USER_STATUS|null> = ref(null)
+
+// TODO possible user statuses?
 const tabs = [
   {
     value: null,
     label: i18n.global.t('general.all'),
   },
   {
-    value: PRODUCT_STATUS.DRAFT,
-    label: i18n.global.t('product_status.draft'),
+    value: USER_STATUS.APPLIED,
+    label: i18n.global.t('user_status.applied'),
   },
   {
-    value: PRODUCT_STATUS.VALID,
-    label: i18n.global.t('product_status.active'),
+    value: USER_STATUS.ACTIVE,
+    label: i18n.global.t('user_status.active'),
   },
   {
-    value: PRODUCT_STATUS.ARCHIVED,
-    label: i18n.global.t('product_status.archived'),
+    value: USER_STATUS.DISABLED,
+    label: i18n.global.t('user_status.disabled'),
   },
 ]
 
-/**
- * Routes to the product creation page
- * @async
- * @returns {void}
- */
-async function createProduct(): Promise<void>{
-  await $routerService?.routeTo(ROUTES.ADD_PRODUCT)
-}
 </script>

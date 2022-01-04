@@ -10,6 +10,8 @@ export default {
     edit: 'Edit',
     duplicate: 'Duplicate',
     view: 'View',
+    home: 'Home',
+    settings: 'Settings'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -37,6 +39,7 @@ export default {
     repeat_password: 'Repeat password',
     account: 'Account',
     personal: 'Personal',
+    address: 'Address',
     street: 'Street',
     number: 'Number',
     zip_code: 'ZIP Code',
@@ -50,7 +53,6 @@ export default {
     company_name: 'Company Name',
     company_uid: 'Company UID',
     language: 'Language',
-    salutation: 'Salutation',
     correspondence_address: 'Correspondence Address',
     domicile_address: 'Address',
     edit_correspondence_address: 'Same as domicile',
@@ -58,6 +60,7 @@ export default {
     branch_structure: 'Branch Strucutre',
     conditions: 'Terms and Conditions',
     accept_conditions: 'I agree to the terms and conditions.',
+    salutation: 'Salutation',
     company_function: 'Role in the company',
     accept_condition_truthful:'All information has been filled in truthfully.',
     passport_or_id: 'Passport',
@@ -66,16 +69,10 @@ export default {
     optional: 'optional',
   },
   dashboards: {
-    management_dashboard: 'Management Dashboard',
-    register_new_employee_here: 'Register a new employee here:',
-    application: 'Application | Applications',
-    state: 'State',
-    action: 'Action',
-    enable_upload: 'Enable upload',
-    reject: 'Reject',
-    sure_to_reject: 'Are you sure you want to decline this request?',
-    yes_reject: 'Yes, reject',
-    unlock_account: 'Unlock account',
+    admin_dashboard: 'Admin Dashboard',
+    partner_dashboard: 'Partner Dashboard',
+    statistics: 'Statistics',
+    finances: 'Finances',
   },
   buttons: {
     finish_signup: 'Finish',
@@ -127,8 +124,7 @@ export default {
     missing_user_type: 'Please select a user type',
     invalid_birth_date: 'Please enter you date of birth',
     date_must_be_future: 'Please choose a future date',
-    can_only_edit_draft: 'Cannot edit (only drafts can be edited)',
-    duplication_error: 'An error occurred while duplicating, please try again.'
+    can_only_edit_draft: 'Cannot edit (only drafts can be edited)'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -202,5 +198,16 @@ export default {
     ended: 'Ended',
     archived: 'Archived',
     valid: 'Valid',
+  },
+  user_status: {
+    applied: 'applied',
+    active: 'active',
+    disabled: 'disabled'
+  },
+  admin: {
+    users: 'Users',
+    players: 'Players',
+    partners: 'Partners',
+    disable_account: 'Disable account',
   }
 };

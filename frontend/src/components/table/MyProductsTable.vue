@@ -19,7 +19,7 @@
         >
           <q-td key="pictures" :props="props">
             <img
-              v-if="props.row.pictures[0] && props.row.pictures[0].url"
+              v-if="props.row.pictures && props.row.pictures[0] && props.row.pictures[0].url"
               class="bg-grey-3"
               :src="props.row.pictures[0].url"
               style="min-width: 140px; max-width: 140px; min-height: 90px; max-height: 90px; border-radius: 4px; object-fit: cover"
@@ -107,7 +107,6 @@
 import {computed, defineProps, inject, Ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import {MY_PRODUCTS} from 'src/data/queries/QUERIES';
 import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
@@ -115,9 +114,11 @@ import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {FetchResult} from '@apollo/client';
 import {sleep} from 'src/helpers/general-helpers';
 import {i18n} from 'boot/i18n';
+import {MY_PRODUCTS} from 'src/data/queries/PRODUCT';
 import {ErrorService} from 'src/services/ErrorService';
-const $routerService: RouterService|undefined = inject('$routerService')
+
 const $errorService: ErrorService|undefined = inject('$errorService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const props = defineProps( {
   search: {
@@ -270,7 +271,10 @@ function getStatusChip(product: Record<string, unknown>): Record<string,unknown>
         color: 'neutral'
       }
     default:
-      return null
+      return {
+        label: '-',
+        color: null
+      }
   }
 }
 </script>
