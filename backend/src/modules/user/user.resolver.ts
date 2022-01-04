@@ -30,18 +30,6 @@ export class UserResolver {
   }
 
   @Public()
-  @Query(() => [User], { name: 'allPlayers' })
-  async getAllPlayers(): Promise<User[]> {
-    return this.usersService.getAllPlayers();
-  }
-
-  @Public()
-  @Query(() => [User], { name: 'allPartners' })
-  async getAllPartners(): Promise<User[]> {
-    return this.usersService.getAllPartners();
-  }
-
-  @Public()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return this.usersService.getUser(getUserArgs);
