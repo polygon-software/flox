@@ -21,6 +21,7 @@ import {
 } from 'typeorm';
 import { ROLE, USER_STATUS } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
+import { Notification } from '../../notification/entities/notification.entity';
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -56,6 +57,13 @@ export class User {
   @JoinColumn()
   @OneToOne(() => Address, { cascade: true, eager: true })
   address: Address;
+
+  @Field(() => [Notification], { description: 'Notifications of the user' })
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    cascade: true,
+    eager: true,
+  })
+  notifications: Notification[];
 
   @Field(() => Date, { description: 'Creation date' })
   @CreateDateColumn()

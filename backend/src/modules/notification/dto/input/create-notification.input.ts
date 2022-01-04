@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsBoolean, IsDate, IsString } from 'class-validator';
+import { User } from '../../../user/entities/user.entity';
 
 @InputType()
 export class CreateNotificationInput {
@@ -18,4 +19,7 @@ export class CreateNotificationInput {
   @Field(() => Boolean, { description: 'Read status' })
   @IsBoolean()
   isRead: boolean;
+
+  @Field(() => User)
+  user: User;
 }

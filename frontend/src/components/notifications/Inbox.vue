@@ -61,7 +61,7 @@
       >
         <MessagePreview
           v-for="message in filteredMessages"
-          :key="message.id"
+          :key="message.uuid"
           :title="message.title"
           :received="message.received"
           :is-read="message.isRead"
@@ -78,16 +78,17 @@
 /**
  * This component displays a message inbox, which contains message items. The messages can be filtered and sorted.
  */
-import {computed, Ref, ref, defineProps} from 'vue'
+import {computed, defineProps, Ref, ref} from 'vue'
 import { i18n } from 'boot/i18n';
 import MessagePreview from 'components/notifications/MessagePreview.vue';
 import MessageDetail from 'components/notifications/MessageDetail.vue';
+import {Notification} from 'src/data/types/Notification';
 
-const props = defineProps({
-  dbRef: {
-    required: true,
-    type: String
-  }
+const props = defineProps( {
+  notifications: {
+    default: () => [],
+    type: Array,
+  },
 })
 
 // Search and sort
@@ -105,64 +106,24 @@ const search = ref('')
 const sort = ref(options[0])
 
 // Open message
-const selectedMessage: Ref<Message|null|undefined> = ref()
+const selectedMessage: Ref<Notification|null|undefined> = ref()
 const showMessageDetail: Ref<boolean> = ref(false)
-
-// Needs to be defined somewhere else...
-type Message = {
-  id: string,
-  title: string,
-  received: string,
-  content: string,
-  isRead: boolean
-}
-
-// This would be fetched from the DB
-const messages = ref([
-  {
-    id: '0',
-    title: 'You have won product X',
-    received: '2021-09-27T12:12:03',
-    content: 'Dear Derp...',
-    isRead: false,
-  },
-  {
-    id: '1',
-    title: 'User Y sent you a message',
-    received: '2021-09-24T18:23:51',
-    content: 'Derpina says...',
-    isRead: true,
-  },
-  {
-    id: '2',
-    title: 'These products might interest you',
-    received: '2021-09-16T07:45:38',
-    content: 'Check out...',
-    isRead: true,
-  },
-  {
-    id: '3',
-    title: 'Happy Birthday',
-    received: '2021-08-26T00:00:00',
-    content: 'Hey derp, wish you all the best...',
-    isRead: false,
-  },
-])
 
 // Sorts the messages according to the selected parameter
 const sortedMessages = computed(() => {
+  const notifications = props.notifications as Array<Notification>
   if (sort.value.value === 'oldest') {
-    return messages.value.slice().sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
+    return notifications.slice().sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
   else {
-    return messages.value.slice().sort((b, a) => new Date(a.received).getTime() - new Date(b.received).getTime())
+    return notifications.slice().sort((b, a) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
 })
 
 // Filter the messages by checking their title and content
 const filteredMessages = computed(() => {
   return sortedMessages.value.filter(msg => {
-    return msg.title.toLowerCase().includes(search.value.toLowerCase()) || msg.content.toLowerCase().includes(search.value.toLowerCase())
+    return msg.title?.toLowerCase().includes(search.value.toLowerCase()) || msg.content.toLowerCase().includes(search.value.toLowerCase())
   })
 })
 
@@ -171,7 +132,7 @@ const filteredMessages = computed(() => {
  * @param {Message} message - the message that was selected
  * @returns {void}
  */
-function openMessage(message: Message) {
+function openMessage(message: Notification) {
   selectedMessage.value = message
   showMessageDetail.value = true
 }

@@ -12,7 +12,7 @@
         color="red"
       />
     </div>
-    <p style="font-size: small"> {{ received }}</p>
+    <p style="font-size: small"> {{ received.toLocaleString() }}</p>
   </q-card>
 </template>
 
@@ -29,7 +29,7 @@ const props = defineProps( {
   },
   received: {
     required: true,
-    type: String,
+    type: Date,
   },
   isRead: {
     required: true,
@@ -38,6 +38,3 @@ const props = defineProps( {
 })
 
 </script>
-
-<style scoped>
-</style>

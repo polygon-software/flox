@@ -119,7 +119,7 @@ import {ErrorService} from 'src/services/ErrorService';
 const $errorService: ErrorService|undefined = inject('$errorService')
 const $routerService: RouterService|undefined = inject('$routerService')
 
-const props = defineProps( {
+defineProps( {
   search: {
     required: true,
     type: String,

@@ -44,7 +44,7 @@
   </div>
   </q-header>
 
-  <!-- Notification Inbox -->
+  <!-- NotificationItem Inbox -->
   <q-dialog
     v-model="showInbox"
     class="q-pa-xs"
@@ -90,7 +90,7 @@ const loggedIn = computed(() => {
 })
 
 // Username does not need to be reactive, since it won't change between logins
-const username = $authStore.getters.getUsername()
+// const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication
@@ -106,9 +106,9 @@ async function logout(): Promise<void>{
  * Triggers a password change for the currently logged in authentication
  * @returns {void}
  */
-function changePassword() {
-  $authService?.showChangePasswordDialog()
-}
+// function changePassword() {
+//   $authService?.showChangePasswordDialog()
+// }
 
 /**
  * Triggers a password change for a non-logged in authentication

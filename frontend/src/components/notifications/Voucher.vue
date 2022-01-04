@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import {defineProps} from 'vue';
 
-const props = defineProps( {
+defineProps( {
   dbRef: {
     required: true,
     type: String,
@@ -27,6 +27,3 @@ const props = defineProps( {
 //TODO: Implement methods to fetch message data
 
 </script>
-
-<style scoped>
-</style>

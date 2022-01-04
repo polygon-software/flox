@@ -1,7 +1,8 @@
 import { ObjectType, InputType, Field } from '@nestjs/graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { IsBoolean, IsDate, IsString } from 'class-validator';
+import { User } from '../../user/entities/user.entity';
 
 @ObjectType()
 @Entity({ name: 'notification' })
@@ -29,4 +30,8 @@ export class Notification extends BaseEntity {
   @Column()
   @IsBoolean()
   isRead: boolean;
+
+  @Field(() => User, { description: 'The user this notification is for.' })
+  @ManyToOne(() => User, (user) => user.notifications)
+  user: User;
 }

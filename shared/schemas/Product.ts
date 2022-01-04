@@ -1,6 +1,6 @@
 import * as Joi from 'joi'
 
-// Base Item
+// Product Item
 export const Product = Joi.object({
     uuid: Joi.string().required(),
     title: Joi.string().required(),

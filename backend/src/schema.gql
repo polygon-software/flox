@@ -72,6 +72,7 @@ input CreateNotificationInput {
 
   """Title"""
   title: String!
+  user: user!
 }
 
 input CreateProductInput {
@@ -182,6 +183,9 @@ type Notification {
 
   """Title"""
   title: String!
+
+  """The user this notification is for."""
+  user: User!
 
   """UUID"""
   uuid: ID!
@@ -426,6 +430,9 @@ type User {
   """Last modification date"""
   lastModifiedAt: DateTime!
 
+  """Notifications of the user"""
+  notifications: [Notification!]!
+
   """Phone number"""
   phone: String!
 
@@ -486,6 +493,9 @@ input notification {
 
   """Title"""
   title: String!
+
+  """The user this notification is for."""
+  user: user!
 }
 
 input private_file {
@@ -617,6 +627,9 @@ input user {
 
   """Last modification date"""
   lastModifiedAt: DateTime!
+
+  """Notifications of the user"""
+  notifications: [notification!]!
 
   """Phone number"""
   phone: String!
