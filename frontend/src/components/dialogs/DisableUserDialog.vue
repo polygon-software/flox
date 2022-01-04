@@ -6,7 +6,7 @@
     <q-card style="width: 600px;">
       <q-card-section>
         <h5 class="q-ma-none q-pa-none">
-          {{ $t('admin.enable_account') }}
+          {{ $t('admin.disable_account') }}
         </h5>
       </q-card-section>
       <q-card-section>
@@ -16,7 +16,7 @@
         >
           <q-item>
             <q-item-section>
-              <div class="row flex content-center">
+              <div class="row flex content-center" style="height: 24px">
                 <p class="col-5">{{ $t('account_data.username') }}:</p>
                 <p class="col-7">{{ props.user.username }}</p>
               </div>
@@ -25,66 +25,37 @@
 
           <q-item>
             <q-item-section>
-              <div class="row flex content-center">
+              <div class="row flex content-center" style="height: 24px">
                 <p class="col-5">{{ $t('account_data.full_name') }}:</p>
                 <p class="col-7">{{ props.user.fullName }}</p>
               </div>
             </q-item-section>
           </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.address') }}:</p>
-                <p class="col-7">{{ address.prettyString() }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.phone_number') }}:</p>
-                <p class="col-7">{{ props.user.phone }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.email') }}:</p>
-                <p class="col-7">
-                  {{ props.user.email }}
-                </p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.birthdate') }}:</p>
-                <p class="col-7">
-                  {{ formatDate(props.user.birthdate) }}
-                </p>
-              </div>
-            </q-item-section>
-          </q-item>
         </q-list>
+
+        <div class="column" style="margin-top: 10px">
+          <!-- Permanent -->
+          <q-radio v-model="permanent" :val="true" :label="$t('admin.permanent')" />
+
+          <!-- Temporary: with datetime picker TODO use new DateTime picker once implemented -->
+          <div class="row">
+            <q-radio v-model="permanent" :val="false" :label="$t('admin.temporary')" />
+            <q-input
+              type="date"
+              outlined
+              dense
+              style="margin-left: 32px"
+            />
+          </div>
+        </div>
+
       </q-card-section>
       <q-card-actions>
         <q-btn
           class="q-ma-md"
-          :label="$t('admin.enable_account')"
-          color="positive"
-          @click="onOk"
-        />
-        <q-btn
-          class="q-ma-md"
-          :label="$t('admin.reject_application')"
+          :label="$t('admin.disable_account')"
           color="negative"
-          @click="onReject"
+          @click="onOk"
         />
         <q-btn
           class="q-ma-md"
@@ -100,9 +71,7 @@
 <script setup lang="ts">
 import {defineProps, defineEmits, ref, Ref, PropType} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
-import {Address} from 'src/data/types/Address';
 import {User} from 'src/data/types/User';
-import {formatDate} from 'src/helpers/format-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 
@@ -111,19 +80,15 @@ const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
+// Permanent/Temporary toggle
+const permanent = ref(true)
+
 const props = defineProps({
   user: {
     type: Object as PropType<User>,
     required: true
   },
 })
-
-const address = new Address(
-  props.user.address?.street?? undefined,
-  props.user.address?.number ?? undefined,
-  props.user.address?.city ?? undefined,
-  props.user.address?.zipCode ?? undefined,
-)
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
