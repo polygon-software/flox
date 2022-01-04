@@ -81,7 +81,7 @@
     </div>
   </q-header>
 
-  <!-- NotificationItem Inbox -->
+  <!-- Notification Inbox -->
   <q-dialog
     v-model="showInbox"
     class="q-pa-xs"
