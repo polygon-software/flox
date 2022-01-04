@@ -7,8 +7,8 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { CreateAddressInput } from 'src/modules/address/dto/input/create-address.input';
 import { CREATION_STATE } from '../../../../ENUM/ENUMS';
+import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
 
 @InputType()
 export class UpdateCompanyInput {

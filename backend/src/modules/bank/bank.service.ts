@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Bank } from './entities/bank.entity';
 import { CreateBankInput } from './dto/input/create-bank.input';
-import { createCognitoAccount, randomPassword } from '../../auth/authService';
+import { createCognitoAccount } from '../../auth/authService';
 import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
 import { CreateUserlessBankInput } from './dto/input/create-userless-bank.input';

@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 
 import { BankService } from './bank.service';
 import { Bank } from './entities/bank.entity';
@@ -8,7 +8,6 @@ import {
   SOIOnly,
 } from '../../auth/authorization.decorator';
 import { CreateBankInput } from './dto/input/create-bank.input';
-import { Query } from '@nestjs/graphql';
 import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
 

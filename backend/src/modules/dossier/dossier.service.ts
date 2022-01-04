@@ -104,7 +104,7 @@ export class DossierService {
    */
   async myDossiers(cognitoId: string): Promise<Dossier[]> {
     const employee = await this.employeeService.getMyEmployee(cognitoId);
-    return await this.dossierRepository.findByIds(
+    return this.dossierRepository.findByIds(
       employee.dossiers.map((dossier) => dossier.uuid),
       { relations: ['documents', 'offers', 'offers.bank', 'original_bank'] },
     );

@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Controller,
-  Inject,
   Options,
   Post,
   Query,
@@ -10,11 +9,7 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { Public } from '../../auth/authentication.decorator';
-import {
-  AnyRole,
-  BankOnly,
-  EmployeeOnly,
-} from '../../auth/authorization.decorator';
+import { AnyRole, EmployeeOnly } from '../../auth/authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
