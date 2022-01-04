@@ -75,7 +75,6 @@
 <script setup lang="ts">
 import {ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
-import {uploadFiles} from 'src/helpers/file-helpers';
 import { executeQuery} from 'src/helpers/data-helpers';
 import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 
