@@ -20,8 +20,8 @@ export class RolesGuard implements CanActivate {
 
   /**
    * Gets the request from context
-   * @param {ExecutionContext} context - context
-   * @returns {any} - request
+   * @param {ExecutionContext} context - request execution context
+   * @returns {any} - the request
    */
   getRequest(context: ExecutionContext): any {
     return getRequest(context);

@@ -183,7 +183,8 @@ export default {
     seller_page_link: 'Verkäuferseite',
     max_clicks: 'Maximale Anzahl Klicks',
     max_cost: 'Maximale Kosten',
-    add_product: 'Produkt hinzufügen'
+    add_product: 'Produkt hinzufügen',
+    title: 'Titel'
   },
   settings: {
     settings: 'Einstellungen',
