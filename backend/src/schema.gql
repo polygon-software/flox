@@ -495,6 +495,11 @@ type Query {
   getMyEmployee: Employee!
   getMyEmployees: [Employee!]!
   getMyUser: User!
+  getOfferDocument(
+    """URL expiration duration (in seconds); defaults to 15min"""
+    expires: [Float!]
+    uuid: ID!
+  ): PrivateFile!
   getPrivateFile(
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]

@@ -195,6 +195,21 @@ export const DOSSIER_FILE = {
   cacheLocation: 'getDossierDocument'
 }
 
+export const OFFER_FILE = {
+  query: gql`
+    query getOfferDocument($uuid: ID!){
+      getOfferDocument(uuid: $uuid){
+        uuid
+        url
+        key
+        __typename
+      }
+    }
+  `,
+  tables: ['private_file'],
+  cacheLocation: 'getOfferDocument'
+}
+
 export const MY_USER = {
   query: gql`
     query{
@@ -424,5 +439,6 @@ export const QUERIES = [
   REJECTED_DOSSIERS,
   DOSSIERS_BANK,
   MY_BANK,
-  DOSSIER_FILE
+  DOSSIER_FILE,
+  OFFER_FILE
 ];

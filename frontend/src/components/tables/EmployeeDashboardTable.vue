@@ -117,7 +117,7 @@ import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
-import {DOSSIER_FILE, MY_DOSSIERS} from 'src/data/queries/QUERIES';
+import {DOSSIER_FILE, MY_DOSSIERS, OFFER_FILE} from 'src/data/queries/QUERIES';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
@@ -216,6 +216,7 @@ function showOfferDocuments(offer: Record<string, unknown>): void {
     component: DownloadDocumentsDialog,
     componentProps: {
       files,
+      query: OFFER_FILE
     }
   })
 }

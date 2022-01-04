@@ -49,7 +49,7 @@ export class FileResolver {
     return this.fileService.getPrivateFile(getPrivateFileArgs, dbUser);
   }
 
-  @Roles(ROLE.COMPANY, ROLE.BANK)
+  @Roles(ROLE.COMPANY, ROLE.BANK, ROLE.EMPLOYEE)
   @Query(() => PrivateFile, { name: 'getDossierDocument' })
   async getDossierDocument(
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
@@ -57,5 +57,15 @@ export class FileResolver {
   ): Promise<PrivateFile> {
     const dbUser = await this.userService.getUser({ uuid: user.userId });
     return this.fileService.getDossierDocument(getPrivateFileArgs, dbUser);
+  }
+
+  @Roles(ROLE.COMPANY, ROLE.BANK, ROLE.EMPLOYEE)
+  @Query(() => PrivateFile, { name: 'getOfferDocument' })
+  async getOfferDocument(
+    @Args() getPrivateFileArgs: GetPrivateFileArgs,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<PrivateFile> {
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    return this.fileService.getOffersFile(getPrivateFileArgs, dbUser);
   }
 }

@@ -281,7 +281,9 @@ export class FileService {
           return offer.bank.uuid === dbUser.fk;
         })) ||
       (dbUser.role === ROLE.COMPANY &&
-        file.dossier.employee.company.uuid === dbUser.fk)
+        file.dossier.employee.company.uuid === dbUser.fk) ||
+      (dbUser.role === ROLE.EMPLOYEE &&
+        file.dossier.employee.uuid === dbUser.fk)
     ) {
       return this.preparePrivateFile(getPrivateFileArgs, file);
     }
@@ -292,6 +294,28 @@ export class FileService {
     getPrivateFileArgs: GetPrivateFileArgs,
     dbUser: User,
   ): Promise<PrivateFile> {
-    //todo
+    const file = await this.privateFilesRepository.findOne(
+      getPrivateFileArgs.uuid,
+      {
+        relations: [
+          'offer',
+          'offer.bank',
+          'offer.dossier',
+          'offer.dossier.employee',
+          'offer.dossier.employee.company',
+        ],
+      },
+    );
+
+    if (
+      (dbUser.role === ROLE.BANK && file.offer.bank.uuid === dbUser.fk) ||
+      (dbUser.role === ROLE.COMPANY &&
+        file.offer.dossier.employee.company.uuid === dbUser.fk) ||
+      (dbUser.role === ROLE.EMPLOYEE &&
+        file.offer.dossier.employee.uuid === dbUser.fk)
+    ) {
+      return this.preparePrivateFile(getPrivateFileArgs, file);
+    }
+    throw new NotFoundException();
   }
 }
