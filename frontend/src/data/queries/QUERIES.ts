@@ -1,6 +1,7 @@
 import {USER_QUERIES} from 'src/data/queries/USER';
 import {PRODUCT_QUERIES} from 'src/data/queries/PRODUCT';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {NOTIFICATION_QUERIES} from 'src/data/queries/NOTIFICATION';
 
 /**
  * This file contains all valid GraphQL queries. A query is structure as follows
@@ -16,5 +17,6 @@ import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 // Queries for all modules
 export const QUERIES: QueryObject[] = [
   ...PRODUCT_QUERIES,
-  ...USER_QUERIES
+  ...USER_QUERIES,
+  ...NOTIFICATION_QUERIES,
 ];

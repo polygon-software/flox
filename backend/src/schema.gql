@@ -60,6 +60,20 @@ input CreateCommentInput {
   user: user!
 }
 
+input CreateNotificationInput {
+  """Content"""
+  content: String!
+
+  """Read status"""
+  isRead: Boolean!
+
+  """Date of receiving"""
+  received: DateTime!
+
+  """Title"""
+  title: String!
+}
+
 input CreateProductInput {
   brand: String
   brandLink: String
@@ -124,6 +138,10 @@ input DeleteCommentInput {
   uuid: ID!
 }
 
+input DeleteNotificationInput {
+  uuid: ID!
+}
+
 input DeleteProductInput {
   uuid: ID!
 }
@@ -139,14 +157,34 @@ input DuplicateProductInput {
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createComment(createCommentInput: CreateCommentInput!): Comment!
+  createNotification(createNotificationInput: CreateNotificationInput!): Notification!
   createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
+  removeNotification(deleteNotificationInput: DeleteNotificationInput!): Notification!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   update(updateUserInput: UpdateUserInput!): User!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  updateNotification(updateNotificationInput: UpdateNotificationInput!): Notification!
   updateProduct(pictures: [String!] = null, updateProductInput: UpdateProductInput!): Product!
+}
+
+type Notification {
+  """Content"""
+  content: String!
+
+  """Read status"""
+  isRead: Boolean!
+
+  """Date of receiving"""
+  received: DateTime!
+
+  """Title"""
+  title: String!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type PrivateFile {
@@ -268,6 +306,7 @@ type PublicFile {
 
 type Query {
   allComments: [Comment!]!
+  allNotifications: [Notification!]!
   allPartners: [User!]!
   allPlayers: [User!]!
   allProducts: [Product!]!
@@ -281,6 +320,8 @@ type Query {
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   myUser: User!
+  notification(uuid: ID!): Notification!
+  notifications(uuids: [ID!]): [Notification!]!
   product(uuid: ID!): Product!
   products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!
@@ -302,6 +343,23 @@ input UpdateCommentInput {
   content: String!
   product: product
   user: user
+  uuid: ID!
+}
+
+input UpdateNotificationInput {
+  """Content"""
+  content: String!
+
+  """Read status"""
+  isRead: Boolean!
+
+  """Date of receiving"""
+  received: DateTime!
+
+  """Title"""
+  title: String!
+
+  """UUID"""
   uuid: ID!
 }
 
@@ -414,6 +472,20 @@ input comment {
 
   """The user who wrote this comment"""
   user: user!
+}
+
+input notification {
+  """Content"""
+  content: String!
+
+  """Read status"""
+  isRead: Boolean!
+
+  """Date of receiving"""
+  received: DateTime!
+
+  """Title"""
+  title: String!
 }
 
 input private_file {
