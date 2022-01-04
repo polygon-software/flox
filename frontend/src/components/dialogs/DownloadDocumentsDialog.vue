@@ -13,22 +13,17 @@
           separator
         >
           <q-item
-            v-for="(file) in existingFiles"
+            v-for="(file) in props.files"
             :key="file.uuid"
           >
             <q-item-section>
               <div class="row flex justify-between content-center" style="height: 50px">
-                <p class="col-8">{{ file.key }}</p>
-                <div
-                  v-if="file.url"
-                  class="col-4"
-                >
-                  <q-btn
-                    color="primary"
-                    icon="download"
-                    @click="openURL(file.url)"
-                  />
-                </div>
+                <p class="col-8">{{ file.key.substring(37) }}</p>
+                <q-btn
+                  color="primary"
+                  icon="download"
+                  @click="openFile(file.uuid)"
+                />
               </div>
             </q-item-section>
           </q-item>
@@ -48,19 +43,19 @@
 <script setup lang="ts">
 import {ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {DOSSIER_FILE, MY_USER, PRIVATE_FILE} from 'src/data/queries/QUERIES';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 // TODO actual implementation for dossier files @johannschwabe
 // const files = ref([])
-
-//remove this and take the existing files form the backend from dossier table
-const existingFiles = ref([
-  {key: 'Beispiel1', uuid: 1, url: 'https://link.springer.com/content/pdf/10.1007/s11576-008-0095-0.pdf'},
-  {key: 'Beispiel2', uuid: 2, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
-  {key: 'Beispiel3', uuid: 3, url: 'https://sisis.rz.htw-berlin.de/inh2009/12372030.pdf'},
-  {key: 'Beispiel4', uuid: 4, url: 'https://cds.cern.ch/record/798228/files/0131456601_TOC.pdf'},
-])
+const props = defineProps({
+  files: {
+    type: Array,
+    required: true
+  }
+})
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
@@ -77,6 +72,17 @@ function hide(): void {
 // eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
+}
+
+/**
+ * fetches and opens a file
+ * @param {string} fileUuid - uuid of file
+ * @returns {Promise<void>} - done
+ */
+async function openFile(fileUuid: string): Promise<void> {
+  const queryRes = await executeQuery(DOSSIER_FILE, {uuid: fileUuid})
+  const file = queryRes.data[DOSSIER_FILE.cacheLocation] as Record<string, unknown>
+  openURL(file.url as string)
 }
 
 </script>

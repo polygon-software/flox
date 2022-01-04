@@ -180,6 +180,21 @@ export const PRIVATE_FILE = {
   cacheLocation: 'getPrivateFile'
 }
 
+export const DOSSIER_FILE = {
+  query: gql`
+    query getDossierDocument($uuid: ID!){
+      getDossierDocument(uuid: $uuid){
+        uuid
+        url
+        key
+        __typename
+      }
+    }
+  `,
+  tables: ['private_file'],
+  cacheLocation: 'getDossierDocument'
+}
+
 export const MY_USER = {
   query: gql`
     query{
@@ -197,7 +212,7 @@ export const MY_USER = {
 
 export const MY_DOSSIERS = {
   query: gql`
-    query{
+    query getMyDossiers{
       getMyDossiers{
         uuid
         created_at
@@ -338,9 +353,19 @@ export const DOSSIERS_BANK = {
           city
           zip_code
         }
+        documents {
+          uuid
+          __typename
+          key
+        }
         offers {
           uuid
           status
+          pdf {
+            uuid
+            __typename
+            key
+          }
           bank {
             uuid
             __typename

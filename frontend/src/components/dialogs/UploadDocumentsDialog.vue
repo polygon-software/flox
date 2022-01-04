@@ -104,7 +104,6 @@ function hide(): void {
 
 /**
  * Uploads the selected files from the desktop to the existing files
- * for now it is a placeholder function
  * @returns {void}
  */
 async function upload(): Promise<void> {
@@ -113,7 +112,7 @@ async function upload(): Promise<void> {
   files.value.forEach((file)=>{
     reformatted[file.name] = file
   })
-  await uploadFiles(reformatted, `/uploadDossierFile?did=${dossier.uuid}`, ['private_file'])
+  await uploadFiles(reformatted, `/uploadDossierFile?did=${dossier.uuid}`, 'getMyDossiers')
 
 }
 

@@ -49,7 +49,7 @@ export class PrivateFile extends BaseEntity {
     nullable: true,
     description: 'Dossier the file belongs to',
   })
-  @ManyToOne(() => Dossier, (company) => company.documents, {
+  @ManyToOne(() => Dossier, (dossier) => dossier.documents, {
     nullable: true,
     onDelete: 'CASCADE',
   })

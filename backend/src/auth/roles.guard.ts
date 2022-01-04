@@ -33,7 +33,6 @@ export class RolesGuard implements CanActivate {
    * @returns {boolean | Promise<boolean>} - can activate
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('canActivate');
     const isPublic = this.isPublic(context);
     if (isPublic) {
       return true;

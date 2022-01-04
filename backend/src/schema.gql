@@ -409,7 +409,7 @@ type Offer {
   last_modified_at: DateTime!
 
   """The Offer as a PDF"""
-  pdf: PrivateFile!
+  pdf: PrivateFile
 
   """Status of Dossier"""
   status: OfferStatus!
@@ -484,6 +484,11 @@ type Query {
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
   getBanks: [Bank!]!
+  getDossierDocument(
+    """URL expiration duration (in seconds); defaults to 15min"""
+    expires: [Float!]
+    uuid: ID!
+  ): PrivateFile!
   getMyBank: Bank!
   getMyCompany: Company!
   getMyDossiers: [Dossier!]

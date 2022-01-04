@@ -15,6 +15,7 @@ import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
 import { ERRORS } from '../../error/ERRORS';
 import { MultipartFile } from 'fastify-multipart';
+import { ROLE } from '../../ENUM/ENUMS';
 
 @Injectable()
 export class FileService {
@@ -139,30 +140,43 @@ export class FileService {
       owner: dbUser.fk,
     });
     if (fileInfo) {
-      const options: Record<string, unknown> = {};
-      // If expiration duration is set, apply
-      if (getPrivateFileArgs.expires) {
-        options.expiresIn = getPrivateFileArgs.expires;
-      }
-
-      // Generate pre-signed URL
-      const url = await getSignedUrl(
-        this.s3,
-        new GetObjectCommand({
-          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
-          Key: fileInfo.key,
-        }),
-        options,
-      );
-      const result = await this.privateFilesRepository.findOne(
-        getPrivateFileArgs.uuid,
-      );
-
-      // Add URL to result
-      return { ...result, url };
+      return this.preparePrivateFile(getPrivateFileArgs, fileInfo);
     }
 
     throw new NotFoundException();
+  }
+
+  /**
+   * Generate a presigned URL
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID
+   * @param {PrivateFile} fileInfo - the file to download
+   * @returns {Promise<PrivateFile>} - file
+   */
+  async preparePrivateFile(
+    getPrivateFileArgs: GetPrivateFileArgs,
+    fileInfo: PrivateFile,
+  ) {
+    const options: Record<string, unknown> = {};
+    // If expiration duration is set, apply
+    if (getPrivateFileArgs.expires) {
+      options.expiresIn = getPrivateFileArgs.expires;
+    }
+
+    // Generate pre-signed URL
+    const url = await getSignedUrl(
+      this.s3,
+      new GetObjectCommand({
+        Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+        Key: fileInfo.key,
+      }),
+      options,
+    );
+    const result = await this.privateFilesRepository.findOne(
+      getPrivateFileArgs.uuid,
+    );
+
+    // Add URL to result
+    return { ...result, url };
   }
 
   /**
@@ -196,7 +210,7 @@ export class FileService {
     repositoryName: string,
     location: Record<'onAssociation' | 'onFile', string>,
     ownerUuid: string,
-  ): Promise<unknown> {
+  ): Promise<Record<string, unknown>> {
     if (!file) {
       throw new Error(ERRORS.no_valid_file);
     }
@@ -242,5 +256,35 @@ export class FileService {
     }
     await this[repositoryName].save(associatedEntity);
     return associatedEntity;
+  }
+
+  async getDossierDocument(
+    getPrivateFileArgs: GetPrivateFileArgs,
+    dbUser: User,
+  ): Promise<PrivateFile> {
+    const file = await this.privateFilesRepository.findOne(
+      getPrivateFileArgs.uuid,
+      {
+        relations: [
+          'dossier',
+          'dossier.offers',
+          'dossier.offers.bank',
+          'dossier.employee',
+          'dossier.employee.company',
+        ],
+      },
+    );
+
+    if (
+      (dbUser.role === ROLE.BANK &&
+        file.dossier.offers.some((offer) => {
+          return offer.bank.uuid === dbUser.fk;
+        })) ||
+      (dbUser.role === ROLE.COMPANY &&
+        file.dossier.employee.company.uuid === dbUser.fk)
+    ) {
+      return this.preparePrivateFile(getPrivateFileArgs, file);
+    }
+    throw new NotFoundException();
   }
 }

@@ -17,7 +17,10 @@ export class Offer extends BaseEntity {
   @ManyToOne(() => Bank)
   bank: Bank;
 
-  @Field(() => PrivateFile, { description: 'The Offer as a PDF' })
+  @Field(() => PrivateFile, {
+    description: 'The Offer as a PDF',
+    nullable: true,
+  })
   @JoinColumn()
   @OneToOne(() => PrivateFile, {
     nullable: true,

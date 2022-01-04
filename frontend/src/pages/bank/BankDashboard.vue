@@ -75,7 +75,7 @@
                 color="primary"
                 size="md"
                 round
-                @click.stop="showAllDocuments"
+                @click.stop="()=>showAllDocuments(_props.row)"
               />
             </q-td>
             <q-td key="offer_status" :props="_props">
@@ -201,12 +201,16 @@ async function createOfferForDossier(dossier: Record<string, unknown>){
 
 /**
  * Shows a dialog for downloading any dossier files
+ * @param {Dossier} dossier - Dossier to download files from
  * @returns {void}
  */
-function showAllDocuments() {
+function showAllDocuments(dossier: Record<string, unknown>) {
   $q.dialog({
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,
+    componentProps: {
+      files:dossier.documents
+    }
   })
 }
 
