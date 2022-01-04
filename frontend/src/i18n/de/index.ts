@@ -204,7 +204,8 @@ export default {
   user_status: {
     applied: 'Angefragt',
     active: 'Aktiv',
-    disabled: 'Deaktiviert'
+    disabled: 'Deaktiviert',
+    disabled_temp: 'Deaktiviert (bis {until})'
   },
   admin: {
     users: 'Benutzer',

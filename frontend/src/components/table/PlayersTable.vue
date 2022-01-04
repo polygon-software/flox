@@ -18,8 +18,8 @@
         >
           <q-td key="status" :props="_props">
             <q-chip
-              :label=getStatusChip(_props.row.status).label
-              :color="getStatusChip(_props.row.status).color"
+              :label=getStatusChip(_props.row).label
+              :color="getStatusChip(_props.row).color"
               text-color="white"
               style="font-weight: bold"
             />
@@ -98,6 +98,7 @@ import EnableUserDialog from 'components/dialogs/EnableUserDialog.vue';
 import DisableUserDialog from 'components/dialogs/DisableUserDialog.vue';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {DISABLE_USER, ENABLE_USER, TEMP_DISABLE_USER} from 'src/data/mutations/USER';
+import {User} from 'src/data/types/User';
 
 const $q = useQuasar()
 
@@ -149,6 +150,7 @@ function disableUser(user: Record<string, unknown>): void{
     // Depending on whether an 'until' date is given, disable temporarily or permanently
     const mutation = until? TEMP_DISABLE_USER : DISABLE_USER
 
+    console.log('do mutation', mutation)
     const variables: Record<string, unknown> = {
         uuid: user.uuid
       }
@@ -223,10 +225,12 @@ function enableUser(user: Record<string, unknown>): void{
 
 /**
  * Gets the color & label for the status chip of a user
- * @param {USER_STATUS} status - the user's status
+ * @param {User} user - the user
  * @returns {Record<string, string>} - object containing color and label
  */
-function getStatusChip(status: USER_STATUS): Record<string,unknown>|null {
+function getStatusChip(user: User): Record<string,unknown>|null {
+  const status = user.status;
+
   switch(status){
     case USER_STATUS.APPLIED:
       // Applied
@@ -241,9 +245,11 @@ function getStatusChip(status: USER_STATUS): Record<string,unknown>|null {
         color: 'positive'
       }
     case USER_STATUS.DISABLED:
-      // Disabled
+      // Disabled (temp or permanent)
       return {
-        label: i18n.global.t('user_status.disabled'),
+        label: user.disabledUntil ?
+          i18n.global.t('user_status.disabled_temp', {until: formatDate(user.disabledUntil)}):
+          i18n.global.t('user_status.disabled'),
         color: 'negative'
       }
     default:

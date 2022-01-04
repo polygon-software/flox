@@ -203,9 +203,10 @@ export default {
     valid: 'Valid',
   },
   user_status: {
-    applied: 'applied',
-    active: 'active',
-    disabled: 'disabled'
+    applied: 'Applied',
+    active: 'Active',
+    disabled: 'Disabled',
+    disabled_temp: 'Disabled (until {until})'
   },
   admin: {
     users: 'Users',
