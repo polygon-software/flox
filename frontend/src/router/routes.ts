@@ -30,6 +30,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/partner/ProductUploadPage.vue') }],
   },
 
+  'PRODUCT_DETAIL': {
+    path: '/product-detail',
+    component: () => getUserRoleLayout(),
+    children: [{ path: '', component: () => import('pages/ProductDetailPage.vue') }],
+  },
+
   'MY_PRODUCTS': {
     path: '/my-products',
     component: () => import('layouts/PartnerLayout.vue'),

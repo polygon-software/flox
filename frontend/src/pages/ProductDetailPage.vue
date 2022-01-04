@@ -1,9 +1,7 @@
 <template>
   <q-page class="flex justify-start q-pa-none q-ma-none">
-    <q-form
-      greedy
+    <div
       style="width: calc(100% - 32px)"
-      @submit="onSubmit"
     >
       <!-- General Info -->
       <q-card
@@ -25,8 +23,7 @@
                 :label="$t('products.product_name')"
                 outlined
                 dense
-                lazy-rules
-                :rules="[ (val) => IS_VALID_STRING(val) || $t('errors.invalid_input')]"
+                readonly
               />
 
               <!-- Description -->
@@ -37,8 +34,8 @@
                 outlined
                 dense
                 type="textarea"
+                readonly
               />
-
             </div>
           </div>
           <!-- Right column -->
@@ -53,19 +50,20 @@
                 :label="$t('products.brand')"
                 outlined
                 dense
+                readonly
               />
-              <q-select
+              <q-input
                 v-model="input.category"
-                :options="categories"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.category')"
                 outlined
                 dense
+                readonly
               />
             </div>
 
-            <!-- Start and End Date TODO Create custom date-time picker -->
+            <!-- Start and End Date -->
             <div class="row flex justify-between">
               <!-- Start date -->
               <q-input
@@ -74,26 +72,21 @@
                 style="width: calc(50% - 25px)"
                 :label="$t('products.start')"
                 stack-label
-                type="date"
                 outlined
                 dense
-                lazy-rules
-                :rules="[ (val) => (val === null || IS_FUTURE_DATE(val)) || $t('errors.date_must_be_future')]"
+                readonly
               />
 
               <!-- End date -->
-              <!-- TODO ensure date is at least some time (24h?) after start -->
               <q-input
                 v-model="input.end"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.end')"
                 stack-label
-                type="date"
                 outlined
                 dense
-                lazy-rules
-                :rules="[ (val) => (val === null || IS_FUTURE_DATE(val)) || $t('errors.date_must_be_future')]"
+                readonly
               />
             </div>
 
@@ -104,13 +97,11 @@
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.value')"
-                type="number"
                 outlined
                 dense
-                lazy-rules
-                :rules="[ (val) => (val === null || val === '' || IS_VALID_NUMBER(val)) || $t('errors.invalid_number')]"
+                readonly
               />
-              <q-select
+              <q-input
                 v-model="input.currency"
                 :options="currencies"
                 class="q-ma-sm"
@@ -118,6 +109,7 @@
                 :label="$t('products.currency')"
                 outlined
                 dense
+                readonly
               />
             </div>
 
@@ -128,11 +120,9 @@
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.min_bet')"
-                type="number"
                 outlined
                 dense
-                lazy-rules="ondemand"
-                :rules="[ (val) => (val === null || val === '' || IS_VALID_MIN_BET(val, input.maxBet, input.value)) || $t('errors.invalid_number')]"
+                readonly
               />
 
               <q-input
@@ -140,11 +130,9 @@
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.max_bet')"
-                type="number"
                 outlined
                 dense
-                lazy-rules="ondemand"
-                :rules="[ (val) => (val === null || val === '' || IS_VALID_MAX_BET(val, input.minBet, input.value)) || $t('errors.invalid_number')]"
+                readonly
               />
             </div>
           </div>
@@ -152,7 +140,7 @@
 
       </q-card>
 
-      <!-- Tags. TODO -->
+      <!-- Tags -->
       <div class="row full-width flex justify-between">
 
         <!-- Tags -->
@@ -175,7 +163,7 @@
             dense
             hide-dropdown-icon
             :label="$t('products.tags')"
-            :hint="$t('products.tags_hint')"
+            readonly
           />
         </q-card>
 
@@ -188,16 +176,14 @@
           <h6 class="q-ma-md">{{ $t('products.type') }}</h6>
           <div class="row flex justify-between items-center q-ma-md">
             <!-- Sponsored -->
-            <q-select
+            <q-input
               v-model="input.sponsored"
-              :options="sponsored"
-              map-options
-              emit-value
               class="column"
               style="width: calc(50% - 25px)"
               :label="$t('products.promotion')"
               outlined
               dense
+              readonly
             />
           </div>
         </q-card>
@@ -222,25 +208,23 @@
               outlined
               dense
               type="url"
-              :rules="[ (val) => !val || val === '' || IS_URL(val)]"
+              readonly
             />
             <q-input
               v-model="input.directBuyLinkMaxClicks"
               class="q-ma-sm col-2"
               :label="$t('products.max_clicks')"
-              type="number"
               outlined
               dense
-              :rules="[ (val) => !val || val === ''|| val === 0 || IS_LARGER_THAN(val, 0)]"
+              readonly
             />
             <q-input
               v-model="input.directBuyLinkMaxCost"
               class="q-ma-sm col-2"
               :label="$t('products.max_cost')"
-              type="number"
               outlined
               dense
-              :rules="[ (val) => !val || val === '' || val === 0 || IS_LARGER_THAN(val, 0)]"
+              readonly
             />
           </div>
 
@@ -253,32 +237,29 @@
               :label="$t('products.seller_page_link')"
               outlined
               dense
-              type="url"
-              :rules="[ (val) => !val || val === '' || IS_URL(val)]"
+              readonly
             />
             <q-input
               v-model="input.brandLinkMaxClicks"
               class="q-ma-sm col-2"
               :label="$t('products.max_clicks')"
-              type="number"
               outlined
               dense
-              :rules="[ (val) => !val || val === '' || val === 0 || IS_LARGER_THAN(val, 0)]"
+              readonly
             />
             <q-input
               v-model="input.brandLinkMaxCost"
               class="q-ma-sm col-2"
               :label="$t('products.max_cost')"
-              type="number"
               outlined
               dense
-              :rules="[ (val) => !val || val === '' || val === 0 || IS_LARGER_THAN(val, 0)]"
+              readonly
             />
           </div>
         </q-card>
       </div>
 
-      <!-- Images TODO Show already uploaded images-->
+      <!-- Images TODO Pictures are displayed a little wierdly-->
       <div class="row full-width">
         <q-card
           class="q-pa-md q-ma-md"
@@ -286,137 +267,91 @@
           style="width: 100%; border-radius: 20px; border: 1px solid black"
         >
           <h6 class="q-ma-md">{{ $tc('products.image', 2) }}</h6>
-          <!-- TODO -->
-          <PictureUpload
-            :pictures="pictures"
-            @change="onPictureChange"
+          <q-img
+            v-for="(picture, index) in pictures"
+            :key="index"
+            :src="picture"
+            :alt="index"
+            class="q-ma-md"
+            width="300px"
           />
         </q-card>
       </div>
-
       <!-- Submit -->
       <div class="row">
         <q-btn
+          v-if="input.status === PRODUCT_STATUS.DRAFT || input.status === PRODUCT_STATUS.VALID"
           class="q-ma-md text-black"
           color="primary"
-          :label="status === PRODUCT_STATUS.VALID ? $t('buttons.submit') : $t('buttons.save_draft')"
-          type="submit"
+          :label="$t('general.edit')"
           rounded
           no-caps
           style="height: 50px;"
+          @click="() => editProduct(input.uuid)"
         />
       </div>
-
-    </q-form>
+    </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-/**
- * A page for uploading products. Can be used to either create new products or existing ones, controlled via props
- */
-import {computed, ComputedRef, inject, reactive, Ref, ref, watch} from 'vue';
-import PictureUpload from 'components/forms/fields/PictureUpload.vue';
-import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import {CREATE_PRODUCT, UPDATE_PRODUCT} from 'src/data/mutations/PRODUCT';
-import {i18n} from 'boot/i18n';
-import {CATEGORY, CURRENCY, PRODUCT_STATUS} from '../../../../shared/definitions/ENUM'
-import {RouterService} from 'src/services/RouterService';
-import ROUTES from 'src/router/routes';
+import {inject, reactive, ref, Ref, watch} from 'vue';
 import {useRoute} from 'vue-router';
-import axios, { AxiosResponse } from 'axios'
-import {
-  IS_FUTURE_DATE,
-  IS_LARGER_THAN,
-  IS_URL,
-  IS_VALID_MAX_BET,
-  IS_VALID_MIN_BET,
-  IS_VALID_NUMBER,
-  IS_VALID_STRING
-} from 'src/data/RULES';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {PRODUCT} from 'src/data/queries/QUERIES';
 import {sleep} from 'src/helpers/general-helpers';
-import {toBase64} from 'src/helpers/image-helper';
-import {PRODUCT} from 'src/data/queries/PRODUCT';
+import axios, {AxiosResponse} from 'axios';
+import {RouterService} from 'src/services/RouterService';
+import {toDataUrl} from 'src/helpers/image-helper';
+import {i18n} from 'src/boot/i18n';
+import {toPascalCase} from 'src/helpers/string-helpers';
+import {PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import ROUTES from 'src/router/routes';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
-
-const productId = route.query.id
+const productId = route.query.id // TODO: Error handling if no ID given
 const queryResult = productId ? subscribeToQuery(PRODUCT as QueryObject, {uuid: productId}) as Ref<Record<string, unknown>> : ref(null)
-
-
-// Read ENUM values and so they can be used as options
-const categories = Object.values(CATEGORY).filter((item) => {
-  return isNaN(Number(item))
-})
-
-const currencies: CURRENCY[] = Object.values(CURRENCY).filter((item) => {
-  return isNaN(Number(item))
-})
-
-const sponsored = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
-
-// Check if all required fields have been filled. If yes, set the product status to valid
-const status: ComputedRef<PRODUCT_STATUS> = computed(() => {
-  if ([input.title,
-    input.description,
-    input.brand,
-    input.value,
-    input.currency,
-    input.start,
-    input.end,
-    input.category,
-    input.minBet,
-    input.maxBet,
-    input.sponsored].some((value) => {return value === null || value === undefined || (typeof value === 'string' && value === '')})) {
-    return PRODUCT_STATUS.DRAFT as PRODUCT_STATUS
-  }
-  return PRODUCT_STATUS.VALID as PRODUCT_STATUS
-})
-
-// Inputs for CREATE_PRODUCT mutation // TODO define Joi type
+const pictures: Ref<Array<string|ArrayBuffer|null>> = ref([])
 const input: Record<string, unknown> = reactive(
   {
-  title: null,
-  description: null,
-  brand: null,
-  value: null,
-  currency: currencies[0],
-  start: null,
-  end: null,
-  category: null,
-  minBet: null,
-  maxBet: null,
-  tags: null,
-  status: status,
-  sponsored: null,
-  brandLink: null,
-  brandLinkMaxClicks: null,
-  brandLinkMaxCost: null,
-  directBuyLink: null,
-  directBuyLinkMaxClicks: null,
-  directBuyLinkMaxCost: null,
-})
-
-// Picture inputs (separated from input, since these have to be added after product is created)
-const pictures: Ref<Array<Ref<File>>> = ref([])
-const oldPictures: Ref<Array<string|ArrayBuffer|null>> = ref([])
+    uuid: null,
+    title: null,
+    description: null,
+    brand: null,
+    value: null,
+    currency: null,
+    start: null,
+    end: null,
+    category: null,
+    minBet: null,
+    maxBet: null,
+    tags: null,
+    status: null,
+    sponsored: null,
+    brandLink: null,
+    brandLinkMaxClicks: null,
+    brandLinkMaxCost: null,
+    directBuyLink: null,
+    directBuyLinkMaxClicks: null,
+    directBuyLinkMaxCost: null,
+  }
+)
 
 /**
- * Watch for first result if a product is given
- */
+* Watch for first result if a product is given
+*/
 const stop = watch(queryResult, async (newValue) => {
   if(newValue && newValue !== {} && !(Array.isArray(newValue) && newValue.length === 0)){
     // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
     await sleep(100)
 
+    // Manually handle each field, since some fields are special
     mapValuesToInput(newValue)
 
     // Pictures
     pictures.value = await mapPicturesToInput(newValue)
-    // TODO handle pictures... @Marino: When making pictures an object, consider taking the format of this.
-    // TODO but we also have to adapt upload to only add those pictures that were not yet added (and allow deletion of old ones)
 
     // Stop watcher, since we already got initial values
     stop()
@@ -429,17 +364,18 @@ const stop = watch(queryResult, async (newValue) => {
  * @return {void}
  */
 function mapValuesToInput(newValue: Record<string, string|unknown>): void {
-  // Manually handle each field, since some fields are special
+  input.uuid = newValue.uuid
   input.title = newValue.title
   input.description = newValue.description
   input.brand = newValue.brand
-  input.category = newValue.category
+  input.category = newValue.category ? toPascalCase(newValue.category as string) : null
   input.value = newValue.value as string !== '' ? newValue.value : null
   input.currency = newValue.currency
   input.minBet = newValue.minBet as string !== '' ? newValue.minBet : null
   input.maxBet = newValue.maxBet as string !== '' ? newValue.maxBet : null
-  input.sponsored = newValue.sponsored
+  input.sponsored = newValue.sponsored ? i18n.global.t('general.yes') : i18n.global.t('general.no')
   input.tags = newValue.tags
+  input.status = newValue.status as PRODUCT_STATUS
   input.directBuyLink = newValue.directBuyLink as string !== '' ? newValue.directBuyLink : null
   input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks as string !== '' ? newValue.directBuyLinkMaxClicks : null
   input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost as string !== '' ? newValue.directBuyLinkMaxCost : null
@@ -456,10 +392,11 @@ function mapValuesToInput(newValue: Record<string, string|unknown>): void {
  * Maps the pictures fetched from the DB to the input object.
  * @param {Record<string, unknown>} newValue Data object loaded from DB
  * @async
- * @return {Promise<Array<Ref<File>>>} Pictures loaded from DB as data urls
+ * @return {Promise<Array<string|ArrayBuffer|null>>} Pictures loaded from DB as data urls
  */
-async function mapPicturesToInput(newValue: Record<string, unknown>): Promise<Array<Ref<File>>> {
-  const existingPictures: Array<Ref<File>> = []
+async function mapPicturesToInput(newValue: Record<string, unknown>): Promise<Array<string | ArrayBuffer | null>> {
+  const existingPictures: Array<string|ArrayBuffer|null> = []
+
   const newPictures = newValue.pictures as Record<string, string>[]
   for (const picture of newPictures) {
     const index: number = newPictures.indexOf(picture);
@@ -469,101 +406,32 @@ async function mapPicturesToInput(newValue: Record<string, unknown>): Promise<Ar
         responseType: 'blob'
       }).then(async (res: AxiosResponse<Blob>) => {
       const file = new File([res.data], `${(input as Record<string, string>).title}_${index}`)
-      existingPictures.push(ref(file))
-
-      // This array is used to remember which pictures currently exist
-      const b64Picture = await toBase64(file)
-      if (!oldPictures.value.includes(b64Picture)) {
-        oldPictures.value.push(b64Picture)
-      }
+      const url = await toDataUrl(file)
+      existingPictures.push(url)
     });
   }
   return existingPictures
 }
 
 /**
- * On picture change, overwrites the array
- * @param {Ref<File[]>} newPictures - New pictures
+ * Routes to the product editing page for the given product
+ * @param {string} uuid - the product's uuid
+ * @async
  * @returns {void}
  */
-function onPictureChange(newPictures: Ref<File>[]){
-  pictures.value = newPictures
+async function editProduct(uuid: string): Promise<void>{
+  await $routerService?.routeTo(
+    ROUTES.ADD_PRODUCT,
+    {
+      id: uuid
+    }
+  )
 }
 
-/**
- * TODO cleanup, simplify
- * On submit, creates/updates existing product
- * @returns {void}
- */
-async function onSubmit(){
-  // Parameters for creating/updating
-  const base64Pictures: Array<string|ArrayBuffer|null> = []
-  for (const picture of pictures.value) {
-    if (picture.value) {
-      const base64String = await toBase64(picture.value)
-      base64Pictures.push(base64String)
-    }
-  }
-
-  const params = {
-    ...input,
-    value: Number.parseInt(input.value as string ?? ''), // Convert 'value' to int TODO can this be done on QInput directly?
-    minBet: Number.parseInt(input.minBet as string ?? ''),
-    maxBet: Number.parseInt(input.maxBet as string ?? ''),
-    directBuyLinkMaxClicks: Number.parseInt(input.directBuyLinkMaxClicks as string ?? ''),
-    directBuyLinkMaxCost: Number.parseInt(input.directBuyLinkMaxCost as string ?? ''),
-    brandLinkMaxClicks: Number.parseInt(input.brandLinkMaxClicks as string ?? ''),
-    brandLinkMaxCost: Number.parseInt(input.brandLinkMaxCost as string ?? ''),
-  }
-
-    let mutationResult
-
-    if(productId){
-      // Case 1: EDIT
-      mutationResult = await executeMutation(
-        UPDATE_PRODUCT,
-        {
-          updateProductInput: {
-            uuid: productId,
-            ...params,
-          },
-          pictures: compareArrays(base64Pictures, oldPictures.value) ? null : base64Pictures,
-        }
-      )
-    } else {
-      // Case 2: CREATE
-      mutationResult = await executeMutation(
-        CREATE_PRODUCT,
-        {
-          createProductInput: params,
-          pictures: base64Pictures
-        }
-      )
-    }
-
-    if(!mutationResult){
-      throw new Error('Product creation/update failed')
-    }
-
-  // Push to success page
-  await $routerService?.routeTo(ROUTES.MY_PRODUCTS)
-}
-
-/**
- * Compares two arrays containing pictures as b64 strings an returns if they are the same of not.
- * @param {Array<Promise<string>>} array1 First array
- * @param {Array<Promise<string>>} array2 Second array
- * @return {boolean} True if arrays are the same
- */
-function compareArrays(array1: Array<string|ArrayBuffer|null>, array2: Array<string|ArrayBuffer|null>): boolean {
-  if (array1.length === array2.length) {
-    for (let i=0; i<array1.length; i++) {
-      if (array1[i] !== array2[i]) {
-        return false
-      }
-    }
-    return true
-  }
-  return false
-}
 </script>
+<style>
+/* q-input readonly looks ugly without this */
+.q-field--outlined.q-field--readonly .q-field__control:before {
+  border-style: solid;
+}
+</style>

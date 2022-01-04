@@ -15,6 +15,7 @@
           :props="props"
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
+          @click="viewProduct(props.row.uuid)"
         >
           <q-td key="pictures" :props="props">
             <img
@@ -60,7 +61,7 @@
               flat
               round
               dense
-              @click="showOptions = !showOptions"
+              @click.stop="showOptions = !showOptions"
             >
               <div class="column">
                 <!-- Edit button (drafts only) -->
@@ -162,6 +163,21 @@ function isEditable(product: Record<string, unknown>): boolean{
   const isValid = status === PRODUCT_STATUS.VALID
   const hasNotStarted =  product.start !== null && (new Date(product.start as string) >= new Date())
   return isDraft || (isValid && hasNotStarted)
+}
+
+/**
+ * Routes to the product detail page to see all it's information
+ * @param {string} uuid - the product's uuid
+ * @async
+ * @returns {void}
+ */
+async function viewProduct(uuid: string): Promise<void>{
+  await $routerService?.routeTo(
+    ROUTES.PRODUCT_DETAIL,
+    {
+      id: uuid
+    }
+  )
 }
 
 /**
