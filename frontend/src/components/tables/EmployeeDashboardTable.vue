@@ -122,6 +122,7 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
+import {uploadFiles} from 'src/helpers/file-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -199,18 +200,21 @@ function showAllDocuments(entity: Record<string, unknown>) {
     title: 'UploadDocumentsDialog',
     component: UploadDocumentsDialog,
     componentProps: {
-      entity
+      entity,
+      uploadGenericFile: async (file: Record<string, unknown>) => {
+        await uploadFiles(file, `/uploadDossierFile?did=${entity.uuid as string}`, 'getMyDossiers')
+      }
     }
   })
 }
 
 /**
- * Show pdf of Offer
+ * Shows a dialog where the offer's files can be downloaded
  * @param {Offer} offer - an offer
  * @returns {void} - void
  */
 function showOfferDocuments(offer: Record<string, unknown>): void {
-  const files = offer.pdf ? [offer.pdf]: []
+  const files = offer.documents ?? []
   $q.dialog({
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,

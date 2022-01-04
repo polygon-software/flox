@@ -80,7 +80,7 @@ function onCancel(): void {
 }
 
 /**
- * fetches and opens a file
+ * Fetches and opens a file
  * @param {string} fileUuid - uuid of file
  * @returns {Promise<void>} - done
  */

@@ -258,7 +258,7 @@ export const MY_DOSSIERS = {
             name
             abbreviation
           }
-          pdf{
+          documents{
             uuid
             __typename
             key
@@ -381,7 +381,7 @@ export const DOSSIERS_BANK = {
         offers {
           uuid
           status
-          pdf {
+          documents {
             uuid
             __typename
             key

@@ -87,6 +87,10 @@ const props = defineProps({
   entity: {
     required: true,
     type: Object
+  },
+  uploadGenericFile: {
+    type: Function,
+    required: true
   }
 })
 
@@ -107,13 +111,11 @@ function hide(): void {
  * @returns {void}
  */
 async function upload(): Promise<void> {
-  const dossier = props.entity as Record<string, string>
   const reformatted:Record<string, File> = {}
   files.value.forEach((file)=>{
     reformatted[file.name] = file
   })
-  await uploadFiles(reformatted, `/uploadDossierFile?did=${dossier.uuid}`, 'getMyDossiers')
-
+  await props.uploadGenericFile(reformatted)
 }
 
 /**

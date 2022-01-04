@@ -127,7 +127,7 @@ export class DossierService {
       dossier,
       bank,
       status: createOfferInput.status,
-      pdf: null,
+      documents: [],
     });
     await this.offerRepository.save(newOffer);
     return this.dossierRepository.findOne(createOfferInput.dossier_uuid, {

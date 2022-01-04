@@ -402,14 +402,14 @@ type Offer {
   """Date of deletion"""
   deleted_at: DateTime
 
+  """The Offer as a PDF"""
+  documents: [PrivateFile!]
+
   """Dossier of Offer"""
   dossier: Dossier!
 
   """Last modification date"""
   last_modified_at: DateTime!
-
-  """The Offer as a PDF"""
-  pdf: PrivateFile
 
   """Status of Dossier"""
   status: OfferStatus!
@@ -443,6 +443,8 @@ type PrivateFile {
 
   """Last modification date"""
   last_modified_at: DateTime!
+
+  """Offer the file belongs to"""
   offer: Offer
 
   """File owner"""

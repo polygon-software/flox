@@ -61,7 +61,6 @@ export class Dossier extends Person {
   @ManyToOne(() => Employee, (employee) => employee.dossiers)
   employee: Employee;
 
-  // TODO ensure type to key
   @Field(() => [PrivateFile], {
     nullable: true,
     description: 'Documents of the company',

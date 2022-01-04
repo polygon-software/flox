@@ -2,13 +2,12 @@ import axios from 'axios';
 import {useApolloClient} from '@vue/apollo-composable';
 
 /**
- * upload a list of files to given enpoint
+ * Upload a list of files to given Endpoint
  * @param {Record<string, unknown>} files - dictionary file filenames vs file
  * @param {string} target - url to upload to
  * @param {string} queryname - Name of the query that got invalidated by request
  * @return {Promise<void>} - Done
  */
-// eslint-disable-next-line sonarjs/cognitive-complexity,require-jsdoc
 export async function uploadFiles(files: Record<string, unknown>, target: string, queryname: string) {
   const apolloClient = useApolloClient().resolveClient()
   let iter = 0
@@ -20,7 +19,7 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
       token = localStorage.getItem(res)
       break
     }
-    iter+=1
+    iter++;
   }
   if(!token){
     throw new Error('Authentication Failure')

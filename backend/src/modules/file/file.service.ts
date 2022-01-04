@@ -147,7 +147,7 @@ export class FileService {
   }
 
   /**
-   * Generate a presigned URL
+   * Generate a presigned URL and return it with the file object
    * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID
    * @param {PrivateFile} fileInfo - the file to download
    * @returns {Promise<PrivateFile>} - file
@@ -201,7 +201,7 @@ export class FileService {
    * @param {string} associationUuid - The Id of the entity to associate with
    * @param {string} repositoryName - The name of the repository where the entity can be found. Needs to be injected.
    * @param {Record<'onAssociation' | 'onFile', string>} location - Where the file and entity link to each other
-   * @param {string} ownerUuid - Cognito Id of owner. //Todo describe how to add on axios request
+   * @param {string} ownerUuid - Cognito Id of owner. Use file-helper.js to add necessary headers
    * @returns {unknown} - The updated entity
    */
   async uploadAssociatedFile(
@@ -221,7 +221,7 @@ export class FileService {
         relations: [location.onAssociation],
       },
     );
-    // Throw error if invalid offer or document upload not enabled
+    // Throw error if invalid associated Entity
     if (!associatedEntity) {
       throw new Error(ERRORS.no_valid_association);
     }
@@ -258,6 +258,12 @@ export class FileService {
     return associatedEntity;
   }
 
+  /**
+   * Allow access to files on a Dossier to related employees, companies, banks and admins
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID
+   * @param {User} dbUser - user requesting file
+   * @returns {Promise<PrivateFile>} - res with presigned url
+   */
   async getDossierDocument(
     getPrivateFileArgs: GetPrivateFileArgs,
     dbUser: User,
@@ -276,20 +282,27 @@ export class FileService {
     );
 
     if (
-      (dbUser.role === ROLE.BANK &&
+      (dbUser.role === ROLE.BANK && //Banks can access files of dossiers they have offer to
         file.dossier.offers.some((offer) => {
           return offer.bank.uuid === dbUser.fk;
         })) ||
-      (dbUser.role === ROLE.COMPANY &&
+      (dbUser.role === ROLE.COMPANY && // Companies can access files of dossiers that one of their employees created
         file.dossier.employee.company.uuid === dbUser.fk) ||
-      (dbUser.role === ROLE.EMPLOYEE &&
-        file.dossier.employee.uuid === dbUser.fk)
+      (dbUser.role === ROLE.EMPLOYEE && // Employees can access files of dossiers they created
+        file.dossier.employee.uuid === dbUser.fk) ||
+      dbUser.role === ROLE.SOI_ADMIN // Admins can do whatever
     ) {
       return this.preparePrivateFile(getPrivateFileArgs, file);
     }
     throw new NotFoundException();
   }
 
+  /**
+   * Allow access to files on a offer to related employees, companies, banks and admins
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID
+   * @param {User} dbUser - user requesting file
+   * @returns {Promise<PrivateFile>} - res with presigned url
+   */
   async getOffersFile(
     getPrivateFileArgs: GetPrivateFileArgs,
     dbUser: User,
@@ -312,7 +325,8 @@ export class FileService {
       (dbUser.role === ROLE.COMPANY &&
         file.offer.dossier.employee.company.uuid === dbUser.fk) ||
       (dbUser.role === ROLE.EMPLOYEE &&
-        file.offer.dossier.employee.uuid === dbUser.fk)
+        file.offer.dossier.employee.uuid === dbUser.fk) ||
+      dbUser.role === ROLE.SOI_ADMIN
     ) {
       return this.preparePrivateFile(getPrivateFileArgs, file);
     }

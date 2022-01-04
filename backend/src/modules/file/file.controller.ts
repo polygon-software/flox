@@ -133,6 +133,11 @@ export class FileController {
     res.send(newFile);
   }
 
+  /**
+   * Answer to preflight options request with headers that allow authorization headers in the post requests.
+   * @param {fastify.FastifyReply<any>} res - the res sent back
+   * @returns {Promise<any>} - done
+   */
   @Options(['/uploadOfferFile', '/uploadDossierFile']) //Todo Find better way to allow Preflight requests
   @Public()
   async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {
@@ -165,7 +170,7 @@ export class FileController {
       file,
       offerUuid,
       'offerRepository',
-      { onFile: 'offer', onAssociation: 'pdf' },
+      { onFile: 'offer', onAssociation: 'documents' },
       req['user'].userId,
     );
 
@@ -186,7 +191,7 @@ export class FileController {
       return;
     }
 
-    // Determine offer UUID from query param
+    // Determine dossier UUID from query param
     const dossierUuid: string = query.did;
     const file = await req.file();
     const updatedDossier = await this.fileService.uploadAssociatedFile(

@@ -209,7 +209,7 @@ function showAllDocuments(dossier: Record<string, unknown>) {
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,
     componentProps: {
-      files:dossier.documents,
+      files: dossier.documents,
       query: DOSSIER_FILE
     }
   })
@@ -224,8 +224,6 @@ function showAllDocuments(dossier: Record<string, unknown>) {
  */
 async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS) {
   switch(status){
-
-    // If accepted: prompt Bank to upload offer documents
     case OFFER_STATUS.ACCEPTED:
 
       $q.dialog({
