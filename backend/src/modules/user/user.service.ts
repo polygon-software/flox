@@ -11,6 +11,7 @@ import {
   disableCognitoAccount,
   enableCognitoAccount,
 } from '../../auth/authService';
+import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
 
 @Injectable()
 export class UserService {
@@ -88,6 +89,35 @@ export class UserService {
     // Disable on database
     await this.usersRepository.update(uuid, {
       status: USER_STATUS.DISABLED,
+    });
+
+    return this.usersRepository.findOne(uuid);
+  }
+
+  /**
+   * Temporarily disables a given user's account
+   * Does NOT disable user's Cognito account altogether!
+   * @param {TempDisableUserInput} tempDisableUserInput - input containing UUID & end date
+   * @returns {Promise<User>} - the user after editing
+   */
+  async temporarilyDisableUser(
+    tempDisableUserInput: TempDisableUserInput,
+  ): Promise<User> {
+    const uuid = tempDisableUserInput.uuid;
+    const user = await this.usersRepository.findOne(uuid);
+
+    // Error checks
+    if (!user) {
+      throw new Error(`Cannot find user for UUID ${uuid}`);
+    }
+    if (user.status !== USER_STATUS.ACTIVE) {
+      throw new Error(`User with UUID ${uuid} is not active`);
+    }
+
+    // Disable on database
+    await this.usersRepository.update(uuid, {
+      status: USER_STATUS.DISABLED,
+      disabledUntil: tempDisableUserInput.until,
     });
 
     return this.usersRepository.findOne(uuid);

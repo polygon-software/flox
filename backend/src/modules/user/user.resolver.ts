@@ -11,6 +11,7 @@ import {
   AnyRole,
   CurrentUser,
 } from '../../auth/authorization.decorator';
+import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -54,6 +55,19 @@ export class UserResolver {
   @Mutation(() => User)
   async disableUser(@Args('uuid') uuid: string): Promise<User> {
     return this.usersService.disableUser(uuid);
+  }
+
+  /**
+   * Disables a given user's account
+   * @param {TempDisableUserInput} tempDisableUserInput - disable input, containing UUID and end date
+   * @returns {Promise<User>} - the user after editing
+   */
+  @AdminOnly()
+  @Mutation(() => User)
+  async temporarilyDisableUser(
+    @Args('tempDisableUserInput') tempDisableUserInput: TempDisableUserInput,
+  ): Promise<User> {
+    return this.usersService.temporarilyDisableUser(tempDisableUserInput);
   }
 
   @Public()

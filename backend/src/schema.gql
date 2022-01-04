@@ -146,6 +146,7 @@ type Mutation {
   remove(deleteUserInput: DeleteUserInput!): User!
   removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
+  temporarilyDisableUser(tempDisableUserInput: TempDisableUserInput!): User!
   update(updateUserInput: UpdateUserInput!): User!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   updateProduct(pictures: [String!] = null, updateProductInput: UpdateProductInput!): Product!
@@ -298,6 +299,11 @@ type Subscription {
   commentAdded: Comment!
 }
 
+input TempDisableUserInput {
+  until: DateTime!
+  uuid: ID!
+}
+
 input UpdateCommentInput {
   content: String!
   product: product
@@ -355,6 +361,9 @@ type User {
 
   """Date of deletion"""
   deletedAt: DateTime
+
+  """Date until which the users account is disabled (if any)"""
+  disabledUntil: DateTime
 
   """E-mail"""
   email: String!
@@ -533,6 +542,9 @@ input user {
 
   """Date of deletion"""
   deletedAt: DateTime
+
+  """Date until which the users account is disabled (if any)"""
+  disabledUntil: DateTime
 
   """E-mail"""
   email: String!
