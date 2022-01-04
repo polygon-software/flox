@@ -49,6 +49,7 @@ export const ENABLE_USER = {
             enableUser(uuid: $uuid ) {
               uuid
               status
+              disabledUntil
               __typename
             }
         }`,
@@ -63,6 +64,7 @@ export const DISABLE_USER = {
             disableUser(uuid: $uuid ) {
               uuid
               status
+              disabledUntil
               __typename
             }
         }`,
