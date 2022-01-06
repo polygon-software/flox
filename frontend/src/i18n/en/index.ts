@@ -218,5 +218,15 @@ export default {
     reject_application: 'Reject',
     permanent: 'Permanent',
     temporary: 'Temporary, until:',
+  },
+  finances: {
+    general: 'General',
+    overview: 'Overview',
+    all_time: 'All time',
+    year: 'Year',
+    quarter: 'Quarter',
+    month: 'Month',
+    week: 'Week',
+    day: 'Day',
   }
 }

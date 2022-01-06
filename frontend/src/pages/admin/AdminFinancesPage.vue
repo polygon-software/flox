@@ -36,31 +36,46 @@
           </q-tabs>
         </div>
 
-        <q-separator/>
-
         <q-table
           :rows="rows"
           :columns="columns"
-          row-key="uuid"
+          row-key="key"
           :rows-per-page-options="[10,20, 100]"
           flat
           bordered
+          style="margin-top: 24px"
         >
+          <template #body="_props">
+
           <q-tr
             :props="_props"
             class="q-ma-none q-pa-none"
             style="cursor: pointer"
           >
             <q-td key="label" :props="_props">
-              {{_props.row.label}}
+              <p>
+                {{_props.row.label}}:
+              </p>
             </q-td>
             <q-td key="value" :props="_props">
-              {{_props.row.value}}
+              <div class="row">
+                <p>
+                  {{_props.row.value.toLocaleString()}}$
+                </p>
+                <p class="text-grey-5" style="padding-left: 6px">
+                  ({{_props.row.change > 0 ? '+' + _props.row.change.toLocaleString(): _props.row.change.toLocaleString()}}$)
+                </p>
+              </div>
             </q-td>
             <q-td key="change" :props="_props">
-              {{_props.row.change}}
+              <q-icon
+                :name="getChangeIcon(_props.row.value, _props.row.change).icon"
+                :color="getChangeIcon(_props.row.value, _props.row.change).color"
+                size="32px"
+              />
             </q-td>
           </q-tr>
+          </template>
 
         </q-table>
       </q-card>
@@ -88,21 +103,24 @@ const selectedTimeframe = ref('year')
 const columns = [
   { name: 'label', label: 'Kennzahl', field: 'label', sortable: true, align: 'center' },
   { name: 'value', label: 'Wert', field: 'value', sortable: true, align: 'center' },
-  { name: 'change', label: 'Change', field: 'change', sortable: true, align: 'center' },
+  { name: 'change', label: 'Trend', field: 'change', sortable: false, align: 'center' },
 ]
 
 const rows = [
   {
+    key: 'total_earnings',
     label: 'Gesamteinnahmen',
     value: 2000000,
-    change: 30000
+    change: 50000
   },
   {
+    key: 'total_credit',
     label: 'Guthabenvolumen',
     value: 500000,
     change: 2100
   },
   {
+    key: 'new_credit',
     label: 'Neue Einzahlungen',
     value: 2300,
     change: -200
@@ -110,11 +128,45 @@ const rows = [
 ]
 
 const tabs = [
-  'since_beginning',
+  'all_time',
   'year',
   'quarter',
   'month',
   'week',
   'day'
 ]
+
+/**
+ * Gets color & icon for a value change
+ * @param {number} value - new value
+ * @param {number} change - value change since last time epoch
+ * @returns {Record<string, string>} - containing icon and color
+ */
+function getChangeIcon(value: number, change: number): Record<string, string>{
+
+  // Threshold: if change is <2%, show flat trend
+  const isSignificantChange = Math.abs(change) > Math.abs(value * 0.02)
+
+  // Neutral
+  if(!isSignificantChange){
+    return {
+      icon: 'trending_flat',
+      color: 'gray',
+    }
+  }
+
+  // Positive
+  if(change > 0){
+    return {
+      icon: 'trending_up',
+      color: 'positive'
+    }
+  }
+
+  // Negative
+  return {
+    icon: 'trending_down',
+    color: 'negative'
+  }
+}
 </script>

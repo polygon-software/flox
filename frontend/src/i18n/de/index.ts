@@ -222,7 +222,7 @@ export default {
   finances: {
     general: 'Allgemein',
     overview: 'Übersicht',
-    since_beginning: 'Seit Anfang',
+    all_time: 'Seit Anfang',
     year: 'Jahr',
     quarter: 'Quartal',
     month: 'Monat',
