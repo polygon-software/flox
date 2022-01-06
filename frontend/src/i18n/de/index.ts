@@ -219,4 +219,14 @@ export default {
     permanent: 'Permanent',
     temporary: 'Temporär, bis:',
   },
+  finances: {
+    general: 'Allgemein',
+    overview: 'Übersicht',
+    since_beginning: 'Seit Anfang',
+    year: 'Jahr',
+    quarter: 'Quartal',
+    month: 'Monat',
+    week: 'Woche',
+    day: 'Tag',
+  }
 }
