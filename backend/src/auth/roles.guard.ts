@@ -32,6 +32,7 @@ export class RolesGuard implements CanActivate {
    * @param {ExecutionContext} context - context
    * @returns {boolean | Promise<boolean>} - can activate
    */
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.isPublic(context);
     if (isPublic) {
@@ -60,12 +61,12 @@ export class RolesGuard implements CanActivate {
       }
     }
 
+    // For publicly accessible resources, allow access by default if user is logged in
     const anyRole = this.isAnyRole(context, roles, dbUser);
     if (anyRole) {
       return true;
     }
 
-    // For publicly accessible resources, allow access by default
     if (accessOverride && !roles) {
       console.warn(
         `Debug override used to access private resource: "${requestedFunction}"!`,
