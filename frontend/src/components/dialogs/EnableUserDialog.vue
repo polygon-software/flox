@@ -148,7 +148,7 @@ function onOk(): void{
 }
 
 /**
- * Executed upon rejecting a company application
+ * Executed upon rejecting a user application
  * @returns {void}
  */
 function onReject(): void {

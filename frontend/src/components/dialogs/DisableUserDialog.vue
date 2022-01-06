@@ -132,23 +132,6 @@ function onOk(): void{
   hide()
 }
 
-/**
- * Executed upon rejecting a company application
- * @returns {void}
- */
-function onReject(): void {
-  // TODO actually reject application
-  hide()
-
-  // Show reject confirmation prompt
-  showNotification(
-    $q,
-    i18n.global.t('messages.account_rejected'),
-    undefined,
-    'negative'
-  )
-}
-
 // eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()

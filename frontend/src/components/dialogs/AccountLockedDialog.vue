@@ -54,7 +54,7 @@ function hide(): void{
   dialog.value?.hide()
 }
 
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   untilDate: {
     type: Date,

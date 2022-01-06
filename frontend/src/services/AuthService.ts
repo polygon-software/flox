@@ -19,7 +19,6 @@ import AccountLockedDialog from 'components/dialogs/AccountLockedDialog.vue';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/USER';
 import {USER_STATUS} from '../../../shared/definitions/ENUM';
-import {sleep} from 'src/helpers/general-helpers';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
