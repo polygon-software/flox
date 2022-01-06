@@ -76,6 +76,8 @@ export class UserService {
     if (!user) {
       throw new Error(`Cannot find user for UUID ${uuid}`);
     }
+
+    // NOTE: if, in the future, it's possible to extend bans, this check must be removed
     if (user.status !== USER_STATUS.ACTIVE) {
       throw new Error(`User with UUID ${uuid} is not active`);
     }

@@ -1,45 +1,39 @@
+import { date } from 'quasar'
+
 /**
  * This file contains helper functions for formatting content in a user-friendly way
  */
 
 /**
- * Formats a date to a string in 01.12.2020 format
- * @param {Date|string} date - the date or date string to format
+ * Formats a date to a string in 01.12.2020 format. Internally, uses Quasar's date formatters
+ * @param {Date|string} inputDate - the date or date string to format
  * @returns {string} - the formatted date
  */
-export function formatDate(date: Date|string): string{
+export function formatDate(inputDate: Date|string): string{
   let actualDate
 
-  if(typeof date === 'string'){
-    actualDate = new Date(date)
+  if(typeof inputDate === 'string'){
+    actualDate = new Date(inputDate)
   } else{
-    actualDate = date
+    actualDate = inputDate
   }
 
-  return `${actualDate.getDate()}.${actualDate.getMonth()+1}.${actualDate.getFullYear()}`
+  return date.formatDate(actualDate, 'DD.MM.YYYY')
 }
 
 /**
  * Formats a date to a string in 01.12.2020, 14:23 format
- * @param {Date|string} date - the date or date string to format
+ * @param {Date|string} inputDate - the date or date string to format
  * @returns {string} - the formatted date
  */
-export function formatDateTime(date: Date|string): string{
+export function formatDateTime(inputDate: Date|string): string{
   let actualDate
 
-  if(typeof date === 'string'){
-    actualDate = new Date(date)
+  if(typeof inputDate === 'string'){
+    actualDate = new Date(inputDate)
   } else{
-    actualDate = date
+    actualDate = inputDate
   }
 
-  // Date string
-  const dateString = `${actualDate.getDate()}.${actualDate.getMonth()+1}.${actualDate.getFullYear()}`
-
-  // Time string
-  const hour = actualDate.getHours()
-  const minute = actualDate.getMinutes()
-  const timeString = `${hour >= 10 ? '' : '0'}${hour}:${minute >= 10 ? '' : '0'}${minute}`
-
-  return `${dateString}, ${timeString}`
+  return date.formatDate(actualDate, 'DD.MM.YYYY hh:mm')
 }
