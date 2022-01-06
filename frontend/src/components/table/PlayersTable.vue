@@ -89,7 +89,7 @@
 <script setup lang="ts">
 import {computed, defineProps, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {formatDate} from 'src/helpers/format-helpers';
+import {formatDate, formatDateTime} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
 import {ALL_PLAYERS} from 'src/data/queries/USER';
@@ -155,7 +155,7 @@ function getStatusChip(user: User): Record<string,unknown>|null {
       // Disabled (temp or permanent)
       return {
         label: user.disabledUntil ?
-          i18n.global.t('user_status.disabled_temp', {until: formatDate(user.disabledUntil)}):
+          i18n.global.t('user_status.disabled_temp', {until: formatDateTime(user.disabledUntil)}):
           i18n.global.t('user_status.disabled'),
         color: 'negative'
       }

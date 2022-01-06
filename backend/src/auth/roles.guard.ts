@@ -6,7 +6,7 @@ import { getRequest } from '../helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { ROLE } from '../ENUM/ENUM';
+import { ROLE, USER_STATUS } from '../ENUM/ENUM';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -52,6 +52,11 @@ export class RolesGuard implements CanActivate {
       // Admin has access to everything
       if (dbUser && dbUser.role === ROLE.ADMIN) {
         return true;
+      }
+
+      // Non-enabled users have no permissions
+      if (dbUser && dbUser.status !== USER_STATUS.ACTIVE) {
+        return false;
       }
     }
 

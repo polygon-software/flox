@@ -219,4 +219,4 @@ export default {
     permanent: 'Permanent',
     temporary: 'Temporary, until:',
   }
-};
+}
