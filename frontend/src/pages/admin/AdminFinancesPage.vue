@@ -8,13 +8,13 @@
       class="column full-height items-start q-pa-md full-width"
       style="padding-right: 32px"
     >
-      <!-- Time frame overview -->
+      <!-- Time frame key figures -->
       <q-card
         class="q-ma-md"
         flat
         style="width: 100%; border-radius: 20px; border: 1px solid black"
       >
-        <h6 class="q-ma-md">{{ $t('finances.overview') }}</h6>
+        <h6 class="q-ma-md">{{ $t('finances.key_figures') }}</h6>
 
         <!-- Time frame picker -->
         <div class="row">
@@ -31,6 +31,7 @@
               :key="tab"
               :name="tab"
               :label="$t(`finances.${tab}`)"
+              @click="updateKeyFigures"
             >
             </q-tab>
           </q-tabs>
@@ -43,6 +44,7 @@
           :rows-per-page-options="[10,20, 100]"
           flat
           bordered
+          class="q-ma-lg"
           style="margin-top: 24px"
         >
           <template #body="_props">
@@ -63,7 +65,7 @@
                   {{_props.row.value.toLocaleString()}}$
                 </p>
                 <p class="text-grey-5" style="padding-left: 6px">
-                  ({{_props.row.change > 0 ? '+' + _props.row.change.toLocaleString(): _props.row.change.toLocaleString()}}$)
+                  ({{_props.row.change > 0 ? '+' + _props.row.change.toLocaleString(): _props.row.change.toLocaleString()}})
                 </p>
               </div>
             </q-td>
@@ -101,11 +103,12 @@ import {ref} from 'vue';
 const selectedTimeframe = ref('year')
 
 const columns = [
-  { name: 'label', label: 'Kennzahl', field: 'label', sortable: true, align: 'center' },
-  { name: 'value', label: 'Wert', field: 'value', sortable: true, align: 'center' },
-  { name: 'change', label: 'Trend', field: 'change', sortable: false, align: 'center' },
+  { name: 'label', label: 'Kennzahl', field: 'label', sortable: true, align: 'start' },
+  { name: 'value', label: 'Wert', field: 'value', sortable: true, align: 'start' },
+  { name: 'change', label: 'Trend', field: 'change', sortable: false, align: 'start' },
 ]
 
+// TODO replace this placeholder data
 const rows = [
   {
     key: 'total_earnings',
@@ -124,6 +127,12 @@ const rows = [
     label: 'Neue Einzahlungen',
     value: 2300,
     change: -200
+  },
+  {
+    key: 'refunds',
+    label: 'Rückzahlungen',
+    value: 200,
+    change: 100
   },
 ]
 
@@ -151,7 +160,7 @@ function getChangeIcon(value: number, change: number): Record<string, string>{
   if(!isSignificantChange){
     return {
       icon: 'trending_flat',
-      color: 'gray',
+      color: 'grey-6',
     }
   }
 
@@ -169,4 +178,14 @@ function getChangeIcon(value: number, change: number): Record<string, string>{
     color: 'negative'
   }
 }
+
+/**
+ * Updates the key figures on timeframe change
+ * @returns {void}
+ */
+function updateKeyFigures(){
+  console.log('Update!')
+  // TODO actual implementation
+}
+
 </script>

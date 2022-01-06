@@ -222,6 +222,7 @@ export default {
   finances: {
     general: 'Allgemein',
     overview: 'Übersicht',
+    key_figures: 'Kennzahlen',
     all_time: 'Seit Anfang',
     year: 'Jahr',
     quarter: 'Quartal',

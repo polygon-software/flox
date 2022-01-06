@@ -222,6 +222,7 @@ export default {
   finances: {
     general: 'General',
     overview: 'Overview',
+    key_figures: 'Key Figures',
     all_time: 'All time',
     year: 'Year',
     quarter: 'Quarter',
