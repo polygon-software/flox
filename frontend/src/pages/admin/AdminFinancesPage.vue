@@ -14,7 +14,20 @@
         flat
         style="width: 100%; border-radius: 20px; border: 1px solid black"
       >
-        <h6 class="q-ma-md">{{ $t('finances.key_figures') }}</h6>
+        <div class="row justify-between">
+          <h6 class="q-ma-md">{{ $t('finances.key_figures') }}</h6>
+          <q-btn
+            icon="link"
+            :label="$t('finances.to_dashboard')"
+            color="primary"
+            rounded
+            unelevated
+            size="md"
+            style="height: 30px"
+            class="q-ma-md"
+            @click="openURL(paymentProcessorUrl)"
+          />
+        </div>
 
         <!-- Time frame picker -->
         <div class="row">
@@ -100,8 +113,12 @@
 
 <script setup lang="ts">
 import {ref} from 'vue';
+import {openURL} from 'quasar';
 
 const selectedTimeframe = ref('year')
+
+// URL to external payment processor page TODO update once chosen
+const paymentProcessorUrl = 'https://www.polygon-software.ch'
 
 const columns = [
   { name: 'label', label: 'Kennzahl', field: 'label', sortable: true, align: 'start' },

@@ -229,5 +229,6 @@ export default {
     month: 'Month',
     week: 'Week',
     day: 'Day',
+    to_dashboard: 'To Dashboard',
   }
 }
