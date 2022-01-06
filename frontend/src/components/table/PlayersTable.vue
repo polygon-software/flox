@@ -58,7 +58,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => disableUser(_props.row)"
+                  @click="() => disableUser(_props.row, $q)"
                 />
 
                 <!-- 'Enable'/'Re-enable' button for inactive accounts -->
@@ -74,7 +74,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => enableUser(_props.row)"
+                  @click="() => enableUser(_props.row, $q)"
                 />
 
               </div>
@@ -88,20 +88,16 @@
 
 <script setup lang="ts">
 import {computed, defineProps, Ref} from 'vue';
-import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
 import {ALL_PLAYERS} from 'src/data/queries/USER';
-import {useQuasar} from 'quasar';
-import EnableUserDialog from 'components/dialogs/EnableUserDialog.vue';
-import DisableUserDialog from 'components/dialogs/DisableUserDialog.vue';
-import {showNotification} from 'src/helpers/notification-helpers';
-import {DISABLE_USER, ENABLE_USER, TEMP_DISABLE_USER} from 'src/data/mutations/USER';
+import {enableUser, disableUser} from 'src/helpers/admin-helpers';
 import {User} from 'src/data/types/User';
+import {useQuasar} from 'quasar';
 
 const $q = useQuasar()
-
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -133,95 +129,6 @@ const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<Array<Record<string, un
 const computedResult = computed(() => {
   return queryResult.value ?? []
 })
-
-/**
- * Disables a given user's account
- * @param {Record<string, unknown>} user - the user to disable
- * @returns {Promise<void>} - if the user was disabled
- */
-function disableUser(user: Record<string, unknown>): void{
-  // Show dialog for choosing disable type (permanent or temporary)
-  $q.dialog({
-    component: DisableUserDialog,
-    componentProps: {
-      user: user
-    }
-  }).onOk((until: Date|null) => {
-    // Depending on whether an 'until' date is given, disable temporarily or permanently
-    const mutation = until? TEMP_DISABLE_USER : DISABLE_USER
-
-    console.log('do mutation', mutation)
-    const variables: Record<string, unknown> = {
-        uuid: user.uuid
-      }
-
-    // Add end date if given
-    if(until){
-      variables.until = until
-    }
-
-    // Disable account on backend
-    executeMutation(
-      mutation,
-      variables
-    ).then(() => {
-      // Show confirmation prompt
-      showNotification(
-        $q,
-        i18n.global.t('messages.account_disabled'),
-        undefined,
-        'negative'
-      )
-    }).catch(() => {
-      // Show error prompt
-      showNotification(
-        $q,
-        i18n.global.t('errors.error_while_disabling'),
-        undefined,
-        'negative'
-      )
-    })
-  })
-}
-
-/**
- * Opens a dialog for enabling a user's account
- * @param {Record<string, unknown>} user - the user to enable
- * @returns {Promise<void>} - if the user was enabled
- */
-function enableUser(user: Record<string, unknown>): void{
-  // Show info dialog for enabling account
-  $q.dialog({
-    component: EnableUserDialog,
-    componentProps: {
-      user: user
-    }
-  }).onOk(() => {
-    // Enable account on backend
-    executeMutation(
-      ENABLE_USER,
-      {
-        uuid: user.uuid
-      }
-    ).then(() => {
-      // Show confirmation prompt
-      showNotification(
-        $q,
-        i18n.global.t('messages.account_enabled'),
-        undefined,
-        'positive'
-      )
-    }).catch(() => {
-      // Show error prompt
-      showNotification(
-        $q,
-        i18n.global.t('errors.error_while_enabling'),
-        undefined,
-        'negative'
-      )
-    })
-  })
-}
 
 /**
  * Gets the color & label for the status chip of a user
