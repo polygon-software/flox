@@ -17,7 +17,7 @@
         <p class="text-grey-8">
           {{
             untilDate ?
-          $t('errors.account_locked_until', { date: formatDate(untilDate) })
+          $t('errors.account_locked_until', { date: formatDateTime(untilDate) })
           :
           $t('errors.account_locked_permanently')
           }}
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { defineProps, ref, Ref} from 'vue';
 import {QDialog} from 'quasar'
-import {formatDate} from 'src/helpers/format-helpers';
+import {formatDateTime} from 'src/helpers/format-helpers';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
