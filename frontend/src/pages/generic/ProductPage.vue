@@ -12,6 +12,7 @@
 import {defineProps} from 'vue';
 import ProductCardDetail from 'components/dialogs/ProductCardDetailDialog.vue';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   product: {
     required: true,

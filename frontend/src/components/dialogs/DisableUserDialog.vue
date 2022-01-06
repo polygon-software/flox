@@ -84,9 +84,8 @@
 import {defineProps, defineEmits, ref, Ref, PropType} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import {User} from 'src/data/types/User';
-import {showNotification} from 'src/helpers/notification-helpers';
-import {i18n} from 'boot/i18n';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const $q: QVueGlobals = useQuasar()
 const emit = defineEmits(['ok'])
 

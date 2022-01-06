@@ -83,6 +83,7 @@ import { i18n } from 'boot/i18n';
 import MessagePreview from 'components/notifications/MessagePreview.vue';
 import MessageDetail from 'components/notifications/MessageDetail.vue';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   dbRef: {
     required: true,
