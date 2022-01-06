@@ -62,7 +62,7 @@
             <q-td key="value" :props="_props">
               <div class="row">
                 <p>
-                  {{_props.row.value.toLocaleString()}}$
+                  {{_props.row.value.toLocaleString()}} CHF
                 </p>
                 <p class="text-grey-5" style="padding-left: 6px">
                   ({{_props.row.change > 0 ? '+' + _props.row.change.toLocaleString(): _props.row.change.toLocaleString()}})
@@ -90,6 +90,7 @@
       >
         <h6 class="q-ma-md">{{ $t('finances.general') }}</h6>
 
+        <p>TODO: more financial content, depending on payment provider / available data.</p>
       </q-card>
 
     </div>
