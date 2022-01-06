@@ -9,21 +9,21 @@
       flat
       bordered
     >
-      <template #body="props">
+      <template #body="_props">
         <q-tr
-          v-if="statusFilter ? props.row.status === statusFilter : true"
-          :props="props"
+          v-if="statusFilter ? _props.row.status === statusFilter : true"
+          :props="_props"
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
-          @click="viewProduct(props.row.uuid)"
+          @click="viewProduct(_props.row.uuid)"
         >
-          <q-td key="pictures" :props="props">
+          <q-td key="pictures" :props="_props">
             <img
-              v-if="props.row.pictures && props.row.pictures[0] && props.row.pictures[0].url"
+              v-if="_props.row.pictures && _props.row.pictures[0] && _props.row.pictures[0].url"
               class="bg-grey-3"
-              :src="props.row.pictures[0].url"
+              :src="_props.row.pictures[0].url"
               style="min-width: 140px; max-width: 140px; min-height: 90px; max-height: 90px; border-radius: 4px; object-fit: cover"
-              :alt="props.row.title"
+              :alt="_props.row.title"
             >
             <div
               v-else
@@ -32,28 +32,28 @@
 
             </div>
           </q-td>
-          <q-td key="title" :props="props">
-            {{ props.row.title ?? '-' }}
+          <q-td key="title" :props="_props">
+            {{ _props.row.title ?? '-' }}
           </q-td>
-          <q-td key="brand" :props="props">
-            {{ props.row.brand ?? '-' }}
+          <q-td key="brand" :props="_props">
+            {{ _props.row.brand ?? '-' }}
           </q-td>
-          <q-td key="status" :props="props">
+          <q-td key="status" :props="_props">
             <q-chip
-              :label=getStatusChip(props.row).label
-              :color="getStatusChip(props.row).color"
+              :label=getStatusChip(_props.row).label
+              :color="getStatusChip(_props.row).color"
               text-color="white"
               style="font-weight: bold"
             />
           </q-td>
-          <q-td key="sponsored" :props="props">
+          <q-td key="sponsored" :props="_props">
             <!-- TODO i18n -->
-            {{ props.row.sponsored ? 'Sponsored' : 'Normal' }}
+            {{ _props.row.sponsored ? 'Sponsored' : 'Normal' }}
           </q-td>
-          <q-td key="start" :props="props">
-            {{ props.row.start ? formatDate(new Date(props.row.start)) : '-' }}
+          <q-td key="start" :props="_props">
+            {{ _props.row.start ? formatDate(new Date(_props.row.start)) : '-' }}
           </q-td>
-          <q-td key="options" :props="props">
+          <q-td key="options" :props="_props">
             <q-btn-dropdown
               dropdown-icon="more_vert"
               auto-close
@@ -66,13 +66,13 @@
               <div class="column">
                 <!-- Edit button (drafts only) -->
                 <q-btn
-                  v-if="isEditable(props.row)"
+                  v-if="isEditable(_props.row)"
                   :label="$t('general.edit')"
                   icon="edit"
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => editProduct(props.row.uuid)"
+                  @click="() => editProduct(_props.row.uuid)"
                 />
 
                 <!-- View button (non-drafts) -->
@@ -83,7 +83,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => viewProduct(props.row.uuid)"
+                  @click="() => viewProduct(_props.row.uuid)"
                 />
 
                 <q-btn
@@ -92,7 +92,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => duplicateProduct(props.row.uuid)"
+                  @click="() => duplicateProduct(_props.row.uuid)"
                 />
               </div>
             </q-btn-dropdown>
@@ -120,6 +120,7 @@ import {ErrorService} from 'src/services/ErrorService';
 const $errorService: ErrorService|undefined = inject('$errorService')
 const $routerService: RouterService|undefined = inject('$routerService')
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
   search: {
     required: true,

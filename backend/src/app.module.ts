@@ -14,6 +14,7 @@ import * as Joi from 'joi';
 import { FileModule } from './modules/file/file.module';
 import { RolesGuard } from './auth/roles.guard';
 import { CommentModule } from './modules/comment/comment.module';
+import { User } from './modules/user/entities/user.entity';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { CommentModule } from './modules/comment/comment.module';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([User]),
     UserModule,
     ProductModule,
     FileModule,

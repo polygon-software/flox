@@ -11,14 +11,17 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
  *
  */
 
+// TODO address?
 export const CREATE_USER = {
     mutation: gql`
         mutation createUser($createUserInput: CreateUserInput!){
             create (createUserInput: $createUserInput) {
               uuid
+              username
               fullName
               email
               phone
+              birthdate
               __typename
             }
         }`,
@@ -38,6 +41,51 @@ export const UPDATE_USER = {
     tables: ['user'],
     type: MutationTypes.UPDATE,
     cacheLocation: 'update'
+}
+
+export const ENABLE_USER = {
+    mutation: gql`
+        mutation enableUser($uuid: String!){
+            enableUser(uuid: $uuid ) {
+              uuid
+              status
+              disabledUntil
+              __typename
+            }
+        }`,
+    tables: ['user'],
+    type: MutationTypes.UPDATE,
+    cacheLocation: undefined
+}
+
+export const DISABLE_USER = {
+    mutation: gql`
+        mutation disableUser($uuid: String!){
+            disableUser(uuid: $uuid ) {
+              uuid
+              status
+              disabledUntil
+              __typename
+            }
+        }`,
+    tables: ['user'],
+    type: MutationTypes.UPDATE,
+    cacheLocation: undefined
+}
+
+export const TEMP_DISABLE_USER = {
+    mutation: gql`
+        mutation temporarilyDisableUser($uuid: ID!, $until: DateTime!){
+            temporarilyDisableUser(tempDisableUserInput: {uuid: $uuid, until: $until }) {
+              uuid
+              status
+              disabledUntil
+              __typename
+            }
+        }`,
+    tables: ['user'],
+    type: MutationTypes.UPDATE,
+    cacheLocation: undefined
 }
 
 export const DELETE_USER = {

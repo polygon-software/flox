@@ -5,25 +5,17 @@ import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
-import { GetUsersArgs } from './dto/args/get-users.args';
 import { Public } from '../../auth/authentication.decorator';
-import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
+import {
+  AdminOnly,
+  AnyRole,
+  CurrentUser,
+} from '../../auth/authorization.decorator';
+import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
-
-  @Public()
-  @Query(() => [User], { name: 'users' })
-  async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
-    return this.usersService.getUsers(getUsersArgs);
-  }
-
-  @Public()
-  @Query(() => [User], { name: 'allUsers' })
-  async getAllUsers(): Promise<User[]> {
-    return this.usersService.getAllUsers();
-  }
 
   @Public()
   @Query(() => [User], { name: 'allPlayers' })
@@ -41,6 +33,41 @@ export class UserResolver {
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return this.usersService.getUser(getUserArgs);
+  }
+
+  /**
+   * Enables a given user's account
+   * @param {string} uuid - user's database & cognito UUID
+   * @returns {Promise<User>} - the user after editing
+   */
+  @AdminOnly()
+  @Mutation(() => User)
+  async enableUser(@Args('uuid') uuid: string): Promise<User> {
+    return this.usersService.enableUser(uuid);
+  }
+
+  /**
+   * Disables a given user's account
+   * @param {string} uuid - user's database & cognito UUID
+   * @returns {Promise<User>} - the user after editing
+   */
+  @AdminOnly()
+  @Mutation(() => User)
+  async disableUser(@Args('uuid') uuid: string): Promise<User> {
+    return this.usersService.disableUser(uuid);
+  }
+
+  /**
+   * Temporarily disables a given user's account
+   * @param {TempDisableUserInput} tempDisableUserInput - disable input, containing UUID and end date
+   * @returns {Promise<User>} - the user after editing
+   */
+  @AdminOnly()
+  @Mutation(() => User)
+  async temporarilyDisableUser(
+    @Args('tempDisableUserInput') tempDisableUserInput: TempDisableUserInput,
+  ): Promise<User> {
+    return this.usersService.temporarilyDisableUser(tempDisableUserInput);
   }
 
   @Public()
@@ -76,7 +103,7 @@ export class UserResolver {
   @AnyRole()
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
-    // Get company where user's UUID matches cognitoID
+    // Get user where user's UUID matches cognitoID
     const myUser = await this.usersService.getUser({
       uuid: user.userId,
     } as GetUserArgs);

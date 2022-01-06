@@ -50,14 +50,31 @@
               @click="showOptions = !showOptions"
             >
               <div class="column">
-                <!-- Disable button -->
+                <!-- 'Disable' button for active accounts -->
                 <q-btn
+                  v-if="_props.row.status === USER_STATUS.ACTIVE"
                   :label="$t('admin.disable_account')"
                   icon="block"
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => disableUser(_props.row)"
+                  @click="() => disableUser(_props.row, $q)"
+                />
+
+                <!-- 'Enable'/'Re-enable' button for inactive accounts -->
+                <q-btn
+                  v-else
+                  :label="$t(
+                    _props.row.status === USER_STATUS.DISABLED ?
+                    'admin.re_enable_account'
+                    :
+                    'admin.enable_account'
+                    )"
+                  icon="lock_open"
+                  class="text-black"
+                  flat
+                  no-caps
+                  @click="() => enableUser(_props.row, $q)"
                 />
               </div>
             </q-btn-dropdown>
@@ -75,6 +92,10 @@ import {formatDate} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
 import {ALL_PARTNERS} from 'src/data/queries/USER';
+import {enableUser, disableUser} from 'src/helpers/admin-helpers';
+import {useQuasar} from 'quasar';
+
+const $q = useQuasar()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -106,22 +127,6 @@ const queryResult = subscribeToQuery(ALL_PARTNERS) as Ref<Array<Record<string, u
 const computedResult = computed(() => {
   return queryResult.value ?? []
 })
-
-/**
- * TODO docs
- * @param {Record<string, unknown>} user - the user to disable
- * @returns {Promise<void>} - if the user was disabled
- */
-function disableUser(user: Record<string, unknown>): void{
-  console.log('Disable user', user)
-  // TODO actual functionality
-  // await $routerService?.routeTo(
-  //   ROUTES.ADD_PRODUCT,
-  //   {
-  //     id: uuid
-  //   }
-  // )
-}
 
 /**
  * Gets the color & label for the status chip of a user

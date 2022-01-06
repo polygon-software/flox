@@ -298,16 +298,16 @@
 import {inject, reactive, ref, Ref, watch} from 'vue';
 import {useRoute} from 'vue-router';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {PRODUCT} from 'src/data/queries/QUERIES';
 import {sleep} from 'src/helpers/general-helpers';
 import axios, {AxiosResponse} from 'axios';
 import {RouterService} from 'src/services/RouterService';
 import {toDataUrl} from 'src/helpers/image-helper';
-import {i18n} from 'src/boot/i18n';
+import {i18n} from 'boot/i18n';
 import {toPascalCase} from 'src/helpers/string-helpers';
-import {PRODUCT_STATUS} from '../../../shared/definitions/ENUM'
+import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM'
 import ROUTES from 'src/router/routes';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {PRODUCT} from 'src/data/queries/PRODUCT';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()

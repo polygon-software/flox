@@ -106,6 +106,12 @@ const menuItems = [
     route: ROUTES.ADMIN_FINANCES,
     icon: 'paid'
   },
+  {
+    name: 'announcements',
+    label: i18n.global.t('dashboards.announcements'),
+    route: ROUTES.ANNOUNCEMENTS,
+    icon: 'campaign'
+  },
 ]
 
 /**

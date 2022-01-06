@@ -32,8 +32,8 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   'PRODUCT_DETAIL': {
     path: '/product-detail',
-    component: () => import(`layouts/${getUserRoleLayout()}.vue`),
-    children: [{ path: '', component: () => import('pages/ProductDetailPage.vue') }],
+    component: () => getUserRoleLayout(),
+    children: [{ path: '', component: () => import('pages/generic/ProductDetailPage.vue') }],
   },
 
   'MY_PRODUCTS': {
@@ -64,6 +64,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     path: '/admin-finances',
     component: () => import('layouts/AdminLayout.vue'),
     children: [{ path: '', component: () => import('pages/admin/AdminFinancesPage.vue') }],
+  },
+
+  'ANNOUNCEMENTS': {
+    path: '/announcements',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/admin/AnnouncementsPage.vue') }],
   },
 
   'PARTNER_STATISTICS': {

@@ -19,6 +19,41 @@ type Address {
   zipCode: String!
 }
 
+type Bank {
+  """Three letter abbreviation of the Bank"""
+  abbreviation: String!
+
+  """Address"""
+  address: Address!
+
+  """Mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Last Name"""
+  last_name: String!
+
+  """Name of the Bank"""
+  name: String!
+
+  """Offers made by Bank"""
+  offers: [Offer!]!
+
+  """Dossier where the mortgage originally belongs to the bank"""
+  own_mortgages: [Dossier!]!
+
+  """Phone Number"""
+  phone: String
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 enum Category {
   CARS
   CELEBRITIES
@@ -42,6 +77,53 @@ type Comment {
 
   """The user who wrote this comment"""
   user: User!
+
+  """UUID"""
+  uuid: ID!
+}
+
+type Company {
+  """Branch structure"""
+  branch_structure: Boolean!
+
+  """Company Name"""
+  company_name: String!
+
+  """Correspondence address"""
+  correspondence_address: Address!
+
+  """Stage of the creation process"""
+  creation_state: creationState!
+
+  """Documents of the company"""
+  documents: [PrivateFile!]
+
+  """Domicile address"""
+  domicile_address: Address!
+
+  """Mail"""
+  email: String!
+
+  """Employees of the company"""
+  employees: [Employee!]
+
+  """First Name"""
+  first_name: String!
+
+  """Language"""
+  language: String!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """Company UID"""
+  uid: String!
 
   """UUID"""
   uuid: ID!
@@ -132,7 +214,97 @@ input DeleteUserInput {
   uuid: ID!
 }
 
+type Dossier {
+  """Date of birth of customer"""
+  born: DateTime!
+
+  """Address"""
+  correspondence_address: Address!
+
+  """Mail"""
+  email: String!
+
+  """Employee who created the Dossier"""
+  employee: Employee!
+
+  """First Name"""
+  first_name: String!
+
+  """Last Name"""
+  last_name: String!
+
+  """Money loaned"""
+  loan_sum: Float!
+
+  """ToDo"""
+  non_arrangeable: Boolean!
+
+  """List of Offers"""
+  offers: [Offer!]!
+
+  """Previous Bank of the customer"""
+  original_bank: Bank!
+
+  """Address of Property"""
+  property_address: Address!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """Status of Dossier"""
+  status: DossierStatus!
+
+  """UUID"""
+  uuid: ID!
+}
+
+enum DossierStatus {
+  COMPLETED
+  IN_PROGRESS
+  OFFERED
+  OPEN
+  REJECTED
+  SENT
+  SIGNED
+  SUBMITTED
+}
+
 input DuplicateProductInput {
+  uuid: ID!
+}
+
+type Employee {
+  """Company"""
+  company: Company!
+
+  """Dossiers of employee"""
+  dossiers: [Dossier!]!
+
+  """Mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """UUID"""
   uuid: ID!
 }
 
@@ -140,13 +312,40 @@ type Mutation {
   create(createUserInput: CreateUserInput!): User!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
+  disableUser(uuid: String!): User!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
+  enableUser(uuid: String!): User!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
+  temporarilyDisableUser(tempDisableUserInput: TempDisableUserInput!): User!
   update(updateUserInput: UpdateUserInput!): User!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   updateProduct(pictures: [String!] = null, updateProductInput: UpdateProductInput!): Product!
+}
+
+type Offer {
+  """Bank making the offer"""
+  bank: Bank!
+
+  """Dossier of Offer"""
+  dossier: Dossier!
+
+  """The Offer as a PDF"""
+  pdf: PrivateFile!
+
+  """Status of Dossier"""
+  status: OfferStatus!
+
+  """UUID"""
+  uuid: ID!
+}
+
+enum OfferStatus {
+  ACCEPTED
+  INTERESTED
+  IN_PROCESS
+  RETRACTED
 }
 
 type PrivateFile {
@@ -271,7 +470,6 @@ type Query {
   allPartners: [User!]!
   allPlayers: [User!]!
   allProducts: [Product!]!
-  allUsers: [User!]!
   comment(uuid: ID!): Comment!
   comments(uuids: [ID!]): [Comment!]!
   getPrivateFile(
@@ -284,7 +482,6 @@ type Query {
   product(uuid: ID!): Product!
   products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!
-  users(uuids: [ID!]): [User!]!
 }
 
 enum Role {
@@ -296,6 +493,11 @@ enum Role {
 
 type Subscription {
   commentAdded: Comment!
+}
+
+input TempDisableUserInput {
+  until: DateTime!
+  uuid: ID!
 }
 
 input UpdateCommentInput {
@@ -356,6 +558,9 @@ type User {
   """Date of deletion"""
   deletedAt: DateTime
 
+  """Date until which the users account is disabled (if any)"""
+  disabledUntil: DateTime
+
   """E-mail"""
   email: String!
 
@@ -414,6 +619,13 @@ input comment {
 
   """The user who wrote this comment"""
   user: user!
+}
+
+enum creationState {
+  APPLIED
+  AWAITING_DOCUMENTS
+  DOCUMENTS_UPLOADED
+  DONE
 }
 
 input private_file {
@@ -533,6 +745,9 @@ input user {
 
   """Date of deletion"""
   deletedAt: DateTime
+
+  """Date until which the users account is disabled (if any)"""
+  disabledUntil: DateTime
 
   """E-mail"""
   email: String!

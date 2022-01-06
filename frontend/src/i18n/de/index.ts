@@ -51,21 +51,13 @@ export default {
     last_name: 'Nachname',
     full_name: 'Name',
     company_name: 'Firmenname',
-    company_uid: 'Firmen UID',
     language: 'Sprache',
-    domicile_address: 'Addresse',
-    correspondence_address: 'Korrespondenzaddresse',
-    edit_correspondence_address: 'Gleich wie Wohnadresse',
     phone_number: 'Telefonnummer',
-    branch_structure: 'Niederlassungsstruktur',
     conditions: 'AGB',
     accept_conditions: 'Ich stimme den AGB zu.',
     salutation: 'Anrede',
-    company_function: 'Funktion in der Firma',
     accept_condition_truthful: 'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
     passport_or_id: 'Ausweiskopie',
-    commercial_register_extract: 'Handelsregisterauszug',
-    execution_register_extract: 'Betreibungsregisterauszug',
     optional: 'optional',
   },
   dashboards: {
@@ -73,6 +65,7 @@ export default {
     partner_dashboard: 'Partner Dashboard',
     statistics: 'Statistiken',
     finances: 'Finanzen',
+    announcements: 'Ankündigungen'
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -124,7 +117,12 @@ export default {
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     invalid_birth_date: 'Bitte geben Sie ihr Geburtsdatum ein',
     date_must_be_future: 'Bitte wählen Sie ein zukünftiges Datum',
-    can_only_edit_draft: 'Bearbeiten fehlgeschlagen (nur Entwürfe können bearbeitet werden)'
+    can_only_edit_draft: 'Bearbeiten fehlgeschlagen (nur Entwürfe können bearbeitet werden)',
+    error_while_enabling: 'Beim Aktivieren ist ein Fehler aufgetreten.',
+    error_while_disabling: 'Beim Deaktivieren ist ein Fehler aufgetreten.',
+    account_locked: 'Account gesperrt',
+    account_locked_permanently: 'Dieser Account wurde dauerhaft gesperrt.',
+    account_locked_until: 'Dieser Account wurde bis {date} gesperrt.'
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
@@ -134,6 +132,11 @@ export default {
   },
   notifications: {
     messages: 'Nachrichten',
+  },
+  messages:{
+    account_enabled: 'Account aktiviert',
+    account_disabled: 'Account deaktiviert',
+    account_rejected: 'Account abgelehnt',
   },
   interests: {
     cars: 'Autos',
@@ -202,12 +205,18 @@ export default {
   user_status: {
     applied: 'Angefragt',
     active: 'Aktiv',
-    disabled: 'Deaktiviert'
+    disabled: 'Deaktiviert',
+    disabled_temp: 'Deaktiviert (bis {until})'
   },
   admin: {
     users: 'Benutzer',
     players: 'Spieler',
     partners: 'Partner',
     disable_account: 'Account deaktivieren',
+    enable_account: 'Account aktivieren',
+    re_enable_account: 'Account reaktivieren',
+    reject_application: 'Ablehnen',
+    permanent: 'Permanent',
+    temporary: 'Temporär, bis:',
   },
 }

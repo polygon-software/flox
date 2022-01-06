@@ -15,6 +15,10 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {i18n} from 'boot/i18n';
+import AccountLockedDialog from 'components/dialogs/AccountLockedDialog.vue';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/USER';
+import {USER_STATUS} from '../../../shared/definitions/ENUM';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -90,7 +94,9 @@ export class AuthenticationService {
           // Store in local variable
           this.$authStore.mutations.setCognitoUser(cognitoUser)
           cognitoUser.authenticateUser(authenticationDetails, {
-              onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
+              onSuccess: (result)=>{
+                void this.loginSuccess(result, resolve)
+              },
               onFailure: (err: Error)=>{this.onFailure(err) },
               // Sets up MFA (only done once after signing up)
               mfaSetup: () => {
@@ -335,7 +341,7 @@ export class AuthenticationService {
               // TODO friendlyDeviceName
             cognitoUser.verifySoftwareToken(code, 'My TOTP device', {
                   onSuccess: (userSession: CognitoUserSession)=>{
-                    this.loginSuccess(userSession, resolve)
+                    void this.loginSuccess(userSession, resolve)
                   },
                   onFailure: (error: Error)=>{
                     this.onFailure(error)
@@ -388,7 +394,7 @@ export class AuthenticationService {
           currentUser?.sendMFACode(code, {
             onSuccess: (userSession: CognitoUserSession)=>{
               this.$authStore.mutations.setCognitoUser(currentUser)
-              this.loginSuccess(userSession, resolve)
+              void this.loginSuccess(userSession, resolve)
             },
             onFailure: (error: Error)=>{
               this.onFailure(error)
@@ -403,11 +409,44 @@ export class AuthenticationService {
      * @param {function} resolve - resolve function
      * @returns {void}
      */
-    loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
+    async loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): Promise<void>{
+
       // Store locally
       this.$authStore.mutations.setUserSession(userSession)
 
-      resolve()
+      // Upon login, fetch my user to check status
+      const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+
+      // No valid user: show error
+      if(!queryResult?.data?.myUser){
+        // Auto-logout
+        await this.logout();
+
+        // Generic error
+        this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
+        return;
+      }
+      const userData = queryResult.data.myUser as Record<string, unknown>
+      const userStatus = userData.status;
+
+      // User is active; allow login
+      if(userStatus === USER_STATUS.ACTIVE ){
+        resolve()
+      } else {
+        // User is disabled or not active: login fails TODO distinction with inactive account?
+
+        // Auto-logout
+        await this.logout();
+
+        // User disabled, show appropriate dialog
+        this.$q.dialog({
+            component: AccountLockedDialog,
+            componentProps: {
+              untilDate: userData.disabledUntil // until-date, if any
+            }
+          }
+        )
+      }
     }
 
     /**
@@ -416,11 +455,22 @@ export class AuthenticationService {
      * @returns {void}
      */
     onFailure(error: Error): void{
-        if(error.name === 'UserNotConfirmedException'){
-            // Show the e-mail verification dialog and send a new code
-            this.showEmailVerificationDialog(true)
-        } else {
-          this.$errorService.showErrorDialog(error)
-        }
+      // Depending on error, show appropriate dialog
+      if(error.name === 'UserNotConfirmedException'){
+        // Show the e-mail verification dialog and send a new code
+        this.showEmailVerificationDialog(true)
+      } else if(error.name === 'NotAuthorizedException' && error.message === 'User is disabled.') {
+        // User disabled, show appropriate dialog
+        this.$q.dialog({
+            component: AccountLockedDialog,
+            componentProps: {
+              // TODO get until-date for temporarily disabled users
+            }
+          }
+        )
+      } else {
+        // Generic error
+        this.$errorService.showErrorDialog(error)
+      }
     }
 }
