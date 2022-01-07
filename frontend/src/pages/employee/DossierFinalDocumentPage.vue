@@ -1,29 +1,43 @@
 <template>
   <q-page class="flex flex-center">
+      <!-- A4 page container -->
       <q-card class="page">
-        <div class="subpage">
-          TODO content
+        <!-- Logo + address row -->
+        <div class="row justify-between">
+          <img
+            alt="S.O.I. AG"
+            :src="require('src/assets/soi-logo.png')"
+            style="height: 50px"
+            class="q-ma-sm"
+          >
+          <p class="text-grey-5" style="margin-top: 16px">
+            {{infoString}}
+          </p>
         </div>
+
+        <!-- Contact info card -->
+        <q-card
+          class="bg-grey-1"
+        >
+          <strong>
+            {{$t('dossier.contact')}}
+          </strong>
+        </q-card>
+
       </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
-
+const infoString = 'Bahnhofstrasse 1 | 6000 Zürich | 043 222 22 22'
 </script>
 
 <style scoped>
 .page {
   width: 210mm;
   min-height: 297mm;
-  padding: 20mm;
   margin: 10mm auto;
-  background: white;
-}
-.subpage {
-  padding: 1cm;
-  border: 5px solid red;
-  height: 257mm;
+  padding: .5cm 1cm .5cm 1cm;
 }
 
 @page {
