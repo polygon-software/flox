@@ -403,6 +403,9 @@ function printDocument(){
   min-height: 297mm;
   margin: 15mm auto;
   padding: 0;
+  /* Force printing light-grey backgrounds, since print dialog will remove bg color by default */
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
 }
 
 .subpage {
@@ -412,7 +415,7 @@ function printDocument(){
 
 .sub-card{
   padding: 5mm;
-  margin-bottom: 3mm
+  margin-bottom: 3mm;
 }
 
 .dotted-line{
@@ -433,6 +436,7 @@ function printDocument(){
     margin: 0 !important;
     padding: 0 !important;
   }
+
   .page {
     height: 100% !important;
     width: 100% !important;
@@ -441,11 +445,10 @@ function printDocument(){
     position: fixed;
     top: 0;
     left: 0;
-    border: initial;
-    border-radius: initial;
-    box-shadow: initial;
-    background: initial;
-    break-after: auto;
+  }
+
+  .button-row{
+    display: none;
   }
 }
 </style>

@@ -46,7 +46,7 @@ const props = defineProps({
     default: i18n.global.t('general.yes')
   },
   falseLabel: {
-    type: Boolean,
+    type: String,
     required: false,
     default: i18n.global.t('general.no')
   },
