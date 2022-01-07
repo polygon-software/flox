@@ -286,6 +286,7 @@
           :label="$t('buttons.back')"
           color="primary"
           flat
+          @click="goBack"
         />
 
         <q-btn
@@ -294,6 +295,7 @@
           color="primary"
           unelevated
           style="margin: 0 32px 0 16px"
+          @click="sendDocument"
         />
 
         <q-btn
@@ -301,6 +303,7 @@
           icon="print"
           color="primary"
           unelevated
+          @click="printDocument"
         />
       </div>
     </div>
@@ -358,6 +361,32 @@ const dossierInfo = {
   debtEnforcements: false,
   lossCertificates: false
 }
+
+
+/**
+ * Goes back to the previous form page
+ * @returns {void}
+ */
+function goBack(){
+  // TODO go to previous form page
+}
+
+/**
+ * Sends the PDF by e-mail
+ * @returns {void}
+ */
+function sendDocument(){
+  // TODO send document by e-mail
+}
+
+/**
+ * Opens print dialog for the generated document
+ * @returns {void}
+ */
+function printDocument(){
+  // TODO create print preview
+}
+
 </script>
 
 <style scoped>
