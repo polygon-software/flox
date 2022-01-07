@@ -1,73 +1,6 @@
-import {
-  SESClient,
-  SES,
-  SendEmailCommand,
-  SendEmailCommandOutput,
-  SendRawEmailCommand,
-} from '@aws-sdk/client-ses';
+import { SES, SendRawEmailCommand } from '@aws-sdk/client-ses';
 import * as nodemailer from 'nodemailer';
 import { AttachmentFile } from './AttachmentFile';
-
-/**
- * Sends an e-mail using AWS SES, using the given parameters
- * @param {string} from - the sender's e-mail address TODO NOTE: in sandbox mode, you can only send from verified addresses!
- * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
- * @param {string} subject - E-mail subject
- * @param {string} body - E-mail's HTML body
- * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
- * @param {string[]} [toCC] - list of CC recipient's email addresses
- * @param {string} [textBody] - optional plaintext body
- * @returns {Promise<void | SendEmailCommandOutput>} - the output from the send email
- */
-export async function sendEmail(
-  from: string,
-  to: string | string[],
-  subject: string,
-  body: string,
-  replyTo?: string[],
-  toCC?: string[],
-  textBody?: string,
-): Promise<void | SendEmailCommandOutput> {
-  // Credentials
-  const credentials = {
-    accessKeyId: process.env.AWS_KEY_ID ?? '',
-    secretAccessKey: process.env.AWS_SECRET_KEY ?? '',
-  };
-
-  // Create SES service object
-  const sesClient = new SESClient({
-    region: process.env.SES_REGION,
-    credentials: credentials,
-  });
-  // E-Mail parameters
-  const params = {
-    Destination: {
-      CcAddresses: toCC ?? [],
-      ToAddresses: Array.isArray(to) ? to : [to],
-    },
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data: body,
-        },
-        Text: {
-          Charset: 'UTF-8',
-          Data: textBody ?? body,
-        },
-      },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: subject,
-      },
-    },
-    Source: from,
-    ReplyToAddresses: replyTo ?? [],
-  };
-  // Send actual e-mail
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-  return sesClient.send(new SendEmailCommand(params));
-}
 
 /**
  * Sends an e-mail with attachment(s) using nodemailer
@@ -75,19 +8,14 @@ export async function sendEmail(
  * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
  * @param {string} subject - E-mail subject
  * @param {string} body - E-mail's HTML body
- * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
- * @param {string[]} [toCC] - list of CC recipient's email addresses
  * @param {AttachmentFile[]} attachments - file attachments
- * @returns {Promise<void | SendEmailCommandOutput>} - the output from the send email
  * @returns {Promise<void>} - done
  */
-export async function sendDocumentEmail(
+export async function sendEmail(
   from: string,
   to: string | string[],
   subject: string,
   body: string,
-  replyTo?: string[],
-  toCC?: string[],
   attachments?: AttachmentFile[],
 ): Promise<void> {
   // Credentials
@@ -118,16 +46,11 @@ export async function sendDocumentEmail(
     attachments: attachments ?? [],
   };
 
-  return new Promise((resolve, reject) => {
-    transporter.sendMail(emailParams, (error, info) => {
-      if (error) {
-        console.error(error);
-        return reject(error);
-      }
-      console.log('transporter.sendMail result', info);
-      resolve(info);
-    });
-  });
+  try {
+    await transporter.sendMail(emailParams);
+  } catch (e) {
+    throw new Error(`Error while sending e-mail: ${e.name}: ${e.message}`);
+  }
 }
 
 /**

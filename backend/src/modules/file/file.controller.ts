@@ -141,15 +141,11 @@ export class FileController {
       contentType: 'application/pdf',
     };
 
-    console.log('SEND with attachment', attachmentFile);
     await sendDocumentEmail(
       'david.wyss@polygon-software.ch',
       'david.wyss@hotmail.ch',
       'DOCUMENT TEST',
       'BLUBBER',
-      null,
-      null,
-      [attachmentFile],
     );
   }
 }
