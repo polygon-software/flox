@@ -1,6 +1,8 @@
 import { SES, SendRawEmailCommand } from '@aws-sdk/client-ses';
 import * as nodemailer from 'nodemailer';
 import { AttachmentFile } from './AttachmentFile';
+import PrivateFile from '../modules/file/entities/private_file.entity';
+import axios from 'axios';
 
 /**
  * Sends an e-mail with attachment(s) using nodemailer
@@ -113,4 +115,47 @@ export async function sendCompanyRejectEmail(email: string): Promise<void> {
   const sender = process.env.EMAIL_SENDER ?? '';
 
   await sendEmail(sender, email, 'Rejected', 'Application is rejected');
+}
+
+/**
+ * Send dossier document email
+ * @param {string[]} recipients - recipients' e-mail addresses
+ * @param {PrivateFile} pdfFile - PDF attachment file; must already contain URL
+ * @returns {Promise<void>} - email sent
+ */
+export async function sendDossierDocumentEmail(
+  recipients: string[],
+  pdfFile: PrivateFile,
+): Promise<void> {
+  const url = pdfFile.url;
+
+  if (!url) {
+    throw new Error('PDF file must contain a URL');
+  }
+
+  const sender = process.env.EMAIL_SENDER ?? '';
+
+  // TODO proper text, multilanguage support?
+  const subject = 'Your Dossier';
+  const body = 'Please see attached file';
+
+  // Download attachment file from given link
+  const fileGet = await axios.get(url);
+  if (!fileGet || !fileGet.data) {
+    throw new Error(`Could not download File from ${url}`);
+  }
+
+  // Get File as buffer
+  const file = fileGet.data;
+  const fileBuffer = await file.toBuffer();
+
+  // Build AttachmentFile
+  const attachmentFile = {
+    filename: pdfFile.key.substring(37), // Extract filename from key, since key is just filename prepended with UUID
+    content: fileBuffer,
+    contentType: 'application/pdf',
+  };
+
+  // Send actual e-mail
+  await sendEmail(sender, recipients, subject, body, [attachmentFile]);
 }

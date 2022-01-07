@@ -8,14 +8,13 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { Public } from '../../auth/authentication.decorator';
-import { AnyRole } from '../../auth/authorization.decorator';
+import { AnyRole, EmployeeOnly } from '../../auth/authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
 import { CREATION_STATE } from '../../ENUM/ENUMS';
 import fastify = require('fastify');
 import { ERRORS } from '../../error/ERRORS';
-import { sendDocumentEmail } from '../../email/helper';
 
 @Controller()
 export class FileController {
@@ -119,33 +118,5 @@ export class FileController {
     await this.companyRepository.save(company);
 
     res.send(newFile);
-  }
-
-  // TODO remove/change
-  @Post('/sendTestMail')
-  @Public()
-  async sendTestEmail(
-    @Req() req: fastify.FastifyRequest,
-    @Res() res: fastify.FastifyReply<any>,
-  ) {
-    // Verify that request is multipart
-    if (!req.isMultipart()) {
-      res.send(new BadRequestException(ERRORS.file_expected));
-      return;
-    }
-    const file = await req.file();
-    const fileBuffer = await file.toBuffer();
-    const attachmentFile = {
-      filename: 'test.pdf',
-      content: fileBuffer,
-      contentType: 'application/pdf',
-    };
-
-    await sendDocumentEmail(
-      'david.wyss@polygon-software.ch',
-      'david.wyss@hotmail.ch',
-      'DOCUMENT TEST',
-      'BLUBBER',
-    );
   }
 }
