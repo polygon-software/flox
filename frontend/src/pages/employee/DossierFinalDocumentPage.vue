@@ -1,6 +1,8 @@
 <template>
   <q-page class="flex flex-center">
-      <!-- A4 page container -->
+    <div class="column">
+
+      <!-- Page Print Preview -->
       <q-card class="page shadow-6">
         <!-- Logo + address row -->
         <div class="row justify-between">
@@ -274,6 +276,34 @@
           </div>
         </div>
       </q-card>
+
+      <!-- Button row -->
+      <div
+        class="row justify-center"
+        style="margin-bottom: 128px"
+      >
+        <q-btn
+          :label="$t('buttons.back')"
+          color="primary"
+          flat
+        />
+
+        <q-btn
+          :label="$t('buttons.send_by_email')"
+          icon="mail"
+          color="primary"
+          unelevated
+          style="margin: 0 32px 0 16px"
+        />
+
+        <q-btn
+          :label="$t('buttons.print')"
+          icon="print"
+          color="primary"
+          unelevated
+        />
+      </div>
+    </div>
   </q-page>
 </template>
 
