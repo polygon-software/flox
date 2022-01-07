@@ -145,6 +145,7 @@ export default {
     reject_reason: 'Ablehnungsgrund',
     contact: 'Kontakt',
     application: 'Antrag',
+    created_on: 'Erstellt am',
     customer_confirms: 'Der Kunde bestätigt die Richtigkeit der Angaben',
   },
   errors: {

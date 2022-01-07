@@ -46,8 +46,11 @@
               class="column col-6"
               style="padding-left: 5mm"
             >
-              <div class="row">
-                <div class="info-field">
+              <div class="row justify-between q-pa-none" style="height: 9mm">
+                <q-item-label caption>
+                  {{ $t('dossier.created_on') }}
+                </q-item-label>
+                <div class="info-field" style="width: 60%">
                   {{ formatDate(dossierInfo.createdOn) }}
                 </div>
               </div>
@@ -111,6 +114,7 @@ const dossierInfo = {
 
 /* Single info field (e.g. name) */
 .info-field{
+  height: 7mm;
   background: white;
   padding: 1mm;
   border-radius: 1mm;
