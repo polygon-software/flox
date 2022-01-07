@@ -137,7 +137,7 @@ export class FileController {
     const fileBuffer = await file.toBuffer();
     const attachmentFile = {
       fileName: 'test.pdf',
-      content: fileBuffer,
+      data: fileBuffer,
       contentType: 'application/pdf',
     };
 
