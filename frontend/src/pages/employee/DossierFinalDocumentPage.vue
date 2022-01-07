@@ -427,27 +427,24 @@ function printDocument(){
 }
 
 @media print {
-  .q-header{
-    visibility: hidden !important;
-    display: none;
-  }
-
   html, body {
     width: 210mm;
     height: 297mm;
+    margin: 0;
+    padding: 0;
   }
   .page {
+    width: 100%;
     margin: 0;
     padding: 0;
     border: initial;
     border-radius: initial;
-    width: initial;
-    min-height: initial;
     box-shadow: initial;
     background: initial;
     break-after: auto;
   }
   .subpage{
+    margin: 0;
     padding: 0
   }
 

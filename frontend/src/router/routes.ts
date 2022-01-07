@@ -142,7 +142,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   // Employee: Final page of new dossier creation
   'DOSSIER_FINAL_DOCUMENT': {
     path: '/new-dossier-document',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/PrintLayout.vue'),
     children: [{ path: '', component: () => import('pages/employee/DossierFinalDocumentPage.vue') }],
   },
 
