@@ -15,6 +15,7 @@ import { Repository } from 'typeorm';
 import { CREATION_STATE } from '../../ENUM/ENUMS';
 import fastify = require('fastify');
 import { ERRORS } from '../../error/ERRORS';
+import { sendDocumentEmail } from '../../email/helper';
 
 @Controller()
 export class FileController {
@@ -118,5 +119,37 @@ export class FileController {
     await this.companyRepository.save(company);
 
     res.send(newFile);
+  }
+
+  // TODO remove/change
+  @Post('/sendTestMail')
+  @Public()
+  async sendTestEmail(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+  ) {
+    // Verify that request is multipart
+    if (!req.isMultipart()) {
+      res.send(new BadRequestException(ERRORS.file_expected));
+      return;
+    }
+    const file = await req.file();
+    const fileBuffer = await file.toBuffer();
+    const attachmentFile = {
+      fileName: 'test.pdf',
+      content: fileBuffer,
+      contentType: 'application/pdf',
+    };
+
+    console.log('SEND with attachment', attachmentFile);
+    await sendDocumentEmail(
+      'david.wyss@polygon-software.ch',
+      'david.wyss@hotmail.ch',
+      'DOCUMENT TEST',
+      'BLUBBER',
+      null,
+      null,
+      [attachmentFile],
+    );
   }
 }

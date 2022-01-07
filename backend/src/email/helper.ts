@@ -1,8 +1,11 @@
 import {
   SESClient,
+  SES,
   SendEmailCommand,
   SendEmailCommandOutput,
+  SendRawEmailCommand,
 } from '@aws-sdk/client-ses';
+import * as nodemailer from 'nodemailer';
 
 /**
  * Sends an e-mail using AWS SES, using the given parameters
@@ -30,8 +33,7 @@ export async function sendEmail(
     secretAccessKey: process.env.AWS_SECRET_KEY ?? '',
   };
 
-  // Create SES service object (seems to be unrecognized by eslint)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+  // Create SES service object
   const sesClient = new SESClient({
     region: process.env.SES_REGION,
     credentials: credentials,
@@ -64,6 +66,76 @@ export async function sendEmail(
   // Send actual e-mail
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
   return sesClient.send(new SendEmailCommand(params));
+}
+
+/**
+ * Sends an e-mail with attachment(s) using nodemailer
+ * @param {string} from - the sender's e-mail address TODO NOTE: in sandbox mode, you can only send from verified addresses!
+ * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
+ * @param {string} subject - E-mail subject
+ * @param {string} body - E-mail's HTML body
+ * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
+ * @param {string[]} [toCC] - list of CC recipient's email addresses
+ * @param {Record<string, unknown>} attachments - file attachments
+ * @returns {Promise<void | SendEmailCommandOutput>} - the output from the send email
+ * @returns {Promise<void>} - done
+ */
+export async function sendDocumentEmail(
+  from: string,
+  to: string | string[],
+  subject: string,
+  body: string,
+  replyTo?: string[],
+  toCC?: string[],
+  attachments?: Record<string, unknown>[],
+): Promise<void> {
+  // Credentials
+  const credentials = {
+    accessKeyId: process.env.AWS_KEY_ID ?? '',
+    secretAccessKey: process.env.AWS_SECRET_KEY ?? '',
+  };
+
+  // Create SES service object
+  const sesClient = new SES({
+    region: process.env.SES_REGION,
+    credentials: credentials,
+  });
+
+  // Create Nodemailer SES transporter
+  const transporter = nodemailer.createTransport({
+    SES: {
+      ses: sesClient,
+      aws: { SendRawEmailCommand },
+    },
+  });
+
+  // Prepare attachments
+  let emailTransportAttachments = [];
+  if (attachments && attachments.length !== 0) {
+    emailTransportAttachments = attachments.map((attachment) => ({
+      filename: attachment.fileName,
+      content: attachment.data,
+      contentType: attachment.contentType,
+    }));
+  }
+  const emailParams = {
+    from,
+    to,
+    subject,
+    html: body,
+    attachments: emailTransportAttachments,
+  };
+
+  return new Promise((resolve, reject) => {
+    transporter.sendMail(emailParams, (error, info) => {
+      if (error) {
+        console.error(error);
+        return reject(error);
+      }
+      console.log('transporter.sendMail result', info);
+      resolve(info);
+    });
+  });
 }
 
 /**
