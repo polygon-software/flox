@@ -206,6 +206,53 @@
             style="margin: 3mm 0 3mm 0"
           />
 
+          <!-- Fourth section: salary/general info -->
+          <div class="row">
+            <!-- Left column -->
+            <div
+              class="column col-6"
+              style="padding-right: 5mm"
+            >
+              <DossierDocumentInfoField
+                :label="$t('dossier.salary')"
+                :content="dossierInfo.salary.toLocaleString() + currency"
+                bold
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.costs')"
+                :content="dossierInfo.costs.toLocaleString() + currency"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.sustainability')"
+                :content="dossierInfo.sustainability + '%'"
+                bold
+              />
+            </div>
+
+            <!-- Right column -->
+            <div
+              class="column col-6"
+              style="padding-left: 5mm"
+            >
+              <DossierDocumentBooleanField
+                :value="dossierInfo.buildingRight"
+                :label="$t('dossier.building_right')"
+              />
+
+              <DossierDocumentBooleanField
+                :value="dossierInfo.debtEnforcements"
+                :label="$t('dossier.debt_enforcements')"
+              />
+
+              <DossierDocumentBooleanField
+                :value="dossierInfo.lossCertificates"
+                :label="$t('dossier.loss_certificates')"
+              />
+            </div>
+          </div>
+
         </q-card>
 
       </q-card>

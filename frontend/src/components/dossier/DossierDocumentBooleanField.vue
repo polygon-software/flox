@@ -15,18 +15,21 @@
         :label="trueLabel"
         :val="true"
         color="black"
+        disable
       />
       <q-radio
         :model-value="value"
         :label="falseLabel"
         :val="false"
         color="black"
+        disable
       />
     </div>
   </div>
 </template>
 
-<script setup lang="ts">/**
+<script setup lang="ts">
+/**
  * A single boolean field within a dossier's output document
  */
 import {i18n} from 'boot/i18n';
