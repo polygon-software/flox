@@ -320,6 +320,11 @@
 import {formatDate} from 'src/helpers/format-helpers';
 import DossierDocumentInfoField from 'components/dossier/DossierDocumentInfoField.vue';
 import DossierDocumentBooleanField from 'components/dossier/DossierDocumentBooleanField.vue';
+import DossierDocumentEmailDialog from 'components/dialogs/DossierDocumentEmailDialog.vue';
+import {useQuasar} from 'quasar';
+
+
+const $q = useQuasar()
 
 // Info for top right-hand corner
 const infoString = 'Bahnhofstrasse 1 | 8001 Zürich | 043 222 22 22'
@@ -382,7 +387,17 @@ function goBack(){
  * @returns {void}
  */
 function sendDocument(){
-  // TODO send document by e-mail
+  const addresses = [
+    contactInfo.email,
+    'david.wyss@polygon-software.ch' // TODO get own email address
+  ]
+
+  $q.dialog({
+    component: DossierDocumentEmailDialog,
+    componentProps: {
+      addresses
+    }
+  })
 }
 
 /**
@@ -390,7 +405,6 @@ function sendDocument(){
  * @returns {void}
  */
 function printDocument(){
-  // TODO create print preview
   window.print()
 }
 

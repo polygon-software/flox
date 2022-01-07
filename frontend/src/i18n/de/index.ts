@@ -171,6 +171,8 @@ export default {
     building_right: 'Baurecht',
     debt_enforcements: 'Betreibungen',
     loss_certificates: 'Verlustscheine',
+    recipients: 'Empfänger',
+    send_email_description: 'Das Dokument wird als PDF and die ausgewählten Empfänger zugestellt. Weitere Empfänger können im obigen Feld angegeben werden.'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

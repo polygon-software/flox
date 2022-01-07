@@ -169,6 +169,8 @@ export default {
     building_right: 'Building Right',
     debt_enforcements: 'Debt Enforcements',
     loss_certificates: 'Loss Certificates',
+    recipients: 'Recipients',
+    send_email_description: 'The document will be sent to the chosen recipients in PDF format. Further recipients can be entered in the field above..'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
