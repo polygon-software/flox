@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
       <!-- A4 page container -->
-      <q-card class="page">
+      <q-card class="page shadow-6">
         <!-- Logo + address row -->
         <div class="row justify-between">
           <img
@@ -253,8 +253,26 @@
             </div>
           </div>
 
+
+
         </q-card>
 
+        <!-- Signature line -->
+        <div
+          class="row justify-end"
+          style="margin-top: 10mm"
+        >
+          <div class="column">
+            <strong>
+              {{ $t('dossier.customer_confirms') }}
+            </strong>
+
+            <!-- Signature line -->
+            <div
+              style="border: none; border-bottom: 1px solid black; width: 90mm; margin-top: 15mm"
+            />
+          </div>
+        </div>
       </q-card>
   </q-page>
 </template>
@@ -322,7 +340,7 @@ const dossierInfo = {
 }
 
 .sub-card{
-  padding: 3mm;
+  padding: 5mm;
   margin-bottom: 3mm
 }
 
