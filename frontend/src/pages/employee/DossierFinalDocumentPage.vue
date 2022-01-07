@@ -47,7 +47,7 @@
               style="padding-left: 5mm"
             >
               <DossierDocumentInfoField
-                :label="$t('dossier.created_on')"
+                :label="$t('general.created_on')"
                 :content="formatDate(dossierInfo.createdOn)"
               />
 
@@ -263,13 +263,13 @@
           style="margin-top: 10mm"
         >
           <div class="column">
-            <strong>
+            <p>
               {{ $t('dossier.customer_confirms') }}
-            </strong>
+            </p>
 
             <!-- Signature line -->
             <div
-              style="border: none; border-bottom: 1px solid black; width: 90mm; margin-top: 15mm"
+              style="border: none; border-bottom: 1px solid black; width: 90mm; margin-top: 12mm"
             />
           </div>
         </div>

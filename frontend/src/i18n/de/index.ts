@@ -9,7 +9,8 @@ export default {
     from: 'Von',
     to: 'Bis',
     date: 'Datum',
-    return: 'Zurück'
+    return: 'Zurück',
+    created_on: 'Erstellt am',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -127,6 +128,8 @@ export default {
     ok: 'OK',
     download: 'Herunterladen',
     preview: 'Vorschau',
+    send_by_email: 'Per Mail senden',
+    print: 'Drucken'
   },
   documents: {
     choose_documents: 'Dokumente wählen',
@@ -145,7 +148,6 @@ export default {
     reject_reason: 'Ablehnungsgrund',
     contact: 'Kontakt',
     application: 'Antrag',
-    created_on: 'Erstellt am',
     customer_confirms: 'Der Kunde bestätigt die Richtigkeit der Angaben',
     original_bank: 'Finanzinstitut',
     purchase_price: 'Kaufpreis',
@@ -168,8 +170,7 @@ export default {
     sustainability: 'Tragbarkeit',
     building_right: 'Baurecht',
     debt_enforcements: 'Betreibungen',
-    loss_certificates: 'Verlustscheine'
-    // TODO copy to english language files
+    loss_certificates: 'Verlustscheine',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
