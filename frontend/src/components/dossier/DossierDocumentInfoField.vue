@@ -7,13 +7,16 @@
     <q-item-label caption style="margin-top: 3.5mm">
       {{ label }}
     </q-item-label>
-    <div class="info-field" style="width: 60%">
+    <div
+      :class="label ? 'info-field text-right' : 'info-field'"
+      style="width: 60%;"
+    >
       {{ content }}
     </div>
   </div>
   <div
     v-else
-    class="info-field"
+    :class="label ? 'info-field text-right' : 'info-field'"
   >
     {{ content }}
   </div>
