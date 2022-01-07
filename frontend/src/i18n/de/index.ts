@@ -142,7 +142,10 @@ export default {
     send_offer: 'Offerte senden',
     upload_offer: 'Offertendokumente hochladen',
     reject_dossier: 'Dossier ablehnen',
-    reject_reason: 'Ablehnungsgrund'
+    reject_reason: 'Ablehnungsgrund',
+    contact: 'Kontakt',
+    application: 'Antrag',
+    customer_confirms: 'Der Kunde bestätigt die Richtigkeit der Angaben',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -243,8 +246,7 @@ export default {
     subject_rejected: 'Abgelehnt',
     body_rejected: 'Die Applikation wurde abgelehnt'
   },
-
   bank: {
     new_user: 'Neuer Benutzer'
-  }
+  },
 };
