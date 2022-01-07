@@ -177,26 +177,16 @@
               class="column col-6"
               style="padding-right: 5mm"
             >
-              <DossierDocumentInfoField
-                :label="$t('dossier.original_bank')"
-                :content="dossierInfo.originalBankName"
+
+              <DossierDocumentBooleanField
+                :value="dossierInfo.directAmortization"
+                :label="$t('dossier.renovated')"
               />
 
               <DossierDocumentInfoField
-                :label="$t('dossier.purchase_price')"
-                :content="dossierInfo.purchasePrice.toLocaleString() + currency"
+                :label="$t('dossier.renovation_amount')"
+                :content="dossierInfo.renovationAmount.toLocaleString() + currency"
               />
-
-              <DossierDocumentInfoField
-                :label="$t('dossier.current_value')"
-                :content="dossierInfo.currentValue.toLocaleString() + currency"
-              />
-
-              <DossierDocumentInfoField
-                :label="$t('dossier.current_mortgage')"
-                :content="dossierInfo.currentMortgage.toLocaleString() + currency"
-              />
-
             </div>
 
             <!-- Right column -->
@@ -205,21 +195,8 @@
               style="padding-left: 5mm"
             >
               <DossierDocumentInfoField
-                :label="$t('dossier.object_type')"
-                :content="dossierInfo.objectType"
-              />
-
-              <DossierDocumentInfoField
-                :label="$t('dossier.purchase_date')"
-                :content="formatDate(dossierInfo.purchaseDate)"
-              />
-
-              <!-- Spacer -->
-              <div style="height: 11mm"/>
-
-              <DossierDocumentInfoField
-                :label="$t('dossier.amortization_amount')"
-                :content="dossierInfo.amortizationAmount.toLocaleString() + currency"
+                :label="$t('dossier.renovation_year')"
+                :content="dossierInfo.renovationDate.getFullYear()"
               />
             </div>
           </div>

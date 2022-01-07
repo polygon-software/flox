@@ -26,7 +26,12 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts">/**
+ * A single boolean field within a dossier's output document
+ */
+import {i18n} from 'boot/i18n';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   label: {
     type: String,
@@ -34,11 +39,13 @@ const props = defineProps({
   },
   trueLabel: {
     type: String,
-    required: true,
+    required: false,
+    default: i18n.global.t('general.yes')
   },
   falseLabel: {
     type: Boolean,
-    required: true,
+    required: false,
+    default: i18n.global.t('general.no')
   },
   value: {
     type: Boolean,

@@ -32,6 +32,11 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * A single text info field within a dossier's output document
+ */
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   label: {
     type: String,
