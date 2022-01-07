@@ -6,6 +6,7 @@ import {
   SendRawEmailCommand,
 } from '@aws-sdk/client-ses';
 import * as nodemailer from 'nodemailer';
+import { AttachmentFile } from './AttachmentFile';
 
 /**
  * Sends an e-mail using AWS SES, using the given parameters
@@ -76,7 +77,7 @@ export async function sendEmail(
  * @param {string} body - E-mail's HTML body
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
- * @param {Record<string, unknown>} attachments - file attachments
+ * @param {AttachmentFile[]} attachments - file attachments
  * @returns {Promise<void | SendEmailCommandOutput>} - the output from the send email
  * @returns {Promise<void>} - done
  */
@@ -87,7 +88,7 @@ export async function sendDocumentEmail(
   body: string,
   replyTo?: string[],
   toCC?: string[],
-  attachments?: Record<string, unknown>[],
+  attachments?: AttachmentFile[],
 ): Promise<void> {
   // Credentials
   const credentials = {
@@ -109,21 +110,12 @@ export async function sendDocumentEmail(
     },
   });
 
-  // Prepare attachments
-  let emailTransportAttachments = [];
-  if (attachments && attachments.length !== 0) {
-    emailTransportAttachments = attachments.map((attachment) => ({
-      filename: attachment.fileName,
-      content: attachment.data,
-      contentType: attachment.contentType,
-    }));
-  }
   const emailParams = {
     from,
     to,
     subject,
     html: body,
-    attachments: emailTransportAttachments,
+    attachments: attachments ?? [],
   };
 
   return new Promise((resolve, reject) => {

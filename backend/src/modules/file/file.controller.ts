@@ -136,8 +136,8 @@ export class FileController {
     const file = await req.file();
     const fileBuffer = await file.toBuffer();
     const attachmentFile = {
-      fileName: 'test.pdf',
-      data: fileBuffer,
+      filename: 'test.pdf',
+      content: fileBuffer,
       contentType: 'application/pdf',
     };
 
