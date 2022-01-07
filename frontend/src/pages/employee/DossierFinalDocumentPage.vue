@@ -181,11 +181,12 @@
             >
 
               <DossierDocumentBooleanField
-                :value="dossierInfo.directAmortization"
+                :value="dossierInfo.renovated"
                 :label="$t('dossier.renovated')"
               />
 
               <DossierDocumentInfoField
+                v-if="dossierInfo.renovated"
                 :label="$t('dossier.renovation_amount')"
                 :content="dossierInfo.renovationAmount.toLocaleString() + currency"
               />
@@ -197,6 +198,7 @@
               style="padding-left: 5mm"
             >
               <DossierDocumentInfoField
+                v-if="dossierInfo.renovated"
                 :label="$t('dossier.renovation_year')"
                 :content="dossierInfo.renovationDate.getFullYear()"
               />
@@ -291,7 +293,7 @@
 
         <q-btn
           :label="$t('buttons.send_by_email')"
-          icon="mail"
+          icon="mail_outline"
           color="primary"
           unelevated
           style="margin: 0 32px 0 16px"
@@ -394,7 +396,7 @@ function printDocument(){
 .page {
   width: 210mm;
   min-height: 297mm;
-  margin: 10mm auto;
+  margin: 15mm auto;
   padding: .5cm 1cm .5cm 1cm;
 }
 
