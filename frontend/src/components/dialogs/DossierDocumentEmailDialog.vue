@@ -48,18 +48,8 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {PropType, ref, Ref} from 'vue'
-import { Company } from 'src/data/types/Company'
-import {executeMutation} from 'src/helpers/data-helpers';
-import {
-  ENABLE_COMPANY_DOCUMENT_UPLOAD,
-  REJECT_COMPANY,
-  UPDATE_COMPANY_EMAIL
-} from 'src/data/mutations/COMPANY';
+import {ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
-import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
-import {Address} from 'src/data/types/Address';
-import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import _ from 'lodash';
