@@ -30,15 +30,15 @@
               class="column col-6"
               style="padding-right: 5mm"
             >
-              <div class="info-field">
-                {{ contactInfo.fullName }}
-              </div>
-              <div class="info-field">
-                {{ contactInfo.street }}
-              </div>
-              <div class="info-field">
-                {{ contactInfo.zipCode }} {{ contactInfo.city }}
-              </div>
+              <DossierDocumentInfoField
+                :content="contactInfo.fullName"
+              />
+              <DossierDocumentInfoField
+                :content="contactInfo.street"
+              />
+              <DossierDocumentInfoField
+                :content="`${contactInfo.zipCode} ${contactInfo.city}`"
+              />
             </div>
 
             <!-- Right column -->
@@ -46,8 +46,67 @@
               class="column col-6"
               style="padding-left: 5mm"
             >
-              <div class="row justify-between q-pa-none" style="height: 9mm">
-                <q-item-label caption>
+              <DossierDocumentInfoField
+                :label="$t('dossier.created_on')"
+                :content="formatDate(dossierInfo.createdOn)"
+              />
+
+              <DossierDocumentInfoField
+                :content="contactInfo.email"
+              />
+
+              <DossierDocumentInfoField
+                :content="contactInfo.phone"
+              />
+            </div>
+          </div>
+        </q-card>
+
+        <!-- Application info card -->
+        <q-card
+          class="bg-grey-1 sub-card"
+        >
+          <strong>
+            {{$t('dossier.application')}}
+          </strong>
+
+
+          <div class="row">
+            <!-- Left column -->
+            <div
+              class="column col-6"
+              style="padding-right: 5mm"
+            >
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.original_bank')"
+                :content="dossierInfo.originalBankName"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.purchase_price')"
+                :content="dossierInfo.purchasePrice.toLocaleString() + currency"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.current_value')"
+                :content="dossierInfo.currentValue.toLocaleString() + currency"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.current_mortgage')"
+                :content="dossierInfo.currentMortgage.toLocaleString() + currency"
+              />
+
+            </div>
+
+            <!-- Right column -->
+            <div
+              class="column col-6"
+              style="padding-left: 5mm"
+            >
+              <div class="row justify-between" style="height: 11mm">
+                <q-item-label caption style="margin-top: 3.5mm">
                   {{ $t('dossier.created_on') }}
                 </q-item-label>
                 <div class="info-field" style="width: 60%">
@@ -64,24 +123,17 @@
           </div>
         </q-card>
 
-        <!-- Application info card -->
-        <q-card
-          class="bg-grey-1 sub-card"
-        >
-          <strong>
-            {{$t('dossier.application')}}
-          </strong>
-        </q-card>
-
       </q-card>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import {formatDate} from 'src/helpers/format-helpers';
+import DossierDocumentInfoField from 'components/dossier/DossierDocumentInfoField.vue';
 
 // Info for top right-hand corner
 const infoString = 'Bahnhofstrasse 1 | 6000 Zürich | 043 222 22 22'
+const currency = ' CHF'
 
 // TODO replace with correct info from preceding form pages
 const contactInfo = {
@@ -95,6 +147,34 @@ const contactInfo = {
 
 const dossierInfo = {
   createdOn: new Date(),
+  originalBankName: 'CLER',
+  purchasePrice: 1000000,
+  purchaseDate: new Date(),
+  currentValue: 1400000,
+  currentMortgage: 700000,
+  objectType: 'Wohnung',
+  amortizationAmount: 8000,
+  installments: [
+    {
+      amount: 700000,
+      expirationDate: new Date,
+    },
+    {
+      amount: 700000,
+      expirationDate: new Date,
+    }
+  ],
+  lendingValue: 54,
+  directAmortization: true,
+  renovated: true,
+  renovationDate: new Date(),
+  renovationAmount: 50000,
+  salary: 200000,
+  costs: 60000,
+  sustainability: 29.5,
+  buildingRight: false,
+  debtEnforcements: false,
+  lossCertificates: false
 }
 </script>
 
@@ -110,16 +190,6 @@ const dossierInfo = {
 .sub-card{
   padding: 3mm;
   margin-bottom: 3mm
-}
-
-/* Single info field (e.g. name) */
-.info-field{
-  height: 7mm;
-  background: white;
-  padding: 1mm;
-  border-radius: 1mm;
-  outline: 1px solid lightgray;
-  margin: 1mm 0 1mm 0
 }
 
 @page {
