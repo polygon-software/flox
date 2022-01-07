@@ -9,18 +9,16 @@
 
 <script setup lang="ts">
 import MenuBar from 'src/components/menu/MenuBar.vue'
+
+/**
+ * This layout is meant to be used on pages that must be printed, and allows for easy hiding of UI components
+ * (e.g. on DossierFinalDocumentPage)
+ */
+
 </script>
 
 <style scoped>
-
 @media print {
-  html, body {
-    width: 210mm;
-    height: 297mm;
-    margin: 0;
-    padding: 0;
-  }
-
   .q-header {
     display: none !important;
   }
