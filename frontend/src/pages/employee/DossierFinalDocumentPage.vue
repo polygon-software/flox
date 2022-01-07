@@ -1,13 +1,10 @@
 <template>
   <q-page class="flex flex-center">
-    <div
-      class="q-pa-md q-ma-md"
-      style="max-width: 1200px"
-    >
-      <q-card>
-        TODO
+      <q-card class="page">
+        <div class="subpage">
+          TODO content
+        </div>
       </q-card>
-    </div>
   </q-page>
 </template>
 
@@ -16,5 +13,39 @@
 </script>
 
 <style scoped>
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm;
+  margin: 10mm auto;
+  background: white;
+}
+.subpage {
+  padding: 1cm;
+  border: 5px solid red;
+  height: 257mm;
+}
 
+@page {
+  size: A4;
+  margin: 0;
+}
+
+/* TODO ensure this is actually needed/use on simple preview page */
+@media print {
+  html, body {
+    width: 210mm;
+    height: 297mm;
+  }
+  .page {
+    margin: 0;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: initial;
+    page-break-after: always;
+  }
+}
 </style>
