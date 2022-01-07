@@ -70,14 +70,113 @@
             {{$t('dossier.application')}}
           </strong>
 
+          <!-- First section: general info -->
+          <div class="row">
+            <!-- Left upper column -->
+            <div
+              class="column col-6"
+              style="padding-right: 5mm"
+            >
+              <DossierDocumentInfoField
+                :label="$t('dossier.original_bank')"
+                :content="dossierInfo.originalBankName"
+              />
 
+              <DossierDocumentInfoField
+                :label="$t('dossier.purchase_price')"
+                :content="dossierInfo.purchasePrice.toLocaleString() + currency"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.current_value')"
+                :content="dossierInfo.currentValue.toLocaleString() + currency"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.current_mortgage')"
+                :content="dossierInfo.currentMortgage.toLocaleString() + currency"
+              />
+
+            </div>
+
+            <!-- Right upper column -->
+            <div
+              class="column col-6"
+              style="padding-left: 5mm"
+            >
+              <DossierDocumentInfoField
+                :label="$t('dossier.object_type')"
+                :content="dossierInfo.objectType"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.purchase_date')"
+                :content="formatDate(dossierInfo.purchaseDate)"
+              />
+
+              <!-- Spacer -->
+              <div style="height: 11mm"/>
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.amortization_amount')"
+                :content="dossierInfo.amortizationAmount.toLocaleString() + currency"
+              />
+            </div>
+          </div>
+
+          <div class="dotted-line"/>
+
+          <!-- Second section: mortgage installments -->
+          <div class="row">
+            <div
+              class="column col-6"
+              style="padding-right: 5mm"
+            >
+              <DossierDocumentInfoField
+                v-for='(installment, index) in dossierInfo.installments'
+                :key="'installment_'+index"
+                :label="$t('dossier.installment') + ' ' + (index+1)"
+                :content="installment.amount.toLocaleString() + currency"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.lending_value')"
+                :content="dossierInfo.lendingValue + '%'"
+                bold
+              />
+            </div>
+            <div
+              class="column col-6"
+              style="padding-left: 5mm"
+            >
+              <DossierDocumentInfoField
+                v-for='(installment, index) in dossierInfo.installments'
+                :key="'installment_'+ index"
+                :label="$t('dossier.expiration_date')"
+                :content="formatDate(installment.expirationDate)"
+              />
+
+              <DossierDocumentBooleanField
+                :value="dossierInfo.directAmortization"
+                :label="$t('dossier.amortization_type')"
+                :true-label="$t('dossier.direct')"
+                :false-label="$t('dossier.indirect')"
+              />
+            </div>
+          </div>
+
+          <q-separator
+            color="grey-6"
+            style="margin: 3mm 0 3mm 0"
+          />
+
+          <!-- Third section: renovation info -->
           <div class="row">
             <!-- Left column -->
             <div
               class="column col-6"
               style="padding-right: 5mm"
             >
-
               <DossierDocumentInfoField
                 :label="$t('dossier.original_bank')"
                 :content="dossierInfo.originalBankName"
@@ -105,22 +204,31 @@
               class="column col-6"
               style="padding-left: 5mm"
             >
-              <div class="row justify-between" style="height: 11mm">
-                <q-item-label caption style="margin-top: 3.5mm">
-                  {{ $t('dossier.created_on') }}
-                </q-item-label>
-                <div class="info-field" style="width: 60%">
-                  {{ formatDate(dossierInfo.createdOn) }}
-                </div>
-              </div>
-              <div class="info-field">
-                {{ contactInfo.street }}
-              </div>
-              <div class="info-field">
-                {{ contactInfo.zipCode }} {{ contactInfo.city }}
-              </div>
+              <DossierDocumentInfoField
+                :label="$t('dossier.object_type')"
+                :content="dossierInfo.objectType"
+              />
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.purchase_date')"
+                :content="formatDate(dossierInfo.purchaseDate)"
+              />
+
+              <!-- Spacer -->
+              <div style="height: 11mm"/>
+
+              <DossierDocumentInfoField
+                :label="$t('dossier.amortization_amount')"
+                :content="dossierInfo.amortizationAmount.toLocaleString() + currency"
+              />
             </div>
           </div>
+
+          <q-separator
+            color="grey-6"
+            style="margin: 3mm 0 3mm 0"
+          />
+
         </q-card>
 
       </q-card>
@@ -130,9 +238,10 @@
 <script setup lang="ts">
 import {formatDate} from 'src/helpers/format-helpers';
 import DossierDocumentInfoField from 'components/dossier/DossierDocumentInfoField.vue';
+import DossierDocumentBooleanField from 'components/dossier/DossierDocumentBooleanField.vue';
 
 // Info for top right-hand corner
-const infoString = 'Bahnhofstrasse 1 | 6000 Zürich | 043 222 22 22'
+const infoString = 'Bahnhofstrasse 1 | 8001 Zürich | 043 222 22 22'
 const currency = ' CHF'
 
 // TODO replace with correct info from preceding form pages
@@ -154,6 +263,7 @@ const dossierInfo = {
   currentMortgage: 700000,
   objectType: 'Wohnung',
   amortizationAmount: 8000,
+  // TODO check for largest possible number of installments
   installments: [
     {
       amount: 700000,
@@ -190,6 +300,12 @@ const dossierInfo = {
 .sub-card{
   padding: 3mm;
   margin-bottom: 3mm
+}
+
+.dotted-line{
+  border: none;
+  border-top: 1px dotted lightgrey;
+  margin: 3mm 0 3mm 0
 }
 
 @page {
