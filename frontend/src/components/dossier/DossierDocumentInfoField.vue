@@ -9,7 +9,7 @@
     </q-item-label>
     <div
       :class="label ? 'info-field text-right' : 'info-field'"
-      style="width: 60%;"
+      style="width: 55%;"
     >
       <strong v-if="bold">
         {{ content }}

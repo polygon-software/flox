@@ -430,26 +430,22 @@ function printDocument(){
   html, body {
     width: 210mm;
     height: 297mm;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   .page {
-    width: 100%;
-    margin: 0;
-    padding: 0;
+    height: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
     border: initial;
     border-radius: initial;
     box-shadow: initial;
     background: initial;
     break-after: auto;
-  }
-  .subpage{
-    margin: 0;
-    padding: 0
-  }
-
-  .button-row{
-    display: none;
   }
 }
 </style>
