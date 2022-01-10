@@ -165,6 +165,7 @@ export default {
     invalid_company_uid: 'Please enter your company\'s UID',
     invalid_address: 'Please enter a valid address',
     invalid_house_number: 'This number does not exist',
+    invalid_date: 'Please enter a valid date',
     invalid_city: 'Please enter a valid city',
     invalid_zip_code: 'Please enter a valid ZIP code',
     invalid_phone_number: 'Please enter a valid phone number',

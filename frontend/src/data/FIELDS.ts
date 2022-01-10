@@ -1,4 +1,4 @@
-import {IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
+import {IS_VALID_DATE, IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
 import {QInput, QSelect} from 'quasar'
 import PasswordRepeatField from 'components/forms/fields/company_signup/PasswordRepeatField.vue'
 import Password from 'components/forms/fields/Password.vue'
@@ -67,7 +67,7 @@ const FIELDS: Record<string, Field> = {
       type: Date,
       label: i18n.global.t('employee_dashboard.date_of_birth'),
       lazy_rules: 'true',
-      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_company_name')]
+      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
     },
   },
     COMPANY_NAME: {

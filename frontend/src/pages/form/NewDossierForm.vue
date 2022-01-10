@@ -157,7 +157,7 @@ const pages = [
 const form: Form = new Form(pages as Record<string, unknown>[])
 
 /**
- * Upon valid registration, creates database entry
+ * Upon validation, it creates a dossier in the database
  * @param {Record<string, unknown>} formData: The form's entered data
  * @async
  * @returns {void}
@@ -168,7 +168,7 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
   }
 
-  // Create account (automatically sends one-time login e-mail as well)
+  // Creates a dossier
   await executeMutation(CREATE_DOSSIER, {
     first_name: formData.full_name.first_name,
     last_name: formData.full_name.last_name,
