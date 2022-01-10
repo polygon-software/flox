@@ -40,12 +40,19 @@
 import {ref, Ref} from 'vue';
 import {QDialog} from 'quasar';
 import OfferUploadFields from 'components/forms/fields/document_upload/OfferUploadFields.vue';
+import {uploadFiles} from 'src/helpers/file-helpers';
 
 const emit = defineEmits(['ok'])
+const props = defineProps({
+  offerUuid: {
+    type: String,
+    required: true
+  }
+})
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 // Uploaded files (key: filename, value: file)
-const files = ref({})
+const files: Ref<Record<string, unknown>> = ref({})
 
 
 // Mandatory - do not remove!
@@ -73,28 +80,8 @@ function onFilesChange(newFiles: Record<string, File>){
  * Uploads the selected files and sends the offer
  * @returns {void}
  */
-function onOk(): void {
-  // TODO upload files here or emit and upload in BankDashboard
-  // for(const fileKey of Object.keys(files.value)) {
-  //   const formData = new FormData();
-  //   if(files.value[fileKey]) {
-  //     // Convert to Blob and append
-  //     const blob = files.value[fileKey] as Blob
-  //     formData.append('file', blob)
-  //
-  //
-  //     const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
-  //
-  //     await axios({
-  //       method: 'post',
-  //       url: `${baseUrl}/uploadPrivateFile`,
-  //       data: formData,
-  //       headers: headers,
-  //     }).catch((e: Error) => {
-  //       throw new Error(`File upload error: ${e.message}`)
-  //     })
-  //   }
-
+async function onOk(): Promise<void> {
+  await uploadFiles(files.value, `/uploadOfferFile?oid=${props.offerUuid}`, 'allDossiersBank')
   emit('ok')
   hide()
 }

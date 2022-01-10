@@ -31,7 +31,7 @@ function getAuthMiddleware(ssrContext: QSsrContext|null|undefined){
  * @param {Readonly<StoreObject>} responseObject - the object received by apollo
  * @returns {string|undefined} - a cache key, e.g. 'User:ab12-cd34-xyz' or nothing
  */
-function dataIdFromObject(responseObject: Readonly<StoreObject>): string|undefined {
+export function dataIdFromObject(responseObject: Readonly<StoreObject>): string|undefined {
   if(!responseObject || Object.keys(responseObject).length === 0) {
     throw new Error('Cannot cache empty object')
   }

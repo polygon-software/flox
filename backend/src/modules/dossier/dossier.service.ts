@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+
 import { Injectable } from '@nestjs/common';
 import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -56,6 +58,7 @@ export class DossierService {
       loan_sum: createDossierInput.loan_sum,
       non_arrangeable: false,
       offers: [],
+      documents: [],
       status: DOSSIER_STATUS.IN_PROGRESS,
       first_name: createDossierInput.first_name,
       last_name: createDossierInput.last_name,
@@ -103,7 +106,10 @@ export class DossierService {
    */
   async myDossiers(cognitoId: string): Promise<Dossier[]> {
     const employee = await this.employeeService.getMyEmployee(cognitoId);
-    return employee.dossiers;
+    return this.dossierRepository.findByIds(
+      employee.dossiers.map((dossier) => dossier.uuid),
+      { relations: ['documents', 'offers', 'offers.bank', 'original_bank'] },
+    );
   }
 
   /**
@@ -123,7 +129,7 @@ export class DossierService {
       dossier,
       bank,
       status: createOfferInput.status,
-      pdf: null,
+      documents: [],
     });
     await this.offerRepository.save(newOffer);
     return this.dossierRepository.findOne(createOfferInput.dossier_uuid, {
@@ -197,7 +203,7 @@ export class DossierService {
           uuid: Not(bank.uuid),
         },
       },
-      relations: ['offers', 'offers.bank'],
+      relations: ['offers', 'offers.bank', 'documents'],
     });
 
     // Return only those that have less than three offers or an own offer

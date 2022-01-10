@@ -88,7 +88,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
  * @param {MutationObject} mutationObject - the mutation that triggered the change
  * @returns {void}
  */
-function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryObject[], changes: Record<string, Record<string, unknown>>, mutationObject: MutationObject){
+export function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryObject[], changes: Record<string, Record<string, unknown>>, mutationObject: MutationObject){
   affectedQueries.forEach((queryObject) => {
     if(!mutationObject.cacheLocation){
       throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
@@ -110,6 +110,7 @@ function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryOb
       // Case 1: CREATE (adds new object to cache)
       if (type === MutationTypes.CREATE) {
         newData = [...oldData, change]
+
       }
       // Case 2: DELETE (removes object from cache)
       else if (type === MutationTypes.DELETE) {

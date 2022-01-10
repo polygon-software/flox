@@ -69,7 +69,7 @@
               color="primary"
               size="md"
               round
-              @click.stop="showAllDocuments"
+              @click.stop="()=>{showAllDocuments(props.row.files)}"
             />
           </q-td>
           <q-td key="offers">
@@ -131,12 +131,16 @@ const rows = computed(()=>{
 
 /**
  * Shows a dialog for downloading any dossier files
+ * @param {Record<string, unknown>[]} files - the files of the selected dossier
  * @returns {void}
  */
-function showAllDocuments() {
+function showAllDocuments(files: Record<string, unknown>[]) {
   $q.dialog({
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,
+    componentProps:{
+      files,
+    }
   })
 }
 

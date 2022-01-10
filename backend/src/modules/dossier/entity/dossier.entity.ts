@@ -13,6 +13,7 @@ import { Offer } from '../../offer/entities/offer.entity';
 import { Bank } from '../../bank/entities/bank.entity';
 import { DOSSIER_STATUS } from '../../../ENUM/ENUMS';
 import { Employee } from '../../employee/entities/employee.entity';
+import PrivateFile from '../../file/entities/private_file.entity';
 
 @Entity()
 @ObjectType()
@@ -59,4 +60,14 @@ export class Dossier extends Person {
   @Field(() => Employee, { description: 'Employee who created the Dossier' })
   @ManyToOne(() => Employee, (employee) => employee.dossiers)
   employee: Employee;
+
+  @Field(() => [PrivateFile], {
+    nullable: true,
+    description: 'Documents of the company',
+  })
+  @OneToMany(() => PrivateFile, (file) => file.dossier, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  documents: PrivateFile[];
 }

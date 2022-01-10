@@ -39,7 +39,7 @@ import { DossierModule } from './modules/dossier/dossier.module';
           },
         },
       },
-      cors: true, // TODO set appropriate for production
+      // cors: true, // TODO set appropriate for production
     }),
     ConfigModule.forRoot({
       isGlobal: true,
