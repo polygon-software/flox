@@ -278,7 +278,10 @@ export class DossierService {
       throw new Error(`Dossier ${dossierUuid} does not exist`);
     }
 
+    // Create file from base64 input
+    const file = new File([pdf], `Dossier_${dossier.readable_id}.pdf`);
+
     // Send actual e-mail
-    await sendDossierDocumentEmail(dossier.readable_id, recipients, pdf);
+    await sendDossierDocumentEmail(dossier.readable_id, recipients, file);
   }
 }

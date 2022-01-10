@@ -1,6 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsArray, IsObject, IsUUID } from 'class-validator';
-import { File } from '../../../../types/File';
+import { IsArray, IsBase64, IsUUID } from 'class-validator';
 
 @InputType()
 export class SendDossierDocumentInput {
@@ -13,6 +12,6 @@ export class SendDossierDocumentInput {
   recipients: string[];
 
   @Field(() => String)
-  @IsObject()
-  file: File;
+  @IsBase64()
+  file: string;
 }

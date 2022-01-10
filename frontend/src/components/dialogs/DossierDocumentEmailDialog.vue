@@ -55,6 +55,7 @@ import {i18n} from 'boot/i18n';
 import _ from 'lodash';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {SEND_DOSSIER_DOCUMENT_EMAIL} from 'src/data/mutations/DOSSIER';
+import {toBase64} from 'src/helpers/image-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -66,12 +67,19 @@ const props = defineProps({
     type: Array,
     required: true
   },
+  // Dossier UUID
+  uuid: {
+    type: String,
+    required: true
+  },
+  // File to attach to the E-mail
   file: {
     type: Object,
-    required: false, // TODO change
-    default: null,
+    required: true
   }
 })
+
+console.log('GOT FILE', props.file)
 
 // Addresses to send to (defaults to those given to dossier as prop)
 const targetAddresses = ref(_.cloneDeep(props.addresses))
@@ -95,12 +103,16 @@ function hide(): void {
  */
 async function onOk(): void {
 
-  // TODO validate for valid inputs
+  // Convert file to base64
+  const base64File = toBase64(props.file)
+
+  // Send E-mail mutation
   await executeMutation(
     SEND_DOSSIER_DOCUMENT_EMAIL,
     {
-      addresses: props.addresses,
-      file: props.file
+      uuid: props.uuid,
+      recipients: targetAddresses,
+      file: base64File
     })
 
   // Show confirmation prompt TODO

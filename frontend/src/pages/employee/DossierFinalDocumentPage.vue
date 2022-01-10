@@ -423,6 +423,7 @@ async function sendDocument(){
   $q.dialog({
     component: DossierDocumentEmailDialog,
     componentProps: {
+      uuid: dossierUuid,
       addresses,
       file: pdfFile
     }
