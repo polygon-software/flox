@@ -79,7 +79,6 @@ const props = defineProps({
   }
 })
 
-console.log('GOT FILE', props.file)
 
 // Addresses to send to (defaults to those given to dossier as prop)
 const targetAddresses = ref(_.cloneDeep(props.addresses))
@@ -104,7 +103,7 @@ function hide(): void {
 async function onOk(): void {
 
   // Convert file to base64
-  const base64File = toBase64(props.file)
+  const base64File = await toBase64(props.file)
 
   // Send E-mail mutation
   await executeMutation(
