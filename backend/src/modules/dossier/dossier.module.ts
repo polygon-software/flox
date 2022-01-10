@@ -14,6 +14,7 @@ import { Company } from '../company/entities/company.entity';
 import { Offer } from '../offer/entities/offer.entity';
 import { FileService } from '../file/file.service';
 import PrivateFile from '../file/entities/private_file.entity';
+import PublicFile from '../file/entities/public_file.entity';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import PrivateFile from '../file/entities/private_file.entity';
       Company,
       Offer,
       PrivateFile,
+      PublicFile,
     ]),
   ],
   providers: [

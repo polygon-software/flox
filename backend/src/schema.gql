@@ -528,6 +528,7 @@ enum Roles {
 }
 
 input SendDossierDocumentInput {
+  pdfUuid: ID!
   recipients: [String!]!
   uuid: ID!
 }
