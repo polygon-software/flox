@@ -123,6 +123,7 @@ async function upload(): Promise<void> {
  * @returns {void}
  */
 function remove(index: number) {
+  // TODO: actual implementation of file removal
   console.log(index)
 }
 

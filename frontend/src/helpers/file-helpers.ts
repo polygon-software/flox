@@ -11,7 +11,7 @@ import {useApolloClient} from '@vue/apollo-composable';
 export async function uploadFiles(files: Record<string, unknown>, target: string, queryname: string) {
   const apolloClient = useApolloClient().resolveClient()
   let iter = 0
-  let res:string|null = 'Schnabeltier'
+  let res:string|null = ''
   let token:string|null = ''
   while (res){
     res = localStorage.key(iter)
