@@ -50,8 +50,8 @@
                   <h7 class="q-py-xl q-my-xl">{{ rightSection.title }}</h7>
                   <component
                     v-for="field in rightSection.fields"
-                    :key="field.key"
                     :is="field.component"
+                    :key="field.key"
                     v-bind="field.attributes"
                     v-model="form.values.value[field.key]"
                     @change="(newValue) => form.updateValue(field.key, newValue)"
