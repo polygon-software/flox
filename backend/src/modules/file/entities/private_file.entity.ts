@@ -3,6 +3,8 @@ import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 import { Company } from '../../company/entities/company.entity';
+import { Dossier } from '../../dossier/entity/dossier.entity';
+import { Offer } from '../../offer/entities/offer.entity';
 
 /**
  * Defines a private file within a restricted AWS S3 bucket.
@@ -38,6 +40,26 @@ export class PrivateFile extends BaseEntity {
     onDelete: 'CASCADE',
   })
   company: Company;
+
+  @Field(() => Dossier, {
+    nullable: true,
+    description: 'Dossier the file belongs to',
+  })
+  @ManyToOne(() => Dossier, (dossier) => dossier.documents, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  dossier: Dossier;
+
+  @Field(() => Offer, {
+    nullable: true,
+    description: 'Offer the file belongs to',
+  })
+  @ManyToOne(() => Offer, (offer) => offer.documents, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  offer: Offer;
 
   // ToDo Dossier will be added in next backend architecture update
 }

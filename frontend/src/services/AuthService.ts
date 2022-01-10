@@ -203,6 +203,7 @@ export class AuthenticationService {
         cognitoUser.signOut(() => {
           this.$authStore.mutations.setCognitoUser(undefined)
           this.$authStore.mutations.setUserSession(undefined)
+          localStorage.clear() // Needed to remove session,id,... tokens
           resolve()
         })
       })

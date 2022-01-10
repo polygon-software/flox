@@ -13,29 +13,24 @@
           separator
         >
           <q-item
-            v-for="(file, index) in existingFiles"
+            v-for="(file, index) in props.entity.documents"
             :key="file.uuid"
           >
             <q-item-section>
               <div class="row flex justify-between content-center" style="height: 50px">
-                <p class="col-8">{{ file.key }}</p>
-                <div
-                  v-if="file.url"
-                  class="col-4"
-                >
-                  <q-btn
-                    style="margin-left: 12px"
-                    color="primary"
-                    icon="download"
-                    @click="openURL(file.url)"
-                  />
-                  <q-btn
-                    style="margin-left: 12px"
-                    color="primary"
-                    icon="delete"
-                    @click="remove(index)"
-                  />
-                </div>
+                <p class="col-8">{{ file.key.substring(32) }}</p>
+                <q-btn
+                  style="margin-left: 12px"
+                  color="primary"
+                  icon="download"
+                  @click="loadFile(file)"
+                />
+                <q-btn
+                  style="margin-left: 12px"
+                  color="primary"
+                  icon="delete"
+                  @click="remove(index)"
+                />
               </div>
             </q-item-section>
           </q-item>
@@ -61,7 +56,6 @@
             :label="$t('status.uploading')"
             color="primary"
             flat
-            disable
             @click="upload"
           />
         </div>
@@ -81,18 +75,23 @@
 <script setup lang="ts">
 import {ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
+import { executeQuery} from 'src/helpers/data-helpers';
+import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const files = ref([])
+const files = ref([]) as Ref<Array<File>>
 
-//remove this and take the existing files form the backend from dossier table
-const existingFiles = ref([
-  {key: 'Beispiel1', uuid: 1, url: 'https://link.springer.com/content/pdf/10.1007/s11576-008-0095-0.pdf'},
-  {key: 'Beispiel2', uuid: 2, url: 'https://link.springer.com/content/pdf/10.1007/s00287-006-0063-2.pdf'},
-  {key: 'Beispiel3', uuid: 3, url: 'https://sisis.rz.htw-berlin.de/inh2009/12372030.pdf'},
-  {key: 'Beispiel4', uuid: 4, url: 'https://cds.cern.ch/record/798228/files/0131456601_TOC.pdf'},
-])
+const props = defineProps({
+  entity: {
+    required: true,
+    type: Object
+  },
+  uploadGenericFile: {
+    type: Function,
+    required: true
+  }
+})
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
@@ -108,17 +107,14 @@ function hide(): void {
 
 /**
  * Uploads the selected files from the desktop to the existing files
- * for now it is a placeholder function
  * @returns {void}
  */
-function upload(): void {
-  if (files.value.length !== 0) {
-    for (const i of files.value) {
-      if (existingFiles.value.indexOf(files.value[i]) === -1) {
-        existingFiles.value.push(files.value[i])
-      }
-    }
-  }
+async function upload(): Promise<void> {
+  const reformatted:Record<string, File> = {}
+  files.value.forEach((file)=>{
+    reformatted[file.name] = file
+  })
+  await props.uploadGenericFile(reformatted)
 }
 
 /**
@@ -127,7 +123,19 @@ function upload(): void {
  * @returns {void}
  */
 function remove(index: number) {
-  existingFiles.value.splice(index, 1)
+  // TODO: actual implementation of file removal
+  console.log(index)
+}
+
+/**
+ * open File based on URL
+ * @param {Record<string, string>} file - file to open
+ * @returns {Promise<void>} - done
+ */
+async function loadFile(file: Record<string, string>) {
+  const queryResult = await executeQuery(PRIVATE_FILE, {uuid: file.uuid})
+  const loadedFile = queryResult.data[PRIVATE_FILE.cacheLocation] as Record<string, string>
+  openURL(loadedFile.url)
 }
 
 // eslint-disable-next-line require-jsdoc

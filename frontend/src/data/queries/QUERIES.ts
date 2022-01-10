@@ -180,6 +180,36 @@ export const PRIVATE_FILE = {
   cacheLocation: 'getPrivateFile'
 }
 
+export const DOSSIER_FILE = {
+  query: gql`
+    query getDossierDocument($uuid: ID!){
+      getDossierDocument(uuid: $uuid){
+        uuid
+        url
+        key
+        __typename
+      }
+    }
+  `,
+  tables: ['private_file'],
+  cacheLocation: 'getDossierDocument'
+}
+
+export const OFFER_FILE = {
+  query: gql`
+    query getOfferDocument($uuid: ID!){
+      getOfferDocument(uuid: $uuid){
+        uuid
+        url
+        key
+        __typename
+      }
+    }
+  `,
+  tables: ['private_file'],
+  cacheLocation: 'getOfferDocument'
+}
+
 export const MY_USER = {
   query: gql`
     query{
@@ -197,40 +227,50 @@ export const MY_USER = {
 
 export const MY_DOSSIERS = {
   query: gql`
-        query{
-            getMyDossiers{
-              uuid
-              created_at
-              first_name
-              last_name
-              __typename
-              non_arrangeable
-              original_bank{
-                __typename
-                uuid
-                name
-                abbreviation
-              }
-              property_address{
-                __typename
-                uuid
-                city
-              }
-              loan_sum
-              status
-              offers{
-                __typename
-                uuid
-                status
-                bank {
-                  __typename
-                  uuid
-                  name
-                  abbreviation
-                }
-              }
-            }
+    query getMyDossiers{
+      getMyDossiers{
+        uuid
+        created_at
+        first_name
+        last_name
+        __typename
+        non_arrangeable
+        original_bank{
+          __typename
+          uuid
+          name
+          abbreviation
         }
+        property_address{
+          __typename
+          uuid
+          city
+        }
+        loan_sum
+        status
+        offers{
+          __typename
+          uuid
+          status
+          bank {
+            __typename
+            uuid
+            name
+            abbreviation
+          }
+          documents{
+            uuid
+            __typename
+            key
+          }
+        }
+        documents{
+          uuid
+          __typename
+          key
+        }
+      }
+    }
   `,
   tables: ['dossier'],
   cacheLocation: 'getMyDossiers'
@@ -333,9 +373,19 @@ export const DOSSIERS_BANK = {
           city
           zip_code
         }
+        documents {
+          uuid
+          __typename
+          key
+        }
         offers {
           uuid
           status
+          documents {
+            uuid
+            __typename
+            key
+          }
           bank {
             uuid
             __typename
@@ -388,5 +438,7 @@ export const QUERIES = [
   ALL_BANKS,
   REJECTED_DOSSIERS,
   DOSSIERS_BANK,
-  MY_BANK
+  MY_BANK,
+  DOSSIER_FILE,
+  OFFER_FILE
 ];

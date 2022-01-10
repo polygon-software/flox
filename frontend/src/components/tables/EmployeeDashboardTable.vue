@@ -54,12 +54,11 @@
           </q-popup-edit>
         </q-td>
         <q-td key="uploads">
-          {{ _props.row.uploads }}
           <q-btn
             icon="picture_as_pdf"
             color="primary"
             round
-            @click="showAllDocuments"
+            @click="()=>showAllDocuments(_props.row)"
           />
         </q-td>
         <q-td key="offers" @click="()=>expandOffers(_props.row.uuid)">
@@ -82,7 +81,7 @@
               :props="_props"
               style="background-color: white; cursor: pointer"
         >
-          <q-td key="date"> --></q-td>
+          <q-td> --></q-td>
           <q-td>{{offer.bank.name}}</q-td>
           <q-td>
             <q-chip
@@ -90,6 +89,14 @@
             >
               {{ $t('offer_status_enum.' + offer.status) }}
             </q-chip>
+          </q-td>
+          <q-td>
+            <q-btn
+              icon="picture_as_pdf"
+              color="primary"
+              round
+              @click="()=>showOfferDocuments(offer)"
+            />
           </q-td>
         </q-tr>
       </div>
@@ -105,15 +112,17 @@
 import {computed, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
+import DownloadDocumentsDialog from 'src/components/dialogs/DownloadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
-import {MY_DOSSIERS} from 'src/data/queries/QUERIES';
+import {MY_DOSSIERS, OFFER_FILE} from 'src/data/queries/QUERIES';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
+import {uploadFiles} from 'src/helpers/file-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -183,12 +192,36 @@ function onUpdateStatus(status: DOSSIER_STATUS, uuid:string){
 
 /**
  * Opens the dialog to show all documents and to upload further documents
+ * @param {Record<string, unknown>} entity - the dossier
  * @returns {void}
  */
-function showAllDocuments() {
+function showAllDocuments(entity: Record<string, unknown>) {
   $q.dialog({
     title: 'UploadDocumentsDialog',
     component: UploadDocumentsDialog,
+    componentProps: {
+      entity,
+      uploadGenericFile: async (file: Record<string, unknown>) => {
+        await uploadFiles(file, `/uploadDossierFile?did=${entity.uuid as string}`, 'getMyDossiers')
+      }
+    }
+  })
+}
+
+/**
+ * Shows a dialog where the offer's files can be downloaded
+ * @param {Offer} offer - an offer
+ * @returns {void} - void
+ */
+function showOfferDocuments(offer: Record<string, unknown>): void {
+  const files = offer.documents ?? []
+  $q.dialog({
+    title: 'DownloadDocumentsDialog',
+    component: DownloadDocumentsDialog,
+    componentProps: {
+      files,
+      query: OFFER_FILE
+    }
   })
 }
 
