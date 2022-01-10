@@ -119,11 +119,13 @@ export async function sendCompanyRejectEmail(email: string): Promise<void> {
 
 /**
  * Send dossier document email
+ * @param {string} readableId - readable dossier ID
  * @param {string[]} recipients - recipients' e-mail addresses
  * @param {PrivateFile} pdfFile - PDF attachment file; must already contain URL
  * @returns {Promise<void>} - email sent
  */
 export async function sendDossierDocumentEmail(
+  readableId: string,
   recipients: string[],
   pdfFile: PrivateFile,
 ): Promise<void> {
@@ -136,7 +138,7 @@ export async function sendDossierDocumentEmail(
   const sender = process.env.EMAIL_SENDER ?? '';
 
   // TODO proper text, multilanguage support?
-  const subject = 'Your Dossier';
+  const subject = `S.O.I Dossier ${readableId}`;
   const body = 'Please see attached file';
 
   // Download attachment file from given link

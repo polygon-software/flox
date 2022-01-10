@@ -13,7 +13,8 @@ export class SendDossierDocumentInput {
   @IsArray()
   recipients: string[];
 
-  @Field(() => PrivateFile)
-  @IsNotEmpty()
-  pdf: PrivateFile;
+  // TODO add once implemented from @johannschwabe's PR
+  // @Field(() => PrivateFile)
+  // @IsNotEmpty()
+  // pdf: PrivateFile;
 }

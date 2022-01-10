@@ -260,16 +260,22 @@ export class DossierService {
     sendDossierDocumentInput: SendDossierDocumentInput,
   ) {
     const dossierUuid = sendDossierDocumentInput.uuid;
-    const pdfFile = sendDossierDocumentInput.pdf;
+    // const pdfFile = sendDossierDocumentInput.pdf; TODO re-add
     const recipients = sendDossierDocumentInput.recipients;
 
-    // Verify PrivateFile has URL
-    if (!pdfFile.url) {
-      // TODO get url
-      console.log('Uh oh, no URL');
-    }
+    const dossier = await this.dossierRepository.findOne(dossierUuid);
 
-    // TODO
-    await sendDossierDocumentEmail(recipients, pdfFile);
+    if (!dossier) {
+      throw new Error(`Dossier ${dossierUuid} does not exist`);
+    }
+    //
+    // // Verify PrivateFile has URL
+    // if (!pdfFile.url) {
+    //   // TODO get url
+    //   console.log('Uh oh, no URL');
+    // }
+    //
+    // // Send actual e-mail
+    // await sendDossierDocumentEmail(dossier.readable_id, recipients, pdfFile);
   }
 }

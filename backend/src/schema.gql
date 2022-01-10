@@ -382,6 +382,7 @@ type Mutation {
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   resetDossier(resetDossierInput: ResetDossierInput!): Dossier!
+  sendDossierDocumentEmail(sendDossierDocumentInput: SendDossierDocumentInput!): Dossier!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
@@ -505,6 +506,11 @@ enum Roles {
   NONE
   SOI_ADMIN
   SOI_EMPLOYEE
+}
+
+input SendDossierDocumentInput {
+  recipients: [String!]!
+  uuid: ID!
 }
 
 type SoiAdmin {
