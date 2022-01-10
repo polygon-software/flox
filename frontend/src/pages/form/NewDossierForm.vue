@@ -100,7 +100,7 @@ import {inject, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
-import {FIELDS} from "src/data/FIELDS";
+import {FIELDS} from 'src/data/FIELDS';
 import {executeMutation} from "src/helpers/data-helpers";
 import ROUTES from "src/router/routes";
 import {RouterService} from "src/services/RouterService";
