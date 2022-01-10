@@ -415,8 +415,14 @@ async function sendDocument(){
   // Generate PDF file
   const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
+  // const files = {
+  //   finalDocument: pdfFile
+  // }
+  // // Upload document
+  // await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
+
   // TODO upload, so we have a UUID....
-  const fileUuid = 'TODO'
+  const fileUuid = '3f8b4352-6c26-4fad-99a1-1158687b6be9'
 
   const addresses = [
     contactInfo.email,

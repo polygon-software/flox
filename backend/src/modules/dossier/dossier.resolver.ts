@@ -150,6 +150,7 @@ export class DossierResolver {
    * Sends an e-mail containing a dossier document to the specified recipients
    * @param {SendDossierDocumentInput} sendDossierDocumentInput - input, containing dossier UUID, recipient, & file UUID
    * @param {Record<string, string>} user - current user
+   * @returns {Promise<void>} - done
    */
   @Mutation(() => Dossier)
   async sendDossierDocumentEmail(
@@ -166,7 +167,7 @@ export class DossierResolver {
     };
     const pdf = await this.fileService.getPrivateFile(args, dbUser);
 
-    return this.dossierService.sendDossierDocumentEmail(
+    await this.dossierService.sendDossierDocumentEmail(
       sendDossierDocumentInput,
       pdf,
     );

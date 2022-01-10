@@ -148,7 +148,7 @@ export async function sendDossierDocumentEmail(
 
   // Get File as buffer
   const file = fileGet.data;
-  const fileBuffer = await file.toBuffer();
+  const fileBuffer = Buffer.from(file);
 
   // Build AttachmentFile
   const attachmentFile = {
@@ -156,6 +156,10 @@ export async function sendDossierDocumentEmail(
     content: fileBuffer,
     contentType: 'application/pdf',
   };
+
+  console.log(
+    'attachment file:' + attachmentFile.filename + attachmentFile.contentType,
+  );
 
   // Send actual e-mail
   await sendEmail(sender, recipients, subject, body, [attachmentFile]);

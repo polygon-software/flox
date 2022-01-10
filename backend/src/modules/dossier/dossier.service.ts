@@ -282,5 +282,7 @@ export class DossierService {
 
     // Send actual e-mail
     await sendDossierDocumentEmail(dossier.readable_id, recipients, pdf);
+
+    return dossier;
   }
 }

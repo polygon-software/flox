@@ -105,7 +105,7 @@ async function onOk(): void {
     SEND_DOSSIER_DOCUMENT_EMAIL,
     {
       uuid: props.uuid,
-      recipients: targetAddresses,
+      recipients: targetAddresses.value,
       fileUuid: props.fileUuid
     })
 
