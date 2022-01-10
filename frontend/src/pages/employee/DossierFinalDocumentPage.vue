@@ -383,7 +383,7 @@ const dossierInfo = {
  */
 async function uploadPdfDocument(){
 
-  const pdf: File; // TODO create from html
+  const pdf: File = null; // TODO create from html
 
   const dossierUuid = dossierInfo.uuid // TODO
   const files = {
@@ -408,6 +408,7 @@ function goBack(){
  */
 function sendDocument(){
 
+  const pdfUuid = 'todo' // TODO
   const addresses = [
     contactInfo.email,
     'david.wyss@polygon-software.ch' // TODO get own email address
