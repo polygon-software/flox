@@ -53,6 +53,8 @@ import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import _ from 'lodash';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {SEND_DOSSIER_DOCUMENT_EMAIL} from 'src/data/mutations/DOSSIER';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -91,11 +93,15 @@ function hide(): void {
  * On OK, send e-mail to all entered addresses
  * @returns {void} - done
  */
-function onOk(): void {
+async function onOk(): void {
 
   // TODO validate for valid inputs
-  // TODO actual send email mutation
-  //await executeMutation(SEND_DOSSIER_FILE_EMAIL, {addresses: .addresses})
+  await executeMutation(
+    SEND_DOSSIER_DOCUMENT_EMAIL,
+    {
+      addresses: props.addresses,
+      file: props.file
+    })
 
   // Show confirmation prompt TODO
   showNotification(

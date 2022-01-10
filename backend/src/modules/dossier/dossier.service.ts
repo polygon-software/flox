@@ -266,18 +266,16 @@ export class DossierService {
    */
   async sendDossierDocumentEmail(
     sendDossierDocumentInput: SendDossierDocumentInput,
-    pdf: PrivateFile,
   ) {
     const dossierUuid = sendDossierDocumentInput.uuid;
     const recipients = sendDossierDocumentInput.recipients;
+    const pdf = sendDossierDocumentInput.file;
+    console.log('SEND EMAIL to dossier uuid', dossierUuid);
 
     const dossier = await this.dossierRepository.findOne(dossierUuid);
 
     if (!dossier) {
       throw new Error(`Dossier ${dossierUuid} does not exist`);
-    }
-    if (!pdf || !pdf.url) {
-      throw new Error('File does is missing URL!');
     }
 
     // Send actual e-mail
