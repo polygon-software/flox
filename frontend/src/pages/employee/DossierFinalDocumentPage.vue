@@ -384,17 +384,16 @@ const dossierInfo = {
  * @returns {Promise<string>} - uploaded PrivateFile's UUID
  */
 async function uploadPdfDocument(){
-
-  const pdf = await generatePdf('preview', true)
-  console.log('Got PDF file', pdf)
-
   const dossierUuid = dossierInfo.uuid // TODO
-  const files = {
-    finalDocument: pdf // TODO file name
-  }
-  // Upload document TODO
-  // await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
 
+  // Generate PDF file
+  const pdf = await generatePdf('preview', `Dossier_${dossierUuid}`)
+
+  const files = {
+    finalDocument: pdf
+  }
+  // Upload document
+  await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
 }
 
 /**
