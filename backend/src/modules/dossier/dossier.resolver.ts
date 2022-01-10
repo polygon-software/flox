@@ -15,6 +15,7 @@ import {
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
+import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -136,5 +137,15 @@ export class DossierResolver {
     updateOfferStatusInput: UpdateOfferStatusInput,
   ): Promise<Dossier> {
     return this.dossierService.updateOfferStatus(updateOfferStatusInput);
+  }
+
+  @Mutation(() => Dossier)
+  async sendDossierDocumentEmail(
+    @Args('sendDossierDocumentInput')
+    sendDossierDocumentInput: SendDossierDocumentInput,
+  ): Promise<void> {
+    return this.dossierService.sendDossierDocumentEmail(
+      sendDossierDocumentInput,
+    );
   }
 }

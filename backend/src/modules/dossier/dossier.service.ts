@@ -13,6 +13,8 @@ import { CreateOfferInput } from './dto/input/create-offer.input';
 import { Offer } from '../offer/entities/offer.entity';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
+import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
+import { sendDossierDocumentEmail } from '../../email/helper';
 
 @Injectable()
 export class DossierService {
@@ -247,5 +249,27 @@ export class DossierService {
     return this.dossierRepository.findOne(updateOfferStatusInput.dossier_uuid, {
       relations: ['offers', 'offers.bank'],
     });
+  }
+
+  /**
+   * Sends an E-mail containing an attached document belonging to a dossier
+   * @param {SendDossierDocumentInput} sendDossierDocumentInput - input, containing recipients & file
+   * @returns {Promise<void>} - done
+   */
+  async sendDossierDocumentEmail(
+    sendDossierDocumentInput: SendDossierDocumentInput,
+  ) {
+    const dossierUuid = sendDossierDocumentInput.uuid;
+    const pdfFile = sendDossierDocumentInput.pdf;
+    const recipients = sendDossierDocumentInput.recipients;
+
+    // Verify PrivateFile has URL
+    if (!pdfFile.url) {
+      // TODO get url
+      console.log('Uh oh, no URL');
+    }
+
+    // TODO
+    await sendDossierDocumentEmail(recipients, pdfFile);
   }
 }
