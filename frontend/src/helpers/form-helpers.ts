@@ -43,6 +43,7 @@ export class Form {
     // Offset by 1, since step starts at 1
     const currentPage: Record<string, Record<string, unknown>[]> = this.pages.value[this.step.value - 1]
 
+    // a page can either have just fields or sections with fields, therefore fields need to be defined correspondingly
     const sections = currentPage.sectionsLHS.concat(currentPage.sectionsRHS)
     // Fields on current page
     if (!currentPage.fields && sections.some(section => !section.fields)) {
