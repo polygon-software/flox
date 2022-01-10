@@ -109,10 +109,8 @@ import {CREATE_DOSSIER} from "src/data/mutations/DOSSIER";
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService | undefined = inject('$errorService')
-const emit = defineEmits(['submit'])
 
 const formRef: Ref<QForm | null> = ref(null)
-
 
 
 const realEstateFields = [
