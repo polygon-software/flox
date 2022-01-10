@@ -322,6 +322,8 @@ import DossierDocumentInfoField from 'components/dossier/DossierDocumentInfoFiel
 import DossierDocumentBooleanField from 'components/dossier/DossierDocumentBooleanField.vue';
 import DossierDocumentEmailDialog from 'components/dialogs/DossierDocumentEmailDialog.vue';
 import {useQuasar} from 'quasar';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {uploadFiles} from 'src/helpers/file-helpers';
 
 
 const $q = useQuasar()
@@ -341,6 +343,7 @@ const contactInfo = {
 }
 
 const dossierInfo = {
+  uuid: 'ec308968-753a-4a2c-a7dc-3a8bac388a17', // Just an example... TODO
   createdOn: new Date(),
   originalBankName: 'CLER',
   purchasePrice: 1000000,
@@ -373,6 +376,23 @@ const dossierInfo = {
   lossCertificates: false
 }
 
+/**
+ * Uploads the document as a PDF
+ * @param {File} pdf - PDF file
+ * @returns {Promise<string>} - uploaded PrivateFile's UUID
+ */
+async function uploadPdfDocument(){
+
+  const pdf: File; // TODO create from html
+
+  const dossierUuid = dossierInfo.uuid // TODO
+  const files = {
+    finalDocument: pdf // TODO file name
+  }
+  // Upload document
+  await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
+
+}
 
 /**
  * Goes back to the previous form page
@@ -387,6 +407,7 @@ function goBack(){
  * @returns {void}
  */
 function sendDocument(){
+
   const addresses = [
     contactInfo.email,
     'david.wyss@polygon-software.ch' // TODO get own email address
@@ -395,7 +416,8 @@ function sendDocument(){
   $q.dialog({
     component: DossierDocumentEmailDialog,
     componentProps: {
-      addresses
+      addresses,
+      pdfUuid
     }
   })
 }
