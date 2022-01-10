@@ -33,8 +33,8 @@
                   :key="leftSection.key">
                   <h7 class="q-py-xl q-my-xl">{{ leftSection.title }}</h7>
                   <component
-                    v-for="field in leftSection.fields"
                     :is="field.component"
+                    v-for="field in leftSection.fields"
                     :key="field.key"
                     v-bind="field.attributes"
                     v-model="form.values.value[field.key]"
