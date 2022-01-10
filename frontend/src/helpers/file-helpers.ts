@@ -13,9 +13,8 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
   let iter = 0
   let res:string|null = ''
   let token:string|null = ''
-  do{
+  do {
     res = localStorage.key(iter)
-    console.log('RES is', res)
     if(res?.endsWith('.idToken') && res?.startsWith('CognitoIdentityServiceProvider.')){
       token = localStorage.getItem(res)
       break

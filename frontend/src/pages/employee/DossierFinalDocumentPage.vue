@@ -380,6 +380,7 @@ const dossierInfo = {
 
 /**
  * Uploads the document as a PDF
+ * TODO add a "finish" button that does this
  * @param {File} pdf - PDF file
  * @returns {Promise<string>} - uploaded PrivateFile's UUID
  */
@@ -409,21 +410,21 @@ function goBack(){
  * @returns {Promise<void>} - done
  */
 async function sendDocument(){
+  const dossierUuid = dossierInfo.uuid
 
-  // Generate PDF
-  await uploadPdfDocument();
+  // Generate PDF file
+  const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
-  const pdfUuid = 'todo' // TODO
   const addresses = [
     contactInfo.email,
-    'david.wyss@polygon-software.ch' // TODO get own email address
+    'david.wyss@polygon-software.ch' // TODO get employee's own email address
   ]
 
   $q.dialog({
     component: DossierDocumentEmailDialog,
     componentProps: {
       addresses,
-      pdfUuid
+      file: pdfFile
     }
   })
 }

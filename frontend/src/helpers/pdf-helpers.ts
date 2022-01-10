@@ -2,7 +2,6 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import {i18n} from 'boot/i18n';
 
-
 /**
  * This file contains all helper functions related to generating PDFs
  */
