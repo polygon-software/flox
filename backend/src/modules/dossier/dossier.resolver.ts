@@ -146,13 +146,29 @@ export class DossierResolver {
     return this.dossierService.updateOfferStatus(updateOfferStatusInput);
   }
 
+  /**
+   * Sends an e-mail containing a dossier document to the specified recipients
+   * @param {SendDossierDocumentInput} sendDossierDocumentInput - input, containing dossier UUID, recipient, & file UUID
+   * @param {Record<string, string>} user - current user
+   */
   @Mutation(() => Dossier)
   async sendDossierDocumentEmail(
     @Args('sendDossierDocumentInput')
     sendDossierDocumentInput: SendDossierDocumentInput,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<void> {
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+
+    // Get actual file
+    const args: GetPrivateFileArgs = {
+      uuid: sendDossierDocumentInput.fileUuid,
+      expires: null,
+    };
+    const pdf = await this.fileService.getPrivateFile(args, dbUser);
+
     return this.dossierService.sendDossierDocumentEmail(
       sendDossierDocumentInput,
+      pdf,
     );
   }
 }

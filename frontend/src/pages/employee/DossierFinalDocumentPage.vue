@@ -415,6 +415,9 @@ async function sendDocument(){
   // Generate PDF file
   const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
+  // TODO upload, so we have a UUID....
+  const fileUuid = 'TODO'
+
   const addresses = [
     contactInfo.email,
     'david.wyss@polygon-software.ch' // TODO get employee's own email address
@@ -425,7 +428,7 @@ async function sendDocument(){
     componentProps: {
       uuid: dossierUuid,
       addresses,
-      file: pdfFile
+      fileUuid: fileUuid
     }
   })
 }

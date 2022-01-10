@@ -55,7 +55,6 @@ import {i18n} from 'boot/i18n';
 import _ from 'lodash';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {SEND_DOSSIER_DOCUMENT_EMAIL} from 'src/data/mutations/DOSSIER';
-import {toBase64} from 'src/helpers/image-helpers';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -72,9 +71,9 @@ const props = defineProps({
     type: String,
     required: true
   },
-  // File to attach to the E-mail
-  file: {
-    type: Object,
+  // File to attach to the E-mail's UUID
+  fileUuid: {
+    type: String,
     required: true
   }
 })
@@ -101,17 +100,13 @@ function hide(): void {
  * @returns {void} - done
  */
 async function onOk(): void {
-
-  // Convert file to base64
-  const base64File = await toBase64(props.file)
-
   // Send E-mail mutation
   await executeMutation(
     SEND_DOSSIER_DOCUMENT_EMAIL,
     {
       uuid: props.uuid,
       recipients: targetAddresses,
-      file: base64File
+      fileUuid: props.fileUuid
     })
 
   // Show confirmation prompt TODO

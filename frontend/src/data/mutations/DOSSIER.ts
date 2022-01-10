@@ -54,8 +54,8 @@ export const SET_DOSSIER_STATUS = {
 
 export const SEND_DOSSIER_DOCUMENT_EMAIL = {
   mutation: gql`
-    mutation sendDossierDocumentEmail($uuid: ID!, $recipients: [String!]!, $file: String!){
-      sendDossierDocumentEmail (sendDossierDocumentInput: {uuid: $uuid, recipients: $recipients, file: $file}) {
+    mutation sendDossierDocumentEmail($uuid: ID!, $recipients: [String!]!, $fileUuid: ID!){
+      sendDossierDocumentEmail (sendDossierDocumentInput: {uuid: $uuid, recipients: $recipients, fileUuid: $fileUuid}) {
         uuid
         status
         __typename
