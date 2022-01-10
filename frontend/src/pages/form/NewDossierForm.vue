@@ -33,9 +33,9 @@
                   :key="leftSection.key">
                   <h7 class="q-py-xl q-my-xl">{{ leftSection.title }}</h7>
                   <component
+                    :is="field.component"
                     v-for="field in leftSection.fields"
                     :key="field.key"
-                    :is="field.component"
                     v-bind="field.attributes"
                     v-model="form.values.value[field.key]"
                     @change="(newValue) => form.updateValue(field.key, newValue)"
@@ -49,9 +49,9 @@
                   :key="rightSection.key">
                   <h7 class="q-py-xl q-my-xl">{{ rightSection.title }}</h7>
                   <component
+                    :is="field.component"
                     v-for="field in rightSection.fields"
                     :key="field.key"
-                    :is="field.component"
                     v-bind="field.attributes"
                     v-model="form.values.value[field.key]"
                     @change="(newValue) => form.updateValue(field.key, newValue)"
@@ -100,12 +100,12 @@ import {inject, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
-import {FIELDS} from "src/data/FIELDS";
-import {executeMutation} from "src/helpers/data-helpers";
-import ROUTES from "src/router/routes";
-import {RouterService} from "src/services/RouterService";
-import {ErrorService} from "src/services/ErrorService";
-import {CREATE_DOSSIER} from "src/data/mutations/DOSSIER";
+import {FIELDS} from 'src/data/FIELDS';
+import {executeMutation} from 'src/helpers/data-helpers';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
+import {ErrorService} from 'src/services/ErrorService';
+import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService | undefined = inject('$errorService')
