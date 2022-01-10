@@ -165,6 +165,7 @@ export default {
     invalid_company_uid: 'Please enter your company\'s UID',
     invalid_address: 'Please enter a valid address',
     invalid_house_number: 'This number does not exist',
+    invalid_date: 'Please enter a valid date',
     invalid_city: 'Please enter a valid city',
     invalid_zip_code: 'Please enter a valid ZIP code',
     invalid_phone_number: 'Please enter a valid phone number',
@@ -207,6 +208,7 @@ export default {
     search: 'Search',
     new_assignment: 'Enter a new assignment',
     date: 'Date',
+    date_of_birth: 'Date of Birth',
     customer: 'Customer',
     institute: 'Institute',
     location: 'Location',
@@ -220,6 +222,10 @@ export default {
     organisation_id: 'Organisation number',
     employee_id: 'Employee number',
     role: 'Role',
+  },
+  form_for_clients: {
+    contact_info: 'Contact Information',
+    property: 'Property'
   },
   dossier_status_enum: {
     OPEN: 'Open',
