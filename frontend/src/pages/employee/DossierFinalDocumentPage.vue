@@ -385,7 +385,8 @@ const dossierInfo = {
  */
 async function uploadPdfDocument(){
 
-  const pdf = await generatePdf('preview')
+  const pdf = await generatePdf('preview', true)
+  console.log('Got PDF file', pdf)
 
   const dossierUuid = dossierInfo.uuid // TODO
   const files = {
