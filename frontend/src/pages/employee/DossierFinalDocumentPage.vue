@@ -3,8 +3,8 @@
     <div class="column">
 
       <!-- Page Print Preview -->
-      <q-card class="page shadow-6">
-        <div id="preview"  class="subpage">
+      <q-card id="preview" class="page shadow-6">
+        <div class="subpage">
           <!-- Logo + address row -->
           <div class="row justify-between">
             <img
@@ -326,6 +326,7 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import {generatePdf} from 'src/helpers/pdf-helpers';
 
 const $q = useQuasar()
 
@@ -383,51 +384,8 @@ const dossierInfo = {
  * @returns {Promise<string>} - uploaded PrivateFile's UUID
  */
 async function uploadPdfDocument(){
-  const elementId = 'preview'
-  const w = document.getElementById(elementId).offsetWidth;
-  const h = document.getElementById(elementId).offsetHeight;
-  // const file = await html2canvas(
-  //   document.getElementById(elementId), {
-  //   dpi: 300, // Set to 300 DPI
-  //   scale: 3, // Adjusts your resolution
-  //   onrendered: function(canvas) {
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  //     const img = canvas.toDataURL('image/jpeg', 1);
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  //     const doc = new jsPDF('L', 'px', [w, h]);
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  //     doc.addImage(img, 'JPEG', 0, 0, w, h);
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  //     doc.save('sample-file.pdf');
-  //     console.log('FILE:', file)
-  //
-  //   }
-  // });
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call
-  await html2canvas(document.getElementById(
-    elementId,
-    {
-        dpi: 300, // Set to 300 DPI
-        scale: 3, // Adjusts your resolution
-    }
-  )).then((canvas) => {
-    console.log('Got canvas', canvas)
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    const imgData = canvas.toDataURL(
-      'image/png');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const doc = new jsPDF('p', 'mm');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    doc.addImage(imgData, 'PNG', 10, 10);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    doc.save('sample-file.pdf');
-    console.log('BUM')
-  });
-
-
-
-  const pdf: File = null; // TODO create from html
+  const pdf = await generatePdf('preview')
 
   const dossierUuid = dossierInfo.uuid // TODO
   const files = {

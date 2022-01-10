@@ -205,7 +205,8 @@ export default {
     missing_user_type: 'Please select a user type',
     documents_missing: 'Documents missing',
     offer_already_present: 'You have already marked this dossier.',
-    unknown: 'Unknown Error'
+    unknown: 'Unknown Error',
+    pdf_generation_error: 'An error occurred while generating the PDF file.',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
