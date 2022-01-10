@@ -17,6 +17,7 @@ import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
 import { sendDossierDocumentEmail } from '../../email/helper';
+import PrivateFile from '../file/entities/private_file.entity';
 
 @Injectable()
 export class DossierService {
@@ -260,13 +261,14 @@ export class DossierService {
   /**
    * Sends an E-mail containing an attached document belonging to a dossier
    * @param {SendDossierDocumentInput} sendDossierDocumentInput - input, containing recipients & file
+   * @param {PrivateFile} pdf - the PDF file to attach to the e-mail
    * @returns {Promise<void>} - done
    */
   async sendDossierDocumentEmail(
     sendDossierDocumentInput: SendDossierDocumentInput,
+    pdf: PrivateFile,
   ) {
     const dossierUuid = sendDossierDocumentInput.uuid;
-    // const pdfFile = sendDossierDocumentInput.pdf; TODO re-add
     const recipients = sendDossierDocumentInput.recipients;
 
     const dossier = await this.dossierRepository.findOne(dossierUuid);
@@ -274,14 +276,11 @@ export class DossierService {
     if (!dossier) {
       throw new Error(`Dossier ${dossierUuid} does not exist`);
     }
-    //
-    // // Verify PrivateFile has URL
-    // if (!pdfFile.url) {
-    //   // TODO get url
-    //   console.log('Uh oh, no URL');
-    // }
-    //
-    // // Send actual e-mail
-    // await sendDossierDocumentEmail(dossier.readable_id, recipients, pdfFile);
+    if (!pdf || !pdf.url) {
+      throw new Error('File does is missing URL!');
+    }
+
+    // Send actual e-mail
+    await sendDossierDocumentEmail(dossier.readable_id, recipients, pdf);
   }
 }

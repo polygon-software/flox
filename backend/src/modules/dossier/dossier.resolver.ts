@@ -16,10 +16,17 @@ import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
+import { FileService } from '../file/file.service';
+import { UserService } from '../user/user.service';
+import { GetPrivateFileArgs } from '../file/dto/get-private-file.args';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
-  constructor(private readonly dossierService: DossierService) {}
+  constructor(
+    private readonly dossierService: DossierService,
+    private readonly fileService: FileService,
+    private readonly userService: UserService,
+  ) {}
 
   /**
    * Adds a new dossier to the database
@@ -143,9 +150,20 @@ export class DossierResolver {
   async sendDossierDocumentEmail(
     @Args('sendDossierDocumentInput')
     sendDossierDocumentInput: SendDossierDocumentInput,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<void> {
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+
+    // Get actual file
+    const args: GetPrivateFileArgs = {
+      uuid: sendDossierDocumentInput.pdfUuid,
+      expires: null,
+    };
+    const pdf = await this.fileService.getPrivateFile(args, dbUser);
+
     return this.dossierService.sendDossierDocumentEmail(
       sendDossierDocumentInput,
+      pdf,
     );
   }
 }
