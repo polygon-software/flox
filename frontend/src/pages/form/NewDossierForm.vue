@@ -104,7 +104,7 @@ import {FIELDS} from 'src/data/FIELDS';
 import {executeMutation} from 'src/helpers/data-helpers';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {ErrorService} from "src/services/ErrorService";
+import {ErrorService} from 'src/services/ErrorService';
 import {CREATE_DOSSIER} from "src/data/mutations/DOSSIER";
 
 const $routerService: RouterService | undefined = inject('$routerService')
