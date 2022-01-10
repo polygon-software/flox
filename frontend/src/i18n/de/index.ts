@@ -209,6 +209,7 @@ export default {
     search: 'Suche',
     new_assignment: 'Neuen Auftrag erfassen',
     date: 'Datum',
+    date_of_birth: 'Geburtsdatum',
     customer: 'Kunde',
     institute: 'Institut',
     location: 'Ort',
@@ -222,6 +223,10 @@ export default {
     organisation_id: 'Organisationsnummer',
     employee_id: 'Mitarbeiternummer',
     role: 'Rolle',
+  },
+  form_for_clients: {
+    contact_info: 'Kontakt',
+    property: 'Immobilie'
   },
   dossier_status_enum: {
     OPEN: 'Offen',

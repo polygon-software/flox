@@ -43,8 +43,18 @@ export class Form {
     // Offset by 1, since step starts at 1
     const currentPage: Record<string, Record<string, unknown>[]> = this.pages.value[this.step.value - 1]
 
+    const sections = currentPage.sectionsLHS.concat(currentPage.sectionsRHS)
     // Fields on current page
-    const pageFields: Record<string, unknown>[] = currentPage.fields
+    if (!currentPage.fields && sections.some(section => !section.fields)) {
+      throw new Error("There aren't any fields defined.");
+    }
+    let pageFields: Record<string, unknown>[] = currentPage.fields ?? []
+    if (pageFields.length === 0){
+      pageFields = []
+      sections.forEach(section => {
+        pageFields = pageFields.concat(section.fields as Record<string, unknown>[])
+      })
+    }
     pageFields.forEach((field: Record<string, any>) => {
       pageKeys.push(field.key as string)
     })

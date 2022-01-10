@@ -207,6 +207,7 @@ export default {
     search: 'Search',
     new_assignment: 'Enter a new assignment',
     date: 'Date',
+    date_of_birth: 'Date of Birth',
     customer: 'Customer',
     institute: 'Institute',
     location: 'Location',
@@ -220,6 +221,10 @@ export default {
     organisation_id: 'Organisation number',
     employee_id: 'Employee number',
     role: 'Role',
+  },
+  form_for_clients: {
+    contact_info: 'Contact Information',
+    property: 'Property'
   },
   dossier_status_enum: {
     OPEN: 'Open',
