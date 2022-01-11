@@ -367,7 +367,7 @@ const contactInfo = {
   city: 'Sowieso',
 }
 const dossierInfo = {
-  uuid: 'ec308968-753a-4a2c-a7dc-3a8bac388a17', // Just an example... TODO
+  uuid: 'a3a303ea-0793-4945-be9b-8a8412aad957', // Just an example... TODO
   createdOn: new Date(),
   originalBankName: 'CLER',
   purchasePrice: 1000000,
@@ -425,13 +425,10 @@ async function uploadPdfDocument(){
   }
 
   // Upload document
-  const uploadResponse: Record<string, unknown>[] = await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
+  const uploadResponse: Record<string, unknown>[] = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')
 
-  // Get documents of dossier
-  const documents: Record<string, unknown>[] = uploadResponse[0].data.documents as Record<string, unknown>[]
-
-  // Find newest document
-  const newPdf: Record<string, string|null> = documents.reduce((a, b) => new Date(a.created_at) > new Date(b.created_at) ? a : b)
+  // Get actual file
+  const newPdf: Record<string, unknown> = uploadResponse[0].data.finalDocument as Record<string, unknown>
 
   // Store to local variable & set loading state
   fileUuid.value = newPdf.uuid

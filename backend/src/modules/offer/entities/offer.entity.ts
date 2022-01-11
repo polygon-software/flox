@@ -10,7 +10,9 @@ import { OFFER_STATUS } from '../../../ENUM/ENUMS';
 @ObjectType()
 export class Offer extends BaseEntity {
   @Field(() => Dossier, { description: 'Dossier of Offer' })
-  @ManyToOne(() => Dossier, (dossier) => dossier.offers)
+  @ManyToOne(() => Dossier, (dossier) => dossier.offers, {
+    onDelete: 'SET NULL',
+  })
   dossier: Dossier;
 
   @Field(() => Bank, { description: 'Bank making the offer' })

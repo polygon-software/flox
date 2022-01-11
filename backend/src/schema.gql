@@ -274,7 +274,7 @@ type Dossier {
   """Date of deletion"""
   deleted_at: DateTime
 
-  """Documents of the company"""
+  """Documents of the dossier"""
   documents: [PrivateFile!]
 
   """Mail"""
@@ -282,6 +282,9 @@ type Dossier {
 
   """Employee who created the Dossier"""
   employee: Employee!
+
+  """Final summary document, to be signed by customer"""
+  finalDocument: PrivateFile
 
   """First Name"""
   first_name: String!
