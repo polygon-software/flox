@@ -148,16 +148,9 @@ export async function sendDossierDocumentEmail(
     throw new Error(`Could not download File from ${url}`);
   }
 
-  console.log(
-    'GET result:',
-    Object.keys(fileGet),
-    fileGet.status,
-    fileGet.config,
-  );
-
   // Get File as buffer
-  const blob = fileGet.data;
-  const fileBuffer = Buffer.from(blob);
+  const arrayBuffer = fileGet.data;
+  const fileBuffer = Buffer.from(arrayBuffer);
 
   // Build AttachmentFile
   const attachmentFile = {
@@ -165,15 +158,6 @@ export async function sendDossierDocumentEmail(
     content: fileBuffer,
     contentType: 'application/pdf',
   };
-
-  console.log(
-    'attachment file:' +
-      attachmentFile.filename +
-      ', ' +
-      attachmentFile.contentType +
-      'with size' +
-      attachmentFile.content.length,
-  );
 
   // Send actual e-mail
   await sendEmail(sender, recipients, subject, body, [attachmentFile]);
