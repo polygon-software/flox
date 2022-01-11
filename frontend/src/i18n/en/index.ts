@@ -94,6 +94,7 @@ export default {
     failure: 'Failure',
     dossier_reset: 'Successfully reset dossier',
     dossier_reset_failed: 'Dossier reset failed',
+    email_sent: 'E-Mail(s) sent'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',

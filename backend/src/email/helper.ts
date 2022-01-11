@@ -5,7 +5,7 @@ import PrivateFile from '../modules/file/entities/private_file.entity';
 import axios from 'axios';
 
 /**
- * Sends an e-mail with attachment(s) using nodemailer
+ * Sends an e-mail with attachment(s) using Nodemailer
  * @param {string} from - the sender's e-mail address TODO NOTE: in sandbox mode, you can only send from verified addresses!
  * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
  * @param {string} subject - E-mail subject
@@ -34,6 +34,9 @@ export async function sendEmail(
 
   // Create Nodemailer SES transporter
   const transporter = nodemailer.createTransport({
+    secure: true,
+    requireTLS: true,
+    secured: true,
     SES: {
       ses: sesClient,
       aws: { SendRawEmailCommand },
