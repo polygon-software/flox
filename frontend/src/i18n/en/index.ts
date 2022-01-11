@@ -124,6 +124,7 @@ export default {
     submit: 'Submit',
     ok: 'OK',
     download: 'Download',
+    upload: 'Upload',
     preview: 'Preview',
   },
   documents: {

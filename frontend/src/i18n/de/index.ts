@@ -126,6 +126,7 @@ export default {
     cancel: 'Abbrechen',
     ok: 'OK',
     download: 'Herunterladen',
+    upload: 'Hochladen',
     preview: 'Vorschau',
   },
   documents: {

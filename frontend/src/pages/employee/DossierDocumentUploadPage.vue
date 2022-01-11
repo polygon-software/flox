@@ -19,12 +19,12 @@
             v-for="(field, index) in section.fields"
             :key="field.key"
           >
-            <q-item
-              class="row"
+            <div
+              class="row full-width"
               style="margin: 20px 0 20px 0"
             >
               <!-- Label & caption -->
-              <div class="column">
+              <div class="column col-4">
                 <q-item-label>
                   {{ field.label }}
                 </q-item-label>
@@ -32,7 +32,46 @@
                   {{ field.caption }}
                 </q-item-label>
               </div>
-            </q-item>
+
+              <!-- Uploaded files -->
+              <div class="column col-6">
+                <div
+                  v-for="(file, index) in field.files"
+                  :key="'file_' + index"
+                  class="row"
+                >
+                  <q-icon
+                    name="description"
+                    color="primary"
+                  />
+                  <!-- TODO link to file... -->
+                  <p class="text-primary" style="margin-left: 6px">
+                    {{file.filename}}
+                  </p>
+
+                  <!-- TODO:  @click="() => removeFile(section, field, file)" -->
+                  <q-btn
+                    class="q-pa-sm q-ma-none"
+                    icon="close"
+                    flat
+                    size="sm"
+                    color="grey-5"
+                  />
+                </div>
+              </div>
+
+              <!-- Upload button -->
+              <div style="width: 190px; height: 30px">
+                <q-btn
+                  size="md"
+                  :label="$t('buttons.upload')"
+                  icon-right="upload"
+                  outline
+                  color="primary"
+                />
+              </div>
+
+            </div>
             <q-separator v-if="index < section.fields.length-1"/>
           </div>
         </q-card>
@@ -54,7 +93,14 @@ const sections = ref([
       {
         label: 'ID / Passkopie',
         key: 'id',
-        files: []
+        files: [
+          {
+            filename: 'blubb.pdf'
+          },
+          {
+            filename: 'blabla.pdf'
+          }
+        ]
       },
       {
         label: 'Lohnabrechnungen',
