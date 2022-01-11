@@ -1,22 +1,25 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center content-start">
     <div class="column">
 
-      <!-- Loading indicator -->
-      <q-card v-if="loading" class="page shadow-6 flex flex-center">
+      <!-- Loading overlay -->
+      <div
+        v-if="loading"
+        class="page flex flex-center loading-indicator"
+      >
         <div class="column">
           <q-spinner
             size="50px"
-            color="primary"
+            color="white"
           />
-          <h6 class="text-grey-8">
+          <h6 class="text-white">
             {{ $t('general.loading') }}
           </h6>
         </div>
-      </q-card>
+      </div>
+
       <!-- Page Print Preview -->
       <q-card
-        v-show="!loading"
         id="preview"
         class="page shadow-6"
       >
@@ -363,7 +366,6 @@ const contactInfo = {
   zipCode: '6003',
   city: 'Sowieso',
 }
-
 const dossierInfo = {
   uuid: 'ec308968-753a-4a2c-a7dc-3a8bac388a17', // Just an example... TODO
   createdOn: new Date(),
@@ -398,16 +400,15 @@ const dossierInfo = {
   lossCertificates: false
 }
 
-// On mount, generate PDF // TODO re-enable
-// onMounted(() => {
-//   // Upload PDF document
-//   void uploadPdfDocument()
-// })
+//On mount, generate PDF
+onMounted(() => {
+  // Upload PDF document
+  void uploadPdfDocument()
+})
 
 
 /**
  * Uploads the document as a PDF (done on page load)
- * @param {File} pdf - PDF file
  * @returns {Promise<string>} - uploaded PrivateFile's UUID
  */
 async function uploadPdfDocument(){
@@ -503,6 +504,15 @@ function printDocument(){
   border: none;
   border-top: 1px dotted lightgrey;
   margin: 3mm 0 3mm 0
+}
+
+/* Loading overlay */
+.loading-indicator{
+  position: absolute;
+  z-index: 10;
+  border-radius: 5px;
+  background-color: rgba(50, 50, 50, 0.6);
+  backdrop-filter: blur(5px);
 }
 
 @page {
