@@ -415,14 +415,24 @@ async function sendDocument(){
   // Generate PDF file
   const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
-  // const files = {
-  //   finalDocument: pdfFile
-  // }
-  // // Upload document
-  // await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
+  // Prepare for upload
+  const files = {
+    finalDocument: pdfFile
+  }
+  // Upload document
+  const uploadResponse: Record<string, unknown>[] = await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
+
+  // Get documents of dossier
+  const documents: Record<string, unknown>[] = uploadResponse[0].data.documents as Record<string, unknown>[]
+
+  // Find new document: since it's only one file, take first
+  const newPdf: Record<string, string|null> = documents.reduce((a, b) => new Date(a.created_at) > new Date(b.created_at) ? a : b)
+
+  console.log(uploadResponse)
+  console.log('Newest document:', newPdf)
 
   // TODO upload, so we have a UUID....
-  const fileUuid = 'ec597b2a-92be-4135-b342-3d0a0712d890'
+  const fileUuid = newPdf.uuid
 
   const addresses = [
     contactInfo.email,
