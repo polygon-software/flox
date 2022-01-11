@@ -29,64 +29,17 @@
 
         <!-- Card -->
         <q-card class="full-width q-pa-md">
-          <!-- Fields -->
+          <!-- Required Fields -->
           <div
-            v-for="(field, index) in section.fields"
+            v-for="(field, index) in section.fields.required"
             :key="field.key"
           >
-            <div
-              class="row full-width"
-              style="margin: 20px 0 20px 0"
-            >
-              <!-- Label & caption -->
-              <div class="column col-4">
-                <q-item-label>
-                  {{ field.label }}{{ field.required? ' *' : ''}}
-                </q-item-label>
-                <q-item-label v-if="field.caption" caption>
-                  {{ field.caption }}
-                </q-item-label>
-              </div>
-
-              <!-- Uploaded files -->
-              <div class="column col-6">
-                <div
-                  v-for="(file, fileIndex) in (files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : [])"
-                  :key="'file_' + fileIndex"
-                  class="row items-center"
-                >
-                  <q-icon
-                    name="description"
-                    color="primary"
-                  />
-                  <!-- TODO link to file, proper centering -->
-                  <p class="text-primary" style="margin-left: 6px">
-                    {{file.filename}}
-                  </p>
-
-                  <!-- TODO:  @click="() => removeFile(section, field, file)" -->
-                  <q-btn
-                    class="q-pa-sm q-ma-none"
-                    icon="close"
-                    flat
-                    size="sm"
-                    color="grey-5"
-                  />
-                </div>
-              </div>
-
-              <!-- Upload button -->
-              <div style="width: 190px; height: 30px">
-                <q-btn
-                  size="md"
-                  :label="$t('buttons.upload')"
-                  icon-right="upload"
-                  outline
-                  color="primary"
-                />
-              </div>
-
-            </div>
+            <FileUploadField
+              :label="field.label"
+              :caption="field.caption"
+              :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
+              required
+            />
             <q-separator v-if="index < section.fields.length-1"/>
           </div>
         </q-card>
@@ -99,110 +52,104 @@
 
 import {Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
+import FileUploadField from 'pages/employee/FileUploadField.vue';
 
 const sections = {
   financials: {
     title: i18n.global.t('documents.financials.title'),
     required: true,
-    fields: [
-      {
-        label: i18n.global.t('documents.financials.id'),
-        key: 'id',
-        required: true,
-        files: [
-          {
-            filename: 'blubb.pdf'
-          },
-          {
-            filename: 'blabla.pdf'
-          }
-        ]
-      },
-      {
-        label: i18n.global.t('documents.financials.salary'),
-        caption: i18n.global.t('documents.financials.salary_caption'),
-        key: 'salary',
-        required: true,
-      },
-      {
-        label: 'Rentenbescheinigung',
-        caption: 'Der letzten drei Monate',
-        key: 'pension',
-        required: true,
-      },
-      {
-        label: i18n.global.t('documents.financials.last_year_tax', {year: new Date().getFullYear()-1}),
-        caption: i18n.global.t('documents.financials.last_year_tax_caption'),
-        key: 'last_year_tax',
-        required: true,
-      },
-      {
-        label: i18n.global.t('documents.financials.pension_id'),
-        key: 'pension_id',
-        required: true,
-      },
-      {
-        label: i18n.global.t('documents.financials.last_year_salary', {year: new Date().getFullYear()-1}),
-        key: 'last_year_salary',
-        required: true,
-      },
-      {
-        label: i18n.global.t('documents.financials.debt_collection'),
-        key: 'debt_collection',
-        required: false,
-      },
-      {
-        label: i18n.global.t('documents.financials.own_funds'),
-        caption: i18n.global.t('documents.financials.own_funds_caption'),
-        key: 'own_funds',
-        required: false,
-      },
-      {
-        label: i18n.global.t('documents.financials.three_a'),
-        key: 'three_a',
-        required: false,
-      },
-      {
-        label: i18n.global.t('documents.financials.life_insurance'),
-        key: 'life_insurance',
-        required: false,
-      },
-      {
-        label: i18n.global.t('documents.financials.leasing_contract'),
-        key: 'leasing_contract',
-        required: false,
-      },
-      {
-        label: i18n.global.t('documents.financials.credit_contract'),
-        key: 'credit_contract',
-        required: false,
-      },
-      {
-        label: i18n.global.t('documents.financials.work_contract'),
-        key: 'work_contract',
-        required: false,
-      },
-      {
-        label: i18n.global.t('documents.financials.marriage_contract'),
-        key: 'marriage_contract',
-        required: false,
-      }
-    ]
+    fields: {
+      required: [
+        {
+          label: i18n.global.t('documents.financials.id'),
+          key: 'id',
+          files: [
+            {
+              filename: 'blubb.pdf'
+            },
+            {
+              filename: 'blabla.pdf'
+            }
+          ]
+        },
+        {
+          label: i18n.global.t('documents.financials.salary'),
+          caption: i18n.global.t('documents.financials.salary_caption'),
+          key: 'salary',
+        },
+        {
+          label: 'Rentenbescheinigung',
+          caption: 'Der letzten drei Monate',
+          key: 'pension',
+        },
+        {
+          label: i18n.global.t('documents.financials.last_year_tax', {year: new Date().getFullYear()-1}),
+          caption: i18n.global.t('documents.financials.last_year_tax_caption'),
+          key: 'last_year_tax',
+        },
+        {
+          label: i18n.global.t('documents.financials.pension_id'),
+          key: 'pension_id',
+        },
+        {
+          label: i18n.global.t('documents.financials.last_year_salary', {year: new Date().getFullYear()-1}),
+          key: 'last_year_salary',
+        },
+      ],
+      optional: [
+        {
+          label: i18n.global.t('documents.financials.debt_collection'),
+          key: 'debt_collection',
+        },
+        {
+          label: i18n.global.t('documents.financials.own_funds'),
+          caption: i18n.global.t('documents.financials.own_funds_caption'),
+          key: 'own_funds',
+        },
+        {
+          label: i18n.global.t('documents.financials.three_a'),
+          key: 'three_a',
+        },
+        {
+          label: i18n.global.t('documents.financials.life_insurance'),
+          key: 'life_insurance',
+        },
+        {
+          label: i18n.global.t('documents.financials.leasing_contract'),
+          key: 'leasing_contract',
+        },
+        {
+          label: i18n.global.t('documents.financials.credit_contract'),
+          key: 'credit_contract',
+        },
+        {
+          label: i18n.global.t('documents.financials.work_contract'),
+          key: 'work_contract',
+        },
+        {
+          label: i18n.global.t('documents.financials.marriage_contract'),
+          key: 'marriage_contract',
+        }
+      ]
+    }
   },
 
   // TODO other sections...
   property: {
     title: i18n.global.t('documents.property.title'),
     required: true,
-    fields: [
-      {
-        label: 'Kopie Hypothekar-Kreditvertrag',
-        caption: 'Bei Ablösungen',
-        key: 'id',
-        required: true,
-        files: []
-      },
-    ]
+    fields: {
+      required:
+      [
+        {
+          label: 'Kopie Hypothekar-Kreditvertrag',
+          caption: 'Bei Ablösungen',
+          key: 'id',
+          required: true,
+          files: []
+        },
+      ]
+    }
   }
 }
 
@@ -229,16 +176,16 @@ function uploadFile(section: string, field: string) {
  */
 function sectionComplete(key: string): boolean{
   const section = sections[key] as Record<string, unknown>
-  const fields = section.fields as Record<string, unknown>[]
+  const requiredFields = section.fields.required as Record<string, unknown>[]
 
   const allFiles = files.value
 
   // Check if all required fields have at least one file
-  return fields.every((field) => {
+  return requiredFields.every((field) => {
     // Find files for this field (if any)
     const fieldFiles = allFiles[key] && allFiles[key][field] ? allFiles[key][field] as Record<string, unknown>[] : []
 
-    return !field.required || fieldFiles.length > 0
+    return fieldFiles.length > 0
   })
 }
 

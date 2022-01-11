@@ -135,9 +135,10 @@ export default {
     document_upload: 'Dokumentenupload',
     additional_documents: 'Weitere Dokumente',
     add_additional_documents: 'Weitere hinzufügen',
+    optional_documents: 'Optionale Dokumente',
     financials: {
       // TODO transfer to english version!
-      title: 'Finanzdaten',
+      title: 'Finanzdokumente',
       id: 'ID-/Passkopie',
       salary: 'Lohnabrechnung',
       salary_caption: 'Der letzten drei Monate',
@@ -157,7 +158,7 @@ export default {
       marriage_contract: 'Ehevertrag',
     },
     property: {
-      title: 'Liegenschaftsdaten'
+      title: 'Liegenschaftsdokumente'
     }
   },
   dossier: {
