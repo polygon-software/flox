@@ -138,7 +138,6 @@ export default {
     financials: {
       // TODO transfer to english version!
       title: 'Finanzdaten',
-      if_available: 'sofern vorhanden',
       id: 'ID-/Passkopie',
       salary: 'Lohnabrechnung',
       salary_caption: 'Der letzten drei Monate',

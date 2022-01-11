@@ -147,9 +147,45 @@ const sections = {
         required: true,
       },
       {
-        label: i18n.global.t('documents.financials.last_year_salary', {year: new Date().getFullYear()-1}),
-        key: 'last_year_salary',
-        required: true,
+        label: i18n.global.t('documents.financials.debt_collection'),
+        key: 'debt_collection',
+        required: false,
+      },
+      {
+        label: i18n.global.t('documents.financials.own_funds'),
+        caption: i18n.global.t('documents.financials.own_funds_caption'),
+        key: 'own_funds',
+        required: false,
+      },
+      {
+        label: i18n.global.t('documents.financials.three_a'),
+        key: 'three_a',
+        required: false,
+      },
+      {
+        label: i18n.global.t('documents.financials.life_insurance'),
+        key: 'life_insurance',
+        required: false,
+      },
+      {
+        label: i18n.global.t('documents.financials.leasing_contract'),
+        key: 'leasing_contract',
+        required: false,
+      },
+      {
+        label: i18n.global.t('documents.financials.credit_contract'),
+        key: 'credit_contract',
+        required: false,
+      },
+      {
+        label: i18n.global.t('documents.financials.work_contract'),
+        key: 'work_contract',
+        required: false,
+      },
+      {
+        label: i18n.global.t('documents.financials.marriage_contract'),
+        key: 'marriage_contract',
+        required: false,
       }
     ]
   },
@@ -199,6 +235,7 @@ function sectionComplete(key: string): boolean{
 
   // Check if all required fields have at least one file
   return fields.every((field) => {
+    // Find files for this field (if any)
     const fieldFiles = allFiles[key] && allFiles[key][field] ? allFiles[key][field] as Record<string, unknown>[] : []
 
     return !field.required || fieldFiles.length > 0
