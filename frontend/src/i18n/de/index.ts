@@ -135,6 +135,31 @@ export default {
     document_upload: 'Dokumentenupload',
     additional_documents: 'Weitere Dokumente',
     add_additional_documents: 'Weitere hinzufügen',
+    financials: {
+      // TODO transfer to english version!
+      title: 'Finanzdaten',
+      if_available: 'sofern vorhanden',
+      id: 'ID-/Passkopie',
+      salary: 'Lohnabrechnung',
+      salary_caption: 'Der letzten drei Monate',
+      pension: 'Rentenbescheinigung',
+      last_year_tax: 'Steuererklärung {year}',
+      last_year_tax_caption: 'Inkl. Schulden-, Liegenschafts- und Wertschriftenverzeichnis',
+      pension_id: 'Pensionskassenausweis',
+      last_year_salary: 'Lohnausweis {year}',
+      debt_collection: 'Betreibungsauszug',
+      own_funds: 'Aufstellung der Eigenmittel - Kontoauszüge',
+      own_funds_caption: 'Lohnkonto, Sparkonto, Wertschriften',
+      three_a: 'Policen Säule 3a',
+      life_insurance: 'Policen Lebensversicherung/Risikoversicherung',
+      leasing_contract: 'Leasingvertrag',
+      credit_contract: 'Kreditvertrag',
+      work_contract: 'Arbeitsvertrag',
+      marriage_contract: 'Ehevertrag',
+    },
+    property: {
+      title: 'Liegenschaftsdaten'
+    }
   },
   dossier: {
     reset_dossier: 'Dossier zurücksetzen',
@@ -250,8 +275,7 @@ export default {
     subject_rejected: 'Abgelehnt',
     body_rejected: 'Die Applikation wurde abgelehnt'
   },
-
   bank: {
     new_user: 'Neuer Benutzer'
-  }
+  },
 };
