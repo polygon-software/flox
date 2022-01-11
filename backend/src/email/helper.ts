@@ -141,24 +141,38 @@ export async function sendDossierDocumentEmail(
   const subject = `S.O.I Dossier ${readableId}`;
   const body = 'Please see attached file';
   // Download attachment file from given link
-  const fileGet = await axios.get(url);
+  const fileGet = await axios.get(url, {
+    responseType: 'arraybuffer',
+  });
   if (!fileGet || !fileGet.data) {
     throw new Error(`Could not download File from ${url}`);
   }
 
+  console.log(
+    'GET result:',
+    Object.keys(fileGet),
+    fileGet.status,
+    fileGet.config,
+  );
+
   // Get File as buffer
-  const file = fileGet.data;
-  const fileBuffer = Buffer.from(file);
+  const blob = fileGet.data;
+  const fileBuffer = Buffer.from(blob);
 
   // Build AttachmentFile
   const attachmentFile = {
-    filename: pdfFile.key.substring(37), // Extract filename from key, since key is just filename prepended with UUID
+    filename: `Dossier_${readableId}`,
     content: fileBuffer,
     contentType: 'application/pdf',
   };
 
   console.log(
-    'attachment file:' + attachmentFile.filename + attachmentFile.contentType,
+    'attachment file:' +
+      attachmentFile.filename +
+      ', ' +
+      attachmentFile.contentType +
+      'with size' +
+      attachmentFile.content.length,
   );
 
   // Send actual e-mail

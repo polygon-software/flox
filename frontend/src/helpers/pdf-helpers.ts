@@ -38,7 +38,10 @@ export async function generatePdf(elementId: string, filename: string, download 
     0,
     0,
     width,
-    height
+    height,
+    'pageContent',
+    'MEDIUM',
+    0
   );
 
   // Download (if applicable)

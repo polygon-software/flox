@@ -422,7 +422,7 @@ async function sendDocument(){
   // await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
 
   // TODO upload, so we have a UUID....
-  const fileUuid = '3f8b4352-6c26-4fad-99a1-1158687b6be9'
+  const fileUuid = 'ec597b2a-92be-4135-b342-3d0a0712d890'
 
   const addresses = [
     contactInfo.email,
