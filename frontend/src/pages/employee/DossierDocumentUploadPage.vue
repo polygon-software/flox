@@ -1,21 +1,22 @@
 <template>
   <q-page class="flex flex-start">
     <div
-      class="column q-pa-lg full-width"
+      class="column justify-start q-pa-lg full-width"
     >
       <div
         v-for="(section, key) in sections"
         :key="key"
+        class="q-ma-none q-pa-none full-width"
       >
         <!-- Title & section status-->
-        <div class="row full-width justify-between items-center">
-          <h5>
+        <div class="row full-width justify-between items-center q-ma-none q-pa-none">
+          <h5 class="q-pa-none">
             {{ section.title }}{{ section.required? ' *' : ''}}
           </h5>
           <!-- "Section complete" marker -->
           <div
             v-if="sectionComplete(key)"
-            class="bg-positive flex flex-center"
+            class="bg-positive"
             style="height: 24px; width: 24px; border-radius: 12px"
           >
             <q-icon
