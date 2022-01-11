@@ -7,10 +7,24 @@
         v-for="section in sections"
         :key="section.key"
       >
-        <!-- Title -->
-        <h5>
-          {{ section.title }}{{ section.required? ' *' : ''}}
-        </h5>
+        <!-- Title & section status-->
+        <div class="row full-width justify-between items-center">
+          <h5>
+            {{ section.title }}{{ section.required? ' *' : ''}}
+          </h5>
+
+          <div
+            v-if="sectionComplete(section.key)"
+            class="bg-positive flex flex-center"
+            style="height: 24px; width: 24px; border-radius: 12px"
+          >
+            <q-icon
+              color="white"
+              name="check"
+              size="sm"
+            />
+          </div>
+        </div>
 
         <!-- Card -->
         <q-card class="full-width q-pa-md">
@@ -38,7 +52,7 @@
                 <div
                   v-for="(file, index) in field.files"
                   :key="'file_' + index"
-                  class="row"
+                  class="row items-center"
                 >
                   <q-icon
                     name="description"
@@ -106,24 +120,35 @@ const sections = ref([
         label: 'Lohnabrechnungen',
         caption: 'Der letzten drei Monate',
         key: 'salary',
-        files: []
+        required: true,
+        files: [
+          {
+            filename: 'blubb.pdf'
+          },
+          {
+            filename: 'blabla.pdf'
+          }
+          ]
       },
       {
         label: 'Rentenbescheinigung',
         caption: 'Der letzten drei Monate',
         key: 'pension',
+        required: false, // TODO true
         files: []
       },
       {
         label: 'Steuererklärung 2020',
         caption: 'Inkl. Schulden-, Liegenschafts- und Wertschriftenverzeichnis',
         key: 'last_year_tax',
+        required: false, // TODO true
         files: []
       },
       {
         label: 'Lohnausweis 2020',
         caption: 'Inkl. Schulden-, Liegenschafts- und Wertschriftenverzeichnis',
         key: 'last_year_salary',
+        required: false, // TODO true
         files: []
       }
     ]
@@ -139,10 +164,25 @@ const sections = ref([
         label: 'Kopie Hypothekar-Kreditvertrag',
         caption: 'Bei Ablösungen',
         key: 'id',
+        required: true,
         files: []
       },
     ]
   }
 ])
+
+/**
+ * Determines whether a section is complete
+ * @param {string} key - the section's key
+ * @returns {boolean} - whether the section is complete
+ */
+function sectionComplete(key: string): boolean{
+  const section = sections.value.find((section) => section.key === key)
+
+  // Check if all required fields have at least one file
+  return section.fields.every((field) => {
+    return !field.required || field.files.length > 0
+  })
+}
 
 </script>
