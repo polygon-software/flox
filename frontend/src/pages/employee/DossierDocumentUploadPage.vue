@@ -43,14 +43,14 @@
             <q-separator v-if="index < section.fields.required.length-1"/>
           </div>
 
-          <q-separator v-if="section.fields.optional"/>
+          <q-separator v-if="section.fields.optional" style="margin-bottom: 10px"/>
 
           <!-- Optional Fields -->
           <q-expansion-item
             v-if="section.fields.optional"
             :label="$t('documents.optional_documents')"
-            icon="description"
             header-class="text-grey-7"
+            switch-toggle-side
           >
             <div
               v-for="(field, index) in section.fields.optional"
