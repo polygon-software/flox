@@ -42,6 +42,26 @@
             />
             <q-separator v-if="index < section.fields.length-1"/>
           </div>
+
+          <!-- Optional Fields -->
+          <q-expansion-item
+            v-if="section.fields.optional"
+            :label="$t('documents.optional_documents')"
+            icon="description"
+            header-class="text-grey-7"
+          >
+            <div
+              v-for="(field, index) in section.fields.optional"
+              :key="field.key"
+            >
+              <FileUploadField
+                :label="field.label"
+                :caption="field.caption"
+                :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
+              />
+              <q-separator v-if="index < section.fields.length-1"/>
+            </div>
+          </q-expansion-item>
         </q-card>
       </div>
     </div>
