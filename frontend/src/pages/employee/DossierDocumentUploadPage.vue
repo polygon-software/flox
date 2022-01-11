@@ -40,6 +40,7 @@
               :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
               required
               @upload="uploadFile(sectionKey, field.key)"
+              @remove="(idx) => removeFile(sectionKey, field.key, idx)"
             />
             <q-separator v-if="index < section.fields.required.length-1"/>
           </div>
@@ -61,6 +62,8 @@
                 :label="field.label"
                 :caption="field.caption"
                 :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
+                @upload="uploadFile(sectionKey, field.key)"
+                @remove="(idx) => removeFile(sectionKey, field.key, idx)"
               />
               <q-separator v-if="index < section.fields.optional.length-1"/>
             </div>
@@ -190,6 +193,21 @@ function uploadFile(section: string, field: string) {
 
   console.log('Upload to', section, 'for field', field)
   // TODO add to section
+  //
+}
+
+
+/**
+ * Uploads a file for the given section/field
+ * @param {string} section - section key
+ * @param {string} field - field key
+ * @param {number} index - file index in array
+ * @returns {Promise<void>} - done
+ */
+function removeFile(section: string, field: string, index: number) {
+
+  console.log('Remove from', section, 'for field', field, 'at index', index)
+  // TODO remove from section
   //
 }
 

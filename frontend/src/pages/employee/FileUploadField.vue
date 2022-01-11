@@ -29,13 +29,13 @@
           {{file.filename}}
         </p>
 
-        <!-- TODO:  @click="() => removeFile(section, field, file)" -->
         <q-btn
           class="q-pa-sm q-ma-none"
           icon="close"
           flat
           size="sm"
           color="grey-5"
+          @click="onRemove(fileIndex)"
         />
       </div>
     </div>
@@ -78,7 +78,7 @@
    }
  })
 
-const emit = defineEmits(['upload'])
+const emit = defineEmits(['upload', 'remove'])
 
 /**
  * Emits an 'upload' event
@@ -86,6 +86,15 @@ const emit = defineEmits(['upload'])
  */
 function onUpload(){
    emit('upload')
+}
+
+/**
+ * Emits an 'remove' event of a file
+ * @param {number} index - index of file in array
+ * @returns {void}
+ */
+function onRemove(index: number){
+   emit('remove', { index })
 }
 
 </script>
