@@ -277,7 +277,7 @@ export class DossierService {
       throw new Error(`Dossier ${dossierUuid} does not exist`);
     }
     if (!pdf || !pdf.url) {
-      throw new Error('File does is missing URL!');
+      throw new Error('File is missing URL!');
     }
 
     // Send actual e-mail

@@ -2,8 +2,24 @@
   <q-page class="flex flex-center">
     <div class="column">
 
+      <!-- Loading indicator -->
+      <q-card v-if="loading" class="page shadow-6 flex flex-center">
+        <div class="column">
+          <q-spinner
+            size="50px"
+            color="primary"
+          />
+          <h6 class="text-grey-8">
+            {{ $t('general.loading') }}
+          </h6>
+        </div>
+      </q-card>
       <!-- Page Print Preview -->
-      <q-card id="preview" class="page shadow-6">
+      <q-card
+        v-show="!loading"
+        id="preview"
+        class="page shadow-6"
+      >
         <div class="subpage">
           <!-- Logo + address row -->
           <div class="row justify-between">
@@ -292,6 +308,7 @@
           :label="$t('buttons.back')"
           color="primary"
           flat
+          :disable="loading"
           @click="goBack"
         />
 
@@ -300,6 +317,7 @@
           icon="mail_outline"
           color="primary"
           unelevated
+          :disable="loading"
           style="margin: 0 32px 0 16px"
           @click="sendDocument"
         />
@@ -309,6 +327,7 @@
           icon="print"
           color="primary"
           unelevated
+          :disable="loading"
           @click="printDocument"
         />
       </div>
@@ -322,13 +341,14 @@ import DossierDocumentInfoField from 'components/dossier/DossierDocumentInfoFiel
 import DossierDocumentBooleanField from 'components/dossier/DossierDocumentBooleanField.vue';
 import DossierDocumentEmailDialog from 'components/dialogs/DossierDocumentEmailDialog.vue';
 import {useQuasar} from 'quasar';
-import {executeMutation} from 'src/helpers/data-helpers';
 import {uploadFiles} from 'src/helpers/file-helpers';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import {generatePdf} from 'src/helpers/pdf-helpers';
+import {onMounted, Ref, ref} from 'vue';
 
 const $q = useQuasar()
+
+const loading = ref(true)
+const fileUuid: Ref<string|null> = ref(null)
 
 // Info for top right-hand corner
 const infoString = 'Bahnhofstrasse 1 | 8001 Zürich | 043 222 22 22'
@@ -378,38 +398,19 @@ const dossierInfo = {
   lossCertificates: false
 }
 
+// On mount, generate PDF // TODO re-enable
+// onMounted(() => {
+//   // Upload PDF document
+//   void uploadPdfDocument()
+// })
+
+
 /**
- * Uploads the document as a PDF
- * TODO add a "finish" button that does this
+ * Uploads the document as a PDF (done on page load)
  * @param {File} pdf - PDF file
  * @returns {Promise<string>} - uploaded PrivateFile's UUID
  */
 async function uploadPdfDocument(){
-  const dossierUuid = dossierInfo.uuid // TODO
-
-  // Generate PDF file
-  const pdf = await generatePdf('preview', `Dossier_${dossierUuid}`)
-
-  const files = {
-    finalDocument: pdf
-  }
-  // Upload document
-  await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
-}
-
-/**
- * Goes back to the previous form page
- * @returns {void}
- */
-function goBack(){
-  // TODO go to previous form page
-}
-
-/**
- * Sends the PDF by e-mail
- * @returns {Promise<void>} - done
- */
-async function sendDocument(){
   const dossierUuid = dossierInfo.uuid
 
   // Generate PDF file
@@ -430,7 +431,26 @@ async function sendDocument(){
 
   // Find newest document
   const newPdf: Record<string, string|null> = documents.reduce((a, b) => new Date(a.created_at) > new Date(b.created_at) ? a : b)
-  const fileUuid = newPdf.uuid
+
+  // Store to local variable & set loading state
+  fileUuid.value = newPdf.uuid
+  loading.value = false
+}
+
+/**
+ * Goes back to the previous form page
+ * @returns {void}
+ */
+function goBack(){
+  // TODO go to previous form page
+}
+
+/**
+ * Sends the PDF by e-mail
+ * @returns {Promise<void>} - done
+ */
+function sendDocument(){
+  const dossierUuid = dossierInfo.uuid
 
   const addresses = [
     contactInfo.email,
@@ -442,7 +462,7 @@ async function sendDocument(){
     componentProps: {
       uuid: dossierUuid,
       addresses,
-      fileUuid: fileUuid
+      fileUuid: fileUuid.value
     }
   })
 }

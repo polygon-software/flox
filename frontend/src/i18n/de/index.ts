@@ -11,6 +11,7 @@ export default {
     date: 'Datum',
     return: 'Zurück',
     created_on: 'Erstellt am',
+    loading: 'Lädt...'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
