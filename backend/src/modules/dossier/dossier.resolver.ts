@@ -157,7 +157,7 @@ export class DossierResolver {
     @Args('sendDossierDocumentInput')
     sendDossierDocumentInput: SendDossierDocumentInput,
     @CurrentUser() user: Record<string, string>,
-  ): Promise<void> {
+  ): Promise<Dossier> {
     const dbUser = await this.userService.getUser({ uuid: user.userId });
 
     // Get actual file
@@ -167,7 +167,7 @@ export class DossierResolver {
     };
     const pdf = await this.fileService.getPrivateFile(args, dbUser);
 
-    await this.dossierService.sendDossierDocumentEmail(
+    return this.dossierService.sendDossierDocumentEmail(
       sendDossierDocumentInput,
       pdf,
     );

@@ -428,12 +428,8 @@ async function sendDocument(){
   // Get documents of dossier
   const documents: Record<string, unknown>[] = uploadResponse[0].data.documents as Record<string, unknown>[]
 
-  // Find new document: since it's only one file, take first
+  // Find newest document
   const newPdf: Record<string, string|null> = documents.reduce((a, b) => new Date(a.created_at) > new Date(b.created_at) ? a : b)
-
-  console.log(uploadResponse)
-  console.log('Newest document:', newPdf)
-
   const fileUuid = newPdf.uuid
 
   const addresses = [
