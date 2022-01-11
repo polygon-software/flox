@@ -4,8 +4,8 @@
       class="column q-pa-lg full-width"
     >
       <div
-        v-for="section in sections"
-        :key="section.key"
+        v-for="(section, key) in sections"
+        :key="key"
       >
         <!-- Title & section status-->
         <div class="row full-width justify-between items-center">
@@ -13,8 +13,9 @@
             {{ section.title }}{{ section.required? ' *' : ''}}
           </h5>
 
+<!--          TODO             v-if="sectionComplete(key)"
+-->
           <div
-            v-if="sectionComplete(section.key)"
             class="bg-positive flex flex-center"
             style="height: 24px; width: 24px; border-radius: 12px"
           >
@@ -40,7 +41,7 @@
               <!-- Label & caption -->
               <div class="column col-4">
                 <q-item-label>
-                  {{ field.label }}
+                  {{ field.label }}{{ field.required? ' *' : ''}}
                 </q-item-label>
                 <q-item-label v-if="field.caption" caption>
                   {{ field.caption }}
@@ -50,15 +51,15 @@
               <!-- Uploaded files -->
               <div class="column col-6">
                 <div
-                  v-for="(file, index) in field.files"
-                  :key="'file_' + index"
+                  v-for="(file, fileIndex) in field.files"
+                  :key="'file_' + fileIndex"
                   class="row items-center"
                 >
                   <q-icon
                     name="description"
                     color="primary"
                   />
-                  <!-- TODO link to file... -->
+                  <!-- TODO link to file, proper centering -->
                   <p class="text-primary" style="margin-left: 6px">
                     {{file.filename}}
                   </p>
@@ -98,15 +99,15 @@
 
 import {ref} from 'vue';
 
-const sections = ref([
-  {
+const sections = ref({
+  financials: {
     title: 'Finanzdaten', // TODO i18n on all fields!
-    key: 'financials',
     required: true,
     fields: [
       {
         label: 'ID / Passkopie',
         key: 'id',
+        required: true,
         files: [
           {
             filename: 'blubb.pdf'
@@ -128,7 +129,7 @@ const sections = ref([
           {
             filename: 'blabla.pdf'
           }
-          ]
+        ]
       },
       {
         label: 'Rentenbescheinigung',
@@ -155,9 +156,8 @@ const sections = ref([
   },
 
   // TODO other sections...
-  {
+  property: {
     title: 'Liegenschaftsdaten', // TODO i18n on all fields!
-    key: 'property',
     required: true,
     fields: [
       {
@@ -169,7 +169,20 @@ const sections = ref([
       },
     ]
   }
-])
+})
+
+
+/**
+ * Uploads a file for the given section/field
+ * @param {string} section - section key
+ * @param {string} field - field key
+ * @returns {Promise<void>} - done
+ */
+function uploadFile(section: string, field: string) {
+
+  // TODO add to section
+  // sections.value[key].fields[field].push(file)
+}
 
 /**
  * Determines whether a section is complete
@@ -177,10 +190,11 @@ const sections = ref([
  * @returns {boolean} - whether the section is complete
  */
 function sectionComplete(key: string): boolean{
-  const section = sections.value.find((section) => section.key === key)
+  const section = sections.value[key] as Record<string, unknown>
+  const fields = section.fields as Record<string, unknown>[]
 
   // Check if all required fields have at least one file
-  return section.fields.every((field) => {
+  return fields.every((field) => {
     return !field.required || field.files.length > 0
   })
 }

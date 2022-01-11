@@ -44,7 +44,7 @@ export class Form {
     const currentPage: Record<string, Record<string, unknown>[]> = this.pages.value[this.step.value - 1]
 
     // a page can either have just fields or sections with fields, therefore fields need to be defined correspondingly
-    const sections = currentPage.sectionsLHS.concat(currentPage.sectionsRHS)
+    const sections = currentPage.sectionsLHS ? currentPage.sectionsLHS.concat(currentPage.sectionsRHS) : []
     // Fields on current page
     if (!currentPage.fields && sections.some(section => !section.fields)) {
       throw new Error("There aren't any fields defined.");
