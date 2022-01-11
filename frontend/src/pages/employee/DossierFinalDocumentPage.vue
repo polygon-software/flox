@@ -367,7 +367,7 @@ const contactInfo = {
   city: 'Sowieso',
 }
 const dossierInfo = {
-  uuid: 'a3a303ea-0793-4945-be9b-8a8412aad957', // Just an example... TODO
+  uuid: 'a3a303ea-0793-4945-be9b-8a8412aad957', // Just an example...
   createdOn: new Date(),
   originalBankName: 'CLER',
   purchasePrice: 1000000,
@@ -401,11 +401,10 @@ const dossierInfo = {
 }
 
 //On mount, generate PDF
-onMounted(() => {
+onMounted(async () => {
   // Upload PDF document
-  void uploadPdfDocument()
+  await uploadPdfDocument()
 })
-
 
 /**
  * Uploads the document as a PDF (done on page load)
@@ -417,14 +416,12 @@ async function uploadPdfDocument(){
   // Generate PDF file
   const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
-  // TODO: if there's already a final document, delete (BUT HOW?)
-
   // Prepare for upload
   const files = {
     finalDocument: pdfFile
   }
 
-  // Upload document
+  // Upload document (replaces existing finalDocument, if any)
   const uploadResponse: Record<string, unknown>[] = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')
 
   // Get actual file
