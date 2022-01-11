@@ -39,6 +39,7 @@
               :caption="field.caption"
               :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
               required
+              @upload="uploadFile(sectionKey, field.key)"
             />
             <q-separator v-if="index < section.fields.required.length-1"/>
           </div>
@@ -187,6 +188,7 @@ const files: Ref<Record<string, Record<string, unknown>[]>> = ref({})
  */
 function uploadFile(section: string, field: string) {
 
+  console.log('Upload to', section, 'for field', field)
   // TODO add to section
   //
 }

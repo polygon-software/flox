@@ -48,6 +48,7 @@
         icon-right="upload"
         outline
         color="primary"
+        @click="onUpload"
       />
     </div>
 
@@ -55,6 +56,7 @@
 </template>
 
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
  const props = defineProps({
    files: {
      type: Array,
@@ -75,5 +77,15 @@
      default: false
    }
  })
+
+const emit = defineEmits(['upload'])
+
+/**
+ * Emits an 'upload' event
+ * @returns {void}
+ */
+function onUpload(){
+   emit('upload')
+}
 
 </script>
