@@ -40,8 +40,10 @@
               :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
               required
             />
-            <q-separator v-if="index < section.fields.length-1"/>
+            <q-separator v-if="index < section.fields.required.length-1"/>
           </div>
+
+          <q-separator v-if="section.fields.optional"/>
 
           <!-- Optional Fields -->
           <q-expansion-item
@@ -59,7 +61,7 @@
                 :caption="field.caption"
                 :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
               />
-              <q-separator v-if="index < section.fields.length-1"/>
+              <q-separator v-if="index < section.fields.optional.length-1"/>
             </div>
           </q-expansion-item>
         </q-card>

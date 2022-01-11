@@ -147,7 +147,7 @@ export default {
       last_year_tax_caption: 'Inkl. Schulden-, Liegenschafts- und Wertschriftenverzeichnis',
       pension_id: 'Pensionskassenausweis',
       last_year_salary: 'Lohnausweis {year}',
-      debt_collection: 'Betreibungsauszug',
+      debt_collection: 'Betreibungsregisterauszug',
       own_funds: 'Aufstellung der Eigenmittel - Kontoauszüge',
       own_funds_caption: 'Lohnkonto, Sparkonto, Wertschriften',
       three_a: 'Policen Säule 3a',
