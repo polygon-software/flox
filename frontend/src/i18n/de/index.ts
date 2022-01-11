@@ -9,7 +9,8 @@ export default {
     from: 'Von',
     to: 'Bis',
     date: 'Datum',
-    return: 'Zurück'
+    return: 'Zurück',
+    warning: 'Achtung!'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -127,6 +128,7 @@ export default {
     ok: 'OK',
     download: 'Herunterladen',
     preview: 'Vorschau',
+    discard: 'Verwerfen',
   },
   documents: {
     choose_documents: 'Dokumente wählen',
@@ -243,8 +245,10 @@ export default {
     subject_rejected: 'Abgelehnt',
     body_rejected: 'Die Applikation wurde abgelehnt'
   },
-
   bank: {
     new_user: 'Neuer Benutzer'
+  },
+  warnings: {
+    // TODO: add all possible warnings once provided by SOI
   }
 };
