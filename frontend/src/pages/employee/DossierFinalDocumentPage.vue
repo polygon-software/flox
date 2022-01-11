@@ -415,10 +415,13 @@ async function sendDocument(){
   // Generate PDF file
   const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
+  // TODO: if there's already a final document, delete (BUT HOW?)
+
   // Prepare for upload
   const files = {
     finalDocument: pdfFile
   }
+
   // Upload document
   const uploadResponse: Record<string, unknown>[] = await uploadFiles(files, `/uploadDossierFile?did=${dossierUuid}`, 'getMyDossiers')
 
@@ -431,7 +434,6 @@ async function sendDocument(){
   console.log(uploadResponse)
   console.log('Newest document:', newPdf)
 
-  // TODO upload, so we have a UUID....
   const fileUuid = newPdf.uuid
 
   const addresses = [
