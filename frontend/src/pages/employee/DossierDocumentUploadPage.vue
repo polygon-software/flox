@@ -71,14 +71,23 @@
         </q-card>
       </div>
     </div>
+
+    <!-- Invisible file picker TODO make functional -->
+    <q-file
+      v-show="false"
+      ref="filePicker"
+      :model-value="files"
+    />
+
   </q-page>
 </template>
 
 <script setup lang="ts">
-
 import {Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
+
+const filePicker: Ref<QFile|null> = ref(null)
 
 const sections = {
   financials: {
@@ -194,6 +203,8 @@ function uploadFile(section: string, field: string) {
   console.log('Upload to', section, 'for field', field)
   // TODO add to section
   //
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+  filePicker.value.pickFiles();
 }
 
 
