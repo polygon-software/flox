@@ -12,10 +12,9 @@
           <h5>
             {{ section.title }}{{ section.required? ' *' : ''}}
           </h5>
-
-<!--          TODO             v-if="sectionComplete(key)"
--->
+          <!-- "Section complete" marker -->
           <div
+            v-if="sectionComplete(key)"
             class="bg-positive flex flex-center"
             style="height: 24px; width: 24px; border-radius: 12px"
           >
