@@ -15,7 +15,7 @@
           </h5>
           <!-- "Section complete" marker -->
           <div
-            v-if="sectionComplete(sectionKey)"
+            v-if="section.required && sectionComplete(sectionKey)"
             class="bg-positive"
             style="height: 24px; width: 24px; border-radius: 12px"
           >
@@ -35,6 +35,7 @@
             :key="field.key"
           >
             <FileUploadField
+              :loading="loading"
               :label="field.label"
               :caption="field.caption"
               :files="filesForField(sectionKey, field.key)"
@@ -45,11 +46,14 @@
             <q-separator v-if="index < section.fields.required.length-1"/>
           </div>
 
-          <q-separator v-if="section.fields.optional" style="margin-bottom: 10px"/>
+          <q-separator
+            v-if="section.fields.optional && section.required"
+            style="margin-bottom: 10px"
+          />
 
           <!-- Optional Fields -->
           <q-expansion-item
-            v-if="section.fields.optional"
+            v-if="section.fields.optional && section.required"
             :label="$t('documents.optional_documents')"
             header-class="text-grey-7"
             switch-toggle-side
@@ -59,6 +63,7 @@
               :key="field.key"
             >
               <FileUploadField
+                :loading="loading"
                 :label="field.label"
                 :caption="field.caption"
                 :files="filesForField(sectionKey, field.key)"
@@ -68,6 +73,23 @@
               <q-separator v-if="index < section.fields.optional.length-1"/>
             </div>
           </q-expansion-item>
+          <!-- If entire section is optional, do not show as expansion item -->
+          <div
+            v-for="(field, index) in section.fields.optional"
+            v-else-if="!section.required"
+            :key="field.key"
+          >
+            <FileUploadField
+              :loading="loading"
+              :label="field.label"
+              :caption="field.caption"
+              :files="filesForField(sectionKey, field.key)"
+              @upload="uploadFile(sectionKey, field.key)"
+              @remove="(idx) => removeFile(sectionKey, field.key, idx)"
+            />
+            <q-separator v-if="index < section.fields.optional.length-1"/>
+          </div>
+
         </q-card>
       </div>
     </div>
@@ -84,6 +106,26 @@
       @update:model-value="onFilePicked"
     />
 
+
+    <!-- Button Row -->
+    <div class="row q-ma-none q-pa-none" style="margin-bottom: 64px">
+      <q-btn
+        class="q-ma-md"
+        :label="$t('buttons.cancel')"
+        color="primary"
+        :disable="loading"
+        flat
+        @click="onCancel"
+      />
+      <q-btn
+        class="q-ma-md"
+        :label="$t('buttons.save')"
+        color="primary"
+        :disable="loading"
+        @click="onSave"
+      />
+    </div>
+
   </q-page>
 </template>
 
@@ -93,7 +135,11 @@ import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile} from 'quasar';
 
+// File Picker component ref
 const filePicker: Ref<QFile|null> = ref(null)
+
+// Loading state
+const loading = ref(false)
 
 const props = defineProps({
   maxFileSize: {
@@ -103,6 +149,7 @@ const props = defineProps({
 })
 
 const sections = {
+  // Financial documents
   financials: {
     title: i18n.global.t('documents.financials.title'),
     required: true,
@@ -111,14 +158,6 @@ const sections = {
         {
           label: i18n.global.t('documents.financials.id'),
           key: 'id',
-          files: [
-            {
-              filename: 'blubb.pdf'
-            },
-            {
-              filename: 'blabla.pdf'
-            }
-          ]
         },
         {
           label: i18n.global.t('documents.financials.salary'),
@@ -182,20 +221,105 @@ const sections = {
     }
   },
 
-  // TODO other sections...
+  // Property information documents
   property: {
     title: i18n.global.t('documents.property.title'),
     required: true,
     fields: {
-      required:
-      [
+      required: [
         {
-          label: 'Kopie Hypothekar-Kreditvertrag',
-          caption: 'Bei Ablösungen',
-          key: 'id',
-          required: true,
+          label: i18n.global.t('documents.property.mortgage_contract'),
+          caption: i18n.global.t('documents.property.mortgage_contract_caption'),
+          key: 'mortgage_contract',
+        },
+        {
+          label: i18n.global.t('documents.property.product_agreement'),
+          caption: i18n.global.t('documents.property.mortgage_contract_caption'),
+          key: 'product_agreement',
+        },
+        // TODO CONDITIONAL: EFH only
+        {
+          label: i18n.global.t('documents.property.building_insurance'),
+          caption: i18n.global.t('documents.property.building_insurance_caption'),
+          key: 'building_insurance',
+        },
+        // TODO CONDITIONAL: Stockwerkeigentum Only!
+        {
+          label: i18n.global.t('documents.property.owner_regulations'),
+          caption: i18n.global.t('documents.property.owner_regulations_caption'),
+          key: 'owner_regulations',
+        },
+        // TODO CONDITIONAL: Stockwerkeigentum Only!
+        {
+          label: i18n.global.t('documents.property.management_regulations'),
+          caption: i18n.global.t('documents.property.owner_regulations_caption'),
+          key: 'management_regulations',
+        },
+        {
+          label: i18n.global.t('documents.property.floor_plans'),
+          key: 'floor_plans',
+        },
+        {
+          label: i18n.global.t('documents.property.pictures'),
+          caption: i18n.global.t('documents.property.pictures_caption'),
+          key: 'pictures',
+        },
+        {
+          label: i18n.global.t('documents.property.purchase_contract'),
+          key: 'purchase_contract',
+        },
+      ],
+      optional: [
+        {
+          label: i18n.global.t('documents.property.renovations'),
+          key: 'renovations',
+        },
+        {
+          label: i18n.global.t('documents.property.legacy_cadaster'),
+          caption: i18n.global.t('documents.property.legacy_cadaster_caption'),
+          key: 'legacy_cadaster',
+        },
+        {
+          label: i18n.global.t('documents.property.land_register_extract'),
+          caption: i18n.global.t('documents.property.land_register_extract_caption'),
+          key: 'land_register_extract',
+        },
+        {
+          label: i18n.global.t('documents.property.building_description'),
+          caption: i18n.global.t('documents.property.building_description_caption'),
+          key: 'building_description',
+        },
+        {
+          label: i18n.global.t('documents.property.reservation_contract'),
+          key: 'reservation_contract',
+        },
+        {
+          label: i18n.global.t('documents.property.market_value_estimate'),
+          key: 'market_value_estimate',
+        },
+        {
+          label: i18n.global.t('documents.property.sales_documentation'),
+          key: 'sales_documentation',
+        },
+        {
+          label: i18n.global.t('documents.property.situation_plan'),
+          key: 'situation_plan',
         },
       ]
+    }
+  },
+  additional: {
+    title: i18n.global.t('documents.additional_documents'),
+    required: false,
+    fields: {
+      required: [],
+      optional:
+        [
+          {
+            label: i18n.global.t('documents.additional_documents'),
+            key: 'additional_documents',
+          },
+        ]
     }
   }
 }
@@ -248,7 +372,6 @@ function onFilePicked(newFiles: File[]){
   section[fieldKey] = (section[fieldKey] as File[]).concat(newFiles)
 }
 
-
 /**
  * Removes a file from a given file
  * @param {string} section - section key
@@ -295,6 +418,24 @@ function filesForField(section: string, field: string): File[]{
   }
 
   return files.value[section][field] as File[] ?? []
+}
+
+/**
+ * Saves & uploads all files to the corresponding dossier
+ * @returns {Promise<void>} - done
+ */
+function onSave(){
+  console.log('init save!')
+  loading.value = true;
+  // TODO make async, actual upload
+}
+
+/**
+ * Upon cancelling, goes back to preceding page
+ * @returns {void}
+ */
+function onCancel(){
+  // TODO go back: determine which page to go to
 }
 
 </script>

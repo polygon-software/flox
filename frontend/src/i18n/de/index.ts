@@ -128,6 +128,7 @@ export default {
     download: 'Herunterladen',
     upload: 'Hochladen',
     preview: 'Vorschau',
+    save: 'Speichern'
   },
   documents: {
     choose_documents: 'Dokumente wählen',
@@ -158,7 +159,30 @@ export default {
       marriage_contract: 'Ehevertrag',
     },
     property: {
-      title: 'Liegenschaftsdokumente'
+      title: 'Liegenschaftsdokumente',
+      mortgage_contract: 'Kopie Hypothekar-Kreditvertrag',
+      mortgage_contract_caption: 'Bei Ablösungen',
+      product_agreement: 'Kopie Produktevereinbarung',
+      building_insurance: 'Gebäudeversicherungsauszug',
+      building_insurance_caption: 'Bei EFH',
+      owner_regulations: 'Stockwerkeigentümerreglement',
+      owner_regulations_caption: 'Bei Stockwerkeigentum',
+      management_regulations: 'Verwaltungsreglement',
+      floor_plans: 'Grundrisspläne',
+      pictures: 'Fotos',
+      pictures_caption: 'Innen und Aussen',
+      purchase_contract: 'Kaufvertrag. bzw. damaliger Kaufvertrag',
+      renovations: 'Renovationsaufstellung der letzten Jahre',
+      legacy_cadaster: 'Altlastenkataster',
+      legacy_cadaster_caption: 'Wird von der Bank organisiert',
+      land_register_extract: 'Grundbuchauszug',
+      land_register_extract_caption: 'Wird i.d.R. von der Bank organisiert',
+      building_description: 'Baubeschrieb',
+      building_description_caption: 'Bei Bauprojekten',
+      reservation_contract: 'Reservationsvertrag',
+      market_value_estimate: 'Verkehrswertschätzung',
+      sales_documentation: 'Verkaufsdokumentation von damals',
+      situation_plan: 'Situationsplan/Katasterplan'
     }
   },
   dossier: {

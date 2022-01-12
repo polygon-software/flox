@@ -126,6 +126,7 @@ export default {
     download: 'Download',
     upload: 'Upload',
     preview: 'Preview',
+    save: 'Save',
   },
   documents: {
     choose_documents: 'Choose documents',

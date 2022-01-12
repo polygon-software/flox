@@ -34,6 +34,7 @@
           flat
           size="sm"
           color="grey-5"
+          :disable="loading"
           @click="onRemove(fileIndex)"
         />
       </div>
@@ -47,6 +48,7 @@
         icon-right="upload"
         outline
         color="primary"
+        :disable="loading"
         @click="onUpload"
       />
     </div>
@@ -74,6 +76,10 @@
      type: Boolean,
      required: false,
      default: false
+   },
+   loading: {
+     type: Boolean,
+     required: true,
    }
  })
 
