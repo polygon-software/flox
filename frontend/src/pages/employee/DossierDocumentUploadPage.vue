@@ -247,7 +247,7 @@ function onFilePicked(newFiles: File[]){
  * @returns {Promise<void>} - done
  */
 function removeFile(section: string, field: string, index: number) {
-  (files.value[section][field] as File[]).splice(index)
+  (files.value[section][field] as File[]).splice(index, 1)
 }
 
 /**
