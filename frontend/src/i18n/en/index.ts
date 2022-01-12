@@ -51,21 +51,13 @@ export default {
     last_name: 'Last Name',
     full_name: 'Name',
     company_name: 'Company Name',
-    company_uid: 'Company UID',
     language: 'Language',
-    correspondence_address: 'Correspondence Address',
-    domicile_address: 'Address',
-    edit_correspondence_address: 'Same as domicile',
+    salutation: 'Salutation',
     phone_number: 'Phone Number',
-    branch_structure: 'Branch Strucutre',
     conditions: 'Terms and Conditions',
     accept_conditions: 'I agree to the terms and conditions.',
-    salutation: 'Salutation',
-    company_function: 'Role in the company',
     accept_condition_truthful:'All information has been filled in truthfully.',
     passport_or_id: 'Passport',
-    commercial_register_extract: 'Commercial Register Extract',
-    execution_register_extract: 'Excerpt from the debt collection register',
     optional: 'optional',
   },
   dashboards: {
@@ -73,6 +65,7 @@ export default {
     partner_dashboard: 'Partner Dashboard',
     statistics: 'Statistics',
     finances: 'Finances',
+    announcements: 'Announcements'
   },
   buttons: {
     finish_signup: 'Finish',
@@ -124,7 +117,12 @@ export default {
     missing_user_type: 'Please select a user type',
     invalid_birth_date: 'Please enter you date of birth',
     date_must_be_future: 'Please choose a future date',
-    can_only_edit_draft: 'Cannot edit (only drafts can be edited)'
+    can_only_edit_draft: 'Cannot edit (only drafts can be edited)',
+    error_while_enabling: 'An error occurred while enabling the account.',
+    error_while_disabling: 'An error occurred while disabling the account.',
+    account_locked: 'Account locked',
+    account_locked_permanently: 'This account has been locked permanently.',
+    account_locked_until: 'This account has been locked until {date}.'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -134,6 +132,11 @@ export default {
   },
   notifications: {
     messages: 'Messages',
+  },
+  messages:{
+    account_enabled: 'Account enabled',
+    account_disabled: 'Account disabled',
+    account_rejected: 'Account rejected',
   },
   interests: {
     cars: 'Cars',
@@ -200,14 +203,20 @@ export default {
     valid: 'Valid',
   },
   user_status: {
-    applied: 'applied',
-    active: 'active',
-    disabled: 'disabled'
+    applied: 'Applied',
+    active: 'Active',
+    disabled: 'Disabled',
+    disabled_temp: 'Disabled (until {until})'
   },
   admin: {
     users: 'Users',
     players: 'Players',
     partners: 'Partners',
     disable_account: 'Disable account',
+    enable_account: 'Enable account',
+    re_enable_account: 'Re-enable account',
+    reject_application: 'Reject',
+    permanent: 'Permanent',
+    temporary: 'Temporary, until:',
   }
-};
+}

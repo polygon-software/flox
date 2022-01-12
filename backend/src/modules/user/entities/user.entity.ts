@@ -116,4 +116,11 @@ export class User {
   @Field(() => Date, { description: 'Date of deletion', nullable: true })
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @Field(() => Date, {
+    description: 'Date until which the users account is disabled (if any)',
+    nullable: true,
+  })
+  @Column({ nullable: true })
+  disabledUntil: Date;
 }

@@ -79,7 +79,6 @@ import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
 
-
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
@@ -88,9 +87,6 @@ const loggedIn = computed(() => {
   // Explicit type
   return $authStore.getters.getLoggedInStatus();
 })
-
-// Username does not need to be reactive, since it won't change between logins
-// const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication
@@ -101,14 +97,6 @@ async function logout(): Promise<void>{
   await $authService?.logout();
   await $routerService?.routeTo(ROUTES.LOGIN)
 }
-
-/**
- * Triggers a password change for the currently logged in authentication
- * @returns {void}
- */
-// function changePassword() {
-//   $authService?.showChangePasswordDialog()
-// }
 
 /**
  * Triggers a password change for a non-logged in authentication

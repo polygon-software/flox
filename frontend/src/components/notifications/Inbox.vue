@@ -85,7 +85,8 @@ import MessagePreview from 'components/notifications/MessagePreview.vue';
 import MessageDetail from 'components/notifications/MessageDetail.vue';
 import {Notification} from 'src/data/types/Notification';
 
-const props = defineProps( {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps({
   notifications: {
     default: () => [],
     type: Array,

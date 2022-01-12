@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {NavigationFailure, RouteLocationRaw, Router, RouteRecordRaw} from 'vue-router';
+import {NavigationFailure, Router, RouteRecordRaw} from 'vue-router';
 
 /**
  * This is a service that is used globally throughout the application for routing
@@ -20,7 +19,7 @@ export class RouterService {
 
   /**
    * Routes to a given route, as defined in ROUTES constant
-   * @param {RouteLocationRaw} to - the route to go to
+   * @param {RouteRecordRaw} to - the route to go to
    * @param {Record<string, string>} [query] - props to pass to the component, if any
    * @returns {void|NavigationFailure|undefined} - the navigation result
    */

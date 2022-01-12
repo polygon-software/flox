@@ -16,7 +16,8 @@
 <script setup lang="ts">
 import {defineProps} from 'vue';
 
-defineProps( {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps( {
   dbRef: {
     required: true,
     type: String,
@@ -27,3 +28,6 @@ defineProps( {
 //TODO: Implement methods to fetch message data
 
 </script>
+
+<style scoped>
+</style>

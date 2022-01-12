@@ -15,6 +15,7 @@ import { FileModule } from './modules/file/file.module';
 import { RolesGuard } from './auth/roles.guard';
 import { CommentModule } from './modules/comment/comment.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { User } from './modules/user/entities/user.entity';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { NotificationModule } from './modules/notification/notification.module';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([User]),
     UserModule,
     ProductModule,
     FileModule,

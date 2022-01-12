@@ -11,6 +11,8 @@ export const MY_USER = {
       myUser{
         uuid
         role
+        status
+        disabledUntil
         notifications {
           uuid
           title
@@ -47,6 +49,7 @@ export const ALL_PLAYERS = {
           zipCode
           __typename
         }
+        disabledUntil
         __typename
       }
     }
@@ -76,6 +79,7 @@ export const ALL_PARTNERS = {
           zipCode
           __typename
         }
+        disabledUntil
         __typename
       }
     }

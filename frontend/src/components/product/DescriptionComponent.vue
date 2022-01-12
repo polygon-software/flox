@@ -8,7 +8,8 @@
 
 import {defineProps} from 'vue';
 
-defineProps({
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps({
   product: {
     required: true,
     type: Object,
