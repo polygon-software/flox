@@ -26,7 +26,7 @@
         />
         <!-- TODO link to file, proper centering -->
         <p class="text-primary" style="margin-left: 6px">
-          {{file.filename}}
+          {{file.name}}
         </p>
 
         <q-btn
@@ -94,7 +94,7 @@ function onUpload(){
  * @returns {void}
  */
 function onRemove(index: number){
-   emit('remove', { index })
+   emit('remove', index)
 }
 
 </script>

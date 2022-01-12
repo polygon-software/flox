@@ -37,7 +37,7 @@
             <FileUploadField
               :label="field.label"
               :caption="field.caption"
-              :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
+              :files="filesForField(sectionKey, field.key)"
               required
               @upload="uploadFile(sectionKey, field.key)"
               @remove="(idx) => removeFile(sectionKey, field.key, idx)"
@@ -61,7 +61,7 @@
               <FileUploadField
                 :label="field.label"
                 :caption="field.caption"
-                :files="files[sectionKey] && files[sectionKey][field.key] ? files[sectionKey][field.key] : []"
+                :files="filesForField(sectionKey, field.key)"
                 @upload="uploadFile(sectionKey, field.key)"
                 @remove="(idx) => removeFile(sectionKey, field.key, idx)"
               />
@@ -217,11 +217,10 @@ function uploadFile(section: string, field: string) {
 
 /**
  * Triggered when a file is picked from the file picker dialog
- * @param {File} file - the newly picked file
+ * @param {File[]} newFiles - the newly picked files
  * @returns {void}
  */
-function onFilePicked(file: File){
-  console.log('file picked:', file)
+function onFilePicked(newFiles: File[]){
 
   const sectionKey = uploadFor.value.section
   const fieldKey = uploadFor.value.field
@@ -231,15 +230,13 @@ function onFilePicked(file: File){
     files.value[sectionKey] = {}
   }
 
-  const section = files.value[sectionKey] as Record<string, Record<string, File[]>>
+  const section = files.value[sectionKey] as Record<string, File[]>
 
   // Add field if not present
   if(!section[fieldKey]){
     section[fieldKey] = []
   }
-  const field = section[fieldKey] as Record<string, File[]>
-
-  field.push(file)
+  section[fieldKey] = (section[fieldKey] as File[]).concat(newFiles)
 }
 
 
@@ -251,10 +248,11 @@ function onFilePicked(file: File){
  * @returns {Promise<void>} - done
  */
 function removeFile(section: string, field: string, index: number) {
-
   console.log('Remove from', section, 'for field', field, 'at index', index)
-  // TODO remove from section
-  //
+  console.log('field is now', files.value[section][field])
+
+  files.value[section][field] = (files.value[section][field] as File[]).slice(index)
+
 }
 
 /**
@@ -275,6 +273,21 @@ function sectionComplete(key: string): boolean{
 
     return fieldFiles.length > 0
   })
+}
+
+/**
+ * Gets the files to pass on to a field
+ * @param {string} section - section key
+ * @param {string} field - field key
+ * @returns {File[]} - the field's files
+ */
+function filesForField(section: string, field: string): File[]{
+  // Section not present, return empty
+  if(!files.value[section]){
+    return []
+  }
+
+  return files.value[section][field] as File[] ?? []
 }
 
 </script>
