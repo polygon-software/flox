@@ -77,9 +77,10 @@
                 v-if="form.step.value < form.pages.value.length"
                 color="primary"
                 :label="$t('buttons.next_step')"
-                :disable="!form.pageValid.value"
                 @click="$refs.stepper.next()"
               />
+ <!--              :disable="!form.pageValid.value" TODO: uncomment -->
+
               <q-btn
                 v-if="form.step.value === form.pages.value.length"
                 color="primary"
@@ -156,12 +157,12 @@ const pages = [
       },
       {
         key: 'property-data2',
-        title: i18n.global.t('form_for_clientsloc.property'),
+        title: i18n.global.t('form_for_clients.property'),
         fields: [FIELDS.PROPERTY_TYPE],
       },
       {
         key: 'property-data3',
-        title: i18n.global.t('form_for_clients.owner_occupied'),
+        title: " ",
         fields: [FIELDS.OWNER_OCCUPIED],
       },
     ],
@@ -169,7 +170,7 @@ const pages = [
       {
         key: 'property-data4',
         title: i18n.global.t('form_for_clients.purchase'),
-        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.PRICE, FIELDS.MARKET_VALUE_ESTIMATION, FIELDS.CURRENT_VALUE_OF_MORTGAGE],
+        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT],
       },
     ]
   },

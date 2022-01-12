@@ -1,28 +1,32 @@
 <template>
   <div>
     <q-input
-      :model-value="price"
+      v-model="price"
       dense
+      type="text"
       :label="$t('form_for_clients.price')"
       :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_amount')]"
       @change="emitValuePrice"
      ></q-input>
     <q-input
-      :model-value="market_value_estimation"
+      v-model="market_value_estimation"
       dense
+      type="text"
       :label="$t('form_for_clients.market_value_estimation')"
       :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_amount')]"
       @change="emitValueMarketValue"
     ></q-input>
     <q-input
-      :model-value="current_value_of_mortgage"
+      v-model="current_value_of_mortgage"
       dense
+      type="text"
       :label="$t('form_for_clients.current_value_of_mortgage')"
       :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_amount')]"
       @change="emitValueMortgage"
     ></q-input>
     <q-input
-      :model-value="current_value_of_mortgage"
+      v-model="enfeoffment"
+      type="text"
       dense
       readonly
       :label="$t('form_for_clients.enfeoffment')"
@@ -33,12 +37,16 @@
 
 <script setup lang="ts">
 import {IS_VALID_STRING} from 'src/data/RULES'
+import {ref} from "vue";
 
 const emit = defineEmits(['change'])
 
-const price = ""
-const market_value_estimation = ""
-const current_value_of_mortgage = ""
+const price = ref('')
+const market_value_estimation = ref('')
+const current_value_of_mortgage = ref('')
+
+let enfeoffment = +current_value_of_mortgage.value / +price.value
+
 
 /**
  * Emits the updated value, if it is valid
@@ -46,6 +54,7 @@ const current_value_of_mortgage = ""
  */
 function emitValuePrice() {
   emit('change', price)
+  enfeoffment = +current_value_of_mortgage.value / +price.value
 }
 /**
  * Emits the updated value, if it is valid
@@ -60,9 +69,9 @@ function emitValueMarketValue() {
  */
 function emitValueMortgage() {
   emit('change', current_value_of_mortgage)
+  enfeoffment = +current_value_of_mortgage.value / +price.value
 }
 
 
-// const enfeoffment = (current_value_of_mortgage / price) ?? 0
 
 </script>

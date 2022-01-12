@@ -1,10 +1,12 @@
 <template>
-  <div class="q-mb-md">
+  <div class="row q-mb-md">
+    <h7 class="col q-py-sm">{{ $t('form_for_clients.owner_occupied') }}</h7>
     <q-option-group
+      class="col"
       v-model="selectedOption"
       :options="options"
       type="radio"
-      align="left"
+      inline
     />
   </div>
 </template>
@@ -24,6 +26,7 @@ const selectedOption = ref(options[0].value)
 
 /**
  * Emits the updated value, if it is valid
+ *       label: i18n.global.t('form_for_clients.owner_occupied'),
  * @returns {void}
  */
 function emitValue(){
