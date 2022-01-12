@@ -39,12 +39,12 @@ const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const progress = ref(1)
+const progress = ref(0)
 
 // Whether file upload is still in progress
 const loading = ref(true)
 
-// Total number of files to upload, calc'd once upload starts
+// Total number of files to upload, calculated once upload starts
 const total = ref(1)
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -77,17 +77,27 @@ function show(): void {
 // eslint-disable-next-line @typescript-eslint/require-await,require-jsdoc
 async function uploadAllFiles(){
   const files = props.files as Record<string, unknown>
+
   // For every section
   Object.keys(files).forEach((sectionKey) => {
-    console.log('Find files for section', sectionKey)
+    // For every field within section
     Object.keys(files[sectionKey]).forEach((fieldKey) => {
-      console.log('Find files for field', fieldKey)
-
+      // Find files
       const fieldFiles = files[sectionKey][fieldKey] as File[] ?? []
 
-      console.log('Field docs:', fieldFiles)
+      // Update total length
+      total.value += fieldFiles.length
+
+      // Upload all files
+      for(const file of fieldFiles){
+        // TODO
+        console.log('upload file', file.name)
+      }
     })
   })
+
+  // Decrease by 1, since we start at 1 to avoid zero-division
+  total.value--
 }
 
 // eslint-disable-next-line require-jsdoc
