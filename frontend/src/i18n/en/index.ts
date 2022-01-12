@@ -230,5 +230,7 @@ export default {
     week: 'Week',
     day: 'Day',
     to_dashboard: 'To Dashboard',
+    income_over_time: 'Income over Time',
+    income_by_category: 'Income by Category'
   }
 }

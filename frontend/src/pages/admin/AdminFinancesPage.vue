@@ -105,6 +105,7 @@
 
         <q-separator style="margin-top: 20px"/>
 
+        <!-- First chart row -->
         <div class="row">
           <div class="col q-pa-sm">
             <!-- Income over time chart -->
