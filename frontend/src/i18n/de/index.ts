@@ -230,6 +230,7 @@ export default {
     week: 'Woche',
     day: 'Tag',
     to_dashboard: 'Zum Dashboard',
+    income_over_time: 'Einnahmen-Verlauf',
     income_by_category: 'Einnahmen pro Kategorie'
   }
 }

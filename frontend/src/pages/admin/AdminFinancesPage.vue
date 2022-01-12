@@ -108,8 +108,8 @@
         <div class="row">
           <div class="col q-pa-sm">
             <!-- Income over time chart -->
-            <strong>{{ $t('finances.income_by_category') }}</strong>
-            <DoughnutChart v-bind="doughnutChartProps" />
+            <strong>{{ $t('finances.income_over_time') }}</strong>
+            <LineChart v-bind="lineChartProps" />
           </div>
           <q-separator vertical style="margin: 0 20px 0 20px"/>
           <div class="col q-pa-sm">
@@ -132,7 +132,7 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import {openURL} from 'quasar';
-import { DoughnutChart, useDoughnutChart } from 'vue-chart-3';
+import { DoughnutChart, LineChart, useDoughnutChart, useLineChart } from 'vue-chart-3';
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
 import {CATEGORY} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
@@ -143,15 +143,25 @@ const selectedTimeframe = ref('year')
 
 // URL to external payment processor page TODO update once chosen
 const paymentProcessorUrl = 'https://www.polygon-software.ch'
-const dataValues = ref([30, 40, 60, 70, 5]);
 
-// Some possible charts:
+// Income over time data TODO get from backend
+const incomeOverTimeData = computed<ChartData<'doughnut'>>(() => ({
+  labels: [ 'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December' ],
+  datasets: [
+    {
+      data: [300, 350, 400, 600, 950, 1200, 1020, 1600, 800, 240, 600],
+      borderColor: 'rgb(30, 122, 122)',
+    },
+  ],
+}));
 
-const testData = computed<ChartData<'doughnut'>>(() => ({
+// Income per category data TODO get from backend
+const incomePerCategoryData = computed<ChartData<'doughnut'>>(() => ({
   labels: Object.values(CATEGORY).map((category) => i18n.global.t(`interests.${category.toLowerCase()}`)),
   datasets: [
     {
-      data: dataValues.value,
+      data: [300, 2000, 600, 700, 55, 300, 220],
       backgroundColor: [
         '#77CEFF',
         '#0079AF',
@@ -163,17 +173,28 @@ const testData = computed<ChartData<'doughnut'>>(() => ({
   ],
 }));
 
-const options = computed<ChartOptions<'doughnut'>>(() => ({
-  plugins: {
-    legend: {
-      position: 'left',
+// Props of income per category chart
+const { doughnutChartProps } = useDoughnutChart({
+  chartData: incomePerCategoryData,
+  options: {
+    plugins: {
+      legend: {
+        position: 'left',
+      },
     },
   },
-}));
+});
 
-const { doughnutChartProps, doughnutChartRef } = useDoughnutChart({
-  chartData: testData,
-  options,
+// Props of income over time chart
+const { lineChartProps } = useLineChart({
+  chartData: incomeOverTimeData,
+  options: {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  }
 });
 
 const columns = [
