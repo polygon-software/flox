@@ -77,6 +77,9 @@
       v-show="false"
       ref="filePicker"
       :model-value="null"
+      accept=".pdf"
+      :max-file-size="props.maxFileSize"
+      :max-files="10"
       multiple
       @update:model-value="onFilePicked"
     />
@@ -91,6 +94,13 @@ import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile} from 'quasar';
 
 const filePicker: Ref<QFile|null> = ref(null)
+
+const props = defineProps({
+  maxFileSize: {
+    type: Number,
+    default: 5e7
+  }
+})
 
 const sections = {
   financials: {
@@ -240,11 +250,11 @@ function onFilePicked(newFiles: File[]){
 
 
 /**
- * Uploads a file for the given section/field
+ * Removes a file from a given file
  * @param {string} section - section key
  * @param {string} field - field key
  * @param {number} index - file index in array
- * @returns {Promise<void>} - done
+ * @returns {void}
  */
 function removeFile(section: string, field: string, index: number) {
   (files.value[section][field] as File[]).splice(index, 1)
