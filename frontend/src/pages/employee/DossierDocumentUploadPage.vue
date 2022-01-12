@@ -184,7 +184,6 @@ const sections = {
           caption: 'Bei Ablösungen',
           key: 'id',
           required: true,
-          files: []
         },
       ]
     }
@@ -257,6 +256,7 @@ function removeFile(section: string, field: string, index: number) {
  * @returns {boolean} - whether the section is complete
  */
 function sectionComplete(key: string): boolean{
+  console.log('check for section', key)
   const section = sections[key] as Record<string, unknown>
   const requiredFields = section.fields.required as Record<string, unknown>[]
 
@@ -265,8 +265,9 @@ function sectionComplete(key: string): boolean{
   // Check if all required fields have at least one file
   return requiredFields.every((field) => {
     // Find files for this field (if any)
-    const fieldFiles = allFiles[key] && allFiles[key][field] ? allFiles[key][field] as Record<string, unknown>[] : []
+    const fieldFiles = allFiles[key] && allFiles[key][field.key] ? allFiles[key][field.key] as Record<string, unknown>[] : []
 
+    console.log('field files are', fieldFiles)
     return fieldFiles.length > 0
   })
 }
