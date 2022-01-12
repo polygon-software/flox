@@ -10,6 +10,7 @@ import CompanyUploadFields from 'components/forms/fields/document_upload/Company
 import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
+import DisabledInputField from 'components/forms/fields/generic/DisabledInputField.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {PROPERTY_TYPE} from "../../../shared/definitions/ENUMS";
@@ -267,7 +268,7 @@ const FIELDS: Record<string, Field> = {
   },
   ENFEOFFMENT: {
     key: 'enfeoffment',
-    component: markRaw(QInput),
+    component: markRaw(DisabledInputField),
     attributes: {
       dense: true,
       type: 'text',

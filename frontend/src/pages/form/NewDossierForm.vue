@@ -156,7 +156,7 @@ const pages = [
       },
       {
         key: 'property-data2',
-        title: i18n.global.t('form_for_clients.property'),
+        title: i18n.global.t('form_for_clientsloc.property'),
         fields: [FIELDS.PROPERTY_TYPE],
       },
       {
@@ -169,7 +169,7 @@ const pages = [
       {
         key: 'property-data4',
         title: i18n.global.t('form_for_clients.purchase'),
-        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.PRICE, FIELDS.MARKET_VALUE_ESTIMATION, FIELDS.CURRENT_VALUE_OF_MORTGAGE, FIELDS.ENFEOFFMENT],
+        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.PRICE, FIELDS.MARKET_VALUE_ESTIMATION, FIELDS.CURRENT_VALUE_OF_MORTGAGE],
       },
     ]
   },
