@@ -15,7 +15,7 @@
           style="margin: 24px 0 24px 0"
         />
         <p style="text-align: center">
-          {{ $t('general.loading', {progress, total})}}
+          {{ $t('general.uploading', {progress, total}) }}
         </p>
       </q-card-section>
       <q-card-actions class="justify-end">
@@ -45,7 +45,7 @@ const progress = ref(1)
 const loading = ref(true)
 
 // Total number of files to upload, calc'd once upload starts
-const total = ref(0)
+const total = ref(1)
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -58,7 +58,7 @@ const props = defineProps({
 onMounted(async () => {
   await uploadAllFiles();
 
-  // Finished
+  // Finished, allow closing dialog
   loading.value = false;
 })
 
@@ -73,8 +73,21 @@ function show(): void {
  * Uploads all files belonging to the dossier
  * @returns {Promise<void>} - done
  */
+// TODO remove
+// eslint-disable-next-line @typescript-eslint/require-await,require-jsdoc
 async function uploadAllFiles(){
-  // TODO
+  const files = props.files as Record<string, unknown>
+  // For every section
+  Object.keys(files).forEach((sectionKey) => {
+    console.log('Find files for section', sectionKey)
+    Object.keys(files[sectionKey]).forEach((fieldKey) => {
+      console.log('Find files for field', fieldKey)
+
+      const fieldFiles = files[sectionKey][fieldKey] as File[] ?? []
+
+      console.log('Field docs:', fieldFiles)
+    })
+  })
 }
 
 // eslint-disable-next-line require-jsdoc
