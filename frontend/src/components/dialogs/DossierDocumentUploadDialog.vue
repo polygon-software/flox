@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import {ref, Ref, defineEmits, onMounted} from 'vue'
 import {QDialog} from 'quasar';
+import {uploadFiles} from 'src/helpers/file-helpers';
 
 const emit = defineEmits(['ok'])
 
@@ -51,6 +52,10 @@ const total = ref(1)
 const props = defineProps({
   files: {
     type: Object,
+    required: true,
+  },
+  dossierUuid: {
+    type: String,
     required: true,
   }
 })
@@ -77,6 +82,7 @@ function show(): void {
 // eslint-disable-next-line @typescript-eslint/require-await,require-jsdoc
 async function uploadAllFiles(){
   const files = props.files as Record<string, unknown>
+  let uploadFiles = []
 
   // For every section
   Object.keys(files).forEach((sectionKey) => {
@@ -88,13 +94,13 @@ async function uploadAllFiles(){
       // Update total length
       total.value += fieldFiles.length
 
-      // Upload all files
-      for(const file of fieldFiles){
-        // TODO
-        console.log('upload file', file.name)
-      }
+      // Add to upload
+      uploadFiles = uploadFiles.concat(fieldFiles)
     })
   })
+
+  // await uploadFiles(files.value, `/uploadDossierFile?oid=${props.dossierUuid}`, 'myDossiers')
+
 
   // Decrease by 1, since we start at 1 to avoid zero-division
   total.value--

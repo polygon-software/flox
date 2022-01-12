@@ -120,7 +120,7 @@
         class="q-ma-md"
         :label="loading ? null : $t('buttons.save')"
         color="primary"
-        :disable="loading"
+        :disable="loading || !canSubmit"
         @click="onSave"
       >
         <q-spinner
@@ -134,13 +134,25 @@
 </template>
 
 <script setup lang="ts">
-import {Ref, ref} from 'vue';
+import {computed, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile, useQuasar} from 'quasar';
 import DossierDocumentUploadDialog from 'components/dialogs/DossierDocumentUploadDialog.vue';
+import {useRoute} from 'vue-router';
 
 const $q = useQuasar()
+const route = useRoute()
+
+
+
+// Get ID from route
+if(!route.query.did){
+  throw new Error('Invalid URL')
+}
+
+// UUID of dossier to upload files to
+const dossierUuid = route.query.did
 
 // File Picker component ref
 const filePicker: Ref<QFile|null> = ref(null)
@@ -152,7 +164,7 @@ const props = defineProps({
   maxFileSize: {
     type: Number,
     default: 5e7
-  }
+  },
 })
 
 // File upload sections
@@ -340,6 +352,11 @@ const uploadFor = ref({
   field: null,
 })
 
+// Whether the form is ready to be submitted
+const canSubmit = computed(() => {
+  return Object.keys(sections).every((sectionKey) => sectionComplete(sectionKey))
+})
+
 /**
  * Uploads a file for the given section/field
  * @param {string} section - section key
@@ -430,18 +447,20 @@ function filesForField(section: string, field: string): File[]{
  * @returns {Promise<void>} - done
  */
 function onSave(){
-  // TODO allow only if all required sections complete
-
-  loading.value = true;
-  $q.dialog({
-    component: DossierDocumentUploadDialog,
-    componentProps: {
-      files: files.value
-    },
-    persistent: true
-  }).onOk(() => {
-    // TODO
-  })
+  // Allow only if all sections complete
+  if(canSubmit.value){
+    loading.value = true;
+    $q.dialog({
+      component: DossierDocumentUploadDialog,
+      componentProps: {
+        files: files.value,
+        dossierUuid: dossierUuid,
+      },
+      persistent: true
+    }).onOk(() => {
+      // TODO route to confirmation page?
+    })
+  }
 }
 
 /**
