@@ -103,7 +103,8 @@
       >
         <h6 class="q-ma-md">{{ $t('finances.general') }}</h6>
 
-        <p>TODO: more financial content, depending on payment provider / available data.</p>
+        <DoughnutChart v-bind="doughnutChartProps" />
+
       </q-card>
 
     </div>
@@ -112,13 +113,57 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {openURL} from 'quasar';
+import { DoughnutChart, useDoughnutChart } from 'vue-chart-3';
+import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 const selectedTimeframe = ref('year')
 
 // URL to external payment processor page TODO update once chosen
 const paymentProcessorUrl = 'https://www.polygon-software.ch'
+const dataValues = ref([30, 40, 60, 70, 5]);
+
+const testData = computed<ChartData<'doughnut'>>(() => ({
+  labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+  datasets: [
+    {
+      data: dataValues.value,
+      backgroundColor: [
+        '#77CEFF',
+        '#0079AF',
+        '#123E6B',
+        '#97B0C4',
+        '#A5C8ED',
+      ],
+    },
+  ],
+}));
+
+const options = computed<ChartOptions<'doughnut'>>(() => ({
+  scales: {
+    myScale: {
+      type: 'logarithmic',
+      position: 'left',
+    },
+  },
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Chart.js Doughnut Chart',
+    },
+  },
+}));
+
+const { doughnutChartProps, doughnutChartRef } = useDoughnutChart({
+  chartData: testData,
+  options,
+});
 
 const columns = [
   { name: 'label', label: 'Kennzahl', field: 'label', sortable: true, align: 'start' },
