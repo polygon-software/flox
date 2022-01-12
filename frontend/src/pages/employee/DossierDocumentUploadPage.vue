@@ -72,12 +72,13 @@
       </div>
     </div>
 
-    <!-- Invisible file picker TODO make functional, proper model-value -->
+    <!-- Invisible file picker (does not need a model-value, since upload is handled via event) -->
     <q-file
       v-show="false"
       ref="filePicker"
-      :model-value="files"
-      @update:model-value
+      :model-value="null"
+      multiple
+      @update:model-value="onFilePicked"
     />
 
   </q-page>
@@ -87,6 +88,7 @@
 import {Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
+import {QFile} from 'quasar';
 
 const filePicker: Ref<QFile|null> = ref(null)
 
@@ -192,6 +194,10 @@ const sections = {
 // Files for sections
 const files: Ref<Record<string, Record<string, unknown>[]>> = ref({})
 
+const uploadFor = ref({
+  section: null,
+  field: null,
+})
 
 /**
  * Uploads a file for the given section/field
@@ -201,11 +207,39 @@ const files: Ref<Record<string, Record<string, unknown>[]>> = ref({})
  */
 function uploadFile(section: string, field: string) {
 
-  console.log('Upload to', section, 'for field', field)
-  // TODO add to section
-  //
+  // Choose upload target
+  uploadFor.value.section = section;
+  uploadFor.value.field = field;
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  filePicker.value.pickFiles();
+  filePicker.value.pickFiles()
+}
+
+/**
+ * Triggered when a file is picked from the file picker dialog
+ * @param {File} file - the newly picked file
+ * @returns {void}
+ */
+function onFilePicked(file: File){
+  console.log('file picked:', file)
+
+  const sectionKey = uploadFor.value.section
+  const fieldKey = uploadFor.value.field
+
+  // Add section if not present
+  if(!files.value[sectionKey]){
+    files.value[sectionKey] = {}
+  }
+
+  const section = files.value[sectionKey] as Record<string, Record<string, File[]>>
+
+  // Add field if not present
+  if(!section[fieldKey]){
+    section[fieldKey] = []
+  }
+  const field = section[fieldKey] as Record<string, File[]>
+
+  field.push(file)
 }
 
 
