@@ -72,11 +72,12 @@
       </div>
     </div>
 
-    <!-- Invisible file picker TODO make functional -->
+    <!-- Invisible file picker TODO make functional, proper model-value -->
     <q-file
       v-show="false"
       ref="filePicker"
       :model-value="files"
+      @update:model-value
     />
 
   </q-page>
