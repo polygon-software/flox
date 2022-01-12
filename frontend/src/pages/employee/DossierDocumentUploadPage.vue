@@ -248,11 +248,7 @@ function onFilePicked(newFiles: File[]){
  * @returns {Promise<void>} - done
  */
 function removeFile(section: string, field: string, index: number) {
-  console.log('Remove from', section, 'for field', field, 'at index', index)
-  console.log('field is now', files.value[section][field])
-
-  files.value[section][field] = (files.value[section][field] as File[]).slice(index)
-
+  (files.value[section][field] as File[]).splice(index)
 }
 
 /**
