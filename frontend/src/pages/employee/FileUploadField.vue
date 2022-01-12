@@ -24,8 +24,7 @@
           name="description"
           color="primary"
         />
-        <!-- TODO link to file, proper centering -->
-        <p class="text-primary" style="margin-left: 6px">
+        <p class="text-primary" style="margin: 0 0 0 6px">
           {{file.name}}
         </p>
 
