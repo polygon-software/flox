@@ -97,13 +97,30 @@
 
       <!-- General -->
       <q-card
-        class="q-ma-md"
+        class="q-ma-md q-pa-md"
         flat
         style="width: 100%; border-radius: 20px; border: 1px solid black"
       >
-        <h6 class="q-ma-md">{{ $t('finances.general') }}</h6>
+        <h6 class="q-ma-none">{{ $t('finances.general') }}</h6>
 
-        <DoughnutChart v-bind="doughnutChartProps" />
+        <q-separator style="margin-top: 20px"/>
+
+        <div class="row">
+          <div class="col q-pa-sm">
+            <!-- Income over time chart -->
+            <strong>{{ $t('finances.income_by_category') }}</strong>
+            <DoughnutChart v-bind="doughnutChartProps" />
+          </div>
+          <q-separator vertical style="margin: 0 20px 0 20px"/>
+          <div class="col q-pa-sm">
+
+            <!-- Income by category chart -->
+            <strong>{{ $t('finances.income_by_category') }}</strong>
+            <DoughnutChart v-bind="doughnutChartProps" />
+          </div>
+        </div>
+
+        <q-separator/>
 
       </q-card>
 
@@ -117,6 +134,8 @@ import {computed, ref} from 'vue';
 import {openURL} from 'quasar';
 import { DoughnutChart, useDoughnutChart } from 'vue-chart-3';
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
+import {CATEGORY} from '../../../../shared/definitions/ENUM';
+import {i18n} from 'boot/i18n';
 
 Chart.register(...registerables);
 
@@ -126,8 +145,10 @@ const selectedTimeframe = ref('year')
 const paymentProcessorUrl = 'https://www.polygon-software.ch'
 const dataValues = ref([30, 40, 60, 70, 5]);
 
+// Some possible charts:
+
 const testData = computed<ChartData<'doughnut'>>(() => ({
-  labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+  labels: Object.values(CATEGORY).map((category) => i18n.global.t(`interests.${category.toLowerCase()}`)),
   datasets: [
     {
       data: dataValues.value,
@@ -143,19 +164,9 @@ const testData = computed<ChartData<'doughnut'>>(() => ({
 }));
 
 const options = computed<ChartOptions<'doughnut'>>(() => ({
-  scales: {
-    myScale: {
-      type: 'logarithmic',
-      position: 'left',
-    },
-  },
   plugins: {
     legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Doughnut Chart',
+      position: 'left',
     },
   },
 }));
