@@ -22,22 +22,23 @@ export const ALL_NOTIFICATIONS = {
   cacheLocation: 'allNotifications'
 }
 
-// TODO implement on backend; for now, we use allNotifications
 export const MY_NOTIFICATIONS = {
   query: gql`
     query{
-      allNotifications{
-        uuid
-        title
-        received
-        content
-        isRead
+      myUser{
+        notifications {
+          uuid
+          title
+          received
+          content
+          isRead
+        }
         __typename
       }
     }
   `,
-  tables: ['notification'],
-  cacheLocation: 'allNotifications'
+  tables: ['user'],
+  cacheLocation: 'myNotifications'
 }
 
 export const NOTIFICATION = {

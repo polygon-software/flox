@@ -116,8 +116,8 @@ import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {MY_USER} from 'src/data/queries/USER';
 import {Notification} from 'src/data/types/Notification';
+import {MY_NOTIFICATIONS} from 'src/data/queries/NOTIFICATION';
 
 
 const $authService: AuthenticationService|undefined = inject('$authService')
@@ -129,11 +129,11 @@ const loggedIn = computed(() => {
   return $authStore.getters.getLoggedInStatus();
 })
 
-const queryResult = subscribeToQuery(MY_USER) as Ref<Record<string, unknown>>
+const myNotificationsQueryResult = subscribeToQuery(MY_NOTIFICATIONS) as Ref<Record<string, unknown>>
 
 const notifications = computed(() => {
   const notifications: Array<Notification> = []
-  const records = queryResult.value?.notifications as Array<Record<string, unknown>> ?? [];
+  const records = myNotificationsQueryResult.value?.notifications as Array<Record<string, unknown>> ?? [];
   records.forEach(record => notifications.push(new Notification(
     record.title as string,
     new Date(record.received as string),

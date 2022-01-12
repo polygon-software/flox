@@ -13,13 +13,6 @@ export const MY_USER = {
         role
         status
         disabledUntil
-        notifications {
-          uuid
-          title
-          received
-          content
-          isRead
-        }
         __typename
       }
     }
