@@ -134,7 +134,7 @@
 import {computed, ref} from 'vue';
 import {openURL} from 'quasar';
 import { DoughnutChart, LineChart, useDoughnutChart, useLineChart } from 'vue-chart-3';
-import { Chart, ChartData, ChartOptions, registerables } from 'chart.js';
+import { Chart, ChartData, registerables } from 'chart.js';
 import {CATEGORY} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
 
