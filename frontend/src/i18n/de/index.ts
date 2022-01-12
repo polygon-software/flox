@@ -9,7 +9,8 @@ export default {
     from: 'Von',
     to: 'Bis',
     date: 'Datum',
-    return: 'Zurück'
+    return: 'Zurück',
+    uploading: 'Wird hochgeladen... ({progress}/{total})'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',

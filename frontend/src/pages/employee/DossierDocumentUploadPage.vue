@@ -106,9 +106,8 @@
       @update:model-value="onFilePicked"
     />
 
-
     <!-- Button Row -->
-    <div class="row q-ma-none q-pa-none" style="margin-bottom: 64px">
+    <div class="row q-ma-none q-pa-none" style="height: 30px; margin-bottom: 64px">
       <q-btn
         class="q-ma-md"
         :label="$t('buttons.cancel')"
@@ -119,11 +118,16 @@
       />
       <q-btn
         class="q-ma-md"
-        :label="$t('buttons.save')"
+        :label="loading ? null : $t('buttons.save')"
         color="primary"
         :disable="loading"
         @click="onSave"
-      />
+      >
+        <q-spinner
+          v-if="loading"
+          style="margin: 0 24px 0 24px"
+        />
+      </q-btn>
     </div>
 
   </q-page>
@@ -133,7 +137,10 @@
 import {Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
-import {QFile} from 'quasar';
+import {QFile, useQuasar} from 'quasar';
+import DossierDocumentUploadDialog from 'components/dialogs/DossierDocumentUploadDialog.vue';
+
+const $q = useQuasar()
 
 // File Picker component ref
 const filePicker: Ref<QFile|null> = ref(null)
@@ -148,6 +155,7 @@ const props = defineProps({
   }
 })
 
+// File upload sections
 const sections = {
   // Financial documents
   financials: {
@@ -425,9 +433,18 @@ function filesForField(section: string, field: string): File[]{
  * @returns {Promise<void>} - done
  */
 function onSave(){
-  console.log('init save!')
+  // TODO allow only if all required sections complete
+
   loading.value = true;
-  // TODO make async, actual upload
+  $q.dialog({
+    component: DossierDocumentUploadDialog,
+    componentProps: {
+      files: files
+    },
+    persistent: true
+  }).onOk(() => {
+    // TODO
+  })
 }
 
 /**
