@@ -447,6 +447,7 @@ function filesForField(section: string, field: string): File[]{
  * @returns {Promise<void>} - done
  */
 function onSave(){
+  // TODO discuss with Christoph: do we want saving to be available for incomplete input?
   // Allow only if all sections complete
   if(canSubmit.value){
     loading.value = true;
