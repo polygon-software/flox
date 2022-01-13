@@ -129,9 +129,5 @@ function onOk(): void {
   hide()
 }
 
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
-}
 </script>
 
