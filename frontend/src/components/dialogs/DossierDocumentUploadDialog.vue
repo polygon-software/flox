@@ -81,8 +81,8 @@ function show(): void {
 // TODO remove
 // eslint-disable-next-line @typescript-eslint/require-await,require-jsdoc
 async function uploadAllFiles(){
-  const files = props.files as Record<string, unknown>
-  let uploadFiles = []
+  const files = props.files as Record<string, Record<string, unknown>>
+  let filesToUpload: Record<string, unknown> = {}
 
   // For every section
   Object.keys(files).forEach((sectionKey) => {
@@ -93,13 +93,13 @@ async function uploadAllFiles(){
 
       // Update total length
       total.value += fieldFiles.length
-
-      // Add to upload
-      uploadFiles = uploadFiles.concat(fieldFiles)
+      fieldFiles.forEach((field, index)=>{
+        filesToUpload[`${fieldKey}_${index}`] = field
+      })
     })
   })
-
-  // await uploadFiles(files.value, `/uploadDossierFile?oid=${props.dossierUuid}`, 'myDossiers')
+  console.log(filesToUpload)
+  await uploadFiles(filesToUpload, `/uploadDossierFile?did=${props.dossierUuid}`, 'myDossiers')
 
 
   // Decrease by 1, since we start at 1 to avoid zero-division

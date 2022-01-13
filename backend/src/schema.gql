@@ -372,6 +372,42 @@ type Employee {
   uuid: ID!
 }
 
+enum FileType {
+  ADDITIONAL_DOCUMENTS
+  BUILDING_DESCRIPTION
+  BUILDING_INSURANCE
+  CREDIT_CONTRACT
+  DEBT_COLLECTION
+  DUMMY
+  FLOOR_PLANS
+  ID
+  LAND_REGISTER_EXTRACT
+  LAST_YEAR_SALARY
+  LAST_YEAR_TAX
+  LEASING_CONTRACT
+  LEGACY_CADASTER
+  LIFE_INSURANCE
+  MANAGEMENT_REGULATIONS
+  MARKET_VALUE_ESTIMATE
+  MARRIAGE_CONTRACT
+  MORTGAGE_CONTRACT
+  NONE
+  OWNER_REGULATIONS
+  OWN_FUNDS
+  PENSION
+  PENSION_ID
+  PICTURES
+  PRODUCT_AGREEMENT
+  PURCHASE_CONTRACT
+  RENOVATIONS
+  RESERVATION_CONTRACT
+  SALARY
+  SALES_DOCUMENTATION
+  SITUATION_PLAN
+  THREE_A
+  WORK_CONTRACT
+}
+
 type Mutation {
   associateUserToCompany(associateUserInput: AssociateUserInput!): Company!
   createBank(createBankInput: CreateBankInput!): Bank!
@@ -437,6 +473,9 @@ type PrivateFile {
 
   """Dossier the file belongs to"""
   dossier: Dossier
+
+  """Type of the File"""
+  file_type: FileType!
 
   """S3 File Key"""
   key: String!

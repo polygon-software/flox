@@ -5,6 +5,7 @@ import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 import { Company } from '../../company/entities/company.entity';
 import { Dossier } from '../../dossier/entity/dossier.entity';
 import { Offer } from '../../offer/entities/offer.entity';
+import { FILE_TYPE } from '../../../ENUM/ENUMS';
 
 /**
  * Defines a private file within a restricted AWS S3 bucket.
@@ -60,6 +61,15 @@ export class PrivateFile extends BaseEntity {
     onDelete: 'CASCADE',
   })
   offer: Offer;
+
+  @Field(() => FILE_TYPE, { description: 'Type of the File' })
+  @Column({
+    type: 'enum',
+    enum: FILE_TYPE,
+    default: FILE_TYPE.NONE,
+  })
+  @IsString()
+  file_type: FILE_TYPE;
 
   // ToDo Dossier will be added in next backend architecture update
 }

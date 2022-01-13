@@ -140,6 +140,7 @@ import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile, useQuasar} from 'quasar';
 import DossierDocumentUploadDialog from 'components/dialogs/DossierDocumentUploadDialog.vue';
 import {useRoute} from 'vue-router';
+import {DOSSIER_FILE_TYPE} from 'src/data/ENUM/ENUM';
 
 const $q = useQuasar()
 const route = useRoute()
@@ -177,65 +178,65 @@ const sections = {
       required: [
         {
           label: i18n.global.t('documents.financials.id'),
-          key: 'id',
+          key: DOSSIER_FILE_TYPE.ID,
         },
         {
           label: i18n.global.t('documents.financials.salary'),
           caption: i18n.global.t('documents.financials.salary_caption'),
-          key: 'salary',
+          key: DOSSIER_FILE_TYPE.SALARY,
         },
         {
           label: 'Rentenbescheinigung',
           caption: 'Der letzten drei Monate',
-          key: 'pension',
+          key: DOSSIER_FILE_TYPE.PENSION,
         },
         {
           label: i18n.global.t('documents.financials.last_year_tax', {year: new Date().getFullYear()-1}),
           caption: i18n.global.t('documents.financials.last_year_tax_caption'),
-          key: 'last_year_tax',
+          key: DOSSIER_FILE_TYPE.LAST_YEAR_TAX,
         },
         {
           label: i18n.global.t('documents.financials.pension_id'),
-          key: 'pension_id',
+          key: DOSSIER_FILE_TYPE.PENSION_ID,
         },
         {
           label: i18n.global.t('documents.financials.last_year_salary', {year: new Date().getFullYear()-1}),
-          key: 'last_year_salary',
+          key: DOSSIER_FILE_TYPE.LAST_YEAR_SALARY,
         },
       ],
       optional: [
         {
           label: i18n.global.t('documents.financials.debt_collection'),
-          key: 'debt_collection',
+          key: DOSSIER_FILE_TYPE.DEBT_COLLECTION,
         },
         {
           label: i18n.global.t('documents.financials.own_funds'),
           caption: i18n.global.t('documents.financials.own_funds_caption'),
-          key: 'own_funds',
+          key: DOSSIER_FILE_TYPE.OWN_FUNDS,
         },
         {
           label: i18n.global.t('documents.financials.three_a'),
-          key: 'three_a',
+          key: DOSSIER_FILE_TYPE.THREE_A,
         },
         {
           label: i18n.global.t('documents.financials.life_insurance'),
-          key: 'life_insurance',
+          key: DOSSIER_FILE_TYPE.LIFE_INSURANCE,
         },
         {
           label: i18n.global.t('documents.financials.leasing_contract'),
-          key: 'leasing_contract',
+          key: DOSSIER_FILE_TYPE.LEASING_CONTRACT,
         },
         {
           label: i18n.global.t('documents.financials.credit_contract'),
-          key: 'credit_contract',
+          key: DOSSIER_FILE_TYPE.CREDIT_CONTRACT,
         },
         {
           label: i18n.global.t('documents.financials.work_contract'),
-          key: 'work_contract',
+          key: DOSSIER_FILE_TYPE.WORK_CONTRACT,
         },
         {
           label: i18n.global.t('documents.financials.marriage_contract'),
-          key: 'marriage_contract',
+          key: DOSSIER_FILE_TYPE.MARRIAGE_CONTRACT,
         }
       ]
     }
@@ -250,80 +251,80 @@ const sections = {
         {
           label: i18n.global.t('documents.property.mortgage_contract'),
           caption: i18n.global.t('documents.property.mortgage_contract_caption'),
-          key: 'mortgage_contract',
+          key: DOSSIER_FILE_TYPE.MORTGAGE_CONTRACT,
         },
         {
           label: i18n.global.t('documents.property.product_agreement'),
-          caption: i18n.global.t('documents.property.mortgage_contract_caption'),
-          key: 'product_agreement',
+          caption: i18n.global.t('documents.property.product_agreement_caption'),
+          key: DOSSIER_FILE_TYPE.PRODUCT_AGREEMENT,
         },
         // TODO CONDITIONAL: EFH only
         {
           label: i18n.global.t('documents.property.building_insurance'),
           caption: i18n.global.t('documents.property.building_insurance_caption'),
-          key: 'building_insurance',
+          key: DOSSIER_FILE_TYPE.BUILDING_INSURANCE,
         },
         // TODO CONDITIONAL: Stockwerkeigentum Only!
         {
           label: i18n.global.t('documents.property.owner_regulations'),
           caption: i18n.global.t('documents.property.owner_regulations_caption'),
-          key: 'owner_regulations',
+          key: DOSSIER_FILE_TYPE.OWNER_REGULATIONS,
         },
         // TODO CONDITIONAL: Stockwerkeigentum Only!
         {
           label: i18n.global.t('documents.property.management_regulations'),
           caption: i18n.global.t('documents.property.owner_regulations_caption'),
-          key: 'management_regulations',
+          key: DOSSIER_FILE_TYPE.MANAGEMENT_REGULATIONS,
         },
         {
           label: i18n.global.t('documents.property.floor_plans'),
-          key: 'floor_plans',
+          key: DOSSIER_FILE_TYPE.FLOOR_PLANS,
         },
         {
           label: i18n.global.t('documents.property.pictures'),
           caption: i18n.global.t('documents.property.pictures_caption'),
-          key: 'pictures',
+          key: DOSSIER_FILE_TYPE.PICTURES,
         },
         {
           label: i18n.global.t('documents.property.purchase_contract'),
-          key: 'purchase_contract',
+          key: DOSSIER_FILE_TYPE.PURCHASE_CONTRACT,
         },
       ],
       optional: [
         {
           label: i18n.global.t('documents.property.renovations'),
-          key: 'renovations',
+          key: DOSSIER_FILE_TYPE.RENOVATIONS,
         },
         {
           label: i18n.global.t('documents.property.legacy_cadaster'),
           caption: i18n.global.t('documents.property.legacy_cadaster_caption'),
-          key: 'legacy_cadaster',
+          key: DOSSIER_FILE_TYPE.LEGACY_CADASTER,
         },
         {
           label: i18n.global.t('documents.property.land_register_extract'),
           caption: i18n.global.t('documents.property.land_register_extract_caption'),
-          key: 'land_register_extract',
+          key: DOSSIER_FILE_TYPE.LAND_REGISTER_EXTRACT,
         },
         {
           label: i18n.global.t('documents.property.building_description'),
           caption: i18n.global.t('documents.property.building_description_caption'),
-          key: 'building_description',
+          key: DOSSIER_FILE_TYPE.BUILDING_DESCRIPTION,
         },
         {
           label: i18n.global.t('documents.property.reservation_contract'),
-          key: 'reservation_contract',
+          key: DOSSIER_FILE_TYPE.RESERVATION_CONTRACT,
         },
         {
           label: i18n.global.t('documents.property.market_value_estimate'),
-          key: 'market_value_estimate',
+          key: DOSSIER_FILE_TYPE.MARKET_VALUE_ESTIMATE,
         },
         {
           label: i18n.global.t('documents.property.sales_documentation'),
-          key: 'sales_documentation',
+          key: DOSSIER_FILE_TYPE.SALES_DOCUMENTATION,
         },
         {
           label: i18n.global.t('documents.property.situation_plan'),
-          key: 'situation_plan',
+          key: DOSSIER_FILE_TYPE.SITUATION_PLAN,
         },
       ]
     }
@@ -337,7 +338,7 @@ const sections = {
         [
           {
             label: i18n.global.t('documents.additional_documents'),
-            key: 'additional_documents',
+            key: DOSSIER_FILE_TYPE.ADDITIONAL_DOCUMENTS,
           },
         ]
     }
@@ -354,7 +355,8 @@ const uploadFor = ref({
 
 // Whether the form is ready to be submitted
 const canSubmit = computed(() => {
-  return Object.keys(sections).every((sectionKey) => sectionComplete(sectionKey))
+  return true;
+  // return Object.keys(sections).every((sectionKey) => sectionComplete(sectionKey))
 })
 
 /**
