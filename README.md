@@ -1,4 +1,6 @@
-![logo](https://polygon-software.ch/images/banner.svg)
+<p align="center">
+<img src="https://polygon-software.ch/images/banner.svg" height="300">
+</p>
 
 # Full Stack Bootstrap Repository
 
@@ -67,11 +69,28 @@ master
 
 Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon completing a feature, [creating a Pull Request](https://github.com/polygon-software/full-stack-bootstrap/compare) in order to merge the feature back into the development branch.
 
+Pull Request naming must adhere to the following schema:
+`type(scope): name`
+     
+| Name  | Description |
+| ------| ----------- | 
+| fix | Fixes an issue |
+| feat | Adds a new feature |
+| doc | Adds documentation |
+| test | Adds tests |
+
+The following Scopes are available:
+- `core`
+- `soi`
+- `bigabig`
+
+E.g. a valid PR name may be `feat(bigabig): Employee Dashboard`
+
 Once significant features have been merged into the `dev` branch, a Pull Request into `master` may be created in order to integrate well-tested features into the bootstrap repository.
 
 New project branches should always be created from `master`, and only merged into from `master`. Project branches should generally never be merged into any other branch.
 
-When creating a Pull Request, make sure to use the appropriate **labels** to identify what project and functionalities the PR belongs to.
+When creating a Pull Request, make sure to use the appropriate **labels** to identify what project and functionalities the PR belongs to. Additionally, autolabeller can automatically add missing labels.
 
 **If a project requires a basic functionality not covered by the bootstrap repository, the following workflow should be observed:**
 1. Create a new feature branch from `dev`

@@ -25,6 +25,7 @@ const sesClient = new SESClient({
  * @param {string} body - E-mail's HTML body
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
+ * @returns {void}
  */
 export async function sendEmail(
   from: string,

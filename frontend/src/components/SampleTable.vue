@@ -74,7 +74,7 @@ import {executeMutation, subscribeToQuery} from '../helpers/data-helpers';
 
 // ----- Data -----
 // Selection must be an array
-let selected = ref([])
+let selected: Ref<Array<Record<string, unknown>>> = ref([])
 const columns = [
   { name: 'uuid', align: 'center', label: 'ID', field: 'uuid', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
@@ -89,9 +89,10 @@ const computedResult = computed(()=>{
 
 /**
  * Deletes the currently selected user
+ * @returns {void}
  */
-function onDelete(){
-  void executeMutation(
+async function onDelete(){
+  await executeMutation(
       DELETE_USER,
       {
         uuid: selected.value[0].uuid
@@ -105,9 +106,11 @@ function onDelete(){
  * Edits the given user
  * @param {string} id - the user's ID
  * @param {Record<string, unknown>} variables - the new variables
+ * @async
+ * @returns {void}
  */
-function onUpdate(id: string, variables: Record<string, unknown>){
-  void executeMutation(
+async function onUpdate(id: string, variables: Record<string, unknown>){
+  await executeMutation(
       UPDATE_USER,
       {
         uuid: id,

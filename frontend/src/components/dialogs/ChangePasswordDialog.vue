@@ -57,16 +57,18 @@
 import {defineEmits, Ref} from 'vue';
 import {ref} from 'vue';
 import {PASSWORD_REGEX} from '../../helpers/REGEX'
+import {QDialog} from 'quasar';
 
 let passwordOld = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
-const dialog: Ref<HTMLElement> = ref<HTMLElement>(null)
+const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 /**
  * Upon submit, pass entered values outwards
+ * @returns {void}
  */
 function onSubmit(){
   emit('ok', {
@@ -77,15 +79,16 @@ function onSubmit(){
 }
 
 // Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value.show();
+  dialog.value?.show();
 }
 
+// eslint-disable-next-line require-jsdoc
 function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value.hide()
+  dialog.value?.hide()
 }
 
 

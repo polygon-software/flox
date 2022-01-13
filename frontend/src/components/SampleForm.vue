@@ -40,10 +40,13 @@ let name = ref(null);
 let age = ref(null);
 
 
-// Upon submit, send GraphQL mutation
-function onSubmit () : void{
+/**
+ * Upon submit, send GraphQL mutation
+ * @returns {void}
+ */
+async function onSubmit (){
   if(!process.env.SERVER){
-    void executeMutation(
+    await executeMutation(
       CREATE_USER,
       {
         name: name.value,
