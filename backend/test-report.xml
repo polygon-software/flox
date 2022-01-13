@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="/Users/davidwyss/Desktop/Polygon.nosync/full-stack-bootstrap/backend/src/user/user.resolver.spec.ts">
+    <testCase name="UsersResolver should be defined" duration="1"/>
+  </file>
+</testExecutions>
