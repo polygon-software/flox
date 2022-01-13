@@ -1,4 +1,6 @@
-![logo](https://polygon-software.ch/images/banner.svg)
+<p align="center">
+<img src="https://polygon-software.ch/images/banner.svg" height="300">
+</p>
 
 # Full Stack Bootstrap Repository
 
