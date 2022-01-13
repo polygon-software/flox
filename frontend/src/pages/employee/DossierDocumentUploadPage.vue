@@ -134,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onBeforeMount, Ref, ref} from 'vue';
+import {computed, inject, onBeforeMount, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile, useQuasar} from 'quasar';
@@ -143,9 +143,12 @@ import {useRoute} from 'vue-router';
 import {DOSSIER_FILE_TYPE} from 'src/data/ENUM/ENUM';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {GET_DOSSIER} from 'src/data/queries/QUERIES';
+import {RouterService} from 'src/services/RouterService';
+import ROUTES from 'src/router/routes';
 
 const $q = useQuasar()
 const route = useRoute()
+const $routerService: RouterService|undefined = inject('$routerService')
 
 
 // Get ID from route
@@ -162,7 +165,22 @@ const files: Ref<Record<string, Record<string,  Array<Record<string, unknown>|Fi
 
 const filesToDelete: Ref<Array<string>> = ref([])
 
-const financial = [DOSSIER_FILE_TYPE.ID, DOSSIER_FILE_TYPE.SALARY,DOSSIER_FILE_TYPE.PENSION,DOSSIER_FILE_TYPE.LAST_YEAR_TAX,DOSSIER_FILE_TYPE.PENSION_ID,DOSSIER_FILE_TYPE.LAST_YEAR_SALARY, DOSSIER_FILE_TYPE.DEBT_COLLECTION,DOSSIER_FILE_TYPE.OWN_FUNDS,DOSSIER_FILE_TYPE.THREE_A,DOSSIER_FILE_TYPE.LIFE_INSURANCE, DOSSIER_FILE_TYPE.LEASING_CONTRACT, DOSSIER_FILE_TYPE.CREDIT_CONTRACT, DOSSIER_FILE_TYPE.WORK_CONTRACT, DOSSIER_FILE_TYPE.MARRIAGE_CONTRACT]
+const financialsFileTypes = [
+  DOSSIER_FILE_TYPE.ID,
+  DOSSIER_FILE_TYPE.SALARY,
+  DOSSIER_FILE_TYPE.PENSION,
+  DOSSIER_FILE_TYPE.LAST_YEAR_TAX,
+  DOSSIER_FILE_TYPE.PENSION_ID,
+  DOSSIER_FILE_TYPE.LAST_YEAR_SALARY,
+  DOSSIER_FILE_TYPE.DEBT_COLLECTION,
+  DOSSIER_FILE_TYPE.OWN_FUNDS,
+  DOSSIER_FILE_TYPE.THREE_A,
+  DOSSIER_FILE_TYPE.LIFE_INSURANCE,
+  DOSSIER_FILE_TYPE.LEASING_CONTRACT,
+  DOSSIER_FILE_TYPE.CREDIT_CONTRACT,
+  DOSSIER_FILE_TYPE.WORK_CONTRACT,
+  DOSSIER_FILE_TYPE.MARRIAGE_CONTRACT
+]
 
 // UUID of dossier to upload files to
 const dossierUuid = route.query.did
@@ -176,7 +194,7 @@ onBeforeMount(()=>{
       const documentType = docu.file_type as DOSSIER_FILE_TYPE
       let subtype = '';
 
-      if(financial.includes(documentType)){
+      if(financialsFileTypes.includes(documentType)){
         subtype = 'financials'
       } else if(documentType === `${DOSSIER_FILE_TYPE.ADDITIONAL_DOCUMENTS}`){
         subtype = 'additional'
@@ -383,8 +401,6 @@ const sections = {
   }
 }
 
-
-
 const uploadFor = ref({
   section: '',
   field: '',
@@ -406,7 +422,6 @@ function uploadFile(section: string, field: string) {
   uploadFor.value.section = section;
   uploadFor.value.field = field;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
   filePicker.value?.pickFiles()
 }
 
@@ -435,7 +450,7 @@ function onFilePicked(newFiles: File[]){
 }
 
 /**
- * Removes a file from a given file
+ * Removes a file from a given field
  * @param {string} section - section key
  * @param {string} field - field key
  * @param {number} index - file index in array
@@ -501,17 +516,9 @@ function onSave(){
       persistent: true
     }).onOk(() => {
       loading.value = false
-      // TODO route to confirmation page?
+      void $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
     })
   }
-}
-
-/**
- * Upon cancelling, goes back to preceding page
- * @returns {void}
- */
-function onCancel(){
-  // TODO go back: determine which page to go to
 }
 
 </script>

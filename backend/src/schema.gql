@@ -424,7 +424,7 @@ type Mutation {
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
-  removeFiles(removeFilesDossierInput: RemoveFilesDossierInput!): Dossier!
+  removeDossierFiles(removeDossierFilesInput: RemoveDossierFilesInput!): Dossier!
   resetDossier(resetDossierInput: ResetDossierInput!): Dossier!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
@@ -558,7 +558,7 @@ type Query {
   users(uuids: [ID!]): [User!]!
 }
 
-input RemoveFilesDossierInput {
+input RemoveDossierFilesInput {
   fileUuids: [ID!]!
   uuid: ID!
 }

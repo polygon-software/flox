@@ -48,7 +48,7 @@ const progress = ref(0)
 const loading = ref(true)
 
 // Total number of files to upload, calculated once upload starts
-const total = ref(4)
+const total = ref(2)
 
 const props = defineProps({
   files: {
@@ -98,14 +98,14 @@ async function uploadAllFiles(){
 
       fieldFiles.forEach((field, index)=>{
         if(!field.hasOwnProperty('uuid')){ // Is a new file
-          filesToUpload[`${fieldKey}_${index}`] = field
+          filesToUpload[`${fieldKey}_${String(index).padStart(4, '0')}`] = field
         }
       })
     })
   })
   await uploadFiles(filesToUpload, `/uploadDossierFile?did=${props.dossierUuid}`, 'myDossiers')
 
-  progress.value+=3;
+  progress.value+=1;
 
   if(props.filesToDelete.length>0){
     await executeMutation(REMOVE_FILES_DOSSIER, {uuid: props.dossierUuid, fileUuids: props.filesToDelete})

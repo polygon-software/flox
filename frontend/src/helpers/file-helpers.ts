@@ -11,16 +11,16 @@ import {useApolloClient} from '@vue/apollo-composable';
 export async function uploadFiles(files: Record<string, unknown>, target: string, queryname: string) {
   const apolloClient = useApolloClient().resolveClient()
   let iter = 0
-  let res:string|null = 'Schnabeltier'
+  let res:string|null = ''
   let token:string|null = ''
-  while (res){
+  do {
     res = localStorage.key(iter)
     if(res?.endsWith('.idToken') && res?.startsWith('CognitoIdentityServiceProvider.')){
       token = localStorage.getItem(res)
       break
     }
     iter++;
-  }
+  } while (res)
   if(!token){
     throw new Error('Authentication Failure')
   }
@@ -47,5 +47,4 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
     throw new Error(`File upload error: ${e.message}`)
   })
   await apolloClient.refetchQueries({include: [queryname]})
-
 }

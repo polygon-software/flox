@@ -17,7 +17,7 @@ import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 import { GetDossierInput } from './dto/input/get-dossier.input';
-import { RemoveFilesDossierInput } from './dto/input/remove-files-dossier.input';
+import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -142,7 +142,7 @@ export class DossierResolver {
   }
 
   /**
-   * Get a Dossier based on it's Uuid
+   * Get a Dossier based on its Uuid
    * @param {GetDossierInput} getDossierInput - uuid of dossier
    * @param {Record<string, string>} user - the current request's user
    * @returns {Promise<Dossier>} - dossier
@@ -159,19 +159,19 @@ export class DossierResolver {
 
   /**
    * Remove files from a dossier
-   * @param {RemoveFilesDossierInput} removeFilesDossierInput - dossier uuid and file uuid list
+   * @param {RemoveDossierFilesInput} removeDossierFilesInput - dossier uuid and file uuid list
    * @param {Record<string, string>} user - the current request's user
    * @returns {Promise<Dossier>} - dossier
    */
   @EmployeeOnly()
   @Mutation(() => Dossier)
-  async removeFiles(
-    @Args('removeFilesDossierInput')
-    removeFilesDossierInput: RemoveFilesDossierInput,
+  async removeDossierFiles(
+    @Args('removeDossierFilesInput')
+    removeDossierFilesInput: RemoveDossierFilesInput,
     @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier> {
     return this.dossierService.removeFiles(
-      removeFilesDossierInput,
+      removeDossierFilesInput,
       user.userId,
     );
   }

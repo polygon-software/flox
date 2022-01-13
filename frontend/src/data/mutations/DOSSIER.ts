@@ -145,8 +145,8 @@ export const SET_OFFER_STATUS = {
 
 export const REMOVE_FILES_DOSSIER = {
   mutation: gql`
-    mutation removeFiles($uuid: ID!, $fileUuids: [ID!]!){
-      removeFiles(removeFilesDossierInput: {uuid: $uuid,fileUuids: $fileUuids}) {
+    mutation removeDossierFiles($uuid: ID!, $fileUuids: [ID!]!){
+      removeDossierFiles(removeFilesDossierInput: {uuid: $uuid,fileUuids: $fileUuids}) {
         uuid
         __typename
         documents{

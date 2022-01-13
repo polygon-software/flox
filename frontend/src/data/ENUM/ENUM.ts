@@ -33,7 +33,6 @@ export enum ROLE {
   NONE = 'NONE',
 }
 
-
 export enum DOSSIER_FILE_TYPE {
   NONE = 'NONE',
   // Financials
@@ -73,6 +72,7 @@ export enum DOSSIER_FILE_TYPE {
   // Additional
   ADDITIONAL_DOCUMENTS = 'ADDITIONAL_DOCUMENTS',
 }
+
 export enum OFFER_FILE_TYPE {
   DUMMY = 'DUMMY',
 }

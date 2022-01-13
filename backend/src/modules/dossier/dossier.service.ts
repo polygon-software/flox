@@ -16,7 +16,7 @@ import { Offer } from '../offer/entities/offer.entity';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 import { User } from '../user/entities/user.entity';
-import { RemoveFilesDossierInput } from './dto/input/remove-files-dossier.input';
+import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
 import { FileService } from '../file/file.service';
 
 @Injectable()
@@ -280,28 +280,28 @@ export class DossierService {
 
   /**
    * Removes a list of files from a dossier. Currently only allows access to Employee of dossier.
-   * @param {RemoveFilesDossierInput} removeFilesDossierInput - uuid of dossier and uuids of files
+   * @param {RemoveDossierFilesInput} removeDossierFilesInput - uuid of dossier and uuids of files
    * @param {string} userUuid - uuid of user requesting
    * @returns {Dossier} - Updated dossier
    */
   async removeFiles(
-    removeFilesDossierInput: RemoveFilesDossierInput,
+    removeDossierFilesInput: RemoveDossierFilesInput,
     userUuid: string,
   ): Promise<Dossier> {
     const user = await this.userRepository.findOne(userUuid);
     const dossier = await this.dossierRepository.findOne(
-      removeFilesDossierInput.uuid,
+      removeDossierFilesInput.uuid,
       {
         relations: ['documents', 'employee'],
       },
     );
     const promises = [];
     if (dossier.employee.uuid === user.fk) {
-      removeFilesDossierInput.fileUuids.forEach((fileUuid) => {
+      removeDossierFilesInput.fileUuids.forEach((fileUuid) => {
         promises.push(this.fileService.deletePrivateFile(fileUuid));
       });
       await Promise.all(promises);
-      return this.dossierRepository.findOne(removeFilesDossierInput.uuid, {
+      return this.dossierRepository.findOne(removeDossierFilesInput.uuid, {
         relations: ['documents', 'employee'],
       });
     }

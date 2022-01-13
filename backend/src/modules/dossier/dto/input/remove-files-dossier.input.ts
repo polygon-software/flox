@@ -2,7 +2,7 @@ import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsUUID } from 'class-validator';
 
 @InputType()
-export class RemoveFilesDossierInput {
+export class RemoveDossierFilesInput {
   @Field(() => ID)
   @IsUUID()
   uuid: string;

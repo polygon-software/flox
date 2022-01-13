@@ -70,8 +70,6 @@ export class PrivateFile extends BaseEntity {
   })
   @IsString()
   file_type: FILE_TYPE;
-
-  // ToDo Dossier will be added in next backend architecture update
 }
 
 export default PrivateFile;

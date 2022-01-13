@@ -203,7 +203,7 @@ export class FileController {
     let updatedDossier;
     for (const file of files) {
       const fileType =
-        FILE_TYPE[file.fieldname.substr(0, file.fieldname.length - 2)];
+        FILE_TYPE[file.fieldname.substr(0, file.fieldname.length - 5)];
       updatedDossier = await this.fileService.uploadAssociatedFile(
         file,
         fileType,
