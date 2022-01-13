@@ -38,6 +38,7 @@ export class Notification extends BaseEntity {
 
   @Field(() => Announcement, {
     description: 'The announcement this notification is from',
+    nullable: true,
   })
   @ManyToOne(() => Announcement, (announcement) => announcement.notifications)
   announcement: Announcement;

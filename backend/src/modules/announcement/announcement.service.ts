@@ -8,7 +8,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Announcement } from './entities/announcement.entity';
 import { UserService } from '../user/user.service';
-import { CreateNotificationInput } from '../notification/dto/input/create-notification.input';
 
 @Injectable()
 export class AnnouncementService {
@@ -22,17 +21,12 @@ export class AnnouncementService {
     createAnnouncementInput: CreateAnnouncementInput,
   ): Promise<Announcement> {
     // Create the announcement
-    const announcement = this.announcementsRepository.create(
-      createAnnouncementInput,
-    );
-    announcement.notifications = await this.userService.broadcastNotification(
-      announcement.userRole,
-      {
-        title: announcement.title,
-        received: new Date(),
-        content: announcement.content,
-        isRead: false,
-      } as CreateNotificationInput,
+    const announcement = this.announcementsRepository.create({
+      ...createAnnouncementInput,
+      date: new Date(),
+    });
+    announcement.notifications = await this.userService.broadcastAnnouncement(
+      announcement,
     );
     return await this.announcementsRepository.save(announcement);
   }

@@ -14,6 +14,7 @@ import {
 import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
 import { CreateNotificationInput } from '../notification/dto/input/create-notification.input';
 import { Notification } from '../notification/entities/notification.entity';
+import { Announcement } from '../announcement/entities/announcement.entity';
 
 @Injectable()
 export class UserService {
@@ -171,6 +172,23 @@ export class UserService {
     const deleted_user = await this.usersRepository.remove(user);
     deleted_user.uuid = uuid;
     return deleted_user;
+  }
+
+  async broadcastAnnouncement(
+    announcement: Announcement,
+  ): Promise<Array<Notification>> {
+    const createNotificationInput = {
+      title: announcement.title,
+      received: announcement.date,
+      content: announcement.content,
+      isRead: false,
+      announcement: announcement,
+    } as CreateNotificationInput;
+
+    return await this.broadcastNotification(
+      announcement.userRole,
+      createNotificationInput,
+    );
   }
 
   async broadcastNotification(
