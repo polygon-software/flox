@@ -16,9 +16,7 @@ import { Dossier } from '../dossier/entity/dossier.entity';
 import { ERRORS } from '../../error/ERRORS';
 import { MultipartFile } from 'fastify-multipart';
 import {
-  DOSSIER_FILE_TYPE,
   FILE_TYPE,
-  OFFER_FILE_TYPE,
   ROLE,
 } from '../../ENUM/ENUMS';
 
