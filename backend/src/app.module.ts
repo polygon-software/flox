@@ -14,7 +14,6 @@ import * as Joi from 'joi';
 import { FileModule } from './modules/file/file.module';
 import { RolesGuard } from './auth/roles.guard';
 import { CommentModule } from './modules/comment/comment.module';
-import { NotificationModule } from './modules/notification/notification.module';
 import { User } from './modules/user/entities/user.entity';
 import { AnnouncementModule } from './modules/announcement/announcement.module';
 
@@ -81,7 +80,6 @@ import { AnnouncementModule } from './modules/announcement/announcement.module';
     ProductModule,
     FileModule,
     CommentModule,
-    NotificationModule,
     AnnouncementModule,
   ],
   providers: [
