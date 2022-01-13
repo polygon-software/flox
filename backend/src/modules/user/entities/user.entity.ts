@@ -58,13 +58,6 @@ export class User {
   @OneToOne(() => Address, { cascade: true, eager: true })
   address: Address;
 
-  @Field(() => [Notification], { description: 'Notifications of the user' })
-  @OneToMany(() => Notification, (notification) => notification.user, {
-    cascade: true,
-    eager: true,
-  })
-  notifications: Notification[];
-
   @Field(() => Date, { description: 'Creation date' })
   @CreateDateColumn()
   createdAt: Date;
@@ -123,4 +116,13 @@ export class User {
   })
   @Column({ nullable: true })
   disabledUntil: Date;
+
+  @Field(() => [Notification], {
+    description: 'Notifications of the user',
+    nullable: true,
+  })
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    cascade: true,
+  })
+  notifications: Notification[];
 }

@@ -36,10 +36,12 @@ export class Announcement extends BaseEntity {
   @IsString()
   userRole: ROLE;
 
-  @Field(() => [Notification], { description: 'Notifications generated' })
+  @Field(() => [Notification], {
+    description: 'Notifications generated',
+    nullable: true,
+  })
   @OneToMany(() => Notification, (notification) => notification.announcement, {
     cascade: true,
-    eager: true,
   })
   notifications: Notification[];
 }

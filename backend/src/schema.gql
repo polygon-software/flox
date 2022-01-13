@@ -27,7 +27,7 @@ type Announcement {
   date: DateTime!
 
   """Notifications generated"""
-  notifications: [Notification!]!
+  notifications: [Notification!]
 
   """Title"""
   title: String!
@@ -459,7 +459,7 @@ type User {
   lastModifiedAt: DateTime!
 
   """Notifications of the user"""
-  notifications: [Notification!]!
+  notifications: [Notification!]
 
   """Phone number"""
   phone: String!
@@ -506,7 +506,7 @@ input announcement {
   date: DateTime!
 
   """Notifications generated"""
-  notifications: [notification!]!
+  notifications: [notification!]
 
   """Title"""
   title: String!
@@ -680,7 +680,7 @@ input user {
   lastModifiedAt: DateTime!
 
   """Notifications of the user"""
-  notifications: [notification!]!
+  notifications: [notification!]
 
   """Phone number"""
   phone: String!

@@ -35,20 +35,31 @@ export class AnnouncementService {
     getAnnouncementsArgs: GetAnnouncementsArgs,
   ): Promise<Announcement[]> {
     if (getAnnouncementsArgs.uuids !== undefined) {
-      return this.announcementsRepository.findByIds(getAnnouncementsArgs.uuids);
+      return this.announcementsRepository.findByIds(
+        getAnnouncementsArgs.uuids,
+        {
+          relations: ['notifications'],
+        },
+      );
     } else {
-      return this.announcementsRepository.find();
+      return this.announcementsRepository.find({
+        relations: ['notifications'],
+      });
     }
   }
 
   getAllAnnouncements(): Promise<Announcement[]> {
-    return this.announcementsRepository.find();
+    return this.announcementsRepository.find({
+      relations: ['notifications'],
+    });
   }
 
   getAnnouncement(
     getAnnouncementArgs: GetAnnouncementArgs,
   ): Promise<Announcement> {
-    return this.announcementsRepository.findOne(getAnnouncementArgs.uuid);
+    return this.announcementsRepository.findOne(getAnnouncementArgs.uuid, {
+      relations: ['notifications'],
+    });
   }
 
   /**
