@@ -261,6 +261,12 @@ export class DossierService {
     });
   }
 
+  /**
+   * Getter for a single dossier. Currently only allows access to Employee of dossier.
+   * @param {string} dossierUuid - uuid of dossier
+   * @param {string} userUuid - uuid of user requesting
+   * @returns {Dossier} - requested dossier
+   */
   async getDossier(dossierUuid: string, userUuid: string): Promise<Dossier> {
     const user = await this.userRepository.findOne(userUuid);
     const dossier = await this.dossierRepository.findOne(dossierUuid, {
@@ -272,6 +278,12 @@ export class DossierService {
     throw new Error('Not Authorized');
   }
 
+  /**
+   * Removes a list of files from a dossier. Currently only allows access to Employee of dossier.
+   * @param {RemoveFilesDossierInput} removeFilesDossierInput - uuid of dossier and uuids of files
+   * @param {string} userUuid - uuid of user requesting
+   * @returns {Dossier} - Updated dossier
+   */
   async removeFiles(
     removeFilesDossierInput: RemoveFilesDossierInput,
     userUuid: string,
