@@ -19,41 +19,6 @@ type Address {
   zipCode: String!
 }
 
-type Bank {
-  """Three letter abbreviation of the Bank"""
-  abbreviation: String!
-
-  """Address"""
-  address: Address!
-
-  """Mail"""
-  email: String!
-
-  """First Name"""
-  first_name: String!
-
-  """Last Name"""
-  last_name: String!
-
-  """Name of the Bank"""
-  name: String!
-
-  """Offers made by Bank"""
-  offers: [Offer!]!
-
-  """Dossier where the mortgage originally belongs to the bank"""
-  own_mortgages: [Dossier!]!
-
-  """Phone Number"""
-  phone: String
-
-  """Human-readable ID"""
-  readable_id: String!
-
-  """UUID"""
-  uuid: ID!
-}
-
 enum Category {
   CARS
   CELEBRITIES
@@ -77,53 +42,6 @@ type Comment {
 
   """The user who wrote this comment"""
   user: User!
-
-  """UUID"""
-  uuid: ID!
-}
-
-type Company {
-  """Branch structure"""
-  branch_structure: Boolean!
-
-  """Company Name"""
-  company_name: String!
-
-  """Correspondence address"""
-  correspondence_address: Address!
-
-  """Stage of the creation process"""
-  creation_state: creationState!
-
-  """Documents of the company"""
-  documents: [PrivateFile!]
-
-  """Domicile address"""
-  domicile_address: Address!
-
-  """Mail"""
-  email: String!
-
-  """Employees of the company"""
-  employees: [Employee!]
-
-  """First Name"""
-  first_name: String!
-
-  """Language"""
-  language: String!
-
-  """Last Name"""
-  last_name: String!
-
-  """Phone Number"""
-  phone: String!
-
-  """Human-readable ID"""
-  readable_id: String!
-
-  """Company UID"""
-  uid: String!
 
   """UUID"""
   uuid: ID!
@@ -214,97 +132,7 @@ input DeleteUserInput {
   uuid: ID!
 }
 
-type Dossier {
-  """Date of birth of customer"""
-  born: DateTime!
-
-  """Address"""
-  correspondence_address: Address!
-
-  """Mail"""
-  email: String!
-
-  """Employee who created the Dossier"""
-  employee: Employee!
-
-  """First Name"""
-  first_name: String!
-
-  """Last Name"""
-  last_name: String!
-
-  """Money loaned"""
-  loan_sum: Float!
-
-  """ToDo"""
-  non_arrangeable: Boolean!
-
-  """List of Offers"""
-  offers: [Offer!]!
-
-  """Previous Bank of the customer"""
-  original_bank: Bank!
-
-  """Address of Property"""
-  property_address: Address!
-
-  """Human-readable ID"""
-  readable_id: String!
-
-  """Status of Dossier"""
-  status: DossierStatus!
-
-  """UUID"""
-  uuid: ID!
-}
-
-enum DossierStatus {
-  COMPLETED
-  IN_PROGRESS
-  OFFERED
-  OPEN
-  REJECTED
-  SENT
-  SIGNED
-  SUBMITTED
-}
-
 input DuplicateProductInput {
-  uuid: ID!
-}
-
-type Employee {
-  """Company"""
-  company: Company!
-
-  """Dossiers of employee"""
-  dossiers: [Dossier!]!
-
-  """Mail"""
-  email: String!
-
-  """First Name"""
-  first_name: String!
-
-  """Function within the company"""
-  function: String!
-
-  """Gender"""
-  gender: String!
-
-  """Language"""
-  language: String!
-
-  """Last Name"""
-  last_name: String!
-
-  """Phone Number"""
-  phone: String!
-
-  """Human-readable ID"""
-  readable_id: String!
-
-  """UUID"""
   uuid: ID!
 }
 
@@ -322,30 +150,6 @@ type Mutation {
   update(updateUserInput: UpdateUserInput!): User!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   updateProduct(pictures: [String!] = null, updateProductInput: UpdateProductInput!): Product!
-}
-
-type Offer {
-  """Bank making the offer"""
-  bank: Bank!
-
-  """Dossier of Offer"""
-  dossier: Dossier!
-
-  """The Offer as a PDF"""
-  pdf: PrivateFile!
-
-  """Status of Dossier"""
-  status: OfferStatus!
-
-  """UUID"""
-  uuid: ID!
-}
-
-enum OfferStatus {
-  ACCEPTED
-  INTERESTED
-  IN_PROCESS
-  RETRACTED
 }
 
 type PrivateFile {
@@ -619,13 +423,6 @@ input comment {
 
   """The user who wrote this comment"""
   user: user!
-}
-
-enum creationState {
-  APPLIED
-  AWAITING_DOCUMENTS
-  DOCUMENTS_UPLOADED
-  DONE
 }
 
 input private_file {
