@@ -154,7 +154,7 @@ if(!route.query.did){
 }
 
 // Files for sections
-const files: Ref<Record<string, Record<string,  Array<Record<string, unknown>>>>> = ref({
+const files: Ref<Record<string, Record<string,  Array<Record<string, unknown>|File>>>> = ref({
   additional: {},
   financials: {},
   property: {}}
@@ -383,14 +383,13 @@ const sections = {
 
 
 const uploadFor = ref({
-  section: null,
-  field: null,
+  section: '',
+  field: '',
 })
 
 // Whether the form is ready to be submitted
 const canSubmit = computed(() => {
-  return true;
-  // return Object.keys(sections).every((sectionKey) => sectionComplete(sectionKey))
+  return Object.keys(sections).every((sectionKey) => sectionComplete(sectionKey as 'financials'|'additional'|'property'))
 })
 
 /**
@@ -400,13 +399,12 @@ const canSubmit = computed(() => {
  * @returns {Promise<void>} - done
  */
 function uploadFile(section: string, field: string) {
-  console.log('bla')
   // Choose upload target
   uploadFor.value.section = section;
   uploadFor.value.field = field;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  filePicker.value.pickFiles()
+  filePicker.value?.pickFiles()
 }
 
 /**
@@ -424,13 +422,13 @@ function onFilePicked(newFiles: File[]){
     files.value[sectionKey] = {}
   }
 
-  const section = files.value[sectionKey] as Record<string, File[]>
+  const section = files.value[sectionKey]
 
   // Add field if not present
   if(!section[fieldKey]){
     section[fieldKey] = []
   }
-  section[fieldKey] = (section[fieldKey] as File[]).concat(newFiles)
+  section[fieldKey] = section[fieldKey].concat(newFiles)
 }
 
 /**
@@ -442,7 +440,7 @@ function onFilePicked(newFiles: File[]){
  */
 function removeFile(section: string, field: string, index: number) {
   if(files.value[section][field][index].hasOwnProperty('uuid')){
-    filesToDelete.value.push(files.value[section][field][index]['uuid'] as string)
+    filesToDelete.value.push((files.value[section][field][index] as Record<string, string|unknown>)['uuid'] as string)
   }
   (files.value[section][field] as unknown[]).splice(index, 1)
 }
@@ -452,9 +450,9 @@ function removeFile(section: string, field: string, index: number) {
  * @param {string} key - the section's key
  * @returns {boolean} - whether the section is complete
  */
-function sectionComplete(key: string): boolean{
-  const section = sections[key] as Record<string, unknown>
-  const requiredFields = section.fields.required as Record<string, unknown>[]
+function sectionComplete(key: 'financials'|'additional'|'property'): boolean{
+  const section = sections[key]
+  const requiredFields = section.fields.required
 
   const allFiles = files.value
 
