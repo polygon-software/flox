@@ -238,8 +238,6 @@ export class FileService {
     if (!user) {
       throw new Error(ERRORS.no_user_found);
     }
-    console.log(location.onFile);
-    console.log(associatedEntity);
     const fileBuffer = await file.toBuffer();
     const newFile = await this.uploadPrivateFile(
       fileBuffer,

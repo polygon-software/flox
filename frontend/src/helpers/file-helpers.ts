@@ -37,7 +37,6 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
       formData.set(fileKey, blob)
     }
   }
-  console.log(formData)
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ?? ''
   await axios({
     method: 'post',

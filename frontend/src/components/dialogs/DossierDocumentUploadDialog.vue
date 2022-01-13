@@ -50,7 +50,6 @@ const loading = ref(true)
 // Total number of files to upload, calculated once upload starts
 const total = ref(4)
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   files: {
     type: Object,
@@ -98,15 +97,16 @@ async function uploadAllFiles(){
       const fieldFiles = files[sectionKey][fieldKey] as File[]|Record<string, unknown>[] ?? []
 
       fieldFiles.forEach((field, index)=>{
-        if(!field.hasOwnProperty('uuid')){
+        if(!field.hasOwnProperty('uuid')){ // Is a new file
           filesToUpload[`${fieldKey}_${index}`] = field
         }
       })
     })
   })
   await uploadFiles(filesToUpload, `/uploadDossierFile?did=${props.dossierUuid}`, 'myDossiers')
+
   progress.value+=3;
-  console.log('delete:', props.filesToDelete.join(', '))
+
   if(props.filesToDelete.length>0){
     await executeMutation(REMOVE_FILES_DOSSIER, {uuid: props.dossierUuid, fileUuids: props.filesToDelete})
   }

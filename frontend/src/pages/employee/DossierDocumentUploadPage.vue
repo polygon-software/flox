@@ -134,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, Ref, ref} from 'vue';
+import {computed, onBeforeMount, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile, useQuasar} from 'quasar';
@@ -168,27 +168,30 @@ const financial = [DOSSIER_FILE_TYPE.ID, DOSSIER_FILE_TYPE.SALARY,DOSSIER_FILE_T
 const dossierUuid = route.query.did
 const dossier: Ref<Record<string,string|unknown>> = ref({
 })
-executeQuery(GET_DOSSIER, {uuid: dossierUuid}).then((queryRes)=>{
-  dossier.value = queryRes.data[GET_DOSSIER.cacheLocation] as Record<string,string|unknown>
-  const documents = dossier.value.documents as Array<Record<string, string|unknown>>
-  documents.forEach((docu)=>{
-    const documentType = docu.file_type as DOSSIER_FILE_TYPE
-    let subtype = '';
+onBeforeMount(()=>{
+  executeQuery(GET_DOSSIER, {uuid: dossierUuid}).then((queryRes)=>{
+    dossier.value = queryRes.data[GET_DOSSIER.cacheLocation] as Record<string,string|unknown>
+    const documents = dossier.value.documents as Array<Record<string, string|unknown>>
+    documents.forEach((docu)=>{
+      const documentType = docu.file_type as DOSSIER_FILE_TYPE
+      let subtype = '';
 
-    if(financial.includes(documentType)){
-      subtype = 'financials'
-    } else if(documentType === `${DOSSIER_FILE_TYPE.ADDITIONAL_DOCUMENTS}`){
-      subtype = 'additional'
-    } else {
-      subtype = 'property'
-    }
-    if(files.value[subtype][documentType]){
-      files.value[subtype][documentType].push(docu)
-    } else {
-      files.value[subtype][documentType] = [docu]
-    }
-  })
-}).catch((err)=>{console.error(err)})
+      if(financial.includes(documentType)){
+        subtype = 'financials'
+      } else if(documentType === `${DOSSIER_FILE_TYPE.ADDITIONAL_DOCUMENTS}`){
+        subtype = 'additional'
+      } else {
+        subtype = 'property'
+      }
+      if(files.value[subtype][documentType]){
+        files.value[subtype][documentType].push(docu)
+      } else {
+        files.value[subtype][documentType] = [docu]
+      }
+    })
+  }).catch((err)=>{console.error(err)})
+})
+
 
 // File Picker component ref
 const filePicker: Ref<QFile|null> = ref(null)
