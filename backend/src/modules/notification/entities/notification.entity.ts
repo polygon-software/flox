@@ -3,6 +3,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { IsBoolean, IsDate, IsString } from 'class-validator';
 import { User } from '../../user/entities/user.entity';
+import { Announcement } from '../../announcement/entities/announcement.entity';
 
 @ObjectType()
 @Entity({ name: 'notification' })
@@ -34,4 +35,10 @@ export class Notification extends BaseEntity {
   @Field(() => User, { description: 'The user this notification is for' })
   @ManyToOne(() => User, (user) => user.notifications)
   user: User;
+
+  @Field(() => Announcement, {
+    description: 'The announcement this notification is from',
+  })
+  @ManyToOne(() => Announcement, (announcement) => announcement.notifications)
+  announcement: Announcement;
 }

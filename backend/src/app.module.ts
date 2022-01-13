@@ -16,6 +16,7 @@ import { RolesGuard } from './auth/roles.guard';
 import { CommentModule } from './modules/comment/comment.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { User } from './modules/user/entities/user.entity';
+import { AnnouncementModule } from './modules/announcement/announcement.module';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { User } from './modules/user/entities/user.entity';
     FileModule,
     CommentModule,
     NotificationModule,
+    AnnouncementModule,
   ],
   providers: [
     JwtStrategy,
