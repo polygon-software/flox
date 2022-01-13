@@ -299,7 +299,7 @@ type Dossier {
   non_arrangeable: Boolean!
 
   """List of Offers"""
-  offers: [Offer!]!
+  offers: [Offer!]
 
   """Previous Bank of the customer"""
   original_bank: Bank!
@@ -408,6 +408,10 @@ enum FileType {
   WORK_CONTRACT
 }
 
+input GetDossierInput {
+  uuid: ID!
+}
+
 type Mutation {
   associateUserToCompany(associateUserInput: AssociateUserInput!): Company!
   createBank(createBankInput: CreateBankInput!): Bank!
@@ -420,6 +424,7 @@ type Mutation {
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
+  removeFiles(removeFilesDossierInput: RemoveFilesDossierInput!): Dossier!
   resetDossier(resetDossierInput: ResetDossierInput!): Dossier!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
@@ -525,6 +530,7 @@ type Query {
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
   getBanks: [Bank!]!
+  getDossier(getDossierInput: GetDossierInput!): Dossier!
   getDossierDocument(
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
@@ -550,6 +556,11 @@ type Query {
   getRejectedDossiers: [Dossier!]
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
+}
+
+input RemoveFilesDossierInput {
+  fileUuids: [ID!]!
+  uuid: ID!
 }
 
 input ResetDossierInput {

@@ -35,6 +35,8 @@
 import {ref, Ref, defineEmits, onMounted} from 'vue'
 import {QDialog} from 'quasar';
 import {uploadFiles} from 'src/helpers/file-helpers';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {REMOVE_FILES_DOSSIER} from 'src/data/mutations/DOSSIER';
 
 const emit = defineEmits(['ok'])
 
@@ -46,7 +48,7 @@ const progress = ref(0)
 const loading = ref(true)
 
 // Total number of files to upload, calculated once upload starts
-const total = ref(1)
+const total = ref(4)
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -57,6 +59,10 @@ const props = defineProps({
   dossierUuid: {
     type: String,
     required: true,
+  },
+  filesToDelete: {
+    type: Array,
+    required: true
   }
 })
 
@@ -89,21 +95,23 @@ async function uploadAllFiles(){
     // For every field within section
     Object.keys(files[sectionKey]).forEach((fieldKey) => {
       // Find files
-      const fieldFiles = files[sectionKey][fieldKey] as File[] ?? []
+      const fieldFiles = files[sectionKey][fieldKey] as File[]|Record<string, unknown>[] ?? []
 
-      // Update total length
-      total.value += fieldFiles.length
       fieldFiles.forEach((field, index)=>{
-        filesToUpload[`${fieldKey}_${index}`] = field
+        if(!field.hasOwnProperty('uuid')){
+          filesToUpload[`${fieldKey}_${index}`] = field
+        }
       })
     })
   })
-  console.log(filesToUpload)
   await uploadFiles(filesToUpload, `/uploadDossierFile?did=${props.dossierUuid}`, 'myDossiers')
+  progress.value+=3;
+  console.log('delete:', props.filesToDelete.join(', '))
+  if(props.filesToDelete.length>0){
+    await executeMutation(REMOVE_FILES_DOSSIER, {uuid: props.dossierUuid, fileUuids: props.filesToDelete})
+  }
+  progress.value+=1;
 
-
-  // Decrease by 1, since we start at 1 to avoid zero-division
-  total.value--
 }
 
 // eslint-disable-next-line require-jsdoc

@@ -141,10 +141,11 @@ import {QFile, useQuasar} from 'quasar';
 import DossierDocumentUploadDialog from 'components/dialogs/DossierDocumentUploadDialog.vue';
 import {useRoute} from 'vue-router';
 import {DOSSIER_FILE_TYPE} from 'src/data/ENUM/ENUM';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {GET_DOSSIER} from 'src/data/queries/QUERIES';
 
 const $q = useQuasar()
 const route = useRoute()
-
 
 
 // Get ID from route
@@ -152,8 +153,42 @@ if(!route.query.did){
   throw new Error('Invalid URL')
 }
 
+// Files for sections
+const files: Ref<Record<string, Record<string,  Array<Record<string, unknown>>>>> = ref({
+  additional: {},
+  financials: {},
+  property: {}}
+)
+
+const filesToDelete: Ref<Array<string>> = ref([])
+
+const financial = [DOSSIER_FILE_TYPE.ID, DOSSIER_FILE_TYPE.SALARY,DOSSIER_FILE_TYPE.PENSION,DOSSIER_FILE_TYPE.LAST_YEAR_TAX,DOSSIER_FILE_TYPE.PENSION_ID,DOSSIER_FILE_TYPE.LAST_YEAR_SALARY, DOSSIER_FILE_TYPE.DEBT_COLLECTION,DOSSIER_FILE_TYPE.OWN_FUNDS,DOSSIER_FILE_TYPE.THREE_A,DOSSIER_FILE_TYPE.LIFE_INSURANCE, DOSSIER_FILE_TYPE.LEASING_CONTRACT, DOSSIER_FILE_TYPE.CREDIT_CONTRACT, DOSSIER_FILE_TYPE.WORK_CONTRACT, DOSSIER_FILE_TYPE.MARRIAGE_CONTRACT]
+
 // UUID of dossier to upload files to
 const dossierUuid = route.query.did
+const dossier: Ref<Record<string,string|unknown>> = ref({
+})
+executeQuery(GET_DOSSIER, {uuid: dossierUuid}).then((queryRes)=>{
+  dossier.value = queryRes.data[GET_DOSSIER.cacheLocation] as Record<string,string|unknown>
+  const documents = dossier.value.documents as Array<Record<string, string|unknown>>
+  documents.forEach((docu)=>{
+    const documentType = docu.file_type as DOSSIER_FILE_TYPE
+    let subtype = '';
+
+    if(financial.includes(documentType)){
+      subtype = 'financials'
+    } else if(documentType === `${DOSSIER_FILE_TYPE.ADDITIONAL_DOCUMENTS}`){
+      subtype = 'additional'
+    } else {
+      subtype = 'property'
+    }
+    if(files.value[subtype][documentType]){
+      files.value[subtype][documentType].push(docu)
+    } else {
+      files.value[subtype][documentType] = [docu]
+    }
+  })
+}).catch((err)=>{console.error(err)})
 
 // File Picker component ref
 const filePicker: Ref<QFile|null> = ref(null)
@@ -345,8 +380,7 @@ const sections = {
   }
 }
 
-// Files for sections
-const files: Ref<Record<string, Record<string, unknown>[]>> = ref({})
+
 
 const uploadFor = ref({
   section: null,
@@ -366,7 +400,7 @@ const canSubmit = computed(() => {
  * @returns {Promise<void>} - done
  */
 function uploadFile(section: string, field: string) {
-
+  console.log('bla')
   // Choose upload target
   uploadFor.value.section = section;
   uploadFor.value.field = field;
@@ -407,7 +441,10 @@ function onFilePicked(newFiles: File[]){
  * @returns {void}
  */
 function removeFile(section: string, field: string, index: number) {
-  (files.value[section][field] as File[]).splice(index, 1)
+  if(files.value[section][field][index].hasOwnProperty('uuid')){
+    filesToDelete.value.push(files.value[section][field][index]['uuid'] as string)
+  }
+  (files.value[section][field] as unknown[]).splice(index, 1)
 }
 
 /**
@@ -457,10 +494,12 @@ function onSave(){
       component: DossierDocumentUploadDialog,
       componentProps: {
         files: files.value,
+        filesToDelete: filesToDelete.value,
         dossierUuid: dossierUuid,
       },
       persistent: true
     }).onOk(() => {
+      loading.value = false
       // TODO route to confirmation page?
     })
   }

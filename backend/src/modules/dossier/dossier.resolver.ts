@@ -11,10 +11,13 @@ import {
   BankOnly,
   CurrentUser,
   EmployeeOnly,
+  AnyRole,
 } from '../../auth/authorization.decorator';
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
+import { GetDossierInput } from './dto/input/get-dossier.input';
+import { RemoveFilesDossierInput } from './dto/input/remove-files-dossier.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -136,5 +139,40 @@ export class DossierResolver {
     updateOfferStatusInput: UpdateOfferStatusInput,
   ): Promise<Dossier> {
     return this.dossierService.updateOfferStatus(updateOfferStatusInput);
+  }
+
+  /**
+   * Get a Dossier based on it's Uuid
+   * @param {GetDossierInput} getDossierInput - uuid of dossier
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier>} - dossier
+   */
+  @AnyRole()
+  @Query(() => Dossier)
+  async getDossier(
+    @Args('getDossierInput')
+    getDossierInput: GetDossierInput,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier> {
+    return this.dossierService.getDossier(getDossierInput.uuid, user.userId);
+  }
+
+  /**
+   * Remove files from a dossier
+   * @param {RemoveFilesDossierInput} removeFilesDossierInput - dossier uuid and file uuid list
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier>} - dossier
+   */
+  @EmployeeOnly()
+  @Mutation(() => Dossier)
+  async removeFiles(
+    @Args('removeFilesDossierInput')
+    removeFilesDossierInput: RemoveFilesDossierInput,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier> {
+    return this.dossierService.removeFiles(
+      removeFilesDossierInput,
+      user.userId,
+    );
   }
 }

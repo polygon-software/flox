@@ -142,3 +142,23 @@ export const SET_OFFER_STATUS = {
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
+
+export const REMOVE_FILES_DOSSIER = {
+  mutation: gql`
+    mutation removeFiles($uuid: ID!, $fileUuids: [ID!]!){
+      removeFiles(removeFilesDossierInput: {uuid: $uuid,fileUuids: $fileUuids}) {
+        uuid
+        __typename
+        documents{
+          uuid
+          __typename
+          key
+          file_type
+        }
+      }
+    }
+  `,
+  tables: ['dossier'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}

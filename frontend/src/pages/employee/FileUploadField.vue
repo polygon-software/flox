@@ -25,7 +25,7 @@
           color="primary"
         />
         <p class="text-primary" style="margin: 0 0 0 6px">
-          {{file.name}}
+          {{file.name ?? file.key.substring(37)}}
         </p>
 
         <q-btn
