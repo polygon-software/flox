@@ -91,13 +91,14 @@ export const MY_NOTIFICATIONS = {
           received
           content
           isRead
+          __typename
         }
         __typename
       }
     }
   `,
   tables: ['user'],
-  cacheLocation: 'myNotifications'
+  cacheLocation: 'myUser'
 }
 
 export const USER_QUERIES: QueryObject[] = [
