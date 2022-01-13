@@ -40,6 +40,7 @@
     "graphql": "^15.6.1",
     "graphql-subscriptions": "^1.2.1",
     "graphql-voyager": "^1.0.0-rc.31",
+    "jest-sonar-reporter": "^2.0.0",
     "joi": "^17.4.2",
     "jwks-rsa": "^2.0.5",
     "passport": "^0.5.0",
@@ -80,24 +81,5 @@
     "presets": [
       "@babel/preset-env"
     ]
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "vue",
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.{(t|j)s,vue}",
-      "!**/node_modules/**"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }
