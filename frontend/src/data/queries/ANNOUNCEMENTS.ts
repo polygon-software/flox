@@ -1,9 +1,26 @@
 import gql from 'graphql-tag';
-import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {MutationTypes, QueryObject} from 'src/data/DATA-DEFINITIONS';
 
 /**
  * Announcement-related queries
  */
+
+export const CREATE_ANNOUNCEMENT = {
+  mutation: gql`
+    mutation createAnnouncement($createAnnouncementInput: CreateAnnouncementInput!){
+      createAnnouncement (createAnnouncementInput: $createAnnouncementInput) {
+        uuid
+        title
+        content
+        date
+        userRole
+        __typename
+      }
+    }`,
+  tables: ['announcement'],
+  type: MutationTypes.CREATE,
+  cacheLocation: 'createAnnouncement'
+}
 
 export const ALL_ANNOUNCEMENTS = {
   query: gql`

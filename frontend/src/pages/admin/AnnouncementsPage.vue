@@ -7,24 +7,35 @@
     <div
       class="column full-height items-start q-pa-md full-width"
     >
-      <!-- Search bar -->
-      <q-input
-        v-model="search"
-        dense
-        rounded
-        outlined
-        type="search"
-        class="q-mb-md"
-      >
-        <template #append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
+      <div class="row justify-between full-width">
+        <!-- Search bar -->
+        <q-input
+          v-model="search"
+          dense
+          rounded
+          outlined
+          type="search"
+          class="col-auto q-mb-md"
+        >
+          <template #append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+
+        <q-btn
+          :label="$t('admin.create_announcement')"
+          color="positive"
+          class="col-auto q-mb-md"
+          dense
+          rounded
+          @click="() => createAnnouncement($q)"
+        />
+
+      </div>
 
       <!-- Table view of products -->
       <AnnouncementsTable
         :search="search"
-        :status-filter="statusFilter"
       />
     </div>
 
@@ -34,7 +45,12 @@
 <script setup lang="ts">
 import AnnouncementsTable from 'components/table/AnnouncementsTable.vue';
 import {ref} from 'vue';
+import {QVueGlobals, useQuasar} from 'quasar';
+import {createAnnouncement} from 'src/helpers/admin-helpers';
+
+const $q: QVueGlobals = useQuasar()
 
 // Search term
 const search = ref('')
+
 </script>

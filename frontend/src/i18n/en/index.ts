@@ -218,6 +218,7 @@ export default {
     reject_application: 'Reject',
     permanent: 'Permanent',
     temporary: 'Temporary, until:',
+    create_announcement: 'Create announcement',
   },
   finances: {
     general: 'General',
@@ -232,5 +233,11 @@ export default {
     to_dashboard: 'To Dashboard',
     income_over_time: 'Income over Time',
     income_by_category: 'Income by Category'
+  },
+  announcement: {
+    title: 'Title',
+    content: 'Content',
+    user_role: 'User role',
+    create: 'Create',
   }
 }

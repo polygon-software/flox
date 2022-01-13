@@ -24,7 +24,7 @@ export class Announcement{
     this.title = title ?? ''
     this.date = date ?? null
     this.content = content ?? ''
-    this.userRole = userRole ?? ROLE.PLAYER
+    this.userRole = userRole ?? ROLE.NONE
     this.uuid = uuid ?? null
   }
 
