@@ -15,10 +15,7 @@ import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
 import { ERRORS } from '../../error/ERRORS';
 import { MultipartFile } from 'fastify-multipart';
-import {
-  FILE_TYPE,
-  ROLE,
-} from '../../ENUM/ENUMS';
+import { FILE_TYPE, ROLE } from '../../ENUM/ENUMS';
 
 @Injectable()
 export class FileService {
