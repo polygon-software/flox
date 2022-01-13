@@ -147,7 +147,7 @@ export class DossierResolver {
    * @param {Record<string, string>} user - the current request's user
    * @returns {Promise<Dossier>} - dossier
    */
-  @AnyRole()
+  @EmployeeOnly()
   @Query(() => Dossier)
   async getDossier(
     @Args('getDossierInput')
