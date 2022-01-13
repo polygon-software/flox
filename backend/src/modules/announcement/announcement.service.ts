@@ -7,12 +7,15 @@ import { DeleteAnnouncementInput } from './dto/input/delete-announcement.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Announcement } from './entities/announcement.entity';
+import { UserService } from '../user/user.service';
+import { CreateNotificationInput } from '../notification/dto/input/create-notification.input';
 
 @Injectable()
 export class AnnouncementService {
   constructor(
     @InjectRepository(Announcement)
-    private announcementsRepository: Repository<Announcement>,
+    private readonly announcementsRepository: Repository<Announcement>,
+    private readonly userService: UserService,
   ) {}
 
   async create(
@@ -21,6 +24,15 @@ export class AnnouncementService {
     // Create the announcement
     const announcement = this.announcementsRepository.create(
       createAnnouncementInput,
+    );
+    announcement.notifications = await this.userService.broadcastNotification(
+      announcement.userRole,
+      {
+        title: announcement.title,
+        received: new Date(),
+        content: announcement.content,
+        isRead: false,
+      } as CreateNotificationInput,
     );
     return await this.announcementsRepository.save(announcement);
   }

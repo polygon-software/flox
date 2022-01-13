@@ -12,11 +12,15 @@ import {
   enableCognitoAccount,
 } from '../../auth/authService';
 import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
+import { CreateNotificationInput } from '../notification/dto/input/create-notification.input';
+import { Notification } from '../notification/entities/notification.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(Notification)
+    private readonly notificationRepository: Repository<Notification>,
   ) {}
 
   /**
@@ -167,5 +171,29 @@ export class UserService {
     const deleted_user = await this.usersRepository.remove(user);
     deleted_user.uuid = uuid;
     return deleted_user;
+  }
+
+  async broadcastNotification(
+    role: ROLE,
+    createNotificationInput: CreateNotificationInput,
+  ): Promise<Array<Notification>> {
+    const users = await this.usersRepository.find({
+      role: role,
+    });
+    const notifications: Array<Notification> = [];
+    users.forEach((user) => {
+      const notification = this.notificationRepository.create({
+        ...createNotificationInput,
+        user: user,
+      });
+      notifications.push(notification);
+    });
+    await Promise.all(
+      notifications.map(
+        async (notification) =>
+          await this.notificationRepository.save(notification),
+      ),
+    );
+    return notifications;
   }
 }
