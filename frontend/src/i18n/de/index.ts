@@ -219,4 +219,18 @@ export default {
     permanent: 'Permanent',
     temporary: 'Temporär, bis:',
   },
+  finances: {
+    general: 'Allgemein',
+    overview: 'Übersicht',
+    key_figures: 'Kennzahlen',
+    all_time: 'Seit Anfang',
+    year: 'Jahr',
+    quarter: 'Quartal',
+    month: 'Monat',
+    week: 'Woche',
+    day: 'Tag',
+    to_dashboard: 'Zum Dashboard',
+    income_over_time: 'Verlauf der Einnahmen',
+    income_by_category: 'Einnahmen pro Kategorie'
+  }
 }
