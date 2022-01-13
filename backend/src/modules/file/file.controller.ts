@@ -77,7 +77,7 @@ export class FileController {
     const newFile = await this.fileService.uploadPrivateFile(
       fileBuffer,
       file.filename,
-      FILE_TYPE.NONE as unknown as FILE_TYPE,
+      FILE_TYPE.NONE as unknown as FILE_TYPE, //Is a DossierFileType by default...
       owner,
       {},
     );
@@ -125,7 +125,7 @@ export class FileController {
     const newFile = await this.fileService.uploadPrivateFile(
       fileBuffer,
       file.filename,
-      FILE_TYPE.NONE as unknown as FILE_TYPE,
+      FILE_TYPE.NONE as unknown as FILE_TYPE, //Is a DossierFileType by default...
       companyUuid, // Owner; must be changed to cognito ID later
       { company },
     );
@@ -170,7 +170,7 @@ export class FileController {
 
     const updatedOffer = await this.fileService.uploadAssociatedFile(
       file,
-      FILE_TYPE.NONE as unknown as FILE_TYPE,
+      FILE_TYPE.NONE as unknown as FILE_TYPE, //Is a DossierFileType by default...
       offerUuid,
       'offerRepository',
       {
