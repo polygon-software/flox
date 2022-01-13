@@ -24,6 +24,6 @@ export class CreateNotificationInput {
   @Field(() => User, { nullable: true })
   user: User;
 
-  @Field(() => Announcement)
+  @Field(() => Announcement, { nullable: true })
   announcement: Announcement;
 }

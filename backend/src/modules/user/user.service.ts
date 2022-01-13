@@ -182,7 +182,6 @@ export class UserService {
       received: announcement.date,
       content: announcement.content,
       isRead: false,
-      announcement: announcement,
     } as CreateNotificationInput;
 
     return await this.broadcastNotification(
