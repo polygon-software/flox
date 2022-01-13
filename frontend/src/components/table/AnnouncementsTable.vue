@@ -15,8 +15,9 @@
 <script setup lang="ts">
 import {computed, defineProps, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {formatDate} from 'src/helpers/format-helpers';
-import {ALL_PLAYERS} from 'src/data/queries/USER';
+import {formatDateTime} from 'src/helpers/format-helpers';
+import {ALL_ANNOUNCEMENTS} from 'src/data/queries/ANNOUNCEMENTS';
+import {Announcement} from 'src/data/types/Announcement';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -28,17 +29,17 @@ const props = defineProps( {
 
 // TODO i18n
 const columns = [
-  { name: 'title', label: 'Title', field: 'title', sortable: true, align: 'center' },
-  { name: 'content', label: 'Content', field: 'content', sortable: true, align: 'center' },
-  { name: 'userRole', label: 'User Role', field: 'userRole', sortable: true, align: 'center' },
-  { name: 'date', label: 'Date', field: (date: string) => date ? formatDate(new Date(date)) : '-', sortable: true, align: 'center' },
+  { name: 'title', label: 'Title', field: 'title', sortable: true, align: 'left' },
+  { name: 'content', label: 'Content', field: 'content', sortable: true, align: 'left' },
+  { name: 'userRole', label: 'User Role', field: 'userRole', sortable: true, align: 'left' },
+  { name: 'date', label: 'Date', field: (announcement: Announcement) => announcement.date ? formatDateTime(new Date(announcement.date)) : '-', sortable: true, align: 'left' },
 ]
 
-const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<Array<Record<string, unknown>>>
+const allAnnouncementsQueryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<Array<Record<string, unknown>>>
 
 // Rows, filtered by status (if applicable)
 const computedResult = computed(() => {
-  return queryResult.value ?? []
+  return allAnnouncementsQueryResult.value ?? []
 })
 
 </script>

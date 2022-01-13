@@ -8,4 +8,5 @@ export const NotificationItem = Joi.object({
   isRead: Joi.boolean().required(),
   uuid: Joi.string().optional(),
   user: Joi.any().optional(),
+  announcement: Joi.any().optional(),
 });

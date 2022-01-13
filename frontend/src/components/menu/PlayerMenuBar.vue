@@ -117,7 +117,7 @@ import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {Notification} from 'src/data/types/Notification';
-import {MY_NOTIFICATIONS} from 'src/data/queries/NOTIFICATION';
+import {MY_NOTIFICATIONS} from 'src/data/queries/USER';
 
 
 const $authService: AuthenticationService|undefined = inject('$authService')

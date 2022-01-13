@@ -81,8 +81,28 @@ export const ALL_PARTNERS = {
   cacheLocation: 'allPartners'
 }
 
+export const MY_NOTIFICATIONS = {
+  query: gql`
+    query{
+      myUser{
+        notifications {
+          uuid
+          title
+          received
+          content
+          isRead
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'myNotifications'
+}
+
 export const USER_QUERIES: QueryObject[] = [
   MY_USER,
   ALL_PLAYERS,
-  ALL_PARTNERS
+  ALL_PARTNERS,
+  MY_NOTIFICATIONS,
 ]

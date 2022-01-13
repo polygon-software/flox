@@ -11,6 +11,7 @@ export class Notification{
   isRead: boolean
   uuid: string | null
   user: Record<string, unknown> | null
+  announcement: Record<string, unknown> | null
 
   /**
    * Constructor
@@ -20,14 +21,16 @@ export class Notification{
    * @param {boolean} isRead - is read
    * @param {string} uuid - uuid
    * @param {Record<string, unknown>} user - user
+   * @param {Record<string, unknown>} announcement - announcement
    */
-  constructor(title?: string, received?: Date, content?: string, isRead?: boolean, uuid?: string, user?: Record<string, unknown>) {
+  constructor(title?: string, received?: Date, content?: string, isRead?: boolean, uuid?: string, user?: Record<string, unknown>, announcement?: Record<string, unknown>) {
     this.title = title ?? ''
     this.received = received ?? new Date()
     this.content = content ?? ''
     this.isRead = isRead ?? false
     this.uuid = uuid ?? null
     this.user = user ?? null
+    this.announcement = announcement ?? null
   }
 
   /**
