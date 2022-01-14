@@ -6,6 +6,15 @@ type Address {
   """City"""
   city: String!
 
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
   """Number"""
   number: String!
 
@@ -37,6 +46,15 @@ type Comment {
   """Content"""
   content: String!
 
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
   """The product this comment belongs to"""
   product: Product!
 
@@ -56,8 +74,8 @@ input CreateAddressInput {
 
 input CreateCommentInput {
   content: String!
-  product: product!
-  user: user!
+  product_uuid: ID!
+  user_uuid: ID!
 }
 
 input CreateProductInput {
@@ -153,14 +171,26 @@ type Mutation {
 }
 
 type PrivateFile {
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
 
   """File owner"""
   owner: String!
 
   """Pre-signed download URL"""
   url: String
+
+  """User the file belongs to"""
+  user: User
 
   """UUID"""
   uuid: ID!
@@ -188,11 +218,14 @@ type Product {
   """Product category"""
   category: Category
 
-  """Comments"""
-  comments: [Comment!]!
+  """Creation date"""
+  created_at: DateTime!
 
   """The currency the value is denoted in"""
   currency: Currency
+
+  """Date of deletion"""
+  deleted_at: DateTime
 
   """Description"""
   description: String
@@ -214,6 +247,9 @@ type Product {
 
   """End Date"""
   end: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
 
   """Number of Likes"""
   likes: Float!
@@ -256,8 +292,17 @@ enum ProductStatus {
 }
 
 type PublicFile {
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
 
   """Product the file belongs to"""
   product: Product
@@ -306,8 +351,6 @@ input TempDisableUserInput {
 
 input UpdateCommentInput {
   content: String!
-  product: product
-  user: user
   uuid: ID!
 }
 
@@ -319,7 +362,6 @@ input UpdateProductInput {
   brandLinkMaxClicks: Float
   brandLinkMaxCost: Float
   category: Category
-  comments: [comment!]
   currency: Currency
   description: String
   directBuyLink: String
@@ -352,9 +394,6 @@ type User {
 
   """Date of birth"""
   birthdate: DateTime!
-
-  """Comments written by the user"""
-  comments: [Comment!]!
 
   """Creation date"""
   createdAt: DateTime!
@@ -398,167 +437,4 @@ enum UserStatus {
   APPLIED
   DISABLED
   NONE
-}
-
-input address {
-  """City"""
-  city: String!
-
-  """Number"""
-  number: String!
-
-  """Street"""
-  street: String!
-
-  """Zip Code"""
-  zipCode: String!
-}
-
-input comment {
-  """Content"""
-  content: String!
-
-  """The product this comment belongs to"""
-  product: product!
-
-  """The user who wrote this comment"""
-  user: user!
-}
-
-input product {
-  """Brand"""
-  brand: String
-
-  """Brand link"""
-  brandLink: String
-
-  """Current number of clicks on brand link"""
-  brandLinkClicks: Float
-
-  """Current cost of brand link"""
-  brandLinkCost: Float
-
-  """Maximum number of clicks on brand link"""
-  brandLinkMaxClicks: Float
-
-  """Maximum cost of brand link"""
-  brandLinkMaxCost: Float
-
-  """Product category"""
-  category: Category
-
-  """Comments"""
-  comments: [comment!]!
-
-  """The currency the value is denoted in"""
-  currency: Currency
-
-  """Description"""
-  description: String
-
-  """Direct Buy link"""
-  directBuyLink: String
-
-  """Current number of clicks on direct buy link"""
-  directBuyLinkClicks: Float
-
-  """Current cost of direct buy link"""
-  directBuyLinkCost: Float
-
-  """Maximum number of clicks on direct buy link"""
-  directBuyLinkMaxClicks: Float
-
-  """Maximum cost of direct buy link"""
-  directBuyLinkMaxCost: Float
-
-  """End Date"""
-  end: DateTime
-
-  """Number of Likes"""
-  likes: Float!
-
-  """Maximum bet"""
-  maxBet: Float
-
-  """Minimum bet"""
-  minBet: Float
-
-  """Pictures for the product"""
-  pictures: [public_file!]
-
-  """Whether the product is sponsored"""
-  sponsored: Boolean
-
-  """Start date"""
-  start: DateTime
-
-  """Status of the product"""
-  status: ProductStatus!
-
-  """Product tags"""
-  tags: [String!]
-
-  """Title"""
-  title: String!
-
-  """Value"""
-  value: Int
-}
-
-input public_file {
-  """S3 File Key"""
-  key: String!
-
-  """Product the file belongs to"""
-  product: product
-
-  """Public download URL"""
-  url: String!
-}
-
-input user {
-  """Domicile address"""
-  address: address!
-
-  """Date of birth"""
-  birthdate: DateTime!
-
-  """Comments written by the user"""
-  comments: [comment!]!
-
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
-
-  """Date until which the users account is disabled (if any)"""
-  disabledUntil: DateTime
-
-  """E-mail"""
-  email: String!
-
-  """Full name"""
-  fullName: String!
-
-  """User interest categories"""
-  interests: [String!]!
-
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
-  """Phone number"""
-  phone: String!
-
-  """Role of the User"""
-  role: Role!
-
-  """Status of the user account"""
-  status: UserStatus!
-
-  """Username"""
-  username: String!
-
-  """Cognito ID"""
-  uuid: ID!
 }

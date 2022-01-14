@@ -89,16 +89,6 @@ export class User {
   @IsDate()
   birthdate: Date;
 
-  @Field(() => [Comment], {
-    nullable: true,
-    description: 'Comments written by the user',
-  })
-  @OneToMany(() => Comment, (comment) => comment.user, {
-    cascade: true,
-    eager: true,
-  })
-  comments: Comment[];
-
   @Field(() => [String], { description: 'User interest categories' })
   @Column('text', { array: true })
   @IsArray()
@@ -119,13 +109,23 @@ export class User {
   @Column({ nullable: true })
   disabledUntil: Date;
 
-  @Field(() => [PrivateFile], {
-    nullable: true,
-    description: 'Documents of the user (e.g. ID copy)',
-  })
-  @OneToMany(() => PrivateFile, (file) => file.user, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  documents: PrivateFile[];
+  // @Field(() => [PrivateFile], {
+  //   nullable: true,
+  //   description: 'Documents of the user (e.g. ID copy)',
+  // })
+  // @OneToMany(() => PrivateFile, (file) => file.user, {
+  //   cascade: true,
+  //   onDelete: 'CASCADE',
+  // })
+  // documents: PrivateFile[];
+
+  // @Field(() => [Comment], {
+  //   nullable: true,
+  //   description: 'Comments written by the user',
+  // })
+  // @OneToMany(() => Comment, (comment) => comment.user, {
+  //   cascade: true,
+  //   eager: true,
+  // })
+  // comments: Comment[];
 }

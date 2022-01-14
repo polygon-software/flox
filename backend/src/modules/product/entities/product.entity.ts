@@ -182,13 +182,13 @@ export class Product extends BaseEntity {
   @IsArray()
   tags: string[];
 
-  @Field(() => [Comment], { description: 'Comments' })
-  @OneToMany(() => Comment, (comment) => comment.product, {
-    cascade: true,
-    eager: true,
-    nullable: true,
-  })
-  comments: Comment[];
+  // @Field(() => [Comment], { description: 'Comments' })
+  // @OneToMany(() => Comment, (comment) => comment.product, {
+  //   cascade: true,
+  //   eager: true,
+  //   nullable: true,
+  // })
+  // comments: Comment[];
 
   @Field(() => Number, { description: 'Number of Likes' })
   @Column({ nullable: true, default: 0 })
