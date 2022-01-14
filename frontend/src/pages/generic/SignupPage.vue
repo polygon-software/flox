@@ -1,11 +1,11 @@
 <template>
   <q-page class="flex flex-center">
-    <!-- Signup Card -->
-    <q-card class="row q-pa-md q-ma-md justify-center flex items-center">
+    <!-- Signup Form -->
+    <div class="q-pa-md q-ma-md">
       <SignupForm
         @submit="onSignup"
       />
-    </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -16,6 +16,7 @@ import {RouterService} from 'src/services/RouterService';
 import SignupForm from 'components/forms/SignupForm.vue'
 import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_USER} from 'src/data/mutations/USER';
+import ROUTES from 'src/router/routes';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -53,7 +54,8 @@ async function onSignup(formValues: Record<string, string>): Promise<void>{
     }
   })
 
-  // TODO: close signup - make it a separate page, reroute to generic success page (can be copied from SOI)
+  // TODO: reroute to generic success page (can be copied from SOI)
+  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
 </script>

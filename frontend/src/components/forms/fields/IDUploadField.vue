@@ -3,7 +3,8 @@
     <!-- Front of ID -->
     <q-file
       v-model="idFront"
-      class="id-preview col"
+      class="col id-preview"
+      input-class="id-preview"
       outlined
       accept="image/*"
       :label="$t('account_data.passport_front')"
@@ -26,7 +27,8 @@
     <!-- Back of ID -->
     <q-file
       v-model="idBack"
-      class="id-preview col"
+      class="col id-preview"
+      input-class="id-preview"
       style="margin-left: 20px"
       outlined
       accept="image/*"
@@ -100,6 +102,7 @@ async function onUpdate(){
 <style scoped>
 .id-preview{
   width: 150px;
-  height: 100px;
+  height: 150px;
+  margin-bottom: 24px
 }
 </style>

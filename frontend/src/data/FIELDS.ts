@@ -75,6 +75,7 @@ const FIELDS: Record<string, Field> = {
           key: 'full_name',
           component: markRaw(QInput),
           attributes: {
+            outlined: true,
             dense: true,
             type: 'text',
             label: i18n.global.t('account_data.full_name'),
@@ -93,6 +94,7 @@ const FIELDS: Record<string, Field> = {
           key: 'phone_number',
           component: markRaw(QInput),
           attributes: {
+            outlined: true,
             dense: true,
             type: 'tel',
             label: i18n.global.t('account_data.phone_number'),
@@ -112,6 +114,7 @@ const FIELDS: Record<string, Field> = {
           key: 'birthdate',
           component: markRaw(QInput),
           attributes: {
+            outlined: true,
             dense: true,
             label: i18n.global.t('account_data.birthdate'),
             lazy_rules: 'ondemand',
