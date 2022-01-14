@@ -117,7 +117,7 @@ export default {
     must_accept_condition_truthful: 'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
-    invalid_birth_date: 'Please enter you date of birth',
+    invalid_birth_date: 'You must be at least 18 years old',
     date_must_be_future: 'Please choose a future date',
     can_only_edit_draft: 'Cannot edit (only drafts can be edited)',
     error_while_enabling: 'An error occurred while enabling the account.',

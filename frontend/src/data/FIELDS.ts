@@ -114,6 +114,7 @@ const FIELDS: Record<string, Field> = {
           key: 'birthdate',
           component: markRaw(QInput),
           attributes: {
+            type: 'date',
             outlined: true,
             dense: true,
             label: i18n.global.t('account_data.birthdate'),

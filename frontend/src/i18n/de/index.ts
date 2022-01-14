@@ -117,7 +117,7 @@ export default {
     must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
-    invalid_birth_date: 'Bitte geben Sie ihr Geburtsdatum ein',
+    invalid_birth_date: 'Sie müssen mindestens 18 Jahre alt sein',
     date_must_be_future: 'Bitte wählen Sie ein zukünftiges Datum',
     can_only_edit_draft: 'Bearbeiten fehlgeschlagen (nur Entwürfe können bearbeitet werden)',
     error_while_enabling: 'Beim Aktivieren ist ein Fehler aufgetreten.',
