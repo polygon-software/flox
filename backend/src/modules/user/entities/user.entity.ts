@@ -90,7 +90,10 @@ export class User {
   @IsDate()
   birthdate: Date;
 
-  @Field(() => [Comment], { description: 'Comments written by the user' })
+  @Field(() => [Comment], {
+    nullable: true,
+    description: 'Comments written by the user',
+  })
   @OneToMany(() => Comment, (comment) => comment.user, {
     cascade: true,
     eager: true,
