@@ -23,3 +23,5 @@ export class Comment extends BaseEntity {
 
   //TODO Add missing fields (likes, replies, etc.)
 }
+
+export default Comment;
