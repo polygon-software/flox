@@ -4,6 +4,7 @@ import Interests from 'components/forms/fields/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
 import LivingAddress from 'components/forms/fields/AddressField.vue'
+import IDUploadField from 'components/forms/fields/IDUploadField.vue'
 import {markRaw} from 'vue';
 import { i18n } from 'boot/i18n';
 
@@ -118,6 +119,13 @@ const FIELDS: Record<string, Field> = {
             rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('errors.invalid_birth_date')]
           }
         },
+        ID_UPLOAD: {
+          key: 'id',
+          component: markRaw(IDUploadField),
+          attributes: {
+            rules: []
+          },
+        }
     }
 
 export {FIELDS}

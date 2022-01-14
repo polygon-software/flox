@@ -3,65 +3,11 @@
     <h5 class="q-mb-none" style="margin-bottom: 30px;">
       {{ $t('authentication.signup') }}
     </h5>
-    <q-form
-        class="q-gutter-md"
-        @submit="onSubmit"
-        >
-    <q-stepper
-        ref="stepper"
-        v-model="form.step.value"
-        active-color="primary"
-        done-icon="done"
-        animated
-        transition-next="fade"
-        transition-prev="fade"
-    >
-      <q-step
-          v-for="(page, index) in form.pages.value"
-          :key="page.key"
-          :name="index+1"
-          :prefix="index+1"
-          :title="page.label"
-          :done="form.step.value > index"
-          class="flex flex-center"
-      >
-        <component
-              :is="field.component"
-              v-for="field in page.fields"
-              :key="field.key"
-              v-bind="field.attributes"
-              v-model="form.values.value[field.key]"
-              @change="(newValue) => form.updateValue(field.key, newValue)"
-          />
-      </q-step>
-      <template #navigation>
-        <q-stepper-navigation>
-          <q-btn
-              v-if="form.step.value > 1"
-              flat
-              style="margin-right: 30px"
-              color="primary"
-              :label="$t('buttons.back')"
-              class="q-ml-sm"
-              @click="$refs.stepper.previous()" />
-          <q-btn
-              v-if="form.step.value < form.pages.value.length"
-              color="primary"
-              :label="$t('buttons.next_step')"
-              :disable="!form.pageValid.value"
-              @click="$refs.stepper.next()"
-          />
-          <q-btn
-              v-if="form.step.value === form.pages.value.length"
-              color="primary"
-              :label="$t('buttons.finish_signup')"
-              type="submit"
-              :disable="!form.pageValid.value"
-          />
-        </q-stepper-navigation>
-      </template>
-    </q-stepper>
-    </q-form>
+    <GenericForm
+      :pages="pages"
+      class="q-gutter-md"
+      @submit="onSubmit"
+    />
   </div>
 </template>
 
@@ -70,6 +16,7 @@ import { FIELDS } from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import { i18n } from 'boot/i18n';
 import {defineEmits} from 'vue';
+import GenericForm from 'components/forms/GenericForm.vue';
 
 /**
  * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different
@@ -82,13 +29,11 @@ import {defineEmits} from 'vue';
 const emit = defineEmits(['submit'])
 
 const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
-const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER]
+const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER, FIELDS.ID_UPLOAD]
 const address_fields  = [FIELDS.ADDRESS]
 const interest_fields = [FIELDS.INTERESTS]
 
-const form = new Form()
-
-form.pages.value = [
+const pages = [
   {
     key: 'account_data',
     label: i18n.global.t('account_data.account'),
@@ -113,10 +58,11 @@ form.pages.value = [
 
 /**
  * Emits the 'submit' event, containing the form's data
+ * @param {Record<string, unknown>} values - form values
  * @returns {void}
  */
-function onSubmit(): void {
-  emit('submit', form.values.value)
+function onSubmit(values: Record<string, unknown>): void {
+  emit('submit', values)
 }
 
 </script>
