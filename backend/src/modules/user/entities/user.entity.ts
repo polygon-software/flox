@@ -121,7 +121,7 @@ export class User {
     nullable: true,
     description: 'Documents of the user (e.g. ID copy)',
   })
-  @OneToMany(() => PrivateFile, (file) => file.owner, {
+  @OneToMany(() => PrivateFile, (file) => file.user, {
     cascade: true,
     onDelete: 'CASCADE',
   })
