@@ -79,7 +79,7 @@ export class FileController {
       return;
     }
 
-    // Determine dossier UUID from query param
+    // Determine user UUID from query param
     const dossierUuid: string = query.did;
     const files = await req.saveRequestFiles();
     let updatedDossier;
@@ -87,8 +87,8 @@ export class FileController {
       updatedDossier = await this.fileService.uploadAssociatedFile(
         file,
         dossierUuid,
-        'dossierRepository',
-        { onFile: 'dossier', onAssociation: 'documents' },
+        'userRepository',
+        { onFile: 'user', onAssociation: 'documents' },
         req['user'].userId,
       );
     }

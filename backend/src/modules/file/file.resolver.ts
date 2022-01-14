@@ -35,7 +35,7 @@ export class FileResolver {
   ): Promise<PrivateFile> {
     // Get DB user
     const dbUser = await this.userRepository.findOne({
-      uuid: user.sub,
+      uuid: user.userId,
     });
 
     return this.fileService.getPrivateFile(getPrivateFileArgs, dbUser);

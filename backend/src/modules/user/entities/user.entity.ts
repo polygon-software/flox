@@ -21,6 +21,7 @@ import {
 } from 'typeorm';
 import { ROLE, USER_STATUS } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
+import PrivateFile from '../../file/entities/private_file.entity';
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -115,4 +116,14 @@ export class User {
   })
   @Column({ nullable: true })
   disabledUntil: Date;
+
+  @Field(() => [PrivateFile], {
+    nullable: true,
+    description: 'Documents of the user (e.g. ID copy)',
+  })
+  @OneToMany(() => PrivateFile, (file) => file.owner, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  documents: PrivateFile[];
 }
