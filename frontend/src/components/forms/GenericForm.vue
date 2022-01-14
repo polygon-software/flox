@@ -40,6 +40,7 @@
             flat
             style="margin-right: 30px"
             class="q-ml-sm"
+            unelevated
             @click="$refs.stepper.previous()"
           />
           <q-btn
@@ -47,12 +48,14 @@
             color="primary"
             :label="$t('buttons.next_step')"
             :disable="!form.pageValid.value"
+            unelevated
             @click="$refs.stepper.next()"
           />
           <q-btn
             v-if="form.step.value === form.pages.value.length"
             color="primary"
             :label="finishLabel"
+            unelevated
             @click="onSubmit"
           />
         </q-stepper-navigation>
@@ -87,6 +90,7 @@
           color="primary"
           :label="!loading ? finishLabel : loadingLabel"
           :disable="loading"
+          unelevated
           @click="onSubmit"
         >
           <q-inner-loading
@@ -144,8 +148,8 @@ const form: Form = new Form(_pages)
  * @returns {void}
  */
 async function onSubmit(){
-  const is_valid = await form_ref.value?.validate()
-  if(is_valid){
+  const isValid = await form_ref.value?.validate()
+  if(isValid){
     emit('submit', form.values.value)
   }
 }
