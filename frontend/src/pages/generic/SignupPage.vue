@@ -39,6 +39,8 @@ async function onSignup(formValues: Record<string, string>): Promise<void>{
   const idFront: File = formValues.id_upload.front as File
   const idBack: File = formValues.id_upload.back as File
 
+  // TODO handle ID file upload
+
   // Sign up via Cognito
   const cognitoId = await $authService?.signUp(username, email, password);
 
