@@ -9,14 +9,14 @@ import { Public } from '../../auth/authentication.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
 
 @Resolver(() => PublicFile)
 export class FileResolver {
   constructor(
     private readonly fileService: FileService,
 
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
   ) {}
 
   @Public()
@@ -34,8 +34,8 @@ export class FileResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<PrivateFile> {
     // Get DB user
-    const dbUser = await this.userRepository.findOne({
-      uuid: user.userId,
+    const dbUser = await this.userService.getUser({
+      uuid: user.sub,
     });
 
     return this.fileService.getPrivateFile(getPrivateFileArgs, dbUser);

@@ -7,10 +7,12 @@ import { ConfigService } from '@nestjs/config';
 import { FileResolver } from './file.resolver';
 import { PrivateFile } from './entities/private_file.entity';
 import { Product } from '../product/entities/product.entity';
+import { UserService } from '../user/user.service';
+import { User } from '../user/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PublicFile, PrivateFile, Product])],
-  providers: [FileService, ConfigService, FileResolver],
+  imports: [TypeOrmModule.forFeature([PublicFile, PrivateFile, Product, User])],
+  providers: [FileService, ConfigService, FileResolver, UserService],
   controllers: [FileController],
 })
 export class FileModule {}
