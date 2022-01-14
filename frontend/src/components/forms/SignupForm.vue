@@ -23,36 +23,35 @@ import GenericForm from 'components/forms/GenericForm.vue';
  * steps are defined.The fields a page contains are defined in the fields variable.
  * Common fields can be found under "src/data/FIELDS".
  * All fields of a page must be completed before the next page can be accessed.
- * TODO use GenericForm!
  */
 
 const emit = defineEmits(['submit'])
 
-const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
-const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER, FIELDS.ID_UPLOAD]
-const address_fields  = [FIELDS.ADDRESS]
-const interest_fields = [FIELDS.INTERESTS]
+const accountFields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
+const personalFields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER, FIELDS.ID_UPLOAD]
+const addressFields  = [FIELDS.ADDRESS]
+const interestFields = [FIELDS.INTERESTS]
 
 const pages = [
   {
     key: 'account_data',
     label: i18n.global.t('account_data.account'),
-    fields: account_fields,
+    fields: accountFields,
   },
   {
     key: 'personal_data',
     label: i18n.global.t('account_data.personal'),
-    fields: personal_fields,
+    fields: personalFields,
   },
   {
     key: 'address_data',
     label: i18n.global.t('account_data.address'),
-    fields: address_fields,
+    fields: addressFields,
   },
   {
     key: 'interests',
     label: i18n.global.t('account_data.interests'),
-    fields: interest_fields,
+    fields: interestFields,
   },
 ]
 

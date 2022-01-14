@@ -123,7 +123,7 @@ const FIELDS: Record<string, Field> = {
           }
         },
         ID_UPLOAD: {
-          key: 'id',
+          key: 'id_upload',
           component: markRaw(IDUploadField),
           attributes: {
             rules: []
