@@ -10,7 +10,7 @@ export default {
     to: 'Bis',
     date: 'Datum',
     return: 'Zurück',
-    uploading: 'Wird hochgeladen... ({progress}/{total})'
+    uploading: 'Wird hochgeladen...'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -139,7 +139,6 @@ export default {
     add_additional_documents: 'Weitere hinzufügen',
     optional_documents: 'Optionale Dokumente',
     financials: {
-      // TODO transfer to english version!
       title: 'Finanzdokumente',
       id: 'ID-/Passkopie',
       salary: 'Lohnabrechnung',
