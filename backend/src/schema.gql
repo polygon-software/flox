@@ -425,17 +425,6 @@ input comment {
   user: user!
 }
 
-input private_file {
-  """S3 File Key"""
-  key: String!
-
-  """File owner"""
-  owner: String!
-
-  """Pre-signed download URL"""
-  url: String
-}
-
 input product {
   """Brand"""
   brand: String
