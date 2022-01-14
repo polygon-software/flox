@@ -58,6 +58,8 @@ export default {
     accept_conditions: 'I agree to the terms and conditions.',
     accept_condition_truthful:'All information has been filled in truthfully.',
     passport_or_id: 'Passport',
+    passport_front: 'Passport (Front)',
+    passport_back: 'Passport (Back)',
     optional: 'optional',
   },
   dashboards: {

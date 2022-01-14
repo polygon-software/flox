@@ -28,8 +28,8 @@ import GenericForm from 'components/forms/GenericForm.vue';
 
 const emit = defineEmits(['submit'])
 
-const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
-const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER, FIELDS.ID_UPLOAD]
+const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT, FIELDS.ID_UPLOAD] // TODO move to next page
+const personal_fields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER]
 const address_fields  = [FIELDS.ADDRESS]
 const interest_fields = [FIELDS.INTERESTS]
 

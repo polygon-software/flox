@@ -23,6 +23,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/generic/LoginPage.vue') }],
   },
 
+  'SIGNUP': {
+    path: '/signup',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/generic/SignupPage.vue') }],
+  },
+
   'ADD_PRODUCT': {
     path: '/add-product',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -98,10 +105,10 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 };
 
-//TODO: Add semi-protected routes
 // Routes that can be accessed without being logged in
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
+  ROUTES.SIGNUP,
 ]
 
 /**
@@ -117,7 +124,6 @@ async function getUserRoleLayout(): Promise<any>{
   if(!queryResult?.data?.myUser){
     return import('pages/generic/Error404.vue')
   }
-
 
   const userData = queryResult.data.myUser as Record<string, unknown>
   const userRole = userData.role;

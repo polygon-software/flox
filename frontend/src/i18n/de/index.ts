@@ -58,6 +58,8 @@ export default {
     salutation: 'Anrede',
     accept_condition_truthful: 'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
     passport_or_id: 'Ausweiskopie',
+    passport_front: 'Ausweis (Vorderseite)',
+    passport_back: 'Ausweis (Rückseite)',
     optional: 'optional',
   },
   dashboards: {

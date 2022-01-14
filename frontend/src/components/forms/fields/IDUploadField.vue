@@ -1,27 +1,89 @@
 <template>
-  <div>
-    TODO
+  <div class="row justify-between">
+    <!-- Front of ID -->
+    <q-file
+      v-model="idFront"
+      class="id-preview col"
+      outlined
+      accept="image/*"
+      :label="$t('account_data.passport_front')"
+      stack-label
+      clearable
+      display-value=""
+      :max-file-size="props.maxFileSize"
+      :rules="[]"
+      @update:model-value="onUpdate"
+    >
+      <img
+        v-if="frontUrl"
+        :src="frontUrl"
+        alt="front"
+        class="q-my-md"
+        style="max-height: 150px"
+      />
+    </q-file>
+
+    <!-- Back of ID -->
+    <q-file
+      v-model="idBack"
+      class="id-preview col"
+      style="margin-left: 20px"
+      outlined
+      accept="image/*"
+      :label="$t('account_data.passport_back')"
+      stack-label
+      clearable
+      display-value=""
+      :max-file-size="props.maxFileSize"
+      :rules="[]"
+      @update:model-value="onUpdate"
+    >
+      <img
+        v-if="backUrl"
+        :src="backUrl"
+        alt="back"
+        class="q-my-md"
+        style="max-height: 150px"
+      />
+    </q-file>
   </div>
 </template>
 
 <script setup lang="ts">
-
-import {defineEmits, Ref, ref, watch} from 'vue';
+import {defineEmits, defineProps, Ref, ref} from 'vue';
+import {toDataUrl} from 'src/helpers/image-helper';
 
 /**
  * This component contains a field where Users must upload their ID (two files, front and back)
  */
 
-let idFront: Ref<File|null> = ref(null)
-let idBack: Ref<File|null> = ref(null)
+const props = defineProps({
+  maxFileSize: {
+    type: Number,
+    default: 5e7
+  },
+})
 
 const emit = defineEmits(['change'])
+
+// Files for ID front & back
+const idFront: Ref<File|null> = ref(null)
+const idBack: Ref<File|null> = ref(null)
+
+// DataURLs for preview
+const frontUrl: Ref<null|ArrayBuffer|string> = ref(null)
+const backUrl: Ref<null|ArrayBuffer|string> = ref(null)
 
 /**
  * Emits an update if both files are present
  * @returns {void}
  */
-function emitUpdate(){
+async function onUpdate(){
+  // Update preview URLs
+  frontUrl.value = idFront.value ? await toDataUrl(idFront.value) : null
+  backUrl.value = idBack.value ? await toDataUrl(idBack.value) : null
+
+  // Update & emit
   if(idFront.value && idBack.value){
     emit('change', {
       front: idFront.value,
@@ -36,5 +98,8 @@ function emitUpdate(){
 </script>
 
 <style scoped>
-
+.id-preview{
+  width: 150px;
+  height: 100px;
+}
 </style>
