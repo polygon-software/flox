@@ -1,8 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
-import { User } from '../../user/entities/user.entity';
 
 /**
  * Defines a private file within a restricted AWS S3 bucket.
@@ -12,10 +11,10 @@ import { User } from '../../user/entities/user.entity';
 @Entity()
 @ObjectType()
 export class PrivateFile extends BaseEntity {
-  @Field(() => User, { description: 'File owner' })
+  @Field(() => String, { description: 'File owner' })
   @Column()
   @IsUUID()
-  owner: User;
+  owner: string;
 
   @Field(() => String, { description: 'S3 File Key' })
   @Column()

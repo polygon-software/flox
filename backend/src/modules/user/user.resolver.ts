@@ -12,31 +12,27 @@ import {
   CurrentUser,
 } from '../../auth/authorization.decorator';
 import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
-import { FileService } from '../file/file.service';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(
-    private readonly userService: UserService,
-    private readonly fileService: FileService,
-  ) {}
+  constructor(private readonly usersService: UserService) {}
 
   @Public()
   @Query(() => [User], { name: 'allPlayers' })
   async getAllPlayers(): Promise<User[]> {
-    return this.userService.getAllPlayers();
+    return this.usersService.getAllPlayers();
   }
 
   @Public()
   @Query(() => [User], { name: 'allPartners' })
   async getAllPartners(): Promise<User[]> {
-    return this.userService.getAllPartners();
+    return this.usersService.getAllPartners();
   }
 
   @Public()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return this.userService.getUser(getUserArgs);
+    return this.usersService.getUser(getUserArgs);
   }
 
   /**
@@ -47,7 +43,7 @@ export class UserResolver {
   @AdminOnly()
   @Mutation(() => User)
   async enableUser(@Args('uuid') uuid: string): Promise<User> {
-    return this.userService.enableUser(uuid);
+    return this.usersService.enableUser(uuid);
   }
 
   /**
@@ -58,7 +54,7 @@ export class UserResolver {
   @AdminOnly()
   @Mutation(() => User)
   async disableUser(@Args('uuid') uuid: string): Promise<User> {
-    return this.userService.disableUser(uuid);
+    return this.usersService.disableUser(uuid);
   }
 
   /**
@@ -71,7 +67,7 @@ export class UserResolver {
   async temporarilyDisableUser(
     @Args('tempDisableUserInput') tempDisableUserInput: TempDisableUserInput,
   ): Promise<User> {
-    return this.userService.temporarilyDisableUser(tempDisableUserInput);
+    return this.usersService.temporarilyDisableUser(tempDisableUserInput);
   }
 
   @Public()
@@ -79,7 +75,7 @@ export class UserResolver {
   async create(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    return this.userService.create(createUserInput);
+    return this.usersService.create(createUserInput);
   }
 
   @Public()
@@ -87,7 +83,7 @@ export class UserResolver {
   async update(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
-    return this.userService.update(updateUserInput);
+    return this.usersService.update(updateUserInput);
   }
 
   @Public()
@@ -95,7 +91,7 @@ export class UserResolver {
   async remove(
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
   ): Promise<User> {
-    return this.userService.remove(deleteUserInput);
+    return this.usersService.remove(deleteUserInput);
   }
 
   /**
@@ -108,7 +104,7 @@ export class UserResolver {
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
     // Get user where user's UUID matches cognitoID
-    const myUser = await this.userService.getUser({
+    const myUser = await this.usersService.getUser({
       uuid: user.userId,
     } as GetUserArgs);
 

@@ -13,7 +13,6 @@ import { User } from '../user/entities/user.entity';
 import { ERRORS } from '../../error/ERRORS';
 import { MultipartFile } from 'fastify-multipart';
 import { Product } from '../product/entities/product.entity';
-import { UserService } from '../user/user.service';
 
 @Injectable()
 export class FileService {
@@ -37,9 +36,7 @@ export class FileService {
     private readonly privateFilesRepository: Repository<PrivateFile>,
 
     @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
-
-    private readonly userService: UserService,
+    private productRepository: Repository<Product>,
 
     private readonly configService: ConfigService,
   ) {}
@@ -104,9 +101,6 @@ export class FileService {
       Key: key,
       Body: dataBuffer,
     };
-
-    // Find actual user for given key
-    const dbUser = await this.userService.getUser({ uuid: owner });
 
     const fileInput = {
       key: key,
