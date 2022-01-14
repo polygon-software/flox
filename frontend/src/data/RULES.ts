@@ -66,6 +66,10 @@ const IS_VALID_MAX_BET = (max: number, min: number, value: number): boolean => {
   return max <= value/5 && value % max === 0 && max > min //TODO Correct parameters for max bet calculation
 }
 
+const IS_VALID_ID_UPLOAD = (val: Record<string, File>): boolean => {
+  return (!!val.front && !!val.back)
+}
+
 export {
   IS_EMAIL,
   IS_URL,
@@ -83,4 +87,5 @@ export {
   IS_SMALLER_THAN_OR_EQUAL,
   IS_VALID_MIN_BET,
   IS_VALID_MAX_BET,
+  IS_VALID_ID_UPLOAD
 }

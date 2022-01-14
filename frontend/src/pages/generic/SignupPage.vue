@@ -36,9 +36,13 @@ async function onSignup(formValues: Record<string, string>): Promise<void>{
   const birthdate = formValues.birthdate
   const interests = formValues.interests
   const address = formValues.address
+  const idFront: File = formValues.id_upload.front as File
+  const idBack: File = formValues.id_upload.back as File
 
   // Sign up via Cognito
   const cognitoId = await $authService?.signUp(username, email, password);
+
+  // Upload ID files
 
   // Create user in backend
   await executeMutation(CREATE_USER, {

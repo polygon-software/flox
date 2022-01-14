@@ -1,4 +1,4 @@
-import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE} from './RULES'
+import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE, IS_VALID_ID_UPLOAD} from './RULES'
 import {QInput} from 'quasar'
 import Interests from 'components/forms/fields/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
@@ -119,7 +119,6 @@ const FIELDS: Record<string, Field> = {
             dense: true,
             label: i18n.global.t('account_data.birthdate'),
             lazy_rules: 'ondemand',
-            mask: '##/##/####',
             rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('errors.invalid_birth_date')]
           }
         },
@@ -127,7 +126,7 @@ const FIELDS: Record<string, Field> = {
           key: 'id_upload',
           component: markRaw(IDUploadField),
           attributes: {
-            rules: []
+            rules: [(val: Record<string, File>): boolean|string  => IS_VALID_ID_UPLOAD(val) || i18n.global.t('errors.missing_file')]
           },
         }
     }
