@@ -98,6 +98,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/generic/SettingsPage.vue') }],
   },
 
+  'SUCCESS': {
+    path: '/success',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/generic/SuccessPage.vue') }],
+  },
+
   // Wildcard route for non-covered routes
   'WILDCARD': {
     path: '/:catchAll(.*)*',
@@ -109,6 +115,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
   ROUTES.SIGNUP,
+  ROUTES.SUCCESS,
 ]
 
 /**
