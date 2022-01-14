@@ -110,7 +110,7 @@ export class FileService {
 
     const fileInput = {
       key: key,
-      owner: dbUser,
+      owner: owner,
       ...association,
     };
     const newFile = this.privateFilesRepository.create(fileInput);
@@ -143,7 +143,7 @@ export class FileService {
   ): Promise<PrivateFile> {
     const fileInfo = await this.privateFilesRepository.findOne({
       uuid: getPrivateFileArgs.uuid,
-      owner: user,
+      owner: user.uuid,
     });
     if (fileInfo) {
       return this.preparePrivateFile(getPrivateFileArgs, fileInfo);
