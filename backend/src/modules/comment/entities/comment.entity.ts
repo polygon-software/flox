@@ -20,6 +20,6 @@ export class Comment extends BaseEntity {
   @Field(() => Product, { description: 'The product this comment belongs to' })
   @ManyToOne(() => Product, (product) => product.comments)
   product: Product;
-}
 
-//TODO Add missing fields (likes, replies, etc.)
+  //TODO Add missing fields (likes, replies, etc.)
+}

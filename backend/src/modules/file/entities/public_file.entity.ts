@@ -8,7 +8,6 @@ import { Product } from '../../product/entities/product.entity';
  * Defines a public file within a public AWS S3 bucket
  */
 
-@InputType('public_file')
 @Entity()
 @ObjectType()
 export class PublicFile extends BaseEntity {

@@ -1,4 +1,4 @@
-import { ObjectType, Field, InputType, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
   IsArray,
   IsDate,
@@ -24,8 +24,7 @@ import { Address } from '../../address/entities/address.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
 
 @ObjectType()
-@Entity({ name: 'user' })
-@InputType('user')
+@Entity()
 /**
  * An application User
  */

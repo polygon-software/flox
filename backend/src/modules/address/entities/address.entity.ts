@@ -8,8 +8,7 @@ import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
  */
 
 @ObjectType()
-@InputType('address')
-@Entity({ name: 'address' })
+@Entity()
 export class Address extends BaseEntity {
   @Field(() => String, { description: 'Street' })
   @Column()
