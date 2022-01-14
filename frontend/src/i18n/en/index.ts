@@ -9,7 +9,8 @@ export default {
     from: 'From',
     to: 'To',
     date: 'Datum',
-    return: 'Return'
+    return: 'Return',
+    warning: 'Warning!'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -125,6 +126,7 @@ export default {
     ok: 'OK',
     download: 'Download',
     preview: 'Preview',
+    discard: 'Discard',
   },
   documents: {
     choose_documents: 'Choose documents',
@@ -248,8 +250,10 @@ export default {
     subject_rejected: 'Rejected',
     body_rejected: 'Application is rejected'
   },
-
   bank: {
     new_user: 'New user'
+  },
+  warnings: {
+    // TODO: add all possible warnings once provided by SOI
   }
 };
