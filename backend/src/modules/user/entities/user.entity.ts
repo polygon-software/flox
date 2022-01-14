@@ -109,23 +109,23 @@ export class User {
   @Column({ nullable: true })
   disabledUntil: Date;
 
-  // @Field(() => [PrivateFile], {
-  //   nullable: true,
-  //   description: 'Documents of the user (e.g. ID copy)',
-  // })
-  // @OneToMany(() => PrivateFile, (file) => file.user, {
-  //   cascade: true,
-  //   onDelete: 'CASCADE',
-  // })
-  // documents: PrivateFile[];
+  @Field(() => [PrivateFile], {
+    nullable: true,
+    description: 'Documents of the user (e.g. ID copy)',
+  })
+  @OneToMany(() => PrivateFile, (file) => file.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  documents: PrivateFile[];
 
-  // @Field(() => [Comment], {
-  //   nullable: true,
-  //   description: 'Comments written by the user',
-  // })
-  // @OneToMany(() => Comment, (comment) => comment.user, {
-  //   cascade: true,
-  //   eager: true,
-  // })
-  // comments: Comment[];
+  @Field(() => [Comment], {
+    nullable: true,
+    description: 'Comments written by the user',
+  })
+  @OneToMany(() => Comment, (comment) => comment.user, {
+    cascade: true,
+    eager: true,
+  })
+  comments: Comment[];
 }

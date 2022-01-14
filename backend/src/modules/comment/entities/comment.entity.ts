@@ -9,7 +9,7 @@ import { User } from '../../user/entities/user.entity';
 @ObjectType()
 export class Comment extends BaseEntity {
   @Field(() => User, { description: 'The user who wrote this comment' })
-  @ManyToOne(() => User) //TODO , (user) => user.comments
+  @ManyToOne(() => User, (user) => user.comments)
   @JoinColumn()
   user: User;
 
@@ -19,7 +19,7 @@ export class Comment extends BaseEntity {
   content: string;
 
   @Field(() => Product, { description: 'The product this comment belongs to' })
-  @ManyToOne(() => Product) // TODO (product) => product.comments
+  @ManyToOne(() => Product, (product) => product.comments)
   @JoinColumn()
   product: Product;
 

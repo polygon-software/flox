@@ -34,8 +34,7 @@ export class PrivateFile extends BaseEntity {
     nullable: true,
     description: 'User the file belongs to',
   })
-  @ManyToOne(() => User, {
-    // tODO , (user) => user.documents,
+  @ManyToOne(() => User, (user) => user.documents, {
     onDelete: 'CASCADE',
   })
   user: User;

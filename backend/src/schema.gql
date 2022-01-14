@@ -218,6 +218,9 @@ type Product {
   """Product category"""
   category: Category
 
+  """Comments"""
+  comments: [Comment!]!
+
   """Creation date"""
   created_at: DateTime!
 
@@ -395,6 +398,9 @@ type User {
   """Date of birth"""
   birthdate: DateTime!
 
+  """Comments written by the user"""
+  comments: [Comment!]
+
   """Creation date"""
   createdAt: DateTime!
 
@@ -403,6 +409,9 @@ type User {
 
   """Date until which the users account is disabled (if any)"""
   disabledUntil: DateTime
+
+  """Documents of the user (e.g. ID copy)"""
+  documents: [PrivateFile!]
 
   """E-mail"""
   email: String!
