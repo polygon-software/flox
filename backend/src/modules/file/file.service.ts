@@ -35,6 +35,9 @@ export class FileService {
     @InjectRepository(PrivateFile)
     private readonly privateFilesRepository: Repository<PrivateFile>,
 
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
+
     private readonly configService: ConfigService,
   ) {}
 
@@ -42,11 +45,13 @@ export class FileService {
    * Uploads a file to the public S3 bucket
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
-   * @returns {Promise<PublicFile>} - file
+   * @param {string} productId - UUID of the corresponding product
+   * @returns {Promise<PublicFile>} - the newly created file
    */
   async uploadPublicFile(
     dataBuffer: Buffer,
     filename: string,
+    productId: string,
   ): Promise<PublicFile> {
     // File upload
     const key = `${uuid()}-${filename}`;
@@ -57,11 +62,19 @@ export class FileService {
     };
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
+
+    const product = await this.productRepository.findOne(productId);
+
+    if (!product) {
+      throw new Error(`Product ${productId} does not exist`);
+    }
+
     const newFile = this.publicFilesRepository.create({
-      key: key,
+      key,
       url: `https://${configService.get(
         'AWS_PUBLIC_BUCKET_NAME',
       )}.s3.${configService.get('AWS_REGION')}.amazonaws.com/${key}`,
+      product: product,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;

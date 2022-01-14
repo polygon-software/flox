@@ -61,6 +61,7 @@ export class FileController {
       fileBuffer,
       file.filename,
       owner,
+      {},
     );
     res.send(newFile);
   }
