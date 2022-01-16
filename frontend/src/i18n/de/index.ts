@@ -244,6 +244,7 @@ export default {
     building_lease: "Baurecht",
     renovation: "Renovation",
     portion: "Tranche",
+    type: "Art",
     expiration_date: "Ablaufdatum",
     renovation_year: "Renovationsjahr",
     amortisation: "Amortisation",

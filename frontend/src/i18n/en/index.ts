@@ -240,6 +240,7 @@ export default {
     current_value_of_mortgage: 'Current value of mortgage in CHF',
     enfeoffment: 'Enfeoffment in %',
     building_lease: "Building lease",
+    type: "Type",
     renovation: "Renovation",
     renovation_year: "Year of Renovation",
     portion: "Portion",

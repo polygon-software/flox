@@ -31,7 +31,7 @@
                 <div
                   v-for="leftSection in page.sectionsLHS"
                   :key="leftSection.key">
-                  <h7 class="q-py-xl q-my-xl">{{ leftSection.title }}</h7>
+                  <b class="q-py-xl q-my-xl">{{ leftSection.title }}</b>
                   <component
                     :is="field.component"
                     v-for="field in leftSection.fields"
@@ -47,7 +47,7 @@
                 <div
                   v-for="rightSection in page.sectionsRHS"
                   :key="rightSection.key">
-                  <h7 class="q-py-xl q-my-xl">{{ rightSection.title }}</h7>
+                  <b class="q-py-xl q-my-xl">{{ rightSection.title }}</b>
                   <component
                     :is="field.component"
                     v-for="field in rightSection.fields"
@@ -116,71 +116,6 @@ const formRef: Ref<QForm | null> = ref(null)
 
 const pages = [
   {
-    key: 'calculations',
-    label: i18n.global.t('form_for_clients.calculations'),
-    sectionsLHS: [
-      {
-        key: 'calculation-data1',
-        title: i18n.global.t('dashboards.mortgage'),
-        fields: [FIELDS.PORTION, FIELDS.EXPIRATION_DATE],
-      },
-      {
-        key: 'calculation-data2',
-        title: i18n.global.t('form_for_clients.building_lease'),
-        fields: [FIELDS.BUILDING_LEASE],
-      },
-    ],
-    sectionsRHS: [
-      {
-        key: 'calculation-data3',
-        title: i18n.global.t('form_for_clients.renovation'),
-        fields: [FIELDS.RENOVATION, FIELDS.RENOVATION_YEAR, FIELDS.PRICE],
-      },
-      {
-        key: 'calculation-data4',
-        title: ' ',
-        fields: [FIELDS.AMORTISATION],
-      },
-      {
-        key: 'calculation-data5',
-        title: ' ',
-        fields: [FIELDS.TYPE, FIELDS.PRICE],
-      },
-    ]
-  },{
-    key: 'calculations',
-    label: i18n.global.t('form_for_clients.calculations'),
-    sectionsLHS: [
-      {
-        key: 'calculation-data1',
-        title: i18n.global.t('dashboards.mortgage'),
-        fields: [FIELDS.PORTION, FIELDS.EXPIRATION_DATE],
-      },
-      {
-        key: 'calculation-data2',
-        title: i18n.global.t('form_for_clients.building_lease'),
-        fields: [FIELDS.BUILDING_LEASE],
-      },
-    ],
-    sectionsRHS: [
-      {
-        key: 'calculation-data3',
-        title: i18n.global.t('form_for_clients.renovation'),
-        fields: [FIELDS.RENOVATION, FIELDS.RENOVATION_YEAR, FIELDS.PRICE],
-      },
-      {
-        key: 'calculation-data4',
-        title: ' ',
-        fields: [FIELDS.AMORTISATION],
-      },
-      {
-        key: 'calculation-data5',
-        title: ' ',
-        fields: [FIELDS.TYPE, FIELDS.PRICE],
-      },
-    ]
-  },
-  {
     key: 'crm-data',
     label: i18n.global.t('employee_dashboard.customer'),
     sectionsLHS: [
@@ -227,7 +162,40 @@ const pages = [
       {
         key: 'property-data4',
         title: i18n.global.t('form_for_clients.purchase'),
-        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT],
+        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT], // TODO: make sure enfeoffment calculation updates
+      },
+    ]
+  },
+  {
+    key: 'calculations',
+    label: i18n.global.t('form_for_clients.calculations'),
+    sectionsLHS: [
+      {
+        key: 'calculation-data1',
+        title: i18n.global.t('dashboards.mortgage'),
+        fields: [FIELDS.PORTION, FIELDS.EXPIRATION_DATE], // TODO: give date a label
+      },
+      {
+        key: 'calculation-data2',
+        title: i18n.global.t('form_for_clients.building_lease'),
+        fields: [FIELDS.BUILDING_LEASE], // TODO: ask what fields should be in here
+      },
+    ],
+    sectionsRHS: [
+      {
+        key: 'calculation-data3',
+        title: ' ',
+        fields: [FIELDS.RENOVATION, FIELDS.RENOVATION_YEAR, FIELDS.PRICE], // TODO: should this only be a year, if yes as a date or as a string?
+      },
+      {
+        key: 'calculation-data4',
+        title: ' ',
+        fields: [FIELDS.AMORTISATION],
+      },
+      {
+        key: 'calculation-data5',
+        title: ' ',
+        fields: [FIELDS.TYPE, FIELDS.PRICE], // TODO: put direct & indirect next to each other
       },
     ]
   },
