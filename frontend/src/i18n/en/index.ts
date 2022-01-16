@@ -164,6 +164,7 @@ export default {
     non_matching_password: 'Passwords not matching',
     invalid_name: 'Please enter your name',
     invalid_amount: 'Please enter a valid amount.',
+    invalid_string: 'Please enter a valid input.',
     invalid_company_name: 'Please enter your company\'s name',
     invalid_company_uid: 'Please enter your company\'s UID',
     invalid_address: 'Please enter a valid address',
@@ -229,6 +230,7 @@ export default {
   form_for_clients: {
     contact_info: 'Contact Information',
     property: 'Property',
+    calculations: 'Calculations',
     property_type: 'Property Type',
     owner_occupied: 'Owner-occupied',
     purchase: 'Purchase',
@@ -237,6 +239,14 @@ export default {
     market_value_estimation: 'Market value estimation in CHF',
     current_value_of_mortgage: 'Current value of mortgage in CHF',
     enfeoffment: 'Enfeoffment in %',
+    building_lease: "Building lease",
+    renovation: "Renovation",
+    renovation_year: "Year of Renovation",
+    portion: "Portion",
+    expiration_date: "Expiration Date",
+    amortisation: "Amortisation",
+    direct: "Direct",
+    indirect: "Indirect"
   },
   dossier_status_enum: {
     OPEN: 'Open',

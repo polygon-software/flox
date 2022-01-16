@@ -114,15 +114,72 @@ const $errorService: ErrorService | undefined = inject('$errorService')
 const formRef: Ref<QForm | null> = ref(null)
 
 
-const realEstateFields = [
-  FIELDS.FULL_NAME,
-  FIELDS.DATE_OF_BIRTH,
-  FIELDS.PHONE_NUMBER,
-  FIELDS.EMAIL,
-  FIELDS.ADDRESS,
-]
-
 const pages = [
+  {
+    key: 'calculations',
+    label: i18n.global.t('form_for_clients.calculations'),
+    sectionsLHS: [
+      {
+        key: 'calculation-data1',
+        title: i18n.global.t('dashboards.mortgage'),
+        fields: [FIELDS.PORTION, FIELDS.EXPIRATION_DATE],
+      },
+      {
+        key: 'calculation-data2',
+        title: i18n.global.t('form_for_clients.building_lease'),
+        fields: [FIELDS.BUILDING_LEASE],
+      },
+    ],
+    sectionsRHS: [
+      {
+        key: 'calculation-data3',
+        title: i18n.global.t('form_for_clients.renovation'),
+        fields: [FIELDS.RENOVATION, FIELDS.RENOVATION_YEAR, FIELDS.PRICE],
+      },
+      {
+        key: 'calculation-data4',
+        title: ' ',
+        fields: [FIELDS.AMORTISATION],
+      },
+      {
+        key: 'calculation-data5',
+        title: ' ',
+        fields: [FIELDS.TYPE, FIELDS.PRICE],
+      },
+    ]
+  },{
+    key: 'calculations',
+    label: i18n.global.t('form_for_clients.calculations'),
+    sectionsLHS: [
+      {
+        key: 'calculation-data1',
+        title: i18n.global.t('dashboards.mortgage'),
+        fields: [FIELDS.PORTION, FIELDS.EXPIRATION_DATE],
+      },
+      {
+        key: 'calculation-data2',
+        title: i18n.global.t('form_for_clients.building_lease'),
+        fields: [FIELDS.BUILDING_LEASE],
+      },
+    ],
+    sectionsRHS: [
+      {
+        key: 'calculation-data3',
+        title: i18n.global.t('form_for_clients.renovation'),
+        fields: [FIELDS.RENOVATION, FIELDS.RENOVATION_YEAR, FIELDS.PRICE],
+      },
+      {
+        key: 'calculation-data4',
+        title: ' ',
+        fields: [FIELDS.AMORTISATION],
+      },
+      {
+        key: 'calculation-data5',
+        title: ' ',
+        fields: [FIELDS.TYPE, FIELDS.PRICE],
+      },
+    ]
+  },
   {
     key: 'crm-data',
     label: i18n.global.t('employee_dashboard.customer'),
@@ -162,7 +219,7 @@ const pages = [
       },
       {
         key: 'property-data3',
-        title: " ",
+        title: ' ',
         fields: [FIELDS.OWNER_OCCUPIED],
       },
     ],

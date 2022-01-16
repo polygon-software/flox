@@ -1,5 +1,5 @@
 import {IS_VALID_DATE, IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
-import {QInput, QOptionGroup, QSelect} from 'quasar'
+import {QInput, QSelect} from 'quasar'
 import PasswordRepeatField from 'components/forms/fields/company_signup/PasswordRepeatField.vue'
 import Password from 'components/forms/fields/Password.vue'
 import CompanyAddressField from 'components/forms/fields/company_signup/CompanyAddressField.vue'
@@ -10,8 +10,12 @@ import CompanyUploadFields from 'components/forms/fields/document_upload/Company
 import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
+import YearPicker from 'components/forms/fields/generic/YearPicker.vue'
 import DisabledInputField from 'components/forms/fields/generic/PropertyInputFields.vue'
 import OwnerOccupiedOptionGroup from 'components/forms/fields/generic/OwnerOccupiedOptionGroup.vue'
+import RenovationOptionGroup from 'components/forms/fields/generic/RenovationOptionGroup.vue'
+import AmortisationOptionGroup from 'components/forms/fields/generic/AmortisationOptionGroup.vue'
+import TypeOptionGroup from 'components/forms/fields/generic/TypeOptionGroup.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {PROPERTY_TYPE} from "../../../shared/definitions/ENUMS";
@@ -276,6 +280,80 @@ const FIELDS: Record<string, Field> = {
       label: i18n.global.t('form_for_clients.enfeoffment'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  PORTION: {
+    key: 'portion',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'text',
+      label: i18n.global.t('form_for_clients.portion'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_string')]
+    },
+  },
+  BUILDING_LEASE: {
+    key: 'building_lease',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'text',
+      label: i18n.global.t('form_for_clients.building_lease'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_string')]
+    },
+  },
+  EXPIRATION_DATE: {
+    key: 'expiration_date',
+    component: markRaw(InputDatePicker),
+    attributes: {
+      dense: true,
+      type: Date,
+      label: i18n.global.t('form_for_clients.expiration_date'),
+      lazy_rules: 'true',
+      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
+    },
+  },
+  RENOVATION: {
+    key: 'property_type',
+    component: markRaw(RenovationOptionGroup),
+    attributes: {
+      label: i18n.global.t('form_for_clients.renovation'),
+      options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('general.yes'), i18n.global.t('general.no')]) || i18n.global.t('errors.invalid_option')]
+    },
+  },
+  RENOVATION_YEAR: {
+    key: 'renovation_year',
+    component: markRaw(YearPicker),
+    attributes: {
+      dense: true,
+      type: Date,
+      label: i18n.global.t('form_for_clients.renovation_year'),
+      lazy_rules: 'true',
+      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
+    },
+  },
+  AMORTISATION: {
+    key: 'amortisation',
+    component: markRaw(AmortisationOptionGroup),
+    attributes: {
+      label: i18n.global.t('form_for_clients.amortisation'),
+      options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('general.yes'), i18n.global.t('general.no')]) || i18n.global.t('errors.invalid_option')]
+    },
+  },
+  TYPE: {
+    key: 'amortisation',
+    component: markRaw(TypeOptionGroup),
+    attributes: {
+      label: i18n.global.t('form_for_clients.type'),
+      options: [{ label: i18n.global.t('form_for_clients.direct'), value: true}, {label: i18n.global.t('form_for_clients.indirect'), value: false}],
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('form_for_clients.direct'), i18n.global.t('form_for_clients.indirect')]) || i18n.global.t('errors.invalid_option')]
     },
   },
 }

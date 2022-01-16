@@ -161,6 +161,7 @@ export default {
     invalid_abbreviation: 'Bitte geben Sie ein gültiges Kürzel ein',
     invalid_name: 'Bitte geben Sie Ihren Namen ein',
     invalid_amount: 'Bitte geben Sie eine gültige Summe ein.',
+    invalid_string: 'Bitte geben Sie einen gültigen Name ein.',
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
     invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
@@ -231,6 +232,7 @@ export default {
   form_for_clients: {
     contact_info: 'Kontakt',
     property: 'Immobilie',
+    calculations: 'Berechnungen',
     property_type: 'Immobilientyp',
     owner_occupied: 'Selbstbewohnt',
     purchase: 'Kauf',
@@ -239,6 +241,14 @@ export default {
     market_value_estimation: 'Verkehrswertschätzung in CHF',
     current_value_of_mortgage: 'Aktuelle Höhe der Hypothek in CHF',
     enfeoffment: 'Belehnung in %',
+    building_lease: "Baurecht",
+    renovation: "Renovation",
+    portion: "Tranche",
+    expiration_date: "Ablaufdatum",
+    renovation_year: "Renovationsjahr",
+    amortisation: "Amortisation",
+    direct: "Direkt",
+    indirect: "Indirekt"
   },
   dossier_status_enum: {
     OPEN: 'Offen',
