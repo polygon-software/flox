@@ -77,9 +77,10 @@
                 v-if="form.step.value < form.pages.value.length"
                 color="primary"
                 :label="$t('buttons.next_step')"
-                :disable="!form.pageValid.value"
                 @click="$refs.stepper.next()"
               />
+ <!--              :disable="!form.pageValid.value" TODO: uncomment -->
+
               <q-btn
                 v-if="form.step.value === form.pages.value.length"
                 color="primary"
@@ -130,13 +131,11 @@ const pages = [
         key: 'crm-data1',
         title: i18n.global.t('employee_dashboard.customer'),
         fields: [FIELDS.FULL_NAME, FIELDS.DATE_OF_BIRTH],
-        lhs: true,
       },
       {
         key: 'crm-data2',
         title: i18n.global.t('account_data.domicile_address'),
         fields: [FIELDS.ADDRESS],
-        lhs: true,
       },
     ],
     sectionsRHS: [
@@ -144,14 +143,36 @@ const pages = [
         key: 'crm-data3',
         title: i18n.global.t('form_for_clients.contact_info'),
         fields: [FIELDS.EMAIL, FIELDS.PHONE_NUMBER],
-        lhs: false,
       },
     ]
   },
   {
-    key: 'real-estate',
+    key: 'property',
     label: i18n.global.t('form_for_clients.property'),
-    fields: realEstateFields, //TODO: change to sections
+    sectionsLHS: [
+      {
+        key: 'property-data1',
+        title: i18n.global.t('account_data.bank'),
+        fields: [FIELDS.BANK],
+      },
+      {
+        key: 'property-data2',
+        title: i18n.global.t('form_for_clients.property'),
+        fields: [FIELDS.PROPERTY_TYPE],
+      },
+      {
+        key: 'property-data3',
+        title: " ",
+        fields: [FIELDS.OWNER_OCCUPIED],
+      },
+    ],
+    sectionsRHS: [
+      {
+        key: 'property-data4',
+        title: i18n.global.t('form_for_clients.purchase'),
+        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT],
+      },
+    ]
   },
 ]
 const form: Form = new Form(pages as Record<string, unknown>[])

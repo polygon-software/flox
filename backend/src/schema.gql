@@ -485,6 +485,7 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getBankNames: [String!]!
   getBanks: [Bank!]!
   getDossierDocument(
     """URL expiration duration (in seconds); defaults to 15min"""

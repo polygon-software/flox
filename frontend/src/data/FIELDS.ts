@@ -1,5 +1,5 @@
 import {IS_VALID_DATE, IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
-import {QInput, QSelect} from 'quasar'
+import {QInput, QOptionGroup, QSelect} from 'quasar'
 import PasswordRepeatField from 'components/forms/fields/company_signup/PasswordRepeatField.vue'
 import Password from 'components/forms/fields/Password.vue'
 import CompanyAddressField from 'components/forms/fields/company_signup/CompanyAddressField.vue'
@@ -10,8 +10,11 @@ import CompanyUploadFields from 'components/forms/fields/document_upload/Company
 import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
+import DisabledInputField from 'components/forms/fields/generic/PropertyInputFields.vue'
+import OwnerOccupiedOptionGroup from 'components/forms/fields/generic/OwnerOccupiedOptionGroup.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
+import {PROPERTY_TYPE} from "../../../shared/definitions/ENUMS";
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -191,7 +194,90 @@ const FIELDS: Record<string, Field> = {
       attributes: {
           rules: [(val: string): boolean|string => val !== null || i18n.global.t('errors.missing_user_type')] // No validation needed
       }
-  }
+  },
+  BANK: {
+    key: 'bank',
+    component: markRaw(QSelect),
+    attributes: {
+      label: i18n.global.t('account_data.bank'),
+      options: ['Raiffeisen', 'UBS', 'ZKB', 'LuKB'], //TODO: replace with real data
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['Raiffeisen', 'UBS', 'ZKB', 'LuKB']) || i18n.global.t('errors.invalid_option')]
+    },
+  },
+  PROPERTY_TYPE: {
+    key: 'property_type',
+    component: markRaw(QSelect),
+    attributes: {
+      label: i18n.global.t('form_for_clients.property_type'),
+      options: Object.values(PROPERTY_TYPE),
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, Object.values(PROPERTY_TYPE)) || i18n.global.t('errors.invalid_option')]
+    },
+  },
+  OWNER_OCCUPIED: {
+    key: 'property_type',
+    component: markRaw(OwnerOccupiedOptionGroup), //TODO: design of QOptionGroup
+    attributes: {
+      label: i18n.global.t('form_for_clients.owner_occupied'),
+      options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('general.yes'), i18n.global.t('general.no')]) || i18n.global.t('errors.invalid_option')]
+    },
+  },
+  DATE_OF_PURCHASE: {
+    key: 'date_of_purchase',
+    component: markRaw(InputDatePicker),
+    attributes: {
+      dense: true,
+      type: Date,
+      label: i18n.global.t('form_for_clients.date_of_purchase'),
+      lazy_rules: 'true',
+      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
+    },
+  },
+  PRICE: {
+    key: 'price',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      label: i18n.global.t('form_for_clients.price'),
+      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  MARKET_VALUE_ESTIMATION: {
+    key: 'market_value_estimation',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'text',
+      label: i18n.global.t('form_for_clients.market_value_estimation'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  CURRENT_VALUE_OF_MORTGAGE: {
+    key: 'current_value_of_mortgage',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'text',
+      label: i18n.global.t('form_for_clients.current_value_of_mortgage'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  ENFEOFFMENT: {
+    key: 'enfeoffment',
+    component: markRaw(DisabledInputField),
+    attributes: {
+      dense: true,
+      type: 'text',
+      label: i18n.global.t('form_for_clients.enfeoffment'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
 }
 
 export {FIELDS}

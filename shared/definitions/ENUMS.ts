@@ -1,5 +1,3 @@
-import { registerEnumType } from '@nestjs/graphql';
-
 export enum DOSSIER_STATUS {
   OPEN = 'OPEN',
   SIGNED = 'SIGNED',
@@ -40,8 +38,3 @@ export enum PROPERTY_TYPE {
   PROPERTY_TYPE_2 = 'PROPERTY_TYPE_2',
   PROPERTY_TYPE_3 = 'PROPERTY_TYPE_3',
 }
-registerEnumType(DOSSIER_STATUS, { name: 'DossierStatus' });
-registerEnumType(OFFER_STATUS, { name: 'OfferStatus' });
-registerEnumType(ROLE, { name: 'Roles' });
-registerEnumType(CREATION_STATE, { name: 'creationState' });
-registerEnumType(PROPERTY_TYPE, { name: 'propertyType' });
