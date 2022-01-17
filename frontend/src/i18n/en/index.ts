@@ -11,7 +11,8 @@ export default {
     date: 'Datum',
     return: 'Return',
     uploading: 'Uploading...',
-    done: 'Done'
+    done: 'Done',
+    warning: 'Warning!'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -129,6 +130,7 @@ export default {
     upload: 'Upload',
     preview: 'Preview',
     save: 'Save',
+    discard: 'Discard',
   },
   documents: {
     choose_documents: 'Choose documents',
@@ -294,13 +296,14 @@ export default {
     ACCEPTED: 'Accepted',
     IN_PROCESS: 'In Process'
   },
-
   email: {
     subject_rejected: 'Rejected',
     body_rejected: 'Application is rejected'
   },
-
   bank: {
     new_user: 'New user'
+  },
+  warnings: {
+    // TODO: add all possible warnings once provided by SOI
   }
 };

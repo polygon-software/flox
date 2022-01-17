@@ -11,7 +11,8 @@ export default {
     date: 'Datum',
     return: 'Zurück',
     uploading: 'Wird hochgeladen...',
-    done: 'Fertig'
+    done: 'Fertig',
+    warning: 'Achtung!'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -130,7 +131,8 @@ export default {
     download: 'Herunterladen',
     upload: 'Hochladen',
     preview: 'Vorschau',
-    save: 'Speichern'
+    save: 'Speichern',
+    discard: 'Verwerfen',
   },
   documents: {
     choose_documents: 'Dokumente wählen',
@@ -303,4 +305,7 @@ export default {
   bank: {
     new_user: 'Neuer Benutzer'
   },
+  warnings: {
+    // TODO: add all possible warnings once provided by SOI
+  }
 };
