@@ -31,7 +31,7 @@ import {defineProps, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {calculateAge} from "src/helpers/date-helpers";
+import {calculateAge} from 'src/helpers/date-helpers';
 
 
 const props = defineProps({
