@@ -28,7 +28,7 @@ export class User{
    */
   validate(): boolean{
     try {
-      Joi.assert(this, UserItem as Schema<any>)
+      Joi.assert(this, UserItem as unknown as Schema)
       return true;
     } catch (e) {
       return false
