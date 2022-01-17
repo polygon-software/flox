@@ -11,7 +11,7 @@ import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
 import PropertyInputFields from 'components/forms/fields/generic/PropertyInputFields.vue'
-import OptionGroupTitle from 'components/forms/fields/generic/TitledOptionGroup.vue'
+import TitledOptionGroup from 'components/forms/fields/generic/TitledOptionGroup.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
@@ -218,7 +218,7 @@ const FIELDS: Record<string, Field> = {
   },
   OWNER_OCCUPIED: {
     key: 'property_type',
-    component: markRaw(OptionGroupTitle),
+    component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.owner_occupied'),
       options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
