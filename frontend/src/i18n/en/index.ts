@@ -252,6 +252,7 @@ export default {
     public: 'Public',
     private: 'Private',
     landlord: 'Building Lease Landlord',
+    landlord_warning: 'Only  mortgages with public building lease landlords are applicable'
   },
   dossier_status_enum: {
     OPEN: 'Open',

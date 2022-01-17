@@ -32,6 +32,10 @@
         type="radio"
         inline
       />
+      <warning-dialog
+        v-model="privateLandlord"
+        :description="$t('form_for_clients.landlord_warning')">
+      </warning-dialog>
     </div>
     <q-input
       v-model="price"
@@ -47,6 +51,7 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {ref,} from 'vue';
+import WarningDialog from "components/dialogs/WarningDialog.vue";
 
 const emit = defineEmits(['change'])
 
@@ -60,11 +65,11 @@ const landlordOptions = [
   {label: i18n.global.t('form_for_clients.private'), value: false},
 ]
 
-const selectedOption = ref(landlordOptions[0].value)
-const landlord = ref(options[0].value)
+const selectedOption = ref(options[0].value)
+const landlord = ref(landlordOptions[0].value)
+const privateLandlord = ref(landlord)
 const date = ref(new Date())
 const price = ref('')
-
 
 
 /**
@@ -75,6 +80,7 @@ const price = ref('')
 function emitValue() {
   emit('change', selectedOption)
 }
+
 
 /**
  * Emits the updated value, if it is valid

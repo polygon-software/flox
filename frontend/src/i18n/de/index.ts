@@ -253,7 +253,8 @@ export default {
     indirect: 'Indirekt',
     public: 'Öffentlich',
     private: 'Privat',
-    landlord: 'Baurechtgeber'
+    landlord: 'Baurechtgeber',
+    landlord_warning: 'Nur Hypotheken mit öffentlich-rechtliche Baurechtsgeber sind vermittelbar'
   },
   dossier_status_enum: {
     OPEN: 'Offen',
