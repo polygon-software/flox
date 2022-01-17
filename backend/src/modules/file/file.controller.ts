@@ -239,6 +239,7 @@ export class FileController {
     const file = await req.file();
     const updatedDossier = await this.fileService.uploadAssociatedFile(
       file,
+      FILE_TYPE.NONE as unknown as FILE_TYPE,
       dossierUuid,
       'dossierRepository',
       { onFile: null, onAssociation: 'finalDocument' },

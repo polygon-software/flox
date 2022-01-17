@@ -422,13 +422,13 @@ async function uploadPdfDocument(){
   }
 
   // Upload document (replaces existing finalDocument, if any)
-  const uploadResponse: Record<string, unknown>[] = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')
+  const uploadResponse: Record<string, unknown> = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')
 
   // Get actual file
-  const newPdf: Record<string, unknown> = uploadResponse[0].data.finalDocument as Record<string, unknown>
+  const newPdf: Record<string, unknown> = uploadResponse.finalDocument as Record<string, unknown>
 
   // Store to local variable & set loading state
-  fileUuid.value = newPdf.uuid
+  fileUuid.value = newPdf.uuid as string
   loading.value = false
 }
 
