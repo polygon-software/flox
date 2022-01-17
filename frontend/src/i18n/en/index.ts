@@ -10,7 +10,8 @@ export default {
     to: 'To',
     date: 'Datum',
     return: 'Return',
-    uploading: 'Uploading...'
+    uploading: 'Uploading...',
+    done: 'Done'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -169,7 +170,7 @@ export default {
       floor_plans: 'Floor plans',
       pictures: 'Photos',
       pictures_caption: 'Interior and exterior',
-      purchase_contract: 'Purchase contract. or purchase contract at that time',
+      purchase_contract: 'Purchase contract, or purchase contract at that time',
       renovations: 'Renovation list of the last years',
       legacy_cadaster: 'Contaminated sites register',
       legacy_cadaster_caption: 'Organized by the bank',
@@ -180,7 +181,7 @@ export default {
       reservation_contract: 'Reservation contract',
       market_value_estimate: 'Fair value estimate',
       sales_documentation: 'Sales documentation from that time',
-      situation_plan: 'Situationsplan/Katasterplan'
+      situation_plan: 'General plan of location/Cadastral map'
     }
   },
   dossier: {

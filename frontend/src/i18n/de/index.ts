@@ -10,7 +10,8 @@ export default {
     to: 'Bis',
     date: 'Datum',
     return: 'Zurück',
-    uploading: 'Wird hochgeladen...'
+    uploading: 'Wird hochgeladen...',
+    done: 'Fertig'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',

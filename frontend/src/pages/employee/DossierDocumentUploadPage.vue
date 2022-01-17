@@ -120,7 +120,7 @@
         class="q-ma-md"
         :label="loading ? null : $t('buttons.save')"
         color="primary"
-        :disable="loading || !canSubmit"
+        :disable="loading"
         @click="onSave"
       >
         <q-spinner
@@ -134,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, onBeforeMount, Ref, ref} from 'vue';
+import {inject, onBeforeMount, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile, useQuasar} from 'quasar';
@@ -207,7 +207,9 @@ onBeforeMount(()=>{
         files.value[subtype][documentType] = [docu]
       }
     })
-  }).catch((err)=>{console.error(err)})
+  }).catch((err)=>{
+    console.error(err)
+  })
 })
 
 
@@ -406,11 +408,6 @@ const uploadFor = ref({
   field: '',
 })
 
-// Whether the form is ready to be submitted
-const canSubmit = computed(() => {
-  return Object.keys(sections).every((sectionKey) => sectionComplete(sectionKey as 'financials'|'additional'|'property'))
-})
-
 /**
  * Uploads a file for the given section/field
  * @param {string} section - section key
@@ -502,23 +499,19 @@ function filesForField(section: string, field: string): File[]{
  * @returns {Promise<void>} - done
  */
 function onSave(){
-  // TODO discuss with Christoph: do we want saving to be available for incomplete input?
-  // Allow only if all sections complete
-  if(canSubmit.value){
-    loading.value = true;
-    $q.dialog({
-      component: DossierDocumentUploadDialog,
-      componentProps: {
-        files: files.value,
-        filesToDelete: filesToDelete.value,
-        dossierUuid: dossierUuid,
-      },
-      persistent: true
-    }).onOk(() => {
-      loading.value = false
-      void $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
-    })
-  }
+  loading.value = true;
+  $q.dialog({
+    component: DossierDocumentUploadDialog,
+    componentProps: {
+      files: files.value,
+      filesToDelete: filesToDelete.value,
+      dossierUuid: dossierUuid,
+    },
+    persistent: true
+  }).onOk(() => {
+    loading.value = false
+    void $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
+  })
 }
 
 </script>

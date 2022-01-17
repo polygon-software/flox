@@ -11,7 +11,6 @@ import {
   BankOnly,
   CurrentUser,
   EmployeeOnly,
-  AnyRole,
 } from '../../auth/authorization.decorator';
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
