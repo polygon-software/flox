@@ -31,11 +31,8 @@
         :options="landlordOptions"
         type="radio"
         inline
+        @update:model-value="landlordChange"
       />
-      <warning-dialog
-        v-model="privateLandlord"
-        :description="$t('form_for_clients.landlord_warning')">
-      </warning-dialog>
     </div>
     <q-input
       v-model="price"
@@ -52,8 +49,10 @@
 import {i18n} from 'boot/i18n';
 import {ref,} from 'vue';
 import WarningDialog from "components/dialogs/WarningDialog.vue";
+import {useQuasar} from "quasar";
 
 const emit = defineEmits(['change'])
+const $q = useQuasar()
 
 const options = [
   {label: i18n.global.t('general.yes'), value: true},
@@ -65,12 +64,19 @@ const landlordOptions = [
   {label: i18n.global.t('form_for_clients.private'), value: false},
 ]
 
-const selectedOption = ref(options[0].value)
+const selectedOption = ref(options[1].value)
 const landlord = ref(landlordOptions[0].value)
-const privateLandlord = ref(landlord)
 const date = ref(new Date())
 const price = ref('')
 
+function landlordChange(isPublic: boolean){
+  if(!isPublic){
+    $q.dialog({
+      component: WarningDialog,
+      componentProps: {description:  i18n.global.t('form_for_clients.landlord_warning') }}
+      )
+  }
+}
 
 /**
  * Emits the updated value, if it is valid
