@@ -11,7 +11,7 @@ export default {
     duplicate: 'Duplizieren',
     view: 'Ansehen',
     home: 'Home',
-    settings: 'Einstellungen'
+    settings: 'Einstellungen',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -23,7 +23,8 @@ export default {
     forgot_password: 'Passwort vergessen',
     reset_password: 'Passwort zurücksetzen',
     redirected: 'Sie werden in Kürze weitergeleitet...',
-    successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
+    successful_application: 'Antrag erfolgreich',
+    successful_application_description: 'Sie erhalten in Kürze per E-Mail Bescheid zu Ihrem Registrierungsantrag.',
     confirmed_registration: 'Registrierung bestätigt',
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
     back_to_login: 'Zurück zu Login',

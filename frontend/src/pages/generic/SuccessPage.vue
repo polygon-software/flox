@@ -6,8 +6,8 @@
       </q-card-section>
 
       <q-card-section style="height: 220px; text-align: center;" class="q-pt-xs q-mt-xs">
-        <p class="text-h4 q-mb-xs">{{ successMessage }}</p>
-        <p class="text-subtitle1">{{ furtherExplanation }}</p>
+        <p class="text-h4 q-mb-xs">{{ $t(title) }}</p>
+        <p class="text-subtitle1">{{ $t(description) }}</p>
         <br/>
         <br/>
         <p v-if="autoRedirect">{{ nextMessage }}</p>
@@ -27,51 +27,52 @@ import {defineProps, inject} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {i18n} from 'boot/i18n';
+import {RouteRecordRaw, useRoute} from 'vue-router';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
 /**
  * This component defines a generic error message that either has a redirect button or automatically redirects.
  * It takes the following properties:
- * @param {String} redirectPath - this is the redirect path of either the button or the automatic redirection
- * @param {Boolean} autoRedirect - boolean whether the user should be automatically redirected or not
- * @param {String} [successMessage] - Shows a quick success phrase (default is 'Hervorragend!' or 'Great!')
- * @param {String} [furtherExplanation] - a quick text (a sentence) to explain what was a success
+ * @param {String} [redirectPath] - this is the redirect path of either the button or the automatic redirection
+ * @param {Boolean} [autoRedirect] - boolean whether the user should be automatically redirected or not
+ * @param {String} [title] - Title phrase
+ * @param {String} [description] - a quick text (a sentence) to explain what was a success
  * @param {String} [nextMessage] - if it redirects automatically, this is the text that explains where it will redirect to
  * @param {String} [buttonLabel] - if it doesn't redirect automatically, this is the label of the button
  * @param {String} [autoRedirectDurationMS] - optional redirection duration length in milliseconds (default is 5000 milliseconds)
  */
 
-
-
 const props = defineProps({
   redirectPath: {
-    required: true,
+    required: false,
     type: String,
+    default: 'LOGIN'
   },
   autoRedirect: {
-    required: true,
+    required: false,
     type: Boolean,
+    default: true,
   },
-  successMessage: {
+  title: {
     required: false,
     type: String,
-    default: i18n.global.t('success')
+    default: i18n.global.t('authentication.successful_application')
   },
-  furtherExplanation: {
+  description: {
     required: false,
     type: String,
-    default: i18n.global.t('successful_application')
+    default: i18n.global.t('authentication.successful_application_description')
   },
   nextMessage: {
     required: false,
     type: String,
-    default: i18n.global.t('redirected')
+    default: i18n.global.t('authentication.redirected')
   },
   buttonLabel: {
     required: false,
     type: String,
-    default: i18n.global.t('back_to_login')
+    default: i18n.global.t('authentication.back_to_login')
   },
   autoRedirectDurationMS: {
     required: false,
@@ -86,12 +87,12 @@ const props = defineProps({
  */
 async function redirectOnClick(): Promise<void> {
   // Redirect to login page
-  await $routerService?.routeTo(ROUTES.redirectPath)
+  await $routerService?.routeTo(ROUTES[props.redirectPath] )
 }
 
 if (props.autoRedirect) {
   setTimeout(function () {
-    void $routerService?.routeTo(ROUTES.redirectPath)
+    void $routerService?.routeTo(ROUTES[props.redirectPath] )
   }, props.autoRedirectDurationMS);
 }
 
