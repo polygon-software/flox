@@ -1,6 +1,6 @@
 <template>
   <div class="row q-mb-md">
-    <h7 class="col q-py-sm">{{ $t('form_for_clients.owner_occupied') }}</h7>
+    <strong class="col q-py-sm">{{ $t('form_for_clients.owner_occupied') }}</strong>
     <q-option-group
       class="col"
       v-model="selectedOption"

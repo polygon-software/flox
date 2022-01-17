@@ -217,7 +217,7 @@ const FIELDS: Record<string, Field> = {
   },
   OWNER_OCCUPIED: {
     key: 'property_type',
-    component: markRaw(OwnerOccupiedOptionGroup), //TODO: design of QOptionGroup
+    component: markRaw(OwnerOccupiedOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.owner_occupied'),
       options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
@@ -229,10 +229,7 @@ const FIELDS: Record<string, Field> = {
     key: 'date_of_purchase',
     component: markRaw(InputDatePicker),
     attributes: {
-      dense: true,
-      type: Date,
       label: i18n.global.t('form_for_clients.date_of_purchase'),
-      lazy_rules: 'true',
       rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
     },
   },

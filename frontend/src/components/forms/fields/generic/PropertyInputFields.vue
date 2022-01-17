@@ -29,6 +29,7 @@
       type="text"
       dense
       disable
+      label-color="black"
       :label="$t('form_for_clients.enfeoffment')"
       >
     </q-input>
@@ -45,9 +46,17 @@ const price = ref('')
 const market_value_estimation = ref('')
 const current_value_of_mortgage = ref('')
 
+
+/**
+ * Automatically keeps enfoffmenet calculation up to date
+ * @returns {String}
+ */
 let enfeoffment = computed(()=>  {
-  return Math.abs(Number.parseInt(current_value_of_mortgage.value)) / Math.abs(Number.parseInt(price.value)) //TODO: normalize & default 0
-}) //TODO style to black
+  if(!current_value_of_mortgage.value || !price.value){
+    return "-"
+  }
+  return (Math.abs(Number.parseInt(current_value_of_mortgage.value)) / Math.abs(Number.parseInt(price.value))) * 100 + "%"
+})
 
 
 /**

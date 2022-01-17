@@ -31,7 +31,7 @@
                 <div
                   v-for="leftSection in page.sectionsLHS"
                   :key="leftSection.key">
-                  <h7 class="q-py-xl q-my-xl">{{ leftSection.title }}</h7>
+                  <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
                   <component
                     :is="field.component"
                     v-for="field in leftSection.fields"
@@ -47,7 +47,7 @@
                 <div
                   v-for="rightSection in page.sectionsRHS"
                   :key="rightSection.key">
-                  <h7 class="q-py-xl q-my-xl">{{ rightSection.title }}</h7>
+                  <strong class="q-py-xl q-my-xl">{{ rightSection.title }}</strong>
                   <component
                     :is="field.component"
                     v-for="field in rightSection.fields"
@@ -114,14 +114,6 @@ const $errorService: ErrorService | undefined = inject('$errorService')
 const formRef: Ref<QForm | null> = ref(null)
 
 
-const realEstateFields = [
-  FIELDS.FULL_NAME,
-  FIELDS.DATE_OF_BIRTH,
-  FIELDS.PHONE_NUMBER,
-  FIELDS.EMAIL,
-  FIELDS.ADDRESS,
-]
-
 const pages = [
   {
     key: 'crm-data',
@@ -162,7 +154,7 @@ const pages = [
       },
       {
         key: 'property-data3',
-        title: " ",
+        title: ' ',
         fields: [FIELDS.OWNER_OCCUPIED],
       },
     ],

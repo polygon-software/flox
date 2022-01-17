@@ -1,6 +1,12 @@
 <template>
   <div >
-    <q-input v-model="date" mask="date" :rules="['date']">
+    <p>Test:  {{props.dateLabel}}</p>
+    <q-input
+      v-model="date"
+      mask="date"
+      :rules="['date']"
+      dense
+      :label="props.dateLabel">
       <template #append>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
@@ -17,7 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {defineProps, ref} from 'vue'
+
+const props = defineProps({
+  dateLabel: {
+    type: String,
+    required: true,
+  },
+})
 const emit = defineEmits(['change'])
 
 const date = ref(new Date())
