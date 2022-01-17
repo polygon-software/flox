@@ -27,7 +27,7 @@ export default {
     successful_application_description: 'Sie erhalten in Kürze per E-Mail Bescheid zu Ihrem Registrierungsantrag.',
     confirmed_registration: 'Registrierung bestätigt',
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
-    back_to_login: 'Zurück zu Login',
+    back_to_login: 'Zurück zum Login',
     change_password: 'Passwort ändern',
     no_account_yet: 'Noch keinen Account?',
     please_enter_username: 'Bitte geben Sie ihren Benutzernamen ein',

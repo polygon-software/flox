@@ -27,7 +27,6 @@ import {defineProps, inject} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {i18n} from 'boot/i18n';
-import {RouteRecordRaw, useRoute} from 'vue-router';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -52,7 +51,7 @@ const props = defineProps({
   autoRedirect: {
     required: false,
     type: Boolean,
-    default: true,
+    default: false,
   },
   title: {
     required: false,
