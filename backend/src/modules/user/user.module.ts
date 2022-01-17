@@ -4,10 +4,10 @@ import { UserResolver } from './user.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Address } from '../address/entities/address.entity';
-import { Notification } from '../notification/entities/notification.entity';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Address, Notification])],
+  imports: [TypeOrmModule.forFeature([User, Address]), NotificationModule],
   providers: [UserResolver, UserService],
   exports: [UserService],
 })

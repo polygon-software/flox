@@ -15,14 +15,13 @@ import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
 import { CreateNotificationInput } from '../notification/dto/input/create-notification.input';
 import { Notification } from '../notification/entities/notification.entity';
 import { Announcement } from '../announcement/entities/announcement.entity';
-import { DeleteNotificationInput } from '../notification/dto/input/delete-notification.input';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
-    @InjectRepository(Notification)
-    private readonly notificationRepository: Repository<Notification>,
+    private readonly notificationService: NotificationService,
   ) {}
 
   /**
@@ -203,33 +202,15 @@ export class UserService {
       role: role,
     });
     const notifications: Array<Notification> = [];
-    users.forEach((user) => {
-      const notification = this.notificationRepository.create({
-        ...createNotificationInput,
-        user: user,
-      });
-      notifications.push(notification);
-    });
     await Promise.all(
-      notifications.map(
-        async (notification) =>
-          await this.notificationRepository.save(notification),
-      ),
+      users.map(async (user) => {
+        const notification = await this.notificationService.create({
+          ...createNotificationInput,
+          user: user,
+        });
+        notifications.push(notification);
+      }),
     );
     return notifications;
-  }
-
-  async deleteNotification(
-    deleteNotificationInput: DeleteNotificationInput,
-  ): Promise<Notification> {
-    const notification = await this.notificationRepository.findOne(
-      deleteNotificationInput.uuid,
-    );
-    const uuid = notification.uuid;
-    const deleted_notification = await this.notificationRepository.remove(
-      notification,
-    );
-    deleted_notification.uuid = uuid;
-    return deleted_notification;
   }
 }

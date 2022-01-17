@@ -7,19 +7,19 @@ export class UpdateNotificationInput {
   @IsUUID()
   uuid: string;
 
-  @Field(() => String, { description: 'Title' })
+  @Field(() => String, { description: 'Title', nullable: true })
   @IsString()
   title: string;
 
-  @Field(() => Date, { description: 'Date of receiving' })
+  @Field(() => Date, { description: 'Date of receiving', nullable: true })
   @IsDate()
   received: Date;
 
-  @Field(() => String, { description: 'Content' })
+  @Field(() => String, { description: 'Content', nullable: true })
   @IsString()
   content: string;
 
-  @Field(() => Boolean, { description: 'Read status' })
+  @Field(() => Boolean, { description: 'Read status', nullable: true })
   @IsBoolean()
   isRead: boolean;
 }

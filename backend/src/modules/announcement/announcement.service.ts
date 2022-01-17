@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Announcement } from './entities/announcement.entity';
 import { UserService } from '../user/user.service';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class AnnouncementService {
@@ -15,6 +16,7 @@ export class AnnouncementService {
     @InjectRepository(Announcement)
     private readonly announcementsRepository: Repository<Announcement>,
     private readonly userService: UserService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async create(
@@ -101,7 +103,7 @@ export class AnnouncementService {
     );
     await Promise.all(
       announcement.notifications.map((notification) =>
-        this.userService.deleteNotification(notification),
+        this.notificationService.delete(notification),
       ),
     );
     const uuid = announcement.uuid;

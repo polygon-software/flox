@@ -84,6 +84,8 @@ import { i18n } from 'boot/i18n';
 import MessagePreview from 'components/notifications/MessagePreview.vue';
 import MessageDetail from 'components/notifications/MessageDetail.vue';
 import {Notification} from 'src/data/types/Notification';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {UPDATE_NOTIFICATION} from 'src/data/queries/NOTIFICATIONS';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -130,12 +132,23 @@ const filteredMessages = computed(() => {
 })
 
 /**
- * Opens the dialog which contains the detail view of a message.
- * @param {Message} message - the message that was selected
+ * Opens the dialog which contains the detail view of a notification.
+ * @param {Message} notification - the notification that was selected
  * @returns {void}
  */
-function openMessage(message: Notification) {
-  selectedMessage.value = message
+function openMessage(notification: Notification) {
+  executeMutation(
+    UPDATE_NOTIFICATION,
+    {
+      updateNotificationInput: {
+        uuid: notification.uuid,
+        isRead: true,
+      }
+    }
+  ).catch((e) => {
+    console.error(e);
+  })
+  selectedMessage.value = notification
   showMessageDetail.value = true
 }
 
@@ -145,9 +158,6 @@ function openMessage(message: Notification) {
  * @returns {void}
  */
 function closeMessage() {
-  if(selectedMessage.value){
-    selectedMessage.value.isRead = true
-  }
   selectedMessage.value = null
   showMessageDetail.value = false
 }
