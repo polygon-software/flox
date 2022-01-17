@@ -11,10 +11,17 @@ import fastify = require('fastify');
 import { Public } from '../../auth/authentication.decorator';
 import { AnyRole } from '../../auth/authorization.decorator';
 import { ERRORS } from '../../error/ERRORS';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Controller()
 export class FileController {
-  constructor(private readonly fileService: FileService) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly fileService: FileService,
+  ) {}
 
   @Public()
   @Post('/uploadPublicFile')
@@ -66,7 +73,7 @@ export class FileController {
     res.send(newFile);
   }
 
-  @Post('/uploadUserIDFile')
+  @Post('/uploadUserIDFiles')
   @Public()
   async uploadUserIDFile(
     @Req() req: fastify.FastifyRequest,
@@ -80,19 +87,33 @@ export class FileController {
     }
 
     // Determine user UUID from query param
-    const dossierUuid: string = query.did;
+    const userUuid: string = query.uid;
+
+    if (!userUuid) {
+      throw new Error(ERRORS.no_user_found);
+    }
+
+    const user = await this.userRepository.findOne(userUuid);
+
+    // Throw error if user doesn't exist
+    if (!user) {
+      throw new Error(ERRORS.no_user_found);
+    }
+
     const files = await req.saveRequestFiles();
-    let updatedDossier;
+
+    let updatedUser;
+
     for (const file of files) {
-      updatedDossier = await this.fileService.uploadAssociatedFile(
+      updatedUser = await this.fileService.uploadAssociatedFile(
         file,
-        dossierUuid,
+        userUuid,
         'userRepository',
         { onFile: 'user', onAssociation: 'documents' },
-        req['user'].userId,
+        userUuid,
       );
     }
     res.header('access-control-allow-origin', '*');
-    res.send(updatedDossier);
+    res.send(updatedUser);
   }
 }

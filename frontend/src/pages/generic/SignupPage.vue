@@ -18,6 +18,7 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import {CREATE_USER} from 'src/data/mutations/USER';
 import ROUTES from 'src/router/routes';
 import {ErrorService} from 'src/services/ErrorService';
+import {uploadUserIdFiles} from 'src/helpers/file-helpers';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -41,6 +42,7 @@ async function onSignup(formValues: Record<string, unknown>): Promise<void>{
   const idFront: File = (formValues.id_upload as Record<string, File>).front
   const idBack: File = (formValues.id_upload as Record<string, File>).back
 
+
   // Sign up via Cognito
   const cognitoId = await $authService?.signUp(username, email, password).catch((err: Error) => {
     $errorService?.showErrorDialog(err)
@@ -63,9 +65,13 @@ async function onSignup(formValues: Record<string, unknown>): Promise<void>{
   });
 
   // Upload ID files
-  // TODO handle ID file upload
-
-
+  const idFiles = {
+    idFront,
+    idBack
+  }
+  await uploadUserIdFiles(idFiles, cognitoId).catch((e: Error) => {
+    $errorService?.showErrorDialog(e)
+  })
 
   // Reroute to generic success page TODO: add props/messages
   await $routerService?.routeTo(ROUTES.SUCCESS)

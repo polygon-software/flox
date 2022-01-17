@@ -28,6 +28,50 @@ type Address {
   zipCode: String!
 }
 
+type Bank {
+  """Three letter abbreviation of the Bank"""
+  abbreviation: String!
+
+  """Address"""
+  address: Address!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Name of the Bank"""
+  name: String!
+
+  """Offers made by Bank"""
+  offers: [Offer!]!
+
+  """Dossier where the mortgage originally belongs to the bank"""
+  own_mortgages: [Dossier!]!
+
+  """Phone Number"""
+  phone: String
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """UUID"""
+  uuid: ID!
+}
+
 enum Category {
   CARS
   CELEBRITIES
@@ -60,6 +104,62 @@ type Comment {
 
   """The user who wrote this comment"""
   user: User!
+
+  """UUID"""
+  uuid: ID!
+}
+
+type Company {
+  """Branch structure"""
+  branch_structure: Boolean!
+
+  """Company Name"""
+  company_name: String!
+
+  """Correspondence address"""
+  correspondence_address: Address!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Stage of the creation process"""
+  creation_state: creationState!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Documents of the company"""
+  documents: [PrivateFile!]
+
+  """Domicile address"""
+  domicile_address: Address!
+
+  """Mail"""
+  email: String!
+
+  """Employees of the company"""
+  employees: [Employee!]
+
+  """First Name"""
+  first_name: String!
+
+  """Language"""
+  language: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """Company UID"""
+  uid: String!
 
   """UUID"""
   uuid: ID!
@@ -150,7 +250,121 @@ input DeleteUserInput {
   uuid: ID!
 }
 
+type Dossier {
+  """Date of birth of customer"""
+  born: DateTime!
+
+  """Address"""
+  correspondence_address: Address!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Documents of the dossier"""
+  documents: [PrivateFile!]
+
+  """Mail"""
+  email: String!
+
+  """Employee who created the Dossier"""
+  employee: Employee!
+
+  """Final summary document, to be signed by customer"""
+  finalDocument: PrivateFile
+
+  """First Name"""
+  first_name: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Money loaned"""
+  loan_sum: Float!
+
+  """ToDo"""
+  non_arrangeable: Boolean!
+
+  """List of Offers"""
+  offers: [Offer!]!
+
+  """Previous Bank of the customer"""
+  original_bank: Bank!
+
+  """Address of Property"""
+  property_address: Address!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """Status of Dossier"""
+  status: DossierStatus!
+
+  """UUID"""
+  uuid: ID!
+}
+
+enum DossierStatus {
+  COMPLETED
+  IN_PROGRESS
+  OFFERED
+  OPEN
+  REJECTED
+  SENT
+  SIGNED
+  SUBMITTED
+}
+
 input DuplicateProductInput {
+  uuid: ID!
+}
+
+type Employee {
+  """Company"""
+  company: Company!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Dossiers of employee"""
+  dossiers: [Dossier!]!
+
+  """Mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """UUID"""
   uuid: ID!
 }
 
@@ -168,6 +382,39 @@ type Mutation {
   update(updateUserInput: UpdateUserInput!): User!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   updateProduct(pictures: [String!] = null, updateProductInput: UpdateProductInput!): Product!
+}
+
+type Offer {
+  """Bank making the offer"""
+  bank: Bank!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """The Offer as a PDF"""
+  documents: [PrivateFile!]
+
+  """Dossier of Offer"""
+  dossier: Dossier!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Status of Dossier"""
+  status: OfferStatus!
+
+  """UUID"""
+  uuid: ID!
+}
+
+enum OfferStatus {
+  ACCEPTED
+  INTERESTED
+  IN_PROCESS
+  RETRACTED
 }
 
 type PrivateFile {
@@ -446,4 +693,11 @@ enum UserStatus {
   APPLIED
   DISABLED
   NONE
+}
+
+enum creationState {
+  APPLIED
+  AWAITING_DOCUMENTS
+  DOCUMENTS_UPLOADED
+  DONE
 }
