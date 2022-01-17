@@ -5,8 +5,12 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import EnableUserDialog from 'components/dialogs/EnableUserDialog.vue';
 import {QVueGlobals} from 'quasar';
-import CreateAnnouncementDialog from 'components/dialogs/CreateAnnouncementDialog.vue';
+import CreateAnnouncementDialog from 'components/dialogs/announcement/CreateAnnouncementDialog.vue';
+import UpdateAnnouncementDialog from 'components/dialogs/announcement/UpdateAnnouncementDialog.vue';
+import DeleteAnnouncementDialog from 'components/dialogs/announcement/DeleteAnnouncementDialog.vue';
 import {CREATE_ANNOUNCEMENT} from 'src/data/queries/ANNOUNCEMENTS';
+import {UPDATE_ANNOUNCEMENT} from 'src/data/queries/ANNOUNCEMENTS';
+import {DELETE_ANNOUNCEMENT} from 'src/data/queries/ANNOUNCEMENTS';
 import {Announcement} from 'src/data/types/Announcement';
 
 /**
@@ -106,7 +110,7 @@ export function enableUser(user: Record<string, unknown>, $q: QVueGlobals): void
 
 
 /**
- * Opens a dialog for enabling a user's account
+ * Opens a dialog for creating an announcement
  * @param {QVueGlobals} $q - Quasar instance for showing dialogs
  * @returns {Promise<void>} - if the user was enabled
  */
@@ -139,6 +143,94 @@ export function createAnnouncement($q: QVueGlobals): void{
       showNotification(
         $q,
         i18n.global.t('errors.error_while_creating_announcement'),
+        undefined,
+        'negative'
+      )
+    })
+  })
+}
+
+/**
+ * Opens a dialog for updating an announcement
+ * @param {Announcement} originalAnnouncement - the announcement to update
+ * @param {QVueGlobals} $q - Quasar instance for showing dialogs
+ * @returns {Promise<void>} - if the user was enabled
+ */
+export function updateAnnouncement(originalAnnouncement: Announcement, $q: QVueGlobals): void{
+  // Show info dialog for enabling account
+  $q.dialog({
+    component: UpdateAnnouncementDialog,
+    componentProps: {
+      originalAnnouncement: originalAnnouncement,
+    }
+  }).onOk((announcement: Announcement) => {
+    // Enable account on backend
+    executeMutation(
+      UPDATE_ANNOUNCEMENT,
+      {
+        updateAnnouncementInput: {
+          uuid: announcement.uuid,
+          title: announcement.title,
+          content: announcement.content,
+        }
+      }
+    ).then(() => {
+      // Show confirmation prompt
+      showNotification(
+        $q,
+        i18n.global.t('messages.announcement_updated'),
+        undefined,
+        'positive'
+      )
+    }).catch((e) => {
+      console.error(e);
+      // Show error prompt
+      showNotification(
+        $q,
+        i18n.global.t('errors.error_while_updating_announcement'),
+        undefined,
+        'negative'
+      )
+    })
+  })
+}
+
+/**
+ * Opens a dialog for deleting an announcement
+ * @param {Announcement} originalAnnouncement - the announcement to update
+ * @param {QVueGlobals} $q - Quasar instance for showing dialogs
+ * @returns {Promise<void>} - if the user was enabled
+ */
+export function deleteAnnouncement(originalAnnouncement: Announcement, $q: QVueGlobals): void{
+  // Show info dialog for enabling account
+  $q.dialog({
+    component: DeleteAnnouncementDialog,
+    componentProps: {
+      originalAnnouncement: originalAnnouncement,
+    }
+  }).onOk((announcement: Announcement) => {
+    // Enable account on backend
+    executeMutation(
+      DELETE_ANNOUNCEMENT,
+      {
+        deleteAnnouncementInput: {
+          uuid: announcement.uuid
+        }
+      }
+    ).then(() => {
+      // Show confirmation prompt
+      showNotification(
+        $q,
+        i18n.global.t('messages.announcement_deleted'),
+        undefined,
+        'positive'
+      )
+    }).catch((e) => {
+      console.error(e);
+      // Show error prompt
+      showNotification(
+        $q,
+        i18n.global.t('errors.error_while_deleting_announcement'),
         undefined,
         'negative'
       )

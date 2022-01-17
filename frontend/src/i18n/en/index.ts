@@ -219,6 +219,8 @@ export default {
     permanent: 'Permanent',
     temporary: 'Temporary, until:',
     create_announcement: 'Create announcement',
+    update_announcement: 'Update announcement',
+    delete_announcement: 'Delete announcement',
   },
   finances: {
     general: 'General',
@@ -239,5 +241,9 @@ export default {
     content: 'Content',
     user_role: 'User role',
     create: 'Create',
+    date: 'Date',
+    edit: 'Edit',
+    update: 'Update',
+    delete: 'Delete',
   }
 }

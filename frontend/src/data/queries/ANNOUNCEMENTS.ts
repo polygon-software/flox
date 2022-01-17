@@ -22,6 +22,40 @@ export const CREATE_ANNOUNCEMENT = {
   cacheLocation: 'createAnnouncement'
 }
 
+export const UPDATE_ANNOUNCEMENT = {
+  mutation: gql`
+    mutation updateAnnouncement($updateAnnouncementInput: UpdateAnnouncementInput!){
+      updateAnnouncement (updateAnnouncementInput: $updateAnnouncementInput) {
+        uuid
+        title
+        content
+        date
+        userRole
+        __typename
+      }
+    }`,
+  tables: ['announcement'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: 'updateAnnouncement'
+}
+
+export const DELETE_ANNOUNCEMENT = {
+  mutation: gql`
+    mutation deleteAnnouncement($deleteAnnouncementInput: DeleteAnnouncementInput!){
+      deleteAnnouncement (deleteAnnouncementInput: $deleteAnnouncementInput) {
+        uuid
+        title
+        content
+        date
+        userRole
+        __typename
+      }
+    }`,
+  tables: ['announcement'],
+  type: MutationTypes.DELETE,
+  cacheLocation: 'deleteAnnouncement'
+}
+
 export const ALL_ANNOUNCEMENTS = {
   query: gql`
     query{

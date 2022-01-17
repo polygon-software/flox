@@ -26,6 +26,7 @@
           :label="$t('admin.create_announcement')"
           color="positive"
           class="col-auto q-mb-md"
+          icon="create"
           dense
           rounded
           @click="() => createAnnouncement($q)"
@@ -45,10 +46,7 @@
 <script setup lang="ts">
 import AnnouncementsTable from 'components/table/AnnouncementsTable.vue';
 import {ref} from 'vue';
-import {QVueGlobals, useQuasar} from 'quasar';
 import {createAnnouncement} from 'src/helpers/admin-helpers';
-
-const $q: QVueGlobals = useQuasar()
 
 // Search term
 const search = ref('')

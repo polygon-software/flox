@@ -6,7 +6,7 @@
     <q-card style="width: 600px;">
       <q-card-section>
         <h5 class="q-ma-none q-pa-none">
-          {{ $t('admin.create_announcement') }}
+          {{ $t('admin.delete_announcement') }}
         </h5>
       </q-card-section>
       <q-card-section>
@@ -16,31 +16,22 @@
         >
           <q-item>
             <q-item-section>
-              <q-input
-                v-model="announcement.title"
-                :label="$t('announcement.title')"
-
-              />
+              <q-item-label>{{ $t('announcement.title') }}</q-item-label>
+              {{ announcement.title }}
             </q-item-section>
           </q-item>
 
           <q-item>
             <q-item-section>
               <q-item-label>{{ $t('announcement.content') }}</q-item-label>
-                <q-editor
-                  v-model="announcement.content"
-                />
+              {{ announcement.content }}
             </q-item-section>
           </q-item>
 
           <q-item>
             <q-item-section>
-              <q-select
-                v-model="announcement.userRole"
-                :label="$t('announcement.user_role')"
-                :options="options"
-                map-options emit-value
-              />
+              <q-item-label>{{ $t('announcement.user_role') }}</q-item-label>
+              {{ announcement.userRole }}
             </q-item-section>
           </q-item>
         </q-list>
@@ -48,8 +39,8 @@
       <q-card-actions>
         <q-btn
           class="q-ma-md"
-          :label="$t('announcement.create')"
-          color="positive"
+          :label="$t('announcement.delete')"
+          color="negative"
           @click="onOk"
         />
         <q-btn
@@ -64,18 +55,38 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineEmits, ref, Ref} from 'vue'
+import {defineEmits, defineProps, ref, Ref} from 'vue'
 import {QDialog} from 'quasar';
 import {Announcement} from 'src/data/types/Announcement';
-import {ROLE} from '../../../../shared/definitions/ENUM'
+
+const props = defineProps({
+  originalAnnouncement: {
+    required: true,
+    type: Announcement,
+    uuid: {
+      required: true,
+      type: String,
+    },
+    title: {
+      required: true,
+      type: String,
+    },
+    content: {
+      required: true,
+      type: String,
+    },
+    userRole:{
+      required: true,
+      type: String,
+    },
+  }
+})
 
 const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const announcement = ref(new Announcement(undefined, undefined, undefined, ROLE.PLAYER))
-
-const options = Object.entries(ROLE).map(([key, value]) => {return {label: key, value: value}})
+const announcement = ref({...props.originalAnnouncement})
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
