@@ -71,23 +71,38 @@ export class AnnouncementService {
     updateAnnouncementInput: UpdateAnnouncementInput,
   ): Promise<Announcement> {
     // Update the announcement
-    const announcement = this.announcementsRepository.create(
-      updateAnnouncementInput,
-    );
+    const announcement = this.announcementsRepository.create({
+      ...updateAnnouncementInput,
+      date: new Date(),
+    });
     await this.announcementsRepository.update(
       updateAnnouncementInput.uuid,
       announcement,
     );
-    return await this.announcementsRepository.findOne(
+    const updatedAnnouncement = await this.announcementsRepository.findOne(
       updateAnnouncementInput.uuid,
+      { relations: ['notifications'] },
     );
+    updatedAnnouncement.notifications.forEach((notification) => {
+      notification.title = announcement.title;
+      notification.content = announcement.content;
+      notification.received = announcement.date;
+      notification.isRead = false;
+    });
+    return await this.announcementsRepository.save(updatedAnnouncement);
   }
 
-  async remove(
+  async delete(
     deleteAnnouncementInput: DeleteAnnouncementInput,
   ): Promise<Announcement> {
     const announcement = await this.announcementsRepository.findOne(
       deleteAnnouncementInput.uuid,
+      { relations: ['notifications'] },
+    );
+    await Promise.all(
+      announcement.notifications.map((notification) =>
+        this.userService.deleteNotification(notification),
+      ),
     );
     const uuid = announcement.uuid;
     const deleted_announcement = await this.announcementsRepository.remove(

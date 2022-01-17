@@ -15,6 +15,7 @@ import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
 import { CreateNotificationInput } from '../notification/dto/input/create-notification.input';
 import { Notification } from '../notification/entities/notification.entity';
 import { Announcement } from '../announcement/entities/announcement.entity';
+import { DeleteNotificationInput } from '../notification/dto/input/delete-notification.input';
 
 @Injectable()
 export class UserService {
@@ -216,5 +217,19 @@ export class UserService {
       ),
     );
     return notifications;
+  }
+
+  async deleteNotification(
+    deleteNotificationInput: DeleteNotificationInput,
+  ): Promise<Notification> {
+    const notification = await this.notificationRepository.findOne(
+      deleteNotificationInput.uuid,
+    );
+    const uuid = notification.uuid;
+    const deleted_notification = await this.notificationRepository.remove(
+      notification,
+    );
+    deleted_notification.uuid = uuid;
+    return deleted_notification;
   }
 }

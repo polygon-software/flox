@@ -57,10 +57,10 @@ export class AnnouncementResolver {
 
   @Public()
   @Mutation(() => Announcement)
-  async removeAnnouncement(
+  async deleteAnnouncement(
     @Args('deleteAnnouncementInput')
     deleteAnnouncementInput: DeleteAnnouncementInput,
   ): Promise<Announcement> {
-    return this.announcementsService.remove(deleteAnnouncementInput);
+    return this.announcementsService.delete(deleteAnnouncementInput);
   }
 }

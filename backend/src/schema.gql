@@ -176,11 +176,11 @@ type Mutation {
   createAnnouncement(createAnnouncementInput: CreateAnnouncementInput!): Announcement!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
+  deleteAnnouncement(deleteAnnouncementInput: DeleteAnnouncementInput!): Announcement!
   disableUser(uuid: String!): User!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   enableUser(uuid: String!): User!
   remove(deleteUserInput: DeleteUserInput!): User!
-  removeAnnouncement(deleteAnnouncementInput: DeleteAnnouncementInput!): Announcement!
   removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   temporarilyDisableUser(tempDisableUserInput: TempDisableUserInput!): User!
@@ -372,14 +372,8 @@ input UpdateAnnouncementInput {
   """Content"""
   content: String!
 
-  """Date of announcement"""
-  date: DateTime!
-
   """Title"""
   title: String!
-
-  """User role to receive notification"""
-  userRole: Role!
 
   """UUID"""
   uuid: ID!
