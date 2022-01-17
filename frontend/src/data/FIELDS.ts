@@ -9,9 +9,9 @@ import ConditionsField from 'components/forms/fields/company_signup/ConditionsFi
 import CompanyUploadFields from 'components/forms/fields/document_upload/CompanyUploadFields.vue'
 import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
+import TitledOptionGroup from 'components/forms/fields/generic/TitledOptionGroup.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
-import PropertyInputFields from 'components/forms/fields/generic/PropertyInputFields.vue'
-import OptionGroupTitle from 'components/forms/fields/generic/TitledOptionGroup.vue'
+import PropertyInputFields from 'components/forms/fields/specific/PropertyInputFields.vue'
 import BuildingLeaseDropdown from 'components/forms/fields/specific/BuildingLeaseDropdown.vue'
 import MortgageFields from 'components/forms/fields/specific/MortgageFields.vue'
 import {markRaw} from 'vue';
@@ -220,7 +220,7 @@ const FIELDS: Record<string, Field> = {
   },
   OWNER_OCCUPIED: {
     key: 'property_type',
-    component: markRaw(OptionGroupTitle),
+    component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.owner_occupied'),
       options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
@@ -314,7 +314,7 @@ const FIELDS: Record<string, Field> = {
   },
   RENOVATION: {
     key: 'property_type',
-    component: markRaw(OptionGroupTitle),
+    component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.renovation'),
       options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
@@ -335,7 +335,7 @@ const FIELDS: Record<string, Field> = {
   },
   AMORTISATION: {
     key: 'amortisation',
-    component: markRaw(OptionGroupTitle),
+    component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.amortisation'),
       options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
@@ -345,7 +345,7 @@ const FIELDS: Record<string, Field> = {
   },
   TYPE: {
     key: 'amortisation',
-    component: markRaw(OptionGroupTitle),
+    component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.type'),
       options: [{ label: i18n.global.t('form_for_clients.direct'), value: true}, {label: i18n.global.t('form_for_clients.indirect'), value: false}],

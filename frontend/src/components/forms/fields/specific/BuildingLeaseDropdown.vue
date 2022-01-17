@@ -2,11 +2,12 @@
   <div class="row q-mb-md">
     <strong class="col q-py-sm">{{ $t('form_for_clients.building_lease') }}</strong>
     <q-option-group
-      class="col"
       v-model="selectedOption"
+      class="col"
       :options="options"
       type="radio"
       inline
+      @update:model-value="emitValue"
     />
   </div>
   <div v-if="selectedOption">
@@ -26,8 +27,8 @@
     <div class="row q-mb-md">
       <p class="col q-py-sm">{{ $t('form_for_clients.landlord') }}</p>
       <q-option-group
-        class="col"
         v-model="landlord"
+        class="col"
         :options="landlordOptions"
         type="radio"
         inline
@@ -48,8 +49,8 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {ref,} from 'vue';
-import WarningDialog from "components/dialogs/WarningDialog.vue";
-import {useQuasar} from "quasar";
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
+import {useQuasar} from 'quasar';
 
 const emit = defineEmits(['change'])
 const $q = useQuasar()

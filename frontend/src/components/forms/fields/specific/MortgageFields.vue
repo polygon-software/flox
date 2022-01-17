@@ -22,7 +22,7 @@
           <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
             <q-date
               v-model="tranche.date"
-              @update:model-value="dateInput"
+              @update:model-value="checkMortgageExpirationDate"
               @change="emitValue"
             >
               <div class="row items-center justify-end">
@@ -40,9 +40,9 @@
 <script setup lang="ts">
 import {IS_VALID_STRING} from 'src/data/RULES'
 import {computed, ref} from 'vue';
-import WarningDialog from "components/dialogs/WarningDialog.vue";
-import {i18n} from "boot/i18n";
-import {useQuasar} from "quasar";
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
+import {i18n} from 'boot/i18n';
+import {useQuasar} from 'quasar';
 
 const emit = defineEmits(['change'])
 const date = ref(new Date())
@@ -71,27 +71,27 @@ function addTranche(){
  * Emits the updated value of the price, if it is valid
  * @returns {void}
  */
-function emitValuePortion() {
+function emitValuePortion() { // TODO: emit the whole array somehow
   emit('change', portion)
 }
 
 /**
  * Warning Pop up if the birthdate is more than 60 years ago.
- * @param {Number} birth_timestamp - timestamp of the date of birth
+ * @param {Number} birthTimestamp - timestamp of the date of birth
  * @returns {void}
  */
-function dateInput(birth_timestamp: Date){
-  const date1 = new Date(birth_timestamp)
-  const date_in_a_month = new Date(new Date().setMonth(new Date().getMonth() + 1))
-  const date_in_12_months = new Date(new Date().setMonth(new Date().getMonth() + 12))
-  const date_in_24_months = new Date(new Date().setMonth(new Date().getMonth() + 24))
-    if(date1.getTime() > date_in_a_month.getTime()){
+function checkMortgageExpirationDate(birthTimestamp: number){
+  const date1 = new Date(birthTimestamp)
+  const dateInAMonth = new Date(new Date().setMonth(new Date().getMonth() + 1))
+  const dateIn12Months = new Date(new Date().setMonth(new Date().getMonth() + 12))
+  const dateIn24Months = new Date(new Date().setMonth(new Date().getMonth() + 24))
+    if(date1.getTime() > dateInAMonth.getTime()){
       $q.dialog({
         component: WarningDialog,
         componentProps: {description: i18n.global.t('form_for_clients.warning_too_short')}
       })
     }
-    if(date1.getTime() > date_in_12_months.getTime()  && date1.getTime() < date_in_24_months.getTime()){
+    if(date1.getTime() > dateIn12Months.getTime()  && date1.getTime() < dateIn24Months.getTime()){
       $q.dialog({
         component: WarningDialog,
         componentProps: {description: i18n.global.t('form_for_clients.warning_mortgage_note')}
