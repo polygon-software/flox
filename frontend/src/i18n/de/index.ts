@@ -338,8 +338,10 @@ export default {
     public: 'Öffentlich',
     private: 'Privat',
     landlord: 'Baurechtgeber',
-    landlord_warning: 'Nur Hypotheken mit öffentlich-rechtliche Baurechtsgeber sind vermittelbar'
-    retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)'
+    landlord_warning: 'Nur Hypotheken mit öffentlich-rechtliche Baurechtsgeber sind vermittelbar',
+    retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)',
+    warning_too_short: 'Die Ablauffrist der  Hypothek ist zu kurz!',
+    warning_mortgage_note: 'Achtung: Evtl. Schuldbriefsplitting notwendig!'
   },
   dossier_status_enum: {
     OPEN: 'Offen',

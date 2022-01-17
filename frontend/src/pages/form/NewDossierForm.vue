@@ -162,7 +162,7 @@ const pages = [
       {
         key: 'property-data4',
         title: i18n.global.t('form_for_clients.purchase'),
-        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT], // TODO: make sure enfeoffment calculation updates
+        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT],
       },
     ]
   },
@@ -173,7 +173,7 @@ const pages = [
       {
         key: 'calculation-data1',
         title: i18n.global.t('dashboards.mortgage'),
-        fields: [FIELDS.PORTION, FIELDS.EXPIRATION_DATE], // TODO: give date a label TODO: add rules for date
+        fields: [FIELDS.MORTGAGE],
       },
       {
         key: 'calculation-data2',

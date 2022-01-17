@@ -323,7 +323,7 @@ export default {
     market_value_estimation: 'Market value estimation in CHF',
     current_value_of_mortgage: 'Current value of mortgage in CHF',
     enfeoffment: 'Enfeoffment in %',
-    retirement_warning: 'The acceptibility of risks is different for people over the age of 60'
+    retirement_warning: 'The acceptibility of risks is different for people over the age of 60',
     building_lease: 'Building lease',
     building_lease_interest: 'Building lease interest  (per year in CHF)',
     type: 'Type',
@@ -337,7 +337,9 @@ export default {
     public: 'Public',
     private: 'Private',
     landlord: 'Building Lease Landlord',
-    landlord_warning: 'Only  mortgages with public building lease landlords are applicable'
+    landlord_warning: 'Only  mortgages with public building lease landlords are applicable',
+    warning_too_short: 'The expiration date of the mortgage is to soon!',
+    warning_mortgage_note: 'Attention: A mortgage note might be obligatory!'
   },
   dossier_status_enum: {
     OPEN: 'Open',

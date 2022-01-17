@@ -69,6 +69,12 @@ const landlord = ref(landlordOptions[0].value)
 const date = ref(new Date())
 const price = ref('')
 
+
+/**
+ * A pop up opens  if the landlord is not public
+ * @param {Boolean} isPublic - landlord type
+ * @returns {void}
+ */
 function landlordChange(isPublic: boolean){
   if(!isPublic){
     $q.dialog({
@@ -80,7 +86,6 @@ function landlordChange(isPublic: boolean){
 
 /**
  * Emits the updated value, if it is valid
- *       label: i18n.global.t('form_for_clients.owner_occupied'),
  * @returns {void}
  */
 function emitValue() {
