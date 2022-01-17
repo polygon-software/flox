@@ -11,15 +11,12 @@ import fastify = require('fastify');
 import { Public } from '../../auth/authentication.decorator';
 import { AnyRole } from '../../auth/authorization.decorator';
 import { ERRORS } from '../../error/ERRORS';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { UserService } from '../user/user.service';
 
 @Controller()
 export class FileController {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
     private readonly fileService: FileService,
   ) {}
 
@@ -73,7 +70,7 @@ export class FileController {
     res.send(newFile);
   }
 
-  @Post('/uploadUserIDFiles')
+  @Post('/uploadUserIdFiles')
   @Public()
   async uploadUserIDFile(
     @Req() req: fastify.FastifyRequest,
@@ -93,7 +90,7 @@ export class FileController {
       throw new Error(ERRORS.no_user_found);
     }
 
-    const user = await this.userRepository.findOne(userUuid);
+    const user = await this.userService.getUser({ uuid: userUuid });
 
     // Throw error if user doesn't exist
     if (!user) {

@@ -36,7 +36,10 @@ export class FileService {
     private readonly privateFilesRepository: Repository<PrivateFile>,
 
     @InjectRepository(Product)
-    private productRepository: Repository<Product>,
+    private readonly productRepository: Repository<Product>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
 
     private readonly configService: ConfigService,
   ) {}
