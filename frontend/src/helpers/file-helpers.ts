@@ -21,7 +21,6 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
     }
     iter++;
   } while (res)
-
   if(!token){
     throw new Error('Authentication Failure')
   }
@@ -31,31 +30,27 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
     Authorization: `Bearer ${token}`
   }
 
-  const result = []
-
+  const formData = new FormData();
   for (const fileKey of Object.keys(files)) {
-    const formData = new FormData();
     if (files[fileKey]) {
       // Convert to Blob and append
       const blob = files[fileKey] as Blob
-      formData.append('file', blob)
-
-      const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ?? ''
-      const uploadResult = await axios({
-        method: 'post',
-        url: `${baseUrl}${target}`,
-        data: formData,
-        headers: headers,
-      }).catch((e: Error) => {
-        throw new Error(`File upload error: ${e.message}`)
-      })
-
-      // Add to result
-      result.push(uploadResult)
+      formData.set(fileKey, blob)
     }
-  await apolloClient.refetchQueries({include: [queryname]})
   }
+  const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ?? ''
+  const uploadResult = await axios({
+    method: 'post',
+    url: `${baseUrl}${target}`,
+    data: formData,
+    headers: headers,
+  }).catch((e: Error) => {
+    throw new Error(`File upload error: ${e.message}`)
+  })
+
+  await apolloClient.refetchQueries({include: [queryname]})
 
   // Return updated objects
-  return result;
+  return uploadResult;
 }
+

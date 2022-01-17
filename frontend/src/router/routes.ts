@@ -146,6 +146,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/employee/DossierFinalDocumentPage.vue') }],
   },
 
+  // Employee: Dossier mandatory document upload
+  'DOSSIER_DOCUMENT_UPLOAD': {
+    path: '/dossier-document-upload',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/employee/DossierDocumentUploadPage.vue') }],
+  },
+
   // Wildcard route for non-covered routes
   'WILDCARD': {
     path: '/:catchAll(.*)*',

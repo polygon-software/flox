@@ -37,6 +37,7 @@ import PublicFile from '../file/entities/public_file.entity';
     FileService,
     EmployeeService,
     CompanyService,
+    FileService,
   ],
 })
 export class DossierModule {}
