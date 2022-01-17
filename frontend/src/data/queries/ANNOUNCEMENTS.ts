@@ -92,4 +92,4 @@ export const ANNOUNCEMENT = {
   cacheLocation: 'announcement'
 }
 
-export const ANNOUNCEMENT_QUERIES: QueryObject[] = [ALL_ANNOUNCEMENTS]
+export const ANNOUNCEMENT_QUERIES: QueryObject[] = [ALL_ANNOUNCEMENTS, ANNOUNCEMENT]
