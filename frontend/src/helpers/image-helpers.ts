@@ -3,21 +3,12 @@
  */
 
 /**
- * Converts a file to a data url
- * @param {File} file The file you want to convert.
- * @returns {string|ArrayBuffer|null} - the data URL for the file
- */
-export async function toDataUrl(file: File): Promise<string|ArrayBuffer|null> {
-  return await readFile(file)
-}
-
-/**
  * Covert a file to a data base64
- * @param {File} file The file you want to convert.
+ * @param {File} file - The file you want to convert.
  * @returns {Promise<string>} - the data URL for the file
  */
 export async function toBase64(file: File): Promise<string> {
-  const dataURL = await readFile(file)
+  const dataURL = await toDataUrl(file)
   if (!dataURL) {
     throw new Error('Error when converting picture')
   }
@@ -27,11 +18,11 @@ export async function toBase64(file: File): Promise<string> {
 }
 
 /**
- * Helper function to call FileReader
- * @param {File} file The file to convert
- * @return {Promise<string|ArrayBuffer|null>} Data url
+ * Converts a file to a data URL using file reader
+ * @param {File} file - The file to convert
+ * @return {Promise<string|ArrayBuffer|null>} - Data URL of the file
  */
-function readFile(file: File): Promise<string|ArrayBuffer|null> {
+export async function toDataUrl(file: File): Promise<string|ArrayBuffer|null> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);

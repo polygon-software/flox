@@ -55,10 +55,11 @@ import {i18n} from 'boot/i18n';
 import _ from 'lodash';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {SEND_DOSSIER_DOCUMENT_EMAIL} from 'src/data/mutations/DOSSIER';
+import {MutationObject} from 'src/data/DATA-DEFINITIONS';
 
 const $q: QVueGlobals = useQuasar()
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+const dialog: Ref<QDialog|null> = ref(null)
 
 const props = defineProps({
   // Default addresses
@@ -97,19 +98,19 @@ function hide(): void {
 
 /**
  * On OK, send e-mail to all entered addresses
- * @returns {void} - done
+ * @returns {Promise<void>} - done
  */
-async function onOk(): void {
+async function onOk() {
   // Send E-mail mutation
   await executeMutation(
-    SEND_DOSSIER_DOCUMENT_EMAIL,
+    SEND_DOSSIER_DOCUMENT_EMAIL as MutationObject,
     {
       uuid: props.uuid,
       recipients: targetAddresses.value,
       fileUuid: props.fileUuid
     })
 
-  // Show confirmation prompt TODO
+  // Show confirmation prompt
   showNotification(
     $q,
     i18n.global.t('messages.email_sent'),

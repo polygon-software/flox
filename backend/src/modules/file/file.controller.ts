@@ -230,7 +230,7 @@ export class FileController {
       file,
       dossierUuid,
       'dossierRepository',
-      { onFile: null, onAssociation: 'finalDocument' }, // TODO add
+      { onFile: null, onAssociation: 'finalDocument' },
       req['user'].userId,
     );
 

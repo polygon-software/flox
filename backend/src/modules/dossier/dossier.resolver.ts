@@ -16,17 +16,10 @@ import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
-import { FileService } from '../file/file.service';
-import { UserService } from '../user/user.service';
-import { GetPrivateFileArgs } from '../file/dto/get-private-file.args';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
-  constructor(
-    private readonly dossierService: DossierService,
-    private readonly fileService: FileService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly dossierService: DossierService) {}
 
   /**
    * Adds a new dossier to the database
@@ -152,24 +145,16 @@ export class DossierResolver {
    * @param {Record<string, string>} user - current user
    * @returns {Promise<void>} - done
    */
+  @EmployeeOnly()
   @Mutation(() => Dossier)
   async sendDossierDocumentEmail(
     @Args('sendDossierDocumentInput')
     sendDossierDocumentInput: SendDossierDocumentInput,
     @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier> {
-    const dbUser = await this.userService.getUser({ uuid: user.userId });
-
-    // Get actual file
-    const args: GetPrivateFileArgs = {
-      uuid: sendDossierDocumentInput.fileUuid,
-      expires: null,
-    };
-    const pdf = await this.fileService.getPrivateFile(args, dbUser);
-
     return this.dossierService.sendDossierDocumentEmail(
       sendDossierDocumentInput,
-      pdf,
+      user,
     );
   }
 }

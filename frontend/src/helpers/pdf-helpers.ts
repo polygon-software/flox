@@ -28,20 +28,21 @@ export async function generatePdf(elementId: string, filename: string, download 
   // PDF setup
   const doc = new jsPDF('p', 'mm');
 
+  // Determine page size in px
   const width = doc.internal.pageSize.getWidth();
   const height = doc.internal.pageSize.getHeight();
 
   // Add to pdf
   doc.addImage(
     imgData,
-    'PNG',
-    0,
-    0,
+    'PNG',  // File format to paste
+    0,          // X coordinates; start at zero
+    0,          // Y coordinates
     width,
     height,
     'pageContent',
-    'MEDIUM',
-    0
+    'MEDIUM', // Compression rate
+    0       // Rotation (0 degrees)
   );
 
   // Download (if applicable)
