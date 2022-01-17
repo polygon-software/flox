@@ -367,6 +367,7 @@ export default {
     new_user: 'Neuer Benutzer'
   },
   warnings: {
+    retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)'
     // TODO: add all possible warnings once provided by SOI
   }
 };

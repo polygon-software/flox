@@ -365,6 +365,7 @@ export default {
     new_user: 'New user'
   },
   warnings: {
+    retirement_warning: 'The acceptibility of risks is different for people over the age of 60'
     // TODO: add all possible warnings once provided by SOI
   }
 };

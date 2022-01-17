@@ -1,6 +1,6 @@
 <template>
   <div class="row q-mb-md">
-    <strong class="col q-py-sm">{{ label }}</strong>
+    <strong class="col q-py-sm">{{ props.label}}</strong>
     <q-option-group
       v-model="selectedOption"
       class="col"
@@ -27,7 +27,7 @@ const props = defineProps({
   defaultValue: {
     type: Boolean,
     required: false,
-    default: true
+    default: true,
   }
 })
 const emit = defineEmits(['change'])

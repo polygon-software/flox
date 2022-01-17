@@ -77,9 +77,9 @@
                 v-if="form.step.value < form.pages.value.length"
                 color="primary"
                 :label="$t('buttons.next_step')"
+                :disable="!form.pageValid.value"
                 @click="$refs.stepper.next()"
               />
- <!--              :disable="!form.pageValid.value" TODO: uncomment -->
 
               <q-btn
                 v-if="form.step.value === form.pages.value.length"
@@ -120,19 +120,19 @@ const pages = [
     label: i18n.global.t('employee_dashboard.customer'),
     sectionsLHS: [
       {
-        key: 'crm-data1',
+        key: 'crm-person',
         title: i18n.global.t('employee_dashboard.customer'),
         fields: [FIELDS.FULL_NAME, FIELDS.DATE_OF_BIRTH],
       },
       {
-        key: 'crm-data2',
+        key: 'crm-address',
         title: i18n.global.t('account_data.domicile_address'),
         fields: [FIELDS.ADDRESS],
       },
     ],
     sectionsRHS: [
       {
-        key: 'crm-data3',
+        key: 'crm-contact',
         title: i18n.global.t('form_for_clients.contact_info'),
         fields: [FIELDS.EMAIL, FIELDS.PHONE_NUMBER],
       },
@@ -143,24 +143,24 @@ const pages = [
     label: i18n.global.t('form_for_clients.property'),
     sectionsLHS: [
       {
-        key: 'property-data1',
+        key: 'property-name',
         title: i18n.global.t('account_data.bank'),
         fields: [FIELDS.BANK],
       },
       {
-        key: 'property-data2',
+        key: 'property-type',
         title: i18n.global.t('form_for_clients.property'),
         fields: [FIELDS.PROPERTY_TYPE],
       },
       {
-        key: 'property-data3',
+        key: 'property-owner-occupied',
         title: ' ',
         fields: [FIELDS.OWNER_OCCUPIED],
       },
     ],
     sectionsRHS: [
       {
-        key: 'property-data4',
+        key: 'property-purchase-detail',
         title: i18n.global.t('form_for_clients.purchase'),
         fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT],
       },
