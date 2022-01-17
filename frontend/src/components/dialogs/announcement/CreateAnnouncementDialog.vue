@@ -43,6 +43,25 @@
               />
             </q-item-section>
           </q-item>
+
+          <q-item>
+            <q-item-section>
+              <q-toggle v-model="announcement.scheduled"/>
+              <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####" :rules="['date']">
+                <template #append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
+                      <q-date v-model="date" mask="DD.MM.YYYY" >
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-card-section>
       <q-card-actions>
@@ -64,16 +83,24 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineEmits, ref, Ref} from 'vue'
+import {computed, defineEmits, ref, Ref} from 'vue'
 import {QDialog} from 'quasar';
 import {Announcement} from 'src/data/types/Announcement';
 import {ROLE} from '../../../../../shared/definitions/ENUM'
+import {formatDate, parseDate} from 'src/helpers/format-helpers';
 
 const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const announcement = ref(new Announcement(undefined, undefined, undefined, ROLE.PLAYER))
+const announcement = ref(new Announcement('', new Date(), '', ROLE.PLAYER, false))
+
+const date = computed({
+  get: () => formatDate(announcement.value.date),
+  set: (dateString) => {
+    announcement.value.date = parseDate(dateString)
+  },
+})
 
 const options = Object.entries(ROLE).map(([key, value]) => {return {label: key, value: value}})
 

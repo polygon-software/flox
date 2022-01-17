@@ -1,7 +1,7 @@
 import { ObjectType, InputType, Field } from '@nestjs/graphql';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { IsDate, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsString } from 'class-validator';
 import { ROLE } from '../../../ENUM/ENUM';
 import { Notification } from '../../notification/entities/notification.entity';
 
@@ -26,6 +26,11 @@ export class Announcement extends BaseEntity {
   @Column()
   @IsDate()
   date: Date;
+
+  @Field(() => Boolean, { description: 'Is the announcement scheduled?' })
+  @Column()
+  @IsBoolean()
+  scheduled: boolean;
 
   @Field(() => ROLE, { description: 'User role to receive notification' })
   @Column({

@@ -7,9 +7,10 @@ import {AnnouncementItem} from '../../../../shared/schemas/AnnouncementItem';
  */
 export class Announcement{
   title: string
-  date: Date | null
+  date: Date
   content: string
   userRole: ROLE
+  scheduled: boolean
   uuid: string | null
 
   /**
@@ -18,13 +19,15 @@ export class Announcement{
    * @param {Date} date - received
    * @param {string} content - content
    * @param {string} userRole - is read
+   * @param {boolean} scheduled - scheduled
    * @param {string} uuid - uuid
    */
-  constructor(title?: string, date?: Date, content?: string, userRole?: ROLE, uuid?: string) {
-    this.title = title ?? ''
-    this.date = date ?? null
-    this.content = content ?? ''
-    this.userRole = userRole ?? ROLE.NONE
+  constructor(title: string, date: Date, content: string, userRole: ROLE, scheduled: boolean, uuid?: string) {
+    this.title = title
+    this.date = date
+    this.content = content
+    this.userRole = userRole
+    this.scheduled = scheduled
     this.uuid = uuid ?? null
   }
 

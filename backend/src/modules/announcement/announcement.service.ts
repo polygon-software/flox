@@ -19,20 +19,29 @@ export class AnnouncementService {
     private readonly notificationService: NotificationService,
   ) {}
 
+  /**
+   * Create a new Announcement, this automatically creates the notifications for the given user-role.
+   * @param {CreateAnnouncementInput} createAnnouncementInput - input
+   * @returns {Promise<Announcement>} - The created announcement
+   */
   async create(
     createAnnouncementInput: CreateAnnouncementInput,
   ): Promise<Announcement> {
     // Create the announcement
-    const announcement = this.announcementsRepository.create({
-      ...createAnnouncementInput,
-      date: new Date(),
-    });
+    const announcement = this.announcementsRepository.create(
+      createAnnouncementInput,
+    );
     announcement.notifications = await this.userService.broadcastAnnouncement(
       announcement,
     );
     return await this.announcementsRepository.save(announcement);
   }
 
+  /**
+   * Get announcements specified by their uuids or all if no uuids are provided.
+   * @param {GetAnnouncementsArgs} getAnnouncementsArgs - uuids
+   * @returns {Promise<Announcement[]>} - requested announcements
+   */
   getAnnouncements(
     getAnnouncementsArgs: GetAnnouncementsArgs,
   ): Promise<Announcement[]> {
@@ -50,12 +59,21 @@ export class AnnouncementService {
     }
   }
 
+  /**
+   * Get all announcements.
+   * @returns {Promise<Announcement[]>} - all announcements
+   */
   getAllAnnouncements(): Promise<Announcement[]> {
     return this.announcementsRepository.find({
       relations: ['notifications'],
     });
   }
 
+  /**
+   * Get announcement specified by its uuid.
+   * @param {GetAnnouncementArgs} getAnnouncementArgs - uuid
+   * @returns {Promise<Announcement[]>} - requested announcement
+   */
   getAnnouncement(
     getAnnouncementArgs: GetAnnouncementArgs,
   ): Promise<Announcement> {
@@ -65,8 +83,8 @@ export class AnnouncementService {
   }
 
   /**
-   * Updates an existing announcement
-   * @param {UpdateAnnouncementInput} updateAnnouncementInput - update announcement input
+   * Partially updates an existing announcement. Updates all notifications belonging to the updated announcement.
+   * @param {UpdateAnnouncementInput} updateAnnouncementInput - Changes to be made to the announcement
    * @returns {Promise<Announcement>} - updated announcement
    */
   async update(
@@ -94,6 +112,11 @@ export class AnnouncementService {
     return await this.announcementsRepository.save(updatedAnnouncement);
   }
 
+  /**
+   * Deletes an existing announcement. Deletes all notifications belonging to the deleted announcement.
+   * @param {DeleteAnnouncementInput} deleteAnnouncementInput - uuid
+   * @returns {Promise<Announcement>} - deleted announcement
+   */
   async delete(
     deleteAnnouncementInput: DeleteAnnouncementInput,
   ): Promise<Announcement> {

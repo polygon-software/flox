@@ -6,13 +6,13 @@ import { GetAnnouncementArgs } from './dto/args/get-announcement.args';
 import { GetAnnouncementsArgs } from './dto/args/get-announcements.args';
 import { DeleteAnnouncementInput } from './dto/input/delete-announcement.input';
 import { Announcement } from './entities/announcement.entity';
-import { Public } from '../../auth/authentication.decorator';
+import { AdminOnly } from '../../auth/authorization.decorator';
 
 @Resolver(() => Announcement)
 export class AnnouncementResolver {
   constructor(private readonly announcementsService: AnnouncementService) {}
 
-  @Public()
+  @AdminOnly()
   @Query(() => [Announcement], { name: 'announcements' })
   async getAnnouncements(
     @Args() getAnnouncementsArgs: GetAnnouncementsArgs,
@@ -20,13 +20,13 @@ export class AnnouncementResolver {
     return this.announcementsService.getAnnouncements(getAnnouncementsArgs);
   }
 
-  @Public()
+  @AdminOnly()
   @Query(() => [Announcement], { name: 'allAnnouncements' })
   async getAllAnnouncements(): Promise<Announcement[]> {
     return this.announcementsService.getAllAnnouncements();
   }
 
-  @Public()
+  @AdminOnly()
   @Query(() => Announcement, { name: 'announcement' })
   async getAnnouncement(
     @Args() getAnnouncementArgs: GetAnnouncementArgs,
@@ -34,7 +34,7 @@ export class AnnouncementResolver {
     return this.announcementsService.getAnnouncement(getAnnouncementArgs);
   }
 
-  @Public()
+  @AdminOnly()
   @Mutation(() => Announcement)
   async createAnnouncement(
     @Args({
@@ -46,7 +46,7 @@ export class AnnouncementResolver {
     return this.announcementsService.create(createAnnouncementInput);
   }
 
-  @Public()
+  @AdminOnly()
   @Mutation(() => Announcement)
   async updateAnnouncement(
     @Args('updateAnnouncementInput')
@@ -55,7 +55,7 @@ export class AnnouncementResolver {
     return this.announcementsService.update(updateAnnouncementInput);
   }
 
-  @Public()
+  @AdminOnly()
   @Mutation(() => Announcement)
   async deleteAnnouncement(
     @Args('deleteAnnouncementInput')

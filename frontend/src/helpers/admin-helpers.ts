@@ -108,11 +108,10 @@ export function enableUser(user: Record<string, unknown>, $q: QVueGlobals): void
   })
 }
 
-
 /**
  * Opens a dialog for creating an announcement
  * @param {QVueGlobals} $q - Quasar instance for showing dialogs
- * @returns {Promise<void>} - if the user was enabled
+ * @returns {Promise<void>} - promise
  */
 export function createAnnouncement($q: QVueGlobals): void{
   // Show info dialog for enabling account
@@ -127,6 +126,8 @@ export function createAnnouncement($q: QVueGlobals): void{
           title: announcement.title,
           content: announcement.content,
           userRole: announcement.userRole,
+          date: announcement.date,
+          scheduled: announcement.scheduled,
         }
       }
     ).then(() => {
@@ -154,7 +155,7 @@ export function createAnnouncement($q: QVueGlobals): void{
  * Opens a dialog for updating an announcement
  * @param {Announcement} originalAnnouncement - the announcement to update
  * @param {QVueGlobals} $q - Quasar instance for showing dialogs
- * @returns {Promise<void>} - if the user was enabled
+ * @returns {Promise<void>} - promise
  */
 export function updateAnnouncement(originalAnnouncement: Announcement, $q: QVueGlobals): void{
   // Show info dialog for enabling account
@@ -172,6 +173,7 @@ export function updateAnnouncement(originalAnnouncement: Announcement, $q: QVueG
           uuid: announcement.uuid,
           title: announcement.title,
           content: announcement.content,
+          date: announcement.date,
         }
       }
     ).then(() => {
@@ -197,9 +199,9 @@ export function updateAnnouncement(originalAnnouncement: Announcement, $q: QVueG
 
 /**
  * Opens a dialog for deleting an announcement
- * @param {Announcement} originalAnnouncement - the announcement to update
+ * @param {Announcement} originalAnnouncement - the announcement to delete
  * @param {QVueGlobals} $q - Quasar instance for showing dialogs
- * @returns {Promise<void>} - if the user was enabled
+ * @returns {Promise<void>} - promise
  */
 export function deleteAnnouncement(originalAnnouncement: Announcement, $q: QVueGlobals): void{
   // Show info dialog for enabling account
