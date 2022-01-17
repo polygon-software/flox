@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 import { ROLE } from '../../../../ENUM/ENUM';
 import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
+import PrivateFile from '../../../file/entities/private_file.entity';
 
 @InputType()
 /**
