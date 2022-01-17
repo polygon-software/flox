@@ -2,31 +2,39 @@
   <div class="row q-mb-md">
     <strong class="col q-py-sm">{{ $t('form_for_clients.owner_occupied') }}</strong>
     <q-option-group
-      class="col"
       v-model="selectedOption"
+      class="col"
       :options="options"
       type="radio"
       inline
+      @change="emitValue"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import {i18n} from 'boot/i18n';
-import {ref, } from 'vue';
+import {defineProps, ref,} from 'vue';
 
+const props = defineProps({
+  label: {
+    type: String,
+    required: true,
+  },
+  options: {
+    type: Object,
+    required: true,
+  },
+  defaultValue: {
+    type: Boolean,
+    required: false,
+    default: true
+  }
+})
 const emit = defineEmits(['change'])
-
-const options = [
-  {label: i18n.global.t('general.yes'), value: true},
-  {label: i18n.global.t('general.no'), value: false},
-]
-
-const selectedOption = ref(options[0].value)
+const selectedOption = ref(props.defaultValue)
 
 /**
  * Emits the updated value, if it is valid
- *       label: i18n.global.t('form_for_clients.owner_occupied'),
  * @returns {void}
  */
 function emitValue(){

@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import {IS_VALID_STRING} from 'src/data/RULES'
-import {computed, ref} from "vue";
+import {computed, ref} from 'vue';
 
 const emit = defineEmits(['change'])
 
@@ -53,28 +53,28 @@ const current_value_of_mortgage = ref('')
  */
 let enfeoffment = computed(()=>  {
   if(!current_value_of_mortgage.value || !price.value){
-    return "-"
+    return '-'
   }
-  return (Math.abs(Number.parseInt(current_value_of_mortgage.value)) / Math.abs(Number.parseInt(price.value))) * 100 + "%"
+  return `${(Math.abs(Number.parseInt(current_value_of_mortgage.value)) / Math.abs(Number.parseInt(price.value))) * 100}%`
 })
 
 
 /**
- * Emits the updated value, if it is valid
+ * Emits the updated value of the price, if it is valid
  * @returns {void}
  */
 function emitValuePrice() {
   emit('change', price)
 }
 /**
- * Emits the updated value, if it is valid
+ * Emits the updated value of the estimated market value, if it is valid
  * @returns {void}
  */
 function emitValueMarketValue() {
   emit('change', market_value_estimation)
 }
 /**
- * Emits the updated value, if it is valid
+ * Emits the updated value of the mortgage, if it is valid
  * @returns {void}
  */
 function emitValueMortgage() {
