@@ -11,6 +11,10 @@ const IS_VALID_STRING = (val: string): boolean => {
   return !isEmpty(val) && val.length > 0
 }
 
+const IS_VALID_DATE = (val: Date): boolean => {
+  return !isEmpty(val)
+}
+
 const IS_VALID_PASSWORD = (val: string): boolean => {
   const result: boolean = PASSWORD_REGEX.test(val)
   return result;
@@ -36,4 +40,4 @@ const IS_VALID_OPTION = (val: unknown, options: unknown[]): boolean => {
   return options.includes(val);
 }
 
-export {IS_VALID_EMAIL, IS_VALID_STRING, IS_VALID_PASSWORD, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP, IS_VALID_OPTION}
+export {IS_VALID_EMAIL, IS_VALID_DATE, IS_VALID_STRING, IS_VALID_PASSWORD, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP, IS_VALID_OPTION}

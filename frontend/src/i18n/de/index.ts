@@ -10,6 +10,7 @@ export default {
     to: 'Bis',
     date: 'Datum',
     return: 'Zurück',
+    warning: 'Achtung!',
     created_on: 'Erstellt am',
     loading: 'Lädt...'
   },
@@ -130,6 +131,7 @@ export default {
     ok: 'OK',
     download: 'Herunterladen',
     preview: 'Vorschau',
+    discard: 'Verwerfen',
     send_by_email: 'Per Mail senden',
     print: 'Drucken'
   },
@@ -202,6 +204,7 @@ export default {
     invalid_phone_number: 'Bitte geben Sie eine gültige Telefonnummer ein',
     invalid_option: 'Bitte wählen Sie eine gültige Option.',
     invalid_company_name: 'Bitte geben Sie Ihren Firmennamen ein',
+    invalid_date: 'Bitte geben sie ein gültiges Datum ein.',
     invalid_company_uid: 'Bitte geben Sie die UID Ihrer Firma ein',
     must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
     must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
@@ -242,6 +245,7 @@ export default {
     search: 'Suche',
     new_assignment: 'Neuen Auftrag erfassen',
     date: 'Datum',
+    date_of_birth: 'Geburtsdatum',
     customer: 'Kunde',
     institute: 'Institut',
     location: 'Ort',
@@ -255,6 +259,10 @@ export default {
     organisation_id: 'Organisationsnummer',
     employee_id: 'Mitarbeiternummer',
     role: 'Rolle',
+  },
+  form_for_clients: {
+    contact_info: 'Kontakt',
+    property: 'Immobilie'
   },
   dossier_status_enum: {
     OPEN: 'Offen',
@@ -279,4 +287,7 @@ export default {
   bank: {
     new_user: 'Neuer Benutzer'
   },
+  warnings: {
+    // TODO: add all possible warnings once provided by SOI
+  }
 };
