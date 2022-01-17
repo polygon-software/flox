@@ -81,11 +81,11 @@ export type FILE_TYPE = typeof FILE_TYPE;
 
 registerEnumType(FILE_TYPE, { name: 'FileType' });
 
-// TODO: change to real data
 export enum PROPERTY_TYPE {
-  PROPERTY_TYPE_1 = 'PROPERTY_TYPE_1',
-  PROPERTY_TYPE_2 = 'PROPERTY_TYPE_2',
-  PROPERTY_TYPE_3 = 'PROPERTY_TYPE_3',
+  ONE_FAMILY_HOUSE = 'ONE_FAMILY_HOUSE',
+  APARTMENT = 'APARTMENT',
+  CONDOMINIUM_OWNERSHIP = 'CONDOMINIUM_OWNERSHIP',
+  APARTMENT_BUILDING = 'APARTMENT_BUILDING',
 }
 registerEnumType(DOSSIER_STATUS, { name: 'DossierStatus' });
 registerEnumType(OFFER_STATUS, { name: 'OfferStatus' });

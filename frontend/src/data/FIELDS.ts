@@ -10,8 +10,8 @@ import CompanyUploadFields from 'components/forms/fields/document_upload/Company
 import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
-import DisabledInputField from 'components/forms/fields/generic/PropertyInputFields.vue'
-import OptionGroupTitle from 'components/forms/fields/generic/OptionGroupTitle.vue'
+import PropertyInputFields from 'components/forms/fields/generic/PropertyInputFields.vue'
+import OptionGroupTitle from 'components/forms/fields/generic/TitledOptionGroup.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
@@ -201,7 +201,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('account_data.bank'),
-      options: ['Raiffeisen', 'UBS', 'ZKB', 'LuKB'], //TODO: replace with real data
+      options: ['Raiffeisen', 'UBS', 'ZKB', 'LuKB'], //TODO: replace with real data: getBankNames query
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['Raiffeisen', 'UBS', 'ZKB', 'LuKB']) || i18n.global.t('errors.invalid_option')]
     },
@@ -231,6 +231,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(InputDatePicker),
     attributes: {
       label: i18n.global.t('form_for_clients.date_of_purchase'),
+      // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
     },
   },
@@ -240,6 +241,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       label: i18n.global.t('form_for_clients.price'),
+      // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
     },
   },
@@ -267,7 +269,7 @@ const FIELDS: Record<string, Field> = {
   },
   ENFEOFFMENT: {
     key: 'enfeoffment',
-    component: markRaw(DisabledInputField),
+    component: markRaw(PropertyInputFields),
     attributes: {
       dense: true,
       type: 'text',

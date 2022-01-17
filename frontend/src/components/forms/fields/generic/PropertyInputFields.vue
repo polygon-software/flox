@@ -43,8 +43,8 @@ import {computed, ref} from 'vue';
 const emit = defineEmits(['change'])
 
 const price = ref('')
-const market_value_estimation = ref('')
-const current_value_of_mortgage = ref('')
+const marketValueEstimation = ref('')
+const currentValueOfMortgage = ref('')
 
 
 /**
@@ -52,10 +52,10 @@ const current_value_of_mortgage = ref('')
  * @returns {String}
  */
 let enfeoffment = computed(()=>  {
-  if(!current_value_of_mortgage.value || !price.value){
+  if(!currentValueOfMortgage.value || !price.value){
     return '-'
   }
-  return `${(Math.abs(Number.parseInt(current_value_of_mortgage.value)) / Math.abs(Number.parseInt(price.value))) * 100}%`
+  return `${(Math.abs(Number.parseInt(currentValueOfMortgage.value)) / Math.abs(Number.parseInt(price.value))) * 100}%`
 })
 
 
@@ -64,23 +64,27 @@ let enfeoffment = computed(()=>  {
  * @returns {void}
  */
 function emitValuePrice() {
-  emit('change', price)
+  if(IS_VALID_STRING(price.value)){
+    emit('change', price)
+  }
 }
 /**
  * Emits the updated value of the estimated market value, if it is valid
  * @returns {void}
  */
 function emitValueMarketValue() {
-  emit('change', market_value_estimation)
+  if(IS_VALID_STRING(marketValueEstimation.value)) {
+    emit('change', marketValueEstimation)
+  }
 }
 /**
  * Emits the updated value of the mortgage, if it is valid
  * @returns {void}
  */
 function emitValueMortgage() {
-  emit('change', current_value_of_mortgage)
+  if(IS_VALID_STRING(currentValueOfMortgage.value)) {
+    emit('change', currentValueOfMortgage)
+  }
 }
-
-
 
 </script>

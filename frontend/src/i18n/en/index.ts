@@ -321,7 +321,6 @@ export default {
     market_value_estimation: 'Market value estimation in CHF',
     current_value_of_mortgage: 'Current value of mortgage in CHF',
     enfeoffment: 'Enfeoffment in %',
-    retirement_warning: 'The acceptibility of risks is different for people over the age of 60'
   },
   dossier_status_enum: {
     OPEN: 'Open',
@@ -347,6 +346,7 @@ export default {
     new_user: 'New user'
   },
   warnings: {
+    retirement_warning: 'The acceptibility of risks is different for people over the age of 60'
     // TODO: add all possible warnings once provided by SOI
   }
 };

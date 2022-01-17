@@ -12,7 +12,7 @@
           <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
             <q-date
               v-model="date"
-              @update:model-value="dateInput"
+              @update:model-value="checkAgeLimit"
               @change="emitValue"
             >
               <div class="row items-center justify-end">
@@ -31,7 +31,7 @@ import {defineProps, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {calculateAge} from "src/helpers/date-helpers";
+import {calculateAge} from 'src/helpers/date-helpers';
 
 
 const props = defineProps({
@@ -39,7 +39,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  retirement_rule: {
+  retirementRule: {
     type: Boolean,
     required: false,
     default: false,
@@ -60,13 +60,13 @@ function emitValue(){
 
 /**
  * Warning Pop up if the birthdate is more than 60 years ago.
- * @param {Number} birth_timestamp - timestamp of the date of birth
+ * @param {Number} birthTimestamp - timestamp of the date of birth
  * @returns {void}
  */
-function dateInput(birth_timestamp: Date){
-  if(props.retirement_rule){
-    const birth_date = new Date(birth_timestamp)
-    if(calculateAge(birth_date) > 60){
+function checkAgeLimit(birthTimestamp: number){
+  if(props.retirementRule){
+    const birthDate = new Date(birthTimestamp)
+    if(calculateAge(birthDate) > 60){
       $q.dialog({
         component: WarningDialog,
         componentProps: {description: i18n.global.t('form_for_clients.retirement_warning')}
