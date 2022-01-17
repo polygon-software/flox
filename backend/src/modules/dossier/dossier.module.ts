@@ -12,18 +12,32 @@ import { Employee } from '../employee/entities/employee.entity';
 import { CompanyService } from '../company/company.service';
 import { Company } from '../company/entities/company.entity';
 import { Offer } from '../offer/entities/offer.entity';
+import { FileService } from '../file/file.service';
+import PrivateFile from '../file/entities/private_file.entity';
+import PublicFile from '../file/entities/public_file.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Dossier, Bank, User, Employee, Company, Offer]),
+    TypeOrmModule.forFeature([
+      Dossier,
+      Bank,
+      User,
+      Employee,
+      Company,
+      Offer,
+      PrivateFile,
+      PublicFile,
+    ]),
   ],
   providers: [
     DossierResolver,
     DossierService,
     BankService,
     UserService,
+    FileService,
     EmployeeService,
     CompanyService,
+    FileService,
   ],
 })
 export class DossierModule {}

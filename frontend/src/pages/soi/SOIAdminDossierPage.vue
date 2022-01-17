@@ -10,6 +10,5 @@
 </template>
 
 <script setup lang="ts">
-
 import AdminDossierTable from 'components/tables/AdminDossierTable.vue';
 </script>

@@ -436,6 +436,51 @@ export const MY_BANK = {
   cacheLocation: 'getMyBank'
 }
 
+export const GET_DOSSIER = {
+  query: gql`
+    query getDossier($uuid: ID!) {
+      getDossier(getDossierInput: {uuid: $uuid}) {
+        uuid
+        __typename
+        first_name
+        last_name
+        created_at
+        readable_id
+        status
+        correspondence_address {
+          __typename
+          uuid
+          city
+          zip_code
+        }
+        documents {
+          uuid
+          __typename
+          key
+          file_type
+        }
+        offers {
+          uuid
+          status
+          documents {
+            uuid
+            __typename
+            key
+          }
+          bank {
+            uuid
+            __typename
+          }
+          __typename
+        }
+        loan_sum
+      }
+    }
+  `,
+  tables: ['dossier'],
+  cacheLocation: 'getDossier'
+}
+
 export const QUERIES = [
   ALL_USERS,
   ALL_COMPANIES,
@@ -451,5 +496,6 @@ export const QUERIES = [
   DOSSIERS_BANK,
   MY_BANK,
   DOSSIER_FILE,
-  OFFER_FILE
+  OFFER_FILE,
+  GET_DOSSIER
 ];

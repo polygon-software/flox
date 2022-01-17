@@ -52,6 +52,20 @@ export const SET_DOSSIER_STATUS = {
   cacheLocation: undefined
 }
 
+export const SEND_DOSSIER_DOCUMENT_EMAIL = {
+  mutation: gql`
+    mutation sendDossierDocumentEmail($uuid: ID!, $recipients: [String!]!, $fileUuid: ID!){
+      sendDossierDocumentEmail (sendDossierDocumentInput: {uuid: $uuid, recipients: $recipients, fileUuid: $fileUuid}) {
+        uuid
+        status
+        __typename
+      }
+    }`,
+  tables: ['dossier'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
 export const RESET_DOSSIER = {
   mutation: gql`
     mutation resetDossier($uuid: ID!){
@@ -139,6 +153,26 @@ export const SET_OFFER_STATUS = {
       }
     }`,
   tables: ['dossier', 'offer'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
+export const REMOVE_FILES_DOSSIER = {
+  mutation: gql`
+    mutation removeDossierFiles($uuid: ID!, $fileUuids: [ID!]!){
+      removeDossierFiles(removeDossierFilesInput: {uuid: $uuid,fileUuids: $fileUuids}) {
+        uuid
+        __typename
+        documents{
+          uuid
+          __typename
+          key
+          file_type
+        }
+      }
+    }
+  `,
+  tables: ['dossier'],
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
