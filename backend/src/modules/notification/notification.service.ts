@@ -21,9 +21,9 @@ export class NotificationService {
   async create(
     createNotificationInput: CreateNotificationInput,
   ): Promise<Notification> {
-    const notification = this.notificationsRepository.create({
-      ...createNotificationInput,
-    });
+    const notification = this.notificationsRepository.create(
+      createNotificationInput,
+    );
     return this.notificationsRepository.save(notification);
   }
 
