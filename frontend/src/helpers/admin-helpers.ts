@@ -108,11 +108,10 @@ export function enableUser(user: Record<string, unknown>, $q: QVueGlobals): void
   })
 }
 
-
 /**
  * Opens a dialog for creating an announcement
  * @param {QVueGlobals} $q - Quasar instance for showing dialogs
- * @returns {Promise<void>} - if the user was enabled
+ * @returns {Promise<void>} - promise
  */
 export function createAnnouncement($q: QVueGlobals): void{
   // Show info dialog for enabling account
@@ -154,7 +153,7 @@ export function createAnnouncement($q: QVueGlobals): void{
  * Opens a dialog for updating an announcement
  * @param {Announcement} originalAnnouncement - the announcement to update
  * @param {QVueGlobals} $q - Quasar instance for showing dialogs
- * @returns {Promise<void>} - if the user was enabled
+ * @returns {Promise<void>} - promise
  */
 export function updateAnnouncement(originalAnnouncement: Announcement, $q: QVueGlobals): void{
   // Show info dialog for enabling account
@@ -197,9 +196,9 @@ export function updateAnnouncement(originalAnnouncement: Announcement, $q: QVueG
 
 /**
  * Opens a dialog for deleting an announcement
- * @param {Announcement} originalAnnouncement - the announcement to update
+ * @param {Announcement} originalAnnouncement - the announcement to delete
  * @param {QVueGlobals} $q - Quasar instance for showing dialogs
- * @returns {Promise<void>} - if the user was enabled
+ * @returns {Promise<void>} - promise
  */
 export function deleteAnnouncement(originalAnnouncement: Announcement, $q: QVueGlobals): void{
   // Show info dialog for enabling account
