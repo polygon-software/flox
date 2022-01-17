@@ -51,7 +51,6 @@ const pages = [
   },
 ]
 
-
 /**
  * Upon valid sign-up, creates database entry
  * @param {Record<string, unknown>} values - form values

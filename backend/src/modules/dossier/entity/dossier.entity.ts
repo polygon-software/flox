@@ -52,9 +52,9 @@ export class Dossier extends Person {
   })
   status: DOSSIER_STATUS;
 
-  @Field(() => [Offer], { description: 'List of Offers' })
+  @Field(() => [Offer], { description: 'List of Offers', nullable: true })
   @JoinColumn()
-  @OneToMany(() => Offer, (offer) => offer.dossier)
+  @OneToMany(() => Offer, (offer) => offer.dossier, { nullable: true })
   offers: Offer[];
 
   @Field(() => Employee, { description: 'Employee who created the Dossier' })
@@ -63,11 +63,22 @@ export class Dossier extends Person {
 
   @Field(() => [PrivateFile], {
     nullable: true,
-    description: 'Documents of the company',
+    description: 'Documents of the dossier',
   })
   @OneToMany(() => PrivateFile, (file) => file.dossier, {
     cascade: true,
     onDelete: 'CASCADE',
   })
   documents: PrivateFile[];
+
+  @Field(() => PrivateFile, {
+    nullable: true,
+    description: 'Final summary document, to be signed by customer',
+  })
+  @OneToOne(() => PrivateFile, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  finalDocument: PrivateFile;
 }

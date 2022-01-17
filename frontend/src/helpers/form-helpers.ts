@@ -45,7 +45,6 @@ export class Form {
 
     // a page can either have just fields or sections with fields, therefore fields need to be defined correspondingly
     const sections = currentPage.sectionsLHS && currentPage.sectionsRHS ? currentPage.sectionsLHS.concat(currentPage.sectionsRHS) : []
-
     // Fields on current page
     if (!currentPage.fields && sections.some(section => !section.fields)) {
       throw new Error("There aren't any fields defined.");

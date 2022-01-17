@@ -10,7 +10,11 @@ export default {
     to: 'To',
     date: 'Datum',
     return: 'Return',
-    warning: 'Warning!'
+    uploading: 'Uploading...',
+    done: 'Done',
+    warning: 'Warning!',
+    created_on: 'Created on',
+    loading: 'Loading...'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -93,6 +97,7 @@ export default {
     failure: 'Failure',
     dossier_reset: 'Successfully reset dossier',
     dossier_reset_failed: 'Dossier reset failed',
+    email_sent: 'E-Mail(s) sent'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -125,8 +130,12 @@ export default {
     submit: 'Submit',
     ok: 'OK',
     download: 'Download',
+    upload: 'Upload',
     preview: 'Preview',
+    save: 'Save',
     discard: 'Discard',
+    send_by_email: 'Send by E-Mail',
+    print: 'Print'
   },
   documents: {
     choose_documents: 'Choose documents',
@@ -134,6 +143,53 @@ export default {
     document_upload: 'File upload',
     additional_documents: 'Additional Documents',
     add_additional_documents: 'Add more',
+    optional_documents: 'Optional documents',
+    financials: {
+      title: 'Financial documents',
+      id: 'ID/Passport copy',
+      salary: 'Payroll',
+      salary_caption: 'The last three months',
+      pension: 'Pension certificate',
+      last_year_tax: 'Tax return {year}',
+      last_year_tax_caption: 'Incl. list of debts, real estate and securities',
+      pension_id: 'Pension fund statement',
+      last_year_salary: 'Wage statement {year}',
+      debt_collection: 'Extract from the debt collection register',
+      own_funds: 'Statement of own resources - Bank statements',
+      own_funds_caption: 'Salary account, savings account, securities',
+      three_a: 'Policies Pillar 3a',
+      life_insurance: 'Policies life insurance/risk insurance',
+      leasing_contract: 'Leasing contract',
+      credit_contract: 'Credit agreement',
+      work_contract: 'Employment contract',
+      marriage_contract: 'Prenuptial agreement',
+    },
+    property: {
+      title: 'Property documents',
+      mortgage_contract: 'Copy mortgage loan agreement',
+      mortgage_contract_caption: 'For detachments',
+      product_agreement: 'Copy product agreement',
+      building_insurance: 'Building insurance statement',
+      building_insurance_caption: 'For EFH',
+      owner_regulations: 'Condominium owner regulations',
+      owner_regulations_caption: 'For condominium ownership',
+      management_regulations: 'Management Regulations',
+      floor_plans: 'Floor plans',
+      pictures: 'Photos',
+      pictures_caption: 'Interior and exterior',
+      purchase_contract: 'Purchase contract, or purchase contract at that time',
+      renovations: 'Renovation list of the last years',
+      legacy_cadaster: 'Contaminated sites register',
+      legacy_cadaster_caption: 'Organized by the bank',
+      land_register_extract: 'Land register excerpt',
+      land_register_extract_caption: 'Usually organized by the bank',
+      building_description: 'Building description',
+      building_description_caption: 'For construction projects',
+      reservation_contract: 'Reservation contract',
+      market_value_estimate: 'Fair value estimate',
+      sales_documentation: 'Sales documentation from that time',
+      situation_plan: 'General plan of location/Cadastral map'
+    }
   },
   dossier: {
     reset_dossier: 'Reset dossier',
@@ -142,7 +198,34 @@ export default {
     send_offer: 'Send offer',
     upload_offer: 'Upload offer documents',
     reject_dossier: 'Reject dossier',
-    reject_reason: 'Reason for rejection'
+    reject_reason: 'Reason for rejection',
+    contact: 'Contact',
+    application: 'Application',
+    customer_confirms: 'The customer confirms the correctness of information',
+    original_bank: 'Bank',
+    purchase_price: 'Purchase Price',
+    current_value: 'Current Value',
+    current_mortgage: 'Current Mortgage',
+    object_type: 'Object Type',
+    purchase_date: 'Purchase Date',
+    installment: 'Installment',
+    expiration_date: 'Expiration Date',
+    lending_value: 'Lending Value',
+    amortization_amount: 'Amortization Amount',
+    amortization_type: 'Amortization Type',
+    direct: 'Direct',
+    indirect: 'Indirect',
+    renovated: 'Renovated',
+    renovation_amount: 'Renovation amount',
+    renovation_year: 'Renovation Year',
+    salary: 'Creditable Salary',
+    costs: 'Costs',
+    sustainability: 'Sustainability',
+    building_right: 'Building Right',
+    debt_enforcements: 'Debt Enforcements',
+    loss_certificates: 'Loss Certificates',
+    recipients: 'Recipients',
+    send_email_description: 'The document will be sent to the chosen recipients in PDF format. Further recipients can be entered in the field above..'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -180,7 +263,8 @@ export default {
     missing_user_type: 'Please select a user type',
     documents_missing: 'Documents missing',
     offer_already_present: 'You have already marked this dossier.',
-    unknown: 'Unknown Error'
+    unknown: 'Unknown Error',
+    pdf_generation_error: 'An error occurred while generating the PDF file.',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -239,6 +323,7 @@ export default {
     market_value_estimation: 'Market value estimation in CHF',
     current_value_of_mortgage: 'Current value of mortgage in CHF',
     enfeoffment: 'Enfeoffment in %',
+    retirement_warning: 'The acceptibility of risks is different for people over the age of 60'
     building_lease: 'Building lease',
     building_lease_interest: 'Building lease interest  (per year in CHF)',
     type: 'Type',
@@ -270,7 +355,6 @@ export default {
     ACCEPTED: 'Accepted',
     IN_PROCESS: 'In Process'
   },
-
   email: {
     subject_rejected: 'Rejected',
     body_rejected: 'Application is rejected'

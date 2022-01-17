@@ -15,6 +15,9 @@ import {
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
+import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
+import { GetDossierInput } from './dto/input/get-dossier.input';
+import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -136,5 +139,59 @@ export class DossierResolver {
     updateOfferStatusInput: UpdateOfferStatusInput,
   ): Promise<Dossier> {
     return this.dossierService.updateOfferStatus(updateOfferStatusInput);
+  }
+
+  /**
+   * Get a Dossier based on its Uuid
+   * @param {GetDossierInput} getDossierInput - uuid of dossier
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier>} - dossier
+   */
+  @EmployeeOnly()
+  @Query(() => Dossier)
+  async getDossier(
+    @Args('getDossierInput')
+    getDossierInput: GetDossierInput,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier> {
+    return this.dossierService.getDossier(getDossierInput.uuid, user.userId);
+  }
+
+  /**
+   * Remove files from a dossier
+   * @param {RemoveDossierFilesInput} removeDossierFilesInput - dossier uuid and file uuid list
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier>} - dossier
+   */
+  @EmployeeOnly()
+  @Mutation(() => Dossier)
+  async removeDossierFiles(
+    @Args('removeDossierFilesInput')
+    removeDossierFilesInput: RemoveDossierFilesInput,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier> {
+    return this.dossierService.removeFiles(
+      removeDossierFilesInput,
+      user.userId,
+    );
+  }
+
+  /**
+   * Sends an e-mail containing a dossier document to the specified recipients
+   * @param {SendDossierDocumentInput} sendDossierDocumentInput - input, containing dossier UUID, recipient, & file UUID
+   * @param {Record<string, string>} user - current user
+   * @returns {Promise<void>} - done
+   */
+  @EmployeeOnly()
+  @Mutation(() => Dossier)
+  async sendDossierDocumentEmail(
+    @Args('sendDossierDocumentInput')
+    sendDossierDocumentInput: SendDossierDocumentInput,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier> {
+    return this.dossierService.sendDossierDocumentEmail(
+      sendDossierDocumentInput,
+      user,
+    );
   }
 }

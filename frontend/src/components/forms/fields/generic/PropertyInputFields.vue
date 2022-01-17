@@ -28,7 +28,8 @@
       v-model="enfeoffment"
       type="text"
       dense
-      readonly
+      disable
+      label-color="black"
       :label="$t('form_for_clients.enfeoffment')"
       >
     </q-input>
@@ -37,7 +38,7 @@
 
 <script setup lang="ts">
 import {IS_VALID_STRING} from 'src/data/RULES'
-import {ref} from "vue";
+import {computed, ref} from 'vue';
 
 const emit = defineEmits(['change'])
 
@@ -45,31 +46,39 @@ const price = ref('')
 const market_value_estimation = ref('')
 const current_value_of_mortgage = ref('')
 
-let enfeoffment = +current_value_of_mortgage.value / +price.value
+
+/**
+ * Automatically keeps enfoffmenet calculation up to date
+ * @returns {String}
+ */
+let enfeoffment = computed(()=>  {
+  if(!current_value_of_mortgage.value || !price.value){
+    return '-'
+  }
+  return `${(Math.abs(Number.parseInt(current_value_of_mortgage.value)) / Math.abs(Number.parseInt(price.value))) * 100}%`
+})
 
 
 /**
- * Emits the updated value, if it is valid
+ * Emits the updated value of the price, if it is valid
  * @returns {void}
  */
 function emitValuePrice() {
   emit('change', price)
-  enfeoffment = +current_value_of_mortgage.value / +price.value
 }
 /**
- * Emits the updated value, if it is valid
+ * Emits the updated value of the estimated market value, if it is valid
  * @returns {void}
  */
 function emitValueMarketValue() {
   emit('change', market_value_estimation)
 }
 /**
- * Emits the updated value, if it is valid
+ * Emits the updated value of the mortgage, if it is valid
  * @returns {void}
  */
 function emitValueMortgage() {
   emit('change', current_value_of_mortgage)
-  enfeoffment = +current_value_of_mortgage.value / +price.value
 }
 
 

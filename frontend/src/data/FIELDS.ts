@@ -11,6 +11,7 @@ import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
 import DisabledInputField from 'components/forms/fields/generic/PropertyInputFields.vue'
+import OptionGroupTitle from 'components/forms/fields/generic/OptionGroupTitle.vue'
 import OwnerOccupiedOptionGroup from 'components/forms/fields/generic/OwnerOccupiedOptionGroup.vue'
 import BuildingLeaseDropdown from 'components/forms/fields/generic/BuildingLeaseDropdown.vue'
 import RenovationOptionGroup from 'components/forms/fields/generic/RenovationOptionGroup.vue'
@@ -18,7 +19,7 @@ import AmortisationOptionGroup from 'components/forms/fields/generic/Amortisatio
 import TypeOptionGroup from 'components/forms/fields/generic/TypeOptionGroup.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
-import {PROPERTY_TYPE} from "../../../shared/definitions/ENUMS";
+import {PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -74,6 +75,7 @@ const FIELDS: Record<string, Field> = {
       type: Date,
       label: i18n.global.t('employee_dashboard.date_of_birth'),
       lazy_rules: 'true',
+      retirement_rule: true,
       rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
     },
   },
@@ -221,7 +223,7 @@ const FIELDS: Record<string, Field> = {
   },
   OWNER_OCCUPIED: {
     key: 'property_type',
-    component: markRaw(OwnerOccupiedOptionGroup), //TODO: design of QOptionGroup
+    component: markRaw(OptionGroupTitle),
     attributes: {
       label: i18n.global.t('form_for_clients.owner_occupied'),
       options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
@@ -233,10 +235,7 @@ const FIELDS: Record<string, Field> = {
     key: 'date_of_purchase',
     component: markRaw(InputDatePicker),
     attributes: {
-      dense: true,
-      type: Date,
       label: i18n.global.t('form_for_clients.date_of_purchase'),
-      lazy_rules: 'true',
       rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
     },
   },

@@ -274,7 +274,7 @@ type Dossier {
   """Date of deletion"""
   deleted_at: DateTime
 
-  """Documents of the company"""
+  """Documents of the dossier"""
   documents: [PrivateFile!]
 
   """Mail"""
@@ -282,6 +282,9 @@ type Dossier {
 
   """Employee who created the Dossier"""
   employee: Employee!
+
+  """Final summary document, to be signed by customer"""
+  finalDocument: PrivateFile
 
   """First Name"""
   first_name: String!
@@ -299,7 +302,7 @@ type Dossier {
   non_arrangeable: Boolean!
 
   """List of Offers"""
-  offers: [Offer!]!
+  offers: [Offer!]
 
   """Previous Bank of the customer"""
   original_bank: Bank!
@@ -372,6 +375,46 @@ type Employee {
   uuid: ID!
 }
 
+enum FileType {
+  ADDITIONAL_DOCUMENTS
+  BUILDING_DESCRIPTION
+  BUILDING_INSURANCE
+  CREDIT_CONTRACT
+  DEBT_COLLECTION
+  DUMMY
+  FLOOR_PLANS
+  ID
+  LAND_REGISTER_EXTRACT
+  LAST_YEAR_SALARY
+  LAST_YEAR_TAX
+  LEASING_CONTRACT
+  LEGACY_CADASTER
+  LIFE_INSURANCE
+  MANAGEMENT_REGULATIONS
+  MARKET_VALUE_ESTIMATE
+  MARRIAGE_CONTRACT
+  MORTGAGE_CONTRACT
+  NONE
+  OWNER_REGULATIONS
+  OWN_FUNDS
+  PENSION
+  PENSION_ID
+  PICTURES
+  PRODUCT_AGREEMENT
+  PURCHASE_CONTRACT
+  RENOVATIONS
+  RESERVATION_CONTRACT
+  SALARY
+  SALES_DOCUMENTATION
+  SITUATION_PLAN
+  THREE_A
+  WORK_CONTRACT
+}
+
+input GetDossierInput {
+  uuid: ID!
+}
+
 type Mutation {
   associateUserToCompany(associateUserInput: AssociateUserInput!): Company!
   createBank(createBankInput: CreateBankInput!): Bank!
@@ -384,7 +427,9 @@ type Mutation {
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
+  removeDossierFiles(removeDossierFilesInput: RemoveDossierFilesInput!): Dossier!
   resetDossier(resetDossierInput: ResetDossierInput!): Dossier!
+  sendDossierDocumentEmail(sendDossierDocumentInput: SendDossierDocumentInput!): Dossier!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
@@ -438,6 +483,9 @@ type PrivateFile {
   """Dossier the file belongs to"""
   dossier: Dossier
 
+  """Type of the File"""
+  file_type: FileType!
+
   """S3 File Key"""
   key: String!
 
@@ -487,6 +535,7 @@ type Query {
   company(cognito_id: ID, uuid: ID): Company!
   getBankNames: [String!]!
   getBanks: [Bank!]!
+  getDossier(getDossierInput: GetDossierInput!): Dossier!
   getDossierDocument(
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
@@ -514,6 +563,11 @@ type Query {
   users(uuids: [ID!]): [User!]!
 }
 
+input RemoveDossierFilesInput {
+  fileUuids: [ID!]!
+  uuid: ID!
+}
+
 input ResetDossierInput {
   uuid: ID!
 }
@@ -525,6 +579,12 @@ enum Roles {
   NONE
   SOI_ADMIN
   SOI_EMPLOYEE
+}
+
+input SendDossierDocumentInput {
+  fileUuid: ID!
+  recipients: [String!]!
+  uuid: ID!
 }
 
 type SoiAdmin {

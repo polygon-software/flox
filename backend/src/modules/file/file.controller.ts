@@ -13,7 +13,7 @@ import { AnyRole, EmployeeOnly } from '../../auth/authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
-import { CREATION_STATE } from '../../ENUM/ENUMS';
+import { CREATION_STATE, FILE_TYPE } from '../../ENUM/ENUMS';
 import fastify = require('fastify');
 import { ERRORS } from '../../error/ERRORS';
 import { Offer } from '../offer/entities/offer.entity';
@@ -77,6 +77,7 @@ export class FileController {
     const newFile = await this.fileService.uploadPrivateFile(
       fileBuffer,
       file.filename,
+      FILE_TYPE.NONE as unknown as FILE_TYPE, //Is a DossierFileType by default...
       owner,
       {},
     );
@@ -124,6 +125,7 @@ export class FileController {
     const newFile = await this.fileService.uploadPrivateFile(
       fileBuffer,
       file.filename,
+      FILE_TYPE.NONE as unknown as FILE_TYPE, //Is a DossierFileType by default...
       companyUuid, // Owner; must be changed to cognito ID later
       { company },
     );
@@ -138,7 +140,11 @@ export class FileController {
    * @param {fastify.FastifyReply<any>} res - the res sent back
    * @returns {Promise<any>} - done
    */
-  @Options(['/uploadOfferFile', '/uploadDossierFile']) //Todo Find better way to allow Preflight requests
+  @Options([
+    '/uploadOfferFile',
+    '/uploadDossierFile',
+    '/uploadDossierFinalDocument',
+  ]) //Todo Find better way to allow Preflight requests
   @Public()
   async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {
     res.headers({
@@ -168,9 +174,13 @@ export class FileController {
 
     const updatedOffer = await this.fileService.uploadAssociatedFile(
       file,
+      FILE_TYPE.NONE as unknown as FILE_TYPE, //Is a DossierFileType by default...
       offerUuid,
       'offerRepository',
-      { onFile: 'offer', onAssociation: 'documents' },
+      {
+        onFile: 'offer',
+        onAssociation: 'documents',
+      },
       req['user'].userId,
     );
 
@@ -193,12 +203,46 @@ export class FileController {
 
     // Determine dossier UUID from query param
     const dossierUuid: string = query.did;
+    const files = await req.saveRequestFiles();
+    let updatedDossier;
+    for (const file of files) {
+      const fileType =
+        FILE_TYPE[file.fieldname.substr(0, file.fieldname.length - 5)];
+      updatedDossier = await this.fileService.uploadAssociatedFile(
+        file,
+        fileType,
+        dossierUuid,
+        'dossierRepository',
+        { onFile: 'dossier', onAssociation: 'documents' },
+        req['user'].userId,
+      );
+    }
+    res.header('access-control-allow-origin', '*');
+    res.send(updatedDossier);
+  }
+
+  @Post('/uploadDossierFinalDocument')
+  @EmployeeOnly()
+  async uploadDossierFinalDocument(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+    @Query() query: Record<string, string>, // Params
+  ): Promise<any> {
+    // Verify that request is multipart
+    if (!req.isMultipart()) {
+      res.send(new BadRequestException(ERRORS.file_expected));
+      return;
+    }
+
+    // Determine dossier UUID from query param
+    const dossierUuid: string = query.did;
     const file = await req.file();
     const updatedDossier = await this.fileService.uploadAssociatedFile(
       file,
+      FILE_TYPE.NONE as unknown as FILE_TYPE,
       dossierUuid,
       'dossierRepository',
-      { onFile: 'dossier', onAssociation: 'documents' },
+      { onFile: null, onAssociation: 'finalDocument' },
       req['user'].userId,
     );
 
