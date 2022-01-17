@@ -10,9 +10,9 @@ import CompanyUploadFields from 'components/forms/fields/document_upload/Company
 import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
-import YearPicker from 'components/forms/fields/generic/YearPicker.vue'
 import DisabledInputField from 'components/forms/fields/generic/PropertyInputFields.vue'
 import OwnerOccupiedOptionGroup from 'components/forms/fields/generic/OwnerOccupiedOptionGroup.vue'
+import BuildingLeaseDropdown from 'components/forms/fields/generic/BuildingLeaseDropdown.vue'
 import RenovationOptionGroup from 'components/forms/fields/generic/RenovationOptionGroup.vue'
 import AmortisationOptionGroup from 'components/forms/fields/generic/AmortisationOptionGroup.vue'
 import TypeOptionGroup from 'components/forms/fields/generic/TypeOptionGroup.vue'
@@ -295,11 +295,10 @@ const FIELDS: Record<string, Field> = {
   },
   BUILDING_LEASE: {
     key: 'building_lease',
-    component: markRaw(QInput),
+    component: markRaw(BuildingLeaseDropdown),
     attributes: {
       dense: true,
       type: 'text',
-      label: i18n.global.t('form_for_clients.building_lease'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_string')]
     },
@@ -327,7 +326,7 @@ const FIELDS: Record<string, Field> = {
   },
   RENOVATION_YEAR: {
     key: 'renovation_year',
-    component: markRaw(YearPicker),
+    component: markRaw(InputDatePicker),
     attributes: {
       dense: true,
       type: Date,

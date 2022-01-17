@@ -31,7 +31,7 @@
                 <div
                   v-for="leftSection in page.sectionsLHS"
                   :key="leftSection.key">
-                  <b class="q-py-xl q-my-xl">{{ leftSection.title }}</b>
+                  <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
                   <component
                     :is="field.component"
                     v-for="field in leftSection.fields"
@@ -47,7 +47,7 @@
                 <div
                   v-for="rightSection in page.sectionsRHS"
                   :key="rightSection.key">
-                  <b class="q-py-xl q-my-xl">{{ rightSection.title }}</b>
+                  <strong class="q-py-xl q-my-xl">{{ rightSection.title }}</strong>
                   <component
                     :is="field.component"
                     v-for="field in rightSection.fields"
@@ -173,19 +173,19 @@ const pages = [
       {
         key: 'calculation-data1',
         title: i18n.global.t('dashboards.mortgage'),
-        fields: [FIELDS.PORTION, FIELDS.EXPIRATION_DATE], // TODO: give date a label
+        fields: [FIELDS.PORTION, FIELDS.EXPIRATION_DATE], // TODO: give date a label TODO: add rules for date
       },
       {
         key: 'calculation-data2',
-        title: i18n.global.t('form_for_clients.building_lease'),
-        fields: [FIELDS.BUILDING_LEASE], // TODO: ask what fields should be in here
+        title: ' ',
+        fields: [FIELDS.BUILDING_LEASE], // TODO: add a pop up
       },
     ],
     sectionsRHS: [
       {
         key: 'calculation-data3',
         title: ' ',
-        fields: [FIELDS.RENOVATION, FIELDS.RENOVATION_YEAR, FIELDS.PRICE], // TODO: should this only be a year, if yes as a date or as a string?
+        fields: [FIELDS.RENOVATION, FIELDS.RENOVATION_YEAR, FIELDS.PRICE],
       },
       {
         key: 'calculation-data4',
