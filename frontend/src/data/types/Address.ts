@@ -31,7 +31,7 @@ export class Address{
    */
   validate(): boolean{
     try {
-      Joi.assert(this, AddressItem as Schema<any>)
+      Joi.assert(this, AddressItem as unknown as Schema)
       return true;
     } catch (e) {
       return false

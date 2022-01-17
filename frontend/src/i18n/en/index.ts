@@ -12,7 +12,9 @@ export default {
     return: 'Return',
     uploading: 'Uploading...',
     done: 'Done',
-    warning: 'Warning!'
+    warning: 'Warning!',
+    created_on: 'Created on',
+    loading: 'Loading...'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -95,6 +97,7 @@ export default {
     failure: 'Failure',
     dossier_reset: 'Successfully reset dossier',
     dossier_reset_failed: 'Dossier reset failed',
+    email_sent: 'E-Mail(s) sent'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -131,6 +134,8 @@ export default {
     preview: 'Preview',
     save: 'Save',
     discard: 'Discard',
+    send_by_email: 'Send by E-Mail',
+    print: 'Print'
   },
   documents: {
     choose_documents: 'Choose documents',
@@ -193,7 +198,34 @@ export default {
     send_offer: 'Send offer',
     upload_offer: 'Upload offer documents',
     reject_dossier: 'Reject dossier',
-    reject_reason: 'Reason for rejection'
+    reject_reason: 'Reason for rejection',
+    contact: 'Contact',
+    application: 'Application',
+    customer_confirms: 'The customer confirms the correctness of information',
+    original_bank: 'Bank',
+    purchase_price: 'Purchase Price',
+    current_value: 'Current Value',
+    current_mortgage: 'Current Mortgage',
+    object_type: 'Object Type',
+    purchase_date: 'Purchase Date',
+    installment: 'Installment',
+    expiration_date: 'Expiration Date',
+    lending_value: 'Lending Value',
+    amortization_amount: 'Amortization Amount',
+    amortization_type: 'Amortization Type',
+    direct: 'Direct',
+    indirect: 'Indirect',
+    renovated: 'Renovated',
+    renovation_amount: 'Renovation amount',
+    renovation_year: 'Renovation Year',
+    salary: 'Creditable Salary',
+    costs: 'Costs',
+    sustainability: 'Sustainability',
+    building_right: 'Building Right',
+    debt_enforcements: 'Debt Enforcements',
+    loss_certificates: 'Loss Certificates',
+    recipients: 'Recipients',
+    send_email_description: 'The document will be sent to the chosen recipients in PDF format. Further recipients can be entered in the field above..'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -229,7 +261,8 @@ export default {
     missing_user_type: 'Please select a user type',
     documents_missing: 'Documents missing',
     offer_already_present: 'You have already marked this dossier.',
-    unknown: 'Unknown Error'
+    unknown: 'Unknown Error',
+    pdf_generation_error: 'An error occurred while generating the PDF file.',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',

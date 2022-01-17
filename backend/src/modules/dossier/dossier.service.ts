@@ -15,9 +15,14 @@ import { CreateOfferInput } from './dto/input/create-offer.input';
 import { Offer } from '../offer/entities/offer.entity';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
+import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
+import { sendDossierDocumentEmail } from '../../email/helper';
+import { GetPrivateFileArgs } from '../file/dto/get-private-file.args';
+import { UserService } from '../user/user.service';
+import { FileService } from '../file/file.service';
+import { ERRORS } from '../../error/ERRORS';
 import { User } from '../user/entities/user.entity';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
-import { FileService } from '../file/file.service';
 
 @Injectable()
 export class DossierService {
@@ -30,6 +35,7 @@ export class DossierService {
     private readonly userRepository: Repository<User>,
     private readonly employeeService: EmployeeService,
     private readonly bankService: BankService,
+    private readonly userService: UserService,
     private readonly fileService: FileService,
   ) {}
 
@@ -306,5 +312,43 @@ export class DossierService {
       });
     }
     throw new Error('Not Authorized');
+  }
+
+  /**
+   * Sends an E-mail containing an attached document belonging to a dossier
+   * @param {SendDossierDocumentInput} sendDossierDocumentInput - input, containing recipients & file
+   * @param {Record<string, string>} user - the User making the request
+   * @returns {Promise<void>} - done
+   */
+  async sendDossierDocumentEmail(
+    sendDossierDocumentInput: SendDossierDocumentInput,
+    user: Record<string, string>,
+  ) {
+    // Get database user
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+
+    // Get actual file
+    const args: GetPrivateFileArgs = {
+      uuid: sendDossierDocumentInput.fileUuid,
+      expires: null,
+    };
+    const pdf = await this.fileService.getPrivateFile(args, dbUser);
+
+    const dossierUuid = sendDossierDocumentInput.uuid;
+    const recipients = sendDossierDocumentInput.recipients;
+
+    const dossier = await this.dossierRepository.findOne(dossierUuid);
+
+    if (!dossier) {
+      throw new Error(ERRORS.no_dossier_found);
+    }
+    if (!pdf || !pdf.url) {
+      throw new Error(ERRORS.file_missing_url);
+    }
+
+    // Send actual e-mail
+    await sendDossierDocumentEmail(dossier.readable_id, recipients, pdf);
+
+    return dossier;
   }
 }

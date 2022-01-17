@@ -15,6 +15,7 @@ import {
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
+import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
 import { GetDossierInput } from './dto/input/get-dossier.input';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
 
@@ -172,6 +173,25 @@ export class DossierResolver {
     return this.dossierService.removeFiles(
       removeDossierFilesInput,
       user.userId,
+    );
+  }
+
+  /**
+   * Sends an e-mail containing a dossier document to the specified recipients
+   * @param {SendDossierDocumentInput} sendDossierDocumentInput - input, containing dossier UUID, recipient, & file UUID
+   * @param {Record<string, string>} user - current user
+   * @returns {Promise<void>} - done
+   */
+  @EmployeeOnly()
+  @Mutation(() => Dossier)
+  async sendDossierDocumentEmail(
+    @Args('sendDossierDocumentInput')
+    sendDossierDocumentInput: SendDossierDocumentInput,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Dossier> {
+    return this.dossierService.sendDossierDocumentEmail(
+      sendDossierDocumentInput,
+      user,
     );
   }
 }

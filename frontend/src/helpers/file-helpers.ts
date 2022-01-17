@@ -6,7 +6,7 @@ import {useApolloClient} from '@vue/apollo-composable';
  * @param {Record<string, unknown>} files - dictionary file filenames vs file
  * @param {string} target - url to upload to
  * @param {string} queryname - Name of the query that got invalidated by request
- * @return {Promise<void>} - Done
+ * @return {Promise<Record<string, unknown>>} - Updated related files
  */
 export async function uploadFiles(files: Record<string, unknown>, target: string, queryname: string) {
   const apolloClient = useApolloClient().resolveClient()
@@ -29,6 +29,7 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
     'Content-Type': 'multipart/form-data',
     Authorization: `Bearer ${token}`
   }
+
   const formData = new FormData();
   for (const fileKey of Object.keys(files)) {
     if (files[fileKey]) {
@@ -38,7 +39,7 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
     }
   }
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ?? ''
-  await axios({
+  const uploadResult = await axios({
     method: 'post',
     url: `${baseUrl}${target}`,
     data: formData,
@@ -46,5 +47,10 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
   }).catch((e: Error) => {
     throw new Error(`File upload error: ${e.message}`)
   })
+
   await apolloClient.refetchQueries({include: [queryname]})
+
+  // Return updated objects
+  return uploadResult.data as Record<string, unknown>;
 }
+

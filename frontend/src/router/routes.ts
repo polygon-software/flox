@@ -137,6 +137,15 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/employee/NewDossierPage.vue') }],
   },
 
+  // TODO: Add other form subpages here
+
+  // Employee: Final page of new dossier creation
+  'DOSSIER_FINAL_DOCUMENT': {
+    path: '/new-dossier-document',
+    component: () => import('layouts/PrintLayout.vue'),
+    children: [{ path: '', component: () => import('pages/employee/DossierFinalDocumentPage.vue') }],
+  },
+
   // Employee: Dossier mandatory document upload
   'DOSSIER_DOCUMENT_UPLOAD': {
     path: '/dossier-document-upload',

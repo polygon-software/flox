@@ -12,7 +12,9 @@ export default {
     return: 'Zurück',
     uploading: 'Wird hochgeladen...',
     done: 'Fertig',
-    warning: 'Achtung!'
+    warning: 'Achtung!',
+    created_on: 'Erstellt am',
+    loading: 'Lädt...'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -97,6 +99,7 @@ export default {
     login_failed: 'Login hat fehlgeschlagen',
     dossier_reset: 'Dossier erfolgreich zurückgesetzt',
     dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
+    email_sent: 'E-Mail(s) versendet'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -133,6 +136,8 @@ export default {
     preview: 'Vorschau',
     save: 'Speichern',
     discard: 'Verwerfen',
+    send_by_email: 'Per Mail senden',
+    print: 'Drucken'
   },
   documents: {
     choose_documents: 'Dokumente wählen',
@@ -195,7 +200,34 @@ export default {
     send_offer: 'Offerte senden',
     upload_offer: 'Offertendokumente hochladen',
     reject_dossier: 'Dossier ablehnen',
-    reject_reason: 'Ablehnungsgrund'
+    reject_reason: 'Ablehnungsgrund',
+    contact: 'Kontakt',
+    application: 'Antrag',
+    customer_confirms: 'Der Kunde bestätigt die Richtigkeit der Angaben',
+    original_bank: 'Finanzinstitut',
+    purchase_price: 'Kaufpreis',
+    current_value: 'Aktueller Wert',
+    current_mortgage: 'Aktuelle Hypothek',
+    object_type: 'Objekttyp',
+    purchase_date: 'Kaufdatum',
+    installment: 'Tranche',
+    expiration_date: 'Ablaufdatum',
+    lending_value: 'Belehnungswert',
+    amortization_amount: 'Amortisationsbetrag',
+    amortization_type: 'Amortisationsart',
+    direct: 'Direkt',
+    indirect: 'Indirekt',
+    renovated: 'Renoviert',
+    renovation_amount: 'Renovationsbetrag',
+    renovation_year: 'Renovationsjahr',
+    salary: 'Anrechenbarer Lohn',
+    costs: 'Kosten',
+    sustainability: 'Tragbarkeit',
+    building_right: 'Baurecht',
+    debt_enforcements: 'Betreibungen',
+    loss_certificates: 'Verlustscheine',
+    recipients: 'Empfänger',
+    send_email_description: 'Das Dokument wird als PDF and die ausgewählten Empfänger zugestellt. Weitere Empfänger können im obigen Feld angegeben werden.'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -231,7 +263,8 @@ export default {
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     documents_missing: 'Fehlende Dokumente',
     offer_already_present: 'Sie haben dieses Dossier bereits markiert.',
-    unknown: 'Unbekannter Fehler'
+    unknown: 'Unbekannter Fehler',
+    pdf_generation_error: 'Beim Erstellen der PDF-Datei ist ein Fehler aufgetreten.',
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',

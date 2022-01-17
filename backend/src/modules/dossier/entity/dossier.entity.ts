@@ -63,11 +63,22 @@ export class Dossier extends Person {
 
   @Field(() => [PrivateFile], {
     nullable: true,
-    description: 'Documents of the company',
+    description: 'Documents of the dossier',
   })
   @OneToMany(() => PrivateFile, (file) => file.dossier, {
     cascade: true,
     onDelete: 'CASCADE',
   })
   documents: PrivateFile[];
+
+  @Field(() => PrivateFile, {
+    nullable: true,
+    description: 'Final summary document, to be signed by customer',
+  })
+  @OneToOne(() => PrivateFile, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  finalDocument: PrivateFile;
 }

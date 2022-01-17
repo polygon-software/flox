@@ -274,7 +274,7 @@ type Dossier {
   """Date of deletion"""
   deleted_at: DateTime
 
-  """Documents of the company"""
+  """Documents of the dossier"""
   documents: [PrivateFile!]
 
   """Mail"""
@@ -282,6 +282,9 @@ type Dossier {
 
   """Employee who created the Dossier"""
   employee: Employee!
+
+  """Final summary document, to be signed by customer"""
+  finalDocument: PrivateFile
 
   """First Name"""
   first_name: String!
@@ -426,6 +429,7 @@ type Mutation {
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeDossierFiles(removeDossierFilesInput: RemoveDossierFilesInput!): Dossier!
   resetDossier(resetDossierInput: ResetDossierInput!): Dossier!
+  sendDossierDocumentEmail(sendDossierDocumentInput: SendDossierDocumentInput!): Dossier!
   updateCompany(updateCompanyInput: UpdateCompanyInput!): Company!
   updateDossier(updateDossierInput: UpdateDossierInput!): Dossier!
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
@@ -574,6 +578,12 @@ enum Roles {
   NONE
   SOI_ADMIN
   SOI_EMPLOYEE
+}
+
+input SendDossierDocumentInput {
+  fileUuid: ID!
+  recipients: [String!]!
+  uuid: ID!
 }
 
 type SoiAdmin {

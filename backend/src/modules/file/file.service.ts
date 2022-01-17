@@ -188,6 +188,7 @@ export class FileService {
   async deletePrivateFile(fileUuid: string): Promise<PrivateFile> {
     const file = await this.privateFilesRepository.findOne(fileUuid);
     await this.privateFilesRepository.delete(file.uuid);
+    // TODO delete on S3
     return file;
   }
 
@@ -211,7 +212,7 @@ export class FileService {
     fileType: FILE_TYPE,
     associationUuid: string,
     repositoryName: string,
-    location: Record<'onAssociation' | 'onFile', string>,
+    location: Record<'onAssociation' | 'onFile', string | null>,
     ownerUuid: string,
   ): Promise<Record<string, unknown>> {
     if (!file) {
@@ -239,7 +240,7 @@ export class FileService {
       file.filename,
       fileType,
       user.fk,
-      { [location.onFile]: associatedEntity },
+      location.onFile ? { [location.onFile]: associatedEntity } : {},
     );
     if (
       // Empty location -> add
@@ -252,10 +253,11 @@ export class FileService {
       associatedEntity[location.onAssociation].push(newFile);
     } else {
       // File found on location -> delete existing file and override
-      await this.deletePrivateFile(
-        associatedEntity[location.onAssociation].uuid,
-      );
+      const oldFileUuid = associatedEntity[location.onAssociation].uuid;
       associatedEntity[location.onAssociation] = newFile;
+      await this[repositoryName].save(associatedEntity);
+
+      await this.deletePrivateFile(oldFileUuid);
     }
     await this[repositoryName].save(associatedEntity);
     return associatedEntity;

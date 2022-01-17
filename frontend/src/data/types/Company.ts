@@ -64,7 +64,7 @@ export class Company {
    */
   validate(): boolean{
     try{
-      Joi.assert(this, CompanyItem as Schema<any>)
+      Joi.assert(this, CompanyItem as unknown as Schema)
       return true;
     } catch (e) {
       return false
