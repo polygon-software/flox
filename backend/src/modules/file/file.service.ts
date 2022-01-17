@@ -15,7 +15,7 @@ import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
 import { ERRORS } from '../../error/ERRORS';
 import { MultipartFile } from 'fastify-multipart';
-import { ROLE } from '../../ENUM/ENUMS';
+import { FILE_TYPE, ROLE } from '../../ENUM/ENUMS';
 
 @Injectable()
 export class FileService {
@@ -82,6 +82,7 @@ export class FileService {
    * Uploads a file to the private S3 bucket
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
+   * @param {FILE_TYPE} fileType - The type of the file
    * @param {string} owner - the file owner's UUID
    * @param {Record<string, Company|Offer|Dossier>} association - the entity the file is associated to
    * @returns {Promise<PrivateFile>} - file
@@ -89,6 +90,7 @@ export class FileService {
   async uploadPrivateFile(
     dataBuffer: Buffer,
     filename: string,
+    fileType: FILE_TYPE,
     owner: string,
     association: Record<string, Company | Offer | Dossier>,
   ): Promise<PrivateFile> {
@@ -103,11 +105,10 @@ export class FileService {
     const fileInput = {
       key: key,
       owner: owner,
+      file_type: fileType,
       ...association,
     };
-
     const newFile = this.privateFilesRepository.create(fileInput);
-
     await this.s3.send(new PutObjectCommand(uploadParams));
     await this.privateFilesRepository.save(newFile);
 
@@ -198,6 +199,7 @@ export class FileService {
    * Otherwise the field is overwritten.
    * Adds the entity to the file at the field given by location.onFile
    * @param {MultipartFile} file - The file
+   * @param {FILE_TYPE} fileType - The type of the file
    * @param {string} associationUuid - The Id of the entity to associate with
    * @param {string} repositoryName - The name of the repository where the entity can be found. Needs to be injected.
    * @param {Record<'onAssociation' | 'onFile', string>} location - Where the file and entity link to each other
@@ -206,6 +208,7 @@ export class FileService {
    */
   async uploadAssociatedFile(
     file: MultipartFile,
+    fileType: FILE_TYPE,
     associationUuid: string,
     repositoryName: string,
     location: Record<'onAssociation' | 'onFile', string>,
@@ -230,11 +233,11 @@ export class FileService {
     if (!user) {
       throw new Error(ERRORS.no_user_found);
     }
-
     const fileBuffer = await file.toBuffer();
     const newFile = await this.uploadPrivateFile(
       fileBuffer,
       file.filename,
+      fileType,
       user.fk,
       { [location.onFile]: associatedEntity },
     );

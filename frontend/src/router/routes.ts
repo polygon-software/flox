@@ -134,7 +134,14 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   'NEW_DOSSIER_PAGE': {
     path: '/new-dossier',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/NewDossierPage.vue') }],
+    children: [{ path: '', component: () => import('pages/employee/NewDossierPage.vue') }],
+  },
+
+  // Employee: Dossier mandatory document upload
+  'DOSSIER_DOCUMENT_UPLOAD': {
+    path: '/dossier-document-upload',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/employee/DossierDocumentUploadPage.vue') }],
   },
 
   // Wildcard route for non-covered routes

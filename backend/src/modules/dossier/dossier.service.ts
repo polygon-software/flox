@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
-import { DOSSIER_STATUS, OFFER_STATUS } from '../../ENUM/ENUMS';
+import { DOSSIER_STATUS, OFFER_STATUS, ROLE } from '../../ENUM/ENUMS';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import { BankService } from '../bank/bank.service';
 import { generateHumanReadableId } from '../../helpers';
@@ -15,6 +15,9 @@ import { CreateOfferInput } from './dto/input/create-offer.input';
 import { Offer } from '../offer/entities/offer.entity';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
 import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
+import { User } from '../user/entities/user.entity';
+import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class DossierService {
@@ -23,8 +26,11 @@ export class DossierService {
     private readonly dossierRepository: Repository<Dossier>,
     @InjectRepository(Offer)
     private readonly offerRepository: Repository<Offer>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly employeeService: EmployeeService,
     private readonly bankService: BankService,
+    private readonly fileService: FileService,
   ) {}
 
   /**
@@ -253,5 +259,52 @@ export class DossierService {
     return this.dossierRepository.findOne(updateOfferStatusInput.dossier_uuid, {
       relations: ['offers', 'offers.bank'],
     });
+  }
+
+  /**
+   * Getter for a single dossier. Currently only allows access to Employee of dossier.
+   * @param {string} dossierUuid - uuid of dossier
+   * @param {string} userUuid - uuid of user requesting
+   * @returns {Dossier} - requested dossier
+   */
+  async getDossier(dossierUuid: string, userUuid: string): Promise<Dossier> {
+    const user = await this.userRepository.findOne(userUuid);
+    const dossier = await this.dossierRepository.findOne(dossierUuid, {
+      relations: ['documents', 'employee'],
+    });
+    if (user.role === ROLE.EMPLOYEE && dossier.employee.uuid === user.fk) {
+      return dossier;
+    }
+    throw new Error('Not Authorized');
+  }
+
+  /**
+   * Removes a list of files from a dossier. Currently only allows access to Employee of dossier.
+   * @param {RemoveDossierFilesInput} removeDossierFilesInput - uuid of dossier and uuids of files
+   * @param {string} userUuid - uuid of user requesting
+   * @returns {Dossier} - Updated dossier
+   */
+  async removeFiles(
+    removeDossierFilesInput: RemoveDossierFilesInput,
+    userUuid: string,
+  ): Promise<Dossier> {
+    const user = await this.userRepository.findOne(userUuid);
+    const dossier = await this.dossierRepository.findOne(
+      removeDossierFilesInput.uuid,
+      {
+        relations: ['documents', 'employee'],
+      },
+    );
+    const promises = [];
+    if (dossier.employee.uuid === user.fk) {
+      removeDossierFilesInput.fileUuids.forEach((fileUuid) => {
+        promises.push(this.fileService.deletePrivateFile(fileUuid));
+      });
+      await Promise.all(promises);
+      return this.dossierRepository.findOne(removeDossierFilesInput.uuid, {
+        relations: ['documents', 'employee'],
+      });
+    }
+    throw new Error('Not Authorized');
   }
 }
