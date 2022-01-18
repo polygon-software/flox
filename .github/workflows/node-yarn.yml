@@ -1,17 +1,16 @@
 name: Set up Node environment,caches and installs dependencies
 
 on:
-  workflow_call
+  workflow_call:
+    inputs:
+      node:
+        required: true
+        type: string
 
 jobs:
   setup:
     name: Setup Node and Dependencies
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [14, 16]
 
     steps:
       - name: Checkout
@@ -20,7 +19,7 @@ jobs:
       - name: Setup node env
         uses: actions/setup-node@v2.1.4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ inputs.node }}
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path

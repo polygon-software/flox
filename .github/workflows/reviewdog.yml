@@ -19,7 +19,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Node and Dependencies
-        uses: ./.github/actions/node-yarn@v1
+        uses: ./node-yarn@feature-sonarCoverage
+        with:
+          node: 14.x
 
       - name: Lint frontend
         uses: reviewdog/action-eslint@v1
