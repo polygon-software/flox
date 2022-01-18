@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Node and Dependencies
-        uses: ./.github/workflows/node-yarn@feature-sonarCoverage
+        uses: ./.github/actions/node-yarn@feature-sonarCoverage
         with:
           node: 14.x
 
