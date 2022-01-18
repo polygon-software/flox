@@ -12,7 +12,8 @@ on:
       - reopened
 
 jobs:
-  name: setup-node
+  setup-node:
+    name: Setup Node & Dependencies
     uses: ./.github/workflows/node-yarn@feature-sonarCoverage
     with:
       node: 14.x
