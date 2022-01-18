@@ -6,7 +6,7 @@ module.exports = {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
   collectCoverageFrom: ['**/*.{(t|j)s,vue}', '!**/node_modules/**'],
-  coverageDirectory: '../coverage',
+  coverageDirectory: '<rootDir>/../reports/coverage',
   testEnvironment: 'node',
   testResultsProcessor: 'jest-sonar-reporter',
 };

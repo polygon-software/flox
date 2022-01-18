@@ -15,8 +15,7 @@ module.exports = {
   // cache: false,
   // verbose: true,
   // watch: true,
-  collectCoverage: true,
-  coverageDirectory: '<rootDir>/test/jest/coverage',
+  coverageDirectory: '<rootDir>/reports/coverage',
   collectCoverageFrom: [
     '<rootDir>/src/**/*.vue',
     '<rootDir>/src/**/*.js',

@@ -1,6 +1,9 @@
-<p align="center">
-<img src="https://polygon-software.ch/images/banner.svg" height="300">
-</p>
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=polygon-software_full-stack-bootstrap&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_full-stack-bootstrap&metric=ncloc&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_full-stack-bootstrap&metric=coverage&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_full-stack-bootstrap&metric=bugs&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
+
 
 # Full Stack Bootstrap Repository
 

@@ -24,24 +24,24 @@ jobs:
         uses: ./.github/actions/node-yarn@v1
 
       - name: Run Backend Unit Tests
-        run: yarn test:unit:cov
+        run: yarn test:unit:report
         working-directory: backend
 
       - name: Run Frontend Unit Tests
-        run: yarn test:unit:cov
+        run: yarn test:unit:report
         working-directory: frontend
 
       - name: Upload Backend Testing Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: backend-reports
-          path: backend/test-report.xml
+          path: backend/reports
 
       - name: Upload Frontend Testing Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: frontend-reports
-          path: frontend/test-report.xml
+          path: frontend/reports
 
   sonarcloud:
     name: Sonar Coverage Scan
@@ -56,13 +56,13 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: backend-reports
-          path: backend/test-report.xml
+          path: backend/reports
 
       - name: Download Frontend Testing Artifacts
         uses: actions/download-artifact@v2
         with:
           name: frontend-reports
-          path: frontend/test-report.xml
+          path: frontend/reports
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
