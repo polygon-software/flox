@@ -15,6 +15,7 @@ import PropertyInputFields from 'components/forms/fields/dossier_creation/Proper
 import BuildingLeaseDropdown from 'components/forms/fields/dossier_creation/BuildingLeaseDropdown.vue'
 import MortgageFields from 'components/forms/fields/dossier_creation/MortgageFields.vue'
 import RenovationFields from 'components/forms/fields/dossier_creation/RenovationFields.vue'
+import AmortisationFields from 'components/forms/fields/dossier_creation/AmortisationFields.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
@@ -339,12 +340,9 @@ const FIELDS: Record<string, Field> = {
   },
   AMORTISATION: {
     key: 'amortisation',
-    component: markRaw(TitledOptionGroup),
+    component: markRaw(AmortisationFields),
     attributes: {
-      label: i18n.global.t('form_for_clients.amortisation'),
-      options: yesNoOptions,
-      // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
+      rules: []
     },
   },
   TYPE: {

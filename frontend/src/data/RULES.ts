@@ -67,6 +67,11 @@ const IS_VALID_FULL_NAME = (val: Record<string, string>): boolean => {
   return !isEmpty(val) && IS_VALID_STRING(val.first_name) && IS_VALID_STRING(val.last_name)
 }
 
+/**
+ * Checks whether a given year is valid (between 1900 and not in the future)
+ * @param {string|number} val - the year
+ * @constructor
+ */
 const IS_VALID_YEAR = (val: string|number): boolean => {
   let value = val
 

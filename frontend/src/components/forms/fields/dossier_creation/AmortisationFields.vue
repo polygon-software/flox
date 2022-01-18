@@ -2,9 +2,9 @@
   <div class="row q-mb-md">
     <strong class="col q-py-sm">{{ $t('form_for_clients.renovation') }}</strong>
 
-    <!-- Renovation toggle -->
+    <!-- Amortisation toggle -->
     <q-option-group
-      v-model="hasRenovation"
+      v-model="hasAmortisation"
       class="col"
       :options="options"
       type="radio"
@@ -12,20 +12,21 @@
       @update:model-value="resetValues"
     />
   </div>
-  <!-- Renovation info (if applicable) -->
-  <div v-if="hasRenovation">
-    <!-- Renovation date -->
-    <q-input
-      v-model.number="renovationYear"
-      type="number"
-      :label="$t('form_for_clients.renovation_year')"
-      :rules="[(val) => IS_VALID_YEAR(val) || $t('errors.invalid_year')]"
+  <!-- Amortisation info (if applicable) -->
+  <div v-if="hasAmortisation">
+    <!-- Amortisation type -->
+    <q-option-group
+      v-model="directAmortisation"
+      class="col"
+      :options="typeOptions"
+      type="radio"
+      inline
       @update:model-value="emitValue"
     />
 
-    <!-- Renovation price -->
+    <!-- Amortisation amount -->
     <q-input
-      v-model.number="renovationPrice"
+      v-model.number="amortisationAmount"
       dense
       type="number"
       :label="$t('form_for_clients.amount')"
@@ -53,24 +54,29 @@ const options = [
   {label: i18n.global.t('general.no'), value: false},
 ]
 
-// Whether building was renovated
-const hasRenovation = ref(options[1].value)
+const typeOptions = [
+  {label: i18n.global.t('form_for_clients.direct'), value: true},
+  {label: i18n.global.t('form_for_clients.indirect'), value: false},
+]
 
-// Lease expiration date
-const renovationYear = ref(null)
+// Whether amortisation is present
+const hasAmortisation = ref(options[1].value)
 
-// Yearly lease interest
-const renovationPrice = ref(null)
+// Whether amortisation is direct
+const directAmortisation = ref(true)
+
+// Amortisation amount
+const amortisationAmount = ref(null)
 
 /**
- * Emits the renovation information
+ * Emits the amortisation information
  * @returns {void}
  */
 function emitValue() {
   emit('change', {
-    hasRenovation: hasRenovation.value,
-    renovationYear: renovationYear.value,
-    renovationPrice: renovationPrice.value
+    hasAmortisation: hasAmortisation.value,
+    directAmortisation: directAmortisation.value,
+    amortisationAmount: amortisationAmount.value
   })
 }
 
@@ -79,8 +85,8 @@ function emitValue() {
  * @returns {void}
  */
 function resetValues(){
-  renovationPrice.value = null
-  renovationYear.value = null
+  directAmortisation.value = true
+  amortisationAmount.value = null
 
   // Emit new value
   emitValue()
