@@ -1,10 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
-    <div
-      class="column q-pa-sm"
-      style="width: 700px;"
-    >
-      <q-form
+  <q-form
         ref="formRef"
         greedy
         class="q-gutter-md"
@@ -91,8 +86,6 @@
           </template>
         </q-stepper>
       </q-form>
-    </div>
-  </q-page>
 </template>
 
 <script setup lang="ts">
@@ -105,7 +98,6 @@ import {FIELDS} from 'src/data/FIELDS';
 import {executeMutation} from 'src/helpers/data-helpers';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {ErrorService} from 'src/services/ErrorService';
 import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 
 const $routerService: RouterService | undefined = inject('$routerService')

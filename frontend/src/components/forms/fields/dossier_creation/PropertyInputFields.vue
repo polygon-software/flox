@@ -5,7 +5,7 @@
       dense
       type="text"
       :label="$t('form_for_clients.price')"
-      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_amount')]"
+      :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitValuePrice"
      ></q-input>
     <q-input
@@ -13,7 +13,7 @@
       dense
       type="text"
       :label="$t('form_for_clients.market_value_estimation')"
-      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_amount')]"
+      :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitValueMarketValue"
     ></q-input>
     <q-input
@@ -21,11 +21,11 @@
       dense
       type="text"
       :label="$t('form_for_clients.current_value_of_mortgage')"
-      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_amount')]"
+      :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitValueMortgage"
     ></q-input>
     <q-input
-      v-model="enfeoffment"
+      :model-value="enfeoffment"
       type="text"
       dense
       disable
@@ -37,21 +37,21 @@
 </template>
 
 <script setup lang="ts">
-import {IS_VALID_STRING} from 'src/data/RULES'
+import {IS_VALID_NUMBER} from 'src/data/RULES'
 import {computed, ref} from 'vue';
 
 const emit = defineEmits(['change'])
 
-const price = ref('')
-const marketValueEstimation = ref('')
-const currentValueOfMortgage = ref('')
+const price = ref(null)
+const marketValueEstimation = ref(null)
+const currentValueOfMortgage = ref(null)
 
 
 /**
  * Automatically keeps enfoffmenet calculation up to date
  * @returns {String}
  */
-let enfeoffment = computed(()=>  {
+const enfeoffment = computed(()=>  {
   if(!currentValueOfMortgage.value || !price.value){
     return '-'
   }
@@ -64,7 +64,7 @@ let enfeoffment = computed(()=>  {
  * @returns {void}
  */
 function emitValuePrice() {
-  if(IS_VALID_STRING(price.value)){
+  if(IS_VALID_NUMBER(price.value)){
     emit('change', price)
   }
 }
@@ -73,7 +73,7 @@ function emitValuePrice() {
  * @returns {void}
  */
 function emitValueMarketValue() {
-  if(IS_VALID_STRING(marketValueEstimation.value)) {
+  if(IS_VALID_NUMBER(marketValueEstimation.value)) {
     emit('change', marketValueEstimation)
   }
 }
@@ -82,7 +82,7 @@ function emitValueMarketValue() {
  * @returns {void}
  */
 function emitValueMortgage() {
-  if(IS_VALID_STRING(currentValueOfMortgage.value)) {
+  if(IS_VALID_NUMBER(currentValueOfMortgage.value)) {
     emit('change', currentValueOfMortgage)
   }
 }

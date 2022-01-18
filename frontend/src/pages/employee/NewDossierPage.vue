@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div
       class="column q-pa-sm"
-      style="width: 500px;"
+      style="width: 700px;"
     >
       <new-dossier-form/>
     </div>
@@ -11,5 +11,5 @@
 
 <script setup lang="ts">
 
-import NewDossierForm from 'pages/form/NewDossierForm.vue';
+import NewDossierForm from 'components/forms/NewDossierForm.vue';
 </script>
