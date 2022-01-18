@@ -96,7 +96,7 @@ function checkMortgageExpirationDate(expirationDateString: string){
   }
 
   // Warning case 2: between 12 and 24 months in the future
-  if(expirationDate.getTime() > dateIn12Months.getTime()  && expirationDate.getTime() < dateIn24Months.getTime()){
+  if(expirationDate.getTime() > dateIn12Months.getTime() && expirationDate.getTime() < dateIn24Months.getTime()){
     $q.dialog({
       component: WarningDialog,
       componentProps: {

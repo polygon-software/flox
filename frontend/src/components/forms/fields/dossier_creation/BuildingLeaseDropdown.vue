@@ -11,19 +11,15 @@
     />
   </div>
   <div v-if="selectedOption">
-    <q-input v-model="date" mask="date" :rules="['date']" :label="$t('form_for_clients.expiration_date')">
-      <template #append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
-            <q-date v-model="date" @change="emitDate">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat/>
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
+    <!-- Expiration date -->
+    <q-input
+      v-model="date"
+      type="date"
+      :label="$t('form_for_clients.expiration_date')"
+      @update:model-value="checkExpirationDate"
+    />
+
+    <!-- Landlord type -->
     <div class="row q-mb-md">
       <p class="col q-py-sm">{{ $t('form_for_clients.landlord') }}</p>
       <q-option-group
@@ -32,9 +28,11 @@
         :options="landlordOptions"
         type="radio"
         inline
-        @update:model-value="landlordChange"
+        @update:model-value="checkLandlordType"
       />
     </div>
+
+    <!-- Lease interest rate -->
     <q-input
       v-model.number="price"
       dense
@@ -42,7 +40,7 @@
       :label="$t('form_for_clients.building_lease_interest')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitValuePrice"
-    ></q-input>
+    />
   </div>
 </template>
 
@@ -73,15 +71,32 @@ const price = ref(null)
 
 
 /**
- * A pop up opens  if the landlord is not public
+ * Checks the landlord type and warns if appropriate
  * @param {Boolean} isPublic - landlord type
  * @returns {void}
  */
-function landlordChange(isPublic: boolean){
+function checkLandlordType(isPublic: boolean){
   if(!isPublic){
     $q.dialog({
       component: WarningDialog,
       componentProps: {description:  i18n.global.t('warnings.warning_landlord') }}
+      )
+  }
+}
+
+/**
+ * Checks building permit expiration date and warns if necessary
+ * @param {string} expirationDateString - expiration date as string
+ * @returns {void}
+ */
+function checkExpirationDate(expirationDateString: string){
+  const expirationDate = new Date(expirationDateString)
+  const dateIn70Years: Date = new Date(new Date().setFullYear(new Date().getFullYear() + 70))
+
+  if(expirationDate.getTime() < dateIn70Years.getTime() ){
+    $q.dialog({
+      component: WarningDialog,
+      componentProps: {description:  i18n.global.t('warnings.building_lease_warning') }}
       )
   }
 }

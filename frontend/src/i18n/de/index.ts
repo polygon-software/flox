@@ -375,7 +375,7 @@ export default {
     warning_landlord: 'Nur Hypotheken mit öffentlich-rechtlichem Baurechtsgeber sind vermittelbar',
     mortgage_too_short: 'Die Ablauffrist der Hypothek ist zu kurz!',
     mortgage_note: 'Achtung: eventuel Schuldbriefsplitting notwendig!',
-    building_lease_warning: 'Auf basis der von Ihnen erfassten Daten kann über diese Plattform keien Hypothek angeboten werden!',
+    building_lease_warning: 'Auf Basis der von Ihnen erfassten Daten kann über diese Plattform keine Hypothek angeboten werden!',
 
   }
 };
