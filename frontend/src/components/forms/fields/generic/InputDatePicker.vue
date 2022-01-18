@@ -1,33 +1,16 @@
 <template>
-  <div >
-    <q-input
-      v-model="date"
-      mask="date"
-      :rules="['date']"
-      dense
-      :label="props.label"
-    >
-      <template #append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
-            <q-date
-              v-model="date"
-              @update:model-value="checkAgeLimit"
-              @change="emitValue"
-            >
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
-  </div>
+  <q-input
+    v-model="date"
+    :rules="['date']"
+    type="date"
+    dense
+    :label="props.label"
+    @update:model-value="emitValue"
+  />
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue';
+import {defineProps, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
@@ -48,28 +31,37 @@ const props = defineProps({
 const emit = defineEmits(['change'])
 const $q = useQuasar()
 
-const date = ref(new Date())
+const date = ref(null)
 
 /**
  * Emits the updated value, if it is valid
  * @returns {void}
  */
 function emitValue(){
-  emit('change', date)
+  if(date.value){
+    const asDate = new Date(date.value)
+    console.log('eMIT', asDate)
+    emit('change',asDate)
+
+    // Check for age limit
+    checkAgeLimit(asDate)
+  }
 }
 
 /**
  * Warning Pop up if the birthdate is more than 60 years ago.
- * @param {Number} birthTimestamp - timestamp of the date of birth
+ * @param {Date} birthdate - date of birth
  * @returns {void}
  */
-function checkAgeLimit(birthTimestamp: number){
+function checkAgeLimit(birthdate: Date){
   if(props.retirementRule){
-    const birthDate = new Date(birthTimestamp)
-    if(calculateAge(birthDate) > 60){
+    console.log('check', birthdate)
+    if(calculateAge(birthdate) > 60){
       $q.dialog({
         component: WarningDialog,
-        componentProps: {description: i18n.global.t('form_for_clients.retirement_warning')}
+        componentProps: {
+          description: i18n.global.t('warnings.retirement_warning')
+        }
       })
     }
   }

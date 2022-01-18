@@ -12,6 +12,7 @@ const IS_VALID_STRING = (val: string): boolean => {
 }
 
 const IS_VALID_DATE = (val: Date): boolean => {
+  console.log('check date', val, typeof val)
   return !isEmpty(val)
 }
 

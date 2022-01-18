@@ -340,6 +340,11 @@ export default {
     ACCEPTED: 'Akzeptiert',
     IN_PROCESS: 'In Bearbeitung'
   },
+  property_type_enum: {
+    ONE_FAMILY_HOUSE: 'Einfamilienhaus',
+    APARTMENT: 'Wohnung',
+    APARTMENT_BUILDING: 'Mehrfamilienhaus'
+  },
   email: {
     subject_rejected: 'Abgelehnt',
     body_rejected: 'Die Applikation wurde abgelehnt'

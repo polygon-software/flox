@@ -338,6 +338,11 @@ export default {
     ACCEPTED: 'Accepted',
     IN_PROCESS: 'In Process'
   },
+  property_type_enum: {
+    ONE_FAMILY_HOUSE: 'Single-family house',
+    APARTMENT: 'Apartment',
+    APARTMENT_BUILDING: 'Apartment building'
+  },
   email: {
     subject_rejected: 'Rejected',
     body_rejected: 'Application is rejected'

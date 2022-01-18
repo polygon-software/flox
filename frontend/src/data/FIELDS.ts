@@ -66,11 +66,9 @@ const FIELDS: Record<string, Field> = {
     key: 'date_of_birth',
     component: markRaw(InputDatePicker),
     attributes: {
-      dense: true,
-      type: Date,
       label: i18n.global.t('employee_dashboard.date_of_birth'),
       lazy_rules: 'true',
-      retirement_rule: true,
+      retirementRule: true,
       rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
     },
   },
@@ -211,7 +209,12 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('form_for_clients.property_type'),
-      options: Object.values(PROPERTY_TYPE),
+      options: Object.values(PROPERTY_TYPE).map((value) => {
+        return {
+          value,
+          label: i18n.global.t(`property_type_enum.${value}`)
+        }
+      }),
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, Object.values(PROPERTY_TYPE)) || i18n.global.t('errors.invalid_option')]
     },
