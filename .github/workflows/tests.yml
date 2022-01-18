@@ -12,12 +12,13 @@ on:
       - reopened
 
 jobs:
-  setup-node:
-    name: Setup Node and Dependencies
+  unit-test:
+    name: Unit Tests
     runs-on: ubuntu-latest
+    needs: setup-node
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Setup node env
@@ -45,19 +46,6 @@ jobs:
       - name: Install backend dependencies
         run: yarn
         working-directory: backend
-
-      - name: Install shared dependencies
-        run: yarn
-        working-directory: shared
-
-  unit-test:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    needs: setup-node
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
 
       - name: Run Backend Unit Tests
         run: yarn test:unit:report
