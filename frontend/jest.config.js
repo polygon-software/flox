@@ -24,14 +24,12 @@ module.exports = {
     '<rootDir>/src/**/*.tsx',
   ],
   coveragePathIgnorePatterns: ['/node_modules/', '.d.ts$'],
-  coverageThreshold: {
-    global: {
-      //  branches: 50,
-      //  functions: 50,
-      //  lines: 50,
-      //  statements: 50
-    },
-  },
+  coverageReporters: [
+    [
+      'lcov',
+      { projectRoot: '../' },
+    ],
+  ],
   testMatch: [
     // Matches tests in any subfolder of 'src' or into 'test/jest/__tests__'
     // Matches all files with extension 'js', 'jsx', 'ts' and 'tsx'
@@ -71,5 +69,10 @@ module.exports = {
   },
   transformIgnorePatterns: [`node_modules/(?!(${esModules}))`],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
-  testResultsProcessor: 'jest-sonar-reporter',
+  reporters: ['default',  ['jest-sonar', {
+    outputDirectory: 'reports',
+    outputName: 'test-reporter.xml',
+    reportedFilePath: 'relative',
+    relativeRootDir: '../',
+  }]],
 };
