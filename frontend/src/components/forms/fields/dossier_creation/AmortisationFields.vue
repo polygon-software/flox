@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {ref,} from 'vue';
-import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES';
+import {IS_VALID_NUMBER} from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
 
