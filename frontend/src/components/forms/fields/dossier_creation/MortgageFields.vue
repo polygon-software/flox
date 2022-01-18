@@ -3,28 +3,36 @@
   v-for="(partition, index) in mortgagePartitions"
   :key="`partition_${index}`">
     <q-input
-      v-model="partition.amount"
+      v-model.number="partition.amount"
       dense
-      type="text"
+      type="number"
       :label="$t('form_for_clients.portion')+' '+ (index+1)"
-      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_amount')]"
+      :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitPartitions"
     ></q-input>
     <q-input
       v-model="partition.date"
       type="date"
-      :rules="['date']"
       dense
       :label="$t('dossier.expiration_date')"
       @change="checkMortgageExpirationDate"
     />
   </div>
-  <q-btn round size="sm" color="primary" icon="add" @click="addPartition"/>
+
+  <!-- Button for adding new partitions -->
+  <q-btn
+    size="sm"
+    color="primary"
+    icon="add"
+    style="margin-top: 12px"
+    round
+    @click="addPartition"
+  />
 </template>
 
 <script setup lang="ts">
-import {IS_VALID_STRING} from 'src/data/RULES'
-import {computed, ref} from 'vue';
+import {IS_VALID_NUMBER} from 'src/data/RULES'
+import {ref} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
