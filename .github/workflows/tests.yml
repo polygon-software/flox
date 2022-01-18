@@ -24,9 +24,6 @@ jobs:
     needs: setup-node
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
       - name: Run Backend Unit Tests
         run: yarn test:unit:report
         working-directory: backend
