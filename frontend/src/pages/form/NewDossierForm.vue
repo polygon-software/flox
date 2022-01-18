@@ -31,7 +31,7 @@
                 <div
                   v-for="leftSection in page.sectionsLHS"
                   :key="leftSection.key">
-                  <h7 class="q-py-xl q-my-xl">{{ leftSection.title }}</h7>
+                  <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
                   <component
                     :is="field.component"
                     v-for="field in leftSection.fields"
@@ -47,7 +47,7 @@
                 <div
                   v-for="rightSection in page.sectionsRHS"
                   :key="rightSection.key">
-                  <h7 class="q-py-xl q-my-xl">{{ rightSection.title }}</h7>
+                  <strong class="q-py-xl q-my-xl">{{ rightSection.title }}</strong>
                   <component
                     :is="field.component"
                     v-for="field in rightSection.fields"
@@ -80,6 +80,7 @@
                 :disable="!form.pageValid.value"
                 @click="$refs.stepper.next()"
               />
+
               <q-btn
                 v-if="form.step.value === form.pages.value.length"
                 color="primary"
@@ -113,45 +114,59 @@ const $errorService: ErrorService | undefined = inject('$errorService')
 const formRef: Ref<QForm | null> = ref(null)
 
 
-const realEstateFields = [
-  FIELDS.FULL_NAME,
-  FIELDS.DATE_OF_BIRTH,
-  FIELDS.PHONE_NUMBER,
-  FIELDS.EMAIL,
-  FIELDS.ADDRESS,
-]
-
 const pages = [
+  // First page: CRM Data
   {
     key: 'crm-data',
     label: i18n.global.t('employee_dashboard.customer'),
     sectionsLHS: [
       {
-        key: 'crm-data1',
+        key: 'crm-person',
         title: i18n.global.t('employee_dashboard.customer'),
         fields: [FIELDS.FULL_NAME, FIELDS.DATE_OF_BIRTH],
-        lhs: true,
       },
       {
-        key: 'crm-data2',
+        key: 'crm-address',
         title: i18n.global.t('account_data.domicile_address'),
         fields: [FIELDS.ADDRESS],
-        lhs: true,
       },
     ],
     sectionsRHS: [
       {
-        key: 'crm-data3',
+        key: 'crm-contact',
         title: i18n.global.t('form_for_clients.contact_info'),
         fields: [FIELDS.EMAIL, FIELDS.PHONE_NUMBER],
-        lhs: false,
       },
     ]
   },
+  // Second page: Property data
   {
-    key: 'real-estate',
+    key: 'property',
     label: i18n.global.t('form_for_clients.property'),
-    fields: realEstateFields, //TODO: change to sections
+    sectionsLHS: [
+      {
+        key: 'property-name',
+        title: i18n.global.t('account_data.bank'),
+        fields: [FIELDS.BANK],
+      },
+      {
+        key: 'property-type',
+        title: i18n.global.t('form_for_clients.property'),
+        fields: [FIELDS.PROPERTY_TYPE],
+      },
+      {
+        key: 'property-owner-occupied',
+        title: ' ',
+        fields: [FIELDS.OWNER_OCCUPIED],
+      },
+    ],
+    sectionsRHS: [
+      {
+        key: 'property-purchase-detail',
+        title: i18n.global.t('form_for_clients.purchase'),
+        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT],
+      },
+    ]
   },
 ]
 const form: Form = new Form(pages as Record<string, unknown>[])
@@ -163,11 +178,7 @@ const form: Form = new Form(pages as Record<string, unknown>[])
  * @returns {void}
  */
 async function onSubmit(formData: Record<string, Record<string, string>>) {
-  const email: string = formData.email.toString()
-  if (email === null || email === undefined) {
-    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
-  }
-
+  // TODO: other params
   // Creates a dossier
   await executeMutation(CREATE_DOSSIER, {
     first_name: formData.full_name.first_name,

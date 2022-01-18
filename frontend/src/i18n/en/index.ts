@@ -246,6 +246,7 @@ export default {
     incorrect_username: 'Username not found',
     non_matching_password: 'Passwords not matching',
     invalid_name: 'Please enter your name',
+    invalid_amount: 'Please enter a valid amount.',
     invalid_company_name: 'Please enter your company\'s name',
     invalid_company_uid: 'Please enter your company\'s UID',
     invalid_address: 'Please enter a valid address',
@@ -311,7 +312,15 @@ export default {
   },
   form_for_clients: {
     contact_info: 'Contact Information',
-    property: 'Property'
+    property: 'Property',
+    property_type: 'Property Type',
+    owner_occupied: 'Owner-occupied',
+    purchase: 'Purchase',
+    date_of_purchase: 'Date of purchase',
+    price: 'Price of purchase in CHF',
+    market_value_estimation: 'Market value estimation in CHF',
+    current_value_of_mortgage: 'Current value of mortgage in CHF',
+    enfeoffment: 'Enfeoffment in %',
   },
   dossier_status_enum: {
     OPEN: 'Open',
@@ -329,6 +338,11 @@ export default {
     ACCEPTED: 'Accepted',
     IN_PROCESS: 'In Process'
   },
+  property_type_enum: {
+    ONE_FAMILY_HOUSE: 'Single-family house',
+    APARTMENT: 'Apartment',
+    APARTMENT_BUILDING: 'Apartment building'
+  },
   email: {
     subject_rejected: 'Rejected',
     body_rejected: 'Application is rejected'
@@ -337,6 +351,7 @@ export default {
     new_user: 'New user'
   },
   warnings: {
+    retirement_warning: 'The acceptibility of risks is different for people over the age of 60'
     // TODO: add all possible warnings once provided by SOI
   }
 };

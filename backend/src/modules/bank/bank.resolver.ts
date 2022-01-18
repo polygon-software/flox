@@ -5,6 +5,7 @@ import { Bank } from './entities/bank.entity';
 import {
   BankOnly,
   CurrentUser,
+  EmployeeOnly,
   SOIOnly,
 } from '../../auth/authorization.decorator';
 import { CreateBankInput } from './dto/input/create-bank.input';
@@ -38,6 +39,21 @@ export class BankResolver {
   @Query(() => [Bank])
   async getBanks(): Promise<Bank[]> {
     return this.bankService.allBanks();
+  }
+
+  /**
+   * Gets the name of all banks
+   * @returns {Promise<String[]>} - name of all banks
+   */
+  @EmployeeOnly()
+  @Query(() => [String])
+  async getBankNames(): Promise<string[]> {
+    const banks = await this.bankService.allBanks();
+    let names: Array<string> = [];
+    banks.forEach((bank) => {
+      names = names.concat(bank.name);
+    });
+    return names;
   }
 
   /**

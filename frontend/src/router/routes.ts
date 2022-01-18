@@ -131,13 +131,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   // Employee: Add new dossier
-  'NEW_DOSSIER_PAGE': {
+  'NEW_DOSSIER': {
     path: '/new-dossier',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/employee/NewDossierPage.vue') }],
   },
-
-  // TODO: Add other form subpages here
 
   // Employee: Final page of new dossier creation
   'DOSSIER_FINAL_DOCUMENT': {
@@ -158,12 +156,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     path: '/:catchAll(.*)*',
     component: () => import('pages/generic/Error404.vue'),
   },
-  // Form to create new dossiers
-  'NEW_DOSSIER_FORM': {
-    path: '/new-dossier-form',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/form/NewDossierForm.vue') }],
-  },
 };
 
 export default ROUTES
@@ -175,7 +167,6 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SUCCESS,
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.SET_PASSWORD,
-  ROUTES.NEW_DOSSIER_FORM
 ]
 
 //TODO: Add semi-protected routes

@@ -80,7 +80,14 @@ export const FILE_TYPE = { ...DOSSIER_FILE_TYPE, ...OFFER_FILE_TYPE };
 export type FILE_TYPE = typeof FILE_TYPE;
 
 registerEnumType(FILE_TYPE, { name: 'FileType' });
+
+export enum PROPERTY_TYPE {
+  ONE_FAMILY_HOUSE = 'ONE_FAMILY_HOUSE',
+  APARTMENT = 'APARTMENT',
+  APARTMENT_BUILDING = 'APARTMENT_BUILDING',
+}
 registerEnumType(DOSSIER_STATUS, { name: 'DossierStatus' });
 registerEnumType(OFFER_STATUS, { name: 'OfferStatus' });
 registerEnumType(ROLE, { name: 'Roles' });
 registerEnumType(CREATION_STATE, { name: 'creationState' });
+registerEnumType(PROPERTY_TYPE, { name: 'propertyType' });

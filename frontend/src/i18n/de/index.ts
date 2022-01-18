@@ -243,6 +243,7 @@ export default {
     non_matching_password: 'Passwörter stimmen nicht überein',
     invalid_abbreviation: 'Bitte geben Sie ein gültiges Kürzel ein',
     invalid_name: 'Bitte geben Sie Ihren Namen ein',
+    invalid_amount: 'Bitte geben Sie eine gültige Summe ein.',
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
     invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
@@ -313,7 +314,15 @@ export default {
   },
   form_for_clients: {
     contact_info: 'Kontakt',
-    property: 'Immobilie'
+    property: 'Immobilie',
+    property_type: 'Immobilientyp',
+    owner_occupied: 'Selbstbewohnt',
+    purchase: 'Kauf',
+    date_of_purchase: 'Kaufdatum',
+    price: 'Kaufpreis in CHF',
+    market_value_estimation: 'Verkehrswertschätzung in CHF',
+    current_value_of_mortgage: 'Aktuelle Höhe der Hypothek in CHF',
+    enfeoffment: 'Belehnung in %',
   },
   dossier_status_enum: {
     OPEN: 'Offen',
@@ -331,6 +340,11 @@ export default {
     ACCEPTED: 'Akzeptiert',
     IN_PROCESS: 'In Bearbeitung'
   },
+  property_type_enum: {
+    ONE_FAMILY_HOUSE: 'Einfamilienhaus',
+    APARTMENT: 'Wohnung',
+    APARTMENT_BUILDING: 'Mehrfamilienhaus'
+  },
   email: {
     subject_rejected: 'Abgelehnt',
     body_rejected: 'Die Applikation wurde abgelehnt'
@@ -339,6 +353,7 @@ export default {
     new_user: 'Neuer Benutzer'
   },
   warnings: {
+    retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)'
     // TODO: add all possible warnings once provided by SOI
   }
 };

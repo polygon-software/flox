@@ -356,6 +356,16 @@ export const ALL_BANKS = {
   cacheLocation: 'getBanks'
 }
 
+export const ALL_BANK_NAMES = {
+  query: gql`
+    query getBankNames{
+      getBankNames
+    }
+  `,
+  tables: ['bank'],
+  cacheLocation: 'getBankNames'
+}
+
 export const DOSSIERS_BANK = {
   query: gql`
     query allDossiersBank {
@@ -481,6 +491,7 @@ export const QUERIES = [
   MY_DOSSIERS,
   MY_USER,
   ALL_BANKS,
+  ALL_BANK_NAMES,
   REJECTED_DOSSIERS,
   DOSSIERS_BANK,
   MY_BANK,

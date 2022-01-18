@@ -69,7 +69,7 @@ export class Form {
       const rules: Array<(valueElement: any) => boolean|string> = field.attributes.rules
       return rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
-        return typeof rule(this.values.value[key]) === 'boolean' && rule(this.values.value[key]) === true
+        return typeof rule(this.values.value[key]) === 'boolean' && rule(this.values.value[key]) === true;
       })
     })
   })
