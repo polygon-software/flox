@@ -1,0 +1,71 @@
+name: Testing
+on:
+  push:
+    branches:
+      - master
+      - project-soi
+      - project-bigabig
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node and Dependencies
+        uses: ./.github/actions/node-yarn@v1
+
+      - name: Run Backend Unit Tests
+        run: yarn test:unit:cov
+        working-directory: backend
+
+      - name: Run Frontend Unit Tests
+        run: yarn test:unit:cov
+        working-directory: frontend
+
+      - name: Upload Backend Testing Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: backend-reports
+          path: backend/test-report.xml
+
+      - name: Upload Frontend Testing Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-reports
+          path: frontend/test-report.xml
+
+  sonarcloud:
+    name: Sonar Coverage Scan
+    runs-on: ubuntu-latest
+    needs: unit-test
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Download Backend Testing Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: backend-reports
+          path: backend/test-report.xml
+
+      - name: Download Frontend Testing Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: frontend-reports
+          path: frontend/test-report.xml
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

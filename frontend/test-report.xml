@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testExecutions version="1">
-  <file path="/Users/davidwyss/Desktop/Polygon.nosync/full-stack-bootstrap/frontend/src/helpers/generator-helpers.spec.ts">
-    <testCase name="Generator Helpers randomNumber should return a random number between 1 and 100" duration="2"/>
-    <testCase name="Generator Helpers randomNumber should return a random number in the given range" duration="0"/>
-    <testCase name="Generator Helpers randomPassword should return a random password of the given length" duration="1"/>
-  </file>
-</testExecutions>

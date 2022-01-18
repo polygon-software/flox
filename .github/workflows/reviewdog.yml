@@ -15,17 +15,11 @@ jobs:
     name: Lint Code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Yarn install frontend
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: frontend
-
-      - name: yarn install backend
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: backend
+      - name: Setup Node and Dependencies
+        uses: ./.github/actions/node-yarn@v1
 
       - name: Lint frontend
         uses: reviewdog/action-eslint@v1
