@@ -16,19 +16,14 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-        node: [ 14.x, 16.x ]
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Setup Node and Dependencies
-        uses: ./.github/actions/node-yarn@feature-sonarCoverage
+        uses: ./.github/workflows/node-yarn@feature-sonarCoverage
         with:
-          node: ${{ matrix.node }}
+          node: 14.x
 
       - name: Run Backend Unit Tests
         run: yarn test:unit:report
