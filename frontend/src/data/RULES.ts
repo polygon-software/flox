@@ -1,5 +1,6 @@
 import {EMAIL_REGEX, PASSWORD_REGEX} from 'src/helpers/REGEX';
 import {isEmpty} from 'lodash';
+import {date} from 'quasar';
 
 /**
  * This file contains rules that can be applied to input forms.
@@ -12,7 +13,6 @@ const IS_VALID_STRING = (val: string): boolean => {
 }
 
 const IS_VALID_DATE = (val: Date): boolean => {
-  console.log('check date', val, typeof val)
   return !isEmpty(val)
 }
 

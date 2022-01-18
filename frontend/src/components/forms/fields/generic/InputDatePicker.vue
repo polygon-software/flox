@@ -33,6 +33,9 @@ const $q = useQuasar()
 
 const date = ref(null)
 
+// Whether the warning popup is open
+const popupOpen = ref(false)
+
 /**
  * Emits the updated value, if it is valid
  * @returns {void}
@@ -40,11 +43,13 @@ const date = ref(null)
 function emitValue(){
   if(date.value){
     const asDate = new Date(date.value)
-    console.log('eMIT', asDate)
-    emit('change',asDate)
 
-    // Check for age limit
-    checkAgeLimit(asDate)
+    // Ensure date input is finished (e.g. user is not still manually typing)
+    if(asDate.getFullYear() > 1900){
+      // Check for age limit
+      checkAgeLimit(asDate)
+    }
+    emit('change', asDate)
   }
 }
 
@@ -54,16 +59,16 @@ function emitValue(){
  * @returns {void}
  */
 function checkAgeLimit(birthdate: Date){
-  if(props.retirementRule){
-    console.log('check', birthdate)
-    if(calculateAge(birthdate) > 60){
-      $q.dialog({
-        component: WarningDialog,
-        componentProps: {
-          description: i18n.global.t('warnings.retirement_warning')
-        }
-      })
-    }
+  if(props.retirementRule && calculateAge(birthdate) > 60 && !popupOpen.value){
+    popupOpen.value = true
+    $q.dialog({
+      component: WarningDialog,
+      componentProps: {
+        description: i18n.global.t('warnings.retirement_warning')
+      }
+    }).onDismiss(() => {
+      popupOpen.value = false
+    })
   }
 }
 </script>
