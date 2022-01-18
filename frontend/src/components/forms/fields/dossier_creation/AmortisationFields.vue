@@ -15,14 +15,17 @@
   <!-- Amortisation info (if applicable) -->
   <div v-if="hasAmortisation">
     <!-- Amortisation type -->
-    <q-option-group
-      v-model="directAmortisation"
-      class="col"
-      :options="typeOptions"
-      type="radio"
-      inline
-      @update:model-value="emitValue"
-    />
+    <div class="row q-mb-md">
+      <strong class="col q-py-sm">{{ $t('form_for_clients.type') }}</strong>
+      <q-option-group
+        v-model="directAmortisation"
+        class="col"
+        :options="typeOptions"
+        type="radio"
+        inline
+        @update:model-value="emitValue"
+      />
+    </div>
 
     <!-- Amortisation amount -->
     <q-input

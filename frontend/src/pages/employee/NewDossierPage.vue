@@ -10,6 +10,5 @@
 </template>
 
 <script setup lang="ts">
-
 import NewDossierForm from 'components/forms/NewDossierForm.vue';
 </script>
