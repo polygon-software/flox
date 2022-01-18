@@ -11,9 +11,9 @@ import UserType from 'components/forms/fields/generic/UserType.vue'
 import AddressField from 'components/forms/fields/generic/AddressField.vue'
 import TitledOptionGroup from 'components/forms/fields/generic/TitledOptionGroup.vue'
 import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue'
-import PropertyInputFields from 'components/forms/fields/specific/PropertyInputFields.vue'
-import BuildingLeaseDropdown from 'components/forms/fields/specific/BuildingLeaseDropdown.vue'
-import MortgageFields from 'components/forms/fields/specific/MortgageFields.vue'
+import PropertyInputFields from 'components/forms/fields/dossier_creation/PropertyInputFields.vue'
+import BuildingLeaseDropdown from 'components/forms/fields/dossier_creation/BuildingLeaseDropdown.vue'
+import MortgageFields from 'components/forms/fields/dossier_creation/MortgageFields.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
@@ -298,22 +298,14 @@ const FIELDS: Record<string, Field> = {
     key: 'enfeoffment',
     component: markRaw(PropertyInputFields),
     attributes: {
-      dense: true,
-      type: 'text',
-      label: i18n.global.t('form_for_clients.enfeoffment'),
-      lazy_rules: 'true',
-      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
+      rules: [] // Checked inside field
     },
   },
   MORTGAGE: {
     key: 'mortgage',
     component: markRaw(MortgageFields),
     attributes: {
-      dense: true,
-      type: 'text',
-      label: i18n.global.t('form_for_clients.portion'),
-      lazy_rules: 'true',
-      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_string')]
+      rules: []
     },
   },
   BUILDING_LEASE: {

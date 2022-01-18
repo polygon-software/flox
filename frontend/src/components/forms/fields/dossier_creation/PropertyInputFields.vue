@@ -1,31 +1,34 @@
 <template>
   <div>
     <q-input
-      v-model="price"
+      v-model.number="price"
       dense
-      type="text"
+      type="number"
       :label="$t('form_for_clients.price')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+      lazy-rules
       @change="emitValuePrice"
      ></q-input>
     <q-input
-      v-model="marketValueEstimation"
+      v-model.number="marketValueEstimation"
       dense
-      type="text"
+      type="number"
       :label="$t('form_for_clients.market_value_estimation')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+      lazy-rules
       @change="emitValueMarketValue"
     ></q-input>
     <q-input
-      v-model="currentValueOfMortgage"
+      v-model.number="currentValueOfMortgage"
       dense
-      type="text"
+      type="number"
       :label="$t('form_for_clients.current_value_of_mortgage')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+      lazy-rules
       @change="emitValueMortgage"
     ></q-input>
     <q-input
-      :model-value="enfeoffment"
+      v-model="enfeoffment"
       type="text"
       dense
       disable
@@ -48,14 +51,14 @@ const currentValueOfMortgage = ref(null)
 
 
 /**
- * Automatically keeps enfoffmenet calculation up to date
+ * Automatically keeps enfeoffment calculation up to date
  * @returns {String}
  */
 const enfeoffment = computed(()=>  {
   if(!currentValueOfMortgage.value || !price.value){
     return '-'
   }
-  return `${(Math.abs(Number.parseInt(currentValueOfMortgage.value)) / Math.abs(Number.parseInt(price.value))) * 100}%`
+  return `${((Math.abs(Number.parseInt(currentValueOfMortgage.value)) / Math.abs(Number.parseInt(price.value))) * 100).toFixed(2)}%`
 })
 
 
