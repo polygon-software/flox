@@ -80,7 +80,7 @@ function landlordChange(isPublic: boolean){
   if(!isPublic){
     $q.dialog({
       component: WarningDialog,
-      componentProps: {description:  i18n.global.t('form_for_clients.landlord_warning') }}
+      componentProps: {description:  i18n.global.t('warnings.warning_landlord') }}
       )
   }
 }

@@ -337,9 +337,6 @@ export default {
     public: 'Public',
     private: 'Private',
     landlord: 'Building Lease Landlord',
-    landlord_warning: 'Only  mortgages with public building lease landlords are applicable',
-    warning_too_short: 'The expiration date of the mortgage is to soon!',
-    warning_mortgage_note: 'Attention: A mortgage note might be obligatory!'
   },
   dossier_status_enum: {
     OPEN: 'Open',
@@ -370,7 +367,9 @@ export default {
     new_user: 'New user'
   },
   warnings: {
-    retirement_warning: 'The acceptibility of risks is different for people over the age of 60'
-    // TODO: add all possible warnings once provided by SOI
+    retirement_warning: 'The acceptability of risks is different for people over the age of 60',
+    warning_landlord: 'Only  mortgages with public building lease landlords are applicable',
+    warning_too_short: 'The expiration date of the mortgage is to soon!',
+    warning_mortgage_note: 'Attention: A mortgage note might be obligatory!'
   }
 };
