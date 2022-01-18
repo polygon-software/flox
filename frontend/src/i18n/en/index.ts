@@ -324,7 +324,6 @@ export default {
     current_value_of_mortgage: 'Current value of mortgage in CHF',
     enfeoffment: 'Enfeoffment in %',
     calculations: 'Calculations',
-    retirement_warning: 'The acceptibility of risks is different for people over the age of 60',
     building_lease: 'Building lease',
     building_lease_interest: 'Building lease interest  (per year in CHF)',
     type: 'Type',

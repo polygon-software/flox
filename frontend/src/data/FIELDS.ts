@@ -1,4 +1,10 @@
-import {IS_VALID_DATE, IS_VALID_EMAIL, IS_VALID_FULL_NAME, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
+import {
+  IS_VALID_DATE,
+  IS_VALID_EMAIL,
+  IS_VALID_FULL_NAME, IS_VALID_NUMBER,
+  IS_VALID_OPTION,
+  IS_VALID_STRING
+} from './RULES'
 import {QInput, QSelect} from 'quasar'
 import PasswordRepeatField from 'components/forms/fields/company_signup/PasswordRepeatField.vue'
 import Password from 'components/forms/fields/Password.vue'
@@ -16,6 +22,7 @@ import BuildingLeaseDropdown from 'components/forms/fields/dossier_creation/Buil
 import MortgageFields from 'components/forms/fields/dossier_creation/MortgageFields.vue'
 import RenovationFields from 'components/forms/fields/dossier_creation/RenovationFields.vue'
 import AmortisationFields from 'components/forms/fields/dossier_creation/AmortisationFields.vue'
+import IncomeFields from 'components/forms/fields/dossier_creation/IncomeFields.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
@@ -353,6 +360,35 @@ const FIELDS: Record<string, Field> = {
       options: [{ label: i18n.global.t('form_for_clients.direct'), value: true}, {label: i18n.global.t('form_for_clients.indirect'), value: false}],
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('form_for_clients.direct'), i18n.global.t('form_for_clients.indirect')]) || i18n.global.t('errors.invalid_option')]
+    },
+  },
+  INCOME: {
+    key: 'income',
+    component: markRaw(IncomeFields),
+    attributes: {
+      rules: []
+    },
+  },
+  CHILD_ALLOWANCES: {
+    key: 'child_allowances',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'number',
+      label: i18n.global.t('form_for_clients.child_allowances'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  BONUS: {
+    key: 'bonus',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'number',
+      label: i18n.global.t('form_for_clients.bonus'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
     },
   },
 }

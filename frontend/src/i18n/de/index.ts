@@ -340,9 +340,21 @@ export default {
     public: 'Öffentlich',
     private: 'Privat',
     landlord: 'Baurechtgeber',
-    retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)',
-    warning_too_short: 'Die Ablauffrist der  Hypothek ist zu kurz!',
-    warning_mortgage_note: 'Achtung: Evtl. Schuldbriefsplitting notwendig!'
+    // TODO from here on: add to english file
+    assets: 'Vermögen',
+    mortgage: 'Hypothek',
+    income: 'Einkommen',
+    gross_income: 'Bruttoeinkommen',
+    additional_income: 'Weitere Einkünfte',
+    child_allowances: 'Kinderzulagen in CHF',
+    bonus: 'Bonus in CHF',
+    costs: 'Kosten',
+    leasing: 'Leasing',
+    credit: 'Kredit',
+    alimony: 'Alimony',
+    various: 'Sonstiges',
+    prosecutions: 'Betreibungen',
+    loss_certificates: 'Verlustscheine'
   },
   dossier_status_enum: {
     OPEN: 'Offen',

@@ -133,6 +133,7 @@ const pages = [
       },
     ]
   },
+
   // Second page: Property data
   {
     key: 'property',
@@ -192,6 +193,28 @@ const pages = [
       },
     ]
   },
+
+  // Fourth page: assets
+  {
+    key: 'assets',
+    label: i18n.global.t('form_for_clients.assets'),
+    sectionsLHS: [
+      {
+        key: 'assets-data1',
+        title: i18n.global.t('form_for_clients.income'),
+        fields: [FIELDS.INCOME],
+      },
+      {
+        key: 'assets-data1',
+        title: i18n.global.t('form_for_clients.additional_income'),
+        fields: [FIELDS.CHILD_ALLOWANCES, FIELDS.BONUS],
+      },
+    ],
+    sectionsRHS: [
+
+    ]
+  },
+
 ]
 const form: Form = new Form(pages as Record<string, unknown>[])
 
