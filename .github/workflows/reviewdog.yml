@@ -13,7 +13,7 @@ on:
 jobs:
   setup-node:
     name: Setup Node & Dependencies
-    uses: ./.github/workflows/node-yarn@feature-sonarCoverage
+    uses: ./.github/workflows/node-yarn.yml@feature-sonarCoverage
     with:
       node: 14.x
 
