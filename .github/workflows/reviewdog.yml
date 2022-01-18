@@ -11,12 +11,6 @@ on:
       - synchronize
       - reopened
 jobs:
-  setup-node:
-    name: Setup Node & Dependencies
-    uses: polygon-software/full-stack-bootstrap/.github/workflows/node-yarn.yml@feature-sonarCoverage
-    with:
-      node: 14.x
-
   lint-code:
     name: Lint Code
     runs-on: ubuntu-latest
@@ -28,7 +22,7 @@ jobs:
       - name: Setup node env
         uses: actions/setup-node@v2.1.4
         with:
-          node-version: ${{ inputs.node }}
+          node-version: 12.x
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
