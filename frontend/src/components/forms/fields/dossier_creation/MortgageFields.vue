@@ -70,27 +70,30 @@ function checkMortgageExpirationDate(expirationDateString: string){
   // TODO also emit...
   const expirationDate = new Date(expirationDateString)
 
-  console.log('check for date', expirationDate)
-
+  // Set up reference dates
   const dateInAMonth = new Date(new Date().setMonth(new Date().getMonth() + 1))
   const dateIn12Months = new Date(new Date().setMonth(new Date().getMonth() + 12))
   const dateIn24Months = new Date(new Date().setMonth(new Date().getMonth() + 24))
-    if(expirationDate.getTime() < dateInAMonth.getTime()){
-      $q.dialog({
-        component: WarningDialog,
-        componentProps: {
-          description: i18n.global.t('warnings.warning_too_short')
-        }
-      })
-    }
-    if(expirationDate.getTime() > dateIn12Months.getTime()  && expirationDate.getTime() < dateIn24Months.getTime()){
-      $q.dialog({
-        component: WarningDialog,
-        componentProps: {
-          description: i18n.global.t('warnings.warning_mortgage_note')
-        }
-      })
-    }
+
+  // Warning case 1: <12 months in the future
+  if(expirationDate.getTime() < dateInAMonth.getTime()){
+    $q.dialog({
+      component: WarningDialog,
+      componentProps: {
+        description: i18n.global.t('warnings.mortgage_too_short')
+      }
+    })
+  }
+
+  // Warning case 2: between 12 and 24 months in the future
+  if(expirationDate.getTime() > dateIn12Months.getTime()  && expirationDate.getTime() < dateIn24Months.getTime()){
+    $q.dialog({
+      component: WarningDialog,
+      componentProps: {
+        description: i18n.global.t('warnings.mortgage_note')
+      }
+    })
+  }
 }
 
 </script>

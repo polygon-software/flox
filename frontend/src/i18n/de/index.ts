@@ -338,7 +338,6 @@ export default {
     public: 'Öffentlich',
     private: 'Privat',
     landlord: 'Baurechtgeber',
-    landlord_warning: 'Nur Hypotheken mit öffentlich-rechtliche Baurechtsgeber sind vermittelbar',
     retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)',
     warning_too_short: 'Die Ablauffrist der  Hypothek ist zu kurz!',
     warning_mortgage_note: 'Achtung: Evtl. Schuldbriefsplitting notwendig!'
@@ -372,7 +371,9 @@ export default {
     new_user: 'Neuer Benutzer'
   },
   warnings: {
-    retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)'
-    // TODO: add all possible warnings once provided by SOI
+    retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)',
+    warning_landlord: 'Nur Hypotheken mit öffentlich-rechtliche Baurechtsgeber sind vermittelbar',
+    mortgage_too_short: 'Die Ablauffrist der Hypothek ist zu kurz!',
+    mortgage_note: 'Achtung: eventuel Schuldbriefsplitting notwendig!'
   }
 };
