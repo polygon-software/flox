@@ -93,7 +93,6 @@
 </template>
 
 <script setup lang="ts">
-
 import {inject, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
@@ -164,7 +163,7 @@ const pages = [
     ]
   },
 
-  // Third page: calculations
+  // Third page: Calculations
   {
     key: 'calculations',
     label: i18n.global.t('form_for_clients.calculations'),
@@ -194,7 +193,7 @@ const pages = [
     ]
   },
 
-  // Fourth page: assets
+  // Fourth page: Assets
   {
     key: 'assets',
     label: i18n.global.t('form_for_clients.assets'),
