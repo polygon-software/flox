@@ -1,4 +1,4 @@
-import {IS_VALID_DATE, IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
+import {IS_VALID_DATE, IS_VALID_EMAIL, IS_VALID_FULL_NAME, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
 import {QInput, QSelect} from 'quasar'
 import PasswordRepeatField from 'components/forms/fields/company_signup/PasswordRepeatField.vue'
 import Password from 'components/forms/fields/Password.vue'
@@ -112,7 +112,7 @@ const FIELDS: Record<string, Field> = {
     key: 'full_name',
     component: markRaw(FullNameField),
     attributes: {
-      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name')]
+      rules: [(val: Record<string, string>): boolean|string  => IS_VALID_FULL_NAME(val) || i18n.global.t('errors.invalid_name')]
     },
   },
   ABBREVIATION: {

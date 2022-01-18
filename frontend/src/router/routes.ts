@@ -167,7 +167,6 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SUCCESS,
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.SET_PASSWORD,
-  ROUTES.NEW_DOSSIER_FORM
 ]
 
 //TODO: Add semi-protected routes

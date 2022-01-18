@@ -1,12 +1,15 @@
 <template>
-  <q-input
-    v-model="date"
-    :rules="['date']"
-    type="date"
-    dense
-    :label="props.label"
-    @update:model-value="emitValue"
-  />
+  <!-- Wrapper div to prevent q-input events from reaching form -->
+  <div>
+    <q-input
+      v-model="date"
+      :rules="props.rules"
+      type="date"
+      dense
+      :label="props.label"
+      @update:model-value="emitValue"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -15,6 +18,7 @@ import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {calculateAge} from 'src/helpers/date-helpers';
+import {IS_VALID_DATE} from 'src/data/RULES';
 
 
 const props = defineProps({
@@ -26,7 +30,12 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false,
-  }
+  },
+  rules: {
+    type: Array,
+    required: false,
+    default: () => [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
+}
 })
 const emit = defineEmits(['change'])
 const $q = useQuasar()

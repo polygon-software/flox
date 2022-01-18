@@ -9,7 +9,7 @@
       @change="emitValuePrice"
      ></q-input>
     <q-input
-      v-model="market_value_estimation"
+      v-model="marketValueEstimation"
       dense
       type="text"
       :label="$t('form_for_clients.market_value_estimation')"
@@ -17,7 +17,7 @@
       @change="emitValueMarketValue"
     ></q-input>
     <q-input
-      v-model="current_value_of_mortgage"
+      v-model="currentValueOfMortgage"
       dense
       type="text"
       :label="$t('form_for_clients.current_value_of_mortgage')"
