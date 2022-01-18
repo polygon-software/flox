@@ -47,7 +47,7 @@
           <q-item>
             <q-item-section>
               <q-toggle v-model="announcement.scheduled"/>
-              <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####" :rules="['date']">
+              <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####">
                 <template #append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">

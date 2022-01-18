@@ -29,6 +29,9 @@ type Announcement {
   """Notifications generated"""
   notifications: [Notification!]
 
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
+
   """Title"""
   title: String!
 
@@ -77,6 +80,12 @@ input CreateAddressInput {
 input CreateAnnouncementInput {
   """Content"""
   content: String!
+
+  """Date of announcement"""
+  date: DateTime!
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
 
   """Title"""
   title: String!
@@ -543,6 +552,9 @@ input announcement {
 
   """Notifications generated"""
   notifications: [notification!]
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
 
   """Title"""
   title: String!

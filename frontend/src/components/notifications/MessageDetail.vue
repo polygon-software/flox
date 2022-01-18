@@ -4,7 +4,7 @@
     class="q-ma-md"
   >
     <strong>{{ title }}</strong>
-    <p>{{ received.toLocaleString() }}</p>
+    <p>{{ formatDate(received) }}</p>
     <p>{{ content }}</p>
 
     <!-- Link to Voucher -->
@@ -13,6 +13,8 @@
 
 <script setup lang="ts">
 import {defineProps} from 'vue';
+import {formatDate} from 'src/helpers/format-helpers';
+
 /**
  * This component displays an opened message.
  */
