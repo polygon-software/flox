@@ -391,6 +391,50 @@ const FIELDS: Record<string, Field> = {
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
     },
   },
+  LEASING: {
+    key: 'leasing',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'number',
+      label: i18n.global.t('form_for_clients.leasing'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  CREDIT: {
+    key: 'credit',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'number',
+      label: i18n.global.t('form_for_clients.credit'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  ALIMONY: {
+    key: 'alimony',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'number',
+      label: i18n.global.t('form_for_clients.alimony'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  VARIOUS: {
+    key: 'various',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'number',
+      label: i18n.global.t('form_for_clients.various'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
 }
 
 export {FIELDS}
