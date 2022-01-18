@@ -4,7 +4,8 @@ import { BankService } from './bank.service';
 import { Bank } from './entities/bank.entity';
 import {
   BankOnly,
-  CurrentUser, EmployeeOnly,
+  CurrentUser,
+  EmployeeOnly,
   SOIOnly,
 } from '../../auth/authorization.decorator';
 import { CreateBankInput } from './dto/input/create-bank.input';
