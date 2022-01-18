@@ -1,6 +1,5 @@
 import {EMAIL_REGEX, PASSWORD_REGEX} from 'src/helpers/REGEX';
 import {isEmpty} from 'lodash';
-import {date} from 'quasar';
 
 /**
  * This file contains rules that can be applied to input forms.

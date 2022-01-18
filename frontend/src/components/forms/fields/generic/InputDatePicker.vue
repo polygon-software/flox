@@ -13,13 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, Ref, ref} from 'vue';
+import {defineProps, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {calculateAge} from 'src/helpers/date-helpers';
 import {IS_VALID_DATE} from 'src/data/RULES';
-
 
 const props = defineProps({
   label: {
