@@ -109,10 +109,8 @@ import {ErrorService} from 'src/services/ErrorService';
 import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 
 const $routerService: RouterService | undefined = inject('$routerService')
-const $errorService: ErrorService | undefined = inject('$errorService')
 
 const formRef: Ref<QForm | null> = ref(null)
-
 
 const pages = [
   // First page: CRM Data

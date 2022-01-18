@@ -41,6 +41,28 @@ export interface Field {
   },
 }
 
+// Commonly used constants
+const yes = i18n.global.t('general.yes')
+const no = i18n.global.t('general.no')
+
+// Options for yes/no questions
+const yesNoOptions = [
+  {
+    value: true,
+    label: yes
+  },
+  {
+    value: false,
+    label: no
+  }
+]
+
+// Commonly used errors
+const errors = {
+  invalid_date: i18n.global.t('errors.invalid_date')
+}
+
+
 const FIELDS: Record<string, Field> = {
     EMAIL: {
       key: 'email',
@@ -71,7 +93,7 @@ const FIELDS: Record<string, Field> = {
       label: i18n.global.t('employee_dashboard.date_of_birth'),
       lazy_rules: 'true',
       retirementRule: true,
-      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
+      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || errors.invalid_date]
     },
   },
     COMPANY_NAME: {
@@ -226,9 +248,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.owner_occupied'),
-      options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
+      options: yesNoOptions,
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('general.yes'), i18n.global.t('general.no')]) || i18n.global.t('errors.invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
     },
   },
   DATE_OF_PURCHASE: {
@@ -237,7 +259,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       label: i18n.global.t('form_for_clients.date_of_purchase'),
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
+      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || errors.invalid_date]
     },
   },
   PRICE: {
@@ -312,7 +334,7 @@ const FIELDS: Record<string, Field> = {
       type: Date,
       label: i18n.global.t('form_for_clients.expiration_date'),
       lazy_rules: 'true',
-      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
+      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || errors.invalid_date]
     },
   },
   RENOVATION: {
@@ -320,9 +342,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.renovation'),
-      options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
+      options: yesNoOptions,
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('general.yes'), i18n.global.t('general.no')]) || i18n.global.t('errors.invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
     },
   },
   RENOVATION_YEAR: {
@@ -333,7 +355,7 @@ const FIELDS: Record<string, Field> = {
       type: Date,
       label: i18n.global.t('form_for_clients.renovation_year'),
       lazy_rules: 'true',
-      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
+      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || errors.invalid_date]
     },
   },
   AMORTISATION: {
@@ -341,9 +363,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.amortisation'),
-      options: [{ label: i18n.global.t('general.yes'), value: true}, {label: i18n.global.t('general.no'), value: false}],
+      options: yesNoOptions,
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('general.yes'), i18n.global.t('general.no')]) || i18n.global.t('errors.invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
     },
   },
   TYPE: {
