@@ -7,7 +7,7 @@
       :options="options"
       type="radio"
       inline
-      @update:model-value="emitType"
+      @update:model-value="resetValues"
     />
   </div>
   <div v-if="hasBuildingLease">
@@ -23,7 +23,7 @@
     <div class="row q-mb-md">
       <p class="col q-py-sm">{{ $t('form_for_clients.landlord') }}</p>
       <q-option-group
-        v-model="landlord"
+        v-model="publicLandlord"
         class="col"
         :options="landlordOptions"
         type="radio"
@@ -39,7 +39,7 @@
       type="number"
       :label="$t('form_for_clients.building_lease_interest')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-      @change="emitLeaseInterest"
+      @change="emitValue"
     />
   </div>
 </template>
@@ -68,13 +68,29 @@ const landlordOptions = [
 const hasBuildingLease = ref(options[1].value)
 
 // Landlord type (public/private)
-const landlord = ref(landlordOptions[0].value)
+const publicLandlord = ref(landlordOptions[0].value)
 
 // Lease expiration date
-const expirationDate = ref(new Date())
+const expirationDate = ref(null)
 
 // Yearly lease interest
 const interest = ref(null)
+
+// Whether the warning popup is open
+const popupOpen = ref(false)
+
+/**
+ * Resets building lease info (triggered upon section toggle)
+ * @returns {void}
+ */
+function resetValues(){
+  publicLandlord.value = landlordOptions[0].value
+  interest.value = null
+  expirationDate.value = null
+
+  // Emit new value
+  emitValue()
+}
 
 /**
  * Checks the landlord type and warns if necessary
@@ -82,12 +98,16 @@ const interest = ref(null)
  * @returns {void}
  */
 function checkLandlordType(isPublic: boolean){
-  if(!isPublic){
+  if(!isPublic && !popupOpen.value){
+    popupOpen.value = true
     $q.dialog({
       component: WarningDialog,
       componentProps: {description:  i18n.global.t('warnings.warning_landlord') }}
-      )
+    ).onDismiss(() => popupOpen.value = false)
   }
+
+  // Emit new value
+  emitValue()
 }
 
 /**
@@ -99,36 +119,28 @@ function checkExpirationDate(expirationDateString: string){
   const expirationDate = new Date(expirationDateString)
   const dateIn70Years: Date = new Date(new Date().setFullYear(new Date().getFullYear() + 70))
 
-  if(expirationDate.getTime() < dateIn70Years.getTime() ){
+  if(expirationDate.getTime() < dateIn70Years.getTime() && !popupOpen.value ){
+    popupOpen.value = true
     $q.dialog({
       component: WarningDialog,
       componentProps: {description:  i18n.global.t('warnings.building_lease_warning') }}
-      )
+    ).onDismiss(() => popupOpen.value = false)
   }
+
+  // Emit new value
+  emitValue()
 }
 
 /**
- * Emits the building lease type
+ * Emits the building lease information
  * @returns {void}
  */
-function emitType() {
-  emit('change', hasBuildingLease.value)
-}
-
-
-/**
- * Emits the expiration date
- * @returns {void}
- */
-function emitDate() {
-  emit('change', expirationDate)
-}
-
-/**
- * Emits the yearly lease price
- * @returns {void}
- */
-function emitLeaseInterest() {
-  emit('change', interest.value)
+function emitValue() {
+  emit('change', {
+    hasBuildingLease: hasBuildingLease.value,
+    publicLandlord: publicLandlord.value,
+    expirationDate: expirationDate.value,
+    interest: interest.value
+  })
 }
 </script>

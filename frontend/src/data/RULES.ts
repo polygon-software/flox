@@ -67,6 +67,16 @@ const IS_VALID_FULL_NAME = (val: Record<string, string>): boolean => {
   return !isEmpty(val) && IS_VALID_STRING(val.first_name) && IS_VALID_STRING(val.last_name)
 }
 
+const IS_VALID_YEAR = (val: string|number): boolean => {
+  let value = val
+
+  if(typeof val === 'string'){
+    value = parseInt(val)
+  }
+
+  return value > 1900 && value < new Date().getFullYear();
+}
+
 export {
   IS_VALID_NUMBER,
   IS_VALID_EMAIL,
@@ -76,5 +86,6 @@ export {
   IS_VALID_HOUSE_NUMBER,
   IS_VALID_ZIP,
   IS_VALID_OPTION,
-  IS_VALID_FULL_NAME
+  IS_VALID_FULL_NAME,
+  IS_VALID_YEAR
 }

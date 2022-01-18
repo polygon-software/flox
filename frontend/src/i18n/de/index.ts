@@ -259,6 +259,7 @@ export default {
     invalid_company_name: 'Bitte geben Sie Ihren Firmennamen ein',
     invalid_date: 'Bitte geben sie ein gültiges Datum ein.',
     invalid_company_uid: 'Bitte geben Sie die UID Ihrer Firma ein',
+    invalid_year: 'Bitte geben Sie ein gültiges Jahr ein',
     must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
     must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',

@@ -250,6 +250,7 @@ export default {
     invalid_string: 'Please enter a valid input.',
     invalid_company_name: 'Please enter your company\'s name',
     invalid_company_uid: 'Please enter your company\'s UID',
+    invalid_year: 'Please enter a valid year',
     invalid_address: 'Please enter a valid address',
     invalid_house_number: 'This number does not exist',
     invalid_date: 'Please enter a valid date',

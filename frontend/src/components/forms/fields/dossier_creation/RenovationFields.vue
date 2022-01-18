@@ -9,16 +9,18 @@
       :options="options"
       type="radio"
       inline
-      @update:model-value="emitType"
+      @update:model-value="resetValues"
     />
   </div>
+  <!-- Renovation info (if applicable) -->
   <div v-if="hasRenovation">
     <!-- Renovation date -->
     <q-input
-      v-model="renovationDate"
-      type="date"
+      v-model.number="renovationYear"
+      type="number"
       :label="$t('form_for_clients.renovation_year')"
-      @update:model-value="emitDate"
+      :rules="[(val) => IS_VALID_YEAR(val) || $t('errors.invalid_year')]"
+      @update:model-value="emitValue"
     />
 
     <!-- Renovation price -->
@@ -28,17 +30,21 @@
       type="number"
       :label="$t('form_for_clients.renovation_amount')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-      @change="emitLeaseInterest"
+      @change="emitValue"
     />
   </div>
+
+  <!-- Spacer -->
+  <div
+    v-else
+    style="height: 136px"
+  />
 </template>
 
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {ref,} from 'vue';
-import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {useQuasar} from 'quasar';
-import {IS_VALID_NUMBER} from 'src/data/RULES';
+import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
 
@@ -51,33 +57,33 @@ const options = [
 const hasRenovation = ref(options[1].value)
 
 // Lease expiration date
-const renovationDate = ref(new Date())
+const renovationYear = ref(null)
 
 // Yearly lease interest
 const renovationPrice = ref(null)
 
 /**
- * Emits the building lease type
+ * Emits the renovation information
  * @returns {void}
  */
-function emitType() {
-  emit('change', hasRenovation.value)
-}
-
-
-/**
- * Emits the expiration date
- * @returns {void}
- */
-function emitDate() {
-  emit('change', renovationDate)
+function emitValue() {
+  emit('change', {
+    hasRenovation: hasRenovation.value,
+    renovationYear: renovationYear.value,
+    renovationPrice: renovationPrice.value
+  })
 }
 
 /**
- * Emits the yearly lease price
+ * Resets renovation info (triggered upon section toggle)
  * @returns {void}
  */
-function emitLeaseInterest() {
-  emit('change', renovationPrice.value)
+function resetValues(){
+  renovationPrice.value = null
+  renovationYear.value = null
+
+  // Emit new value
+  emitValue()
 }
+
 </script>

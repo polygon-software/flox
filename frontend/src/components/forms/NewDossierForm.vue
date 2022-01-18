@@ -179,7 +179,7 @@ const pages = [
       {
         key: 'calculation-data3',
         title: ' ',
-        fields: [FIELDS.RENOVATION, FIELDS.RENOVATION_YEAR, FIELDS.PRICE],
+        fields: [FIELDS.RENOVATION],
       },
       {
         key: 'calculation-data4',
