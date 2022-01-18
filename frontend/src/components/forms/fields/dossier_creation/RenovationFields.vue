@@ -33,12 +33,6 @@
       @change="emitValue"
     />
   </div>
-
-  <!-- Spacer -->
-  <div
-    v-else
-    style="height: 136px"
-  />
 </template>
 
 <script setup lang="ts">

@@ -1,91 +1,95 @@
 <template>
   <q-form
-        ref="formRef"
-        greedy
-        class="q-gutter-md"
+    ref="formRef"
+    greedy
+    class="q-gutter-md"
+  >
+    <!-- Stepper (for multi-page forms) -->
+    <q-stepper
+      ref="stepper"
+      v-model="form.step.value"
+      class="column"
+      active-color="primary"
+      done-icon="done"
+      style="min-height: 600px"
+      animated
+    >
+      <!-- Form content -->
+      <q-step
+        v-for="(page, index) in form.pages.value"
+        :key="page.key"
+        :name="index+1"
+        :prefix="index+1"
+        :title="page.label"
+        :done="form.step.value > index"
       >
-        <!-- Stepper (for multi-page forms) -->
-        <q-stepper
-          ref="stepper"
-          v-model="form.step.value"
-          active-color="primary"
-          done-icon="done"
-          animated
-        >
-          <q-step
-            v-for="(page, index) in form.pages.value"
-            :key="page.key"
-            :name="index+1"
-            :prefix="index+1"
-            :title="page.label"
-            :done="form.step.value > index"
-          >
+        <div
+          class="row">
+          <div class="col">
             <div
-              class="row">
-              <div class="col">
-                <div
-                  v-for="leftSection in page.sectionsLHS"
-                  :key="leftSection.key">
-                  <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
-                  <component
-                    :is="field.component"
-                    v-for="field in leftSection.fields"
-                    :key="field.key"
-                    v-bind="field.attributes"
-                    v-model="form.values.value[field.key]"
-                    @change="(newValue) => form.updateValue(field.key, newValue)"
-                    @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
-                  />
-                </div>
-              </div>
-              <div class="col q-ml-lg  q-pl-lg">
-                <div
-                  v-for="rightSection in page.sectionsRHS"
-                  :key="rightSection.key">
-                  <strong class="q-py-xl q-my-xl">{{ rightSection.title }}</strong>
-                  <component
-                    :is="field.component"
-                    v-for="field in rightSection.fields"
-                    :key="field.key"
-                    v-bind="field.attributes"
-                    v-model="form.values.value[field.key]"
-                    @change="(newValue) => form.updateValue(field.key, newValue)"
-                    @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
-                  />
-                </div>
-              </div>
+              v-for="leftSection in page.sectionsLHS"
+              :key="leftSection.key">
+              <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
+              <component
+                :is="field.component"
+                v-for="field in leftSection.fields"
+                :key="field.key"
+                v-bind="field.attributes"
+                v-model="form.values.value[field.key]"
+                @change="(newValue) => form.updateValue(field.key, newValue)"
+                @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+              />
             </div>
+          </div>
+          <div class="col q-ml-lg  q-pl-lg">
+            <div
+              v-for="rightSection in page.sectionsRHS"
+              :key="rightSection.key">
+              <strong class="q-py-xl q-my-xl">{{ rightSection.title }}</strong>
+              <component
+                :is="field.component"
+                v-for="field in rightSection.fields"
+                :key="field.key"
+                v-bind="field.attributes"
+                v-model="form.values.value[field.key]"
+                @change="(newValue) => form.updateValue(field.key, newValue)"
+                @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+              />
+            </div>
+          </div>
+        </div>
+      </q-step>
 
-          </q-step>
-          <template #navigation>
-            <q-stepper-navigation>
-              <q-btn
-                v-if="form.step.value > 1"
-                color="primary"
-                :label="$t('buttons.back')"
-                flat
-                style="margin-right: 30px"
-                class="q-ml-sm"
-                @click="$refs.stepper.previous()"
-              />
-              <q-btn
-                v-if="form.step.value < form.pages.value.length"
-                color="primary"
-                :label="$t('buttons.next_step')"
-                :disable="!form.pageValid.value"
-                @click="$refs.stepper.next()"
-              />
+      <!-- Bottom navigation -->
+      <template #navigation>
+        <q-stepper-navigation style="position: absolute; bottom: 0">
+          <q-btn
+            v-if="form.step.value > 1"
+            color="primary"
+            :label="$t('buttons.back')"
+            flat
+            style="margin-right: 30px"
+            class="q-ml-sm"
+            @click="$refs.stepper.previous()"
+          />
+          <q-btn
+            v-if="form.step.value < form.pages.value.length"
+            color="primary"
+            :label="$t('buttons.next_step')"
+            :disable="!form.pageValid.value"
+            @click="$refs.stepper.next()"
+          />
 
-              <q-btn
-                v-if="form.step.value === form.pages.value.length"
-                color="primary"
-                :label="$t('buttons.finish_signup')"
-                @click="onSubmit"
-              />
-            </q-stepper-navigation>
-          </template>
-        </q-stepper>
-      </q-form>
+          <q-btn
+            v-if="form.step.value === form.pages.value.length"
+            color="primary"
+            :label="$t('buttons.finish_signup')"
+            @click="onSubmit"
+          />
+        </q-stepper-navigation>
+      </template>
+    </q-stepper>
+  </q-form>
 </template>
 
 <script setup lang="ts">
@@ -169,13 +173,13 @@ const pages = [
         title: i18n.global.t('dashboards.mortgage'),
         fields: [FIELDS.MORTGAGE],
       },
+    ],
+    sectionsRHS: [
       {
         key: 'calculation-data2',
         title: ' ',
-        fields: [FIELDS.BUILDING_LEASE], // TODO: add a pop up
+        fields: [FIELDS.BUILDING_LEASE],
       },
-    ],
-    sectionsRHS: [
       {
         key: 'calculation-data3',
         title: ' ',
