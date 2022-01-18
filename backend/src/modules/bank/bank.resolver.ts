@@ -46,13 +46,13 @@ export class BankResolver {
    */
   @EmployeeOnly()
   @Query(() => [String])
-  async getBankNames(): Promise<String[]> {
-    const banks = await this.bankService.allBanks()
-    let names: Array<string> = []
-    banks.forEach(bank => {
-      names = names.concat(bank.name)
-    })
-    return names
+  async getBankNames(): Promise<string[]> {
+    const banks = await this.bankService.allBanks();
+    let names: Array<string> = [];
+    banks.forEach((bank) => {
+      names = names.concat(bank.name);
+    });
+    return names;
   }
 
   /**

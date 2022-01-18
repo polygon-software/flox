@@ -314,7 +314,6 @@ export default {
   form_for_clients: {
     contact_info: 'Contact Information',
     property: 'Property',
-    calculations: 'Calculations',
     property_type: 'Property Type',
     owner_occupied: 'Owner-occupied',
     purchase: 'Purchase',
@@ -323,6 +322,7 @@ export default {
     market_value_estimation: 'Market value estimation in CHF',
     current_value_of_mortgage: 'Current value of mortgage in CHF',
     enfeoffment: 'Enfeoffment in %',
+    calculations: 'Calculations',
     retirement_warning: 'The acceptibility of risks is different for people over the age of 60',
     building_lease: 'Building lease',
     building_lease_interest: 'Building lease interest  (per year in CHF)',
@@ -356,6 +356,11 @@ export default {
     RETRACTED: 'Retracted',
     ACCEPTED: 'Accepted',
     IN_PROCESS: 'In Process'
+  },
+  property_type_enum: {
+    ONE_FAMILY_HOUSE: 'Single-family house',
+    APARTMENT: 'Apartment',
+    APARTMENT_BUILDING: 'Apartment building'
   },
   email: {
     subject_rejected: 'Rejected',

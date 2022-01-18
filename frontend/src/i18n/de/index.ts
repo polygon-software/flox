@@ -244,7 +244,7 @@ export default {
     invalid_abbreviation: 'Bitte geben Sie ein gültiges Kürzel ein',
     invalid_name: 'Bitte geben Sie Ihren Namen ein',
     invalid_amount: 'Bitte geben Sie eine gültige Summe ein.',
-    invalid_string: 'Bitte geben Sie einen gültigen Name ein.',
+    invalid_string: 'Bitte geben Sie einen gültigen Namen ein.',
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
     invalid_username: 'Bitte geben Sie einen Benutzernamen ein',
@@ -316,7 +316,6 @@ export default {
   form_for_clients: {
     contact_info: 'Kontakt',
     property: 'Immobilie',
-    calculations: 'Berechnungen',
     property_type: 'Immobilientyp',
     owner_occupied: 'Selbstbewohnt',
     purchase: 'Kauf',
@@ -325,6 +324,7 @@ export default {
     market_value_estimation: 'Verkehrswertschätzung in CHF',
     current_value_of_mortgage: 'Aktuelle Höhe der Hypothek in CHF',
     enfeoffment: 'Belehnung in %',
+    calculations: 'Berechnungen',
     building_lease: 'Baurecht',
     building_lease_interest: 'Baurechtzins (pro Jahr in CHF)',
     renovation: 'Renovation',
@@ -358,6 +358,11 @@ export default {
     RETRACTED: 'Zurückgezogen',
     ACCEPTED: 'Akzeptiert',
     IN_PROCESS: 'In Bearbeitung'
+  },
+  property_type_enum: {
+    ONE_FAMILY_HOUSE: 'Einfamilienhaus',
+    APARTMENT: 'Wohnung',
+    APARTMENT_BUILDING: 'Mehrfamilienhaus'
   },
   email: {
     subject_rejected: 'Abgelehnt',

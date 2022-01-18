@@ -1,4 +1,4 @@
-import {IS_VALID_DATE, IS_VALID_EMAIL, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
+import {IS_VALID_DATE, IS_VALID_EMAIL, IS_VALID_FULL_NAME, IS_VALID_OPTION, IS_VALID_STRING} from './RULES'
 import {QInput, QSelect} from 'quasar'
 import PasswordRepeatField from 'components/forms/fields/company_signup/PasswordRepeatField.vue'
 import Password from 'components/forms/fields/Password.vue'
@@ -68,11 +68,9 @@ const FIELDS: Record<string, Field> = {
     key: 'date_of_birth',
     component: markRaw(InputDatePicker),
     attributes: {
-      dense: true,
-      type: Date,
       label: i18n.global.t('employee_dashboard.date_of_birth'),
       lazy_rules: 'true',
-      retirement_rule: true,
+      retirementRule: true,
       rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
     },
   },
@@ -116,7 +114,7 @@ const FIELDS: Record<string, Field> = {
     key: 'full_name',
     component: markRaw(FullNameField),
     attributes: {
-      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name')]
+      rules: [(val: Record<string, string>): boolean|string  => IS_VALID_FULL_NAME(val) || i18n.global.t('errors.invalid_name')]
     },
   },
   ABBREVIATION: {
@@ -203,7 +201,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('account_data.bank'),
-      options: ['Raiffeisen', 'UBS', 'ZKB', 'LuKB'], //TODO: replace with real data
+      options: ['Raiffeisen', 'UBS', 'ZKB', 'LuKB'], //TODO: replace with real data: getBankNames query
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['Raiffeisen', 'UBS', 'ZKB', 'LuKB']) || i18n.global.t('errors.invalid_option')]
     },
@@ -213,7 +211,12 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('form_for_clients.property_type'),
-      options: Object.values(PROPERTY_TYPE),
+      options: Object.values(PROPERTY_TYPE).map((value) => {
+        return {
+          value,
+          label: i18n.global.t(`property_type_enum.${value}`)
+        }
+      }),
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, Object.values(PROPERTY_TYPE)) || i18n.global.t('errors.invalid_option')]
     },

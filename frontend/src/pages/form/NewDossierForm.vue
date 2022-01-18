@@ -115,6 +115,7 @@ const formRef: Ref<QForm | null> = ref(null)
 
 
 const pages = [
+  // First page: CRM Data
   {
     key: 'crm-data',
     label: i18n.global.t('employee_dashboard.customer'),
@@ -138,6 +139,7 @@ const pages = [
       },
     ]
   },
+  // Second page: Property data
   {
     key: 'property',
     label: i18n.global.t('form_for_clients.property'),
@@ -166,6 +168,8 @@ const pages = [
       },
     ]
   },
+
+  // Third page: calculations
   {
     key: 'calculations',
     label: i18n.global.t('form_for_clients.calculations'),
@@ -209,11 +213,7 @@ const form: Form = new Form(pages as Record<string, unknown>[])
  * @returns {void}
  */
 async function onSubmit(formData: Record<string, Record<string, string>>) {
-  const email: string = formData.email.toString()
-  if (email === null || email === undefined) {
-    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
-  }
-
+  // TODO: other params
   // Creates a dossier
   await executeMutation(CREATE_DOSSIER, {
     first_name: formData.full_name.first_name,
