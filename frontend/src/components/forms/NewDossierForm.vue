@@ -214,7 +214,14 @@ const pages = [
       {
         key: 'assets-data3',
         title: i18n.global.t('form_for_clients.costs'),
-        fields: [FIELDS.LEASING, FIELDS.CREDIT, FIELDS.ALIMONY, FIELDS.VARIOUS],
+        fields: [
+          FIELDS.LEASING,
+          FIELDS.CREDIT,
+          FIELDS.ALIMONY,
+          FIELDS.VARIOUS,
+          FIELDS.PROSECUTIONS,
+          FIELDS.LOSS_CERTIFICATES
+        ],
       },
     ]
   },

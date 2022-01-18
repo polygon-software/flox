@@ -435,6 +435,26 @@ const FIELDS: Record<string, Field> = {
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
     },
   },
+  PROSECUTIONS: {
+    key: 'prosecutions',
+    component: markRaw(TitledOptionGroup),
+    attributes: {
+      label: i18n.global.t('form_for_clients.prosecutions'),
+      options: yesNoOptions,
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
+    },
+  },
+  LOSS_CERTIFICATES: {
+    key: 'loss_certificates',
+    component: markRaw(TitledOptionGroup),
+    attributes: {
+      label: i18n.global.t('form_for_clients.loss_certificates'),
+      options: yesNoOptions,
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
+    },
+  },
 }
 
 export {FIELDS}
