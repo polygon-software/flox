@@ -23,6 +23,9 @@ jobs:
     needs: setup-node
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
       - name: Lint frontend
         uses: reviewdog/action-eslint@v1
         with:
