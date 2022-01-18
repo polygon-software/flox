@@ -18,7 +18,7 @@
     "ios": "quasar dev -m capacitor -T ios",
     "test:unit": "jest --updateSnapshot",
     "test:unit:report": "jest --ci --coverage",
-    "serve:test:report": "quasar serve reports/coverage/lcov-report/ --port 8788",
+    "serve:test:report": "quasar serve reports/coverage/lcov-report/ --port 8787",
     "test:unit:watch": "jest --watch",
     "test:unit:watchAll": "jest --watchAll",
     "concurrently:dev:test": "concurrently \"yarn dev\" \"yarn test:unit:watch\""
@@ -40,7 +40,7 @@
     "date-fns": "^2.25.0",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
-    "jest-sonar-reporter": "^2.0.0",
+    "jest-sonar": "^0.2.12",
     "joi": "^17.4.2",
     "lodash": "^4.17.21",
     "qrcode.vue": "^3.3.3",
