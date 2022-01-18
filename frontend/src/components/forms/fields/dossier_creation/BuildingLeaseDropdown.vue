@@ -36,11 +36,11 @@
       />
     </div>
     <q-input
-      v-model="price"
+      v-model.number="price"
       dense
-      type="text"
+      type="number"
       :label="$t('form_for_clients.building_lease_interest')"
-      :rules="[(val: string) => IS_VALID_STRING(val) || $t('errors.invalid_amount')]"
+      :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitValuePrice"
     ></q-input>
   </div>
@@ -51,6 +51,7 @@ import {i18n} from 'boot/i18n';
 import {ref,} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {useQuasar} from 'quasar';
+import {IS_VALID_NUMBER} from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
 const $q = useQuasar()
@@ -68,7 +69,7 @@ const landlordOptions = [
 const selectedOption = ref(options[1].value)
 const landlord = ref(landlordOptions[0].value)
 const date = ref(new Date())
-const price = ref('')
+const price = ref(null)
 
 
 /**

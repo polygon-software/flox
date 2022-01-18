@@ -243,7 +243,7 @@ export default {
     non_matching_password: 'Passwörter stimmen nicht überein',
     invalid_abbreviation: 'Bitte geben Sie ein gültiges Kürzel ein',
     invalid_name: 'Bitte geben Sie Ihren Namen ein',
-    invalid_amount: 'Bitte geben Sie eine gültige Summe ein.',
+    invalid_amount: 'Bitte geben Sie eine gültige Zahl ein.',
     invalid_string: 'Bitte geben Sie einen gültigen Namen ein.',
     invalid_password: 'Bitte geben Sie ein gültiges Passwort ein',
     invalid_email: 'Bitte geben Sie eine gütlige E-Mail Adresse ein',
@@ -372,8 +372,10 @@ export default {
   },
   warnings: {
     retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)',
-    warning_landlord: 'Nur Hypotheken mit öffentlich-rechtliche Baurechtsgeber sind vermittelbar',
+    warning_landlord: 'Nur Hypotheken mit öffentlich-rechtlichem Baurechtsgeber sind vermittelbar',
     mortgage_too_short: 'Die Ablauffrist der Hypothek ist zu kurz!',
-    mortgage_note: 'Achtung: eventuel Schuldbriefsplitting notwendig!'
+    mortgage_note: 'Achtung: eventuel Schuldbriefsplitting notwendig!',
+    building_lease_warning: 'Auf basis der von Ihnen erfassten Daten kann über diese Plattform keien Hypothek angeboten werden!',
+
   }
 };

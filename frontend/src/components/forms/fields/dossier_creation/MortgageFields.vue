@@ -1,7 +1,9 @@
 <template>
   <div
-  v-for="(partition, index) in mortgagePartitions"
-  :key="`partition_${index}`">
+    v-for="(partition, index) in mortgagePartitions"
+    :key="`partition_${index}`"
+    style="margin-bottom: 12px"
+  >
     <q-input
       v-model.number="partition.amount"
       dense
@@ -24,7 +26,6 @@
     size="sm"
     color="primary"
     icon="add"
-    style="margin-top: 12px"
     round
     @click="addPartition"
   />
@@ -75,6 +76,7 @@ function emitPartitions() {
  * @returns {void}
  */
 function checkMortgageExpirationDate(expirationDateString: string){
+  // TODO
   // TODO also emit...
   const expirationDate = new Date(expirationDateString)
 

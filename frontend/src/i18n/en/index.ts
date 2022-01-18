@@ -370,6 +370,7 @@ export default {
     retirement_warning: 'The acceptability of risks is different for people over the age of 60',
     warning_landlord: 'Only  mortgages with public building lease landlords are applicable',
     mortgage_too_short: 'The expiration date of the mortgage is to soon!',
-    mortgage_note: 'Attention: A mortgage note might be obligatory!'
+    mortgage_note: 'Attention: Mortgage note splitting may be required!',
+    building_lease_warning: 'Based on the entered data, no mortgage can be offered through this platform!'
   }
 };
