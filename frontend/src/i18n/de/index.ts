@@ -333,7 +333,7 @@ export default {
     type: 'Art',
     expiration_date: 'Ablaufdatum',
     renovation_year: 'Renovationsjahr',
-    renovation_amount: 'Betrag in CHF',
+    amount: 'Betrag in CHF',
     amortisation: 'Amortisation',
     direct: 'Direkt',
     indirect: 'Indirekt',

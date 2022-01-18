@@ -1,6 +1,6 @@
 <template>
   <div class="row q-mb-md">
-    <strong class="col q-py-sm">{{ $t('form_for_clients.renovation') }}</strong>
+    <strong class="col q-py-sm">{{ $t('form_for_clients.amortisation') }}</strong>
 
     <!-- Amortisation toggle -->
     <q-option-group
@@ -38,7 +38,7 @@
   <!-- Spacer -->
   <div
     v-else
-    style="height: 136px"
+    style="height: 100px"
   />
 </template>
 

@@ -186,11 +186,6 @@ const pages = [
         title: ' ',
         fields: [FIELDS.AMORTISATION],
       },
-      {
-        key: 'calculation-data5',
-        title: ' ',
-        fields: [FIELDS.TYPE, FIELDS.PRICE], // TODO: put direct & indirect next to each other
-      },
     ]
   },
 ]
