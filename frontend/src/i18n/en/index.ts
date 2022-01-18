@@ -329,6 +329,7 @@ export default {
     type: 'Type',
     renovation: 'Renovation',
     renovation_year: 'Year of Renovation',
+    renovation_amount: 'Amount in CHF',
     portion: 'Portion',
     expiration_date: 'Expiration Date',
     amortisation: 'Amortisation',

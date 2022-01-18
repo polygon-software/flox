@@ -2,18 +2,18 @@
   <div class="row q-mb-md">
     <strong class="col q-py-sm">{{ $t('form_for_clients.building_lease') }}</strong>
     <q-option-group
-      v-model="selectedOption"
+      v-model="hasBuildingLease"
       class="col"
       :options="options"
       type="radio"
       inline
-      @update:model-value="emitValue"
+      @update:model-value="emitType"
     />
   </div>
-  <div v-if="selectedOption">
+  <div v-if="hasBuildingLease">
     <!-- Expiration date -->
     <q-input
-      v-model="date"
+      v-model="expirationDate"
       type="date"
       :label="$t('form_for_clients.expiration_date')"
       @update:model-value="checkExpirationDate"
@@ -34,12 +34,12 @@
 
     <!-- Lease interest rate -->
     <q-input
-      v-model.number="price"
+      v-model.number="interest"
       dense
       type="number"
       :label="$t('form_for_clients.building_lease_interest')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-      @change="emitValuePrice"
+      @change="emitLeaseInterest"
     />
   </div>
 </template>
@@ -64,14 +64,20 @@ const landlordOptions = [
   {label: i18n.global.t('form_for_clients.private'), value: false},
 ]
 
-const selectedOption = ref(options[1].value)
-const landlord = ref(landlordOptions[0].value)
-const date = ref(new Date())
-const price = ref(null)
+// Whether building lease applies
+const hasBuildingLease = ref(options[1].value)
 
+// Landlord type (public/private)
+const landlord = ref(landlordOptions[0].value)
+
+// Lease expiration date
+const expirationDate = ref(new Date())
+
+// Yearly lease interest
+const interest = ref(null)
 
 /**
- * Checks the landlord type and warns if appropriate
+ * Checks the landlord type and warns if necessary
  * @param {Boolean} isPublic - landlord type
  * @returns {void}
  */
@@ -102,27 +108,27 @@ function checkExpirationDate(expirationDateString: string){
 }
 
 /**
- * Emits the updated value, if it is valid
+ * Emits the building lease type
  * @returns {void}
  */
-function emitValue() {
-  emit('change', selectedOption)
+function emitType() {
+  emit('change', hasBuildingLease.value)
 }
 
 
 /**
- * Emits the updated value, if it is valid
+ * Emits the expiration date
  * @returns {void}
  */
 function emitDate() {
-  emit('change', date)
+  emit('change', expirationDate)
 }
 
 /**
- * Emits the updated value, if it is valid
+ * Emits the yearly lease price
  * @returns {void}
  */
-function emitValuePrice() {
-  emit('change', price)
+function emitLeaseInterest() {
+  emit('change', interest.value)
 }
 </script>

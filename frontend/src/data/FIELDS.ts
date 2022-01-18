@@ -14,6 +14,7 @@ import InputDatePicker from 'components/forms/fields/generic/InputDatePicker.vue
 import PropertyInputFields from 'components/forms/fields/dossier_creation/PropertyInputFields.vue'
 import BuildingLeaseDropdown from 'components/forms/fields/dossier_creation/BuildingLeaseDropdown.vue'
 import MortgageFields from 'components/forms/fields/dossier_creation/MortgageFields.vue'
+import RenovationFields from 'components/forms/fields/dossier_creation/RenovationFields.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
@@ -330,24 +331,10 @@ const FIELDS: Record<string, Field> = {
     },
   },
   RENOVATION: {
-    key: 'property_type',
-    component: markRaw(TitledOptionGroup),
+    key: 'renovation',
+    component: markRaw(RenovationFields),
     attributes: {
-      label: i18n.global.t('form_for_clients.renovation'),
-      options: yesNoOptions,
-      // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
-    },
-  },
-  RENOVATION_YEAR: {
-    key: 'renovation_year',
-    component: markRaw(InputDatePicker),
-    attributes: {
-      dense: true,
-      type: Date,
-      label: i18n.global.t('form_for_clients.renovation_year'),
-      lazy_rules: 'true',
-      rules: [(val: Date): boolean|string => IS_VALID_DATE(val) || errors.invalid_date]
+      rules: []
     },
   },
   AMORTISATION: {
