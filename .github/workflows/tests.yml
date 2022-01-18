@@ -14,7 +14,7 @@ on:
 jobs:
   setup-node:
     name: Setup Node & Dependencies
-    uses: ./.github/workflows/node-yarn.yml@feature-sonarCoverage
+    uses: polygon-software/full-stack-bootstrap/.github/workflows/node-yarn.yml@feature-sonarCoverage
     with:
       node: 14.x
 
