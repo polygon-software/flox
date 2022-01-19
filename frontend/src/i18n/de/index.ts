@@ -272,6 +272,7 @@ export default {
     offer_already_present: 'Sie haben dieses Dossier bereits markiert.',
     unknown: 'Unbekannter Fehler',
     pdf_generation_error: 'Beim Erstellen der PDF-Datei ist ein Fehler aufgetreten.',
+    mortgage_total_must_be: 'Total-Betrag muss {amount} entsprechen'
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
@@ -366,7 +367,7 @@ export default {
     affordability: 'Tragbarkeit',
     costs_per_year: 'Kosten pro Jahr',
     enfeoffment_between: 'Belehnung zwischen',
-    discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?'
+    discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?',
   },
   dossier_status_enum: {
     OPEN: 'Offen',

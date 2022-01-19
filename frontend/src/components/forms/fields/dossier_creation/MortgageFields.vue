@@ -1,40 +1,58 @@
 <template>
-  <div
-    v-for="(partition, index) in mortgagePartitions"
-    :key="`partition_${index}`"
-    style="margin-bottom: 12px"
-  >
-    <q-input
-      v-model.number="partition.amount"
-      dense
-      type="number"
-      :label="$t('form_for_clients.portion')+' '+ (index+1)"
-      :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-      @change="emitPartitions"
-    ></q-input>
-    <q-input
-      v-model="partition.date"
-      type="date"
-      dense
-      :label="$t('dossier.expiration_date')"
-      @change="checkMortgageExpirationDate"
+  <div>
+
+    <div
+      v-for="(partition, index) in mortgagePartitions"
+      :key="`partition_${index}`"
+      style="margin-bottom: 12px"
+    >
+      <q-input
+        v-model.number="partition.amount"
+        dense
+        type="number"
+        :label="$t('form_for_clients.portion')+' '+ (index+1)"
+        :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+        @change="emitValue"
+      ></q-input>
+      <q-input
+        v-model="partition.date"
+        type="date"
+        dense
+        :label="$t('dossier.expiration_date')"
+        @change="checkMortgageExpirationDate"
+      />
+    </div>
+
+    <!-- Error message (if appropriate) -->
+    <div
+      v-if="!isValidTotal"
+      class="row items-start"
+      style="margin-top: 24px"
+    >
+      <q-icon name="error" color="negative" size="sm"/>
+      <p
+        class="text-negative q-ml-sm"
+      >
+        {{ $t('errors.mortgage_total_must_be', {amount: totalAmount})}}
+      </p>
+    </div>
+
+
+    <!-- Button for adding new partitions -->
+    <q-btn
+      size="sm"
+      color="primary"
+      icon="add"
+      :disable="mortgagePartitions.length >= maxPartitions"
+      round
+      @click="addPartition"
     />
   </div>
-
-  <!-- Button for adding new partitions -->
-  <q-btn
-    size="sm"
-    color="primary"
-    icon="add"
-    :disable="mortgagePartitions.length >= maxPartitions"
-    round
-    @click="addPartition"
-  />
 </template>
 
 <script setup lang="ts">
 import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES'
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
@@ -72,6 +90,16 @@ onMounted(() => {
 })
 
 /**
+ * Whether the sum of all partition amounts is equal to the total amount
+ */
+const isValidTotal = computed(() => {
+  let total = 0
+  mortgagePartitions.value.forEach((partition) => total += parseInt(partition.amount))
+
+  return total === parseInt(props.totalAmount);
+})
+
+/**
  * Adds a partition whenever the plus button is clicked
  * @returns {void}
  */
@@ -89,7 +117,9 @@ function addPartition(){
  * Emits the updated value of the price, if it is valid
  * @returns {void}
  */
-function emitPartitions() {
+function emitValue() {
+  // TODO: if total not valid, emit as invalid?
+
   // Filter out nulls (if add button was pressed too often), except first partition
   const filteredPartitions = mortgagePartitions.value.filter((partition, index) => {
     return index === 0 || (partition.amount || partition.date)
@@ -136,7 +166,7 @@ function checkMortgageExpirationDate(expirationDateString: string){
   }
 
   // Emit value
-  emitPartitions()
+  emitValue()
 }
 
 </script>
