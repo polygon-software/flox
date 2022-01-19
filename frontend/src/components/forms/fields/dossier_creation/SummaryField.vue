@@ -40,10 +40,17 @@ const props = defineProps({
 const computedClass = computed(() => {
   let styleClass = 'q-pa-sm text-right '
 
-  if(props.valueType === 'positive'){
-    styleClass += 'bg-green-2'
-  } else if(props.valueType === 'negative'){
-    styleClass += 'bg-red-2'
+
+  switch(props.valueType){
+    case 'positive':
+      styleClass += 'bg-green-2'
+      break;
+    case 'negative':
+      styleClass += 'bg-red-2'
+      break;
+    case 'neutral':
+      styleClass += 'bordered-card'
+      break;
   }
 
   return styleClass
@@ -52,5 +59,7 @@ const computedClass = computed(() => {
 </script>
 
 <style scoped>
-
+.bordered-card{
+  border: 1px solid lightgray;
+}
 </style>
