@@ -355,7 +355,7 @@ export default {
     costs: 'Kosten',
     leasing: 'Leasing',
     credit: 'Kredit',
-    alimony: 'Alimony',
+    alimony: 'Alimente',
     various: 'Sonstiges',
     prosecutions: 'Betreibungen',
     loss_certificates: 'Verlustscheine',

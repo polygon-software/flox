@@ -106,7 +106,7 @@
                 flat
               >
                 <strong>
-                  {{ totalCosts ? `CHF ${totalCosts}` : '-' }}
+                  {{ totalExpenses ? `CHF ${totalExpenses}` : '-' }}
                 </strong>
               </q-card>
             </div>
@@ -125,12 +125,12 @@
           />
           <SummaryField
             :label="$t('form_for_clients.costs_per_year')"
-            :content="totalCosts ? `CHF ${totalCosts}` : '-' "
+            :content="totalExpenses ? `CHF ${totalExpenses}` : '-' "
             value-type="negative"
           />
           <SummaryField
-            :label="$t('form_for_clients.portability')"
-            :content="portability ? `${portability}%` : '-' "
+            :label="$t('form_for_clients.affordability')"
+            :content="affordability ? `${affordability}%` : '-' "
           />
         </div>
       </q-step>
@@ -374,9 +374,9 @@ const eligibleIncome = computed(() => {
 })
 
 /**
- * Sum of costs
+ * Sum of expenses
  */
-const totalCosts = computed(() => {
+const totalExpenses = computed(() => {
   const leasing = form.values.value.leasing as number|undefined
   const credit = form.values.value.credit as number|undefined
   const alimony = form.values.value.alimony as number|undefined
@@ -390,15 +390,32 @@ const totalCosts = computed(() => {
 })
 
 /**
- * Mortgage portability
+ * Sum of yearly costs
  */
-const portability = computed(() => {
+const totalCosts = computed(() => {
+  // TODO calculation
+  // const leasing = form.values.value.leasing as number|undefined
+  // const credit = form.values.value.credit as number|undefined
+  // const alimony = form.values.value.alimony as number|undefined
+  // const various = form.values.value.various as number|undefined
+  //
+  // if(leasing && credit && alimony && various){
+  //   return parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various)
+  // }
+
+  return null
+})
+
+/**
+ * Mortgage affordability
+ */
+const affordability = computed(() => {
 
   // Ensure all required values are given
   if(totalCosts.value && eligibleIncome.value){
 
-    // TODO calculation, warnings
-    return 25
+    // TODO warnings
+    return (totalCosts.value / eligibleIncome.value * 100).toFixed(2)
   }
 
   return null
