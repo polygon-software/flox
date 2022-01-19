@@ -42,6 +42,7 @@
                   :key="field.key"
                   v-bind="field.attributes"
                   v-model="form.values.value[field.key]"
+                  :initial-value="form.values.value[field.key]"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
                 />
@@ -60,6 +61,7 @@
                   :key="field.key"
                   v-bind="field.attributes"
                   v-model="form.values.value[field.key]"
+                  :initial-value="form.values.value[field.key]"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
                 />
@@ -67,7 +69,10 @@
             </div>
           </div>
 
-          <q-separator style="margin: 24px 0 48px 0"/>
+          <q-separator
+            v-if="form.step.value === 4"
+            style="margin: 24px 0 48px 0"
+          />
 
           <!-- Sum block for income page -->
           <div
@@ -261,12 +266,17 @@ const pages = [
       {
         key: 'crm-person',
         title: i18n.global.t('employee_dashboard.customer'),
-        fields: [FIELDS.FULL_NAME, FIELDS.DATE_OF_BIRTH],
+        fields: [
+          FIELDS.FULL_NAME,
+          FIELDS.DATE_OF_BIRTH
+        ],
       },
       {
         key: 'crm-address',
         title: i18n.global.t('account_data.domicile_address'),
-        fields: [FIELDS.ADDRESS],
+        fields: [
+          FIELDS.ADDRESS
+        ],
       },
     ],
     sectionsRHS: [
@@ -603,6 +613,4 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
   // TODO: route to final document
   await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
 }
-
-
 </script>

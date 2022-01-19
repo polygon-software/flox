@@ -17,7 +17,7 @@ import {defineProps, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {calculateAge} from 'src/helpers/date-helpers';
+import {calculateAge, dateToInputString} from 'src/helpers/date-helpers';
 import {IS_VALID_DATE} from 'src/data/RULES';
 
 const props = defineProps({
@@ -34,12 +34,18 @@ const props = defineProps({
     type: Array,
     required: false,
     default: () => [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
-}
+  },
+  initialValue: {
+    type: Date,
+    required: false,
+    default: null
+  }
 })
+
 const emit = defineEmits(['change'])
 const $q = useQuasar()
 
-const date = ref(null)
+const date = ref(dateToInputString(props.initialValue)  ?? null)
 
 // Whether the warning popup is open
 const popupOpen = ref(false)

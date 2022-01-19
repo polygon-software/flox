@@ -64,7 +64,7 @@ const IS_VALID_OPTION = (val: unknown|Record<string, unknown>, options: unknown[
 }
 
 const IS_VALID_FULL_NAME = (val: Record<string, string>): boolean => {
-  return !isEmpty(val) && IS_VALID_STRING(val.first_name) && IS_VALID_STRING(val.last_name)
+  return !isEmpty(val) && IS_VALID_STRING(val.firstName) && IS_VALID_STRING(val.lastName)
 }
 
 /**

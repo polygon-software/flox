@@ -10,7 +10,7 @@ import PasswordRepeatField from 'components/forms/fields/company_signup/Password
 import Password from 'components/forms/fields/Password.vue'
 import CompanyAddressField from 'components/forms/fields/company_signup/CompanyAddressField.vue'
 import CompanyDataField from 'components/forms/fields/company_signup/CompanyDataField.vue'
-import FullNameField from 'components/forms/fields/company_signup/FullNameField.vue'
+import FullNameField from 'components/forms/fields/generic/FullNameField.vue'
 import ConditionsField from 'components/forms/fields/company_signup/ConditionsField.vue'
 import CompanyUploadFields from 'components/forms/fields/document_upload/CompanyUploadFields.vue'
 import UserType from 'components/forms/fields/generic/UserType.vue'

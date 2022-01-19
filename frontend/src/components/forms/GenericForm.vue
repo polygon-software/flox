@@ -27,6 +27,7 @@
           :key="field.key"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
+          :initial-value="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
           @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
         />
@@ -78,6 +79,7 @@
           :key="field.key"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
+          :initial-value="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
           @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
         />
