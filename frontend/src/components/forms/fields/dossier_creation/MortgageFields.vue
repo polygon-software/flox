@@ -26,6 +26,7 @@
     size="sm"
     color="primary"
     icon="add"
+    :disable="mortgagePartitions.length >= maxPartitions"
     round
     @click="addPartition"
   />
@@ -50,16 +51,21 @@ const mortgagePartitions = ref([
   }
 ])
 
+// Maximum number of partitions
+const maxPartitions = 4
+
 /**
  * Adds a partition whenever the plus button is clicked
  * @returns {void}
  */
 function addPartition(){
-  mortgagePartitions.value.push(
-    {
-      amount: null,
-      date: null,
+  if(mortgagePartitions.value.length < maxPartitions){
+    mortgagePartitions.value.push(
+      {
+        amount: null,
+        date: null,
     })
+  }
 }
 
 /**
