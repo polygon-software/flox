@@ -11,7 +11,7 @@
       class="column"
       active-color="primary"
       done-icon="done"
-      style="min-height: 600px"
+      style="min-height: 700px"
       animated
     >
       <!-- Form content -->
@@ -25,6 +25,7 @@
       >
         <div
           class="row">
+          <!-- Left-hand side -->
           <div class="col">
             <div
               v-for="leftSection in page.sectionsLHS"
@@ -41,6 +42,8 @@
               />
             </div>
           </div>
+
+          <!-- Right-hand side -->
           <div class="col q-ml-lg  q-pl-lg">
             <div
               v-for="rightSection in page.sectionsRHS"
@@ -56,6 +59,51 @@
                 @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
               />
             </div>
+          </div>
+        </div>
+
+        <q-separator style="margin: 24px 0 48px 0"/>
+
+        <!-- Summary block for income page -->
+        <div
+          v-if="form.step.value === 4"
+          class="row"
+        >
+          <!-- Left side: wage summary -->
+          <div
+            class="col"
+            style="margin-right: 24px"
+          >
+            <strong>
+              {{ $t('form_for_clients.eligible_income')}}
+            </strong>
+            <q-card
+              class="q-pa-sm bg-green-2 text-right"
+              style="margin: 12px 0 12px 0"
+            >
+              <strong>
+                {{ eligibleIncome }}
+              </strong>
+            </q-card>
+          </div>
+
+          <!-- Right side: costs summary -->
+          <div
+            class="col"
+            style="margin-left: 24px"
+          >
+            <strong>
+              {{ $t('form_for_clients.costs')}}
+            </strong>
+            <q-card
+              class="q-pa-sm bg-red-2 text-right"
+              style="margin: 12px 0 12px 0"
+            >
+              <strong>
+                CHF 250'000
+                <!-- TODO -->
+              </strong>
+            </q-card>
           </div>
         </div>
       </q-step>
@@ -93,7 +141,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, Ref, ref} from 'vue';
+import {computed, inject, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
@@ -105,6 +153,7 @@ import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 
+// Form component reference
 const formRef: Ref<QForm | null> = ref(null)
 
 const pages = [
@@ -204,7 +253,7 @@ const pages = [
         fields: [FIELDS.INCOME],
       },
       {
-        key: 'assets-data1',
+        key: 'assets-data2',
         title: i18n.global.t('form_for_clients.additional_income'),
         fields: [FIELDS.CHILD_ALLOWANCES, FIELDS.BONUS],
       },
@@ -224,9 +273,27 @@ const pages = [
       },
     ]
   },
-
 ]
 const form: Form = new Form(pages as Record<string, unknown>[])
+
+/**
+ * From the data given on the 'assets' page, calculate sum of eligible income
+ */
+const eligibleIncome = computed(() => {
+  const grossIncomes = form.values.value.income as number[]|undefined
+  const bonus = form.values.value.bonus as number|undefined
+  const childAllowances = form.values.value.child_allowances as number|undefined
+
+  if(grossIncomes && bonus && childAllowances){
+    let sumOfIncomes = 0
+    grossIncomes.forEach((income) => sumOfIncomes += income)
+
+    const total = sumOfIncomes + parseInt(bonus) + parseInt(childAllowances)
+    return `CHF ${total}`
+  }
+
+  return '-'
+})
 
 /**
  * Upon validation, it creates a dossier in the database

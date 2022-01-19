@@ -10,7 +10,7 @@ const IS_VALID_NUMBER = (val: number|string): boolean => {
     return true;
   }
 
-  return !!parseInt(val)
+  return !!parseInt(val) || parseInt(val) === 0
 }
 
 const IS_VALID_STRING = (val: string): boolean => {

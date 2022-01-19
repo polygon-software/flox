@@ -10,7 +10,7 @@
       type="number"
       :label="$t('form_for_clients.gross_income')+' '+ (index+1)"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-      @change="() => onChange(index)"
+      @update:model-value="() => onChange(index)"
     />
   </div>
 
@@ -46,6 +46,8 @@ function addIncome(){
   if(incomes.value[incomes.value.length-1]){
     incomes.value.push(null)
   }
+
+  emitIncomes()
 }
 
 /**
@@ -55,7 +57,7 @@ function addIncome(){
  */
 function onChange(index: number){
   // If nothing was entered, remove
-  if(!incomes.value[index] || incomes.value[index] <= 0){
+  if(incomes.value.length > 1 && (!incomes.value[index] || incomes.value[index] <= 0)){
     incomes.value.splice(index, 1)
   }
 
