@@ -270,7 +270,7 @@ export default {
     offer_already_present: 'You have already marked this dossier.',
     unknown: 'Unknown Error',
     pdf_generation_error: 'An error occurred while generating the PDF file.',
-    mortgage_total_must_be: 'Total must be equal to {amount}'
+    mortgage_total_must_be: 'Total must be equal to CHF {amount}'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
