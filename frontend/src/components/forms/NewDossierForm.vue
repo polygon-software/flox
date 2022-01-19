@@ -557,20 +557,12 @@ function onPageChange(){
       affordabilityWarning = i18n.global.t('warnings.affordability_critical')
     }
 
-    if(affordabilityWarning){
-      $q.dialog({
-        component: WarningDialog,
-        componentProps: {
-          description: affordabilityWarning
-        }
-      })
-    }
-
     // Trigger warning depending on enfeoffment ratio (if >80%), use low value because its enfeoffment is higher
     if(enfeoffmentEstimate.value.low > 80){
       enfeoffmentWarning = i18n.global.t('warnings.enfeoffment_warning')
     }
 
+    // Affordability warning
     if(affordabilityWarning){
       $q.dialog({
         component: WarningDialog,
@@ -580,6 +572,7 @@ function onPageChange(){
       })
     }
 
+    // Enfeoffment warning
     if(enfeoffmentWarning){
       $q.dialog({
         component: WarningDialog,
