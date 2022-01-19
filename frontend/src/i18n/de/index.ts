@@ -349,6 +349,7 @@ export default {
     income: 'Einkommen',
     gross_income: 'Bruttoeinkommen',
     additional_income: 'Weitere Einkünfte',
+    total_income: 'Totales Einkommen',
     eligible_income: 'Anrechenbares Einkommen',
     child_allowances: 'Kinderzulagen in CHF',
     bonus: 'Bonus in CHF',

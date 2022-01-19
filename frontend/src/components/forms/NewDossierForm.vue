@@ -73,13 +73,13 @@
             v-if="form.step.value === 4"
             class="row"
           >
-            <!-- Left side: wage summary -->
+            <!-- Left side: income summary -->
             <div
               class="col"
               style="margin-right: 24px"
             >
               <strong>
-                {{ $t('form_for_clients.eligible_income')}}
+                {{ $t('form_for_clients.total_income')}}
               </strong>
               <q-card
                 class="q-pa-sm bg-green-2 text-right"
@@ -87,7 +87,7 @@
                 flat
               >
                 <strong>
-                  {{ eligibleIncome ? `CHF ${eligibleIncome}` : '-' }}
+                  {{ totalIncome ? `CHF ${totalIncome}` : '-' }}
                 </strong>
               </q-card>
             </div>
@@ -383,9 +383,9 @@ const pages = [
 const form: Form = new Form(pages as Record<string, unknown>[])
 
 /**
- * Sum of eligible income
+ * Total income
  */
-const eligibleIncome = computed(() => {
+const totalIncome = computed(() => {
   const grossIncomes = form.values.value.income as number[]|undefined
   const bonus = form.values.value.bonus as number|undefined
   const childAllowances = form.values.value.child_allowances as number|undefined
@@ -415,6 +415,13 @@ const totalExpenses = computed(() => {
   }
 
   return null
+})
+
+/**
+ * Sum of eligible income (total income minus expenses)
+ */
+const eligibleIncome = computed(() => {
+  return totalIncome.value - totalExpenses.value
 })
 
 /**
