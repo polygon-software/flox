@@ -52,18 +52,23 @@ const IS_VALID_ZIP = (val: string): boolean => {
   return Number.isInteger(parseInt(val, 10))
 }
 
-// Checks whether a selection is contained in a list of options
+/**
+ * Checks whether a selection is contained in a list of options
+ * @param {unknown|Record<string,unknown>} val - chosen option
+ * @param {unknown[]} options - valid options
+ * @constructor
+ */
 const IS_VALID_OPTION = (val: unknown|Record<string, unknown>, options: unknown[]): boolean => {
-
-  const result = options.includes(val) || (options as Record<string, unknown>[]).some((option) => {
+  return options.includes(val) || (options as Record<string, unknown>[]).some((option) => {
     return option.value === val || option.value === (val as Record<string, unknown>)?.value
   })
-
-  console.log('check', val, 'for options', options, ':', result)
-
-  return result
 }
 
+/**
+ * Checks whether a given full name is complete (first and last name)
+ * @param {Record<string, string>} val - entered full name
+ * @constructor
+ */
 const IS_VALID_FULL_NAME = (val: Record<string, string>): boolean => {
   return !isEmpty(val) && IS_VALID_STRING(val.firstName) && IS_VALID_STRING(val.lastName)
 }
@@ -79,7 +84,6 @@ const IS_VALID_YEAR = (val: string|number): boolean => {
   if(typeof val === 'string'){
     value = parseInt(val)
   }
-
   return value > 1900;
 }
 
@@ -98,6 +102,17 @@ const IS_VALID_PAST_YEAR = (val: string|number): boolean => {
   return IS_VALID_YEAR(value) && value <= new Date().getFullYear();
 }
 
+/**
+ * Checks whether mortgage partitioning is valid
+ * @param {Record<string, number|Date>[]} val - mortgage partitions
+ * @constructor
+ */
+const IS_VALID_MORTGAGE = (val: Record<string, number|Date>[]): boolean => {
+  return val.every((partition) => {
+    return partition.amount && partition.amount > 0 && partition.date
+  })
+}
+
 
 export {
   IS_VALID_NUMBER,
@@ -110,5 +125,6 @@ export {
   IS_VALID_OPTION,
   IS_VALID_FULL_NAME,
   IS_VALID_YEAR,
-  IS_VALID_PAST_YEAR
+  IS_VALID_PAST_YEAR,
+  IS_VALID_MORTGAGE
 }

@@ -261,6 +261,7 @@ export default {
     invalid_zip_code: 'Please enter a valid ZIP code',
     invalid_phone_number: 'Please enter a valid phone number',
     invalid_option: 'Please choose a valid option.',
+    invalid_mortgage: 'Please enter a valid mortgage partitioning',
     must_accept_conditions: 'You have to accept the terms and conditions.',
     must_accept_condition_truthful: 'You must have filled in all information truthfully.',
     missing_file: 'Missing file',

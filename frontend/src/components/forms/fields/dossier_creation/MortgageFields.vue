@@ -43,13 +43,21 @@ const emit = defineEmits(['change'])
 
 const $q = useQuasar()
 
-// Mortgage partitions
-const mortgagePartitions = ref([
-  {
-    amount: null,
-    date: null,
+const props = defineProps({
+  initialValue: {
+    type: Object,
+    required: false,
+    default: () => {
+      return [{
+        amount: null,
+        date: null,
+      }]
+    }
   }
-])
+})
+
+// Mortgage partitions
+const mortgagePartitions = ref(props.initialValue as Record<string, unknown>[])
 
 // Maximum number of partitions
 const maxPartitions = 4
@@ -73,7 +81,11 @@ function addPartition(){
  * @returns {void}
  */
 function emitPartitions() {
-  emit('change', mortgagePartitions.value)
+  // Filter out nulls (if add button was pressed too often), except first partition
+  const filteredPartitions = mortgagePartitions.value.filter((partition, index) => {
+    return index === 0 || (partition.amount || partition.date)
+  })
+  emit('change', filteredPartitions)
 }
 
 /**

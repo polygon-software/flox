@@ -1,7 +1,7 @@
 import {
   IS_VALID_DATE,
   IS_VALID_EMAIL,
-  IS_VALID_FULL_NAME, IS_VALID_NUMBER,
+  IS_VALID_FULL_NAME, IS_VALID_MORTGAGE, IS_VALID_NUMBER,
   IS_VALID_OPTION,
   IS_VALID_STRING
 } from './RULES'
@@ -317,7 +317,7 @@ const FIELDS: Record<string, Field> = {
     key: 'mortgage',
     component: markRaw(MortgageFields),
     attributes: {
-      rules: []
+      rules: [(val: Record<string, number|Date>[]): boolean|string => IS_VALID_MORTGAGE(val) || i18n.global.t('errors.invalid_mortgage')]
     },
   },
   BUILDING_LEASE: {
@@ -327,7 +327,7 @@ const FIELDS: Record<string, Field> = {
       dense: true,
       type: 'text',
       lazy_rules: 'true',
-      rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_string')]
+      rules: []
     },
   },
   EXPIRATION_DATE: {
