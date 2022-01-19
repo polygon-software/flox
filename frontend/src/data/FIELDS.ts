@@ -66,6 +66,14 @@ const yesNoOptions = [
   }
 ]
 
+// Options for property type
+const propertyTypeOptions = Object.values(PROPERTY_TYPE).map((value) => {
+    return {
+      value,
+      label: i18n.global.t(`property_type_enum.${value}`)
+    }
+})
+
 // Commonly used errors
 const errors = {
   invalid_date: i18n.global.t('errors.invalid_date')
@@ -242,14 +250,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('form_for_clients.property_type'),
-      options: Object.values(PROPERTY_TYPE).map((value) => {
-        return {
-          value,
-          label: i18n.global.t(`property_type_enum.${value}`)
-        }
-      }),
+      options: propertyTypeOptions,
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, Object.values(PROPERTY_TYPE)) || i18n.global.t('errors.invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, propertyTypeOptions) || i18n.global.t('errors.invalid_option')]
     },
   },
   OWNER_OCCUPIED: {

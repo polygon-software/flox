@@ -54,13 +54,14 @@ const IS_VALID_ZIP = (val: string): boolean => {
 
 // Checks whether a selection is contained in a list of options
 const IS_VALID_OPTION = (val: unknown|Record<string, unknown>, options: unknown[]): boolean => {
-  let value = val
 
-  // If option was picked from an object, use inner 'value'
-  if(!!val && (val as Record<string, unknown>).value){
-    value = (val as Record<string, unknown>).value
-  }
-  return options.includes(value);
+  const result = options.includes(val) || (options as Record<string, unknown>[]).some((option) => {
+    return option.value === val || option.value === (val as Record<string, unknown>)?.value
+  })
+
+  console.log('check', val, 'for options', options, ':', result)
+
+  return result
 }
 
 const IS_VALID_FULL_NAME = (val: Record<string, string>): boolean => {

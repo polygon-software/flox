@@ -29,19 +29,24 @@ const props = defineProps({
     required: true,
   },
   defaultValue: {
-    type: Boolean,
+    type: Object,
     required: false,
-    default: true,
+    default: null,
   },
   // Warnings in format [{value: true, text: 'something'}]
   warnings: {
     type: Array,
     required: false,
     default: null
+  },
+  initialValue: {
+    type: Object,
+    required: false,
+    default: null
   }
 })
 const emit = defineEmits(['change'])
-const selectedOption = ref(props.defaultValue)
+const selectedOption = ref(props.initialValue ?? props.defaultValue)
 
 /**
  * Emits the updated value, if it is valid
