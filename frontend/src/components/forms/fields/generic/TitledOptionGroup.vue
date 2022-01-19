@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref,} from 'vue';
+import {defineProps, onMounted, ref,} from 'vue';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 
@@ -47,6 +47,13 @@ const props = defineProps({
 })
 const emit = defineEmits(['change'])
 const selectedOption = ref(props.initialValue ?? props.defaultValue)
+
+
+onMounted(() => {
+  // Emit initial value, since it may already be a valid input
+  emitValue()
+})
+
 
 /**
  * Emits the updated value, if it is valid
