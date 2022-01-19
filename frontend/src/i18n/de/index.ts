@@ -402,6 +402,7 @@ export default {
     building_lease_warning: 'Auf Basis der von Ihnen erfassten Daten kann über diese Plattform keine Hypothek angeboten werden!',
     prosecutions_loss_certificates: 'Achtung: Wenn Betreibungen oder Verlustscheine vorliegen... TODO',
     affordability_impossible: 'Achtung: Aufgrund der Tragbarkeit von über 35% ist diese Hypothek nicht finanzierbar.',
-    affordability_critical: 'Achtung: Aufgrund der Tragbarkeit ist diese Hypothek nur fraglich finanzierbar.'
+    affordability_critical: 'Achtung: Aufgrund der Tragbarkeit ist diese Hypothek nur fraglich finanzierbar.',
+    enfeoffment_warning: 'Achtung: Aufgrund des Belehnungsgrades ist diese Hypothek nicht finanzierbar.'
   }
 };

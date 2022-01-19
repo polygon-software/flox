@@ -379,6 +379,6 @@ export default {
     prosecutions_loss_certificates: 'Attention: If prosecutions or loss certificates exist... TODO',
     affordability_impossible: 'Attention: Due to the affordability of more than 35%, this mortgage cannot be financed.',
     affordability_critical: 'Attention: Due to the affordability, this mortgage may be barely financeable.',
-
+    enfeoffment_warning: 'Attention: Due to the enfeoffment ratio, this mortgage cannot be financed.'
   }
 };

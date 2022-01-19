@@ -535,20 +535,44 @@ const enfeoffmentEstimate = computed(() => {
 function onPageChange(){
   // When going to final page, validate affordability
   if(form.step.value === form.pages.value.length){
-    let warningText
+    let affordabilityWarning
+    let enfeoffmentWarning
 
     // Trigger warning depending on affordability rating
     if(affordability.value > 35){
-      warningText = i18n.global.t('warnings.affordability_impossible')
+      affordabilityWarning = i18n.global.t('warnings.affordability_impossible')
     } else if(affordability.value > 33 && affordability.value <= 35){
-      warningText = i18n.global.t('warnings.affordability_critical')
+      affordabilityWarning = i18n.global.t('warnings.affordability_critical')
     }
 
-    if(warningText){
+    if(affordabilityWarning){
       $q.dialog({
         component: WarningDialog,
         componentProps: {
-          description: warningText
+          description: affordabilityWarning
+        }
+      })
+    }
+
+    // Trigger warning depending on enfeoffment ratio (if >80%), use low value because its enfeoffment is higher
+    if(enfeoffmentEstimate.value.low > 80){
+      enfeoffmentWarning = i18n.global.t('warnings.enfeoffment_warning')
+    }
+
+    if(affordabilityWarning){
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: affordabilityWarning
+        }
+      })
+    }
+
+    if(enfeoffmentWarning){
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: enfeoffmentWarning
         }
       })
     }
