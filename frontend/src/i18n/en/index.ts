@@ -127,6 +127,7 @@ export default {
     back: 'Back',
     next_step: 'Next',
     cancel: 'Cancel',
+    close: 'Close',
     submit: 'Submit',
     ok: 'OK',
     download: 'Download',
@@ -135,7 +136,9 @@ export default {
     save: 'Save',
     discard: 'Discard',
     send_by_email: 'Send by E-Mail',
-    print: 'Print'
+    print: 'Print',
+    upload_documents: 'Upload Documents',
+    save_and_print: 'Save & Print'
   },
   documents: {
     choose_documents: 'Choose documents',

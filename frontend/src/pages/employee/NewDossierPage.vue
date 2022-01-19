@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div
       class="column q-pa-sm"
-      style="width: 700px"
+      style="width: 900px"
     >
       <new-dossier-form/>
     </div>

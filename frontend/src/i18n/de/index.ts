@@ -130,6 +130,7 @@ export default {
     next_step: 'Weiter',
     submit: 'Senden',
     cancel: 'Abbrechen',
+    close: 'Schliessen',
     ok: 'OK',
     download: 'Herunterladen',
     upload: 'Hochladen',
@@ -137,7 +138,9 @@ export default {
     save: 'Speichern',
     discard: 'Verwerfen',
     send_by_email: 'Per Mail senden',
-    print: 'Drucken'
+    print: 'Drucken',
+    upload_documents: 'Dokumente hochladen',
+    save_and_print: 'Speichern & Drucken'
   },
   documents: {
     choose_documents: 'Dokumente wählen',
@@ -355,7 +358,11 @@ export default {
     alimony: 'Alimony',
     various: 'Sonstiges',
     prosecutions: 'Betreibungen',
-    loss_certificates: 'Verlustscheine'
+    loss_certificates: 'Verlustscheine',
+    summary: 'Zusammenfassung',
+    market_value_between: 'Verkehrswert zwischen',
+    affordability: 'Tragbarkeit',
+    costs_per_year: 'Kosten pro Jahr'
   },
   dossier_status_enum: {
     OPEN: 'Offen',

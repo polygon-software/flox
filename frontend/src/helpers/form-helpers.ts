@@ -38,7 +38,7 @@ export class Form {
     return true; // TODO remove
 
     // If page structure does not exist, page can't be valid
-    if (this.pages.value.length === 0) return false
+    if(this.pages.value.length === 0) return false
 
     // Get keys that should exist in 'values' for this page
     const pageKeys: string[] = []

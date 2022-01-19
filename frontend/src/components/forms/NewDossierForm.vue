@@ -23,116 +23,177 @@
         :title="page.label"
         :done="form.step.value > index"
       >
+        <!-- Main form content (pages 1-4) -->
         <div
-          class="row">
-          <!-- Left-hand side -->
-          <div class="col">
-            <div
-              v-for="leftSection in page.sectionsLHS"
-              :key="leftSection.key">
-              <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
-              <component
-                :is="field.component"
-                v-for="field in leftSection.fields"
-                :key="field.key"
-                v-bind="field.attributes"
-                v-model="form.values.value[field.key]"
-                @change="(newValue) => form.updateValue(field.key, newValue)"
-                @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
-              />
+          v-if="form.step.value < form.pages.value.length"
+        >
+          <div
+            class="row">
+            <!-- Left-hand side -->
+            <div class="col">
+              <div
+                v-for="leftSection in page.sectionsLHS"
+                :key="leftSection.key">
+                <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
+                <component
+                  :is="field.component"
+                  v-for="field in leftSection.fields"
+                  :key="field.key"
+                  v-bind="field.attributes"
+                  v-model="form.values.value[field.key]"
+                  @change="(newValue) => form.updateValue(field.key, newValue)"
+                  @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+                />
+              </div>
+            </div>
+
+            <!-- Right-hand side -->
+            <div class="col q-ml-lg  q-pl-lg">
+              <div
+                v-for="rightSection in page.sectionsRHS"
+                :key="rightSection.key">
+                <strong class="q-py-xl q-my-xl">{{ rightSection.title }}</strong>
+                <component
+                  :is="field.component"
+                  v-for="field in rightSection.fields"
+                  :key="field.key"
+                  v-bind="field.attributes"
+                  v-model="form.values.value[field.key]"
+                  @change="(newValue) => form.updateValue(field.key, newValue)"
+                  @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+                />
+              </div>
             </div>
           </div>
 
-          <!-- Right-hand side -->
-          <div class="col q-ml-lg  q-pl-lg">
+          <q-separator style="margin: 24px 0 48px 0"/>
+
+          <!-- Sum block for income page -->
+          <div
+            v-if="form.step.value === 4"
+            class="row"
+          >
+            <!-- Left side: wage summary -->
             <div
-              v-for="rightSection in page.sectionsRHS"
-              :key="rightSection.key">
-              <strong class="q-py-xl q-my-xl">{{ rightSection.title }}</strong>
-              <component
-                :is="field.component"
-                v-for="field in rightSection.fields"
-                :key="field.key"
-                v-bind="field.attributes"
-                v-model="form.values.value[field.key]"
-                @change="(newValue) => form.updateValue(field.key, newValue)"
-                @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
-              />
+              class="col"
+              style="margin-right: 24px"
+            >
+              <strong>
+                {{ $t('form_for_clients.eligible_income')}}
+              </strong>
+              <q-card
+                class="q-pa-sm bg-green-2 text-right"
+                style="margin: 12px 0 12px 0"
+                flat
+              >
+                <strong>
+                  {{ eligibleIncome ? `CHF ${eligibleIncome}` : '-' }}
+                </strong>
+              </q-card>
+            </div>
+
+            <!-- Right side: costs summary -->
+            <div
+              class="col"
+              style="margin-left: 24px"
+            >
+              <strong>
+                {{ $t('form_for_clients.costs')}}
+              </strong>
+              <q-card
+                class="q-pa-sm bg-red-2 text-right"
+                style="margin: 12px 0 12px 0"
+                flat
+              >
+                <strong>
+                  {{ totalCosts ? `CHF ${totalCosts}` : '-' }}
+                </strong>
+              </q-card>
             </div>
           </div>
         </div>
 
-        <q-separator style="margin: 24px 0 48px 0"/>
-
-        <!-- Summary block for income page -->
+        <!-- Summary page (final page before submit) -->
         <div
-          v-if="form.step.value === 4"
-          class="row"
+          v-else
+          class="column"
         >
-          <!-- Left side: wage summary -->
-          <div
-            class="col"
-            style="margin-right: 24px"
-          >
-            <strong>
-              {{ $t('form_for_clients.eligible_income')}}
-            </strong>
-            <q-card
-              class="q-pa-sm bg-green-2 text-right"
-              style="margin: 12px 0 12px 0"
-            >
-              <strong>
-                {{ eligibleIncome }}
-              </strong>
-            </q-card>
-          </div>
-
-          <!-- Right side: costs summary -->
-          <div
-            class="col"
-            style="margin-left: 24px"
-          >
-            <strong>
-              {{ $t('form_for_clients.costs')}}
-            </strong>
-            <q-card
-              class="q-pa-sm bg-red-2 text-right"
-              style="margin: 12px 0 12px 0"
-            >
-              <strong>
-                {{ totalCosts }}
-              </strong>
-            </q-card>
-          </div>
+          <SummaryField
+            :label="$t('form_for_clients.eligible_income')"
+            :content="eligibleIncome ? `CHF ${eligibleIncome}` : '-' "
+            value-type="positive"
+          />
+          <SummaryField
+            :label="$t('form_for_clients.costs_per_year')"
+            :content="totalCosts ? `CHF ${totalCosts}` : '-' "
+            value-type="negative"
+          />
+          <SummaryField
+            :label="$t('form_for_clients.portability')"
+            :content="portability ? `${portability}%` : '-' "
+          />
         </div>
       </q-step>
 
       <!-- Bottom navigation -->
       <template #navigation>
         <q-stepper-navigation style="position: absolute; bottom: 0">
-          <q-btn
-            v-if="form.step.value > 1"
-            color="primary"
-            :label="$t('buttons.back')"
-            flat
-            style="margin-right: 30px"
-            class="q-ml-sm"
-            @click="$refs.stepper.previous()"
-          />
-          <q-btn
+          <!-- Regular navigation -->
+          <div
             v-if="form.step.value < form.pages.value.length"
-            color="primary"
-            :label="$t('buttons.next_step')"
-            :disable="!form.pageValid.value"
-            @click="$refs.stepper.next()"
-          />
+            class="row"
+          >
+            <q-btn
+              v-if="form.step.value > 1"
+              color="primary"
+              :label="$t('buttons.back')"
+              flat
+              style="margin-right: 30px"
+              class="q-ml-sm"
+              @click="$refs.stepper.previous()"
+            />
+            <q-btn
+              color="primary"
+              :label="$t('buttons.next_step')"
+              :disable="!form.pageValid.value"
+              @click="$refs.stepper.next()"
+            />
+          </div>
 
-          <q-btn
+
+          <!-- Finish buttons -->
+          <div
             v-if="form.step.value === form.pages.value.length"
-            color="primary"
-            :label="$t('buttons.finish_signup')"
-            @click="onSubmit"
-          />
+            class="row"
+          >
+            <q-btn
+              v-if="form.step.value > 1"
+              color="primary"
+              :label="$t('buttons.back')"
+              flat
+              class="q-ml-sm"
+              @click="$refs.stepper.previous()"
+            />
+            <q-btn
+              :label="$t('buttons.discard')"
+              color="negative"
+              class="q-ml-sm"
+              flat
+            />
+            <q-btn
+              :label="$t('buttons.upload_documents')"
+              color="primary"
+              icon="upload"
+              class="q-ml-sm"
+              outline
+            />
+            <q-btn
+              :label="$t('buttons.save_and_print')"
+              color="primary"
+              icon="print"
+              class="q-ml-sm"
+            />
+          </div>
         </q-stepper-navigation>
       </template>
     </q-stepper>
@@ -149,6 +210,7 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
+import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.vue';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 
@@ -276,11 +338,24 @@ const pages = [
       },
     ]
   },
+
+  // Fifth page: Summary
+  {
+    key: 'summary',
+    label: i18n.global.t('form_for_clients.summary'),
+    sections: [
+      {
+        key: 'summary',
+        title: i18n.global.t('form_for_clients.summary'),
+        fields: [],
+      },
+    ],
+  },
 ]
 const form: Form = new Form(pages as Record<string, unknown>[])
 
 /**
- * From the data given on the 'assets' page, calculate sum of eligible income
+ * Sum of eligible income
  */
 const eligibleIncome = computed(() => {
   const grossIncomes = form.values.value.income as number[]|undefined
@@ -292,15 +367,14 @@ const eligibleIncome = computed(() => {
     let sumOfIncomes = 0
     grossIncomes.forEach((income) => sumOfIncomes += income)
 
-    const total = sumOfIncomes + parseInt(bonus) + parseInt(childAllowances) + parseInt(assets)
-    return `CHF ${total}`
+    return sumOfIncomes + parseInt(bonus) + parseInt(childAllowances) + parseInt(assets)
   }
 
-  return '-'
+  return null
 })
 
 /**
- * From the data given on the 'assets' page, calculate sum of costs
+ * Sum of costs
  */
 const totalCosts = computed(() => {
   const leasing = form.values.value.leasing as number|undefined
@@ -309,11 +383,25 @@ const totalCosts = computed(() => {
   const various = form.values.value.various as number|undefined
 
   if(leasing && credit && alimony && various){
-    const total = parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various)
-    return `CHF ${total}`
+    return parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various)
   }
 
-  return '-'
+  return null
+})
+
+/**
+ * Mortgage portability
+ */
+const portability = computed(() => {
+
+  // Ensure all required values are given
+  if(totalCosts.value && eligibleIncome.value){
+
+    // TODO calculation, warnings
+    return 25
+  }
+
+  return null
 })
 
 /**
