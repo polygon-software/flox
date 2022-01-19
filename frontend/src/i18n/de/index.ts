@@ -362,7 +362,8 @@ export default {
     summary: 'Zusammenfassung',
     market_value_between: 'Verkehrswert zwischen',
     affordability: 'Tragbarkeit',
-    costs_per_year: 'Kosten pro Jahr'
+    costs_per_year: 'Kosten pro Jahr',
+    enfeoffment_between: 'Belehnung zwischen'
   },
   dossier_status_enum: {
     OPEN: 'Offen',

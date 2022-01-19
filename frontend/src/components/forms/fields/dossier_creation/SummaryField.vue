@@ -8,11 +8,27 @@
     <q-card
       flat
       :class="computedClass"
-      style="width: 250px; margin: 12px 0 12px 0"
+      style="width: 250px; height: 40px; margin: 12px 0 12px 0"
     >
-      <b>
+      <strong v-if="bold">
         {{ content }}
-      </b>
+      </strong>
+      <p v-else>
+        {{ content }}
+      </p>
+    </q-card>
+    <q-card
+      v-if="secondContent"
+      flat
+      :class="computedClass"
+      style="width: 250px; height: 40px; margin: 12px 0 12px 24px"
+    >
+      <strong v-if="bold">
+        {{ secondContent }}
+      </strong>
+      <p v-else>
+        {{ secondContent }}
+      </p>
     </q-card>
   </div>
 </template>
@@ -34,12 +50,24 @@ const props = defineProps({
     type: () => 'positive'|'negative'|'neutral' as PropType<string>,
     required: false,
     default: 'neutral',
+  },
+  secondContent: {
+    type: String,
+    required: false,
+    default: null
+  },
+  bold: {
+    type: Boolean,
+    required: false,
+    default: false,
   }
 })
 
+/**
+ * CSS Class to apply on the card(s)
+ */
 const computedClass = computed(() => {
   let styleClass = 'q-pa-sm text-right '
-
 
   switch(props.valueType){
     case 'positive':

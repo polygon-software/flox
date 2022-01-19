@@ -118,19 +118,44 @@
           v-else
           class="column"
         >
+          <!-- Eligible salary -->
           <SummaryField
             :label="$t('form_for_clients.eligible_income')"
             :content="eligibleIncome ? `CHF ${eligibleIncome}` : '-' "
             value-type="positive"
           />
+
+          <!-- Costs per year -->
           <SummaryField
             :label="$t('form_for_clients.costs_per_year')"
-            :content="totalExpenses ? `CHF ${totalExpenses}` : '-' "
+            :content="totalCosts ? `CHF ${totalCosts}` : '-' "
             value-type="negative"
           />
+
+          <!-- Affordability -->
           <SummaryField
             :label="$t('form_for_clients.affordability')"
             :content="affordability ? `${affordability}%` : '-' "
+          />
+
+          <q-separator style="margin: 24px 0 24px 0"/>
+
+          <!-- Estimated value range -->
+          <SummaryField
+            :label="$t('form_for_clients.market_value_between')"
+            :content="valueEstimate.low ? `CHF ${valueEstimate.low }` : '-' "
+            :second-content="valueEstimate.high ? `CHF ${valueEstimate.high }` : '-' "
+            value-type="positive"
+          />
+
+          <q-separator style="margin: 24px 0 24px 0"/>
+
+          <!-- Enfeoffment -->
+          <SummaryField
+            :label="$t('form_for_clients.enfeoffment_between')"
+            :content="enfeoffmentEstimate.low ? `${enfeoffmentEstimate.low}%` : '-' "
+            :second-content="enfeoffmentEstimate.high ? `${enfeoffmentEstimate.high}%` : '-' "
+            bold
           />
         </div>
       </q-step>
@@ -217,6 +242,7 @@ const $routerService: RouterService | undefined = inject('$routerService')
 // Form component reference
 const formRef: Ref<QForm | null> = ref(null)
 
+// Form Pages
 const pages = [
   // First page: CRM Data
   {
@@ -352,6 +378,8 @@ const pages = [
     ],
   },
 ]
+
+// Form instance
 const form: Form = new Form(pages as Record<string, unknown>[])
 
 /**
@@ -390,18 +418,27 @@ const totalExpenses = computed(() => {
 })
 
 /**
- * Sum of yearly costs
+ * Sum of yearly costs (used for affordability)
+ * Formula: 5% interest on mortgage sum + 1% of highest market value estimation of property + amortisation costs
  */
 const totalCosts = computed(() => {
-  // TODO calculation
-  // const leasing = form.values.value.leasing as number|undefined
-  // const credit = form.values.value.credit as number|undefined
-  // const alimony = form.values.value.alimony as number|undefined
-  // const various = form.values.value.various as number|undefined
-  //
-  // if(leasing && credit && alimony && various){
-  //   return parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various)
-  // }
+  // Mortgage amount
+  const mortgage = (form.values.value.enfeoffment as Record<string, number>|undefined)?.currentValueOfMortgage
+
+  // TODO adapt: take from CSV-calculated value here
+  // Higher market value estimate
+  const marketValueEstimation = (form.values.value.enfeoffment as Record<string, number>|undefined)?.marketValueEstimation
+
+  // Yearly amortisation cost
+  const amortisation = (form.values.value.amortisation as Record<string, number>|undefined)?.amortisationAmount ?? 0
+
+  // 5% yearly mortgage interest
+  const interestRate = 0.05
+
+  // Ensure all required values are given
+  if(mortgage && marketValueEstimation){ // TODO && all others
+    return (mortgage * interestRate) + (0.01 * marketValueEstimation) + amortisation
+  }
 
   return null
 })
@@ -419,6 +456,56 @@ const affordability = computed(() => {
   }
 
   return null
+})
+
+/**
+ * High/low market value estimations (based on value gain and customer estimate)
+ */
+const valueEstimate = computed(() => {
+  // Customer market value estimate
+  const customerEstimate = (form.values.value.enfeoffment as Record<string, number>|undefined)?.marketValueEstimation
+
+  // Invalid, data missing
+  if(!customerEstimate) {
+    // TODO throw error
+    return {
+      low: null,
+      high: null
+    }
+  }
+
+  // TODO adapt: calculate from CSV
+  const highEstimate = Math.round(customerEstimate * 1.14)
+
+  // Return as array (low & high estimate)
+  return {
+    low: customerEstimate,
+    high: highEstimate
+  }
+})
+
+/**
+ * High/low enfeoffment estimations (in percent)
+ */
+const enfeoffmentEstimate = computed(() => {
+  // Mortgage amount
+  const mortgage = (form.values.value.enfeoffment as Record<string, number>|undefined)?.currentValueOfMortgage
+
+  // Invalid, data missing
+  if(!valueEstimate.value || !mortgage) {
+    // TODO throw error
+    return {
+      low: null,
+      high: null
+    }
+  }
+
+  // Return as array (low & high estimate)
+  return {
+    low: (mortgage/valueEstimate.value.low * 100).toFixed(2),
+    high: (mortgage/valueEstimate.value.high * 100).toFixed(2)
+  }
+
 })
 
 /**

@@ -7,7 +7,7 @@
       :label="$t('form_for_clients.price')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
-      @change="emitValuePrice"
+      @update:model-value="emitValue"
      ></q-input>
     <q-input
       v-model.number="marketValueEstimation"
@@ -16,7 +16,7 @@
       :label="$t('form_for_clients.market_value_estimation')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
-      @change="emitValueMarketValue"
+      @update:model-value="emitValue"
     ></q-input>
     <q-input
       v-model.number="currentValueOfMortgage"
@@ -25,7 +25,7 @@
       :label="$t('form_for_clients.current_value_of_mortgage')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
-      @change="emitValueMortgage"
+      @update:model-value="emitValue"
     ></q-input>
     <q-input
       v-model="enfeoffment"
@@ -63,30 +63,16 @@ const enfeoffment = computed(()=>  {
 
 
 /**
- * Emits the updated value of the price, if it is valid
+ * Emits the updated value, if all variables are valid
  * @returns {void}
  */
-function emitValuePrice() {
-  if(IS_VALID_NUMBER(price.value)){
-    emit('change', price)
-  }
-}
-/**
- * Emits the updated value of the estimated market value, if it is valid
- * @returns {void}
- */
-function emitValueMarketValue() {
-  if(IS_VALID_NUMBER(marketValueEstimation.value)) {
-    emit('change', marketValueEstimation)
-  }
-}
-/**
- * Emits the updated value of the mortgage, if it is valid
- * @returns {void}
- */
-function emitValueMortgage() {
-  if(IS_VALID_NUMBER(currentValueOfMortgage.value)) {
-    emit('change', currentValueOfMortgage)
+function emitValue() {
+  if (IS_VALID_NUMBER(price.value) && IS_VALID_NUMBER(marketValueEstimation.value) && IS_VALID_NUMBER(currentValueOfMortgage.value)) {
+    emit('change', {
+      price: price.value,
+      marketValueEstimation: marketValueEstimation.value,
+      currentValueOfMortgage: currentValueOfMortgage.value
+    })
   }
 }
 
