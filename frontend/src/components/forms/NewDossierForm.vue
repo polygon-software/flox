@@ -13,6 +13,7 @@
       done-icon="done"
       style="min-height: 870px"
       animated
+      @update:model-value="onPageChange"
     >
       <!-- Form content -->
       <q-step
@@ -235,15 +236,17 @@
 import {computed, inject, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
-import {QForm} from 'quasar';
+import {QForm, useQuasar} from 'quasar';
 import {FIELDS} from 'src/data/FIELDS';
 import {executeMutation} from 'src/helpers/data-helpers';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.vue';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
 
 const $routerService: RouterService | undefined = inject('$routerService')
+const $q = useQuasar()
 
 // Form component reference
 const formRef: Ref<QForm | null> = ref(null)
@@ -466,14 +469,12 @@ const totalCosts = computed(() => {
 })
 
 /**
- * Mortgage affordability
+ * Mortgage affordability in percent
  */
 const affordability = computed(() => {
 
   // Ensure all required values are given
   if(totalCosts.value && eligibleIncome.value){
-
-    // TODO warnings
     return (totalCosts.value / eligibleIncome.value * 100).toFixed(2)
   }
 
@@ -526,6 +527,33 @@ const enfeoffmentEstimate = computed(() => {
   }
 
 })
+
+/**
+ * Upon page change, validate whether warning dialogs must be shown
+ * @returns {void}
+ */
+function onPageChange(){
+  // When going to final page, validate affordability
+  if(form.step.value === form.pages.value.length){
+    let warningText
+
+    // Trigger warning depending on affordability rating
+    if(affordability.value > 35){
+      warningText = i18n.global.t('warnings.affordability_impossible')
+    } else if(affordability.value > 33 && affordability.value <= 35){
+      warningText = i18n.global.t('warnings.affordability_critical')
+    }
+
+    if(warningText){
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: warningText
+        }
+      })
+    }
+  }
+}
 
 /**
  * Upon validation, it creates a dossier in the database

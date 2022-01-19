@@ -376,6 +376,9 @@ export default {
     mortgage_too_short: 'The expiration date of the mortgage is to soon!',
     mortgage_note: 'Attention: Mortgage note splitting may be required!',
     building_lease_warning: 'Based on the entered data, no mortgage can be offered through this platform!',
-    prosecutions_loss_certificates: 'Attention: If prosecutions or loss certificates exist... TODO'
+    prosecutions_loss_certificates: 'Attention: If prosecutions or loss certificates exist... TODO',
+    affordability_impossible: 'Attention: Due to the affordability of more than 35%, this mortgage cannot be financed.',
+    affordability_critical: 'Attention: Due to the affordability, this mortgage may be barely financeable.',
+
   }
 };
