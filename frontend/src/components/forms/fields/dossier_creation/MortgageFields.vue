@@ -44,6 +44,10 @@ const emit = defineEmits(['change'])
 const $q = useQuasar()
 
 const props = defineProps({
+  totalAmount: {
+    type: Number,
+    required: true,
+  },
   initialValue: {
     type: Object,
     required: false,
