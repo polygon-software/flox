@@ -19,7 +19,7 @@
     size="sm"
     color="primary"
     icon="add"
-    :disable="!incomes[incomes.length-1]"
+    :disable="!incomes[incomes.length-1] || incomes.length === maxIncomes"
     round
     style="margin-bottom: 32px"
     @click="addIncome"
@@ -32,6 +32,9 @@ import {ref} from 'vue';
 
 const emit = defineEmits(['change'])
 
+// Maximum number of separate incomes
+const maxIncomes = 4
+
 // Mortgage partitions
 const incomes = ref([
   null,
@@ -43,7 +46,7 @@ const incomes = ref([
  */
 function addIncome(){
   // Only if last is not null
-  if(incomes.value[incomes.value.length-1]){
+  if(incomes.value[incomes.value.length-1] && incomes.value.length < maxIncomes){
     incomes.value.push(null)
   }
 

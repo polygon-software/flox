@@ -11,7 +11,7 @@
       class="column"
       active-color="primary"
       done-icon="done"
-      style="min-height: 700px"
+      style="min-height: 870px"
       animated
     >
       <!-- Form content -->
