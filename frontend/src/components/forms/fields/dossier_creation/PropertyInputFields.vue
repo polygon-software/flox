@@ -45,10 +45,23 @@ import {computed, ref} from 'vue';
 
 const emit = defineEmits(['change'])
 
-const price = ref(null)
-const marketValueEstimation = ref(null)
-const currentValueOfMortgage = ref(null)
+const props = defineProps({
+  initialValue: {
+    type: Object,
+    required: false,
+    default: () => {
+      return {
+        price: null,
+        marketValueEstimation: null,
+        currentValueOfMortgage: null
+      }
+    }
+  }
+})
 
+const price = ref(props.initialValue?.price as number|null)
+const marketValueEstimation = ref(props.initialValue?.marketValueEstimation as number|null)
+const currentValueOfMortgage = ref(props.initialValue?.currentValueOfMortgage as number|null)
 
 /**
  * Automatically keeps enfeoffment calculation up to date
