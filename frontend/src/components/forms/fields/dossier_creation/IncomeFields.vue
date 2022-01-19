@@ -32,13 +32,19 @@ import {ref} from 'vue';
 
 const emit = defineEmits(['change'])
 
+const props = defineProps({
+  initialValue: {
+    type: Array,
+    required: false,
+    default: () => [null]
+  }
+})
+
 // Maximum number of separate incomes
 const maxIncomes = 4
 
 // Incomes
-const incomes = ref([
-  null,
-])
+const incomes = ref(props.initialValue)
 
 /**
  * Adds an income whenever the plus button is clicked
