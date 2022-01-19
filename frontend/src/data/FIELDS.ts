@@ -253,7 +253,7 @@ const FIELDS: Record<string, Field> = {
     },
   },
   OWNER_OCCUPIED: {
-    key: 'property_type',
+    key: 'owner_occupied',
     component: markRaw(TitledOptionGroup),
     attributes: {
       label: i18n.global.t('form_for_clients.owner_occupied'),
@@ -387,6 +387,17 @@ const FIELDS: Record<string, Field> = {
       dense: true,
       type: 'number',
       label: i18n.global.t('form_for_clients.bonus'),
+      lazy_rules: 'true',
+      rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
+    },
+  },
+  ASSETS: {
+    key: 'assets',
+    component: markRaw(QInput),
+    attributes: {
+      dense: true,
+      type: 'number',
+      label: i18n.global.t('form_for_clients.assets'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
     },

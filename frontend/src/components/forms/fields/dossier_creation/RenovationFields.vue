@@ -19,7 +19,7 @@
       v-model.number="renovationYear"
       type="number"
       :label="$t('form_for_clients.renovation_year')"
-      :rules="[(val) => IS_VALID_YEAR(val) || $t('errors.invalid_year')]"
+      :rules="[(val) => IS_VALID_PAST_YEAR(val) || $t('errors.invalid_year')]"
       @update:model-value="emitValue"
     />
 
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {ref,} from 'vue';
-import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES';
+import {IS_VALID_NUMBER, IS_VALID_PAST_YEAR} from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
 

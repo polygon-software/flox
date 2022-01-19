@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import {IS_VALID_NUMBER} from 'src/data/RULES'
+import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES'
 import {ref} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
@@ -76,9 +76,12 @@ function emitPartitions() {
  * @returns {void}
  */
 function checkMortgageExpirationDate(expirationDateString: string){
-  // TODO
-  // TODO also emit...
   const expirationDate = new Date(expirationDateString)
+
+  // If year is invalid (e.g. while entering '2023', until fourth number is entered, year may be '023'), cancel
+  if(!IS_VALID_YEAR(expirationDate.getFullYear())){
+    return
+  }
 
   // Set up reference dates
   const dateInAMonth = new Date(new Date().setMonth(new Date().getMonth() + 1))
@@ -104,6 +107,9 @@ function checkMortgageExpirationDate(expirationDateString: string){
       }
     })
   }
+
+  // Emit value
+  emitPartitions()
 }
 
 </script>

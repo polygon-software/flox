@@ -254,7 +254,11 @@ const pages = [
       {
         key: 'assets-data2',
         title: i18n.global.t('form_for_clients.additional_income'),
-        fields: [FIELDS.CHILD_ALLOWANCES, FIELDS.BONUS],
+        fields: [
+          FIELDS.CHILD_ALLOWANCES,
+          FIELDS.BONUS,
+          FIELDS.ASSETS
+        ],
       },
     ],
     sectionsRHS: [
@@ -282,12 +286,13 @@ const eligibleIncome = computed(() => {
   const grossIncomes = form.values.value.income as number[]|undefined
   const bonus = form.values.value.bonus as number|undefined
   const childAllowances = form.values.value.child_allowances as number|undefined
+  const assets = form.values.value.assets as number|undefined
 
-  if(grossIncomes && bonus && childAllowances){
+  if(grossIncomes && bonus && childAllowances && assets){
     let sumOfIncomes = 0
     grossIncomes.forEach((income) => sumOfIncomes += income)
 
-    const total = sumOfIncomes + parseInt(bonus) + parseInt(childAllowances)
+    const total = sumOfIncomes + parseInt(bonus) + parseInt(childAllowances) + parseInt(assets)
     return `CHF ${total}`
   }
 

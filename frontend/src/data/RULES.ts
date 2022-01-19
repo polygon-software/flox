@@ -68,7 +68,7 @@ const IS_VALID_FULL_NAME = (val: Record<string, string>): boolean => {
 }
 
 /**
- * Checks whether a given year is valid (between 1900 and not in the future)
+ * Checks whether a given year is valid (after 1900)
  * @param {string|number} val - the year
  * @constructor
  */
@@ -79,8 +79,24 @@ const IS_VALID_YEAR = (val: string|number): boolean => {
     value = parseInt(val)
   }
 
-  return value > 1900 && value < new Date().getFullYear();
+  return value > 1900;
 }
+
+/**
+ * Checks whether a given year is valid (between 1900 and not in the future)
+ * @param {string|number} val - the year
+ * @constructor
+ */
+const IS_VALID_PAST_YEAR = (val: string|number): boolean => {
+  let value = val
+
+  if(typeof val === 'string'){
+    value = parseInt(val)
+  }
+
+  return IS_VALID_YEAR(value) && value <= new Date().getFullYear();
+}
+
 
 export {
   IS_VALID_NUMBER,
@@ -92,5 +108,6 @@ export {
   IS_VALID_ZIP,
   IS_VALID_OPTION,
   IS_VALID_FULL_NAME,
-  IS_VALID_YEAR
+  IS_VALID_YEAR,
+  IS_VALID_PAST_YEAR
 }

@@ -389,7 +389,7 @@ export default {
     retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)',
     warning_landlord: 'Nur Hypotheken mit öffentlich-rechtlichem Baurechtsgeber sind vermittelbar',
     mortgage_too_short: 'Die Ablauffrist der Hypothek ist zu kurz!',
-    mortgage_note: 'Achtung: eventuel Schuldbriefsplitting notwendig!',
+    mortgage_note: 'Achtung: eventuell Schuldbriefsplitting notwendig!',
     building_lease_warning: 'Auf Basis der von Ihnen erfassten Daten kann über diese Plattform keine Hypothek angeboten werden!',
     prosecutions_loss_certificates: 'Achtung: Wenn Betreibungen oder Verlustscheine vorliegen... TODO'
   }
