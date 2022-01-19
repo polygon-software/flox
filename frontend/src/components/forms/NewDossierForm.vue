@@ -197,8 +197,7 @@
             />
           </div>
 
-
-          <!-- Finish buttons -->
+          <!-- End-of-form buttons -->
           <div
             v-if="form.step.value === form.pages.value.length"
             class="row"
@@ -216,19 +215,14 @@
               color="negative"
               class="q-ml-sm"
               flat
-            />
-            <q-btn
-              :label="$t('buttons.upload_documents')"
-              color="primary"
-              icon="upload"
-              class="q-ml-sm"
-              outline
+              @click="onDiscard"
             />
             <q-btn
               :label="$t('buttons.save_and_print')"
               color="primary"
               icon="print"
               class="q-ml-sm"
+              @click="onSubmit"
             />
           </div>
         </q-stepper-navigation>
@@ -407,7 +401,7 @@ const form: Form = new Form(pages as Record<string, unknown>[])
  * Mortgage volume
  */
 const mortgage = computed(() => {
-  return (form.values.value.enfeoffment as Record<string, number>|undefined)?.currentValueOfMortgage ?? null
+  return Math.round((form.values.value.enfeoffment as Record<string, number>|undefined)?.currentValueOfMortgage) ?? null
 })
 
 /**
@@ -423,7 +417,7 @@ const totalIncome = computed(() => {
     let sumOfIncomes = 0
     grossIncomes.forEach((income) => sumOfIncomes += income)
 
-    return sumOfIncomes + parseInt(bonus) + parseInt(childAllowances) + parseInt(assets)
+    return Math.round(sumOfIncomes + parseInt(bonus) + parseInt(childAllowances) + parseInt(assets))
   }
 
   return null
@@ -439,7 +433,7 @@ const totalExpenses = computed(() => {
   const various = form.values.value.various as number|undefined
 
   if(leasing && credit && alimony && various){
-    return parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various)
+    return Math.round(parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various))
   }
 
   return null
@@ -454,7 +448,7 @@ const eligibleIncome = computed(() => {
     return null
   }
 
-  return totalIncome.value - totalExpenses.value
+  return Math.round(totalIncome.value - totalExpenses.value)
 })
 
 /**
@@ -474,7 +468,7 @@ const totalCosts = computed(() => {
 
   // Ensure all required values are given
   if(mortgage.value && marketValueEstimation){
-    return (mortgage.value * interestRate) + (0.01 * marketValueEstimation) + amortisation
+    return Math.round((mortgage.value * interestRate) + (0.01 * marketValueEstimation) + amortisation)
   }
 
   return null
@@ -498,7 +492,7 @@ const affordability = computed(() => {
  */
 const valueEstimate = computed(() => {
   // Customer market value estimate
-  const customerEstimate = (form.values.value.enfeoffment as Record<string, number>|undefined)?.marketValueEstimation
+  const customerEstimate = Math.round((form.values.value.enfeoffment as Record<string, number>|undefined)?.marketValueEstimation)
 
   // Invalid, data missing
   if(!customerEstimate) {
@@ -582,6 +576,23 @@ function onPageChange(){
       })
     }
   }
+}
+
+/**
+ * Opens a dialog for confirming discarding all data
+ * @returns {void}
+ */
+function onDiscard(){
+  $q.dialog({
+    component: WarningDialog,
+    componentProps: {
+      description: i18n.global.t('form_for_clients.discard_dossier'),
+      okLabel: i18n.global.t('buttons.cancel'),
+      showDiscard: true
+    }
+  }).onCancel(() => {
+    void $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
+  })
 }
 
 /**

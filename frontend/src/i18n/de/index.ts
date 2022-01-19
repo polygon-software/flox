@@ -365,7 +365,8 @@ export default {
     market_value_between: 'Verkehrswert zwischen',
     affordability: 'Tragbarkeit',
     costs_per_year: 'Kosten pro Jahr',
-    enfeoffment_between: 'Belehnung zwischen'
+    enfeoffment_between: 'Belehnung zwischen',
+    discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?'
   },
   dossier_status_enum: {
     OPEN: 'Offen',
