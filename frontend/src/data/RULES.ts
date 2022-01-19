@@ -113,6 +113,17 @@ const IS_VALID_MORTGAGE = (val: Record<string, number|Date>[]): boolean => {
   })
 }
 
+const IS_VALID_BUILDING_LEASE = (val: Record<string, unknown>): boolean => {
+  return !val.hasBuildingLease || (val.expirationDate !== null && val.interest !== null)
+}
+
+const IS_VALID_RENOVATION = (val: Record<string, unknown>): boolean => {
+  return !val.hasRenovation || (val.renovationYear !== null && val.renovationPrice !== null)
+}
+
+const IS_VALID_AMORTISATION = (val: Record<string, unknown>): boolean => {
+  return !val.hasAmortisation || val.amortisationAmount !== null
+}
 
 export {
   IS_VALID_NUMBER,
@@ -126,5 +137,8 @@ export {
   IS_VALID_FULL_NAME,
   IS_VALID_YEAR,
   IS_VALID_PAST_YEAR,
-  IS_VALID_MORTGAGE
+  IS_VALID_MORTGAGE,
+  IS_VALID_BUILDING_LEASE,
+  IS_VALID_RENOVATION,
+  IS_VALID_AMORTISATION
 }

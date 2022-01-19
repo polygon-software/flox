@@ -46,13 +46,28 @@
 
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
-import {ref,} from 'vue';
+import {onMounted, ref,} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {useQuasar} from 'quasar';
 import {IS_VALID_NUMBER} from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
 const $q = useQuasar()
+
+const props = defineProps({
+  initialValue: {
+    type: Object,
+    required: false,
+    default: () => {
+      return {
+        hasBuildingLease: false,
+        publicLandlord: true,
+        expirationDate: null,
+        interest: null,
+      }
+    }
+  }
+})
 
 const options = [
   {label: i18n.global.t('general.yes'), value: true},
@@ -65,19 +80,24 @@ const landlordOptions = [
 ]
 
 // Whether building lease applies
-const hasBuildingLease = ref(options[1].value)
+const hasBuildingLease = ref(props.initialValue?.hasBuildingLease as boolean)
 
 // Landlord type (public/private)
-const publicLandlord = ref(landlordOptions[0].value)
+const publicLandlord = ref(props.initialValue?.publicLandlord as boolean)
 
-// Lease expiration date
-const expirationDate = ref(null)
+// Lease expiration date TODO check if inputFormat is needed
+const expirationDate = ref(props.initialValue?.expirationDate as Date ?? null)
 
 // Yearly lease interest
-const interest = ref(null)
+const interest = ref(props.initialValue?.interest as number ?? null)
 
 // Whether the warning popup is open
 const popupOpen = ref(false)
+
+onMounted(() => {
+  // Emit initial value (simply set to "No"), since it's already a valid input
+  emitValue()
+})
 
 /**
  * Resets building lease info (triggered upon section toggle)

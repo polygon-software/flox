@@ -37,10 +37,24 @@
 
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
-import {ref,} from 'vue';
+import {onMounted, ref,} from 'vue';
 import {IS_VALID_NUMBER, IS_VALID_PAST_YEAR} from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
+
+const props = defineProps({
+  initialValue: {
+    type: Object,
+    required: false,
+    default: () => {
+      return {
+        hasRenovation: false,
+        renovationYear: null,
+        renovationPrice: null,
+      }
+    }
+  }
+})
 
 const options = [
   {label: i18n.global.t('general.yes'), value: true},
@@ -48,13 +62,19 @@ const options = [
 ]
 
 // Whether building was renovated
-const hasRenovation = ref(options[1].value)
+const hasRenovation = ref(props.initialValue?.hasRenovation as boolean)
 
 // Lease expiration date
-const renovationYear = ref(null)
+const renovationYear = ref(props.initialValue?.renovationYear as number|null)
 
 // Yearly lease interest
-const renovationPrice = ref(null)
+const renovationPrice = ref(props.initialValue?.renovationPrice as number|null)
+
+
+onMounted(() => {
+  // Emit initial value (simply set to "No"), since it's already a valid input
+  emitValue()
+})
 
 /**
  * Emits the renovation information

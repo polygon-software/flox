@@ -1,8 +1,10 @@
 import {
+  IS_VALID_AMORTISATION,
+  IS_VALID_BUILDING_LEASE,
   IS_VALID_DATE,
   IS_VALID_EMAIL,
   IS_VALID_FULL_NAME, IS_VALID_MORTGAGE, IS_VALID_NUMBER,
-  IS_VALID_OPTION,
+  IS_VALID_OPTION, IS_VALID_RENOVATION,
   IS_VALID_STRING
 } from './RULES'
 import {QInput, QSelect} from 'quasar'
@@ -327,7 +329,7 @@ const FIELDS: Record<string, Field> = {
       dense: true,
       type: 'text',
       lazy_rules: 'true',
-      rules: []
+      rules: [(val: Record<string, unknown>): boolean|string => IS_VALID_BUILDING_LEASE(val) || i18n.global.t('errors.invalid_option')]
     },
   },
   EXPIRATION_DATE: {
@@ -345,24 +347,14 @@ const FIELDS: Record<string, Field> = {
     key: 'renovation',
     component: markRaw(RenovationFields),
     attributes: {
-      rules: []
+      rules: [(val: Record<string, unknown>): boolean|string => IS_VALID_RENOVATION(val) || i18n.global.t('errors.invalid_option')]
     },
   },
   AMORTISATION: {
     key: 'amortisation',
     component: markRaw(AmortisationFields),
     attributes: {
-      rules: []
-    },
-  },
-  TYPE: {
-    key: 'amortisation',
-    component: markRaw(TitledOptionGroup),
-    attributes: {
-      label: i18n.global.t('form_for_clients.type'),
-      options: [{ label: i18n.global.t('form_for_clients.direct'), value: true}, {label: i18n.global.t('form_for_clients.indirect'), value: false}],
-      // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, [i18n.global.t('form_for_clients.direct'), i18n.global.t('form_for_clients.indirect')]) || i18n.global.t('errors.invalid_option')]
+      rules: [(val: Record<string, unknown>): boolean|string => IS_VALID_AMORTISATION(val) || i18n.global.t('errors.invalid_option')]
     },
   },
   INCOME: {

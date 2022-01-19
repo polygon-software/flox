@@ -41,10 +41,24 @@
 
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
-import {ref,} from 'vue';
+import {onMounted, ref,} from 'vue';
 import {IS_VALID_NUMBER} from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
+
+const props = defineProps({
+  initialValue: {
+    type: Object,
+    required: false,
+    default: () => {
+      return {
+        hasAmortisation: false,
+        directAmortisation: true,
+        amortisationAmount: null,
+      }
+    }
+  }
+})
 
 const options = [
   {label: i18n.global.t('general.yes'), value: true},
@@ -57,13 +71,18 @@ const typeOptions = [
 ]
 
 // Whether amortisation is present
-const hasAmortisation = ref(options[1].value)
+const hasAmortisation = ref(props.initialValue?.hasAmortisation as boolean)
 
 // Whether amortisation is direct
-const directAmortisation = ref(true)
+const directAmortisation = ref(props.initialValue?.directAmortisation as boolean)
 
 // Amortisation amount
-const amortisationAmount = ref(null)
+const amortisationAmount = ref(props.initialValue?.amortisationAmount as number|null)
+
+onMounted(() => {
+  // Emit initial value (simply set to "No"), since it's already a valid input
+  emitValue()
+})
 
 /**
  * Emits the amortisation information
