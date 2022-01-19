@@ -441,6 +441,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       label: i18n.global.t('form_for_clients.prosecutions'),
       options: yesNoOptions,
+      defaultValue: false,
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
     },
@@ -451,6 +452,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       label: i18n.global.t('form_for_clients.loss_certificates'),
       options: yesNoOptions,
+      defaultValue: false,
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
     },

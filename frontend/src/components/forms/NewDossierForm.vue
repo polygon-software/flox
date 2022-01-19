@@ -100,8 +100,7 @@
               style="margin: 12px 0 12px 0"
             >
               <strong>
-                CHF 250'000
-                <!-- TODO -->
+                {{ totalCosts }}
               </strong>
             </q-card>
           </div>
@@ -289,6 +288,23 @@ const eligibleIncome = computed(() => {
     grossIncomes.forEach((income) => sumOfIncomes += income)
 
     const total = sumOfIncomes + parseInt(bonus) + parseInt(childAllowances)
+    return `CHF ${total}`
+  }
+
+  return '-'
+})
+
+/**
+ * From the data given on the 'assets' page, calculate sum of costs
+ */
+const totalCosts = computed(() => {
+  const leasing = form.values.value.leasing as number|undefined
+  const credit = form.values.value.credit as number|undefined
+  const alimony = form.values.value.alimony as number|undefined
+  const various = form.values.value.various as number|undefined
+
+  if(leasing && credit && alimony && various){
+    const total = parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various)
     return `CHF ${total}`
   }
 
