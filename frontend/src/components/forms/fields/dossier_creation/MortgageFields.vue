@@ -53,7 +53,6 @@ const props = defineProps({
     required: false,
     default: () => {
       return [{
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         amount: null,
         date: null,
       }]
