@@ -132,6 +132,12 @@
             value-type="negative"
           />
 
+          <!-- Mortgage Volume -->
+          <SummaryField
+            :label="$t('account_data.mortgage_volume')"
+            :content="mortgage ? `CHF ${mortgage}` : '-' "
+          />
+
           <!-- Affordability -->
           <SummaryField
             :label="$t('form_for_clients.affordability')"
@@ -383,6 +389,13 @@ const pages = [
 const form: Form = new Form(pages as Record<string, unknown>[])
 
 /**
+ * Mortgage volume
+ */
+const mortgage = computed(() => {
+  return (form.values.value.enfeoffment as Record<string, number>|undefined)?.currentValueOfMortgage ?? null
+})
+
+/**
  * Total income
  */
 const totalIncome = computed(() => {
@@ -421,6 +434,11 @@ const totalExpenses = computed(() => {
  * Sum of eligible income (total income minus expenses)
  */
 const eligibleIncome = computed(() => {
+  // Ensure all needed values are present
+  if(!totalIncome.value || !totalExpenses.value){
+    return null
+  }
+
   return totalIncome.value - totalExpenses.value
 })
 
@@ -429,9 +447,6 @@ const eligibleIncome = computed(() => {
  * Formula: 5% interest on mortgage sum + 1% of highest market value estimation of property + amortisation costs
  */
 const totalCosts = computed(() => {
-  // Mortgage amount
-  const mortgage = (form.values.value.enfeoffment as Record<string, number>|undefined)?.currentValueOfMortgage
-
   // TODO adapt: take from CSV-calculated value here
   // Higher market value estimate
   const marketValueEstimation = (form.values.value.enfeoffment as Record<string, number>|undefined)?.marketValueEstimation
@@ -443,8 +458,8 @@ const totalCosts = computed(() => {
   const interestRate = 0.05
 
   // Ensure all required values are given
-  if(mortgage && marketValueEstimation){ // TODO && all others
-    return (mortgage * interestRate) + (0.01 * marketValueEstimation) + amortisation
+  if(mortgage.value && marketValueEstimation){
+    return (mortgage.value * interestRate) + (0.01 * marketValueEstimation) + amortisation
   }
 
   return null
@@ -495,11 +510,8 @@ const valueEstimate = computed(() => {
  * High/low enfeoffment estimations (in percent)
  */
 const enfeoffmentEstimate = computed(() => {
-  // Mortgage amount
-  const mortgage = (form.values.value.enfeoffment as Record<string, number>|undefined)?.currentValueOfMortgage
-
   // Invalid, data missing
-  if(!valueEstimate.value || !mortgage) {
+  if(!valueEstimate.value || !mortgage.value) {
     // TODO throw error
     return {
       low: null,
@@ -509,8 +521,8 @@ const enfeoffmentEstimate = computed(() => {
 
   // Return as array (low & high estimate)
   return {
-    low: (mortgage/valueEstimate.value.low * 100).toFixed(2),
-    high: (mortgage/valueEstimate.value.high * 100).toFixed(2)
+    low: (mortgage.value/valueEstimate.value.low * 100).toFixed(2),
+    high: (mortgage.value/valueEstimate.value.high * 100).toFixed(2)
   }
 
 })
