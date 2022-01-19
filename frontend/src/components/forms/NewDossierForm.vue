@@ -356,7 +356,9 @@ const pages = [
       {
         key: 'assets-data1',
         title: i18n.global.t('form_for_clients.income'),
-        fields: [FIELDS.INCOME],
+        fields: [
+          FIELDS.INCOME
+        ],
       },
       {
         key: 'assets-data2',

@@ -5,6 +5,10 @@ import {isEmpty} from 'lodash';
  * This file contains rules that can be applied to input forms.
  */
 
+const IS_NOT_NULL = (val: unknown): boolean => {
+  return val !== null && val !== undefined
+}
+
 const IS_VALID_NUMBER = (val: number|string): boolean => {
   if(typeof val === 'number'){
     return true;
@@ -125,7 +129,12 @@ const IS_VALID_AMORTISATION = (val: Record<string, unknown>): boolean => {
   return !val.hasAmortisation || val.amortisationAmount !== null
 }
 
+const IS_VALID_INCOME = (val: number[]): boolean => {
+  return val.length > 0 && val.every((income) => income > 0)
+}
+
 export {
+  IS_NOT_NULL,
   IS_VALID_NUMBER,
   IS_VALID_EMAIL,
   IS_VALID_DATE,
@@ -140,5 +149,6 @@ export {
   IS_VALID_MORTGAGE,
   IS_VALID_BUILDING_LEASE,
   IS_VALID_RENOVATION,
-  IS_VALID_AMORTISATION
+  IS_VALID_AMORTISATION,
+  IS_VALID_INCOME
 }

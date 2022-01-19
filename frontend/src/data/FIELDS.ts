@@ -3,7 +3,7 @@ import {
   IS_VALID_BUILDING_LEASE,
   IS_VALID_DATE,
   IS_VALID_EMAIL,
-  IS_VALID_FULL_NAME, IS_VALID_MORTGAGE, IS_VALID_NUMBER,
+  IS_VALID_FULL_NAME, IS_VALID_INCOME, IS_VALID_MORTGAGE, IS_VALID_NUMBER,
   IS_VALID_OPTION, IS_VALID_RENOVATION,
   IS_VALID_STRING
 } from './RULES'
@@ -362,7 +362,7 @@ const FIELDS: Record<string, Field> = {
     key: 'income',
     component: markRaw(IncomeFields),
     attributes: {
-      rules: []
+      rules: [(val: number[]): boolean|string => IS_VALID_INCOME(val) || i18n.global.t('errors.invalid_amount')]
     },
   },
   CHILD_ALLOWANCES: {

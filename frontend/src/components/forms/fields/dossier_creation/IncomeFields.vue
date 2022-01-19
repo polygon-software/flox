@@ -35,7 +35,7 @@ const emit = defineEmits(['change'])
 // Maximum number of separate incomes
 const maxIncomes = 4
 
-// Mortgage partitions
+// Incomes
 const incomes = ref([
   null,
 ])
@@ -73,7 +73,9 @@ function onChange(index: number){
  * @returns {void}
  */
 function emitIncomes() {
-  emit('change', incomes.value)
+  // Filter out empty fields
+  const filteredIncomes = incomes.value.filter((income) => income !== undefined && income !== null)
+  emit('change', filteredIncomes)
 }
 
 </script>
