@@ -7,13 +7,17 @@
       :options="options"
       type="radio"
       inline
-      @change="emitValue"
+      @update:model-value="emitValue"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import {defineProps, ref,} from 'vue';
+import {useQuasar} from 'quasar';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
+
+const $q = useQuasar()
 
 const props = defineProps({
   label: {
@@ -28,6 +32,12 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: true,
+  },
+  // Warnings in format [{value: true, text: 'something'}]
+  warnings: {
+    type: Array,
+    required: false,
+    default: null
   }
 })
 const emit = defineEmits(['change'])
@@ -38,6 +48,33 @@ const selectedOption = ref(props.defaultValue)
  * @returns {void}
  */
 function emitValue(){
+  checkWarnings()
+
   emit('change', selectedOption)
 }
+
+/**
+ * Upon changing value, ensures any needed warnings are shown
+ * @returns {void}
+ */
+function checkWarnings(){
+  if(props.warnings){
+    const warnings: Record<string, unknown>[] = props.warnings
+
+    // Find if there's a warning for the newly selected value
+    const valueWarning = warnings.find((warning) => warning.value === selectedOption.value)
+
+    if(valueWarning){
+      const warningText = valueWarning.text
+
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: warningText
+        }
+      })
+    }
+  }
+}
+
 </script>

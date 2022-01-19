@@ -443,7 +443,13 @@ const FIELDS: Record<string, Field> = {
       options: yesNoOptions,
       defaultValue: false,
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')],
+      warnings: [
+        {
+          value: true,
+          text: i18n.global.t('warnings.prosecutions_loss_certificates')
+        }
+      ]
     },
   },
   LOSS_CERTIFICATES: {
@@ -454,7 +460,13 @@ const FIELDS: Record<string, Field> = {
       options: yesNoOptions,
       defaultValue: false,
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')]
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, yesNoOptions) || i18n.global.t('errors.invalid_option')],
+      warnings: [
+        {
+          value: true,
+          text: i18n.global.t('warnings.prosecutions_loss_certificates')
+        }
+      ]
     },
   },
 }

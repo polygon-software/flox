@@ -391,6 +391,6 @@ export default {
     mortgage_too_short: 'Die Ablauffrist der Hypothek ist zu kurz!',
     mortgage_note: 'Achtung: eventuel Schuldbriefsplitting notwendig!',
     building_lease_warning: 'Auf Basis der von Ihnen erfassten Daten kann über diese Plattform keine Hypothek angeboten werden!',
-
+    prosecutions_loss_certificates: 'Achtung: Wenn Betreibungen oder Verlustscheine vorliegen... TODO'
   }
 };
