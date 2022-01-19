@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES'
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
@@ -53,6 +53,7 @@ const props = defineProps({
     required: false,
     default: () => {
       return [{
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         amount: null,
         date: null,
       }]
@@ -65,6 +66,11 @@ const mortgagePartitions = ref(props.initialValue as Record<string, unknown>[])
 
 // Maximum number of partitions
 const maxPartitions = 4
+
+// On mount, preset initial partition to full value
+onMounted(() => {
+  mortgagePartitions.value[0].amount = props.totalAmount
+})
 
 /**
  * Adds a partition whenever the plus button is clicked
