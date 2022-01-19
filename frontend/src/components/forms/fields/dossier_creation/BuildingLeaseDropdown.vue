@@ -49,7 +49,7 @@ import {i18n} from 'boot/i18n';
 import {onMounted, ref,} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {useQuasar} from 'quasar';
-import {IS_VALID_NUMBER} from 'src/data/RULES';
+import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES';
 
 const emit = defineEmits(['change'])
 const $q = useQuasar()
@@ -85,7 +85,7 @@ const hasBuildingLease = ref(props.initialValue?.hasBuildingLease as boolean)
 // Landlord type (public/private)
 const publicLandlord = ref(props.initialValue?.publicLandlord as boolean)
 
-// Lease expiration date TODO check if inputFormat is needed
+// Lease expiration date
 const expirationDate = ref(props.initialValue?.expirationDate as Date ?? null)
 
 // Yearly lease interest
@@ -137,6 +137,11 @@ function checkLandlordType(isPublic: boolean){
  */
 function checkExpirationDate(expirationDateString: string){
   const expirationDate = new Date(expirationDateString)
+
+  if(!IS_VALID_YEAR(expirationDate.getFullYear())){
+    return
+  }
+
   const dateIn70Years: Date = new Date(new Date().setFullYear(new Date().getFullYear() + 70))
 
   if(expirationDate.getTime() < dateIn70Years.getTime() && !popupOpen.value ){
