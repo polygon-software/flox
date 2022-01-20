@@ -355,19 +355,21 @@ import DossierDocumentEmailDialog from 'components/dialogs/DossierDocumentEmailD
 import {useQuasar} from 'quasar';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {generatePdf} from 'src/helpers/pdf-helpers';
-import {onMounted, Ref, ref} from 'vue';
+import {inject, onMounted, Ref, ref} from 'vue';
 import {useRoute} from 'vue-router';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
+import {i18n} from 'boot/i18n';
+import {ErrorService} from 'src/services/ErrorService';
 
 const $q = useQuasar()
 const route = useRoute()
-
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 const dossierUuid = route.query.did as string
 const dossier = ref(null)
 
-const loading = ref(false) // TODO set to true once document upload dunzo
+const loading = ref(true)
 const fileUuid: Ref<string|null> = ref(null)
 
 // Info for top right-hand corner
@@ -376,14 +378,27 @@ const currency = ' CHF'
 
 //On mount, generate PDF
 onMounted(async () => {
-  // TODO error if no UUID given
-
+  // Ensure link gives a UUID
+  if(!dossierUuid){
+    // Show error
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.invalid_link', {error: (err as Error).message}))
+    )
+  }
   const dossierQueryResult = await executeQuery(GET_DOSSIER, {uuid: dossierUuid})
 
-  dossier.value = dossierQueryResult.data.getDossier
+  dossier.value = dossierQueryResult.data?.getDossier
+
+  // Ensure dossier loaded correctly
+  if(!dossier.value){
+    // Show error
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.invalid_link', {error: (err as Error).message}))
+    )
+  }
 
   // Upload PDF document
-  // await uploadPdfDocument()
+  await uploadPdfDocument()
 })
 
 /**
@@ -403,7 +418,7 @@ async function uploadPdfDocument(){
   const uploadResponse: Record<string, unknown> = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')
 
   // Get actual file
-  const newPdf: Record<string, unknown> = uploadResponse.finalDocument as Record<string, unknown>
+  const newPdf: Record<string, unknown> = uploadResponse
 
   // Store to local variable & set loading state
   fileUuid.value = newPdf.uuid as string
