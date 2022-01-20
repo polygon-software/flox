@@ -57,7 +57,7 @@ import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change', 'warning'])
 
 const $q = useQuasar()
 
@@ -163,6 +163,9 @@ function checkMortgageExpirationDate(expirationDateString: string){
         description: i18n.global.t('warnings.mortgage_too_short')
       }
     })
+
+    // Emit warning to mark as non-arrangeable
+    emit('warning')
   }
 
   // Warning case 2: between 12 and 24 months in the future
@@ -173,6 +176,9 @@ function checkMortgageExpirationDate(expirationDateString: string){
         description: i18n.global.t('warnings.mortgage_note')
       }
     })
+
+    // Emit warning to mark as non-arrangeable
+    emit('warning')
   }
 
   // Emit value

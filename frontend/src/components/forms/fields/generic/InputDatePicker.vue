@@ -42,7 +42,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change', 'warning'])
 const $q = useQuasar()
 
 const date = ref(dateToInputString(props.initialValue)  ?? null)
@@ -83,6 +83,8 @@ function checkAgeLimit(birthdate: Date){
     }).onDismiss(() => {
       popupOpen.value = false
     })
+
+    emit('warning')
   }
 }
 </script>

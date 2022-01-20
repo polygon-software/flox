@@ -47,6 +47,7 @@
                   :total-amount="mortgage"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+                  @warning="nonArrangeable = true"
                 />
               </div>
             </div>
@@ -66,6 +67,7 @@
                   :initial-value="form.values.value[field.key]"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+                  @warning="nonArrangeable = true"
                 />
               </div>
             </div>
@@ -574,6 +576,9 @@ function onPageChange(){
           description: affordabilityWarning
         }
       })
+
+      // Mark as non-arrangeable
+      nonArrangeable.value = true
     }
 
     // Enfeoffment warning
@@ -584,6 +589,9 @@ function onPageChange(){
           description: enfeoffmentWarning
         }
       })
+
+      // Mark as non-arrangeable
+      nonArrangeable.value = true
     }
   }
 }
@@ -612,7 +620,7 @@ function onDiscard(){
  * @returns {void}
  */
 async function onSubmit(formData: Record<string, Record<string, string>>) {
-  // TODO: other params
+  // TODO: other params, set up upload
   // Creates a dossier
   await executeMutation(CREATE_DOSSIER, {
     first_name: formData.full_name.first_name,

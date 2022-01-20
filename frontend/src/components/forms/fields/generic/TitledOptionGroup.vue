@@ -45,7 +45,7 @@ const props = defineProps({
     default: null
   }
 })
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change', 'warning'])
 const selectedOption = ref(props.initialValue ?? props.defaultValue)
 
 
@@ -76,6 +76,7 @@ function checkWarnings(){
     // Find if there's a warning for the newly selected value
     const valueWarning = warnings.find((warning) => warning.value === selectedOption.value)
 
+    // Trigger dialog & emit event
     if(valueWarning){
       const warningText = valueWarning.text
 
@@ -85,6 +86,9 @@ function checkWarnings(){
           description: warningText
         }
       })
+
+      // Emit warning to mark as non-arrangeable
+      emit('warning')
     }
   }
 }

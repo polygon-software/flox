@@ -51,7 +51,7 @@ import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {useQuasar} from 'quasar';
 import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES';
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change', 'warning'])
 const $q = useQuasar()
 
 const props = defineProps({
@@ -123,7 +123,12 @@ function checkLandlordType(isPublic: boolean){
     $q.dialog({
       component: WarningDialog,
       componentProps: {description:  i18n.global.t('warnings.warning_landlord') }}
-    ).onDismiss(() => popupOpen.value = false)
+    ).onDismiss(() => {
+      popupOpen.value = false
+    })
+
+    // Emit warning to mark as non-arrangeable
+    emit('warning')
   }
 
   // Emit new value
@@ -136,15 +141,15 @@ function checkLandlordType(isPublic: boolean){
  * @returns {void}
  */
 function checkExpirationDate(expirationDateString: string){
-  const expirationDate = new Date(expirationDateString)
+  const expirationAsDate = new Date(expirationDateString)
 
-  if(!IS_VALID_YEAR(expirationDate.getFullYear())){
+  if(!IS_VALID_YEAR(expirationAsDate.getFullYear())){
     return
   }
 
   const dateIn70Years: Date = new Date(new Date().setFullYear(new Date().getFullYear() + 70))
 
-  if(expirationDate.getTime() < dateIn70Years.getTime() && !popupOpen.value ){
+  if(expirationAsDate.getTime() < dateIn70Years.getTime() && !popupOpen.value ){
     popupOpen.value = true
     $q.dialog({
       component: WarningDialog,
