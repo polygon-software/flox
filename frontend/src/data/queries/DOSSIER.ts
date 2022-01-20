@@ -184,6 +184,17 @@ export const GET_DOSSIER = {
         email
         phone
         birthdate
+        has_amortisation
+        has_building_lease
+        has_renovation
+        renovation_price
+        renovation_year
+        readable_id
+        purchase_date
+        purchase_price
+        market_value_estimation
+        mortgage_amount
+        amortisation_amount
         address {
           uuid
           street
@@ -212,14 +223,11 @@ export const GET_DOSSIER = {
           uuid
           __typename
         }
-        __typename
         offers{
           __typename
           uuid
           status
         }
-        non_arrangeable
-        status
         __typename
       }
     }
