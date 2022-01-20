@@ -222,6 +222,7 @@ function showDossierDocuments(dossier: Record<string, unknown>): void {
   // Add final document, if any
   if(dossier.final_document){
     files.push(dossier.final_document)
+    // TODO: this has no valid link to dossier... fix
   }
 
   $q.dialog({
