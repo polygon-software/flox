@@ -92,7 +92,7 @@ export class Dossier extends Person {
   @ManyToOne(() => Bank)
   original_bank: Bank;
 
-  @Field(() => PROPERTY_TYPE, { description: 'Status of Dossier' })
+  @Field(() => PROPERTY_TYPE, { description: 'Property type' })
   @Column({
     type: 'enum',
     enum: PROPERTY_TYPE,

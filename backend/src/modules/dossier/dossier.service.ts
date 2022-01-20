@@ -61,18 +61,59 @@ export class DossierService {
       });
     }
     const dossier = this.dossierRepository.create({
-      correspondence_address: createDossierInput.correspondence_address,
+      // Basic information
+      first_name: createDossierInput.first_name,
+      last_name: createDossierInput.last_name,
+      address: createDossierInput.address,
+      email: createDossierInput.email,
+      phone: createDossierInput.phone,
+      birthdate: createDossierInput.birthdate,
+
+      // Value/purchase information
       original_bank: originalBank,
-      born: createDossierInput.born,
-      property_address: createDossierInput.property_address,
-      loan_sum: createDossierInput.loan_sum,
-      non_arrangeable: false,
+      property_type: createDossierInput.property_type,
+      owner_occupied: createDossierInput.owner_occupied,
+      purchase_date: createDossierInput.purchase_date,
+      purchase_price: createDossierInput.purchase_price,
+      market_value_estimation: createDossierInput.market_value_estimation,
+      mortgage_amount: createDossierInput.mortgage_amount,
+
+      // Amortisation infomration
+      has_amortisation: createDossierInput.has_amortisation,
+      direct_amortisation: createDossierInput.direct_amortisation,
+      amortisation_amount: createDossierInput.amortisation_amount,
+
+      // Building lease information
+      has_building_lease: createDossierInput.has_building_lease,
+      public_landlord: createDossierInput.public_landlord,
+      building_lease_expiration_date:
+        createDossierInput.building_lease_expiration_date,
+      building_lease_interest: createDossierInput.building_lease_interest,
+
+      // Renovation information
+      has_renovation: createDossierInput.has_renovation,
+      renovation_year: createDossierInput.renovation_year,
+      renovation_price: createDossierInput.renovation_price,
+
+      // Income/cost information
+      incomes: createDossierInput.incomes,
+      child_allowances: createDossierInput.child_allowances,
+      bonus: createDossierInput.bonus,
+      assets: createDossierInput.assets,
+      leasing: createDossierInput.leasing,
+      credit: createDossierInput.credit,
+      alimony: createDossierInput.alimony,
+      various: createDossierInput.various,
+      prosecutions: createDossierInput.prosecutions,
+      loss_certificates: createDossierInput.loss_certificates,
+
+      // Flag for non-arrangeable dossiers
+      non_arrangeable: createDossierInput.non_arrangeable,
+
+      // Prefilled field (not from input)
       offers: [],
       documents: [],
       status: DOSSIER_STATUS.IN_PROGRESS,
-      first_name: createDossierInput.first_name,
-      last_name: createDossierInput.last_name,
-      email: createDossierInput.email,
       readable_id: generateHumanReadableId(),
       employee: employee,
     });

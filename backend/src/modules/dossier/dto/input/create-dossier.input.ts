@@ -57,7 +57,7 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
   original_bank_abbreviation: string;
 
   @Field(() => PROPERTY_TYPE)
-  property_type: string;
+  property_type: PROPERTY_TYPE;
 
   @Field(() => Boolean)
   @IsBoolean()
@@ -181,4 +181,9 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
   @Field(() => Boolean)
   @IsBoolean()
   non_arrangeable: boolean;
+
+  /**
+   * Calculated total numbers
+   * TODO add
+   */
 }
