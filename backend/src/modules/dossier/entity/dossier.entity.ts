@@ -66,7 +66,7 @@ export class Dossier extends Person {
     onDelete: 'CASCADE',
   })
   @JoinColumn()
-  finalDocument: PrivateFile;
+  final_document: PrivateFile;
   /**
    * Basic information
    */

@@ -78,7 +78,7 @@ export class DossierService {
       market_value_estimation: createDossierInput.market_value_estimation,
       mortgage_amount: createDossierInput.mortgage_amount,
 
-      // Amortisation infomration
+      // Amortisation information
       has_amortisation: createDossierInput.has_amortisation,
       direct_amortisation: createDossierInput.direct_amortisation,
       amortisation_amount: createDossierInput.amortisation_amount,

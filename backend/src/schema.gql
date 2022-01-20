@@ -374,7 +374,7 @@ type Dossier {
   employee: Employee!
 
   """Final summary document, to be signed by customer"""
-  finalDocument: PrivateFile
+  final_document: PrivateFile
 
   """First Name"""
   first_name: String!

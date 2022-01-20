@@ -3,10 +3,15 @@ import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
 
 export const CREATE_DOSSIER = {
   mutation: gql`
-    mutation createDossier($first_name: String!, $last_name: String!, $correspondence_address: CreateAddressInput!, $email: String!, $original_bank_name: String!, $original_bank_abbreviation: String!, $born: DateTime!, $property_address: CreateAddressInput!, $loan_sum: Float!){
-      createDossier (createDossierInput: {first_name: $first_name, last_name: $last_name, correspondence_address: $correspondence_address, email: $email, original_bank_name: $original_bank_name,original_bank_abbreviation: $original_bank_abbreviation, born: $born, property_address: $property_address, loan_sum: $loan_sum}) {
+    mutation createDossier($createDossierInput: CreateDossierInput!){
+      createDossier (createDossierInput: $createDossierInput) {
         uuid
-        correspondence_address {
+        first_name
+        last_name
+        email
+        phone
+        birthdate
+        address {
           uuid
           street
           number
@@ -16,20 +21,20 @@ export const CREATE_DOSSIER = {
         }
         original_bank {
           uuid
+          abbreviation
+          name
           __typename
         }
-        born
-        property_address {
-          uuid
-          street
-          number
-          city
-          zip_code
-          __typename
-        }
-        loan_sum
         non_arrangeable
         status
+        employee {
+          uuid
+          __typename
+        }
+        final_document{
+          uuid
+          __typename
+        }
         __typename
       }
     }`,
@@ -71,7 +76,12 @@ export const RESET_DOSSIER = {
     mutation resetDossier($uuid: ID!){
       resetDossier (resetDossierInput: {uuid: $uuid}) {
         uuid
-        correspondence_address {
+        first_name
+        last_name
+        email
+        phone
+        birthdate
+        address {
           uuid
           street
           number
@@ -81,23 +91,30 @@ export const RESET_DOSSIER = {
         }
         original_bank {
           uuid
+          abbreviation
+          name
           __typename
         }
-        born
-        property_address {
+        non_arrangeable
+        status
+        employee {
           uuid
-          street
-          number
-          city
-          zip_code
           __typename
         }
+        documents{
+          uuid
+          __typename
+        }
+        final_document{
+          uuid
+          __typename
+        }
+        __typename
         offers{
           __typename
           uuid
           status
         }
-        loan_sum
         non_arrangeable
         status
         __typename
