@@ -663,9 +663,9 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
   const purchaseDate = formData.date_of_purchase
   const purchasePrice = formData.enfeoffment?.price
   const marketValueEstimation = formData.enfeoffment?.marketValueEstimation
+  const mortgageAmount = formData.enfeoffment?.currentValueOfMortgage
 
   // Page 3
-  const mortgage = formData.enfeoffment?.currentValueOfMortgage
   const hasAmortisation = formData.amortisation?.hasAmortisation
   const directAmortisation = formData.amortisation?.directAmortisation         // may be null
   const amortisationAmount = formData.amortisation?.amortisationAmount         // may be null
@@ -687,14 +687,14 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
   const credit = formData.credit
   const alimony = formData.alimony
   const various = formData.various
-  const lossCertificates = formData.loss_certificates
   const prosecutions = formData.prosecutions
+  const lossCertificates = formData.loss_certificates
 
   // Verify all mandatory attributes are present
   if([
     firstName, lastName, address, email, phone, birthdate,
     bankName, bankAbbreviation, propertyType, ownerOccupied, purchaseDate, purchasePrice, marketValueEstimation,
-    mortgage, hasAmortisation, hasBuildingLease, hasRenovation, mortgagePartitions,
+    mortgageAmount, hasAmortisation, hasBuildingLease, hasRenovation, mortgagePartitions,
     incomes, childAllowances, bonus, assets, leasing, credit, alimony, various, lossCertificates, prosecutions
   ].some((value) => value === null || value === undefined)){
     // Show error
@@ -703,6 +703,9 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
     )
     return
   }
+
+
+  // TODO: Don't forget about non-arrangeable tag
 
   // Creates a dossier
   // await executeMutation(CREATE_DOSSIER, {

@@ -35,10 +35,6 @@ export class Form {
    * (used to determine whether to allow going to next step within form)
    */
   pageValid = computed(() => {
-
-    // TODO remove
-    return true
-
     // If page structure does not exist, page can't be valid
     if(this.pages.value.length === 0) return false
 

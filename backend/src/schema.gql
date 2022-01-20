@@ -215,21 +215,18 @@ input CreateCompanyInput {
 }
 
 input CreateDossierInput {
+  birthdate: DateTime!
   born: DateTime
   correspondence_address: CreateAddressInput!
-
-  """E-mail"""
-  email: String
-
-  """First Name"""
-  first_name: String
-
-  """Last Name"""
-  last_name: String
+  email: String!
+  first_name: String!
+  last_name: String!
   loan_sum: Float
   original_bank_abbreviation: String!
   original_bank_name: String!
+  phone: String!
   property_address: CreateAddressInput!
+  property_type: propertyType!
 }
 
 input CreateEmployeeInput {
@@ -866,4 +863,10 @@ enum creationState {
   AWAITING_DOCUMENTS
   DOCUMENTS_UPLOADED
   DONE
+}
+
+enum propertyType {
+  APARTMENT
+  APARTMENT_BUILDING
+  ONE_FAMILY_HOUSE
 }
