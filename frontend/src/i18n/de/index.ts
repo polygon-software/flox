@@ -367,6 +367,9 @@ export default {
     affordability: 'Tragbarkeit',
     costs_per_year: 'Kosten pro Jahr',
     enfeoffment_between: 'Belehnung zwischen',
+    enfeoffment_first_rank: '1. Rang',
+    enfeoffment_second_rank: '1. & 2. Rang',
+    enfeoffment_too_high: 'Nicht finanzierbar',
     discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?',
   },
   dossier_status_enum: {

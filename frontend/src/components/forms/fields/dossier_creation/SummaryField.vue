@@ -8,27 +8,37 @@
     <q-card
       flat
       :class="computedClass"
-      style="width: 250px; height: 40px; margin: 12px 0 12px 0"
+      :style="`width: 250px;margin: 12px 0 12px 0; height: ${caption ? '50px' : '40px'}`"
     >
-      <strong v-if="bold">
-        {{ content }}
-      </strong>
-      <p v-else>
-        {{ content }}
-      </p>
+      <div class="column">
+        <strong v-if="bold">
+          {{ content }}
+        </strong>
+        <p v-else>
+          {{ content }}
+        </p>
+        <q-item-label v-if="caption" caption>
+          {{ caption }}
+        </q-item-label>
+      </div>
     </q-card>
     <q-card
       v-if="secondContent"
       flat
       :class="computedClass"
-      style="width: 250px; height: 40px; margin: 12px 0 12px 24px"
+      :style="`width: 250px;margin: 12px 0 12px 24px; height: ${caption ? '50px' : '40px'}`"
     >
-      <strong v-if="bold">
-        {{ secondContent }}
-      </strong>
-      <p v-else>
-        {{ secondContent }}
-      </p>
+      <div class="column">
+        <strong v-if="bold">
+          {{ secondContent }}
+        </strong>
+        <p v-else>
+          {{ secondContent }}
+        </p>
+        <q-item-label v-if="secondCaption" caption>
+          {{ secondCaption }}
+        </q-item-label>
+      </div>
     </q-card>
   </div>
 </template>
@@ -60,6 +70,16 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false,
+  },
+  caption: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  secondCaption: {
+    type: String,
+    required: false,
+    default: null,
   }
 })
 

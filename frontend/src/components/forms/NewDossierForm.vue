@@ -169,6 +169,8 @@
             :label="$t('form_for_clients.enfeoffment_between')"
             :content="enfeoffmentEstimate.low ? `${enfeoffmentEstimate.low}%` : '-' "
             :second-content="enfeoffmentEstimate.high ? `${enfeoffmentEstimate.high}%` : '-' "
+            :caption="enfeoffmentRank(enfeoffmentEstimate.low)"
+            :second-caption="enfeoffmentRank(enfeoffmentEstimate.high)"
             bold
           />
         </div>
@@ -624,4 +626,19 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
   // TODO: route to final document
   await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
 }
+
+/**
+ * Gets the rank for a given enfeoffment rate
+ * @param {number} rate - enfeoffment rate in percent
+ * @returns {string} - rank string
+ */
+function enfeoffmentRank(rate){
+  if(rate <= 66){
+    return i18n.global.t('form_for_clients.enfeoffment_first_rank')
+  } else if(rate > 66 && rate <= 80){
+    return i18n.global.t('form_for_clients.enfeoffment_second_rank')
+  }
+  return i18n.global.t('form_for_clients.enfeoffment_too_high')
+}
+
 </script>
