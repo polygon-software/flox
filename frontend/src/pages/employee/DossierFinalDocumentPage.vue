@@ -19,11 +19,13 @@
 
       <!-- Page Print Preview -->
       <q-card
-        v-if="dossier"
         id="preview"
         class="page shadow-6"
       >
-        <div class="subpage">
+        <div
+          v-if="dossier"
+          class="subpage"
+        >
           <!-- Logo + address row -->
           <div class="row justify-between">
             <img
@@ -54,13 +56,13 @@
                 style="padding-right: 5mm"
               >
                 <DossierDocumentInfoField
-                  :content="`${dossier.first_name} ${dossier.lastName}`"
+                  :content="`${dossier.first_name} ${dossier.last_name}`"
                 />
                 <DossierDocumentInfoField
                   :content="dossier.address.street"
                 />
                 <DossierDocumentInfoField
-                  :content="`${dossier.address.zipCode} ${dossier.address.city}`"
+                  :content="`${dossier.address.zip_code} ${dossier.address.city}`"
                 />
               </div>
 
@@ -71,7 +73,7 @@
               >
                 <DossierDocumentInfoField
                   :label="$t('general.created_on')"
-                  :content="formatDate(dossier.created_on)"
+                  :content="formatDate(dossier.created_at)"
                 />
 
                 <DossierDocumentInfoField
@@ -184,6 +186,7 @@
 <!--                />-->
 
                 <DossierDocumentBooleanField
+                  v-if="dossier.has_amortisation"
                   :value="dossier.direct_amortisation"
                   :label="$t('dossier.amortization_type')"
                   :true-label="$t('dossier.direct')"
@@ -326,7 +329,7 @@
           icon="mail_outline"
           color="primary"
           unelevated
-          :disable="loading"
+          :disable="loading || !dossier || !fileUuid"
           style="margin: 0 32px 0 16px"
           @click="sendDocument"
         />
@@ -336,7 +339,7 @@
           icon="print"
           color="primary"
           unelevated
-          :disable="loading"
+          :disable="loading || !dossier"
           @click="printDocument"
         />
       </div>
@@ -416,26 +419,26 @@ function goBack(){
 }
 
 /**
- * Sends the PDF by e-mail
+ * Opens a dialog for sending the PDF by e-mail
  * @returns {Promise<void>} - done
  */
 function sendDocument(){
-  // TODO re-enable
-  // const dossierUuid = dossierInfo.uuid
-  //
-  // const addresses = [
-  //   contactInfo.email,
-  //   'david.wyss@polygon-software.ch' // TODO get employee's own email address
-  // ]
-  //
-  // $q.dialog({
-  //   component: DossierDocumentEmailDialog,
-  //   componentProps: {
-  //     uuid: dossierUuid,
-  //     addresses,
-  //     fileUuid: fileUuid.value
-  //   }
-  // })
+  if(dossier.value && fileUuid.value){
+    const addresses = [
+      dossier.value.email,                                      // Customer e-mail
+      (dossier.value.employee as Record<string, string>).email, // Employee (broker) email
+    ]
+
+    // Open upload dialog
+    $q.dialog({
+      component: DossierDocumentEmailDialog,
+      componentProps: {
+        uuid: dossierUuid,
+        addresses,
+        fileUuid: fileUuid.value
+      }
+    })
+  }
 }
 
 /**

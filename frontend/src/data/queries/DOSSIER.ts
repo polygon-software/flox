@@ -175,16 +175,17 @@ export const GET_DOSSIER = {
     query getDossier($uuid: ID!) {
       getDossier(getDossierInput: {uuid: $uuid}) {
         uuid
-        employee {
-          uuid
-          __typename
-        }
+        status
+        non_arrangeable
+        created_at
         first_name
         last_name
         email
         phone
         birthdate
         has_amortisation
+        direct_amortisation
+        amortisation_amount
         has_building_lease
         has_renovation
         renovation_price
@@ -192,8 +193,11 @@ export const GET_DOSSIER = {
         readable_id
         purchase_date
         purchase_price
+        property_type
         market_value_estimation
         mortgage_amount
+        prosecutions
+        loss_certificates
         amortisation_amount
         address {
           uuid
@@ -209,10 +213,9 @@ export const GET_DOSSIER = {
           name
           __typename
         }
-        non_arrangeable
-        status
         employee {
           uuid
+          email
           __typename
         }
         documents{
