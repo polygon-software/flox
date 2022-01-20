@@ -29,7 +29,7 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
 
   @Field(() => CreateAddressInput)
   @IsNotEmpty()
-  correspondence_address: Address;
+  address: Address;
 
   @Field(() => String)
   @IsString()
