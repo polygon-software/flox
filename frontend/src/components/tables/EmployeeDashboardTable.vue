@@ -217,8 +217,13 @@ async function uploadDossierDocuments(dossier: Record<string, unknown>) {
  * @returns {void} - void
  */
 function showDossierDocuments(dossier: Record<string, unknown>): void {
-  // TODO: also allow viewing final document?
-  const files = dossier.documents ?? []
+  const files: Record<string, unknown>[] = _.cloneDeep(dossier.documents) ?? []
+
+  // Add final document, if any
+  if(dossier.final_document){
+    files.push(dossier.final_document)
+  }
+
   $q.dialog({
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,

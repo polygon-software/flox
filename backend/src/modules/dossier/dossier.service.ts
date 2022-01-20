@@ -169,7 +169,15 @@ export class DossierService {
     const employee = await this.employeeService.getMyEmployee(cognitoId);
     return this.dossierRepository.findByIds(
       employee.dossiers.map((dossier) => dossier.uuid),
-      { relations: ['documents', 'offers', 'offers.bank', 'original_bank'] },
+      {
+        relations: [
+          'documents',
+          'offers',
+          'offers.bank',
+          'original_bank',
+          'final_document',
+        ],
+      },
     );
   }
 
@@ -264,7 +272,7 @@ export class DossierService {
           uuid: Not(bank.uuid),
         },
       },
-      relations: ['offers', 'offers.bank', 'documents'],
+      relations: ['offers', 'offers.bank', 'documents', 'final_document'],
     });
 
     // Return only those that have less than three offers or an own offer
@@ -327,7 +335,7 @@ export class DossierService {
   async getDossier(dossierUuid: string, userUuid: string): Promise<Dossier> {
     const user = await this.userRepository.findOne(userUuid);
     const dossier = await this.dossierRepository.findOne(dossierUuid, {
-      relations: ['documents', 'employee'],
+      relations: ['documents', 'employee', 'final_document'],
     });
     if (user.role === ROLE.EMPLOYEE && dossier.employee.uuid === user.fk) {
       return dossier;
@@ -349,7 +357,7 @@ export class DossierService {
     const dossier = await this.dossierRepository.findOne(
       removeDossierFilesInput.uuid,
       {
-        relations: ['documents', 'employee'],
+        relations: ['documents', 'employee', 'final_document'],
       },
     );
     const promises = [];
@@ -359,7 +367,7 @@ export class DossierService {
       });
       await Promise.all(promises);
       return this.dossierRepository.findOne(removeDossierFilesInput.uuid, {
-        relations: ['documents', 'employee'],
+        relations: ['documents', 'employee', 'final_document'],
       });
     }
     throw new Error('Not Authorized');

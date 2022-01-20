@@ -58,13 +58,11 @@ export const MY_DOSSIERS = {
         documents{
           uuid
           key
-          url
           __typename
         }
         final_document{
           uuid
           key
-          url
           __typename
         }
         offers{
