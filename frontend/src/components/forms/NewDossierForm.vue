@@ -708,7 +708,8 @@ async function onSubmit() {
   }
 
   // Creates a dossier
-  await executeMutation(CREATE_DOSSIER, {
+  try{
+    const mutationResult = await executeMutation(CREATE_DOSSIER, {
     createDossierInput: {
       // Basic information
       first_name: firstName,
@@ -724,53 +725,55 @@ async function onSubmit() {
       property_type: propertyType,
       owner_occupied: ownerOccupied,
       purchase_date: purchaseDate,
-      purchase_price: purchasePrice,
-      market_value_estimation: marketValueEstimation,
-      mortgage_amount: mortgageAmount,
+      purchase_price: parseInt(purchasePrice),
+      market_value_estimation: parseInt(marketValueEstimation),
+      mortgage_amount: parseInt(mortgageAmount),
 
       // Amortisation information
       has_amortisation: hasAmortisation,
       direct_amortisation: directAmortisation,
-      amortisation_amount: amortisationAmount,
+      amortisation_amount: parseInt(amortisationAmount),
 
       // Building lease information
       has_building_lease: hasBuildingLease,
       public_landlord: publicLandlord,
       building_lease_expiration_date: buildingLeaseExpirationDate,
-      building_lease_interest: buildingLeaseInterest,
+      building_lease_interest: parseInt(buildingLeaseInterest),
 
       // Renovation information
       has_renovation: hasRenovation,
       renovation_year: renovationYear,
-      renovation_price: renovationPrice,
+      renovation_price: parseInt(renovationPrice),
       // TODO mortgage partitions here
+      // TODO calc'd totals here
 
       // Income/cost information
       incomes,
-      child_allowances: childAllowances,
-      bonus,
-      assets,
-      leasing,
-      credit,
-      alimony,
-      various,
+      child_allowances: parseInt(childAllowances),
+      bonus: parseInt(bonus),
+      assets: parseInt(assets),
+      leasing: parseInt(leasing),
+      credit: parseInt(credit),
+      alimony: parseInt(alimony),
+      various: parseInt(various),
       prosecutions,
       loss_certificates: lossCertificates,
 
       // Flag for dossier being non-arrangeable
       non_arrangeable: nonArrangeable.value
     }
-  }).catch((e: Error) => {
-    // Show error
-    $errorService?.showErrorDialog(
-      new Error(i18n.global.t('errors.dossier_upload_error', {error: e.message}))
-    )
-  }).then((result) => {
-    console.log('result:', result)
+  })
+
+    console.log('result:', mutationResult)
 
     // TODO: route to final document
-    void $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
-  })
+    await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
+  } catch(err: Error){
+    // Show error
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.dossier_upload_error', {error: (err as Error).message}))
+    )
+  }
 
 }
 
