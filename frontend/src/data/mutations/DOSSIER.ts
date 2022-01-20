@@ -6,11 +6,16 @@ export const CREATE_DOSSIER = {
     mutation createDossier($createDossierInput: CreateDossierInput!){
       createDossier (createDossierInput: $createDossierInput) {
         uuid
+        created_at
         first_name
         last_name
         email
         phone
         birthdate
+        non_arrangeable
+        status
+        mortgage_amount
+        non_arrangeable
         address {
           uuid
           street
@@ -25,9 +30,11 @@ export const CREATE_DOSSIER = {
           name
           __typename
         }
-        non_arrangeable
-        status
         employee {
+          uuid
+          __typename
+        }
+        documents{
           uuid
           __typename
         }
@@ -35,13 +42,10 @@ export const CREATE_DOSSIER = {
           uuid
           __typename
         }
-        documents {
-          uuid
+        offers{
           __typename
-        }
-        offers {
           uuid
-          __typename
+          status
         }
         __typename
       }

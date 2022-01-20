@@ -5,11 +5,16 @@ export const MY_DOSSIERS = {
     query getMyDossiers{
       getMyDossiers{
         uuid
+        created_at
         first_name
         last_name
         email
         phone
         birthdate
+        non_arrangeable
+        status
+        mortgage_amount
+        non_arrangeable
         address {
           uuid
           street
@@ -24,8 +29,6 @@ export const MY_DOSSIERS = {
           name
           __typename
         }
-        non_arrangeable
-        status
         employee {
           uuid
           __typename
@@ -38,14 +41,11 @@ export const MY_DOSSIERS = {
           uuid
           __typename
         }
-        __typename
         offers{
           __typename
           uuid
           status
         }
-        non_arrangeable
-        status
         __typename
       }
     }
