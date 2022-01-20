@@ -661,6 +661,8 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
   const purchaseDate = formData.date_of_purchase
   const purchasePrice = formData.enfeoffment.price
   const marketValueEstimation = formData.enfeoffment.marketValueEstimation
+
+  // Page 3
   const mortgage = formData.enfeoffment.currentValueOfMortgage
   const hasAmortisation = formData.amortisation.hasAmortisation
   const directAmortisation = formData.amortisation.directAmortisation
@@ -674,7 +676,17 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
   const renovationYear = formData.renovation.renovationYear
   const mortgagePartitions = formData.mortgage
 
-  // Page 3
+  // Page 4
+  const incomes = formData.income
+  const childAllowances = formData.child_allowances
+  const bonus = formData.bonus
+  const assets = formData.assets
+  const leasing = formData.leasing
+  const credit = formData.credit
+  const alimony = formData.alimony
+  const various = formData.various
+  const lossCertificates = formData.loss_certificates
+  const prosecutions = formData.prosecutions
 
   // TODO add ALL values!!
   if([
