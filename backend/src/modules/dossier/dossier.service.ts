@@ -110,6 +110,16 @@ export class DossierService {
       // Flag for non-arrangeable dossiers
       non_arrangeable: createDossierInput.non_arrangeable,
 
+      // Calculated values
+
+      affordability: createDossierInput.affordability,
+      eligible_income: createDossierInput.eligible_income,
+      total_costs: createDossierInput.total_costs,
+      value_estimate_low: createDossierInput.value_estimate_low,
+      value_estimate_high: createDossierInput.value_estimate_high,
+      enfeoffment_estimate_low: createDossierInput.enfeoffment_estimate_low,
+      enfeoffment_estimate_high: createDossierInput.enfeoffment_estimate_high,
+
       // Prefilled field (not from input)
       offers: [],
       documents: [],

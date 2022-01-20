@@ -698,7 +698,8 @@ async function onSubmit() {
     firstName, lastName, address, email, phone, birthdate,
     bankName, bankAbbreviation, propertyType, ownerOccupied, purchaseDate, purchasePrice, marketValueEstimation,
     mortgageAmount, hasAmortisation, hasBuildingLease, hasRenovation, mortgagePartitions,
-    incomes, childAllowances, bonus, assets, leasing, credit, alimony, various, lossCertificates, prosecutions
+    incomes, childAllowances, bonus, assets, leasing, credit, alimony, various, lossCertificates, prosecutions,
+    affordability.value, eligibleIncome.value, totalCosts.value, valueEstimate.value, enfeoffmentEstimate.value
   ].some((value) => value === null || value === undefined)){
     // Show error
     $errorService?.showErrorDialog(
@@ -760,14 +761,24 @@ async function onSubmit() {
       loss_certificates: lossCertificates,
 
       // Flag for dossier being non-arrangeable
-      non_arrangeable: nonArrangeable.value
+      non_arrangeable: nonArrangeable.value,
+
+      // Calculated totals
+      affordability: affordability.value,
+      eligible_income: eligibleIncome.value,
+      total_costs: totalCosts.value,
+      value_estimate_low: valueEstimate.value.low,
+      value_estimate_high: valueEstimate.value.high,
+      enfeoffment_estimate_low: enfeoffmentEstimate.value.low,
+      enfeoffment_estimate_high: enfeoffmentEstimate.value.high
     }
   })
 
+    const newDossier = mutationResult.data
     console.log('result:', mutationResult)
 
     // TODO: route to final document
-    await $routerService?.routeTo(ROUTES.DOSSIER_FINAL_DOCUMENT)
+    // await $routerService?.routeTo(ROUTES.DOSSIER_FINAL_DOCUMENT, {did: newDossier.uuid})
   } catch(err: Error){
     // Show error
     $errorService?.showErrorDialog(

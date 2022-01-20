@@ -184,6 +184,33 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
 
   /**
    * Calculated total numbers
-   * TODO add
    */
+
+  @Field(() => Number)
+  @IsNumber()
+  affordability: number;
+
+  @Field(() => Number)
+  @IsNumber()
+  eligible_income: number;
+
+  @Field(() => Number)
+  @IsNumber()
+  total_costs: number;
+
+  @Field(() => Number)
+  @IsNumber()
+  value_estimate_low: number;
+
+  @Field(() => Number)
+  @IsNumber()
+  value_estimate_high: number;
+
+  @Field(() => Number)
+  @IsNumber()
+  enfeoffment_estimate_low: number;
+
+  @Field(() => Number)
+  @IsNumber()
+  enfeoffment_estimate_high: number;
 }

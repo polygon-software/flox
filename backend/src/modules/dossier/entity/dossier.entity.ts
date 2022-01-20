@@ -14,6 +14,7 @@ import { Bank } from '../../bank/entities/bank.entity';
 import { DOSSIER_STATUS, PROPERTY_TYPE } from '../../../ENUM/ENUMS';
 import { Employee } from '../../employee/entities/employee.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
+import { IsNumber } from 'class-validator';
 
 @Entity()
 @ObjectType()
@@ -276,6 +277,47 @@ export class Dossier extends Person {
 
   /**
    * Calculated total numbers
-   * TODO add
    */
+
+  @Field(() => Number, {
+    description: 'Calculated affordability',
+  })
+  @Column()
+  affordability: number;
+
+  @Field(() => Number, {
+    description: 'Total eligible income',
+  })
+  @Column()
+  eligible_income: number;
+
+  @Field(() => Number, {
+    description: 'Total calculated costs',
+  })
+  @Column()
+  total_costs: number;
+
+  @Field(() => Number, {
+    description: 'Lower market value estimate',
+  })
+  @Column()
+  value_estimate_low: number;
+
+  @Field(() => Number, {
+    description: 'Higher market value estimate',
+  })
+  @Column()
+  value_estimate_high: number;
+
+  @Field(() => Number, {
+    description: 'Enfeoffment for lower value estimate',
+  })
+  @Column()
+  enfeoffment_estimate_low: number;
+
+  @Field(() => Number, {
+    description: 'Enfeoffment for higher value estimate',
+  })
+  @Column()
+  enfeoffment_estimate_high: number;
 }
