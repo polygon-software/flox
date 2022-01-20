@@ -217,7 +217,7 @@ export class Dossier extends Person {
   @Field(() => [Number], {
     description: 'Owners gross incomes',
   })
-  @Column()
+  @Column('int', { array: true })
   incomes: number[];
 
   @Field(() => Number, {
