@@ -62,7 +62,7 @@ onMounted(() => {
 function emitValue(){
   checkWarnings()
 
-  emit('change', selectedOption)
+  emit('change', selectedOption.value)
 }
 
 /**

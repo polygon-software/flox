@@ -38,6 +38,7 @@
                 <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
                 <!-- NOTE: 'totalAmount' is passed because MortgageFields needs it for calculation -->
                 <!-- NOTE: Because of the bank list, we separately pass 'options' prop -->
+                <!-- NOTE: these are only done in the LHS section since these fields are LHS! -->
                 <component
                   :is="field.component"
                   v-for="field in leftSection.fields"
@@ -564,7 +565,8 @@ onMounted(async () => {
   // Format so option group can use it
   bankOptions.value = bankList.map((bank: Record<string, string>) => {
     return {
-      label: `${bank.name} (${bank.abbreviation})`
+      label: `${bank.name} (${bank.abbreviation})`,
+      value: bank
     }
   })
 })
@@ -643,18 +645,44 @@ function onDiscard(){
  * @returns {void}
  */
 async function onSubmit(formData: Record<string, Record<string, string>>) {
+  // Page 1
   const firstName = formData.full_name.first_name
   const lastName = formData.full_name.last_name
   const address =  formData.address
   const email = formData.email
   const phone = formData.phone_number
-  const bank =  formData.bank
+  const birthdate = formData.date_of_birth
+
+  // Page 2
+  const bankName =  formData.bank.value.name as string|null
+  const bankAbbreviation =  formData.bank.value.abbreviation as string|null
+  const propertyType = formData.property_type.value
+  const ownerOccupied = formData.owner_occupied
+  const purchaseDate = formData.date_of_purchase
+  const purchasePrice = formData.enfeoffment.price
+  const marketValueEstimation = formData.enfeoffment.marketValueEstimation
+  const mortgage = formData.enfeoffment.currentValueOfMortgage
+  const hasAmortisation = formData.amortisation.hasAmortisation
+  const directAmortisation = formData.amortisation.directAmortisation
+  const amortisationAmount = formData.amortisation.amortisationAmount
+  const hasBuildingLease = formData.building_lease.hasBuildingLease
+  const publicLandlord = formData.building_lease.publicLandlord
+  const buildingLeaseExpirationDate = formData.building_lease.expirationDate
+  const buildingLeaseInterest = formData.building_lease.interest
+  const hasRenovation = formData.renovation.hasRenovation
+  const renovationPrice = formData.renovation.renovationPrice
+  const renovationYear = formData.renovation.renovationYear
+  const mortgagePartitions = formData.mortgage
+
+  // Page 3
 
   // TODO add ALL values!!
-  // if([firstName, lastName, address, email].some((value) => value === null || value === undefined)){
-  //   // TODO show error popup
-  //   throw new Error('FORM INCOMPLETE')
-  // }
+  if([
+    firstName, lastName, address, email, phone, bankName, bankAbbreviation
+  ].some((value) => value === null || value === undefined)){
+    // TODO show error popup
+    throw new Error('FORM INCOMPLETE')
+  }
 
   // Creates a dossier
   // await executeMutation(CREATE_DOSSIER, {
