@@ -166,12 +166,12 @@
 <!--                  :content="installment.amount.toLocaleString() + currency"-->
 <!--                />-->
 
-                <!-- TODO enfeoffment -->
-<!--                <DossierDocumentInfoField-->
-<!--                  :label="$t('dossier.lending_value')"-->
-<!--                  :content="dossierInfo.lendingValue + '%'"-->
-<!--                  bold-->
-<!--                />-->
+                <!-- Enfeoffment -->
+                <DossierDocumentInfoField
+                  :label="$t('dossier.lending_value')"
+                  :content="dossier.enfeoffment_estimate_low + '%'"
+                  bold
+                />
               </div>
               <div
                 class="column col-6"
@@ -245,23 +245,23 @@
                 class="column col-6"
                 style="padding-right: 5mm"
               >
-                <!-- TODO total income here -->
+                <!-- Eligible income -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.salary')"
-                  :content="'TODO salary total'"
+                  :content="dossier.eligible_income.toLocaleString() + currency"
                   bold
                 />
 
-                <!-- TODO total costs here -->
+                <!-- Total costs -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.costs')"
-                  :content="(50000).toLocaleString() + currency"
+                  :content="dossier.total_costs.toLocaleString() + currency"
                 />
 
-                <!-- TODO affordability -->
+                <!-- Affordability -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.sustainability')"
-                  :content="(55) + '%'"
+                  :content="dossier.affordability + '%'"
                   bold
                 />
               </div>
