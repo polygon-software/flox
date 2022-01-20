@@ -59,6 +59,10 @@ export const REJECTED_DOSSIERS = {
     query{
       getRejectedDossiers{
         uuid
+        employee {
+          uuid
+          __typename
+        }
         first_name
         last_name
         email
@@ -113,6 +117,10 @@ export const DOSSIERS_BANK = {
     query allDossiersBank {
       allDossiersBank{
         uuid
+        employee {
+          uuid
+          __typename
+        }
         first_name
         last_name
         email
@@ -167,6 +175,10 @@ export const GET_DOSSIER = {
     query getDossier($uuid: ID!) {
       getDossier(getDossierInput: {uuid: $uuid}) {
         uuid
+        employee {
+          uuid
+          __typename
+        }
         first_name
         last_name
         email

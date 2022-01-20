@@ -44,7 +44,7 @@ export class Dossier extends Person {
   status: DOSSIER_STATUS;
 
   @Field(() => Employee, { description: 'Employee who created the Dossier' })
-  @ManyToOne(() => Employee, (employee) => employee.dossiers)
+  @ManyToOne(() => Employee, (employee) => employee.dossiers, { eager: true })
   employee: Employee;
 
   @Field(() => [PrivateFile], {

@@ -29,7 +29,7 @@
           {{ _props.row.original_bank.name }}
         </q-td>
         <q-td key="location">
-          {{ _props.row.property_address.city }}
+          {{ _props.row.address.city }}
         </q-td>
         <q-td key="mortgage_amount">
           {{ _props.row.loan_sum }}

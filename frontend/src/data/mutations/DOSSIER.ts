@@ -35,6 +35,14 @@ export const CREATE_DOSSIER = {
           uuid
           __typename
         }
+        documents {
+          uuid
+          __typename
+        }
+        offers {
+          uuid
+          __typename
+        }
         __typename
       }
     }`,
