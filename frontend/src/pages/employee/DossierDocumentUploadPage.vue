@@ -313,7 +313,6 @@ const sections = {
         },
         {
           label: i18n.global.t('documents.property.product_agreement'),
-          caption: i18n.global.t('documents.property.product_agreement_caption'),
           key: DOSSIER_FILE_TYPE.PRODUCT_AGREEMENT,
         },
         // TODO CONDITIONAL: EFH only

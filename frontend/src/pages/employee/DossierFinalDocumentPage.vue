@@ -316,14 +316,16 @@
         class="row justify-center button-row"
         style="margin-bottom: 128px"
       >
+        <!-- Back to dashboard -->
         <q-btn
           :label="$t('buttons.back_to_dashboard')"
           color="primary"
           flat
-          :disable="loading"
+          :disable="loading || !dossier || !fileUuid"
           @click="goBack"
         />
 
+        <!-- Send by e-mail -->
         <q-btn
           :label="$t('buttons.send_by_email')"
           icon="mail_outline"
@@ -334,6 +336,7 @@
           @click="sendDocument"
         />
 
+        <!-- Print -->
         <q-btn
           :label="$t('buttons.print')"
           icon="print"

@@ -5,16 +5,37 @@ export const MY_DOSSIERS = {
     query getMyDossiers{
       getMyDossiers{
         uuid
+        status
+        non_arrangeable
         created_at
         first_name
         last_name
         email
         phone
         birthdate
-        non_arrangeable
-        status
+        has_amortisation
+        direct_amortisation
+        amortisation_amount
+        has_building_lease
+        has_renovation
+        renovation_price
+        renovation_year
+        readable_id
+        purchase_date
+        purchase_price
+        property_type
+        market_value_estimation
         mortgage_amount
-        non_arrangeable
+        prosecutions
+        loss_certificates
+        amortisation_amount
+        affordability
+        eligible_income
+        total_costs
+        value_estimate_low
+        value_estimate_high
+        enfeoffment_estimate_low
+        enfeoffment_estimate_high
         address {
           uuid
           street
@@ -31,14 +52,19 @@ export const MY_DOSSIERS = {
         }
         employee {
           uuid
+          email
           __typename
         }
         documents{
           uuid
+          key
+          url
           __typename
         }
         final_document{
           uuid
+          key
+          url
           __typename
         }
         offers{
@@ -59,15 +85,37 @@ export const REJECTED_DOSSIERS = {
     query{
       getRejectedDossiers{
         uuid
-        employee {
-          uuid
-          __typename
-        }
+        status
+        non_arrangeable
+        created_at
         first_name
         last_name
         email
         phone
         birthdate
+        has_amortisation
+        direct_amortisation
+        amortisation_amount
+        has_building_lease
+        has_renovation
+        renovation_price
+        renovation_year
+        readable_id
+        purchase_date
+        purchase_price
+        property_type
+        market_value_estimation
+        mortgage_amount
+        prosecutions
+        loss_certificates
+        amortisation_amount
+        affordability
+        eligible_income
+        total_costs
+        value_estimate_low
+        value_estimate_high
+        enfeoffment_estimate_low
+        enfeoffment_estimate_high
         address {
           uuid
           street
@@ -82,10 +130,9 @@ export const REJECTED_DOSSIERS = {
           name
           __typename
         }
-        non_arrangeable
-        status
         employee {
           uuid
+          email
           __typename
         }
         documents{
@@ -96,14 +143,11 @@ export const REJECTED_DOSSIERS = {
           uuid
           __typename
         }
-        __typename
         offers{
           __typename
           uuid
           status
         }
-        non_arrangeable
-        status
         __typename
       }
     }
@@ -117,15 +161,37 @@ export const DOSSIERS_BANK = {
     query allDossiersBank {
       allDossiersBank{
         uuid
-        employee {
-          uuid
-          __typename
-        }
+        status
+        non_arrangeable
+        created_at
         first_name
         last_name
         email
         phone
         birthdate
+        has_amortisation
+        direct_amortisation
+        amortisation_amount
+        has_building_lease
+        has_renovation
+        renovation_price
+        renovation_year
+        readable_id
+        purchase_date
+        purchase_price
+        property_type
+        market_value_estimation
+        mortgage_amount
+        prosecutions
+        loss_certificates
+        amortisation_amount
+        affordability
+        eligible_income
+        total_costs
+        value_estimate_low
+        value_estimate_high
+        enfeoffment_estimate_low
+        enfeoffment_estimate_high
         address {
           uuid
           street
@@ -140,10 +206,9 @@ export const DOSSIERS_BANK = {
           name
           __typename
         }
-        non_arrangeable
-        status
         employee {
           uuid
+          email
           __typename
         }
         documents{
@@ -154,14 +219,11 @@ export const DOSSIERS_BANK = {
           uuid
           __typename
         }
-        __typename
         offers{
           __typename
           uuid
           status
         }
-        non_arrangeable
-        status
         __typename
       }
     }
