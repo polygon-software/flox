@@ -216,6 +216,7 @@ input CreateCompanyInput {
 
 input CreateDossierInput {
   address: CreateAddressInput!
+  affordability: Float!
   alimony: Float!
   amortisation_amount: Float
   assets: Float!
@@ -226,7 +227,10 @@ input CreateDossierInput {
   child_allowances: Float!
   credit: Float!
   direct_amortisation: Boolean
+  eligible_income: Float!
   email: String!
+  enfeoffment_estimate_high: Float!
+  enfeoffment_estimate_low: Float!
   first_name: String!
   has_amortisation: Boolean!
   has_building_lease: Boolean!
@@ -249,6 +253,9 @@ input CreateDossierInput {
   purchase_price: Float!
   renovation_price: Float
   renovation_year: Float
+  total_costs: Float!
+  value_estimate_high: Float!
+  value_estimate_low: Float!
   various: Float!
 }
 
@@ -328,6 +335,9 @@ type Dossier {
   """Address"""
   address: Address!
 
+  """Calculated affordability"""
+  affordability: Float!
+
   """Alimony cost"""
   alimony: Float!
 
@@ -367,11 +377,20 @@ type Dossier {
   """Documents of the dossier"""
   documents: [PrivateFile!]
 
+  """Total eligible income"""
+  eligible_income: Float!
+
   """Mail"""
   email: String!
 
   """Employee who created the Dossier"""
   employee: Employee!
+
+  """Enfeoffment for higher value estimate"""
+  enfeoffment_estimate_high: Float!
+
+  """Enfeoffment for lower value estimate"""
+  enfeoffment_estimate_low: Float!
 
   """Final summary document, to be signed by customer"""
   final_document: PrivateFile
@@ -451,8 +470,17 @@ type Dossier {
   """Status of Dossier"""
   status: DossierStatus!
 
+  """Total calculated costs"""
+  total_costs: Float!
+
   """UUID"""
   uuid: ID!
+
+  """Higher market value estimate"""
+  value_estimate_high: Float!
+
+  """Lower market value estimate"""
+  value_estimate_low: Float!
 
   """Various costs"""
   various: Float!

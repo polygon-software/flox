@@ -764,21 +764,27 @@ async function onSubmit() {
       non_arrangeable: nonArrangeable.value,
 
       // Calculated totals
-      affordability: affordability.value,
-      eligible_income: eligibleIncome.value,
-      total_costs: totalCosts.value,
-      value_estimate_low: valueEstimate.value.low,
-      value_estimate_high: valueEstimate.value.high,
-      enfeoffment_estimate_low: enfeoffmentEstimate.value.low,
-      enfeoffment_estimate_high: enfeoffmentEstimate.value.high
+      affordability: parseFloat(affordability.value),
+      eligible_income: parseInt(eligibleIncome.value),
+      total_costs: parseInt(totalCosts.value),
+      value_estimate_low: parseInt(valueEstimate.value.low),
+      value_estimate_high: parseInt(valueEstimate.value.high),
+      enfeoffment_estimate_low: parseFloat(enfeoffmentEstimate.value.low),
+      enfeoffment_estimate_high: parseFloat(enfeoffmentEstimate.value.high)
     }
   })
 
-    const newDossier = mutationResult.data
-    console.log('result:', mutationResult)
+    const newDossier = mutationResult.data?.createDossier as Record<string, unknown>|null
 
-    // TODO: route to final document
-    // await $routerService?.routeTo(ROUTES.DOSSIER_FINAL_DOCUMENT, {did: newDossier.uuid})
+    if(!newDossier){
+      // Show error
+      $errorService?.showErrorDialog(
+        new Error(i18n.global.t('errors.dossier_upload_error', {error: (err as Error).message}))
+      )
+    }
+
+    // Route to final document
+    await $routerService?.routeTo(ROUTES.DOSSIER_FINAL_DOCUMENT, {did: newDossier.uuid})
   } catch(err: Error){
     // Show error
     $errorService?.showErrorDialog(

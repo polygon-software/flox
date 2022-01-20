@@ -282,7 +282,7 @@ export class Dossier extends Person {
   @Field(() => Number, {
     description: 'Calculated affordability',
   })
-  @Column()
+  @Column('float')
   affordability: number;
 
   @Field(() => Number, {
@@ -312,12 +312,12 @@ export class Dossier extends Person {
   @Field(() => Number, {
     description: 'Enfeoffment for lower value estimate',
   })
-  @Column()
+  @Column('float')
   enfeoffment_estimate_low: number;
 
   @Field(() => Number, {
     description: 'Enfeoffment for higher value estimate',
   })
-  @Column()
+  @Column('float')
   enfeoffment_estimate_high: number;
 }

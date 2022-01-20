@@ -199,6 +199,13 @@ export const GET_DOSSIER = {
         prosecutions
         loss_certificates
         amortisation_amount
+        affordability
+        eligible_income
+        total_costs
+        value_estimate_low
+        value_estimate_high
+        enfeoffment_estimate_low
+        enfeoffment_estimate_high
         address {
           uuid
           street
