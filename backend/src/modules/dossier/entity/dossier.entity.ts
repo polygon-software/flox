@@ -21,13 +21,15 @@ export class Dossier extends Person {
   // First/last name and e-mail are part of 'Person'
 
   /**
-   * Linked/base information
+   * Flag for dossier being non-arrangeable
    */
-
   @Field(() => Boolean, { description: 'ToDo' })
   @Column()
   non_arrangeable: boolean;
 
+  /**
+   * Linked/base information
+   */
   @Field(() => [Offer], { description: 'List of Offers', nullable: true })
   @JoinColumn()
   @OneToMany(() => Offer, (offer) => offer.dossier, { nullable: true })
@@ -205,4 +207,75 @@ export class Dossier extends Person {
   })
   @Column({ nullable: true })
   renovation_price: number;
+
+  // TODO: how to handle mortgage partitions? (object array --> might need object...)
+
+  /**
+   * Income/cost information
+   */
+
+  @Field(() => [Number], {
+    description: 'Owners gross incomes',
+  })
+  @Column()
+  incomes: number[];
+
+  @Field(() => Number, {
+    description: 'Child allowances',
+  })
+  @Column()
+  child_allowances: number;
+
+  @Field(() => Number, {
+    description: 'Bonus payments',
+  })
+  @Column()
+  bonus: number;
+
+  @Field(() => Number, {
+    description: 'Amount of assets',
+  })
+  @Column()
+  assets: number;
+
+  @Field(() => Number, {
+    description: 'Leasing cost',
+  })
+  @Column()
+  leasing: number;
+
+  @Field(() => Number, {
+    description: 'Credit cost',
+  })
+  @Column()
+  credit: number;
+
+  @Field(() => Number, {
+    description: 'Alimony cost',
+  })
+  @Column()
+  alimony: number;
+
+  @Field(() => Number, {
+    description: 'Various costs',
+  })
+  @Column()
+  various: number;
+
+  @Field(() => Boolean, {
+    description: 'Whether there are ongoing prosecutions against the owner',
+  })
+  @Column()
+  prosecutions: boolean;
+
+  @Field(() => Boolean, {
+    description: 'Whether loss certificates exist on the property',
+  })
+  @Column()
+  loss_certificates: boolean;
+
+  /**
+   * Calculated total numbers
+   * TODO add
+   */
 }
