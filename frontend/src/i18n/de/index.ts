@@ -345,7 +345,6 @@ export default {
     public: 'Öffentlich',
     private: 'Privat',
     landlord: 'Baurechtgeber',
-    // TODO from here on: add to english file
     assets: 'Vermögen',
     mortgage: 'Hypothek',
     income: 'Einkommen',

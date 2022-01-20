@@ -404,6 +404,9 @@ const pages = [
 // Form instance
 const form: Form = new Form(pages as Record<string, unknown>[])
 
+// Non-arrangeable tag
+const nonArrangeable = ref(false)
+
 /**
  * Mortgage volume
  */
