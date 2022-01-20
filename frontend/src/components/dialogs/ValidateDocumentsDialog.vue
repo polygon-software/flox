@@ -71,7 +71,6 @@ import { PropType, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar, openURL} from 'quasar';
 import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Company} from 'src/data/types/Company';
-import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import {AuthenticationService} from 'src/services/AuthService';
@@ -80,6 +79,7 @@ import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
 import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
+import {PRIVATE_FILE} from 'src/data/queries/FILE';
 
 const $q: QVueGlobals = useQuasar()
 

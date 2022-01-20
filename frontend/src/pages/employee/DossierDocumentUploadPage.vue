@@ -144,7 +144,7 @@ import {DOSSIER_FILE_TYPE} from 'src/data/ENUM/ENUM';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {GET_DOSSIER} from "src/data/queries/DOSSIER";
+import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
 
 const $q = useQuasar()
 const route = useRoute()
