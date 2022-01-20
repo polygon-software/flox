@@ -358,8 +358,13 @@ export const ALL_BANKS = {
 
 export const ALL_BANK_NAMES = {
   query: gql`
-    query getBankNames{
-      getBankNames
+    query getBankList{
+      getBankList {
+        uuid
+        name
+        abbreviation
+        __typename
+      }
     }
   `,
   tables: ['bank'],

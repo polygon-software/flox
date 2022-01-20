@@ -44,6 +44,9 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * A summary field that can show either one or two values with a title, and optional captions
+ */
 
 import {computed, PropType} from 'vue';
 

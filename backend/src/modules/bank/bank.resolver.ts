@@ -4,7 +4,8 @@ import { BankService } from './bank.service';
 import { Bank } from './entities/bank.entity';
 import {
   BankOnly,
-  CurrentUser, EmployeeOnly,
+  CurrentUser,
+  EmployeeOnly,
   SOIOnly,
 } from '../../auth/authorization.decorator';
 import { CreateBankInput } from './dto/input/create-bank.input';
@@ -41,18 +42,22 @@ export class BankResolver {
   }
 
   /**
-   * Gets the name of all banks
-   * @returns {Promise<String[]>} - name of all banks
+   * Gets the names and abbreviations of all banks
+   * @returns {Promise<Bank[]>} - names and abbreviations of all banks
    */
   @EmployeeOnly()
-  @Query(() => [String])
-  async getBankNames(): Promise<string[]> {
+  @Query(() => [Bank])
+  async getBankList(): Promise<Bank[]> {
     const banks = await this.bankService.allBanks();
-    let names: Array<string> = [];
-    banks.forEach((bank) => {
-      names = names.concat(bank.name);
-    });
-    return names;
+
+    // Return a data-reduced form of bank, containing only uuid, name & abbreviation
+    return banks.map((bank) => {
+      return {
+        uuid: bank.uuid,
+        name: bank.name,
+        abbreviation: bank.abbreviation,
+      };
+    }) as unknown as Bank[];
   }
 
   /**

@@ -283,7 +283,10 @@ const pages = [
       {
         key: 'crm-contact',
         title: i18n.global.t('form_for_clients.contact_info'),
-        fields: [FIELDS.EMAIL, FIELDS.PHONE_NUMBER],
+        fields: [
+          FIELDS.EMAIL,
+          FIELDS.PHONE_NUMBER
+        ],
       },
     ]
   },
@@ -620,19 +623,32 @@ function onDiscard(){
  * @returns {void}
  */
 async function onSubmit(formData: Record<string, Record<string, string>>) {
-  // TODO: other params, set up upload
+  const firstName = formData.full_name.first_name
+  const lastName = formData.full_name.last_name
+  const address =  formData.address
+  const email = formData.email
+  const phone = formData.phone_number
+  const bank =  formData.bank
+
+  // TODO add ALL values!!
+  // if([firstName, lastName, address, email].some((value) => value === null || value === undefined)){
+  //   // TODO show error popup
+  //   throw new Error('FORM INCOMPLETE')
+  // }
+
   // Creates a dossier
-  await executeMutation(CREATE_DOSSIER, {
-    first_name: formData.full_name.first_name,
-    last_name: formData.full_name.last_name,
-    correspondence_address: formData.address,
-    email: formData.email,
-    original_bank_name: formData.original_bank_name,
-    original_bank_abbreviation: formData.original_bank_abbreviation,
-    born: formData.born,
-    property_address: formData.property_address,
-    loan_sum: formData.loan_sum
-  })
+  // await executeMutation(CREATE_DOSSIER, {
+  //   first_name: firstName,
+  //   last_name: lastName,
+  //   correspondence_address: address,
+  //   email: email,
+  //   phone: phone, // TODO on mutation
+  //   original_bank_name: bank,
+  //   original_bank_abbreviation: formData.original_bank_abbreviation,
+  //   born: formData.born,
+  //   property_address: formData.property_address,
+  //   loan_sum: formData.loan_sum
+  // })
 
   // TODO: route to final document
   await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)

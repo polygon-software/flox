@@ -674,7 +674,7 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
-  getBankNames: [String!]!
+  getBankList: [Bank!]!
   getBanks: [Bank!]!
   getDossier(getDossierInput: GetDossierInput!): Dossier!
   getDossierDocument(
