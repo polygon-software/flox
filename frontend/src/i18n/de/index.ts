@@ -273,7 +273,8 @@ export default {
     unknown: 'Unbekannter Fehler',
     pdf_generation_error: 'Beim Erstellen der PDF-Datei ist ein Fehler aufgetreten.',
     mortgage_total_must_be: 'Total-Betrag muss CHF {amount} entsprechen',
-    dossier_submit_error: 'Es fehlen benötigte Attribute, bitte prüfen Sie das Formular und versuchen Sie es erneut'
+    dossier_submit_error: 'Es fehlen benötigte Attribute, bitte prüfen Sie das Formular und versuchen Sie es erneut',
+    dossier_upload_error: 'Fehler beim Hochladen des Dossiers: {error}',
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',

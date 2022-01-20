@@ -271,7 +271,8 @@ export default {
     unknown: 'Unknown Error',
     pdf_generation_error: 'An error occurred while generating the PDF file.',
     mortgage_total_must_be: 'Total must be equal to CHF {amount}',
-    dossier_submit_error: 'Mandatory attributes are missing, please check the form and try again'
+    dossier_submit_error: 'Mandatory attributes are missing, please check the form and try again',
+    dossier_upload_error: 'Error while uploading dossier: {error}',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',

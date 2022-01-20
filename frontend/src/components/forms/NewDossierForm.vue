@@ -704,22 +704,67 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
     return
   }
 
-
-  // TODO: Don't forget about non-arrangeable tag
-
   // Creates a dossier
-  // await executeMutation(CREATE_DOSSIER, {
-  //   first_name: firstName,
-  //   last_name: lastName,
-  //   correspondence_address: address,
-  //   email: email,
-  //   phone: phone, // TODO on mutation
-  //   original_bank_name: bank,
-  //   original_bank_abbreviation: formData.original_bank_abbreviation,
-  //   born: formData.born,
-  //   property_address: formData.property_address,
-  //   loan_sum: formData.loan_sum
-  // })
+  const newDossierMutationResult = await executeMutation(CREATE_DOSSIER, {
+    createOfferInput: {
+      // Basic information
+      first_name: firstName,
+      last_name: lastName,
+      address,
+      email,
+      phone,
+      birthdate,
+
+      // Value purchase information
+      original_bank_name: bankName,
+      original_bank_abbreviation: bankAbbreviation,
+      property_type: propertyType,
+      owner_occupied: ownerOccupied,
+      purchase_date: purchaseDate,
+      purchase_price: purchasePrice,
+      market_value_estimation: marketValueEstimation,
+      mortgage_amount: mortgageAmount,
+
+      // Amortisation information
+      has_amortisation: hasAmortisation,
+      direct_amortisation: directAmortisation,
+      amortisation_amount: amortisationAmount,
+
+      // Building lease information
+      has_building_lease: hasBuildingLease,
+      public_landlord: publicLandlord,
+      building_lease_expiration_date: buildingLeaseExpirationDate,
+      building_lease_interest: buildingLeaseInterest,
+
+      // Renovation information
+      has_renovation: hasRenovation,
+      renovation_year: renovationYear,
+      renovation_price: renovationPrice,
+      // TODO mortgage partitions here
+
+      // Income/cost information
+      incomes,
+      child_allowances: childAllowances,
+      bonus,
+      assets,
+      leasing,
+      credit,
+      alimony,
+      various,
+      prosecutions,
+      loss_certificates: lossCertificates,
+
+      // Flag for dossier being non-arrangeable
+      non_arrangeable: nonArrangeable.value
+    }
+  }).catch((e: Error) => {
+    // Show error
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.dossier_upload_error', {error: e.message}))
+    )
+  })
+
+  console.log('REsult:', newDossierMutationResult)
 
   // TODO: route to final document
   await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
