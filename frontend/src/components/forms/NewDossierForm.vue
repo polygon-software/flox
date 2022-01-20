@@ -646,10 +646,13 @@ function onDiscard(){
  * @async
  * @returns {void}
  */
-async function onSubmit(formData: Record<string, Record<string, string>>) {
+async function onSubmit() {
+  const formData = form.values.value as Record<string, Record<string,unknown>>
+  console.log('form data:', formData)
+
   // Page 1
-  const firstName = formData.full_name?.first_name
-  const lastName = formData.full_name?.last_name
+  const firstName = formData.full_name?.firstName
+  const lastName = formData.full_name?.lastName
   const address =  formData.address
   const email = formData.email
   const phone = formData.phone_number
@@ -705,8 +708,8 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
   }
 
   // Creates a dossier
-  const newDossierMutationResult = await executeMutation(CREATE_DOSSIER, {
-    createOfferInput: {
+  await executeMutation(CREATE_DOSSIER, {
+    createDossierInput: {
       // Basic information
       first_name: firstName,
       last_name: lastName,
@@ -762,12 +765,13 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
     $errorService?.showErrorDialog(
       new Error(i18n.global.t('errors.dossier_upload_error', {error: e.message}))
     )
+  }).then((result) => {
+    console.log('result:', result)
+
+    // TODO: route to final document
+    void $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
   })
 
-  console.log('REsult:', newDossierMutationResult)
-
-  // TODO: route to final document
-  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
 }
 
 /**
