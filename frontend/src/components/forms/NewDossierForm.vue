@@ -37,6 +37,7 @@
                 :key="leftSection.key">
                 <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
                 <!-- NOTE: 'totalAmount' is passed because MortgageFields needs it for calculation -->
+                <!-- NOTE: Because of the bank list, we separately pass 'options' prop -->
                 <component
                   :is="field.component"
                   v-for="field in leftSection.fields"
@@ -44,6 +45,7 @@
                   v-bind="field.attributes"
                   v-model="form.values.value[field.key]"
                   :initial-value="form.values.value[field.key]"
+                  :options="field.key === 'bank' ? bankOptions : field.attributes.options"
                   :total-amount="mortgage"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
@@ -198,7 +200,7 @@
             <q-btn
               color="primary"
               :label="$t('buttons.next_step')"
-              :disable="!form.pageValid.value"
+              :disable="!form.pageValid.value || bankOptions.length === 0"
               @click="$refs.stepper.next()"
             />
           </div>

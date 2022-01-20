@@ -1,4 +1,5 @@
 import {
+  IS_NOT_NULL,
   IS_VALID_AMORTISATION,
   IS_VALID_BUILDING_LEASE,
   IS_VALID_DATE,
@@ -244,9 +245,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('account_data.bank'),
-      options: ['Raiffeisen', 'UBS', 'ZKB', 'LuKB'], //TODO: replace with real data: getBankNames query
+      options: [], // Replaced from NewDossierForm with actual bank data
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['Raiffeisen', 'UBS', 'ZKB', 'LuKB']) || i18n.global.t('errors.invalid_option')]
+      rules: [(val: string): boolean|string  => IS_NOT_NULL(val) || i18n.global.t('errors.invalid_option')]
     },
   },
   PROPERTY_TYPE: {
