@@ -117,12 +117,13 @@ import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
-import {MY_DOSSIERS, OFFER_FILE} from 'src/data/queries/QUERIES';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 import {uploadFiles} from 'src/helpers/file-helpers';
+import {MY_DOSSIERS} from 'src/data/queries/DOSSIER';
+import {OFFER_FILE} from 'src/data/queries/FILE';
 
 const $q: QVueGlobals = useQuasar()
 

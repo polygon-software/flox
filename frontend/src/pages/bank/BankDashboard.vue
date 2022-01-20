@@ -123,7 +123,6 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import {DOSSIER_FILE, DOSSIERS_BANK, MY_BANK} from 'src/data/queries/QUERIES';
 import {computed, inject, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
@@ -136,6 +135,9 @@ import {CREATE_OFFER, SET_OFFER_STATUS} from 'src/data/mutations/DOSSIER';
 import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
 import {ErrorService} from 'src/services/ErrorService';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {DOSSIERS_BANK} from 'src/data/queries/DOSSIER';
+import {MY_BANK} from 'src/data/queries/BANK';
+import {DOSSIER_FILE} from 'src/data/queries/FILE';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')

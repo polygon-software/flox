@@ -252,8 +252,8 @@ import {RouterService} from 'src/services/RouterService';
 import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {ALL_BANK_NAMES} from 'src/data/queries/QUERIES';
 import {ErrorService} from 'src/services/ErrorService';
+import {ALL_BANK_NAMES} from 'src/data/queries/BANK';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')

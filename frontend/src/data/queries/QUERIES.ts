@@ -18,9 +18,6 @@ import SOI_EMPLOYEE_QUERIES from 'src/data/queries/SOI_EMPLOYEE';
  * When adding a new query, also add it to the QUERIES array at the bottom of this file.
  */
 
-
-
-
 export const QUERIES = [
   ...DOSSIER_QUERIES,
   ...USER_QUERIES,
