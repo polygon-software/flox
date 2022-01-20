@@ -12,14 +12,14 @@
         type="number"
         :label="$t('form_for_clients.portion')+' '+ (index+1)"
         :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-        @change="emitValue"
+        @update:model-value="emitValue"
       ></q-input>
       <q-input
         v-model="partition.date"
         type="date"
         dense
         :label="$t('dossier.expiration_date')"
-        @change="checkMortgageExpirationDate"
+        @update:model-value="checkMortgageExpirationDate"
       />
     </div>
 
@@ -94,7 +94,12 @@ onMounted(() => {
  */
 const isValidTotal = computed(() => {
   let total = 0
-  mortgagePartitions.value.forEach((partition) => total += parseInt(partition.amount))
+  mortgagePartitions.value.forEach((partition) => {
+    if(partition.amount){
+      total += parseInt(partition.amount)
+    }
+  })
+
 
   return total === parseInt(props.totalAmount);
 })
@@ -118,7 +123,12 @@ function addPartition(){
  * @returns {void}
  */
 function emitValue() {
-  // TODO: if total not valid, emit as invalid?
+
+  // If total amount is not valid, don't emit
+  if(!isValidTotal.value){
+    emit('change', null)
+    return
+  }
 
   // Filter out nulls (if add button was pressed too often), except first partition
   const filteredPartitions = mortgagePartitions.value.filter((partition, index) => {

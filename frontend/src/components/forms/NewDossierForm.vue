@@ -36,6 +36,7 @@
                 v-for="leftSection in page.sectionsLHS"
                 :key="leftSection.key">
                 <strong class="q-py-xl q-my-xl">{{ leftSection.title }}</strong>
+                <!-- NOTE: 'totalAmount' is passed because MortgageFields needs it for calculation -->
                 <component
                   :is="field.component"
                   v-for="field in leftSection.fields"
@@ -43,6 +44,7 @@
                   v-bind="field.attributes"
                   v-model="form.values.value[field.key]"
                   :initial-value="form.values.value[field.key]"
+                  :total-amount="mortgage"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
                 />
@@ -307,7 +309,10 @@ const pages = [
       {
         key: 'property-purchase-detail',
         title: i18n.global.t('form_for_clients.purchase'),
-        fields: [FIELDS.DATE_OF_PURCHASE, FIELDS.ENFEOFFMENT],
+        fields: [
+          FIELDS.DATE_OF_PURCHASE,
+          FIELDS.ENFEOFFMENT
+        ],
       },
     ]
   },

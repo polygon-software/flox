@@ -321,7 +321,6 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(MortgageFields),
     attributes: {
       rules: [(val: Record<string, number|Date>[]): boolean|string => IS_VALID_MORTGAGE(val) || i18n.global.t('errors.invalid_mortgage')],
-      totalAmount: 20000 // TODO get actual value
     },
   },
   BUILDING_LEASE: {
