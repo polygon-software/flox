@@ -140,7 +140,8 @@ export default {
     send_by_email: 'Per Mail senden',
     print: 'Drucken',
     upload_documents: 'Dokumente hochladen',
-    save_and_print: 'Speichern & Drucken'
+    save_and_print: 'Speichern & Drucken',
+    back_to_dashboard: 'Zurück zum dashboard',
   },
   documents: {
     choose_documents: 'Dokumente wählen',
@@ -304,7 +305,7 @@ export default {
     title: 'Mitarbeiter Dashboard',
     applications: 'Anträge',
     search: 'Suche',
-    new_assignment: 'Neuen Auftrag erfassen',
+    new_assignment: 'Neues Dossier erfassen',
     date: 'Datum',
     date_of_birth: 'Geburtsdatum',
     customer: 'Kunde',

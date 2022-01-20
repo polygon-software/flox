@@ -138,7 +138,8 @@ export default {
     send_by_email: 'Send by E-Mail',
     print: 'Print',
     upload_documents: 'Upload Documents',
-    save_and_print: 'Save & Print'
+    save_and_print: 'Save & Print',
+    back_to_dashboard: 'Back to dashboard',
   },
   documents: {
     choose_documents: 'Choose documents',

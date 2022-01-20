@@ -317,7 +317,7 @@
         style="margin-bottom: 128px"
       >
         <q-btn
-          :label="$t('buttons.back')"
+          :label="$t('buttons.back_to_dashboard')"
           color="primary"
           flat
           :disable="loading"
@@ -361,10 +361,13 @@ import {executeQuery} from 'src/helpers/data-helpers';
 import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {ErrorService} from 'src/services/ErrorService';
+import {RouterService} from 'src/services/RouterService';
+import ROUTES from 'src/router/routes';
 
 const $q = useQuasar()
 const route = useRoute()
 const $errorService: ErrorService|undefined = inject('$errorService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const dossierUuid = route.query.did as string
 const dossier = ref(null)
@@ -427,10 +430,10 @@ async function uploadPdfDocument(){
 
 /**
  * Goes back to the previous form page
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
-function goBack(){
-  // TODO go to previous form page
+async function goBack(){
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
 }
 
 /**
