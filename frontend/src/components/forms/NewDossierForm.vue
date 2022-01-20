@@ -767,7 +767,7 @@ async function onSubmit() {
     console.log('result:', mutationResult)
 
     // TODO: route to final document
-    await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
+    await $routerService?.routeTo(ROUTES.DOSSIER_FINAL_DOCUMENT)
   } catch(err: Error){
     // Show error
     $errorService?.showErrorDialog(

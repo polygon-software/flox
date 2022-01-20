@@ -89,7 +89,7 @@ export class Dossier extends Person {
    */
 
   @Field(() => Bank, { description: 'Previous Bank of the customer' })
-  @ManyToOne(() => Bank)
+  @ManyToOne(() => Bank, { eager: true })
   original_bank: Bank;
 
   @Field(() => PROPERTY_TYPE, { description: 'Property type' })

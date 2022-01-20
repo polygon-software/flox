@@ -1,340 +1,341 @@
 <template>
   <q-page class="flex flex-center content-start">
-    <div class="column">
+<!--    <div class="column">-->
 
-      <!-- Loading overlay -->
-      <div
-        v-if="loading"
-        class="page flex flex-center loading-indicator"
-      >
-        <div class="column">
-          <q-spinner
-            size="50px"
-            color="white"
-          />
-          <h6 class="text-white">
-            {{ $t('general.loading') }}
-          </h6>
-        </div>
-      </div>
+<!--      &lt;!&ndash; Loading overlay &ndash;&gt;-->
+<!--      <div-->
+<!--        v-if="loading"-->
+<!--        class="page flex flex-center loading-indicator"-->
+<!--      >-->
+<!--        <div class="column">-->
+<!--          <q-spinner-->
+<!--            size="50px"-->
+<!--            color="white"-->
+<!--          />-->
+<!--          <h6 class="text-white">-->
+<!--            {{ $t('general.loading') }}-->
+<!--          </h6>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <!-- Page Print Preview -->
-      <q-card
-        id="preview"
-        class="page shadow-6"
-      >
-        <div class="subpage">
-          <!-- Logo + address row -->
-          <div class="row justify-between">
-            <img
-              alt="S.O.I. AG"
-              :src="require('src/assets/soi-logo.png')"
-              style="height: 15mm"
-              class="q-ma-sm"
-            >
-            <p class="text-grey-5" style="margin-top: 5mm">
-              {{infoString}}
-            </p>
-          </div>
+<!--      &lt;!&ndash; Page Print Preview &ndash;&gt;-->
+<!--      <q-card-->
+<!--        id="preview"-->
+<!--        class="page shadow-6"-->
+<!--      >-->
+<!--        <div class="subpage">-->
+<!--          &lt;!&ndash; Logo + address row &ndash;&gt;-->
+<!--          <div class="row justify-between">-->
+<!--            <img-->
+<!--              alt="S.O.I. AG"-->
+<!--              :src="require('src/assets/soi-logo.png')"-->
+<!--              style="height: 15mm"-->
+<!--              class="q-ma-sm"-->
+<!--            >-->
+<!--            <p class="text-grey-5" style="margin-top: 5mm">-->
+<!--              {{infoString}}-->
+<!--            </p>-->
+<!--          </div>-->
 
-          <!-- Contact info card -->
-          <q-card
-            class="bg-grey-1 sub-card"
-            flat
-            style="margin-top: 5mm"
-          >
-            <strong style="margin-bottom: 1mm">
-              {{$t('dossier.contact')}}
-            </strong>
+<!--          &lt;!&ndash; Contact info card &ndash;&gt;-->
+<!--          <q-card-->
+<!--            class="bg-grey-1 sub-card"-->
+<!--            flat-->
+<!--            style="margin-top: 5mm"-->
+<!--          >-->
+<!--            <strong style="margin-bottom: 1mm">-->
+<!--              {{$t('dossier.contact')}}-->
+<!--            </strong>-->
 
-            <div class="row">
-              <!-- Left column -->
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :content="contactInfo.fullName"
-                />
-                <DossierDocumentInfoField
-                  :content="contactInfo.street"
-                />
-                <DossierDocumentInfoField
-                  :content="`${contactInfo.zipCode} ${contactInfo.city}`"
-                />
-              </div>
+<!--            <div class="row">-->
+<!--              &lt;!&ndash; Left column &ndash;&gt;-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-right: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentInfoField-->
+<!--                  :content="contactInfo.fullName"-->
+<!--                />-->
+<!--                <DossierDocumentInfoField-->
+<!--                  :content="contactInfo.street"-->
+<!--                />-->
+<!--                <DossierDocumentInfoField-->
+<!--                  :content="`${contactInfo.zipCode} ${contactInfo.city}`"-->
+<!--                />-->
+<!--              </div>-->
 
-              <!-- Right column -->
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :label="$t('general.created_on')"
-                  :content="formatDate(dossierInfo.createdOn)"
-                />
+<!--              &lt;!&ndash; Right column &ndash;&gt;-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-left: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('general.created_on')"-->
+<!--                  :content="formatDate(dossierInfo.createdOn)"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :content="contactInfo.email"
-                />
+<!--                <DossierDocumentInfoField-->
+<!--                  :content="contactInfo.email"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :content="contactInfo.phone"
-                />
-              </div>
-            </div>
-          </q-card>
+<!--                <DossierDocumentInfoField-->
+<!--                  :content="contactInfo.phone"-->
+<!--                />-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </q-card>-->
 
-          <!-- Application info card -->
-          <q-card
-            flat
-            class="bg-grey-1 sub-card"
-          >
-            <strong>
-              {{$t('dossier.application')}}
-            </strong>
+<!--          &lt;!&ndash; Application info card &ndash;&gt;-->
+<!--          <q-card-->
+<!--            flat-->
+<!--            class="bg-grey-1 sub-card"-->
+<!--          >-->
+<!--            <strong>-->
+<!--              {{$t('dossier.application')}}-->
+<!--            </strong>-->
 
-            <!-- First section: general info -->
-            <div class="row">
-              <!-- Left upper column -->
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :label="$t('dossier.original_bank')"
-                  :content="dossierInfo.originalBankName"
-                />
+<!--            &lt;!&ndash; First section: general info &ndash;&gt;-->
+<!--            <div class="row">-->
+<!--              &lt;!&ndash; Left upper column &ndash;&gt;-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-right: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.original_bank')"-->
+<!--                  :content="dossierInfo.originalBankName"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :label="$t('dossier.purchase_price')"
-                  :content="dossierInfo.purchasePrice.toLocaleString() + currency"
-                />
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.purchase_price')"-->
+<!--                  :content="dossierInfo.purchasePrice.toLocaleString() + currency"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :label="$t('dossier.current_value')"
-                  :content="dossierInfo.currentValue.toLocaleString() + currency"
-                />
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.current_value')"-->
+<!--                  :content="dossierInfo.currentValue.toLocaleString() + currency"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :label="$t('dossier.current_mortgage')"
-                  :content="dossierInfo.currentMortgage.toLocaleString() + currency"
-                />
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.current_mortgage')"-->
+<!--                  :content="dossierInfo.currentMortgage.toLocaleString() + currency"-->
+<!--                />-->
 
-              </div>
+<!--              </div>-->
 
-              <!-- Right upper column -->
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :label="$t('dossier.object_type')"
-                  :content="dossierInfo.objectType"
-                />
+<!--              &lt;!&ndash; Right upper column &ndash;&gt;-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-left: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.object_type')"-->
+<!--                  :content="dossierInfo.objectType"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :label="$t('dossier.purchase_date')"
-                  :content="formatDate(dossierInfo.purchaseDate)"
-                />
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.purchase_date')"-->
+<!--                  :content="formatDate(dossierInfo.purchaseDate)"-->
+<!--                />-->
 
-                <!-- Spacer -->
-                <div style="height: 11mm"/>
+<!--                &lt;!&ndash; Spacer &ndash;&gt;-->
+<!--                <div style="height: 11mm"/>-->
 
-                <DossierDocumentInfoField
-                  :label="$t('dossier.amortization_amount')"
-                  :content="dossierInfo.amortizationAmount.toLocaleString() + currency"
-                />
-              </div>
-            </div>
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.amortization_amount')"-->
+<!--                  :content="dossierInfo.amortizationAmount.toLocaleString() + currency"-->
+<!--                />-->
+<!--              </div>-->
+<!--            </div>-->
 
-            <div class="dotted-line"/>
+<!--            <div class="dotted-line"/>-->
 
-            <!-- Second section: mortgage installments -->
-            <div class="row">
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-                <DossierDocumentInfoField
-                  v-for='(installment, index) in dossierInfo.installments'
-                  :key="'installment_'+index"
-                  :label="$t('dossier.installment') + ' ' + (index+1)"
-                  :content="installment.amount.toLocaleString() + currency"
-                />
+<!--            &lt;!&ndash; Second section: mortgage installments &ndash;&gt;-->
+<!--            <div class="row">-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-right: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentInfoField-->
+<!--                  v-for='(installment, index) in dossierInfo.installments'-->
+<!--                  :key="'installment_'+index"-->
+<!--                  :label="$t('dossier.installment') + ' ' + (index+1)"-->
+<!--                  :content="installment.amount.toLocaleString() + currency"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :label="$t('dossier.lending_value')"
-                  :content="dossierInfo.lendingValue + '%'"
-                  bold
-                />
-              </div>
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentInfoField
-                  v-for='(installment, index) in dossierInfo.installments'
-                  :key="'installment_'+ index"
-                  :label="$t('dossier.expiration_date')"
-                  :content="formatDate(installment.expirationDate)"
-                />
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.lending_value')"-->
+<!--                  :content="dossierInfo.lendingValue + '%'"-->
+<!--                  bold-->
+<!--                />-->
+<!--              </div>-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-left: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentInfoField-->
+<!--                  v-for='(installment, index) in dossierInfo.installments'-->
+<!--                  :key="'installment_'+ index"-->
+<!--                  :label="$t('dossier.expiration_date')"-->
+<!--                  :content="formatDate(installment.expirationDate)"-->
+<!--                />-->
 
-                <DossierDocumentBooleanField
-                  :value="dossierInfo.directAmortization"
-                  :label="$t('dossier.amortization_type')"
-                  :true-label="$t('dossier.direct')"
-                  :false-label="$t('dossier.indirect')"
-                />
-              </div>
-            </div>
+<!--                <DossierDocumentBooleanField-->
+<!--                  :value="dossierInfo.directAmortization"-->
+<!--                  :label="$t('dossier.amortization_type')"-->
+<!--                  :true-label="$t('dossier.direct')"-->
+<!--                  :false-label="$t('dossier.indirect')"-->
+<!--                />-->
+<!--              </div>-->
+<!--            </div>-->
 
-            <q-separator
-              color="grey-6"
-              style="margin: 3mm 0 3mm 0"
-            />
+<!--            <q-separator-->
+<!--              color="grey-6"-->
+<!--              style="margin: 3mm 0 3mm 0"-->
+<!--            />-->
 
-            <!-- Third section: renovation info -->
-            <div class="row">
-              <!-- Left column -->
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
+<!--            &lt;!&ndash; Third section: renovation info &ndash;&gt;-->
+<!--            <div class="row">-->
+<!--              &lt;!&ndash; Left column &ndash;&gt;-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-right: 5mm"-->
+<!--              >-->
 
-                <DossierDocumentBooleanField
-                  :value="dossierInfo.renovated"
-                  :label="$t('dossier.renovated')"
-                />
+<!--                <DossierDocumentBooleanField-->
+<!--                  :value="dossierInfo.renovated"-->
+<!--                  :label="$t('dossier.renovated')"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  v-if="dossierInfo.renovated"
-                  :label="$t('dossier.renovation_amount')"
-                  :content="dossierInfo.renovationAmount.toLocaleString() + currency"
-                />
-              </div>
+<!--                <DossierDocumentInfoField-->
+<!--                  v-if="dossierInfo.renovated"-->
+<!--                  :label="$t('dossier.renovation_amount')"-->
+<!--                  :content="dossierInfo.renovationAmount.toLocaleString() + currency"-->
+<!--                />-->
+<!--              </div>-->
 
-              <!-- Right column -->
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentInfoField
-                  v-if="dossierInfo.renovated"
-                  :label="$t('dossier.renovation_year')"
-                  :content="dossierInfo.renovationDate.getFullYear()"
-                />
-              </div>
-            </div>
+<!--              &lt;!&ndash; Right column &ndash;&gt;-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-left: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentInfoField-->
+<!--                  v-if="dossierInfo.renovated"-->
+<!--                  :label="$t('dossier.renovation_year')"-->
+<!--                  :content="dossierInfo.renovationDate.getFullYear()"-->
+<!--                />-->
+<!--              </div>-->
+<!--            </div>-->
 
-            <q-separator
-              color="grey-6"
-              style="margin: 3mm 0 3mm 0"
-            />
+<!--            <q-separator-->
+<!--              color="grey-6"-->
+<!--              style="margin: 3mm 0 3mm 0"-->
+<!--            />-->
 
-            <!-- Fourth section: salary/general info -->
-            <div class="row">
-              <!-- Left column -->
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :label="$t('dossier.salary')"
-                  :content="dossierInfo.salary.toLocaleString() + currency"
-                  bold
-                />
+<!--            &lt;!&ndash; Fourth section: salary/general info &ndash;&gt;-->
+<!--            <div class="row">-->
+<!--              &lt;!&ndash; Left column &ndash;&gt;-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-right: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.salary')"-->
+<!--                  :content="dossierInfo.salary.toLocaleString() + currency"-->
+<!--                  bold-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :label="$t('dossier.costs')"
-                  :content="dossierInfo.costs.toLocaleString() + currency"
-                />
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.costs')"-->
+<!--                  :content="dossierInfo.costs.toLocaleString() + currency"-->
+<!--                />-->
 
-                <DossierDocumentInfoField
-                  :label="$t('dossier.sustainability')"
-                  :content="dossierInfo.sustainability + '%'"
-                  bold
-                />
-              </div>
+<!--                <DossierDocumentInfoField-->
+<!--                  :label="$t('dossier.sustainability')"-->
+<!--                  :content="dossierInfo.sustainability + '%'"-->
+<!--                  bold-->
+<!--                />-->
+<!--              </div>-->
 
-              <!-- Right column -->
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentBooleanField
-                  :value="dossierInfo.buildingRight"
-                  :label="$t('dossier.building_right')"
-                />
+<!--              &lt;!&ndash; Right column &ndash;&gt;-->
+<!--              <div-->
+<!--                class="column col-6"-->
+<!--                style="padding-left: 5mm"-->
+<!--              >-->
+<!--                <DossierDocumentBooleanField-->
+<!--                  :value="dossierInfo.buildingRight"-->
+<!--                  :label="$t('dossier.building_right')"-->
+<!--                />-->
 
-                <DossierDocumentBooleanField
-                  :value="dossierInfo.debtEnforcements"
-                  :label="$t('dossier.debt_enforcements')"
-                />
+<!--                <DossierDocumentBooleanField-->
+<!--                  :value="dossierInfo.debtEnforcements"-->
+<!--                  :label="$t('dossier.debt_enforcements')"-->
+<!--                />-->
 
-                <DossierDocumentBooleanField
-                  :value="dossierInfo.lossCertificates"
-                  :label="$t('dossier.loss_certificates')"
-                />
-              </div>
-            </div>
+<!--                <DossierDocumentBooleanField-->
+<!--                  :value="dossierInfo.lossCertificates"-->
+<!--                  :label="$t('dossier.loss_certificates')"-->
+<!--                />-->
+<!--              </div>-->
+<!--            </div>-->
 
 
 
-          </q-card>
+<!--          </q-card>-->
 
-          <!-- Signature line -->
-          <div
-            class="row justify-end"
-            style="margin-top: 10mm"
-          >
-            <div class="column">
-              <p>
-                {{ $t('dossier.customer_confirms') }}
-              </p>
+<!--          &lt;!&ndash; Signature line &ndash;&gt;-->
+<!--          <div-->
+<!--            class="row justify-end"-->
+<!--            style="margin-top: 10mm"-->
+<!--          >-->
+<!--            <div class="column">-->
+<!--              <p>-->
+<!--                {{ $t('dossier.customer_confirms') }}-->
+<!--              </p>-->
 
-              <!-- Signature line -->
-              <div
-                style="border: none; border-bottom: 1px solid black; width: 90mm; margin-top: 12mm"
-              />
-            </div>
-          </div>
-        </div>
-      </q-card>
+<!--              &lt;!&ndash; Signature line &ndash;&gt;-->
+<!--              <div-->
+<!--                style="border: none; border-bottom: 1px solid black; width: 90mm; margin-top: 12mm"-->
+<!--              />-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </q-card>-->
 
-      <!-- Button row -->
-      <div
-        class="row justify-center button-row"
-        style="margin-bottom: 128px"
-      >
-        <q-btn
-          :label="$t('buttons.back')"
-          color="primary"
-          flat
-          :disable="loading"
-          @click="goBack"
-        />
+<!--      &lt;!&ndash; Button row &ndash;&gt;-->
+<!--      <div-->
+<!--        class="row justify-center button-row"-->
+<!--        style="margin-bottom: 128px"-->
+<!--      >-->
+<!--        <q-btn-->
+<!--          :label="$t('buttons.back')"-->
+<!--          color="primary"-->
+<!--          flat-->
+<!--          :disable="loading"-->
+<!--          @click="goBack"-->
+<!--        />-->
 
-        <q-btn
-          :label="$t('buttons.send_by_email')"
-          icon="mail_outline"
-          color="primary"
-          unelevated
-          :disable="loading"
-          style="margin: 0 32px 0 16px"
-          @click="sendDocument"
-        />
+<!--        <q-btn-->
+<!--          :label="$t('buttons.send_by_email')"-->
+<!--          icon="mail_outline"-->
+<!--          color="primary"-->
+<!--          unelevated-->
+<!--          :disable="loading"-->
+<!--          style="margin: 0 32px 0 16px"-->
+<!--          @click="sendDocument"-->
+<!--        />-->
 
-        <q-btn
-          :label="$t('buttons.print')"
-          icon="print"
-          color="primary"
-          unelevated
-          :disable="loading"
-          @click="printDocument"
-        />
-      </div>
-    </div>
+<!--        <q-btn-->
+<!--          :label="$t('buttons.print')"-->
+<!--          icon="print"-->
+<!--          color="primary"-->
+<!--          unelevated-->
+<!--          :disable="loading"-->
+<!--          @click="printDocument"-->
+<!--        />-->
+<!--      </div>-->
+<!--    </div>-->
+    BNANAO
   </q-page>
 </template>
 
@@ -347,8 +348,16 @@ import {useQuasar} from 'quasar';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {generatePdf} from 'src/helpers/pdf-helpers';
 import {onMounted, Ref, ref} from 'vue';
+import {useRoute} from 'vue-router';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
 
 const $q = useQuasar()
+const route = useRoute()
+
+
+const dossierUuid = route.query.did as string
+const dossier = ref(null)
 
 const loading = ref(true)
 const fileUuid: Ref<string|null> = ref(null)
@@ -357,53 +366,19 @@ const fileUuid: Ref<string|null> = ref(null)
 const infoString = 'Bahnhofstrasse 1 | 8001 Zürich | 043 222 22 22'
 const currency = ' CHF'
 
-// TODO replace with correct info from preceding form pages
-const contactInfo = {
-  fullName: 'Jusuf Amzai',
-  email: 'email@adresse.ch',
-  phone: '041 123 45 67',
-  street: 'Sowiesostrasse 1',
-  zipCode: '6003',
-  city: 'Sowieso',
-}
-const dossierInfo = {
-  uuid: 'a3a303ea-0793-4945-be9b-8a8412aad957', // Just an example...
-  createdOn: new Date(),
-  originalBankName: 'CLER',
-  purchasePrice: 1000000,
-  purchaseDate: new Date(),
-  currentValue: 1400000,
-  currentMortgage: 700000,
-  objectType: 'Wohnung',
-  amortizationAmount: 8000,
-  // TODO check for largest possible number of installments
-  installments: [
-    {
-      amount: 700000,
-      expirationDate: new Date,
-    },
-    {
-      amount: 700000,
-      expirationDate: new Date,
-    }
-  ],
-  lendingValue: 54,
-  directAmortization: true,
-  renovated: true,
-  renovationDate: new Date(),
-  renovationAmount: 50000,
-  salary: 200000,
-  costs: 60000,
-  sustainability: 29.5,
-  buildingRight: false,
-  debtEnforcements: false,
-  lossCertificates: false
-}
-
 //On mount, generate PDF
 onMounted(async () => {
+  // TODO error if no UUID given
+
+  const dossierQueryResult = await executeQuery(GET_DOSSIER, {uuid: dossierUuid})
+  console.log('Data is', dossierQueryResult)
+
+  dossier.value = dossierQueryResult.data.getDossier
+
+  console.log('Dossier is', dossier.value)
+
   // Upload PDF document
-  await uploadPdfDocument()
+  // await uploadPdfDocument()
 })
 
 /**
@@ -411,8 +386,6 @@ onMounted(async () => {
  * @returns {Promise<string>} - uploaded PrivateFile's UUID
  */
 async function uploadPdfDocument(){
-  const dossierUuid = dossierInfo.uuid
-
   // Generate PDF file
   const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
@@ -445,21 +418,22 @@ function goBack(){
  * @returns {Promise<void>} - done
  */
 function sendDocument(){
-  const dossierUuid = dossierInfo.uuid
-
-  const addresses = [
-    contactInfo.email,
-    'david.wyss@polygon-software.ch' // TODO get employee's own email address
-  ]
-
-  $q.dialog({
-    component: DossierDocumentEmailDialog,
-    componentProps: {
-      uuid: dossierUuid,
-      addresses,
-      fileUuid: fileUuid.value
-    }
-  })
+  // TODO re-enable
+  // const dossierUuid = dossierInfo.uuid
+  //
+  // const addresses = [
+  //   contactInfo.email,
+  //   'david.wyss@polygon-software.ch' // TODO get employee's own email address
+  // ]
+  //
+  // $q.dialog({
+  //   component: DossierDocumentEmailDialog,
+  //   componentProps: {
+  //     uuid: dossierUuid,
+  //     addresses,
+  //     fileUuid: fileUuid.value
+  //   }
+  // })
 }
 
 /**
