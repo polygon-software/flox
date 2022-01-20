@@ -238,17 +238,18 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, Ref, ref} from 'vue';
+import {computed, inject, onMounted, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm, useQuasar} from 'quasar';
 import {FIELDS} from 'src/data/FIELDS';
-import {executeMutation} from 'src/helpers/data-helpers';
+import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
+import {ALL_BANK_NAMES} from 'src/data/queries/QUERIES';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $q = useQuasar()
@@ -412,6 +413,9 @@ const form: Form = new Form(pages as Record<string, unknown>[])
 // Non-arrangeable tag
 const nonArrangeable = ref(false)
 
+// Bank list
+const bankOptions = ref([])
+
 /**
  * Mortgage volume
  */
@@ -547,6 +551,20 @@ const enfeoffmentEstimate = computed(() => {
     high: (mortgage.value/valueEstimate.value.high * 100).toFixed(2)
   }
 
+})
+
+// Upon mounting, get list of banks
+onMounted(async () => {
+  // Execute query
+  const banksQuery = await executeQuery(ALL_BANK_NAMES)
+  const bankList: Record<string, string>[] = banksQuery.data.getBankList
+
+  // Format so option group can use it
+  bankOptions.value = bankList.map((bank: Record<string, string>) => {
+    return {
+      label: `${bank.name} (${bank.abbreviation})`
+    }
+  })
 })
 
 /**
