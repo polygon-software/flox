@@ -253,8 +253,10 @@ import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {ALL_BANK_NAMES} from 'src/data/queries/QUERIES';
+import {ErrorService} from 'src/services/ErrorService';
 
 const $routerService: RouterService | undefined = inject('$routerService')
+const $errorService: ErrorService|undefined = inject('$errorService')
 const $q = useQuasar()
 
 // Form component reference
@@ -646,34 +648,34 @@ function onDiscard(){
  */
 async function onSubmit(formData: Record<string, Record<string, string>>) {
   // Page 1
-  const firstName = formData.full_name.first_name
-  const lastName = formData.full_name.last_name
+  const firstName = formData.full_name?.first_name
+  const lastName = formData.full_name?.last_name
   const address =  formData.address
   const email = formData.email
   const phone = formData.phone_number
   const birthdate = formData.date_of_birth
 
   // Page 2
-  const bankName =  formData.bank.value.name as string|null
-  const bankAbbreviation =  formData.bank.value.abbreviation as string|null
-  const propertyType = formData.property_type.value
+  const bankName =  formData.bank?.value.name as string|null
+  const bankAbbreviation =  formData.bank?.value.abbreviation as string|null
+  const propertyType = formData.property_type?.value
   const ownerOccupied = formData.owner_occupied
   const purchaseDate = formData.date_of_purchase
-  const purchasePrice = formData.enfeoffment.price
-  const marketValueEstimation = formData.enfeoffment.marketValueEstimation
+  const purchasePrice = formData.enfeoffment?.price
+  const marketValueEstimation = formData.enfeoffment?.marketValueEstimation
 
   // Page 3
-  const mortgage = formData.enfeoffment.currentValueOfMortgage
-  const hasAmortisation = formData.amortisation.hasAmortisation
-  const directAmortisation = formData.amortisation.directAmortisation
-  const amortisationAmount = formData.amortisation.amortisationAmount
-  const hasBuildingLease = formData.building_lease.hasBuildingLease
-  const publicLandlord = formData.building_lease.publicLandlord
-  const buildingLeaseExpirationDate = formData.building_lease.expirationDate
-  const buildingLeaseInterest = formData.building_lease.interest
-  const hasRenovation = formData.renovation.hasRenovation
-  const renovationPrice = formData.renovation.renovationPrice
-  const renovationYear = formData.renovation.renovationYear
+  const mortgage = formData.enfeoffment?.currentValueOfMortgage
+  const hasAmortisation = formData.amortisation?.hasAmortisation
+  const directAmortisation = formData.amortisation?.directAmortisation         // may be null
+  const amortisationAmount = formData.amortisation?.amortisationAmount         // may be null
+  const hasBuildingLease = formData.building_lease?.hasBuildingLease
+  const publicLandlord = formData.building_lease?.publicLandlord               // may be null
+  const buildingLeaseExpirationDate = formData.building_lease?.expirationDate  // may be null
+  const buildingLeaseInterest = formData.building_lease?.interest              // may be null
+  const hasRenovation = formData.renovation?.hasRenovation
+  const renovationPrice = formData.renovation?.renovationPrice                 // may be null
+  const renovationYear = formData.renovation?.renovationYear                   // may be null
   const mortgagePartitions = formData.mortgage
 
   // Page 4
@@ -688,12 +690,18 @@ async function onSubmit(formData: Record<string, Record<string, string>>) {
   const lossCertificates = formData.loss_certificates
   const prosecutions = formData.prosecutions
 
-  // TODO add ALL values!!
+  // Verify all mandatory attributes are present
   if([
-    firstName, lastName, address, email, phone, bankName, bankAbbreviation
+    firstName, lastName, address, email, phone, birthdate,
+    bankName, bankAbbreviation, propertyType, ownerOccupied, purchaseDate, purchasePrice, marketValueEstimation,
+    mortgage, hasAmortisation, hasBuildingLease, hasRenovation, mortgagePartitions,
+    incomes, childAllowances, bonus, assets, leasing, credit, alimony, various, lossCertificates, prosecutions
   ].some((value) => value === null || value === undefined)){
-    // TODO show error popup
-    throw new Error('FORM INCOMPLETE')
+    // Show error
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.dossier_submit_error'))
+    )
+    return
   }
 
   // Creates a dossier
