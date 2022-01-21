@@ -415,7 +415,7 @@ export default {
     enfeoffment_warning: 'Achtung: Aufgrund des Belehnungsgrades ist diese Hypothek nicht finanzierbar.'
   },
   // TODO IN ENGLISH FILE
-  dossier_file_type_enum: {
+  file_type_enum: {
     ID: 'ID-/Passkopie',
     SALARY: 'Lohnabrechnung',
     PENSION: 'Rentenbescheinigung',

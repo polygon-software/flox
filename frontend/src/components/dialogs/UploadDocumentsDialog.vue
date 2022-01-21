@@ -5,9 +5,9 @@
   >
     <q-card style="width: 600px;">
       <q-card-section>
-        <p>
+        <h6 class="q-ma-sm">
           {{ $t('employee_dashboard.all_documents') }}
-        </p>
+        </h6>
         <q-list
           bordered
           separator
@@ -25,7 +25,7 @@
                   </q-item-label>
                   <!-- File type -->
                   <q-item-label v-if="file.file_type !== DOSSIER_FILE_TYPE.NONE" caption>
-                    {{ $t(`dossier_file_type_enum.${file.file_type}`) }}
+                    {{ $t(`file_type_enum.${file.file_type}`) }}
                   </q-item-label>
                 </div>
                 <q-btn
