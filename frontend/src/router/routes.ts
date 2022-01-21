@@ -1,4 +1,7 @@
 import {RouteRecordRaw} from 'vue-router';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/USER';
+import {ROLE} from '../../../shared/definitions/ENUMS';
 
 /**
  * This file defines the routes available within the application
@@ -8,11 +11,7 @@ import {RouteRecordRaw} from 'vue-router';
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
   // TODO: Depending on user's role, redirect to respective dashboard --> see 'project-bigabig' for reference
-  'MAIN': {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/MainPage.vue') }],
-  },
+  'MAIN': () => getUserRoleRoute(),
 
   'LOGIN': {
     path: '/login',
@@ -170,5 +169,37 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SET_PASSWORD,
 ]
 
-//TODO: Add semi-protected routes
 
+
+/**
+ * Returns the route to the dashboard for the currently logged in user
+ * @async
+ * @returns {any} - the layout component
+ */
+async function getUserRoleRoute(): Promise<any>{
+  // Get user's data from backend
+  const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+
+  // Non-logged in: Redirect to 404
+  if(!queryResult?.data?.myUser){
+    return ROUTES.LOGIN
+  }
+
+  const userData = queryResult.data.myUser as Record<string, unknown>
+  const userRole = userData.role;
+
+  switch(userRole){
+    case ROLE.SOI_ADMIN:
+      return ROUTES.ADMIN_EMPLOYEES
+    case ROLE.SOI_EMPLOYEE:
+      return ROUTES.APPLICATIONS
+    case ROLE.COMPANY:
+      return ROUTES.MANAGEMENT_EMPLOYEE_DATA
+    case ROLE.EMPLOYEE:
+      return ROUTES.EMPLOYEE_DASHBOARD
+    case ROLE.BANK:
+      return ROUTES.BANK_DASHBOARD
+    default:
+      return ROUTES.LOGIN
+  }
+}
