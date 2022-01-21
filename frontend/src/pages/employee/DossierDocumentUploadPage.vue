@@ -529,7 +529,7 @@ async function uploadAllFiles(){
       })
     })
   })
-  await uploadFiles(filesToUpload, `/uploadDossierFile?did=${dossierUuid.toString()}`, 'myDossiers')
+  await uploadFiles(filesToUpload, `/uploadDossierFile?did=${dossierUuid.toString()}`, 'getMyDossiers')
 
   if(filesToDelete.value.length>0){
     await executeMutation(REMOVE_FILES_DOSSIER, {uuid: dossierUuid, fileUuids: filesToDelete.value})

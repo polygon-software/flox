@@ -220,9 +220,9 @@ export const REMOVE_FILES_DOSSIER = {
         __typename
         documents{
           uuid
-          __typename
           key
           file_type
+          __typename
         }
       }
     }
