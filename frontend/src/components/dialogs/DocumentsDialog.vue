@@ -12,9 +12,11 @@
           bordered
           separator
         >
+          <!-- A single document (highlighted if it's a dossier's final summary document) -->
           <q-item
             v-for="(file) in props.files"
             :key="file.uuid"
+            :style="file.key.substring(37) === finalDocumentName && uploadEnabled ? 'background: rgba(253, 216, 53, 0.4)' : ''"
           >
             <q-item-section>
               <div class="row flex justify-between content-center" style="height: 50px">
@@ -97,6 +99,9 @@ const props = defineProps({
   }
 })
 
+// Name of dossier's final document (used to prettify in template)
+const finalDocumentName = props.dossierUuid ? `Dossier_${props.dossierUuid}.pdf`: ''
+
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
@@ -143,8 +148,6 @@ function onUpload() {
  */
 function getFileName(key: string){
   const shortName = key.substring(37)
-  const finalDocumentName = props.dossierUuid ? `Dossier_${props.dossierUuid}.pdf`: ''
   return shortName === finalDocumentName ? i18n.global.t('documents.final_document') + '.pdf' : shortName
 }
-
 </script>
