@@ -55,17 +55,10 @@
         </q-td>
         <q-td key="uploads">
           <q-btn
-            icon="download"
+            icon="picture_as_pdf"
             color="primary"
             round
             @click="()=>showDossierDocuments(_props.row)"
-          />
-          <q-btn
-            class="q-ml-sm"
-            icon="upload_file"
-            color="primary"
-            round
-            @click="()=>uploadDossierDocuments(_props.row)"
           />
         </q-td>
         <q-td key="offers" @click="()=>expandOffers(_props.row.uuid)">
@@ -116,10 +109,10 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, Ref, ref} from 'vue';
+import {computed, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import DownloadDocumentsDialog from 'src/components/dialogs/DownloadDocumentsDialog.vue';
+import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
@@ -128,14 +121,10 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
-import {uploadFiles} from 'src/helpers/file-helpers';
 import {MY_DOSSIERS} from 'src/data/queries/DOSSIER';
 import {DOSSIER_FILE, OFFER_FILE} from 'src/data/queries/FILE';
-import {RouterService} from 'src/services/RouterService';
-import ROUTES from 'src/router/routes';
 
 const $q: QVueGlobals = useQuasar()
-const $routerService: RouterService|undefined = inject('$routerService')
 
 // Selection must be an array
 const selected = ref([])
@@ -202,26 +191,15 @@ function onUpdateStatus(status: DOSSIER_STATUS, uuid:string){
 }
 
 /**
- * Routes to the page where documents can be uploaded for a given dossier
- * @param {Record<string, unknown>} dossier - the dossier
- * @returns {Promise<void>} - done
- */
-async function uploadDossierDocuments(dossier: Record<string, unknown>) {
-  await $routerService?.routeTo(ROUTES.DOSSIER_DOCUMENT_UPLOAD, {did: dossier.uuid})
-}
-
-
-/**
  * Shows a dialog where the dossier's files can be downloaded
  * @param {Record<string, unknown>} dossier - a dossier
  * @returns {void} - void
  */
 function showDossierDocuments(dossier: Record<string, unknown>): void {
-  const files: Record<string, unknown>[] = _.cloneDeep(dossier.documents) ?? []
+  const files: Record<string, unknown>[] = dossier.documents ?? []
 
   $q.dialog({
-    title: 'DownloadDocumentsDialog',
-    component: DownloadDocumentsDialog,
+    component: UploadDocumentsDialog,
     componentProps: {
       files,
       query: DOSSIER_FILE
@@ -236,7 +214,6 @@ function showDossierDocuments(dossier: Record<string, unknown>): void {
 function showOfferDocuments(offer: Record<string, unknown>): void {
   const files = offer.documents ?? []
   $q.dialog({
-    title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,
     componentProps: {
       files,

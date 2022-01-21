@@ -59,7 +59,6 @@ const props = defineProps({
     required: false,
     default: PRIVATE_FILE
   }
-
 })
 
 // Mandatory - do not remove!

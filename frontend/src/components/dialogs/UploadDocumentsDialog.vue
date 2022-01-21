@@ -13,59 +13,27 @@
           separator
         >
           <q-item
-            v-for="(file, index) in props.entity.documents"
+            v-for="(file) in props.files"
             :key="file.uuid"
           >
             <q-item-section>
               <div class="row flex justify-between content-center" style="height: 50px">
-                <p class="col-8">{{ file.key.substring(32) }}</p>
+                <p class="col-8">{{ file.key.substring(37) }}</p>
                 <q-btn
-                  style="margin-left: 12px"
                   color="primary"
                   icon="download"
-                  @click="loadFile(file)"
-                />
-                <q-btn
-                  style="margin-left: 12px"
-                  color="primary"
-                  icon="delete"
-                  @click="remove(index)"
+                  @click="openFile(file.uuid)"
                 />
               </div>
             </q-item-section>
           </q-item>
         </q-list>
       </q-card-section>
-      <q-card-section>
-        <div>
-          <q-file
-            v-model="files"
-            class="q-mb-md"
-            outlined
-            accept="image/*, .pdf"
-            :label="$t('employee_dashboard.upload_more_documents')"
-            stack-label
-            clearable
-            use-chips
-            multiple
-            append
-          />
-          <q-btn
-            v-if="files.length !== 0"
-            class="q-ma-md"
-            :label="$t('status.uploading')"
-            color="primary"
-            flat
-            @click="upload"
-          />
-        </div>
-      </q-card-section>
       <q-card-actions>
         <q-btn
           class="q-ma-md"
-          :label="$t('buttons.cancel')"
+          :label="$t('buttons.ok')"
           color="primary"
-          flat
           @click="onCancel"
         />
       </q-card-actions>
@@ -73,25 +41,31 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {ref, Ref} from 'vue';
+import {inject, ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
 import { executeQuery} from 'src/helpers/data-helpers';
 import {PRIVATE_FILE} from 'src/data/queries/FILE';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
+import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const files = ref([]) as Ref<Array<File>>
-
 const props = defineProps({
-  entity: {
-    required: true,
-    type: Object
-  },
-  uploadGenericFile: {
-    type: Function,
+  files: {
+    type: Array,
     required: true
+  },
+  query: {
+    type: Object,
+    required: false,
+    default: PRIVATE_FILE
   }
 })
+
+// TODO: Special handling for final document
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
@@ -106,36 +80,24 @@ function hide(): void {
 }
 
 /**
- * Uploads the selected files from the desktop to the existing files
- * @returns {void}
- */
-async function upload(): Promise<void> {
-  const reformatted:Record<string, File> = {}
-  files.value.forEach((file)=>{
-    reformatted[file.name] = file
-  })
-  await props.uploadGenericFile(reformatted)
-}
-
-/**
- * After clicking on the delete icon, removes the file
- * @param {number} index - index number of the file which should be removed
- * @returns {void}
- */
-function remove(index: number) {
-  // TODO: actual implementation of file removal
-  console.log(index)
-}
-
-/**
- * open File based on URL
- * @param {Record<string, string>} file - file to open
+ * Routes to the page where documents can be uploaded for a given dossier
+ * @param {Record<string, unknown>} dossier - the dossier
  * @returns {Promise<void>} - done
  */
-async function loadFile(file: Record<string, string>) {
-  const queryResult = await executeQuery(PRIVATE_FILE, {uuid: file.uuid})
-  const loadedFile = queryResult.data[PRIVATE_FILE.cacheLocation] as Record<string, string>
-  openURL(loadedFile.url)
+async function uploadDossierDocuments(dossier: Record<string, unknown>) {
+  await $routerService?.routeTo(ROUTES.DOSSIER_DOCUMENT_UPLOAD, {did: dossier.uuid})
+}
+
+/**
+ * Fetches and opens a file
+ * @param {string} fileUuid - uuid of file
+ * @returns {Promise<void>} - done
+ */
+async function openFile(fileUuid: string): Promise<void> {
+  const query = props.query as QueryObject
+  const queryRes = await executeQuery(query, {uuid: fileUuid})
+  const file = queryRes.data[query.cacheLocation] as Record<string, unknown>
+  openURL(file.url as string)
 }
 
 // eslint-disable-next-line require-jsdoc
