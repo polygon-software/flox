@@ -90,7 +90,7 @@ const fromDate = ref(dateToInputString(dateFilter.value?.fromDate as Date))
 const toDate = ref(dateToInputString(dateFilter.value?.toDate as Date))
 
 /**
- * Updates from and to date
+ * Updates from and to date according to the user input
  * @returns {void}
  */
 function filterSelected() {

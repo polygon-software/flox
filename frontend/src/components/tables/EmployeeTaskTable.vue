@@ -130,6 +130,7 @@ const columns = [
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
+// Filters the returned data by date
 const computedResult = computed(()=>{
   let filteredResult = []
   for (const query in queryResult.value){
