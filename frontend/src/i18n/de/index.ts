@@ -150,6 +150,7 @@ export default {
     additional_documents: 'Weitere Dokumente',
     add_additional_documents: 'Weitere hinzufügen',
     optional_documents: 'Optionale Dokumente',
+    final_document: 'Abschlussdokument',
     financials: {
       title: 'Finanzdokumente',
       id: 'ID-/Passkopie',

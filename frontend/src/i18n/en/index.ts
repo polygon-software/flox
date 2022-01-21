@@ -148,6 +148,7 @@ export default {
     additional_documents: 'Additional Documents',
     add_additional_documents: 'Add more',
     optional_documents: 'Optional documents',
+    final_document: 'Summary Document',
     financials: {
       title: 'Financial documents',
       id: 'ID/Passport copy',

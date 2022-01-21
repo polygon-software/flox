@@ -18,7 +18,9 @@
           >
             <q-item-section>
               <div class="row flex justify-between content-center" style="height: 50px">
-                <p class="col-8">{{ file.key.substring(37) }}</p>
+                <p class="col-8">
+                  {{ getFileName(file.key) }}
+                </p>
                 <q-btn
                   color="primary"
                   icon="download"
@@ -32,9 +34,18 @@
       <q-card-actions>
         <q-btn
           class="q-ma-md"
-          :label="$t('buttons.ok')"
+          :label="$t('buttons.close')"
           color="primary"
+          flat
           @click="onCancel"
+        />
+
+        <q-btn
+          class="q-ma-md"
+          :label="$t('buttons.upload_documents')"
+          icon="upload"
+          color="primary"
+          @click="uploadDossierDocuments"
         />
       </q-card-actions>
     </q-card>
@@ -48,6 +59,7 @@ import {PRIVATE_FILE} from 'src/data/queries/FILE';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {i18n} from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -56,6 +68,10 @@ const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 const props = defineProps({
   files: {
     type: Array,
+    required: true
+  },
+  dossierUuid: {
+    type: String,
     required: true
   },
   query: {
@@ -81,11 +97,11 @@ function hide(): void {
 
 /**
  * Routes to the page where documents can be uploaded for a given dossier
- * @param {Record<string, unknown>} dossier - the dossier
  * @returns {Promise<void>} - done
  */
-async function uploadDossierDocuments(dossier: Record<string, unknown>) {
-  await $routerService?.routeTo(ROUTES.DOSSIER_DOCUMENT_UPLOAD, {did: dossier.uuid})
+async function uploadDossierDocuments() {
+  console.log('UPLOAD for dossier')
+  await $routerService?.routeTo(ROUTES.DOSSIER_DOCUMENT_UPLOAD, {did: props.dossierUuid})
 }
 
 /**
@@ -103,6 +119,17 @@ async function openFile(fileUuid: string): Promise<void> {
 // eslint-disable-next-line require-jsdoc
 function onCancel(): void {
   hide()
+}
+
+/**
+ * Returns the display file name for a given file key
+ * @param {string} key - PrivateFile's key (UUID followed by filename)
+ * @returns {string} - file to show
+ */
+function getFileName(key: string){
+  const shortName = key.substring(37)
+  const finalDocumentName = `Dossier_${props.dossierUuid}.pdf`
+  return shortName === finalDocumentName ? i18n.global.t('documents.final_document') + '.pdf' : shortName
 }
 
 </script>

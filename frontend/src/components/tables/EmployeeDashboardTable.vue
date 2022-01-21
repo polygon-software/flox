@@ -202,6 +202,7 @@ function showDossierDocuments(dossier: Record<string, unknown>): void {
     component: UploadDocumentsDialog,
     componentProps: {
       files,
+      dossierUuid: dossier.uuid,
       query: DOSSIER_FILE
     }
   })
