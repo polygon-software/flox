@@ -126,7 +126,6 @@ const columns = [
   { name: 'prov_emp', label: i18n.global.t('account_data.provision_employee'), field: 'prov_emp', sortable: true, align: 'center' },
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
   { name: 'prov_ratio', label: i18n.global.t('account_data.provision_ratio'), field: 'prov_ratio', sortable: false, align: 'center' },
-  { name: 'date', label: i18n.global.t('general.date'), field: 'date', sortable: true, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
@@ -134,11 +133,11 @@ const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<R
 const computedResult = computed(()=>{
   let filteredResult = []
   for (const query in queryResult.value){
-    if(query.date < fromDate && query.date > toDate){
+    if(query.date.getTime() < fromDate.value.getTime() && query.date.getTime() > toDate.value.getTime()){
       filteredResult.push(query)
     }
   }
-  return queryResult.value ?? []
+  return filteredResult ?? []
 })
 
 /**
