@@ -219,12 +219,6 @@ async function uploadDossierDocuments(dossier: Record<string, unknown>) {
 function showDossierDocuments(dossier: Record<string, unknown>): void {
   const files: Record<string, unknown>[] = _.cloneDeep(dossier.documents) ?? []
 
-  // Add final document, if any
-  if(dossier.final_document){
-    files.push(dossier.final_document)
-    // TODO: this has no valid link to dossier... fix
-  }
-
   $q.dialog({
     title: 'DownloadDocumentsDialog',
     component: DownloadDocumentsDialog,
