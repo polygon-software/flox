@@ -103,8 +103,9 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
-import DownloadDocumentsDialog from 'components/dialogs/DownloadDocumentsDialog.vue';
+import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import {REJECTED_DOSSIERS} from 'src/data/queries/DOSSIER';
+import {DOSSIER_FILE} from 'src/data/queries/FILE';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -136,10 +137,10 @@ const rows = computed(()=>{
  */
 function showAllDocuments(files: Record<string, unknown>[]) {
   $q.dialog({
-    title: 'DownloadDocumentsDialog',
-    component: DownloadDocumentsDialog,
-    componentProps:{
+    component: DocumentsDialog,
+    componentProps: {
       files,
+      query: DOSSIER_FILE,
     }
   })
 }

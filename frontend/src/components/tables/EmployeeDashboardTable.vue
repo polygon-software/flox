@@ -111,8 +111,7 @@
 <script setup lang="ts">
 import {computed, inject, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import DownloadDocumentsDialog from 'src/components/dialogs/DownloadDocumentsDialog.vue';
-import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
+import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
@@ -202,11 +201,12 @@ function showDossierDocuments(dossier: Record<string, unknown>): void {
   const files: Record<string, unknown>[] = dossier.documents ?? []
 
   $q.dialog({
-    component: UploadDocumentsDialog,
+    component: DocumentsDialog,
     componentProps: {
       files,
       dossierUuid: dossier.uuid,
-      query: DOSSIER_FILE
+      query: DOSSIER_FILE,
+      uploadEnabled: true
     }
   }).onOk(() => {
     // Upload documents
@@ -231,7 +231,7 @@ async function uploadDossierDocuments(uuid) {
 function showOfferDocuments(offer: Record<string, unknown>): void {
   const files = offer.documents ?? []
   $q.dialog({
-    component: DownloadDocumentsDialog,
+    component: DocumentsDialog,
     componentProps: {
       files,
       query: OFFER_FILE

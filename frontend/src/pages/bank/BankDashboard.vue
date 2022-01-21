@@ -126,7 +126,7 @@ import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import {computed, inject, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import DownloadDocumentsDialog from 'components/dialogs/DownloadDocumentsDialog.vue';
+import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import UploadOfferDialog from 'components/dialogs/UploadOfferDialog.vue';
 import RejectDossierDialog from 'components/dialogs/RejectDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
@@ -208,8 +208,7 @@ async function createOfferForDossier(dossier: Record<string, unknown>){
  */
 function showAllDocuments(dossier: Record<string, unknown>) {
   $q.dialog({
-    title: 'DownloadDocumentsDialog',
-    component: DownloadDocumentsDialog,
+    component: DocumentsDialog,
     componentProps: {
       files: dossier.documents,
       query: DOSSIER_FILE
