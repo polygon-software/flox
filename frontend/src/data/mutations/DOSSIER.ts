@@ -6,16 +6,39 @@ export const CREATE_DOSSIER = {
     mutation createDossier($createDossierInput: CreateDossierInput!){
       createDossier (createDossierInput: $createDossierInput) {
         uuid
+        status
+        non_arrangeable
         created_at
         first_name
         last_name
         email
         phone
         birthdate
-        non_arrangeable
-        status
+        has_amortisation
+        direct_amortisation
+        amortisation_amount
+        has_building_lease
+        has_renovation
+        renovation_price
+        renovation_year
+        readable_id
+        purchase_date
+        purchase_price
+        property_type
+        market_value_estimation
         mortgage_amount
-        non_arrangeable
+        prosecutions
+        loss_certificates
+        amortisation_amount
+        affordability
+        eligible_income
+        total_costs
+        value_estimate_low
+        value_estimate_high
+        enfeoffment_estimate_low
+        enfeoffment_estimate_high
+        partition_amounts
+        partition_dates
         address {
           uuid
           street
@@ -32,14 +55,17 @@ export const CREATE_DOSSIER = {
         }
         employee {
           uuid
+          email
           __typename
         }
         documents{
           uuid
+          key
           __typename
         }
         final_document{
           uuid
+          key
           __typename
         }
         offers{
