@@ -45,25 +45,22 @@
           :label="$t('buttons.upload_documents')"
           icon="upload"
           color="primary"
-          @click="uploadDossierDocuments"
+          @click="onUpload"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {inject, ref, Ref} from 'vue';
+import {ref, Ref} from 'vue';
 import {QDialog, openURL} from 'quasar';
 import { executeQuery} from 'src/helpers/data-helpers';
 import {PRIVATE_FILE} from 'src/data/queries/FILE';
-import ROUTES from 'src/router/routes';
-import {RouterService} from 'src/services/RouterService';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {i18n} from 'boot/i18n';
 
-const $routerService: RouterService|undefined = inject('$routerService')
-
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+const emit = defineEmits(['ok'])
 
 const props = defineProps({
   files: {
@@ -81,8 +78,6 @@ const props = defineProps({
   }
 })
 
-// TODO: Special handling for final document
-
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
@@ -95,14 +90,6 @@ function hide(): void {
   dialog.value?.hide()
 }
 
-/**
- * Routes to the page where documents can be uploaded for a given dossier
- * @returns {Promise<void>} - done
- */
-async function uploadDossierDocuments() {
-  console.log('UPLOAD for dossier')
-  await $routerService?.routeTo(ROUTES.DOSSIER_DOCUMENT_UPLOAD, {did: props.dossierUuid})
-}
 
 /**
  * Fetches and opens a file
@@ -117,8 +104,17 @@ async function openFile(fileUuid: string): Promise<void> {
 }
 
 // eslint-disable-next-line require-jsdoc
-function onCancel(): void {
+function onCancel() {
   hide()
+}
+
+/**
+ * On upload button click, hide & emit 'ok'
+ * @returns {void}
+ */
+function onUpload() {
+  emit('ok')
+  hide();
 }
 
 /**

@@ -109,7 +109,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, Ref, ref} from 'vue';
+import {computed, inject, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
 import DownloadDocumentsDialog from 'src/components/dialogs/DownloadDocumentsDialog.vue';
 import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
@@ -123,8 +123,11 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 import {MY_DOSSIERS} from 'src/data/queries/DOSSIER';
 import {DOSSIER_FILE, OFFER_FILE} from 'src/data/queries/FILE';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
 
 const $q: QVueGlobals = useQuasar()
+const $routerService: RouterService|undefined = inject('$routerService')
 
 // Selection must be an array
 const selected = ref([])
@@ -205,8 +208,21 @@ function showDossierDocuments(dossier: Record<string, unknown>): void {
       dossierUuid: dossier.uuid,
       query: DOSSIER_FILE
     }
+  }).onOk(() => {
+    // Upload documents
+    void uploadDossierDocuments(dossier.uuid)
   })
 }
+
+/**
+ * Routes to the page where documents can be uploaded for a given dossier
+ * @param {string} uuid - dossier UUID
+ * @returns {Promise<void>} - done
+ */
+async function uploadDossierDocuments(uuid) {
+  await $routerService?.routeTo(ROUTES.DOSSIER_DOCUMENT_UPLOAD, {did: uuid})
+}
+
 /**
  * Shows a dialog where the offer's files can be downloaded
  * @param {Record<string, unknown>} offer - an offer
