@@ -86,9 +86,11 @@ const mortgagePartitions = ref(props.initialValue as Record<string, unknown>[])
 // Maximum number of partitions
 const maxPartitions = 4
 
-// On mount, preset initial partition to full value
+// On mount, preset initial partition to full value if no initial value is given
 onMounted(() => {
-  mortgagePartitions.value[0].amount = props.totalAmount
+  if(!mortgagePartitions.value[0].amount){
+    mortgagePartitions.value[0].amount = props.totalAmount
+  }
 })
 
 /**
