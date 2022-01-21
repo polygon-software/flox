@@ -14,7 +14,6 @@ import { Bank } from '../../bank/entities/bank.entity';
 import { DOSSIER_STATUS, PROPERTY_TYPE } from '../../../ENUM/ENUMS';
 import { Employee } from '../../employee/entities/employee.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
-import { IsNumber } from 'class-validator';
 
 @Entity()
 @ObjectType()
