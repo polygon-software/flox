@@ -1,11 +1,20 @@
 <template>
   <div class="row">
+    <q-select
+      dense
+      filled
+      clearable
+      v-model="dateFilter"
+      :options="options"
+      :label="$t('dossier.date_filter')"
+      @update:model-value="filterSelected"/>
     <q-input
       v-model="fromDate"
       type="date"
       :label="$t('general.from')"
       outlined
       dense
+      style="margin: 0 10px 0 10px"
       @change="emitValues"
     />
     <q-input
@@ -29,7 +38,7 @@
       @change="emitValues"
     >
       <template #prepend>
-        <q-icon name="search" />
+        <q-icon name="search"/>
       </template>
     </q-input>
   </div>
@@ -37,18 +46,60 @@
 
 <script setup lang="ts">
 import {defineEmits, ref} from 'vue';
+import {i18n} from "boot/i18n";
+import {dateToInputString, getCurrentQuarter} from "src/helpers/date-helpers";
 
 const emit = defineEmits(['change'])
+const today = new Date()
+
+
+const options = [
+  {
+    key: 'year-to-date',
+    label: i18n.global.t('dossier.year_to_date'),
+    fromDate: new Date(today.getFullYear(), 0, 1), // January 1st current year
+    toDate: today,
+  },
+  {
+    key: 'current-quarter',
+    label: i18n.global.t('dossier.current_quarter'),
+    fromDate:  getCurrentQuarter()[0],
+    toDate: getCurrentQuarter()[1],
+  },
+  {
+    key: 'current-month',
+    label: i18n.global.t('dossier.current_month'),
+    fromDate:  new Date(today.getFullYear(), today.getMonth(), 1), // 1st current month
+    toDate: new Date(today.getFullYear(), today.getMonth()+1, 0), // last current month
+  },
+  {
+    key: 'past-365-days',
+    label: i18n.global.t('dossier.past_365_days'),
+    fromDate: new Date(today.getFullYear() - 1, today.getMonth(), today.getDate()), // a year ago today
+    toDate: today,
+  },
+]
+
 
 const search = ref('')
-const fromDate = ref(null)
-const toDate = ref(null)
+const dateFilter = ref(options[0])
+const fromDate = ref(dateToInputString(dateFilter.value.fromDate))
+const toDate = ref(dateToInputString(dateFilter.value.toDate))
+
+/**
+ * Updates from and to date
+ * @returns {void}
+ */
+function filterSelected() {
+  fromDate.value = dateToInputString(dateFilter.value.fromDate)
+  toDate.value = dateToInputString(dateFilter.value.toDate)
+}
 
 /**
  * Emits the current state
  * @returns {void}
  */
-function emitValues(){
+function emitValues() {
   emit('change', {
     search: search.value,
     fromDate: fromDate.value,
