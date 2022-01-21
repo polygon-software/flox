@@ -148,7 +148,13 @@ function onUpload() {
  * @returns {string} - file to show
  */
 function getFileName(key: string){
-  const shortName = key.substring(37)
+  const maxLength = 32 // Maximum name length, excluding suffix
+  let shortName = key.substring(37)
+
+  // Shorten, if needed
+  if(shortName.length > maxLength && shortName != finalDocumentName){
+    shortName = shortName.substring(0, maxLength) + '[...].pdf'
+  }
   return shortName === finalDocumentName ? i18n.global.t('documents.final_document') + '.pdf' : shortName
 }
 </script>
