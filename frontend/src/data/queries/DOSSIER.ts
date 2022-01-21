@@ -60,11 +60,13 @@ export const MY_DOSSIERS = {
         documents{
           uuid
           key
+          file_type
           __typename
         }
         final_document{
           uuid
           key
+          file_type
           __typename
         }
         offers{
@@ -137,10 +139,14 @@ export const REJECTED_DOSSIERS = {
         }
         documents{
           uuid
+          file_type
+          key
           __typename
         }
         final_document{
           uuid
+          file_type
+          key
           __typename
         }
         offers{

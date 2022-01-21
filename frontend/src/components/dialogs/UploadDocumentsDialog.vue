@@ -18,9 +18,16 @@
           >
             <q-item-section>
               <div class="row flex justify-between content-center" style="height: 50px">
-                <p class="col-8">
-                  {{ getFileName(file.key) }}
-                </p>
+                <div class="column">
+                  <!-- File name -->
+                  <q-item-label>
+                    {{ getFileName(file.key) }}
+                  </q-item-label>
+                  <!-- File type -->
+                  <q-item-label v-if="file.file_type !== DOSSIER_FILE_TYPE.NONE" caption>
+                    {{ $t(`dossier_file_type_enum.${file.file_type}`) }}
+                  </q-item-label>
+                </div>
                 <q-btn
                   color="primary"
                   icon="download"
@@ -58,6 +65,7 @@ import { executeQuery} from 'src/helpers/data-helpers';
 import {PRIVATE_FILE} from 'src/data/queries/FILE';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {i18n} from 'boot/i18n';
+import {DOSSIER_FILE_TYPE} from '../../../../shared/definitions/ENUMS';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 const emit = defineEmits(['ok'])
