@@ -184,8 +184,8 @@ const financialsFileTypes = [
 
 // UUID of dossier to upload files to
 const dossierUuid = route.query.did
-const dossier: Ref<Record<string,string|unknown>> = ref({
-})
+const dossier: Ref<Record<string,string|unknown>> = ref({})
+
 onBeforeMount(()=>{
   executeQuery(GET_DOSSIER, {uuid: dossierUuid}).then((queryRes)=>{
     dossier.value = queryRes.data[GET_DOSSIER.cacheLocation] as Record<string,string|unknown>
@@ -511,6 +511,14 @@ function onSave(){
     loading.value = false
     void $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
   })
+}
+
+/**
+ * On cancel, go back to dashboard
+ * @returns {Promise<void>} - done
+ */
+async function onCancel(){
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
 }
 
 </script>
