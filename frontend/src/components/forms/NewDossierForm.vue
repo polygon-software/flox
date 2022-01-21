@@ -180,6 +180,23 @@
             :second-caption="enfeoffmentRank(enfeoffmentEstimate.high)"
             bold
           />
+
+          <!-- Warning card if non-arrangeable -->
+          <q-card
+            v-if="nonArrangeable"
+            class="row q-pa-md text-white bg-red-5 justify-between items-center"
+            style="width: 500px; margin-top: 32px"
+          >
+            <q-icon
+              class="col-3"
+              name="warning"
+              color="white"
+              size="80px"
+            />
+            <strong class="col">
+              {{ $t('warnings.non_arrangeable') }}
+            </strong>
+          </q-card>
         </div>
       </q-step>
 

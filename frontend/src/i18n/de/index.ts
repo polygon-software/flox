@@ -412,7 +412,8 @@ export default {
     prosecutions_loss_certificates: 'Achtung: Wenn Betreibungen oder Verlustscheine vorliegen... TODO',
     affordability_impossible: 'Achtung: Aufgrund der Tragbarkeit von über 35% ist diese Hypothek nicht finanzierbar.',
     affordability_critical: 'Achtung: Aufgrund der Tragbarkeit ist diese Hypothek nur fraglich finanzierbar.',
-    enfeoffment_warning: 'Achtung: Aufgrund des Belehnungsgrades ist diese Hypothek nicht finanzierbar.'
+    enfeoffment_warning: 'Achtung: Aufgrund des Belehnungsgrades ist diese Hypothek nicht finanzierbar.',
+    non_arrangeable: 'Achtung: Aufgrund der eingegebenen Daten wird dieses Dossier als nicht vermittelbar markiert. Bitte stellen Sie sicher, dass alle Daten korrekt eingegeben wurden.'
   },
   file_type_enum: {
     ID: 'ID-/Passkopie',
