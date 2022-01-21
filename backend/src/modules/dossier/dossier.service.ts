@@ -394,11 +394,11 @@ export class DossierService {
       uuid: sendDossierDocumentInput.fileUuid,
       expires: null,
     };
+
     const pdf = await this.fileService.getPrivateFile(args, dbUser);
 
     const dossierUuid = sendDossierDocumentInput.uuid;
     const recipients = sendDossierDocumentInput.recipients;
-
     const dossier = await this.dossierRepository.findOne(dossierUuid);
 
     if (!dossier) {

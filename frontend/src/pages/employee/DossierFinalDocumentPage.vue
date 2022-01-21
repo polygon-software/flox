@@ -420,8 +420,6 @@ async function uploadPdfDocument(){
   // Generate PDF file
   let pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
-  console.log('PDFFile:', pdfFile)
-
   // Prepare for upload
   const files = {
     finalDocument: pdfFile
@@ -431,10 +429,10 @@ async function uploadPdfDocument(){
   const uploadResponse: Record<string, unknown> = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')
 
   // Get actual file
-  const newPdf: Record<string, unknown> = uploadResponse
+  const updatedDossier: Record<string, unknown> = uploadResponse
 
   // Store to local variable & set loading state
-  fileUuid.value = newPdf.uuid as string
+  fileUuid.value = updatedDossier.final_document.uuid as string
 }
 
 /**
