@@ -366,6 +366,7 @@ import {i18n} from 'boot/i18n';
 import {ErrorService} from 'src/services/ErrorService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {sleep} from 'src/helpers/general-helpers';
 
 const $q = useQuasar()
 const route = useRoute()
@@ -403,8 +404,12 @@ onMounted(async () => {
     )
   }
 
+  await sleep(100)
+
   // Upload PDF document
   await uploadPdfDocument()
+
+  loading.value = false
 })
 
 /**
@@ -413,7 +418,9 @@ onMounted(async () => {
  */
 async function uploadPdfDocument(){
   // Generate PDF file
-  const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
+  let pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
+
+  console.log('PDFFile:', pdfFile)
 
   // Prepare for upload
   const files = {
@@ -428,7 +435,6 @@ async function uploadPdfDocument(){
 
   // Store to local variable & set loading state
   fileUuid.value = newPdf.uuid as string
-  loading.value = false
 }
 
 /**

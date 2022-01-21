@@ -52,5 +52,5 @@ export async function generatePdf(elementId: string, filename: string, download 
 
   // Create blob & return as file
   const blob = doc.output('blob')
-  return new File([blob], `${filename}.pdf`)
+  return new File([blob], `${filename}.pdf`, {type: 'application/pdf'})
 }
