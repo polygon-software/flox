@@ -414,14 +414,13 @@ export default {
     affordability_critical: 'Achtung: Aufgrund der Tragbarkeit ist diese Hypothek nur fraglich finanzierbar.',
     enfeoffment_warning: 'Achtung: Aufgrund des Belehnungsgrades ist diese Hypothek nicht finanzierbar.'
   },
-  // TODO IN ENGLISH FILE
   file_type_enum: {
     ID: 'ID-/Passkopie',
     SALARY: 'Lohnabrechnung',
     PENSION: 'Rentenbescheinigung',
     LAST_YEAR_TAX: 'Steuererklärung',
     PENSION_ID: 'Pensionskassenausweis',
-    LAS_YEAR_SALARY: 'Lohnausweis',
+    LAST_YEAR_SALARY: 'Lohnausweis',
     DEBT_COLLECTION: 'Betreibungsregisterauszug',
     OWN_FUNDS: 'Aufstellung der Eigenmittel - Kontoauszüge',
     THREE_A: 'Policen Säule 3a',
@@ -437,7 +436,7 @@ export default {
     MANAGEMENT_REGULATIONS: 'Verwaltungsreglement',
     FLOOR_PLANS: 'Grundrisspläne',
     PICTURES: 'Fotos',
-    PRUCHASE_CONTRACT: 'Kaufvertrag. bzw. damaliger Kaufvertrag',
+    PURCHASE_CONTRACT: 'Kaufvertrag. bzw. damaliger Kaufvertrag',
     RENOVATIONS: 'Renovationsaufstellung der letzten Jahre',
     LEGACY_CADASTER: 'Altlastenkataster',
     LAND_REGISTER_EXTRACT: 'Grundbuchauszug',
