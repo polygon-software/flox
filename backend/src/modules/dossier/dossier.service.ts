@@ -107,11 +107,14 @@ export class DossierService {
       prosecutions: createDossierInput.prosecutions,
       loss_certificates: createDossierInput.loss_certificates,
 
+      // Mortgage partitions
+      partition_amounts: createDossierInput.partition_amounts,
+      partition_dates: createDossierInput.partition_dates,
+
       // Flag for non-arrangeable dossiers
       non_arrangeable: createDossierInput.non_arrangeable,
 
       // Calculated values
-
       affordability: createDossierInput.affordability,
       eligible_income: createDossierInput.eligible_income,
       total_costs: createDossierInput.total_costs,

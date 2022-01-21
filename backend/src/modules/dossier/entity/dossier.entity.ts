@@ -209,7 +209,21 @@ export class Dossier extends Person {
   @Column({ nullable: true })
   renovation_price: number;
 
-  // TODO: how to handle mortgage partitions? (object array --> might need object...)
+  /**
+   * Mortgage Partitions
+   */
+
+  @Field(() => [Number], {
+    description: 'Mortgage partition amounts',
+  })
+  @Column('int', { array: true })
+  partition_amounts: number[];
+
+  @Field(() => [Date], {
+    description: 'Mortgage partition expiration dates',
+  })
+  @Column('date', { array: true })
+  partition_dates: Date[];
 
   /**
    * Income/cost information

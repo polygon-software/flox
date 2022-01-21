@@ -128,7 +128,17 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
   @IsNumber()
   renovation_price: number;
 
-  // TODO: how to handle mortgage partitions? (object array --> might need object...)
+  /**
+   * Mortgage Partitions
+   */
+
+  @Field(() => [Number])
+  @IsArray()
+  partition_amounts: number[];
+
+  @Field(() => [Date])
+  @IsArray()
+  partition_dates: Date[];
 
   /**
    * Income/cost information

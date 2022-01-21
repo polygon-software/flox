@@ -245,6 +245,8 @@ input CreateDossierInput {
   original_bank_abbreviation: String!
   original_bank_name: String!
   owner_occupied: Boolean!
+  partition_amounts: [Float!]!
+  partition_dates: [DateTime!]!
   phone: String!
   property_type: propertyType!
   prosecutions: Boolean!
@@ -439,6 +441,12 @@ type Dossier {
 
   """Whether the property is inhabited by its owner"""
   owner_occupied: Boolean!
+
+  """Mortgage partition amounts"""
+  partition_amounts: [Float!]!
+
+  """Mortgage partition expiration dates"""
+  partition_dates: [DateTime!]!
 
   """Phone number"""
   phone: String!

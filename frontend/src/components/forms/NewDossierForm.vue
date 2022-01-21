@@ -638,7 +638,6 @@ function onPageChange(){
  * @returns {void}
  */
 function setWarning(warning: DOSSIER_WARNING, value: boolean){
-  console.log('SET WARNING', warning, 'to value', value)
   if(value){
     if(!warnings.value.includes(warning)){
       warnings.value.push(warning)
@@ -704,7 +703,15 @@ async function onSubmit() {
   const hasRenovation = formData.renovation?.hasRenovation
   const renovationPrice = formData.renovation?.renovationPrice                 // may be null
   const renovationYear = formData.renovation?.renovationYear                   // may be null
+
+  // Mortgage partitions
   const mortgagePartitions = formData.mortgage
+  const partitionAmounts = []
+  const partitionDates = []
+  mortgagePartitions.forEach((partition: Record<string, number|Date>) => {
+    partitionAmounts.push(partition.amount)
+    partitionDates.push(partition.date)
+  })
 
   // Page 4
   const incomes = formData.income
@@ -770,8 +777,10 @@ async function onSubmit() {
       has_renovation: hasRenovation,
       renovation_year: renovationYear,
       renovation_price: parseInt(renovationPrice),
-      // TODO mortgage partitions here
-      // TODO calc'd totals here
+
+      // Mortgage partitions
+      partition_amounts: partitionAmounts,
+      partition_dates: partitionDates,
 
       // Income/cost information
       incomes,
