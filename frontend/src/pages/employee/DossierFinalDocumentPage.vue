@@ -59,7 +59,7 @@
                   :content="`${dossier.first_name} ${dossier.last_name}`"
                 />
                 <DossierDocumentInfoField
-                  :content="dossier.address.street"
+                  :content="`${dossier.address.street} ${dossier.address.number}`"
                 />
                 <DossierDocumentInfoField
                   :content="`${dossier.address.zip_code} ${dossier.address.city}`"
