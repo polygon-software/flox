@@ -16,6 +16,7 @@
 import {defineProps, onMounted, ref,} from 'vue';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
+import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
 
 const $q = useQuasar()
 
@@ -45,7 +46,7 @@ const props = defineProps({
     default: null
   }
 })
-const emit = defineEmits(['change', 'warning'])
+const emit = defineEmits(['change', 'warning', 'no-warning'])
 const selectedOption = ref(props.initialValue ?? props.defaultValue)
 
 
@@ -88,7 +89,12 @@ function checkWarnings(){
       })
 
       // Emit warning to mark as non-arrangeable
-      emit('warning')
+      emit('warning', valueWarning.type as DOSSIER_WARNING)
+    } else {
+      // Emit no-warning for all possible, since value is valid
+      warnings.forEach((warning) => {
+        emit('no-warning', warning.type )
+      })
     }
   }
 }

@@ -56,10 +56,12 @@ import {computed, onMounted, ref} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
+import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
 
-const emit = defineEmits(['change', 'warning'])
-
+const emit = defineEmits(['change', 'warning', 'no-warning'])
 const $q = useQuasar()
+
+const popupOpen = ref(false)
 
 const props = defineProps({
   totalAmount: {
@@ -157,28 +159,41 @@ function checkMortgageExpirationDate(expirationDateString: string){
 
   // Warning case 1: <12 months in the future
   if(expirationDate.getTime() < dateInAMonth.getTime()){
-    $q.dialog({
-      component: WarningDialog,
-      componentProps: {
-        description: i18n.global.t('warnings.mortgage_too_short')
-      }
-    })
+    if(!popupOpen.value){
+      popupOpen.value = true
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: i18n.global.t('warnings.mortgage_too_short')
+        }
+      }).onDismiss(() => {
+        popupOpen.value = false
+      })
 
-    // Emit warning to mark as non-arrangeable
-    emit('warning')
+      // Emit warning to mark as non-arrangeable
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      emit('warning', DOSSIER_WARNING.MORTGAGE_DURATION)
+    }
   }
-
   // Warning case 2: between 12 and 24 months in the future
-  if(expirationDate.getTime() > dateIn12Months.getTime() && expirationDate.getTime() < dateIn24Months.getTime()){
-    $q.dialog({
-      component: WarningDialog,
-      componentProps: {
-        description: i18n.global.t('warnings.mortgage_note')
-      }
-    })
+  else if(expirationDate.getTime() > dateIn12Months.getTime() && expirationDate.getTime() < dateIn24Months.getTime()){
+    if(!popupOpen.value){
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: i18n.global.t('warnings.mortgage_note')
+        }
+      }).onDismiss(() => {
+        popupOpen.value = false
+      })
 
-    // Emit warning to mark as non-arrangeable
-    emit('warning')
+      // Emit warning to mark as non-arrangeable
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      emit('warning', DOSSIER_WARNING.MORTGAGE_DURATION)
+    }
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    emit('no-warning', DOSSIER_WARNING.MORTGAGE_DURATION)
   }
 
   // Emit value

@@ -50,8 +50,10 @@ import {onMounted, ref,} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {useQuasar} from 'quasar';
 import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES';
+import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
 
-const emit = defineEmits(['change', 'warning'])
+// eslint-disable-next-line sonarjs/no-duplicate-string
+const emit = defineEmits(['change', 'warning', 'no-warning'])
 const $q = useQuasar()
 
 const props = defineProps({
@@ -128,7 +130,12 @@ function checkLandlordType(isPublic: boolean){
     })
 
     // Emit warning to mark as non-arrangeable
-    emit('warning')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    emit('warning', DOSSIER_WARNING.LANDLORD_TYPE)
+  } else if(isPublic) {
+    // Emit no-warning to no longer mark as non-arrangeable
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    emit('no-warning', DOSSIER_WARNING.LANDLORD_TYPE)
   }
 
   // Emit new value
@@ -149,12 +156,21 @@ function checkExpirationDate(expirationDateString: string){
 
   const dateIn70Years: Date = new Date(new Date().setFullYear(new Date().getFullYear() + 70))
 
-  if(expirationAsDate.getTime() < dateIn70Years.getTime() && !popupOpen.value ){
-    popupOpen.value = true
-    $q.dialog({
-      component: WarningDialog,
-      componentProps: {description:  i18n.global.t('warnings.building_lease_warning') }}
-    ).onDismiss(() => popupOpen.value = false)
+  if(expirationAsDate.getTime() < dateIn70Years.getTime()){
+    if(!popupOpen.value){
+      popupOpen.value = true
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {description:  i18n.global.t('warnings.building_lease_warning') }}
+      ).onDismiss(() => popupOpen.value = false)
+
+      // Emit warning to mark as non-arrangeable
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      emit('warning', DOSSIER_WARNING.LEASE_DURATION)
+    }
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    emit('no-warning', DOSSIER_WARNING.LEASE_DURATION)
   }
 
   // Emit new value

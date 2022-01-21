@@ -50,7 +50,8 @@
                   :total-amount="mortgage"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
-                  @warning="nonArrangeable = true"
+                  @warning="(val) => setWarning(val, true)"
+                  @no-warning="(val) => setWarning(val, false)"
                 />
               </div>
             </div>
@@ -70,7 +71,8 @@
                   :initial-value="form.values.value[field.key]"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
-                  @warning="nonArrangeable = true"
+                  @warning="(val) => setWarning(val, true)"
+                  @no-warning="(val) => setWarning(val, false)"
                 />
               </div>
             </div>
@@ -254,6 +256,7 @@ import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {ErrorService} from 'src/services/ErrorService';
 import {ALL_BANK_NAMES} from 'src/data/queries/BANK';
+import {DOSSIER_WARNING} from '../../../../shared/definitions/ENUMS';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
@@ -415,8 +418,13 @@ const pages = [
 // Form instance
 const form: Form = new Form(pages as Record<string, unknown>[])
 
-// Non-arrangeable tag
-const nonArrangeable = ref(false)
+// Triggered warnings (used for computing non-arrangeable status)
+const warnings: Ref<DOSSIER_WARNING[]> = ref([])
+
+// Non-arrangeable tag: if any warnings present, mark as non-arrangeable
+const nonArrangeable = computed(() => {
+  return warnings.value.length > 0
+})
 
 // Bank list
 const bankOptions = ref([])
@@ -603,9 +611,6 @@ function onPageChange(){
           description: affordabilityWarning
         }
       })
-
-      // Mark as non-arrangeable
-      nonArrangeable.value = true
     }
 
     // Enfeoffment warning
@@ -616,10 +621,30 @@ function onPageChange(){
           description: enfeoffmentWarning
         }
       })
-
-      // Mark as non-arrangeable
-      nonArrangeable.value = true
     }
+
+    // Set warnings if needed (for some reason, ESLint can't handle this)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    setWarning(DOSSIER_WARNING.ENFEOFFMENT, !!enfeoffmentWarning)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    setWarning(DOSSIER_WARNING.AFFORDABILITY, !!affordabilityWarning)
+  }
+}
+
+/**
+ * Sets a warning to the given value
+ * @param {DOSSIER_WARNING} warning - the warning
+ * @param {boolean} value - the value to set it to
+ * @returns {void}
+ */
+function setWarning(warning: DOSSIER_WARNING, value: boolean){
+  console.log('SET WARNING', warning, 'to value', value)
+  if(value){
+    if(!warnings.value.includes(warning)){
+      warnings.value.push(warning)
+    }
+  } else if(warnings.value.includes(warning)){
+    warnings.value.splice(warnings.value.indexOf(warning), 1)
   }
 }
 

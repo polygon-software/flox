@@ -19,6 +19,7 @@ import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {calculateAge, dateToInputString} from 'src/helpers/date-helpers';
 import {IS_VALID_DATE} from 'src/data/RULES';
+import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
 
 const props = defineProps({
   label: {
@@ -42,7 +43,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['change', 'warning'])
+const emit = defineEmits(['change', 'warning', 'no-warning'])
 const $q = useQuasar()
 
 const date = ref(dateToInputString(props.initialValue)  ?? null)
@@ -73,18 +74,24 @@ function emitValue(){
  * @returns {void}
  */
 function checkAgeLimit(birthdate: Date){
-  if(props.retirementRule && calculateAge(birthdate) > 60 && !popupOpen.value){
-    popupOpen.value = true
-    $q.dialog({
-      component: WarningDialog,
-      componentProps: {
-        description: i18n.global.t('warnings.retirement_warning')
-      }
-    }).onDismiss(() => {
-      popupOpen.value = false
-    })
+  if(props.retirementRule && calculateAge(birthdate) > 60) {
+    if (!popupOpen.value) {
+      popupOpen.value = true
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: i18n.global.t('warnings.retirement_warning')
+        }
+      }).onDismiss(() => {
+        popupOpen.value = false
+      })
 
-    emit('warning')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      emit('warning', DOSSIER_WARNING.RETIREMENT)
+    }
+  } else if(props.retirementRule) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    emit('no-warning', DOSSIER_WARNING.RETIREMENT)
   }
 }
 </script>

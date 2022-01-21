@@ -28,7 +28,7 @@ import AmortisationFields from 'components/forms/fields/dossier_creation/Amortis
 import IncomeFields from 'components/forms/fields/dossier_creation/IncomeFields.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
-import {PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING, PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -455,7 +455,9 @@ const FIELDS: Record<string, Field> = {
       warnings: [
         {
           value: true,
-          text: i18n.global.t('warnings.prosecutions_loss_certificates')
+          text: i18n.global.t('warnings.prosecutions_loss_certificates'),
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
+          type: DOSSIER_WARNING.PROSECUTIONS
         }
       ]
     },
@@ -472,7 +474,9 @@ const FIELDS: Record<string, Field> = {
       warnings: [
         {
           value: true,
-          text: i18n.global.t('warnings.prosecutions_loss_certificates')
+          text: i18n.global.t('warnings.prosecutions_loss_certificates'),
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
+          type: DOSSIER_WARNING.LOSS_CERTIFICATES
         }
       ]
     },
