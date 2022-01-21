@@ -295,10 +295,14 @@ export const GET_DOSSIER = {
         }
         documents{
           uuid
+          key
+          file_type
           __typename
         }
         final_document{
           uuid
+          key
+          file_type
           __typename
         }
         offers{

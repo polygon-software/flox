@@ -191,6 +191,8 @@ onBeforeMount(()=>{
   executeQuery(GET_DOSSIER, {uuid: dossierUuid}).then((queryRes)=>{
     dossier.value = queryRes.data[GET_DOSSIER.cacheLocation] as Record<string,string|unknown>
     const documents = dossier.value.documents as Array<Record<string, string|unknown>>
+
+    console.log('Files for dossier:', documents)
     documents.forEach((docu)=>{
       const documentType = docu.file_type as DOSSIER_FILE_TYPE
       let subtype = '';
