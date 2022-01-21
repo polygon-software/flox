@@ -68,6 +68,10 @@ import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_FILE_TYPE} from '../../../../shared/definitions/ENUMS';
 
+/**
+ * A dialog for showing a list of downloadable files, and (optionally) to allow uploading new files to the given entity
+ */
+
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 const emit = defineEmits(['ok'])
 

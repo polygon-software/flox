@@ -138,13 +138,14 @@ import {inject, onBeforeMount, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile, useQuasar} from 'quasar';
-import DossierDocumentUploadDialog from 'components/dialogs/DossierDocumentUploadDialog.vue';
 import {useRoute} from 'vue-router';
 import {DOSSIER_FILE_TYPE} from 'src/data/ENUM/ENUM';
-import {executeQuery} from 'src/helpers/data-helpers';
+import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
+import {uploadFiles} from 'src/helpers/file-helpers';
+import {REMOVE_FILES_DOSSIER} from 'src/data/mutations/DOSSIER';
 
 const $q = useQuasar()
 const route = useRoute()
@@ -497,20 +498,42 @@ function filesForField(section: string, field: string): File[]{
  * Saves & uploads all files to the corresponding dossier
  * @returns {Promise<void>} - done
  */
-function onSave(){
+async function onSave(){
   loading.value = true;
-  $q.dialog({
-    component: DossierDocumentUploadDialog,
-    componentProps: {
-      files: files.value,
-      filesToDelete: filesToDelete.value,
-      dossierUuid: dossierUuid,
-    },
-    persistent: true
-  }).onOk(() => {
-    loading.value = false
-    void $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
+
+  await uploadAllFiles()
+
+  loading.value = false
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
+}
+
+/**
+ * Uploads all files belonging to the dossier
+ * @returns {Promise<void>} - done
+ */
+async function uploadAllFiles(){
+  const allFiles = files.value as Record<string, Record<string, unknown>>
+  const filesToUpload: Record<string, unknown> = {}
+
+  // For every section
+  Object.keys(allFiles).forEach((sectionKey) => {
+    // For every field within section
+    Object.keys(allFiles[sectionKey]).forEach((fieldKey) => {
+      // Find files
+      const fieldFiles = allFiles[sectionKey][fieldKey] as File[]|Record<string, unknown>[] ?? []
+
+      fieldFiles.forEach((field, index)=>{
+        if(!field.hasOwnProperty('uuid')){ // Is a new file
+          filesToUpload[`${fieldKey}_${String(index).padStart(4, '0')}`] = field
+        }
+      })
+    })
   })
+  await uploadFiles(filesToUpload, `/uploadDossierFile?did=${dossierUuid.toString()}`, 'myDossiers')
+
+  if(filesToDelete.value.length>0){
+    await executeMutation(REMOVE_FILES_DOSSIER, {uuid: dossierUuid, fileUuids: filesToDelete.value})
+  }
 }
 
 /**
