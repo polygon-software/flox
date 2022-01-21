@@ -1,13 +1,16 @@
 <template>
   <div class="row">
+    <div class="q-gutter-y-md column" style="min-width: 150px">
     <q-select
       dense
       filled
       clearable
+      style="overflow: hidden; text-overflow: ellipsis"
       v-model="dateFilter"
       :options="options"
       :label="$t('dossier.date_filter')"
       @update:model-value="filterSelected"/>
+    </div>
     <q-input
       v-model="fromDate"
       type="date"
@@ -45,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, ref} from 'vue';
+import {defineEmits, Ref, ref} from 'vue';
 import {i18n} from "boot/i18n";
 import {dateToInputString, getCurrentQuarter} from "src/helpers/date-helpers";
 
@@ -82,17 +85,17 @@ const options = [
 
 
 const search = ref('')
-const dateFilter = ref(options[0])
-const fromDate = ref(dateToInputString(dateFilter.value.fromDate))
-const toDate = ref(dateToInputString(dateFilter.value.toDate))
+const dateFilter : Ref<Record<string, Date|string>|null> =  ref(options[0])
+const fromDate = ref(dateToInputString(dateFilter.value?.fromDate as Date))
+const toDate = ref(dateToInputString(dateFilter.value?.toDate as Date))
 
 /**
  * Updates from and to date
  * @returns {void}
  */
 function filterSelected() {
-  fromDate.value = dateToInputString(dateFilter.value.fromDate)
-  toDate.value = dateToInputString(dateFilter.value.toDate)
+  fromDate.value = dateToInputString(dateFilter.value?.fromDate as Date)
+  toDate.value = dateToInputString(dateFilter.value?.toDate as Date)
 }
 
 /**
@@ -100,6 +103,7 @@ function filterSelected() {
  * @returns {void}
  */
 function emitValues() {
+  dateFilter.value = null
   emit('change', {
     search: search.value,
     fromDate: fromDate.value,

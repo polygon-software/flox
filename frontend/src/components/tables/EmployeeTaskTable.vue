@@ -23,7 +23,7 @@
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
-      :filter="search"
+      :filter="searchTerm"
       :filter-method="tableFilter"
       flat
     >
@@ -112,9 +112,10 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
-const search = ref('')
+const searchTerm = ref('')
 const fromDate: Ref<string|null> = ref(null)
 const toDate: Ref<string|null> = ref(null)
+
 
 // ----- Data -----
 const columns = [
@@ -125,11 +126,18 @@ const columns = [
   { name: 'prov_emp', label: i18n.global.t('account_data.provision_employee'), field: 'prov_emp', sortable: true, align: 'center' },
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
   { name: 'prov_ratio', label: i18n.global.t('account_data.provision_ratio'), field: 'prov_ratio', sortable: false, align: 'center' },
+  { name: 'date', label: i18n.global.t('general.date'), field: 'date', sortable: true, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
+  let filteredResult = []
+  for (const query in queryResult.value){
+    if(query.date < fromDate && query.date > toDate){
+      filteredResult.push(query)
+    }
+  }
   return queryResult.value ?? []
 })
 
@@ -150,7 +158,7 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
  * @returns {void}
  */
 function updateFilter(input: Record<string, string>){
-  search.value = input.search
+  searchTerm.value = input.search
   fromDate.value = input.fromDate
   toDate.value = input.toDate
 }
