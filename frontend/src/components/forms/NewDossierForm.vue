@@ -185,55 +185,47 @@
 
       <!-- Bottom navigation -->
       <template #navigation>
-        <q-stepper-navigation style="position: absolute; bottom: 0">
+        <q-stepper-navigation style="width: 100%; position: absolute; bottom: 0">
           <!-- Regular navigation -->
           <div
-            v-if="form.step.value < form.pages.value.length"
-            class="row"
+            class="row full-width justify-between"
           >
-            <q-btn
-              v-if="form.step.value > 1"
-              color="primary"
-              :label="$t('buttons.back')"
-              flat
-              style="margin-right: 30px"
-              class="q-ml-sm"
-              @click="$refs.stepper.previous()"
-            />
-            <q-btn
-              color="primary"
-              :label="$t('buttons.next_step')"
-              :disable="!form.pageValid.value || bankOptions.length === 0"
-              @click="$refs.stepper.next()"
-            />
-          </div>
+            <!-- Left-side buttons (prev/next, print) -->
+            <div>
+              <q-btn
+                v-if="form.step.value > 1"
+                color="primary"
+                :label="$t('buttons.back')"
+                flat
+                style="margin-right: 30px"
+                class="q-ml-sm"
+                @click="$refs.stepper.previous()"
+              />
+              <q-btn
+                v-if="form.step.value < form.pages.value.length"
+                color="primary"
+                :label="$t('buttons.next_step')"
+                :disable="!form.pageValid.value || bankOptions.length === 0"
+                @click="$refs.stepper.next()"
+              />
 
-          <!-- End-of-form buttons -->
-          <div
-            v-if="form.step.value === form.pages.value.length"
-            class="row"
-          >
-            <q-btn
-              v-if="form.step.value > 1"
-              color="primary"
-              :label="$t('buttons.back')"
-              flat
-              class="q-ml-sm"
-              @click="$refs.stepper.previous()"
-            />
+              <q-btn
+                v-else
+                :label="$t('buttons.save_and_print')"
+                color="primary"
+                icon="print"
+                class="q-ml-sm"
+                @click="onSubmit"
+              />
+            </div>
+
+            <!-- Discard button -->
             <q-btn
               :label="$t('buttons.discard')"
               color="negative"
               class="q-ml-sm"
               flat
               @click="onDiscard"
-            />
-            <q-btn
-              :label="$t('buttons.save_and_print')"
-              color="primary"
-              icon="print"
-              class="q-ml-sm"
-              @click="onSubmit"
             />
           </div>
         </q-stepper-navigation>
