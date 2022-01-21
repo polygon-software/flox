@@ -158,13 +158,13 @@
                 class="column col-6"
                 style="padding-right: 5mm"
               >
-                <!-- TODO re-enable once fixed -->
-<!--                <DossierDocumentInfoField-->
-<!--                  v-for='(installment, index) in dossierInfo.installments'-->
-<!--                  :key="'installment_'+index"-->
-<!--                  :label="$t('dossier.installment') + ' ' + (index+1)"-->
-<!--                  :content="installment.amount.toLocaleString() + currency"-->
-<!--                />-->
+                <!-- Partition amount -->
+                <DossierDocumentInfoField
+                  v-for='(amount, index) in dossier.partition_amounts'
+                  :key="'partition_'+index"
+                  :label="$t('dossier.installment') + ' ' + (index+1)"
+                  :content="amount.toLocaleString() + currency"
+                />
 
                 <!-- Enfeoffment -->
                 <DossierDocumentInfoField
@@ -177,13 +177,13 @@
                 class="column col-6"
                 style="padding-left: 5mm"
               >
-                <!-- TODO re-enable -->
-<!--                <DossierDocumentInfoField-->
-<!--                  v-for='(installment, index) in dossierInfo.installments'-->
-<!--                  :key="'installment_'+ index"-->
-<!--                  :label="$t('dossier.expiration_date')"-->
-<!--                  :content="formatDate(installment.expirationDate)"-->
-<!--                />-->
+                <!-- Partition expiration date -->
+                <DossierDocumentInfoField
+                  v-for='(date, index) in dossier.partition_dates'
+                  :key="'partition_'+ index"
+                  :label="$t('dossier.expiration_date')"
+                  :content="formatDate(date)"
+                />
 
                 <DossierDocumentBooleanField
                   v-if="dossier.has_amortisation"

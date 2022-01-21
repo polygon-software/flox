@@ -33,6 +33,7 @@
                 <q-btn
                   color="primary"
                   icon="download"
+                  round
                   @click="openFile(file.uuid)"
                 />
               </div>

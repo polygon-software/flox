@@ -274,6 +274,8 @@ export const GET_DOSSIER = {
         value_estimate_high
         enfeoffment_estimate_low
         enfeoffment_estimate_high
+        partition_dates
+        partition_amounts
         address {
           uuid
           street

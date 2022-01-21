@@ -126,7 +126,7 @@ export class DossierService {
       // Prefilled field (not from input)
       offers: [],
       documents: [],
-      status: DOSSIER_STATUS.IN_PROGRESS,
+      status: DOSSIER_STATUS.OPEN,
       readable_id: generateHumanReadableId(),
       employee: employee,
     });

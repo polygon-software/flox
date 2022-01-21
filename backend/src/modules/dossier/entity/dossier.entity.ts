@@ -40,7 +40,7 @@ export class Dossier extends Person {
   @Column({
     type: 'enum',
     enum: DOSSIER_STATUS,
-    default: DOSSIER_STATUS.IN_PROGRESS,
+    default: DOSSIER_STATUS.OPEN,
   })
   status: DOSSIER_STATUS;
 
