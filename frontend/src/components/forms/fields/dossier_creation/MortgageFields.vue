@@ -148,6 +148,7 @@ function emitValue() {
  */
 function checkMortgageExpirationDate(expirationDateString: string){
   const expirationDate = new Date(expirationDateString)
+  console.log('Check for date', expirationDate)
 
   // If year is invalid (e.g. while entering '2023', until fourth number is entered, year may be '023'), cancel
   if(!IS_VALID_YEAR(expirationDate.getFullYear())){
@@ -180,6 +181,7 @@ function checkMortgageExpirationDate(expirationDateString: string){
   // Warning case 2: between 12 and 24 months in the future
   else if(expirationDate.getTime() > dateIn12Months.getTime() && expirationDate.getTime() < dateIn24Months.getTime()){
     if(!popupOpen.value){
+      popupOpen.value = true
       $q.dialog({
         component: WarningDialog,
         componentProps: {
