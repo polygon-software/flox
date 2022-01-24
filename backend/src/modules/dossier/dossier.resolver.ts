@@ -18,10 +18,16 @@ import { UpdateOfferStatusInput } from './dto/input/update-offer-status.input';
 import { SendDossierDocumentInput } from './dto/input/send-dossier-document.input';
 import { GetDossierInput } from './dto/input/get-dossier.input';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
+import { BankService } from '../bank/bank.service';
+import { UserService } from '../user/user.service';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
-  constructor(private readonly dossierService: DossierService) {}
+  constructor(
+    private readonly dossierService: DossierService,
+    private readonly bankService: BankService,
+    private readonly userService: UserService,
+  ) {}
 
   /**
    * Adds a new dossier to the database
@@ -117,14 +123,30 @@ export class DossierResolver {
   /**
    * All dossiers, where the requesting bank isn't the original_bank
    * @param {Record<string, string>} user - the current request's user
+   * @param {string} bankUuid - bank UUID, only relevant for SOIAdmin to access bank dashboard view
    * @returns {Promise<Dossier[]>} - All dossiers, where the requesting bank isn't the original_bank
    */
   @BankOnly()
   @Query(() => [Dossier])
   async allDossiersBank(
     @CurrentUser() user: Record<string, string>,
+    @Args('bankUuid', { nullable: true }) bankUuid: string,
   ): Promise<Dossier[]> {
-    return this.dossierService.allDossiersBank(user.userId);
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+
+    let bank;
+
+    // If admin: overwrite user with the one of the desired bank (get by FK, since UUID is only foreign key)
+    if (dbUser && dbUser.role === ROLE.SOI_ADMIN && bankUuid) {
+      console.log('Get dossiers for', bankUuid);
+      bank = await this.bankService.getMyBank(bankUuid);
+    } else if (!dbUser || dbUser.role !== ROLE.BANK) {
+      throw new Error('User is not a Bank');
+    } else {
+      bank = await this.bankService.getMyBank(dbUser.fk);
+    }
+
+    return this.dossierService.allDossiersBank(bank.uuid);
   }
 
   /**

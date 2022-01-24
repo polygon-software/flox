@@ -130,7 +130,8 @@ async function routeToRegisterBank(): Promise<void> {
  * @returns {Promise<void>} - completed
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  await $routerService?.routeTo(ROUTES.BANK_DASHBOARD)
+  // TODO ensure this only works for banks that have an account!!
+  await $routerService?.routeTo(ROUTES.BANK_DASHBOARD, {bid: row.uuid})
 }
 
 

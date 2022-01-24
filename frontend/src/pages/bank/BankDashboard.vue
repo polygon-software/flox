@@ -138,19 +138,25 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {DOSSIERS_BANK} from 'src/data/queries/DOSSIER';
 import {MY_BANK} from 'src/data/queries/BANK';
 import {DOSSIER_FILE} from 'src/data/queries/FILE';
+import {useRoute} from 'vue-router';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
+const route = useRoute()
 
-const dossiers = subscribeToQuery(DOSSIERS_BANK, {})
-const computedResult = computed(()=>{
-  return dossiers.value ?? []
-})
+
 
 const search = ref('')
 
-const myBank = subscribeToQuery(MY_BANK, {})
+// Bank UUID from query (if going from SOI admin to bank)
+const bankId = route.query.bid
 
+// Getters, depending on whether user is actually a bank or admin accessing bank view
+const myBank = subscribeToQuery(MY_BANK, bankId ? { bankUuid: bankId } : {})
+const dossiers = subscribeToQuery(DOSSIERS_BANK, bankId ? { bankUuid: bankId } : {})
+const computedResult = computed(()=>{
+  return dossiers.value ?? []
+})
 /**
  * Checks whether we have an own offer on a dossier
  * @param {Record<string, unknown>} dossier - the dossier

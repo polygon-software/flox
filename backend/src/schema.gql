@@ -799,7 +799,7 @@ type PublicFile {
 
 type Query {
   allCompanies: [Company!]!
-  allDossiersBank: [Dossier!]!
+  allDossiersBank(bankUuid: String): [Dossier!]!
   allEmployees: [Employee!]!
   allSoiEmployees: [SoiEmployee!]!
   allUsers: [User!]!
@@ -813,7 +813,7 @@ type Query {
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
-  getMyBank: Bank!
+  getMyBank(bankUuid: String): Bank!
   getMyCompany: Company!
   getMyDossiers: [Dossier!]
   getMyEmployee: Employee!

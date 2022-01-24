@@ -63,15 +63,23 @@ export class BankResolver {
   /**
    * Get the currently logged in bank, if he is a bank
    * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   * @param {string} bankUuid - bank UUID, only relevant for SOIAdmin to access bank dashboard view
    * @returns {Promise<Bank>} - The bank
    */
   @BankOnly()
   @Query(() => Bank, { name: 'getMyBank' })
-  async getMyBank(@CurrentUser() user: Record<string, string>): Promise<Bank> {
+  async getMyBank(
+    @CurrentUser() user: Record<string, string>,
+    @Args('bankUuid', { nullable: true }) bankUuid: string,
+  ): Promise<Bank> {
     const dbUser = await this.userService.getUser({ uuid: user.userId });
-    if (!dbUser || dbUser.role !== ROLE.BANK) {
-      throw new Error('User is not an Bank');
+
+    // If admin: overwrite user with the one of the desired bank (get by FK, since UUID is only foreign key)
+    if (dbUser && dbUser.role === ROLE.SOI_ADMIN && bankUuid) {
+      return this.bankService.getMyBank(bankUuid);
+    } else if (!dbUser || dbUser.role !== ROLE.BANK) {
+      throw new Error('User is not a Bank');
     }
-    return this.bankService.getMyBank(dbUser.uuid);
+    return this.bankService.getMyBank(dbUser.fk);
   }
 }

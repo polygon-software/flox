@@ -38,8 +38,8 @@ export const ALL_BANK_NAMES = {
 
 export const MY_BANK = {
   query: gql`
-    query getMyBank{
-      getMyBank{
+    query getMyBank($bankUuid: String){
+      getMyBank(bankUuid: $bankUuid){
         uuid
         first_name
         last_name
