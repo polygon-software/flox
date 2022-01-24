@@ -226,6 +226,7 @@ export default {
     update_announcement: 'Update announcement',
     delete_announcement: 'Delete announcement',
     options: 'Options',
+    all: 'All',
   },
   finances: {
     general: 'General',
@@ -251,5 +252,9 @@ export default {
     update: 'Update',
     delete: 'Delete',
     scheduled: 'Scheduled',
+    past: 'Past',
+    future: 'Future',
+    role_filter: 'Filter by user role',
+    date_filter: 'Filter by date',
   },
 };

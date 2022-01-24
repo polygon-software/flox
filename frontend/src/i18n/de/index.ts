@@ -231,6 +231,7 @@ export default {
     update_announcement: 'Ankündigung aktualisieren',
     delete_announcement: 'Ankündigung löschen',
     options: 'Optionen',
+    all: 'Alle',
   },
   finances: {
     general: 'Allgemein',
@@ -256,5 +257,9 @@ export default {
     update: 'Aktualisieren',
     delete: 'Löschen',
     scheduled: 'Geplant',
+    past: 'Vergangene',
+    future: 'Zukünftige',
+    role_filter: 'Filtern nach Benuterrolle',
+    date_filter: 'Filtern nach Datum',
   },
 };

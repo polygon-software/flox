@@ -56,6 +56,8 @@ import {formatDate} from 'src/helpers/format-helpers';
 import {ALL_ANNOUNCEMENTS} from 'src/data/queries/ANNOUNCEMENTS';
 import {updateAnnouncement, deleteAnnouncement} from 'src/helpers/admin-helpers';
 import { i18n } from 'boot/i18n';
+import {ROLE} from '../../../../shared/definitions/ENUM';
+import { Announcement } from 'src/data/types/Announcement';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -63,20 +65,51 @@ const props = defineProps( {
     required: true,
     type: String,
   },
+  roleFilter: {
+    required: false,
+    default: null,
+    type: String,
+  },
+  dateFilter: {
+    required: false,
+    default: null,
+    type: String,
+  },
 })
 
 const columns = [
   { name: 'title', label: i18n.global.t('announcement.title'), field: 'title', sortable: true, align: 'left' },
-  { name: 'content', label: 'Content', field: i18n.global.t('announcement.content'), sortable: true, align: 'left' },
-  { name: 'userRoles', label: 'User Roles', field: i18n.global.t('announcement.user_roles'), sortable: true, align: 'left', format: (val:string[]) => val.join(', ') },
-  { name: 'date', label: 'Date', field: i18n.global.t('announcement.date'), sortable: true, align: 'left', format: (val:string) => formatDate(new Date(val)) },
-  { name: 'options', label: '', field: i18n.global.t('admin.options'), sortable: false, align: 'left'},
+  { name: 'content', label: i18n.global.t('announcement.content'), field: 'content', sortable: true, align: 'left' },
+  { name: 'userRoles', label: i18n.global.t('announcement.user_roles'), field: 'userRoles', sortable: true, align: 'left', format: (val:string[]) => val.join(', ') },
+  { name: 'date', label: i18n.global.t('announcement.date'), field: 'date', sortable: true, align: 'left', format: (val:string) => formatDate(new Date(val)) },
+  { name: 'options', sortable: false, align: 'left', style: 'width: 0;'},
 ]
 
 const allAnnouncementsQueryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<Record<string, unknown>[]>
 
 const computedResult = computed(() => {
-  return allAnnouncementsQueryResult?.value ?? [];
+  const announcementRecords = allAnnouncementsQueryResult?.value ?? [];
+  let announcements = announcementRecords.map((record) => new Announcement(
+    record.title as string,
+    new Date(record.date as string),
+    record.content as string,
+    record.userRoles as ROLE[],
+    record.scheduled as boolean,
+    record.uuid as string,
+  ))
+  if(props.roleFilter !== null){
+    announcements = announcements.filter((announcement) => announcement.userRoles.includes(props.roleFilter as ROLE))
+  }
+  if(props.dateFilter !== null){
+    const now = Date.now()
+    if(props.dateFilter === 'past'){
+      announcements = announcements.filter((announcement) => announcement.date.getDate() < now)
+    }
+    else if(props.dateFilter === 'future'){
+      announcements = announcements.filter((announcement) => announcement.date.getDate() > now)
+    }
+  }
+  return announcements
 })
 
 const pagination = ref({
