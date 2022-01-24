@@ -13,8 +13,12 @@
     />
   </div>
   <!-- Amortisation info (if applicable) -->
-  <div v-if="hasAmortisation">
-    <!-- Amortisation type -->
+
+  <q-card
+    v-if="hasAmortisation"
+    class="q-pa-sm bg-grey-1"
+    style="margin-bottom: 24px"
+  >    <!-- Amortisation type -->
     <div class="row q-mb-md">
       <strong class="col q-py-sm">{{ $t('form_for_clients.type') }}</strong>
       <q-option-group
@@ -36,7 +40,7 @@
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitValue"
     />
-  </div>
+  </q-card>
 </template>
 
 <script setup lang="ts">

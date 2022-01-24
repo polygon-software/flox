@@ -13,7 +13,12 @@
     />
   </div>
   <!-- Renovation info (if applicable) -->
-  <div v-if="hasRenovation">
+
+  <q-card
+    v-if="hasRenovation"
+    class="q-pa-sm bg-grey-1"
+    style="margin-bottom: 24px"
+  >
     <!-- Renovation date -->
     <q-input
       v-model.number="renovationYear"
@@ -32,7 +37,7 @@
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitValue"
     />
-  </div>
+  </q-card>
 </template>
 
 <script setup lang="ts">
