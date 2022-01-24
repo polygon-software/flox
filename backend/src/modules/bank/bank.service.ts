@@ -8,6 +8,7 @@ import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
 import { CreateUserlessBankInput } from './dto/input/create-userless-bank.input';
 import { generateHumanReadableId } from '../../helpers';
+import { GetBankArgs } from './dto/args/get-bank.args';
 
 @Injectable()
 export class BankService {
@@ -99,17 +100,17 @@ export class BankService {
   }
 
   /**
-   * Get the bank of the logged in user
-   * @param {string} uuid - the bank's database UUID'
+   * Get a bank by uuid
+   * @param {GetBankArgs} getBankArgs - getter arguments, containing UUID
    * @returns {Promise<Bank>} - the bank
    */
-  async getMyBank(uuid: string): Promise<Bank> {
-    const bank = await this.bankRepository.findOne(uuid, {
+  async getBank(getBankArgs: GetBankArgs): Promise<Bank> {
+    const bank = await this.bankRepository.findOne(getBankArgs.uuid, {
       relations: ['offers', 'own_mortgages', 'offers.dossier'],
     });
 
     if (!bank) {
-      throw new Error(`No bank found for ${uuid}`);
+      throw new Error(`No bank found for ${getBankArgs.uuid}`);
     }
 
     return bank;

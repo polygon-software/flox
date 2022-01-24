@@ -3,14 +3,20 @@ import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { BankService } from './bank.service';
 import { Bank } from './entities/bank.entity';
 import {
+  AdminOnly,
   BankOnly,
   CurrentUser,
   EmployeeOnly,
+  Roles,
   SOIOnly,
 } from '../../auth/authorization.decorator';
 import { CreateBankInput } from './dto/input/create-bank.input';
 import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
+import { Employee } from '../employee/entities/employee.entity';
+import { GetEmployeeArgs } from '../employee/dto/args/get-employee.args';
+import { GetCompanyArgs } from '../company/dto/args/get-company.args';
+import { GetBankArgs } from './dto/args/get-bank.args';
 
 @Resolver(() => Bank)
 export class BankResolver {
@@ -76,10 +82,21 @@ export class BankResolver {
 
     // If admin: overwrite user with the one of the desired bank (get by FK, since UUID is only foreign key)
     if (dbUser && dbUser.role === ROLE.SOI_ADMIN && bankUuid) {
-      return this.bankService.getMyBank(bankUuid);
+      return this.bankService.getBank({ uuid: dbUser.fk } as GetBankArgs);
     } else if (!dbUser || dbUser.role !== ROLE.BANK) {
       throw new Error('User is not a Bank');
     }
-    return this.bankService.getMyBank(dbUser.fk);
+    return this.bankService.getBank({ uuid: dbUser.fk } as GetBankArgs);
+  }
+
+  /**
+   * Get a bank by UUID
+   * @param {GetBankArgs} getBankArgs - getter arguments, containing UUID
+   * @returns {Promise<Employee>} - The Employee
+   */
+  @AdminOnly()
+  @Query(() => Bank, { name: 'getBank' })
+  async getBank(@Args() getBankArgs: GetBankArgs): Promise<Bank> {
+    return this.bankService.getBank(getBankArgs);
   }
 }

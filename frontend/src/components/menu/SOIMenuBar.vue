@@ -114,6 +114,7 @@ import {useRoute} from 'vue-router';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {COMPANY} from 'src/data/queries/COMPANY';
 import {EMPLOYEE} from 'src/data/queries/EMPLOYEE';
+import {BANK} from 'src/data/queries/BANK';
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
@@ -193,6 +194,10 @@ async function getChipValues(){
     const firstName = employeeQuery.data.getEmployee.first_name as string ?? null
     const lastName = employeeQuery.data.getEmployee.last_name as string ?? null
     employeeName.value = firstName && lastName ? `${firstName} ${lastName}` : null
+  }
+  if(bankUuid.value){
+    const bankQuery = await executeQuery(BANK, {uuid: employeeUuid.value})
+    bankName.value = bankQuery.data.getBank.name as string ?? null
   }
 }
 

@@ -21,6 +21,7 @@ import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input'
 import { BankService } from '../bank/bank.service';
 import { UserService } from '../user/user.service';
 import { EmployeeService } from '../employee/employee.service';
+import { GetBankArgs } from '../bank/dto/args/get-bank.args';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -160,12 +161,12 @@ export class DossierResolver {
 
     // If admin: overwrite user with the one of the desired bank (get by FK, since UUID is only foreign key)
     if (dbUser && dbUser.role === ROLE.SOI_ADMIN && bankUuid) {
-      bank = await this.bankService.getMyBank(bankUuid);
+      bank = await this.bankService.getBank({ uuid: bankUuid } as GetBankArgs);
     } else if (!dbUser || dbUser.role !== ROLE.BANK) {
       throw new Error('User is not a Bank');
     } else {
       // Regular case: logged in as a bank
-      bank = await this.bankService.getMyBank(dbUser.fk);
+      bank = await this.bankService.getBank({ uuid: dbUser.fk } as GetBankArgs);
     }
 
     return this.dossierService.allDossiersBank(bank.uuid);

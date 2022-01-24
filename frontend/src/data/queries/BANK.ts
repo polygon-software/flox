@@ -1,5 +1,26 @@
 import gql from 'graphql-tag';
 
+export const BANK = {
+  query: gql`
+    query getBank($uuid: ID!){
+      getBank(uuid: $uuid){
+        uuid
+        __typename
+        name
+        abbreviation
+        first_name
+        last_name
+        email
+        readable_id
+        created_at
+        phone
+      }
+    }
+  `,
+  tables: ['bank'],
+  cacheLocation: 'getBanks'
+}
+
 export const ALL_BANKS = {
   query: gql`
     query getBanks{
