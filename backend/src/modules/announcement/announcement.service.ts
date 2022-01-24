@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAnnouncementInput } from './dto/input/create-announcement.input';
 import { UpdateAnnouncementInput } from './dto/input/update-announcement.input';
-import { GetAnnouncementArgs } from './dto/args/get-announcement.args';
-import { GetAnnouncementsArgs } from './dto/args/get-announcements.args';
 import { DeleteAnnouncementInput } from './dto/input/delete-announcement.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -41,37 +39,11 @@ export class AnnouncementService {
   }
 
   /**
-   * Get announcements specified by their uuids or all if no uuids are provided.
-   * @param {GetAnnouncementsArgs} getAnnouncementsArgs - uuids
-   * @returns {Promise<Announcement[]>} - requested announcements
-   */
-  async getAnnouncements(
-    getAnnouncementsArgs: GetAnnouncementsArgs,
-  ): Promise<Announcement[]> {
-    if (getAnnouncementsArgs.uuids !== undefined) {
-      return this.announcementsRepository.findByIds(getAnnouncementsArgs.uuids);
-    } else {
-      return this.announcementsRepository.find();
-    }
-  }
-
-  /**
    * Get all announcements.
    * @returns {Promise<Announcement[]>} - all announcements
    */
   async getAllAnnouncements(): Promise<Announcement[]> {
     return this.announcementsRepository.find();
-  }
-
-  /**
-   * Get announcement specified by its uuid.
-   * @param {GetAnnouncementArgs} getAnnouncementArgs - uuid
-   * @returns {Promise<Announcement[]>} - requested announcement
-   */
-  async getAnnouncement(
-    getAnnouncementArgs: GetAnnouncementArgs,
-  ): Promise<Announcement> {
-    return this.announcementsRepository.findOne(getAnnouncementArgs.uuid);
   }
 
   /**

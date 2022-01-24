@@ -22,25 +22,4 @@ export const ALL_ANNOUNCEMENTS = {
   cacheLocation: 'allAnnouncements',
 };
 
-export const ANNOUNCEMENT = {
-  query: gql`
-    query announcement($uuid: ID!) {
-      announcement(uuid: $uuid) {
-        uuid
-        title
-        date
-        content
-        userRole
-        scheduled
-        __typename
-      }
-    }
-  `,
-  tables: ['announcement'],
-  cacheLocation: 'announcement',
-};
-
-export const ANNOUNCEMENT_QUERIES: QueryObject[] = [
-  ALL_ANNOUNCEMENTS,
-  ANNOUNCEMENT,
-];
+export const ANNOUNCEMENT_QUERIES: QueryObject[] = [ALL_ANNOUNCEMENTS];
