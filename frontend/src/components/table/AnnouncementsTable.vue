@@ -55,6 +55,7 @@ import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {ALL_ANNOUNCEMENTS} from 'src/data/queries/ANNOUNCEMENTS';
 import {updateAnnouncement, deleteAnnouncement} from 'src/helpers/admin-helpers';
+import { i18n } from 'boot/i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -64,19 +65,16 @@ const props = defineProps( {
   },
 })
 
-// TODO i18n
 const columns = [
-  { name: 'title', label: 'Title', field: 'title', sortable: true, align: 'left' },
-  { name: 'content', label: 'Content', field: 'content', sortable: true, align: 'left' },
-  { name: 'userRoles', label: 'User Roles', field: 'userRoles', sortable: true, align: 'left', format: (val:string[]) => val.join(', ') },
-  { name: 'date', label: 'Date', field: 'date', sortable: true, align: 'left', format: (val:string) => formatDate(new Date(val)) },
-  { name: 'options', label: '', field: 'options', sortable: false, align: 'left'},
-
+  { name: 'title', label: i18n.global.t('announcement.title'), field: 'title', sortable: true, align: 'left' },
+  { name: 'content', label: 'Content', field: i18n.global.t('announcement.content'), sortable: true, align: 'left' },
+  { name: 'userRoles', label: 'User Roles', field: i18n.global.t('announcement.user_roles'), sortable: true, align: 'left', format: (val:string[]) => val.join(', ') },
+  { name: 'date', label: 'Date', field: i18n.global.t('announcement.date'), sortable: true, align: 'left', format: (val:string) => formatDate(new Date(val)) },
+  { name: 'options', label: '', field: i18n.global.t('admin.options'), sortable: false, align: 'left'},
 ]
 
 const allAnnouncementsQueryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<Record<string, unknown>[]>
 
-// Rows, filtered by status (if applicable)
 const computedResult = computed(() => {
   return allAnnouncementsQueryResult?.value ?? [];
 })

@@ -14,9 +14,9 @@ export class NotificationService {
   ) {}
 
   /**
-   * Creates a new notification on the database
+   * Creates a new notification on the database.
    * @param {CreateNotificationInput} createNotificationInput - input values
-   * @returns {Notification} - the database notification
+   * @returns {Promise<Notification>} - the database notification
    */
   async create(
     createNotificationInput: CreateNotificationInput,
@@ -27,6 +27,11 @@ export class NotificationService {
     return this.notificationsRepository.save(notification);
   }
 
+  /**
+   * Updates a notification on the database.
+   * @param {UpdateNotificationInput} updateNotificationInput - updated fields
+   * @returns {Promise<Notification>} - updated notification
+   */
   async update(
     updateNotificationInput: UpdateNotificationInput,
   ): Promise<Notification> {
@@ -40,6 +45,11 @@ export class NotificationService {
     return this.notificationsRepository.findOne(updateNotificationInput.uuid);
   }
 
+  /**
+   * Deletes a notification on the DB.
+   * @param {DeleteNotificationInput} deleteNotificationInput - uuid
+   * @returns {Promise<Notification>} - deleted notification
+   */
   async delete(
     deleteNotificationInput: DeleteNotificationInput,
   ): Promise<Notification> {
@@ -54,6 +64,12 @@ export class NotificationService {
     return deletedNotification;
   }
 
+  /**
+   * Returns the current notifications of a user.
+   * Current means, that the notification date lays before now.
+   * @param {Record<string, string>} user - user data from request.
+   * @returns {Promise<Notification[]>} - current notifications of the user.
+   */
   async currentUserNotifications(
     user: Record<string, string>,
   ): Promise<Notification[]> {

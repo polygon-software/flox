@@ -126,6 +126,7 @@ export default {
     account_locked: 'Account locked',
     account_locked_permanently: 'This account has been locked permanently.',
     account_locked_until: 'This account has been locked until {date}.',
+    error_mark_as_read: 'Could not mark as read.',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -224,6 +225,7 @@ export default {
     create_announcement: 'Create announcement',
     update_announcement: 'Update announcement',
     delete_announcement: 'Delete announcement',
+    options: 'Options',
   },
   finances: {
     general: 'General',

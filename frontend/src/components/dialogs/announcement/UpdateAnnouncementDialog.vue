@@ -10,60 +10,41 @@
         </h5>
       </q-card-section>
       <q-card-section>
-        <q-list
-          bordered
-          separator
-        >
-          <q-item>
-            <q-item-section>
-              <q-input
-                v-model="announcement.title"
-                :label="$t('announcement.title')"
+        <q-form>
+          <q-input
+            v-model="announcement.title"
+            :label="$t('announcement.title')"
+          />
 
-              />
-            </q-item-section>
-          </q-item>
+          <q-input
+            v-model="announcement.content"
+            :label="$t('announcement.content')"
+            type="textarea"
+          />
 
-          <q-item>
-            <q-item-section>
-              <q-input
-                v-model="announcement.content"
-                :label="$t('announcement.content')"
-                type="textarea"
-              />
-            </q-item-section>
-          </q-item>
+          <q-select
+            v-model="announcement.userRoles"
+            :label="$t('announcement.user_roles')"
+            :options="options"
+            multiple
+          />
 
-          <q-item>
-            <q-item-section>
-              <q-select
-                v-model="announcement.userRoles"
-                :label="$t('announcement.user_roles')"
-                :options="options"
-                multiple
-              />
-            </q-item-section>
-          </q-item>
+          <q-toggle v-model="announcement.scheduled" :label="$t('announcement.scheduled')"/>
 
-          <q-item>
-            <q-item-section>
-              <q-toggle v-model="announcement.scheduled" :label="$t('announcement.scheduled')"/>
-              <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####" :label="$t('announcement.date')">
-                <template #append>
-                  <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
-                      <q-date v-model="date" mask="DD.MM.YYYY" >
-                        <div class="row items-center justify-end">
-                          <q-btn v-close-popup label="Close" color="primary" flat />
-                        </div>
-                      </q-date>
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
-            </q-item-section>
-          </q-item>
-        </q-list>
+          <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####" :label="$t('announcement.date')">
+            <template #append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
+                  <q-date v-model="date" mask="DD.MM.YYYY" >
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+        </q-form>
       </q-card-section>
       <q-card-actions>
         <q-btn
@@ -89,6 +70,7 @@ import {QDialog} from 'quasar';
 import {Announcement} from 'src/data/types/Announcement';
 import { formatDate, parseDate } from 'src/helpers/format-helpers';
 import {ROLE} from '../../../../../shared/definitions/ENUM'
+import { cloneDeep } from 'lodash';
 
 const props = defineProps({
   originalAnnouncement: {
@@ -126,7 +108,7 @@ const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const announcement = ref({...props.originalAnnouncement} as Announcement)
+const announcement = ref(cloneDeep(props.originalAnnouncement))
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

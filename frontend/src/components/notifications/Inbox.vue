@@ -79,13 +79,16 @@
 /**
  * This component displays a message inbox, which contains message items. The messages can be filtered and sorted.
  */
-import {computed, defineProps, Ref, ref} from 'vue'
+import { computed, defineProps, inject, Ref, ref } from 'vue';
 import { i18n } from 'boot/i18n';
 import MessagePreview from 'components/notifications/MessagePreview.vue';
 import MessageDetail from 'components/notifications/MessageDetail.vue';
 import {Notification} from 'src/data/types/Notification';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {MARK_NOTIFICATION_AS_READ} from 'src/data/mutations/NOTIFICATIONS';
+import { ErrorService } from 'src/services/ErrorService';
+
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -117,10 +120,10 @@ const showMessageDetail: Ref<boolean> = ref(false)
 const sortedMessages = computed(() => {
   const notifications = props.notifications as Notification[]
   if (sort.value === 'oldest') {
-    return notifications.slice().sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
+    return notifications.sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
   else {
-    return notifications.slice().sort((b, a) => new Date(a.received).getTime() - new Date(b.received).getTime())
+    return notifications.sort((b, a) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
 })
 
@@ -143,7 +146,10 @@ function openMessage(notification: Notification) {
       uuid: notification.uuid,
     }
   ).catch((e) => {
-    console.error(e);
+    console.error(e)
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.error_mark_as_read'))
+    )
   })
   selectedMessage.value = notification
   showMessageDetail.value = true

@@ -68,7 +68,7 @@ import {Announcement} from 'src/data/types/Announcement';
 import {formatDate} from 'src/helpers/format-helpers';
 
 const props = defineProps({
-  originalAnnouncement: {
+  announcement: {
     required: true,
     type: Announcement,
     uuid: {
@@ -94,8 +94,6 @@ const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const announcement = ref({...props.originalAnnouncement} as Announcement)
-
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void {
@@ -114,7 +112,7 @@ function hide(): void {
  * @returns {void}
  */
 function onOk(): void{
-  emit('ok', announcement.value)
+  emit('ok', props.announcement)
   hide()
 }
 

@@ -129,6 +129,7 @@ export default {
     account_locked: 'Account gesperrt',
     account_locked_permanently: 'Dieser Account wurde dauerhaft gesperrt.',
     account_locked_until: 'Dieser Account wurde bis {date} gesperrt.',
+    error_mark_as_read: 'Konnte nicht als gelesen markiert werden.',
   },
   set_password: {
     description:
@@ -229,6 +230,7 @@ export default {
     create_announcement: 'Ankündigung erstellen',
     update_announcement: 'Ankündigung aktualisieren',
     delete_announcement: 'Ankündigung löschen',
+    options: 'Optionen',
   },
   finances: {
     general: 'Allgemein',
@@ -247,7 +249,7 @@ export default {
   announcement: {
     title: 'Titel',
     content: 'Inhalt',
-    user_roles: 'Benutzer Rollen',
+    user_roles: 'Benutzerrollen',
     create: 'Erstellen',
     date: 'Datum',
     edit: 'Bearbeiten',

@@ -223,7 +223,7 @@ export function deleteAnnouncement(
   $q.dialog({
     component: DeleteAnnouncementDialog,
     componentProps: {
-      originalAnnouncement: originalAnnouncement,
+      announcement: originalAnnouncement,
     },
   }).onOk((announcement: Announcement) => {
     // Enable account on backend

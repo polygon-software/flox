@@ -174,6 +174,13 @@ export class UserService {
     return deletedUser;
   }
 
+  /**
+   * Creates notifications for all users definded by userRoles with tho content
+   * of the announcement.
+   * @param {ROLE[]} userRoles - user roles to broadcast to.
+   * @param {Announcement} announcement - announcement to broadcast
+   * @returns {Promise<Notification[]>} - list of all created notifications
+   */
   async broadcastAnnouncement(
     userRoles: ROLE[],
     announcement: Announcement,
@@ -199,6 +206,12 @@ export class UserService {
     return notifications;
   }
 
+  /**
+   * Creates the notification defined by createNotificationInput for all users of the given role.
+   * @param {ROLE} role - user role to create notifications for.
+   * @param {CreateNotificationInput} createNotificationInput - notification to broadcast.
+   * @returns {Promise<Notification[]>} - created notifications.
+   */
   async broadcastNotification(
     role: ROLE,
     createNotificationInput: CreateNotificationInput,

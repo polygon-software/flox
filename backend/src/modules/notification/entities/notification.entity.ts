@@ -9,7 +9,7 @@ import { Announcement } from '../../announcement/entities/announcement.entity';
 @Entity({ name: 'notification' })
 @InputType('notification')
 /**
- * An application User
+ * A notification for a specific user. Can also belong to an announcement that triggered its creation.
  */
 export class Notification extends BaseEntity {
   @Field(() => String, { description: 'Title' })
