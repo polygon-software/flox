@@ -41,4 +41,15 @@ export class NotificationResolver {
   ): Promise<Array<Notification>> {
     return this.notificationsService.currentUserNotifications(user);
   }
+
+  @AnyRole()
+  @Mutation(() => Notification)
+  async markNotificationAsRead(
+    @Args('uuid') uuid: string,
+  ): Promise<Notification> {
+    return this.notificationsService.update({
+      uuid: uuid,
+      isRead: true,
+    } as UpdateNotificationInput);
+  }
 }

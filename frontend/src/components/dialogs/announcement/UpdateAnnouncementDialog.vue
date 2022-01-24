@@ -26,10 +26,11 @@
 
           <q-item>
             <q-item-section>
-              <q-item-label>{{ $t('announcement.content') }}</q-item-label>
-                <q-editor
-                  v-model="announcement.content"
-                />
+              <q-input
+                v-model="announcement.content"
+                :label="$t('announcement.content')"
+                type="textarea"
+              />
             </q-item-section>
           </q-item>
 

@@ -212,6 +212,7 @@ type Mutation {
   disableUser(uuid: String!): User!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   enableUser(uuid: String!): User!
+  markNotificationAsRead(uuid: String!): Notification!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!

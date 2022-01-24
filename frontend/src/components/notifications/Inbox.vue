@@ -85,7 +85,7 @@ import MessagePreview from 'components/notifications/MessagePreview.vue';
 import MessageDetail from 'components/notifications/MessageDetail.vue';
 import {Notification} from 'src/data/types/Notification';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {UPDATE_NOTIFICATION} from 'src/data/mutations/NOTIFICATIONS';
+import {MARK_NOTIFICATION_AS_READ} from 'src/data/mutations/NOTIFICATIONS';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -138,12 +138,9 @@ const filteredMessages = computed(() => {
  */
 function openMessage(notification: Notification) {
   executeMutation(
-    UPDATE_NOTIFICATION,
+    MARK_NOTIFICATION_AS_READ,
     {
-      updateNotificationInput: {
-        uuid: notification.uuid,
-        isRead: true,
-      }
+      uuid: notification.uuid,
     }
   ).catch((e) => {
     console.error(e);
