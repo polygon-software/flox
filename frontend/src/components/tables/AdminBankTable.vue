@@ -56,6 +56,7 @@
         <q-tr
           :props="props"
           style="background-color: white; cursor: pointer"
+          @click="() => onRowClick(props.row)"
         >
           <q-td key="id" :props="props">
             {{ props.row.readable_id }}
@@ -122,6 +123,16 @@ const computedResult = computed(()=>{
 async function routeToRegisterBank(): Promise<void> {
   await $routerService?.routeTo(ROUTES.REGISTER_BANK)
 }
+
+/**
+ * Upon clicking a row, opens the bank's dashboard view
+ * @param {Record<string, unknown>} row - the row that was clicked
+ * @returns {Promise<void>} - completed
+ */
+async function onRowClick(row: Record<string, unknown>): Promise<void>{
+  await $routerService?.routeTo(ROUTES.BANK_DASHBOARD)
+}
+
 
 </script>
 

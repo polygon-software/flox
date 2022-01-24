@@ -47,10 +47,10 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/employee/EmployeeDashboardPage.vue') }],
   },
 
+  // Bank: Main dashboard
   'BANK_DASHBOARD': {
-    name: 'bank_dashboard',
     path: '/bank-dashboard',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/bank/BankDashboard.vue') }],
   },
 
