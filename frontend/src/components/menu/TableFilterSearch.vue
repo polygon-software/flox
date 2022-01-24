@@ -5,8 +5,8 @@
       dense
       filled
       clearable
-      style="overflow: hidden; text-overflow: ellipsis"
       v-model="dateFilter"
+      style="overflow: hidden; text-overflow: ellipsis"
       :options="options"
       :label="$t('dossier.date_filter')"
       @update:model-value="filterSelected"/>
@@ -49,8 +49,8 @@
 
 <script setup lang="ts">
 import {defineEmits, Ref, ref} from 'vue';
-import {i18n} from "boot/i18n";
-import {dateToInputString, getCurrentQuarter} from "src/helpers/date-helpers";
+import {i18n} from 'boot/i18n';
+import {dateToInputString, getCurrentQuarter} from 'src/helpers/date-helpers';
 
 const emit = defineEmits(['change'])
 const today = new Date()

@@ -2,7 +2,7 @@
  * This file contains all helper functions pertaining to dates
  */
 
-import {date} from "quasar";
+import {date} from 'quasar';
 
 /**
  * Calculates the age of a person with a given birth datee
