@@ -235,6 +235,10 @@ export const DOSSIERS_BANK = {
           __typename
           uuid
           status
+          dossier {
+            uuid
+            __typename
+          }
         }
         __typename
       }

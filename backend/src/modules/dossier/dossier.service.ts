@@ -274,7 +274,13 @@ export class DossierService {
           uuid: Not(uuid),
         },
       },
-      relations: ['offers', 'offers.bank', 'documents', 'final_document'],
+      relations: [
+        'offers',
+        'offers.bank',
+        'offers.dossier',
+        'documents',
+        'final_document',
+      ],
     });
 
     // Return only those that have less than three offers or an own offer

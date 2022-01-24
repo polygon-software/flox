@@ -138,11 +138,11 @@ export class DossierResolver {
 
     // If admin: overwrite user with the one of the desired bank (get by FK, since UUID is only foreign key)
     if (dbUser && dbUser.role === ROLE.SOI_ADMIN && bankUuid) {
-      console.log('Get dossiers for', bankUuid);
       bank = await this.bankService.getMyBank(bankUuid);
     } else if (!dbUser || dbUser.role !== ROLE.BANK) {
       throw new Error('User is not a Bank');
     } else {
+      // Regular case: logged in as a bank
       bank = await this.bankService.getMyBank(dbUser.fk);
     }
 

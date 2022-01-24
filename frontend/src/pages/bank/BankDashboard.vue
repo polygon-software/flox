@@ -48,7 +48,7 @@
               {{ _props.row.readable_id }}
             </q-td>
             <q-td key="city" :props="_props">
-              {{ _props.row.correspondence_address.city }}
+              {{ _props.row.address.city }}
             </q-td>
             <q-td key="market_value" :props="_props">
               unknown
