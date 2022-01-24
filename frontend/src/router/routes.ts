@@ -10,11 +10,11 @@ import {ROLE} from '../../../shared/definitions/ENUMS';
 
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
-  // TODO: Depending on user's role, redirect to respective dashboard --> see 'project-bigabig' for reference
+  // Redirect to dashboards handled by router
   'MAIN': {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => getUserRoleComponent() }],
+    children: [],
   },
 
   'LOGIN': {
@@ -173,37 +173,3 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SET_PASSWORD,
 ]
 
-
-
-/**
- * Returns the component of the dashboard for the currently logged in user
- * @async
- * @returns {any} - the layout component
- */
-async function getUserRoleComponent(): Promise<any>{
-  // Get user's data from backend
-  const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
-
-  // Non-logged in: Redirect to 404
-  if(!queryResult?.data?.getMyUser){
-    return import('pages/generic/Error404.vue')
-  }
-
-  const userData = queryResult.data.getMyUser as Record<string, unknown>
-  const userRole = userData.role;
-
-  switch(userRole){
-    case ROLE.SOI_ADMIN:
-      return import('pages/soi/SOIAdminDossierPage.vue')
-    case ROLE.SOI_EMPLOYEE:
-      return import('pages/soi/SOIApplicationPage.vue')
-    case ROLE.COMPANY:
-      return import('pages/company/ManagementEmployeeDataPage.vue')
-    case ROLE.EMPLOYEE:
-      return import('pages/employee/EmployeeDashboardPage.vue')
-    case ROLE.BANK:
-      return import('pages/bank/BankDashboard.vue')
-    default:
-      return import('pages/generic/LoginPage.vue')
-  }
-}
