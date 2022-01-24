@@ -242,7 +242,7 @@ export class FileController {
       FILE_TYPE.NONE as unknown as FILE_TYPE,
       dossierUuid,
       'dossierRepository',
-      { onFile: null, onAssociation: 'finalDocument' },
+      { onFile: 'dossier', onAssociation: 'final_document' },
       req['user'].userId,
     );
 

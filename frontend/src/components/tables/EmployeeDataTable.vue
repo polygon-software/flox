@@ -84,12 +84,12 @@
 <script setup lang="ts">
 import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {MY_EMPLOYEES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {tableFilter} from 'src/helpers/filter-helpers';
+import {MY_EMPLOYEES} from 'src/data/queries/EMPLOYEE';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 

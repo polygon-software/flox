@@ -215,21 +215,50 @@ input CreateCompanyInput {
 }
 
 input CreateDossierInput {
-  born: DateTime
-  correspondence_address: CreateAddressInput!
-
-  """E-mail"""
-  email: String
-
-  """First Name"""
-  first_name: String
-
-  """Last Name"""
-  last_name: String
-  loan_sum: Float
+  address: CreateAddressInput!
+  affordability: Float!
+  alimony: Float!
+  amortisation_amount: Float
+  assets: Float!
+  birthdate: DateTime!
+  bonus: Float!
+  building_lease_expiration_date: DateTime
+  building_lease_interest: Float
+  child_allowances: Float!
+  credit: Float!
+  direct_amortisation: Boolean
+  eligible_income: Float!
+  email: String!
+  enfeoffment_estimate_high: Float!
+  enfeoffment_estimate_low: Float!
+  first_name: String!
+  has_amortisation: Boolean!
+  has_building_lease: Boolean!
+  has_renovation: Boolean!
+  incomes: [Float!]!
+  last_name: String!
+  leasing: Float!
+  loss_certificates: Boolean!
+  market_value_estimation: Float!
+  mortgage_amount: Float!
+  non_arrangeable: Boolean!
   original_bank_abbreviation: String!
   original_bank_name: String!
-  property_address: CreateAddressInput!
+  owner_occupied: Boolean!
+  partition_amounts: [Float!]!
+  partition_dates: [DateTime!]!
+  phone: String!
+  property_type: propertyType!
+  prosecutions: Boolean!
+  public_landlord: Boolean
+  purchase_date: DateTime!
+  purchase_price: Float!
+  renovation_price: Float
+  renovation_year: Float
+  total_costs: Float!
+  value_estimate_high: Float!
+  value_estimate_low: Float!
+  various: Float!
 }
 
 input CreateEmployeeInput {
@@ -305,20 +334,53 @@ input DeleteCompanyInput {
 }
 
 type Dossier {
-  """Date of birth of customer"""
-  born: DateTime!
-
   """Address"""
-  correspondence_address: Address!
+  address: Address!
+
+  """Calculated affordability"""
+  affordability: Float!
+
+  """Alimony cost"""
+  alimony: Float!
+
+  """Amount of property amortisation"""
+  amortisation_amount: Float
+
+  """Amount of assets"""
+  assets: Float!
+
+  """Date of birth of customer"""
+  birthdate: DateTime!
+
+  """Bonus payments"""
+  bonus: Float!
+
+  """Building lease expiration date"""
+  building_lease_expiration_date: DateTime
+
+  """Amount of building lease interest"""
+  building_lease_interest: Float
+
+  """Child allowances"""
+  child_allowances: Float!
 
   """Creation date"""
   created_at: DateTime!
 
+  """Credit cost"""
+  credit: Float!
+
   """Date of deletion"""
   deleted_at: DateTime
 
+  """Whether the property amortisation is direct"""
+  direct_amortisation: Boolean
+
   """Documents of the dossier"""
   documents: [PrivateFile!]
+
+  """Total eligible income"""
+  eligible_income: Float!
 
   """Mail"""
   email: String!
@@ -326,11 +388,29 @@ type Dossier {
   """Employee who created the Dossier"""
   employee: Employee!
 
+  """Enfeoffment for higher value estimate"""
+  enfeoffment_estimate_high: Float!
+
+  """Enfeoffment for lower value estimate"""
+  enfeoffment_estimate_low: Float!
+
   """Final summary document, to be signed by customer"""
-  finalDocument: PrivateFile
+  final_document: PrivateFile
 
   """First Name"""
   first_name: String!
+
+  """Whether the property has amortisation"""
+  has_amortisation: Boolean!
+
+  """Whether the property has a building lease"""
+  has_building_lease: Boolean!
+
+  """Whether the property has been renovated"""
+  has_renovation: Boolean!
+
+  """Owners gross incomes"""
+  incomes: [Float!]!
 
   """Last modification date"""
   last_modified_at: DateTime!
@@ -338,8 +418,17 @@ type Dossier {
   """Last Name"""
   last_name: String!
 
-  """Money loaned"""
-  loan_sum: Float!
+  """Leasing cost"""
+  leasing: Float!
+
+  """Whether loss certificates exist on the property"""
+  loss_certificates: Boolean!
+
+  """Current market value estimate"""
+  market_value_estimation: Float!
+
+  """Current mortgage amount"""
+  mortgage_amount: Float!
 
   """ToDo"""
   non_arrangeable: Boolean!
@@ -350,17 +439,59 @@ type Dossier {
   """Previous Bank of the customer"""
   original_bank: Bank!
 
-  """Address of Property"""
-  property_address: Address!
+  """Whether the property is inhabited by its owner"""
+  owner_occupied: Boolean!
+
+  """Mortgage partition amounts"""
+  partition_amounts: [Float!]!
+
+  """Mortgage partition expiration dates"""
+  partition_dates: [DateTime!]!
+
+  """Phone number"""
+  phone: String!
+
+  """Property type"""
+  property_type: propertyType!
+
+  """Whether there are ongoing prosecutions against the owner"""
+  prosecutions: Boolean!
+
+  """Whether the building lease landlord is public"""
+  public_landlord: Boolean
+
+  """Date of initial purchase"""
+  purchase_date: DateTime!
+
+  """Price of initial purchase"""
+  purchase_price: Float!
 
   """Human-readable ID"""
   readable_id: String!
 
+  """Price of property renovation"""
+  renovation_price: Float
+
+  """Year of property renovation"""
+  renovation_year: Float
+
   """Status of Dossier"""
   status: DossierStatus!
 
+  """Total calculated costs"""
+  total_costs: Float!
+
   """UUID"""
   uuid: ID!
+
+  """Higher market value estimate"""
+  value_estimate_high: Float!
+
+  """Lower market value estimate"""
+  value_estimate_low: Float!
+
+  """Various costs"""
+  various: Float!
 }
 
 enum DossierStatus {
@@ -674,7 +805,7 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
-  getBankNames: [String!]!
+  getBankList: [Bank!]!
   getBanks: [Bank!]!
   getDossier(getDossierInput: GetDossierInput!): Dossier!
   getDossierDocument(
@@ -866,4 +997,10 @@ enum creationState {
   AWAITING_DOCUMENTS
   DOCUMENTS_UPLOADED
   DONE
+}
+
+enum propertyType {
+  APARTMENT
+  APARTMENT_BUILDING
+  ONE_FAMILY_HOUSE
 }

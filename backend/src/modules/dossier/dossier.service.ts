@@ -61,18 +61,72 @@ export class DossierService {
       });
     }
     const dossier = this.dossierRepository.create({
-      correspondence_address: createDossierInput.correspondence_address,
-      original_bank: originalBank,
-      born: createDossierInput.born,
-      property_address: createDossierInput.property_address,
-      loan_sum: createDossierInput.loan_sum,
-      non_arrangeable: false,
-      offers: [],
-      documents: [],
-      status: DOSSIER_STATUS.IN_PROGRESS,
+      // Basic information
       first_name: createDossierInput.first_name,
       last_name: createDossierInput.last_name,
+      address: createDossierInput.address,
       email: createDossierInput.email,
+      phone: createDossierInput.phone,
+      birthdate: createDossierInput.birthdate,
+
+      // Value/purchase information
+      original_bank: originalBank,
+      property_type: createDossierInput.property_type,
+      owner_occupied: createDossierInput.owner_occupied,
+      purchase_date: createDossierInput.purchase_date,
+      purchase_price: createDossierInput.purchase_price,
+      market_value_estimation: createDossierInput.market_value_estimation,
+      mortgage_amount: createDossierInput.mortgage_amount,
+
+      // Amortisation information
+      has_amortisation: createDossierInput.has_amortisation,
+      direct_amortisation: createDossierInput.direct_amortisation,
+      amortisation_amount: createDossierInput.amortisation_amount,
+
+      // Building lease information
+      has_building_lease: createDossierInput.has_building_lease,
+      public_landlord: createDossierInput.public_landlord,
+      building_lease_expiration_date:
+        createDossierInput.building_lease_expiration_date,
+      building_lease_interest: createDossierInput.building_lease_interest,
+
+      // Renovation information
+      has_renovation: createDossierInput.has_renovation,
+      renovation_year: createDossierInput.renovation_year,
+      renovation_price: createDossierInput.renovation_price,
+
+      // Income/cost information
+      incomes: createDossierInput.incomes,
+      child_allowances: createDossierInput.child_allowances,
+      bonus: createDossierInput.bonus,
+      assets: createDossierInput.assets,
+      leasing: createDossierInput.leasing,
+      credit: createDossierInput.credit,
+      alimony: createDossierInput.alimony,
+      various: createDossierInput.various,
+      prosecutions: createDossierInput.prosecutions,
+      loss_certificates: createDossierInput.loss_certificates,
+
+      // Mortgage partitions
+      partition_amounts: createDossierInput.partition_amounts,
+      partition_dates: createDossierInput.partition_dates,
+
+      // Flag for non-arrangeable dossiers
+      non_arrangeable: createDossierInput.non_arrangeable,
+
+      // Calculated values
+      affordability: createDossierInput.affordability,
+      eligible_income: createDossierInput.eligible_income,
+      total_costs: createDossierInput.total_costs,
+      value_estimate_low: createDossierInput.value_estimate_low,
+      value_estimate_high: createDossierInput.value_estimate_high,
+      enfeoffment_estimate_low: createDossierInput.enfeoffment_estimate_low,
+      enfeoffment_estimate_high: createDossierInput.enfeoffment_estimate_high,
+
+      // Prefilled field (not from input)
+      offers: [],
+      documents: [],
+      status: DOSSIER_STATUS.OPEN,
       readable_id: generateHumanReadableId(),
       employee: employee,
     });
@@ -118,7 +172,15 @@ export class DossierService {
     const employee = await this.employeeService.getMyEmployee(cognitoId);
     return this.dossierRepository.findByIds(
       employee.dossiers.map((dossier) => dossier.uuid),
-      { relations: ['documents', 'offers', 'offers.bank', 'original_bank'] },
+      {
+        relations: [
+          'documents',
+          'offers',
+          'offers.bank',
+          'original_bank',
+          'final_document',
+        ],
+      },
     );
   }
 
@@ -213,7 +275,7 @@ export class DossierService {
           uuid: Not(bank.uuid),
         },
       },
-      relations: ['offers', 'offers.bank', 'documents'],
+      relations: ['offers', 'offers.bank', 'documents', 'final_document'],
     });
 
     // Return only those that have less than three offers or an own offer
@@ -276,7 +338,7 @@ export class DossierService {
   async getDossier(dossierUuid: string, userUuid: string): Promise<Dossier> {
     const user = await this.userRepository.findOne(userUuid);
     const dossier = await this.dossierRepository.findOne(dossierUuid, {
-      relations: ['documents', 'employee'],
+      relations: ['documents', 'employee', 'final_document'],
     });
     if (user.role === ROLE.EMPLOYEE && dossier.employee.uuid === user.fk) {
       return dossier;
@@ -298,7 +360,7 @@ export class DossierService {
     const dossier = await this.dossierRepository.findOne(
       removeDossierFilesInput.uuid,
       {
-        relations: ['documents', 'employee'],
+        relations: ['documents', 'employee', 'final_document'],
       },
     );
     const promises = [];
@@ -308,7 +370,7 @@ export class DossierService {
       });
       await Promise.all(promises);
       return this.dossierRepository.findOne(removeDossierFilesInput.uuid, {
-        relations: ['documents', 'employee'],
+        relations: ['documents', 'employee', 'final_document'],
       });
     }
     throw new Error('Not Authorized');
@@ -332,11 +394,11 @@ export class DossierService {
       uuid: sendDossierDocumentInput.fileUuid,
       expires: null,
     };
+
     const pdf = await this.fileService.getPrivateFile(args, dbUser);
 
     const dossierUuid = sendDossierDocumentInput.uuid;
     const recipients = sendDossierDocumentInput.recipients;
-
     const dossier = await this.dossierRepository.findOne(dossierUuid);
 
     if (!dossier) {

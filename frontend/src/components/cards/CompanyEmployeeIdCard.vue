@@ -18,11 +18,13 @@
 
 <script setup lang="ts">
 import {executeQuery} from 'src/helpers/data-helpers';
-import {MY_COMPANY, MY_EMPLOYEE, MY_USER} from 'src/data/queries/QUERIES';
 import {ROLE} from 'src/data/ENUM/ENUM';
 import {User} from 'src/data/types/User';
 import {ref} from 'vue';
 import {i18n} from 'boot/i18n';
+import {MY_USER} from 'src/data/queries/USER';
+import {MY_EMPLOYEE} from 'src/data/queries/EMPLOYEE';
+import {MY_COMPANY} from 'src/data/queries/COMPANY';
 
 
 const employeeReadableId = ref('')
