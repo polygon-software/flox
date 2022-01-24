@@ -165,11 +165,11 @@ export class DossierService {
   }
 
   /**
-   * @param {string} cognitoId - id of user of employee
+   * @param {string} uuid - employee's database UUID
    * @returns {Promise<Dossier[]>} - dossiers of employee
    */
-  async myDossiers(cognitoId: string): Promise<Dossier[]> {
-    const employee = await this.employeeService.getMyEmployee(cognitoId);
+  async myDossiers(uuid: string): Promise<Dossier[]> {
+    const employee = await this.employeeService.getMyEmployee(uuid);
     return this.dossierRepository.findByIds(
       employee.dossiers.map((dossier) => dossier.uuid),
       {

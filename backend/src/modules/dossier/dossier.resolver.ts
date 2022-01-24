@@ -7,10 +7,10 @@ import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.inpu
 import { ROLE } from '../../ENUM/ENUMS';
 import {
   AdminOnly,
-  Roles,
   BankOnly,
   CurrentUser,
   EmployeeOnly,
+  Roles,
 } from '../../auth/authorization.decorator';
 import { CreateOfferInput } from './dto/input/create-offer.input';
 import { ResetDossierInput } from './dto/input/reset-dossier.input';
@@ -20,6 +20,7 @@ import { GetDossierInput } from './dto/input/get-dossier.input';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
 import { BankService } from '../bank/bank.service';
 import { UserService } from '../user/user.service';
+import { EmployeeService } from '../employee/employee.service';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -27,6 +28,7 @@ export class DossierResolver {
     private readonly dossierService: DossierService,
     private readonly bankService: BankService,
     private readonly userService: UserService,
+    private readonly employeeService: EmployeeService,
   ) {}
 
   /**
@@ -74,14 +76,34 @@ export class DossierResolver {
   /**
    * Dossiers of currently logged in employee
    * @param {Record<string, string>} user - the current request's user
+   * @param {string} employeeUuid - employee uuid override for company access
    * @returns {Promise<Dossier[]>} - dossiers of currently logged in employee
    */
-  @EmployeeOnly()
+  @Roles(ROLE.COMPANY, ROLE.EMPLOYEE)
   @Query(() => [Dossier], { nullable: true, name: 'getMyDossiers' })
   async myDossiers(
     @CurrentUser() user: Record<string, string>,
+    @Args('employeeUuid', { nullable: true }) employeeUuid: string,
   ): Promise<Dossier[]> {
-    return this.dossierService.myDossiers(user.userId);
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+
+    let employee;
+
+    // If admin/company: overwrite user with the one of the desired employee (get by FK, since UUID is only foreign key)
+    if (
+      dbUser &&
+      employeeUuid &&
+      (dbUser.role === ROLE.SOI_ADMIN || dbUser.role === ROLE.COMPANY)
+    ) {
+      employee = await this.employeeService.getMyEmployee(employeeUuid);
+    } else if (!dbUser || dbUser.role !== ROLE.BANK) {
+      throw new Error('User is not an Employee');
+    } else {
+      // Regular case: logged in as a employee
+      employee = await this.employeeService.getMyEmployee(dbUser.fk);
+    }
+
+    return this.dossierService.myDossiers(employee.uuid);
   }
 
   /**

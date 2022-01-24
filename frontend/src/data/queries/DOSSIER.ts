@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 export const MY_DOSSIERS = {
   query: gql`
-    query getMyDossiers{
-      getMyDossiers{
+    query getMyDossiers($employeeUuid: String){
+      getMyDossiers(employeeUuid: $employeeUuid){
         uuid
         status
         non_arrangeable

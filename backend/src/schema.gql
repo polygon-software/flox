@@ -815,7 +815,7 @@ type Query {
   ): PrivateFile!
   getMyBank(bankUuid: String): Bank!
   getMyCompany: Company!
-  getMyDossiers: [Dossier!]
+  getMyDossiers(employeeUuid: String): [Dossier!]
   getMyEmployee: Employee!
   getMyEmployees: [Employee!]!
   getMyUser: User!

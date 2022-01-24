@@ -159,7 +159,7 @@ const columns = [
 ]
 
 
-const dossiers = subscribeToQuery(MY_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
+const dossiers = subscribeToQuery(MY_DOSSIERS, employeeUuid ? { employeeUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 const rows = computed( () => {
   return dossiers.value ?? []
 })
