@@ -185,11 +185,11 @@ async function getChipValues(){
   bankUuid.value = route.query.bid
 
   if(companyUuid.value){
-    const companyQuery = await executeQuery(COMPANY, {uuid: companyUuid})
+    const companyQuery = await executeQuery(COMPANY, {uuid: companyUuid.value})
     companyName.value = companyQuery.data.company.company_name as string ?? null
   }
   if(employeeUuid.value){
-    const employeeQuery = await executeQuery(EMPLOYEE, {uuid: employeeUuid})
+    const employeeQuery = await executeQuery(EMPLOYEE, {uuid: employeeUuid.value})
     const firstName = employeeQuery.data.getEmployee.first_name as string ?? null
     const lastName = employeeQuery.data.getEmployee.last_name as string ?? null
     employeeName.value = firstName && lastName ? `${firstName} ${lastName}` : null

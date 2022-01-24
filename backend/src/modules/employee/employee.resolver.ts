@@ -112,16 +112,29 @@ export class EmployeeResolver {
     @Args() getEmployeeArgs: GetEmployeeArgs,
     @CurrentUser() user: Record<string, string>,
   ): Promise<Employee> {
-    // TODO
-    // const dbUser = await this.userService.getUser({ uuid: user.userId });
-    // if (!dbUser) {
-    //   throw new Error('No valid user found');
-    // }
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    if (!dbUser) {
+      throw new Error('No valid user found');
+    }
 
     // If user is a company, ensure they have rights to access this specific employee
-    // if (dbUser.role === ROLE.COMPANY) {
-    //   // TODO error etc.
-    // }
+    if (dbUser.role === ROLE.COMPANY) {
+      // Get company where user's UUID matches cognitoID OR uuid matches companyUuid
+      const company = await this.companyService.getCompany({
+        uuid: dbUser.fk,
+      } as GetCompanyArgs);
+      if (!company) {
+        throw new Error(`No company found for ${user.userId}`);
+      }
+      const companyEmployees = await this.employeeService.getEmployees(company);
+      if (
+        !companyEmployees.some(
+          (employee) => employee.uuid === getEmployeeArgs.uuid,
+        )
+      ) {
+        throw new Error(`Cannot get Employee ${getEmployeeArgs.uuid}`);
+      }
+    }
     return this.employeeService.getEmployee(getEmployeeArgs.uuid);
   }
 
