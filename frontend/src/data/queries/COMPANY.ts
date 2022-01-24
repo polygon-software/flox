@@ -51,6 +51,7 @@ export const COMPANY = {
         readable_id
         first_name
         last_name
+        company_name
         documents{
           uuid
           key

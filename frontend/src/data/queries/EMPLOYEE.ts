@@ -1,5 +1,23 @@
 import gql from 'graphql-tag';
 
+export const EMPLOYEE = {
+  query: gql`
+    query getEmployee($uuid: ID!){
+      getEmployee(uuid: $uuid){
+        uuid
+        first_name
+        last_name
+        function
+        email
+        phone
+        __typename
+      }
+    }
+  `,
+  tables: ['employee'],
+  cacheLocation: 'allEmployees'
+}
+
 export const ALL_EMPLOYEES = {
   query: gql`
     query allEmployees{
@@ -61,7 +79,8 @@ export const MY_EMPLOYEE = {
 const EMPLOYEE_QUERIES = [
   ALL_EMPLOYEES,
   MY_EMPLOYEE,
-  MY_EMPLOYEES
+  MY_EMPLOYEES,
+  EMPLOYEE,
 ]
 
 

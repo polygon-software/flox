@@ -130,9 +130,13 @@ async function routeToRegisterEmployee(): Promise<void> {
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, {
+  const params = companyUuid ? {
+    cid: companyUuid,
     eid: row.uuid
-  })
+  } : {
+    eid: row.uuid
+  }
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, params)
 }
 
 </script>

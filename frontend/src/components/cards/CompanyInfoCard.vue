@@ -28,7 +28,3 @@ const companyUuid = route.query.cid
 const company = subscribeToQuery(MY_COMPANY, companyUuid ? {companyUuid} : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 </script>
-
-<style scoped>
-
-</style>

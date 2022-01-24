@@ -2,18 +2,19 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeService } from './employee.service';
 import { Employee } from './entities/employee.entity';
 import { CreateEmployeeInput } from './dto/input/create-employee.input';
-
 import {
   AdminOnly,
   CompanyOnly,
   CurrentUser,
   EmployeeOnly,
+  Roles,
 } from '../../auth/authorization.decorator';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUMS';
+import { GetEmployeeArgs } from './dto/args/get-employee.args';
 
 @Resolver(() => Employee)
 export class EmployeeResolver {
@@ -97,6 +98,31 @@ export class EmployeeResolver {
       throw new Error('User is not an Employee');
     }
     return this.employeeService.getEmployee(dbUser.fk);
+  }
+
+  /**
+   * Get an employee by UUID
+   * @param {GetEmployeeArgs} getEmployeeArgs - getter arguments, containing UUID
+   * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   * @returns {Promise<Employee>} - The Employee
+   */
+  @Roles(ROLE.SOI_ADMIN, ROLE.COMPANY)
+  @Query(() => Employee, { name: 'getEmployee' })
+  async getEmployee(
+    @Args() getEmployeeArgs: GetEmployeeArgs,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Employee> {
+    // TODO
+    // const dbUser = await this.userService.getUser({ uuid: user.userId });
+    // if (!dbUser) {
+    //   throw new Error('No valid user found');
+    // }
+
+    // If user is a company, ensure they have rights to access this specific employee
+    // if (dbUser.role === ROLE.COMPANY) {
+    //   // TODO error etc.
+    // }
+    return this.employeeService.getEmployee(getEmployeeArgs.uuid);
   }
 
   /**

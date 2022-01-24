@@ -813,6 +813,7 @@ type Query {
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
+  getEmployee(uuid: ID!): Employee!
   getMyBank(bankUuid: String): Bank!
   getMyCompany(companyUuid: String): Company!
   getMyDossiers(employeeUuid: String): [Dossier!]

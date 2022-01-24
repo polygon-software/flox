@@ -108,8 +108,14 @@ import ROUTES from 'src/router/routes';
 import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {MY_EMPLOYEES} from 'src/data/queries/EMPLOYEE';
+import {useRoute} from 'vue-router';
+import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+const route = useRoute()
 
 const $routerService: RouterService|undefined = inject('$routerService')
+
+// Company ID from route (if any), only relevant if going from SOIAdmin -> Company view
+const companyUuid = route.query.cid
 
 // Search term
 const search = ref('')
@@ -127,7 +133,7 @@ const columns = [
   { name: 'prov_ratio', label: i18n.global.t('account_data.provision_ratio'), field: 'prov_ratio', sortable: false, align: 'center' },
 ]
 
-const queryResult = subscribeToQuery(MY_EMPLOYEES,) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []
@@ -139,9 +145,13 @@ const computedResult = computed(()=>{
  * @returns {Promise<void>} - completed
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, {
+  const params = companyUuid ? {
+    cid: companyUuid,
     eid: row.uuid
-  })
+    } : {
+    eid: row.uuid
+  }
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, params)
 }
 
 /**
