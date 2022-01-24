@@ -11,7 +11,11 @@ import {ROLE} from '../../../shared/definitions/ENUMS';
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
   // TODO: Depending on user's role, redirect to respective dashboard --> see 'project-bigabig' for reference
-  'MAIN': () => getUserRoleRoute(),
+  'MAIN': {
+    path: '/',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => getUserRoleComponent() }],
+  },
 
   'LOGIN': {
     path: '/login',
@@ -172,34 +176,34 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
 
 
 /**
- * Returns the route to the dashboard for the currently logged in user
+ * Returns the component of the dashboard for the currently logged in user
  * @async
  * @returns {any} - the layout component
  */
-async function getUserRoleRoute(): Promise<any>{
+async function getUserRoleComponent(): Promise<any>{
   // Get user's data from backend
   const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
 
   // Non-logged in: Redirect to 404
-  if(!queryResult?.data?.myUser){
-    return ROUTES.LOGIN
+  if(!queryResult?.data?.getMyUser){
+    return import('pages/generic/Error404.vue')
   }
 
-  const userData = queryResult.data.myUser as Record<string, unknown>
+  const userData = queryResult.data.getMyUser as Record<string, unknown>
   const userRole = userData.role;
 
   switch(userRole){
     case ROLE.SOI_ADMIN:
-      return ROUTES.ADMIN_EMPLOYEES
+      return import('pages/soi/SOIAdminDossierPage.vue')
     case ROLE.SOI_EMPLOYEE:
-      return ROUTES.APPLICATIONS
+      return import('pages/soi/SOIApplicationPage.vue')
     case ROLE.COMPANY:
-      return ROUTES.MANAGEMENT_EMPLOYEE_DATA
+      return import('pages/company/ManagementEmployeeDataPage.vue')
     case ROLE.EMPLOYEE:
-      return ROUTES.EMPLOYEE_DASHBOARD
+      return import('pages/employee/EmployeeDashboardPage.vue')
     case ROLE.BANK:
-      return ROUTES.BANK_DASHBOARD
+      return import('pages/bank/BankDashboard.vue')
     default:
-      return ROUTES.LOGIN
+      return import('pages/generic/LoginPage.vue')
   }
 }
