@@ -103,10 +103,10 @@ const computedResult = computed(() => {
   if(props.dateFilter !== null){
     const now = Date.now()
     if(props.dateFilter === 'past'){
-      announcements = announcements.filter((announcement) => announcement.date.getDate() < now)
+      announcements = announcements.filter((announcement) => announcement.date.getTime() < now)
     }
     else if(props.dateFilter === 'future'){
-      announcements = announcements.filter((announcement) => announcement.date.getDate() > now)
+      announcements = announcements.filter((announcement) => announcement.date.getTime() > now)
     }
   }
   return announcements
