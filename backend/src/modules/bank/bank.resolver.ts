@@ -81,7 +81,10 @@ export class BankResolver {
     const dbUser = await this.userService.getUser({ uuid: user.userId });
 
     // If admin: overwrite user with the one of the desired bank (get by FK, since UUID is only foreign key)
-    if (dbUser && dbUser.role === ROLE.SOI_ADMIN && bankUuid) {
+    if (dbUser && dbUser.role === ROLE.SOI_ADMIN) {
+      if (!bankUuid) {
+        throw new Error('Admin must specify bankUuid');
+      }
       return this.bankService.getBank({ uuid: dbUser.fk } as GetBankArgs);
     } else if (!dbUser || dbUser.role !== ROLE.BANK) {
       throw new Error('User is not a Bank');

@@ -146,8 +146,6 @@ const bankName = ref(null)
  * On mounted, get names of all needed entities
  */
 onMounted(async () => {
-  console.log('On mounted!')
-
   await getChipValues()
 })
 
@@ -196,7 +194,7 @@ async function getChipValues(){
     employeeName.value = firstName && lastName ? `${firstName} ${lastName}` : null
   }
   if(bankUuid.value){
-    const bankQuery = await executeQuery(BANK, {uuid: employeeUuid.value})
+    const bankQuery = await executeQuery(BANK, {uuid: bankUuid.value})
     bankName.value = bankQuery.data.getBank.name as string ?? null
   }
 }
