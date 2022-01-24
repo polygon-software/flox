@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi, { Schema } from 'joi';
 import { ROLE } from '../../../../shared/definitions/ENUM';
 import { AnnouncementItem } from '../../../../shared/schemas/AnnouncementItem';
 
@@ -44,7 +44,7 @@ export class Announcement {
    */
   validate(): boolean {
     try {
-      Joi.assert(this, AnnouncementItem);
+      Joi.assert(this, AnnouncementItem as unknown as Schema);
       return true;
     } catch (e) {
       return false;

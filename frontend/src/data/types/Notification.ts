@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi, { Schema } from 'joi';
 import { NotificationItem } from '../../../../shared/schemas/NotificationItem';
 
 /**
@@ -47,7 +47,7 @@ export class Notification {
    */
   validate(): boolean {
     try {
-      Joi.assert(this, NotificationItem);
+      Joi.assert(this, NotificationItem as unknown as Schema);
       return true;
     } catch (e) {
       return false;
