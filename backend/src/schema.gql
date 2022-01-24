@@ -82,7 +82,7 @@ input CreateAnnouncementInput {
   content: String!
 
   """Date of announcement"""
-  date: DateTime!
+  date: DateTime
 
   """Is the announcement scheduled?"""
   scheduled: Boolean!
@@ -405,6 +405,12 @@ input TempDisableUserInput {
 input UpdateAnnouncementInput {
   """Content"""
   content: String!
+
+  """Date of announcement"""
+  date: DateTime
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
 
   """Title"""
   title: String!

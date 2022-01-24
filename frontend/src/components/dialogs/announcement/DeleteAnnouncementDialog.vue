@@ -34,6 +34,13 @@
               {{ announcement.userRole }}
             </q-item-section>
           </q-item>
+
+          <q-item>
+            <q-item-section>
+              <q-item-label>{{ $t('announcement.date') }}</q-item-label>
+              {{ formatDate(announcement.date) }}
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-card-section>
       <q-card-actions>
@@ -58,6 +65,7 @@
 import {defineEmits, defineProps, ref, Ref} from 'vue'
 import {QDialog} from 'quasar';
 import {Announcement} from 'src/data/types/Announcement';
+import {formatDate} from 'src/helpers/format-helpers';
 
 const props = defineProps({
   originalAnnouncement: {
@@ -86,7 +94,7 @@ const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const announcement = ref({...props.originalAnnouncement})
+const announcement = ref({...props.originalAnnouncement} as Announcement)
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

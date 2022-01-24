@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import {computed, defineProps, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {formatDateTime} from 'src/helpers/format-helpers';
+import {formatDate} from 'src/helpers/format-helpers';
 import {ALL_ANNOUNCEMENTS} from 'src/data/queries/ANNOUNCEMENTS';
 import {updateAnnouncement, deleteAnnouncement} from 'src/helpers/admin-helpers';
 
@@ -69,7 +69,7 @@ const columns = [
   { name: 'title', label: 'Title', field: 'title', sortable: true, align: 'left' },
   { name: 'content', label: 'Content', field: 'content', sortable: true, align: 'left' },
   { name: 'userRole', label: 'User Role', field: 'userRole', sortable: true, align: 'left' },
-  { name: 'date', label: 'Date', field: 'date', sortable: true, align: 'left', format: (val:string) => formatDateTime(new Date(val)) },
+  { name: 'date', label: 'Date', field: 'date', sortable: true, align: 'left', format: (val:string) => formatDate(new Date(val)) },
   { name: 'options', label: '', field: 'options', sortable: false, align: 'left'},
 
 ]

@@ -31,6 +31,9 @@ export class AnnouncementService {
     const announcement = this.announcementsRepository.create(
       createAnnouncementInput,
     );
+    if (!announcement.scheduled) {
+      announcement.date = new Date(new Date().setHours(0, 0, 0, 0));
+    }
     announcement.notifications = await this.userService.broadcastAnnouncement(
       announcement,
     );
@@ -80,10 +83,12 @@ export class AnnouncementService {
     updateAnnouncementInput: UpdateAnnouncementInput,
   ): Promise<Announcement> {
     // Update the announcement
-    const announcement = this.announcementsRepository.create({
-      ...updateAnnouncementInput,
-      date: new Date(),
-    });
+    const announcement = this.announcementsRepository.create(
+      updateAnnouncementInput,
+    );
+    if (!announcement.scheduled) {
+      announcement.date = new Date(new Date().setHours(0, 0, 0, 0));
+    }
     await this.announcementsRepository.update(
       updateAnnouncementInput.uuid,
       announcement,

@@ -46,7 +46,7 @@
 
           <q-item>
             <q-item-section>
-              <q-toggle v-model="announcement.scheduled" :label="$t('announcement.schedule')"/>
+              <q-toggle v-model="announcement.scheduled" :label="$t('announcement.scheduled')"/>
               <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####" :label="$t('announcement.date')">
                 <template #append>
                   <q-icon name="event" class="cursor-pointer">

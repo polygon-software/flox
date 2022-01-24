@@ -253,6 +253,6 @@ export default {
     edit: 'Bearbeiten',
     update: 'Aktualisieren',
     delete: 'Löschen',
-    schedule: 'Planen',
+    scheduled: 'Geplant',
   },
 };

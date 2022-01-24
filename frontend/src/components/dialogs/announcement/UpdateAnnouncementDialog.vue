@@ -39,6 +39,25 @@
               {{ announcement.userRole }}
             </q-item-section>
           </q-item>
+
+          <q-item>
+            <q-item-section>
+              <q-toggle v-model="announcement.scheduled" :label="$t('announcement.scheduled')"/>
+              <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####" :label="$t('announcement.date')">
+                <template #append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
+                      <q-date v-model="date" mask="DD.MM.YYYY" >
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-card-section>
       <q-card-actions>
@@ -60,9 +79,10 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineEmits, defineProps, ref, Ref} from 'vue'
+import { computed, defineEmits, defineProps, ref, Ref } from 'vue';
 import {QDialog} from 'quasar';
 import {Announcement} from 'src/data/types/Announcement';
+import { formatDate, parseDate } from 'src/helpers/format-helpers';
 
 const props = defineProps({
   originalAnnouncement: {
@@ -87,11 +107,18 @@ const props = defineProps({
   }
 })
 
+const date = computed({
+  get: () => formatDate(announcement.value.date),
+  set: (dateString) => {
+    announcement.value.date = parseDate(dateString)
+  },
+})
+
 const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const announcement = ref({...props.originalAnnouncement})
+const announcement = ref({...props.originalAnnouncement} as Announcement)
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

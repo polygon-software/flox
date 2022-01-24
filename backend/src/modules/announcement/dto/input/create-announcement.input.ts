@@ -16,7 +16,7 @@ export class CreateAnnouncementInput {
   @IsString()
   userRole: ROLE;
 
-  @Field(() => Date, { description: 'Date of announcement' })
+  @Field(() => Date, { description: 'Date of announcement', nullable: true })
   @IsDate()
   date: Date;
 

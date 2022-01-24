@@ -248,6 +248,6 @@ export default {
     edit: 'Edit',
     update: 'Update',
     delete: 'Delete',
-    schedule: 'Schedule',
+    scheduled: 'Scheduled',
   },
 };
