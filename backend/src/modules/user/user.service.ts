@@ -165,7 +165,7 @@ export class UserService {
   }
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {
-    const user = await this.usersRepository.create(updateUserInput);
+    const user = this.usersRepository.create(updateUserInput);
     await this.usersRepository.update(updateUserInput.uuid, user);
     return this.usersRepository.findOne(updateUserInput.uuid);
   }
@@ -173,9 +173,9 @@ export class UserService {
   async remove(deleteUserInput: DeleteUserInput): Promise<User> {
     const user = await this.usersRepository.findOne(deleteUserInput.uuid);
     const uuid = user.uuid;
-    const deleted_user = await this.usersRepository.remove(user);
-    deleted_user.uuid = uuid;
-    return deleted_user;
+    const deletedUser = await this.usersRepository.remove(user);
+    deletedUser.uuid = uuid;
+    return deletedUser;
   }
 
   async broadcastAnnouncement(
@@ -188,7 +188,7 @@ export class UserService {
       isRead: false,
     } as CreateNotificationInput;
 
-    return await this.broadcastNotification(
+    return this.broadcastNotification(
       announcement.userRole,
       createNotificationInput,
     );

@@ -33,17 +33,13 @@ export class Notification extends BaseEntity {
   isRead: boolean;
 
   @Field(() => User, { description: 'The user this notification is for' })
-  @ManyToOne(() => User, (user) => user.notifications, {
-    eager: true,
-  })
+  @ManyToOne(() => User, (user) => user.notifications)
   user: User;
 
   @Field(() => Announcement, {
     description: 'The announcement this notification is from',
     nullable: true,
   })
-  @ManyToOne(() => Announcement, (announcement) => announcement.notifications, {
-    eager: true,
-  })
+  @ManyToOne(() => Announcement, (announcement) => announcement.notifications)
   announcement: Announcement;
 }

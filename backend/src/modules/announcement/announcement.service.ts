@@ -34,7 +34,7 @@ export class AnnouncementService {
     announcement.notifications = await this.userService.broadcastAnnouncement(
       announcement,
     );
-    return await this.announcementsRepository.save(announcement);
+    return this.announcementsRepository.save(announcement);
   }
 
   /**
@@ -42,7 +42,7 @@ export class AnnouncementService {
    * @param {GetAnnouncementsArgs} getAnnouncementsArgs - uuids
    * @returns {Promise<Announcement[]>} - requested announcements
    */
-  getAnnouncements(
+  async getAnnouncements(
     getAnnouncementsArgs: GetAnnouncementsArgs,
   ): Promise<Announcement[]> {
     if (getAnnouncementsArgs.uuids !== undefined) {
@@ -63,7 +63,7 @@ export class AnnouncementService {
    * Get all announcements.
    * @returns {Promise<Announcement[]>} - all announcements
    */
-  getAllAnnouncements(): Promise<Announcement[]> {
+  async getAllAnnouncements(): Promise<Announcement[]> {
     return this.announcementsRepository.find({
       relations: ['notifications'],
     });
@@ -74,7 +74,7 @@ export class AnnouncementService {
    * @param {GetAnnouncementArgs} getAnnouncementArgs - uuid
    * @returns {Promise<Announcement[]>} - requested announcement
    */
-  getAnnouncement(
+  async getAnnouncement(
     getAnnouncementArgs: GetAnnouncementArgs,
   ): Promise<Announcement> {
     return this.announcementsRepository.findOne(getAnnouncementArgs.uuid, {
@@ -109,7 +109,7 @@ export class AnnouncementService {
       notification.received = announcement.date;
       notification.isRead = false;
     });
-    return await this.announcementsRepository.save(updatedAnnouncement);
+    return this.announcementsRepository.save(updatedAnnouncement);
   }
 
   /**
@@ -130,10 +130,10 @@ export class AnnouncementService {
       ),
     );
     const uuid = announcement.uuid;
-    const deleted_announcement = await this.announcementsRepository.remove(
+    const deletedAnnouncement = await this.announcementsRepository.remove(
       announcement,
     );
-    deleted_announcement.uuid = uuid;
-    return deleted_announcement;
+    deletedAnnouncement.uuid = uuid;
+    return deletedAnnouncement;
   }
 }
