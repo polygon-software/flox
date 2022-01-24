@@ -139,8 +139,8 @@ const computedResult = computed(()=>{
  * @returns {Promise<void>} - completed
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_DASHBOARD, {
-    uuid: row.uuid
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, {
+    eid: row.uuid
   })
 }
 

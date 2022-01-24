@@ -126,7 +126,7 @@ async function routeToRegisterBank(): Promise<void> {
 }
 
 /**
- * Upon clicking a row, opens the bank's dashboard view
+ * Upon clicking a row, opens the bank's dashboard view if the bank has an account
  * @param {Record<string, unknown>} row - the row that was clicked
  * @returns {Promise<void>} - completed
  */
@@ -136,7 +136,6 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
     await $routerService?.routeTo(ROUTES.BANK_DASHBOARD, {bid: row.uuid})
   }
 }
-
 
 </script>
 

@@ -30,6 +30,7 @@
             </template>
           </q-input>
           <q-btn
+            v-if="!employeeUuid"
             :label="$t('employee_dashboard.new_assignment')"
             color="primary"
             icon="add"
@@ -57,7 +58,12 @@ import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue
 import CompanyEmployeeId from 'components/cards/CompanyEmployeeIdCard.vue';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {useRoute} from 'vue-router';
 
+const route = useRoute()
+
+// Employee ID from route (if any), only relevant if going from company -> employee view
+const employeeUuid = route.query.eid
 const search = ref('')
 
 const $routerService: RouterService|undefined = inject('$routerService')

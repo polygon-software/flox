@@ -124,9 +124,14 @@ import {MY_DOSSIERS} from 'src/data/queries/DOSSIER';
 import {DOSSIER_FILE, OFFER_FILE} from 'src/data/queries/FILE';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {useRoute} from 'vue-router';
 
 const $q: QVueGlobals = useQuasar()
 const $routerService: RouterService|undefined = inject('$routerService')
+const route = useRoute()
+
+// Employee ID from route (if any), only relevant if going from company -> employee view
+const employeeUuid = route.query.eid
 
 // Selection must be an array
 const selected = ref([])
