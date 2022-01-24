@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateNotificationInput } from './dto/input/create-notification.input';
 import { UpdateNotificationInput } from './dto/input/update-notification.input';
 import { DeleteNotificationInput } from './dto/input/delete-notification.input';
-import { Repository } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from './entities/notification.entity';
 
@@ -30,7 +30,7 @@ export class NotificationService {
   async update(
     updateNotificationInput: UpdateNotificationInput,
   ): Promise<Notification> {
-    const notification = await this.notificationsRepository.create(
+    const notification = this.notificationsRepository.create(
       updateNotificationInput,
     );
     await this.notificationsRepository.update(
@@ -47,10 +47,22 @@ export class NotificationService {
       deleteNotificationInput.uuid,
     );
     const uuid = notification.uuid;
-    const deleted_notification = await this.notificationsRepository.remove(
+    const deletedNotification = await this.notificationsRepository.remove(
       notification,
     );
-    deleted_notification.uuid = uuid;
-    return deleted_notification;
+    deletedNotification.uuid = uuid;
+    return deletedNotification;
+  }
+
+  async currentUserNotifications(
+    user: Record<string, string>,
+  ): Promise<Array<Notification>> {
+    const now = new Date();
+    return this.notificationsRepository.find({
+      where: {
+        user: { uuid: user.userId },
+        received: LessThan(now.toISOString()),
+      },
+    });
   }
 }

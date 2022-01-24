@@ -1,16 +1,15 @@
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { NotificationService } from './notification.service';
 import { CreateNotificationInput } from './dto/input/create-notification.input';
 import { UpdateNotificationInput } from './dto/input/update-notification.input';
 import { DeleteNotificationInput } from './dto/input/delete-notification.input';
 import { Notification } from './entities/notification.entity';
-import { Public } from '../../auth/authentication.decorator';
+import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
 
 @Resolver(() => Notification)
 export class NotificationResolver {
   constructor(private readonly notificationsService: NotificationService) {}
 
-  @Public()
   @Mutation(() => Notification)
   async createNotification(
     @Args('createNotificationInput')
@@ -19,7 +18,6 @@ export class NotificationResolver {
     return this.notificationsService.create(createNotificationInput);
   }
 
-  @Public()
   @Mutation(() => Notification)
   async updateNotification(
     @Args('updateNotificationInput')
@@ -28,12 +26,19 @@ export class NotificationResolver {
     return this.notificationsService.update(updateNotificationInput);
   }
 
-  @Public()
   @Mutation(() => Notification)
   async deleteNotification(
     @Args('deleteNotificationInput')
     deleteNotificationInput: DeleteNotificationInput,
   ): Promise<Notification> {
     return this.notificationsService.delete(deleteNotificationInput);
+  }
+
+  @AnyRole()
+  @Query(() => [Notification], { name: 'myNotifications' })
+  async myNotifications(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<Array<Notification>> {
+    return this.notificationsService.currentUserNotifications(user);
   }
 }

@@ -24,6 +24,7 @@ export const AdminOnly = (): CustomDecorator =>
 export const AnyRole = (): CustomDecorator => SetMetadata(ANY_ROLE_KEY, true);
 
 // Access to current user from request
+// The user record has the form { userId: string, username: string }
 export const CurrentUser = createParamDecorator(
   (data, req) => getRequest(req).user,
 );

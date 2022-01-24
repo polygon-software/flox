@@ -1,22 +1,25 @@
 import gql from 'graphql-tag';
-import {MutationTypes, QueryObject} from 'src/data/DATA-DEFINITIONS';
+import { QueryObject } from 'src/data/DATA-DEFINITIONS';
 
 /**
  * Notification-related queries
  */
 
-export const UPDATE_NOTIFICATION = {
-  mutation: gql`
-    mutation updateNotification($updateNotificationInput: UpdateNotificationInput!){
-      updateNotification (updateNotificationInput: $updateNotificationInput) {
+export const MY_NOTIFICATIONS = {
+  query: gql`
+    query {
+      myNotifications {
         uuid
+        title
+        received
+        content
         isRead
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['notification'],
-  type: MutationTypes.UPDATE,
-  cacheLocation: 'updateNotification'
-}
+  cacheLocation: 'myNotifications',
+};
 
-export const NOTIFICATION_QUERIES: QueryObject[] = []
+export const NOTIFICATION_QUERIES: QueryObject[] = [MY_NOTIFICATIONS];

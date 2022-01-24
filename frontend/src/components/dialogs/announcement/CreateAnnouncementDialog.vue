@@ -46,8 +46,8 @@
 
           <q-item>
             <q-item-section>
-              <q-toggle v-model="announcement.scheduled"/>
-              <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####">
+              <q-toggle v-model="announcement.scheduled" :label="$t('announcement.schedule')"/>
+              <q-input v-model="date" :disable="!announcement.scheduled" filled mask="##.##.####" :label="$t('announcement.date')">
                 <template #append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
@@ -102,7 +102,9 @@ const date = computed({
   },
 })
 
-const options = Object.entries(ROLE).map(([key, value]) => {return {label: key, value: value}})
+const options = Object.entries(ROLE).map(([key, value]) => {
+  return {label: key, value: value}
+})
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

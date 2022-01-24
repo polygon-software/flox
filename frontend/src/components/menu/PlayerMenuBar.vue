@@ -117,7 +117,7 @@ import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {Notification} from 'src/data/types/Notification';
-import {MY_NOTIFICATIONS} from 'src/data/queries/USER';
+import {MY_NOTIFICATIONS} from 'src/data/queries/NOTIFICATIONS';
 
 
 const $authService: AuthenticationService|undefined = inject('$authService')
@@ -129,19 +129,19 @@ const loggedIn = computed(() => {
   return $authStore.getters.getLoggedInStatus();
 })
 
-const myNotificationsQueryResult = subscribeToQuery(MY_NOTIFICATIONS) as Ref<Record<string, unknown>>
+const myNotificationsQueryResult = subscribeToQuery(MY_NOTIFICATIONS) as Ref<Array<Record<string, unknown>>>
 
 const notifications = computed(() => {
-  const notifications: Array<Notification> = []
-  const records = myNotificationsQueryResult.value?.notifications as Array<Record<string, unknown>> ?? [];
-  records.forEach(record => notifications.push(new Notification(
+  const myNotifications: Array<Notification> = []
+  const records = myNotificationsQueryResult.value  ?? [];
+  records.forEach(record => myNotifications.push(new Notification(
     record.title as string,
     new Date(record.received as string),
     record.content as string,
     record.isRead as boolean,
     record.uuid as string,
   )));
-  return notifications;
+  return myNotifications;
 })
 
 // The number of notifications

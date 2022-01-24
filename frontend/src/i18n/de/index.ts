@@ -11,7 +11,7 @@ export default {
     duplicate: 'Duplizieren',
     view: 'Ansehen',
     home: 'Home',
-    settings: 'Einstellungen'
+    settings: 'Einstellungen',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -25,7 +25,8 @@ export default {
     redirected: 'Sie werden in Kürze weitergeleitet...',
     successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
     confirmed_registration: 'Registrierung bestätigt',
-    redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
+    redirect_to_login:
+      'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
     back_to_login: 'Zurück zu Login',
     change_password: 'Passwort ändern',
     no_account_yet: 'Noch keinen Account?',
@@ -65,7 +66,7 @@ export default {
     partner_dashboard: 'Partner Dashboard',
     statistics: 'Statistiken',
     finances: 'Finanzen',
-    announcements: 'Ankündigungen'
+    announcements: 'Ankündigungen',
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -87,9 +88,12 @@ export default {
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
     user_not_defined: 'Benutzerpool ist nicht definiert',
-    missing_properties: 'Eine oder mehrere der folgenden Eigenschaften fehlen für die angegebene Mutation: \'mutation\', \'tables\', \'type\', \'cacheLocation\'',
-    not_logged_in: 'Versucht, sich abzumelden, obwohl man nicht eingeloggt ist!',
-    error_occurred: 'Ein Fehler ist aufgetreten, versuchen Sie sich erneut anzumelden',
+    missing_properties:
+      "Eine oder mehrere der folgenden Eigenschaften fehlen für die angegebene Mutation: 'mutation', 'tables', 'type', 'cacheLocation'",
+    not_logged_in:
+      'Versucht, sich abzumelden, obwohl man nicht eingeloggt ist!',
+    error_occurred:
+      'Ein Fehler ist aufgetreten, versuchen Sie sich erneut anzumelden',
     cant_find_module: 'Kann Modul nicht finden ',
     cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
     missing_attributes: 'Fehlende Attribute',
@@ -112,20 +116,23 @@ export default {
     invalid_company_name: 'Bitte geben Sie Ihren Firmennamen ein',
     invalid_company_uid: 'Bitte geben Sie die UID Ihrer Firma ein',
     must_accept_conditions: 'Sie müssen den AGBs zustimmen.',
-    must_accept_condition_truthful: 'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
+    must_accept_condition_truthful:
+      'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     invalid_birth_date: 'Bitte geben Sie ihr Geburtsdatum ein',
     date_must_be_future: 'Bitte wählen Sie ein zukünftiges Datum',
-    can_only_edit_draft: 'Bearbeiten fehlgeschlagen (nur Entwürfe können bearbeitet werden)',
+    can_only_edit_draft:
+      'Bearbeiten fehlgeschlagen (nur Entwürfe können bearbeitet werden)',
     error_while_enabling: 'Beim Aktivieren ist ein Fehler aufgetreten.',
     error_while_disabling: 'Beim Deaktivieren ist ein Fehler aufgetreten.',
     account_locked: 'Account gesperrt',
     account_locked_permanently: 'Dieser Account wurde dauerhaft gesperrt.',
-    account_locked_until: 'Dieser Account wurde bis {date} gesperrt.'
+    account_locked_until: 'Dieser Account wurde bis {date} gesperrt.',
   },
   set_password: {
-    description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
+    description:
+      'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
   },
   greetings: {
     welcome_bigabig: 'Willkommen bei Big A Big',
@@ -133,7 +140,7 @@ export default {
   notifications: {
     messages: 'Nachrichten',
   },
-  messages:{
+  messages: {
     account_enabled: 'Account aktiviert',
     account_disabled: 'Account deaktiviert',
     account_rejected: 'Account abgelehnt',
@@ -150,7 +157,8 @@ export default {
     tools: 'Werkzeuge',
     travelling: 'Reisen',
     watches: 'Uhren',
-    select_interests: 'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
+    select_interests:
+      'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
     amount_selected: '{amount}/{max} gewählt',
   },
   products: {
@@ -184,13 +192,13 @@ export default {
     max_clicks: 'Maximale Anzahl Klicks',
     max_cost: 'Maximale Kosten',
     add_product: 'Produkt hinzufügen',
-    title: 'Titel'
+    title: 'Titel',
   },
   settings: {
     settings: 'Einstellungen',
     general: 'Allgemein',
     account: 'Benutzerkonto',
-    personal_data: 'Persönliche Daten'
+    personal_data: 'Persönliche Daten',
   },
   status: {
     loading: 'Lädt',
@@ -206,7 +214,7 @@ export default {
     applied: 'Angefragt',
     active: 'Aktiv',
     disabled: 'Deaktiviert',
-    disabled_temp: 'Deaktiviert (bis {until})'
+    disabled_temp: 'Deaktiviert (bis {until})',
   },
   admin: {
     users: 'Benutzer',
@@ -234,7 +242,7 @@ export default {
     day: 'Tag',
     to_dashboard: 'Zum Dashboard',
     income_over_time: 'Verlauf der Einnahmen',
-    income_by_category: 'Einnahmen pro Kategorie'
+    income_by_category: 'Einnahmen pro Kategorie',
   },
   announcement: {
     title: 'Titel',
@@ -245,5 +253,6 @@ export default {
     edit: 'Bearbeiten',
     update: 'Aktualisieren',
     delete: 'Löschen',
-  }
-}
+    schedule: 'Planen',
+  },
+};

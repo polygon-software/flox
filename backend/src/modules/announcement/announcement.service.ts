@@ -46,16 +46,9 @@ export class AnnouncementService {
     getAnnouncementsArgs: GetAnnouncementsArgs,
   ): Promise<Announcement[]> {
     if (getAnnouncementsArgs.uuids !== undefined) {
-      return this.announcementsRepository.findByIds(
-        getAnnouncementsArgs.uuids,
-        {
-          relations: ['notifications'],
-        },
-      );
+      return this.announcementsRepository.findByIds(getAnnouncementsArgs.uuids);
     } else {
-      return this.announcementsRepository.find({
-        relations: ['notifications'],
-      });
+      return this.announcementsRepository.find();
     }
   }
 
@@ -64,9 +57,7 @@ export class AnnouncementService {
    * @returns {Promise<Announcement[]>} - all announcements
    */
   async getAllAnnouncements(): Promise<Announcement[]> {
-    return this.announcementsRepository.find({
-      relations: ['notifications'],
-    });
+    return this.announcementsRepository.find();
   }
 
   /**
@@ -77,9 +68,7 @@ export class AnnouncementService {
   async getAnnouncement(
     getAnnouncementArgs: GetAnnouncementArgs,
   ): Promise<Announcement> {
-    return this.announcementsRepository.findOne(getAnnouncementArgs.uuid, {
-      relations: ['notifications'],
-    });
+    return this.announcementsRepository.findOne(getAnnouncementArgs.uuid);
   }
 
   /**
@@ -101,7 +90,6 @@ export class AnnouncementService {
     );
     const updatedAnnouncement = await this.announcementsRepository.findOne(
       updateAnnouncementInput.uuid,
-      { relations: ['notifications'] },
     );
     updatedAnnouncement.notifications.forEach((notification) => {
       notification.title = announcement.title;
@@ -122,7 +110,6 @@ export class AnnouncementService {
   ): Promise<Announcement> {
     const announcement = await this.announcementsRepository.findOne(
       deleteAnnouncementInput.uuid,
-      { relations: ['notifications'] },
     );
     await Promise.all(
       announcement.notifications.map((notification) =>

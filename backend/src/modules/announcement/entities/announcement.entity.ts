@@ -47,6 +47,7 @@ export class Announcement extends BaseEntity {
   })
   @OneToMany(() => Notification, (notification) => notification.announcement, {
     cascade: true,
+    eager: true,
   })
   notifications: Notification[];
 }

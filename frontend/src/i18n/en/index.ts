@@ -11,7 +11,7 @@ export default {
     duplicate: 'Duplicate',
     view: 'View',
     home: 'Home',
-    settings: 'Settings'
+    settings: 'Settings',
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -25,10 +25,11 @@ export default {
     redirected: 'You will be redirected shortly...',
     successful_application: 'Your application was successful.',
     confirmed_registration: 'Registration confirmed',
-    redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
+    redirect_to_login:
+      'Your registration is now being processed! You will now be automatically redirected to the login screen.',
     back_to_login: 'Back to Login',
     change_password: 'Change password',
-    no_account_yet: 'Don\'t have an account?',
+    no_account_yet: "Don't have an account?",
     please_enter_username: 'Please enter your username',
   },
   account_data: {
@@ -56,7 +57,7 @@ export default {
     phone_number: 'Phone Number',
     conditions: 'Terms and Conditions',
     accept_conditions: 'I agree to the terms and conditions.',
-    accept_condition_truthful:'All information has been filled in truthfully.',
+    accept_condition_truthful: 'All information has been filled in truthfully.',
     passport_or_id: 'Passport',
     optional: 'optional',
   },
@@ -65,7 +66,7 @@ export default {
     partner_dashboard: 'Partner Dashboard',
     statistics: 'Statistics',
     finances: 'Finances',
-    announcements: 'Announcements'
+    announcements: 'Announcements',
   },
   buttons: {
     finish_signup: 'Finish',
@@ -87,7 +88,8 @@ export default {
   errors: {
     nothing_here: 'Oops. Nothing here...',
     user_not_defined: 'User Pool is not defined',
-    missing_properties: 'One or more of the following properties are missing for the given mutation: \'mutation\', \'tables\', \'type\', \'cacheLocation\'',
+    missing_properties:
+      "One or more of the following properties are missing for the given mutation: 'mutation', 'tables', 'type', 'cacheLocation'",
     not_logged_in: 'Trying to log out despite not being logged in!',
     error_occurred: 'An error occurred, try logging in again',
     cant_find_module: 'Cannot find module ',
@@ -103,8 +105,8 @@ export default {
     invalid_name: 'Please enter your name',
     invalid_number: 'Please enter a number',
     invalid_input: 'Please enter something',
-    invalid_company_name: 'Please enter your company\'s name',
-    invalid_company_uid: 'Please enter your company\'s UID',
+    invalid_company_name: "Please enter your company's name",
+    invalid_company_uid: "Please enter your company's UID",
     invalid_address: 'Please enter a valid address',
     invalid_house_number: 'This number does not exist',
     invalid_city: 'Please enter a valid city',
@@ -112,7 +114,8 @@ export default {
     invalid_phone_number: 'Please enter a valid phone number',
     invalid_option: 'Please choose a valid option.',
     must_accept_conditions: 'You have to accept the terms and conditions.',
-    must_accept_condition_truthful: 'You must have filled in all information truthfully.',
+    must_accept_condition_truthful:
+      'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
     invalid_birth_date: 'Please enter you date of birth',
@@ -122,7 +125,7 @@ export default {
     error_while_disabling: 'An error occurred while disabling the account.',
     account_locked: 'Account locked',
     account_locked_permanently: 'This account has been locked permanently.',
-    account_locked_until: 'This account has been locked until {date}.'
+    account_locked_until: 'This account has been locked until {date}.',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -133,7 +136,7 @@ export default {
   notifications: {
     messages: 'Messages',
   },
-  messages:{
+  messages: {
     account_enabled: 'Account enabled',
     account_disabled: 'Account disabled',
     account_rejected: 'Account rejected',
@@ -184,13 +187,13 @@ export default {
     max_clicks: 'Maximum number of clicks',
     max_cost: 'Maximum cost',
     add_product: 'Add new Product',
-    title: 'Title'
+    title: 'Title',
   },
   settings: {
     settings: 'Settings',
     general: 'General',
     account: 'Account',
-    personal_data: 'Personal Data'
+    personal_data: 'Personal Data',
   },
   status: {
     loading: 'Loading',
@@ -206,7 +209,7 @@ export default {
     applied: 'Applied',
     active: 'Active',
     disabled: 'Disabled',
-    disabled_temp: 'Disabled (until {until})'
+    disabled_temp: 'Disabled (until {until})',
   },
   admin: {
     users: 'Users',
@@ -234,7 +237,7 @@ export default {
     day: 'Day',
     to_dashboard: 'To Dashboard',
     income_over_time: 'Income over Time',
-    income_by_category: 'Income by Category'
+    income_by_category: 'Income by Category',
   },
   announcement: {
     title: 'Title',
@@ -245,5 +248,6 @@ export default {
     edit: 'Edit',
     update: 'Update',
     delete: 'Delete',
-  }
-}
+    schedule: 'Schedule',
+  },
+};

@@ -157,7 +157,6 @@ input CreateUserInput {
 
   """phone number"""
   phone: String!
-  role: Role
 
   """Username"""
   username: String!
@@ -380,6 +379,7 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
+  myNotifications: [Notification!]!
   myUser: User!
   product(uuid: ID!): Product!
   products(uuids: [ID!]): [Product!]!

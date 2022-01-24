@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import { QueryObject } from 'src/data/DATA-DEFINITIONS';
 
 /**
  * User-related queries
@@ -7,8 +7,8 @@ import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 
 export const MY_USER = {
   query: gql`
-    query{
-      myUser{
+    query {
+      myUser {
         uuid
         role
         status
@@ -18,13 +18,13 @@ export const MY_USER = {
     }
   `,
   tables: ['user'],
-  cacheLocation: 'myUser'
-}
+  cacheLocation: 'myUser',
+};
 
 export const ALL_PLAYERS = {
   query: gql`
-    query{
-      allPlayers{
+    query {
+      allPlayers {
         uuid
         role
         createdAt
@@ -48,13 +48,13 @@ export const ALL_PLAYERS = {
     }
   `,
   tables: ['user'],
-  cacheLocation: 'allPlayers'
-}
+  cacheLocation: 'allPlayers',
+};
 
 export const ALL_PARTNERS = {
   query: gql`
-    query{
-      allPartners{
+    query {
+      allPartners {
         uuid
         role
         createdAt
@@ -78,32 +78,7 @@ export const ALL_PARTNERS = {
     }
   `,
   tables: ['user'],
-  cacheLocation: 'allPartners'
-}
+  cacheLocation: 'allPartners',
+};
 
-export const MY_NOTIFICATIONS = {
-  query: gql`
-    query{
-      myUser{
-        notifications {
-          uuid
-          title
-          received
-          content
-          isRead
-          __typename
-        }
-        __typename
-      }
-    }
-  `,
-  tables: ['user'],
-  cacheLocation: 'myUser'
-}
-
-export const USER_QUERIES: QueryObject[] = [
-  MY_USER,
-  ALL_PLAYERS,
-  ALL_PARTNERS,
-  MY_NOTIFICATIONS,
-]
+export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_PLAYERS, ALL_PARTNERS];

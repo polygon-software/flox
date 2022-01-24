@@ -138,7 +138,6 @@ export class UserService {
   getAllPlayers(): Promise<User[]> {
     return this.usersRepository.find({
       where: { role: ROLE.PLAYER },
-      relations: ['notifications'],
     });
   }
 
@@ -149,7 +148,6 @@ export class UserService {
   getAllPartners(): Promise<User[]> {
     return this.usersRepository.find({
       where: { role: ROLE.PARTNER },
-      relations: ['notifications'],
     });
   }
 
@@ -159,9 +157,7 @@ export class UserService {
    * @returns {Promise<User>} - the user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersRepository.findOne(getUserArgs.uuid, {
-      relations: ['notifications'],
-    });
+    return this.usersRepository.findOne(getUserArgs.uuid);
   }
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {
