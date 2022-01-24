@@ -134,7 +134,7 @@ const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<R
 const computedResult = computed(()=>{
   let filteredResult = []
   for (const query in queryResult.value){
-    if(query.date.getTime() < fromDate.value.getTime() && query.date.getTime() > toDate.value.getTime()){
+    if((query.date.getTime() as Date) < (fromDate.value.getTime() as Date) && (query.date.getTime() as Date) > (toDate.value.getTime() as Date)) {
       filteredResult.push(query)
     }
   }

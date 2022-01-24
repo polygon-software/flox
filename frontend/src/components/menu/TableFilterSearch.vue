@@ -2,10 +2,10 @@
   <div class="row">
     <div class="q-gutter-y-md column" style="min-width: 150px">
     <q-select
+      v-model="dateFilter"
       dense
       filled
       clearable
-      v-model="dateFilter"
       style="overflow: hidden; text-overflow: ellipsis"
       :options="options"
       :label="$t('dossier.date_filter')"
@@ -51,6 +51,8 @@
 import {defineEmits, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {dateToInputString, getCurrentQuarter} from 'src/helpers/date-helpers';
+import endOfMonth from 'date-fns/endOfMonth'
+
 
 const emit = defineEmits(['change'])
 const today = new Date()
@@ -73,7 +75,7 @@ const options = [
     key: 'current-month',
     label: i18n.global.t('dossier.current_month'),
     fromDate:  new Date(today.getFullYear(), today.getMonth(), 1), // 1st current month
-    toDate: new Date(today.getFullYear(), today.getMonth()+1, 0), // last current month
+    toDate: endOfMonth(today), // last current month
   },
   {
     key: 'past-365-days',
@@ -96,6 +98,7 @@ const toDate = ref(dateToInputString(dateFilter.value?.toDate as Date))
 function filterSelected() {
   fromDate.value = dateToInputString(dateFilter.value?.fromDate as Date)
   toDate.value = dateToInputString(dateFilter.value?.toDate as Date)
+  emitValues()
 }
 
 /**
