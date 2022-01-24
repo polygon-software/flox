@@ -37,15 +37,25 @@
       </p>
     </div>
 
-
-    <!-- Button for adding new partitions -->
+    <!-- Button for adding new partitions (as long as all existing ones are valid) -->
     <q-btn
       size="sm"
       color="primary"
       icon="add"
-      :disable="mortgagePartitions.length >= maxPartitions"
+      :disable="mortgagePartitions.length >= maxPartitions || !mortgagePartitions[mortgagePartitions.length-1].amount || !mortgagePartitions[mortgagePartitions.length-1].date"
       round
       @click="addPartition"
+    />
+
+    <!-- Button for removing last partition -->
+    <q-btn
+      class="q-ml-sm"
+      size="sm"
+      color="primary"
+      icon="remove"
+      :disable="mortgagePartitions.length === 1"
+      round
+      @click="removePartition"
     />
   </div>
 </template>
@@ -109,7 +119,7 @@ const isValidTotal = computed(() => {
 })
 
 /**
- * Adds a partition whenever the plus button is clicked
+ * Adds a mortgage partition
  * @returns {void}
  */
 function addPartition(){
@@ -119,6 +129,16 @@ function addPartition(){
         amount: null,
         date: null,
     })
+  }
+}
+
+/**
+ * Removes the last partition
+ * @returns {void}
+ */
+function removePartition(){
+  if(mortgagePartitions.value.length > 1){
+    mortgagePartitions.value.pop()
   }
 }
 

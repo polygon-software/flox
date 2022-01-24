@@ -243,7 +243,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('account_data.bank'),
-      options: [], // Replaced from NewDossierForm with actual bank data
+      options: [], // We don't set an initial value here; NewDossierForm replaces this with actual bank list
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_NOT_NULL(val) || i18n.global.t('errors.invalid_option')]
     },
