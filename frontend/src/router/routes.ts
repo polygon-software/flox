@@ -43,7 +43,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   'EMPLOYEE_DASHBOARD': {
     path: '/employee-dashboard',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/employee/EmployeeDashboardPage.vue') }],
   },
 
@@ -52,12 +52,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     path: '/bank-dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/bank/BankDashboard.vue') }],
-  },
-
-  'MANAGEMENT_EMPLOYEE_VIEW': {
-    path: '/management-employee-view',
-    component: () => import('layouts/ManagementLayout.vue'),
-    children: [{ path: '', component: () => import('pages/employee/EmployeeDashboardPage.vue') }],
   },
 
   'SIGNUP': {
@@ -123,7 +117,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   // SOI Employee: Applications
   'APPLICATIONS': {
     path: '/applications',
-    component: () => import('layouts/SOIEmployeeLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/soi/SOIApplicationPage.vue') }],
   },
 
@@ -173,3 +167,32 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SET_PASSWORD,
 ]
 
+
+/**
+ * Returns the layout for the currently logged in user
+ * @async
+ * @returns {any} - the layout component
+ */
+async function getUserRoleLayout(): Promise<any>{
+  // Get user's data from backend
+  const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+
+  // Non-logged in: Redirect to 404
+  if(!queryResult?.data?.getMyUser){
+    return import('layouts/MainLayout.vue')
+  }
+
+  const userData = queryResult.data.getMyUser as Record<string, unknown>
+  const userRole = userData.role;
+
+  switch(userRole){
+    case ROLE.SOI_ADMIN:
+      return import('layouts/SOIAdminLayout.vue')
+    case ROLE.SOI_EMPLOYEE:
+      return import('layouts/SOIEmployeeLayout.vue')
+    case ROLE.COMPANY:
+      return import('layouts/ManagementLayout.vue')
+    default:
+      return import('layouts/MainLayout.vue')
+  }
+}
