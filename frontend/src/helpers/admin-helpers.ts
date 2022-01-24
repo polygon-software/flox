@@ -132,7 +132,7 @@ export function createAnnouncement($q: QVueGlobals): void {
       createAnnouncementInput: {
         title: announcement.title,
         content: announcement.content,
-        userRole: announcement.userRole,
+        userRoles: announcement.userRoles,
         scheduled: announcement.scheduled,
         date: announcement.scheduled ? announcement.date : null,
       },
@@ -182,6 +182,7 @@ export function updateAnnouncement(
         uuid: announcement.uuid,
         title: announcement.title,
         content: announcement.content,
+        userRoles: announcement.userRoles,
         scheduled: announcement.scheduled,
         date: announcement.scheduled ? announcement.date : null,
       },

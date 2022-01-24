@@ -1,7 +1,7 @@
 import { ObjectType, InputType, Field } from '@nestjs/graphql';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { IsBoolean, IsDate, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsDate, IsString } from 'class-validator';
 import { ROLE } from '../../../ENUM/ENUM';
 import { Notification } from '../../notification/entities/notification.entity';
 
@@ -9,7 +9,7 @@ import { Notification } from '../../notification/entities/notification.entity';
 @Entity({ name: 'announcement' })
 @InputType('announcement')
 /**
- * An application User
+ * An announcement that is sent to one or more user roles in the form of a notification
  */
 export class Announcement extends BaseEntity {
   @Field(() => String, { description: 'Title' })
@@ -32,14 +32,10 @@ export class Announcement extends BaseEntity {
   @IsBoolean()
   scheduled: boolean;
 
-  @Field(() => ROLE, { description: 'User role to receive notification' })
-  @Column({
-    type: 'enum',
-    enum: ROLE,
-    default: ROLE.NONE,
-  })
-  @IsString()
-  userRole: ROLE;
+  @Field(() => [ROLE], { description: 'User roles to receive notification' })
+  @Column('simple-array', { nullable: true })
+  @IsArray()
+  userRoles: ROLE[];
 
   @Field(() => [Notification], {
     description: 'Notifications generated',

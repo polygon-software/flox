@@ -12,7 +12,7 @@ export class NotificationResolver {
   @Query(() => [Notification], { name: 'myNotifications' })
   async myNotifications(
     @CurrentUser() user: Record<string, string>,
-  ): Promise<Array<Notification>> {
+  ): Promise<Notification[]> {
     return this.notificationsService.currentUserNotifications(user);
   }
 

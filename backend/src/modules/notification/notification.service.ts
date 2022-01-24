@@ -56,7 +56,7 @@ export class NotificationService {
 
   async currentUserNotifications(
     user: Record<string, string>,
-  ): Promise<Array<Notification>> {
+  ): Promise<Notification[]> {
     const now = new Date();
     return this.notificationsRepository.find({
       where: {

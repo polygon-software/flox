@@ -119,7 +119,7 @@ const columns = [
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
-const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<Array<Record<string, unknown>>>
+const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<Record<string, unknown>[]>
 
 // Rows, filtered by status (if applicable)
 const computedResult = computed(() => {

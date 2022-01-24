@@ -132,7 +132,7 @@ const loggedIn = computed(() => {
 const myNotificationsQueryResult = subscribeToQuery(MY_NOTIFICATIONS) as Ref<Array<Record<string, unknown>>>
 
 const notifications = computed(() => {
-  const myNotifications: Array<Notification> = []
+  const myNotifications: Notification[] = []
   const records = myNotificationsQueryResult.value  ?? [];
   records.forEach(record => myNotifications.push(new Notification(
     record.title as string,

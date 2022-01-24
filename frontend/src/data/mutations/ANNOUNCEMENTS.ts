@@ -11,7 +11,7 @@ export const CREATE_ANNOUNCEMENT = {
         title
         content
         date
-        userRole
+        userRoles
         scheduled
         __typename
       }
@@ -32,7 +32,7 @@ export const UPDATE_ANNOUNCEMENT = {
         title
         content
         date
-        userRole
+        userRoles
         scheduled
         __typename
       }
@@ -53,7 +53,7 @@ export const DELETE_ANNOUNCEMENT = {
         title
         content
         date
-        userRole
+        userRoles
         scheduled
         __typename
       }

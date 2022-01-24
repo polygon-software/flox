@@ -36,10 +36,10 @@
           <q-item>
             <q-item-section>
               <q-select
-                v-model="announcement.userRole"
-                :label="$t('announcement.user_role')"
+                v-model="announcement.userRoles"
+                :label="$t('announcement.user_roles')"
                 :options="options"
-                map-options emit-value
+                multiple
               />
             </q-item-section>
           </q-item>
@@ -93,7 +93,7 @@ const emit = defineEmits(['ok'])
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
-const announcement = ref(new Announcement('', new Date(), '', ROLE.PLAYER, false))
+const announcement = ref(new Announcement('', new Date(), '', [ROLE.PLAYER], false))
 
 const date = computed({
   get: () => formatDate(announcement.value.date),
@@ -102,9 +102,7 @@ const date = computed({
   },
 })
 
-const options = Object.entries(ROLE).map(([key, value]) => {
-  return {label: key, value: value}
-})
+const options = [ROLE.PLAYER, ROLE.PARTNER]
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

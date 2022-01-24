@@ -68,13 +68,13 @@ const props = defineProps( {
 const columns = [
   { name: 'title', label: 'Title', field: 'title', sortable: true, align: 'left' },
   { name: 'content', label: 'Content', field: 'content', sortable: true, align: 'left' },
-  { name: 'userRole', label: 'User Role', field: 'userRole', sortable: true, align: 'left' },
+  { name: 'userRoles', label: 'User Roles', field: 'userRoles', sortable: true, align: 'left', format: (val:string[]) => val.join(', ') },
   { name: 'date', label: 'Date', field: 'date', sortable: true, align: 'left', format: (val:string) => formatDate(new Date(val)) },
   { name: 'options', label: '', field: 'options', sortable: false, align: 'left'},
 
 ]
 
-const allAnnouncementsQueryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<Array<Record<string, unknown>>>
+const allAnnouncementsQueryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<Record<string, unknown>[]>
 
 // Rows, filtered by status (if applicable)
 const computedResult = computed(() => {

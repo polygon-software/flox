@@ -12,7 +12,7 @@ export const ALL_ANNOUNCEMENTS = {
         title
         date
         content
-        userRole
+        userRoles
         scheduled
         __typename
       }

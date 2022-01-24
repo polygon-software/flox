@@ -36,8 +36,12 @@
 
           <q-item>
             <q-item-section>
-              <q-item-label>{{ $t('announcement.user_role') }}</q-item-label>
-              {{ announcement.userRole }}
+              <q-select
+                v-model="announcement.userRoles"
+                :label="$t('announcement.user_roles')"
+                :options="options"
+                multiple
+              />
             </q-item-section>
           </q-item>
 
@@ -84,6 +88,7 @@ import { computed, defineEmits, defineProps, ref, Ref } from 'vue';
 import {QDialog} from 'quasar';
 import {Announcement} from 'src/data/types/Announcement';
 import { formatDate, parseDate } from 'src/helpers/format-helpers';
+import {ROLE} from '../../../../../shared/definitions/ENUM'
 
 const props = defineProps({
   originalAnnouncement: {
@@ -114,6 +119,8 @@ const date = computed({
     announcement.value.date = parseDate(dateString)
   },
 })
+
+const options = [ROLE.PLAYER, ROLE.PARTNER]
 
 const emit = defineEmits(['ok'])
 

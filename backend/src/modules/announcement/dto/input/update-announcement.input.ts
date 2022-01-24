@@ -1,5 +1,6 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsDate, IsString, IsUUID } from 'class-validator';
+import { IsArray, IsBoolean, IsDate, IsString, IsUUID } from 'class-validator';
+import { ROLE } from '../../../../ENUM/ENUM';
 
 @InputType()
 export class UpdateAnnouncementInput {
@@ -14,6 +15,10 @@ export class UpdateAnnouncementInput {
   @Field(() => String, { description: 'Content' })
   @IsString()
   content: string;
+
+  @Field(() => [ROLE], { description: 'User roles to receive notification' })
+  @IsArray()
+  userRoles: ROLE[];
 
   @Field(() => Date, { description: 'Date of announcement', nullable: true })
   @IsDate()

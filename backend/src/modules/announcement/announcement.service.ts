@@ -33,6 +33,7 @@ export class AnnouncementService {
       announcement.date = new Date(new Date().setHours(0, 0, 0, 0));
     }
     announcement.notifications = await this.userService.broadcastAnnouncement(
+      announcement.userRoles,
       announcement,
     );
     return this.announcementsRepository.save(announcement);
@@ -61,19 +62,48 @@ export class AnnouncementService {
     if (!announcement.scheduled) {
       announcement.date = new Date(new Date().setHours(0, 0, 0, 0));
     }
+    const oldAnnouncement = await this.announcementsRepository.findOne(
+      announcement.uuid,
+    );
     await this.announcementsRepository.update(
       updateAnnouncementInput.uuid,
       announcement,
     );
-    const updatedAnnouncement = await this.announcementsRepository.findOne(
+    let updatedAnnouncement = await this.announcementsRepository.findOne(
       updateAnnouncementInput.uuid,
     );
+    // User role differences
+    const removedRoles = oldAnnouncement.userRoles.filter(
+      (oldRole) => !updatedAnnouncement.userRoles.includes(oldRole),
+    );
+    const addedRoles = updatedAnnouncement.userRoles.filter(
+      (newRole) => !oldAnnouncement.userRoles.includes(newRole),
+    );
+    // Delete now invalid notifications
+    await Promise.all(
+      updatedAnnouncement.notifications
+        .filter((notification) => removedRoles.includes(notification.user.role))
+        .map((invalidNotification) =>
+          this.notificationService.delete(invalidNotification),
+        ),
+    );
+    updatedAnnouncement = await this.announcementsRepository.findOne(
+      updateAnnouncementInput.uuid,
+    );
+    // Update existing notifications
     updatedAnnouncement.notifications.forEach((notification) => {
       notification.title = announcement.title;
       notification.content = announcement.content;
       notification.received = announcement.date;
       notification.isRead = false;
     });
+    // Create new notifications
+    const newNotifications = await this.userService.broadcastAnnouncement(
+      addedRoles,
+      updatedAnnouncement,
+    );
+    updatedAnnouncement.notifications.push(...newNotifications);
+
     return this.announcementsRepository.save(updatedAnnouncement);
   }
 

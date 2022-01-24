@@ -242,7 +242,7 @@ export default {
   announcement: {
     title: 'Title',
     content: 'Content',
-    user_role: 'User role',
+    user_roles: 'User roles',
     create: 'Create',
     date: 'Date',
     edit: 'Edit',

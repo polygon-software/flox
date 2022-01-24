@@ -115,7 +115,7 @@ const showMessageDetail: Ref<boolean> = ref(false)
 
 // Sorts the messages according to the selected parameter
 const sortedMessages = computed(() => {
-  const notifications = props.notifications as Array<Notification>
+  const notifications = props.notifications as Notification[]
   if (sort.value === 'oldest') {
     return notifications.slice().sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }

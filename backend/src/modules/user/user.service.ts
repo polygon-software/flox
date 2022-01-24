@@ -175,8 +175,9 @@ export class UserService {
   }
 
   async broadcastAnnouncement(
+    userRoles: ROLE[],
     announcement: Announcement,
-  ): Promise<Array<Notification>> {
+  ): Promise<Notification[]> {
     const createNotificationInput = {
       title: announcement.title,
       received: announcement.date,
@@ -184,20 +185,28 @@ export class UserService {
       isRead: false,
     } as CreateNotificationInput;
 
-    return this.broadcastNotification(
-      announcement.userRole,
-      createNotificationInput,
+    const notificationsByRole = await Promise.all(
+      userRoles.map((userRole) =>
+        this.broadcastNotification(userRole, createNotificationInput),
+      ),
     );
+
+    const notifications: Notification[] = [];
+    notificationsByRole.forEach((notificationList) =>
+      notifications.push(...notificationList),
+    );
+
+    return notifications;
   }
 
   async broadcastNotification(
     role: ROLE,
     createNotificationInput: CreateNotificationInput,
-  ): Promise<Array<Notification>> {
+  ): Promise<Notification[]> {
     const users = await this.usersRepository.find({
       role: role,
     });
-    const notifications: Array<Notification> = [];
+    const notifications: Notification[] = [];
     await Promise.all(
       users.map(async (user) => {
         const notification = await this.notificationService.create({

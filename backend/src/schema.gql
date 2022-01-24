@@ -35,8 +35,8 @@ type Announcement {
   """Title"""
   title: String!
 
-  """User role to receive notification"""
-  userRole: Role!
+  """User roles to receive notification"""
+  userRoles: [Role!]!
 
   """UUID"""
   uuid: ID!
@@ -90,8 +90,8 @@ input CreateAnnouncementInput {
   """Title"""
   title: String!
 
-  """User role to receive notification"""
-  userRole: Role!
+  """User roles to receive notification"""
+  userRoles: [Role!]!
 }
 
 input CreateCommentInput {
@@ -389,6 +389,9 @@ input UpdateAnnouncementInput {
   """Title"""
   title: String!
 
+  """User roles to receive notification"""
+  userRoles: [Role!]!
+
   """UUID"""
   uuid: ID!
 }
@@ -522,8 +525,8 @@ input announcement {
   """Title"""
   title: String!
 
-  """User role to receive notification"""
-  userRole: Role!
+  """User roles to receive notification"""
+  userRoles: [Role!]!
 }
 
 input comment {
