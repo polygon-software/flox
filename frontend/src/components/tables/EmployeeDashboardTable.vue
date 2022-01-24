@@ -41,6 +41,7 @@
             {{ $t('dossier_status_enum.' + _props.row.status) }}
           </q-chip>
           <q-popup-edit
+            v-if="!employeeUuid"
             v-slot="scope"
             :auto-save="true"
             :model-value="_props.row.status"
@@ -211,7 +212,7 @@ function showDossierDocuments(dossier: Record<string, unknown>): void {
       files,
       dossierUuid: dossier.uuid,
       query: DOSSIER_FILE,
-      uploadEnabled: true
+      uploadEnabled: !employeeUuid // If coming from non-employee view, disable upload
     }
   }).onOk(() => {
     // Upload documents
