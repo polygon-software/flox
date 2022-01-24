@@ -93,6 +93,7 @@ import ROUTES from 'src/router/routes';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {ALL_BANKS} from 'src/data/queries/BANK';
+import {IS_VALID_EMAIL} from 'src/data/RULES';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -130,8 +131,10 @@ async function routeToRegisterBank(): Promise<void> {
  * @returns {Promise<void>} - completed
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  // TODO ensure this only works for banks that have an account!!
-  await $routerService?.routeTo(ROUTES.BANK_DASHBOARD, {bid: row.uuid})
+  // Only allow reroute if bank has an account (thus a valid e-mail
+  if(IS_VALID_EMAIL(row.email)){
+    await $routerService?.routeTo(ROUTES.BANK_DASHBOARD, {bid: row.uuid})
+  }
 }
 
 
