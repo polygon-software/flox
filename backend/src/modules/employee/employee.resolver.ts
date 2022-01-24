@@ -59,17 +59,21 @@ export class EmployeeResolver {
   /**
    * Get the list of employees for the currently logged in company account
    * @param {Record<string, string>} user - the currently logged in cognito user (userId and username)
+   * @param {string} [companyUuid] - company's UUID, if accessed from admin
    * @returns { Promise<Employee[]>} - Employees
    */
   @CompanyOnly()
   @Query(() => [Employee], { name: 'getMyEmployees' })
   async getMyEmployees(
     @CurrentUser() user: Record<string, string>,
+    @Args('companyUuid', { nullable: true }) companyUuid?: string,
   ): Promise<Employee[]> {
-    // Get company where user's UUID matches cognitoID
-    const company = await this.companyService.getCompany({
-      cognito_id: user.userId,
-    } as GetCompanyArgs);
+    const args = companyUuid
+      ? ({ uuid: companyUuid } as GetCompanyArgs)
+      : ({ cognito_id: user.userId } as GetCompanyArgs);
+
+    // Get company where user's UUID matches cognitoID OR uuid matches companyUuid
+    const company = await this.companyService.getCompany(args);
 
     if (!company) {
       throw new Error(`No company found for ${user.userId}`);

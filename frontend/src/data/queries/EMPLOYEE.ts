@@ -20,8 +20,8 @@ export const ALL_EMPLOYEES = {
 
 export const MY_EMPLOYEES = {
   query: gql`
-    query getMyEmployees{
-      getMyEmployees{
+    query getMyEmployees($companyUuid: String){
+      getMyEmployees(companyUuid: $companyUuid){
         uuid
         first_name
         last_name

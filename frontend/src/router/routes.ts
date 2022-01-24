@@ -31,7 +31,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   'MANAGEMENT_EMPLOYEE_DATA': {
     path: '/management-employee-data',
-    component: () => import('layouts/ManagementLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/company/ManagementEmployeeDataPage.vue') }],
   },
 

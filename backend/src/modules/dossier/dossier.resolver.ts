@@ -96,7 +96,7 @@ export class DossierResolver {
       (dbUser.role === ROLE.SOI_ADMIN || dbUser.role === ROLE.COMPANY)
     ) {
       employee = await this.employeeService.getMyEmployee(employeeUuid);
-    } else if (!dbUser || dbUser.role !== ROLE.BANK) {
+    } else if (!dbUser || dbUser.role !== ROLE.EMPLOYEE) {
       throw new Error('User is not an Employee');
     } else {
       // Regular case: logged in as a employee

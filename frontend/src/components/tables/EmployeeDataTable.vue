@@ -90,8 +90,13 @@ import ROUTES from 'src/router/routes';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {MY_EMPLOYEES} from 'src/data/queries/EMPLOYEE';
+import {useRoute} from 'vue-router';
+const route = useRoute()
 
 const $routerService: RouterService|undefined = inject('$routerService')
+
+// Company ID from route (if any), only relevant if going from SOIAdmin -> Company view
+const companyUuid = route.query.cid
 
 // Search term
 const search = ref('')
@@ -105,7 +110,7 @@ const columns = [
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false, align: 'center' },
 ]
 
-const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []

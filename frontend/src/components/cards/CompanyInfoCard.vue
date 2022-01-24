@@ -19,8 +19,13 @@
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {Ref} from 'vue';
 import {MY_COMPANY} from 'src/data/queries/COMPANY';
+import {useRoute} from 'vue-router';
+const route = useRoute()
 
-const company = subscribeToQuery(MY_COMPANY) as Ref<Record<string, Array<Record<string, unknown>>>>
+// Company ID from route (if any), only relevant if going from SOIAdmin -> Company view
+const companyUuid = route.query.cid
+
+const company = subscribeToQuery(MY_COMPANY, companyUuid ? {companyUuid} : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 </script>
 

@@ -814,10 +814,10 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getMyBank(bankUuid: String): Bank!
-  getMyCompany: Company!
+  getMyCompany(companyUuid: String): Company!
   getMyDossiers(employeeUuid: String): [Dossier!]
   getMyEmployee: Employee!
-  getMyEmployees: [Employee!]!
+  getMyEmployees(companyUuid: String): [Employee!]!
   getMyUser: User!
   getOfferDocument(
     """URL expiration duration (in seconds); defaults to 15min"""
