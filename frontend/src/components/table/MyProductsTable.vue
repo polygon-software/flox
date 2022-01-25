@@ -145,7 +145,7 @@ const columns = [
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
-const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<Array<Record<string, unknown>>>
+const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<Record<string, unknown>[]>
 
 // Rows, filtered by status (if applicable)
 const computedResult = computed(() => {

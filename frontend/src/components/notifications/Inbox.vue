@@ -61,11 +61,12 @@
       >
         <MessagePreview
           v-for="message in filteredMessages"
-          :key="message.id"
+          :key="message.uuid"
           :title="message.title"
           :received="message.received"
           :is-read="message.isRead"
-          style="width: 90%; height: 75px;"
+          :content="message.content"
+          style="width: 300px; height: 75px;"
           @click="openMessage(message)"
         >
         </MessagePreview>
@@ -78,17 +79,23 @@
 /**
  * This component displays a message inbox, which contains message items. The messages can be filtered and sorted.
  */
-import {computed, Ref, ref, defineProps} from 'vue'
+import { computed, defineProps, inject, Ref, ref } from 'vue';
 import { i18n } from 'boot/i18n';
 import MessagePreview from 'components/notifications/MessagePreview.vue';
 import MessageDetail from 'components/notifications/MessageDetail.vue';
+import {Notification} from 'src/data/types/Notification';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {MARK_NOTIFICATION_AS_READ} from 'src/data/mutations/NOTIFICATIONS';
+import { ErrorService } from 'src/services/ErrorService';
+
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
-  dbRef: {
-    required: true,
-    type: String
-  }
+  notifications: {
+    default: () => [],
+    type: Array,
+  },
 })
 
 // Search and sort
@@ -103,60 +110,20 @@ const options = [
   }
 ]
 const search = ref('')
-const sort = ref(options[0])
+const sort = ref(options[0].value)
 
 // Open message
-const selectedMessage: Ref<Message|null|undefined> = ref()
+const selectedMessage: Ref<Notification|null|undefined> = ref()
 const showMessageDetail: Ref<boolean> = ref(false)
-
-// Needs to be defined somewhere else...
-type Message = {
-  id: string,
-  title: string,
-  received: string,
-  content: string,
-  isRead: boolean
-}
-
-// This would be fetched from the DB
-const messages = ref([
-  {
-    id: '0',
-    title: 'You have won product X',
-    received: '2021-09-27T12:12:03',
-    content: 'Dear Derp...',
-    isRead: false,
-  },
-  {
-    id: '1',
-    title: 'User Y sent you a message',
-    received: '2021-09-24T18:23:51',
-    content: 'Derpina says...',
-    isRead: true,
-  },
-  {
-    id: '2',
-    title: 'These products might interest you',
-    received: '2021-09-16T07:45:38',
-    content: 'Check out...',
-    isRead: true,
-  },
-  {
-    id: '3',
-    title: 'Happy Birthday',
-    received: '2021-08-26T00:00:00',
-    content: 'Hey derp, wish you all the best...',
-    isRead: false,
-  },
-])
 
 // Sorts the messages according to the selected parameter
 const sortedMessages = computed(() => {
-  if (sort.value.value === 'oldest') {
-    return messages.value.slice().sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
+  const notifications = props.notifications as Notification[]
+  if (sort.value === 'oldest') {
+    return notifications.sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
   else {
-    return messages.value.slice().sort((b, a) => new Date(a.received).getTime() - new Date(b.received).getTime())
+    return notifications.sort((b, a) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
 })
 
@@ -168,12 +135,23 @@ const filteredMessages = computed(() => {
 })
 
 /**
- * Opens the dialog which contains the detail view of a message.
- * @param {Message} message - the message that was selected
+ * Opens the dialog which contains the detail view of a notification.
+ * @param {Message} notification - the notification that was selected
  * @returns {void}
  */
-function openMessage(message: Message) {
-  selectedMessage.value = message
+function openMessage(notification: Notification) {
+  executeMutation(
+    MARK_NOTIFICATION_AS_READ,
+    {
+      uuid: notification.uuid,
+    }
+  ).catch((e) => {
+    console.error(e)
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.error_mark_as_read'))
+    )
+  })
+  selectedMessage.value = notification
   showMessageDetail.value = true
 }
 
@@ -183,9 +161,6 @@ function openMessage(message: Message) {
  * @returns {void}
  */
 function closeMessage() {
-  if(selectedMessage.value){
-    selectedMessage.value.isRead = true
-  }
   selectedMessage.value = null
   showMessageDetail.value = false
 }

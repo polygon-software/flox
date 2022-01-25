@@ -76,7 +76,6 @@
                   no-caps
                   @click="() => enableUser(_props.row, $q)"
                 />
-
               </div>
             </q-btn-dropdown>
           </q-td>
@@ -95,9 +94,6 @@ import {i18n} from 'boot/i18n';
 import {ALL_PLAYERS} from 'src/data/queries/USER';
 import {enableUser, disableUser} from 'src/helpers/admin-helpers';
 import {User} from 'src/data/types/User';
-import {useQuasar} from 'quasar';
-
-const $q = useQuasar()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -123,7 +119,7 @@ const columns = [
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
-const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<Array<Record<string, unknown>>>
+const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<Record<string, unknown>[]>
 
 // Rows, filtered by status (if applicable)
 const computedResult = computed(() => {

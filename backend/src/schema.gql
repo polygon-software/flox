@@ -19,6 +19,29 @@ type Address {
   zipCode: String!
 }
 
+type Announcement {
+  """Content"""
+  content: String!
+
+  """Date of announcement"""
+  date: DateTime!
+
+  """Notifications generated"""
+  notifications: [Notification!]
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
+
+  """Title"""
+  title: String!
+
+  """User roles to receive notification"""
+  userRoles: [Role!]!
+
+  """UUID"""
+  uuid: ID!
+}
+
 enum Category {
   CARS
   CELEBRITIES
@@ -52,6 +75,23 @@ input CreateAddressInput {
   number: String!
   street: String!
   zipCode: String!
+}
+
+input CreateAnnouncementInput {
+  """Content"""
+  content: String!
+
+  """Date of announcement"""
+  date: DateTime
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
+
+  """Title"""
+  title: String!
+
+  """User roles to receive notification"""
+  userRoles: [Role!]!
 }
 
 input CreateCommentInput {
@@ -100,7 +140,6 @@ input CreateUserInput {
 
   """phone number"""
   phone: String!
-  role: Role
 
   """Username"""
   username: String!
@@ -120,6 +159,10 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteAnnouncementInput {
+  uuid: ID!
+}
+
 input DeleteCommentInput {
   uuid: ID!
 }
@@ -138,18 +181,45 @@ input DuplicateProductInput {
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
+  createAnnouncement(createAnnouncementInput: CreateAnnouncementInput!): Announcement!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
+  deleteAnnouncement(deleteAnnouncementInput: DeleteAnnouncementInput!): Announcement!
   disableUser(uuid: String!): User!
   duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
   enableUser(uuid: String!): User!
+  markNotificationAsRead(uuid: String!): Notification!
   remove(deleteUserInput: DeleteUserInput!): User!
   removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
   removeProduct(deleteProductInput: DeleteProductInput!): Product!
   temporarilyDisableUser(tempDisableUserInput: TempDisableUserInput!): User!
   update(updateUserInput: UpdateUserInput!): User!
+  updateAnnouncement(updateAnnouncementInput: UpdateAnnouncementInput!): Announcement!
   updateComment(updateCommentInput: UpdateCommentInput!): Comment!
   updateProduct(pictures: [String!] = null, updateProductInput: UpdateProductInput!): Product!
+}
+
+type Notification {
+  """The announcement this notification is from"""
+  announcement: Announcement
+
+  """Content"""
+  content: String!
+
+  """Read status"""
+  isRead: Boolean!
+
+  """Date of receiving"""
+  received: DateTime!
+
+  """Title"""
+  title: String!
+
+  """The user this notification is for"""
+  user: User!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type PrivateFile {
@@ -270,6 +340,7 @@ type PublicFile {
 }
 
 type Query {
+  allAnnouncements: [Announcement!]!
   allComments: [Comment!]!
   allPartners: [User!]!
   allPlayers: [User!]!
@@ -282,6 +353,7 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
+  myNotifications: [Notification!]!
   myUser: User!
   product(uuid: ID!): Product!
   products(uuids: [ID!]): [Product!]!
@@ -301,6 +373,26 @@ type Subscription {
 
 input TempDisableUserInput {
   until: DateTime!
+  uuid: ID!
+}
+
+input UpdateAnnouncementInput {
+  """Content"""
+  content: String!
+
+  """Date of announcement"""
+  date: DateTime
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
+
+  """Title"""
+  title: String!
+
+  """User roles to receive notification"""
+  userRoles: [Role!]!
+
+  """UUID"""
   uuid: ID!
 }
 
@@ -377,6 +469,9 @@ type User {
   """Last modification date"""
   lastModifiedAt: DateTime!
 
+  """Notifications of the user"""
+  notifications: [Notification!]
+
   """Phone number"""
   phone: String!
 
@@ -414,6 +509,26 @@ input address {
   zipCode: String!
 }
 
+input announcement {
+  """Content"""
+  content: String!
+
+  """Date of announcement"""
+  date: DateTime!
+
+  """Notifications generated"""
+  notifications: [notification!]
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
+
+  """Title"""
+  title: String!
+
+  """User roles to receive notification"""
+  userRoles: [Role!]!
+}
+
 input comment {
   """Content"""
   content: String!
@@ -422,6 +537,26 @@ input comment {
   product: product!
 
   """The user who wrote this comment"""
+  user: user!
+}
+
+input notification {
+  """The announcement this notification is from"""
+  announcement: announcement
+
+  """Content"""
+  content: String!
+
+  """Read status"""
+  isRead: Boolean!
+
+  """Date of receiving"""
+  received: DateTime!
+
+  """Title"""
+  title: String!
+
+  """The user this notification is for"""
   user: user!
 }
 
@@ -557,6 +692,9 @@ input user {
 
   """Last modification date"""
   lastModifiedAt: DateTime!
+
+  """Notifications of the user"""
+  notifications: [notification!]
 
   """Phone number"""
   phone: String!

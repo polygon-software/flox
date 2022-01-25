@@ -21,6 +21,7 @@ import {
 } from 'typeorm';
 import { ROLE, USER_STATUS } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
+import { Notification } from '../../notification/entities/notification.entity';
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -115,4 +116,13 @@ export class User {
   })
   @Column({ nullable: true })
   disabledUntil: Date;
+
+  @Field(() => [Notification], {
+    description: 'Notifications of the user',
+    nullable: true,
+  })
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    cascade: true,
+  })
+  notifications: Notification[];
 }

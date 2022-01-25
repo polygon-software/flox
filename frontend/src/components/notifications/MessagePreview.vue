@@ -12,12 +12,15 @@
         color="red"
       />
     </div>
-    <p style="font-size: small"> {{ received }}</p>
+    <q-item-label :lines="1" style="width: 90%"> {{ content }}</q-item-label>
+    <p style="font-size: small"> {{ formatDate(received) }}</p>
   </q-card>
 </template>
 
 <script setup lang="ts">
 import {defineProps} from 'vue';
+import {formatDate} from 'src/helpers/format-helpers';
+
 /**
  * This component displays a message item in the message-inbox.
  */
@@ -29,15 +32,16 @@ const props = defineProps( {
   },
   received: {
     required: true,
-    type: String,
+    type: Date,
   },
   isRead: {
     required: true,
-    type: Boolean
-  }
+    type: Boolean,
+  },
+  content: {
+    required: true,
+    type: String,
+  },
 })
 
 </script>
-
-<style scoped>
-</style>
