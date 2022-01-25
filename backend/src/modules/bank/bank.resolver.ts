@@ -7,15 +7,12 @@ import {
   BankOnly,
   CurrentUser,
   EmployeeOnly,
-  Roles,
   SOIOnly,
 } from '../../auth/authorization.decorator';
 import { CreateBankInput } from './dto/input/create-bank.input';
 import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
 import { Employee } from '../employee/entities/employee.entity';
-import { GetEmployeeArgs } from '../employee/dto/args/get-employee.args';
-import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 import { GetBankArgs } from './dto/args/get-bank.args';
 
 @Resolver(() => Bank)
