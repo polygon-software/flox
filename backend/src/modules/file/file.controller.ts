@@ -287,10 +287,15 @@ export class FileController {
     res.send('OK'); //TODO some response?
   }
 
-  // TODO docstrings
-  // eslint-disable-next-line valid-jsdoc
+  /**
+   * Gets the value
+   * @param {FastifyRequest} req - request
+   * @param {FastifyReply} res - response
+   * @param {Record<string, string>} query - URL query, should contain 'zipCode', 'start' and 'end'
+   * @returns {Promise<void>} - done
+   */
   @Get('/getValueDevelopment')
-  @Public() // TODO enable for roles?
+  @EmployeeOnly()
   async getValueDevelopment(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
@@ -302,7 +307,7 @@ export class FileController {
 
     // Ensure all attributes present
     if (!zipCode || !start || !end) {
-      res.send(new Error('literally missing stuff but ok')); // TODO error message
+      res.send(new Error(ERRORS.missing_query_parameters));
       return;
     }
 
@@ -315,7 +320,7 @@ export class FileController {
       isNaN(endDate.getTime()) ||
       endDate.getTime() < startDate.getTime()
     ) {
-      res.send(new Error('No valid dates entered')); // TODO error message
+      res.send(new Error(ERRORS.invalid_date_input));
       return;
     }
 
