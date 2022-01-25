@@ -277,9 +277,10 @@ export class FileController {
     const file = await req.file();
 
     if (file.mimetype !== 'text/csv') {
-      res.send(new BadRequestException('YOU MUST BE BANANAS')); // TODO
+      res.send(new BadRequestException(ERRORS.no_valid_file));
     }
 
+    // TODO: additional assurances of correct format?
     console.log('Upload file!');
     await this.fileService.uploadValueDevelopmentFile(file);
 
@@ -288,7 +289,7 @@ export class FileController {
   }
 
   /**
-   * Gets the value
+   * Gets the value development for a given zip code over a given time frame (or the closest timeframe available)
    * @param {FastifyRequest} req - request
    * @param {FastifyReply} res - response
    * @param {Record<string, string>} query - URL query, should contain 'zipCode', 'start' and 'end'
