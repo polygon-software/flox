@@ -1,11 +1,11 @@
 <template>
   <q-page class="row justify-center">
     <div class="col-auto">
-      <product-feed/>
+      <filter-list/>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import ProductFeed from 'components/product/ProductFeed.vue';
+import FilterList from 'components/product/FilterList.vue';
 </script>

@@ -3,6 +3,19 @@
     <div v-if="searchFilter !== ''" class="q-pa-sm">
       {{ $t('products.results_for') }} "<strong> {{ searchFilter }} </strong>"
     </div>
+    <div class="row q-gutter-sm q-pa-sm">
+      <q-btn
+        rounded
+        :label="$t('products.filter_and_sort')"
+        icon="sort"
+        @click="openFilterPage"
+      />
+      <q-btn
+        rounded
+        :label="$t('products.reset_filter')"
+        @click="resetFilter"
+      />
+    </div>
     <div class="row q-pa-sm q-gutter-sm justify-center">
       <ProductCard
         v-for="product in filteredProducts"
@@ -21,6 +34,7 @@ import { ALL_PRODUCTS } from 'src/data/queries/PRODUCT';
 import { RouterService } from 'src/services/RouterService';
 import { Product } from 'src/data/types/Product';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../shared/definitions/ENUM';
+import ROUTES from 'src/router/routes';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -29,6 +43,7 @@ const queryResult = subscribeToQuery(ALL_PRODUCTS) as Ref<Record<string, unknown
 const searchFilter = computed(() => {
   return $routerService?.getQuery().search as string ?? '';
 })
+
 
 const realProducts = computed(() => {
   const productRecords = queryResult?.value ?? []
@@ -72,4 +87,22 @@ const filteredProducts = computed(() => {
   }
   return products;
 })
+
+/**
+ * Open sort and filter page.
+ * @returns {Promise<void>} - async
+ */
+async function openFilterPage(): Promise<void>{
+  await $routerService?.routeTo(ROUTES.FILTER)
+}
+
+/**
+ * Open sort and filter page.
+ * @returns {Promise<void>} - async
+ */
+async function resetFilter(): Promise<void>{
+  // TODO: reset filter
+  return new Promise((resolve => resolve()))
+}
+
 </script>

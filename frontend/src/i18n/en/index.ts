@@ -191,6 +191,12 @@ export default {
     title: 'Title',
     search: 'Search...',
     results_for: 'Results for',
+    filter_and_sort: 'Filter & Sort',
+    sort_by: 'Sort by',
+    relevance: 'Relevance',
+    value_asc: 'Value ascending',
+    value_desc: 'Value descending',
+    all: 'All',
   },
   settings: {
     settings: 'Settings',
