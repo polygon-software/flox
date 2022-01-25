@@ -96,15 +96,15 @@ export class DossierResolver {
       employeeUuid &&
       (dbUser.role === ROLE.SOI_ADMIN || dbUser.role === ROLE.COMPANY)
     ) {
-      employee = await this.employeeService.getMyEmployee(employeeUuid);
+      employee = await this.employeeService.getEmployee(employeeUuid);
     } else if (!dbUser || dbUser.role !== ROLE.EMPLOYEE) {
       throw new Error('User is not an Employee');
     } else {
       // Regular case: logged in as a employee
-      employee = await this.employeeService.getMyEmployee(dbUser.fk);
+      employee = await this.employeeService.getEmployee(dbUser.fk);
     }
 
-    return this.dossierService.myDossiers(employee.uuid);
+    return this.dossierService.getDossiersForEmployee(employee.uuid);
   }
 
   /**
@@ -146,14 +146,14 @@ export class DossierResolver {
   /**
    * All dossiers, where the requesting bank isn't the original_bank
    * @param {Record<string, string>} user - the current request's user
-   * @param {string} bankUuid - bank UUID, only relevant for SOIAdmin to access bank dashboard view
+   * @param {string} [bankUuid] - bank UUID, only relevant for SOIAdmin to access bank dashboard view
    * @returns {Promise<Dossier[]>} - All dossiers, where the requesting bank isn't the original_bank
    */
   @BankOnly()
   @Query(() => [Dossier])
   async allDossiersBank(
     @CurrentUser() user: Record<string, string>,
-    @Args('bankUuid', { nullable: true }) bankUuid: string,
+    @Args('bankUuid', { nullable: true }) bankUuid?: string,
   ): Promise<Dossier[]> {
     const dbUser = await this.userService.getUser({ uuid: user.userId });
 

@@ -90,20 +90,11 @@ export class EmployeeService {
   }
 
   /**
-   * get a specific employee
-   * @param {string} uuid - uuid
-   * @returns {Promise<Employee>} - employee
-   */
-  async getEmployee(uuid: string): Promise<Employee> {
-    return this.employeeRepository.findOne(uuid, { relations: ['company'] });
-  }
-
-  /**
    * Get the Employee of the given UUID
    * @param {string} uuid - the employee's database uuid (not cognito ID)
    * @returns {Promise<Employee>} - The employee
    */
-  async getMyEmployee(uuid: string): Promise<Employee> {
+  async getEmployee(uuid: string): Promise<Employee> {
     const employee = await this.employeeRepository.findOne(uuid, {
       relations: [
         'company',

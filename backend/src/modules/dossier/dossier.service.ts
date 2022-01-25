@@ -49,7 +49,7 @@ export class DossierService {
     createDossierInput: CreateDossierInput,
     cognitoId: string,
   ): Promise<Dossier> {
-    const employee = await this.employeeService.getMyEmployee(cognitoId);
+    const employee = await this.employeeService.getEmployee(cognitoId);
 
     let originalBank = await this.bankService.findBankByAbbreviation(
       createDossierInput.original_bank_abbreviation,
@@ -165,11 +165,12 @@ export class DossierService {
   }
 
   /**
+   * Gets the dossiers for a given employee
    * @param {string} uuid - employee's database UUID
    * @returns {Promise<Dossier[]>} - dossiers of employee
    */
-  async myDossiers(uuid: string): Promise<Dossier[]> {
-    const employee = await this.employeeService.getMyEmployee(uuid);
+  async getDossiersForEmployee(uuid: string): Promise<Dossier[]> {
+    const employee = await this.employeeService.getEmployee(uuid);
     return this.dossierRepository.findByIds(
       employee.dossiers.map((dossier) => dossier.uuid),
       {
