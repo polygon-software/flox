@@ -55,11 +55,10 @@ export async function saveValueDevelopmentCsv(
     );
   });
 
-  // Set up database connection & query runner
+  // Set up database connection and query runner
   const connection: Connection = getConnection();
   const queryRunner: QueryRunner = connection.createQueryRunner();
-
-  await queryRunner.connect(); // performs connection
+  await queryRunner.connect();
 
   const tableExists = await queryRunner.hasTable(tableName);
   console.log('Table exists?', tableExists);
@@ -70,10 +69,14 @@ export async function saveValueDevelopmentCsv(
     await queryRunner.dropTable(tableName);
   }
 
+  // Create table with proper columns
   await queryRunner.createTable(
     new Table({
       name: tableName,
       columns,
     }),
   );
+
+  // Insert values into table
+  await queryRunner.manager.insert(tableName, parsedCsv);
 }
