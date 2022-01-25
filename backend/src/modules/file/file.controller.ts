@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  Get,
   Options,
   Post,
   Query,
@@ -23,6 +24,7 @@ import { ERRORS } from '../../error/ERRORS';
 import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
 import { User } from '../user/entities/user.entity';
+import { getValueDevelopment } from '../../value-development/value-development';
 
 @Controller()
 export class FileController {
@@ -283,5 +285,35 @@ export class FileController {
 
     res.header('access-control-allow-origin', '*');
     res.send('OK'); //TODO some response?
+  }
+
+  // TODO docstrings
+  // eslint-disable-next-line valid-jsdoc
+  @Get('/getValueDevelopment')
+  @Public() // TODO enable for roles?
+  async getValueDevelopment(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+    @Query() query: Record<string, string>, // Params
+  ): Promise<any> {
+    console.log('Requested for', query);
+
+    const zipCode = query.zipCode;
+    const start = query.start;
+    const end = query.end;
+
+    if (!zipCode || !start || !end) {
+      throw new Error('literally missing stuff but ok');
+    }
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    const multiplier = await getValueDevelopment(zipCode, startDate, endDate);
+
+    console.log('backend told me multiplier is', multiplier, ', trust me bro');
+
+    res.header('access-control-allow-origin', '*');
+    res.send(`Here u go: ${multiplier}`); //TODO some response?
   }
 }
