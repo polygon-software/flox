@@ -195,6 +195,7 @@ export default {
     add_product: 'Produkt hinzufügen',
     title: 'Titel',
     search: 'Suchen...',
+    results_for: 'Resultate für',
   },
   settings: {
     settings: 'Einstellungen',

@@ -1,10 +1,15 @@
 <template>
   <div class="q-pa-sm">
-    <ProductCard
-      v-for="product in filteredProducts"
-      :key="`${product.uuid}-${searchFilter}`"
-      :product="product"
-    />
+    <div v-if="searchFilter !== ''" class="q-pa-sm">
+      {{ $t('products.results_for') }} "<strong> {{ searchFilter }} </strong>"
+    </div>
+    <div class="row q-pa-sm q-gutter-sm justify-center">
+      <ProductCard
+        v-for="product in filteredProducts"
+        :key="`${product.uuid}-${searchFilter}`"
+        :product="product"
+      />
+    </div>
   </div>
 </template>
 

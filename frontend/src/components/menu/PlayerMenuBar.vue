@@ -20,7 +20,7 @@
       >
         <template #append>
           <q-icon
-            v-if="search.length > 0"
+            v-if="search !== ''"
             name="cancel"
             class="cursor-pointer"
             size="xs"
@@ -146,7 +146,6 @@ import { subscribeToQuery } from 'src/helpers/data-helpers';
 import { Notification } from 'src/data/types/Notification';
 import { MY_NOTIFICATIONS } from 'src/data/queries/NOTIFICATIONS';
 
-
 const $authService: AuthenticationService | undefined = inject('$authService');
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth();
@@ -156,10 +155,7 @@ const loggedIn = computed(() => {
   return $authStore.getters.getLoggedInStatus();
 });
 
-const search = computed({
-  get(){ return $routerService?.getQuery().search as string ?? ''},
-  set(val: string){ return $routerService?.setQuery({ search: val })},
-});
+const search = ref('')
 
 /**
  * Go to product feed with search term.

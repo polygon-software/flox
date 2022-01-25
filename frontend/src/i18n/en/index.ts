@@ -190,6 +190,7 @@ export default {
     add_product: 'Add new Product',
     title: 'Title',
     search: 'Search...',
+    results_for: 'Results for',
   },
   settings: {
     settings: 'Settings',
