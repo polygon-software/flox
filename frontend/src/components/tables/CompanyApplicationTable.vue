@@ -43,7 +43,6 @@
 <script setup lang="ts">
 import {computed, inject, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {ALL_COMPANIES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {Company} from 'src/data/types/Company';
 import SignUpApplicationDialog from 'components/dialogs/SignUpApplicationDialog.vue';
@@ -53,6 +52,7 @@ import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
 
 import {CREATION_STATE} from 'src/data/ENUM/ENUM';
+import {ALL_COMPANIES} from 'src/data/queries/COMPANY';
 
 const $q: QVueGlobals = useQuasar()
 const $authService: AuthenticationService|undefined = inject('$authService')

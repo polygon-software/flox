@@ -36,7 +36,7 @@ export class Form {
    */
   pageValid = computed(() => {
     // If page structure does not exist, page can't be valid
-    if (this.pages.value.length === 0) return false
+    if(this.pages.value.length === 0) return false
 
     // Get keys that should exist in 'values' for this page
     const pageKeys: string[] = []
@@ -63,13 +63,15 @@ export class Form {
     // Validate each field by its "rules" attribute
     return pageKeys.every((key) => {
       // If no value present at all, stop check
-      if (!this.values.value[key]) return false
+      if (this.values.value[key] === null || this.values.value[key] === undefined){
+        return false
+      }
 
       const field: Field = FIELDS[key.toUpperCase()]
       const rules: Array<(valueElement: any) => boolean|string> = field.attributes.rules
-      return rules.every((rule: (valueElement: any) => boolean|string) => {
+      return rules.length === 0 || rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
-        return typeof rule(this.values.value[key]) === 'boolean' && rule(this.values.value[key]) === true;
+        return typeof rule(this.values.value[key]) === 'boolean' && rule(this.values.value[key]) === true
       })
     })
   })

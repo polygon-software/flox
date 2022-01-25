@@ -3,10 +3,43 @@ import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
 
 export const CREATE_DOSSIER = {
   mutation: gql`
-    mutation createDossier($first_name: String!, $last_name: String!, $correspondence_address: CreateAddressInput!, $email: String!, $original_bank_name: String!, $original_bank_abbreviation: String!, $born: DateTime!, $property_address: CreateAddressInput!, $loan_sum: Float!){
-      createDossier (createDossierInput: {first_name: $first_name, last_name: $last_name, correspondence_address: $correspondence_address, email: $email, original_bank_name: $original_bank_name,original_bank_abbreviation: $original_bank_abbreviation, born: $born, property_address: $property_address, loan_sum: $loan_sum}) {
+    mutation createDossier($createDossierInput: CreateDossierInput!){
+      createDossier (createDossierInput: $createDossierInput) {
         uuid
-        correspondence_address {
+        status
+        non_arrangeable
+        created_at
+        first_name
+        last_name
+        email
+        phone
+        birthdate
+        has_amortisation
+        direct_amortisation
+        amortisation_amount
+        has_building_lease
+        has_renovation
+        renovation_price
+        renovation_year
+        readable_id
+        purchase_date
+        purchase_price
+        property_type
+        market_value_estimation
+        mortgage_amount
+        prosecutions
+        loss_certificates
+        amortisation_amount
+        affordability
+        eligible_income
+        total_costs
+        value_estimate_low
+        value_estimate_high
+        enfeoffment_estimate_low
+        enfeoffment_estimate_high
+        partition_amounts
+        partition_dates
+        address {
           uuid
           street
           number
@@ -16,20 +49,30 @@ export const CREATE_DOSSIER = {
         }
         original_bank {
           uuid
+          abbreviation
+          name
           __typename
         }
-        born
-        property_address {
+        employee {
           uuid
-          street
-          number
-          city
-          zip_code
+          email
           __typename
         }
-        loan_sum
-        non_arrangeable
-        status
+        documents{
+          uuid
+          key
+          __typename
+        }
+        final_document{
+          uuid
+          key
+          __typename
+        }
+        offers{
+          __typename
+          uuid
+          status
+        }
         __typename
       }
     }`,
@@ -71,7 +114,12 @@ export const RESET_DOSSIER = {
     mutation resetDossier($uuid: ID!){
       resetDossier (resetDossierInput: {uuid: $uuid}) {
         uuid
-        correspondence_address {
+        first_name
+        last_name
+        email
+        phone
+        birthdate
+        address {
           uuid
           street
           number
@@ -81,23 +129,30 @@ export const RESET_DOSSIER = {
         }
         original_bank {
           uuid
+          abbreviation
+          name
           __typename
         }
-        born
-        property_address {
+        non_arrangeable
+        status
+        employee {
           uuid
-          street
-          number
-          city
-          zip_code
           __typename
         }
+        documents{
+          uuid
+          __typename
+        }
+        final_document{
+          uuid
+          __typename
+        }
+        __typename
         offers{
           __typename
           uuid
           status
         }
-        loan_sum
         non_arrangeable
         status
         __typename
@@ -165,9 +220,9 @@ export const REMOVE_FILES_DOSSIER = {
         __typename
         documents{
           uuid
-          __typename
           key
           file_type
+          __typename
         }
       }
     }

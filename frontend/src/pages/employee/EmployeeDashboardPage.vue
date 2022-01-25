@@ -55,9 +55,6 @@
 import {inject, ref} from 'vue'
 import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue';
 import CompanyEmployeeId from 'components/cards/CompanyEmployeeIdCard.vue';
-import {CREATE_DOSSIER, CREATE_OFFER} from 'src/data/mutations/DOSSIER';
-import {executeMutation} from 'src/helpers/data-helpers';
-import {OFFER_STATUS} from 'src/data/ENUM/ENUM';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 

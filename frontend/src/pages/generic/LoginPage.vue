@@ -41,11 +41,11 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {RouteRecordRaw} from 'vue-router';
 import {executeQuery} from 'src/helpers/data-helpers';
-import {MY_USER} from 'src/data/queries/QUERIES';
 import {ROLE} from 'src/data/ENUM/ENUM';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import {QVueGlobals, useQuasar} from 'quasar';
+import {MY_USER} from 'src/data/queries/USER';
 
 const $q: QVueGlobals = useQuasar()
 

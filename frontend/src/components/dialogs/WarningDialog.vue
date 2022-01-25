@@ -53,7 +53,7 @@ import {QDialog} from 'quasar'
 import {i18n} from 'boot/i18n';
 
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-const emit = defineEmits(['ok', 'discard'])
+const emit = defineEmits(['ok', 'cancel'])
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -105,7 +105,7 @@ function onOk(): void {
  * @returns {void}
  */
 function onDiscard(): void {
-  emit('discard')
+  emit('cancel')
   hide()
 }
 </script>

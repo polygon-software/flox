@@ -6,7 +6,7 @@ import {date} from 'quasar';
 import endOfMonth from 'date-fns/endOfMonth'
 
 /**
- * Calculates the age of a person with a given birth datee
+ * Calculates the age of a person with a given birth date
  * @param {date} birthDate - birthday to calculate from
  * @returns {number} - age in full years
  */

@@ -1,7 +1,6 @@
 <template>
   <q-page class="flex flex-center content-start">
     <div class="column">
-
       <!-- Loading overlay -->
       <div
         v-if="loading"
@@ -23,7 +22,10 @@
         id="preview"
         class="page shadow-6"
       >
-        <div class="subpage">
+        <div
+          v-if="dossier"
+          class="subpage"
+        >
           <!-- Logo + address row -->
           <div class="row justify-between">
             <img
@@ -33,7 +35,7 @@
               class="q-ma-sm"
             >
             <p class="text-grey-5" style="margin-top: 5mm">
-              {{infoString}}
+              {{ infoString }}
             </p>
           </div>
 
@@ -54,13 +56,13 @@
                 style="padding-right: 5mm"
               >
                 <DossierDocumentInfoField
-                  :content="contactInfo.fullName"
+                  :content="`${dossier.first_name} ${dossier.last_name}`"
                 />
                 <DossierDocumentInfoField
-                  :content="contactInfo.street"
+                  :content="`${dossier.address.street} ${dossier.address.number}`"
                 />
                 <DossierDocumentInfoField
-                  :content="`${contactInfo.zipCode} ${contactInfo.city}`"
+                  :content="`${dossier.address.zip_code} ${dossier.address.city}`"
                 />
               </div>
 
@@ -71,15 +73,15 @@
               >
                 <DossierDocumentInfoField
                   :label="$t('general.created_on')"
-                  :content="formatDate(dossierInfo.createdOn)"
+                  :content="formatDate(dossier.created_at)"
                 />
 
                 <DossierDocumentInfoField
-                  :content="contactInfo.email"
+                  :content="dossier.email"
                 />
 
                 <DossierDocumentInfoField
-                  :content="contactInfo.phone"
+                  :content="dossier.phone"
                 />
               </div>
             </div>
@@ -103,22 +105,22 @@
               >
                 <DossierDocumentInfoField
                   :label="$t('dossier.original_bank')"
-                  :content="dossierInfo.originalBankName"
+                  :content="dossier.original_bank.name"
                 />
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.purchase_price')"
-                  :content="dossierInfo.purchasePrice.toLocaleString() + currency"
+                  :content="dossier.purchase_price.toLocaleString() + currency"
                 />
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.current_value')"
-                  :content="dossierInfo.currentValue.toLocaleString() + currency"
+                  :content="dossier.market_value_estimation.toLocaleString() + currency"
                 />
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.current_mortgage')"
-                  :content="dossierInfo.currentMortgage.toLocaleString() + currency"
+                  :content="dossier.mortgage_amount.toLocaleString() + currency"
                 />
 
               </div>
@@ -130,12 +132,12 @@
               >
                 <DossierDocumentInfoField
                   :label="$t('dossier.object_type')"
-                  :content="dossierInfo.objectType"
+                  :content="$t(`property_type_enum.${dossier.property_type}`)"
                 />
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.purchase_date')"
-                  :content="formatDate(dossierInfo.purchaseDate)"
+                  :content="formatDate(dossier.purchase_date)"
                 />
 
                 <!-- Spacer -->
@@ -143,7 +145,7 @@
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.amortization_amount')"
-                  :content="dossierInfo.amortizationAmount.toLocaleString() + currency"
+                  :content="dossier.has_amortisation ? dossier.amortisation_amount.toLocaleString() + currency : '-'"
                 />
               </div>
             </div>
@@ -156,16 +158,18 @@
                 class="column col-6"
                 style="padding-right: 5mm"
               >
+                <!-- Partition amount -->
                 <DossierDocumentInfoField
-                  v-for='(installment, index) in dossierInfo.installments'
-                  :key="'installment_'+index"
+                  v-for='(amount, index) in dossier.partition_amounts'
+                  :key="'partition_'+index"
                   :label="$t('dossier.installment') + ' ' + (index+1)"
-                  :content="installment.amount.toLocaleString() + currency"
+                  :content="amount.toLocaleString() + currency"
                 />
 
+                <!-- Enfeoffment -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.lending_value')"
-                  :content="dossierInfo.lendingValue + '%'"
+                  :content="dossier.enfeoffment_estimate_low + '%'"
                   bold
                 />
               </div>
@@ -173,15 +177,17 @@
                 class="column col-6"
                 style="padding-left: 5mm"
               >
+                <!-- Partition expiration date -->
                 <DossierDocumentInfoField
-                  v-for='(installment, index) in dossierInfo.installments'
-                  :key="'installment_'+ index"
+                  v-for='(date, index) in dossier.partition_dates'
+                  :key="'partition_'+ index"
                   :label="$t('dossier.expiration_date')"
-                  :content="formatDate(installment.expirationDate)"
+                  :content="formatDate(date)"
                 />
 
                 <DossierDocumentBooleanField
-                  :value="dossierInfo.directAmortization"
+                  v-if="dossier.has_amortisation"
+                  :value="dossier.direct_amortisation"
                   :label="$t('dossier.amortization_type')"
                   :true-label="$t('dossier.direct')"
                   :false-label="$t('dossier.indirect')"
@@ -203,14 +209,14 @@
               >
 
                 <DossierDocumentBooleanField
-                  :value="dossierInfo.renovated"
+                  :value="dossier.has_renovation"
                   :label="$t('dossier.renovated')"
                 />
 
                 <DossierDocumentInfoField
-                  v-if="dossierInfo.renovated"
+                  v-if="dossier.has_renovation"
                   :label="$t('dossier.renovation_amount')"
-                  :content="dossierInfo.renovationAmount.toLocaleString() + currency"
+                  :content="dossier.renovation_price.toLocaleString() + currency"
                 />
               </div>
 
@@ -220,9 +226,9 @@
                 style="padding-left: 5mm"
               >
                 <DossierDocumentInfoField
-                  v-if="dossierInfo.renovated"
+                  v-if="dossier.has_renovation"
                   :label="$t('dossier.renovation_year')"
-                  :content="dossierInfo.renovationDate.getFullYear()"
+                  :content="dossier.renovation_year"
                 />
               </div>
             </div>
@@ -239,20 +245,23 @@
                 class="column col-6"
                 style="padding-right: 5mm"
               >
+                <!-- Eligible income -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.salary')"
-                  :content="dossierInfo.salary.toLocaleString() + currency"
+                  :content="dossier.eligible_income.toLocaleString() + currency"
                   bold
                 />
 
+                <!-- Total costs -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.costs')"
-                  :content="dossierInfo.costs.toLocaleString() + currency"
+                  :content="dossier.total_costs.toLocaleString() + currency"
                 />
 
+                <!-- Affordability -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.sustainability')"
-                  :content="dossierInfo.sustainability + '%'"
+                  :content="dossier.affordability + '%'"
                   bold
                 />
               </div>
@@ -263,17 +272,17 @@
                 style="padding-left: 5mm"
               >
                 <DossierDocumentBooleanField
-                  :value="dossierInfo.buildingRight"
+                  :value="dossier.has_building_lease"
                   :label="$t('dossier.building_right')"
                 />
 
                 <DossierDocumentBooleanField
-                  :value="dossierInfo.debtEnforcements"
+                  :value="dossier.prosecutions"
                   :label="$t('dossier.debt_enforcements')"
                 />
 
                 <DossierDocumentBooleanField
-                  :value="dossierInfo.lossCertificates"
+                  :value="dossier.loss_certificates"
                   :label="$t('dossier.loss_certificates')"
                 />
               </div>
@@ -307,30 +316,33 @@
         class="row justify-center button-row"
         style="margin-bottom: 128px"
       >
+        <!-- Back to dashboard -->
         <q-btn
-          :label="$t('buttons.back')"
+          :label="$t('buttons.back_to_dashboard')"
           color="primary"
           flat
-          :disable="loading"
+          :disable="loading || !dossier || !fileUuid"
           @click="goBack"
         />
 
+        <!-- Send by e-mail -->
         <q-btn
           :label="$t('buttons.send_by_email')"
           icon="mail_outline"
           color="primary"
           unelevated
-          :disable="loading"
+          :disable="loading || !dossier || !fileUuid"
           style="margin: 0 32px 0 16px"
           @click="sendDocument"
         />
 
+        <!-- Print -->
         <q-btn
           :label="$t('buttons.print')"
           icon="print"
           color="primary"
           unelevated
-          :disable="loading"
+          :disable="loading || !dossier"
           @click="printDocument"
         />
       </div>
@@ -346,9 +358,23 @@ import DossierDocumentEmailDialog from 'components/dialogs/DossierDocumentEmailD
 import {useQuasar} from 'quasar';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {generatePdf} from 'src/helpers/pdf-helpers';
-import {onMounted, Ref, ref} from 'vue';
+import {inject, onMounted, Ref, ref} from 'vue';
+import {useRoute} from 'vue-router';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
+import {i18n} from 'boot/i18n';
+import {ErrorService} from 'src/services/ErrorService';
+import {RouterService} from 'src/services/RouterService';
+import ROUTES from 'src/router/routes';
+import {sleep} from 'src/helpers/general-helpers';
 
 const $q = useQuasar()
+const route = useRoute()
+const $errorService: ErrorService|undefined = inject('$errorService')
+const $routerService: RouterService|undefined = inject('$routerService')
+
+const dossierUuid = route.query.did as string
+const dossier = ref(null)
 
 const loading = ref(true)
 const fileUuid: Ref<string|null> = ref(null)
@@ -357,53 +383,33 @@ const fileUuid: Ref<string|null> = ref(null)
 const infoString = 'Bahnhofstrasse 1 | 8001 Zürich | 043 222 22 22'
 const currency = ' CHF'
 
-// TODO replace with correct info from preceding form pages
-const contactInfo = {
-  fullName: 'Jusuf Amzai',
-  email: 'email@adresse.ch',
-  phone: '041 123 45 67',
-  street: 'Sowiesostrasse 1',
-  zipCode: '6003',
-  city: 'Sowieso',
-}
-const dossierInfo = {
-  uuid: 'a3a303ea-0793-4945-be9b-8a8412aad957', // Just an example...
-  createdOn: new Date(),
-  originalBankName: 'CLER',
-  purchasePrice: 1000000,
-  purchaseDate: new Date(),
-  currentValue: 1400000,
-  currentMortgage: 700000,
-  objectType: 'Wohnung',
-  amortizationAmount: 8000,
-  // TODO check for largest possible number of installments
-  installments: [
-    {
-      amount: 700000,
-      expirationDate: new Date,
-    },
-    {
-      amount: 700000,
-      expirationDate: new Date,
-    }
-  ],
-  lendingValue: 54,
-  directAmortization: true,
-  renovated: true,
-  renovationDate: new Date(),
-  renovationAmount: 50000,
-  salary: 200000,
-  costs: 60000,
-  sustainability: 29.5,
-  buildingRight: false,
-  debtEnforcements: false,
-  lossCertificates: false
-}
-
 //On mount, generate PDF
 onMounted(async () => {
+  // Ensure link gives a UUID
+  if(!dossierUuid){
+    // Show error
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.invalid_link', {error: (err as Error).message}))
+    )
+  }
+  const dossierQueryResult = await executeQuery(GET_DOSSIER, {uuid: dossierUuid})
+
+  dossier.value = dossierQueryResult.data?.getDossier
+
+  // Ensure dossier loaded correctly
+  if(!dossier.value){
+    // Show error
+    $errorService?.showErrorDialog(
+      new Error(i18n.global.t('errors.invalid_link', {error: (err as Error).message}))
+    )
+  }
+
+  await sleep(100)
+
   // Upload PDF document
   await uploadPdfDocument()
+
+  loading.value = false
 })
 
 /**
@@ -411,10 +417,8 @@ onMounted(async () => {
  * @returns {Promise<string>} - uploaded PrivateFile's UUID
  */
 async function uploadPdfDocument(){
-  const dossierUuid = dossierInfo.uuid
-
   // Generate PDF file
-  const pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
+  let pdfFile = await generatePdf('preview', `Dossier_${dossierUuid}`);
 
   // Prepare for upload
   const files = {
@@ -425,41 +429,41 @@ async function uploadPdfDocument(){
   const uploadResponse: Record<string, unknown> = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')
 
   // Get actual file
-  const newPdf: Record<string, unknown> = uploadResponse.finalDocument as Record<string, unknown>
+  const updatedDossier: Record<string, unknown> = uploadResponse
 
   // Store to local variable & set loading state
-  fileUuid.value = newPdf.uuid as string
-  loading.value = false
+  fileUuid.value = updatedDossier.final_document.uuid as string
 }
 
 /**
  * Goes back to the previous form page
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
-function goBack(){
-  // TODO go to previous form page
+async function goBack(){
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD)
 }
 
 /**
- * Sends the PDF by e-mail
+ * Opens a dialog for sending the PDF by e-mail
  * @returns {Promise<void>} - done
  */
 function sendDocument(){
-  const dossierUuid = dossierInfo.uuid
+  if(dossier.value && fileUuid.value){
+    const addresses = [
+      dossier.value.email,                                      // Customer e-mail
+      (dossier.value.employee as Record<string, string>).email, // Employee (broker) email
+    ]
 
-  const addresses = [
-    contactInfo.email,
-    'david.wyss@polygon-software.ch' // TODO get employee's own email address
-  ]
-
-  $q.dialog({
-    component: DossierDocumentEmailDialog,
-    componentProps: {
-      uuid: dossierUuid,
-      addresses,
-      fileUuid: fileUuid.value
-    }
-  })
+    // Open upload dialog
+    $q.dialog({
+      component: DossierDocumentEmailDialog,
+      componentProps: {
+        uuid: dossierUuid,
+        addresses,
+        fileUuid: fileUuid.value
+      }
+    })
+  }
 }
 
 /**

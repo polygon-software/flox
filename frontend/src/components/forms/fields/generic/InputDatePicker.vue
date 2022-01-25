@@ -17,8 +17,9 @@ import {defineProps, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {calculateAge} from 'src/helpers/date-helpers';
+import {calculateAge, dateToInputString} from 'src/helpers/date-helpers';
 import {IS_VALID_DATE} from 'src/data/RULES';
+import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
 
 const props = defineProps({
   label: {
@@ -34,12 +35,18 @@ const props = defineProps({
     type: Array,
     required: false,
     default: () => [(val: Date): boolean|string => IS_VALID_DATE(val) || i18n.global.t('errors.invalid_date')]
-}
+  },
+  initialValue: {
+    type: Date,
+    required: false,
+    default: null
+  }
 })
-const emit = defineEmits(['change'])
+
+const emit = defineEmits(['change', 'warning', 'no-warning'])
 const $q = useQuasar()
 
-const date = ref(null)
+const date = ref(dateToInputString(props.initialValue)  ?? null)
 
 // Whether the warning popup is open
 const popupOpen = ref(false)
@@ -67,16 +74,24 @@ function emitValue(){
  * @returns {void}
  */
 function checkAgeLimit(birthdate: Date){
-  if(props.retirementRule && calculateAge(birthdate) > 60 && !popupOpen.value){
-    popupOpen.value = true
-    $q.dialog({
-      component: WarningDialog,
-      componentProps: {
-        description: i18n.global.t('warnings.retirement_warning')
-      }
-    }).onDismiss(() => {
-      popupOpen.value = false
-    })
+  if(props.retirementRule && calculateAge(birthdate) > 60) {
+    if (!popupOpen.value) {
+      popupOpen.value = true
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: i18n.global.t('warnings.retirement_warning')
+        }
+      }).onDismiss(() => {
+        popupOpen.value = false
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      emit('warning', DOSSIER_WARNING.RETIREMENT)
+    }
+  } else if(props.retirementRule) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    emit('no-warning', DOSSIER_WARNING.RETIREMENT)
   }
 }
 </script>

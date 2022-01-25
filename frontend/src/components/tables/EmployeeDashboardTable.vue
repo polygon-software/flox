@@ -29,10 +29,10 @@
           {{ _props.row.original_bank.name }}
         </q-td>
         <q-td key="location">
-          {{ _props.row.property_address.city }}
+          {{ _props.row.address.city }}
         </q-td>
         <q-td key="mortgage_amount">
-          {{ _props.row.loan_sum }}
+          {{ _props.row.mortgage_amount.toLocaleString() }}
         </q-td>
         <q-td key="status">
           <q-chip
@@ -58,7 +58,7 @@
             icon="picture_as_pdf"
             color="primary"
             round
-            @click="()=>showAllDocuments(_props.row)"
+            @click="()=>showDossierDocuments(_props.row)"
           />
         </q-td>
         <q-td key="offers" @click="()=>expandOffers(_props.row.uuid)">
@@ -92,7 +92,7 @@
           </q-td>
           <q-td>
             <q-btn
-              icon="picture_as_pdf"
+              icon="download"
               color="primary"
               round
               @click="()=>showOfferDocuments(offer)"
@@ -109,22 +109,24 @@
 </template>
 
 <script setup lang="ts">
-import {computed, Ref, ref} from 'vue';
+import {computed, inject, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import UploadDocumentsDialog from 'src/components/dialogs/UploadDocumentsDialog.vue';
-import DownloadDocumentsDialog from 'src/components/dialogs/DownloadDocumentsDialog.vue';
+import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
-import {MY_DOSSIERS, OFFER_FILE} from 'src/data/queries/QUERIES';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
-import {uploadFiles} from 'src/helpers/file-helpers';
+import {MY_DOSSIERS} from 'src/data/queries/DOSSIER';
+import {DOSSIER_FILE, OFFER_FILE} from 'src/data/queries/FILE';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
 
 const $q: QVueGlobals = useQuasar()
+const $routerService: RouterService|undefined = inject('$routerService')
 
 // Selection must be an array
 const selected = ref([])
@@ -191,33 +193,45 @@ function onUpdateStatus(status: DOSSIER_STATUS, uuid:string){
 }
 
 /**
- * Opens the dialog to show all documents and to upload further documents
- * @param {Record<string, unknown>} entity - the dossier
- * @returns {void}
+ * Shows a dialog where the dossier's files can be downloaded
+ * @param {Record<string, unknown>} dossier - a dossier
+ * @returns {void} - void
  */
-function showAllDocuments(entity: Record<string, unknown>) {
+function showDossierDocuments(dossier: Record<string, unknown>): void {
+  const files: Record<string, unknown>[] = dossier.documents ?? []
+
   $q.dialog({
-    title: 'UploadDocumentsDialog',
-    component: UploadDocumentsDialog,
+    component: DocumentsDialog,
     componentProps: {
-      entity,
-      uploadGenericFile: async (file: Record<string, unknown>) => {
-        await uploadFiles(file, `/uploadDossierFile?did=${entity.uuid as string}`, 'getMyDossiers')
-      }
+      files,
+      dossierUuid: dossier.uuid,
+      query: DOSSIER_FILE,
+      uploadEnabled: true
     }
+  }).onOk(() => {
+    // Upload documents
+    void uploadDossierDocuments(dossier.uuid)
   })
 }
 
 /**
+ * Routes to the page where documents can be uploaded for a given dossier
+ * @param {string} uuid - dossier UUID
+ * @returns {Promise<void>} - done
+ */
+async function uploadDossierDocuments(uuid) {
+  await $routerService?.routeTo(ROUTES.DOSSIER_DOCUMENT_UPLOAD, {did: uuid})
+}
+
+/**
  * Shows a dialog where the offer's files can be downloaded
- * @param {Offer} offer - an offer
+ * @param {Record<string, unknown>} offer - an offer
  * @returns {void} - void
  */
 function showOfferDocuments(offer: Record<string, unknown>): void {
   const files = offer.documents ?? []
   $q.dialog({
-    title: 'DownloadDocumentsDialog',
-    component: DownloadDocumentsDialog,
+    component: DocumentsDialog,
     componentProps: {
       files,
       query: OFFER_FILE

@@ -18,7 +18,7 @@
 
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {Ref} from 'vue';
-import {MY_COMPANY} from 'src/data/queries/QUERIES';
+import {MY_COMPANY} from 'src/data/queries/COMPANY';
 
 const company = subscribeToQuery(MY_COMPANY) as Ref<Record<string, Array<Record<string, unknown>>>>
 

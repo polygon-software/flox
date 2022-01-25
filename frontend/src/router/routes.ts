@@ -7,6 +7,7 @@ import {RouteRecordRaw} from 'vue-router';
 
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
+  // TODO: Depending on user's role, redirect to respective dashboard --> see 'project-bigabig' for reference
   'MAIN': {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
