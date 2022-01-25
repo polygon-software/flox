@@ -37,6 +37,8 @@
     "amazon-cognito-identity-js": "^5.2.3",
     "apollo-server-fastify": "^3.3.0",
     "class-validator": "^0.13.1",
+    "csv": "^6.0.5",
+    "csv-parse": "^5.0.4",
     "fastify": "^3.22.0",
     "fastify-multipart": "^5.1.0",
     "graphql": "^15.6.1",

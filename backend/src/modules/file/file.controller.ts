@@ -274,10 +274,14 @@ export class FileController {
 
     const file = await req.file();
 
+    if (file.mimetype !== 'text/csv') {
+      res.send(new BadRequestException('YOU MUST BE BANANAS')); // TODO
+    }
+
     console.log('Upload file!');
     await this.fileService.uploadValueDevelopmentFile(file);
 
     res.header('access-control-allow-origin', '*');
-    res.send(); //TODO some response?
+    res.send('OK'); //TODO some response?
   }
 }

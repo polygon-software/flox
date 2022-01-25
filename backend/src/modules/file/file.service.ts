@@ -16,6 +16,7 @@ import { Dossier } from '../dossier/entity/dossier.entity';
 import { ERRORS } from '../../error/ERRORS';
 import { MultipartFile } from 'fastify-multipart';
 import { FILE_TYPE, ROLE } from '../../ENUM/ENUMS';
+import { parseCsv } from '../../helpers/csv-helpers';
 
 @Injectable()
 export class FileService {
@@ -344,27 +345,20 @@ export class FileService {
    * @returns {Promise<void>} - file
    */
   async uploadValueDevelopmentFile(file: MultipartFile) {
-    console.log('TODO upload file:', file);
+    console.log('TODO upload file:', file.filename);
     const fileBuffer = await file.toBuffer();
 
-    // File upload
-    // const key = `${uuid()}-${filename}`;
+    const parsedCsv = await parseCsv(fileBuffer);
+    console.log('parsed:', parsedCsv);
+    // // File upload
+    // const key = file.filename;
     // const uploadParams = {
     //   Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
     //   Key: key,
-    //   Body: dataBuffer,
+    //   Body: fileBuffer,
     // };
-    //
-    // const fileInput = {
-    //   key: key,
-    //   owner: owner,
-    //   file_type: fileType,
-    //   ...association,
-    // };
-    // const newFile = this.privateFilesRepository.create(fileInput);
     // await this.s3.send(new PutObjectCommand(uploadParams));
-    // await this.privateFilesRepository.save(newFile);
-    //
-    // return newFile;
+
+    // TODO: Do we not just want to decode and so on?
   }
 }
