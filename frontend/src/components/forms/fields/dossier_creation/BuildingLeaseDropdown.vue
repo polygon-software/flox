@@ -10,7 +10,11 @@
       @update:model-value="resetValues"
     />
   </div>
-  <div v-if="hasBuildingLease">
+  <q-card
+    v-if="hasBuildingLease"
+    class="q-pa-sm bg-grey-1"
+    style="margin-bottom: 24px"
+  >
     <!-- Expiration date -->
     <q-input
       v-model="expirationDate"
@@ -20,7 +24,7 @@
     />
 
     <!-- Landlord type -->
-    <div class="row q-mb-md">
+    <div class="row q-mb-md q-mt-sm" style="margin-bottom: 0">
       <p class="col q-py-sm">{{ $t('form_for_clients.landlord') }}</p>
       <q-option-group
         v-model="publicLandlord"
@@ -41,7 +45,7 @@
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       @change="emitValue"
     />
-  </div>
+  </q-card>
 </template>
 
 <script setup lang="ts">

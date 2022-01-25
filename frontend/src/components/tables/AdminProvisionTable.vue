@@ -99,7 +99,6 @@ import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {i18n} from 'boot/i18n';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {ALL_COMPANIES} from 'src/data/queries/COMPANY';
-import {useRoute} from 'vue-router';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 

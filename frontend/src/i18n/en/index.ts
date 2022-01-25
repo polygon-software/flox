@@ -231,7 +231,12 @@ export default {
     debt_enforcements: 'Debt Enforcements',
     loss_certificates: 'Loss Certificates',
     recipients: 'Recipients',
-    send_email_description: 'The document will be sent to the chosen recipients in PDF format. Further recipients can be entered in the field above..'
+    send_email_description: 'The document will be sent to the chosen recipients in PDF format. Further recipients can be entered in the field above..',
+    year_to_date: 'Year to Date',
+    current_quarter: 'Current quarter',
+    current_month: 'Current month',
+    past_365_days: 'Past 365 days',
+    date_filter: 'Date Filter',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',

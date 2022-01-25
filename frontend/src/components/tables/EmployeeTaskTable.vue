@@ -23,7 +23,7 @@
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
-      :filter="search"
+      :filter="searchTerm"
       :filter-method="tableFilter"
       flat
     >
@@ -118,9 +118,10 @@ const $routerService: RouterService|undefined = inject('$routerService')
 const companyUuid = route.query.cid
 
 // Search term
-const search = ref('')
+const searchTerm = ref('')
 const fromDate: Ref<string|null> = ref(null)
 const toDate: Ref<string|null> = ref(null)
+
 
 // ----- Data -----
 const columns = [
@@ -135,8 +136,17 @@ const columns = [
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
+// Filters the returned data by date TODO: When creating actual provision table, sensibly sum up here
 const computedResult = computed(()=>{
-  return queryResult.value ?? []
+  const filteredResult: Record<string, unknown>[] = []
+  if(fromDate.value && toDate.value){
+    for (const employee in queryResult.value){
+      if((employee.created_at as Date).getTime() < (fromDate.value as Date ).getTime() && (employee.created_at as Date).getTime() > (toDate.value as Date).getTime()) {
+        filteredResult.push(employee)
+      }
+    }
+  }
+  return filteredResult ?? []
 })
 
 /**
@@ -160,7 +170,7 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
  * @returns {void}
  */
 function updateFilter(input: Record<string, string>){
-  search.value = input.search
+  searchTerm.value = input.search
   fromDate.value = input.fromDate
   toDate.value = input.toDate
 }

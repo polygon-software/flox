@@ -41,6 +41,7 @@ export const MY_EMPLOYEES = {
     query getMyEmployees($companyUuid: String){
       getMyEmployees(companyUuid: $companyUuid){
         uuid
+        created_at
         first_name
         last_name
         function

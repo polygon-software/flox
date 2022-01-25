@@ -233,7 +233,12 @@ export default {
     debt_enforcements: 'Betreibungen',
     loss_certificates: 'Verlustscheine',
     recipients: 'Empfänger',
-    send_email_description: 'Das Dokument wird als PDF and die ausgewählten Empfänger zugestellt. Weitere Empfänger können im obigen Feld angegeben werden.'
+    send_email_description: 'Das Dokument wird als PDF and die ausgewählten Empfänger zugestellt. Weitere Empfänger können im obigen Feld angegeben werden.',
+    year_to_date: 'Aktuelles Jahr',
+    current_quarter: 'Aktuelles Quartal',
+    current_month: 'Aktueller Monat',
+    past_365_days: 'Letzte 365 Tage',
+    date_filter: 'Datumsfilter',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

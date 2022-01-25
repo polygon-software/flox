@@ -20,6 +20,7 @@ import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {Ref} from 'vue';
 import {MY_COMPANY} from 'src/data/queries/COMPANY';
 import {useRoute} from 'vue-router';
+
 const route = useRoute()
 
 // Company ID from route (if any), only relevant if going from SOIAdmin -> Company view
