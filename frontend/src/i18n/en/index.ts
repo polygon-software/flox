@@ -102,7 +102,6 @@ export default {
   dashboards: {
     management_dashboard: 'Management Dashboard',
     offer: 'Offer | Offers',
-    register_new_employee_here: 'Register a new employee here:',
     application: 'Application | Applications',
     state: 'State',
     action: 'Action',
@@ -114,12 +113,14 @@ export default {
     view_documents: 'View documents',
     employee_tasks: 'Employee tasks',
     dossier: 'Dossier | Dossiers',
+    rejected_dossiers: 'Rejected Dossiers',
     offer_id: 'Offer Nr.',
     market_value: 'Market Value',
     mortgage: 'Mortgage',
     b_degree: 'B-Degree',
     acceptability_of_risks: 'Acceptability of risks',
     expiration: 'Expiration',
+    soi_employees: 'SOI Employees'
   },
   buttons: {
     finish_signup: 'Finish',

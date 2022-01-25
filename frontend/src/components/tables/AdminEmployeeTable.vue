@@ -7,7 +7,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $t('account_data.employees') + ' (' + computedResult.length + ')' }}
+        {{ $t('dashboards.soi_employees') + ' (' + computedResult.length + ')' }}
       </h6>
 
       <!-- Container for search & adding -->

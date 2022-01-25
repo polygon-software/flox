@@ -29,6 +29,7 @@
 
         <!-- Register new employee -->
         <q-btn
+          v-if="!companyUuid"
           icon="add"
           :label="$t('authentication.employee_signup')"
           dense

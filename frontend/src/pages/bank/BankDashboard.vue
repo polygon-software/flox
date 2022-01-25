@@ -1,6 +1,6 @@
 <template>
   <q-page
-    class="q-pa-lg q-ma-lg">
+    class="q-pa-lg q-ma-none">
 
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
@@ -87,6 +87,7 @@
                 :label="$t('offer_status_enum.' + (ownOfferForDossier(_props.row).status))"
               >
                 <q-popup-edit
+                  v-if="!bankUuid"
                   v-slot="scope"
                   :auto-save="true"
                   :model-value="ownOfferForDossier(_props.row).status"
@@ -106,6 +107,7 @@
                 color="primary"
                 text-color="white"
                 :label=" $t('dossier.offer')"
+                :disable="bankUuid"
                 clickable
                 @click="createOfferForDossier(_props.row)"
               />
@@ -149,11 +151,11 @@ const route = useRoute()
 const search = ref('')
 
 // Bank UUID from query (if going from SOI admin to bank)
-const bankId = route.query.bid
+const bankUuid = route.query.bid
 
 // Getters, depending on whether user is actually a bank or admin accessing bank view
-const myBank = subscribeToQuery(MY_BANK, bankId ? { bankUuid: bankId } : {})
-const dossiers = subscribeToQuery(DOSSIERS_BANK, bankId ? { bankUuid: bankId } : {})
+const myBank = subscribeToQuery(MY_BANK, bankUuid ? { bankUuid: bankUuid } : {})
+const dossiers = subscribeToQuery(DOSSIERS_BANK, bankUuid ? { bankUuid: bankUuid } : {})
 const computedResult = computed(()=>{
   return dossiers.value ?? []
 })

@@ -66,15 +66,6 @@ export const MY_BANK = {
         last_name
         readable_id
         email
-        offers{
-          __typename
-          uuid
-          status
-          dossier {
-            uuid
-            __typename
-          }
-        }
         __typename
       }
     }

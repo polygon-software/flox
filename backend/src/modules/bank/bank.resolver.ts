@@ -85,7 +85,7 @@ export class BankResolver {
       if (!bankUuid) {
         throw new Error('Admin must specify bankUuid');
       }
-      return this.bankService.getBank({ uuid: dbUser.fk } as GetBankArgs);
+      return this.bankService.getBank({ uuid: bankUuid } as GetBankArgs);
     } else if (!dbUser || dbUser.role !== ROLE.BANK) {
       throw new Error('User is not a Bank');
     }
