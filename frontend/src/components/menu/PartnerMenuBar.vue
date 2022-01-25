@@ -98,7 +98,7 @@
     <q-card
       style="overflow: hidden"
     >
-      <Inbox db-ref="123"/>
+      <Inbox :notifications="notifications"/>
       <q-card-actions align="center">
         <q-btn
           :label="$t('buttons.back')"
@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, ref, defineEmits} from 'vue'
+import { computed, inject, ref, defineEmits, Ref } from 'vue';
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -124,6 +124,9 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
+import { subscribeToQuery } from 'src/helpers/data-helpers';
+import { MY_NOTIFICATIONS } from 'src/data/queries/NOTIFICATIONS';
+import { Notification } from 'src/data/types/Notification';
 
 
 const $authService: AuthenticationService|undefined = inject('$authService')
@@ -137,9 +140,25 @@ const loggedIn = computed(() => {
   return $authStore.getters.getLoggedInStatus();
 })
 
-// TODO get from backend
+const myNotificationsQueryResult = subscribeToQuery(MY_NOTIFICATIONS) as Ref<Array<Record<string, unknown>>>
+
+const notifications = computed(() => {
+  const myNotifications: Notification[] = []
+  const records = myNotificationsQueryResult.value  ?? [];
+  records.forEach(record => myNotifications.push(new Notification(
+    record.title as string,
+    new Date(record.received as string),
+    record.content as string,
+    record.isRead as boolean,
+    record.uuid as string,
+  )));
+  return myNotifications;
+})
+
 // The number of notifications
-const notificationCount = ref(2)
+const notificationCount = computed(() => {
+  return notifications.value.filter(notification => !notification.isRead).length;
+})
 
 /**
  * Logs out the current authentication
