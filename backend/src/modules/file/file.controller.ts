@@ -9,7 +9,11 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { Public } from '../../auth/authentication.decorator';
-import { AnyRole, EmployeeOnly } from '../../auth/authorization.decorator';
+import {
+  AdminOnly,
+  AnyRole,
+  EmployeeOnly,
+} from '../../auth/authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
@@ -248,5 +252,32 @@ export class FileController {
 
     res.header('access-control-allow-origin', '*');
     res.send(updatedDossier);
+  }
+
+  /**
+   * Uploads a value development CSV file to replace the old one
+   * @param {FastifyRequest} req - request
+   * @param {FastifyReply} res - response
+   * @returns {Promise<void>} - done
+   */
+  @Post('/uploadValueDevelopmentFile')
+  @AdminOnly()
+  async uploadValueDevelopmentFile(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+  ): Promise<any> {
+    // Verify that request is multipart
+    if (!req.isMultipart()) {
+      res.send(new BadRequestException(ERRORS.file_expected));
+      return;
+    }
+
+    const file = await req.file();
+
+    console.log('Upload file!');
+    await this.fileService.uploadValueDevelopmentFile(file);
+
+    res.header('access-control-allow-origin', '*');
+    res.send(); //TODO some response?
   }
 }

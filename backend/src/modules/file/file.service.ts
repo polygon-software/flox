@@ -337,4 +337,34 @@ export class FileService {
     }
     throw new NotFoundException();
   }
+
+  /**
+   * Uploads a value development CSV file
+   * @param {MultipartFile} file - multipart CSV file input
+   * @returns {Promise<void>} - file
+   */
+  async uploadValueDevelopmentFile(file: MultipartFile) {
+    console.log('TODO upload file:', file);
+    const fileBuffer = await file.toBuffer();
+
+    // File upload
+    // const key = `${uuid()}-${filename}`;
+    // const uploadParams = {
+    //   Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+    //   Key: key,
+    //   Body: dataBuffer,
+    // };
+    //
+    // const fileInput = {
+    //   key: key,
+    //   owner: owner,
+    //   file_type: fileType,
+    //   ...association,
+    // };
+    // const newFile = this.privateFilesRepository.create(fileInput);
+    // await this.s3.send(new PutObjectCommand(uploadParams));
+    // await this.privateFilesRepository.save(newFile);
+    //
+    // return newFile;
+  }
 }
