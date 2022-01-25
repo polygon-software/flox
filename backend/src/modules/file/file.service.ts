@@ -345,20 +345,14 @@ export class FileService {
    * @returns {Promise<void>} - file
    */
   async uploadValueDevelopmentFile(file: MultipartFile) {
-    console.log('TODO upload file:', file.filename);
+    console.log('Uploaded file:', file.filename);
     const fileBuffer = await file.toBuffer();
 
-    const parsedCsv = await parseCsv(fileBuffer);
-    console.log('parsed:', parsedCsv);
-    // // File upload
-    // const key = file.filename;
-    // const uploadParams = {
-    //   Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
-    //   Key: key,
-    //   Body: fileBuffer,
-    // };
-    // await this.s3.send(new PutObjectCommand(uploadParams));
+    const parsedCsv = (await parseCsv(fileBuffer)) as Record<string, string>[];
+    console.log('parsed', parsedCsv.length, 'rows');
 
-    // TODO: Do we not just want to decode and so on?
+    parsedCsv.forEach((row: Record<string, string>) => {
+      // TODO upload to database
+    });
   }
 }
