@@ -89,27 +89,32 @@ export async function getValueDevelopment(
     throw new Error('missing table'); // TODO from constants
   }
 
-  // Get zip code -> region mapping
-  const zipCodeMapping = (await queryRunner.manager.findOne(zipCodeTableName, {
-    zip_code: zipCode,
-  })) as Record<string, unknown>;
+  // Get zip code -> region mapping directly via SQL because we're cool like that
+  const zipCodeQuery = await queryRunner.manager.query(`
+    SELECT *
+    FROM ${zipCodeTableName}
+    WHERE zip_code='${zipCode}'
+    LIMIT 1
+    `);
 
-  if (!zipCodeMapping) {
+  if (!zipCodeQuery || zipCodeQuery.length === 0) {
     throw new Error('no zipcode mapping found'); // TODO
   }
+
+  const zipCodeMapping = zipCodeQuery[0];
 
   // Extract region code
   const regionCode = zipCodeMapping.region;
   console.log('Region code is', regionCode);
-
-  // Get region -> value mapping
-  const valueMapping = (await queryRunner.manager.findOne(valueTableName, {
-    region: regionCode,
-  })) as Record<string, unknown>;
-
-  if (!zipCodeMapping) {
-    throw new Error('no value mapping found'); // TODO
-  }
-
-  console.log('value mapping is', valueMapping);
+  //
+  // // Get region -> value mapping
+  // const valueMapping = (await queryRunner.manager.findOne(valueTableName, {
+  //   region: regionCode,
+  // })) as Record<string, unknown>;
+  //
+  // if (!zipCodeMapping) {
+  //   throw new Error('no value mapping found'); // TODO
+  // }
+  //
+  // console.log('value mapping is', valueMapping);
 }
