@@ -300,6 +300,7 @@ export class FileController {
     const start = query.start;
     const end = query.end;
 
+    // Ensure all attributes present
     if (!zipCode || !start || !end) {
       res.send(new Error('literally missing stuff but ok')); // TODO error message
       return;
@@ -308,9 +309,13 @@ export class FileController {
     const startDate = new Date(start);
     const endDate = new Date(end);
 
-    // Ensure start and end are in correct order
-    if (endDate.getTime() < startDate.getTime()) {
-      res.send(new Error('end must be after start')); // TODO error message
+    // Ensure dates are valid end date is after start date
+    if (
+      isNaN(startDate.getTime()) ||
+      isNaN(endDate.getTime()) ||
+      endDate.getTime() < startDate.getTime()
+    ) {
+      res.send(new Error('No valid dates entered')); // TODO error message
       return;
     }
 
