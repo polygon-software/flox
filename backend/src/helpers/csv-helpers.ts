@@ -1,4 +1,11 @@
 import { parse } from 'csv-parse';
+import {
+  Connection,
+  getConnection,
+  QueryRunner,
+  Table,
+  TableColumn,
+} from 'typeorm';
 
 /**
  * This file contains all helper functions related to handling CSV files
@@ -28,4 +35,45 @@ export async function parseCsv(fileBuffer: Buffer, delimiter = '\t') {
       },
     );
   });
+}
+
+// TODO docs
+// eslint-disable-next-line require-jsdoc
+export async function saveValueDevelopmentCsv(
+  parsedCsv: Record<string, unknown>[],
+) {
+  const tableName = 'value_development';
+  const columnNames = Object.keys(parsedCsv[0]);
+  const columns: TableColumn[] = [];
+
+  columnNames.forEach((columnName) => {
+    columns.push(
+      new TableColumn({
+        type: 'text', // TODO possibly parse values to numbers?
+        name: columnName,
+      }),
+    );
+  });
+
+  // Set up database connection & query runner
+  const connection: Connection = getConnection();
+  const queryRunner: QueryRunner = connection.createQueryRunner();
+
+  await queryRunner.connect(); // performs connection
+
+  const tableExists = await queryRunner.hasTable(tableName);
+  console.log('Table exists?', tableExists);
+
+  // Discard existing table, if any
+  if (tableExists) {
+    console.log('Drop table!');
+    await queryRunner.dropTable(tableName);
+  }
+
+  await queryRunner.createTable(
+    new Table({
+      name: tableName,
+      columns,
+    }),
+  );
 }

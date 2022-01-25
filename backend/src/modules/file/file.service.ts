@@ -16,7 +16,7 @@ import { Dossier } from '../dossier/entity/dossier.entity';
 import { ERRORS } from '../../error/ERRORS';
 import { MultipartFile } from 'fastify-multipart';
 import { FILE_TYPE, ROLE } from '../../ENUM/ENUMS';
-import { parseCsv } from '../../helpers/csv-helpers';
+import { parseCsv, saveValueDevelopmentCsv } from '../../helpers/csv-helpers';
 
 @Injectable()
 export class FileService {
@@ -351,8 +351,7 @@ export class FileService {
     const parsedCsv = (await parseCsv(fileBuffer)) as Record<string, string>[];
     console.log('parsed', parsedCsv.length, 'rows');
 
-    parsedCsv.forEach((row: Record<string, string>) => {
-      // TODO upload to database
-    });
+    // Persist to database
+    await saveValueDevelopmentCsv(parsedCsv);
   }
 }
