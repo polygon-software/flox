@@ -56,7 +56,7 @@
         <q-tr
           :props="props"
           style="background-color: white; cursor: pointer"
-          @click="() => onRowClick(props.row)"
+          @click="onRowClick"
         >
             <q-td key="first_name" :props="props">
               {{ props.row.first_name }}
@@ -121,11 +121,10 @@ async function routeToRegisterEmployee(): Promise<void> {
 }
 
 /**
- * Upon clicking a row, opens the employee's dashboard view
- * @param {Record<string, unknown>} row - the row that was clicked
+ * Upon clicking a row, opens the SOI employee dashboard view
  * @returns {Promise<void>} - completed
  */
-async function onRowClick(row: Record<string, unknown>): Promise<void>{
+async function onRowClick(): Promise<void>{
   await $routerService?.routeTo(ROUTES.APPLICATIONS)
 }
 

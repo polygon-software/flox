@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {computed, inject, ref, watch} from 'vue';
+import {computed, inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw, useRoute} from 'vue-router';
 import {i18n} from 'boot/i18n';
