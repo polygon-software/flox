@@ -37,12 +37,16 @@ export async function parseCsv(fileBuffer: Buffer, delimiter = '\t') {
   });
 }
 
-// TODO docs
-// eslint-disable-next-line require-jsdoc
+/**
+ * Persists a parsed development CSV file to the database's 'value_development' ta le
+ * @param {Record<string, unknown>[]} parsedCsv - CSV parsed to object array
+ * @returns {Promise<void>} - done
+ */
 export async function saveValueDevelopmentCsv(
   parsedCsv: Record<string, unknown>[],
 ) {
   const tableName = 'value_development';
+  const defaultCodeName = 'MS_Code'; // Default name of code column; replaced with 'region'
   const columnNames = Object.keys(parsedCsv[0]);
   const columns: TableColumn[] = [];
 
@@ -50,7 +54,7 @@ export async function saveValueDevelopmentCsv(
     columns.push(
       new TableColumn({
         type: 'text', // TODO possibly parse values to numbers?
-        name: columnName,
+        name: columnName === defaultCodeName ? 'region' : columnName,
       }),
     );
   });
