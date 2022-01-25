@@ -152,7 +152,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   // Wildcard route for non-covered routes
   'WILDCARD': {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/generic/Error404.vue'),
+    component: () => import('pages/generic/Error404.vue')
+  },
+
+  // Explicit error for non-allowed routes
+  'ERROR': {
+    path: '/error',
+    component: () => import('pages/generic/Error404.vue')
   },
 };
 
@@ -165,6 +171,22 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SUCCESS,
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.SET_PASSWORD,
+]
+
+// Routes that have additional access constraints
+export const CONSTRAINED_ROUTES = [
+  {
+    path: ROUTES.BANK_DASHBOARD.path,
+    allowedRoles: [ROLE.BANK],
+    constrainedRoles: [ROLE.SOI_ADMIN],
+    necessaryQueryParams: ['bid']
+  },
+  {
+    path: ROUTES.BANK_DASHBOARD.path,
+    allowedRoles: [ROLE.BANK],
+    constrainedRoles: [ROLE.SOI_ADMIN],
+    necessaryQueryParams: ['bid']
+  }
 ]
 
 
