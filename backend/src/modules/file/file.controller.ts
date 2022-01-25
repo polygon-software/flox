@@ -296,24 +296,32 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
     @Query() query: Record<string, string>, // Params
   ): Promise<any> {
-    console.log('Requested for', query);
-
     const zipCode = query.zipCode;
     const start = query.start;
     const end = query.end;
 
     if (!zipCode || !start || !end) {
-      throw new Error('literally missing stuff but ok');
+      res.send(new Error('literally missing stuff but ok')); // TODO error message
+      return;
     }
 
     const startDate = new Date(start);
     const endDate = new Date(end);
 
-    const multiplier = await getValueDevelopment(zipCode, startDate, endDate);
+    // Ensure start and end are in correct order
+    if (endDate.getTime() < startDate.getTime()) {
+      res.send(new Error('end must be after start')); // TODO error message
+      return;
+    }
 
-    console.log('backend told me multiplier is', multiplier, ', trust me bro');
-
-    res.header('access-control-allow-origin', '*');
-    res.send(`Here u go: ${multiplier}`); //TODO some response?
+    try {
+      // Calculate value multiplier
+      const multiplier = await getValueDevelopment(zipCode, startDate, endDate);
+      res.header('access-control-allow-origin', '*');
+      res.send(multiplier);
+    } catch (error) {
+      // Return any calculation errors that occurred
+      res.send(error);
+    }
   }
 }

@@ -137,10 +137,15 @@ export async function getValueDevelopment(
   // If data older than oldest is requested, use oldest column instead
   if (oldestKey > startKey) {
     startKey = oldestKey;
+  } else if (newestKey < startKey) {
+    // Special case: if oldest is also newer than any data present
+    startKey = newestKey;
   }
   // If data newer than newest is requested, use newest column instead
   if (newestKey < endKey) {
     endKey = newestKey;
+  } else if (oldestKey > endKey) {
+    endKey = oldestKey;
   }
 
   const startValue = valueMapping[startKey];
@@ -148,7 +153,8 @@ export async function getValueDevelopment(
   console.log('Value Start:', startValue, ', value end:', endValue);
   // TODO Christoph's discussed logic with SOI, it physically hurts
 
-  return endValue / startValue;
+  // Limit result to 4 decimal points & return
+  return (endValue / startValue).toFixed(4);
 }
 
 /**
