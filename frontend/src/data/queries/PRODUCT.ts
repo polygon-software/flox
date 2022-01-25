@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import { QueryObject } from 'src/data/DATA-DEFINITIONS';
 
 /**
  * Product-related queries
@@ -7,8 +7,8 @@ import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 
 export const ALL_PRODUCTS = {
   query: gql`
-    query{
-      allProducts{
+    query {
+      allProducts {
         uuid
         title
         description
@@ -25,7 +25,7 @@ export const ALL_PRODUCTS = {
         minBet
         maxBet
         tags
-        pictures{
+        pictures {
           uuid
           url
           __typename
@@ -35,14 +35,14 @@ export const ALL_PRODUCTS = {
     }
   `,
   tables: ['product'],
-  cacheLocation: 'allProducts'
-}
+  cacheLocation: 'allProducts',
+};
 
 // TODO implement on backend; for now, we use allProducts
 export const MY_PRODUCTS = {
   query: gql`
-    query{
-      allProducts{
+    query {
+      allProducts {
         uuid
         title
         description
@@ -59,7 +59,7 @@ export const MY_PRODUCTS = {
         minBet
         tags
         maxBet
-        pictures{
+        pictures {
           uuid
           url
           __typename
@@ -69,13 +69,13 @@ export const MY_PRODUCTS = {
     }
   `,
   tables: ['product'],
-  cacheLocation: 'allProducts'
-}
+  cacheLocation: 'allProducts',
+};
 
 export const PRODUCT = {
   query: gql`
-    query product($uuid: ID!){
-      product(uuid: $uuid){
+    query product($uuid: ID!) {
+      product(uuid: $uuid) {
         uuid
         title
         description
@@ -96,7 +96,7 @@ export const PRODUCT = {
         minBet
         maxBet
         tags
-        pictures{
+        pictures {
           uuid
           url
           __typename
@@ -106,7 +106,11 @@ export const PRODUCT = {
     }
   `,
   tables: ['product'],
-  cacheLocation: 'product'
-}
+  cacheLocation: 'product',
+};
 
-export const PRODUCT_QUERIES: QueryObject[] = [ALL_PRODUCTS, MY_PRODUCTS, PRODUCT]
+export const PRODUCT_QUERIES: QueryObject[] = [
+  ALL_PRODUCTS,
+  MY_PRODUCTS,
+  PRODUCT,
+];

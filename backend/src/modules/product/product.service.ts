@@ -17,10 +17,11 @@ import { base64ToBuffer } from '../../helpers/image-helper';
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectRepository(Product) private productsRepository: Repository<Product>,
+    @InjectRepository(Product)
+    private readonly productsRepository: Repository<Product>,
     @InjectRepository(PublicFile)
-    private fileRepository: Repository<PublicFile>,
-    private fileService: FileService,
+    private readonly fileRepository: Repository<PublicFile>,
+    private readonly fileService: FileService,
   ) {}
 
   async create(
@@ -165,9 +166,9 @@ export class ProductService {
       deleteProductInput.uuid,
     );
     const uuid = product.uuid;
-    const deleted_product = await this.productsRepository.remove(product);
-    deleted_product.uuid = uuid;
-    return deleted_product;
+    const deletedProduct = await this.productsRepository.remove(product);
+    deletedProduct.uuid = uuid;
+    return deletedProduct;
   }
 
   /**
@@ -182,15 +183,16 @@ export class ProductService {
     product: Product,
   ): Promise<void> {
     // Create new picture objects
-    for (let base64Picture of base64Strings) {
+    for (const base64Picture of base64Strings) {
       // Remove prepended string
+      let base64Picture2 = base64Picture;
       if (base64Picture.startsWith('stream;base64')) {
-        base64Picture = base64Picture.replace('stream;base64,', '');
+        base64Picture2 = base64Picture.replace('stream;base64,', '');
       }
 
       // Convert base64 to buffer
-      const buffer = base64ToBuffer(base64Picture);
-      const index = base64Strings.indexOf(base64Picture);
+      const buffer = base64ToBuffer(base64Picture2);
+      const index = base64Strings.indexOf(base64Picture2);
 
       // Upload the image
       await this.fileService.uploadPublicFile(

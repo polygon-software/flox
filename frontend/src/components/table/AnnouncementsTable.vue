@@ -1,7 +1,7 @@
 <template>
   <div class="column full-width">
     <q-table
-      :rows="computedResult"
+      :rows="filteredAnnouncements"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10, 20, 100]"
@@ -87,9 +87,9 @@ const columns = [
 
 const allAnnouncementsQueryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<Record<string, unknown>[]>
 
-const computedResult = computed(() => {
+const realAnnouncements = computed(() => {
   const announcementRecords = allAnnouncementsQueryResult?.value ?? [];
-  let announcements = announcementRecords.map((record) => new Announcement(
+  return announcementRecords.map((record) => new Announcement(
     record.title as string,
     new Date(record.date as string),
     record.content as string,
@@ -97,6 +97,10 @@ const computedResult = computed(() => {
     record.scheduled as boolean,
     record.uuid as string,
   ))
+})
+
+const filteredAnnouncements = computed(() => {
+  let announcements = realAnnouncements.value
   if(props.roleFilter !== null){
     announcements = announcements.filter((announcement) => announcement.userRoles.includes(props.roleFilter as ROLE))
   }
