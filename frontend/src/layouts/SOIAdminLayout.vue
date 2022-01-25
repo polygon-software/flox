@@ -35,7 +35,25 @@
 
     <q-page-container class="absolute-full">
       <q-scroll-area class="fit">
-        <router-view />
+        <q-btn
+          v-if="route.query.cid"
+          :label="$t('account_data.employees')"
+          no-caps
+          flat
+          class="text-white"
+          style="background: rgba(244, 67, 54, 0.8); border-radius: 0"
+          @click="() => onItemClick(ROUTES.MANAGEMENT_EMPLOYEE_DATA, route.query)"
+        />
+        <q-btn
+          v-if="route.query.cid"
+          :label="$t('account_data.tasks')"
+          no-caps
+          flat
+          class="text-white"
+          style="background: rgba(244, 67, 54, 0.8); border-radius: 0"
+          @click="() => onItemClick(ROUTES.MANAGEMENT_EMPLOYEE_TASKS, route.query)"
+        />
+        <router-view :style="computedStyle" />
       </q-scroll-area>
     </q-page-container>
 
@@ -44,7 +62,7 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {inject, ref} from 'vue';
+import {computed, inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw, useRoute} from 'vue-router';
 import {i18n} from 'boot/i18n';
@@ -53,6 +71,12 @@ const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute();
 
 const showDrawer = ref(true)
+
+
+const computedStyle = computed(() => {
+  const isForeignDashboard = route.query.bid || route.query.cid || route.query.eid
+  return isForeignDashboard ? 'border: 10px solid rgba(244, 67, 54, 0.8); border-radius: 0 5px 5px 5px' : null
+})
 
 // Left-side menu items
 const menuItems = [
@@ -63,7 +87,7 @@ const menuItems = [
   },
   {
     name: 'employees',
-    label: i18n.global.t('account_data.employees'),
+    label: i18n.global.t('dashboards.soi_employees'),
     route: ROUTES.ADMIN_EMPLOYEES,
   },
   {
@@ -77,12 +101,14 @@ const menuItems = [
     route: ROUTES.ADMIN_BANK,
   },
 ]
+
 /**
  * Routes to an item's target route
  * @param {RouteRecordRaw} target - target route
- * @returns {void}
+ * @param {Record<string, unknown>} [query] - query to apply
+ * @returns {Promise<void>} - done
  */
-async function onItemClick(target: RouteRecordRaw){
-  await $routerService?.routeTo(target)
+async function onItemClick(target: RouteRecordRaw, query?: Record<string, unknown>){
+  await $routerService?.routeTo(target, query ?? null)
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <q-page
-    class="q-pa-lg q-ma-lg">
+    class="q-pa-lg q-ma-none">
 
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
@@ -48,7 +48,7 @@
               {{ _props.row.readable_id }}
             </q-td>
             <q-td key="city" :props="_props">
-              {{ _props.row.correspondence_address.city }}
+              {{ _props.row.address.city }}
             </q-td>
             <q-td key="market_value" :props="_props">
               unknown
@@ -87,6 +87,7 @@
                 :label="$t('offer_status_enum.' + (ownOfferForDossier(_props.row).status))"
               >
                 <q-popup-edit
+                  v-if="!bankUuid"
                   v-slot="scope"
                   :auto-save="true"
                   :model-value="ownOfferForDossier(_props.row).status"
@@ -106,6 +107,7 @@
                 color="primary"
                 text-color="white"
                 :label=" $t('dossier.offer')"
+                :disable="bankUuid"
                 clickable
                 @click="createOfferForDossier(_props.row)"
               />
@@ -138,19 +140,25 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {DOSSIERS_BANK} from 'src/data/queries/DOSSIER';
 import {MY_BANK} from 'src/data/queries/BANK';
 import {DOSSIER_FILE} from 'src/data/queries/FILE';
+import {useRoute} from 'vue-router';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
+const route = useRoute()
 
-const dossiers = subscribeToQuery(DOSSIERS_BANK, {})
-const computedResult = computed(()=>{
-  return dossiers.value ?? []
-})
+
 
 const search = ref('')
 
-const myBank = subscribeToQuery(MY_BANK, {})
+// Bank UUID from query (if going from SOI admin to bank)
+const bankUuid = route.query.bid
 
+// Getters, depending on whether user is actually a bank or admin accessing bank view
+const myBank = subscribeToQuery(MY_BANK, bankUuid ? { bankUuid: bankUuid } : {})
+const dossiers = subscribeToQuery(DOSSIERS_BANK, bankUuid ? { bankUuid: bankUuid } : {})
+const computedResult = computed(()=>{
+  return dossiers.value ?? []
+})
 /**
  * Checks whether we have an own offer on a dossier
  * @param {Record<string, unknown>} dossier - the dossier

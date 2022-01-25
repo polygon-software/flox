@@ -48,15 +48,12 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 
-
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const loggedIn = computed(() => {
-  // Explicit type
-  const result: boolean = $authStore.getters.getLoggedInStatus()
-  return result;
+  return $authStore.getters.getLoggedInStatus()
 })
 
 

@@ -57,7 +57,7 @@ const showDrawer = ref(true)
 const menuItems = [
   {
     name: 'applications',
-    label: i18n.global.tc('dashboards.application', 2),
+    label: i18n.global.tc('dashboards.dossier', 2),
     route: ROUTES.APPLICATIONS,
   },
 ]

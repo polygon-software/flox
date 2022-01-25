@@ -51,6 +51,7 @@ export const COMPANY = {
         readable_id
         first_name
         last_name
+        company_name
         documents{
           uuid
           key
@@ -66,8 +67,8 @@ export const COMPANY = {
 
 export const MY_COMPANY = {
   query: gql`
-    query getMyCompany{
-      getMyCompany{
+    query getMyCompany($companyUuid: String){
+      getMyCompany(companyUuid: $companyUuid){
         uuid
         readable_id
         first_name

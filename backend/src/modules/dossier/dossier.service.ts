@@ -49,7 +49,7 @@ export class DossierService {
     createDossierInput: CreateDossierInput,
     cognitoId: string,
   ): Promise<Dossier> {
-    const employee = await this.employeeService.getMyEmployee(cognitoId);
+    const employee = await this.employeeService.getEmployee(cognitoId);
 
     let originalBank = await this.bankService.findBankByAbbreviation(
       createDossierInput.original_bank_abbreviation,
@@ -165,11 +165,12 @@ export class DossierService {
   }
 
   /**
-   * @param {string} cognitoId - id of user of employee
+   * Gets the dossiers for a given employee
+   * @param {string} uuid - employee's database UUID
    * @returns {Promise<Dossier[]>} - dossiers of employee
    */
-  async myDossiers(cognitoId: string): Promise<Dossier[]> {
-    const employee = await this.employeeService.getMyEmployee(cognitoId);
+  async getDossiersForEmployee(uuid: string): Promise<Dossier[]> {
+    const employee = await this.employeeService.getEmployee(uuid);
     return this.dossierRepository.findByIds(
       employee.dossiers.map((dossier) => dossier.uuid),
       {
@@ -264,18 +265,23 @@ export class DossierService {
   /**
    * All dossiers, where the requesting bank isn't the original_bank and there are either open offer spots, or
    * we have already created an offer
-   * @param {string} cognitoId - the the banks users id
+   * @param {string} uuid - the the bank's database id ('banks' table)
    * @returns {Promise<Dossier[]>} - the dossiers
    */
-  async allDossiersBank(cognitoId: string): Promise<Dossier[]> {
-    const bank = await this.bankService.getMyBank(cognitoId);
+  async allDossiersBank(uuid: string): Promise<Dossier[]> {
     const dossiers = await this.dossierRepository.find({
       where: {
         original_bank: {
-          uuid: Not(bank.uuid),
+          uuid: Not(uuid),
         },
       },
-      relations: ['offers', 'offers.bank', 'documents', 'final_document'],
+      relations: [
+        'offers',
+        'offers.bank',
+        'offers.dossier',
+        'documents',
+        'final_document',
+      ],
     });
 
     // Return only those that have less than three offers or an own offer
@@ -285,7 +291,7 @@ export class DossierService {
 
       // Whether we already have an offer on this dossier
       const ownOffer = !!dossier.offers.find(
-        (offer) => offer.bank.uuid === bank.uuid,
+        (offer) => offer.bank.uuid === uuid,
       );
 
       return freeSpots || ownOffer;

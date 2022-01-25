@@ -56,6 +56,7 @@
         <q-tr
           :props="props"
           style="background-color: white; cursor: pointer"
+          @click="() => onRowClick(props.row)"
         >
           <q-td key="id" :props="props">
             {{ props.row.readable_id }}
@@ -92,6 +93,7 @@ import ROUTES from 'src/router/routes';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {ALL_BANKS} from 'src/data/queries/BANK';
+import {IS_VALID_EMAIL} from 'src/data/RULES';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -121,6 +123,18 @@ const computedResult = computed(()=>{
  */
 async function routeToRegisterBank(): Promise<void> {
   await $routerService?.routeTo(ROUTES.REGISTER_BANK)
+}
+
+/**
+ * Upon clicking a row, opens the bank's dashboard view if the bank has an account
+ * @param {Record<string, unknown>} row - the row that was clicked
+ * @returns {Promise<void>} - completed
+ */
+async function onRowClick(row: Record<string, unknown>): Promise<void>{
+  // Only allow reroute if bank has an account (thus a valid e-mail
+  if(IS_VALID_EMAIL(row.email)){
+    await $routerService?.routeTo(ROUTES.BANK_DASHBOARD, {bid: row.uuid})
+  }
 }
 
 </script>

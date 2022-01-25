@@ -76,6 +76,43 @@ type Bank {
   uuid: ID!
 }
 
+enum Category {
+  CARS
+  CELEBRITIES
+  COOKING
+  FASHION
+  MUSIC
+  OUTDOOR
+  SPORTS
+  TECHNOLOGY
+  TOOLS
+  TRAVELLING
+  WATCHES
+}
+
+type Comment {
+  """Content"""
+  content: String!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """The product this comment belongs to"""
+  product: Product!
+
+  """The user who wrote this comment"""
+  user: User!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Company {
   """Branch structure"""
   branch_structure: Boolean!
@@ -279,6 +316,12 @@ input CreateSoiEmployeeInput {
 
   """Phone Number"""
   phone: String!
+}
+
+enum Currency {
+  CHF
+  EUR
+  USD
 }
 
 """
@@ -636,6 +679,104 @@ type PrivateFile {
   uuid: ID!
 }
 
+type Product {
+  """Brand"""
+  brand: String
+
+  """Brand link"""
+  brandLink: String
+
+  """Current number of clicks on brand link"""
+  brandLinkClicks: Float
+
+  """Current cost of brand link"""
+  brandLinkCost: Float
+
+  """Maximum number of clicks on brand link"""
+  brandLinkMaxClicks: Float
+
+  """Maximum cost of brand link"""
+  brandLinkMaxCost: Float
+
+  """Product category"""
+  category: Category
+
+  """Comments"""
+  comments: [Comment!]!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """The currency the value is denoted in"""
+  currency: Currency
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Description"""
+  description: String
+
+  """Direct Buy link"""
+  directBuyLink: String
+
+  """Current number of clicks on direct buy link"""
+  directBuyLinkClicks: Float
+
+  """Current cost of direct buy link"""
+  directBuyLinkCost: Float
+
+  """Maximum number of clicks on direct buy link"""
+  directBuyLinkMaxClicks: Float
+
+  """Maximum cost of direct buy link"""
+  directBuyLinkMaxCost: Float
+
+  """End Date"""
+  end: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Number of Likes"""
+  likes: Float!
+
+  """Maximum bet"""
+  maxBet: Float
+
+  """Minimum bet"""
+  minBet: Float
+
+  """Pictures for the product"""
+  pictures: [PublicFile!]
+
+  """Whether the product is sponsored"""
+  sponsored: Boolean
+
+  """Start date"""
+  start: DateTime
+
+  """Status of the product"""
+  status: ProductStatus!
+
+  """Product tags"""
+  tags: [String!]
+
+  """Title"""
+  title: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Value"""
+  value: Int
+}
+
+enum ProductStatus {
+  ARCHIVED
+  DRAFT
+  VALID
+}
+
 type PublicFile {
   """Creation date"""
   created_at: DateTime!
@@ -658,12 +799,13 @@ type PublicFile {
 
 type Query {
   allCompanies: [Company!]!
-  allDossiersBank: [Dossier!]!
+  allDossiersBank(bankUuid: String): [Dossier!]!
   allEmployees: [Employee!]!
   allSoiEmployees: [SoiEmployee!]!
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getBank(uuid: ID!): Bank!
   getBankList: [Bank!]!
   getBanks: [Bank!]!
   getDossier(getDossierInput: GetDossierInput!): Dossier!
@@ -672,11 +814,12 @@ type Query {
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
-  getMyBank: Bank!
-  getMyCompany: Company!
-  getMyDossiers: [Dossier!]
+  getEmployee(uuid: ID!): Employee!
+  getMyBank(bankUuid: String): Bank!
+  getMyCompany(companyUuid: String): Company!
+  getMyDossiers(employeeUuid: String): [Dossier!]
   getMyEmployee: Employee!
-  getMyEmployees: [Employee!]!
+  getMyEmployees(companyUuid: String): [Employee!]!
   getMyUser: User!
   getOfferDocument(
     """URL expiration duration (in seconds); defaults to 15min"""

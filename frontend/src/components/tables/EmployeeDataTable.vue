@@ -29,6 +29,7 @@
 
         <!-- Register new employee -->
         <q-btn
+          v-if="!companyUuid"
           icon="add"
           :label="$t('authentication.employee_signup')"
           dense
@@ -90,8 +91,13 @@ import ROUTES from 'src/router/routes';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {MY_EMPLOYEES} from 'src/data/queries/EMPLOYEE';
+import {useRoute} from 'vue-router';
+const route = useRoute()
 
 const $routerService: RouterService|undefined = inject('$routerService')
+
+// Company ID from route (if any), only relevant if going from SOIAdmin -> Company view
+const companyUuid = route.query.cid
 
 // Search term
 const search = ref('')
@@ -105,7 +111,7 @@ const columns = [
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false, align: 'center' },
 ]
 
-const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []
@@ -125,9 +131,13 @@ async function routeToRegisterEmployee(): Promise<void> {
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {
-    uuid: row.uuid
-  })
+  const params = companyUuid ? {
+    cid: companyUuid,
+    eid: row.uuid
+  } : {
+    eid: row.uuid
+  }
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, params)
 }
 
 </script>

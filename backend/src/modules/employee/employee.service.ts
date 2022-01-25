@@ -90,36 +90,25 @@ export class EmployeeService {
   }
 
   /**
-   * get a specific employee
-   * @param {string} uuid - uuid
-   * @returns {Promise<Employee>} - employee
-   */
-  async getEmployee(uuid: string): Promise<Employee> {
-    return this.employeeRepository.findOne(uuid, { relations: ['company'] });
-  }
-
-  /**
-   * Get the Employee of the currently logged in user
-   * @param {string} cognitoId - the employees users id
+   * Get the Employee of the given UUID
+   * @param {string} uuid - the employee's database uuid (not cognito ID)
    * @returns {Promise<Employee>} - The employee
    */
-  async getMyEmployee(cognitoId: string): Promise<Employee> {
-    const user = await this.userService.getUser({ uuid: cognitoId });
-    if (user && user.role === ROLE.EMPLOYEE) {
-      return this.employeeRepository.findOne(user.fk, {
-        relations: [
-          'company',
-          'dossiers',
-          'dossiers.original_bank',
-          'dossiers.offers',
-          'dossiers.offers.bank',
-        ],
-      });
+  async getEmployee(uuid: string): Promise<Employee> {
+    const employee = await this.employeeRepository.findOne(uuid, {
+      relations: [
+        'company',
+        'dossiers',
+        'dossiers.original_bank',
+        'dossiers.offers',
+        'dossiers.offers.bank',
+      ],
+    });
+
+    if (!employee) {
+      throw new Error(`No employee found for ${uuid}`);
     }
-    throw new Error(
-      `User is not an Employee but a ${
-        user ? String(user.role) : 'unauthenticated'
-      }`,
-    );
+
+    return employee;
   }
 }

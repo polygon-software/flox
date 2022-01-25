@@ -94,11 +94,15 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref, Ref} from 'vue';
+import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {i18n} from 'boot/i18n';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {ALL_COMPANIES} from 'src/data/queries/COMPANY';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
+
+const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
 const search = ref('')
@@ -125,6 +129,17 @@ const computedResult = computed(()=>{
  */
 function updateSearch(input: string){
   search.value = input
+}
+
+/**
+ * Upon clicking a row, opens the company's dashboard view
+ * @param {Record<string, unknown>} row - the row that was clicked
+ * @returns {Promise<void>} - done
+ */
+async function onRowClick(row: Record<string, unknown>): Promise<void>{
+  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_DATA, {
+    cid: row.uuid
+  })
 }
 
 </script>

@@ -13,10 +13,15 @@ import {
   SOIOnly,
 } from '../../auth/authorization.decorator';
 import { Public } from '../../auth/authentication.decorator';
+import { UserService } from '../user/user.service';
+import { ROLE } from '../../ENUM/ENUMS';
 
 @Resolver(() => Company)
 export class CompanyResolver {
-  constructor(private readonly companyService: CompanyService) {}
+  constructor(
+    private readonly companyService: CompanyService,
+    private readonly userService: UserService,
+  ) {}
 
   /**
    * Gets a list of companies matching the given criteria
@@ -55,17 +60,27 @@ export class CompanyResolver {
   /**
    * Get the company for the currently logged in company account
    * @param {Record<string, string>} user - the current request's user
+   * @param {string} [companyUuid] - company's UUID, if accessed from admin
    * @returns {void}
    */
   @CompanyOnly()
   @Query(() => Company, { name: 'getMyCompany' })
   async getMyCompany(
     @CurrentUser() user: Record<string, string>,
+    @Args('companyUuid', { nullable: true }) companyUuid?: string,
   ): Promise<Company> {
-    // Get company where user's UUID matches cognitoID
-    const company = await this.companyService.getCompany({
-      cognito_id: user.userId,
-    } as GetCompanyArgs);
+    const args = companyUuid
+      ? ({ uuid: companyUuid } as GetCompanyArgs)
+      : ({ cognito_id: user.userId } as GetCompanyArgs);
+
+    // Ensure that params only valid if user is an admin
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    if (companyUuid && dbUser.role !== ROLE.SOI_ADMIN) {
+      throw new Error(`Cannot getMyCompany for user ${user.userId}`);
+    }
+
+    // Get company where user's UUID matches cognitoID or companyUuid
+    const company = await this.companyService.getCompany(args);
 
     if (!company) {
       throw new Error(`No company found for ${user.userId}`);

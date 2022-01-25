@@ -104,7 +104,6 @@ export default {
   dashboards: {
     management_dashboard: 'Chef Dashboard',
     offer: 'Offerte | Offerten',
-    register_new_employee_here: 'Melden Sie hier eine*n neue*n Mitarbeitenden an:',
     application: 'Antrag | Anträge',
     state: 'Status',
     action: 'Aktion',
@@ -116,12 +115,14 @@ export default {
     view_documents: 'Dokumente ansehen',
     employee_tasks: 'Mitarbeitendenaufträge',
     dossier: 'Dossier | Dossiers',
+    rejected_dossiers: 'Abgelehnte Dossiers',
     offer_id: 'Auftr. Nr.',
     market_value: 'Verkehrswert',
     mortgage: 'Hypothek',
     b_degree: 'B-Grad',
     acceptability_of_risks: 'Tragbarkeit',
     expiration: 'Ablauf',
+    soi_employees: 'SOI-Mitarbeitende'
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -309,7 +310,6 @@ export default {
   },
   employee_dashboard: {
     title: 'Mitarbeiter Dashboard',
-    applications: 'Anträge',
     search: 'Suche',
     new_assignment: 'Neues Dossier erfassen',
     date: 'Datum',

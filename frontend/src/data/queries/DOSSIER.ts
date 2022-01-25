@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 export const MY_DOSSIERS = {
   query: gql`
-    query getMyDossiers{
-      getMyDossiers{
+    query getMyDossiers($employeeUuid: String){
+      getMyDossiers(employeeUuid: $employeeUuid){
         uuid
         status
         non_arrangeable
@@ -164,8 +164,8 @@ export const REJECTED_DOSSIERS = {
 
 export const DOSSIERS_BANK = {
   query: gql`
-    query allDossiersBank {
-      allDossiersBank{
+    query allDossiersBank($bankUuid: String) {
+      allDossiersBank(bankUuid: $bankUuid){
         uuid
         status
         non_arrangeable
@@ -198,6 +198,8 @@ export const DOSSIERS_BANK = {
         value_estimate_high
         enfeoffment_estimate_low
         enfeoffment_estimate_high
+        partition_dates
+        partition_amounts
         address {
           uuid
           street
@@ -219,16 +221,24 @@ export const DOSSIERS_BANK = {
         }
         documents{
           uuid
+          key
+          file_type
           __typename
         }
         final_document{
           uuid
+          key
+          file_type
           __typename
         }
         offers{
           __typename
           uuid
           status
+          dossier {
+            uuid
+            __typename
+          }
         }
         __typename
       }

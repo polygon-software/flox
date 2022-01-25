@@ -1,7 +1,7 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-start q-pa-xl">
     <div
-      class="q-pa-md q-ma-md"
+      class="q-pa-md full-width"
       style="max-width: 1200px"
     >
       <!-- Own info -->
@@ -13,8 +13,7 @@
         style="height: 40px"
       >
         <h6 class="q-ma-none">
-          {{ $t('employee_dashboard.applications') }}
-          <!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
+          {{ $tc('dashboards.dossier', 2) }}
         </h6>
         <div class="row q-ma-none q-pa-none">
           <q-input
@@ -30,6 +29,7 @@
             </template>
           </q-input>
           <q-btn
+            v-if="!employeeUuid"
             :label="$t('employee_dashboard.new_assignment')"
             color="primary"
             icon="add"
@@ -57,7 +57,12 @@ import EmployeeDashboardTable from 'components/tables/EmployeeDashboardTable.vue
 import CompanyEmployeeId from 'components/cards/CompanyEmployeeIdCard.vue';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {useRoute} from 'vue-router';
 
+const route = useRoute()
+
+// Employee ID from route (if any), only relevant if going from company -> employee view
+const employeeUuid = route.query.eid
 const search = ref('')
 
 const $routerService: RouterService|undefined = inject('$routerService')

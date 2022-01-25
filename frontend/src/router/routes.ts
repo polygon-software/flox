@@ -1,4 +1,7 @@
 import {RouteRecordRaw} from 'vue-router';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/USER';
+import {ROLE} from '../../../shared/definitions/ENUMS';
 
 /**
  * This file defines the routes available within the application
@@ -7,11 +10,11 @@ import {RouteRecordRaw} from 'vue-router';
 
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
-  // TODO: Depending on user's role, redirect to respective dashboard --> see 'project-bigabig' for reference
+  // Redirect to dashboards handled by router
   'MAIN': {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/MainPage.vue') }],
+    children: [],
   },
 
   'LOGIN': {
@@ -28,33 +31,27 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   'MANAGEMENT_EMPLOYEE_DATA': {
     path: '/management-employee-data',
-    component: () => import('layouts/ManagementLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/company/ManagementEmployeeDataPage.vue') }],
   },
 
   'MANAGEMENT_EMPLOYEE_TASKS': {
     path: '/management-employee-tasks',
-    component: () => import('layouts/ManagementLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/company/ManagementEmployeeTaskPage.vue') }],
   },
 
   'EMPLOYEE_DASHBOARD': {
     path: '/employee-dashboard',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/employee/EmployeeDashboardPage.vue') }],
   },
 
+  // Bank: Main dashboard
   'BANK_DASHBOARD': {
-    name: 'bank_dashboard',
     path: '/bank-dashboard',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/bank/BankDashboard.vue') }],
-  },
-
-  'MANAGEMENT_EMPLOYEE_VIEW': {
-    path: '/management-employee-view',
-    component: () => import('layouts/ManagementLayout.vue'),
-    children: [{ path: '', component: () => import('pages/employee/EmployeeDashboardPage.vue') }],
   },
 
   'SIGNUP': {
@@ -120,7 +117,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   // SOI Employee: Applications
   'APPLICATIONS': {
     path: '/applications',
-    component: () => import('layouts/SOIEmployeeLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [{ path: '', component: () => import('pages/soi/SOIApplicationPage.vue') }],
   },
 
@@ -155,7 +152,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   // Wildcard route for non-covered routes
   'WILDCARD': {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/generic/Error404.vue'),
+    component: () => import('pages/generic/Error404.vue')
+  },
+
+  // Explicit error for non-allowed routes
+  'ERROR': {
+    path: '/error',
+    component: () => import('pages/generic/Error404.vue')
   },
 };
 
@@ -170,5 +173,67 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SET_PASSWORD,
 ]
 
-//TODO: Add semi-protected routes
+/**
+ * Routes that have additional access constraints
+ * allowedRoles specifies roles that don't have to fulfill constraints to access these pages,
+ * constrainedRoles must provide the specified query parameters to access the page
+ */
+export const CONSTRAINED_ROUTES = [
+  // Bank dashboard: also allowed to admins when 'bid' is given
+  {
+    path: ROUTES.BANK_DASHBOARD.path,
+    allowedRoles: [ROLE.BANK],
+    constrainedRoles: [ROLE.SOI_ADMIN],
+    necessaryQueryParams: ['bid']
+  },
+  // Company dashboards: also allowed to admins when 'cid' is given
+  {
+    path: ROUTES.MANAGEMENT_EMPLOYEE_DATA.path,
+    allowedRoles: [ROLE.COMPANY],
+    constrainedRoles: [ROLE.SOI_ADMIN],
+    necessaryQueryParams: ['cid']
+  },
+  {
+    path: ROUTES.MANAGEMENT_EMPLOYEE_TASKS.path,
+    allowedRoles: [ROLE.COMPANY],
+    constrainedRoles: [ROLE.SOI_ADMIN],
+    necessaryQueryParams: ['cid']
+  },
+  // Employee Dashboard : also allowed to admins when 'bid' is given
+  {
+    path: ROUTES.MANAGEMENT_EMPLOYEE_TASKS.path,
+    allowedRoles: [ROLE.COMPANY, ROLE.EMPLOYEE],
+    constrainedRoles: [ROLE.SOI_ADMIN],
+    necessaryQueryParams: ['bid']
+  }
+]
 
+
+/**
+ * Returns the layout for the currently logged in user
+ * @async
+ * @returns {any} - the layout component
+ */
+async function getUserRoleLayout(): Promise<any>{
+  // Get user's data from backend
+  const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+
+  // Non-logged in: Redirect to 404
+  if(!queryResult?.data?.getMyUser){
+    return import('layouts/MainLayout.vue')
+  }
+
+  const userData = queryResult.data.getMyUser as Record<string, unknown>
+  const userRole = userData.role;
+
+  switch(userRole){
+    case ROLE.SOI_ADMIN:
+      return import('layouts/SOIAdminLayout.vue')
+    case ROLE.SOI_EMPLOYEE:
+      return import('layouts/SOIEmployeeLayout.vue')
+    case ROLE.COMPANY:
+      return import('layouts/ManagementLayout.vue')
+    default:
+      return import('layouts/MainLayout.vue')
+  }
+}

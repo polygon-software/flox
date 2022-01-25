@@ -1,9 +1,9 @@
+import { date } from 'quasar';
+import endOfMonth from 'date-fns/endOfMonth'
+
 /**
  * This file contains all helper functions pertaining to dates
  */
-
-import {date} from 'quasar';
-import endOfMonth from 'date-fns/endOfMonth'
 
 /**
  * Calculates the age of a person with a given birth date

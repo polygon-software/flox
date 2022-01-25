@@ -8,6 +8,7 @@ import { ROLE } from '../../ENUM/ENUMS';
 import { UserService } from '../user/user.service';
 import { CreateUserlessBankInput } from './dto/input/create-userless-bank.input';
 import { generateHumanReadableId } from '../../helpers';
+import { GetBankArgs } from './dto/args/get-bank.args';
 
 @Injectable()
 export class BankService {
@@ -99,21 +100,19 @@ export class BankService {
   }
 
   /**
-   * Get the bank of the logged in user
-   * @param {string} cognitoId - the banks users id
+   * Get a bank by uuid
+   * @param {GetBankArgs} getBankArgs - getter arguments, containing UUID
    * @returns {Promise<Bank>} - the bank
    */
-  async getMyBank(cognitoId: string): Promise<Bank> {
-    const bank = await this.userService.getUser({ uuid: cognitoId });
-    if (bank && bank.role === ROLE.BANK) {
-      return this.bankRepository.findOne(bank.fk, {
-        relations: ['offers', 'own_mortgages', 'offers.dossier'],
-      });
+  async getBank(getBankArgs: GetBankArgs): Promise<Bank> {
+    const bank = await this.bankRepository.findOne(getBankArgs.uuid, {
+      relations: ['offers', 'own_mortgages', 'offers.dossier'],
+    });
+
+    if (!bank) {
+      throw new Error(`No bank found for ${getBankArgs.uuid}`);
     }
-    throw new Error(
-      `User is not an Bank but a ${
-        bank ? String(bank.role) : 'unauthenticated'
-      }`,
-    );
+
+    return bank;
   }
 }

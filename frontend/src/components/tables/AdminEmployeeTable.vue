@@ -7,7 +7,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $t('account_data.employees') + ' (' + computedResult.length + ')' }}
+        {{ $t('dashboards.soi_employees') + ' (' + computedResult.length + ')' }}
       </h6>
 
       <!-- Container for search & adding -->
@@ -56,6 +56,7 @@
         <q-tr
           :props="props"
           style="background-color: white; cursor: pointer"
+          @click="onRowClick"
         >
             <q-td key="first_name" :props="props">
               {{ props.row.first_name }}
@@ -117,6 +118,14 @@ const computedResult = computed(()=>{
  */
 async function routeToRegisterEmployee(): Promise<void> {
   await $routerService?.routeTo(ROUTES.NEW_SOI_EMPLOYEE_PAGE)
+}
+
+/**
+ * Upon clicking a row, opens the SOI employee dashboard view
+ * @returns {Promise<void>} - completed
+ */
+async function onRowClick(): Promise<void>{
+  await $routerService?.routeTo(ROUTES.APPLICATIONS)
 }
 
 </script>

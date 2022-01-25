@@ -4,7 +4,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $tc('dashboards.dossier', 2) + ' (' + rows.length + ')' }}
+        {{ $t('dashboards.rejected_dossiers') + ' (' + rows.length + ')' }}
       </h6>
 
       <!-- Search bar -->
