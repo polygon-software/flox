@@ -124,12 +124,8 @@ export async function getValueDevelopment(
   const valueMapping = valueMappingQuery[0];
 
   // Get column names
-  const startColumnName = getColumnNameForDate(start);
-  const endColumnName = getColumnNameForDate(end);
-
-  // TODO limiter if columns not available (earliest/latest)
-  let startKey = valueMapping[startColumnName];
-  let endKey = valueMapping[endColumnName];
+  let startKey = getColumnNameForDate(start);
+  let endKey = getColumnNameForDate(end);
 
   // Find oldest & newest data in value mapping
   let keys = Object.keys(valueMapping);
@@ -142,12 +138,17 @@ export async function getValueDevelopment(
   if (oldestKey > startKey) {
     startKey = oldestKey;
   }
-  // If data newer than newest is requested, use oldest column instead
+  // If data newer than newest is requested, use newest column instead
   if (newestKey < endKey) {
     endKey = newestKey;
   }
 
-  console.log('Start:', startKey, ', end:', endKey);
+  const startValue = valueMapping[startKey];
+  const endValue = valueMapping[endKey];
+  console.log('Value Start:', startValue, ', value end:', endValue);
+  // TODO Christoph's discussed logic with SOI, it physically hurts
+
+  return endValue / startValue;
 }
 
 /**
