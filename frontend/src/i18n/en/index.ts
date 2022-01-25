@@ -189,6 +189,7 @@ export default {
     max_cost: 'Maximum cost',
     add_product: 'Add new Product',
     title: 'Title',
+    search: 'Search...',
   },
   settings: {
     settings: 'Settings',

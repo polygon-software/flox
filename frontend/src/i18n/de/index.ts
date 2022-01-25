@@ -194,6 +194,7 @@ export default {
     max_cost: 'Maximale Kosten',
     add_product: 'Produkt hinzufügen',
     title: 'Titel',
+    search: 'Suchen...',
   },
   settings: {
     settings: 'Einstellungen',

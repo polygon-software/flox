@@ -8,6 +8,33 @@
           class="q-ma-sm"
       >
     </div>
+
+    <div class="row">
+      <q-input
+        v-model="search"
+        outlined rounded
+        class="q-ma-sm"
+        style="width: 300px"
+        :placeholder="$t('products.search')"
+        @keypress.enter="searchValue = search"
+      >
+        <template #append>
+          <q-icon
+            v-if="search.length > 0"
+            name="cancel"
+            class="cursor-pointer"
+            size="xs"
+            @click="search = ''"
+          />
+          <q-icon
+            name="search"
+            class="cursor-pointer"
+            @click="searchValue = search"
+          />
+        </template>
+      </q-input>
+    </div>
+
     <div class="row">
       <!-- Account options -->
       <q-badge
@@ -128,6 +155,9 @@ const loggedIn = computed(() => {
   // Explicit type
   return $authStore.getters.getLoggedInStatus();
 })
+
+const search = ref('');
+const searchValue = ref('');
 
 const myNotificationsQueryResult = subscribeToQuery(MY_NOTIFICATIONS) as Ref<Array<Record<string, unknown>>>
 
