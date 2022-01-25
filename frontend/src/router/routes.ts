@@ -173,17 +173,36 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SET_PASSWORD,
 ]
 
-// Routes that have additional access constraints
+/**
+ * Routes that have additional access constraints
+ * allowedRoles specifies roles that don't have to fulfill constraints to access these pages,
+ * constrainedRoles must provide the specified query parameters to access the page
+ */
 export const CONSTRAINED_ROUTES = [
+  // Bank dashboard: also allowed to admins when 'bid' is given
   {
     path: ROUTES.BANK_DASHBOARD.path,
     allowedRoles: [ROLE.BANK],
     constrainedRoles: [ROLE.SOI_ADMIN],
     necessaryQueryParams: ['bid']
   },
+  // Company dashboards: also allowed to admins when 'cid' is given
   {
-    path: ROUTES.BANK_DASHBOARD.path,
-    allowedRoles: [ROLE.BANK],
+    path: ROUTES.MANAGEMENT_EMPLOYEE_DATA.path,
+    allowedRoles: [ROLE.COMPANY],
+    constrainedRoles: [ROLE.SOI_ADMIN],
+    necessaryQueryParams: ['cid']
+  },
+  {
+    path: ROUTES.MANAGEMENT_EMPLOYEE_TASKS.path,
+    allowedRoles: [ROLE.COMPANY],
+    constrainedRoles: [ROLE.SOI_ADMIN],
+    necessaryQueryParams: ['cid']
+  },
+  // Employee Dashboard : also allowed to admins when 'bid' is given
+  {
+    path: ROUTES.MANAGEMENT_EMPLOYEE_TASKS.path,
+    allowedRoles: [ROLE.COMPANY, ROLE.EMPLOYEE],
     constrainedRoles: [ROLE.SOI_ADMIN],
     necessaryQueryParams: ['bid']
   }
