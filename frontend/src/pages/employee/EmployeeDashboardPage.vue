@@ -1,7 +1,7 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-start q-pa-xl">
     <div
-      class="q-pa-md q-ma-md"
+      class="q-pa-md full-width"
       style="max-width: 1200px"
     >
       <!-- Own info -->
@@ -13,8 +13,7 @@
         style="height: 40px"
       >
         <h6 class="q-ma-none">
-          {{ $t('employee_dashboard.applications') }}
-          <!--          {{ $t('employee_dashboard.applications') }} ({{ rows.length }})-->
+          {{ $tc('dashboards.dossier', 2) }}
         </h6>
         <div class="row q-ma-none q-pa-none">
           <q-input

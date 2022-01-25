@@ -305,7 +305,6 @@ export default {
   },
   employee_dashboard: {
     title: 'Mitarbeiter Dashboard',
-    applications: 'Anträge',
     search: 'Suche',
     new_assignment: 'Neues Dossier erfassen',
     date: 'Datum',
