@@ -343,15 +343,13 @@ export class FileService {
   /**
    * Uploads a value development CSV file
    * @param {MultipartFile} file - multipart CSV file input
-   * @returns {Promise<void>} - file
+   * @returns {Promise<void>} - done
    */
   async uploadValueDevelopmentFile(file: MultipartFile) {
-    console.log('Uploaded file:', file.filename);
     const fileBuffer = await file.toBuffer();
 
     // Parse CSV to object structure
     const parsedCsv = (await parseCsv(fileBuffer)) as Record<string, string>[];
-    console.log('parsed', parsedCsv.length, 'rows');
 
     // Persist to database
     await saveValueDevelopmentCsv(parsedCsv);

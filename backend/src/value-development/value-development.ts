@@ -18,17 +18,28 @@ export async function saveValueDevelopmentCsv(
   parsedCsv: Record<string, unknown>[],
 ) {
   const tableName = 'value_development';
-  const defaultCodeName = 'MS_Code'; // Default name of code column; replaced with 'region'
+  const defaultCodeName = 'MS_Code'; // Default code column; replaced with 'region'
+  const defaultRegionName = 'MS_Name'; // Default name column; replaced with 'region_name'
   const columnNames = Object.keys(parsedCsv[0]);
   const columns: TableColumn[] = [];
 
+  // Generate columns (with special handling for region name & code)
   columnNames.forEach((columnName) => {
-    columns.push(
-      new TableColumn({
-        type: 'text', // TODO possibly parse values to numbers?
-        name: columnName === defaultCodeName ? 'region' : columnName,
-      }),
-    );
+    let column;
+    switch (columnName) {
+      case defaultRegionName:
+        column = new TableColumn({ type: 'text', name: 'region_name' });
+        break;
+      case defaultCodeName:
+        column = new TableColumn({ type: 'text', name: 'region' });
+        break;
+      default:
+        column = new TableColumn({
+          type: 'double precision',
+          name: columnName,
+        });
+    }
+    columns.push(column);
   });
 
   // Set up database connection and query runner
@@ -36,12 +47,9 @@ export async function saveValueDevelopmentCsv(
   const queryRunner: QueryRunner = connection.createQueryRunner();
   await queryRunner.connect();
 
-  const tableExists = await queryRunner.hasTable(tableName);
-  console.log('Table exists?', tableExists);
-
   // Discard existing table, if any
+  const tableExists = await queryRunner.hasTable(tableName);
   if (tableExists) {
-    console.log('Drop table!');
     await queryRunner.dropTable(tableName);
   }
 
