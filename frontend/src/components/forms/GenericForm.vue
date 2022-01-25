@@ -108,10 +108,11 @@
  * @param {string} [finishLabel] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
  * @param {boolean} [loading] - loading status to show on the finish button
  */
-import {defineProps, Ref, ref} from 'vue';
+import {defineEmits, defineProps, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
+
 const emit = defineEmits(['submit'])
 const formRef: Ref<QForm|null> = ref(null)
 const props = defineProps({
