@@ -50,7 +50,7 @@
               CHF {{ _props.row.mortgage_amount.toLocaleString() }}
             </q-td>
             <q-td key="enfeoffment" :props="_props">
-              {{ _props.row.enfeoffment_estimate_high }}% - {{ _props.row.enfeoffment_estimate_low }}%
+              {{ _props.row.enfeoffment_estimate_low }}% - {{ _props.row.enfeoffment_estimate_high }}%
             </q-td>
             <q-td key="affordability" :props="_props">
               {{ _props.row.affordability }}%
