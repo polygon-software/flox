@@ -77,7 +77,9 @@ export class CompanyService {
    * @returns {Promise<Company[]>} - company
    */
   async getAllCompanies(): Promise<Company[]> {
-    return this.companyRepository.find({ relations: ['documents'] });
+    return this.companyRepository.find({
+      relations: ['documents', 'employees', 'employees.dossiers'],
+    });
   }
 
   /**

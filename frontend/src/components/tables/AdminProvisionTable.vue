@@ -36,8 +36,7 @@
               {{ props.row.company_name }}
             </q-td>
             <q-td key="volume" :props="props">
-              <!-- TODO volume -->
-              600'000
+              CHF {{ companyMortgageAmount(props.row).toLocaleString() }}
             </q-td>
             <q-td key="prov_soi" :props="props">
               <!-- TODO volume -->
@@ -137,6 +136,18 @@ const rows = computed(()=> {
   return companies ?? []
 })
 
+// Total mortgage amount of all companies
+const totalAmount = computed(() => {
+  let total = 0
+  rows.value.forEach((employee: Record<string, unknown>) => {
+    const dossiers: Record<string, unknown>[] = employee.dossiers
+    dossiers.forEach((dossier) => {
+      total += dossier.mortgage_amount
+    })
+  })
+  return total;
+})
+
 /**
  * Updates the filter parameters
  * @param {Record<string, unknown>} input - Input, containing search and from/to dates
@@ -160,6 +171,27 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
   })
 }
 
+/**
+ * Calculates the sum of a given company's mortgage amounts
+ * @param {Record<string, unknown>} company - company's database entry
+ * @returns {number} - total amount
+ */
+function companyMortgageAmount(company: Record<string, unknown>){
+  let totalAmount = 0
+
+  const employees = company.employees as Record<string, unknown>[] ?? []
+  console.log('check for company', company)
+
+  employees.forEach((employee: Record<string, unknown>) => {
+    const dossiers = employee.dossiers as Record<string, unknown>[] ?? []
+
+    dossiers.forEach((dossier) => {
+      totalAmount += dossier.mortgage_amount
+    })
+  })
+
+  return totalAmount
+}
 </script>
 
 <style scoped>
