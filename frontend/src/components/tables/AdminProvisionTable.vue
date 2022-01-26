@@ -55,7 +55,7 @@
           style="height: 14px"
         />
 
-        <!-- Last entry: sum row -->
+        <!-- On last row, append sum row -->
         <q-tr v-if="props.rowIndex === rows.length-1">
           <q-td key="company_name"/>
           <!-- Mortgage volume total -->
@@ -110,34 +110,47 @@ const columns = [
 
 const queryResult = subscribeToQuery(ALL_COMPANIES_PROVISIONS) as Ref<Record<string, Array<Record<string, unknown>>>>
 
-// Filters dossiers within the returned data by date
+// Filters dossiers within the returned companies' employees by date
 const rows = computed(()=> {
   const companies = queryResult.value
 
-  // TODO filter
-  // // Filter by 'from'/'to' date if filter is set
-  // if(fromDate.value || toDate.value){
-  //   const correctedEmployees: Record<string, unknown>[] = []
-  //
-  //   employees.forEach((employee: Record<string, unknown>) => {
-  //     const filteredDossiers = (employee.dossiers as Record<string, unknown>[]).filter((dossier: Record<string, unknown>) => {
-  //       const validFrom = fromDate.value ? new Date(dossier.created_at).getTime() > new Date(fromDate.value).getTime() : true
-  //       const validTo = toDate.value ? new Date(dossier.created_at).getTime() < new Date(toDate.value).getTime() : true
-  //       return validFrom && validTo
-  //     })
-  //
-  //     // Add to employees array
-  //     correctedEmployees.push({
-  //       ...employee,
-  //       dossiers: filteredDossiers
-  //     })
-  //   })
-  //   return correctedEmployees
-  // }
+  // Filter by 'from'/'to' date if filter is set
+  if(fromDate.value || toDate.value){
+    const correctedCompanies: Record<string, unknown>[] = []
+
+    // For every company, get its employees
+    companies.forEach((company: Record<string, unknown>) => {
+      const employees = company.employees as Record<string, unknown>[]
+
+      const correctedEmployees: Record<string, unknown>[] = []
+      // For every employee, get their dossiers
+      employees.forEach((employee: Record<string, unknown>) => {
+        const filteredDossiers = (employee.dossiers as Record<string, unknown>[]).filter((dossier: Record<string, unknown>) => {
+          const validFrom = fromDate.value ? new Date(dossier.created_at).getTime() > new Date(fromDate.value).getTime() : true
+          const validTo = toDate.value ? new Date(dossier.created_at).getTime() < new Date(toDate.value).getTime() : true
+          return validFrom && validTo
+        })
+
+        // Add to employees array
+        correctedEmployees.push({
+          ...employee,
+          dossiers: filteredDossiers
+        })
+      })
+
+      // Add to employees array
+      correctedCompanies.push({
+        ...company,
+        employees: correctedEmployees
+      })
+    })
+    return correctedCompanies
+  }
 
   // If no filters set, return directly
   return companies ?? []
 })
+
 
 // Total mortgage amount of all companies
 const totalMortgageAmount = computed(() => {
