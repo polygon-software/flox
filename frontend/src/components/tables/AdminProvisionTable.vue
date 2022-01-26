@@ -7,34 +7,22 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $tc('account_data.provision', 2) + ' (' + computedResult.length + ')' }}
+        {{ $tc('account_data.provision', 2) + ' (' + rows.length + ')' }}
       </h6>
-
-      <!-- Search bar -->
-      <q-input
-        v-model="search"
-        :label="$t('general.search')"
-        type="search"
-        outlined
-        dense
-        class="q-mb-md"
-        @change="updateSearch"
-      >
-        <template #prepend>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-
+      <!-- Container for search & adding -->
+      <TableFilterSearch
+        @change="updateFilter"
+      />
     </div>
     <q-table
       card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
-      :rows="computedResult"
+      :rows="rows"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
-      :filter="search"
+      :filter="searchTerm"
       :filter-method="tableFilter"
       flat
     >
@@ -67,7 +55,7 @@
         />
 
         <!-- Last entry: sum row -->
-        <q-tr v-if="props.rowIndex === computedResult.length-1">
+        <q-tr v-if="props.rowIndex === rows.length-1">
           <q-td key="company_name"/>
           <q-td key="volume" :props="props">
             <!-- TODO sum -->
@@ -98,14 +86,17 @@ import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {i18n} from 'boot/i18n';
 import {tableFilter} from 'src/helpers/filter-helpers';
-import {ALL_COMPANIES} from 'src/data/queries/COMPANY';
+import {ALL_COMPANIES_PROVISIONS} from 'src/data/queries/COMPANY';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
-const search = ref('')
+const searchTerm = ref('')
+const fromDate: Ref<string|null> = ref(null)
+const toDate: Ref<string|null> = ref(null)
 
 // ----- Data -----
 const columns = [
@@ -115,21 +106,48 @@ const columns = [
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
 ]
 
-// TODO: Include provisions in query once implemented on backend
-const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(ALL_COMPANIES_PROVISIONS) as Ref<Record<string, Array<Record<string, unknown>>>>
 
-const computedResult = computed(()=>{
-  return queryResult.value ?? []
+// Filters dossiers within the returned data by date
+const rows = computed(()=> {
+  const companies = queryResult.value
+
+  // TODO filter
+  // // Filter by 'from'/'to' date if filter is set
+  // if(fromDate.value || toDate.value){
+  //   const correctedEmployees: Record<string, unknown>[] = []
+  //
+  //   employees.forEach((employee: Record<string, unknown>) => {
+  //     const filteredDossiers = (employee.dossiers as Record<string, unknown>[]).filter((dossier: Record<string, unknown>) => {
+  //       const validFrom = fromDate.value ? new Date(dossier.created_at).getTime() > new Date(fromDate.value).getTime() : true
+  //       const validTo = toDate.value ? new Date(dossier.created_at).getTime() < new Date(toDate.value).getTime() : true
+  //       return validFrom && validTo
+  //     })
+  //
+  //     // Add to employees array
+  //     correctedEmployees.push({
+  //       ...employee,
+  //       dossiers: filteredDossiers
+  //     })
+  //   })
+  //   return correctedEmployees
+  // }
+
+  // If no filters set, return directly
+  return companies ?? []
 })
 
 /**
- * Updates the search value
- * @param {string} input - new search input
+ * Updates the filter parameters
+ * @param {Record<string, unknown>} input - Input, containing search and from/to dates
  * @returns {void}
  */
-function updateSearch(input: string){
-  search.value = input
+function updateFilter(input: Record<string, string>){
+  searchTerm.value = input.search
+  fromDate.value = input.fromDate
+  toDate.value = input.toDate
 }
+
 
 /**
  * Upon clicking a row, opens the company's dashboard view
