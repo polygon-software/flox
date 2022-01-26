@@ -57,9 +57,8 @@
         <q-tr v-if="props.rowIndex === rows.length-1">
           <q-td key="company_name"/>
           <q-td key="volume" :props="props">
-            <!-- TODO sum -->
             <strong>
-              1'200'000
+              CHF {{ totalMortgageAmount.toLocaleString() }}
             </strong>
           </q-td>
           <q-td key="prov_soi" :props="props">
@@ -137,13 +136,10 @@ const rows = computed(()=> {
 })
 
 // Total mortgage amount of all companies
-const totalAmount = computed(() => {
+const totalMortgageAmount = computed(() => {
   let total = 0
-  rows.value.forEach((employee: Record<string, unknown>) => {
-    const dossiers: Record<string, unknown>[] = employee.dossiers
-    dossiers.forEach((dossier) => {
-      total += dossier.mortgage_amount
-    })
+  rows.value.forEach((company: Record<string, unknown>) => {
+    total += companyMortgageAmount(company)
   })
   return total;
 })
@@ -180,7 +176,6 @@ function companyMortgageAmount(company: Record<string, unknown>){
   let totalAmount = 0
 
   const employees = company.employees as Record<string, unknown>[] ?? []
-  console.log('check for company', company)
 
   employees.forEach((employee: Record<string, unknown>) => {
     const dossiers = employee.dossiers as Record<string, unknown>[] ?? []
