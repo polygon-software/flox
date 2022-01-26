@@ -7,7 +7,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $t('dashboards.employee_dossiers') + ' (' + rows.length + ')' }}
+        {{ $tc('dashboards.dossier', 2) + ' (' + rows.length + ')' }}
       </h6>
 
       <!-- Container for search & adding -->
@@ -46,7 +46,7 @@
               CHF {{ dossierVolumeSum(props.row).toLocaleString()}}
             </q-td>
             <q-td key="prov_org" :props="props">
-              CHF {{ (dossierVolumeSum(props.row) * provisionsFactor).toLocaleString() }}
+              CHF {{ (Math.round(getProvisionTotalForEmployee(props.row) * provisionsFactor)).toLocaleString() }}
             </q-td>
         </q-tr>
 
@@ -89,7 +89,7 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {MY_EMPLOYEES_PROVISIONS} from 'src/data/queries/EMPLOYEE';
 import {useRoute} from 'vue-router';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
-import {getProvisionFactor} from 'src/helpers/provision-helpers';
+import {getProvisionFactor, getProvisionTotalForEmployee} from 'src/helpers/provision-helpers';
 const route = useRoute()
 
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -101,7 +101,6 @@ const companyUuid = route.query.cid
 const searchTerm = ref('')
 const fromDate: Ref<string|null> = ref(null)
 const toDate: Ref<string|null> = ref(null)
-
 
 // ----- Data -----
 const columns = [

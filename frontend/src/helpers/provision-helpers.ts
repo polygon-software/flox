@@ -25,5 +25,38 @@ export function getProvisionFactor(volume: number){
  * @returns {number} - total provision amount
  */
 export function getProvisionForDossier(dossier: Record<string, unknown>){
+  let provision = 0
 
+  const amounts = dossier.partition_amounts as number[]
+  const dates = dossier.partition_dates as string[]
+  const startDate = new Date(dossier.created_at as string)
+
+  for(let i = 0; i < amounts.length; i++){
+    const amount = amounts[i]
+    const endDate = new Date(dates[i])
+
+    const durationInMs = endDate.getTime() - startDate.getTime()
+    const durationInYears = durationInMs / (365 * 24 * 60 * 60 * 1000)
+    console.log('Partition runs for', durationInYears, 'years')
+
+    // TODO magic number...
+    provision += amount * durationInYears / 1000
+  }
+
+  return Math.round(provision)
+}
+
+/**
+ * Calculates the total provision for an employee
+ * @param {Record<string, unknown>} employee - the employee, having 'dossiers'
+ * @returns {number} - total provision amount
+ */
+export function getProvisionTotalForEmployee(employee: Record<string, unknown>){
+  const dossiers = employee.dossiers as Record<string, unknown>[]
+  let total = 0
+  dossiers.forEach((dossier) => {
+    total += getProvisionForDossier(dossier)
+  })
+
+  return Math.round(total)
 }

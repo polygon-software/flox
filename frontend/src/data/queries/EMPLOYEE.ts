@@ -68,6 +68,7 @@ export const MY_EMPLOYEES_PROVISIONS = {
         phone
         dossiers {
           uuid
+          created_at
           mortgage_amount
           partition_amounts
           partition_dates
