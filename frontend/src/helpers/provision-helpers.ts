@@ -31,15 +31,17 @@ export function getProvisionForDossier(dossier: Record<string, unknown>){
   const dates = dossier.partition_dates as string[]
   const startDate = new Date(dossier.created_at as string)
 
+  // Calculate provision for every partition
   for(let i = 0; i < amounts.length; i++){
     const amount = amounts[i]
     const endDate = new Date(dates[i])
 
+    // Calculate partition's remaining runtime in years
     const durationInMs = endDate.getTime() - startDate.getTime()
     const durationInYears = durationInMs / (365 * 24 * 60 * 60 * 1000)
-    console.log('Partition runs for', durationInYears, 'years')
 
-    // TODO magic number...
+    // Formula: partition amount * duration in years / 1000
+    // (1000 is an arbitrary factor determined by SOI)
     provision += amount * durationInYears / 1000
   }
 

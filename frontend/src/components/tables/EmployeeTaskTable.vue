@@ -69,7 +69,7 @@
           </q-td>
           <q-td key="prov_org" :props="props">
             <strong>
-              CHF {{ (totalAmount * provisionsFactor).toLocaleString() }}
+              CHF {{ totalProvisions.toLocaleString() }}
             </strong>
           </q-td>
         </q-tr>
@@ -151,6 +151,17 @@ const totalAmount = computed(() => {
 // Provisions percentage
 const provisionsFactor = computed(() => {
   return getProvisionFactor(totalAmount.value)
+})
+
+// Total provision amount across all employees
+const totalProvisions = computed(() => {
+  let total = 0
+  rows.value.forEach((employee: Record<string, unknown>) => {
+    total += getProvisionTotalForEmployee(employee)
+  })
+
+  // Apply company's provision factor
+  return Math.round(total * provisionsFactor.value)
 })
 
 
