@@ -99,7 +99,8 @@ export default {
     login_failed: 'Login hat fehlgeschlagen',
     dossier_reset: 'Dossier erfolgreich zurückgesetzt',
     dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
-    email_sent: 'E-Mail(s) versendet'
+    email_sent: 'E-Mail(s) versendet',
+    file_uploaded: 'Datei erfolgreich hochgeladen',
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -123,7 +124,9 @@ export default {
     acceptability_of_risks: 'Tragbarkeit',
     expiration: 'Ablauf',
     soi_employees: 'SOI-Mitarbeitende',
-    files: 'Dateien'
+    files: 'Dateien',
+    value_increase_csv: 'CSV-Datei Verkehrswertsteigerung',
+    value_increase_csv_description: 'Verkehrswertsteigerungsdaten, welche zur Berechnung von Schätzwerten verwendet werden'
   },
   buttons: {
     finish_signup: 'Abschliessen',
@@ -146,6 +149,7 @@ export default {
     back_to_dashboard: 'Zurück zum dashboard',
   },
   documents: {
+    choose_file: 'Datei wählen',
     choose_documents: 'Dokumente wählen',
     documents_available: 'Dokumente verfügbar',
     document_upload: 'Dokumentenupload',
@@ -284,7 +288,8 @@ export default {
     mortgage_total_must_be: 'Total-Betrag muss CHF {amount} entsprechen',
     dossier_submit_error: 'Es fehlen benötigte Attribute, bitte prüfen Sie das Formular und versuchen Sie es erneut',
     dossier_upload_error: 'Fehler beim Hochladen des Dossiers: {error}',
-    missing_data: 'Es fehlen notwendige Daten.'
+    missing_data: 'Es fehlen notwendige Daten',
+    file_upload_failed: 'Datei hochladen fehlgeschlagen',
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
@@ -420,7 +425,8 @@ export default {
     affordability_impossible: 'Achtung: Aufgrund der Tragbarkeit von über 35% ist diese Hypothek nicht finanzierbar.',
     affordability_critical: 'Achtung: Aufgrund der Tragbarkeit ist diese Hypothek nur fraglich finanzierbar.',
     enfeoffment_warning: 'Achtung: Aufgrund des Belehnungsgrades ist diese Hypothek nicht finanzierbar.',
-    non_arrangeable: 'Achtung: Aufgrund der eingegebenen Daten wird dieses Dossier als nicht vermittelbar markiert. Bitte stellen Sie sicher, dass alle Daten korrekt eingegeben wurden.'
+    non_arrangeable: 'Achtung: Aufgrund der eingegebenen Daten wird dieses Dossier als nicht vermittelbar markiert. Bitte stellen Sie sicher, dass alle Daten korrekt eingegeben wurden.',
+    csv_file_warning: 'Achtung: Durch das Hochladen der CSV-Datei wird der bestehende Datensatz zur Verkehrswertsteigerung überschrieben. Dieser Vorgang kann nicht rückgängig gemacht werden. Sind Sie sicher?'
   },
   file_type_enum: {
     ID: 'ID-/Passkopie',

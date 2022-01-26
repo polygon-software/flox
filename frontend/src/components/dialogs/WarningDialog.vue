@@ -29,12 +29,12 @@
           v-if="showDiscard"
           :label="discardLabel"
           flat
-          color="negative"
+          :color="swapNegative ? 'primary' : 'negative'"
           @click="onDiscard"
         />
         <q-btn
           :label="okLabel"
-          color="primary"
+          :color="swapNegative ? 'negative' : 'primary'"
           @click="onOk"
         />
       </q-card-actions>
@@ -76,6 +76,11 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  swapNegative: { // Swaps negative and primary colors, making "Ok" negative
+    type: Boolean,
+    required: false,
+    default: false
+  }
 
 })
 
