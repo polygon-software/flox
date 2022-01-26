@@ -40,12 +40,10 @@
               {{ props.row.last_name }}
             </q-td>
             <q-td key="tasks" :props="props">
-              <!-- TODO contract number -->
-              4
+              {{ props.row.dossiers.length }}
             </q-td>
             <q-td key="volume" :props="props">
-              <!-- TODO volume -->
-              600'000
+              CHF {{ dossierVolumeSum(props.row).toLocaleString()}}
             </q-td>
             <q-td key="prov_emp" :props="props">
               <!-- TODO volume -->
@@ -107,7 +105,7 @@ import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
-import {MY_EMPLOYEES} from 'src/data/queries/EMPLOYEE';
+import {MY_EMPLOYEES_PROVISIONS} from 'src/data/queries/EMPLOYEE';
 import {useRoute} from 'vue-router';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 const route = useRoute()
@@ -129,24 +127,23 @@ const columns = [
   { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true, align: 'center' },
   { name: 'tasks', label: i18n.global.t('account_data.tasks'), field: 'tasks', sortable: true, align: 'center' },
   { name: 'volume', label: i18n.global.t('account_data.volume'), field: 'volume', sortable: true, align: 'center' },
-  { name: 'prov_emp', label: i18n.global.t('account_data.provision_employee'), field: 'prov_emp', sortable: true, align: 'center' },
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
-  { name: 'prov_ratio', label: i18n.global.t('account_data.provision_ratio'), field: 'prov_ratio', sortable: false, align: 'center' },
 ]
 
-const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(MY_EMPLOYEES_PROVISIONS as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 // Filters the returned data by date TODO: When creating actual provision table, sensibly sum up here
 const computedResult = computed(()=>{
-  const filteredResult: Record<string, unknown>[] = []
-  if(fromDate.value && toDate.value){
-    for (const employee in queryResult.value){
-      if((employee.created_at as Date).getTime() < (fromDate.value as Date ).getTime() && (employee.created_at as Date).getTime() > (toDate.value as Date).getTime()) {
-        filteredResult.push(employee)
-      }
-    }
-  }
-  return filteredResult ?? []
+  // TODO
+  // const filteredResult: Record<string, unknown>[] = []
+  // if(fromDate.value && toDate.value){
+  //   for (const employee in queryResult.value){
+  //     if((employee.created_at as Date).getTime() < (fromDate.value as Date ).getTime() && (employee.created_at as Date).getTime() > (toDate.value as Date).getTime()) {
+  //       filteredResult.push(employee)
+  //     }
+  //   }
+  // }
+  return queryResult.value ?? []
 })
 
 /**
@@ -173,6 +170,22 @@ function updateFilter(input: Record<string, string>){
   searchTerm.value = input.search
   fromDate.value = input.fromDate
   toDate.value = input.toDate
+}
+
+/**
+ * Calculates the sum of a given employee's dossier amounts
+ * @param {Record<string, unknown>} employee - employee database entry
+ * @returns {number} - total amount
+ */
+function dossierVolumeSum(employee: Record<string, unknown>){
+  let totalAmount = 0
+  const dossiers = employee.dossiers as Record<string, unknown>[] ?? []
+
+  dossiers.forEach((dossier) => {
+    totalAmount += dossier.mortgage_amount
+  })
+
+  return totalAmount
 }
 
 </script>
