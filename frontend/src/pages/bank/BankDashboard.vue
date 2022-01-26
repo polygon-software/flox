@@ -1,25 +1,18 @@
 <template>
   <q-page
-    class="q-pa-lg q-ma-none">
+    class="q-pa-lg q-ma-none"
+    style="margin-top: 50px"
+  >
 
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
       <h5 class="q-ma-none">
         {{ $tc('dashboards.dossier', 2) + ' (' + rows.length + ')' }}
       </h5>
-      <!-- Search bar -->
-      <q-input
-        v-model="search"
-        dense
-        :label="$t('general.search')"
-        outlined
-        type="search"
-        class="q-mb-md"
-      >
-        <template #prepend>
-          <q-icon name="search" />
-        </template>
-      </q-input>
+      <!-- Container for search & adding -->
+      <TableFilterSearch
+        @change="updateFilter"
+      />
     </div>
 
     <!-- Dossiers Overview -->
@@ -123,12 +116,13 @@
 <script setup lang="ts">
 import {i18n} from 'boot/i18n';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import {computed, inject, ref} from 'vue';
+import {computed, inject, Ref, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import UploadOfferDialog from 'components/dialogs/UploadOfferDialog.vue';
 import RejectDossierDialog from 'components/dialogs/RejectDossierDialog.vue';
+import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {offerChipStyle} from 'src/helpers/chip-helpers';
 import {CREATE_OFFER, SET_OFFER_STATUS} from 'src/data/mutations/DOSSIER';
@@ -144,14 +138,17 @@ const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
 const route = useRoute()
 
-const search = ref('')
+// Search term
+const searchTerm = ref('')
+const fromDate: Ref<string|null> = ref(null)
+const toDate: Ref<string|null> = ref(null)
 
 // Bank UUID from query (if going from SOI admin to bank)
 const bankUuid = route.query.bid
 
 // Getters, depending on whether user is actually a bank or admin accessing bank view
 const myBank = subscribeToQuery(MY_BANK, bankUuid ? { bankUuid: bankUuid } : {})
-const dossiers = subscribeToQuery(DOSSIERS_BANK, bankUuid ? { bankUuid: bankUuid } : {})
+const dossiers = subscribeToQuery(DOSSIERS_BANK, bankUuid ? { bankUuid: bankUuid } : {}) as Ref<Record<string, unknown>[]>
 
 const columns = [
   {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true, align: 'center'},
@@ -174,7 +171,27 @@ const columns = [
 
 
 const rows = computed(()=>{
-  return dossiers.value ?? []
+  let filteredDossiers: Record<string, unknown>[] = dossiers.value ?? []
+
+  // Build date objects from filters
+  const fromDateAsDate = fromDate.value? new Date(fromDate.value) : null
+  const toDateAsDate = toDate.value? new Date(toDate.value) : null
+  if(toDateAsDate){
+    toDateAsDate.setHours(23)
+    toDateAsDate.setMinutes(59)
+    toDateAsDate.setSeconds(59)
+  }
+
+  // Filter by dates if filters are set
+  if(fromDateAsDate || toDateAsDate){
+    filteredDossiers = filteredDossiers.filter((dossier: Record<string, unknown>) => {
+      const validFrom = fromDateAsDate ? new Date(dossier.created_at as string).getTime() > fromDateAsDate.getTime() : true
+      const validTo = toDateAsDate ? new Date(dossier.created_at as string).getTime() < toDateAsDate.getTime() : true
+      return validFrom && validTo
+    })
+  }
+
+  return filteredDossiers
 })
 /**
  * Checks whether we have an own offer on a dossier
@@ -334,6 +351,17 @@ function nearestExpirationDate(dateStrings: string[]){
   })
 
   return sortedDates[0] ?? null
+}
+
+/**
+ * Updates the filter parameters
+ * @param {Record<string, unknown>} input - Input, containing search and from/to dates
+ * @returns {void}
+ */
+function updateFilter(input: Record<string, string>){
+  searchTerm.value = input.search
+  fromDate.value = input.fromDate
+  toDate.value = input.toDate
 }
 
 </script>
