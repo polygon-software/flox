@@ -38,6 +38,6 @@ export function getCurrentQuarter(): Array<Date> {
   const today = new Date()
   const currentQuarter = Math.floor((today.getMonth() + 3) / 3) - 1
   const quarterBeginn = new Date(today.getFullYear(), currentQuarter * 3, 1)
-  const quarterEnd = endOfMonth(new Date(today.getFullYear(), currentQuarter * 3 + 3, today.getDate()))
+  const quarterEnd = endOfMonth(new Date(today.getFullYear(), currentQuarter * 3 + 3, today.getDate(), 23, 59, 59))
   return [quarterBeginn, quarterEnd]
 }

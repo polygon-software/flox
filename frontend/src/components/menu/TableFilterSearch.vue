@@ -57,12 +57,17 @@ import endOfMonth from 'date-fns/endOfMonth'
 const emit = defineEmits(['change'])
 const today = new Date()
 
+// Ensure 'today' is always included
+today.setHours(23)
+today.setMinutes(59)
+today.setSeconds(59)
+
 
 const options = [
   {
     key: 'year-to-date',
     label: i18n.global.t('dossier.year_to_date'),
-    fromDate: new Date(today.getFullYear(), 0, 1), // January 1st current year
+    fromDate: new Date(today.getFullYear(), 0, 1, 23, 59, 59), // January 1st current year
     toDate: today,
   },
   {

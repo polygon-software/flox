@@ -119,12 +119,20 @@ const rows = computed(()=> {
 
   // Filter by 'from'/'to' date if filter is set
   if(fromDate.value || toDate.value){
+
+    const fromDateAsDate = new Date(fromDate.value)
+    // Format filters to ensure chosen end day is included
+    const toDateAsDate = new Date(toDate.value)
+    toDateAsDate.setHours(23)
+    toDateAsDate.setMinutes(59)
+    toDateAsDate.setSeconds(59)
+
     const correctedEmployees: Record<string, unknown>[] = []
 
     employees.forEach((employee: Record<string, unknown>) => {
      const filteredDossiers = (employee.dossiers as Record<string, unknown>[]).filter((dossier: Record<string, unknown>) => {
-       const validFrom = fromDate.value ? new Date(dossier.created_at).getTime() > new Date(fromDate.value).getTime() : true
-       const validTo = toDate.value ? new Date(dossier.created_at).getTime() < new Date(toDate.value).getTime() : true
+       const validFrom = fromDate.value ? new Date(dossier.created_at).getTime() > fromDateAsDate.getTime() : true
+       const validTo = toDate.value ? new Date(dossier.created_at).getTime() < toDateAsDate.getTime() : true
        return validFrom && validTo
       })
 
