@@ -46,7 +46,7 @@
         />
         <q-btn
           v-if="route.query.cid"
-          :label="$t('account_data.tasks')"
+          :label="$tc('dashboards.dossier', 2)"
           no-caps
           flat
           class="text-white"
