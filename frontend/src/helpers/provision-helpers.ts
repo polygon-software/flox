@@ -62,3 +62,31 @@ export function getProvisionTotalForEmployee(employee: Record<string, unknown>){
 
   return Math.round(total)
 }
+
+/**
+ * Filters a list of employees' dossiers by the given date(s)
+ * @param {Record<string, unknown>[]} employees - list of employees that have dossiers
+ * @param {Date} [fromDate] - from date filter
+ * @param {Date} [toDate] - to date filter
+ * @returns {Record<string, unknown>[]} - employees with filtered dossiers
+ */
+export function filterEmployeesDossiersByDates(employees: Record<string, unknown>[], fromDate?: Date, toDate?: Date){
+  const correctedEmployees: Record<string, unknown>[] = []
+
+  // For every employee, go through their dossiers
+  employees.forEach((employee: Record<string, unknown>) => {
+    const filteredDossiers = (employee.dossiers as Record<string, unknown>[]).filter((dossier: Record<string, unknown>) => {
+      const validFrom = fromDate ? new Date(dossier.created_at as string).getTime() > fromDate.getTime() : true
+      const validTo = toDate ? new Date(dossier.created_at as string).getTime() < toDate.getTime() : true
+      return validFrom && validTo
+    })
+
+    // Add to employees array
+    correctedEmployees.push({
+      ...employee,
+      dossiers: filteredDossiers
+    })
+  })
+
+  return correctedEmployees
+}

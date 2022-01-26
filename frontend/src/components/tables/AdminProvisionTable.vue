@@ -46,7 +46,7 @@
 
           <!-- Provision the company will receive -->
           <q-td key="prov_org" :props="props">
-            CHF {{ (companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row))).toLocaleString() }}
+            CHF {{ Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row))).toLocaleString() }}
           </q-td>
         </q-tr>
 
@@ -91,7 +91,11 @@ import {ALL_COMPANIES_PROVISIONS} from 'src/data/queries/COMPANY';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
-import {getProvisionForDossier, getProvisionFactor} from 'src/helpers/provision-helpers';
+import {
+  getProvisionForDossier,
+  getProvisionFactor,
+  filterEmployeesDossiersByDates
+} from 'src/helpers/provision-helpers';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -108,20 +112,22 @@ const columns = [
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
 ]
 
-const queryResult = subscribeToQuery(ALL_COMPANIES_PROVISIONS) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(ALL_COMPANIES_PROVISIONS) as Ref<Record<string, unknown>[]>
 
 // Filters dossiers within the returned companies' employees by date
-const rows = computed(()=> {
+const rows = computed(() => {
   const companies = queryResult.value
 
   // Filter by 'from'/'to' date if filter is set
   if(fromDate.value || toDate.value){
     // Format filters to ensure chosen end day is included
-    const fromDateAsDate = new Date(fromDate.value)
-    const toDateAsDate = new Date(toDate.value)
-    toDateAsDate.setHours(23)
-    toDateAsDate.setMinutes(59)
-    toDateAsDate.setSeconds(59)
+    const fromDateAsDate = fromDate.value ? new Date(fromDate.value) : undefined
+    const toDateAsDate = toDate.value ? new Date(toDate.value) : undefined
+    if(toDateAsDate){
+      toDateAsDate.setHours(23)
+      toDateAsDate.setMinutes(59)
+      toDateAsDate.setSeconds(59)
+    }
 
     const correctedCompanies: Record<string, unknown>[] = []
 
@@ -129,26 +135,10 @@ const rows = computed(()=> {
     companies.forEach((company: Record<string, unknown>) => {
       const employees = company.employees as Record<string, unknown>[]
 
-      const correctedEmployees: Record<string, unknown>[] = []
-      // For every employee, get their dossiers
-      employees.forEach((employee: Record<string, unknown>) => {
-        const filteredDossiers = (employee.dossiers as Record<string, unknown>[]).filter((dossier: Record<string, unknown>) => {
-          const validFrom = fromDate.value ? new Date(dossier.created_at).getTime() > fromDateAsDate.getTime() : true
-          const validTo = toDate.value ? new Date(dossier.created_at).getTime() < toDateAsDate.getTime() : true
-          return validFrom && validTo
-        })
-
-        // Add to employees array
-        correctedEmployees.push({
-          ...employee,
-          dossiers: filteredDossiers
-        })
-      })
-
       // Add to employees array
       correctedCompanies.push({
         ...company,
-        employees: correctedEmployees
+        employees: filterEmployeesDossiersByDates(employees, fromDateAsDate, toDateAsDate)
       })
     })
     return correctedCompanies
@@ -183,7 +173,7 @@ const totalCompanyProvisionAmount = computed(() => {
   rows.value.forEach((company: Record<string, unknown>) => {
     total += companyTotalProvision(company) * getProvisionFactor(companyMortgageAmount(company))
   })
-  return total;
+  return Math.round(total);
 })
 
 /**
@@ -223,7 +213,7 @@ function companyMortgageAmount(company: Record<string, unknown>){
     const dossiers = employee.dossiers as Record<string, unknown>[] ?? []
 
     dossiers.forEach((dossier) => {
-      totalAmount += dossier.mortgage_amount
+      totalAmount += (dossier as Record<string, number>).mortgage_amount
     })
   })
 
