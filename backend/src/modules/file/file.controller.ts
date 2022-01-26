@@ -257,9 +257,10 @@ export class FileController {
   }
 
   /**
-   * Uploads a value development CSV file to replace the old one
+   * Uploads a value development CSV file to replace the old one in the 'value_development' table
+   * TODO for future sprint: additional assurance of correct form data
    * @param {FastifyRequest} req - request
-   * @param {FastifyReply} res - response
+   * @param {FastifyReply<any>} res - response
    * @returns {Promise<void>} - done
    */
   @Post('/uploadValueDevelopmentFile')
@@ -280,18 +281,16 @@ export class FileController {
       res.send(new BadRequestException(ERRORS.no_valid_file));
     }
 
-    // TODO: additional assurances of correct format?
-    console.log('Upload file!');
     await this.fileService.uploadValueDevelopmentFile(file);
 
     res.header('access-control-allow-origin', '*');
-    res.send('OK'); //TODO some response?
+    res.send('OK');
   }
 
   /**
    * Gets the value development for a given zip code over a given time frame (or the closest timeframe available)
    * @param {FastifyRequest} req - request
-   * @param {FastifyReply} res - response
+   * @param {FastifyReply<any>} res - response
    * @param {Record<string, string>} query - URL query, should contain 'zipCode', 'start' and 'end'
    * @returns {Promise<void>} - done
    */
@@ -303,8 +302,8 @@ export class FileController {
     @Query() query: Record<string, string>, // Params
   ): Promise<any> {
     const zipCode = query.zipCode;
-    const start = query.start;
-    const end = query.end;
+    const start = query.start; // start date in YYYY-MM-DD format
+    const end = query.end; // end date in YYYY-MM-DD format
 
     // Ensure all attributes present
     if (!zipCode || !start || !end) {

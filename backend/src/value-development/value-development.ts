@@ -6,6 +6,7 @@ import {
   Table,
   TableColumn,
 } from 'typeorm';
+import { ERRORS } from '../error/ERRORS';
 /**
  * This file contains all functionalities related to the saving and fetching of value development data
  */
@@ -71,15 +72,19 @@ export async function saveValueDevelopmentCsv(
   await queryRunner.manager.insert(valueTableName, parsedCsv);
 }
 
-// TODO docstrings, split up more
-// eslint-disable-next-line require-jsdoc
+/**
+ * Calculates the value increase multiplier for a given zip code over a given time period by using statistical
+ * value development data stored in the database
+ * @param {string} zipCode - zip code
+ * @param {Date} start - start date of time period
+ * @param {Date} end - end date of time period
+ * @returns {number} - value multiplier to apply
+ */
 export async function getValueDevelopment(
   zipCode: string,
   start: Date,
-  end?: Date,
+  end: Date,
 ) {
-  console.log('Find value development for', zipCode, start, end);
-
   // Set up database connection and query runner
   const connection: Connection = getConnection();
   const queryRunner: QueryRunner = connection.createQueryRunner();
@@ -89,7 +94,7 @@ export async function getValueDevelopment(
   const valueTableExists = await queryRunner.hasTable(valueTableName);
   const zipTableExists = await queryRunner.hasTable(zipCodeTableName);
   if (!valueTableExists || !zipTableExists) {
-    throw new Error('missing table'); // TODO from constants
+    throw new Error(ERRORS.missing_database_data);
   }
 
   // Get zip code -> region mapping directly via SQL because we're cool like that
@@ -100,15 +105,15 @@ export async function getValueDevelopment(
     LIMIT 1
     `);
 
+  // Ensure we have data for the given zip code
   if (!zipCodeQuery || zipCodeQuery.length === 0) {
-    throw new Error('no zipcode mapping found'); // TODO
+    throw new Error(ERRORS.invalid_zip_code);
   }
 
   const zipCodeMapping = zipCodeQuery[0];
 
   // Extract region code
   const regionCode = zipCodeMapping.region;
-  console.log('Region code is', regionCode);
 
   // Get region -> value development mapping
   const valueMappingQuery = await queryRunner.manager.query(`
@@ -119,7 +124,7 @@ export async function getValueDevelopment(
     `);
 
   if (!valueMappingQuery) {
-    throw new Error('no value mapping found'); // TODO
+    throw new Error(ERRORS.missing_database_data);
   }
   const valueMapping = valueMappingQuery[0];
 
@@ -150,8 +155,6 @@ export async function getValueDevelopment(
 
   const startValue = valueMapping[startKey];
   const endValue = valueMapping[endKey];
-  console.log('Value Start:', startValue, ', value end:', endValue);
-  // TODO Christoph's discussed logic with SOI, it physically hurts
 
   // Limit result to 4 decimal points & return
   return (endValue / startValue).toFixed(4);
