@@ -1,7 +1,6 @@
 import {
   Connection,
   getConnection,
-  Not,
   QueryRunner,
   Table,
   TableColumn,
