@@ -7,7 +7,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $t('dashboards.employee_tasks') + ' (' + computedResult.length + ')' }}
+        {{ $t('dashboards.employee_dossiers') + ' (' + rows.length + ')' }}
       </h6>
 
       <!-- Container for search & adding -->
@@ -18,7 +18,7 @@
     <q-table
       card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
-      :rows="computedResult"
+      :rows="rows"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
@@ -39,15 +39,11 @@
             <q-td key="last_name" :props="props">
               {{ props.row.last_name }}
             </q-td>
-            <q-td key="tasks" :props="props">
+            <q-td key="dossiers" :props="props">
               {{ props.row.dossiers.length }}
             </q-td>
             <q-td key="volume" :props="props">
               CHF {{ dossierVolumeSum(props.row).toLocaleString()}}
-            </q-td>
-            <q-td key="prov_emp" :props="props">
-              <!-- TODO volume -->
-              40'000
             </q-td>
             <q-td key="prov_org" :props="props">
               <!-- TODO volume -->
@@ -65,30 +61,20 @@
         />
 
         <!-- Last entry: sum row -->
-        <q-tr v-if="props.rowIndex === computedResult.length-1">
+        <q-tr v-if="props.rowIndex === rows.length-1">
           <q-td key="first_name"/>
           <q-td key="last_name"/>
-          <q-td key="tasks"/>
-          <q-td key="volume" :props="props">
-            <!-- TODO sum -->
+          <q-td key="dossiers">
+            {{ totalCount }}
+          </q-td>
+          <q-td key="volume">
             <strong>
-              1'200'000
+              CHF {{ totalAmount.toLocaleString() }}
             </strong>
           </q-td>
-          <q-td key="prov_emp" :props="props">
-            <!-- TODO sum -->
-            <strong>
-              80'000
-            </strong>          </q-td>
           <q-td key="prov_org" :props="props">
-            <!-- TODO sum -->
             <strong>
-              120'000
-            </strong>          </q-td>
-          <q-td key="prov_ratio" :props="props">
-            <!-- TODO sum -->
-            <strong>
-              120'000
+              CHF {{ totalProvisions.toLocaleString() }}
             </strong>
           </q-td>
         </q-tr>
@@ -125,7 +111,7 @@ const toDate: Ref<string|null> = ref(null)
 const columns = [
   { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true, align: 'center' },
   { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true, align: 'center' },
-  { name: 'tasks', label: i18n.global.t('account_data.tasks'), field: 'tasks', sortable: true, align: 'center' },
+  { name: 'dossiers', label: i18n.global.tc('dashboards.dossier', 2), field: 'dossiers', sortable: true, align: 'center' },
   { name: 'volume', label: i18n.global.t('account_data.volume'), field: 'volume', sortable: true, align: 'center' },
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
 ]
@@ -133,7 +119,7 @@ const columns = [
 const queryResult = subscribeToQuery(MY_EMPLOYEES_PROVISIONS as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 // Filters the returned data by date TODO: When creating actual provision table, sensibly sum up here
-const computedResult = computed(()=>{
+const rows = computed(()=>{
   // TODO
   // const filteredResult: Record<string, unknown>[] = []
   // if(fromDate.value && toDate.value){
@@ -145,6 +131,33 @@ const computedResult = computed(()=>{
   // }
   return queryResult.value ?? []
 })
+
+// Total count of dossiers
+const totalCount = computed(() => {
+  let total = 0
+  rows.value.forEach((employee: Record<string, unknown>) => {
+    total += employee.dossiers.length
+  })
+  return total;
+})
+
+// Total mortgage amount of dossiers
+const totalAmount = computed(() => {
+  let total = 0
+  rows.value.forEach((employee: Record<string, unknown>) => {
+    const dossiers: Record<string, unknown>[] = employee.dossiers
+    dossiers.forEach((dossier) => {
+      total += dossier.mortgage_amount
+    })
+  })
+  return total;
+})
+
+// Total provisions amount
+const totalProvisions = computed(() => {
+  return totalAmount.value * 0.3 // TODO factor
+})
+
 
 /**
  * Upon clicking a row, opens the employee's dashboard view
