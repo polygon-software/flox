@@ -31,7 +31,7 @@ export class Employee extends Person {
 
   @Field(() => Company, { description: 'Company' })
   @JoinColumn()
-  @ManyToOne(() => Company)
+  @ManyToOne(() => Company, { eager: true })
   company: Company;
 
   @Field(() => [Dossier], { description: 'Dossiers of employee' })
