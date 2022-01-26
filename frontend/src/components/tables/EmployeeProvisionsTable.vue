@@ -7,7 +7,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $tc('dashboards.dossier', 2) + ' (' + rows.length + ')' }}
+        {{ $tc('dashboards.dossier', 2) }}
       </h6>
 
       <!-- Container for search & adding -->
@@ -113,18 +113,32 @@ const columns = [
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES_PROVISIONS as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
-// Filters the returned data by date
-const rows = computed(()=>{
-  // TODO filtering
-  // const filteredResult: Record<string, unknown>[] = []
-  // if(fromDate.value && toDate.value){
-  //   for (const employee in queryResult.value){
-  //     if((employee.created_at as Date).getTime() < (fromDate.value as Date ).getTime() && (employee.created_at as Date).getTime() > (toDate.value as Date).getTime()) {
-  //       filteredResult.push(employee)
-  //     }
-  //   }
-  // }
-  return queryResult.value ?? []
+// Filters dossiers within the returned data by date
+const rows = computed(()=> {
+  const employees = queryResult.value
+
+  // Filter by 'from'/'to' date if filter is set
+  if(fromDate.value || toDate.value){
+    const correctedEmployees: Record<string, unknown>[] = []
+
+    employees.forEach((employee: Record<string, unknown>) => {
+     const filteredDossiers = (employee.dossiers as Record<string, unknown>[]).filter((dossier: Record<string, unknown>) => {
+       const validFrom = fromDate.value ? new Date(dossier.created_at).getTime() > new Date(fromDate.value).getTime() : true
+       const validTo = toDate.value ? new Date(dossier.created_at).getTime() < new Date(toDate.value).getTime() : true
+       return validFrom && validTo
+      })
+
+      // Add to employees array
+      correctedEmployees.push({
+        ...employee,
+        dossiers: filteredDossiers
+      })
+    })
+    return correctedEmployees
+  }
+
+  // If no filters set, return directly
+  return employees ?? []
 })
 
 // Total count of dossiers
