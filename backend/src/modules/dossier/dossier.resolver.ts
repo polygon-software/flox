@@ -8,7 +8,6 @@ import { ROLE } from '../../ENUM/ENUMS';
 import {
   AdminOnly,
   BankOnly,
-  CompanyOnly,
   CurrentUser,
   EmployeeOnly,
   Roles,
@@ -23,7 +22,6 @@ import { BankService } from '../bank/bank.service';
 import { UserService } from '../user/user.service';
 import { EmployeeService } from '../employee/employee.service';
 import { GetBankArgs } from '../bank/dto/args/get-bank.args';
-import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
