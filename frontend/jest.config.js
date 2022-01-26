@@ -26,8 +26,8 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/', '.d.ts$'],
   coverageReporters: [
     [
-      "lcov",
-      { projectRoot: "../" },
+      'lcov',
+      { projectRoot: '../' },
     ],
   ],
   testMatch: [
