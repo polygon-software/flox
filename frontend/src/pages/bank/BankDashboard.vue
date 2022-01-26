@@ -5,7 +5,7 @@
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
       <h5 class="q-ma-none">
-        {{ $tc('dashboards.dossier', 2) + ' (' + computedResult.length + ')' }}
+        {{ $tc('dashboards.dossier', 2) + ' (' + rows.length + ')' }}
       </h5>
       <!-- Search bar -->
       <q-input
@@ -27,7 +27,7 @@
       <q-table
         card-style="border-radius: 8px; background-color: transparent"
         table-header-class="bg-transparent"
-        :rows="computedResult"
+        :rows="rows"
         :columns="columns"
         row-key="uuid"
         :rows-per-page-options="[10,20, 100]"
@@ -51,22 +51,21 @@
               {{ _props.row.address.city }}
             </q-td>
             <q-td key="market_value" :props="_props">
-              unknown
+              CHF {{ _props.row.value_estimate_low.toLocaleString() }}
             </q-td>
             <q-td key="mortgage" :props="_props">
-              {{ _props.row.loan_sum }}
+              CHF {{ _props.row.mortgage_amount.toLocaleString() }}
             </q-td>
-            <q-td key="b_degree" :props="_props">
+            <q-td key="enfeoffment" :props="_props">
               <!-- TODO -->
               -
             </q-td>
-            <q-td key="acceptability_of_risks" :props="_props">
-              <!-- TODO -->
-              -
+            <q-td key="affordability" :props="_props">
+              {{ _props.row.affordability }}%
             </q-td>
             <q-td key="expiration" :props="_props">
-              <!-- TODO -->
-              -
+              {{ formatDate(nearestExpirationDate(_props.row.partition_dates)) }}
+
             </q-td>
             <q-td key="download">
               <q-icon
@@ -146,8 +145,6 @@ const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
 const route = useRoute()
 
-
-
 const search = ref('')
 
 // Bank UUID from query (if going from SOI admin to bank)
@@ -156,7 +153,28 @@ const bankUuid = route.query.bid
 // Getters, depending on whether user is actually a bank or admin accessing bank view
 const myBank = subscribeToQuery(MY_BANK, bankUuid ? { bankUuid: bankUuid } : {})
 const dossiers = subscribeToQuery(DOSSIERS_BANK, bankUuid ? { bankUuid: bankUuid } : {})
-const computedResult = computed(()=>{
+
+const columns = [
+  {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true, align: 'center'},
+  {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'offer_id', sortable: true, align: 'center'},
+  {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: false, align: 'center'},
+  {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: true, align: 'center'},
+  {name: 'mortgage', label: i18n.global.t('dashboards.mortgage'), field: 'mortgage', sortable: true, align: 'center'},
+  {name: 'enfeoffment', label: i18n.global.t('dashboards.enfeoffment'), field: 'enfeoffment', sortable: true, align: 'center'},
+  {
+    name: 'affordability',
+    label: i18n.global.t('dashboards.affordability'),
+    field: 'affordability',
+    sortable: true,
+    align: 'center'
+  },
+  {name: 'expiration', label: i18n.global.t('dashboards.expiration'), field: 'expiration', sortable: true, align: 'center'},
+  {name: 'download', label: ' ', field: 'download', sortable: true, align: 'center'},
+  {name: 'offer_status', label: ' ', field: 'offer_status', sortable: true, align: 'center'},
+]
+
+
+const rows = computed(()=>{
   return dossiers.value ?? []
 })
 /**
@@ -298,24 +316,25 @@ async function changeOfferStatus(dossierUuid: string, offerUuid: string, status:
   })
 }
 
-const columns = [
-  {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true, align: 'center'},
-  {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'offer_id', sortable: true, align: 'center'},
-  {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: false, align: 'center'},
-  {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: true, align: 'center'},
-  {name: 'mortgage', label: i18n.global.t('dashboards.mortgage'), field: 'mortgage', sortable: true, align: 'center'},
-  {name: 'b_degree', label: i18n.global.t('dashboards.b_degree'), field: 'b_degree', sortable: true, align: 'center'},
-  {
-    name: 'acceptability_of_risks',
-    label: i18n.global.t('dashboards.acceptability_of_risks'),
-    field: 'acceptability_of_risks',
-    sortable: true,
-    align: 'center'
-  },
-  {name: 'expiration', label: i18n.global.t('dashboards.expiration'), field: 'expiration', sortable: true, align: 'center'},
-  {name: 'download', label: ' ', field: 'download', sortable: true, align: 'center'},
-  {name: 'offer_status', label: ' ', field: 'offer_status', sortable: true, align: 'center'},
-]
+/**
+ * Finds the closest expiration date
+ * @param {string[]} dateStrings - expiration dates
+ * @returns {Date} - closest date as date
+ */
+function nearestExpirationDate(dateStrings: string[]){
+  let sortedDates: Date[] = []
 
+  // Build date array
+  dateStrings.forEach((dateString) => {
+    sortedDates.push(new Date(dateString))
+  })
+
+  // Sort in ascending order
+  sortedDates = sortedDates.sort((a,b) => {
+    return a.getTime() - b.getTime()
+  })
+
+  return sortedDates[0] ?? null
+}
 
 </script>
