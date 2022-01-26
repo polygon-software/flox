@@ -122,7 +122,8 @@ export default {
     b_degree: 'B-Grad',
     acceptability_of_risks: 'Tragbarkeit',
     expiration: 'Ablauf',
-    soi_employees: 'SOI-Mitarbeitende'
+    soi_employees: 'SOI-Mitarbeitende',
+    files: 'Dateien'
   },
   buttons: {
     finish_signup: 'Abschliessen',

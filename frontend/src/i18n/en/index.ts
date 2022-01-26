@@ -120,7 +120,8 @@ export default {
     b_degree: 'B-Degree',
     acceptability_of_risks: 'Acceptability of risks',
     expiration: 'Expiration',
-    soi_employees: 'SOI Employees'
+    soi_employees: 'SOI Employees',
+    files: 'Files'
   },
   buttons: {
     finish_signup: 'Finish',

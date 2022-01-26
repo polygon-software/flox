@@ -114,6 +114,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/soi/SOIAdminBankPage.vue') }],
   },
 
+  // SOI Admin: Files
+  'ADMIN_FILES': {
+    path: '/admin-files',
+    component: () => import('layouts/SOIAdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/soi/SOIAdminFilesPage.vue') }],
+  },
+
   // SOI Employee: Applications
   'APPLICATIONS': {
     path: '/applications',
