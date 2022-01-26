@@ -47,7 +47,7 @@ import {computed, inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw, useRoute} from 'vue-router';
 import {i18n} from 'boot/i18n';
-import ManagementMenuBar from 'components/menu/ManagementMenuBar.vue';
+import ManagementMenuBar from 'components/menu/CompanyMenuBar.vue';
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute();
 
