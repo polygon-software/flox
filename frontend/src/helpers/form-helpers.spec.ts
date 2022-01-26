@@ -52,7 +52,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['personal_data'] = 'Ramize';
+      form.values.value['full_name'] = {first_name: "Ramize", last_name: "Abdili"}
       expect(form.pageValid.value).toBe(false)
     });
 
@@ -64,12 +64,10 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['personal_data'] = 'Ramize';
-      // form.updateValue('personal_data', "Ramize")
-      expect(form.values.value).toStrictEqual({personal_data: 'Ramize'})
+      form.values.value['full_name'] = {first_name: "Ramize", last_name: "Abdili"}
       expect(form.pageValid.value).not.toBeUndefined()
-      expect(form.values.value['personal_data']).not.toBeUndefined()
-      //expect(form.pageValid.value).toBe(true)
+      expect(form.values.value["full_name"]).toStrictEqual({first_name: "Ramize", last_name: "Abdili"})
+      // expect(form.pageValid.value).toBe(true)
     });
 
     it('one filled form with wrong key is not valid', () => {
@@ -80,7 +78,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['personal_information'] = 'Ramize';
+      form.values.value['name'] = {first_name: "Ramize", last_name: "Abdili"}
       expect(form.pageValid.value).toBe(false)
     });
 
