@@ -150,6 +150,8 @@ export class FileController {
     '/uploadOfferFile',
     '/uploadDossierFile',
     '/uploadDossierFinalDocument',
+    '/getValueDevelopment',
+    '/uploadValueDevelopmentFile',
   ]) //Todo Find better way to allow Preflight requests
   @Public()
   async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {

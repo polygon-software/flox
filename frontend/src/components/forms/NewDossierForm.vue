@@ -164,8 +164,8 @@
           <!-- Estimated value range -->
           <SummaryField
             :label="$t('form_for_clients.market_value_between')"
-            :content="valueEstimate.low ? `CHF ${valueEstimate.low }` : '-' "
-            :second-content="valueEstimate.high ? `CHF ${valueEstimate.high }` : '-' "
+            :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low }` : '-' "
+            :second-content="valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high }` : '-' "
             value-type="positive"
           />
 
@@ -266,6 +266,8 @@ import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {ErrorService} from 'src/services/ErrorService';
 import {ALL_BANK_NAMES} from 'src/data/queries/BANK';
 import {DOSSIER_WARNING} from '../../../../shared/definitions/ENUMS';
+import axios from 'axios';
+import {dateToInputString} from 'src/helpers/date-helpers';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
@@ -439,6 +441,9 @@ const nonArrangeable = computed(() => {
 // Bank list
 const bankOptions: Ref<Record<string, unknown>[]> = ref([])
 
+// Value estimate high/low
+const valueEstimate: Ref<null|Record<string, number>> = ref(null)
+
 /**
  * Mortgage volume
  */
@@ -530,42 +535,11 @@ const affordability: ComputedRef<number|null> = computed(() => {
 })
 
 /**
- * High/low market value estimations (based on value gain and customer estimate)
- */
-const valueEstimate = computed(() => {
-  // Customer market value estimate
-  const customerEstimate = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.marketValueEstimation) : null
-
-  // Invalid, data missing
-  if(!customerEstimate) {
-    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
-    return {
-      low: null,
-      high: null
-    }
-  }
-
-  // const multiplier = await axios.get(url, {
-  //   responseType: 'arraybuffer',
-  // });
-
-  // TODO adapt: calculate from CSV
-  const highEstimate = Math.round(customerEstimate * 1.14)
-
-  // Return as array (low & high estimate)
-  return {
-    low: customerEstimate,
-    high: highEstimate
-  }
-})
-
-/**
  * High/low enfeoffment estimations (in percent)
  */
 const enfeoffmentEstimate = computed(() => {
   // Invalid, data missing
   if(!valueEstimate.value || !valueEstimate.value.low || !valueEstimate.value.high || !mortgage.value) {
-    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
     return {
       low: null,
       high: null
@@ -597,11 +571,13 @@ onMounted(async () => {
 
 /**
  * Upon page change, validate whether warning dialogs must be shown
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
-function onPageChange(){
+async function onPageChange(){
   // When going to final page, validate affordability
   if(form.step.value === form.pages.value.length){
+    await calculateValueEstimate();
+
     let affordabilityWarning
     let enfeoffmentWarning
 
@@ -646,6 +622,71 @@ function onPageChange(){
 }
 
 /**
+ * Calculates the High/low market value estimations (based on value gain and customer estimate)
+ * @returns {Promise<void>} - done
+ */
+async function calculateValueEstimate(){
+  // Get form data
+  const formData = form.values.value as Record<string, Record<string,unknown>>
+
+  // Ensure all necessary data is present
+  const address =  formData.address
+  const purchaseDate = formData.date_of_purchase as unknown as Date
+  const customerEstimate = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.marketValueEstimation) : null
+
+  if(!address || !purchaseDate || !customerEstimate){
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
+    return;
+  }
+
+  const zipCode = address.zip_code as string
+  const startDateString = dateToInputString(purchaseDate)
+  const endDateString = dateToInputString(new Date())
+
+  // Ensure user has token
+  let iter = 0
+  let res:string|null = ''
+  let token:string|null = ''
+  do {
+    res = localStorage.key(iter)
+    if(res?.endsWith('.idToken') && res?.startsWith('CognitoIdentityServiceProvider.')){
+      token = localStorage.getItem(res)
+      break
+    }
+    iter++;
+  } while (res)
+  if(!token){
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
+    return;
+  }
+
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
+  const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
+  const url = `${baseUrl}/getValueDevelopment?zipCode=${zipCode}&start=${startDateString}&end=${endDateString}`
+
+  // Get value multiplier from backend
+  const multiplierRequest = await axios.get(url, {headers});
+  const multiplier = multiplierRequest.data as number;
+
+  if(!multiplier){
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
+    return;
+  }
+
+  const highEstimate = Math.round(customerEstimate * multiplier)
+
+  // Return as array (low & high estimate)
+  valueEstimate.value = {
+    low: customerEstimate,
+    high: highEstimate
+  }
+
+}
+
+
+/**
  * Sets a warning to the given value
  * @param {DOSSIER_WARNING} warning - the warning
  * @param {boolean} value - the value to set it to
@@ -686,7 +727,6 @@ function onDiscard(){
  */
 async function onSubmit() {
   const formData = form.values.value as Record<string, Record<string,unknown>>
-  console.log('form data:', formData)
 
   // Page 1
   const firstName = formData.full_name?.firstName
@@ -815,8 +855,8 @@ async function onSubmit() {
       affordability: affordability.value,
       eligible_income: eligibleIncome.value,
       total_costs: totalCosts.value,
-      value_estimate_low: valueEstimate.value.low,
-      value_estimate_high: valueEstimate.value.high,
+      value_estimate_low: valueEstimate.value?.low,
+      value_estimate_high: valueEstimate.value?.high,
       enfeoffment_estimate_low: enfeoffmentEstimate.value.low,
       enfeoffment_estimate_high: enfeoffmentEstimate.value.high,
     }
