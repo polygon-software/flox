@@ -49,7 +49,11 @@ export class DossierService {
     createDossierInput: CreateDossierInput,
     cognitoId: string,
   ): Promise<Dossier> {
-    const employee = await this.employeeService.getEmployee(cognitoId);
+    const dbUser = await this.userService.getUser({ uuid: cognitoId });
+    if (!dbUser) {
+      throw new Error('No valid employee found');
+    }
+    const employee = await this.employeeService.getEmployee(dbUser.fk);
 
     let originalBank = await this.bankService.findBankByAbbreviation(
       createDossierInput.original_bank_abbreviation,
