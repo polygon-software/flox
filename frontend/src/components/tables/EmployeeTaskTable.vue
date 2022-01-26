@@ -46,12 +46,7 @@
               CHF {{ dossierVolumeSum(props.row).toLocaleString()}}
             </q-td>
             <q-td key="prov_org" :props="props">
-              <!-- TODO volume -->
-              60'000
-            </q-td>
-            <q-td key="prov_ratio" :props="props">
-              <!-- TODO volume -->
-              60'000
+              CHF {{ (dossierVolumeSum(props.row) * provisionsFactor).toLocaleString() }}
             </q-td>
         </q-tr>
 
@@ -60,21 +55,21 @@
           style="height: 14px"
         />
 
-        <!-- Last entry: sum row -->
+        <!-- Last row: append sum row -->
         <q-tr v-if="props.rowIndex === rows.length-1">
           <q-td key="first_name"/>
           <q-td key="last_name"/>
-          <q-td key="dossiers">
+          <q-td key="dossiers" :props="props">
             {{ totalCount }}
           </q-td>
-          <q-td key="volume">
+          <q-td key="volume" :props="props">
             <strong>
               CHF {{ totalAmount.toLocaleString() }}
             </strong>
           </q-td>
           <q-td key="prov_org" :props="props">
             <strong>
-              CHF {{ totalProvisions.toLocaleString() }}
+              CHF {{ (totalAmount * provisionsFactor).toLocaleString() }}
             </strong>
           </q-td>
         </q-tr>
@@ -118,9 +113,9 @@ const columns = [
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES_PROVISIONS as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
-// Filters the returned data by date TODO: When creating actual provision table, sensibly sum up here
+// Filters the returned data by date
 const rows = computed(()=>{
-  // TODO
+  // TODO filtering
   // const filteredResult: Record<string, unknown>[] = []
   // if(fromDate.value && toDate.value){
   //   for (const employee in queryResult.value){
@@ -153,9 +148,18 @@ const totalAmount = computed(() => {
   return total;
 })
 
-// Total provisions amount
-const totalProvisions = computed(() => {
-  return totalAmount.value * 0.3 // TODO factor
+// Provisions percentage
+const provisionsFactor = computed(() => {
+  const total = totalAmount.value
+  if(total >= 15000000){
+    return 0.75
+  } else if(total >= 8000000){
+    return 0.7
+  } else if(total >= 4000000){
+    return 0.65
+  }
+
+  return 0.6
 })
 
 
