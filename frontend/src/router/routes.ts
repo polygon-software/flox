@@ -35,10 +35,10 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/company/ManagementEmployeeDataPage.vue') }],
   },
 
-  'MANAGEMENT_EMPLOYEE_TASKS': {
-    path: '/management-employee-tasks',
+  'MANAGEMENT_EMPLOYEE_PROVISIONS': {
+    path: '/management-employee-provisions',
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/company/ManagementEmployeeTaskPage.vue') }],
+    children: [{ path: '', component: () => import('pages/company/ManagementEmployeeProvisionsPage.vue') }],
   },
 
   'EMPLOYEE_DASHBOARD': {
@@ -194,17 +194,17 @@ export const CONSTRAINED_ROUTES = [
     necessaryQueryParams: ['cid']
   },
   {
-    path: ROUTES.MANAGEMENT_EMPLOYEE_TASKS.path,
+    path: ROUTES.MANAGEMENT_EMPLOYEE_PROVISIONS.path,
     allowedRoles: [ROLE.COMPANY],
     constrainedRoles: [ROLE.SOI_ADMIN],
     necessaryQueryParams: ['cid']
   },
   // Employee Dashboard : also allowed to admins when 'bid' is given
   {
-    path: ROUTES.MANAGEMENT_EMPLOYEE_TASKS.path,
+    path: ROUTES.EMPLOYEE_DASHBOARD.path,
     allowedRoles: [ROLE.COMPANY, ROLE.EMPLOYEE],
     constrainedRoles: [ROLE.SOI_ADMIN],
-    necessaryQueryParams: ['bid']
+    necessaryQueryParams: ['eid']
   }
 ]
 

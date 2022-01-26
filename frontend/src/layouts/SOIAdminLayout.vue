@@ -51,7 +51,7 @@
           flat
           class="text-white"
           style="background: rgba(244, 67, 54, 0.8); border-radius: 0"
-          @click="() => onItemClick(ROUTES.MANAGEMENT_EMPLOYEE_TASKS, route.query)"
+          @click="() => onItemClick(ROUTES.MANAGEMENT_EMPLOYEE_PROVISIONS, route.query)"
         />
         <router-view :style="computedStyle" />
       </q-scroll-area>

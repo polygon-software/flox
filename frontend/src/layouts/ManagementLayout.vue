@@ -66,9 +66,9 @@ const menuItems = [
     route: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
   },
   {
-    name: 'tasks',
-    label: i18n.global.t('account_data.tasks'),
-    route: ROUTES.MANAGEMENT_EMPLOYEE_TASKS,
+    name: 'dossiers',
+    label: i18n.global.tc('dashboards.dossier', 2),
+    route: ROUTES.MANAGEMENT_EMPLOYEE_PROVISIONS,
   },
 ]
 /**
