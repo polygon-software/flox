@@ -89,6 +89,7 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {MY_EMPLOYEES_PROVISIONS} from 'src/data/queries/EMPLOYEE';
 import {useRoute} from 'vue-router';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {getProvisionFactor} from 'src/helpers/provision-helpers';
 const route = useRoute()
 
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -150,16 +151,7 @@ const totalAmount = computed(() => {
 
 // Provisions percentage
 const provisionsFactor = computed(() => {
-  const total = totalAmount.value
-  if(total >= 15000000){
-    return 0.75
-  } else if(total >= 8000000){
-    return 0.7
-  } else if(total >= 4000000){
-    return 0.65
-  }
-
-  return 0.6
+  return getProvisionFactor(totalAmount.value)
 })
 
 

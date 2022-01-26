@@ -69,6 +69,8 @@ export const MY_EMPLOYEES_PROVISIONS = {
         dossiers {
           uuid
           mortgage_amount
+          partition_amounts
+          partition_dates
           __typename
         }
         __typename
