@@ -40,3 +40,24 @@ export function deleteCookies(category: string): void{
     }
   })
 }
+
+/**
+ * Gets the authorization token (if any) from local storage
+ * @returns {Promise<null|string>} - auth token, if any
+ */
+export function getAuthToken(){
+  let iter = 0
+  let res:string|null = ''
+  let token:string|null = null
+  do {
+    res = localStorage.key(iter)
+    if(res?.endsWith('.idToken') && res?.startsWith('CognitoIdentityServiceProvider.')){
+      token = localStorage.getItem(res)
+      break
+    }
+    iter++;
+  } while (res)
+
+
+  return token;
+}

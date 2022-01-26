@@ -268,6 +268,7 @@ import {ALL_BANK_NAMES} from 'src/data/queries/BANK';
 import {DOSSIER_WARNING} from '../../../../shared/definitions/ENUMS';
 import axios from 'axios';
 import {dateToInputString} from 'src/helpers/date-helpers';
+import {getAuthToken} from 'src/helpers/cookie-helpers';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
@@ -503,9 +504,13 @@ const eligibleIncome = computed(() => {
  * Formula: 5% interest on mortgage sum + 1% of highest market value estimation of property + amortisation costs
  */
 const totalCosts = computed(() => {
-  // TODO adapt: take from CSV-calculated value here
+  // Value estimate is needed for calculation
+  if(!valueEstimate.value){
+    return null
+  }
+
   // Higher market value estimate
-  const marketValueEstimation = (form.values.value.enfeoffment as Record<string, number>|undefined)?.marketValueEstimation
+  const marketValueEstimation = valueEstimate.value.high
 
   // Yearly amortisation cost
   const amortisation = (form.values.value.amortisation as Record<string, number>|undefined)?.amortisationAmount ?? 0
@@ -644,17 +649,8 @@ async function calculateValueEstimate(){
   const endDateString = dateToInputString(new Date())
 
   // Ensure user has token
-  let iter = 0
-  let res:string|null = ''
-  let token:string|null = ''
-  do {
-    res = localStorage.key(iter)
-    if(res?.endsWith('.idToken') && res?.startsWith('CognitoIdentityServiceProvider.')){
-      token = localStorage.getItem(res)
-      break
-    }
-    iter++;
-  } while (res)
+  const token = getAuthToken();
+
   if(!token){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
     return;

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useApolloClient} from '@vue/apollo-composable';
+import {getAuthToken} from 'src/helpers/cookie-helpers';
 
 /**
  * Upload a list of files to given Endpoint
@@ -10,17 +11,7 @@ import {useApolloClient} from '@vue/apollo-composable';
  */
 export async function uploadFiles(files: Record<string, unknown>, target: string, queryname: string) {
   const apolloClient = useApolloClient().resolveClient()
-  let iter = 0
-  let res:string|null = ''
-  let token:string|null = ''
-  do {
-    res = localStorage.key(iter)
-    if(res?.endsWith('.idToken') && res?.startsWith('CognitoIdentityServiceProvider.')){
-      token = localStorage.getItem(res)
-      break
-    }
-    iter++;
-  } while (res)
+  const token = getAuthToken()
   if(!token){
     throw new Error('Authentication Failure')
   }
