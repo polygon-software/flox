@@ -252,7 +252,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, onMounted, Ref, ref} from 'vue';
+import {computed, ComputedRef, inject, onMounted, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm, useQuasar} from 'quasar';
@@ -270,6 +270,7 @@ import {DOSSIER_WARNING} from '../../../../shared/definitions/ENUMS';
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
 const $q = useQuasar()
+
 
 // Form component reference
 const formRef: Ref<QForm | null> = ref(null)
@@ -436,13 +437,13 @@ const nonArrangeable = computed(() => {
 })
 
 // Bank list
-const bankOptions = ref([])
+const bankOptions: Ref<Record<string, unknown>[]> = ref([])
 
 /**
  * Mortgage volume
  */
 const mortgage = computed(() => {
-  return Math.round((form.values.value.enfeoffment as Record<string, number>|undefined)?.currentValueOfMortgage) ?? null
+  return form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.currentValueOfMortgage) : null
 })
 
 /**
@@ -450,9 +451,9 @@ const mortgage = computed(() => {
  */
 const totalIncome = computed(() => {
   const grossIncomes = form.values.value.income as number[]|undefined
-  const bonus = form.values.value.bonus as number|undefined
-  const childAllowances = form.values.value.child_allowances as number|undefined
-  const assets = form.values.value.assets as number|undefined
+  const bonus = form.values.value.bonus as string|undefined
+  const childAllowances = form.values.value.child_allowances as string|undefined
+  const assets = form.values.value.assets as string|undefined
 
   if(grossIncomes && bonus && childAllowances && assets){
     let sumOfIncomes = 0
@@ -468,10 +469,10 @@ const totalIncome = computed(() => {
  * Sum of expenses
  */
 const totalExpenses = computed(() => {
-  const leasing = form.values.value.leasing as number|undefined
-  const credit = form.values.value.credit as number|undefined
-  const alimony = form.values.value.alimony as number|undefined
-  const various = form.values.value.various as number|undefined
+  const leasing = form.values.value.leasing as string|undefined
+  const credit = form.values.value.credit as string|undefined
+  const alimony = form.values.value.alimony as string|undefined
+  const various = form.values.value.various as string|undefined
 
   if(leasing && credit && alimony && various){
     return Math.round(parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various))
@@ -518,11 +519,11 @@ const totalCosts = computed(() => {
 /**
  * Mortgage affordability in percent
  */
-const affordability = computed(() => {
+const affordability: ComputedRef<number|null> = computed(() => {
 
   // Ensure all required values are given
   if(totalCosts.value && eligibleIncome.value){
-    return (totalCosts.value / eligibleIncome.value * 100).toFixed(2)
+    return parseFloat((totalCosts.value / eligibleIncome.value * 100).toFixed(2))
   }
 
   return null
@@ -533,16 +534,20 @@ const affordability = computed(() => {
  */
 const valueEstimate = computed(() => {
   // Customer market value estimate
-  const customerEstimate = Math.round((form.values.value.enfeoffment as Record<string, number>|undefined)?.marketValueEstimation)
+  const customerEstimate = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.marketValueEstimation) : null
 
   // Invalid, data missing
   if(!customerEstimate) {
-    // TODO throw error
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
     return {
       low: null,
       high: null
     }
   }
+
+  // const multiplier = await axios.get(url, {
+  //   responseType: 'arraybuffer',
+  // });
 
   // TODO adapt: calculate from CSV
   const highEstimate = Math.round(customerEstimate * 1.14)
@@ -559,8 +564,8 @@ const valueEstimate = computed(() => {
  */
 const enfeoffmentEstimate = computed(() => {
   // Invalid, data missing
-  if(!valueEstimate.value || !mortgage.value) {
-    // TODO throw error
+  if(!valueEstimate.value || !valueEstimate.value.low || !valueEstimate.value.high || !mortgage.value) {
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
     return {
       low: null,
       high: null
@@ -569,8 +574,8 @@ const enfeoffmentEstimate = computed(() => {
 
   // Return as array (low & high estimate)
   return {
-    low: (mortgage.value/valueEstimate.value.low * 100).toFixed(2),
-    high: (mortgage.value/valueEstimate.value.high * 100).toFixed(2)
+    low: parseFloat((mortgage.value/valueEstimate.value.low * 100).toFixed(2)),
+    high: parseFloat((mortgage.value/valueEstimate.value.high * 100).toFixed(2))
   }
 
 })
@@ -579,7 +584,7 @@ const enfeoffmentEstimate = computed(() => {
 onMounted(async () => {
   // Execute query
   const banksQuery = await executeQuery(ALL_BANK_NAMES)
-  const bankList: Record<string, string>[] = banksQuery.data.getBankList
+  const bankList = banksQuery.data.getBankList as Record<string, string>[]
 
   // Format so option group can use it
   bankOptions.value = bankList.map((bank: Record<string, string>) => {
@@ -587,7 +592,7 @@ onMounted(async () => {
       label: `${bank.name} (${bank.abbreviation})`,
       value: bank
     }
-  })
+  }) as Record<string, unknown>[]
 })
 
 /**
@@ -601,14 +606,14 @@ function onPageChange(){
     let enfeoffmentWarning
 
     // Trigger warning depending on affordability rating
-    if(affordability.value > 35){
+    if(affordability.value && affordability.value > 35){
       affordabilityWarning = i18n.global.t('warnings.affordability_impossible')
-    } else if(affordability.value > 33 && affordability.value <= 35){
+    } else if(affordability.value && affordability.value > 33 && affordability.value <= 35){
       affordabilityWarning = i18n.global.t('warnings.affordability_critical')
     }
 
     // Trigger warning depending on enfeoffment ratio (if >80%), use low value because its enfeoffment is higher
-    if(enfeoffmentEstimate.value.low > 80){
+    if(enfeoffmentEstimate.value && enfeoffmentEstimate.value.low && enfeoffmentEstimate.value.low > 80){
       enfeoffmentWarning = i18n.global.t('warnings.enfeoffment_warning')
     }
 
@@ -692,8 +697,8 @@ async function onSubmit() {
   const birthdate = formData.date_of_birth
 
   // Page 2
-  const bankName =  formData.bank?.value.name as string|null
-  const bankAbbreviation =  formData.bank?.value.abbreviation as string|null
+  const bankName =  (formData.bank?.value as Record<string, string>).name as string|null
+  const bankAbbreviation =  (formData.bank?.value as Record<string, string>).abbreviation as string|null
   const propertyType = formData.property_type?.value
   const ownerOccupied = formData.owner_occupied
   const purchaseDate = formData.date_of_purchase
@@ -714,12 +719,12 @@ async function onSubmit() {
   const renovationYear = formData.renovation?.renovationYear                   // may be null
 
   // Mortgage partitions
-  const mortgagePartitions = formData.mortgage
-  const partitionAmounts = []
-  const partitionDates = []
+  const mortgagePartitions = formData.mortgage as unknown as Record<string, number|Date>[]
+  const partitionAmounts: number[] = []
+  const partitionDates: Date[] = []
   mortgagePartitions.forEach((partition: Record<string, number|Date>) => {
-    partitionAmounts.push(partition.amount)
-    partitionDates.push(partition.date)
+    partitionAmounts.push(partition.amount as number)
+    partitionDates.push(partition.date as Date)
   })
 
   // Page 4
@@ -767,25 +772,25 @@ async function onSubmit() {
       property_type: propertyType,
       owner_occupied: ownerOccupied,
       purchase_date: purchaseDate,
-      purchase_price: parseInt(purchasePrice),
-      market_value_estimation: parseInt(marketValueEstimation),
-      mortgage_amount: parseInt(mortgageAmount),
+      purchase_price: parseInt(purchasePrice as string),
+      market_value_estimation: parseInt(marketValueEstimation as string),
+      mortgage_amount: parseInt(mortgageAmount as string),
 
       // Amortisation information
       has_amortisation: hasAmortisation,
       direct_amortisation: directAmortisation,
-      amortisation_amount: parseInt(amortisationAmount),
+      amortisation_amount: parseInt(amortisationAmount as string),
 
       // Building lease information
       has_building_lease: hasBuildingLease,
       public_landlord: publicLandlord,
       building_lease_expiration_date: buildingLeaseExpirationDate,
-      building_lease_interest: parseInt(buildingLeaseInterest),
+      building_lease_interest: parseInt(buildingLeaseInterest as string),
 
       // Renovation information
       has_renovation: hasRenovation,
       renovation_year: renovationYear,
-      renovation_price: parseInt(renovationPrice),
+      renovation_price: parseInt(renovationPrice as string),
 
       // Mortgage partitions
       partition_amounts: partitionAmounts,
@@ -793,13 +798,13 @@ async function onSubmit() {
 
       // Income/cost information
       incomes,
-      child_allowances: parseInt(childAllowances),
-      bonus: parseInt(bonus),
-      assets: parseInt(assets),
-      leasing: parseInt(leasing),
-      credit: parseInt(credit),
-      alimony: parseInt(alimony),
-      various: parseInt(various),
+      child_allowances: parseInt(childAllowances.toString()),
+      bonus: parseInt(bonus.toString()),
+      assets: parseInt(assets.toString()),
+      leasing: parseInt(leasing.toString()),
+      credit: parseInt(credit.toString()),
+      alimony: parseInt(alimony.toString()),
+      various: parseInt(various.toString()),
       prosecutions,
       loss_certificates: lossCertificates,
 
@@ -807,32 +812,34 @@ async function onSubmit() {
       non_arrangeable: nonArrangeable.value,
 
       // Calculated totals
-      affordability: parseFloat(affordability.value),
-      eligible_income: parseInt(eligibleIncome.value),
-      total_costs: parseInt(totalCosts.value),
-      value_estimate_low: parseInt(valueEstimate.value.low),
-      value_estimate_high: parseInt(valueEstimate.value.high),
-      enfeoffment_estimate_low: parseFloat(enfeoffmentEstimate.value.low),
-      enfeoffment_estimate_high: parseFloat(enfeoffmentEstimate.value.high)
+      affordability: affordability.value,
+      eligible_income: eligibleIncome.value,
+      total_costs: totalCosts.value,
+      value_estimate_low: valueEstimate.value.low,
+      value_estimate_high: valueEstimate.value.high,
+      enfeoffment_estimate_low: enfeoffmentEstimate.value.low,
+      enfeoffment_estimate_high: enfeoffmentEstimate.value.high,
     }
   })
 
-    const newDossier = mutationResult.data?.createDossier as Record<string, unknown>|null
+    const newDossier = mutationResult?.data?.createDossier as Record<string, unknown>|null
 
     if(!newDossier){
       // Show error
       $errorService?.showErrorDialog(
-        new Error(i18n.global.t('errors.dossier_upload_error', {error: (err as Error).message}))
+        new Error(i18n.global.t('errors.dossier_upload_error'))
       )
+      return;
     }
 
     // Route to final document
     await $routerService?.routeTo(ROUTES.DOSSIER_FINAL_DOCUMENT, {did: newDossier.uuid})
-  } catch(err: Error){
+  } catch(err){
     // Show error
     $errorService?.showErrorDialog(
       new Error(i18n.global.t('errors.dossier_upload_error', {error: (err as Error).message}))
     )
+    return
   }
 
 }
@@ -842,7 +849,7 @@ async function onSubmit() {
  * @param {number} rate - enfeoffment rate in percent
  * @returns {string} - rank string
  */
-function enfeoffmentRank(rate){
+function enfeoffmentRank(rate: number){
   if(rate <= 66){
     return i18n.global.t('form_for_clients.enfeoffment_first_rank')
   } else if(rate > 66 && rate <= 80){
