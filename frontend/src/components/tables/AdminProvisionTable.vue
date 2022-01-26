@@ -32,20 +32,22 @@
           style="background-color: white; cursor: pointer"
           @click="() => onRowClick(props.row)"
         >
-            <q-td key="company_name" :props="props">
-              {{ props.row.company_name }}
-            </q-td>
-            <q-td key="volume" :props="props">
-              CHF {{ companyMortgageAmount(props.row).toLocaleString() }}
-            </q-td>
-            <q-td key="prov_soi" :props="props">
-              <!-- TODO volume -->
-              40'000
-            </q-td>
-            <q-td key="prov_org" :props="props">
-              <!-- TODO volume -->
-              60'000
-            </q-td>
+          <q-td key="company_name" :props="props">
+            {{ props.row.company_name }}
+          </q-td>
+          <!-- Total mortgage amount for company -->
+          <q-td key="volume" :props="props">
+            CHF {{ companyMortgageAmount(props.row).toLocaleString() }}
+          </q-td>
+          <!-- Total Provision SOI for company -->
+          <q-td key="prov_soi" :props="props">
+           CHF {{ companyTotalProvision(props.row).toLocaleString() }}
+          </q-td>
+
+          <!-- Provision the company will receive -->
+          <q-td key="prov_org" :props="props">
+            CHF {{ (companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row))).toLocaleString() }}
+          </q-td>
         </q-tr>
 
         <!-- One spacer row per row -->
@@ -56,21 +58,22 @@
         <!-- Last entry: sum row -->
         <q-tr v-if="props.rowIndex === rows.length-1">
           <q-td key="company_name"/>
+          <!-- Mortgage volume total -->
           <q-td key="volume" :props="props">
             <strong>
               CHF {{ totalMortgageAmount.toLocaleString() }}
             </strong>
           </q-td>
+          <!-- SOI provisions total -->
           <q-td key="prov_soi" :props="props">
-            <!-- TODO sum -->
             <strong>
-              80'000
+              CHF {{ totalProvisionAmount.toLocaleString( )}}
             </strong>
           </q-td>
+          <!-- Company provisions total -->
           <q-td key="prov_org" :props="props">
-            <!-- TODO sum -->
             <strong>
-              120'000
+              CHF {{ totalCompanyProvisionAmount.toLocaleString( )}}
             </strong>
           </q-td>
         </q-tr>
@@ -88,6 +91,7 @@ import {ALL_COMPANIES_PROVISIONS} from 'src/data/queries/COMPANY';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
+import {getProvisionForDossier, getProvisionFactor} from 'src/helpers/provision-helpers';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -144,6 +148,24 @@ const totalMortgageAmount = computed(() => {
   return total;
 })
 
+// Total provision amount of all companies
+const totalProvisionAmount = computed(() => {
+  let total = 0
+  rows.value.forEach((company: Record<string, unknown>) => {
+    total += companyTotalProvision(company)
+  })
+  return total;
+})
+
+// Total payable provision amount of all companies
+const totalCompanyProvisionAmount = computed(() => {
+  let total = 0
+  rows.value.forEach((company: Record<string, unknown>) => {
+    total += companyTotalProvision(company) * getProvisionFactor(companyMortgageAmount(company))
+  })
+  return total;
+})
+
 /**
  * Updates the filter parameters
  * @param {Record<string, unknown>} input - Input, containing search and from/to dates
@@ -170,7 +192,7 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
 /**
  * Calculates the sum of a given company's mortgage amounts
  * @param {Record<string, unknown>} company - company's database entry
- * @returns {number} - total amount
+ * @returns {number} - total mortgage amount
  */
 function companyMortgageAmount(company: Record<string, unknown>){
   let totalAmount = 0
@@ -187,6 +209,28 @@ function companyMortgageAmount(company: Record<string, unknown>){
 
   return totalAmount
 }
+
+/**
+ * Calculates the sum of a given company's provisions, NOT adjusted for the company's provision factor
+ * @param {Record<string, unknown>} company - company's database entry
+ * @returns {number} - total company provisions
+ */
+function companyTotalProvision(company: Record<string, unknown>){
+  let totalAmount = 0
+
+  const employees = company.employees as Record<string, unknown>[] ?? []
+
+  employees.forEach((employee: Record<string, unknown>) => {
+    const dossiers = employee.dossiers as Record<string, unknown>[] ?? []
+
+    dossiers.forEach((dossier) => {
+      totalAmount += getProvisionForDossier(dossier)
+    })
+  })
+
+  return totalAmount
+}
+
 </script>
 
 <style scoped>
