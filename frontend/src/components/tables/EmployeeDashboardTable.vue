@@ -22,6 +22,9 @@
         <q-td key="date">
           {{ formatDate(_props.row.created_at) }}
         </q-td>
+        <q-td key="date">
+          {{ formatDateTime(_props.row.last_modified_at) }}
+        </q-td>
         <q-td key="customer">
           {{ _props.row.first_name + " " + _props.row.last_name }}
         </q-td>
@@ -118,7 +121,7 @@ import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_STATUS} from 'src/data/ENUM/ENUM';
 import {showNotification} from 'src/helpers/notification-helpers';
-import {formatDate} from 'src/helpers/format-helpers';
+import {formatDate, formatDateTime} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 import {MY_DOSSIERS} from 'src/data/queries/DOSSIER';
@@ -148,7 +151,7 @@ const props = defineProps({
 // ----- Data -----
 const columns = [
   { name: 'date', label: i18n.global.t('employee_dashboard.date'), field: 'date', sortable: true, align: 'center' },
-  // customer + customer id
+  { name: 'latest_change', label: i18n.global.t('employee_dashboard.latest_change'), field: 'latest_change', sortable: true, align: 'center' },
   { name: 'customer', label: i18n.global.t('employee_dashboard.customer'), field: 'customer', sortable: true, align: 'center' },
   { name: 'institute', label: i18n.global.t('employee_dashboard.institute'), field: 'institute', sortable: true, align: 'center' },
   { name: 'location', label: i18n.global.t('employee_dashboard.location'), field: 'location', sortable: true, align: 'center' },

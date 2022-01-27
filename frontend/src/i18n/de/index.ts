@@ -313,6 +313,7 @@ export default {
     search: 'Suche',
     new_assignment: 'Neues Dossier erfassen',
     date: 'Datum',
+    latest_change: 'Letzte Änderung',
     date_of_birth: 'Geburtsdatum',
     customer: 'Kunde',
     institute: 'Institut',
