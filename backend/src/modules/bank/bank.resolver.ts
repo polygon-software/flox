@@ -99,4 +99,14 @@ export class BankResolver {
   async getBank(@Args() getBankArgs: GetBankArgs): Promise<Bank> {
     return this.bankService.getBank(getBankArgs);
   }
+
+  /**
+   * Get a list of bank name & abbreviation suggestions
+   * @returns {Promise<Employee>} - The Employee
+   */
+  @EmployeeOnly()
+  @Query(() => [Bank], { name: 'getBankNameSuggestions' })
+  async getBankNameSuggestions(): Promise<Bank[]> {
+    return this.bankService.getBankNameSuggestions();
+  }
 }

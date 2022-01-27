@@ -43,7 +43,7 @@ export function deleteCookies(category: string): void{
 
 /**
  * Gets the authorization token (if any) from local storage
- * @returns {Promise<null|string>} - auth token, if any
+ * @returns {null|string} - auth token, if any
  */
 export function getAuthToken(){
   let iter = 0

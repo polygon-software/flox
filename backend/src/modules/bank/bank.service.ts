@@ -9,6 +9,7 @@ import { UserService } from '../user/user.service';
 import { CreateUserlessBankInput } from './dto/input/create-userless-bank.input';
 import { generateHumanReadableId } from '../../helpers';
 import { GetBankArgs } from './dto/args/get-bank.args';
+import { BANK_SUGGESTIONS } from '../../CONSTANTS/BANK';
 
 @Injectable()
 export class BankService {
@@ -114,5 +115,42 @@ export class BankService {
     }
 
     return bank;
+  }
+
+  /**
+   * Returns a list of bank name/abbreviation suggestions
+   * @returns {Promise<Bank[]>} - all bank name/abbreviation suggestions
+   */
+  async getBankNameSuggestions() {
+    // Set a default UUID, because query expects one
+    const defaultUuid = 'bank-suggestion-';
+
+    // Imported from constants file
+    let nameSuggestions = BANK_SUGGESTIONS as Record<string, string>[];
+
+    // Filter suggestions: Exclude banks that are already present in bank database
+    const existingBanks = await this.bankRepository.find();
+    const existingBankAbbreviations: string[] = [];
+    const existingBankNames: string[] = [];
+    existingBanks.forEach((existingBank) => {
+      existingBankAbbreviations.push(existingBank.abbreviation);
+      existingBankNames.push(existingBank.name);
+    });
+
+    // Filter out existing ones
+    nameSuggestions = nameSuggestions.filter((suggestion) => {
+      return (
+        !existingBankAbbreviations.includes(suggestion.abbreviation) &&
+        !existingBankNames.includes(suggestion.name)
+      );
+    });
+
+    // Add a UUID to all suggestions
+    for (let i = 0; i < nameSuggestions.length; i++) {
+      nameSuggestions[i].uuid = `${defaultUuid}${i}`;
+    }
+
+    // Explicit type conversion, since we don't return all required fields for a bank
+    return nameSuggestions as unknown as Bank[];
   }
 }

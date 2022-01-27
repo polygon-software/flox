@@ -74,10 +74,27 @@ export const MY_BANK = {
   cacheLocation: 'getMyBank'
 }
 
+export const BANK_NAME_SUGGESTIONS = {
+  query: gql`
+    query getBankNameSuggestions{
+      getBankNameSuggestions {
+        uuid
+        name
+        abbreviation
+        __typename
+      }
+    }
+  `,
+  tables: ['bank'],
+  cacheLocation: 'getBankNameSuggestions'
+}
+
 const BANK_QUERIES = [
+  BANK,
   ALL_BANK_NAMES,
   ALL_BANKS,
-  MY_BANK
+  MY_BANK,
+  BANK_NAME_SUGGESTIONS
 ]
 
 

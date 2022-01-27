@@ -286,6 +286,10 @@ export default {
     dossier_upload_error: 'Error while uploading dossier: {error}',
     missing_data: 'Required data is missing',
     file_upload_failed: 'File upload failed',
+    missing_data: 'Required data is missing',
+    file_upload_failed: 'File upload failed',
+    abbreviation_length: 'Abbreviation must be exactly 3 letters long',
+    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -321,7 +325,7 @@ export default {
     customer: 'Customer',
     institute: 'Institute',
     location: 'Location',
-    mortgage_amount: 'Mortage amount CHF',
+    mortgage_amount: 'Mortgage amount CHF',
     status: 'Status',
     uploads: 'Documents',
     all_documents: 'All documents',
@@ -410,7 +414,9 @@ export default {
     body_rejected: 'Application is rejected'
   },
   bank: {
-    new_user: 'New user'
+    new_user: 'New user',
+    name: 'Name',
+    abbreviation: 'Abbreviation'
   },
   warnings: {
     retirement_warning: 'The acceptability of risks is different for people over the age of 60',

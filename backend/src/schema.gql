@@ -666,6 +666,7 @@ type Query {
   company(cognito_id: ID, uuid: ID): Company!
   getBank(uuid: ID!): Bank!
   getBankList: [Bank!]!
+  getBankNameSuggestions: [Bank!]!
   getBanks: [Bank!]!
   getDossier(getDossierInput: GetDossierInput!): Dossier!
   getDossierDocument(
