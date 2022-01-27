@@ -98,7 +98,7 @@
                 color="primary"
                 text-color="white"
                 :label=" $t('dossier.offer')"
-                :disable="bankUuid"
+                :disable="bankUuid !== undefined && bankUuid !== null"
                 clickable
                 @click="createOfferForDossier(_props.row)"
               />
@@ -219,21 +219,27 @@ function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, un
  * @returns {Promise<void>} - done
  */
 async function createOfferForDossier(dossier: Record<string, unknown>){
-  if(!myBank.value){
+
+  console.log('CREATE')
+  if(!myBank.value || bankUuid){
     return null;
   }
   const myBankValue = myBank.value as Record<string, string|unknown>
+  console.log('my bank is', myBankValue)
   // Ensure no missing values
-  if(!myBank.value || !dossier || !myBankValue.uuid){
+  if(!myBankValue || !dossier || !myBankValue.uuid){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_attributes')))
     return
   }
+
+  console.log('Checking ownOffer for dossier', dossier)
 
   // Ensure no offer present yet
   if(ownOfferForDossier(dossier)){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.offer_already_present')))
     return
   }
+  console.log('MUTATE')
 
   // Create actual offer
   await executeMutation(CREATE_OFFER, {
