@@ -100,6 +100,11 @@ const menuItems = [
     label: i18n.global.tc('account_data.bank', 2),
     route: ROUTES.ADMIN_BANK,
   },
+  {
+    name: 'files',
+    label: i18n.global.t('dashboards.files'),
+    route: ROUTES.ADMIN_FILES,
+  },
 ]
 
 /**

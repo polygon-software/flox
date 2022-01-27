@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  Get,
   Options,
   Post,
   Query,
@@ -9,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { Public } from '../../auth/authentication.decorator';
-import { AnyRole, EmployeeOnly } from '../../auth/authorization.decorator';
+import {
+  AdminOnly,
+  AnyRole,
+  EmployeeOnly,
+} from '../../auth/authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from '../company/entities/company.entity';
 import { Repository } from 'typeorm';
@@ -19,6 +24,7 @@ import { ERRORS } from '../../error/ERRORS';
 import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
 import { User } from '../user/entities/user.entity';
+import { getValueDevelopment } from '../../value-development/value-development';
 
 @Controller()
 export class FileController {
@@ -144,6 +150,8 @@ export class FileController {
     '/uploadOfferFile',
     '/uploadDossierFile',
     '/uploadDossierFinalDocument',
+    '/getValueDevelopment',
+    '/uploadValueDevelopmentFile',
   ]) //Todo Find better way to allow Preflight requests
   @Public()
   async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {
@@ -248,5 +256,84 @@ export class FileController {
 
     res.header('access-control-allow-origin', '*');
     res.send(updatedDossier);
+  }
+
+  /**
+   * Uploads a value development CSV file to replace the old one in the 'value_development' table
+   * TODO for future sprint: additional assurance of correct form data
+   * @param {FastifyRequest} req - request
+   * @param {FastifyReply<any>} res - response
+   * @returns {Promise<void>} - done
+   */
+  @Post('/uploadValueDevelopmentFile')
+  @AdminOnly()
+  async uploadValueDevelopmentFile(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+  ): Promise<any> {
+    // Verify that request is multipart
+    if (!req.isMultipart()) {
+      res.send(new BadRequestException(ERRORS.file_expected));
+      return;
+    }
+
+    const file = await req.file();
+
+    if (file.mimetype !== 'text/csv') {
+      res.send(new BadRequestException(ERRORS.no_valid_file));
+    }
+
+    await this.fileService.uploadValueDevelopmentFile(file);
+
+    res.header('access-control-allow-origin', '*');
+    res.send('OK');
+  }
+
+  /**
+   * Gets the value development for a given zip code over a given time frame (or the closest timeframe available)
+   * @param {FastifyRequest} req - request
+   * @param {FastifyReply<any>} res - response
+   * @param {Record<string, string>} query - URL query, should contain 'zipCode', 'start' and 'end'
+   * @returns {Promise<void>} - done
+   */
+  @Get('/getValueDevelopment')
+  @EmployeeOnly()
+  async getValueDevelopment(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+    @Query() query: Record<string, string>, // Params
+  ): Promise<any> {
+    const zipCode = query.zipCode;
+    const start = query.start; // start date in YYYY-MM-DD format
+    const end = query.end; // end date in YYYY-MM-DD format
+
+    // Ensure all attributes present
+    if (!zipCode || !start || !end) {
+      res.send(new Error(ERRORS.missing_query_parameters));
+      return;
+    }
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    // Ensure dates are valid end date is after start date
+    if (
+      isNaN(startDate.getTime()) ||
+      isNaN(endDate.getTime()) ||
+      endDate.getTime() < startDate.getTime()
+    ) {
+      res.send(new Error(ERRORS.invalid_date_input));
+      return;
+    }
+
+    try {
+      // Calculate value multiplier
+      const multiplier = await getValueDevelopment(zipCode, startDate, endDate);
+      res.header('access-control-allow-origin', '*');
+      res.send(multiplier);
+    } catch (error) {
+      // Return any calculation errors that occurred
+      res.send(error);
+    }
   }
 }

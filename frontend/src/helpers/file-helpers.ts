@@ -1,26 +1,17 @@
 import axios from 'axios';
 import {useApolloClient} from '@vue/apollo-composable';
+import {getAuthToken} from 'src/helpers/cookie-helpers';
 
 /**
  * Upload a list of files to given Endpoint
  * @param {Record<string, unknown>} files - dictionary file filenames vs file
  * @param {string} target - url to upload to
- * @param {string} queryname - Name of the query that got invalidated by request
+ * @param {string} [queryName] - Name of the query that got invalidated by request, if any
  * @return {Promise<Record<string, unknown>>} - Updated related files
  */
-export async function uploadFiles(files: Record<string, unknown>, target: string, queryname: string) {
+export async function uploadFiles(files: Record<string, unknown>, target: string, queryName?: string) {
   const apolloClient = useApolloClient().resolveClient()
-  let iter = 0
-  let res:string|null = ''
-  let token:string|null = ''
-  do {
-    res = localStorage.key(iter)
-    if(res?.endsWith('.idToken') && res?.startsWith('CognitoIdentityServiceProvider.')){
-      token = localStorage.getItem(res)
-      break
-    }
-    iter++;
-  } while (res)
+  const token = getAuthToken()
   if(!token){
     throw new Error('Authentication Failure')
   }
@@ -48,7 +39,9 @@ export async function uploadFiles(files: Record<string, unknown>, target: string
     throw new Error(`File upload error: ${e.message}`)
   })
 
-  await apolloClient.refetchQueries({include: [queryname]})
+  if(queryName){
+    await apolloClient.refetchQueries({include: [queryName]})
+  }
 
   // Return updated objects
   return uploadResult.data as Record<string, unknown>;

@@ -16,6 +16,8 @@ import { Dossier } from '../dossier/entity/dossier.entity';
 import { ERRORS } from '../../error/ERRORS';
 import { MultipartFile } from 'fastify-multipart';
 import { FILE_TYPE, ROLE } from '../../ENUM/ENUMS';
+import { parseCsv } from '../../helpers/csv-helpers';
+import { saveValueDevelopmentCsv } from '../../value-development/value-development';
 
 @Injectable()
 export class FileService {
@@ -336,5 +338,20 @@ export class FileService {
       return this.preparePrivateFile(getPrivateFileArgs, file);
     }
     throw new NotFoundException();
+  }
+
+  /**
+   * Uploads a value development CSV file
+   * @param {MultipartFile} file - multipart CSV file input
+   * @returns {Promise<void>} - done
+   */
+  async uploadValueDevelopmentFile(file: MultipartFile) {
+    const fileBuffer = await file.toBuffer();
+
+    // Parse CSV to object structure
+    const parsedCsv = (await parseCsv(fileBuffer)) as Record<string, string>[];
+
+    // Persist to database
+    await saveValueDevelopmentCsv(parsedCsv);
   }
 }

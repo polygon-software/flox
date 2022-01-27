@@ -97,7 +97,8 @@ export default {
     failure: 'Failure',
     dossier_reset: 'Successfully reset dossier',
     dossier_reset_failed: 'Dossier reset failed',
-    email_sent: 'E-Mail(s) sent'
+    email_sent: 'E-Mail(s) sent',
+    file_uploaded: 'Successfully uploaded file',
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -120,7 +121,10 @@ export default {
     b_degree: 'B-Degree',
     acceptability_of_risks: 'Acceptability of risks',
     expiration: 'Expiration',
-    soi_employees: 'SOI Employees'
+    soi_employees: 'SOI Employees',
+    files: 'Files',
+    value_increase_csv: 'CSV-File for Market Value Development',
+    value_increase_csv_description: 'Market value development data used for calculating value estimates'
   },
   buttons: {
     finish_signup: 'Finish',
@@ -143,6 +147,7 @@ export default {
     back_to_dashboard: 'Back to dashboard',
   },
   documents: {
+    choose_file: 'Choose file',
     choose_documents: 'Choose documents',
     documents_available: 'Documents available',
     document_upload: 'File upload',
@@ -281,6 +286,8 @@ export default {
     mortgage_total_must_be: 'Total must be equal to CHF {amount}',
     dossier_submit_error: 'Mandatory attributes are missing, please check the form and try again',
     dossier_upload_error: 'Error while uploading dossier: {error}',
+    missing_data: 'Required data is missing',
+    file_upload_failed: 'File upload failed',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -417,7 +424,8 @@ export default {
     affordability_impossible: 'Attention: Due to the affordability of more than 35%, this mortgage cannot be financed.',
     affordability_critical: 'Attention: Due to the affordability, this mortgage may be barely financeable.',
     enfeoffment_warning: 'Attention: Due to the enfeoffment ratio, this mortgage cannot be financed.',
-    non_arrangeable: 'Attention: Due to the entered data, this dossier will be marked as non-arrangeable! Please ensure that all information was entered correctly.'
+    non_arrangeable: 'Attention: Due to the entered data, this dossier will be marked as non-arrangeable! Please ensure that all information was entered correctly.',
+    csv_file_warning: 'Attention: Uploading a new value developent CSV file will replace the existing dataset. This process cannot be undone. Are you sure?',
   },
   file_type_enum: {
     ID: 'ID/Passport copy',
