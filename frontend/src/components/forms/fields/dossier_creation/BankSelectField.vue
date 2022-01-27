@@ -138,6 +138,9 @@ function emitValue(){
   const optionValue =  selectedOption.value?.value as Record<string, string>|null
   if(selectedOption.value && optionValue && optionValue.name && optionValue.abbreviation){
     emit('change', selectedOption.value.value)
+  } else {
+    // Invalid, emit null
+    emit('change', null)
   }
 }
 
