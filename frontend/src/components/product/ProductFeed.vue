@@ -39,12 +39,20 @@
 <script setup lang="ts">
 import ProductCard from 'components/product/ProductCard.vue';
 import { subscribeToQuery } from 'src/helpers/data-helpers';
-import { computed, Ref } from 'vue';
+import { computed, Ref, watchEffect } from 'vue';
 import { ALL_PRODUCTS } from 'src/data/queries/PRODUCT';
 import { Product } from 'src/data/types/Product';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import { useRoute, useRouter } from 'vue-router';
+import { Context, Module } from 'vuex-smart-module';
+import FeedState from 'src/store/feed/state';
+import FeedGetters from 'src/store/feed/getters';
+import FeedMutations from 'src/store/feed/mutations';
+import { useFeedStore } from 'src/store/feed';
+import FeedActions from 'src/store/feed/actions';
+
+const feedStore: Context<Module<FeedState, FeedGetters, FeedMutations, FeedActions>> = useFeedStore();
 
 const router = useRouter()
 const route = useRoute()
@@ -162,6 +170,12 @@ const sortedProducts = computed(() => {
   }
   return products
 })
+
+const categories = computed(() => new Set(realProducts.value.map((product) => product.category)))
+const brands = computed(() => new Set(realProducts.value.map((product) => product.brand)))
+
+watchEffect(() => feedStore.commit('setCategories', [...categories.value]))
+watchEffect(() => feedStore.commit('setBrands', [...brands.value]))
 
 /**
  * Open sort and filter page.

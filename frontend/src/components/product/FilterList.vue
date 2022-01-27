@@ -37,7 +37,7 @@
             <q-chip
               v-for="category in categories"
               :key="category"
-              :label="$t(`products.category.${category}`)"
+              :label="$t(`products.categories.${category}`)"
               :selected="categoryFilter === category"
               @click="categoryFilter = category"
             />
@@ -72,24 +72,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import ROUTES from 'src/router/routes';
 import { useRoute, useRouter } from 'vue-router';
+import { Context, Module } from 'vuex-smart-module';
+import FeedState from 'src/store/feed/state';
+import FeedGetters from 'src/store/feed/getters';
+import FeedMutations from 'src/store/feed/mutations';
+import FeedActions from 'src/store/feed/actions';
+import { useFeedStore } from 'src/store/feed';
+
+const feedStore: Context<Module<FeedState, FeedGetters, FeedMutations, FeedActions>> = useFeedStore();
 
 const router = useRouter()
 const route = useRoute()
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
-  categories: {
-    type: Array,
-    default: () => [],
-  },
-  brands: {
-    type: Array,
-    default: () => [],
-  },
-})
+const categories = computed(() => feedStore.getters.getCategories())
+const brands = computed(() => feedStore.getters.getBrands())
 
 const categoryFilter = computed({
   get(): string{

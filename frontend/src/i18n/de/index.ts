@@ -203,6 +203,10 @@ export default {
     value_desc: 'Wert absteigend',
     all: 'Alle',
     reset_filter: 'Filter zurücksetzen',
+    categories: {
+      TECHNOLOGY: 'Technologie',
+      CARS: 'Autos',
+    },
   },
   settings: {
     settings: 'Einstellungen',

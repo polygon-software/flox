@@ -198,6 +198,10 @@ export default {
     value_desc: 'Value descending',
     all: 'All',
     reset_filter: 'Reset filter',
+    categories: {
+      TECHNOLOGY: 'Technology',
+      CARS: 'Cars',
+    },
   },
   settings: {
     settings: 'Settings',
