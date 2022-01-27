@@ -26,6 +26,7 @@ import MortgageFields from 'components/forms/fields/dossier_creation/MortgageFie
 import RenovationFields from 'components/forms/fields/dossier_creation/RenovationFields.vue'
 import AmortisationFields from 'components/forms/fields/dossier_creation/AmortisationFields.vue'
 import IncomeFields from 'components/forms/fields/dossier_creation/IncomeFields.vue'
+import BankSelectField from 'components/forms/fields/dossier_creation/BankSelectField.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_WARNING, PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
@@ -240,7 +241,7 @@ const FIELDS: Record<string, Field> = {
   },
   BANK: {
     key: 'bank',
-    component: markRaw(QSelect),
+    component: markRaw(BankSelectField),
     attributes: {
       label: i18n.global.t('account_data.bank'),
       options: [], // We don't set an initial value here; NewDossierForm replaces this with actual bank list
