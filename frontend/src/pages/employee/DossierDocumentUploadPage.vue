@@ -137,7 +137,7 @@
 import {inject, onBeforeMount, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
-import {QFile, useQuasar} from 'quasar';
+import {QFile} from 'quasar';
 import {useRoute} from 'vue-router';
 import {DOSSIER_FILE_TYPE} from 'src/data/ENUM/ENUM';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
@@ -147,7 +147,6 @@ import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {REMOVE_FILES_DOSSIER} from 'src/data/mutations/DOSSIER';
 
-const $q = useQuasar()
 const route = useRoute()
 const $routerService: RouterService|undefined = inject('$routerService')
 

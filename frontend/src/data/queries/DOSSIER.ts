@@ -8,6 +8,7 @@ export const MY_DOSSIERS = {
         status
         non_arrangeable
         created_at
+        last_modified_at
         first_name
         last_name
         email

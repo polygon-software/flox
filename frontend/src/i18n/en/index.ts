@@ -321,6 +321,7 @@ export default {
     search: 'Search',
     new_assignment: 'Enter a new assignment',
     date: 'Date',
+    latest_change: 'Latest Change',
     date_of_birth: 'Date of Birth',
     customer: 'Customer',
     institute: 'Institute',

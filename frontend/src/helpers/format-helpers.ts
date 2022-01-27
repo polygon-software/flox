@@ -35,5 +35,5 @@ export function formatDateTime(inputDate: Date|string): string{
     actualDate = inputDate
   }
 
-  return date.formatDate(actualDate, 'DD.MM.YYYY hh:mm')
+  return date.formatDate(actualDate, 'DD.MM.YYYY HH:mm')
 }
