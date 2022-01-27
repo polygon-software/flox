@@ -11,7 +11,7 @@
       fill-input
       use-input
       hide-selected
-      @filter="filterFn"
+      @filter="filterSuggestions"
       @input-value="onOptionChange"
       @update:model-value="onDropdownSelect"
     />
@@ -23,14 +23,16 @@
       class="col q-ml-md"
       :label="$t('bank.abbreviation')"
       :disable="!isNewBank"
+      :rules="[(val) => val && val.length === 3 || $t('errors.abbreviation_length')]"
       @change="onNewAbbreviation"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-
 import {Ref, ref} from 'vue';
+
+const emit = defineEmits(['change'])
 
 const props = defineProps({
   options: {
@@ -43,7 +45,6 @@ const props = defineProps({
   }
 })
 
-
 const filteredOptions =  ref(props.options)
 const selectedOption: Ref<null|Record<string, unknown>> = ref(null)
 
@@ -51,18 +52,22 @@ const isNewBank = ref(false)
 const abbreviation: Ref<string|null> = ref(null)
 
 
-// eslint-disable-next-line require-jsdoc
-function filterFn (val: string, update: any, abort: any) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+/**
+ * Filter function for suggestions
+ * @param {string} searchTerm - search term
+ * @param {Function} update - update function
+ * @returns {void}
+ */
+function filterSuggestions (searchTerm: string, update: (func: any) => any) {
   update(() => {
     filteredOptions.value = props.options.filter((option) => {
-      return (option as Record<string, string>).label.toLowerCase().indexOf(val.toLowerCase()) > -1
+      return (option as Record<string, string>).label.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
     })
   })
 }
 
 /**
- * On select, update model value
+ * When a new bank is chosen, verifies whether it's an existing or new (custom) option
  * @param {string} val - new text input
  * @returns {void}
  */
@@ -77,9 +82,9 @@ function onOptionChange(val: string) {
 
   // If bank is not in the options, user must manually enter abbreviation
   if(!hasMatchingOption){
-    console.log('User entered custom!')
     abbreviation.value = null
 
+    // Update selection
     selectedOption.value = {
       label: val,
       value: {
@@ -88,17 +93,29 @@ function onOptionChange(val: string) {
       }
     }
   }
+
+  // Emit new value
+  emitValue()
 }
 
-// eslint-disable-next-line require-jsdoc
+/**
+ * When a preexisting option is selected via dropdown click
+ * @param {Record<string, unknown>} newSelection - selected option, having 'label' and 'value'
+ * @returns {void}
+ */
 function onDropdownSelect(newSelection: Record<string, unknown>){
-  console.log('Selected via dropdown:', newSelection)
   selectedOption.value = newSelection
   abbreviation.value = (selectedOption.value.value as Record<string, string>).abbreviation
 
+  // Emit new value
+  emitValue()
 }
 
-// eslint-disable-next-line require-jsdoc
+/**
+ * Triggered when the user manually adds an abbreviation, add to selected option in uppercase
+ * @param {string} val - abbreviation input
+ * @returns {void}
+ */
 function onNewAbbreviation(val: string){
   abbreviation.value = val.toUpperCase()
 
@@ -108,8 +125,21 @@ function onNewAbbreviation(val: string){
   }
 
   (selectedOption.value.value as Record<string, string>).abbreviation = abbreviation.value
+
+  // Emit new value
+  emitValue()
 }
-// TODO emit
+
+/**
+ * Emits the currently selected value, if it's valid
+ * @returns {void}
+ */
+function emitValue(){
+  const optionValue =  selectedOption.value?.value as Record<string, string>|null
+  if(selectedOption.value && optionValue && optionValue.name && optionValue.abbreviation){
+    emit('change', selectedOption.value.value)
+  }
+}
 
 </script>
 
