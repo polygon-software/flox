@@ -10,4 +10,8 @@ export const ERRORS = {
   no_valid_association: 'No valid association found',
   no_user_found: 'Cognito Id of request could not be resolved to User',
   no_dossier_found: 'Dossier does not exist',
+  invalid_date_input: 'Start and end date must be valid in YYYY-MM-DD format',
+  invalid_zip_code: 'Invalid Zip Code',
+  missing_query_parameters: 'Required query parameters are missing',
+  missing_database_data: 'Missing required data in database',
 };
