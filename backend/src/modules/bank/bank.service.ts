@@ -131,13 +131,18 @@ export class BankService {
     // Filter suggestions: Exclude banks that are already present in bank database
     const existingBanks = await this.bankRepository.find();
     const existingBankAbbreviations: string[] = [];
+    const existingBankNames: string[] = [];
     existingBanks.forEach((existingBank) => {
       existingBankAbbreviations.push(existingBank.abbreviation);
+      existingBankNames.push(existingBank.name);
     });
 
     // Filter out existing ones
     nameSuggestions = nameSuggestions.filter((suggestion) => {
-      return !existingBankAbbreviations.includes(suggestion.abbreviation);
+      return (
+        !existingBankAbbreviations.includes(suggestion.abbreviation) &&
+        !existingBankNames.includes(suggestion.name)
+      );
     });
 
     // Add a UUID to all suggestions
