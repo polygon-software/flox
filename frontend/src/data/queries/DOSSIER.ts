@@ -171,11 +171,6 @@ export const DOSSIERS_BANK = {
         status
         non_arrangeable
         created_at
-        first_name
-        last_name
-        email
-        phone
-        birthdate
         has_amortisation
         direct_amortisation
         amortisation_amount
@@ -207,17 +202,6 @@ export const DOSSIERS_BANK = {
           number
           city
           zip_code
-          __typename
-        }
-        original_bank {
-          uuid
-          abbreviation
-          name
-          __typename
-        }
-        employee {
-          uuid
-          email
           __typename
         }
         documents{

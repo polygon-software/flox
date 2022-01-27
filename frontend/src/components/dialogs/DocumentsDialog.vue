@@ -151,10 +151,15 @@ function getFileName(key: string){
   const maxLength = 32 // Maximum name length, excluding suffix
   let shortName = key.substring(37)
 
+  // If final document, return it directly
+  if(shortName === finalDocumentName){
+    return i18n.global.t('documents.final_document') + '.pdf'
+  }
+
   // Shorten, if needed
-  if(shortName.length > maxLength && shortName != finalDocumentName){
+  if(shortName.length > maxLength){
     shortName = shortName.substring(0, maxLength) + '[...].pdf'
   }
-  return shortName === finalDocumentName ? i18n.global.t('documents.final_document') + '.pdf' : shortName
+  return shortName
 }
 </script>
