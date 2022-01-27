@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue';
+import { computed, defineProps } from 'vue';
 import ROUTES from 'src/router/routes';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -91,25 +91,30 @@ const props = defineProps({
   },
 })
 
-const categoryFilter = ref('all')
-const brandFilter = ref('all')
+const categoryFilter = computed({
+  get(): string{
+    return route.query.category as string ?? 'all';
+  },
+  async set(val: string) {
+    await router.push({ path: route.path, query: { ...route.query, category: val } })
+  }
+})
+
+const brandFilter = computed({
+  get(): string{
+    return route.query.brand as string ?? 'all';
+  },
+  async set(val: string) {
+    await router.push({ path: route.path, query: { ...route.query, brand: val } })
+  }
+})
 
 const sortBy = computed({
   get(): string{
-    const sort = route.query.sort
-    if(sort !== null){
-      return sort as string
-    }
-    return 'relevance'
+    return route.query.sort as string ?? 'relevance';
   },
   async set(val: string){
-    let sort: string | null;
-    if(val === 'relevance'){
-      sort = null;
-    } else {
-      sort = val;
-    }
-    await router.push({ path: route.path , query: { ...route.query, sort: sort } })
+    await router.push({ path: route.path , query: { ...route.query, sort: val } })
   }
 })
 
@@ -126,6 +131,6 @@ async function onBack(): Promise<void>{
  * @returns {Promise<void>} - async
  */
 async function resetFilter(): Promise<void>{
-  await router.push({ path: route.path , query: { ...route.query, sort: null, category: null, brand: null } })
+  await router.push({ path: route.path , query: { ...route.query, sort: 'relevance', category: 'all', brand: 'all' } })
 }
 </script>

@@ -76,7 +76,7 @@
               floating
               color="red"
               rounded
-              style="height: 18px; margin: 13px 10px 0 0; z-index: 10"
+              style="height: 18px; width: 18px; margin: 13px 10px 0 0; z-index: 10"
             >
               {{notificationCount}}
             </q-badge>

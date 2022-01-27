@@ -9,7 +9,17 @@
         :label="$t('products.filter_and_sort')"
         icon="sort"
         @click="openFilterPage"
-      />
+      >
+        <q-badge
+          v-if="filterCount > 0"
+          floating
+          color="red"
+          rounded
+          style="height: 18px; width: 18px; z-index: 10"
+        >
+          {{filterCount}}
+        </q-badge>
+      </q-btn>
       <q-btn
         rounded
         :label="$t('products.reset_filter')"
@@ -18,7 +28,7 @@
     </div>
     <div class="col q-pa-sm q-gutter-sm justify-center">
       <ProductCard
-        v-for="product in filteredProducts"
+        v-for="product in sortedProducts"
         :key="`${product.uuid}-${searchFilter}`"
         :product="product"
       />
@@ -45,6 +55,47 @@ const searchFilter = computed(() => {
   return route.query.search as string ?? '';
 })
 
+const categoryFilter = computed({
+  get(): string{
+    return route.query.category as string ?? 'all';
+  },
+  async set(val: string) {
+    await router.push({ path: route.path, query: { ...route.query, category: val } })
+  }
+})
+
+const brandFilter = computed({
+  get(): string{
+    return route.query.brand as string ?? 'all';
+  },
+  async set(val: string) {
+    await router.push({ path: route.path, query: { ...route.query, brand: val } })
+  }
+})
+
+const sortBy = computed({
+  get(): string{
+    return route.query.sort as string ?? 'relevance';
+  },
+  async set(val: string){
+    await router.push({ path: route.path , query: { ...route.query, sort: val } })
+  }
+})
+
+const filterCount = computed(() => {
+  let count = 0
+  if(sortBy.value !== 'relevance'){
+    count += 1
+  }
+  if(brandFilter.value !== 'all'){
+    count += 1
+  }
+  if(categoryFilter.value !== 'all'){
+    count += 1
+  }
+  return count
+})
+
 
 const realProducts = computed(() => {
   const productRecords = queryResult?.value ?? []
@@ -56,8 +107,8 @@ const realProducts = computed(() => {
     record.category as CATEGORY,
     record.value as number,
     record.currency as CURRENCY,
-    record.start as Date,
-    record.end as Date,
+    new Date(record.start as string),
+    new Date(record.end as string),
     record.pictures as Record<string, string>[],
     record.status as PRODUCT_STATUS,
     record.sponsored as boolean,
@@ -84,10 +135,32 @@ const filteredProducts = computed(() => {
   if(searchFilter.value !== ''){
     const filter = searchFilter.value.toLowerCase();
     products = products.filter((product) =>
-      product.title.toLowerCase().includes(filter) || product.description.toLowerCase().includes(filter)
+      product.title.toLowerCase().includes(filter) ||
+      product.description.toLowerCase().includes(filter) ||
+      product.tags.some(tag => tag.toLowerCase().includes(filter))
     )
   }
+  if(brandFilter.value !== 'all'){
+    products = products.filter((product) => product.brand === brandFilter.value)
+  }
+  if(categoryFilter.value !== 'all'){
+    products = products.filter((product) => product.category === categoryFilter.value)
+  }
   return products;
+})
+
+const sortedProducts = computed(() => {
+  let products = filteredProducts.value
+  if(sortBy.value === 'time_left'){
+    products = products.sort((a, b) => a.end.getTime() - b.end.getTime())
+  }
+  else if(sortBy.value === 'value_asc'){
+    products = products.sort((a, b) => a.value - b.value)
+  }
+  else if(sortBy.value === 'value_desc'){
+    products = products.sort((a, b) => b.value - a.value)
+  }
+  return products
 })
 
 /**
@@ -103,7 +176,6 @@ async function openFilterPage(): Promise<void>{
  * @returns {Promise<void>} - async
  */
 async function resetFilter(): Promise<void>{
-  await router.push({ path: route.path , query: { ...route.query, sort: null, category: null, brand: null } })
+  await router.push({ path: route.path , query: { ...route.query, sort: 'relevance', category: 'all', brand: 'all' } })
 }
-
 </script>
