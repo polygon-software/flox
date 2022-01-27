@@ -280,10 +280,10 @@ export class FileService {
       {
         relations: [
           'dossier',
+          'dossier.employee',
+          'dossier.employee.company', // TODO for future: these multi-nested relations only work if they are set to 'eager', find possible solution
           'dossier.offers',
           'dossier.offers.bank',
-          'dossier.employee',
-          'dossier.employee.company',
         ],
       },
     );

@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import EmployeeTaskTable from 'components/tables/EmployeeTaskTable.vue';
+import EmployeeTaskTable from 'components/tables/EmployeeProvisionsTable.vue';
 import CompanyInfoCard from 'components/cards/CompanyInfoCard.vue';
 
 </script>

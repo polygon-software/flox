@@ -7,34 +7,22 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $tc('account_data.provision', 2) + ' (' + computedResult.length + ')' }}
+        {{ $tc('account_data.provision', 2) + ' (' + rows.length + ')' }}
       </h6>
-
-      <!-- Search bar -->
-      <q-input
-        v-model="search"
-        :label="$t('general.search')"
-        type="search"
-        outlined
-        dense
-        class="q-mb-md"
-        @change="updateSearch"
-      >
-        <template #prepend>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-
+      <!-- Container for search & adding -->
+      <TableFilterSearch
+        @change="updateFilter"
+      />
     </div>
     <q-table
       card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
-      :rows="computedResult"
+      :rows="rows"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
-      :filter="search"
+      :filter="searchTerm"
       :filter-method="tableFilter"
       flat
     >
@@ -44,21 +32,22 @@
           style="background-color: white; cursor: pointer"
           @click="() => onRowClick(props.row)"
         >
-            <q-td key="company_name" :props="props">
-              {{ props.row.company_name }}
-            </q-td>
-            <q-td key="volume" :props="props">
-              <!-- TODO volume -->
-              600'000
-            </q-td>
-            <q-td key="prov_soi" :props="props">
-              <!-- TODO volume -->
-              40'000
-            </q-td>
-            <q-td key="prov_org" :props="props">
-              <!-- TODO volume -->
-              60'000
-            </q-td>
+          <q-td key="company_name" :props="props">
+            {{ props.row.company_name }}
+          </q-td>
+          <!-- Total mortgage amount for company -->
+          <q-td key="volume" :props="props">
+            CHF {{ companyMortgageAmount(props.row).toLocaleString() }}
+          </q-td>
+          <!-- Total Provision SOI for company -->
+          <q-td key="prov_soi" :props="props">
+           CHF {{ companyTotalProvision(props.row).toLocaleString() }}
+          </q-td>
+
+          <!-- Provision the company will receive -->
+          <q-td key="prov_org" :props="props">
+            CHF {{ Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row))).toLocaleString() }}
+          </q-td>
         </q-tr>
 
         <!-- One spacer row per row -->
@@ -66,25 +55,25 @@
           style="height: 14px"
         />
 
-        <!-- Last entry: sum row -->
-        <q-tr v-if="props.rowIndex === computedResult.length-1">
+        <!-- On last row, append sum row -->
+        <q-tr v-if="props.rowIndex === rows.length-1">
           <q-td key="company_name"/>
+          <!-- Mortgage volume total -->
           <q-td key="volume" :props="props">
-            <!-- TODO sum -->
             <strong>
-              1'200'000
+              CHF {{ totalMortgageAmount.toLocaleString() }}
             </strong>
           </q-td>
+          <!-- SOI provisions total -->
           <q-td key="prov_soi" :props="props">
-            <!-- TODO sum -->
             <strong>
-              80'000
+              CHF {{ totalProvisionAmount.toLocaleString( )}}
             </strong>
           </q-td>
+          <!-- Company provisions total -->
           <q-td key="prov_org" :props="props">
-            <!-- TODO sum -->
             <strong>
-              120'000
+              CHF {{ totalCompanyProvisionAmount.toLocaleString( )}}
             </strong>
           </q-td>
         </q-tr>
@@ -98,14 +87,22 @@ import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
 import {i18n} from 'boot/i18n';
 import {tableFilter} from 'src/helpers/filter-helpers';
-import {ALL_COMPANIES} from 'src/data/queries/COMPANY';
+import {ALL_COMPANIES_PROVISIONS} from 'src/data/queries/COMPANY';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import TableFilterSearch from 'components/menu/TableFilterSearch.vue';
+import {
+  getProvisionForDossier,
+  getProvisionFactor,
+  filterEmployeesDossiersByDates
+} from 'src/helpers/provision-helpers';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Search term
-const search = ref('')
+const searchTerm = ref('')
+const fromDate: Ref<string|null> = ref(null)
+const toDate: Ref<string|null> = ref(null)
 
 // ----- Data -----
 const columns = [
@@ -115,21 +112,81 @@ const columns = [
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
 ]
 
-// TODO: Include provisions in query once implemented on backend
-const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(ALL_COMPANIES_PROVISIONS) as Ref<Record<string, unknown>[]>
 
-const computedResult = computed(()=>{
-  return queryResult.value ?? []
+// Filters dossiers within the returned companies' employees by date
+const rows = computed(() => {
+  const companies = queryResult.value
+
+  // Filter by 'from'/'to' date if filter is set
+  if(fromDate.value || toDate.value){
+    // Format filters to ensure chosen end day is included
+    const fromDateAsDate = fromDate.value ? new Date(fromDate.value) : undefined
+    const toDateAsDate = toDate.value ? new Date(toDate.value) : undefined
+    if(toDateAsDate){
+      toDateAsDate.setHours(23)
+      toDateAsDate.setMinutes(59)
+      toDateAsDate.setSeconds(59)
+    }
+
+    const correctedCompanies: Record<string, unknown>[] = []
+
+    // For every company, get its employees
+    companies.forEach((company: Record<string, unknown>) => {
+      const employees = company.employees as Record<string, unknown>[]
+
+      // Add to employees array
+      correctedCompanies.push({
+        ...company,
+        employees: filterEmployeesDossiersByDates(employees, fromDateAsDate, toDateAsDate)
+      })
+    })
+    return correctedCompanies
+  }
+
+  // If no filters set, return directly
+  return companies ?? []
+})
+
+
+// Total mortgage amount of all companies
+const totalMortgageAmount = computed(() => {
+  let total = 0
+  rows.value.forEach((company: Record<string, unknown>) => {
+    total += companyMortgageAmount(company)
+  })
+  return total;
+})
+
+// Total provision amount of all companies
+const totalProvisionAmount = computed(() => {
+  let total = 0
+  rows.value.forEach((company: Record<string, unknown>) => {
+    total += companyTotalProvision(company)
+  })
+  return total;
+})
+
+// Total payable provision amount of all companies
+const totalCompanyProvisionAmount = computed(() => {
+  let total = 0
+  rows.value.forEach((company: Record<string, unknown>) => {
+    total += companyTotalProvision(company) * getProvisionFactor(companyMortgageAmount(company))
+  })
+  return Math.round(total);
 })
 
 /**
- * Updates the search value
- * @param {string} input - new search input
+ * Updates the filter parameters
+ * @param {Record<string, unknown>} input - Input, containing search and from/to dates
  * @returns {void}
  */
-function updateSearch(input: string){
-  search.value = input
+function updateFilter(input: Record<string, string>){
+  searchTerm.value = input.search
+  fromDate.value = input.fromDate
+  toDate.value = input.toDate
 }
+
 
 /**
  * Upon clicking a row, opens the company's dashboard view
@@ -140,6 +197,48 @@ async function onRowClick(row: Record<string, unknown>): Promise<void>{
   await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_DATA, {
     cid: row.uuid
   })
+}
+
+/**
+ * Calculates the sum of a given company's mortgage amounts
+ * @param {Record<string, unknown>} company - company's database entry
+ * @returns {number} - total mortgage amount
+ */
+function companyMortgageAmount(company: Record<string, unknown>){
+  let totalAmount = 0
+
+  const employees = company.employees as Record<string, unknown>[] ?? []
+
+  employees.forEach((employee: Record<string, unknown>) => {
+    const dossiers = employee.dossiers as Record<string, unknown>[] ?? []
+
+    dossiers.forEach((dossier) => {
+      totalAmount += (dossier as Record<string, number>).mortgage_amount
+    })
+  })
+
+  return totalAmount
+}
+
+/**
+ * Calculates the sum of a given company's provisions, NOT adjusted for the company's provision factor
+ * @param {Record<string, unknown>} company - company's database entry
+ * @returns {number} - total company provisions
+ */
+function companyTotalProvision(company: Record<string, unknown>){
+  let totalAmount = 0
+
+  const employees = company.employees as Record<string, unknown>[] ?? []
+
+  employees.forEach((employee: Record<string, unknown>) => {
+    const dossiers = employee.dossiers as Record<string, unknown>[] ?? []
+
+    dossiers.forEach((dossier) => {
+      totalAmount += getProvisionForDossier(dossier)
+    })
+  })
+
+  return totalAmount
 }
 
 </script>

@@ -81,10 +81,39 @@ export const MY_COMPANY = {
   cacheLocation: 'getMyCompany'
 }
 
+export const ALL_COMPANIES_PROVISIONS = {
+  query: gql`
+    query{
+      allCompanies{
+        uuid
+        readable_id
+        company_name
+        employees {
+          uuid
+          dossiers {
+            uuid
+            created_at
+            mortgage_amount
+            partition_amounts
+            partition_dates
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['company'],
+  cacheLocation: 'allCompanies'
+}
+
+
 const COMPANY_QUERIES = [
   ALL_COMPANIES,
   COMPANY,
-  MY_COMPANY
+  MY_COMPANY,
+  ALL_COMPANIES_PROVISIONS
 ]
 
 
