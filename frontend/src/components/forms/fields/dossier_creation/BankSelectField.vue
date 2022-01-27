@@ -2,7 +2,8 @@
   <q-select
     :model-value="model"
     v-bind="props"
-    input-debounce="0"
+    :options="filteredOptions"
+    :input-debounce="0"
     fill-input
     use-input
     hide-selected
@@ -54,6 +55,9 @@ function filterFn (val: string, update: any, abort: any) {
 function setModel(val: Record<string, string>) {
   model.value = val
 }
+
+// TODO emit
+
 </script>
 
 <style scoped>
