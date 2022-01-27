@@ -83,10 +83,8 @@ export default {
     volume: 'Volumen',
     mortgage_volume: 'Hypothekarvolumen',
     provision: 'Provision | Provisionen',
-    provision_employee: 'Provision MA',
     provision_company: 'Provision Organisation',
     provision_soi: 'Provision SOI',
-    provision_ratio: 'Anteil prov. Vermittler',
     bank: 'Bank | Banken',
   },
   messages: {

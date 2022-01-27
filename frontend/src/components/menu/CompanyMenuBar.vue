@@ -9,7 +9,7 @@
         @click="toggleDrawer"
       />
       <q-toolbar-title>
-        SOI Chamäleon
+        Strategic Opportunity Investments
       </q-toolbar-title>
 
       <q-btn-dropdown

@@ -55,6 +55,33 @@ export const MY_EMPLOYEES = {
   cacheLocation: 'getMyEmployees'
 }
 
+export const MY_EMPLOYEES_PROVISIONS = {
+  query: gql`
+    query getMyEmployees($companyUuid: String){
+      getMyEmployees(companyUuid: $companyUuid){
+        uuid
+        created_at
+        first_name
+        last_name
+        function
+        email
+        phone
+        dossiers {
+          uuid
+          created_at
+          mortgage_amount
+          partition_amounts
+          partition_dates
+          __typename
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['employee'],
+  cacheLocation: 'getMyEmployees'
+}
+
 export const MY_EMPLOYEE = {
   query: gql`
     query getMyEmployee{
@@ -82,6 +109,7 @@ const EMPLOYEE_QUERIES = [
   MY_EMPLOYEE,
   MY_EMPLOYEES,
   EMPLOYEE,
+  MY_EMPLOYEES_PROVISIONS
 ]
 
 

@@ -57,6 +57,11 @@ import endOfMonth from 'date-fns/endOfMonth'
 const emit = defineEmits(['change'])
 const today = new Date()
 
+// Ensure 'today' is always included
+today.setHours(23)
+today.setMinutes(59)
+today.setSeconds(59)
+
 
 const options = [
   {
