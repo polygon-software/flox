@@ -47,7 +47,6 @@
                   v-model="form.values.value[field.key]"
                   :initial-value="form.values.value[field.key]"
                   :options="field.key === 'bank' ? bankOptions : field.attributes.options"
-                  :suggestions="field.key === 'bank'? bankSuggestions : null"
                   :total-amount="mortgage"
                   @change="(newValue) => form.updateValue(field.key, newValue)"
                   @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
@@ -442,8 +441,6 @@ const nonArrangeable = computed(() => {
 
 // Bank list
 const bankOptions: Ref<Record<string, unknown>[]> = ref([])
-// Suggestions for adding new Bank
-const bankSuggestions: Ref<Record<string, unknown>[]> = ref([])
 
 // Value estimate high/low
 const valueEstimate: Ref<null|Record<string, number>> = ref(null)
@@ -570,6 +567,9 @@ onMounted(async () => {
   const bankSuggestionsQuery = await executeQuery(BANK_NAME_SUGGESTIONS)
   const bankSuggestionsList = bankSuggestionsQuery.data.getBankNameSuggestions as Record<string, string>[]
 
+  // Concatenate both arrays
+  bankList = bankList.concat(bankSuggestionsList)
+
   // Format so option group can use it
   bankOptions.value = bankList.map((bank: Record<string, string>) => {
     return {
@@ -578,14 +578,7 @@ onMounted(async () => {
     }
   }) as Record<string, unknown>[]
 
-  // TODO
-  // eslint-disable-next-line sonarjs/no-identical-functions
-  bankSuggestions.value = bankSuggestionsList.map((bank: Record<string, string>) => {
-    return {
-      label: bank.name,
-      value: bank
-    }
-  }) as Record<string, unknown>[]
+
 })
 
 /**

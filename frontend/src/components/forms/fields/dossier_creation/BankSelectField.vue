@@ -1,7 +1,10 @@
 <template>
-  <div class="column q-mb-md">
+  <div class="row q-mb-md">
+    <!-- TODO i18n for name and others -->
     <q-select
+      class="col-8"
       :model-value="selectedOption"
+      label="Name"
       v-bind="props"
       :options="filteredOptions"
       :input-debounce="0"
@@ -9,7 +12,8 @@
       use-input
       hide-selected
       @filter="filterFn"
-      @input-value="setModel"
+      @input-value="onOptionChange"
+      @update:model-value="onDropdownSelect"
     >
       <template #no-option>
         <q-item>
@@ -21,25 +25,14 @@
       </template>
     </q-select>
 
-
-    <q-item-label caption class="text-primary">
-      oder
-    </q-item-label>
-
-    <div class="row">
-      <q-input
-        v-model="newName"
-        class="col-8"
-        label="Name"
-      />
-      <q-input
-        :model-value="newAbbreviation"
-        :maxlength="3"
-        class="col q-ml-md"
-        label="Abkürzung"
-        @change="onNewAbbreviation"
-      />
-    </div>
+    <q-input
+      :model-value="abbreviation"
+      :maxlength="3"
+      class="col q-ml-md"
+      label="Abkürzung"
+      :disable="!isNewBank"
+      @change="onNewAbbreviation"
+    />
   </div>
 </template>
 
@@ -60,11 +53,11 @@ const props = defineProps({
 
 
 const filteredOptions =  ref(props.options)
-const selectedOption: Ref<null|Record<string, string>> = ref(null)
+const selectedOption: Ref<null|Record<string, unknown>> = ref(null)
 
+const isNewBank = ref(false)
+const abbreviation: Ref<string|null> = ref(null)
 
-const newName: Ref<string|null> = ref(null)
-const newAbbreviation: Ref<string|null> = ref(null)
 
 // eslint-disable-next-line require-jsdoc
 function filterFn (val: string, update: any, abort: any) {
@@ -81,16 +74,36 @@ function filterFn (val: string, update: any, abort: any) {
  * @param {string} val - new text input
  * @returns {void}
  */
-function setModel(val: string) {
-  selectedOption.value = val
+function onOptionChange(val: string) {
+  // Check whether val is in options
+  const hasMatchingOption = props.options.some((option) => {
+    return (option as Record<string, Record<string, string>>).value.name.toLowerCase() === val.toLowerCase()
+  })
+
+  // If not, it must be new and user must manually enter abbreviation
+  if(!hasMatchingOption){
+    console.log('User entered custom!')
+    isNewBank.value = true
+    abbreviation.value = null
+  }
+
+  // selectedOption.value = val
   // const selectedBank = (props.options.find((option) => (option as Record<string, string>).label === val)) as Record<string, Record<string, string>> ?? null
   // selectedOption.value = selectedBank.value
   // console.log('selected', selectedOption.value)
 }
 
 // eslint-disable-next-line require-jsdoc
+function onDropdownSelect(newSelection: Record<string, unknown>){
+  console.log('Selected via dropdown:', newSelection)
+  selectedOption.value = newSelection
+  abbreviation.value = (selectedOption.value.value as Record<string, string>).abbreviation
+
+}
+
+// eslint-disable-next-line require-jsdoc
 function onNewAbbreviation(val: string){
-  newAbbreviation.value = val.toUpperCase()
+  abbreviation.value = val.toUpperCase()
 }
 // TODO emit
 
