@@ -1,24 +1,46 @@
 <template>
-  <q-select
-    :model-value="model"
-    v-bind="props"
-    :options="filteredOptions"
-    :input-debounce="0"
-    fill-input
-    use-input
-    hide-selected
-    @filter="filterFn"
-    @input-value="setModel"
-  >
-    <template #no-option>
-      <q-item>
-        <q-item-section class="text-grey">
-          No results
-          <!-- TODO -->
-        </q-item-section>
-      </q-item>
-    </template>
-  </q-select>
+  <div class="column q-mb-md">
+    <q-select
+      :model-value="selectedOption"
+      v-bind="props"
+      :options="filteredOptions"
+      :input-debounce="0"
+      fill-input
+      use-input
+      hide-selected
+      @filter="filterFn"
+      @input-value="setModel"
+    >
+      <template #no-option>
+        <q-item>
+          <q-item-section class="text-grey">
+            No results
+            <!-- TODO -->
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-select>
+
+
+    <q-item-label caption class="text-primary">
+      oder
+    </q-item-label>
+
+    <div class="row">
+      <q-input
+        v-model="newName"
+        class="col-8"
+        label="Name"
+      />
+      <q-input
+        :model-value="newAbbreviation"
+        :maxlength="3"
+        class="col q-ml-md"
+        label="Abkürzung"
+        @change="onNewAbbreviation"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -29,13 +51,20 @@ const props = defineProps({
   options: {
     type: Array,
     required: true
+  },
+  suggestions: {
+    type: Array,
+    required: true
   }
 })
 
 
 const filteredOptions =  ref(props.options)
-const model: Ref<null|Record<string, string>> = ref(null)
+const selectedOption: Ref<null|Record<string, string>> = ref(null)
 
+
+const newName: Ref<string|null> = ref(null)
+const newAbbreviation: Ref<string|null> = ref(null)
 
 // eslint-disable-next-line require-jsdoc
 function filterFn (val: string, update: any, abort: any) {
@@ -49,13 +78,20 @@ function filterFn (val: string, update: any, abort: any) {
 
 /**
  * On select, update model value
- * @param {Record<string, string>} val - new selection
+ * @param {string} val - new text input
  * @returns {void}
  */
-function setModel(val: Record<string, string>) {
-  model.value = val
+function setModel(val: string) {
+  selectedOption.value = val
+  // const selectedBank = (props.options.find((option) => (option as Record<string, string>).label === val)) as Record<string, Record<string, string>> ?? null
+  // selectedOption.value = selectedBank.value
+  // console.log('selected', selectedOption.value)
 }
 
+// eslint-disable-next-line require-jsdoc
+function onNewAbbreviation(val: string){
+  newAbbreviation.value = val.toUpperCase()
+}
 // TODO emit
 
 </script>
