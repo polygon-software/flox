@@ -117,11 +117,14 @@ export class BankService {
   }
 
   /**
-   * All banks
+   * Returns a list of bank name suggestions
    * @returns {Promise<Bank[]>} - all Banks TODO dosctriogs
    */
   getBankNameSuggestions() {
-    const nameSuggestions = [
+    // Set a default UUID, because query expects one
+    const defaultUuid = 'bank-suggestion-';
+
+    const nameSuggestions: Record<string, string>[] = [
       {
         name: 'BlubberBank Sarganserland',
         abbreviation: 'BBS',
@@ -130,11 +133,18 @@ export class BankService {
         name: 'Raiffeisenbank Peperonistan',
         abbreviation: 'RBP',
       },
+      {
+        name: 'Suppenbank Zürich',
+        abbreviation: 'SBZ',
+      },
     ];
 
-    // TODO
-    console.log('return suggestions');
+    // Add a UUID to all suggestions
+    for (let i = 0; i < nameSuggestions.length; i++) {
+      nameSuggestions[i].uuid = `${defaultUuid}${i}`;
+    }
 
-    return nameSuggestions;
+    // Explicit type conversion, since we don't return all required fields for a bank
+    return nameSuggestions as unknown as Bank[];
   }
 }

@@ -264,7 +264,7 @@ import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {ErrorService} from 'src/services/ErrorService';
-import {ALL_BANK_NAMES} from 'src/data/queries/BANK';
+import {ALL_BANK_NAMES, BANK_NAME_SUGGESTIONS} from 'src/data/queries/BANK';
 import {DOSSIER_WARNING} from '../../../../shared/definitions/ENUMS';
 import axios from 'axios';
 import {dateToInputString} from 'src/helpers/date-helpers';
@@ -561,9 +561,14 @@ const enfeoffmentEstimate = computed(() => {
 
 // Upon mounting, get list of banks
 onMounted(async () => {
-  // Execute query
+  // Execute queries for existing & suggested banks
   const banksQuery = await executeQuery(ALL_BANK_NAMES)
-  const bankList = banksQuery.data.getBankList as Record<string, string>[]
+  let bankList = banksQuery.data.getBankList as Record<string, string>[]
+  const bankSuggestionsQuery = await executeQuery(BANK_NAME_SUGGESTIONS)
+  const bankSuggestions = bankSuggestionsQuery.data.getBankNameSuggestions as Record<string, string>[]
+
+  // Concatenate both lists
+  bankList = bankList.concat(bankSuggestions)
 
   // Format so option group can use it
   bankOptions.value = bankList.map((bank: Record<string, string>) => {
@@ -649,7 +654,7 @@ async function calculateValueEstimate(){
   const endDateString = dateToInputString(new Date())
 
   // Ensure user has token
-  const token = getAuthToken();
+  const token: string|null = getAuthToken();
 
   if(!token){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
