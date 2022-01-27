@@ -316,7 +316,7 @@ export default {
     customer: 'Customer',
     institute: 'Institute',
     location: 'Location',
-    mortgage_amount: 'Mortage amount CHF',
+    mortgage_amount: 'Mortgage amount CHF',
     status: 'Status',
     uploads: 'Documents',
     all_documents: 'All documents',

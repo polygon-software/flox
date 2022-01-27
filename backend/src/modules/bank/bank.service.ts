@@ -115,4 +115,26 @@ export class BankService {
 
     return bank;
   }
+
+  /**
+   * All banks
+   * @returns {Promise<Bank[]>} - all Banks TODO dosctriogs
+   */
+  getBankNameSuggestions() {
+    const nameSuggestions = [
+      {
+        name: 'BlubberBank Sarganserland',
+        abbreviation: 'BBS',
+      },
+      {
+        name: 'Raiffeisenbank Peperonistan',
+        abbreviation: 'RBP',
+      },
+    ];
+
+    // TODO
+    console.log('return suggestions');
+
+    return nameSuggestions;
+  }
 }
