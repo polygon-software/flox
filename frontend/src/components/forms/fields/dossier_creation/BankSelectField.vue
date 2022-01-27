@@ -23,14 +23,15 @@
       class="col q-ml-md"
       :label="$t('bank.abbreviation')"
       :disable="!isNewBank"
-      :rules="[(val) => val && val.length === 3 || $t('errors.abbreviation_length')]"
-      @change="onNewAbbreviation"
+      :rules="[abbreviationRule]"
+      @update:model-value="onNewAbbreviation"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import {Ref, ref} from 'vue';
+import {i18n} from 'boot/i18n';
 
 const emit = defineEmits(['change'])
 
@@ -39,10 +40,6 @@ const props = defineProps({
     type: Array,
     required: true
   },
-  suggestions: {
-    type: Array,
-    required: true
-  }
 })
 
 const filteredOptions =  ref(props.options)
@@ -51,6 +48,41 @@ const selectedOption: Ref<null|Record<string, unknown>> = ref(null)
 const isNewBank = ref(false)
 const abbreviation: Ref<string|null> = ref(null)
 
+/**
+ * Rule for  validation of custom abbreviations
+ * @param {string} val - the abbreviation
+ * @returns {boolean|string} - success (true), or an error message
+ */
+const abbreviationRule = (val: string) =>{
+  // Only apply to custom banks
+  if(!isNewBank.value){
+    return true
+  }
+
+  // Check if abbreviation is of valid length
+  if(!val || val.length !== 3){
+    // Set to null and emit, since value is invalid
+    (selectedOption.value?.value as Record<string, unknown>).abbreviation = null
+    emitValue()
+
+    return i18n.global.t('errors.abbreviation_length')
+  }
+
+  // Check if abbreviation is identical to an existing bank
+  const existingBank = props.options.find((option => {
+    return (option as Record<string, Record<string, string>>).value.abbreviation === val
+  })) as Record<string, Record<string, string>>|null
+
+  if(existingBank){
+    // Set to null and emit, since value is invalid
+    (selectedOption.value?.value as Record<string, unknown>).abbreviation = null
+    emitValue()
+
+    return i18n.global.t('errors.abbreviation_not_unique') + ' (' + existingBank.value.name + ')'
+  }
+
+  return true;
+}
 
 /**
  * Filter function for suggestions
