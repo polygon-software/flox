@@ -3,7 +3,7 @@
  */
 
 /**
- * Bank Name suggestions, to be replaced with complete Finma list
+ * Bank Name suggestions TODO replace with complete Finma list
  */
 export const BANK_SUGGESTIONS = [
   {
