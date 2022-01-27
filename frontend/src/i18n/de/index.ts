@@ -288,8 +288,6 @@ export default {
     dossier_upload_error: 'Fehler beim Hochladen des Dossiers: {error}',
     missing_data: 'Es fehlen notwendige Daten',
     file_upload_failed: 'Datei hochladen fehlgeschlagen',
-    missing_data: 'Es fehlen notwendige Daten',
-    file_upload_failed: 'Datei hochladen fehlgeschlagen',
     abbreviation_length: 'Abkürzung muss genau 3 Zeichen lang sein',
     abbreviation_not_unique: 'Abkürzung darf nicht identisch mit einer bestehenden Bank sein'
   },
