@@ -740,8 +740,8 @@ async function onSubmit() {
   const birthdate = formData.date_of_birth
 
   // Page 2
-  const bankName =  (formData.bank?.value as Record<string, string>).name as string|null
-  const bankAbbreviation =  (formData.bank?.value as Record<string, string>).abbreviation as string|null
+  const bankName =  (formData.bank as Record<string, string>).name as string|null
+  const bankAbbreviation =  (formData.bank as Record<string, string>).abbreviation as string|null
   const propertyType = formData.property_type?.value
   const ownerOccupied = formData.owner_occupied
   const purchaseDate = formData.date_of_purchase
