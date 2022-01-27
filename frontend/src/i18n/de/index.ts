@@ -413,7 +413,9 @@ export default {
     body_rejected: 'Die Applikation wurde abgelehnt'
   },
   bank: {
-    new_user: 'Neuer Benutzer'
+    new_user: 'Neuer Benutzer',
+    name: 'Name',
+    abbreviation: 'Abkürzung'
   },
   warnings: {
     retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)',

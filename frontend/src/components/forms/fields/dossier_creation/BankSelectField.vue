@@ -1,10 +1,10 @@
 <template>
   <div class="row q-mb-md">
-    <!-- TODO i18n for name and others -->
+    <!-- Bank select dropdown (both existing and suggestions) -->
     <q-select
       class="col-8"
       :model-value="selectedOption"
-      label="Name"
+      :label="$t('bank.name')"
       v-bind="props"
       :options="filteredOptions"
       :input-debounce="0"
@@ -14,22 +14,14 @@
       @filter="filterFn"
       @input-value="onOptionChange"
       @update:model-value="onDropdownSelect"
-    >
-      <template #no-option>
-        <q-item>
-          <q-item-section class="text-grey">
-            No results
-            <!-- TODO -->
-          </q-item-section>
-        </q-item>
-      </template>
-    </q-select>
+    />
 
+    <!-- Abbreviation field (pre-filled for existing, input for new -->
     <q-input
       :model-value="abbreviation"
       :maxlength="3"
       class="col q-ml-md"
-      label="Abkürzung"
+      :label="$t('bank.abbreviation')"
       :disable="!isNewBank"
       @change="onNewAbbreviation"
     />
@@ -80,17 +72,22 @@ function onOptionChange(val: string) {
     return (option as Record<string, Record<string, string>>).value.name.toLowerCase() === val.toLowerCase()
   })
 
-  // If not, it must be new and user must manually enter abbreviation
+  // Update disabled status of abbreviation field
+  isNewBank.value = !hasMatchingOption
+
+  // If bank is not in the options, user must manually enter abbreviation
   if(!hasMatchingOption){
     console.log('User entered custom!')
-    isNewBank.value = true
     abbreviation.value = null
-  }
 
-  // selectedOption.value = val
-  // const selectedBank = (props.options.find((option) => (option as Record<string, string>).label === val)) as Record<string, Record<string, string>> ?? null
-  // selectedOption.value = selectedBank.value
-  // console.log('selected', selectedOption.value)
+    selectedOption.value = {
+      label: val,
+      value: {
+        name:  val,
+        abbreviation: null,
+      }
+    }
+  }
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -104,6 +101,13 @@ function onDropdownSelect(newSelection: Record<string, unknown>){
 // eslint-disable-next-line require-jsdoc
 function onNewAbbreviation(val: string){
   abbreviation.value = val.toUpperCase()
+
+  // Update current selection with abbreviation
+  if(!selectedOption.value || !selectedOption.value.value){
+    throw new Error('illegal combo')
+  }
+
+  (selectedOption.value.value as Record<string, string>).abbreviation = abbreviation.value
 }
 // TODO emit
 

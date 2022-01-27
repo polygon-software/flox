@@ -412,7 +412,9 @@ export default {
     body_rejected: 'Application is rejected'
   },
   bank: {
-    new_user: 'New user'
+    new_user: 'New user',
+    name: 'Name',
+    abbreviation: 'Abbreviation'
   },
   warnings: {
     retirement_warning: 'The acceptability of risks is different for people over the age of 60',
