@@ -72,11 +72,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, inject, ref } from 'vue';
+import { computed, defineProps, ref } from 'vue';
 import ROUTES from 'src/router/routes';
-import { RouterService } from 'src/services/RouterService';
+import { useRoute, useRouter } from 'vue-router';
 
-const $routerService: RouterService|undefined = inject('$routerService')
+const router = useRouter()
+const route = useRoute()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -90,24 +91,41 @@ const props = defineProps({
   },
 })
 
-const sortBy = ref('relevance')
 const categoryFilter = ref('all')
 const brandFilter = ref('all')
+
+const sortBy = computed({
+  get(): string{
+    const sort = route.query.sort
+    if(sort !== null){
+      return sort as string
+    }
+    return 'relevance'
+  },
+  async set(val: string){
+    let sort: string | null;
+    if(val === 'relevance'){
+      sort = null;
+    } else {
+      sort = val;
+    }
+    await router.push({ path: route.path , query: { ...route.query, sort: sort } })
+  }
+})
 
 /**
  * Go back to product feed
  * @returns {Promise<void>} - async
  */
 async function onBack(): Promise<void>{
-  await $routerService?.routeTo(ROUTES.MAIN)
+  await router.push({ path: ROUTES.MAIN.path, query: { ...route.query  } })
 }
 
 /**
- * Open sort and filter page.
+ * Reset sorting and filter.
  * @returns {Promise<void>} - async
  */
 async function resetFilter(): Promise<void>{
-  // TODO: reset filter
-  return new Promise((resolve => resolve()))
+  await router.push({ path: route.path , query: { ...route.query, sort: null, category: null, brand: null } })
 }
 </script>

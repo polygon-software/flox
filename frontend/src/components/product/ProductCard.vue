@@ -1,6 +1,6 @@
 <template>
   <q-card
-    style="width: 400px; height: 800px; cursor: pointer"
+    style="width: 400px; cursor: pointer"
     class="q-mb-xl q-pa-sm"
     @click="openDetailView(product)"
   >

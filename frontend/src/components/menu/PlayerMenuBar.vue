@@ -5,7 +5,8 @@
           alt="Bigabig"
           :src="require('src/assets/bigabig-logo.svg')"
           style="height: 50px"
-          class="q-ma-sm"
+          class="q-ma-sm cursor-pointer"
+          @click="goHome"
       >
     </div>
 
@@ -156,6 +157,14 @@ const loggedIn = computed(() => {
 });
 
 const search = ref('')
+
+/**
+ * Go to main page.
+ * @returns {Promise<void>} - async
+ */
+async function goHome(): Promise<void> {
+  await $routerService?.routeTo(ROUTES.MAIN);
+}
 
 /**
  * Go to product feed with search term.

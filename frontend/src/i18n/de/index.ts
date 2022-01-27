@@ -202,6 +202,7 @@ export default {
     value_asc: 'Wert aufsteigend',
     value_desc: 'Wert absteigend',
     all: 'Alle',
+    reset_filter: 'Filter zurücksetzen',
   },
   settings: {
     settings: 'Einstellungen',

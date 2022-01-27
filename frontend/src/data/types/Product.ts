@@ -10,6 +10,7 @@ import {
  * A class representing a product
  */
 export class Product {
+  uuid: string;
   title: string;
   description: string;
   brand: string;
@@ -39,6 +40,7 @@ export class Product {
 
   /**
    * Constructor
+   * @param {string} uuid - uuid
    * @param {string} title - title
    * @param {string} description - description
    * @param {string} brand - brand
@@ -67,6 +69,7 @@ export class Product {
    * @param {number} likes - likes
    */
   constructor(
+    uuid: string,
     title: string,
     description: string,
     brand: string,
@@ -94,6 +97,7 @@ export class Product {
     comments: Record<string, string>[],
     likes: number
   ) {
+    this.uuid = uuid;
     this.title = title;
     this.description = description;
     this.brand = brand;

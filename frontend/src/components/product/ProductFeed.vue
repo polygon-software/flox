@@ -16,7 +16,7 @@
         @click="resetFilter"
       />
     </div>
-    <div class="row q-pa-sm q-gutter-sm justify-center">
+    <div class="col q-pa-sm q-gutter-sm justify-center">
       <ProductCard
         v-for="product in filteredProducts"
         :key="`${product.uuid}-${searchFilter}`"
@@ -29,25 +29,27 @@
 <script setup lang="ts">
 import ProductCard from 'components/product/ProductCard.vue';
 import { subscribeToQuery } from 'src/helpers/data-helpers';
-import { computed, inject, Ref } from 'vue';
+import { computed, Ref } from 'vue';
 import { ALL_PRODUCTS } from 'src/data/queries/PRODUCT';
-import { RouterService } from 'src/services/RouterService';
 import { Product } from 'src/data/types/Product';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
+import { useRoute, useRouter } from 'vue-router';
 
-const $routerService: RouterService|undefined = inject('$routerService')
+const router = useRouter()
+const route = useRoute()
 
 const queryResult = subscribeToQuery(ALL_PRODUCTS) as Ref<Record<string, unknown>[]>
 
 const searchFilter = computed(() => {
-  return $routerService?.getQuery().search as string ?? '';
+  return route.query.search as string ?? '';
 })
 
 
 const realProducts = computed(() => {
   const productRecords = queryResult?.value ?? []
   return productRecords.map((record) => new Product(
+    record.uuid as string,
     record.title as string,
     record.description as string,
     record.brand as string,
@@ -93,16 +95,15 @@ const filteredProducts = computed(() => {
  * @returns {Promise<void>} - async
  */
 async function openFilterPage(): Promise<void>{
-  await $routerService?.routeTo(ROUTES.FILTER)
+  await router.push({ path: ROUTES.FILTER.path, query: { ...route.query }});
 }
 
 /**
- * Open sort and filter page.
+ * Reset sorting and filter.
  * @returns {Promise<void>} - async
  */
 async function resetFilter(): Promise<void>{
-  // TODO: reset filter
-  return new Promise((resolve => resolve()))
+  await router.push({ path: route.path , query: { ...route.query, sort: null, category: null, brand: null } })
 }
 
 </script>
