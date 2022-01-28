@@ -65,7 +65,7 @@
             @click="()=>showDossierDocuments(_props.row)"
           />
         </q-td>
-        <q-td key="offers" @click="()=>expandOffers(_props.row.uuid)">
+        <q-td key="offers" @click="()=> expandOffers(_props.row.uuid)">
           <q-chip
             v-for="(offer, index) in _props.row.offers"
             :key="index"

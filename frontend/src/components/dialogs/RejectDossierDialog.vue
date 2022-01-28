@@ -63,7 +63,7 @@ function hide(): void {
  * @returns {void}
  */
 function onReject(): void {
-  emit('ok', rejectReason)
+  emit('ok', rejectReason.value)
   hide()
 }
 

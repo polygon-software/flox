@@ -74,6 +74,18 @@ export const MY_DOSSIERS = {
           __typename
           uuid
           status
+          documents{
+            uuid
+            key
+            __typename
+          }
+          bank {
+            uuid
+            name
+            abbreviation
+            __typename
+          }
+          status
         }
         __typename
       }
@@ -154,6 +166,12 @@ export const REJECTED_DOSSIERS = {
           __typename
           uuid
           status
+          bank {
+            uuid
+            name
+            abbreviation
+            __typename
+          }
         }
         __typename
       }
@@ -171,11 +189,6 @@ export const DOSSIERS_BANK = {
         status
         non_arrangeable
         created_at
-        first_name
-        last_name
-        email
-        phone
-        birthdate
         has_amortisation
         direct_amortisation
         amortisation_amount
@@ -209,17 +222,6 @@ export const DOSSIERS_BANK = {
           zip_code
           __typename
         }
-        original_bank {
-          uuid
-          abbreviation
-          name
-          __typename
-        }
-        employee {
-          uuid
-          email
-          __typename
-        }
         documents{
           uuid
           key
@@ -236,6 +238,10 @@ export const DOSSIERS_BANK = {
           __typename
           uuid
           status
+          bank {
+            uuid
+            __typename
+          }
           dossier {
             uuid
             __typename
