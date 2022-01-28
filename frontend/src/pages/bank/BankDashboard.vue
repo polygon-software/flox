@@ -292,8 +292,8 @@ async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OF
       }).onOk((reason: string) => {
         // TODO save reject reason
         console.log('reject with reason', reason)
-        // Change offer status TODO .then on mutation that uploads files
-        void changeOfferStatus(dossierUuid, offerUuid, status)
+        // Change offer status
+        void changeOfferStatus(dossierUuid, offerUuid, status, reason)
       })
       break;
 
@@ -308,14 +308,16 @@ async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OF
  * @param {string} dossierUuid - the dossier's UUID
  * @param {string} offerUuid - the offer's UUID
  * @param {OFFER_STATUS} status - new status
+ * @param {string} [rejectReason] - reason for rejection (if the dossier was rejected)
  * @returns {Promise<void>} - done
  */
-async function changeOfferStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS){
+async function changeOfferStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS, rejectReason?: string){
   // Change offer status
   await executeMutation(SET_OFFER_STATUS, {
     dossier_uuid: dossierUuid,
     offer_uuid: offerUuid,
-    status: status
+    status: status,
+    reject_reason: rejectReason
   }).then(() => {
     showNotification(
       $q,

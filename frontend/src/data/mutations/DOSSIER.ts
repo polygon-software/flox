@@ -190,8 +190,8 @@ export const CREATE_OFFER = {
 
 export const SET_OFFER_STATUS = {
   mutation: gql`
-    mutation updateOfferStatus($dossier_uuid: ID!, $offer_uuid: ID!, $status: OfferStatus!){
-      updateOfferStatus (updateOfferStatusInput: {dossier_uuid: $dossier_uuid, offer_uuid: $offer_uuid, status: $status}) {
+    mutation updateOfferStatus($dossier_uuid: ID!, $offer_uuid: ID!, $status: OfferStatus!, $reject_reason: String){
+      updateOfferStatus (updateOfferStatusInput: {dossier_uuid: $dossier_uuid, offer_uuid: $offer_uuid, status: $status, reject_reason: $reject_reason}) {
         uuid
         __typename
         offers{

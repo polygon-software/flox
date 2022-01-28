@@ -329,9 +329,19 @@ export class DossierService {
     }
 
     // Update offer status
-    await this.offerRepository.update(updateOfferStatusInput.offer_uuid, {
-      status: updateOfferStatusInput.status,
-    });
+    if (
+      updateOfferStatusInput.reject_reason &&
+      updateOfferStatusInput.status === OFFER_STATUS.RETRACTED
+    ) {
+      await this.offerRepository.update(updateOfferStatusInput.offer_uuid, {
+        status: updateOfferStatusInput.status,
+        reject_reason: updateOfferStatusInput.reject_reason,
+      });
+    } else {
+      await this.offerRepository.update(updateOfferStatusInput.offer_uuid, {
+        status: updateOfferStatusInput.status,
+      });
+    }
 
     // Return updated dossier
     return this.dossierRepository.findOne(updateOfferStatusInput.dossier_uuid, {

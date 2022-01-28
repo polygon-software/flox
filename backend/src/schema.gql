@@ -587,7 +587,10 @@ type Offer {
   """Last modification date"""
   last_modified_at: DateTime!
 
-  """Status of Dossier"""
+  """Reason the offer was rejected (if it was rejected)"""
+  reject_reason: String
+
+  """Status of the offer"""
   status: OfferStatus!
 
   """UUID"""
@@ -831,6 +834,7 @@ input UpdateEmployeeInput {
 input UpdateOfferStatusInput {
   dossier_uuid: ID!
   offer_uuid: ID!
+  reject_reason: String
   status: OfferStatus!
 }
 
