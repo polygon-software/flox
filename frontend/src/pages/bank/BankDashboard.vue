@@ -27,6 +27,7 @@
         separator="none"
         :filter="search"
         :filter-method="tableFilter"
+        :pagination="{sortBy: 'date', descending: true}"
         flat
       >
         <template #body="_props">
@@ -78,7 +79,7 @@
                 :label="$t('offer_status_enum.' + (ownOfferForDossier(_props.row).status))"
               >
                 <q-popup-edit
-                  v-if="!bankUuid"
+                  v-if="canEditOfferStatus(_props.row)"
                   v-slot="scope"
                   :auto-save="true"
                   :model-value="ownOfferForDossier(_props.row).status"
@@ -151,12 +152,12 @@ const myBank = subscribeToQuery(MY_BANK, bankUuid ? { bankUuid: bankUuid } : {})
 const dossiers = subscribeToQuery(DOSSIERS_BANK, bankUuid ? { bankUuid: bankUuid } : {}) as Ref<Record<string, unknown>[]>
 
 const columns = [
-  {name: 'date', label: i18n.global.t('account_data.date'), field: 'date', sortable: true, align: 'center'},
-  {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'offer_id', sortable: true, align: 'center'},
+  {name: 'date', label: i18n.global.t('account_data.date'), field: 'created_at', sortable: true, align: 'center'},
+  {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'readable_id', sortable: false, align: 'center'},
   {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: false, align: 'center'},
-  {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: true, align: 'center'},
+  {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: false, align: 'center'},
   {name: 'mortgage', label: i18n.global.t('dashboards.mortgage'), field: 'mortgage', sortable: true, align: 'center'},
-  {name: 'enfeoffment', label: i18n.global.t('dashboards.enfeoffment'), field: 'enfeoffment', sortable: true, align: 'center'},
+  {name: 'enfeoffment', label: i18n.global.t('dashboards.enfeoffment'), field: 'enfeoffment', sortable: false, align: 'center'},
   {
     name: 'affordability',
     label: i18n.global.t('dashboards.affordability'),
@@ -165,7 +166,7 @@ const columns = [
     align: 'center'
   },
   {name: 'expiration', label: i18n.global.t('dashboards.expiration'), field: 'expiration', sortable: true, align: 'center'},
-  {name: 'download', label: ' ', field: 'download', sortable: true, align: 'center'},
+  {name: 'download', label: ' ', field: 'download', sortable: false, align: 'center'},
   {name: 'offer_status', label: ' ', field: 'offer_status', sortable: true, align: 'center'},
 ]
 
@@ -365,6 +366,21 @@ function updateFilter(input: Record<string, string>){
   searchTerm.value = input.search
   fromDate.value = input.fromDate
   toDate.value = input.toDate
+}
+
+/**
+ * Determines whether the status of a given dossier's offer can be edited
+ * @param {Record<string, unknown>} dossier - the dossier
+ * @returns {boolean} - whether status can be edited
+ */
+function canEditOfferStatus(dossier: Record<string, unknown>){
+  const offer = ownOfferForDossier(dossier)
+
+  if(!offer || bankUuid){
+    return false
+  }
+
+  return offer.status !== OFFER_STATUS.RETRACTED && offer.status !== OFFER_STATUS.ACCEPTED
 }
 
 </script>
