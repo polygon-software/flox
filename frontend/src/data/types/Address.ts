@@ -1,4 +1,4 @@
-import {AddressItem} from '../../../../shared/schemas/AddressItem';
+import {AddressItem} from '../../../schemas/AddressItem';
 import Joi, {Schema} from 'joi';
 import {i18n} from 'boot/i18n';
 

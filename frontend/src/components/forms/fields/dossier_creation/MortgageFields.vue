@@ -66,7 +66,7 @@ import {computed, onMounted, ref} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
-import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING} from '../../../../../definitions/ENUMS';
 
 const emit = defineEmits(['change', 'warning', 'no-warning'])
 const $q = useQuasar()

@@ -12,4 +12,4 @@ COPY . .
 
 RUN rm -r dist
 
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "dev:ssr"]
