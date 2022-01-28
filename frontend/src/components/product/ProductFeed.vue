@@ -1,13 +1,15 @@
 <template>
-  <div class="q-pa-sm">
-    <div v-if="searchFilter !== ''" class="q-pa-sm">
+  <div class="col q-pa-md">
+    <div v-if="searchFilter !== ''" class="row">
       {{ $t('products.results_for') }} "<strong> {{ searchFilter }} </strong>"
     </div>
-    <div class="row q-gutter-sm q-pa-sm">
+    <div class="row q-mt-sm">
       <q-btn
         rounded
         :label="$t('products.filter_and_sort')"
         icon="sort"
+        class="col"
+        style="max-width: 250px;"
         @click="openFilterPage"
       >
         <q-badge
@@ -23,15 +25,21 @@
       <q-btn
         rounded
         :label="$t('products.reset_filter')"
+        class="col q-ml-md"
+        style="max-width: 200px;"
         @click="resetFilter"
       />
     </div>
-    <div class="col q-pa-sm q-gutter-sm justify-center">
-      <ProductCard
+    <div class="col q-mt-md">
+      <div
         v-for="product in sortedProducts"
         :key="`${product.uuid}-${searchFilter}`"
-        :product="product"
-      />
+        class="row q-mt-md"
+      >
+        <ProductCard
+          :product="product"
+        />
+      </div>
     </div>
   </div>
 </template>

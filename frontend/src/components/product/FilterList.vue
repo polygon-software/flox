@@ -1,6 +1,6 @@
 <template>
-  <div class="q-pa-sm">
-    <div class="row justify-between q-ma-lg no-wrap">
+  <div class="q-pa-md">
+    <div class="row justify-between no-wrap">
       <q-btn icon="arrow_back" round color="primary" @click="onBack"/>
       {{ $t('products.filter_and_sort') }}
       <q-btn icon="refresh" round color="primary" @click="resetFilter"/>

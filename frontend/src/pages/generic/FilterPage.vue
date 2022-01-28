@@ -1,6 +1,6 @@
 <template>
   <q-page class="row justify-center">
-    <div class="col-auto">
+    <div class="col" style="max-width: 600px;">
       <filter-list/>
     </div>
   </q-page>
