@@ -165,8 +165,8 @@ export const RESET_DOSSIER = {
 
 export const CREATE_OFFER = {
   mutation: gql`
-    mutation createOffer($bank_uuid: String!, $dossier_uuid: String!, $status: OfferStatus!){
-      createOffer(createOfferInput: {bank_uuid: $bank_uuid, dossier_uuid:$dossier_uuid, status: $status}){
+    mutation createOffer($bank_uuid: String!, $dossier_uuid: String!){
+      createOffer(createOfferInput: {bank_uuid: $bank_uuid, dossier_uuid:$dossier_uuid}){
         uuid
         __typename
         offers{

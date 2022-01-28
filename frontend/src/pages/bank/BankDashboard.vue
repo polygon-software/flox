@@ -240,7 +240,6 @@ async function createOfferForDossier(dossier: Record<string, unknown>){
   await executeMutation(CREATE_OFFER, {
     bank_uuid: myBankValue.uuid,
     dossier_uuid: dossier.uuid,
-    status: OFFER_STATUS.INTERESTED // TODO remove once no mock-data present anymore
   })
 }
 

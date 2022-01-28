@@ -205,7 +205,7 @@ export class DossierService {
     const newOffer = this.offerRepository.create({
       dossier,
       bank,
-      status: createOfferInput.status,
+      status: OFFER_STATUS.INTERESTED,
       documents: [],
     });
     await this.offerRepository.save(newOffer);

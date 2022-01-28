@@ -250,7 +250,6 @@ input CreateEmployeeInput {
 input CreateOfferInput {
   bank_uuid: String!
   dossier_uuid: String!
-  status: OfferStatus!
 }
 
 input CreateSoiAdminInput {
