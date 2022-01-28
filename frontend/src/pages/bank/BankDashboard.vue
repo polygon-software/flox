@@ -268,8 +268,8 @@ function showAllDocuments(dossier: Record<string, unknown>) {
  */
 async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OFFER_STATUS) {
   switch(status){
+    // Accepted: upload necessary files
     case OFFER_STATUS.ACCEPTED:
-
       $q.dialog({
       title: 'UploadOfferDialog',
       component: UploadOfferDialog,
@@ -278,20 +278,18 @@ async function onUpdateStatus(dossierUuid: string, offerUuid: string, status: OF
         offerUuid,
       }
       }).onOk(() => {
-        // Change offer status TODO .then on mutation that uploads files
+        // Change offer status
         void changeOfferStatus(dossierUuid, offerUuid, status)
       })
       break;
 
-    // If retracted: prompt Bank to enter reason
+    // Retracted: prompt Bank to enter reason
     case OFFER_STATUS.RETRACTED:
       $q.dialog({
         title: 'RejectDossierDialog',
         component: RejectDossierDialog,
         persistent: true
       }).onOk((reason: string) => {
-        // TODO save reject reason
-        console.log('reject with reason', reason)
         // Change offer status
         void changeOfferStatus(dossierUuid, offerUuid, status, reason)
       })

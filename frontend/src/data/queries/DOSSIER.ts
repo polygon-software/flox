@@ -74,6 +74,18 @@ export const MY_DOSSIERS = {
           __typename
           uuid
           status
+          documents{
+            uuid
+            key
+            __typename
+          }
+          bank {
+            uuid
+            name
+            abbreviation
+            __typename
+          }
+          status
         }
         __typename
       }
