@@ -16,7 +16,7 @@
           <q-item
             v-for="(file) in props.files"
             :key="file.uuid"
-            :style="file.key.substring(37) === finalDocumentName && uploadEnabled ? 'background: rgba(253, 216, 53, 0.4)' : ''"
+            :style="file.key.substring(37) === finalDocumentName && dossierUuid ? 'background: rgba(253, 216, 53, 0.4)' : ''"
           >
             <q-item-section>
               <div class="row flex justify-between content-center" style="height: 50px">
