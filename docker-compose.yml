@@ -4,19 +4,33 @@ services:
   main:
     container_name: soi_main
     build:
-      context: .
+      context: backend
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
       - /usr/src/app/dist
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
-    env_file:
-      - .env
     networks:
       - webnet
     depends_on:
       - database
+
+  frontend:
+    container_name: soi_frontend
+    build:
+      context: frontend
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    ports:
+      - ${FRONTEND_PORT}:${FRONTEND_PORT}
+    networks:
+      - webnet
+    depends_on:
+      - main
+
 
   database:
     container_name: soi_database
