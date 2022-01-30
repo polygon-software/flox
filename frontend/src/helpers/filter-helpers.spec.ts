@@ -12,10 +12,11 @@ describe('Filter Helpers', () => {
 
   describe('return whether a string is present in a sentence of type Date', () => {
     it('string is present in a sentence', () => {
-      expect(deepFilter(new Date("2014-01-31"), "2014-01-31")).toBe(true)
+      expect(new Date("31.01.2014")).toBeInstanceOf(Date)
+      expect(deepFilter(new Date("31.01.2014"), "31.01.2014")).toBe(true)
     });
     it('string is not present in a sentence', () => {
-      expect(deepFilter(new Date("2014-01-31"), "2015-01-31")).toBe(false)
+      expect(deepFilter(new Date("31.01.2014"), "31.01.2015")).toBe(false)
     });
   });
 
@@ -68,10 +69,10 @@ describe('Filter Helpers', () => {
 
   describe('return whether a string is present in a sentence of type Array', () => {
     it('string is present in a sentence', () => {
-      expect(deepFilter(["hallo ich bin"], "hallo")).toBe(true)
+      expect(deepFilter(['hallo', 'ich', 'bin'], "hallo")).toBe(true)
     });
     it('string is not present in a sentence', () => {
-      expect(deepFilter(["hallo ich bin"], "hello")).toBe(false)
+      expect(deepFilter(['hallo', 'ich', 'bin'], "hello")).toBe(false)
     });
   });
 
