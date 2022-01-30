@@ -3,7 +3,7 @@
  */
 
 /**
- * Covert a file to a data base64
+ * Convert a file to a data base64
  * @param {File} file - The file you want to convert.
  * @returns {Promise<string>} - the data URL for the file
  */
