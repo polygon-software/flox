@@ -1,7 +1,19 @@
-import { ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
-import { Entity } from 'typeorm';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { Column, Entity } from 'typeorm';
+import { IsPhoneNumber, IsString } from 'class-validator';
 
 @ObjectType()
-@Entity('soiemployee')
-export class SoiEmployee extends Person {}
+@Entity()
+export class SoiEmployee extends Person {
+  @Column()
+  @Field(() => String, { description: 'Phone Number' })
+  @IsString()
+  @IsPhoneNumber()
+  phone: string;
+
+  @Column()
+  @Field(() => String, { description: 'Gender' })
+  @IsString()
+  gender: string;
+}

@@ -49,7 +49,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.domicile_address') }}:</p>
-                <p class="col-7">{{ domicile_address.prettyString() }}</p>
+                <p class="col-7">{{ domicileAddress.prettyString() }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -58,7 +58,7 @@
             <q-item-section>
               <div class="row flex content-center">
                 <p class="col-5">{{ $t('account_data.correspondence_address') }}:</p>
-                <p class="col-7">{{ correspondence_address.prettyString() }}</p>
+                <p class="col-7">{{ correspondenceAddress.prettyString() }}</p>
               </div>
             </q-item-section>
           </q-item>
@@ -144,7 +144,7 @@ import {
   UPDATE_COMPANY_EMAIL
 } from 'src/data/mutations/COMPANY';
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
-import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
+import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Address} from 'src/data/types/Address';
 import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
@@ -165,13 +165,13 @@ const props = defineProps({
 const email = ref(props.company.email)
 
 // Convert addresses to actual address instances
-const domicile_address = new Address(
+const domicileAddress = new Address(
   props.company.domicile_address?.street?? undefined,
   props.company.domicile_address?.number ?? undefined,
   props.company.domicile_address?.city ?? undefined,
   props.company.domicile_address?.zip_code ?? undefined,
 )
-const correspondence_address = new Address(
+const correspondenceAddress = new Address(
   props.company.correspondence_address?.street ?? undefined,
   props.company.correspondence_address?.number ?? undefined,
   props.company.correspondence_address?.city ?? undefined,
@@ -193,8 +193,7 @@ function hide(): void {
 
 /**
  * On OK, enable document upload for the company and send e-mail
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onOk(): Promise<void> {
   // Verify all required attributes present
@@ -228,10 +227,10 @@ function onReject(): void {
   //TODO: Send rejection E-mail
   $q.dialog({
     title: 'Reject',
-    component: RejectDialog,
+    component: RejectApplicationDialog,
   }).onOk(() => {
     // Remove company application on DB
-    void executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {
+    executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {
       // Show notification
       showNotification(
         $q,
@@ -241,6 +240,8 @@ function onReject(): void {
       )
       // Hide outer popup
       hide()
+    }).catch((error)=>{
+      console.error(error) // Todo Toast
     })
   })
 }
@@ -248,8 +249,7 @@ function onReject(): void {
 /**
  * Changes a company's e-mail address to a new one
  * @param {string} newEmail - the e-mail address to change to
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onChangeEmail(newEmail: string): Promise<void>{
   await executeMutation(

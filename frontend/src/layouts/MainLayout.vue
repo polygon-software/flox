@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="bg-grey-4">
+  <q-layout view="lHh Lpr lFf" class="bg-grey-1">
     <MenuBar/>
     <q-page-container>
       <router-view />

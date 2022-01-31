@@ -1,33 +1,38 @@
 <template>
-  <q-header class="row bg-white shadow-5 justify-between">
-    <div class="row">
-      <h5 class="text-black q-pa-none q-ma-md">
-        Strategic Opportunity Investments
-      </h5>
-      <p
-          v-if="loggedIn && username"
-          class="text-grey-7"
+  <q-header class="row bg-black shadow-5 justify-between">
+    <h5 class="text-white q-pa-none q-ma-md">
+      Strategic Opportunity Investments
+    </h5>
+    <q-btn-dropdown
+        dropdown-icon="more_vert"
+        auto-close
+        no-icon-animation
+        flat
+        round
+        dense
+        style="margin-right: 4px"
+        @click="showOptions = !showOptions"
       >
-        {{ $t('authentication.loggedIn', {user: username})}}
-      </p>
-    </div>
-  <div class="row">
-    <q-btn
-        v-if="loggedIn"
-        :label="$t('authentication.logout')"
-        class="text-primary"
-        flat
-        @click="logout"
-    />
-    <q-btn
-        v-if="loggedIn"
-        :label="$t('authentication.change_password')"
-        class="text-primary"
-        flat
-        @click="changePassword"
-    />
-  </div>
+        <div class="column">
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('authentication.logout')"
+            class="text-black"
+            flat
+            no-caps
+            @click="logout"
+          />
 
+          <q-btn
+            v-if="loggedIn"
+            :label="$t('authentication.change_password')"
+            class="text-black"
+            flat
+            no-caps
+            @click="changePassword"
+          />
+        </div>
+    </q-btn-dropdown>
   </q-header>
 </template>
 
@@ -43,24 +48,18 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 
-
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const loggedIn = computed(() => {
-  // Explicit type
-  const result: boolean = $authStore.getters.getLoggedInStatus()
-  return result;
+  return $authStore.getters.getLoggedInStatus()
 })
 
-// Username does not need to be reactive, since it won't change between logins
-const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function logout(): Promise<void>{
   await $authService?.logout();

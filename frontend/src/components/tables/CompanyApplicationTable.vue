@@ -4,6 +4,8 @@
     :rows="computedResult"
     :columns="columns"
     row-key="uuid"
+    class="full-width"
+    style="max-width: 900px"
   >
     <template #body="props">
       <q-tr :props="props">
@@ -24,8 +26,10 @@
           <q-btn
             v-if="isAction(props.row)"
             color="primary"
-            :label="action_label[props.row.creation_state]?.text || ''"
-            @click="action_label[props.row.creation_state]?.action(props.row)"
+            :label="actionLabel[props.row.creation_state]?.text || ''"
+            style="border-radius: 8px"
+            no-caps
+            @click="actionLabel[props.row.creation_state]?.action(props.row)"
           />
           <div v-else>
             {{ $t('errors.documents_missing') }}
@@ -39,7 +43,6 @@
 <script setup lang="ts">
 import {computed, inject, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {ALL_COMPANIES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {Company} from 'src/data/types/Company';
 import SignUpApplicationDialog from 'components/dialogs/SignUpApplicationDialog.vue';
@@ -49,20 +52,21 @@ import {AuthenticationService} from 'src/services/AuthService';
 import {ErrorService} from 'src/services/ErrorService';
 
 import {CREATION_STATE} from 'src/data/ENUM/ENUM';
+import {ALL_COMPANIES} from 'src/data/queries/COMPANY';
 
 const $q: QVueGlobals = useQuasar()
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $errorService: ErrorService|undefined = inject('$errorService')
 // ----- Data -----
 const columns = [
-  { name: 'readable_id', label: 'ID', field: 'readable_id', sortable: false },
-  { name: 'company_name', label: i18n.global.t('account_data.company_name'), field: 'company_name', sortable: true },
-  {name: 'state', required: true, label: i18n.global.t('dashboards.state'), align: 'left', field: 'state', sortable: true},
-  {name: 'action', required: true, label: i18n.global.t('dashboards.action'), align: 'left', field: 'action', sortable: true}
+  { name: 'readable_id', label: 'ID', field: 'readable_id', align: 'center', sortable: false },
+  { name: 'company_name', label: i18n.global.t('account_data.company_name'), align: 'center', field: 'company_name', sortable: true },
+  {name: 'state', required: true, label: i18n.global.t('dashboards.state'), align: 'center', field: 'state', sortable: true},
+  {name: 'action', required: true, label: i18n.global.t('dashboards.action'), align: 'center', field: 'action', sortable: true}
 ]
 
 
-const action_label = {
+const actionLabel = {
   [`${CREATION_STATE.APPLIED}`]: {text: i18n.global.t('dashboards.enable_upload'), action: showEnableUploadDialog},
   [`${CREATION_STATE.AWAITING_DOCUMENTS}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog},
   [`${CREATION_STATE.DOCUMENTS_UPLOADED}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog},
@@ -73,7 +77,6 @@ const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<
 const computedResult = computed(()=>{
   const companies = queryResult.value ?? []
   // Filter out completed applications by hiding those that have an account
-  // TODO filter out rejected applications
   return companies.filter((company) => {
     return company.creation_state !== CREATION_STATE.DONE
   })

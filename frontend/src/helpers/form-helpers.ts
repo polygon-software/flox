@@ -36,15 +36,26 @@ export class Form {
    */
   pageValid = computed(() => {
     // If page structure does not exist, page can't be valid
-    if (this.pages.value.length === 0) return false
+    if(this.pages.value.length === 0) return false
 
     // Get keys that should exist in 'values' for this page
     const pageKeys: string[] = []
     // Offset by 1, since step starts at 1
     const currentPage: Record<string, Record<string, unknown>[]> = this.pages.value[this.step.value - 1]
 
+    // a page can either have just fields or sections with fields, therefore fields need to be defined correspondingly
+    const sections = currentPage.sectionsLHS && currentPage.sectionsRHS ? currentPage.sectionsLHS.concat(currentPage.sectionsRHS) : []
     // Fields on current page
-    const pageFields: Record<string, unknown>[] = currentPage.fields
+    if (!currentPage.fields && sections.some(section => !section.fields)) {
+      throw new Error("There aren't any fields defined.");
+    }
+    let pageFields: Record<string, unknown>[] = currentPage.fields ?? []
+    if (pageFields.length === 0){
+      pageFields = []
+      sections.forEach(section => {
+        pageFields = pageFields.concat(section.fields as Record<string, unknown>[])
+      })
+    }
     pageFields.forEach((field: Record<string, any>) => {
       pageKeys.push(field.key as string)
     })
@@ -52,11 +63,13 @@ export class Form {
     // Validate each field by its "rules" attribute
     return pageKeys.every((key) => {
       // If no value present at all, stop check
-      if (!this.values.value[key]) return false
+      if (this.values.value[key] === null || this.values.value[key] === undefined){
+        return false
+      }
 
       const field: Field = FIELDS[key.toUpperCase()]
       const rules: Array<(valueElement: any) => boolean|string> = field.attributes.rules
-      return rules.every((rule: (valueElement: any) => boolean|string) => {
+      return rules.length === 0 || rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
         return typeof rule(this.values.value[key]) === 'boolean' && rule(this.values.value[key]) === true
       })

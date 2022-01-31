@@ -57,19 +57,19 @@ function randomNumber(min: number, max: number) {
 
 /**
  * Generates a random password that is valid for AWS Cognito of at least the given length
- * @param {number} min_length - min length
+ * @param {number} minLength - min length
  * @returns {string} - a random string
  */
-export function randomPassword(min_length: number): string {
-  const chars_lower = 'abcdefghijklmnopqrstuvwxyz';
-  const chars_upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+export function randomPassword(minLength: number): string {
+  const charsLower = 'abcdefghijklmnopqrstuvwxyz';
+  const charsUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const numbers = '0123456789';
   const special = '[]{}()?-!><:;+=';
-  const required_chars = [chars_lower, chars_upper, numbers, special];
+  const requiredChars = [charsLower, charsUpper, numbers, special];
   let res = '';
-  required_chars.forEach((required_char) => {
-    for (let i = 0; i < Math.ceil(min_length / required_chars.length); i++) {
-      res += required_char[randomNumber(0, required_char.length)];
+  requiredChars.forEach((requiredChar) => {
+    for (let i = 0; i < Math.ceil(minLength / requiredChars.length); i++) {
+      res += requiredChar[randomNumber(0, requiredChar.length)];
     }
   });
   res = res

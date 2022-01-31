@@ -37,6 +37,8 @@
     "amazon-cognito-identity-js": "^5.2.3",
     "apollo-server-fastify": "^3.3.0",
     "class-validator": "^0.13.1",
+    "csv": "^6.0.5",
+    "csv-parse": "^5.0.4",
     "fastify": "^3.22.0",
     "fastify-multipart": "^5.1.0",
     "graphql": "^15.6.1",
@@ -44,6 +46,7 @@
     "graphql-voyager": "^1.0.0-rc.31",
     "joi": "^17.4.2",
     "jwks-rsa": "^2.0.5",
+    "nodemailer": "^6.7.2",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
     "pg": "^8.7.1",
@@ -51,7 +54,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "ts-morph": "^12.0.0",
-    "typeorm": "^0.2.38",
+    "typeorm": "^0.2.41",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

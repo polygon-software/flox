@@ -62,8 +62,7 @@ export class AuthenticationService {
      * Logs into the AWS authentication pool using the given data
      * @param {string} identifier - the authentication's identifier (usually E-mail or username)
      * @param {string} password - the authentication's password
-     * @async
-     * @returns {void}
+     * @returns {Promise<void>} - done
      */
     async login(identifier: string, password: string): Promise<void>{
 
@@ -140,8 +139,7 @@ export class AuthenticationService {
    * @param {string} username - the chosen username
    * @param {string} email - the authentication's e-mail address -> TODO move to attributes
    * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
-   * @async
-   * @returns {void}
+   * @returns {Promise<void>} - done
    */
   async signUp(username: string, email: string, password: string): Promise<void> {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
@@ -205,6 +203,7 @@ export class AuthenticationService {
         cognitoUser.signOut(() => {
           this.$authStore.mutations.setCognitoUser(undefined)
           this.$authStore.mutations.setUserSession(undefined)
+          localStorage.clear() // Needed to remove session,id,... tokens
           resolve()
         })
       })
@@ -368,8 +367,7 @@ export class AuthenticationService {
     /**
      * Confirm e-mail verification code
      * @param {string} code -verification code
-     * @async
-     * @returns {void}
+     * @returns {Promise<void>} - done
      */
     async verifyEmail(code: string): Promise<void>{
       return new Promise((resolve, reject)=>{

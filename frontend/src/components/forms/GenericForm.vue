@@ -1,6 +1,6 @@
 <template>
   <q-form
-    ref="form_ref"
+    ref="formRef"
     greedy
     class="q-gutter-md"
   >
@@ -27,6 +27,7 @@
           :key="field.key"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
+          :initial-value="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
           @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
         />
@@ -65,9 +66,9 @@
     >
       <q-card-section>
         <div class="row flex flex-center">
-          <b class="text-primary">
+          <strong class="text-primary">
             {{ form.pages.value[0].label }}
-          </b>
+          </strong>
         </div>
       </q-card-section>
       <q-separator class="q-ma-lg"/>
@@ -78,6 +79,7 @@
           :key="field.key"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
+          :initial-value="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
           @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
         />
@@ -112,7 +114,7 @@ import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
 const emit = defineEmits(['submit'])
 
-const form_ref: Ref<QForm|null> = ref(null)
+const formRef: Ref<QForm|null> = ref(null)
 
 const props = defineProps({
   finishLabel: {
@@ -142,13 +144,11 @@ const form: Form = new Form(props.pages as Record<string, unknown>[])
 
 /**
  * Validates and, if valid, submits the form with all entered values
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onSubmit(){
-  const is_valid = await form_ref.value?.validate()
-
-  if(is_valid){
+  const isValid = await formRef.value?.validate()
+  if(isValid){
     emit('submit', form.values.value)
   }
 }

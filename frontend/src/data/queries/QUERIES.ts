@@ -1,4 +1,10 @@
-import gql from 'graphql-tag';
+import DOSSIER_QUERIES from 'src/data/queries/DOSSIER';
+import USER_QUERIES from 'src/data/queries/USER';
+import COMPANY_QUERIES from 'src/data/queries/COMPANY';
+import EMPLOYEE_QUERIES from 'src/data/queries/EMPLOYEE';
+import FILE_QUERIES from 'src/data/queries/FILE';
+import BANK_QUERIES from 'src/data/queries/BANK';
+import SOI_EMPLOYEE_QUERIES from 'src/data/queries/SOI_EMPLOYEE';
 
 /**
  * This file contains all valid GraphQL queries. A query is structure as follows
@@ -12,150 +18,12 @@ import gql from 'graphql-tag';
  * When adding a new query, also add it to the QUERIES array at the bottom of this file.
  */
 
-export const ALL_USERS = {
-  query: gql`
-    query{
-      allUsers{
-        uuid
-        fk
-        role
-        __typename
-      }
-    }
-      `,
-  tables: ['user'],
-  cacheLocation: 'allUsers'
-}
-
-export const ALL_COMPANIES = {
-  query: gql`
-    query{
-      allCompanies{
-        uuid
-        readable_id
-        company_name
-        first_name
-        last_name
-        email
-        phone
-        language
-        uid
-        creation_state
-        domicile_address{
-          uuid
-          street
-          number
-          city
-          zip_code
-          __typename
-        }
-        correspondence_address{
-          uuid
-          street
-          number
-          city
-          zip_code
-          __typename
-        }
-        documents{
-          uuid
-          key
-          __typename
-        }
-        __typename
-      }
-    }
-        `,
-  tables: ['company'],
-  cacheLocation: 'allCompanies'
-}
-
-export const COMPANY = {
-  query: gql`
-    query company($uuid: ID, $cognito_id: ID){
-      company(uuid: $uuid, cognito_id: $cognito_id){
-        uuid
-        readable_id
-        first_name
-        last_name
-        documents{
-          uuid
-          key
-          __typename
-        }
-        __typename
-      }
-    }
-  `,
-  tables: ['company', 'documents'],
-  cacheLocation: 'company'
-}
-
-export const MY_COMPANY = {
-  query: gql`
-    query myCompany{
-      myCompany{
-        uuid
-        readable_id
-        first_name
-        last_name
-        __typename
-      }
-    }
-  `,
-  tables: ['company'],
-  cacheLocation: 'myCompany'
-}
-
-export const ALL_EMPLOYEES = {
-  query: gql`
-        query{
-            allEmployees{
-              uuid
-              first_name
-              last_name
-              function
-              email
-              phone
-              __typename
-            }
-        }
-        `,
-  tables: ['employee'],
-  cacheLocation: 'allEmployees'
-}
-
-export const MY_EMPLOYEES = {
-  query: gql`
-        query{
-            myEmployees{
-              uuid
-              first_name
-              last_name
-              function
-              email
-              phone
-              __typename
-            }
-        }
-        `,
-  tables: ['employee'],
-  cacheLocation: 'myEmployees'
-}
-
-export const PRIVATE_FILE = {
-  query: gql`
-    query getPrivateFile($uuid: ID!){
-      getPrivateFile(uuid: $uuid){
-        uuid
-        url
-        key
-        __typename
-      }
-    }
-  `,
-  tables: ['private_file'],
-  cacheLocation: 'getPrivateFile'
-}
-
-export const QUERIES = [ALL_USERS, ALL_COMPANIES, COMPANY, ALL_EMPLOYEES, MY_EMPLOYEES, PRIVATE_FILE];
+export const QUERIES = [
+  ...DOSSIER_QUERIES,
+  ...USER_QUERIES,
+  ...COMPANY_QUERIES,
+  ...EMPLOYEE_QUERIES,
+  ...FILE_QUERIES,
+  ...BANK_QUERIES,
+  ...SOI_EMPLOYEE_QUERIES
+];

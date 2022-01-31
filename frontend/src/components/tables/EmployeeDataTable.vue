@@ -1,5 +1,8 @@
 <template>
-  <div class="column">
+  <div
+    class="column full-width"
+    style="max-width: 900px"
+  >
     <div
       class="row justify-between q-ma-none"
     >
@@ -26,13 +29,14 @@
 
         <!-- Register new employee -->
         <q-btn
+          v-if="!companyUuid"
           icon="add"
           :label="$t('authentication.employee_signup')"
           dense
           color="primary"
           unelevated
           padding="8px"
-          style="height: 40px"
+          style="height: 40px; border-radius: 8px"
           @click="routeToRegisterEmployee"
         />
       </div>
@@ -46,6 +50,7 @@
       :rows-per-page-options="[10,20, 100]"
       separator="none"
       :filter="search"
+      :filter-method="tableFilter"
       flat
     >
       <template #body="props">
@@ -80,25 +85,33 @@
 <script setup lang="ts">
 import {computed, inject, ref, Ref} from 'vue';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {MY_EMPLOYEES} from 'src/data/queries/QUERIES';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {tableFilter} from 'src/helpers/filter-helpers';
+import {MY_EMPLOYEES} from 'src/data/queries/EMPLOYEE';
+import {useRoute} from 'vue-router';
+const route = useRoute()
+
 const $routerService: RouterService|undefined = inject('$routerService')
+
+// Company ID from route (if any), only relevant if going from SOIAdmin -> Company view
+const companyUuid = route.query.cid
 
 // Search term
 const search = ref('')
 
 // ----- Data -----
 const columns = [
-  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true },
-  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true },
-  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true },
-  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false },
-  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false },
+  { name: 'first_name', label: i18n.global.t('account_data.first_name'), field: 'first_name', sortable: true, align: 'center' },
+  { name: 'last_name', label: i18n.global.t('account_data.last_name'), field: 'last_name', sortable: true, align: 'center' },
+  { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true, align: 'center' },
+  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false, align: 'center' },
+  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false, align: 'center' },
 ]
 
-const queryResult = subscribeToQuery(MY_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>
+const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>
 
 const computedResult = computed(()=>{
   return queryResult.value ?? []
@@ -106,8 +119,7 @@ const computedResult = computed(()=>{
 
 /**
  * Routes to the page for registering a new employee
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function routeToRegisterEmployee(): Promise<void> {
   await $routerService?.routeTo(ROUTES.NEW_EMPLOYEE_PAGE)
@@ -116,13 +128,16 @@ async function routeToRegisterEmployee(): Promise<void> {
 /**
  * Upon clicking a row, opens the employee's dashboard view
  * @param {Record<string, unknown>} row - the row that was clicked
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void>{
-  await $routerService?.routeTo(ROUTES.MANAGEMENT_EMPLOYEE_VIEW, {
-    uuid: row.uuid
-  })
+  const params = companyUuid ? {
+    cid: companyUuid,
+    eid: row.uuid
+  } : {
+    eid: row.uuid
+  }
+  await $routerService?.routeTo(ROUTES.EMPLOYEE_DASHBOARD, params)
 }
 
 </script>

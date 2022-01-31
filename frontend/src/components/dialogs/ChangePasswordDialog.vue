@@ -53,14 +53,13 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, Ref} from 'vue';
-import {ref} from 'vue';
+import {defineEmits, Ref, ref} from 'vue';
 import {PASSWORD_REGEX} from 'src/helpers/REGEX'
-import {QDialog, useDialogPluginComponent} from 'quasar';
+import {QDialog} from 'quasar';
 
-let passwordOld = ref('')
-let password = ref('')
-let passwordRep = ref('')
+const passwordOld = ref('')
+const password = ref('')
+const passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)

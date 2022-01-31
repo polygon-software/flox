@@ -14,15 +14,26 @@ import {QUERIES} from 'src/data/queries/QUERIES';
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
- * @returns {ApolloQueryResult<Record<string, unknown[]>>} - the query's output
+ * @returns {Promise<ApolloQueryResult<Record<string, unknown[] | unknown>>>} - the query's output
  */
-async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
-
+async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[] | unknown>>> {
   const queryResult = useQuery(queryObject.query, variables ?? {})
 
+  // If we have a cached result, return immediately
+  if(queryResult.result.value){
+    return {
+      data: queryResult.result.value as Record<string, unknown[]>,
+      loading: false,
+    } as ApolloQueryResult<Record<string, unknown[]>>
+  }
+
   return new Promise(((resolve, reject) => {
-    queryResult.onResult((res)=>{resolve(res)})
-    queryResult.onError((err)=>{reject(err)})
+    queryResult.onResult((res)=>{
+      resolve(res)
+    })
+    queryResult.onError((err)=>{
+      reject(err)
+    })
   }))
 }
 
@@ -32,7 +43,7 @@ async function executeQuery(queryObject: QueryObject, variables?: Record<string,
  * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutatio
  * @returns {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
  */
-async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null> {
+async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult | null> {
   const mutation =  mutationObject.mutation
   const tables =  mutationObject.tables
   const type =  mutationObject.type
@@ -77,7 +88,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
  * @param {MutationObject} mutationObject - the mutation that triggered the change
  * @returns {void}
  */
-function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryObject[], changes: Record<string, Record<string, unknown>>, mutationObject: MutationObject){
+export function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryObject[], changes: Record<string, Record<string, unknown>>, mutationObject: MutationObject){
   affectedQueries.forEach((queryObject) => {
     if(!mutationObject.cacheLocation){
       throw new Error(i18n.global.t('errors.cache_location_missing') + JSON.stringify(mutationObject))
@@ -99,6 +110,7 @@ function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryOb
       // Case 1: CREATE (adds new object to cache)
       if (type === MutationTypes.CREATE) {
         newData = [...oldData, change]
+
       }
       // Case 2: DELETE (removes object from cache)
       else if (type === MutationTypes.DELETE) {

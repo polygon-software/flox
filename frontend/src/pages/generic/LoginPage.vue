@@ -1,0 +1,103 @@
+<template>
+  <q-page class="flex flex-center">
+    <q-card class="square q-pa-md q-ma-md">
+
+      <!-- Login Card -->
+      <q-card-section
+        class="col"
+      >
+        <LoginForm @submit="onLogin"/>
+      </q-card-section>
+
+      <!-- Signup Card -->
+      <q-card-section
+        style="text-align: center"
+      >
+          <q-btn
+            class="q-ma-md"
+            flat
+            color="primary"
+            style="width: 400px"
+            :label="$t('authentication.signup_now')"
+            @click="toSignup"
+          />
+      </q-card-section>
+    </q-card>
+  </q-page>
+</template>
+
+<script setup lang="ts">
+import LoginForm from 'components/forms/LoginForm.vue'
+import {inject} from 'vue'
+import {AuthenticationService} from 'src/services/AuthService';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
+import {RouteRecordRaw} from 'vue-router';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {ROLE} from 'src/data/ENUM/ENUM';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
+import {QVueGlobals, useQuasar} from 'quasar';
+import {MY_USER} from 'src/data/queries/USER';
+
+const $q: QVueGlobals = useQuasar()
+
+const $authService: AuthenticationService|undefined = inject('$authService')
+const $routerService: RouterService|undefined = inject('$routerService')
+
+
+/**
+ * Logs in the given authentication
+ * @param {string} username - the authentication's username
+ * @param {string} password - the authentication's password
+ * @returns {void}
+ */
+async function onLogin({username, password}: {username: string, password: string}){
+  await $authService?.login(username, password)
+
+  // TODO: handle errors in login, such as incorrect 2FA code
+
+  const queryRes = await executeQuery(MY_USER)
+  if(!queryRes || !queryRes.data){
+    await $authService?.logout()
+    // Show error prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.login_failed'),
+      undefined,
+      'negative'
+    )
+  }
+  const user = queryRes.data[MY_USER.cacheLocation] as Record<string, unknown>
+  if (!user){
+    await $authService?.logout()
+    // Show error prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.login_failed'),
+      undefined,
+      'negative'
+    )
+  }
+  const role = user.role as ROLE
+  const targetRouteMapping: Record<ROLE, RouteRecordRaw> = {
+    [ROLE.SOI_ADMIN]: ROUTES.ADMIN_DOSSIERS,
+    [ROLE.COMPANY]: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
+    [ROLE.EMPLOYEE]: ROUTES.EMPLOYEE_DASHBOARD,
+    [ROLE.SOI_EMPLOYEE]: ROUTES.APPLICATIONS,
+    [ROLE.BANK]: ROUTES.BANK_DASHBOARD,
+    [ROLE.NONE]: ROUTES.WILDCARD,
+  }
+  // Redirect to main page
+  await $routerService?.routeTo(targetRouteMapping[role])
+}
+
+/**
+ * Routes to the Signup Page
+ * @returns {Promise<void>} - done
+ */
+async function toSignup(): Promise<void>{
+  await $routerService?.routeTo(ROUTES.SIGNUP)
+}
+
+</script>

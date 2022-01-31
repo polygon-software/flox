@@ -68,19 +68,18 @@
 </template>
 <script setup lang="ts">
 import { PropType, ref, Ref} from 'vue'
-import {QDialog, QVueGlobals, useQuasar} from 'quasar';
-import RejectDialog from 'src/components/dialogs/RejectDialog.vue'
+import {QDialog, QVueGlobals, useQuasar, openURL} from 'quasar';
+import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Company} from 'src/data/types/Company';
-import {PRIVATE_FILE} from 'src/data/queries/QUERIES';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import _ from 'lodash';
 import {AuthenticationService} from 'src/services/AuthService';
-import { DELETE_COMPANY, ASSOCIATE_USER_TO_COMPANY} from 'src/data/mutations/COMPANY';
+import {ASSOCIATE_USER_TO_COMPANY, REJECT_COMPANY} from 'src/data/mutations/COMPANY';
 import {ErrorService} from 'src/services/ErrorService';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
 import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
-import {openURL} from 'quasar';
+import {PRIVATE_FILE} from 'src/data/queries/FILE';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -110,14 +109,13 @@ void getUrls()
 /**
  * Load all URLs and add to local object
  * TODO: Verify why this works only once
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function getUrls(): Promise<void>{
   const documents = _company.value.documents ?? [];
   for(const document of documents) {
     const queryResult = await executeQuery(PRIVATE_FILE, {uuid: document.uuid})
-    const file = queryResult.data.getPrivateFile as unknown as Record<string, unknown>
+    const file = queryResult.data.getPrivateFile as Record<string, string>
 
     // Add to copy
     document.url = file.url;
@@ -139,8 +137,7 @@ function hide(): void {
 
 /**
  * On OK, create account and send e-mail
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onOk(): Promise<void> {
   if([props.company.readable_id, props.company.email].some((val) => val === null || val === undefined)){
@@ -169,13 +166,12 @@ async function onOk(): Promise<void> {
  * @returns {void}
  */
 function onReject(): void {
-  //TODO: Send rejection message
   $q.dialog({
     title: 'Reject',
-    component: RejectDialog,
+    component: RejectApplicationDialog,
   }).onOk(() => {
     // Remove company application on DB
-    void executeMutation(DELETE_COMPANY, {uuid: props.company.uuid}).then(() => {
+    executeMutation(REJECT_COMPANY, {uuid: props.company.uuid}).then(() => {
       // Show notification
       showNotification(
         $q,
@@ -185,6 +181,15 @@ function onReject(): void {
       )
       // Hide outer popup
       hide()
+    }).catch((error)=>{
+      console.error(error)
+      // Show confirmation prompt
+      showNotification(
+        $q,
+        i18n.global.t('messages.rejection_failed'),
+        undefined,
+        'negative'
+      )
     })
   })
 }

@@ -1,69 +1,61 @@
-import {
-  SESClient,
-  SendEmailCommand,
-  SendEmailCommandOutput,
-} from '@aws-sdk/client-ses';
+import { SES, SendRawEmailCommand } from '@aws-sdk/client-ses';
+import * as nodemailer from 'nodemailer';
+import { AttachmentFile } from './AttachmentFile';
+import PrivateFile from '../modules/file/entities/private_file.entity';
+import axios from 'axios';
 
 /**
- * Sends an e-mail using AWS SES, using the given parameters
+ * Sends an e-mail with attachment(s) using Nodemailer
  * @param {string} from - the sender's e-mail address TODO NOTE: in sandbox mode, you can only send from verified addresses!
  * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
  * @param {string} subject - E-mail subject
  * @param {string} body - E-mail's HTML body
- * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
- * @param {string[]} [toCC] - list of CC recipient's email addresses
- * @param {string} [textBody] - optional plaintext body
- * @returns {Promise<void | SendEmailCommandOutput>} - the output from the send email
+ * @param {AttachmentFile[]} attachments - file attachments
+ * @returns {Promise<void>} - done
  */
 export async function sendEmail(
   from: string,
   to: string | string[],
   subject: string,
   body: string,
-  replyTo?: string[],
-  toCC?: string[],
-  textBody?: string,
-): Promise<void | SendEmailCommandOutput> {
+  attachments?: AttachmentFile[],
+): Promise<void> {
   // Credentials
   const credentials = {
     accessKeyId: process.env.AWS_KEY_ID ?? '',
     secretAccessKey: process.env.AWS_SECRET_KEY ?? '',
   };
 
-  // Create SES service object (seems to be unrecognized by eslint)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
-  const sesClient = new SESClient({
+  // Create SES service object
+  const sesClient = new SES({
     region: process.env.SES_REGION,
     credentials: credentials,
   });
-  // E-Mail parameters
-  const params = {
-    Destination: {
-      CcAddresses: toCC ?? [],
-      ToAddresses: Array.isArray(to) ? to : [to],
+
+  // Create Nodemailer SES transporter
+  const transporter = nodemailer.createTransport({
+    secure: true,
+    requireTLS: true,
+    secured: true,
+    SES: {
+      ses: sesClient,
+      aws: { SendRawEmailCommand },
     },
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data: body,
-        },
-        Text: {
-          Charset: 'UTF-8',
-          Data: textBody ?? body,
-        },
-      },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: subject,
-      },
-    },
-    Source: from,
-    ReplyToAddresses: replyTo ?? [],
+  });
+
+  const emailParams = {
+    from,
+    to,
+    subject,
+    html: body,
+    attachments: attachments ?? [],
   };
-  // Send actual e-mail
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-  return await sesClient.send(new SendEmailCommand(params));
+
+  try {
+    await transporter.sendMail(emailParams);
+  } catch (e) {
+    throw new Error(`Error while sending e-mail: ${e.name}: ${e.message}`);
+  }
 }
 
 /**
@@ -126,4 +118,50 @@ export async function sendCompanyRejectEmail(email: string): Promise<void> {
   const sender = process.env.EMAIL_SENDER ?? '';
 
   await sendEmail(sender, email, 'Rejected', 'Application is rejected');
+}
+
+/**
+ * Send dossier document email
+ * @param {string} readableId - readable dossier ID
+ * @param {string[]} recipients - recipients' e-mail addresses
+ * @param {PrivateFile} pdfFile - PDF attachment file; must already contain URL
+ * @returns {Promise<void>} - email sent
+ */
+export async function sendDossierDocumentEmail(
+  readableId: string,
+  recipients: string[],
+  pdfFile: PrivateFile,
+): Promise<void> {
+  const url = pdfFile.url;
+
+  if (!url) {
+    throw new Error('PDF file must contain a URL');
+  }
+
+  const sender = process.env.EMAIL_SENDER ?? '';
+
+  // TODO proper text, multilanguage support?
+  const subject = `S.O.I Dossier ${readableId}`;
+  const body = 'Please see attached file';
+  // Download attachment file from given link
+  const fileGet = await axios.get(url, {
+    responseType: 'arraybuffer',
+  });
+  if (!fileGet || !fileGet.data) {
+    throw new Error(`Could not download File from ${url}`);
+  }
+
+  // Get File as buffer
+  const arrayBuffer = fileGet.data;
+  const fileBuffer = Buffer.from(arrayBuffer);
+
+  // Build AttachmentFile
+  const attachmentFile = {
+    filename: `Dossier_${readableId}`,
+    content: fileBuffer,
+    contentType: 'application/pdf',
+  };
+
+  // Send actual e-mail
+  await sendEmail(sender, recipients, subject, body, [attachmentFile]);
 }

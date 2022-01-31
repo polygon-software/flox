@@ -52,17 +52,16 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, Ref} from 'vue';
-import {ref} from 'vue';
+import {defineEmits, Ref, ref} from 'vue';
 import {PASSWORD_REGEX} from '../../helpers/REGEX'
 import {QDialog} from 'quasar';
 
-let verificationCode = ref('')
-let password = ref('')
-let passwordRep = ref('')
+const verificationCode = ref('')
+const password = ref('')
+const passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
-let dialog: Ref<QDialog|null> = ref(null)
+const dialog: Ref<QDialog|null> = ref(null)
 
 /**
  * On submit, emit data outwards

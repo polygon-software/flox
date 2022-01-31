@@ -34,7 +34,7 @@
 
     <q-page-container class="absolute-full">
       <q-scroll-area class="fit">
-        <router-view />
+        <router-view :style="computedStyle" />
       </q-scroll-area>
     </q-page-container>
 
@@ -43,15 +43,20 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {inject, ref} from 'vue';
+import {computed, inject, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouteRecordRaw, useRoute} from 'vue-router';
 import {i18n} from 'boot/i18n';
-import ManagementMenuBar from 'components/menu/ManagementMenuBar.vue';
+import ManagementMenuBar from 'components/menu/CompanyMenuBar.vue';
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute();
 
 const showDrawer = ref(true)
+
+const computedStyle = computed(() => {
+  const isForeignDashboard = !!route.query.eid
+  return isForeignDashboard ? 'border: 10px solid rgba(244, 67, 54, 0.8); border-radius: 5px' : null
+})
 
 // Left-side menu items
 const menuItems = [
@@ -61,9 +66,9 @@ const menuItems = [
     route: ROUTES.MANAGEMENT_EMPLOYEE_DATA,
   },
   {
-    name: 'tasks',
-    label: i18n.global.t('account_data.tasks'),
-    route: ROUTES.MANAGEMENT_EMPLOYEE_TASKS,
+    name: 'dossiers',
+    label: i18n.global.tc('dashboards.dossier', 2),
+    route: ROUTES.MANAGEMENT_EMPLOYEE_PROVISIONS,
   },
 ]
 /**

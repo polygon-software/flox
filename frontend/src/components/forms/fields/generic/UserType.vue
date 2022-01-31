@@ -1,7 +1,7 @@
 <template>
   <div class="q-mb-md">
     <q-option-group
-      v-model="selected_user"
+      v-model="selectedUser"
       :options="users"
       type="radio"
       align="left"
@@ -24,9 +24,9 @@ const users = [
   {label: i18n.global.t('user_types.manager'), value: 'management-dashboard'},
   {label: i18n.global.t('user_types.employee'), value: 'employee-dashboard'},
 ]
-const selected_user = ref(users[0].value)
+const selectedUser = ref(users[0].value)
 
-watch(selected_user, (newVal) => {
+watch(selectedUser, (newVal) => {
   emitValue(newVal)
 })
 

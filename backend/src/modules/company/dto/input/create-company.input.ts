@@ -1,15 +1,14 @@
 import { Field, InputType, PartialType } from '@nestjs/graphql';
 import {
   IsBoolean,
-  IsEmail,
   IsNotEmpty,
   IsNotEmptyObject,
   IsOptional,
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
-import { CreateAddressInput } from 'src/modules/address/dto/input/create-address.input';
 import { CreatePersonInput } from '../../../person/dto/create-person.input';
+import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
 
 @InputType()
 export class CreateCompanyInput extends PartialType(CreatePersonInput) {

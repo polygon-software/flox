@@ -23,8 +23,8 @@ const sesClient = new SESClient({
  * Sends an e-mail using AWS SES, using the given parameters
  * @param {string} from - the sender's e-mail address TODO NOTE: in sandbox mode, you can only send from verified addresses!
  * @param {string|string[]} to - list of recipient's email addresses TODO NOTE: in sandbox mode, you can only send to verified addresses!
- * @param {string} subject - E-mail subject
- * @param {string} body - E-mail's HTML body
+ * @param {string} subject - e-mail subject
+ * @param {string} body - e-mail's HTML body
  * @param {string[]} [replyTo] - list of e-mail addresses to reply to (if not specified, 'from' is also the reply address)
  * @param {string[]} [toCC] - list of CC recipient's email addresses
  * @returns {void}
@@ -74,8 +74,7 @@ export async function sendEmail(
  * @param {string} email - the user's e-mail address
  * @param {string} password - the user's (generated) password
  * @param {string} type - the users type - 'emp' for employee or 'man' for company
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 export async function sendPasswordChangeEmail(email: string, password: string, type: string): Promise<void>{
   // Generate one-time password change link
@@ -96,8 +95,7 @@ export async function sendPasswordChangeEmail(email: string, password: string, t
  * Sends an e-mail for document upload
  * @param {string} email - e-mail address
  * @param {string} companyId - company UUID
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 export async function sendDocumentUploadEmail(email: string, companyId: string): Promise<void>{
   // Set up e-mail parameters

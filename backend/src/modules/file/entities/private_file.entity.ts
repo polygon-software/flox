@@ -1,9 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 import { Company } from '../../company/entities/company.entity';
-import { User } from '../../user/entities/user.entity';
+import { Dossier } from '../../dossier/entity/dossier.entity';
+import { Offer } from '../../offer/entities/offer.entity';
+import { FILE_TYPE } from '../../../ENUM/ENUMS';
 
 /**
  * Defines a private file within a restricted AWS S3 bucket.
@@ -12,7 +14,6 @@ import { User } from '../../user/entities/user.entity';
 
 @Entity()
 @ObjectType()
-@InputType('private_file')
 export class PrivateFile extends BaseEntity {
   @Field(() => String, { description: 'File owner' })
   @Column()
@@ -41,7 +42,34 @@ export class PrivateFile extends BaseEntity {
   })
   company: Company;
 
-  // ToDo Dossier will be added in next backend architecture update
+  @Field(() => Dossier, {
+    nullable: true,
+    description: 'Dossier the file belongs to',
+  })
+  @ManyToOne(() => Dossier, (dossier) => dossier.documents, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  dossier: Dossier;
+
+  @Field(() => Offer, {
+    nullable: true,
+    description: 'Offer the file belongs to',
+  })
+  @ManyToOne(() => Offer, (offer) => offer.documents, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  offer: Offer;
+
+  @Field(() => FILE_TYPE, { description: 'Type of the File' })
+  @Column({
+    type: 'enum',
+    enum: FILE_TYPE,
+    default: FILE_TYPE.NONE,
+  })
+  @IsString()
+  file_type: FILE_TYPE;
 }
 
 export default PrivateFile;
