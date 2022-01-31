@@ -1,8 +1,9 @@
 version: '3.7'
 
 services:
-  main:
-    container_name: soi_main
+  backend:
+    container_name: soi_backend
+    image: polygonsoftware/soi-backend
     build:
       context: backend
     volumes:
@@ -18,6 +19,7 @@ services:
 
   frontend:
     container_name: soi_frontend
+    image: polygonsoftware/soi-frontend
     build:
       context: frontend
     volumes:
@@ -30,7 +32,6 @@ services:
       - webnet
     depends_on:
       - main
-
 
   database:
     container_name: soi_database
