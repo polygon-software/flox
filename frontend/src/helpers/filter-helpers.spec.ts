@@ -1,10 +1,20 @@
 import {deepFilter, tableFilter} from 'src/helpers/filter-helpers';
 
 describe('Filter Helpers', () => {
+  let sentence: string;
+  let sentence_with_one_uppercase: string
+  let sentence_uppercase: string;
+  let hallo: string;
+  beforeEach( () => {
+    sentence = 'hallo ich bin';
+    sentence_with_one_uppercase = 'Hallo ich bin';
+    sentence_uppercase = 'HALLO ICH BIN'
+    hallo = 'hallo';
+  });
   describe('string is present in a given sentence', () => {
     it('should return whether a string is present in a sentence of one word', () => {
-      expect(deepFilter('hallo', 'hallo')).toBe(true)
-      expect(deepFilter('hallo', 'hello')).toBe(false)
+      expect(deepFilter(hallo, 'hallo')).toBe(true)
+      expect(deepFilter(hallo, 'hello')).toBe(false)
     });
     it('should return whether a string is present in a sentence of type Date', () => {
       expect(deepFilter(new Date(1643620313943), '31.01.2022')).toBe(true)
@@ -19,20 +29,21 @@ describe('Filter Helpers', () => {
       expect(deepFilter(6, '6.5')).toBe(false)
     });
     it('should return whether a string is present in a sentence of type String with different upper-lowercase', () => {
-      expect(deepFilter('Hallo ich bin', 'Hallo')).toBe(true)
-      expect(deepFilter('Hallo ich bin', 'hallo')).toBe(true)
-      expect(deepFilter('HALLO ICH BIN', 'hallo')).toBe(true)
-      expect(deepFilter('Hallo ich bin', 'Hello')).toBe(false)
-      expect(deepFilter('Hallo ich bin', 'hello')).toBe(false)
+      expect(deepFilter(sentence, 'hallo')).toBe(true)
+      expect(deepFilter(sentence_with_one_uppercase, 'Hallo')).toBe(true)
+      expect(deepFilter(sentence_with_one_uppercase, 'hallo')).toBe(true)
+      expect(deepFilter(sentence_uppercase, 'hallo')).toBe(true)
+      expect(deepFilter(sentence_with_one_uppercase, 'Hello')).toBe(false)
+      expect(deepFilter(sentence, 'hello')).toBe(false)
     });
     it('should return whether a string is present in a sentence with different depthLimits', () => {
-      expect(deepFilter(['hallo ich bin'], 'hallo', 5)).toBe(true)
-      expect(deepFilter(['hallo ich bin'], 'hallo', 0)).toBe(false)
+      expect(deepFilter([sentence], 'hallo', 5)).toBe(true)
+      expect(deepFilter([sentence], 'hallo', 0)).toBe(false)
     });
     it('should return whether a string is present in a sentence of type Array', () => {
-      expect(deepFilter(['hallo ich bin'], 'hallo')).toBe(true)
-      expect(deepFilter(['HALLO ICH BIN'], 'hallo')).toBe(true)
-      expect(deepFilter(['hallo ich bin'], 'hello')).toBe(false)
+      expect(deepFilter([sentence], 'hallo')).toBe(true)
+      expect(deepFilter([sentence_uppercase], 'hallo')).toBe(true)
+      expect(deepFilter([sentence], 'hello')).toBe(false)
     });
     it('should return whether a string is present in a sentence of type Object', () => {
       expect(deepFilter({ age: 40, first_name: 'Dickerson', last_name: 'Macdonald' }, 'Macdonald')).toBe(true)

@@ -12,8 +12,10 @@ describe('Form Helpers', () => {
 
   describe('forms', () => {
     let form: Form;
+    let any_name: string;
     beforeEach( () => {
       form = new Form();
+      any_name = 'Ramize Abdili';
     });
     it('should return that no form is not valid', () => {
       form.pages.value = []
@@ -49,7 +51,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['full_name'] = 'Ramize Abdili'
+      form.values.value['full_name'] = any_name
       expect(form.pageValid.value).toBe(false)
     });
     it('should return that one filled form is valid', () => {
@@ -60,9 +62,9 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['full_name'] = 'Ramize Abdili' // {first_name: 'Ramize', last_name: 'Abdili'}
+      form.values.value['full_name'] = any_name // {first_name: 'Ramize', last_name: 'Abdili'}
       expect(form.pageValid.value).not.toBeUndefined()
-      expect(form.values.value['full_name']).toStrictEqual('Ramize Abdili')
+      expect(form.values.value['full_name']).toStrictEqual(any_name)
       expect(form.pageValid.value).toBe(true)
     });
     it('should return that one filled form with wrong key is not valid', () => {
@@ -73,7 +75,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['name'] = 'Ramize Abdili'
+      form.values.value['name'] = any_name
       expect(form.pageValid.value).toBe(false)
     });
     it('should return that one filled form with invalid type is not valid', () => {
