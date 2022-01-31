@@ -2,26 +2,24 @@ import {Form} from "src/helpers/form-helpers";
 import {FIELDS} from "src/data/FIELDS";
 
 describe('Form Helpers', () => {
-  describe('function updateValue should update the value', () => {
-    it('the value should be updated', () => {
+  describe('updateValue', () => {
+    it('should update the value', () => {
       const form = new Form();
       form.updateValue("test_key", "test_value")
       expect(form.values.value).toStrictEqual({test_key: "test_value"})
     });
   });
 
-  describe('test forms on a page', () => {
+  describe('forms', () => {
     let form: Form;
     beforeEach( () => {
       form = new Form();
     });
-
-    it('no form is not valid', () => {
+    it('should return that no form is not valid', () => {
       form.pages.value = []
       expect(form.pageValid.value).toBe(false)
     });
-
-    it('two empty forms are not valid', () => {
+    it('should return that two empty forms are not valid', () => {
       const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
       form.pages.value = [
         {
@@ -37,8 +35,7 @@ describe('Form Helpers', () => {
       ]
       expect(form.pageValid.value).toBe(false)
       });
-
-    it('one empty form and one filled form, both together are not valid', () => {
+    it('should return that one empty form and one filled form, both together are not valid', () => {
       const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
       form.pages.value = [
         {
@@ -55,8 +52,7 @@ describe('Form Helpers', () => {
       form.values.value['full_name'] = {first_name: "Ramize", last_name: "Abdili"}
       expect(form.pageValid.value).toBe(false)
     });
-
-    it('one form is filled', () => {
+    it('should return that one filled form is valid', () => {
       form.pages.value = [
         {
           key: 'personal_data',
@@ -69,8 +65,7 @@ describe('Form Helpers', () => {
       expect(form.values.value["full_name"]).toStrictEqual({first_name: "Ramize", last_name: "Abdili"})
       // expect(form.pageValid.value).toBe(true)
     });
-
-    it('one filled form with wrong key is not valid', () => {
+    it('should return that one filled form with wrong key is not valid', () => {
       form.pages.value = [
         {
           key: 'personal_data',
@@ -81,8 +76,7 @@ describe('Form Helpers', () => {
       form.values.value['name'] = {first_name: "Ramize", last_name: "Abdili"}
       expect(form.pageValid.value).toBe(false)
     });
-
-    it('one filled form with invalid type is not valid', () => {
+    it('should return that one filled form with invalid type is not valid', () => {
       form.pages.value = [
         {
           key: 'personal_data',
