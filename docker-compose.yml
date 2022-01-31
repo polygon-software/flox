@@ -3,7 +3,7 @@ version: '3.7'
 services:
   backend:
     container_name: soi_backend
-    image: polygonsoftware/soi-backend
+    image: polygonsoftware/soi
     build:
       context: backend
     volumes:
