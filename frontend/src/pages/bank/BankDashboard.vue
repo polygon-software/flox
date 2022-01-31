@@ -98,7 +98,7 @@
                 color="primary"
                 text-color="white"
                 :label=" $t('dossier.offer')"
-                :disable="bankUuid"
+                :disable="bankUuid ?? false"
                 clickable
                 @click="createOfferForDossier(_props.row)"
               />
@@ -219,6 +219,7 @@ function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, un
  * @returns {Promise<void>} - done
  */
 async function createOfferForDossier(dossier: Record<string, unknown>){
+  console.log('CREATE for dossier')
   if(!myBank.value){
     return null;
   }
