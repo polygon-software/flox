@@ -64,6 +64,8 @@ export const MY_BANK = {
         uuid
         first_name
         last_name
+        name
+        abbreviation
         readable_id
         email
         __typename

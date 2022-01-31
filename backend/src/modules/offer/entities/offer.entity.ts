@@ -32,11 +32,18 @@ export class Offer extends BaseEntity {
   })
   documents: PrivateFile[];
 
-  @Field(() => OFFER_STATUS, { description: 'Status of Dossier' })
+  @Field(() => OFFER_STATUS, { description: 'Status of the offer' })
   @Column({
     type: 'enum',
     enum: OFFER_STATUS,
     default: OFFER_STATUS.INTERESTED,
   })
   status: OFFER_STATUS;
+
+  @Field(() => String, {
+    nullable: true,
+    description: 'Reason the offer was rejected (if it was rejected)',
+  })
+  @Column({ nullable: true })
+  reject_reason: string;
 }

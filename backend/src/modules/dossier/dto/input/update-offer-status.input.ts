@@ -1,5 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { OFFER_STATUS } from '../../../../ENUM/ENUMS';
 
 @InputType()
@@ -15,4 +15,8 @@ export class UpdateOfferStatusInput {
   @Field(() => OFFER_STATUS, { nullable: false })
   @IsNotEmpty()
   status: OFFER_STATUS;
+
+  @Field(() => String, { nullable: true })
+  @IsString()
+  reject_reason: string;
 }

@@ -205,7 +205,7 @@ export class DossierService {
     const newOffer = this.offerRepository.create({
       dossier,
       bank,
-      status: createOfferInput.status,
+      status: OFFER_STATUS.INTERESTED,
       documents: [],
     });
     await this.offerRepository.save(newOffer);
@@ -329,9 +329,19 @@ export class DossierService {
     }
 
     // Update offer status
-    await this.offerRepository.update(updateOfferStatusInput.offer_uuid, {
-      status: updateOfferStatusInput.status,
-    });
+    if (
+      updateOfferStatusInput.reject_reason &&
+      updateOfferStatusInput.status === OFFER_STATUS.RETRACTED
+    ) {
+      await this.offerRepository.update(updateOfferStatusInput.offer_uuid, {
+        status: updateOfferStatusInput.status,
+        reject_reason: updateOfferStatusInput.reject_reason,
+      });
+    } else {
+      await this.offerRepository.update(updateOfferStatusInput.offer_uuid, {
+        status: updateOfferStatusInput.status,
+      });
+    }
 
     // Return updated dossier
     return this.dossierRepository.findOne(updateOfferStatusInput.dossier_uuid, {
