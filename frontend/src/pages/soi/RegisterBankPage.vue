@@ -63,8 +63,8 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
   await executeMutation(
     CREATE_BANK,
     {
-      first_name: values.full_name.first_name,
-      last_name: values.full_name.last_name,
+      first_name: values.full_name.firstName,
+      last_name: values.full_name.lastName,
       name: values.company_name,
       phone: values.phone_number,
       abbreviation: values.abbreviation,
