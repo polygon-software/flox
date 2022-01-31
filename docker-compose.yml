@@ -7,9 +7,9 @@ services:
     build:
       context: backend
     volumes:
-      - backend/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/dist
+      - soi:backend/usr/src/app
+#      - soi:/usr/src/app/node_modules
+#      - soi:/usr/src/app/dist
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     networks:
@@ -23,15 +23,15 @@ services:
     build:
       context: frontend
     volumes:
-      - frontend/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/dist
+      - soi-frontend:frontend/usr/src/app
+#      - soi-frontend:/usr/src/app/node_modules
+#      - soi-frontend:/usr/src/app/dist
     ports:
       - ${FRONTEND_PORT}:${FRONTEND_PORT}
     networks:
       - webnet
     depends_on:
-      - main
+      - backend
 
   database:
     container_name: soi_database
@@ -63,4 +63,7 @@ networks:
   webnet:
 volumes:
   dbdata:
-  nocodbdata:
+#  nocodbdata:
+  soi:
+  soi-frontend:
+
