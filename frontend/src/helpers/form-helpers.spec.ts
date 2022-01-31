@@ -1,12 +1,12 @@
-import {Form} from "src/helpers/form-helpers";
-import {FIELDS} from "src/data/FIELDS";
+import {Form} from 'src/helpers/form-helpers';
+import {FIELDS} from 'src/data/FIELDS';
 
 describe('Form Helpers', () => {
   describe('updateValue', () => {
     it('should update the value', () => {
       const form = new Form();
-      form.updateValue("test_key", "test_value")
-      expect(form.values.value).toStrictEqual({test_key: "test_value"})
+      form.updateValue('test_key', 'test_value')
+      expect(form.values.value).toStrictEqual({test_key: 'test_value'})
     });
   });
 
@@ -49,7 +49,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['full_name'] = {first_name: "Ramize", last_name: "Abdili"}
+      form.values.value['full_name'] = {first_name: 'Ramize', last_name: 'Abdili'}
       expect(form.pageValid.value).toBe(false)
     });
     it('should return that one filled form is valid', () => {
@@ -60,10 +60,10 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['full_name'] = {first_name: "Ramize", last_name: "Abdili"}
+      form.values.value['full_name'] = {first_name: 'Ramize', last_name: 'Abdili'}
       expect(form.pageValid.value).not.toBeUndefined()
-      expect(form.values.value["full_name"]).toStrictEqual({first_name: "Ramize", last_name: "Abdili"})
-      // expect(form.pageValid.value).toBe(true)
+      expect(form.values.value['full_name']).toStrictEqual({first_name: 'Ramize', last_name: 'Abdili'})
+      expect(form.pageValid.value).toBe(true)
     });
     it('should return that one filled form with wrong key is not valid', () => {
       form.pages.value = [
@@ -73,7 +73,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['name'] = {first_name: "Ramize", last_name: "Abdili"}
+      form.values.value['name'] = {first_name: 'Ramize', last_name: 'Abdili'}
       expect(form.pageValid.value).toBe(false)
     });
     it('should return that one filled form with invalid type is not valid', () => {
