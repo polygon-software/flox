@@ -59,7 +59,7 @@ function recursiveFilter(target:any, term:string, depthLimit=5):boolean{
 
   if(Array.isArray(target)){
     return target.some((item)=>{
-      recursiveFilter(item, term,depthLimit-1)
+      return recursiveFilter(item, term,depthLimit-1)
     })
   }
   if(typeof target === 'object'){

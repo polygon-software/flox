@@ -12,11 +12,10 @@ describe('Filter Helpers', () => {
 
   describe('return whether a string is present in a sentence of type Date', () => {
     it('string is present in a sentence', () => {
-      expect(new Date("31.01.2014")).toBeInstanceOf(Date)
-      expect(deepFilter(new Date("31.01.2014"), "31.01.2014")).toBe(true)
+      expect(deepFilter(new Date(1643620313943), "31.01.2022")).toBe(true)
     });
     it('string is not present in a sentence', () => {
-      expect(deepFilter(new Date("31.01.2014"), "31.01.2015")).toBe(false)
+      expect(deepFilter(new Date(1643620313943), "30.01.2022")).toBe(false)
     });
   });
 
@@ -60,19 +59,19 @@ describe('Filter Helpers', () => {
 
   describe('return whether a string is present in a sentence with depthLimit 0', () => {
     it('string is present in a sentence with depthLimit 5', () => {
-      expect(deepFilter("hallo ich bin", "hallo", 5)).toBe(true)
+      expect(deepFilter(['hallo ich bin'], "hallo", 5)).toBe(true)
     });
     it('string is present in a sentence but with depthLimit 0', () => {
-      expect(deepFilter("hallo ich bin", "hallo", 0)).toBe(false)
+      expect(deepFilter(['hallo ich bin'], "hallo", 0)).toBe(false)
     });
   });
 
   describe('return whether a string is present in a sentence of type Array', () => {
     it('string is present in a sentence', () => {
-      expect(deepFilter(['hallo', 'ich', 'bin'], "hallo")).toBe(true)
+      expect(deepFilter(['hallo ich bin'], "hallo")).toBe(true)
     });
     it('string is not present in a sentence', () => {
-      expect(deepFilter(['hallo', 'ich', 'bin'], "hello")).toBe(false)
+      expect(deepFilter(['hallo ich bin'], "hello")).toBe(false)
     });
   });
 
