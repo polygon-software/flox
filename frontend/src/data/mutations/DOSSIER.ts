@@ -26,6 +26,7 @@ export const CREATE_DOSSIER = {
         purchase_price
         property_type
         market_value_estimation
+        last_modified_at
         mortgage_amount
         prosecutions
         loss_certificates
