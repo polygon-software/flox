@@ -49,7 +49,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['full_name'] = {first_name: 'Ramize', last_name: 'Abdili'}
+      form.values.value['full_name'] = 'Ramize Abdili'
       expect(form.pageValid.value).toBe(false)
     });
     it('should return that one filled form is valid', () => {
@@ -60,9 +60,9 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['full_name'] = {first_name: 'Ramize', last_name: 'Abdili'}
+      form.values.value['full_name'] = 'Ramize Abdili' // {first_name: 'Ramize', last_name: 'Abdili'}
       expect(form.pageValid.value).not.toBeUndefined()
-      expect(form.values.value['full_name']).toStrictEqual({first_name: 'Ramize', last_name: 'Abdili'})
+      expect(form.values.value['full_name']).toStrictEqual('Ramize Abdili')
       expect(form.pageValid.value).toBe(true)
     });
     it('should return that one filled form with wrong key is not valid', () => {
@@ -73,7 +73,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['name'] = {first_name: 'Ramize', last_name: 'Abdili'}
+      form.values.value['name'] = 'Ramize Abdili'
       expect(form.pageValid.value).toBe(false)
     });
     it('should return that one filled form with invalid type is not valid', () => {
@@ -84,7 +84,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.FULL_NAME,],
         },
       ]
-      form.values.value['personal_data'] = 2737827;
+      form.values.value['full_name'] = 2737827;
       expect(form.pageValid.value).toBe(false)
     });
   });
