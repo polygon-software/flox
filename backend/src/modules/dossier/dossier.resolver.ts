@@ -174,7 +174,7 @@ export class DossierResolver {
 
   /**
    * Updates the status of an offer
-   * @param {UpdateOfferStatusInput} updateOfferStatusInput - input, containing dossier & offer uuid and new status
+   * @param {UpdateOfferStatusInput} updateOfferStatusInput - input, containing dossier & offer uuid and new status (and rejection reason, if applicable)
    * @returns {Promise<Dossier>} - updated dossier
    */
   @Roles(ROLE.EMPLOYEE, ROLE.BANK, ROLE.SOI_ADMIN)
