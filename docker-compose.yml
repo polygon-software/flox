@@ -4,6 +4,12 @@ services:
   backend:
     container_name: soi_backend
     image: polygonsoftware/soi
+    x-aws-pull_credentials: arn:aws:secretsmanager:eu-central-1:923473058470:secret:dockerhubAccessToken-nAnDW9
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2048m
     build:
       context: backend
     volumes:
@@ -20,6 +26,12 @@ services:
   frontend:
     container_name: soi_frontend
     image: polygonsoftware/soi-frontend
+    x-aws-pull_credentials: arn:aws:secretsmanager:eu-central-1:923473058470:secret:dockerhubAccessToken-nAnDW9
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2048m
     build:
       context: frontend
     volumes:
