@@ -9,9 +9,13 @@ import {
   CURRENCY,
   PRODUCT_STATUS,
   ROLE,
+  USER_STATUS,
 } from '../../../shared/definitions/ENUM';
 import { Announcement } from 'src/data/types/Announcement';
 import { ALL_ANNOUNCEMENTS } from 'src/data/queries/ANNOUNCEMENTS';
+import { ALL_PARTNERS } from 'src/data/queries/USER';
+import { User } from 'src/data/types/User';
+import { Address } from 'src/data/types/Address';
 
 /**
  * Fetch notifications of current user.
@@ -55,6 +59,17 @@ export function fetchAllAnnouncements(): Ref<Announcement[]> {
     Record<string, unknown>[]
   >;
   return computed(() => mapAnnouncements(queryResult));
+}
+
+/**
+ * Fetch all partners.
+ * @returns {Ref<User[]>} - all partners
+ */
+export function fetchAllPartners(): Ref<User[]> {
+  const queryResult = subscribeToQuery(ALL_PARTNERS) as Ref<
+    Record<string, unknown>[]
+  >;
+  return computed(() => mapUsers(queryResult));
 }
 
 /**
@@ -140,5 +155,43 @@ export function mapAnnouncements(
         record.scheduled as boolean,
         record.uuid as string
       )
+  );
+}
+
+/**
+ * Map user records to user instances.
+ * @param {Ref<Record<string, unknown>[]>} queryResult - user records.
+ * @returns {User[]} - user instances.
+ */
+export function mapUsers(queryResult: Ref<Record<string, unknown>[]>): User[] {
+  const records = queryResult.value ?? [];
+  return records.map(
+    (record) =>
+      new User(
+        record.role as ROLE,
+        record.status as USER_STATUS,
+        record.uuid as string,
+        record.fullName as string,
+        record.username as string,
+        mapAddress(record.address as Record<string, unknown>),
+        record.phone as string,
+        record.email as string,
+        new Date(record.birthday as string),
+        new Date(record.disabledUntil as string)
+      )
+  );
+}
+
+/**
+ * Map address record to address instance.
+ * @param {Record<string, unknown>} record - address record.
+ * @returns {Address} - address instance.
+ */
+export function mapAddress(record: Record<string, unknown>): Address {
+  return new Address(
+    record.street as string,
+    record.number as string,
+    record.city as string,
+    record.zipCode as string
   );
 }
