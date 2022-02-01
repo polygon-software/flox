@@ -13,7 +13,7 @@ import {
 } from '../../../shared/definitions/ENUM';
 import { Announcement } from 'src/data/types/Announcement';
 import { ALL_ANNOUNCEMENTS } from 'src/data/queries/ANNOUNCEMENTS';
-import { ALL_PARTNERS } from 'src/data/queries/USER';
+import { ALL_PARTNERS, ALL_PLAYERS } from 'src/data/queries/USER';
 import { User } from 'src/data/types/User';
 import { Address } from 'src/data/types/Address';
 
@@ -63,10 +63,21 @@ export function fetchAllAnnouncements(): Ref<Announcement[]> {
 
 /**
  * Fetch all partners.
- * @returns {Ref<User[]>} - all partners
+ * @returns {Ref<User[]>} - all partners.
  */
 export function fetchAllPartners(): Ref<User[]> {
   const queryResult = subscribeToQuery(ALL_PARTNERS) as Ref<
+    Record<string, unknown>[]
+  >;
+  return computed(() => mapUsers(queryResult));
+}
+
+/**
+ * Fetch all players.
+ * @returns {Ref<User[]>} - all players.
+ */
+export function fetchAllPlayers(): Ref<User[]> {
+  const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<
     Record<string, unknown>[]
   >;
   return computed(() => mapUsers(queryResult));
@@ -176,7 +187,7 @@ export function mapUsers(queryResult: Ref<Record<string, unknown>[]>): User[] {
         mapAddress(record.address as Record<string, unknown>),
         record.phone as string,
         record.email as string,
-        new Date(record.birthday as string),
+        new Date(record.birthdate as string),
         new Date(record.disabledUntil as string)
       )
   );

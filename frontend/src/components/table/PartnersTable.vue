@@ -37,7 +37,7 @@
             {{ _props.row.phone}}
           </q-td>
           <q-td key="birthdate" :props="_props">
-            {{ _props.row.birthdate ? formatDate(new Date(_props.row.birthdate)) : '-' }}
+            {{ _props.row.birthdate ? formatDate(_props.row.birthdate) : '-' }}
           </q-td>
           <q-td key="options" :props="_props">
             <q-btn-dropdown
@@ -120,7 +120,6 @@ const columns = [
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
-// Rows, filtered by status (if applicable)
 const allPartners = fetchAllPartners();
 
 /**
