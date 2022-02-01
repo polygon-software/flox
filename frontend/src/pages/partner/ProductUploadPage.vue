@@ -1,6 +1,7 @@
 <template>
   <q-page class="flex justify-start q-pa-none q-ma-none">
     <q-form
+      v-if="product"
       greedy
       style="width: calc(100% - 32px)"
       @submit="onSubmit"
