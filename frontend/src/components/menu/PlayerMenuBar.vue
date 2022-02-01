@@ -89,7 +89,7 @@
     <q-card
       style="overflow: hidden"
     >
-      <Inbox :notifications="notifications"/>
+      <Inbox :notifications="myNotifications"/>
       <q-card-actions align="center">
         <q-btn
           :label="$t('buttons.back')"
@@ -127,11 +127,11 @@ const loggedIn = computed(() => {
   return $authStore.getters.getLoggedInStatus();
 })
 
-const notifications = fetchMyNotifications()
+const myNotifications = fetchMyNotifications()
 
 // The number of notifications
 const notificationCount = computed(() => {
-  return notifications.value.filter(notification => !notification.isRead).length;
+  return myNotifications.value.filter(notification => !notification.isRead).length;
 })
 
 /**

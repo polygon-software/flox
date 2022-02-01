@@ -8,7 +8,10 @@ import {
   CATEGORY,
   CURRENCY,
   PRODUCT_STATUS,
+  ROLE,
 } from '../../../shared/definitions/ENUM';
+import { Announcement } from 'src/data/types/Announcement';
+import { ALL_ANNOUNCEMENTS } from 'src/data/queries/ANNOUNCEMENTS';
 
 /**
  * Fetch notifications of current user.
@@ -20,10 +23,9 @@ export function fetchMyNotifications(): Ref<Notification[]> {
   >;
 
   return computed(() => {
-    const myNotifications: Notification[] = [];
     const records = queryResult.value ?? [];
-    records.forEach((record) =>
-      myNotifications.push(
+    return records.map(
+      (record) =>
         new Notification(
           record.title as string,
           new Date(record.received as string),
@@ -31,9 +33,7 @@ export function fetchMyNotifications(): Ref<Notification[]> {
           record.isRead as boolean,
           record.uuid as string
         )
-      )
     );
-    return myNotifications;
   });
 }
 
@@ -78,6 +78,31 @@ export function fetchAllProducts(): Ref<Product[]> {
           record.tags as string[],
           record.comments as Record<string, string>[],
           record.likes as number
+        )
+    );
+  });
+}
+
+/**
+ * Fetch all announcements.
+ * @returns {Ref<Announcement[]>} - all announcements
+ */
+export function fetchAllAnnouncements(): Ref<Announcement[]> {
+  const queryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<
+    Record<string, unknown>[]
+  >;
+
+  return computed(() => {
+    const records = queryResult.value ?? [];
+    return records.map(
+      (record) =>
+        new Announcement(
+          record.title as string,
+          new Date(record.date as string),
+          record.content as string,
+          record.userRoles as ROLE[],
+          record.scheduled as boolean,
+          record.uuid as string
         )
     );
   });
