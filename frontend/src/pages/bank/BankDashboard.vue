@@ -220,7 +220,6 @@ function ownOfferForDossier(dossier: Record<string, unknown>): Record<string, un
  * @returns {Promise<void>} - done
  */
 async function createOfferForDossier(dossier: Record<string, unknown>){
-  console.log('CREATE for dossier')
   if(!myBank.value || bankUuid){
     return null;
   }
