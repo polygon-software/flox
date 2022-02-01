@@ -1,5 +1,5 @@
 # PREREQUISITE: An ECS context, named 'soicontext' with valid credentials
-
+cd ..
 docker context use default
 
 # Build & push backend
