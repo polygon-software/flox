@@ -127,7 +127,7 @@ const loggedIn = computed(() => {
   return $authStore.getters.getLoggedInStatus();
 })
 
-const notifications = computed(() => fetchMyNotifications())
+const notifications = fetchMyNotifications()
 
 // The number of notifications
 const notificationCount = computed(() => {
