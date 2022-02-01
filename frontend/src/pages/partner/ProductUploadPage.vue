@@ -122,7 +122,7 @@
             <!-- Value & currency -->
             <div class="row flex justify-between">
               <q-input
-                v-model="product.value"
+                v-model.number="product.value"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.value')"
@@ -146,7 +146,7 @@
             <!-- Min/Max bet -->
             <div class="row flex justify-between">
               <q-input
-                v-model="product.minBet"
+                v-model.number="product.minBet"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.min_bet')"
@@ -158,7 +158,7 @@
               />
 
               <q-input
-                v-model="product.maxBet"
+                v-model.number="product.maxBet"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.max_bet')"
@@ -247,7 +247,7 @@
               :rules="[ (val) => !val || val === '' || IS_URL(val)]"
             />
             <q-input
-              v-model="product.directBuyLinkMaxClicks"
+              v-model.number="product.directBuyLinkMaxClicks"
               class="q-ma-sm col-2"
               :label="$t('products.max_clicks')"
               type="number"
@@ -256,7 +256,7 @@
               :rules="[ (val) => !val || val === ''|| val === 0 || IS_LARGER_THAN(val, 0)]"
             />
             <q-input
-              v-model="product.directBuyLinkMaxCost"
+              v-model.number="product.directBuyLinkMaxCost"
               class="q-ma-sm col-2"
               :label="$t('products.max_cost')"
               type="number"
@@ -279,7 +279,7 @@
               :rules="[ (val) => !val || val === '' || IS_URL(val)]"
             />
             <q-input
-              v-model="product.brandLinkMaxClicks"
+              v-model.number="product.brandLinkMaxClicks"
               class="q-ma-sm col-2"
               :label="$t('products.max_clicks')"
               type="number"
@@ -288,7 +288,7 @@
               :rules="[ (val) => !val || val === '' || val === 0 || IS_LARGER_THAN(val, 0)]"
             />
             <q-input
-              v-model="product.brandLinkMaxCost"
+              v-model.number="product.brandLinkMaxCost"
               class="q-ma-sm col-2"
               :label="$t('products.max_cost')"
               type="number"
@@ -321,7 +321,7 @@
         <q-btn
           class="q-ma-md text-black"
           color="primary"
-          :label="status === PRODUCT_STATUS.VALID ? $t('buttons.submit') : $t('buttons.save_draft')"
+          :label="product.status === PRODUCT_STATUS.VALID ? $t('buttons.submit') : $t('buttons.save_draft')"
           type="submit"
           rounded
           no-caps
@@ -365,7 +365,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
 
 const productId = route.query.id as string
-const product = computed(() => productId ? fetchProduct(productId).value : new Product({}))
+const product = productId ? fetchProduct(productId) : ref(new Product({}))
 
 const startDate = computed({
   get: () => product.value?.start ? formatDate(product.value.start) : '',
@@ -396,28 +396,32 @@ const currencies: CURRENCY[] = Object.values(CURRENCY).filter((item) => {
 
 const sponsoredOptions = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
-// Check if all required fields have been filled. If yes, set the product status to valid
-watch(product, (val) => {
-  if(val !== null) {
-    if (
-      [
-        val.title,
-        val.description,
-        val.brand,
-        val.value,
-        val.currency,
-        val.start,
-        val.end,
-        val.category,
-        val.minBet,
-        val.maxBet,
-        val.sponsored,
-      ]
+const status = computed(() => {
+  if (
+    [
+      product.value?.title,
+      product.value?.description,
+      product.value?.brand,
+      product.value?.value,
+      product.value?.currency,
+      product.value?.start,
+      product.value?.end,
+      product.value?.category,
+      product.value?.minBet,
+      product.value?.maxBet,
+      product.value?.sponsored,
+    ]
       .some((value) => value === null || (typeof value === 'string' && value === '')))
-    {
-      val.status = PRODUCT_STATUS.DRAFT
-    }
-    val.status = PRODUCT_STATUS.VALID
+  {
+    return PRODUCT_STATUS.DRAFT
+  }
+  return PRODUCT_STATUS.VALID
+})
+
+// Check if all required fields have been filled. If yes, set the product status to valid
+watch(status, (val) => {
+  if(product.value) {
+    product.value.status = val
   }
 })
 
@@ -466,20 +470,41 @@ function onPictureChange(newPictures: Ref<File>[]){
  * @returns {void}
  */
 async function onSubmit(){
-  // Parameters for creating/updating
-  const base64Pictures: Array<string|ArrayBuffer|null> = []
-  for (const picture of pictures.value) {
-    if (picture.value) {
-      const base64String = await toBase64(picture.value)
-      base64Pictures.push(base64String)
+  if(product.value) {
+    // Parameters for creating/updating
+    const base64Pictures: Array<string | ArrayBuffer | null> = []
+    for (const picture of pictures.value) {
+      if (picture.value) {
+        const base64String = await toBase64(picture.value)
+        base64Pictures.push(base64String)
+      }
     }
-  }
 
-  const params = { ...product }
+    const params = {
+      title: product.value.title,
+      description: product.value.description,
+      brand: product.value.brand,
+      category: product.value.category,
+      start: product.value.start,
+      end: product.value.end,
+      value: product.value.value,
+      currency: product.value.currency,
+      minBet: product.value.minBet,
+      maxBet: product.value.maxBet,
+      tags: product.value.tags,
+      sponsored: product.value.sponsored,
+      directBuyLink: product.value.directBuyLink,
+      directBuyLinkMaxClicks: product.value.directBuyLinkMaxClicks,
+      directBuyLinkMaxCost: product.value.directBuyLinkMaxCost,
+      brandLink: product.value.brandLink,
+      brandLinkMaxClicks: product.value.brandLinkMaxClicks,
+      brandLinkMaxCost: product.value.brandLinkMaxCost,
+      status: product.value.status,
+    }
 
     let mutationResult
 
-    if(productId){
+    if (productId) {
       // Case 1: EDIT
       mutationResult = await executeMutation(
         UPDATE_PRODUCT,
@@ -502,12 +527,13 @@ async function onSubmit(){
       )
     }
 
-    if(!mutationResult){
+    if (!mutationResult) {
       throw new Error('Product creation/update failed')
     }
 
-  // Push to success page
-  await $routerService?.routeTo(ROUTES.MY_PRODUCTS)
+    // Push to success page
+    await $routerService?.routeTo(ROUTES.MY_PRODUCTS)
+  }
 }
 
 /**
