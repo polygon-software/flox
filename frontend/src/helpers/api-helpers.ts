@@ -84,18 +84,17 @@ export function fetchAllPlayers(): Ref<User[]> {
 }
 
 /**
- * Fetch product initially does not update the product.
+ * Fetch product.
  * @param {string} productId - product UUID.
- * @returns {Product} - initial product.
+ * @returns {Ref<Product | null>} - product.
  */
-export function fetchProductInitially(productId: string): Product {
-  const queryResult = subscribeToQuery(PRODUCT, { uuid: productId }) as Ref<
-    Record<string, unknown>
-  >;
-  console.log('queryResult', queryResult);
-  const val: Record<string, unknown> = queryResult.value;
-  console.log('val', val);
-  return mapProduct(queryResult.value);
+export function fetchProduct(productId: string): Ref<Product | null> {
+  const queryResult = subscribeToQuery(PRODUCT, {
+    uuid: productId,
+  }) as Ref<Record<string, unknown> | null>;
+  return computed(() =>
+    queryResult.value ? mapProduct(queryResult.value) : null
+  );
 }
 
 /**
@@ -197,33 +196,33 @@ export function mapAddress(record: Record<string, unknown>): Address {
  * @returns {Product} - product instance.
  */
 export function mapProduct(record: Record<string, unknown>): Product {
-  return new Product(
-    record.uuid as string,
-    record.title as string,
-    record.description as string,
-    record.brand as string,
-    record.category as CATEGORY,
-    record.value as number,
-    record.currency as CURRENCY,
-    new Date(record.start as string),
-    new Date(record.end as string),
-    record.pictures as Record<string, string>[],
-    record.status as PRODUCT_STATUS,
-    record.sponsored as boolean,
-    record.directBuyLink as string,
-    record.directBuyLinkCLicks as number,
-    record.directBuyLinkMaxClicks as number,
-    record.directBuyLinkCost as number,
-    record.directBuyLinkMaxCost as number,
-    record.brandLink as string,
-    record.brandLinkClicks as number,
-    record.brandLinkMaxClicks as number,
-    record.brandLinkCost as number,
-    record.brandLinkMaxCost as number,
-    record.minBet as number,
-    record.maxBet as number,
-    record.tags as string[],
-    record.comments as Record<string, string>[],
-    record.likes as number
-  );
+  return new Product({
+    uuid: record.uuid as string,
+    title: record.title as string,
+    description: record.description as string,
+    brand: record.brand as string,
+    category: record.category as CATEGORY,
+    value: record.value as number,
+    currency: record.currency as CURRENCY,
+    start: new Date(record.start as string),
+    end: new Date(record.end as string),
+    pictures: record.pictures as Record<string, string>[],
+    status: record.status as PRODUCT_STATUS,
+    sponsored: record.sponsored as boolean,
+    directBuyLink: record.directBuyLink as string,
+    directBuyLinkCLicks: record.directBuyLinkCLicks as number,
+    directBuyLinkMaxClicks: record.directBuyLinkMaxClicks as number,
+    directBuyLinkCost: record.directBuyLinkCost as number,
+    directBuyLinkMaxCost: record.directBuyLinkMaxCost as number,
+    brandLink: record.brandLink as string,
+    brandLinkClicks: record.brandLinkClicks as number,
+    brandLinkMaxClicks: record.brandLinkMaxClicks as number,
+    brandLinkCost: record.brandLinkCost as number,
+    brandLinkMaxCost: record.brandLinkMaxCost as number,
+    minBet: record.minBet as number,
+    maxBet: record.maxBet as number,
+    tags: record.tags as string[],
+    comments: record.comments as Record<string, string>[],
+    likes: record.likes as number,
+  });
 }

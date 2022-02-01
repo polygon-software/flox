@@ -1,6 +1,7 @@
 <template>
   <q-page class="flex justify-start q-pa-none q-ma-none">
     <div
+      v-if="product"
       style="width: calc(100% - 32px)"
     >
       <!-- General Info -->
@@ -67,7 +68,8 @@
             <div class="row flex justify-between">
               <!-- Start date -->
               <q-input
-                v-model="product.start"
+                v-model="startDate"
+                mask="##.##.####"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.start')"
@@ -79,7 +81,8 @@
 
               <!-- End date -->
               <q-input
-                v-model="product.end"
+                v-model="endDate"
+                mask="##.##.####"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.end')"
@@ -176,8 +179,11 @@
           <h6 class="q-ma-md">{{ $t('products.type') }}</h6>
           <div class="row flex justify-between items-center q-ma-md">
             <!-- Sponsored -->
-            <q-input
+            <q-select
               v-model="product.sponsored"
+              :options="sponsoredOptions"
+              map-options
+              emit-value
               class="column"
               style="width: calc(50% - 25px)"
               :label="$t('products.promotion')"
@@ -295,14 +301,16 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, Ref, watch } from 'vue';
+import { computed, inject, ref, Ref, watch } from 'vue';
 import {useRoute} from 'vue-router';
 import axios, {AxiosResponse} from 'axios';
 import {RouterService} from 'src/services/RouterService';
 import {toDataUrl} from 'src/helpers/image-helper';
 import { CURRENCY, PRODUCT_STATUS } from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
-import { fetchProductInitially } from 'src/helpers/api-helpers';
+import { fetchProduct } from 'src/helpers/api-helpers';
+import { formatDate, parseDate } from 'src/helpers/format-helpers';
+import { i18n } from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
@@ -314,28 +322,48 @@ const currencies: CURRENCY[] = Object.values(CURRENCY).filter((item) => {
 const pictures: Ref<Array<string|ArrayBuffer|null>> = ref([])
 
 const productId = route.query.id as string // TODO: Error handling if no ID given
-const product = fetchProductInitially(productId)
+const product = fetchProduct(productId)
 
-console.log(product)
+const startDate = computed({
+  get: () => product.value?.start ? formatDate(product.value.start) : '',
+  set: (dateString) => {
+    if(product.value !== null) {
+      product.value.start = parseDate(dateString)
+    }
+  },
+})
+
+const endDate = computed({
+  get: () => product.value?.end ? formatDate(product.value.end) : '',
+  set: (dateString) => {
+    if(product.value !== null) {
+      product.value.end = parseDate(dateString)
+    }
+  },
+})
 
 const stop = watch(product, async (val) => {
-  const existingPictures: Array<string|ArrayBuffer|null> = []
-  const newPictures = val.pictures
-  await Promise.all(newPictures.map(picture => {
-    const index: number = newPictures.indexOf(picture);
-    return axios.get(
-      picture.url,
-      {
-        responseType: 'blob'
-      }).then(async (res: AxiosResponse<Blob>) => {
-      const file = new File([res.data], `${product.title}_${index}`)
-      const url = await toDataUrl(file)
-      existingPictures.push(url)
-    });
-  }));
-  pictures.value = existingPictures;
-  stop();
+  if(val !== null) {
+    const existingPictures: Array<string | ArrayBuffer | null> = []
+    const newPictures = val.pictures
+    await Promise.all(newPictures.map(picture => {
+      const index: number = newPictures.indexOf(picture);
+      return axios.get(
+        picture.url,
+        {
+          responseType: 'blob'
+        }).then(async (res: AxiosResponse<Blob>) => {
+        const file = new File([res.data], `${val.title as string}_${index}`)
+        const url = await toDataUrl(file)
+        existingPictures.push(url)
+      });
+    }));
+    pictures.value = existingPictures;
+    stop();
+  }
 })
+
+const sponsoredOptions = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
 /**
  * Routes to the product editing page for the given product
