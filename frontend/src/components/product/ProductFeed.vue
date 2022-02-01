@@ -10,15 +10,9 @@
 
 <script setup lang="ts">
 import ProductCard from 'components/product/ProductCard.vue';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {computed, Ref} from 'vue';
-import {ALL_PRODUCTS} from 'src/data/queries/PRODUCT';
+import { fetchAllProducts } from 'src/helpers/api-helpers';
 
-const queryResult = subscribeToQuery(ALL_PRODUCTS) as Ref<Record<string, Array<Record<string, unknown>>>>|undefined
-
-const products = computed(()=>{
-  return queryResult && queryResult.value ? Object.values(queryResult.value) ?? [] : []
-})
+const products = fetchAllProducts()
 </script>
 <style scoped>
 </style>
