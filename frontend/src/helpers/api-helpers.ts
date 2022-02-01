@@ -3,7 +3,7 @@ import { subscribeToQuery } from 'src/helpers/data-helpers';
 import { MY_NOTIFICATIONS } from 'src/data/queries/NOTIFICATIONS';
 import { computed, Ref } from 'vue';
 import { Product } from 'src/data/types/Product';
-import { ALL_PRODUCTS, MY_PRODUCTS } from 'src/data/queries/PRODUCT';
+import { ALL_PRODUCTS, MY_PRODUCTS, PRODUCT } from 'src/data/queries/PRODUCT';
 import {
   CATEGORY,
   CURRENCY,
@@ -84,6 +84,21 @@ export function fetchAllPlayers(): Ref<User[]> {
 }
 
 /**
+ * Fetch product initially does not update the product.
+ * @param {string} productId - product UUID.
+ * @returns {Product} - initial product.
+ */
+export function fetchProductInitially(productId: string): Product {
+  const queryResult = subscribeToQuery(PRODUCT, { uuid: productId }) as Ref<
+    Record<string, unknown>
+  >;
+  console.log('queryResult', queryResult);
+  const val: Record<string, unknown> = queryResult.value;
+  console.log('val', val);
+  return mapProduct(queryResult.value);
+}
+
+/**
  * Map notification records to notification instances.
  * @param {Ref<Record<string, unknown>[]>} queryResult - notification records.
  * @returns {Notification[]} - notification instances.
@@ -113,38 +128,7 @@ export function mapProducts(
   queryResult: Ref<Record<string, unknown>[]>
 ): Product[] {
   const productRecords = queryResult.value ?? [];
-  return productRecords.map(
-    (record) =>
-      new Product(
-        record.uuid as string,
-        record.title as string,
-        record.description as string,
-        record.brand as string,
-        record.category as CATEGORY,
-        record.value as number,
-        record.currency as CURRENCY,
-        new Date(record.start as string),
-        new Date(record.end as string),
-        record.pictures as Record<string, string>[],
-        record.status as PRODUCT_STATUS,
-        record.sponsored as boolean,
-        record.directBuyLink as string,
-        record.directBuyLinkCLicks as number,
-        record.directBuyLinkMaxClicks as number,
-        record.directBuyLinkCost as number,
-        record.directBuyLinkMaxCost as number,
-        record.brandLink as string,
-        record.brandLinkClicks as number,
-        record.brandLinkMaxClicks as number,
-        record.brandLinkCost as number,
-        record.brandLinkMaxCost as number,
-        record.minBet as number,
-        record.maxBet as number,
-        record.tags as string[],
-        record.comments as Record<string, string>[],
-        record.likes as number
-      )
-  );
+  return productRecords.map((record) => mapProduct(record));
 }
 
 /**
@@ -204,5 +188,42 @@ export function mapAddress(record: Record<string, unknown>): Address {
     record.number as string,
     record.city as string,
     record.zipCode as string
+  );
+}
+
+/**
+ * Map product record to product instance.
+ * @param {Record<string, unknown>} record - product record.
+ * @returns {Product} - product instance.
+ */
+export function mapProduct(record: Record<string, unknown>): Product {
+  return new Product(
+    record.uuid as string,
+    record.title as string,
+    record.description as string,
+    record.brand as string,
+    record.category as CATEGORY,
+    record.value as number,
+    record.currency as CURRENCY,
+    new Date(record.start as string),
+    new Date(record.end as string),
+    record.pictures as Record<string, string>[],
+    record.status as PRODUCT_STATUS,
+    record.sponsored as boolean,
+    record.directBuyLink as string,
+    record.directBuyLinkCLicks as number,
+    record.directBuyLinkMaxClicks as number,
+    record.directBuyLinkCost as number,
+    record.directBuyLinkMaxCost as number,
+    record.brandLink as string,
+    record.brandLinkClicks as number,
+    record.brandLinkMaxClicks as number,
+    record.brandLinkCost as number,
+    record.brandLinkMaxCost as number,
+    record.minBet as number,
+    record.maxBet as number,
+    record.tags as string[],
+    record.comments as Record<string, string>[],
+    record.likes as number
   );
 }
