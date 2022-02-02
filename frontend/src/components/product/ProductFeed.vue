@@ -47,11 +47,7 @@
 <script setup lang="ts">
 import ProductCard from 'components/product/ProductCard.vue';
 import { fetchAllProducts } from 'src/helpers/api-helpers';
-import { subscribeToQuery } from 'src/helpers/data-helpers';
-import { computed, Ref, watchEffect } from 'vue';
-import { ALL_PRODUCTS } from 'src/data/queries/PRODUCT';
-import { Product } from 'src/data/types/Product';
-import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../shared/definitions/ENUM';
+import { computed, watchEffect } from 'vue';
 import ROUTES from 'src/router/routes';
 import { useRoute, useRouter } from 'vue-router';
 import { Context, Module } from 'vuex-smart-module';
@@ -60,6 +56,7 @@ import FeedGetters from 'src/store/feed/getters';
 import FeedMutations from 'src/store/feed/mutations';
 import { useFeedStore } from 'src/store/feed';
 import FeedActions from 'src/store/feed/actions';
+import { CATEGORY } from '../../../../shared/definitions/ENUM';
 
 const feedStore: Context<Module<FeedState, FeedGetters, FeedMutations, FeedActions>> = useFeedStore();
 
@@ -118,8 +115,8 @@ const filteredProducts = computed(() => {
   if(searchFilter.value !== ''){
     const filter = searchFilter.value.toLowerCase();
     products = products.filter((product) =>
-      product.title.toLowerCase().includes(filter) ||
-      product.description.toLowerCase().includes(filter) ||
+      product.title && product.title.toLowerCase().includes(filter) ||
+      product.description && product.description.toLowerCase().includes(filter) ||
       product.tags.some(tag => tag.toLowerCase().includes(filter))
     )
   }
@@ -135,19 +132,27 @@ const filteredProducts = computed(() => {
 const sortedProducts = computed(() => {
   let products = filteredProducts.value
   if(sortBy.value === 'time_left'){
-    products = products.sort((a, b) => a.end.getTime() - b.end.getTime())
+    products = products.sort((a, b) => a.end && b.end ? a.end.getTime() - b.end.getTime() : 0)
   }
   else if(sortBy.value === 'value_asc'){
-    products = products.sort((a, b) => a.value - b.value)
+    products = products.sort((a, b) => a.value && b.value ? a.value - b.value : 0)
   }
   else if(sortBy.value === 'value_desc'){
-    products = products.sort((a, b) => b.value - a.value)
+    products = products.sort((a, b) => b.value && a.value ? b.value - a.value : 0)
   }
   return products
 })
 
-const categories = computed(() => new Set(realProducts.value.map((product) => product.category)))
-const brands = computed(() => new Set(realProducts.value.map((product) => product.brand)))
+const categories = computed(() => new Set(
+  allProducts.value
+    .filter((product) => product.category !== null)
+    .map((product) => product.category ?? CATEGORY.CARS)
+  ))
+const brands = computed(() => new Set(
+  allProducts.value
+    .filter((product) => product.brand !== null)
+    .map((product) => product.brand ?? '')
+))
 
 watchEffect(() => feedStore.commit('setCategories', [...categories.value]))
 watchEffect(() => feedStore.commit('setBrands', [...brands.value]))
