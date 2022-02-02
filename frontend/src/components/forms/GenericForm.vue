@@ -1,6 +1,6 @@
 <template>
   <q-form
-    ref="form_ref"
+    ref="formRef"
     greedy
     class="q-gutter-md"
   >
@@ -112,13 +112,13 @@
  * @param {string} [finishLabel] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
  * @param {boolean} [loading] - loading status to show on the finish button
  */
-import {defineProps, Ref, ref, defineEmits} from 'vue';
+import {defineEmits, defineProps, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
 
 const emit = defineEmits(['submit'])
-const form_ref: Ref<QForm|null> = ref(null)
+const formRef: Ref<QForm|null> = ref(null)
 const props = defineProps({
   finishLabel: {
     required: false,
@@ -141,16 +141,15 @@ const props = defineProps({
     default: false
   }
 })
+
 // Get copy of prop form
-const _pages = props.pages ? props.pages as Record<string, unknown>[] : undefined
-const form: Form = new Form(_pages)
+const form: Form = new Form(props.pages as Record<string, unknown>[])
 /**
  * Validates and, if valid, submits the form with all entered values
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function onSubmit(){
-  const isValid = await form_ref.value?.validate()
+  const isValid = await formRef.value?.validate()
   if(isValid){
     emit('submit', form.values.value)
   }

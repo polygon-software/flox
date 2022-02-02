@@ -19,9 +19,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ROLE, USER_STATUS } from '../../../ENUM/ENUM';
-import Address from '../../address/entities/address.entity';
 import PrivateFile from '../../file/entities/private_file.entity';
 import Comment from '../../comment/entities/comment.entity';
+import { Address } from '../../address/entities/address.entity';
+import { Notification } from '../../notification/entities/notification.entity';
 
 @ObjectType()
 @Entity()
@@ -128,4 +129,13 @@ export class User {
     eager: true,
   })
   comments: Comment[];
+
+  @Field(() => [Notification], {
+    description: 'Notifications of the user',
+    nullable: true,
+  })
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    cascade: true,
+  })
+  notifications: Notification[];
 }

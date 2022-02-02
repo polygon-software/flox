@@ -17,19 +17,19 @@ import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
-  @Public()
+  @AdminOnly()
   @Query(() => [User], { name: 'allPlayers' })
   async getAllPlayers(): Promise<User[]> {
     return this.usersService.getAllPlayers();
   }
 
-  @Public()
+  @AdminOnly()
   @Query(() => [User], { name: 'allPartners' })
   async getAllPartners(): Promise<User[]> {
     return this.usersService.getAllPartners();
   }
 
-  @Public()
+  @AdminOnly()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return this.usersService.getUser(getUserArgs);
@@ -78,7 +78,7 @@ export class UserResolver {
     return this.usersService.create(createUserInput);
   }
 
-  @Public()
+  @AdminOnly()
   @Mutation(() => User)
   async update(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
@@ -86,7 +86,7 @@ export class UserResolver {
     return this.usersService.update(updateUserInput);
   }
 
-  @Public()
+  @AdminOnly()
   @Mutation(() => User)
   async remove(
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,

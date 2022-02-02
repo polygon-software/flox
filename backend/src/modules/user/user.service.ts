@@ -12,11 +12,16 @@ import {
   enableCognitoAccount,
 } from '../../auth/authService';
 import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
+import { CreateNotificationInput } from '../notification/dto/input/create-notification.input';
+import { Notification } from '../notification/entities/notification.entity';
+import { Announcement } from '../announcement/entities/announcement.entity';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    private readonly notificationService: NotificationService,
   ) {}
 
   /**
@@ -132,7 +137,7 @@ export class UserService {
    */
   getAllPlayers(): Promise<User[]> {
     return this.usersRepository.find({
-      role: ROLE.PLAYER,
+      where: { role: ROLE.PLAYER },
     });
   }
 
@@ -142,7 +147,7 @@ export class UserService {
    */
   getAllPartners(): Promise<User[]> {
     return this.usersRepository.find({
-      role: ROLE.PARTNER,
+      where: { role: ROLE.PARTNER },
     });
   }
 
@@ -156,7 +161,7 @@ export class UserService {
   }
 
   async update(updateUserInput: UpdateUserInput): Promise<User> {
-    const user = await this.usersRepository.create(updateUserInput);
+    const user = this.usersRepository.create(updateUserInput);
     await this.usersRepository.update(updateUserInput.uuid, user);
     return this.usersRepository.findOne(updateUserInput.uuid);
   }
@@ -164,8 +169,66 @@ export class UserService {
   async remove(deleteUserInput: DeleteUserInput): Promise<User> {
     const user = await this.usersRepository.findOne(deleteUserInput.uuid);
     const uuid = user.uuid;
-    const deleted_user = await this.usersRepository.remove(user);
-    deleted_user.uuid = uuid;
-    return deleted_user;
+    const deletedUser = await this.usersRepository.remove(user);
+    deletedUser.uuid = uuid;
+    return deletedUser;
+  }
+
+  /**
+   * Creates notifications for all users definded by userRoles with tho content
+   * of the announcement.
+   * @param {ROLE[]} userRoles - user roles to broadcast to.
+   * @param {Announcement} announcement - announcement to broadcast
+   * @returns {Promise<Notification[]>} - list of all created notifications
+   */
+  async broadcastAnnouncement(
+    userRoles: ROLE[],
+    announcement: Announcement,
+  ): Promise<Notification[]> {
+    const createNotificationInput = {
+      title: announcement.title,
+      received: announcement.date,
+      content: announcement.content,
+      isRead: false,
+    } as CreateNotificationInput;
+
+    const notificationsByRole = await Promise.all(
+      userRoles.map((userRole) =>
+        this.broadcastNotification(userRole, createNotificationInput),
+      ),
+    );
+
+    const notifications: Notification[] = [];
+    notificationsByRole.forEach((notificationList) =>
+      notifications.push(...notificationList),
+    );
+
+    return notifications;
+  }
+
+  /**
+   * Creates the notification defined by createNotificationInput for all users of the given role.
+   * @param {ROLE} role - user role to create notifications for.
+   * @param {CreateNotificationInput} createNotificationInput - notification to broadcast.
+   * @returns {Promise<Notification[]>} - created notifications.
+   */
+  async broadcastNotification(
+    role: ROLE,
+    createNotificationInput: CreateNotificationInput,
+  ): Promise<Notification[]> {
+    const users = await this.usersRepository.find({
+      role: role,
+    });
+    const notifications: Notification[] = [];
+    await Promise.all(
+      users.map(async (user) => {
+        const notification = await this.notificationService.create({
+          ...createNotificationInput,
+          user: user,
+        });
+        notifications.push(notification);
+      }),
+    );
+    return notifications;
   }
 }

@@ -53,11 +53,17 @@ export class ProductService {
 
   /**
    * Updates an existing product
-   * @param {UpdateProductInput} updateProductInput
-   * @param {Array<string>|null} pictures
+   * @param {UpdateProductInput} updateProductInput - update product input
+   * @param {Array<string>|null} pictures - pictures
+   * @returns {Promise<Product>} - updated product
    */
-  async update(updateProductInput: UpdateProductInput, pictures: Array<string>|null): Promise<Product> {
-    const currentProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+  async update(
+    updateProductInput: UpdateProductInput,
+    pictures: Array<string> | null,
+  ): Promise<Product> {
+    const currentProduct = await this.productsRepository.findOne(
+      updateProductInput.uuid,
+    );
     let updatedProduct;
 
     // Check if pictures have changed
@@ -70,13 +76,17 @@ export class ProductService {
       // Update the product
       const product = this.productsRepository.create(updateProductInput);
       await this.productsRepository.update(updateProductInput.uuid, product);
-      updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+      updatedProduct = await this.productsRepository.findOne(
+        updateProductInput.uuid,
+      );
       await this.createPublicFiles(pictures, updatedProduct);
     } else {
       // Update the product
       const product = this.productsRepository.create(updateProductInput);
       await this.productsRepository.update(updateProductInput.uuid, product);
-      updatedProduct = await this.productsRepository.findOne(updateProductInput.uuid);
+      updatedProduct = await this.productsRepository.findOne(
+        updateProductInput.uuid,
+      );
     }
     return updatedProduct;
   }
@@ -84,6 +94,7 @@ export class ProductService {
   /**
    * Duplicates an existing product and returns the new Product
    * @param {DuplicateProductInput} duplicateProductInput - The product input containing the existing product's data
+   * @returns {Promise<Product>} - duplicated product
    */
   async duplicate(
     duplicateProductInput: DuplicateProductInput,

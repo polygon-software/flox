@@ -7,11 +7,14 @@ import Comment from '../comment/entities/comment.entity';
 import { Address } from '../address/entities/address.entity';
 import PrivateFile from '../file/entities/private_file.entity';
 import PublicFile from '../file/entities/public_file.entity';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Address, Comment, PrivateFile, PublicFile]),
+    NotificationModule,
   ],
   providers: [UserResolver, UserService],
+  exports: [UserService],
 })
 export class UserModule {}

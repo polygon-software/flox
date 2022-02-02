@@ -12,7 +12,6 @@ import { DeleteCommentInput } from './dto/input/delete-comment-input';
 // Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
 const pubSub = new PubSub();
 
-
 @Resolver(() => Comment)
 export class CommentResolver {
   constructor(private readonly commentService: CommentService) {}

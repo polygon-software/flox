@@ -22,6 +22,15 @@ export function formatDate(inputDate: Date|string): string{
 }
 
 /**
+ * Parses a string in 01.12.2020 format to a date. Internally, uses Quasar's date extractDate
+ * @param {string} inputString - the date string to parse
+ * @returns {Date} - the parsed date
+ */
+export function parseDate(inputString: string): Date{
+  return date.extractDate(inputString, 'DD.MM.YYYY')
+}
+
+/**
  * Formats a date to a string in 01.12.2020, 14:23 format
  * @param {Date|string} inputDate - the date or date string to format
  * @returns {string} - the formatted date
@@ -35,5 +44,5 @@ export function formatDateTime(inputDate: Date|string): string{
     actualDate = inputDate
   }
 
-  return date.formatDate(actualDate, 'DD.MM.YYYY hh:mm')
+  return date.formatDate(actualDate, 'DD.MM.YYYY HH:mm')
 }
