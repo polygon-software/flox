@@ -1,4 +1,3 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { AnnouncementResolver } from './announcement.resolver';
 import { AnnouncementService } from './announcement.service';
 import { Repository } from 'typeorm';
