@@ -44,7 +44,7 @@ export class EmployeeService {
     const employee = this.employeeRepository.create({
       ...createEmployeeInput,
       company,
-      readable_id: generateHumanReadableId(), //Todo Collision Prevention
+      readable_id: generateHumanReadableId(ROLE.EMPLOYEE), //Todo Collision Prevention
     });
     const newEmployee = await this.employeeRepository.save(employee);
     await this.userService.create({

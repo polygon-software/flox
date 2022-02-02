@@ -36,7 +36,7 @@ export class BankService {
       ...createBankInput,
       offers: [],
       own_mortgages: [],
-      readable_id: generateHumanReadableId(),
+      readable_id: generateHumanReadableId(ROLE.BANK),
     });
     const savedBank = await this.bankRepository.save(bank);
     await this.userService.create({
@@ -69,7 +69,7 @@ export class BankService {
       last_name: '-',
       email: '-',
       phone: '-',
-      readable_id: generateHumanReadableId(),
+      readable_id: generateHumanReadableId(ROLE.BANK),
     });
     return this.bankRepository.save(newBank);
   }
