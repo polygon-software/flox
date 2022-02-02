@@ -109,6 +109,9 @@ const filterCount = computed(() => {
   return count
 })
 
+/**
+ * Products filtered by search-term, brand and category.
+ */
 const filteredProducts = computed(() => {
   let products = allProducts.value
   if(searchFilter.value !== ''){
@@ -128,6 +131,10 @@ const filteredProducts = computed(() => {
   return products;
 })
 
+/**
+ * Products filtered and sorted by relevance (as it comes from the backend),
+ * time-left, value ascending or value descending
+ */
 const sortedProducts = computed(() => {
   let products = filteredProducts.value
   if(sortBy.value === 'time_left'){
@@ -147,6 +154,7 @@ const categories = computed(() => new Set(
     .filter((product) => product.category !== null)
     .map((product) => product.category ?? CATEGORY.CARS)
   ))
+
 const brands = computed(() => new Set(
   allProducts.value
     .filter((product) => product.brand !== null)
