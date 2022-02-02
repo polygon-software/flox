@@ -21,7 +21,11 @@ describe('AnnouncementResolver', () => {
     userRepository = new Repository<User>();
     announcementRepository = new Repository<Announcement>();
 
-    notificationService = new NotificationService(notificationRepository);
+    notificationService = new NotificationService(
+      notificationRepository,
+      userRepository,
+      announcementRepository,
+    );
     userService = new UserService(userRepository, notificationService);
     announcementService = new AnnouncementService(
       announcementRepository,
