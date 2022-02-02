@@ -1,6 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsBoolean, IsDate, IsString } from 'class-validator';
-import { Announcement } from '../../../announcement/entities/announcement.entity';
 
 @InputType()
 export class CreateNotificationInput {
