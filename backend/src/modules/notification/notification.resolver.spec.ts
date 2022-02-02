@@ -1,19 +1,22 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationResolver } from './notification.resolver';
 import { NotificationService } from './notification.service';
+import { Repository } from 'typeorm';
+import { Notification } from './entities/notification.entity';
 
 describe('NotificationsResolver', () => {
-  let resolver: NotificationResolver;
+  let notificationService: NotificationService;
+  let notificationRepository: Repository<Notification>;
+  let notificationResolver: NotificationResolver;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [NotificationResolver, NotificationService],
-    }).compile();
+    notificationRepository = new Repository<Notification>();
 
-    resolver = module.get<NotificationResolver>(NotificationResolver);
+    notificationService = new NotificationService(notificationRepository);
+
+    notificationResolver = new NotificationResolver(notificationService);
   });
 
   it('should be defined', () => {
-    expect(resolver).toBeDefined();
+    expect(notificationResolver).toBeDefined();
   });
 });

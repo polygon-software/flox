@@ -1,19 +1,38 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { AnnouncementResolver } from './announcement.resolver';
 import { AnnouncementService } from './announcement.service';
+import { Repository } from 'typeorm';
+import { Announcement } from './entities/announcement.entity';
+import { UserService } from '../user/user.service';
+import { NotificationService } from '../notification/notification.service';
+import { User } from '../user/entities/user.entity';
+import { Notification } from '../notification/entities/notification.entity';
 
 describe('AnnouncementResolver', () => {
-  let resolver: AnnouncementResolver;
+  let announcementResolver: AnnouncementResolver;
+  let announcementService: AnnouncementService;
+  let announcementRepository: Repository<Announcement>;
+  let userService: UserService;
+  let notificationService: NotificationService;
+  let userRepository: Repository<User>;
+  let notificationRepository: Repository<Notification>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AnnouncementResolver, AnnouncementService],
-    }).compile();
+    notificationRepository = new Repository<Notification>();
+    userRepository = new Repository<User>();
+    announcementRepository = new Repository<Announcement>();
 
-    resolver = module.get<AnnouncementResolver>(AnnouncementResolver);
+    notificationService = new NotificationService(notificationRepository);
+    userService = new UserService(userRepository, notificationService);
+    announcementService = new AnnouncementService(
+      announcementRepository,
+      userService,
+      notificationService,
+    );
+
+    announcementResolver = new AnnouncementResolver(announcementService);
   });
 
   it('should be defined', () => {
-    expect(resolver).toBeDefined();
+    expect(announcementResolver).toBeDefined();
   });
 });

@@ -1,7 +1,7 @@
 <template>
   <div class="column full-width">
     <q-table
-      :rows="computedResult"
+      :rows="allPartners"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
@@ -37,7 +37,7 @@
             {{ _props.row.phone}}
           </q-td>
           <q-td key="birthdate" :props="_props">
-            {{ _props.row.birthdate ? formatDate(new Date(_props.row.birthdate)) : '-' }}
+            {{ _props.row.birthdate ? formatDate(_props.row.birthdate) : '-' }}
           </q-td>
           <q-td key="options" :props="_props">
             <q-btn-dropdown
@@ -86,14 +86,13 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, Ref} from 'vue';
-import { subscribeToQuery} from 'src/helpers/data-helpers';
+import {defineProps} from 'vue';
 import {formatDate} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
-import {ALL_PARTNERS} from 'src/data/queries/USER';
 import {enableUser, disableUser} from 'src/helpers/admin-helpers';
 import {useQuasar} from 'quasar';
+import { fetchAllPartners } from 'src/helpers/api-helpers';
 
 const $q = useQuasar()
 
@@ -121,12 +120,7 @@ const columns = [
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
-const queryResult = subscribeToQuery(ALL_PARTNERS) as Ref<Record<string, unknown>[]>
-
-// Rows, filtered by status (if applicable)
-const computedResult = computed(() => {
-  return queryResult.value ?? []
-})
+const allPartners = fetchAllPartners();
 
 /**
  * Gets the color & label for the status chip of a user
