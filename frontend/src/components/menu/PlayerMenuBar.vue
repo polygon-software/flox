@@ -128,7 +128,6 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-
 </template>
 
 <script setup lang="ts">
