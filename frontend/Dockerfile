@@ -5,11 +5,10 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn
+RUN yarn --ignore-platform
 
 COPY . .
 
 RUN rm -r dist
 
-CMD ["yarn", "start:dev"]
-
+CMD ["yarn", "dev:ssr"]

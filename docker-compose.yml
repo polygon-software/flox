@@ -2,8 +2,8 @@ version: '3.7'
 
 services:
   backend:
-    container_name: ${PROJECT_NAME}_backend
-    image: polygonsoftware/${BACKEND_IMAGE}
+    container_name: bootstrap_backend
+    image: polygonsoftware/full-stack-bootstrap-backend
     x-aws-pull_credentials: arn:aws:secretsmanager:eu-central-1:923473058470:secret:dockerhubAccessToken-nAnDW9
     deploy:
       resources:
@@ -22,8 +22,8 @@ services:
       - database
 
   frontend:
-    container_name: ${PROJECT_NAME}_frontend
-    image: polygonsoftware/${FRONTEND_IMAGE}
+    container_name: bootstrap_frontend
+    image: polygonsoftware/full-stack-bootstrap-frontend
     x-aws-pull_credentials: arn:aws:secretsmanager:eu-central-1:923473058470:secret:dockerhubAccessToken-nAnDW9
     deploy:
       resources:
@@ -42,7 +42,7 @@ services:
       - backend
 
   database:
-    container_name: ${PROJECT_NAME}_database
+    container_name: bootstrap_database
     image: postgres:14
     networks:
       - webnet

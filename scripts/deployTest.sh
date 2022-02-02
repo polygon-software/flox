@@ -19,5 +19,5 @@ docker push polygonsoftware/full-stack-bootstrap-backend
 # Upload new versions
 echo Deploying new versions to AWS...
 cd ..
-docker context use soicontext
-docker compose up
+docker context use ecscontext
+docker compose --project-name bootstrap-test up
