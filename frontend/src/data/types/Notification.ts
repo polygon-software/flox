@@ -2,7 +2,7 @@ import Joi, { Schema } from 'joi';
 import { NotificationItem } from '../../../../shared/schemas/NotificationItem';
 
 /**
- * A class representing an notification
+ * A class representing a notification
  */
 export class Notification {
   title: string;

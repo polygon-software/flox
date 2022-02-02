@@ -44,12 +44,13 @@
 
 <script setup lang="ts">
 import {defineProps, ref} from 'vue'
+import { Product } from 'src/data/types/Product';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   product: {
     required: true,
-    type: Object, // TODO proper typing with Joi
+    type: Product,
   }
 })
 

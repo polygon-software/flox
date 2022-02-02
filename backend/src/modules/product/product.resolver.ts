@@ -6,7 +6,7 @@ import { GetProductArgs } from './dto/args/get-product.args';
 import { DeleteProductInput } from './dto/input/delete-product.input';
 import { Product } from './entities/product.entity';
 import { GetProductsArgs } from './dto/args/get-products.args';
-import { Public } from 'src/auth/authentication.decorator';
+import { Public } from '../../auth/authentication.decorator';
 import { DuplicateProductInput } from './dto/input/duplicate-product.input';
 
 @Resolver(() => Product)

@@ -1,7 +1,7 @@
 <template>
   <q-card
-    style="width: 400px; cursor: pointer"
-    class="q-mb-xl q-pa-sm"
+    style="cursor: pointer; width: 100%;"
+    class="q-pa-sm"
     @click="openDetailView(product)"
   >
 
@@ -21,7 +21,7 @@
     </q-carousel>
 
     <!-- Title and Icons -->
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center no-wrap">
       <h5 class="q-ml-sm">{{ product.title }}</h5>
       <div
         class="q-gutter-md"
@@ -40,7 +40,7 @@
     </div>
     <!-- Dialogs for clickable Icons -->
     <q-dialog
-      v-for="dialog in icon_dialogs"
+      v-for="dialog in iconDialogs"
       :key="dialog.key"
       v-model="dialog.model"
     >
@@ -115,7 +115,7 @@ const icons = computed(() => {
   ]
 })
 
-const icon_dialogs = computed(() => {
+const iconDialogs = computed(() => {
   return [
     {
       key: 'comments',

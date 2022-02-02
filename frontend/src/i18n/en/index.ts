@@ -145,6 +145,10 @@ export default {
     account_rejected: 'Account rejected',
   },
   interests: {
+    select_interests: 'Please select up to {max} categories that interest you',
+    amount_selected: '{amount}/{max} selected',
+  },
+  categories: {
     cars: 'Cars',
     celebrities: 'Celebrities',
     cooking: 'Cooking',
@@ -156,8 +160,6 @@ export default {
     tools: 'Tools',
     travelling: 'Travelling',
     watches: 'Watches',
-    select_interests: 'Please select up to {max} categories that interest you',
-    amount_selected: '{amount}/{max} selected',
   },
   products: {
     products: 'Products',
@@ -191,6 +193,15 @@ export default {
     max_cost: 'Maximum cost',
     add_product: 'Add new Product',
     title: 'Title',
+    search: 'Search...',
+    results_for: 'Results for',
+    filter_and_sort: 'Filter & Sort',
+    sort_by: 'Sort by',
+    relevance: 'Relevance',
+    value_asc: 'Value ascending',
+    value_desc: 'Value descending',
+    all: 'All',
+    reset_filter: 'Reset filter',
   },
   settings: {
     settings: 'Settings',

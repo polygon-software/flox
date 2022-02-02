@@ -4,7 +4,7 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 
 // Set up cognito admin provider
 const provider = new CognitoIdentityProvider({
-  region: process.env.AWS_REGION ?? '',
+  region: process.env.AWS_REGION ?? 'eu-central-1',
 });
 
 /**

@@ -1,0 +1,1 @@
+INSERT INTO public.notification (uuid, title, received, content, "isRead", "userUuid", "announcementUuid") VALUES ('64d5d846-46fe-493e-9e50-beeb70ceccd5', 'Test', '2022-02-01 00:00:00.000000', 'Edited: Testerino', false, '0a8ee825-889d-4609-a5e2-01dfb593c309', '893aa1fd-427c-4050-8859-e1f560c727e6');

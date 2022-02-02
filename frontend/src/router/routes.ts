@@ -1,7 +1,7 @@
-import {RouteRecordRaw} from 'vue-router';
-import {executeQuery} from 'src/helpers/data-helpers';
-import {ROLE} from '../../../shared/definitions/ENUM';
-import {MY_USER} from 'src/data/queries/USER';
+import { RouteRecordRaw } from 'vue-router';
+import { executeQuery } from 'src/helpers/data-helpers';
+import { ROLE } from '../../../shared/definitions/ENUM';
+import { MY_USER } from 'src/data/queries/USER';
 
 /**
  * This file defines the routes available within the application
@@ -9,93 +9,149 @@ import {MY_USER} from 'src/data/queries/USER';
 
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
-  'MAIN': {
+  MAIN: {
     path: '/',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/generic/MainPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/generic/MainPage.vue') },
+    ],
   },
 
-  'LOGIN': {
+  FILTER: {
+    path: '/filter',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    component: () => getUserRoleLayout(),
+    children: [
+      { path: '', component: () => import('pages/generic/FilterPage.vue') },
+    ],
+  },
+
+  LOGIN: {
     path: '/login',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/generic/LoginPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/generic/LoginPage.vue') },
+    ],
   },
 
-  'SIGNUP': {
+  SIGNUP: {
     path: '/signup',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/generic/SignupPage.vue') }],
   },
 
-  'ADD_PRODUCT': {
+  ADD_PRODUCT: {
     path: '/add-product',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/partner/ProductUploadPage.vue') }],
+    children: [
+      {
+        path: '',
+        component: () => import('pages/partner/ProductUploadPage.vue'),
+      },
+    ],
   },
 
-  'PRODUCT_DETAIL': {
+  PRODUCT_DETAIL: {
     path: '/product-detail',
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/generic/ProductDetailPage.vue') }],
+    children: [
+      {
+        path: '',
+        component: () => import('pages/generic/ProductDetailPage.vue'),
+      },
+    ],
   },
 
-  'MY_PRODUCTS': {
+  MY_PRODUCTS: {
     path: '/my-products',
     component: () => import('layouts/PartnerLayout.vue'),
-    children: [{ path: '', component: () => import('pages/partner/MyProductsPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/partner/MyProductsPage.vue') },
+    ],
   },
 
-  'PLAYERS': {
+  PLAYERS: {
     path: '/players',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/admin/PlayersPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/admin/PlayersPage.vue') },
+    ],
   },
 
-  'PARTNERS': {
+  PARTNERS: {
     path: '/partners',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/admin/PartnersPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/admin/PartnersPage.vue') },
+    ],
   },
 
-  'ADMIN_STATISTICS': {
+  ADMIN_STATISTICS: {
     path: '/admin-statistics',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/admin/AdminStatisticsPage.vue') }],
+    children: [
+      {
+        path: '',
+        component: () => import('pages/admin/AdminStatisticsPage.vue'),
+      },
+    ],
   },
 
-  'ADMIN_FINANCES': {
+  ADMIN_FINANCES: {
     path: '/admin-finances',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/admin/AdminFinancesPage.vue') }],
+    children: [
+      {
+        path: '',
+        component: () => import('pages/admin/AdminFinancesPage.vue'),
+      },
+    ],
   },
 
-  'ANNOUNCEMENTS': {
+  ANNOUNCEMENTS: {
     path: '/announcements',
     component: () => import('layouts/AdminLayout.vue'),
-    children: [{ path: '', component: () => import('pages/admin/AnnouncementsPage.vue') }],
+    children: [
+      {
+        path: '',
+        component: () => import('pages/admin/AnnouncementsPage.vue'),
+      },
+    ],
   },
 
-  'PARTNER_STATISTICS': {
+  PARTNER_STATISTICS: {
     path: '/partner-statistics',
     component: () => import('layouts/PartnerLayout.vue'),
-    children: [{ path: '', component: () => import('pages/partner/PartnerStatisticsPage.vue') }],
+    children: [
+      {
+        path: '',
+        component: () => import('pages/partner/PartnerStatisticsPage.vue'),
+      },
+    ],
   },
 
-  'PARTNER_FINANCES': {
+  PARTNER_FINANCES: {
     path: '/partner-finances',
     component: () => import('layouts/PartnerLayout.vue'),
-    children: [{ path: '', component: () => import('pages/partner/PartnerFinancesPage.vue') }],
+    children: [
+      {
+        path: '',
+        component: () => import('pages/partner/PartnerFinancesPage.vue'),
+      },
+    ],
   },
 
-  'SETTINGS': {
+  SETTINGS: {
     path: '/settings',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => getUserRoleLayout(),
-    children: [{ path: '', component: () => import('pages/generic/SettingsPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/generic/SettingsPage.vue') },
+    ],
   },
 
   'SUCCESS': {
@@ -105,7 +161,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   },
 
   // Wildcard route for non-covered routes
-  'WILDCARD': {
+  WILDCARD: {
     path: '/:catchAll(.*)*',
     component: () => import('pages/generic/Error404.vue'),
   },
@@ -116,35 +172,38 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
   ROUTES.SIGNUP,
   ROUTES.SUCCESS,
-]
+];
 
 /**
  * Returns the layout for the currently logged in user
  * @async
  * @returns {any} - the layout component
  */
-async function getUserRoleLayout(): Promise<any>{
+async function getUserRoleLayout(): Promise<any> {
   // Get user's data from backend
-  const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+  const queryResult = (await executeQuery(MY_USER)) as unknown as Record<
+    string,
+    Record<string, unknown>
+  >;
 
   // Non-logged in: Redirect to 404
-  if(!queryResult?.data?.myUser){
-    return import('pages/generic/Error404.vue')
+  if (!queryResult?.data?.myUser) {
+    return import('pages/generic/Error404.vue');
   }
 
-  const userData = queryResult.data.myUser as Record<string, unknown>
+  const userData = queryResult.data.myUser as Record<string, unknown>;
   const userRole = userData.role;
 
-  switch(userRole){
+  switch (userRole) {
     case ROLE.ADMIN:
-      return import('layouts/AdminLayout.vue')
+      return import('layouts/AdminLayout.vue');
     case ROLE.PARTNER:
-      return import('layouts/PartnerLayout.vue')
+      return import('layouts/PartnerLayout.vue');
     case ROLE.PLAYER:
-      return import('layouts/PlayerLayout.vue')
+      return import('layouts/PlayerLayout.vue');
     default:
-      return import('pages/generic/Error404.vue') // TODO possibly 403 forbidden page?
-    }
+      return import('pages/generic/Error404.vue'); // TODO possibly 403 forbidden page?
+  }
 }
 
-export default ROUTES
+export default ROUTES;

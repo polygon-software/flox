@@ -1,13 +1,41 @@
 <template>
-  <q-header class="row bg-primary shadow-5 justify-between">
+  <q-header class="row bg-primary shadow-5 justify-between no-wrap">
     <div class="row">
       <img
           alt="Bigabig"
           :src="require('src/assets/bigabig-logo.svg')"
           style="height: 50px"
-          class="q-ma-sm"
+          class="q-ma-sm cursor-pointer"
+          @click="goHome"
       >
     </div>
+
+    <!-- Search field -->
+    <div class="row">
+      <q-input
+        v-model="search"
+        outlined rounded
+        class="q-ma-sm"
+        :placeholder="$t('products.search')"
+        @keypress.enter="onSearch"
+      >
+        <template #append>
+          <q-icon
+            v-if="search !== ''"
+            name="cancel"
+            class="cursor-pointer"
+            size="xs"
+            @click="onClear"
+          />
+          <q-icon
+            name="search"
+            class="cursor-pointer"
+            @click="onSearch"
+          />
+        </template>
+      </q-input>
+    </div>
+
     <div class="row">
       <!-- Account options -->
       <q-badge
@@ -48,7 +76,7 @@
               floating
               color="red"
               rounded
-              style="height: 18px; margin: 13px 10px 0 0; z-index: 10"
+              style="height: 18px; width: 18px; margin: 13px 10px 0 0; z-index: 10"
             >
               {{notificationCount}}
             </q-badge>
@@ -89,7 +117,7 @@
     <q-card
       style="overflow: hidden"
     >
-      <Inbox :notifications="notifications"/>
+      <Inbox :notifications="myNotifications"/>
       <q-card-actions align="center">
         <q-btn
           :label="$t('buttons.back')"
@@ -100,63 +128,72 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-
 </template>
 
 <script setup lang="ts">
-import {computed, inject, Ref, ref} from 'vue'
-import {AuthenticationService} from 'src/services/AuthService';
-import {RouterService} from 'src/services/RouterService';
+import { computed, inject, ref } from 'vue';
+import { AuthenticationService } from 'src/services/AuthService';
+import { RouterService } from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {useAuth} from 'src/store/authentication';
-import {Context, Module} from 'vuex-smart-module';
+import { useAuth } from 'src/store/authentication';
+import { Context, Module } from 'vuex-smart-module';
 import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {Notification} from 'src/data/types/Notification';
-import {MY_NOTIFICATIONS} from 'src/data/queries/NOTIFICATIONS';
+import { fetchMyNotifications } from 'src/helpers/api-helpers';
 
-
-const $authService: AuthenticationService|undefined = inject('$authService')
-const $routerService: RouterService|undefined = inject('$routerService')
-const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
+const $authService: AuthenticationService | undefined = inject('$authService');
+const $routerService: RouterService | undefined = inject('$routerService');
+const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth();
 
 const loggedIn = computed(() => {
   // Explicit type
   return $authStore.getters.getLoggedInStatus();
-})
+});
 
-const myNotificationsQueryResult = subscribeToQuery(MY_NOTIFICATIONS) as Ref<Array<Record<string, unknown>>>
+const search = ref('')
 
-const notifications = computed(() => {
-  const myNotifications: Notification[] = []
-  const records = myNotificationsQueryResult.value  ?? [];
-  records.forEach(record => myNotifications.push(new Notification(
-    record.title as string,
-    new Date(record.received as string),
-    record.content as string,
-    record.isRead as boolean,
-    record.uuid as string,
-  )));
-  return myNotifications;
-})
+/**
+ * Go to main page.
+ * @returns {Promise<void>} - async
+ */
+async function goHome(): Promise<void> {
+  await $routerService?.routeTo(ROUTES.MAIN);
+}
+
+/**
+ * Go to product feed with search term.
+ * @returns {Promise<void>} - async
+ */
+async function onSearch(): Promise<void> {
+  await $routerService?.routeTo(ROUTES.MAIN, { search: search.value });
+}
+
+/**
+ * Clear search term.
+ * @returns {void} - void
+ */
+function onClear(): void {
+  search.value = '';
+}
+
+const myNotifications = fetchMyNotifications()
 
 // The number of notifications
 const notificationCount = computed(() => {
-  return notifications.value.filter(notification => !notification.isRead).length;
-})
+  return myNotifications.value.filter(notification => !notification.isRead).length;
+});
 
 /**
  * Logs out the current authentication
  * @async
  * @returns {void}
  */
-async function logout(): Promise<void>{
+async function logout(): Promise<void> {
   await $authService?.logout();
-  await $routerService?.routeTo(ROUTES.LOGIN)
+  await $routerService?.routeTo(ROUTES.LOGIN);
 }
 
 /**
@@ -164,21 +201,21 @@ async function logout(): Promise<void>{
  * @returns {void}
  */
 function changePassword() {
-  $authService?.showChangePasswordDialog()
+  $authService?.showChangePasswordDialog();
 }
 
 /*
 * This section controls the visibility of the notification inbox popup.
 *  TODO: Change it to a push or rerendering?
 */
-const showInbox = ref(false)
+const showInbox = ref(false);
 
 /**
  * Opens the inbox
  * @returns {void}
  */
 function openInbox() {
-  showInbox.value = true
+  showInbox.value = true;
 }
 
 /**
@@ -186,6 +223,6 @@ function openInbox() {
  * @returns {void}
  */
 function closeInbox() {
-  showInbox.value = false
+  showInbox.value = false;
 }
 </script>
