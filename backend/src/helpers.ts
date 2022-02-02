@@ -19,7 +19,7 @@ export function getRequest(context: ExecutionContext): any {
 }
 
 /**
- * Generates a short human-readable ID
+ * Generates a short human-readable ID and for bank, company, and employee it adds a corresponding prefix
  * @param {ENUM} role - optional role of the object the ID will be created for
  * @param {number} [length] - length of the ID to generate
  * @returns {string} - an ID
