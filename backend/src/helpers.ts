@@ -1,6 +1,7 @@
-import { ExecutionContext } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
+import {ExecutionContext} from '@nestjs/common';
+import {GqlExecutionContext} from '@nestjs/graphql';
 import * as crypto from 'crypto';
+import {ROLE} from "./ENUM/ENUMS";
 
 /**
  * Gets the request from context
@@ -19,10 +20,11 @@ export function getRequest(context: ExecutionContext): any {
 
 /**
  * Generates a short human-readable ID
+ * @param {ENUM} role - optional role of the object the ID will be created for
  * @param {number} [length] - length of the ID to generate
  * @returns {string} - an ID
  */
-export function generateHumanReadableId(length = 10): string {
+export function generateHumanReadableId(role = ROLE.NONE, length = 10): string {
   let result = '';
 
   // Exclude I and l to avoid confusion
@@ -30,6 +32,15 @@ export function generateHumanReadableId(length = 10): string {
   for (let i = 0; i < length; i++) {
     result += alphabet.charAt(crypto.randomInt(alphabet.length));
   }
-
+  switch(role){
+    case ROLE.BANK:
+      result = `FI${result.substring(2)}`
+      break
+    case ROLE.COMPANY:
+      result = `BR${result.substring(2)}`
+      break
+    case ROLE.EMPLOYEE:
+      result = `MA${result.substring(2)}`
+  }
   return result;
 }
