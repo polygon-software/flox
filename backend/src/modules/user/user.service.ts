@@ -224,7 +224,7 @@ export class UserService {
       users.map(async (user) => {
         const notification = await this.notificationService.create({
           ...createNotificationInput,
-          user: user,
+          userUuid: user.uuid,
         });
         notifications.push(notification);
       }),

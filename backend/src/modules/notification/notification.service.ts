@@ -5,12 +5,14 @@ import { DeleteNotificationInput } from './dto/input/delete-notification.input';
 import { LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from './entities/notification.entity';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class NotificationService {
   constructor(
     @InjectRepository(Notification)
     private readonly notificationsRepository: Repository<Notification>,
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -21,9 +23,23 @@ export class NotificationService {
   async create(
     createNotificationInput: CreateNotificationInput,
   ): Promise<Notification> {
-    const notification = this.notificationsRepository.create(
-      createNotificationInput,
-    );
+    // Find user for UUID
+    const user = await this.userService.getUser({
+      uuid: createNotificationInput.userUuid,
+    });
+
+    if (!user) {
+      throw Error('No User found');
+    }
+
+    const notification = this.notificationsRepository.create({
+      title: createNotificationInput.title,
+      received: createNotificationInput.received,
+      content: createNotificationInput.content,
+      isRead: createNotificationInput.isRead,
+      user,
+      announcement: createNotificationInput.announcement,
+    });
     return this.notificationsRepository.save(notification);
   }
 
