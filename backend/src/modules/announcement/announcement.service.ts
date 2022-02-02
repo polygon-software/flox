@@ -48,6 +48,15 @@ export class AnnouncementService {
   }
 
   /**
+   * Get an announcements by uuid.
+   * @param {string} uuid - the announcement's uuid
+   * @returns {Promise<Announcement>} - the announcement
+   */
+  async getAnnouncement(uuid: string): Promise<Announcement> {
+    return this.announcementsRepository.findOne(uuid);
+  }
+
+  /**
    * Partially updates an existing announcement. Updates all notifications belonging to the updated announcement.
    * @param {UpdateAnnouncementInput} updateAnnouncementInput - Changes to be made to the announcement
    * @returns {Promise<Announcement>} - updated announcement

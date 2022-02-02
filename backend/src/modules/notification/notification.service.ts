@@ -6,6 +6,7 @@ import { LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from './entities/notification.entity';
 import { UserService } from '../user/user.service';
+import { AnnouncementService } from '../announcement/announcement.service';
 
 @Injectable()
 export class NotificationService {
@@ -13,6 +14,7 @@ export class NotificationService {
     @InjectRepository(Notification)
     private readonly notificationsRepository: Repository<Notification>,
     private readonly userService: UserService,
+    private readonly announcementService: AnnouncementService,
   ) {}
 
   /**
@@ -32,13 +34,20 @@ export class NotificationService {
       throw Error('No User found');
     }
 
+    // Find announcement for UUID
+    const announcement = createNotificationInput.announcementUuid
+      ? await this.announcementService.getAnnouncement(
+          createNotificationInput.announcementUuid,
+        )
+      : null;
+
     const notification = this.notificationsRepository.create({
       title: createNotificationInput.title,
       received: createNotificationInput.received,
       content: createNotificationInput.content,
       isRead: createNotificationInput.isRead,
       user,
-      announcement: createNotificationInput.announcement,
+      announcement: announcement,
     });
     return this.notificationsRepository.save(notification);
   }
