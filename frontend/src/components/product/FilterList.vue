@@ -37,7 +37,7 @@
             <q-chip
               v-for="category in categories"
               :key="category"
-              :label="$t(`products.categories.${category}`)"
+              :label="$t(`categories.${category.toLowerCase()}`)"
               :selected="categoryFilter === category"
               @click="categoryFilter = category"
             />

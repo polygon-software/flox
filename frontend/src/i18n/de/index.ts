@@ -147,6 +147,11 @@ export default {
     account_rejected: 'Account abgelehnt',
   },
   interests: {
+    select_interests:
+      'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
+    amount_selected: '{amount}/{max} gewählt',
+  },
+  categories: {
     cars: 'Autos',
     celebrities: 'Celebrities',
     cooking: 'Kochen',
@@ -158,9 +163,6 @@ export default {
     tools: 'Werkzeuge',
     travelling: 'Reisen',
     watches: 'Uhren',
-    select_interests:
-      'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
-    amount_selected: '{amount}/{max} gewählt',
   },
   products: {
     products: 'Produkte',
@@ -203,10 +205,6 @@ export default {
     value_desc: 'Wert absteigend',
     all: 'Alle',
     reset_filter: 'Filter zurücksetzen',
-    categories: {
-      TECHNOLOGY: 'Technologie',
-      CARS: 'Autos',
-    },
   },
   settings: {
     settings: 'Einstellungen',
