@@ -1,7 +1,7 @@
 import { Notification } from 'src/data/types/Notification';
 import { subscribeToQuery } from 'src/helpers/data-helpers';
 import { MY_NOTIFICATIONS } from 'src/data/queries/NOTIFICATIONS';
-import { computed, Ref } from 'vue';
+import { computed, ComputedRef, Ref } from 'vue';
 import { Product } from 'src/data/types/Product';
 import { ALL_PRODUCTS, MY_PRODUCTS, PRODUCT } from 'src/data/queries/PRODUCT';
 import {
@@ -19,9 +19,9 @@ import { Address } from 'src/data/types/Address';
 
 /**
  * Fetch notifications of current user.
- * @returns {Ref<Notification[]>} - my notifications
+ * @returns {ComputedRef<Notification[]>} - my notifications
  */
-export function fetchMyNotifications(): Ref<Notification[]> {
+export function fetchMyNotifications(): ComputedRef<Notification[]> {
   const queryResult = subscribeToQuery(MY_NOTIFICATIONS) as Ref<
     Record<string, unknown>[]
   >;
@@ -30,9 +30,9 @@ export function fetchMyNotifications(): Ref<Notification[]> {
 
 /**
  * Fetch all products.
- * @returns {Ref<Product[]>} - all products
+ * @returns {ComputedRef<Product[]>} - all products
  */
-export function fetchAllProducts(): Ref<Product[]> {
+export function fetchAllProducts(): ComputedRef<Product[]> {
   const queryResult = subscribeToQuery(ALL_PRODUCTS) as Ref<
     Record<string, unknown>[]
   >;
@@ -41,9 +41,9 @@ export function fetchAllProducts(): Ref<Product[]> {
 
 /**
  * Fetch my products.
- * @returns {Ref<Product[]>} - my products
+ * @returns {ComputedRef<Product[]>} - my products
  */
-export function fetchMyProducts(): Ref<Product[]> {
+export function fetchMyProducts(): ComputedRef<Product[]> {
   const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<
     Record<string, unknown>[]
   >;
@@ -52,9 +52,9 @@ export function fetchMyProducts(): Ref<Product[]> {
 
 /**
  * Fetch all announcements.
- * @returns {Ref<Announcement[]>} - all announcements
+ * @returns {ComputedRef<Announcement[]>} - all announcements
  */
-export function fetchAllAnnouncements(): Ref<Announcement[]> {
+export function fetchAllAnnouncements(): ComputedRef<Announcement[]> {
   const queryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<
     Record<string, unknown>[]
   >;
@@ -63,9 +63,9 @@ export function fetchAllAnnouncements(): Ref<Announcement[]> {
 
 /**
  * Fetch all partners.
- * @returns {Ref<User[]>} - all partners.
+ * @returns {ComputedRef<User[]>} - all partners.
  */
-export function fetchAllPartners(): Ref<User[]> {
+export function fetchAllPartners(): ComputedRef<User[]> {
   const queryResult = subscribeToQuery(ALL_PARTNERS) as Ref<
     Record<string, unknown>[]
   >;
@@ -74,9 +74,9 @@ export function fetchAllPartners(): Ref<User[]> {
 
 /**
  * Fetch all players.
- * @returns {Ref<User[]>} - all players.
+ * @returns {ComputedRef<User[]>} - all players.
  */
-export function fetchAllPlayers(): Ref<User[]> {
+export function fetchAllPlayers(): ComputedRef<User[]> {
   const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<
     Record<string, unknown>[]
   >;
@@ -86,9 +86,9 @@ export function fetchAllPlayers(): Ref<User[]> {
 /**
  * Fetch product.
  * @param {string} productId - product UUID.
- * @returns {Ref<Product | null>} - product.
+ * @returns {ComputedRef<Product | null>} - product.
  */
-export function fetchProduct(productId: string): Ref<Product | null> {
+export function fetchProduct(productId: string): ComputedRef<Product | null> {
   const queryResult = subscribeToQuery(PRODUCT, {
     uuid: productId,
   }) as Ref<Record<string, unknown> | null>;
