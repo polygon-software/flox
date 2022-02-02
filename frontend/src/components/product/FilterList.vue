@@ -72,48 +72,47 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 import ROUTES from 'src/router/routes';
-import { useRoute, useRouter } from 'vue-router';
 import { Context, Module } from 'vuex-smart-module';
 import FeedState from 'src/store/feed/state';
 import FeedGetters from 'src/store/feed/getters';
 import FeedMutations from 'src/store/feed/mutations';
 import FeedActions from 'src/store/feed/actions';
 import { useFeedStore } from 'src/store/feed';
+import { RouterService } from 'src/services/RouterService';
+
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const feedStore: Context<Module<FeedState, FeedGetters, FeedMutations, FeedActions>> = useFeedStore();
-
-const router = useRouter()
-const route = useRoute()
 
 const categories = computed(() => feedStore.getters.getCategories())
 const brands = computed(() => feedStore.getters.getBrands())
 
 const categoryFilter = computed({
   get(): string{
-    return route.query.category as string ?? 'all';
+    return $routerService?.getQueryParam('category') ?? 'all';
   },
   async set(val: string) {
-    await router.push({ path: route.path, query: { ...route.query, category: val } })
+    await $routerService?.pushToQuery({ category: val })
   }
 })
 
 const brandFilter = computed({
   get(): string{
-    return route.query.brand as string ?? 'all';
+    return $routerService?.getQueryParam('brand') ?? 'all';
   },
   async set(val: string) {
-    await router.push({ path: route.path, query: { ...route.query, brand: val } })
+    await $routerService?.pushToQuery({ brand: val })
   }
 })
 
 const sortBy = computed({
   get(): string{
-    return route.query.sort as string ?? 'relevance';
+    return $routerService?.getQueryParam('sort') ?? 'relevance';
   },
   async set(val: string){
-    await router.push({ path: route.path , query: { ...route.query, sort: val } })
+    await $routerService?.pushToQuery({ sort: val })
   }
 })
 
@@ -122,7 +121,7 @@ const sortBy = computed({
  * @returns {Promise<void>} - async
  */
 async function onBack(): Promise<void>{
-  await router.push({ path: ROUTES.MAIN.path, query: { ...route.query  } })
+  await $routerService?.routeTo(ROUTES.MAIN, undefined, true);
 }
 
 /**
@@ -130,6 +129,6 @@ async function onBack(): Promise<void>{
  * @returns {Promise<void>} - async
  */
 async function resetFilter(): Promise<void>{
-  await router.push({ path: route.path , query: { ...route.query, sort: 'relevance', category: 'all', brand: 'all' } })
+  await $routerService?.pushToQuery({ sort: 'relevance', category: 'all', brand: 'all' })
 }
 </script>

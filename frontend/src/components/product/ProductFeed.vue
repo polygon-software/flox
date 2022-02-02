@@ -47,9 +47,8 @@
 <script setup lang="ts">
 import ProductCard from 'components/product/ProductCard.vue';
 import { fetchAllProducts } from 'src/helpers/api-helpers';
-import { computed, watchEffect } from 'vue';
+import { computed, inject, watchEffect } from 'vue';
 import ROUTES from 'src/router/routes';
-import { useRoute, useRouter } from 'vue-router';
 import { Context, Module } from 'vuex-smart-module';
 import FeedState from 'src/store/feed/state';
 import FeedGetters from 'src/store/feed/getters';
@@ -57,42 +56,42 @@ import FeedMutations from 'src/store/feed/mutations';
 import { useFeedStore } from 'src/store/feed';
 import FeedActions from 'src/store/feed/actions';
 import { CATEGORY } from '../../../../shared/definitions/ENUM';
+import { RouterService } from 'src/services/RouterService';
+
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const feedStore: Context<Module<FeedState, FeedGetters, FeedMutations, FeedActions>> = useFeedStore();
-
-const router = useRouter()
-const route = useRoute()
 
 const allProducts = fetchAllProducts()
 
 const searchFilter = computed(() => {
-  return route.query.search as string ?? '';
+  return $routerService?.getQueryParam('search') ?? '';
 })
 
 const categoryFilter = computed({
   get(): string{
-    return route.query.category as string ?? 'all';
+    return $routerService?.getQueryParam('category') ?? 'all';
   },
   async set(val: string) {
-    await router.push({ path: route.path, query: { ...route.query, category: val } })
+    await $routerService?.pushToQuery({ category: val })
   }
 })
 
 const brandFilter = computed({
   get(): string{
-    return route.query.brand as string ?? 'all';
+    return $routerService?.getQueryParam('brand') ?? 'all';
   },
   async set(val: string) {
-    await router.push({ path: route.path, query: { ...route.query, brand: val } })
+    await $routerService?.pushToQuery({ brand: val })
   }
 })
 
 const sortBy = computed({
   get(): string{
-    return route.query.sort as string ?? 'relevance';
+    return $routerService?.getQueryParam('sort') ?? 'relevance';
   },
   async set(val: string){
-    await router.push({ path: route.path , query: { ...route.query, sort: val } })
+    await $routerService?.pushToQuery({ sort: val })
   }
 })
 
@@ -162,7 +161,7 @@ watchEffect(() => feedStore.commit('setBrands', [...brands.value]))
  * @returns {Promise<void>} - async
  */
 async function openFilterPage(): Promise<void>{
-  await router.push({ path: ROUTES.FILTER.path, query: { ...route.query }});
+  await $routerService?.routeTo(ROUTES.FILTER, undefined, true);
 }
 
 /**
@@ -170,6 +169,6 @@ async function openFilterPage(): Promise<void>{
  * @returns {Promise<void>} - async
  */
 async function resetFilter(): Promise<void>{
-  await router.push({ path: route.path , query: { ...route.query, sort: 'relevance', category: 'all', brand: 'all' } })
+  await $routerService?.pushToQuery({ sort: 'relevance', category: 'all', brand: 'all' })
 }
 </script>
