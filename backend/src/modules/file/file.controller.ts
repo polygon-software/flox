@@ -26,19 +26,17 @@ export class FileController {
       return;
     }
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
+    const fileBuffer = await file.toBuffer();
     const params = req.query as Record<string, string>;
     const productId = params.productId;
 
-    const new_file = await this.fileService.uploadPublicFile(
-      file_buffer,
+    const newFile = await this.fileService.uploadPublicFile(
+      fileBuffer,
       file.filename,
       productId,
     );
-    res.send(new_file);
+    res.send(newFile);
   }
-
-
 
   @Post('/uploadPrivateFile')
   @AnyRole()
@@ -56,12 +54,12 @@ export class FileController {
     const owner = req['user'].userId;
 
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.fileService.uploadPrivateFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.fileService.uploadPrivateFile(
+      fileBuffer,
       file.filename,
       owner,
     );
-    res.send(new_file);
+    res.send(newFile);
   }
 }

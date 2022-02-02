@@ -1,18 +1,34 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { AnnouncementService } from './announcement.service';
+import { Repository } from 'typeorm';
+import { Announcement } from './entities/announcement.entity';
+import { UserService } from '../user/user.service';
+import { NotificationService } from '../notification/notification.service';
+import { User } from '../user/entities/user.entity';
+import { Notification } from '../notification/entities/notification.entity';
 
 describe('AnnouncementService', () => {
-  let service: AnnouncementService;
+  let announcementService: AnnouncementService;
+  let announcementRepository: Repository<Announcement>;
+  let userService: UserService;
+  let notificationService: NotificationService;
+  let userRepository: Repository<User>;
+  let notificationRepository: Repository<Notification>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AnnouncementService],
-    }).compile();
+    notificationRepository = new Repository<Notification>();
+    userRepository = new Repository<User>();
+    announcementRepository = new Repository<Announcement>();
 
-    service = module.get<AnnouncementService>(AnnouncementService);
+    notificationService = new NotificationService(notificationRepository);
+    userService = new UserService(userRepository, notificationService);
+    announcementService = new AnnouncementService(
+      announcementRepository,
+      userService,
+      notificationService,
+    );
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(announcementService).toBeDefined();
   });
 });

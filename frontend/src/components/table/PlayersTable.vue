@@ -1,7 +1,7 @@
 <template>
   <div class="column full-width">
     <q-table
-      :rows="computedResult"
+      :rows="allPlayers"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
@@ -37,7 +37,7 @@
             {{ _props.row.phone}}
           </q-td>
           <q-td key="birthdate" :props="_props">
-            {{ _props.row.birthdate ? formatDate(new Date(_props.row.birthdate)) : '-' }}
+            {{ _props.row.birthdate ? formatDate(_props.row.birthdate) : '-' }}
           </q-td>
           <q-td key="options" :props="_props">
             <q-btn-dropdown
@@ -86,14 +86,13 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, Ref} from 'vue';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {defineProps} from 'vue';
 import {formatDate, formatDateTime} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
-import {ALL_PLAYERS} from 'src/data/queries/USER';
 import {enableUser, disableUser} from 'src/helpers/admin-helpers';
 import {User} from 'src/data/types/User';
+import { fetchAllPlayers } from 'src/helpers/api-helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -119,12 +118,7 @@ const columns = [
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
-const queryResult = subscribeToQuery(ALL_PLAYERS) as Ref<Record<string, unknown>[]>
-
-// Rows, filtered by status (if applicable)
-const computedResult = computed(() => {
-  return queryResult.value ?? []
-})
+const allPlayers = fetchAllPlayers();
 
 /**
  * Gets the color & label for the status chip of a user

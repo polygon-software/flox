@@ -1,7 +1,7 @@
 <template>
   <div class="column full-width">
     <q-table
-      :rows="computedResult"
+      :rows="myProducts"
       :columns="columns"
       row-key="uuid"
       :rows-per-page-options="[10,20, 100]"
@@ -104,8 +104,8 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, inject, Ref} from 'vue';
-import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
+import {defineProps, inject} from 'vue';
+import {executeMutation} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
 import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
@@ -114,8 +114,8 @@ import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';
 import {FetchResult} from '@apollo/client';
 import {sleep} from 'src/helpers/general-helpers';
 import {i18n} from 'boot/i18n';
-import {MY_PRODUCTS} from 'src/data/queries/PRODUCT';
 import {ErrorService} from 'src/services/ErrorService';
+import { fetchMyProducts } from 'src/helpers/api-helpers';
 
 const $errorService: ErrorService|undefined = inject('$errorService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -145,12 +145,8 @@ const columns = [
   { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
 ]
 
-const queryResult = subscribeToQuery(MY_PRODUCTS) as Ref<Record<string, unknown>[]>
-
 // Rows, filtered by status (if applicable)
-const computedResult = computed(() => {
-  return queryResult.value ?? []
-})
+const myProducts = fetchMyProducts();
 
 /**
  * Determines whether a product should be editable (if it's either a draft, or a valid product that hasn't started yet

@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/cognitive-complexity */
+
 import Joi, { Schema } from 'joi';
 import { ProductItem } from '../../../../shared/schemas/ProductItem';
 import {
@@ -6,124 +8,100 @@ import {
   PRODUCT_STATUS,
 } from '../../../../shared/definitions/ENUM';
 
+export interface ProductParams {
+  uuid?: string;
+  title?: string;
+  description?: string;
+  brand?: string;
+  category?: CATEGORY;
+  value?: number;
+  currency?: CURRENCY;
+  start?: Date;
+  end?: Date;
+  pictures?: Record<string, string>[];
+  status?: PRODUCT_STATUS;
+  sponsored?: boolean;
+  directBuyLink?: string;
+  directBuyLinkCLicks?: number;
+  directBuyLinkMaxClicks?: number;
+  directBuyLinkCost?: number;
+  directBuyLinkMaxCost?: number;
+  brandLink?: string;
+  brandLinkClicks?: number;
+  brandLinkMaxClicks?: number;
+  brandLinkCost?: number;
+  brandLinkMaxCost?: number;
+  minBet?: number;
+  maxBet?: number;
+  tags?: string[];
+  comments?: Record<string, string>[];
+  likes?: number;
+}
+
 /**
  * A class representing a product
  */
 export class Product {
-  uuid: string;
-  title: string;
-  description: string;
-  brand: string;
-  category: CATEGORY;
-  value: number;
+  uuid: string | null;
+  title: string | null;
+  description: string | null;
+  brand: string | null;
+  category: CATEGORY | null;
+  value: number | null;
   currency: CURRENCY;
-  start: Date;
-  end: Date;
+  start: Date | null;
+  end: Date | null;
   pictures: Record<string, string>[];
   status: PRODUCT_STATUS;
-  sponsored: boolean;
-  directBuyLink: string;
-  directBuyLinkCLicks: number;
-  directBuyLinkMaxClicks: number;
-  directBuyLinkCost: number;
-  directBuyLinkMaxCost: number;
-  brandLink: string;
-  brandLinkClicks: number;
-  brandLinkMaxClicks: number;
-  brandLinkCost: number;
-  brandLinkMaxCost: number;
-  minBet: number;
-  maxBet: number;
+  sponsored: boolean | null;
+  directBuyLink: string | null;
+  directBuyLinkCLicks: number | null;
+  directBuyLinkMaxClicks: number | null;
+  directBuyLinkCost: number | null;
+  directBuyLinkMaxCost: number | null;
+  brandLink: string | null;
+  brandLinkClicks: number | null;
+  brandLinkMaxClicks: number | null;
+  brandLinkCost: number | null;
+  brandLinkMaxCost: number | null;
+  minBet: number | null;
+  maxBet: number | null;
   tags: string[];
   comments: Record<string, string>[];
   likes: number;
 
   /**
    * Constructor
-   * @param {string} uuid - uuid
-   * @param {string} title - title
-   * @param {string} description - description
-   * @param {string} brand - brand
-   * @param {CATEGORY} category - category
-   * @param {number} value - value
-   * @param {CURRENCY} currency - currency
-   * @param {Date} start - start
-   * @param {Date} end - end
-   * @param {Record<string, string>[]} pictures - pictures
-   * @param {PRODUCT_STATUS} status - status
-   * @param {boolean} sponsored - sponsored
-   * @param {string} directBuyLink - direct buy link
-   * @param {number} directBuyLinkCLicks - direct buy link clicks
-   * @param {number} directBuyLinkMaxClicks - direct buy link max clicks
-   * @param {number} directBuyLinkCost - direct buy link cost
-   * @param {number} directBuyLinkMaxCost - direct buy link max cost
-   * @param {string} brandLink - brand link
-   * @param {number} brandLinkClicks - brand link clicks
-   * @param {number} brandLinkMaxClicks - brand link max clicks
-   * @param {number} brandLinkCost - brand link cost
-   * @param {number} brandLinkMaxCost - brand link max cost
-   * @param {number} minBet - minimum bet
-   * @param {number} maxBet - maximum bet
-   * @param {string[]} tags - tags
-   * @param {Record<string, string>[]} comments - comments
-   * @param {number} likes - likes
+   * @param {ProductParams} params - params
    */
-  constructor(
-    uuid: string,
-    title: string,
-    description: string,
-    brand: string,
-    category: CATEGORY,
-    value: number,
-    currency: CURRENCY,
-    start: Date,
-    end: Date,
-    pictures: Record<string, string>[],
-    status: PRODUCT_STATUS,
-    sponsored: boolean,
-    directBuyLink: string,
-    directBuyLinkCLicks: number,
-    directBuyLinkMaxClicks: number,
-    directBuyLinkCost: number,
-    directBuyLinkMaxCost: number,
-    brandLink: string,
-    brandLinkClicks: number,
-    brandLinkMaxClicks: number,
-    brandLinkCost: number,
-    brandLinkMaxCost: number,
-    minBet: number,
-    maxBet: number,
-    tags: string[],
-    comments: Record<string, string>[],
-    likes: number
-  ) {
-    this.uuid = uuid;
-    this.title = title;
-    this.description = description;
-    this.brand = brand;
-    this.category = category;
-    this.value = value;
-    this.currency = currency;
-    this.start = start;
-    this.end = end;
-    this.pictures = pictures;
-    this.status = status;
-    this.sponsored = sponsored;
-    this.directBuyLink = directBuyLink;
-    this.directBuyLinkCLicks = directBuyLinkCLicks;
-    this.directBuyLinkMaxClicks = directBuyLinkMaxClicks;
-    this.directBuyLinkCost = directBuyLinkCost;
-    this.directBuyLinkMaxCost = directBuyLinkMaxCost;
-    this.brandLink = brandLink;
-    this.brandLinkClicks = brandLinkClicks;
-    this.brandLinkMaxClicks = brandLinkMaxClicks;
-    this.brandLinkCost = brandLinkCost;
-    this.brandLinkMaxCost = brandLinkMaxCost;
-    this.minBet = minBet;
-    this.maxBet = maxBet;
-    this.tags = tags;
-    this.comments = comments;
-    this.likes = likes;
+  constructor(params: ProductParams) {
+    this.uuid = params.uuid || null;
+    this.title = params.title || null;
+    this.description = params.description || null;
+    this.brand = params.brand || null;
+    this.category = params.category || null;
+    this.value = params.value || null;
+    this.currency = params.currency || CURRENCY.CHF;
+    this.start = params.start || null;
+    this.end = params.end || null;
+    this.pictures = params.pictures || [];
+    this.status = params.status || PRODUCT_STATUS.DRAFT;
+    this.sponsored = params.sponsored || null;
+    this.directBuyLink = params.directBuyLink || null;
+    this.directBuyLinkCLicks = params.directBuyLinkCLicks || null;
+    this.directBuyLinkMaxClicks = params.directBuyLinkMaxClicks || null;
+    this.directBuyLinkCost = params.directBuyLinkCost || null;
+    this.directBuyLinkMaxCost = params.directBuyLinkMaxCost || null;
+    this.brandLink = params.brandLink || null;
+    this.brandLinkClicks = params.brandLinkClicks || null;
+    this.brandLinkMaxClicks = params.brandLinkMaxClicks || null;
+    this.brandLinkCost = params.brandLinkCost || null;
+    this.brandLinkMaxCost = params.brandLinkMaxCost || null;
+    this.minBet = params.minBet || null;
+    this.maxBet = params.maxBet || null;
+    this.tags = params.tags || [];
+    this.comments = params.comments || [];
+    this.likes = params.likes || 0;
   }
 
   /**

@@ -50,14 +50,12 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, ref, Ref} from 'vue';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {computed, defineProps, ref} from 'vue';
 import {formatDate} from 'src/helpers/format-helpers';
-import {ALL_ANNOUNCEMENTS} from 'src/data/queries/ANNOUNCEMENTS';
 import {updateAnnouncement, deleteAnnouncement} from 'src/helpers/admin-helpers';
 import { i18n } from 'boot/i18n';
 import {ROLE} from '../../../../shared/definitions/ENUM';
-import { Announcement } from 'src/data/types/Announcement';
+import { fetchAllAnnouncements } from 'src/helpers/api-helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -85,22 +83,10 @@ const columns = [
   { name: 'options', sortable: false, align: 'left', style: 'width: 0;'},
 ]
 
-const allAnnouncementsQueryResult = subscribeToQuery(ALL_ANNOUNCEMENTS) as Ref<Record<string, unknown>[]>
-
-const realAnnouncements = computed(() => {
-  const announcementRecords = allAnnouncementsQueryResult?.value ?? [];
-  return announcementRecords.map((record) => new Announcement(
-    record.title as string,
-    new Date(record.date as string),
-    record.content as string,
-    record.userRoles as ROLE[],
-    record.scheduled as boolean,
-    record.uuid as string,
-  ))
-})
+const allAnnouncements = fetchAllAnnouncements()
 
 const filteredAnnouncements = computed(() => {
-  let announcements = realAnnouncements.value
+  let announcements = allAnnouncements.value
   if(props.roleFilter !== null){
     announcements = announcements.filter((announcement) => announcement.userRoles.includes(props.roleFilter as ROLE))
   }

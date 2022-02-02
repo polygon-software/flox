@@ -1,6 +1,7 @@
 <template>
   <q-page class="flex justify-start q-pa-none q-ma-none">
     <div
+      v-if="product"
       style="width: calc(100% - 32px)"
     >
       <!-- General Info -->
@@ -18,7 +19,7 @@
             <div class="row flex justify-between">
               <!-- Name -->
               <q-input
-                v-model="input.title"
+                v-model="product.title"
                 class="q-ma-sm full-width"
                 :label="$t('products.product_name')"
                 outlined
@@ -28,7 +29,7 @@
 
               <!-- Description -->
               <q-input
-                v-model="input.description"
+                v-model="product.description"
                 class="q-ma-sm full-width"
                 :label="$t('products.product_description')"
                 outlined
@@ -44,7 +45,7 @@
             <!-- Brand & category row -->
             <div class="row flex justify-between">
               <q-input
-                v-model="input.brand"
+                v-model="product.brand"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.brand')"
@@ -53,7 +54,7 @@
                 readonly
               />
               <q-input
-                v-model="input.category"
+                v-model="product.category"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.category')"
@@ -67,7 +68,8 @@
             <div class="row flex justify-between">
               <!-- Start date -->
               <q-input
-                v-model="input.start"
+                v-model="startDate"
+                mask="##.##.####"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.start')"
@@ -79,7 +81,8 @@
 
               <!-- End date -->
               <q-input
-                v-model="input.end"
+                v-model="endDate"
+                mask="##.##.####"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.end')"
@@ -93,7 +96,7 @@
             <!-- Value & currency -->
             <div class="row flex justify-between">
               <q-input
-                v-model="input.value"
+                v-model="product.value"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.value')"
@@ -102,7 +105,7 @@
                 readonly
               />
               <q-input
-                v-model="input.currency"
+                v-model="product.currency"
                 :options="currencies"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
@@ -116,7 +119,7 @@
             <!-- Min/Max bet -->
             <div class="row flex justify-between">
               <q-input
-                v-model="input.minBet"
+                v-model="product.minBet"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.min_bet')"
@@ -126,7 +129,7 @@
               />
 
               <q-input
-                v-model="input.maxBet"
+                v-model="product.maxBet"
                 class="q-ma-sm"
                 style="width: calc(50% - 25px)"
                 :label="$t('products.max_bet')"
@@ -152,7 +155,7 @@
           <h6 class="q-ma-md">{{ $t('products.tags') }}</h6>
           <q-select
             ref="ChipInput"
-            v-model="input.tags"
+            v-model="product.tags"
             class="q-ma-md"
             outlined
             multiple
@@ -176,8 +179,11 @@
           <h6 class="q-ma-md">{{ $t('products.type') }}</h6>
           <div class="row flex justify-between items-center q-ma-md">
             <!-- Sponsored -->
-            <q-input
-              v-model="input.sponsored"
+            <q-select
+              v-model="product.sponsored"
+              :options="sponsoredOptions"
+              map-options
+              emit-value
               class="column"
               style="width: calc(50% - 25px)"
               :label="$t('products.promotion')"
@@ -202,7 +208,7 @@
           <div class="row flex justify-between">
             <!-- Product Page Link -->
             <q-input
-              v-model="input.directBuyLink"
+              v-model="product.directBuyLink"
               class="q-ma-sm col-7"
               :label="$t('products.product_page_link')"
               outlined
@@ -211,7 +217,7 @@
               readonly
             />
             <q-input
-              v-model="input.directBuyLinkMaxClicks"
+              v-model="product.directBuyLinkMaxClicks"
               class="q-ma-sm col-2"
               :label="$t('products.max_clicks')"
               outlined
@@ -219,7 +225,7 @@
               readonly
             />
             <q-input
-              v-model="input.directBuyLinkMaxCost"
+              v-model="product.directBuyLinkMaxCost"
               class="q-ma-sm col-2"
               :label="$t('products.max_cost')"
               outlined
@@ -232,7 +238,7 @@
           <div class="row flex justify-between">
             <!-- Seller Page Link -->
             <q-input
-              v-model="input.brandLink"
+              v-model="product.brandLink"
               class="q-ma-sm col-7"
               :label="$t('products.seller_page_link')"
               outlined
@@ -240,7 +246,7 @@
               readonly
             />
             <q-input
-              v-model="input.brandLinkMaxClicks"
+              v-model="product.brandLinkMaxClicks"
               class="q-ma-sm col-2"
               :label="$t('products.max_clicks')"
               outlined
@@ -248,7 +254,7 @@
               readonly
             />
             <q-input
-              v-model="input.brandLinkMaxCost"
+              v-model="product.brandLinkMaxCost"
               class="q-ma-sm col-2"
               :label="$t('products.max_cost')"
               outlined
@@ -280,14 +286,14 @@
       <!-- Submit -->
       <div class="row">
         <q-btn
-          v-if="input.status === PRODUCT_STATUS.DRAFT || input.status === PRODUCT_STATUS.VALID"
+          v-if="product.status === PRODUCT_STATUS.DRAFT || product.status === PRODUCT_STATUS.VALID"
           class="q-ma-md text-black"
           color="primary"
           :label="$t('general.edit')"
           rounded
           no-caps
           style="height: 50px;"
-          @click="() => editProduct(input.uuid)"
+          @click="() => editProduct(product.uuid)"
         />
       </div>
     </div>
@@ -295,123 +301,69 @@
 </template>
 
 <script setup lang="ts">
-import {inject, reactive, ref, Ref, watch} from 'vue';
+import { computed, inject, ref, Ref, watch } from 'vue';
 import {useRoute} from 'vue-router';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {sleep} from 'src/helpers/general-helpers';
 import axios, {AxiosResponse} from 'axios';
 import {RouterService} from 'src/services/RouterService';
 import {toDataUrl} from 'src/helpers/image-helper';
-import {i18n} from 'boot/i18n';
-import {toPascalCase} from 'src/helpers/string-helpers';
-import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM'
+import { CURRENCY, PRODUCT_STATUS } from '../../../../shared/definitions/ENUM';
 import ROUTES from 'src/router/routes';
-import {QueryObject} from 'src/data/DATA-DEFINITIONS';
-import {PRODUCT} from 'src/data/queries/PRODUCT';
+import { fetchProduct } from 'src/helpers/api-helpers';
+import { formatDate, parseDate } from 'src/helpers/format-helpers';
+import { i18n } from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const route = useRoute()
-const productId = route.query.id // TODO: Error handling if no ID given
-const queryResult = productId ? subscribeToQuery(PRODUCT as QueryObject, {uuid: productId}) as Ref<Record<string, unknown>> : ref(null)
+
+const currencies: CURRENCY[] = Object.values(CURRENCY).filter((item) => {
+  return isNaN(Number(item))
+})
+
 const pictures: Ref<Array<string|ArrayBuffer|null>> = ref([])
-const input: Record<string, unknown> = reactive(
-  {
-    uuid: null,
-    title: null,
-    description: null,
-    brand: null,
-    value: null,
-    currency: null,
-    start: null,
-    end: null,
-    category: null,
-    minBet: null,
-    maxBet: null,
-    tags: null,
-    status: null,
-    sponsored: null,
-    brandLink: null,
-    brandLinkMaxClicks: null,
-    brandLinkMaxCost: null,
-    directBuyLink: null,
-    directBuyLinkMaxClicks: null,
-    directBuyLinkMaxCost: null,
-  }
-)
 
-/**
-* Watch for first result if a product is given
-*/
-const stop = watch(queryResult, async (newValue) => {
-  if(newValue && newValue !== {} && !(Array.isArray(newValue) && newValue.length === 0)){
-    // Wait for 100ms before prefilling form to avoid hydration mismatches & UI bugs in fields
-    await sleep(100)
+const productId = route.query.id as string // TODO: Error handling if no ID given
+const product = fetchProduct(productId)
 
-    // Manually handle each field, since some fields are special
-    mapValuesToInput(newValue)
+const startDate = computed({
+  get: () => product.value?.start ? formatDate(product.value.start) : '',
+  set: (dateString) => {
+    if(product.value !== null) {
+      product.value.start = parseDate(dateString)
+    }
+  },
+})
 
-    // Pictures
-    pictures.value = await mapPicturesToInput(newValue)
+const endDate = computed({
+  get: () => product.value?.end ? formatDate(product.value.end) : '',
+  set: (dateString) => {
+    if(product.value !== null) {
+      product.value.end = parseDate(dateString)
+    }
+  },
+})
 
-    // Stop watcher, since we already got initial values
-    stop()
+const stop = watch(product, async (val) => {
+  if(val !== null) {
+    const existingPictures: Array<string | ArrayBuffer | null> = []
+    const newPictures = val.pictures
+    await Promise.all(newPictures.map(picture => {
+      const index: number = newPictures.indexOf(picture);
+      return axios.get(
+        picture.url,
+        {
+          responseType: 'blob'
+        }).then(async (res: AxiosResponse<Blob>) => {
+        const file = new File([res.data], `${val.title as string}_${index}`)
+        const url = await toDataUrl(file)
+        existingPictures.push(url)
+      });
+    }));
+    pictures.value = existingPictures;
+    stop();
   }
 })
 
-/**
- * Maps the data fetched from the DB to the input object.
- * @param {Record<string, unknown>} newValue Data object loaded from DB
- * @return {void}
- */
-function mapValuesToInput(newValue: Record<string, string|unknown>): void {
-  input.uuid = newValue.uuid
-  input.title = newValue.title
-  input.description = newValue.description
-  input.brand = newValue.brand
-  input.category = newValue.category ? toPascalCase(newValue.category as string) : null
-  input.value = newValue.value as string !== '' ? newValue.value : null
-  input.currency = newValue.currency
-  input.minBet = newValue.minBet as string !== '' ? newValue.minBet : null
-  input.maxBet = newValue.maxBet as string !== '' ? newValue.maxBet : null
-  input.sponsored = newValue.sponsored ? i18n.global.t('general.yes') : i18n.global.t('general.no')
-  input.tags = newValue.tags
-  input.status = newValue.status as PRODUCT_STATUS
-  input.directBuyLink = newValue.directBuyLink as string !== '' ? newValue.directBuyLink : null
-  input.directBuyLinkMaxClicks = newValue.directBuyLinkMaxClicks as string !== '' ? newValue.directBuyLinkMaxClicks : null
-  input.directBuyLinkMaxCost = newValue.directBuyLinkMaxCost as string !== '' ? newValue.directBuyLinkMaxCost : null
-  input.brandLink = newValue.brandLink as string !== '' ? newValue.brandLink : null
-  input.brandLinkMaxClicks = newValue.brandLinkMaxClicks as string !== '' ? newValue.brandLinkMaxClicks : null
-  input.brandLinkMaxCost = newValue.brandLinkMaxCost as string !== '' ? newValue.brandLinkMaxCost : null
-
-  // Dates: extract substring for date-only
-  input.start = newValue.start ? (newValue.start as string).substring(0, 10) : null
-  input.end = newValue.end ? (newValue.end as string).substring(0, 10) : null
-}
-
-/**
- * Maps the pictures fetched from the DB to the input object.
- * @param {Record<string, unknown>} newValue Data object loaded from DB
- * @async
- * @return {Promise<Array<string|ArrayBuffer|null>>} Pictures loaded from DB as data urls
- */
-async function mapPicturesToInput(newValue: Record<string, unknown>): Promise<Array<string | ArrayBuffer | null>> {
-  const existingPictures: Array<string|ArrayBuffer|null> = []
-
-  const newPictures = newValue.pictures as Record<string, string>[]
-  for (const picture of newPictures) {
-    const index: number = newPictures.indexOf(picture);
-    await axios.get(
-      picture.url,
-      {
-        responseType: 'blob'
-      }).then(async (res: AxiosResponse<Blob>) => {
-      const file = new File([res.data], `${(input as Record<string, string>).title}_${index}`)
-      const url = await toDataUrl(file)
-      existingPictures.push(url)
-    });
-  }
-  return existingPictures
-}
+const sponsoredOptions = [{value: true, label: i18n.global.t('general.yes')}, {value: false, label: i18n.global.t('general.no')}]
 
 /**
  * Routes to the product editing page for the given product
