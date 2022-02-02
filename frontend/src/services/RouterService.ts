@@ -1,33 +1,81 @@
-import {NavigationFailure, Router, RouteRecordRaw} from 'vue-router';
+import {
+  NavigationFailure,
+  Router,
+  RouteRecordRaw,
+  useRouter,
+  useRoute,
+  RouteLocationNormalizedLoaded,
+} from 'vue-router';
 
 /**
  * This is a service that is used globally throughout the application for routing
  */
 export class RouterService {
-
-    // Router instance
-    router: Router
+  // Router instance
+  router: Router;
+  route: RouteLocationNormalizedLoaded;
 
   /**
    * Constructor
-   * @param {Router} router - router instance
-  */
-  constructor(router: Router) {
-      this.router = router
+   */
+  constructor() {
+    this.router = useRouter();
+    this.route = useRoute();
   }
 
+  /**
+   * Routes to a given route, as defined in ROUTES constant.
+   * @param {RouteRecordRaw} to - the route to go to.
+   * @param {Record<string, string>} [query] - props to pass to the component, if any.
+   * @param {boolean} keepQuery - keep the current query and add new query parameters if given.
+   * @returns {void|NavigationFailure|undefined} - the navigation result.
+   */
+  async routeTo(
+    to: RouteRecordRaw,
+    query?: Record<string, string>,
+    keepQuery = false
+  ): Promise<void | NavigationFailure | undefined> {
+    if (keepQuery) {
+      if (query) {
+        return this.router.push({
+          path: to.path,
+          query: { ...this.route.query, ...query },
+        });
+      } else {
+        return this.router.push({
+          path: to.path,
+          query: { ...this.route.query },
+        });
+      }
+    } else {
+      if (query) {
+        return this.router.push({ path: to.path, query });
+      } else {
+        return this.router.push({ path: to.path });
+      }
+    }
+  }
 
   /**
-   * Routes to a given route, as defined in ROUTES constant
-   * @param {RouteRecordRaw} to - the route to go to
-   * @param {Record<string, string>} [query] - props to pass to the component, if any
-   * @returns {void|NavigationFailure|undefined} - the navigation result
+   * Adds given parameters to the URL query.
+   * @param {Record<string, string>} params - query parameters.
+   * @returns {void|NavigationFailure|undefined} - the navigation result.
    */
-  async routeTo(to: RouteRecordRaw, query?: Record<string, string>): Promise<void | NavigationFailure | undefined>{
-    if(query){
-      return this.router.push({path: to.path, query})
-    }
+  async pushToQuery(
+    params: Record<string, string>
+  ): Promise<void | NavigationFailure | undefined> {
+    return this.router.push({
+      path: this.route.path,
+      query: { ...this.route.query, ...params },
+    });
+  }
 
-    return this.router.push({path: to.path})
+  /**
+   * Returns the requested query parameter.
+   * @param {string} key - parameter name
+   * @returns {string | null} key - requested parameter
+   */
+  getQueryParam(key: string): string | null {
+    return (this.route.query[key] as string) ?? null;
   }
 }

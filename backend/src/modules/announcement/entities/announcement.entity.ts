@@ -33,7 +33,7 @@ export class Announcement extends BaseEntity {
   scheduled: boolean;
 
   @Field(() => [ROLE], { description: 'User roles to receive notification' })
-  @Column('simple-array', { nullable: true })
+  @Column('text', { array: true })
   @IsArray()
   userRoles: ROLE[];
 

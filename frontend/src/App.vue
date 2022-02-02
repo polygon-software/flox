@@ -8,7 +8,6 @@ import {provide, reactive} from 'vue';
 import {ErrorService} from './services/ErrorService';
 import {useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
-import {routerInstance} from 'boot/router';
 
 const $q = useQuasar()
 
@@ -21,7 +20,7 @@ const $authService: AuthenticationService = reactive(new AuthenticationService($
 provide<AuthenticationService>('$authService', $authService)
 
 // Router service
-const $routerService: RouterService = reactive(new RouterService(routerInstance))
+const $routerService: RouterService = reactive(new RouterService())
 provide<RouterService>('$routerService', $routerService)
 
 // Quasar

@@ -23,7 +23,7 @@
       class="q-ma-md col"
       style="font-size: medium"
     >
-      {{ $t('interests.select_interests', {max: max_interests}) }}
+      {{ $t('interests.select_interests', { max: maxInterests }) }}
     </p>
     <q-scroll-area
       style="height: 125px;"
@@ -45,7 +45,7 @@
       class="q-ma-md col"
       style="font-size: medium"
     >
-      {{ $t('interests.amount_selected', { amount: selectedInterests.length, max: max_interests }) }}
+      {{ $t('interests.amount_selected', { amount: selectedInterests.length, max: maxInterests }) }}
     </p>
   </q-card>
 
@@ -60,7 +60,7 @@ const emit = defineEmits(['change'])
 const search = ref('')
 
 // All available interest categories
-const max_interests = 5
+const maxInterests = 5
 type interest = {
   name: string,
   model: boolean
@@ -69,73 +69,66 @@ type interest = {
 // TODO: could be done as a loop?
 const interests = ref([
   {
-    name: i18n.global.t('interests.cars'),
+    name: i18n.global.t('categories.cars'),
     value: CATEGORY.CARS,
     model: false,
   },
   {
-    name: i18n.global.t('interests.celebrities'),
+    name: i18n.global.t('categories.celebrities'),
     value: CATEGORY.CELEBRITIES,
     model: false,
   },
   {
-    name: i18n.global.t('interests.cooking'),
+    name: i18n.global.t('categories.cooking'),
     value: CATEGORY.COOKING,
     model: false,
   },
   {
-    name: i18n.global.t('interests.fashion'),
+    name: i18n.global.t('categories.fashion'),
     value: CATEGORY.FASHION,
     model: false,
   },
   {
-    name: i18n.global.t('interests.music'),
+    name: i18n.global.t('categories.music'),
     value: CATEGORY.MUSIC,
     model: false,
   },
   {
-    name: i18n.global.t('interests.outdoor'),
+    name: i18n.global.t('categories.outdoor'),
     value: CATEGORY.OUTDOOR,
     model: false,
   },
   {
-    name: i18n.global.t('interests.sports'),
+    name: i18n.global.t('categories.sports'),
     value: CATEGORY.SPORTS,
     model: false,
   },
   {
-    name: i18n.global.t('interests.technology'),
+    name: i18n.global.t('categories.technology'),
     value: CATEGORY.TECHNOLOGY,
     model: false,
   },
   {
-    name: i18n.global.t('interests.tools'),
+    name: i18n.global.t('categories.tools'),
     value: CATEGORY.TOOLS,
     model: false,
   },
   {
-    name: i18n.global.t('interests.travelling'),
+    name: i18n.global.t('categories.travelling'),
     value: CATEGORY.TRAVELLING,
     model: false,
   },
   {
-    name: i18n.global.t('interests.watches'),
+    name: i18n.global.t('categories.watches'),
     value: CATEGORY.WATCHES,
     model: false,
   },
 ])
 
 const selectedInterests = computed(() => {
-  const filteredInterests = interests.value.filter(item => {
-    return item.model === true
-  })
-
-  const result = []
-  for(const interest of filteredInterests){
-    result.push(interest.value)
-  }
-
-  return result;
+  return  interests.value
+    .filter((interest) => interest.model)
+    .map((interest) => interest.value)
 })
 
 // Sorts the interests alphabetically
@@ -162,7 +155,7 @@ function clickChip(interest: interest) {
   }
 
   // Not at maximum number of selected interests
-  else if (!interest.model && selectedInterests.value.length < max_interests) {
+  else if (!interest.model && selectedInterests.value.length < maxInterests) {
     interest.model = true
   }
 
