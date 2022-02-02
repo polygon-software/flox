@@ -15,8 +15,10 @@ describe('UsersResolver', () => {
   beforeEach(async () => {
     userRepository = new Repository<User>();
     notificationRepository = new Repository<Notification>();
+
     notificationService = new NotificationService(notificationRepository);
     userService = new UserService(userRepository, notificationService);
+
     userResolver = new UserResolver(userService);
   });
 

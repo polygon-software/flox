@@ -16,7 +16,7 @@ export class FileResolver {
   async getPublicFile(
     @Args() getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return await this.fileService.getPublicFile(getPublicFileArgs);
+    return this.fileService.getPublicFile(getPublicFileArgs);
   }
 
   @AnyRole() // TODO application specific: set appropriate guards here
@@ -24,6 +24,6 @@ export class FileResolver {
   async getPrivateFile(
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
   ): Promise<PrivateFile> {
-    return await this.fileService.getPrivateFile(getPrivateFileArgs);
+    return this.fileService.getPrivateFile(getPrivateFileArgs);
   }
 }

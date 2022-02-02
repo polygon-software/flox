@@ -21,19 +21,19 @@ export class CommentResolver {
   async getComments(
     @Args() getCommentsArgs: GetCommentsArgs,
   ): Promise<Comment[]> {
-    return await this.commentService.getComments(getCommentsArgs);
+    return this.commentService.getComments(getCommentsArgs);
   }
 
   @Public()
   @Query(() => [Comment], { name: 'allComments' })
   async getAllComments(): Promise<Comment[]> {
-    return await this.commentService.getAllComments();
+    return this.commentService.getAllComments();
   }
 
   @Public()
   @Query(() => Comment, { name: 'comment' })
   async getComment(@Args() getCommentArgs: GetCommentArgs): Promise<Comment> {
-    return await this.commentService.getComment(getCommentArgs);
+    return this.commentService.getComment(getCommentArgs);
   }
 
   @Public()
@@ -52,7 +52,7 @@ export class CommentResolver {
   async updateComment(
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
   ): Promise<Comment> {
-    return await this.commentService.update(updateCommentInput);
+    return this.commentService.update(updateCommentInput);
   }
 
   @Public()
@@ -60,12 +60,12 @@ export class CommentResolver {
   async removeComment(
     @Args('deleteCommentInput') deleteCommentInput: DeleteCommentInput,
   ): Promise<Comment> {
-    return await this.commentService.remove(deleteCommentInput);
+    return this.commentService.remove(deleteCommentInput);
   }
 
   @Public()
   @Subscription(() => Comment)
-  commentAdded(): AsyncIterator<unknown, any, undefined> {
+  commentAdded(): AsyncIterator<unknown> {
     return pubSub.asyncIterator('commentAdded');
   }
 }
