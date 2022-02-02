@@ -13,7 +13,6 @@
 
 <script setup lang="ts">
 import { FIELDS } from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form-helpers'
 import { i18n } from 'boot/i18n';
 import {defineEmits} from 'vue';
 import GenericForm from 'components/forms/GenericForm.vue';

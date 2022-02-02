@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref, } from 'vue'
+import {inject, } from 'vue'
 import {AuthenticationService} from '../../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
