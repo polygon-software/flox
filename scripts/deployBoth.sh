@@ -1,4 +1,4 @@
-# PREREQUISITE: An ECS context, named '[projectname]context' with valid credentials
+# PREREQUISITE: An ECS context, named 'ecscontext' with valid credentials
 # IMPORTANT: Ensure this is adapted to the specific project!
 cd ..
 docker context use default
