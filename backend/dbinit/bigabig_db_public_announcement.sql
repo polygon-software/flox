@@ -1,1 +1,1 @@
-INSERT INTO public.announcement (uuid, title, content, date, scheduled, "userRoles") VALUES ('893aa1fd-427c-4050-8859-e1f560c727e6', 'Test', 'Edited: Testerino', '2022-02-01 00:00:00.000000', false, 'PLAYER');
+INSERT INTO public.announcement (uuid, title, content, date, scheduled, "userRoles") VALUES ('893aa1fd-427c-4050-8859-e1f560c727e6', 'Test', 'Edited: Testerino', '2022-02-01 00:00:00.000000', false, '{PLAYER}');
