@@ -1,19 +1,20 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 describe('UsersResolver', () => {
-  let resolver: UserResolver;
+  let userResolver: UserResolver;
+  let userService: UserService;
+  let userRepository: Repository<User>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UserResolver, UserService],
-    }).compile();
-
-    resolver = module.get<UserResolver>(UserResolver);
+    userRepository = new Repository<User>();
+    userService = new UserService(userRepository);
+    userResolver = new UserResolver(userService);
   });
 
   it('should be defined', () => {
-    expect(resolver).toBeDefined();
+    expect(userResolver).toBeDefined();
   });
 });

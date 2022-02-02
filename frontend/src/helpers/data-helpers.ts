@@ -26,6 +26,7 @@ async function executeQuery(
 ): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
   const queryResult = useQuery(queryObject.query, variables ?? {});
 
+  // If we have a cached result, return immediately
   if (queryResult.result.value) {
     return {
       data: queryResult.result.value as Record<string, unknown[]>,
