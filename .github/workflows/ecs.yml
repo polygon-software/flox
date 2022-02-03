@@ -32,12 +32,13 @@ jobs:
       - name: Build and push Frontend
         uses: docker/build-push-action@v2
         with:
-          context: "{{defaultContext}}:frontend"
+          context: "./frontend"
+          path: frontend
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
       - name: Build and push Backend
         uses: docker/build-push-action@v2
         with:
-          context: "{{defaultContext}}:backend"
+          context: "./backend"
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}:latest
