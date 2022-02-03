@@ -154,7 +154,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     ],
   },
 
-  'SUCCESS': {
+  SUCCESS: {
     path: '/success',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/generic/SuccessPage.vue') }],
