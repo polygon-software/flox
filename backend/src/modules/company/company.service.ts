@@ -134,7 +134,7 @@ export class CompanyService {
       deleteCompanyInput.uuid,
     );
     const uuid = company.uuid;
-    const deletedCompany = await this.companyRepository.remove(company);
+    const deletedCompany = await this.companyRepository.softRemove(company);
     deletedCompany.uuid = uuid;
     return deletedCompany;
   }

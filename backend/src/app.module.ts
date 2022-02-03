@@ -19,6 +19,12 @@ import { SoiAdminModule } from './modules/SOI-Admin/soi-admin.module';
 import { SoiEmployeeModule } from './modules/SOI-Employee/soi-employee.module';
 import { FileModule } from './modules/file/file.module';
 import { DossierModule } from './modules/dossier/dossier.module';
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
+import winston from 'winston';
+import CloudWatchTransport from 'winston-cloudwatch';
 
 @Module({
   imports: [
@@ -64,6 +70,7 @@ import { DossierModule } from './modules/dossier/dossier.module';
         AWS_PRIVATE_BUCKET_NAME: Joi.string().required(),
       }),
     }),
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

@@ -73,7 +73,7 @@ export class UserService {
   async remove(deleteUserInput: DeleteUserInput): Promise<User> {
     const user = await this.usersRepository.findOne(deleteUserInput.uuid);
     const uuid = user.uuid;
-    const deletedUser = await this.usersRepository.remove(user);
+    const deletedUser = await this.usersRepository.softRemove(user);
     deletedUser.uuid = uuid;
     return deletedUser;
   }
