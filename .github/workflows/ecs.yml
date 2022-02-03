@@ -5,12 +5,19 @@ on:
     branches:
       - master
       - project-*
+  pull_request:
+    branches:
+      - master
+      - project-*
 
 env:
   AWS_REGION: eu-central-1                   
   ECS_SERVICE: MY_ECS_SERVICE                 # TODO set this to your Amazon ECS service name
   ECS_CLUSTER: bootstrap-test                 # TODO set this to your Amazon ECS cluster name
   AWS_DOCKERHUB_TOKEN: ${{ secrets.AWS_DOCKERHUB_TOKEN }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ECS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ECS_KEY_SECRET }}
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
   deploy:
@@ -42,16 +49,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v2
-        with:
-          context: frontend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
+      # - name: Build and push Frontend
+      #  uses: docker/build-push-action@v2
+      #  with:
+      #    context: frontend
+      #    push: true
+      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
           
-      - name: Build and push Backend
-        uses: docker/build-push-action@v2
-        with:
-          context: backend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
+      #- name: Build and push Backend
+      #  uses: docker/build-push-action@v2
+      #  with:
+      #    context: backend
+      #    push: true
+      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
+
+      - name: Setup ecs-cli environment
+        uses: marocchino/setup-ecs-cli@v1.1.0
+        
+      - name: Use ECS CLI TEST
+        run: |
+          ecs-cli compose -p BANANO up
+
