@@ -1,11 +1,11 @@
-import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE, IS_VALID_ID_UPLOAD} from './RULES'
-import {QInput} from 'quasar'
+import { IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE, IS_VALID_ID_UPLOAD } from './RULES'
+import { QInput } from 'quasar'
 import Interests from 'components/forms/fields/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
 import LivingAddress from 'components/forms/fields/AddressField.vue'
 import IDUploadField from 'components/forms/fields/IDUploadField.vue'
-import {markRaw} from 'vue';
+import { markRaw } from 'vue';
 import { i18n } from 'boot/i18n';
 
 /**
@@ -29,7 +29,6 @@ export interface Field {
     rules: Array<(val: any, ...args: any[]) => boolean|string>
     [key: string]: any
   },
-
 }
 
 const FIELDS: Record<string, Field> = {
@@ -62,14 +61,14 @@ const FIELDS: Record<string, Field> = {
             component: markRaw(Password),
             attributes: {
               rules: [(val: string): boolean|string => IS_VALID_PASSWORD(val) || i18n.global.t('errors.invalid_password')]
-            }
+            },
         },
         PASSWORD_REPEAT: {
             key: 'password_repeat',
             component: markRaw(PasswordRepeat),
             attributes: {
               rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) || i18n.global.t('errors.invalid_password')]
-            }
+            },
         },
         FULL_NAME: {
           key: 'full_name',
@@ -120,7 +119,7 @@ const FIELDS: Record<string, Field> = {
             label: i18n.global.t('account_data.birthdate'),
             lazy_rules: 'ondemand',
             rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('errors.invalid_birth_date')]
-          }
+          },
         },
         ID_UPLOAD: {
           key: 'id_upload',
@@ -128,7 +127,7 @@ const FIELDS: Record<string, Field> = {
           attributes: {
             rules: [(val: Record<string, File>): boolean|string  => IS_VALID_ID_UPLOAD(val) || i18n.global.t('errors.missing_file')]
           },
-        }
+        },
     }
 
-export {FIELDS}
+export { FIELDS }
