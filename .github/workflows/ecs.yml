@@ -34,10 +34,10 @@ jobs:
         with:
           context: frontend
           push: true
-          tags: ${ DOCKERHUB_USERNAME }/${ FRONTEND_IMAGE_NAME }:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}:latest
       - name: Build and push Backend
         uses: docker/build-push-action@v2
         with:
           context: backend
           push: true
-          tags: ${ DOCKERHUB_USERNAME }/${ BACKEND_IMAGE_NAME }:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}:latest
