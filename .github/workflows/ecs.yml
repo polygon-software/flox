@@ -3,7 +3,8 @@ name: Push to Docker Hub & deploy to AWS ECS
 on:
   push:
     branches:
-      - feature-dockerTestDeployment # TODO use project branches & master
+      - master
+      - project-*
 
 env:
   AWS_REGION: eu-central-1                   
@@ -25,7 +26,6 @@ jobs:
         id: repo_name
         run: |
           GITHUB_REF=${{github.ref_name}}
-          GITHUB_REF=${GITHUB_REF##*/}
           GITHUB_REF=${GITHUB_REF,,}
           echo ${GITHUB_REF}
           echo "::set-output name=BRANCH_NAME::${GITHUB_REF}"
