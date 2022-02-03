@@ -71,6 +71,7 @@ jobs:
         run: |
           curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
           docker context create ecs ecscontext --from-env
+          docker login
           docker context use ecscontext
           docker compose -p Schnabeltier up
 
