@@ -68,15 +68,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
           
-      - name: Install Docker CLI
-        uses: actions-hub/docker/cli@master
-        env:
-          SKIP_LOGIN: true
-      - name: Deploy to ECS
+      - name: Setup ecs-cli environment
+        uses: marocchino/setup-ecs-cli@v1.1.0
+        
+      - name: Use ECS CLI TEST
         run: |
-          docker --version
-          docker context ls
-          docker context create ecs ecscontext
-          docker context use ecscontext
-          docker compose ps
-          docker context rm ecscontext
+          ecs-cli compose -p BANANO
+
