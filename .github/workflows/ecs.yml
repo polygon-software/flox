@@ -17,7 +17,6 @@ env:
   AWS_DOCKERHUB_TOKEN: ${{ secrets.AWS_DOCKERHUB_TOKEN }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ECS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ECS_KEY_SECRET }}
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
   deploy:
@@ -62,11 +61,9 @@ jobs:
       #    context: backend
       #    push: true
       #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
-
-      - name: Setup ecs-cli environment
-        uses: marocchino/setup-ecs-cli@v1.1.0
-        
-      - name: Use ECS CLI TEST
-        run: |
-          ecs-cli compose -p ${{ env.ECS_CLUSTER }} up
+      - name: "Configure AWS Credentials"
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::923473058470:role/ecsTaskExecutionRole
+          aws-region: eu-central-1
 
