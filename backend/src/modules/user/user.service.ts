@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
@@ -7,11 +7,14 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { Logger, warn } from 'winston';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -51,6 +54,7 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
+    this.logger.warn(`Requested user with ID: ${getUserArgs.uuid}`);
     return this.usersRepository.findOne(getUserArgs.uuid);
   }
 

@@ -23,7 +23,7 @@ import { FileService } from '../file/file.service';
 import { ERRORS } from '../../error/ERRORS';
 import { User } from '../user/entities/user.entity';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
-import { Logger } from 'winston';
+import { Logger, warn } from 'winston';
 import {
   WINSTON_MODULE_NEST_PROVIDER,
   WINSTON_MODULE_PROVIDER,
@@ -38,8 +38,8 @@ export class DossierService {
     private readonly offerRepository: Repository<Offer>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    private readonly logger: LoggerService,
+    // @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    // private readonly logger: LoggerService,
     private readonly employeeService: EmployeeService,
     private readonly bankService: BankService,
     private readonly userService: UserService,
@@ -141,7 +141,7 @@ export class DossierService {
       readable_id: generateHumanReadableId(),
       employee: employee,
     });
-    this.logger.log('Dossier was created');
+    warn('bla');
     return this.dossierRepository.save(dossier);
   }
 

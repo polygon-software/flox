@@ -37,6 +37,7 @@ export class UserResolver {
     if (!user) {
       throw new Error('No User authenticated');
     }
+
     return this.usersService.getUser({ uuid: user.userId });
   }
 }
