@@ -25,6 +25,7 @@ jobs:
         id: repo_name
         run: |
           GITHUB_REF=${{github.ref_name}} | tr '[:upper:]' '[:lower:]'
+          echo ${GITHUB_REF##*/}
           echo "::set-output name=BRANCH_NAME::${GITHUB_REF##*/}"
         
       - name: Set up QEMU
