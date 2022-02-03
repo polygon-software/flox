@@ -160,6 +160,12 @@ export class UserService {
     return this.usersRepository.findOne(getUserArgs.uuid);
   }
 
+  getUserWithDocuments(getUserArgs: GetUserArgs): Promise<User> {
+    return this.usersRepository.findOne(getUserArgs, {
+      relations: ['documents'],
+    });
+  }
+
   async update(updateUserInput: UpdateUserInput): Promise<User> {
     const user = this.usersRepository.create(updateUserInput);
     await this.usersRepository.update(updateUserInput.uuid, user);

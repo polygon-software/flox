@@ -1,20 +1,15 @@
 import { Args, Resolver, Query } from '@nestjs/graphql';
 import PublicFile from './entities/public_file.entity';
 import { FileService } from './file.service';
-import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
+import { AdminOnly } from '../../auth/authorization.decorator';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
 import { Public } from '../../auth/authentication.decorator';
-import { UserService } from '../user/user.service';
 
 @Resolver(() => PublicFile)
 export class FileResolver {
-  constructor(
-    private readonly fileService: FileService,
-
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly fileService: FileService) {}
 
   @Public()
   @Query(() => PublicFile, { name: 'getPublicFile' })
@@ -24,17 +19,11 @@ export class FileResolver {
     return this.fileService.getPublicFile(getPublicFileArgs);
   }
 
-  @AnyRole()
+  @AdminOnly()
   @Query(() => PrivateFile, { name: 'getPrivateFile' })
   async getPrivateFile(
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
-    @CurrentUser() user: Record<string, string>,
   ): Promise<PrivateFile> {
-    // Get DB user
-    const dbUser = await this.userService.getUser({
-      uuid: user.sub,
-    });
-
-    return this.fileService.getPrivateFile(getPrivateFileArgs, dbUser);
+    return this.fileService.getPrivateFile(getPrivateFileArgs);
   }
 }

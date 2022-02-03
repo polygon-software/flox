@@ -131,16 +131,13 @@ export class FileService {
   /**
    * Gets a private file from the database
    * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID
-   * @param {User} user - user requesting file
    * @returns {Promise<PrivateFile>} - file
    */
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
-    user: User,
   ): Promise<PrivateFile> {
     const fileInfo = await this.privateFilesRepository.findOne({
       uuid: getPrivateFileArgs.uuid,
-      owner: user.uuid,
     });
     if (fileInfo) {
       return this.preparePrivateFile(getPrivateFileArgs, fileInfo);
@@ -230,12 +227,14 @@ export class FileService {
     }
 
     const fileBuffer = await file.toBuffer();
+
     const newFile = await this.uploadPrivateFile(
       fileBuffer,
       file.filename,
       ownerUuid,
       { [location.onFile]: associatedEntity },
     );
+
     if (
       // Empty location -> add
       associatedEntity[location.onAssociation] === null ||

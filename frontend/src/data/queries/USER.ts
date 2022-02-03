@@ -51,6 +51,41 @@ export const ALL_PLAYERS = {
   cacheLocation: 'allPlayers',
 };
 
+export const PLAYER = {
+  query: gql`
+    query user($uuid: ID!){
+      user(uuid: $uuid) {
+        uuid
+        role
+        createdAt
+        fullName
+        username
+        email
+        phone
+        birthdate
+        status
+        address {
+          uuid
+          street
+          number
+          city
+          zipCode
+          __typename
+        }
+        disabledUntil
+        documents {
+          uuid
+          url
+          __typename
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'user',
+};
+
 export const ALL_PARTNERS = {
   query: gql`
     query {

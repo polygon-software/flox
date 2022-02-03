@@ -5,16 +5,17 @@ import {ROLE, USER_STATUS} from '../../../../shared/definitions/ENUM';
  * A class representing a company data object
  */
 export class User {
-  role: ROLE
-  status: USER_STATUS
-  uuid: string | null
-  fullName: string | null
-  username: string | null
-  address: Address | null
-  phone: string | null
-  email: string | null
-  birthdate: Date | null
-  disabledUntil: Date | null
+  role: ROLE;
+  status: USER_STATUS;
+  uuid: string | null;
+  fullName: string | null;
+  username: string | null;
+  address: Address | null;
+  phone: string | null;
+  email: string | null;
+  birthdate: Date | null;
+  disabledUntil: Date | null;
+  documents?: Record<string, string>[];
 
   /**
    * Constructor
@@ -28,10 +29,11 @@ export class User {
    * @param email
    * @param birthdate
    * @param disabledUntil
+   * @param documents
    */
   // eslint-disable-next-line require-jsdoc
   constructor(role: ROLE, status: USER_STATUS, uuid?: string, fullName?: string, username?: string, address?: Address,
-              phone?: string, email?: string, birthdate?: Date, disabledUntil?: Date) {
+              phone?: string, email?: string, birthdate?: Date, disabledUntil?: Date, documents?: Record<string, string>[]) {
     this.role = role
     this.status = status
     this.uuid = uuid ?? null
@@ -42,5 +44,6 @@ export class User {
     this.email = email ?? null
     this.birthdate = birthdate ?? null
     this.disabledUntil = disabledUntil ?? null
+    this.documents = documents ?? []
   }
 }

@@ -18,20 +18,20 @@ import { QUERIES } from 'src/data/queries/QUERIES';
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
  * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
- * @returns {ApolloQueryResult<Record<string, unknown[]>>} - the query's output
+ * @returns {ApolloQueryResult<Record<string, unknown>>} - the query's output
  */
 async function executeQuery(
   queryObject: QueryObject,
   variables?: Record<string, unknown>
-): Promise<ApolloQueryResult<Record<string, unknown[]>>> {
+): Promise<ApolloQueryResult<Record<string, unknown>>> {
   const queryResult = useQuery(queryObject.query, variables ?? {});
 
   // If we have a cached result, return immediately
   if (queryResult.result.value) {
     return {
-      data: queryResult.result.value as Record<string, unknown[]>,
+      data: queryResult.result.value as Record<string, unknown>,
       loading: false,
-    } as ApolloQueryResult<Record<string, unknown[]>>;
+    } as ApolloQueryResult<Record<string, unknown>>;
   }
 
   return new Promise((resolve, reject) => {

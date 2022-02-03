@@ -69,7 +69,8 @@ async function onSignup(formValues: Record<string, unknown>): Promise<void>{
     idFront,
     idBack
   }
-  await uploadUserIdFiles(idFiles, cognitoId).catch((e: Error) => {
+
+  await uploadUserIdFiles(idFiles, cognitoId as string).catch((e: Error) => {
     $errorService?.showErrorDialog(e)
   })
 

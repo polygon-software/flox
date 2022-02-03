@@ -28,7 +28,7 @@ export class FileController {
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
-      res.send(new BadRequestException('File expected on this endpoint'));
+      res.send(new BadRequestException(ERRORS.file_expected));
       return;
     }
     const file = await req.file();
@@ -72,7 +72,7 @@ export class FileController {
 
   @Post('/uploadUserIdFiles')
   @Public()
-  async uploadUserIDFile(
+  async uploadUserIDFiles(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
     @Query() query: Record<string, string>, // Params

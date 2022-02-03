@@ -56,11 +56,11 @@ export async function uploadPrivateFiles(files: Record<string, unknown>, target:
 
 /**
  * Upload user ID files and associates them to user
- * @param {Record<string, unknown>} files - dictionary file filenames vs file
+ * @param {Record<string, File>} files - dictionary file filenames vs file
  * @param {string} userUuid - user UUID
  * @return {Promise<Record<string, unknown>>} - Updated related files
  */
-export async function uploadUserIdFiles(files: Record<string, unknown>, userUuid: string) {
+export async function uploadUserIdFiles(files: Record<string, File>, userUuid: string) {
   const formData = new FormData();
   for (const fileKey of Object.keys(files)) {
     if (files[fileKey]) {
