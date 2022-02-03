@@ -23,7 +23,7 @@ import { FileService } from '../file/file.service';
 import { ERRORS } from '../../error/ERRORS';
 import { User } from '../user/entities/user.entity';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
-import { Logger, warn } from 'winston';
+import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
