@@ -9,7 +9,7 @@ RUN yarn
 
 COPY . .
 
-RUN rm -r dist
+RUN rm -rf dist
 
 CMD ["yarn", "start:dev"]
 

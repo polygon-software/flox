@@ -9,6 +9,6 @@ RUN yarn --ignore-platform
 
 COPY . .
 
-RUN rm -r dist
+RUN rm -rf dist
 
 CMD ["yarn", "dev:ssr"]
