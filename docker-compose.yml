@@ -1,10 +1,11 @@
 version: '3.7'
 
+# This is the docker-compose to be used for AWS ECS Deployment
+
 services:
   backend:
-    container_name: bootstrap_backend
-    image: polygonsoftware/full-stack-bootstrap-backend
-    x-aws-pull_credentials: arn:aws:secretsmanager:eu-central-1:923473058470:secret:dockerhubAccessToken-nAnDW9
+    image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}
+    x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
       resources:
         limits:
@@ -22,9 +23,8 @@ services:
       - database
 
   frontend:
-    container_name: bootstrap_frontend
-    image: polygonsoftware/full-stack-bootstrap-frontend
-    x-aws-pull_credentials: arn:aws:secretsmanager:eu-central-1:923473058470:secret:dockerhubAccessToken-nAnDW9
+    image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}
+    x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
       resources:
         limits:
@@ -42,7 +42,6 @@ services:
       - backend
 
   database:
-    container_name: bootstrap_database
     image: postgres:14
     networks:
       - webnet
