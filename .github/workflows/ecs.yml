@@ -5,15 +5,9 @@ on:
     branches:
       - master
       - project-*
-  pull_request:
-    branches:
-      - master
-      - project-*
 
 env:
   AWS_REGION: eu-central-1                   
-  ECS_SERVICE: MY_ECS_SERVICE                 # TODO set this to your Amazon ECS service name
-  ECS_CLUSTER: bootstrap-test                 # TODO set this to your Amazon ECS cluster name
   AWS_DOCKERHUB_TOKEN: ${{ secrets.AWS_DOCKERHUB_TOKEN }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ECS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ECS_KEY_SECRET }}
@@ -48,30 +42,27 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
-      # - name: Build and push Frontend
-      #  uses: docker/build-push-action@v2
-      #  with:
-      #    context: frontend
-      #    push: true
-      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: frontend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
           
-      #- name: Build and push Backend
-      #  uses: docker/build-push-action@v2
-      #  with:
-      #    context: backend
-      #    push: true
-      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
-      #- name: "Configure AWS Credentials"
-      #  uses: aws-actions/configure-aws-credentials@v1
-      #  with:
-      #    role-to-assume: arn:aws:iam::923473058470:role/ecsTaskExecutionRole
-      #    aws-region: eu-central-1
+      - name: Build and push Backend
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
       
-      - name: Docker context create
+      - name: Deploy to ECS
         run: |
           curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
           docker context create ecs ecscontext --from-env
           docker login
           docker context use ecscontext
-          docker compose -p Schnabeltier up
+          docker compose -p ${{ steps.repo_name.outputs.BRANCH_NAME }} up
+          docker context use default
+          docker context rm ecscontext
 
