@@ -24,7 +24,7 @@ jobs:
       - name: Generate Repository name
         run: |
           GITHUB_REF=${{github.ref_name}}
-          export BRANCH_NAME=${GITHUB_REF##*/}
+          echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV"
         
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
