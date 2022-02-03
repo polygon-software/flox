@@ -75,5 +75,5 @@ jobs:
       - name: Docker context create
         uses: actions-hub/docker@master
         with:
-          args: context create ecs ecscontext --from-env
+          args: ecs version
 
