@@ -108,13 +108,12 @@ async function onUpdate(){
   // Update URLs
   await(updatePreviewURLs())
 
-  // Emit c hange
+  // Emit change
   emit('change', {
     front: idFront.value,
     back: idBack.value
   })
 }
-
 </script>
 
 <style scoped>
