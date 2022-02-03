@@ -24,7 +24,8 @@ jobs:
       - name: Generate Repository name
         id: repo_name
         run: |
-          GITHUB_REF=${{github.ref_name}} | tr '[:upper:]' '[:lower:]'
+          GITHUB_REF=${{github.ref_name}}
+          GITHUB_REF="$GITHUB_REF" | tr '[:upper:]' '[:lower:]'
           GITHUB_REF=${GITHUB_REF##*/}
           echo ${GITHUB_REF}
           echo "::set-output name=BRANCH_NAME::${GITHUB_REF}"
