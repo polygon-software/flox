@@ -50,6 +50,11 @@ services:
     image: postgres:14
     networks:
       - webnet
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2048m
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER:  ${DB_USER}
