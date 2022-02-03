@@ -6,9 +6,6 @@ import { GetPublicFileArgs } from './dto/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
 import { Public } from '../../auth/authentication.decorator';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 
 @Resolver(() => PublicFile)
