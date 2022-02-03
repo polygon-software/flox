@@ -66,14 +66,9 @@ jobs:
       #  with:
       #    role-to-assume: arn:aws:iam::923473058470:role/ecsTaskExecutionRole
       #    aws-region: eu-central-1
-      - name: Login to docker hub
-        uses: actions-hub/docker/login@master
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
-
+      
       - name: Docker context create
-        uses: actions-hub/docker@master
-        with:
-          args: ecs version
+        run: |
+          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+          docker context create ecs ecscontext --from-env
 
