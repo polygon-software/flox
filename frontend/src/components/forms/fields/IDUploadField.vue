@@ -1,55 +1,55 @@
 <template>
   <div class="row justify-between">
-      <!-- Front of ID -->
-      <q-file
+    <!-- Front of ID -->
+    <q-file
 
-        v-model="idFront"
-        class="col id-preview"
-        input-class="id-preview"
-        outlined
-        accept="image/*"
-        :label="$t('account_data.passport_front')"
-        stack-label
-        clearable
-        display-value=""
-        :max-file-size="props.maxFileSize"
-        :rules="[]"
-        @update:model-value="onUpdate"
-      >
-        <img
-          v-if="frontUrl"
-          :src="frontUrl"
-          alt="front"
-          class="q-my-md"
-          style="max-height: 150px"
-        />
-      </q-file>
+      v-model="idFront"
+      class="col id-preview"
+      input-class="id-preview"
+      outlined
+      accept="image/*"
+      :label="$t('account_data.passport_front')"
+      stack-label
+      clearable
+      display-value=""
+      :max-file-size="props.maxFileSize"
+      :rules="[]"
+      @update:model-value="onUpdate"
+    >
+      <img
+        v-if="frontUrl"
+        :src="frontUrl"
+        alt="front"
+        class="q-my-md"
+        style="max-height: 150px"
+      />
+    </q-file>
 
-      <!-- Back of ID -->
-      <q-file
-        v-model="idBack"
-        class="col id-preview"
-        input-class="id-preview"
-        style="margin-left: 20px"
-        outlined
-        accept="image/*"
-        :label="$t('account_data.passport_back')"
-        stack-label
-        clearable
-        display-value=""
-        :max-file-size="props.maxFileSize"
-        :rules="[]"
-        @update:model-value="onUpdate"
-      >
-        <img
-          v-if="backUrl"
-          :src="backUrl"
-          alt="back"
-          class="q-my-md"
-          style="max-height: 150px"
-        />
-      </q-file>
-    </div>
+    <!-- Back of ID -->
+    <q-file
+      v-model="idBack"
+      class="col id-preview"
+      input-class="id-preview"
+      style="margin-left: 20px"
+      outlined
+      accept="image/*"
+      :label="$t('account_data.passport_back')"
+      stack-label
+      clearable
+      display-value=""
+      :max-file-size="props.maxFileSize"
+      :rules="[]"
+      @update:model-value="onUpdate"
+    >
+      <img
+        v-if="backUrl"
+        :src="backUrl"
+        alt="back"
+        class="q-my-md"
+        style="max-height: 150px"
+      />
+    </q-file>
+  </div>
 </template>
 
 <script setup lang="ts">
