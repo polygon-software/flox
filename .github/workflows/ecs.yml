@@ -61,9 +61,14 @@ jobs:
       #    context: backend
       #    push: true
       #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
-      - name: "Configure AWS Credentials"
-        uses: aws-actions/configure-aws-credentials@v1
+      #- name: "Configure AWS Credentials"
+      #  uses: aws-actions/configure-aws-credentials@v1
+      #  with:
+      #    role-to-assume: arn:aws:iam::923473058470:role/ecsTaskExecutionRole
+      #    aws-region: eu-central-1
+      
+      - name: Docker context create
+        uses: actions-hub/docker@master
         with:
-          role-to-assume: arn:aws:iam::923473058470:role/ecsTaskExecutionRole
-          aws-region: eu-central-1
+          args: context create ecs ecscontext --from-env
 
