@@ -5,6 +5,7 @@ version: '3.0'
 services:
   backend:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}
+    x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
       resources:
         limits:
@@ -23,6 +24,7 @@ services:
 
   frontend:
     image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}
+    x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
       resources:
         limits:
