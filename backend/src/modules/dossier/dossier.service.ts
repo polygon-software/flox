@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 
-import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
@@ -24,10 +24,7 @@ import { ERRORS } from '../../error/ERRORS';
 import { User } from '../user/entities/user.entity';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
 import { Logger, warn } from 'winston';
-import {
-  WINSTON_MODULE_NEST_PROVIDER,
-  WINSTON_MODULE_PROVIDER,
-} from 'nest-winston';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class DossierService {
@@ -38,8 +35,7 @@ export class DossierService {
     private readonly offerRepository: Repository<Offer>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    // @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    // private readonly logger: LoggerService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly employeeService: EmployeeService,
     private readonly bankService: BankService,
     private readonly userService: UserService,
@@ -141,7 +137,7 @@ export class DossierService {
       readable_id: generateHumanReadableId(),
       employee: employee,
     });
-    warn('bla');
+    this.logger.log('log', `Dossier created:${dossier}`);
     return this.dossierRepository.save(dossier);
   }
 
