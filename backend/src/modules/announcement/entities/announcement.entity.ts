@@ -1,4 +1,4 @@
-import { ObjectType, InputType, Field } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { IsArray, IsBoolean, IsDate, IsString } from 'class-validator';
@@ -7,7 +7,6 @@ import { Notification } from '../../notification/entities/notification.entity';
 
 @ObjectType()
 @Entity({ name: 'announcement' })
-@InputType('announcement')
 /**
  * An announcement that is sent to one or more user roles in the form of a notification
  */
