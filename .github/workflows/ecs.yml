@@ -61,6 +61,12 @@ jobs:
       #    context: backend
       #    push: true
       #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
+      - name: S3 Sync
+        uses: ItsKarma/aws-cli@v1.70.0
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
           
       - name: Install Docker CLI
         uses: actions-hub/docker/cli@master
