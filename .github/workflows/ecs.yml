@@ -25,6 +25,7 @@ jobs:
         run: |
           GITHUB_REF=${{github.ref_name}}
           echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo ${{env.BRANCH_NAME}}
         
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
