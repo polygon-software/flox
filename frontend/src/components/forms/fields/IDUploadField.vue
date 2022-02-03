@@ -2,10 +2,8 @@
   <div class="row justify-between">
     <!-- Front of ID -->
     <q-file
-
       v-model="idFront"
-      class="col id-preview"
-      input-class="id-preview"
+      class="col"
       outlined
       accept="image/*"
       :label="$t('account_data.passport_front')"
@@ -20,16 +18,14 @@
         v-if="frontUrl"
         :src="frontUrl"
         alt="front"
-        class="q-my-md"
-        style="max-height: 150px"
+        class="q-my-md id-preview-image"
       />
     </q-file>
 
     <!-- Back of ID -->
     <q-file
       v-model="idBack"
-      class="col id-preview"
-      input-class="id-preview"
+      class="col"
       style="margin-left: 20px"
       outlined
       accept="image/*"
@@ -45,8 +41,7 @@
         v-if="backUrl"
         :src="backUrl"
         alt="back"
-        class="q-my-md"
-        style="max-height: 150px"
+        class="q-my-md id-preview-image"
       />
     </q-file>
   </div>
@@ -117,9 +112,7 @@ async function onUpdate(){
 </script>
 
 <style scoped>
-.id-preview{
-  width: 150px;
-  height: 150px;
-  margin-bottom: 24px
+.id-preview-image{
+  max-width: 100%;
 }
 </style>
