@@ -69,7 +69,7 @@ jobs:
       - name: Deploy to ECS
         run: |
           docker --version
-          docker context create ecs ecscontext --profile test
+          docker context create --help
           docker context use ecscontext
           docker compose ps
           docker context rm ecscontext
