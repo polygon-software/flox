@@ -64,6 +64,6 @@ jobs:
           
       - name: Deploy to ECS
         run: |
-          docker context create ecs ecscontext
+          docker context create ecs --from-env ecscontext
           docker context use ecscontext
           docker compose ps
