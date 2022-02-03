@@ -9,8 +9,8 @@ env:
   AWS_REGION: eu-central-1                   
   ECS_SERVICE: MY_ECS_SERVICE                 # TODO set this to your Amazon ECS service name
   ECS_CLUSTER: bootstrap-test                 # TODO set this to your Amazon ECS cluster name
-  FRONTEND_IMAGE_NAME: ${{ github.ref_name }}-frontend
-  BACKEND_IMAGE_NAME: ${{ github.ref_name }}-backend
+  FRONTEND_IMAGE_NAME: ${{ github.ref_name#***/ }}-frontend
+  BACKEND_IMAGE_NAME: ${{ github.ref_name#***/ }}-backend
   AWS_DOCKERHUB_TOKEN: ${{ secrets.AWS_DOCKERHUB_TOKEN }}
 
 jobs:
