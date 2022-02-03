@@ -24,6 +24,7 @@ export default {
     reset_password: 'Reset password',
     redirected: 'You will be redirected shortly...',
     successful_application: 'Your application was successful.',
+    successful_application_description: 'You will shortly be notified per e-mail with your application result.',
     confirmed_registration: 'Registration confirmed',
     redirect_to_login:
       'Your registration is now being processed! You will now be automatically redirected to the login screen.',
