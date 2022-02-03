@@ -68,5 +68,5 @@ jobs:
         
       - name: Use ECS CLI TEST
         run: |
-          ecs-cli compose -p BANANO
+          ecs-cli compose up -p BANANO
 
