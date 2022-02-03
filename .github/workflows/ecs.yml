@@ -24,8 +24,8 @@ jobs:
       - name: Generate Repository name
         id: repo_name
         run: |
-          GITHUB_REF=${{github.ref_name}}
-          echo "::set-output name=BRANCH_NAME::${GITHUB_REF##*/,,}"
+          GITHUB_REF=${{github.ref_name}} | tr '[:upper:]' '[:lower:]'
+          echo "::set-output name=BRANCH_NAME::${GITHUB_REF##*/}"
         
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
