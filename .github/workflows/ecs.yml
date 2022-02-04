@@ -63,8 +63,8 @@ jobs:
           echo VPC ID is $VPCID
           SUBNETS=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPCID --query 'Subnets[*].SubnetId' --output text`
           echo Subnets are $SUBNETS
-          LOADBALANCER=`aws elbv2 create-load-balancer --name ${{ steps.repo_name.outputs.BRANCH_NAME }} --type network --subnets $SUBNETS`
-          echo "LOADBALANCER=$LOADBALANCER.LoadBalancers[0].LoadBalancerArn" >> $GITHUB_ENV
+          LOADBALANCER=`aws elbv2 create-load-balancer --name ${{ steps.repo_name.outputs.BRANCH_NAME }} --type network --subnets $SUBNETS --query 'LoadBalancers[0].LoadBalancerArn'`
+          echo "LOADBALANCER=$LOADBALANCER" >> $GITHUB_ENV
           
       ## TO HERE
       - name: Tets
