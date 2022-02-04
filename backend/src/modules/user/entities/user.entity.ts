@@ -116,7 +116,6 @@ export class User {
   })
   @OneToMany(() => PrivateFile, (file) => file.user, {
     cascade: true,
-    onDelete: 'CASCADE',
   })
   documents: PrivateFile[];
 
