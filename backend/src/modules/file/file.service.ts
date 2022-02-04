@@ -88,14 +88,14 @@ export class FileService {
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
    * @param {string} owner - the file owner's UUID
-   * @param {Record<string, Product|user>} association - the entity the file is associated to
+   * @param {Record<string, Product|User>} association - the entity the file is associated to
    * @returns {Promise<PrivateFile>} - file
    */
   async uploadPrivateFile(
     dataBuffer: Buffer,
     filename: string,
     owner: string,
-    association: Record<string, Product | User>, // TODO gotta ensure this is right
+    association: Record<string, Product | User>,
   ): Promise<PrivateFile> {
     // File upload
     const key = `${uuid()}-${filename}`;
