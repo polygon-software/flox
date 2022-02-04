@@ -69,6 +69,8 @@ jobs:
           echo "AWS_LOADBALANCER_URL=$URL" >> $GITHUB_ENV
           echo "VUE_APP_GRAPHQL_ENDPOINT=http://$URL:${{ env.SERVER_PORT }}/graphql" >> $GITHUB_ENV
           echo "VUE_APP_WS_ENDPOINT=ws://$URL:${{ env.SERVER_PORT }}/graphql-websocket" >> $GITHUB_ENV
+          echo "FRONTEND_IMAGE_NAME=${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend" >> $GITHUB_ENV
+          echo "BACKEND_IMAGE_NAME=${{ steps.repo_name.outputs.BRANCH_NAME }}-backend" >> $GITHUB_ENV
           
       - name: Deploy to ECS
         run: |
