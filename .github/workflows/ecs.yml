@@ -60,7 +60,9 @@ jobs:
       - name: Set up Load Balancer
         run: |
           VPCID=`aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query 'Vpcs[0].VpcId --output text'`
+          echo VPC ID is $VPCID
           SUBNETS=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPCID --query 'Subnets[*].SubnetId --output text'
+          echo Subnets are $SUBNETS
           LOADBALANCER=aws elbv2 create-load-balancer --name ${{ steps.repo_name.outputs.BRANCH_NAME }} --type network --subnets $SUBNETS
       ## TO HERE
       
