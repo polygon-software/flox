@@ -5,7 +5,7 @@ x-aws-loadbalancer: ${AWS_LOADBALANCER}
 
 services:
   backend:
-    image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}
+    image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
       resources:
@@ -24,7 +24,7 @@ services:
       - database
 
   frontend:
-    image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}
+    image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
       resources:
