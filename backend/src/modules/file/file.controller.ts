@@ -97,19 +97,27 @@ export class FileController {
       throw new Error(ERRORS.no_user_found);
     }
 
-    const files = await req.saveRequestFiles();
+    const files = req.files();
 
-    let updatedUser;
+    while (true) {
+      const file = await files.next();
 
-    for (const file of files) {
-      updatedUser = await this.fileService.uploadAssociatedFile(
-        file,
+      if (!file.value) {
+        break;
+      }
+
+      await this.fileService.uploadAssociatedFile(
+        file.value,
         userUuid,
         'userRepository',
         { onFile: 'user', onAssociation: 'documents' },
         userUuid,
       );
     }
+
+    const updatedUser = await this.userService.getUserWithDocuments({
+      uuid: userUuid,
+    });
     res.header('access-control-allow-origin', '*');
     res.send(updatedUser);
   }

@@ -210,7 +210,7 @@ export class FileService {
     repositoryName: string,
     location: Record<'onAssociation' | 'onFile', string>,
     ownerUuid: string,
-  ): Promise<Record<string, unknown>> {
+  ): Promise<void> {
     if (!file) {
       throw new Error(ERRORS.no_valid_file);
     }
@@ -227,7 +227,6 @@ export class FileService {
     }
 
     const fileBuffer = await file.toBuffer();
-
     const newFile = await this.uploadPrivateFile(
       fileBuffer,
       file.filename,
@@ -252,6 +251,5 @@ export class FileService {
       associatedEntity[location.onAssociation] = newFile;
     }
     await this[repositoryName].save(associatedEntity);
-    return associatedEntity;
   }
 }
