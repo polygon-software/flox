@@ -42,21 +42,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v2
-        with:
-          context: frontend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
-          
-      - name: Build and push Backend
-        uses: docker/build-push-action@v2
-        with:
-          context: backend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
-      
+            
       - name: Set up Load Balancer & set Environment Variable
         run: |
           VPCID=`aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query 'Vpcs[0].VpcId'`
@@ -72,6 +58,28 @@ jobs:
           echo "VUE_APP_WS_ENDPOINT=ws://$URL:${{ env.SERVER_PORT }}/graphql-websocket" >> $GITHUB_ENV
           echo "FRONTEND_IMAGE_NAME=${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend" >> $GITHUB_ENV
           echo "BACKEND_IMAGE_NAME=${{ steps.repo_name.outputs.BRANCH_NAME }}-backend" >> $GITHUB_ENV
+      
+      # TODO add user pool ID?
+      - name: Edit frontend .env file
+        run: |
+          cd frontend
+          echo VUE_APP_GRAPHQL_ENDPOINT="${{ env.VUE_APP_GRAPHQL_ENDPOINT }}" >> .env
+          echo VUE_APP_WS_ENDPOINT="${{ env.VUE_APP_WS_ENDPOINT }}" >> .env
+          cat .env
+
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: frontend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
+          
+      - name: Build and push Backend
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
           
       - name: Deploy to ECS
         run: |
