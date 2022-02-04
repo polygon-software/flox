@@ -67,7 +67,11 @@ jobs:
         run: |
           URL=`aws elbv2 describe-load-balancers --names ${{ steps.repo_name.outputs.BRANCH_NAME }} --query 'LoadBalancers[*].DNSName' --output text`
           echo "AWS_LOADBALANCER_URL=$URL" >> $GITHUB_ENV
-          echo Output URL: $URL, env var is:${{ env.AWS_LOADBALANCER_URL }}
+
+      
+      - name: TEST
+        run: |
+          echo Output URL is:${{ env.AWS_LOADBALANCER_URL }}
 
       
       #- name: Deploy to ECS
