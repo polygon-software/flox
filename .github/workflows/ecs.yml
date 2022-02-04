@@ -61,7 +61,7 @@ jobs:
           VPCID=`aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query 'Vpcs[0].VpcId'`
           SUBNETS=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPCID --query 'Subnets[*].SubnetId' --output text`
           LOADBALANCER=`aws elbv2 create-load-balancer --name ${{ steps.repo_name.outputs.BRANCH_NAME }} --type network --subnets $SUBNETS --query 'LoadBalancers[0].LoadBalancerArn'`
-          echo "AWS_LOADBALANCER=$LOADBALANCER" >> $GITHUB_ENV
+          echo "AWS_LOADBALANCER=${{ steps.repo_name.outputs.BRANCH_NAME }}" >> $GITHUB_ENV
           
       - name: Set up DNS/URL Environment variables
         run: |
