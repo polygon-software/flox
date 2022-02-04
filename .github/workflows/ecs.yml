@@ -66,8 +66,8 @@ jobs:
       - name: Set up DNS Environment variables
         run: |
           URL=`aws elbv2 describe-load-balancers --names ${{ steps.repo_name.outputs.BRANCH_NAME }} --query 'LoadBalancers[*].DNSName' --output text`
-          echo "AWS_LOADBALANCER_URL=$LOADBALANCER" >> $GITHUB_ENV
-          echo Output URL: ${{ env.AWS_LOADBALANCER_URL }}
+          echo "AWS_LOADBALANCER_URL=$URL" >> $GITHUB_ENV
+          echo Output URL: $URL, env var is:${{ env.AWS_LOADBALANCER_URL }}
 
       
       #- name: Deploy to ECS
