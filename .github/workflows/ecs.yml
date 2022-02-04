@@ -64,8 +64,12 @@ jobs:
           SUBNETS=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPCID --query 'Subnets[*].SubnetId' --output text`
           echo Subnets are $SUBNETS
           LOADBALANCER=`aws elbv2 create-load-balancer --name ${{ steps.repo_name.outputs.BRANCH_NAME }} --type network --subnets $SUBNETS`
-          echo Load Balancer is $LOADBALANCER
+          echo "LOADBALANCER=$LOADBALANCER" >> $GITHUB_ENV
+          
       ## TO HERE
+      - name: Tets
+        run: |
+          echo Load balancer: ${{ env.LOADBALANCER }}
       
       #- name: Deploy to ECS
       #  run: |
