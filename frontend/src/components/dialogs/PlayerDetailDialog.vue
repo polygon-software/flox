@@ -6,37 +6,56 @@
   >
     <q-card v-if="player" class="q-pa-md" style="width: 800px;">
       <q-card-section>
-
         <!-- Documents -->
         <q-carousel
           v-model="currentDocumentKey"
-          animated
           navigation
-          infinite
           arrows
+          style="height: 250px;"
+          control-color="black"
         >
           <q-carousel-slide
             v-for="document in documents"
             :key="document.key"
             :name="document.key"
             :img-src="document.url"
+            style="background-size: contain; background-repeat: no-repeat;"
           />
         </q-carousel>
-
-        <!-- Player info -->
-        <div class="col">
-          <h4 class="q-ml-sm">{{ player.username }}</h4>
-          <h5 class="q-ml-sm">{{ player.fullName }}</h5>
-          <h5 class="q-ml-sm">{{ player.address.prettyString()}}</h5>
-        </div>
-
       </q-card-section>
 
-      <q-card-actions align="center">
+      <q-card-section>
+        <user-details :user="player"/>
+      </q-card-section>
+
+      <q-card-actions align="between">
+        <!-- 'Disable' button for active accounts -->
+        <q-btn
+          v-if="player.status === USER_STATUS.ACTIVE"
+          :label="$t('admin.disable_account')"
+          icon="block"
+          color="negative"
+          @click="() => disableUser(player, $q)"
+        />
+
+        <!-- 'Enable'/'Re-enable' button for inactive accounts -->
+        <q-btn
+          v-else
+          :label="$t(
+                    player.status === USER_STATUS.DISABLED ?
+                    'admin.re_enable_account'
+                    :
+                    'admin.enable_account'
+                    )"
+          icon="lock_open"
+          color="positive"
+          @click="() => enableUser(player, $q)"
+        />
+
+        <!-- Back -->
         <q-btn
           :label="$t('buttons.back')"
           color="black"
-          flat
           @click="hide"
         />
       </q-card-actions>
@@ -46,10 +65,14 @@
 
 <script setup lang="ts">
 import { ref, Ref, defineProps, watch, computed, ComputedRef } from 'vue';
-import {QDialog} from 'quasar';
+import { QDialog } from 'quasar';
 import { fetchPlayer } from 'src/helpers/api-helpers';
 import { PRIVATE_FILE } from 'src/data/queries/FILE';
 import { executeQuery } from 'src/helpers/data-helpers';
+import { enableUser, disableUser } from 'src/helpers/admin-helpers';
+import { USER_STATUS } from '../../../../shared/definitions/ENUM';
+import UserDetails from 'components/user/UserDetails.vue';
+
 
 const dialog: Ref<QDialog|null> = ref(null)
 // Mandatory - do not remove!
@@ -83,7 +106,6 @@ const stop = watch(playerDocuments, async () => {
   if(playerDocuments.value.length > 0) {
     documents.value = await updateDocuments()
     currentDocumentKey.value = documents.value[0]?.key ?? ''
-    console.log(`${currentDocumentKey.value}`, documents.value)
     stop()
   }
 })
