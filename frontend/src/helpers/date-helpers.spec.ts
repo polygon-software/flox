@@ -21,7 +21,7 @@ describe('Date Helpers', () => {
   describe('returned date in string format', () => {
     it('should return a date as an string in format (YYYY-MM-DD)', () => {
       expect(dateToInputString(birthday)).toStrictEqual('2014-01-31')
-      expect(dateToInputString(date_one_year_one_day_ago)).toStrictEqual(date_one_year_one_day_ago.getFullYear() + '-' + ("0" + (date_one_year_one_day_ago.getMonth() + 1)).slice(-2) + '-' + ("0" + date_one_year_one_day_ago.getDate()).slice(-2))
+      expect(dateToInputString(date_one_year_one_day_ago)).toStrictEqual(date_one_year_one_day_ago.getFullYear().toString() + '-' + ('0' + (date_one_year_one_day_ago.getMonth() + 1).toString()).slice(-2) + '-' + ('0' + date_one_year_one_day_ago.getDate().toString()).slice(-2))
     });
   })
 });
