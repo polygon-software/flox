@@ -22,17 +22,11 @@ describe('Format Helpers', () => {
       expect(formatDate(date)).toStrictEqual('31.01.2014')
       expect(formatDate(date_as_string)).toStrictEqual('31.01.2014')
     });
-    it('should not return date in wrong format', () => {
-      expect(formatDate(date)).not.toStrictEqual('31.01.14')
-    });
   });
   describe('formatDateTime in format "DD.MM.YYYY hh:mm"', () => {
     it('should return date in right format', () => {
       expect(formatDateTime(date_with_time)).toStrictEqual('31.01.2014 12:00')
       expect(formatDateTime(date_with_time_as_string)).toStrictEqual('31.01.2014 12:00')
-    });
-    it('should not return date in wrong format', () => {
-      expect(formatDateTime(date_with_time)).not.toStrictEqual('31.01.2014 12:000')
     });
   });
 });

@@ -21,7 +21,7 @@ describe('Form Helpers', () => {
       form.pages.value = []
       expect(form.pageValid.value).toBe(false)
     });
-    it('should return that two empty forms are not valid', () => {
+    it('should return that two empty pages are not valid', () => {
       const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
       form.pages.value = [
         {
@@ -37,7 +37,7 @@ describe('Form Helpers', () => {
       ]
       expect(form.pageValid.value).toBe(false)
       });
-    it('should return that one empty form and one filled form, both together are not valid', () => {
+    it('should return that one empty page as a first page and one filled page as a second page, both together are not valid', () => {
       const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
       form.pages.value = [
         {
@@ -54,7 +54,24 @@ describe('Form Helpers', () => {
       form.values.value['full_name'] = any_name
       expect(form.pageValid.value).toBe(false)
     });
-    it('should return that one filled form is valid', () => {
+    it('should return that one filled page as a first page and one empty page as a second page, both together are valid', () => {
+      const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
+      form.pages.value = [
+        {
+          key: 'personal_data',
+          label: 'Personal',
+          fields: [FIELDS.FULL_NAME,],
+        },
+        {
+          key: 'account_data',
+          label: 'Account',
+          fields: account_fields,
+        },
+      ]
+      form.values.value['full_name'] = any_name
+      expect(form.pageValid.value).toBe(true)
+    });
+    it('should return that one filled page is valid', () => {
       form.pages.value = [
         {
           key: 'personal_data',
@@ -67,7 +84,7 @@ describe('Form Helpers', () => {
       expect(form.values.value['full_name']).toStrictEqual(any_name)
       expect(form.pageValid.value).toBe(true)
     });
-    it('should return that one filled form with wrong key is not valid', () => {
+    it('should return that one filled page with wrong key is not valid', () => {
       form.pages.value = [
         {
           key: 'personal_data',
@@ -78,7 +95,7 @@ describe('Form Helpers', () => {
       form.values.value['name'] = any_name
       expect(form.pageValid.value).toBe(false)
     });
-    it('should return that one filled form with invalid type is not valid', () => {
+    it('should return that one filled page with invalid type is not valid', () => {
       form.pages.value = [
         {
           key: 'personal_data',

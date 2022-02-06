@@ -27,6 +27,7 @@ describe('Filter Helpers', () => {
     it('should return whether a string is present in a sentence of type Number', () => {
       expect(deepFilter(6, '6')).toBe(true)
       expect(deepFilter(6, '6.5')).toBe(false)
+      expect(deepFilter(6.5, '6')).toBe(false)
     });
     it('should return whether a string is present in a sentence of type String with different upper-lowercase', () => {
       expect(deepFilter(sentence, 'hallo')).toBe(true)
@@ -43,11 +44,15 @@ describe('Filter Helpers', () => {
     it('should return whether a string is present in a sentence of type Array', () => {
       expect(deepFilter([sentence], 'hallo')).toBe(true)
       expect(deepFilter([sentence_uppercase], 'hallo')).toBe(true)
+      expect(deepFilter(['monday', 'tuesday', sentence], 'hallo')).toBe(true)
       expect(deepFilter([sentence], 'hello')).toBe(false)
+      expect(deepFilter(['monday', 'tuesday', sentence], 'hello')).toBe(false)
     });
     it('should return whether a string is present in a sentence of type Object', () => {
       expect(deepFilter({ age: 40, first_name: 'Dickerson', last_name: 'Macdonald' }, 'Macdonald')).toBe(true)
+      expect(deepFilter({ age: 40, first_name: 'Dickerson', last_name: 'Macdonald' }, 'kerson')).toBe(true)
       expect(deepFilter({ age: 40, first_name: 'Dickerson', last_name: 'Macdonald' }, 'Mcdonald')).toBe(false)
+      expect(deepFilter({ age: 40, first_name: 'Dickerson', last_name: 'Macdonald' }, 'karson')).toBe(false)
     });
     it('should return false if empty sentence', () => {
       expect(deepFilter('', 'Macdonald')).toBe(false)
