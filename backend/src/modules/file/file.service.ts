@@ -190,7 +190,6 @@ export class FileService {
   async deletePrivateFile(fileUuid: string): Promise<PrivateFile> {
     const file = await this.privateFilesRepository.findOne(fileUuid);
     await this.privateFilesRepository.softDelete(file.uuid);
-    // TODO delete on S3
     return file;
   }
 
