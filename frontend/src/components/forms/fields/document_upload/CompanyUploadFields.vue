@@ -4,7 +4,7 @@
     v-model="passport"
     class="q-mb-md"
     outlined
-    accept="image/*, .pdf"
+    accept=".pdf"
     :label="$t('account_data.passport_or_id')"
     stack-label
     clearable
@@ -22,7 +22,7 @@
     v-model="commercialRegisterExtract"
     class="q-mb-md"
     outlined
-    accept="image/*, .pdf"
+    accept=".pdf"
     :label="`${$t('account_data.commercial_register_extract')} (${$t('account_data.optional')})`"
     stack-label
     clearable
@@ -40,7 +40,7 @@
     v-model="executionRegisterExtract"
     class="q-mb-md"
     outlined
-    accept="image/*, .pdf"
+    accept=".pdf"
     :label="$t('account_data.execution_register_extract')"
     stack-label
     clearable
@@ -60,7 +60,7 @@
     v-model="field.value"
     class="q-mb-md"
     outlined
-    accept="image/*, .pdf"
+    accept=".pdf"
     :label="$t('documents.additional_documents')"
     stack-label
     clearable
@@ -108,7 +108,6 @@ function emitValue(){
     }
   }
 
-  // TODO inner validation?
   emit('change', {passport, commercialRegisterExtract, executionRegisterExtract, ...additionalFiles})
 }
 

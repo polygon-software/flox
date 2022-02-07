@@ -90,6 +90,6 @@ async function onSubmit(values: Record<string, Record<string, File|null>>){
   }
 
   // TODO add fitting success message
-  await $routerService.routeTo(ROUTES.SUCCESS)
+  await $routerService?.routeTo(ROUTES.SUCCESS)
 }
 </script>

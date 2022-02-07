@@ -1,6 +1,6 @@
 import Joi, {Schema} from 'joi';
 import {ROLE} from 'src/data/ENUM/ENUM';
-import {UserItem} from '../../../../shared/schemas/UserItem';
+import {UserItem} from '../../../schemas/UserItem';
 
 /**
  * A class representing an user

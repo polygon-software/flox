@@ -33,6 +33,8 @@ export const ALL_COMPANIES = {
         documents{
           uuid
           key
+          owner
+          url
           __typename
         }
         __typename

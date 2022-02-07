@@ -67,8 +67,8 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
     CREATE_COMPANY,
     {
       company_name: values.company_data.company_name,
-      first_name: values.full_name.first_name,
-      last_name: values.full_name.last_name,
+      first_name: values.full_name.firstName,
+      last_name: values.full_name.lastName,
       language: values.language,
       uid: values.company_data.uid,
       domicile_address: domicileAddress,

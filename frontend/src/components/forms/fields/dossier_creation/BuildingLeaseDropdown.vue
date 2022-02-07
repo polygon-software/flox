@@ -54,7 +54,7 @@ import {onMounted, ref,} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {useQuasar} from 'quasar';
 import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES';
-import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING} from '../../../../../definitions/ENUMS';
 
 // eslint-disable-next-line sonarjs/no-duplicate-string
 const emit = defineEmits(['change', 'warning', 'no-warning'])

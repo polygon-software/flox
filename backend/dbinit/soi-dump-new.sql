@@ -16,83 +16,41 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-ALTER TABLE ONLY public.dossier DROP CONSTRAINT "FK_fed05b9ba6da9391363e26528ea";
-ALTER TABLE ONLY public.offer DROP CONSTRAINT "FK_e8635e2c8e3f27813847955f170";
-ALTER TABLE ONLY public.company DROP CONSTRAINT "FK_e2ec6ea5ec961bdd0fc7c986267";
-ALTER TABLE ONLY public.employee DROP CONSTRAINT "FK_d51fc1f836fee82c6c77d913806";
-ALTER TABLE ONLY public.dossier DROP CONSTRAINT "FK_ca26615c2fb1cb3be481b381f2c";
-ALTER TABLE ONLY public.private_file DROP CONSTRAINT "FK_bcebcab2d56ae0199407ecc4f62";
-ALTER TABLE ONLY public.private_file DROP CONSTRAINT "FK_b902bc0f8d39a9d0beaa25070b8";
-ALTER TABLE ONLY public.company DROP CONSTRAINT "FK_a9f680ed13cbcbb4bb1387b04bd";
-ALTER TABLE ONLY public.comment DROP CONSTRAINT "FK_9c51df74fc7f7b59a6b2645c543";
-ALTER TBLE ONLY public.bank DROP CONSTRAINT "FK_899821e269947d54e371c2a741e";
-ALTER TABLE ONLY public.comment DROP CONSTRAINT "FK_7b6ea5bd28ac07eb1383034ee48";
-ALTER TABLE ONLY public.offer DROP CONSTRAINT "FK_68cd3351a7128468f3de8fb487a";
-ALTER TABLE ONLY public.private_file DROP CONSTRAINT "FK_494136f6e6f996fe77ed1a3249a";
-ALTER TABLE ONLY public.dossier DROP CONSTRAINT "FK_2a26706528112ef56e5f7601c8d";
-ALTER TABLE ONLY public.dossier DROP CONSTRAINT "FK_012c5092b7dd1f0a3adf05223de";
-ALTER TABLE ONLY public.dossier DROP CONSTRAINT "UQ_fed05b9ba6da9391363e26528ea";
-ALTER TABLE ONLY public.bank DROP CONSTRAINT "UQ_bba3c6c58751099874df530192c";
-ALTER TABLE ONLY public.bank DROP CONSTRAINT "UQ_11f196da2e68cef1c7e84b4fe94";
-ALTER TABLE ONLY public.dossier DROP CONSTRAINT "UQ_012c5092b7dd1f0a3adf05223de";
-ALTER TABLE ONLY public.company DROP CONSTRAINT "REL_e2ec6ea5ec961bdd0fc7c98626";
-ALTER TABLE ONLY public.company DROP CONSTRAINT "REL_a9f680ed13cbcbb4bb1387b04b";
-ALTER TABLE ONLY public.bank DROP CONSTRAINT "REL_899821e269947d54e371c2a741";
-ALTER TABLE ONLY public.dossier DROP CONSTRAINT "PK_f9f49ba689e2abb87eaeded1d27";
-ALTER TABLE ONLY public.soi_employee DROP CONSTRAINT "PK_eb0ff739846aad9d81bf90ea43f";
-ALTER TABLE ONLY public.comment DROP CONSTRAINT "PK_e45a9d11ff7a3cf11f6c42107b4";
-ALTER TABLE ONLY public.public_file DROP CONSTRAINT "PK_ba13d24107ee3497d7d71f81be3";
-ALTER TABLE ONLY public."user" DROP CONSTRAINT "PK_a95e949168be7b7ece1a2382fed";
-ALTER TABLE ONLY public.soiemployee DROP CONSTRAINT "PK_9700773a76dd555d212de68e598";
-ALTER TABLE ONLY public.bank DROP CONSTRAINT "PK_83a8522f1861bee5e13f4cba127";
-ALTER TABLE ONLY public.employee DROP CONSTRAINT "PK_54452b02a5a8c125422e3697495";
-ALTER TABLE ONLY public.address DROP CONSTRAINT "PK_496d4a29b0dfa82ede19a4bcad0";
-ALTER TABLE ONLY public.offer DROP CONSTRAINT "PK_41c06b86e503ef9018af0d5e0dc";
-ALTER TABLE ONLY public.company DROP CONSTRAINT "PK_3fa0b2af99d910864a56bb10c9e";
-ALTER TABLE ONLY public.soi_admin DROP CONSTRAINT "PK_217c42248c5d20c501c5c30c53e";
-ALTER TABLE ONLY public.private_file DROP CONSTRAINT "PK_19ac201a356fa3aacef66563869";
-ALTER TABLE ONLY public.product DROP CONSTRAINT "PK_1442fd7cb5e0b32ff5d0b6c13d0";
-DROP TABLE public.zip_codes;
-DROP TABLE public.value_development;
-DROP TABLE public."user";
-DROP TABLE public.typeorm_metadata;
-DROP TABLE public.soiemployee;
-DROP TABLE public.soi_employee;
-DROP TABLE public.soi_admin;
-DROP TABLE public.public_file;
-DROP TABLE public.product;
-DROP TABLE public.private_file;
-DROP TABLE public.offer;
-DROP TABLE public.employee;
-DROP TABLE public.dossier;
-DROP TABLE public.company;
-DROP TABLE public.comment;
-DROP TABLE public.bank;
-DROP TABLE public.address;
-DROP TYPE public.user_role_enum;
-DROP TYPE public.product_status_enum;
-DROP TYPE public.product_currency_enum;
-DROP TYPE public.product_category_enum;
-DROP TYPE public.private_file_file_type_enum;
-DROP TYPE public.offer_status_enum;
-DROP TYPE public.dossier_status_enum;
-DROP TYPE public.dossier_property_type_enum;
-DROP TYPE public.company_creation_state_enum;
-DROP SCHEMA public;
+DROP DATABASE soi_db;
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: db_user
+-- Name: soi_db; Type: DATABASE; Schema: -; Owner: db_user
 --
 
-CREATE SCHEMA public;
+CREATE DATABASE soi_db WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.utf8';
 
 
-ALTER SCHEMA public OWNER TO db_user;
+ALTER DATABASE soi_db OWNER TO db_user;
+
+\connect soi_db
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
 
 --
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: db_user
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
-COMMENT ON SCHEMA public IS 'standard public schema';
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
 
 --
