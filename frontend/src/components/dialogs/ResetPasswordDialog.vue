@@ -53,7 +53,7 @@
 import {defineEmits, Ref, ref} from 'vue';
 import {PASSWORD_MIN_LENGTH, PASSWORD_REGEX} from '../../helpers/REGEX'
 import {QDialog} from 'quasar';
-import {i18n} from "boot/i18n";
+import {i18n} from 'boot/i18n';
 
 const verificationCode = ref('')
 const password = ref('')
