@@ -265,7 +265,7 @@ import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {ErrorService} from 'src/services/ErrorService';
 import {ALL_BANK_NAMES, BANK_NAME_SUGGESTIONS} from 'src/data/queries/BANK';
-import {DOSSIER_WARNING} from '../../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING} from '../../../definitions/ENUMS';
 import axios from 'axios';
 import {dateToInputString} from 'src/helpers/date-helpers';
 import {getAuthToken} from 'src/helpers/cookie-helpers';

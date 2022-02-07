@@ -1,4 +1,4 @@
-import {CompanyItem} from '../../../../shared/schemas/CompanyItem';
+import {CompanyItem} from '../../../schemas/CompanyItem';
 import Joi, {Schema} from 'joi';
 import {Address} from 'src/data/types/Address';
 import {CREATION_STATE} from 'src/data/ENUM/ENUM';

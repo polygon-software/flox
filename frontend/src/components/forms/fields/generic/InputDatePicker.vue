@@ -19,7 +19,7 @@ import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {calculateAge, dateToInputString} from 'src/helpers/date-helpers';
 import {IS_VALID_DATE} from 'src/data/RULES';
-import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING} from '../../../../../definitions/ENUMS';
 
 const props = defineProps({
   label: {
