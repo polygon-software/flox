@@ -120,13 +120,13 @@ export class FileController {
       (company.creation_state !== CREATION_STATE.AWAITING_DOCUMENTS &&
         company.creation_state !== CREATION_STATE.DOCUMENTS_UPLOADED)
     ) {
-      throw new Error(ERRORS.no_valid_company);
+      res.send(new Error(ERRORS.no_valid_company));
     }
 
     const file = await req.file();
 
     if (!file) {
-      throw new Error(ERRORS.no_valid_file);
+      res.send(new Error(ERRORS.no_valid_file));
     }
     const fileBuffer = await file.toBuffer();
     const newFile = await this.fileService.uploadPrivateFile(
