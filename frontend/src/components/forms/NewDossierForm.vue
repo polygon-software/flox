@@ -166,7 +166,10 @@
             :label="$t('form_for_clients.market_value_between')"
             :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low }` : '-' "
             :second-content="valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high }` : '-' "
+            :caption="$t('dossier.customer_value')"
+            :second-caption="$t('dossier.estimated_market_value')"
             value-type="positive"
+            bold
           />
 
           <q-separator style="margin: 24px 0 24px 0"/>
@@ -643,9 +646,10 @@ async function calculateValueEstimate(){
   // Ensure all necessary data is present
   const address =  formData.address
   const purchaseDate = formData.date_of_purchase as unknown as Date
-  const customerEstimate = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.marketValueEstimation) : null
+  const customerEstimate = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.market_value_estimation) : null
+  const priceAtPurchase = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.price) : null
 
-  if(!address || !purchaseDate || !customerEstimate){
+  if(!address || !purchaseDate || !priceAtPurchase ||!customerEstimate){
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
     return;
   }
@@ -677,7 +681,7 @@ async function calculateValueEstimate(){
     return;
   }
 
-  const highEstimate = Math.round(customerEstimate * multiplier)
+  const highEstimate = Math.round(priceAtPurchase * multiplier)
 
   // Return as array (low & high estimate)
   valueEstimate.value = {
