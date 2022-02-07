@@ -114,8 +114,8 @@
                 />
 
                 <DossierDocumentInfoField
-                  :label="$t('dossier.current_value')"
-                  :content="dossier.market_value_estimation.toLocaleString() + currency"
+                  :label="$t('dossier.calculated_market_value')"
+                  :content="dossier.value_estimate_high.toLocaleString() + currency"
                 />
 
                 <DossierDocumentInfoField
@@ -200,7 +200,7 @@
               style="margin: 3mm 0 3mm 0"
             />
 
-            <!-- Third section: renovation info -->
+            <!-- Third section: renovation information -->
             <div class="row">
               <!-- Left column -->
               <div
