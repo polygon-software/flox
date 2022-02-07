@@ -102,4 +102,4 @@ jobs:
           aws_route53_rr_name: "${{ steps.repo_name.outputs.BRANCH_NAME }}.${{ secrets.PROJECT_BASE_DOMAIN }}"
           aws_route53_rr_type: "A"
           aws_route53_rr_ttl: "300"
-          aws_route53_rr_value: "192.168.1.1"
+          aws_route53_rr_value: "full-loadb-lu7zq9mraci5-27656d19dd1ec0a7.elb.eu-central-1.amazonaws.com"
