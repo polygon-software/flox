@@ -64,7 +64,7 @@ const emit = defineEmits(['ok'])
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 /**
- * Rules for validation of password
+ * Rules for validation of the password
  * @param {string} val - the password
  * @returns {boolean|string} - success (true), or an error message
  */
