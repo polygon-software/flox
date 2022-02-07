@@ -67,35 +67,35 @@ jobs:
           echo VUE_APP_WS_ENDPOINT="${{ env.VUE_APP_WS_ENDPOINT }}" >> .env
           cat .env
 
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v2
-        with:
-          context: frontend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
+      #- name: Build and push Frontend
+      #  uses: docker/build-push-action@v2
+      #  with:
+      #    context: frontend
+      #    push: true
+      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
           
-      - name: Build and push Backend
-        uses: docker/build-push-action@v2
-        with:
-          context: backend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
+      #- name: Build and push Backend
+      #  uses: docker/build-push-action@v2
+      #  with:
+      #    context: backend
+      #    push: true
+      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
           
-      - name: Deploy to ECS
-        run: |
-          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
-          docker context create ecs ecscontext --from-env
-          docker login
-          docker compose pull
-          docker context use ecscontext
-          docker compose -p ${{ steps.repo_name.outputs.BRANCH_NAME }} up
-          docker context use default
-          docker context rm ecscontext
+      #- name: Deploy to ECS
+      #  run: |
+      #    curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+      #    docker context create ecs ecscontext --from-env
+      #    docker login
+      #    docker compose pull
+      #    docker context use ecscontext
+      #    docker compose -p ${{ steps.repo_name.outputs.BRANCH_NAME }} up
+      #    docker context use default
+      #    docker context rm ecscontext
    
       - name: "Create Route 53 record"
         uses: Roosterfish/aws-route53-record-set-action@master
         with: 
-          aws_access_key_id: ${{ secrets.AWS_ECS_KEY_SECRET }}
+          aws_access_key_id: ${{ secrets.AWS_ECS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_ECS_KEY_SECRET }}
           aws_route53_hosted_zone_id: ${{ secrets.AWS_HOSTED_ZONE_ID }}
           aws_route53_rr_action: "CREATE"
