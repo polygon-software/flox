@@ -44,15 +44,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
             
             
-      # TODO: Add listener on port 80 -> frontend port
+      # TODO: Dynamic frontend ARN... how...
       - name: Set up Load Balancer & set Environment Variable
         run: |
           VPCID=`aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query 'Vpcs[0].VpcId'`
           SUBNETS=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPCID --query 'Subnets[*].SubnetId' --output text`
           LOADBALANCER=`aws elbv2 create-load-balancer --name ${{ steps.repo_name.outputs.BRANCH_NAME }} --type network --subnets $SUBNETS --query 'LoadBalancers[0].LoadBalancerArn'`
           echo "AWS_LOADBALANCER=${{ steps.repo_name.outputs.BRANCH_NAME }}" >> $GITHUB_ENV
-          aws elb create-load-balancer-listeners --load-balancer-name ${{ steps.repo_name.outputs.BRANCH_NAME }} --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8080"
-
+          aws elbv2 create-listener --load-balancer-arn $LOADBALANCER --protocol TCP --port 80 --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:eu-central-1:923473058470:targetgroup/proje-Front-QOJBRRN95DXH/ecc2a83591f167fb
           
       - name: Set up DNS/URL Environment variables
         run: |
