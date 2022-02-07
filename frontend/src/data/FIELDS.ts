@@ -29,7 +29,7 @@ import IncomeFields from 'components/forms/fields/dossier_creation/IncomeFields.
 import BankSelectField from 'components/forms/fields/dossier_creation/BankSelectField.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
-import {DOSSIER_WARNING, PROPERTY_TYPE} from '../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING, PROPERTY_TYPE} from '../../definitions/ENUMS';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.

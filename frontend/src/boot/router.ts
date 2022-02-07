@@ -4,7 +4,7 @@ import {Router} from 'vue-router';
 import {root} from 'src/store';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/USER';
-import {ROLE} from '../../../shared/definitions/ENUMS';
+import {ROLE} from '../../definitions/ENUMS';
 
 let routerInstance: Router
 

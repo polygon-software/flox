@@ -16,7 +16,7 @@
 import {defineProps, onMounted, ref,} from 'vue';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING} from '../../../../../definitions/ENUMS';
 
 const $q = useQuasar()
 
