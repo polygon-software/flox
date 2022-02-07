@@ -137,7 +137,7 @@ export class DossierService {
       readable_id: generateHumanReadableId(),
       employee: employee,
     });
-    this.logger.log('log', `Dossier created:${dossier}`);
+    this.logger.warn(`Dossier created:${JSON.stringify(dossier)}`);
     return this.dossierRepository.save(dossier);
   }
 
