@@ -9,7 +9,6 @@
       :label="$t('account_data.passport_front')"
       stack-label
       clearable
-      display-value=""
       :max-file-size="props.maxFileSize"
       :rules="[]"
       @update:model-value="onUpdate"
@@ -32,7 +31,6 @@
       :label="$t('account_data.passport_back')"
       stack-label
       clearable
-      display-value=""
       :max-file-size="props.maxFileSize"
       :rules="[]"
       @update:model-value="onUpdate"
@@ -114,5 +112,6 @@ async function onUpdate(){
 <style scoped>
 .id-preview-image{
   max-width: 100%;
+  max-height: 200px;
 }
 </style>
