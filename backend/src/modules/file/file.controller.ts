@@ -124,6 +124,7 @@ export class FileController {
     }
 
     const file = await req.file();
+
     if (!file) {
       throw new Error(ERRORS.no_valid_file);
     }
