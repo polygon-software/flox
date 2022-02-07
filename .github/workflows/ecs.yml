@@ -99,7 +99,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_ECS_KEY_SECRET }}
           aws_route53_hosted_zone_id: ${{ secrets.AWS_HOSTED_ZONE_ID }}
           aws_route53_rr_action: "CREATE"
-          aws_route53_rr_name: "${{ steps.repo_name.outputs.BRANCH_NAME }}.${{ secrets.PROJECT_BASE_DOMAIN }}"
+          aws_route53_rr_name: "${{ steps.repo_name.outputs.BRANCH_NAME }}."
           aws_route53_rr_type: "A"
           aws_route53_rr_ttl: "300"
           aws_route53_rr_value: "${{ env.VUE_APP_GRAPHQL_ENDPOINT }}"
