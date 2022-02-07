@@ -44,14 +44,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
             
             
-      # TODO: Dynamic frontend ARN... how...
       - name: Set up Load Balancer & set Environment Variable
         run: |
           VPCID=`aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query 'Vpcs[0].VpcId'`
           SUBNETS=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPCID --query 'Subnets[*].SubnetId' --output text`
           LOADBALANCER=`aws elbv2 create-load-balancer --name ${{ steps.repo_name.outputs.BRANCH_NAME }} --type network --subnets $SUBNETS --query 'LoadBalancers[0].LoadBalancerArn' --output text`
           echo "AWS_LOADBALANCER=${{ steps.repo_name.outputs.BRANCH_NAME }}" >> $GITHUB_ENV
-          aws elbv2 create-listener --load-balancer-arn $LOADBALANCER --protocol TCP --port 80 --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:eu-central-1:923473058470:targetgroup/proje-Front-QOJBRRN95DXH/ecc2a83591f167fb
+          echo "AWS_LOADBALANCER_ARN=$LOADBALANCER" >> $GITHUB_ENV
           
       - name: Set up DNS/URL Environment variables
         run: |
@@ -94,6 +93,13 @@ jobs:
       #    docker compose -p ${{ steps.repo_name.outputs.BRANCH_NAME }} up
       #    docker context use default
       #    docker context rm ecscontext
+          
+      # TODO we assume frontend target group is third - use actual filter instead...
+      - name: Set up listener on port 80 for Frontend
+        run: |
+          TARGET_GROUP_ARN=`aws elbv2 describe-target-groups --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --query 'TargetGroups[2].TargetGroupArn' --output text`
+          aws elbv2 create-listener --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --protocol TCP --port 80 --default-actions Type=forward,TargetGroupArn=$TARGET_GROUP_ARN
+
    
       - name: "Create Route 53 record"
         uses: Roosterfish/aws-route53-record-set-action@master
