@@ -14,8 +14,7 @@ import { Comment } from '../../comment/entities/comment.entity';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../ENUM/ENUM';
 
 @ObjectType()
-@Entity({ name: 'product' })
-@InputType('product')
+@Entity()
 export class Product extends BaseEntity {
   @Field(() => String, { description: 'Title' })
   @Column()

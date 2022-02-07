@@ -13,7 +13,7 @@ import {
 } from '../../../shared/definitions/ENUM';
 import { Announcement } from 'src/data/types/Announcement';
 import { ALL_ANNOUNCEMENTS } from 'src/data/queries/ANNOUNCEMENTS';
-import { ALL_PARTNERS, ALL_PLAYERS } from 'src/data/queries/USER';
+import { ALL_PARTNERS, ALL_PLAYERS, PLAYER } from 'src/data/queries/USER';
 import { User } from 'src/data/types/User';
 import { Address } from 'src/data/types/Address';
 
@@ -81,6 +81,18 @@ export function fetchAllPlayers(): ComputedRef<User[]> {
     Record<string, unknown>[]
   >;
   return computed(() => mapUsers(queryResult));
+}
+
+/**
+ * Fetch player.
+ * @param {string} playerId - player UUID.
+ * @returns {ComputedRef<User | null>} - player.
+ */
+export function fetchPlayer(playerId: string): ComputedRef<User | null> {
+  const queryResult = subscribeToQuery(PLAYER, {
+    uuid: playerId,
+  }) as Ref<Record<string, unknown> | null>;
+  return computed(() => queryResult.value ? mapUser(queryResult.value): null);
 }
 
 /**
@@ -159,21 +171,28 @@ export function mapAnnouncements(
  */
 export function mapUsers(queryResult: Ref<Record<string, unknown>[]>): User[] {
   const records = queryResult.value ?? [];
-  return records.map(
-    (record) =>
-      new User(
-        record.role as ROLE,
-        record.status as USER_STATUS,
-        record.uuid as string,
-        record.fullName as string,
-        record.username as string,
-        mapAddress(record.address as Record<string, unknown>),
-        record.phone as string,
-        record.email as string,
-        new Date(record.birthdate as string),
-        new Date(record.disabledUntil as string)
-      )
-  );
+  return records.map((record) => mapUser(record));
+}
+
+/**
+ * Map user record to user instance.
+ * @param {Record<string, unknown>} record - user record.
+ * @returns {User} - user instance.
+ */
+export function mapUser(record: Record<string, unknown>): User {
+  return new User(
+    record.role as ROLE,
+    record.status as USER_STATUS,
+    record.uuid as string,
+    record.fullName as string,
+    record.username as string,
+    mapAddress(record.address as Record<string, unknown>),
+    record.phone as string,
+    record.email as string,
+    new Date(record.birthdate as string),
+    new Date(record.disabledUntil as string),
+    record.documents as Record<string, string>[] ?? undefined,
+  )
 }
 
 /**

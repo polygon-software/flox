@@ -160,6 +160,12 @@ export class UserService {
     return this.usersRepository.findOne(getUserArgs.uuid);
   }
 
+  getUserWithDocuments(getUserArgs: GetUserArgs): Promise<User> {
+    return this.usersRepository.findOne(getUserArgs, {
+      relations: ['documents'],
+    });
+  }
+
   async update(updateUserInput: UpdateUserInput): Promise<User> {
     const user = this.usersRepository.create(updateUserInput);
     await this.usersRepository.update(updateUserInput.uuid, user);
@@ -224,7 +230,7 @@ export class UserService {
       users.map(async (user) => {
         const notification = await this.notificationService.create({
           ...createNotificationInput,
-          user: user,
+          userUuid: user.uuid,
         });
         notifications.push(notification);
       }),

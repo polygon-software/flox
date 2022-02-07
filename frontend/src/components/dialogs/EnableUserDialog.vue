@@ -9,70 +9,11 @@
           {{ $t('admin.enable_account') }}
         </h5>
       </q-card-section>
+
       <q-card-section>
-        <q-list
-          bordered
-          separator
-        >
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.username') }}:</p>
-                <p class="col-7">{{ props.user.username }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.full_name') }}:</p>
-                <p class="col-7">{{ props.user.fullName }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.address') }}:</p>
-                <p class="col-7">{{ address.prettyString() }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.phone_number') }}:</p>
-                <p class="col-7">{{ props.user.phone }}</p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.email') }}:</p>
-                <p class="col-7">
-                  {{ props.user.email }}
-                </p>
-              </div>
-            </q-item-section>
-          </q-item>
-
-          <q-item>
-            <q-item-section>
-              <div class="row flex content-center">
-                <p class="col-5">{{ $t('account_data.birthdate') }}:</p>
-                <p class="col-7">
-                  {{ formatDate(props.user.birthdate) }}
-                </p>
-              </div>
-            </q-item-section>
-          </q-item>
-        </q-list>
+        <user-details :user="props.user"/>
       </q-card-section>
+
       <q-card-actions>
         <q-btn
           class="q-ma-md"
@@ -100,11 +41,10 @@
 <script setup lang="ts">
 import {defineProps, defineEmits, ref, Ref, PropType} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
-import {Address} from 'src/data/types/Address';
 import {User} from 'src/data/types/User';
-import {formatDate} from 'src/helpers/format-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
+import UserDetails from 'components/user/UserDetails.vue';
 
 const $q: QVueGlobals = useQuasar()
 const emit = defineEmits(['ok'])
@@ -117,13 +57,6 @@ const props = defineProps({
     required: true
   },
 })
-
-const address = new Address(
-  props.user.address?.street?? undefined,
-  props.user.address?.number ?? undefined,
-  props.user.address?.city ?? undefined,
-  props.user.address?.zipCode ?? undefined,
-)
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

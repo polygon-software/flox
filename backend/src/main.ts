@@ -8,6 +8,10 @@ import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
 
+/**
+ * Create NestFastifyApplication
+ * @returns {Promise<void>} - Done
+ */
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,

@@ -5,12 +5,18 @@ import { DeleteNotificationInput } from './dto/input/delete-notification.input';
 import { LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Notification } from './entities/notification.entity';
+import { User } from '../user/entities/user.entity';
+import { Announcement } from '../announcement/entities/announcement.entity';
 
 @Injectable()
 export class NotificationService {
   constructor(
     @InjectRepository(Notification)
     private readonly notificationsRepository: Repository<Notification>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(Announcement)
+    private readonly announcementRepository: Repository<Announcement>,
   ) {}
 
   /**
@@ -21,9 +27,30 @@ export class NotificationService {
   async create(
     createNotificationInput: CreateNotificationInput,
   ): Promise<Notification> {
-    const notification = this.notificationsRepository.create(
-      createNotificationInput,
+    // Find user for UUID
+    const user = await this.userRepository.findOne(
+      createNotificationInput.userUuid,
     );
+
+    if (!user) {
+      throw Error('No User found');
+    }
+
+    // Find announcement for UUID
+    const announcement = createNotificationInput.announcementUuid
+      ? await this.announcementRepository.findOne(
+          createNotificationInput.announcementUuid,
+        )
+      : null;
+
+    const notification = this.notificationsRepository.create({
+      title: createNotificationInput.title,
+      received: createNotificationInput.received,
+      content: createNotificationInput.content,
+      isRead: createNotificationInput.isRead,
+      user,
+      announcement: announcement,
+    });
     return this.notificationsRepository.save(notification);
   }
 

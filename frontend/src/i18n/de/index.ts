@@ -23,11 +23,12 @@ export default {
     forgot_password: 'Passwort vergessen',
     reset_password: 'Passwort zurücksetzen',
     redirected: 'Sie werden in Kürze weitergeleitet...',
-    successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
+    successful_application: 'Antrag erfolgreich',
+    successful_application_description: 'Sie erhalten in Kürze per E-Mail Bescheid zu Ihrem Registrierungsantrag.',
     confirmed_registration: 'Registrierung bestätigt',
     redirect_to_login:
       'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
-    back_to_login: 'Zurück zu Login',
+    back_to_login: 'Zurück zum Login',
     change_password: 'Passwort ändern',
     no_account_yet: 'Noch keinen Account?',
     please_enter_username: 'Bitte geben Sie ihren Benutzernamen ein',
@@ -59,6 +60,8 @@ export default {
     salutation: 'Anrede',
     accept_condition_truthful: 'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
     passport_or_id: 'Ausweiskopie',
+    passport_front: 'Ausweis (Vorderseite)',
+    passport_back: 'Ausweis (Rückseite)',
     optional: 'optional',
   },
   dashboards: {
@@ -120,7 +123,7 @@ export default {
       'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
-    invalid_birth_date: 'Bitte geben Sie ihr Geburtsdatum ein',
+    invalid_birth_date: 'Sie müssen mindestens 18 Jahre alt sein',
     date_must_be_future: 'Bitte wählen Sie ein zukünftiges Datum',
     can_only_edit_draft:
       'Bearbeiten fehlgeschlagen (nur Entwürfe können bearbeitet werden)',

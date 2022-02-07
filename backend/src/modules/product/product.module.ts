@@ -7,10 +7,11 @@ import { Comment } from '../comment/entities/comment.entity';
 import PublicFile from '../file/entities/public_file.entity';
 import { FileService } from '../file/file.service';
 import PrivateFile from '../file/entities/private_file.entity';
+import { User } from '../user/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product, Comment, PublicFile, PrivateFile]),
+    TypeOrmModule.forFeature([Product, Comment, PublicFile, PrivateFile, User]),
   ],
   providers: [ProductResolver, ProductService, FileService],
 })

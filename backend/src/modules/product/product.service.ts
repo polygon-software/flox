@@ -153,7 +153,7 @@ export class ProductService {
             );
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           });
       });
     }

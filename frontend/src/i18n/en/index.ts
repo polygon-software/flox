@@ -24,6 +24,7 @@ export default {
     reset_password: 'Reset password',
     redirected: 'You will be redirected shortly...',
     successful_application: 'Your application was successful.',
+    successful_application_description: 'You will shortly be notified per e-mail with your application result.',
     confirmed_registration: 'Registration confirmed',
     redirect_to_login:
       'Your registration is now being processed! You will now be automatically redirected to the login screen.',
@@ -59,6 +60,8 @@ export default {
     accept_conditions: 'I agree to the terms and conditions.',
     accept_condition_truthful: 'All information has been filled in truthfully.',
     passport_or_id: 'Passport',
+    passport_front: 'Passport (Front)',
+    passport_back: 'Passport (Back)',
     optional: 'optional',
   },
   dashboards: {
@@ -118,7 +121,7 @@ export default {
       'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
-    invalid_birth_date: 'Please enter you date of birth',
+    invalid_birth_date: 'You must be at least 18 years old',
     date_must_be_future: 'Please choose a future date',
     can_only_edit_draft: 'Cannot edit (only drafts can be edited)',
     error_while_enabling: 'An error occurred while enabling the account.',

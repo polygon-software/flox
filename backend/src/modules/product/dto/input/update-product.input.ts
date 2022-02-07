@@ -10,7 +10,6 @@ import {
   IsUUID,
 } from 'class-validator';
 import { CATEGORY, CURRENCY, PRODUCT_STATUS } from '../../../../ENUM/ENUM';
-import { Comment } from '../../../comment/entities/comment.entity';
 
 @InputType()
 export class UpdateProductInput {
@@ -108,10 +107,6 @@ export class UpdateProductInput {
   @Field(() => [String], { nullable: true })
   @IsArray()
   tags: string[];
-
-  @Field(() => [Comment], { nullable: true })
-  @IsArray()
-  comments: Comment[];
 
   @Field(() => Number, { nullable: true })
   likes: number;

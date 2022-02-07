@@ -15,6 +15,7 @@
           :props="_props"
           class="q-ma-none q-pa-none"
           style="cursor: pointer"
+          @click="openDetailView(_props.row)"
         >
           <q-td key="status" :props="_props">
             <q-chip
@@ -47,7 +48,7 @@
               flat
               round
               dense
-              @click="showOptions = !showOptions"
+              @click.stop="showOptions = !showOptions"
             >
               <div class="column">
                 <!-- 'Disable' button for active accounts -->
@@ -86,13 +87,17 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
+import { defineProps } from 'vue';
 import {formatDate, formatDateTime} from 'src/helpers/format-helpers';
 import {USER_STATUS} from '../../../../shared/definitions/ENUM';
 import {i18n} from 'boot/i18n';
 import {enableUser, disableUser} from 'src/helpers/admin-helpers';
 import {User} from 'src/data/types/User';
 import { fetchAllPlayers } from 'src/helpers/api-helpers';
+import PlayerDetailDialog from 'components/dialogs/PlayerDetailDialog.vue';
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -119,6 +124,21 @@ const columns = [
 ]
 
 const allPlayers = fetchAllPlayers();
+
+/**
+ * Opens the detailed view of a player in dialog
+ * @param {User} player - the selected player
+ * @returns {void}
+ */
+function openDetailView(player: User) {
+  $q.dialog({
+    title: 'DetailView',
+    component: PlayerDetailDialog,
+    componentProps: {
+      playerId: player.uuid
+    }
+  })
+}
 
 /**
  * Gets the color & label for the status chip of a user

@@ -1,4 +1,4 @@
-import { ObjectType, Field, InputType, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
   IsArray,
   IsDate,
@@ -7,7 +7,6 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Comment } from '../../comment/entities/comment.entity';
 import {
   Column,
   CreateDateColumn,
@@ -20,12 +19,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ROLE, USER_STATUS } from '../../../ENUM/ENUM';
+import PrivateFile from '../../file/entities/private_file.entity';
+import Comment from '../../comment/entities/comment.entity';
 import { Address } from '../../address/entities/address.entity';
 import { Notification } from '../../notification/entities/notification.entity';
 
 @ObjectType()
-@Entity({ name: 'user' })
-@InputType('user')
+@Entity()
 /**
  * An application User
  */
@@ -90,13 +90,6 @@ export class User {
   @IsDate()
   birthdate: Date;
 
-  @Field(() => [Comment], { description: 'Comments written by the user' })
-  @OneToMany(() => Comment, (comment) => comment.user, {
-    cascade: true,
-    eager: true,
-  })
-  comments: Comment[];
-
   @Field(() => [String], { description: 'User interest categories' })
   @Column('text', { array: true })
   @IsArray()
@@ -116,6 +109,25 @@ export class User {
   })
   @Column({ nullable: true })
   disabledUntil: Date;
+
+  @Field(() => [PrivateFile], {
+    nullable: true,
+    description: 'Documents of the user (e.g. ID copy)',
+  })
+  @OneToMany(() => PrivateFile, (file) => file.user, {
+    cascade: true,
+  })
+  documents: PrivateFile[];
+
+  @Field(() => [Comment], {
+    nullable: true,
+    description: 'Comments written by the user',
+  })
+  @OneToMany(() => Comment, (comment) => comment.user, {
+    cascade: true,
+    eager: true,
+  })
+  comments: Comment[];
 
   @Field(() => [Notification], {
     description: 'Notifications of the user',

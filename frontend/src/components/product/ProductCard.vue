@@ -21,18 +21,17 @@
     </q-carousel>
 
     <!-- Title and Icons -->
-    <div class="flex justify-between items-center no-wrap">
-      <h5 class="q-ml-sm">{{ product.title }}</h5>
-      <div
-        class="q-gutter-md"
-        style="justify-content: flex-end; font-size: x-large"
-      >
+    <div class="row justify-between items-center q-ma-sm">
+      <div class="text-h4 no-wrap">
+        {{ product.title }}
+      </div>
+      <div class="row no-wrap q-gutter-sm">
         <q-icon
           v-for="icon in icons"
           :key="icon.tag"
           :tag="icon.tag"
           :name="icon.name"
-          class="q-mr-sm"
+          size="lg"
           style="cursor: pointer;"
           @click.stop="icon.callback()"
         />

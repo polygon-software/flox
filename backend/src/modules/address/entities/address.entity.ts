@@ -1,4 +1,4 @@
-import { ObjectType, Field, InputType } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Column, Entity } from 'typeorm';
 import { IsString } from 'class-validator';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
@@ -8,8 +8,7 @@ import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
  */
 
 @ObjectType()
-@InputType('address')
-@Entity({ name: 'address' })
+@Entity()
 export class Address extends BaseEntity {
   @Field(() => String, { description: 'Street' })
   @Column()
@@ -31,3 +30,5 @@ export class Address extends BaseEntity {
   @IsString()
   zipCode: string;
 }
+
+export default Address;

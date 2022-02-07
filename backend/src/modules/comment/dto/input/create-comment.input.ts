@@ -1,17 +1,15 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { User } from '../../../user/entities/user.entity';
+import { InputType, Field, ID } from '@nestjs/graphql';
 import { IsString } from 'class-validator';
-import { Product } from '../../../product/entities/product.entity';
 
 @InputType()
 export class CreateCommentInput {
-  @Field(() => User)
-  user: User;
+  @Field(() => ID)
+  user_uuid: string;
 
   @Field(() => String)
   @IsString()
   content: string;
 
-  @Field(() => Product)
-  product: Product;
+  @Field(() => ID)
+  product_uuid: string;
 }

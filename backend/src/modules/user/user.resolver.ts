@@ -32,7 +32,7 @@ export class UserResolver {
   @AdminOnly()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersService.getUser(getUserArgs);
+    return this.usersService.getUserWithDocuments(getUserArgs);
   }
 
   /**

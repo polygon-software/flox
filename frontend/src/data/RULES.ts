@@ -1,5 +1,6 @@
 import { EMAIL_REGEX, PASSWORD_REGEX, URL_REGEX } from 'src/helpers/REGEX';
 import { parseDate } from 'src/helpers/format-helpers';
+import { calculateAge } from 'src/helpers/date-helpers';
 
 /**
  * This file contains rules that can be applied to input forms.
@@ -32,9 +33,9 @@ const IS_VALID_ZIP = (val: string): boolean => {
 };
 
 const IS_VALID_BIRTHDATE = (val: string): boolean => {
-  console.log('TODO check', val, 'for birthday');
-  // TODO
-  return true;
+  const birthDate = new Date(val);
+  const age = calculateAge(birthDate);
+  return age >= 18;
 };
 
 const IS_FUTURE_DATE = (val: string): boolean => {
@@ -65,6 +66,10 @@ const IS_VALID_MAX_BET = (max: number, min: number, value: number): boolean => {
   return max <= value / 5 && value % max === 0 && max > min; //TODO Correct parameters for max bet calculation
 };
 
+const IS_VALID_ID_UPLOAD = (val: Record<string, File>): boolean => {
+  return (!!val.front && !!val.back)
+}
+
 export {
   IS_EMAIL,
   IS_URL,
@@ -82,4 +87,5 @@ export {
   IS_SMALLER_THAN_OR_EQUAL,
   IS_VALID_MIN_BET,
   IS_VALID_MAX_BET,
+  IS_VALID_ID_UPLOAD,
 };
