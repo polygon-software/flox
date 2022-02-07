@@ -27,7 +27,7 @@ describe('Filter Helpers', () => {
     it('should return whether a string is present in a sentence of type Number', () => {
       expect(deepFilter(6, '6')).toBe(true)
       expect(deepFilter(6, '6.5')).toBe(false)
-      expect(deepFilter(6.5, '6')).toBe(false)
+      expect(deepFilter(6.5, '6')).toBe(true)
     });
     it('should return whether a string is present in a sentence of type String with different upper-lowercase', () => {
       expect(deepFilter(sentence, 'hallo')).toBe(true)
