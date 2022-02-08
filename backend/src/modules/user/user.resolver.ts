@@ -8,6 +8,7 @@ import {
   AnyRole,
   CurrentUser,
 } from '../../auth/authorization.decorator';
+import { DisableUserInput } from './dto/input/disable-user.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -47,7 +48,9 @@ export class UserResolver {
    */
   @AdminOnly()
   @Mutation(() => User)
-  async disableUser(@Args('uuid') uuid: string): Promise<User> {
-    return this.usersService.disableUser(uuid);
+  async disableUser(
+    @Args('disableUserInput') disableUserInput: DisableUserInput,
+  ): Promise<User> {
+    return this.usersService.disableUser(disableUserInput);
   }
 }

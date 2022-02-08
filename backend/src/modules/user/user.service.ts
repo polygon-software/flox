@@ -7,14 +7,13 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import {
-  disableCognitoAccount,
-  enableCognitoAccount,
-} from '../../auth/authService';
+import { disableCognitoAccount } from '../../auth/authService';
 import { Bank } from '../bank/entities/bank.entity';
 import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
 import { Employee } from '../employee/entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
+import { Args } from '@nestjs/graphql';
+import { DisableUserInput } from './dto/input/disable-user.input';
 
 @Injectable()
 export class UserService {
@@ -97,14 +96,15 @@ export class UserService {
 
   /**
    * Disables a given user's account
-   * @param {string} uuid - user's database & cognito UUID
-   * @param {string} repositoryName - The name of the repository where the user's entity can be found. Needs to be injected.
+   * @param {DisableUserInput} disableUserInput - disabling input, containing uuid & repository name
    * @returns {Promise<Company|Bank|Employee|SoiEmployee>} - the user after editing
    */
   async disableUser(
-    uuid: string,
-    repositoryName: string,
+    disableUserInput: DisableUserInput,
   ): Promise<Company | Bank | Employee | SoiEmployee> {
+    const uuid = disableUserInput.uuid;
+    const repositoryName = disableUserInput.repositoryName;
+
     const user = await this[repositoryName].findOne(uuid);
 
     // Error checks
