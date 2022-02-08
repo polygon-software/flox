@@ -94,10 +94,15 @@ jobs:
       #    docker context use default
       #    docker context rm ecscontext
           
-      # TODO we assume frontend target group is third - use actual filter instead...
       - name: Set up listener on port 80 for Frontend
         run: |
-          TARGET_GROUP_ARN=`aws elbv2 describe-target-groups --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --query 'TargetGroups[2].TargetGroupArn' --output text`
+          TARGET_GROUPS=`aws elbv2 describe-target-groups --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --query 'TargetGroups[*].TargetGroupArn' --output text`
+          for arn in ${TARGET_GROUPS}; do
+            if [ -z ${arn##*Front*} ] ;then
+              TARGET_GROUP_ARN=$arn
+            fi
+          done
+          echo $TARGET_GROUP_ARN is target group!
           aws elbv2 create-listener --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --protocol TCP --port 80 --default-actions Type=forward,TargetGroupArn=$TARGET_GROUP_ARN
 
    
