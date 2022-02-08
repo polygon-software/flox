@@ -69,19 +69,19 @@ jobs:
           echo VUE_APP_WS_ENDPOINT="${{ env.VUE_APP_WS_ENDPOINT }}" >> .env
           cat .env
 
-      #- name: Build and push Frontend
-      #  uses: docker/build-push-action@v2
-      #  with:
-      #    context: frontend
-      #    push: true
-      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: frontend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
           
-      #- name: Build and push Backend
-      #  uses: docker/build-push-action@v2
-      #  with:
-      #    context: backend
-      #    push: true
-      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
+      - name: Build and push Backend
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
           
       - name: Deploy to ECS
         run: |
