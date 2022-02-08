@@ -11,6 +11,6 @@ COPY . .
 
 RUN rm -rf dist
 
-CMD ["yarn", "build:ssr"]
+RUN yarn build:ssr
 RUN cd dist/ssr
 CMD ["yarn", "start"]
