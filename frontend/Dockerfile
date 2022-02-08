@@ -13,4 +13,5 @@ RUN rm -rf dist
 
 RUN yarn build:ssr
 RUN cd dist/ssr
+RUN yarn --ignore-platform
 CMD ["yarn", "start"]
