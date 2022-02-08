@@ -110,12 +110,12 @@ const props = defineProps( {
 })
 
 const columns = [
-  { name: 'status', label: i18n.global.t('user.status'), field: 'status', sortable: true, align: 'center' },
-  { name: 'username', label: i18n.global.t('user.username'), field: 'username', sortable: true, align: 'center' },
-  { name: 'fullName', label: i18n.global.t('user.full_name'), field: 'fullName', sortable: true, align: 'center' },
-  { name: 'email', label: i18n.global.t('user.email'), field: 'email', sortable: true, align: 'center' },
-  { name: 'phone', label: i18n.global.t('user.phone'), field: 'phone', sortable: true, align: 'center' },
-  { name: 'birthdate', label: i18n.global.t('user.birth_date'), field: 'birthdate', sortable: true, align: 'center' },
+  { name: 'status', label: i18n.global.t('admin.status'), field: 'status', sortable: true, align: 'center' },
+  { name: 'username', label: i18n.global.t('account_data.username'), field: 'username', sortable: true, align: 'center' },
+  { name: 'fullName', label: i18n.global.t('account_data.full_name'), field: 'fullName', sortable: true, align: 'center' },
+  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: true, align: 'center' },
+  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: true, align: 'center' },
+  { name: 'birthdate', label: i18n.global.t('account_data.birthdate'), field: 'birthdate', sortable: true, align: 'center' },
   { name: 'options', field: 'options', sortable: false, align: 'center'},
 ]
 
