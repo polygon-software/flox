@@ -25,6 +25,7 @@ import { User } from '../user/entities/user.entity';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { prettify } from '../../helpers/log-helper';
 
 @Injectable()
 export class DossierService {
@@ -137,7 +138,7 @@ export class DossierService {
       readable_id: generateHumanReadableId(),
       employee: employee,
     });
-    this.logger.warn(`Dossier created:${JSON.stringify(dossier)}`);
+    this.logger.warn(`Dossier created:${prettify(dossier)}`);
     return this.dossierRepository.save(dossier);
   }
 
