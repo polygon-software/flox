@@ -3,7 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import PublicFile from './entities/public_file.entity';
 import PrivateFile from './entities/private_file.entity';
-import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import {
+  GetObjectCommand,
+  ListObjectsCommand,
+  PutObjectCommand,
+  S3,
+} from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
@@ -361,5 +366,31 @@ export class FileService {
 
     // Persist to database
     await saveValueDevelopmentCsv(parsedCsv);
+  }
+
+  /**
+   * Get the log files for a date range
+   * @param {Date} startDate - start date
+   * @param {Date} endDate - end date
+   * @returns {string[]} - list of download urls
+   */
+  async getLogFiles(startDate: Date, endDate: Date): string[] {
+    const listFiles = new ListObjectsCommand({
+      Bucket: this.configService.get('AWS_LOG_BUCKET_NAME'),
+    });
+    const files = await this.s3.send(listFiles);
+    const filteredFiles = files.Contents.filter((item) => {
+      return item.LastModified > startDate && item.LastModified < endDate;
+    });
+    const promises = filteredFiles.map((item) => {
+      return getSignedUrl(
+        this.s3,
+        new GetObjectCommand({
+          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+          Key: item.Key,
+        }),
+      );
+    });
+    return await Promise.all(promises);
   }
 }
