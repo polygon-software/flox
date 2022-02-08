@@ -1,7 +1,7 @@
 import { Person } from '../../person/entities/person.entity';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Column, Entity } from 'typeorm';
-import { IsPhoneNumber, IsString } from 'class-validator';
+import { IsDate, IsPhoneNumber, IsString } from 'class-validator';
 
 @ObjectType()
 @Entity()
@@ -16,4 +16,12 @@ export class SoiEmployee extends Person {
   @Field(() => String, { description: 'Gender' })
   @IsString()
   gender: string;
+
+  @Field(() => ID, {
+    description: 'Date of account ban (if any)',
+    nullable: true,
+  })
+  @Column()
+  @IsDate()
+  banned_at: Date;
 }

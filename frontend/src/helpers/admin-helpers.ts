@@ -6,7 +6,6 @@ import {
 import { executeMutation } from 'src/helpers/data-helpers';
 import { showNotification } from 'src/helpers/notification-helpers';
 import { i18n } from 'boot/i18n';
-import EnableUserDialog from 'components/dialogs/EnableUserDialog.vue';
 import {QVueGlobals} from 'quasar';
 
 /**
@@ -61,44 +60,3 @@ export function disableUser(
   });
 }
 
-/**
- * Opens a dialog for enabling a user's account
- * @param {Record<string, unknown>} user - the user to enable
- * @param {QVueGlobals} $q - Quasar instance for showing dialogs
- * @returns {Promise<void>} - if the user was enabled
- */
-export function enableUser(
-  user: Record<string, unknown>,
-  $q: QVueGlobals
-): void {
-  // Show info dialog for enabling account
-  $q.dialog({
-    component: EnableUserDialog,
-    componentProps: {
-      user: user,
-    },
-  }).onOk(() => {
-    // Enable account on backend
-    executeMutation(ENABLE_USER, {
-      uuid: user.uuid,
-    })
-      .then(() => {
-        // Show confirmation prompt
-        showNotification(
-          $q,
-          i18n.global.t('messages.account_enabled'),
-          undefined,
-          'positive'
-        );
-      })
-      .catch(() => {
-        // Show error prompt
-        showNotification(
-          $q,
-          i18n.global.t('errors.error_while_enabling'),
-          undefined,
-          'negative'
-        );
-      });
-  });
-}

@@ -7,11 +7,28 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import {
+  disableCognitoAccount,
+  enableCognitoAccount,
+} from '../../auth/authService';
+import { Bank } from '../bank/entities/bank.entity';
+import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
+import { Employee } from '../employee/entities/employee.entity';
+import { Company } from '../company/entities/company.entity';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+    @InjectRepository(Bank)
+    private readonly bankRepository: Repository<Bank>,
+    @InjectRepository(SoiEmployee)
+    private readonly soiEmployeeRepository: Repository<SoiEmployee>,
+    @InjectRepository(Employee)
+    private readonly employeeRepository: Repository<Employee>,
+    @InjectRepository(Company)
+    private readonly companyRepository: Repository<Company>,
   ) {}
 
   /**
@@ -76,5 +93,41 @@ export class UserService {
     const deletedUser = await this.usersRepository.remove(user);
     deletedUser.uuid = uuid;
     return deletedUser;
+  }
+
+  /**
+   * Disables a given user's account
+   * @param {string} uuid - user's database & cognito UUID
+   * @param {string} repositoryName - The name of the repository where the user's entity can be found. Needs to be injected.
+   * @returns {Promise<Company|Bank|Employee|SoiEmployee>} - the user after editing
+   */
+  async disableUser(
+    uuid: string,
+    repositoryName: string,
+  ): Promise<Company | Bank | Employee | SoiEmployee> {
+    const user = await this[repositoryName].findOne(uuid);
+
+    // Error checks
+    if (!user || !user.email) {
+      throw new Error(`Cannot find valid user for UUID ${uuid}`);
+    }
+
+    if (!!user.banned_at) {
+      throw new Error(`User with UUID ${uuid} is already banned`);
+    }
+
+    const email = user.email;
+
+    // Disable cognito account
+    await disableCognitoAccount(email).catch((error: Error) => {
+      throw error;
+    });
+
+    // Disable on database
+    await this[repositoryName].update(uuid, {
+      banned_at: new Date(),
+    });
+
+    return this[repositoryName].findOne(uuid);
   }
 }

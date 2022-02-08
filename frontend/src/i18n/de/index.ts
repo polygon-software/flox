@@ -473,8 +473,5 @@ export default {
   admin: {
     disable_account: 'Account deaktivieren',
     disable_company_account_description: 'Achtung: Dadurch werden auch sämtliche Mitarbeitenden-Accounts dieser Firma gesperrt',
-    enable_account: 'Account aktivieren',
-    re_enable_account: 'Account reaktivieren',
-    reject_application: 'Ablehnen',
   },
 };

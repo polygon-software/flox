@@ -7,7 +7,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IsString, IsUUID } from 'class-validator';
+import { IsDate, IsString, IsUUID } from 'class-validator';
 import { ROLE } from '../../../ENUM/ENUMS';
 
 @Entity()

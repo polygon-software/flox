@@ -1,4 +1,4 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { User } from './entities/user.entity';
@@ -38,5 +38,16 @@ export class UserResolver {
       throw new Error('No User authenticated');
     }
     return this.usersService.getUser({ uuid: user.userId });
+  }
+
+  /**
+   * Disables a given user's account
+   * @param {string} uuid - user's database & cognito UUID
+   * @returns {Promise<User>} - the user after editing
+   */
+  @AdminOnly()
+  @Mutation(() => User)
+  async disableUser(@Args('uuid') uuid: string): Promise<User> {
+    return this.usersService.disableUser(uuid);
   }
 }
