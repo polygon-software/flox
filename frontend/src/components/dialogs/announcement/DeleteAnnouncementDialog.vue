@@ -1,9 +1,9 @@
 <template>
   <q-dialog
-    ref="dialog"
-    :title="$t('dashboards.application')"
+    ref="dialogRef"
+    @hide="onDialogHide"
   >
-    <q-card style="width: 600px;">
+    <q-card class="q-dialog-plugin" style="width: 600px;">
       <q-card-section>
         <h5 class="q-ma-none q-pa-none">
           {{ $t('admin.delete_announcement') }}
@@ -48,25 +48,26 @@
           class="q-ma-md"
           :label="$t('announcement.delete')"
           color="negative"
-          @click="onOk"
+          @click="onOKClick"
         />
         <q-btn
           class="q-ma-md"
           :label="$t('buttons.cancel')"
           color="primary"
           flat
-          @click="onCancel"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineEmits, defineProps, ref, Ref} from 'vue'
-import {QDialog} from 'quasar';
-import {Announcement} from 'src/data/types/Announcement';
-import {formatDate} from 'src/helpers/format-helpers';
+import { defineEmits, defineProps } from 'vue'
+import { QDialog, useDialogPluginComponent } from 'quasar';
+import { Announcement } from 'src/data/types/Announcement';
+import { formatDate } from 'src/helpers/format-helpers';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   announcement: {
     required: true,
@@ -90,35 +91,24 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['ok'])
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emits = defineEmits([
+  // REQUIRED; need to specify some events that your
+  // component will emit through useDialogPluginComponent()
+  ...useDialogPluginComponent.emits
+])
 
 /**
  * On OK, emit event
  * @returns {void}
  */
-function onOk(): void{
-  emit('ok', props.announcement)
-  hide()
-}
-
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
+function onOKClick() {
+  // on OK, it is REQUIRED to
+  // call onDialogOK (with optional payload)
+  onDialogOK(props.announcement)
 }
 
 </script>

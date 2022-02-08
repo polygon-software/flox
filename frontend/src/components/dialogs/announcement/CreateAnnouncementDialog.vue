@@ -1,7 +1,7 @@
 <template>
   <q-dialog
-    ref="dialog"
-    :title="$t('dashboards.application')"
+    ref="dialogRef"
+    @hide="onDialogHide"
   >
     <q-card style="width: 600px;">
       <q-card-section>
@@ -51,14 +51,14 @@
           class="q-ma-md"
           :label="$t('announcement.create')"
           color="positive"
-          @click="onOk"
+          @click="onOKClick"
         />
         <q-btn
           class="q-ma-md"
           :label="$t('buttons.cancel')"
           color="primary"
           flat
-          @click="onCancel"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
@@ -66,51 +66,41 @@
 </template>
 <script setup lang="ts">
 import {computed, defineEmits, ref, Ref} from 'vue'
-import {QDialog} from 'quasar';
+import { QDialog, useDialogPluginComponent } from 'quasar';
 import {Announcement} from 'src/data/types/Announcement';
 import {ROLE} from '../../../../../shared/definitions/ENUM'
 import {formatDate, parseDate} from 'src/helpers/format-helpers';
 
-const emit = defineEmits(['ok'])
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emits = defineEmits([
+  // REQUIRED; need to specify some events that your
+  // component will emit through useDialogPluginComponent()
+  ...useDialogPluginComponent.emits
+])
 
-const announcement = ref(new Announcement('', new Date(), '', [ROLE.PLAYER], false))
+const announcement: Ref<Announcement> = ref(new Announcement('', new Date(), '', [ROLE.PLAYER], false))
 
 const date = computed({
   get: () => formatDate(announcement.value.date),
-  set: (dateString) => {
+  set: (dateString: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     announcement.value.date = parseDate(dateString)
   },
 })
 
 const options = [ROLE.PLAYER, ROLE.PARTNER]
 
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
 /**
  * On OK, emit event
  * @returns {void}
  */
-function onOk(): void{
-  emit('ok', announcement.value)
-  hide()
-}
-
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
+function onOKClick() {
+  // on OK, it is REQUIRED to
+  // call onDialogOK (with optional payload)
+  onDialogOK(announcement.value)
 }
 
 </script>
