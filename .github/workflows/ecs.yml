@@ -69,30 +69,30 @@ jobs:
           echo VUE_APP_WS_ENDPOINT="${{ env.VUE_APP_WS_ENDPOINT }}" >> .env
           cat .env
 
-      #- name: Build and push Frontend
-      #  uses: docker/build-push-action@v2
-      #  with:
-      #    context: frontend
-      #    push: true
-      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: frontend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend:latest
           
-      #- name: Build and push Backend
-      #  uses: docker/build-push-action@v2
-      #  with:
-      #    context: backend
-      #    push: true
-      #    tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
+      - name: Build and push Backend
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.repo_name.outputs.BRANCH_NAME }}-backend:latest
           
-      #- name: Deploy to ECS
-      #  run: |
-      #    curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
-      #    docker context create ecs ecscontext --from-env
-      #    docker login
-      #    docker compose pull
-      #    docker context use ecscontext
-      #    docker compose -p ${{ steps.repo_name.outputs.BRANCH_NAME }} up
-      #    docker context use default
-      #    docker context rm ecscontext
+      - name: Deploy to ECS
+        run: |
+          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+          docker context create ecs ecscontext --from-env
+          docker login
+          docker compose pull
+          docker context use ecscontext
+          docker compose -p ${{ steps.repo_name.outputs.BRANCH_NAME }} up
+          docker context use default
+          docker context rm ecscontext
           
       - name: Set up listener on port 80 for Frontend
         run: |
@@ -102,7 +102,6 @@ jobs:
               TARGET_GROUP_ARN=$arn
             fi
           done
-          echo $TARGET_GROUP_ARN is target group!
           aws elbv2 create-listener --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --protocol TCP --port 80 --default-actions Type=forward,TargetGroupArn=$TARGET_GROUP_ARN
 
    
