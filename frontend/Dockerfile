@@ -11,7 +11,9 @@ COPY . .
 
 RUN rm -rf dist
 
-RUN yarn build:ssr
+RUN quasar build -m ssr
+RUN ls
 RUN cd dist/ssr
 RUN yarn --ignore-platform
+RUN ls
 CMD ["yarn", "start"]
