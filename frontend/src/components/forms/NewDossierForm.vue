@@ -646,7 +646,7 @@ async function calculateValueEstimate(){
   // Ensure all necessary data is present
   const address =  formData.address
   const purchaseDate = formData.date_of_purchase as unknown as Date
-  const customerEstimate = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.market_value_estimation) : null
+  const customerEstimate = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.marketValueEstimation) : null
   const priceAtPurchase = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.price) : null
 
   if(!address || !purchaseDate || !priceAtPurchase ||!customerEstimate){
