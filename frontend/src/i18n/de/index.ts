@@ -468,5 +468,13 @@ export default {
     SALES_DOCUMENTATION: 'Verkaufsdokumentation von damals',
     SITUATION_PLAN: 'Situationsplan/Katasterplan',
     ADDITIONAL_DOCUMENTS: 'Zusätzliche Dokumente'
-  }
+  },
+  // TODO add in english file as well
+  admin: {
+    disable_account: 'Account deaktivieren',
+    disable_company_account_description: 'Achtung: Dadurch werden auch sämtliche Mitarbeitenden-Accounts dieser Firma gesperrt',
+    enable_account: 'Account aktivieren',
+    re_enable_account: 'Account reaktivieren',
+    reject_application: 'Ablehnen',
+  },
 };

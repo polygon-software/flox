@@ -17,7 +17,7 @@
           <q-item>
             <q-item-section>
               <div class="row flex content-center" style="height: 24px">
-                <p class="col-5">{{ $t('account_data.username') }}:</p>
+                <p class="col-5">{{ $t('account_data.first_name') }}:</p>
                 <p class="col-7">{{ props.user.first_name }}</p>
               </div>
             </q-item-section>
@@ -26,8 +26,26 @@
           <q-item>
             <q-item-section>
               <div class="row flex content-center" style="height: 24px">
-                <p class="col-5">{{ $t('account_data.full_name') }}:</p>
+                <p class="col-5">{{ $t('account_data.last_name') }}:</p>
                 <p class="col-7">{{ props.user.last_name }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item>
+            <q-item-section>
+              <div class="row flex content-center" style="height: 24px">
+                <p class="col-5">{{ $t('account_data.email') }}:</p>
+                <p class="col-7">{{ props.user.email }}</p>
+              </div>
+            </q-item-section>
+          </q-item>
+
+          <q-item>
+            <q-item-section>
+              <div class="row flex content-center" style="height: 24px">
+                <p class="col-5">{{ $t('account_data.phone_number') }}:</p>
+                <p class="col-7">{{ props.user.phone }}</p>
               </div>
             </q-item-section>
           </q-item>
