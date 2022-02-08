@@ -11,4 +11,4 @@ COPY . .
 
 RUN rm -rf dist
 
-CMD ["yarn", "build:ssr"]
+CMD ["yarn", "dev:ssr"]
