@@ -12,5 +12,5 @@ COPY . .
 RUN rm -rf dist
 
 RUN yarn build:ssr
-RUN yarn global add pm2
-CMD ["pm2-runtime", "dist/ssr/index.js"]
+WORKDIR dist/ssr
+CMD ["yarn", "start"]
