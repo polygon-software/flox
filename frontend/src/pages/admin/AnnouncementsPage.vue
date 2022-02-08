@@ -16,15 +16,22 @@
           outlined
           type="search"
           class="col-auto q-mb-md"
+          :placeholder="$t('products.search')"
         >
           <template #append>
-            <q-icon name="search" />
+            <q-icon
+              v-if="search !== ''"
+              name="close"
+              class="cursor-pointer"
+              @click="onClear"
+            />
+            <q-icon name="search"/>
           </template>
         </q-input>
 
         <q-btn
           :label="$t('admin.create_announcement')"
-          color="positive"
+          color="primary"
           class="col-auto q-mb-md"
           icon="create"
           dense
@@ -80,5 +87,13 @@ const dateFilter: Ref<null|string> = ref(null)
 
 // Search term
 const search = ref('')
+
+/**
+ * Clear search term.
+ * @returns {void} - void
+ */
+function onClear(): void {
+  search.value = '';
+}
 
 </script>

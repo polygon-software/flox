@@ -1,6 +1,6 @@
 <template>
-  <q-header class="row bg-primary shadow-5 justify-between">
-    <div class="row">
+  <q-header class="row flex items-center bg-primary shadow-5 no-wrap">
+    <div class="col flex justify-start">
       <img
         alt="Bigabig"
         :src="require('src/assets/bigabig-logo.svg')"
@@ -20,101 +20,90 @@
     </div>
 
     <!-- Search field -->
-    <div class="row">
-      <q-input
-        v-model="search"
-        outlined rounded
-        class="q-ma-sm"
-        :placeholder="$t('products.search')"
-        @keypress.enter="onSearch"
-      >
-        <template #append>
-          <q-icon
-            v-if="search !== ''"
-            name="cancel"
-            class="cursor-pointer"
-            size="xs"
-            @click="onClear"
-          />
-          <q-icon
-            name="search"
-            class="cursor-pointer"
-            @click="onSearch"
-          />
-        </template>
-      </q-input>
+    <div class="col flex justify-center">
+      <SeachBar v-if="$routerService?.route.path === '/'"/>
     </div>
 
-    <div class="row">
-      <!-- Account options -->
-      <q-badge
-        v-if="notificationCount > 0"
-        floating
-        color="red"
-        rounded
-        style="margin: 10px 5px 0 0; z-index: 10"
-      >
-        {{notificationCount}}
-      </q-badge>
-
-      <q-btn-dropdown
-        dropdown-icon="account_circle"
+    <div class="col q-mr-md flex justify-end">
+      <!-- TODO: Avatar should be fetched from user-->
+      <q-avatar
+        icon="account_circle"
+        text-color="black"
+        font-size="48px"
         size="xl"
-        color="black"
-        auto-close
-        no-icon-animation
-        flat
-        round
-        dense
+        style="cursor: pointer;"
+        rounded
         @click="showOptions = !showOptions"
       >
-        <div class="column" style="width: 200px">
-          <q-btn
-            v-if="loggedIn"
-            :label="$t('notifications.messages')"
-            icon="notifications"
-            color="black"
-            class="text-black"
-            flat
-            no-caps
-            style="width: 100%"
-            @click="openInbox"
-          >
-            <q-badge
-              v-if="notificationCount > 0"
-              floating
-              color="red"
-              rounded
-              style="height: 18px; width: 18px; margin: 13px 10px 0 0; z-index: 10"
-            >
-              {{notificationCount}}
-            </q-badge>
-          </q-btn>
-          <q-btn
-            v-if="loggedIn"
-            :label="$t('authentication.logout')"
-            icon="logout"
-            color="black"
-            class="text-black"
-            flat
-            no-caps
-            style="width: 100%"
-            @click="logout"
-          />
+        <!-- Notifications -->
+        <q-badge
+          v-if="notificationCount > 0"
+          floating
+          color="red"
+          rounded
+          style="margin: 10px 0 0 0; z-index: 10"
+        >
+          {{notificationCount}}
+        </q-badge>
 
-          <q-btn
-            v-if="loggedIn"
-            :label="$t('authentication.change_password')"
-            icon="lock"
-            color="black"
-            class="text-black"
-            flat
-            no-caps
-            style="width: 100%"
-            @click="changePassword"
-          />
-        </div>
-      </q-btn-dropdown>
+        <!-- Account Options -->
+        <q-menu
+          :offset="[10, 7]"
+          style="width: 250px;"
+        >
+          <q-list>
+            <q-item>
+              <q-btn
+                v-if="loggedIn"
+                :label="$t('notifications.messages')"
+                icon="notifications"
+                color="black"
+                class="text-black"
+                flat
+                no-caps
+                align="left"
+                @click="openInbox"
+              >
+                <q-badge
+                  v-if="notificationCount > 0"
+                  floating
+                  color="red"
+                  rounded
+                  style="height: 18px; width: 18px; margin: 13px 10px 0 0; z-index: 10"
+                >
+                  {{notificationCount}}
+                </q-badge>
+              </q-btn>
+            </q-item>
+            <q-item>
+              <q-btn
+                v-if="loggedIn"
+                :label="$t('authentication.change_password')"
+                icon="lock"
+                color="black"
+                class="text-black"
+                flat
+                no-caps
+                align="left"
+                @click="changePassword"
+              />
+            </q-item>
+            <q-item>
+              <q-btn
+                v-if="loggedIn"
+                :label="$t('authentication.logout')"
+                icon="logout"
+                color="black"
+                class="text-black"
+                flat
+                no-caps
+                align="left"
+                @click="logout"
+              />
+            </q-item>
+          </q-list>
+        </q-menu>
+      </q-avatar>
     </div>
   </q-header>
 
@@ -126,7 +115,7 @@
     <q-card
       style="overflow: hidden"
     >
-      <Inbox :notifications="notifications"/>
+      <Inbox :messages="myNotifications"/>
       <q-card-actions align="center">
         <q-btn
           :label="$t('buttons.back')"
@@ -152,6 +141,7 @@ import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
 import { fetchMyNotifications } from 'src/helpers/api-helpers';
+import SeachBar from 'components/menu/MenuSeachBar.vue';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -159,12 +149,11 @@ const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActi
 
 const emit = defineEmits(['toggleMenu'])
 
+const showOptions = ref(false)
 const loggedIn = computed(() => {
   // Explicit type
   return $authStore.getters.getLoggedInStatus();
 })
-
-const search = ref('')
 
 /**
  * Go to main page.
@@ -172,22 +161,6 @@ const search = ref('')
  */
 async function goHome(): Promise<void> {
   await $routerService?.routeTo(ROUTES.MAIN);
-}
-
-/**
- * Go to product feed with search term.
- * @returns {Promise<void>} - async
- */
-async function onSearch(): Promise<void> {
-  await $routerService?.routeTo(ROUTES.MAIN, { search: search.value });
-}
-
-/**
- * Clear search term.
- * @returns {void} - void
- */
-function onClear(): void {
-  search.value = '';
 }
 
 const myNotifications = fetchMyNotifications()

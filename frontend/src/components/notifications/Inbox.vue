@@ -35,9 +35,18 @@
         outlined
         type="search"
         class="q-mb-md"
+        :placeholder="$t('products.search')"
       >
         <template #append>
-          <q-icon name="search" />
+          <q-icon
+            v-if="search !== ''"
+            class="cursor-pointer"
+            name="close"
+            @click="onClear"
+          />
+          <q-icon
+            name="search"
+          />
         </template>
       </q-input>
 
@@ -45,19 +54,18 @@
       <q-select
         v-model="sort"
         class="q-my-md"
-        style="width: 125px"
+        style="width: 100px"
         borderless
         dense
         :options="options"
         map-options
         emit-value
-        :label="$t('general.sort_by')"
       />
 
       <!-- Messages -->
       <q-scroll-area
-        style="height: 300px;"
         class="q-pb-md"
+        style="height: 300px;"
       >
         <MessagePreview
           v-for="message in filteredMessages"
@@ -70,6 +78,18 @@
           @click="openMessage(message)"
         >
         </MessagePreview>
+        <div
+          v-if="messages.length === 0"
+          class="q-mt-xl text-center"
+        >
+          {{ $t('notifications.empty_inbox') }}
+        </div>
+        <div
+          v-else-if="filteredMessages.length === 0"
+          class="q-mt-xl text-center"
+        >
+          {{ $t('notifications.no_machtes_found') }}
+        </div>
       </q-scroll-area>
     </q-card-section>
   </q-card>
@@ -92,7 +112,7 @@ const $errorService: ErrorService|undefined = inject('$errorService')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
-  notifications: {
+  messages: {
     default: () => [],
     type: Array,
   },
@@ -118,7 +138,7 @@ const showMessageDetail: Ref<boolean> = ref(false)
 
 // Sorts the messages according to the selected parameter
 const sortedMessages = computed(() => {
-  const notifications = props.notifications as Notification[]
+  const notifications = props.messages as Notification[]
   if (sort.value === 'oldest') {
     return notifications.sort((a, b) => new Date(a.received).getTime() - new Date(b.received).getTime())
   }
@@ -163,6 +183,14 @@ function openMessage(notification: Notification) {
 function closeMessage() {
   selectedMessage.value = null
   showMessageDetail.value = false
+}
+
+/**
+ * Clear search term.
+ * @returns {void} - void
+ */
+function onClear(): void {
+  search.value = '';
 }
 
 </script>

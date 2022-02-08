@@ -1,71 +1,98 @@
 <template>
   <div class="q-pa-md">
-    <div class="row justify-between no-wrap">
-      <q-btn icon="arrow_back" round color="primary" @click="onBack"/>
-      {{ $t('products.filter_and_sort') }}
-      <q-btn icon="refresh" round color="primary" @click="resetFilter"/>
+    <div class="row justify-between no-wrap items-center">
+      <q-btn icon="arrow_back" round color="primary" style="height: 15px; width: 15px;" @click="onBack"/>
+      <h5>{{ $t('products.filter_and_sort') }}</h5>
+      <q-btn icon="refresh" round color="primary" style="height: 15px; width: 15px;" @click="resetFilter"/>
     </div>
     <q-list>
+      <!--- Sorting -->
       <q-item>
-        <q-item-section>
-          <q-item-label>{{ $t('products.sort_by') }}</q-item-label>
-        </q-item-section>
+        <q-card class="q-pa-md full-width">
+          <q-item-section>
+            <q-item-label class="q-mb-md">{{ $t('products.sort_by') }}</q-item-label>
+          </q-item-section>
+          <q-item-section>
+            <div class="row">
+              <q-chip
+                :label="$t('products.relevance')"
+                :selected="sortBy === 'relevance'"
+                :color="sortBy === 'relevance' ? 'primary' : 'gray'"
+                @click="sortBy = 'relevance'"
+              />
+              <q-chip
+                :label="$t('products.time_left')"
+                :selected="sortBy === 'time_left'"
+                :color="sortBy === 'time_left' ? 'primary' : 'gray'"
+                @click="sortBy = 'time_left'"
+              />
+              <q-chip
+                :label="$t('products.value_asc')"
+                :selected="sortBy === 'value_asc'"
+                :color="sortBy === 'value_asc' ? 'primary' : 'gray'"
+                @click="sortBy = 'value_asc'"
+              />
+              <q-chip
+                :label="$t('products.value_desc')"
+                :selected="sortBy === 'value_desc'"
+                :color="sortBy === 'value_desc' ? 'primary' : 'gray'"
+                @click="sortBy = 'value_desc'"
+              />
+            </div>
+          </q-item-section>
+        </q-card>
       </q-item>
+      <!--- Category Filters -->
       <q-item>
-        <q-item-section>
-          <div class="row">
-            <q-radio v-model="sortBy" val="relevance" :label="$t('products.relevance')" />
-            <q-radio v-model="sortBy" val="time_left" :label="$t('products.time_left')"/>
-            <q-radio v-model="sortBy" val="value_asc" :label="$t('products.value_asc')"/>
-            <q-radio v-model="sortBy" val="value_desc" :label="$t('products.value_desc')"/>
-          </div>
-        </q-item-section>
+        <q-card class="q-pa-md full-width">
+          <!-- Title -->
+          <q-item-section>
+            <q-item-label class="q-mb-md">{{ $t('products.category') }}</q-item-label>
+          </q-item-section>
+          <!-- Chips -->
+          <q-item-section>
+            <div class="row">
+              <q-chip
+                :label="$t('products.all')"
+                :selected="categoryFilter === 'all'"
+                @click="categoryFilter = 'all'"
+              />
+              <q-chip
+                v-for="category in categories"
+                :key="category"
+                :label="$t(`categories.${category.toLowerCase()}`)"
+                :selected="categoryFilter === category"
+                @click="categoryFilter = category"
+              />
+            </div>
+          </q-item-section>
+        </q-card>
       </q-item>
+      <!--- Brand Filters -->
       <q-item>
-        <q-item-section>
-          <q-item-label>{{ $t('products.category') }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <div class="row">
-            <q-chip
-              :label="$t('products.all')"
-              :selected="categoryFilter === 'all'"
-              @click="categoryFilter = 'all'"
-            />
-            <q-chip
-              v-for="category in categories"
-              :key="category"
-              :label="$t(`categories.${category.toLowerCase()}`)"
-              :selected="categoryFilter === category"
-              @click="categoryFilter = category"
-            />
-          </div>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label>{{ $t('products.brand') }}</q-item-label>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <div class="row">
-            <q-chip
-              :label="$t('products.all')"
-              :selected="brandFilter === 'all'"
-              @click="brandFilter = 'all'"
-            />
-            <q-chip
-              v-for="brand in brands"
-              :key="brand"
-              :label="brand"
-              :selected="brandFilter === brand"
-              @click="brandFilter = brand"
-            />
-          </div>
-        </q-item-section>
+        <q-card class="q-pa-md full-width">
+          <!-- Title -->
+          <q-item-section>
+            <q-item-label class="q-mb-md">{{ $t('products.brand') }}</q-item-label>
+          </q-item-section>
+          <!-- Chips -->
+          <q-item-section>
+            <div class="row">
+              <q-chip
+                :label="$t('products.all')"
+                :selected="brandFilter === 'all'"
+                @click="brandFilter = 'all'"
+              />
+              <q-chip
+                v-for="brand in brands"
+                :key="brand"
+                :label="brand"
+                :selected="brandFilter === brand"
+                @click="brandFilter = brand"
+              />
+            </div>
+          </q-item-section>
+        </q-card>
       </q-item>
     </q-list>
   </div>

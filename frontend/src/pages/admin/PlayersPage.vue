@@ -14,10 +14,17 @@
         rounded
         outlined
         type="search"
-        class="q-mb-md"
+        class="col-auto q-mb-md"
+        :placeholder="$t('products.search')"
       >
         <template #append>
-          <q-icon name="search" />
+          <q-icon
+            v-if="search !== ''"
+            name="close"
+            class="cursor-pointer"
+            @click="onClear"
+          />
+          <q-icon name="search"/>
         </template>
       </q-input>
 

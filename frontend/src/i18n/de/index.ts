@@ -3,7 +3,7 @@ export default {
     yes: 'Ja',
     no: 'Nein',
     new: 'Neu',
-    newest: 'Neuste',
+    newest: 'Neueste',
     oldest: 'Älteste',
     sort_by: 'Sortieren nach:',
     all: 'Alle',
@@ -143,6 +143,8 @@ export default {
   },
   notifications: {
     messages: 'Nachrichten',
+    empty_inbox: 'Sie haben noch keine Nachrichten erhalten.',
+    no_matches_found: 'Keine Übereinstimmungen gefunden.',
   },
   messages: {
     account_enabled: 'Account aktiviert',

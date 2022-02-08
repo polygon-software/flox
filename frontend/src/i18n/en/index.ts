@@ -139,6 +139,8 @@ export default {
   },
   notifications: {
     messages: 'Messages',
+    empty_inbox: 'You haven\'t recieved any messages yet.',
+    no_matches_found: 'No matches found.'
   },
   messages: {
     account_enabled: 'Account enabled',

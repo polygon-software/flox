@@ -25,8 +25,10 @@
           <q-select
             v-model="announcement.userRoles"
             :label="$t('announcement.user_roles')"
-            :options="options"
+            use-chips
+            stack-label
             multiple
+            :options="options"
           />
 
           <q-toggle v-model="announcement.scheduled" :label="$t('announcement.scheduled')"/>
@@ -50,7 +52,7 @@
         <q-btn
           class="q-ma-md"
           :label="$t('announcement.create')"
-          color="positive"
+          color="primary"
           @click="onOk"
         />
         <q-btn

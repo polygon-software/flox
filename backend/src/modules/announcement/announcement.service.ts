@@ -81,7 +81,7 @@ export class AnnouncementService {
     );
     // Delete now invalid notifications
     await Promise.all(
-      updatedAnnouncement.notifications
+      updatedAnnouncement.messages
         .filter((notification) => removedRoles.includes(notification.user.role))
         .map((invalidNotification) =>
           this.notificationService.delete(invalidNotification),
@@ -91,7 +91,7 @@ export class AnnouncementService {
       updateAnnouncementInput.uuid,
     );
     // Update existing notifications
-    updatedAnnouncement.notifications.forEach((notification) => {
+    updatedAnnouncement.messages.forEach((notification) => {
       notification.title = announcement.title;
       notification.content = announcement.content;
       notification.received = announcement.date;
@@ -102,7 +102,7 @@ export class AnnouncementService {
       addedRoles,
       updatedAnnouncement,
     );
-    updatedAnnouncement.notifications.push(...newNotifications);
+    updatedAnnouncement.messages.push(...newNotifications);
 
     return this.announcementsRepository.save(updatedAnnouncement);
   }
@@ -119,7 +119,7 @@ export class AnnouncementService {
       deleteAnnouncementInput.uuid,
     );
     await Promise.all(
-      announcement.notifications.map((notification) =>
+      announcement.messages.map((notification) =>
         this.notificationService.delete(notification),
       ),
     );
