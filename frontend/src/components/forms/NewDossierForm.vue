@@ -113,7 +113,7 @@
               style="margin-left: 24px"
             >
               <strong>
-                {{ $t('form_for_clients.costs')}}
+                {{ $t('form_for_clients.costs_per_year')}}
               </strong>
               <q-card
                 class="q-pa-sm bg-red-2 text-right"
@@ -145,6 +145,8 @@
             :label="$t('form_for_clients.costs_per_year')"
             :content="totalCosts ? `CHF ${totalCosts}` : '-' "
             value-type="negative"
+            :show-hover-text="true"
+            :hover-text="totalCostsAsString"
           />
 
           <!-- Mortgage Volume -->
@@ -401,7 +403,7 @@ const pages = [
     sectionsRHS: [
       {
         key: 'assets-data3',
-        title: i18n.global.t('form_for_clients.costs'),
+        title: i18n.global.t('form_for_clients.costs_per_year'),
         fields: [
           FIELDS.LEASING,
           FIELDS.CREDIT,
@@ -459,13 +461,12 @@ const totalIncome = computed(() => {
   const grossIncomes = form.values.value.income as number[]|undefined
   const bonus = form.values.value.bonus as string|undefined
   const childAllowances = form.values.value.child_allowances as string|undefined
-  const assets = form.values.value.assets as string|undefined
 
-  if(grossIncomes && bonus && childAllowances && assets){
+  if(grossIncomes && bonus && childAllowances){
     let sumOfIncomes = 0
     grossIncomes.forEach((income) => sumOfIncomes += income)
 
-    return Math.round(sumOfIncomes + parseInt(bonus) + parseInt(childAllowances) + parseInt(assets))
+    return Math.round(sumOfIncomes + parseInt(bonus) + parseInt(childAllowances))
   }
 
   return null
@@ -524,6 +525,29 @@ const totalCosts = computed(() => {
   }
 
   return null
+})
+
+const totalCostsAsString = computed(() => {
+  // Value estimate is needed for calculation
+  if(!valueEstimate.value){
+    return ''
+  }
+
+  // Higher market value estimate
+  const marketValueEstimation = valueEstimate.value.high
+
+  // Yearly amortisation cost
+  const amortisation = (form.values.value.amortisation as Record<string, number>|undefined)?.amortisationAmount ?? 0
+
+  // 5% yearly mortgage interest
+  const interestRate = 0.05
+
+  // Ensure all required values are given
+  if(mortgage.value && marketValueEstimation){
+    return `(${mortgage.value} * ${interestRate}) + (0.01 * ${marketValueEstimation}) + ${amortisation}`
+  }
+
+  return ''
 })
 
 /**
