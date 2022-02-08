@@ -13,7 +13,13 @@ COPY . .
 
 RUN rm -rf dist
 
-RUN quasar build -m ssr
-WORKDIR /dist/ssr
-RUN yarn --ignore-platform
-CMD ["yarn", "start"]
+FROM develop-stage as build-stage
+RUN yarn \
+    && yarn lint \
+    && quasar build -m ssr
+
+# production stage
+FROM nginx:1.17.5-alpine as production-stage
+COPY --from=build-stage /app/dist/ssr /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
