@@ -1,5 +1,6 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
+import { ROLE } from '../../../../ENUM/ENUMS';
 
 @InputType()
 export class DisableUserInput {
@@ -7,7 +8,7 @@ export class DisableUserInput {
   @IsUUID()
   uuid: string;
 
-  @Field(() => String)
-  @IsNotEmpty()
-  repositoryName: string;
+  @Field(() => ROLE, { description: 'Role of the User' })
+  @IsString()
+  role: ROLE;
 }

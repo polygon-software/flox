@@ -96,15 +96,14 @@ export class UserService {
 
   /**
    * Disables a given user's account
-   * @param {DisableUserInput} disableUserInput - disabling input, containing uuid & repository name
+   * @param {string} uuid - user's UUID in the respective repository
+   * @param {string} repositoryName - repository name where the user's associated entity is found
    * @returns {Promise<Company|Bank|Employee|SoiEmployee>} - the user after editing
    */
   async disableUser(
-    disableUserInput: DisableUserInput,
+    uuid: string,
+    repositoryName: string,
   ): Promise<Company | Bank | Employee | SoiEmployee> {
-    const uuid = disableUserInput.uuid;
-    const repositoryName = disableUserInput.repositoryName;
-
     const user = await this[repositoryName].findOne(uuid);
 
     // Error checks

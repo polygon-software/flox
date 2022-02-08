@@ -9,6 +9,10 @@ import {
   CurrentUser,
 } from '../../auth/authorization.decorator';
 import { DisableUserInput } from './dto/input/disable-user.input';
+import { Bank } from '../bank/entities/bank.entity';
+import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
+import { Employee } from '../employee/entities/employee.entity';
+import { Company } from '../company/entities/company.entity';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -43,14 +47,19 @@ export class UserResolver {
 
   /**
    * Disables a given user's account
-   * @param {string} uuid - user's database & cognito UUID
+   * @param {DisableUserInput} disableUserInput - disabling input, including UUID & role
    * @returns {Promise<User>} - the user after editing
    */
   @AdminOnly()
-  @Mutation(() => User)
+  @Mutation(() => Bank | SoiEmployee | Employee | Company)
   async disableUser(
     @Args('disableUserInput') disableUserInput: DisableUserInput,
-  ): Promise<User> {
-    return this.usersService.disableUser(disableUserInput);
+  ): Promise<Bank | SoiEmployee | Employee | Company> {
+    // TODO check repo type...
+
+    return this.usersService.disableUser(
+      disableUserInput.uuid,
+      'BLAREPOsitory',
+    );
   }
 }
