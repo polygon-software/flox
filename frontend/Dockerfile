@@ -6,14 +6,14 @@ COPY package.json ./
 COPY yarn.lock ./
 
 RUN yarn --ignore-platform
+RUN yarn global add @vue/cli
+RUN yarn global add @quasar/cli
 
 COPY . .
 
 RUN rm -rf dist
 
 RUN quasar build -m ssr
-RUN ls
-RUN cd dist/ssr
+WORKDIR /dist/ssr
 RUN yarn --ignore-platform
-RUN ls
 CMD ["yarn", "start"]
