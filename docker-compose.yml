@@ -14,8 +14,6 @@ services:
           memory: 2048m
     build:
       context: backend
-    volumes:
-      - data-backend:backend/usr/src/app
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     networks:
@@ -72,5 +70,4 @@ networks:
 volumes:
   dbdata:
   #  nocodbdata:
-  data-backend:
   data-frontend:
