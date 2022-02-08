@@ -138,7 +138,9 @@ export class DossierService {
       readable_id: generateHumanReadableId(),
       employee: employee,
     });
-    this.logger.warn(`Dossier created:${prettify(dossier)}`);
+    this.logger.warn(
+      `Dossier created by ${prettify(dbUser)}:\n${prettify(dossier)}`,
+    );
     return this.dossierRepository.save(dossier);
   }
 
@@ -212,10 +214,17 @@ export class DossierService {
       status: OFFER_STATUS.INTERESTED,
       documents: [],
     });
-    await this.offerRepository.save(newOffer);
-    return this.dossierRepository.findOne(createOfferInput.dossier_uuid, {
-      relations: ['offers', 'offers.bank'],
-    });
+    const savedOffer = await this.offerRepository.save(newOffer);
+    const updatedDossier = this.dossierRepository.findOne(
+      createOfferInput.dossier_uuid,
+      {
+        relations: ['offers', 'offers.bank'],
+      },
+    );
+    this.logger.warn(
+      `Offer ${savedOffer} for dossier created:\n${prettify(updatedDossier)}`,
+    );
+    return updatedDossier;
   }
 
   /**
@@ -393,9 +402,14 @@ export class DossierService {
         promises.push(this.fileService.deletePrivateFile(fileUuid));
       });
       await Promise.all(promises);
-      return this.dossierRepository.findOne(removeDossierFilesInput.uuid, {
-        relations: ['documents', 'employee', 'final_document'],
-      });
+      const updatedDossier = this.dossierRepository.findOne(
+        removeDossierFilesInput.uuid,
+        {
+          relations: ['documents', 'employee', 'final_document'],
+        },
+      );
+      this.logger.warn(`Dossier files removed: ${updatedDossier}`);
+      return updatedDossier;
     }
     throw new Error('Not Authorized');
   }

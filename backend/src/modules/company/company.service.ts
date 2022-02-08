@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateCompanyInput } from './dto/input/create-company.input';
 import { UpdateCompanyInput } from './dto/input/update-company.input';
 import { GetCompanyArgs } from './dto/args/get-company.args';
@@ -16,6 +16,9 @@ import {
   sendPasswordChangeEmail,
 } from '../../email/helper';
 import { UserService } from '../user/user.service';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+import { prettify } from '../../helpers/log-helper';
 
 @Injectable()
 export class CompanyService {
@@ -24,6 +27,7 @@ export class CompanyService {
     private readonly companyRepository: Repository<Company>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly userService: UserService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -55,7 +59,7 @@ export class CompanyService {
       documents: null,
       // TODO: other default values
     });
-
+    this.logger.warn(`Company created:\n${prettify(company)}`);
     return this.companyRepository.save(company);
   }
 
@@ -136,6 +140,7 @@ export class CompanyService {
     const uuid = company.uuid;
     const deletedCompany = await this.companyRepository.softRemove(company);
     deletedCompany.uuid = uuid;
+    this.logger.warn(`Company deleted:\n${prettify(company)}`);
     return deletedCompany;
   }
 
@@ -175,7 +180,11 @@ export class CompanyService {
     });
     company.creation_state = CREATION_STATE.DONE;
     await this.companyRepository.save(company);
-    return this.companyRepository.findOne(uuid);
+    const updatedCompany = this.companyRepository.findOne(uuid);
+    this.logger.warn(
+      `Company with user associated:\n${prettify(updatedCompany)}`,
+    );
+    return updatedCompany;
   }
 
   /**

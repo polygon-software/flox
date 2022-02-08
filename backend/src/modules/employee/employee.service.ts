@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateEmployeeInput } from './dto/input/create-employee.input';
 import { UpdateEmployeeInput } from './dto/input/update-employee.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +11,9 @@ import { ROLE } from '../../ENUM/ENUMS';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { CompanyService } from '../company/company.service';
 import { generateHumanReadableId } from '../../helpers';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+import { prettify } from '../../helpers/log-helper';
 
 @Injectable()
 export class EmployeeService {
@@ -19,6 +22,7 @@ export class EmployeeService {
     private readonly employeeRepository: Repository<Employee>,
     private readonly userService: UserService,
     private readonly companyService: CompanyService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -52,6 +56,7 @@ export class EmployeeService {
       uuid: cognitoId,
       fk: newEmployee.uuid,
     });
+    this.logger.warn(`Employee created:\n${prettify(newEmployee)}`);
 
     return newEmployee;
   }

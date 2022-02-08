@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Bank } from './entities/bank.entity';
@@ -10,6 +10,9 @@ import { CreateUserlessBankInput } from './dto/input/create-userless-bank.input'
 import { generateHumanReadableId } from '../../helpers';
 import { GetBankArgs } from './dto/args/get-bank.args';
 import { BANK_SUGGESTIONS } from '../../CONSTANTS/BANK';
+import { prettify } from '../../helpers/log-helper';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @Injectable()
 export class BankService {
@@ -17,6 +20,7 @@ export class BankService {
     @InjectRepository(Bank)
     private readonly bankRepository: Repository<Bank>,
     private readonly userService: UserService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -44,6 +48,7 @@ export class BankService {
       uuid: cognitoId,
       fk: bank.uuid,
     });
+    this.logger.warn(`Bank created:\n${prettify(savedBank)}`);
     return savedBank;
   }
 
@@ -57,7 +62,7 @@ export class BankService {
 
   /**
    * Create a bank without an associated user
-   * @param {createUserlessBankInput} createBankInput - mimimal info for new bank
+   * @param {CreateUserlessBankInput} createBankInput - mimimal info for new bank
    * @return {Promise<Bank>} - new Bank
    */
   async createUserlessBank(
