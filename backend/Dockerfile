@@ -11,5 +11,5 @@ COPY . .
 
 RUN rm -rf dist
 
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "start:prod"]
 
