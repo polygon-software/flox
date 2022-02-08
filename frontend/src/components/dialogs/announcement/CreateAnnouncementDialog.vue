@@ -65,11 +65,11 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {computed, defineEmits, ref, Ref} from 'vue'
+import { computed, defineEmits, ref, Ref } from 'vue'
 import { QDialog, useDialogPluginComponent } from 'quasar';
-import {Announcement} from 'src/data/types/Announcement';
-import {ROLE} from '../../../../../shared/definitions/ENUM'
-import {formatDate, parseDate} from 'src/helpers/format-helpers';
+import { Announcement } from 'src/data/types/Announcement';
+import { ROLE } from '../../../../../shared/definitions/ENUM'
+import { formatDate, parseDate } from 'src/helpers/format-helpers';
 
 // REQUIRED; must be called inside of setup()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
