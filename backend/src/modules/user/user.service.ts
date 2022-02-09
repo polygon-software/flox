@@ -13,6 +13,7 @@ import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
 import { Employee } from '../employee/entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
 import { EmployeeService } from '../employee/employee.service';
+import { Person } from '../person/entities/person.entity';
 
 @Injectable()
 export class UserService {
@@ -99,12 +100,9 @@ export class UserService {
    * Disables a given user's account
    * @param {string} uuid - user's UUID in the respective repository
    * @param {string} repositoryName - repository name where the user's associated entity is found
-   * @returns {Promise<Company|Bank|Employee|SoiEmployee>} - the user after editing
+   * @returns {Promise<Person>} - the user after editing
    */
-  async disableUser(
-    uuid: string,
-    repositoryName: string,
-  ): Promise<Company | Bank | Employee | SoiEmployee> {
+  async disableUser(uuid: string, repositoryName: string): Promise<Person> {
     const user = await this[repositoryName].findOne(uuid);
 
     // Error checks
