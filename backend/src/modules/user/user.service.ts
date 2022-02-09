@@ -14,6 +14,7 @@ import { Employee } from '../employee/entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
 import { Args } from '@nestjs/graphql';
 import { DisableUserInput } from './dto/input/disable-user.input';
+import { EmployeeService } from '../employee/employee.service';
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,8 @@ export class UserService {
     private readonly companyRepository: Repository<Company>,
     @InjectRepository(Bank)
     private readonly bankRepository: Repository<Bank>,
+
+    private readonly employeeService: EmployeeService,
   ) {}
 
   /**
@@ -126,6 +129,14 @@ export class UserService {
     await this[repositoryName].update(uuid, {
       banned_at: new Date(),
     });
+
+    // If user is a company, also disable all employees
+    if (repositoryName === 'companyRepository') {
+      const companyEmployees = await this.employeeService.getEmployees(user);
+      companyEmployees.forEach((employee) => {
+        this.disableUser(employee.uuid, 'employeeRepository');
+      });
+    }
 
     return this[repositoryName].findOne(uuid);
   }
