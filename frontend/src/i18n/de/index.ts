@@ -391,6 +391,7 @@ export default {
     enfeoffment_second_rank: '1. & 2. Rang',
     enfeoffment_too_high: 'Nicht finanzierbar',
     discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?',
+    formula: '(Hypothekenwert * Zinssatz) + (0,01 * Marktwertschätzung) + Amortisation'
   },
   dossier_status_enum: {
     OPEN: 'Offen',
