@@ -156,8 +156,7 @@ export async function getValueDevelopment(
   const endValue = valueMapping[endKey];
 
   // Limit result to 4 decimal points & return
-  // return parseFloat((endValue / startValue).toFixed(4)); // TODO: Correct calculation after discussion with SOI
-  return 1 + parseFloat(((endValue - startValue) / 100).toFixed(4));
+  return parseFloat((endValue / startValue).toFixed(4));
 }
 
 /**

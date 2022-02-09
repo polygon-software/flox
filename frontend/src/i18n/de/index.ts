@@ -218,6 +218,7 @@ export default {
     purchase_price: 'Kaufpreis',
     customer_value: 'Kundenschätzwert',
     calculated_market_value: 'Berechneter Marktwert',
+    estimated_market_value: 'Marktwertschätzung anhand Kaufpreis',
     current_mortgage: 'Aktuelle Hypothek',
     object_type: 'Objekttyp',
     purchase_date: 'Kaufdatum',

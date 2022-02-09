@@ -200,7 +200,7 @@
               style="margin: 3mm 0 3mm 0"
             />
 
-            <!-- Third section: renovation info -->
+            <!-- Third section: renovation information -->
             <div class="row">
               <!-- Left column -->
               <div

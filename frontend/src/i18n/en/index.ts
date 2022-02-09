@@ -216,6 +216,7 @@ export default {
     purchase_price: 'Purchase Price',
     customer_value: 'Customer Estimated Value',
     calculated_market_value: 'Calculated Market Value',
+    estimated_market_value: 'Estimated Market Value based on Price at Purchase',
     current_mortgage: 'Current Mortgage',
     object_type: 'Object Type',
     purchase_date: 'Purchase Date',
