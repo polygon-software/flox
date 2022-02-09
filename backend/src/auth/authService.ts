@@ -120,6 +120,5 @@ function handleOperation(err: Error | undefined, data: unknown | undefined) {
     console.log('Error is', err);
     throw err;
   }
-  console.log('OP data:', data);
   return data;
 }

@@ -116,7 +116,6 @@ export class UserService {
 
     const email = user.email;
 
-    console.log('Banning user with account', email, 'in repo', repositoryName);
     // Disable cognito account
     await disableCognitoAccount(email).catch((error: Error) => {
       throw error;
