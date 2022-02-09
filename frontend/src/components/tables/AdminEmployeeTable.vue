@@ -75,6 +75,7 @@
             </q-td>
           <q-td key="options" :props="props">
             <q-btn-dropdown
+              v-if="!props.row.banned_at"
               dropdown-icon="more_vert"
               auto-close
               no-icon-animation
@@ -86,7 +87,6 @@
               <div class="column">
                 <!-- 'Disable' button for active accounts -->
                 <q-btn
-                  v-if="!props.row.banned_at"
                   :label="$t('admin.disable_account')"
                   icon="block"
                   class="text-black"
@@ -96,6 +96,12 @@
                 />
               </div>
             </q-btn-dropdown>
+            <q-icon
+              v-else
+              color="negative"
+              name="block"
+              size="sm"
+            />
           </q-td>
         </q-tr>
         <!-- One spacer row per row -->
