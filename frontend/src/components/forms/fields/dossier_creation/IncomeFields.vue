@@ -9,10 +9,10 @@
       dense
       :label="$t('form_for_clients.gross_income')+' '+ (index+1)"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-      @update:model-value="() => onChange(index)"
       mask="###.###.###.###"
       reverse-fill-mask
       unmasked-value
+      @update:model-value="() => onChange(index)"
     />
   </div>
 

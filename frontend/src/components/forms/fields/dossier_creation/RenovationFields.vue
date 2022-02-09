@@ -34,10 +34,10 @@
       dense
       :label="$t('form_for_clients.amount')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-      @change="emitValue"
       mask="###.###.###.###"
       reverse-fill-mask
       unmasked-value
+      @change="emitValue"
     />
   </q-card>
 </template>
