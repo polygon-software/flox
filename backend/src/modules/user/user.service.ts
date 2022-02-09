@@ -20,14 +20,6 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(SoiEmployee)
-    private readonly soiEmployeeRepository: Repository<SoiEmployee>,
-    @InjectRepository(Employee)
-    private readonly employeeRepository: Repository<Employee>,
-    @InjectRepository(Company)
-    private readonly companyRepository: Repository<Company>,
-    @InjectRepository(Bank)
-    private readonly bankRepository: Repository<Bank>,
   ) {}
 
   /**

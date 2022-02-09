@@ -29,7 +29,7 @@ export class Person extends BaseEntity {
     description: 'Date of account ban (if any)',
     nullable: true,
   })
-  @Column()
+  @Column({ nullable: true })
   @IsDate()
   banned_at: Date;
 }
