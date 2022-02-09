@@ -7,6 +7,7 @@ import {
   AdminOnly,
   AnyRole,
   CurrentUser,
+  Roles,
 } from '../../auth/authorization.decorator';
 import { DisableUserInput } from './dto/input/disable-user.input';
 import { Person } from '../person/entities/person.entity';
@@ -15,24 +16,24 @@ import { ERRORS } from '../../error/ERRORS';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly usersService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @AdminOnly()
   @Query(() => [User], { name: 'users' })
   async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
-    return this.usersService.getUsers(getUsersArgs);
+    return this.userService.getUsers(getUsersArgs);
   }
 
   @AdminOnly()
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
-    return this.usersService.getAllUsers();
+    return this.userService.getAllUsers();
   }
 
   @AdminOnly()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersService.getUser(getUserArgs);
+    return this.userService.getUser(getUserArgs);
   }
 
   @AnyRole()
@@ -41,19 +42,33 @@ export class UserResolver {
     if (!user) {
       throw new Error('No User authenticated');
     }
-    return this.usersService.getUser({ uuid: user.userId });
+    return this.userService.getUser({ uuid: user.userId });
   }
 
   /**
    * Disables a given user's account
    * @param {DisableUserInput} disableUserInput - disabling input, including UUID & role
+   * @param {Record<string, unknown>} user - the user making the request
    * @returns {Promise<User>} - the user after editing
    */
-  @AdminOnly()
+  @Roles(ROLE.COMPANY, ROLE.SOI_ADMIN)
   @Mutation(() => Person)
   async disableUser(
     @Args('disableUserInput') disableUserInput: DisableUserInput,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<Person> {
+    // Determine if combination of role & user type is valid
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    if (
+      !(
+        dbUser.role == ROLE.SOI_ADMIN ||
+        (dbUser.role !== ROLE.COMPANY &&
+          disableUserInput.role === ROLE.EMPLOYEE)
+      )
+    ) {
+      throw new Error(ERRORS.no_permission_to_disable);
+    }
+
     let repository;
 
     // Depending on role of the user to ban, pass corresponding repository to service
@@ -74,6 +89,6 @@ export class UserResolver {
         throw new Error(ERRORS.invalid_user_type);
     }
 
-    return this.usersService.disableUser(disableUserInput.uuid, repository);
+    return this.userService.disableUser(disableUserInput.uuid, repository);
   }
 }
