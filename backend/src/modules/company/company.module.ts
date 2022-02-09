@@ -6,13 +6,22 @@ import { Company } from './entities/company.entity';
 import { Address } from '../address/entities/address.entity';
 import { Employee } from '../employee/entities/employee.entity';
 import { User } from '../user/entities/user.entity';
-import { UserModule } from '../user/user.module';
+import { UserService } from '../user/user.service';
+import { EmployeeService } from '../employee/employee.service';
+import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
+import { Bank } from '../bank/entities/bank.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Company, Address, Employee, User]),
-    UserModule,
+    TypeOrmModule.forFeature([
+      Company,
+      Address,
+      Employee,
+      User,
+      SoiEmployee,
+      Bank,
+    ]),
   ],
-  providers: [CompanyResolver, CompanyService],
+  providers: [CompanyResolver, CompanyService, UserService, EmployeeService],
 })
 export class CompanyModule {}

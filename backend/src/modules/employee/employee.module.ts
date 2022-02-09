@@ -11,7 +11,9 @@ import { FileService } from '../file/file.service';
 import PrivateFile from '../file/entities/private_file.entity';
 import PublicFile from '../file/entities/public_file.entity';
 import { Offer } from '../offer/entities/offer.entity';
-import { UserModule } from '../user/user.module';
+import { UserService } from '../user/user.service';
+import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
+import { Bank } from '../bank/entities/bank.entity';
 
 @Module({
   imports: [
@@ -24,8 +26,9 @@ import { UserModule } from '../user/user.module';
       PublicFile,
       Dossier,
       Offer,
+      SoiEmployee,
+      Bank,
     ]),
-    UserModule,
   ],
   providers: [
     EmployeeResolver,
@@ -33,6 +36,7 @@ import { UserModule } from '../user/user.module';
     CompanyService,
     CompanyService,
     FileService,
+    UserService,
   ],
 })
 export class EmployeeModule {}
