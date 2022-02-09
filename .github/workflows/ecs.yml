@@ -15,9 +15,8 @@ env:
   
 jobs:
   deploy:
-    name: Deploy
+    name: Deploy Test Environment to ECS
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
       - name: Checkout Repository
