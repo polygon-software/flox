@@ -3,43 +3,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
 import { DossierResolver } from './dossier.resolver';
 import { DossierService } from './dossier.service';
-import { Bank } from '../bank/entities/bank.entity';
-import { BankService } from '../bank/bank.service';
 import { User } from '../user/entities/user.entity';
-import { Employee } from '../employee/entities/employee.entity';
-import { CompanyService } from '../company/company.service';
-import { Company } from '../company/entities/company.entity';
+import { UserModule } from '../user/user.module';
 import { Offer } from '../offer/entities/offer.entity';
-import { FileService } from '../file/file.service';
-import PrivateFile from '../file/entities/private_file.entity';
-import PublicFile from '../file/entities/public_file.entity';
-import { UserService } from '../user/user.service';
-import { EmployeeService } from '../employee/employee.service';
-import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
+import { EmployeeModule } from '../employee/employee.module';
+import { BankModule } from '../bank/bank.module';
+import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Dossier,
-      Bank,
-      User,
-      Employee,
-      Company,
-      Offer,
-      PrivateFile,
-      PublicFile,
-      SoiEmployee,
-    ]),
+    TypeOrmModule.forFeature([Dossier, User, Offer]),
+    UserModule,
+    EmployeeModule,
+    BankModule,
+    FileModule,
   ],
-  providers: [
-    DossierResolver,
-    DossierService,
-    BankService,
-    FileService,
-    CompanyService,
-    FileService,
-    UserService,
-    EmployeeService,
-  ],
+  providers: [DossierResolver, DossierService],
+  exports: [DossierService],
 })
 export class DossierModule {}

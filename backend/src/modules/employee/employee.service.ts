@@ -17,7 +17,6 @@ export class EmployeeService {
   constructor(
     @InjectRepository(Employee)
     private readonly employeeRepository: Repository<Employee>,
-    @Inject(forwardRef(() => CompanyService))
     private readonly companyService: CompanyService,
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,

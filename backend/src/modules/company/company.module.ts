@@ -1,27 +1,17 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CompanyResolver } from './company.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Company } from './entities/company.entity';
-import { Address } from '../address/entities/address.entity';
-import { Employee } from '../employee/entities/employee.entity';
 import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
-import { EmployeeService } from '../employee/employee.service';
-import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
-import { Bank } from '../bank/entities/bank.entity';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Company,
-      Address,
-      Employee,
-      User,
-      SoiEmployee,
-      Bank,
-    ]),
+    TypeOrmModule.forFeature([Company, User]),
+    forwardRef(() => UserModule),
   ],
-  providers: [CompanyResolver, CompanyService, UserService, EmployeeService],
+  providers: [CompanyResolver, CompanyService],
+  exports: [CompanyService],
 })
 export class CompanyModule {}
