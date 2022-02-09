@@ -1,6 +1,6 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
-import { IsDate, IsPhoneNumber, IsString } from 'class-validator';
+import { IsPhoneNumber, IsString } from 'class-validator';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Company } from '../../company/entities/company.entity';
 import { Dossier } from '../../dossier/entity/dossier.entity';
@@ -37,12 +37,4 @@ export class Employee extends Person {
   @Field(() => [Dossier], { description: 'Dossiers of employee' })
   @OneToMany(() => Dossier, (dossier) => dossier.employee)
   dossiers: Dossier[];
-
-  @Field(() => ID, {
-    description: 'Date of account ban (if any)',
-    nullable: true,
-  })
-  @Column()
-  @IsDate()
-  banned_at: Date;
 }

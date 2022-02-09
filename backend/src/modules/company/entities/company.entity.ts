@@ -1,11 +1,10 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import {
   IsString,
   IsBoolean,
   IsOptional,
   IsPhoneNumber,
-  IsDate,
 } from 'class-validator';
 import { Address } from '../../address/entities/address.entity';
 import { Person } from '../../person/entities/person.entity';
@@ -87,12 +86,4 @@ export class Company extends Person {
     cascade: true,
   })
   employees: Employee[];
-
-  @Field(() => ID, {
-    description: 'Date of account ban (if any)',
-    nullable: true,
-  })
-  @Column()
-  @IsDate()
-  banned_at: Date;
 }

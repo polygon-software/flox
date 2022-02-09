@@ -9,10 +9,6 @@ import {
   CurrentUser,
 } from '../../auth/authorization.decorator';
 import { DisableUserInput } from './dto/input/disable-user.input';
-import { Bank } from '../bank/entities/bank.entity';
-import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
-import { Employee } from '../employee/entities/employee.entity';
-import { Company } from '../company/entities/company.entity';
 import { Person } from '../person/entities/person.entity';
 import { ROLE } from '../../ENUM/ENUMS';
 import { ERRORS } from '../../error/ERRORS';
