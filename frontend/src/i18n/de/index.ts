@@ -24,7 +24,8 @@ export default {
     reset_password: 'Passwort zurücksetzen',
     redirected: 'Sie werden in Kürze weitergeleitet...',
     successful_application: 'Antrag erfolgreich',
-    successful_application_description: 'Sie erhalten in Kürze per E-Mail Bescheid zu Ihrem Registrierungsantrag.',
+    successful_application_description:
+      'Sie erhalten in Kürze per E-Mail Bescheid zu Ihrem Registrierungsantrag.',
     confirmed_registration: 'Registrierung bestätigt',
     redirect_to_login:
       'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
@@ -148,6 +149,9 @@ export default {
     account_enabled: 'Account aktiviert',
     account_disabled: 'Account deaktiviert',
     account_rejected: 'Account abgelehnt',
+    announcement_created: 'Ankündigung erstellt',
+    announcement_updated: 'Ankündigung aktualisiert',
+    announcement_deleted: 'Ankündigung gelöscht',
   },
   interests: {
     select_interests:
@@ -246,6 +250,7 @@ export default {
     delete_announcement: 'Ankündigung löschen',
     options: 'Optionen',
     all: 'Alle',
+    status: 'Status',
   },
   finances: {
     general: 'Allgemein',

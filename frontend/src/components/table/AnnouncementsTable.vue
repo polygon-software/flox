@@ -28,7 +28,7 @@
                 class="text-black"
                 flat
                 no-caps
-                @click="() => updateAnnouncement(_props.row, $q)"
+                @click="updateAnnouncement(_props.row)"
               />
 
               <!-- delete announcement -->
@@ -38,7 +38,7 @@
                 class="text-black"
                 flat
                 no-caps
-                @click="() => deleteAnnouncement(_props.row, $q)"
+                @click="deleteAnnouncement(_props.row)"
               />
 
             </div>
@@ -50,12 +50,15 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, ref} from 'vue';
-import {formatDate} from 'src/helpers/format-helpers';
-import {updateAnnouncement, deleteAnnouncement} from 'src/helpers/admin-helpers';
+import { computed, defineProps, inject, ref } from 'vue';
+import { formatDate } from 'src/helpers/format-helpers';
 import { i18n } from 'boot/i18n';
-import {ROLE} from '../../../../shared/definitions/ENUM';
+import { ROLE } from '../../../../shared/definitions/ENUM';
 import { fetchAllAnnouncements } from 'src/helpers/api-helpers';
+import { DialogService } from 'src/services/DialogService';
+import { Announcement } from 'src/data/types/Announcement';
+
+const dialogService: DialogService | undefined = inject('$dialogService')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -106,5 +109,23 @@ const pagination = ref({
   sortBy: 'date',
   descending: true,
 })
+
+/**
+ * Open dialog for announcement deletion.
+ * @param {Announcement} announcement - announcement to delete.
+ * @returns {void} - void
+ */
+function deleteAnnouncement(announcement: Announcement) {
+  dialogService?.deleteAnnouncement(announcement)
+}
+
+/**
+ * Open dialog for announcement updating.
+ * @param {Announcement} announcement - announcement to update.
+ * @returns {void} - void
+ */
+function updateAnnouncement(announcement: Announcement) {
+  dialogService?.updateAnnouncement(announcement)
+}
 
 </script>
