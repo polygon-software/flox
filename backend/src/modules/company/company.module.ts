@@ -6,10 +6,13 @@ import { Company } from './entities/company.entity';
 import { Address } from '../address/entities/address.entity';
 import { Employee } from '../employee/entities/employee.entity';
 import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Company, Address, Employee, User])],
-  providers: [CompanyResolver, CompanyService, UserService],
+  imports: [
+    TypeOrmModule.forFeature([Company, Address, Employee, User]),
+    UserModule,
+  ],
+  providers: [CompanyResolver, CompanyService],
 })
 export class CompanyModule {}

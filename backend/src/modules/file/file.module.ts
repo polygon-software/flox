@@ -7,10 +7,10 @@ import { ConfigService } from '@nestjs/config';
 import { FileResolver } from './file.resolver';
 import { PrivateFile } from './entities/private_file.entity';
 import { Company } from '../company/entities/company.entity';
-import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
 import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -22,8 +22,9 @@ import { Dossier } from '../dossier/entity/dossier.entity';
       Offer,
       Dossier,
     ]),
+    UserModule,
   ],
-  providers: [FileService, ConfigService, FileResolver, UserService],
+  providers: [FileService, ConfigService, FileResolver],
   controllers: [FileController],
 })
 export class FileModule {}

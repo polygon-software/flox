@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Bank } from './entities/bank.entity';
 import { BankResolver } from './bank.resolver';
 import { BankService } from './bank.service';
-import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Bank, User])],
-  providers: [BankResolver, BankService, UserService],
+  imports: [TypeOrmModule.forFeature([Bank, User]), UserModule],
+  providers: [BankResolver, BankService],
 })
 export class BankModule {}

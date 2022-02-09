@@ -5,7 +5,6 @@ import { DossierResolver } from './dossier.resolver';
 import { DossierService } from './dossier.service';
 import { Bank } from '../bank/entities/bank.entity';
 import { BankService } from '../bank/bank.service';
-import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
 import { EmployeeService } from '../employee/employee.service';
 import { Employee } from '../employee/entities/employee.entity';
@@ -15,6 +14,7 @@ import { Offer } from '../offer/entities/offer.entity';
 import { FileService } from '../file/file.service';
 import PrivateFile from '../file/entities/private_file.entity';
 import PublicFile from '../file/entities/public_file.entity';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -28,12 +28,12 @@ import PublicFile from '../file/entities/public_file.entity';
       PrivateFile,
       PublicFile,
     ]),
+    UserModule,
   ],
   providers: [
     DossierResolver,
     DossierService,
     BankService,
-    UserService,
     FileService,
     EmployeeService,
     CompanyService,

@@ -39,6 +39,9 @@ type Bank {
   """Address"""
   address: Address!
 
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Creation date"""
   created_at: DateTime!
 
@@ -77,6 +80,9 @@ type Bank {
 }
 
 type Company {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Branch structure"""
   branch_structure: Boolean!
 
@@ -462,6 +468,9 @@ enum DossierStatus {
 }
 
 type Employee {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Company"""
   company: Company!
 
@@ -750,6 +759,9 @@ type SoiAdmin {
 }
 
 type SoiEmployee {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Creation date"""
   created_at: DateTime!
 

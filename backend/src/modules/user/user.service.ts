@@ -12,8 +12,6 @@ import { Bank } from '../bank/entities/bank.entity';
 import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
 import { Employee } from '../employee/entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
-import { Args } from '@nestjs/graphql';
-import { DisableUserInput } from './dto/input/disable-user.input';
 
 @Injectable()
 export class UserService {
