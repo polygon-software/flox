@@ -12,7 +12,6 @@ import { Bank } from '../bank/entities/bank.entity';
 import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
 import { Employee } from '../employee/entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
-import { EmployeeService } from '../employee/employee.service';
 
 @Injectable()
 export class UserService {
@@ -26,9 +25,7 @@ export class UserService {
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
     @InjectRepository(Bank)
-    private readonly bankRepository: Repository<Bank>,
-
-    private readonly employeeService: EmployeeService,
+    private readonly bankRepository: Repository<Bank>, // private readonly employeeService: EmployeeService,
   ) {}
 
   /**
@@ -128,13 +125,14 @@ export class UserService {
       banned_at: new Date(),
     });
 
-    // If user is a company, also disable all employees
-    if (repositoryName === 'companyRepository') {
-      const companyEmployees = await this.employeeService.getEmployees(user);
-      companyEmployees.forEach((employee) => {
-        this.disableUser(employee.uuid, 'employeeRepository');
-      });
-    }
+    // TODO
+    // // If user is a company, also disable all employees
+    // if (repositoryName === 'companyRepository') {
+    //   const companyEmployees = await this.employeeService.getEmployees(user);
+    //   companyEmployees.forEach((employee) => {
+    //     this.disableUser(employee.uuid, 'employeeRepository');
+    //   });
+    // }
 
     return this[repositoryName].findOne(uuid);
   }
