@@ -92,7 +92,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => disableUser(props.row, $q)"
+                  @click="() => disableUser(props.row, ROLE.SOI_EMPLOYEE, $q)"
                 />
               </div>
             </q-btn-dropdown>
@@ -115,6 +115,7 @@ import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {SOI_EMPLOYEES} from 'src/data/queries/SOI_EMPLOYEE';
 import {disableUser} from 'src/helpers/admin-helpers';
+import {ROLE} from 'src/data/ENUM/ENUM';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
