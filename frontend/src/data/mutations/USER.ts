@@ -3,11 +3,10 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
 
 export const DISABLE_USER = {
   mutation: gql`
-    mutation disableUser($uuid: String!){
-      disableUser(uuid: $uuid ) {
+    mutation disableUser($uuid: ID!, $role: Roles!){
+      disableUser(disableUserInput: {uuid: $uuid, role: $role}) {
         uuid
-        status
-        disabledUntil
+        banned_at
         __typename
       }
     }`,

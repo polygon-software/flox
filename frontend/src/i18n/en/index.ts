@@ -292,7 +292,8 @@ export default {
     missing_data: 'Required data is missing',
     file_upload_failed: 'File upload failed',
     abbreviation_length: 'Abbreviation must be exactly 3 letters long',
-    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank'
+    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank',
+    error_while_disabling: 'An error occurred while disabling'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
