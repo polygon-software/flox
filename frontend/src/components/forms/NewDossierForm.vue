@@ -146,7 +146,8 @@
             :content="totalCosts ? `CHF ${totalCosts}` : '-' "
             value-type="negative"
             :show-hover-text="true"
-            :hover-text="$t('form_for_clients.formula') + totalCostsAsString"
+            :hover-text="$t('form_for_clients.formula')"
+            :second-hover-text="totalCostsAsString"
           />
 
           <!-- Mortgage Volume -->

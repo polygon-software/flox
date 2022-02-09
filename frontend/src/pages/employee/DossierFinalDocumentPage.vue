@@ -264,6 +264,12 @@
                   :content="dossier.affordability + '%'"
                   bold
                 />
+
+                <!-- Assets -->
+                <DossierDocumentInfoField
+                  :label="$t('dossier.assets')"
+                  :content="dossier.assets.toLocaleString() + currency"
+                />
               </div>
 
               <!-- Right column -->

@@ -233,6 +233,7 @@ export default {
     salary: 'Creditable Salary',
     costs: 'Costs',
     sustainability: 'Sustainability',
+    assets: 'Assets',
     building_right: 'Building Right',
     debt_enforcements: 'Debt Enforcements',
     loss_certificates: 'Loss Certificates',

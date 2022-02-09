@@ -235,6 +235,7 @@ export default {
     salary: 'Anrechenbarer Lohn',
     costs: 'Kosten',
     sustainability: 'Tragbarkeit',
+    assets: 'Vermögen',
     building_right: 'Baurecht',
     debt_enforcements: 'Betreibungen',
     loss_certificates: 'Verlustscheine',

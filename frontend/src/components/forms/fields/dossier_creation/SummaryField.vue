@@ -14,12 +14,16 @@
         <strong v-if="bold">
           <q-tooltip v-if="showHoverText">
             {{ hoverText }}
+            <br/>
+            {{ secondHoverText }}
           </q-tooltip>
           {{ content }}
         </strong>
         <p v-else>
           <q-tooltip v-if="showHoverText">
             {{ hoverText }}
+            <br/>
+            {{ secondHoverText }}
           </q-tooltip>
           {{ content }}
         </p>
@@ -96,6 +100,11 @@ const props = defineProps({
     default: false,
   },
   hoverText: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  secondHoverText: {
     type: String,
     required: false,
     default: null,
