@@ -11,7 +11,7 @@ services:
       resources:
         limits:
           cpus: '1.0'
-          memory: 2048m
+          memory: 1024m
     build:
       context: backend
     ports:
@@ -28,7 +28,7 @@ services:
       resources:
         limits:
           cpus: '1.0'
-          memory: 2048m
+          memory: 1024m
     build:
       context: frontend
     volumes:
@@ -42,6 +42,11 @@ services:
 
   database:
     image: postgres:14
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2048m
     networks:
       - webnet
     environment:
@@ -53,21 +58,21 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
 
-#  nocodb:
-#    container_name: nocodb
-#    image: nocodb/nocodb:latest
-#    networks:
-#      - webnet
-#    ports:
-#      - ${NOCODB_PORT}:8080
-#    volumes:
-#      - nocodbdata:/usr/app/data
-#    depends_on:
-#      - database
+  nocodb:
+    container_name: nocodb
+    image: nocodb/nocodb:latest
+    networks:
+      - webnet
+    ports:
+      - ${NOCODB_PORT}:8080
+    volumes:
+      - nocodbdata:/usr/app/data
+    depends_on:
+      - database
 
 networks:
   webnet:
 volumes:
   dbdata:
-  #  nocodbdata:
+  nocodbdata:
   data-frontend:

@@ -12,5 +12,6 @@ COPY . .
 RUN rm -rf dist
 
 RUN yarn build:ssr
+RUN rm -rf node_modules
 WORKDIR dist/ssr
 CMD ["yarn", "start"]
