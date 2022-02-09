@@ -102,7 +102,7 @@
                 flat
               >
                 <strong>
-                  {{ totalIncome ? `CHF ${totalIncome}` : '-' }}
+                  {{ totalIncome ? `CHF ${totalIncome.toLocaleString()}` : '-' }}
                 </strong>
               </q-card>
             </div>
@@ -121,7 +121,7 @@
                 flat
               >
                 <strong>
-                  {{ totalExpenses ? `CHF ${totalExpenses}` : '-' }}
+                  {{ totalExpenses ? `CHF ${totalExpenses.toLocaleString()}` : '-' }}
                 </strong>
               </q-card>
             </div>
@@ -136,24 +136,24 @@
           <!-- Eligible salary -->
           <SummaryField
             :label="$t('form_for_clients.eligible_income')"
-            :content="eligibleIncome ? `CHF ${eligibleIncome}` : '-' "
+            :content="eligibleIncome ? `CHF ${eligibleIncome.toLocaleString()}` : '-' "
             value-type="positive"
           />
 
           <!-- Costs per year -->
           <SummaryField
             :label="$t('form_for_clients.costs_per_year')"
-            :content="totalCosts ? `CHF ${totalCosts}` : '-' "
+            :content="totalCosts ? `CHF ${totalCosts.toLocaleString()}` : '-' "
             value-type="negative"
             :show-hover-text="true"
             :hover-text="$t('form_for_clients.formula')"
-            :second-hover-text="totalCostsAsString"
+            :second-hover-text="totalCostsAsString.toLocaleString()"
           />
 
           <!-- Mortgage Volume -->
           <SummaryField
             :label="$t('account_data.mortgage_volume')"
-            :content="mortgage ? `CHF ${mortgage}` : '-' "
+            :content="mortgage ? `CHF ${mortgage.toLocaleString()}` : '-' "
           />
 
           <!-- Affordability -->
@@ -167,8 +167,8 @@
           <!-- Estimated value range -->
           <SummaryField
             :label="$t('form_for_clients.market_value_between')"
-            :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low }` : '-' "
-            :second-content="valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high }` : '-' "
+            :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low.toLocaleString() }` : '-' "
+            :second-content="valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high.toLocaleString() }` : '-' "
             :caption="$t('dossier.customer_value')"
             :second-caption="$t('dossier.estimated_market_value')"
             value-type="positive"
