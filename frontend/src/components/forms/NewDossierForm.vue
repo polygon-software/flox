@@ -224,12 +224,15 @@
                 @click="$refs.stepper.previous()"
               />
               <q-btn
+                v-if="form.step.value < form.pages.value.length"
                 color="primary"
                 :label="$t('buttons.next_step')"
+                :disable="!form.pageValid.value || bankOptions.length === 0"
                 @click="$refs.stepper.next()"
               />
 
               <q-btn
+                v-else
                 :label="$t('buttons.save_and_print')"
                 color="primary"
                 icon="print"
