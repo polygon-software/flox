@@ -19,7 +19,7 @@ import { DisableUserInput } from './dto/input/disable-user.input';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
     @InjectRepository(Bank)
     private readonly bankRepository: Repository<Bank>,
     @InjectRepository(SoiEmployee)

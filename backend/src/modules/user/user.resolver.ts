@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { User } from './entities/user.entity';
@@ -13,6 +13,9 @@ import { Bank } from '../bank/entities/bank.entity';
 import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
 import { Employee } from '../employee/entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
+import { Person } from '../person/entities/person.entity';
+import { ROLE } from '../../ENUM/ENUMS';
+import { ERRORS } from '../../error/ERRORS';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -51,15 +54,30 @@ export class UserResolver {
    * @returns {Promise<User>} - the user after editing
    */
   @AdminOnly()
-  @Mutation(() => Bank | SoiEmployee | Employee | Company)
+  @Mutation(() => Person)
   async disableUser(
     @Args('disableUserInput') disableUserInput: DisableUserInput,
-  ): Promise<Bank | SoiEmployee | Employee | Company> {
-    // TODO check repo type...
+  ): Promise<Person> {
+    let repository;
 
-    return this.usersService.disableUser(
-      disableUserInput.uuid,
-      'BLAREPOsitory',
-    );
+    // Depending on role of the user to ban, pass corresponding repository to service
+    switch (disableUserInput.role) {
+      case ROLE.BANK:
+        repository = 'bankRepository';
+        break;
+      case ROLE.COMPANY:
+        repository = 'companyRepository';
+        break;
+      case ROLE.SOI_EMPLOYEE:
+        repository = 'soiEmployeeRepository';
+        break;
+      case ROLE.EMPLOYEE:
+        repository = 'employeeRepository';
+        break;
+      default:
+        throw new Error(ERRORS.invalid_user_type);
+    }
+
+    return this.usersService.disableUser(disableUserInput.uuid, repository);
   }
 }

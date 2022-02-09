@@ -85,8 +85,8 @@
             >
               <div class="column">
                 <!-- 'Disable' button for active accounts -->
-                <!-- TODO add status, v-if="props.row.status === USER_STATUS.ACTIVE"-->
                 <q-btn
+                  v-if="!props.row.banned_at"
                   :label="$t('admin.disable_account')"
                   icon="block"
                   class="text-black"

@@ -1,7 +1,6 @@
 import DisableUserDialog from 'components/dialogs/DisableUserDialog.vue';
 import {
   DISABLE_USER,
-  ENABLE_USER,
 } from 'src/data/mutations/USER';
 import { executeMutation } from 'src/helpers/data-helpers';
 import { showNotification } from 'src/helpers/notification-helpers';

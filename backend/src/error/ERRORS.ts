@@ -14,4 +14,5 @@ export const ERRORS = {
   invalid_zip_code: 'Invalid Zip Code',
   missing_query_parameters: 'Required query parameters are missing',
   missing_database_data: 'Missing required data in database',
+  invalid_user_type: 'Invalid User Type specified',
 };
