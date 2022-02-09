@@ -295,6 +295,12 @@ input DeleteCompanyInput {
   uuid: ID!
 }
 
+input DisableUserInput {
+  """Role of the User"""
+  role: Roles!
+  uuid: ID!
+}
+
 type Dossier {
   """Address"""
   address: Address!
@@ -310,6 +316,9 @@ type Dossier {
 
   """Amount of assets"""
   assets: Float!
+
+  """Date of account ban (if any)"""
+  banned_at: ID
 
   """Date of birth of customer"""
   birthdate: DateTime!
@@ -563,6 +572,7 @@ type Mutation {
   createOffer(createOfferInput: CreateOfferInput!): Dossier!
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
+  disableUser(disableUserInput: DisableUserInput!): Person!
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
@@ -610,6 +620,35 @@ enum OfferStatus {
   INTERESTED
   IN_PROCESS
   RETRACTED
+}
+
+type Person {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type PrivateFile {
@@ -733,6 +772,9 @@ input SendDossierDocumentInput {
 }
 
 type SoiAdmin {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Creation date"""
   created_at: DateTime!
 

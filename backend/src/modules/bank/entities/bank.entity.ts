@@ -1,10 +1,9 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Person } from '../../person/entities/person.entity';
 import { Address } from '../../address/entities/address.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { Offer } from '../../offer/entities/offer.entity';
 import { Dossier } from '../../dossier/entity/dossier.entity';
-import { IsDate } from 'class-validator';
 
 @Entity()
 @ObjectType()
@@ -36,12 +35,4 @@ export class Bank extends Person {
   })
   @OneToMany(() => Dossier, (dossier) => dossier.original_bank)
   own_mortgages: Dossier[];
-
-  @Field(() => ID, {
-    description: 'Date of account ban (if any)',
-    nullable: true,
-  })
-  @Column()
-  @IsDate()
-  banned_at: Date;
 }

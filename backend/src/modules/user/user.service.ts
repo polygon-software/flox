@@ -12,20 +12,23 @@ import { Bank } from '../bank/entities/bank.entity';
 import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
 import { Employee } from '../employee/entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
+import { EmployeeService } from '../employee/employee.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
-    @InjectRepository(Bank)
-    private readonly bankRepository: Repository<Bank>,
+    private readonly userRepository: Repository<User>,
     @InjectRepository(SoiEmployee)
     private readonly soiEmployeeRepository: Repository<SoiEmployee>,
     @InjectRepository(Employee)
     private readonly employeeRepository: Repository<Employee>,
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
+    @InjectRepository(Bank)
+    private readonly bankRepository: Repository<Bank>,
+
+    private readonly employeeService: EmployeeService,
   ) {}
 
   /**
@@ -34,8 +37,8 @@ export class UserService {
    * @returns {Promise<User>} - new user
    */
   async create(createUserInput: CreateUserInput): Promise<User> {
-    const user = this.usersRepository.create(createUserInput);
-    return this.usersRepository.save(user);
+    const user = this.userRepository.create(createUserInput);
+    return this.userRepository.save(user);
   }
 
   /**
@@ -45,9 +48,9 @@ export class UserService {
    */
   getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
     if (getUsersArgs.uuids !== undefined) {
-      return this.usersRepository.findByIds(getUsersArgs.uuids);
+      return this.userRepository.findByIds(getUsersArgs.uuids);
     } else {
-      return this.usersRepository.find();
+      return this.userRepository.find();
     }
   }
 
@@ -56,7 +59,7 @@ export class UserService {
    * @returns {Promise<User[]>} - array of all users
    */
   getAllUsers(): Promise<User[]> {
-    return this.usersRepository.find();
+    return this.userRepository.find();
   }
 
   /**
@@ -65,7 +68,7 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersRepository.findOne(getUserArgs.uuid);
+    return this.userRepository.findOne(getUserArgs.uuid);
   }
 
   /**
@@ -74,9 +77,9 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   async update(updateUserInput: UpdateUserInput): Promise<User> {
-    const user = this.usersRepository.create(updateUserInput);
-    await this.usersRepository.update(updateUserInput.uuid, user);
-    return this.usersRepository.findOne(updateUserInput.uuid);
+    const user = this.userRepository.create(updateUserInput);
+    await this.userRepository.update(updateUserInput.uuid, user);
+    return this.userRepository.findOne(updateUserInput.uuid);
   }
 
   /**
@@ -85,9 +88,9 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   async remove(deleteUserInput: DeleteUserInput): Promise<User> {
-    const user = await this.usersRepository.findOne(deleteUserInput.uuid);
+    const user = await this.userRepository.findOne(deleteUserInput.uuid);
     const uuid = user.uuid;
-    const deletedUser = await this.usersRepository.remove(user);
+    const deletedUser = await this.userRepository.remove(user);
     deletedUser.uuid = uuid;
     return deletedUser;
   }
@@ -124,6 +127,14 @@ export class UserService {
     await this[repositoryName].update(uuid, {
       banned_at: new Date(),
     });
+
+    // If user is a company, also disable all employees
+    if (repositoryName === 'companyRepository') {
+      const companyEmployees = await this.employeeService.getEmployees(user);
+      companyEmployees.forEach((employee) => {
+        this.disableUser(employee.uuid, 'employeeRepository');
+      });
+    }
 
     return this[repositoryName].findOne(uuid);
   }

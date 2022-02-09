@@ -16,12 +16,4 @@ export class SoiEmployee extends Person {
   @Field(() => String, { description: 'Gender' })
   @IsString()
   gender: string;
-
-  @Field(() => ID, {
-    description: 'Date of account ban (if any)',
-    nullable: true,
-  })
-  @Column()
-  @IsDate()
-  banned_at: Date;
 }
