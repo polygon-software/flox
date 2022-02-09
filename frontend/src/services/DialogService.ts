@@ -36,12 +36,8 @@ export class DialogService {
   }
 
   /**
-   * This file contains all admin helper functions (e.g. for enabling/disabling users)
-   */
-
-  /**
-   * Disables a given user's account
-   * @param {User} user - the user to disable
+   * Opens a dialog to disable a given user's account.
+   * @param {User} user - user to disable
    * @returns {Promise<void>} - if the user was disabled
    */
   disableUser(user: User): void {
@@ -90,8 +86,8 @@ export class DialogService {
   }
 
   /**
-   * Opens a dialog for enabling a user's account
-   * @param {User} user - the user to enable
+   * Opens a dialog for enabling a user's account.
+   * @param {User} user - user to enable
    * @returns {Promise<void>} - if the user was enabled
    */
   enableUser(user: User): void {
@@ -130,7 +126,7 @@ export class DialogService {
   }
 
   /**
-   * Opens a dialog for creating an announcement
+   * Opens a dialog for creating an announcement.
    * @returns {Promise<void>} - promise
    */
   createAnnouncement(): void {
@@ -173,8 +169,8 @@ export class DialogService {
   }
 
   /**
-   * Opens a dialog for updating an announcement
-   * @param {Announcement} originalAnnouncement - the announcement to update
+   * Opens a dialog for updating an announcement.
+   * @param {Announcement} originalAnnouncement - announcement to update
    * @returns {Promise<void>} - promise
    */
   updateAnnouncement(originalAnnouncement: Announcement): void {
@@ -221,8 +217,8 @@ export class DialogService {
   }
 
   /**
-   * Opens a dialog for deleting an announcement
-   * @param {Announcement} originalAnnouncement - the announcement to delete
+   * Opens a dialog for deleting an announcement.
+   * @param {Announcement} originalAnnouncement - announcement to delete
    * @returns {Promise<void>} - promise
    */
   deleteAnnouncement(originalAnnouncement: Announcement): void {
