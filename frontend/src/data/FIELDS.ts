@@ -291,7 +291,7 @@ const FIELDS: Record<string, Field> = {
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.price'),
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
+      rules: [(val: string): boolean|string  => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
     },
   },
   MARKET_VALUE_ESTIMATION: {
