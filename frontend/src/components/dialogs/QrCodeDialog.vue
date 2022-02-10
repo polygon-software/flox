@@ -36,8 +36,10 @@
 import QrcodeVue from 'qrcode.vue';
 import {defineEmits, defineProps, ref, Ref} from 'vue';
 import {QDialog} from 'quasar'
+
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 const emit = defineEmits(['ok'])
+
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void{
@@ -49,9 +51,6 @@ function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
-
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-const emit = defineEmits(['ok'])
 
 const props = defineProps({
   value: {
@@ -60,18 +59,6 @@ const props = defineProps({
     default: '',
   },
 })
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-// eslint-disable-next-line require-jsdoc
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
 
 /**
  * On Ok, emit ok event
