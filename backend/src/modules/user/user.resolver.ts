@@ -1,7 +1,13 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  createUnionType,
+  Mutation,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { GetUserArgs } from './dto/args/get-user.args';
-import { User } from './entities/user.entity';
+import { PersonType, User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import {
   AdminOnly,
@@ -52,7 +58,7 @@ export class UserResolver {
    * @returns {Promise<User>} - the user after editing
    */
   @Roles(ROLE.COMPANY, ROLE.SOI_ADMIN)
-  @Mutation(() => Person)
+  @Mutation(() => PersonType)
   async disableUser(
     @Args('disableUserInput') disableUserInput: DisableUserInput,
     @CurrentUser() user: Record<string, string>,
@@ -61,7 +67,7 @@ export class UserResolver {
     const dbUser = await this.userService.getUser({ uuid: user.userId });
     if (
       !(
-        dbUser.role == ROLE.SOI_ADMIN ||
+        dbUser.role === ROLE.SOI_ADMIN ||
         (dbUser.role !== ROLE.COMPANY &&
           disableUserInput.role === ROLE.EMPLOYEE)
       )

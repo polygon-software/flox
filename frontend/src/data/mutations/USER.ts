@@ -5,12 +5,29 @@ export const DISABLE_USER = {
   mutation: gql`
     mutation disableUser($uuid: ID!, $role: Roles!){
       disableUser(disableUserInput: {uuid: $uuid, role: $role}) {
-        uuid
-        banned_at
-        __typename
+        ... on Employee {
+          uuid
+          banned_at
+          __typename
+        }
+        ... on Company {
+          uuid
+          banned_at
+          __typename
+        }
+        ... on SoiEmployee {
+          uuid
+          banned_at
+          __typename
+        }
+        ... on Bank {
+          uuid
+          banned_at
+          __typename
+        }
       }
     }`,
-  tables: ['user'],
+  tables: ['user', 'soi_employee', 'employee', 'company', 'bank'],
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }

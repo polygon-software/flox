@@ -572,7 +572,7 @@ type Mutation {
   createOffer(createOfferInput: CreateOfferInput!): Dossier!
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
-  disableUser(disableUserInput: DisableUserInput!): Person!
+  disableUser(disableUserInput: DisableUserInput!): PersonType!
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
@@ -622,34 +622,7 @@ enum OfferStatus {
   RETRACTED
 }
 
-type Person {
-  """Date of account ban (if any)"""
-  banned_at: ID
-
-  """Creation date"""
-  created_at: DateTime!
-
-  """Date of deletion"""
-  deleted_at: DateTime
-
-  """Mail"""
-  email: String!
-
-  """First Name"""
-  first_name: String!
-
-  """Last modification date"""
-  last_modified_at: DateTime!
-
-  """Last Name"""
-  last_name: String!
-
-  """Human-readable ID"""
-  readable_id: String!
-
-  """UUID"""
-  uuid: ID!
-}
+union PersonType = Bank | Company | Employee | SoiEmployee
 
 type PrivateFile {
   """Company the file belongs to"""

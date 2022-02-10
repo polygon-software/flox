@@ -98,6 +98,7 @@ export default {
     dossier_reset_failed: 'Dossier reset failed',
     email_sent: 'E-Mail(s) sent',
     file_uploaded: 'Successfully uploaded file',
+    account_disabled: 'Account disabled successfully'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',

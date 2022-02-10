@@ -99,13 +99,6 @@ export async function disableCognitoAccount(email: string): Promise<void> {
     Username: email,
   };
 
-  console.log(
-    'DISABLE user with email',
-    email,
-    'In pool',
-    process.env.USER_POOL_ID,
-  );
-
   return provider.adminDisableUser(params, handleOperation);
 }
 

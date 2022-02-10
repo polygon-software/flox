@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { createUnionType, Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -7,8 +7,17 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IsDate, IsString, IsUUID } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 import { ROLE } from '../../../ENUM/ENUMS';
+import { Bank } from '../../bank/entities/bank.entity';
+import { Employee } from '../../employee/entities/employee.entity';
+import { SoiEmployee } from '../../SOI-Employee/entities/soi-employee.entity';
+import { Company } from '../../company/entities/company.entity';
+
+export const PersonType = createUnionType({
+  name: 'PersonType',
+  types: () => [Bank, Employee, SoiEmployee, Company],
+});
 
 @Entity()
 @ObjectType()

@@ -100,6 +100,7 @@ export default {
     dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
     email_sent: 'E-Mail(s) versendet',
     file_uploaded: 'Datei erfolgreich hochgeladen',
+    account_disabled: 'Account erfolgreich deaktiviert'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
