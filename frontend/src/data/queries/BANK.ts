@@ -35,6 +35,7 @@ export const ALL_BANKS = {
         readable_id
         created_at
         phone
+        banned_at
       }
     }
   `,

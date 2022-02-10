@@ -73,6 +73,13 @@
             <q-td key="date" :props="props">
               {{ formatDate(new Date(props.row.created_at)) }}
             </q-td>
+            <q-td key="options" :props="props">
+              <!-- Options dropdown -->
+              <UserOptionsDropdown
+                :user="props.row"
+                :role="ROLE.SOI_EMPLOYEE"
+              />
+            </q-td>
         </q-tr>
         <!-- One spacer row per row -->
         <q-tr style="height: 14px"/>
@@ -90,6 +97,8 @@ import ROUTES from 'src/router/routes';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {SOI_EMPLOYEES} from 'src/data/queries/SOI_EMPLOYEE';
+import UserOptionsDropdown from 'components/menu/UserOptionsDropdown.vue';
+import {ROLE} from 'src/data/ENUM/ENUM';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -103,6 +112,7 @@ const columns = [
   { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false, align: 'center' },
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false, align: 'center' },
   { name: 'date', label: i18n.global.t('general.date'), field: 'created_at', sortable: true, align: 'center' },
+  { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(SOI_EMPLOYEES) as Ref<Record<string, Array<Record<string, unknown>>>>

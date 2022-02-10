@@ -57,7 +57,7 @@ export class BankService {
 
   /**
    * Create a bank without an associated user
-   * @param {createUserlessBankInput} createBankInput - mimimal info for new bank
+   * @param {CreateUserlessBankInput} createBankInput - mimimal info for new bank
    * @return {Promise<Bank>} - new Bank
    */
   async createUserlessBank(

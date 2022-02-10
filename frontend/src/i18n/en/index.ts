@@ -98,6 +98,7 @@ export default {
     dossier_reset_failed: 'Dossier reset failed',
     email_sent: 'E-Mail(s) sent',
     file_uploaded: 'Successfully uploaded file',
+    account_disabled: 'Account disabled successfully'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -293,7 +294,8 @@ export default {
     missing_data: 'Required data is missing',
     file_upload_failed: 'File upload failed',
     abbreviation_length: 'Abbreviation must be exactly 3 letters long',
-    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank'
+    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank',
+    error_while_disabling: 'An error occurred while disabling'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -468,5 +470,9 @@ export default {
     SALES_DOCUMENTATION: 'Past sales documentation',
     SITUATION_PLAN: 'General plan of location/Cadastral map',
     ADDITIONAL_DOCUMENTS: 'Additional Documents'
-  }
+  },
+  admin: {
+    disable_account: 'Disable Account',
+    disable_company_account_description: 'Caution: This will also disable all employees of the company',
+  },
 };

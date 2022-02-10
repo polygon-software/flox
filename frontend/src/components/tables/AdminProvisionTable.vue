@@ -51,6 +51,13 @@
           <q-td key="prov_org" :props="props">
             CHF {{ Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row))).toLocaleString() }}
           </q-td>
+          <q-td key="options" :props="props">
+            <!-- Options dropdown -->
+            <UserOptionsDropdown
+              :user="props.row"
+              :role="ROLE.COMPANY"
+            />
+          </q-td>
         </q-tr>
 
         <!-- One spacer row per row -->
@@ -105,6 +112,8 @@ import {
   getProvisionFactor,
   filterEmployeesDossiersByDates
 } from 'src/helpers/provision-helpers';
+import UserOptionsDropdown from 'components/menu/UserOptionsDropdown.vue';
+import {ROLE} from 'src/data/ENUM/ENUM';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -120,6 +129,7 @@ const columns = [
   { name: 'prov_total', label: i18n.global.t('account_data.provision_total'), field: 'prov_total', sortable: true, align: 'center' },
   { name: 'prov_soi', label: i18n.global.t('account_data.provision_soi'), field: 'prov_soi', sortable: true, align: 'center' },
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
+  { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(ALL_COMPANIES_PROVISIONS) as Ref<Record<string, unknown>[]>

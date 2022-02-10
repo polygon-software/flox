@@ -1,6 +1,12 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import * as crypto from 'crypto';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+
+// Set up cognito admin provider
+const provider = new CognitoIdentityProvider({
+  region: process.env.AWS_REGION ?? 'eu-central-1',
+});
 
 /**
  * Create a new Cognito Account with the given email address and password.
@@ -79,4 +85,33 @@ export function randomPassword(minLength: number): string {
     .map(({ value }) => value)
     .join('');
   return res;
+}
+
+/**
+ * Disables (locks) a cognito account by email
+ * @param {string} email - The account's email
+ * @returns {Promise<void>} - done
+ */
+export async function disableCognitoAccount(email: string): Promise<void> {
+  // Request parameters
+  const params = {
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    Username: email,
+  };
+
+  return provider.adminDisableUser(params, handleOperation);
+}
+
+/**
+ * Handles Cognito operation
+ * @param {Error|undefined} err - errors that occurred
+ * @param {unknown|undefined} data - output data
+ * @returns {void}
+ */
+function handleOperation(err: Error | undefined, data: unknown | undefined) {
+  if (err) {
+    console.log('Error is', err);
+    throw err;
+  }
+  return data;
 }
