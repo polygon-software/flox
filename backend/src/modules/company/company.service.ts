@@ -53,7 +53,6 @@ export class CompanyService {
       readable_id: readableId,
       creation_state: CREATION_STATE.APPLIED, // initially disable document upload until manually enabled by SOI admin
       documents: null,
-      // TODO: other default values
     });
 
     return this.companyRepository.save(company);
