@@ -8,7 +8,10 @@ COPY frontend/yarn.lock ./
 COPY /frontend /frontend
 COPY /shared /shared
 
-WORKDIR /frontend
+WORKDIR /shared
+RUN yarn --ignore-platform
+
+WORKDIR ../frontend
 RUN yarn --ignore-platform
 
 RUN rm -rf dist
