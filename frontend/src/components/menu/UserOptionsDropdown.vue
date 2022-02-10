@@ -32,6 +32,11 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * This is a dropdown options component to be used in all user tables
+ * currently, it only serves to disable users
+ */
+
 import {disableUser} from 'src/helpers/admin-helpers';
 import {useQuasar} from 'quasar';
 import {PropType} from 'vue';
@@ -39,6 +44,7 @@ import {ROLE} from 'src/data/ENUM/ENUM';
 
 const $q = useQuasar()
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   user: {
     type: Object,
