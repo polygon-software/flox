@@ -7,7 +7,7 @@
       <q-card
         flat
         class="row justify-between q-pa-md"
-        style="width: 670px; "
+        style="width: 670px"
       >
         <div class="col-6">
           <h6 class="q-ma-none">{{ $t('dashboards.value_increase_csv') }}</h6>
@@ -53,7 +53,6 @@
                     v-model="range"
                     range
                     mask="YYYY-MM-DD"
-
                   >
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="Close" color="primary" flat />

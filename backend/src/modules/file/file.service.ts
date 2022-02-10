@@ -376,7 +376,7 @@ export class FileService {
    * Get the log files for a date range
    * @param {Date} startDate - start date
    * @param {Date} endDate - end date
-   * @returns {string[]} - list of download urls
+   * @returns {Promise<PrivateFile[]>} - list of download urls
    */
   async getLogFiles(startDate: Date, endDate: Date): Promise<PrivateFile[]> {
     const listFiles = new ListObjectsCommand({

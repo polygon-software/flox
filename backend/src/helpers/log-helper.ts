@@ -11,7 +11,7 @@ const descriptors = {
   SoiEmployee: ['uuid', 'readable_id', 'first_name', 'last_name'],
 };
 /**
- * prettifies important information of an entity
+ * Prettifies important information of an entity
  * @param {unknown} entity - to prettify
  * @returns {string} - pretty representation
  */

@@ -675,7 +675,6 @@ async function calculateValueEstimate(){
   const priceAtPurchase = form.values.value.enfeoffment ? Math.round((form.values.value.enfeoffment as Record<string, number>)?.price) : null
 
   if(!address || !purchaseDate || !priceAtPurchase ||!customerEstimate){
-    console.log(address, purchaseDate, priceAtPurchase, customerEstimate)
     $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
     return;
   }
