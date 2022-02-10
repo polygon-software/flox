@@ -8,6 +8,7 @@ COPY yarn.lock ./
 RUN yarn --ignore-platform
 
 COPY . .
+RUN ls -al
 
 RUN rm -rf dist
 
