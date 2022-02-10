@@ -1,10 +1,4 @@
-import {
-  Args,
-  createUnionType,
-  Mutation,
-  Query,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { PersonType, User } from './entities/user.entity';
@@ -19,10 +13,17 @@ import { DisableUserInput } from './dto/input/disable-user.input';
 import { Person } from '../person/entities/person.entity';
 import { ROLE } from '../../ENUM/ENUMS';
 import { ERRORS } from '../../error/ERRORS';
+import { EmployeeService } from '../employee/employee.service';
+import { CompanyService } from '../company/company.service';
+import { GetCompanyArgs } from '../company/dto/args/get-company.args';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly employeeService: EmployeeService,
+    private readonly companyService: CompanyService,
+  ) {}
 
   @AdminOnly()
   @Query(() => [User], { name: 'users' })
@@ -66,13 +67,33 @@ export class UserResolver {
     // Determine if combination of role & user type is valid
     const dbUser = await this.userService.getUser({ uuid: user.userId });
     if (
-      !(
-        dbUser.role === ROLE.SOI_ADMIN ||
-        (dbUser.role !== ROLE.COMPANY &&
-          disableUserInput.role === ROLE.EMPLOYEE)
-      )
+      dbUser.role !== ROLE.SOI_ADMIN &&
+      !(dbUser.role === ROLE.COMPANY && disableUserInput.role === ROLE.EMPLOYEE)
     ) {
       throw new Error(ERRORS.no_permission_to_disable);
+    }
+
+    // Check if company is disabling its own employee
+    if (dbUser.role === ROLE.COMPANY) {
+      // Get company
+      const company = await this.companyService.getCompany({
+        uuid: dbUser.fk,
+      } as GetCompanyArgs);
+
+      if (!company) {
+        throw new Error(ERRORS.no_permission_to_disable);
+      }
+
+      // Get employees
+      const companyEmployees = await this.employeeService.getEmployees(company);
+      if (
+        !companyEmployees ||
+        !companyEmployees.find(
+          (employee) => employee.uuid === disableUserInput.uuid,
+        )
+      ) {
+        throw new Error(ERRORS.no_permission_to_disable);
+      }
     }
 
     let repository;

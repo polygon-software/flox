@@ -109,7 +109,6 @@ const props = defineProps({
   },
 })
 
-console.log('PROPS:', props)
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

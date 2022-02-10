@@ -8,11 +8,13 @@ import { Employee } from '../employee/entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
 import { Bank } from '../bank/entities/bank.entity';
 import { EmployeeModule } from '../employee/employee.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, SoiEmployee, Employee, Company, Bank]),
     forwardRef(() => EmployeeModule),
+    forwardRef(() => CompanyModule),
   ],
   providers: [UserResolver, UserService],
   exports: [UserService],
