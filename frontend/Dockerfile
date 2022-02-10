@@ -2,6 +2,7 @@ FROM node:14-alpine
 
 WORKDIR /usr/src/app
 
+WORKDIR /frontend
 COPY package.json ./
 COPY yarn.lock ./
 
