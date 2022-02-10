@@ -9,7 +9,8 @@ WORKDIR /frontend
 
 RUN yarn --ignore-platform
 
-COPY . .
+COPY /frontend /frontend
+COPY /shared /shared
 
 RUN rm -rf dist
 
