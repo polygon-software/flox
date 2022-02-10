@@ -39,6 +39,9 @@ type Bank {
   """Address"""
   address: Address!
 
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Creation date"""
   created_at: DateTime!
 
@@ -77,6 +80,9 @@ type Bank {
 }
 
 type Company {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Branch structure"""
   branch_structure: Boolean!
 
@@ -289,6 +295,12 @@ input DeleteCompanyInput {
   uuid: ID!
 }
 
+input DisableUserInput {
+  """Role of the User"""
+  role: Roles!
+  uuid: ID!
+}
+
 type Dossier {
   """Address"""
   address: Address!
@@ -304,6 +316,9 @@ type Dossier {
 
   """Amount of assets"""
   assets: Float!
+
+  """Date of account ban (if any)"""
+  banned_at: ID
 
   """Date of birth of customer"""
   birthdate: DateTime!
@@ -462,6 +477,9 @@ enum DossierStatus {
 }
 
 type Employee {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Company"""
   company: Company!
 
@@ -554,6 +572,7 @@ type Mutation {
   createOffer(createOfferInput: CreateOfferInput!): Dossier!
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
+  disableUser(disableUserInput: DisableUserInput!): PersonType!
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
   removeCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
@@ -602,6 +621,8 @@ enum OfferStatus {
   IN_PROCESS
   RETRACTED
 }
+
+union PersonType = Bank | Company | Employee | SoiEmployee
 
 type PrivateFile {
   """Company the file belongs to"""
@@ -724,6 +745,9 @@ input SendDossierDocumentInput {
 }
 
 type SoiAdmin {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Creation date"""
   created_at: DateTime!
 
@@ -750,6 +774,9 @@ type SoiAdmin {
 }
 
 type SoiEmployee {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
   """Creation date"""
   created_at: DateTime!
 

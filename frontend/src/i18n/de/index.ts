@@ -87,6 +87,7 @@ export default {
     provision: 'Provision | Provisionen',
     provision_company: 'Provision Organisation',
     provision_soi: 'Provision SOI',
+    provision_total: 'Totale Provision',
     bank: 'Bank | Banken',
   },
   messages: {
@@ -101,6 +102,7 @@ export default {
     dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
     email_sent: 'E-Mail(s) versendet',
     file_uploaded: 'Datei erfolgreich hochgeladen',
+    account_disabled: 'Account erfolgreich deaktiviert'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -217,7 +219,9 @@ export default {
     customer_confirms: 'Der Kunde bestätigt die Richtigkeit der Angaben',
     original_bank: 'Finanzinstitut',
     purchase_price: 'Kaufpreis',
-    current_value: 'Aktueller Wert',
+    customer_value: 'Kundenschätzwert',
+    calculated_market_value: 'Berechneter Marktwert',
+    estimated_market_value: 'Marktwertschätzung anhand Kaufpreis',
     current_mortgage: 'Aktuelle Hypothek',
     object_type: 'Objekttyp',
     purchase_date: 'Kaufdatum',
@@ -234,6 +238,7 @@ export default {
     salary: 'Anrechenbarer Lohn',
     costs: 'Kosten',
     sustainability: 'Tragbarkeit',
+    assets: 'Vermögen',
     building_right: 'Baurecht',
     debt_enforcements: 'Betreibungen',
     loss_certificates: 'Verlustscheine',
@@ -257,6 +262,8 @@ export default {
     incorrect_email: 'E-Mail Adresse wurde nicht gefunden',
     incorrect_username: 'Benutzername wurde nicht gefunden',
     non_matching_password: 'Passwörter stimmen nicht überein',
+    password_too_short: 'Das Passwort muss mindestens 8 Zeichen haben.',
+    password_missing: 'Bitte verwenden Sie mindestens ein klein Buchstabe, ein Grossbuchstabe, eine Zahl und ein Sonderzeichen.',
     invalid_abbreviation: 'Bitte geben Sie ein gültiges Kürzel ein',
     invalid_name: 'Bitte geben Sie Ihren Namen ein',
     invalid_amount: 'Bitte geben Sie eine gültige Zahl ein.',
@@ -291,7 +298,8 @@ export default {
     missing_data: 'Es fehlen notwendige Daten',
     file_upload_failed: 'Datei hochladen fehlgeschlagen',
     abbreviation_length: 'Abkürzung muss genau 3 Zeichen lang sein',
-    abbreviation_not_unique: 'Abkürzung darf nicht identisch mit einer bestehenden Bank sein'
+    abbreviation_not_unique: 'Abkürzung darf nicht identisch mit einer bestehenden Bank sein',
+    error_while_disabling: 'Beim Deaktivieren ist ein Fehler aufgetreten'
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
@@ -366,14 +374,13 @@ export default {
     landlord: 'Baurechtgeber',
     assets: 'Vermögen',
     mortgage: 'Hypothek',
-    income: 'Einkommen',
-    gross_income: 'Bruttoeinkommen',
-    additional_income: 'Weitere Einkünfte',
-    total_income: 'Totales Einkommen',
-    eligible_income: 'Anrechenbares Einkommen',
+    income: 'Einkommen pro Jahr',
+    gross_income: 'Bruttoeinkommen pro Jahr',
+    additional_income: 'Weitere Einkünfte pro Jahr',
+    total_income: 'Totales Einkommen pro Jahr',
+    eligible_income: 'Anrechenbares Einkommen pro Jahr',
     child_allowances: 'Kinderzulagen in CHF',
     bonus: 'Bonus in CHF',
-    costs: 'Kosten',
     leasing: 'Leasing',
     credit: 'Kredit',
     alimony: 'Alimente',
@@ -389,6 +396,7 @@ export default {
     enfeoffment_second_rank: '1. & 2. Rang',
     enfeoffment_too_high: 'Nicht finanzierbar',
     discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?',
+    formula: '(Hypothekenwert * Zinssatz) + (0,01 * Marktwertschätzung) + Amortisation'
   },
   dossier_status_enum: {
     OPEN: 'Offen',
@@ -465,5 +473,9 @@ export default {
     SALES_DOCUMENTATION: 'Verkaufsdokumentation von damals',
     SITUATION_PLAN: 'Situationsplan/Katasterplan',
     ADDITIONAL_DOCUMENTS: 'Zusätzliche Dokumente'
-  }
+  },
+  admin: {
+    disable_account: 'Account deaktivieren',
+    disable_company_account_description: 'Achtung: Dadurch werden auch sämtliche Mitarbeitenden-Accounts dieser Firma gesperrt',
+  },
 };

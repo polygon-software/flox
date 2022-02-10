@@ -39,14 +39,24 @@
           <q-td key="volume" :props="props">
             CHF {{ companyMortgageAmount(props.row).toLocaleString() }}
           </q-td>
-          <!-- Total Provision SOI for company -->
-          <q-td key="prov_soi" :props="props">
+          <!-- Total Provision for company -->
+          <q-td key="prov_total" :props="props">
            CHF {{ companyTotalProvision(props.row).toLocaleString() }}
           </q-td>
-
+          <!-- Total Provision SOI for company -->
+          <q-td key="prov_soi" :props="props">
+            CHF {{ (companyTotalProvision(props.row) - Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row)))).toLocaleString() }}
+          </q-td>
           <!-- Provision the company will receive -->
           <q-td key="prov_org" :props="props">
             CHF {{ Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row))).toLocaleString() }}
+          </q-td>
+          <q-td key="options" :props="props">
+            <!-- Options dropdown -->
+            <UserOptionsDropdown
+              :user="props.row"
+              :role="ROLE.COMPANY"
+            />
           </q-td>
         </q-tr>
 
@@ -64,10 +74,16 @@
               CHF {{ totalMortgageAmount.toLocaleString() }}
             </strong>
           </q-td>
+          <!-- Provisions total -->
+          <q-td key="prov_total" :props="props">
+            <strong>
+              CHF {{ totalProvisionAmount.toLocaleString( )}}
+            </strong>
+          </q-td>
           <!-- SOI provisions total -->
           <q-td key="prov_soi" :props="props">
             <strong>
-              CHF {{ totalProvisionAmount.toLocaleString( )}}
+              CHF {{ (totalProvisionAmount - totalCompanyProvisionAmount).toLocaleString( )}}
             </strong>
           </q-td>
           <!-- Company provisions total -->
@@ -96,6 +112,8 @@ import {
   getProvisionFactor,
   filterEmployeesDossiersByDates
 } from 'src/helpers/provision-helpers';
+import UserOptionsDropdown from 'components/menu/UserOptionsDropdown.vue';
+import {ROLE} from 'src/data/ENUM/ENUM';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -108,8 +126,10 @@ const toDate: Ref<string|null> = ref(null)
 const columns = [
   { name: 'company_name', label: i18n.global.t('account_data.broker'), field: 'company_name', sortable: true, align: 'center' },
   { name: 'volume', label: i18n.global.t('account_data.mortgage_volume'), field: 'volume', sortable: true, align: 'center' },
+  { name: 'prov_total', label: i18n.global.t('account_data.provision_total'), field: 'prov_total', sortable: true, align: 'center' },
   { name: 'prov_soi', label: i18n.global.t('account_data.provision_soi'), field: 'prov_soi', sortable: true, align: 'center' },
   { name: 'prov_org', label: i18n.global.t('account_data.provision_company'), field: 'prov_org', sortable: false, align: 'center' },
+  { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(ALL_COMPANIES_PROVISIONS) as Ref<Record<string, unknown>[]>

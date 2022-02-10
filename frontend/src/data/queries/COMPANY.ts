@@ -33,6 +33,8 @@ export const ALL_COMPANIES = {
         documents{
           uuid
           key
+          owner
+          url
           __typename
         }
         __typename
@@ -88,6 +90,11 @@ export const ALL_COMPANIES_PROVISIONS = {
         uuid
         readable_id
         company_name
+        email
+        phone
+        first_name
+        last_name
+        banned_at
         employees {
           uuid
           dossiers {

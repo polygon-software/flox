@@ -83,6 +83,7 @@ export default {
     provision: 'Provision | Provisions',
     provision_company: 'Company Provision',
     provision_soi: 'Provision SOI',
+    provision_total: 'Total Provision',
     offer: 'offer',
     abbreviation: 'Abbreviation',
     bank: 'Bank | Banks',
@@ -99,6 +100,7 @@ export default {
     dossier_reset_failed: 'Dossier reset failed',
     email_sent: 'E-Mail(s) sent',
     file_uploaded: 'Successfully uploaded file',
+    account_disabled: 'Account disabled successfully'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -215,7 +217,9 @@ export default {
     customer_confirms: 'The customer confirms the correctness of information',
     original_bank: 'Bank',
     purchase_price: 'Purchase Price',
-    current_value: 'Current Value',
+    customer_value: 'Customer Estimated Value',
+    calculated_market_value: 'Calculated Market Value',
+    estimated_market_value: 'Estimated Market Value based on Price at Purchase',
     current_mortgage: 'Current Mortgage',
     object_type: 'Object Type',
     purchase_date: 'Purchase Date',
@@ -232,6 +236,7 @@ export default {
     salary: 'Creditable Salary',
     costs: 'Costs',
     sustainability: 'Sustainability',
+    assets: 'Assets',
     building_right: 'Building Right',
     debt_enforcements: 'Debt Enforcements',
     loss_certificates: 'Loss Certificates',
@@ -261,6 +266,8 @@ export default {
     incorrect_email: 'Email address not found',
     incorrect_username: 'Username not found',
     non_matching_password: 'Passwords not matching',
+    password_too_short: 'The password needs to be at least 8 characters long.',
+    password_missing: 'Please include at least one lowercase, uppercase, digit, and special character.',
     invalid_name: 'Please enter your name',
     invalid_amount: 'Please enter a valid amount.',
     invalid_string: 'Please enter a valid input.',
@@ -289,7 +296,8 @@ export default {
     missing_data: 'Required data is missing',
     file_upload_failed: 'File upload failed',
     abbreviation_length: 'Abbreviation must be exactly 3 letters long',
-    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank'
+    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank',
+    error_while_disabling: 'An error occurred while disabling'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -365,14 +373,13 @@ export default {
     landlord: 'Building Lease Landlord',
     assets: 'Assets',
     mortgage: 'Mortgage',
-    income: 'Income',
-    gross_income: 'Gross Income',
-    additional_income: 'Additional Income',
-    total_income: 'Total Income',
-    eligible_income: 'Eligible Income',
+    income: 'Income per year',
+    gross_income: 'Gross Income per year',
+    additional_income: 'Additional Income per year',
+    total_income: 'Total Income per year',
+    eligible_income: 'Eligible Income per year',
     child_allowances: 'Child Allowances in CHF',
     bonus: 'Bonus in CHF',
-    costs: 'Costs',
     leasing: 'Leasing',
     credit: 'Credit',
     alimony: 'Alimony',
@@ -382,12 +389,13 @@ export default {
     summary: 'Summary',
     market_value_between: 'Market value between',
     affordability: 'Affordability',
-    costs_per_year: 'Cost per year',
+    costs_per_year: 'Costs per year',
     enfeoffment_between: 'Enfeoffment between',
     enfeoffment_first_rank: '1. Rank',
     enfeoffment_second_rank: '1. & 2. Rank',
     enfeoffment_too_high: 'Not financeable',
     discard_dossier: 'All entered data will be lost. Are you sure?',
+    formula: '(Mortgage Value * Interest Rate) + (0.01 * Market Value Estimate) + Amortization'
   },
   dossier_status_enum: {
     OPEN: 'Open',
@@ -464,5 +472,9 @@ export default {
     SALES_DOCUMENTATION: 'Past sales documentation',
     SITUATION_PLAN: 'General plan of location/Cadastral map',
     ADDITIONAL_DOCUMENTS: 'Additional Documents'
-  }
+  },
+  admin: {
+    disable_account: 'Disable Account',
+    disable_company_account_description: 'Caution: This will also disable all employees of the company',
+  },
 };

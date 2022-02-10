@@ -63,8 +63,8 @@ async function onRegister(formData: Record<string, Record<string, string>>){
 
   // Create account (automatically sends one-time login e-mail as well)
   await executeMutation(CREATE_EMPLOYEE, {
-    first_name: formData.full_name.first_name,
-    last_name: formData.full_name.last_name,
+    first_name: formData.full_name.firstName,
+    last_name: formData.full_name.lastName,
     gender: formData.salutation,
     phone: formData.phone_number,
     email: formData.email,

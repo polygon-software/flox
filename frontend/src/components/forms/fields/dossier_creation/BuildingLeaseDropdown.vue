@@ -43,6 +43,9 @@
       type="number"
       :label="$t('form_for_clients.building_lease_interest')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+      mask="###'###'###'###"
+      reverse-fill-mask
+      unmasked-value
       @change="emitValue"
     />
   </q-card>
@@ -54,7 +57,7 @@ import {onMounted, ref,} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {useQuasar} from 'quasar';
 import {IS_VALID_NUMBER, IS_VALID_YEAR} from 'src/data/RULES';
-import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING} from '../../../../../definitions/ENUMS';
 
 // eslint-disable-next-line sonarjs/no-duplicate-string
 const emit = defineEmits(['change', 'warning', 'no-warning'])

@@ -12,6 +12,9 @@
         type="number"
         :label="$t('form_for_clients.portion')+' '+ (index+1)"
         :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+        mask="###'###'###'###"
+        reverse-fill-mask
+        unmasked-value
         @update:model-value="emitValue"
       ></q-input>
       <q-input
@@ -66,7 +69,7 @@ import {computed, onMounted, ref} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {useQuasar} from 'quasar';
-import {DOSSIER_WARNING} from '../../../../../../shared/definitions/ENUMS';
+import {DOSSIER_WARNING} from '../../../../../definitions/ENUMS';
 
 const emit = defineEmits(['change', 'warning', 'no-warning'])
 const $q = useQuasar()

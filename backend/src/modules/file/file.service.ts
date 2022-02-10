@@ -138,10 +138,19 @@ export class FileService {
     getPrivateFileArgs: GetPrivateFileArgs,
     dbUser: User,
   ): Promise<PrivateFile> {
-    const fileInfo = await this.privateFilesRepository.findOne({
+    let conditions: Record<string, unknown> = {
       uuid: getPrivateFileArgs.uuid,
       owner: dbUser.fk,
-    });
+    };
+
+    // SOI Admin / SOI employee has override
+    if (dbUser.role === ROLE.SOI_ADMIN || dbUser.role === ROLE.SOI_EMPLOYEE) {
+      conditions = {
+        uuid: getPrivateFileArgs.uuid,
+      };
+    }
+
+    const fileInfo = await this.privateFilesRepository.findOne(conditions);
     if (fileInfo) {
       return this.preparePrivateFile(getPrivateFileArgs, fileInfo);
     }

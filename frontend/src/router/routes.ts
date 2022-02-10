@@ -1,7 +1,7 @@
 import {RouteRecordRaw} from 'vue-router';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/USER';
-import {ROLE} from '../../../shared/definitions/ENUMS';
+import {ROLE} from '../../definitions/ENUMS';
 
 /**
  * This file defines the routes available within the application

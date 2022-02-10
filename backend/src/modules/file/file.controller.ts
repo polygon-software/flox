@@ -120,12 +120,13 @@ export class FileController {
       (company.creation_state !== CREATION_STATE.AWAITING_DOCUMENTS &&
         company.creation_state !== CREATION_STATE.DOCUMENTS_UPLOADED)
     ) {
-      throw new Error(ERRORS.no_valid_company);
+      res.send(new Error(ERRORS.no_valid_company));
     }
 
     const file = await req.file();
+
     if (!file) {
-      throw new Error(ERRORS.no_valid_file);
+      res.send(new Error(ERRORS.no_valid_file));
     }
     const fileBuffer = await file.toBuffer();
     const newFile = await this.fileService.uploadPrivateFile(
@@ -261,8 +262,8 @@ export class FileController {
   /**
    * Uploads a value development CSV file to replace the old one in the 'value_development' table
    * TODO for future sprint: additional assurance of correct form data
-   * @param {FastifyRequest} req - request
-   * @param {FastifyReply<any>} res - response
+   * @param {fastify.FastifyRequest} req - request
+   * @param {fastify.FastifyReply<any>} res - response
    * @returns {Promise<void>} - done
    */
   @Post('/uploadValueDevelopmentFile')
@@ -291,8 +292,8 @@ export class FileController {
 
   /**
    * Gets the value development for a given zip code over a given time frame (or the closest timeframe available)
-   * @param {FastifyRequest} req - request
-   * @param {FastifyReply<any>} res - response
+   * @param {fastify.FastifyRequest} req - request
+   * @param {fastify.FastifyReply<any>} res - response
    * @param {Record<string, string>} query - URL query, should contain 'zipCode', 'start' and 'end'
    * @returns {Promise<void>} - done
    */

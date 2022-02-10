@@ -18,9 +18,7 @@
             v-model="password"
             label="New Password"
             type="password"
-            :rules="[
-              val => PASSWORD_REGEX.test(val) || 'Not ok'
-            ]"
+            :rules="[passwordRules]"
         />
         <q-input
             v-model="passwordRep"
@@ -53,8 +51,9 @@
 
 <script setup lang="ts">
 import {defineEmits, Ref, ref} from 'vue';
-import {PASSWORD_REGEX} from '../../helpers/REGEX'
+import {PASSWORD_MIN_LENGTH, PASSWORD_REGEX} from '../../helpers/REGEX'
 import {QDialog} from 'quasar';
+import {i18n} from 'boot/i18n';
 
 const verificationCode = ref('')
 const password = ref('')
@@ -62,6 +61,22 @@ const passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
 const dialog: Ref<QDialog|null> = ref(null)
+
+/**
+ * Rules for validation of password
+ * @param {string} val - the password
+ * @returns {boolean|string} - success (true), or an error message
+ */
+const passwordRules = (val: string) => {
+  if (!PASSWORD_MIN_LENGTH.test(val)) {
+    return i18n.global.t('errors.password_too_short')
+  } else if (!PASSWORD_REGEX.test(val)){
+    // must contain at least one of each: lower-, and an uppercase letter, a digit, and a special character
+    return i18n.global.t('errors.password_missing')
+  }
+  return true
+}
+
 
 /**
  * On submit, emit data outwards

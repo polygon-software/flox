@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateCompanyInput } from './dto/input/create-company.input';
 import { UpdateCompanyInput } from './dto/input/update-company.input';
 import { GetCompanyArgs } from './dto/args/get-company.args';
@@ -23,6 +23,7 @@ export class CompanyService {
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
 
@@ -35,14 +36,14 @@ export class CompanyService {
     createCompanyInput: CreateCompanyInput,
   ): Promise<Company> {
     // Generate human-readable ID and search for existing company with same ID
-    let readableId = generateHumanReadableId();
+    let readableId = generateHumanReadableId(ROLE.COMPANY);
     let existingCompany = await this.companyRepository.findOne({
       readable_id: readableId,
     });
 
     // If ID already exists, regenerate
     while (existingCompany !== null && existingCompany !== undefined) {
-      readableId = generateHumanReadableId();
+      readableId = generateHumanReadableId(ROLE.COMPANY);
       existingCompany = await this.companyRepository.findOne({
         readable_id: readableId,
       });
