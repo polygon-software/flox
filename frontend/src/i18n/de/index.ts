@@ -100,6 +100,7 @@ export default {
     dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
     email_sent: 'E-Mail(s) versendet',
     file_uploaded: 'Datei erfolgreich hochgeladen',
+    account_disabled: 'Account erfolgreich deaktiviert'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -237,6 +238,7 @@ export default {
     salary: 'Anrechenbarer Lohn',
     costs: 'Kosten',
     sustainability: 'Tragbarkeit',
+    assets: 'Vermögen',
     building_right: 'Baurecht',
     debt_enforcements: 'Betreibungen',
     loss_certificates: 'Verlustscheine',
@@ -296,7 +298,8 @@ export default {
     missing_data: 'Es fehlen notwendige Daten',
     file_upload_failed: 'Datei hochladen fehlgeschlagen',
     abbreviation_length: 'Abkürzung muss genau 3 Zeichen lang sein',
-    abbreviation_not_unique: 'Abkürzung darf nicht identisch mit einer bestehenden Bank sein'
+    abbreviation_not_unique: 'Abkürzung darf nicht identisch mit einer bestehenden Bank sein',
+    error_while_disabling: 'Beim Deaktivieren ist ein Fehler aufgetreten'
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
@@ -371,14 +374,13 @@ export default {
     landlord: 'Baurechtgeber',
     assets: 'Vermögen',
     mortgage: 'Hypothek',
-    income: 'Einkommen',
-    gross_income: 'Bruttoeinkommen',
-    additional_income: 'Weitere Einkünfte',
-    total_income: 'Totales Einkommen',
-    eligible_income: 'Anrechenbares Einkommen',
+    income: 'Einkommen pro Jahr',
+    gross_income: 'Bruttoeinkommen pro Jahr',
+    additional_income: 'Weitere Einkünfte pro Jahr',
+    total_income: 'Totales Einkommen pro Jahr',
+    eligible_income: 'Anrechenbares Einkommen pro Jahr',
     child_allowances: 'Kinderzulagen in CHF',
     bonus: 'Bonus in CHF',
-    costs: 'Kosten',
     leasing: 'Leasing',
     credit: 'Kredit',
     alimony: 'Alimente',
@@ -394,6 +396,7 @@ export default {
     enfeoffment_second_rank: '1. & 2. Rang',
     enfeoffment_too_high: 'Nicht finanzierbar',
     discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?',
+    formula: '(Hypothekenwert * Zinssatz) + (0,01 * Marktwertschätzung) + Amortisation'
   },
   dossier_status_enum: {
     OPEN: 'Offen',
@@ -470,5 +473,9 @@ export default {
     SALES_DOCUMENTATION: 'Verkaufsdokumentation von damals',
     SITUATION_PLAN: 'Situationsplan/Katasterplan',
     ADDITIONAL_DOCUMENTS: 'Zusätzliche Dokumente'
-  }
+  },
+  admin: {
+    disable_account: 'Account deaktivieren',
+    disable_company_account_description: 'Achtung: Dadurch werden auch sämtliche Mitarbeitenden-Accounts dieser Firma gesperrt',
+  },
 };

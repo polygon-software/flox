@@ -12,9 +12,19 @@
     >
       <div class="column">
         <strong v-if="bold">
+          <q-tooltip v-if="showHoverText">
+            {{ hoverText }}
+            <br/>
+            {{ secondHoverText }}
+          </q-tooltip>
           {{ content }}
         </strong>
         <p v-else>
+          <q-tooltip v-if="showHoverText">
+            {{ hoverText }}
+            <br/>
+            {{ secondHoverText }}
+          </q-tooltip>
           {{ content }}
         </p>
         <q-item-label v-if="caption" caption>
@@ -83,7 +93,22 @@ const props = defineProps({
     type: String,
     required: false,
     default: null,
-  }
+  },
+  showHoverText: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  hoverText: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  secondHoverText: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 
 /**

@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserService } from '../user/user.service';
 import { SoiAdmin } from './entities/soi-admin.entity';
 import { SoiAdminService } from './soi-admin.service';
 import { SoiAdminResolver } from './soi-admin.resolver';
-import { User } from '../user/entities/user.entity';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SoiAdmin, User])],
-  providers: [SoiAdminService, SoiAdminResolver, UserService],
+  imports: [TypeOrmModule.forFeature([SoiAdmin]), UserModule],
+  providers: [SoiAdminService, SoiAdminResolver],
+  exports: [SoiAdminService],
 })
 /**
  * A SOI Admin Module

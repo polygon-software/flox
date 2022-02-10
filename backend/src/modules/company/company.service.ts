@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateCompanyInput } from './dto/input/create-company.input';
 import { UpdateCompanyInput } from './dto/input/update-company.input';
 import { GetCompanyArgs } from './dto/args/get-company.args';
@@ -26,6 +26,7 @@ export class CompanyService {
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}

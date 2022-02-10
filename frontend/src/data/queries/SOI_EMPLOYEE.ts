@@ -10,6 +10,7 @@ export const SOI_EMPLOYEES = {
         email
         phone
         created_at
+        banned_at
         __typename
       }
     }

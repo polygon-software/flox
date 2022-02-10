@@ -38,6 +38,9 @@
       type="number"
       :label="$t('form_for_clients.amount')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+      mask="###'###'###'###"
+      reverse-fill-mask
+      unmasked-value
       @change="emitValue"
     />
   </q-card>

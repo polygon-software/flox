@@ -39,6 +39,7 @@ export const MY_DOSSIERS = {
         enfeoffment_estimate_high
         partition_amounts
         partition_dates
+        assets
         address {
           uuid
           street
@@ -131,6 +132,7 @@ export const REJECTED_DOSSIERS = {
         value_estimate_high
         enfeoffment_estimate_low
         enfeoffment_estimate_high
+        assets
         address {
           uuid
           street
@@ -214,6 +216,7 @@ export const DOSSIERS_BANK = {
         enfeoffment_estimate_high
         partition_dates
         partition_amounts
+        assets
         address {
           uuid
           street
@@ -293,6 +296,7 @@ export const GET_DOSSIER = {
         enfeoffment_estimate_high
         partition_dates
         partition_amounts
+        assets
         address {
           uuid
           street

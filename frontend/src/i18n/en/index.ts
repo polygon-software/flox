@@ -98,6 +98,7 @@ export default {
     dossier_reset_failed: 'Dossier reset failed',
     email_sent: 'E-Mail(s) sent',
     file_uploaded: 'Successfully uploaded file',
+    account_disabled: 'Account disabled successfully'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -234,6 +235,7 @@ export default {
     salary: 'Creditable Salary',
     costs: 'Costs',
     sustainability: 'Sustainability',
+    assets: 'Assets',
     building_right: 'Building Right',
     debt_enforcements: 'Debt Enforcements',
     loss_certificates: 'Loss Certificates',
@@ -293,7 +295,8 @@ export default {
     missing_data: 'Required data is missing',
     file_upload_failed: 'File upload failed',
     abbreviation_length: 'Abbreviation must be exactly 3 letters long',
-    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank'
+    abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank',
+    error_while_disabling: 'An error occurred while disabling'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -369,14 +372,13 @@ export default {
     landlord: 'Building Lease Landlord',
     assets: 'Assets',
     mortgage: 'Mortgage',
-    income: 'Income',
-    gross_income: 'Gross Income',
-    additional_income: 'Additional Income',
-    total_income: 'Total Income',
-    eligible_income: 'Eligible Income',
+    income: 'Income per year',
+    gross_income: 'Gross Income per year',
+    additional_income: 'Additional Income per year',
+    total_income: 'Total Income per year',
+    eligible_income: 'Eligible Income per year',
     child_allowances: 'Child Allowances in CHF',
     bonus: 'Bonus in CHF',
-    costs: 'Costs',
     leasing: 'Leasing',
     credit: 'Credit',
     alimony: 'Alimony',
@@ -386,12 +388,13 @@ export default {
     summary: 'Summary',
     market_value_between: 'Market value between',
     affordability: 'Affordability',
-    costs_per_year: 'Cost per year',
+    costs_per_year: 'Costs per year',
     enfeoffment_between: 'Enfeoffment between',
     enfeoffment_first_rank: '1. Rank',
     enfeoffment_second_rank: '1. & 2. Rank',
     enfeoffment_too_high: 'Not financeable',
     discard_dossier: 'All entered data will be lost. Are you sure?',
+    formula: '(Mortgage Value * Interest Rate) + (0.01 * Market Value Estimate) + Amortization'
   },
   dossier_status_enum: {
     OPEN: 'Open',
@@ -468,5 +471,9 @@ export default {
     SALES_DOCUMENTATION: 'Past sales documentation',
     SITUATION_PLAN: 'General plan of location/Cadastral map',
     ADDITIONAL_DOCUMENTS: 'Additional Documents'
-  }
+  },
+  admin: {
+    disable_account: 'Disable Account',
+    disable_company_account_description: 'Caution: This will also disable all employees of the company',
+  },
 };

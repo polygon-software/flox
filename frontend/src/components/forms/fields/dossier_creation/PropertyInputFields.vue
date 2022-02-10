@@ -7,6 +7,9 @@
       :label="$t('form_for_clients.price')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
+      mask="###'###'###'###"
+      reverse-fill-mask
+      unmasked-value
       @update:model-value="emitValue"
      ></q-input>
     <q-input
@@ -16,6 +19,9 @@
       :label="$t('form_for_clients.market_value_estimation')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
+      mask="###'###'###'###"
+      reverse-fill-mask
+      unmasked-value
       @update:model-value="emitValue"
     ></q-input>
     <q-input
@@ -25,6 +31,9 @@
       :label="$t('form_for_clients.current_value_of_mortgage')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
+      mask="###'###'###'###"
+      reverse-fill-mask
+      unmasked-value
       @update:model-value="emitValue"
     ></q-input>
     <q-input

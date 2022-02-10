@@ -47,6 +47,7 @@ export const MY_EMPLOYEES = {
         function
         email
         phone
+        banned_at
         __typename
       }
     }
@@ -66,6 +67,7 @@ export const MY_EMPLOYEES_PROVISIONS = {
         function
         email
         phone
+        banned_at
         dossiers {
           uuid
           created_at

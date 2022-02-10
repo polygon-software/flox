@@ -74,6 +74,13 @@
             <q-td key="email" :props="props">
               {{ props.row.email }}
             </q-td>
+            <q-td key="options" :props="props">
+              <!-- Options dropdown -->
+              <UserOptionsDropdown
+                :user="props.row"
+                :role="ROLE.EMPLOYEE"
+              />
+            </q-td>
         </q-tr>
         <!-- One spacer row per row -->
         <q-tr style="height: 14px"/>
@@ -92,8 +99,10 @@ import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {MY_EMPLOYEES} from 'src/data/queries/EMPLOYEE';
 import {useRoute} from 'vue-router';
-const route = useRoute()
+import UserOptionsDropdown from 'components/menu/UserOptionsDropdown.vue';
+import {ROLE} from 'src/data/ENUM/ENUM';
 
+const route = useRoute()
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Company ID from route (if any), only relevant if going from SOIAdmin -> Company view
@@ -109,6 +118,7 @@ const columns = [
   { name: 'function', label: i18n.global.t('account_data.company_function'), field: 'function', sortable: true, align: 'center' },
   { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: false, align: 'center' },
   { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: false, align: 'center' },
+  { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
 const queryResult = subscribeToQuery(MY_EMPLOYEES as QueryObject, companyUuid? { companyUuid } : {}) as Ref<Record<string, Array<Record<string, unknown>>>>

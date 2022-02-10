@@ -6,24 +6,26 @@ import { PublicFile } from './entities/public_file.entity';
 import { ConfigService } from '@nestjs/config';
 import { FileResolver } from './file.resolver';
 import { PrivateFile } from './entities/private_file.entity';
-import { Company } from '../company/entities/company.entity';
-import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
+import { UserModule } from '../user/user.module';
 import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
+import { Company } from '../company/entities/company.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       PublicFile,
       PrivateFile,
-      Company,
       User,
       Offer,
       Dossier,
+      Company,
     ]),
+    UserModule,
   ],
-  providers: [FileService, ConfigService, FileResolver, UserService],
+  providers: [FileService, FileResolver, ConfigService],
   controllers: [FileController],
+  exports: [FileService],
 })
 export class FileModule {}
