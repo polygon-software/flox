@@ -5,12 +5,11 @@ WORKDIR /usr/src/app
 COPY frontend/package.json ./
 COPY frontend/yarn.lock ./
 
-WORKDIR /frontend
-
-RUN yarn --ignore-platform
-
 COPY /frontend /frontend
 COPY /shared /shared
+
+WORKDIR /frontend
+RUN yarn --ignore-platform
 
 RUN rm -rf dist
 
