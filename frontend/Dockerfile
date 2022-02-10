@@ -7,9 +7,8 @@ COPY yarn.lock ./
 
 RUN yarn --ignore-platform
 
-COPY frontend/ frontend/
-COPY shared/ shared/
-RUN ls -al
+COPY . .
+ADD /shared /shared
 
 RUN rm -rf dist
 
