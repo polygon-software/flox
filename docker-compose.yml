@@ -13,7 +13,7 @@ services:
           cpus: '1.0'
           memory: 2048m
     build:
-      context: .
+      context: /
       dockerfile: ./backend/Dockerfile
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
@@ -31,7 +31,7 @@ services:
           cpus: '1.0'
           memory: 2048m
     build:
-      context: .
+      context: /
       dockerfile: ./frontend/Dockerfile
     volumes:
       - data-frontend:frontend/usr/src/app
