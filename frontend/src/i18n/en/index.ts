@@ -469,5 +469,9 @@ export default {
     SALES_DOCUMENTATION: 'Past sales documentation',
     SITUATION_PLAN: 'General plan of location/Cadastral map',
     ADDITIONAL_DOCUMENTS: 'Additional Documents'
-  }
+  },
+  admin: {
+    disable_account: 'Disable Account',
+    disable_company_account_description: 'Caution: This will also disable all employees of the company',
+  },
 };

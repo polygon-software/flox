@@ -10,6 +10,23 @@
         </h5>
       </q-card-section>
       <q-card-section>
+        <!-- Warning card for companies -->
+        <q-card
+          v-if="role === ROLE.COMPANY"
+          class="row q-pa-md text-white bg-red-5 justify-between items-center"
+        >
+          <q-icon
+            class="col-3"
+            name="warning"
+            color="white"
+            size="40px"
+          />
+          <strong class="col">
+            {{ $t('admin.disable_company_account_description') }}
+          </strong>
+        </q-card>
+      </q-card-section>
+      <q-card-section>
         <q-list
           bordered
           separator
@@ -73,6 +90,7 @@
 import {defineProps, defineEmits, ref, Ref, PropType} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import {User} from 'src/data/types/User';
+import {ROLE} from 'src/data/ENUM/ENUM';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const $q: QVueGlobals = useQuasar()
@@ -85,7 +103,13 @@ const props = defineProps({
     type: Object as PropType<User>,
     required: true
   },
+  role: {
+    type: String as PropType<ROLE>,
+    required: true
+  },
 })
+
+console.log('PROPS:', props)
 
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc

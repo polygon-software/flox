@@ -34,6 +34,9 @@
 <script setup lang="ts">
 import {disableUser} from 'src/helpers/admin-helpers';
 import {useQuasar} from 'quasar';
+import {PropType} from 'vue';
+import {ROLE} from 'src/data/ENUM/ENUM';
+
 const $q = useQuasar()
 
 const props = defineProps({
@@ -42,7 +45,7 @@ const props = defineProps({
     required: true
   },
   role: {
-    type: String,
+    type: String as PropType<ROLE>,
     required: true
   }
 })

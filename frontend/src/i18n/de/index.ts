@@ -471,7 +471,6 @@ export default {
     SITUATION_PLAN: 'Situationsplan/Katasterplan',
     ADDITIONAL_DOCUMENTS: 'Zusätzliche Dokumente'
   },
-  // TODO add in english file as well
   admin: {
     disable_account: 'Account deaktivieren',
     disable_company_account_description: 'Achtung: Dadurch werden auch sämtliche Mitarbeitenden-Accounts dieser Firma gesperrt',

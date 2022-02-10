@@ -73,13 +73,13 @@
             <q-td key="date" :props="props">
               {{ formatDate(new Date(props.row.created_at)) }}
             </q-td>
-          <q-td key="options" :props="props">
-            <!-- Options dropdown -->
-            <UserOptionsDropdown
-              :user="props.row"
-              :role="ROLE.SOI_EMPLOYEE"
-            />
-          </q-td>
+            <q-td key="options" :props="props">
+              <!-- Options dropdown -->
+              <UserOptionsDropdown
+                :user="props.row"
+                :role="ROLE.SOI_EMPLOYEE"
+              />
+            </q-td>
         </q-tr>
         <!-- One spacer row per row -->
         <q-tr style="height: 14px"/>

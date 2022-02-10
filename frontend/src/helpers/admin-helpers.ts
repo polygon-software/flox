@@ -28,6 +28,7 @@ export function disableUser(
     component: DisableUserDialog,
     componentProps: {
       user: user,
+      role: role
     },
   }).onOk(() => {
     // Disable account on backend
