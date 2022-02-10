@@ -11,7 +11,7 @@ services:
       resources:
         limits:
           cpus: '1.0'
-          memory: 1024m
+          memory: 2048m
     build:
       context: backend
     ports:
@@ -28,7 +28,7 @@ services:
       resources:
         limits:
           cpus: '1.0'
-          memory: 1024m
+          memory: 2048m
     build:
       context: frontend
     volumes:
