@@ -5,11 +5,13 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn
+RUN yarn --ignore-platform
 
 COPY . .
 
 RUN rm -rf dist
 
-RUN yarn build
-CMD ["yarn", "start:prod"]
+RUN yarn build:ssr
+RUN rm -rf node_modules
+WORKDIR dist/ssr
+CMD ["yarn", "start"]
