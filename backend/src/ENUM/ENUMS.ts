@@ -76,7 +76,14 @@ export enum DOSSIER_FILE_TYPE {
 export enum OFFER_FILE_TYPE {
   DUMMY = 'DUMMY',
 }
-export const FILE_TYPE = { ...DOSSIER_FILE_TYPE, ...OFFER_FILE_TYPE };
+export enum GENERAL_FILE_TYPES {
+  LOG = 'LOG',
+}
+export const FILE_TYPE = {
+  ...DOSSIER_FILE_TYPE,
+  ...OFFER_FILE_TYPE,
+  ...GENERAL_FILE_TYPES,
+};
 export type FILE_TYPE = typeof FILE_TYPE;
 
 registerEnumType(FILE_TYPE, { name: 'FileType' });

@@ -374,7 +374,7 @@ export class FileService {
    * @param {Date} endDate - end date
    * @returns {string[]} - list of download urls
    */
-  async getLogFiles(startDate: Date, endDate: Date): string[] {
+  async getLogFiles(startDate: Date, endDate: Date): Promise<PrivateFile[]> {
     const listFiles = new ListObjectsCommand({
       Bucket: this.configService.get('AWS_LOG_BUCKET_NAME'),
     });
@@ -389,8 +389,28 @@ export class FileService {
           Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
           Key: item.Key,
         }),
-      );
+      ).then((url) => {
+        return {
+          url,
+          key: item.Key,
+        };
+      });
     });
-    return await Promise.all(promises);
+    const urls = await Promise.all(promises);
+    return urls.map((file) => {
+      return {
+        uuid: file.key,
+        owner: 'admin',
+        url: file.url,
+        key: file.key,
+        company: null,
+        offer: null,
+        dossier: null,
+        file_type: FILE_TYPE.LOG as unknown as FILE_TYPE,
+        created_at: new Date(Date.now()),
+        last_modified_at: new Date(Date.now()),
+        deleted_at: null,
+      } as PrivateFile;
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import PublicFile from './entities/public_file.entity';
 import { FileService } from './file.service';
 import {
+  AdminOnly,
   AnyRole,
   CurrentUser,
   Roles,
@@ -12,6 +13,7 @@ import PrivateFile from './entities/private_file.entity';
 import { Public } from '../../auth/authentication.decorator';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUMS';
+import { GetLogFilesArgs } from './dto/get-log-files-args';
 
 @Resolver(() => PublicFile)
 export class FileResolver {
@@ -67,5 +69,16 @@ export class FileResolver {
   ): Promise<PrivateFile> {
     const dbUser = await this.userService.getUser({ uuid: user.userId });
     return this.fileService.getOffersFile(getPrivateFileArgs, dbUser);
+  }
+
+  @AdminOnly()
+  @Query(() => [PrivateFile], { name: 'getLogs' })
+  async getLogs(
+    @Args() getLogFilesArgs: GetLogFilesArgs,
+  ): Promise<PrivateFile[]> {
+    return this.fileService.getLogFiles(
+      getLogFilesArgs.start,
+      getLogFilesArgs.end,
+    );
   }
 }
