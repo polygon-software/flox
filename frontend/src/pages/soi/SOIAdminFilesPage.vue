@@ -44,7 +44,7 @@
           </q-item-label>
         </div>
         <div class="col column items-end">
-          <q-input v-model="rangeDisplay" filled style="width: 250px" @focusout="setRange"
+          <q-input v-model="rangeDisplay" style="width: 250px" outlined @focusout="setRange"
           >
             <template #append>
               <q-icon name="event" class="cursor-pointer">
@@ -53,6 +53,7 @@
                     v-model="range"
                     range
                     mask="YYYY-MM-DD"
+
                   >
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="Close" color="primary" flat />
@@ -67,6 +68,7 @@
             icon="download"
             color="primary"
             style="width: 250px"
+            class="q-mt-md"
             @click="getLogs"/>
         </div>
       </q-card>
