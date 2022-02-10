@@ -43,6 +43,9 @@
       type="number"
       :label="$t('form_for_clients.building_lease_interest')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+      mask="###'###'###'###"
+      reverse-fill-mask
+      unmasked-value
       @change="emitValue"
     />
   </q-card>

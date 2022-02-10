@@ -12,6 +12,9 @@
         type="number"
         :label="$t('form_for_clients.portion')+' '+ (index+1)"
         :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
+        mask="###'###'###'###"
+        reverse-fill-mask
+        unmasked-value
         @update:model-value="emitValue"
       ></q-input>
       <q-input

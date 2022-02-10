@@ -54,7 +54,7 @@
             {{ props.row.property_address.city }}
           </q-td>
           <q-td key="mortgage_amount">
-            {{ props.row.loan_sum }}
+            {{ props.row.loan_sum.toLocaleString() }}
           </q-td>
           <q-td key="status">
             <q-chip
