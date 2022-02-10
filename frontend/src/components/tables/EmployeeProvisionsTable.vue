@@ -40,7 +40,7 @@
               {{ props.row.last_name }}
             </q-td>
             <q-td key="dossiers" :props="props">
-              {{ props.row.dossiers.length.toLocaleString() }}
+              {{ props.row.dossiers.length }}
             </q-td>
             <q-td key="volume" :props="props">
               CHF {{ dossierVolumeSum(props.row).toLocaleString()}}
@@ -60,7 +60,7 @@
           <q-td key="first_name"/>
           <q-td key="last_name"/>
           <q-td key="dossiers" :props="props">
-            {{ totalCount.toLocaleString() }}
+            {{ totalCount }}
           </q-td>
           <q-td key="volume" :props="props">
             <strong>

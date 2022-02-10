@@ -9,6 +9,7 @@
       <q-input
         v-model.number="partition.amount"
         dense
+        type="number"
         :label="$t('form_for_clients.portion')+' '+ (index+1)"
         :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
         mask="###'###'###'###"

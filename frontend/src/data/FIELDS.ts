@@ -383,6 +383,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
+      type: 'number',
       mask: mask_format,
       reverseFillMask: true,
       unmaskedValue: true,
@@ -396,6 +397,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
+      type: 'number',
       mask: mask_format,
       reverseFillMask: true,
       unmaskedValue: true,
@@ -409,6 +411,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
+      type: 'number',
       mask: mask_format,
       reverseFillMask: true,
       unmaskedValue: true,
@@ -422,6 +425,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
+      type: 'number',
       mask: mask_format,
       reverseFillMask: true,
       unmaskedValue: true,
@@ -435,6 +439,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
+      type: 'number',
       mask: mask_format,
       reverseFillMask: true,
       unmaskedValue: true,
@@ -448,6 +453,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
+      type: 'number',
       mask: mask_format,
       reverseFillMask: true,
       unmaskedValue: true,
@@ -461,6 +467,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
+      type: 'number',
       mask: mask_format,
       reverseFillMask: true,
       unmaskedValue: true,

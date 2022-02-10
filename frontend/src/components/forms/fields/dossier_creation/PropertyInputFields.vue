@@ -3,6 +3,7 @@
     <q-input
       v-model.number="price"
       dense
+      type="number"
       :label="$t('form_for_clients.price')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
@@ -14,6 +15,7 @@
     <q-input
       v-model.number="marketValueEstimation"
       dense
+      type="number"
       :label="$t('form_for_clients.market_value_estimation')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
@@ -25,6 +27,7 @@
     <q-input
       v-model.number="currentValueOfMortgage"
       dense
+      type="number"
       :label="$t('form_for_clients.current_value_of_mortgage')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       lazy-rules
