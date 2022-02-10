@@ -1,7 +1,7 @@
 import { Person } from '../../person/entities/person.entity';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity } from 'typeorm';
-import { IsDate, IsPhoneNumber, IsString } from 'class-validator';
+import { IsPhoneNumber, IsString } from 'class-validator';
 
 @ObjectType()
 @Entity()
