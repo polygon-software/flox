@@ -286,6 +286,9 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
+      mask: mask_format,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.price'),
       // eslint-disable-next-line sonarjs/no-duplicate-string
       rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
@@ -297,6 +300,9 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'text',
+      mask: mask_format,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.market_value_estimation'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
@@ -308,6 +314,9 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'text',
+      mask: mask_format,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.current_value_of_mortgage'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_amount')]
