@@ -3,7 +3,6 @@ name: Push to Docker Hub & deploy to AWS ECS
 on:
   push:
     branches:
-      - master
       - project-*
 
 env:
