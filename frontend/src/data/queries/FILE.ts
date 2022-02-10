@@ -45,10 +45,26 @@ export const OFFER_FILE = {
   cacheLocation: 'getOfferDocument'
 }
 
+export const LOG_FILES = {
+  query: gql`
+    query getLogs($start: DateTime!, $end: DateTime! ){
+      getLogs(start: $start, end: $end){
+        uuid
+        __typename
+        key
+        url
+      }
+    }
+  `,
+  tables: ['private_file'],
+  cacheLocation: 'getLogs'
+}
+
 const FILE_QUERIES = [
   PRIVATE_FILE,
   DOSSIER_FILE,
-  OFFER_FILE
+  OFFER_FILE,
+  LOG_FILES,
 ]
 
 

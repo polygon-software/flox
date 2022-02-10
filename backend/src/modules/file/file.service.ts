@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import PublicFile from './entities/public_file.entity';
@@ -23,6 +23,8 @@ import { MultipartFile } from 'fastify-multipart';
 import { FILE_TYPE, ROLE } from '../../ENUM/ENUMS';
 import { parseCsv } from '../../helpers/csv-helpers';
 import { saveValueDevelopmentCsv } from '../../value-development/value-development';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @Injectable()
 export class FileService {
@@ -54,6 +56,8 @@ export class FileService {
     private readonly dossierRepository: Repository<Dossier>,
 
     private readonly configService: ConfigService,
+
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -379,6 +383,7 @@ export class FileService {
       Bucket: this.configService.get('AWS_LOG_BUCKET_NAME'),
     });
     const files = await this.s3.send(listFiles);
+
     const filteredFiles = files.Contents.filter((item) => {
       return item.LastModified > startDate && item.LastModified < endDate;
     });
@@ -386,7 +391,7 @@ export class FileService {
       return getSignedUrl(
         this.s3,
         new GetObjectCommand({
-          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+          Bucket: this.configService.get('AWS_LOG_BUCKET_NAME'),
           Key: item.Key,
         }),
       ).then((url) => {

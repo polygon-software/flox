@@ -125,7 +125,9 @@ export default {
     soi_employees: 'SOI-Mitarbeitende',
     files: 'Dateien',
     value_increase_csv: 'CSV-Datei Verkehrswertsteigerung',
-    value_increase_csv_description: 'Verkehrswertsteigerungsdaten, welche zur Berechnung von Schätzwerten verwendet werden'
+    value_increase_csv_description: 'Verkehrswertsteigerungsdaten, welche zur Berechnung von Schätzwerten verwendet werden',
+    logs: 'Logs der API',
+    logs_description: 'Zum Abfragen der Logs in einem Zeitraum'
   },
   buttons: {
     finish_signup: 'Abschliessen',
