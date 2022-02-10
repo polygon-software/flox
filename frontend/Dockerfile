@@ -2,9 +2,10 @@ FROM node:14-alpine
 
 WORKDIR /usr/src/app
 
+COPY frontend/package.json ./
+COPY frontend/yarn.lock ./
+
 WORKDIR /frontend
-COPY package.json ./
-COPY yarn.lock ./
 
 RUN yarn --ignore-platform
 
