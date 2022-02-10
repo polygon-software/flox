@@ -74,33 +74,10 @@
               {{ formatDate(new Date(props.row.created_at)) }}
             </q-td>
           <q-td key="options" :props="props">
-            <q-btn-dropdown
-              v-if="!props.row.banned_at"
-              dropdown-icon="more_vert"
-              auto-close
-              no-icon-animation
-              flat
-              round
-              dense
-              @click.stop="showOptions = !showOptions"
-            >
-              <div class="column">
-                <!-- 'Disable' button for active accounts -->
-                <q-btn
-                  :label="$t('admin.disable_account')"
-                  icon="block"
-                  class="text-black"
-                  flat
-                  no-caps
-                  @click="() => disableUser(props.row, ROLE.SOI_EMPLOYEE, $q)"
-                />
-              </div>
-            </q-btn-dropdown>
-            <q-icon
-              v-else
-              color="negative"
-              name="block"
-              size="sm"
+            <!-- Options dropdown -->
+            <UserOptionsDropdown
+              :user="props.row"
+              :role="ROLE.SOI_EMPLOYEE"
             />
           </q-td>
         </q-tr>
@@ -120,7 +97,7 @@ import ROUTES from 'src/router/routes';
 import {formatDate} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {SOI_EMPLOYEES} from 'src/data/queries/SOI_EMPLOYEE';
-import {disableUser} from 'src/helpers/admin-helpers';
+import UserOptionsDropdown from 'components/menu/UserOptionsDropdown.vue';
 import {ROLE} from 'src/data/ENUM/ENUM';
 
 const $routerService: RouterService|undefined = inject('$routerService')
