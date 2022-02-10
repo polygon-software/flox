@@ -9,7 +9,7 @@
       dense
       :label="$t('form_for_clients.gross_income')+' '+ (index+1)"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
-      mask="###.###.###.###"
+      mask="###'###'###'###"
       reverse-fill-mask
       unmasked-value
       @update:model-value="() => onChange(index)"

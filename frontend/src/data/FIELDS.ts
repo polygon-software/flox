@@ -29,9 +29,9 @@ import IncomeFields from 'components/forms/fields/dossier_creation/IncomeFields.
 import BankSelectField from 'components/forms/fields/dossier_creation/BankSelectField.vue'
 import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
-import {DOSSIER_WARNING, PROPERTY_TYPE} from '../../definitions/ENUMS';
+import {DOSSIER_WARNING, PROPERTY_TYPE} from 'app/definitions/ENUMS';
 
-const mask_format = '###.###.###.###'
+const mask_format = "###'###'###'###"
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -375,8 +375,8 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       mask: mask_format,
-      reverse_fill_mask: true,
-      unmasked_value: true,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.child_allowances'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
@@ -388,8 +388,8 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       mask: mask_format,
-      reverse_fill_mask: true,
-      unmasked_value: true,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.bonus'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
@@ -401,8 +401,8 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       mask: mask_format,
-      reverse_fill_mask: true,
-      unmasked_value: true,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.assets'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
@@ -414,8 +414,8 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       mask: mask_format,
-      reverse_fill_mask: true,
-      unmasked_value: true,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.leasing'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
@@ -427,8 +427,8 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       mask: mask_format,
-      reverse_fill_mask: true,
-      unmasked_value: true,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.credit'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
@@ -440,8 +440,8 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       mask: mask_format,
-      reverse_fill_mask: true,
-      unmasked_value: true,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.alimony'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
@@ -453,8 +453,8 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       mask: mask_format,
-      reverse_fill_mask: true,
-      unmasked_value: true,
+      reverseFillMask: true,
+      unmaskedValue: true,
       label: i18n.global.t('form_for_clients.various'),
       lazy_rules: 'true',
       rules: [(val: string): boolean|string => IS_VALID_NUMBER(val) || i18n.global.t('errors.invalid_amount')]
