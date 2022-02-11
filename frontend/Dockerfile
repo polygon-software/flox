@@ -12,7 +12,7 @@ COPY . .
 RUN rm -rf dist
 
 RUN yarn build:ssr
-COPY node_modules ./dist/ssr/
+#COPY node_modules ./dist/ssr/
 
 #RUN rm -rf node_modules
 
