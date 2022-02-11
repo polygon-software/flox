@@ -60,6 +60,18 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/generic/SignupPage.vue') }],
   },
 
+  'RESET_PASSWORD': {
+    path: '/reset-password',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/generic/ResetPasswordPage.vue') }],
+  },
+
+  'RESET_PASSWORD2': {
+    path: '/reset-password2',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/generic/ResetPassword2Page.vue') }],
+  },
+
   'SUCCESS': {
     path: '/success',
     component: () => import('layouts/MainLayout.vue'),
@@ -178,6 +190,8 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SUCCESS,
   ROUTES.DOCUMENT_UPLOAD,
   ROUTES.SET_PASSWORD,
+  ROUTES.RESET_PASSWORD,
+  ROUTES.RESET_PASSWORD2,
 ]
 
 /**

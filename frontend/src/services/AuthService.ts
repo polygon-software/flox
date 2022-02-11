@@ -241,8 +241,8 @@ export class AuthenticationService {
       }
 
       this.$q.dialog({
-            title: 'Reset Password',
-            message: 'Please enter your username',
+            title: i18n.global.t('authentication.reset_password'),
+            message: i18n.global.t('authentication.reset_password_text'),
             cancel: true,
             persistent: true,
             prompt: {

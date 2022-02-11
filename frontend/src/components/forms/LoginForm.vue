@@ -44,14 +44,15 @@
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
-import {AuthenticationService} from 'src/services/AuthService';
 import {inject, defineEmits} from 'vue';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
 
-const $authService: AuthenticationService|undefined = inject('$authService')
+const $routerService: RouterService|undefined = inject('$routerService')
 
 const emit = defineEmits(['submit'])
 
-const fields = [FIELDS.EMAIL, FIELDS.PASSWORD, FIELDS.ROUTE_TARGET]
+const fields = [FIELDS.EMAIL, FIELDS.PASSWORD]
 
 const form = new Form()
 form.pages.value = [
@@ -66,8 +67,8 @@ form.pages.value = [
  * Triggers a password change for a non-logged in user
  * @returns {void}
  */
-function forgotPassword() {
-  $authService?.showResetPasswordDialog();
+async function forgotPassword() {
+  await $routerService?.routeTo(ROUTES.RESET_PASSWORD)
 }
 
 /**

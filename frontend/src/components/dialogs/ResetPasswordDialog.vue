@@ -2,44 +2,42 @@
   <q-dialog
       ref="dialog"
       :persistent="true"
-      title="Blubb"
   >
-    <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
+    <q-card class="q-pa-sm" style="width: 400px; min-height: 350px">
       <q-form
           class="q-gutter-md"
           @submit="onSubmit"
       >
-        <strong>Reset Password</strong>
+        <strong>{{ $t('authentication.reset_password') }}</strong>
         <q-input
             v-model="verificationCode"
-            label="Email Verification Code"
+            :label="$t('authentication.email_verification_code')"
         />
         <q-input
             v-model="password"
-            label="New Password"
+            :label="$t('authentication.new_password')"
             type="password"
             :rules="[passwordRules]"
         />
         <q-input
             v-model="passwordRep"
-            label="New Password repeated"
+            :label="$t('authentication.new_password_repeated')"
             type="password"
             :rules="[
               val => val === password || 'Passwords must be identical',
             ]"
         />
         <q-card-actions align="right">
-
           <q-btn
-              color="primary"
-              label="Change"
-              :disable="password !== passwordRep || verificationCode.length !== 6"
-              type="submit"
+            :label="$t('buttons.cancel')"
+            color="primary"
+            @click="hide"
           />
           <q-btn
-              label="Cancel"
               color="primary"
-              @click="hide"
+              :label="$t('buttons.confirm_change')"
+              :disable="password !== passwordRep || verificationCode.length !== 6"
+              type="submit"
           />
         </q-card-actions>
       </q-form>
@@ -51,7 +49,7 @@
 
 <script setup lang="ts">
 import {defineEmits, Ref, ref} from 'vue';
-import {PASSWORD_MIN_LENGTH, PASSWORD_REGEX} from '../../helpers/REGEX'
+import {PASSWORD_MIN_LENGTH, PASSWORD_REGEX} from 'src/helpers/REGEX'
 import {QDialog} from 'quasar';
 import {i18n} from 'boot/i18n';
 

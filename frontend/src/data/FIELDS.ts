@@ -93,7 +93,7 @@ const FIELDS: Record<string, Field> = {
       attributes: {
         dense: true,
         type: 'email',
-        label: i18n.global.t('account_data.email'),
+        label: i18n.global.t('account_data.email') + ' *',
         lazy_rules: 'ondemand',
         rules: [(val: string): boolean|string  => IS_VALID_EMAIL(val) || i18n.global.t('errors.invalid_email')]
       },
