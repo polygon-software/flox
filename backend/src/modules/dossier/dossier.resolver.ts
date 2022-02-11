@@ -22,6 +22,7 @@ import { BankService } from '../bank/bank.service';
 import { UserService } from '../user/user.service';
 import { EmployeeService } from '../employee/employee.service';
 import { GetBankArgs } from '../bank/dto/args/get-bank.args';
+import { DeleteDossierInput } from './dto/input/delete-dossier.input';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -248,5 +249,18 @@ export class DossierResolver {
       sendDossierDocumentInput,
       user,
     );
+  }
+
+  /**
+   * Fully (hard) deletes a dossier and its offers
+   * @param {DeleteDossierInput} deleteDossierInput - input, containing UUID
+   * @returns {Promise<Dossier>} - the Dossier
+   */
+  @AdminOnly()
+  @Mutation(() => Dossier)
+  async deleteDossier(
+    @Args('deleteDossierInput') deleteDossierInput: DeleteDossierInput,
+  ): Promise<Dossier> {
+    return this.dossierService.deleteDossier(deleteDossierInput);
   }
 }

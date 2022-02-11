@@ -81,7 +81,7 @@
               {{ offer.bank.abbreviation }}
             </q-chip>
           </q-td>
-          <q-td key="non-non_arrangeable">
+          <q-td key="non_arrangeable">
             <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
           </q-td>
         </q-tr>
@@ -95,7 +95,6 @@
 <script setup lang="ts">
 import {computed, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import ResetDossierDialog from 'src/components/dialogs/ResetDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {formatDate} from 'src/helpers/format-helpers';
@@ -106,6 +105,7 @@ import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import {REJECTED_DOSSIERS} from 'src/data/queries/DOSSIER';
 import {DOSSIER_FILE} from 'src/data/queries/FILE';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -152,7 +152,14 @@ function showAllDocuments(files: Record<string, unknown>[]) {
  */
 function onRowClick(dossier: Record<string, unknown>): void{
   $q.dialog({
-    component: ResetDossierDialog,
+    component: WarningDialog,
+    componentProps: {
+      description: i18n.global.t('admin.reset_dossier_description'),
+      okLabel: i18n.global.t('admin.reset_dossier'),
+      discardLabel: i18n.global.t('buttons.cancel'),
+      showDiscard: true,
+      swapNegative: true
+    }
   }).onOk(() => {
     // Delete all offers & reset status
     executeMutation(RESET_DOSSIER, {uuid: dossier.uuid}).then(() => {

@@ -100,7 +100,9 @@ export default {
     dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
     email_sent: 'E-Mail(s) versendet',
     file_uploaded: 'Datei erfolgreich hochgeladen',
-    account_disabled: 'Account erfolgreich deaktiviert'
+    account_disabled: 'Account erfolgreich deaktiviert',
+    dossier_deleted: 'Dossier erfolgreich gelöscht',
+    dossier_delete_failed: 'Löschen des Dossiers fehlgeschlagen',
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -207,8 +209,6 @@ export default {
     }
   },
   dossier: {
-    reset_dossier: 'Dossier zurücksetzen',
-    reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.',
     offer: 'offerieren',
     send_offer: 'Offerte senden',
     upload_offer: 'Offertendokumente hochladen',
@@ -477,5 +477,10 @@ export default {
   admin: {
     disable_account: 'Account deaktivieren',
     disable_company_account_description: 'Achtung: Dadurch werden auch sämtliche Mitarbeitenden-Accounts dieser Firma gesperrt',
+    delete_permanently: 'Permanent löschen',
+    delete_dossier: 'Dossier löschen',
+    delete_dossier_description: 'Dossier und alle darauf erstellten Offerten werden permanent gelöscht.',
+    reset_dossier: 'Dossier zurücksetzen',
+    reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.',
   },
 };

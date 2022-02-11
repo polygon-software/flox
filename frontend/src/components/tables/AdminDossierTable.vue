@@ -39,7 +39,6 @@
         <q-tr
           :props="props"
           style="background-color: white; cursor: pointer"
-          @click="()=>onRowClick(props.row)"
         >
           <q-td key="date">
             {{ formatDate(props.row.created_at) }}
@@ -81,8 +80,32 @@
               {{ offer.bank.abbreviation }}
             </q-chip>
           </q-td>
-          <q-td key="non-non_arrangeable">
+          <q-td key="non_arrangeable">
             <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
+          </q-td>
+          <q-td key="options">
+            <!-- Options for enabled users -->
+            <q-btn-dropdown
+              dropdown-icon="more_vert"
+              auto-close
+              no-icon-animation
+              flat
+              round
+              dense
+              @click.stop=""
+            >
+              <div class="column">
+                <!-- Button for permanent (hard) delete -->
+                <q-btn
+                  :label="$t('admin.delete_permanently')"
+                  icon="delete"
+                  class="text-black"
+                  flat
+                  no-caps
+                  @click="()=> onDossierDelete(props.row)"
+                />
+              </div>
+            </q-btn-dropdown>
           </q-td>
         </q-tr>
         <!-- one spacer row per row -->
@@ -95,17 +118,17 @@
 <script setup lang="ts">
 import {computed, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import ResetDossierDialog from 'src/components/dialogs/ResetDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {formatDate} from 'src/helpers/format-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
-import {RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
+import {DELETE_DOSSIER, RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import {DOSSIER_FILE} from 'src/data/queries/FILE';
 import {ALL_DOSSIERS} from 'src/data/queries/DOSSIER';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -121,6 +144,7 @@ const columns = [
   { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false, align: 'center' },
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false, align: 'center' },
   { name: 'non_arrangeable', label: ' ', field: 'non_arrangeable', sortable: true, align: 'center' },
+  { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
 const search = ref('')
@@ -146,27 +170,34 @@ function showAllDocuments(files: Record<string, unknown>[]) {
 }
 
 /**
- * Upon clicking a row, show dialog to re-enable dossier
+ * Upon deleting a dossier, show confirmation dialog
  * @param {Record<string, unknown>} dossier - dossier that was clicked
  * @returns {void}
  */
-function onRowClick(dossier: Record<string, unknown>): void{
+function onDossierDelete(dossier: Record<string, unknown>): void{
   $q.dialog({
-    component: ResetDossierDialog,
+    component: WarningDialog,
+    componentProps: {
+      description: i18n.global.t('admin.delete_dossier_description'),
+      okLabel: i18n.global.t('admin.delete_dossier'),
+      discardLabel: i18n.global.t('buttons.cancel'),
+      showDiscard: true,
+      swapNegative: true
+    }
   }).onOk(() => {
     // Delete all offers & reset status
-    executeMutation(RESET_DOSSIER, {uuid: dossier.uuid}).then(() => {
+    executeMutation(DELETE_DOSSIER, {uuid: dossier.uuid}).then(() => {
       // Show notification
       showNotification(
         $q,
-        i18n.global.t('messages.dossier_reset'),
+        i18n.global.t('messages.dossier_deleted'),
         undefined,
         'primary'
       )
     }).catch(()=>{
       showNotification(
         $q,
-        i18n.global.t('messages.dossier_reset_failed'),
+        i18n.global.t('messages.dossier_delete_failed'),
         undefined,
         'negative'
       )
