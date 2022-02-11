@@ -12,7 +12,7 @@ COPY . .
 RUN rm -rf dist
 
 RUN yarn build:ssr
-RUN rm -rf node_modules
+#RUN rm -rf node_modules
 WORKDIR dist/ssr
 RUN yarn global add express
 CMD ["yarn", "start"]
