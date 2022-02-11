@@ -68,7 +68,7 @@
               color="primary"
               size="md"
               round
-              @click.stop="()=>{showAllDocuments(props.row.files)}"
+              @click.stop="()=>{showAllDocuments(props.row.documents)}"
             />
           </q-td>
           <q-td key="offers">
@@ -122,7 +122,7 @@ import {QVueGlobals, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {formatDate} from 'src/helpers/format-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
-import {DELETE_DOSSIER, RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
+import {DELETE_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';

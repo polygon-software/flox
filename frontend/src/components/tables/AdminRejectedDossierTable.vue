@@ -69,7 +69,7 @@
               color="primary"
               size="md"
               round
-              @click.stop="()=>{showAllDocuments(props.row.files)}"
+              @click.stop="()=>{showAllDocuments(props.row.documents)}"
             />
           </q-td>
           <q-td key="offers">
