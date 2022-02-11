@@ -43,8 +43,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
-          memory: 2048m
+          cpus: '2.0'
+          memory: 4096m
     networks:
       - webnet
     environment:
