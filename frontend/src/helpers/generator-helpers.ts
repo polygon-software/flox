@@ -5,12 +5,12 @@
 import ROUTES from 'src/router/routes';
 
 /**
- * Generates a random number in given range
+ * Generates a random integer in given range
  * @param {number} min - minimum
  * @param {number} max - maximum
  * @returns {number} - a random number
  */
-function randomNumber(min:number, max:number) {
+export function randomNumber(min= 0, max = 100): number {
   return Math.floor(Math.random() * (max - min) + min)
 }
 

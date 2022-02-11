@@ -112,8 +112,8 @@ import {defineProps, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm} from 'quasar';
-const emit = defineEmits(['submit'])
 
+const emit = defineEmits(['submit'])
 const formRef: Ref<QForm|null> = ref(null)
 
 const props = defineProps({
@@ -152,6 +152,4 @@ async function onSubmit(){
     emit('submit', form.values.value)
   }
 }
-
-
 </script>

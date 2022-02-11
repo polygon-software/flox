@@ -40,14 +40,6 @@ import {QDialog} from 'quasar'
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 const emit = defineEmits(['ok'])
 
-const props = defineProps({
-  value: {
-    type: String,
-    required: true,
-    default: '',
-  },
-})
-
 // Mandatory - do not remove!
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void{
@@ -59,6 +51,14 @@ function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
+
+const props = defineProps({
+  value: {
+    type: String,
+    required: true,
+    default: '',
+  },
+})
 
 /**
  * On Ok, emit ok event

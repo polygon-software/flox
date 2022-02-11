@@ -1,4 +1,3 @@
-
 FROM node:14-alpine
 
 WORKDIR /usr/src/app
@@ -10,6 +9,9 @@ RUN yarn --ignore-platform
 
 COPY . .
 
-RUN rm -r dist
+RUN rm -rf dist
 
-CMD ["yarn", "dev:ssr"]
+RUN yarn build:ssr
+RUN rm -rf node_modules
+WORKDIR dist/ssr
+CMD ["yarn", "start"]
