@@ -86,6 +86,11 @@ const menuItems = [
     route: ROUTES.ADMIN_DOSSIERS,
   },
   {
+    name: 'rejected_dossiers',
+    label: i18n.global.t('dashboards.rejected_dossiers'),
+    route: ROUTES.ADMIN_REJECTED_DOSSIERS,
+  },
+  {
     name: 'employees',
     label: i18n.global.t('dashboards.soi_employees'),
     route: ROUTES.ADMIN_EMPLOYEES,

@@ -4,8 +4,7 @@
       class="q-pa-lg full-width row justify-center"
       style="margin-top: 50px"
     >
-      TODO
-<!--      <AdminDossierTable/>-->
+      <AdminDossierTable/>
     </div>
   </q-page>
 </template>
