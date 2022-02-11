@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
@@ -8,6 +8,9 @@ import { createCognitoAccount, randomPassword } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { ROLE } from '../../ENUM/ENUMS';
 import { generateHumanReadableId } from '../../helpers';
+import { prettify } from '../../helpers/log-helper';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @Injectable()
 export class SoiEmployeeService {
@@ -15,6 +18,7 @@ export class SoiEmployeeService {
     @InjectRepository(SoiEmployee)
     private readonly soiEmployeeRepository: Repository<SoiEmployee>,
     private readonly userService: UserService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -66,6 +70,7 @@ export class SoiEmployeeService {
       uuid: cognitoId,
       fk: soiEmployeeEntry.uuid,
     });
+    this.logger.warn(`SOI Employee created:\n${prettify(soiEmployee)}`);
 
     return soiEmployeeEntry;
   }

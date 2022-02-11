@@ -538,6 +538,7 @@ enum FileType {
   LEASING_CONTRACT
   LEGACY_CADASTER
   LIFE_INSURANCE
+  LOG
   MANAGEMENT_REGULATIONS
   MARKET_VALUE_ESTIMATE
   MARRIAGE_CONTRACT
@@ -698,6 +699,7 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getEmployee(uuid: ID!): Employee!
+  getLogs(end: DateTime!, start: DateTime!): [PrivateFile!]!
   getMyBank(bankUuid: String): Bank!
   getMyCompany(companyUuid: String): Company!
   getMyDossiers(employeeUuid: String): [Dossier!]

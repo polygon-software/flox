@@ -7,6 +7,7 @@ import fmp = require('fastify-multipart');
 import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 /**
  * Create NestFastifyApplication
@@ -24,6 +25,7 @@ async function bootstrap() {
   // to the same folder as your main bundle or use workerURI property to specify other path.
   // Not sure if this is actually relevant, TODO test
   const configService: ConfigService = app.get(ConfigService);
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   await app.register(fmp);

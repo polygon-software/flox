@@ -31,24 +31,85 @@
         </div>
       </q-card>
 
+      <!-- Get Logs -->
+      <q-card
+        flat
+        class="row justify-between q-pa-md"
+        style="width: 670px"
+      >
+        <div class="col-6">
+          <h6 class="q-ma-none">{{ $t('dashboards.logs') }}</h6>
+          <q-item-label caption>
+            {{ $t('dashboards.logs_description')}}
+          </q-item-label>
+        </div>
+        <div class="col column items-end">
+          <q-input v-model="rangeDisplay" style="width: 250px" outlined @focusout="setRange"
+          >
+            <template #append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
+                  <q-date
+                    v-model="range"
+                    range
+                    mask="YYYY-MM-DD"
+                  >
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+          <q-btn
+            :label="$t('buttons.download')"
+            icon="download"
+            color="primary"
+            style="width: 250px"
+            class="q-mt-md"
+            @click="getLogs"/>
+        </div>
+      </q-card>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import ValueIncreaseUploadField from 'components/forms/fields/admin_file_upload/ValueIncreaseUploadField.vue';
-import {ref, Ref} from 'vue';
+import { ref, Ref, watch} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
-import {useQuasar} from 'quasar';
+import {openURL, useQuasar} from 'quasar';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {dateToInputString} from 'src/helpers/date-helpers';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {LOG_FILES} from 'src/data/queries/FILE';
 
 const $q = useQuasar()
 
 const file: Ref<null|File> = ref(null)
+const start = new Date()
+const to = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1)
+const range: Ref<Record<string, string>> = ref({from: dateToInputString(start), to:dateToInputString(to)})
+const rangeDisplay = ref(`${range.value.from} - ${range.value.to}`)
+watch(()=>range.value.from + range.value.to, ()=>{
+  rangeDisplay.value = `${range.value.from} - ${range.value.to}`
+})
 
+/**
+ * Keeps range and rangeDisplay in sync
+ * @return {void}
+ */
+function setRange(){
+  const val = rangeDisplay.value
+  const startDateString = val.substr(0, 10)
+  const endDateString = val.substr(13)
 
+  range.value.from = startDateString
+  range.value.to = endDateString
+}
 /**
  * When CSV is uploaded show warning dialog & upload on confirm
  * @returns {void}
@@ -93,6 +154,22 @@ function onCsvUpload(){
       })
     })
   }
+}
+
+/**
+ * Fetch logs in specified date Range
+ * @returns {Promise<void>} - done
+ */
+async function getLogs() {
+  const fromDateSplit = range.value.from.split('-')
+  const toDateSplit = range.value.to.split('-')
+  const fromDate = new Date(parseInt(fromDateSplit[0]), parseInt(fromDateSplit[1]) - 1, parseInt(fromDateSplit[2]))
+  const toDate = new Date(parseInt(toDateSplit[0]), parseInt(toDateSplit[1]) - 1, parseInt(toDateSplit[2]))
+  const res = await executeQuery(LOG_FILES, {start: fromDate, end: toDate})
+  const files = res.data[LOG_FILES.cacheLocation] as Array<Record<string, string>>
+  files.forEach((file)=>{
+    openURL(file.url)
+  })
 }
 
 </script>

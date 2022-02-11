@@ -124,8 +124,9 @@ export default {
     soi_employees: 'SOI Employees',
     files: 'Files',
     value_increase_csv: 'CSV-File for Market Value Development',
-    value_increase_csv_description: 'Market value development data used for calculating value estimates'
-  },
+    value_increase_csv_description: 'Market value development data used for calculating value estimates',
+    logs: 'Logs of the API',
+    logs_description: 'Request logs in a date range'},
   buttons: {
     finish_signup: 'Finish',
     finish: 'Finish',

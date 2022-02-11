@@ -37,3 +37,9 @@ lerna-debug.log*
 /backend/node_modules/
 /backend/dist/
 /shared/node_modules/
+/backend/dbinit
+/terraform
+
+**.tfstate
+**.lock.hcl
+**.terraform
