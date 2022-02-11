@@ -31,8 +31,6 @@ services:
           memory: 2048m
     build:
       context: frontend
-    volumes:
-      - data-frontend:frontend/usr/src/app
     ports:
       - ${FRONTEND_PORT}:${FRONTEND_PORT}
     networks:
@@ -75,4 +73,3 @@ networks:
 volumes:
   dbdata:
   #nocodbdata:
-  data-frontend:
