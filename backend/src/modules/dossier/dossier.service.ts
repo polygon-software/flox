@@ -495,8 +495,9 @@ export class DossierService {
     }
 
     // Delete dossier itself
-    await this.dossierRepository.remove(dossier);
+    const deletedDossier = await this.dossierRepository.remove(dossier);
+    deletedDossier.uuid = deleteDossierInput.uuid;
 
-    return dossier;
+    return deletedDossier;
   }
 }
