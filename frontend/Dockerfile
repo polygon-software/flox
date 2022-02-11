@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:16-alpine
 
 WORKDIR /usr/src/app
 
@@ -12,7 +12,11 @@ COPY . .
 RUN rm -rf dist
 
 RUN yarn build:ssr
+COPY node_modules ./dist/ssr/
+
 #RUN rm -rf node_modules
+
 WORKDIR dist/ssr
-RUN yarn global add express
+RUN yarn --ignore-platform
+
 CMD ["yarn", "start"]
