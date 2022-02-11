@@ -451,4 +451,20 @@ export class DossierService {
 
     return dossier;
   }
+
+  /**
+   * Gets all dossiers in the database
+   * @returns {Promise<Dossier[]>} - dossiers
+   */
+  async getAllDossiers(): Promise<Dossier[]> {
+    return this.dossierRepository.find({
+      relations: [
+        'documents',
+        'offers',
+        'offers.bank',
+        'original_bank',
+        'final_document',
+      ],
+    });
+  }
 }

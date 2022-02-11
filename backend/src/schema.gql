@@ -688,6 +688,7 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getAllDossiers: [Dossier!]
   getBank(uuid: ID!): Bank!
   getBankList: [Bank!]!
   getBankNameSuggestions: [Bank!]!

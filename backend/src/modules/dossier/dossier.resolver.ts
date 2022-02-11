@@ -118,6 +118,16 @@ export class DossierResolver {
   }
 
   /**
+   * Get all dossiers
+   * @returns {Promise<Dossier[]>} - all dossiers
+   */
+  @AdminOnly()
+  @Query(() => [Dossier], { nullable: true })
+  async getAllDossiers(): Promise<Dossier[]> {
+    return this.dossierService.getAllDossiers();
+  }
+
+  /**
    * Resets a dossier, changing its state and deleting any open offers
    * @param {ResetDossierInput} resetDossierInput - input, containing uuid
    * @returns {Promise<Dossier>} - the dossier after being reset

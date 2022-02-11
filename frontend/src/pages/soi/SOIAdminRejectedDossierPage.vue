@@ -4,11 +4,11 @@
       class="q-pa-lg full-width row justify-center"
       style="margin-top: 50px"
     >
-      <AdminDossierTable/>
+      <AdminRejectedDossierTable/>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import AdminDossierTable from 'components/tables/AdminDossierTable.vue';
+import AdminRejectedDossierTable from 'components/tables/AdminRejectedDossierTable.vue';
 </script>

@@ -4,7 +4,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $tc('dashboards.dossier', 2) + ' (' + rows.length + ')' }}
+        {{ $t('dashboards.rejected_dossiers') + ' (' + rows.length + ')' }}
       </h6>
 
       <!-- Search bar -->
@@ -104,8 +104,8 @@ import {RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
+import {REJECTED_DOSSIERS} from 'src/data/queries/DOSSIER';
 import {DOSSIER_FILE} from 'src/data/queries/FILE';
-import {ALL_DOSSIERS} from 'src/data/queries/DOSSIER';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -125,7 +125,7 @@ const columns = [
 
 const search = ref('')
 
-const dossiers = subscribeToQuery(ALL_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
+const dossiers = subscribeToQuery(REJECTED_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
 const rows = computed(()=>{
   return dossiers.value ?? []
 })
