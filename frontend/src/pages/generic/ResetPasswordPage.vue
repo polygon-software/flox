@@ -42,7 +42,7 @@
               color="primary"
               :label="$t('authentication.reset_password')"
               :disable="form.values.value[field.key].length === 0"
-              @click="onReset"
+              @click="onReset(form.values.value[field.key])"
             />
           </div>
         </div>
@@ -57,12 +57,13 @@ import { Form } from 'src/helpers/form-helpers'
 import {inject} from 'vue'
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {CognitoUser} from "amazon-cognito-identity-js";
-import {Context, Module} from "vuex-smart-module";
-import AuthState from "src/store/authentication/state";
-import AuthGetters from "src/store/authentication/getters";
-import AuthMutations from "src/store/authentication/mutations";
-import AuthActions from "src/store/authentication/actions";
+import {CognitoUser} from 'amazon-cognito-identity-js';
+import {Context, Module} from 'vuex-smart-module';
+import AuthState from 'src/store/authentication/state';
+import AuthGetters from 'src/store/authentication/getters';
+import AuthMutations from 'src/store/authentication/mutations';
+import AuthActions from 'src/store/authentication/actions';
+import {useAuth} from 'src/store/authentication';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -78,15 +79,15 @@ form.pages.value = [
   }
 ]
 
-const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>>
+const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 /**
  * Routes to the Reset Password 2 Page
  * @returns {Promise<void>} - done
  */
-async function onReset(): Promise<void>{
+async function onReset(username: string): Promise<void>{
   // Set up cognitoUser first
   $authStore.mutations.setCognitoUser(new CognitoUser({
-    Username: form.values.value[field.key],
+    Username: username,
     Pool: $authStore.getters.getUserPool()
   }));
   // Call forgotPassword on cognitoUser
@@ -96,7 +97,6 @@ async function onReset(): Promise<void>{
     },
     onFailure: (err: Error) => {
       $authStore.mutations.setCognitoUser(undefined);
-      this.onFailure(err)
     },
   });
   await $routerService?.routeTo(ROUTES.RESET_PASSWORD2)
