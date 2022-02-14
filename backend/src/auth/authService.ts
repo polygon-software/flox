@@ -70,7 +70,7 @@ export function randomPassword(minLength: number): string {
   const charsLower = 'abcdefghijklmnopqrstuvwxyz';
   const charsUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const numbers = '0123456789';
-  const special = '!';
+  const special = '!?+'; // Limited to known working characters due to base-64 encoding
   const requiredChars = [charsLower, charsUpper, numbers, special];
   let res = '';
   requiredChars.forEach((requiredChar) => {
