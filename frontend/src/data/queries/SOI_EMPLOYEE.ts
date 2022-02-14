@@ -15,7 +15,7 @@ export const SOI_EMPLOYEES = {
       }
     }
   `,
-  tables: ['user'],
+  tables: ['soi_employee'],
   cacheLocation: 'allSoiEmployees'
 }
 
