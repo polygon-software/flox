@@ -29,7 +29,7 @@ export default {
     successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
     confirmed_registration: 'Registrierung bestätigt',
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
-    back_to_login: 'Zurück zu Login',
+    back_to_login: 'Zurück zum Login',
     change_password: 'Passwort ändern',
     unauthenticated: 'Nicht Angemeldet'
 

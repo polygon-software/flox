@@ -57,22 +57,22 @@ const props = defineProps({
   successMessage: {
     required: false,
     type: String,
-    default: i18n.global.t('success')
+    default: i18n.global.t('messages.success')
   },
   furtherExplanation: {
     required: false,
     type: String,
-    default: i18n.global.t('successful_application')
+    default: i18n.global.t('authentication.successful_application')
   },
   nextMessage: {
     required: false,
     type: String,
-    default: i18n.global.t('redirected')
+    default: i18n.global.t('authentication.redirected')
   },
   buttonLabel: {
     required: false,
     type: String,
-    default: i18n.global.t('back_to_login')
+    default: i18n.global.t('authentication.back_to_login')
   },
   autoRedirectDurationMS: {
     required: false,
@@ -82,7 +82,7 @@ const props = defineProps({
 })
 
 /**
- * Routes to  desired path - given through prop
+ * Routes to  desired path - given through URL query
  * @returns {Promise<void>} - done
  */
 async function redirectOnClick(): Promise<void> {
