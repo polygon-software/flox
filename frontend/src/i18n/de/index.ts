@@ -32,7 +32,6 @@ export default {
     back_to_login: 'Zurück zum Login',
     change_password: 'Passwort ändern',
     unauthenticated: 'Nicht Angemeldet'
-
   },
   account_data: {
     employees: 'Mitarbeitende',

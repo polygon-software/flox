@@ -43,8 +43,6 @@ const $routerService: RouterService|undefined = inject('$routerService')
  * @param {String} [autoRedirectDurationMS] - optional redirection duration length in milliseconds (default is 5000 milliseconds)
  */
 
-
-
 const props = defineProps({
   redirectPath: {
     required: true,
