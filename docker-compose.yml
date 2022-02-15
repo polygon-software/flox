@@ -14,9 +14,6 @@ services:
         limits:
           cpus: '8.0'
           memory: 8192m
-        reservations:
-          cpus: '4.0'
-          memory: 8192m
     build:
       context: backend
     ports:
@@ -36,9 +33,6 @@ services:
         limits:
           cpus: '8.0'
           memory: 8192m
-        reservations:
-          cpus: '4.0'
-          memory: 8192m
     build:
       context: frontend
     ports:
@@ -55,9 +49,6 @@ services:
         limits:
           cpus: '8.0'
           memory: 8192M
-        reservations:
-          cpus: '4.0'
-          memory: 8192m
     networks:
       - webnet
     environment:
