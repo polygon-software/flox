@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { UserModule } from './modules/user/user.module';
-import { ProductModule } from './modules/product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
@@ -11,12 +10,8 @@ import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import * as Joi from 'joi';
-import { FileModule } from './modules/file/file.module';
 import { RolesGuard } from './auth/roles.guard';
-import { CommentModule } from './modules/comment/comment.module';
 import { User } from './modules/user/entities/user.entity';
-import { AnnouncementModule } from './modules/announcement/announcement.module';
-import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
   imports: [
@@ -78,11 +73,6 @@ import { NotificationModule } from './modules/notification/notification.module';
     }),
     TypeOrmModule.forFeature([User]),
     UserModule,
-    ProductModule,
-    FileModule,
-    CommentModule,
-    AnnouncementModule,
-    NotificationModule,
   ],
   providers: [
     JwtStrategy,

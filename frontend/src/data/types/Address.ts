@@ -1,6 +1,4 @@
-import Joi, { Schema } from 'joi';
 import { i18n } from 'boot/i18n';
-import { AddressItem } from '../../../../shared/schemas/AddressItem';
 
 /**
  * A class representing an address
@@ -28,19 +26,6 @@ export class Address {
     this.number = number ?? null;
     this.city = city ?? null;
     this.zipCode = zipCode ?? null;
-  }
-
-  /**
-   * Validates the address to Joi schema
-   * @returns {boolean} whether the address fits the schema
-   */
-  validate(): boolean {
-    try {
-      Joi.assert(this, AddressItem as unknown as Schema);
-      return true;
-    } catch (e) {
-      return false;
-    }
   }
 
   /**

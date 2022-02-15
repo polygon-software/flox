@@ -6,7 +6,7 @@
       <h5
         class="q-pa-sm q-ma-none"
       >
-        {{ $t('greetings.welcome_bigabig') }}</h5>
+        {{ $t('greetings.welcome_datavis') }}</h5>
       <!-- Login Card -->
       <LoginForm
         class="row q-pa-md items-center"
@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import {inject, } from 'vue'
-import {AuthenticationService} from '../../services/AuthService';
+import {AuthenticationService} from 'src/services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue'

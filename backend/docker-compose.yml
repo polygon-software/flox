@@ -2,10 +2,9 @@ version: '3.7'
 
 services:
   main:
-    container_name: bigabig_main
+    container_name: datavis_main
     build:
-      context: ../
-      dockerfile: backend/Dockerfile
+      context: .
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -20,7 +19,7 @@ services:
       - database
 
   database:
-    container_name: bigabig_database
+    container_name: datavis_database
     image: postgres:14
     networks:
       - webnet

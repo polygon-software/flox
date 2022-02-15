@@ -3,7 +3,7 @@
     <div class="row">
       <img
           alt="Polygon Software"
-          :src="require('src/assets/bigabig-logo.svg')"
+          :src="require('src/assets/quasar-logo-vertical.svg')"
           style="height: 50px"
           class="q-ma-sm"
       >

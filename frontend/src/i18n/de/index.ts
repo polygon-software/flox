@@ -140,7 +140,7 @@ export default {
       'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',
   },
   greetings: {
-    welcome_bigabig: 'Willkommen bei Big A Big',
+    welcome_datavis: 'Willkommen bei DataVis',
   },
   notifications: {
     messages: 'Nachrichten',

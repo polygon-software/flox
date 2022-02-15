@@ -136,7 +136,7 @@ export default {
     description: 'Since this is your first login, please set a password.',
   },
   greetings: {
-    welcome_bigabig: 'Welcome to Big A Big',
+    welcome_datavis: 'Welcome to DataVis',
   },
   notifications: {
     messages: 'Messages',
