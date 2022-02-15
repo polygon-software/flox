@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :title="$t('dossier.send_document')"
   >
     <q-card style="width: 600px;">
@@ -41,25 +41,29 @@
           :label="$t('buttons.cancel')"
           color="primary"
           flat
-          @click="onCancel"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {ref, Ref} from 'vue'
-import {QDialog, QVueGlobals, useQuasar} from 'quasar';
+import {defineEmits, ref} from 'vue'
+import {QVueGlobals, useQuasar} from 'quasar';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import _ from 'lodash';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {SEND_DOSSIER_DOCUMENT_EMAIL} from 'src/data/mutations/DOSSIER';
 import {MutationObject} from 'src/data/DATA-DEFINITIONS';
+import { useDialogPluginComponent } from 'quasar'
+
+const emit = defineEmits(useDialogPluginComponent.emits)
+
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const $q: QVueGlobals = useQuasar()
-
-const dialog: Ref<QDialog|null> = ref(null)
 
 const props = defineProps({
   // Default addresses
@@ -83,19 +87,6 @@ const props = defineProps({
 // Addresses to send to (defaults to those given to dossier as prop)
 const targetAddresses = ref(_.cloneDeep(props.addresses))
 
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
 /**
  * On OK, send e-mail to all entered addresses
  * @returns {Promise<void>} - done
@@ -118,11 +109,7 @@ async function onOk() {
     'positive'
   )
 
-  hide()
+  onDialogOK()
 }
 
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
-}
 </script>

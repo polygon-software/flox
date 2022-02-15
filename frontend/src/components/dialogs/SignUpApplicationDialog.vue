@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :title="$t('dashboards.application')"
   >
     <q-card style="width: 600px;">
@@ -128,14 +128,14 @@
           :label="$t('buttons.cancel')"
           color="primary"
           flat
-          @click="onCancel"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {PropType, ref, Ref} from 'vue'
+import {defineEmits, PropType, ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
 import {
@@ -143,16 +143,21 @@ import {
   REJECT_COMPANY,
   UPDATE_COMPANY_EMAIL
 } from 'src/data/mutations/COMPANY';
-import {QDialog, QVueGlobals, useQuasar} from 'quasar';
+import { QVueGlobals, useQuasar} from 'quasar';
 import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Address} from 'src/data/types/Address';
 import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
+import { useDialogPluginComponent } from 'quasar'
+
+const emit = defineEmits(useDialogPluginComponent.emits)
+
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+
 
 const $q: QVueGlobals = useQuasar()
-
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 const props = defineProps({
   company: {
@@ -177,19 +182,6 @@ const correspondenceAddress = new Address(
   props.company.correspondence_address?.city ?? undefined,
   props.company.correspondence_address?.zip_code ?? undefined,
 )
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
 
 /**
  * On OK, enable document upload for the company and send e-mail
@@ -216,7 +208,7 @@ async function onOk(): Promise<void> {
     'positive'
   )
 
-  hide()
+  onDialogOK()
 }
 
 /**
@@ -238,8 +230,7 @@ function onReject(): void {
         undefined,
         'primary'
       )
-      // Hide outer popup
-      hide()
+      onDialogCancel()
     }).catch((error)=>{
       console.error(error) // Todo Toast
     })
@@ -262,10 +253,4 @@ async function onChangeEmail(newEmail: string): Promise<void>{
   // Update in own prop to reflect changed state
   email.value = newEmail
 }
-
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
-}
-
 </script>

@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :title="$t('bank.new_user')"
   >
     <q-card class="q-pa-md q-ma-md">
@@ -13,7 +13,7 @@
           class="q-ma-md"
           :label="$t('general.return')"
           color="positive"
-          @click="onYesReject"
+          @click="onDialogOK"
         />
       </q-card-actions>
     </q-card>
@@ -21,12 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref, defineEmits} from 'vue'
-import {QDialog} from 'quasar';
+import {defineEmits} from 'vue'
+import { useDialogPluginComponent } from 'quasar'
 
-const emit = defineEmits(['ok'])
+const emit = defineEmits(useDialogPluginComponent.emits)
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const props = defineProps({
   email: {
@@ -38,27 +39,5 @@ const props = defineProps({
     required: true
   }
 })
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
-/**
- * Reject an application
- * @returns {void}
- */
-function onYesReject(): void {
-  emit('ok')
-  hide()
-}
 </script>
 

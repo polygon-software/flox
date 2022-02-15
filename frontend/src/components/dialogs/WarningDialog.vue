@@ -1,8 +1,7 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :persistent="true"
-    title="QR"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
@@ -30,12 +29,12 @@
           :label="discardLabel"
           flat
           :color="swapNegative ? 'primary' : 'negative'"
-          @click="onDiscard"
+          @click="onDialogCancel"
         />
         <q-btn
           :label="okLabel"
           :color="swapNegative ? 'negative' : 'primary'"
-          @click="onOk"
+          @click="onDialogOK"
         />
       </q-card-actions>
     </q-card>
@@ -48,12 +47,14 @@
  * execute any functionality, but only emits the 'ok' and 'discard' events.
  */
 
-import {defineEmits, defineProps, ref, Ref} from 'vue';
-import {QDialog} from 'quasar'
+import {defineEmits, defineProps} from 'vue';
 import {i18n} from 'boot/i18n';
+import { useDialogPluginComponent } from 'quasar'
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-const emit = defineEmits(['ok', 'cancel'])
+const emit = defineEmits(useDialogPluginComponent.emits)
+
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -81,36 +82,5 @@ const props = defineProps({
     required: false,
     default: false
   }
-
 })
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-// eslint-disable-next-line require-jsdoc
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
-/**
- * On Ok, emit ok event
- * @returns {void}
- */
-function onOk(): void {
-  emit('ok')
-  hide()
-}
-
-/**
- * On discard, emit event
- * @returns {void}
- */
-function onDiscard(): void {
-  emit('cancel')
-  hide()
-}
 </script>

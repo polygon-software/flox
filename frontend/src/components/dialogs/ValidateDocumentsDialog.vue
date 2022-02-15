@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     title="Application"
   >
     <q-card style="min-width: 600px; max-width: 80%;">
@@ -60,15 +60,15 @@
           :label="$t('buttons.cancel')"
           color="primary"
           flat
-          @click="onCancel"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 <script setup lang="ts">
-import { PropType, ref, Ref} from 'vue'
-import {QDialog, QVueGlobals, useQuasar, openURL} from 'quasar';
+import { PropType, ref} from 'vue'
+import {QVueGlobals, useQuasar, openURL} from 'quasar';
 import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Company} from 'src/data/types/Company';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
@@ -80,10 +80,14 @@ import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
 import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.vue'
 import {PRIVATE_FILE} from 'src/data/queries/FILE';
+import { useDialogPluginComponent } from 'quasar'
+
+const emit = defineEmits(useDialogPluginComponent.emits)
+
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const $q: QVueGlobals = useQuasar()
-
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 const props = defineProps({
   company: {
@@ -122,18 +126,7 @@ async function getUrls(): Promise<void>{
   }
 }
 
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
 
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
 
 /**
  * On OK, create account and send e-mail
@@ -157,8 +150,7 @@ async function onOk(): Promise<void> {
     'positive'
   )
 
-  hide()
-
+  onDialogOK()
 }
 
 /**
@@ -180,7 +172,7 @@ function onReject(): void {
         'primary'
       )
       // Hide outer popup
-      hide()
+      onDialogHide()
     }).catch((error)=>{
       console.error(error)
       // Show confirmation prompt
@@ -192,11 +184,6 @@ function onReject(): void {
       )
     })
   })
-}
-
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
 }
 
 /**

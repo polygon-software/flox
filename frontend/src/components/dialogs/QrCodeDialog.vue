@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :persistent="true"
     title="QR"
   >
@@ -20,12 +20,12 @@
         <q-btn
           label="Abbrechen"
           color="primary"
-          @click="hide"
+          @click="onDialogCancel"
         />
         <q-btn
           label="OK"
           color="primary"
-          @click="onOk"
+          @click="onDialogOK"
         />
       </q-card-actions>
     </q-card>
@@ -34,23 +34,13 @@
 
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
-import {defineEmits, defineProps, ref, Ref} from 'vue';
-import {QDialog} from 'quasar'
+import {defineEmits, defineProps} from 'vue';
+import { useDialogPluginComponent } from 'quasar'
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-const emit = defineEmits(['ok'])
+const emit = defineEmits(useDialogPluginComponent.emits)
 
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-// eslint-disable-next-line require-jsdoc
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const props = defineProps({
   value: {
@@ -59,14 +49,4 @@ const props = defineProps({
     default: '',
   },
 })
-
-/**
- * On Ok, emit ok event
- * @returns {void}
- */
-function onOk(): void {
-  emit('ok')
-  hide()
-}
-
 </script>

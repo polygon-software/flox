@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :title="$t('employee_dashboard.all_documents')"
   >
     <q-card style="width: 600px;">
@@ -47,7 +47,7 @@
           :label="$t('buttons.close')"
           color="primary"
           flat
-          @click="onCancel"
+          @click="onDialogCancel"
         />
 
         <q-btn
@@ -56,27 +56,31 @@
           :label="$t('buttons.upload_documents')"
           icon="upload"
           color="primary"
-          @click="onUpload"
+          @click="onDialogOK"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {ref, Ref} from 'vue';
-import {QDialog, openURL} from 'quasar';
+import {defineEmits} from 'vue';
+import {openURL} from 'quasar';
 import { executeQuery} from 'src/helpers/data-helpers';
 import {PRIVATE_FILE} from 'src/data/queries/FILE';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_FILE_TYPE} from '../../../definitions/ENUMS';
-
+import { useDialogPluginComponent } from 'quasar'
 /**
  * A dialog for showing a list of downloadable files, and (optionally) to allow uploading new files to the given entity
  */
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-const emit = defineEmits(['ok'])
+const emit = defineEmits(useDialogPluginComponent.emits)
+
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+
+
 
 const props = defineProps({
   files: {
@@ -103,19 +107,6 @@ const props = defineProps({
 // Name of dossier's final document (used to prettify in template)
 const finalDocumentName = props.dossierUuid ? `Dossier_${props.dossierUuid}.pdf`: ''
 
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
-
 /**
  * Fetches and opens a file
  * @param {string} fileUuid - uuid of file
@@ -126,20 +117,6 @@ async function openFile(fileUuid: string): Promise<void> {
   const queryRes = await executeQuery(query, {uuid: fileUuid})
   const file = queryRes.data[query.cacheLocation] as Record<string, unknown>
   openURL(file.url as string)
-}
-
-// eslint-disable-next-line require-jsdoc
-function onCancel() {
-  hide()
-}
-
-/**
- * On upload button click, hide & emit 'ok'
- * @returns {void}
- */
-function onUpload() {
-  emit('ok')
-  hide();
 }
 
 /**

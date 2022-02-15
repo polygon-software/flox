@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-      ref="dialog"
+      ref="dialogRef"
       title="Change Password"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
@@ -39,7 +39,7 @@
           <q-btn
               label="Cancel"
               color="primary"
-              @click="hide"
+              @click="onDialogCancel"
           />
         </q-card-actions>
 
@@ -55,13 +55,17 @@ import {defineEmits, Ref, ref} from 'vue';
 import {PASSWORD_MIN_LENGTH, PASSWORD_REGEX} from 'src/helpers/REGEX'
 import {QDialog} from 'quasar';
 import {i18n} from 'boot/i18n';
+import { useDialogPluginComponent } from 'quasar'
+
+const emit = defineEmits(useDialogPluginComponent.emits)
+
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const passwordOld = ref('')
 const password = ref('')
 const passwordRep = ref('')
 
-const emit = defineEmits(['ok'])
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 /**
  * Rules for validation of the password
@@ -83,26 +87,9 @@ const passwordRules = (val: string) => {
  * @returns {void}
  */
 function onSubmit(){
-  emit('ok', {
+  onDialogOK({
     passwordNew: password.value,
     passwordOld: passwordOld.value,
   })
-  hide()
 }
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
-
-
 </script>

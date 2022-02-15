@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :title="$t('dashboards.dossier')"
   >
     <q-card class="q-pa-md q-ma-md">
@@ -15,13 +15,13 @@
           class="q-ma-md"
           :label="$t('dossier.reset_dossier')"
           color="negative"
-          @click="onConfirm"
+          @click="onDialogOK"
         />
         <q-btn
           class="q-ma-md"
           :label="$t('buttons.cancel')"
           color="primary"
-          @click="onCancel"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
@@ -31,36 +31,11 @@
 <script setup lang="ts">
 import {ref, Ref, defineEmits} from 'vue'
 import {QDialog} from 'quasar';
+import { useDialogPluginComponent } from 'quasar'
 
-const emit = defineEmits(['ok'])
+const emit = defineEmits(useDialogPluginComponent.emits)
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
-/**
- * Confirm resetting a dossier
- * @returns {void}
- */
-function onConfirm(): void {
-  emit('ok')
-  hide()
-}
-
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
-}
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 </script>
 

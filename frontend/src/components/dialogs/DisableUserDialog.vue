@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :title="$t('dashboards.application')"
   >
     <q-card style="width: 600px;">
@@ -73,30 +73,29 @@
           class="q-ma-md"
           :label="$t('admin.disable_account')"
           color="negative"
-          @click="onOk"
+          @click="onDialogOK"
         />
         <q-btn
           class="q-ma-md"
           :label="$t('buttons.cancel')"
           color="primary"
           flat
-          @click="onCancel"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineProps, defineEmits, ref, Ref, PropType} from 'vue'
-import {QDialog, QVueGlobals, useQuasar} from 'quasar';
+import {defineProps, defineEmits, PropType} from 'vue'
 import {User} from 'src/data/types/User';
 import {ROLE} from 'src/data/ENUM/ENUM';
+import { useDialogPluginComponent } from 'quasar'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const $q: QVueGlobals = useQuasar()
-const emit = defineEmits(['ok'])
+const emit = defineEmits(useDialogPluginComponent.emits)
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const props = defineProps({
   user: {
@@ -108,33 +107,4 @@ const props = defineProps({
     required: true
   },
 })
-
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
-/**
- * On OK, emit event
- * @returns {void}
- */
-function onOk(): void{
-  emit('ok')
-  hide()
-}
-
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
-}
-
 </script>
