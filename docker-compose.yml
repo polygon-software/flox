@@ -8,10 +8,15 @@ services:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
+      mode: replicated
+      replicas: 2
       resources:
         limits:
-          cpus: '1.0'
-          memory: 2048m
+          cpus: '6.0'
+          memory: 8192M
+        reservations:
+          cpus: '3.0'
+          memory: 4096M
     build:
       context: backend
     ports:
@@ -25,10 +30,15 @@ services:
     image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
+      mode: replicated
+      replicas: 2
       resources:
         limits:
-          cpus: '1.0'
-          memory: 2048m
+          cpus: '6.0'
+          memory: 8192M
+        reservations:
+          cpus: '3.0'
+          memory: 4096M
     build:
       context: frontend
     ports:
@@ -43,8 +53,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2.0'
-          memory: 4096m
+          cpus: '6.0'
+          memory: 8192M
+        reservations:
+          cpus: '3.0'
+          memory: 4096M
     networks:
       - webnet
     environment:
