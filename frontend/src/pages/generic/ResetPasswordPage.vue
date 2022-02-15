@@ -41,8 +41,8 @@
             <q-btn
               color="primary"
               :label="$t('authentication.reset_password')"
-              :disable="form.values.value[field.key].length === 0"
-              @click="onReset(form.values.value[field.key])"
+              :disable="!form.values.value.email"
+              @click="onReset"
             />
           </div>
         </div>
@@ -64,9 +64,14 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {useAuth} from 'src/store/authentication';
+import {ErrorService} from "src/services/ErrorService";
+import {AuthenticationService} from "src/services/AuthService";
+import {i18n} from "boot/i18n";
 
 const $routerService: RouterService|undefined = inject('$routerService')
+const $errorService: ErrorService|undefined = inject('$errorService')
 
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 const fields = [FIELDS.EMAIL]
 
@@ -84,11 +89,16 @@ const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActi
  * Routes to the Reset Password 2 Page
  * @returns {Promise<void>} - done
  */
-async function onReset(username: string): Promise<void>{
+async function onReset(): Promise<void>{
+  const username = form.values.value.email as string
+  const userPool = $authStore.getters.getUserPool()
+  if (!username || !userPool){
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
+  }
   // Set up cognitoUser first
   $authStore.mutations.setCognitoUser(new CognitoUser({
     Username: username,
-    Pool: $authStore.getters.getUserPool()
+    Pool: userPool
   }));
   // Call forgotPassword on cognitoUser
   $authStore.getters.getCognitoUser()?.forgotPassword({
@@ -97,6 +107,7 @@ async function onReset(username: string): Promise<void>{
     },
     onFailure: (err: Error) => {
       $authStore.mutations.setCognitoUser(undefined);
+      $authService?.onFailure(err)
     },
   });
   await $routerService?.routeTo(ROUTES.RESET_PASSWORD2)

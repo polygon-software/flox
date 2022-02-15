@@ -51,7 +51,7 @@
               color="primary"
               :label="$t('buttons.confirm_change')"
               :disable="password !== passwordRep || verificationCode.length !== 6"
-              @click="onReset2(password.value, verificationCode.value)"
+              @click="onReset2"
             />
           </div>
         </div>
@@ -100,8 +100,8 @@ const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActi
  * Routes to the Login Page
  * @returns {Promise<void>} - done
  */
-async function onReset2({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}): Promise<void>{
-  $authStore.getters.getCognitoUser()?.confirmPassword(verificationCode,passwordNew,{
+async function onReset2(): Promise<void>{
+  $authStore.getters.getCognitoUser()?.confirmPassword(verificationCode.value,password.value,{
     onSuccess: (result: unknown)=>{console.log(result)},
     onFailure: (err: Error) => {console.log(err)}
   })
