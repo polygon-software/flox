@@ -6,6 +6,7 @@ import {
   useRoute,
   RouteLocationNormalizedLoaded,
 } from 'vue-router';
+import {values} from "lodash";
 
 /**
  * This is a service that is used globally throughout the application for routing
@@ -58,11 +59,11 @@ export class RouterService {
 
   /**
    * Adds given parameters to the URL query.
-   * @param {Record<string, string>} params - query parameters.
+   * @param {Record<string, string[]>} params - query parameters.
    * @returns {void|NavigationFailure|undefined} - the navigation result.
    */
   async pushToQuery(
-    params: Record<string, string>
+    params: Record<string, string | string[]>
   ): Promise<void | NavigationFailure | undefined> {
     return this.router.push({
       path: this.route.path,
@@ -73,9 +74,19 @@ export class RouterService {
   /**
    * Returns the requested query parameter.
    * @param {string} key - parameter name
-   * @returns {string | null} key - requested parameter
+   * @returns {Array<string> | null} key - requested parameter
    */
-  getQueryParam(key: string): string | null {
-    return (this.route.query[key] as string) ?? null;
+  getQueryParam(key: string): string[] | null {
+    const params: string[] = []
+    const query = this.route.query[key]
+    if (query instanceof Array) {
+      Object.values(query).forEach(param => {
+        params.push(param as string)
+      })
+      return params
+    }
+    else {
+      return [(query as string)]
+    }
   }
 }

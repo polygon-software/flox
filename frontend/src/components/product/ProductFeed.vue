@@ -65,45 +65,45 @@ const feedStore: Context<Module<FeedState, FeedGetters, FeedMutations, FeedActio
 const allProducts = fetchAllProducts()
 
 const searchFilter = computed(() => {
-  return $routerService?.getQueryParam('search') ?? '';
+  return $routerService?.getQueryParam('search') ?? [];
 })
 
 const categoryFilter = computed({
-  get(): string{
-    return $routerService?.getQueryParam('category') ?? 'all';
+  get(): string[] {
+    return $routerService?.getQueryParam('category') ?? [];
   },
-  async set(val: string) {
+  async set(val: string | string[]) {
     await $routerService?.pushToQuery({ category: val })
   }
 })
 
 const brandFilter = computed({
-  get(): string{
-    return $routerService?.getQueryParam('brand') ?? 'all';
+  get(): string[] {
+    return $routerService?.getQueryParam('brand') ?? [];
   },
-  async set(val: string) {
+  async set(val: string | string[]) {
     await $routerService?.pushToQuery({ brand: val })
   }
 })
 
 const sortBy = computed({
-  get(): string{
-    return $routerService?.getQueryParam('sort') ?? 'relevance';
+  get(): string[] {
+    return $routerService?.getQueryParam('sort') ?? ['relevance'];
   },
-  async set(val: string){
+  async set(val: string | string[]){
     await $routerService?.pushToQuery({ sort: val })
   }
 })
 
 const filterCount = computed(() => {
   let count = 0
-  if(sortBy.value !== 'relevance'){
+  if(sortBy.value[0] !== 'relevance'){
     count += 1
   }
-  if(brandFilter.value !== 'all'){
+  if(brandFilter.value.length > 0){
     count += 1
   }
-  if(categoryFilter.value !== 'all'){
+  if(categoryFilter.value.length > 0){
     count += 1
   }
   return count
@@ -114,19 +114,19 @@ const filterCount = computed(() => {
  */
 const filteredProducts = computed(() => {
   let products = allProducts.value
-  if(searchFilter.value !== ''){
-    const filter = searchFilter.value.toLowerCase();
+  if(searchFilter.value.length > 0){
+    const filter = searchFilter.value[0].toLowerCase();
     products = products.filter((product) =>
       product.title && product.title.toLowerCase().includes(filter) ||
       product.description && product.description.toLowerCase().includes(filter) ||
       product.tags.some(tag => tag.toLowerCase().includes(filter))
     )
   }
-  if(brandFilter.value !== 'all'){
-    products = products.filter((product) => product.brand === brandFilter.value)
+  if(brandFilter.value.length > 0){
+    products = products.filter((product) => product.brand && brandFilter.value.includes(product.brand))
   }
-  if(categoryFilter.value !== 'all'){
-    products = products.filter((product) => product.category === categoryFilter.value)
+  if(categoryFilter.value.length > 0){
+    products = products.filter((product) => product.category && categoryFilter.value.includes(product.category))
   }
   return products;
 })
