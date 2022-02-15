@@ -16,7 +16,11 @@ lerna-debug.log*
 
 # Tests
 /coverage
+**/coverage
 /.nyc_output
+**/test-report.xml
+/frontend/reports
+/backend/reports
 
 # IDEs and editors
 /.idea
@@ -37,3 +41,9 @@ lerna-debug.log*
 /backend/node_modules/
 /backend/dist/
 /shared/node_modules/
+/backend/dbinit
+/terraform
+
+**.tfstate
+**.lock.hcl
+**.terraform

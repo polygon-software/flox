@@ -11,6 +11,9 @@ import { ROLE } from '../../ENUM/ENUMS';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { CompanyService } from '../company/company.service';
 import { generateHumanReadableId } from '../../helpers';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+import { prettify } from '../../helpers/log-helper';
 
 @Injectable()
 export class EmployeeService {
@@ -20,6 +23,7 @@ export class EmployeeService {
     private readonly companyService: CompanyService,
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -53,6 +57,7 @@ export class EmployeeService {
       uuid: cognitoId,
       fk: newEmployee.uuid,
     });
+    this.logger.warn(`Employee created:\n${prettify(newEmployee)}`);
 
     return newEmployee;
   }

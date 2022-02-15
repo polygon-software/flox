@@ -46,7 +46,9 @@ function recursiveFilter(target:any, term:string, depthLimit=5):boolean{
   }
 
   if(typeof target === 'number'){
-    return !isNaN(Number(term)) && Math.abs(Number(term) - (target )  ) < 0.1
+    const numeric_comparison = !isNaN(Number(term)) && Math.abs(Number(term) - (target )  ) < 0.1
+    const string_comparison = target.toString().includes(term)
+    return numeric_comparison || string_comparison
   }
 
   if(typeof target === 'string'){
@@ -59,7 +61,7 @@ function recursiveFilter(target:any, term:string, depthLimit=5):boolean{
 
   if(Array.isArray(target)){
     return target.some((item)=>{
-      recursiveFilter(item, term,depthLimit-1)
+      return recursiveFilter(item, term,depthLimit-1)
     })
   }
   if(typeof target === 'object'){

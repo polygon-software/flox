@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import PublicFile from './entities/public_file.entity';
 import PrivateFile from './entities/private_file.entity';
-import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import {
+  GetObjectCommand,
+  ListObjectsCommand,
+  PutObjectCommand,
+  S3,
+} from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 import { GetPublicFileArgs } from './dto/get-public-file.args';
@@ -18,6 +23,8 @@ import { MultipartFile } from 'fastify-multipart';
 import { FILE_TYPE, ROLE } from '../../ENUM/ENUMS';
 import { parseCsv } from '../../helpers/csv-helpers';
 import { saveValueDevelopmentCsv } from '../../value-development/value-development';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @Injectable()
 export class FileService {
@@ -49,6 +56,8 @@ export class FileService {
     private readonly dossierRepository: Repository<Dossier>,
 
     private readonly configService: ConfigService,
+
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -198,8 +207,7 @@ export class FileService {
    */
   async deletePrivateFile(fileUuid: string): Promise<PrivateFile> {
     const file = await this.privateFilesRepository.findOne(fileUuid);
-    await this.privateFilesRepository.delete(file.uuid);
-    // TODO delete on S3
+    await this.privateFilesRepository.softDelete(file.uuid);
     return file;
   }
 
@@ -362,5 +370,52 @@ export class FileService {
 
     // Persist to database
     await saveValueDevelopmentCsv(parsedCsv);
+  }
+
+  /**
+   * Get the log files for a date range
+   * @param {Date} startDate - start date
+   * @param {Date} endDate - end date
+   * @returns {Promise<PrivateFile[]>} - list of download urls
+   */
+  async getLogFiles(startDate: Date, endDate: Date): Promise<PrivateFile[]> {
+    const listFiles = new ListObjectsCommand({
+      Bucket: this.configService.get('AWS_LOG_BUCKET_NAME'),
+    });
+    const files = await this.s3.send(listFiles);
+
+    const filteredFiles = files.Contents.filter((item) => {
+      return item.LastModified > startDate && item.LastModified < endDate;
+    });
+    const promises = filteredFiles.map((item) => {
+      return getSignedUrl(
+        this.s3,
+        new GetObjectCommand({
+          Bucket: this.configService.get('AWS_LOG_BUCKET_NAME'),
+          Key: item.Key,
+        }),
+      ).then((url) => {
+        return {
+          url,
+          key: item.Key,
+        };
+      });
+    });
+    const urls = await Promise.all(promises);
+    return urls.map((file) => {
+      return {
+        uuid: file.key,
+        owner: 'admin',
+        url: file.url,
+        key: file.key,
+        company: null,
+        offer: null,
+        dossier: null,
+        file_type: FILE_TYPE.LOG as unknown as FILE_TYPE,
+        created_at: new Date(Date.now()),
+        last_modified_at: new Date(Date.now()),
+        deleted_at: null,
+      } as PrivateFile;
+    });
   }
 }

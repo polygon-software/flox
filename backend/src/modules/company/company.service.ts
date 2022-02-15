@@ -16,6 +16,9 @@ import {
   sendPasswordChangeEmail,
 } from '../../email/helper';
 import { UserService } from '../user/user.service';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+import { prettify } from '../../helpers/log-helper';
 
 @Injectable()
 export class CompanyService {
@@ -25,6 +28,7 @@ export class CompanyService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
   /**
@@ -54,9 +58,8 @@ export class CompanyService {
       readable_id: readableId,
       creation_state: CREATION_STATE.APPLIED, // initially disable document upload until manually enabled by SOI admin
       documents: null,
-      // TODO: other default values
     });
-
+    this.logger.warn(`Company created:\n${prettify(company)}`);
     return this.companyRepository.save(company);
   }
 
@@ -135,8 +138,9 @@ export class CompanyService {
       deleteCompanyInput.uuid,
     );
     const uuid = company.uuid;
-    const deletedCompany = await this.companyRepository.remove(company);
+    const deletedCompany = await this.companyRepository.softRemove(company);
     deletedCompany.uuid = uuid;
+    this.logger.warn(`Company deleted:\n${prettify(company)}`);
     return deletedCompany;
   }
 
@@ -176,7 +180,11 @@ export class CompanyService {
     });
     company.creation_state = CREATION_STATE.DONE;
     await this.companyRepository.save(company);
-    return this.companyRepository.findOne(uuid);
+    const updatedCompany = this.companyRepository.findOne(uuid);
+    this.logger.warn(
+      `Company with user associated:\n${prettify(updatedCompany)}`,
+    );
+    return updatedCompany;
   }
 
   /**

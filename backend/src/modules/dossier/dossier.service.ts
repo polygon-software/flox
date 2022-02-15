@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
@@ -23,6 +23,9 @@ import { FileService } from '../file/file.service';
 import { ERRORS } from '../../error/ERRORS';
 import { User } from '../user/entities/user.entity';
 import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input';
+import { Logger } from 'winston';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { prettify } from '../../helpers/log-helper';
 
 @Injectable()
 export class DossierService {
@@ -33,6 +36,7 @@ export class DossierService {
     private readonly offerRepository: Repository<Offer>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly employeeService: EmployeeService,
     private readonly bankService: BankService,
     private readonly userService: UserService,
@@ -134,7 +138,9 @@ export class DossierService {
       readable_id: generateHumanReadableId(),
       employee: employee,
     });
-
+    this.logger.warn(
+      `Dossier created by ${prettify(dbUser)}:\n${prettify(dossier)}`,
+    );
     return this.dossierRepository.save(dossier);
   }
 
@@ -208,10 +214,17 @@ export class DossierService {
       status: OFFER_STATUS.INTERESTED,
       documents: [],
     });
-    await this.offerRepository.save(newOffer);
-    return this.dossierRepository.findOne(createOfferInput.dossier_uuid, {
-      relations: ['offers', 'offers.bank'],
-    });
+    const savedOffer = await this.offerRepository.save(newOffer);
+    const updatedDossier = this.dossierRepository.findOne(
+      createOfferInput.dossier_uuid,
+      {
+        relations: ['offers', 'offers.bank'],
+      },
+    );
+    this.logger.warn(
+      `Offer ${savedOffer} for dossier created:\n${prettify(updatedDossier)}`,
+    );
+    return updatedDossier;
   }
 
   /**
@@ -389,9 +402,14 @@ export class DossierService {
         promises.push(this.fileService.deletePrivateFile(fileUuid));
       });
       await Promise.all(promises);
-      return this.dossierRepository.findOne(removeDossierFilesInput.uuid, {
-        relations: ['documents', 'employee', 'final_document'],
-      });
+      const updatedDossier = await this.dossierRepository.findOne(
+        removeDossierFilesInput.uuid,
+        {
+          relations: ['documents', 'employee', 'final_document'],
+        },
+      );
+      this.logger.warn(`Dossier files removed: ${updatedDossier}`);
+      return updatedDossier;
     }
     throw new Error('Not Authorized');
   }

@@ -31,7 +31,7 @@ export default {
     successful_application: 'Ihr Auftrag wurde erfolgreich entgegengenommen.',
     confirmed_registration: 'Registrierung bestätigt',
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
-    back_to_login: 'Zurück zu Login',
+    back_to_login: 'Zurück zum Login',
     change_password: 'Passwort ändern',
     unauthenticated: 'Nicht Angemeldet',
     reset_password: 'Passwort zurücksetzen',
@@ -40,7 +40,6 @@ export default {
     new_password: 'Neues Passwort',
     new_password_repeated: 'Passwort erneut eingeben',
     enter_new_password: 'Geben Sie ein neues Passwort ein',
-
   },
   account_data: {
     employees: 'Mitarbeitende',
@@ -134,7 +133,9 @@ export default {
     soi_employees: 'SOI-Mitarbeitende',
     files: 'Dateien',
     value_increase_csv: 'CSV-Datei Verkehrswertsteigerung',
-    value_increase_csv_description: 'Verkehrswertsteigerungsdaten, welche zur Berechnung von Schätzwerten verwendet werden'
+    value_increase_csv_description: 'Verkehrswertsteigerungsdaten, welche zur Berechnung von Schätzwerten verwendet werden',
+    logs: 'Logs der API',
+    logs_description: 'Zum Abfragen der Logs in einem Zeitraum'
   },
   buttons: {
     finish_signup: 'Abschliessen',

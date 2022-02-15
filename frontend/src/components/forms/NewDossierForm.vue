@@ -102,7 +102,7 @@
                 flat
               >
                 <strong>
-                  {{ totalIncome ? `CHF ${totalIncome.toLocaleString()}` : '-' }}
+                  {{ totalIncome !== null && totalIncome !== undefined ? `CHF ${totalIncome.toLocaleString()}` : '-' }}
                 </strong>
               </q-card>
             </div>
@@ -121,7 +121,7 @@
                 flat
               >
                 <strong>
-                  {{ totalExpenses ? `CHF ${totalExpenses.toLocaleString()}` : '-' }}
+                  {{ totalExpenses !== null && totalExpenses !== undefined ? `CHF ${totalExpenses.toLocaleString()}` : '-' }}
                 </strong>
               </q-card>
             </div>
@@ -485,7 +485,7 @@ const totalExpenses = computed(() => {
   const alimony = form.values.value.alimony as string|undefined
   const various = form.values.value.various as string|undefined
 
-  if(leasing && credit && alimony && various){
+  if([leasing, credit, alimony, various].every((value) => value !== undefined && typeof value === 'string')){
     return Math.round(parseInt(leasing) + parseInt(credit) + parseInt(alimony) + parseInt(various))
   }
 
@@ -497,7 +497,7 @@ const totalExpenses = computed(() => {
  */
 const eligibleIncome = computed(() => {
   // Ensure all needed values are present
-  if(!totalIncome.value || !totalExpenses.value){
+  if(totalIncome.value === null || totalExpenses.value === null ){
     return null
   }
 

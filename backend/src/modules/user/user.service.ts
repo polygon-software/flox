@@ -7,6 +7,8 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { Logger } from 'winston';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { disableCognitoAccount } from '../../auth/authService';
 import { Bank } from '../bank/entities/bank.entity';
 import { SoiEmployee } from '../SOI-Employee/entities/soi-employee.entity';
@@ -18,6 +20,8 @@ import { Person } from '../person/entities/person.entity';
 @Injectable()
 export class UserService {
   constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(SoiEmployee)
@@ -69,6 +73,7 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
+    this.logger.warn(`Requested user with ID: ${getUserArgs.uuid}`);
     return this.userRepository.findOne(getUserArgs.uuid);
   }
 
@@ -91,7 +96,7 @@ export class UserService {
   async remove(deleteUserInput: DeleteUserInput): Promise<User> {
     const user = await this.userRepository.findOne(deleteUserInput.uuid);
     const uuid = user.uuid;
-    const deletedUser = await this.userRepository.remove(user);
+    const deletedUser = await this.userRepository.softRemove(user);
     deletedUser.uuid = uuid;
     return deletedUser;
   }

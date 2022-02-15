@@ -5,6 +5,7 @@ services:
     container_name: soi_main
     build:
       context: .
+      dockerfile: Dockerfile:dev
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules

@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :title="$t('employee_dashboard.all_documents')"
   >
     <q-card style="width: 600px;">
@@ -22,7 +22,7 @@
           :label="$t('buttons.cancel')"
           color="primary"
           flat
-          @click="onCancel"
+          @click="onDialogCancel"
         />
         <q-btn
           class="q-ma-md"
@@ -37,35 +37,29 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {ref, Ref} from 'vue';
-import {QDialog} from 'quasar';
+import {defineEmits, ref, Ref} from 'vue';
 import OfferUploadFields from 'components/forms/fields/document_upload/OfferUploadFields.vue';
 import {uploadFiles} from 'src/helpers/file-helpers';
+import { useDialogPluginComponent } from 'quasar'
 
-const emit = defineEmits(['ok'])
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emit = defineEmits(useDialogPluginComponent.emits)
+
+// REQUIRED; must be called inside of setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+
+
 const props = defineProps({
   offerUuid: {
     type: String,
     required: true
   }
 })
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 // Uploaded files (key: filename, value: file)
 const files: Ref<Record<string, unknown>> = ref({})
 
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
 
 /**
  * When files in form change, update
@@ -82,13 +76,8 @@ function onFilesChange(newFiles: Record<string, File>){
  */
 async function onOk(): Promise<void> {
   await uploadFiles(files.value, `/uploadOfferFile?oid=${props.offerUuid}`, 'allDossiersBank')
-  emit('ok')
-  hide()
+  onDialogOK()
 }
 
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
-}
 
 </script>

@@ -19,6 +19,12 @@ import { SoiAdminModule } from './modules/SOI-Admin/soi-admin.module';
 import { SoiEmployeeModule } from './modules/SOI-Employee/soi-employee.module';
 import { FileModule } from './modules/file/file.module';
 import { DossierModule } from './modules/dossier/dossier.module';
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
+import * as winston from 'winston';
+import * as CloudWatchTransport from 'winston-cloudwatch';
 
 @Module({
   imports: [
@@ -63,6 +69,31 @@ import { DossierModule } from './modules/dossier/dossier.module';
         AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
         AWS_PRIVATE_BUCKET_NAME: Joi.string().required(),
       }),
+    }),
+    WinstonModule.forRoot({
+      format: winston.format.uncolorize(), //Uncolorize logs as weird character encoding appears when logs are colorized in cloudwatch.
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.ms(),
+            nestWinstonModuleUtilities.format.nestLike(),
+          ),
+        }),
+        new CloudWatchTransport({
+          name: 'Cloudwatch Logs',
+          logGroupName: process.env.CLOUDWATCH_GROUP_NAME,
+          logStreamName: process.env.CLOUDWATCH_STREAM_NAME,
+          awsAccessKeyId: process.env.CW_ACCESS_KEY,
+          awsSecretKey: process.env.CV_KEY_SECRET,
+          awsRegion: process.env.AWS_REGION,
+          messageFormatter: function (item) {
+            return (
+              item.level + ': ' + item.message + ' ' + JSON.stringify(item.meta)
+            );
+          },
+        }),
+      ],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
