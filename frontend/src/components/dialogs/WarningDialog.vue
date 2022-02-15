@@ -29,7 +29,7 @@
           :label="discardLabel"
           flat
           :color="swapNegative ? 'primary' : 'negative'"
-          @click="onDialogCancel"
+          @click="onCancel"
         />
         <q-btn
           :label="okLabel"
@@ -51,7 +51,7 @@ import {defineEmits, defineProps} from 'vue';
 import {i18n} from 'boot/i18n';
 import { useDialogPluginComponent } from 'quasar'
 
-const emit = defineEmits(useDialogPluginComponent.emits)
+const emit = defineEmits([...useDialogPluginComponent.emits, 'cancel'])
 
 // REQUIRED; must be called inside of setup()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
@@ -83,4 +83,13 @@ const props = defineProps({
     default: false
   }
 })
+
+/**
+ * On cancel, emit
+ * @returns {void}
+ */
+function onCancel(){
+  emit('cancel')
+  onDialogHide()
+}
 </script>
