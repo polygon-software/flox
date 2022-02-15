@@ -41,6 +41,7 @@
             flat
             style="margin-right: 30px"
             class="q-ml-sm"
+            unelevated
             @click="$refs.stepper.previous()"
           />
           <q-btn
@@ -48,12 +49,14 @@
             color="primary"
             :label="$t('buttons.next_step')"
             :disable="!form.pageValid.value"
+            unelevated
             @click="$refs.stepper.next()"
           />
           <q-btn
             v-if="form.step.value === form.pages.value.length"
             color="primary"
             :label="finishLabel"
+            unelevated
             @click="onSubmit"
           />
         </q-stepper-navigation>
@@ -89,6 +92,7 @@
           color="primary"
           :label="!loading ? finishLabel : loadingLabel"
           :disable="loading"
+          unelevated
           @click="onSubmit"
         >
           <q-inner-loading

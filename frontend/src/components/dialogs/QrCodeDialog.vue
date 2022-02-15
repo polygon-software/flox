@@ -18,12 +18,12 @@
       <q-separator dark/>
       <q-card-actions align="right">
         <q-btn
-          label="Abbrechen"
+          :label="$t('buttons.cancel')"
           color="primary"
           @click="hide"
         />
         <q-btn
-          label="OK"
+          :label="$t('buttons.ok')"
           color="primary"
           @click="onOk"
         />

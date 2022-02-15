@@ -13,7 +13,7 @@ export enum MutationTypes {
 
 // Interface definitions as used in constant files (e.g. QUERIES.ts, MUTATIONS.ts)
 export interface QueryObject {
-    query: DocumentNode,             // Actual GraphQL query
+    query: DocumentNode,    // Actual GraphQL query
     tables: string[],       // Affected Tables
     cacheLocation: string,  // Location in cache (actual GraphQL query name)
 }
@@ -21,6 +21,6 @@ export interface QueryObject {
 export interface MutationObject {
     mutation: DocumentNode,          // Actual GraphQL mutation
     tables: string[],       // Affected Tables
-    cacheLocation: string,  // Location in cache (actual GraphQL query name)
+    cacheLocation: string|undefined,  // Location in cache (actual GraphQL query name) - not needed for updates
     type: MutationTypes     // Type of mutation
 }

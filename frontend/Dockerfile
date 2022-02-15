@@ -2,12 +2,17 @@ FROM node:14-alpine
 
 WORKDIR /usr/src/app
 
-COPY package.json ./
-COPY yarn.lock ./
+COPY frontend/package.json ./
+COPY frontend/yarn.lock ./
 
+COPY /frontend /frontend
+COPY /shared /shared
+
+WORKDIR /shared
 RUN yarn --ignore-platform
 
-COPY . .
+WORKDIR ../frontend
+RUN yarn --ignore-platform
 
 RUN rm -rf dist
 

@@ -2,46 +2,274 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateItemInput {
-  """Name"""
-  name: String!
+type Address {
+  """City"""
+  city: String!
 
-  """User UUID"""
-  userUUID: ID
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Zip Code"""
+  zipCode: String!
+}
+
+type Announcement {
+  """Content"""
+  content: String!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of announcement"""
+  date: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Notifications generated"""
+  notifications: [Notification!]
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
+
+  """Title"""
+  title: String!
+
+  """User roles to receive notification"""
+  userRoles: [Role!]!
+
+  """UUID"""
+  uuid: ID!
+}
+
+enum Category {
+  CARS
+  CELEBRITIES
+  COOKING
+  FASHION
+  MUSIC
+  OUTDOOR
+  SPORTS
+  TECHNOLOGY
+  TOOLS
+  TRAVELLING
+  WATCHES
+}
+
+type Comment {
+  """Content"""
+  content: String!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """The product this comment belongs to"""
+  product: Product!
+
+  """The user who wrote this comment"""
+  user: User!
+
+  """UUID"""
+  uuid: ID!
+}
+
+input CreateAddressInput {
+  city: String!
+  number: String!
+  street: String!
+  zipCode: String!
+}
+
+input CreateAnnouncementInput {
+  """Content"""
+  content: String!
+
+  """Date of announcement"""
+  date: DateTime
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
+
+  """Title"""
+  title: String!
+
+  """User roles to receive notification"""
+  userRoles: [Role!]!
+}
+
+input CreateCommentInput {
+  content: String!
+  product_uuid: ID!
+  user_uuid: ID!
+}
+
+input CreateProductInput {
+  brand: String
+  brandLink: String
+  brandLinkMaxClicks: Float
+  brandLinkMaxCost: Float
+  category: Category
+  currency: Currency
+  description: String
+  directBuyLink: String
+  directBuyLinkMaxClicks: Float
+  directBuyLinkMaxCost: Float
+  end: DateTime
+  maxBet: Float
+  minBet: Float
+  sponsored: Boolean
+  start: DateTime
+  status: ProductStatus!
+  tags: [String!]
+  title: String!
+  value: Int
 }
 
 input CreateUserInput {
-  age: Int!
-  name: String!
+  """User address"""
+  address: CreateAddressInput!
+
+  """Date of birth"""
+  birthdate: DateTime!
+
+  """E-mail address"""
+  email: String!
+
+  """Full name of the user"""
+  fullName: String!
+
+  """User interest categories"""
+  interests: [String!]!
+
+  """phone number"""
+  phone: String!
+
+  """Username"""
+  username: String!
+
+  """Cognito ID"""
+  uuid: ID!
+}
+
+enum Currency {
+  CHF
+  EUR
+  USD
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input DeleteAnnouncementInput {
+  uuid: ID!
+}
+
+input DeleteCommentInput {
+  uuid: ID!
+}
+
+input DeleteProductInput {
+  uuid: ID!
 }
 
 input DeleteUserInput {
   uuid: ID!
 }
 
-type Item {
-  """Name"""
-  name: String!
-
-  """User of the item"""
-  user: User
-
-  """UUID"""
+input DuplicateProductInput {
   uuid: ID!
 }
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
-  createItem(createItemInput: CreateItemInput!): Item!
+  createAnnouncement(createAnnouncementInput: CreateAnnouncementInput!): Announcement!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  createProduct(createProductInput: CreateProductInput!, pictures: [String!]!): Product!
+  deleteAnnouncement(deleteAnnouncementInput: DeleteAnnouncementInput!): Announcement!
+  disableUser(uuid: String!): User!
+  duplicateProduct(duplicateProductInput: DuplicateProductInput!): Product!
+  enableUser(uuid: String!): User!
+  markNotificationAsRead(uuid: String!): Notification!
   remove(deleteUserInput: DeleteUserInput!): User!
-  removeItem(uuid: ID!): Item!
+  removeComment(deleteCommentInput: DeleteCommentInput!): Comment!
+  removeProduct(deleteProductInput: DeleteProductInput!): Product!
+  temporarilyDisableUser(tempDisableUserInput: TempDisableUserInput!): User!
   update(updateUserInput: UpdateUserInput!): User!
-  updateItem(updateItemInput: UpdateItemInput!): Item!
+  updateAnnouncement(updateAnnouncementInput: UpdateAnnouncementInput!): Announcement!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  updateProduct(pictures: [String!] = null, updateProductInput: UpdateProductInput!): Product!
+}
+
+type Notification {
+  """The announcement this notification is from"""
+  announcement: Announcement
+
+  """Content"""
+  content: String!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Read status"""
+  isRead: Boolean!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Date of receiving"""
+  received: DateTime!
+
+  """Title"""
+  title: String!
+
+  """The user this notification is for"""
+  user: User!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type PrivateFile {
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
 
   """File owner"""
   owner: String!
@@ -49,13 +277,126 @@ type PrivateFile {
   """Pre-signed download URL"""
   url: String
 
+  """User the file belongs to"""
+  user: User
+
   """UUID"""
   uuid: ID!
 }
 
+type Product {
+  """Brand"""
+  brand: String
+
+  """Brand link"""
+  brandLink: String
+
+  """Current number of clicks on brand link"""
+  brandLinkClicks: Float
+
+  """Current cost of brand link"""
+  brandLinkCost: Float
+
+  """Maximum number of clicks on brand link"""
+  brandLinkMaxClicks: Float
+
+  """Maximum cost of brand link"""
+  brandLinkMaxCost: Float
+
+  """Product category"""
+  category: Category
+
+  """Comments"""
+  comments: [Comment!]!
+
+  """Creation date"""
+  created_at: DateTime!
+
+  """The currency the value is denoted in"""
+  currency: Currency
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
+  """Description"""
+  description: String
+
+  """Direct Buy link"""
+  directBuyLink: String
+
+  """Current number of clicks on direct buy link"""
+  directBuyLinkClicks: Float
+
+  """Current cost of direct buy link"""
+  directBuyLinkCost: Float
+
+  """Maximum number of clicks on direct buy link"""
+  directBuyLinkMaxClicks: Float
+
+  """Maximum cost of direct buy link"""
+  directBuyLinkMaxCost: Float
+
+  """End Date"""
+  end: DateTime
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Number of Likes"""
+  likes: Float!
+
+  """Maximum bet"""
+  maxBet: Float
+
+  """Minimum bet"""
+  minBet: Float
+
+  """Pictures for the product"""
+  pictures: [PublicFile!]
+
+  """Whether the product is sponsored"""
+  sponsored: Boolean
+
+  """Start date"""
+  start: DateTime
+
+  """Status of the product"""
+  status: ProductStatus!
+
+  """Product tags"""
+  tags: [String!]
+
+  """Title"""
+  title: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Value"""
+  value: Int
+}
+
+enum ProductStatus {
+  ARCHIVED
+  DRAFT
+  VALID
+}
+
 type PublicFile {
+  """Creation date"""
+  created_at: DateTime!
+
+  """Date of deletion"""
+  deleted_at: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  last_modified_at: DateTime!
+
+  """Product the file belongs to"""
+  product: Product
 
   """Public download URL"""
   url: String!
@@ -65,32 +406,93 @@ type PublicFile {
 }
 
 type Query {
-  allUsers: [User!]!
+  allAnnouncements: [Announcement!]!
+  allComments: [Comment!]!
+  allPartners: [User!]!
+  allPlayers: [User!]!
+  allProducts: [Product!]!
+  comment(uuid: ID!): Comment!
+  comments(uuids: [ID!]): [Comment!]!
   getPrivateFile(
     """URL expiration duration (in seconds)"""
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
-  item(uuid: ID!): Item!
-  items: [Item!]!
+  myNotifications: [Notification!]!
+  myUser: User!
+  product(uuid: ID!): Product!
+  products(uuids: [ID!]): [Product!]!
   user(uuid: ID!): User!
-  users(uuids: [ID!]): [User!]!
+}
+
+enum Role {
+  ADMIN
+  NONE
+  PARTNER
+  PLAYER
 }
 
 type Subscription {
-  userAdded: User!
+  commentAdded: Comment!
 }
 
-input UpdateItemInput {
-  """Name"""
-  name: String
-
-  """User UUID"""
-  userUUID: ID
-
-  """Item UUID"""
+input TempDisableUserInput {
+  until: DateTime!
   uuid: ID!
+}
+
+input UpdateAnnouncementInput {
+  """Content"""
+  content: String!
+
+  """Date of announcement"""
+  date: DateTime
+
+  """Is the announcement scheduled?"""
+  scheduled: Boolean!
+
+  """Title"""
+  title: String!
+
+  """User roles to receive notification"""
+  userRoles: [Role!]!
+
+  """UUID"""
+  uuid: ID!
+}
+
+input UpdateCommentInput {
+  content: String!
+  uuid: ID!
+}
+
+input UpdateProductInput {
+  brand: String
+  brandLink: String
+  brandLinkClicks: Float
+  brandLinkCost: Float
+  brandLinkMaxClicks: Float
+  brandLinkMaxCost: Float
+  category: Category
+  currency: Currency
+  description: String
+  directBuyLink: String
+  directBuyLinkClicks: Float
+  directBuyLinkCost: Float
+  directBuyLinkMaxClicks: Float
+  directBuyLinkMaxCost: Float
+  end: DateTime
+  likes: Float
+  maxBet: Float
+  minBet: Float
+  sponsored: Boolean
+  start: DateTime
+  status: ProductStatus
+  tags: [String!]
+  title: String
+  uuid: ID!
+  value: Int
 }
 
 input UpdateUserInput {
@@ -100,15 +502,61 @@ input UpdateUserInput {
 }
 
 type User {
-  """Age"""
-  age: Int!
+  """Domicile address"""
+  address: Address!
 
-  """Items of the user"""
-  items: [Item!]
+  """Date of birth"""
+  birthdate: DateTime!
 
-  """Name"""
-  name: String!
+  """Comments written by the user"""
+  comments: [Comment!]
 
-  """UUID"""
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Date until which the users account is disabled (if any)"""
+  disabledUntil: DateTime
+
+  """Documents of the user (e.g. ID copy)"""
+  documents: [PrivateFile!]
+
+  """E-mail"""
+  email: String!
+
+  """Full name"""
+  fullName: String!
+
+  """User interest categories"""
+  interests: [String!]!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """Notifications of the user"""
+  notifications: [Notification!]
+
+  """Phone number"""
+  phone: String!
+
+  """Role of the User"""
+  role: Role!
+
+  """Status of the user account"""
+  status: UserStatus!
+
+  """Username"""
+  username: String!
+
+  """Cognito ID"""
   uuid: ID!
+}
+
+enum UserStatus {
+  ACTIVE
+  APPLIED
+  DISABLED
+  NONE
 }

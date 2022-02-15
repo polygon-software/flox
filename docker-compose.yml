@@ -7,13 +7,15 @@ services:
   backend:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
+    env_file: backend/.env
     deploy:
       resources:
         limits:
           cpus: '1.0'
           memory: 2048m
     build:
-      context: backend
+      context: .
+      dockerfile: ./backend/Dockerfile
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     networks:
@@ -24,13 +26,15 @@ services:
   frontend:
     image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
+    env_file: frontend/.env
     deploy:
       resources:
         limits:
           cpus: '1.0'
           memory: 2048m
     build:
-      context: frontend
+      context: .
+      dockerfile: ./frontend/Dockerfile
     volumes:
       - data-frontend:frontend/usr/src/app
     ports:

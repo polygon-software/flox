@@ -14,6 +14,11 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
+import {i18n} from 'boot/i18n';
+import AccountLockedDialog from 'components/dialogs/AccountLockedDialog.vue';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/USER';
+import {USER_STATUS} from '../../../shared/definitions/ENUM';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -89,7 +94,9 @@ export class AuthenticationService {
           // Store in local variable
           this.$authStore.mutations.setCognitoUser(cognitoUser)
           cognitoUser.authenticateUser(authenticationDetails, {
-              onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
+              onSuccess: (result)=>{
+                void this.loginSuccess(result, resolve)
+              },
               onFailure: (err: Error)=>{this.onFailure(err) },
               // Sets up MFA (only done once after signing up)
               mfaSetup: () => {
@@ -135,18 +142,16 @@ export class AuthenticationService {
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.
-   * TODO make adaptable to other parameters via direct handling of {attributes} param
    * @param {string} username - the chosen username
-   * @param {string} email - the authentication's e-mail address -> TODO move to attributes
+   * @param {string} email - the authentication's e-mail address
    * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
    * @async
-   * @returns {void}
+   * @returns {string} - the cognito user's UUID
    */
-  async signUp(username: string, email: string, password: string): Promise<void> {
+  async signUp(username: string, email: string, password: string): Promise<string> {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
       const attributes = [];
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-      // TODO disable requirement on AWS @thommann
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
       this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
             if (err) {
@@ -161,7 +166,8 @@ export class AuthenticationService {
     })
 
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
-    this.showEmailVerificationDialog()
+
+    return cognitoUserWrapper.userSub
   }
 
   /**
@@ -216,9 +222,15 @@ export class AuthenticationService {
       }
 
       this.$q.dialog({
-            title: 'Reset Password',
-            message: 'Please enter your username',
-            cancel: true,
+            title: i18n.global.t('authentication.reset_password'),
+            message: i18n.global.t('authentication.please_enter_username'),
+            cancel: {
+              label: i18n.global.t('buttons.cancel'),
+              flat: true,
+            },
+            ok: {
+              label: i18n.global.t('buttons.ok'),
+            },
             persistent: true,
             prompt: {
                 model: '',
@@ -275,7 +287,7 @@ export class AuthenticationService {
                 return
             } else {
               this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
-                  // TODO
+                  console.log('resend code')
                 })
             }
         }
@@ -329,7 +341,7 @@ export class AuthenticationService {
               // TODO friendlyDeviceName
             cognitoUser.verifySoftwareToken(code, 'My TOTP device', {
                   onSuccess: (userSession: CognitoUserSession)=>{
-                    this.loginSuccess(userSession, resolve)
+                    void this.loginSuccess(userSession, resolve)
                   },
                   onFailure: (error: Error)=>{
                     this.onFailure(error)
@@ -382,7 +394,7 @@ export class AuthenticationService {
           currentUser?.sendMFACode(code, {
             onSuccess: (userSession: CognitoUserSession)=>{
               this.$authStore.mutations.setCognitoUser(currentUser)
-              this.loginSuccess(userSession, resolve)
+              void this.loginSuccess(userSession, resolve)
             },
             onFailure: (error: Error)=>{
               this.onFailure(error)
@@ -397,11 +409,44 @@ export class AuthenticationService {
      * @param {function} resolve - resolve function
      * @returns {void}
      */
-    loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
+    async loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): Promise<void>{
+
       // Store locally
       this.$authStore.mutations.setUserSession(userSession)
 
-      resolve()
+      // Upon login, fetch my user to check status
+      const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+
+      // No valid user: show error
+      if(!queryResult?.data?.myUser){
+        // Auto-logout
+        await this.logout();
+
+        // Generic error
+        this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
+        return;
+      }
+      const userData = queryResult.data.myUser as Record<string, unknown>
+      const userStatus = userData.status;
+
+      // User is active; allow login
+      if(userStatus === USER_STATUS.ACTIVE ){
+        resolve()
+      } else {
+        // User is disabled or not active: login fails TODO distinction with inactive account?
+
+        // Auto-logout
+        await this.logout();
+
+        // User disabled, show appropriate dialog
+        this.$q.dialog({
+            component: AccountLockedDialog,
+            componentProps: {
+              untilDate: userData.disabledUntil // until-date, if any
+            }
+          }
+        )
+      }
     }
 
     /**
@@ -410,11 +455,22 @@ export class AuthenticationService {
      * @returns {void}
      */
     onFailure(error: Error): void{
-        if(error.name === 'UserNotConfirmedException'){
-            // Show the e-mail verification dialog and send a new code
-            this.showEmailVerificationDialog(true)
-        } else {
-          this.$errorService.showErrorDialog(error)
-        }
+      // Depending on error, show appropriate dialog
+      if(error.name === 'UserNotConfirmedException'){
+        // Show the e-mail verification dialog and send a new code
+        this.showEmailVerificationDialog(true)
+      } else if(error.name === 'NotAuthorizedException' && error.message === 'User is disabled.') {
+        // User disabled, show appropriate dialog
+        this.$q.dialog({
+            component: AccountLockedDialog,
+            componentProps: {
+              // TODO get until-date for temporarily disabled users
+            }
+          }
+        )
+      } else {
+        // Generic error
+        this.$errorService.showErrorDialog(error)
+      }
     }
 }

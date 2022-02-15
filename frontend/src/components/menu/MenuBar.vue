@@ -1,51 +1,73 @@
 <template>
-  <q-header class="row bg-white shadow-5 justify-between">
+  <q-header class="row bg-primary shadow-5 justify-between">
     <div class="row">
       <img
           alt="Polygon Software"
-          src="https://media-exp1.licdn.com/dms/image/C4D0BAQEI1LFXsM4DVA/company-logo_200_200/0/1593964710523?e=2159024400&v=beta&t=k1qIEpVNRq-GBvW1fZt2SKvcuq59WL8J0IuLW0qMSG4"
+          :src="require('src/assets/bigabig-logo.svg')"
           style="height: 50px"
           class="q-ma-sm"
       >
-      <h5 class="text-black q-pa-none q-ma-md">
-        PolygonSoftware Template
-      </h5>
-      <p
-          class="text-grey-7"
-          v-if="loggedIn && username"
-      >
-        {{ $t('loggedIn', {user: username})}}
-      </p>
     </div>
   <div class="row">
     <q-btn
         v-if="loggedIn"
-        label="Logout"
-        class="text-primary"
+        :label="$t('authentication.logout')"
+        class="text-black"
         flat
         @click="logout"
     />
     <q-btn
-        v-if="loggedIn"
-        label="Change Password"
-        class="text-primary"
-        flat
-        @click="changePassword"
-    />
-    <q-btn
         v-if="!loggedIn"
-        label="Password Forgotten"
-        class="text-primary"
+        :label="$t('authentication.forgot_password')"
+        class="text-black"
         flat
         @click="forgottenPassword"
     />
+    <div
+      v-if="loggedIn"
+      class="row items-center q-mr-md"
+    >
+      <q-btn
+        round
+        icon="notifications"
+        color="black"
+        style="width: 10px; height: 10px"
+        @click="openInbox"
+      >
+        <q-badge
+          floating
+          color="red"
+          rounded
+        />
+      </q-btn>
+    </div>
   </div>
-
   </q-header>
+
+  <!-- Notification Inbox -->
+  <q-dialog
+    v-model="showInbox"
+    class="q-pa-xs"
+  >
+    <q-card
+      style="overflow: hidden"
+    >
+      <Inbox db-ref="123"/>
+      <q-card-actions align="center">
+        <q-btn
+          :label="$t('buttons.back')"
+          flat
+          color="black"
+          @click="closeInbox"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+
 </template>
 
 <script setup lang="ts">
-import {computed, inject} from 'vue'
+import {computed, inject, ref} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -55,7 +77,7 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
-
+import Inbox from 'components/notifications/Inbox.vue';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -63,12 +85,8 @@ const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActi
 
 const loggedIn = computed(() => {
   // Explicit type
-  const result: boolean = $authStore.getters.getLoggedInStatus()
-  return result;
+  return $authStore.getters.getLoggedInStatus();
 })
-
-// Username does not need to be reactive, since it won't change between logins
-const username = $authStore.getters.getUsername()
 
 /**
  * Logs out the current authentication
@@ -81,14 +99,6 @@ async function logout(): Promise<void>{
 }
 
 /**
- * Triggers a password change for the currently logged in authentication
- * @returns {void}
- */
-function changePassword() {
-  $authService?.showChangePasswordDialog()
-}
-
-/**
  * Triggers a password change for a non-logged in authentication
  * @returns {void}
  */
@@ -96,4 +106,25 @@ function forgottenPassword() {
   $authService?.showResetPasswordDialog();
 }
 
+/*
+* This section controls the visibility of the notification inbox popup.
+*  TODO: Change it to a push or rerendering?
+*/
+const showInbox = ref(false)
+
+/**
+ * Opens the inbox
+ * @returns {void}
+ */
+function openInbox() {
+  showInbox.value = true
+}
+
+/**
+ * Closes the inbox
+ * @returns {void}
+ */
+function closeInbox() {
+  showInbox.value = false
+}
 </script>

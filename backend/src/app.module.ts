@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
+import { ProductModule } from './modules/product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
@@ -9,10 +10,13 @@ import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
-import { ItemModule } from './item/item.module';
 import * as Joi from 'joi';
-import { FileModule } from './file/file.module';
+import { FileModule } from './modules/file/file.module';
 import { RolesGuard } from './auth/roles.guard';
+import { CommentModule } from './modules/comment/comment.module';
+import { User } from './modules/user/entities/user.entity';
+import { AnnouncementModule } from './modules/announcement/announcement.module';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
   imports: [
@@ -33,6 +37,7 @@ import { RolesGuard } from './auth/roles.guard';
           },
         },
       },
+      cors: false, // TODO set appropriate for production
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -71,9 +76,13 @@ import { RolesGuard } from './auth/roles.guard';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([User]),
     UserModule,
-    ItemModule,
+    ProductModule,
     FileModule,
+    CommentModule,
+    AnnouncementModule,
+    NotificationModule,
   ],
   providers: [
     JwtStrategy,
@@ -87,4 +96,8 @@ import { RolesGuard } from './auth/roles.guard';
     },
   ],
 })
+
+/**
+ * Main Module
+ */
 export class AppModule {}
