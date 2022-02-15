@@ -64,7 +64,7 @@ form.pages.value = [
 ]
 
 /**
- * Triggers a password change for a non-logged in user
+ * Routes to reset password request page for a non-logged in user
  * @returns {void}
  */
 async function forgotPassword() {

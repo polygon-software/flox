@@ -57,6 +57,8 @@ import { Form } from 'src/helpers/form-helpers'
 import {inject} from 'vue'
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {ErrorService} from 'src/services/ErrorService';
+import {AuthenticationService} from 'src/services/AuthService';
 import {CognitoUser} from 'amazon-cognito-identity-js';
 import {Context, Module} from 'vuex-smart-module';
 import AuthState from 'src/store/authentication/state';
@@ -64,14 +66,12 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {useAuth} from 'src/store/authentication';
-import {ErrorService} from "src/services/ErrorService";
-import {AuthenticationService} from "src/services/AuthService";
-import {i18n} from "boot/i18n";
+import {i18n} from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
-
 const $authService: AuthenticationService|undefined = inject('$authService')
+const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const fields = [FIELDS.EMAIL]
 
@@ -84,21 +84,20 @@ form.pages.value = [
   }
 ]
 
-const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 /**
- * Routes to the Reset Password 2 Page
+ * Routes to the actual reset password request page
  * @returns {Promise<void>} - done
  */
 async function onReset(): Promise<void>{
   const username = form.values.value.email as string
   const userPool = $authStore.getters.getUserPool()
   if (!username || !userPool){
-    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_data')))
+    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.missing_user')))
   }
   // Set up cognitoUser first
   $authStore.mutations.setCognitoUser(new CognitoUser({
     Username: username,
-    Pool: userPool
+    Pool: userPool,
   }));
   // Call forgotPassword on cognitoUser
   $authStore.getters.getCognitoUser()?.forgotPassword({
@@ -115,7 +114,7 @@ async function onReset(): Promise<void>{
 
 
 /**
- * Routes to the Login Page
+ * Routes back to the Login Page
  * @returns {Promise<void>} - done
  */
 async function onCancel(): Promise<void>{

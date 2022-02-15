@@ -306,7 +306,9 @@ export default {
     file_upload_failed: 'Datei hochladen fehlgeschlagen',
     abbreviation_length: 'Abkürzung muss genau 3 Zeichen lang sein',
     abbreviation_not_unique: 'Abkürzung darf nicht identisch mit einer bestehenden Bank sein',
-    error_while_disabling: 'Beim Deaktivieren ist ein Fehler aufgetreten'
+    error_while_disabling: 'Beim Deaktivieren ist ein Fehler aufgetreten',
+    missing_user: 'Bitte geben sie einen gültigen Benutzernamen ein',
+    identical_password: 'Passwörter müssen identisch sein',
   },
   set_password: {
     description: 'Da dies dein erster Login ist, bitten wir dich, ein Passwort zu setzen.',

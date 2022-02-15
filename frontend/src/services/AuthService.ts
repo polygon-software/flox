@@ -4,7 +4,6 @@ import {CognitoUser, CognitoUserSession,
 } from 'amazon-cognito-identity-js';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordDialog from 'components/dialogs/ChangePasswordDialog.vue'
-import ResetPasswordDialog from 'components/dialogs/ResetPasswordDialog.vue'
 import {ErrorService} from './ErrorService';
 import {QVueGlobals} from 'quasar';
 import {useAuth} from 'src/store/authentication';
@@ -226,66 +225,6 @@ export class AuthenticationService {
                 }
             })
         })
-    }
-
-    /**
-     * Shows a dialog for requesting password reset
-     * @returns {void}
-     */
-    showResetPasswordDialog(): void{
-      const userPool = this.$authStore.getters.getUserPool()
-
-      if(userPool === undefined){
-        this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
-        return
-      }
-
-      this.$q.dialog({
-            title: i18n.global.t('authentication.reset_password'),
-            message: i18n.global.t('authentication.reset_password_text'),
-            cancel: true,
-            persistent: true,
-            prompt: {
-                model: '',
-                isValid: (val: string) => val.length >= 1,
-                type: 'text'
-            },
-        }).onOk((input: string) => {
-            // Set up cognitoUser first
-            this.$authStore.mutations.setCognitoUser(new CognitoUser({
-                Username: input,
-                Pool: userPool
-            }));
-
-            // Call forgotPassword on cognitoUser
-          this.$authStore.getters.getCognitoUser()?.forgotPassword({
-                onSuccess: function() {
-                    // TODO
-                },
-                onFailure: (err: Error) => {
-                  this.$authStore.mutations.setCognitoUser(undefined);
-                  this.onFailure(err)
-                },
-                inputVerificationCode: () => {this.showResetPasswordFormDialog()}
-            });
-        })
-    }
-
-    /**
-     * Show actual password reset form dialog
-     * @returns {void}
-     */
-    showResetPasswordFormDialog(): void{
-        this.$q.dialog({
-            component: ResetPasswordDialog,
-            componentProps: {},
-        }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
-            this.$authStore.getters.getCognitoUser()?.confirmPassword(verificationCode,passwordNew,{
-                onSuccess: (result: unknown)=>{console.log(result)},
-                onFailure: (err: Error) => {console.log(err)}
-            })
-        })
-
     }
 
     /**

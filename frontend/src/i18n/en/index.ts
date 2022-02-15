@@ -304,7 +304,9 @@ export default {
     file_upload_failed: 'File upload failed',
     abbreviation_length: 'Abbreviation must be exactly 3 letters long',
     abbreviation_not_unique: 'Abbreviation must not be identical to an existing Bank',
-    error_while_disabling: 'An error occurred while disabling'
+    error_while_disabling: 'An error occurred while disabling',
+    missing_user: 'Please enter a valid username',
+    identical_password: 'Passwords must be identical',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',

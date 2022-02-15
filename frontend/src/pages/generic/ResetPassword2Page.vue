@@ -18,7 +18,7 @@
           <q-form
             class="q-gutter-md"
             style="width: 300px; align-self: center"
-            @submit="onReset2"
+            @submit="onReset"
           >
             <q-input
               v-model="verificationCode"
@@ -35,7 +35,7 @@
               :label="$t('authentication.new_password_repeated')"
               type="password"
               :rules="[
-                val => val === password || 'Passwords must be identical',
+                val => val === password || $t('errors.identical_password'),
                 ]"
             />
           </q-form>
@@ -51,7 +51,7 @@
               color="primary"
               :label="$t('buttons.confirm_change')"
               :disable="password !== passwordRep || verificationCode.length !== 6"
-              @click="onReset2"
+              @click="onReset"
             />
           </div>
         </div>
@@ -78,7 +78,7 @@ const password = ref('')
 const passwordRep = ref('')
 
 const $routerService: RouterService|undefined = inject('$routerService')
-
+const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 /**
  * Rules for validation of password
@@ -95,12 +95,11 @@ const passwordRules = (val: string) => {
   return true
 }
 
-const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 /**
- * Routes to the Login Page
+ * Resets the password and routes back to the Login Page
  * @returns {Promise<void>} - done
  */
-async function onReset2(): Promise<void>{
+async function onReset(): Promise<void>{
   $authStore.getters.getCognitoUser()?.confirmPassword(verificationCode.value,password.value,{
     onSuccess: (result: unknown)=>{console.log(result)},
     onFailure: (err: Error) => {console.log(err)}
@@ -110,7 +109,7 @@ async function onReset2(): Promise<void>{
 
 
 /**
- * Routes to the Login Page
+ * Routes back to the Login Page
  * @returns {Promise<void>} - done
  */
 async function onCancel(): Promise<void>{
