@@ -36,7 +36,7 @@
           icon="create"
           dense
           rounded
-          @click="() => createAnnouncement($q)"
+          @click="createAnnouncement"
         />
 
       </div>
@@ -77,23 +77,24 @@
 
 <script setup lang="ts">
 import AnnouncementsTable from 'components/table/AnnouncementsTable.vue';
-import { Ref, ref } from 'vue';
-import {createAnnouncement} from 'src/helpers/admin-helpers';
+import { inject, Ref, ref } from 'vue';
 import {ROLE} from '../../../../shared/definitions/ENUM';
+import { DialogService } from 'src/services/DialogService';
+
+const dialogService: DialogService | undefined = inject('$dialogService')
 
 const roleFilter: Ref<null|ROLE> = ref(null)
 const dateFilter: Ref<null|string> = ref(null)
-
 
 // Search term
 const search = ref('')
 
 /**
- * Clear search term.
+ * Open announcement creation dialog.
  * @returns {void} - void
  */
-function onClear(): void {
-  search.value = '';
+function createAnnouncement(){
+  dialogService?.createAnnouncement();
 }
 
 </script>

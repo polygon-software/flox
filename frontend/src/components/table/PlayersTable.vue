@@ -59,7 +59,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => disableUser(_props.row, $q)"
+                  @click="disableUser(_props.row)"
                 />
 
                 <!-- 'Enable'/'Re-enable' button for inactive accounts -->
@@ -75,7 +75,7 @@
                   class="text-black"
                   flat
                   no-caps
-                  @click="() => enableUser(_props.row, $q)"
+                  @click="enableUser(_props.row)"
                 />
               </div>
             </q-btn-dropdown>
@@ -87,17 +87,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-import {formatDate, formatDateTime} from 'src/helpers/format-helpers';
-import {USER_STATUS} from '../../../../shared/definitions/ENUM';
-import {i18n} from 'boot/i18n';
-import {enableUser, disableUser} from 'src/helpers/admin-helpers';
-import {User} from 'src/data/types/User';
+import { defineProps, inject } from 'vue';
+import { formatDate, formatDateTime } from 'src/helpers/format-helpers';
+import { USER_STATUS } from '../../../../shared/definitions/ENUM';
+import { i18n } from 'boot/i18n';
+import { User } from 'src/data/types/User';
 import { fetchAllPlayers } from 'src/helpers/api-helpers';
-import PlayerDetailDialog from 'components/dialogs/PlayerDetailDialog.vue';
-import { useQuasar } from 'quasar';
+import { DialogService } from 'src/services/DialogService';
 
-const $q = useQuasar()
+const dialogService: DialogService|undefined = inject('$dialogService')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps( {
@@ -112,18 +110,35 @@ const props = defineProps( {
   }
 })
 
-// TODO i18n
 const columns = [
-  { name: 'status', label: 'Status', field: 'status', sortable: true, align: 'center' },
-  { name: 'username', label: 'Username', field: 'username', sortable: true, align: 'center' },
-  { name: 'fullName', label: 'Full Name', field: 'fullName', sortable: true, align: 'center' },
-  { name: 'email', label: 'E-Mail', field: 'email', sortable: true, align: 'center' },
-  { name: 'phone', label: 'Phone', field: 'phone', sortable: true, align: 'center' },
-  { name: 'birthdate', label: 'Date of Birth', field: 'birthdate', sortable: true, align: 'center' },
-  { name: 'options', label: '', field: 'options', sortable: false, align: 'center'},
+  { name: 'status', label: i18n.global.t('admin.status'), field: 'status', sortable: true, align: 'center' },
+  { name: 'username', label: i18n.global.t('account_data.username'), field: 'username', sortable: true, align: 'center' },
+  { name: 'fullName', label: i18n.global.t('account_data.full_name'), field: 'fullName', sortable: true, align: 'center' },
+  { name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: true, align: 'center' },
+  { name: 'phone', label: i18n.global.t('account_data.phone_number'), field: 'phone', sortable: true, align: 'center' },
+  { name: 'birthdate', label: i18n.global.t('account_data.birthdate'), field: 'birthdate', sortable: true, align: 'center' },
+  { name: 'options', field: 'options', sortable: false, align: 'center'},
 ]
 
 const allPlayers = fetchAllPlayers();
+
+/**
+ * Open enableUser dialog
+ * @param {User} user - user
+ * @returns {void} - void
+ */
+function enableUser(user: User){
+  dialogService?.enableUser(user)
+}
+
+/**
+ * Open disableUser dialog
+ * @param {User} user - user
+ * @returns {void} - void
+ */
+function disableUser(user: User){
+  dialogService?.disableUser(user)
+}
 
 /**
  * Opens the detailed view of a player in dialog
@@ -131,13 +146,7 @@ const allPlayers = fetchAllPlayers();
  * @returns {void}
  */
 function openDetailView(player: User) {
-  $q.dialog({
-    title: 'DetailView',
-    component: PlayerDetailDialog,
-    componentProps: {
-      playerId: player.uuid
-    }
-  })
+  dialogService?.openDetailUserView(player)
 }
 
 /**

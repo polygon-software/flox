@@ -1,10 +1,9 @@
 <template>
   <q-dialog
-    ref="dialog"
-    title="DetailView"
-    @hide="hide"
+    ref="dialogRef"
+    @hide="onDialogHide"
   >
-    <q-card v-if="player" class="q-pa-md" style="width: 800px;">
+    <q-card v-if="player" class="q-dialog-plugin q-pa-md" style="width: 800px;">
       <q-card-section>
         <!-- Documents -->
         <q-carousel
@@ -35,7 +34,7 @@
           :label="$t('admin.disable_account')"
           icon="block"
           color="negative"
-          @click="() => disableUser(player, $q)"
+          @click="disableUser"
         />
 
         <!-- 'Enable'/'Re-enable' button for inactive accounts -->
@@ -49,14 +48,14 @@
                     )"
           icon="lock_open"
           color="positive"
-          @click="() => enableUser(player, $q)"
+          @click="enableUser"
         />
 
         <!-- Back -->
         <q-btn
           :label="$t('buttons.back')"
           color="black"
-          @click="hide"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
@@ -64,29 +63,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, defineProps, watch, computed, ComputedRef } from 'vue';
-import { QDialog } from 'quasar';
+import { ref, Ref, defineProps, watch, computed, ComputedRef, defineEmits } from 'vue';
+import { QDialog, useDialogPluginComponent, useQuasar } from 'quasar';
 import { fetchPlayer } from 'src/helpers/api-helpers';
 import { PRIVATE_FILE } from 'src/data/queries/FILE';
 import { executeQuery } from 'src/helpers/data-helpers';
-import { enableUser, disableUser } from 'src/helpers/admin-helpers';
 import { USER_STATUS } from '../../../../shared/definitions/ENUM';
 import UserDetails from 'components/user/UserDetails.vue';
+import { DialogService } from 'src/services/DialogService';
 
+const quasar = useQuasar();
+const dialogService: DialogService = new DialogService(quasar)
 
-const dialog: Ref<QDialog|null> = ref(null)
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void{
-  //eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show()
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
+// REQUIRED; must be called inside of setup()
+const { dialogRef, onDialogHide, onDialogCancel } = useDialogPluginComponent()
 
 const props = defineProps({
   playerId: {
@@ -95,6 +85,13 @@ const props = defineProps({
   }
 })
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emits = defineEmits([
+  // REQUIRED; need to specify some events that your
+  // component will emit through useDialogPluginComponent()
+  ...useDialogPluginComponent.emits
+])
+
 const player = fetchPlayer(props.playerId)
 
 // General
@@ -102,6 +99,29 @@ const documents: Ref<Record<string, string>[]> = ref([]);
 const playerDocuments: ComputedRef<Record<string, string>[]> = computed(() => player.value?.documents ?? [])
 const currentDocumentKey: Ref<string> = ref( '')
 
+/**
+ * Open enableUser dialog
+ * @returns {void} - void
+ */
+function enableUser(){
+  if(player.value !== null) {
+    dialogService?.enableUser(player.value)
+  }
+}
+
+/**
+ * Open disableUser dialog
+ * @returns {void} - void
+ */
+function disableUser(){
+  if(player.value !== null) {
+    dialogService?.disableUser(player.value)
+  }
+}
+
+/**
+ * Fetch player documents (ID pictures) once.
+ */
 const stop = watch(playerDocuments, async () => {
   if(playerDocuments.value.length > 0) {
     documents.value = await updateDocuments()

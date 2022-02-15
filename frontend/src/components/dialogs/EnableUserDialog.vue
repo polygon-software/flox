@@ -39,7 +39,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineProps, defineEmits, ref, Ref, PropType} from 'vue'
+import {defineProps, defineEmits, ref, Ref} from 'vue'
 import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import {User} from 'src/data/types/User';
 import {showNotification} from 'src/helpers/notification-helpers';
@@ -53,7 +53,7 @@ const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 const props = defineProps({
   user: {
-    type: Object as PropType<User>,
+    type: User,
     required: true
   },
 })

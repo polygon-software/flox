@@ -4,7 +4,8 @@ services:
   main:
     container_name: bigabig_main
     build:
-      context: .
+      context: ../
+      dockerfile: backend/Dockerfile
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules

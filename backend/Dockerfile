@@ -1,15 +1,22 @@
+FROM node:16-alpine
 
-FROM node:14-alpine
+WORKDIR /full-stack-bootstrap/backend
 
-WORKDIR /usr/src/app
+COPY backend .
 
-COPY package.json ./
-COPY yarn.lock ./
+WORKDIR /full-stack-bootstrap/shared
 
-RUN yarn
+COPY shared .
+RUN yarn --ignore-platform
 
-COPY . .
+WORKDIR /full-stack-bootstrap/backend
 
-RUN rm -r dist
+RUN yarn --ignore-platform
 
-CMD ["yarn", "start:dev"]
+RUN rm -rf dist
+
+RUN yarn build
+
+WORKDIR ./dist/backend/src
+
+CMD ["node", "main.js"]
