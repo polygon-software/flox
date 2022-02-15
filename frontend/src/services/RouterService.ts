@@ -85,8 +85,11 @@ export class RouterService {
       })
       return params
     }
+    else if(query) {
+      return [query]
+    }
     else {
-      return [(query as string)]
+      return []
     }
   }
 }

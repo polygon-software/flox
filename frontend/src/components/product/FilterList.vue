@@ -16,26 +16,26 @@
             <div class="row">
               <q-chip
                 :label="$t('products.relevance')"
-                :selected="sortBy === 'relevance'"
-                :color="sortBy === 'relevance' ? 'primary' : 'gray'"
+                :selected="sortBy[0] === 'relevance' || sortBy.length === 0"
+                :color="sortBy[0] === 'relevance' || sortBy.length === 0 ? 'primary' : 'gray'"
                 @click="sortBy = 'relevance'"
               />
               <q-chip
                 :label="$t('products.time_left')"
-                :selected="sortBy === 'time_left'"
-                :color="sortBy === 'time_left' ? 'primary' : 'gray'"
+                :selected="sortBy[0] === 'time_left'"
+                :color="sortBy[0] === 'time_left' ? 'primary' : 'gray'"
                 @click="sortBy = 'time_left'"
               />
               <q-chip
                 :label="$t('products.value_asc')"
-                :selected="sortBy === 'value_asc'"
-                :color="sortBy === 'value_asc' ? 'primary' : 'gray'"
+                :selected="sortBy[0] === 'value_asc'"
+                :color="sortBy[0] === 'value_asc' ? 'primary' : 'gray'"
                 @click="sortBy = 'value_asc'"
               />
               <q-chip
                 :label="$t('products.value_desc')"
-                :selected="sortBy === 'value_desc'"
-                :color="sortBy === 'value_desc' ? 'primary' : 'gray'"
+                :selected="sortBy[0] === 'value_desc'"
+                :color="sortBy[0] === 'value_desc' ? 'primary' : 'gray'"
                 @click="sortBy = 'value_desc'"
               />
             </div>
@@ -52,12 +52,18 @@
           <!-- Chips -->
           <q-item-section>
             <div class="row">
-              <!--TODO: Add a button to select all -->
+              <q-chip
+                :label="$t('products.all')"
+                :selected="selectedCategoryFilters.length === 0"
+                :color="selectedCategoryFilters.length === 0 ? 'primary' : 'gray'"
+                @click="selectAllAttributes(categoryFilters)"
+              />
               <q-chip
                 v-for="category in categories"
                 :key="category"
                 :label="$t(`categories.${category.toLowerCase()}`)"
                 :selected="selectedCategoryFilters.includes(category)"
+                :color="selectedCategoryFilters.includes(category) ? 'primary' : 'gray'"
                 @click="toggleCategory(category)"
               />
             </div>
@@ -76,14 +82,16 @@
             <div class="row">
               <q-chip
                 :label="$t('products.all')"
-                :selected="brandFilters === brands"
-                @click="brandFilters = brands"
+                :selected="selectedBrandFilters.length === 0"
+                :color="selectedBrandFilters.length === 0 ? 'primary' : 'gray'"
+                @click="selectAllAttributes(brandFilters)"
               />
               <q-chip
                 v-for="brand in brands"
                 :key="brand"
                 :label="brand"
-                :selected="brandFilters.includes(brand)"
+                :selected="selectedBrandFilters.includes(brand)"
+                :color="selectedBrandFilters.includes(brand) ? 'primary' : 'gray'"
                 @click="toggleBrand(brand)"
               />
             </div>
@@ -95,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, Ref, ref } from 'vue';
+import {computed, ComputedRef, inject, Ref, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import { Context, Module } from 'vuex-smart-module';
 import FeedState from 'src/store/feed/state';
@@ -110,11 +118,14 @@ const $routerService: RouterService|undefined = inject('$routerService')
 
 const feedStore: Context<Module<FeedState, FeedGetters, FeedMutations, FeedActions>> = useFeedStore();
 
-const categories = computed(() => categoriesToString(feedStore.getters.getCategories()))
-const categoryFilters: Ref<Record<string, boolean>> = ref(createCategoryFilter())
+const allFilters: Ref<Array<Record<string, boolean>>> = ref([])
+
+const categories = computed(() => feedStore.getters.getCategories())
+const categoryFilters: Ref<Record<string, boolean>> = ref(createFilterAttribute(categories, 'category'))
+allFilters.value.push(categoryFilters.value)
 const selectedCategoryFilters = computed(() => {
   const selected = []
-  for (const [key, value] of Object.entries(categoryFilters)) {
+  for (const [key, value] of Object.entries(categoryFilters.value)) {
     if (value) {
       selected.push(key)
     }
@@ -123,10 +134,11 @@ const selectedCategoryFilters = computed(() => {
 })
 
 const brands = computed(() => feedStore.getters.getBrands())
-const brandFilters: Ref<Record<string, boolean>> = ref(createBrandFilter())
+const brandFilters: Ref<Record<string, boolean>> = ref(createFilterAttribute(brands, 'brand'))
+allFilters.value.push(brandFilters.value)
 const selectedBrandFilters = computed(() => {
   const selected = []
-  for (const [key, value] of Object.entries(brandFilters)) {
+  for (const [key, value] of Object.entries(brandFilters.value)) {
     if (value) {
       selected.push(key)
     }
@@ -134,60 +146,37 @@ const selectedBrandFilters = computed(() => {
   return selected
 })
 
+const sortBy = computed({
+  get(): string[] {
+    const sortParam = $routerService?.getQueryParam('sort')
+    return sortParam ? sortParam : ['relevance']
+  },
+  async set(val: string | string[]){
+    await $routerService?.pushToQuery({ sort: val })
+  }
+})
+
 /**
- * Create an object where the keys are all categories and the values are whether they are currently selected.
+ * Create an object where the keys are product attributes like brand or category and the values are whether they are currently selected.
+ * @param {ComputedRef<string[]>} attributes - Product attributes that can be filtered for.
+ * @param {string} param - Query param that should be checked for already selected attributes
  * @return {Record<string, boolean>} - Object
  */
-function createCategoryFilter(): Record<string, boolean> {
+function createFilterAttribute(attributes: ComputedRef<string[]>, param: string): Record<string, boolean> {
   // Fill in all categories from the feed
   const filters: Record<string, boolean> = {}
-  for (const category of categories.value) {
-    filters[category] = false
+  for (const attribute of attributes.value) {
+    filters[attribute] = false
   }
 
   // Set all to selected, according to the query
-  const queryParams = $routerService?.getQueryParam('category')
+  const queryParams = $routerService?.getQueryParam(param)
   if (queryParams) {
-    for (const category of queryParams) {
-      filters[category] = true
+    for (const queryParam of queryParams) {
+      filters[queryParam] = true
     }
   }
   return filters
-}
-
-/**
- * Create an object where the keys are all categories and the values are whether they are currently selected.
- * @return {Record<string, boolean>} - Object
- */
-function createBrandFilter(): Record<string, boolean> {
-  // Fill in all brands from the feed
-  const filters: Record<string, boolean> = {}
-  for (const brand of brands.value) {
-    filters[brand] = false
-  }
-
-  // Set all to selected, according to the query
-  const queryParams = $routerService?.getQueryParam('brand')
-  if (queryParams) {
-    for (const brand of queryParams) {
-      filters[brand] = true
-    }
-  }
-  return filters
-}
-
-
-/**
- * Converts the ENUM values of categories to an array of strings.
- * @param {CATEGORY[]} categoriesENUM - Categories fetched via feedstore.
- * @return {string[]} - Categories as strings
- */
-function categoriesToString(categoriesENUM: CATEGORY[]|string[]): string[] {
-  const strings: string[] = []
-  categoriesENUM.forEach(category => {
-    strings.push(category.toLowerCase())
-  })
-  return strings
 }
 
 /**
@@ -209,20 +198,22 @@ async function toggleCategory(category: string): Promise<void> {
  */
 async function toggleBrand(brand: string): Promise<void> {
   // Toggle selection
-  brandFilters.value[brand] = !categoryFilters.value[brand]
+  brandFilters.value[brand] = !brandFilters.value[brand]
   // Update query
-  await $routerService?.pushToQuery({ category: selectedBrandFilters.value })
-  }
+  await $routerService?.pushToQuery({ brand: selectedBrandFilters.value })
+}
 
-const sortBy = computed({
-  get(): string[] {
-    const sortParam = $routerService?.getQueryParam('sort')
-    return sortParam ? sortParam : ['relevance']
-  },
-  async set(val: string | string[]){
-    await $routerService?.pushToQuery({ sort: val })
+/**
+ * Sets all entires of a filter attribute to true.
+ * @param {Record<string, boolean>} attributeFilter - The attribute where all entries should be set as selected
+ * @return {void}
+ */
+function selectAllAttributes(attributeFilter: Record<string, boolean>): void {
+  let key: keyof typeof attributeFilter;
+  for (key in attributeFilter) {
+    attributeFilter[key] = false
   }
-})
+}
 
 /**
  * Go back to product feed
@@ -237,6 +228,9 @@ async function onBack(): Promise<void>{
  * @returns {Promise<void>} - async
  */
 async function resetFilter(): Promise<void>{
-  await $routerService?.pushToQuery({ sort: ['relevance'], category: categories.value, brand: brands.value })
+  for (const filter of allFilters.value) {
+    selectAllAttributes(filter)
+  }
+  await $routerService?.pushToQuery({ sort: [], category: [], brand: [] })
 }
 </script>

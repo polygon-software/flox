@@ -1,7 +1,7 @@
 <template>
   <div class="col q-pa-md">
-    <div v-if="searchFilter !== ''" class="row">
-      {{ $t('products.results_for') }} "<strong> {{ searchFilter }} </strong>"
+    <div v-if="searchFilter.length > 0" class="row">
+      {{ $t('products.results_for') }} "<strong> {{ searchFilter[0] }} </strong>"
     </div>
     <div class="row q-mt-sm">
       <q-btn
@@ -97,7 +97,7 @@ const sortBy = computed({
 
 const filterCount = computed(() => {
   let count = 0
-  if(sortBy.value[0] !== 'relevance'){
+  if(sortBy.value[0] !== 'relevance' && sortBy.value.length > 0){
     count += 1
   }
   if(brandFilter.value.length > 0){
@@ -173,10 +173,26 @@ async function openFilterPage(): Promise<void>{
 }
 
 /**
+ * Returns all elements of a set as an array of strings.
+ * @param {Set<string | CATEGORY>} set - Set from where to extract the values
+ * @return {string[]} - Array with set values as strings
+ */
+function getSetValues(set: Set<string | CATEGORY>): string[] {
+  const values = []
+  for (let val of Array.from(set)) {
+    if (Object.keys(CATEGORY).includes(val)) {
+      val = val.toLowerCase()
+    }
+    values.push(val)
+  }
+  return values
+}
+
+/**
  * Reset sorting and filter.
  * @returns {Promise<void>} - async
  */
 async function resetFilter(): Promise<void>{
-  await $routerService?.pushToQuery({ sort: 'relevance', category: 'all', brand: 'all' })
+  await $routerService?.pushToQuery({ sort: [], category: [], brand: [] })
 }
 </script>
