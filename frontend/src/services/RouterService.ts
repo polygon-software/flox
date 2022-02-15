@@ -6,7 +6,7 @@ import {
   useRoute,
   RouteLocationNormalizedLoaded,
 } from 'vue-router';
-import {values} from "lodash";
+import {values} from 'lodash';
 
 /**
  * This is a service that is used globally throughout the application for routing
