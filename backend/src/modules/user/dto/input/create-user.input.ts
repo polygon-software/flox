@@ -1,6 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 import {
-  IsArray,
   IsDate,
   IsEmail,
   IsNotEmptyObject,
@@ -41,10 +40,6 @@ export class CreateUserInput {
   @IsString()
   @IsDate()
   birthdate: Date;
-
-  @Field(() => [String], { description: 'User interest categories' })
-  @IsArray()
-  interests: string[];
 
   @Field(() => CreateAddressInput, { description: 'User address' })
   @IsNotEmptyObject()

@@ -59,9 +59,6 @@ const address = reactive(new Address())
  * @returns {void}
  */
 function emitValue(){
-  if(address.validate()){
-    emit('change', address)
-  }
-
+  emit('change', address)
 }
 </script>

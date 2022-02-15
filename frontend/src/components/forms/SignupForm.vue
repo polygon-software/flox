@@ -27,9 +27,8 @@ import GenericForm from 'components/forms/GenericForm.vue';
 const emit = defineEmits(['submit'])
 
 const accountFields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
-const personalFields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER, FIELDS.ID_UPLOAD]
+const personalFields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER]
 const addressFields  = [FIELDS.ADDRESS]
-const interestFields = [FIELDS.INTERESTS]
 
 const pages = [
   {
@@ -46,11 +45,6 @@ const pages = [
     key: 'address_data',
     label: i18n.global.t('account_data.address'),
     fields: addressFields,
-  },
-  {
-    key: 'interests',
-    label: i18n.global.t('account_data.interests'),
-    fields: interestFields,
   },
 ]
 

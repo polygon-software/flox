@@ -11,8 +11,6 @@ export const MY_USER = {
       myUser {
         uuid
         role
-        status
-        disabledUntil
         __typename
       }
     }
@@ -21,10 +19,10 @@ export const MY_USER = {
   cacheLocation: 'myUser',
 };
 
-export const ALL_PLAYERS = {
+export const ALL_USERS = {
   query: gql`
     query {
-      allPlayers {
+      allUsers {
         uuid
         role
         createdAt
@@ -33,7 +31,6 @@ export const ALL_PLAYERS = {
         email
         phone
         birthdate
-        status
         address {
           uuid
           street
@@ -42,16 +39,15 @@ export const ALL_PLAYERS = {
           zipCode
           __typename
         }
-        disabledUntil
         __typename
       }
     }
   `,
   tables: ['user'],
-  cacheLocation: 'allPlayers',
+  cacheLocation: 'allUsers',
 };
 
-export const PLAYER = {
+export const USER = {
   query: gql`
     query user($uuid: ID!){
       user(uuid: $uuid) {
@@ -63,19 +59,12 @@ export const PLAYER = {
         email
         phone
         birthdate
-        status
         address {
           uuid
           street
           number
           city
           zipCode
-          __typename
-        }
-        disabledUntil
-        documents {
-          uuid
-          url
           __typename
         }
         __typename
@@ -86,34 +75,4 @@ export const PLAYER = {
   cacheLocation: 'user',
 };
 
-export const ALL_PARTNERS = {
-  query: gql`
-    query {
-      allPartners {
-        uuid
-        role
-        createdAt
-        fullName
-        username
-        email
-        phone
-        birthdate
-        status
-        address {
-          uuid
-          street
-          number
-          city
-          zipCode
-          __typename
-        }
-        disabledUntil
-        __typename
-      }
-    }
-  `,
-  tables: ['user'],
-  cacheLocation: 'allPartners',
-};
-
-export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_PLAYERS, ALL_PARTNERS];
+export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_USERS];

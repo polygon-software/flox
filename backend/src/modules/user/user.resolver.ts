@@ -11,63 +11,21 @@ import {
   AnyRole,
   CurrentUser,
 } from '../../auth/authorization.decorator';
-import { TempDisableUserInput } from './dto/input/temp-disable-user.input';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
   @AdminOnly()
-  @Query(() => [User], { name: 'allPlayers' })
-  async getAllPlayers(): Promise<User[]> {
-    return this.usersService.getAllPlayers();
-  }
-
-  @AdminOnly()
-  @Query(() => [User], { name: 'allPartners' })
+  @Query(() => [User], { name: 'allUsers' })
   async getAllPartners(): Promise<User[]> {
-    return this.usersService.getAllPartners();
+    return this.usersService.getAllUsers();
   }
 
   @AdminOnly()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersService.getUserWithDocuments(getUserArgs);
-  }
-
-  /**
-   * Enables a given user's account
-   * @param {string} uuid - user's database & cognito UUID
-   * @returns {Promise<User>} - the user after editing
-   */
-  @AdminOnly()
-  @Mutation(() => User)
-  async enableUser(@Args('uuid') uuid: string): Promise<User> {
-    return this.usersService.enableUser(uuid);
-  }
-
-  /**
-   * Disables a given user's account
-   * @param {string} uuid - user's database & cognito UUID
-   * @returns {Promise<User>} - the user after editing
-   */
-  @AdminOnly()
-  @Mutation(() => User)
-  async disableUser(@Args('uuid') uuid: string): Promise<User> {
-    return this.usersService.disableUser(uuid);
-  }
-
-  /**
-   * Temporarily disables a given user's account
-   * @param {TempDisableUserInput} tempDisableUserInput - disable input, containing UUID and end date
-   * @returns {Promise<User>} - the user after editing
-   */
-  @AdminOnly()
-  @Mutation(() => User)
-  async temporarilyDisableUser(
-    @Args('tempDisableUserInput') tempDisableUserInput: TempDisableUserInput,
-  ): Promise<User> {
-    return this.usersService.temporarilyDisableUser(tempDisableUserInput);
+    return this.usersService.getUser(getUserArgs);
   }
 
   @Public()

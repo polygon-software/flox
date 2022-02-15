@@ -23,51 +23,12 @@
         flat
         @click="forgottenPassword"
     />
-    <div
-      v-if="loggedIn"
-      class="row items-center q-mr-md"
-    >
-      <q-btn
-        round
-        icon="notifications"
-        color="black"
-        style="width: 10px; height: 10px"
-        @click="openInbox"
-      >
-        <q-badge
-          floating
-          color="red"
-          rounded
-        />
-      </q-btn>
-    </div>
   </div>
   </q-header>
-
-  <!-- Notification Inbox -->
-  <q-dialog
-    v-model="showInbox"
-    class="q-pa-xs"
-  >
-    <q-card
-      style="overflow: hidden"
-    >
-      <Inbox db-ref="123"/>
-      <q-card-actions align="center">
-        <q-btn
-          :label="$t('buttons.back')"
-          flat
-          color="black"
-          @click="closeInbox"
-        />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
-
 </template>
 
 <script setup lang="ts">
-import {computed, inject, ref} from 'vue'
+import {computed, inject} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -77,15 +38,14 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
-import Inbox from 'components/notifications/Inbox.vue';
 
-const $authService: AuthenticationService|undefined = inject('$authService')
-const $routerService: RouterService|undefined = inject('$routerService')
-const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
+const authService: AuthenticationService|undefined = inject('$authService')
+const routerService: RouterService|undefined = inject('$routerService')
+const authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const loggedIn = computed(() => {
   // Explicit type
-  return $authStore.getters.getLoggedInStatus();
+  return authStore.getters.getLoggedInStatus();
 })
 
 /**
@@ -94,8 +54,8 @@ const loggedIn = computed(() => {
  * @returns {void}
  */
 async function logout(): Promise<void>{
-  await $authService?.logout();
-  await $routerService?.routeTo(ROUTES.LOGIN)
+  await authService?.logout();
+  await routerService?.routeTo(ROUTES.LOGIN)
 }
 
 /**
@@ -103,28 +63,6 @@ async function logout(): Promise<void>{
  * @returns {void}
  */
 function forgottenPassword() {
-  $authService?.showResetPasswordDialog();
-}
-
-/*
-* This section controls the visibility of the notification inbox popup.
-*  TODO: Change it to a push or rerendering?
-*/
-const showInbox = ref(false)
-
-/**
- * Opens the inbox
- * @returns {void}
- */
-function openInbox() {
-  showInbox.value = true
-}
-
-/**
- * Closes the inbox
- * @returns {void}
- */
-function closeInbox() {
-  showInbox.value = false
+  authService?.showResetPasswordDialog();
 }
 </script>

@@ -2,7 +2,6 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoUser, CognitoUserSession,
   ISignUpResult
 } from 'amazon-cognito-identity-js';
-import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordDialog from 'components/dialogs/ChangePasswordDialog.vue'
 import ResetPasswordDialog from 'components/dialogs/ResetPasswordDialog.vue'
 import {ErrorService} from './ErrorService';
@@ -15,10 +14,8 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {i18n} from 'boot/i18n';
-import AccountLockedDialog from 'components/dialogs/AccountLockedDialog.vue';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/USER';
-import {USER_STATUS} from '../../../shared/definitions/ENUM';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -70,73 +67,34 @@ export class AuthenticationService {
      * @returns {void}
      */
     async login(identifier: string, password: string): Promise<void>{
+      // Generate auth details
+      const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+          Username: identifier,
+          Password: password
+      });
 
-        // Generate auth details
-        const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
-            Username: identifier,
-            Password: password
-        });
+      const userPool = this.$authStore.getters.getUserPool()
 
-        const userPool = this.$authStore.getters.getUserPool()
+      if(userPool === undefined){
+        this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
+        return
+      }
+        // Actual Cognito authentication on given pool
+      const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
+          Username: identifier,
+          Pool: userPool,
+      });
 
-        if(userPool === undefined){
-          this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
-          return
-        }
-          // Actual Cognito authentication on given pool
-        const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
-            Username: identifier,
-            Pool: userPool,
-        });
-
-        // Execute auth function
-        return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
-          // Store in local variable
-          this.$authStore.mutations.setCognitoUser(cognitoUser)
-          cognitoUser.authenticateUser(authenticationDetails, {
-              onSuccess: (result)=>{
-                void this.loginSuccess(result, resolve)
-              },
-              onFailure: (err: Error)=>{this.onFailure(err) },
-              // Sets up MFA (only done once after signing up)
-              mfaSetup: () => {
-                this.setupMFA(cognitoUser, resolve)
-              },
-
-            // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-              selectMFAType: function () {
-                  cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
-              },
-
-              // Called if time-limited one time password is required (only second login or later)
-              totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
-
-              //TODO check when/if this appears
-              mfaRequired: function () {
-                  const verificationCode = prompt('Please input verification code', '');
-                  if (typeof verificationCode === 'string') {
-                      cognitoUser.sendMFACode(verificationCode, this);
-                  }
-              },
-
-
-          })
+      // Execute auth function
+      return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
+        // Store in local variable
+        this.$authStore.mutations.setCognitoUser(cognitoUser)
+        cognitoUser.authenticateUser(authenticationDetails, {
+            onSuccess: (result)=>{
+              void this.loginSuccess(result, resolve)
+            },
+            onFailure: (err: Error)=>{this.onFailure(err) },
         })
-    }
-
-
-  /**
-   * Sets up MFA for the given cognito user
-   * @param {CognitoUser} cognitoUser - the user
-   * @param {function} resolve - resolve function
-   * @returns {void}
-   */
-  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
-    cognitoUser.associateSoftwareToken({
-        associateSecretCode: (secret: string) => {
-          this.$authStore.mutations.setCognitoUser(cognitoUser)
-          this.showQRCodeDialog(secret, resolve, cognitoUser)},
-        onFailure: (err: Error) => {this.onFailure(err)}
       })
     }
 
@@ -310,48 +268,6 @@ export class AuthenticationService {
     }
 
     /**
-     * Shows a dialog containing a QR code for setting up two factor authentication
-     * @param {string} secretCode - the authenticator code to encode in QR code form
-     * @param {function} resolve - resolve function
-     * @param {CognitoUser} cognitoUser - the cognito user to show the dialog for
-     * @returns {void}
-     */
-    showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void, cognitoUser: CognitoUser): void{
-      const username = this.$authStore.getters.getUsername() ?? 'user'
-
-      const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
-      this.$q.dialog({
-          component: QrCodeDialog,
-          componentProps: {
-              value: codeUrl
-          },
-      }).onOk(() => {
-          // Verify code
-          this.$q.dialog({
-              title: 'Verification',
-              message: 'Please enter your 2FA authenticator code',
-              cancel: true,
-              persistent: true,
-              prompt: {
-                  model: '',
-                  isValid: (val: string) => val.length >= 6,
-                  type: 'text'
-              },
-          }).onOk((code: string) => {
-              // TODO friendlyDeviceName
-            cognitoUser.verifySoftwareToken(code, 'My TOTP device', {
-                  onSuccess: (userSession: CognitoUserSession)=>{
-                    void this.loginSuccess(userSession, resolve)
-                  },
-                  onFailure: (error: Error)=>{
-                    this.onFailure(error)
-                  },
-              });
-          })
-      })
-    }
-
-    /**
      * Confirm e-mail verification code
      * @param {string} code -verification code
      * @async
@@ -426,27 +342,8 @@ export class AuthenticationService {
         this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
         return;
       }
-      const userData = queryResult.data.myUser as Record<string, unknown>
-      const userStatus = userData.status;
 
-      // User is active; allow login
-      if(userStatus === USER_STATUS.ACTIVE ){
-        resolve()
-      } else {
-        // User is disabled or not active: login fails TODO distinction with inactive account?
-
-        // Auto-logout
-        await this.logout();
-
-        // User disabled, show appropriate dialog
-        this.$q.dialog({
-            component: AccountLockedDialog,
-            componentProps: {
-              untilDate: userData.disabledUntil // until-date, if any
-            }
-          }
-        )
-      }
+      resolve()
     }
 
     /**
@@ -459,15 +356,6 @@ export class AuthenticationService {
       if(error.name === 'UserNotConfirmedException'){
         // Show the e-mail verification dialog and send a new code
         this.showEmailVerificationDialog(true)
-      } else if(error.name === 'NotAuthorizedException' && error.message === 'User is disabled.') {
-        // User disabled, show appropriate dialog
-        this.$q.dialog({
-            component: AccountLockedDialog,
-            componentProps: {
-              // TODO get until-date for temporarily disabled users
-            }
-          }
-        )
       } else {
         // Generic error
         this.$errorService.showErrorDialog(error)

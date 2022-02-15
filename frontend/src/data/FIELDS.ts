@@ -1,10 +1,8 @@
-import { IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE, IS_VALID_ID_UPLOAD } from './RULES'
+import { IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING, IS_VALID_BIRTHDATE } from './RULES'
 import { QInput } from 'quasar'
-import Interests from 'components/forms/fields/Interests.vue'
 import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
 import Password from 'components/forms/fields/Password.vue'
 import LivingAddress from 'components/forms/fields/AddressField.vue'
-import IDUploadField from 'components/forms/fields/IDUploadField.vue'
 import { markRaw } from 'vue';
 import { i18n } from 'boot/i18n';
 
@@ -82,13 +80,6 @@ const FIELDS: Record<string, Field> = {
             rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_name')]
           },
         },
-        INTERESTS: {
-          key: 'interests',
-          component: markRaw(Interests),
-          attributes: {
-            rules: [(val: Array<number>, max_interests: number): boolean|string => val.length > 0 && val.length < 6 || i18n.global.t('interests.select_interests', {max: max_interests})]
-          },
-        },
         PHONE_NUMBER: {
           key: 'phone_number',
           component: markRaw(QInput),
@@ -119,13 +110,6 @@ const FIELDS: Record<string, Field> = {
             label: i18n.global.t('account_data.birthdate'),
             lazy_rules: 'ondemand',
             rules: [(val: string): boolean|string  => IS_VALID_BIRTHDATE(val) || i18n.global.t('errors.invalid_birth_date')]
-          },
-        },
-        ID_UPLOAD: {
-          key: 'id_upload',
-          component: markRaw(IDUploadField),
-          attributes: {
-            rules: [(val: Record<string, File>): boolean|string  => IS_VALID_ID_UPLOAD(val) || i18n.global.t('errors.missing_file')]
           },
         },
     }

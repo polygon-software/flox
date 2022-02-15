@@ -11,7 +11,6 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
  *
  */
 
-// TODO address?
 export const CREATE_USER = {
     mutation: gql`
         mutation createUser($createUserInput: CreateUserInput!){
@@ -28,64 +27,6 @@ export const CREATE_USER = {
     tables: ['user'],
     type: MutationTypes.CREATE,
     cacheLocation: 'create'
-}
-
-export const UPDATE_USER = {
-    mutation: gql`
-        mutation updateUser($uuid: ID!, $name: String, $age: Int){
-            update (updateUserInput: {uuid: $uuid, name: $name, age: $age}) {
-                uuid
-                __typename
-            }
-        }`,
-    tables: ['user'],
-    type: MutationTypes.UPDATE,
-    cacheLocation: 'update'
-}
-
-export const ENABLE_USER = {
-    mutation: gql`
-        mutation enableUser($uuid: String!){
-            enableUser(uuid: $uuid ) {
-              uuid
-              status
-              disabledUntil
-              __typename
-            }
-        }`,
-    tables: ['user'],
-    type: MutationTypes.UPDATE,
-    cacheLocation: undefined
-}
-
-export const DISABLE_USER = {
-    mutation: gql`
-        mutation disableUser($uuid: String!){
-            disableUser(uuid: $uuid ) {
-              uuid
-              status
-              disabledUntil
-              __typename
-            }
-        }`,
-    tables: ['user'],
-    type: MutationTypes.UPDATE,
-    cacheLocation: undefined
-}
-
-export const TEMP_DISABLE_USER = {
-    mutation: gql`
-        mutation temporarilyDisableUser($uuid: ID!, $until: DateTime!){
-            temporarilyDisableUser(tempDisableUserInput: {uuid: $uuid, until: $until }) {
-              uuid
-              status
-              disabledUntil
-              __typename
-            }
-        }`,
-    tables: ['user'],
-    type: MutationTypes.UPDATE,
-    cacheLocation: undefined
 }
 
 export const DELETE_USER = {

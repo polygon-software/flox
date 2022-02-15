@@ -1,6 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
-  IsArray,
   IsDate,
   IsEmail,
   IsPhoneNumber,
@@ -13,16 +12,12 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  OneToMany,
   OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ROLE, USER_STATUS } from '../../../ENUM/ENUM';
-import PrivateFile from '../../file/entities/private_file.entity';
-import Comment from '../../comment/entities/comment.entity';
+import { ROLE } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
-import { Notification } from '../../notification/entities/notification.entity';
 
 @ObjectType()
 @Entity()
@@ -38,15 +33,6 @@ export class User {
   })
   @IsString()
   role: ROLE;
-
-  @Field(() => USER_STATUS, { description: 'Status of the user account' })
-  @Column({
-    type: 'enum',
-    enum: USER_STATUS,
-    default: USER_STATUS.NONE,
-  })
-  @IsString()
-  status: USER_STATUS;
 
   @Field(() => ID, { description: 'Cognito ID' })
   @PrimaryColumn()
@@ -90,11 +76,6 @@ export class User {
   @IsDate()
   birthdate: Date;
 
-  @Field(() => [String], { description: 'User interest categories' })
-  @Column('text', { array: true })
-  @IsArray()
-  interests: string[];
-
   @Field(() => Date, { description: 'Last modification date' })
   @UpdateDateColumn()
   lastModifiedAt: Date;
@@ -102,39 +83,4 @@ export class User {
   @Field(() => Date, { description: 'Date of deletion', nullable: true })
   @DeleteDateColumn()
   deletedAt: Date;
-
-  @Field(() => Date, {
-    description: 'Date until which the users account is disabled (if any)',
-    nullable: true,
-  })
-  @Column({ nullable: true })
-  disabledUntil: Date;
-
-  @Field(() => [PrivateFile], {
-    nullable: true,
-    description: 'Documents of the user (e.g. ID copy)',
-  })
-  @OneToMany(() => PrivateFile, (file) => file.user, {
-    cascade: true,
-  })
-  documents: PrivateFile[];
-
-  @Field(() => [Comment], {
-    nullable: true,
-    description: 'Comments written by the user',
-  })
-  @OneToMany(() => Comment, (comment) => comment.user, {
-    cascade: true,
-    eager: true,
-  })
-  comments: Comment[];
-
-  @Field(() => [Notification], {
-    description: 'Notifications of the user',
-    nullable: true,
-  })
-  @OneToMany(() => Notification, (notification) => notification.user, {
-    cascade: true,
-  })
-  notifications: Notification[];
 }
