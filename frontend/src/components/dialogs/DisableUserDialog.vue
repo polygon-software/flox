@@ -92,9 +92,11 @@ import {User} from 'src/data/types/User';
 import {ROLE} from 'src/data/ENUM/ENUM';
 import { useDialogPluginComponent } from 'quasar'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
 
 // REQUIRED; must be called inside of setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const props = defineProps({

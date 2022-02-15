@@ -151,9 +151,11 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import { useDialogPluginComponent } from 'quasar'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
 
 // REQUIRED; must be called inside of setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 

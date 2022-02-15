@@ -67,7 +67,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import { PropType, ref} from 'vue'
+import {defineEmits, PropType, ref} from 'vue'
 import {QVueGlobals, useQuasar, openURL} from 'quasar';
 import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Company} from 'src/data/types/Company';
@@ -82,6 +82,7 @@ import DocumentPreviewDialog from 'src/components/dialogs/DocumentPreviewDialog.
 import {PRIVATE_FILE} from 'src/data/queries/FILE';
 import { useDialogPluginComponent } from 'quasar'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
 
 // REQUIRED; must be called inside of setup()

@@ -75,9 +75,11 @@ import { useDialogPluginComponent } from 'quasar'
  * A dialog for showing a list of downloadable files, and (optionally) to allow uploading new files to the given entity
  */
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
 
 // REQUIRED; must be called inside of setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 
