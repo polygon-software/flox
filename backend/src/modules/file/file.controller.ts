@@ -212,13 +212,19 @@ export class FileController {
 
     // Determine dossier UUID from query param
     const dossierUuid: string = query.did;
-    const files = await req.saveRequestFiles();
+    const files = await req.files();
     let updatedDossier;
-    for (const file of files) {
+    while (true) {
+      const file = await files.next();
+      if (file.done) {
+        break;
+      }
       const fileType =
-        FILE_TYPE[file.fieldname.substr(0, file.fieldname.length - 5)];
+        FILE_TYPE[
+          file.value.fieldname.substr(0, file.value.fieldname.length - 5)
+        ];
       updatedDossier = await this.fileService.uploadAssociatedFile(
-        file,
+        file.value,
         fileType,
         dossierUuid,
         'dossierRepository',
