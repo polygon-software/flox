@@ -36,8 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref, defineEmits} from 'vue'
-import {QDialog} from 'quasar';
+import {ref, defineEmits} from 'vue'
 import { useDialogPluginComponent } from 'quasar'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -48,8 +47,6 @@ const emit = defineEmits(useDialogPluginComponent.emits)
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const rejectReason = ref('')
-
-
 
 /**
  * Emits reject event, including the entered reason

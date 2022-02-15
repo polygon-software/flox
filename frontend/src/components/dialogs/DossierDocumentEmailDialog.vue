@@ -58,9 +58,11 @@ import {SEND_DOSSIER_DOCUMENT_EMAIL} from 'src/data/mutations/DOSSIER';
 import {MutationObject} from 'src/data/DATA-DEFINITIONS';
 import { useDialogPluginComponent } from 'quasar'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
 
 // REQUIRED; must be called inside of setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const $q: QVueGlobals = useQuasar()

@@ -64,13 +64,13 @@
 </template>
 <script setup lang="ts">
 import {defineEmits} from 'vue';
-import {openURL} from 'quasar';
 import { executeQuery} from 'src/helpers/data-helpers';
 import {PRIVATE_FILE} from 'src/data/queries/FILE';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_FILE_TYPE} from '../../../definitions/ENUMS';
-import { useDialogPluginComponent } from 'quasar'
+import { useDialogPluginComponent, openURL } from 'quasar'
+
 /**
  * A dialog for showing a list of downloadable files, and (optionally) to allow uploading new files to the given entity
  */
@@ -81,8 +81,6 @@ const emit = defineEmits(useDialogPluginComponent.emits)
 // REQUIRED; must be called inside of setup()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-
-
 
 const props = defineProps({
   files: {

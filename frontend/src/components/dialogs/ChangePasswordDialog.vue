@@ -51,9 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, Ref, ref} from 'vue';
+import {defineEmits, ref} from 'vue';
 import {PASSWORD_MIN_LENGTH, PASSWORD_REGEX} from 'src/helpers/REGEX'
-import {QDialog} from 'quasar';
 import {i18n} from 'boot/i18n';
 import { useDialogPluginComponent } from 'quasar'
 
@@ -61,7 +60,8 @@ import { useDialogPluginComponent } from 'quasar'
 const emit = defineEmits(useDialogPluginComponent.emits)
 
 // REQUIRED; must be called inside of setup()
-const { dialogRef, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { dialogRef, onDialogOK, onDialogCancel, onDialogHide } = useDialogPluginComponent()
 
 const passwordOld = ref('')
 const password = ref('')
