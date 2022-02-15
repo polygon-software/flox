@@ -61,16 +61,20 @@ async function onRegister(formData: Record<string, Record<string, string>>){
   }
 
   // Create account (automatically sends one-time login e-mail as well)
-  await executeMutation(CREATE_SOI_EMPLOYEE, {
-    first_name: formData.full_name.firstName,
-    last_name: formData.full_name.lastName,
-    gender: formData.salutation,
-    phone: formData.phone_number,
-    email: formData.email,
-  })
+  try {
+    await executeMutation(CREATE_SOI_EMPLOYEE, {
+      first_name: formData.full_name.firstName,
+      last_name: formData.full_name.lastName,
+      gender: formData.salutation,
+      phone: formData.phone_number,
+      email: formData.email,
+    })
 
-  // Route back
-  await $routerService?.routeTo(ROUTES.ADMIN_EMPLOYEES)
+    // Route back
+    await $routerService?.routeTo(ROUTES.ADMIN_EMPLOYEES)
+  } catch(e) {
+  $errorService?.showErrorDialog(e as Error)
+}
 }
 
 </script>
