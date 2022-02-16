@@ -83,12 +83,12 @@
                   v-slot="scope"
                   :auto-save="true"
                   :model-value="ownOfferForDossier(_props.row).status"
-                  @save="(value) => onUpdateStatus(_props.row.uuid, ownOfferForDossier(_props.row).uuid, value)"
                 >
                   <q-select
                     v-model="scope.value"
                     :option-label="(status)=>$t('offer_status_enum.' + status)"
                     :options="Object.keys(OFFER_STATUS)"
+                    @update:model-value="onUpdateStatus(_props.row.uuid, ownOfferForDossier(_props.row).uuid, scope.value)"
                   />
                 </q-popup-edit>
               </q-chip>
