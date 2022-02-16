@@ -33,8 +33,18 @@ export class BankService {
     // Ensure abbreviation is unique
     const abbreviation = createBankInput.abbreviation;
     const existingBank = await this.findBankByAbbreviation(abbreviation);
-    if (existingBank) {
-      throw new Error(`${ERRORS.bank_must_be_unique} (${existingBank.name})`);
+    const suggestions = await this.getBankNameSuggestions();
+    const existingSuggestion = suggestions.find(
+      (suggestion) => suggestion.abbreviation === abbreviation,
+    );
+
+    // If the abbreviation is taken by either a suggestion or a bank, throw error
+    if (existingBank || existingSuggestion) {
+      throw new Error(
+        `${ERRORS.bank_must_be_unique} (${
+          existingBank ? existingBank.name : existingSuggestion.name
+        })`,
+      );
     }
 
     // Create a Cognito account with a random password
