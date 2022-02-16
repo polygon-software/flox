@@ -60,6 +60,7 @@ export class FileController {
       fileBuffer,
       file.filename,
     );
+    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 
