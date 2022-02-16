@@ -6,7 +6,7 @@
     v-model="field.value"
     class="q-mb-md"
     outlined
-    accept="image/*, .pdf"
+    accept=".pdf"
     :label="$t(index === 0 ? 'documents.choose_documents' : 'documents.additional_documents')"
     stack-label
     clearable
