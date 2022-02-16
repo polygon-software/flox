@@ -169,7 +169,6 @@ watch(route, async () => {
  */
 async function logout(): Promise<void>{
   await $authService?.logout();
-  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
 /**

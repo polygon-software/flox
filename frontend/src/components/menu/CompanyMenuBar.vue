@@ -76,7 +76,6 @@ const loggedIn = computed(() => {
  */
 async function logout(): Promise<void>{
   await $authService?.logout();
-  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
 

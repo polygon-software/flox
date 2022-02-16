@@ -16,13 +16,13 @@ const $q = useQuasar()
 const $errorService: ErrorService = reactive(new ErrorService($q))
 provide<ErrorService>('$errorService', $errorService)
 
-// Auth service
-const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService))
-provide<AuthenticationService>('$authService', $authService)
-
 // Router service
 const $routerService: RouterService = reactive(new RouterService(routerInstance))
 provide<RouterService>('$routerService', $routerService)
+
+// Auth service
+const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService, $routerService))
+provide<AuthenticationService>('$authService', $authService)
 
 // Quasar
 provide('$q', $q)

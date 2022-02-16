@@ -15,6 +15,10 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {i18n} from 'boot/i18n';
+import {useApolloClient} from '@vue/apollo-composable';
+import ROUTES from 'src/router/routes';
+import {RouterService} from 'src/services/RouterService';
+import {sleep} from 'src/helpers/general-helpers';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -30,14 +34,18 @@ export class AuthenticationService {
     // Error handler service
     $errorService: ErrorService
 
+    // Router service
+    $routerService: RouterService
+
     $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>>
 
   /**
    * Constructor
    * @param {QVueGlobals} quasar - quasar instance
    * @param {ErrorService} errorService - error service instance
+   * @param {RouterService} routerService - router service instance
    */
-    constructor(quasar: QVueGlobals, errorService: ErrorService) {
+    constructor(quasar: QVueGlobals, errorService: ErrorService, routerService: RouterService) {
       // Store
       this.$authStore = useAuth()
 
@@ -56,6 +64,9 @@ export class AuthenticationService {
 
       // Error service
       this.$errorService = errorService
+
+      // Router service
+      this.$routerService = routerService
     }
 
     /**
@@ -199,7 +210,8 @@ export class AuthenticationService {
     if(!cognitoUser){
       this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.not_logged_in')))
     } else {
-      return new Promise((resolve) => {
+      // Sign out
+      await new Promise<void>((resolve) => {
         cognitoUser.signOut(() => {
           this.$authStore.mutations.setCognitoUser(undefined)
           this.$authStore.mutations.setUserSession(undefined)
@@ -207,6 +219,18 @@ export class AuthenticationService {
           resolve()
         })
       })
+
+      // Redirect to login
+      await this.$routerService.routeTo(ROUTES.LOGIN)
+
+      // Short delay before cleaning cache to prevent erroneous query re-fetching
+      await sleep(1500)
+
+      // Clear cache to prevent erroneous dashboard loading when changing roles
+      const apolloClient = useApolloClient()
+      console.log('Client is:', apolloClient.client, apolloClient.client.cache)
+      await apolloClient.client.resetStore()
+      console.log('new cache is:', apolloClient.client.cache)
     }
   }
 
