@@ -152,9 +152,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Quasar App',
-        short_name: 'Quasar App',
-        description: 'A Quasar Framework app',
+        name: 'S.O.I. Chamäleon',
+        short_name: 'S.O.I. ',
+        description: 'S.O.I. Chamäleon',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
