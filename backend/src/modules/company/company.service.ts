@@ -10,7 +10,11 @@ import { Company } from './entities/company.entity';
 import { generateHumanReadableId } from '../../helpers';
 import { User } from '../user/entities/user.entity';
 import { CREATION_STATE, ROLE } from '../../ENUM/ENUMS';
-import { createCognitoAccount, randomPassword } from '../../auth/authService';
+import {
+  checkIfUserExists,
+  createCognitoAccount,
+  randomPassword,
+} from '../../auth/authService';
 import {
   sendCompanyRejectEmail,
   sendPasswordChangeEmail,
@@ -19,6 +23,7 @@ import { UserService } from '../user/user.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { prettify } from '../../helpers/log-helper';
+import { ERRORS } from '../../error/ERRORS';
 
 @Injectable()
 export class CompanyService {
@@ -151,12 +156,22 @@ export class CompanyService {
    */
   async enableDocumentUpload(uuid: string): Promise<Company> {
     const company = await this.companyRepository.findOne(uuid);
+
+    // Ensure creation state is valid
     if (company.creation_state !== CREATION_STATE.APPLIED) {
       throw Error(
         "Can't enable Document Upload when the current creation state isn't 'APPLIED'. Is: " +
           company.creation_state,
       );
     }
+
+    // Ensure there is no account of any type for the given e-mail address yet, since it can't be changed later anymore
+    const existsAlready = await checkIfUserExists(company.email);
+
+    if (existsAlready) {
+      throw new Error(ERRORS.account_exists_for_email);
+    }
+
     await this.companyRepository.update(uuid, {
       creation_state: CREATION_STATE.AWAITING_DOCUMENTS,
     });

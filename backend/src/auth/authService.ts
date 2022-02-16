@@ -1,7 +1,10 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import * as crypto from 'crypto';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AdminGetUserCommandOutput,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
 
 // Set up cognito admin provider
 const provider = new CognitoIdentityProvider({
@@ -51,6 +54,7 @@ export async function createCognitoAccount(
   );
   return cognitoUserWrapper.userSub;
 }
+
 /**
  * Generates a random number in given range
  * @param {number} min - start of the range
@@ -106,12 +110,39 @@ export async function disableCognitoAccount(email: string): Promise<void> {
  * Handles Cognito operation
  * @param {Error|undefined} err - errors that occurred
  * @param {unknown|undefined} data - output data
- * @returns {void}
+ * @returns {void|unknown} - data, if any
  */
 function handleOperation(err: Error | undefined, data: unknown | undefined) {
   if (err) {
     console.log('Error is', err);
     throw err;
   }
+  console.log('Got user', data);
   return data;
+}
+
+/**
+ * Checks whether a Cognito account exists for a given e-mail
+ * @param {string} email - The email of the new user
+ * @returns {Promise<boolean>} - whether the user already exists
+ */
+export async function checkIfUserExists(email: string): Promise<boolean> {
+  // Request parameters
+  const params = {
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    Username: email,
+  };
+
+  const existingUser: AdminGetUserCommandOutput | undefined = await new Promise(
+    (resolve) => {
+      provider.adminGetUser(params, function (err, data) {
+        if (err) {
+          resolve(undefined);
+        }
+        resolve(data);
+      });
+    },
+  );
+
+  return !!existingUser;
 }

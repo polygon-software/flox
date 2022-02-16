@@ -135,7 +135,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineEmits, PropType, ref} from 'vue'
+import {defineEmits, inject, PropType, ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
 import {
@@ -150,6 +150,9 @@ import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import { useDialogPluginComponent } from 'quasar'
+import {ErrorService} from 'src/services/ErrorService';
+import {AuthenticationService} from 'src/services/AuthService';
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
@@ -158,7 +161,6 @@ const emit = defineEmits(useDialogPluginComponent.emits)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
-
 const $q: QVueGlobals = useQuasar()
 
 const props = defineProps({
@@ -166,6 +168,10 @@ const props = defineProps({
     type: Object as PropType<Company>,
     required: true
   },
+  errorService: {
+    type: ErrorService,
+    required: true
+  }
 })
 
 // E-mail as a separate value, since it's editable
@@ -196,29 +202,34 @@ async function onOk(): Promise<void> {
     throw new Error('Missing data for company; cannot activate account')
   }
 
-  // Enable on database
-  await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
+  try{
+    // Enable on database
+    await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
 
-  // Send document upload e-mail
-  await sendDocumentUploadEmail(company.email ?? '', company.uuid ?? '')
+    // Send document upload e-mail
+    await sendDocumentUploadEmail(company.email ?? '', company.uuid ?? '')
 
-  // Show confirmation prompt
-  showNotification(
-    $q,
-    i18n.global.t('messages.document_upload_enabled'),
-    undefined,
-    'positive'
-  )
+    // Show confirmation prompt
+    showNotification(
+      $q,
+      i18n.global.t('messages.document_upload_enabled'),
+      undefined,
+      'positive'
+    )
 
-  onDialogOK()
+    onDialogOK()
+  } catch(err){
+    // Show error
+    props.errorService?.showErrorDialog(err)
+    return
+  }
 }
 
 /**
- * Executed upon rejecting a company application
+ * Rejects an application and sends a corresponding rejection e-mail
  * @returns {void}
  */
 function onReject(): void {
-  //TODO: Send rejection E-mail
   $q.dialog({
     title: 'Reject',
     component: RejectApplicationDialog,
@@ -233,9 +244,14 @@ function onReject(): void {
         'primary'
       )
       onDialogCancel()
-    }).catch((error)=>{
-      console.error(error) // Todo Toast
-    })
+    }).catch(()=>{
+      // Show notification
+      showNotification(
+        $q,
+        i18n.global.t('messages.rejection_failed'),
+        undefined,
+        'negative'
+      )    })
   })
 }
 
