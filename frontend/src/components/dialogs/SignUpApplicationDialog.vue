@@ -135,7 +135,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineEmits, inject, PropType, ref} from 'vue'
+import {defineEmits, PropType, ref} from 'vue'
 import { Company } from 'src/data/types/Company'
 import {executeMutation} from 'src/helpers/data-helpers';
 import {
@@ -143,16 +143,13 @@ import {
   REJECT_COMPANY,
   UPDATE_COMPANY_EMAIL
 } from 'src/data/mutations/COMPANY';
-import { QVueGlobals, useQuasar} from 'quasar';
+import { QVueGlobals, useQuasar, useDialogPluginComponent } from 'quasar';
 import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Address} from 'src/data/types/Address';
 import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
-import { useDialogPluginComponent } from 'quasar'
 import {ErrorService} from 'src/services/ErrorService';
-import {AuthenticationService} from 'src/services/AuthService';
-
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
