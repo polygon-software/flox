@@ -13,6 +13,7 @@ import { BANK_SUGGESTIONS } from '../../CONSTANTS/BANK';
 import { prettify } from '../../helpers/log-helper';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { ERRORS } from '../../error/ERRORS';
 
 @Injectable()
 export class BankService {
@@ -29,6 +30,13 @@ export class BankService {
    * @returns {Promise<{bank:Bank, password: string}>} - new Bank
    */
   async createBank(createBankInput: CreateBankInput): Promise<Bank> {
+    // Ensure abbreviation is unique
+    const abbreviation = createBankInput.abbreviation;
+    const existingBank = await this.findBankByAbbreviation(abbreviation);
+    if (existingBank) {
+      throw new Error(`${ERRORS.bank_must_be_unique} (${existingBank.name})`);
+    }
+
     // Create a Cognito account with a random password
     const cognitoId = await createCognitoAccount(
       createBankInput.email,
