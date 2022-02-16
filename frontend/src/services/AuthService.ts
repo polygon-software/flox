@@ -223,14 +223,9 @@ export class AuthenticationService {
       // Redirect to login
       await this.$routerService.routeTo(ROUTES.LOGIN)
 
-      // Short delay before cleaning cache to prevent erroneous query re-fetching
-      await sleep(1500)
-
       // Clear cache to prevent erroneous dashboard loading when changing roles
       const apolloClient = useApolloClient()
-      console.log('Client is:', apolloClient.client, apolloClient.client.cache)
-      await apolloClient.client.resetStore()
-      console.log('new cache is:', apolloClient.client.cache)
+      await apolloClient.client.clearStore()
     }
   }
 
