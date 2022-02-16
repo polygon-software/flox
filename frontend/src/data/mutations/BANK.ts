@@ -9,6 +9,12 @@ export const CREATE_BANK = {
         first_name
         last_name
         email
+        name
+        abbreviation
+        readable_id
+        created_at
+        phone
+        banned_at
         __typename
       }
     }`,

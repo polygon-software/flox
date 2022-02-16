@@ -79,16 +79,12 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
     componentProps: {email: values.email, password: pw}
   }).onOk(() => {
     // Push to success page
-    setTimeout(function () {
-      void $routerService?.routeTo(ROUTES.ADMIN_BANK)
-    }, 5000);
-    void $routerService?.routeTo(ROUTES.SUCCESS)
+    void $routerService?.routeTo(ROUTES.SUCCESS, {
+      msg: 'messages.bank_created',
+      btn: 'buttons.to_dashboard',
+      target: 'ADMIN_BANK'
+    })
   })
-
-
-  // TODO: Admin must get popup with bank credentials here, so they can be sent via e-mail (not automatically)
-
-
 }
 
 </script>

@@ -99,7 +99,10 @@ export default {
     dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
     email_sent: 'E-Mail(s) versendet',
     file_uploaded: 'Datei erfolgreich hochgeladen',
-    account_disabled: 'Account erfolgreich deaktiviert'
+    files_uploaded: 'Dateien erfolgreich hochgeladen',
+    account_disabled: 'Account erfolgreich deaktiviert',
+    password_set: 'Passwort erfolgreich festgelegt',
+    bank_created: 'Bank erfolgreich erstellt'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -148,6 +151,7 @@ export default {
     upload_documents: 'Dokumente hochladen',
     save_and_print: 'Speichern & Drucken',
     back_to_dashboard: 'Zurück zum dashboard',
+    to_dashboard: 'Zum Dashboard'
   },
   documents: {
     choose_file: 'Datei wählen',
