@@ -37,19 +37,19 @@
           </q-td>
           <!-- Total mortgage amount for company -->
           <q-td key="volume" :props="props">
-            CHF {{ companyMortgageAmount(props.row).toLocaleString() }}
+            CHF {{ companyMortgageAmount(props.row).toLocaleString('de-ch') }}
           </q-td>
           <!-- Total Provision for company -->
           <q-td key="prov_total" :props="props">
-           CHF {{ companyTotalProvision(props.row).toLocaleString() }}
+           CHF {{ companyTotalProvision(props.row).toLocaleString('de-ch') }}
           </q-td>
           <!-- Total Provision SOI for company -->
           <q-td key="prov_soi" :props="props">
-            CHF {{ (companyTotalProvision(props.row) - Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row)))).toLocaleString() }}
+            CHF {{ (companyTotalProvision(props.row) - Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row)))).toLocaleString('de-ch') }}
           </q-td>
           <!-- Provision the company will receive -->
           <q-td key="prov_org" :props="props">
-            CHF {{ Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row))).toLocaleString() }}
+            CHF {{ Math.round(companyTotalProvision(props.row) * getProvisionFactor(companyMortgageAmount(props.row))).toLocaleString('de-ch') }}
           </q-td>
           <q-td key="options" :props="props">
             <!-- Options dropdown -->
@@ -71,7 +71,7 @@
           <!-- Mortgage volume total -->
           <q-td key="volume" :props="props">
             <strong>
-              CHF {{ totalMortgageAmount.toLocaleString() }}
+              CHF {{ totalMortgageAmount.toLocaleString('de-ch') }}
             </strong>
           </q-td>
           <!-- Provisions total -->

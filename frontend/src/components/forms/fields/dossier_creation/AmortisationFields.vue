@@ -35,7 +35,7 @@
     <q-input
       v-model.number="amortisationAmount"
       dense
-      type="number"
+      type="text"
       :label="$t('form_for_clients.amount')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       mask="###'###'###'###"

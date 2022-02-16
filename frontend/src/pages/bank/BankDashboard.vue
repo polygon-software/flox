@@ -45,10 +45,10 @@
               {{ _props.row.address.city }}
             </q-td>
             <q-td key="market_value" :props="_props">
-              CHF {{ _props.row.value_estimate_low.toLocaleString() }} - CHF {{ _props.row.value_estimate_high.toLocaleString() }}
+              CHF {{ _props.row.value_estimate_low.toLocaleString('de-ch') }} - CHF {{ _props.row.value_estimate_high.toLocaleString('de-ch') }}
             </q-td>
             <q-td key="mortgage" :props="_props">
-              CHF {{ _props.row.mortgage_amount.toLocaleString() }}
+              CHF {{ _props.row.mortgage_amount.toLocaleString('de-ch') }}
             </q-td>
             <q-td key="enfeoffment" :props="_props">
               {{ _props.row.enfeoffment_estimate_low }}% - {{ _props.row.enfeoffment_estimate_high }}%

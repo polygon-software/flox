@@ -40,7 +40,7 @@
     <q-input
       v-model.number="interest"
       dense
-      type="number"
+      type="text"
       :label="$t('form_for_clients.building_lease_interest')"
       :rules="[(val) => IS_VALID_NUMBER(val) || $t('errors.invalid_amount')]"
       mask="###'###'###'###"
