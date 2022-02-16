@@ -22,7 +22,7 @@ export default boot(({ router, store}) => {
       return(ROUTES.LOGIN)
     }
     // Case 2: going to login when logged in, or to default path '/'
-    else if((to.path === ROUTES.LOGIN.path && loggedIn) || to.path === ROUTES.MAIN.path){
+    else if(((to.path === ROUTES.LOGIN.path || to.path === '/') && loggedIn)){
       const user = await getUser();
       return getUserRoleRoute(user)
     }

@@ -109,7 +109,6 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
-import {boolean} from 'joi';
 import {useRoute} from 'vue-router';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {COMPANY} from 'src/data/queries/COMPANY';
@@ -152,7 +151,7 @@ onMounted(async () => {
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   admin: {
-    type: boolean,
+    type: Boolean,
     required: false,
     default: false,
   }
