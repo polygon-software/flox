@@ -138,7 +138,7 @@ export class FileController {
     );
     company.creation_state = CREATION_STATE.DOCUMENTS_UPLOADED;
     await this.companyRepository.save(company);
-
+    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 
