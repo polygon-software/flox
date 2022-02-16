@@ -1,22 +1,19 @@
-FROM node:14-alpine
+FROM node:16-alpine
 
 WORKDIR /usr/src/app
 
-COPY frontend/package.json ./
-COPY frontend/yarn.lock ./
+COPY package.json ./
+COPY yarn.lock ./
 
-COPY /frontend /frontend
-COPY /shared /shared
-
-WORKDIR /shared
 RUN yarn --ignore-platform
 
-WORKDIR ../frontend
-RUN yarn --ignore-platform
+COPY . .
 
 RUN rm -rf dist
 
 RUN yarn build:ssr
-RUN rm -rf node_modules
+
 WORKDIR dist/ssr
+RUN yarn --ignore-platform
+
 CMD ["yarn", "start"]
