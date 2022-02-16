@@ -71,7 +71,7 @@
 <script setup lang="ts">
 import AnnouncementsTable from 'components/table/AnnouncementsTable.vue';
 import { inject, Ref, ref } from 'vue';
-import {ROLE} from '../../../../shared/definitions/ENUM';
+import {ROLE} from '../../../definitions/ENUM';
 import { DialogService } from 'src/services/DialogService';
 
 const dialogService: DialogService | undefined = inject('$dialogService')

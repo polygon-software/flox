@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import { executeQuery } from 'src/helpers/data-helpers';
-import { ROLE } from '../../../shared/definitions/ENUM';
+import { ROLE } from '../../definitions/ENUM';
 import { MY_USER } from 'src/data/queries/USER';
 
 /**

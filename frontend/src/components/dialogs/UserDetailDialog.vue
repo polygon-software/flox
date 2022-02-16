@@ -68,7 +68,7 @@ import { QDialog, useDialogPluginComponent, useQuasar } from 'quasar';
 import { fetchPlayer } from 'src/helpers/api-helpers';
 import { PRIVATE_FILE } from 'src/data/queries/FILE';
 import { executeQuery } from 'src/helpers/data-helpers';
-import { USER_STATUS } from '../../../../shared/definitions/ENUM';
+import { USER_STATUS } from '../../../definitions/ENUM';
 import UserDetails from 'components/user/UserDetails.vue';
 import { DialogService } from 'src/services/DialogService';
 

@@ -107,7 +107,7 @@
 import {defineProps, inject} from 'vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {formatDate} from 'src/helpers/format-helpers';
-import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
+import {PRODUCT_STATUS} from '../../../definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {DUPLICATE_PRODUCT} from 'src/data/mutations/PRODUCT';

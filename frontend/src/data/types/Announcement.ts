@@ -1,6 +1,6 @@
 import Joi, { Schema } from 'joi';
-import { ROLE } from '../../../../shared/definitions/ENUM';
-import { AnnouncementItem } from '../../../../shared/schemas/AnnouncementItem';
+import { ROLE } from '../../../definitions/ENUM';
+import { AnnouncementItem } from '../../../schemas/AnnouncementItem';
 
 /**
  * A class representing an announcement

@@ -1,12 +1,12 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 
 import Joi, { Schema } from 'joi';
-import { ProductItem } from '../../../../shared/schemas/ProductItem';
+import { ProductItem } from '../../../schemas/ProductItem';
 import {
   CATEGORY,
   CURRENCY,
   PRODUCT_STATUS,
-} from '../../../../shared/definitions/ENUM';
+} from '../../../definitions/ENUM';
 
 export interface ProductParams {
   uuid?: string;

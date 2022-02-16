@@ -69,7 +69,7 @@ import { computed, defineEmits, defineProps, ref } from 'vue';
 import { QDialog, useDialogPluginComponent } from 'quasar';
 import { Announcement } from 'src/data/types/Announcement';
 import { formatDate, parseDate } from 'src/helpers/format-helpers';
-import { ROLE } from '../../../../../shared/definitions/ENUM'
+import { ROLE } from '../../../../definitions/ENUM'
 import { cloneDeep } from 'lodash';
 
 const props = defineProps({

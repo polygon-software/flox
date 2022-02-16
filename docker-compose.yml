@@ -7,15 +7,18 @@ services:
   backend:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
-    env_file: backend/.env
     deploy:
+      mode: replicated
+      replicas: 2
       resources:
         limits:
-          cpus: '1.0'
-          memory: 2048m
+          cpus: '4.0'
+          memory: 8192m
+        reservations:
+          cpus: '4.0'
+          memory: 4096m
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
+      context: backend
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     networks:
@@ -26,17 +29,18 @@ services:
   frontend:
     image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
-    env_file: frontend/.env
     deploy:
+      mode: replicated
+      replicas: 2
       resources:
         limits:
-          cpus: '1.0'
-          memory: 2048m
+          cpus: '4.0'
+          memory: 8192m
+        reservations:
+          cpus: '4.0'
+          memory: 4096m
     build:
-      context: .
-      dockerfile: ./frontend/Dockerfile
-    volumes:
-      - data-frontend:frontend/usr/src/app
+      context: frontend
     ports:
       - ${FRONTEND_PORT}:${FRONTEND_PORT}
     networks:
@@ -49,8 +53,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
-          memory: 2048m
+          cpus: '4.0'
+          memory: 8192M
+        reservations:
+          cpus: '4.0'
+          memory: 4096m
     networks:
       - webnet
     environment:
@@ -79,4 +86,3 @@ networks:
 volumes:
   dbdata:
   #nocodbdata:
-  data-frontend:

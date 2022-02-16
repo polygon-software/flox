@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@nestjs/graphql": "^9.1.2",
-    "joi": "^17.4.2"
-  }
-}

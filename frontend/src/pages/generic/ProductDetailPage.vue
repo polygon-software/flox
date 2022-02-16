@@ -306,7 +306,7 @@ import {useRoute} from 'vue-router';
 import axios, {AxiosResponse} from 'axios';
 import {RouterService} from 'src/services/RouterService';
 import {toDataUrl} from 'src/helpers/image-helper';
-import { CURRENCY, PRODUCT_STATUS } from '../../../../shared/definitions/ENUM';
+import { CURRENCY, PRODUCT_STATUS } from '../../../definitions/ENUM';
 import ROUTES from 'src/router/routes';
 import { fetchProduct } from 'src/helpers/api-helpers';
 import { formatDate, parseDate } from 'src/helpers/format-helpers';

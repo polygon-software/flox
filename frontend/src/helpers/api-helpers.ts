@@ -10,7 +10,7 @@ import {
   PRODUCT_STATUS,
   ROLE,
   USER_STATUS,
-} from '../../../shared/definitions/ENUM';
+} from '../../definitions/ENUM';
 import { Announcement } from 'src/data/types/Announcement';
 import { ALL_ANNOUNCEMENTS } from 'src/data/queries/ANNOUNCEMENTS';
 import { ALL_PARTNERS, ALL_PLAYERS, PLAYER } from 'src/data/queries/USER';

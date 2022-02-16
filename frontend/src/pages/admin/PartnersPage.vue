@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import {Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
-import {USER_STATUS} from '../../../../shared/definitions/ENUM';
+import {USER_STATUS} from '../../../definitions/ENUM';
 import PartnersTable from 'components/table/PartnersTable.vue';
 
 // Search term

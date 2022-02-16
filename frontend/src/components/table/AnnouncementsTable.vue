@@ -53,7 +53,7 @@
 import { computed, defineProps, inject, ref } from 'vue';
 import { formatDate } from 'src/helpers/format-helpers';
 import { i18n } from 'boot/i18n';
-import { ROLE } from '../../../../shared/definitions/ENUM';
+import { ROLE } from '../../../definitions/ENUM';
 import { fetchAllAnnouncements } from 'src/helpers/api-helpers';
 import { DialogService } from 'src/services/DialogService';
 import { Announcement } from 'src/data/types/Announcement';

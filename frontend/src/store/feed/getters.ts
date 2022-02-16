@@ -1,6 +1,6 @@
 import FeedState from './state';
 import { Getters } from 'vuex-smart-module';
-import { CATEGORY } from '../../../../shared/definitions/ENUM';
+import { CATEGORY } from '../../../definitions/ENUM';
 
 /**
  * Getters

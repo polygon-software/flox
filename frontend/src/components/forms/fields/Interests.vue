@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import {computed, defineEmits, ref} from 'vue'
 import { i18n } from 'boot/i18n';
-import {CATEGORY} from '../../../../../shared/definitions/ENUM';
+import {CATEGORY} from '../../../../definitions/ENUM';
 
 const emit = defineEmits(['change'])
 const search = ref('')

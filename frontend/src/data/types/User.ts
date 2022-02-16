@@ -1,5 +1,5 @@
 import {Address} from 'src/data/types/Address';
-import {ROLE, USER_STATUS} from '../../../../shared/definitions/ENUM';
+import {ROLE, USER_STATUS} from '../../../definitions/ENUM';
 
 /**
  * A class representing a company data object

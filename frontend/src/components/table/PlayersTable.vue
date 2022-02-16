@@ -89,7 +89,7 @@
 <script setup lang="ts">
 import { defineProps, inject } from 'vue';
 import { formatDate, formatDateTime } from 'src/helpers/format-helpers';
-import { USER_STATUS } from '../../../../shared/definitions/ENUM';
+import { USER_STATUS } from '../../../definitions/ENUM';
 import { i18n } from 'boot/i18n';
 import { User } from 'src/data/types/User';
 import { fetchAllPlayers } from 'src/helpers/api-helpers';

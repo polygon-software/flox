@@ -1,5 +1,5 @@
 import Joi, { Schema } from 'joi';
-import { NotificationItem } from '../../../../shared/schemas/NotificationItem';
+import { NotificationItem } from '../../../schemas/NotificationItem';
 
 /**
  * A class representing a notification

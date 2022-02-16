@@ -1,4 +1,4 @@
-import { CATEGORY } from '../../../../shared/definitions/ENUM';
+import { CATEGORY } from '../../../definitions/ENUM';
 
 /**
  * Feed state

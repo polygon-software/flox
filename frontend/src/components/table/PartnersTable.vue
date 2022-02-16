@@ -88,7 +88,7 @@
 <script setup lang="ts">
 import { defineProps, inject } from 'vue';
 import { formatDate } from 'src/helpers/format-helpers';
-import { USER_STATUS } from '../../../../shared/definitions/ENUM';
+import { USER_STATUS } from '../../../definitions/ENUM';
 import { i18n } from 'boot/i18n';
 import { DialogService } from 'src/services/DialogService';
 import { fetchAllPartners } from 'src/helpers/api-helpers';

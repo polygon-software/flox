@@ -70,7 +70,7 @@ import {RouterService} from 'src/services/RouterService';
 import {inject, Ref, ref} from 'vue';
 import ROUTES from 'src/router/routes';
 import MyProductsTable from 'components/table/MyProductsTable.vue';
-import {PRODUCT_STATUS} from '../../../../shared/definitions/ENUM';
+import {PRODUCT_STATUS} from '../../../definitions/ENUM';
 import {i18n} from 'boot/i18n';
 
 const $routerService: RouterService|undefined = inject('$routerService')

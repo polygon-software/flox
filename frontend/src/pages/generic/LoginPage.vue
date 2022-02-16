@@ -20,7 +20,6 @@
       </strong>
 
       <q-btn
-        v-if="!signup"
         :label="$t('authentication.signup')"
         color="transparent"
         text-color="primary"
