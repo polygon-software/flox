@@ -237,7 +237,7 @@
                 color="primary"
                 icon="print"
                 class="q-ml-sm"
-                :disable="valueEstimateLoading"
+                :disable="valueEstimateLoading || hasSubmitted"
                 @click="onSubmit"
               />
             </div>
@@ -453,6 +453,9 @@ const valueEstimate: Ref<null|Record<string, number>> = ref(null)
 
 // Whether the value estimate is currently being loaded from the backend
 const valueEstimateLoading = ref(false)
+
+// Whether the from has been submitted (to prevent multi-submit)
+const hasSubmitted = ref(false)
 
 /**
  * Mortgage volume
@@ -765,6 +768,13 @@ function onDiscard(){
  * @returns {void}
  */
 async function onSubmit() {
+  if(hasSubmitted.value){
+    return
+  }
+
+  // Prevent multi-submit
+  hasSubmitted.value = true
+
   const formData = form.values.value as Record<string, Record<string,unknown>>
 
   // Page 1
