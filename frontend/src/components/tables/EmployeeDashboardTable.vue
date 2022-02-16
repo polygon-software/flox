@@ -35,7 +35,7 @@
           {{ _props.row.address.city }}
         </q-td>
         <q-td key="mortgage_amount">
-          {{ _props.row.mortgage_amount.toLocaleString() }}
+          {{ _props.row.mortgage_amount.toLocaleString('de-ch') }}
         </q-td>
         <q-td key="status">
           <q-chip

@@ -102,7 +102,7 @@
                 flat
               >
                 <strong>
-                  {{ totalIncome !== null && totalIncome !== undefined ? `CHF ${totalIncome.toLocaleString()}` : '-' }}
+                  {{ totalIncome !== null && totalIncome !== undefined ? `CHF ${totalIncome.toLocaleString('de-ch')}` : '-' }}
                 </strong>
               </q-card>
             </div>
@@ -121,7 +121,7 @@
                 flat
               >
                 <strong>
-                  {{ totalExpenses !== null && totalExpenses !== undefined ? `CHF ${totalExpenses.toLocaleString()}` : '-' }}
+                  {{ totalExpenses !== null && totalExpenses !== undefined ? `CHF ${totalExpenses.toLocaleString('de-ch')}` : '-' }}
                 </strong>
               </q-card>
             </div>
@@ -136,24 +136,24 @@
           <!-- Eligible salary -->
           <SummaryField
             :label="$t('form_for_clients.eligible_income')"
-            :content="eligibleIncome ? `CHF ${eligibleIncome.toLocaleString()}` : '-' "
+            :content="eligibleIncome ? `CHF ${eligibleIncome.toLocaleString('de-ch')}` : '-' "
             value-type="positive"
           />
 
           <!-- Costs per year -->
           <SummaryField
             :label="$t('form_for_clients.costs_per_year')"
-            :content="valueEstimateLoading ? $t('general.loading') : totalCosts ? `CHF ${totalCosts.toLocaleString()}` : '-' "
+            :content="valueEstimateLoading ? $t('general.loading') : totalCosts ? `CHF ${totalCosts.toLocaleString('de-ch')}` : '-' "
             value-type="negative"
             :show-hover-text="true"
             :hover-text="$t('form_for_clients.formula')"
-            :second-hover-text="totalCostsAsString.toLocaleString()"
+            :second-hover-text="totalCostsAsString.toLocaleString('de-ch')"
           />
 
           <!-- Mortgage Volume -->
           <SummaryField
             :label="$t('account_data.mortgage_volume')"
-            :content="mortgage ? `CHF ${mortgage.toLocaleString()}` : '-' "
+            :content="mortgage ? `CHF ${mortgage.toLocaleString('de-ch')}` : '-' "
           />
 
           <!-- Affordability -->
@@ -167,8 +167,8 @@
           <!-- Estimated value range -->
           <SummaryField
             :label="$t('form_for_clients.market_value_between')"
-            :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low.toLocaleString() }` : '-' "
-            :second-content="valueEstimateLoading ? $t('general.loading') : valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high.toLocaleString() }` : '-' "
+            :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low.toLocaleString('de-ch') }` : '-' "
+            :second-content="valueEstimateLoading ? $t('general.loading') : valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high.toLocaleString('de-ch') }` : '-' "
             :caption="$t('dossier.customer_value')"
             :second-caption="$t('dossier.estimated_market_value')"
             value-type="positive"
