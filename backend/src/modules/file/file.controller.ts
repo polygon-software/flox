@@ -87,6 +87,7 @@ export class FileController {
       owner,
       {},
     );
+    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 
