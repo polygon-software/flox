@@ -143,7 +143,7 @@
           <!-- Costs per year -->
           <SummaryField
             :label="$t('form_for_clients.costs_per_year')"
-            :content="totalCosts ? `CHF ${totalCosts.toLocaleString()}` : '-' "
+            :content="valueEstimateLoading ? $t('general.loading') : totalCosts ? `CHF ${totalCosts.toLocaleString()}` : '-' "
             value-type="negative"
             :show-hover-text="true"
             :hover-text="$t('form_for_clients.formula')"
@@ -159,7 +159,7 @@
           <!-- Affordability -->
           <SummaryField
             :label="$t('form_for_clients.affordability')"
-            :content="affordability ? `${affordability}%` : '-' "
+            :content="valueEstimateLoading ? $t('general.loading') : affordability ? `${affordability}%` : '-' "
           />
 
           <q-separator style="margin: 24px 0 24px 0"/>
@@ -168,7 +168,7 @@
           <SummaryField
             :label="$t('form_for_clients.market_value_between')"
             :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low.toLocaleString() }` : '-' "
-            :second-content="valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high.toLocaleString() }` : '-' "
+            :second-content="valueEstimateLoading ? $t('general.loading') : valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high.toLocaleString() }` : '-' "
             :caption="$t('dossier.customer_value')"
             :second-caption="$t('dossier.estimated_market_value')"
             value-type="positive"
@@ -231,13 +231,13 @@
                 :disable="!form.pageValid.value || bankOptions.length === 0"
                 @click="$refs.stepper.next()"
               />
-
               <q-btn
                 v-else
                 :label="$t('buttons.save_and_print')"
                 color="primary"
                 icon="print"
                 class="q-ml-sm"
+                :disable="valueEstimateLoading"
                 @click="onSubmit"
               />
             </div>
@@ -450,6 +450,9 @@ const bankOptions: Ref<Record<string, unknown>[]> = ref([])
 
 // Value estimate high/low
 const valueEstimate: Ref<null|Record<string, number>> = ref(null)
+
+// Whether the value estimate is currently being loaded from the backend
+const valueEstimateLoading = ref(false)
 
 /**
  * Mortgage volume
@@ -691,6 +694,9 @@ async function calculateValueEstimate(){
     return;
   }
 
+  // Set loading status
+  valueEstimateLoading.value = true
+
   const headers = {
     Authorization: `Bearer ${token}`
   }
@@ -714,6 +720,8 @@ async function calculateValueEstimate(){
     high: highEstimate
   }
 
+  // Set loading status
+  valueEstimateLoading.value = false
 }
 
 
