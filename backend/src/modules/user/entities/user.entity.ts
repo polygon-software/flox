@@ -1,52 +1,29 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
-import {
-  IsDate,
-  IsEmail,
-  IsPhoneNumber,
-  IsString,
-  IsUUID,
-} from 'class-validator';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { IsDate, IsEmail, IsPhoneNumber, IsString } from 'class-validator';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { ROLE } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
+import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 
 @ObjectType()
 @Entity()
 /**
  * An application User
  */
-export class User {
+export class User extends BaseEntity {
   @Field(() => ROLE, { description: 'Role of the User' })
   @Column({
     type: 'enum',
     enum: ROLE,
-    default: ROLE.NONE,
+    default: ROLE.USER,
   })
   @IsString()
   role: ROLE;
-
-  @Field(() => ID, { description: 'Cognito ID' })
-  @PrimaryColumn()
-  @IsUUID()
-  uuid: string;
 
   @Field(() => Address, { description: 'Domicile address' })
   @JoinColumn()
   @OneToOne(() => Address, { cascade: true, eager: true })
   address: Address;
-
-  @Field(() => Date, { description: 'Creation date' })
-  @CreateDateColumn()
-  createdAt: Date;
 
   @Field(() => String, { description: 'Username' })
   @Column()
@@ -75,12 +52,4 @@ export class User {
   @IsString()
   @IsDate()
   birthdate: Date;
-
-  @Field(() => Date, { description: 'Last modification date' })
-  @UpdateDateColumn()
-  lastModifiedAt: Date;
-
-  @Field(() => Date, { description: 'Date of deletion', nullable: true })
-  @DeleteDateColumn()
-  deletedAt: Date;
 }

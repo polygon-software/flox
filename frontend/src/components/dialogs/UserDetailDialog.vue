@@ -39,11 +39,7 @@ const props = defineProps({
 })
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emits = defineEmits([
-  // REQUIRED; need to specify some events that your
-  // component will emit through useDialogPluginComponent()
-  ...useDialogPluginComponent.emits
-])
+const emits = defineEmits(useDialogPluginComponent.emits)
 
 const user = fetchUser(props.userId)
 </script>

@@ -7,13 +7,13 @@ type Address {
   city: String!
 
   """Creation date"""
-  created_at: DateTime!
+  createdAt: DateTime!
 
   """Date of deletion"""
-  deleted_at: DateTime
+  deletedAt: DateTime
 
   """Last modification date"""
-  last_modified_at: DateTime!
+  lastModifiedAt: DateTime!
 
   """Number"""
   number: String!
@@ -82,7 +82,6 @@ type Query {
 
 enum Role {
   ADMIN
-  NONE
   USER
 }
 
@@ -121,6 +120,6 @@ type User {
   """Username"""
   username: String!
 
-  """Cognito ID"""
+  """UUID"""
   uuid: ID!
 }

@@ -16,13 +16,13 @@ export class BaseEntity {
 
   @Field(() => Date, { description: 'Creation date' })
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @Field(() => Date, { description: 'Last modification date' })
   @UpdateDateColumn()
-  last_modified_at: Date;
+  lastModifiedAt: Date;
 
   @Field(() => Date, { description: 'Date of deletion', nullable: true })
   @DeleteDateColumn()
-  deleted_at: Date;
+  deletedAt: Date;
 }

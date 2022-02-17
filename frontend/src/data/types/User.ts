@@ -2,7 +2,7 @@ import {Address} from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 
 /**
- * A class representing a company data object
+ * A class representing a user data object
  */
 export class User {
   role: ROLE;

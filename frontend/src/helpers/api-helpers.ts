@@ -6,7 +6,7 @@ import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 
 /**
- * Fetch all user.
+ * Fetch all users.
  * @returns {ComputedRef<User[]>} - all users.
  */
 export function fetchAllUsers(): ComputedRef<User[]> {

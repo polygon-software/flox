@@ -25,7 +25,7 @@
       <q-item-section>
         <div class="row flex content-center">
           <p class="col-5">{{ $t('account_data.address') }}:</p>
-          <p class="col-7">{{ address.prettyString() }}</p>
+          <p class="col-7">{{ props.user.address.prettyString() }}</p>
         </div>
       </q-item-section>
     </q-item>
@@ -66,7 +66,6 @@
 <script setup>
 import { defineProps } from 'vue';
 import { User } from 'src/data/types/User';
-import { Address } from 'src/data/types/Address';
 import { formatDate } from 'src/helpers/format-helpers';
 
 const props = defineProps({
@@ -74,13 +73,7 @@ const props = defineProps({
     type: User,
     required: true
   },
-})
+});
 
-const address = new Address(
-  props.user.address?.street?? undefined,
-  props.user.address?.number ?? undefined,
-  props.user.address?.city ?? undefined,
-  props.user.address?.zipCode ?? undefined,
-)
 </script>
 
