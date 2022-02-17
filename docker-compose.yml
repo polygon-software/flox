@@ -11,7 +11,10 @@ services:
       resources:
         limits:
           cpus: '1.0'
-          memory: 2048m
+          memory: 1024m
+        reservations:
+          cpus: '2.0'
+          memory: 4096m
     build:
       context: backend
     ports:
@@ -28,11 +31,12 @@ services:
       resources:
         limits:
           cpus: '1.0'
-          memory: 2048m
+          memory: 1024m
+        reservations:
+          cpus: '2.0'
+          memory: 4096m
     build:
       context: frontend
-    volumes:
-      - data-frontend:frontend/usr/src/app
     ports:
       - ${FRONTEND_PORT}:${FRONTEND_PORT}
     networks:
@@ -46,7 +50,10 @@ services:
       resources:
         limits:
           cpus: '1.0'
-          memory: 2048m
+          memory: 1024m
+        reservations:
+          cpus: '2.0'
+          memory: 4096m
     networks:
       - webnet
     environment:
@@ -75,4 +82,3 @@ networks:
 volumes:
   dbdata:
   #nocodbdata:
-  data-frontend:
