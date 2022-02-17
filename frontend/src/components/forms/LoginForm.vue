@@ -18,13 +18,14 @@
           @change="(newValue) => form.updateValue(field.key, newValue)"
       />
       <q-btn
-          style="margin-top: 20px"
-          color="primary"
-          text-color="black"
-          :label="$t('authentication.login')"
-          type="submit"
-          rounded
-          :disable="!form.pageValid.value"
+        style="margin-top: 20px; border-radius: 0"
+        text-color="primary"
+        :label="$t('authentication.login')"
+        type="submit"
+        no-caps
+        unelevated
+        outline
+        :disable="!form.pageValid.value"
       />
     </q-form>
   </div>

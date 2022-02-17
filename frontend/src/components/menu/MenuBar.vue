@@ -1,14 +1,6 @@
 <template>
-  <q-header class="row bg-primary shadow-5 justify-between">
-    <div class="row">
-      <img
-          alt="Polygon Software"
-          :src="require('src/assets/quasar-logo-vertical.svg')"
-          style="height: 50px"
-          class="q-ma-sm"
-      >
-    </div>
-  <div class="row">
+  <q-header class="row bg-transparent full-width">
+  <div class="row justify-between full-width q-pa-sm">
     <q-btn
         v-if="loggedIn"
         :label="$t('authentication.logout')"
@@ -16,13 +8,16 @@
         flat
         @click="logout"
     />
-    <q-btn
-        v-if="!loggedIn"
-        :label="$t('authentication.forgot_password')"
-        class="text-black"
-        flat
-        @click="forgottenPassword"
-    />
+    <!-- Placeholder if not logged in -->
+    <div v-else/>
+
+    <!-- Logo -->
+    <img
+      alt="Ziegler Consultants"
+      :src="require('src/assets/zc_logo.svg')"
+      style="height: 50px"
+      class="q-ma-sm"
+    >
   </div>
   </q-header>
 </template>
@@ -58,11 +53,4 @@ async function logout(): Promise<void>{
   await routerService?.routeTo(ROUTES.LOGIN)
 }
 
-/**
- * Triggers a password change for a non-logged in authentication
- * @returns {void}
- */
-function forgottenPassword() {
-  authService?.showResetPasswordDialog();
-}
 </script>

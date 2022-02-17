@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <q-card
+    <div
       class="column items-center text-center"
     >
       <h5
@@ -13,28 +13,22 @@
         @submit="onLogin"
       />
 
-      <strong
-        style="margin-top: 0; padding: 0"
-      >
-        {{ $t('authentication.no_account_yet') }}
-      </strong>
-
       <q-btn
-        v-if="!signup"
-        :label="$t('authentication.signup')"
+        :label="$t('authentication.forgot_password')"
         color="transparent"
-        text-color="primary"
+        text-color="black"
         flat
-        rounded
-        @click="toSignup"
+        no-caps
+        unelevated
+        @click="forgotPassword"
       />
 
-    </q-card>
+    </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {inject, } from 'vue'
+import {inject,} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
@@ -58,12 +52,11 @@ async function onLogin({username, password}: {username: string, password: string
 }
 
 /**
- * Go to signup Page
- * @returns {Promise<void>} - done
+ * Triggers a password change for a non-logged in authentication
+ * @returns {void}
  */
-async function toSignup(){
-  // Redirect to signup page
-  await $routerService?.routeTo(ROUTES.SIGNUP)
+function forgotPassword() {
+  $authService?.showResetPasswordDialog();
 }
 
 </script>
