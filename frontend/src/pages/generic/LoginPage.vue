@@ -48,7 +48,7 @@ async function onLogin({username, password}: {username: string, password: string
   await $authService?.login(username, password)
 
   // Redirect to main page
-  await $routerService?.routeTo(ROUTES.MAIN)
+  await $routerService?.routeTo(ROUTES.CUSTOMERS) // TODO role-dependent
 }
 
 /**

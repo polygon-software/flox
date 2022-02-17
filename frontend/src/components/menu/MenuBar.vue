@@ -11,6 +11,8 @@
     <!-- Placeholder if not logged in -->
     <div v-else/>
 
+    <q-chip v-if="admin" label="ADMIN MODE"/>
+
     <!-- Logo -->
     <img
       alt="Ziegler Consultants"
@@ -23,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject} from 'vue'
+import {computed, inject, defineProps} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -37,6 +39,14 @@ import AuthActions from 'src/store/authentication/actions';
 const authService: AuthenticationService|undefined = inject('$authService')
 const routerService: RouterService|undefined = inject('$routerService')
 const authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
+
+const props = defineProps({
+  admin:  {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
+})
 
 const loggedIn = computed(() => {
   // Explicit type

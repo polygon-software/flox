@@ -1,4 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/USER';
+import {ROLE} from 'src/data/ENUM';
 
 /**
  * This file defines the routes available within the application
@@ -8,9 +11,9 @@ import { RouteRecordRaw } from 'vue-router';
 const ROUTES: Record<string, RouteRecordRaw> = {
   // Admin: Customers
   CUSTOMERS: {
-    path: '/',
+    path: '/customers',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => getUserRoleLayout(),
     children: [
       { path: '', component: () => import('pages/admin/CustomersPage.vue') },
     ],
@@ -19,7 +22,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   LOGIN: {
     path: '/login',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/UserLayout.vue'),
     children: [
       { path: '', component: () => import('pages/generic/LoginPage.vue') },
     ],
@@ -28,13 +31,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   SIGNUP: {
     path: '/signup',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/UserLayout.vue'),
     children: [{ path: '', component: () => import('pages/generic/SignupPage.vue') }],
   },
 
   SUCCESS: {
     path: '/success',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/UserLayout.vue'),
     children: [{ path: '', component: () => import('pages/generic/SuccessPage.vue') }],
   },
 
@@ -53,3 +56,29 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
 ];
 
 export default ROUTES;
+
+/**
+ * Returns the layout for the currently logged in user
+ * @async
+ * @returns {any} - the layout component
+ */
+async function getUserRoleLayout(): Promise<any>{
+  // Get user's data from backend
+  const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+
+  // Non-logged in: Redirect to 404
+  if(!queryResult?.data?.myUser){
+    return import('layouts/UserLayout.vue')
+  }
+
+  const userData = queryResult.data.myUser as Record<string, unknown>
+  const userRole = userData.role;
+
+  switch(userRole){
+    case ROLE.ADMIN:
+      return import('layouts/AdminLayout.vue')
+    case ROLE.USER:
+    default:
+      return import('layouts/UserLayout.vue')
+  }
+}
