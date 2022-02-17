@@ -10,11 +10,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
-          memory: 1024m
-        reservations:
           cpus: '2.0'
           memory: 4096m
+        reservations:
+          cpus: '1.0'
+          memory: 1024m
     build:
       context: backend
     ports:
@@ -30,11 +30,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
-          memory: 1024m
-        reservations:
           cpus: '2.0'
           memory: 4096m
+        reservations:
+          cpus: '1.0'
+          memory: 1024m
     build:
       context: frontend
     ports:
@@ -49,11 +49,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
-          memory: 1024m
-        reservations:
           cpus: '2.0'
           memory: 4096m
+        reservations:
+          cpus: '1.0'
+          memory: 1024m
     networks:
       - webnet
     environment:
