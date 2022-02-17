@@ -114,8 +114,10 @@ async function logout(): Promise<void>{
  * @returns {boolean} - whether it's active
  */
 function isActiveOption(option: Record<string, string>){
-  // TODO better handling
-  return route.path.endsWith(option.key)
+  const routeParts = route.path.split('/')
+
+  // TODO depths?
+  return routeParts[1] === option.key
 }
 
 /**
@@ -125,6 +127,7 @@ function isActiveOption(option: Record<string, string>){
  */
 function onNavClick(option: Record<string, string>){
   // TODO navigate to corresponding route
+  console.log('GOTO', option)
 }
 
 </script>

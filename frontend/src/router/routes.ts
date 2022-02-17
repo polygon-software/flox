@@ -15,7 +15,8 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => getUserRoleLayout(),
     children: [
-      { path: '', component: () => import('pages/admin/CustomersPage.vue') },
+      { path: '', component: () => import('pages/admin/CustomersListPage.vue') },
+      { path: '/:catchAll(.*)*', component: () => import('pages/general/CustomerPage.vue') },
     ],
   },
 
@@ -24,7 +25,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => import('layouts/UserLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/generic/LoginPage.vue') },
+      { path: '', component: () => import('pages/general/LoginPage.vue') },
     ],
   },
 
@@ -32,19 +33,19 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     path: '/signup',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => import('layouts/UserLayout.vue'),
-    children: [{ path: '', component: () => import('pages/generic/SignupPage.vue') }],
+    children: [{ path: '', component: () => import('pages/general/SignupPage.vue') }],
   },
 
   SUCCESS: {
     path: '/success',
     component: () => import('layouts/UserLayout.vue'),
-    children: [{ path: '', component: () => import('pages/generic/SuccessPage.vue') }],
+    children: [{ path: '', component: () => import('pages/general/SuccessPage.vue') }],
   },
 
   // Wildcard route for non-covered routes
   WILDCARD: {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/generic/Error404.vue'),
+    component: () => import('pages/general/Error404.vue'),
   },
 };
 
