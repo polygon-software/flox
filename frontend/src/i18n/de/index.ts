@@ -12,6 +12,7 @@ export default {
     home: 'Home',
     settings: 'Einstellungen',
     loading: 'Lädt',
+    filter: 'Filter',
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -49,7 +50,7 @@ export default {
     accept_condition_truthful: 'Alle Angaben sind wahrheitsgetreu ausgefüllt.',
     optional: 'optional',
   },
-  dashboards: {
+  dashboard: {
     customer: 'Kunde | Kunden',
     project: 'Projekt | Projekte',
     station: 'Station',

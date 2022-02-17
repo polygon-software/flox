@@ -12,6 +12,7 @@ export default {
     home: 'Home',
     settings: 'Settings',
     loading: 'Loading',
+    filter: 'Filter',
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -48,7 +49,7 @@ export default {
     accept_condition_truthful: 'All information has been filled in truthfully.',
     optional: 'optional',
   },
-  dashboards: {
+  dashboard: {
     customer: 'Customer | Customer',
     project: 'Project | Projects',
     station: 'Station',
