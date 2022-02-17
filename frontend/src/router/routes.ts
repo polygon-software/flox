@@ -29,6 +29,26 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     ],
   },
 
+  // General: Account
+  ACCOUNT: {
+    path: '/account',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    component: () => getUserRoleLayout(),
+    children: [
+      { path: '', component: () => import('pages/general/AccountPage.vue') },
+    ]
+  },
+
+  // General: Share
+  SHARE: {
+    path: '/share',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    component: () => getUserRoleLayout(),
+    children: [
+      { path: '', component: () => import('pages/general/SharePage.vue') },
+    ]
+  },
+
   LOGIN: {
     path: '/login',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

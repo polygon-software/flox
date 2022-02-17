@@ -138,7 +138,7 @@ const navOptions = props.admin ? adminNavOptions : userNavOptions
 const routeParts = computed(() => {
   const pathParts = route.path.split('/')
   pathParts.splice(0, 1)
-  return pathParts
+  return pathParts[0].length > 0 ? pathParts : []
 })
 
 
@@ -160,7 +160,7 @@ async function logout(): Promise<void>{
 function isActiveOption(option: Record<string, string>){
   const pathParts = route.path.split('/')
 
-  // TODO depths?
+  console.log('parts:', pathParts)
   return `/${pathParts[0]}` === option.path
 }
 
