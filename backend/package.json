@@ -20,7 +20,7 @@
     "test:unit:watch": "jest --watch",
     "test:unit:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:dev": "docker-compose up -V --build"
+    "docker:db": "docker-compose up"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.45.0",
@@ -46,6 +46,7 @@
     "jest-sonar": "^0.2.12",
     "joi": "^17.4.2",
     "jwks-rsa": "^2.0.5",
+    "mysql": "^2.18.1",
     "node-fetch": "^2.6.6",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",

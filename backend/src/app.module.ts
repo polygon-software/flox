@@ -12,6 +12,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
 import { User } from './modules/user/entities/user.entity';
+import { PreviewModule } from './modules/preview/preview.module';
 
 @Module({
   imports: [
@@ -45,7 +46,6 @@ import { User } from './modules/user/entities/user.entity';
         DB_HOST: Joi.string().required(),
 
         // Ports
-        NOCODB_PORT: Joi.number().required(),
         SERVER_PORT: Joi.number().required(),
         DB_PORT: Joi.number().required(),
       }),
@@ -64,8 +64,37 @@ import { User } from './modules/user/entities/user.entity';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forRootAsync({
+      name: 'MR2000',
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mariadb',
+        host: configService.get('mr2000.host'),
+        port: configService.get('mr2000.port'),
+        username: configService.get('mr2000.username'),
+        password: configService.get('mr2000.password'),
+        database: configService.get('mr2000.database'),
+        synchronize: false,
+      }),
+      inject: [ConfigService],
+    }),
+    TypeOrmModule.forRootAsync({
+      name: 'MR3000',
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mariadb',
+        host: configService.get('mr3000.host'),
+        port: configService.get('mr3000.port'),
+        username: configService.get('mr3000.username'),
+        password: configService.get('mr3000.password'),
+        database: configService.get('mr3000.database'),
+        synchronize: false,
+      }),
+      inject: [ConfigService],
+    }),
     TypeOrmModule.forFeature([User]),
     UserModule,
+    PreviewModule,
   ],
   providers: [
     JwtStrategy,

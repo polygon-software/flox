@@ -76,6 +76,7 @@ type Mutation {
 type Query {
   allUsers: [User!]!
   myUser: User!
+  preview(cli: String!, date: String!, num: String!): String!
   user(uuid: ID!): User!
 }
 
