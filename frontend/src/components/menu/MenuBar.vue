@@ -9,6 +9,7 @@
         :key="option.key"
         class="row justify-start items-center"
       >
+        <!-- Navigation root page -->
         <q-btn
           :label="option.label"
           flat
@@ -16,12 +17,29 @@
           :color="isActiveOption(option) ? 'black' : 'primary'"
           @click="onNavClick(option)"
         />
-        <q-icon
+
+        <!-- Sub-navigation -->
+        <div
           v-if="isActiveOption(option)"
-          name="chevron_right"
-          color="black"
-          size="sm"
-        />
+          class="row justify-center"
+        >
+          <div
+            v-for="part in routeParts"
+            :key="part"
+            class="row justify-center items-center"
+          >
+            <q-icon
+              name="chevron_right"
+              color="black"
+              size="sm"
+            />
+            <q-btn
+              :label="part.toUpperCase()"
+              color="black"
+              flat
+            />
+          </div>
+        </div>
       </div>
 
       <!-- Logout button -->
@@ -112,6 +130,17 @@ const userNavOptions = [
 const navOptions = props.admin ? adminNavOptions : userNavOptions
 
 /**
+ * Parts of the route
+ * e.g. ['usz', 'p123'] for route '/usz/p123'
+ */
+const routeParts = computed(() => {
+  const pathParts = route.path.split('/')
+  pathParts.splice(0, 1)
+  return pathParts
+})
+
+
+/**
  * Logs out the current authentication
  * @async
  * @returns {void}
@@ -130,7 +159,7 @@ function isActiveOption(option: Record<string, string>){
   const routeParts = route.path.split('/')
 
   // TODO depths?
-  return `/${routeParts[1]}` === option.path
+  return `/${routeParts[0]}` === option.path
 }
 
 /**
