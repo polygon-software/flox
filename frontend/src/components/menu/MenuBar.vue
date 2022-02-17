@@ -14,17 +14,18 @@
         @click="onNavClick(option)"
       />
 
-    </div>
-
-    <div class="row justify-center">
       <!-- Logout button -->
       <q-btn
         v-if="loggedIn"
-        icon="logout"
+        :label="$t('authentication.logout')"
         color="primary"
         flat
+        no-caps
         @click="logout"
       />
+    </div>
+
+    <div class="row justify-center">
       <!-- Logo -->
       <img
         alt="Ziegler Consultants"
