@@ -3,7 +3,7 @@
   <div class="row justify-between full-width q-pa-sm">
 
     <!-- Navigation -->
-    <div class="column">
+    <div class="column justify-start items-start">
       <div
         v-for="option in navOptions"
         :key="option.key"
@@ -24,7 +24,7 @@
           class="row justify-center"
         >
           <div
-            v-for="part in routeParts"
+            v-for="(part, index) in routeParts"
             :key="part"
             class="row justify-center items-center"
           >
@@ -37,6 +37,7 @@
               :label="part.toUpperCase()"
               color="black"
               flat
+              @click="onSubnavClick(index)"
             />
           </div>
         </div>
@@ -78,13 +79,14 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {i18n} from 'boot/i18n';
-import {useRoute} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 
 const authService: AuthenticationService|undefined = inject('$authService')
 const routerService: RouterService|undefined = inject('$routerService')
 const authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 
 const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
   admin:  {
@@ -136,7 +138,7 @@ const navOptions = props.admin ? adminNavOptions : userNavOptions
 const routeParts = computed(() => {
   const pathParts = route.path.split('/')
   pathParts.splice(0, 1)
-  return pathParts
+  return pathParts[0].length > 0 ? pathParts : []
 })
 
 
@@ -156,20 +158,41 @@ async function logout(): Promise<void>{
  * @returns {boolean} - whether it's active
  */
 function isActiveOption(option: Record<string, string>){
-  const routeParts = route.path.split('/')
+  const pathParts = route.path.split('/')
 
   // TODO depths?
-  return `/${routeParts[0]}` === option.path
+  return `/${pathParts[0]}` === option.path
 }
 
 /**
- * Upon clicking a navigation option, route to corresponding page
+ * Upon clicking a navigation main option, route to corresponding page
  * @param {Record<string, string>} option - navigation option that was clicked
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
-function onNavClick(option: Record<string, string>){
-  // TODO navigate to corresponding route
-  console.log('GOTO', option)
+async function onNavClick(option: Record<string, string>){
+  await router.push(option.path)
+}
+
+/**
+ * Upon clicking a sub-navigation option, route to corresponding page
+ * @param {number} index - index of the clicked option
+ * @returns {Promise<void>} - done
+ */
+async function onSubnavClick(index: number){
+  const diff = routeParts.value.length - index - 1
+
+  // Last item clicked; no change needed
+  if(diff === 0){
+    return
+  }
+
+  // Build new target path by removing as many parts as needed
+  let targetPath = ''
+  for(let i = 0; i < routeParts.value.length - diff; i++){
+    targetPath += `/${routeParts.value[i]}`
+  }
+
+  await router.push(targetPath)
 }
 
 </script>
