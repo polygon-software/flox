@@ -53,7 +53,9 @@ export default {
     customer: 'Customer | Customer',
     project: 'Project | Projects',
     station: 'Station',
-    device_pool: 'Device Pool'
+    device_pool: 'Device Pool',
+    account: 'Account',
+    share: 'Share'
   },
   buttons: {
     finish: 'Finish',
