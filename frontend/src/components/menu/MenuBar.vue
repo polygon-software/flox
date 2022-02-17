@@ -138,7 +138,7 @@ const navOptions = props.admin ? adminNavOptions : userNavOptions
 const routeParts = computed(() => {
   const pathParts = route.path.split('/')
   pathParts.splice(0, 1)
-  return pathParts[0].length > 0 ? pathParts : []
+  return pathParts
 })
 
 
@@ -179,6 +179,7 @@ async function onNavClick(option: Record<string, string>){
  * @returns {Promise<void>} - done
  */
 async function onSubnavClick(index: number){
+  // Get amount of path items to remove
   const diff = routeParts.value.length - index - 1
 
   // Last item clicked; no change needed
@@ -191,6 +192,8 @@ async function onSubnavClick(index: number){
   for(let i = 0; i < routeParts.value.length - diff; i++){
     targetPath += `/${routeParts.value[i]}`
   }
+
+  console.log(route.params)
 
   await router.push(targetPath)
 }
