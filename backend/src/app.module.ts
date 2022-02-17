@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
@@ -9,10 +9,10 @@ import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
-import { ItemModule } from './item/item.module';
 import * as Joi from 'joi';
-import { FileModule } from './file/file.module';
 import { RolesGuard } from './auth/roles.guard';
+import { User } from './modules/user/entities/user.entity';
+import { PreviewModule } from './modules/preview/preview.module';
 
 @Module({
   imports: [
@@ -33,6 +33,7 @@ import { RolesGuard } from './auth/roles.guard';
           },
         },
       },
+      cors: false, // TODO set appropriate for production
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -45,16 +46,8 @@ import { RolesGuard } from './auth/roles.guard';
         DB_HOST: Joi.string().required(),
 
         // Ports
-        NOCODB_PORT: Joi.number().required(),
         SERVER_PORT: Joi.number().required(),
         DB_PORT: Joi.number().required(),
-
-        // AWS
-        AWS_REGION: Joi.string().required(),
-        AWS_ACCESS_KEY_ID: Joi.string().required(),
-        AWS_SECRET_ACCESS_KEY: Joi.string().required(),
-        AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
-        AWS_PRIVATE_BUCKET_NAME: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -71,9 +64,37 @@ import { RolesGuard } from './auth/roles.guard';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forRootAsync({
+      name: 'MR2000',
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mariadb',
+        host: configService.get('mr2000.host'),
+        port: configService.get('mr2000.port'),
+        username: configService.get('mr2000.username'),
+        password: configService.get('mr2000.password'),
+        database: configService.get('mr2000.database'),
+        synchronize: false,
+      }),
+      inject: [ConfigService],
+    }),
+    TypeOrmModule.forRootAsync({
+      name: 'MR3000',
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mariadb',
+        host: configService.get('mr3000.host'),
+        port: configService.get('mr3000.port'),
+        username: configService.get('mr3000.username'),
+        password: configService.get('mr3000.password'),
+        database: configService.get('mr3000.database'),
+        synchronize: false,
+      }),
+      inject: [ConfigService],
+    }),
+    TypeOrmModule.forFeature([User]),
     UserModule,
-    ItemModule,
-    FileModule,
+    PreviewModule,
   ],
   providers: [
     JwtStrategy,
@@ -87,4 +108,8 @@ import { RolesGuard } from './auth/roles.guard';
     },
   ],
 })
+
+/**
+ * Main Module
+ */
 export class AppModule {}

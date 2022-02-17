@@ -10,13 +10,27 @@ export default (): Config => ({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
   },
+  mr2000: {
+    host: process.env.MR_HOST,
+    port: process.env.MR_PORT,
+    username: process.env.MR_USER,
+    password: process.env.MR_PASSWORD,
+    database: process.env.MR_2000,
+  },
+  mr3000: {
+    host: process.env.MR_HOST,
+    port: process.env.MR_PORT,
+    username: process.env.MR_USER,
+    password: process.env.MR_PASSWORD,
+    database: process.env.MR_3000,
+  },
 });
 
-export class serverConfig {
+export class ServerConfig {
   port: number;
 }
 
-export class databaseConfig {
+export class DatabaseConfig {
   host: string;
   port: string;
   username: string;
@@ -25,7 +39,9 @@ export class databaseConfig {
 }
 
 export class Config {
-  server: serverConfig;
+  server: ServerConfig;
   entities: string;
-  database: databaseConfig;
+  database: DatabaseConfig;
+  mr2000: DatabaseConfig;
+  mr3000: DatabaseConfig;
 }

@@ -2,7 +2,6 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoUser, CognitoUserSession,
   ISignUpResult
 } from 'amazon-cognito-identity-js';
-import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordDialog from 'components/dialogs/ChangePasswordDialog.vue'
 import ResetPasswordDialog from 'components/dialogs/ResetPasswordDialog.vue'
 import {ErrorService} from './ErrorService';
@@ -14,6 +13,9 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
+import {i18n} from 'boot/i18n';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/USER';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -65,88 +67,49 @@ export class AuthenticationService {
      * @returns {void}
      */
     async login(identifier: string, password: string): Promise<void>{
+      // Generate auth details
+      const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+          Username: identifier,
+          Password: password
+      });
 
-        // Generate auth details
-        const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
-            Username: identifier,
-            Password: password
-        });
+      const userPool = this.$authStore.getters.getUserPool()
 
-        const userPool = this.$authStore.getters.getUserPool()
+      if(userPool === undefined){
+        this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
+        return
+      }
+        // Actual Cognito authentication on given pool
+      const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
+          Username: identifier,
+          Pool: userPool,
+      });
 
-        if(userPool === undefined){
-          this.$errorService.showErrorDialog(new Error('User Pool is not defined'))
-          return
-        }
-          // Actual Cognito authentication on given pool
-        const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
-            Username: identifier,
-            Pool: userPool,
-        });
-
-        // Execute auth function
-        return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
-          // Store in local variable
-          this.$authStore.mutations.setCognitoUser(cognitoUser)
-          cognitoUser.authenticateUser(authenticationDetails, {
-              onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
-              onFailure: (err: Error)=>{this.onFailure(err) },
-              // Sets up MFA (only done once after signing up)
-              mfaSetup: () => {
-                this.setupMFA(cognitoUser, resolve)
-              },
-
-            // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-              selectMFAType: function () {
-                  cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
-              },
-
-              // Called if time-limited one time password is required (only second login or later)
-              totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
-
-              //TODO check when/if this appears
-              mfaRequired: function () {
-                  const verificationCode = prompt('Please input verification code', '');
-                  if (typeof verificationCode === 'string') {
-                      cognitoUser.sendMFACode(verificationCode, this);
-                  }
-              },
-
-
-          })
+      // Execute auth function
+      return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
+        // Store in local variable
+        this.$authStore.mutations.setCognitoUser(cognitoUser)
+        cognitoUser.authenticateUser(authenticationDetails, {
+            onSuccess: (result)=>{
+              void this.loginSuccess(result, resolve)
+            },
+            onFailure: (err: Error)=>{this.onFailure(err) },
         })
-    }
-
-
-  /**
-   * Sets up MFA for the given cognito user
-   * @param {CognitoUser} cognitoUser - the user
-   * @param {function} resolve - resolve function
-   * @returns {void}
-   */
-  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
-    cognitoUser.associateSoftwareToken({
-        associateSecretCode: (secret: string) => {
-          this.$authStore.mutations.setCognitoUser(cognitoUser)
-          this.showQRCodeDialog(secret, resolve, cognitoUser)},
-        onFailure: (err: Error) => {this.onFailure(err)}
       })
     }
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.
-   * TODO make adaptable to other parameters via direct handling of {attributes} param
    * @param {string} username - the chosen username
-   * @param {string} email - the authentication's e-mail address -> TODO move to attributes
+   * @param {string} email - the authentication's e-mail address
    * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
    * @async
-   * @returns {void}
+   * @returns {string} - the cognito user's UUID
    */
-  async signUp(username: string, email: string, password: string): Promise<void> {
+  async signUp(username: string, email: string, password: string): Promise<string> {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
       const attributes = [];
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-      // TODO disable requirement on AWS @thommann
       attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'birthdate', Value: '2000-05-12'}))
       this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
             if (err) {
@@ -161,7 +124,8 @@ export class AuthenticationService {
     })
 
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
-    this.showEmailVerificationDialog()
+
+    return cognitoUserWrapper.userSub
   }
 
   /**
@@ -216,9 +180,15 @@ export class AuthenticationService {
       }
 
       this.$q.dialog({
-            title: 'Reset Password',
-            message: 'Please enter your username',
-            cancel: true,
+            title: i18n.global.t('authentication.reset_password'),
+            message: i18n.global.t('authentication.please_enter_username'),
+            cancel: {
+              label: i18n.global.t('buttons.cancel'),
+              flat: true,
+            },
+            ok: {
+              label: i18n.global.t('buttons.ok'),
+            },
             persistent: true,
             prompt: {
                 model: '',
@@ -275,7 +245,7 @@ export class AuthenticationService {
                 return
             } else {
               this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
-                  // TODO
+                  console.log('resend code')
                 })
             }
         }
@@ -295,48 +265,6 @@ export class AuthenticationService {
         }).onCancel(() => {
             // TODO
         })
-    }
-
-    /**
-     * Shows a dialog containing a QR code for setting up two factor authentication
-     * @param {string} secretCode - the authenticator code to encode in QR code form
-     * @param {function} resolve - resolve function
-     * @param {CognitoUser} cognitoUser - the cognito user to show the dialog for
-     * @returns {void}
-     */
-    showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void, cognitoUser: CognitoUser): void{
-      const username = this.$authStore.getters.getUsername() ?? 'user'
-
-      const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
-      this.$q.dialog({
-          component: QrCodeDialog,
-          componentProps: {
-              value: codeUrl
-          },
-      }).onOk(() => {
-          // Verify code
-          this.$q.dialog({
-              title: 'Verification',
-              message: 'Please enter your 2FA authenticator code',
-              cancel: true,
-              persistent: true,
-              prompt: {
-                  model: '',
-                  isValid: (val: string) => val.length >= 6,
-                  type: 'text'
-              },
-          }).onOk((code: string) => {
-              // TODO friendlyDeviceName
-            cognitoUser.verifySoftwareToken(code, 'My TOTP device', {
-                  onSuccess: (userSession: CognitoUserSession)=>{
-                    this.loginSuccess(userSession, resolve)
-                  },
-                  onFailure: (error: Error)=>{
-                    this.onFailure(error)
-                  },
-              });
-          })
-      })
     }
 
     /**
@@ -382,7 +310,7 @@ export class AuthenticationService {
           currentUser?.sendMFACode(code, {
             onSuccess: (userSession: CognitoUserSession)=>{
               this.$authStore.mutations.setCognitoUser(currentUser)
-              this.loginSuccess(userSession, resolve)
+              void this.loginSuccess(userSession, resolve)
             },
             onFailure: (error: Error)=>{
               this.onFailure(error)
@@ -397,9 +325,23 @@ export class AuthenticationService {
      * @param {function} resolve - resolve function
      * @returns {void}
      */
-    loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
+    async loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): Promise<void>{
+
       // Store locally
       this.$authStore.mutations.setUserSession(userSession)
+
+      // Upon login, fetch my user to check status
+      const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+
+      // No valid user: show error
+      if(!queryResult?.data?.myUser){
+        // Auto-logout
+        await this.logout();
+
+        // Generic error
+        this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
+        return;
+      }
 
       resolve()
     }
@@ -410,11 +352,13 @@ export class AuthenticationService {
      * @returns {void}
      */
     onFailure(error: Error): void{
-        if(error.name === 'UserNotConfirmedException'){
-            // Show the e-mail verification dialog and send a new code
-            this.showEmailVerificationDialog(true)
-        } else {
-          this.$errorService.showErrorDialog(error)
-        }
+      // Depending on error, show appropriate dialog
+      if(error.name === 'UserNotConfirmedException'){
+        // Show the e-mail verification dialog and send a new code
+        this.showEmailVerificationDialog(true)
+      } else {
+        // Generic error
+        this.$errorService.showErrorDialog(error)
+      }
     }
 }

@@ -1,0 +1,62 @@
+import { Injectable } from '@nestjs/common';
+import { CreateUserInput } from './dto/input/create-user.input';
+import { UpdateUserInput } from './dto/input/update-user.input';
+import { GetUserArgs } from './dto/args/get-user.args';
+import { DeleteUserInput } from './dto/input/delete-user.input';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { ROLE } from '../../ENUM/ENUM';
+
+@Injectable()
+export class UserService {
+  constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+  ) {}
+
+  /**
+   * Creates a new user on the database
+   * @param {CreateUserInput} createUserInput - input values
+   * @returns {User} - the database user
+   */
+  async create(createUserInput: CreateUserInput): Promise<User> {
+    const user = this.usersRepository.create({
+      ...createUserInput,
+      role: ROLE.USER,
+    });
+    return this.usersRepository.save(user);
+  }
+
+  /**
+   * Returns all Players
+   * @returns {Promise<User[]>} - all partner users
+   */
+  getAllUsers(): Promise<User[]> {
+    return this.usersRepository.find({
+      where: { role: ROLE.USER },
+    });
+  }
+
+  /**
+   * Fetches a single user
+   * @param {GetUserArgs} getUserArgs - search arguments, containing UUID
+   * @returns {Promise<User>} - the user
+   */
+  getUser(getUserArgs: GetUserArgs): Promise<User> {
+    return this.usersRepository.findOne(getUserArgs.uuid);
+  }
+
+  async update(updateUserInput: UpdateUserInput): Promise<User> {
+    const user = this.usersRepository.create(updateUserInput);
+    await this.usersRepository.update(updateUserInput.uuid, user);
+    return this.usersRepository.findOne(updateUserInput.uuid);
+  }
+
+  async remove(deleteUserInput: DeleteUserInput): Promise<User> {
+    const user = await this.usersRepository.findOne(deleteUserInput.uuid);
+    const uuid = user.uuid;
+    const deletedUser = await this.usersRepository.remove(user);
+    deletedUser.uuid = uuid;
+    return deletedUser;
+  }
+}

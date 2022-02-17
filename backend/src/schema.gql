@@ -2,112 +2,123 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateItemInput {
-  """Name"""
-  name: String!
+type Address {
+  """City"""
+  city: String!
 
-  """User UUID"""
-  userUUID: ID
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """Number"""
+  number: String!
+
+  """Street"""
+  street: String!
+
+  """UUID"""
+  uuid: ID!
+
+  """Zip Code"""
+  zipCode: String!
+}
+
+input CreateAddressInput {
+  city: String!
+  number: String!
+  street: String!
+  zipCode: String!
 }
 
 input CreateUserInput {
-  age: Int!
-  name: String!
+  """User address"""
+  address: CreateAddressInput!
+
+  """Date of birth"""
+  birthdate: DateTime!
+
+  """E-mail address"""
+  email: String!
+
+  """Full name of the user"""
+  fullName: String!
+
+  """phone number"""
+  phone: String!
+
+  """Username"""
+  username: String!
+
+  """Cognito ID"""
+  uuid: ID!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 input DeleteUserInput {
   uuid: ID!
 }
 
-type Item {
-  """Name"""
-  name: String!
-
-  """User of the item"""
-  user: User
-
-  """UUID"""
-  uuid: ID!
-}
-
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
-  createItem(createItemInput: CreateItemInput!): Item!
   remove(deleteUserInput: DeleteUserInput!): User!
-  removeItem(uuid: ID!): Item!
   update(updateUserInput: UpdateUserInput!): User!
-  updateItem(updateItemInput: UpdateItemInput!): Item!
-}
-
-type PrivateFile {
-  """S3 File Key"""
-  key: String!
-
-  """File owner"""
-  owner: String!
-
-  """Pre-signed download URL"""
-  url: String
-
-  """UUID"""
-  uuid: ID!
-}
-
-type PublicFile {
-  """S3 File Key"""
-  key: String!
-
-  """Public download URL"""
-  url: String!
-
-  """UUID"""
-  uuid: ID!
 }
 
 type Query {
   allUsers: [User!]!
-  getPrivateFile(
-    """URL expiration duration (in seconds)"""
-    expires: [Float!]
-    uuid: ID!
-  ): PrivateFile!
-  getPublicFile(uuid: ID!): PublicFile!
-  item(uuid: ID!): Item!
-  items: [Item!]!
+  myUser: User!
+  preview(cli: String!, date: String!, num: String!): String!
   user(uuid: ID!): User!
-  users(uuids: [ID!]): [User!]!
 }
 
-type Subscription {
-  userAdded: User!
-}
-
-input UpdateItemInput {
-  """Name"""
-  name: String
-
-  """User UUID"""
-  userUUID: ID
-
-  """Item UUID"""
-  uuid: ID!
+enum Role {
+  ADMIN
+  USER
 }
 
 input UpdateUserInput {
-  age: Int
-  name: String
   uuid: ID!
 }
 
 type User {
-  """Age"""
-  age: Int!
+  """Domicile address"""
+  address: Address!
 
-  """Items of the user"""
-  items: [Item!]
+  """Date of birth"""
+  birthdate: DateTime!
 
-  """Name"""
-  name: String!
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """E-mail"""
+  email: String!
+
+  """Full name"""
+  fullName: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """Phone number"""
+  phone: String!
+
+  """Role of the User"""
+  role: Role!
+
+  """Username"""
+  username: String!
 
   """UUID"""
   uuid: ID!

@@ -55,6 +55,9 @@ export class Form {
       if (!this.values.value[key]) return false
 
       const field: Field = FIELDS[key.toUpperCase()]
+      if(!field){
+        throw new Error(`No field found for ${key.toUpperCase()}`)
+      }
       const rules: Array<(valueElement: any) => boolean|string> = field.attributes.rules
       return rules.every((rule: (valueElement: any) => boolean|string) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)

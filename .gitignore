@@ -1,6 +1,8 @@
+# Quasar
+frontend/.quasar
+
 # compiled output
 /dist
-/node_modules
 
 # Logs
 logs
@@ -39,5 +41,6 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 /backend/node_modules/
-/backend/dist/
+/frontend/node_modules/
 /shared/node_modules/
+/backend/dist/
