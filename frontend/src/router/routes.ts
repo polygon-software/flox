@@ -6,12 +6,13 @@ import { RouteRecordRaw } from 'vue-router';
 
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
-  MAIN: {
+  // Admin: Customers
+  CUSTOMERS: {
     path: '/',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/generic/MainPage.vue') },
+      { path: '', component: () => import('pages/admin/CustomersPage.vue') },
     ],
   },
 
