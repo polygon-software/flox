@@ -18,7 +18,7 @@ export default boot(({ router, store}) => {
     }
 
     // Logged in, and going to /login or base path
-    if(loggedIn && (to.path === ROUTES.LOGIN.path || to.path === '/')){
+    if(loggedIn && (to.path === ROUTES.LOGIN.path )){
       // If user is logged in and trying to log in, redirect to main page
       return(ROUTES.CUSTOMERS) // TODO make role-based
     }

@@ -1,14 +1,9 @@
 <template>
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Projects -->
-    <h5>{{ $tc('dashboard.project', 0) }}</h5>
+    <h5>{{ $t('dashboard.project') }}</h5>
 
-    <p>TODO, Customer is {{ customerId }}</p>
-
-    <!-- Title: Device pool -->
-    <h5>{{ $t('dashboard.device_pool') }}</h5>
-
-    <p>TODO TODO</p>
+    <p>TODO, Project is {{ projectId }}</p>
 
   </q-page>
 </template>
@@ -18,7 +13,7 @@ import {defineProps} from 'vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
-  customerId: {
+  projectId: {
     required: true,
     type: String
   }

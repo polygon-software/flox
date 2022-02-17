@@ -4,15 +4,25 @@
 
     <!-- Navigation -->
     <div class="column">
-      <q-btn
+      <div
         v-for="option in navOptions"
         :key="option.key"
-        :label="option.label"
-        flat
-        no-caps
-        :color="isActiveOption(option) ? 'black' : 'primary'"
-        @click="onNavClick(option)"
-      />
+        class="row justify-start items-center"
+      >
+        <q-btn
+          :label="option.label"
+          flat
+          no-caps
+          :color="isActiveOption(option) ? 'black' : 'primary'"
+          @click="onNavClick(option)"
+        />
+        <q-icon
+          v-if="isActiveOption(option)"
+          name="chevron_right"
+          color="black"
+          size="sm"
+        />
+      </div>
 
       <!-- Logout button -->
       <q-btn
@@ -75,14 +85,17 @@ const loggedIn = computed(() => {
 const adminNavOptions = [
   {
     key: 'customers',
+    path: ROUTES.CUSTOMERS.path,
     label: i18n.global.tc('dashboard.customer', 0)
   },
   {
     key: 'account',
+    path: '/account', // TODO
     label: i18n.global.t('dashboard.account')
   },
   {
     key: 'share',
+    path: '/share', // TODO
     label: i18n.global.t('dashboard.share')
   },
 ]
@@ -117,7 +130,7 @@ function isActiveOption(option: Record<string, string>){
   const routeParts = route.path.split('/')
 
   // TODO depths?
-  return routeParts[1] === option.key
+  return `/${routeParts[1]}` === option.path
 }
 
 /**
