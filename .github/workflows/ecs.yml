@@ -7,10 +7,11 @@ on:
 
 env:
   AWS_REGION: eu-central-1                   
-  AWS_DOCKERHUB_TOKEN: ${{ secrets.AWS_DOCKERHUB_TOKEN }}
+  AWS_DOCKERHUB_TOKEN: ${{ secrets.AWS_DOCKERHUB_TOKEN }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ECS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ECS_KEY_SECRET }}
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  SERVER_PORT: 3000
   
 jobs:
   deploy:
@@ -58,13 +59,20 @@ jobs:
           echo "VUE_APP_WS_ENDPOINT=ws://$URL:${{ env.SERVER_PORT }}/graphql-websocket" >> $GITHUB_ENV
           echo "FRONTEND_IMAGE_NAME=${{ steps.repo_name.outputs.BRANCH_NAME }}-frontend" >> $GITHUB_ENV
           echo "BACKEND_IMAGE_NAME=${{ steps.repo_name.outputs.BRANCH_NAME }}-backend" >> $GITHUB_ENV
+          echo "VUE_APP_BASE_URL=http://${{ steps.repo_name.outputs.BRANCH_NAME }}.${{ secrets.PROJECT_BASE_DOMAIN }}" >> $GITHUB_ENV
+          echo "VUE_APP_BACKEND_BASE_URL=http://$URL:${{ env.SERVER_PORT }}" >> $GITHUB_ENV
       
-      # TODO add user pool ID?
-      - name: Edit frontend .env file
+      - name: Edit frontend and backend .env files
         run: |
           cd frontend
           echo VUE_APP_GRAPHQL_ENDPOINT="${{ env.VUE_APP_GRAPHQL_ENDPOINT }}" >> .env
           echo VUE_APP_WS_ENDPOINT="${{ env.VUE_APP_WS_ENDPOINT }}" >> .env
+          echo VUE_APP_BASE_URL="${{ env.VUE_APP_BASE_URL }}" >> .env
+          echo VUE_APP_BACKEND_BASE_URL="${{ env.VUE_APP_BACKEND_BASE_URL }}" >> .env
+          cat .env
+          cd ..
+          cd backend
+          echo BASE_URL="${{ env.VUE_APP_BASE_URL }}" >> .env
           cat .env
 
       - name: Build and push Frontend
