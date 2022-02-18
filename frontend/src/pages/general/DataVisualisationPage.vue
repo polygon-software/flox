@@ -22,13 +22,23 @@
       />
     </div>
 
-    <p>TODO TODO</p>
+    <!-- Horizontal - x -->
+    <strong>{{ $t('visualisation.horizontal') }} - X</strong>
+
+    <HorizontalGraph/>
+
+    <!-- Horizontal - y -->
+    <strong>{{ $t('visualisation.horizontal') }} - Y</strong>
+
+    <!-- Horizontal - z -->
+    <strong>{{ $t('visualisation.horizontal') }} - Z</strong>
 
   </q-page>
 </template>
 
 <script setup lang="ts">
 import {defineProps} from 'vue';
+import HorizontalGraph from 'components/graphs/HorizontalGraph.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
