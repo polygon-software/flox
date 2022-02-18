@@ -232,3 +232,16 @@ export const REMOVE_FILES_DOSSIER = {
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
+
+export const DELETE_DOSSIER = {
+  mutation: gql`
+    mutation deleteDossier($uuid: ID!){
+      deleteDossier (deleteDossierInput: {uuid: $uuid}) {
+        uuid
+        __typename
+      }
+    }`,
+  tables: ['dossier'],
+  type: MutationTypes.DELETE,
+  cacheLocation: 'deleteDossier'
+}

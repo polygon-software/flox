@@ -8,7 +8,7 @@
     flat
     round
     dense
-    @click.stop="showOptions = !showOptions"
+    @click.stop=""
   >
     <div class="column">
       <!-- 'Disable' button for active accounts -->
