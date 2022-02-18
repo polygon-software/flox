@@ -51,6 +51,7 @@ export async function createCognitoAccount(
   );
   return cognitoUserWrapper.userSub;
 }
+
 /**
  * Generates a random number in given range
  * @param {number} min - start of the range
@@ -106,7 +107,7 @@ export async function disableCognitoAccount(email: string): Promise<void> {
  * Handles Cognito operation
  * @param {Error|undefined} err - errors that occurred
  * @param {unknown|undefined} data - output data
- * @returns {void}
+ * @returns {void|unknown} - data, if any
  */
 function handleOperation(err: Error | undefined, data: unknown | undefined) {
   if (err) {
@@ -114,4 +115,28 @@ function handleOperation(err: Error | undefined, data: unknown | undefined) {
     throw err;
   }
   return data;
+}
+
+/**
+ * Checks whether a Cognito account exists for a given e-mail
+ * @param {string} email - The email of the new user
+ * @returns {Promise<boolean>} - whether the user already exists
+ */
+export async function checkIfUserExists(email: string): Promise<boolean> {
+  // Request parameters
+  const params = {
+    UserPoolId: process.env.USER_POOL_ID ?? '',
+    Username: email,
+  };
+
+  const existingUser = await new Promise((resolve) => {
+    provider.adminGetUser(params, function (err) {
+      if (err) {
+        resolve(false);
+      }
+      resolve(true);
+    });
+  });
+
+  return !!existingUser;
 }

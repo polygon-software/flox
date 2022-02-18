@@ -98,6 +98,9 @@ export default {
     dossier_reset_failed: 'Dossier reset failed',
     email_sent: 'E-Mail(s) sent',
     file_uploaded: 'Successfully uploaded file',
+    files_uploaded: 'Successfully uploaded files',
+    password_set: 'Password set successfully',
+    bank_created: 'Bank created successfully',
     account_disabled: 'Account disabled successfully',
     dossier_deleted: 'Successfully deleted dossier',
     dossier_delete_failed: 'Dossier delete failed',
@@ -148,6 +151,7 @@ export default {
     upload_documents: 'Upload Documents',
     save_and_print: 'Save & Print',
     back_to_dashboard: 'Back to dashboard',
+    to_dashboard: 'To dashboard',
   },
   documents: {
     choose_file: 'Choose file',

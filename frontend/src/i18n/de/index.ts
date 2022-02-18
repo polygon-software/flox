@@ -99,6 +99,9 @@ export default {
     dossier_reset_failed: 'Zurücksetzen des Dossiers fehlgeschlagen',
     email_sent: 'E-Mail(s) versendet',
     file_uploaded: 'Datei erfolgreich hochgeladen',
+    files_uploaded: 'Dateien erfolgreich hochgeladen',
+    password_set: 'Passwort erfolgreich festgelegt',
+    bank_created: 'Bank erfolgreich erstellt',
     account_disabled: 'Account erfolgreich deaktiviert',
     dossier_deleted: 'Dossier erfolgreich gelöscht',
     dossier_delete_failed: 'Löschen des Dossiers fehlgeschlagen',
@@ -150,6 +153,7 @@ export default {
     upload_documents: 'Dokumente hochladen',
     save_and_print: 'Speichern & Drucken',
     back_to_dashboard: 'Zurück zum dashboard',
+    to_dashboard: 'Zum Dashboard'
   },
   documents: {
     choose_file: 'Datei wählen',

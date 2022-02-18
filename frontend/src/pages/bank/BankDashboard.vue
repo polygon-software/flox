@@ -45,10 +45,10 @@
               {{ _props.row.address.city }}
             </q-td>
             <q-td key="market_value" :props="_props">
-              CHF {{ _props.row.value_estimate_low.toLocaleString() }} - CHF {{ _props.row.value_estimate_high.toLocaleString() }}
+              CHF {{ _props.row.value_estimate_low.toLocaleString('de-ch') }} - CHF {{ _props.row.value_estimate_high.toLocaleString('de-ch') }}
             </q-td>
             <q-td key="mortgage" :props="_props">
-              CHF {{ _props.row.mortgage_amount.toLocaleString() }}
+              CHF {{ _props.row.mortgage_amount.toLocaleString('de-ch') }}
             </q-td>
             <q-td key="enfeoffment" :props="_props">
               {{ _props.row.enfeoffment_estimate_low }}% - {{ _props.row.enfeoffment_estimate_high }}%
@@ -83,12 +83,12 @@
                   v-slot="scope"
                   :auto-save="true"
                   :model-value="ownOfferForDossier(_props.row).status"
-                  @save="(value) => onUpdateStatus(_props.row.uuid, ownOfferForDossier(_props.row).uuid, value)"
                 >
                   <q-select
                     v-model="scope.value"
                     :option-label="(status)=>$t('offer_status_enum.' + status)"
                     :options="Object.keys(OFFER_STATUS)"
+                    @update:model-value="onUpdateStatus(_props.row.uuid, ownOfferForDossier(_props.row).uuid, scope.value)"
                   />
                 </q-popup-edit>
               </q-chip>

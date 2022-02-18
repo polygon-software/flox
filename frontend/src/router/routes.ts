@@ -10,13 +10,6 @@ import {ROLE} from '../../definitions/ENUMS';
 
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
-  // Redirect to dashboards handled by router
-  'MAIN': {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [],
-  },
-
   'LOGIN': {
     path: '/login',
     component: () => import('layouts/MainLayout.vue'),

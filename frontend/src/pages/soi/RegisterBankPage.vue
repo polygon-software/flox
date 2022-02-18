@@ -25,8 +25,11 @@ import {CREATE_BANK} from 'src/data/mutations/BANK';
 import {QVueGlobals, useQuasar} from 'quasar';
 import NewBankLoginDialog from 'components/dialogs/NewBankLoginDialog.vue'
 import {randomPassword} from 'src/helpers/generator-helpers';
+import {ErrorService} from 'src/services/ErrorService';
 
+const $errorService: ErrorService|undefined = inject('$errorService')
 const $routerService: RouterService|undefined = inject('$routerService')
+
 const $q: QVueGlobals = useQuasar()
 
 /**
@@ -60,35 +63,35 @@ const pages = [
 async function onSignup(values: Record<string, Record<string, unknown>>){
   const pw = randomPassword(8)
   // Sign up bank on database
-  await executeMutation(
-    CREATE_BANK,
-    {
-      first_name: values.full_name.firstName,
-      last_name: values.full_name.lastName,
-      name: values.company_name,
-      phone: values.phone_number,
-      abbreviation: values.abbreviation,
-      address: values.address,
-      email: values.email,
-      password: pw,
-    }
-  )
+  try{
+    await executeMutation(
+      CREATE_BANK,
+      {
+        first_name: values.full_name.firstName,
+        last_name: values.full_name.lastName,
+        name: values.company_name,
+        phone: values.phone_number,
+        abbreviation: values.abbreviation,
+        address: values.address,
+        email: values.email,
+        password: pw,
+      }
+    )
 
-  $q.dialog({
-    component: NewBankLoginDialog,
-    componentProps: {email: values.email, password: pw}
-  }).onOk(() => {
-    // Push to success page
-    setTimeout(function () {
-      void $routerService?.routeTo(ROUTES.ADMIN_BANK)
-    }, 5000);
-    void $routerService?.routeTo(ROUTES.SUCCESS)
-  })
-
-
-  // TODO: Admin must get popup with bank credentials here, so they can be sent via e-mail (not automatically)
-
-
+    $q.dialog({
+      component: NewBankLoginDialog,
+      componentProps: {email: values.email, password: pw}
+    }).onOk(() => {
+      // Push to success page
+      void $routerService?.routeTo(ROUTES.SUCCESS, {
+        msg: 'messages.bank_created',
+        btn: 'buttons.to_dashboard',
+        target: 'ADMIN_BANK'
+      })
+    })
+  } catch(e) {
+    $errorService?.showErrorDialog(e as Error)
+  }
 }
 
 </script>

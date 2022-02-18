@@ -20,7 +20,7 @@
 import {executeQuery} from 'src/helpers/data-helpers';
 import {ROLE} from 'src/data/ENUM/ENUM';
 import {User} from 'src/data/types/User';
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {MY_USER} from 'src/data/queries/USER';
 import {MY_EMPLOYEE} from 'src/data/queries/EMPLOYEE';
@@ -32,35 +32,37 @@ const companyReadableId = ref('')
 const other = ref('')
 const errorString = i18n.global.t('authentication.unauthenticated')
 
-executeQuery(MY_USER).then((userResp)=>{
-  if(!userResp.data){
+onMounted(() => {
+  executeQuery(MY_USER).then((userResp) => {
+    if (!userResp.data) {
+      other.value = errorString
+      return
+    }
+    const user = userResp.data[MY_USER.cacheLocation] as User
+    if (user.role === ROLE.EMPLOYEE) {
+      executeQuery(MY_EMPLOYEE).then((employeeResp) => {
+        const employee = employeeResp.data[MY_EMPLOYEE.cacheLocation] as Record<string, unknown>;
+        employeeReadableId.value = employee.readable_id as string
+        const company = employee.company as Record<string, string>
+        companyReadableId.value = company.readable_id;
+      }).catch((error) => {
+        other.value = user.role || errorString
+        console.error(error)
+      })
+    } else if (user.role === ROLE.COMPANY) {
+      executeQuery(MY_COMPANY).then((companyResp) => {
+        const company = companyResp.data[MY_COMPANY.cacheLocation] as Record<string, unknown>;
+        companyReadableId.value = company.readable_id as string
+      }).catch((error) => {
+        other.value = user.role || errorString
+        console.error(error)
+      })
+    } else {
+      other.value = user.role || errorString
+    }
+  }).catch((error) => {
     other.value = errorString
-    return
-  }
-  const user = userResp.data[MY_USER.cacheLocation]  as User
-  if(user.role === ROLE.EMPLOYEE){
-    executeQuery(MY_EMPLOYEE).then((employeeResp)=>{
-      const employee = employeeResp.data[MY_EMPLOYEE.cacheLocation] as Record<string, unknown >;
-      employeeReadableId.value = employee.readable_id as string
-      const company = employee.company as Record<string, string >
-      companyReadableId.value = company.readable_id;
-    }).catch((error)=>{
-      other.value = user.role || errorString
-      console.error(error)
-    })
-  } else if(user.role === ROLE.COMPANY){
-    executeQuery(MY_COMPANY).then((companyResp)=>{
-      const company = companyResp.data[MY_COMPANY.cacheLocation] as Record<string, unknown >;
-      companyReadableId.value = company.readable_id as string
-    }).catch((error)=>{
-      other.value = user.role || errorString
-      console.error(error)
-    })
-  } else {
-    other.value = user.role || errorString
-  }
-}).catch((error)=>{
-  other.value = errorString
-  console.error(error)
+    console.error(error)
+  })
 })
 </script>

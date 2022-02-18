@@ -141,16 +141,18 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
   // ----- Hooks -----
   onServerPrefetch(async () => {
     const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query, variables)
-    if(!tempRes.data){ return}
+    if(!tempRes.data){
+      return
+    }
     res.value = tempRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
     $ssrStore.mutations.setPrefetchedData({key: query.cacheLocation, value: res.value})
   })
 
   onBeforeMount( () => {
     const apolloClient = useApolloClient().resolveClient()
-    const current_cache_state = apolloClient.readQuery({query: query.query, variables}) as Record<string, Record<string, unknown>[]>[] ?? []
+    const currentCacheState = apolloClient.readQuery({query: query.query, variables}) as Record<string, Record<string, unknown>[]>[] ?? []
     // Test if the query is already in the cache
-    if(Object.values(current_cache_state).length === 0){
+    if(Object.values(currentCacheState).length === 0){
       res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
 
       // SPA

@@ -101,22 +101,18 @@
 <script setup lang="ts">
 import {computed, defineEmits, inject, onMounted, ref, watch} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
-import {RouterService} from 'src/services/RouterService';
-import ROUTES from 'src/router/routes';
 import {useAuth} from 'src/store/authentication';
 import {Context, Module} from 'vuex-smart-module';
 import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
-import {boolean} from 'joi';
 import {useRoute} from 'vue-router';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {COMPANY} from 'src/data/queries/COMPANY';
 import {EMPLOYEE} from 'src/data/queries/EMPLOYEE';
 import {BANK} from 'src/data/queries/BANK';
 const $authService: AuthenticationService|undefined = inject('$authService')
-const $routerService: RouterService|undefined = inject('$routerService')
 const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 const route = useRoute()
 
@@ -152,7 +148,7 @@ onMounted(async () => {
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   admin: {
-    type: boolean,
+    type: Boolean,
     required: false,
     default: false,
   }
@@ -170,7 +166,6 @@ watch(route, async () => {
  */
 async function logout(): Promise<void>{
   await $authService?.logout();
-  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
 /**

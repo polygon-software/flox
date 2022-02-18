@@ -6,11 +6,10 @@
       </q-card-section>
 
       <q-card-section style="height: 220px; text-align: center;" class="q-pt-xs q-mt-xs">
-        <p class="text-h4 q-mb-xs">{{ successMessage }}</p>
-        <p class="text-subtitle1">{{ furtherExplanation }}</p>
+        <p class="text-h4 q-mb-xs">{{ $t('messages.success') }}</p>
+        <p class="text-subtitle1">{{ message }}</p>
         <br/>
         <br/>
-        <p v-if="autoRedirect">{{ nextMessage }}</p>
         <q-btn
           else
           color="blue"
@@ -23,61 +22,32 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, inject} from 'vue';
+import {inject} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {i18n} from 'boot/i18n';
+import {RouteRecordRaw, useRoute} from 'vue-router';
 
 const $routerService: RouterService|undefined = inject('$routerService')
-
+const route = useRoute()
 
 /**
- * This component defines a generic error message that either has a redirect button or automatically redirects.
- * It takes the following properties:
- * @param {String} redirectPath - this is the redirect path of either the button or the automatic redirection
- * @param {Boolean} autoRedirect - boolean whether the user should be automatically redirected or not
- * @param {String} [successMessage] - Shows a quick success phrase (default is 'Hervorragend!' or 'Great!')
- * @param {String} [furtherExplanation] - a quick text (a sentence) to explain what was a success
- * @param {String} [nextMessage] - if it redirects automatically, this is the text that explains where it will redirect to
- * @param {String} [buttonLabel] - if it doesn't redirect automatically, this is the label of the button
- * @param {String} [autoRedirectDurationMS] - optional redirection duration length in milliseconds (default is 5000 milliseconds)
+ * This component defines a generic success message that has a redirect button and automatically redirects.
+ * It optionally takes the following properties via URL:
+ * @param {String} [target] - redirect target route
+ * @param {String} [msg] - success message to show
+ * @param {String} [btn] - label of the button
  */
 
-const props = defineProps({
-  redirectPath: {
-    required: true,
-    type: String,
-  },
-  autoRedirect: {
-    required: true,
-    type: Boolean,
-  },
-  successMessage: {
-    required: false,
-    type: String,
-    default: i18n.global.t('messages.success')
-  },
-  furtherExplanation: {
-    required: false,
-    type: String,
-    default: i18n.global.t('authentication.successful_application')
-  },
-  nextMessage: {
-    required: false,
-    type: String,
-    default: i18n.global.t('authentication.redirected')
-  },
-  buttonLabel: {
-    required: false,
-    type: String,
-    default: i18n.global.t('authentication.back_to_login')
-  },
-  autoRedirectDurationMS: {
-    required: false,
-    type: Number,
-    default: 5000
-  },
-})
+
+const query = route.query
+
+// Get parameters from route query (if any), or use default
+const target: RouteRecordRaw = query.target ? ROUTES[(query.target.toString()).toUpperCase()] : ROUTES.LOGIN
+const message = query.msg ?  i18n.global.t(query.msg) : i18n.global.t('authentication.successful_application')
+const buttonLabel = query.btn ?  i18n.global.t(query.btn) : i18n.global.t('authentication.back_to_login')
+const autoRedirectDurationMS = 5000
+
 
 /**
  * Routes to  desired path - given through URL query
@@ -85,13 +55,13 @@ const props = defineProps({
  */
 async function redirectOnClick(): Promise<void> {
   // Redirect to login page
-  await $routerService?.routeTo(ROUTES.redirectPath)
+  await $routerService?.routeTo(target)
 }
 
-if (props.autoRedirect) {
-  setTimeout(function () {
-    void $routerService?.routeTo(ROUTES.redirectPath)
-  }, props.autoRedirectDurationMS);
-}
+// Set up auto-redirect
+setTimeout(function () {
+  void $routerService?.routeTo(target)
+}, autoRedirectDurationMS);
+
 
 </script>

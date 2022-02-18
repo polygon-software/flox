@@ -89,7 +89,9 @@ async function onSubmit(values: Record<string, Record<string, File|null>>){
     }
   }
 
-  // TODO add fitting success message
-  await $routerService?.routeTo(ROUTES.SUCCESS)
+  // Redirect to success page
+  await $routerService?.routeTo(ROUTES.SUCCESS, {
+    msg: 'messages.files_uploaded'
+  })
 }
 </script>

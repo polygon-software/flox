@@ -77,26 +77,26 @@ async function submitPassword(values: Record<string, string>) {
     }
   })
 
-  setTimeout(function() {
-    let target;
-    switch(type){
-      case ROLE.EMPLOYEE:
-        target = ROUTES.EMPLOYEE_DASHBOARD
-        break;
-      case ROLE.SOI_EMPLOYEE:
-        target = ROUTES.APPLICATIONS
-        break;
-      case ROLE.COMPANY:
-        target = ROUTES.MANAGEMENT_EMPLOYEE_DATA
-        break;
-      default:
-        target = ROUTES.WILDCARD // Should never happen; redirect to 404 page
-        return;
-    }
-
-    void $routerService?.routeTo(target)
-  }, 5000);
-  await $routerService?.routeTo(ROUTES.SUCCESS)
+  let target;
+  switch(type){
+    case ROLE.EMPLOYEE:
+      target = 'EMPLOYEE_DASHBOARD'
+      break;
+    case ROLE.SOI_EMPLOYEE:
+      target = 'APPLICATIONS'
+      break;
+    case ROLE.COMPANY:
+      target = 'MANAGEMENT_EMPLOYEE_DATA'
+      break;
+    default:
+      target = 'WILDCARD' // Should never happen; redirect to 404 page
+      return;
+  }
+  await $routerService?.routeTo(ROUTES.SUCCESS, {
+    msg: 'messages.password_set',
+    btn: 'buttons.to_dashboard',
+    target: target,
+  })
 }
 </script>
 

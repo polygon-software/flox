@@ -86,7 +86,6 @@ export const MY_DOSSIERS = {
             abbreviation
             __typename
           }
-          status
         }
         __typename
       }
@@ -327,11 +326,6 @@ export const GET_DOSSIER = {
           key
           file_type
           __typename
-        }
-        offers{
-          __typename
-          uuid
-          status
         }
         __typename
       }
