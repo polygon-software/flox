@@ -72,7 +72,9 @@ function copyContent(){
   console.log('TODO: copy content')
   $q.dialog({
     component: ShareDialog,
-    componentProps: {},
+    componentProps: {
+      q: $q
+    },
   }).onOk(() => {
     console.log('SHARE')
   })

@@ -128,5 +128,8 @@ export default {
     two_weeks: '2 Wochen',
     one_month: '1 Monat',
     custom: 'Eigene'
+  },
+  messages: {
+    copied: 'Kopiert'
   }
 };
