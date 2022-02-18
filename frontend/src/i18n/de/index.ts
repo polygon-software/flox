@@ -13,6 +13,7 @@ export default {
     settings: 'Einstellungen',
     loading: 'Lädt',
     filter: 'Filter',
+    copy: 'Kopieren'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -108,15 +109,22 @@ export default {
   greetings: {
     welcome_datavis: 'Willkommen bei DataVis',
   },
-  interests: {
-    select_interests:
-      'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
-    amount_selected: '{amount}/{max} gewählt',
-  },
   settings: {
     settings: 'Einstellungen',
     general: 'Allgemein',
     account: 'Benutzerkonto',
     personal_data: 'Persönliche Daten',
   },
+  visualisation: {
+    period: 'Periode',
+    horizontal: 'Horizontal',
+    vertical: 'Vertikal'
+  },
+  period: {
+    twelve_hours: '12 Stunden',
+    two_days: '2 Tage',
+    two_weeks: '2 Wochen',
+    one_month: '1 Monat',
+    custom: 'Eigene'
+  }
 };
