@@ -8,14 +8,17 @@ services:
     image: ${DOCKERHUB_USERNAME}/${BACKEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
+      mode: replicated
+      replicas: 2
       resources:
         limits:
-          cpus: '1.0'
-          memory: 2048m
+          cpus: '4.0'
+          memory: 8192m
+        reservations:
+          cpus: '4.0'
+          memory: 4096m
     build:
       context: backend
-    volumes:
-      - data-backend:backend/usr/src/app
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     networks:
@@ -27,14 +30,17 @@ services:
     image: ${DOCKERHUB_USERNAME}/${FRONTEND_IMAGE_NAME}:latest
     x-aws-pull_credentials: ${AWS_DOCKERHUB_TOKEN}
     deploy:
+      mode: replicated
+      replicas: 2
       resources:
         limits:
-          cpus: '1.0'
-          memory: 2048m
+          cpus: '4.0'
+          memory: 8192m
+        reservations:
+          cpus: '4.0'
+          memory: 4096m
     build:
       context: frontend
-    volumes:
-      - data-frontend:frontend/usr/src/app
     ports:
       - ${FRONTEND_PORT}:${FRONTEND_PORT}
     networks:
@@ -44,6 +50,14 @@ services:
 
   database:
     image: postgres:14
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8192M
+        reservations:
+          cpus: '4.0'
+          memory: 4096m
     networks:
       - webnet
     environment:
@@ -55,22 +69,20 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
 
-#  nocodb:
-#    container_name: nocodb
-#    image: nocodb/nocodb:latest
-#    networks:
-#      - webnet
-#    ports:
-#      - ${NOCODB_PORT}:8080
-#    volumes:
-#      - nocodbdata:/usr/app/data
-#    depends_on:
-#      - database
+  #nocodb:
+  #  container_name: nocodb
+  #  image: nocodb/nocodb:latest
+  #  networks:
+  #    - webnet
+  #  ports:
+  #    - ${NOCODB_PORT}:${NOCODB_PORT}
+  #  volumes:
+  #    - nocodbdata:/usr/app/data
+  #  depends_on:
+  #    - database
 
 networks:
   webnet:
 volumes:
   dbdata:
-  #  nocodbdata:
-  data-backend:
-  data-frontend:
+  #nocodbdata:

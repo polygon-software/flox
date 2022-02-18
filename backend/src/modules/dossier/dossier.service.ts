@@ -403,7 +403,7 @@ export class DossierService {
         promises.push(this.fileService.deletePrivateFile(fileUuid));
       });
       await Promise.all(promises);
-      const updatedDossier = this.dossierRepository.findOne(
+      const updatedDossier = await this.dossierRepository.findOne(
         removeDossierFilesInput.uuid,
         {
           relations: ['documents', 'employee', 'final_document'],

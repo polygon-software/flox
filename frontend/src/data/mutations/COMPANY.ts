@@ -35,6 +35,11 @@ export const ASSOCIATE_USER_TO_COMPANY ={
     mutation associateUserToCompany($uuid: ID!){
       associateUserToCompany(associateUserInput: {uuid: $uuid}) {
         uuid
+        creation_state
+        documents{
+          uuid
+          __typename
+        }
         __typename
       }
     }

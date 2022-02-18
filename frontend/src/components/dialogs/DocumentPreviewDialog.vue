@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     title="Preview"
   >
     <q-card
@@ -24,10 +24,15 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref} from 'vue';
-import {QDialog} from 'quasar';
+import {defineEmits} from 'vue';
+import { useDialogPluginComponent } from 'quasar'
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emit = defineEmits(useDialogPluginComponent.emits)
+
+// REQUIRED; must be called inside of setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 const props = defineProps({
   url: {
@@ -36,17 +41,4 @@ const props = defineProps({
     default: '',
   },
 })
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc,@typescript-eslint/no-unused-vars
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
 </script>

@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     title="Application"
   >
     <q-card class="q-pa-md q-ma-md">
@@ -12,13 +12,13 @@
           class="q-ma-md"
           :label="$t('dashboards.yes_reject')"
           color="negative"
-          @click="onYesReject"
+          @click="onDialogOK"
         />
         <q-btn
           class="q-ma-md"
           :label="$t('buttons.cancel')"
           color="primary"
-          @click="onCancel"
+          @click="onDialogCancel"
         />
       </q-card-actions>
     </q-card>
@@ -26,38 +26,15 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref, defineEmits} from 'vue'
-import {QDialog} from 'quasar';
+import { useDialogPluginComponent } from 'quasar'
+import {defineEmits} from 'vue';
 
-const emit = defineEmits(['ok'])
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emit = defineEmits(useDialogPluginComponent.emits)
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
+// REQUIRED; must be called inside of setup()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
-/**
- * Reject an application
- * @returns {void}
- */
-function onYesReject(): void {
-  emit('ok')
-  hide()
-}
-
-// eslint-disable-next-line require-jsdoc
-function onCancel(): void {
-  hide()
-}
 </script>
 

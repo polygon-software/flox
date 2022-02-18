@@ -11,10 +11,12 @@ export const CREATE_SOI_EMPLOYEE = {
         gender
         phone
         email
+        created_at
+        banned_at
         __typename
       }
     }`,
-  tables: ['soiemployee'],
+  tables: ['soi_employee'],
   type: MutationTypes.CREATE,
-  cacheLocation: 'createSOIEmployee'
+  cacheLocation: 'createSoiEmployee'
 }
