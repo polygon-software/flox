@@ -11,7 +11,7 @@ import {ROLE} from 'src/data/ENUM';
 const ROUTES: Record<string, RouteRecordRaw> = {
   // Admin: Customers
   CUSTOMERS: {
-    path: '/',
+    path: '/customers',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     component: () => getUserRoleLayout(),
     children: [
@@ -19,12 +19,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
       {
         path: '/:catchAll(.*)',
         component: () => import('pages/general/CustomerPage.vue'),
-        props: route => ({ customerId: route.path.split('/')[1] })
+        props: route => ({ customerId: route.path.split('/')[2] })
       },
       {
         path: '/:catchAll(.*)/:catchAll(.*)',
         component: () => import('pages/general/ProjectPage.vue'),
-        props: route => ({ projectId: route.path.split('/')[2] })
+        props: route => ({ projectId: route.path.split('/')[3] })
       },
     ],
   },

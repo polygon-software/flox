@@ -24,7 +24,7 @@
           class="row justify-center"
         >
           <div
-            v-for="(part, index) in routeParts"
+            v-for="(part, index) in routeParts.slice(1)"
             :key="part"
             class="row justify-center items-center"
           >
@@ -110,12 +110,12 @@ const adminNavOptions = [
   },
   {
     key: 'account',
-    path: '/account', // TODO
+    path: ROUTES.ACCOUNT.path,
     label: i18n.global.t('dashboard.account')
   },
   {
     key: 'share',
-    path: '/share', // TODO
+    path: ROUTES.SHARE.path,
     label: i18n.global.t('dashboard.share')
   },
 ]
@@ -128,8 +128,17 @@ const userNavOptions = [
   },
 ]
 
-// Depending on prop, show corresponding navigation options
-const navOptions = props.admin ? adminNavOptions : userNavOptions
+/**
+ * Navigation options, depending on user type and whether they are logged in
+ */
+const navOptions = computed(() => {
+  // Non-logged in users are not shown navigation
+  if(!loggedIn.value){
+    return []
+  }
+
+  return props.admin ? adminNavOptions : userNavOptions
+})
 
 /**
  * Parts of the route
@@ -159,9 +168,7 @@ async function logout(): Promise<void>{
  */
 function isActiveOption(option: Record<string, string>){
   const pathParts = route.path.split('/')
-
-  console.log('parts:', pathParts)
-  return `/${pathParts[0]}` === option.path
+  return `/${pathParts[1]}` === option.path
 }
 
 /**
@@ -179,9 +186,10 @@ async function onNavClick(option: Record<string, string>){
  * @returns {Promise<void>} - done
  */
 async function onSubnavClick(index: number){
-  // Get amount of path items to remove
-  const diff = routeParts.value.length - index - 1
+  // Get amount of path items to remove (-2 to ignore root path)
+  const diff = routeParts.value.length - index - 2
 
+  console.log('Diff:', diff)
   // Last item clicked; no change needed
   if(diff === 0){
     return
@@ -192,8 +200,6 @@ async function onSubnavClick(index: number){
   for(let i = 0; i < routeParts.value.length - diff; i++){
     targetPath += `/${routeParts.value[i]}`
   }
-
-  console.log(route.params)
 
   await router.push(targetPath)
 }
