@@ -117,7 +117,6 @@ function handleOperation(err: Error | undefined, data: unknown | undefined) {
     console.log('Error is', err);
     throw err;
   }
-  console.log('Got user', data);
   return data;
 }
 
@@ -133,16 +132,14 @@ export async function checkIfUserExists(email: string): Promise<boolean> {
     Username: email,
   };
 
-  const existingUser: AdminGetUserCommandOutput | undefined = await new Promise(
-    (resolve) => {
-      provider.adminGetUser(params, function (err, data) {
-        if (err) {
-          resolve(undefined);
-        }
-        resolve(data);
-      });
-    },
-  );
+  const existingUser = await new Promise((resolve) => {
+    provider.adminGetUser(params, function (err) {
+      if (err) {
+        resolve(false);
+      }
+      resolve(true);
+    });
+  });
 
   return !!existingUser;
 }

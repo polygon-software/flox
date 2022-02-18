@@ -51,10 +51,7 @@ export class BankService {
     const cognitoId = await createCognitoAccount(
       createBankInput.email,
       createBankInput.password,
-    ).catch((e) => {
-      // Propagate any cognito errors and don't create
-      throw e;
-    });
+    );
 
     // Create the SoiAdmin and User in the database
     const bank = this.bankRepository.create({
