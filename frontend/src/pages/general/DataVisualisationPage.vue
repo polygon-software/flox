@@ -1,7 +1,7 @@
 <template>
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Station name -->
-    <h5>{{$tc('dashboard.station', 1)}} {{stationId}}</h5>
+    <h5>{{$tc('dashboard.station', 1)}} {{stationId.toUpperCase()}}</h5>
 
     <!-- Time Period picker -->
     <strong>{{ $t('visualisation.period') }}</strong>
@@ -27,13 +27,20 @@
     <!-- Horizontal - x -->
     <strong>{{ $t('visualisation.horizontal') }} - X</strong>
 
+    <!-- TODO params -->
     <HorizontalGraph/>
 
     <!-- Horizontal - y -->
     <strong>{{ $t('visualisation.horizontal') }} - Y</strong>
 
+    <!-- TODO params -->
+    <HorizontalGraph/>
+
     <!-- Horizontal - z -->
     <strong>{{ $t('visualisation.horizontal') }} - Z</strong>
+
+    <!-- TODO params -->
+    <HorizontalGraph/>
 
   </q-page>
 </template>
