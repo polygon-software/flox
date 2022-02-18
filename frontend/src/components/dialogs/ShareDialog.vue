@@ -77,9 +77,8 @@
 
 <script setup lang="ts">
 import {defineProps, defineEmits, PropType, Ref, ref} from 'vue';
-import { useDialogPluginComponent } from 'quasar';
+import { useDialogPluginComponent, QVueGlobals} from 'quasar';
 import {showNotification} from 'src/helpers/notification-helpers';
-import {QVueGlobals} from 'quasar';
 import {i18n} from 'boot/i18n';
 
 // REQUIRED; must be called inside of setup()
@@ -110,6 +109,7 @@ async function createLink(){
   console.log('CREATE link')
   generatedLink.value = 'https://www.datavis-sample.com/123'
 
+  // Copy to clipboard
   await copyLink()
 }
 
@@ -131,7 +131,7 @@ async function copyLink(){
     undefined,
     undefined,
     undefined,
-    500
+    400
   )
 }
 
