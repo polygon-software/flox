@@ -17,19 +17,19 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [
       { path: '', component: () => import('pages/admin/CustomersListPage.vue') },
       {
-        path: '/:catchAll(.*)',
+        path: ':customerId',
         component: () => import('pages/general/CustomerPage.vue'),
-        props: route => ({ customerId: route.path.split('/')[2] })
+        props: route => ({ customerId: route.params.customerId })
       },
       {
-        path: '/:catchAll(.*)/:catchAll(.*)',
+        path: ':customerId/:projectId',
         component: () => import('pages/general/ProjectPage.vue'),
-        props: route => ({ projectId: route.path.split('/')[3] })
+        props: route => ({ projectId: route.params.projectId })
       },
       {
-        path: '/:catchAll(.*)/:catchAll(.*)/:catchAll(.*)',
+        path: ':customerId/:projectId/:paramId',
         component: () => import('pages/general/ParametersPage.vue'),
-        props: route => ({ parametersId: route.path.split('/')[4] })
+        props: route => ({ parametersId: route.params.paramId })
       },
     ],
   },
