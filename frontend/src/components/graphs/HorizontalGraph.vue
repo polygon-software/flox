@@ -14,7 +14,7 @@
       <!-- Button Row -->
       <div class="row full-width justify-end">
         <q-btn
-          :label="$t('general.copy')"
+          :label="$t('buttons.copy')"
           icon="content_copy"
           style="border-radius: 0"
           text-color="primary"
@@ -29,6 +29,11 @@
 </template>
 
 <script setup lang="ts">
+import ShareDialog from 'components/dialogs/ShareDialog.vue';
+import {useQuasar} from 'quasar';
+
+const $q = useQuasar()
+
 // TODO: copypasta, what chart library...
 // import { DoughnutChart, LineChart, useDoughnutChart, useLineChart } from 'vue-chart-3';
 // import { Chart, ChartData, registerables } from 'chart.js';
@@ -58,12 +63,19 @@
 // });
 //
 
+
 /**
  * Copies the graph's content
  * @returns {void}
  */
 function copyContent(){
   console.log('TODO: copy content')
+  $q.dialog({
+    component: ShareDialog,
+    componentProps: {},
+  }).onOk(() => {
+    console.log('SHARE')
+  })
 }
 
 </script>

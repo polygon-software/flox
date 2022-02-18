@@ -13,7 +13,6 @@ export default {
     settings: 'Einstellungen',
     loading: 'Lädt',
     filter: 'Filter',
-    copy: 'Kopieren'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -66,6 +65,9 @@ export default {
     submit: 'Senden',
     cancel: 'Abbrechen',
     ok: 'OK',
+    copy: 'Kopieren',
+    send: 'Senden',
+    create_link: 'Link erzeugen'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

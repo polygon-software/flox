@@ -13,7 +13,6 @@ export default {
     settings: 'Settings',
     loading: 'Loading',
     filter: 'Filter',
-    copy: 'Copy'
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -65,6 +64,9 @@ export default {
     cancel: 'Cancel',
     submit: 'Submit',
     ok: 'OK',
+    copy: 'Copy',
+    send: 'Send',
+    create_link: 'Create Link'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
