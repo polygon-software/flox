@@ -5,7 +5,9 @@
       style="height: 90px"
     >
       <!-- Navigation -->
-      <div class="column justify-start items-start">
+      <div
+        class="column justify-start items-start"
+      >
         <div
           v-for="option in navOptions"
           :key="option.key"

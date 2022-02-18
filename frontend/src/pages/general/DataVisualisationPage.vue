@@ -4,7 +4,9 @@
     <h5>{{$tc('dashboard.station', 1)}} {{stationId.toUpperCase()}}</h5>
 
     <!-- Time Period picker -->
-    <strong>{{ $t('visualisation.period') }}</strong>
+    <h6 class="q-ma-none q-pa-none">
+      {{ $t('visualisation.period') }}
+    </h6>
 
     <div
       class="row justify-between q-ma-lg"
@@ -25,19 +27,25 @@
     </div>
 
     <!-- Horizontal - x -->
-    <strong>{{ $t('visualisation.horizontal') }} - X</strong>
+    <h6 class="q-ma-none q-pa-none">
+      {{ $t('visualisation.horizontal') }} - X
+    </h6>
 
     <!-- TODO params -->
     <HorizontalGraph/>
 
     <!-- Horizontal - y -->
-    <strong>{{ $t('visualisation.horizontal') }} - Y</strong>
+    <h6 class="q-ma-none q-pa-none">
+      {{ $t('visualisation.horizontal') }} - Y
+    </h6>
 
     <!-- TODO params -->
     <HorizontalGraph/>
 
     <!-- Horizontal - z -->
-    <strong>{{ $t('visualisation.horizontal') }} - Z</strong>
+    <h6 class="q-ma-none q-pa-none">
+      {{ $t('visualisation.horizontal') }} - Z
+    </h6>
 
     <!-- TODO params -->
     <HorizontalGraph/>
