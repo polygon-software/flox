@@ -1,10 +1,7 @@
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { ISignUpResult } from 'amazon-cognito-identity-js';
 import * as crypto from 'crypto';
-import {
-  AdminGetUserCommandOutput,
-  CognitoIdentityProvider,
-} from '@aws-sdk/client-cognito-identity-provider';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 // Set up cognito admin provider
 const provider = new CognitoIdentityProvider({

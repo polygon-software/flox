@@ -34,7 +34,7 @@
       <!-- Get Logs -->
       <q-card
         flat
-        class="row justify-between q-pa-md"
+        class="row justify-between q-pa-md q-mt-lg"
         style="width: 670px"
       >
         <div class="col-6">

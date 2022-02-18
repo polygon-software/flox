@@ -86,11 +86,18 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/soi/SOIAdminEmployeePage.vue') }],
   },
 
-  // SOI Admin: Dossiers
+  // SOI Admin: All Dossiers
   'ADMIN_DOSSIERS': {
     path: '/admin-dossiers',
     component: () => import('layouts/SOIAdminLayout.vue'),
     children: [{ path: '', component: () => import('pages/soi/SOIAdminDossierPage.vue') }],
+  },
+
+  // SOI Admin: Rejected Dossiers
+  'ADMIN_REJECTED_DOSSIERS': {
+    path: '/admin-rejected-dossiers',
+    component: () => import('layouts/SOIAdminLayout.vue'),
+    children: [{ path: '', component: () => import('pages/soi/SOIAdminRejectedDossierPage.vue') }],
   },
 
   // SOI Admin: Provisions

@@ -26,6 +26,7 @@ import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input'
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { prettify } from '../../helpers/log-helper';
+import { DeleteDossierInput } from './dto/input/delete-dossier.input';
 
 @Injectable()
 export class DossierService {
@@ -450,5 +451,53 @@ export class DossierService {
     await sendDossierDocumentEmail(dossier.readable_id, recipients, pdf);
 
     return dossier;
+  }
+
+  /**
+   * Gets all dossiers in the database
+   * @returns {Promise<Dossier[]>} - dossiers
+   */
+  async getAllDossiers(): Promise<Dossier[]> {
+    return this.dossierRepository.find({
+      relations: [
+        'documents',
+        'offers',
+        'offers.bank',
+        'original_bank',
+        'final_document',
+      ],
+    });
+  }
+
+  /**
+   * Fully (hard) deletes a dossier and its offers
+   * @param {DeleteDossierInput} deleteDossierInput - input, containing uuid
+   * @returns {Promise<Dossier>} - the dossier after being reset
+   */
+  async deleteDossier(
+    deleteDossierInput: DeleteDossierInput,
+  ): Promise<Dossier> {
+    // Find dossier
+    const dossier = await this.dossierRepository.findOne(
+      deleteDossierInput.uuid,
+      {
+        relations: ['offers', 'original_bank'],
+      },
+    );
+
+    if (!dossier) {
+      throw new Error(`No dossier found for ${deleteDossierInput.uuid}`);
+    }
+
+    // Remove all offers
+    for (const offer of dossier.offers) {
+      await this.offerRepository.remove(offer);
+    }
+
+    // Delete dossier itself
+    const deletedDossier = await this.dossierRepository.remove(dossier);
+    deletedDossier.uuid = deleteDossierInput.uuid;
+
+    return deletedDossier;
   }
 }
