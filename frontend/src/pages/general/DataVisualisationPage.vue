@@ -15,10 +15,12 @@
         :key="option.key"
         :label="$t(`period.${option.key}`)"
         style="border-radius: 0"
-        text-color="primary"
+        :text-color="timePeriod.key === option.key ? 'white' : 'primary'"
+        :class="timePeriod.key === option.key ? 'bg-primary' : null"
         no-caps
         unelevated
         outline
+        @click="timePeriod = option"
       />
     </div>
 
@@ -37,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
+import {defineProps, ref} from 'vue';
 import HorizontalGraph from 'components/graphs/HorizontalGraph.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -67,6 +69,8 @@ const timePeriodOptions = [
   }
 ]
 
+// Currently chosen time period
+const timePeriod = ref(timePeriodOptions[0])
 </script>
 
 <style scoped>
