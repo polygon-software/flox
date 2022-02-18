@@ -26,6 +26,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
         component: () => import('pages/general/ProjectPage.vue'),
         props: route => ({ projectId: route.path.split('/')[3] })
       },
+      {
+        path: '/:catchAll(.*)/:catchAll(.*)/:catchAll(.*)',
+        component: () => import('pages/general/ParametersPage.vue'),
+        props: route => ({ parametersId: route.path.split('/')[4] })
+      },
     ],
   },
 
