@@ -255,7 +255,6 @@ async function clickedOption(url: string): Promise<void>{
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  // todo: david
   await routerService?.addToRoute(row.project) // or use another value...
 }
 </script>
