@@ -45,6 +45,10 @@ import {formatDateForGraph} from 'src/helpers/format-helpers';
 const $q = useQuasar()
 
 const props = defineProps({
+  dataset: {
+    type: Array,
+    required: true,
+  },
   datasetName: {
     type: String,
     required: true
@@ -61,7 +65,7 @@ const options = {
         zoomout: false,
         download: false
       },
-    }
+    },
   },
   colors: ['var(--q-secondary)'],
   stroke: {
@@ -125,37 +129,19 @@ const options = {
   },
   tooltip: {
     x: {
+      show: false,
       formatter: function (timestamp: number){
         return date.formatDate(new Date(timestamp), 'dddd DD.MM.YYYY - HH:mm:ss')
       }
-    }
+    },
   }
 }
+
+// Data series from props
 const series = [{
   name: props.datasetName.toUpperCase(),
-  data: randomTimeSeries()
+  data: props.dataset
 }]
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * Placeholder function, generates a random time series with spikes
- * TODO remove
- */
-function randomTimeSeries(){
-  const result = []
-  let date = new Date()
-  for(let i = 0; i < 100; i++){
-    const newElement = {
-      x: date.getTime(),
-      y: Math.random()/(Math.random() < 0.9 ? 10 : 2)
-    }
-    result.push(newElement)
-
-    date.setTime(date.getTime() + 60000)
-  }
-
-  return result
-}
 
 
 /**

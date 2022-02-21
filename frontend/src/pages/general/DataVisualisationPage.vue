@@ -32,8 +32,9 @@
     </h6>
 
     <!-- TODO params -->
-    <HorizontalGraph
+    <TimeSeriesGraph
       :dataset-name="stationId"
+      :dataset="randomTimeSeries()"
     />
 
     <!-- Horizontal - y -->
@@ -42,8 +43,9 @@
     </h6>
 
     <!-- TODO params -->
-    <HorizontalGraph
+    <TimeSeriesGraph
       :dataset-name="stationId"
+      :dataset="randomTimeSeries()"
     />
     <!-- Horizontal - z -->
     <h6 class="q-ma-md q-pa-none">
@@ -51,15 +53,16 @@
     </h6>
 
     <!-- TODO params -->
-    <HorizontalGraph
+    <TimeSeriesGraph
       :dataset-name="stationId"
+      :dataset="randomTimeSeries()"
     />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import {defineProps, ref} from 'vue';
-import HorizontalGraph from 'components/graphs/HorizontalGraph.vue';
+import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -90,8 +93,26 @@ const timePeriodOptions = [
 
 // Currently chosen time period
 const timePeriod = ref(timePeriodOptions[0])
+
+// eslint-disable-next-line valid-jsdoc
+/**
+ * Placeholder function, generates a random time series with spikes
+ * TODO remove
+ */
+function randomTimeSeries(){
+  const result = []
+  let date = new Date()
+  for(let i = 0; i < 100; i++){
+    const newElement = {
+      x: date.getTime(),
+      y: Math.random()/(Math.random() < 0.9 ? 10 : 2)
+    }
+    result.push(newElement)
+
+    date.setTime(date.getTime() + 60000)
+  }
+
+  return result
+}
+
 </script>
-
-<style scoped>
-
-</style>
