@@ -245,7 +245,6 @@ async function createNewProject(): Promise<void>{
  */
 async function clickedOption(url: string): Promise<void>{
   //TODO: routes to different pages
-  console.log(url)
   await routerService?.routeTo(ROUTES[url])
 }
 </script>

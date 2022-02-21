@@ -70,7 +70,6 @@ export default {
     pid: 'PID',
     files: 'Files',
     ftp: 'FTP',
-    new_project: 'New Project',
     remove_from_project: 'Remove from Project',
     compress_vibration_data: 'Compress Vibration Data',
     download_compress_vibration_data: 'Download Compress Vibration Data',
@@ -79,6 +78,7 @@ export default {
     edit_parameters: 'Edit Parameters',
     show_status_files: 'Show Status Files',
     show_device_health: 'Show Device Health',
+    name: 'Name',
   },
   buttons: {
     finish: 'Finish',
@@ -87,6 +87,9 @@ export default {
     cancel: 'Cancel',
     submit: 'Submit',
     ok: 'OK',
+    new_project: 'New Project',
+    custom_graph: 'Custom Graph',
+    load_parameters: 'Load Parameters',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',

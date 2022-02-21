@@ -79,6 +79,7 @@ export default {
     edit_parameters: 'Parameter bearbeiten',
     show_status_files: 'Statusdateien anzeigen',
     show_device_health: 'Gerätezustand anzeigen',
+    name: 'Name',
   },
   buttons: {
     finish: 'Abschliessen',
@@ -88,6 +89,8 @@ export default {
     cancel: 'Abbrechen',
     ok: 'OK',
     new_project: 'Neues Projekt',
+    custom_graph: 'Benutzerdefinierte Grafik',
+    load_parameters: 'Parameter laden',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
