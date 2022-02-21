@@ -5,6 +5,11 @@ import {root} from 'src/store';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/USER';
 import {ROLE} from '../../definitions/ENUMS';
+import {Context, Module} from 'vuex-smart-module';
+import AuthState from 'src/store/authentication/state';
+import AuthGetters from 'src/store/authentication/getters';
+import AuthMutations from 'src/store/authentication/mutations';
+import AuthActions from 'src/store/authentication/actions';
 
 let routerInstance: Router
 
@@ -24,7 +29,8 @@ export default boot(({ router, store}) => {
     // Case 2: going to login when logged in, or to default path '/'
     else if(((to.path === ROUTES.LOGIN.path || to.path === '/') && loggedIn)){
       const user = await getUser();
-      return getUserRoleRoute(user)
+
+      return getUserRoleRoute(user, $authStore)
     }
     // Case 3: route has some constraints
     const matchingConstrainedRoute = CONSTRAINED_ROUTES.find((constrainedRoute) => constrainedRoute.path === to.path)
@@ -59,11 +65,14 @@ async function getUser() {
 /**
  * Returns the component of the dashboard for the currently logged in user
  * @param {Record<string, unknown>|null} user - the user, if any
+ * @param {Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions, Record<string, any>>>} $authStore - authentication store
  * @returns {any} - the layout component
  */
-function getUserRoleRoute(user: Record<string, unknown>|null){
+function getUserRoleRoute(user: Record<string, unknown>|null, $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions, Record<string, any>>>){
   // Non-logged in: Redirect to login
   if(!user){
+    $authStore.mutations.setCognitoUser(undefined)
+    $authStore.mutations.setUserSession(undefined)
     return ROUTES.LOGIN
   }
 

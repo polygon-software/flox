@@ -60,6 +60,7 @@ export class FileController {
       fileBuffer,
       file.filename,
     );
+    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 
@@ -87,6 +88,7 @@ export class FileController {
       owner,
       {},
     );
+    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 
@@ -138,7 +140,7 @@ export class FileController {
     );
     company.creation_state = CREATION_STATE.DOCUMENTS_UPLOADED;
     await this.companyRepository.save(company);
-
+    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 

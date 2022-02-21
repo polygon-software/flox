@@ -17,4 +17,7 @@ export const ERRORS = {
   invalid_user_type: 'Invalid User Type specified',
   no_permission_to_disable:
     'The current user is not allowed to disable this account',
+  bank_must_be_unique: 'Bank abbreviation must be unique',
+  account_exists_for_email:
+    'There already exists an account for this e-mail address',
 };

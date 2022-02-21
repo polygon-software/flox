@@ -295,6 +295,10 @@ input DeleteCompanyInput {
   uuid: ID!
 }
 
+input DeleteDossierInput {
+  uuid: ID!
+}
+
 input DisableUserInput {
   """Role of the User"""
   role: Roles!
@@ -573,6 +577,7 @@ type Mutation {
   createOffer(createOfferInput: CreateOfferInput!): Dossier!
   createSoiAdmin(createSoiAdminInput: CreateSoiAdminInput!): SoiAdmin!
   createSoiEmployee(createSoiEmployeeInput: CreateSoiEmployeeInput!): SoiEmployee!
+  deleteDossier(deleteDossierInput: DeleteDossierInput!): Dossier!
   disableUser(disableUserInput: DisableUserInput!): PersonType!
   enableCompanyDocumentUpload(uuid: String!): Company!
   rejectCompany(deleteCompanyInput: DeleteCompanyInput!): Company!
@@ -688,6 +693,7 @@ type Query {
   allUsers: [User!]!
   companies(uuids: [ID!]): [Company!]!
   company(cognito_id: ID, uuid: ID): Company!
+  getAllDossiers: [Dossier!]
   getBank(uuid: ID!): Bank!
   getBankList: [Bank!]!
   getBankNameSuggestions: [Bank!]!

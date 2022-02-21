@@ -99,9 +99,11 @@ export default {
     email_sent: 'E-Mail(s) sent',
     file_uploaded: 'Successfully uploaded file',
     files_uploaded: 'Successfully uploaded files',
-    account_disabled: 'Account disabled successfully',
     password_set: 'Password set successfully',
-    bank_created: 'Bank created successfully'
+    bank_created: 'Bank created successfully',
+    account_disabled: 'Account disabled successfully',
+    dossier_deleted: 'Successfully deleted dossier',
+    dossier_delete_failed: 'Dossier delete failed',
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -208,8 +210,6 @@ export default {
     }
   },
   dossier: {
-    reset_dossier: 'Reset dossier',
-    reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.',
     offer: 'offer',
     send_offer: 'Send offer',
     upload_offer: 'Upload offer documents',
@@ -479,5 +479,10 @@ export default {
   admin: {
     disable_account: 'Disable Account',
     disable_company_account_description: 'Caution: This will also disable all employees of the company',
+    delete_permanently: 'Delete permanently',
+    delete_dossier: 'Delete Dossier',
+    delete_dossier_description: 'Dossier and all related Offers will be deleted permanently.',
+    reset_dossier: 'Reset dossier',
+    reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.',
   },
 };

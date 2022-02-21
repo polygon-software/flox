@@ -36,7 +36,7 @@
       v-model="address.zip_code"
       dense
       :label="$t('account_data.zip_code')"
-      type="number"
+      type="text"
       :rules="[(val) => IS_VALID_ZIP(val) || $t('errors.invalid_zip_code')]"
       style="width:30%"
       mask="######"

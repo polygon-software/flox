@@ -110,17 +110,17 @@
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.purchase_price')"
-                  :content="dossier.purchase_price.toLocaleString() + currency"
+                  :content="dossier.purchase_price.toLocaleString('de-ch') + currency"
                 />
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.calculated_market_value')"
-                  :content="dossier.value_estimate_high.toLocaleString() + currency"
+                  :content="dossier.value_estimate_high.toLocaleString('de-ch') + currency"
                 />
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.current_mortgage')"
-                  :content="dossier.mortgage_amount.toLocaleString() + currency"
+                  :content="dossier.mortgage_amount.toLocaleString('de-ch') + currency"
                 />
 
               </div>
@@ -145,7 +145,7 @@
 
                 <DossierDocumentInfoField
                   :label="$t('dossier.amortization_amount')"
-                  :content="dossier.has_amortisation ? dossier.amortisation_amount.toLocaleString() + currency : '-'"
+                  :content="dossier.has_amortisation ? dossier.amortisation_amount.toLocaleString('de-ch') + currency : '-'"
                 />
               </div>
             </div>
@@ -163,7 +163,7 @@
                   v-for='(amount, index) in dossier.partition_amounts'
                   :key="'partition_'+index"
                   :label="$t('dossier.installment') + ' ' + (index+1)"
-                  :content="amount.toLocaleString() + currency"
+                  :content="amount.toLocaleString('de-ch') + currency"
                 />
 
                 <!-- Enfeoffment -->
@@ -216,7 +216,7 @@
                 <DossierDocumentInfoField
                   v-if="dossier.has_renovation"
                   :label="$t('dossier.renovation_amount')"
-                  :content="dossier.renovation_price.toLocaleString() + currency"
+                  :content="dossier.renovation_price.toLocaleString('de-ch') + currency"
                 />
               </div>
 
@@ -248,14 +248,14 @@
                 <!-- Eligible income -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.salary')"
-                  :content="dossier.eligible_income.toLocaleString() + currency"
+                  :content="dossier.eligible_income.toLocaleString('de-ch') + currency"
                   bold
                 />
 
                 <!-- Total costs -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.costs')"
-                  :content="dossier.total_costs.toLocaleString() + currency"
+                  :content="dossier.total_costs.toLocaleString('de-ch') + currency"
                 />
 
                 <!-- Affordability -->
@@ -268,7 +268,7 @@
                 <!-- Assets -->
                 <DossierDocumentInfoField
                   :label="$t('dossier.assets')"
-                  :content="dossier.assets.toLocaleString() + currency"
+                  :content="dossier.assets.toLocaleString('de-ch') + currency"
                 />
               </div>
 

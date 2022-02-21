@@ -1,8 +1,8 @@
 {
-  "name": "my-app",
+  "name": "soi",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "description": "Strategic Opportunity Investment AG",
+  "productName": "S.O.I Chamäleon",
   "author": "davwys <david.wyss@hotmail.ch>",
   "private": true,
   "scripts": {

@@ -93,7 +93,8 @@ function showEnableUploadDialog(company: Company) {
     title: 'SignUpApplication',
     component: SignUpApplicationDialog,
     componentProps: {
-      company: company
+      company: company,
+      errorService: $errorService
     }
   })
 }

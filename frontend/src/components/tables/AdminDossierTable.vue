@@ -4,7 +4,7 @@
       class="row justify-between q-ma-none"
     >
       <h6 class="q-ma-none">
-        {{ $t('dashboards.rejected_dossiers') + ' (' + rows.length + ')' }}
+        {{ $tc('dashboards.dossier', 2) + ' (' + rows.length + ')' }}
       </h6>
 
       <!-- Search bar -->
@@ -39,7 +39,6 @@
         <q-tr
           :props="props"
           style="background-color: white; cursor: pointer"
-          @click="()=>onRowClick(props.row)"
         >
           <q-td key="date">
             {{ formatDate(props.row.created_at) }}
@@ -51,10 +50,10 @@
             {{ props.row.original_bank.name }}
           </q-td>
           <q-td key="location">
-            {{ props.row.property_address.city }}
+            {{ props.row.address.city }}
           </q-td>
           <q-td key="mortgage_amount">
-            {{ props.row.loan_sum.toLocaleString() }}
+            {{ props.row.mortgage_amount.toLocaleString('de-ch') }}
           </q-td>
           <q-td key="status">
             <q-chip
@@ -69,7 +68,7 @@
               color="primary"
               size="md"
               round
-              @click.stop="()=>{showAllDocuments(props.row.files)}"
+              @click.stop="()=>{showAllDocuments(props.row)}"
             />
           </q-td>
           <q-td key="offers">
@@ -81,8 +80,32 @@
               {{ offer.bank.abbreviation }}
             </q-chip>
           </q-td>
-          <q-td key="non-non_arrangeable">
+          <q-td key="non_arrangeable">
             <q-icon v-if="props.row.non_arrangeable" name="warning" size="30px" color="red"/>
+          </q-td>
+          <q-td key="options">
+            <!-- Options for enabled users -->
+            <q-btn-dropdown
+              dropdown-icon="more_vert"
+              auto-close
+              no-icon-animation
+              flat
+              round
+              dense
+              @click.stop=""
+            >
+              <div class="column">
+                <!-- Button for permanent (hard) delete -->
+                <q-btn
+                  :label="$t('admin.delete_permanently')"
+                  icon="delete"
+                  class="text-black"
+                  flat
+                  no-caps
+                  @click="()=> onDossierDelete(props.row)"
+                />
+              </div>
+            </q-btn-dropdown>
           </q-td>
         </q-tr>
         <!-- one spacer row per row -->
@@ -95,17 +118,17 @@
 <script setup lang="ts">
 import {computed, Ref, ref} from 'vue';
 import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
-import ResetDossierDialog from 'src/components/dialogs/ResetDossierDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {formatDate} from 'src/helpers/format-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
-import {RESET_DOSSIER} from 'src/data/mutations/DOSSIER';
+import {DELETE_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
 import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
-import {REJECTED_DOSSIERS} from 'src/data/queries/DOSSIER';
 import {DOSSIER_FILE} from 'src/data/queries/FILE';
+import {ALL_DOSSIERS} from 'src/data/queries/DOSSIER';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
 
 const $q: QVueGlobals = useQuasar()
 
@@ -121,52 +144,61 @@ const columns = [
   { name: 'uploads', label: i18n.global.t('employee_dashboard.uploads'), field: 'uploads', sortable: false, align: 'center' },
   { name: 'offers', label: i18n.global.t('employee_dashboard.offers'), field: 'offers', sortable: false, align: 'center' },
   { name: 'non_arrangeable', label: ' ', field: 'non_arrangeable', sortable: true, align: 'center' },
+  { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
 const search = ref('')
 
-const dossiers = subscribeToQuery(REJECTED_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
+const dossiers = subscribeToQuery(ALL_DOSSIERS) as Ref<Record<string, Array<Record<string, unknown>>>>
 const rows = computed(()=>{
   return dossiers.value ?? []
 })
 
 /**
  * Shows a dialog for downloading any dossier files
- * @param {Record<string, unknown>[]} files - the files of the selected dossier
+ * @param {Record<string, unknown>} dossier - the selected dossier
  * @returns {void}
  */
-function showAllDocuments(files: Record<string, unknown>[]) {
+function showAllDocuments(dossier: Record<string, unknown>) {
   $q.dialog({
     component: DocumentsDialog,
     componentProps: {
-      files,
+      files: dossier.documents,
       query: DOSSIER_FILE,
+      dossierUuid: dossier.uuid
     }
   })
 }
 
 /**
- * Upon clicking a row, show dialog to re-enable dossier
+ * Upon deleting a dossier, show confirmation dialog
  * @param {Record<string, unknown>} dossier - dossier that was clicked
  * @returns {void}
  */
-function onRowClick(dossier: Record<string, unknown>): void{
+function onDossierDelete(dossier: Record<string, unknown>): void{
   $q.dialog({
-    component: ResetDossierDialog,
+    component: WarningDialog,
+    componentProps: {
+      description: i18n.global.t('admin.delete_dossier_description'),
+      okLabel: i18n.global.t('admin.delete_dossier'),
+      discardLabel: i18n.global.t('buttons.cancel'),
+      showDiscard: true,
+      swapNegative: true
+    }
   }).onOk(() => {
     // Delete all offers & reset status
-    executeMutation(RESET_DOSSIER, {uuid: dossier.uuid}).then(() => {
+    executeMutation(DELETE_DOSSIER, {uuid: dossier.uuid}).then(() => {
       // Show notification
       showNotification(
         $q,
-        i18n.global.t('messages.dossier_reset'),
+        i18n.global.t('messages.dossier_deleted'),
         undefined,
         'primary'
       )
     }).catch(()=>{
       showNotification(
         $q,
-        i18n.global.t('messages.dossier_reset_failed'),
+        i18n.global.t('messages.dossier_delete_failed'),
         undefined,
         'negative'
       )

@@ -43,10 +43,10 @@
               {{ props.row.dossiers.length }}
             </q-td>
             <q-td key="volume" :props="props">
-              CHF {{ dossierVolumeSum(props.row).toLocaleString()}}
+              CHF {{ dossierVolumeSum(props.row).toLocaleString('de-ch')}}
             </q-td>
             <q-td key="prov_org" :props="props">
-              CHF {{ (Math.round(getProvisionTotalForEmployee(props.row) * provisionsFactor)).toLocaleString() }}
+              CHF {{ (Math.round(getProvisionTotalForEmployee(props.row) * provisionsFactor)).toLocaleString('de-ch') }}
             </q-td>
         </q-tr>
 
@@ -64,12 +64,12 @@
           </q-td>
           <q-td key="volume" :props="props">
             <strong>
-              CHF {{ totalAmount.toLocaleString() }}
+              CHF {{ totalAmount.toLocaleString('de-ch') }}
             </strong>
           </q-td>
           <q-td key="prov_org" :props="props">
             <strong>
-              CHF {{ totalProvisions.toLocaleString() }}
+              CHF {{ totalProvisions.toLocaleString('de-ch') }}
             </strong>
           </q-td>
         </q-tr>
