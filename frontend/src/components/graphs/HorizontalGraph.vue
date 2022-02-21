@@ -138,7 +138,8 @@ const series = [{
 
 // eslint-disable-next-line valid-jsdoc
 /**
- * Placeholder function, TODO remove
+ * Placeholder function, generates a random time series with spikes
+ * TODO remove
  */
 function randomTimeSeries(){
   const result = []
@@ -146,11 +147,11 @@ function randomTimeSeries(){
   for(let i = 0; i < 100; i++){
     const newElement = {
       x: date.getTime(),
-      y: Math.random()/2
+      y: Math.random()/(Math.random() < 0.9 ? 10 : 2)
     }
     result.push(newElement)
 
-    date.setTime(date.getTime() + 10000)
+    date.setTime(date.getTime() + 60000)
   }
 
   return result
