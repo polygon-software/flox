@@ -10,6 +10,9 @@
       style="background: lightblue;"
     >
       TODO
+      <q-no-ssr>
+        <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
+      </q-no-ssr>
 
       <!-- Button Row -->
       <div class="row full-width justify-end">
@@ -32,37 +35,22 @@
 import ShareDialog from 'components/dialogs/ShareDialog.vue';
 import {useQuasar} from 'quasar';
 
+
 const $q = useQuasar()
 
-// TODO: copypasta, what chart library...
-// import { DoughnutChart, LineChart, useDoughnutChart, useLineChart } from 'vue-chart-3';
-// import { Chart, ChartData, registerables } from 'chart.js';
-//
-// Chart.register(...registerables);
-// // Income over time data TODO get from backend
-// const incomeOverTimeData = computed<ChartData<'doughnut'>>(() => ({
-//   labels: [ 'January', 'February', 'March', 'April', 'May', 'June',
-//     'July', 'August', 'September', 'October', 'November', 'December' ],
-//   datasets: [
-//     {
-//       data: [300, 350, 400, 600, 950, 1200, 1020, 1600, 800, 240, 600],
-//       borderColor: 'rgb(30, 122, 122)',
-//     },
-//   ],
-// }));
-// // Props of income over time chart
-// const { lineChartProps } = useLineChart({
-//   chartData: incomeOverTimeData,
-//   options: {
-//     plugins: {
-//       legend: {
-//         display: false,
-//       },
-//     },
-//   }
-// });
-//
-
+// TODO
+const options = {
+  chart: {
+    id: 'vuechart-example'
+  },
+  xaxis: {
+    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+  }
+}
+const series = [{
+  name: 'series-1',
+  data: [30, 40, 45, 50, 49, 60, 70, 91]
+}]
 
 /**
  * Copies the graph's content
