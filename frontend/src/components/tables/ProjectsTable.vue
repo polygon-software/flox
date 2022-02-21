@@ -35,6 +35,7 @@
       <template #body="props">
         <q-tr
           :props="props"
+          @click="rowClicker"
         >
           <q-td key="project">
             {{ props.row.project }}
@@ -246,6 +247,16 @@ async function createNewProject(): Promise<void>{
 async function clickedOption(url: string): Promise<void>{
   //TODO: routes to different pages
   await routerService?.routeTo(ROUTES[url])
+}
+
+/**
+ * Routes to that project page which is clicked
+ * @async
+ * @returns {void}
+ */
+async function rowClicker(): Promise<void> {
+  // todo: david
+  await routerService?.routeTo(ROUTES.CUSTOMERS)
 }
 </script>
 
