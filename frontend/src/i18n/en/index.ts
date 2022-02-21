@@ -80,6 +80,14 @@ export default {
     show_device_health: 'Show Device Health',
     name: 'Name',
   },
+  edit_parameters: {
+    user_data: 'User Data and Thresholds',
+    contacts: 'Alert Contacts',
+    project_name: 'Project Name',
+    station_name: 'Station Name',
+    name: 'Name',
+    number: 'Mobile Number',
+  },
   buttons: {
     finish: 'Finish',
     back: 'Back',
@@ -90,6 +98,7 @@ export default {
     new_project: 'New Project',
     custom_graph: 'Custom Graph',
     load_parameters: 'Load Parameters',
+    new_contact: 'New Contakt',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',

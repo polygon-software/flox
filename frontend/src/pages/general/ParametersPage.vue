@@ -1,13 +1,16 @@
 <template>
-  <q-page class="row justify-center">
-    <div class="col" style="max-width: 600px;">
-      PARAMETERS PAGE for {{ parametersId }}
-    </div>
+  <q-page class="column items-center justify-start full-width">
+    <!-- Title: Project name -->
+    <h5>{{ parametersId }}</h5>
+    <UserDataForm/>
+    <AlertContactsForm/>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import {defineProps} from 'vue';
+import UserDataForm from 'components/forms/UserDataForm.vue';
+import AlertContactsForm from 'components/forms/AlertContactsForm.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({

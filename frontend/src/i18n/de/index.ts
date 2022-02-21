@@ -81,6 +81,14 @@ export default {
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
   },
+  edit_parameters: {
+    user_data: 'Benutzerdaten und Schwellenwerte',
+    contacts: 'Alert-Kontakte',
+    project_name: 'Projektname',
+    station_name: 'Stationsname',
+    name: 'Name',
+    number: 'Telefonnumer',
+  },
   buttons: {
     finish: 'Abschliessen',
     back: 'Zurück',
@@ -91,6 +99,7 @@ export default {
     new_project: 'Neues Projekt',
     custom_graph: 'Benutzerdefinierte Grafik',
     load_parameters: 'Parameter laden',
+    new_contact: 'Neuer Kontakt',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
