@@ -6,13 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Dossier } from './entity/dossier.entity';
 import { CreateDossierInput } from './dto/input/create-dossier.input';
 import { UpdateDossierInput } from './dto/input/update-dossier.input';
-import {
-  DOSSIER_FILE_TYPE,
-  DOSSIER_STATUS,
-  OFFER_STATUS,
-  PROPERTY_TYPE,
-  ROLE,
-} from '../../ENUM/ENUMS';
+import { DOSSIER_STATUS, OFFER_STATUS, ROLE } from '../../ENUM/ENUMS';
 import { UpdateDossierStatusInput } from './dto/input/update-dossier-status.input';
 import { BankService } from '../bank/bank.service';
 import { generateHumanReadableId } from '../../helpers';
