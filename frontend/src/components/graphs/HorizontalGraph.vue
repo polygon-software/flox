@@ -55,7 +55,7 @@ const options = {
   chart: {
     id: 'vuechart-example'
   },
-  colors: ['#26A69A'],
+  colors: ['var(--q-secondary)'],
   stroke: {
     width: 1.5
   },
@@ -87,12 +87,14 @@ const options = {
       {
         y: 0.25,
         strokeDashArray: 2,
-        borderColor: '#C10015',
+        borderColor: 'var(--q-negative)',
         label: {
           position: 'left',
           offsetX: 80,
+          borderWidth: 0,
           style: {
-            color: '#C10015',
+            color: 'var(--q-negative)',
+            background: 'rgba(0,0,0,0)'
           },
           text: 'Warning at 0.25'
         }
@@ -102,7 +104,7 @@ const options = {
 }
 const series = [{
   name: props.datasetName.toUpperCase(),
-  data: Array.from({length: 200}, () => Math.random() / 2)
+  data: Array.from({length: 200}, () => (Math.random() / 2))
 }]
 
 /**
