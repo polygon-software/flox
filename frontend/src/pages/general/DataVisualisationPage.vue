@@ -27,7 +27,7 @@
     </div>
 
     <!-- Horizontal - x -->
-    <h6 class="q-ma-none q-pa-none">
+    <h6 class="q-ma-md q-pa-none">
       {{ $t('visualisation.horizontal') }} - X
     </h6>
 
@@ -37,7 +37,7 @@
     />
 
     <!-- Horizontal - y -->
-    <h6 class="q-ma-none q-pa-none">
+    <h6 class="q-ma-md q-pa-none">
       {{ $t('visualisation.horizontal') }} - Y
     </h6>
 
@@ -46,7 +46,7 @@
       :dataset-name="stationId"
     />
     <!-- Horizontal - z -->
-    <h6 class="q-ma-none q-pa-none">
+    <h6 class="q-ma-md q-pa-none">
       {{ $t('visualisation.horizontal') }} - Z
     </h6>
 

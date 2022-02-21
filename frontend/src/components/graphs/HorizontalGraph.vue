@@ -1,8 +1,8 @@
 <template>
   <!-- Container -->
   <div
-    class="q-pa-lg full-width q-mb-lg"
-    style="height: 280px; margin-bottom: 110px"
+    class="q-pa-lg full-width"
+    style="height: 280px; margin-bottom: 110px; padding: 0 50px 0 50px"
   >
     <!-- Content -->
     <div
@@ -53,7 +53,14 @@ const props = defineProps({
 // TODO
 const options = {
   chart: {
-    id: 'vuechart-example'
+    id: props.datasetName,
+    toolbar: {
+      tools: {
+        zoomin: false,
+        zoomout: false,
+        download: false
+      },
+    }
   },
   colors: ['var(--q-secondary)'],
   stroke: {
@@ -65,8 +72,16 @@ const options = {
     position: 'bottom',
     horizontalAlign: 'left',
     offsetX: 20,
-    offsetY: 10,
-    fontSize: '16px'
+    offsetY: 8,
+    fontSize: '16px',
+    fontWeight: 600,
+    markers: {
+      radius: 0,
+      width: 16,
+      height: 16,
+      offsetX: -10,
+      offsetY: 2
+    }
   },
   xaxis: {
     type: 'numeric', // TODO: Date format
@@ -77,7 +92,8 @@ const options = {
     title: {
       text: 'mm/s', // TODO: unit from DB
       style: {
-        fontSize: '16px'
+        fontSize: '16px',
+        fontWeight: 600,
       },
       offsetX: -10
     }
@@ -104,8 +120,29 @@ const options = {
 }
 const series = [{
   name: props.datasetName.toUpperCase(),
-  data: Array.from({length: 200}, () => (Math.random() / 2))
+  data: randomTimeSeries()
 }]
+
+// eslint-disable-next-line valid-jsdoc
+/**
+ * Placeholder function, TODO remove
+ */
+function randomTimeSeries(){
+  const result = []
+  let date = new Date()
+  for(let i = 0; i < 300; i++){
+    const newElement = {
+      x: date.toDateString(),
+      y: Math.random()/2
+    }
+    result.push(newElement)
+
+    date.setTime(date.getTime() + 10000)
+  }
+
+  return result
+}
+
 
 /**
  * Copies the graph's content
