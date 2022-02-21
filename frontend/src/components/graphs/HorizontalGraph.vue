@@ -40,6 +40,7 @@
 import ShareDialog from 'components/dialogs/ShareDialog.vue';
 import {defineProps} from 'vue';
 import {useQuasar} from 'quasar';
+import {formatDateForGraph} from 'src/helpers/format-helpers';
 
 const $q = useQuasar()
 
@@ -84,7 +85,12 @@ const options = {
     }
   },
   xaxis: {
-    type: 'numeric', // TODO: Date format
+    type: 'numeric',
+    labels: {
+      formatter: function (timestamp: number){
+        return formatDateForGraph(new Date(timestamp))
+      }
+    }
   },
   yaxis: {
     type: 'numeric',
@@ -130,9 +136,9 @@ const series = [{
 function randomTimeSeries(){
   const result = []
   let date = new Date()
-  for(let i = 0; i < 300; i++){
+  for(let i = 0; i < 100; i++){
     const newElement = {
-      x: date.toDateString(),
+      x: date.getTime(),
       y: Math.random()/2
     }
     result.push(newElement)

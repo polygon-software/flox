@@ -46,3 +46,12 @@ export function formatDateTime(inputDate: Date|string): string{
 
   return date.formatDate(actualDate, 'DD.MM.YYYY HH:mm')
 }
+
+/**
+ * Formats a date to a string in Mon 25.01. - 18:00 format
+ * @param {Date} inputDate - the date to format
+ * @returns {string} - the formatted date
+ */
+export function formatDateForGraph(inputDate: Date|string): string{
+  return date.formatDate(inputDate, 'ddd DD.MM. - HH:mm')
+}
