@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import ShareDialog from 'components/dialogs/ShareDialog.vue';
 import {defineProps} from 'vue';
-import {useQuasar} from 'quasar';
+import {date, useQuasar} from 'quasar';
 import {formatDateForGraph} from 'src/helpers/format-helpers';
 
 const $q = useQuasar()
@@ -122,6 +122,13 @@ const options = {
         }
       }
     ]
+  },
+  tooltip: {
+    x: {
+      formatter: function (timestamp: number){
+        return date.formatDate(new Date(timestamp), 'dddd DD.MM.YYYY - HH:mm:ss')
+      }
+    }
   }
 }
 const series = [{
