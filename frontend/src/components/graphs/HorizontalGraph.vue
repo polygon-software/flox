@@ -9,10 +9,12 @@
       class="column justify-between full-height"
       style="background: lightblue;"
     >
-      TODO
-      <q-no-ssr>
-        <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
-      </q-no-ssr>
+        <apexchart
+          height="280"
+          type="line"
+          :options="options"
+          :series="series"
+        />
 
       <!-- Button Row -->
       <div class="row full-width justify-end">
@@ -43,13 +45,13 @@ const options = {
   chart: {
     id: 'vuechart-example'
   },
-  xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-  }
+  // xaxis: {
+  //   categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+  // }
 }
 const series = [{
   name: 'series-1',
-  data: [30, 40, 45, 50, 49, 60, 70, 91]
+  data: Array.from({length: 200}, () => Math.random())
 }]
 
 /**
