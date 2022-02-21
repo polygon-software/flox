@@ -35,7 +35,7 @@
       <template #body="props">
         <q-tr
           :props="props"
-          @click="rowClicker"
+          @click="() => onRowClick(props.row)"
         >
           <q-td key="project">
             {{ props.row.project }}
@@ -251,12 +251,12 @@ async function clickedOption(url: string): Promise<void>{
 
 /**
  * Routes to that project page which is clicked
- * @async
- * @returns {void}
+ * @param {Record<string, unknown>} row - the project row that was clicked
+ * @returns {Promise<void>} - done
  */
-async function rowClicker(): Promise<void> {
+async function onRowClick(row: Record<string, unknown>): Promise<void> {
   // todo: david
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
+  await routerService?.addToRoute(row.project) // or use another value...
 }
 </script>
 

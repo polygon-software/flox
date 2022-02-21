@@ -24,11 +24,20 @@ export class RouterService {
   }
 
   /**
+   * Adds the given string to the URl path
+   * @param {string} path - path to route to
+   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
+   */
+  addToRoute(path: string){
+    return this.router.push(`${this.route.path}/${path}`)
+  }
+
+  /**
    * Routes to a given route, as defined in ROUTES constant.
    * @param {RouteRecordRaw} to - the route to go to.
    * @param {Record<string, string>} [query] - props to pass to the component, if any.
    * @param {boolean} keepQuery - keep the current query and add new query parameters if given.
-   * @returns {void|NavigationFailure|undefined} - the navigation result.
+   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
    */
   async routeTo(
     to: RouteRecordRaw,
