@@ -32,7 +32,9 @@
     </h6>
 
     <!-- TODO params -->
-    <HorizontalGraph/>
+    <HorizontalGraph
+      :dataset-name="stationId"
+    />
 
     <!-- Horizontal - y -->
     <h6 class="q-ma-none q-pa-none">
@@ -40,16 +42,18 @@
     </h6>
 
     <!-- TODO params -->
-    <HorizontalGraph/>
-
+    <HorizontalGraph
+      :dataset-name="stationId"
+    />
     <!-- Horizontal - z -->
     <h6 class="q-ma-none q-pa-none">
       {{ $t('visualisation.horizontal') }} - Z
     </h6>
 
     <!-- TODO params -->
-    <HorizontalGraph/>
-
+    <HorizontalGraph
+      :dataset-name="stationId"
+    />
   </q-page>
 </template>
 
