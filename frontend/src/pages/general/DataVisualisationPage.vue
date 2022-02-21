@@ -31,10 +31,10 @@
       {{ $t('visualisation.horizontal') }} - X
     </h6>
 
-    <!-- TODO params -->
     <TimeSeriesGraph
       :dataset-name="stationId"
       :dataset="randomTimeSeries()"
+      unit="mm/s"
     />
 
     <!-- Horizontal - y -->
@@ -42,20 +42,20 @@
       {{ $t('visualisation.horizontal') }} - Y
     </h6>
 
-    <!-- TODO params -->
     <TimeSeriesGraph
       :dataset-name="stationId"
       :dataset="randomTimeSeries()"
+      unit="mm/s"
     />
     <!-- Horizontal - z -->
     <h6 class="q-ma-md q-pa-none">
       {{ $t('visualisation.horizontal') }} - Z
     </h6>
 
-    <!-- TODO params -->
     <TimeSeriesGraph
       :dataset-name="stationId"
       :dataset="randomTimeSeries()"
+      unit="mm/s"
     />
   </q-page>
 </template>

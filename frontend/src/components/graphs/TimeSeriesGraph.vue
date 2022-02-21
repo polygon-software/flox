@@ -51,15 +51,20 @@ const props = defineProps({
   },
   datasetName: {
     type: String,
-    required: true
+    required: true,
+  },
+  unit: {
+    type: String,
+    required: true,
   }
 })
 
-// TODO
+// Graph options
 const options = {
   chart: {
     id: props.datasetName,
     toolbar: {
+      offsetX: -60,
       tools: {
         zoomin: false,
         zoomout: false,
@@ -100,7 +105,7 @@ const options = {
     type: 'numeric',
     decimalsInFloat: 2,
     title: {
-      text: 'mm/s', // TODO: unit from DB
+      text: props.unit,
       style: {
         fontSize: '16px',
         fontWeight: 600,
