@@ -48,10 +48,26 @@ const options = {
   // xaxis: {
   //   categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
   // }
+  annotations: {
+    yaxis: [
+      {
+        y: 0.25,
+        borderColor: '#FF0000',
+        label: {
+          borderColor: '#FF0000',
+          style: {
+            color: '#fff',
+            background: '#FF0000'
+          },
+          text: 'Warning at 0.25'
+        }
+      }
+    ]
+  }
 }
 const series = [{
   name: 'series-1',
-  data: Array.from({length: 200}, () => Math.random())
+  data: Array.from({length: 200}, () => Math.random() / 2)
 }]
 
 /**
