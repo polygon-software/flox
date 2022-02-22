@@ -120,7 +120,7 @@ input RegisterUserInput {
   phone: String
 
   """Username"""
-  username: String
+  username: String!
 }
 
 enum Role {

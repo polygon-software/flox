@@ -18,7 +18,7 @@ export class RegisterUserInput {
   @IsUUID()
   cognitoUuid: string;
 
-  @Field(() => String, { description: 'Username', nullable: true })
+  @Field(() => String, { description: 'Username' })
   @IsString()
   username: string;
 
