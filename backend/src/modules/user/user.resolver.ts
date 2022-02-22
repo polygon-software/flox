@@ -13,6 +13,9 @@ import {
 } from '../../auth/authorization.decorator';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 import { Project } from '../../types/Project';
+import { MR2000 } from '../../types/MR2000';
+import { MR3000 } from '../../types/MR3000';
+import { Device } from '../../types/Device';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -97,5 +100,16 @@ export class UserResolver {
   @Query(() => [Project], { name: 'getUserProjects' })
   async getUserProjects(@Args() getUserProjectsArgs: GetUserArgs) {
     return this.usersService.getUserProjects(getUserProjectsArgs);
+  }
+
+  /**
+   * Returns a list of the user's MR2000 & MR3000 devices
+   * @param {GetUserArgs} getUserDevicesArgs - contains user's UUID
+   * @returns {Promise<Device[]>} - the user's devices
+   */
+  @AdminOnly()
+  @Query(() => [Device], { name: 'getUserDevices' })
+  async getUserDevices(@Args() getUserDevicesArgs: GetUserArgs) {
+    return this.usersService.getUserDevices(getUserDevicesArgs);
   }
 }

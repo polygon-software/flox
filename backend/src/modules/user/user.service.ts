@@ -149,4 +149,40 @@ export class UserService {
     // Filter by projects that the user has access to
     return projects.filter((project) => user.projects.includes(project.name));
   }
+
+  /**
+   * Returns a list of the user's MR2000 & MR3000 devices
+   * @param {GetUserArgs} getUserDevicesArgs - contains user's UUID
+   * @returns {Promise<MR2000|MR3000[]>} - the user's devices
+   */
+  async getUserDevices(getUserDevicesArgs: GetUserArgs) {
+    // Get user
+    const user = await this.usersRepository.findOne(getUserDevicesArgs.uuid);
+
+    if (!user) {
+      throw new Error(`No user found for ${getUserDevicesArgs.uuid}`);
+    }
+
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable('MR2000', 'station');
+    const mr3000instances = await fetchFromTable('MR3000', 'station');
+
+    const devices = [];
+
+    // Add all allowed MR2000 instances
+    mr2000instances.forEach((instance) => {
+      if (user.mr2000instances.includes(instance.cli)) {
+        devices.push(new MR2000(instance.cli));
+      }
+    });
+
+    // Add all allowed MR3000 instances
+    mr3000instances.forEach((instance) => {
+      if (user.mr3000instances.includes(instance.cli)) {
+        devices.push(new MR3000(instance.cli));
+      }
+    });
+
+    return devices;
+  }
 }

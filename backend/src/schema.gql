@@ -78,6 +78,8 @@ input DeleteUserInput {
   uuid: ID!
 }
 
+union Device = MR2000 | MR3000
+
 type MR2000 {
   """Device CLI ID"""
   cli: String!
@@ -114,6 +116,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
+  getUserDevices(uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   myUser: User!
   preview(cli: String!, date: String!, num: String!): String!
