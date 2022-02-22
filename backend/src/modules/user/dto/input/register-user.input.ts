@@ -11,7 +11,7 @@ import { CreateAddressInput } from '../../../address/dto/input/create-address.in
 
 @InputType()
 /**
- * User update Input
+ * User registration Input
  */
 export class RegisterUserInput {
   @Field(() => ID, { description: 'Cognito ID' })
