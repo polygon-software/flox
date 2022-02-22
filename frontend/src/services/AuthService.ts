@@ -235,36 +235,39 @@ export class AuthenticationService {
 
     /**
      * Shows a dialog for verifying E-Mail
-     * @param {boolean} [renew] - whether to generate a new verification code
-     * @returns {void}
+     * @param {boolean} [renew=false] - whether to generate a new verification code
+     * @returns {Promise<void>} - async
      */
-    showEmailVerificationDialog(renew = false): void{
-        if(renew){
-            if(!this.$authStore.getters.getCognitoUser()){
-                this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
-                return
-            } else {
-              this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
-                  console.log('resend code')
-                })
-            }
+    async showEmailVerificationDialog(renew = false): Promise<void>{
+      return new Promise((resolve, reject)=> {
+
+        if (renew) {
+          if (!this.$authStore.getters.getCognitoUser()) {
+            this.$errorService.showErrorDialog(new Error('An error occurred, try logging in again'))
+            return
+          } else {
+            this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
+              console.log('resend code')
+            })
+          }
         }
 
         this.$q.dialog({
-            title: 'Verification',
-            message: 'Please enter your e-mail verification code',
-            cancel: true,
-            persistent: true,
-            prompt: {
-                model: '',
-                isValid: (val: string) => val.length >= 6,
-                type: 'text'
-            },
+          title: 'Verification',
+          message: 'Please enter your e-mail verification code',
+          cancel: true,
+          persistent: true,
+          prompt: {
+            model: '',
+            isValid: (val: string) => val.length >= 6,
+            type: 'text'
+          },
         }).onOk((input: string) => {
-            void this.verifyEmail(input)
+          this.verifyEmail(input).then(resolve).catch(reject)
         }).onCancel(() => {
-            // TODO
+          reject()
         })
+      })
     }
 
     /**
@@ -355,7 +358,9 @@ export class AuthenticationService {
       // Depending on error, show appropriate dialog
       if(error.name === 'UserNotConfirmedException'){
         // Show the e-mail verification dialog and send a new code
-        this.showEmailVerificationDialog(true)
+        this.showEmailVerificationDialog(true).catch(() => {
+          this.$errorService.showErrorDialog(new Error('Something went wrong while verifying email.'))
+        })
       } else {
         // Generic error
         this.$errorService.showErrorDialog(error)

@@ -1,10 +1,11 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
   IsArray,
   IsDate,
   IsEmail,
   IsPhoneNumber,
   IsString,
+  IsUUID,
 } from 'class-validator';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { ROLE } from '../../../ENUM/ENUM';
@@ -26,18 +27,23 @@ export class User extends BaseEntity {
   @IsString()
   role: ROLE;
 
+  @Field(() => ID, { description: 'Cognito user UUID' })
+  @Column({ nullable: true })
+  @IsUUID()
+  cognitoUuid: string;
+
   @Field(() => Address, { description: 'Domicile address' })
   @JoinColumn()
   @OneToOne(() => Address, { cascade: true, eager: true })
   address: Address;
 
   @Field(() => String, { description: 'Username' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   username: string;
 
   @Field(() => String, { description: 'Full name' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   fullName: string;
 
@@ -48,13 +54,13 @@ export class User extends BaseEntity {
   email: string;
 
   @Field(() => String, { description: 'Phone number' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   @IsPhoneNumber()
   phone: string;
 
   @Field(() => Date, { description: 'Date of birth' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   @IsDate()
   birthdate: Date;
