@@ -11,6 +11,7 @@ import {
   AnyRole,
   CurrentUser,
 } from '../../auth/authorization.decorator';
+import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -69,7 +70,20 @@ export class UserResolver {
     if (!myUser) {
       throw new Error(`No user found for ${user.userId}`);
     }
-
     return myUser;
+  }
+
+  /**
+   * Grants a user access to an instance (MR2000, MR3000 or project)
+   * @param {AddUserPermissionInput} addUserPermissionInput - input, containing user uuid, resource name and type
+   * @returns {Promise<User>} - the updated user
+   */
+  @AdminOnly()
+  @Mutation(() => User, { name: 'addPermission' })
+  async addPermission(
+    @Args('addUserPermissionInput')
+    addUserPermissionInput: AddUserPermissionInput,
+  ): Promise<User> {
+    return this.usersService.addPermission(addUserPermissionInput);
   }
 }
