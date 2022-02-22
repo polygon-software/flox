@@ -16,6 +16,7 @@ import { Project } from '../../types/Project';
 import { MR2000 } from '../../types/MR2000';
 import { MR3000 } from '../../types/MR3000';
 import { RegisterUserInput } from './dto/input/register-user.input';
+import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
 
 @Injectable()
 export class UserService {
@@ -222,6 +223,42 @@ export class UserService {
       if (user.mr3000instances.includes(instance.cli)) {
         devices.push(new MR3000(instance.cli));
       }
+    });
+
+    return devices;
+  }
+
+  /**
+   * Returns a list the devices belonging to a given project
+   * @param {GetProjectDevicesArgs} getProjectDevicesArgs - contains project name
+   * @returns {Promise<MR2000|MR3000[]>} - the user's devices
+   */
+  async getProjectDevices(getProjectDevicesArgs: GetProjectDevicesArgs) {
+    const filterQuery = `WHERE comment='${getProjectDevicesArgs.name}'`;
+
+    // TODO handle whitespace...
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable(
+      'MR2000',
+      'station',
+      filterQuery,
+    );
+    const mr3000instances = await fetchFromTable(
+      'MR3000',
+      'station',
+      filterQuery,
+    );
+
+    const devices = [];
+
+    // Add all MR2000 instances
+    mr2000instances.forEach((instance) => {
+      devices.push(new MR2000(instance.cli));
+    });
+
+    // Add all MR3000 instances
+    mr3000instances.forEach((instance) => {
+      devices.push(new MR3000(instance.cli));
     });
 
     return devices;

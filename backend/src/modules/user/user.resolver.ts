@@ -15,6 +15,7 @@ import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 import { Project } from '../../types/Project';
 import { Device } from '../../types/Device';
 import { RegisterUserInput } from './dto/input/register-user.input';
+import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -155,5 +156,12 @@ export class UserResolver {
       throw new Error(`No user found for ${user.userId}`);
     }
     return this.usersService.getUserDevices({ uuid: dbUser.uuid });
+  }
+
+  @AnyRole()
+  @Query(() => [Device], { name: 'getProjectDevices' })
+  async getProjectDevices(@Args() getProjectDevices: GetProjectDevicesArgs) {
+    // TODO permission check on user for non-admin
+    return this.usersService.getProjectDevices(GetProjectDevicesArgs);
   }
 }

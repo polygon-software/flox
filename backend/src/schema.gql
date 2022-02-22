@@ -117,6 +117,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
+  getProjectDevices(name: String!): [Device!]!
   getUserDevices(uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!

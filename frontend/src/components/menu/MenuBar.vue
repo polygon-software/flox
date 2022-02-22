@@ -193,7 +193,6 @@ async function onSubnavClick(index: number){
   // Get amount of path items to remove (-2 to ignore root path)
   const diff = routeParts.value.length - index - 2
 
-  console.log('Diff:', diff)
   // Last item clicked; no change needed
   if(diff === 0){
     return
