@@ -11,6 +11,8 @@ import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 import { Args } from '@nestjs/graphql';
 import { GetPreviewArgs } from '../preview/dto/get-preview.args';
 import { fetchFromTable } from '../../helpers/database-helpers';
+import { Project } from '../../types/Project';
+import { MR2000 } from '../../types/MR2000';
 
 @Injectable()
 export class UserService {
@@ -128,19 +130,47 @@ export class UserService {
    * @returns {Promise<Project[]>} - the user's projects
    */
   async getUserProjects(getUserProjectsArgs: GetUserArgs) {
+    // Get user
+    const user = await this.usersRepository.findOne(getUserProjectsArgs.uuid);
+
+    if (!user) {
+      throw new Error(`No user found for ${getUserProjectsArgs.uuid}`);
+    }
+
     const projects = [];
 
-    // Get all MR3000 instances
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable('MR2000', 'station');
     const mr3000instances = await fetchFromTable('MR3000', 'station');
 
-    mr3000instances.forEach((instance) => {
-      if (instance.comment && !projects.includes(instance.comment.trim())) {
-        projects.push(instance.comment.trim());
+    // TODO do for all
+    const allInstances = mr2000instances.concat(mr3000instances);
+
+    mr2000instances.forEach((instance) => {
+      const convertedInstance = new MR2000(instance.cli);
+      // If instance belongs to a project
+      if (instance.comment) {
+        const existingProject = projects.find(
+          (project) => project.name === instance.comment.trim(),
+        );
+        // And no project in array yet
+        if (!existingProject) {
+          projects.push(
+            new Project(instance.comment.trim(), [convertedInstance], []),
+          );
+        } else {
+          existingProject.mr2000instances.push(convertedInstance);
+        }
       }
     });
 
     console.log('Projects:', projects);
-    // return rows.toString();
+    console.log('user Projects:', user.projects);
+
+    // Filter by projects that the user has access to
+    // projects = projects.filter((project) => user.projects.includes(project));
+
+    // console.log('filtered:', projects);
 
     return [];
   }

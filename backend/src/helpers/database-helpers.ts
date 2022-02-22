@@ -22,15 +22,21 @@ export async function getQueryRunner(database: string) {
  * Gets an array of the objects within a given database table
  * @param {string} database - database name
  * @param {string} table - table name
+ * @param {string} [filterQuery] - optional SQL filtering query
  * @returns {Record<string, unknown>[]} - database table contents
  */
-export async function fetchFromTable(database: string, table: string) {
+export async function fetchFromTable(
+  database: string,
+  table: string,
+  filterQuery?: string,
+) {
   // Get query runner
   const queryRunner = await getQueryRunner(database);
 
   return queryRunner.manager.query(
     `
       SELECT * FROM ${table}
+      ${filterQuery ?? ''}
       `,
   );
 }
