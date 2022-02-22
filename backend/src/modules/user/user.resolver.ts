@@ -12,6 +12,7 @@ import {
   CurrentUser,
 } from '../../auth/authorization.decorator';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
+import { Project } from '../../types/Project';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -85,5 +86,12 @@ export class UserResolver {
     addUserPermissionInput: AddUserPermissionInput,
   ): Promise<User> {
     return this.usersService.addPermission(addUserPermissionInput);
+  }
+
+  @AdminOnly()
+  @Query(() => [Project], { name: 'getUserProjects' })
+  async getUserProjects(@Args() getUserProjectsArgs: GetUserArgs) {
+    // TODO get projects list for user
+    console.log('GET with args', getUserProjectsArgs);
   }
 }
