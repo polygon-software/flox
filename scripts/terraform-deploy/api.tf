@@ -186,12 +186,12 @@ resource "aws_elastic_beanstalk_environment" "api_eb_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PUBLIC_BUCKET_NAME"
-    value     = "soi-public-bucket-production"
+    value     = "soi-public-bucket-live"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PRIVATE_BUCKET_NAME"
-    value     = "soi-private-bucket-production"
+    value     = "soi-private-bucket-live"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
