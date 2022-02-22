@@ -146,6 +146,7 @@ import ROUTES from 'src/router/routes';
 import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {REMOVE_FILES_DOSSIER} from 'src/data/mutations/DOSSIER';
+import {PROPERTY_TYPE} from 'app/definitions/ENUMS';
 
 const route = useRoute()
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -181,53 +182,8 @@ const financialsFileTypes = [
   DOSSIER_FILE_TYPE.WORK_CONTRACT,
   DOSSIER_FILE_TYPE.MARRIAGE_CONTRACT
 ]
-
-// UUID of dossier to upload files to
-const dossierUuid = route.query.did
-const dossier: Ref<Record<string,string|unknown>> = ref({})
-
-onBeforeMount(()=>{
-  executeQuery(GET_DOSSIER, {uuid: dossierUuid}).then((queryRes)=>{
-    dossier.value = queryRes.data[GET_DOSSIER.cacheLocation] as Record<string,string|unknown>
-    const documents = dossier.value.documents as Array<Record<string, string|unknown>>
-    documents.forEach((docu)=>{
-      const documentType = docu.file_type as DOSSIER_FILE_TYPE
-      let subtype = '';
-
-      if(financialsFileTypes.includes(documentType)){
-        subtype = 'financials'
-      } else if(documentType === `${DOSSIER_FILE_TYPE.ADDITIONAL_DOCUMENTS}`){
-        subtype = 'additional'
-      } else {
-        subtype = 'property'
-      }
-      if(files.value[subtype][documentType]){
-        files.value[subtype][documentType].push(docu)
-      } else {
-        files.value[subtype][documentType] = [docu]
-      }
-    })
-  }).catch((err)=>{
-    console.error(err)
-  })
-})
-
-
-// File Picker component ref
-const filePicker: Ref<QFile|null> = ref(null)
-
-// Loading state
-const loading = ref(false)
-
-const props = defineProps({
-  maxFileSize: {
-    type: Number,
-    default: 5e7
-  },
-})
-
 // File upload sections
-const sections = {
+const sections = ref({
   // Financial documents
   financials: {
     title: i18n.global.t('documents.financials.title'),
@@ -315,24 +271,6 @@ const sections = {
           label: i18n.global.t('documents.property.product_agreement'),
           key: DOSSIER_FILE_TYPE.PRODUCT_AGREEMENT,
         },
-        // TODO CONDITIONAL: EFH only
-        {
-          label: i18n.global.t('documents.property.building_insurance'),
-          caption: i18n.global.t('documents.property.building_insurance_caption'),
-          key: DOSSIER_FILE_TYPE.BUILDING_INSURANCE,
-        },
-        // TODO CONDITIONAL: Stockwerkeigentum Only!
-        {
-          label: i18n.global.t('documents.property.owner_regulations'),
-          caption: i18n.global.t('documents.property.owner_regulations_caption'),
-          key: DOSSIER_FILE_TYPE.OWNER_REGULATIONS,
-        },
-        // TODO CONDITIONAL: Stockwerkeigentum Only!
-        {
-          label: i18n.global.t('documents.property.management_regulations'),
-          caption: i18n.global.t('documents.property.owner_regulations_caption'),
-          key: DOSSIER_FILE_TYPE.MANAGEMENT_REGULATIONS,
-        },
         {
           label: i18n.global.t('documents.property.floor_plans'),
           key: DOSSIER_FILE_TYPE.FLOOR_PLANS,
@@ -400,7 +338,80 @@ const sections = {
         ]
     }
   }
-}
+})
+const oneFamilyHouse =  // CONDITIONAL: EFH only
+  [{
+    label: i18n.global.t('documents.property.building_insurance'),
+    caption: i18n.global.t('documents.property.building_insurance_caption'),
+    key: DOSSIER_FILE_TYPE.BUILDING_INSURANCE,
+  }]
+const appartment = [// CONDITIONAL: Stockwerkeigentum Only!
+  {
+    label: i18n.global.t('documents.property.owner_regulations'),
+    caption: i18n.global.t('documents.property.owner_regulations_caption'),
+    key: DOSSIER_FILE_TYPE.OWNER_REGULATIONS,
+  },
+  // CONDITIONAL: Stockwerkeigentum Only!
+  {
+    label: i18n.global.t('documents.property.management_regulations'),
+    caption: i18n.global.t('documents.property.owner_regulations_caption'),
+    key: DOSSIER_FILE_TYPE.MANAGEMENT_REGULATIONS,
+  }]
+
+// UUID of dossier to upload files to
+const dossierUuid = route.query.did
+const dossier: Ref<Record<string,string|unknown>> = ref({})
+
+onBeforeMount(()=>{
+  executeQuery(GET_DOSSIER, {uuid: dossierUuid}).then((queryRes)=>{
+    dossier.value = queryRes.data[GET_DOSSIER.cacheLocation] as Record<string,string|unknown>
+    if (dossier.value.property_type === PROPERTY_TYPE.ONE_FAMILY_HOUSE) {
+      sections.value.property.fields.required.push(...oneFamilyHouse)
+      sections.value.property.fields.optional.push(...appartment)
+    } else if (dossier.value.property_type === PROPERTY_TYPE.APARTMENT) {
+      sections.value.property.fields.required.push(...appartment)
+      sections.value.property.fields.optional.push(...oneFamilyHouse)
+    } else {
+      sections.value.property.fields.optional.push(...oneFamilyHouse, ...appartment)
+    }
+    const documents = dossier.value.documents as Array<Record<string, string|unknown>>
+    documents.forEach((docu)=>{
+      const documentType = docu.file_type as DOSSIER_FILE_TYPE
+      let subtype = '';
+
+      if(financialsFileTypes.includes(documentType)){
+        subtype = 'financials'
+      } else if(documentType === `${DOSSIER_FILE_TYPE.ADDITIONAL_DOCUMENTS}`){
+        subtype = 'additional'
+      } else {
+        subtype = 'property'
+      }
+      if(files.value[subtype][documentType]){
+        files.value[subtype][documentType].push(docu)
+      } else {
+        files.value[subtype][documentType] = [docu]
+      }
+    })
+  }).catch((err)=>{
+    console.error(err)
+  })
+})
+
+
+// File Picker component ref
+const filePicker: Ref<QFile|null> = ref(null)
+
+// Loading state
+const loading = ref(false)
+
+const props = defineProps({
+  maxFileSize: {
+    type: Number,
+    default: 5e7
+  },
+})
+
+
 
 const uploadFor = ref({
   section: '',
@@ -465,7 +476,7 @@ function removeFile(section: string, field: string, index: number) {
  * @returns {boolean} - whether the section is complete
  */
 function sectionComplete(key: 'financials'|'additional'|'property'): boolean{
-  const section = sections[key]
+  const section = sections.value[key]
   const requiredFields = section.fields.required
 
   const allFiles = files.value
