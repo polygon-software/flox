@@ -1,11 +1,16 @@
 import { MR2000 } from './MR2000';
 import { MR3000 } from './MR3000';
-import { ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Project {
+  @Field(() => String, { description: 'Project name' })
   name: string;
+
+  @Field(() => [MR2000], { description: 'Associated MR2000 instances' })
   mr2000instances: MR2000[];
+
+  @Field(() => [MR3000], { description: 'Associated MR3000 instances' })
   mr3000instances: MR3000[];
 
   /**
