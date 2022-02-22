@@ -3,12 +3,13 @@ import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PERMISSION, ROLE } from '../../ENUM/ENUM';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 import { Args } from '@nestjs/graphql';
+import { GetPreviewArgs } from '../preview/dto/get-preview.args';
 
 @Injectable()
 export class UserService {
@@ -126,8 +127,27 @@ export class UserService {
    * @returns {Promise<Project[]>} - the user's projects
    */
   async getUserProjects(getUserProjectsArgs: GetUserArgs) {
-    // TODO
-    // return this.usersService.getUserProjects(getUserProjectsArgs);
+    const projects = [];
+
+    // Get all MR3000 instances
+    const conn = getConnection('MR3000');
+    const queryRunner = conn.createQueryRunner();
+    await queryRunner.connect();
+    const mr3000instances = await queryRunner.manager.query(
+      `\
+      SELECT * FROM station
+      `,
+    );
+
+    mr3000instances.forEach((instance) => {
+      if (instance.comment && !projects.includes(instance.comment.trim())) {
+        projects.push(instance.comment.trim());
+      }
+    });
+
+    console.log('Projects:', projects);
+    // return rows.toString();
+
     return [];
   }
 }
