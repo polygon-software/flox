@@ -69,7 +69,28 @@ export class UserResolver {
     if (!myUser) {
       throw new Error(`No user found for ${user.userId}`);
     }
+    return myUser;
+  }
 
+  /**
+   * Grants a user access to an MR2000 instance
+   * @param {Record<string, string>}  user - currently logged-in user from request
+   * @async
+   * @returns {User} - the user, if any
+   */
+  @AnyRole()
+  @Query(() => User, { name: 'myUser' })
+  async addMR2000Permission(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<User> {
+    // Get user where user's UUID matches cognitoID
+    const myUser = await this.usersService.getUser({
+      uuid: user.userId,
+    } as GetUserArgs);
+
+    if (!myUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
     return myUser;
   }
 }
