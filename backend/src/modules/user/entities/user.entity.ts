@@ -1,11 +1,11 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
   IsArray,
   IsDate,
   IsEmail,
   IsPhoneNumber,
   IsString,
-  IsUUID
+  IsUUID,
 } from 'class-validator';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { ROLE } from '../../../ENUM/ENUM';
