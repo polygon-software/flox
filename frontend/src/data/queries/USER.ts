@@ -92,6 +92,23 @@ export const USER_DEVICES = {
   cacheLocation: 'getUserDevices',
 };
 
+export const MY_DEVICES = {
+  query: gql`
+    query{
+      myDevices{
+      ...on MR2000{
+        cli
+      }
+      ... on MR3000{
+        cli
+      }
+      __typename
+    }}
+  `,
+  tables: ['user'],
+  cacheLocation: 'getUserDevices',
+};
+
 export const USER_PROJECTS = {
   query: gql`
     query getUserProjects($uuid: ID!){
@@ -110,10 +127,30 @@ export const USER_PROJECTS = {
   cacheLocation: 'getUserProjects',
 };
 
+export const MY_PROJECTS = {
+  query: gql`
+    query{
+      myProjects{
+        name
+        mr2000instances{
+          cli
+        }
+        mr3000instances{
+          cli
+        }
+        __typename
+      }}
+  `,
+  tables: ['user'],
+  cacheLocation: 'myProjects',
+};
+
 export const USER_QUERIES: QueryObject[] = [
   MY_USER,
   ALL_USERS,
   USER,
   USER_DEVICES,
-  USER_PROJECTS
+  USER_PROJECTS,
+  MY_PROJECTS,
+  MY_DEVICES
 ];
