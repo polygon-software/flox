@@ -88,10 +88,14 @@ export class UserResolver {
     return this.usersService.addPermission(addUserPermissionInput);
   }
 
+  /**
+   * Returns a list of the user's projects
+   * @param {GetUserArgs} getUserProjectsArgs - contains user's UUID
+   * @returns {Promise<Project[]>} - the user's projects
+   */
   @AdminOnly()
   @Query(() => [Project], { name: 'getUserProjects' })
   async getUserProjects(@Args() getUserProjectsArgs: GetUserArgs) {
-    // TODO get projects list for user
-    console.log('GET with args', getUserProjectsArgs);
+    return this.usersService.getUserProjects(getUserProjectsArgs);
   }
 }

@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PERMISSION, ROLE } from '../../ENUM/ENUM';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
+import { Args } from '@nestjs/graphql';
 
 @Injectable()
 export class UserService {
@@ -117,5 +118,16 @@ export class UserService {
     });
 
     return this.usersRepository.findOne(addUserPermissionInput.uuid);
+  }
+
+  /**
+   * Returns a list of the user's projects
+   * @param {GetUserArgs} getUserProjectsArgs - contains user's UUID
+   * @returns {Promise<Project[]>} - the user's projects
+   */
+  async getUserProjects(getUserProjectsArgs: GetUserArgs) {
+    // TODO
+    // return this.usersService.getUserProjects(getUserProjectsArgs);
+    return [];
   }
 }
