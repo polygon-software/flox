@@ -15,12 +15,42 @@ import {
 import { Project } from '../../types/Project';
 import { MR2000 } from '../../types/MR2000';
 import { MR3000 } from '../../types/MR3000';
+import { RegisterUserInput } from './dto/input/register-user.input';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
+
+  /**
+   * Register a new user. Returns null if user email is not in DB.
+   * @param {RegisterUserInput} registerUserInput - input values
+   * @returns {User} - the database user
+   */
+  async register(registerUserInput: RegisterUserInput): Promise<User> {
+    const update = this.usersRepository.create(registerUserInput);
+    const user = await this.usersRepository.findOne({
+      where: { email: update.email },
+    });
+    if (user) {
+      await this.usersRepository.update(user.uuid, update);
+      return this.usersRepository.findOne(user.uuid);
+    }
+    return null;
+  }
+
+  /**
+   * Check if user email is in DB.
+   * @param {string} email - user email.
+   * @returns {boolean} - if the email is in the DB.
+   */
+  async existsUserWithEmail(email: string): Promise<boolean> {
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+    return !!user;
+  }
 
   /**
    * Creates a new user on the database
@@ -42,6 +72,17 @@ export class UserService {
   getAllUsers(): Promise<User[]> {
     return this.usersRepository.find({
       where: { role: ROLE.USER },
+    });
+  }
+
+  /**
+   * Fetches a single user
+   * @param {string} cognitoUuid - cognito UUID of the requester
+   * @returns {Promise<User>} - the user
+   */
+  fetchUserByCognitoUuid(cognitoUuid: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: { cognitoUuid: cognitoUuid },
     });
   }
 

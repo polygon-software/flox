@@ -14,6 +14,7 @@ import {
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 import { Project } from '../../types/Project';
 import { Device } from '../../types/Device';
+import { RegisterUserInput } from './dto/input/register-user.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -32,7 +33,21 @@ export class UserResolver {
   }
 
   @Public()
-  @Mutation(() => User)
+  @Query(() => Boolean, { name: 'isEmailAllowed' })
+  async getUserAllowed(@Args('email') email: string): Promise<boolean> {
+    return this.usersService.existsUserWithEmail(email);
+  }
+
+  @Public()
+  @Mutation(() => User, { name: 'register', nullable: true })
+  async register(
+    @Args('registerUserInput') registerUserInput: RegisterUserInput,
+  ): Promise<User> {
+    return this.usersService.register(registerUserInput);
+  }
+
+  @AdminOnly()
+  @Mutation(() => User, { name: 'create' })
   async create(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
@@ -64,9 +79,7 @@ export class UserResolver {
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
     // Get user where user's UUID matches cognitoID
-    const myUser = await this.usersService.getUser({
-      uuid: user.userId,
-    } as GetUserArgs);
+    const myUser = await this.usersService.fetchUserByCognitoUuid(user.userId);
 
     if (!myUser) {
       throw new Error(`No user found for ${user.userId}`);
