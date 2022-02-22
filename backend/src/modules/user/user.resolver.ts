@@ -31,9 +31,9 @@ export class UserResolver {
   }
 
   @Public()
-  @Mutation(() => Boolean, { name: 'allowed' })
+  @Query(() => Boolean, { name: 'isEmailAllowed' })
   async getUserAllowed(@Args('email') email: string): Promise<boolean> {
-    return this.usersService.getUserAllowed(email);
+    return this.usersService.existsUserWithEmail(email);
   }
 
   @Public()
@@ -78,7 +78,7 @@ export class UserResolver {
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
     // Get user where user's UUID matches cognitoID
-    const myUser = await this.usersService.myUser(user.userId);
+    const myUser = await this.usersService.fetchUserByCognitoUuid(user.userId);
 
     if (!myUser) {
       throw new Error(`No user found for ${user.userId}`);

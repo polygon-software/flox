@@ -38,7 +38,7 @@ export class UserService {
    * @param {string} email - user email.
    * @returns {boolean} - if the email is in the DB.
    */
-  async getUserAllowed(email: string): Promise<boolean> {
+  async existsUserWithEmail(email: string): Promise<boolean> {
     const user = await this.usersRepository.findOne({
       where: { email: email },
     });
@@ -73,7 +73,7 @@ export class UserService {
    * @param {string} cognitoUuid - cognito UUID of the requester
    * @returns {Promise<User>} - the user
    */
-  myUser(cognitoUuid: string): Promise<User> {
+  fetchUserByCognitoUuid(cognitoUuid: string): Promise<User> {
     return this.usersRepository.findOne({
       where: { cognitoUuid: cognitoUuid },
     });

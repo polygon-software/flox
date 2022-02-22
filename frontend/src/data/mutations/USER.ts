@@ -25,16 +25,6 @@ export const REGISTER_USER = {
   cacheLocation: 'register'
 }
 
-export const ALLOWED = {
-  mutation: gql`
-    mutation allowed($email: String!){
-      allowed (email: $email)
-    }`,
-  tables: ['email'],
-  type: MutationTypes.UPDATE,
-  cacheLocation: 'allowed'
-}
-
 export const ADD_PERMISSION = {
   mutation: gql`
     mutation addPermission($addUserPermissionInput: AddUserPermissionInput!){

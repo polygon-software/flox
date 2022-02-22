@@ -14,10 +14,11 @@ import {inject, } from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import SignupForm from 'components/forms/SignupForm.vue'
-import {executeMutation} from 'src/helpers/data-helpers';
-import { ALLOWED, REGISTER_USER } from 'src/data/mutations/USER';
+import { executeMutation, executeQuery } from 'src/helpers/data-helpers';
+import { REGISTER_USER } from 'src/data/mutations/USER';
 import ROUTES from 'src/router/routes';
 import {ErrorService} from 'src/services/ErrorService';
+import { EMAIL_ALLOWED } from 'src/data/queries/USER';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -34,11 +35,9 @@ async function onSignup(formValues: Record<string, unknown>): Promise<void>{
   const email = formValues.email as string
   const password = formValues.password_repeat as string
 
-  const allowed = await executeMutation(ALLOWED, { email: email}).catch((err: Error) => {
-    $errorService?.showErrorDialog(err)
-  });
+  const allowed = await executeQuery(EMAIL_ALLOWED, { email: email});
 
-  if(!allowed?.data?.allowed) {
+  if(!allowed?.data?.isEmailAllowed) {
     $errorService?.showErrorDialog(new Error(`Signup failed. The given email (${ email }) is not correct.`))
     return
   }

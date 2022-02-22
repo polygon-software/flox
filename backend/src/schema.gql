@@ -80,7 +80,6 @@ input DeleteUserInput {
 
 type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
-  allowed(email: String!): Boolean!
   create(createUserInput: CreateUserInput!): User!
   register(registerUserInput: RegisterUserInput!): User
   remove(deleteUserInput: DeleteUserInput!): User!
@@ -95,6 +94,7 @@ enum Permission {
 
 type Query {
   allUsers: [User!]!
+  isEmailAllowed(email: String!): Boolean!
   myUser: User!
   preview(cli: String!, date: String!, num: String!): String!
   user(uuid: ID!): User!
