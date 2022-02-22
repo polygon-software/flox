@@ -45,24 +45,3 @@ export const ADD_PERMISSION = {
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
-
-export const ADD_PERMISSION = {
-  mutation: gql`
-    mutation addPermission($addUserPermissionInput: AddUserPermissionInput!){
-      addPermission (addUserPermissionInput: $addUserPermissionInput) {
-        uuid
-        username
-        fullName
-        email
-        phone
-        birthdate
-        projects
-        mr2000instances
-        mr3000instances
-        __typename
-      }
-    }`,
-  tables: ['user'],
-  type: MutationTypes.UPDATE,
-  cacheLocation: undefined
-}
