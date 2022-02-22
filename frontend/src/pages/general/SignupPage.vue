@@ -63,8 +63,16 @@ async function onSignup(formValues: Record<string, unknown>): Promise<void>{
     $errorService?.showErrorDialog(new Error(`Signup failed. Res: ${ res?.toString() ?? 'void' }`))
     return
   }
-  // Reroute to generic success page
-  await $routerService?.routeTo(ROUTES.SUCCESS)
+  try{
+    await $authService?.showEmailVerificationDialog()
+    await $authService?.login(username, password)
+    await $routerService?.routeTo(ROUTES.CUSTOMERS) // TODO role-dependent
+  }
+  catch (e) {
+    console.error(e)
+    await $routerService?.routeTo(ROUTES.LOGIN)
+  }
+
 }
 
 </script>
