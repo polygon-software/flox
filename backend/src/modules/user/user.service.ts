@@ -143,9 +143,7 @@ export class UserService {
     const mr2000instances = await fetchFromTable('MR2000', 'station');
     const mr3000instances = await fetchFromTable('MR3000', 'station');
 
-    // TODO do for all
-    const allInstances = mr2000instances.concat(mr3000instances);
-
+    // Find & create projects for MR2000 instances
     mr2000instances.forEach((instance) => {
       const convertedInstance = new MR2000(instance.cli);
       // If instance belongs to a project
@@ -168,10 +166,6 @@ export class UserService {
     console.log('user Projects:', user.projects);
 
     // Filter by projects that the user has access to
-    // projects = projects.filter((project) => user.projects.includes(project));
-
-    // console.log('filtered:', projects);
-
-    return [];
+    return projects.filter((project) => user.projects.includes(project.name));
   }
 }
