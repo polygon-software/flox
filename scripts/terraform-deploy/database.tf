@@ -15,7 +15,7 @@ resource "aws_rds_cluster" "tf_db_cluster" {
   engine = "aurora-postgresql"
   engine_version = "12.7"
   cluster_identifier = "${var.project_prefix_char}-db-cluster"
-  database_name = "soidb"
+  database_name = "soi_db"
   master_username = "db_user"
   master_password = "db_user_pass"
   skip_final_snapshot = true // todo use final snapshot in production
@@ -41,7 +41,7 @@ resource "aws_security_group" "DB-Security-Group" {
     from_port = 5432
     to_port = 5432
     protocol = "TCP"
-    security_groups = [aws_security_group.API-Security-Group.id]
+    security_groups = [aws_security_group.API-Security-Group.id, aws_security_group.vpn_access.id]
   }
   egress {
     from_port        = 0

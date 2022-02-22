@@ -80,5 +80,5 @@ variable "web_pri_subnet_factor" {
 variable "cidr_block" {
   type        = string
   description = "CIDR block for the VPC."
-  default     = "10.0.0.0/24"
+  default     = "10.0.0.0/23"
 }
