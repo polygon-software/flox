@@ -1,5 +1,6 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import {
+  IsArray,
   IsDate,
   IsEmail,
   IsPhoneNumber,
@@ -63,4 +64,25 @@ export class User extends BaseEntity {
   @IsString()
   @IsDate()
   birthdate: Date;
+
+  @Field(() => [String], {
+    description: 'Projects that the user has access to',
+  })
+  @Column('text', { array: true, nullable: true })
+  @IsArray()
+  projects: string[];
+
+  @Field(() => [String], {
+    description: 'MR2000 instances that the user has access to',
+  })
+  @Column('text', { array: true, nullable: true })
+  @IsArray()
+  mr2000instances: string[];
+
+  @Field(() => [String], {
+    description: 'MR3000 instances that the user has access to',
+  })
+  @Column('text', { array: true, nullable: true })
+  @IsArray()
+  mr3000instances: string[];
 }

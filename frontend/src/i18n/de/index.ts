@@ -65,6 +65,9 @@ export default {
     submit: 'Senden',
     cancel: 'Abbrechen',
     ok: 'OK',
+    copy: 'Kopieren',
+    send: 'Senden',
+    create_link: 'Link erzeugen'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -108,15 +111,25 @@ export default {
   greetings: {
     welcome_datavis: 'Willkommen bei DataVis',
   },
-  interests: {
-    select_interests:
-      'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
-    amount_selected: '{amount}/{max} gewählt',
-  },
   settings: {
     settings: 'Einstellungen',
     general: 'Allgemein',
     account: 'Benutzerkonto',
     personal_data: 'Persönliche Daten',
   },
+  visualisation: {
+    period: 'Periode',
+    horizontal: 'Horizontal',
+    vertical: 'Vertikal'
+  },
+  period: {
+    twelve_hours: '12 Stunden',
+    two_days: '2 Tage',
+    two_weeks: '2 Wochen',
+    one_month: '1 Monat',
+    custom: 'Eigene'
+  },
+  messages: {
+    copied: 'Kopiert'
+  }
 };
