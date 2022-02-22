@@ -130,16 +130,16 @@ type User {
   lastModifiedAt: DateTime!
 
   """MR2000 instances that the user has access to"""
-  mr2000instances: [String!]!
+  mr2000instances: [String!]
 
   """MR3000 instances that the user has access to"""
-  mr3000instances: [String!]!
+  mr3000instances: [String!]
 
   """Phone number"""
   phone: String!
 
   """Projects that the user has access to"""
-  projects: [String!]!
+  projects: [String!]
 
   """Role of the User"""
   role: Role!
