@@ -13,6 +13,7 @@ import { GetPreviewArgs } from '../preview/dto/get-preview.args';
 import { fetchFromTable } from '../../helpers/database-helpers';
 import { Project } from '../../types/Project';
 import { MR2000 } from '../../types/MR2000';
+import { MR3000 } from '../../types/MR3000';
 
 @Injectable()
 export class UserService {
@@ -143,27 +144,48 @@ export class UserService {
     const mr2000instances = await fetchFromTable('MR2000', 'station');
     const mr3000instances = await fetchFromTable('MR3000', 'station');
 
+    const allInstances = [
+      {
+        instances: mr2000instances,
+        isMR2000: true,
+      },
+      {
+        instances: mr3000instances,
+        isMR2000: false,
+      },
+    ];
+
     // Find & create projects for MR2000 instances
-    mr2000instances.forEach((instance) => {
-      const convertedInstance = new MR2000(instance.cli);
-      // If instance belongs to a project
-      if (instance.comment) {
-        const existingProject = projects.find(
-          (project) => project.name === instance.comment.trim(),
-        );
-        // And no project in array yet
-        if (!existingProject) {
-          projects.push(
-            new Project(instance.comment.trim(), [convertedInstance], []),
+    allInstances.forEach((instanceType) => {
+      instanceType.instances.forEach((instance) => {
+        const convertedInstance = instanceType.isMR2000
+          ? new MR2000(instance.cli)
+          : new MR3000(instance.cli);
+        // If instance belongs to a project
+        if (instance.comment) {
+          const existingProject = projects.find(
+            (project) => project.name === instance.comment.trim(),
           );
-        } else {
-          existingProject.mr2000instances.push(convertedInstance);
+          // If no project in array yet
+          if (!existingProject) {
+            projects.push(
+              new Project(
+                instance.comment.trim(),
+                instanceType.isMR2000 ? [convertedInstance] : [],
+                instanceType.isMR2000 ? [] : [convertedInstance],
+              ),
+            );
+          } else {
+            // If project exists, add to its instances
+            existingProject[
+              instanceType.isMR2000 ? mr2000instances : mr3000instances
+            ].push(convertedInstance);
+          }
         }
-      }
+      });
     });
 
     console.log('Projects:', projects);
-    console.log('user Projects:', user.projects);
 
     // Filter by projects that the user has access to
     return projects.filter((project) => user.projects.includes(project.name));
