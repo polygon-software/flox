@@ -80,7 +80,9 @@ export class UserService {
     addUserPermissionInput: AddUserPermissionInput,
   ): Promise<User> {
     // Get user
-    const user = this.usersRepository.findOne(addUserPermissionInput.uuid);
+    const user = await this.usersRepository.findOne(
+      addUserPermissionInput.uuid,
+    );
 
     if (!user) {
       throw new Error(`No user found for ${addUserPermissionInput.uuid}`);
