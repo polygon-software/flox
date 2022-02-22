@@ -263,7 +263,7 @@ export class AuthenticationService {
             type: 'text'
           },
         }).onOk((input: string) => {
-          void this.verifyEmail(input).then(resolve)
+          this.verifyEmail(input).then(resolve).catch(reject)
         }).onCancel(() => {
           reject()
         })
@@ -358,7 +358,9 @@ export class AuthenticationService {
       // Depending on error, show appropriate dialog
       if(error.name === 'UserNotConfirmedException'){
         // Show the e-mail verification dialog and send a new code
-        void this.showEmailVerificationDialog(true)
+        this.showEmailVerificationDialog(true).catch(() => {
+          this.$errorService.showErrorDialog(new Error('Something went wrong while verifying email.'))
+        })
       } else {
         // Generic error
         this.$errorService.showErrorDialog(error)
