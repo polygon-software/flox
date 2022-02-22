@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import ShareDialog from 'components/dialogs/ShareDialog.vue';
-import {defineProps} from 'vue';
+import {computed, defineProps} from 'vue';
 import {date, useQuasar} from 'quasar';
 import {formatDateForGraph} from 'src/helpers/format-helpers';
 
@@ -57,6 +57,18 @@ const props = defineProps({
     type: String,
     required: true,
   }
+})
+
+/**
+ * Finds the highest datapoint, rounded to .1 increments
+ * (used for determining y axis scale)
+ */
+const highestDatapoint = computed(() => {
+  return Math.floor(10 * Math.max.apply(Math, props.dataset.map(
+    (datapoint) => {
+      return (datapoint as Record<string, number>).y;
+    })
+  )) / 10
 })
 
 // Graph options
@@ -103,6 +115,9 @@ const options = {
   },
   yaxis: {
     type: 'numeric',
+    min: 0,
+    max: highestDatapoint.value,
+    tickAmount: Math.floor(highestDatapoint.value / 0.1),
     decimalsInFloat: 2,
     title: {
       text: props.unit,
@@ -147,7 +162,6 @@ const series = [{
   name: props.datasetName.toUpperCase(),
   data: props.dataset
 }]
-
 
 /**
  * Copies the graph's content
