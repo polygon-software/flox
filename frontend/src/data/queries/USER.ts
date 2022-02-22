@@ -85,82 +85,8 @@ export const USER = {
   cacheLocation: 'user',
 };
 
-export const USER_DEVICES = {
-  query: gql`
-    query getUserDevices($uuid: ID!){
-      getUserDevices(uuid: $uuid){
-      ...on MR2000{
-        cli
-      }
-      ... on MR3000{
-        cli
-      }
-      __typename
-    }}
-  `,
-  tables: ['user'],
-  cacheLocation: 'getUserDevices',
-};
-
-export const MY_DEVICES = {
-  query: gql`
-    query{
-      myDevices{
-      ...on MR2000{
-        cli
-      }
-      ... on MR3000{
-        cli
-      }
-      __typename
-    }}
-  `,
-  tables: ['user'],
-  cacheLocation: 'getUserDevices',
-};
-
-export const USER_PROJECTS = {
-  query: gql`
-    query getUserProjects($uuid: ID!){
-      getUserProjects(uuid: $uuid){
-        name
-        mr2000instances{
-          cli
-        }
-        mr3000instances{
-          cli
-        }
-      __typename
-    }}
-  `,
-  tables: ['user'],
-  cacheLocation: 'getUserProjects',
-};
-
-export const MY_PROJECTS = {
-  query: gql`
-    query{
-      myProjects{
-        name
-        mr2000instances{
-          cli
-        }
-        mr3000instances{
-          cli
-        }
-        __typename
-      }}
-  `,
-  tables: ['user'],
-  cacheLocation: 'myProjects',
-};
-
 export const USER_QUERIES: QueryObject[] = [
   MY_USER,
   ALL_USERS,
   USER,
-  USER_DEVICES,
-  USER_PROJECTS,
-  MY_PROJECTS,
-  MY_DEVICES
 ];
