@@ -79,8 +79,9 @@ export class UserResolver {
    * @returns {Promise<User>} - the updated user
    */
   @AdminOnly()
-  @Query(() => User, { name: 'myUser' })
+  @Mutation(() => User, { name: 'addPermission' })
   async addPermission(
+    @Args('addUserPermissionInput')
     addUserPermissionInput: AddUserPermissionInput,
   ): Promise<User> {
     return this.usersService.addPermission(addUserPermissionInput);

@@ -13,3 +13,4 @@ export enum PERMISSION {
 }
 
 registerEnumType(ROLE, { name: 'Role' });
+registerEnumType(PERMISSION, { name: 'Permission' });

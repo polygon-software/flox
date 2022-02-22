@@ -2,6 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddUserPermissionInput {
+  """Name of the permitted resource"""
+  resource: String!
+
+  """Permission Type"""
+  type: Permission!
+
+  """User UUID"""
+  uuid: ID!
+}
+
 type Address {
   """City"""
   city: String!
@@ -68,9 +79,16 @@ input DeleteUserInput {
 }
 
 type Mutation {
+  addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   create(createUserInput: CreateUserInput!): User!
   remove(deleteUserInput: DeleteUserInput!): User!
   update(updateUserInput: UpdateUserInput!): User!
+}
+
+enum Permission {
+  MR2000
+  MR3000
+  PROJECT
 }
 
 type Query {

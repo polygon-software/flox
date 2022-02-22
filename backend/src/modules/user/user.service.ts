@@ -105,8 +105,13 @@ export class UserService {
         );
     }
 
+    // Either extend existing array or create new one
+    const updatedColumn = user[column]
+      ? [...user[column], addUserPermissionInput.resource]
+      : [addUserPermissionInput.resource];
+
     await this.usersRepository.update(addUserPermissionInput.uuid, {
-      [column]: [...user[column], addUserPermissionInput.resource],
+      [column]: updatedColumn,
     });
 
     return this.usersRepository.findOne(addUserPermissionInput.uuid);
