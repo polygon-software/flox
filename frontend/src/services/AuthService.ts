@@ -235,8 +235,8 @@ export class AuthenticationService {
 
     /**
      * Shows a dialog for verifying E-Mail
-     * @param {boolean} [renew] - whether to generate a new verification code
-     * @returns {void}
+     * @param {boolean} [renew=false] - whether to generate a new verification code
+     * @returns {Promise<void>} - async
      */
     async showEmailVerificationDialog(renew = false): Promise<void>{
       return new Promise((resolve, reject)=> {
