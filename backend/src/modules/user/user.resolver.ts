@@ -160,8 +160,10 @@ export class UserResolver {
 
   @AnyRole()
   @Query(() => [Device], { name: 'getProjectDevices' })
-  async getProjectDevices(@Args() getProjectDevices: GetProjectDevicesArgs) {
+  async getProjectDevices(
+    @Args() getProjectDevicesArgs: GetProjectDevicesArgs,
+  ) {
     // TODO permission check on user for non-admin
-    return this.usersService.getProjectDevices(GetProjectDevicesArgs);
+    return this.usersService.getProjectDevices(getProjectDevicesArgs);
   }
 }

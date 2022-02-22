@@ -36,12 +36,14 @@ export async function fetchFromTable(
   // Get query runner
   const queryRunner = await getQueryRunner(database);
 
-  return queryRunner.manager.query(
-    `
+  // Build query
+  const query = `
       SELECT * FROM ${table}
       ${filterQuery ?? ''}
-      `,
-  );
+  `;
+
+  // Execute
+  return queryRunner.manager.query(query);
 }
 
 /**

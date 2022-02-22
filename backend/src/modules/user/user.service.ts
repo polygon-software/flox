@@ -234,9 +234,9 @@ export class UserService {
    * @returns {Promise<MR2000|MR3000[]>} - the user's devices
    */
   async getProjectDevices(getProjectDevicesArgs: GetProjectDevicesArgs) {
+    // Note that in the actual database, project names may contain trailing whitespace (but is ignores by SQL)
     const filterQuery = `WHERE comment='${getProjectDevicesArgs.name}'`;
 
-    // TODO handle whitespace...
     // Get all MR2000 & MR3000 instances
     const mr2000instances = await fetchFromTable(
       'MR2000',
