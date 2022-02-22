@@ -13,7 +13,7 @@ export class AddUserPermissionInput {
 
   @Field(() => String, { description: 'Name of the permitted resource' })
   @IsString()
-  permission: string;
+  resource: string;
 
   @Field(() => PERMISSION, { description: 'Permission Type' })
   @IsString()

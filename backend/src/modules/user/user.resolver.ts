@@ -11,6 +11,7 @@ import {
   AnyRole,
   CurrentUser,
 } from '../../auth/authorization.decorator';
+import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -73,24 +74,15 @@ export class UserResolver {
   }
 
   /**
-   * Grants a user access to an MR2000 instance
-   * @param {Record<string, string>}  user - currently logged-in user from request
-   * @async
-   * @returns {User} - the user, if any
+   * Grants a user access to an instance (MR2000, MR3000 or project)
+   * @param {AddUserPermissionInput} addUserPermissionInput - input, containing user uuid, resource name and type
+   * @returns {Promise<User>} - the updated user
    */
-  @AnyRole()
+  @AdminOnly()
   @Query(() => User, { name: 'myUser' })
-  async addMR2000Permission(
-    @CurrentUser() user: Record<string, string>,
+  async addPermission(
+    addUserPermissionInput: AddUserPermissionInput,
   ): Promise<User> {
-    // Get user where user's UUID matches cognitoID
-    const myUser = await this.usersService.getUser({
-      uuid: user.userId,
-    } as GetUserArgs);
-
-    if (!myUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
-    return myUser;
+    return this.usersService.addPermission(addUserPermissionInput);
   }
 }
