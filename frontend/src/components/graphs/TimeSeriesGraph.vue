@@ -56,6 +56,10 @@ const props = defineProps({
   unit: {
     type: String,
     required: true,
+  },
+  warningLevel: {
+    type: Number,
+    required: false,
   }
 })
 
@@ -64,7 +68,7 @@ const props = defineProps({
  * (used for determining y axis scale)
  */
 const highestDatapoint = computed(() => {
-  return Math.floor(10 * Math.max.apply(Math, props.dataset.map(
+  return Math.ceil(10 * Math.max.apply(Math, props.dataset.map(
     (datapoint) => {
       return (datapoint as Record<string, number>).y;
     })
@@ -129,9 +133,9 @@ const options = {
     }
   },
   annotations: {
-    yaxis: [
+    yaxis: props.warningLevel ? [
       {
-        y: 0.25,
+        y: props.warningLevel,
         strokeDashArray: 2,
         borderColor: 'var(--q-negative)',
         label: {
@@ -145,7 +149,7 @@ const options = {
           text: 'Warning at 0.25'
         }
       }
-    ]
+    ] : [],
   },
   tooltip: {
     x: {

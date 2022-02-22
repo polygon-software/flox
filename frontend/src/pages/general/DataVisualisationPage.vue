@@ -34,6 +34,7 @@
     <TimeSeriesGraph
       :dataset-name="stationId"
       :dataset="randomTimeSeries()"
+      :warning-level="0.25"
       unit="mm/s"
     />
 
@@ -45,6 +46,7 @@
     <TimeSeriesGraph
       :dataset-name="stationId"
       :dataset="randomTimeSeries()"
+      :warning-level="0.25"
       unit="mm/s"
     />
     <!-- Horizontal - z -->
@@ -55,6 +57,7 @@
     <TimeSeriesGraph
       :dataset-name="stationId"
       :dataset="randomTimeSeries()"
+      :warning-level="0.25"
       unit="mm/s"
     />
   </q-page>
