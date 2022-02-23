@@ -79,13 +79,6 @@ export default {
     show_status_files: 'Show Status Files',
     show_device_health: 'Show Device Health',
     name: 'Name',
-  dashboard: {
-    customer: 'Customer | Customer',
-    project: 'Project | Projects',
-    station: 'Station',
-    device_pool: 'Device Pool',
-    account: 'Account',
-    share: 'Share'
   },
   buttons: {
     finish: 'Finish',
