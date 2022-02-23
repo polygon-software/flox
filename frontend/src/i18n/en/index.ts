@@ -79,6 +79,13 @@ export default {
     show_status_files: 'Show Status Files',
     show_device_health: 'Show Device Health',
     name: 'Name',
+  dashboard: {
+    customer: 'Customer | Customer',
+    project: 'Project | Projects',
+    station: 'Station',
+    device_pool: 'Device Pool',
+    account: 'Account',
+    share: 'Share'
   },
   buttons: {
     finish: 'Finish',
@@ -90,6 +97,9 @@ export default {
     new_project: 'New Project',
     custom_graph: 'Custom Graph',
     load_parameters: 'Load Parameters',
+    copy: 'Copy',
+    send: 'Send',
+    create_link: 'Create Link'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -140,4 +150,19 @@ export default {
     account: 'Account',
     personal_data: 'Personal Data',
   },
+  visualisation: {
+    period: 'Period',
+    horizontal: 'Horizontal',
+    vertical: 'Vertical'
+  },
+  period: {
+    twelve_hours: '12 Hours',
+    two_days: '2 Days',
+    two_weeks: '2 Weeks',
+    one_month: '1 Month',
+    custom: 'Custom'
+  },
+  messages: {
+    copied: 'Copied'
+  }
 };

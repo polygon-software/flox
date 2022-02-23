@@ -2,6 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddUserPermissionInput {
+  """Name of the permitted resource"""
+  resource: String!
+
+  """Permission Type"""
+  type: Permission!
+
+  """User UUID"""
+  uuid: ID!
+}
+
 type Address {
   """City"""
   city: String!
@@ -68,16 +79,48 @@ input DeleteUserInput {
 }
 
 type Mutation {
+  addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   create(createUserInput: CreateUserInput!): User!
+  register(registerUserInput: RegisterUserInput!): User
   remove(deleteUserInput: DeleteUserInput!): User!
   update(updateUserInput: UpdateUserInput!): User!
 }
 
+enum Permission {
+  MR2000
+  MR3000
+  PROJECT
+}
+
 type Query {
   allUsers: [User!]!
+  isEmailAllowed(email: String!): Boolean!
   myUser: User!
   preview(cli: String!, date: String!, num: String!): String!
   user(uuid: ID!): User!
+}
+
+input RegisterUserInput {
+  """User address"""
+  address: CreateAddressInput
+
+  """Date of birth"""
+  birthdate: DateTime
+
+  """Cognito ID"""
+  cognitoUuid: ID!
+
+  """E-mail address"""
+  email: String!
+
+  """Full name of the user"""
+  fullName: String
+
+  """phone number"""
+  phone: String
+
+  """Username"""
+  username: String!
 }
 
 enum Role {
@@ -96,6 +139,9 @@ type User {
   """Date of birth"""
   birthdate: DateTime!
 
+  """Cognito user UUID"""
+  cognitoUuid: ID!
+
   """Creation date"""
   createdAt: DateTime!
 
@@ -111,8 +157,17 @@ type User {
   """Last modification date"""
   lastModifiedAt: DateTime!
 
+  """MR2000 instances that the user has access to"""
+  mr2000instances: [String!]!
+
+  """MR3000 instances that the user has access to"""
+  mr3000instances: [String!]!
+
   """Phone number"""
   phone: String!
+
+  """Projects that the user has access to"""
+  projects: [String!]!
 
   """Role of the User"""
   role: Role!

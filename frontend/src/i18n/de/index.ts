@@ -91,6 +91,9 @@ export default {
     new_project: 'Neues Projekt',
     custom_graph: 'Benutzerdefinierte Grafik',
     load_parameters: 'Parameter laden',
+    copy: 'Kopieren',
+    send: 'Senden',
+    create_link: 'Link erzeugen'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -145,4 +148,19 @@ export default {
     account: 'Benutzerkonto',
     personal_data: 'Persönliche Daten',
   },
+  visualisation: {
+    period: 'Periode',
+    horizontal: 'Horizontal',
+    vertical: 'Vertikal'
+  },
+  period: {
+    twelve_hours: '12 Stunden',
+    two_days: '2 Tage',
+    two_weeks: '2 Wochen',
+    one_month: '1 Monat',
+    custom: 'Eigene'
+  },
+  messages: {
+    copied: 'Kopiert'
+  }
 };

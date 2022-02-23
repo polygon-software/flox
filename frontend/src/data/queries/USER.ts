@@ -5,6 +5,16 @@ import { QueryObject } from 'src/data/DATA-DEFINITIONS';
  * User-related queries
  */
 
+
+export const EMAIL_ALLOWED = {
+  query : gql`
+    query isEmailAllowed($email: String!){
+      isEmailAllowed (email: $email)
+    }`,
+  tables: ['user'],
+  cacheLocation: 'isEmailAllowed'
+}
+
 export const MY_USER = {
   query: gql`
     query {

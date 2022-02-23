@@ -48,12 +48,12 @@ async function executeQuery(
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
  * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
  * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutatio
- * @returns {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
+ * @returns {Promise<FetchResult<Record<string, any>> | null>} Returns the values defined by the mutation
  */
 async function executeMutation(
   mutationObject: MutationObject,
   variables: Record<string, unknown>
-): Promise<FetchResult<any> | null> {
+): Promise<FetchResult<Record<string, any>> | null> {
   const mutation = mutationObject.mutation;
   const tables = mutationObject.tables;
   const type = mutationObject.type;
