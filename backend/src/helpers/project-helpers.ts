@@ -47,10 +47,10 @@ export function getProjectsForInstances(
         // If no project in array yet
         if (!existingProject) {
           projects.push(
-            new Project(
+            createProjectForInstance(
               instance.comment.trim(),
-              instanceType.isMR2000 ? ([convertedInstance] as MR2000[]) : [],
-              instanceType.isMR2000 ? [] : ([convertedInstance] as MR3000[]),
+              convertedInstance,
+              instanceType.isMR2000,
             ),
           );
         } else {
@@ -64,4 +64,23 @@ export function getProjectsForInstances(
   });
 
   return projects;
+}
+
+/**
+ * Creates a project, given an initial instance and its type
+ * @param {string} name - project name
+ * @param {MR2000|MR3000} instance - the initial instance
+ * @param {boolean} isMR2000 - whether it's an MR2000 instance
+ * @returns {Project} - the new Project
+ */
+function createProjectForInstance(
+  name: string,
+  instance: MR2000 | MR3000,
+  isMR2000: boolean,
+) {
+  return new Project(
+    name,
+    isMR2000 ? ([instance] as MR2000[]) : [],
+    isMR2000 ? [] : ([instance] as MR3000[]),
+  );
 }
