@@ -151,7 +151,7 @@ async function logout(): Promise<void>{
  */
 function isActiveOption(option: Record<string, string>){
   const pathParts = route.path.split('/')
-  return `/${pathParts.slice(1).join('/')}`.startsWith(option.path)
+  return `/${pathParts[1]}` === option.path
 }
 
 /**
