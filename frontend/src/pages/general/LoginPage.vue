@@ -34,8 +34,8 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue';
 import {ROLE} from 'src/data/ENUM';
-import {executeQuery} from "src/helpers/data-helpers";
-import {MY_USER} from "src/data/queries/USER";
+import {executeQuery} from 'src/helpers/data-helpers';
+import {MY_USER} from 'src/data/queries/USER';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -51,18 +51,23 @@ async function onLogin({username, password}: {username: string, password: string
   await $authService?.login(username, password)
 
   // Redirect to main page
-  //TODO: fetch customer_id (username of user) and append to route -> append function in Ramize's PR
   const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
 
   const userData = queryResult.data.myUser as Record<string, unknown>
-  const userRole = userData.role as Enumerator;
-  const targetRouteMapping = {
-    [ROLE.USER]: ROUTES.CUSTOMERS,
-    [ROLE.ADMIN]: ROUTES.CUSTOMERS,
+  const userName = userData.username as string;
+  const userRole = userData.role as string;
+
+  switch(userRole){
+    case ROLE.USER:
+      await $routerService?.routeTo(ROUTES.CUSTOMERS);
+      await $routerService?.addToRoute(userName);
+      break;
+    case ROLE.ADMIN:
+      await $routerService?.routeTo(ROUTES.CUSTOMERS);
+      break;
+    default:
+      await $routerService?.routeTo(ROUTES.CUSTOMERS);
   }
-  // Redirect to main page
-  await $routerService?.routeTo(targetRouteMapping[userRole])
-  await $routerService?.routeTo(ROUTES.CUSTOMERS) // TODO role-dependent
 }
 
 /**
