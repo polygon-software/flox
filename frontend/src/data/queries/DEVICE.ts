@@ -12,7 +12,7 @@ export const USER_DEVICES = {
       ...on MR2000{
         cli
       }
-      ... on MR3000{
+      ...on MR3000{
         cli
       }
       __typename
@@ -29,7 +29,7 @@ export const MY_DEVICES = {
       ...on MR2000{
         cli
       }
-      ... on MR3000{
+      ...on MR3000{
         cli
       }
       __typename
@@ -46,7 +46,7 @@ export const PROJECT_DEVICES = {
         ...on MR2000{
           cli
         }
-        ... on MR3000{
+        ...on MR3000{
           cli
         }
         __typename
