@@ -69,6 +69,7 @@ export async function saveValueDevelopmentCsv(
 
   // Insert values into table
   await queryRunner.manager.insert(valueTableName, parsedCsv);
+  await queryRunner.release();
 }
 
 /**
@@ -93,6 +94,7 @@ export async function getValueDevelopment(
   const valueTableExists = await queryRunner.hasTable(valueTableName);
   const zipTableExists = await queryRunner.hasTable(zipCodeTableName);
   if (!valueTableExists || !zipTableExists) {
+    await queryRunner.release();
     throw new Error(ERRORS.missing_database_data);
   }
 
@@ -106,6 +108,7 @@ export async function getValueDevelopment(
 
   // Ensure we have data for the given zip code
   if (!zipCodeQuery || zipCodeQuery.length === 0) {
+    await queryRunner.release();
     throw new Error(ERRORS.invalid_zip_code);
   }
 
@@ -123,6 +126,7 @@ export async function getValueDevelopment(
     `);
 
   if (!valueMappingQuery) {
+    await queryRunner.release();
     throw new Error(ERRORS.missing_database_data);
   }
   const valueMapping = valueMappingQuery[0];
@@ -154,6 +158,8 @@ export async function getValueDevelopment(
 
   const startValue = valueMapping[startKey];
   const endValue = valueMapping[endKey];
+
+  await queryRunner.release();
 
   // Limit result to 4 decimal points & return
   return parseFloat((endValue / startValue).toFixed(4));
