@@ -53,7 +53,7 @@ export default {
   dashboard: {
     customer: 'Kunde | Kunden',
     project: 'Projekt | Projekte',
-    station: 'Station',
+    station: 'Station | Stationen',
     device_pool: 'Gerätepool',
     account: 'Account',
     share: 'Teilen'

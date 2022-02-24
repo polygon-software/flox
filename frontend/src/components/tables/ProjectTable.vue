@@ -14,20 +14,12 @@
         </template>
       </q-input>
       <q-btn
-        v-if="!selected"
         :label="$t('buttons.custom_graph')"
         outline
         class="text-grey"
         style="margin-left: 50px"
-        @click="showCustomGraph"
-      />
-      <q-btn
-        v-else
-        :label="$t('buttons.load_parameters')"
-        outline
-        class="text-grey"
-        style="margin-left: 50px"
-        @click="loadParameters"
+        :disable="selectedRows.length === 0"
+        @click="() => showCustomGraph(selectedRows)"
       />
     </div>
     <q-table
@@ -44,12 +36,12 @@
       <template #body="props">
         <q-tr
           :props="props"
+          @click="() => showCustomGraph([props.row.name])"
         >
           <q-td key="checkbox">
             <q-checkbox
-              v-model="selection"
+              v-model="selectedRows"
               :val="props.row.name"
-              @click="updatedCheckbox"
             />
           </q-td>
           <q-td key="name">
@@ -114,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import {inject, Ref, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
@@ -123,8 +115,7 @@ import {RouterService} from 'src/services/RouterService';
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 
-const selected = ref(false)
-const selection = ref([])
+const selectedRows: Ref<string[]> = ref([])
 
 // ----- Data -----
 const columns = [
@@ -209,35 +200,22 @@ const buttons = [
 
 /**
  * Routes to a new page where the graph of that project is shown
+ * @param {string[]} devices - names of devices to show the graph for
  * @returns {Promise<void>} - done
  */
-async function showCustomGraph(): Promise<void>{
-  //TODO: routes to the custom graph of that device pool
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
-}
+async function showCustomGraph(devices: string[]): Promise<void>{
+  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
 
-/**
- * Loads the parameters of that device pool which is selected
- * @async
- * @returns {void}
- */
-async function loadParameters(): Promise<void>{
-  //TODO: loads the parameters
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
-}
+  // Build string combination of device CLIs
+  let pathSuffix = ''
+  devices.forEach((device) => {
+    pathSuffix += `${device}+`
+  })
 
-/**
- * Updates the selected value dependent if selection array is empty or not
- * @returns {boolean} - whether some selected values are in the selection array or not
- */
-function updatedCheckbox() {
-  if (selection.value.length === 0) {
-    selected.value = false
-  }
-  else if (selection.value.length !== 0) {
-    selected.value = true
-  }
-  return selected.value
+  // Subtract last '+'
+  pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
+
+  await routerService?.addToRoute(pathSuffix)
 }
 
 /**
