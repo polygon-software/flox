@@ -5,7 +5,6 @@ import { QueryObject } from 'src/data/DATA-DEFINITIONS';
  * User-related queries
  */
 
-
 export const EMAIL_ALLOWED = {
   query : gql`
     query isEmailAllowed($email: String!){
@@ -22,6 +21,8 @@ export const MY_USER = {
         uuid
         role
         username
+        email
+        cognitoUuid
         __typename
       }
     }
@@ -36,20 +37,9 @@ export const ALL_USERS = {
       allUsers {
         uuid
         role
-        createdAt
-        fullName
         username
         email
-        phone
-        birthdate
-        address {
-          uuid
-          street
-          number
-          city
-          zipCode
-          __typename
-        }
+        cognitoUuid
         __typename
       }
     }
@@ -64,20 +54,9 @@ export const USER = {
       user(uuid: $uuid) {
         uuid
         role
-        createdAt
-        fullName
         username
         email
-        phone
-        birthdate
-        address {
-          uuid
-          street
-          number
-          city
-          zipCode
-          __typename
-        }
+        cognitoUuid
         __typename
       }
     }
