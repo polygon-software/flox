@@ -1,73 +1,69 @@
 <template>
   <q-header class="row bg-transparent full-width">
-    <div
-      class="row justify-between full-width q-pa-sm"
-      style="height: 90px"
-    >
-      <!-- Navigation -->
+  <div class="row justify-between full-width q-pa-sm">
+
+    <!-- Navigation -->
+    <div class="column justify-start items-start">
       <div
-        class="column justify-start items-start"
+        v-for="option in navOptions"
+        :key="option.key"
+        class="row justify-start items-center"
       >
-        <div
-          v-for="option in navOptions"
-          :key="option.key"
-          class="row justify-start items-center"
-        >
-          <!-- Navigation root page -->
-          <q-btn
-            :label="option.label"
-            flat
-            no-caps
-            :color="isActiveOption(option) ? 'black' : 'primary'"
-            @click="onNavClick(option)"
-          />
-
-          <!-- Sub-navigation -->
-          <div
-            v-if="isActiveOption(option)"
-            class="row justify-center"
-          >
-            <div
-              v-for="(part, index) in routeParts.slice(1)"
-              :key="part"
-              class="row justify-center items-center"
-            >
-              <q-icon
-                name="chevron_right"
-                color="black"
-                size="sm"
-              />
-              <q-btn
-                :label="part.toUpperCase()"
-                color="black"
-                flat
-                @click="onSubnavClick(index)"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Logout button -->
+        <!-- Navigation root page -->
         <q-btn
-          v-if="loggedIn"
-          :label="$t('authentication.logout')"
-          color="primary"
+          :label="option.label"
           flat
           no-caps
-          @click="logout"
+          :color="isActiveOption(option) ? 'black' : 'primary'"
+          @click="onNavClick(option)"
         />
+
+        <!-- Sub-navigation -->
+        <div
+          v-if="isActiveOption(option)"
+          class="row justify-center"
+        >
+          <div
+            v-for="(part, index) in routeParts.slice(1)"
+            :key="part"
+            class="row justify-center items-center"
+          >
+            <q-icon
+              name="chevron_right"
+              color="black"
+              size="sm"
+            />
+            <q-btn
+              :label="part.toUpperCase()"
+              color="black"
+              flat
+              @click="onSubnavClick(index)"
+            />
+          </div>
+        </div>
       </div>
 
-      <div class="row justify-center">
-        <!-- Logo -->
-        <img
-          alt="Ziegler Consultants"
-          :src="require('src/assets/zc_logo.svg')"
-          style="height: 50px"
-          class="q-ma-sm"
-        >
-      </div>
+      <!-- Logout button -->
+      <q-btn
+        v-if="loggedIn"
+        :label="$t('authentication.logout')"
+        color="primary"
+        flat
+        no-caps
+        @click="logout"
+      />
     </div>
+
+    <div class="row justify-center">
+      <!-- Logo -->
+      <img
+        alt="Ziegler Consultants"
+        :src="require('src/assets/zc_logo.svg')"
+        style="height: 50px"
+        class="q-ma-sm"
+      >
+    </div>
+  </div>
   </q-header>
 </template>
 
