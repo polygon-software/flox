@@ -3,20 +3,22 @@ import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
-import { getConnection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PERMISSION, ROLE } from '../../ENUM/ENUM';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
-import {
-  fetchFromTable,
-  getProjectsForInstances,
-} from '../../helpers/database-helpers';
+import { fetchFromTable } from '../../helpers/database-helpers';
 import { Project } from '../../types/Project';
 import { MR2000 } from '../../types/MR2000';
 import { MR3000 } from '../../types/MR3000';
 import { RegisterUserInput } from './dto/input/register-user.input';
 import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
+import { getProjectsForInstances } from '../../helpers/project-helpers';
+import {
+  mr2000fromDatabaseEntry,
+  mr3000fromDatabaseEntry,
+} from '../../helpers/device-helpers';
 
 @Injectable()
 export class UserService {
@@ -214,14 +216,14 @@ export class UserService {
     // Add all allowed MR2000 instances
     mr2000instances.forEach((instance) => {
       if (user.mr2000instances.includes(instance.cli)) {
-        devices.push(new MR2000(instance.cli));
+        devices.push(mr2000fromDatabaseEntry(instance));
       }
     });
 
     // Add all allowed MR3000 instances
     mr3000instances.forEach((instance) => {
       if (user.mr3000instances.includes(instance.cli)) {
-        devices.push(new MR3000(instance.cli));
+        devices.push(mr3000fromDatabaseEntry(instance));
       }
     });
 
@@ -253,12 +255,12 @@ export class UserService {
 
     // Add all MR2000 instances
     mr2000instances.forEach((instance) => {
-      devices.push(new MR2000(instance.cli));
+      devices.push(mr2000fromDatabaseEntry(instance));
     });
 
     // Add all MR3000 instances
     mr3000instances.forEach((instance) => {
-      devices.push(new MR3000(instance.cli));
+      devices.push(mr3000fromDatabaseEntry(instance));
     });
 
     return devices;

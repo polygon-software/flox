@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class MR3000 {
-  @Field(() => String, { description: 'Device CLI ID' })
+  @Field(() => String, { description: 'CLI ID' })
   cli: string;
 
   /**
