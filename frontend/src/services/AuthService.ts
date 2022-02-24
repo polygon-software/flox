@@ -113,6 +113,9 @@ export class AuthenticationService {
             },
 
             newPasswordRequired: function (userAttributes){
+              if(!newPassword){
+
+              }
               cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
             },
 

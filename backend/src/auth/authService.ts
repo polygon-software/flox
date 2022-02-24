@@ -20,12 +20,7 @@ export async function createCognitoAccount(
     UserPoolId: process.env.USER_POOL_ID,
     Username: email,
     TemporaryPassword: password || pw,
-    UserAttributes: [
-      {
-        Name: 'email',
-        Value: email,
-      },
-    ],
+    UserAttributes: [],
   };
   const resp = await provider.adminCreateUser(params);
   return {
