@@ -43,7 +43,9 @@ export async function fetchFromTable(
   `;
 
   // Execute
-  return queryRunner.manager.query(query);
+  const queryResult = await queryRunner.manager.query(query);
 
-  // TODO close connection
+  await queryRunner.release();
+
+  return queryResult;
 }
