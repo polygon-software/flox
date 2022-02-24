@@ -137,7 +137,7 @@ type Query {
   myProjects: [Project!]!
   myUser: User!
   preview(cli: String!, date: String!, num: String!): String!
-  user(uuid: ID!): User!
+  user(cognitoUuid: ID, uuid: ID): User!
 }
 
 input RegisterUserInput {
