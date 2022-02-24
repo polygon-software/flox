@@ -67,9 +67,10 @@ const props = defineProps({
 const highestDatapoint = computed(() => {
   let max = 0;
   props.datasets.forEach((dataset) => {
-    const datasetMax = Math.ceil(10 * Math.max.apply(Math, dataset.data.map(
+    const datasetData = (dataset as Record<string, Record<string, number>[]>).data
+    const datasetMax = Math.ceil(10 * Math.max.apply(Math, datasetData.map(
       (datapoint) => {
-        return (datapoint as Record<string, number>).y;
+        return datapoint.y;
       })
     )) / 10
 
