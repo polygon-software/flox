@@ -18,8 +18,8 @@
         outline
         class="text-grey"
         style="margin-left: 50px"
-        :disable="selection.length === 0"
-        @click="showCustomGraph"
+        :disable="selectedRows.length === 0"
+        @click="() => showCustomGraph(selectedRows)"
       />
     </div>
     <q-table
@@ -36,12 +36,12 @@
       <template #body="props">
         <q-tr
           :props="props"
+          @click="() => showCustomGraph([props.row.name])"
         >
           <q-td key="checkbox">
             <q-checkbox
-              v-model="selection"
+              v-model="selectedRows"
               :val="props.row.name"
-              @click="updatedCheckbox"
             />
           </q-td>
           <q-td key="name">
@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import {inject, Ref, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
@@ -115,7 +115,7 @@ import {RouterService} from 'src/services/RouterService';
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 
-const selection = ref([])
+const selectedRows: Ref<string[]> = ref([])
 
 // ----- Data -----
 const columns = [
@@ -200,11 +200,20 @@ const buttons = [
 
 /**
  * Routes to a new page where the graph of that project is shown
+ * @param {string[]} devices - names of devices to show the graph for
  * @returns {Promise<void>} - done
  */
-async function showCustomGraph(): Promise<void>{
-  //TODO: routes to the custom graph of that device pool
-  await routerService?.addToRoute('P1A-a')
+async function showCustomGraph(devices: string[]): Promise<void>{
+  // Build string combination of device CLIs
+  let pathSuffix = ''
+  devices.forEach((device) => {
+    pathSuffix += `${device}+`
+  })
+
+  // Subtract last '+'
+  pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
+
+  await routerService?.addToRoute(pathSuffix)
 }
 
 /**
