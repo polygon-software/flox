@@ -3,7 +3,7 @@ import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
-import { getConnection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PERMISSION, ROLE } from '../../ENUM/ENUM';
@@ -12,10 +12,11 @@ import {
   fetchFromTable,
   getProjectsForInstances,
 } from '../../helpers/database-helpers';
-import { Project } from '../../types/Project';
 import { MR2000 } from '../../types/MR2000';
 import { MR3000 } from '../../types/MR3000';
 import { RegisterUserInput } from './dto/input/register-user.input';
+import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
+import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 
 @Injectable()
 export class UserService {
@@ -88,11 +89,19 @@ export class UserService {
 
   /**
    * Fetches a single user
-   * @param {GetUserArgs} getUserArgs - search arguments, containing UUID
+   * @param {GetUserArgs} getUserArgs - search arguments, containing UUID or Cognito UUID
    * @returns {Promise<User>} - the user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersRepository.findOne(getUserArgs.uuid);
+    return this.usersRepository.findOne(
+      getUserArgs.uuid
+        ? {
+            uuid: getUserArgs.uuid,
+          }
+        : {
+            cognitoUuid: getUserArgs.cognitoUuid,
+          },
+    );
   }
 
   /**
@@ -169,10 +178,10 @@ export class UserService {
 
   /**
    * Returns a list of the user's projects
-   * @param {GetUserArgs} getUserProjectsArgs - contains user's UUID
+   * @param {GetUserProjectsArgs} getUserProjectsArgs - contains user's UUID
    * @returns {Promise<Project[]>} - the user's projects
    */
-  async getUserProjects(getUserProjectsArgs: GetUserArgs) {
+  async getUserProjects(getUserProjectsArgs: GetUserProjectsArgs) {
     // Get user
     const user = await this.usersRepository.findOne(getUserProjectsArgs.uuid);
 
@@ -193,10 +202,10 @@ export class UserService {
 
   /**
    * Returns a list of the user's MR2000 & MR3000 devices
-   * @param {GetUserArgs} getUserDevicesArgs - contains user's UUID
+   * @param {GetUserDevicesArgs} getUserDevicesArgs - contains user's UUID
    * @returns {Promise<MR2000|MR3000[]>} - the user's devices
    */
-  async getUserDevices(getUserDevicesArgs: GetUserArgs) {
+  async getUserDevices(getUserDevicesArgs: GetUserDevicesArgs) {
     // Get user
     const user = await this.usersRepository.findOne(getUserDevicesArgs.uuid);
 
