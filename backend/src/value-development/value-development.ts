@@ -69,6 +69,7 @@ export async function saveValueDevelopmentCsv(
 
   // Insert values into table
   await queryRunner.manager.insert(valueTableName, parsedCsv);
+  await queryRunner.release();
 }
 
 /**
@@ -88,11 +89,11 @@ export async function getValueDevelopment(
   const connection: Connection = getConnection();
   const queryRunner: QueryRunner = connection.createQueryRunner();
   await queryRunner.connect();
-
   // Ensure both needed tables exist
   const valueTableExists = await queryRunner.hasTable(valueTableName);
   const zipTableExists = await queryRunner.hasTable(zipCodeTableName);
   if (!valueTableExists || !zipTableExists) {
+    await queryRunner.release();
     throw new Error(ERRORS.missing_database_data);
   }
 
@@ -106,6 +107,7 @@ export async function getValueDevelopment(
 
   // Ensure we have data for the given zip code
   if (!zipCodeQuery || zipCodeQuery.length === 0) {
+    await queryRunner.release();
     throw new Error(ERRORS.invalid_zip_code);
   }
 
@@ -121,7 +123,7 @@ export async function getValueDevelopment(
     WHERE region='${regionCode}'
     LIMIT 1
     `);
-
+  await queryRunner.release();
   if (!valueMappingQuery) {
     throw new Error(ERRORS.missing_database_data);
   }

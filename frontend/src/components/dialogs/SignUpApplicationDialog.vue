@@ -204,7 +204,7 @@ async function onOk(): Promise<void> {
     await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
 
     // Send document upload e-mail
-    await sendDocumentUploadEmail(company.email ?? '', company.uuid ?? '')
+    await sendDocumentUploadEmail(email.value ?? '', company.uuid ?? '')
 
     // Show confirmation prompt
     showNotification(
