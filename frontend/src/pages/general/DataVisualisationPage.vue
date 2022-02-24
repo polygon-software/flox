@@ -32,8 +32,20 @@
     </h6>
 
     <TimeSeriesGraph
-      :dataset-name="stationId"
-      :dataset="randomTimeSeries()"
+      :datasets="[
+        {
+          name: stationId,
+          data: randomTimeSeries()
+        },
+        {
+          name: stationId + '_1',
+          data: randomTimeSeries()
+        },
+        {
+          name: stationId + '_2',
+          data: randomTimeSeries()
+        }
+      ]"
       :warning-level="0.25"
       unit="mm/s"
     />
@@ -44,8 +56,12 @@
     </h6>
 
     <TimeSeriesGraph
-      :dataset-name="stationId"
-      :dataset="randomTimeSeries()"
+      :datasets="[
+        {
+          name: stationId,
+          data: randomTimeSeries()
+        }
+      ]"
       :warning-level="0.25"
       unit="mm/s"
     />
@@ -55,8 +71,12 @@
     </h6>
 
     <TimeSeriesGraph
-      :dataset-name="stationId"
-      :dataset="randomTimeSeries()"
+      :datasets="[
+        {
+          name: stationId,
+          data: randomTimeSeries()
+        }
+      ]"
       :warning-level="0.25"
       unit="mm/s"
     />
