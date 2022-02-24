@@ -130,10 +130,10 @@ type Project {
 type Query {
   allUsers: [User!]!
   getProjectDevices(name: String!): [Device!]!
-  getUserDevices(uuid: ID!): [Device!]!
+  getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
-  myDevices: [Device!]!
+  myDevices(unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!
   preview(cli: String!, date: String!, num: String!): String!

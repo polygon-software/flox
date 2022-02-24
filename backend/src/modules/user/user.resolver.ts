@@ -20,6 +20,7 @@ import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
+import { GetMyDevicesArgs } from './dto/args/get-my-devices.args';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -150,11 +151,15 @@ export class UserResolver {
   /**
    * Returns a list of the current user's devices
    * @param {Record<string, string>}  user - currently logged-in user from request
+   * @param {GetMyDevicesArgs} [getMyDevicesArgs] - arguments containing whether to return only unassigned devices
    * @returns {Promise<Project[]>} - the user's projects
    */
   @AnyRole()
   @Query(() => [Device], { name: 'myDevices' })
-  async myDevices(@CurrentUser() user: Record<string, string>) {
+  async myDevices(
+    @CurrentUser() user: Record<string, string>,
+    @Args() getMyDevicesArgs?: GetMyDevicesArgs,
+  ) {
     // Get user
     const dbUser = await this.usersService.getUser({
       cognitoUuid: user.userId,
@@ -163,7 +168,10 @@ export class UserResolver {
     if (!dbUser) {
       throw new Error(`No user found for ${user.userId}`);
     }
-    return this.usersService.getUserDevices({ uuid: dbUser.uuid });
+    return this.usersService.getUserDevices({
+      uuid: dbUser.uuid,
+      unassigned: getMyDevicesArgs?.unassigned ?? false,
+    } as GetUserDevicesArgs);
   }
 
   /**

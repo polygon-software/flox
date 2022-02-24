@@ -216,9 +216,21 @@ export class UserService {
       throw new Error(`No user found for ${getUserDevicesArgs.uuid}`);
     }
 
+    const filterQuery = getUserDevicesArgs.unassigned
+      ? "WHERE (comment IS null OR comment='')"
+      : null;
+
     // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable('MR2000', 'station');
-    const mr3000instances = await fetchFromTable('MR3000', 'station');
+    const mr2000instances = await fetchFromTable(
+      'MR2000',
+      'station',
+      filterQuery,
+    );
+    const mr3000instances = await fetchFromTable(
+      'MR3000',
+      'station',
+      filterQuery,
+    );
 
     const devices = [];
 
