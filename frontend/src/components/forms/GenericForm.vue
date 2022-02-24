@@ -63,18 +63,10 @@
       </template>
     </q-stepper>
     <!-- Single card (for single-page forms -->
-    <q-card
+    <div
       v-else
       class="q-pa-md"
     >
-      <q-card-section>
-        <div class="row flex flex-center">
-          <strong class="text-primary">
-            {{ form.pages.value[0].label }}
-          </strong>
-        </div>
-      </q-card-section>
-      <q-separator class="q-ma-lg"/>
       <q-card-section>
         <component
           :is="field.component"
@@ -100,7 +92,7 @@
           />
         </q-btn>
       </q-card-actions>
-    </q-card>
+    </div>
   </q-form>
 </template>
 

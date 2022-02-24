@@ -7,4 +7,5 @@ export const ERRORS = {
   no_valid_file: 'No valid file sent',
   no_valid_association: 'No valid association found',
   no_user_found: 'Cognito ID of request could not be resolved to User',
+  resource_not_allowed: 'User is not permitted to access this resource',
 };
