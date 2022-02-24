@@ -21,6 +21,7 @@ export const MY_USER = {
       myUser {
         uuid
         role
+        username
         __typename
       }
     }
