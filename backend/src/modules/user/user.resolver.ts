@@ -188,7 +188,7 @@ export class UserResolver {
   ) {
     // Get user
     const dbUser = await this.usersService.getUser({
-      uuid: user.userId,
+      cognitoUuid: user.userId,
     } as GetUserArgs);
 
     if (!dbUser) {
