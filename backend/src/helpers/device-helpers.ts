@@ -27,7 +27,7 @@ export function mr2000fromDatabaseEntry(entry: Record<string, unknown>) {
 export function mr3000fromDatabaseEntry(entry: Record<string, unknown>) {
   return new MR3000(
     entry.cli as string,
-    // entry.mr_SN as string,
+    entry.mr_SN as string,
     // entry.PID as string,
     // entry.last_file as number,
   );

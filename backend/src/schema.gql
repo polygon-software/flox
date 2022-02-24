@@ -81,13 +81,25 @@ input DeleteUserInput {
 union Device = MR2000 | MR3000
 
 type MR2000 {
-  """Device CLI ID"""
+  """CLI ID"""
   cli: String!
+
+  """Number of files"""
+  numberOfFiles: Float!
+
+  """PID"""
+  pid: String!
+
+  """Serial number"""
+  serialNumber: String!
 }
 
 type MR3000 {
-  """Device CLI ID"""
+  """CLI ID"""
   cli: String!
+
+  """Serial number"""
+  serialNumber: String!
 }
 
 type Mutation {
