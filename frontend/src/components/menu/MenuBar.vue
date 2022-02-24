@@ -113,17 +113,6 @@ const navigationOptions = [
 ]
 
 /**
- * Parts of the route
- * e.g. ['usz', 'p123'] for route '/usz/p123'
- */
-const routeParts = computed(() => {
-  const pathParts = route.path.split('/')
-  pathParts.splice(0, 1)
-  return pathParts[0].length > 0 ? pathParts : []
-})
-
-
-/**
  * Navigation options, depending on user type and whether they are logged in
  */
 const navOptions = computed(() => {
@@ -133,6 +122,16 @@ const navOptions = computed(() => {
   }
 
   return navigationOptions
+})
+
+/**
+ * Parts of the route
+ * e.g. ['usz', 'p123'] for route '/usz/p123'
+ */
+const routeParts = computed(() => {
+  const pathParts = route.path.split('/')
+  pathParts.splice(0, 1)
+  return pathParts[0].length > 0 ? pathParts : []
 })
 
 /**
