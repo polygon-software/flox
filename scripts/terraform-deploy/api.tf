@@ -233,7 +233,7 @@ resource "aws_elastic_beanstalk_environment" "api_eb_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "BASE_URL"
-    value     = "http://ebs-web.polygon-project.ch"
+    value     = "http://soi-web.polygon-project.ch"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
