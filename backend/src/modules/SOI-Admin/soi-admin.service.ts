@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { SoiAdmin } from './entities/soi-admin.entity';
 import { CreateSoiAdminInput } from './dto/input/create-soi-admin.input';
-import { createCognitoAccount, randomPassword } from '../../auth/authService';
+import { createCognitoAccount } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { ROLE } from '../../ENUM/ENUMS';
 
@@ -25,16 +25,12 @@ export class SoiAdminService {
     createSoiAdminInput: CreateSoiAdminInput,
   ): Promise<SoiAdmin> {
     // Create a Cognito account with a random password
-    const password = randomPassword(8);
-    const cognitoId = await createCognitoAccount(
-      createSoiAdminInput.email,
-      password,
-    );
+    const newAccount = await createCognitoAccount(createSoiAdminInput.email);
 
     // Send password reset email with the current password embedded
     await sendPasswordChangeEmail(
       createSoiAdminInput.email,
-      password,
+      newAccount.password,
       ROLE.SOI_ADMIN,
     );
 
@@ -42,7 +38,7 @@ export class SoiAdminService {
     const soiAdmin = this.soiAdminRepository.create(createSoiAdminInput);
     await this.userService.create({
       role: ROLE.SOI_ADMIN,
-      uuid: cognitoId,
+      uuid: newAccount.cognitoId,
       fk: soiAdmin.uuid,
     });
     return this.soiAdminRepository.save(soiAdmin);

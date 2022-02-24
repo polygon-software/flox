@@ -72,9 +72,10 @@ export class AuthenticationService {
      * Logs into the AWS authentication pool using the given data
      * @param {string} identifier - the authentication's identifier (usually E-mail or username)
      * @param {string} password - the authentication's password
+     * @param {string} newPassword - the new password if comming from set-password page
      * @returns {Promise<void>} - done
      */
-    async login(identifier: string, password: string): Promise<void>{
+    async login(identifier: string, password: string, newPassword=''): Promise<void>{
 
         // Generate auth details
         const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
@@ -99,28 +100,32 @@ export class AuthenticationService {
           // Store in local variable
           this.$authStore.mutations.setCognitoUser(cognitoUser)
           cognitoUser.authenticateUser(authenticationDetails, {
-              onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
-              onFailure: (err: Error)=>{this.onFailure(err) },
-              // Sets up MFA (only done once after signing up)
-              mfaSetup: () => {
-                this.setupMFA(cognitoUser, resolve)
-              },
+            onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
+            onFailure: (err: Error)=>{this.onFailure(err) },
+            // Sets up MFA (only done once after signing up)
+            mfaSetup: () => {
+              this.setupMFA(cognitoUser, resolve)
+            },
 
-            // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-              selectMFAType: function () {
-                  cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
-              },
+          // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
+            selectMFAType: function () {
+              cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
+            },
 
-              // Called if time-limited one time password is required (only second login or later)
-              totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
+            newPasswordRequired: function (userAttributes){
+              cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
+            },
 
-              //TODO check when/if this appears
-              mfaRequired: function () {
-                  const verificationCode = prompt('Please input verification code', '');
-                  if (typeof verificationCode === 'string') {
-                      cognitoUser.sendMFACode(verificationCode, this);
-                  }
-              },
+            // Called if time-limited one time password is required (only second login or later)
+            totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
+
+            //TODO check when/if this appears
+            mfaRequired: function () {
+                const verificationCode = prompt('Please input verification code', '');
+                if (typeof verificationCode === 'string') {
+                    cognitoUser.sendMFACode(verificationCode, this);
+                }
+            },
 
 
           })

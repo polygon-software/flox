@@ -13,7 +13,6 @@ import { CREATION_STATE, ROLE } from '../../ENUM/ENUMS';
 import {
   checkIfUserExists,
   createCognitoAccount,
-  randomPassword,
 } from '../../auth/authService';
 import {
   sendCompanyRejectEmail,
@@ -185,12 +184,15 @@ export class CompanyService {
    */
   async associateUser(uuid: string): Promise<Company> {
     const company = await this.companyRepository.findOne(uuid);
-    const password = randomPassword(8);
-    const cognitoId = await createCognitoAccount(company.email, password);
-    await sendPasswordChangeEmail(company.email, password, ROLE.COMPANY);
+    const newAccount = await createCognitoAccount(company.email);
+    await sendPasswordChangeEmail(
+      company.email,
+      newAccount.password,
+      ROLE.COMPANY,
+    );
     await this.userService.create({
       role: ROLE.COMPANY,
-      uuid: cognitoId,
+      uuid: newAccount.cognitoId,
       fk: company.uuid,
     });
     company.creation_state = CREATION_STATE.DONE;

@@ -1,8 +1,5 @@
-import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
-import { ISignUpResult } from 'amazon-cognito-identity-js';
-import * as crypto from 'crypto';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-
+import * as crypto from 'crypto';
 // Set up cognito admin provider
 const provider = new CognitoIdentityProvider({
   region: process.env.AWS_REGION ?? 'eu-central-1',
@@ -11,47 +8,31 @@ const provider = new CognitoIdentityProvider({
 /**
  * Create a new Cognito Account with the given email address and password.
  * @param {string} email - The email of the new user
- * @param {string} password - The password of the new user
- * @returns {string} - Cognito ID
+ * @param {string|null} password - Initial Password if needed
+ * @returns {Promise<Record<string, string>>} - Cognito ID
  */
 export async function createCognitoAccount(
   email: string,
-  password: string,
-): Promise<string> {
-  // Set up authentication user pool
-  const poolSettings = {
-    UserPoolId: process.env.USER_POOL_ID ?? '',
-    ClientId: process.env.USER_POOL_CLIENT_ID ?? '',
+  password = null,
+): Promise<Record<string, string>> {
+  const pw = randomPassword(8);
+  const params = {
+    UserPoolId: process.env.USER_POOL_ID,
+    Username: email,
+    TemporaryPassword: password || pw,
+    UserAttributes: [
+      {
+        Name: 'email',
+        Value: email,
+      },
+    ],
   };
-  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings);
-  const cognitoUserWrapper: ISignUpResult = await new Promise(
-    (resolve, reject) => {
-      const attributes = [];
-      attributes.push(
-        new AmazonCognitoIdentity.CognitoUserAttribute({
-          Name: 'email',
-          Value: email,
-        }),
-      );
-      userPool.signUp(
-        email,
-        password,
-        attributes,
-        [],
-        (err?: Error, result?: ISignUpResult) => {
-          if (err) {
-            reject(err);
-          }
-          if (result) {
-            resolve(result);
-          }
-        },
-      );
-    },
-  );
-  return cognitoUserWrapper.userSub;
+  const resp = await provider.adminCreateUser(params);
+  return {
+    cognitoId: resp.User.Username,
+    password: pw,
+  };
 }
-
 /**
  * Generates a random number in given range
  * @param {number} min - start of the range
@@ -61,7 +42,6 @@ export async function createCognitoAccount(
 function randomNumber(min: number, max: number) {
   return crypto.randomInt(max - min) + min;
 }
-
 /**
  * Generates a random password that is valid for AWS Cognito of at least the given length
  * @param {number} minLength - min length
