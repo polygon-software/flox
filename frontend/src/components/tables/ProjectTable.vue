@@ -14,20 +14,12 @@
         </template>
       </q-input>
       <q-btn
-        v-if="!selected"
         :label="$t('buttons.custom_graph')"
         outline
         class="text-grey"
         style="margin-left: 50px"
+        :disable="selection.length === 0"
         @click="showCustomGraph"
-      />
-      <q-btn
-        v-else
-        :label="$t('buttons.load_parameters')"
-        outline
-        class="text-grey"
-        style="margin-left: 50px"
-        @click="loadParameters"
       />
     </div>
     <q-table
@@ -123,7 +115,6 @@ import {RouterService} from 'src/services/RouterService';
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 
-const selected = ref(false)
 const selection = ref([])
 
 // ----- Data -----
@@ -213,31 +204,7 @@ const buttons = [
  */
 async function showCustomGraph(): Promise<void>{
   //TODO: routes to the custom graph of that device pool
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
-}
-
-/**
- * Loads the parameters of that device pool which is selected
- * @async
- * @returns {void}
- */
-async function loadParameters(): Promise<void>{
-  //TODO: loads the parameters
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
-}
-
-/**
- * Updates the selected value dependent if selection array is empty or not
- * @returns {boolean} - whether some selected values are in the selection array or not
- */
-function updatedCheckbox() {
-  if (selection.value.length === 0) {
-    selected.value = false
-  }
-  else if (selection.value.length !== 0) {
-    selected.value = true
-  }
-  return selected.value
+  await routerService?.addToRoute('P1A-a')
 }
 
 /**
