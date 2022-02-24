@@ -91,7 +91,7 @@
                   class="column; text-grey"
                   flat
                   no-caps
-                  @click="clickedOption(button.url)"
+                  @click="onOptionClick(button.key)"
                 />
             </q-btn-dropdown>
           </q-td>

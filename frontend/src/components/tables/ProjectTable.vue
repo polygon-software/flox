@@ -103,7 +103,7 @@
                   class="column; text-grey"
                   flat
                   no-caps
-                  @click="onOptionClick(button.url)"
+                  @click="onOptionClick(button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
