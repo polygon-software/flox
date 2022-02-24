@@ -12,7 +12,7 @@ export const EMAIL_ALLOWED = {
       isEmailAllowed (email: $email)
     }`,
   tables: ['user'],
-  cacheLocation: 'isEmailAllowed'
+  cacheLocation: 'isEmailAllowed',
 }
 
 export const MY_USER = {

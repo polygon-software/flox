@@ -16,7 +16,9 @@ export const REGISTER_USER = {
       register (registerUserInput: $registerUserInput) {
         uuid
         cognitoUuid
+        username
         email
+        role
         __typename
       }
     }`,
