@@ -3,24 +3,17 @@
     <!-- Title: Projects -->
     <h5>{{ $tc('dashboard.project', 0) }}</h5>
 
-    <p>TODO, Customer is {{ customerId }}</p>
+    <ProjectsTable/>
 
     <!-- Title: Device pool -->
     <h5>{{ $t('dashboard.device_pool') }}</h5>
 
-    <p>TODO TODO</p>
+    <DevicePoolsTable/>
 
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
-  customerId: {
-    required: true,
-    type: String
-  }
-})
+import ProjectsTable from 'components/tables/ProjectsTable.vue';
+import DevicePoolsTable from 'components/tables/DevicePoolTable.vue';
 </script>
