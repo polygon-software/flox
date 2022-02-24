@@ -1,5 +1,5 @@
-import { ArgsType, Field, ID } from '@nestjs/graphql';
-import { IsBoolean, IsUUID } from 'class-validator';
+import { ArgsType, Field } from '@nestjs/graphql';
+import { IsBoolean } from 'class-validator';
 
 @ArgsType()
 export class GetMyDevicesArgs {
