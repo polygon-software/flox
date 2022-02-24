@@ -44,4 +44,6 @@ export async function fetchFromTable(
 
   // Execute
   return queryRunner.manager.query(query);
+
+  // TODO close connection
 }

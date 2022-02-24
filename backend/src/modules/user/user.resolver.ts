@@ -14,8 +14,10 @@ import {
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 import { Project } from '../../types/Project';
 import { Device } from '../../types/Device';
-import { RegisterUserInput } from './dto/input/register-user.input';
 import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
+import { RegisterUserInput } from './dto/input/register-user.input';
+import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
+import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -104,23 +106,23 @@ export class UserResolver {
 
   /**
    * Returns a list of a given user's projects
-   * @param {GetUserArgs} getUserProjectsArgs - contains user's UUID
+   * @param {GetUserProjectsArgs} getUserProjectsArgs - contains user's UUID
    * @returns {Promise<Project[]>} - the user's projects
    */
   @AdminOnly()
   @Query(() => [Project], { name: 'getUserProjects' })
-  async getUserProjects(@Args() getUserProjectsArgs: GetUserArgs) {
+  async getUserProjects(@Args() getUserProjectsArgs: GetUserProjectsArgs) {
     return this.usersService.getUserProjects(getUserProjectsArgs);
   }
 
   /**
    * Returns a list of a given user's MR2000 & MR3000 devices
-   * @param {GetUserArgs} getUserDevicesArgs - contains user's UUID
+   * @param {GetUserDevicesArgs} getUserDevicesArgs - contains user's UUID
    * @returns {Promise<Device[]>} - the user's devices
    */
   @AdminOnly()
   @Query(() => [Device], { name: 'getUserDevices' })
-  async getUserDevices(@Args() getUserDevicesArgs: GetUserArgs) {
+  async getUserDevices(@Args() getUserDevicesArgs: GetUserDevicesArgs) {
     return this.usersService.getUserDevices(getUserDevicesArgs);
   }
 
@@ -133,7 +135,9 @@ export class UserResolver {
   @Query(() => [Project], { name: 'myProjects' })
   async myProjects(@CurrentUser() user: Record<string, string>) {
     // Get user
-    const dbUser = await this.usersService.getUser({ uuid: user.userId });
+    const dbUser = await this.usersService.getUser({
+      cognitoUuid: user.userId,
+    } as GetUserArgs);
 
     if (!dbUser) {
       throw new Error(`No user found for ${user.userId}`);
@@ -150,7 +154,9 @@ export class UserResolver {
   @Query(() => [Device], { name: 'myDevices' })
   async myDevices(@CurrentUser() user: Record<string, string>) {
     // Get user
-    const dbUser = await this.usersService.getUser({ uuid: user.userId });
+    const dbUser = await this.usersService.getUser({
+      uuid: user.userId,
+    } as GetUserArgs);
 
     if (!dbUser) {
       throw new Error(`No user found for ${user.userId}`);
