@@ -1,7 +1,7 @@
 <template>
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Station name -->
-    <h5>{{$tc('dashboard.station', 1)}} {{stationId.toUpperCase()}}</h5>
+    <h5>{{pageTitle}}</h5>
 
     <!-- Time Period picker -->
     <h6 class="q-ma-none q-pa-none">
@@ -32,20 +32,7 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="[
-        {
-          name: stationId,
-          data: randomTimeSeries()
-        },
-        {
-          name: stationId + '_1',
-          data: randomTimeSeries()
-        },
-        {
-          name: stationId + '_2',
-          data: randomTimeSeries()
-        }
-      ]"
+      :datasets="computedDatasets"
       :warning-level="0.25"
       unit="mm/s"
     />
@@ -56,12 +43,7 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="[
-        {
-          name: stationId,
-          data: randomTimeSeries()
-        }
-      ]"
+      :datasets="computedDatasets"
       :warning-level="0.25"
       unit="mm/s"
     />
@@ -71,12 +53,7 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="[
-        {
-          name: stationId,
-          data: randomTimeSeries()
-        }
-      ]"
+      :datasets="computedDatasets"
       :warning-level="0.25"
       unit="mm/s"
     />
@@ -84,8 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue';
+import {computed, defineProps, ref} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
+import {i18n} from 'boot/i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -116,6 +94,33 @@ const timePeriodOptions = [
 
 // Currently chosen time period
 const timePeriod = ref(timePeriodOptions[0])
+
+// TODO remove placeholder data
+const computedDatasets = computed(() => {
+  const datasets = [] as Record<string, unknown>[]
+
+  (props.stationId.split('+')).forEach((station) => {
+    datasets.push(
+      {
+        name: station,
+        data: randomTimeSeries()
+      }
+    )
+  })
+
+  return datasets
+})
+
+const pageTitle = computed(() => {
+  const stations = props.stationId.split('+')
+  let title = i18n.global.tc('dashboard.station', stations.length)
+
+  stations.forEach((station) => {
+    title += ` ${station},`
+  })
+
+  return title.substring(0, title.length-1);
+})
 
 // eslint-disable-next-line valid-jsdoc
 /**

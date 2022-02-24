@@ -204,6 +204,8 @@ const buttons = [
  * @returns {Promise<void>} - done
  */
 async function showCustomGraph(devices: string[]): Promise<void>{
+  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
+
   // Build string combination of device CLIs
   let pathSuffix = ''
   devices.forEach((device) => {

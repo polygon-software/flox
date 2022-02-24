@@ -52,7 +52,7 @@ export default {
   dashboard: {
     customer: 'Customer | Customer',
     project: 'Project | Projects',
-    station: 'Station',
+    station: 'Station | Stations',
     device_pool: 'Device Pool',
     account: 'Account',
     share: 'Share'
