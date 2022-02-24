@@ -19,7 +19,6 @@ import { RegisterUserInput } from './dto/input/register-user.input';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import { ROLE } from '../../ENUM/ENUM';
-import { NotAuthorizedException } from '@aws-sdk/client-cognito-identity-provider';
 import { ERRORS } from '../../error/ERRORS';
 
 @Resolver(() => User)
