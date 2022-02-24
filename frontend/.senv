@@ -1,13 +1,9 @@
 FRONTEND_PORT=3001
 SERVER_PORT=3000
 
-VUE_APP_GRAPHQL_ENDPOINT=http://soi-api.polygon-project.ch:3000/graphql
-VUE_APP_WS_ENDPOINT=ws://soi-api.polygon-project.ch:3000/graphql-websocket
 VUE_APP_USER_POOL_ID=eu-central-1_Fx5YjVdhK
 VUE_APP_USER_POOL_CLIENT_ID=5h4fcam55ktksdcd0cskqidcsj
 VUE_APP_NAME=SOI
-VUE_APP_BASE_URL=http://soi-web.polygon-project.ch
-VUE_APP_BACKEND_BASE_URL=http://soi-api.polygon-project.ch:3000
 
 # AWS Config
 VUE_APP_AWS_REGION=eu-central-1
@@ -17,5 +13,4 @@ VUE_APP_AWS_KEY_ID=AKIA5OA2ITKTAGYPDOMD
 VUE_APP_AWS_SECRET_KEY=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
 
 # E-Mail Config
-# TODO change for production
 VUE_APP_EMAIL_SENDER=info@soi-ag.ch

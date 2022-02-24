@@ -1,0 +1,5 @@
+VUE_APP_GRAPHQL_ENDPOINT=http://localhost:3000/graphql
+VUE_APP_WS_ENDPOINT=ws://localhost:3000/graphql-websocket
+
+VUE_APP_BASE_URL=http://localhost:8080
+VUE_APP_BACKEND_BASE_URL=http://localhost:3000

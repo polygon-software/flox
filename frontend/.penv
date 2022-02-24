@@ -1,0 +1,6 @@
+
+VUE_APP_GRAPHQL_ENDPOINT=http://soi-api.polygon-project.ch:3000/graphql
+VUE_APP_WS_ENDPOINT=ws://soi-api.polygon-project.ch:3000/graphql-websocket
+
+VUE_APP_BASE_URL=http://soi-web.polygon-project.ch
+VUE_APP_BACKEND_BASE_URL=http://soi-api.polygon-project.ch:3000
