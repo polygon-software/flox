@@ -67,6 +67,7 @@ export class User extends BaseEntity {
 
   @Field(() => [String], {
     description: 'Projects that the user has access to',
+    nullable: true,
   })
   @Column('text', { array: true, nullable: true })
   @IsArray()
@@ -74,6 +75,7 @@ export class User extends BaseEntity {
 
   @Field(() => [String], {
     description: 'MR2000 instances that the user has access to',
+    nullable: true,
   })
   @Column('text', { array: true, nullable: true })
   @IsArray()
@@ -81,6 +83,7 @@ export class User extends BaseEntity {
 
   @Field(() => [String], {
     description: 'MR3000 instances that the user has access to',
+    nullable: true,
   })
   @Column('text', { array: true, nullable: true })
   @IsArray()

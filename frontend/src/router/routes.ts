@@ -31,6 +31,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
         component: () => import('pages/general/DataVisualisationPage.vue'),
         props: route => ({ stationId: route.params.stationId })
       },
+      {
+        path: ':customerId/:projectId/:stationId/edit',
+        component: () => import('pages/general/ParametersPage.vue'),
+        props: route => ({ parametersId: route.params.stationId })
+      },
     ],
   },
 

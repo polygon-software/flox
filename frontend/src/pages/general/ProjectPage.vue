@@ -1,15 +1,16 @@
 <template>
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Projects -->
-    <h5>{{ $t('dashboard.project') }}</h5>
+    <h5>{{ $t('dashboard.project') }} {{ projectId }}</h5>
 
-    <p>TODO, Project is {{ projectId }}</p>
+    <ProjectTable/>
 
   </q-page>
 </template>
 
 <script setup lang="ts">
 import {defineProps} from 'vue';
+import ProjectTable from 'components/tables/ProjectTable.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
