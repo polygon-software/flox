@@ -78,6 +78,18 @@ input DeleteUserInput {
   uuid: ID!
 }
 
+union Device = MR2000 | MR3000
+
+type MR2000 {
+  """Device CLI ID"""
+  cli: String!
+}
+
+type MR3000 {
+  """Device CLI ID"""
+  cli: String!
+}
+
 type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   create(createUserInput: CreateUserInput!): User!
@@ -92,12 +104,27 @@ enum Permission {
   PROJECT
 }
 
+type Project {
+  """Associated MR2000 instances"""
+  mr2000instances: [MR2000!]!
+
+  """Associated MR3000 instances"""
+  mr3000instances: [MR3000!]!
+
+  """Project name"""
+  name: String!
+}
+
 type Query {
   allUsers: [User!]!
+  getUserDevices(uuid: ID!): [Device!]!
+  getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
+  myDevices: [Device!]!
+  myProjects: [Project!]!
   myUser: User!
   preview(cli: String!, date: String!, num: String!): String!
-  user(uuid: ID!): User!
+  user(cognitoUuid: ID, uuid: ID): User!
 }
 
 input RegisterUserInput {
@@ -158,16 +185,16 @@ type User {
   lastModifiedAt: DateTime!
 
   """MR2000 instances that the user has access to"""
-  mr2000instances: [String!]!
+  mr2000instances: [String!]
 
   """MR3000 instances that the user has access to"""
-  mr3000instances: [String!]!
+  mr3000instances: [String!]
 
   """Phone number"""
   phone: String!
 
   """Projects that the user has access to"""
-  projects: [String!]!
+  projects: [String!]
 
   """Role of the User"""
   role: Role!

@@ -11,8 +11,12 @@ import {
   AnyRole,
   CurrentUser,
 } from '../../auth/authorization.decorator';
-import { RegisterUserInput } from './dto/input/register-user.input';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
+import { Project } from '../../types/Project';
+import { Device } from '../../types/Device';
+import { RegisterUserInput } from './dto/input/register-user.input';
+import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
+import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -71,8 +75,7 @@ export class UserResolver {
   /**
    * Get the DB user for the currently logged in cognito user
    * @param {Record<string, string>}  user - currently logged-in user from request
-   * @async
-   * @returns {User} - the user, if any
+   * @returns {Promise<User>} - the user, if any
    */
   @AnyRole()
   @Query(() => User, { name: 'myUser' })
@@ -98,5 +101,65 @@ export class UserResolver {
     addUserPermissionInput: AddUserPermissionInput,
   ): Promise<User> {
     return this.usersService.addPermission(addUserPermissionInput);
+  }
+
+  /**
+   * Returns a list of a given user's projects
+   * @param {GetUserProjectsArgs} getUserProjectsArgs - contains user's UUID
+   * @returns {Promise<Project[]>} - the user's projects
+   */
+  @AdminOnly()
+  @Query(() => [Project], { name: 'getUserProjects' })
+  async getUserProjects(@Args() getUserProjectsArgs: GetUserProjectsArgs) {
+    return this.usersService.getUserProjects(getUserProjectsArgs);
+  }
+
+  /**
+   * Returns a list of a given user's MR2000 & MR3000 devices
+   * @param {GetUserDevicesArgs} getUserDevicesArgs - contains user's UUID
+   * @returns {Promise<Device[]>} - the user's devices
+   */
+  @AdminOnly()
+  @Query(() => [Device], { name: 'getUserDevices' })
+  async getUserDevices(@Args() getUserDevicesArgs: GetUserDevicesArgs) {
+    return this.usersService.getUserDevices(getUserDevicesArgs);
+  }
+
+  /**
+   * Returns a list of the current user's projects
+   * @param {Record<string, string>}  user - currently logged-in user from request
+   * @returns {Promise<Project[]>} - the user's projects
+   */
+  @AnyRole()
+  @Query(() => [Project], { name: 'myProjects' })
+  async myProjects(@CurrentUser() user: Record<string, string>) {
+    // Get user
+    const dbUser = await this.usersService.getUser({
+      cognitoUuid: user.userId,
+    } as GetUserArgs);
+
+    if (!dbUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+    return this.usersService.getUserProjects({ uuid: dbUser.uuid });
+  }
+
+  /**
+   * Returns a list of the current user's devices
+   * @param {Record<string, string>}  user - currently logged-in user from request
+   * @returns {Promise<Project[]>} - the user's projects
+   */
+  @AnyRole()
+  @Query(() => [Device], { name: 'myDevices' })
+  async myDevices(@CurrentUser() user: Record<string, string>) {
+    // Get user
+    const dbUser = await this.usersService.getUser({
+      uuid: user.userId,
+    } as GetUserArgs);
+
+    if (!dbUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+    return this.usersService.getUserDevices({ uuid: dbUser.uuid });
   }
 }

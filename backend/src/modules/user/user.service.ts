@@ -8,7 +8,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PERMISSION, ROLE } from '../../ENUM/ENUM';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
+import {
+  fetchFromTable,
+  getProjectsForInstances,
+} from '../../helpers/database-helpers';
+import { MR2000 } from '../../types/MR2000';
+import { MR3000 } from '../../types/MR3000';
 import { RegisterUserInput } from './dto/input/register-user.input';
+import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
+import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 
 @Injectable()
 export class UserService {
@@ -81,11 +89,19 @@ export class UserService {
 
   /**
    * Fetches a single user
-   * @param {GetUserArgs} getUserArgs - search arguments, containing UUID
+   * @param {GetUserArgs} getUserArgs - search arguments, containing UUID or Cognito UUID
    * @returns {Promise<User>} - the user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersRepository.findOne(getUserArgs.uuid);
+    return this.usersRepository.findOne(
+      getUserArgs.uuid
+        ? {
+            uuid: getUserArgs.uuid,
+          }
+        : {
+            cognitoUuid: getUserArgs.cognitoUuid,
+          },
+    );
   }
 
   /**
@@ -158,5 +174,65 @@ export class UserService {
     });
 
     return this.usersRepository.findOne(addUserPermissionInput.uuid);
+  }
+
+  /**
+   * Returns a list of the user's projects
+   * @param {GetUserProjectsArgs} getUserProjectsArgs - contains user's UUID
+   * @returns {Promise<Project[]>} - the user's projects
+   */
+  async getUserProjects(getUserProjectsArgs: GetUserProjectsArgs) {
+    // Get user
+    const user = await this.usersRepository.findOne(getUserProjectsArgs.uuid);
+
+    if (!user) {
+      throw new Error(`No user found for ${getUserProjectsArgs.uuid}`);
+    }
+
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable('MR2000', 'station');
+    const mr3000instances = await fetchFromTable('MR3000', 'station');
+
+    // Build list of projects from instances
+    const projects = getProjectsForInstances(mr2000instances, mr3000instances);
+
+    // Filter by projects that the user has access to
+    return projects.filter((project) => user.projects.includes(project.name));
+  }
+
+  /**
+   * Returns a list of the user's MR2000 & MR3000 devices
+   * @param {GetUserDevicesArgs} getUserDevicesArgs - contains user's UUID
+   * @returns {Promise<MR2000|MR3000[]>} - the user's devices
+   */
+  async getUserDevices(getUserDevicesArgs: GetUserDevicesArgs) {
+    // Get user
+    const user = await this.usersRepository.findOne(getUserDevicesArgs.uuid);
+
+    if (!user) {
+      throw new Error(`No user found for ${getUserDevicesArgs.uuid}`);
+    }
+
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable('MR2000', 'station');
+    const mr3000instances = await fetchFromTable('MR3000', 'station');
+
+    const devices = [];
+
+    // Add all allowed MR2000 instances
+    mr2000instances.forEach((instance) => {
+      if (user.mr2000instances.includes(instance.cli)) {
+        devices.push(new MR2000(instance.cli));
+      }
+    });
+
+    // Add all allowed MR3000 instances
+    mr3000instances.forEach((instance) => {
+      if (user.mr3000instances.includes(instance.cli)) {
+        devices.push(new MR3000(instance.cli));
+      }
+    });
+
+    return devices;
   }
 }
