@@ -42,13 +42,23 @@ async function onSignup(formValues: Record<string, unknown>): Promise<void>{
     return
   }
 
+  let success = true
   // Sign up via Cognito
   const cognitoId = await $authService?.signUp(username, email, password).catch((err: Error) => {
-    $errorService?.showErrorDialog(err)
+    if(err) {
+      $errorService?.showErrorDialog(err)
+    } else {
+      $errorService?.showErrorDialog(new Error('Could not signup to cognito!'))
+    }
+    success = false
   });
 
+  if(!success){
+    return
+  }
+
   // Create user in backend
-  const res = await executeMutation(REGISTER_USER, {
+  await executeMutation(REGISTER_USER, {
     registerUserInput: {
       cognitoUuid: cognitoId,
       username,
@@ -58,14 +68,10 @@ async function onSignup(formValues: Record<string, unknown>): Promise<void>{
     $errorService?.showErrorDialog(err)
   });
 
-  if(!res?.data?.register) {
-    $errorService?.showErrorDialog(new Error(`Signup failed. Res: ${ res?.toString() ?? 'void' }`))
-    return
-  }
   try{
     await $authService?.showEmailVerificationDialog()
     await $authService?.login(username, password)
-    await $routerService?.routeTo(ROUTES.CUSTOMERS) // TODO role-dependent
+    await $routerService?.routeTo(ROUTES.HOME)
   }
   catch (e) {
     console.error(e)

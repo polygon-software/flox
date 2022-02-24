@@ -1,4 +1,4 @@
-import {Address} from 'src/data/types/Address';
+import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 
 /**
@@ -6,35 +6,59 @@ import { ROLE } from 'src/data/ENUM';
  */
 export class User {
   role: ROLE;
-  uuid: string | null;
+  uuid: string;
+  username: string;
+  email: string;
+  cognitoUuid: string;
   fullName: string | null;
-  username: string | null;
   address: Address | null;
   phone: string | null;
-  email: string | null;
   birthdate: Date | null;
+  projects: string[] | null;
+  mr2000instances: string[] | null;
+  mr3000instances: string[] | null;
+
+
 
   /**
    * Constructor
    * @param role
    * @param uuid
-   * @param fullName
    * @param username
+   * @param fullName
    * @param address
    * @param phone
    * @param email
    * @param birthdate
+   * @param cognitoUuid
+   * @param projects
+   * @param mr2000instances
+   * @param mr3000instances
    */
   // eslint-disable-next-line require-jsdoc
-  constructor(role: ROLE, uuid?: string, fullName?: string, username?: string, address?: Address,
-              phone?: string, email?: string, birthdate?: Date){
+  constructor(role: ROLE,
+              uuid: string,
+              username: string,
+              email: string,
+              cognitoUuid: string,
+              fullName?: string,
+              address?: Address,
+              phone?: string,
+              birthdate?: Date,
+              projects?: string[],
+              mr2000instances?: string[],
+              mr3000instances?: string[],){
     this.role = role
-    this.uuid = uuid ?? null
+    this.uuid = uuid
+    this.username = username
+    this.email = email
+    this.cognitoUuid = cognitoUuid
     this.fullName = fullName ?? null
-    this.username = username ?? null
     this.address = address ?? null
     this.phone = phone ?? null
-    this.email = email ?? null
     this.birthdate = birthdate ?? null
+    this.projects = projects ?? null
+    this.mr2000instances = mr2000instances ?? null
+    this.mr3000instances = mr3000instances ?? null
   }
 }
