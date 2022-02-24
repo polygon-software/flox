@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
@@ -18,6 +18,9 @@ import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
 import { RegisterUserInput } from './dto/input/register-user.input';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
+import { ROLE } from '../../ENUM/ENUM';
+import { NotAuthorizedException } from '@aws-sdk/client-cognito-identity-provider';
+import { ERRORS } from '../../error/ERRORS';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -155,7 +158,7 @@ export class UserResolver {
   async myDevices(@CurrentUser() user: Record<string, string>) {
     // Get user
     const dbUser = await this.usersService.getUser({
-      uuid: user.userId,
+      cognitoUuid: user.userId,
     } as GetUserArgs);
 
     if (!dbUser) {
@@ -164,12 +167,34 @@ export class UserResolver {
     return this.usersService.getUserDevices({ uuid: dbUser.uuid });
   }
 
+  /**
+   * Returns a list of the devices (MR2000 or MR3000) belonging to a given project
+   * @param {GetProjectDevicesArgs} getProjectDevicesArgs - getter arguments, containing project name
+   * @param {Record<string, string>} user - currently logged-in user from request
+   * @returns {Promise<Device[]>} - the project's devices
+   */
   @AnyRole()
   @Query(() => [Device], { name: 'getProjectDevices' })
   async getProjectDevices(
     @Args() getProjectDevicesArgs: GetProjectDevicesArgs,
+    @CurrentUser() user: Record<string, string>,
   ) {
-    // TODO permission check on user for non-admin
+    // Get user
+    const dbUser = await this.usersService.getUser({
+      uuid: user.userId,
+    } as GetUserArgs);
+
+    if (!dbUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+    // For non-admin users, check whether they have permissions to access the requested project
+    if (
+      dbUser.role !== ROLE.ADMIN &&
+      !dbUser.projects.includes(getProjectDevicesArgs.name)
+    ) {
+      throw new Error(ERRORS.resource_not_allowed);
+    }
+
     return this.usersService.getProjectDevices(getProjectDevicesArgs);
   }
 }
