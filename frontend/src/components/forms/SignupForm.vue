@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5 class="q-mb-none" style="margin-bottom: 30px;">
+    <h5 class="q-mb-none" style="text-align: center; margin-bottom: 30px;">
       {{ $t('authentication.signup') }}
     </h5>
     <GenericForm
