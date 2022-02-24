@@ -15,5 +15,5 @@
 
 <script setup lang="ts">
 import ProjectsTable from 'components/tables/ProjectsTable.vue';
-import DevicePoolsTable from 'components/tables/DevicePoolsTable.vue';
+import DevicePoolsTable from 'components/tables/DevicePoolTable.vue';
 </script>

@@ -61,11 +61,11 @@ export default {
   projects: {
     project: 'Projekt',
     device: 'Gerät',
-    client: 'Kund',
+    client: 'Kunde',
     ip: 'IP',
     firmware: 'Firmware',
     serial: 'Serial',
-    sale_status: 'Sale-Status',
+    sale_status: 'Verkaufs-Status',
     station: 'Station',
     vpn_status: 'VPN Status',
     pid: 'PID',
@@ -73,7 +73,7 @@ export default {
     ftp: 'FTP',
     remove_from_project: 'Aus Projekt entfernen',
     compress_vibration_data: 'Vibrationsdaten komprimieren',
-    download_compress_vibration_data: 'Komprimierungs-Vibrationsdaten herunterladen',
+    download_compress_vibration_data: 'Komprimierte Vibrationsdaten herunterladen',
     display_data: 'Daten anzeigen',
     show_event: 'Ereignis-/Peak-Dateien anzeigen',
     edit_parameters: 'Parameter bearbeiten',
@@ -136,11 +136,6 @@ export default {
   },
   greetings: {
     welcome_datavis: 'Willkommen bei DataVis',
-  },
-  interests: {
-    select_interests:
-      'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
-    amount_selected: '{amount}/{max} gewählt',
   },
   settings: {
     settings: 'Einstellungen',

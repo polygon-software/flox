@@ -72,7 +72,7 @@ export default {
     ftp: 'FTP',
     remove_from_project: 'Remove from Project',
     compress_vibration_data: 'Compress Vibration Data',
-    download_compress_vibration_data: 'Download Compress Vibration Data',
+    download_compress_vibration_data: 'Download compressed Vibration Data',
     display_data: 'Display Data',
     show_event: 'Show Event/Peak Files',
     edit_parameters: 'Edit Parameters',
@@ -132,10 +132,6 @@ export default {
   },
   greetings: {
     welcome_datavis: 'Welcome to DataVis',
-  },
-  interests: {
-    select_interests: 'Please select up to {max} categories that interest you',
-    amount_selected: '{amount}/{max} selected',
   },
   settings: {
     settings: 'Settings',

@@ -14,7 +14,7 @@
         </template>
       </q-input>
       <q-btn
-        v-if="selected === false"
+        v-if="!selected"
         :label="$t('buttons.custom_graph')"
         outline
         class="text-grey"
@@ -22,7 +22,7 @@
         @click="showCustomGraph"
       />
       <q-btn
-        v-else-if="selected === true"
+        v-else
         :label="$t('buttons.load_parameters')"
         outline
         class="text-grey"
@@ -95,25 +95,19 @@
               dense
               @click.stop=""
             >
-              <div
-                v-for="button in buttons"
-                :key="button.label"
-                class="column"
-              >
                 <!-- Button for options -->
                 <q-btn
+                  v-for="button in buttons"
+                  :key="button.key"
                   :label="button.label"
-                  class="text-grey"
+                  class="column; text-grey"
                   flat
                   no-caps
-                  @click="clickedOption(button.url)"
+                  @click="onOptionClick(button.url)"
                 />
-              </div>
             </q-btn-dropdown>
           </q-td>
         </q-tr>
-        <!-- one spacer row per row -->
-        <q-tr style="height: 14px"/>
       </template>
     </q-table>
   </div>
@@ -180,43 +174,42 @@ const rows = [
 
 const buttons = [
   {
+    key: 'remove',
     label: i18n.global.t('projects.remove_from_project'),
-    url: 'CUSTOMERS'
   },
   {
+    key: 'compress',
     label: i18n.global.t('projects.compress_vibration_data'),
-    url: 'CUSTOMERS'
   },
   {
+    key: 'download',
     label: i18n.global.t('projects.download_compress_vibration_data'),
-    url: 'CUSTOMERS'
   },
   {
+    key: 'display',
     label: i18n.global.t('projects.display_data'),
-    url: 'CUSTOMERS'
   },
   {
+    key: 'show_event',
     label: i18n.global.t('projects.show_event'),
-    url: 'CUSTOMERS'
   },
   {
+    key: 'edit',
     label: i18n.global.t('projects.edit_parameters'),
-    url: 'CUSTOMERS'
   },
   {
+    key: 'show_status',
     label: i18n.global.t('projects.show_status_files'),
-    url: 'CUSTOMERS'
   },
   {
+    key: 'show_device',
     label: i18n.global.t('projects.show_device_health'),
-    url: 'CUSTOMERS'
   },
 ]
 
 /**
  * Routes to a new page where the graph of that project is shown
- * @async
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
 async function showCustomGraph(): Promise<void>{
   //TODO: routes to the custom graph of that device pool
@@ -249,18 +242,42 @@ function updatedCheckbox() {
 
 /**
  * Routes to different pages dependent which button is clicked
- * @param {string} url - the URL to route to
- * @async
- * @returns {void}
+ * @param {string} key - the button key
+ * @returns {Promise<void>} - routes to correct page
  */
-async function clickedOption(url: string): Promise<void>{
+async function onOptionClick(key: string): Promise<void>{
   //TODO: routes to different pages
-  await routerService?.routeTo(ROUTES[url])
+  switch(key){
+    case 'remove':
+      await routerService?.routeTo(ROUTES.LOGIN)
+      break
+    case 'compress':
+      await routerService?.routeTo(ROUTES.CUSTOMER)
+      break
+    case 'download':
+      await routerService?.routeTo(ROUTES.CUSTOMER)
+      break
+    case 'display':
+      await routerService?.routeTo(ROUTES.CUSTOMER)
+      break
+    case 'show_event':
+      await routerService?.routeTo(ROUTES.CUSTOMER)
+      break
+    case 'edit':
+      await routerService?.routeTo(ROUTES.CUSTOMER)
+      break
+    case 'show_status':
+      await routerService?.routeTo(ROUTES.CUSTOMER)
+      break
+    case 'show_device':
+      await routerService?.routeTo(ROUTES.CUSTOMER)
+      break
+    default:
+      await routerService?.routeTo(ROUTES.CUSTOMER)
+  }
 }
 </script>
 
 <style scoped>
-td {
-  color: #87858A;
-}
+
 </style>
