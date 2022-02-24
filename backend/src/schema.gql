@@ -81,13 +81,25 @@ input DeleteUserInput {
 union Device = MR2000 | MR3000
 
 type MR2000 {
-  """Device CLI ID"""
+  """CLI ID"""
   cli: String!
+
+  """Number of files"""
+  numberOfFiles: Float!
+
+  """PID"""
+  pid: String!
+
+  """Serial number"""
+  serialNumber: String!
 }
 
 type MR3000 {
-  """Device CLI ID"""
+  """CLI ID"""
   cli: String!
+
+  """Serial number"""
+  serialNumber: String!
 }
 
 type Mutation {
@@ -117,10 +129,11 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  getUserDevices(uuid: ID!): [Device!]!
+  getProjectDevices(name: String!): [Device!]!
+  getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
-  myDevices: [Device!]!
+  myDevices(unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!
   preview(cli: String!, date: String!, num: String!): String!
