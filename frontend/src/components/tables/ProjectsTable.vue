@@ -24,7 +24,7 @@
     <q-table
       class="q-mt-lg"
       flat
-      :rows="rows"
+      :rows="mockedRows"
       :columns="columns"
       row-key="uuid"
       :filter="search"
@@ -102,13 +102,11 @@
 </template>
 
 <script setup lang="ts">
-import {inject, computed, ref} from 'vue';
+import {inject, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {MY_PROJECTS} from 'src/data/queries/PROJECT';
 
 
 const search = ref('')
