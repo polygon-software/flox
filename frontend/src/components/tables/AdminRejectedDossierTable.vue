@@ -79,6 +79,10 @@
               :style="offerChipStyle(offer.status)"
             >
               {{ offer.bank.abbreviation }}
+              <!-- Reject reason as tooltip -->
+              <q-tooltip>
+                {{ offer.reject_reason }}
+              </q-tooltip>
             </q-chip>
           </q-td>
           <q-td key="non_arrangeable">
