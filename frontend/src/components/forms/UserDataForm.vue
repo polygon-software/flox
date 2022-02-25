@@ -66,21 +66,13 @@
                 </q-field>
               </q-td>
               <q-td key="state">
-                <div v-if="props.row.state === 1">
+                <div v-if="props.row.column === 'Trigger'">
                   Always Active
                 </div>
                 <q-toggle
-                  v-else-if="props.row.state === 2"
-                  v-model="toggle1"
-                  :label="toggle1"
-                  color="grey"
-                  false-value="Disabled"
-                  true-value="Enabled"
-                />
-                <q-toggle
-                  v-else-if="props.row.state === 3"
-                  v-model="toggle2"
-                  :label="toggle2"
+                  v-else
+                  v-model="props.row.state"
+                  :label="props.row.state"
                   color="grey"
                   false-value="Disabled"
                   true-value="Enabled"
@@ -97,11 +89,9 @@
 <script setup lang="ts">
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {inject, ref} from 'vue';
+import {inject, reactive} from 'vue';
 
 const routerService: RouterService|undefined = inject('$routerService')
-const toggle1 = ref('Enabled')
-const toggle2 = ref('Enabled')
 
 const columns = [
   { name: 'column', label: '', field: 'column', sortable: false, align: 'center' },
@@ -111,29 +101,29 @@ const columns = [
   { name: 'state', label: 'State', field: 'state', sortable: false, align: 'center' },
 ]
 
-const rows = [
+const rows = reactive([
   {
     column: 'Trigger',
     channel_x: '0.250',
     channel_y: '0.350',
     channel_z: '0.500',
-    state: 1,
+    state: 'Enabled',
   },
   {
     column: 'Alarm 1',
     channel_x: '0.150',
     channel_y: '0.300',
     channel_z: '0.550',
-    state: 2,
+    state: 'Enabled',
   },
   {
     column: 'Alarm 2',
     channel_x: '0.110',
     channel_y: '0.310',
     channel_z: '0.700',
-    state: 3,
+    state: 'Enabled',
   },
-]
+])
 
 /**
  * Loads the parameters of that device pool which is selected
