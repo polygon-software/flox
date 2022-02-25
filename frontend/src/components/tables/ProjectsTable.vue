@@ -102,13 +102,13 @@
 </template>
 
 <script setup lang="ts">
-import {inject, computed, Ref, ref} from 'vue';
+import {inject, computed, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {MY_PROJECTS} from "src/data/queries/PROJECT";
+import {MY_PROJECTS} from 'src/data/queries/PROJECT';
 
 
 const search = ref('')
@@ -132,11 +132,12 @@ const columns = [
 ]
 
 
-const userProjects = subscribeToQuery(MY_PROJECTS)
+//TODO: uncomment when we have data (and then remove the mocked rows)
+/*const userProjects = subscribeToQuery(MY_PROJECTS)
 
 const rows = computed(()=>{
   return userProjects.value ?? []
-})
+})*/
 
 
 const mockedRows = [

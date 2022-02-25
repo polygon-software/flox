@@ -79,6 +79,7 @@ export default {
     show_status_files: 'Show Status Files',
     show_device_health: 'Show Device Health',
     name: 'Name',
+    id: 'ID',
   },
   buttons: {
     finish: 'Finish',

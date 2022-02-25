@@ -80,6 +80,7 @@ export default {
     show_status_files: 'Statusdateien anzeigen',
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
+    id: 'ID',
   },
   buttons: {
     finish: 'Abschliessen',
