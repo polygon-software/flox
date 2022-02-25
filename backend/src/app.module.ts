@@ -13,6 +13,7 @@ import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
 import { User } from './modules/user/entities/user.entity';
 import { PreviewModule } from './modules/preview/preview.module';
+import { ProjectModule } from './modules/project/project.module';
 
 @Module({
   imports: [
@@ -95,6 +96,7 @@ import { PreviewModule } from './modules/preview/preview.module';
     TypeOrmModule.forFeature([User]),
     UserModule,
     PreviewModule,
+    ProjectModule,
   ],
   providers: [
     JwtStrategy,
