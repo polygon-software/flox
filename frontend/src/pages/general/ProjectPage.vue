@@ -1,7 +1,7 @@
 <template>
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Projects -->
-    <h5>{{ $t('dashboard.project') }} {{ projectId }}</h5>
+    <h5>{{ $t('dashboard.project') }} {{ projectId.toUpperCase() }}</h5>
 
     <ProjectTable/>
 

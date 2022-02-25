@@ -14,10 +14,11 @@ import {inject, } from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import SignupForm from 'components/forms/SignupForm.vue'
-import {executeMutation} from 'src/helpers/data-helpers';
-import {CREATE_USER} from 'src/data/mutations/USER';
+import { executeMutation, executeQuery } from 'src/helpers/data-helpers';
+import { REGISTER_USER } from 'src/data/mutations/USER';
 import ROUTES from 'src/router/routes';
 import {ErrorService} from 'src/services/ErrorService';
+import { EMAIL_ALLOWED } from 'src/data/queries/USER';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -32,35 +33,51 @@ async function onSignup(formValues: Record<string, unknown>): Promise<void>{
   // Get params from form
   const username = formValues.username as string
   const email = formValues.email as string
-  const phone = formValues.phone_number as string
   const password = formValues.password_repeat as string
-  const fullName = formValues.full_name as string
-  const birthdate = formValues.birthdate
-  const address = formValues.address
 
+  const allowed = await executeQuery(EMAIL_ALLOWED, { email: email});
 
+  if(!allowed?.data?.isEmailAllowed) {
+    $errorService?.showErrorDialog(new Error(`Signup failed. The given email (${ email }) is not correct.`))
+    return
+  }
+
+  let success = true
   // Sign up via Cognito
   const cognitoId = await $authService?.signUp(username, email, password).catch((err: Error) => {
-    $errorService?.showErrorDialog(err)
+    if(err) {
+      $errorService?.showErrorDialog(err)
+    } else {
+      $errorService?.showErrorDialog(new Error('Could not signup to cognito!'))
+    }
+    success = false
   });
 
+  if(!success){
+    return
+  }
+
   // Create user in backend
-  await executeMutation(CREATE_USER, {
-    createUserInput: {
-      uuid: cognitoId,
+  await executeMutation(REGISTER_USER, {
+    registerUserInput: {
+      cognitoUuid: cognitoId,
       username,
       email,
-      phone,
-      fullName,
-      birthdate,
-      address
     }
   }).catch((err: Error) => {
     $errorService?.showErrorDialog(err)
   });
 
-  // Reroute to generic success page
-  await $routerService?.routeTo(ROUTES.SUCCESS)
+  try{
+    await $authService?.showEmailVerificationDialog()
+    await $authService?.login(username, password)
+    await $routerService?.routeTo(ROUTES.HOME)
+  }
+  catch (e) {
+    console.error(e)
+    await $routerService?.routeTo(ROUTES.LOGIN)
+  }
+
 }
 
 </script>

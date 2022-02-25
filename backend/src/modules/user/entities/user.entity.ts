@@ -1,5 +1,12 @@
-import { ObjectType, Field } from '@nestjs/graphql';
-import { IsDate, IsEmail, IsPhoneNumber, IsString } from 'class-validator';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+import {
+  IsArray,
+  IsDate,
+  IsEmail,
+  IsPhoneNumber,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { ROLE } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
@@ -20,18 +27,23 @@ export class User extends BaseEntity {
   @IsString()
   role: ROLE;
 
+  @Field(() => ID, { description: 'Cognito user UUID' })
+  @Column({ nullable: true })
+  @IsUUID()
+  cognitoUuid: string;
+
   @Field(() => Address, { description: 'Domicile address' })
   @JoinColumn()
   @OneToOne(() => Address, { cascade: true, eager: true })
   address: Address;
 
   @Field(() => String, { description: 'Username' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   username: string;
 
   @Field(() => String, { description: 'Full name' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   fullName: string;
 
@@ -42,14 +54,38 @@ export class User extends BaseEntity {
   email: string;
 
   @Field(() => String, { description: 'Phone number' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   @IsPhoneNumber()
   phone: string;
 
   @Field(() => Date, { description: 'Date of birth' })
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   @IsDate()
   birthdate: Date;
+
+  @Field(() => [String], {
+    description: 'Projects that the user has access to',
+    nullable: true,
+  })
+  @Column('text', { array: true, nullable: true })
+  @IsArray()
+  projects: string[];
+
+  @Field(() => [String], {
+    description: 'MR2000 instances that the user has access to',
+    nullable: true,
+  })
+  @Column('text', { array: true, nullable: true })
+  @IsArray()
+  mr2000instances: string[];
+
+  @Field(() => [String], {
+    description: 'MR3000 instances that the user has access to',
+    nullable: true,
+  })
+  @Column('text', { array: true, nullable: true })
+  @IsArray()
+  mr3000instances: string[];
 }

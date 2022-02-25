@@ -53,6 +53,36 @@ export default {
   dashboard: {
     customer: 'Kunde | Kunden',
     project: 'Projekt | Projekte',
+    station: 'Station | Stationen',
+    device_pool: 'Gerätepool',
+    account: 'Account',
+    share: 'Teilen'
+  },
+  projects: {
+    project: 'Projekt',
+    device: 'Gerät',
+    client: 'Kunde',
+    ip: 'IP',
+    firmware: 'Firmware',
+    serial: 'Serial',
+    sale_status: 'Verkaufs-Status',
+    station: 'Station',
+    vpn_status: 'VPN Status',
+    pid: 'PID',
+    files: 'Dokumente',
+    ftp: 'FTP',
+    remove_from_project: 'Aus Projekt entfernen',
+    compress_vibration_data: 'Vibrationsdaten komprimieren',
+    download_compress_vibration_data: 'Komprimierte Vibrationsdaten herunterladen',
+    display_data: 'Daten anzeigen',
+    show_event: 'Ereignis-/Peak-Dateien anzeigen',
+    edit_parameters: 'Parameter bearbeiten',
+    show_status_files: 'Statusdateien anzeigen',
+    show_device_health: 'Gerätezustand anzeigen',
+    name: 'Name',
+  dashboard: {
+    customer: 'Kunde | Kunden',
+    project: 'Projekt | Projekte',
     station: 'Station',
     device_pool: 'Gerätepool',
     account: 'Account',
@@ -99,6 +129,9 @@ export default {
     new_project: 'Neues Projekt',
     custom_graph: 'Benutzerdefinierte Grafik',
     load_parameters: 'Parameter laden',
+    copy: 'Kopieren',
+    send: 'Senden',
+    create_link: 'Link erzeugen'
     new_contact: 'Neuer Kontakt',
   },
   errors: {
@@ -143,15 +176,25 @@ export default {
   greetings: {
     welcome_datavis: 'Willkommen bei DataVis',
   },
-  interests: {
-    select_interests:
-      'Bitte wählen Sie bis zu {max} Kategorien die Sie interessieren',
-    amount_selected: '{amount}/{max} gewählt',
-  },
   settings: {
     settings: 'Einstellungen',
     general: 'Allgemein',
     account: 'Benutzerkonto',
     personal_data: 'Persönliche Daten',
   },
+  visualisation: {
+    period: 'Periode',
+    horizontal: 'Horizontal',
+    vertical: 'Vertikal'
+  },
+  period: {
+    twelve_hours: '12 Stunden',
+    two_days: '2 Tage',
+    two_weeks: '2 Wochen',
+    one_month: '1 Monat',
+    custom: 'Eigene'
+  },
+  messages: {
+    copied: 'Kopiert'
+  }
 };

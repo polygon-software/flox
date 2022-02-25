@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, inject, defineProps} from 'vue'
+import {computed, inject} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -88,21 +88,13 @@ const authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActio
 const route = useRoute()
 const router = useRouter()
 
-const props = defineProps({
-  admin:  {
-    type: Boolean,
-    required: false,
-    default: false,
-  }
-})
-
 const loggedIn = computed(() => {
   // Explicit type
   return authStore.getters.getLoggedInStatus();
 })
 
 // Navigation options for admin
-const adminNavOptions = [
+const navigationOptions = [
   {
     key: 'customers',
     path: ROUTES.CUSTOMERS.path,
@@ -120,14 +112,6 @@ const adminNavOptions = [
   },
 ]
 
-// TODO: navigation options for users
-const userNavOptions = [
-  {
-    key: 'account',
-    label: i18n.global.t('dashboard.account')
-  },
-]
-
 /**
  * Navigation options, depending on user type and whether they are logged in
  */
@@ -137,7 +121,7 @@ const navOptions = computed(() => {
     return []
   }
 
-  return props.admin ? adminNavOptions : userNavOptions
+  return navigationOptions
 })
 
 /**
@@ -149,7 +133,6 @@ const routeParts = computed(() => {
   pathParts.splice(0, 1)
   return pathParts[0].length > 0 ? pathParts : []
 })
-
 
 /**
  * Logs out the current authentication
@@ -189,7 +172,6 @@ async function onSubnavClick(index: number){
   // Get amount of path items to remove (-2 to ignore root path)
   const diff = routeParts.value.length - index - 2
 
-  console.log('Diff:', diff)
   // Last item clicked; no change needed
   if(diff === 0){
     return

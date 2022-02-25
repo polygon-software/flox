@@ -28,11 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import {inject,} from 'vue'
+import {inject} from 'vue'
 import {AuthenticationService} from 'src/services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import LoginForm from 'components/forms/LoginForm.vue'
+import LoginForm from 'components/forms/LoginForm.vue';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -46,9 +46,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
  */
 async function onLogin({username, password}: {username: string, password: string}): Promise<void>{
   await $authService?.login(username, password)
-
-  // Redirect to main page
-  await $routerService?.routeTo(ROUTES.CUSTOMERS) // TODO role-dependent
+  await $routerService?.routeTo(ROUTES.HOME)
 }
 
 /**

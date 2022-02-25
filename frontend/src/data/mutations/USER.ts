@@ -10,33 +10,40 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
  * - cacheLocation: the actual GraphQL mutation's name (since cached data will be stored there)
  *
  */
-
-export const CREATE_USER = {
-    mutation: gql`
-        mutation createUser($createUserInput: CreateUserInput!){
-            create (createUserInput: $createUserInput) {
-              uuid
-              username
-              fullName
-              email
-              phone
-              birthdate
-              __typename
-            }
-        }`,
-    tables: ['user'],
-    type: MutationTypes.CREATE,
-    cacheLocation: 'create'
+export const REGISTER_USER = {
+  mutation: gql`
+    mutation registerUser($registerUserInput: RegisterUserInput!){
+      register (registerUserInput: $registerUserInput) {
+        uuid
+        cognitoUuid
+        username
+        email
+        role
+        __typename
+      }
+    }`,
+  tables: ['user'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: 'register'
 }
 
-export const DELETE_USER = {
-    mutation: gql`
-        mutation deleteUser($uuid: ID!){
-            remove (deleteUserInput: {uuid: $uuid}) {
-                uuid
-            }
-        }`,
-    tables: ['user'],
-    type: MutationTypes.DELETE,
-    cacheLocation: 'remove'
+export const ADD_PERMISSION = {
+  mutation: gql`
+    mutation addPermission($addUserPermissionInput: AddUserPermissionInput!){
+      addPermission (addUserPermissionInput: $addUserPermissionInput) {
+        uuid
+        username
+        fullName
+        email
+        phone
+        birthdate
+        projects
+        mr2000instances
+        mr3000instances
+        __typename
+      }
+    }`,
+  tables: ['user'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
 }

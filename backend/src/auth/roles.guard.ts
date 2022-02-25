@@ -48,7 +48,9 @@ export class RolesGuard implements CanActivate {
     const user = req.user;
     let dbUser = undefined;
     if (user) {
-      dbUser = await this.userRepository.findOne(user.userId);
+      dbUser = await this.userRepository.findOne({
+        where: { cognitoUuid: user.userId },
+      });
 
       // Admin has access to everything
       if (dbUser && dbUser.role === ROLE.ADMIN) {

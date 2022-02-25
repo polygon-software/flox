@@ -1,10 +1,10 @@
 import {
   NavigationFailure,
+  RouteLocationNormalizedLoaded,
   Router,
   RouteRecordRaw,
-  useRouter,
   useRoute,
-  RouteLocationNormalizedLoaded,
+  useRouter
 } from 'vue-router';
 
 /**

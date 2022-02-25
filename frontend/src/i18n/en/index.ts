@@ -52,6 +52,36 @@ export default {
   dashboard: {
     customer: 'Customer | Customer',
     project: 'Project | Projects',
+    station: 'Station | Stations',
+    device_pool: 'Device Pool',
+    account: 'Account',
+    share: 'Share'
+  },
+  projects: {
+    project: 'Project',
+    device: 'Device',
+    client: 'Client',
+    ip: 'IP',
+    firmware: 'Firmware',
+    serial: 'Serial',
+    sale_status: 'Sale-Status',
+    station: 'Station',
+    vpn_status: 'VPN Status',
+    pid: 'PID',
+    files: 'Files',
+    ftp: 'FTP',
+    remove_from_project: 'Remove from Project',
+    compress_vibration_data: 'Compress Vibration Data',
+    download_compress_vibration_data: 'Download compressed Vibration Data',
+    display_data: 'Display Data',
+    show_event: 'Show Event/Peak Files',
+    edit_parameters: 'Edit Parameters',
+    show_status_files: 'Show Status Files',
+    show_device_health: 'Show Device Health',
+    name: 'Name',
+  dashboard: {
+    customer: 'Customer | Customer',
+    project: 'Project | Projects',
     station: 'Station',
     device_pool: 'Device Pool',
     account: 'Account',
@@ -98,6 +128,9 @@ export default {
     new_project: 'New Project',
     custom_graph: 'Custom Graph',
     load_parameters: 'Load Parameters',
+    copy: 'Copy',
+    send: 'Send',
+    create_link: 'Create Link'
     new_contact: 'New Contakt',
   },
   errors: {
@@ -139,14 +172,25 @@ export default {
   greetings: {
     welcome_datavis: 'Welcome to DataVis',
   },
-  interests: {
-    select_interests: 'Please select up to {max} categories that interest you',
-    amount_selected: '{amount}/{max} selected',
-  },
   settings: {
     settings: 'Settings',
     general: 'General',
     account: 'Account',
     personal_data: 'Personal Data',
   },
+  visualisation: {
+    period: 'Period',
+    horizontal: 'Horizontal',
+    vertical: 'Vertical'
+  },
+  period: {
+    twelve_hours: '12 Hours',
+    two_days: '2 Days',
+    two_weeks: '2 Weeks',
+    one_month: '1 Month',
+    custom: 'Custom'
+  },
+  messages: {
+    copied: 'Copied'
+  }
 };

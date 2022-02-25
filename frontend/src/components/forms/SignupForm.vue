@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5 class="q-mb-none" style="margin-bottom: 30px;">
+    <h5 class="q-mb-none" style="text-align: center; margin-bottom: 30px;">
       {{ $t('authentication.signup') }}
     </h5>
     <GenericForm
@@ -27,24 +27,12 @@ import GenericForm from 'components/forms/GenericForm.vue';
 const emit = defineEmits(['submit'])
 
 const accountFields = [FIELDS.EMAIL, FIELDS.USERNAME, FIELDS.PASSWORD_REPEAT]
-const personalFields = [FIELDS.FULL_NAME, FIELDS.BIRTHDATE, FIELDS.PHONE_NUMBER]
-const addressFields  = [FIELDS.ADDRESS]
 
 const pages = [
   {
     key: 'account_data',
     label: i18n.global.t('account_data.account'),
     fields: accountFields,
-  },
-  {
-    key: 'personal_data',
-    label: i18n.global.t('account_data.personal'),
-    fields: personalFields,
-  },
-  {
-    key: 'address_data',
-    label: i18n.global.t('account_data.address'),
-    fields: addressFields,
   },
 ]
 
