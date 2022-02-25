@@ -11,6 +11,7 @@ import {
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { getProjectsForInstances } from '../../helpers/project-helpers';
 import { CreateProjectInput } from './dto/input/create-project.input';
+import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-project.input';
 
 @Injectable()
 export class ProjectService {
@@ -117,5 +118,16 @@ export class ProjectService {
     //
     // // Filter by projects that the user has access to
     // return projects.filter((project) => user.projects.includes(project.name));
+  }
+
+  /**
+   * Removes devices from their associated project(s)
+   * @param {RemoveDevicesFromProjectInput} removeDevicesFromProjectInput - contains MR2000/3000 instances to remove
+   * @returns {Promise<void>} - done
+   */
+  async removeDevicesFromProject(
+    removeDevicesFromProjectInput: RemoveDevicesFromProjectInput,
+  ) {
+    removeDevicesFromProjectInput.mr2000Instances.forEach((mr2000) => {});
   }
 }
