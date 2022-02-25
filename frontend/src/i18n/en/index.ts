@@ -485,4 +485,10 @@ export default {
     reset_dossier: 'Reset dossier',
     reset_dossier_description: 'Reset the dossier, removing all offers that have already been made.',
   },
+  jobs: {
+    customer_advisor: 'Customer Advisor',
+    team_leader: 'Team Leader',
+    sales_leader: 'Sales Leader',
+    branch_leader: 'Branch Leader',
+  }
 };
