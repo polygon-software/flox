@@ -10,6 +10,7 @@ import {
 } from '../../helpers/device-helpers';
 import { GetUserProjectsArgs } from '../user/dto/args/get-user-projects.args';
 import { getProjectsForInstances } from '../../helpers/project-helpers';
+import { CreateProjectInput } from './dto/input/create-project.input';
 
 @Injectable()
 export class ProjectService {
@@ -79,25 +80,40 @@ export class ProjectService {
 
   /**
    * Returns a list of the user's projects
-   * @param {GetUserProjectsArgs} getUserProjectsArgs - contains user's UUID
-   * @returns {Promise<Project[]>} - the user's projects
+   * @param {CreateProjectInput} createProjectInput - contains project name & associated MR2000/3000 instances
+   * @param {string} userUuid - the user to create the project for (automatically adds related permission)
+   * @returns {Promise<Project>} - the newly created project
    */
-  async createProject(getUserProjectsArgs: GetUserProjectsArgs) {
-    // Get user
-    const user = await this.usersRepository.findOne(getUserProjectsArgs.uuid);
+  async createProject(
+    createProjectInput: CreateProjectInput,
+    userUuid: string,
+  ) {
+    const projectName = createProjectInput.name;
+    const user = await this.usersRepository.findOne(userUuid);
 
-    if (!user) {
-      throw new Error(`No user found for ${getUserProjectsArgs.uuid}`);
+    // Ensure project name is not already present (in actual projects and/or permissions)
+    const userProjects = await this.getUserProjects({ uuid: userUuid });
+    const userProjectPermissions = user.projects;
+    if (
+      userProjectPermissions.includes(projectName) ||
+      userProjects.find((project) => project.name === projectName)
+    ) {
+      throw new Error(`Project name ${projectName} is already taken`);
     }
 
-    // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable('MR2000', 'station');
-    const mr3000instances = await fetchFromTable('MR3000', 'station');
+    // Add to user's project permissions
+    await this.usersRepository.update(userUuid, {
+      projects: [...user.projects, createProjectInput.name],
+    });
 
-    // Build list of projects from instances
-    const projects = getProjectsForInstances(mr2000instances, mr3000instances);
-
-    // Filter by projects that the user has access to
-    return projects.filter((project) => user.projects.includes(project.name));
+    // // Get all MR2000 & MR3000 instances
+    // const mr2000instances = await fetchFromTable('MR2000', 'station');
+    // const mr3000instances = await fetchFromTable('MR3000', 'station');
+    //
+    // // Build list of projects from instances
+    // const projects = getProjectsForInstances(mr2000instances, mr3000instances);
+    //
+    // // Filter by projects that the user has access to
+    // return projects.filter((project) => user.projects.includes(project.name));
   }
 }
