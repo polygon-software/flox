@@ -14,6 +14,7 @@ import { RolesGuard } from './auth/roles.guard';
 import { User } from './modules/user/entities/user.entity';
 import { PreviewModule } from './modules/preview/preview.module';
 import { ProjectModule } from './modules/project/project.module';
+import { DeviceModule } from './modules/device/device.module';
 
 @Module({
   imports: [
@@ -97,6 +98,7 @@ import { ProjectModule } from './modules/project/project.module';
     UserModule,
     PreviewModule,
     ProjectModule,
+    DeviceModule,
   ],
   providers: [
     JwtStrategy,
