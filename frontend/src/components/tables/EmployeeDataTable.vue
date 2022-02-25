@@ -66,7 +66,7 @@
               {{ props.row.last_name }}
             </q-td>
             <q-td key="function" :props="props">
-              {{ props.row.function }}
+              {{ $t(`jobs.${props.row.function}`) }}
             </q-td>
             <q-td key="phone" :props="props">
               {{ props.row.phone }}

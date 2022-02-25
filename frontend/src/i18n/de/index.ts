@@ -62,7 +62,7 @@ export default {
     date: 'Datum',
     status: 'Status',
     language: 'Sprache',
-    domicile_address: 'Addresse',
+    domicile_address: 'Domiziladdresse',
     correspondence_address: 'Korrespondenzaddresse',
     edit_correspondence_address: 'Gleich wie Wohnadresse',
     phone_number: 'Telefonnummer',
@@ -486,4 +486,10 @@ export default {
     reset_dossier: 'Dossier zurücksetzen',
     reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.',
   },
+  jobs: {
+    customer_advisor: 'Kundenberater*in',
+    team_leader: 'Teamleiter*in',
+    sales_leader: 'Verkaufsleiter*in',
+    branch_leader: 'Niederlassungsleiter*in',
+  }
 };

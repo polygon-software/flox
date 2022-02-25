@@ -80,7 +80,7 @@ async function onSignup(values: Record<string, Record<string, unknown>>){
 
     $q.dialog({
       component: NewBankLoginDialog,
-      componentProps: {email: values.email, password: pw}
+      componentProps: {email: values.email, password: pw},
     }).onOk(() => {
       // Push to success page
       void $routerService?.routeTo(ROUTES.SUCCESS, {

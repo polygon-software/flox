@@ -177,3 +177,36 @@ function getColumnNameForDate(date: Date) {
 
   return `${year}${quarter}`;
 }
+
+/**
+ * Determines whether the given zip code is valid (present within database)
+ * @param {string} zipCode - zip code
+ * @returns {boolean} - whether it's valid
+ */
+export async function isZipCodeValid(zipCode: string) {
+  // Set up database connection and query runner
+  const connection: Connection = getConnection();
+  const queryRunner: QueryRunner = connection.createQueryRunner();
+  await queryRunner.connect();
+
+  // Ensure needed table exists
+  const zipTableExists = await queryRunner.hasTable(zipCodeTableName);
+  if (!zipTableExists) {
+    await queryRunner.release();
+    throw new Error(ERRORS.missing_database_data);
+  }
+
+  // Get zip code -> region mapping directly via SQL because we're cool like that
+  const zipCodeQuery = await queryRunner.manager.query(`
+    SELECT *
+    FROM ${zipCodeTableName}
+    WHERE zip_code='${zipCode}'
+    LIMIT 1
+    `);
+
+  // Check whether we have data for the given zip code
+  const isValid = zipCodeQuery && zipCodeQuery.length > 0;
+  await queryRunner.release();
+
+  return isValid;
+}

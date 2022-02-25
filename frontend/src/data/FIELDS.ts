@@ -31,7 +31,25 @@ import {markRaw} from 'vue';
 import {i18n} from 'boot/i18n';
 import {DOSSIER_WARNING, PROPERTY_TYPE} from 'app/definitions/ENUMS';
 
-const mask_format = "###'###'###'###"
+const maskFormat = "###'###'###'###"
+const jobOptions = [
+  {
+    label: i18n.global.t('jobs.customer_advisor'),
+    value: 'customer_advisor'
+  },
+  {
+    label: i18n.global.t('jobs.team_leader'),
+    value: 'team_leader'
+  },
+  {
+    label: i18n.global.t('jobs.sales_leader'),
+    value: 'sales_leader'
+  },
+  {
+    label: i18n.global.t('jobs.branch_leader'),
+    value: 'branch_leader'
+  }
+]
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -175,7 +193,7 @@ const FIELDS: Record<string, Field> = {
     key: 'address',
     component: markRaw(AddressField),
     attributes: {
-      rules: [] // Validated by component
+      rules: [(val: Record<string, string>): boolean|string  => IS_NOT_NULL(val) || i18n.global.t('errors.invalid_address')]
     },
   },
   LANGUAGE: {
@@ -202,8 +220,8 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QSelect),
     attributes: {
       label: i18n.global.t('account_data.company_function'),
-      options: ['CEO', 'Admin', 'Entwickler*in', 'HR', 'Blablabla'], // TODO possibly move elsewhere.
-      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, ['CEO', 'Admin', 'Entwickler*in', 'HR', 'Blablabla']) || i18n.global.t('errors.invalid_option')]
+      options: jobOptions,
+      rules: [(val: string): boolean|string  => IS_VALID_OPTION(val, jobOptions)|| i18n.global.t('errors.invalid_option')]
     },
   },
   COMPANY_ADDRESS: {
@@ -286,7 +304,7 @@ const FIELDS: Record<string, Field> = {
     component: markRaw(QInput),
     attributes: {
       dense: true,
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.price'),
@@ -300,7 +318,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'text',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.market_value_estimation'),
@@ -314,7 +332,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'text',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.current_value_of_mortgage'),
@@ -384,7 +402,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'number',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.child_allowances'),
@@ -398,7 +416,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'number',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.bonus'),
@@ -412,7 +430,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'number',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.assets'),
@@ -426,7 +444,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'number',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.leasing'),
@@ -440,7 +458,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'number',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.credit'),
@@ -454,7 +472,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'number',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.alimony'),
@@ -468,7 +486,7 @@ const FIELDS: Record<string, Field> = {
     attributes: {
       dense: true,
       type: 'number',
-      mask: mask_format,
+      mask: maskFormat,
       reverseFillMask: true,
       unmaskedValue: true,
       label: i18n.global.t('form_for_clients.various'),
