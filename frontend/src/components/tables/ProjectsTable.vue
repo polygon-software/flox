@@ -102,11 +102,14 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import {inject, computed, Ref, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {MY_PROJECTS} from "src/data/queries/PROJECT";
+
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -128,7 +131,15 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-const rows = [
+
+const userProjects = subscribeToQuery(MY_PROJECTS)
+
+const rows = computed(()=>{
+  return userProjects.value ?? []
+})
+
+
+const mockedRows = [
   {
     project: 'P1A',
     device: 'MR3000',
