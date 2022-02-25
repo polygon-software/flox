@@ -14,13 +14,13 @@ import {
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 import { Project } from '../../types/Project';
 import { Device } from '../../types/Device';
-import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
+import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
 import { RegisterUserInput } from './dto/input/register-user.input';
-import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
-import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
+import { GetUserProjectsArgs } from '../project/dto/args/get-user-projects.args';
+import { GetUserDevicesArgs } from '../device/dto/args/get-user-devices.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
-import { GetMyDevicesArgs } from './dto/args/get-my-devices.args';
+import { GetMyDevicesArgs } from '../device/dto/args/get-my-devices.args';
 
 @Resolver(() => User)
 export class UserResolver {

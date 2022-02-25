@@ -12,14 +12,11 @@ import { fetchFromTable } from '../../helpers/database-helpers';
 import { MR2000 } from '../../types/MR2000';
 import { MR3000 } from '../../types/MR3000';
 import { RegisterUserInput } from './dto/input/register-user.input';
-import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
 import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
 } from '../../helpers/device-helpers';
-import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
-import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
-import { getProjectsForInstances } from '../../helpers/project-helpers';
+import { GetUserDevicesArgs } from '../device/dto/args/get-user-devices.args';
 
 @Injectable()
 export class UserService {

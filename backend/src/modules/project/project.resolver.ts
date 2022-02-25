@@ -11,10 +11,10 @@ import { Project } from '../../types/Project';
 import { GetUserArgs } from '../user/dto/args/get-user.args';
 import { UserService } from '../user/user.service';
 import { Device } from '../../types/Device';
-import { GetProjectDevicesArgs } from '../user/dto/args/get-project-devices.args';
+import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
-import { GetUserProjectsArgs } from '../user/dto/args/get-user-projects.args';
+import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 
 @Resolver(() => User)
 export class ProjectResolver {

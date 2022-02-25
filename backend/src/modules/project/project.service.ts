@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
-import { GetProjectDevicesArgs } from '../user/dto/args/get-project-devices.args';
+import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
 import { fetchFromTable } from '../../helpers/database-helpers';
 import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
 } from '../../helpers/device-helpers';
-import { GetUserProjectsArgs } from '../user/dto/args/get-user-projects.args';
+import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { getProjectsForInstances } from '../../helpers/project-helpers';
 import { CreateProjectInput } from './dto/input/create-project.input';
 
@@ -100,6 +100,8 @@ export class ProjectService {
     ) {
       throw new Error(`Project name ${projectName} is already taken`);
     }
+
+    // TODO: Add as comment on all relevant tables, at least: 'station', 'param'
 
     // Add to user's project permissions
     await this.usersRepository.update(userUuid, {
