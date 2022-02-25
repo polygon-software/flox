@@ -345,13 +345,13 @@ const oneFamilyHouse =  // CONDITIONAL: EFH only
     caption: i18n.global.t('documents.property.building_insurance_caption'),
     key: DOSSIER_FILE_TYPE.BUILDING_INSURANCE,
   }]
-const appartment = [// CONDITIONAL: Stockwerkeigentum Only!
+const apartment = [// CONDITIONAL: Stockwerkeigentum Only!
   {
     label: i18n.global.t('documents.property.owner_regulations'),
     caption: i18n.global.t('documents.property.owner_regulations_caption'),
     key: DOSSIER_FILE_TYPE.OWNER_REGULATIONS,
   },
-  // CONDITIONAL: Stockwerkeigentum Only!
+  // CONDITIONAL: apartment Only!
   {
     label: i18n.global.t('documents.property.management_regulations'),
     caption: i18n.global.t('documents.property.owner_regulations_caption'),
@@ -367,12 +367,12 @@ onBeforeMount(()=>{
     dossier.value = queryRes.data[GET_DOSSIER.cacheLocation] as Record<string,string|unknown>
     if (dossier.value.property_type === PROPERTY_TYPE.ONE_FAMILY_HOUSE) {
       sections.value.property.fields.required.push(...oneFamilyHouse)
-      sections.value.property.fields.optional.push(...appartment)
+      sections.value.property.fields.optional.push(...apartment)
     } else if (dossier.value.property_type === PROPERTY_TYPE.APARTMENT) {
-      sections.value.property.fields.required.push(...appartment)
+      sections.value.property.fields.required.push(...apartment)
       sections.value.property.fields.optional.push(...oneFamilyHouse)
     } else {
-      sections.value.property.fields.optional.push(...oneFamilyHouse, ...appartment)
+      sections.value.property.fields.optional.push(...oneFamilyHouse, ...apartment)
     }
     const documents = dossier.value.documents as Array<Record<string, string|unknown>>
     documents.forEach((docu)=>{
