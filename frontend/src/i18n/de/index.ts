@@ -62,7 +62,7 @@ export default {
     date: 'Datum',
     status: 'Status',
     language: 'Sprache',
-    domicile_address: 'Addresse',
+    domicile_address: 'Domiziladdresse',
     correspondence_address: 'Korrespondenzaddresse',
     edit_correspondence_address: 'Gleich wie Wohnadresse',
     phone_number: 'Telefonnummer',
