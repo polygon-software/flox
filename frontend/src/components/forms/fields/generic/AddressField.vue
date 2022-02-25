@@ -33,13 +33,15 @@
     >
     </q-input>
     <q-input
+      ref="zipRef"
       v-model="address.zip_code"
       dense
       :label="$t('account_data.zip_code')"
       type="text"
-      :rules="[(val) => IS_VALID_ZIP(val) || $t('errors.invalid_zip_code')]"
+      :rules="[(val) => IS_VALID_ZIP(val, validateZip) || $t('errors.invalid_zip_code')]"
       style="width:30%"
       mask="######"
+      :debounce="validateZip ? 200 : 0"
       @change="emitValue"
     >
     </q-input>
@@ -47,11 +49,12 @@
 </template>
 
 <script setup lang="ts">
-import {PropType, reactive} from 'vue'
+import {PropType, reactive, ref, Ref} from 'vue'
 import { IS_VALID_STRING, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP } from 'src/data/RULES';
 import {Address} from 'src/data/types/Address';
 import {getAuthToken} from 'src/helpers/cookie-helpers';
 import axios from 'axios';
+import {QForm, QInput} from 'quasar';
 const emit = defineEmits(['change'])
 
 const props = defineProps({
@@ -68,50 +71,19 @@ const props = defineProps({
 })
 
 const address = reactive(props.initialValue)
+const zipRef: Ref<QInput|null> = ref(null)
 
 /**
- * Emits the updated value, if it is valid
- * @returns {void}
+ * Emits the updated value, if it is valid (otherwise emits null)
+ * @returns {Promise<void>} - done
  */
 async function emitValue(){
-  if(address.validate()){
-    if(props.validateZip){
-      const zipValid = await isZipCodeValid()
-      if(zipValid){
-        emit('change', address)
-      } else {
-        emit('change', null)
-      }
-    } else {
-      emit('change', address)
-    }
+  const zipValidated = props.validateZip ? await zipRef.value?.validate() : true
+  if(address.validate() && zipValidated){
+    emit('change', address)
   } else {
     emit('change', null)
   }
 }
 
-/**
- * Determines whether the currently entered zip code is valid
- * @returns {Promise<boolean>} - whether it's valid
- */
-async function isZipCodeValid(){
-  // Ensure user has token
-  const token: string|null = getAuthToken();
-
-  if(!address || !token){
-    return false
-  }
-
-  const zipCode = address.zip_code as string
-
-  const headers = {
-    Authorization: `Bearer ${token}`
-  }
-  const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
-  const url = `${baseUrl}/isZipCodeValid?zipCode=${zipCode}`
-
-  // Get value multiplier from backend
-  const isValidRequest = await axios.get(url, {headers});
-  return isValidRequest.data as boolean;
-}
 </script>
