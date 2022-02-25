@@ -371,11 +371,11 @@ export class FileController {
       res.send(new Error(ERRORS.missing_query_parameters));
       return;
     }
+    res.header('access-control-allow-origin', '*');
 
     try {
       // Determine whether ZIP code is valid
       const isValid = await isZipCodeValid(zipCode);
-      res.header('access-control-allow-origin', '*');
       res.send(isValid);
     } catch (error) {
       // Return any calculation errors that occurred
