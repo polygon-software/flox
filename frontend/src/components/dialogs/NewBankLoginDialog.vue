@@ -1,6 +1,7 @@
 <template>
   <q-dialog
     ref="dialogRef"
+    persistent
     :title="$t('bank.new_user')"
   >
     <q-card class="q-pa-md q-ma-md">
