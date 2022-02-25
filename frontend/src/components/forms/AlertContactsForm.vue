@@ -12,7 +12,7 @@
 
     <div style="display: flex;">
       <div style="display:flex; flex-direction: row">
-        <div>
+        <div style="width: 250px">
           <p style="color: #87858A; margin-top: 25px; margin-bottom: 0">{{ $t('edit_parameters.name') }}</p>
           <q-field outlined stack-label>
             <template #control>
@@ -38,7 +38,7 @@
       </div>
 
       <div style="display:flex; flex-direction: row; margin-left: 75px">
-        <div>
+        <div style="width: 250px">
           <p style="color: #87858A; margin-top: 25px; margin-bottom: 0">{{ $t('edit_parameters.name') }}</p>
           <q-field outlined stack-label>
             <template #control>
