@@ -7,6 +7,7 @@ import { fetchFromTable } from '../../helpers/database-helpers';
 import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
+  removeDeviceFromProject,
 } from '../../helpers/device-helpers';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { getProjectsForInstances } from '../../helpers/project-helpers';
@@ -128,6 +129,13 @@ export class ProjectService {
   async removeDevicesFromProject(
     removeDevicesFromProjectInput: RemoveDevicesFromProjectInput,
   ) {
-    removeDevicesFromProjectInput.mr2000Instances.forEach((mr2000) => {});
+    // Remove MR2000s, if any
+    for (const mr2000 of removeDevicesFromProjectInput.mr2000Instances ?? []) {
+      await removeDeviceFromProject(mr2000, true);
+    }
+    // Remove MR3000s, if any
+    for (const mr3000 of removeDevicesFromProjectInput.mr3000Instances ?? []) {
+      await removeDeviceFromProject(mr3000, false);
+    }
   }
 }
