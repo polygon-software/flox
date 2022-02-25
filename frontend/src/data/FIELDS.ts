@@ -193,7 +193,7 @@ const FIELDS: Record<string, Field> = {
     key: 'address',
     component: markRaw(AddressField),
     attributes: {
-      rules: [] // Validated by component
+      rules: [(val: Record<string, string>): boolean|string  => IS_NOT_NULL(val) || i18n.global.t('errors.invalid_address')]
     },
   },
   LANGUAGE: {
