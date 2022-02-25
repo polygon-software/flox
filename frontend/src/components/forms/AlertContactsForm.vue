@@ -67,12 +67,14 @@
 </template>
 
 <script setup lang="ts">
-import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {inject, ref} from 'vue';
+import AddContactDialog from 'src/components/dialogs/AddContactDialog.vue'
+import {useQuasar} from 'quasar';
 
 const routerService: RouterService|undefined = inject('$routerService')
 const selection = ref([])
+const $q = useQuasar()
 
 const checkboxes = [
   {val: 'event', label: 'Event'},
@@ -82,13 +84,16 @@ const checkboxes = [
 ]
 
 /**
- * Routes to new Contact Page
+ * Routes to new Contact Dialog
  * @async
  * @returns {void}
  */
+//TODO: onOk
 async function newContact(): Promise<void>{
-  //TODO: new contact page
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
+  $q.dialog({
+    component: AddContactDialog,
+    componentProps: {}
+  })
 }
 
 </script>

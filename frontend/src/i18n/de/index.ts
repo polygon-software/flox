@@ -88,6 +88,8 @@ export default {
     station_name: 'Stationsname',
     name: 'Name',
     number: 'Telefonnumer',
+    email: 'E-mail',
+    add_new_contact: 'Füge neuen Kontakt hinzu',
   },
   buttons: {
     finish: 'Abschliessen',
@@ -103,6 +105,8 @@ export default {
     send: 'Senden',
     create_link: 'Link erzeugen',
     new_contact: 'Neuer Kontakt',
+    load: 'Laden',
+    save: 'Speichern',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

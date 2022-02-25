@@ -87,6 +87,8 @@ export default {
     station_name: 'Station Name',
     name: 'Name',
     number: 'Mobile Number',
+    email: 'Email',
+    add_new_contact: 'Add new contact',
   },
   buttons: {
     finish: 'Finish',
@@ -102,6 +104,8 @@ export default {
     send: 'Send',
     create_link: 'Create Link',
     new_contact: 'New Contakt',
+    load: 'Load',
+    save: 'Save',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
