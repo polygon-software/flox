@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
@@ -14,9 +14,13 @@ import {
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
 import { Project } from '../../types/Project';
 import { Device } from '../../types/Device';
+import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
 import { RegisterUserInput } from './dto/input/register-user.input';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
+import { ROLE } from '../../ENUM/ENUM';
+import { ERRORS } from '../../error/ERRORS';
+import { GetMyDevicesArgs } from './dto/args/get-my-devices.args';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -147,19 +151,57 @@ export class UserResolver {
   /**
    * Returns a list of the current user's devices
    * @param {Record<string, string>}  user - currently logged-in user from request
+   * @param {GetMyDevicesArgs} [getMyDevicesArgs] - arguments containing whether to return only unassigned devices
    * @returns {Promise<Project[]>} - the user's projects
    */
   @AnyRole()
   @Query(() => [Device], { name: 'myDevices' })
-  async myDevices(@CurrentUser() user: Record<string, string>) {
+  async myDevices(
+    @CurrentUser() user: Record<string, string>,
+    @Args() getMyDevicesArgs?: GetMyDevicesArgs,
+  ) {
     // Get user
     const dbUser = await this.usersService.getUser({
-      uuid: user.userId,
+      cognitoUuid: user.userId,
     } as GetUserArgs);
 
     if (!dbUser) {
       throw new Error(`No user found for ${user.userId}`);
     }
-    return this.usersService.getUserDevices({ uuid: dbUser.uuid });
+    return this.usersService.getUserDevices({
+      uuid: dbUser.uuid,
+      unassigned: getMyDevicesArgs?.unassigned ?? false,
+    } as GetUserDevicesArgs);
+  }
+
+  /**
+   * Returns a list of the devices (MR2000 or MR3000) belonging to a given project
+   * @param {GetProjectDevicesArgs} getProjectDevicesArgs - getter arguments, containing project name
+   * @param {Record<string, string>} user - currently logged-in user from request
+   * @returns {Promise<Device[]>} - the project's devices
+   */
+  @AnyRole()
+  @Query(() => [Device], { name: 'getProjectDevices' })
+  async getProjectDevices(
+    @Args() getProjectDevicesArgs: GetProjectDevicesArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    // Get user
+    const dbUser = await this.usersService.getUser({
+      cognitoUuid: user.userId,
+    } as GetUserArgs);
+
+    if (!dbUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+    // For non-admin users, check whether they have permissions to access the requested project
+    if (
+      dbUser.role !== ROLE.ADMIN &&
+      !dbUser.projects.includes(getProjectDevicesArgs.name)
+    ) {
+      throw new Error(ERRORS.resource_not_allowed);
+    }
+
+    return this.usersService.getProjectDevices(getProjectDevicesArgs);
   }
 }

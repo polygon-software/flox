@@ -8,15 +8,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PERMISSION, ROLE } from '../../ENUM/ENUM';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
-import {
-  fetchFromTable,
-  getProjectsForInstances,
-} from '../../helpers/database-helpers';
+import { fetchFromTable } from '../../helpers/database-helpers';
 import { MR2000 } from '../../types/MR2000';
 import { MR3000 } from '../../types/MR3000';
 import { RegisterUserInput } from './dto/input/register-user.input';
+import { GetProjectDevicesArgs } from './dto/args/get-project-devices.args';
+import {
+  mr2000fromDatabaseEntry,
+  mr3000fromDatabaseEntry,
+} from '../../helpers/device-helpers';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
+import { getProjectsForInstances } from '../../helpers/project-helpers';
 
 @Injectable()
 export class UserService {
@@ -213,24 +216,72 @@ export class UserService {
       throw new Error(`No user found for ${getUserDevicesArgs.uuid}`);
     }
 
+    const filterQuery = getUserDevicesArgs.unassigned
+      ? "WHERE (comment IS null OR comment='')"
+      : null;
+
     // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable('MR2000', 'station');
-    const mr3000instances = await fetchFromTable('MR3000', 'station');
+    const mr2000instances = await fetchFromTable(
+      'MR2000',
+      'station',
+      filterQuery,
+    );
+    const mr3000instances = await fetchFromTable(
+      'MR3000',
+      'station',
+      filterQuery,
+    );
 
     const devices = [];
 
     // Add all allowed MR2000 instances
     mr2000instances.forEach((instance) => {
       if (user.mr2000instances.includes(instance.cli)) {
-        devices.push(new MR2000(instance.cli));
+        devices.push(mr2000fromDatabaseEntry(instance));
       }
     });
 
     // Add all allowed MR3000 instances
     mr3000instances.forEach((instance) => {
       if (user.mr3000instances.includes(instance.cli)) {
-        devices.push(new MR3000(instance.cli));
+        devices.push(mr3000fromDatabaseEntry(instance));
       }
+    });
+
+    return devices;
+  }
+
+  /**
+   * Returns a list the devices belonging to a given project
+   * @param {GetProjectDevicesArgs} getProjectDevicesArgs - contains project name
+   * @returns {Promise<MR2000|MR3000[]>} - the user's devices
+   */
+  async getProjectDevices(getProjectDevicesArgs: GetProjectDevicesArgs) {
+    // Note that in the actual database, project names may contain trailing whitespace (but is ignores by SQL)
+    const filterQuery = `WHERE comment='${getProjectDevicesArgs.name}'`;
+
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable(
+      'MR2000',
+      'station',
+      filterQuery,
+    );
+    const mr3000instances = await fetchFromTable(
+      'MR3000',
+      'station',
+      filterQuery,
+    );
+
+    const devices = [];
+
+    // Add all MR2000 instances
+    mr2000instances.forEach((instance) => {
+      devices.push(mr2000fromDatabaseEntry(instance));
+    });
+
+    // Add all MR3000 instances
+    mr3000instances.forEach((instance) => {
+      devices.push(mr3000fromDatabaseEntry(instance));
     });
 
     return devices;

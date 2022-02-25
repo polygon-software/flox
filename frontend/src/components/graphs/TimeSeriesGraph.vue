@@ -13,7 +13,7 @@
           height="280"
           type="line"
           :options="options"
-          :series="series"
+          :series="datasets"
         />
       </div>
 
@@ -45,12 +45,8 @@ import {formatDateForGraph} from 'src/helpers/format-helpers';
 const $q = useQuasar()
 
 const props = defineProps({
-  dataset: {
+  datasets: {
     type: Array,
-    required: true,
-  },
-  datasetName: {
-    type: String,
     required: true,
   },
   unit: {
@@ -65,21 +61,30 @@ const props = defineProps({
 })
 
 /**
- * Finds the highest datapoint, rounded to .1 increments
+ * Finds the highest datapoint across all datasets, rounded to .1 increments
  * (used for determining y axis scale)
  */
 const highestDatapoint = computed(() => {
-  return Math.ceil(10 * Math.max.apply(Math, props.dataset.map(
-    (datapoint) => {
-      return (datapoint as Record<string, number>).y;
-    })
-  )) / 10
+  let max = 0;
+  props.datasets.forEach((dataset) => {
+    const datasetData = (dataset as Record<string, Record<string, number>[]>).data
+    const datasetMax = Math.ceil(10 * Math.max.apply(Math, datasetData.map(
+      (datapoint) => {
+        return datapoint.y;
+      })
+    )) / 10
+
+    if(datasetMax > max){
+      max = datasetMax
+    }
+  })
+
+  return max;
 })
 
 // Graph options
 const options = {
   chart: {
-    id: props.datasetName,
     toolbar: {
       offsetX: -60,
       tools: {
@@ -89,7 +94,7 @@ const options = {
       },
     },
   },
-  colors: ['var(--q-secondary)'],
+  colors: ['var(--q-secondary)', 'var(--q-accent)', 'var(--q-warning)'],
   stroke: {
     width: 1.5
   },
@@ -102,11 +107,13 @@ const options = {
     offsetY: 8,
     fontSize: '16px',
     fontWeight: 600,
+    formatter: function (datasetName: string){
+      return datasetName.toUpperCase()
+    },
     markers: {
       radius: 0,
       width: 16,
       height: 16,
-      offsetX: -10,
       offsetY: 2
     }
   },
@@ -161,12 +168,6 @@ const options = {
     },
   }
 }
-
-// Data series from props
-const series = [{
-  name: props.datasetName.toUpperCase(),
-  data: props.dataset
-}]
 
 /**
  * Copies the graph's content

@@ -1,6 +1,4 @@
 import { RouteRecordRaw } from 'vue-router';
-import {executeQuery} from 'src/helpers/data-helpers';
-import {MY_USER} from 'src/data/queries/USER';
 import {ROLE} from 'src/data/ENUM';
 
 /**
@@ -9,11 +7,15 @@ import {ROLE} from 'src/data/ENUM';
 
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
+  HOME: {
+    path: '/',
+    component: () => import('layouts/Layout.vue'),
+  },
   // Admin: Customers
   CUSTOMERS: {
     path: '/customers',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => getUserRoleLayout(),
+    component: () => import('layouts/Layout.vue'),
     children: [
       { path: '', component: () => import('pages/admin/CustomersListPage.vue') },
       {
@@ -43,7 +45,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   ACCOUNT: {
     path: '/account',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => getUserRoleLayout(),
+    component: () => import('layouts/Layout.vue'),
     children: [
       { path: '', component: () => import('pages/general/AccountPage.vue') },
     ]
@@ -53,7 +55,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   SHARE: {
     path: '/share',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => getUserRoleLayout(),
+    component: () => import('layouts/Layout.vue'),
     children: [
       { path: '', component: () => import('pages/general/SharePage.vue') },
     ]
@@ -62,7 +64,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   LOGIN: {
     path: '/login',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => import('layouts/UserLayout.vue'),
+    component: () => import('layouts/Layout.vue'),
     children: [
       { path: '', component: () => import('pages/general/LoginPage.vue') },
     ],
@@ -71,13 +73,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
   SIGNUP: {
     path: '/signup',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => import('layouts/UserLayout.vue'),
+    component: () => import('layouts/Layout.vue'),
     children: [{ path: '', component: () => import('pages/general/SignupPage.vue') }],
   },
 
   SUCCESS: {
     path: '/success',
-    component: () => import('layouts/UserLayout.vue'),
+    component: () => import('layouts/Layout.vue'),
     children: [{ path: '', component: () => import('pages/general/SuccessPage.vue') }],
   },
 
@@ -95,30 +97,18 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SUCCESS,
 ];
 
-export default ROUTES;
 
-/**
- * Returns the layout for the currently logged in user
- * @async
- * @returns {any} - the layout component
+/*
+ * Routes that have additional access constraints
+ * allowedRoles specifies roles that don't have to fulfill constraints to access these pages,
+ * constrainedRoles must provide the specified query parameters to access the page
  */
-async function getUserRoleLayout(): Promise<any>{
-  // Get user's data from backend
-  const queryResult = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>
+export const CONSTRAINED_ROUTES = [
+  // Bank dashboard: also allowed to admins when 'bid' is given
+  {
+    path: ROUTES.CUSTOMERS.path,
+    allowedRoles: [ROLE.ADMIN],
+  },
+]
 
-  // Non-logged in: Redirect to 404
-  if(!queryResult?.data?.myUser){
-    return import('layouts/UserLayout.vue')
-  }
-
-  const userData = queryResult.data.myUser as Record<string, unknown>
-  const userRole = userData.role;
-
-  switch(userRole){
-    case ROLE.ADMIN:
-      return import('layouts/AdminLayout.vue')
-    case ROLE.USER:
-    default:
-      return import('layouts/UserLayout.vue')
-  }
-}
+export default ROUTES;
