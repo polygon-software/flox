@@ -45,6 +45,7 @@
                   :key="field.key"
                   v-bind="field.attributes"
                   v-model="form.values.value[field.key]"
+                  :validate-zip="field.key === 'address' ? true : null"
                   :initial-value="form.values.value[field.key]"
                   :options="field.key === 'bank' ? bankOptions : field.attributes.options"
                   :total-amount="mortgage"
@@ -946,5 +947,4 @@ function enfeoffmentRank(rate: number){
   }
   return i18n.global.t('form_for_clients.enfeoffment_too_high')
 }
-
 </script>

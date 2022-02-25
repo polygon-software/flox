@@ -1,5 +1,7 @@
 import {EMAIL_REGEX, PASSWORD_REGEX} from 'src/helpers/REGEX';
 import {isEmpty} from 'lodash';
+import {getAuthToken} from 'src/helpers/cookie-helpers';
+import axios from 'axios';
 
 /**
  * This file contains rules that can be applied to input forms.
@@ -51,9 +53,37 @@ const IS_VALID_HOUSE_NUMBER = (val: string): boolean => {
   return Number.isInteger(parseInt(val, 10))
 }
 
-const IS_VALID_ZIP = (val: string): boolean => {
-  //TODO: Add check for ZIP Code
-  return Number.isInteger(parseInt(val, 10))
+const IS_VALID_ZIP = async (val: string, strict: boolean): Promise<boolean> => {
+  if(!strict){
+    return Number.isInteger(parseInt(val, 10))
+  }
+
+  return isZipCodeValid(val)
+}
+
+
+/**
+ * Determines whether the currently entered zip code is valid
+ * @param {string} zipCode - the zip code to validate
+ * @returns {Promise<boolean>} - whether it's valid
+ */
+async function isZipCodeValid(zipCode: string){
+  // Ensure user has token
+  const token: string|null = getAuthToken();
+
+  if(!zipCode || !token){
+    return false
+  }
+
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
+  const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
+  const url = `${baseUrl}/isZipCodeValid?zipCode=${zipCode}`
+
+  // Get value multiplier from backend
+  const isValidRequest = await axios.get(url, {headers});
+  return isValidRequest.data as boolean;
 }
 
 /**
