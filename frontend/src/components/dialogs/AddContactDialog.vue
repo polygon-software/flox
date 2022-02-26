@@ -105,8 +105,8 @@ function onSubmit(){
  * On load, .....
  * @returns {void}
  */
-//TODO: what does load button?
 function onLoad(){
+  //TODO: what does load button?
   onDialogCancel()
 }
 

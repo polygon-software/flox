@@ -67,12 +67,10 @@
 </template>
 
 <script setup lang="ts">
-import {RouterService} from 'src/services/RouterService';
-import {inject, ref} from 'vue';
+import {ref} from 'vue';
 import AddContactDialog from 'src/components/dialogs/AddContactDialog.vue'
 import {useQuasar} from 'quasar';
 
-const routerService: RouterService|undefined = inject('$routerService')
 const selection = ref([])
 const $q = useQuasar()
 
@@ -88,8 +86,8 @@ const checkboxes = [
  * @async
  * @returns {void}
  */
-//TODO: onOk
-async function newContact(): Promise<void>{
+function newContact(){
+  //TODO: onOk
   $q.dialog({
     component: AddContactDialog,
     componentProps: {}
