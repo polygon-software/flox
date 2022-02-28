@@ -97,7 +97,8 @@ function onSubmit(){
   onDialogOK({
     name: name.value,
     phone: phone.value,
-    email: email.value
+    email: email.value,
+    checkbox: checkboxes.values()
   })
 }
 

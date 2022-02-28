@@ -79,6 +79,9 @@ const checkboxes = [
   {val: 'alarm1', label: 'Alarm 1'},
   {val: 'alarm2', label: 'Alarm 2'},
   {val: 'sms', label: 'SMS limit'},
+  {val: 'power_battery', label: 'Power/Battery'},
+  {val: 'memory', label: 'Memory'},
+  {val: 'daily', label: 'Daily'},
 ]
 
 /**
