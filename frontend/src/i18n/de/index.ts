@@ -93,7 +93,8 @@ export default {
     load_parameters: 'Parameter laden',
     copy: 'Kopieren',
     send: 'Senden',
-    create_link: 'Link erzeugen'
+    create_link: 'Link erzeugen',
+    show: 'Anzeigen',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -157,5 +158,18 @@ export default {
   },
   messages: {
     copied: 'Kopiert'
-  }
+  },
+  dialog: {
+    period: 'Periode',
+    scale: 'Skala',
+    hours: '12 Stunden',
+    days: '2 Tage',
+    weeks: '2 Wochen',
+    months: '1 Monat',
+    select_period: 'Periode auswählen',
+    perception_level: 'Wahrnehmungsebene',
+    alarm_level: 'Alarmlevel',
+    highest_peak: 'Höchster Peak',
+    enter_value: 'Wert eingeben',
+  },
 };

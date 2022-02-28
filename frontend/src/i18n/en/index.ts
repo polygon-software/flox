@@ -92,7 +92,8 @@ export default {
     load_parameters: 'Load Parameters',
     copy: 'Copy',
     send: 'Send',
-    create_link: 'Create Link'
+    create_link: 'Create Link',
+    show: 'Show',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -153,5 +154,18 @@ export default {
   },
   messages: {
     copied: 'Copied'
-  }
+  },
+  dialog: {
+    period: 'Period',
+    scale: 'Scale',
+    hours: '12 hours',
+    days: '2 days',
+    weeks: '2 weeks',
+    months: '1 month',
+    select_period: 'Select period',
+    perception_level: 'Perception level',
+    alarm_level: 'Alarm level',
+    highest_peak: 'Highest peak',
+    enter_value: 'Enter value',
+  },
 };
