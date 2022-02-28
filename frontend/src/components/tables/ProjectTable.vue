@@ -92,10 +92,10 @@
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
-                  class="column; text-grey"
+                  class="text-grey"
                   flat
                   no-caps
-                  @click="onOptionClick(button.key)"
+                  @click="onOptionClick(button.key, props.row.name)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -221,9 +221,10 @@ async function showCustomGraph(devices: string[]): Promise<void>{
 /**
  * Routes to different pages dependent which button is clicked
  * @param {string} key - the button key
+ * @param {string} device - the selected device
  * @returns {Promise<void>} - routes to correct page
  */
-async function onOptionClick(key: string): Promise<void>{
+async function onOptionClick(key: string, device: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
@@ -242,7 +243,7 @@ async function onOptionClick(key: string): Promise<void>{
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
     case 'edit':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.addToRoute(`${device}/edit`)
       break
     case 'show_status':
       await routerService?.routeTo(ROUTES.CUSTOMER)
