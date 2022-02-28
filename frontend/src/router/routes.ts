@@ -61,6 +61,16 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     ]
   },
 
+  // General: Status
+  STATUS: {
+    path: '/status',
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    component: () => import('layouts/Layout.vue'),
+    children: [
+      { path: '', component: () => import('pages/general/StatusPage.vue') },
+    ]
+  },
+
   LOGIN: {
     path: '/login',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

@@ -153,5 +153,18 @@ export default {
   },
   messages: {
     copied: 'Copied'
-  }
+  },
+  client_connectivity: {
+    title: 'Client Connectivity',
+    date_time: 'Date/Time',
+    real_ip: 'Real IP',
+    port: 'Port',
+    vpn_ip: 'VPN IP',
+    event: 'Event',
+  },
+log_files: {
+  log_file: 'LOG File',
+  ftp_log_file: 'FTP LOG File - recent uploads',
+  rest_log_file: 'REST LOG File',
+},
 };
