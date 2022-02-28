@@ -59,7 +59,7 @@ resource "aws_elastic_beanstalk_environment" "web_eb_env" {
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "InstanceType"
-    value     = "t3.micro"
+    value     = "t4g.small"
   }
 
   /*  setting {

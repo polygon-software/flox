@@ -28,7 +28,7 @@ resource "aws_rds_cluster_instance" "tf_db_instance" {
   engine = "aurora-postgresql"
   engine_version = "12.7"
   cluster_identifier = aws_rds_cluster.tf_db_cluster.id
-  instance_class     = "db.t3.medium"
+  instance_class     = "db.t4g.medium"
   db_subnet_group_name = aws_db_subnet_group.tf_db_subnet_group.name
   count = 2
 }

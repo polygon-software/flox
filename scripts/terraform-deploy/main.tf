@@ -77,8 +77,6 @@ resource "aws_eip" "tf_nat_eip" {
   }
 }
 
-
-
 // create nat gateway.
 resource "aws_nat_gateway" "tf_nat" {
 
@@ -94,13 +92,11 @@ resource "aws_nat_gateway" "tf_nat" {
   }
 }
 
-
 resource "aws_route" "tf_route_pri" {
 
   route_table_id         = aws_route_table.tf_r_table_pri.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.tf_nat.id
-
 
   lifecycle {
     create_before_destroy = true
@@ -118,7 +114,6 @@ resource "aws_route" "tf_route_pub" {
   }
 }
 
-
 // create aws s3 bucket to Upload app to
 resource "aws_s3_bucket" "tf_app_bucket" {
   bucket = "${var.project_prefix_char}-app-bucket"
@@ -128,6 +123,7 @@ resource "aws_s3_bucket" "tf_app_bucket" {
   }
 }
 
+// Needs to be imported with terraform import
 resource "aws_route53_zone" "main_zone" {
   name            = "polygon-project.ch"
 }

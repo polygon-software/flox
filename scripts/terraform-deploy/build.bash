@@ -25,7 +25,7 @@ echo ',\n   "engines":' >> dist/package.json
 echo $(<package.json) | jq '.engines' >> dist/package.json
 echo '}' >> dist/package.json
 cd dist
-zip -r ../scripts/terraform-deploy/backend.zip * -q
+zip -r ../../scripts/terraform-deploy/backend.zip * -q
 cd ..
 
 cd ../frontend
@@ -42,7 +42,10 @@ echo '{
         "productName": "S.O.I Chamäleon",
         "author": "davwys <david.wyss@hotmail.ch>",
         "private": true,
-        "scripts":
+        "scripts":{
+            "start": "node index.js"
+        },
+        "dependencies":
  ' >> dist/ssr/package.json
 
 echo $(<package.json) | jq '.dependencies' >> dist/ssr/package.json
@@ -56,4 +59,4 @@ echo ',\n   "jestSonar":' >> dist/ssr/package.json
 echo $(<package.json) | jq '.jestSonar' >> dist/ssr/package.json
 echo '}' >> dist/ssr/package.json
 cd dist/ssr
-zip -r ../scripts/terraform-deploy/frontend.zip * -q
+zip -r ../../../scripts/terraform-deploy/frontend.zip * -q
