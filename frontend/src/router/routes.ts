@@ -41,11 +41,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
       {
         path: ':customerId/:projectId/:stationId/files',
         component: () => import('pages/general/FilesPage.vue'),
-        props: route => ({ parametersId: route.params.stationId })
+        props: route => ({ stationId: route.params.stationId })
       },
       {
         path: ':customerId/:projectId/:stationId/files/:filesId',
-        component: () => import('pages/general/FilePage.vue'),
+        component: () => import('pages/general/PreviewPage.vue'),
         props: route => ({ filesId: route.params.filesId })
       },
     ],

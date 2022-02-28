@@ -1,7 +1,7 @@
 <template>
   <q-page class="column items-center justify-start full-width">
     <!-- Title -->
-    <h5>{{ $t('dashboard.files') }} {{ parametersId.toUpperCase() }}</h5>
+    <h5>{{ $t('dashboard.files') }} {{ stationId.toUpperCase() }}</h5>
 
     <FilesTable/>
 
@@ -14,7 +14,7 @@ import FilesTable from 'components/tables/FilesTable.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
-  parametersId: {
+  stationId: {
     required: true,
     type: String
   }
