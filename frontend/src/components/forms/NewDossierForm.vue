@@ -168,8 +168,8 @@
           <!-- Estimated value range -->
           <SummaryField
             :label="$t('form_for_clients.market_value_between')"
-            :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low.toLocaleString('de-ch') }` : '-' "
-            :second-content="valueEstimateLoading ? $t('general.loading') : valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high.toLocaleString('de-ch') }` : '-' "
+            :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low.toLocaleString('de-ch') }` : '-'"
+            :second-content="prognosisAvailable ? (valueEstimateLoading ? $t('general.loading') : valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high.toLocaleString('de-ch')}` : '-'): $t('dossier.no_prognosis') "
             :caption="$t('dossier.customer_value')"
             :second-caption="$t('dossier.estimated_market_value')"
             value-type="positive"
@@ -458,6 +458,9 @@ const valueEstimateLoading = ref(false)
 // Whether the from has been submitted (to prevent multi-submit)
 const hasSubmitted = ref(false)
 
+// Whether the region of the given zip code is in the value_development table
+const prognosisAvailable = ref(true)
+
 /**
  * Mortgage volume
  */
@@ -579,17 +582,20 @@ const affordability: ComputedRef<number|null> = computed(() => {
  */
 const enfeoffmentEstimate = computed(() => {
   // Invalid, data missing
-  if(!valueEstimate.value || !valueEstimate.value.low || !valueEstimate.value.high || !mortgage.value) {
+  if(!mortgage.value) {
     return {
       low: null,
       high: null
     }
   }
+  const low = valueEstimate.value?.low ? parseFloat((mortgage.value/valueEstimate.value.low * 100).toFixed(2)) : null
+  const high = valueEstimate.value?.high ? parseFloat((mortgage.value/valueEstimate.value.high * 100).toFixed(2)) : null
+
 
   // Return as array (low & high estimate)
   return {
-    low: parseFloat((mortgage.value/valueEstimate.value.low * 100).toFixed(2)),
-    high: parseFloat((mortgage.value/valueEstimate.value.high * 100).toFixed(2))
+    low,
+    high,
   }
 
 })
@@ -708,24 +714,35 @@ async function calculateValueEstimate(){
   const url = `${baseUrl}/getValueDevelopment?zipCode=${zipCode}&start=${startDateString}&end=${endDateString}`
 
   // Get value multiplier from backend
-  const multiplierRequest = await axios.get(url, {headers});
-  const multiplier = multiplierRequest.data as number;
+  await axios.get(url, {headers}).then((multiplierRequest)=>{
+    const multiplier = multiplierRequest?.data as number;
 
-  if(!multiplier){
-    $errorService?.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
-    return;
-  }
 
-  const highEstimate = Math.round(priceAtPurchase * multiplier)
+    if(!multiplier){
+      $errorService?.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
+      return;
+    }
 
-  // Return as array (low & high estimate)
-  valueEstimate.value = {
-    low: customerEstimate,
-    high: highEstimate
-  }
+    const highEstimate = Math.round(priceAtPurchase * multiplier)
 
-  // Set loading status
-  valueEstimateLoading.value = false
+    // Return as array (low & high estimate)
+    valueEstimate.value = {
+      low: customerEstimate,
+      high: highEstimate
+    }
+
+    // Set loading status
+    valueEstimateLoading.value = false
+  }).catch((err)=>{
+    // Return as array (low & high estimate)
+    valueEstimate.value = {
+      low: customerEstimate,
+      high: customerEstimate
+    }
+    prognosisAvailable.value = false
+    valueEstimateLoading.value = false
+  });
+
 }
 
 

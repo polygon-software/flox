@@ -15,11 +15,11 @@ export async function createCognitoAccount(
   email: string,
   password = null,
 ): Promise<Record<string, string>> {
-  const pw = randomPassword(8);
+  const pw = password || randomPassword(8);
   const params = {
     UserPoolId: process.env.USER_POOL_ID,
     Username: email,
-    TemporaryPassword: password || pw,
+    TemporaryPassword: pw,
     UserAttributes: [],
   };
   const resp = await provider.adminCreateUser(params);

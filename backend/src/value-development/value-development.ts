@@ -124,7 +124,8 @@ export async function getValueDevelopment(
     LIMIT 1
     `);
   await queryRunner.release();
-  if (!valueMappingQuery) {
+  console.log(valueMappingQuery);
+  if (!valueMappingQuery || valueMappingQuery.length === 0) {
     await queryRunner.release();
     throw new Error(ERRORS.missing_database_data);
   }

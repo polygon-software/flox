@@ -69,7 +69,7 @@ async function onRegister(formData: Record<string, Record<string, string>>){
       gender: formData.salutation,
       phone: formData.phone_number,
       email: formData.email,
-      function: formData.company_function,
+      function: formData.company_function.value,
       language: formData.language,
     });
     // Route back

@@ -18,7 +18,6 @@ import {i18n} from 'boot/i18n';
 import {useApolloClient} from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
  * signing up, logging in, logging out, changing passwords, and more.
@@ -77,25 +76,26 @@ export class AuthenticationService {
      */
     async login(identifier: string, password: string, newPassword=''): Promise<void>{
 
-        // Generate auth details
-        const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
-            Username: identifier,
-            Password: password
-        });
+      // Generate auth details
+      const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+          Username: identifier,
+          Password: password
+      });
 
-        const userPool = this.$authStore.getters.getUserPool()
+      const userPool = this.$authStore.getters.getUserPool()
 
-        if(userPool === undefined){
-          this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
-          return
-        }
-          // Actual Cognito authentication on given pool
-        const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
-            Username: identifier,
-            Pool: userPool,
-        });
+      if(userPool === undefined){
+        this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
+        return
+      }
+        // Actual Cognito authentication on given pool
+      const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
+          Username: identifier,
+          Pool: userPool,
+      });
 
-        // Execute auth function
+
+      // Execute auth function
         return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
           // Store in local variable
           this.$authStore.mutations.setCognitoUser(cognitoUser)
@@ -113,8 +113,8 @@ export class AuthenticationService {
             },
 
             newPasswordRequired: function (userAttributes){
-              if(!newPassword){
-
+              while(!newPassword){
+                newPassword = prompt('Bitte geben Sie ein neues Passwort ein', '')||'';
               }
               cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
             },
@@ -131,6 +131,7 @@ export class AuthenticationService {
             },
 
 
+
           })
         })
     }
@@ -144,12 +145,12 @@ export class AuthenticationService {
    */
   setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
     cognitoUser.associateSoftwareToken({
-        associateSecretCode: (secret: string) => {
-          this.$authStore.mutations.setCognitoUser(cognitoUser)
-          this.showQRCodeDialog(secret, resolve, cognitoUser)},
-        onFailure: (err: Error) => {this.onFailure(err)}
-      })
-    }
+      associateSecretCode: (secret: string) => {
+        this.$authStore.mutations.setCognitoUser(cognitoUser)
+        this.showQRCodeDialog(secret, resolve, cognitoUser)},
+      onFailure: (err: Error) => {this.onFailure(err)}
+    })
+  }
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.

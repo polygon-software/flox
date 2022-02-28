@@ -48,7 +48,10 @@ export class BankService {
     }
 
     // Create a Cognito account with a random password
-    const newAccount = await createCognitoAccount(createBankInput.email);
+    const newAccount = await createCognitoAccount(
+      createBankInput.email,
+      createBankInput.password,
+    );
 
     // Create the SoiAdmin and User in the database
     const bank = this.bankRepository.create({

@@ -252,6 +252,7 @@ export default {
     current_month: 'Aktueller Monat',
     past_365_days: 'Letzte 365 Tage',
     date_filter: 'Datumsfilter',
+    no_prognosis: 'In dem angegebenen Zip Code ist keine Prognose möglich'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

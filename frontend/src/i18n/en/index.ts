@@ -250,6 +250,8 @@ export default {
     current_month: 'Current month',
     past_365_days: 'Past 365 days',
     date_filter: 'Date Filter',
+    no_prognosis: 'In the given Zip Code no prognosis is possible'
+
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
