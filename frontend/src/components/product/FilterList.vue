@@ -112,7 +112,6 @@ import FeedMutations from 'src/store/feed/mutations';
 import FeedActions from 'src/store/feed/actions';
 import { useFeedStore } from 'src/store/feed';
 import { RouterService } from 'src/services/RouterService';
-import { CATEGORY } from '../../../../shared/definitions/ENUM';
 
 const $routerService: RouterService|undefined = inject('$routerService')
 

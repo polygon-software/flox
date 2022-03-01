@@ -173,22 +173,6 @@ async function openFilterPage(): Promise<void>{
 }
 
 /**
- * Returns all elements of a set as an array of strings.
- * @param {Set<string | CATEGORY>} set - Set from where to extract the values
- * @return {string[]} - Array with set values as strings
- */
-function getSetValues(set: Set<string | CATEGORY>): string[] {
-  const values = []
-  for (let val of Array.from(set)) {
-    if (Object.keys(CATEGORY).includes(val)) {
-      val = val.toLowerCase()
-    }
-    values.push(val)
-  }
-  return values
-}
-
-/**
  * Reset sorting and filter.
  * @returns {Promise<void>} - async
  */

@@ -10,7 +10,7 @@
   >
     <template #append>
       <q-icon
-        v-if="search !== ''"
+        v-if="search"
         name="close"
         class="cursor-pointer"
         @click="onClear"

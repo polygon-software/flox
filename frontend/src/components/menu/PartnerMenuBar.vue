@@ -21,7 +21,7 @@
 
     <!-- Search field -->
     <div class="col flex justify-center">
-      <SeachBar v-if="$routerService?.route.path === '/'"/>
+      <SearchBar v-if="$routerService?.route.path === '/'"/>
     </div>
 
     <div class="col q-mr-md flex justify-end">
@@ -141,7 +141,7 @@ import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import Inbox from 'components/notifications/Inbox.vue';
 import { fetchMyNotifications } from 'src/helpers/api-helpers';
-import SeachBar from 'components/menu/MenuSeachBar.vue';
+import SearchBar from 'components/menu/MenuSearchBar.vue';
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
