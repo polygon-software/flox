@@ -23,7 +23,7 @@
           dense
           type="tel"
           lazy-rules="ondemand"
-          mask="### ### ## ##"
+          mask="## ### ## ##"
           :rules="[(val) => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_phone_number')]"
         />
         <p>{{ $t('edit_parameters.email') }}</p>
@@ -99,7 +99,7 @@ const props = defineProps({
  * @returns {object} - object which contains all values
  */
 function getData(): Record<string, unknown>{
-  return {fullName: name.value, phoneNumber: phone.value, emailAddress: email.value, selection: selection.value}
+  return {fullName: name.value, phoneNumber: '+41 ' + phone.value, emailAddress: email.value, selection: selection.value}
 }
 
 defineExpose({getData})
