@@ -100,7 +100,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  deviceData(end: DateTime!, file: String!, resolution: Int!, start: DateTime!): String!
+  deviceData(end: DateTime!, name: String!, resolution: Int!, start: DateTime!): String!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!

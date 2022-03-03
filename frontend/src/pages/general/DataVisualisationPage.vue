@@ -32,7 +32,8 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="computedDatasets"
+      v-if="datasets"
+      :datasets="computedDatasets.x"
       :warning-level="0.25"
       unit="mm/s"
     />
@@ -43,7 +44,8 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="computedDatasets"
+      v-if="datasets"
+      :datasets="computedDatasets.y"
       :warning-level="0.25"
       unit="mm/s"
     />
@@ -53,7 +55,8 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="computedDatasets"
+      v-if="datasets"
+      :datasets="computedDatasets.z"
       :warning-level="0.25"
       unit="mm/s"
     />
@@ -61,9 +64,12 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, ref} from 'vue';
+import {computed, defineProps, Ref, ref} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {DEVICE_DATA} from 'src/data/queries/DEVICE';
+import {round} from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -95,20 +101,38 @@ const timePeriodOptions = [
 // Currently chosen time period
 const timePeriod = ref(timePeriodOptions[0])
 
+const start = new Date('2022-03-01')
+const end = new Date('2022-03-03')
+
+const datasets: Ref<string|null> = ref(null)
+
+executeQuery(DEVICE_DATA, {name: props.stationId, start: start, end: end, resolution: 1})
+  .then(response => datasets.value = response.data?.deviceData as string).catch(e => console.error(e))
+
 // TODO remove placeholder data
 const computedDatasets = computed(() => {
-  const datasets = [] as Record<string, unknown>[]
-
-  (props.stationId.split('+')).forEach((station) => {
-    datasets.push(
-      {
-        name: station,
-        data: randomTimeSeries()
-      }
-    )
-  })
-
-  return datasets
+  const JSONString: string|null = datasets.value
+  const x: Array<Record<number, number>> = []
+  const y: Array<Record<number, number>> = []
+  const z: Array<Record<number, number>> = []
+  if(JSONString){
+    const array = JSON.parse(JSONString) as Array<Array<unknown>>
+    const values = array[2] as Array<Array<number>>
+    const step = round((end.getTime() - start.getTime()) / values.length)
+    let currentStep = 0;
+    values.forEach(value => {
+      const time = start.getTime() + currentStep
+      currentStep += step
+      x.push({x: time, y: value[0]} as Record<number, number>)
+      y.push({x: time, y: value[1]} as Record<number, number>)
+      z.push({x: time, y: value[2]} as Record<number, number>)
+    })
+  }
+  return {
+    x: [{name: props.stationId, data: x}],
+    y: [{name: props.stationId, data: y}],
+    z: [{name: props.stationId, data: z}],
+  }
 })
 
 const pageTitle = computed(() => {
@@ -121,26 +145,5 @@ const pageTitle = computed(() => {
 
   return title.substring(0, title.length-1);
 })
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * Placeholder function, generates a random time series with spikes
- * TODO remove
- */
-function randomTimeSeries(){
-  const result = []
-  let date = new Date()
-  for(let i = 0; i < 100; i++){
-    const newElement = {
-      x: date.getTime(),
-      y: Math.random()/(Math.random() < 0.9 ? 10 : 2)
-    }
-    result.push(newElement)
-
-    date.setTime(date.getTime() + 60000)
-  }
-
-  return result
-}
 
 </script>

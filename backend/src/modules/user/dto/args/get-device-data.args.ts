@@ -5,7 +5,7 @@ import { IsInt, IsString } from 'class-validator';
 export class GetDeviceDataArgs {
   @Field(() => String)
   @IsString()
-  file: string;
+  name: string;
 
   @Field(() => Date)
   @IsInt()

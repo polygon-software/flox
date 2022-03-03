@@ -29,7 +29,7 @@ export class UserResolver {
   @Query(() => String, { name: 'deviceData' })
   getDeviceData(@Args() getDeviceDataArgs: GetDeviceDataArgs) {
     return this.usersService.getDeviceData(
-      getDeviceDataArgs.file,
+      getDeviceDataArgs.name,
       getDeviceDataArgs.start,
       getDeviceDataArgs.end,
       getDeviceDataArgs.resolution,

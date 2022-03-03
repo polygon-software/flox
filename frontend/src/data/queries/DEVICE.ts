@@ -39,6 +39,16 @@ export const MY_DEVICES = {
   cacheLocation: 'getUserDevices',
 };
 
+export const DEVICE_DATA = {
+  query: gql`
+    query getDeviceData($name: String!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
+      deviceData(name: $name, start: $start, end: $end, resolution: $resolution)
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'getDeviceData',
+};
+
 export const PROJECT_DEVICES = {
   query: gql`
     query getProjectDevices($name: String!){
@@ -57,8 +67,8 @@ export const PROJECT_DEVICES = {
 };
 
 export const DEVICE_QUERIES: QueryObject[] = [
-
   USER_DEVICES,
   MY_DEVICES,
-  PROJECT_DEVICES
+  PROJECT_DEVICES,
+  DEVICE_DATA,
 ];
