@@ -8,23 +8,34 @@
           outlined
           :label="props.fullName"
           :disable="props.disabled"
+          dense
+          type="text"
+          lazy-rules="true"
+          :rules="[(val) => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_username')]"
         />
         <p>{{ $t('edit_parameters.number') }}</p>
         <q-input
           v-model="phone"
-          type="number"
           outlined
           prefix="+41"
           :label="props.phoneNumber"
           :disable="props.disabled"
+          dense
+          type="tel"
+          lazy-rules="ondemand"
+          mask="### ### ## ##"
+          :rules="[(val) => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_phone_number')]"
         />
         <p>{{ $t('edit_parameters.email') }}</p>
         <q-input
           v-model="email"
-          type="email"
           outlined
           :label="props.emailAddress"
           :disable="props.disabled"
+          dense
+          type="email"
+          lazy-rules="ondemand"
+          :rules="[(val) => IS_EMAIL(val) || i18n.global.t('errors.invalid_email')]"
         />
       </div>
       <div style="display: flex; flex-direction: column; margin-top: 35px; margin-left: 35px; color: #87858A">
@@ -43,7 +54,8 @@
 
 <script setup lang="ts">
 import {defineProps, ref, defineExpose} from 'vue';
-import {i18n} from "boot/i18n";
+import {i18n} from 'boot/i18n';
+import { IS_VALID_STRING, IS_EMAIL } from 'src/data/RULES'
 
 const name = ref('')
 const phone = ref('')

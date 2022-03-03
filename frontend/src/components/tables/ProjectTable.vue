@@ -89,11 +89,11 @@
             >
                 <!-- Button for options -->
                 <q-btn
-                  style="display: flex; flex-direction: column"
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
                   class="text-grey"
+                  style="display: flex; flex-direction: column"
                   flat
                   no-caps
                   @click="onOptionClick(props.row.name, button.key)"
