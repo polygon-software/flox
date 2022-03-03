@@ -38,6 +38,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
         component: () => import('pages/general/ParametersPage.vue'),
         props: route => ({ parametersId: route.params.stationId })
       },
+      {
+        path: ':customerId/:projectId/:stationId/status',
+        component: () => import('pages/general/StatusPage.vue'),
+        props: route => ({ stationId: route.params.stationId })
+      },
     ],
   },
 
@@ -58,16 +63,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     component: () => import('layouts/Layout.vue'),
     children: [
       { path: '', component: () => import('pages/general/SharePage.vue') },
-    ]
-  },
-
-  // General: Status
-  STATUS: {
-    path: '/status',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    component: () => import('layouts/Layout.vue'),
-    children: [
-      { path: '', component: () => import('pages/general/StatusPage.vue') },
     ]
   },
 

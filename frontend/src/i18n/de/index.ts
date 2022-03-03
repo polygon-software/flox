@@ -158,6 +158,9 @@ export default {
   messages: {
     copied: 'Kopiert'
   },
+  status: {
+    title: 'Status von',
+  },
   client_connectivity: {
     title: 'Client-Konnektivität',
     date_time: 'Datum/Zeit',
