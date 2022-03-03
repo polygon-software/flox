@@ -36,28 +36,28 @@
           <div class="row">
             <div class="col q-ma-sm">Trigger</div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelxTrigger"/>
+              <q-input v-model="channelxTrigger" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelyTrigger"/>
+              <q-input v-model="channelyTrigger" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelzTrigger"/>
+              <q-input v-model="channelzTrigger" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input borderless v-model="stateTrigger"/>
+              <q-input v-model="stateTrigger" borderless/>
             </div>
           </div>
           <div class="row">
             <div class="col q-ma-sm">Alarm 1</div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelxAlarm1"/>
+              <q-input v-model="channelxAlarm1" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelyAlarm1"/>
+              <q-input v-model="channelyAlarm1" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelzAlarm1"/>
+              <q-input v-model="channelzAlarm1" outlined/>
             </div>
             <div class="col q-ma-sm">
               <q-toggle
@@ -72,13 +72,13 @@
           <div class="row">
             <div class="col q-ma-sm">Alarm 2</div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelxAlarm2"/>
+              <q-input v-model="channelxAlarm2" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelyAlarm2"/>
+              <q-input v-model="channelyAlarm2" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input outlined v-model="channelzAlarm2"/>
+              <q-input v-model="channelzAlarm2" outlined/>
             </div>
             <div class="col q-ma-sm">
               <q-toggle
@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {inject, reactive, ref} from 'vue';
+import {inject, ref} from 'vue';
 
 const routerService: RouterService|undefined = inject('$routerService')
 

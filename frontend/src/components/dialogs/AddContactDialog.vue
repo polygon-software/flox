@@ -10,8 +10,8 @@
           @submit="onSubmit"
       >
         <GenericContactForm
-          :disabled="false"
           ref="contactForm"
+          :disabled="false"
         />
         <q-card-actions align="center">
           <q-btn
