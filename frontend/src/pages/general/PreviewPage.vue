@@ -1,7 +1,7 @@
 <template>
   <q-page class="row justify-center">
     <div class="col" style="max-width: 600px;">
-      FILE PAGE for {{ filesId }}
+      FILE PAGE for {{ fileId }}
     </div>
   </q-page>
 </template>
@@ -11,7 +11,7 @@ import {defineProps} from 'vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
-  filesId: {
+  fileId: {
     required: true,
     type: String
   }

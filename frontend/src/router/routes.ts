@@ -44,9 +44,9 @@ const ROUTES: Record<string, RouteRecordRaw> = {
         props: route => ({ stationId: route.params.stationId })
       },
       {
-        path: ':customerId/:projectId/:stationId/files/:filesId',
+        path: ':customerId/:projectId/:stationId/files/:fileId',
         component: () => import('pages/general/PreviewPage.vue'),
-        props: route => ({ filesId: route.params.filesId })
+        props: route => ({ fileId: route.params.fileId })
       },
     ],
   },

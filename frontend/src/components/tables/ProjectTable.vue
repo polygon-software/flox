@@ -95,7 +95,7 @@
                   class="column; text-grey"
                   flat
                   no-caps
-                  @click="onOptionClick(button.key)"
+                  @click="onOptionClick(props.row.name, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -181,7 +181,7 @@ const buttons = [
     label: i18n.global.t('projects.display_data'),
   },
   {
-    key: 'show_event',
+    key: 'files',
     label: i18n.global.t('projects.show_event'),
   },
   {
@@ -220,10 +220,11 @@ async function showCustomGraph(devices: string[]): Promise<void>{
 
 /**
  * Routes to different pages dependent which button is clicked
+ * @param {string} device - the name of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
-async function onOptionClick(key: string): Promise<void>{
+async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
@@ -238,8 +239,8 @@ async function onOptionClick(key: string): Promise<void>{
     case 'display':
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
-    case 'show_event':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+    case 'files':
+      await routerService?.addToRoute(`${device}/${key}`)
       break
     case 'edit':
       await routerService?.routeTo(ROUTES.CUSTOMER)
