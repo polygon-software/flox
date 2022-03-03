@@ -41,8 +41,31 @@ export const MY_DEVICES = {
 
 export const DEVICE_DATA = {
   query: gql`
-    query getDeviceData($name: String!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
-      deviceData(name: $name, start: $start, end: $end, resolution: $resolution)
+    query getDeviceData($stationId: String!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
+      deviceData(stationId: $stationId, start: $start, end: $end, resolution: $resolution){
+        x{
+          stationId
+          data {
+            x
+            y
+          }
+        }
+        y{
+          stationId
+          data {
+            x
+            y
+          }
+        }
+        z{
+          stationId
+          data {
+            x
+            y
+          }
+        }
+        max
+      }
     }
   `,
   tables: ['user'],

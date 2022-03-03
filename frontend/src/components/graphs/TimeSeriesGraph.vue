@@ -56,8 +56,13 @@ const props = defineProps({
   warningLevel: {
     type: Number,
     required: false,
-    default: null
-  }
+    default: null,
+  },
+  maxValue: {
+    type: Number,
+    required: false,
+    default: null,
+  },
 })
 
 /**
@@ -118,18 +123,18 @@ const options = {
     }
   },
   xaxis: {
-    type: 'numeric',
+    type: 'datetime',
     labels: {
-      formatter: function (timestamp: number){
-        return formatDateForGraph(new Date(timestamp))
+      formatter: function (timestamp: Date){
+        return formatDateForGraph(timestamp)
       }
     }
   },
   yaxis: {
     type: 'numeric',
     min: 0,
-    max: highestDatapoint.value,
-    tickAmount: Math.floor(highestDatapoint.value / 0.1),
+    max: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10) / 10,
+    tickAmount: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10),
     decimalsInFloat: 2,
     title: {
       text: props.unit,
@@ -163,7 +168,7 @@ const options = {
     x: {
       show: false,
       formatter: function (timestamp: number){
-        return date.formatDate(new Date(timestamp), 'dddd DD.MM.YYYY - HH:mm:ss')
+        return date.formatDate(timestamp, 'dddd DD.MM.YYYY - HH:mm:ss')
       }
     },
   }

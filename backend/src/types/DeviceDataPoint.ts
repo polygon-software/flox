@@ -1,0 +1,15 @@
+import { Field, Float, ObjectType } from '@nestjs/graphql';
+
+@ObjectType()
+export class DeviceDataPoint {
+  @Field(() => Date, { description: 'Timestamp' })
+  x: Date;
+
+  @Field(() => Float, { description: 'Value' })
+  y: number;
+
+  constructor(x: Date, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}

@@ -22,6 +22,9 @@ import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { getProjectsForInstances } from '../../helpers/project-helpers';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom, map, Observable } from 'rxjs';
+import { DeviceDataPoint } from '../../types/DeviceDataPoint';
+import { DeviceData } from '../../types/DeviceData';
+import { DeviceDataAxis } from '../../types/DeviceDataAxis';
 
 @Injectable()
 export class UserService {
@@ -31,17 +34,37 @@ export class UserService {
   ) {}
 
   async getDeviceData(
-    file: string,
+    stationId: string,
     start: Date,
     end: Date,
     resolution: number,
-  ) {
-    const url = `http://localhost:5000/rrt?file=${file}&start=${start.getTime()}&end=${end.getTime()}&step=${resolution}`;
+  ): Promise<DeviceData> {
+    const url = `http://localhost:5000/rrt?file=${stationId}&start=${start.getTime()}&end=${end.getTime()}&step=${resolution}`;
     const response: Observable<unknown> = this.axios
       .get(url)
       .pipe(map((response) => response.data));
     const data = await firstValueFrom(response);
-    return JSON.stringify(data);
+    const values = data[2] as Array<Array<number>>;
+    const step = (end.getTime() - start.getTime()) / (values.length - 1);
+    let currentStep = 0;
+    const x: DeviceDataPoint[] = [];
+    const y: DeviceDataPoint[] = [];
+    const z: DeviceDataPoint[] = [];
+    let maxValue = 0;
+    values.forEach((value) => {
+      const time = start.getTime() + Math.floor(currentStep);
+      currentStep += step;
+      maxValue = Math.max(maxValue, ...value);
+      x.push(new DeviceDataPoint(new Date(time), value[0]));
+      y.push(new DeviceDataPoint(new Date(time), value[1]));
+      z.push(new DeviceDataPoint(new Date(time), value[2]));
+    });
+    return new DeviceData(
+      new DeviceDataAxis(stationId, x),
+      new DeviceDataAxis(stationId, y),
+      new DeviceDataAxis(stationId, z),
+      maxValue,
+    );
   }
 
   /**

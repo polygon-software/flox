@@ -53,6 +53,36 @@ scalar DateTime
 
 union Device = MR2000 | MR3000
 
+type DeviceData {
+  """Max value"""
+  max: Float!
+
+  """x-axis"""
+  x: DeviceDataAxis!
+
+  """y-axis"""
+  y: DeviceDataAxis!
+
+  """z-axis"""
+  z: DeviceDataAxis!
+}
+
+type DeviceDataAxis {
+  """Data Points"""
+  data: [DeviceDataPoint!]!
+
+  """CLI ID"""
+  stationId: String!
+}
+
+type DeviceDataPoint {
+  """Timestamp"""
+  x: DateTime!
+
+  """Value"""
+  y: Float!
+}
+
 type MR2000 {
   """CLI ID"""
   cli: String!
@@ -100,7 +130,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  deviceData(end: DateTime!, name: String!, resolution: Int!, start: DateTime!): String!
+  deviceData(end: DateTime!, resolution: Int!, start: DateTime!, stationId: String!): DeviceData!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!

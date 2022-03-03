@@ -35,6 +35,7 @@
       v-if="datasets"
       :datasets="computedDatasets.x"
       :warning-level="0.25"
+      :max-value="datasets.max"
       unit="mm/s"
     />
 
@@ -47,6 +48,7 @@
       v-if="datasets"
       :datasets="computedDatasets.y"
       :warning-level="0.25"
+      :max-value="datasets.max"
       unit="mm/s"
     />
     <!-- Horizontal - z -->
@@ -58,6 +60,7 @@
       v-if="datasets"
       :datasets="computedDatasets.z"
       :warning-level="0.25"
+      :max-value="datasets.max"
       unit="mm/s"
     />
   </q-page>
@@ -69,7 +72,6 @@ import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {DEVICE_DATA} from 'src/data/queries/DEVICE';
-import {round} from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -104,45 +106,22 @@ const timePeriod = ref(timePeriodOptions[0])
 const start = new Date('2022-03-01')
 const end = new Date('2022-03-03')
 
-const datasets: Ref<string|null> = ref(null)
+const datasets: Ref<Record<string, unknown>|null> = ref(null)
 
-executeQuery(DEVICE_DATA, {name: props.stationId, start: start, end: end, resolution: 1})
-  .then(response => datasets.value = response.data?.deviceData as string).catch(e => console.error(e))
-
-// TODO remove placeholder data
 const computedDatasets = computed(() => {
-  const JSONString: string|null = datasets.value
-  const x: Array<Record<number, number>> = []
-  const y: Array<Record<number, number>> = []
-  const z: Array<Record<number, number>> = []
-  if(JSONString){
-    const array = JSON.parse(JSONString) as Array<Array<unknown>>
-    const values = array[2] as Array<Array<number>>
-    const step = round((end.getTime() - start.getTime()) / values.length)
-    let currentStep = 0;
-    values.forEach(value => {
-      const time = start.getTime() + currentStep
-      currentStep += step
-      x.push({x: time, y: value[0]} as Record<number, number>)
-      y.push({x: time, y: value[1]} as Record<number, number>)
-      z.push({x: time, y: value[2]} as Record<number, number>)
-    })
-  }
-  return {
-    x: [{name: props.stationId, data: x}],
-    y: [{name: props.stationId, data: y}],
-    z: [{name: props.stationId, data: z}],
-  }
+  return datasets.value ? { x: [datasets.value.x], y: [datasets.value.y], z: [datasets.value.z] } : { x: [], y: [], z: []}
 })
+
+executeQuery(DEVICE_DATA, {stationId: props.stationId, start: start, end: end, resolution: 1})
+  .then(response => datasets.value = response.data?.deviceData as Record<string, unknown>)
+  .catch(e => console.error(e))
 
 const pageTitle = computed(() => {
   const stations = props.stationId.split('+')
   let title = i18n.global.tc('dashboard.station', stations.length)
-
   stations.forEach((station) => {
     title += ` ${station},`
   })
-
   return title.substring(0, title.length-1);
 })
 

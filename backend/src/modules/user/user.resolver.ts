@@ -20,16 +20,17 @@ import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
 import { GetMyDevicesArgs } from './dto/args/get-my-devices.args';
 import { GetDeviceDataArgs } from './dto/args/get-device-data.args';
+import { DeviceData } from '../../types/DeviceData';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
   @Public()
-  @Query(() => String, { name: 'deviceData' })
+  @Query(() => DeviceData, { name: 'deviceData' })
   getDeviceData(@Args() getDeviceDataArgs: GetDeviceDataArgs) {
     return this.usersService.getDeviceData(
-      getDeviceDataArgs.name,
+      getDeviceDataArgs.stationId,
       getDeviceDataArgs.start,
       getDeviceDataArgs.end,
       getDeviceDataArgs.resolution,
