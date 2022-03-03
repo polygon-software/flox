@@ -189,7 +189,7 @@ const buttons = [
     label: i18n.global.t('projects.display_data'),
   },
   {
-    key: 'show_event',
+    key: 'files',
     label: i18n.global.t('projects.show_event'),
   },
   {
@@ -227,8 +227,8 @@ async function onOptionClick(device: string, key: string): Promise<void>{
     case 'display':
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
-    case 'show_event':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+    case 'files':
+      await routerService?.addToRoute(`pool/${device}/${key}`)
       break
     case 'edit':
       await routerService?.routeTo(ROUTES.CUSTOMER)

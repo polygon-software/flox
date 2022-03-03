@@ -56,7 +56,8 @@ export default {
     station: 'Station | Stationen',
     device_pool: 'Gerätepool',
     account: 'Account',
-    share: 'Teilen'
+    share: 'Teilen',
+    files: 'Ereignisse vom Station',
   },
   projects: {
     project: 'Projekt',
@@ -173,5 +174,22 @@ export default {
     log_file: 'LOG Datei',
     ftp_log_file: 'FTP LOG Datei - aktuelle Uploads',
     rest_log_file: 'REST LOG Datei',
+  },
+  files: {
+    events: '{events} Ereignisse',
+    peak_files: '{peak_files} Peak-Dateien',
+    zip_files: '{zip_files} ZIP-Dateien',
+    totally_files: '{files} von insgesamt {total_files} Dateien',
+    file: 'Datei',
+    type: 'Typ',
+    date_time: 'Datum/Typ',
+    peak_x: 'Spitze X',
+    peak_y: 'Spitze Y',
+    peak_z: 'Spitze Z',
+    frq_x: 'Frq X',
+    frq_y: 'Frq Y',
+    frq_z: 'Frq Z',
+    vsum: 'VSUM',
+    download: 'Herunterladen',
   },
 };

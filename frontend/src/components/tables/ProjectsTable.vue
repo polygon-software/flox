@@ -206,7 +206,7 @@ const buttons = [
     label: i18n.global.t('projects.display_data'),
   },
   {
-    key: 'show_event',
+    key: 'files',
     label: i18n.global.t('projects.show_event'),
   },
   {
@@ -255,8 +255,8 @@ async function onOptionClick(project: string, device: string, key: string): Prom
     case 'display':
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
-    case 'show_event':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+    case 'files':
+      await routerService?.addToRoute(`${project}/${device}/${key}`)
       break
     case 'edit':
       await routerService?.routeTo(ROUTES.CUSTOMER)

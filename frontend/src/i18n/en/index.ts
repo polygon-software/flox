@@ -55,7 +55,8 @@ export default {
     station: 'Station | Stations',
     device_pool: 'Device Pool',
     account: 'Account',
-    share: 'Share'
+    share: 'Share',
+    files: 'Events from Station',
   },
   projects: {
     project: 'Project',
@@ -165,9 +166,26 @@ export default {
     vpn_ip: 'VPN IP',
     event: 'Event',
   },
-log_files: {
-  log_file: 'LOG File',
-  ftp_log_file: 'FTP LOG File - recent uploads',
-  rest_log_file: 'REST LOG File',
-},
+  log_files: {
+    log_file: 'LOG File',
+    ftp_log_file: 'FTP LOG File - recent uploads',
+    rest_log_file: 'REST LOG File',
+  },
+  files: {
+    events: '{events} events',
+    peak_files: '{peak_files} peak-files',
+    zip_files: '{zip_files} ZIP-Files',
+    totally_files: '{files} of totally {total_files} files',
+    file: 'File',
+    type: 'Type',
+    date_time: 'Date/Type',
+    peak_x: 'Peak X',
+    peak_y: 'Peak Y',
+    peak_z: 'Peak Z',
+    frq_x: 'Frq X',
+    frq_y: 'Frq Y',
+    frq_z: 'Frq Z',
+    vsum: 'VSUM',
+    download: 'Download',
+  },
 };
