@@ -4,13 +4,13 @@ import { DeviceDataPoint } from './DeviceDataPoint';
 @ObjectType()
 export class DeviceDataAxis {
   @Field(() => String, { description: 'CLI ID' })
-  stationId: string;
+  name: string;
 
   @Field(() => [DeviceDataPoint], { description: 'Data Points' })
   data: DeviceDataPoint[];
 
-  constructor(stationId: string, data: DeviceDataPoint[]) {
-    this.stationId = stationId;
+  constructor(name: string, data: DeviceDataPoint[]) {
+    this.name = name;
     this.data = data;
   }
 }

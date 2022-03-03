@@ -32,10 +32,10 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="datasets"
-      :datasets="computedDatasets.x"
+      v-if="!fetching"
+      :datasets="datasets.x"
       :warning-level="0.25"
-      :max-value="datasets.max"
+      :max-value="maxValue"
       unit="mm/s"
     />
 
@@ -45,10 +45,10 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="datasets"
-      :datasets="computedDatasets.y"
+      v-if="!fetching"
+      :datasets="datasets.y"
       :warning-level="0.25"
-      :max-value="datasets.max"
+      :max-value="maxValue"
       unit="mm/s"
     />
     <!-- Horizontal - z -->
@@ -57,17 +57,17 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="datasets"
-      :datasets="computedDatasets.z"
+      v-if="!fetching"
+      :datasets="datasets.z"
       :warning-level="0.25"
-      :max-value="datasets.max"
+      :max-value="maxValue"
       unit="mm/s"
     />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, Ref, ref} from 'vue';
+import {defineProps, Ref, ref} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
 import {executeQuery} from 'src/helpers/data-helpers';
@@ -106,23 +106,43 @@ const timePeriod = ref(timePeriodOptions[0])
 const start = new Date('2022-03-01')
 const end = new Date('2022-03-03')
 
-const datasets: Ref<Record<string, unknown>|null> = ref(null)
+const datasets: Ref<Record<string, Record<string, unknown>[]>> = ref({ x: [], y: [], z: []})
+const maxValue: Ref<number> = ref(0)
 
-const computedDatasets = computed(() => {
-  return datasets.value ? { x: [datasets.value.x], y: [datasets.value.y], z: [datasets.value.z] } : { x: [], y: [], z: []}
+const stations = props.stationId.split('+')
+let title = i18n.global.tc('dashboard.station', stations.length)
+stations.forEach((station) => {
+  title += ` ${station},`
 })
+const pageTitle = title.substring(0, title.length-1);
 
-executeQuery(DEVICE_DATA, {stationId: props.stationId, start: start, end: end, resolution: 1})
-  .then(response => datasets.value = response.data?.deviceData as Record<string, unknown>)
-  .catch(e => console.error(e))
+const fetching = ref(true);
 
-const pageTitle = computed(() => {
-  const stations = props.stationId.split('+')
-  let title = i18n.global.tc('dashboard.station', stations.length)
-  stations.forEach((station) => {
-    title += ` ${station},`
-  })
-  return title.substring(0, title.length-1);
-})
+/**
+ * TODO
+ * @param {Date} start - start
+ * @param {Date} end - end
+ * @returns {Promise<void>} - async
+ */
+async function queryData(start: Date, end: Date){
+  fetching.value = true
+  maxValue.value = 0
+  const promiseList = stations.map(station =>
+  executeQuery(DEVICE_DATA, {stationId: station, start: start, end: end, resolution: 1})
+    .then(response => {
+      const deviceData = response.data.deviceData as Record<string, Record<string, unknown>|number>
+      datasets.value.x.push(deviceData.x as Record<string, unknown>)
+      datasets.value.y.push(deviceData.y as Record<string, unknown>)
+      datasets.value.z.push(deviceData.z as Record<string, unknown>)
+      maxValue.value = Math.max(maxValue.value, deviceData.max as number)
+    })
+    .catch(e => console.error(e)));
+  await Promise.all(promiseList)
+  fetching.value = false
+}
+
+queryData(start, end).catch(e => console.error(e))
+
+
 
 </script>

@@ -44,21 +44,21 @@ export const DEVICE_DATA = {
     query getDeviceData($stationId: String!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
       deviceData(stationId: $stationId, start: $start, end: $end, resolution: $resolution){
         x{
-          stationId
+          name
           data {
             x
             y
           }
         }
         y{
-          stationId
+          name
           data {
             x
             y
           }
         }
         z{
-          stationId
+          name
           data {
             x
             y

@@ -72,7 +72,7 @@ type DeviceDataAxis {
   data: [DeviceDataPoint!]!
 
   """CLI ID"""
-  stationId: String!
+  name: String!
 }
 
 type DeviceDataPoint {
