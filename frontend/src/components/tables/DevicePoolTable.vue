@@ -74,10 +74,11 @@
             >
                 <!-- Button for options -->
                 <q-btn
+                  style="display: flex; flex-direction: column"
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
-                  class="column; text-grey"
+                  class="text-grey"
                   flat
                   no-caps
                   @click="onOptionClick(button.key)"
