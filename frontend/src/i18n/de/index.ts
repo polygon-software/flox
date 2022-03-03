@@ -90,6 +90,13 @@ export default {
     number: 'Telefonnumer',
     email: 'E-mail',
     add_new_contact: 'Füge neuen Kontakt hinzu',
+    event: 'Ereigniss',
+    alarm1: 'Alarm 1',
+    alarm2: 'Alarm 2',
+    sms_limit: 'SMS-Grenze',
+    battery: 'Leistung/Batterie',
+    memory: 'Erinnerung',
+    daily: 'Täglich',
   },
   buttons: {
     finish: 'Abschliessen',

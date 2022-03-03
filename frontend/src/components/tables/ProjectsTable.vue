@@ -92,7 +92,7 @@
                   class="text-grey"
                   flat
                   no-caps
-                  @click="onOptionClick(button.key)"
+                  @click="onOptionClick(props.row.project, props.row.station, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -235,11 +235,13 @@ async function createNewProject(): Promise<void>{
 }
 
 /**
- * Routes to different pages dependent which button is clicked
+ * Routes to different pages dependent which button is clicked$
+ * @param {string} project - the name of a project
+ * @param {string} device - the name of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
-async function onOptionClick(key: string): Promise<void>{
+async function onOptionClick(project: string, device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
@@ -258,7 +260,7 @@ async function onOptionClick(key: string): Promise<void>{
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
     case 'edit':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.addToRoute(`${project}/${device}/${key}`)
       break
     case 'show_status':
       await routerService?.routeTo(ROUTES.CUSTOMER)

@@ -89,6 +89,13 @@ export default {
     number: 'Mobile Number',
     email: 'Email',
     add_new_contact: 'Add new contact',
+    event: 'Event',
+    alarm1: 'Alarm 1',
+    alarm2: 'Alarm 2',
+    sms_limit: 'SMS limit',
+    battery: 'Power/Battery',
+    memory: 'Memory',
+    daily: 'Daily',
   },
   buttons: {
     finish: 'Finish',

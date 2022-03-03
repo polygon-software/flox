@@ -96,7 +96,7 @@
                   class="text-grey"
                   flat
                   no-caps
-                  @click="onOptionClick(button.key, props.row.name)"
+                  @click="onOptionClick(props.row.name, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -221,11 +221,11 @@ async function showCustomGraph(devices: string[]): Promise<void>{
 
 /**
  * Routes to different pages dependent which button is clicked
+ * @param {string} device - the name of a device
  * @param {string} key - the button key
- * @param {string} device - the selected device
  * @returns {Promise<void>} - routes to correct page
  */
-async function onOptionClick(key: string, device: string): Promise<void>{
+async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
@@ -244,7 +244,7 @@ async function onOptionClick(key: string, device: string): Promise<void>{
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
     case 'edit':
-      await routerService?.addToRoute(`${device}/edit`)
+      await routerService?.addToRoute(`${device}/${key}`)
       break
     case 'show_status':
       await routerService?.routeTo(ROUTES.CUSTOMER)

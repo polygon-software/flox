@@ -43,6 +43,7 @@
 
 <script setup lang="ts">
 import {defineProps, ref, defineExpose} from 'vue';
+import {i18n} from "boot/i18n";
 
 const name = ref('')
 const phone = ref('')
@@ -50,13 +51,13 @@ const email = ref('')
 const selection = ref([])
 
 const checkboxes = [
-  {val: 'event', label: 'Event'},
-  {val: 'alarm1', label: 'Alarm 1'},
-  {val: 'alarm2', label: 'Alarm 2'},
-  {val: 'sms', label: 'SMS limit'},
-  {val: 'power_battery', label: 'Power/Battery'},
-  {val: 'memory', label: 'Memory'},
-  {val: 'daily', label: 'Daily'},
+  {val: 'event', label: i18n.global.t('edit_parameters.event'),},
+  {val: 'alarm1', label: i18n.global.t('edit_parameters.alarm1')},
+  {val: 'alarm2', label: i18n.global.t('edit_parameters.alarm2')},
+  {val: 'sms', label: i18n.global.t('edit_parameters.sms_limit')},
+  {val: 'power_battery', label: i18n.global.t('edit_parameters.battery')},
+  {val: 'memory', label: i18n.global.t('edit_parameters.memory')},
+  {val: 'daily', label: i18n.global.t('edit_parameters.daily')},
 ]
 
 const props = defineProps({

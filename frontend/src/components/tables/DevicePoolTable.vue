@@ -81,7 +81,7 @@
                   class="text-grey"
                   flat
                   no-caps
-                  @click="onOptionClick(button.key)"
+                  @click="onOptionClick(props.row.station, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -209,10 +209,11 @@ const buttons = [
 
 /**
  * Routes to different pages dependent which button is clicked
+ * @param {string} device - the name of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
-async function onOptionClick(key: string): Promise<void>{
+async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
@@ -231,7 +232,7 @@ async function onOptionClick(key: string): Promise<void>{
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
     case 'edit':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.addToRoute(`pool/${device}/${key}`)
       break
     case 'show_status':
       await routerService?.routeTo(ROUTES.CUSTOMER)
