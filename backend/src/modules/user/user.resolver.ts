@@ -1,9 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
-import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { Public } from '../../auth/authentication.decorator';
 import {
@@ -21,14 +19,26 @@ import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
 import { GetMyDevicesArgs } from './dto/args/get-my-devices.args';
+import { GetDeviceDataArgs } from './dto/args/get-device-data.args';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
+  @Public()
+  @Query(() => String, { name: 'deviceData' })
+  getDeviceData(@Args() getDeviceDataArgs: GetDeviceDataArgs) {
+    return this.usersService.getDeviceData(
+      getDeviceDataArgs.file,
+      getDeviceDataArgs.start,
+      getDeviceDataArgs.end,
+      getDeviceDataArgs.resolution,
+    );
+  }
+
   @AdminOnly()
   @Query(() => [User], { name: 'allUsers' })
-  async getAllPartners(): Promise<User[]> {
+  async getAllUsers(): Promise<User[]> {
     return this.usersService.getAllUsers();
   }
 
@@ -53,27 +63,11 @@ export class UserResolver {
   }
 
   @AdminOnly()
-  @Mutation(() => User, { name: 'create' })
-  async create(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<User> {
-    return this.usersService.create(createUserInput);
-  }
-
-  @AdminOnly()
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'updateUser' })
   async update(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
     return this.usersService.update(updateUserInput);
-  }
-
-  @AdminOnly()
-  @Mutation(() => User)
-  async remove(
-    @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
-  ): Promise<User> {
-    return this.usersService.remove(deleteUserInput);
   }
 
   /**

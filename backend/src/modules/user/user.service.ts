@@ -20,12 +20,29 @@ import {
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { getProjectsForInstances } from '../../helpers/project-helpers';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom, map, Observable } from 'rxjs';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    private readonly axios: HttpService,
   ) {}
+
+  async getDeviceData(
+    file: string,
+    start: Date,
+    end: Date,
+    resolution: number,
+  ) {
+    const url = `http://localhost:5000/rrt?file=${file}&start=${start.getTime()}&end=${end.getTime()}&step=${resolution}`;
+    const response: Observable<unknown> = this.axios
+      .get(url)
+      .pipe(map((response) => response.data));
+    const data = await firstValueFrom(response);
+    return JSON.stringify(data);
+  }
 
   /**
    * Register a new user. Returns null if user email is not in DB.

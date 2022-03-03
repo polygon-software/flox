@@ -46,37 +46,10 @@ input CreateAddressInput {
   zipCode: String!
 }
 
-input CreateUserInput {
-  """User address"""
-  address: CreateAddressInput!
-
-  """Date of birth"""
-  birthdate: DateTime!
-
-  """E-mail address"""
-  email: String!
-
-  """Full name of the user"""
-  fullName: String!
-
-  """phone number"""
-  phone: String!
-
-  """Username"""
-  username: String!
-
-  """Cognito ID"""
-  uuid: ID!
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-input DeleteUserInput {
-  uuid: ID!
-}
 
 union Device = MR2000 | MR3000
 
@@ -104,10 +77,8 @@ type MR3000 {
 
 type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
-  create(createUserInput: CreateUserInput!): User!
   register(registerUserInput: RegisterUserInput!): User
-  remove(deleteUserInput: DeleteUserInput!): User!
-  update(updateUserInput: UpdateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 enum Permission {
@@ -129,6 +100,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
+  deviceData(end: DateTime!, file: String!, resolution: Int!, start: DateTime!): String!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
