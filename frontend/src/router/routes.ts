@@ -38,6 +38,21 @@ const ROUTES: Record<string, RouteRecordRaw> = {
         component: () => import('pages/general/ParametersPage.vue'),
         props: route => ({ parametersId: route.params.stationId })
       },
+      {
+        path: ':customerId/:projectId/:stationId/status',
+        component: () => import('pages/general/StatusPage.vue'),
+        props: route => ({ stationId: route.params.stationId })
+      },
+      {
+        path: ':customerId/:projectId/:stationId/files',
+        component: () => import('pages/general/FilesPage.vue'),
+        props: route => ({ stationId: route.params.stationId })
+      },
+      {
+        path: ':customerId/:projectId/:stationId/files/:fileId',
+        component: () => import('pages/general/PreviewPage.vue'),
+        props: route => ({ fileId: route.params.fileId })
+      },
     ],
   },
 
