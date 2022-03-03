@@ -80,7 +80,7 @@ type DeviceDataPoint {
   x: DateTime!
 
   """Value"""
-  y: Float!
+  y: Float
 }
 
 type MR2000 {

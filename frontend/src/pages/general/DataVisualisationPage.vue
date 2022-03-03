@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, Ref, ref} from 'vue';
+import {computed, defineProps, Ref, ref, watch} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
 import {executeQuery} from 'src/helpers/data-helpers';
@@ -103,8 +103,34 @@ const timePeriodOptions = [
 // Currently chosen time period
 const timePeriod = ref(timePeriodOptions[0])
 
-const start = new Date('2022-03-01')
-const end = new Date('2022-03-03')
+const end = computed(() => {
+  return new Date()
+})
+
+const start = computed(() => {
+  const date = new Date(end.value)
+  switch (timePeriod.value.key){
+    case 'twelve_hours':
+      date.setHours(date.getHours() - 12)
+      break
+    case 'two_days':
+      date.setDate(date.getDate() - 2)
+      break
+    case 'two_weeks':
+      date.setDate(date.getDate() - 14)
+      break
+    case 'one_month':
+      date.setMonth(date.getMonth() - 1)
+      break
+    case 'custom':
+    default:
+      break
+  }
+  return date
+})
+
+watch(start, () => queryData(start.value, end.value))
+watch(end, () => queryData(start.value, end.value))
 
 const datasets: Ref<Record<string, Record<string, unknown>[]>> = ref({ x: [], y: [], z: []})
 const maxValue: Ref<number> = ref(0)
@@ -127,6 +153,7 @@ const fetching = ref(true);
 async function queryData(start: Date, end: Date){
   fetching.value = true
   maxValue.value = 0
+  datasets.value = { x: [], y: [], z: []}
   const promiseList = stations.map(station =>
   executeQuery(DEVICE_DATA, {stationId: station, start: start, end: end, resolution: 1})
     .then(response => {
@@ -141,8 +168,5 @@ async function queryData(start: Date, end: Date){
   fetching.value = false
 }
 
-queryData(start, end).catch(e => console.error(e))
-
-
-
+queryData(start.value, end.value).catch(e => console.error(e))
 </script>

@@ -5,7 +5,7 @@ export class DeviceDataPoint {
   @Field(() => Date, { description: 'Timestamp' })
   x: Date;
 
-  @Field(() => Float, { description: 'Value' })
+  @Field(() => Float, { description: 'Value', nullable: true })
   y: number;
 
   constructor(x: Date, y: number) {
