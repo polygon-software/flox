@@ -115,6 +115,8 @@ export default {
     new_contact: 'Neuer Kontakt',
     load: 'Laden',
     save: 'Speichern',
+    show: 'Anzeigen',
+    close: 'Schliessen',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -150,6 +152,7 @@ export default {
       'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
   },
   set_password: {
     description:
@@ -211,6 +214,19 @@ export default {
     frq_z: 'Frq Z',
     vsum: 'VSUM',
     download: 'Herunterladen',
+  },
+  dialog: {
+    period: 'Periode',
+    scale: 'Skala',
+    hours: '12 Stunden',
+    days: '2 Tage',
+    weeks: '2 Wochen',
+    months: '1 Monat',
+    select_period: 'Periode auswählen',
+    perception_level: 'Wahrnehmungsebene',
+    alarm_level: 'Alarmlevel',
+    highest_peak: 'Höchster Peak',
+    enter_value: 'Wert eingeben',
   },
   device_health: {
     title: 'Gesundheitsstatus von',

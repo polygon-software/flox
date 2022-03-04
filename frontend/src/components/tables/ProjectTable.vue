@@ -112,11 +112,15 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
+import {useQuasar} from 'quasar';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 
 const selectedRows: Ref<string[]> = ref([])
+
+const $q = useQuasar()
 
 // ----- Data -----
 const columns = [
@@ -202,21 +206,25 @@ const buttons = [
 /**
  * Routes to a new page where the graph of that project is shown
  * @param {string[]} devices - names of devices to show the graph for
- * @returns {Promise<void>} - done
+ * @returns {void} - done
  */
-async function showCustomGraph(devices: string[]): Promise<void>{
+function showCustomGraph(devices: string[]): void{
   // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
+  $q.dialog({
+    component: CustomGraphDialog,
+    componentProps: {},
+  }).onOk(async () => {
+    // Build string combination of device CLIs
+    let pathSuffix = ''
+    devices.forEach((device) => {
+      pathSuffix += `${device}+`
+    })
 
-  // Build string combination of device CLIs
-  let pathSuffix = ''
-  devices.forEach((device) => {
-    pathSuffix += `${device}+`
+    // Subtract last '+'
+    pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
+
+    await routerService?.addToRoute(pathSuffix)
   })
-
-  // Subtract last '+'
-  pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
-
-  await routerService?.addToRoute(pathSuffix)
 }
 
 /**
