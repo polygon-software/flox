@@ -22,7 +22,7 @@
         no-caps
         unelevated
         outline
-        @click="timePeriod = option"
+        @click="option.key === 'custom' ? showCustomGraphDialog(): timePeriod = option"
       />
     </div>
 
@@ -64,6 +64,8 @@
 import {computed, defineProps, ref} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
+import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue';
+import {useQuasar} from 'quasar';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -141,6 +143,21 @@ function randomTimeSeries(){
   }
 
   return result
+}
+
+const $q = useQuasar()
+
+/**
+ * Shows the Custom Graph Dialog
+ * @returns {void} - done
+ */
+function showCustomGraphDialog(): void{
+  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
+  // TODO: onOK
+  $q.dialog({
+    component: CustomGraphDialog,
+    componentProps: {},
+  })
 }
 
 </script>

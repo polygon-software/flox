@@ -45,7 +45,7 @@
             <q-radio v-model="scale" style="color: #87858A" val="alarm_level" :label="$t('dialog.alarm_level')" />
             <q-radio v-model="scale" style="color: #87858A" val="highest_peak" :label="$t('dialog.highest_peak')" />
             <q-radio v-model="scale" style="color: #87858A" val="entered_value">
-              <q-input v-model="enteredValue" outlined dense :label="$t('dialog.enter_value')" />
+              <q-input v-model="enteredValue" type="number" outlined dense :label="$t('dialog.enter_value')" />
             </q-radio>
           </div>
         </div>
@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import { useDialogPluginComponent } from 'quasar';
-import {parseDate} from 'src/helpers/format-helpers';
+import { parseDate } from 'src/helpers/format-helpers';
 
 const period = ref('twelve_hours')
 const scale = ref('perception_level')
@@ -106,10 +106,10 @@ function checkDate() {
  * @returns {void}
  */
 function onSubmit(){
-  let periodValue = period.value
+  let periodValue: string|{from: string, to: string} = period.value
   let scaleValue = scale.value
   if(periodValue === 'selected_period'){
-    periodValue = selectedPeriodText.value
+    periodValue = selectedPeriod.value
   }
   if(scaleValue === 'entered_value'){
     scaleValue = enteredValue.value
