@@ -51,8 +51,8 @@ export class UserService {
     const resolution = getLevelWritingArgs.resolution;
     const promiseList = getLevelWritingArgs.stationIds.map(
       async (stationId) => {
+        const url = `http://localhost:5000/rrt?file=${stationId}&start=${startTime}&end=${endTime}&step=${resolution}`;
         try {
-          const url = `http://localhost:5000/rrt?file=${stationId}&start=${startTime}&end=${endTime}&step=${resolution}`;
           const response: Observable<unknown> = this.axios
             .get(url)
             .pipe(map((response) => response.data));
@@ -75,7 +75,9 @@ export class UserService {
           y_axes.push(new LevelWritingAxis(stationId, y_points));
           z_axes.push(new LevelWritingAxis(stationId, z_points));
         } catch (e) {
-          console.error(`Level Writings for station "${stationId}" not found`);
+          console.error(
+            `Level Writings for station "${stationId}" not found! URL: ${url}`,
+          );
         }
       },
     );
