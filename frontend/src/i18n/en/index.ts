@@ -94,6 +94,7 @@ export default {
     send: 'Send',
     create_link: 'Create Link',
     show: 'Show',
+    close: 'Close',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -127,6 +128,7 @@ export default {
       'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
+    incorrect_date_range: 'Please select a valid date range',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',

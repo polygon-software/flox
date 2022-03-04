@@ -12,22 +12,25 @@
         <div style="display:flex; flex-direction: row">
           <div style="display: flex; flex-direction: column; margin-top: 35px; margin-left: 10px">
             <p>{{ $t('dialog.period') }}</p>
-            <q-radio v-model="period" style="color: #87858A" val="hours" :label="$t('dialog.hours')" />
-            <q-radio v-model="period" style="color: #87858A" val="days" :label="$t('dialog.days')" />
-            <q-radio v-model="period" style="color: #87858A" val="weeks" :label="$t('dialog.weeks')" />
-            <q-radio v-model="period" style="color: #87858A" val="months" :label="$t('dialog.months')" />
+            <q-radio v-model="period" style="color: #87858A" val="twelve_hours" :label="$t('dialog.hours')" />
+            <q-radio v-model="period" style="color: #87858A" val="two_days" :label="$t('dialog.days')" />
+            <q-radio v-model="period" style="color: #87858A" val="two_weeks" :label="$t('dialog.weeks')" />
+            <q-radio v-model="period" style="color: #87858A" val="one_month" :label="$t('dialog.months')" />
             <q-radio v-model="period" style="color: #87858A" val="selected_period" >
               <q-input
                 v-model="selectedPeriodText"
-                outlined dense
+                outlined
+                dense
                 :label="$t('dialog.select_period')"
-                mask="##.##.#### - ##.##.####">
+                mask="##.##.#### - ##.##.####"
+                :rules="[val => checkDate(val) || $t('errors.incorrect_date_range')]"
+              >
                 <template #append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
                       <q-date v-model="selectedPeriod" range mask="DD.MM.YYYY">
                         <div class="row items-center justify-end">
-                          <q-btn v-close-popup label="Close" color="primary" flat />
+                          <q-btn v-close-popup :label="$t('buttons.close')" color="primary" flat />
                         </div>
                       </q-date>
                     </q-popup-proxy>
@@ -52,6 +55,7 @@
             outline
             class="text-grey"
             type="submit"
+            :disable="checkDate"
           />
           <q-btn
             :label="$t('buttons.cancel')"
@@ -66,17 +70,16 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineEmits, ref} from 'vue';
+import {computed, ref} from 'vue';
 import { useDialogPluginComponent } from 'quasar';
+import {parseDate} from 'src/helpers/format-helpers';
 
-const period = ref('')
-const scale = ref('')
+const period = ref('twelve_hours')
+const scale = ref('perception_level')
 const selectedPeriod = ref({ from: '02.08.2021', to: '17.08.2021' })
 const enteredValue = ref('')
 
 const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent()
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emits = defineEmits(useDialogPluginComponent.emits)
 
 const selectedPeriodText = computed({
   get: () => {
@@ -84,14 +87,19 @@ const selectedPeriodText = computed({
   },
   set: (val: string) => {
     const stringArray: string[] = val.split('-')
-    if (stringArray[0].trim() < stringArray[1].trim()) {
-      throw new Error('Make sure that entering the date makes sense')
-    }
-    else if(stringArray.length > 1) {
+    if(stringArray.length > 1) {
       selectedPeriod.value = {from: stringArray[0].trim(), to: stringArray[1].trim()}
     }
   }
 })
+
+/**
+ * Checks the date range, if from date is before to date
+ * @returns {void}
+ */
+function checkDate() {
+  return parseDate(selectedPeriod.value.from) <= parseDate(selectedPeriod.value.to)
+}
 
 /**
  * On submit, emit data outwards

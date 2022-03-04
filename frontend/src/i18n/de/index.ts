@@ -95,6 +95,7 @@ export default {
     send: 'Senden',
     create_link: 'Link erzeugen',
     show: 'Anzeigen',
+    close: 'Schliessen',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -130,6 +131,7 @@ export default {
       'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
   },
   set_password: {
     description:
