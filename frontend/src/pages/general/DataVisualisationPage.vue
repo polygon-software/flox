@@ -22,7 +22,7 @@
         no-caps
         unelevated
         outline
-        @click="timePeriod = option"
+        @click="option.key === 'custom' ? showCustomGraphDialog(): timePeriod = option"
       />
     </div>
 
@@ -67,6 +67,8 @@
 import {computed, defineProps, Ref, ref, watch} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
+import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue';
+import {useQuasar} from 'quasar';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {LEVEL_WRITING} from 'src/data/queries/DEVICE';
 
@@ -161,6 +163,21 @@ const pageTitle = title.substring(0, title.length-1);
 async function fetchLevelWritings(start: Date, end: Date){
   const response = await executeQuery(LEVEL_WRITING, {stationIds: stations, start: start, end: end, resolution: 1})
   levelWritings.value = response.data.levelWriting as LevelWritings
+}
+
+const $q = useQuasar()
+
+/**
+ * Shows the Custom Graph Dialog
+ * @returns {void} - done
+ */
+function showCustomGraphDialog(): void{
+  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
+  // TODO: onOK
+  $q.dialog({
+    component: CustomGraphDialog,
+    componentProps: {},
+  })
 }
 
 // Fetch initially
