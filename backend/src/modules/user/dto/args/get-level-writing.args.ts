@@ -2,10 +2,10 @@ import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { IsInt, IsString } from 'class-validator';
 
 @ArgsType()
-export class GetDeviceDataArgs {
-  @Field(() => String)
+export class GetLevelWritingArgs {
+  @Field(() => [String])
   @IsString()
-  stationId: string;
+  stationIds: string[];
 
   @Field(() => Date)
   @IsInt()

@@ -53,29 +53,29 @@ scalar DateTime
 
 union Device = MR2000 | MR3000
 
-type DeviceData {
+type LevelWriting {
   """Max value"""
   max: Float!
 
   """x-axis"""
-  x: DeviceDataAxis!
+  x: [LevelWritingAxis!]!
 
   """y-axis"""
-  y: DeviceDataAxis!
+  y: [LevelWritingAxis!]!
 
   """z-axis"""
-  z: DeviceDataAxis!
+  z: [LevelWritingAxis!]!
 }
 
-type DeviceDataAxis {
+type LevelWritingAxis {
   """Data Points"""
-  data: [DeviceDataPoint!]!
+  data: [LevelWritingPoint!]!
 
   """CLI ID"""
   name: String!
 }
 
-type DeviceDataPoint {
+type LevelWritingPoint {
   """Timestamp"""
   x: DateTime!
 
@@ -130,11 +130,11 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  deviceData(end: DateTime!, resolution: Int!, start: DateTime!, stationId: String!): DeviceData!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
+  levelWriting(end: DateTime!, resolution: Int!, start: DateTime!, stationIds: [String!]!): LevelWriting!
   myDevices(unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!

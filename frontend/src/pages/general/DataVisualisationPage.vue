@@ -35,7 +35,7 @@
       v-if="!fetching"
       :datasets="datasets.x"
       :warning-level="0.25"
-      :max-value="maxValue"
+      :max-value="datasets.max"
       unit="mm/s"
     />
 
@@ -48,7 +48,7 @@
       v-if="!fetching"
       :datasets="datasets.y"
       :warning-level="0.25"
-      :max-value="maxValue"
+      :max-value="datasets.max"
       unit="mm/s"
     />
     <!-- Horizontal - z -->
@@ -60,7 +60,7 @@
       v-if="!fetching"
       :datasets="datasets.z"
       :warning-level="0.25"
-      :max-value="maxValue"
+      :max-value="datasets.max"
       unit="mm/s"
     />
   </q-page>
@@ -71,7 +71,7 @@ import {computed, defineProps, Ref, ref, watch} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
 import {executeQuery} from 'src/helpers/data-helpers';
-import {DEVICE_DATA} from 'src/data/queries/DEVICE';
+import {LEVEL_WRITING} from 'src/data/queries/DEVICE';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -132,8 +132,7 @@ const start = computed(() => {
 watch(start, () => queryData(start.value, end.value))
 watch(end, () => queryData(start.value, end.value))
 
-const datasets: Ref<Record<string, Record<string, unknown>[]>> = ref({ x: [], y: [], z: []})
-const maxValue: Ref<number> = ref(0)
+const datasets: Ref<Record<string, Record<string, unknown>[]|number>> = ref({ x: [], y: [], z: [], max: 0 })
 
 const stations = props.stationId.split('+')
 let title = i18n.global.tc('dashboard.station', stations.length)
@@ -152,19 +151,8 @@ const fetching = ref(true);
  */
 async function queryData(start: Date, end: Date){
   fetching.value = true
-  maxValue.value = 0
-  datasets.value = { x: [], y: [], z: []}
-  const promiseList = stations.map(station =>
-  executeQuery(DEVICE_DATA, {stationId: station, start: start, end: end, resolution: 1})
-    .then(response => {
-      const deviceData = response.data.deviceData as Record<string, Record<string, unknown>|number>
-      datasets.value.x.push(deviceData.x as Record<string, unknown>)
-      datasets.value.y.push(deviceData.y as Record<string, unknown>)
-      datasets.value.z.push(deviceData.z as Record<string, unknown>)
-      maxValue.value = Math.max(maxValue.value, deviceData.max as number)
-    })
-    .catch(e => console.error(e)));
-  await Promise.all(promiseList)
+  const response = await executeQuery(LEVEL_WRITING, {stationIds: stations, start: start, end: end, resolution: 1})
+  datasets.value = response.data.levelWriting as Record<string, Record<string, unknown>[] | number>
   fetching.value = false
 }
 

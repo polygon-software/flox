@@ -1,7 +1,7 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class DeviceDataPoint {
+export class LevelWritingPoint {
   @Field(() => Date, { description: 'Timestamp' })
   x: Date;
 

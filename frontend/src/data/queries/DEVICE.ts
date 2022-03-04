@@ -39,10 +39,10 @@ export const MY_DEVICES = {
   cacheLocation: 'getUserDevices',
 };
 
-export const DEVICE_DATA = {
+export const LEVEL_WRITING = {
   query: gql`
-    query getDeviceData($stationId: String!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
-      deviceData(stationId: $stationId, start: $start, end: $end, resolution: $resolution){
+    query getDeviceData($stationIds: [String!]!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
+      levelWriting(stationIds: $stationIds, start: $start, end: $end, resolution: $resolution){
         x{
           name
           data {
@@ -93,5 +93,5 @@ export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
   MY_DEVICES,
   PROJECT_DEVICES,
-  DEVICE_DATA,
+  LEVEL_WRITING,
 ];

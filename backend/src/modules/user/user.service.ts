@@ -22,9 +22,10 @@ import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { getProjectsForInstances } from '../../helpers/project-helpers';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom, map, Observable } from 'rxjs';
-import { DeviceDataPoint } from '../../types/DeviceDataPoint';
-import { DeviceData } from '../../types/DeviceData';
-import { DeviceDataAxis } from '../../types/DeviceDataAxis';
+import { LevelWritingPoint } from '../../types/LevelWritingPoint';
+import { LevelWriting } from '../../types/LevelWriting';
+import { LevelWritingAxis } from '../../types/LevelWritingAxis';
+import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 
 @Injectable()
 export class UserService {
@@ -33,38 +34,44 @@ export class UserService {
     private readonly axios: HttpService,
   ) {}
 
-  async getDeviceData(
-    stationId: string,
-    start: Date,
-    end: Date,
-    resolution: number,
-  ): Promise<DeviceData> {
-    const url = `http://localhost:5000/rrt?file=${stationId}&start=${start.getTime()}&end=${end.getTime()}&step=${resolution}`;
-    const response: Observable<unknown> = this.axios
-      .get(url)
-      .pipe(map((response) => response.data));
-    const data = await firstValueFrom(response);
-    const values = data[2] as Array<Array<number>>;
-    const step = (end.getTime() - start.getTime()) / (values.length - 1);
-    let currentStep = 0;
-    const x: DeviceDataPoint[] = [];
-    const y: DeviceDataPoint[] = [];
-    const z: DeviceDataPoint[] = [];
+  async getLevelWriting(
+    getLevelWritingArgs: GetLevelWritingArgs,
+  ): Promise<LevelWriting> {
+    const x_axes: LevelWritingAxis[] = [];
+    const y_axes: LevelWritingAxis[] = [];
+    const z_axes: LevelWritingAxis[] = [];
     let maxValue = 0;
-    values.forEach((value) => {
-      const time = start.getTime() + Math.floor(currentStep);
-      currentStep += step;
-      maxValue = Math.max(maxValue, ...value);
-      x.push(new DeviceDataPoint(new Date(time), value[0]));
-      y.push(new DeviceDataPoint(new Date(time), value[1]));
-      z.push(new DeviceDataPoint(new Date(time), value[2]));
-    });
-    return new DeviceData(
-      new DeviceDataAxis(stationId, x),
-      new DeviceDataAxis(stationId, y),
-      new DeviceDataAxis(stationId, z),
-      maxValue,
+    const startTime = getLevelWritingArgs.start.getTime();
+    const endTime = getLevelWritingArgs.end.getTime();
+    const resolution = getLevelWritingArgs.resolution;
+    const promiseList = getLevelWritingArgs.stationIds.map(
+      async (stationId) => {
+        const url = `http://localhost:5000/rrt?file=${stationId}&start=${startTime}&end=${endTime}&step=${resolution}`;
+        const response: Observable<unknown> = this.axios
+          .get(url)
+          .pipe(map((response) => response.data));
+        const data = await firstValueFrom(response);
+        const step = data[0][2] * 1000; // ms
+        const values = data[2] as Array<Array<number>>;
+        let currentStep = 0;
+        const x_points: LevelWritingPoint[] = [];
+        const y_points: LevelWritingPoint[] = [];
+        const z_points: LevelWritingPoint[] = [];
+        values.forEach((value) => {
+          const time = startTime + currentStep;
+          currentStep += step;
+          maxValue = Math.max(maxValue, ...value);
+          x_points.push(new LevelWritingPoint(new Date(time), value[0]));
+          y_points.push(new LevelWritingPoint(new Date(time), value[1]));
+          z_points.push(new LevelWritingPoint(new Date(time), value[2]));
+        });
+        x_axes.push(new LevelWritingAxis(stationId, x_points));
+        y_axes.push(new LevelWritingAxis(stationId, y_points));
+        z_axes.push(new LevelWritingAxis(stationId, z_points));
+      },
     );
+    await Promise.all(promiseList);
+    return new LevelWriting(x_axes, y_axes, z_axes, maxValue);
   }
 
   /**

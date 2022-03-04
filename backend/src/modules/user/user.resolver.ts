@@ -19,22 +19,17 @@ import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
 import { GetMyDevicesArgs } from './dto/args/get-my-devices.args';
-import { GetDeviceDataArgs } from './dto/args/get-device-data.args';
-import { DeviceData } from '../../types/DeviceData';
+import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
+import { LevelWriting } from '../../types/LevelWriting';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
   @Public()
-  @Query(() => DeviceData, { name: 'deviceData' })
-  getDeviceData(@Args() getDeviceDataArgs: GetDeviceDataArgs) {
-    return this.usersService.getDeviceData(
-      getDeviceDataArgs.stationId,
-      getDeviceDataArgs.start,
-      getDeviceDataArgs.end,
-      getDeviceDataArgs.resolution,
-    );
+  @Query(() => LevelWriting, { name: 'levelWriting' })
+  getLevelWriting(@Args() getLevelWritingArgs: GetLevelWritingArgs) {
+    return this.usersService.getLevelWriting(getLevelWritingArgs);
   }
 
   @AdminOnly()
