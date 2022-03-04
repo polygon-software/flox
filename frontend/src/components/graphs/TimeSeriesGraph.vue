@@ -60,33 +60,13 @@ const props = defineProps({
   },
   maxValue: {
     type: Number,
-    required: false,
-    default: null,
+    required: true,
   },
 })
 
 /**
- * Finds the highest datapoint across all datasets, rounded to .1 increments
- * (used for determining y axis scale)
+ * Sets the level markers on the y-axis.
  */
-const highestDatapoint = computed(() => {
-  let max = 0;
-  props.datasets.forEach((dataset) => {
-    const datasetData = (dataset as Record<string, Record<string, number>[]>).data
-    const datasetMax = Math.ceil(10 * Math.max.apply(Math, datasetData.map(
-      (datapoint) => {
-        return datapoint.y;
-      })
-    )) / 10
-
-    if(datasetMax > max){
-      max = datasetMax
-    }
-  })
-
-  return max;
-})
-
 const annotations = computed(() => {
   const yaxis: Record<string, unknown>[] = []
   const markers = props.levelMarkers as Record<string, string|number>[]
@@ -157,7 +137,7 @@ const options = computed(() => {
     yaxis: {
       type: 'numeric',
       min: 0,
-      max: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10) / 10,
+      max: Math.ceil(props.maxValue * 10) / 10,
       tickAmount: 10,
       decimalsInFloat: 2,
       title: {

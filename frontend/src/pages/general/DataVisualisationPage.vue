@@ -96,6 +96,7 @@ const timePeriodOptions = [
   }
 ]
 
+// Horizontal markers to be displayed in the graphs
 const levelMarkers = computed(() => [
   {
     label: 'Warning',
