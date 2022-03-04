@@ -14,6 +14,12 @@ export class DeviceResolver {
     private readonly userService: UserService,
   ) {}
 
+  /**
+   * Get the level writings for multiple devices if the user has permission.
+   * @param {GetLevelWritingArgs} getLevelWritingArgs - StationIds, start, end & resolution
+   * @param {Record<string, string>} user - cognito user from request.
+   * @returns {Promise<LevelWriting>} - The level writings of the devices.
+   */
   @AnyRole()
   @Query(() => LevelWriting, { name: 'levelWriting' })
   async getLevelWriting(

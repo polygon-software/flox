@@ -135,7 +135,7 @@ const options = computed(() => {
       type: 'numeric',
       min: 0,
       max: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10) / 10,
-      tickAmount: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10),
+      tickAmount: 10,
       decimalsInFloat: 2,
       title: {
         text: props.unit,

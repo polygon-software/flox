@@ -5,10 +5,14 @@ import { LevelWritingPoint } from '../../types/LevelWritingPoint';
 import { LevelWriting } from '../../types/LevelWriting';
 import { LevelWritingAxis } from '../../types/LevelWritingAxis';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class DeviceService {
-  constructor(private readonly axios: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {}
 
   /**
    * Get the level writings on three axis (x, y, z) for multiple stations.
@@ -25,11 +29,13 @@ export class DeviceService {
     const startTime = getLevelWritingArgs.start.getTime();
     const endTime = getLevelWritingArgs.end.getTime();
     const resolution = getLevelWritingArgs.resolution;
+    const host = this.configService.get('pyAPI.host');
+    const port = this.configService.get('pyAPI.port');
     const promiseList = getLevelWritingArgs.stationIds.map(
       async (stationId) => {
-        const url = `http://localhost:5000/rrt?file=${stationId}&start=${startTime}&end=${endTime}&step=${resolution}`;
+        const url = `http://${host}:${port}/rrt?file=${stationId}&start=${startTime}&end=${endTime}&step=${resolution}`;
         try {
-          const response: Observable<unknown> = this.axios
+          const response: Observable<unknown> = this.httpService
             .get(url)
             .pipe(map((response) => response.data));
           const data = await firstValueFrom(response);

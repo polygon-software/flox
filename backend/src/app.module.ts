@@ -33,7 +33,7 @@ import { DeviceModule } from './modules/device/device.module';
           },
         },
       },
-      cors: false, // TODO set appropriate for production
+      cors: false,
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -44,10 +44,22 @@ import { DeviceModule } from './modules/device/device.module';
         DB_USER: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_HOST: Joi.string().required(),
-
-        // Ports
-        SERVER_PORT: Joi.number().required(),
         DB_PORT: Joi.number().required(),
+
+        // Server
+        SERVER_PORT: Joi.number().required(),
+
+        // Maria DB
+        MR_PORT: Joi.number().required(),
+        MR_2000: Joi.string().required(),
+        MR_3000: Joi.string().required(),
+        MR_USER: Joi.string().required(),
+        MR_PASSWORD: Joi.string().required(),
+        MR_HOST: Joi.string().required(),
+
+        // Python API
+        PY_PORT: Joi.number().required(),
+        PY_HOST: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({

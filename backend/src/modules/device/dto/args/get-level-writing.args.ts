@@ -1,18 +1,18 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { IsInt, IsString } from 'class-validator';
+import { IsArray, IsDate, IsInt } from 'class-validator';
 
 @ArgsType()
 export class GetLevelWritingArgs {
   @Field(() => [String])
-  @IsString()
+  @IsArray()
   stationIds: string[];
 
   @Field(() => Date)
-  @IsInt()
+  @IsDate()
   start: Date;
 
   @Field(() => Date)
-  @IsInt()
+  @IsDate()
   end: Date;
 
   @Field(() => Int)
