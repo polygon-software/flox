@@ -1,9 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
-import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
-import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { Public } from '../../auth/authentication.decorator';
 import {
@@ -28,7 +26,7 @@ export class UserResolver {
 
   @AdminOnly()
   @Query(() => [User], { name: 'allUsers' })
-  async getAllPartners(): Promise<User[]> {
+  async getAllUsers(): Promise<User[]> {
     return this.usersService.getAllUsers();
   }
 
@@ -41,7 +39,7 @@ export class UserResolver {
   @Public()
   @Query(() => Boolean, { name: 'isEmailAllowed' })
   async getUserAllowed(@Args('email') email: string): Promise<boolean> {
-    return this.usersService.existsUserWithEmail(email);
+    return this.usersService.existsEmptyUserWithEmail(email);
   }
 
   @Public()
@@ -53,27 +51,11 @@ export class UserResolver {
   }
 
   @AdminOnly()
-  @Mutation(() => User, { name: 'create' })
-  async create(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<User> {
-    return this.usersService.create(createUserInput);
-  }
-
-  @AdminOnly()
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'updateUser' })
   async update(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
     return this.usersService.update(updateUserInput);
-  }
-
-  @AdminOnly()
-  @Mutation(() => User)
-  async remove(
-    @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
-  ): Promise<User> {
-    return this.usersService.remove(deleteUserInput);
   }
 
   /**
@@ -85,12 +67,7 @@ export class UserResolver {
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
     // Get user where user's UUID matches cognitoID
-    const myUser = await this.usersService.fetchUserByCognitoUuid(user.userId);
-
-    if (!myUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
-    return myUser;
+    return this.usersService.getMyUser(user);
   }
 
   /**
@@ -138,13 +115,7 @@ export class UserResolver {
   @Query(() => [Project], { name: 'myProjects' })
   async myProjects(@CurrentUser() user: Record<string, string>) {
     // Get user
-    const dbUser = await this.usersService.getUser({
-      cognitoUuid: user.userId,
-    } as GetUserArgs);
-
-    if (!dbUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
+    const dbUser = await this.usersService.getMyUser(user);
     return this.usersService.getUserProjects({ uuid: dbUser.uuid });
   }
 
@@ -161,13 +132,7 @@ export class UserResolver {
     @Args() getMyDevicesArgs?: GetMyDevicesArgs,
   ) {
     // Get user
-    const dbUser = await this.usersService.getUser({
-      cognitoUuid: user.userId,
-    } as GetUserArgs);
-
-    if (!dbUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
+    const dbUser = await this.usersService.getMyUser(user);
     return this.usersService.getUserDevices({
       uuid: dbUser.uuid,
       unassigned: getMyDevicesArgs?.unassigned ?? false,
@@ -187,13 +152,7 @@ export class UserResolver {
     @CurrentUser() user: Record<string, string>,
   ) {
     // Get user
-    const dbUser = await this.usersService.getUser({
-      cognitoUuid: user.userId,
-    } as GetUserArgs);
-
-    if (!dbUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
+    const dbUser = await this.usersService.getMyUser(user);
     // For non-admin users, check whether they have permissions to access the requested project
     if (
       dbUser.role !== ROLE.ADMIN &&
