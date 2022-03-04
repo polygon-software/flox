@@ -101,6 +101,7 @@ const levelMarkers = computed(() => [
     label: 'Warning',
     value: 0.25,
     color: 'red',
+    dashSize: 3,
   }
 ])
 

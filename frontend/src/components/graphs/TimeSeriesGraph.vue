@@ -93,7 +93,7 @@ const annotations = computed(() => {
   markers.forEach(marker => {
     yaxis.push({
       y: marker.value,
-        strokeDashArray: 2,
+      strokeDashArray: marker.dashSize,
       borderColor: 'var(--q-negative)',
       label: {
         position: 'left',
