@@ -89,9 +89,35 @@ export const PROJECT_DEVICES = {
   cacheLocation: 'getProjectDevices',
 };
 
+export const EVENT_TABLE_ROWS= {
+  query: gql`
+    query eventTable($stationId: String!){
+      eventTable(stationId: $stationId){
+        file
+        type
+        dateTime
+        peakX
+        peakY
+        peakZ
+        downloadURL
+        fileName
+        previewURL
+        frequencyX
+        frequencyY
+        frequencyZ
+        VSUM
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'eventTable'
+}
+
 export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
   MY_DEVICES,
   PROJECT_DEVICES,
   LEVEL_WRITING,
+  EVENT_TABLE_ROWS
 ];

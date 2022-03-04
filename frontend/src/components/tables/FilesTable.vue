@@ -78,11 +78,13 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import {inject, onMounted, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {EVENT_TABLE_ROWS} from 'src/data/queries/DEVICE';
 
 // TODO: take data from database
 const events = ref(12)
@@ -108,6 +110,8 @@ const columns = [
   { name: 'vsum', label: i18n.global.t('files.vsum'), field: 'vsum', sortable: true, align: 'center' },
   { name: 'download', label: i18n.global.t('files.download'), field: 'download', sortable: false, align: 'center' },
 ]
+
+subscribeToQuery(EVENT_TABLE_ROWS, {stationId: '44_08'})
 
 // TODO: take data from database
 const rows = [

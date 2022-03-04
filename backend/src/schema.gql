@@ -53,6 +53,47 @@ scalar DateTime
 
 union Device = MR2000 | MR3000
 
+type EventsTableRow {
+  """pk_frq.VSUM"""
+  VSUM: String
+
+  """events.rec_time"""
+  dateTime: DateTime!
+
+  """Download URL"""
+  downloadURL: String
+
+  """events.num"""
+  file: String!
+
+  """events.filenam end"""
+  fileName: String
+
+  """pk_frq.frqX"""
+  frequencyX: String
+
+  """pk_frq.frqY"""
+  frequencyY: String
+
+  """pk_frq.frqZ"""
+  frequencyZ: String
+
+  """events.peakX + events.unitX"""
+  peakX: String!
+
+  """events.peakY + events.unitY"""
+  peakY: String!
+
+  """events.peakZ + events.unitZ"""
+  peakZ: String!
+
+  """Preview URL"""
+  previewURL: String
+
+  """events.typ converted"""
+  type: String!
+}
+
 type LevelWriting {
   """Max value"""
   max: Float!
@@ -130,6 +171,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
+  eventTable(stationId: String!): [EventsTableRow!]!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!

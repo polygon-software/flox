@@ -6,6 +6,8 @@ import { LevelWriting } from '../../types/LevelWriting';
 import { LevelWritingAxis } from '../../types/LevelWritingAxis';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { ConfigService } from '@nestjs/config';
+import { fetchFromTable } from '../../helpers/database-helpers';
+import { EventsTableRow } from '../../types/EventsTableRow';
 
 @Injectable()
 export class DeviceService {
@@ -65,5 +67,126 @@ export class DeviceService {
     );
     await Promise.all(promiseList);
     return new LevelWriting(x_axes, y_axes, z_axes, maxValue);
+  }
+
+  /**
+   * gets events
+   * @param {string} clientId - Id of client
+   * @returns {Promise<EventsTableRow[]>} - table Rows
+   */
+  async getEvents(clientId: string): Promise<EventsTableRow[]> {
+    const typeMapping = {
+      n: 'Evt',
+      p: 'Pk',
+      Z: 'ZIP',
+    };
+
+    const mr2000 = await fetchFromTable(
+      'MR2000',
+      'events',
+      `WHERE cli=${clientId} ORDER by rec_time DESC`,
+    );
+    const frequencyAvailable = await fetchFromTable(
+      'MR3000',
+      'pk_frq',
+      `WHERE ident LIKE ${clientId}.%`,
+    );
+    let mr3000 = [];
+    if (frequencyAvailable.length > 0) {
+      mr3000 = await fetchFromTable(
+        'MR3000',
+        'events JOIN pk_frq ON events.ident=pk_frq.ident ',
+        `WHERE cli=${clientId} ORDER by rec_time DESC`,
+      );
+    } else {
+      mr3000 = await fetchFromTable(
+        'MR3000',
+        'events',
+        `WHERE cli=${clientId} ORDER by rec_time DESC`,
+      );
+    }
+
+    const mr2000Res = mr2000.map((item) => {
+      const file = item['num'];
+      const type = typeMapping[item['type'].toLowerCase()];
+      const dateTime = new Date(item['rec_time']);
+      const peakX = `${item['peakX']} ${item['unitX']}`;
+      const peakY = `${item['peakY']} ${item['unitY']}`;
+      const peakZ = `${item['peakZ']} ${item['unitZ']}`;
+      const timeStamp = dateTime.getTime() / 1000;
+      let downloadURL = null;
+      let previewURL = null;
+      let fileName = null;
+      if (item['filenam'] !== 'no') {
+        downloadURL = `../download.cgi/?client=${clientId}&num=${item['num']}&token=${timeStamp}`;
+        fileName = item['filenam'].split('/').pop();
+      }
+      if (item['filenam'] === 'unavail') {
+        downloadURL = '';
+      }
+      if (type === 'Evt') {
+        previewURL = `../preview.cgi/?client=${clientId}&num=${item['num']}&token=${timeStamp}`;
+      }
+      return new EventsTableRow(
+        file,
+        type,
+        dateTime,
+        peakX,
+        peakY,
+        peakZ,
+        downloadURL,
+        fileName,
+        previewURL,
+        null,
+        null,
+        null,
+        null,
+      );
+    });
+
+    const mr3000Res = mr3000.map((item) => {
+      const file = item['num'];
+      const type = typeMapping[item['type'].toLowerCase()];
+      const dateTime = new Date(item['rec_time']);
+      const peakX = `${item['peakX']} ${item['unitX']}`;
+      const peakY = `${item['peakY']} ${item['unitY']}`;
+      const peakZ = `${item['peakZ']} ${item['unitZ']}`;
+      const timeStamp = dateTime.getTime() / 1000;
+
+      const downloadURL = `../download.cgi/?client=${clientId}&num=${item['num']}&token=${timeStamp}`;
+      const fileName = item['filenam'].split('/').pop();
+      let previewURL = null;
+
+      if (type === 'Evt') {
+        previewURL = `../preview.cgi/?client=${clientId}&num=${item['num']}&token=${timeStamp}`;
+      }
+      let frequencyX = null;
+      let frequencyY = null;
+      let frequencyZ = null;
+      let VSUM = null;
+      if (frequencyAvailable.length > 0) {
+        frequencyX = item['frqX'];
+        frequencyY = item['frqY'];
+        frequencyZ = item['frqZ'];
+        VSUM = item['VSUM'];
+      }
+
+      return new EventsTableRow(
+        file,
+        type,
+        dateTime,
+        peakX,
+        peakY,
+        peakZ,
+        downloadURL,
+        fileName,
+        previewURL,
+        frequencyX,
+        frequencyY,
+        frequencyZ,
+        VSUM,
+      );
+    });
+    return [...mr2000Res, ...mr3000Res];
   }
 }
