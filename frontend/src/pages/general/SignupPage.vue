@@ -2,6 +2,9 @@
   <q-page class="flex flex-center">
     <!-- Signup Form -->
     <div class="q-pa-md q-ma-md">
+      <h5 class="q-mb-none" style="text-align: center; margin-bottom: 30px;">
+        {{ $t('authentication.signup') }}
+      </h5>
       <SignupForm
         @submit="onSignup"
       />

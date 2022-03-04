@@ -208,4 +208,8 @@ export default {
     vsum: 'VSUM',
     download: 'Download',
   },
+  success: {
+    saved_successfully: 'Saved successfully!',
+    back_to_home: 'Back to Home page',
+  },
 };

@@ -212,4 +212,8 @@ export default {
     vsum: 'VSUM',
     download: 'Herunterladen',
   },
+  success: {
+    saved_successfully: 'Speicherung durchgeführt!',
+    back_to_home: 'Zurück zur Home Seite',
+  },
 };

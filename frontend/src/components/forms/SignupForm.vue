@@ -1,8 +1,5 @@
 <template>
   <div>
-    <h5 class="q-mb-none" style="text-align: center; margin-bottom: 30px;">
-      {{ $t('authentication.signup') }}
-    </h5>
     <GenericForm
       :pages="pages"
       class="q-gutter-md"
