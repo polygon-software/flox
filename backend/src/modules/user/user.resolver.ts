@@ -67,12 +67,7 @@ export class UserResolver {
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
     // Get user where user's UUID matches cognitoID
-    const myUser = await this.usersService.fetchUserByCognitoUuid(user.userId);
-
-    if (!myUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
-    return myUser;
+    return this.usersService.getMyUser(user);
   }
 
   /**
@@ -120,13 +115,7 @@ export class UserResolver {
   @Query(() => [Project], { name: 'myProjects' })
   async myProjects(@CurrentUser() user: Record<string, string>) {
     // Get user
-    const dbUser = await this.usersService.getUser({
-      cognitoUuid: user.userId,
-    } as GetUserArgs);
-
-    if (!dbUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
+    const dbUser = await this.usersService.getMyUser(user);
     return this.usersService.getUserProjects({ uuid: dbUser.uuid });
   }
 
@@ -143,13 +132,7 @@ export class UserResolver {
     @Args() getMyDevicesArgs?: GetMyDevicesArgs,
   ) {
     // Get user
-    const dbUser = await this.usersService.getUser({
-      cognitoUuid: user.userId,
-    } as GetUserArgs);
-
-    if (!dbUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
+    const dbUser = await this.usersService.getMyUser(user);
     return this.usersService.getUserDevices({
       uuid: dbUser.uuid,
       unassigned: getMyDevicesArgs?.unassigned ?? false,
@@ -169,13 +152,7 @@ export class UserResolver {
     @CurrentUser() user: Record<string, string>,
   ) {
     // Get user
-    const dbUser = await this.usersService.getUser({
-      cognitoUuid: user.userId,
-    } as GetUserArgs);
-
-    if (!dbUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
+    const dbUser = await this.usersService.getMyUser(user);
     // For non-admin users, check whether they have permissions to access the requested project
     if (
       dbUser.role !== ROLE.ADMIN &&

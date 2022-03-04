@@ -48,6 +48,7 @@
           v-if="loggedIn"
           :label="$t('authentication.logout')"
           color="primary"
+          class="all-pointer-events"
           flat
           no-caps
           @click="logout"
