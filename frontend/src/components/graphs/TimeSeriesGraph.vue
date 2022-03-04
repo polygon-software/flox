@@ -53,10 +53,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  warningLevel: {
-    type: Number,
+  levelMarkers: {
+    type: Array,
     required: false,
-    default: null,
+    default: () => [],
   },
   maxValue: {
     type: Number,
@@ -85,6 +85,29 @@ const highestDatapoint = computed(() => {
   })
 
   return max;
+})
+
+const annotations = computed(() => {
+  const yaxis: Record<string, unknown>[] = []
+  const markers = props.levelMarkers as Record<string, string|number>[]
+  markers.forEach(marker => {
+    yaxis.push({
+      y: marker.value,
+        strokeDashArray: 2,
+      borderColor: 'var(--q-negative)',
+      label: {
+        position: 'left',
+        offsetX: 80,
+        borderWidth: 0,
+        style: {
+          color: marker.color,
+          background: 'rgba(0,0,0,0)',
+        },
+        text: `${marker.label}: ${marker.value}`
+      }
+    })
+  })
+  return yaxis
 })
 
 // Graph options
@@ -147,23 +170,7 @@ const options = computed(() => {
       }
     },
     annotations: {
-      yaxis: props.warningLevel ? [
-        {
-          y: props.warningLevel,
-          strokeDashArray: 2,
-          borderColor: 'var(--q-negative)',
-          label: {
-            position: 'left',
-            offsetX: 80,
-            borderWidth: 0,
-            style: {
-              color: 'var(--q-negative)',
-              background: 'rgba(0,0,0,0)'
-            },
-            text: 'Warning at 0.25'
-          }
-        }
-      ] : [],
+      yaxis: annotations.value,
     },
     tooltip: {
       x: {
