@@ -291,4 +291,13 @@ export class UserService {
 
     return devices;
   }
+
+  isAuthorizedForDevice(user: User, deviceId: string): boolean {
+    return (
+      user.role === ROLE.ADMIN ||
+      (user.role === ROLE.USER &&
+        !user.mr2000instances?.includes(deviceId) &&
+        !user.mr3000instances?.includes(deviceId))
+    );
+  }
 }

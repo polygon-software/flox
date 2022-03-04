@@ -6,18 +6,20 @@ import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUM';
 import { UnauthorizedException } from '@nestjs/common';
+import { DeviceParams } from '../../types/DeviceParams';
+import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 
 @Resolver()
 export class DeviceResolver {
   constructor(
-    private readonly devicesService: DeviceService,
+    private readonly deviceService: DeviceService,
     private readonly userService: UserService,
   ) {}
 
   /**
    * Get the level writings for multiple devices if the user has permission.
    * @param {GetLevelWritingArgs} getLevelWritingArgs - StationIds, start, end & resolution
-   * @param {Record<string, string>} user - cognito user from request.
+   * @param {Record<string, string>} user - Cognito user from request.
    * @returns {Promise<LevelWriting>} - The level writings of the devices.
    */
   @AnyRole()
@@ -27,23 +29,36 @@ export class DeviceResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<LevelWriting> {
     const dbUser = await this.userService.getMyUser(user);
-    let allowed = false;
-    if (dbUser.role === ROLE.USER) {
-      allowed = true;
-      getLevelWritingArgs.stationIds.forEach((stationId) => {
-        if (
-          !dbUser.mr2000instances?.includes(stationId) &&
-          !dbUser.mr3000instances?.includes(stationId)
-        ) {
-          allowed = false;
-        }
-      });
-    }
+    getLevelWritingArgs.stationIds.forEach((stationId) => {
+      if (!this.userService.isAuthorizedForDevice(dbUser, stationId)) {
+        throw new UnauthorizedException();
+      }
+    });
 
-    if (dbUser.role === ROLE.ADMIN || allowed) {
-      return this.devicesService.getLevelWriting(getLevelWritingArgs);
-    }
+    return this.deviceService.getLevelWriting(getLevelWritingArgs);
+  }
 
-    throw new UnauthorizedException();
+  /**
+   * Get the device parameters if the user has permission.
+   * @param {GetDeviceParamsArgs} getDeviceParamsArgs - StationId
+   * @param {Record<string, string>} user - Cognito user from request.
+   * @returns {Promise<DeviceParams>} - The parameters of the device.
+   */
+  @AnyRole()
+  @Query(() => DeviceParams, { name: 'deviceParams' })
+  async getDeviceParams(
+    @Args() getDeviceParamsArgs: GetDeviceParamsArgs,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<DeviceParams> {
+    const dbUser = await this.userService.getMyUser(user);
+    if (
+      !this.userService.isAuthorizedForDevice(
+        dbUser,
+        getDeviceParamsArgs.stationId,
+      )
+    ) {
+      throw new UnauthorizedException();
+    }
+    return this.deviceService.getDeviceParams(getDeviceParamsArgs);
   }
 }

@@ -41,7 +41,7 @@ export const MY_DEVICES = {
 
 export const LEVEL_WRITING = {
   query: gql`
-    query getDeviceData($stationIds: [String!]!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
+    query getLevelWriting($stationIds: [String!]!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
       levelWriting(stationIds: $stationIds, start: $start, end: $end, resolution: $resolution){
         x{
           name
@@ -68,8 +68,31 @@ export const LEVEL_WRITING = {
       }
     }
   `,
-  tables: ['user'],
-  cacheLocation: 'getDeviceData',
+  tables: ['device'],
+  cacheLocation: 'getLevelWriting',
+};
+
+export const DEVICE_PARAMS = {
+  query: gql`
+    query getDeviceParams($stationId: String!){
+      deviceParams(stationId: $stationId){
+        trigX
+        trigY
+        trigZ
+        ala1X
+        ala1Y
+        ala1Z
+        ala2X
+        ala2Y
+        ala2Z
+        unitX
+        unitY
+        unitZ
+      }
+    }
+  `,
+  tables: ['device'],
+  cacheLocation: 'getDeviceParams',
 };
 
 export const PROJECT_DEVICES = {
@@ -85,7 +108,7 @@ export const PROJECT_DEVICES = {
         __typename
       }}
   `,
-  tables: ['user'],
+  tables: ['project'],
   cacheLocation: 'getProjectDevices',
 };
 
@@ -94,4 +117,5 @@ export const DEVICE_QUERIES: QueryObject[] = [
   MY_DEVICES,
   PROJECT_DEVICES,
   LEVEL_WRITING,
+  DEVICE_PARAMS,
 ];

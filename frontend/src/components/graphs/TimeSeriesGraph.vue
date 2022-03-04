@@ -74,14 +74,12 @@ const annotations = computed(() => {
     yaxis.push({
       y: marker.value,
       strokeDashArray: marker.dashSize,
-      borderColor: 'var(--q-negative)',
+      borderColor: marker.color,
       label: {
-        position: 'left',
-        offsetX: 80,
         borderWidth: 0,
         style: {
           color: marker.color,
-          background: 'rgba(0,0,0,0)',
+          background: 'transparent',
         },
         text: `${marker.label}: ${marker.value}`
       }

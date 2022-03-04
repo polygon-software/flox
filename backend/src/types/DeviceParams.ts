@@ -6,7 +6,7 @@ import { Field, Float, ObjectType } from '@nestjs/graphql';
  */
 
 @ObjectType()
-export class MR2000 {
+export class DeviceParams {
   // Triggers
   @Field(() => Float)
   trigX: number;
@@ -31,15 +31,7 @@ export class MR2000 {
   @Field(() => Float)
   ala2Z: number;
 
-  // TODO find out what this is / if needed
-  @Field(() => Float)
-  lsbX: number;
-  @Field(() => Float)
-  lsbY: number;
-  @Field(() => Float)
-  lsbZ: number;
-
-  // Units TODO verify if needed
+  // Units
   @Field(() => String)
   unitX: string;
   @Field(() => String)
@@ -57,9 +49,6 @@ export class MR2000 {
     ala2X: number,
     ala2Y: number,
     ala2Z: number,
-    lsbX: number,
-    lsbY: number,
-    lsbZ: number,
     unitX: string,
     unitY: string,
     unitZ: string,
@@ -73,9 +62,6 @@ export class MR2000 {
     this.ala2X = ala2X;
     this.ala2Y = ala2Y;
     this.ala2Z = ala2Z;
-    this.lsbX = lsbX;
-    this.lsbY = lsbY;
-    this.lsbZ = lsbZ;
     this.unitX = unitX;
     this.unitY = unitY;
     this.unitZ = unitZ;

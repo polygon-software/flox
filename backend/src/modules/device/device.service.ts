@@ -6,6 +6,9 @@ import { LevelWriting } from '../../types/LevelWriting';
 import { LevelWritingAxis } from '../../types/LevelWritingAxis';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { ConfigService } from '@nestjs/config';
+import { DeviceParams } from '../../types/DeviceParams';
+import { fetchFromTable } from '../../helpers/database-helpers';
+import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 
 @Injectable()
 export class DeviceService {
@@ -13,6 +16,73 @@ export class DeviceService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {}
+
+  async getDeviceParams(
+    getDeviceParamsArgs: GetDeviceParamsArgs,
+  ): Promise<DeviceParams> {
+    const deviceId = getDeviceParamsArgs.stationId;
+    const filterQuery = `WHERE cli = "${deviceId}"`;
+    if (deviceId.includes('_')) {
+      // MR3000
+      const mr3000instances = await fetchFromTable(
+        'MR3000',
+        'para_trigala',
+        filterQuery,
+      );
+      const instance = mr3000instances[0];
+      return new DeviceParams(
+        instance.trigX,
+        instance.trigY,
+        instance.trigZ,
+        instance.ala1X,
+        instance.ala1Y,
+        instance.ala1Z,
+        instance.ala2X,
+        instance.ala2Y,
+        instance.ala2Z,
+        instance.unitX,
+        instance.unitY,
+        instance.unitZ,
+      );
+    } else {
+      // MR2000
+      const mr2000instances = await fetchFromTable(
+        'MR2000',
+        'param',
+        filterQuery,
+      );
+      const instance = mr2000instances[0];
+      // TODO: Ask customer if multiply by lsb is necessary
+      // return new DeviceParams(
+      //   instance.trigX * instance.lsbX,
+      //   instance.trigY * instance.lsbY,
+      //   instance.trigZ * instance.lsbZ,
+      //   instance.ala1X * instance.lsbX,
+      //   instance.ala1Y * instance.lsbY,
+      //   instance.ala1Z * instance.lsbZ,
+      //   instance.ala2X * instance.lsbX,
+      //   instance.ala2Y * instance.lsbY,
+      //   instance.ala2Z * instance.lsbZ,
+      //   instance.unitX,
+      //   instance.unitY,
+      //   instance.unitZ,
+      // );
+      return new DeviceParams(
+        instance.trigX,
+        instance.trigY,
+        instance.trigZ,
+        instance.ala1X,
+        instance.ala1Y,
+        instance.ala1Z,
+        instance.ala2X,
+        instance.ala2Y,
+        instance.ala2Z,
+        instance.unitX,
+        instance.unitY,
+        instance.unitZ,
+      );
+    }
+  }
 
   /**
    * Get the level writings on three axis (x, y, z) for multiple stations.
