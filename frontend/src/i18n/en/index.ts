@@ -55,7 +55,8 @@ export default {
     station: 'Station | Stations',
     device_pool: 'Device Pool',
     account: 'Account',
-    share: 'Share'
+    share: 'Share',
+    files: 'Events from Station',
   },
   projects: {
     project: 'Project',
@@ -80,6 +81,23 @@ export default {
     show_device_health: 'Show Device Health',
     name: 'Name',
   },
+  edit_parameters: {
+    user_data: 'User Data and Thresholds',
+    contacts: 'Alert Contacts',
+    project_name: 'Project Name',
+    station_name: 'Station Name',
+    name: 'Name',
+    number: 'Mobile Number',
+    email: 'Email',
+    add_new_contact: 'Add new contact',
+    event: 'Event',
+    alarm1: 'Alarm 1',
+    alarm2: 'Alarm 2',
+    sms_limit: 'SMS limit',
+    battery: 'Power/Battery',
+    memory: 'Memory',
+    daily: 'Daily',
+  },
   buttons: {
     finish: 'Finish',
     back: 'Back',
@@ -94,6 +112,9 @@ export default {
     send: 'Send',
     create_link: 'Create Link',
     create: 'Create project',
+    new_contact: 'New Contakt',
+    load: 'Load',
+    save: 'Save',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -154,6 +175,39 @@ export default {
   },
   messages: {
     copied: 'Copied'
+  },
+  status: {
+    title: 'Status of',
+  },
+  client_connectivity: {
+    title: 'Client Connectivity',
+    date_time: 'Date/Time',
+    real_ip: 'Real IP',
+    port: 'Port',
+    vpn_ip: 'VPN IP',
+    event: 'Event',
+  },
+  log_files: {
+    log_file: 'LOG File',
+    ftp_log_file: 'FTP LOG File - recent uploads',
+    rest_log_file: 'REST LOG File',
+  },
+  files: {
+    events: '{events} events',
+    peak_files: '{peak_files} peak-files',
+    zip_files: '{zip_files} ZIP-Files',
+    totally_files: '{files} of totally {total_files} files',
+    file: 'File',
+    type: 'Type',
+    date_time: 'Date/Type',
+    peak_x: 'Peak X',
+    peak_y: 'Peak Y',
+    peak_z: 'Peak Z',
+    frq_x: 'Frq X',
+    frq_y: 'Frq Y',
+    frq_z: 'Frq Z',
+    vsum: 'VSUM',
+    download: 'Download',
   },
   project_data: {
     name: 'Project Name',
