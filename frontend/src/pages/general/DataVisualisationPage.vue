@@ -32,7 +32,6 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="!fetching"
       :datasets="levelWritings.x"
       :warning-level="0.25"
       :max-value="levelWritings.max"
@@ -45,7 +44,6 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="!fetching"
       :datasets="levelWritings.y"
       :warning-level="0.25"
       :max-value="levelWritings.max"
@@ -57,7 +55,6 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="!fetching"
       :datasets="levelWritings.z"
       :warning-level="0.25"
       :max-value="levelWritings.max"
@@ -155,9 +152,6 @@ stations.forEach((station) => {
 })
 const pageTitle = title.substring(0, title.length-1);
 
-// If currently fetching. Used to hide graphs if no data is available.
-const fetching = ref(true);
-
 /**
  * Fetch the level writings for all stations.
  * @param {Date} start - start time
@@ -165,10 +159,8 @@ const fetching = ref(true);
  * @returns {Promise<void>} - async
  */
 async function fetchLevelWritings(start: Date, end: Date){
-  fetching.value = true
   const response = await executeQuery(LEVEL_WRITING, {stationIds: stations, start: start, end: end, resolution: 1})
   levelWritings.value = response.data.levelWriting as LevelWritings
-  fetching.value = false
 }
 
 // Fetch initially

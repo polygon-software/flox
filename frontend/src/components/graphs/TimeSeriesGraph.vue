@@ -88,91 +88,93 @@ const highestDatapoint = computed(() => {
 })
 
 // Graph options
-const options = {
-  chart: {
-    toolbar: {
-      offsetX: -60,
-      tools: {
-        zoomin: false,
-        zoomout: false,
-        download: false
+const options = computed(() => {
+  return {
+    chart: {
+      toolbar: {
+        offsetX: -60,
+        tools: {
+          zoomin: false,
+          zoomout: false,
+          download: false
+        },
       },
     },
-  },
-  colors: ['var(--q-secondary)', 'var(--q-accent)', 'var(--q-warning)'],
-  stroke: {
-    width: 1.5
-  },
-  legend: {
-    show: true,
-    showForSingleSeries: true,
-    position: 'bottom',
-    horizontalAlign: 'left',
-    offsetX: 20,
-    offsetY: 8,
-    fontSize: '16px',
-    fontWeight: 600,
-    formatter: function (datasetName: string){
-      return datasetName.toUpperCase()
+    colors: ['var(--q-secondary)', 'var(--q-accent)', 'var(--q-warning)'],
+    stroke: {
+      width: 1.5
     },
-    markers: {
-      radius: 0,
-      width: 16,
-      height: 16,
-      offsetY: 2
-    }
-  },
-  xaxis: {
-    type: 'datetime',
-    labels: {
-      formatter: function (timestamp: Date){
-        return formatDateForGraph(timestamp)
+    legend: {
+      show: true,
+      showForSingleSeries: true,
+      position: 'bottom',
+      horizontalAlign: 'left',
+      offsetX: 20,
+      offsetY: 8,
+      fontSize: '16px',
+      fontWeight: 600,
+      formatter: function (datasetName: string) {
+        return datasetName.toUpperCase()
+      },
+      markers: {
+        radius: 0,
+        width: 16,
+        height: 16,
+        offsetY: 2
       }
-    }
-  },
-  yaxis: {
-    type: 'numeric',
-    min: 0,
-    max: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10) / 10,
-    tickAmount: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10),
-    decimalsInFloat: 2,
-    title: {
-      text: props.unit,
-      style: {
-        fontSize: '16px',
-        fontWeight: 600,
-      },
-      offsetX: -10
-    }
-  },
-  annotations: {
-    yaxis: props.warningLevel ? [
-      {
-        y: props.warningLevel,
-        strokeDashArray: 2,
-        borderColor: 'var(--q-negative)',
-        label: {
-          position: 'left',
-          offsetX: 80,
-          borderWidth: 0,
-          style: {
-            color: 'var(--q-negative)',
-            background: 'rgba(0,0,0,0)'
-          },
-          text: 'Warning at 0.25'
+    },
+    xaxis: {
+      type: 'datetime',
+      labels: {
+        formatter: function (timestamp: Date) {
+          return formatDateForGraph(timestamp)
         }
       }
-    ] : [],
-  },
-  tooltip: {
-    x: {
-      show: false,
-      formatter: function (timestamp: number){
-        return date.formatDate(timestamp, 'dddd DD.MM.YYYY - HH:mm:ss')
+    },
+    yaxis: {
+      type: 'numeric',
+      min: 0,
+      max: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10) / 10,
+      tickAmount: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10),
+      decimalsInFloat: 2,
+      title: {
+        text: props.unit,
+        style: {
+          fontSize: '16px',
+          fontWeight: 600,
+        },
+        offsetX: -10
       }
     },
+    annotations: {
+      yaxis: props.warningLevel ? [
+        {
+          y: props.warningLevel,
+          strokeDashArray: 2,
+          borderColor: 'var(--q-negative)',
+          label: {
+            position: 'left',
+            offsetX: 80,
+            borderWidth: 0,
+            style: {
+              color: 'var(--q-negative)',
+              background: 'rgba(0,0,0,0)'
+            },
+            text: 'Warning at 0.25'
+          }
+        }
+      ] : [],
+    },
+    tooltip: {
+      x: {
+        show: false,
+        formatter: function (timestamp: number) {
+          return date.formatDate(timestamp, 'dddd DD.MM.YYYY - HH:mm:ss')
+        }
+      },
+    }
   }
-}
+})
 
 /**
  * Copies the graph's content
