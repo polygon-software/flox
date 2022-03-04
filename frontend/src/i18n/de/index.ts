@@ -233,5 +233,8 @@ export default {
     battery_voltage: 'Batteriespannung',
     cellular_signal: 'Mobiles Signal',
     main_battery: 'Hauptbatterie',
+    good: 'gut',
+    fair: 'fair',
+    poor: 'schlecht',
   },
 };

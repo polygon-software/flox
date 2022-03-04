@@ -55,7 +55,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
       },
       {
         path: ':customerId/:projectId/:stationId/device_health',
-        component: () => import('pages/general/SohPage.vue'),
+        component: () => import('pages/general/DeviceHealthPage.vue'),
         props: route => ({ stationId: route.params.stationId })
       },
     ],

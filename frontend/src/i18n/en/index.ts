@@ -229,5 +229,8 @@ export default {
     battery_voltage: 'Battery Voltage',
     cellular_signal: 'Cellular Signal',
     main_battery: 'Main Battery',
+    good: 'good',
+    fair: 'fair',
+    poor: 'poor',
   },
 };

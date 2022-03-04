@@ -31,9 +31,11 @@
       {{ $t('device_health.battery_voltage') }}
     </h6>
 
+    <!-- todo: replace max value-->
     <TimeSeriesGraph
       :datasets="computedDatasetsBatteryVoltage"
-      :warning-level="0.25"
+      :max-value="50"
+      :show-value-on-marker="false"
       unit="Volt"
     />
 
@@ -44,7 +46,9 @@
 
     <TimeSeriesGraph
       :datasets="computedDatasetsCellularSignal"
-      :warning-level="0.25"
+      :level-markers="levelMarkersCellularSignal"
+      :max-value="100"
+      :show-value-on-marker="false"
       unit="%"
     />
   </q-page>
@@ -53,7 +57,7 @@
 <script setup lang="ts">
 import {computed, defineProps, ref} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
-import { i18n } from 'boot/i18n';;
+import { i18n } from 'boot/i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -113,6 +117,27 @@ const computedDatasetsCellularSignal = computed(() => {
   ]
 })
 
+const levelMarkersCellularSignal = computed(() => [
+  {
+    label: i18n.global.t('device_health.good'),
+    value: 80,
+    color: 'green',
+    dashSize: 0,
+  },
+  {
+    label: i18n.global.t('device_health.fair'),
+    value: 50,
+    color: 'orange',
+    dashSize: 0,
+  },
+  {
+    label: i18n.global.t('device_health.poor'),
+    value: 10,
+    color: 'red',
+    dashSize: 0,
+  },
+])
+
 // eslint-disable-next-line valid-jsdoc
 /**
  * Placeholder function, generates a random time series with spikes
@@ -124,7 +149,7 @@ function randomTimeSeries(){
   for(let i = 0; i < 100; i++){
     const newElement = {
       x: date.getTime(),
-      y: Math.random()/(Math.random() < 0.9 ? 10 : 2)
+      y: Math.random()/(Math.random() < 0.9 ? 0.1 : 0.02)
     }
     result.push(newElement)
 

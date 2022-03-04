@@ -62,6 +62,11 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  showValueOnMarker: {
+    type: Boolean,
+    required: false,
+    default: true,
+  }
 })
 
 /**
@@ -74,7 +79,7 @@ const annotations = computed(() => {
     yaxis.push({
       y: marker.value,
       strokeDashArray: marker.dashSize,
-      borderColor: 'var(--q-negative)',
+      borderColor: marker.color,
       label: {
         position: 'left',
         offsetX: 80,
@@ -83,7 +88,7 @@ const annotations = computed(() => {
           color: marker.color,
           background: 'rgba(0,0,0,0)',
         },
-        text: `${marker.label}: ${marker.value}`
+        text: props.showValueOnMarker? `${marker.label}: ${marker.value}` : `${marker.label}`
       }
     })
   })
