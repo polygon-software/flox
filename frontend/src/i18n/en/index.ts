@@ -208,4 +208,10 @@ export default {
     vsum: 'VSUM',
     download: 'Download',
   },
+  device_health: {
+    title: 'Health Status of',
+    battery_voltage: 'Battery Voltage',
+    cellular_signal: 'Cellular Signal',
+    main_battery: 'Main Battery',
+  },
 };
