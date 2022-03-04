@@ -3,6 +3,7 @@ import { ALL_USERS, MY_USER, USER } from 'src/data/queries/USER';
 import { User } from 'src/data/types/User';
 import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
+import { Project } from 'src/data/types/Project';
 
 /**
  * Fetch all users.
@@ -66,7 +67,7 @@ export function mapUser(record: Record<string, unknown>): User {
     mapAddress(record.address as Record<string, unknown>),
     record.phone as string,
     new Date(record.birthdate as string),
-    record.projects as string[],
+    record.projects as Project[],
     record.mr2000instances as string[],
     record.mr3000instances as string[],
   )

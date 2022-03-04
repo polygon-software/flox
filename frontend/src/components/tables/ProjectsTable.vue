@@ -103,10 +103,14 @@
 
 <script setup lang="ts">
 import {inject, ref} from 'vue';
+import {useQuasar} from 'quasar';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
+
+const $q = useQuasar()
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -229,7 +233,11 @@ const buttons = [
  * @returns {void}
  */
 async function createNewProject(): Promise<void>{
-  //TODO: routes to create new project page or dialog
+  $q.dialog({
+    component: CreateProjectDialog,
+  }).onOk(() => {
+    console.log('Create project')
+  })
   await routerService?.routeTo(ROUTES.CUSTOMERS)
 }
 

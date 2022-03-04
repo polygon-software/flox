@@ -7,10 +7,20 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  OneToMany,
+  AfterInsert,
+  AfterLoad,
+  AfterUpdate,
+} from 'typeorm';
 import { ROLE } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
+import { Project } from '../../project/entities/project.entity';
 
 @ObjectType()
 @Entity()
@@ -65,13 +75,14 @@ export class User extends BaseEntity {
   @IsDate()
   birthdate: Date;
 
-  @Field(() => [String], {
+  @Field(() => [Project], {
     description: 'Projects that the user has access to',
     nullable: true,
   })
-  @Column('text', { array: true, nullable: true })
-  @IsArray()
-  projects: string[];
+  @OneToMany(() => Project, (project) => project.user, {
+    cascade: true,
+  })
+  projects: Project[];
 
   @Field(() => [String], {
     description: 'MR2000 instances that the user has access to',
@@ -88,4 +99,13 @@ export class User extends BaseEntity {
   @Column('text', { array: true, nullable: true })
   @IsArray()
   mr3000instances: string[];
+
+  @AfterLoad()
+  @AfterInsert()
+  @AfterUpdate()
+  async nullChecks() {
+    if (!this.projects) {
+      this.projects = [];
+    }
+  }
 }

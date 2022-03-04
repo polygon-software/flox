@@ -92,7 +92,8 @@ export default {
     load_parameters: 'Load Parameters',
     copy: 'Copy',
     send: 'Send',
-    create_link: 'Create Link'
+    create_link: 'Create Link',
+    create: 'Create project',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -153,5 +154,8 @@ export default {
   },
   messages: {
     copied: 'Copied'
-  }
+  },
+  project_data: {
+    name: 'Project Name',
+  },
 };

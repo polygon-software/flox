@@ -1,13 +1,11 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
-
+import {Args, Mutation, Query, Resolver} from '@nestjs/graphql';
 import { ProjectService } from './project.service';
-import { User } from '../user/entities/user.entity';
 import {
   AdminOnly,
   AnyRole,
   CurrentUser,
 } from '../../auth/authorization.decorator';
-import { Project } from '../../types/Project';
+import { Project } from './entities/project.entity';
 import { GetUserArgs } from '../user/dto/args/get-user.args';
 import { UserService } from '../user/user.service';
 import { Device } from '../../types/Device';
@@ -15,8 +13,9 @@ import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.ar
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
+import {CreateProjectInput} from './dto/input/create-project.input';
 
-@Resolver(() => User)
+@Resolver(() => Project)
 export class ProjectResolver {
   constructor(
     private readonly projectService: ProjectService,
@@ -76,11 +75,30 @@ export class ProjectResolver {
     // For non-admin users, check whether they have permissions to access the requested project
     if (
       dbUser.role !== ROLE.ADMIN &&
-      !dbUser.projects.includes(getProjectDevicesArgs.name)
+      !dbUser.projects.some(
+        (project) => project.name === getProjectDevicesArgs.name,
+      )
     ) {
       throw new Error(ERRORS.resource_not_allowed);
     }
 
     return this.projectService.getProjectDevices(getProjectDevicesArgs);
+  }
+
+  /**
+   * Create a new Project for the given user
+   * @param {CreateProjectInput} createProjectInput - Input containing project name and associatied MR2000 and MR3000 devices
+   * @param {String} userUuid - The user owning the project
+   * @return {Project} - The newly created project
+   */
+  @AnyRole()
+  @Mutation(() => Project)
+  async createProject(
+    @Args({ name: 'createProjectInput', type: () => CreateProjectInput })
+    createProjectInput: CreateProjectInput,
+    @Args({ name: 'userUuid', type: () => String })
+    userUuid: string,
+  ): Promise<Project> {
+    return this.projectService.createProject(createProjectInput, userUuid);
   }
 }

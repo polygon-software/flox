@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Address } from '../address/entities/address.entity';
 import { User } from '../user/entities/user.entity';
-import { ProjectResolver } from './project.resolver';
-import { ProjectService } from './project.service';
 import { UserService } from '../user/user.service';
+import { Project } from './entities/project.entity';
+import { ProjectService } from './project.service';
+import { ProjectResolver } from './project.resolver';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Address])],
+  imports: [TypeOrmModule.forFeature([Project, User])],
   providers: [ProjectResolver, ProjectService, UserService],
   exports: [ProjectService],
 })

@@ -13,10 +13,12 @@ import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { getProjectsForInstances } from '../../helpers/project-helpers';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-project.input';
+import { Project } from './entities/project.entity';
 
 @Injectable()
 export class ProjectService {
   constructor(
+    @InjectRepository(Project) private projectRepository: Repository<Project>,
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
@@ -97,7 +99,7 @@ export class ProjectService {
     const userProjects = await this.getUserProjects({ uuid: userUuid });
     const userProjectPermissions = user.projects;
     if (
-      userProjectPermissions.includes(projectName) ||
+      userProjectPermissions.find((project) => project.name === projectName) ||
       userProjects.find((project) => project.name === projectName)
     ) {
       throw new Error(`Project name ${projectName} is already taken`);
@@ -105,10 +107,16 @@ export class ProjectService {
 
     // TODO: Add as comment on all relevant tables, at least: 'station', 'param'
 
-    // Add to user's project permissions
-    await this.usersRepository.update(userUuid, {
-      projects: [...user.projects, createProjectInput.name],
+    // Create new project
+    const newProject = this.projectRepository.create({
+      name: createProjectInput.name,
+      user: user,
+      mr2000instances: createProjectInput.mr2000instances,
+      mr3000instances: createProjectInput.mr3000instances,
     });
+    await this.projectRepository.save(newProject);
+
+    return newProject;
 
     // // Get all MR2000 & MR3000 instances
     // const mr2000instances = await fetchFromTable('MR2000', 'station');
@@ -130,11 +138,11 @@ export class ProjectService {
     removeDevicesFromProjectInput: RemoveDevicesFromProjectInput,
   ) {
     // Remove MR2000s, if any
-    for (const mr2000 of removeDevicesFromProjectInput.mr2000Instances ?? []) {
+    for (const mr2000 of removeDevicesFromProjectInput.mr2000instances ?? []) {
       await removeDeviceFromProject(mr2000, true);
     }
     // Remove MR3000s, if any
-    for (const mr3000 of removeDevicesFromProjectInput.mr3000Instances ?? []) {
+    for (const mr3000 of removeDevicesFromProjectInput.mr3000instances ?? []) {
       await removeDeviceFromProject(mr3000, false);
     }
   }

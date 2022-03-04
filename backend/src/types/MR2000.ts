@@ -2,6 +2,11 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class MR2000 {
+  /*
+  @Field(() => User, { description: 'User that owns the device' })
+  @ManyToOne(() => User, (user) => user.mr2000instances, { eager: true })
+  user: User;*/
+
   @Field(() => String, { description: 'CLI ID' })
   cli: string;
 

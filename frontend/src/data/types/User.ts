@@ -1,4 +1,5 @@
 import { Address } from 'src/data/types/Address';
+import { Project } from 'src/data/types/Project';
 import { ROLE } from 'src/data/ENUM';
 
 /**
@@ -14,7 +15,7 @@ export class User {
   address: Address | null;
   phone: string | null;
   birthdate: Date | null;
-  projects: string[] | null;
+  projects: Project[] | null;
   mr2000instances: string[] | null;
   mr3000instances: string[] | null;
 
@@ -45,7 +46,7 @@ export class User {
               address?: Address,
               phone?: string,
               birthdate?: Date,
-              projects?: string[],
+              projects?: Project[],
               mr2000instances?: string[],
               mr3000instances?: string[],){
     this.role = role
