@@ -51,28 +51,32 @@ export class UserService {
     const resolution = getLevelWritingArgs.resolution;
     const promiseList = getLevelWritingArgs.stationIds.map(
       async (stationId) => {
-        const url = `http://localhost:5000/rrt?file=${stationId}&start=${startTime}&end=${endTime}&step=${resolution}`;
-        const response: Observable<unknown> = this.axios
-          .get(url)
-          .pipe(map((response) => response.data));
-        const data = await firstValueFrom(response);
-        const step = data[0][2] * 1000; // ms
-        const values = data[2] as Array<Array<number>>;
-        let currentStep = 0;
-        const x_points: LevelWritingPoint[] = [];
-        const y_points: LevelWritingPoint[] = [];
-        const z_points: LevelWritingPoint[] = [];
-        values.forEach((value) => {
-          const time = startTime + currentStep;
-          currentStep += step;
-          maxValue = Math.max(maxValue, ...value);
-          x_points.push(new LevelWritingPoint(new Date(time), value[0]));
-          y_points.push(new LevelWritingPoint(new Date(time), value[1]));
-          z_points.push(new LevelWritingPoint(new Date(time), value[2]));
-        });
-        x_axes.push(new LevelWritingAxis(stationId, x_points));
-        y_axes.push(new LevelWritingAxis(stationId, y_points));
-        z_axes.push(new LevelWritingAxis(stationId, z_points));
+        try {
+          const url = `http://localhost:5000/rrt?file=${stationId}&start=${startTime}&end=${endTime}&step=${resolution}`;
+          const response: Observable<unknown> = this.axios
+            .get(url)
+            .pipe(map((response) => response.data));
+          const data = await firstValueFrom(response);
+          const step = data[0][2] * 1000; // ms
+          const values = data[2] as Array<Array<number>>;
+          let currentStep = 0;
+          const x_points: LevelWritingPoint[] = [];
+          const y_points: LevelWritingPoint[] = [];
+          const z_points: LevelWritingPoint[] = [];
+          values.forEach((value) => {
+            const time = startTime + currentStep;
+            currentStep += step;
+            maxValue = Math.max(maxValue, ...value);
+            x_points.push(new LevelWritingPoint(new Date(time), value[0]));
+            y_points.push(new LevelWritingPoint(new Date(time), value[1]));
+            z_points.push(new LevelWritingPoint(new Date(time), value[2]));
+          });
+          x_axes.push(new LevelWritingAxis(stationId, x_points));
+          y_axes.push(new LevelWritingAxis(stationId, y_points));
+          z_axes.push(new LevelWritingAxis(stationId, z_points));
+        } catch (e) {
+          console.error(`Level Writings for station "${stationId}" not found`);
+        }
       },
     );
     await Promise.all(promiseList);
