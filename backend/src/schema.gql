@@ -57,13 +57,13 @@ type LevelWriting {
   """Max value"""
   max: Float!
 
-  """x-axis"""
+  """X-axes"""
   x: [LevelWritingAxis!]!
 
-  """y-axis"""
+  """Y-axes"""
   y: [LevelWritingAxis!]!
 
-  """z-axis"""
+  """Z-axes"""
   z: [LevelWritingAxis!]!
 }
 
@@ -71,7 +71,7 @@ type LevelWritingAxis {
   """Data Points"""
   data: [LevelWritingPoint!]!
 
-  """CLI ID"""
+  """Station ID"""
   name: String!
 }
 

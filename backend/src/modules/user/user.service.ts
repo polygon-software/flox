@@ -34,6 +34,11 @@ export class UserService {
     private readonly axios: HttpService,
   ) {}
 
+  /**
+   * Get the level writings on three axis (x, y, z) for multiple stations.
+   * @param {GetLevelWritingArgs} getLevelWritingArgs - stationIds, start, end and resolution
+   * @returns {LevelWriting} - the level writings as a LevelWriting instance
+   */
   async getLevelWriting(
     getLevelWritingArgs: GetLevelWritingArgs,
   ): Promise<LevelWriting> {

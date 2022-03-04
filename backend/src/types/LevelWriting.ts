@@ -1,15 +1,18 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { LevelWritingAxis } from './LevelWritingAxis';
 
+/**
+ * Level writing for multiple stations. Includes max value over all data points.
+ */
 @ObjectType()
 export class LevelWriting {
-  @Field(() => [LevelWritingAxis], { description: 'x-axis' })
+  @Field(() => [LevelWritingAxis], { description: 'X-axes' })
   x: LevelWritingAxis[];
 
-  @Field(() => [LevelWritingAxis], { description: 'y-axis' })
+  @Field(() => [LevelWritingAxis], { description: 'Y-axes' })
   y: LevelWritingAxis[];
 
-  @Field(() => [LevelWritingAxis], { description: 'z-axis' })
+  @Field(() => [LevelWritingAxis], { description: 'Z-axes' })
   z: LevelWritingAxis[];
 
   @Field(() => Float, { description: 'Max value' })

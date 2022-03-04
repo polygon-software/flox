@@ -33,9 +33,9 @@
 
     <TimeSeriesGraph
       v-if="!fetching"
-      :datasets="datasets.x"
+      :datasets="levelWritings.x"
       :warning-level="0.25"
-      :max-value="datasets.max"
+      :max-value="levelWritings.max"
       unit="mm/s"
     />
 
@@ -46,9 +46,9 @@
 
     <TimeSeriesGraph
       v-if="!fetching"
-      :datasets="datasets.y"
+      :datasets="levelWritings.y"
       :warning-level="0.25"
-      :max-value="datasets.max"
+      :max-value="levelWritings.max"
       unit="mm/s"
     />
     <!-- Horizontal - z -->
@@ -58,9 +58,9 @@
 
     <TimeSeriesGraph
       v-if="!fetching"
-      :datasets="datasets.z"
+      :datasets="levelWritings.z"
       :warning-level="0.25"
-      :max-value="datasets.max"
+      :max-value="levelWritings.max"
       unit="mm/s"
     />
   </q-page>
@@ -73,7 +73,6 @@ import {i18n} from 'boot/i18n';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {LEVEL_WRITING} from 'src/data/queries/DEVICE';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   stationId: {
     required: true,
@@ -100,13 +99,15 @@ const timePeriodOptions = [
   }
 ]
 
-// Currently chosen time period
+// Selected time period
 const timePeriod = ref(timePeriodOptions[0])
 
+// End of the visualized period
 const end = computed(() => {
   return new Date()
 })
 
+// Start of the visualized period
 const start = computed(() => {
   const date = new Date(end.value)
   switch (timePeriod.value.key){
@@ -129,32 +130,47 @@ const start = computed(() => {
   return date
 })
 
-watch(start, () => queryData(start.value, end.value))
-watch(end, () => queryData(start.value, end.value))
+// Watch for changes in time period and query new level writings
+watch(start, () => fetchLevelWritings(start.value, end.value))
+watch(end, () => fetchLevelWritings(start.value, end.value))
 
-const datasets: Ref<Record<string, Record<string, unknown>[]|number>> = ref({ x: [], y: [], z: [], max: 0 })
+// Level Writings type
+type LevelWritings = {
+  x: Record<string, unknown>[],
+  y: Record<string, unknown>[],
+  z: Record<string, unknown>[],
+  max: number
+}
 
+// Level writings
+const levelWritings: Ref<LevelWritings> = ref({ x: [], y: [], z: [], max: 0 })
+
+// Stations in URL
 const stations = props.stationId.split('+')
+
+// Title containing station IDs
 let title = i18n.global.tc('dashboard.station', stations.length)
 stations.forEach((station) => {
   title += ` ${station},`
 })
 const pageTitle = title.substring(0, title.length-1);
 
+// If currently fetching. Used to hide graphs if no data is available.
 const fetching = ref(true);
 
 /**
- * TODO
- * @param {Date} start - start
- * @param {Date} end - end
+ * Fetch the level writings for all stations.
+ * @param {Date} start - start time
+ * @param {Date} end - end time
  * @returns {Promise<void>} - async
  */
-async function queryData(start: Date, end: Date){
+async function fetchLevelWritings(start: Date, end: Date){
   fetching.value = true
   const response = await executeQuery(LEVEL_WRITING, {stationIds: stations, start: start, end: end, resolution: 1})
-  datasets.value = response.data.levelWriting as Record<string, Record<string, unknown>[] | number>
+  levelWritings.value = response.data.levelWriting as LevelWritings
   fetching.value = false
 }
 
-queryData(start.value, end.value).catch(e => console.error(e))
+// Fetch initially
+fetchLevelWritings(start.value, end.value).catch(e => console.error(e))
 </script>
