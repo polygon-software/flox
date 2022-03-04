@@ -82,3 +82,9 @@ variable "cidr_block" {
   description = "CIDR block for the VPC."
   default     = "10.0.0.0/23"
 }
+
+variable "SSL_certificate_id" {
+  type = string
+  description = "SSL certificate for domain"
+  default = "arn:aws:acm:eu-central-1:923473058470:certificate/ee43abe5-4fe4-4733-910a-571bfcb0f178"
+}

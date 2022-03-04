@@ -17,11 +17,11 @@ echo '{
  ' >> dist/package.json
 
 echo $(<package.json) | jq '.dependencies' >> dist/package.json
-echo ',\n   "devDependencies":' >> dist/package.json
+echo ',   "devDependencies":' >> dist/package.json
 echo $(<package.json) | jq '.devDependencies' >> dist/package.json
-echo ',\n   "babel":' >> dist/package.json
+echo ',   "babel":' >> dist/package.json
 echo $(<package.json) | jq '.babel' >> dist/package.json
-echo ',\n   "engines":' >> dist/package.json
+echo ',   "engines":' >> dist/package.json
 echo $(<package.json) | jq '.engines' >> dist/package.json
 echo '}' >> dist/package.json
 cd dist
@@ -49,13 +49,13 @@ echo '{
  ' >> dist/ssr/package.json
 
 echo $(<package.json) | jq '.dependencies' >> dist/ssr/package.json
-echo ',\n   "devDependencies":' >> dist/ssr/package.json
+echo ',   "devDependencies":' >> dist/ssr/package.json
 echo $(<package.json) | jq '.devDependencies' >> dist/ssr/package.json
-echo ',\n   "browserslist":' >> dist/ssr/package.json
+echo ',   "browserslist":' >> dist/ssr/package.json
 echo $(<package.json) | jq '.browserslist' >> dist/ssr/package.json
-echo ',\n   "engines":' >> dist/ssr/package.json
+echo ',   "engines":' >> dist/ssr/package.json
 echo $(<package.json) | jq '.engines' >> dist/ssr/package.json
-echo ',\n   "jestSonar":' >> dist/ssr/package.json
+echo ',   "jestSonar":' >> dist/ssr/package.json
 echo $(<package.json) | jq '.jestSonar' >> dist/ssr/package.json
 echo '}' >> dist/ssr/package.json
 cd dist/ssr

@@ -79,4 +79,34 @@ resource "aws_elastic_beanstalk_environment" "web_eb_env" {
     name      = "MaxSize"
     value     = 6
   }
+  setting {
+    namespace = "aws:elb:listener:443"
+    name      = "ListenerProtocol"
+    value     = "TCP"
+  }
+  setting {
+    namespace = "aws:elb:listener:443"
+    name      = "InstancePort"
+    value     = 8080
+  }
+  setting {
+    namespace = "aws:elb:listener:443"
+    name      = "InstanceProtocol"
+    value     = "TCP"
+  }
+  setting {
+    namespace = "aws:elb:listener:443"
+    name      = "SSLCertificateId"
+    value     = var.SSL_certificate_id
+  }
+  setting {
+    name      = "ListenerEnabled"
+    namespace = "aws:elb:listener:80"
+    value     = "false"
+  }
+  setting {
+    name      = "Application Healthcheck URL"
+    namespace = "aws:elasticbeanstalk:application"
+    value     = "TCP:8080"
+  }
 }

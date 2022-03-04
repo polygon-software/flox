@@ -16,6 +16,7 @@ import { ERRORS } from '../../error/ERRORS';
 import { EmployeeService } from '../employee/employee.service';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
+import { verifyUser } from 'src/auth/authService';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -118,5 +119,22 @@ export class UserResolver {
     }
 
     return this.userService.disableUser(disableUserInput.uuid, repository);
+  }
+
+  /**
+   * Set the email of user as verified
+   * @param {Record<string, unknown>} user - the user making the request
+   * @returns {Promise<User>} - the user after editing
+   */
+  @AnyRole()
+  @Mutation(() => String, { name: 'verifyUser' })
+  async verifyUser(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<string> {
+    if (!user) {
+      throw new Error('No User authenticated');
+    }
+    await verifyUser(user.userId);
+    return user.userId;
   }
 }

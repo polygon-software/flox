@@ -18,6 +18,9 @@ import {i18n} from 'boot/i18n';
 import {useApolloClient} from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {VERIFY_EMAIL} from 'src/data/mutations/USER';
+import {sleep} from 'src/helpers/general-helpers';
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
  * signing up, logging in, logging out, changing passwords, and more.
@@ -100,7 +103,7 @@ export class AuthenticationService {
           // Store in local variable
           this.$authStore.mutations.setCognitoUser(cognitoUser)
           cognitoUser.authenticateUser(authenticationDetails, {
-            onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
+            onSuccess: (result)=>{ this.loginSuccess(result); resolve()},
             onFailure: (err: Error)=>{this.onFailure(err) },
             // Sets up MFA (only done once after signing up)
             mfaSetup: () => {
@@ -112,9 +115,9 @@ export class AuthenticationService {
               cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
             },
 
-            newPasswordRequired: function (userAttributes){
-              while(!newPassword){
-                newPassword = prompt('Bitte geben Sie ein neues Passwort ein', '')||'';
+            newPasswordRequired: function (userAttributes) {
+              while (!newPassword) {
+                newPassword = prompt('Bitte geben Sie ein neues Passwort ein', '') || '';
               }
               cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
             },
@@ -380,8 +383,11 @@ export class AuthenticationService {
         }).onOk((code: string) => {
             // TODO friendlyDeviceName
           cognitoUser.verifySoftwareToken(code, 'My TOTP device', {
-                onSuccess: (userSession: CognitoUserSession)=>{
-                  this.loginSuccess(userSession, resolve)
+                onSuccess: async (userSession: CognitoUserSession) => {
+                  this.loginSuccess(userSession)
+                  await sleep(100)
+                  // await executeMutation(VERIFY_EMAIL, {})
+                  resolve()
                 },
                 onFailure: (error: Error)=>{
                   this.onFailure(error)
@@ -431,9 +437,10 @@ export class AuthenticationService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
         currentUser?.sendMFACode(code, {
-          onSuccess: (userSession: CognitoUserSession)=>{
+          onSuccess: (userSession: CognitoUserSession) => {
             this.$authStore.mutations.setCognitoUser(currentUser)
-            this.loginSuccess(userSession, resolve)
+            this.loginSuccess(userSession)
+            resolve()
           },
           onFailure: (error: Error)=>{
             this.onFailure(error)
@@ -445,14 +452,11 @@ export class AuthenticationService {
   /**
    * When login succeeds
    * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
-   * @param {function} resolve - resolve function
    * @returns {void}
    */
-  loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
+  loginSuccess(userSession: CognitoUserSession): void{
     // Store locally
     this.$authStore.mutations.setUserSession(userSession)
-
-    resolve()
   }
 
   /**

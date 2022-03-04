@@ -20,14 +20,40 @@ export async function createCognitoAccount(
     UserPoolId: process.env.USER_POOL_ID,
     Username: email,
     TemporaryPassword: pw,
-    UserAttributes: [],
+    DesiredDeliveryMediums: ['EMAIL'],
+    UserAttributes: [
+      {
+        Name: 'email',
+        Value: email,
+      },
+    ],
   };
   const resp = await provider.adminCreateUser(params);
+
   return {
     cognitoId: resp.User.Username,
     password: pw,
   };
 }
+
+/**
+ * Verify User
+ * @param {string} userId - userId
+ * @return {Promise<void>} - done
+ */
+export function verifyUser(userId) {
+  return provider.adminUpdateUserAttributes({
+    Username: userId,
+    UserPoolId: process.env.USER_POOL_ID,
+    UserAttributes: [
+      {
+        Name: 'email_verified',
+        Value: 'true',
+      },
+    ],
+  });
+}
+
 /**
  * Generates a random number in given range
  * @param {number} min - start of the range

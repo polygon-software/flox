@@ -85,19 +85,24 @@ resource "aws_elastic_beanstalk_environment" "api_eb_env" {
     value     = aws_security_group.API-Security-Group.id
   }
   setting {
-    namespace = "aws:elb:listener:3000"
+    namespace = "aws:elb:listener:443"
     name      = "ListenerProtocol"
-    value     = "TCP"
+    value     = "SSL"
   }
   setting {
-    namespace = "aws:elb:listener:3000"
+    namespace = "aws:elb:listener:443"
     name      = "InstancePort"
     value     = 3000
   }
   setting {
-    namespace = "aws:elb:listener:3000"
+    namespace = "aws:elb:listener:443"
     name      = "InstanceProtocol"
     value     = "TCP"
+  }
+  setting {
+    namespace = "aws:elb:listener:443"
+    name      = "SSLCertificateId"
+    value     = var.SSL_certificate_id
   }
   setting {
     name      = "ListenerEnabled"
@@ -109,6 +114,7 @@ resource "aws_elastic_beanstalk_environment" "api_eb_env" {
     namespace = "aws:elasticbeanstalk:application"
     value     = "TCP:3000"
   }
+
 
   // Env Variables
   setting {
@@ -202,7 +208,7 @@ resource "aws_elastic_beanstalk_environment" "api_eb_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "EMAIL_SENDER"
-    value     = "info@soi-ag.ch"
+    value     = "soi@soi.polygon-project.ch"
   }
 
   setting {
@@ -233,7 +239,7 @@ resource "aws_elastic_beanstalk_environment" "api_eb_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "BASE_URL"
-    value     = "http://soi-web.polygon-project.ch"
+    value     = "https://soi-web.polygon-project.ch"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
