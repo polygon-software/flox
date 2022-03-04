@@ -12,7 +12,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
 import { User } from './modules/user/entities/user.entity';
-import { PreviewModule } from './modules/preview/preview.module';
+import { DeviceModule } from './modules/device/device.module';
 
 @Module({
   imports: [
@@ -94,7 +94,7 @@ import { PreviewModule } from './modules/preview/preview.module';
     }),
     TypeOrmModule.forFeature([User]),
     UserModule,
-    PreviewModule,
+    DeviceModule,
   ],
   providers: [
     JwtStrategy,

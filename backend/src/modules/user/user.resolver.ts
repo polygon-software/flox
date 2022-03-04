@@ -19,18 +19,10 @@ import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
 import { GetMyDevicesArgs } from './dto/args/get-my-devices.args';
-import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
-import { LevelWriting } from '../../types/LevelWriting';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
-
-  @Public()
-  @Query(() => LevelWriting, { name: 'levelWriting' })
-  getLevelWriting(@Args() getLevelWritingArgs: GetLevelWritingArgs) {
-    return this.usersService.getLevelWriting(getLevelWritingArgs);
-  }
 
   @AdminOnly()
   @Query(() => [User], { name: 'allUsers' })
@@ -47,7 +39,7 @@ export class UserResolver {
   @Public()
   @Query(() => Boolean, { name: 'isEmailAllowed' })
   async getUserAllowed(@Args('email') email: string): Promise<boolean> {
-    return this.usersService.existsUserWithEmail(email);
+    return this.usersService.existsEmptyUserWithEmail(email);
   }
 
   @Public()

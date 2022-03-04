@@ -4,10 +4,9 @@ import { UserResolver } from './user.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Address } from '../address/entities/address.entity';
-import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Address]), HttpModule],
+  imports: [TypeOrmModule.forFeature([User, Address])],
   providers: [UserResolver, UserService],
   exports: [UserService],
 })

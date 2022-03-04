@@ -138,7 +138,6 @@ type Query {
   myDevices(unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!
-  preview(cli: String!, date: String!, num: String!): String!
   user(cognitoUuid: ID, uuid: ID): User!
 }
 
