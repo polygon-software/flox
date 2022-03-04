@@ -7,7 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToOne } from 'typeorm';
 import { ROLE } from '../../../ENUM/ENUM';
 import { Address } from '../../address/entities/address.entity';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
@@ -38,6 +38,7 @@ export class User extends BaseEntity {
   address: Address;
 
   @Field(() => String, { description: 'Username' })
+  @Index({ unique: true })
   @Column({ nullable: true })
   @IsString()
   username: string;

@@ -39,6 +39,39 @@ export const MY_DEVICES = {
   cacheLocation: 'getUserDevices',
 };
 
+export const LEVEL_WRITING = {
+  query: gql`
+    query getDeviceData($stationIds: [String!]!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
+      levelWriting(stationIds: $stationIds, start: $start, end: $end, resolution: $resolution){
+        x{
+          name
+          data {
+            x
+            y
+          }
+        }
+        y{
+          name
+          data {
+            x
+            y
+          }
+        }
+        z{
+          name
+          data {
+            x
+            y
+          }
+        }
+        max
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'getDeviceData',
+};
+
 export const PROJECT_DEVICES = {
   query: gql`
     query getProjectDevices($name: String!){
@@ -57,8 +90,8 @@ export const PROJECT_DEVICES = {
 };
 
 export const DEVICE_QUERIES: QueryObject[] = [
-
   USER_DEVICES,
   MY_DEVICES,
-  PROJECT_DEVICES
+  PROJECT_DEVICES,
+  LEVEL_WRITING,
 ];
