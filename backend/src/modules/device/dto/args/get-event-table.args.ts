@@ -13,4 +13,10 @@ export class GetEventTableArgs {
 
   @Field(() => String, { nullable: true })
   filter: string;
+
+  @Field(() => String, { nullable: true })
+  orderBy: string;
+
+  @Field(() => Boolean, { nullable: true })
+  descending: boolean;
 }

@@ -91,8 +91,15 @@ export const PROJECT_DEVICES = {
 
 export const EVENT_TABLE_ROWS = {
   query: gql`
-    query eventTable($stationId: String!, $skip: Int!, $take: Int!){
-      eventTable(stationId: $stationId, skip: $skip, take: $take){
+    query eventTable(
+      $stationId: String!,
+      $skip: Int!,
+      $take: Int!,
+      $filter: String,
+      $orderBy: String,
+      $descending: Boolean
+    ){
+      eventTable(stationId: $stationId, skip: $skip, take: $take, filter: $filter, orderBy: $orderBy, descending: $descending){
         items {
           file
           type
@@ -109,7 +116,10 @@ export const EVENT_TABLE_ROWS = {
           VSUM
           __typename
         }
-        length
+        lengthAll
+        lengthEvt
+        lengthPk
+        lengthZip
         __typename
       }
     }

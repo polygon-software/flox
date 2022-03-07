@@ -2,21 +2,19 @@
   <div class="column">
     <!-- Search input -->
     <div class="row" style="justify-content: center">
-      <p>{{ $t('files.events', {events: rows?.length || 0}) }}, {{ $t('files.peak_files', {peak_files: peakFiles}) }},
-        {{ $t('files.zip_files', {zip_files: zipFiles}) }}, {{ $t('files.totally_files', {files: files, total_files: totalFiles}) }}</p>
+      <p>{{ $t('files.events', {events: lenghts.Evt}) }}, {{ $t('files.peak_files', {peak_files: lenghts.Pk}) }},
+        {{ $t('files.zip_files', {zip_files: lenghts.Zip}) }}</p>
     </div>
     <div class="row" style="justify-content: center">
-      <q-input
+      <q-select
         v-model="search"
         :label="$t('general.filter')"
+        :options="['All', 'Evt', 'Pk', 'Zip']"
         outlined
-        type="search"
         dense
-      >
-        <template #append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
+        style="width: 90px"
+        @update:model-value="refetch"
+      />
     </div>
     <q-table
       v-model:pagination="pagination"
@@ -25,8 +23,6 @@
       :rows="rows || []"
       :columns="columns"
       row-key="uuid"
-      :filter="search"
-      :filter-method="tableFilter"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
       @request="updatePagination"
@@ -87,8 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, inject, onMounted, Ref, ref, watch} from 'vue';
-import {tableFilter} from 'src/helpers/filter-helpers';
+import {defineProps, inject, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
@@ -103,53 +98,61 @@ const props = defineProps({
     type: String
   }
 })
+const routerService: RouterService|undefined = inject('$routerService')
+
+
 /**
  * Updates the table based on user pagination inputs
  * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
  * @returns {void} - -
  */
 function updatePagination(update: Record<string, string|Record<string, unknown>>){
-  let newPagination = update.pagination as Record<string, unknown>
-  executeQuery(EVENT_TABLE_ROWS, {stationId: props.stationId, skip: (newPagination.page as number - 1) * (newPagination.rowsPerPage as number), take: newPagination.rowsPerPage as number}).then((res)=>{
-    const fetchRes = res.data[EVENT_TABLE_ROWS.cacheLocation] as Record<string, Record<string, unknown>[]>
-    pagination.value = newPagination
-    pagination.value.rowsNumber = fetchRes.length
-    rows.value = fetchRes.items
-  }).catch((err)=>{
-    console.log(err)
-  })
+  pagination.value = update.pagination as Record<string, unknown>
+  return refetch()
 }
 
+/**
+ * Fetch events
+ * @returns {Promise<void>} - done
+ */
+async function refetch(): Promise<void>{
+  const res = await executeQuery(EVENT_TABLE_ROWS, {
+    stationId: props.stationId,
+    skip: (pagination.value.page as number - 1) * (pagination.value.rowsPerPage as number),
+    take: pagination.value.rowsPerPage as number,
+    filter: search.value,
+    orderBy: (pagination.value.sortBy as string) || 'date_time',
+    descending: pagination.value.descending as boolean || false
+  });
+  const fetchRes = res.data[EVENT_TABLE_ROWS.cacheLocation] as Record<string, Record<string, unknown>[]|number>
+  pagination.value.rowsNumber = fetchRes.lengthAll
+  rows.value = fetchRes.items as Record<string, unknown>[]
+  lenghts.value.total = fetchRes.lengthAll as number
+  lenghts.value.Pk = fetchRes.lengthPk as number
+  lenghts.value.Evt = fetchRes.lengthEvt as number
+  lenghts.value.Zip = fetchRes.lengthZip as number
+
+}
+const lenghts = ref({
+  total: 0,
+  Zip: 0,
+  Evt: 0,
+  Pk: 0
+})
 
 const pagination = ref({
   page: 1,
   rowsPerPage: 10,
-  rowsNumber: 100,
+  rowsNumber: 0,
   descending: false,
-  sortBy: null
+  sortBy: ''
 }) as Ref<Record<string, unknown>>
 
 const rows = ref([]) as Ref<Record<string, unknown>[]>
-executeQuery(EVENT_TABLE_ROWS, {
-  stationId: props.stationId,
-  skip: (pagination.value.page as number - 1) * (pagination.value.rowsPerPage as number),
-  take: pagination.value.rowsPerPage as number
-}).then((res)=>{
-  const fetchRes = res.data[EVENT_TABLE_ROWS.cacheLocation] as Record<string, Record<string, unknown>[]>
-  pagination.value.rowsNumber = fetchRes.length
-  rows.value = fetchRes.items}).catch((err)=>{
-  console.log(err)
-})
+const search = ref(null)
 
+void refetch()
 
-// TODO: take data from database
-const peakFiles = ref(12)
-const zipFiles = ref(1)
-const files = ref(600)
-const totalFiles = ref(788)
-const search = ref('')
-
-const routerService: RouterService|undefined = inject('$routerService')
 const formatDate = date.formatDate
 // ----- Data -----
 const columns = [
@@ -174,7 +177,7 @@ const columns = [
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  await routerService?.addToRoute(row.file) // or use another value...
+  await routerService?.addToRoute(row.file) // Todo
 }
 
 // TODO: replace it to download the file
@@ -183,7 +186,7 @@ async function onRowClick(row: Record<string, unknown>): Promise<void> {
  * @returns {void}
  */
 async function downloadFile () {
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
+  await routerService?.routeTo(ROUTES.CUSTOMERS) // ToDo
 }
 </script>
 

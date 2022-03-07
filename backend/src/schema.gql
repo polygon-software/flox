@@ -55,7 +55,10 @@ union Device = MR2000 | MR3000
 
 type EventsTable {
   items: [EventsTableRow!]!
-  length: Int!
+  lengthAll: Int!
+  lengthEvt: Int!
+  lengthPk: Int!
+  lengthZip: Int!
 }
 
 type EventsTableRow {
@@ -176,7 +179,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  eventTable(filter: String, skip: Int!, stationId: String!, take: Int!): EventsTable!
+  eventTable(descending: Boolean, filter: String, orderBy: String, skip: Int!, stationId: String!, take: Int!): EventsTable!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
