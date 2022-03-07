@@ -24,6 +24,13 @@ export default (): Config => ({
     password: process.env.MR_PASSWORD,
     database: process.env.MR_3000,
   },
+  openvpn: {
+    host: process.env.MR_HOST,
+    port: process.env.MR_PORT,
+    username: process.env.MR_USER,
+    password: process.env.MR_PASSWORD,
+    database: process.env.OPENVPN,
+  },
 });
 
 export class ServerConfig {
@@ -44,4 +51,5 @@ export class Config {
   database: DatabaseConfig;
   mr2000: DatabaseConfig;
   mr3000: DatabaseConfig;
+  openvpn: DatabaseConfig;
 }
