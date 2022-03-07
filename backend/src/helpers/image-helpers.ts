@@ -8,5 +8,5 @@
  * @returns {string|ArrayBuffer|null} - Buffer
  */
 export function base64ToBuffer(base64String: string): Buffer {
-  return Buffer.from(base64String, 'base64');
+  return Buffer.start(base64String, 'base64');
 }

@@ -64,6 +64,10 @@ const props = defineProps({
   },
 })
 
+const maxValue = computed(() => {
+  return props.maxValue
+})
+
 /**
  * Sets the level markers on the y-axis.
  */
@@ -71,19 +75,21 @@ const annotations = computed(() => {
   const yaxis: Record<string, unknown>[] = []
   const markers = props.levelMarkers as Record<string, string|number>[]
   markers.forEach(marker => {
-    yaxis.push({
-      y: marker.value,
-      strokeDashArray: marker.dashSize,
-      borderColor: marker.color,
-      label: {
-        borderWidth: 0,
-        style: {
-          color: marker.color,
-          background: 'transparent',
-        },
-        text: `${marker.label}: ${marker.value}`
-      }
-    })
+    if(marker.value < maxValue.value) {
+      yaxis.push({
+        y: marker.value,
+        strokeDashArray: marker.dashSize,
+        borderColor: marker.color,
+        label: {
+          borderWidth: 0,
+          style: {
+            color: marker.color,
+            background: 'transparent',
+          },
+          text: `${marker.label}: ${marker.value}`
+        }
+      })
+    }
   })
   return yaxis
 })
@@ -135,7 +141,7 @@ const options = computed(() => {
     yaxis: {
       type: 'numeric',
       min: 0,
-      max: Math.ceil(props.maxValue * 10) / 10,
+      max: maxValue.value,
       tickAmount: 10,
       decimalsInFloat: 2,
       title: {

@@ -36,12 +36,12 @@
       <template #body="props">
         <q-tr
           :props="props"
-          @click="() => showCustomGraph([props.row.name])"
+          @click="() => showCustomGraph([props.row.client])"
         >
           <q-td key="checkbox">
             <q-checkbox
               v-model="selectedRows"
-              :val="props.row.name"
+              :val="props.row.client"
             />
           </q-td>
           <q-td key="name">
@@ -142,10 +142,10 @@ const columns = [
 const rows = [
   {
     name: 'P1A-A',
-    device: 'MR3000',
-    client: '21_45',
+    device: 'MR2000',
+    client: '39-11',
     ip: '10.8.13.182',
-    firmware: '2.08',
+    firmware: '220.60',
     serial: '87654321',
     sale_status: 'Rental',
     vpn_status: 'Down',
@@ -156,7 +156,7 @@ const rows = [
   {
     name: 'P1A-B',
     device: 'MR2000',
-    client: '25_16',
+    client: '39-12',
     ip: '10.8.16.16',
     firmware: '220.65',
     serial: '856',
@@ -164,6 +164,19 @@ const rows = [
     vpn_status: 'Up',
     pid: '01-PC-A1',
     files: '27',
+    ftp: 'Active',
+  },
+  {
+    name: 'P1A-C',
+    device: 'MR3000',
+    client: '44_08',
+    ip: '10.8.17.154',
+    firmware: '2.80',
+    serial: '4567',
+    sale_status: 'Sold',
+    vpn_status: 'Up',
+    pid: '03-PMA1',
+    files: '5',
     ftp: 'Active',
   },
 ]
@@ -213,7 +226,7 @@ function showCustomGraph(devices: string[]): void{
   $q.dialog({
     component: CustomGraphDialog,
     componentProps: {},
-  }).onOk(async () => {
+  }).onOk(async (settings: Record<string, string>) => {
     // Build string combination of device CLIs
     let pathSuffix = ''
     devices.forEach((device) => {
@@ -224,6 +237,7 @@ function showCustomGraph(devices: string[]): void{
     pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
 
     await routerService?.addToRoute(pathSuffix)
+    await routerService?.pushToQuery(settings)
   })
 }
 

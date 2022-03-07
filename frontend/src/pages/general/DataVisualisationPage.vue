@@ -14,15 +14,15 @@
     >
       <q-btn
         v-for="option in timePeriodOptions"
-        :key="option.key"
-        :label="$t(`period.${option.key}`)"
+        :key="option"
+        :label="$t(`period.${option}`)"
         style="border-radius: 0"
-        :text-color="timePeriod.key === option.key ? 'white' : 'primary'"
-        :class="timePeriod.key === option.key ? 'bg-primary' : null"
+        :text-color="periodOption === option ? 'white' : 'primary'"
+        :class="periodOption === option ? 'bg-primary' : null"
         no-caps
         unelevated
         outline
-        @click="option.key === 'custom' ? showCustomGraphDialog(): timePeriod = option"
+        @click="option === 'custom' ? showCustomGraphDialog() : periodOption = option"
       />
     </div>
 
@@ -34,8 +34,8 @@
     <TimeSeriesGraph
       :datasets="levelWritings.x"
       :level-markers="xMarkers"
-      :max-value="levelWritings.max"
-      unit="mm/s"
+      :max-value="scale"
+      :unit="units.x"
     />
 
     <!-- Horizontal - y -->
@@ -46,31 +46,34 @@
     <TimeSeriesGraph
       :datasets="levelWritings.y"
       :level-markers="yMarkers"
-      :max-value="levelWritings.max"
-      unit="mm/s"
+      :max-value="scale"
+      :unit="units.y"
     />
     <!-- Horizontal - z -->
     <h6 class="q-ma-md q-pa-none">
-      {{ $t('visualisation.horizontal') }} - Z
+      {{ $t('visualisation.vertical') }} - Z
     </h6>
 
     <TimeSeriesGraph
       :datasets="levelWritings.z"
       :level-markers="zMarkers"
-      :max-value="levelWritings.max"
-      unit="mm/s"
+      :max-value="scale"
+      :unit="units.z"
     />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, Ref, ref, watch} from 'vue';
+import {computed, ComputedRef, defineProps, inject, Ref, ref, watch} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue';
-import {useQuasar} from 'quasar';
+import {date, useQuasar} from 'quasar';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {DEVICE_PARAMS, LEVEL_WRITING} from 'src/data/queries/DEVICE';
+import {RouterService} from 'src/services/RouterService';
+
+const routerService: RouterService|undefined = inject('$routerService')
 
 const props = defineProps({
   stationId: {
@@ -81,21 +84,11 @@ const props = defineProps({
 
 // Time period options
 const timePeriodOptions = [
-  {
-    key: 'twelve_hours',
-  },
-  {
-    key: 'two_days',
-  },
-  {
-    key: 'two_weeks',
-  },
-  {
-    key: 'one_month',
-  },
-  {
-    key: 'custom',
-  }
+  'twelve_hours',
+  'two_days',
+  'two_weeks',
+  'one_month',
+  'custom',
 ]
 
 const xMarkers = computed(() => [...levelMarkers.value, ...warningLevels.value.x])
@@ -112,12 +105,46 @@ const levelMarkers = computed(() => [
   }
 ])
 
+const maxAlarm = computed(() => {
+  let max = 0
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  stations.forEach((station) => {
+    const params = deviceParams.value[station]
+    if (params) {
+      max = Math.max(max, params.ala2X as number, params.ala2Y as number, params.ala2Z as number)
+    }
+  })
+  return max
+})
+
+const units = computed(() => {
+  const unitsRecord: Record<string, string> = {x: '', y: '', z: ''}
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  stations.forEach((station) => {
+    const params = deviceParams.value[station]
+    if (params) {
+      const unitX = (params.unitX as string).trim()
+      const unitY = (params.unitY as string).trim()
+      const unitZ = (params.unitZ as string).trim()
+      if(!unitsRecord.x.includes(unitX)){
+        unitsRecord.x = unitsRecord.x ? `${unitsRecord.x}, ${unitX}` : unitX
+      }
+      if(!unitsRecord.y.includes(unitY)){
+        unitsRecord.y = unitsRecord.y ? `${unitsRecord.y}, ${unitY}` : unitY
+      }
+      if(!unitsRecord.z.includes(unitZ)){
+        unitsRecord.z = unitsRecord.z ? `${unitsRecord.z}, ${unitZ}` : unitZ
+      }
+    }
+  })
+  return unitsRecord
+})
+
 const warningLevels = computed(() => {
   const markers: Record<string, Record<string, unknown>[]> = {x: [], y: [], z: []}
   if(stations.length === 1){
     const params = deviceParams.value[stations[0]]
     if(params) {
-      console.log(params)
       markers.x.push({
         label: 'Alarm 1',
         value: params.ala1X,
@@ -177,18 +204,71 @@ const warningLevels = computed(() => {
   return markers
 })
 
+// Selected scale
+const scaleOption = computed({
+  get() {
+    return routerService?.getQueryParam('scale') ?? 'highest_peak'
+  },
+  set(val: string) {
+    return routerService?.pushToQuery({scale: val})
+  }
+})
+
+// Scale
+const scale: ComputedRef<number> = computed(() => {
+  switch (scaleOption.value){
+    case 'perception_level':
+      return 0.3
+    case 'alarm_level':
+      return Math.ceil(maxAlarm.value * 11) / 10
+    case 'custom':
+      return parseFloat(routerService?.getQueryParam('customScale')?.trim() ?? '1.0')
+    case 'highest_peak':
+    default:
+      return Math.ceil(levelWritings.value.max * 10) / 10
+  }
+})
+
 // Selected time period
-const timePeriod = ref(timePeriodOptions[0])
+const periodOption = computed({
+  get() {
+    return routerService?.getQueryParam('period') ?? timePeriodOptions[0]
+  },
+  set(val: string) {
+    return routerService?.pushToQuery({period: val})
+  }
+})
+
+const customPeriod = computed(() => {
+  const period = {start: new Date(), end: new Date()}
+  const periodText = routerService?.getQueryParam('customPeriod')
+  if(periodText){
+    const startText = periodText.split('-')[0].trim()
+    const endText = periodText.split('-')[1].trim()
+    period.start = date.extractDate(startText, 'DD.MM.YYYY')
+    period.end = date.extractDate(endText, 'DD.MM.YYYY')
+  }
+  return period
+})
 
 // End of the visualized period
-const end = computed(() => {
-  return new Date()
+const end: ComputedRef<Date> = computed(() => {
+  switch (periodOption.value){
+    case 'custom':
+      return customPeriod.value.end
+    case 'twelve_hours':
+    case 'two_days':
+    case 'two_weeks':
+    case 'one_month':
+    default:
+      return new Date()
+  }
 })
 
 // Start of the visualized period
 const start = computed(() => {
   const date = new Date(end.value)
-  switch (timePeriod.value.key){
+  switch (periodOption.value){
     case 'twelve_hours':
       date.setHours(date.getHours() - 12)
       break
@@ -202,6 +282,7 @@ const start = computed(() => {
       date.setMonth(date.getMonth() - 1)
       break
     case 'custom':
+      return customPeriod.value.start
     default:
       break
   }
@@ -264,11 +345,16 @@ const $q = useQuasar()
  * @returns {void} - done
  */
 function showCustomGraphDialog(): void{
-  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
-  // TODO: onOK
   $q.dialog({
     component: CustomGraphDialog,
-    componentProps: {},
+    componentProps: {
+      scale: scaleOption.value,
+      period: periodOption.value,
+      customScale: scale.value,
+      customPeriod: customPeriod.value,
+    },
+  }).onOk(async (settings: Record<string, string>) => {
+    await routerService?.pushToQuery(settings)
   })
 }
 
