@@ -198,7 +198,7 @@ const buttons = [
     label: i18n.global.t('projects.show_status_files'),
   },
   {
-    key: 'show_device',
+    key: 'device_health',
     label: i18n.global.t('projects.show_device_health'),
   },
 ]
@@ -257,8 +257,8 @@ async function onOptionClick(device: string, key: string): Promise<void>{
     case 'status':
       await routerService?.addToRoute(`${device}/${key}`)
       break
-    case 'show_device':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+    case 'device_health':
+      await routerService?.addToRoute(`${device}/${key}`)
       break
     default:
       await routerService?.routeTo(ROUTES.CUSTOMER)

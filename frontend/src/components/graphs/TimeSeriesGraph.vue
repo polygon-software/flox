@@ -41,6 +41,7 @@ import ShareDialog from 'components/dialogs/ShareDialog.vue';
 import {computed, defineProps} from 'vue';
 import {date, useQuasar} from 'quasar';
 import {formatDateForGraph} from 'src/helpers/format-helpers';
+import {i18n} from 'boot/i18n';
 
 const $q = useQuasar()
 
@@ -74,7 +75,7 @@ const annotations = computed(() => {
     yaxis.push({
       y: marker.value,
       strokeDashArray: marker.dashSize,
-      borderColor: 'var(--q-negative)',
+      borderColor: marker.color,
       label: {
         position: 'left',
         offsetX: 80,
@@ -83,7 +84,7 @@ const annotations = computed(() => {
           color: marker.color,
           background: 'rgba(0,0,0,0)',
         },
-        text: `${marker.label}: ${marker.value}`
+        text: marker.showValue ? `${marker.label} ${i18n.global.t('visualisation.at')} ${marker.value}` : `${marker.label}`
       }
     })
   })
