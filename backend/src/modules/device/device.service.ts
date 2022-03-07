@@ -52,21 +52,6 @@ export class DeviceService {
         filterQuery,
       );
       const instance = mr2000instances[0];
-      // TODO: Ask customer if multiply by lsb is necessary
-      // return new DeviceParams(
-      //   instance.trigX * instance.lsbX,
-      //   instance.trigY * instance.lsbY,
-      //   instance.trigZ * instance.lsbZ,
-      //   instance.ala1X * instance.lsbX,
-      //   instance.ala1Y * instance.lsbY,
-      //   instance.ala1Z * instance.lsbZ,
-      //   instance.ala2X * instance.lsbX,
-      //   instance.ala2Y * instance.lsbY,
-      //   instance.ala2Z * instance.lsbZ,
-      //   instance.unitX,
-      //   instance.unitY,
-      //   instance.unitZ,
-      // );
       return new DeviceParams(
         instance.trigX,
         instance.trigY,
