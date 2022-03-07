@@ -22,7 +22,7 @@
         no-caps
         unelevated
         outline
-        @click="timePeriod = option"
+        @click="option.key === 'custom' ? showCustomGraphDialog(): timePeriod = option"
       />
     </div>
 
@@ -32,8 +32,9 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="computedDatasets"
-      :warning-level="0.25"
+      :datasets="levelWritings.x"
+      :level-markers="levelMarkers"
+      :max-value="levelWritings.max"
       unit="mm/s"
     />
 
@@ -43,8 +44,9 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="computedDatasets"
-      :warning-level="0.25"
+      :datasets="levelWritings.y"
+      :level-markers="levelMarkers"
+      :max-value="levelWritings.max"
       unit="mm/s"
     />
     <!-- Horizontal - z -->
@@ -53,19 +55,23 @@
     </h6>
 
     <TimeSeriesGraph
-      :datasets="computedDatasets"
-      :warning-level="0.25"
+      :datasets="levelWritings.z"
+      :level-markers="levelMarkers"
+      :max-value="levelWritings.max"
       unit="mm/s"
     />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, ref} from 'vue';
+import {computed, defineProps, Ref, ref, watch} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
+import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue';
+import {useQuasar} from 'quasar';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {LEVEL_WRITING} from 'src/data/queries/DEVICE';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   stationId: {
     required: true,
@@ -92,55 +98,98 @@ const timePeriodOptions = [
   }
 ]
 
-// Currently chosen time period
+// Horizontal markers to be displayed in the graphs
+const levelMarkers = computed(() => [
+  {
+    label: 'Warning',
+    value: 0.25,
+    color: 'red',
+    dashSize: 3,
+  }
+])
+
+// Selected time period
 const timePeriod = ref(timePeriodOptions[0])
 
-// TODO remove placeholder data
-const computedDatasets = computed(() => {
-  const datasets = [] as Record<string, unknown>[]
-
-  (props.stationId.split('+')).forEach((station) => {
-    datasets.push(
-      {
-        name: station,
-        data: randomTimeSeries()
-      }
-    )
-  })
-
-  return datasets
+// End of the visualized period
+const end = computed(() => {
+  return new Date()
 })
 
-const pageTitle = computed(() => {
-  const stations = props.stationId.split('+')
-  let title = i18n.global.tc('dashboard.station', stations.length)
-
-  stations.forEach((station) => {
-    title += ` ${station},`
-  })
-
-  return title.substring(0, title.length-1);
-})
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * Placeholder function, generates a random time series with spikes
- * TODO remove
- */
-function randomTimeSeries(){
-  const result = []
-  let date = new Date()
-  for(let i = 0; i < 100; i++){
-    const newElement = {
-      x: date.getTime(),
-      y: Math.random()/(Math.random() < 0.9 ? 10 : 2)
-    }
-    result.push(newElement)
-
-    date.setTime(date.getTime() + 60000)
+// Start of the visualized period
+const start = computed(() => {
+  const date = new Date(end.value)
+  switch (timePeriod.value.key){
+    case 'twelve_hours':
+      date.setHours(date.getHours() - 12)
+      break
+    case 'two_days':
+      date.setDate(date.getDate() - 2)
+      break
+    case 'two_weeks':
+      date.setDate(date.getDate() - 14)
+      break
+    case 'one_month':
+      date.setMonth(date.getMonth() - 1)
+      break
+    case 'custom':
+    default:
+      break
   }
+  return date
+})
 
-  return result
+// Watch for changes in time period and query new level writings
+watch(start, () => fetchLevelWritings(start.value, end.value))
+watch(end, () => fetchLevelWritings(start.value, end.value))
+
+// Level Writings type
+type LevelWritings = {
+  x: Record<string, unknown>[],
+  y: Record<string, unknown>[],
+  z: Record<string, unknown>[],
+  max: number
 }
 
+// Level writings
+const levelWritings: Ref<LevelWritings> = ref({ x: [], y: [], z: [], max: 0 })
+
+// Stations in URL
+const stations = props.stationId.split('+')
+
+// Title containing station IDs
+let title = i18n.global.tc('dashboard.station', stations.length)
+stations.forEach((station) => {
+  title += ` ${station},`
+})
+const pageTitle = title.substring(0, title.length-1);
+
+/**
+ * Fetch the level writings for all stations.
+ * @param {Date} start - start time
+ * @param {Date} end - end time
+ * @returns {Promise<void>} - async
+ */
+async function fetchLevelWritings(start: Date, end: Date){
+  const response = await executeQuery(LEVEL_WRITING, {stationIds: stations, start: start, end: end, resolution: 1})
+  levelWritings.value = response.data.levelWriting as LevelWritings
+}
+
+const $q = useQuasar()
+
+/**
+ * Shows the Custom Graph Dialog
+ * @returns {void} - done
+ */
+function showCustomGraphDialog(): void{
+  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
+  // TODO: onOK
+  $q.dialog({
+    component: CustomGraphDialog,
+    componentProps: {},
+  })
+}
+
+// Fetch initially
+fetchLevelWritings(start.value, end.value).catch(e => console.error(e))
 </script>

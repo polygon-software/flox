@@ -92,10 +92,11 @@
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
-                  class="column; text-grey"
+                  class="text-grey"
+                  style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(button.key)"
+                  @click="onOptionClick(props.row.name, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -111,11 +112,15 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
+import {useQuasar} from 'quasar';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 
 const selectedRows: Ref<string[]> = ref([])
+
+const $q = useQuasar()
 
 // ----- Data -----
 const columns = [
@@ -181,7 +186,7 @@ const buttons = [
     label: i18n.global.t('projects.display_data'),
   },
   {
-    key: 'show_event',
+    key: 'files',
     label: i18n.global.t('projects.show_event'),
   },
   {
@@ -189,7 +194,7 @@ const buttons = [
     label: i18n.global.t('projects.edit_parameters'),
   },
   {
-    key: 'show_status',
+    key: 'status',
     label: i18n.global.t('projects.show_status_files'),
   },
   {
@@ -201,29 +206,34 @@ const buttons = [
 /**
  * Routes to a new page where the graph of that project is shown
  * @param {string[]} devices - names of devices to show the graph for
- * @returns {Promise<void>} - done
+ * @returns {void} - done
  */
-async function showCustomGraph(devices: string[]): Promise<void>{
+function showCustomGraph(devices: string[]): void{
   // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
+  $q.dialog({
+    component: CustomGraphDialog,
+    componentProps: {},
+  }).onOk(async () => {
+    // Build string combination of device CLIs
+    let pathSuffix = ''
+    devices.forEach((device) => {
+      pathSuffix += `${device}+`
+    })
 
-  // Build string combination of device CLIs
-  let pathSuffix = ''
-  devices.forEach((device) => {
-    pathSuffix += `${device}+`
+    // Subtract last '+'
+    pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
+
+    await routerService?.addToRoute(pathSuffix)
   })
-
-  // Subtract last '+'
-  pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
-
-  await routerService?.addToRoute(pathSuffix)
 }
 
 /**
  * Routes to different pages dependent which button is clicked
+ * @param {string} device - the name of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
-async function onOptionClick(key: string): Promise<void>{
+async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
@@ -238,14 +248,14 @@ async function onOptionClick(key: string): Promise<void>{
     case 'display':
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
-    case 'show_event':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+    case 'files':
+      await routerService?.addToRoute(`${device}/${key}`)
       break
     case 'edit':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.addToRoute(`${device}/${key}`)
       break
-    case 'show_status':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+    case 'status':
+      await routerService?.addToRoute(`${device}/${key}`)
       break
     case 'show_device':
       await routerService?.routeTo(ROUTES.CUSTOMER)

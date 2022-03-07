@@ -56,7 +56,8 @@ export default {
     station: 'Station | Stationen',
     device_pool: 'Gerätepool',
     account: 'Account',
-    share: 'Teilen'
+    share: 'Teilen',
+    files: 'Ereignisse vom Station',
   },
   projects: {
     project: 'Projekt',
@@ -82,6 +83,23 @@ export default {
     name: 'Name',
     id: 'ID',
   },
+  edit_parameters: {
+    user_data: 'Benutzerdaten und Schwellenwerte',
+    contacts: 'Alert-Kontakte',
+    project_name: 'Projektname',
+    station_name: 'Stationsname',
+    name: 'Name',
+    number: 'Telefonnumer',
+    email: 'E-mail',
+    add_new_contact: 'Füge neuen Kontakt hinzu',
+    event: 'Ereigniss',
+    alarm1: 'Alarm 1',
+    alarm2: 'Alarm 2',
+    sms_limit: 'SMS-Grenze',
+    battery: 'Leistung/Batterie',
+    memory: 'Erinnerung',
+    daily: 'Täglich',
+  },
   buttons: {
     finish: 'Abschliessen',
     back: 'Zurück',
@@ -94,7 +112,12 @@ export default {
     load_parameters: 'Parameter laden',
     copy: 'Kopieren',
     send: 'Senden',
-    create_link: 'Link erzeugen'
+    create_link: 'Link erzeugen',
+    new_contact: 'Neuer Kontakt',
+    load: 'Laden',
+    save: 'Speichern',
+    show: 'Anzeigen',
+    close: 'Schliessen',
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -130,6 +153,7 @@ export default {
       'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
   },
   set_password: {
     description:
@@ -158,5 +182,51 @@ export default {
   },
   messages: {
     copied: 'Kopiert'
-  }
+  },
+  status: {
+    title: 'Status von',
+  },
+  client_connectivity: {
+    title: 'Client-Konnektivität',
+    date_time: 'Datum/Zeit',
+    real_ip: 'Echter IP',
+    port: 'Port',
+    vpn_ip: 'VPN IP',
+    event: 'Ereignisse',
+  },
+  log_files: {
+    log_file: 'LOG Datei',
+    ftp_log_file: 'FTP LOG Datei - aktuelle Uploads',
+    rest_log_file: 'REST LOG Datei',
+  },
+  files: {
+    events: '{events} Ereignisse',
+    peak_files: '{peak_files} Peak-Dateien',
+    zip_files: '{zip_files} ZIP-Dateien',
+    totally_files: '{files} von insgesamt {total_files} Dateien',
+    file: 'Datei',
+    type: 'Typ',
+    date_time: 'Datum/Typ',
+    peak_x: 'Spitze X',
+    peak_y: 'Spitze Y',
+    peak_z: 'Spitze Z',
+    frq_x: 'Frq X',
+    frq_y: 'Frq Y',
+    frq_z: 'Frq Z',
+    vsum: 'VSUM',
+    download: 'Herunterladen',
+  },
+  dialog: {
+    period: 'Periode',
+    scale: 'Skala',
+    hours: '12 Stunden',
+    days: '2 Tage',
+    weeks: '2 Wochen',
+    months: '1 Monat',
+    select_period: 'Periode auswählen',
+    perception_level: 'Wahrnehmungsebene',
+    alarm_level: 'Alarmlevel',
+    highest_peak: 'Höchster Peak',
+    enter_value: 'Wert eingeben',
+  },
 };

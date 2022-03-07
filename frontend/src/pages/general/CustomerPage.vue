@@ -8,12 +8,12 @@
     <!-- Title: Device pool -->
     <h5>{{ $t('dashboard.device_pool') }}</h5>
 
-    <DevicePoolsTable/>
+    <DevicePoolTable/>
 
   </q-page>
 </template>
 
 <script setup lang="ts">
 import ProjectsTable from 'components/tables/ProjectsTable.vue';
-import DevicePoolsTable from 'components/tables/DevicePoolTable.vue';
+import DevicePoolTable from 'components/tables/DevicePoolTable.vue';
 </script>

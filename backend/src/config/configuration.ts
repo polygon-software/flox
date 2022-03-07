@@ -24,24 +24,34 @@ export default (): Config => ({
     password: process.env.MR_PASSWORD,
     database: process.env.MR_3000,
   },
+  pyAPI: {
+    host: process.env.PY_HOST,
+    port: process.env.PY_PORT,
+  },
 });
 
-export class ServerConfig {
+type ServerConfig = {
   port: number;
-}
+};
 
-export class DatabaseConfig {
+type APIConfig = {
+  host: string;
+  port: string;
+};
+
+type DatabaseConfig = {
   host: string;
   port: string;
   username: string;
   password: string;
   database: string;
-}
+};
 
-export class Config {
+type Config = {
   server: ServerConfig;
   entities: string;
   database: DatabaseConfig;
   mr2000: DatabaseConfig;
   mr3000: DatabaseConfig;
-}
+  pyAPI: APIConfig;
+};
