@@ -36,7 +36,7 @@ export const MY_DEVICES = {
     }}
   `,
   tables: ['user'],
-  cacheLocation: 'getUserDevices',
+  cacheLocation: 'myDevices',
 };
 
 export const PROJECT_DEVICES = {
