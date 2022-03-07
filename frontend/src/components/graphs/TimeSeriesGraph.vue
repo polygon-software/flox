@@ -41,6 +41,7 @@ import ShareDialog from 'components/dialogs/ShareDialog.vue';
 import {computed, defineProps} from 'vue';
 import {date, useQuasar} from 'quasar';
 import {formatDateForGraph} from 'src/helpers/format-helpers';
+import {i18n} from 'boot/i18n';
 
 const $q = useQuasar()
 
@@ -86,7 +87,7 @@ const annotations = computed(() => {
             color: marker.color,
             background: 'transparent',
           },
-          text: `${marker.label}: ${marker.value}`
+          text: marker.showValue ? `${marker.label} ${i18n.global.t('visualisation.at')} ${marker.value}` : `${marker.label}`
         }
       })
     }

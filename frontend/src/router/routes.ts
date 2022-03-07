@@ -53,6 +53,11 @@ const ROUTES: Record<string, RouteRecordRaw> = {
         component: () => import('pages/general/PreviewPage.vue'),
         props: route => ({ fileId: route.params.fileId })
       },
+      {
+        path: ':customerId/:projectId/:stationId/device_health',
+        component: () => import('pages/general/DeviceHealthPage.vue'),
+        props: route => ({ stationId: route.params.stationId })
+      },
     ],
   },
 
