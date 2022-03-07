@@ -33,6 +33,13 @@ export class RouterService {
   }
 
   /**
+   * Go back.
+   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.   */
+  goBack(){
+    return this.router.push(this.route.path.substring(0, this.route.path.lastIndexOf('/')))
+  }
+
+  /**
    * Routes to a given route, as defined in ROUTES constant.
    * @param {RouteRecordRaw} to - the route to go to.
    * @param {Record<string, string>} [query] - props to pass to the component, if any.

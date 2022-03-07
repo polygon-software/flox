@@ -22,51 +22,29 @@ export class DeviceService {
   ): Promise<DeviceParams> {
     const deviceId = getDeviceParamsArgs.stationId;
     const filterQuery = `WHERE cli = "${deviceId}"`;
+    let instances: Record<string, string | number>[];
     if (deviceId.includes('_')) {
       // MR3000
-      const mr3000instances = await fetchFromTable(
-        'MR3000',
-        'para_trigala',
-        filterQuery,
-      );
-      const instance = mr3000instances[0];
-      return new DeviceParams(
-        instance.trigX,
-        instance.trigY,
-        instance.trigZ,
-        instance.ala1X,
-        instance.ala1Y,
-        instance.ala1Z,
-        instance.ala2X,
-        instance.ala2Y,
-        instance.ala2Z,
-        instance.unitX,
-        instance.unitY,
-        instance.unitZ,
-      );
+      instances = await fetchFromTable('MR3000', 'para_trigala', filterQuery);
     } else {
       // MR2000
-      const mr2000instances = await fetchFromTable(
-        'MR2000',
-        'param',
-        filterQuery,
-      );
-      const instance = mr2000instances[0];
-      return new DeviceParams(
-        instance.trigX,
-        instance.trigY,
-        instance.trigZ,
-        instance.ala1X,
-        instance.ala1Y,
-        instance.ala1Z,
-        instance.ala2X,
-        instance.ala2Y,
-        instance.ala2Z,
-        instance.unitX,
-        instance.unitY,
-        instance.unitZ,
-      );
+      instances = await fetchFromTable('MR2000', 'param', filterQuery);
     }
+    const instance = instances[0];
+    return new DeviceParams(
+      instance.trigX as number,
+      instance.trigY as number,
+      instance.trigZ as number,
+      instance.ala1X as number,
+      instance.ala1Y as number,
+      instance.ala1Z as number,
+      instance.ala2X as number,
+      instance.ala2Y as number,
+      instance.ala2Z as number,
+      instance.unitX as string,
+      instance.unitY as string,
+      instance.unitZ as string,
+    );
   }
 
   /**

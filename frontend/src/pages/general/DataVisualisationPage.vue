@@ -60,6 +60,22 @@
       :max-value="scale"
       :unit="units.z"
     />
+
+    <q-dialog v-model="alert">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Alert</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          {{ `Units ${invalidUnit1} and ${invalidUnit2} are not compatible` }}
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn v-close-popup flat label="OK" color="primary" @click="goBack"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -81,6 +97,14 @@ const props = defineProps({
     type: String
   }
 })
+
+/**
+ * Go back to last page.
+ * @returns {Promise<void>} - async
+ */
+async function goBack() {
+  await routerService?.goBack()
+}
 
 // Time period options
 const timePeriodOptions = [
@@ -117,26 +141,34 @@ const maxAlarm = computed(() => {
   return max
 })
 
+const alert = computed(() => invalidUnits.value)
+
+const invalidUnits = ref(false)
+const invalidUnit1 = ref('')
+const invalidUnit2 = ref('')
+
 const units = computed(() => {
   const unitsRecord: Record<string, string> = {x: '', y: '', z: ''}
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-  stations.forEach((station) => {
-    const params = deviceParams.value[station]
-    if (params) {
-      const unitX = (params.unitX as string).trim()
-      const unitY = (params.unitY as string).trim()
-      const unitZ = (params.unitZ as string).trim()
-      if(!unitsRecord.x.includes(unitX)){
-        unitsRecord.x = unitsRecord.x ? `${unitsRecord.x}, ${unitX}` : unitX
+    // eslint-disable-next-line sonarjs/cognitive-complexity
+    stations.forEach((station) => {
+      const params = deviceParams.value[station]
+      if (params) {
+        const stationUnits: Record<string, string> = {
+          x: (params.unitX as string).trim(),
+          y: (params.unitY as string).trim(),
+          z: (params.unitZ as string).trim()
+        }
+        Object.entries(stationUnits).forEach(([key, value]) => {
+          if (!unitsRecord[key]) {
+            unitsRecord[key] = value
+          } else if (unitsRecord[key] !== value) {
+            invalidUnits.value = true
+            invalidUnit1.value = value
+            invalidUnit2.value = unitsRecord[key]
+          }
+        })
       }
-      if(!unitsRecord.y.includes(unitY)){
-        unitsRecord.y = unitsRecord.y ? `${unitsRecord.y}, ${unitY}` : unitY
-      }
-      if(!unitsRecord.z.includes(unitZ)){
-        unitsRecord.z = unitsRecord.z ? `${unitsRecord.z}, ${unitZ}` : unitZ
-      }
-    }
-  })
+    })
   return unitsRecord
 })
 
