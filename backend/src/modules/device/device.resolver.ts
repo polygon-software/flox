@@ -1,4 +1,4 @@
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { DeviceService } from './device.service';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { LevelWriting } from '../../types/LevelWriting';
@@ -6,7 +6,6 @@ import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUM';
 import { UnauthorizedException } from '@nestjs/common';
-import { EventsTableRow } from '../../types/EventsTableRow';
 import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 
