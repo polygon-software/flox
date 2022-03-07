@@ -234,7 +234,7 @@ export default {
     cellular_signal: 'Mobiles Signal',
     main_battery: 'Hauptbatterie',
     good: 'gut',
-    fair: 'fair',
+    fair: 'ausreichend',
     poor: 'schlecht',
   },
 };

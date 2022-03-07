@@ -35,7 +35,6 @@
     <TimeSeriesGraph
       :datasets="computedDatasetsBatteryVoltage"
       :max-value="50"
-      :show-value-on-marker="false"
       unit="Volt"
     />
 
@@ -48,7 +47,6 @@
       :datasets="computedDatasetsCellularSignal"
       :level-markers="levelMarkersCellularSignal"
       :max-value="100"
-      :show-value-on-marker="false"
       unit="%"
     />
   </q-page>
@@ -94,7 +92,7 @@ const computedDatasetsBatteryVoltage = computed(() => {
   return [
     {
       name: i18n.global.t('device_health.main_battery'),
-      data: randomTimeSeries()
+      data: randomTimeSeries(),
     }
   ]
 })
@@ -123,18 +121,21 @@ const levelMarkersCellularSignal = computed(() => [
     value: 80,
     color: 'green',
     dashSize: 0,
+    showValue: false,
   },
   {
     label: i18n.global.t('device_health.fair'),
     value: 50,
     color: 'orange',
     dashSize: 0,
+    showValue: false,
   },
   {
     label: i18n.global.t('device_health.poor'),
     value: 10,
     color: 'red',
     dashSize: 0,
+    showValue: false,
   },
 ])
 

@@ -56,17 +56,16 @@ const props = defineProps({
   levelMarkers: {
     type: Array,
     required: false,
-    default: () => [],
+    default: () => [{showValue: {
+      type: Boolean,
+        required: false,
+        default: false,
+      }}],
   },
   maxValue: {
     type: Number,
     required: true,
   },
-  showValueOnMarker: {
-    type: Boolean,
-    required: false,
-    default: true,
-  }
 })
 
 /**
@@ -88,7 +87,7 @@ const annotations = computed(() => {
           color: marker.color,
           background: 'rgba(0,0,0,0)',
         },
-        text: props.showValueOnMarker? `${marker.label}: ${marker.value}` : `${marker.label}`
+        text: marker.showValue? `${marker.label}: ${marker.value}` : `${marker.label}`
       }
     })
   })
