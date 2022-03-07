@@ -34,6 +34,7 @@ export const MY_DEVICES = {
         pid
         ftp
         ip
+        firmware
         project {
           uuid
           name
@@ -46,6 +47,7 @@ export const MY_DEVICES = {
         serialNumber
         ftp
         ip
+        firmware
         project {
           uuid
           name

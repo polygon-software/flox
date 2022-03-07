@@ -26,6 +26,9 @@ export class MR3000 {
   @Field(() => String, { description: 'IP address, if any', nullable: true })
   ip: string;
 
+  @Field(() => String, { description: 'Firmware version' })
+  firmware: string;
+
   constructor(
     cli: string,
     name: string,
@@ -33,6 +36,7 @@ export class MR3000 {
     project: Project,
     ftp: boolean,
     ip: string,
+    firmware: string,
   ) {
     this.cli = cli;
     this.name = name;
@@ -40,5 +44,6 @@ export class MR3000 {
     this.project = project;
     this.ftp = ftp;
     this.ip = ip;
+    this.firmware = firmware;
   }
 }

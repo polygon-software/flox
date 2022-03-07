@@ -98,6 +98,9 @@ type MR2000 {
   """CLI ID"""
   cli: String!
 
+  """Firmware version"""
+  firmware: String!
+
   """FTP forward status"""
   ftp: Boolean!
 
@@ -123,6 +126,9 @@ type MR2000 {
 type MR3000 {
   """CLI ID"""
   cli: String!
+
+  """Firmware version"""
+  firmware: String!
 
   """FTP forward status"""
   ftp: Boolean!

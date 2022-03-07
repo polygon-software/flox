@@ -38,6 +38,7 @@ export async function mr2000fromDatabaseEntry(
     project, // Project (if any)
     !!storeEntry, // FTP forward status (true if an entry is present)
     vpnEntry ? (vpnEntry.vpn_ip as string) : null,
+    entry.firmware as string,
   );
 }
 
@@ -69,6 +70,7 @@ export async function mr3000fromDatabaseEntry(
     project, // Project (if any)
     !!storeEntry, // FTP forward status (true if an entry is present)
     vpnEntry ? (vpnEntry.vpn_ip as string) : null,
+    entry.firmware as string,
   );
 }
 
