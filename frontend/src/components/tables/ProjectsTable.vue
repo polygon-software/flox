@@ -20,14 +20,6 @@
         style="margin-left: 50px"
         @click="createNewProject"
       />
-      <!--- Needed for testing todo: delete -->
-      <q-btn
-        :label="$t('My Projects')"
-        outline
-        class="text-grey"
-        style="margin-left: 50px"
-        @click="showProjects"
-      />
     </div>
     <q-table
       class="q-mt-lg"
@@ -111,14 +103,15 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import {inject, onMounted, Ref, ref} from 'vue';
 import {useQuasar} from 'quasar';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
-import MyProjectDialog from 'src/components/dialogs/MyProjectsDialog.vue'
+import {myProjectDevices, myProjects} from 'src/helpers/api-helpers';
+import {Project} from 'src/data/types/Project';
 
 const $q = useQuasar()
 
@@ -142,65 +135,7 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-const rows = [
-  {
-    project: 'P1A',
-    device: 'MR3000',
-    client: '21_45',
-    ip: '10.8.13.182',
-    firmware: '2.08',
-    serial: '87654321',
-    sale_status: 'Rental',
-    station: 'P1A-A',
-    vpn_status: 'Down',
-    pid: '0ZAB-21',
-    files: '1489',
-    ftp: 'Active',
-  },
-  {
-    project: 'P2A',
-    device: 'MR4000',
-    client: '25_16',
-    ip: '10.8.16.16',
-    firmware: '220.65',
-    serial: '856',
-    sale_status: 'Sold',
-    station: 'P1A-B',
-    vpn_status: 'Up',
-    pid: '01-PC-A1',
-    files: '27',
-    ftp: 'Active',
-  },
-  {
-    project: 'P3A',
-    device: 'MR2000',
-    client: '45-13',
-    ip: '10.8.13.21',
-    firmware: '2.2.7',
-    serial: '355673',
-    sale_status: 'Sold',
-    station: 'P2A-A',
-    vpn_status: 'Up',
-    pid: '3012-21',
-    files: '68',
-    ftp: 'Active',
-  },
-  {
-    project: 'P4A',
-    device: 'MR1000',
-    client: '39_21',
-    ip: '10.8.13.11',
-    firmware: '2.2.3',
-    serial: '112456',
-    sale_status: 'Sold',
-    station: 'P3-A',
-    vpn_status: 'Up',
-    pid: '3090-121',
-    files: '109',
-    ftp: 'Active',
-  },
-]
-
+const rows: Ref<Project[]> = ref([])
 
 const buttons = [
   {
@@ -237,8 +172,14 @@ const buttons = [
   },
 ]
 
+onMounted(async () => {
+  rows.value = await myProjectDevices()
+  console.log('rows is now', rows.value)
+})
+
+
 /**
- * Routes to Create New Project Page or Dialog
+ * Shows a dialog for creating a new project
  * @async
  * @returns {void}
  */
@@ -247,14 +188,7 @@ async function createNewProject(): Promise<void> {
     component: CreateProjectDialog,
   }).onOk(() => {
     console.log('Create project')
-  })
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
-}
-
-// eslint-disable-next-line require-jsdoc
-async function showProjects(): Promise<void> {
-  $q.dialog({
-    component: MyProjectDialog,
+    // TODO show success notification
   })
   await routerService?.routeTo(ROUTES.CUSTOMERS)
 }

@@ -28,37 +28,33 @@ export class DeviceService {
       throw new Error(`No user found for ${getUserDevicesArgs.uuid}`);
     }
 
-    const filterQuery = getUserDevicesArgs.unassigned
-      ? "WHERE (comment IS null OR comment='')"
-      : null;
-
     // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable(
-      'MR2000',
-      'station',
-      filterQuery,
-    );
-    const mr3000instances = await fetchFromTable(
-      'MR3000',
-      'station',
-      filterQuery,
-    );
+    const mr2000instances = await fetchFromTable('MR2000', 'station');
+    const mr3000instances = await fetchFromTable('MR3000', 'station');
 
     const devices = [];
 
     // Add all allowed MR2000 instances
     mr2000instances.forEach((instance) => {
-      if (user.mr2000instances.includes(instance.cli)) {
+      if ((user.mr2000instances ?? []).includes(instance.cli)) {
         devices.push(mr2000fromDatabaseEntry(instance));
       }
     });
 
     // Add all allowed MR3000 instances
     mr3000instances.forEach((instance) => {
-      if (user.mr3000instances.includes(instance.cli)) {
+      if ((user.mr3000instances ?? []).includes(instance.cli)) {
         devices.push(mr3000fromDatabaseEntry(instance));
       }
     });
+
+    // Filter based on unassigned/assigned setting
+    if (getUserDevicesArgs.unassigned) {
+      // TODO filter
+    }
+    if (getUserDevicesArgs.assigned) {
+      // TODO filter
+    }
 
     return devices;
   }

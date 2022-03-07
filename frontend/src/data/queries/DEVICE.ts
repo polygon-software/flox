@@ -24,8 +24,8 @@ export const USER_DEVICES = {
 
 export const MY_DEVICES = {
   query: gql`
-    query{
-      myDevices{
+    query myDevices($unassigned: Boolean, $assigned: Boolean){
+      myDevices(unassigned: $unassigned, assigned: $assigned){
       ...on MR2000{
         cli
       }

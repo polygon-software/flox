@@ -5,6 +5,8 @@ import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
 import {MY_PROJECTS} from 'src/data/queries/PROJECT';
+import {MY_DEVICES} from 'src/data/queries/DEVICE';
+import {Device} from 'src/data/types/Device';
 
 /**
  * Fetch all users.
@@ -44,7 +46,7 @@ export async function myUser(): Promise<User | null> {
 }
 
 /**
- * Fetch all projects beloning to current user
+ * Fetch all projects belonging to current user
  * @return {Promise<Project[]>} - An array containing all the user's projects
  */
 export async function myProjects(): Promise<Project[]> {
@@ -56,6 +58,21 @@ export async function myProjects(): Promise<Project[]> {
     }
   }
   return projects
+}
+
+/**
+ * Fetch all devices that are part of projects belonging to current user
+ * @return {Promise<Device[]>} - An array containing all the user's projects
+ */
+export async function myProjectDevices(): Promise<Device[]> {
+  const devices: Device[] = [];
+  const queryResult = await executeQuery(MY_DEVICES, {assigned: true}); // TODO adapt query
+  if(queryResult.data?.getUserDevices){
+    for (const device of queryResult.data.getUserDevices as Record<string, unknown>[]) {
+      devices.push(mapDevice(device));
+    }
+  }
+  return devices
 }
 
 /**
@@ -120,4 +137,17 @@ export function mapProject(record: Record<string, unknown>): Project {
     record.mr2000instances as string[],
     record.mr3000instances as string[],
   )
+}
+
+/**
+ * Map device record (MR2000 or MR3000) to device instance.
+ * @param {Record<string, unknown>} record - project record.
+ * @returns {Project} - project instance.
+ */
+export function mapDevice(record: Record<string, unknown>): Device {
+  return new Device(
+    record.cli as string,
+    record.serialNumber as string,
+  )
+  // TODO project...
 }

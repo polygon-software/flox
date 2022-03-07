@@ -54,6 +54,7 @@ export class DeviceResolver {
     return this.deviceService.getUserDevices({
       uuid: dbUser.uuid,
       unassigned: getMyDevicesArgs?.unassigned ?? false,
+      assigned: getMyDevicesArgs?.assigned ?? false,
     } as GetUserDevicesArgs);
   }
 }
