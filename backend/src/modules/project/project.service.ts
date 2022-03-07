@@ -15,7 +15,7 @@ import { CreateProjectInput } from './dto/input/create-project.input';
 import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-project.input';
 import { Project } from './entities/project.entity';
 import { UpdateProjectInput } from './dto/input/update-project-input';
-import {DeleteProjectInput} from './dto/input/delete-project.input';
+import { DeleteProjectInput } from './dto/input/delete-project.input';
 
 @Injectable()
 export class ProjectService {
@@ -73,15 +73,9 @@ export class ProjectService {
       throw new Error(`No user found for ${getUserProjectsArgs.uuid}`);
     }
 
-    // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable('MR2000', 'station');
-    const mr3000instances = await fetchFromTable('MR3000', 'station');
-
-    // Build list of projects from instances
-    const projects = getProjectsForInstances(mr2000instances, mr3000instances);
-
-    // Filter by projects that the user has access to
-    return projects.filter((project) => user.projects.includes(project.name));
+    return this.projectRepository.find({
+      user: user,
+    });
   }
 
   /**
@@ -105,8 +99,6 @@ export class ProjectService {
       throw new Error(`Project name ${projectName} is already taken`);
     }
 
-    // TODO: Add as comment on all relevant tables, at least: 'station', 'param'
-
     // Create new project
     const newProject = this.projectRepository.create({
       name: createProjectInput.name,
@@ -117,16 +109,6 @@ export class ProjectService {
     await this.projectRepository.save(newProject);
 
     return newProject;
-
-    // // Get all MR2000 & MR3000 instances
-    // const mr2000instances = await fetchFromTable('MR2000', 'station');
-    // const mr3000instances = await fetchFromTable('MR3000', 'station');
-    //
-    // // Build list of projects from instances
-    // const projects = getProjectsForInstances(mr2000instances, mr3000instances);
-    //
-    // // Filter by projects that the user has access to
-    // return projects.filter((project) => user.projects.includes(project.name));
   }
 
   /**

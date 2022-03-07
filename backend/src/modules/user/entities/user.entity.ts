@@ -79,7 +79,6 @@ export class User extends BaseEntity {
     description: 'Projects that the user has access to',
     nullable: true,
   })
-  @JoinColumn({ name: 'name' })
   @OneToMany(() => Project, (project) => project.user, {
     cascade: true,
   })

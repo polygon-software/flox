@@ -1,4 +1,4 @@
-import {Args, Mutation, Query, Resolver} from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ProjectService } from './project.service';
 import {
   AdminOnly,
@@ -16,8 +16,8 @@ import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import {string} from 'joi';
-import {DeleteProjectInput} from './dto/input/delete-project.input';
+import { string } from 'joi';
+import { DeleteProjectInput } from './dto/input/delete-project.input';
 
 @Resolver(() => Project)
 export class ProjectResolver {
