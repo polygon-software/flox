@@ -28,9 +28,13 @@ export const MY_DEVICES = {
       myDevices(unassigned: $unassigned, assigned: $assigned){
       ...on MR2000{
         cli
+        serialNumber
+        numberOfFiles
+        pid
       }
       ...on MR3000{
         cli
+        serialNumber
       }
       __typename
     }}

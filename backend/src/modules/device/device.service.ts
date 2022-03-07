@@ -34,8 +34,6 @@ export class DeviceService {
 
     const devices = [];
 
-    console.log('inst:', user.mr2000instances, user.mr3000instances);
-
     // Add all allowed MR2000 instances
     mr2000instances.forEach((instance) => {
       if ((user.mr2000instances ?? []).includes(instance.cli)) {

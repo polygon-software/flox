@@ -41,7 +41,7 @@
             {{ props.row.project }}
           </q-td>
           <q-td key="device">
-            {{ props.row.device }}
+            {{ props.row.cli }}
           </q-td>
           <q-td key="client">
             {{ props.row.client }}
@@ -53,7 +53,7 @@
             {{ props.row.firmware }}
           </q-td>
           <q-td key="serial">
-            {{ props.row.serial }}
+            {{ props.row.serialNumber }}
           </q-td>
           <q-td key="sale_status">
             {{ props.row.sale_status }}
@@ -110,7 +110,7 @@ import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
-import {myProjectDevices, myProjects} from 'src/helpers/api-helpers';
+import {myProjectDevices} from 'src/helpers/api-helpers';
 import {Project} from 'src/data/types/Project';
 
 const $q = useQuasar()
