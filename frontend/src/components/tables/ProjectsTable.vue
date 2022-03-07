@@ -24,7 +24,7 @@
     <q-table
       class="q-mt-lg"
       flat
-      :rows="rows"
+      :rows="mockedRows"
       :columns="columns"
       row-key="uuid"
       :filter="search"
@@ -109,6 +109,7 @@ import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 
+
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 
@@ -129,7 +130,16 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-const rows = [
+
+//TODO: uncomment when we have data (and then remove the mocked rows)
+/*const userProjects = subscribeToQuery(MY_PROJECTS)
+
+const rows = computed(()=>{
+  return userProjects.value ?? []
+})*/
+
+
+const mockedRows = [
   {
     project: 'P1A',
     device: 'MR3000',

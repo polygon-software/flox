@@ -81,6 +81,7 @@ export default {
     show_status_files: 'Statusdateien anzeigen',
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
+    id: 'ID',
   },
   edit_parameters: {
     user_data: 'Benutzerdaten und Schwellenwerte',
