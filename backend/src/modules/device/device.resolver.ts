@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { DeviceService } from './device.service';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { LevelWriting } from '../../types/LevelWriting';
@@ -7,7 +7,8 @@ import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUM';
 import { UnauthorizedException } from '@nestjs/common';
 import { EventsTableRow } from '../../types/EventsTableRow';
-import { GetEventTable } from './dto/args/get-event-table';
+import { GetEventTableArgs } from './dto/args/get-event-table.args';
+import { EventsTable } from '../../types/EventsTable';
 
 @Resolver()
 export class DeviceResolver {
@@ -50,22 +51,22 @@ export class DeviceResolver {
   }
 
   @AnyRole()
-  @Query(() => [EventsTableRow], { name: 'eventTable' })
+  @Query(() => EventsTable, { name: 'eventTable' })
   async getEventTable(
-    @Args() stationId: GetEventTable,
+    @Args() eventTableArgs: GetEventTableArgs,
     @CurrentUser() user: Record<string, string>,
-  ): Promise<EventsTableRow[]> {
+  ): Promise<EventsTable> {
     const dbUser = await this.userService.getMyUser(user);
     let allowed = false;
     if (dbUser.role === ROLE.USER) {
       allowed = !(
-        !dbUser.mr2000instances?.includes(stationId.stationId) &&
-        !dbUser.mr3000instances?.includes(stationId.stationId)
+        !dbUser.mr2000instances?.includes(eventTableArgs.stationId) &&
+        !dbUser.mr3000instances?.includes(eventTableArgs.stationId)
       );
     }
 
     if (dbUser.role === ROLE.ADMIN || allowed) {
-      return this.devicesService.getEvents(stationId.stationId);
+      return this.devicesService.getEvents(eventTableArgs);
     }
 
     throw new UnauthorizedException();

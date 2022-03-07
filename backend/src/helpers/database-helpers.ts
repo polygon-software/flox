@@ -48,3 +48,31 @@ export async function fetchFromTable(
 
   return queryResult;
 }
+
+/**
+ * Gets number of objects within a given database table
+ * @param {string} database - database name
+ * @param {string} table - table name
+ * @param {string} [filterQuery] - optional SQL filtering query
+ * @returns {number} - database table contents
+ */
+export async function fetchCountFromTable(
+  database: string,
+  table: string,
+  filterQuery?: string,
+) {
+  // Get query runner
+  const queryRunner = await getQueryRunner(database);
+
+  // Build query
+  const query = `
+      SELECT count(*) FROM ${table}
+      ${filterQuery ?? ''}
+  `;
+  // Execute
+  const queryResult = await queryRunner.manager.query(query);
+
+  await queryRunner.release();
+
+  return queryResult;
+}

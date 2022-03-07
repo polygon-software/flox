@@ -2,7 +2,7 @@
   <div class="column">
     <!-- Search input -->
     <div class="row" style="justify-content: center">
-      <p>{{ $t('files.events', {events: events}) }}, {{ $t('files.peak_files', {peak_files: peakFiles}) }},
+      <p>{{ $t('files.events', {events: rows?.length || 0}) }}, {{ $t('files.peak_files', {peak_files: peakFiles}) }},
         {{ $t('files.zip_files', {zip_files: zipFiles}) }}, {{ $t('files.totally_files', {files: files, total_files: totalFiles}) }}</p>
     </div>
     <div class="row" style="justify-content: center">
@@ -19,6 +19,7 @@
       </q-input>
     </div>
     <q-table
+      v-model:pagination="pagination"
       class="q-mt-lg"
       flat
       :rows="rows || []"
@@ -28,6 +29,7 @@
       :filter-method="tableFilter"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
+      @request="updatePagination"
     >
       <template #body="props">
         <q-tr
@@ -41,7 +43,7 @@
             {{ props.row.type }}
           </q-td>
           <q-td key="dateTime">
-            {{ props.row.dateTime }}
+            {{ formatDate(props.row.dateTime, 'DD.MM.YYYY') }}
           </q-td>
           <q-td key="peakX">
             {{ props.row.peakX }}
@@ -85,16 +87,62 @@
 </template>
 
 <script setup lang="ts">
-import {inject, onMounted, ref} from 'vue';
+import {defineProps, inject, onMounted, Ref, ref, watch} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {executeQuery} from 'src/helpers/data-helpers';
 import {EVENT_TABLE_ROWS} from 'src/data/queries/DEVICE';
+import {date} from 'quasar';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps({
+  stationId: {
+    required: true,
+    type: String
+  }
+})
+/**
+ * Updates the table based on user pagination inputs
+ * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
+ * @returns {void} - -
+ */
+function updatePagination(update: Record<string, string|Record<string, unknown>>){
+  let newPagination = update.pagination as Record<string, unknown>
+  executeQuery(EVENT_TABLE_ROWS, {stationId: props.stationId, skip: (newPagination.page as number - 1) * (newPagination.rowsPerPage as number), take: newPagination.rowsPerPage as number}).then((res)=>{
+    const fetchRes = res.data[EVENT_TABLE_ROWS.cacheLocation] as Record<string, Record<string, unknown>[]>
+    pagination.value = newPagination
+    pagination.value.rowsNumber = fetchRes.length
+    rows.value = fetchRes.items
+  }).catch((err)=>{
+    console.log(err)
+  })
+}
+
+
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 10,
+  rowsNumber: 100,
+  descending: false,
+  sortBy: null
+}) as Ref<Record<string, unknown>>
+
+const rows = ref([]) as Ref<Record<string, unknown>[]>
+executeQuery(EVENT_TABLE_ROWS, {
+  stationId: props.stationId,
+  skip: (pagination.value.page as number - 1) * (pagination.value.rowsPerPage as number),
+  take: pagination.value.rowsPerPage as number
+}).then((res)=>{
+  const fetchRes = res.data[EVENT_TABLE_ROWS.cacheLocation] as Record<string, Record<string, unknown>[]>
+  pagination.value.rowsNumber = fetchRes.length
+  rows.value = fetchRes.items}).catch((err)=>{
+  console.log(err)
+})
+
 
 // TODO: take data from database
-const events = ref(12)
 const peakFiles = ref(12)
 const zipFiles = ref(1)
 const files = ref(600)
@@ -102,7 +150,7 @@ const totalFiles = ref(788)
 const search = ref('')
 
 const routerService: RouterService|undefined = inject('$routerService')
-
+const formatDate = date.formatDate
 // ----- Data -----
 const columns = [
   { name: 'file', label: i18n.global.t('files.file'), field: 'file', sortable: true, align: 'center' },
@@ -119,7 +167,6 @@ const columns = [
   { name: 'previewURL', label: i18n.global.t('files.previewURL'), field: 'previewURL', sortable: false, align: 'center' },
 ]
 
-const rows = subscribeToQuery(EVENT_TABLE_ROWS, {stationId: '44_08'})
 
 /**
  * Routes to graph page of that event which is clicked

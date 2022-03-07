@@ -57,7 +57,7 @@ export default {
     device_pool: 'Gerätepool',
     account: 'Account',
     share: 'Teilen',
-    files: 'Ereignisse vom Station',
+    files: 'Ereignisse von Station',
   },
   projects: {
     project: 'Projekt',

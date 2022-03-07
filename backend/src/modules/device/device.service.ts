@@ -6,8 +6,13 @@ import { LevelWriting } from '../../types/LevelWriting';
 import { LevelWritingAxis } from '../../types/LevelWritingAxis';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { ConfigService } from '@nestjs/config';
-import { fetchFromTable } from '../../helpers/database-helpers';
+import {
+  fetchCountFromTable,
+  fetchFromTable,
+} from '../../helpers/database-helpers';
 import { EventsTableRow } from '../../types/EventsTableRow';
+import { GetEventTableArgs } from './dto/args/get-event-table.args';
+import { EventsTable } from '../../types/EventsTable';
 
 @Injectable()
 export class DeviceService {
@@ -71,10 +76,12 @@ export class DeviceService {
 
   /**
    * gets events
-   * @param {string} clientId - Id of client
+   * @param {GetEventTableArgs} getEventArgs - Id of client
    * @returns {Promise<EventsTableRow[]>} - table Rows
    */
-  async getEvents(clientId: string): Promise<EventsTableRow[]> {
+  async getEvents(getEventArgs: GetEventTableArgs): Promise<EventsTable> {
+    const clientId = getEventArgs.stationId;
+    const length = await this.getEventsLength(getEventArgs);
     const typeMapping = {
       n: 'Evt',
       p: 'Pk',
@@ -84,9 +91,10 @@ export class DeviceService {
       const mr2000 = await fetchFromTable(
         'MR2000',
         'events',
-        `WHERE cli='${clientId}' ORDER by rec_time DESC`,
+        `WHERE cli='${clientId}' ORDER by rec_time DESC
+        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
       );
-      return mr2000.map((item) => {
+      const res = mr2000.map((item) => {
         const file = item['num'];
         const type = typeMapping[item['typ'].toLowerCase()];
         const dateTime = new Date(item['rec_time']);
@@ -123,6 +131,7 @@ export class DeviceService {
           null,
         );
       });
+      return new EventsTable(length, res);
     }
 
     const frequencyAvailable = await fetchFromTable(
@@ -130,25 +139,26 @@ export class DeviceService {
       'pk_frq',
       `WHERE ident LIKE '${clientId}.%'`,
     );
-    console.log(frequencyAvailable);
     let mr3000 = [];
     if (frequencyAvailable.length > 0) {
       console.log('frequency available');
       mr3000 = await fetchFromTable(
         'MR3000',
         'events JOIN pk_frq ON events.ident=pk_frq.ident ',
-        `WHERE events.cli='${clientId}' ORDER by rec_time DESC`,
+        `WHERE events.cli='${clientId}' ORDER by rec_time DESC
+        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
       );
     } else {
       console.log('frequency not available');
       mr3000 = await fetchFromTable(
         'MR3000',
         'events',
-        `WHERE cli='${clientId}' ORDER by rec_time DESC`,
+        `WHERE cli='${clientId}' ORDER by rec_time DESC
+        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
       );
     }
 
-    return mr3000.map((item) => {
+    const res = mr3000.map((item) => {
       const file = item['num'];
       const type = typeMapping[item['typ'].toLowerCase()];
       const dateTime = new Date(item['rec_time']);
@@ -191,5 +201,17 @@ export class DeviceService {
         VSUM,
       );
     });
+    return new EventsTable(length, res);
+  }
+
+  async getEventsLength(getEventArgs: GetEventTableArgs): Promise<number> {
+    const clientId = getEventArgs.stationId;
+    const database = clientId.includes('-') ? 'MR2000' : 'MR3000';
+    const res = await fetchCountFromTable(
+      database,
+      'events',
+      `WHERE cli='${clientId}'`,
+    );
+    return res[0]['count(*)'];
   }
 }

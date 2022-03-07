@@ -53,6 +53,11 @@ scalar DateTime
 
 union Device = MR2000 | MR3000
 
+type EventsTable {
+  items: [EventsTableRow!]!
+  length: Int!
+}
+
 type EventsTableRow {
   """pk_frq.VSUM"""
   VSUM: String
@@ -171,7 +176,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  eventTable(stationId: String!): [EventsTableRow!]!
+  eventTable(filter: String, skip: Int!, stationId: String!, take: Int!): EventsTable!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
