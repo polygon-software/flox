@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Project } from '../modules/project/entities/project.entity';
 
 @ObjectType()
 export class MR3000 {
@@ -14,13 +15,15 @@ export class MR3000 {
   @Field(() => String, { description: 'Serial number' })
   serialNumber: string;
 
-  /**
-   * Constructor
-   * @param {string} cli - CLI ID
-   * @param {string} serialNumber - Serial Number
-   */
-  constructor(cli: string, serialNumber: string) {
+  @Field(() => Project, {
+    description: 'Project the device belongs to (if any)',
+    nullable: true,
+  })
+  project: Project;
+
+  constructor(cli: string, serialNumber: string, project: Project) {
     this.cli = cli;
     this.serialNumber = serialNumber;
+    this.project = project;
   }
 }

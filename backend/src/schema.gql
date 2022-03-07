@@ -104,6 +104,9 @@ type MR2000 {
   """PID"""
   pid: String!
 
+  """Project the device belongs to (if any)"""
+  project: Project
+
   """Serial number"""
   serialNumber: String!
 }
@@ -111,6 +114,9 @@ type MR2000 {
 type MR3000 {
   """CLI ID"""
   cli: String!
+
+  """Project the device belongs to (if any)"""
+  project: Project
 
   """Serial number"""
   serialNumber: String!

@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Project } from '../modules/project/entities/project.entity';
 
 @ObjectType()
 export class MR2000 {
@@ -19,22 +20,23 @@ export class MR2000 {
   @Field(() => Number, { description: 'Number of files' })
   numberOfFiles: number;
 
-  /**
-   * Constructor
-   * @param {string} cli - CLI ID
-   * @param {string} serialNumber - Serial Number
-   * @param {string} pid - PID
-   * @param {number} numberOfFiles - number of device files
-   */
+  @Field(() => Project, {
+    description: 'Project the device belongs to (if any)',
+    nullable: true,
+  })
+  project: Project;
+
   constructor(
     cli: string,
     serialNumber: string,
     pid: string,
     numberOfFiles: number,
+    project: Project,
   ) {
     this.cli = cli;
     this.serialNumber = serialNumber;
     this.pid = pid;
     this.numberOfFiles = numberOfFiles;
+    this.project = project;
   }
 }

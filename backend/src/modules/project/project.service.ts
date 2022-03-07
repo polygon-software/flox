@@ -3,14 +3,8 @@ import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
-import { fetchFromTable } from '../../helpers/database-helpers';
-import {
-  mr2000fromDatabaseEntry,
-  mr3000fromDatabaseEntry,
-  removeDeviceFromProject,
-} from '../../helpers/device-helpers';
+import { removeDeviceFromProject } from '../../helpers/device-helpers';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
-import { getProjectsForInstances } from '../../helpers/project-helpers';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-project.input';
 import { Project } from './entities/project.entity';
@@ -30,34 +24,7 @@ export class ProjectService {
    * @returns {Promise<MR2000|MR3000[]>} - the user's devices
    */
   async getProjectDevices(getProjectDevicesArgs: GetProjectDevicesArgs) {
-    // Note that in the actual database, project names may contain trailing whitespace (but is ignores by SQL)
-    const filterQuery = `WHERE comment='${getProjectDevicesArgs.name}'`;
-
-    // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable(
-      'MR2000',
-      'station',
-      filterQuery,
-    );
-    const mr3000instances = await fetchFromTable(
-      'MR3000',
-      'station',
-      filterQuery,
-    );
-
-    const devices = [];
-
-    // Add all MR2000 instances
-    mr2000instances.forEach((instance) => {
-      devices.push(mr2000fromDatabaseEntry(instance));
-    });
-
-    // Add all MR3000 instances
-    mr3000instances.forEach((instance) => {
-      devices.push(mr3000fromDatabaseEntry(instance));
-    });
-
-    return devices;
+    // TODO functionality
   }
 
   /**

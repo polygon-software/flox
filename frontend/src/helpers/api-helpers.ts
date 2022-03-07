@@ -148,6 +148,6 @@ export function mapDevice(record: Record<string, unknown>): Device {
   return new Device(
     record.cli as string,
     record.serialNumber as string,
+    record.project as Project
   )
-  // TODO project...
 }

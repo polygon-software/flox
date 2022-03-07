@@ -5,30 +5,56 @@
 import { MR2000 } from '../types/MR2000';
 import { MR3000 } from '../types/MR3000';
 import { getQueryRunner } from './database-helpers';
+import { Repository } from 'typeorm';
+import { Project } from '../modules/project/entities/project.entity';
 
 /**
  * Creates an MR2000 instance from a RowPacketData entry
  * @param {Record<string, string|number>} entry - database entry row
- * @returns {MR2000} - MR2000 instance
+ * @param {Repository<Project>} projectRepository - project repository to search in
+ * @returns {Promise<MR2000>} - MR2000 instance
  */
-export function mr2000fromDatabaseEntry(entry: Record<string, unknown>) {
+export async function mr2000fromDatabaseEntry(
+  entry: Record<string, unknown>,
+  projectRepository: Repository<Project>,
+) {
+  // Find project the instance belongs to project (if any)
+  const project = await findProjectForDevice(
+    projectRepository,
+    entry.cli as string,
+    true,
+  );
+
   return new MR2000(
     entry.cli as string,
     entry.mr_SN as string,
     entry.PID as string,
     entry.last_file as number,
+    project,
   );
 }
 
 /**
  * Creates an MR3000 instance from a RowPacketData entry
  * @param {Record<string, string|number>} entry - database entry row
- * @returns {MR3000} - MR3000 instance
+ * @param {Repository<Project>} projectRepository - project repository to search in
+ * @returns {Promise<MR3000>} - MR3000 instance
  */
-export function mr3000fromDatabaseEntry(entry: Record<string, unknown>) {
+export async function mr3000fromDatabaseEntry(
+  entry: Record<string, unknown>,
+  projectRepository: Repository<Project>,
+) {
+  // Find project the instance belongs to project (if any)
+  const project = await findProjectForDevice(
+    projectRepository,
+    entry.cli as string,
+    true,
+  );
+
   return new MR3000(
     entry.cli as string,
     entry.mr_SN as string,
+    project,
     // entry.PID as string,
     // entry.last_file as number,
   );
@@ -44,15 +70,26 @@ export async function removeDeviceFromProject(
   device: MR2000 | MR3000,
   isMr2000: boolean,
 ) {
-  const databaseName = isMr2000 ? 'MR2000' : 'MR3000';
-  const queryRunner = await getQueryRunner(databaseName);
+  // TODO functionality
+}
 
-  // List of tables where a device's project is stored in the 'comment' field
-  // (since this is different between MR2000 and MR3000 devices)
-  const affectedTables = isMr2000 ? ['station', 'param'] : ['station'];
-
-  // TODO: On database, write 'comment' as null
-
-  // Close database connection
-  await queryRunner.release();
+/**
+ * Find the project the given instance belongs to (if any)
+ * @param {Repository<Project>} projectRepository - repository to search in
+ * @param {string} cli - device name (CLI)
+ * @param {boolean} isMr2000 - whether it's an MR2000 device
+ * @returns {Promise<void|Project>} - project, if any
+ */
+export async function findProjectForDevice(
+  projectRepository: Repository<Project>,
+  cli: string,
+  isMr2000: boolean,
+) {
+  return projectRepository
+    .createQueryBuilder('project')
+    .where(
+      `:cli=ANY(project.${isMr2000 ? 'mr2000instances' : 'mr3000instances'})`,
+      { cli },
+    )
+    .getOne();
 }

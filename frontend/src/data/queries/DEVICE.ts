@@ -31,10 +31,18 @@ export const MY_DEVICES = {
         serialNumber
         numberOfFiles
         pid
+        project {
+          uuid
+          name
+        }
       }
       ...on MR3000{
         cli
         serialNumber
+        project {
+          uuid
+          name
+        }
       }
       __typename
     }}
