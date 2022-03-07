@@ -63,7 +63,7 @@ export default {
     project: 'Projekt',
     new_project: 'Neues Projekt',
     device: 'Gerät',
-    client: 'Kunde',
+    client: 'Client',
     ip: 'IP',
     firmware: 'Firmware',
     serial: 'Serial',

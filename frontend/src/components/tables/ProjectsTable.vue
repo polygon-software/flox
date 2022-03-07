@@ -44,7 +44,7 @@
             {{ props.row.cli }}
           </q-td>
           <q-td key="client">
-            {{ props.row.client }}
+            {{ props.row.cli }}
           </q-td>
           <q-td key="ip">
             {{ props.row.ip }}
@@ -238,7 +238,7 @@ async function onOptionClick(project: string, device: string, key: string): Prom
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  await routerService?.addToRoute(row.project) // or use another value...
+  await routerService?.addToRoute(row.project.name as string)
 }
 </script>
 

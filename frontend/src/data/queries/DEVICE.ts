@@ -34,6 +34,7 @@ export const MY_DEVICES = {
         project {
           uuid
           name
+          __typename
         }
       }
       ...on MR3000{
@@ -42,6 +43,7 @@ export const MY_DEVICES = {
         project {
           uuid
           name
+          __typename
         }
       }
       __typename
@@ -53,8 +55,8 @@ export const MY_DEVICES = {
 
 export const PROJECT_DEVICES = {
   query: gql`
-    query getProjectDevices($name: String!){
-      getProjectDevices(name: $name){
+    query getProjectDevices($uuid: ID!){
+      getProjectDevices(uuid: $uuid){
         ...on MR2000{
           cli
         }
