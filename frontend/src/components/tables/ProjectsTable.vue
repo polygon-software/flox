@@ -71,7 +71,7 @@
             {{ props.row.files }}
           </q-td>
           <q-td key="ftp">
-            {{ props.row.ftp }}
+            {{ $t(props.row.ftp ? 'general.yes' : 'general.no')}}
           </q-td>
           <q-td key="options">
             <q-btn-dropdown
