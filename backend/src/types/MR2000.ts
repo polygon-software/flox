@@ -29,6 +29,9 @@ export class MR2000 {
   })
   ftp: boolean;
 
+  @Field(() => String, { description: 'IP address' })
+  ip: string;
+
   constructor(
     cli: string,
     name: string,
@@ -37,6 +40,7 @@ export class MR2000 {
     numberOfFiles: number,
     project: Project,
     ftp: boolean,
+    ip: string,
   ) {
     this.cli = cli;
     this.name = name;
@@ -45,5 +49,6 @@ export class MR2000 {
     this.numberOfFiles = numberOfFiles;
     this.project = project;
     this.ftp = ftp;
+    this.ip = ip;
   }
 }

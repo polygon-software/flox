@@ -40,6 +40,11 @@ export class DeviceService {
     const mr2000store = await fetchFromTable('MR2000', 'store_mr');
     const mr3000store = await fetchFromTable('MR3000', 'store');
 
+    // Fetch VPN table for FTP info
+    const vpnInfo = await fetchFromTable('openvpn', 'tempovp');
+
+    console.log('VPN:', vpnInfo);
+
     let devices = [];
 
     // Add all allowed MR2000 instances
@@ -48,6 +53,7 @@ export class DeviceService {
         const mr2000 = await mr2000fromDatabaseEntry(
           instance,
           this.projectRepository,
+          vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
           mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
         );
         devices.push(mr2000);
@@ -60,6 +66,7 @@ export class DeviceService {
         const mr3000 = await mr3000fromDatabaseEntry(
           instance,
           this.projectRepository,
+          vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
           mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
         );
         devices.push(mr3000);

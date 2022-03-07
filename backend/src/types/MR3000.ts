@@ -23,17 +23,22 @@ export class MR3000 {
   })
   ftp: boolean;
 
+  @Field(() => String, { description: 'IP address' })
+  ip: string;
+
   constructor(
     cli: string,
     name: string,
     serialNumber: string,
     project: Project,
     ftp: boolean,
+    ip: string,
   ) {
     this.cli = cli;
     this.name = name;
     this.serialNumber = serialNumber;
     this.project = project;
     this.ftp = ftp;
+    this.ip = ip;
   }
 }

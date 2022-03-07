@@ -10,6 +10,7 @@ export class Device {
   project: Project;
   pid: string;
   ftp: boolean;
+  ip: string;
   // TODO more fields
 
   // eslint-disable-next-line require-jsdoc
@@ -20,6 +21,7 @@ export class Device {
     project: Project,
     pid: string,
     ftp: boolean,
+    ip: string,
   ){
     this.cli = cli
     this.name = name
@@ -27,5 +29,6 @@ export class Device {
     this.project = project
     this.pid = pid
     this.ftp = ftp
+    this.ip = ip
   }
 }

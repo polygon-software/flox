@@ -101,6 +101,9 @@ type MR2000 {
   """FTP forward status"""
   ftp: Boolean!
 
+  """IP address"""
+  ip: String!
+
   """Device name"""
   name: String!
 
@@ -123,6 +126,9 @@ type MR3000 {
 
   """FTP forward status"""
   ftp: Boolean!
+
+  """IP address"""
+  ip: String!
 
   """Device name"""
   name: String!
