@@ -32,6 +32,7 @@ export const MY_DEVICES = {
         serialNumber
         numberOfFiles
         pid
+        ftp
         project {
           uuid
           name
@@ -42,6 +43,7 @@ export const MY_DEVICES = {
         cli
         name
         serialNumber
+        ftp
         project {
           uuid
           name

@@ -18,15 +18,22 @@ export class MR3000 {
   })
   project: Project;
 
+  @Field(() => Boolean, {
+    description: 'FTP forward status',
+  })
+  ftp: boolean;
+
   constructor(
     cli: string,
     name: string,
     serialNumber: string,
     project: Project,
+    ftp: boolean,
   ) {
     this.cli = cli;
     this.name = name;
     this.serialNumber = serialNumber;
     this.project = project;
+    this.ftp = ftp;
   }
 }

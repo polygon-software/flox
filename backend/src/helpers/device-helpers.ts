@@ -12,11 +12,13 @@ import { Project } from '../modules/project/entities/project.entity';
  * Creates an MR2000 instance from a RowPacketData entry
  * @param {Record<string, string|number>} entry - database entry row
  * @param {Repository<Project>} projectRepository - project repository to search in
+ * @param {Record<string, unknown>} [storeEntry] - entry in store table, if any
  * @returns {Promise<MR2000>} - MR2000 instance
  */
 export async function mr2000fromDatabaseEntry(
   entry: Record<string, unknown>,
   projectRepository: Repository<Project>,
+  storeEntry?: Record<string, unknown>,
 ) {
   // Find project the instance belongs to project (if any)
   const project = await findProjectForDevice(
@@ -26,12 +28,13 @@ export async function mr2000fromDatabaseEntry(
   );
 
   return new MR2000(
-    entry.cli as string,
-    deviceNameFromComment(entry.comment as string),
-    entry.mr_SN as string,
-    entry.PID as string,
-    entry.last_file as number,
-    project,
+    entry.cli as string, // Device CLIs
+    deviceNameFromComment(entry.comment as string), // Device name
+    entry.mr_SN as string, // Serial number
+    entry.PID as string, // PID
+    entry.last_file as number, // File number
+    project, // Project (if any)
+    !!storeEntry, // FTP forward status (true if an entry is present)
   );
 }
 
@@ -39,11 +42,13 @@ export async function mr2000fromDatabaseEntry(
  * Creates an MR3000 instance from a RowPacketData entry
  * @param {Record<string, string|number>} entry - database entry row
  * @param {Repository<Project>} projectRepository - project repository to search in
+ * @param {Record<string, unknown>} [storeEntry] - entry in store table, if any
  * @returns {Promise<MR3000>} - MR3000 instance
  */
 export async function mr3000fromDatabaseEntry(
   entry: Record<string, unknown>,
   projectRepository: Repository<Project>,
+  storeEntry?: Record<string, unknown>,
 ) {
   // Find project the instance belongs to project (if any)
   const project = await findProjectForDevice(
@@ -53,12 +58,11 @@ export async function mr3000fromDatabaseEntry(
   );
 
   return new MR3000(
-    entry.cli as string,
-    deviceNameFromComment(entry.comment as string),
-    entry.mr_SN as string,
-    project,
-    // entry.PID as string,
-    // entry.last_file as number,
+    entry.cli as string, // Device CLI
+    deviceNameFromComment(entry.comment as string), // Device name
+    entry.mr_SN as string, // Serial Number
+    project, // Project (if any)
+    !!storeEntry, // FTP forward status (true if an entry is present)
   );
 }
 

@@ -9,6 +9,7 @@ export class Device {
   serialNumber: string;
   project: Project;
   pid: string;
+  ftp: boolean;
   // TODO more fields
 
   // eslint-disable-next-line require-jsdoc
@@ -18,11 +19,13 @@ export class Device {
     serialNumber: string,
     project: Project,
     pid: string,
+    ftp: boolean,
   ){
     this.cli = cli
     this.name = name
     this.serialNumber = serialNumber
     this.project = project
     this.pid = pid
+    this.ftp = ftp
   }
 }

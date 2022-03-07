@@ -24,6 +24,11 @@ export class MR2000 {
   })
   project: Project;
 
+  @Field(() => Boolean, {
+    description: 'FTP forward status',
+  })
+  ftp: boolean;
+
   constructor(
     cli: string,
     name: string,
@@ -31,6 +36,7 @@ export class MR2000 {
     pid: string,
     numberOfFiles: number,
     project: Project,
+    ftp: boolean,
   ) {
     this.cli = cli;
     this.name = name;
@@ -38,5 +44,6 @@ export class MR2000 {
     this.pid = pid;
     this.numberOfFiles = numberOfFiles;
     this.project = project;
+    this.ftp = ftp;
   }
 }
