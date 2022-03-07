@@ -5,7 +5,6 @@ import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
-import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
@@ -23,16 +22,6 @@ import { DeviceModule } from './modules/device/device.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
-      installSubscriptionHandlers: true,
-      subscriptions: {
-        // Could also use graphql-ws instead of default (subscriptions-transport-ws)
-        'subscriptions-transport-ws': {
-          path: '/graphql-websocket',
-          onConnect: (context: Context) => {
-            console.log('Client connected to GraphQL Websocket!', context);
-          },
-        },
-      },
       cors: false,
     }),
     ConfigModule.forRoot({

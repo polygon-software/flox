@@ -1,12 +1,10 @@
-import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable';
+import { useMutation, useQuery } from '@vue/apollo-composable';
 import {
   MutationObject,
   MutationTypes,
   QueryObject,
 } from '../data/DATA-DEFINITIONS';
 import { ApolloCache, ApolloQueryResult, FetchResult } from '@apollo/client';
-import { onBeforeMount, onServerPrefetch, Ref, ref } from 'vue';
-import { useSSR } from 'src/store/ssr';
 import { i18n } from 'boot/i18n';
 import { QUERIES } from 'src/data/queries/QUERIES';
 
@@ -150,87 +148,4 @@ function updateAffectedQueries(
   });
 }
 
-/**
- * Subscribes to a graphQL query.
- * @param {QueryObject} query - the graphQL query object
- * @param {Record<string, unknown>} [variables] - any variables to pass to the query
- * @returns {Ref<Record<string, unknown>[] | Record<string, unknown> | null>} - the query's output
- */
-function subscribeToQuery(
-  query: QueryObject,
-  variables?: Record<string, unknown>
-): Ref<Record<string, unknown>[] | Record<string, unknown> | null> {
-  const $ssrStore = useSSR();
-  const res: Ref<Record<string, unknown>[] | Record<string, unknown> | null> =
-    ref(null);
-
-  // ----- Hooks -----
-  onServerPrefetch(async () => {
-    const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(
-      query,
-      variables
-    );
-    if (!tempRes.data) {
-      return;
-    }
-    res.value = tempRes.data[query.cacheLocation] as
-      | Record<string, unknown>[]
-      | Record<string, unknown>;
-    $ssrStore.mutations.setPrefetchedData({
-      key: query.cacheLocation,
-      value: res.value,
-    });
-  });
-
-  onBeforeMount(() => {
-    const apolloClient = useApolloClient().resolveClient();
-    const currentCacheState = apolloClient.readQuery({
-      query: query.query,
-      variables,
-    }) as Record<string, unknown>[] | Record<string, unknown>;
-    // Test if the query is already in the cache
-    if (currentCacheState === null) {
-      // Test if the query is already prefetched
-      if ($ssrStore.getters.isPrefetched()(query.cacheLocation)) {
-        // SSR
-        res.value = $ssrStore.getters.getPrefetchedData()(
-          query.cacheLocation
-        ) as Record<string, unknown>[] | Record<string, unknown>;
-
-        apolloClient.writeQuery({
-          query: query.query,
-          variables: variables,
-          data: {
-            [query.cacheLocation]: res.value,
-          },
-        });
-      } else {
-        // SPA
-        void executeQuery(query, variables).then(
-          (fetchedRes: ApolloQueryResult<Record<string, unknown>>) => {
-            if (fetchedRes.data) {
-              res.value = fetchedRes.data[query.cacheLocation] as
-                | Record<string, unknown>[]
-                | Record<string, unknown>;
-            } else {
-              res.value = null;
-            }
-          }
-        );
-      }
-    }
-
-    apolloClient
-      .watchQuery({ query: query.query, variables: variables })
-      .subscribe({
-        next(value: ApolloQueryResult<Record<string, unknown>>) {
-          res.value = value.data[query.cacheLocation] as
-            | Record<string, unknown>[]
-            | Record<string, unknown>;
-        },
-      });
-  });
-  return res;
-}
-
-export { executeQuery, executeMutation, subscribeToQuery };
+export { executeQuery, executeMutation };
