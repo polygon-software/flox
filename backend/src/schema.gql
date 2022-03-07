@@ -129,7 +129,7 @@ type Mutation {
   register(registerUserInput: RegisterUserInput!): User
   remove(deleteUserInput: DeleteUserInput!): User!
   update(updateUserInput: UpdateUserInput!): User!
-  updateProjectName(projectName: String!, projectUuid: String!, updateProjectInput: UpdateProjectInput!): Project!
+  updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
 }
 
 enum Permission {
@@ -166,7 +166,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  getProjectDevices(name: String!): [Device!]!
+  getProjectDevices(uuid: ID!): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
@@ -208,6 +208,9 @@ enum Role {
 input UpdateProjectInput {
   """Project name"""
   name: String!
+
+  """Project UUID"""
+  uuid: ID!
 }
 
 input UpdateUserInput {

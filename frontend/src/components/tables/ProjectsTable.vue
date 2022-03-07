@@ -38,7 +38,7 @@
           @click="() => onRowClick(props.row)"
         >
           <q-td key="project">
-            {{ props.row.project }}
+            {{ props.row.project?.name ?? '-' }}
           </q-td>
           <q-td key="device">
             {{ props.row.cli }}

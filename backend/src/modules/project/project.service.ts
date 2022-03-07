@@ -14,13 +14,14 @@ import { DeleteProjectInput } from './dto/input/delete-project.input';
 @Injectable()
 export class ProjectService {
   constructor(
-    @InjectRepository(Project) private projectRepository: Repository<Project>,
+    @InjectRepository(Project)
+    private readonly projectRepository: Repository<Project>,
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
   /**
    * Returns a list the devices belonging to a given project
-   * @param {GetProjectDevicesArgs} getProjectDevicesArgs - contains project name
+   * @param {GetProjectDevicesArgs} getProjectDevicesArgs - contains project uuid
    * @returns {Promise<MR2000|MR3000[]>} - the user's devices
    */
   async getProjectDevices(getProjectDevicesArgs: GetProjectDevicesArgs) {
@@ -80,15 +81,16 @@ export class ProjectService {
 
   /**
    * Updates a project
-   * @param {string} projectUuid Uuid of the project to change
-   * @param {UpdateProjectInput} updateProjectInput Project paramters that should be changed.
+   * @param {UpdateProjectInput} updateProjectInput Project parameters that should be changed.
    * @return {UpdateProjectInput} - The updated project
    */
   async updateProjectName(
-    projectUuid: string,
     updateProjectInput: UpdateProjectInput,
   ): Promise<UpdateResult> {
-    return this.projectRepository.update(projectUuid, updateProjectInput);
+    return this.projectRepository.update(
+      updateProjectInput.uuid,
+      updateProjectInput,
+    );
   }
 
   /**

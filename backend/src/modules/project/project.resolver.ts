@@ -69,7 +69,7 @@ export class ProjectResolver {
     @Args() getProjectDevicesArgs: GetProjectDevicesArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (await this.validateAccessToProject(user, getProjectDevicesArgs.name)) {
+    if (await this.validateAccessToProject(user, getProjectDevicesArgs.uuid)) {
       return this.projectService.getProjectDevices(getProjectDevicesArgs);
     }
   }
@@ -90,8 +90,6 @@ export class ProjectResolver {
 
   /**
    * Update a project
-   * @param {string} projectUuid - Uuid of the project to change
-   * @param {string} projectName - Project name before the update
    * @param {UpdateProjectInput} updateProjectInput - Input containing the new project name
    * @param {Record<string, string>} user - currently logged-in user from request
    * @return {Promise<Project>} - The newly created project
@@ -99,19 +97,12 @@ export class ProjectResolver {
   @AnyRole()
   @Mutation(() => Project)
   async updateProjectName(
-    @Args({ name: 'projectUuid', type: () => String })
-    projectUuid: string,
-    @Args({ name: 'projectName', type: () => String })
-    projectName: string,
     @Args({ name: 'updateProjectInput', type: () => UpdateProjectInput })
     updateProjectInput: UpdateProjectInput,
     @CurrentUser() user: Record<string, string>,
   ): Promise<UpdateResult> {
-    if (await this.validateAccessToProject(user, projectName)) {
-      return this.projectService.updateProjectName(
-        projectUuid,
-        updateProjectInput,
-      );
+    if (await this.validateAccessToProject(user, updateProjectInput.uuid)) {
+      return this.projectService.updateProjectName(updateProjectInput);
     }
   }
 
@@ -126,7 +117,7 @@ export class ProjectResolver {
     deleteProjectInput: DeleteProjectInput,
     @CurrentUser() user: Record<string, string>,
   ): Promise<DeleteResult> {
-    if (await this.validateAccessToProject(user, deleteProjectInput.name)) {
+    if (await this.validateAccessToProject(user, deleteProjectInput.uuid)) {
       return this.projectService.deleteProject(deleteProjectInput);
     }
   }
@@ -134,13 +125,13 @@ export class ProjectResolver {
   /**
    * Validates if the given user has access to the given project
    * @param {Record<string, string>} user - User that demands access
-   * @param {string} projectName - Project which user wants to access
+   * @param {string} projectUuid - UUID of the project which the user wants to access
    * @private
    * @return {boolean} - validation result
    */
   private async validateAccessToProject(
     user: Record<string, string>,
-    projectName: string,
+    projectUuid: string,
   ): Promise<boolean> {
     // Get user
     const dbUser = await this.userService.getUser({
@@ -153,7 +144,7 @@ export class ProjectResolver {
     // For non-admin users, check whether they have permissions to access the requested project
     if (
       dbUser.role !== ROLE.ADMIN &&
-      !dbUser.projects.some((project) => project.name === projectName)
+      !dbUser.projects.some((project) => project.uuid === projectUuid)
     ) {
       throw new Error(ERRORS.resource_not_allowed);
     }

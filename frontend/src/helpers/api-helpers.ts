@@ -66,7 +66,7 @@ export async function myProjects(): Promise<Project[]> {
  */
 export async function myProjectDevices(): Promise<Device[]> {
   const devices: Device[] = [];
-  const queryResult = await executeQuery(MY_DEVICES, {assigned: true}); // TODO adapt query
+  const queryResult = await executeQuery(MY_DEVICES, {assigned: true});
   if(queryResult.data?.myDevices){
     for (const device of queryResult.data.myDevices as Record<string, unknown>[]) {
       devices.push(mapDevice(device));

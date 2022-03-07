@@ -1,20 +1,14 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsString } from 'class-validator';
+import { Field, ID, InputType } from '@nestjs/graphql';
+import { IsUUID } from 'class-validator';
 
 @InputType()
 /**
- * Input for updating a project
+ * Input for deleting a project
  */
 export class DeleteProjectInput {
-  @Field(() => String, {
-    description: 'Project uuid',
+  @Field(() => ID, {
+    description: 'Project UUID',
   })
-  @IsString()
+  @IsUUID()
   uuid: string;
-
-  @Field(() => String, {
-    description: 'Project name',
-  })
-  @IsString()
-  name: string;
 }

@@ -1,9 +1,9 @@
-import { ArgsType, Field } from '@nestjs/graphql';
-import { IsString } from 'class-validator';
+import { ArgsType, Field, ID } from '@nestjs/graphql';
+import { IsUUID } from 'class-validator';
 
 @ArgsType()
 export class GetProjectDevicesArgs {
-  @Field(() => String)
-  @IsString()
-  name: string;
+  @Field(() => ID)
+  @IsUUID()
+  uuid: string;
 }
