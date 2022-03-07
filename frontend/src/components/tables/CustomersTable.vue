@@ -1,5 +1,5 @@
 <template>
-  <div class="column">
+  <div class="column" style="min-width: 50%;">
     <!-- Search input -->
     <q-input
       v-model="search"
@@ -15,11 +15,10 @@
     <q-table
       class="q-mt-lg"
       flat
-      :rows="rows"
+      :rows="allUsers"
       :columns="columns"
       row-key="uuid"
       :filter="search"
-      :filter-method="tableFilter"
       :rows-per-page-options="[10,20, 100]"
     >
       <template #body="props">
@@ -44,10 +43,10 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {computed, inject, ref} from 'vue';
+import {inject, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
-import {ALL_USERS} from 'src/data/queries/USER';
+import {fetchAllUsers} from 'src/helpers/api-helpers';
+import {User} from 'src/data/types/User';
 
 const search = ref('')
 const routerService: RouterService | undefined = inject('$routerService')
@@ -59,18 +58,17 @@ const columns = [
   {name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: true, align: 'center'},
 ]
 
-const allUsers = subscribeToQuery(ALL_USERS)
-const rows = computed(()=>{
-  return allUsers.value ?? []
-})
+const allUsers: Ref<User[]> = ref([])
 
 
 /**
- * Routes to the customer page of the clicked customer row
+ * Routes to the customer page of the clicked customer ‡row
  * @param {Record<string, unknown>} row - the custom row that was clicked
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  await routerService?.addToRoute(row.username) // or use another value...
+  await routerService?.addToRoute(row.username as string)
 }
+
+fetchAllUsers().then(users => allUsers.value = users).catch(e => console.error(e))
 </script>
