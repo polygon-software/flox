@@ -36,7 +36,7 @@ export class DeviceService {
     const mr2000instances = await fetchFromTable('MR2000', 'station');
     const mr3000instances = await fetchFromTable('MR3000', 'station');
 
-    const devices = [];
+    let devices = [];
 
     // Add all allowed MR2000 instances
     for (const instance of mr2000instances) {
@@ -62,10 +62,10 @@ export class DeviceService {
 
     // Filter based on unassigned/assigned setting
     if (getUserDevicesArgs.unassigned) {
-      // TODO filter
+      devices = devices.filter((device) => !device.project);
     }
     if (getUserDevicesArgs.assigned) {
-      // TODO filter
+      devices = devices.filter((device) => !!device.project);
     }
 
     return devices;
