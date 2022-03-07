@@ -273,7 +273,7 @@ const scale: ComputedRef<number> = computed(() => {
     case 'alarm_level':
       return Math.ceil(maxAlarm.value * 11) / 10
     case 'custom':
-      return parseFloat(routerService?.getQueryParam('customScale')?.trim() ?? '1.0')
+      return parseFloat(routerService?.getQueryParam('customScale')?.trim() ?? `${perception + 0.1}`)
     case 'highest_peak':
     default:
       return Math.ceil(levelWritings.value.max * 10) / 10
