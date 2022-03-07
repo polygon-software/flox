@@ -167,6 +167,6 @@ export function mapDevice(record: Record<string, unknown>): Device {
     record.project as Project,
     record.pid as string ?? '-',
     record.ftp as boolean,
-    record.ip as string
+    record.ip as string ?? '-'
   )
 }

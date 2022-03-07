@@ -23,7 +23,7 @@ export class MR3000 {
   })
   ftp: boolean;
 
-  @Field(() => String, { description: 'IP address' })
+  @Field(() => String, { description: 'IP address, if any', nullable: true })
   ip: string;
 
   constructor(

@@ -37,7 +37,7 @@ export async function mr2000fromDatabaseEntry(
     entry.last_file as number, // File number
     project, // Project (if any)
     !!storeEntry, // FTP forward status (true if an entry is present)
-    (vpnEntry?.vpn_ip as string) ?? '-', // TODO
+    vpnEntry ? (vpnEntry.vpn_ip as string) : null,
   );
 }
 
@@ -68,7 +68,7 @@ export async function mr3000fromDatabaseEntry(
     entry.mr_SN as string, // Serial Number
     project, // Project (if any)
     !!storeEntry, // FTP forward status (true if an entry is present)
-    (vpnEntry?.vpn_ip as string) ?? '-', // TODO
+    vpnEntry ? (vpnEntry.vpn_ip as string) : null,
   );
 }
 
