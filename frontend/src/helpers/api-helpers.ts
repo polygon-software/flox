@@ -164,6 +164,7 @@ export function mapDevice(record: Record<string, unknown>): Device {
     record.cli as string,
     record.name as string,
     record.serialNumber as string,
-    record.project as Project
+    record.project as Project,
+    record.pid as string ?? '-'
   )
 }
