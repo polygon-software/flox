@@ -209,7 +209,8 @@ export default {
     frq_y: 'Frq Y',
     frq_z: 'Frq Z',
     vsum: 'VSUM',
-    download: 'Download',
+    downloadURL: 'Download',
+    previewURL: 'Preview'
   },
   dialog: {
     period: 'Period',

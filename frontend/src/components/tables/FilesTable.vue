@@ -21,7 +21,7 @@
     <q-table
       class="q-mt-lg"
       flat
-      :rows="rows"
+      :rows="rows || []"
       :columns="columns"
       row-key="uuid"
       :filter="search"
@@ -40,35 +40,42 @@
           <q-td key="type">
             {{ props.row.type }}
           </q-td>
-          <q-td key="date_time">
-            {{ props.row.date_time }}
+          <q-td key="dateTime">
+            {{ props.row.dateTime }}
           </q-td>
-          <q-td key="peak_x">
-            {{ props.row.peak_x }}
+          <q-td key="peakX">
+            {{ props.row.peakX }}
           </q-td>
-          <q-td key="peak_y">
-            {{ props.row.peak_y }}
+          <q-td key="peakY">
+            {{ props.row.peakY }}
           </q-td>
-          <q-td key="peak_z">
-            {{ props.row.peak_z }}
+          <q-td key="peakZ">
+            {{ props.row.peakZ }}
           </q-td>
-          <q-td key="frq_x">
-            {{ props.row.frq_x }}
+          <q-td key="frequencyX">
+            {{ props.row.frequencyX }}
           </q-td>
-          <q-td key="frq_y">
-            {{ props.row.frq_y }}
+          <q-td key="frequencyY">
+            {{ props.row.frequencyY }}
           </q-td>
-          <q-td key="frq_z">
-            {{ props.row.frq_z }}
+          <q-td key="frequencyZ">
+            {{ props.row.frequencyZ }}
           </q-td>
-          <q-td key="vsum">
-            {{ props.row.vsum }}
+          <q-td key="VSUM">
+            {{ props.row.VSUM }}
           </q-td>
-          <q-td key="download">
+          <q-td key="fileName">
             <a
               href="#"
-              @click.stop="downloadFile"
-              v-text="props.row.download"
+              @click.stop="()=>{downloadFile(props.row.downloadURL)}"
+              v-text="props.row.fileName"
+            />
+          </q-td>
+          <q-td key="preview">
+            <a
+              href="#"
+              @click.stop="()=>{preview(props.row.previewURL)}"
+              v-text="props.row.previewURL ? 'show': ''"
             />
           </q-td>
         </q-tr>
@@ -100,48 +107,19 @@ const routerService: RouterService|undefined = inject('$routerService')
 const columns = [
   { name: 'file', label: i18n.global.t('files.file'), field: 'file', sortable: true, align: 'center' },
   { name: 'type', label: i18n.global.t('files.type'), field: 'type', sortable: true, align: 'center' },
-  { name: 'date_time', label: i18n.global.t('files.date_time'), field: 'date_time', sortable: true, align: 'center' },
-  { name: 'peak_x', label: i18n.global.t('files.peak_x'), field: 'peak_x', sortable: true, align: 'center' },
-  { name: 'peak_y', label: i18n.global.t('files.peak_y'), field: 'peak_y', sortable: true, align: 'center' },
-  { name: 'peak_z', label: i18n.global.t('files.peak_z'), field: 'peak_z', sortable: true, align: 'center' },
-  { name: 'frq_x', label: i18n.global.t('files.frq_x'), field: 'frq_x', sortable: true, align: 'center' },
-  { name: 'frq_y', label: i18n.global.t('files.frq_y'), field: 'frq_y', sortable: true, align: 'center' },
-  { name: 'frq_z', label: i18n.global.t('files.frq_z'), field: 'frq_z', sortable: true, align: 'center' },
-  { name: 'vsum', label: i18n.global.t('files.vsum'), field: 'vsum', sortable: true, align: 'center' },
-  { name: 'download', label: i18n.global.t('files.download'), field: 'download', sortable: false, align: 'center' },
+  { name: 'dateTime', label: i18n.global.t('files.date_time'), field: 'dateTime', sortable: true, align: 'center' },
+  { name: 'peakX', label: i18n.global.t('files.peak_x'), field: 'peakX', sortable: true, align: 'center' },
+  { name: 'peakY', label: i18n.global.t('files.peak_y'), field: 'peakY', sortable: true, align: 'center' },
+  { name: 'peakZ', label: i18n.global.t('files.peak_z'), field: 'peakZ', sortable: true, align: 'center' },
+  { name: 'frequencyX', label: i18n.global.t('files.frq_x'), field: 'frequencyX', sortable: true, align: 'center' },
+  { name: 'frequencyY', label: i18n.global.t('files.frq_y'), field: 'frequencyY', sortable: true, align: 'center' },
+  { name: 'frequencyZ', label: i18n.global.t('files.frq_z'), field: 'frequencyZ', sortable: true, align: 'center' },
+  { name: 'VSUM', label: i18n.global.t('files.vsum'), field: 'VSUM', sortable: true, align: 'center' },
+  { name: 'downloadURL', label: i18n.global.t('files.downloadURL'), field: 'downloadURL', sortable: false, align: 'center' },
+  { name: 'previewURL', label: i18n.global.t('files.previewURL'), field: 'previewURL', sortable: false, align: 'center' },
 ]
 
-subscribeToQuery(EVENT_TABLE_ROWS, {stationId: '44_08'})
-
-// TODO: take data from database
-const rows = [
-  {
-    file: '2',
-    type: 'Evt',
-    date_time: '2022-02-28 10:39:43',
-    peak_x: '0.161 mm/s',
-    peak_y: '0.713 mm/s',
-    peak_z: '0.076 mm/s',
-    frq_x: '90.1',
-    frq_y: '15.8',
-    frq_z: '15.8',
-    vsum: '0.72',
-    download: '22059002.XMR',
-  },
-  {
-    file: '50',
-    type: 'Pk',
-    date_time: '2022-02-27 09:25:45',
-    peak_x: '0.049 mm/s',
-    peak_y: '0.064 mm/s',
-    peak_z: '0.875 mm/s',
-    frq_x: '99.8',
-    frq_y: '17.2',
-    frq_z: '17.9',
-    vsum: '0.88',
-    download: '22059001.XMR',
-  },
-]
+const rows = subscribeToQuery(EVENT_TABLE_ROWS, {stationId: '44_08'})
 
 /**
  * Routes to graph page of that event which is clicked
