@@ -115,6 +115,8 @@ const timePeriodOptions = [
   'custom',
 ]
 
+const perception = 0.2;
+
 const xMarkers = computed(() => [...levelMarkers.value, ...warningLevels.value.x])
 const yMarkers = computed(() => [...levelMarkers.value, ...warningLevels.value.y])
 const zMarkers = computed(() => [...levelMarkers.value, ...warningLevels.value.z])
@@ -123,7 +125,7 @@ const zMarkers = computed(() => [...levelMarkers.value, ...warningLevels.value.z
 const levelMarkers = computed(() => [
   {
     label: 'Perception',
-    value: 0.2,
+    value: perception,
     color: 'green',
     dashSize: 3,
   }
@@ -135,10 +137,27 @@ const maxAlarm = computed(() => {
   stations.forEach((station) => {
     const params = deviceParams.value[station]
     if (params) {
-      max = Math.max(max, params.ala2X as number, params.ala2Y as number, params.ala2Z as number)
+      if (params.ala1X < 100){
+        max = Math.max(max, params.ala1X as number)
+      }
+      if (params.ala1Y < 100){
+        max = Math.max(max, params.ala1Y as number)
+      }
+      if (params.ala1Z < 100){
+        max = Math.max(max, params.ala1Z as number)
+      }
+      if (params.ala2X < 100){
+        max = Math.max(max, params.ala2X as number)
+      }
+      if (params.ala2Y < 100){
+        max = Math.max(max, params.ala2Y as number)
+      }
+      if (params.ala2Z < 100){
+        max = Math.max(max, params.ala2Z as number)
+      }
     }
   })
-  return max
+  return Math.max(max, perception + 0.1)
 })
 
 const alert = computed(() => invalidUnits.value)
@@ -250,7 +269,7 @@ const scaleOption = computed({
 const scale: ComputedRef<number> = computed(() => {
   switch (scaleOption.value){
     case 'perception_level':
-      return 0.3
+      return perception + 0.1
     case 'alarm_level':
       return Math.ceil(maxAlarm.value * 11) / 10
     case 'custom':
