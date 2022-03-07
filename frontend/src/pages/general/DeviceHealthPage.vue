@@ -31,7 +31,6 @@
       {{ $t('device_health.battery_voltage') }}
     </h6>
 
-    <!-- todo: replace max value-->
     <TimeSeriesGraph
       :datasets="computedDatasetsBatteryVoltage"
       :max-value="50"

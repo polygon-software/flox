@@ -171,7 +171,8 @@ export default {
   visualisation: {
     period: 'Periode',
     horizontal: 'Horizontal',
-    vertical: 'Vertikal'
+    vertical: 'Vertikal',
+    at: 'bei',
   },
   period: {
     twelve_hours: '12 Stunden',

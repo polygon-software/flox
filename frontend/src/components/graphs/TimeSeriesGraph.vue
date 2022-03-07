@@ -41,6 +41,7 @@ import ShareDialog from 'components/dialogs/ShareDialog.vue';
 import {computed, defineProps} from 'vue';
 import {date, useQuasar} from 'quasar';
 import {formatDateForGraph} from 'src/helpers/format-helpers';
+import {i18n} from 'boot/i18n';
 
 const $q = useQuasar()
 
@@ -56,11 +57,7 @@ const props = defineProps({
   levelMarkers: {
     type: Array,
     required: false,
-    default: () => [{showValue: {
-      type: Boolean,
-        required: false,
-        default: false,
-      }}],
+    default: () => [],
   },
   maxValue: {
     type: Number,
@@ -87,7 +84,7 @@ const annotations = computed(() => {
           color: marker.color,
           background: 'rgba(0,0,0,0)',
         },
-        text: marker.showValue? `${marker.label}: ${marker.value}` : `${marker.label}`
+        text: marker.showValue ? `${marker.label} ${i18n.global.t('visualisation.at')} ${marker.value}` : `${marker.label}`
       }
     })
   })
