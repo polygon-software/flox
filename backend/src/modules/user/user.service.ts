@@ -86,8 +86,8 @@ export class UserService {
   }
 
   /**
-   * Returns all Players
-   * @returns {Promise<User[]>} - all partner users
+   * Returns all Users (only users, no admins)
+   * @returns {Promise<User[]>} - all users
    */
   getAllUsers(): Promise<User[]> {
     return this.usersRepository.find({
