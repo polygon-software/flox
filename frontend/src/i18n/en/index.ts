@@ -80,6 +80,7 @@ export default {
     show_status_files: 'Show Status Files',
     show_device_health: 'Show Device Health',
     name: 'Name',
+    id: 'ID',
   },
   edit_parameters: {
     user_data: 'User Data and Thresholds',
@@ -166,7 +167,8 @@ export default {
   visualisation: {
     period: 'Period',
     horizontal: 'Horizontal',
-    vertical: 'Vertical'
+    vertical: 'Vertical',
+    at: 'at',
   },
   period: {
     twelve_hours: '12 Hours',
@@ -224,5 +226,14 @@ export default {
     alarm_level: 'Alarm level',
     highest_peak: 'Highest peak',
     enter_value: 'Enter value',
+  },
+  device_health: {
+    title: 'Health Status of',
+    battery_voltage: 'Battery Voltage',
+    cellular_signal: 'Cellular Signal',
+    main_battery: 'Main Battery',
+    good: 'good',
+    fair: 'fair',
+    poor: 'poor',
   },
 };

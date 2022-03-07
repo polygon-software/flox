@@ -81,6 +81,7 @@ export default {
     show_status_files: 'Statusdateien anzeigen',
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
+    id: 'ID',
   },
   edit_parameters: {
     user_data: 'Benutzerdaten und Schwellenwerte',
@@ -170,7 +171,8 @@ export default {
   visualisation: {
     period: 'Periode',
     horizontal: 'Horizontal',
-    vertical: 'Vertikal'
+    vertical: 'Vertikal',
+    at: 'bei',
   },
   period: {
     twelve_hours: '12 Stunden',
@@ -228,5 +230,14 @@ export default {
     alarm_level: 'Alarmlevel',
     highest_peak: 'Höchster Peak',
     enter_value: 'Wert eingeben',
+  },
+  device_health: {
+    title: 'Gesundheitsstatus von',
+    battery_voltage: 'Batteriespannung',
+    cellular_signal: 'Mobiles Signal',
+    main_battery: 'Hauptbatterie',
+    good: 'gut',
+    fair: 'ausreichend',
+    poor: 'schlecht',
   },
 };

@@ -41,6 +41,7 @@ import ShareDialog from 'components/dialogs/ShareDialog.vue';
 import {computed, defineProps} from 'vue';
 import {date, useQuasar} from 'quasar';
 import {formatDateForGraph} from 'src/helpers/format-helpers';
+import {i18n} from 'boot/i18n';
 
 const $q = useQuasar()
 
@@ -53,38 +54,41 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  warningLevel: {
-    type: Number,
+  levelMarkers: {
+    type: Array,
     required: false,
-    default: null,
+    default: () => [],
   },
   maxValue: {
     type: Number,
-    required: false,
-    default: null,
+    required: true,
   },
 })
 
 /**
- * Finds the highest datapoint across all datasets, rounded to .1 increments
- * (used for determining y axis scale)
+ * Sets the level markers on the y-axis.
  */
-const highestDatapoint = computed(() => {
-  let max = 0;
-  props.datasets.forEach((dataset) => {
-    const datasetData = (dataset as Record<string, Record<string, number>[]>).data
-    const datasetMax = Math.ceil(10 * Math.max.apply(Math, datasetData.map(
-      (datapoint) => {
-        return datapoint.y;
-      })
-    )) / 10
-
-    if(datasetMax > max){
-      max = datasetMax
-    }
+const annotations = computed(() => {
+  const yaxis: Record<string, unknown>[] = []
+  const markers = props.levelMarkers as Record<string, string|number>[]
+  markers.forEach(marker => {
+    yaxis.push({
+      y: marker.value,
+      strokeDashArray: marker.dashSize,
+      borderColor: marker.color,
+      label: {
+        position: 'left',
+        offsetX: 80,
+        borderWidth: 0,
+        style: {
+          color: marker.color,
+          background: 'rgba(0,0,0,0)',
+        },
+        text: marker.showValue ? `${marker.label} ${i18n.global.t('visualisation.at')} ${marker.value}` : `${marker.label}`
+      }
+    })
   })
-
-  return max;
+  return yaxis
 })
 
 // Graph options
@@ -134,7 +138,7 @@ const options = computed(() => {
     yaxis: {
       type: 'numeric',
       min: 0,
-      max: Math.ceil((props.maxValue ?? highestDatapoint.value) * 10) / 10,
+      max: Math.ceil(props.maxValue * 10) / 10,
       tickAmount: 10,
       decimalsInFloat: 2,
       title: {
@@ -147,23 +151,7 @@ const options = computed(() => {
       }
     },
     annotations: {
-      yaxis: props.warningLevel ? [
-        {
-          y: props.warningLevel,
-          strokeDashArray: 2,
-          borderColor: 'var(--q-negative)',
-          label: {
-            position: 'left',
-            offsetX: 80,
-            borderWidth: 0,
-            style: {
-              color: 'var(--q-negative)',
-              background: 'rgba(0,0,0,0)'
-            },
-            text: 'Warning at 0.25'
-          }
-        }
-      ] : [],
+      yaxis: annotations.value,
     },
     tooltip: {
       x: {

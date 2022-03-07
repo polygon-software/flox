@@ -33,7 +33,7 @@
 
     <TimeSeriesGraph
       :datasets="levelWritings.x"
-      :warning-level="0.25"
+      :level-markers="levelMarkers"
       :max-value="levelWritings.max"
       unit="mm/s"
     />
@@ -45,7 +45,7 @@
 
     <TimeSeriesGraph
       :datasets="levelWritings.y"
-      :warning-level="0.25"
+      :level-markers="levelMarkers"
       :max-value="levelWritings.max"
       unit="mm/s"
     />
@@ -56,7 +56,7 @@
 
     <TimeSeriesGraph
       :datasets="levelWritings.z"
-      :warning-level="0.25"
+      :level-markers="levelMarkers"
       :max-value="levelWritings.max"
       unit="mm/s"
     />
@@ -97,6 +97,16 @@ const timePeriodOptions = [
     key: 'custom',
   }
 ]
+
+// Horizontal markers to be displayed in the graphs
+const levelMarkers = computed(() => [
+  {
+    label: 'Warning',
+    value: 0.25,
+    color: 'red',
+    dashSize: 3,
+  }
+])
 
 // Selected time period
 const timePeriod = ref(timePeriodOptions[0])
