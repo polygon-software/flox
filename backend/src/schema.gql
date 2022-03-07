@@ -48,13 +48,16 @@ input CreateAddressInput {
 
 input CreateProjectInput {
   """Associated MR2000 instances"""
-  mr2000instances: [String!]!
+  mr2000instances: [String!]
 
   """Associated MR3000 instances"""
-  mr3000instances: [String!]!
+  mr3000instances: [String!]
 
   """Project name"""
   name: String!
+
+  """Uuid of the user owning the project"""
+  userUuid: String!
 }
 
 input CreateUserInput {
@@ -116,10 +119,11 @@ type MR3000 {
 type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   create(createUserInput: CreateUserInput!): User!
-  createProject(createProjectInput: CreateProjectInput!, userUuid: String!): Project!
+  createProject(createProjectInput: CreateProjectInput!): Project!
   register(registerUserInput: RegisterUserInput!): User
   remove(deleteUserInput: DeleteUserInput!): User!
   update(updateUserInput: UpdateUserInput!): User!
+  updateProjectName(projectName: String!, projectUuid: String!, updateProjectInput: UpdateProjectInput!): Project!
 }
 
 enum Permission {
@@ -193,6 +197,11 @@ input RegisterUserInput {
 enum Role {
   ADMIN
   USER
+}
+
+input UpdateProjectInput {
+  """Project name"""
+  name: String!
 }
 
 input UpdateUserInput {

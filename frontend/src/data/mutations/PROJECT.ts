@@ -12,8 +12,8 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
  */
 export const CREATE_PROJECT = {
   mutation: gql`
-    mutation createProject($createProjectInput: CreateProjectInput!, $userUuid: String!){
-      createProject (createProjectInput: $createProjectInput, userUuid: $userUuid) {
+    mutation createProject($createProjectInput: CreateProjectInput!){
+      createProject (createProjectInput: $createProjectInput) {
         uuid
         name
         mr2000instances
@@ -28,8 +28,8 @@ export const CREATE_PROJECT = {
 
 export const UPDATE_PROJECT = {
   mutation: gql`
-    mutation updateProject($updateProjectInput: UpdateProjectInput!){
-      update (updateProjectInput: $updateProjectInput) {
+    mutation updateProject($projectUuid: String!, $projectName: String!, $updateProjectInput: UpdateProjectInput!){
+      update (projectUuid: $projectUuid, projectName: $projectName, updateProjectInput: $updateProjectInput) {
         uuid
         name
         mr2000instances

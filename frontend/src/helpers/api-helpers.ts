@@ -4,6 +4,7 @@ import { User } from 'src/data/types/User';
 import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
+import {MY_PROJECTS} from 'src/data/queries/PROJECT';
 
 /**
  * Fetch all users.
@@ -40,6 +41,21 @@ export async function myUser(): Promise<User | null> {
     return null
   }
   return mapUser(queryResult.data.myUser as Record<string, unknown>);
+}
+
+/**
+ * Fetch all projects beloning to current user
+ * @return {Promise<Project[]>} - An array containing all the user's projects
+ */
+export async function myProjects(): Promise<Project[]> {
+  const projects: Project[] = [];
+  const queryResult = await executeQuery(MY_PROJECTS);
+  if(queryResult.data?.myProjects){
+    for (const project of queryResult.data.myProjects as Record<string, unknown>[]) {
+      projects.push(mapProject(project));
+    }
+  }
+  return projects
 }
 
 /**
@@ -89,4 +105,19 @@ export function mapAddress(record: Record<string, unknown>|undefined): Address|u
   } else {
     return undefined;
   }
+}
+
+/**
+ * Map project record to project instance.
+ * @param {Record<string, unknown>} record - project record.
+ * @returns {Project} - project instance.
+ */
+export function mapProject(record: Record<string, unknown>): Project {
+  return new Project(
+    record.name as string,
+    record.uuid as string,
+    record.user as User,
+    record.mr2000instances as string[],
+    record.mr3000instances as string[],
+  )
 }

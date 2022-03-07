@@ -1,6 +1,6 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { IsArray, IsString } from 'class-validator';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { User } from '../../user/entities/user.entity';
 
@@ -16,7 +16,9 @@ export class Project extends BaseEntity {
   name: string;
 
   @Field(() => User, { description: 'User that owns the project' })
-  @ManyToOne(() => User, (user) => user.projects, { eager: true })
+  @ManyToOne(() => User, (user) => user.projects, {
+    eager: true,
+  })
   user: User;
 
   @Field(() => [String], {

@@ -60,6 +60,7 @@ export default {
   },
   projects: {
     project: 'Project',
+    new_project: 'New Project',
     device: 'Device',
     client: 'Client',
     ip: 'IP',
@@ -80,6 +81,7 @@ export default {
     show_status_files: 'Show Status Files',
     show_device_health: 'Show Device Health',
     name: 'Name',
+    project_name: 'Project Name',
   },
   edit_parameters: {
     user_data: 'User Data and Thresholds',
@@ -208,8 +210,5 @@ export default {
     frq_z: 'Frq Z',
     vsum: 'VSUM',
     download: 'Download',
-  },
-  project_data: {
-    name: 'Project Name',
   },
 };

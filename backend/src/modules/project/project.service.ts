@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
@@ -14,6 +14,8 @@ import { getProjectsForInstances } from '../../helpers/project-helpers';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-project.input';
 import { Project } from './entities/project.entity';
+import { UpdateProjectInput } from './dto/input/update-project-input';
+import {DeleteProjectInput} from './dto/input/delete-project.input';
 
 @Injectable()
 export class ProjectService {
@@ -84,20 +86,18 @@ export class ProjectService {
 
   /**
    * Returns a list of the user's projects
-   * @param {CreateProjectInput} createProjectInput - contains project name & associated MR2000/3000 instances
-   * @param {string} userUuid - the user to create the project for (automatically adds related permission)
+   * @param {CreateProjectInput} createProjectInput - contains the owners uuid, as well as project name & associated MR2000/3000 instances
    * @returns {Promise<Project>} - the newly created project
    */
-  async createProject(
-    createProjectInput: CreateProjectInput,
-    userUuid: string,
-  ) {
+  async createProject(createProjectInput: CreateProjectInput) {
     const projectName = createProjectInput.name;
+    const userUuid = createProjectInput.userUuid;
     const user = await this.usersRepository.findOne(userUuid);
 
     // Ensure project name is not already present (in actual projects and/or permissions)
     const userProjects = await this.getUserProjects({ uuid: userUuid });
     const userProjectPermissions = user.projects;
+
     if (
       userProjectPermissions.find((project) => project.name === projectName) ||
       userProjects.find((project) => project.name === projectName)
@@ -127,6 +127,28 @@ export class ProjectService {
     //
     // // Filter by projects that the user has access to
     // return projects.filter((project) => user.projects.includes(project.name));
+  }
+
+  /**
+   * Updates a project
+   * @param {string} projectUuid Uuid of the project to change
+   * @param {UpdateProjectInput} updateProjectInput Project paramters that should be changed.
+   * @return {UpdateProjectInput} - The updated project
+   */
+  async updateProjectName(
+    projectUuid: string,
+    updateProjectInput: UpdateProjectInput,
+  ): Promise<UpdateResult> {
+    return this.projectRepository.update(projectUuid, updateProjectInput);
+  }
+
+  /**
+   * Deletes a project
+   * @param {DeleteProjectInput} deleteProjectInput - Input containing the uuid of the project to delete
+   * @return {Promise<DeleteResult>} - Result object from deletion
+   */
+  async deleteProject(deleteProjectInput: DeleteProjectInput) {
+    return this.projectRepository.delete(deleteProjectInput.uuid);
   }
 
   /**

@@ -20,6 +20,14 @@
         style="margin-left: 50px"
         @click="createNewProject"
       />
+      <!--- Needed for testing todo: delete -->
+      <q-btn
+        :label="$t('My Projects')"
+        outline
+        class="text-grey"
+        style="margin-left: 50px"
+        @click="showProjects"
+      />
     </div>
     <q-table
       class="q-mt-lg"
@@ -110,6 +118,7 @@ import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
+import MyProjectDialog from 'src/components/dialogs/MyProjectsDialog.vue'
 
 const $q = useQuasar()
 
@@ -233,11 +242,19 @@ const buttons = [
  * @async
  * @returns {void}
  */
-async function createNewProject(): Promise<void>{
+async function createNewProject(): Promise<void> {
   $q.dialog({
     component: CreateProjectDialog,
   }).onOk(() => {
     console.log('Create project')
+  })
+  await routerService?.routeTo(ROUTES.CUSTOMERS)
+}
+
+// eslint-disable-next-line require-jsdoc
+async function showProjects(): Promise<void> {
+  $q.dialog({
+    component: MyProjectDialog,
   })
   await routerService?.routeTo(ROUTES.CUSTOMERS)
 }

@@ -12,13 +12,13 @@
       <q-card-section class="column items-center">
         <!-- Title -->
         <h6 class="q-ma-none q-pa-none">
-          {{$t('dashboard.share')}}
+          {{$t('projects.new_project')}}
         </h6>
 
         <!-- Project name -->
         <q-input
           v-model="name"
-          :label="$t('project_data.name')"
+          :label="$t('projects.project_name')"
           class="q-ma-md"
           outlined
           dense
@@ -84,6 +84,7 @@ async function createProject() {
   const userUuid = user?.uuid
 
   const params = {
+    userUuid: userUuid,
     name: name.value,
     mr2000instances: mr2000instances.value,
     mr3000instances: mr3000instances.value,
@@ -97,7 +98,6 @@ async function createProject() {
       createProjectInput: {
         ...params
       },
-      userUuid: userUuid,
     }
   )
 

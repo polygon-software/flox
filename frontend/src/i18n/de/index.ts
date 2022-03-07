@@ -61,6 +61,7 @@ export default {
   },
   projects: {
     project: 'Projekt',
+    new_project: 'Neues Projekt',
     device: 'Gerät',
     client: 'Kunde',
     ip: 'IP',
@@ -81,6 +82,7 @@ export default {
     show_status_files: 'Statusdateien anzeigen',
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
+    project_name: 'Projektname',
   },
   edit_parameters: {
     user_data: 'Benutzerdaten und Schwellenwerte',
@@ -212,8 +214,5 @@ export default {
     frq_z: 'Frq Z',
     vsum: 'VSUM',
     download: 'Herunterladen',
-  },
-  project_data: {
-    name: 'Projektname',
   },
 };
