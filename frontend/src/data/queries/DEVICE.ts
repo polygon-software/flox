@@ -108,7 +108,7 @@ export const PROJECT_DEVICES = {
         __typename
       }}
   `,
-  tables: ['project'],
+  tables: ['device'],
   cacheLocation: 'getProjectDevices',
 };
 
