@@ -76,6 +76,21 @@ export async function myProjectDevices(): Promise<Device[]> {
 }
 
 /**
+ * Fetch all of the current user's devices that are not part of any projects
+ * @return {Promise<Device[]>} - An array containing all the user's projects
+ */
+export async function myPoolDevices(): Promise<Device[]> {
+  const devices: Device[] = [];
+  const queryResult = await executeQuery(MY_DEVICES, {unassigned: true});
+  if(queryResult.data?.myDevices){
+    for (const device of queryResult.data.myDevices as Record<string, unknown>[]) {
+      devices.push(mapDevice(device));
+    }
+  }
+  return devices
+}
+
+/**
  * Map user records to user instances.
  * @param {Record<string, unknown>[]} records - user records.
  * @returns {User[]} - user instances.

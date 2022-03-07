@@ -105,5 +105,5 @@ function deviceNameFromComment(comment: string) {
   if (!comment.startsWith('ZC-')) {
     throw new Error('Invalid device name');
   }
-  return comment.substring(6);
+  return comment.substring(6).trim();
 }

@@ -111,7 +111,7 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
 import {myProjectDevices} from 'src/helpers/api-helpers';
-import {Project} from 'src/data/types/Project';
+import {Device} from 'src/data/types/Device';
 
 const $q = useQuasar()
 
@@ -135,7 +135,7 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-const rows: Ref<Project[]> = ref([])
+const rows: Ref<Device[]> = ref([])
 
 const buttons = [
   {
@@ -172,9 +172,9 @@ const buttons = [
   },
 ]
 
+// Once mounted, fetch data
 onMounted(async () => {
   rows.value = await myProjectDevices()
-  console.log('rows is now', rows.value)
 })
 
 
