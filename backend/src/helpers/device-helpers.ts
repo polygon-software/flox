@@ -27,6 +27,7 @@ export async function mr2000fromDatabaseEntry(
 
   return new MR2000(
     entry.cli as string,
+    deviceNameFromComment(entry.comment as string),
     entry.mr_SN as string,
     entry.PID as string,
     entry.last_file as number,
@@ -53,6 +54,7 @@ export async function mr3000fromDatabaseEntry(
 
   return new MR3000(
     entry.cli as string,
+    deviceNameFromComment(entry.comment as string),
     entry.mr_SN as string,
     project,
     // entry.PID as string,
@@ -92,4 +94,16 @@ export async function findProjectForDevice(
       { cli },
     )
     .getOne();
+}
+
+/**
+ * Extracts the device name from a comment string (e.g. "ZC-123TestDevice" -> "TestDevice")
+ * @param {string} comment - database comment
+ * @returns {string} - device name
+ */
+function deviceNameFromComment(comment: string) {
+  if (!comment.startsWith('ZC-')) {
+    throw new Error('Invalid device name');
+  }
+  return comment.substring(6);
 }

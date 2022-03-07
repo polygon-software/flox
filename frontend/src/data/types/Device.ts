@@ -5,6 +5,7 @@ import {Project} from 'src/data/types/Project';
  */
 export class Device {
   cli: string;
+  name: string;
   serialNumber: string;
   project: Project;
   // TODO more fields
@@ -12,10 +13,12 @@ export class Device {
   // eslint-disable-next-line require-jsdoc
   constructor(
     cli: string,
+    name: string,
     serialNumber: string,
     project: Project
   ){
     this.cli = cli
+    this.name = name
     this.serialNumber = serialNumber
     this.project = project
   }

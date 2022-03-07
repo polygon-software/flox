@@ -98,6 +98,9 @@ type MR2000 {
   """CLI ID"""
   cli: String!
 
+  """Device name"""
+  name: String!
+
   """Number of files"""
   numberOfFiles: Float!
 
@@ -114,6 +117,9 @@ type MR2000 {
 type MR3000 {
   """CLI ID"""
   cli: String!
+
+  """Device name"""
+  name: String!
 
   """Project the device belongs to (if any)"""
   project: Project

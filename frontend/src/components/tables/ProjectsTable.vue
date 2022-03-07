@@ -41,7 +41,7 @@
             {{ props.row.project?.name ?? '-' }}
           </q-td>
           <q-td key="device">
-            {{ props.row.cli }}
+            {{ props.row.name }}
           </q-td>
           <q-td key="client">
             {{ props.row.cli }}

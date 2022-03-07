@@ -147,6 +147,7 @@ export function mapProject(record: Record<string, unknown>): Project {
 export function mapDevice(record: Record<string, unknown>): Device {
   return new Device(
     record.cli as string,
+    record.name as string,
     record.serialNumber as string,
     record.project as Project
   )

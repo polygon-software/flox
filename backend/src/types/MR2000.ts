@@ -3,13 +3,11 @@ import { Project } from '../modules/project/entities/project.entity';
 
 @ObjectType()
 export class MR2000 {
-  /*
-  @Field(() => User, { description: 'User that owns the device' })
-  @ManyToOne(() => User, (user) => user.mr2000instances, { eager: true })
-  user: User;*/
-
   @Field(() => String, { description: 'CLI ID' })
   cli: string;
+
+  @Field(() => String, { description: 'Device name' })
+  name: string;
 
   @Field(() => String, { description: 'Serial number' })
   serialNumber: string;
@@ -28,12 +26,14 @@ export class MR2000 {
 
   constructor(
     cli: string,
+    name: string,
     serialNumber: string,
     pid: string,
     numberOfFiles: number,
     project: Project,
   ) {
     this.cli = cli;
+    this.name = name;
     this.serialNumber = serialNumber;
     this.pid = pid;
     this.numberOfFiles = numberOfFiles;
