@@ -24,7 +24,7 @@
     <q-table
       class="q-mt-lg"
       flat
-      :rows="mockedRows"
+      :rows="rows"
       :columns="columns"
       row-key="uuid"
       :filter="search"
