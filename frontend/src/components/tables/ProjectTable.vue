@@ -41,7 +41,7 @@
           <q-td key="checkbox">
             <q-checkbox
               v-model="selectedRows"
-              :val="props.row.name"
+              :val="props.row.cli"
             />
           </q-td>
           <q-td key="name">
