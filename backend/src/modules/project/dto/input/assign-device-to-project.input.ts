@@ -5,9 +5,9 @@ import { MR3000 } from '../../../../types/MR3000';
 
 @InputType()
 /**
- * Input for removing a device from its associated project
+ * Input for associating a device to a project
  */
-export class RemoveDeviceFromProjectInput {
+export class AssignDeviceToProjectInput {
   @Field(() => ID, {
     description: 'Project UUID',
   })

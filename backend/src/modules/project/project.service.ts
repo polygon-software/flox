@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
 import {
+  findProjectForDevice,
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
 } from '../../helpers/device-helpers';
@@ -16,6 +17,7 @@ import { DeleteProjectInput } from './dto/input/delete-project.input';
 import { fetchFromTable } from '../../helpers/database-helpers';
 import { MR2000 } from '../../types/MR2000';
 import { MR3000 } from '../../types/MR3000';
+import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
 
 @Injectable()
 export class ProjectService {
@@ -157,8 +159,8 @@ export class ProjectService {
 
   /**
    * Removes devices from their associated project(s)
-   * @param {RemoveDeviceFromProjectInput} removeDeviceFromProjectInput - contains MR2000/3000 instance uuids to remove
-   * @returns {Promise<void>} - done
+   * @param {RemoveDeviceFromProjectInput} removeDeviceFromProjectInput - contains project UUID and device CLI
+   * @returns {Promise<Project>} - updated project
    */
   async removeDeviceFromProject(
     removeDeviceFromProjectInput: RemoveDeviceFromProjectInput,
@@ -205,5 +207,54 @@ export class ProjectService {
     );
 
     return this.projectRepository.findOne(removeDeviceFromProjectInput.uuid);
+  }
+
+  /**
+   * Removes devices from their associated project(s)
+   * @param {AssignDeviceToProjectInput} assignDeviceToProjectInput - contains project UUID and device CLI
+   * @returns {Promise<Project>} - updated project
+   */
+  async assignDeviceToProject(
+    assignDeviceToProjectInput: AssignDeviceToProjectInput,
+  ) {
+    // Get project
+    const project = await this.projectRepository.findOne(
+      assignDeviceToProjectInput.uuid,
+    );
+
+    if (!project) {
+      throw new Error(
+        `No project found for ${assignDeviceToProjectInput.uuid}`,
+      );
+    }
+
+    const cli = assignDeviceToProjectInput.cli;
+    const isMr2000 = cli.includes('-'); // TODO use helper function once present
+
+    // Throw error if device is already part of a project
+    const existingProject = await findProjectForDevice(
+      this.projectRepository,
+      cli,
+      isMr2000,
+    );
+    if (existingProject) {
+      throw new Error(`Device ${cli} is already assigned to a project`);
+    }
+
+    // Build partial entity, depending on type
+    const updateData = isMr2000
+      ? {
+          mr2000instances: project.mr2000instances.concat(cli),
+        }
+      : {
+          mr3000instances: project.mr3000instances.concat(cli),
+        };
+
+    await this.projectRepository.update(
+      assignDeviceToProjectInput.uuid,
+      updateData,
+    );
+
+    return this.projectRepository.findOne(assignDeviceToProjectInput.uuid);
   }
 }
