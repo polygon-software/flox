@@ -60,7 +60,7 @@ export async function mr3000fromDatabaseEntry(
   const project = await findProjectForDevice(
     projectRepository,
     entry.cli as string,
-    true,
+    false,
   );
 
   return new MR3000(

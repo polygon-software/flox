@@ -42,8 +42,6 @@ export class DeviceService {
     // Fetch VPN table for FTP info
     const vpnInfo = await fetchFromTable('openvpn', 'tempovp');
 
-    console.log('VPN:', vpnInfo);
-
     let devices = [];
 
     // Add all allowed MR2000 instances
