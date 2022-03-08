@@ -10,7 +10,8 @@ import {
 import {
   Column,
   Entity,
- Index, JoinColumn,
+  Index,
+  JoinColumn,
   OneToOne,
   OneToMany,
   AfterInsert,

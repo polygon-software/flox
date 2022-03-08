@@ -4,7 +4,6 @@
 
 import { MR2000 } from '../types/MR2000';
 import { MR3000 } from '../types/MR3000';
-import { getQueryRunner } from './database-helpers';
 import { Repository } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
 
