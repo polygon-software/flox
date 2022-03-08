@@ -18,6 +18,7 @@ import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
 import { RemoveDeviceFromProjectInput } from './dto/input/remove-device-from-project.input';
+import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
 
 @Resolver(() => Project)
 export class ProjectResolver {
@@ -206,5 +207,31 @@ export class ProjectResolver {
       throw new Error(ERRORS.resource_not_allowed);
     }
     return true;
+  }
+
+  /**
+   * Assigns a given device to a project
+   * @param {AssignDeviceToProjectInput} assignDeviceToProjectInput - contains project UUID & device CLI
+   * @param {Record<string, string>} user - currently logged-in user from request
+   * @returns {Promise<Project>} - the updated project
+   */
+  @AnyRole()
+  @Mutation(() => Project)
+  async assignDeviceToProject(
+    @Args({
+      name: 'assignDeviceToProjectInput',
+      type: () => AssignDeviceToProjectInput,
+    })
+    assignDeviceToProjectInput: AssignDeviceToProjectInput,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    if (
+      await this.validateAccessToProject(user, assignDeviceToProjectInput.uuid)
+    ) {
+      // TODO more permission checks
+      return this.projectService.assignDeviceToProject(
+        assignDeviceToProjectInput,
+      );
+    }
   }
 }

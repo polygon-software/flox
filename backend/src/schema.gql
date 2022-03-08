@@ -39,6 +39,14 @@ type Address {
   zipCode: String!
 }
 
+input AssignDeviceToProjectInput {
+  """Device CLI"""
+  cli: String
+
+  """Project UUID"""
+  uuid: ID!
+}
+
 type Bank {
   """Three letter abbreviation of the Bank"""
   abbreviation: String!
@@ -516,6 +524,7 @@ type MR3000 {
 
 type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
+  assignDeviceToProject(assignDeviceToProjectInput: AssignDeviceToProjectInput!): Project!
   createProject(createProjectInput: CreateProjectInput!): Project!
   register(registerUserInput: RegisterUserInput!): User
   removeDeviceFromProject(removeDeviceFromProjectInput: RemoveDeviceFromProjectInput!): Project!

@@ -228,6 +228,8 @@ export class ProjectService {
       );
     }
 
+    // TODO ensure device exists & user has access
+
     const cli = assignDeviceToProjectInput.cli;
     const isMr2000 = cli.includes('-'); // TODO use helper function once present
 
