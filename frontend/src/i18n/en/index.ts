@@ -82,6 +82,7 @@ export default {
     show_device_health: 'Show Device Health',
     name: 'Name',
     project_name: 'Project Name',
+    id: 'ID',
   },
   edit_parameters: {
     user_data: 'User Data and Thresholds',
@@ -117,6 +118,8 @@ export default {
     new_contact: 'New Contakt',
     load: 'Load',
     save: 'Save',
+    show: 'Show',
+    close: 'Close',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -150,6 +153,7 @@ export default {
       'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
+    incorrect_date_range: 'Please select a valid date range',
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -166,7 +170,8 @@ export default {
   visualisation: {
     period: 'Period',
     horizontal: 'Horizontal',
-    vertical: 'Vertical'
+    vertical: 'Vertical',
+    at: 'at',
   },
   period: {
     twelve_hours: '12 Hours',
@@ -213,5 +218,27 @@ export default {
     frq_z: 'Frq Z',
     vsum: 'VSUM',
     download: 'Download',
+  },
+  dialog: {
+    period: 'Period',
+    scale: 'Scale',
+    hours: '12 hours',
+    days: '2 days',
+    weeks: '2 weeks',
+    months: '1 month',
+    select_period: 'Select period',
+    perception_level: 'Perception level',
+    alarm_level: 'Alarm level',
+    highest_peak: 'Highest peak',
+    enter_value: 'Enter value',
+  },
+  device_health: {
+    title: 'Health Status of',
+    battery_voltage: 'Battery Voltage',
+    cellular_signal: 'Cellular Signal',
+    main_battery: 'Main Battery',
+    good: 'good',
+    fair: 'fair',
+    poor: 'poor',
   },
 };

@@ -166,37 +166,10 @@ input CreateProjectInput {
   userUuid: String!
 }
 
-input CreateUserInput {
-  """User address"""
-  address: CreateAddressInput!
-
-  """Date of birth"""
-  birthdate: DateTime!
-
-  """E-mail address"""
-  email: String!
-
-  """Full name of the user"""
-  fullName: String!
-
-  """phone number"""
-  phone: String!
-
-  """Username"""
-  username: String!
-
-  """Cognito ID"""
-  uuid: ID!
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-input DeleteUserInput {
-  uuid: ID!
-}
 
 union Device = MR2000 | MR3000
 
@@ -459,6 +432,36 @@ enum FileType {
   WORK_CONTRACT
 }
 
+type LevelWriting {
+  """Max value"""
+  max: Float!
+
+  """X-axes"""
+  x: [LevelWritingAxis!]!
+
+  """Y-axes"""
+  y: [LevelWritingAxis!]!
+
+  """Z-axes"""
+  z: [LevelWritingAxis!]!
+}
+
+type LevelWritingAxis {
+  """Data Points"""
+  data: [LevelWritingPoint!]!
+
+  """Station ID"""
+  name: String!
+}
+
+type LevelWritingPoint {
+  """Timestamp"""
+  x: DateTime!
+
+  """Value"""
+  y: Float
+}
+
 type MR2000 {
   """CLI ID"""
   cli: String!
@@ -513,12 +516,10 @@ type MR3000 {
 
 type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
-  create(createUserInput: CreateUserInput!): User!
   createProject(createProjectInput: CreateProjectInput!): Project!
   register(registerUserInput: RegisterUserInput!): User
-  remove(deleteUserInput: DeleteUserInput!): User!
-  update(updateUserInput: UpdateUserInput!): User!
   updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
+  updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Offer {
@@ -630,10 +631,10 @@ type Query {
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
+  levelWriting(end: DateTime!, resolution: Int!, start: DateTime!, stationIds: [String!]!): LevelWriting!
   myDevices(assigned: Boolean, unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!
-  preview(cli: String!, date: String!, num: String!): String!
   user(cognitoUuid: ID, uuid: ID): User!
 }
 

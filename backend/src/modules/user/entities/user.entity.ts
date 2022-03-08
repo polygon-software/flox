@@ -10,7 +10,7 @@ import {
 import {
   Column,
   Entity,
-  JoinColumn,
+ Index, JoinColumn,
   OneToOne,
   OneToMany,
   AfterInsert,
@@ -48,6 +48,7 @@ export class User extends BaseEntity {
   address: Address;
 
   @Field(() => String, { description: 'Username' })
+  @Index({ unique: true })
   @Column({ nullable: true })
   @IsString()
   username: string;

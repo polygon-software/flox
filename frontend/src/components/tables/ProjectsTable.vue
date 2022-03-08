@@ -24,7 +24,7 @@
     <q-table
       class="q-mt-lg"
       flat
-      :rows="rows"
+      :rows="mockedRows"
       :columns="columns"
       row-key="uuid"
       :filter="search"
@@ -116,6 +116,7 @@ import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q = useQuasar()
 
+
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 
@@ -168,7 +169,7 @@ const buttons = [
     label: i18n.global.t('projects.show_status_files'),
   },
   {
-    key: 'show_device',
+    key: 'device_health',
     label: i18n.global.t('projects.show_device_health'),
   },
 ]
@@ -230,8 +231,8 @@ async function onOptionClick(project: string, device: string, key: string): Prom
     case 'status':
       await routerService?.addToRoute(`${project}/${device}/${key}`)
       break
-    case 'show_device':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+    case 'device_health':
+      await routerService?.addToRoute(`${project}/${device}/${key}`)
       break
     default:
       await routerService?.routeTo(ROUTES.CUSTOMER)
