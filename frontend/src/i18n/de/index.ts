@@ -180,7 +180,8 @@ export default {
     custom: 'Eigene'
   },
   messages: {
-    copied: 'Kopiert'
+    copied: 'Kopiert',
+    project_created: 'Projekt erfolgreich erstellt'
   },
   status: {
     title: 'Status von',

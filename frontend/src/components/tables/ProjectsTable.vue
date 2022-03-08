@@ -112,6 +112,7 @@ import {RouterService} from 'src/services/RouterService';
 import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
 import {myProjectDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q = useQuasar()
 
@@ -188,8 +189,17 @@ async function createNewProject(): Promise<void> {
   $q.dialog({
     component: CreateProjectDialog,
   }).onOk(() => {
-    console.log('Create project')
-    // TODO show success notification
+    // Show success notification
+    showNotification(
+      $q,
+      i18n.global.t('messages.project_created'),
+      'center',
+      'primary',
+      undefined,
+      undefined,
+      undefined,
+      400
+    )
   })
   await routerService?.routeTo(ROUTES.CUSTOMERS)
 }

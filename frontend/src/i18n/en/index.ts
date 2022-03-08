@@ -176,7 +176,8 @@ export default {
     custom: 'Custom'
   },
   messages: {
-    copied: 'Copied'
+    copied: 'Copied',
+    project_created: 'Project created successfully'
   },
   status: {
     title: 'Status of',
