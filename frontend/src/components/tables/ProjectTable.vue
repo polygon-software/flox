@@ -36,7 +36,7 @@
       <template #body="props">
         <q-tr
           :props="props"
-          @click="() => showCustomGraph([props.row.name])"
+          @click="() => showCustomGraph([props.row.cli])"
         >
           <q-td key="checkbox">
             <q-checkbox
