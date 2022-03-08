@@ -518,6 +518,7 @@ type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   createProject(createProjectInput: CreateProjectInput!): Project!
   register(registerUserInput: RegisterUserInput!): User
+  removeDeviceFromProject(removeDeviceFromProjectInput: RemoveDeviceFromProjectInput!): Project!
   updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
@@ -659,6 +660,14 @@ input RegisterUserInput {
 
   """Username"""
   username: String!
+}
+
+input RemoveDeviceFromProjectInput {
+  """Device CLI"""
+  cli: String
+
+  """Project UUID"""
+  uuid: ID!
 }
 
 enum Role {

@@ -17,6 +17,7 @@ import { CreateProjectInput } from './dto/input/create-project.input';
 import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
+import { RemoveDeviceFromProjectInput } from './dto/input/remove-device-from-project.input';
 
 @Resolver(() => Project)
 export class ProjectResolver {
@@ -70,6 +71,34 @@ export class ProjectResolver {
   ) {
     if (await this.validateAccessToProject(user, getProjectDevicesArgs.uuid)) {
       return this.projectService.getProjectDevices(getProjectDevicesArgs);
+    }
+  }
+
+  /**
+   * Removes a device from a given project
+   * @param {RemoveDeviceFromProjectInput} removeDeviceFromProjectInput - contains project UUID & device CLI
+   * @param {Record<string, string>} user - currently logged-in user from request
+   * @returns {Promise<Project>} - the updated project
+   */
+  @AnyRole()
+  @Mutation(() => Project)
+  async removeDeviceFromProject(
+    @Args({
+      name: 'removeDeviceFromProjectInput',
+      type: () => RemoveDeviceFromProjectInput,
+    })
+    removeDeviceFromProjectInput: RemoveDeviceFromProjectInput,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    if (
+      await this.validateAccessToProject(
+        user,
+        removeDeviceFromProjectInput.uuid,
+      )
+    ) {
+      return this.projectService.removeDeviceFromProject(
+        removeDeviceFromProjectInput,
+      );
     }
   }
 
@@ -132,7 +161,6 @@ export class ProjectResolver {
     user: Record<string, string>,
     projectUuid: string,
   ): Promise<boolean> {
-    console.log('check access of', user, 'to', projectUuid);
     // Get user
     const dbUser = await this.userService.getUser({
       cognitoUuid: user.userId,

@@ -9,7 +9,7 @@ import {
 } from '../../helpers/device-helpers';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { CreateProjectInput } from './dto/input/create-project.input';
-import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-project.input';
+import { RemoveDeviceFromProjectInput } from './dto/input/remove-device-from-project.input';
 import { Project } from './entities/project.entity';
 import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
@@ -157,50 +157,53 @@ export class ProjectService {
 
   /**
    * Removes devices from their associated project(s)
-   * @param {RemoveDevicesFromProjectInput} removeDevicesFromProjectInput - contains MR2000/3000 instance uuids to remove
+   * @param {RemoveDeviceFromProjectInput} removeDeviceFromProjectInput - contains MR2000/3000 instance uuids to remove
    * @returns {Promise<void>} - done
    */
-  async removeDevicesFromProject(
-    removeDevicesFromProjectInput: RemoveDevicesFromProjectInput,
+  async removeDeviceFromProject(
+    removeDeviceFromProjectInput: RemoveDeviceFromProjectInput,
   ) {
     // Get project
     const project = await this.projectRepository.findOne(
-      removeDevicesFromProjectInput.uuid,
+      removeDeviceFromProjectInput.uuid,
     );
 
     if (!project) {
       throw new Error(
-        `No project found for ${removeDevicesFromProjectInput.uuid}`,
+        `No project found for ${removeDeviceFromProjectInput.uuid}`,
       );
     }
 
-    let newMr2000instances = project.mr2000instances;
-    let newMr3000instances = project.mr3000instances;
+    const cli = removeDeviceFromProjectInput.cli;
 
-    // Remove MR2000s, if any
-    if (
-      removeDevicesFromProjectInput.mr2000instances &&
-      project.mr2000instances
-    ) {
-      newMr2000instances = newMr2000instances.filter(
-        (instance) =>
-          !removeDevicesFromProjectInput.mr2000instances.includes(instance),
-      );
-    }
-    // Remove MR3000s, if any
-    if (
-      removeDevicesFromProjectInput.mr3000instances &&
-      project.mr3000instances
-    ) {
-      newMr3000instances = newMr3000instances.filter(
-        (instance) =>
-          !removeDevicesFromProjectInput.mr3000instances.includes(instance),
+    const validMr2000 = project.mr2000instances.includes(cli);
+    const validMr3000 = project.mr3000instances.includes(cli);
+
+    // Throw error if given device is not part of given project
+    if (!validMr2000 && !validMr3000) {
+      throw new Error(
+        `Device ${cli} is not assigned to project ${removeDeviceFromProjectInput.uuid}`,
       );
     }
 
-    return this.projectRepository.update(removeDevicesFromProjectInput.uuid, {
-      mr2000instances: newMr2000instances,
-      mr3000instances: newMr3000instances,
-    });
+    // Build partial entity, depending on type
+    const updateData = validMr2000
+      ? {
+          mr2000instances: project.mr2000instances.filter(
+            (instance) => instance !== cli,
+          ),
+        }
+      : {
+          mr3000instances: project.mr3000instances.filter(
+            (instance) => instance !== cli,
+          ),
+        };
+
+    await this.projectRepository.update(
+      removeDeviceFromProjectInput.uuid,
+      updateData,
+    );
+
+    return this.projectRepository.findOne(removeDeviceFromProjectInput.uuid);
   }
 }
