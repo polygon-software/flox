@@ -56,7 +56,7 @@
             {{ props.row.serialNumber }}
           </q-td>
           <q-td key="sale_status">
-            {{ props.row.sale_status }}
+            {{ props.row.saleStatus }}
           </q-td>
           <q-td key="station">
             {{ props.row.name }}

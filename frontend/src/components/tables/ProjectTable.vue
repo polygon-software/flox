@@ -48,10 +48,10 @@
             {{ props.row.name }}
           </q-td>
           <q-td key="device">
-            {{ props.row.device }}
+            {{ props.row.type }}
           </q-td>
           <q-td key="client">
-            {{ props.row.client }}
+            {{ props.row.cli }}
           </q-td>
           <q-td key="ip">
             {{ props.row.ip }}
@@ -60,13 +60,13 @@
             {{ props.row.firmware }}
           </q-td>
           <q-td key="serial">
-            {{ props.row.serial }}
+            {{ props.row.serialNumber }}
           </q-td>
           <q-td key="sale_status">
-            {{ props.row.sale_status }}
+            {{ props.row.saleStatus }}
           </q-td>
           <q-td key="vpn_status">
-            {{ props.row.vpn_status }}
+            {{ props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
           </q-td>
           <q-td key="pid">
             {{ props.row.pid }}
@@ -75,7 +75,7 @@
             {{ props.row.files }}
           </q-td>
           <q-td key="ftp">
-            {{ props.row.ftp }}
+            {{ $t(props.row.ftp ? 'general.yes' : 'general.no')}}
           </q-td>
           <q-td key="options">
             <q-btn-dropdown
