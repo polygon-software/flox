@@ -193,12 +193,8 @@ async function createNewProject(): Promise<void> {
     showNotification(
       $q,
       i18n.global.t('messages.project_created'),
-      'center',
-      'primary',
-      undefined,
-      undefined,
-      undefined,
-      400
+      'bottom',
+      'positive',
     )
   })
   await routerService?.routeTo(ROUTES.CUSTOMERS)

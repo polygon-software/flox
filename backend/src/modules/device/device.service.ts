@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Any, In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import { fetchFromTable } from '../../helpers/database-helpers';
 import {
-  findProjectForDevice,
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
 } from '../../helpers/device-helpers';
