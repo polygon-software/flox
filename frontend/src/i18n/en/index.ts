@@ -61,7 +61,7 @@ export default {
   projects: {
     project: 'Project',
     new_project: 'New Project',
-    device: 'Device',
+    device: 'Device Type',
     client: 'Client',
     ip: 'IP',
     firmware: 'Firmware',

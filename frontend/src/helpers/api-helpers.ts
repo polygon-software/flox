@@ -169,5 +169,6 @@ export function mapDevice(record: Record<string, unknown>): Device {
     record.ftp as boolean,
     record.ip as string ?? '-',
     record.firmware as string,
+    record.__typename as ('MR2000'|'MR3000')
   )
 }

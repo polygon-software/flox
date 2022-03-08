@@ -41,7 +41,7 @@
             {{ props.row.project?.name ?? '-' }}
           </q-td>
           <q-td key="device">
-            {{ props.row.name }}
+            {{ props.row.type }}
           </q-td>
           <q-td key="client">
             {{ props.row.cli }}
@@ -59,7 +59,7 @@
             {{ props.row.sale_status }}
           </q-td>
           <q-td key="station">
-            {{ props.row.station }}
+            {{ props.row.name }}
           </q-td>
           <q-td key="vpn_status">
             {{ props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
