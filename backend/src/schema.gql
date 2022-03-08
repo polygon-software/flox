@@ -60,39 +60,271 @@ input CreateProjectInput {
   userUuid: String!
 }
 
-input CreateUserInput {
-  """User address"""
-  address: CreateAddressInput!
-
-  """Date of birth"""
-  birthdate: DateTime!
-
-  """E-mail address"""
-  email: String!
-
-  """Full name of the user"""
-  fullName: String!
-
-  """phone number"""
-  phone: String!
-
-  """Username"""
-  username: String!
-
-  """Cognito ID"""
-  uuid: ID!
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
-input DeleteUserInput {
+union Device = MR2000 | MR3000
+
+type Dossier {
+  """Address"""
+  address: Address!
+
+  """Calculated affordability"""
+  affordability: Float!
+
+  """Alimony cost"""
+  alimony: Float!
+
+  """Amount of property amortisation"""
+  amortisation_amount: Float
+
+  """Amount of assets"""
+  assets: Float!
+
+  """Date of account ban (if any)"""
+  banned_at: ID
+
+  """Date of birth of customer"""
+  birthdate: DateTime!
+
+  """Bonus payments"""
+  bonus: Float!
+
+  """Building lease expiration date"""
+  building_lease_expiration_date: DateTime
+
+  """Amount of building lease interest"""
+  building_lease_interest: Float
+
+  """Child allowances"""
+  child_allowances: Float!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Credit cost"""
+  credit: Float!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Whether the property amortisation is direct"""
+  direct_amortisation: Boolean
+
+  """Documents of the dossier"""
+  documents: [PrivateFile!]
+
+  """Total eligible income"""
+  eligible_income: Float!
+
+  """Mail"""
+  email: String!
+
+  """Employee who created the Dossier"""
+  employee: Employee!
+
+  """Enfeoffment for higher value estimate"""
+  enfeoffment_estimate_high: Float!
+
+  """Enfeoffment for lower value estimate"""
+  enfeoffment_estimate_low: Float!
+
+  """Final summary document, to be signed by customer"""
+  final_document: PrivateFile
+
+  """First Name"""
+  first_name: String!
+
+  """Whether the property has amortisation"""
+  has_amortisation: Boolean!
+
+  """Whether the property has a building lease"""
+  has_building_lease: Boolean!
+
+  """Whether the property has been renovated"""
+  has_renovation: Boolean!
+
+  """Owners gross incomes"""
+  incomes: [Float!]!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Leasing cost"""
+  leasing: Float!
+
+  """Whether loss certificates exist on the property"""
+  loss_certificates: Boolean!
+
+  """Current market value estimate"""
+  market_value_estimation: Float!
+
+  """Current mortgage amount"""
+  mortgage_amount: Float!
+
+  """ToDo"""
+  non_arrangeable: Boolean!
+
+  """List of Offers"""
+  offers: [Offer!]
+
+  """Previous Bank of the customer"""
+  original_bank: Bank!
+
+  """Whether the property is inhabited by its owner"""
+  owner_occupied: Boolean!
+
+  """Mortgage partition amounts"""
+  partition_amounts: [Float!]!
+
+  """Mortgage partition expiration dates"""
+  partition_dates: [DateTime!]!
+
+  """Phone number"""
+  phone: String!
+
+  """Property type"""
+  property_type: propertyType!
+
+  """Whether there are ongoing prosecutions against the owner"""
+  prosecutions: Boolean!
+
+  """Whether the building lease landlord is public"""
+  public_landlord: Boolean
+
+  """Date of initial purchase"""
+  purchase_date: DateTime!
+
+  """Price of initial purchase"""
+  purchase_price: Float!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """Price of property renovation"""
+  renovation_price: Float
+
+  """Year of property renovation"""
+  renovation_year: Float
+
+  """Status of Dossier"""
+  status: DossierStatus!
+
+  """Total calculated costs"""
+  total_costs: Float!
+
+  """UUID"""
+  uuid: ID!
+
+  """Higher market value estimate"""
+  value_estimate_high: Float!
+
+  """Lower market value estimate"""
+  value_estimate_low: Float!
+
+  """Various costs"""
+  various: Float!
+}
+
+enum DossierStatus {
+  COMPLETED
+  IN_PROGRESS
+  OFFERED
+  OPEN
+  REJECTED
+  SENT
+  SIGNED
+  SUBMITTED
+}
+
+type Employee {
+  """Date of account ban (if any)"""
+  banned_at: ID
+
+  """Company"""
+  company: Company!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Dossiers of employee"""
+  dossiers: [Dossier!]!
+
+  """Mail"""
+  email: String!
+
+  """First Name"""
+  first_name: String!
+
+  """Function within the company"""
+  function: String!
+
+  """Gender"""
+  gender: String!
+
+  """Language"""
+  language: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """Last Name"""
+  last_name: String!
+
+  """Phone Number"""
+  phone: String!
+
+  """Human-readable ID"""
+  readable_id: String!
+
+  """UUID"""
   uuid: ID!
 }
 
-union Device = MR2000 | MR3000
+enum FileType {
+  ADDITIONAL_DOCUMENTS
+  BUILDING_DESCRIPTION
+  BUILDING_INSURANCE
+  CREDIT_CONTRACT
+  DEBT_COLLECTION
+  DUMMY
+  FLOOR_PLANS
+  ID
+  LAND_REGISTER_EXTRACT
+  LAST_YEAR_SALARY
+  LAST_YEAR_TAX
+  LEASING_CONTRACT
+  LEGACY_CADASTER
+  LIFE_INSURANCE
+  LOG
+  MANAGEMENT_REGULATIONS
+  MARKET_VALUE_ESTIMATE
+  MARRIAGE_CONTRACT
+  MORTGAGE_CONTRACT
+  NONE
+  OWNER_REGULATIONS
+  OWN_FUNDS
+  PENSION
+  PENSION_ID
+  PICTURES
+  PRODUCT_AGREEMENT
+  PURCHASE_CONTRACT
+  RENOVATIONS
+  RESERVATION_CONTRACT
+  SALARY
+  SALES_DOCUMENTATION
+  SITUATION_PLAN
+  THREE_A
+  WORK_CONTRACT
+}
 
 type MR2000 {
   """CLI ID"""
@@ -148,12 +380,10 @@ type MR3000 {
 
 type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
-  create(createUserInput: CreateUserInput!): User!
   createProject(createProjectInput: CreateProjectInput!): Project!
   register(registerUserInput: RegisterUserInput!): User
-  remove(deleteUserInput: DeleteUserInput!): User!
-  update(updateUserInput: UpdateUserInput!): User!
   updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
+  updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 enum Permission {
@@ -194,10 +424,10 @@ type Query {
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
+  levelWriting(end: DateTime!, resolution: Int!, start: DateTime!, stationIds: [String!]!): LevelWriting!
   myDevices(assigned: Boolean, unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!
-  preview(cli: String!, date: String!, num: String!): String!
   user(cognitoUuid: ID, uuid: ID): User!
 }
 

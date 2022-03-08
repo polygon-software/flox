@@ -76,7 +76,7 @@ export class ProjectResolver {
 
   /**
    * Create a new project for the given user
-   * @param {CreateProjectInput} createProjectInput - Input containing project name and associatied MR2000 and MR3000 devices
+   * @param {CreateProjectInput} createProjectInput - Input containing project name and associated MR2000 and MR3000 devices
    * @return {Project} - The newly created project
    */
   @AnyRole()

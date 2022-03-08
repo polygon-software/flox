@@ -1,69 +1,70 @@
 <template>
-  <q-header class="row bg-transparent full-width">
-  <div class="row justify-between full-width q-pa-sm">
+  <q-header class="row bg-transparent full-width no-pointer-events">
+    <div class="row justify-between full-width q-pa-sm">
 
-    <!-- Navigation -->
-    <div class="column justify-start items-start">
-      <div
-        v-for="option in navOptions"
-        :key="option.key"
-        class="row justify-start items-center"
-      >
-        <!-- Navigation root page -->
-        <q-btn
-          :label="option.label"
-          flat
-          no-caps
-          :color="isActiveOption(option) ? 'black' : 'primary'"
-          @click="onNavClick(option)"
-        />
-
-        <!-- Sub-navigation -->
+      <!-- Navigation -->
+      <div class="column justify-start items-start">
         <div
-          v-if="isActiveOption(option)"
-          class="row justify-center"
+          v-for="option in navOptions"
+          :key="option.key"
+          class="row justify-start items-center all-pointer-events"
         >
+          <!-- Navigation root page -->
+          <q-btn
+            :label="option.label"
+            flat
+            no-caps
+            :color="isActiveOption(option) ? 'black' : 'primary'"
+            @click="onNavClick(option)"
+          />
+
+          <!-- Sub-navigation -->
           <div
-            v-for="(part, index) in routeParts.slice(1)"
-            :key="part"
-            class="row justify-center items-center"
+            v-if="isActiveOption(option)"
+            class="row justify-center "
           >
-            <q-icon
-              name="chevron_right"
-              color="black"
-              size="sm"
-            />
-            <q-btn
-              :label="part.toUpperCase()"
-              color="black"
-              flat
-              @click="onSubnavClick(index)"
-            />
+            <div
+              v-for="(part, index) in routeParts.slice(1)"
+              :key="part"
+              class="row justify-center items-center"
+            >
+              <q-icon
+                name="chevron_right"
+                color="black"
+                size="sm"
+              />
+              <q-btn
+                :label="part.toUpperCase()"
+                color="black"
+                flat
+                @click="onSubnavClick(index)"
+              />
+            </div>
           </div>
         </div>
+
+        <!-- Logout button -->
+        <q-btn
+          v-if="loggedIn"
+          :label="$t('authentication.logout')"
+          color="primary"
+          class="all-pointer-events"
+          flat
+          no-caps
+          @click="logout"
+        />
       </div>
 
-      <!-- Logout button -->
-      <q-btn
-        v-if="loggedIn"
-        :label="$t('authentication.logout')"
-        color="primary"
-        flat
-        no-caps
-        @click="logout"
-      />
+      <div class="row justify-center">
+        <!-- Logo -->
+        <img
+          alt="Ziegler Consultants"
+          :src="require('src/assets/zc_logo.svg')"
+          style="height: 50px"
+          class="q-ma-sm"
+        >
+      </div>
     </div>
-
-    <div class="row justify-center">
-      <!-- Logo -->
-      <img
-        alt="Ziegler Consultants"
-        :src="require('src/assets/zc_logo.svg')"
-        style="height: 50px"
-        class="q-ma-sm"
-      >
-    </div>
-  </div>
   </q-header>
 </template>
 

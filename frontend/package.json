@@ -46,7 +46,6 @@
     "lodash": "^4.17.21",
     "qrcode.vue": "^3.3.3",
     "quasar": "^2.0.0",
-    "subscriptions-transport-ws": "^0.9.19",
     "vue": "^3.2.20",
     "vue-class-component": "^8.0.0-0",
     "vue-i18n": "^9.0.0",

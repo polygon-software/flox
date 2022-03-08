@@ -5,16 +5,14 @@ import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
-import { Context } from 'vm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './auth/jwt.strategy';
 import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
 import { User } from './modules/user/entities/user.entity';
-import { PreviewModule } from './modules/preview/preview.module';
-import { ProjectModule } from './modules/project/project.module';
 import { DeviceModule } from './modules/device/device.module';
+import { ProjectModule } from './modules/project/project.module';
 
 @Module({
   imports: [
@@ -25,17 +23,7 @@ import { DeviceModule } from './modules/device/device.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
-      installSubscriptionHandlers: true,
-      subscriptions: {
-        // Could also use graphql-ws instead of default (subscriptions-transport-ws)
-        'subscriptions-transport-ws': {
-          path: '/graphql-websocket',
-          onConnect: (context: Context) => {
-            console.log('Client connected to GraphQL Websocket!', context);
-          },
-        },
-      },
-      cors: false, // TODO set appropriate for production
+      cors: false,
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -46,10 +34,22 @@ import { DeviceModule } from './modules/device/device.module';
         DB_USER: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_HOST: Joi.string().required(),
-
-        // Ports
-        SERVER_PORT: Joi.number().required(),
         DB_PORT: Joi.number().required(),
+
+        // Server
+        SERVER_PORT: Joi.number().required(),
+
+        // Maria DB
+        MR_PORT: Joi.number().required(),
+        MR_2000: Joi.string().required(),
+        MR_3000: Joi.string().required(),
+        MR_USER: Joi.string().required(),
+        MR_PASSWORD: Joi.string().required(),
+        MR_HOST: Joi.string().required(),
+
+        // Python API
+        PY_PORT: Joi.number().required(),
+        PY_HOST: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -110,7 +110,7 @@ import { DeviceModule } from './modules/device/device.module';
     }),
     TypeOrmModule.forFeature([User]),
     UserModule,
-    PreviewModule,
+    DeviceModule,
     ProjectModule,
     DeviceModule,
   ],

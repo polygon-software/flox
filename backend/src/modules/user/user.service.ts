@@ -25,6 +25,22 @@ export class UserService {
   ) {}
 
   /**
+   * Return curent user given the cognito user from the request.
+   * @param {Record<string, string>} cognitoUser - cognito user from request.
+   * @returns {Promise<User>} - user.
+   */
+  async getMyUser(cognitoUser: Record<string, string>): Promise<User> {
+    const myUser = await this.usersRepository.findOne({
+      where: { cognitoUuid: cognitoUser.userId },
+    });
+
+    if (!myUser) {
+      throw new Error(`No user found for ${cognitoUser.userId}`);
+    }
+    return myUser;
+  }
+
+  /**
    * Register a new user. Returns null if user email is not in DB.
    * @param {RegisterUserInput} registerUserInput - input values
    * @returns {User} - the database user
@@ -42,13 +58,13 @@ export class UserService {
   }
 
   /**
-   * Check if user email is in DB.
+   * Check if user email is in DB and email is not already in use.
    * @param {string} email - user email.
    * @returns {boolean} - if the email is in the DB.
    */
-  async existsUserWithEmail(email: string): Promise<boolean> {
+  async existsEmptyUserWithEmail(email: string): Promise<boolean> {
     const user = await this.usersRepository.findOne({
-      where: { email: email },
+      where: { email: email, cognitoUuid: null },
     });
     return !!user;
   }
@@ -67,23 +83,12 @@ export class UserService {
   }
 
   /**
-   * Returns all Players
-   * @returns {Promise<User[]>} - all partner users
+   * Returns all Users (only users, no admins)
+   * @returns {Promise<User[]>} - all users
    */
   getAllUsers(): Promise<User[]> {
     return this.usersRepository.find({
       where: { role: ROLE.USER },
-    });
-  }
-
-  /**
-   * Fetches a single user
-   * @param {string} cognitoUuid - cognito UUID of the requester
-   * @returns {Promise<User>} - the user
-   */
-  fetchUserByCognitoUuid(cognitoUuid: string): Promise<User> {
-    return this.usersRepository.findOne({
-      where: { cognitoUuid: cognitoUuid },
     });
   }
 
