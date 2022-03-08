@@ -44,7 +44,7 @@ export class ProjectService {
     const mr3000instances = await fetchFromTable('MR3000', 'station');
 
     // Fetch stores for FTP info
-    const mr2000store = await fetchFromTable('MR2000', 'store_mr');
+    const mr2000store = await fetchFromTable('MR2000', 'store');
     const mr3000store = await fetchFromTable('MR3000', 'store');
 
     // Fetch VPN table for FTP info

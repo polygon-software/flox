@@ -69,7 +69,36 @@ export class ProjectResolver {
     @Args() getProjectDevicesArgs: GetProjectDevicesArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (await this.validateAccessToProject(user, getProjectDevicesArgs.uuid)) {
+    // Determine if a project name was given, we need to ensure matching project for the user
+    if (getProjectDevicesArgs.name) {
+      // Get user
+      const dbUser = await this.userService.getUser({
+        cognitoUuid: user.userId,
+      } as GetUserArgs);
+
+      if (!dbUser) {
+        throw new Error(`No user found for ${user.userId}`);
+      }
+      const userProjects = await this.projectService.getUserProjects({
+        uuid: dbUser.uuid,
+      });
+
+      const project = userProjects.find(
+        (project) => project.name === getProjectDevicesArgs.name,
+      );
+
+      if (!project) {
+        throw new Error(
+          `No project named ${getProjectDevicesArgs.name} found for user`,
+        );
+      }
+
+      return this.projectService.getProjectDevices({
+        uuid: project.uuid,
+      } as GetProjectDevicesArgs);
+    } else if (
+      await this.validateAccessToProject(user, getProjectDevicesArgs.uuid)
+    ) {
       return this.projectService.getProjectDevices(getProjectDevicesArgs);
     }
   }

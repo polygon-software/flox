@@ -115,7 +115,8 @@ import {RouterService} from 'src/services/RouterService';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
 import {Device} from 'src/data/types/Device';
-import {myProjectDevices} from 'src/helpers/api-helpers';
+import {singleProjectDevices} from 'src/helpers/api-helpers';
+import {useRoute} from 'vue-router';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -123,6 +124,7 @@ const routerService: RouterService|undefined = inject('$routerService')
 const selectedRows: Ref<string[]> = ref([])
 
 const $q = useQuasar()
+const route = useRoute()
 
 // ----- Data -----
 const columns = [
@@ -180,7 +182,8 @@ const buttons = [
 
 // Once mounted, fetch data
 onMounted(async () => {
-  rows.value = await myProjectDevices()
+  const projectName = route.path.split('/').pop() ?? ''
+  rows.value = await singleProjectDevices(projectName)
 })
 
 

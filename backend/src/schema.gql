@@ -628,7 +628,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  getProjectDevices(uuid: ID!): [Device!]!
+  getProjectDevices(name: String, uuid: ID): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!

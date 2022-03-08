@@ -96,8 +96,8 @@ export const LEVEL_WRITING = {
 
 export const PROJECT_DEVICES = {
   query: gql`
-    query getProjectDevices($uuid: ID!){
-      getProjectDevices(uuid: $uuid){
+    query getProjectDevices($uuid: ID, $name: String){
+      getProjectDevices(uuid: $uuid, name: $name){
         ...on MR2000{
           cli
           name
