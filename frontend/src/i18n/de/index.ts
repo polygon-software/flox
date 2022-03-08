@@ -13,6 +13,7 @@ export default {
     settings: 'Einstellungen',
     loading: 'Lädt',
     filter: 'Filter',
+    warning: 'Warnung'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -121,6 +122,7 @@ export default {
     save: 'Speichern',
     show: 'Anzeigen',
     close: 'Schliessen',
+    confirm: 'Bestätigen'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -245,4 +247,7 @@ export default {
     fair: 'ausreichend',
     poor: 'schlecht',
   },
+  warnings: {
+    unassign_device: 'Sind Sie sicher? Dadurch werden alle Daten des Geräts gelöscht!'
+  }
 };

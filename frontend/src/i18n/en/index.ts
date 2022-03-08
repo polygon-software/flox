@@ -13,6 +13,7 @@ export default {
     settings: 'Settings',
     loading: 'Loading',
     filter: 'Filter',
+    warning: 'Warning',
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -120,6 +121,7 @@ export default {
     save: 'Save',
     show: 'Show',
     close: 'Close',
+    confirm: 'Confirm'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -241,4 +243,7 @@ export default {
     fair: 'fair',
     poor: 'poor',
   },
+  warnings: {
+    unassign_device: 'Are you sure? All data for this device will be deleted!'
+  }
 };

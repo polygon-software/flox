@@ -92,7 +92,7 @@
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(props.row.project, props.row.station, button.key)"
+                  @click="onOptionClick(props.row.project, props.row.cli, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -113,6 +113,10 @@ import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
 import {myProjectDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
 import {showNotification} from 'src/helpers/notification-helpers';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {REMOVE_DEVICE_FROM_PROJECT} from 'src/data/mutations/PROJECT';
+import {Project} from 'src/data/types/Project';
 
 const $q = useQuasar()
 
@@ -201,16 +205,32 @@ async function createNewProject(): Promise<void> { //TODO: Add different dialog 
 
 /**
  * Routes to different pages dependent which button is clicked$
- * @param {string} project - the name of a project
- * @param {string} device - the name of a device
+ * @param {Project} project - the Project
+ * @param {string} device - the device's CLI
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
-async function onOptionClick(project: string, device: string, key: string): Promise<void>{
+async function onOptionClick(project: Project, device: string, key: string): Promise<void>{
+  console.log('onoptionclick', device)
   //TODO: routes to different pages
   switch(key){
+    // Removing device from project: Show warning dialog
     case 'remove':
-      await routerService?.routeTo(ROUTES.LOGIN)
+      $q.dialog({
+        component: WarningDialog,
+        componentProps: {
+          description: i18n.global.t('warnings.unassign_device'),
+          showDiscard: true,
+          discardLabel: i18n.global.t('buttons.cancel'),
+          swapNegative: true,
+          okLabel: i18n.global.t('buttons.confirm')
+        }
+      }).onOk(() => {
+        void executeMutation(REMOVE_DEVICE_FROM_PROJECT, {uuid: project.uuid, cli: device}).then(() => {
+          // TODO success
+          console.log('REMOVED')
+        })
+      })
       break
     case 'compress':
       await routerService?.routeTo(ROUTES.CUSTOMER)
@@ -222,16 +242,16 @@ async function onOptionClick(project: string, device: string, key: string): Prom
       await routerService?.routeTo(ROUTES.CUSTOMER)
       break
     case 'files':
-      await routerService?.addToRoute(`${project}/${device}/${key}`)
+      await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     case 'edit':
-      await routerService?.addToRoute(`${project}/${device}/${key}`)
+      await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     case 'status':
-      await routerService?.addToRoute(`${project}/${device}/${key}`)
+      await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     case 'device_health':
-      await routerService?.addToRoute(`${project}/${device}/${key}`)
+      await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     default:
       await routerService?.routeTo(ROUTES.CUSTOMER)

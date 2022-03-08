@@ -26,10 +26,10 @@ export const CREATE_PROJECT = {
   cacheLocation: 'createProject'
 }
 
-export const UPDATE_PROJECT = {
+export const REMOVE_DEVICE_FROM_PROJECT = {
   mutation: gql`
-    mutation updateProject($projectUuid: String!, $projectName: String!, $updateProjectInput: UpdateProjectInput!){
-      update (projectUuid: $projectUuid, projectName: $projectName, updateProjectInput: $updateProjectInput) {
+    mutation removeDeviceFromProject($uuid: ID!, $cli: String!){
+      removeDeviceFromProject (removeDeviceFromProjectInput: {uuid: $uuid, cli: $cli}) {
         uuid
         name
         mr2000instances
@@ -39,21 +39,5 @@ export const UPDATE_PROJECT = {
     }`,
   tables: ['project'],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'undefined'
-}
-
-export const DELETE_PROJECT = {
-  mutation: gql`
-    mutation deleteProject($deleteProjectInput: DeleteProjectInput!){
-      update (deleteProjectInput: $deleteProjectInput) {
-        uuid
-        name
-        mr2000instances
-        mr3000instances
-        __typename
-      }
-    }`,
-  tables: ['project'],
-  type: MutationTypes.DELETE,
-  cacheLocation: 'undefined'
+  cacheLocation: undefined
 }
