@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsArray } from 'class-validator';
 import { MR2000 } from '../../../../types/MR2000';
 import { MR3000 } from '../../../../types/MR3000';
@@ -8,11 +8,23 @@ import { MR3000 } from '../../../../types/MR3000';
  * Input for removing devices from their associated project(s)
  */
 export class RemoveDevicesFromProjectInput {
-  @Field(() => [MR2000], { description: 'MR2000 instances', nullable: true })
+  @Field(() => ID, {
+    description: 'Project UUID',
+  })
   @IsArray()
-  mr2000instances: MR2000[];
+  uuid: string;
 
-  @Field(() => [MR3000], { description: 'MR3000 instances', nullable: true })
+  @Field(() => [String], {
+    description: 'MR2000 instance uuids',
+    nullable: true,
+  })
   @IsArray()
-  mr3000instances: MR3000[];
+  mr2000instances: string[];
+
+  @Field(() => [String], {
+    description: 'MR3000 instance uuids',
+    nullable: true,
+  })
+  @IsArray()
+  mr3000instances: string[];
 }

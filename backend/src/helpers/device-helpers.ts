@@ -74,19 +74,6 @@ export async function mr3000fromDatabaseEntry(
 }
 
 /**
- * Removes a device from any project at database level
- * @param {MR2000|MR3000} device - the device to remove
- * @param {boolean} isMr2000 - whether it's an MR2000 device
- * @returns {Promise<void>} - done
- */
-export async function removeDeviceFromProject(
-  device: MR2000 | MR3000,
-  isMr2000: boolean,
-) {
-  // TODO functionality
-}
-
-/**
  * Find the project the given instance belongs to (if any)
  * @param {Repository<Project>} projectRepository - repository to search in
  * @param {string} cli - device name (CLI)
