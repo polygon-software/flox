@@ -16,7 +16,7 @@ export class ProjectService {
   constructor(
     @InjectRepository(Project)
     private readonly projectRepository: Repository<Project>,
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
   /**
@@ -35,7 +35,7 @@ export class ProjectService {
    */
   async getUserProjects(getUserProjectsArgs: GetUserProjectsArgs) {
     // Get user
-    const user = await this.usersRepository.findOne(getUserProjectsArgs.uuid);
+    const user = await this.userRepository.findOne(getUserProjectsArgs.uuid);
 
     if (!user) {
       throw new Error(`No user found for ${getUserProjectsArgs.uuid}`);
@@ -47,14 +47,14 @@ export class ProjectService {
   }
 
   /**
-   * Returns a list of the user's projects
+   * Creates a new project
    * @param {CreateProjectInput} createProjectInput - contains the owners uuid, as well as project name & associated MR2000/3000 instances
    * @returns {Promise<Project>} - the newly created project
    */
   async createProject(createProjectInput: CreateProjectInput) {
     const projectName = createProjectInput.name;
     const userUuid = createProjectInput.userUuid;
-    const user = await this.usersRepository.findOne(userUuid);
+    const user = await this.userRepository.findOne(userUuid);
 
     // Ensure project name is not already present (in actual projects and/or permissions)
     const userProjects = await this.getUserProjects({ uuid: userUuid });

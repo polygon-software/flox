@@ -4,7 +4,6 @@
 
 import { MR2000 } from '../types/MR2000';
 import { MR3000 } from '../types/MR3000';
-import { getQueryRunner } from './database-helpers';
 import { Repository } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
 
@@ -22,7 +21,7 @@ export async function mr2000fromDatabaseEntry(
   vpnEntry: Record<string, unknown>,
   storeEntry?: Record<string, unknown>,
 ) {
-  // Find project the instance belongs to project (if any)
+  // Find project the instance belongs to (if any)
   const project = await findProjectForDevice(
     projectRepository,
     entry.cli as string,
