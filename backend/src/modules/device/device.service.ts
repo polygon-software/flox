@@ -21,7 +21,7 @@ import { ConfigService } from '@nestjs/config';
 export class DeviceService {
   constructor(
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
     @InjectRepository(Project)
     private readonly projectRepository: Repository<Project>,
     private readonly httpService: HttpService,
@@ -88,7 +88,7 @@ export class DeviceService {
    */
   async getUserDevices(getUserDevicesArgs: GetUserDevicesArgs) {
     // Get user
-    const user = await this.usersRepository.findOne(getUserDevicesArgs.uuid);
+    const user = await this.userRepository.findOne(getUserDevicesArgs.uuid);
 
     if (!user) {
       throw new Error(`No user found for ${getUserDevicesArgs.uuid}`);

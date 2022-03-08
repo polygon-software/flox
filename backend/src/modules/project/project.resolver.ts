@@ -107,7 +107,7 @@ export class ProjectResolver {
 
   /**
    * Deletes a project
-   * @param {DeleteProjectInput} deleteProjectInput - Input that contains the uuid and name of the project to delete.
+   * @param {DeleteProjectInput} deleteProjectInput - Input that contains the uuid of the project to delete.
    * @param {Record<string, string>} user - User who requested the deletion.
    * @return {DeleteResult} - Result object from deletion
    */

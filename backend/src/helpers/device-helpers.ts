@@ -21,7 +21,7 @@ export async function mr2000fromDatabaseEntry(
   vpnEntry: Record<string, unknown>,
   storeEntry?: Record<string, unknown>,
 ) {
-  // Find project the instance belongs to project (if any)
+  // Find project the instance belongs to (if any)
   const project = await findProjectForDevice(
     projectRepository,
     entry.cli as string,
