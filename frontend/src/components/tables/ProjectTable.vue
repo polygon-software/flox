@@ -107,13 +107,15 @@
 </template>
 
 <script setup lang="ts">
-import {inject, Ref, ref} from 'vue';
+import {inject, onMounted, Ref, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
+import {Device} from 'src/data/types/Device';
+import {myProjectDevices} from 'src/helpers/api-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -139,34 +141,7 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-const rows = [
-  {
-    name: 'P1A-A',
-    device: 'MR3000',
-    client: '21_45',
-    ip: '10.8.13.182',
-    firmware: '2.08',
-    serial: '87654321',
-    sale_status: 'Rental',
-    vpn_status: 'Down',
-    pid: '0ZAB-21',
-    files: '1489',
-    ftp: 'Active',
-  },
-  {
-    name: 'P1A-B',
-    device: 'MR2000',
-    client: '25_16',
-    ip: '10.8.16.16',
-    firmware: '220.65',
-    serial: '856',
-    sale_status: 'Sold',
-    vpn_status: 'Up',
-    pid: '01-PC-A1',
-    files: '27',
-    ftp: 'Active',
-  },
-]
+const rows: Ref<Device[]> = ref([])
 
 const buttons = [
   {
@@ -202,6 +177,12 @@ const buttons = [
     label: i18n.global.t('projects.show_device_health'),
   },
 ]
+
+// Once mounted, fetch data
+onMounted(async () => {
+  rows.value = await myProjectDevices()
+})
+
 
 /**
  * Routes to a new page where the graph of that project is shown

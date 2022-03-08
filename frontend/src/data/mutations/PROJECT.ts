@@ -37,7 +37,7 @@ export const REMOVE_DEVICE_FROM_PROJECT = {
         __typename
       }
     }`,
-  tables: ['project'],
+  tables: ['project'], // TODO: how can we ensure this also updates the device-related queries?
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }

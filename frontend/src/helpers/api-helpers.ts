@@ -5,7 +5,7 @@ import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
 import {MY_PROJECTS} from 'src/data/queries/PROJECT';
-import {MY_DEVICES} from 'src/data/queries/DEVICE';
+import {MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
 import {Device} from 'src/data/types/Device';
 
 /**
@@ -52,7 +52,7 @@ export async function myUser(): Promise<User | null> {
 export async function myProjects(): Promise<Project[]> {
   const projects: Project[] = [];
   const queryResult = await executeQuery(MY_PROJECTS);
-  if(queryResult.data?.myProjects){
+  if(queryResult.data[MY_PROJECTS.cacheLocation]){
     for (const project of queryResult.data.myProjects as Record<string, unknown>[]) {
       projects.push(mapProject(project));
     }
@@ -67,7 +67,23 @@ export async function myProjects(): Promise<Project[]> {
 export async function myProjectDevices(): Promise<Device[]> {
   const devices: Device[] = [];
   const queryResult = await executeQuery(MY_DEVICES, {assigned: true});
-  if(queryResult.data?.myDevices){
+  if(queryResult.data[MY_DEVICES.cacheLocation]){
+    for (const device of queryResult.data.myDevices as Record<string, unknown>[]) {
+      devices.push(mapDevice(device));
+    }
+  }
+  return devices
+}
+
+/**
+ * Fetch all devices that are part of a given project project
+ * @param {string} uuid - the project's UUID
+ * @return {Promise<Device[]>} - An array containing all the user's projects
+ */
+export async function singleProjectDevices(uuid: string): Promise<Device[]> {
+  const devices: Device[] = [];
+  const queryResult = await executeQuery(PROJECT_DEVICES, {uuid});
+  if(queryResult.data[PROJECT_DEVICES.cacheLocation]){
     for (const device of queryResult.data.myDevices as Record<string, unknown>[]) {
       devices.push(mapDevice(device));
     }

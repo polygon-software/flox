@@ -100,9 +100,31 @@ export const PROJECT_DEVICES = {
       getProjectDevices(uuid: $uuid){
         ...on MR2000{
           cli
+          name
+          serialNumber
+          numberOfFiles
+          pid
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
         }
         ...on MR3000{
           cli
+          name
+          serialNumber
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
         }
         __typename
       }}
