@@ -179,13 +179,12 @@ onMounted(async () => {
   console.log('ROWS:', rows.value) // TODO remove, debug only
 })
 
-
 /**
  * Shows a dialog for creating a new project
  * @async
  * @returns {void}
  */
-async function createNewProject(): Promise<void> {
+async function createNewProject(): Promise<void> { //TODO: Add different dialog for admin
   $q.dialog({
     component: CreateProjectDialog,
   }).onOk(() => {
