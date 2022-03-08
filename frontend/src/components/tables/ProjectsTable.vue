@@ -176,7 +176,6 @@ const buttons = [
 // Once mounted, fetch data
 onMounted(async () => {
   rows.value = await myProjectDevices()
-  console.log('ROWS:', rows.value) // TODO remove, debug only
 })
 
 
