@@ -181,6 +181,8 @@ export default {
   },
   status: {
     title: 'Status of',
+    up: 'Up',
+    down: 'Down'
   },
   client_connectivity: {
     title: 'Client Connectivity',

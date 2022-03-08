@@ -51,7 +51,7 @@
             {{ props.row.station }}
           </q-td>
           <q-td key="vpn_status">
-            {{ props.row.vpn_status }}
+            {{ props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
           </q-td>
           <q-td key="pid">
             {{ props.row.pid }}
