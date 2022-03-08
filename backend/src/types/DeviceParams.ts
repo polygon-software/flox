@@ -1,8 +1,7 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 
 /**
- * Parameters for an MR2000 device
- * TODO: This type is incomplete append as needed when working with params
+ * Parameters for a device.
  */
 
 @ObjectType()

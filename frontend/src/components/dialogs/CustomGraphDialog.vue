@@ -122,7 +122,7 @@ const customPeriodText = computed({
   },
   set: (val: string) => {
     const stringArray: string[] = val.split('-')
-    if(stringArray.length == 2) {
+    if(stringArray.length === 2) {
       const start = stringArray[0].trim()
       const end = stringArray[1].trim()
       customPeriodValue.value = start === end ? start : {from: start, to: end}
