@@ -132,6 +132,7 @@ export class ProjectResolver {
     user: Record<string, string>,
     projectUuid: string,
   ): Promise<boolean> {
+    console.log('check access of', user, 'to', projectUuid);
     // Get user
     const dbUser = await this.userService.getUser({
       cognitoUuid: user.userId,

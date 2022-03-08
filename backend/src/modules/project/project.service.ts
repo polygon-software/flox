@@ -3,13 +3,18 @@ import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
-import { removeDeviceFromProject } from '../../helpers/device-helpers';
+import {
+  mr2000fromDatabaseEntry,
+  mr3000fromDatabaseEntry,
+  removeDeviceFromProject,
+} from '../../helpers/device-helpers';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-project.input';
 import { Project } from './entities/project.entity';
 import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
+import { fetchFromTable } from '../../helpers/database-helpers';
 
 @Injectable()
 export class ProjectService {
@@ -25,7 +30,54 @@ export class ProjectService {
    * @returns {Promise<MR2000|MR3000[]>} - the user's devices
    */
   async getProjectDevices(getProjectDevicesArgs: GetProjectDevicesArgs) {
-    // TODO functionality
+    // Get project
+    const project = await this.projectRepository.findOne(
+      getProjectDevicesArgs.uuid,
+    );
+
+    if (!project) {
+      throw new Error(`No project found for ${getProjectDevicesArgs.uuid}`);
+    }
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable('MR2000', 'station');
+    const mr3000instances = await fetchFromTable('MR3000', 'station');
+
+    // Fetch stores for FTP info
+    const mr2000store = await fetchFromTable('MR2000', 'store_mr');
+    const mr3000store = await fetchFromTable('MR3000', 'store');
+
+    // Fetch VPN table for FTP info
+    const vpnInfo = await fetchFromTable('openvpn', 'tempovp');
+
+    const devices = [];
+
+    // Add all MR2000 instances that belong to the project
+    for (const instance of mr2000instances) {
+      if ((project.mr2000instances ?? []).includes(instance.cli)) {
+        const mr2000 = await mr2000fromDatabaseEntry(
+          instance,
+          this.projectRepository,
+          vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
+          mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
+        );
+        devices.push(mr2000);
+      }
+    }
+
+    // Add all MR3000 instances that belong to the project
+    for (const instance of mr3000instances) {
+      if ((project.mr3000instances ?? []).includes(instance.cli)) {
+        const mr3000 = await mr3000fromDatabaseEntry(
+          instance,
+          this.projectRepository,
+          vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
+          mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
+        );
+        devices.push(mr3000);
+      }
+    }
+
+    return devices;
   }
 
   /**
