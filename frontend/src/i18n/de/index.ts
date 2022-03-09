@@ -189,7 +189,8 @@ export default {
   },
   messages: {
     copied: 'Kopiert',
-    project_created: 'Projekt erfolgreich erstellt'
+    project_created: 'Projekt erfolgreich erstellt',
+    assigned_device: 'Gerät erfolgreich zugeordnet'
   },
   status: {
     title: 'Status von',

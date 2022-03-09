@@ -15,14 +15,16 @@
           {{$t('projects.assign_to_project')}}
         </h6>
 
-        <!-- Project name -->
-        <q-input
-          v-model="name"
-          :label="$t('projects.project_name')"
-          class="q-ma-md"
-          outlined
-          dense
+        <!-- Project picker -->
+        <q-radio
+          v-for="project in projects"
+          :key="project.uuid"
+          v-model="selectedProject"
+          style="color: #87858A"
+          :val="project"
+          :label="project.name"
         />
+
 
       </q-card-section>
 
@@ -31,18 +33,6 @@
       <q-card-actions
         align="center"
       >
-        <!-- Create button -->
-        <q-btn
-          :label="$t('buttons.create_project')"
-          style="border-radius: 0"
-          text-color="primary"
-          no-caps
-          unelevated
-          outline
-          :disable="!name"
-          @click="createProject"
-        />
-
         <!-- Cancel button -->
         <q-btn
           :label="$t('buttons.cancel')"
@@ -53,6 +43,18 @@
           outline
           @click="onDialogCancel"
         />
+
+        <!-- Confirm button -->
+        <q-btn
+          :label="$t('buttons.confirm')"
+          style="border-radius: 0"
+          text-color="primary"
+          no-caps
+          unelevated
+          outline
+          :disable="!selectedProject"
+          @click="assignToProject"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -61,17 +63,25 @@
 <script setup lang="ts">
 // REQUIRED; must be called inside of setup()
 import {useDialogPluginComponent} from 'quasar';
-import {defineEmits, Ref, ref} from 'vue';
+import {defineEmits, onMounted, Ref, ref} from 'vue';
 import {CREATE_PROJECT} from 'src/data/mutations/PROJECT';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {myUser} from 'src/helpers/api-helpers';
+import {myPoolDevices, myProjects, myUser} from 'src/helpers/api-helpers';
+import {Project} from 'src/data/types/Project';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(useDialogPluginComponent.emits)
 
-const name: Ref<string|null|undefined> = ref()
+const projects: Ref<Project[]> = ref([])
+const selectedProject: Ref<Project|null> = ref(null)
+
+// Load user's projects
+onMounted(async () => {
+  projects.value = await myProjects()
+  console.log('Got projects:', projects.value)
+})
 
 /**
  * TODO
