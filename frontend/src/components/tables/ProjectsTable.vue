@@ -212,7 +212,6 @@ async function createNewProject(): Promise<void> { //TODO: Add different dialog 
  * @returns {Promise<void>} - routes to correct page
  */
 async function onOptionClick(project: Project, device: string, key: string): Promise<void>{
-  console.log('onoptionclick', device)
   //TODO: routes to different pages
   switch(key){
     // Removing device from project: Show warning dialog
@@ -235,6 +234,12 @@ async function onOptionClick(project: Project, device: string, key: string): Pro
             'bottom',
             'positive',
           )
+
+          // TODO not working yet; ensure we update correctly
+          void myProjectDevices().then((result) => {
+            rows.value = result
+            console.log('Got updated data:', result)
+          })
         })
       })
       break

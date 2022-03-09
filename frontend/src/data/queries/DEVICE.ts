@@ -57,7 +57,7 @@ export const MY_DEVICES = {
       __typename
     }}
   `,
-  tables: ['user'],
+  tables: ['device'],
   cacheLocation: 'myDevices',
 };
 
@@ -90,7 +90,7 @@ export const LEVEL_WRITING = {
       }
     }
   `,
-  tables: ['user'],
+  tables: ['device'],
   cacheLocation: 'getDeviceData',
 };
 
@@ -129,7 +129,7 @@ export const PROJECT_DEVICES = {
         __typename
       }}
   `,
-  tables: ['user'],
+  tables: ['device'],
   cacheLocation: 'getProjectDevices',
 };
 

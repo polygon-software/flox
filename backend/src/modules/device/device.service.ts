@@ -143,4 +143,54 @@ export class DeviceService {
 
     return devices;
   }
+
+  // TODO if needed...
+  // /**
+  //  * Gets an MR2000/MR3000 device by CLI
+  //  * @param {string} cli - device CLI
+  //  * @returns {Promise<MR2000|MR3000} - the device
+  //  */
+  // async getDeviceByCli(cli: string) {
+  //   // Get all MR2000 & MR3000 instances
+  //   const mr2000instances = await fetchFromTable('MR2000', 'station');
+  //   const mr3000instances = await fetchFromTable('MR3000', 'station');
+  //
+  //   // Fetch stores for FTP info
+  //   const mr2000store = await fetchFromTable('MR2000', 'store');
+  //   const mr3000store = await fetchFromTable('MR3000', 'store');
+  //
+  //   // Fetch VPN table for FTP info
+  //   const vpnInfo = await fetchFromTable('openvpn', 'tempovp');
+  //
+  //   const validMr2000 = mr2000instances.find(
+  //     (instance) => instance.cli === cli,
+  //   );
+  //
+  //   // If it's a valid MR2000
+  //   if (validMr2000) {
+  //     return await mr2000fromDatabaseEntry(
+  //       validMr2000,
+  //       this.projectRepository,
+  //       vpnInfo.find((vpnEntry) => vpnEntry.cli === validMr2000.cli),
+  //       mr2000store.find((storeEntry) => storeEntry.cli === validMr2000.cli),
+  //     );
+  //   }
+  //
+  //   const validMr3000 = mr3000instances.find(
+  //     (instance) => instance.cli === cli,
+  //   );
+  //
+  //   // If it's a valid MR3000
+  //   if (validMr3000) {
+  //     return await mr3000fromDatabaseEntry(
+  //       validMr3000,
+  //       this.projectRepository,
+  //       vpnInfo.find((vpnEntry) => vpnEntry.cli === validMr3000.cli),
+  //       mr3000store.find((storeEntry) => storeEntry.cli === validMr3000.cli),
+  //     );
+  //   }
+  //
+  //   // TODO
+  //   throw new Error('no thats illegal');
+  // }
 }

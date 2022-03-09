@@ -65,6 +65,7 @@ export async function myProjects(): Promise<Project[]> {
  * @return {Promise<Device[]>} - An array containing all the user's projects
  */
 export async function myProjectDevices(): Promise<Device[]> {
+  console.log('Fetch!')
   const devices: Device[] = [];
   const queryResult = await executeQuery(MY_DEVICES, {assigned: true});
   if(queryResult.data[MY_DEVICES.cacheLocation]){
