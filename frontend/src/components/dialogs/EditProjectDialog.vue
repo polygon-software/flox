@@ -80,7 +80,6 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
-import {myProjectDevices} from 'src/helpers/api-helpers';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 

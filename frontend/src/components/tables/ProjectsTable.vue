@@ -275,7 +275,7 @@ async function onOptionClick(project: Project, device: string, key: string): Pro
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  await routerService?.addToRoute(row.project.name as string)
+  await routerService?.addToRoute((row.project as Project).name )
 }
 </script>
 

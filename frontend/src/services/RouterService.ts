@@ -29,7 +29,11 @@ export class RouterService {
    * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
    */
   addToRoute(path: string){
-    return this.router.push(`${this.route.path}/${path}`)
+    let currentRoute = this.route.path
+    if(currentRoute.endsWith('/')){
+      currentRoute = currentRoute.substring(0, currentRoute.length - 1)
+    }
+    return this.router.push(`${currentRoute}/${path}`)
   }
 
   /**
