@@ -165,6 +165,7 @@ export default {
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
+    error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.'
   },
   set_password: {
     description:

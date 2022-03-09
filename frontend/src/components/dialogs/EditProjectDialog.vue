@@ -132,9 +132,13 @@ async function editProject() {
   })
 
   if (!mutationResult) {
-    throw new Error('An error occurred while creating the project')
+    props.errorService.showErrorDialog(
+      new Error(i18n.global.t('errors.error_while_editing'))
+    )
+    return
   }
- onDialogOK(newName.value)
+
+  onDialogOK(newName.value)
 }
 
 /**
