@@ -130,8 +130,8 @@ async function assignToProject() {
  * @returns {number} - number of devices
  */
 function numberOfDevicesInProject(project: Project){
-  const mr2000 = (project.mr2000instances ?? []).length
-  const mr3000 = (project.mr3000instances ?? []).length
+  const mr2000 = project.mr2000instances.length
+  const mr3000 = project.mr3000instances.length
 
   return mr2000 + mr3000
 }

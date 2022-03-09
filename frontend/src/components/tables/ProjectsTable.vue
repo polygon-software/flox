@@ -225,22 +225,19 @@ async function onOptionClick(project: Project, device: string, key: string): Pro
           swapNegative: true,
           okLabel: i18n.global.t('buttons.confirm')
         }
-      }).onOk(() => {
-        void executeMutation(REMOVE_DEVICE_FROM_PROJECT, {uuid: project.uuid, cli: device}).then(() => {
-          // Show success notification
-          showNotification(
-            $q,
-            i18n.global.t('messages.removed_device'),
-            'bottom',
-            'positive',
-          )
+      }).onOk(async () => {
+        await executeMutation(REMOVE_DEVICE_FROM_PROJECT, {uuid: project.uuid, cli: device})
 
-          // TODO not working yet; ensure we update correctly
-          void myProjectDevices().then((result) => {
-            rows.value = result
-            console.log('Got updated data:', result)
-          })
-        })
+        // Show success notification
+        showNotification(
+          $q,
+          i18n.global.t('messages.removed_device'),
+          'bottom',
+          'positive',
+        )
+
+        // Update
+        rows.value = await myProjectDevices()
       })
       break
     case 'compress':

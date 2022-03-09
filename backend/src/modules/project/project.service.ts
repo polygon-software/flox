@@ -57,7 +57,7 @@ export class ProjectService {
 
     // Add all MR2000 instances that belong to the project
     for (const instance of mr2000instances) {
-      if ((project.mr2000instances ?? []).includes(instance.cli)) {
+      if (project.mr2000instances.includes(instance.cli)) {
         const mr2000 = await mr2000fromDatabaseEntry(
           instance,
           this.projectRepository,
@@ -70,7 +70,7 @@ export class ProjectService {
 
     // Add all MR3000 instances that belong to the project
     for (const instance of mr3000instances) {
-      if ((project.mr3000instances ?? []).includes(instance.cli)) {
+      if (project.mr3000instances.includes(instance.cli)) {
         const mr3000 = await mr3000fromDatabaseEntry(
           instance,
           this.projectRepository,
@@ -131,8 +131,8 @@ export class ProjectService {
     const newProject = this.projectRepository.create({
       name: createProjectInput.name,
       user: user,
-      mr2000instances: createProjectInput.mr2000instances,
-      mr3000instances: createProjectInput.mr3000instances,
+      mr2000instances: createProjectInput.mr2000instances ?? [],
+      mr3000instances: createProjectInput.mr3000instances ?? [],
     });
     await this.projectRepository.save(newProject);
 
