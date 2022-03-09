@@ -27,6 +27,8 @@ import {useQuasar} from 'quasar';
 import EditProjectDialog from 'components/dialogs/EditProjectDialog.vue';
 import {myProjects} from 'src/helpers/api-helpers';
 import {RouterService} from 'src/services/RouterService';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
 
 const $q = useQuasar()
 const routerService: RouterService|undefined = inject('$routerService')
@@ -63,7 +65,13 @@ function editProjectName(){
       uuid: projectUuid.value,
     }
   }).onOk(async (newName: string) => {
-    // TODO go back
+    // After editing is finished, show success notification & navigate to new project URL
+    showNotification(
+      $q,
+      i18n.global.t('messages.project_renamed'),
+      'bottom',
+      'positive',
+    )
     await routerService?.goBack()
     await routerService?.addToRoute(newName)
   })
