@@ -109,9 +109,8 @@ const rows: Ref<Device[]> = ref([])
 const $q = useQuasar()
 
 // ----- Data -----
-// TODO: Remove this sample data
 const columns = [
-  { name: 'device', label: i18n.global.t('projects.device'), field: 'device', sortable: true, align: 'center' },
+  { name: 'device', label: i18n.global.t('projects.device_type'), field: 'device', sortable: true, align: 'center' },
   { name: 'client', label: i18n.global.t('projects.client'), field: 'client', sortable: true, align: 'center' },
   { name: 'ip', label: i18n.global.t('projects.ip'), field: 'ip', sortable: true, align: 'center' },
   { name: 'firmware', label: i18n.global.t('projects.firmware'), field: 'firmware', sortable: true, align: 'center' },

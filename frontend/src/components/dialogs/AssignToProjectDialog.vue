@@ -16,20 +16,30 @@
         </h6>
 
         <!-- Project picker -->
-        <q-radio
+        <q-item
           v-for="project in projects"
           :key="project.uuid"
-          v-model="selectedProject"
-          style="color: #87858A"
-          :val="project"
-          :label="project.name"
-        />
-
-
+          v-ripple
+          tag="label"
+        >
+          <q-item-section avatar>
+            <q-radio
+              v-model="selectedProject"
+              :val="project"
+            />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>
+              {{ project.name }}
+            </q-item-label>
+            <q-item-label caption>
+              {{ `(${project.mr2000instances.length + project.mr3000instances.length} ${$tc('projects.device', project.mr2000instances.length + project.mr3000instances.length)})` }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
       </q-card-section>
 
-      <!-- Devices -->
-
+      <!-- Actions -->
       <q-card-actions
         align="center"
       >

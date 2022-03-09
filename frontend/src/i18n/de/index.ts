@@ -62,8 +62,9 @@ export default {
   },
   projects: {
     project: 'Projekt',
+    device: 'Gerät | Geräte',
     new_project: 'Neues Projekt',
-    device: 'Gerättyp',
+    device_type: 'Gerättyp',
     client: 'Client',
     ip: 'IP',
     firmware: 'Firmware',
