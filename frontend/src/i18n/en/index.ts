@@ -25,10 +25,11 @@ export default {
   },
   account_data: {
     authentication: 'Authentication',
-    email: 'E-Mail',
+    email: 'E-Mail address',
     username: 'Username',
     password: 'Password',
     repeat_password: 'Repeat password',
+    change_password: 'Change password',
     account: 'Account',
     personal: 'Personal',
     address: 'Address',
@@ -114,6 +115,7 @@ export default {
     new_contact: 'New Contakt',
     load: 'Load',
     save: 'Save',
+    edit: 'Edit',
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',

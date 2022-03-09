@@ -2,7 +2,7 @@
   <q-page class="column items-center justify-start full-width">
       <!-- Title: Projects -->
       <h5>{{ $t('dashboard.account') }}</h5>
-      <SignupForm
+      <AccountForm
         @submit="onChange"
       />
   </q-page>
@@ -10,12 +10,12 @@
 
 <script setup lang="ts">
 import {inject, } from 'vue'
-import SignupForm from 'components/forms/SignupForm.vue'
 import { executeQuery } from 'src/helpers/data-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 import { EMAIL_ALLOWED } from 'src/data/queries/USER';
 import SuccessDialog from 'components/dialogs/SuccessDialog.vue';
 import {useQuasar} from 'quasar';
+import AccountForm from 'components/forms/AccountForm.vue';
 
 const $errorService: ErrorService|undefined = inject('$errorService')
 const $q = useQuasar()
