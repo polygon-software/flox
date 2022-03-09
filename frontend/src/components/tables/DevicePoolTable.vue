@@ -77,7 +77,8 @@
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
-                  class="text-grey"
+                  class="text-grey full-width"
+                  align="left"
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
@@ -123,8 +124,8 @@ const columns = [
 
 const buttons = [
   {
-    key: 'remove',
-    label: i18n.global.t('projects.remove_from_project'),
+    key: 'assign',
+    label: i18n.global.t('projects.assign_to_project'),
   },
   {
     key: 'compress',

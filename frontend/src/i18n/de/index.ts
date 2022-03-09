@@ -74,6 +74,7 @@ export default {
     pid: 'PID',
     files: 'Dokumente',
     ftp: 'FTP',
+    assign_to_project: 'Zu Projekt zuordnen',
     remove_from_project: 'Aus Projekt entfernen',
     compress_vibration_data: 'Vibrationsdaten komprimieren',
     download_compress_vibration_data: 'Komprimierte Vibrationsdaten herunterladen',
