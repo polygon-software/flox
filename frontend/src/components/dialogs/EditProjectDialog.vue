@@ -17,8 +17,8 @@
 
         <!-- Project name -->
         <q-input
-          v-model="name"
-          :label="$t('projects.project_name')"
+          v-model="newName"
+          :label="$t('projects.edit_project_name')"
           class="q-ma-md"
           outlined
           dense
@@ -33,14 +33,14 @@
       >
         <!-- Create button -->
         <q-btn
-          :label="$t('buttons.create_project')"
+          :label="$t('buttons.confirm')"
           style="border-radius: 0"
           text-color="primary"
           no-caps
           unelevated
           outline
-          :disable="!name"
-          @click="createProject"
+          :disable="newName === name"
+          @click="editProject"
         />
 
         <!-- Cancel button -->
@@ -61,43 +61,41 @@
 <script setup lang="ts">
 // REQUIRED; must be called inside of setup()
 import {useDialogPluginComponent} from 'quasar';
-import {defineEmits, Ref, ref} from 'vue';
-import {CREATE_PROJECT} from 'src/data/mutations/PROJECT';
+import {defineEmits, defineProps, Ref, ref} from 'vue';
+import {UPDATE_PROJECT_NAME} from 'src/data/mutations/PROJECT';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {myUser} from 'src/helpers/api-helpers';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(useDialogPluginComponent.emits)
 
-const name: Ref<string|null|undefined> = ref()
-const mr2000instances = ref([])
-const mr3000instances = ref([])
+const props = defineProps({
+  uuid: {
+    type: String,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+})
+
+// Set initial value to original project name
+const newName: Ref<string|null|undefined> = ref(props.name)
 
 /**
- * Creates a new project.
+ * Updates the project's name
  * @return {void}
  */
-async function createProject() {
-  const user = await myUser()
-  const userUuid = user?.uuid
-
-  const params = {
-    userUuid: userUuid,
-    name: name.value,
-    mr2000instances: mr2000instances.value,
-    mr3000instances: mr3000instances.value,
-  }
-
+async function editProject() {
   let mutationResult
 
   mutationResult = await executeMutation(
-    CREATE_PROJECT,
+    UPDATE_PROJECT_NAME,
     {
-      createProjectInput: {
-        ...params
-      },
+      uuid: props.uuid,
+      name: newName,
     }
   )
 

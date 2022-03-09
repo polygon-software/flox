@@ -86,6 +86,7 @@ export default {
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
     project_name: 'Projektname',
+    edit_project_name: 'Projektnamen bearbeiten',
     id: 'ID',
   },
   edit_parameters: {

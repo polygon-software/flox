@@ -72,8 +72,6 @@ const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginC
 const emits = defineEmits(useDialogPluginComponent.emits)
 
 const name: Ref<string|null|undefined> = ref()
-const mr2000instances = ref([])
-const mr3000instances = ref([])
 
 /**
  * Creates a new project.
@@ -86,8 +84,6 @@ async function createProject() {
   const params = {
     userUuid: userUuid,
     name: name.value,
-    mr2000instances: mr2000instances.value,
-    mr3000instances: mr3000instances.value,
   }
 
   let mutationResult

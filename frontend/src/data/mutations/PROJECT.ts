@@ -10,6 +10,7 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
  * - cacheLocation: the actual GraphQL mutation's name (since cached data will be stored there)
  *
  */
+
 export const CREATE_PROJECT = {
   mutation: gql`
     mutation createProject($createProjectInput: CreateProjectInput!){
@@ -39,7 +40,7 @@ export const REMOVE_DEVICE_FROM_PROJECT = {
     }`,
   tables: ['project', 'device'], // TODO: how can we ensure this also updates the device-related queries?
   type: MutationTypes.UPDATE,
-  cacheLocation: 'removeDeviceFromProject'
+  cacheLocation: undefined
 }
 
 export const ASSIGN_DEVICE_TO_PROJECT = {
@@ -55,5 +56,21 @@ export const ASSIGN_DEVICE_TO_PROJECT = {
     }`,
   tables: ['project', 'device'], // TODO: how can we ensure this also updates the device-related queries?
   type: MutationTypes.UPDATE,
-  cacheLocation: 'assignDeviceToProject'
+  cacheLocation: undefined
+}
+
+export const UPDATE_PROJECT_NAME = {
+  mutation: gql`
+    mutation updateProjectName($uuid: ID!, $name: String!){
+      updateProjectName (updateProjectInput: {uuid: $uuid, name: $name}) {
+        uuid
+        name
+        mr2000instances
+        mr3000instances
+        __typename
+      }
+    }`,
+  tables: ['project'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
 }

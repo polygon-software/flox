@@ -42,7 +42,9 @@ const props = defineProps({
 function editProjectName(){
   $q.dialog({
     component: EditProjectDialog,
-    componentProps: {}
+    componentProps: {
+      name: props.projectId
+    }
   })
 }
 </script>

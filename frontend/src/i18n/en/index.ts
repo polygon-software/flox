@@ -85,6 +85,7 @@ export default {
     show_device_health: 'Show Device Health',
     name: 'Name',
     project_name: 'Project Name',
+    edit_project_name: 'Edit Project Name',
     id: 'ID',
   },
   edit_parameters: {
