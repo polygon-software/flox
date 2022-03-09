@@ -95,13 +95,13 @@ async function editProject() {
     UPDATE_PROJECT_NAME,
     {
       uuid: props.uuid,
-      name: newName,
+      name: newName.value,
     }
   )
 
   if (!mutationResult) {
     throw new Error('An error occurred while creating the project')
   }
- onDialogOK()
+ onDialogOK(newName.value)
 }
 </script>

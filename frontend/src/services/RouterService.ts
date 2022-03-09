@@ -87,4 +87,12 @@ export class RouterService {
   getQueryParam(key: string): string | null {
     return (this.route.query[key] as string) ?? null;
   }
+
+  /**
+   * Go back.
+   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
+   */
+  goBack(){
+    return this.router.push(this.route.path.substring(0, this.route.path.lastIndexOf('/')))
+  }
 }

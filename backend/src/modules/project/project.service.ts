@@ -137,24 +137,28 @@ export class ProjectService {
   /**
    * Updates a project
    * @param {UpdateProjectInput} updateProjectInput Project parameters that should be changed.
-   * @return {UpdateProjectInput} - The updated project
+   * @return {Promise<Project>} - The updated project
    */
-  async updateProjectName(
-    updateProjectInput: UpdateProjectInput,
-  ): Promise<UpdateResult> {
-    return this.projectRepository.update(
-      updateProjectInput.uuid,
-      updateProjectInput,
-    );
+  async updateProjectName(updateProjectInput: UpdateProjectInput) {
+    console.log('trigger update with', updateProjectInput);
+    await this.projectRepository.update(updateProjectInput.uuid, {
+      name: updateProjectInput.name,
+    });
+
+    return this.projectRepository.findOne(updateProjectInput.uuid);
   }
 
   /**
    * Deletes a project
    * @param {DeleteProjectInput} deleteProjectInput - Input containing the uuid of the project to delete
-   * @return {Promise<DeleteResult>} - Result object from deletion
+   * @return {Promise<Project>} - Deleted project
    */
   async deleteProject(deleteProjectInput: DeleteProjectInput) {
-    return this.projectRepository.delete(deleteProjectInput.uuid);
+    const project = this.projectRepository.findOne(deleteProjectInput.uuid);
+
+    await this.projectRepository.delete(deleteProjectInput.uuid);
+
+    return project;
   }
 
   /**

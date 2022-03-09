@@ -10,6 +10,7 @@
         unelevated
         size="xs"
         style="height: 30px; width: 30px; margin-left: 5px"
+        :disable="!projectUuid"
         @click="editProjectName"
       />
     </div>
@@ -20,18 +21,33 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
+import {defineProps, inject, onMounted, ref, Ref} from 'vue';
 import ProjectTable from 'components/tables/ProjectTable.vue';
 import {useQuasar} from 'quasar';
 import EditProjectDialog from 'components/dialogs/EditProjectDialog.vue';
+import {myProjects} from 'src/helpers/api-helpers';
+import {RouterService} from 'src/services/RouterService';
 
 const $q = useQuasar()
+const routerService: RouterService|undefined = inject('$routerService')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   projectId: {
     required: true,
     type: String
+  }
+})
+
+const projectUuid: Ref<null|string> = ref(null)
+
+// Once mounted, determine actual project entry's UUID (for editing)
+onMounted(async () => {
+  const ownProjects = await myProjects()
+  const project = ownProjects.find((project) => project.name === props.projectId)
+
+  if(project){
+    projectUuid.value = project.uuid
   }
 })
 
@@ -43,8 +59,13 @@ function editProjectName(){
   $q.dialog({
     component: EditProjectDialog,
     componentProps: {
-      name: props.projectId
+      name: props.projectId,
+      uuid: projectUuid.value,
     }
+  }).onOk(async (newName: string) => {
+    // TODO go back
+    await routerService?.goBack()
+    await routerService?.addToRoute(newName)
   })
 }
 </script>

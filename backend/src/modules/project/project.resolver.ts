@@ -158,7 +158,7 @@ export class ProjectResolver {
     @Args({ name: 'updateProjectInput', type: () => UpdateProjectInput })
     updateProjectInput: UpdateProjectInput,
     @CurrentUser() user: Record<string, string>,
-  ): Promise<UpdateResult> {
+  ) {
     if (await this.validateAccessToProject(user, updateProjectInput.uuid)) {
       return this.projectService.updateProjectName(updateProjectInput);
     }
@@ -168,13 +168,13 @@ export class ProjectResolver {
    * Deletes a project
    * @param {DeleteProjectInput} deleteProjectInput - Input that contains the uuid of the project to delete.
    * @param {Record<string, string>} user - User who requested the deletion.
-   * @return {DeleteResult} - Result object from deletion
+   * @return {Promise<Project>} - The project that was deleted
    */
   async deleteProject(
     @Args({ name: 'deleteProjectInput', type: () => DeleteProjectInput })
     deleteProjectInput: DeleteProjectInput,
     @CurrentUser() user: Record<string, string>,
-  ): Promise<DeleteResult> {
+  ) {
     if (await this.validateAccessToProject(user, deleteProjectInput.uuid)) {
       return this.projectService.deleteProject(deleteProjectInput);
     }
