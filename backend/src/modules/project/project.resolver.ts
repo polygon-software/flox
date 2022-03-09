@@ -210,6 +210,36 @@ export class ProjectResolver {
   }
 
   /**
+   * Validates if the given user has access to the given device
+   * @param {Record<string, string>} user - User that demands access
+   * @param {string} cli - CLI of the device which the user wants to access
+   * @private
+   * @return {boolean} - validation result
+   */
+  private async validateAccessToDevice(
+    user: Record<string, string>,
+    cli: string,
+  ): Promise<boolean> {
+    // Get user
+    const dbUser = await this.userService.getUser({
+      cognitoUuid: user.userId,
+    } as GetUserArgs);
+
+    if (!dbUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+    // For non-admin users, check whether they have permissions to access the requested device
+    if (
+      dbUser.role !== ROLE.ADMIN &&
+      !dbUser.mr2000instances.some((device) => device === cli) &&
+      !dbUser.mr3000instances.some((device) => device === cli)
+    ) {
+      throw new Error(ERRORS.resource_not_allowed);
+    }
+    return true;
+  }
+
+  /**
    * Assigns a given device to a project
    * @param {AssignDeviceToProjectInput} assignDeviceToProjectInput - contains project UUID & device CLI
    * @param {Record<string, string>} user - currently logged-in user from request
@@ -225,10 +255,19 @@ export class ProjectResolver {
     assignDeviceToProjectInput: AssignDeviceToProjectInput,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (
-      await this.validateAccessToProject(user, assignDeviceToProjectInput.uuid)
-    ) {
-      // TODO more permission checks
+    // Verify project access
+    const hasProjectAccess = await this.validateAccessToProject(
+      user,
+      assignDeviceToProjectInput.uuid,
+    );
+
+    // Verify device access
+    const hasDeviceAccess = await this.validateAccessToDevice(
+      user,
+      assignDeviceToProjectInput.cli,
+    );
+
+    if (hasProjectAccess && hasDeviceAccess) {
       return this.projectService.assignDeviceToProject(
         assignDeviceToProjectInput,
       );

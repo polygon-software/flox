@@ -128,26 +128,6 @@ const buttons = [
     label: i18n.global.t('projects.assign_to_project'),
   },
   {
-    key: 'compress',
-    label: i18n.global.t('projects.compress_vibration_data'),
-  },
-  {
-    key: 'download',
-    label: i18n.global.t('projects.download_compress_vibration_data'),
-  },
-  {
-    key: 'display',
-    label: i18n.global.t('projects.display_data'),
-  },
-  {
-    key: 'files',
-    label: i18n.global.t('projects.show_event'),
-  },
-  {
-    key: 'edit',
-    label: i18n.global.t('projects.edit_parameters'),
-  },
-  {
     key: 'status',
     label: i18n.global.t('projects.show_status_files'),
   },
