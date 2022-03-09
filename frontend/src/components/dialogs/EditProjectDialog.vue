@@ -12,7 +12,7 @@
       <q-card-section class="column items-center">
         <!-- Title -->
         <h6 class="q-ma-none q-pa-none">
-          {{$t('projects.new_project')}}
+          {{$t('projects.edit_project')}}
         </h6>
 
         <!-- Project name -->
@@ -31,10 +31,22 @@
       <q-card-actions
         align="center"
       >
-        <!-- Create button -->
+
+        <!-- Delete project button -->
         <q-btn
-          :label="$t('buttons.confirm')"
-          style="border-radius: 0"
+          :label="$t('buttons.delete_project')"
+          style="border-radius: 0;"
+          color="negative"
+          no-caps
+          unelevated
+          outline
+          @click="deleteProject"
+        />
+
+        <!-- Rename button -->
+        <q-btn
+          :label="$t('buttons.rename')"
+          style="border-radius: 0; margin-left: 10px"
           text-color="primary"
           no-caps
           unelevated
@@ -46,13 +58,14 @@
         <!-- Cancel button -->
         <q-btn
           :label="$t('buttons.cancel')"
-          style="border-radius: 0; margin-left: 30px"
           text-color="primary"
+          style="border-radius: 0"
           no-caps
           unelevated
           outline
           @click="onDialogCancel"
         />
+
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -60,10 +73,14 @@
 
 <script setup lang="ts">
 // REQUIRED; must be called inside of setup()
-import {useDialogPluginComponent} from 'quasar';
-import {defineEmits, defineProps, Ref, ref} from 'vue';
+import {QVueGlobals, useDialogPluginComponent} from 'quasar';
+import {defineEmits, defineProps, PropType, Ref, ref} from 'vue';
 import {UPDATE_PROJECT_NAME} from 'src/data/mutations/PROJECT';
 import {executeMutation} from 'src/helpers/data-helpers';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
+import {i18n} from 'boot/i18n';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {myProjectDevices} from 'src/helpers/api-helpers';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
@@ -79,6 +96,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  q: {
+    type: Object as PropType<QVueGlobals>,
+    required: true
+  }
 })
 
 // Set initial value to original project name
@@ -103,5 +124,39 @@ async function editProject() {
     throw new Error('An error occurred while creating the project')
   }
  onDialogOK(newName.value)
+}
+
+/**
+ * Shows a confirmation prompt and, upon confirmation, deletes a project
+ * @return {void}
+ */
+function deleteProject() {
+  props.q.dialog({
+    component: WarningDialog,
+    componentProps: {
+      description: i18n.global.t('warnings.delete_project'),
+      showDiscard: true,
+      discardLabel: i18n.global.t('buttons.cancel'),
+      swapNegative: true,
+      okLabel: i18n.global.t('buttons.confirm')
+    }
+  }).onOk(() => {
+    // TODO delete
+    // void executeMutation(REMOVE_DEVICE_FROM_PROJECT, {uuid: project.uuid, cli: device}).then(() => {
+    //   // Show success notification
+    //   showNotification(
+    //     $q,
+    //     i18n.global.t('messages.removed_device'),
+    //     'bottom',
+    //     'positive',
+    //   )
+    //
+    //   // TODO not working yet; ensure we update correctly
+    //   void myProjectDevices().then((result) => {
+    //     rows.value = result
+    //     console.log('Got updated data:', result)
+    //   })
+    // })
+  })
 }
 </script>

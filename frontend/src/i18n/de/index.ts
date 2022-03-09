@@ -86,7 +86,7 @@ export default {
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
     project_name: 'Projektname',
-    edit_project_name: 'Projektnamen bearbeiten',
+    edit_project: 'Projekt bearbeiten',
     id: 'ID',
   },
   edit_parameters: {
@@ -120,12 +120,14 @@ export default {
     send: 'Senden',
     create_link: 'Link erzeugen',
     create_project: 'Projekt erstellen',
+    delete_project: 'Projekt löschen',
     new_contact: 'Neuer Kontakt',
     load: 'Laden',
     save: 'Speichern',
     show: 'Anzeigen',
     close: 'Schliessen',
-    confirm: 'Bestätigen'
+    confirm: 'Bestätigen',
+    rename: 'Umbenennen'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -254,6 +256,7 @@ export default {
     poor: 'schlecht',
   },
   warnings: {
-    unassign_device: 'Sind Sie sicher? Dadurch werden alle Daten des Geräts gelöscht!'
+    unassign_device: 'Sind Sie sicher? Dadurch werden alle Daten des Geräts gelöscht!',
+    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt!'
   }
 };

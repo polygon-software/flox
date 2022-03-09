@@ -2,7 +2,10 @@
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Projects -->
     <div class="row items-center">
+      <!-- Project name -->
       <h5>{{ $t('dashboard.project') }} {{ projectId.toUpperCase() }}</h5>
+
+      <!-- Edit button -->
       <q-btn
         icon="edit"
         text-color="primary"
@@ -11,7 +14,7 @@
         size="xs"
         style="height: 30px; width: 30px; margin-left: 5px"
         :disable="!projectUuid"
-        @click="editProjectName"
+        @click="editProject"
       />
     </div>
 
@@ -57,12 +60,13 @@ onMounted(async () => {
  * Shows a dialog for editing a project's name
  * @returns {void}
  */
-function editProjectName(){
+function editProject(){
   $q.dialog({
     component: EditProjectDialog,
     componentProps: {
       name: props.projectId,
       uuid: projectUuid.value,
+      q: $q
     }
   }).onOk(async (newName: string) => {
     // After editing is finished, show success notification

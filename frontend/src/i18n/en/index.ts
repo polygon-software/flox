@@ -85,7 +85,7 @@ export default {
     show_device_health: 'Show Device Health',
     name: 'Name',
     project_name: 'Project Name',
-    edit_project_name: 'Edit Project Name',
+    edit_project: 'Edit Project',
     id: 'ID',
   },
   edit_parameters: {
@@ -118,13 +118,15 @@ export default {
     copy: 'Copy',
     send: 'Send',
     create_link: 'Create Link',
-    create: 'Create project',
+    create_project: 'Create project',
+    delete_project: 'Delete project',
     new_contact: 'New Contakt',
     load: 'Load',
     save: 'Save',
     show: 'Show',
     close: 'Close',
-    confirm: 'Confirm'
+    confirm: 'Confirm',
+    rename: 'Rename'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -250,6 +252,7 @@ export default {
     poor: 'poor',
   },
   warnings: {
-    unassign_device: 'Are you sure? All data for this device will be deleted!'
+    unassign_device: 'Are you sure? All data for this device will be deleted!',
+    delete_project: 'Are you sure? This will remove all devices from this project!'
   }
 };
