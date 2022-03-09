@@ -18,6 +18,7 @@ import { fetchFromTable } from '../../helpers/database-helpers';
 import { MR2000 } from '../../types/MR2000';
 import { MR3000 } from '../../types/MR3000';
 import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
+import { GetUserArgs } from '../user/dto/args/get-user.args';
 
 @Injectable()
 export class ProjectService {
@@ -116,8 +117,12 @@ export class ProjectService {
     const userProjectPermissions = user.projects;
 
     if (
-      userProjectPermissions.find((project) => project.name === projectName) ||
-      userProjects.find((project) => project.name === projectName)
+      userProjectPermissions.find(
+        (project) => project.name.toLowerCase() === projectName.toLowerCase(),
+      ) ||
+      userProjects.find(
+        (project) => project.name.toLowerCase() === projectName.toLowerCase(),
+      )
     ) {
       throw new Error(`Project name ${projectName} is already taken`);
     }
@@ -137,9 +142,26 @@ export class ProjectService {
   /**
    * Updates a project
    * @param {UpdateProjectInput} updateProjectInput Project parameters that should be changed.
+   * @param {string} userUuid - user's database UUID
    * @return {Promise<Project>} - The updated project
    */
-  async updateProjectName(updateProjectInput: UpdateProjectInput) {
+  async updateProjectName(
+    updateProjectInput: UpdateProjectInput,
+    userUuid: string,
+  ) {
+    // Get user's existing projects and ensure they have no project by this name yet
+    const userProjects = await this.getUserProjects({ uuid: userUuid });
+    if (
+      userProjects.find(
+        (project) =>
+          project.name.toLowerCase() === updateProjectInput.name.toLowerCase(),
+      )
+    ) {
+      throw new Error(
+        `Project name ${updateProjectInput.name} is already taken`,
+      );
+    }
+
     await this.projectRepository.update(updateProjectInput.uuid, {
       name: updateProjectInput.name,
     });

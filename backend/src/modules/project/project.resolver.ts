@@ -15,7 +15,6 @@ import { ERRORS } from '../../error/ERRORS';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { UpdateProjectInput } from './dto/input/update-project-input';
-import { DeleteResult, UpdateResult } from 'typeorm';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
 import { RemoveDeviceFromProjectInput } from './dto/input/remove-device-from-project.input';
 import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
@@ -160,7 +159,15 @@ export class ProjectResolver {
     @CurrentUser() user: Record<string, string>,
   ) {
     if (await this.validateAccessToProject(user, updateProjectInput.uuid)) {
-      return this.projectService.updateProjectName(updateProjectInput);
+      // Get user
+      const dbUser = await this.userService.getUser({
+        cognitoUuid: user.userId,
+      } as GetUserArgs);
+
+      return this.projectService.updateProjectName(
+        updateProjectInput,
+        dbUser.uuid,
+      );
     }
   }
 

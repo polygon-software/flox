@@ -81,6 +81,7 @@ import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {RouterService} from 'src/services/RouterService';
+import {ErrorService} from 'src/services/ErrorService';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
@@ -103,6 +104,10 @@ const props = defineProps({
   routerService: {
     type: Object as PropType<RouterService>,
     required: true
+  },
+  errorService: {
+    type: Object as PropType<ErrorService>,
+    required: true
   }
 })
 
@@ -122,7 +127,9 @@ async function editProject() {
       uuid: props.uuid,
       name: newName.value,
     }
-  )
+  ).catch((e) => {
+    props.errorService.showErrorDialog(e as Error)
+  })
 
   if (!mutationResult) {
     throw new Error('An error occurred while creating the project')
@@ -131,7 +138,7 @@ async function editProject() {
 }
 
 /**
- * Shows a confirmation prompt and, upon confirmation, deletes a project
+ * Shows a confirmation prompt and, upon confirmation, deletes a project & routes back
  * @return {void}
  */
 function deleteProject() {

@@ -32,9 +32,11 @@ import {myProjects} from 'src/helpers/api-helpers';
 import {RouterService} from 'src/services/RouterService';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
+import {ErrorService} from 'src/services/ErrorService';
 
 const $q = useQuasar()
 const routerService: RouterService|undefined = inject('$routerService')
+const errorService: ErrorService|undefined = inject('$errorService')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -67,7 +69,8 @@ function editProject(){
       name: props.projectId,
       uuid: projectUuid.value,
       q: $q,
-      routerService: routerService
+      routerService: routerService,
+      errorService: errorService
     }
   }).onOk(async (newName: string) => {
     // After editing is finished, show success notification

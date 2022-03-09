@@ -87,6 +87,7 @@ export default {
     name: 'Name',
     project_name: 'Projektname',
     edit_project: 'Projekt bearbeiten',
+    edit_project_name: 'Projektnamen bearbeiten',
     id: 'ID',
   },
   edit_parameters: {
