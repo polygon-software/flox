@@ -248,10 +248,10 @@ export class ProjectService {
     // Build partial entity, depending on type
     const updateData = isMr2000
       ? {
-          mr2000instances: project.mr2000instances.concat(cli),
+          mr2000instances: (project.mr2000instances ?? []).concat(cli),
         }
       : {
-          mr3000instances: project.mr3000instances.concat(cli),
+          mr3000instances: (project.mr3000instances ?? []).concat(cli),
         };
 
     await this.projectRepository.update(

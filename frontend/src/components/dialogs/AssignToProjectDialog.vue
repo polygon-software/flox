@@ -33,7 +33,9 @@
               {{ project.name }}
             </q-item-label>
             <q-item-label caption>
-              {{ `(${project.mr2000instances.length + project.mr3000instances.length} ${$tc('projects.device', project.mr2000instances.length + project.mr3000instances.length)})` }}
+              {{
+                `(${numberOfDevicesInProject(project)} ${$tc('projects.device', numberOfDevicesInProject(project))})`
+              }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -120,5 +122,17 @@ async function assignToProject() {
     }
     onDialogOK()
   }
+}
+
+/**
+ * Returns the number of devices within a project
+ * @param {Project} project - the project whose instances to count
+ * @returns {number} - number of devices
+ */
+function numberOfDevicesInProject(project: Project){
+  const mr2000 = (project.mr2000instances ?? []).length
+  const mr3000 = (project.mr3000instances ?? []).length
+
+  return mr2000 + mr3000
 }
 </script>
