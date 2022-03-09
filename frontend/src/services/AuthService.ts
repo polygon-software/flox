@@ -16,6 +16,7 @@ import AuthActions from 'src/store/authentication/actions';
 import {i18n} from 'boot/i18n';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {MY_USER} from 'src/data/queries/USER';
+import {useApolloClient} from '@vue/apollo-composable';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -139,13 +140,17 @@ export class AuthenticationService {
     if(!cognitoUser){
       this.$errorService.showErrorDialog(new Error('Trying to log out despite not being logged in!'))
     } else {
-      return new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         cognitoUser.signOut(() => {
           this.$authStore.mutations.setCognitoUser(undefined)
           this.$authStore.mutations.setUserSession(undefined)
           resolve()
         })
       })
+
+      // Clear cache to prevent erroneous dashboard loading when changing roles
+      const apolloClient = useApolloClient()
+      await apolloClient.client.clearStore()
     }
   }
 
