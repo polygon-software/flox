@@ -1,13 +1,13 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsArray, IsString } from 'class-validator';
+import { Field, ID, InputType } from '@nestjs/graphql';
+import { IsArray, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 /**
  * Input for project creation
  */
 export class CreateProjectInput {
-  @Field(() => String, { description: 'Uuid of the user owning the project' })
-  @IsString()
+  @Field(() => ID, { description: 'Uuid of the user owning the project' })
+  @IsUUID()
   userUuid: string;
 
   @Field(() => String, { description: 'Project name' })

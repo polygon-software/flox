@@ -75,7 +75,7 @@
 // REQUIRED; must be called inside of setup()
 import {QVueGlobals, useDialogPluginComponent} from 'quasar';
 import {defineEmits, defineProps, PropType, Ref, ref} from 'vue';
-import {UPDATE_PROJECT_NAME} from 'src/data/mutations/PROJECT';
+import {DELETE_PROJECT, UPDATE_PROJECT_NAME} from 'src/data/mutations/PROJECT';
 import {executeMutation} from 'src/helpers/data-helpers';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
@@ -140,23 +140,19 @@ function deleteProject() {
       swapNegative: true,
       okLabel: i18n.global.t('buttons.confirm')
     }
-  }).onOk(() => {
-    // TODO delete
-    // void executeMutation(REMOVE_DEVICE_FROM_PROJECT, {uuid: project.uuid, cli: device}).then(() => {
-    //   // Show success notification
-    //   showNotification(
-    //     $q,
-    //     i18n.global.t('messages.removed_device'),
-    //     'bottom',
-    //     'positive',
-    //   )
-    //
-    //   // TODO not working yet; ensure we update correctly
-    //   void myProjectDevices().then((result) => {
-    //     rows.value = result
-    //     console.log('Got updated data:', result)
-    //   })
-    // })
+  }).onOk(async () => {
+    // Delete project
+    await executeMutation(DELETE_PROJECT, {uuid: props.uuid}).then(() => {
+      // Show success notification
+      showNotification(
+        props.q,
+        i18n.global.t('messages.project_deleted'),
+        'bottom',
+        'positive',
+      )
+    })
+
+    onDialogCancel()
   })
 }
 </script>

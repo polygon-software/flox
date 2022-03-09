@@ -192,7 +192,8 @@ export default {
     project_created: 'Project created successfully',
     assigned_device: 'Device assigned successfully',
     removed_device: 'Device removed successfully',
-    renamed_project: 'Project renamed successfully'
+    project_renamed: 'Project renamed successfully',
+    project_deleted: 'Project deleted successfully'
   },
   status: {
     title: 'Status of',

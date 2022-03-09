@@ -170,6 +170,8 @@ export class ProjectResolver {
    * @param {Record<string, string>} user - User who requested the deletion.
    * @return {Promise<Project>} - The project that was deleted
    */
+  @AnyRole()
+  @Mutation(() => Project)
   async deleteProject(
     @Args({ name: 'deleteProjectInput', type: () => DeleteProjectInput })
     deleteProjectInput: DeleteProjectInput,

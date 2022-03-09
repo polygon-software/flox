@@ -81,19 +81,13 @@ async function createProject() {
   const user = await myUser()
   const userUuid = user?.uuid
 
-  const params = {
-    userUuid: userUuid,
-    name: name.value,
-  }
-
   let mutationResult
 
   mutationResult = await executeMutation(
     CREATE_PROJECT,
     {
-      createProjectInput: {
-        ...params
-      },
+      userUuid: userUuid,
+      name: name.value,
     }
   )
 

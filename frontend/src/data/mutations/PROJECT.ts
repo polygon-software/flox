@@ -13,8 +13,8 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
 
 export const CREATE_PROJECT = {
   mutation: gql`
-    mutation createProject($createProjectInput: CreateProjectInput!){
-      createProject (createProjectInput: $createProjectInput) {
+    mutation createProject($userUuid: ID!, $name: String!){
+      createProject (createProjectInput: {userUuid: $userUuid, name: $name}) {
         uuid
         name
         mr2000instances
@@ -25,6 +25,22 @@ export const CREATE_PROJECT = {
   tables: ['project'],
   type: MutationTypes.CREATE,
   cacheLocation: 'createProject'
+}
+
+export const DELETE_PROJECT = {
+  mutation: gql`
+    mutation deleteProject($uuid: ID!){
+      deleteProject (deleteProjectInput: {uuid: $uuid}) {
+        uuid
+        name
+        mr2000instances
+        mr3000instances
+        __typename
+      }
+    }`,
+  tables: ['project'],
+  type: MutationTypes.DELETE,
+  cacheLocation: 'deleteProject'
 }
 
 export const REMOVE_DEVICE_FROM_PROJECT = {

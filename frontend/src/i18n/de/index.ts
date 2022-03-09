@@ -196,7 +196,8 @@ export default {
     project_created: 'Projekt erfolgreich erstellt',
     assigned_device: 'Gerät erfolgreich zugeordnet',
     removed_device: 'Gerät erfolgreich entfernt',
-    project_renamed: 'Projekt erfolgreich umbenannt'
+    project_renamed: 'Projekt erfolgreich umbenannt',
+    project_deleted: 'Projekt erfolgreich gelöscht'
   },
   status: {
     title: 'Status von',

@@ -171,13 +171,18 @@ input CreateProjectInput {
   name: String!
 
   """Uuid of the user owning the project"""
-  userUuid: String!
+  userUuid: ID!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+input DeleteProjectInput {
+  """Project UUID"""
+  uuid: ID!
+}
 
 union Device = MR2000 | MR3000
 
@@ -526,6 +531,7 @@ type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   assignDeviceToProject(assignDeviceToProjectInput: AssignDeviceToProjectInput!): Project!
   createProject(createProjectInput: CreateProjectInput!): Project!
+  deleteProject(deleteProjectInput: DeleteProjectInput!): Project!
   register(registerUserInput: RegisterUserInput!): User
   removeDeviceFromProject(removeDeviceFromProjectInput: RemoveDeviceFromProjectInput!): Project!
   updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
