@@ -80,6 +80,7 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {RouterService} from 'src/services/RouterService';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
@@ -97,6 +98,10 @@ const props = defineProps({
   },
   q: {
     type: Object as PropType<QVueGlobals>,
+    required: true
+  },
+  routerService: {
+    type: Object as PropType<RouterService>,
     required: true
   }
 })
@@ -141,17 +146,20 @@ function deleteProject() {
     }
   }).onOk(async () => {
     // Delete project
-    await executeMutation(DELETE_PROJECT, {uuid: props.uuid}).then(() => {
-      // Show success notification
-      showNotification(
-        props.q,
-        i18n.global.t('messages.project_deleted'),
-        'bottom',
-        'positive',
-      )
-    })
+    await executeMutation(DELETE_PROJECT, {uuid: props.uuid})
+
+    // Show success notification
+    showNotification(
+      props.q,
+      i18n.global.t('messages.project_deleted'),
+      'bottom',
+      'positive',
+    )
 
     onDialogCancel()
+
+    // Route back, since project no longer exists
+    await props.routerService.goBack()
   })
 }
 </script>

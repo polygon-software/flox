@@ -66,7 +66,8 @@ function editProject(){
     componentProps: {
       name: props.projectId,
       uuid: projectUuid.value,
-      q: $q
+      q: $q,
+      routerService: routerService
     }
   }).onOk(async (newName: string) => {
     // After editing is finished, show success notification
