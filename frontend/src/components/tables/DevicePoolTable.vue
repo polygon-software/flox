@@ -100,10 +100,13 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {myPoolDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
+import AssignToProjectDialog from 'components/dialogs/AssignToProjectDialog.vue';
+import {useQuasar} from 'quasar';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 const rows: Ref<Device[]> = ref([])
+const $q = useQuasar()
 
 // ----- Data -----
 // TODO: Remove this sample data
@@ -151,23 +154,14 @@ onMounted(async () => {
 async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
-    case 'remove':
-      await routerService?.routeTo(ROUTES.LOGIN)
-      break
-    case 'compress':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'download':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'display':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'files':
-      await routerService?.addToRoute(`pool/${device}/${key}`)
-      break
-    case 'edit':
-      await routerService?.addToRoute(`pool/${device}/${key}`)
+    case 'assign':
+      $q.dialog({
+        component: AssignToProjectDialog,
+        componentProps: {}
+      }).onOk(() => {
+        console.log('great success')
+        // TODO success message
+      })
       break
     case 'status':
       await routerService?.addToRoute(`pool/${device}/${key}`)
