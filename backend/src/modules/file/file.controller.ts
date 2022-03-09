@@ -24,7 +24,10 @@ import { ERRORS } from '../../error/ERRORS';
 import { Offer } from '../offer/entities/offer.entity';
 import { Dossier } from '../dossier/entity/dossier.entity';
 import { User } from '../user/entities/user.entity';
-import { getValueDevelopment } from '../../value-development/value-development';
+import {
+  getValueDevelopment,
+  isZipCodeValid,
+} from '../../value-development/value-development';
 
 @Controller()
 export class FileController {
@@ -155,6 +158,7 @@ export class FileController {
     '/uploadDossierFinalDocument',
     '/getValueDevelopment',
     '/uploadValueDevelopmentFile',
+    '/isZipCodeValid',
   ]) //Todo Find better way to allow Preflight requests
   @Public()
   async corsResponse(@Res() res: fastify.FastifyReply<any>): Promise<any> {
@@ -340,6 +344,39 @@ export class FileController {
       const multiplier = await getValueDevelopment(zipCode, startDate, endDate);
       res.header('access-control-allow-origin', '*');
       res.send(multiplier);
+    } catch (error) {
+      // Return any calculation errors that occurred
+      res.send(error);
+    }
+  }
+
+  /**
+   * Determines whether a given ZIP code is valid
+   * @param {fastify.FastifyRequest} req - request
+   * @param {fastify.FastifyReply<any>} res - response
+   * @param {Record<string, string>} query - URL query, should contain 'zipCode'
+   * @returns {Promise<void>} - done
+   */
+  @Get('/isZipCodeValid')
+  @EmployeeOnly()
+  async isZipCodeValid(
+    @Req() req: fastify.FastifyRequest,
+    @Res() res: fastify.FastifyReply<any>,
+    @Query() query: Record<string, string>, // Params
+  ): Promise<any> {
+    const zipCode = query.zipCode;
+
+    // Ensure attribute is present
+    if (!zipCode) {
+      res.send(new Error(ERRORS.missing_query_parameters));
+      return;
+    }
+    res.header('access-control-allow-origin', '*');
+
+    try {
+      // Determine whether ZIP code is valid
+      const isValid = await isZipCodeValid(zipCode);
+      res.send(isValid);
     } catch (error) {
       // Return any calculation errors that occurred
       res.send(error);

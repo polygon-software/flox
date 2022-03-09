@@ -167,6 +167,7 @@ export const REJECTED_DOSSIERS = {
           __typename
           uuid
           status
+          reject_reason
           bank {
             uuid
             name

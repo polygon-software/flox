@@ -60,7 +60,7 @@ const $routerService: RouterService|undefined = inject('$routerService')
  * @returns {void}
  */
 async function onLogin({username, password}: {username: string, password: string}){
-  await $authService?.login(username, password)
+  await $authService?.login(username.trim(), password)
 
   // TODO: handle errors in login, such as incorrect 2FA code
 

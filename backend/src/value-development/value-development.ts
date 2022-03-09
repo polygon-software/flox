@@ -69,6 +69,7 @@ export async function saveValueDevelopmentCsv(
 
   // Insert values into table
   await queryRunner.manager.insert(valueTableName, parsedCsv);
+  await queryRunner.release();
 }
 
 /**
@@ -93,6 +94,7 @@ export async function getValueDevelopment(
   const valueTableExists = await queryRunner.hasTable(valueTableName);
   const zipTableExists = await queryRunner.hasTable(zipCodeTableName);
   if (!valueTableExists || !zipTableExists) {
+    await queryRunner.release();
     throw new Error(ERRORS.missing_database_data);
   }
 
@@ -106,6 +108,7 @@ export async function getValueDevelopment(
 
   // Ensure we have data for the given zip code
   if (!zipCodeQuery || zipCodeQuery.length === 0) {
+    await queryRunner.release();
     throw new Error(ERRORS.invalid_zip_code);
   }
 
@@ -123,6 +126,7 @@ export async function getValueDevelopment(
     `);
 
   if (!valueMappingQuery) {
+    await queryRunner.release();
     throw new Error(ERRORS.missing_database_data);
   }
   const valueMapping = valueMappingQuery[0];
@@ -155,6 +159,8 @@ export async function getValueDevelopment(
   const startValue = valueMapping[startKey];
   const endValue = valueMapping[endKey];
 
+  await queryRunner.release();
+
   // Limit result to 4 decimal points & return
   return parseFloat((endValue / startValue).toFixed(4));
 }
@@ -170,4 +176,37 @@ function getColumnNameForDate(date: Date) {
   const quarter = Math.floor(month / 3) + 1;
 
   return `${year}${quarter}`;
+}
+
+/**
+ * Determines whether the given zip code is valid (present within database)
+ * @param {string} zipCode - zip code
+ * @returns {boolean} - whether it's valid
+ */
+export async function isZipCodeValid(zipCode: string) {
+  // Set up database connection and query runner
+  const connection: Connection = getConnection();
+  const queryRunner: QueryRunner = connection.createQueryRunner();
+  await queryRunner.connect();
+
+  // Ensure needed table exists
+  const zipTableExists = await queryRunner.hasTable(zipCodeTableName);
+  if (!zipTableExists) {
+    await queryRunner.release();
+    throw new Error(ERRORS.missing_database_data);
+  }
+
+  // Get zip code -> region mapping directly via SQL because we're cool like that
+  const zipCodeQuery = await queryRunner.manager.query(`
+    SELECT *
+    FROM ${zipCodeTableName}
+    WHERE zip_code='${zipCode}'
+    LIMIT 1
+    `);
+
+  // Check whether we have data for the given zip code
+  const isValid = zipCodeQuery && zipCodeQuery.length > 0;
+  await queryRunner.release();
+
+  return isValid;
 }

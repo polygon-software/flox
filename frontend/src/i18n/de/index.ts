@@ -62,7 +62,7 @@ export default {
     date: 'Datum',
     status: 'Status',
     language: 'Sprache',
-    domicile_address: 'Addresse',
+    domicile_address: 'Domiziladdresse',
     correspondence_address: 'Korrespondenzaddresse',
     edit_correspondence_address: 'Gleich wie Wohnadresse',
     phone_number: 'Telefonnummer',
@@ -100,9 +100,9 @@ export default {
     email_sent: 'E-Mail(s) versendet',
     file_uploaded: 'Datei erfolgreich hochgeladen',
     files_uploaded: 'Dateien erfolgreich hochgeladen',
+    account_disabled: 'Account erfolgreich deaktiviert',
     password_set: 'Passwort erfolgreich festgelegt',
     bank_created: 'Bank erfolgreich erstellt',
-    account_disabled: 'Account erfolgreich deaktiviert',
     dossier_deleted: 'Dossier erfolgreich gelöscht',
     dossier_delete_failed: 'Löschen des Dossiers fehlgeschlagen',
   },
@@ -486,4 +486,10 @@ export default {
     reset_dossier: 'Dossier zurücksetzen',
     reset_dossier_description: 'Dossier wird zurückgesetzt und alle darauf erstellten Offerten gelöscht.',
   },
+  jobs: {
+    customer_advisor: 'Kundenberater*in',
+    team_leader: 'Teamleiter*in',
+    sales_leader: 'Verkaufsleiter*in',
+    branch_leader: 'Niederlassungsleiter*in',
+  }
 };

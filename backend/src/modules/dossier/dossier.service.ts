@@ -26,6 +26,7 @@ import { RemoveDossierFilesInput } from './dto/input/remove-files-dossier.input'
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { prettify } from '../../helpers/log-helper';
+import { isCompleted } from './dossier-helpers';
 import { DeleteDossierInput } from './dto/input/delete-dossier.input';
 
 @Injectable()
@@ -293,6 +294,7 @@ export class DossierService {
           uuid: Not(uuid),
         },
       },
+
       relations: [
         'offers',
         'offers.bank',
@@ -312,7 +314,7 @@ export class DossierService {
         (offer) => offer.bank.uuid === uuid,
       );
 
-      return freeSpots || ownOffer;
+      return (freeSpots && isCompleted(dossier)) || ownOffer;
     });
   }
 
