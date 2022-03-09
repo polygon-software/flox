@@ -65,13 +65,15 @@ function editProjectName(){
       uuid: projectUuid.value,
     }
   }).onOk(async (newName: string) => {
-    // After editing is finished, show success notification & navigate to new project URL
+    // After editing is finished, show success notification
     showNotification(
       $q,
       i18n.global.t('messages.project_renamed'),
       'bottom',
       'positive',
     )
+
+    // Navigate to project's new URL
     await routerService?.goBack()
     await routerService?.addToRoute(newName)
   })

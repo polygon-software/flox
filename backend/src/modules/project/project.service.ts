@@ -140,7 +140,6 @@ export class ProjectService {
    * @return {Promise<Project>} - The updated project
    */
   async updateProjectName(updateProjectInput: UpdateProjectInput) {
-    console.log('trigger update with', updateProjectInput);
     await this.projectRepository.update(updateProjectInput.uuid, {
       name: updateProjectInput.name,
     });
