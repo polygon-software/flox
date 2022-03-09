@@ -41,3 +41,19 @@ export const REMOVE_DEVICE_FROM_PROJECT = {
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
+
+export const ASSIGN_DEVICE_TO_PROJECT = {
+  mutation: gql`
+    mutation assignDeviceToProject($uuid: ID!, $cli: String!){
+      assignDeviceToProject (assignDeviceToProjectInput: {uuid: $uuid, cli: $cli}) {
+        uuid
+        name
+        mr2000instances
+        mr3000instances
+        __typename
+      }
+    }`,
+  tables: ['project'], // TODO: how can we ensure this also updates the device-related queries?
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}

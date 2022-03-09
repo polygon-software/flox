@@ -228,8 +228,13 @@ async function onOptionClick(project: Project, device: string, key: string): Pro
         }
       }).onOk(() => {
         void executeMutation(REMOVE_DEVICE_FROM_PROJECT, {uuid: project.uuid, cli: device}).then(() => {
-          // TODO success
-          console.log('REMOVED')
+          // Show success notification
+          showNotification(
+            $q,
+            i18n.global.t('messages.removed_device'),
+            'bottom',
+            'positive',
+          )
         })
       })
       break

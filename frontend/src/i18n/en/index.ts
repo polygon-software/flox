@@ -187,7 +187,8 @@ export default {
   messages: {
     copied: 'Copied',
     project_created: 'Project created successfully',
-    assigned_device: 'Device assigned successfully'
+    assigned_device: 'Device assigned successfully',
+    removed_device: 'Device removed successfully'
   },
   status: {
     title: 'Status of',

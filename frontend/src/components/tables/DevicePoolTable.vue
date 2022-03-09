@@ -82,7 +82,7 @@
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(props.row.station, button.key)"
+                  @click="onOptionClick(props.row.cli, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -102,6 +102,7 @@ import {myPoolDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
 import AssignToProjectDialog from 'components/dialogs/AssignToProjectDialog.vue';
 import {useQuasar} from 'quasar';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -146,7 +147,7 @@ onMounted(async () => {
 
 /**
  * Routes to different pages dependent which button is clicked
- * @param {string} device - the name of a device
+ * @param {string} device - the CLI of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
@@ -156,10 +157,17 @@ async function onOptionClick(device: string, key: string): Promise<void>{
     case 'assign':
       $q.dialog({
         component: AssignToProjectDialog,
-        componentProps: {}
+        componentProps: {
+          cli: device
+        }
       }).onOk(() => {
-        console.log('great success')
-        // TODO success message
+        // Show success notification
+        showNotification(
+          $q,
+          i18n.global.t('messages.assigned_device'),
+          'bottom',
+          'positive',
+        )
       })
       break
     case 'status':

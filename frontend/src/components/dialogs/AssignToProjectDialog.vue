@@ -73,11 +73,11 @@
 <script setup lang="ts">
 // REQUIRED; must be called inside of setup()
 import {useDialogPluginComponent} from 'quasar';
-import {defineEmits, onMounted, Ref, ref} from 'vue';
-import {CREATE_PROJECT} from 'src/data/mutations/PROJECT';
-import {executeMutation} from 'src/helpers/data-helpers';
-import {myPoolDevices, myProjects, myUser} from 'src/helpers/api-helpers';
+import {defineEmits, defineProps, onMounted, Ref, ref} from 'vue'
+import {myProjects} from 'src/helpers/api-helpers';
 import {Project} from 'src/data/types/Project';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {ASSIGN_DEVICE_TO_PROJECT} from 'src/data/mutations/PROJECT';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
@@ -87,43 +87,38 @@ const emits = defineEmits(useDialogPluginComponent.emits)
 const projects: Ref<Project[]> = ref([])
 const selectedProject: Ref<Project|null> = ref(null)
 
+const props = defineProps({
+  cli: {
+    type: String,
+    required: true,
+  }
+})
+
 // Load user's projects
 onMounted(async () => {
   projects.value = await myProjects()
-  console.log('Got projects:', projects.value)
 })
 
 /**
- * TODO
- * @return {void}
+ * Assigns the given device to the chosen project
+ * @return {Promise<void>} - done
  */
-function assignToProject() {
-  // TODO
-  console.log('ASSIGN')
-  // const user = await myUser()
-  // const userUuid = user?.uuid
-  //
-  // const params = {
-  //   userUuid: userUuid,
-  //   name: name.value,
-  //   mr2000instances: mr2000instances.value,
-  //   mr3000instances: mr3000instances.value,
-  // }
-  //
-  // let mutationResult
-  //
-  // mutationResult = await executeMutation(
-  //   CREATE_PROJECT,
-  //   {
-  //     createProjectInput: {
-  //       ...params
-  //     },
-  //   }
-  // )
-  //
-  // if (!mutationResult) {
-  //   throw new Error('An error occured while creating the project')
-  // }
- onDialogOK()
+async function assignToProject() {
+  if(selectedProject.value && props.cli){
+    let mutationResult
+
+    mutationResult = await executeMutation(
+      ASSIGN_DEVICE_TO_PROJECT,
+      {
+        uuid: selectedProject.value?.uuid,
+        cli: props.cli
+      }
+    )
+
+    if (!mutationResult) {
+      throw new Error('An error occurred while assigning the device')
+    }
+    onDialogOK()
+  }
 }
 </script>

@@ -102,7 +102,7 @@ async function createProject() {
   )
 
   if (!mutationResult) {
-    throw new Error('An error occured while creating the project')
+    throw new Error('An error occurred while creating the project')
   }
  onDialogOK()
 }
