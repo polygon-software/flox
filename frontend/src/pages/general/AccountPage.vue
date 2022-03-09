@@ -28,9 +28,8 @@ const $q = useQuasar()
 async function onChange(formValues: Record<string, unknown>): Promise<void>{
   // TODO: updates the data in backend
   // Get params from form
-  const username = formValues.username as string
   const email = formValues.email as string
-  const password = formValues.password_repeat as string
+  const username = formValues.username as string
 
   const allowed = await executeQuery(EMAIL_ALLOWED, { email: email});
 
