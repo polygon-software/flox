@@ -36,9 +36,9 @@ export class DeviceService {
   async getLevelWriting(
     getLevelWritingArgs: GetLevelWritingArgs,
   ): Promise<LevelWriting> {
-    const x_axes: LevelWritingAxis[] = [];
-    const y_axes: LevelWritingAxis[] = [];
-    const z_axes: LevelWritingAxis[] = [];
+    const xAxes: LevelWritingAxis[] = [];
+    const yAxes: LevelWritingAxis[] = [];
+    const zAxes: LevelWritingAxis[] = [];
     let maxValue = 0;
     const startTime = getLevelWritingArgs.start.getTime();
     const endTime = getLevelWritingArgs.end.getTime();
@@ -56,20 +56,20 @@ export class DeviceService {
           const step = data[0][2] * 1000; // ms
           const values = data[2] as Array<Array<number>>;
           let currentStep = 0;
-          const x_points: LevelWritingPoint[] = [];
-          const y_points: LevelWritingPoint[] = [];
-          const z_points: LevelWritingPoint[] = [];
+          const xPoints: LevelWritingPoint[] = [];
+          const yPoints: LevelWritingPoint[] = [];
+          const zPoints: LevelWritingPoint[] = [];
           values.forEach((value) => {
             const time = startTime + currentStep;
             currentStep += step;
             maxValue = Math.max(maxValue, ...value);
-            x_points.push(new LevelWritingPoint(new Date(time), value[0]));
-            y_points.push(new LevelWritingPoint(new Date(time), value[1]));
-            z_points.push(new LevelWritingPoint(new Date(time), value[2]));
+            xPoints.push(new LevelWritingPoint(new Date(time), value[0]));
+            yPoints.push(new LevelWritingPoint(new Date(time), value[1]));
+            zPoints.push(new LevelWritingPoint(new Date(time), value[2]));
           });
-          x_axes.push(new LevelWritingAxis(stationId, x_points));
-          y_axes.push(new LevelWritingAxis(stationId, y_points));
-          z_axes.push(new LevelWritingAxis(stationId, z_points));
+          xAxes.push(new LevelWritingAxis(stationId, xPoints));
+          yAxes.push(new LevelWritingAxis(stationId, yPoints));
+          zAxes.push(new LevelWritingAxis(stationId, zPoints));
         } catch (e) {
           console.error(
             `Level Writings for station "${stationId}" not found! URL: ${url}`,
@@ -78,7 +78,7 @@ export class DeviceService {
       },
     );
     await Promise.all(promiseList);
-    return new LevelWriting(x_axes, y_axes, z_axes, maxValue);
+    return new LevelWriting(xAxes, yAxes, zAxes, maxValue);
   }
 
   /**
@@ -143,54 +143,4 @@ export class DeviceService {
 
     return devices;
   }
-
-  // TODO if needed...
-  // /**
-  //  * Gets an MR2000/MR3000 device by CLI
-  //  * @param {string} cli - device CLI
-  //  * @returns {Promise<MR2000|MR3000} - the device
-  //  */
-  // async getDeviceByCli(cli: string) {
-  //   // Get all MR2000 & MR3000 instances
-  //   const mr2000instances = await fetchFromTable('MR2000', 'station');
-  //   const mr3000instances = await fetchFromTable('MR3000', 'station');
-  //
-  //   // Fetch stores for FTP info
-  //   const mr2000store = await fetchFromTable('MR2000', 'store');
-  //   const mr3000store = await fetchFromTable('MR3000', 'store');
-  //
-  //   // Fetch VPN table for FTP info
-  //   const vpnInfo = await fetchFromTable('openvpn', 'tempovp');
-  //
-  //   const validMr2000 = mr2000instances.find(
-  //     (instance) => instance.cli === cli,
-  //   );
-  //
-  //   // If it's a valid MR2000
-  //   if (validMr2000) {
-  //     return await mr2000fromDatabaseEntry(
-  //       validMr2000,
-  //       this.projectRepository,
-  //       vpnInfo.find((vpnEntry) => vpnEntry.cli === validMr2000.cli),
-  //       mr2000store.find((storeEntry) => storeEntry.cli === validMr2000.cli),
-  //     );
-  //   }
-  //
-  //   const validMr3000 = mr3000instances.find(
-  //     (instance) => instance.cli === cli,
-  //   );
-  //
-  //   // If it's a valid MR3000
-  //   if (validMr3000) {
-  //     return await mr3000fromDatabaseEntry(
-  //       validMr3000,
-  //       this.projectRepository,
-  //       vpnInfo.find((vpnEntry) => vpnEntry.cli === validMr3000.cli),
-  //       mr3000store.find((storeEntry) => storeEntry.cli === validMr3000.cli),
-  //     );
-  //   }
-  //
-  //   // TODO
-  //   throw new Error('no thats illegal');
-  // }
 }
