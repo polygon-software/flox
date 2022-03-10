@@ -53,7 +53,7 @@ const projectUuid: Ref<null|string> = ref(null)
 // Once mounted, determine actual project entry's UUID (for editing)
 onMounted(async () => {
   const ownProjects = await myProjects()
-  const project = ownProjects.find((project) => project.name === props.projectId)
+  const project = ownProjects.find((ownProject) => ownProject.name === props.projectId)
 
   if(project){
     projectUuid.value = project.uuid
