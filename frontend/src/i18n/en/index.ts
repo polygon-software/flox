@@ -61,7 +61,6 @@ export default {
   },
   projects: {
     project: 'Project',
-    new_project: 'New Project',
     device: 'Device | Devices',
     new_project: 'New Project',
     device_type: 'Device Type',
