@@ -17,6 +17,7 @@ import {
   mr3000fromDatabaseEntry,
 } from '../../helpers/device-helpers';
 import { GetUserDevicesArgs } from '../device/dto/args/get-user-devices.args';
+import { GetUserProjectsArgs } from '../project/dto/args/get-user-projects.args';
 
 @Injectable()
 export class UserService {
@@ -179,5 +180,20 @@ export class UserService {
     });
 
     return this.usersRepository.findOne(addUserPermissionInput.uuid);
+  }
+
+  /**
+   * Returns whether a user is authorized to view and update the given device.
+   * @param {User} user - The user.
+   * @param {string} cli - The device client.
+   * @returns {bool} - Whether the user is authorized.
+   */
+  isAuthorizedForDevice(user: User, cli: string): boolean {
+    return (
+      user.role === ROLE.ADMIN ||
+      (user.role === ROLE.USER &&
+        (user.mr2000instances?.includes(cli) ||
+          user.mr3000instances?.includes(cli)))
+    );
   }
 }

@@ -39,7 +39,7 @@ export const UPDATE_PROJECT = {
     }`,
   tables: ['project'],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'undefined'
+  cacheLocation: undefined
 }
 
 export const DELETE_PROJECT = {
@@ -55,5 +55,5 @@ export const DELETE_PROJECT = {
     }`,
   tables: ['project'],
   type: MutationTypes.DELETE,
-  cacheLocation: 'undefined'
+  cacheLocation: 'deleteProject'
 }
