@@ -36,7 +36,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
       {
         path: ':customerId/:projectId/:stationId/edit',
         component: () => import('pages/general/ParametersPage.vue'),
-        props: route => ({ parametersId: route.params.stationId })
+        props: route => ({ projectId: route.params.projectId, stationId: route.params.stationId })
       },
       {
         path: ':customerId/:projectId/:stationId/status',

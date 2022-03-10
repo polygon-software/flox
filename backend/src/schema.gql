@@ -145,12 +145,12 @@ type Project {
 
 type Query {
   allUsers: [User!]!
-  deviceParams(stationId: String!): DeviceParams!
+  deviceParams(cli: String!): DeviceParams!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
-  levelWriting(end: DateTime!, resolution: Int!, start: DateTime!, stationIds: [String!]!): LevelWriting!
+  levelWriting(clients: [String!]!, end: DateTime!, resolution: Int!, start: DateTime!): LevelWriting!
   myDevices(unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!

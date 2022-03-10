@@ -101,22 +101,31 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {inject, ref, onMounted} from 'vue';
 import {executeQuery} from 'src/helpers/data-helpers';
-import {LEVEL_WRITING} from 'src/data/queries/DEVICE';
+import {DEVICE_PARAMS} from 'src/data/queries/DEVICE';
 
 const routerService: RouterService|undefined = inject('$routerService')
 
-// const xValue = ref('')
-// const yValue = ref('')
-// const zValue = ref('')
+// const trigX = ref('')
+// const trigY = ref('')
+// const trigZ = ref('')
+// const ala1X = ref('')
+// const ala1Y = ref('')
+// const ala1Z = ref('')
+// const ala2X = ref('')
+// const ala2Y = ref('')
+// const ala2Z = ref('')
 onMounted(async () => {
-  const result = await executeQuery(LEVEL_WRITING) as unknown as Record<string, Record<string, unknown>>;
+  const result = await executeQuery(DEVICE_PARAMS) as unknown as Record<string, Record<string, unknown>>;
   console.log('result', result)
-  // xValue.value = (result?.data?.levelWriting as Record<string, string>).x;
-  // console.log('x', xValue.value)
-  // yValue.value = (result?.data?.levelWriting as Record<string, string>).y;
-  // console.log('y', yValue.value)
-  // zValue.value = (result?.data?.levelWriting as Record<string, string>).z;
-  // console.log('z', zValue.value)
+  // trigX.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).trigX;
+  // trigY.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).trigY;
+  // trigZ.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).trigZ;
+  // ala1X.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala1X;
+  // ala1Y.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala1Y;
+  // ala1Z.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala1Z;
+  // ala2X.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala2X;
+  // ala2Y.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala2Y;
+  // ala2Z.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala2Z;
 });
 
 // TODO: remove mock data and replace it with real ones

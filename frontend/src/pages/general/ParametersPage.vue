@@ -1,7 +1,7 @@
 <template>
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Project name -->
-    <h5>{{ parametersId }}</h5>
+    <h5>{{ projectId }} - {{ stationId }}</h5>
     <UserDataForm/>
     <AlertContactsForm/>
   </q-page>
@@ -14,7 +14,11 @@ import AlertContactsForm from 'components/forms/AlertContactsForm.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
-  parametersId: {
+  projectId: {
+    required: true,
+    type: String
+  },
+  stationId: {
     required: true,
     type: String
   }
