@@ -99,9 +99,25 @@
 <script setup lang="ts">
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {inject, ref} from 'vue';
+import {inject, ref, onMounted} from 'vue';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {LEVEL_WRITING} from 'src/data/queries/DEVICE';
 
 const routerService: RouterService|undefined = inject('$routerService')
+
+// const xValue = ref('')
+// const yValue = ref('')
+// const zValue = ref('')
+onMounted(async () => {
+  const result = await executeQuery(LEVEL_WRITING) as unknown as Record<string, Record<string, unknown>>;
+  console.log('result', result)
+  // xValue.value = (result?.data?.levelWriting as Record<string, string>).x;
+  // console.log('x', xValue.value)
+  // yValue.value = (result?.data?.levelWriting as Record<string, string>).y;
+  // console.log('y', yValue.value)
+  // zValue.value = (result?.data?.levelWriting as Record<string, string>).z;
+  // console.log('z', zValue.value)
+});
 
 // TODO: remove mock data and replace it with real ones
 const channelxTrigger = ref('0.250')
