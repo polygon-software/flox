@@ -2,7 +2,10 @@
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Project name -->
     <h5>{{ projectId }} - {{ stationId }}</h5>
-    <UserDataForm/>
+    <UserDataForm
+      :project-id="projectId"
+      :station-id="stationId"
+    />
     <AlertContactsForm/>
   </q-page>
 </template>

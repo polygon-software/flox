@@ -14,13 +14,13 @@
         <p>{{ $t('edit_parameters.project_name') }}</p>
         <q-field outlined stack-label style="width: 250px">
           <template #control>
-            <div class="self-center full-width no-outline" tabindex="0">Nord-1 B</div>
+            <div class="self-center full-width no-outline" tabindex="0">{{ props.projectId }}</div>
           </template>
         </q-field>
         <p>{{ $t('edit_parameters.station_name') }}</p>
         <q-field outlined stack-label style="width: 250px">
           <template #control>
-            <div class="self-center full-width no-outline" tabindex="0">USZ01</div>
+            <div class="self-center full-width no-outline" tabindex="0">{{ props.stationId }}</div>
           </template>
         </q-field>
       </div>
@@ -36,13 +36,13 @@
           <div class="row">
             <div class="col q-ma-sm">Trigger</div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelxTrigger" outlined/>
+              <q-input v-model="trigX" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelyTrigger" outlined/>
+              <q-input v-model="trigY" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelzTrigger" outlined/>
+              <q-input v-model="trigZ" outlined/>
             </div>
             <div class="col q-ma-sm">
               <q-input v-model="stateTrigger" borderless/>
@@ -51,13 +51,13 @@
           <div class="row">
             <div class="col q-ma-sm">Alarm 1</div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelxAlarm1" outlined/>
+              <q-input v-model="ala1X" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelyAlarm1" outlined/>
+              <q-input v-model="ala1Y" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelzAlarm1" outlined/>
+              <q-input v-model="ala1Z" outlined/>
             </div>
             <div class="col q-ma-sm">
               <q-toggle
@@ -72,13 +72,13 @@
           <div class="row">
             <div class="col q-ma-sm">Alarm 2</div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelxAlarm2" outlined/>
+              <q-input v-model="ala2X" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelyAlarm2" outlined/>
+              <q-input v-model="ala2Y" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="channelzAlarm2" outlined/>
+              <q-input v-model="ala2Z" outlined/>
             </div>
             <div class="col q-ma-sm">
               <q-toggle
@@ -99,48 +99,50 @@
 <script setup lang="ts">
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {inject, ref, onMounted} from 'vue';
+import {inject, ref, onMounted, defineProps} from 'vue';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {DEVICE_PARAMS} from 'src/data/queries/DEVICE';
 
 const routerService: RouterService|undefined = inject('$routerService')
 
-// const trigX = ref('')
-// const trigY = ref('')
-// const trigZ = ref('')
-// const ala1X = ref('')
-// const ala1Y = ref('')
-// const ala1Z = ref('')
-// const ala2X = ref('')
-// const ala2Y = ref('')
-// const ala2Z = ref('')
-onMounted(async () => {
-  const result = await executeQuery(DEVICE_PARAMS) as unknown as Record<string, Record<string, unknown>>;
-  console.log('result', result)
-  // trigX.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).trigX;
-  // trigY.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).trigY;
-  // trigZ.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).trigZ;
-  // ala1X.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala1X;
-  // ala1Y.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala1Y;
-  // ala1Z.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala1Z;
-  // ala2X.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala2X;
-  // ala2Y.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala2Y;
-  // ala2Z.value = (result?.getDeviceParams?.deviceParams as Record<string, string>).ala2Z;
-});
+const props = defineProps({
+  projectId: {
+    required: true,
+    type: String
+  },
+  stationId: {
+    required: true,
+    type: String
+  }
+})
 
 // TODO: remove mock data and replace it with real ones
-const channelxTrigger = ref('0.250')
-const channelyTrigger = ref('0.350')
-const channelzTrigger = ref('0.500')
 const stateTrigger = ref('Always active')
-const channelxAlarm1 = ref('0.150')
-const channelyAlarm1 = ref('0.300')
-const channelzAlarm1 = ref('0.550')
 const stateAlarm1 = ref('Enabled')
-const channelxAlarm2 = ref('0.150')
-const channelyAlarm2 = ref('0.300')
-const channelzAlarm2 = ref('0.550')
 const stateAlarm2 = ref('Enabled')
+
+const trigX = ref()
+const trigY = ref()
+const trigZ = ref()
+const ala1X = ref()
+const ala1Y = ref()
+const ala1Z = ref()
+const ala2X = ref()
+const ala2Y = ref()
+const ala2Z = ref()
+onMounted(async () => {
+  const result = await executeQuery(DEVICE_PARAMS, {cli: props.stationId})
+  const data = result.data.deviceParams as Record<string, string|number>
+  trigX.value = data.trigX;
+  trigY.value = data.trigY;
+  trigZ.value = data.trigZ;
+  ala1X.value = data.ala1X;
+  ala1Y.value = data.ala1Y;
+  ala1Z.value = data.ala1Z;
+  ala2X.value = data.ala2X;
+  ala2Y.value = data.ala2Y;
+  ala2Z.value = data.ala2Z;
+});
 
 /**
  * Loads the parameters of that device pool which is selected
