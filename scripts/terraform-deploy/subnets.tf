@@ -36,7 +36,7 @@ resource "aws_subnet" "frontend_private_subnet" {
 
 resource "aws_route_table_association" "frontend_route_table_association_public" {
   count                 = 3
-  route_table_id        = aws_route_table.frontend_route_table_public.id
+  route_table_id        = aws_route_table.route_table_public.id
   subnet_id             = aws_subnet.frontend_public_subnet[count.index].id
 
   lifecycle {
@@ -46,8 +46,8 @@ resource "aws_route_table_association" "frontend_route_table_association_public"
 
 resource "aws_route_table_association" "frontend_route_table_association_private" {
   count                 = 3
-  route_table_id        = aws_route_table.frontend_route_table_private.id
-  subnet_id             = aws_subnet.frontend_public_subnet[count.index].id
+  route_table_id        = aws_route_table.route_table_private.id
+  subnet_id             = aws_subnet.frontend_private_subnet[count.index].id
 
   lifecycle {
     create_before_destroy = true

@@ -85,7 +85,7 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   setting {
     namespace     = "aws:elb:listener:443"
     name          = "ListenerProtocol"
-    value         = "TCP"
+    value         = "SSL"
   }
   setting {
     namespace     = "aws:elb:listener:443"

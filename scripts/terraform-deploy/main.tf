@@ -35,7 +35,7 @@ resource "aws_internet_gateway" "internet_gateway" {
   }
 }
 
-resource "aws_route_table" "frontend_route_table_private" {
+resource "aws_route_table" "route_table_private" {
   vpc_id                = aws_vpc.vpc.id
   tags = {
     Name          = "${var.project}-${var.type}-${var.web}-route-table-private"
@@ -48,11 +48,11 @@ resource "aws_route_table" "frontend_route_table_private" {
   }
 }
 
-resource "aws_route_table" "frontend_route_table_public" {
+resource "aws_route_table" "route_table_public" {
   vpc_id                = aws_vpc.vpc.id
 
   tags = {
-    Name          = "${var.project}-${var.type}-${var.web}-route-table-public"
+    Name          = "${var.project}-${var.type}-route-table-public"
     Project       = var.project
     SubnetType    = "public"
   }
@@ -60,7 +60,7 @@ resource "aws_route_table" "frontend_route_table_public" {
 
 // Create new elastic IP for the NAT
 // @Cloudmates: needed?
-resource "aws_eip" "frontend_nat_elastic_ip" {
+resource "aws_eip" "web_nat_elastic_ip" {
   vpc                   = true
   tags = {
     Name          = "${var.project}-${var.type}-${var.web}-nat-eip"
@@ -74,7 +74,7 @@ resource "aws_eip" "frontend_nat_elastic_ip" {
 
 // Create nat gateway. @Cloudmates: Is that needed?
 resource "aws_nat_gateway" "frontend_nat" {
-  allocation_id         = aws_eip.frontend_nat_elastic_ip.id
+  allocation_id         = aws_eip.web_nat_elastic_ip.id
   subnet_id             = aws_subnet.frontend_public_subnet[0].id
 
   tags = {
@@ -88,7 +88,7 @@ resource "aws_nat_gateway" "frontend_nat" {
 }
 
 resource "aws_route" "frontend_route_private" {
-  route_table_id        = aws_route_table.frontend_route_table_private.id
+  route_table_id        = aws_route_table.route_table_private.id
   destination_cidr_block= "0.0.0.0/0"
   nat_gateway_id        = aws_nat_gateway.frontend_nat.id
   lifecycle {
@@ -97,7 +97,7 @@ resource "aws_route" "frontend_route_private" {
 }
 
 resource "aws_route" "frontend_route_public" {
-  route_table_id        = aws_route_table.frontend_route_table_public.id
+  route_table_id        = aws_route_table.route_table_public.id
   destination_cidr_block= "0.0.0.0/0"
   gateway_id            = aws_internet_gateway.internet_gateway.id
   lifecycle {
@@ -123,7 +123,7 @@ resource "aws_route53_record" "api_record" {
   records               = [aws_elastic_beanstalk_environment.api_env.endpoint_url]
 }
 
-resource "aws_route53_record" "ebs_web_record" {
+resource "aws_route53_record" "web_record" {
   name                  = "${var.project}-${var.type}-${var.web}.${var.superdomain}"
   type                  = "CNAME"
   zone_id               = var.route53_zone_id
