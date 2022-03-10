@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { UserService } from '../user/user.service';
 import { DeviceService } from './device.service';
@@ -16,6 +16,7 @@ import { LevelWriting } from '../../types/LevelWriting';
 import { UnauthorizedException } from '@nestjs/common';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
+import { UpdateDeviceParamsInput } from './dto/input/update-device.input';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -65,6 +66,22 @@ export class DeviceResolver {
       throw new UnauthorizedException();
     }
     return this.deviceService.getDeviceParams(getDeviceParamsArgs);
+  }
+
+  /**
+   * Updates the device parameters
+   * @param {UpdateDeviceParamsInput} updateDeviceParamsInput - the inputs which should be updated
+   * @returns {Promise<string>} - The id of the device which is being updates
+   */
+  @AnyRole()
+  //TODO: just the user from which the device is and the admin can update
+  @Mutation(() => String, { name: 'updateDeviceParams' })
+  async updateDeviceParams(
+    @Args('updateDeviceParamsInput')
+    updateDeviceParamsInput: UpdateDeviceParamsInput,
+  ): Promise<string> {
+    await this.deviceService.updateDeviceParams(updateDeviceParamsInput);
+    return updateDeviceParamsInput.cli;
   }
 
   /**

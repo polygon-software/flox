@@ -168,6 +168,7 @@ type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   createProject(createProjectInput: CreateProjectInput!): Project!
   register(registerUserInput: RegisterUserInput!): User
+  updateDeviceParams(updateDeviceParamsInput: UpdateDeviceParamsInput!): String!
   updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
@@ -244,6 +245,19 @@ input RegisterUserInput {
 enum Role {
   ADMIN
   USER
+}
+
+input UpdateDeviceParamsInput {
+  ala1X: Float
+  ala1Y: Float
+  ala1Z: Float
+  ala2X: Float
+  ala2Y: Float
+  ala2Z: Float
+  cli: String!
+  trigX: Float
+  trigY: Float
+  trigZ: Float
 }
 
 input UpdateProjectInput {

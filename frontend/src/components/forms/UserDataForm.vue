@@ -25,6 +25,13 @@
         </q-field>
       </div>
       <div style="width: 50%">
+        <q-btn
+          style="float: right"
+          :label="$t('buttons.save')"
+          outline
+          class="text-grey"
+          @click="updateParams"
+        />
         <q-form style="display:flex; flex-direction: column">
           <div class="row">
             <div class="col q-ma-sm"></div>
@@ -36,13 +43,13 @@
           <div class="row">
             <div class="col q-ma-sm">Trigger</div>
             <div class="col q-ma-sm">
-              <q-input v-model="trigX" outlined/>
+              <q-input v-model.number="trigX" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="trigY" outlined/>
+              <q-input v-model.number="trigY" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="trigZ" outlined/>
+              <q-input v-model.number="trigZ" outlined/>
             </div>
             <div class="col q-ma-sm">
               <q-input v-model="stateTrigger" borderless/>
@@ -51,13 +58,13 @@
           <div class="row">
             <div class="col q-ma-sm">Alarm 1</div>
             <div class="col q-ma-sm">
-              <q-input v-model="ala1X" outlined/>
+              <q-input v-model.number="ala1X" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="ala1Y" outlined/>
+              <q-input v-model.number="ala1Y" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="ala1Z" outlined/>
+              <q-input v-model.number="ala1Z" outlined/>
             </div>
             <div class="col q-ma-sm">
               <q-toggle
@@ -72,13 +79,13 @@
           <div class="row">
             <div class="col q-ma-sm">Alarm 2</div>
             <div class="col q-ma-sm">
-              <q-input v-model="ala2X" outlined/>
+              <q-input v-model.number="ala2X" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="ala2Y" outlined/>
+              <q-input v-model.number="ala2Y" outlined/>
             </div>
             <div class="col q-ma-sm">
-              <q-input v-model="ala2Z" outlined/>
+              <q-input v-model.number="ala2Z" outlined/>
             </div>
             <div class="col q-ma-sm">
               <q-toggle
@@ -99,9 +106,10 @@
 <script setup lang="ts">
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {inject, ref, onMounted, defineProps} from 'vue';
-import {executeQuery} from 'src/helpers/data-helpers';
+import {inject, ref, onMounted, defineProps, Ref} from 'vue';
+import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import {DEVICE_PARAMS} from 'src/data/queries/DEVICE';
+import {UPDATE_PARAMS} from 'src/data/mutations/DEVICE';
 
 const routerService: RouterService|undefined = inject('$routerService')
 
@@ -121,37 +129,54 @@ const stateTrigger = ref('Always active')
 const stateAlarm1 = ref('Enabled')
 const stateAlarm2 = ref('Enabled')
 
-const trigX = ref()
-const trigY = ref()
-const trigZ = ref()
-const ala1X = ref()
-const ala1Y = ref()
-const ala1Z = ref()
-const ala2X = ref()
-const ala2Y = ref()
-const ala2Z = ref()
+const trigX: Ref<number> = ref(0)
+const trigY: Ref<number> = ref(0)
+const trigZ: Ref<number> = ref(0)
+const ala1X: Ref<number> = ref(0)
+const ala1Y: Ref<number> = ref(0)
+const ala1Z: Ref<number> = ref(0)
+const ala2X: Ref<number> = ref(0)
+const ala2Y: Ref<number> = ref(0)
+const ala2Z: Ref<number> = ref(0)
 onMounted(async () => {
   const result = await executeQuery(DEVICE_PARAMS, {cli: props.stationId})
   const data = result.data.deviceParams as Record<string, string|number>
-  trigX.value = data.trigX;
-  trigY.value = data.trigY;
-  trigZ.value = data.trigZ;
-  ala1X.value = data.ala1X;
-  ala1Y.value = data.ala1Y;
-  ala1Z.value = data.ala1Z;
-  ala2X.value = data.ala2X;
-  ala2Y.value = data.ala2Y;
-  ala2Z.value = data.ala2Z;
+  trigX.value = data.trigX as number;
+  trigY.value = data.trigY as number;
+  trigZ.value = data.trigZ as number;
+  ala1X.value = data.ala1X as number;
+  ala1Y.value = data.ala1Y as number;
+  ala1Z.value = data.ala1Z as number;
+  ala2X.value = data.ala2X as number;
+  ala2Y.value = data.ala2Y as number;
+  ala2Z.value = data.ala2Z as number;
 });
 
 /**
- * Loads the parameters of that device pool which is selected
+ * Loads the parameters of that device pool which are selected
  * @async
  * @returns {void}
  */
 async function loadParameters(): Promise<void>{
   //TODO: loads the parameters
   await routerService?.routeTo(ROUTES.CUSTOMERS)
+}
+
+/**
+ * Updates the input parameters of that device pool which are changed
+ * @returns {void}
+ */
+async function updateParams() {
+  await executeMutation(UPDATE_PARAMS, {updateDeviceParamsInput: {cli: props.stationId,
+      trigX: trigX.value,
+      trigY: trigY.value,
+      trigZ: trigZ.value,
+      ala1X: ala1X.value,
+      ala1Y: ala1Y.value,
+      ala1Z: ala1Z.value,
+      ala2X: ala2X.value,
+      ala2Y: ala2Y.value,
+      ala2Z: ala2Z.value }})
 }
 
 </script>

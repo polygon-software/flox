@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
-import { fetchFromTable } from '../../helpers/database-helpers';
+import { fetchFromTable, writeToTable } from '../../helpers/database-helpers';
 import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
@@ -18,6 +18,7 @@ import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { ConfigService } from '@nestjs/config';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
+import { UpdateDeviceParamsInput } from './dto/input/update-device.input';
 
 @Injectable()
 export class DeviceService {
@@ -64,6 +65,32 @@ export class DeviceService {
       instance.unitY as string,
       instance.unitZ as string,
     );
+  }
+
+  /**
+   * Updates the device parameters
+   * @param {UpdateDeviceParamsInput} updateDeviceParamsInput - the inputs which should be updated
+   * @returns {Promise<void>} - done
+   */
+  async updateDeviceParams(
+    updateDeviceParamsInput: UpdateDeviceParamsInput,
+  ): Promise<void> {
+    const client = updateDeviceParamsInput.cli;
+    const filterQuery = `WHERE cli = "${client}"`;
+    const update = {};
+    Object.entries(updateDeviceParamsInput).forEach(([key, value]) => {
+      if (key !== 'cli' && value !== null) {
+        update[key] = value;
+      }
+    });
+    if (client.includes('_')) {
+      // TODO: Use helper function to distinguish between device types
+      // MR3000
+      await writeToTable('MR3000', 'para_trigala', filterQuery, update);
+    } else {
+      // MR2000
+      await writeToTable('MR2000', 'param', filterQuery, update);
+    }
   }
 
   /**
