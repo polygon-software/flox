@@ -387,7 +387,7 @@ const pageTitle = title.substring(0, title.length-1);
  * @returns {Promise<void>} - async
  */
 async function fetchLevelWritings(){
-  const response = await executeQuery(LEVEL_WRITING, {stationIds: stations, start: start.value, end: end.value, resolution: 1})
+  const response = await executeQuery(LEVEL_WRITING, {clients: stations, start: start.value, end: end.value, resolution: 1})
   levelWritings.value = response.data.levelWriting as LevelWritings
 }
 
@@ -397,7 +397,7 @@ async function fetchLevelWritings(){
  */
 async function fetchDeviceParams(){
   const promiseList = stations.map(async (stationId: string) => {
-    const response = await executeQuery(DEVICE_PARAMS, {stationId: stationId})
+    const response = await executeQuery(DEVICE_PARAMS, {cli: stationId})
     deviceParams.value[stationId] = response.data.deviceParams as Record<string, string|number>
   })
   await Promise.all(promiseList)
