@@ -97,7 +97,10 @@ export class ProjectResolver {
         uuid: project.uuid,
       } as GetProjectDevicesArgs);
     } else if (
-      await this.validateAccessToProject(user, getProjectDevicesArgs.uuid)
+      await this.projectService.validateAccessToProject(
+        user,
+        getProjectDevicesArgs.uuid,
+      )
     ) {
       return this.projectService.getProjectDevices(getProjectDevicesArgs);
     }
@@ -160,7 +163,12 @@ export class ProjectResolver {
     updateProjectInput: UpdateProjectInput,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (await this.validateAccessToProject(user, updateProjectInput.uuid)) {
+    if (
+      await this.projectService.validateAccessToProject(
+        user,
+        updateProjectInput.uuid,
+      )
+    ) {
       // Get user
       const dbUser = await this.userService.getUser({
         cognitoUuid: user.userId,
@@ -196,35 +204,6 @@ export class ProjectResolver {
       return this.projectService.deleteProject(deleteProjectInput);
     }
     throw new UnauthorizedException();
-  }
-
-  /**
-   * Validates if the given user has access to the given project
-   * @param {Record<string, string>} user - User that demands access
-   * @param {string} projectUuid - UUID of the project which the user wants to access
-   * @private
-   * @return {boolean} - validation result
-   */
-  private async validateAccessToProject(
-    user: Record<string, string>,
-    projectUuid: string,
-  ): Promise<boolean> {
-    // Get user
-    const dbUser = await this.userService.getUser({
-      cognitoUuid: user.userId,
-    } as GetUserArgs);
-
-    if (!dbUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
-    // For non-admin users, check whether they have permissions to access the requested project
-    if (
-      dbUser.role !== ROLE.ADMIN &&
-      !dbUser.projects.some((project) => project.uuid === projectUuid)
-    ) {
-      throw new Error(ERRORS.resource_not_allowed);
-    }
-    return true;
   }
 
   /**
@@ -274,7 +253,7 @@ export class ProjectResolver {
     @CurrentUser() user: Record<string, string>,
   ) {
     // Verify project access
-    const hasProjectAccess = await this.validateAccessToProject(
+    const hasProjectAccess = await this.projectService.validateAccessToProject(
       user,
       assignDeviceToProjectInput.uuid,
     );

@@ -71,7 +71,7 @@ export const LEVEL_WRITING = {
       $resolution: Int!
     ) {
       levelWriting(
-        stationIds: $stationIds
+        clients: $stationIds
         start: $start
         end: $end
         resolution: $resolution
@@ -108,7 +108,7 @@ export const LEVEL_WRITING = {
 export const DEVICE_PARAMS = {
   query: gql`
     query getDeviceParams($stationId: String!) {
-      deviceParams(stationId: $stationId) {
+      deviceParams(cli: $stationId) {
         trigX
         trigY
         trigZ
