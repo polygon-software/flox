@@ -33,49 +33,49 @@
       :rows-per-page-options="[10,20, 100]"
       separator="none"
     >
-      <template #body="props">
+      <template #body="_props">
         <q-tr
-          :props="props"
-          @click="() => showCustomGraph([props.row.cli])"
+          :props="_props"
+          @click="() => showCustomGraph([_props.row.cli])"
         >
           <q-td key="checkbox">
             <q-checkbox
               v-model="selectedRows"
-              :val="props.row.cli"
+              :val="_props.row.cli"
             />
           </q-td>
           <q-td key="name">
-            {{ props.row.name }}
+            {{ _props.row.name }}
           </q-td>
           <q-td key="device">
-            {{ props.row.type }}
+            {{ _props.row.type }}
           </q-td>
           <q-td key="client">
-            {{ props.row.cli }}
+            {{ _props.row.cli }}
           </q-td>
           <q-td key="ip">
-            {{ props.row.ip }}
+            {{ _props.row.ip }}
           </q-td>
           <q-td key="firmware">
-            {{ props.row.firmware }}
+            {{ _props.row.firmware }}
           </q-td>
           <q-td key="serial">
-            {{ props.row.serialNumber }}
+            {{ _props.row.serialNumber }}
           </q-td>
           <q-td key="sale_status">
-            {{ props.row.saleStatus }}
+            {{ _props.row.saleStatus }}
           </q-td>
           <q-td key="vpn_status">
-            {{ props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
+            {{ _props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
           </q-td>
           <q-td key="pid">
-            {{ props.row.pid }}
+            {{ _props.row.pid }}
           </q-td>
           <q-td key="files">
-            {{ props.row.files }}
+            {{ _props.row.files }}
           </q-td>
           <q-td key="ftp">
-            {{ $t(props.row.ftp ? 'general.yes' : 'general.no')}}
+            {{ $t(_props.row.ftp ? 'general.yes' : 'general.no')}}
           </q-td>
           <q-td key="options">
             <q-btn-dropdown
@@ -97,7 +97,7 @@
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(props.row.cli, button.key)"
+                  @click="onOptionClick(_props.row.cli, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -116,12 +116,8 @@ import {RouterService} from 'src/services/RouterService';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
 import {Device} from 'src/data/types/Device';
-import {myProjectDevices, singleProjectDevices} from 'src/helpers/api-helpers';
+import {singleProjectDevices} from 'src/helpers/api-helpers';
 import {useRoute} from 'vue-router';
-import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {executeMutation} from 'src/helpers/data-helpers';
-import {REMOVE_DEVICE_FROM_PROJECT} from 'src/data/mutations/PROJECT';
-import {showNotification} from 'src/helpers/notification-helpers';
 import {removeDeviceFromProject} from 'src/helpers/project-helpers';
 
 const search = ref('')

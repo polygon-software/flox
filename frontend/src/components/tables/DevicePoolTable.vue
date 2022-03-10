@@ -100,9 +100,7 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {myPoolDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
-import AssignToProjectDialog from 'components/dialogs/AssignToProjectDialog.vue';
 import {useQuasar} from 'quasar';
-import {showNotification} from 'src/helpers/notification-helpers';
 import {assignDeviceToProject} from 'src/helpers/project-helpers';
 
 const search = ref('')

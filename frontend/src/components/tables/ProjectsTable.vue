@@ -114,9 +114,6 @@ import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
 import {myProjectDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
 import {showNotification} from 'src/helpers/notification-helpers';
-import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {executeMutation} from 'src/helpers/data-helpers';
-import {REMOVE_DEVICE_FROM_PROJECT} from 'src/data/mutations/PROJECT';
 import {Project} from 'src/data/types/Project';
 import {removeDeviceFromProject} from 'src/helpers/project-helpers';
 
