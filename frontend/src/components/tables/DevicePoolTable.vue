@@ -103,6 +103,7 @@ import {Device} from 'src/data/types/Device';
 import AssignToProjectDialog from 'components/dialogs/AssignToProjectDialog.vue';
 import {useQuasar} from 'quasar';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {assignDeviceToProject} from 'src/helpers/project-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -155,20 +156,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'assign':
-      $q.dialog({
-        component: AssignToProjectDialog,
-        componentProps: {
-          cli: device
-        }
-      }).onOk(() => {
-        // Show success notification
-        showNotification(
-          $q,
-          i18n.global.t('messages.assigned_device'),
-          'bottom',
-          'positive',
-        )
-      })
+      assignDeviceToProject($q, device)
       break
     case 'status':
       await routerService?.addToRoute(`pool/${device}/${key}`)

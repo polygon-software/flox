@@ -118,6 +118,7 @@ import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {REMOVE_DEVICE_FROM_PROJECT} from 'src/data/mutations/PROJECT';
 import {Project} from 'src/data/types/Project';
+import {removeDeviceFromProject} from 'src/helpers/project-helpers';
 
 const $q = useQuasar()
 
@@ -216,29 +217,7 @@ async function onOptionClick(project: Project, device: string, key: string): Pro
   switch(key){
     // Removing device from project: Show warning dialog
     case 'remove':
-      $q.dialog({
-        component: WarningDialog,
-        componentProps: {
-          description: i18n.global.t('warnings.unassign_device'),
-          showDiscard: true,
-          discardLabel: i18n.global.t('buttons.cancel'),
-          swapNegative: true,
-          okLabel: i18n.global.t('buttons.confirm')
-        }
-      }).onOk(async () => {
-        await executeMutation(REMOVE_DEVICE_FROM_PROJECT, {uuid: project.uuid, cli: device})
-
-        // Show success notification
-        showNotification(
-          $q,
-          i18n.global.t('messages.removed_device'),
-          'bottom',
-          'positive',
-        )
-
-        // Update
-        rows.value = await myProjectDevices()
-      })
+      removeDeviceFromProject($q, project.uuid, device)
       break
     case 'compress':
       await routerService?.routeTo(ROUTES.CUSTOMERS)

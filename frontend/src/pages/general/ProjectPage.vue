@@ -18,7 +18,9 @@
       />
     </div>
 
-    <ProjectTable/>
+    <ProjectTable
+    :uuid="projectUuid"
+    />
 
   </q-page>
 </template>

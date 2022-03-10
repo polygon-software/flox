@@ -97,7 +97,7 @@
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(props.row.name, button.key)"
+                  @click="onOptionClick(props.row.cli, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, onMounted, Ref, ref} from 'vue';
+import {inject, onMounted, Ref, ref, defineProps} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
@@ -116,8 +116,13 @@ import {RouterService} from 'src/services/RouterService';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
 import {Device} from 'src/data/types/Device';
-import {singleProjectDevices} from 'src/helpers/api-helpers';
+import {myProjectDevices, singleProjectDevices} from 'src/helpers/api-helpers';
 import {useRoute} from 'vue-router';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {REMOVE_DEVICE_FROM_PROJECT} from 'src/data/mutations/PROJECT';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {removeDeviceFromProject} from 'src/helpers/project-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -126,6 +131,13 @@ const selectedRows: Ref<string[]> = ref([])
 
 const $q = useQuasar()
 const route = useRoute()
+
+const props = defineProps({
+  uuid: {
+    type: String,
+    required: true,
+  }
+})
 
 // ----- Data -----
 const columns = [
@@ -214,7 +226,7 @@ function showCustomGraph(devices: string[]): void{
 
 /**
  * Routes to different pages dependent which button is clicked
- * @param {string} device - the name of a device
+ * @param {string} device - the CLI of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
@@ -222,7 +234,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
-      await routerService?.routeTo(ROUTES.LOGIN)
+      removeDeviceFromProject($q, props.uuid, device)
       break
     case 'compress':
       await routerService?.routeTo(ROUTES.CUSTOMERS)
