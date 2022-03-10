@@ -53,6 +53,21 @@ scalar DateTime
 
 union Device = MR2000 | MR3000
 
+type DeviceParams {
+  ala1X: Float!
+  ala1Y: Float!
+  ala1Z: Float!
+  ala2X: Float!
+  ala2Y: Float!
+  ala2Z: Float!
+  trigX: Float!
+  trigY: Float!
+  trigZ: Float!
+  unitX: String!
+  unitY: String!
+  unitZ: String!
+}
+
 type LevelWriting {
   """Max value"""
   max: Float!
@@ -130,6 +145,7 @@ type Project {
 
 type Query {
   allUsers: [User!]!
+  deviceParams(stationId: String!): DeviceParams!
   getProjectDevices(name: String!): [Device!]!
   getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
