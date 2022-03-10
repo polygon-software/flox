@@ -96,9 +96,9 @@
 
     <!-- Invisible file picker (does not need a model-value, since upload is handled via event) -->
     <q-file
+      v-if="showQFile"
       v-show="false"
       ref="filePicker"
-      :model-value="null"
       accept=".pdf"
       :max-file-size="props.maxFileSize"
       :max-files="10"
@@ -147,10 +147,12 @@ import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {REMOVE_FILES_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {PROPERTY_TYPE} from 'app/definitions/ENUMS';
+import {sleep} from 'src/helpers/general-helpers';
 
 const route = useRoute()
 const $routerService: RouterService|undefined = inject('$routerService')
 
+const showQFile = ref(false)
 
 // Get ID from route
 if(!route.query.did){
@@ -411,8 +413,6 @@ const props = defineProps({
   },
 })
 
-
-
 const uploadFor = ref({
   section: '',
   field: '',
@@ -424,11 +424,12 @@ const uploadFor = ref({
  * @param {string} field - field key
  * @returns {Promise<void>} - done
  */
-function uploadFile(section: string, field: string) {
+async function uploadFile(section: string, field: string) {
   // Choose upload target
   uploadFor.value.section = section;
   uploadFor.value.field = field;
-
+  showQFile.value = true
+  await sleep(10)
   filePicker.value?.pickFiles()
 }
 
@@ -438,10 +439,9 @@ function uploadFile(section: string, field: string) {
  * @returns {void}
  */
 function onFilePicked(newFiles: File[]){
-
+  showQFile.value = false
   const sectionKey = uploadFor.value.section
   const fieldKey = uploadFor.value.field
-
   // Add section if not present
   if(!files.value[sectionKey]){
     files.value[sectionKey] = {}
@@ -454,6 +454,7 @@ function onFilePicked(newFiles: File[]){
     section[fieldKey] = []
   }
   section[fieldKey] = section[fieldKey].concat(newFiles)
+
 }
 
 /**
