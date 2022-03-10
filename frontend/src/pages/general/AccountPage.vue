@@ -10,38 +10,31 @@
 
 <script setup lang="ts">
 import {inject, } from 'vue'
-import { executeQuery } from 'src/helpers/data-helpers';
-import {ErrorService} from 'src/services/ErrorService';
-import { EMAIL_ALLOWED } from 'src/data/queries/USER';
 import SuccessDialog from 'components/dialogs/SuccessDialog.vue';
 import {useQuasar} from 'quasar';
 import AccountForm from 'components/forms/AccountForm.vue';
+import {RouterService} from 'src/services/RouterService';
 
-const $errorService: ErrorService|undefined = inject('$errorService')
 const $q = useQuasar()
+const routerService: RouterService|undefined = inject('$routerService')
 
 /**
  * Updates an authentication using the given data
  * @param {Record<string, string>} formValues - form values
  * @returns {void}
  */
-async function onChange(formValues: Record<string, unknown>): Promise<void>{
+function onChange(formValues: Record<string, unknown>): void{
   // TODO: updates the data in backend
   // Get params from form
   const email = formValues.email as string
   const username = formValues.username as string
 
-  const allowed = await executeQuery(EMAIL_ALLOWED, { email: email});
-
-  if(!allowed?.data?.isEmailAllowed) {
-    $errorService?.showErrorDialog(new Error(`Change the account data failed. The given email (${ email }) is not correct.`))
-    return
-  }
+  //TODO: check if email and username does not exist in the database and create a new user
 
   //TODO: onOk
   $q.dialog({
     component: SuccessDialog,
-    componentProps: {}
+    componentProps: {routerService: routerService}
   })
 }
 </script>

@@ -25,13 +25,18 @@
 
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import {inject} from 'vue';
+import {defineProps} from 'vue';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 
-const { dialogRef } = useDialogPluginComponent()
+const { dialogRef, onDialogHide } = useDialogPluginComponent()
 
-const routerService: RouterService|undefined = inject('$routerService')
+const props = defineProps({
+  routerService: {
+    required: true,
+    type: RouterService,
+  },
+})
 
 /**
  * This component defines a generic success message that has a redirect button and automatically redirects.
@@ -44,11 +49,13 @@ const autoRedirectDurationMS = 5000
  */
 async function redirectOnClick(): Promise<void> {
   // Redirect to customer page
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
+  onDialogHide()
+  await props.routerService?.routeTo(ROUTES.CUSTOMERS)
 }
 // Set up auto-redirect
 setTimeout(function () {
-  void routerService?.routeTo(ROUTES.CUSTOMERS)
+  onDialogHide()
+  void props.routerService?.routeTo(ROUTES.CUSTOMERS)
 }, autoRedirectDurationMS);
 
 

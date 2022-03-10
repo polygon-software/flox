@@ -71,7 +71,7 @@
       <q-btn
         color="primary"
         :label="$t('buttons.finish')"
-        :disable="false"
+        :disable="!saveChanges"
         unelevated
         @click="onSubmit"
       />
@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, inject, ref} from 'vue';
+import {defineEmits, inject, ref, Ref} from 'vue';
 import { IS_EMAIL, IS_VALID_STRING } from 'src/data/RULES'
 import {AuthenticationService} from 'src/services/AuthService';
 import {Context, Module} from 'vuex-smart-module';
@@ -89,25 +89,30 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {useAuth} from 'src/store/authentication';
+import {ErrorService} from 'src/services/ErrorService';
 
 const authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 const $authService: AuthenticationService|undefined = inject('$authService')
 
 // TODO: replace with data from database
 const email = ref('ramize.abdili@hotmail.com')
-const username: string | any = authStore.getters.getUsername();
+const username: Ref<string | undefined> = ref(authStore.getters.getUsername())
 
 const emit = defineEmits(['submit'])
 
 const editingEmail = ref(false)
 const editingUsername = ref(false)
+const saveChanges = ref(false)
+
+const $errorService: ErrorService|undefined = inject('$errorService')
 
 /**
  * Changes the disable value of the button
  * @returns {void}
  */
 function onSaveEmail(){
-  editingEmail.value = !editingEmail.value;
+  editingEmail.value = !editingEmail.value
+  saveChanges.value = true
 }
 
 /**
@@ -115,7 +120,8 @@ function onSaveEmail(){
  * @returns {void}
  */
 function onSaveUsername(){
-  editingUsername.value = !editingUsername.value;
+  editingUsername.value = !editingUsername.value
+  saveChanges.value = true
 }
 
 /**
@@ -123,7 +129,10 @@ function onSaveUsername(){
  * @returns {void}
  */
 function onSubmit(): void {
-  emit('submit', {email: email.value, username: username?.value})
+  if (username.value === undefined){
+    $errorService?.showErrorDialog(new Error('Change the username data failed because it is undefined. You have to enter a username'))
+  }
+  emit('submit', {email: email.value, username: username.value})
 }
 
 /**
