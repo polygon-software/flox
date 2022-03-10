@@ -29,14 +29,14 @@ To locally run a project built with the full stack bootstrap, the following comm
 
 - Running frontend locally (any of these) within `/frontend`:
 ````bash
-quasar dev          // running with clientside rendering
-quasar dev -m pwa   // running as progressive web application
-quasar dev -m ssr   // running with serverside rendering
+yarn dev         // running with clientside rendering
+yarn dev:pwa     // running as progressive web application
+yarn dev:ssr     // running with serverside rendering
 ````
 
 - Runnning backend + database locally within `/backend`:
 ````bash
-docker-compose up -b -v
+docker-compose up --build -V
 ````
 This will create one container each for backend, database and nocoDB. *Note:* you must have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running for this command to work. If you are running on a Windows machine, you may need to enable CPU virtualization in BIOS/UEFI.
 
