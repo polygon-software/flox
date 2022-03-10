@@ -26,6 +26,7 @@ jobs:
             core
             soi
             bigabig
+            datavis
           wip: false
           validateSingleCommit: true
 

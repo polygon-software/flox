@@ -16,8 +16,8 @@ variable "api" {
 }
 
 variable "type" {
-  description     = "Live or Test or testV2..."
-  default         = "Test"
+  description     = "live or test or testV2..."
+  default         = "test"
   type            = string
 }
 
