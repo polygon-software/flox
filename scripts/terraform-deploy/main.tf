@@ -1,53 +1,46 @@
 terraform {
-
-/*  backend "remote" {
-    organization = "polygon-software"
-    workspaces {
-      name = "terraform-testing-mh"
-    }
-  }*/
-
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.27"
+      source            = "hashicorp/aws"
+      version           = "~> 3.27"
     }
   }
-
-  required_version = ">= 0.14.9"
+  required_version      = ">= 0.14.9"
 }
 
 // define AWS as provider
 provider "aws" {
-  profile = "default"
-  region  = "eu-central-1"
+  profile               = "default"
+  region                = var.aws_region
 }
 
-resource "aws_vpc" "tf_eb_vpc" {
-  cidr_block = var.cidr_block
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+resource "aws_vpc" "vpc" {
+  cidr_block            = var.cidr_block
+  enable_dns_hostnames  = true
+  enable_dns_support    = true
 
   tags = {
-    Name = "${var.project_prefix_char}-main-vpc"
+    Name          = "${var.project}-${var.type}-vpc"
+    Project       = var.project
   }
 
 }
 
-resource "aws_internet_gateway" "tf_internet_gateway" {
-  vpc_id = aws_vpc.tf_eb_vpc.id
+resource "aws_internet_gateway" "internet_gateway" {
+  vpc_id                = aws_vpc.vpc.id
 
   tags = {
-    Name = "${var.project_prefix_char}-internet-gateway"
+    Name          = "${var.project}-${var.type}-internet-gateway"
+    Project       = var.project
   }
 }
 
-resource "aws_route_table" "tf_r_table_pri" {
-
-  vpc_id = aws_vpc.tf_eb_vpc.id
+resource "aws_route_table" "frontend_route_table_private" {
+  vpc_id                = aws_vpc.vpc.id
   tags = {
-    Name = "${var.project_prefix_char}-r-table-pir"
-    SubnetType = "private"
+    Name          = "${var.project}-${var.type}-${var.web}-route-table-private"
+    Project       = var.project
+    SubnetType    = "private"
   }
 
   lifecycle {
@@ -55,21 +48,23 @@ resource "aws_route_table" "tf_r_table_pri" {
   }
 }
 
-resource "aws_route_table" "tf_r_table_pub" {
-  vpc_id = aws_vpc.tf_eb_vpc.id
+resource "aws_route_table" "frontend_route_table_public" {
+  vpc_id                = aws_vpc.vpc.id
 
   tags = {
-    Name = "${var.project_prefix_char}-r-table-pub"
-    SubnetType = "public"
+    Name          = "${var.project}-${var.type}-${var.web}-route-table-public"
+    Project       = var.project
+    SubnetType    = "public"
   }
 }
 
 // Create new elastic IP for the NAT
-resource "aws_eip" "tf_nat_eip" {
-  vpc = true
+// @Cloudmates: needed?
+resource "aws_eip" "frontend_nat_elastic_ip" {
+  vpc                   = true
   tags = {
-    Name      = "${var.project_prefix_char}-nat-eip"
-    Network   = "NAT"
+    Name          = "${var.project}-${var.type}-${var.web}-nat-eip"
+    Project       = var.project
   }
 
   lifecycle {
@@ -77,14 +72,14 @@ resource "aws_eip" "tf_nat_eip" {
   }
 }
 
-// create nat gateway.
-resource "aws_nat_gateway" "tf_nat" {
-
-  allocation_id = aws_eip.tf_nat_eip.id
-  subnet_id     = aws_subnet.web_pub_subnet[0].id
+// Create nat gateway. @Cloudmates: Is that needed?
+resource "aws_nat_gateway" "frontend_nat" {
+  allocation_id         = aws_eip.frontend_nat_elastic_ip.id
+  subnet_id             = aws_subnet.frontend_public_subnet[0].id
 
   tags = {
-    Name      = "${var.project_prefix_char}-nat"
+    Name          = "${var.project}-${var.type}-${var.web}-nat"
+    Project       = var.project
   }
 
   lifecycle {
@@ -92,54 +87,56 @@ resource "aws_nat_gateway" "tf_nat" {
   }
 }
 
-resource "aws_route" "tf_route_pri" {
-
-  route_table_id         = aws_route_table.tf_r_table_pri.id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.tf_nat.id
-
+resource "aws_route" "frontend_route_private" {
+  route_table_id        = aws_route_table.frontend_route_table_private.id
+  destination_cidr_block= "0.0.0.0/0"
+  nat_gateway_id        = aws_nat_gateway.frontend_nat.id
+  tags = {
+    Project       = var.project
+  }
   lifecycle {
     create_before_destroy = true
   }
 }
 
-resource "aws_route" "tf_route_pub" {
-
-  route_table_id         = aws_route_table.tf_r_table_pub.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.tf_internet_gateway.id
-
+resource "aws_route" "frontend_route_public" {
+  route_table_id        = aws_route_table.frontend_route_table_public.id
+  destination_cidr_block= "0.0.0.0/0"
+  gateway_id            = aws_internet_gateway.internet_gateway.id
+  tags = {
+    Project       = var.project
+  }
   lifecycle {
     create_before_destroy = true
   }
 }
 
 // create aws s3 bucket to Upload app to
-resource "aws_s3_bucket" "tf_app_bucket" {
-  bucket = "${var.project_prefix_char}-app-bucket"
+resource "aws_s3_bucket" "source_code_bucket" {
+  bucket                = "${var.project}-${var.type}-app-bucket"
 
   tags = {
-    Name = "${var.project_prefix_char}-app-bucket"
+    Name          = "${var.project}-source-code-bucket"
+    Project       = var.project
   }
 }
 
-// Needs to be imported with terraform import
-resource "aws_route53_zone" "main_zone" {
-  name            = "polygon-project.ch"
-}
+resource "aws_route53_record" "api_record" {
+  name                  = "${var.project}-${var.type}-${var.api}.${var.superdomain}"
+  type                  = "CNAME"
+  zone_id               = var.route53_zone_id
+  ttl                   = "300"
+  records               = [aws_elastic_beanstalk_environment.api_env.endpoint_url]
+  tags = {
+    Project       = var.project
+  }}
 
-resource "aws_route53_record" "ebs-api-record" {
-  name    = "${var.project_prefix_char}-api.polygon-project.ch"
-  type    = "CNAME"
-  zone_id = aws_route53_zone.main_zone.id
-  ttl     = "300"
-  records = [aws_elastic_beanstalk_environment.api_eb_env.endpoint_url]
-}
-
-resource "aws_route53_record" "ebs-web-record" {
-  name    = "${var.project_prefix_char}-web.polygon-project.ch"
-  type    = "CNAME"
-  zone_id = aws_route53_zone.main_zone.id
-  ttl     = "300"
-  records = [aws_elastic_beanstalk_environment.web_eb_env.endpoint_url]
-}
+resource "aws_route53_record" "ebs_web_record" {
+  name                  = "${var.project}-${var.type}-${var.web}.${var.superdomain}"
+  type                  = "CNAME"
+  zone_id               = var.route53_zone_id
+  ttl                   = "300"
+  records               = [aws_elastic_beanstalk_environment.frontend_env.endpoint_url]
+  tags = {
+    Project       = var.project
+  }}
