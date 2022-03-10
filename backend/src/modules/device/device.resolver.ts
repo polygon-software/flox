@@ -1,6 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
-import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { DeviceService } from './device.service';
 import {
@@ -17,7 +16,7 @@ import { LevelWriting } from '../../types/LevelWriting';
 import { ROLE } from '../../ENUM/ENUM';
 import { UnauthorizedException } from '@nestjs/common';
 
-@Resolver(() => User)
+@Resolver(() => Device)
 export class DeviceResolver {
   constructor(
     private readonly deviceService: DeviceService,
