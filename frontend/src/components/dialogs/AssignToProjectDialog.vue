@@ -21,6 +21,7 @@
           :key="project.uuid"
           v-ripple
           tag="label"
+          style="min-width: 250px"
         >
           <q-item-section avatar>
             <q-radio
