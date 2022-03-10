@@ -24,7 +24,7 @@
     <q-table
       class="q-mt-lg"
       flat
-      :rows="mockedRows"
+      :rows="rows"
       :columns="columns"
       row-key="uuid"
       :filter="search"
@@ -38,13 +38,13 @@
           @click="() => onRowClick(props.row)"
         >
           <q-td key="project">
-            {{ props.row.project }}
+            {{ props.row.project?.name ?? '-' }}
           </q-td>
           <q-td key="device">
-            {{ props.row.device }}
+            {{ props.row.name }}
           </q-td>
           <q-td key="client">
-            {{ props.row.client }}
+            {{ props.row.cli }}
           </q-td>
           <q-td key="ip">
             {{ props.row.ip }}
@@ -53,7 +53,7 @@
             {{ props.row.firmware }}
           </q-td>
           <q-td key="serial">
-            {{ props.row.serial }}
+            {{ props.row.serialNumber }}
           </q-td>
           <q-td key="sale_status">
             {{ props.row.sale_status }}
@@ -62,7 +62,7 @@
             {{ props.row.station }}
           </q-td>
           <q-td key="vpn_status">
-            {{ props.row.vpn_status }}
+            {{ props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
           </q-td>
           <q-td key="pid">
             {{ props.row.pid }}
@@ -71,7 +71,7 @@
             {{ props.row.files }}
           </q-td>
           <q-td key="ftp">
-            {{ props.row.ftp }}
+            {{ $t(props.row.ftp ? 'general.yes' : 'general.no')}}
           </q-td>
           <q-td key="options">
             <q-btn-dropdown
@@ -103,11 +103,18 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue';
+import {inject, onMounted, Ref, ref} from 'vue';
+import {useQuasar} from 'quasar';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
+import {myProjectDevices} from 'src/helpers/api-helpers';
+import {Device} from 'src/data/types/Device';
+import {showNotification} from 'src/helpers/notification-helpers';
+
+const $q = useQuasar()
 
 
 const search = ref('')
@@ -130,74 +137,7 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-
-//TODO: uncomment when we have data (and then remove the mocked rows)
-/*const userProjects = subscribeToQuery(MY_PROJECTS)
-
-const rows = computed(()=>{
-  return userProjects.value ?? []
-})*/
-
-
-const mockedRows = [
-  {
-    project: 'P1A',
-    device: 'MR3000',
-    client: '21_45',
-    ip: '10.8.13.182',
-    firmware: '2.08',
-    serial: '87654321',
-    sale_status: 'Rental',
-    station: 'P1A-A',
-    vpn_status: 'Down',
-    pid: '0ZAB-21',
-    files: '1489',
-    ftp: 'Active',
-  },
-  {
-    project: 'P2A',
-    device: 'MR4000',
-    client: '25_16',
-    ip: '10.8.16.16',
-    firmware: '220.65',
-    serial: '856',
-    sale_status: 'Sold',
-    station: 'P1A-B',
-    vpn_status: 'Up',
-    pid: '01-PC-A1',
-    files: '27',
-    ftp: 'Active',
-  },
-  {
-    project: 'P3A',
-    device: 'MR2000',
-    client: '45-13',
-    ip: '10.8.13.21',
-    firmware: '2.2.7',
-    serial: '355673',
-    sale_status: 'Sold',
-    station: 'P2A-A',
-    vpn_status: 'Up',
-    pid: '3012-21',
-    files: '68',
-    ftp: 'Active',
-  },
-  {
-    project: 'P4A',
-    device: 'MR1000',
-    client: '39_21',
-    ip: '10.8.13.11',
-    firmware: '2.2.3',
-    serial: '112456',
-    sale_status: 'Sold',
-    station: 'P3-A',
-    vpn_status: 'Up',
-    pid: '3090-121',
-    files: '109',
-    ftp: 'Active',
-  },
-]
-
+const rows: Ref<Device[]> = ref([])
 
 const buttons = [
   {
@@ -234,13 +174,28 @@ const buttons = [
   },
 ]
 
+// Once mounted, fetch data
+onMounted(async () => {
+  rows.value = await myProjectDevices()
+})
+
 /**
- * Routes to Create New Project Page or Dialog
+ * Shows a dialog for creating a new project
  * @async
  * @returns {void}
  */
-async function createNewProject(): Promise<void>{
-  //TODO: routes to create new project page or dialog
+async function createNewProject(): Promise<void> { //TODO: Add different dialog for admin
+  $q.dialog({
+    component: CreateProjectDialog,
+  }).onOk(() => {
+    // Show success notification
+    showNotification(
+      $q,
+      i18n.global.t('messages.project_created'),
+      'bottom',
+      'positive',
+    )
+  })
   await routerService?.routeTo(ROUTES.CUSTOMERS)
 }
 
@@ -289,7 +244,7 @@ async function onOptionClick(project: string, device: string, key: string): Prom
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  await routerService?.addToRoute(row.project) // or use another value...
+  await routerService?.addToRoute(row.project.name as string)
 }
 </script>
 

@@ -46,6 +46,20 @@ input CreateAddressInput {
   zipCode: String!
 }
 
+input CreateProjectInput {
+  """Associated MR2000 instances"""
+  mr2000instances: [String!]
+
+  """Associated MR3000 instances"""
+  mr3000instances: [String!]
+
+  """Project name"""
+  name: String!
+
+  """Uuid of the user owning the project"""
+  userUuid: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -102,11 +116,26 @@ type MR2000 {
   """CLI ID"""
   cli: String!
 
+  """Firmware version"""
+  firmware: String!
+
+  """FTP forward status"""
+  ftp: Boolean!
+
+  """IP address, if any"""
+  ip: String
+
+  """Device name"""
+  name: String!
+
   """Number of files"""
   numberOfFiles: Float!
 
   """PID"""
   pid: String!
+
+  """Project the device belongs to (if any)"""
+  project: Project
 
   """Serial number"""
   serialNumber: String!
@@ -116,13 +145,30 @@ type MR3000 {
   """CLI ID"""
   cli: String!
 
+  """Firmware version"""
+  firmware: String!
+
+  """FTP forward status"""
+  ftp: Boolean!
+
+  """IP address, if any"""
+  ip: String
+
+  """Device name"""
+  name: String!
+
+  """Project the device belongs to (if any)"""
+  project: Project
+
   """Serial number"""
   serialNumber: String!
 }
 
 type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
+  createProject(createProjectInput: CreateProjectInput!): Project!
   register(registerUserInput: RegisterUserInput!): User
+  updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
@@ -133,25 +179,40 @@ enum Permission {
 }
 
 type Project {
-  """Associated MR2000 instances"""
-  mr2000instances: [MR2000!]!
+  """Creation date"""
+  createdAt: DateTime!
 
-  """Associated MR3000 instances"""
-  mr3000instances: [MR3000!]!
+  """Date of deletion"""
+  deletedAt: DateTime
 
-  """Project name"""
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """MR2000 instances that the user has access to"""
+  mr2000instances: [String!]
+
+  """MR3000 instances that the user has access to"""
+  mr3000instances: [String!]
+
+  """Project Name"""
   name: String!
+
+  """User that owns the project"""
+  user: User!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type Query {
   allUsers: [User!]!
   deviceParams(cli: String!): DeviceParams!
-  getProjectDevices(name: String!): [Device!]!
-  getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
+  getProjectDevices(uuid: ID!): [Device!]!
+  getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
   levelWriting(clients: [String!]!, end: DateTime!, resolution: Int!, start: DateTime!): LevelWriting!
-  myDevices(unassigned: Boolean): [Device!]!
+  myDevices(assigned: Boolean, unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!
   user(cognitoUuid: ID, uuid: ID): User!
@@ -183,6 +244,14 @@ input RegisterUserInput {
 enum Role {
   ADMIN
   USER
+}
+
+input UpdateProjectInput {
+  """Project name"""
+  name: String!
+
+  """Project UUID"""
+  uuid: ID!
 }
 
 input UpdateUserInput {
@@ -224,7 +293,7 @@ type User {
   phone: String!
 
   """Projects that the user has access to"""
-  projects: [String!]
+  projects: [Project!]
 
   """Role of the User"""
   role: Role!

@@ -21,6 +21,9 @@ export const MY_USER = {
         uuid
         role
         username
+        projects {
+          name
+        }
         email
         cognitoUuid
         __typename
@@ -39,6 +42,9 @@ export const ALL_USERS = {
         role
         username
         email
+        projects {
+          name
+        }
         cognitoUuid
         __typename
       }
@@ -56,6 +62,9 @@ export const USER = {
         role
         username
         email
+        projects {
+          name
+        }
         cognitoUuid
         __typename
       }

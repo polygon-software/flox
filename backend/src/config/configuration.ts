@@ -24,6 +24,13 @@ export default (): Config => ({
     password: process.env.MR_PASSWORD,
     database: process.env.MR_3000,
   },
+  openvpn: {
+    host: process.env.MR_HOST,
+    port: process.env.MR_PORT,
+    username: process.env.MR_USER,
+    password: process.env.MR_PASSWORD,
+    database: process.env.OPENVPN,
+  },
   pyAPI: {
     host: process.env.PY_HOST,
     port: process.env.PY_PORT,
@@ -53,5 +60,6 @@ type Config = {
   database: DatabaseConfig;
   mr2000: DatabaseConfig;
   mr3000: DatabaseConfig;
+  openvpn: DatabaseConfig;
   pyAPI: APIConfig;
 };

@@ -12,6 +12,7 @@ import * as Joi from 'joi';
 import { RolesGuard } from './auth/roles.guard';
 import { User } from './modules/user/entities/user.entity';
 import { DeviceModule } from './modules/device/device.module';
+import { ProjectModule } from './modules/project/project.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { DeviceModule } from './modules/device/device.module';
         MR_PORT: Joi.number().required(),
         MR_2000: Joi.string().required(),
         MR_3000: Joi.string().required(),
+        OPENVPN: Joi.string().required(),
         MR_USER: Joi.string().required(),
         MR_PASSWORD: Joi.string().required(),
         MR_HOST: Joi.string().required(),
@@ -93,9 +95,24 @@ import { DeviceModule } from './modules/device/device.module';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forRootAsync({
+      name: 'openvpn',
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mariadb',
+        host: configService.get('openvpn.host'),
+        port: configService.get('openvpn.port'),
+        username: configService.get('openvpn.username'),
+        password: configService.get('openvpn.password'),
+        database: configService.get('openvpn.database'),
+        synchronize: false,
+      }),
+      inject: [ConfigService],
+    }),
     TypeOrmModule.forFeature([User]),
     UserModule,
     DeviceModule,
+    ProjectModule,
   ],
   providers: [
     JwtStrategy,
