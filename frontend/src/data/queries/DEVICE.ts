@@ -25,20 +25,42 @@ export const USER_DEVICES = {
 
 export const MY_DEVICES = {
   query: gql`
-    query {
-      myDevices {
-        ... on MR2000 {
-          cli
+    query myDevices($unassigned: Boolean, $assigned: Boolean){
+      myDevices (unassigned: $unassigned, assigned: $assigned){
+      ...on MR2000{
+        cli
+        name
+        serialNumber
+        numberOfFiles
+        pid
+        ftp
+        ip
+        firmware
+        project {
+          uuid
+          name
+          __typename
         }
-        ... on MR3000 {
-          cli
+      }
+      ...on MR3000{
+        cli
+        name
+        serialNumber
+        ftp
+        ip
+        firmware
+        project {
+          uuid
+          name
+          __typename
+        }
         }
         __typename
       }
     }
   `,
   tables: ['user'],
-  cacheLocation: 'getUserDevices',
+  cacheLocation: 'myDevices',
 };
 
 export const LEVEL_WRITING = {
@@ -109,8 +131,8 @@ export const DEVICE_PARAMS = {
 
 export const PROJECT_DEVICES = {
   query: gql`
-    query getProjectDevices($name: String!) {
-      getProjectDevices(name: $name) {
+    query getProjectDevices($uuid: ID!) {
+      getProjectDevices(uuid: $uuid) {
         ... on MR2000 {
           cli
         }

@@ -10,12 +10,12 @@ export const USER_PROJECTS = {
     query getUserProjects($uuid: ID!){
       getUserProjects(uuid: $uuid){
         name
-        mr2000instances{
-          cli
+        uuid
+        user {
+          uuid
         }
-        mr3000instances{
-          cli
-        }
+        mr2000instances
+        mr3000instances
       __typename
     }}
   `,
@@ -28,12 +28,12 @@ export const MY_PROJECTS = {
     query{
       myProjects{
         name
-        mr2000instances{
-          cli
+        uuid
+        user {
+          uuid
         }
-        mr3000instances{
-          cli
-        }
+        mr2000instances
+        mr3000instances
         __typename
       }}
   `,
