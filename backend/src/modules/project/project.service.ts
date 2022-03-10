@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
@@ -15,10 +15,7 @@ import { Project } from './entities/project.entity';
 import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
 import { fetchFromTable } from '../../helpers/database-helpers';
-import { MR2000 } from '../../types/MR2000';
-import { MR3000 } from '../../types/MR3000';
 import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
-import { GetUserArgs } from '../user/dto/args/get-user.args';
 
 @Injectable()
 export class ProjectService {

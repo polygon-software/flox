@@ -1,7 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
 import { IsArray, IsString } from 'class-validator';
-import { MR2000 } from '../../../../types/MR2000';
-import { MR3000 } from '../../../../types/MR3000';
 
 @InputType()
 /**
