@@ -4,7 +4,7 @@ import {
   Router,
   RouteRecordRaw,
   useRoute,
-  useRouter
+  useRouter,
 } from 'vue-router';
 
 /**
@@ -28,12 +28,22 @@ export class RouterService {
    * @param {string} path - path to route to
    * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
    */
-  addToRoute(path: string){
+  addToRoute(path: string) {
     let currentRoute = this.route.path
     if(currentRoute.endsWith('/')){
       currentRoute = currentRoute.substring(0, currentRoute.length - 1)
     }
-    return this.router.push(`${currentRoute}/${path}`)
+    return this.router.push(`${currentRoute}/${path}`);
+  }
+
+  /**
+   * Go back.
+   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
+   */
+  goBack() {
+    return this.router.push(
+      this.route.path.substring(0, this.route.path.lastIndexOf('/'))
+    );
   }
 
   /**

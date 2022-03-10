@@ -43,6 +43,7 @@ import { ProjectModule } from './modules/project/project.module';
         MR_PORT: Joi.number().required(),
         MR_2000: Joi.string().required(),
         MR_3000: Joi.string().required(),
+        OPENVPN: Joi.string().required(),
         MR_USER: Joi.string().required(),
         MR_PASSWORD: Joi.string().required(),
         MR_HOST: Joi.string().required(),
@@ -112,7 +113,6 @@ import { ProjectModule } from './modules/project/project.module';
     UserModule,
     DeviceModule,
     ProjectModule,
-    DeviceModule,
   ],
   providers: [
     JwtStrategy,

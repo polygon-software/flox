@@ -19,7 +19,7 @@ export const USER_PROJECTS = {
       __typename
     }}
   `,
-  tables: ['user'],
+  tables: ['project'],
   cacheLocation: 'getUserProjects',
 };
 
@@ -37,7 +37,7 @@ export const MY_PROJECTS = {
         __typename
       }}
   `,
-  tables: ['user'],
+  tables: ['project'],
   cacheLocation: 'myProjects',
 };
 

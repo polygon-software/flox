@@ -24,7 +24,6 @@ import { UnauthorizedException } from '@nestjs/common';
 export class ProjectResolver {
   constructor(
     private readonly projectService: ProjectService,
-
     private readonly userService: UserService,
   ) {}
 
@@ -122,7 +121,7 @@ export class ProjectResolver {
     @CurrentUser() user: Record<string, string>,
   ) {
     if (
-      await this.validateAccessToProject(
+      await this.projectService.validateAccessToProject(
         user,
         removeDeviceFromProjectInput.uuid,
       )
@@ -188,7 +187,7 @@ export class ProjectResolver {
     deleteProjectInput: DeleteProjectInput,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (await this.validateAccessToProject(user, deleteProjectInput.uuid)) {
+    if (await this.projectService.validateAccessToProject(user, deleteProjectInput.uuid)) {
       return this.projectService.deleteProject(deleteProjectInput);
     }
     throw new UnauthorizedException();

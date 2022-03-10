@@ -206,7 +206,7 @@ function showCustomGraph(devices: string[]): void{
   $q.dialog({
     component: CustomGraphDialog,
     componentProps: {},
-  }).onOk(async () => {
+  }).onOk(async (settings: Record<string, string>) => {
     // Build string combination of device CLIs
     let pathSuffix = ''
     devices.forEach((device) => {
@@ -217,6 +217,7 @@ function showCustomGraph(devices: string[]): void{
     pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
 
     await routerService?.addToRoute(pathSuffix)
+    await routerService?.pushToQuery(settings)
   })
 }
 

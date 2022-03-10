@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserService } from '../user/user.service';
 import { DeviceService } from './device.service';
 import { DeviceResolver } from './device.resolver';
 import { Project } from '../project/entities/project.entity';
@@ -16,7 +15,7 @@ import { User } from '../user/entities/user.entity';
     ConfigModule,
     TypeOrmModule.forFeature([Project, User]),
   ],
-  providers: [DeviceResolver, DeviceService, UserService],
+  providers: [DeviceResolver, DeviceService],
   exports: [DeviceService],
 })
 export class DeviceModule {}
