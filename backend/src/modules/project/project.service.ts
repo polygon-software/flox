@@ -10,6 +10,10 @@ import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-p
 import { Project } from './entities/project.entity';
 import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
+import { GetUserArgs } from '../user/dto/args/get-user.args';
+import { ROLE } from '../../ENUM/ENUM';
+import { ERRORS } from '../../error/ERRORS';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ProjectService {
@@ -17,6 +21,7 @@ export class ProjectService {
     @InjectRepository(Project)
     private readonly projectRepository: Repository<Project>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -118,5 +123,33 @@ export class ProjectService {
     for (const mr3000 of removeDevicesFromProjectInput.mr3000instances ?? []) {
       await removeDeviceFromProject(mr3000, false);
     }
+  }
+  /**
+   * Validates if the given user has access to the given project
+   * @param {Record<string, string>} user - User that demands access
+   * @param {string} projectUuid - UUID of the project which the user wants to access
+   * @private
+   * @return {boolean} - validation result
+   */
+  async validateAccessToProject(
+    user: Record<string, string>,
+    projectUuid: string,
+  ): Promise<boolean> {
+    // Get user
+    const dbUser = await this.userService.getUser({
+      cognitoUuid: user.userId,
+    } as GetUserArgs);
+
+    if (!dbUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+    // For non-admin users, check whether they have permissions to access the requested project
+    if (
+      dbUser.role !== ROLE.ADMIN &&
+      !dbUser.projects.some((project) => project.uuid === projectUuid)
+    ) {
+      throw new Error(ERRORS.resource_not_allowed);
+    }
+    return true;
   }
 }
