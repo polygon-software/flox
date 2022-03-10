@@ -187,7 +187,12 @@ export class ProjectResolver {
     deleteProjectInput: DeleteProjectInput,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (await this.projectService.validateAccessToProject(user, deleteProjectInput.uuid)) {
+    if (
+      await this.projectService.validateAccessToProject(
+        user,
+        deleteProjectInput.uuid,
+      )
+    ) {
       return this.projectService.deleteProject(deleteProjectInput);
     }
     throw new UnauthorizedException();
