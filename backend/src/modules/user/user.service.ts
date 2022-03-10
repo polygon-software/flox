@@ -8,15 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PERMISSION, ROLE } from '../../ENUM/ENUM';
 import { AddUserPermissionInput } from './dto/input/add-user-permission.input';
-import { fetchFromTable } from '../../helpers/database-helpers';
-import { MR2000 } from '../../types/MR2000';
-import { MR3000 } from '../../types/MR3000';
 import { RegisterUserInput } from './dto/input/register-user.input';
-import {
-  mr2000fromDatabaseEntry,
-  mr3000fromDatabaseEntry,
-} from '../../helpers/device-helpers';
-import { GetUserDevicesArgs } from '../device/dto/args/get-user-devices.args';
 
 @Injectable()
 export class UserService {

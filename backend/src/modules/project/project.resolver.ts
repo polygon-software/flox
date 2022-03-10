@@ -18,6 +18,7 @@ import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
 import { RemoveDeviceFromProjectInput } from './dto/input/remove-device-from-project.input';
 import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Resolver(() => Project)
 export class ProjectResolver {
@@ -84,7 +85,7 @@ export class ProjectResolver {
       });
 
       const project = userProjects.find(
-        (project) => project.name === getProjectDevicesArgs.name,
+        (userProject) => userProject.name === getProjectDevicesArgs.name,
       );
 
       if (!project) {
@@ -101,6 +102,7 @@ export class ProjectResolver {
     ) {
       return this.projectService.getProjectDevices(getProjectDevicesArgs);
     }
+    throw new UnauthorizedException();
   }
 
   /**
@@ -129,6 +131,7 @@ export class ProjectResolver {
         removeDeviceFromProjectInput,
       );
     }
+    throw new UnauthorizedException();
   }
 
   /**
@@ -169,6 +172,7 @@ export class ProjectResolver {
         dbUser.uuid,
       );
     }
+    throw new UnauthorizedException();
   }
 
   /**
@@ -187,6 +191,7 @@ export class ProjectResolver {
     if (await this.validateAccessToProject(user, deleteProjectInput.uuid)) {
       return this.projectService.deleteProject(deleteProjectInput);
     }
+    throw new UnauthorizedException();
   }
 
   /**
@@ -281,5 +286,7 @@ export class ProjectResolver {
         assignDeviceToProjectInput,
       );
     }
+
+    throw new UnauthorizedException();
   }
 }
