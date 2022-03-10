@@ -88,8 +88,10 @@ import {date, useQuasar} from 'quasar';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {DEVICE_PARAMS, LEVEL_WRITING} from 'src/data/queries/DEVICE';
 import {RouterService} from 'src/services/RouterService';
+import { ErrorService } from 'src/services/ErrorService';
 
 const routerService: RouterService|undefined = inject('$routerService')
+const errorService: ErrorService|undefined = inject('$errorService')
 
 const props = defineProps({
   stationId: {
@@ -115,7 +117,10 @@ const timePeriodOptions = [
   'custom',
 ]
 
+// The perception level of 0.2 is fixed and defined by the customer
 const perception = 0.2;
+// When scaling for perception, we want some space above the perception level.
+const perceptionScale = perception + 0.1;
 
 const xMarkers = computed(() => [...levelMarkers.value, ...warningLevels.value.x])
 const yMarkers = computed(() => [...levelMarkers.value, ...warningLevels.value.y])
@@ -133,32 +138,29 @@ const levelMarkers = computed(() => [
 
 const maxAlarm = computed(() => {
   let max = 0
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-  stations.forEach((station) => {
+  stations.forEach((station: string) => {
     const params = deviceParams.value[station]
     if (params) {
-      if (params.ala1X < 100){
-        max = Math.max(max, params.ala1X as number)
-      }
-      if (params.ala1Y < 100){
-        max = Math.max(max, params.ala1Y as number)
-      }
-      if (params.ala1Z < 100){
-        max = Math.max(max, params.ala1Z as number)
-      }
-      if (params.ala2X < 100){
-        max = Math.max(max, params.ala2X as number)
-      }
-      if (params.ala2Y < 100){
-        max = Math.max(max, params.ala2Y as number)
-      }
-      if (params.ala2Z < 100){
-        max = Math.max(max, params.ala2Z as number)
-      }
+      max = updateMaxAlarm(max, params.ala1X as number)
+      max = updateMaxAlarm(max, params.ala2X as number)
+      max = updateMaxAlarm(max, params.ala1Y as number)
+      max = updateMaxAlarm(max, params.ala2Y as number)
+      max = updateMaxAlarm(max, params.ala1Z as number)
+      max = updateMaxAlarm(max, params.ala2Z as number)
     }
   })
-  return Math.max(max, perception + 0.1)
+  return Math.max(max, perceptionScale)
 })
+
+/**
+ * Return the new maximum alarm. If an alarm is not set, its value is 100 and should not be considered.
+ * @param {number} max - the current maximum.
+ * @param {number} alarm - the alarm parameter.
+ * @returns {number} - the new maximum.
+ */
+function updateMaxAlarm(max: number, alarm: number){
+  return alarm < 100 ? Math.max(max, alarm) : max
+}
 
 const alert = computed(() => invalidUnits.value)
 
@@ -166,10 +168,15 @@ const invalidUnits = ref(false)
 const invalidUnit1 = ref('')
 const invalidUnit2 = ref('')
 
+/**
+ * Returns the units for each axis.
+ * It is invalid for different stations to have different units on the same axis,
+ */
 const units = computed(() => {
   const unitsRecord: Record<string, string> = {x: '', y: '', z: ''}
     // eslint-disable-next-line sonarjs/cognitive-complexity
-    stations.forEach((station) => {
+    stations.forEach((station: string) => {
+      // For each station, read out the units and compare them to the other stations units
       const params = deviceParams.value[station]
       if (params) {
         const stationUnits: Record<string, string> = {
@@ -178,6 +185,7 @@ const units = computed(() => {
           z: (params.unitZ as string).trim()
         }
         Object.entries(stationUnits).forEach(([key, value]) => {
+          // For each unit of the station, check if they differ from the other stations units
           if (!unitsRecord[key]) {
             unitsRecord[key] = value
           } else if (unitsRecord[key] !== value) {
@@ -191,6 +199,10 @@ const units = computed(() => {
   return unitsRecord
 })
 
+/**
+ * Returns a list of markers for both alarms and the trigger on all axes.
+ * These markers are only shown if only a single device is visualized.
+ */
 const warningLevels = computed(() => {
   const markers: Record<string, Record<string, unknown>[]> = {x: [], y: [], z: []}
   if(stations.length === 1){
@@ -269,13 +281,15 @@ const scaleOption = computed({
 const scale: ComputedRef<number> = computed(() => {
   switch (scaleOption.value){
     case 'perception_level':
-      return perception + 0.1
+      return perceptionScale
     case 'alarm_level':
+      // The max alarm level added 10% and rounded up to one digit
       return Math.ceil(maxAlarm.value * 11) / 10
     case 'custom':
-      return parseFloat(routerService?.getQueryParam('customScale')?.trim() ?? `${perception + 0.1}`)
+      return parseFloat(routerService?.getQueryParam('customScale')?.trim() ?? `${perceptionScale}`)
     case 'highest_peak':
     default:
+      // The max writing level rounded up to one digit
       return Math.ceil(levelWritings.value.max * 10) / 10
   }
 })
@@ -318,26 +332,26 @@ const end: ComputedRef<Date> = computed(() => {
 
 // Start of the visualized period
 const start = computed(() => {
-  const date = new Date(end.value)
+  const startDate = new Date(end.value)
   switch (periodOption.value){
     case 'twelve_hours':
-      date.setHours(date.getHours() - 12)
+      startDate.setHours(startDate.getHours() - 12)
       break
     case 'two_days':
-      date.setDate(date.getDate() - 2)
+      startDate.setDate(startDate.getDate() - 2)
       break
     case 'two_weeks':
-      date.setDate(date.getDate() - 14)
+      startDate.setDate(startDate.getDate() - 14)
       break
     case 'one_month':
-      date.setMonth(date.getMonth() - 1)
+      startDate.setMonth(startDate.getMonth() - 1)
       break
     case 'custom':
       return customPeriod.value.start
     default:
       break
   }
-  return date
+  return startDate
 })
 
 // Watch for changes in time period and query new level writings
@@ -363,7 +377,7 @@ const stations = props.stationId.split('+')
 
 // Title containing station IDs
 let title = i18n.global.tc('dashboard.station', stations.length)
-stations.forEach((station) => {
+stations.forEach((station: string) => {
   title += ` ${station},`
 })
 const pageTitle = title.substring(0, title.length-1);
@@ -382,7 +396,7 @@ async function fetchLevelWritings(){
  * @returns {Promise<void>} - async
  */
 async function fetchDeviceParams(){
-  const promiseList = stations.map(async (stationId) => {
+  const promiseList = stations.map(async (stationId: string) => {
     const response = await executeQuery(DEVICE_PARAMS, {stationId: stationId})
     deviceParams.value[stationId] = response.data.deviceParams as Record<string, string|number>
   })
@@ -410,6 +424,6 @@ function showCustomGraphDialog(): void{
 }
 
 // Fetch initially
-fetchLevelWritings().catch(e => console.error(e))
-fetchDeviceParams().catch(e => console.error(e))
+fetchLevelWritings().catch(() => errorService?.showErrorDialog(new Error('Fetching level writings failed with an error.')))
+fetchDeviceParams().catch(() => errorService?.showErrorDialog(new Error('Fetching device parameters failed with an error.')))
 </script>

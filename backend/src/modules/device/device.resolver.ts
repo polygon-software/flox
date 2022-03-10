@@ -4,7 +4,6 @@ import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { LevelWriting } from '../../types/LevelWriting';
 import { AnyRole, CurrentUser } from '../../auth/authorization.decorator';
 import { UserService } from '../user/user.service';
-import { ROLE } from '../../ENUM/ENUM';
 import { UnauthorizedException } from '@nestjs/common';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
@@ -29,7 +28,7 @@ export class DeviceResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<LevelWriting> {
     const dbUser = await this.userService.getMyUser(user);
-    getLevelWritingArgs.stationIds.forEach((stationId) => {
+    getLevelWritingArgs.clients.forEach((stationId) => {
       if (!this.userService.isAuthorizedForDevice(dbUser, stationId)) {
         throw new UnauthorizedException();
       }
@@ -52,10 +51,7 @@ export class DeviceResolver {
   ): Promise<DeviceParams> {
     const dbUser = await this.userService.getMyUser(user);
     if (
-      !this.userService.isAuthorizedForDevice(
-        dbUser,
-        getDeviceParamsArgs.stationId,
-      )
+      !this.userService.isAuthorizedForDevice(dbUser, getDeviceParamsArgs.cli)
     ) {
       throw new UnauthorizedException();
     }

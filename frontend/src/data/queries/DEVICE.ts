@@ -7,16 +7,17 @@ import { QueryObject } from 'src/data/DATA-DEFINITIONS';
 
 export const USER_DEVICES = {
   query: gql`
-    query getUserDevices($uuid: ID!){
-      getUserDevices(uuid: $uuid){
-      ...on MR2000{
-        cli
+    query getUserDevices($uuid: ID!) {
+      getUserDevices(uuid: $uuid) {
+        ... on MR2000 {
+          cli
+        }
+        ... on MR3000 {
+          cli
+        }
+        __typename
       }
-      ...on MR3000{
-        cli
-      }
-      __typename
-    }}
+    }
   `,
   tables: ['user'],
   cacheLocation: 'getUserDevices',
@@ -24,16 +25,17 @@ export const USER_DEVICES = {
 
 export const MY_DEVICES = {
   query: gql`
-    query{
-      myDevices{
-      ...on MR2000{
-        cli
+    query {
+      myDevices {
+        ... on MR2000 {
+          cli
+        }
+        ... on MR3000 {
+          cli
+        }
+        __typename
       }
-      ...on MR3000{
-        cli
-      }
-      __typename
-    }}
+    }
   `,
   tables: ['user'],
   cacheLocation: 'getUserDevices',
@@ -41,23 +43,33 @@ export const MY_DEVICES = {
 
 export const LEVEL_WRITING = {
   query: gql`
-    query getLevelWriting($stationIds: [String!]!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
-      levelWriting(stationIds: $stationIds, start: $start, end: $end, resolution: $resolution){
-        x{
+    query getLevelWriting(
+      $stationIds: [String!]!
+      $start: DateTime!
+      $end: DateTime!
+      $resolution: Int!
+    ) {
+      levelWriting(
+        stationIds: $stationIds
+        start: $start
+        end: $end
+        resolution: $resolution
+      ) {
+        x {
           name
           data {
             x
             y
           }
         }
-        y{
+        y {
           name
           data {
             x
             y
           }
         }
-        z{
+        z {
           name
           data {
             x
@@ -74,8 +86,8 @@ export const LEVEL_WRITING = {
 
 export const DEVICE_PARAMS = {
   query: gql`
-    query getDeviceParams($stationId: String!){
-      deviceParams(stationId: $stationId){
+    query getDeviceParams($stationId: String!) {
+      deviceParams(stationId: $stationId) {
         trigX
         trigY
         trigZ
@@ -92,21 +104,22 @@ export const DEVICE_PARAMS = {
     }
   `,
   tables: ['device'],
-  cacheLocation: 'getDeviceParams',
+  cacheLocation: 'deviceParams',
 };
 
 export const PROJECT_DEVICES = {
   query: gql`
-    query getProjectDevices($name: String!){
-      getProjectDevices(name: $name){
-        ...on MR2000{
+    query getProjectDevices($name: String!) {
+      getProjectDevices(name: $name) {
+        ... on MR2000 {
           cli
         }
-        ...on MR3000{
+        ... on MR3000 {
           cli
         }
         __typename
-      }}
+      }
+    }
   `,
   tables: ['device'],
   cacheLocation: 'getProjectDevices',

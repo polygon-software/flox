@@ -5,5 +5,5 @@ import { IsArray } from 'class-validator';
 export class GetDeviceParamsArgs {
   @Field(() => String)
   @IsArray()
-  stationId: string;
+  cli: string;
 }

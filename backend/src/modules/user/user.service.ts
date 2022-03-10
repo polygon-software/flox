@@ -292,12 +292,18 @@ export class UserService {
     return devices;
   }
 
-  isAuthorizedForDevice(user: User, deviceId: string): boolean {
+  /**
+   * Returns whether a user is authorized to view and update the given device.
+   * @param {User} user - The user.
+   * @param {string} cli - The device client.
+   * @returns {bool} - Whether the user is authorized.
+   */
+  isAuthorizedForDevice(user: User, cli: string): boolean {
     return (
       user.role === ROLE.ADMIN ||
       (user.role === ROLE.USER &&
-        (user.mr2000instances?.includes(deviceId) ||
-          user.mr3000instances?.includes(deviceId)))
+        (user.mr2000instances?.includes(cli) ||
+          user.mr3000instances?.includes(cli)))
     );
   }
 }
