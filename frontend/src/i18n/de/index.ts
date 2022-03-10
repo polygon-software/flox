@@ -82,6 +82,7 @@ export default {
     show_status_files: 'Statusdateien anzeigen',
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
+    id: 'ID',
   },
   edit_parameters: {
     user_data: 'Benutzerdaten und Schwellenwerte',
@@ -116,6 +117,8 @@ export default {
     new_contact: 'Neuer Kontakt',
     load: 'Laden',
     save: 'Speichern',
+    show: 'Anzeigen',
+    close: 'Schliessen',
     edit: 'Bearbeiten',
   },
   errors: {
@@ -152,6 +155,7 @@ export default {
       'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
   },
   set_password: {
     description:
@@ -169,7 +173,8 @@ export default {
   visualisation: {
     period: 'Periode',
     horizontal: 'Horizontal',
-    vertical: 'Vertikal'
+    vertical: 'Vertikal',
+    at: 'bei',
   },
   period: {
     twelve_hours: '12 Stunden',
@@ -213,6 +218,28 @@ export default {
     frq_z: 'Frq Z',
     vsum: 'VSUM',
     download: 'Herunterladen',
+  },
+  dialog: {
+    period: 'Periode',
+    scale: 'Skala',
+    hours: '12 Stunden',
+    days: '2 Tage',
+    weeks: '2 Wochen',
+    months: '1 Monat',
+    select_period: 'Periode auswählen',
+    perception_level: 'Wahrnehmungsebene',
+    alarm_level: 'Alarmlevel',
+    highest_peak: 'Höchster Peak',
+    enter_value: 'Wert eingeben',
+  },
+  device_health: {
+    title: 'Gesundheitsstatus von',
+    battery_voltage: 'Batteriespannung',
+    cellular_signal: 'Mobiles Signal',
+    main_battery: 'Hauptbatterie',
+    good: 'gut',
+    fair: 'ausreichend',
+    poor: 'schlecht',
   },
   success: {
     saved_successfully: 'Speicherung durchgeführt!',

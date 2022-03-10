@@ -22,7 +22,7 @@
         no-caps
         unelevated
         outline
-        @click="timePeriod = option"
+        @click="option.key === 'custom' ? showCustomGraphDialog(): timePeriod = option"
       />
     </div>
 
@@ -33,7 +33,7 @@
 
     <TimeSeriesGraph
       :datasets="levelWritings.x"
-      :warning-level="0.25"
+      :level-markers="levelMarkers"
       :max-value="levelWritings.max"
       unit="mm/s"
     />
@@ -45,7 +45,7 @@
 
     <TimeSeriesGraph
       :datasets="levelWritings.y"
-      :warning-level="0.25"
+      :level-markers="levelMarkers"
       :max-value="levelWritings.max"
       unit="mm/s"
     />
@@ -56,7 +56,7 @@
 
     <TimeSeriesGraph
       :datasets="levelWritings.z"
-      :warning-level="0.25"
+      :level-markers="levelMarkers"
       :max-value="levelWritings.max"
       unit="mm/s"
     />
@@ -67,6 +67,8 @@
 import {computed, defineProps, Ref, ref, watch} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
+import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue';
+import {useQuasar} from 'quasar';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {LEVEL_WRITING} from 'src/data/queries/DEVICE';
 
@@ -95,6 +97,16 @@ const timePeriodOptions = [
     key: 'custom',
   }
 ]
+
+// Horizontal markers to be displayed in the graphs
+const levelMarkers = computed(() => [
+  {
+    label: 'Warning',
+    value: 0.25,
+    color: 'red',
+    dashSize: 3,
+  }
+])
 
 // Selected time period
 const timePeriod = ref(timePeriodOptions[0])
@@ -161,6 +173,21 @@ const pageTitle = title.substring(0, title.length-1);
 async function fetchLevelWritings(start: Date, end: Date){
   const response = await executeQuery(LEVEL_WRITING, {stationIds: stations, start: start, end: end, resolution: 1})
   levelWritings.value = response.data.levelWriting as LevelWritings
+}
+
+const $q = useQuasar()
+
+/**
+ * Shows the Custom Graph Dialog
+ * @returns {void} - done
+ */
+function showCustomGraphDialog(): void{
+  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
+  // TODO: onOK
+  $q.dialog({
+    component: CustomGraphDialog,
+    componentProps: {},
+  })
 }
 
 // Fetch initially
