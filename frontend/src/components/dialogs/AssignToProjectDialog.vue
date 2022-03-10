@@ -108,9 +108,7 @@ onMounted(async () => {
  */
 async function assignToProject() {
   if(selectedProject.value && props.cli){
-    let mutationResult
-
-    mutationResult = await executeMutation(
+    const mutationResult = await executeMutation(
       ASSIGN_DEVICE_TO_PROJECT,
       {
         uuid: selectedProject.value?.uuid,

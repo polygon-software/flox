@@ -81,9 +81,7 @@ async function createProject() {
   const user = await myUser()
   const userUuid = user?.uuid
 
-  let mutationResult
-
-  mutationResult = await executeMutation(
+  const mutationResult = await executeMutation(
     CREATE_PROJECT,
     {
       userUuid: userUuid,

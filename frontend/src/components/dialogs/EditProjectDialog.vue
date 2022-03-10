@@ -119,9 +119,7 @@ const newName: Ref<string|null|undefined> = ref(props.name)
  * @return {void}
  */
 async function editProject() {
-  let mutationResult
-
-  mutationResult = await executeMutation(
+  const mutationResult = await executeMutation(
     UPDATE_PROJECT_NAME,
     {
       uuid: props.uuid,
