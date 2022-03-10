@@ -16,7 +16,11 @@ describe('ProjectsResolver', () => {
     userRepository = new Repository<User>();
     userService = new UserService(userRepository);
     projectRepository = new Repository<Project>();
-    projectService = new ProjectService(projectRepository, userRepository);
+    projectService = new ProjectService(
+      projectRepository,
+      userRepository,
+      userService,
+    );
     projectResolver = new ProjectResolver(projectService, userService);
   });
 
