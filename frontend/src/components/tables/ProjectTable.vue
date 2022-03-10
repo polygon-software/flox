@@ -225,13 +225,13 @@ async function onOptionClick(device: string, key: string): Promise<void>{
       await routerService?.routeTo(ROUTES.LOGIN)
       break
     case 'compress':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'download':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'display':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'files':
       await routerService?.addToRoute(`${device}/${key}`)
@@ -246,7 +246,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
       await routerService?.addToRoute(`${device}/${key}`)
       break
     default:
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
   }
 }
 </script>

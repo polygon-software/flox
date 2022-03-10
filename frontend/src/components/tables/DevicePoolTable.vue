@@ -177,7 +177,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
       await routerService?.addToRoute(`pool/${device}/${key}`)
       break
     default:
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
   }
 }
 </script>

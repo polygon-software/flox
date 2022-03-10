@@ -241,13 +241,13 @@ async function onOptionClick(project: Project, device: string, key: string): Pro
       })
       break
     case 'compress':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'download':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'display':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'files':
       await routerService?.addToRoute(`${project.name}/${device}/${key}`)
@@ -262,7 +262,7 @@ async function onOptionClick(project: Project, device: string, key: string): Pro
       await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     default:
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
   }
 }
 
