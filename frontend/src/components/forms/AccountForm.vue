@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, inject, ref, Ref} from 'vue';
+import {defineEmits, inject, ref, Ref, onMounted} from 'vue';
 import { IS_EMAIL, IS_VALID_STRING } from 'src/data/RULES'
 import {AuthenticationService} from 'src/services/AuthService';
 import {Context, Module} from 'vuex-smart-module';
@@ -90,13 +90,20 @@ import AuthMutations from 'src/store/authentication/mutations';
 import AuthActions from 'src/store/authentication/actions';
 import {useAuth} from 'src/store/authentication';
 import {ErrorService} from 'src/services/ErrorService';
+import {MY_USER} from 'src/data/queries/USER';
+import {executeQuery} from 'src/helpers/data-helpers';
 
 const authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 const $authService: AuthenticationService|undefined = inject('$authService')
 
 // TODO: replace with data from database
-const email = ref('ramize.abdili@hotmail.com')
 const username: Ref<string | undefined> = ref(authStore.getters.getUsername())
+const email = ref('')
+onMounted(async () => {
+  const result = await executeQuery(MY_USER) as unknown as Record<string, Record<string, unknown>>;
+  email.value = (result?.data?.myUser as Record<string, string>).email;
+});
+
 
 const emit = defineEmits(['submit'])
 
