@@ -41,9 +41,9 @@ export class BankService {
     // If the abbreviation is taken by either a suggestion or a bank, throw error
     if (existingBank || existingSuggestion) {
       throw new Error(
-        `${ERRORS.bank_must_be_unique} (${
-          existingBank ? existingBank.name : existingSuggestion.name
-        })`,
+        `${ERRORS.bank_must_be_unique} (${prettify(
+          existingBank ? existingBank.name : existingSuggestion.name,
+        )})`,
       );
     }
 

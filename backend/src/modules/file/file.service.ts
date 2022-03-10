@@ -398,6 +398,7 @@ export class FileService {
         return {
           url,
           key: item.Key,
+          date: item.LastModified,
         };
       });
     });
@@ -413,7 +414,7 @@ export class FileService {
         dossier: null,
         file_type: FILE_TYPE.LOG as unknown as FILE_TYPE,
         created_at: new Date(Date.now()),
-        last_modified_at: new Date(Date.now()),
+        last_modified_at: file.date,
         deleted_at: null,
       } as PrivateFile;
     });

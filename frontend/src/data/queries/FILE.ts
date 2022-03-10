@@ -53,6 +53,7 @@ export const LOG_FILES = {
         __typename
         key
         url
+        last_modified_at
       }
     }
   `,
