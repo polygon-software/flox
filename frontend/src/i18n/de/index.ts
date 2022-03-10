@@ -128,7 +128,8 @@ export default {
     show: 'Anzeigen',
     close: 'Schliessen',
     confirm: 'Bestätigen',
-    rename: 'Umbenennen'
+    rename: 'Umbenennen',
+    discard: 'Verwerfen'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -260,6 +261,6 @@ export default {
   },
   warnings: {
     unassign_device: 'Sind Sie sicher? Dadurch werden alle Daten des Geräts gelöscht!',
-    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt!'
+    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt, und ihre Daten gelöscht!'
   }
 };

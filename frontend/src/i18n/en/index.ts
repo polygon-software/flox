@@ -121,13 +121,14 @@ export default {
     create_link: 'Create Link',
     create_project: 'Create project',
     delete_project: 'Delete project',
-    new_contact: 'New Contakt',
+    new_contact: 'New Contact',
     load: 'Load',
     save: 'Save',
     show: 'Show',
     close: 'Close',
     confirm: 'Confirm',
-    rename: 'Rename'
+    rename: 'Rename',
+    discard: 'Discard'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -256,6 +257,6 @@ export default {
   },
   warnings: {
     unassign_device: 'Are you sure? All data for this device will be deleted!',
-    delete_project: 'Are you sure? This will remove all devices from this project!'
+    delete_project: 'Are you sure? This will remove all devices from this project, and their data deleted!'
   }
 };
