@@ -91,9 +91,6 @@ resource "aws_route" "frontend_route_private" {
   route_table_id        = aws_route_table.frontend_route_table_private.id
   destination_cidr_block= "0.0.0.0/0"
   nat_gateway_id        = aws_nat_gateway.frontend_nat.id
-  tags = {
-    Project       = var.project
-  }
   lifecycle {
     create_before_destroy = true
   }
@@ -103,9 +100,6 @@ resource "aws_route" "frontend_route_public" {
   route_table_id        = aws_route_table.frontend_route_table_public.id
   destination_cidr_block= "0.0.0.0/0"
   gateway_id            = aws_internet_gateway.internet_gateway.id
-  tags = {
-    Project       = var.project
-  }
   lifecycle {
     create_before_destroy = true
   }
@@ -127,9 +121,7 @@ resource "aws_route53_record" "api_record" {
   zone_id               = var.route53_zone_id
   ttl                   = "300"
   records               = [aws_elastic_beanstalk_environment.api_env.endpoint_url]
-  tags = {
-    Project       = var.project
-  }}
+}
 
 resource "aws_route53_record" "ebs_web_record" {
   name                  = "${var.project}-${var.type}-${var.web}.${var.superdomain}"
@@ -137,6 +129,4 @@ resource "aws_route53_record" "ebs_web_record" {
   zone_id               = var.route53_zone_id
   ttl                   = "300"
   records               = [aws_elastic_beanstalk_environment.frontend_env.endpoint_url]
-  tags = {
-    Project       = var.project
-  }}
+}

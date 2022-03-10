@@ -42,9 +42,6 @@ resource "aws_route_table_association" "frontend_route_table_association_public"
   lifecycle {
     create_before_destroy = true
   }
-  tags = {
-    Project       = var.project
-  }
 }
 
 resource "aws_route_table_association" "frontend_route_table_association_private" {
@@ -54,8 +51,5 @@ resource "aws_route_table_association" "frontend_route_table_association_private
 
   lifecycle {
     create_before_destroy = true
-  }
-  tags = {
-    Project       = var.project
   }
 }

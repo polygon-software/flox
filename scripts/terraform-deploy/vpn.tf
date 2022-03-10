@@ -68,16 +68,10 @@ resource "aws_ec2_client_vpn_network_association" "vpn_subnets" {
   lifecycle {
     ignore_changes  = [subnet_id]
   }
-  tags = {
-    Project       = var.project
-  }
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "vpn_auth_rule" {
   client_vpn_endpoint_id  = aws_ec2_client_vpn_endpoint.vpn.id
   target_network_cidr     = aws_vpc.vpc.cidr_block
   authorize_all_groups    = true
-  tags = {
-    Project       = var.project
-  }
 }

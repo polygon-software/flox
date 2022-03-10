@@ -1,7 +1,7 @@
 variable "aws_region" {
   default         = "eu-central-1"
   description     = "AWS Region"
-  type            = "string"
+  type            = string
 }
 variable "project" {
   description     = "prefix used for all resources in the Project"
@@ -54,7 +54,7 @@ variable "eb_app_desc" {
 variable "azs" {
   description     = "Name for the Elastic beanstalk api app"
   type            = list(string)
-  default         = [var.aws_region + "a", var.aws_region + "b", var.aws_region + "c"]
+  default = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
 }
 
 variable "api_pub_subnet_factor" {
