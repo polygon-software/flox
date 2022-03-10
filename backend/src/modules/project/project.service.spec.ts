@@ -9,6 +9,7 @@ describe('ProjectService', () => {
   let projectService: ProjectService;
   let userService: UserService;
   let projectRepository: Repository<Project>;
+  let userService: UserService;
 
   beforeEach(async () => {
     userRepository = new Repository<User>();

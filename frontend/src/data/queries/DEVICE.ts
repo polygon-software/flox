@@ -25,35 +25,35 @@ export const USER_DEVICES = {
 
 export const MY_DEVICES = {
   query: gql`
-    query myDevices($unassigned: Boolean, $assigned: Boolean){
-      myDevices (unassigned: $unassigned, assigned: $assigned){
-      ...on MR2000{
-        cli
-        name
-        serialNumber
-        numberOfFiles
-        pid
-        ftp
-        ip
-        firmware
-        project {
-          uuid
+    query myDevices($unassigned: Boolean, $assigned: Boolean) {
+      myDevices(unassigned: $unassigned, assigned: $assigned) {
+        ... on MR2000 {
+          cli
           name
-          __typename
+          serialNumber
+          numberOfFiles
+          pid
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
         }
-      }
-      ...on MR3000{
-        cli
-        name
-        serialNumber
-        ftp
-        ip
-        firmware
-        project {
-          uuid
+        ... on MR3000 {
+          cli
           name
-          __typename
-        }
+          serialNumber
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
       }
       __typename
     }}
@@ -65,13 +65,13 @@ export const MY_DEVICES = {
 export const LEVEL_WRITING = {
   query: gql`
     query getLevelWriting(
-      $stationIds: [String!]!
+      $clients: [String!]!
       $start: DateTime!
       $end: DateTime!
       $resolution: Int!
     ) {
       levelWriting(
-        clients: $stationIds
+        clients: $clients
         start: $start
         end: $end
         resolution: $resolution
@@ -107,8 +107,8 @@ export const LEVEL_WRITING = {
 
 export const DEVICE_PARAMS = {
   query: gql`
-    query getDeviceParams($stationId: String!) {
-      deviceParams(cli: $stationId) {
+    query getDeviceParams($cli: String!) {
+      deviceParams(cli: $cli) {
         trigX
         trigY
         trigZ
