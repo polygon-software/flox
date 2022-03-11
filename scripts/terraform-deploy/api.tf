@@ -126,7 +126,6 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     value     = "TCP:3000"
   }
 
-
   // Env Variables for NestJS
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
@@ -275,7 +274,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "CV_KEY_SECRET"
+    name      = "CW_KEY_SECRET"
     value     = "Udi2k9SWVyRg1P4wFxMA5sTeH9ngtRUVHBMWjIoK"
   }
   setting {
