@@ -7,7 +7,6 @@ import { UserService } from '../user/user.service';
 describe('ProjectService', () => {
   let userRepository: Repository<User>;
   let projectService: ProjectService;
-  let userService: UserService;
   let projectRepository: Repository<Project>;
   let userService: UserService;
 
