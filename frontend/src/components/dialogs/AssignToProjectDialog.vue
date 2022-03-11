@@ -79,8 +79,6 @@ import {useDialogPluginComponent} from 'quasar';
 import {defineEmits, defineProps, onMounted, Ref, ref} from 'vue'
 import {myProjects} from 'src/helpers/api-helpers';
 import {Project} from 'src/data/types/Project';
-import {executeMutation} from 'src/helpers/data-helpers';
-import {ASSIGN_DEVICE_TO_PROJECT} from 'src/data/mutations/PROJECT';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
@@ -106,20 +104,12 @@ onMounted(async () => {
  * Assigns the given device to the chosen project
  * @return {Promise<void>} - done
  */
-async function assignToProject() {
+function assignToProject() {
   if(selectedProject.value && props.cli){
-    const mutationResult = await executeMutation(
-      ASSIGN_DEVICE_TO_PROJECT,
-      {
-        uuid: selectedProject.value?.uuid,
-        cli: props.cli
-      }
-    )
-
-    if (!mutationResult) {
-      throw new Error('An error occurred while assigning the device')
-    }
-    onDialogOK()
+    onDialogOK({
+      uuid: selectedProject.value?.uuid,
+      cli: props.cli
+    })
   }
 }
 

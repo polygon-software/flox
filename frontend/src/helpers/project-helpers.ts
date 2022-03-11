@@ -1,7 +1,7 @@
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {REMOVE_DEVICE_FROM_PROJECT} from 'src/data/mutations/PROJECT';
+import {ASSIGN_DEVICE_TO_PROJECT, REMOVE_DEVICE_FROM_PROJECT} from 'src/data/mutations/PROJECT';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {QVueGlobals} from 'quasar';
 import AssignToProjectDialog from 'components/dialogs/AssignToProjectDialog.vue';
@@ -52,7 +52,16 @@ export function assignDeviceToProject(q: QVueGlobals, device: string){
     componentProps: {
       cli: device
     }
-  }).onOk(() => {
+  }).onOk(async (result: Record<string, string>) => {
+    console.log('assign with', result)
+   await executeMutation(
+      ASSIGN_DEVICE_TO_PROJECT,
+      {
+        uuid: result.uuid,
+        cli: result.cli
+      }
+    )
+
     // Show success notification
     showNotification(
       q,

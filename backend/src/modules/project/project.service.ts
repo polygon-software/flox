@@ -269,10 +269,10 @@ export class ProjectService {
     // Build partial entity, depending on type
     const updateData = isMr2000
       ? ({
-          mr2000instances: (project.mr2000instances ?? []).push(cli),
+          mr2000instances: (project.mr2000instances ?? []).concat([cli]),
         } as unknown as QueryDeepPartialEntity<Project>)
       : ({
-          mr3000instances: (project.mr3000instances ?? []).push(cli),
+          mr3000instances: (project.mr3000instances ?? []).concat([cli]),
         } as unknown as QueryDeepPartialEntity<Project>);
 
     await this.projectRepository.update(

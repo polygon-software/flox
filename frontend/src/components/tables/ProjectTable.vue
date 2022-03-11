@@ -116,7 +116,6 @@ import {RouterService} from 'src/services/RouterService';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
 import {Device} from 'src/data/types/Device';
-import {useRoute} from 'vue-router';
 import {removeDeviceFromProject} from 'src/helpers/project-helpers';
 
 const search = ref('')
