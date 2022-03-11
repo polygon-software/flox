@@ -125,7 +125,6 @@ export async function getValueDevelopment(
     `);
   await queryRunner.release();
   if (!valueMappingQuery || valueMappingQuery.length === 0) {
-    await queryRunner.release();
     throw new Error(ERRORS.missing_database_data);
   }
   const valueMapping = valueMappingQuery[0];

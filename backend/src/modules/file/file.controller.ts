@@ -104,6 +104,7 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
     @Query() query: Record<string, string>, // Params
   ): Promise<any> {
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     res.header('access-control-allow-origin', '*');
 
     // Verify that request is multipart

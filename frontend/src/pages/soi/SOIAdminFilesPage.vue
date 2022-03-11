@@ -71,7 +71,13 @@
             @click="getLogs"/>
         </div>
         <div class="col column items-end">
-          <q-btn v-for="log in links" :key="log.dateString" :label="formatDate(log.dateString)" @click="()=>{openURL(log.url)}"/>
+          <q-btn
+            v-for="log in links"
+            :key="log.dateString"
+            :label="formatDate(log.dateString)"
+            @click="()=> {
+              openURL(log.url)
+            }"/>
         </div>
       </q-card>
     </div>
@@ -103,7 +109,7 @@ watch(()=>range.value, ()=>{
   if(typeof range.value === 'string'){
     rangeDisplay.value = `${range.value} - ${range.value}`;
   } else {
-    rangeDisplay.value = `${(range.value ).from} - ${(range.value ).to}`
+    rangeDisplay.value = `${(range.value).from} - ${(range.value).to}`
   }
 })
 
@@ -180,7 +186,6 @@ async function getLogs() {
     toDateSplit = range.value.split('-')
   }
 
-
   const fromDate = new Date(parseInt(fromDateSplit[0]), parseInt(fromDateSplit[1]) - 1, parseInt(fromDateSplit[2]))
   const toDate = new Date(parseInt(toDateSplit[0]), parseInt(toDateSplit[1]) - 1, parseInt(toDateSplit[2]), 23,59)
   const res = await executeQuery(LOG_FILES, {start: fromDate, end: toDate})
@@ -197,7 +202,6 @@ async function getLogs() {
       }
     })
   }
-
 }
 
 </script>

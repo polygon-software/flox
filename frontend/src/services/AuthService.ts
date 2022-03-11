@@ -115,7 +115,7 @@ export class AuthenticationService {
 
             newPasswordRequired: function (userAttributes) {
               while (!newPassword) {
-                newPassword = prompt('Bitte geben Sie ein neues Passwort ein', '') || '';
+                newPassword = prompt(i18n.global.t('messages.enter_new_password'), '') || '';
               }
               cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
             },
@@ -125,7 +125,7 @@ export class AuthenticationService {
 
             //TODO check when/if this appears
             mfaRequired: function () {
-                const verificationCode = prompt('Please input verification code', '');
+                const verificationCode = prompt(i18n.global.t('messages.enter_verification_code', ''));
                 if (typeof verificationCode === 'string') {
                     cognitoUser.sendMFACode(verificationCode, this);
                 }
@@ -269,8 +269,8 @@ export class AuthenticationService {
     }
 
     this.$q.dialog({
-          title: 'Reset Password',
-          message: 'Please enter your username',
+          title: i18n.global.t('messages.reset_password'),
+          message: i18n.global.t('messages.enter_username'),
           cancel: true,
           persistent: true,
           prompt: {
@@ -287,14 +287,14 @@ export class AuthenticationService {
 
           // Call forgotPassword on cognitoUser
         this.$authStore.getters.getCognitoUser()?.forgotPassword({
-              onSuccess: function() {
-                  // TODO
-              },
+              onSuccess: function() {}, // Do nothing
               onFailure: (err: Error) => {
                 this.$authStore.mutations.setCognitoUser(undefined);
                 this.onFailure(err)
               },
-              inputVerificationCode: () => {this.showResetPasswordFormDialog()}
+              inputVerificationCode: () => {
+                this.showResetPasswordFormDialog()
+              }
           });
       })
   }
@@ -309,8 +309,12 @@ export class AuthenticationService {
           componentProps: {},
       }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
           this.$authStore.getters.getCognitoUser()?.confirmPassword(verificationCode,passwordNew,{
-              onSuccess: (result: unknown)=>{console.log(result)},
-              onFailure: (err: Error) => {console.log(err)}
+              onSuccess: (result: unknown)=>{
+                console.log(result)
+              },
+              onFailure: (err: Error) => {
+                console.error(err)
+              }
           })
       })
 
@@ -328,14 +332,14 @@ export class AuthenticationService {
               return
           } else {
             this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
-                // TODO
-              })
+              // Do nothing
+            })
           }
       }
 
       this.$q.dialog({
-          title: 'Verification',
-          message: 'Please enter your e-mail verification code',
+          title: i18n.global.t('messages.verification'),
+          message: i18n.global.t('messages.enter_verification_code'),
           cancel: true,
           persistent: true,
           prompt: {
@@ -346,7 +350,7 @@ export class AuthenticationService {
       }).onOk((input: string) => {
           void this.verifyEmail(input)
       }).onCancel(() => {
-          // TODO
+          // Do nothing
       })
   }
 
@@ -383,8 +387,6 @@ export class AuthenticationService {
           cognitoUser.verifySoftwareToken(code, 'My TOTP device', {
                 onSuccess: async (userSession: CognitoUserSession) => {
                   this.loginSuccess(userSession)
-                  await sleep(100)
-                  // await executeMutation(VERIFY_EMAIL, {})
                   resolve()
                 },
                 onFailure: (error: Error)=>{

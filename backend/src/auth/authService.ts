@@ -37,24 +37,6 @@ export async function createCognitoAccount(
 }
 
 /**
- * Verify User
- * @param {string} userId - userId
- * @return {Promise<void>} - done
- */
-export function verifyUser(userId) {
-  return provider.adminUpdateUserAttributes({
-    Username: userId,
-    UserPoolId: process.env.USER_POOL_ID,
-    UserAttributes: [
-      {
-        Name: 'email_verified',
-        Value: 'true',
-      },
-    ],
-  });
-}
-
-/**
  * Generates a random number in given range
  * @param {number} min - start of the range
  * @param {number} max - end of the range

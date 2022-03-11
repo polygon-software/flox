@@ -31,13 +31,3 @@ export const DISABLE_USER = {
   type: MutationTypes.UPDATE,
   cacheLocation: undefined
 }
-export const VERIFY_EMAIL = {
-  mutation: gql`
-    mutation verifyUser{
-      verifyUser
-    }
-  `,
-  tables: [],
-  type: MutationTypes.UPDATE,
-  cacheLocation: undefined
-}
