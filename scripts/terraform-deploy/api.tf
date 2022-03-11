@@ -204,12 +204,12 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PUBLIC_BUCKET_NAME"
-    value     = "soi-public-bucket-live"
+    value     = "soi-test-public-bucket"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PRIVATE_BUCKET_NAME"
-    value     = "soi-private-bucket-live"
+    value     = "soi-test-private-bucket"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
