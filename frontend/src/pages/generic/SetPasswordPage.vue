@@ -68,7 +68,7 @@ async function submitPassword(values: Record<string, string>) {
   const decodedPw = atob(password)
 
   // Log in
-  await $authService?.login(decodedEmail, decodedPw,  values.password_repeat)
+  await $authService?.login(decodedEmail, decodedPw, values.password_repeat)
 
 
   let target;

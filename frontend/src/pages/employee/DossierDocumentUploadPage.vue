@@ -454,7 +454,6 @@ function onFilePicked(newFiles: File[]){
     section[fieldKey] = []
   }
   section[fieldKey] = section[fieldKey].concat(newFiles)
-
 }
 
 /**

@@ -104,6 +104,11 @@ export default {
     account_disabled: 'Account disabled successfully',
     dossier_deleted: 'Successfully deleted dossier',
     dossier_delete_failed: 'Dossier delete failed',
+    enter_new_password: 'Please enter a new password',
+    enter_verification_code: 'Please enter verification code',
+    reset_password: 'Reset Password',
+    enter_username: 'Please enter your username',
+    verification: 'Verification'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
