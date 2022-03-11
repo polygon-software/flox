@@ -116,7 +116,7 @@ resource "aws_s3_bucket" "source_code_bucket" {
 }
 
 resource "aws_route53_record" "api_record" {
-  name                  = "${var.project}-${var.type}-${var.api}.${var.superdomain}"
+  name                  = "${var.project}-${var.api}.${var.superdomain}"
   type                  = "CNAME"
   zone_id               = var.route53_zone_id
   ttl                   = "300"
@@ -124,7 +124,7 @@ resource "aws_route53_record" "api_record" {
 }
 
 resource "aws_route53_record" "web_record" {
-  name                  = "${var.project}-${var.type}-${var.web}.${var.superdomain}"
+  name                  = "${var.project}-${var.web}.${var.superdomain}"
   type                  = "CNAME"
   zone_id               = var.route53_zone_id
   ttl                   = "300"
