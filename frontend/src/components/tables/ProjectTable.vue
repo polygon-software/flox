@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, onMounted, Ref, ref, defineProps} from 'vue';
+import {inject, Ref, ref, defineProps} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
@@ -116,7 +116,6 @@ import {RouterService} from 'src/services/RouterService';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
 import {Device} from 'src/data/types/Device';
-import {fetchProjectDevices} from 'src/helpers/api-helpers';
 import {useRoute} from 'vue-router';
 import {removeDeviceFromProject} from 'src/helpers/project-helpers';
 
@@ -126,7 +125,6 @@ const routerService: RouterService|undefined = inject('$routerService')
 const selectedRows: Ref<string[]> = ref([])
 
 const $q = useQuasar()
-const route = useRoute()
 
 const props = defineProps({
   uuid: {
