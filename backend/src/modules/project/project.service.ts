@@ -46,8 +46,16 @@ export class ProjectService {
       throw new Error(`No project found for ${getProjectDevicesArgs.uuid}`);
     }
     // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable('MR2000', 'station');
-    const mr3000instances = await fetchFromTable('MR3000', 'station');
+    const mr2000instances = await fetchFromTable(
+      'MR2000',
+      'station',
+      `WHERE cli IN ('${project.mr2000instances.join("','")}')`,
+    );
+    const mr3000instances = await fetchFromTable(
+      'MR3000',
+      'station',
+      `WHERE cli IN ('${project.mr3000instances.join("','")}')`,
+    );
 
     // Fetch stores for FTP info
     const mr2000store = await fetchFromTable('MR2000', 'store');
@@ -60,28 +68,24 @@ export class ProjectService {
 
     // Add all MR2000 instances that belong to the project
     for (const instance of mr2000instances) {
-      if (project.mr2000instances.includes(instance.cli)) {
-        const mr2000 = await mr2000fromDatabaseEntry(
-          instance,
-          this.projectRepository,
-          vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
-          mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
-        );
-        devices.push(mr2000);
-      }
+      const mr2000 = await mr2000fromDatabaseEntry(
+        instance,
+        this.projectRepository,
+        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
+        mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
+      );
+      devices.push(mr2000);
     }
 
     // Add all MR3000 instances that belong to the project
     for (const instance of mr3000instances) {
-      if (project.mr3000instances.includes(instance.cli)) {
-        const mr3000 = await mr3000fromDatabaseEntry(
-          instance,
-          this.projectRepository,
-          vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
-          mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
-        );
-        devices.push(mr3000);
-      }
+      const mr3000 = await mr3000fromDatabaseEntry(
+        instance,
+        this.projectRepository,
+        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
+        mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
+      );
+      devices.push(mr3000);
     }
 
     return devices;
