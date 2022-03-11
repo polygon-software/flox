@@ -109,7 +109,8 @@ export default {
     enter_verification_code: 'Bitte geben Sie ihren Bestätigungscode ein',
     reset_password: 'Passwort zurücksetzen',
     enter_username: 'Bitte geben Sie ihren Nutzernamen ein',
-    verification: 'Verifizierung'
+    verification: 'Verifizierung',
+    enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',

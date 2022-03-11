@@ -18,7 +18,7 @@ import {i18n} from 'boot/i18n';
 import {useApolloClient} from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {sleep} from 'src/helpers/general-helpers';
+
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
  * signing up, logging in, logging out, changing passwords, and more.
@@ -287,7 +287,9 @@ export class AuthenticationService {
 
           // Call forgotPassword on cognitoUser
         this.$authStore.getters.getCognitoUser()?.forgotPassword({
-              onSuccess: function() {}, // Do nothing
+              onSuccess: function() {
+                // Do nothing
+              },
               onFailure: (err: Error) => {
                 this.$authStore.mutations.setCognitoUser(undefined);
                 this.onFailure(err)
@@ -383,9 +385,8 @@ export class AuthenticationService {
                 type: 'text'
             },
         }).onOk((code: string) => {
-            // TODO friendlyDeviceName
-          cognitoUser.verifySoftwareToken(code, 'My TOTP device', {
-                onSuccess: async (userSession: CognitoUserSession) => {
+          cognitoUser.verifySoftwareToken(code, 'SOI TOTP device', {
+                onSuccess: (userSession: CognitoUserSession) => {
                   this.loginSuccess(userSession)
                   resolve()
                 },
@@ -423,8 +424,8 @@ export class AuthenticationService {
   verify2FACode (tokenType: string, resolve:  (value: (void | PromiseLike<void>)) => void): void {
       // Verify code
       this.$q.dialog({
-          title: 'Verification',
-          message: 'Please enter your 2FA authenticator code',
+          title: i18n.global.t('messages.verification'),
+          message: i18n.global.t('messages.enter_2fa'),
           cancel: true,
           persistent: true,
           prompt: {
