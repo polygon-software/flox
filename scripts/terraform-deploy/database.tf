@@ -26,7 +26,7 @@ resource "aws_rds_cluster" "database_cluster" {
   database_name             = var.database_name
   master_username           = var.database_master_username
   master_password           = var.database_master_password  // Mhm..
-  skip_final_snapshot       = true // todo use final snapshot in production
+  skip_final_snapshot       = false
   db_subnet_group_name      = aws_db_subnet_group.database_subnet_group.name
   vpc_security_group_ids    = [aws_security_group.database_security_group.id]
   tags = {
@@ -67,8 +67,3 @@ resource "aws_security_group" "database_security_group" {
     ipv6_cidr_blocks    = ["::/0"]
   }
 }
-
-
-
-
-

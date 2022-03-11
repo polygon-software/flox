@@ -108,7 +108,6 @@ resource "aws_route" "frontend_route_public" {
 // create aws s3 bucket to Upload app to
 resource "aws_s3_bucket" "source_code_bucket" {
   bucket                = "${var.project}-${var.type}-app-bucket"
-
   tags = {
     Name          = "${var.project}-source-code-bucket"
     Project       = var.project
