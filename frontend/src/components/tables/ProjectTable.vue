@@ -116,7 +116,7 @@ import {RouterService} from 'src/services/RouterService';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
 import {Device} from 'src/data/types/Device';
-import {singleProjectDevices} from 'src/helpers/api-helpers';
+import {fetchProjectDevices} from 'src/helpers/api-helpers';
 import {useRoute} from 'vue-router';
 import {removeDeviceFromProject} from 'src/helpers/project-helpers';
 
@@ -132,7 +132,7 @@ const props = defineProps({
   uuid: {
     type: String,
     required: true,
-  }
+  },
 })
 
 // ----- Data -----
@@ -188,13 +188,6 @@ const buttons = [
     label: i18n.global.t('projects.show_device_health'),
   },
 ]
-
-// Once mounted, fetch data
-onMounted(async () => {
-  const projectName = route.path.split('/').pop() ?? ''
-  rows.value = await singleProjectDevices(projectName)
-})
-
 
 /**
  * Routes to a new page where the graph of that project is shown

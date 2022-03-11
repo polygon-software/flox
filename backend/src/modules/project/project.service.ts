@@ -20,6 +20,7 @@ import { UserService } from '../user/user.service';
 import { GetUserArgs } from '../user/dto/args/get-user.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class ProjectService {
@@ -116,12 +117,8 @@ export class ProjectService {
 
     // Ensure project name is not already present (in actual projects and/or permissions)
     const userProjects = await this.getUserProjects({ uuid: userUuid });
-    const userProjectPermissions = user.projects;
 
     if (
-      userProjectPermissions.find(
-        (project) => project.name.toLowerCase() === projectName.toLowerCase(),
-      ) ||
       userProjects.find(
         (project) => project.name.toLowerCase() === projectName.toLowerCase(),
       )
@@ -271,12 +268,12 @@ export class ProjectService {
 
     // Build partial entity, depending on type
     const updateData = isMr2000
-      ? {
-          mr2000instances: (project.mr2000instances ?? []).concat(cli),
-        }
-      : {
-          mr3000instances: (project.mr3000instances ?? []).concat(cli),
-        };
+      ? ({
+          mr2000instances: (project.mr2000instances ?? []).push(cli),
+        } as unknown as QueryDeepPartialEntity<Project>)
+      : ({
+          mr3000instances: (project.mr3000instances ?? []).push(cli),
+        } as unknown as QueryDeepPartialEntity<Project>);
 
     await this.projectRepository.update(
       assignDeviceToProjectInput.uuid,
@@ -309,6 +306,36 @@ export class ProjectService {
     if (
       dbUser.role !== ROLE.ADMIN &&
       !dbUser.projects.some((project) => project.uuid === projectUuid)
+    ) {
+      throw new Error(ERRORS.resource_not_allowed);
+    }
+    return true;
+  }
+
+  /**
+   * Validates if the given user has access to the given device
+   * @param {Record<string, string>} user - User that demands access
+   * @param {string} cli - CLI of the device which the user wants to access
+   * @private
+   * @return {boolean} - validation result
+   */
+  async validateAccessToDevice(
+    user: Record<string, string>,
+    cli: string,
+  ): Promise<boolean> {
+    // Get user
+    const dbUser = await this.userService.getUser({
+      cognitoUuid: user.userId,
+    } as GetUserArgs);
+
+    if (!dbUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+    // For non-admin users, check whether they have permissions to access the requested device
+    if (
+      dbUser.role !== ROLE.ADMIN &&
+      !dbUser.mr2000instances.some((device) => device === cli) &&
+      !dbUser.mr3000instances.some((device) => device === cli)
     ) {
       throw new Error(ERRORS.resource_not_allowed);
     }

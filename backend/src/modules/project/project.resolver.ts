@@ -123,12 +123,11 @@ export class ProjectResolver {
     removeDeviceFromProjectInput: RemoveDeviceFromProjectInput,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (
-      await this.projectService.validateAccessToProject(
-        user,
-        removeDeviceFromProjectInput.uuid,
-      )
-    ) {
+    const hasProjectAccess = await this.projectService.validateAccessToProject(
+      user,
+      removeDeviceFromProjectInput.uuid,
+    );
+    if (hasProjectAccess) {
       return this.projectService.removeDeviceFromProject(
         removeDeviceFromProjectInput,
       );
@@ -163,12 +162,11 @@ export class ProjectResolver {
     updateProjectInput: UpdateProjectInput,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (
-      await this.projectService.validateAccessToProject(
-        user,
-        updateProjectInput.uuid,
-      )
-    ) {
+    const hasProjectAccess = await this.projectService.validateAccessToProject(
+      user,
+      updateProjectInput.uuid,
+    );
+    if (hasProjectAccess) {
       // Get user
       const dbUser = await this.userService.getUser({
         cognitoUuid: user.userId,
@@ -207,36 +205,6 @@ export class ProjectResolver {
   }
 
   /**
-   * Validates if the given user has access to the given device
-   * @param {Record<string, string>} user - User that demands access
-   * @param {string} cli - CLI of the device which the user wants to access
-   * @private
-   * @return {boolean} - validation result
-   */
-  private async validateAccessToDevice(
-    user: Record<string, string>,
-    cli: string,
-  ): Promise<boolean> {
-    // Get user
-    const dbUser = await this.userService.getUser({
-      cognitoUuid: user.userId,
-    } as GetUserArgs);
-
-    if (!dbUser) {
-      throw new Error(`No user found for ${user.userId}`);
-    }
-    // For non-admin users, check whether they have permissions to access the requested device
-    if (
-      dbUser.role !== ROLE.ADMIN &&
-      !dbUser.mr2000instances.some((device) => device === cli) &&
-      !dbUser.mr3000instances.some((device) => device === cli)
-    ) {
-      throw new Error(ERRORS.resource_not_allowed);
-    }
-    return true;
-  }
-
-  /**
    * Assigns a given device to a project
    * @param {AssignDeviceToProjectInput} assignDeviceToProjectInput - contains project UUID & device CLI
    * @param {Record<string, string>} user - currently logged-in user from request
@@ -259,7 +227,7 @@ export class ProjectResolver {
     );
 
     // Verify device access
-    const hasDeviceAccess = await this.validateAccessToDevice(
+    const hasDeviceAccess = await this.projectService.validateAccessToDevice(
       user,
       assignDeviceToProjectInput.cli,
     );

@@ -80,7 +80,7 @@ export async function myProjectDevices(): Promise<Device[]> {
  * @param {string} name - the project's name (taken from URL)
  * @return {Promise<Device[]>} - An array containing all the user's projects
  */
-export async function singleProjectDevices(name: string): Promise<Device[]> {
+export async function fetchProjectDevices(name: string): Promise<Device[]> {
   const devices: Device[] = [];
   const queryResult = await executeQuery(PROJECT_DEVICES, {name});
   if(queryResult.data[PROJECT_DEVICES.cacheLocation]){

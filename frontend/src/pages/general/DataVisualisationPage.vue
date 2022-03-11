@@ -418,8 +418,8 @@ function showCustomGraphDialog(): void{
       customScale: scale.value,
       customPeriod: customPeriod.value,
     },
-  }).onOk(async (settings: Record<string, string>) => {
-    await routerService?.pushToQuery(settings)
+  }).onOk((settings: Record<string, string>) => {
+    void routerService?.pushToQuery(settings)
   })
 }
 
