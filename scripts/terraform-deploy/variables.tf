@@ -33,18 +33,6 @@ variable "app_bucket" {
   type            = string
 }
 
-variable "eb_frontend_name" {
-  default         = "terraform-eb-api"
-  description     = "Name for the Elastic beanstalk frontend app"
-  type            = string
-}
-
-variable "eb_api_name" {
-  default         = "terraform-eb-frontend"
-  description     = "Name for the Elastic beanstalk api app"
-  type            = string
-}
-
 variable "eb_app_desc" {
   default         = "SOI live EBS app"
   description     = "Description for the elastic Beanstalk app"
