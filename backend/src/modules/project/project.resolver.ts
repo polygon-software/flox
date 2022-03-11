@@ -10,8 +10,6 @@ import { GetUserArgs } from '../user/dto/args/get-user.args';
 import { UserService } from '../user/user.service';
 import { Device } from '../../types/Device';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
-import { ROLE } from '../../ENUM/ENUM';
-import { ERRORS } from '../../error/ERRORS';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { UpdateProjectInput } from './dto/input/update-project-input';
