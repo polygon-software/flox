@@ -59,8 +59,8 @@ export class DeviceResolver {
     let allowed = false;
     if (dbUser.role === ROLE.USER) {
       allowed = !(
-        !dbUser.mr2000instances?.includes(eventTableArgs.stationId) &&
-        !dbUser.mr3000instances?.includes(eventTableArgs.stationId)
+        !dbUser.mr2000instances?.includes(eventTableArgs.cli) &&
+        !dbUser.mr3000instances?.includes(eventTableArgs.cli)
       );
     }
 

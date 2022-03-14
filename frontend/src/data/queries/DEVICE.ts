@@ -99,7 +99,7 @@ export const EVENT_TABLE_ROWS = {
       $orderBy: String,
       $descending: Boolean
     ){
-      eventTable(stationId: $stationId, skip: $skip, take: $take, filter: $filter, orderBy: $orderBy, descending: $descending){
+      eventTable(cli: $stationId, skip: $skip, take: $take, filter: $filter, orderBy: $orderBy, descending: $descending){
         items {
           file
           type

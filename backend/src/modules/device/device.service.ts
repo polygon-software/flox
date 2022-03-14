@@ -98,21 +98,21 @@ export class DeviceService {
   }
 
   /**
-   * gets events
+   * Gets events for a given cli
    * @param {GetEventTableArgs} getEventArgs - Id of client
    * @returns {Promise<EventsTableRow[]>} - table Rows
    */
   async getEvents(getEventArgs: GetEventTableArgs): Promise<EventsTable> {
-    const clientId = getEventArgs.stationId;
+    const cli = getEventArgs.cli;
 
     // Get number of items in database by type
-    const lengthAll = await this.getEventsLength(clientId);
-    const lengthEvt = await this.getEventsLength(clientId, 'Evt');
-    const lengthPk = await this.getEventsLength(clientId, 'Pk');
-    const lengthZip = await this.getEventsLength(clientId, 'ZIP');
+    const lengthAll = await this.getEventsLength(cli);
+    const lengthEvt = await this.getEventsLength(cli, 'Evt');
+    const lengthPk = await this.getEventsLength(cli, 'Pk');
+    const lengthZip = await this.getEventsLength(cli, 'ZIP');
 
     // Where clause for filtering by cli and typ
-    let filterQuery = `WHERE events.cli='${clientId}'`;
+    let filterQuery = `WHERE events.cli='${cli}'`;
     if (getEventArgs.filter && getEventArgs.filter !== 'All') {
       filterQuery += ` AND events.typ='${
         this.reverseTypeMapping[getEventArgs.filter]
@@ -124,7 +124,7 @@ export class DeviceService {
     orderBy += ` ${getEventArgs.descending ? 'DESC' : 'ASC'}`;
 
     // MR2000
-    if (clientId.includes('-')) {
+    if (cli.includes('-')) {
       // MR2000 can't order by these
       if (
         ['frqX', 'frqY', 'frqZ', 'frqZ'].some((item) => {
@@ -140,7 +140,7 @@ export class DeviceService {
         LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
       );
       const res = mr2000.map((item) => {
-        return this.mapMR2000(item, clientId);
+        return this.mapMR2000(item, cli);
       });
       return new EventsTable(lengthAll, lengthZip, lengthEvt, lengthPk, res);
     }
@@ -149,7 +149,7 @@ export class DeviceService {
     const frequencyAvailable = await fetchFromTable(
       'MR3000',
       'pk_frq',
-      `WHERE ident LIKE '${clientId}.%'`,
+      `WHERE ident LIKE '${cli}.%'`,
     );
     let mr3000 = [];
     if (frequencyAvailable.length > 0) {
@@ -169,7 +169,7 @@ export class DeviceService {
     }
 
     const res = mr3000.map((item) => {
-      return this.mapMR3000(item, clientId, frequencyAvailable.length > 0);
+      return this.mapMR3000(item, cli, frequencyAvailable.length > 0);
     });
     return new EventsTable(lengthAll, lengthZip, lengthEvt, lengthPk, res);
   }

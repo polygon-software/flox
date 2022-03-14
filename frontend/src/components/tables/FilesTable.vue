@@ -2,14 +2,18 @@
   <div class="column">
     <!-- Search input -->
     <div class="row" style="justify-content: center">
-      <p>{{ $t('files.events', {events: lenghts.Evt}) }}, {{ $t('files.peak_files', {peak_files: lenghts.Pk}) }},
-        {{ $t('files.zip_files', {zip_files: lenghts.Zip}) }}</p>
+      <p>{{ $t('files.events', {events: lengths.Evt}) }}, {{ $t('files.peak_files', {peak_files: lengths.Pk}) }},
+        {{ $t('files.zip_files', {zip_files: lengths.Zip}) }}</p>
     </div>
     <div class="row" style="justify-content: center">
       <q-select
         v-model="search"
         :label="$t('general.filter')"
-        :options="['All', 'Evt', 'Pk', 'Zip']"
+        :options="[
+          {label: $t('files.filter.all'), value: 'All'},
+          {label: $t('files.filter.evt'), value: 'Evt'},
+          {label: $t('files.filter.pk'), value: 'Pk'},
+          {label: $t('files.filter.zip'), value: 'Zip'}]"
         outlined
         dense
         style="width: 90px"
@@ -127,13 +131,13 @@ async function refetch(): Promise<void>{
   const fetchRes = res.data[EVENT_TABLE_ROWS.cacheLocation] as Record<string, Record<string, unknown>[]|number>
   pagination.value.rowsNumber = fetchRes.lengthAll
   rows.value = fetchRes.items as Record<string, unknown>[]
-  lenghts.value.total = fetchRes.lengthAll as number
-  lenghts.value.Pk = fetchRes.lengthPk as number
-  lenghts.value.Evt = fetchRes.lengthEvt as number
-  lenghts.value.Zip = fetchRes.lengthZip as number
+  lengths.value.total = fetchRes.lengthAll as number
+  lengths.value.Pk = fetchRes.lengthPk as number
+  lengths.value.Evt = fetchRes.lengthEvt as number
+  lengths.value.Zip = fetchRes.lengthZip as number
 
 }
-const lenghts = ref({
+const lengths = ref({
   total: 0,
   Zip: 0,
   Evt: 0,
