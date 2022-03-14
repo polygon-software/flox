@@ -426,6 +426,7 @@ export class DeviceService {
             // MR2000
             cli: input.cli,
             // status: null,
+            timestamp: new Date(),
             // timestamp: null,
             id: '123', // TODO??
             // from_IP: null,
@@ -446,6 +447,7 @@ export class DeviceService {
         : {
             // MR3000
             cli: input.cli,
+            status: 0, // TODO
             name: input.name,
             email: input.email,
             phone: input.phone,
