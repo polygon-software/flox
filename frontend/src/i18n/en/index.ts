@@ -60,6 +60,7 @@ export default {
   },
   projects: {
     project: 'Project',
+    new_project: 'New Project',
     device: 'Device',
     client: 'Client',
     ip: 'IP',
@@ -80,6 +81,7 @@ export default {
     show_status_files: 'Show Status Files',
     show_device_health: 'Show Device Health',
     name: 'Name',
+    project_name: 'Project Name',
     id: 'ID',
   },
   edit_parameters: {
@@ -112,6 +114,7 @@ export default {
     copy: 'Copy',
     send: 'Send',
     create_link: 'Create Link',
+    create: 'Create project',
     new_contact: 'New Contakt',
     load: 'Load',
     save: 'Save',
@@ -178,10 +181,13 @@ export default {
     custom: 'Custom'
   },
   messages: {
-    copied: 'Copied'
+    copied: 'Copied',
+    project_created: 'Project created successfully'
   },
   status: {
     title: 'Status of',
+    up: 'Up',
+    down: 'Down'
   },
   client_connectivity: {
     title: 'Client Connectivity',

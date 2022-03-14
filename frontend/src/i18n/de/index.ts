@@ -61,8 +61,9 @@ export default {
   },
   projects: {
     project: 'Projekt',
+    new_project: 'Neues Projekt',
     device: 'Gerät',
-    client: 'Kunde',
+    client: 'Client',
     ip: 'IP',
     firmware: 'Firmware',
     serial: 'Serial',
@@ -81,6 +82,7 @@ export default {
     show_status_files: 'Statusdateien anzeigen',
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
+    project_name: 'Projektname',
     id: 'ID',
   },
   edit_parameters: {
@@ -113,6 +115,7 @@ export default {
     copy: 'Kopieren',
     send: 'Senden',
     create_link: 'Link erzeugen',
+    create_project: 'Projekt erstellen',
     new_contact: 'Neuer Kontakt',
     load: 'Laden',
     save: 'Speichern',
@@ -182,10 +185,13 @@ export default {
     custom: 'Eigene'
   },
   messages: {
-    copied: 'Kopiert'
+    copied: 'Kopiert',
+    project_created: 'Projekt erfolgreich erstellt'
   },
   status: {
     title: 'Status von',
+    up: 'Up',
+    down: 'Down'
   },
   client_connectivity: {
     title: 'Client-Konnektivität',

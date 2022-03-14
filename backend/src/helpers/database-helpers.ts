@@ -1,7 +1,4 @@
 import { getConnection } from 'typeorm';
-import { MR2000 } from '../types/MR2000';
-import { MR3000 } from '../types/MR3000';
-import { Project } from '../types/Project';
 
 /**
  * This file contains all helper functions for fetching data from databases
