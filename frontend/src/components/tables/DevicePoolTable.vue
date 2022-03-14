@@ -154,7 +154,9 @@ async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'assign':
-      assignDeviceToProject($q, device)
+      await assignDeviceToProject($q, device)
+      // Refetch data
+      rows.value = await myPoolDevices()
       break
     case 'status':
       await routerService?.addToRoute(`pool/${device}/${key}`)
