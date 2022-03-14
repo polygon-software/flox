@@ -78,8 +78,8 @@ export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
 }
 
 /**
- * Fetch all of the current user's devices that are not part of any projects
- * @param {Record<string, string>} [params] - query parameters, if any
+ * Fetch all of the current user's devices
+ * @param {Record<string, string>} [params] - query parameters for filtering ('unassigned' / 'assigned')
  * @return {Device[]} - An array containing all the user's projects
  */
 export function myDevices(params?: Record<string, boolean>) {
