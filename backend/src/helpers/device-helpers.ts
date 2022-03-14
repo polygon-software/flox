@@ -111,6 +111,6 @@ function deviceNameFromComment(comment: string) {
  * @param {string} clientId - the client id
  * @returns {'MR2000'|'MR3000'} - the device type
  */
-export function MRX000(clientId: string) {
+export function deviceType(clientId: string) {
   return clientId.includes('-') ? 'MR2000' : 'MR3000';
 }

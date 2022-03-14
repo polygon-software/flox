@@ -6,7 +6,7 @@ import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
-  MRX000,
+  deviceType,
 } from '../../helpers/device-helpers';
 import { Project } from '../project/entities/project.entity';
 import { HttpService } from '@nestjs/axios';
@@ -237,7 +237,7 @@ export class DeviceService {
     orderBy += ` ${getEventArgs.descending ? 'DESC' : 'ASC'}`;
 
     // MR2000
-    if (MRX000(cli) === 'MR2000') {
+    if (deviceType(cli) === 'MR2000') {
       // MR2000 can't order by these
       if (
         ['frqX', 'frqY', 'frqZ', 'frqZ'].some((item) => {
@@ -294,7 +294,7 @@ export class DeviceService {
    * @returns {int} - number of entries
    */
   async getEventsLength(clientId: string, type = ''): Promise<number> {
-    const database = MRX000(clientId);
+    const database = deviceType(clientId);
     const typeClause =
       type === '' ? '' : `AND typ='${this.reverseTypeMapping[type]}'`;
     const res = await fetchCountFromTable(
