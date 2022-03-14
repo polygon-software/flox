@@ -99,7 +99,7 @@ export default {
     number: 'Telefonnumer',
     email: 'E-mail',
     add_new_contact: 'Füge neuen Kontakt hinzu',
-    event: 'Ereigniss',
+    event: 'Ereignis',
     alarm1: 'Alarm 1',
     alarm2: 'Alarm 2',
     sms_limit: 'SMS-Grenze',

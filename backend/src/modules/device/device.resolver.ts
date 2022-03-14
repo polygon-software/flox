@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import { DeviceService } from './device.service';
 import {
@@ -18,6 +18,9 @@ import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { ROLE } from '../../ENUM/ENUM';
+import { Project } from '../project/entities/project.entity';
+import { CreateProjectInput } from '../project/dto/input/create-project.input';
+import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -123,6 +126,32 @@ export class DeviceResolver {
 
     if (dbUser.role === ROLE.ADMIN || allowed) {
       return this.deviceService.getEvents(eventTableArgs);
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  @AnyRole()
+  @Mutation(() => Device)
+  async addContactToDevice(
+    @Args({
+      name: 'addContactToDeviceInput',
+      type: () => AddContactToDeviceInput,
+    })
+    addContactToDeviceInput: AddContactToDeviceInput,
+    @CurrentUser()
+    user: Record<string, string>,
+  ): Promise<EventsTable> {
+    const dbUser = await this.userService.getMyUser(user);
+    let allowed = false;
+    if (dbUser.role === ROLE.USER) {
+      allowed =
+        dbUser.mr2000instances?.includes(addContactToDeviceInput.cli) ||
+        dbUser.mr3000instances?.includes(addContactToDeviceInput.cli);
+    }
+
+    if (dbUser.role === ROLE.ADMIN || allowed) {
+      return this.deviceService.addContactToDevice(addContactToDeviceInput);
     }
 
     throw new UnauthorizedException();
