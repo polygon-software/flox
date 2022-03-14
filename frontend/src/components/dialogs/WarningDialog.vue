@@ -54,7 +54,7 @@ import { useDialogPluginComponent } from 'quasar'
 const emit = defineEmits([...useDialogPluginComponent.emits, 'cancel'])
 
 // REQUIRED; must be called inside of setup()
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
+const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -90,6 +90,6 @@ const props = defineProps({
  */
 function onCancel(){
   emit('cancel')
-  onDialogHide()
+  onDialogCancel()
 }
 </script>
