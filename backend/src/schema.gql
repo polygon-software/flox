@@ -2,6 +2,41 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddContactToDeviceInput {
+  """Whether to trigger on alarm1"""
+  alarm1: Boolean!
+
+  """Whether to trigger on alarm2"""
+  alarm2: Boolean!
+
+  """Device CLI"""
+  cli: String!
+
+  """Whether to trigger daily"""
+  daily: Boolean!
+
+  """E-Mail address"""
+  email: String!
+
+  """Whether to trigger on event"""
+  event: Boolean!
+
+  """Name"""
+  name: String!
+
+  """Whether to trigger on performance/battery alert"""
+  performanceOrBattery: Boolean!
+
+  """Phone number"""
+  phone: String!
+
+  """Whether to trigger on reminders"""
+  reminder: Boolean!
+
+  """Whether to trigger on SMS Limit"""
+  smsLimit: Boolean!
+}
+
 input AddUserPermissionInput {
   """Name of the permitted resource"""
   resource: String!
@@ -592,6 +627,7 @@ type MR3000 {
 }
 
 type Mutation {
+  addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput!): Device!
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   assignDeviceToProject(assignDeviceToProjectInput: AssignDeviceToProjectInput!): Project!
   createProject(createProjectInput: CreateProjectInput!): Project!

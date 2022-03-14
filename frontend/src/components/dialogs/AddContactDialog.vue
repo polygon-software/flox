@@ -5,7 +5,7 @@
     <q-card class="q-pa-sm" style="width: 600px; min-height: 250px">
       <h5 style="text-align: center">{{ $t('edit_parameters.add_new_contact') }}</h5>
       <q-form
-          class="q-gutter-md"
+          class="q-gutter-md full-width"
           @submit="onSubmit"
       >
         <GenericContactForm

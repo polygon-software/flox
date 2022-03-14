@@ -141,7 +141,7 @@ export class DeviceResolver {
     addContactToDeviceInput: AddContactToDeviceInput,
     @CurrentUser()
     user: Record<string, string>,
-  ): Promise<EventsTable> {
+  ) {
     const dbUser = await this.userService.getMyUser(user);
     let allowed = false;
     if (dbUser.role === ROLE.USER) {

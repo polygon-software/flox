@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="display:flex; flex-direction: row">
+    <div class="row flex flex-center">
       <div style="width: 250px">
         <p>{{ $t('edit_parameters.name') }}</p>
         <q-input

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
@@ -25,6 +25,10 @@ import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
+import { Args } from '@nestjs/graphql';
+import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
+import { CurrentUser } from '../../auth/authorization.decorator';
+import { ROLE } from '../../ENUM/ENUM';
 
 @Injectable()
 export class DeviceService {
@@ -398,5 +402,23 @@ export class DeviceService {
       frequencyZ,
       VSUM,
     );
+  }
+
+  /**
+   * Adds a contact to a given device
+   * @param {AddContactToDeviceInput} addContactToDeviceInput - input, containing all contact info
+   * @returns {Promise<Record<string, unknown>>} - the new contact that was added
+   */
+  async addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput) {
+    // Determine device type for table name
+    const type = deviceType(addContactToDeviceInput.cli);
+    let tableName;
+    if (type === 'MR2000') {
+      tableName = 'alert';
+    } else {
+      tableName = 'para_alert';
+    }
+
+    // TODO
   }
 }
