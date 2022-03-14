@@ -38,6 +38,18 @@ export class DeviceParams {
   @Field(() => String)
   unitZ: string;
 
+  // Modes
+  @Field(() => String)
+  ala1_mode: string;
+  @Field(() => String)
+  ala2_mode: string;
+
+  // Edits
+  @Field(() => Number)
+  ala1_edit: number;
+  @Field(() => Number)
+  ala2_edit: number;
+
   constructor(
     trigX: number,
     trigY: number,
@@ -51,6 +63,10 @@ export class DeviceParams {
     unitX: string,
     unitY: string,
     unitZ: string,
+    ala1_mode: string,
+    ala2_mode: string,
+    ala1_edit: number,
+    ala2_edit: number,
   ) {
     this.trigX = trigX;
     this.trigY = trigY;
@@ -64,5 +80,9 @@ export class DeviceParams {
     this.unitX = unitX;
     this.unitY = unitY;
     this.unitZ = unitZ;
+    this.ala1_mode = ala1_mode;
+    this.ala2_mode = ala2_mode;
+    this.ala1_edit = ala1_edit;
+    this.ala2_edit = ala2_edit;
   }
 }

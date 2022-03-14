@@ -19,6 +19,7 @@ import { ConfigService } from '@nestjs/config';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { UpdateDeviceParamsInput } from './dto/input/update-device.input';
+import { string } from 'joi';
 
 @Injectable()
 export class DeviceService {
@@ -51,6 +52,34 @@ export class DeviceService {
       instances = await fetchFromTable('MR2000', 'param', filterQuery);
     }
     const instance = instances[0];
+    const enabledYes = 'enabled: YES';
+    const enabledNo = 'enabled: NO';
+    if (
+      instance.ala1_mode === undefined ||
+      instance.ala2_mode === undefined ||
+      instance.ala1_edit === undefined ||
+      instance.ala2_edit === undefined
+    ) {
+      instance.ala1_mode = enabledYes;
+      instance.ala2_mode = enabledYes;
+      instance.ala1_edit = 1;
+      instance.ala2_edit = 1;
+    }
+    const ala1_mode = instance.ala1_mode as string;
+    const ala2_mode = instance.ala2_mode as string;
+    if (ala1_mode.includes(enabledYes)) {
+      instance.ala1_mode = enabledYes;
+    }
+    if (ala1_mode.includes(enabledNo)) {
+      instance.ala1_mode = enabledNo;
+    }
+    if (ala2_mode.includes(enabledYes)) {
+      instance.ala2_mode = enabledYes;
+    }
+    if (ala2_mode.includes(enabledNo)) {
+      instance.ala2_mode = enabledNo;
+    }
+    console.log(instance);
     return new DeviceParams(
       instance.trigX as number,
       instance.trigY as number,
@@ -64,6 +93,10 @@ export class DeviceService {
       instance.unitX as string,
       instance.unitY as string,
       instance.unitZ as string,
+      instance.ala1_mode as string,
+      instance.ala2_mode as string,
+      instance.ala1_edit as number,
+      instance.ala2_edit as number,
     );
   }
 

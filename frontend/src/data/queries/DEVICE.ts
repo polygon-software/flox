@@ -122,6 +122,10 @@ export const DEVICE_PARAMS = {
         unitX
         unitY
         unitZ
+        ala1_mode
+        ala2_mode
+        ala1_edit
+        ala2_edit
       }
     }
   `,

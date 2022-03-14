@@ -71,9 +71,13 @@ type DeviceParams {
   ala1X: Float!
   ala1Y: Float!
   ala1Z: Float!
+  ala1_edit: Float!
+  ala1_mode: String!
   ala2X: Float!
   ala2Y: Float!
   ala2Z: Float!
+  ala2_edit: Float!
+  ala2_mode: String!
   trigX: Float!
   trigY: Float!
   trigZ: Float!
