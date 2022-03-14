@@ -102,6 +102,7 @@ import {myPoolDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
 import {useQuasar} from 'quasar';
 import {assignDeviceToProject} from 'src/helpers/project-helpers';
+import {sleep} from 'src/helpers/general-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -156,7 +157,8 @@ async function onOptionClick(device: string, key: string): Promise<void>{
     case 'assign':
       await assignDeviceToProject($q, device)
       // Refetch data
-      rows.value = await myPoolDevices()
+      // await sleep(200)
+      // rows.value = await myPoolDevices()
       break
     case 'status':
       await routerService?.addToRoute(`pool/${device}/${key}`)
