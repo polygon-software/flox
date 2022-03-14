@@ -3,10 +3,10 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
-import { fetchFromTable } from '../../helpers/database-helpers';
 import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
+  deviceType,
 } from '../../helpers/device-helpers';
 import { Project } from '../project/entities/project.entity';
 import { HttpService } from '@nestjs/axios';
@@ -16,11 +16,41 @@ import { LevelWriting } from '../../types/LevelWriting';
 import { LevelWritingAxis } from '../../types/LevelWritingAxis';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { ConfigService } from '@nestjs/config';
+import {
+  fetchCountFromTable,
+  fetchFromTable,
+} from '../../helpers/database-helpers';
+import { EventsTableRow } from '../../types/EventsTableRow';
+import { GetEventTableArgs } from './dto/args/get-event-table.args';
+import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 
 @Injectable()
 export class DeviceService {
+  reverseTypeMapping = {
+    Evt: 'n',
+    Pk: 'p',
+    ZIP: 'Z',
+  };
+  typeMapping = {
+    n: 'Evt',
+    p: 'Pk',
+    Z: 'ZIP',
+  };
+  columnMapping = {
+    file: 'num',
+    type: 'typ',
+    date_time: 'rec_time',
+    peakX: 'peakX',
+    peakY: 'peakY',
+    peakZ: 'peakZ',
+    frequencyX: 'frqX',
+    frequencyY: 'frqY',
+    frequencyZ: 'frqZ',
+    VSUM: 'VSUM',
+  };
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -178,5 +208,195 @@ export class DeviceService {
     }
 
     return devices;
+  }
+
+  /**
+   * Gets events for a given cli
+   * @param {GetEventTableArgs} getEventArgs - Id of client
+   * @returns {Promise<EventsTableRow[]>} - table Rows
+   */
+  async getEvents(getEventArgs: GetEventTableArgs): Promise<EventsTable> {
+    const cli = getEventArgs.cli;
+
+    // Get number of items in database by type
+    const lengthAll = await this.getEventsLength(cli);
+    const lengthEvt = await this.getEventsLength(cli, 'Evt');
+    const lengthPk = await this.getEventsLength(cli, 'Pk');
+    const lengthZip = await this.getEventsLength(cli, 'ZIP');
+
+    // Where clause for filtering by cli and typ
+    let filterQuery = `WHERE events.cli='${cli}'`;
+    if (getEventArgs.filter && getEventArgs.filter !== 'All') {
+      filterQuery += ` AND events.typ='${
+        this.reverseTypeMapping[getEventArgs.filter]
+      }'`;
+    }
+
+    // Order by clause
+    let orderBy = this.columnMapping[getEventArgs.orderBy] || 'rec_time';
+    orderBy += ` ${getEventArgs.descending ? 'DESC' : 'ASC'}`;
+
+    // MR2000
+    if (deviceType(cli) === 'MR2000') {
+      // MR2000 can't order by these
+      if (
+        ['frqX', 'frqY', 'frqZ', 'frqZ'].some((item) => {
+          return orderBy.startsWith(item);
+        })
+      ) {
+        orderBy = 'rec_time';
+      }
+      const mr2000 = await fetchFromTable(
+        'MR2000',
+        'events',
+        `${filterQuery} ORDER BY ${orderBy}
+        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
+      );
+      const res = mr2000.map((item) => {
+        return this.mapMR2000(item, cli);
+      });
+      return new EventsTable(lengthAll, lengthZip, lengthEvt, lengthPk, res);
+    }
+
+    // MR3000
+    const frequencyAvailable = await fetchFromTable(
+      'MR3000',
+      'pk_frq',
+      `WHERE ident LIKE '${cli}.%'`,
+    );
+    let mr3000 = [];
+    if (frequencyAvailable.length > 0) {
+      mr3000 = await fetchFromTable(
+        'MR3000',
+        'events JOIN pk_frq ON events.ident=pk_frq.ident ',
+        `${filterQuery} ORDER BY ${orderBy}
+        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
+      );
+    } else {
+      mr3000 = await fetchFromTable(
+        'MR3000',
+        'events',
+        `${filterQuery} ORDER BY ${orderBy}
+        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
+      );
+    }
+
+    const res = mr3000.map((item) => {
+      return this.mapMR3000(item, cli, frequencyAvailable.length > 0);
+    });
+    return new EventsTable(lengthAll, lengthZip, lengthEvt, lengthPk, res);
+  }
+
+  /**
+   * count(*) Query with filter clause
+   * @param {string} clientId - client id
+   * @param {string} type - Evt, Pk or Zip
+   * @returns {int} - number of entries
+   */
+  async getEventsLength(clientId: string, type = ''): Promise<number> {
+    const database = deviceType(clientId);
+    const typeClause =
+      type === '' ? '' : `AND typ='${this.reverseTypeMapping[type]}'`;
+    const res = await fetchCountFromTable(
+      database,
+      'events',
+      `WHERE cli='${clientId}' ${typeClause}`,
+    );
+    return res[0]['count(*)'];
+  }
+
+  /**
+   * Map entries into EventTableRow for MR2000 events
+   * @param {Record<string, unknown>} item - db table row
+   * @param {string} clientId - client id
+   * @returns {EventsTableRow} - res
+   */
+  mapMR2000(item, clientId) {
+    const file = item['num'];
+    const type = this.typeMapping[item['typ'].toLowerCase()];
+    const dateTime = new Date(item['rec_time']);
+    const peakX = `${item['peakX']} ${item['unitX']}`;
+    const peakY = `${item['peakY']} ${item['unitY']}`;
+    const peakZ = `${item['peakZ']} ${item['unitZ']}`;
+    const timeStamp = dateTime.getTime() / 1000;
+    let downloadURL = null;
+    let previewURL = null;
+    let fileName = null;
+    if (item['filenam'] !== 'no') {
+      downloadURL = `../download.cgi/?client=${clientId}&num=${item['num']}&token=${timeStamp}`;
+      fileName = item['filenam'].split('/').pop();
+    }
+    if (item['filenam'] === 'unavail') {
+      downloadURL = '';
+    }
+    if (type === 'Evt') {
+      previewURL = `../preview.cgi/?client=${clientId}&num=${item['num']}&token=${timeStamp}`;
+    }
+    return new EventsTableRow(
+      file,
+      type,
+      dateTime,
+      peakX,
+      peakY,
+      peakZ,
+      downloadURL,
+      fileName,
+      previewURL,
+      null,
+      null,
+      null,
+      null,
+    );
+  }
+
+  /**
+   * Map entries into EventTableRow for MR3000 events
+   * @param {Record<string, unknown>} item - db table row
+   * @param {string} clientId - client id
+   * @param {boolean} frequencyAvailable - Whether frequency data is available
+   * @returns {EventsTableRow} - res
+   */
+  mapMR3000(item, clientId, frequencyAvailable) {
+    const file = item['num'];
+    const type = this.typeMapping[item['typ'].toLowerCase()];
+    const dateTime = new Date(item['rec_time']);
+    const peakX = `${item['peakX']} ${item['unitX']}`;
+    const peakY = `${item['peakY']} ${item['unitY']}`;
+    const peakZ = `${item['peakZ']} ${item['unitZ']}`;
+    const timeStamp = dateTime.getTime() / 1000;
+
+    const downloadURL = `../download.cgi/?client=${clientId}&num=${item['num']}&token=${timeStamp}`;
+    const fileName = item['filenam'].split('/').pop();
+    let previewURL = null;
+
+    if (type === 'Evt') {
+      previewURL = `../preview.cgi/?client=${clientId}&num=${item['num']}&token=${timeStamp}`;
+    }
+    let frequencyX = null;
+    let frequencyY = null;
+    let frequencyZ = null;
+    let VSUM = null;
+    if (frequencyAvailable) {
+      frequencyX = item['frqX'];
+      frequencyY = item['frqY'];
+      frequencyZ = item['frqZ'];
+      VSUM = item['VSUM'];
+    }
+
+    return new EventsTableRow(
+      file,
+      type,
+      dateTime,
+      peakX,
+      peakY,
+      peakZ,
+      downloadURL,
+      fileName,
+      previewURL,
+      frequencyX,
+      frequencyY,
+      frequencyZ,
+      VSUM,
+    );
   }
 }

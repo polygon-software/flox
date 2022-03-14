@@ -13,8 +13,11 @@ import { GetUserArgs } from '../user/dto/args/get-user.args';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { LevelWriting } from '../../types/LevelWriting';
 import { UnauthorizedException } from '@nestjs/common';
+import { GetEventTableArgs } from './dto/args/get-event-table.args';
+import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
+import { ROLE } from '../../ENUM/ENUM';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -102,5 +105,26 @@ export class DeviceResolver {
       unassigned: getMyDevicesArgs?.unassigned ?? false,
       assigned: getMyDevicesArgs?.assigned ?? false,
     } as GetUserDevicesArgs);
+  }
+
+  @AnyRole()
+  @Query(() => EventsTable, { name: 'eventTable' })
+  async getEventTable(
+    @Args() eventTableArgs: GetEventTableArgs,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<EventsTable> {
+    const dbUser = await this.userService.getMyUser(user);
+    let allowed = false;
+    if (dbUser.role === ROLE.USER) {
+      allowed =
+        dbUser.mr2000instances?.includes(eventTableArgs.cli) ||
+        dbUser.mr3000instances?.includes(eventTableArgs.cli);
+    }
+
+    if (dbUser.role === ROLE.ADMIN || allowed) {
+      return this.deviceService.getEvents(eventTableArgs);
+    }
+
+    throw new UnauthorizedException();
   }
 }

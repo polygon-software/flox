@@ -58,7 +58,7 @@ export default {
     device_pool: 'Gerätepool',
     account: 'Account',
     share: 'Teilen',
-    files: 'Ereignisse vom Station',
+    files: 'Ereignisse von Station',
   },
   projects: {
     project: 'Projekt',
@@ -235,7 +235,14 @@ export default {
     frq_y: 'Frq Y',
     frq_z: 'Frq Z',
     vsum: 'VSUM',
-    download: 'Herunterladen',
+    downloadURL: 'Herunterladen',
+    previewURL: 'Vorschau',
+    filter: {
+      all: 'Alle',
+      evt: 'Events',
+      pk: 'Peaks',
+      zip: 'Zip'
+    }
   },
   dialog: {
     period: 'Periode',

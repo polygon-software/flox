@@ -3,7 +3,7 @@
     <!-- Title -->
     <h5>{{ $t('dashboard.files') }} {{ stationId.toUpperCase() }}</h5>
 
-    <FilesTable/>
+    <FilesTable :station-id="stationId"/>
 
   </q-page>
 </template>

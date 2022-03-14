@@ -231,7 +231,14 @@ export default {
     frq_y: 'Frq Y',
     frq_z: 'Frq Z',
     vsum: 'VSUM',
-    download: 'Download',
+    downloadURL: 'Download',
+    previewURL: 'Preview',
+    filter: {
+      all: 'All',
+      evt: 'Events',
+      pk: 'Peaks',
+      zip: 'Zip'
+    }
   },
   dialog: {
     period: 'Period',

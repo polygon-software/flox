@@ -2,32 +2,34 @@
   <div class="column">
     <!-- Search input -->
     <div class="row" style="justify-content: center">
-      <p>{{ $t('files.events', {events: events}) }}, {{ $t('files.peak_files', {peak_files: peakFiles}) }},
-        {{ $t('files.zip_files', {zip_files: zipFiles}) }}, {{ $t('files.totally_files', {files: files, total_files: totalFiles}) }}</p>
+      <p>{{ $t('files.events', {events: lengths.Evt}) }}, {{ $t('files.peak_files', {peak_files: lengths.Pk}) }},
+        {{ $t('files.zip_files', {zip_files: lengths.Zip}) }}</p>
     </div>
     <div class="row" style="justify-content: center">
-      <q-input
+      <q-select
         v-model="search"
         :label="$t('general.filter')"
+        :options="[
+          {label: $t('files.filter.all'), value: 'All'},
+          {label: $t('files.filter.evt'), value: 'Evt'},
+          {label: $t('files.filter.pk'), value: 'Pk'},
+          {label: $t('files.filter.zip'), value: 'Zip'}]"
         outlined
-        type="search"
         dense
-      >
-        <template #append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
+        style="width: 90px"
+        @update:model-value="refetch"
+      />
     </div>
     <q-table
+      v-model:pagination="pagination"
       class="q-mt-lg"
       flat
-      :rows="rows"
+      :rows="rows || []"
       :columns="columns"
       row-key="uuid"
-      :filter="search"
-      :filter-method="tableFilter"
       :rows-per-page-options="[10,20, 100]"
       separator="none"
+      @request="updatePagination"
     >
       <template #body="props">
         <q-tr
@@ -40,35 +42,42 @@
           <q-td key="type">
             {{ props.row.type }}
           </q-td>
-          <q-td key="date_time">
-            {{ props.row.date_time }}
+          <q-td key="dateTime">
+            {{ formatDate(props.row.dateTime, 'DD.MM.YYYY') }}
           </q-td>
-          <q-td key="peak_x">
-            {{ props.row.peak_x }}
+          <q-td key="peakX">
+            {{ props.row.peakX }}
           </q-td>
-          <q-td key="peak_y">
-            {{ props.row.peak_y }}
+          <q-td key="peakY">
+            {{ props.row.peakY }}
           </q-td>
-          <q-td key="peak_z">
-            {{ props.row.peak_z }}
+          <q-td key="peakZ">
+            {{ props.row.peakZ }}
           </q-td>
-          <q-td key="frq_x">
-            {{ props.row.frq_x }}
+          <q-td key="frequencyX">
+            {{ props.row.frequencyX }}
           </q-td>
-          <q-td key="frq_y">
-            {{ props.row.frq_y }}
+          <q-td key="frequencyY">
+            {{ props.row.frequencyY }}
           </q-td>
-          <q-td key="frq_z">
-            {{ props.row.frq_z }}
+          <q-td key="frequencyZ">
+            {{ props.row.frequencyZ }}
           </q-td>
-          <q-td key="vsum">
-            {{ props.row.vsum }}
+          <q-td key="VSUM">
+            {{ props.row.VSUM }}
           </q-td>
-          <q-td key="download">
+          <q-td key="fileName">
             <a
               href="#"
-              @click.stop="downloadFile"
-              v-text="props.row.download"
+              @click.stop="()=>{downloadFile(props.row.downloadURL)}"
+              v-text="props.row.fileName"
+            />
+          </q-td>
+          <q-td key="preview">
+            <a
+              href="#"
+              @click.stop="()=>{preview(props.row.previewURL)}"
+              v-text="props.row.previewURL ? 'show': ''"
             />
           </q-td>
         </q-tr>
@@ -78,66 +87,93 @@
 </template>
 
 <script setup lang="ts">
-import {inject, ref} from 'vue';
-import {tableFilter} from 'src/helpers/filter-helpers';
+import {defineProps, inject, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {executeQuery} from 'src/helpers/data-helpers';
+import {EVENT_TABLE_ROWS} from 'src/data/queries/DEVICE';
+import {date} from 'quasar';
 
-// TODO: take data from database
-const events = ref(12)
-const peakFiles = ref(12)
-const zipFiles = ref(1)
-const files = ref(600)
-const totalFiles = ref(788)
-const search = ref('')
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps({
+  stationId: {
+    required: true,
+    type: String
+  }
+})
 const routerService: RouterService|undefined = inject('$routerService')
 
+
+/**
+ * Updates the table based on user pagination inputs
+ * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
+ * @returns {void} - -
+ */
+function updatePagination(update: Record<string, string|Record<string, unknown>>){
+  pagination.value = update.pagination as Record<string, unknown>
+  return refetch()
+}
+
+/**
+ * Fetch events
+ * @returns {Promise<void>} - done
+ */
+async function refetch(): Promise<void>{
+  const res = await executeQuery(EVENT_TABLE_ROWS, {
+    stationId: props.stationId,
+    skip: (pagination.value.page as number - 1) * (pagination.value.rowsPerPage as number),
+    take: pagination.value.rowsPerPage as number,
+    filter: search.value,
+    orderBy: (pagination.value.sortBy as string) || 'date_time',
+    descending: pagination.value.descending as boolean || false
+  });
+  const fetchRes = res.data[EVENT_TABLE_ROWS.cacheLocation] as Record<string, Record<string, unknown>[]|number>
+  pagination.value.rowsNumber = fetchRes.lengthAll
+  rows.value = fetchRes.items as Record<string, unknown>[]
+  lengths.value.total = fetchRes.lengthAll as number
+  lengths.value.Pk = fetchRes.lengthPk as number
+  lengths.value.Evt = fetchRes.lengthEvt as number
+  lengths.value.Zip = fetchRes.lengthZip as number
+
+}
+const lengths = ref({
+  total: 0,
+  Zip: 0,
+  Evt: 0,
+  Pk: 0
+})
+
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 10,
+  rowsNumber: 0,
+  descending: false,
+  sortBy: ''
+}) as Ref<Record<string, unknown>>
+
+const rows = ref([]) as Ref<Record<string, unknown>[]>
+const search = ref(null)
+
+void refetch()
+
+const formatDate = date.formatDate
 // ----- Data -----
 const columns = [
   { name: 'file', label: i18n.global.t('files.file'), field: 'file', sortable: true, align: 'center' },
   { name: 'type', label: i18n.global.t('files.type'), field: 'type', sortable: true, align: 'center' },
-  { name: 'date_time', label: i18n.global.t('files.date_time'), field: 'date_time', sortable: true, align: 'center' },
-  { name: 'peak_x', label: i18n.global.t('files.peak_x'), field: 'peak_x', sortable: true, align: 'center' },
-  { name: 'peak_y', label: i18n.global.t('files.peak_y'), field: 'peak_y', sortable: true, align: 'center' },
-  { name: 'peak_z', label: i18n.global.t('files.peak_z'), field: 'peak_z', sortable: true, align: 'center' },
-  { name: 'frq_x', label: i18n.global.t('files.frq_x'), field: 'frq_x', sortable: true, align: 'center' },
-  { name: 'frq_y', label: i18n.global.t('files.frq_y'), field: 'frq_y', sortable: true, align: 'center' },
-  { name: 'frq_z', label: i18n.global.t('files.frq_z'), field: 'frq_z', sortable: true, align: 'center' },
-  { name: 'vsum', label: i18n.global.t('files.vsum'), field: 'vsum', sortable: true, align: 'center' },
-  { name: 'download', label: i18n.global.t('files.download'), field: 'download', sortable: false, align: 'center' },
+  { name: 'dateTime', label: i18n.global.t('files.date_time'), field: 'dateTime', sortable: true, align: 'center' },
+  { name: 'peakX', label: i18n.global.t('files.peak_x'), field: 'peakX', sortable: true, align: 'center' },
+  { name: 'peakY', label: i18n.global.t('files.peak_y'), field: 'peakY', sortable: true, align: 'center' },
+  { name: 'peakZ', label: i18n.global.t('files.peak_z'), field: 'peakZ', sortable: true, align: 'center' },
+  { name: 'frequencyX', label: i18n.global.t('files.frq_x'), field: 'frequencyX', sortable: true, align: 'center' },
+  { name: 'frequencyY', label: i18n.global.t('files.frq_y'), field: 'frequencyY', sortable: true, align: 'center' },
+  { name: 'frequencyZ', label: i18n.global.t('files.frq_z'), field: 'frequencyZ', sortable: true, align: 'center' },
+  { name: 'VSUM', label: i18n.global.t('files.vsum'), field: 'VSUM', sortable: true, align: 'center' },
+  { name: 'downloadURL', label: i18n.global.t('files.downloadURL'), field: 'downloadURL', sortable: false, align: 'center' },
+  { name: 'previewURL', label: i18n.global.t('files.previewURL'), field: 'previewURL', sortable: false, align: 'center' },
 ]
 
-// TODO: take data from database
-const rows = [
-  {
-    file: '2',
-    type: 'Evt',
-    date_time: '2022-02-28 10:39:43',
-    peak_x: '0.161 mm/s',
-    peak_y: '0.713 mm/s',
-    peak_z: '0.076 mm/s',
-    frq_x: '90.1',
-    frq_y: '15.8',
-    frq_z: '15.8',
-    vsum: '0.72',
-    download: '22059002.XMR',
-  },
-  {
-    file: '50',
-    type: 'Pk',
-    date_time: '2022-02-27 09:25:45',
-    peak_x: '0.049 mm/s',
-    peak_y: '0.064 mm/s',
-    peak_z: '0.875 mm/s',
-    frq_x: '99.8',
-    frq_y: '17.2',
-    frq_z: '17.9',
-    vsum: '0.88',
-    download: '22059001.XMR',
-  },
-]
 
 /**
  * Routes to graph page of that event which is clicked
@@ -145,7 +181,7 @@ const rows = [
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  await routerService?.addToRoute(row.file) // or use another value...
+  await routerService?.addToRoute(row.file) // Todo
 }
 
 // TODO: replace it to download the file
@@ -154,7 +190,7 @@ async function onRowClick(row: Record<string, unknown>): Promise<void> {
  * @returns {void}
  */
 async function downloadFile () {
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
+  await routerService?.routeTo(ROUTES.CUSTOMERS) // ToDo
 }
 </script>
 
