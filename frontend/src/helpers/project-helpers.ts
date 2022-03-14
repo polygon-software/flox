@@ -53,7 +53,6 @@ export function assignDeviceToProject(q: QVueGlobals, device: string){
       cli: device
     }
   }).onOk(async (result: Record<string, string>) => {
-    console.log('assign with', result)
    await executeMutation(
       ASSIGN_DEVICE_TO_PROJECT,
       {

@@ -78,8 +78,6 @@ export class ProjectService {
         .join("','")}')`,
     );
 
-    console.log('mr2000:', mr2000store);
-
     const devices = [];
 
     // Add all MR2000 instances that belong to the project
