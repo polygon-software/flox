@@ -1,4 +1,4 @@
-import { executeQuery } from 'src/helpers/data-helpers';
+import { executeQuery, subscribeToQuery } from 'src/helpers/data-helpers';
 import { ALL_USERS, MY_USER, USER } from 'src/data/queries/USER';
 import { User } from 'src/data/types/User';
 import { Address } from 'src/data/types/Address';
@@ -7,6 +7,7 @@ import { Project } from 'src/data/types/Project';
 import {MY_PROJECTS} from 'src/data/queries/PROJECT';
 import {MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
 import {Device} from 'src/data/types/Device';
+import {computed, Ref} from 'vue';
 
 /**
  * Fetch all users.
@@ -95,15 +96,25 @@ export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
  * Fetch all of the current user's devices that are not part of any projects
  * @return {Promise<Device[]>} - An array containing all the user's projects
  */
-export async function myPoolDevices(): Promise<Device[]> {
-  const devices: Device[] = [];
-  const queryResult = await executeQuery(MY_DEVICES, {unassigned: true});
-  if(queryResult.data[MY_DEVICES.cacheLocation]){
-    for (const device of queryResult.data[MY_DEVICES.cacheLocation] as Record<string, unknown>[]) {
-      devices.push(mapDevice(device));
+export function myPoolDevices() {
+  const queryResult = subscribeToQuery(MY_DEVICES, {unassigned: true}) as Ref<Record<string, unknown>[]>;
+  return computed(() => {
+    const devices: Device[] = [];
+    if(queryResult.value){
+      for (const device of queryResult.value ) {
+        devices.push(mapDevice(device));
+      }
     }
-  }
-  return devices
+    return devices
+  });
+  // const devices: Device[] = [];
+  // const queryResult = await executeQuery(MY_DEVICES, {unassigned: true});
+  // if(queryResult.data[MY_DEVICES.cacheLocation]){
+  //   for (const device of queryResult.data[MY_DEVICES.cacheLocation] as Record<string, unknown>[]) {
+  //     devices.push(mapDevice(device));
+  //   }
+  // }
+  // return devices
 }
 
 /**

@@ -106,7 +106,7 @@ import {sleep} from 'src/helpers/general-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
-const rows: Ref<Device[]> = ref([])
+const rows = myPoolDevices()
 const $q = useQuasar()
 
 // ----- Data -----
@@ -140,11 +140,6 @@ const buttons = [
   },
 ]
 
-// Once mounted, fetch data
-onMounted(async () => {
-  rows.value = await myPoolDevices()
-})
-
 /**
  * Routes to different pages dependent which button is clicked
  * @param {string} device - the CLI of a device
@@ -156,9 +151,6 @@ async function onOptionClick(device: string, key: string): Promise<void>{
   switch(key){
     case 'assign':
       await assignDeviceToProject($q, device)
-      // Refetch data
-      // await sleep(200)
-      // rows.value = await myPoolDevices()
       break
     case 'status':
       await routerService?.addToRoute(`pool/${device}/${key}`)

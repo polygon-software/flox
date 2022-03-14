@@ -3,6 +3,7 @@ import {MutationObject, MutationTypes, QueryObject,} from '../data/DATA-DEFINITI
 import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
 import {i18n} from 'boot/i18n';
 import {QUERIES} from 'src/data/queries/QUERIES';
+import {onBeforeMount, ref, Ref} from 'vue';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -192,56 +193,32 @@ function refetchAffectedQueries(
  * @param {Record<string, unknown>} [variables] - any variables to pass to the query
  * @returns {Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>} - the query's output
  */
-// function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
-//   const $ssrStore = useSSR();
-//   const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
-//
-//   // ----- Hooks -----
-//   onServerPrefetch(async () => {
-//     const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query, variables)
-//     if(!tempRes.data){
-//       return
-//     }
-//     res.value = tempRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
-//     $ssrStore.mutations.setPrefetchedData({key: query.cacheLocation, value: res.value})
-//   })
-//
-//   onBeforeMount( () => {
-//     const apolloClient = useApolloClient().resolveClient()
-//     const currentCacheState = apolloClient.readQuery({query: query.query, variables}) as Record<string, Record<string, unknown>[]>[] ?? []
-//     // Test if the query is already in the cache
-//     if(Object.values(currentCacheState).length === 0){
-//       res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
-//
-//       // SPA
-//       if(res.value.length <= 0){
-//         void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
-//           if(fetchedRes.data){
-//             res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
-//           } else {
-//             res.value = []
-//           }
-//         })
-//       } else {
-//         // SSR
-//         apolloClient.writeQuery({
-//           query: query.query,
-//           variables: variables,
-//           data: {
-//             [query.cacheLocation]: res.value
-//           }
-//         })
-//       }
-//     }
-//
-//     apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
-//       next(value: ApolloQueryResult<Record<string, unknown>>) {
-//         res.value = value.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
-//       }
-//     })
-//   })
-//   return res;
-// }
+function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
+  const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
+
+  // ----- Hooks -----
+  onBeforeMount( () => {
+    const apolloClient = useApolloClient().resolveClient()
+    const currentCacheState = apolloClient.readQuery({query: query.query, variables}) as Record<string, Record<string, unknown>[]>[] ?? []
+    // Test if the query is already in the cache
+    if(Object.values(currentCacheState).length === 0){
+      void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
+        if(fetchedRes.data){
+          res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+        } else {
+          res.value = []
+        }
+      })
+    }
+
+    apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
+      next(value: ApolloQueryResult<Record<string, unknown>>) {
+        res.value = value.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+      }
+    })
+  })
+  return res;
+}
 
 
-export { executeQuery, executeMutation };
+export { executeQuery, executeMutation, subscribeToQuery };
