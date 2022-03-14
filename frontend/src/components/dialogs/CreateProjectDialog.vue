@@ -61,15 +61,23 @@
 <script setup lang="ts">
 // REQUIRED; must be called inside of setup()
 import {useDialogPluginComponent} from 'quasar';
-import {defineEmits, Ref, ref} from 'vue';
+import {defineEmits, defineProps, PropType, Ref, ref} from 'vue';
 import {CREATE_PROJECT} from 'src/data/mutations/PROJECT';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {myUser} from 'src/helpers/api-helpers';
+import {ErrorService} from 'src/services/ErrorService';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(useDialogPluginComponent.emits)
+
+const props = defineProps({
+  errorService: {
+    type: Object as PropType<ErrorService>,
+    required: true
+  }
+})
 
 const name: Ref<string|null|undefined> = ref()
 
@@ -81,17 +89,17 @@ async function createProject() {
   const user = await myUser()
   const userUuid = user?.uuid
 
-  const mutationResult = await executeMutation(
-    CREATE_PROJECT,
-    {
-      userUuid: userUuid,
-      name: name.value,
-    }
-  )
-
-  if (!mutationResult) {
-    throw new Error('An error occurred while creating the project')
+  try{
+    await executeMutation(
+      CREATE_PROJECT,
+      {
+        userUuid: userUuid,
+        name: name.value,
+      }
+    )
+    onDialogOK()
+  } catch (e){
+    props.errorService?.showErrorDialog(e as Error)
   }
- onDialogOK()
 }
 </script>

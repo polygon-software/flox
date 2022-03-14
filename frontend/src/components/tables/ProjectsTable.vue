@@ -116,12 +116,14 @@ import {Device} from 'src/data/types/Device';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {Project} from 'src/data/types/Project';
 import {removeDeviceFromProject} from 'src/helpers/project-helpers';
+import {ErrorService} from 'src/services/ErrorService';
 
 const $q = useQuasar()
 
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
+const errorService: ErrorService|undefined = inject('$errorService')
 
 // ----- Data -----
 const columns = [
@@ -190,6 +192,9 @@ onMounted(async () => {
 async function createNewProject(): Promise<void> { //TODO: Add different dialog for admin
   $q.dialog({
     component: CreateProjectDialog,
+    componentProps: {
+      errorService: errorService
+    }
   }).onOk(() => {
     // Show success notification
     showNotification(
