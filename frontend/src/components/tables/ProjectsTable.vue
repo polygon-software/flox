@@ -111,7 +111,7 @@ import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
-import {myProjectDevices} from 'src/helpers/api-helpers';
+import {myDevices, myProjectDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {Project} from 'src/data/types/Project';
@@ -142,7 +142,7 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-const rows: Ref<Device[]> = ref([])
+const rows = myDevices({assigned: true})
 
 const buttons = [
   {
@@ -178,11 +178,6 @@ const buttons = [
     label: i18n.global.t('projects.show_device_health'),
   },
 ]
-
-// Once mounted, fetch data
-onMounted(async () => {
-  rows.value = await myProjectDevices()
-})
 
 /**
  * Shows a dialog for creating a new project

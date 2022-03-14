@@ -93,20 +93,18 @@
 </template>
 
 <script setup lang="ts">
-import {inject, onMounted, Ref, ref} from 'vue';
+import {inject, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {myPoolDevices} from 'src/helpers/api-helpers';
-import {Device} from 'src/data/types/Device';
+import {myDevices} from 'src/helpers/api-helpers';
 import {useQuasar} from 'quasar';
 import {assignDeviceToProject} from 'src/helpers/project-helpers';
-import {sleep} from 'src/helpers/general-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
-const rows = myPoolDevices()
+const rows = myDevices({unassigned: true})
 const $q = useQuasar()
 
 // ----- Data -----

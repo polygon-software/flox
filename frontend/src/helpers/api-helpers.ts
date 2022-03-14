@@ -62,21 +62,6 @@ export async function myProjects(): Promise<Project[]> {
 }
 
 /**
- * Fetch all devices that are part of projects belonging to current user
- * @return {Promise<Device[]>} - An array containing all the user's projects
- */
-export async function myProjectDevices(): Promise<Device[]> {
-  const devices: Device[] = [];
-  const queryResult = await executeQuery(MY_DEVICES, {assigned: true});
-  if(queryResult.data[MY_DEVICES.cacheLocation]){
-    for (const device of queryResult.data[MY_DEVICES.cacheLocation] as Record<string, unknown>[]) {
-      devices.push(mapDevice(device));
-    }
-  }
-  return devices
-}
-
-/**
  * Fetch all devices that are part of a given project project
  * @param {string} uuid - the project's uuid
  * @return {Promise<Device[]>} - An array containing all the user's projects
@@ -94,10 +79,11 @@ export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
 
 /**
  * Fetch all of the current user's devices that are not part of any projects
- * @return {Promise<Device[]>} - An array containing all the user's projects
+ * @param {Record<string, string>} [params] - query parameters, if any
+ * @return {Device[]} - An array containing all the user's projects
  */
-export function myPoolDevices() {
-  const queryResult = subscribeToQuery(MY_DEVICES, {unassigned: true}) as Ref<Record<string, unknown>[]>;
+export function myDevices(params?: Record<string, boolean>) {
+  const queryResult = subscribeToQuery(MY_DEVICES, params) as Ref<Record<string, unknown>[]>;
   return computed(() => {
     const devices: Device[] = [];
     if(queryResult.value){
@@ -107,14 +93,6 @@ export function myPoolDevices() {
     }
     return devices
   });
-  // const devices: Device[] = [];
-  // const queryResult = await executeQuery(MY_DEVICES, {unassigned: true});
-  // if(queryResult.data[MY_DEVICES.cacheLocation]){
-  //   for (const device of queryResult.data[MY_DEVICES.cacheLocation] as Record<string, unknown>[]) {
-  //     devices.push(mapDevice(device));
-  //   }
-  // }
-  // return devices
 }
 
 /**
