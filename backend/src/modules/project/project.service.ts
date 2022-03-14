@@ -73,7 +73,7 @@ export class ProjectService {
     const vpnInfo = await fetchFromTable(
       'openvpn',
       'tempovp',
-      `WHERE cli IN ('${project.mr3000instances
+      `WHERE cli IN ('${project.mr2000instances
         .concat(project.mr3000instances)
         .join("','")}')`,
     );
