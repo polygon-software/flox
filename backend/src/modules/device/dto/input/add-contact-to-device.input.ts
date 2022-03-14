@@ -57,10 +57,10 @@ export class AddContactToDeviceInput {
   smsLimit: boolean;
 
   @Field(() => Boolean, {
-    description: 'Whether to trigger on performance/battery alert',
+    description: 'Whether to trigger on power alert',
   })
   @IsBoolean()
-  performanceOrBattery: boolean;
+  power: boolean;
 
   @Field(() => Boolean, {
     description: 'Whether to trigger on reminders',

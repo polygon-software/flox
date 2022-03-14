@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
@@ -19,16 +19,14 @@ import { ConfigService } from '@nestjs/config';
 import {
   fetchCountFromTable,
   fetchFromTable,
+  insertIntoTable,
 } from '../../helpers/database-helpers';
 import { EventsTableRow } from '../../types/EventsTableRow';
 import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
-import { Args } from '@nestjs/graphql';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
-import { CurrentUser } from '../../auth/authorization.decorator';
-import { ROLE } from '../../ENUM/ENUM';
 
 @Injectable()
 export class DeviceService {
@@ -412,13 +410,48 @@ export class DeviceService {
   async addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput) {
     // Determine device type for table name
     const type = deviceType(addContactToDeviceInput.cli);
-    let tableName;
+    let table;
     if (type === 'MR2000') {
-      tableName = 'alert';
+      table = 'alert';
     } else {
-      tableName = 'para_alert';
+      table = 'para_alert';
     }
 
-    // TODO
+    const input = addContactToDeviceInput;
+
+    // Record to insert in database (depending on type)
+    const record =
+      type === 'MR2000'
+        ? {
+            // MR2000
+            cli: input.cli,
+            name: input.name,
+            email: input.email,
+            phone: input.phone,
+            event: input.event,
+            alarm1: input.alarm1,
+            alarm2: input.alarm2,
+            daily: input.daily,
+            soh_power: input.power,
+            soh_sms_limit: input.smsLimit,
+            // TODO: reminder?
+          }
+        : {
+            // MR3000
+            cli: input.cli,
+            name: input.name,
+            email: input.email,
+            phone: input.phone,
+            event_all: input.event,
+            event_alarm1: input.alarm1,
+            event_alarm2: input.alarm2,
+            daily: input.daily,
+            soh_power: input.power,
+            soh_sms_limit: input.smsLimit,
+            // TODO: reminder?
+          };
+
+    // Write to database
+    await insertIntoTable(type, table, record);
   }
 }

@@ -24,11 +24,11 @@ input AddContactToDeviceInput {
   """Name"""
   name: String!
 
-  """Whether to trigger on performance/battery alert"""
-  performanceOrBattery: Boolean!
-
   """Phone number"""
   phone: String!
+
+  """Whether to trigger on power alert"""
+  power: Boolean!
 
   """Whether to trigger on reminders"""
   reminder: Boolean!
