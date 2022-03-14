@@ -255,9 +255,11 @@ input UpdateDeviceParamsInput {
   ala1X: Float
   ala1Y: Float
   ala1Z: Float
+  ala1_mode: String!
   ala2X: Float
   ala2Y: Float
   ala2Z: Float
+  ala2_mode: String!
   cli: String!
   trigX: Float
   trigY: Float

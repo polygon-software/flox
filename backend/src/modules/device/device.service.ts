@@ -19,7 +19,6 @@ import { ConfigService } from '@nestjs/config';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { UpdateDeviceParamsInput } from './dto/input/update-device.input';
-import { string } from 'joi';
 
 @Injectable()
 export class DeviceService {
@@ -79,7 +78,7 @@ export class DeviceService {
     if (ala2_mode.includes(enabledNo)) {
       instance.ala2_mode = enabledNo;
     }
-    console.log(instance);
+    // TODO: resolve it with the type
     return new DeviceParams(
       instance.trigX as number,
       instance.trigY as number,

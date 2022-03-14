@@ -25,4 +25,8 @@ export class UpdateDeviceParamsInput {
   ala2Y: number;
   @Field(() => Float, { nullable: true })
   ala2Z: number;
+  @Field(() => String)
+  ala1_mode: string;
+  @Field(() => String)
+  ala2_mode: string;
 }
