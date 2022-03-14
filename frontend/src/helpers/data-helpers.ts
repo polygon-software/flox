@@ -154,7 +154,7 @@ function updateAffectedQueries(
 }
 
 /**
- * Fully refetches all queries affected by a mutation
+ * Forces a full re-fetch all queries affected by a mutation by removing them from cache
  * @param {QueryObject[]} affectedQueries - all affected queries
  * @param {MutationObject} mutationObject - the mutation that triggered the change
  * @returns {void}
@@ -179,10 +179,6 @@ function refetchAffectedQueries(
         fieldName: queryObject.cacheLocation
       })
     }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    console.log('post:', cache.data)
   }
 }
 
