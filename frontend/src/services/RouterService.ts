@@ -29,17 +29,11 @@ export class RouterService {
    * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
    */
   addToRoute(path: string) {
-    return this.router.push(`${this.route.path}/${path}`);
-  }
-
-  /**
-   * Go back.
-   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
-   */
-  goBack() {
-    return this.router.push(
-      this.route.path.substring(0, this.route.path.lastIndexOf('/'))
-    );
+    let currentRoute = this.route.path
+    if(currentRoute.endsWith('/')){
+      currentRoute = currentRoute.substring(0, currentRoute.length - 1)
+    }
+    return this.router.push(`${currentRoute}/${path}`);
   }
 
   /**
@@ -96,5 +90,13 @@ export class RouterService {
    */
   getQueryParam(key: string): string | null {
     return (this.route.query[key] as string) ?? null;
+  }
+
+  /**
+   * Go back.
+   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
+   */
+  goBack(){
+    return this.router.push(this.route.path.substring(0, this.route.path.lastIndexOf('/')))
   }
 }

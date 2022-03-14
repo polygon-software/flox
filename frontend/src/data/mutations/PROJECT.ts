@@ -10,10 +10,11 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
  * - cacheLocation: the actual GraphQL mutation's name (since cached data will be stored there)
  *
  */
+
 export const CREATE_PROJECT = {
   mutation: gql`
-    mutation createProject($createProjectInput: CreateProjectInput!){
-      createProject (createProjectInput: $createProjectInput) {
+    mutation createProject($userUuid: ID!, $name: String!){
+      createProject (createProjectInput: {userUuid: $userUuid, name: $name}) {
         uuid
         name
         mr2000instances
@@ -26,26 +27,10 @@ export const CREATE_PROJECT = {
   cacheLocation: 'createProject'
 }
 
-export const UPDATE_PROJECT = {
-  mutation: gql`
-    mutation updateProject($projectUuid: String!, $projectName: String!, $updateProjectInput: UpdateProjectInput!){
-      update (projectUuid: $projectUuid, projectName: $projectName, updateProjectInput: $updateProjectInput) {
-        uuid
-        name
-        mr2000instances
-        mr3000instances
-        __typename
-      }
-    }`,
-  tables: ['project'],
-  type: MutationTypes.UPDATE,
-  cacheLocation: undefined
-}
-
 export const DELETE_PROJECT = {
   mutation: gql`
-    mutation deleteProject($deleteProjectInput: DeleteProjectInput!){
-      update (deleteProjectInput: $deleteProjectInput) {
+    mutation deleteProject($uuid: ID!){
+      deleteProject (deleteProjectInput: {uuid: $uuid}) {
         uuid
         name
         mr2000instances
@@ -56,4 +41,52 @@ export const DELETE_PROJECT = {
   tables: ['project'],
   type: MutationTypes.DELETE,
   cacheLocation: 'deleteProject'
+}
+
+export const REMOVE_DEVICE_FROM_PROJECT = {
+  mutation: gql`
+    mutation removeDeviceFromProject($uuid: ID!, $cli: String!){
+      removeDeviceFromProject (removeDeviceFromProjectInput: {uuid: $uuid, cli: $cli}) {
+        uuid
+        name
+        mr2000instances
+        mr3000instances
+        __typename
+      }
+    }`,
+  tables: ['project', 'device'], // TODO: how can we ensure this also updates the device-related queries?
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
+export const ASSIGN_DEVICE_TO_PROJECT = {
+  mutation: gql`
+    mutation assignDeviceToProject($uuid: ID!, $cli: String!){
+      assignDeviceToProject (assignDeviceToProjectInput: {uuid: $uuid, cli: $cli}) {
+        uuid
+        name
+        mr2000instances
+        mr3000instances
+        __typename
+      }
+    }`,
+  tables: ['project', 'device'], // TODO: how can we ensure this also updates the device-related queries?
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
+export const UPDATE_PROJECT_NAME = {
+  mutation: gql`
+    mutation updateProjectName($uuid: ID!, $name: String!){
+      updateProjectName (updateProjectInput: {uuid: $uuid, name: $name}) {
+        uuid
+        name
+        mr2000instances
+        mr3000instances
+        __typename
+      }
+    }`,
+  tables: ['project'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
 }

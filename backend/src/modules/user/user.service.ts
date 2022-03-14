@@ -98,6 +98,7 @@ export class UserService {
         : {
             cognitoUuid: getUserArgs.cognitoUuid,
           },
+      { relations: ['projects'] },
     );
   }
 

@@ -30,7 +30,7 @@
           :props="props"
         >
           <q-td key="device">
-            {{ props.row.name }}
+            {{ props.row.type }}
           </q-td>
           <q-td key="client">
             {{ props.row.cli }}
@@ -48,7 +48,7 @@
             {{ props.row.sale_status }}
           </q-td>
           <q-td key="station">
-            {{ props.row.station }}
+            {{ props.row.name }}
           </q-td>
           <q-td key="vpn_status">
             {{ props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
@@ -77,11 +77,12 @@
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
-                  class="text-grey"
+                  class="text-grey full-width"
+                  align="left"
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(props.row.station, button.key)"
+                  @click="onOptionClick(props.row.cli, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -99,15 +100,17 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {myPoolDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
+import {useQuasar} from 'quasar';
+import {assignDeviceToProject} from 'src/helpers/project-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
 const rows: Ref<Device[]> = ref([])
+const $q = useQuasar()
 
 // ----- Data -----
-// TODO: Remove this sample data
 const columns = [
-  { name: 'device', label: i18n.global.t('projects.device'), field: 'device', sortable: true, align: 'center' },
+  { name: 'device', label: i18n.global.t('projects.device_type'), field: 'device', sortable: true, align: 'center' },
   { name: 'client', label: i18n.global.t('projects.client'), field: 'client', sortable: true, align: 'center' },
   { name: 'ip', label: i18n.global.t('projects.ip'), field: 'ip', sortable: true, align: 'center' },
   { name: 'firmware', label: i18n.global.t('projects.firmware'), field: 'firmware', sortable: true, align: 'center' },
@@ -123,28 +126,8 @@ const columns = [
 
 const buttons = [
   {
-    key: 'remove',
-    label: i18n.global.t('projects.remove_from_project'),
-  },
-  {
-    key: 'compress',
-    label: i18n.global.t('projects.compress_vibration_data'),
-  },
-  {
-    key: 'download',
-    label: i18n.global.t('projects.download_compress_vibration_data'),
-  },
-  {
-    key: 'display',
-    label: i18n.global.t('projects.display_data'),
-  },
-  {
-    key: 'files',
-    label: i18n.global.t('projects.show_event'),
-  },
-  {
-    key: 'edit',
-    label: i18n.global.t('projects.edit_parameters'),
+    key: 'assign',
+    label: i18n.global.t('projects.assign_to_project'),
   },
   {
     key: 'status',
@@ -163,30 +146,15 @@ onMounted(async () => {
 
 /**
  * Routes to different pages dependent which button is clicked
- * @param {string} device - the name of a device
+ * @param {string} device - the CLI of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
 async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
-    case 'remove':
-      await routerService?.routeTo(ROUTES.LOGIN)
-      break
-    case 'compress':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'download':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'display':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'files':
-      await routerService?.addToRoute(`pool/${device}/${key}`)
-      break
-    case 'edit':
-      await routerService?.addToRoute(`pool/${device}/${key}`)
+    case 'assign':
+      assignDeviceToProject($q, device)
       break
     case 'status':
       await routerService?.addToRoute(`pool/${device}/${key}`)
@@ -195,7 +163,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
       await routerService?.addToRoute(`pool/${device}/${key}`)
       break
     default:
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
   }
 }
 </script>

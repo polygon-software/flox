@@ -13,6 +13,7 @@ export default {
     settings: 'Einstellungen',
     loading: 'Lädt',
     filter: 'Filter',
+    warning: 'Warnung'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -61,8 +62,9 @@ export default {
   },
   projects: {
     project: 'Projekt',
+    device: 'Gerät | Geräte',
     new_project: 'Neues Projekt',
-    device: 'Gerät',
+    device_type: 'Gerätetyp',
     client: 'Client',
     ip: 'IP',
     firmware: 'Firmware',
@@ -73,6 +75,7 @@ export default {
     pid: 'PID',
     files: 'Dokumente',
     ftp: 'FTP',
+    assign_to_project: 'Zu Projekt zuordnen',
     remove_from_project: 'Aus Projekt entfernen',
     compress_vibration_data: 'Vibrationsdaten komprimieren',
     download_compress_vibration_data: 'Komprimierte Vibrationsdaten herunterladen',
@@ -83,6 +86,8 @@ export default {
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
     project_name: 'Projektname',
+    edit_project: 'Projekt bearbeiten',
+    edit_project_name: 'Projektnamen bearbeiten',
     id: 'ID',
   },
   edit_parameters: {
@@ -116,11 +121,15 @@ export default {
     send: 'Senden',
     create_link: 'Link erzeugen',
     create_project: 'Projekt erstellen',
+    delete_project: 'Projekt löschen',
     new_contact: 'Neuer Kontakt',
     load: 'Laden',
     save: 'Speichern',
     show: 'Anzeigen',
     close: 'Schliessen',
+    confirm: 'Bestätigen',
+    rename: 'Umbenennen',
+    discard: 'Verwerfen'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -157,6 +166,7 @@ export default {
     missing_file: 'Datei fehlt',
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
     incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
+    error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.'
   },
   set_password: {
     description:
@@ -186,7 +196,11 @@ export default {
   },
   messages: {
     copied: 'Kopiert',
-    project_created: 'Projekt erfolgreich erstellt'
+    project_created: 'Projekt erfolgreich erstellt',
+    assigned_device: 'Gerät erfolgreich zugeordnet',
+    removed_device: 'Gerät erfolgreich entfernt',
+    project_renamed: 'Projekt erfolgreich umbenannt',
+    project_deleted: 'Projekt erfolgreich gelöscht'
   },
   status: {
     title: 'Status von',
@@ -252,4 +266,8 @@ export default {
     fair: 'ausreichend',
     poor: 'schlecht',
   },
+  warnings: {
+    unassign_device: 'Sind Sie sicher? Dadurch werden alle Daten des Geräts gelöscht!',
+    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt, und ihre Daten gelöscht!'
+  }
 };
