@@ -1,5 +1,4 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-
 import { UserService } from '../user/user.service';
 import { DeviceService } from './device.service';
 import {

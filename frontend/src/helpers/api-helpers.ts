@@ -5,7 +5,7 @@ import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
 import {MY_PROJECTS} from 'src/data/queries/PROJECT';
-import {MY_DEVICES} from 'src/data/queries/DEVICE';
+import {MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
 import {Device} from 'src/data/types/Device';
 
 /**
@@ -14,10 +14,10 @@ import {Device} from 'src/data/types/Device';
  */
 export async function fetchAllUsers(): Promise<User[]> {
   const queryResult = await executeQuery(ALL_USERS);
-  if(!queryResult.data?.allUsers){
+  if(!queryResult.data[ALL_USERS.cacheLocation]){
     return []
   }
-  return mapUsers(queryResult.data.allUsers as Record<string, unknown>[]);
+  return mapUsers(queryResult.data[ALL_USERS.cacheLocation] as Record<string, unknown>[]);
 }
 
 /**
@@ -27,10 +27,10 @@ export async function fetchAllUsers(): Promise<User[]> {
  */
 export async function fetchUser(userId: string): Promise<User | null> {
   const queryResult = await executeQuery(USER, { uuid: userId });
-  if(!queryResult.data?.user){
+  if(!queryResult.data[USER.cacheLocation]){
     return null
   }
-  return mapUser(queryResult.data.user as Record<string, unknown>);
+  return mapUser(queryResult.data[USER.cacheLocation] as Record<string, unknown>);
 }
 
 /**
@@ -39,10 +39,10 @@ export async function fetchUser(userId: string): Promise<User | null> {
  */
 export async function myUser(): Promise<User | null> {
   const queryResult = await executeQuery(MY_USER);
-  if(!queryResult.data?.myUser){
+  if(!queryResult.data[MY_USER.cacheLocation]){
     return null
   }
-  return mapUser(queryResult.data.myUser as Record<string, unknown>);
+  return mapUser(queryResult.data[MY_USER.cacheLocation] as Record<string, unknown>);
 }
 
 /**
@@ -52,8 +52,8 @@ export async function myUser(): Promise<User | null> {
 export async function myProjects(): Promise<Project[]> {
   const projects: Project[] = [];
   const queryResult = await executeQuery(MY_PROJECTS);
-  if(queryResult.data?.myProjects){
-    for (const project of queryResult.data.myProjects as Record<string, unknown>[]) {
+  if(queryResult.data[MY_PROJECTS.cacheLocation]){
+    for (const project of queryResult.data[MY_PROJECTS.cacheLocation] as Record<string, unknown>[]) {
       projects.push(mapProject(project));
     }
   }
@@ -67,8 +67,24 @@ export async function myProjects(): Promise<Project[]> {
 export async function myProjectDevices(): Promise<Device[]> {
   const devices: Device[] = [];
   const queryResult = await executeQuery(MY_DEVICES, {assigned: true});
-  if(queryResult.data?.myDevices){
-    for (const device of queryResult.data.myDevices as Record<string, unknown>[]) {
+  if(queryResult.data[MY_DEVICES.cacheLocation]){
+    for (const device of queryResult.data[MY_DEVICES.cacheLocation] as Record<string, unknown>[]) {
+      devices.push(mapDevice(device));
+    }
+  }
+  return devices
+}
+
+/**
+ * Fetch all devices that are part of a given project project
+ * @param {string} uuid - the project's uuid
+ * @return {Promise<Device[]>} - An array containing all the user's projects
+ */
+export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
+  const devices: Device[] = [];
+  const queryResult = await executeQuery(PROJECT_DEVICES, {uuid});
+  if(queryResult.data[PROJECT_DEVICES.cacheLocation]){
+    for (const device of queryResult.data[PROJECT_DEVICES.cacheLocation] as Record<string, unknown>[]) {
       devices.push(mapDevice(device));
     }
   }
@@ -82,8 +98,8 @@ export async function myProjectDevices(): Promise<Device[]> {
 export async function myPoolDevices(): Promise<Device[]> {
   const devices: Device[] = [];
   const queryResult = await executeQuery(MY_DEVICES, {unassigned: true});
-  if(queryResult.data?.myDevices){
-    for (const device of queryResult.data.myDevices as Record<string, unknown>[]) {
+  if(queryResult.data[MY_DEVICES.cacheLocation]){
+    for (const device of queryResult.data[MY_DEVICES.cacheLocation] as Record<string, unknown>[]) {
       devices.push(mapDevice(device));
     }
   }
@@ -169,5 +185,6 @@ export function mapDevice(record: Record<string, unknown>): Device {
     record.ftp as boolean,
     record.ip as string ?? '-',
     record.firmware as string,
+    record.__typename as ('MR2000'|'MR3000')
   )
 }

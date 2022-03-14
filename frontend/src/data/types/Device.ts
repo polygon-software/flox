@@ -12,6 +12,7 @@ export class Device {
   ftp: boolean;
   ip: string;
   firmware: string;
+  type: 'MR2000'|'MR3000';
   // TODO more fields
 
   // eslint-disable-next-line require-jsdoc
@@ -24,6 +25,7 @@ export class Device {
     ftp: boolean,
     ip: string,
     firmware: string,
+    type: 'MR2000'|'MR3000',
   ){
     this.cli = cli
     this.name = name
@@ -33,5 +35,6 @@ export class Device {
     this.ftp = ftp
     this.ip = ip
     this.firmware = firmware
+    this.type = type
   }
 }

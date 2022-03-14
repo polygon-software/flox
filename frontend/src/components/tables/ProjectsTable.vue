@@ -41,7 +41,7 @@
             {{ props.row.project?.name ?? '-' }}
           </q-td>
           <q-td key="device">
-            {{ props.row.name }}
+            {{ props.row.type }}
           </q-td>
           <q-td key="client">
             {{ props.row.cli }}
@@ -56,10 +56,10 @@
             {{ props.row.serialNumber }}
           </q-td>
           <q-td key="sale_status">
-            {{ props.row.sale_status }}
+            {{ props.row.saleStatus }}
           </q-td>
           <q-td key="station">
-            {{ props.row.station }}
+            {{ props.row.name }}
           </q-td>
           <q-td key="vpn_status">
             {{ props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
@@ -88,11 +88,12 @@
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
-                  class="text-grey"
+                  class="text-grey full-width"
+                  align="left"
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(props.row.project, props.row.station, button.key)"
+                  @click="onOptionClick(props.row.project, props.row.cli, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -113,17 +114,21 @@ import CreateProjectDialog from 'src/components/dialogs/CreateProjectDialog.vue'
 import {myProjectDevices} from 'src/helpers/api-helpers';
 import {Device} from 'src/data/types/Device';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {Project} from 'src/data/types/Project';
+import {removeDeviceFromProject} from 'src/helpers/project-helpers';
+import {ErrorService} from 'src/services/ErrorService';
 
 const $q = useQuasar()
 
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
+const errorService: ErrorService|undefined = inject('$errorService')
 
 // ----- Data -----
 const columns = [
   { name: 'project', label: i18n.global.t('projects.project'), field: 'project', sortable: true, align: 'center' },
-  { name: 'device', label: i18n.global.t('projects.device'), field: 'device', sortable: true, align: 'center' },
+  { name: 'device', label: i18n.global.t('projects.device_type'), field: 'device', sortable: true, align: 'center' },
   { name: 'client', label: i18n.global.t('projects.client'), field: 'client', sortable: true, align: 'center' },
   { name: 'ip', label: i18n.global.t('projects.ip'), field: 'ip', sortable: true, align: 'center' },
   { name: 'firmware', label: i18n.global.t('projects.firmware'), field: 'firmware', sortable: true, align: 'center' },
@@ -187,6 +192,9 @@ onMounted(async () => {
 async function createNewProject(): Promise<void> { //TODO: Add different dialog for admin
   $q.dialog({
     component: CreateProjectDialog,
+    componentProps: {
+      errorService: errorService
+    }
   }).onOk(() => {
     // Show success notification
     showNotification(
@@ -201,40 +209,41 @@ async function createNewProject(): Promise<void> { //TODO: Add different dialog 
 
 /**
  * Routes to different pages dependent which button is clicked$
- * @param {string} project - the name of a project
- * @param {string} device - the name of a device
+ * @param {Project} project - the Project
+ * @param {string} device - the device's CLI
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
-async function onOptionClick(project: string, device: string, key: string): Promise<void>{
+async function onOptionClick(project: Project, device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
+    // Removing device from project: Show warning dialog
     case 'remove':
-      await routerService?.routeTo(ROUTES.LOGIN)
+      removeDeviceFromProject($q, project.uuid, device)
       break
     case 'compress':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'download':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'display':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'files':
-      await routerService?.addToRoute(`${project}/${device}/${key}`)
+      await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     case 'edit':
-      await routerService?.addToRoute(`${project}/${device}/${key}`)
+      await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     case 'status':
-      await routerService?.addToRoute(`${project}/${device}/${key}`)
+      await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     case 'device_health':
-      await routerService?.addToRoute(`${project}/${device}/${key}`)
+      await routerService?.addToRoute(`${project.name}/${device}/${key}`)
       break
     default:
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
   }
 }
 
@@ -244,7 +253,7 @@ async function onOptionClick(project: string, device: string, key: string): Prom
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  await routerService?.addToRoute(row.project.name as string)
+  await routerService?.addToRoute((row.project as Project).name )
 }
 </script>
 

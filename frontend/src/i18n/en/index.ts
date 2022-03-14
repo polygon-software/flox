@@ -13,6 +13,7 @@ export default {
     settings: 'Settings',
     loading: 'Loading',
     filter: 'Filter',
+    warning: 'Warning',
   },
   authentication: {
     loggedIn: 'Logged in as {user}',
@@ -60,8 +61,9 @@ export default {
   },
   projects: {
     project: 'Project',
+    device: 'Device | Devices',
     new_project: 'New Project',
-    device: 'Device',
+    device_type: 'Device Type',
     client: 'Client',
     ip: 'IP',
     firmware: 'Firmware',
@@ -72,6 +74,7 @@ export default {
     pid: 'PID',
     files: 'Files',
     ftp: 'FTP',
+    assign_to_project: 'Assign to Project',
     remove_from_project: 'Remove from Project',
     compress_vibration_data: 'Compress Vibration Data',
     download_compress_vibration_data: 'Download compressed Vibration Data',
@@ -82,6 +85,8 @@ export default {
     show_device_health: 'Show Device Health',
     name: 'Name',
     project_name: 'Project Name',
+    edit_project: 'Edit Project',
+    edit_project_name: 'Edit Project Name',
     id: 'ID',
   },
   edit_parameters: {
@@ -114,12 +119,16 @@ export default {
     copy: 'Copy',
     send: 'Send',
     create_link: 'Create Link',
-    create: 'Create project',
-    new_contact: 'New Contakt',
+    create_project: 'Create project',
+    delete_project: 'Delete project',
+    new_contact: 'New Contact',
     load: 'Load',
     save: 'Save',
     show: 'Show',
     close: 'Close',
+    confirm: 'Confirm',
+    rename: 'Rename',
+    discard: 'Discard'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -154,6 +163,7 @@ export default {
     missing_file: 'Missing file',
     missing_user_type: 'Please select a user type',
     incorrect_date_range: 'Please select a valid date range',
+    error_while_editing: 'An error occurred while editing the project.'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -182,7 +192,11 @@ export default {
   },
   messages: {
     copied: 'Copied',
-    project_created: 'Project created successfully'
+    project_created: 'Project created successfully',
+    assigned_device: 'Device assigned successfully',
+    removed_device: 'Device removed successfully',
+    project_renamed: 'Project renamed successfully',
+    project_deleted: 'Project deleted successfully'
   },
   status: {
     title: 'Status of',
@@ -241,4 +255,8 @@ export default {
     fair: 'fair',
     poor: 'poor',
   },
+  warnings: {
+    unassign_device: 'Are you sure? All data for this device will be deleted!',
+    delete_project: 'Are you sure? This will remove all devices from this project, and their data will be deleted!'
+  }
 };

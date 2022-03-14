@@ -7,14 +7,16 @@ import {
 } from '../../auth/authorization.decorator';
 import { Project } from './entities/project.entity';
 import { GetUserArgs } from '../user/dto/args/get-user.args';
+import { UserService } from '../user/user.service';
 import { Device } from '../../types/Device';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { UpdateProjectInput } from './dto/input/update-project-input';
-import { DeleteResult, UpdateResult } from 'typeorm';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
-import { UserService } from '../user/user.service';
+import { RemoveDeviceFromProjectInput } from './dto/input/remove-device-from-project.input';
+import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Resolver(() => Project)
 export class ProjectResolver {
@@ -65,7 +67,34 @@ export class ProjectResolver {
     @Args() getProjectDevicesArgs: GetProjectDevicesArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
-    if (
+    // Determine if a project name was given, we need to ensure matching project for the user
+    if (getProjectDevicesArgs.name) {
+      // Get user
+      const dbUser = await this.userService.getUser({
+        cognitoUuid: user.userId,
+      } as GetUserArgs);
+
+      if (!dbUser) {
+        throw new Error(`No user found for ${user.userId}`);
+      }
+      const userProjects = await this.projectService.getUserProjects({
+        uuid: dbUser.uuid,
+      });
+
+      const project = userProjects.find(
+        (userProject) => userProject.name === getProjectDevicesArgs.name,
+      );
+
+      if (!project) {
+        throw new Error(
+          `No project named ${getProjectDevicesArgs.name} found for user`,
+        );
+      }
+
+      return this.projectService.getProjectDevices({
+        uuid: project.uuid,
+      } as GetProjectDevicesArgs);
+    } else if (
       await this.projectService.validateAccessToProject(
         user,
         getProjectDevicesArgs.uuid,
@@ -73,6 +102,35 @@ export class ProjectResolver {
     ) {
       return this.projectService.getProjectDevices(getProjectDevicesArgs);
     }
+    throw new UnauthorizedException();
+  }
+
+  /**
+   * Removes a device from a given project
+   * @param {RemoveDeviceFromProjectInput} removeDeviceFromProjectInput - contains project UUID & device CLI
+   * @param {Record<string, string>} user - currently logged-in user from request
+   * @returns {Promise<Project>} - the updated project
+   */
+  @AnyRole()
+  @Mutation(() => Project)
+  async removeDeviceFromProject(
+    @Args({
+      name: 'removeDeviceFromProjectInput',
+      type: () => RemoveDeviceFromProjectInput,
+    })
+    removeDeviceFromProjectInput: RemoveDeviceFromProjectInput,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const hasProjectAccess = await this.projectService.validateAccessToProject(
+      user,
+      removeDeviceFromProjectInput.uuid,
+    );
+    if (hasProjectAccess) {
+      return this.projectService.removeDeviceFromProject(
+        removeDeviceFromProjectInput,
+      );
+    }
+    throw new UnauthorizedException();
   }
 
   /**
@@ -101,28 +159,38 @@ export class ProjectResolver {
     @Args({ name: 'updateProjectInput', type: () => UpdateProjectInput })
     updateProjectInput: UpdateProjectInput,
     @CurrentUser() user: Record<string, string>,
-  ): Promise<UpdateResult> {
-    if (
-      await this.projectService.validateAccessToProject(
-        user,
-        updateProjectInput.uuid,
-      )
-    ) {
-      return this.projectService.updateProjectName(updateProjectInput);
+  ) {
+    const hasProjectAccess = await this.projectService.validateAccessToProject(
+      user,
+      updateProjectInput.uuid,
+    );
+    if (hasProjectAccess) {
+      // Get user
+      const dbUser = await this.userService.getUser({
+        cognitoUuid: user.userId,
+      } as GetUserArgs);
+
+      return this.projectService.updateProjectName(
+        updateProjectInput,
+        dbUser.uuid,
+      );
     }
+    throw new UnauthorizedException();
   }
 
   /**
    * Deletes a project
    * @param {DeleteProjectInput} deleteProjectInput - Input that contains the uuid of the project to delete.
    * @param {Record<string, string>} user - User who requested the deletion.
-   * @return {DeleteResult} - Result object from deletion
+   * @return {Promise<Project>} - The project that was deleted
    */
+  @AnyRole()
+  @Mutation(() => Project)
   async deleteProject(
     @Args({ name: 'deleteProjectInput', type: () => DeleteProjectInput })
     deleteProjectInput: DeleteProjectInput,
     @CurrentUser() user: Record<string, string>,
-  ): Promise<DeleteResult> {
+  ) {
     if (
       await this.projectService.validateAccessToProject(
         user,
@@ -131,5 +199,43 @@ export class ProjectResolver {
     ) {
       return this.projectService.deleteProject(deleteProjectInput);
     }
+    throw new UnauthorizedException();
+  }
+
+  /**
+   * Assigns a given device to a project
+   * @param {AssignDeviceToProjectInput} assignDeviceToProjectInput - contains project UUID & device CLI
+   * @param {Record<string, string>} user - currently logged-in user from request
+   * @returns {Promise<Project>} - the updated project
+   */
+  @AnyRole()
+  @Mutation(() => Project)
+  async assignDeviceToProject(
+    @Args({
+      name: 'assignDeviceToProjectInput',
+      type: () => AssignDeviceToProjectInput,
+    })
+    assignDeviceToProjectInput: AssignDeviceToProjectInput,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    // Verify project access
+    const hasProjectAccess = await this.projectService.validateAccessToProject(
+      user,
+      assignDeviceToProjectInput.uuid,
+    );
+
+    // Verify device access
+    const hasDeviceAccess = await this.projectService.validateAccessToDevice(
+      user,
+      assignDeviceToProjectInput.cli,
+    );
+
+    if (hasProjectAccess && hasDeviceAccess) {
+      return this.projectService.assignDeviceToProject(
+        assignDeviceToProjectInput,
+      );
+    }
+
+    throw new UnauthorizedException();
   }
 }

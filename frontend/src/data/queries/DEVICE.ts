@@ -54,12 +54,11 @@ export const MY_DEVICES = {
             name
             __typename
           }
-        }
-        __typename
       }
-    }
+      __typename
+    }}
   `,
-  tables: ['user'],
+  tables: ['device'],
   cacheLocation: 'myDevices',
 };
 
@@ -131,13 +130,35 @@ export const DEVICE_PARAMS = {
 
 export const PROJECT_DEVICES = {
   query: gql`
-    query getProjectDevices($uuid: ID!) {
-      getProjectDevices(uuid: $uuid) {
-        ... on MR2000 {
+    query getProjectDevices($uuid: ID, $name: String){
+      getProjectDevices(uuid: $uuid, name: $name){
+        ...on MR2000{
           cli
+          name
+          serialNumber
+          numberOfFiles
+          pid
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
         }
         ... on MR3000 {
           cli
+          name
+          serialNumber
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
         }
         __typename
       }

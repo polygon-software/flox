@@ -1,19 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
-import { removeDeviceFromProject } from '../../helpers/device-helpers';
+import {
+  findProjectForDevice,
+  mr2000fromDatabaseEntry,
+  mr3000fromDatabaseEntry,
+} from '../../helpers/device-helpers';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { CreateProjectInput } from './dto/input/create-project.input';
-import { RemoveDevicesFromProjectInput } from './dto/input/remove-devices-from-project.input';
+import { RemoveDeviceFromProjectInput } from './dto/input/remove-device-from-project.input';
 import { Project } from './entities/project.entity';
 import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
+import { fetchFromTable } from '../../helpers/database-helpers';
+import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
+import { UserService } from '../user/user.service';
 import { GetUserArgs } from '../user/dto/args/get-user.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
-import { UserService } from '../user/user.service';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class ProjectService {
@@ -30,7 +37,72 @@ export class ProjectService {
    * @returns {Promise<MR2000|MR3000[]>} - the user's devices
    */
   async getProjectDevices(getProjectDevicesArgs: GetProjectDevicesArgs) {
-    // TODO functionality
+    // Get project
+    const project = await this.projectRepository.findOne(
+      getProjectDevicesArgs.uuid,
+    );
+
+    if (!project) {
+      throw new Error(`No project found for ${getProjectDevicesArgs.uuid}`);
+    }
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable(
+      'MR2000',
+      'station',
+      `WHERE cli IN ('${project.mr2000instances.join("','")}')`,
+    );
+    const mr3000instances = await fetchFromTable(
+      'MR3000',
+      'station',
+      `WHERE cli IN ('${project.mr3000instances.join("','")}')`,
+    );
+
+    // Fetch stores for FTP info
+    const mr2000store = await fetchFromTable(
+      'MR2000',
+      'store',
+      `WHERE cli IN ('${project.mr2000instances.join("','")}')`,
+    );
+    const mr3000store = await fetchFromTable(
+      'MR3000',
+      'store',
+      `WHERE cli IN ('${project.mr3000instances.join("','")}')`,
+    );
+
+    // Fetch VPN table for FTP info
+    const vpnInfo = await fetchFromTable(
+      'openvpn',
+      'tempovp',
+      `WHERE cli IN ('${project.mr2000instances
+        .concat(project.mr3000instances)
+        .join("','")}')`,
+    );
+
+    const devices = [];
+
+    // Add all MR2000 instances that belong to the project
+    for (const instance of mr2000instances) {
+      const mr2000 = await mr2000fromDatabaseEntry(
+        instance,
+        this.projectRepository,
+        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
+        mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
+      );
+      devices.push(mr2000);
+    }
+
+    // Add all MR3000 instances that belong to the project
+    for (const instance of mr3000instances) {
+      const mr3000 = await mr3000fromDatabaseEntry(
+        instance,
+        this.projectRepository,
+        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
+        mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
+      );
+      devices.push(mr3000);
+    }
+
+    return devices;
   }
 
   /**
@@ -63,11 +135,11 @@ export class ProjectService {
 
     // Ensure project name is not already present (in actual projects and/or permissions)
     const userProjects = await this.getUserProjects({ uuid: userUuid });
-    const userProjectPermissions = user.projects;
 
     if (
-      userProjectPermissions.find((project) => project.name === projectName) ||
-      userProjects.find((project) => project.name === projectName)
+      userProjects.find(
+        (project) => project.name.toLowerCase() === projectName.toLowerCase(),
+      )
     ) {
       throw new Error(`Project name ${projectName} is already taken`);
     }
@@ -76,8 +148,8 @@ export class ProjectService {
     const newProject = this.projectRepository.create({
       name: createProjectInput.name,
       user: user,
-      mr2000instances: createProjectInput.mr2000instances,
-      mr3000instances: createProjectInput.mr3000instances,
+      mr2000instances: createProjectInput.mr2000instances ?? [],
+      mr3000instances: createProjectInput.mr3000instances ?? [],
     });
     await this.projectRepository.save(newProject);
 
@@ -87,43 +159,148 @@ export class ProjectService {
   /**
    * Updates a project
    * @param {UpdateProjectInput} updateProjectInput Project parameters that should be changed.
-   * @return {UpdateProjectInput} - The updated project
+   * @param {string} userUuid - user's database UUID
+   * @return {Promise<Project>} - The updated project
    */
   async updateProjectName(
     updateProjectInput: UpdateProjectInput,
-  ): Promise<UpdateResult> {
-    return this.projectRepository.update(
-      updateProjectInput.uuid,
-      updateProjectInput,
-    );
+    userUuid: string,
+  ) {
+    // Get user's existing projects and ensure they have no project by this name yet
+    const userProjects = await this.getUserProjects({ uuid: userUuid });
+    if (
+      userProjects.find(
+        (project) =>
+          project.name.toLowerCase() === updateProjectInput.name.toLowerCase(),
+      )
+    ) {
+      throw new Error(
+        `Project name ${updateProjectInput.name} is already taken`,
+      );
+    }
+
+    await this.projectRepository.update(updateProjectInput.uuid, {
+      name: updateProjectInput.name,
+    });
+
+    return this.projectRepository.findOne(updateProjectInput.uuid);
   }
 
   /**
    * Deletes a project
    * @param {DeleteProjectInput} deleteProjectInput - Input containing the uuid of the project to delete
-   * @return {Promise<DeleteResult>} - Result object from deletion
+   * @return {Promise<Project>} - Deleted project
    */
   async deleteProject(deleteProjectInput: DeleteProjectInput) {
-    return this.projectRepository.delete(deleteProjectInput.uuid);
+    const project = this.projectRepository.findOne(deleteProjectInput.uuid);
+
+    await this.projectRepository.delete(deleteProjectInput.uuid);
+
+    return project;
   }
 
   /**
    * Removes devices from their associated project(s)
-   * @param {RemoveDevicesFromProjectInput} removeDevicesFromProjectInput - contains MR2000/3000 instances to remove
-   * @returns {Promise<void>} - done
+   * @param {RemoveDeviceFromProjectInput} removeDeviceFromProjectInput - contains project UUID and device CLI
+   * @returns {Promise<Project>} - updated project
    */
-  async removeDevicesFromProject(
-    removeDevicesFromProjectInput: RemoveDevicesFromProjectInput,
+  async removeDeviceFromProject(
+    removeDeviceFromProjectInput: RemoveDeviceFromProjectInput,
   ) {
-    // Remove MR2000s, if any
-    for (const mr2000 of removeDevicesFromProjectInput.mr2000instances ?? []) {
-      await removeDeviceFromProject(mr2000, true);
+    // Get project
+    const project = await this.projectRepository.findOne(
+      removeDeviceFromProjectInput.uuid,
+    );
+
+    if (!project) {
+      throw new Error(
+        `No project found for ${removeDeviceFromProjectInput.uuid}`,
+      );
     }
-    // Remove MR3000s, if any
-    for (const mr3000 of removeDevicesFromProjectInput.mr3000instances ?? []) {
-      await removeDeviceFromProject(mr3000, false);
+
+    const cli = removeDeviceFromProjectInput.cli;
+
+    const validMr2000 = project.mr2000instances.includes(cli);
+    const validMr3000 = project.mr3000instances.includes(cli);
+
+    // Throw error if given device is not part of given project
+    if (!validMr2000 && !validMr3000) {
+      throw new Error(
+        `Device ${cli} is not assigned to project ${removeDeviceFromProjectInput.uuid}`,
+      );
     }
+
+    // Build partial entity, depending on type
+    const updateData = validMr2000
+      ? {
+          mr2000instances: project.mr2000instances.filter(
+            (instance) => instance !== cli,
+          ),
+        }
+      : {
+          mr3000instances: project.mr3000instances.filter(
+            (instance) => instance !== cli,
+          ),
+        };
+
+    await this.projectRepository.update(
+      removeDeviceFromProjectInput.uuid,
+      updateData,
+    );
+
+    return this.projectRepository.findOne(removeDeviceFromProjectInput.uuid);
   }
+
+  /**
+   * Removes devices from their associated project(s)
+   * @param {AssignDeviceToProjectInput} assignDeviceToProjectInput - contains project UUID and device CLI
+   * @returns {Promise<Project>} - updated project
+   */
+  async assignDeviceToProject(
+    assignDeviceToProjectInput: AssignDeviceToProjectInput,
+  ) {
+    // Get project
+    const project = await this.projectRepository.findOne(
+      assignDeviceToProjectInput.uuid,
+    );
+
+    if (!project) {
+      throw new Error(
+        `No project found for ${assignDeviceToProjectInput.uuid}`,
+      );
+    }
+
+    // Determine type
+    const cli = assignDeviceToProjectInput.cli;
+    const isMr2000 = cli.includes('-'); // TODO use helper function once present
+
+    // Throw error if device is already part of a project
+    const existingProject = await findProjectForDevice(
+      this.projectRepository,
+      cli,
+      isMr2000,
+    );
+    if (existingProject) {
+      throw new Error(`Device ${cli} is already assigned to a project`);
+    }
+
+    // Build partial entity, depending on type
+    const updateData = isMr2000
+      ? ({
+          mr2000instances: (project.mr2000instances ?? []).concat([cli]),
+        } as unknown as QueryDeepPartialEntity<Project>)
+      : ({
+          mr3000instances: (project.mr3000instances ?? []).concat([cli]),
+        } as unknown as QueryDeepPartialEntity<Project>);
+
+    await this.projectRepository.update(
+      assignDeviceToProjectInput.uuid,
+      updateData,
+    );
+
+    return this.projectRepository.findOne(assignDeviceToProjectInput.uuid);
+  }
+
   /**
    * Validates if the given user has access to the given project
    * @param {Record<string, string>} user - User that demands access
@@ -147,6 +324,36 @@ export class ProjectService {
     if (
       dbUser.role !== ROLE.ADMIN &&
       !dbUser.projects.some((project) => project.uuid === projectUuid)
+    ) {
+      throw new Error(ERRORS.resource_not_allowed);
+    }
+    return true;
+  }
+
+  /**
+   * Validates if the given user has access to the given device
+   * @param {Record<string, string>} user - User that demands access
+   * @param {string} cli - CLI of the device which the user wants to access
+   * @private
+   * @return {boolean} - validation result
+   */
+  async validateAccessToDevice(
+    user: Record<string, string>,
+    cli: string,
+  ): Promise<boolean> {
+    // Get user
+    const dbUser = await this.userService.getUser({
+      cognitoUuid: user.userId,
+    } as GetUserArgs);
+
+    if (!dbUser) {
+      throw new Error(`No user found for ${user.userId}`);
+    }
+    // For non-admin users, check whether they have permissions to access the requested device
+    if (
+      dbUser.role !== ROLE.ADMIN &&
+      !dbUser.mr2000instances.some((device) => device === cli) &&
+      !dbUser.mr3000instances.some((device) => device === cli)
     ) {
       throw new Error(ERRORS.resource_not_allowed);
     }
