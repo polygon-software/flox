@@ -73,3 +73,29 @@ export async function fetchCountFromTable(
 
   return queryResult;
 }
+
+/**
+ * Writes the given record into a given database table
+ * @param {string} database - database name
+ * @param {string} table - table name
+ * @param {Record<string, unknown>} record - record to write to database
+ * @returns {void}
+ */
+export async function insertIntoTable(
+  database: string,
+  table: string,
+  record: Record<string, unknown>,
+) {
+  // Get query runner
+  const queryRunner = await getQueryRunner(database);
+
+  // Build statement
+  const statement = `
+      INSERT INTO ${table} (${Object.keys(record).join(',')})
+      VALUES (${Object.values(record).join(',')});
+  `;
+
+  // Execute
+  await queryRunner.manager.query(statement);
+  await queryRunner.release();
+}
