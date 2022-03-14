@@ -403,19 +403,15 @@ export class DeviceService {
   }
 
   /**
-   * Adds a contact to a given device
+   * Adds a contact to a given device (either on table 'alert' or 'para_alert')
    * @param {AddContactToDeviceInput} addContactToDeviceInput - input, containing all contact info
    * @returns {Promise<Record<string, unknown>>} - the new contact that was added
    */
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   async addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput) {
     // Determine device type for table name
     const type = deviceType(addContactToDeviceInput.cli);
-    let table;
-    if (type === 'MR2000') {
-      table = 'alert';
-    } else {
-      table = 'para_alert';
-    }
+    const table = type === 'MR2000' ? 'alert' : 'para_alert';
 
     const input = addContactToDeviceInput;
 
@@ -426,9 +422,8 @@ export class DeviceService {
             // MR2000
             cli: input.cli,
             // status: null,
-            timestamp: new Date(),
             // timestamp: null,
-            id: '123', // TODO??
+            id: 'no_id', // TODO??
             // from_IP: null,
             name: input.name,
             email: input.email,
@@ -447,7 +442,7 @@ export class DeviceService {
         : {
             // MR3000
             cli: input.cli,
-            status: 0, // TODO
+            status: 0, // TODO this should be correct from source code, but not sure
             name: input.name,
             email: input.email,
             phone: input.phone,
