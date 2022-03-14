@@ -425,15 +425,22 @@ export class DeviceService {
         ? {
             // MR2000
             cli: input.cli,
+            // status: null,
+            // timestamp: null,
+            id: '123', // TODO??
+            // from_IP: null,
             name: input.name,
             email: input.email,
             phone: input.phone,
-            event: input.event,
-            alarm1: input.alarm1,
-            alarm2: input.alarm2,
-            daily: input.daily,
-            soh_power: input.power,
-            soh_sms_limit: input.smsLimit,
+            event: input.event ? 1 : 0,
+            alarm1: input.alarm1 ? 1 : 0,
+            alarm2: input.alarm2 ? 1 : 0,
+            daily: input.daily ? 1 : 0,
+            soh_power: input.power ? 1 : 0,
+            soh_sms_limit: input.smsLimit ? 1 : 0,
+            // soh_warning: null,
+            // soh_error: null,
+            // soh_err_warn: null,
             // TODO: reminder?
           }
         : {
@@ -442,12 +449,12 @@ export class DeviceService {
             name: input.name,
             email: input.email,
             phone: input.phone,
-            event_all: input.event,
-            event_alarm1: input.alarm1,
-            event_alarm2: input.alarm2,
-            daily: input.daily,
-            soh_power: input.power,
-            soh_sms_limit: input.smsLimit,
+            event_all: input.event ? 1 : 0,
+            event_alarm1: input.alarm1 ? 1 : 0,
+            event_alarm2: input.alarm2 ? 1 : 0,
+            daily: input.daily ? 1 : 0,
+            soh_power: input.power ? 1 : 0,
+            soh_sms_limit: input.smsLimit ? 1 : 0,
             // TODO: reminder?
           };
 

@@ -89,13 +89,21 @@ export async function insertIntoTable(
   // Get query runner
   const queryRunner = await getQueryRunner(database);
 
+  // Build list of values (e.g. "some","other","value", 1, 0)
+  let values = '';
+  Object.values(record).forEach((value) => {
+    values += typeof value === 'string' ? `"${value}",` : `${value},`;
+  });
+  values = values.substring(0, values.lastIndexOf(','));
+
   // Build statement
   const statement = `
-      INSERT INTO ${table} (${Object.keys(record).join(',')})
-      VALUES (${Object.values(record).join(',')});
+    INSERT INTO ${table} (${Object.keys(record).join(',')})
+    VALUES (${values});
   `;
 
   // Execute
+  console.log(statement);
   await queryRunner.manager.query(statement);
   await queryRunner.release();
 }
