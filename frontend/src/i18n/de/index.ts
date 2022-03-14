@@ -242,7 +242,7 @@ export default {
     poor: 'schlecht',
   },
   success: {
-    saved_successfully: 'Speicherung durchgeführt!',
+    saved_successfully: 'Erfolgreich gespeichert!',
     back_to_home: 'Zurück zur Home Seite',
   },
 };

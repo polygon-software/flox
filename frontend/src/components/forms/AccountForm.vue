@@ -9,7 +9,7 @@
           label=""
           type="email"
           :rules="[(val) => IS_EMAIL(val) || $t('errors.invalid_email')]"
-          lazy-rules="onedemand"
+          lazy-rules="ondemand"
           :outlined="editingEmail"
           :borderless="!editingEmail"
           :disable="!editingEmail"
@@ -136,7 +136,7 @@ function onSaveUsername(){
  * @returns {void}
  */
 function onSubmit(): void {
-  if (username.value === undefined){
+  if (username.value === undefined || !username.value || username.value.length === 0){
     $errorService?.showErrorDialog(new Error('Change the username data failed because it is undefined. You have to enter a username'))
   }
   emit('submit', {email: email.value, username: username.value})

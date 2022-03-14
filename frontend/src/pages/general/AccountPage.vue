@@ -1,6 +1,6 @@
 <template>
   <q-page class="column items-center justify-start full-width">
-      <!-- Title: Projects -->
+      <!-- Title: Account -->
       <h5>{{ $t('dashboard.account') }}</h5>
       <AccountForm
         @submit="onChange"

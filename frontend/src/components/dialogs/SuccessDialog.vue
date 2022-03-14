@@ -44,7 +44,7 @@ const props = defineProps({
 
 const autoRedirectDurationMS = 5000
 /**
- * Routes to  desired path - given through URL
+ * Routes to the customer page
  * @returns {Promise<void>} - done
  */
 async function redirectOnClick(): Promise<void> {
