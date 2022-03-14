@@ -39,7 +39,6 @@ export async function fetchFromTable(
       ${filterQuery ?? ''}
   `;
 
-  console.log(query);
   // Execute
   const queryResult = await queryRunner.manager.query(query);
 

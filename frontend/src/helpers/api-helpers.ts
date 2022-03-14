@@ -77,12 +77,12 @@ export async function myProjectDevices(): Promise<Device[]> {
 
 /**
  * Fetch all devices that are part of a given project project
- * @param {string} name - the project's name (taken from URL)
+ * @param {string} uuid - the project's uuid
  * @return {Promise<Device[]>} - An array containing all the user's projects
  */
-export async function fetchProjectDevices(name: string): Promise<Device[]> {
+export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
   const devices: Device[] = [];
-  const queryResult = await executeQuery(PROJECT_DEVICES, {name});
+  const queryResult = await executeQuery(PROJECT_DEVICES, {uuid});
   if(queryResult.data[PROJECT_DEVICES.cacheLocation]){
     for (const device of queryResult.data[PROJECT_DEVICES.cacheLocation] as Record<string, unknown>[]) {
       devices.push(mapDevice(device));

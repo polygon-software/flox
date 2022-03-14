@@ -58,11 +58,27 @@ export class ProjectService {
     );
 
     // Fetch stores for FTP info
-    const mr2000store = await fetchFromTable('MR2000', 'store');
-    const mr3000store = await fetchFromTable('MR3000', 'store');
+    const mr2000store = await fetchFromTable(
+      'MR2000',
+      'store',
+      `WHERE cli IN ('${project.mr2000instances.join("','")}')`,
+    );
+    const mr3000store = await fetchFromTable(
+      'MR3000',
+      'store',
+      `WHERE cli IN ('${project.mr3000instances.join("','")}')`,
+    );
 
     // Fetch VPN table for FTP info
-    const vpnInfo = await fetchFromTable('openvpn', 'tempovp');
+    const vpnInfo = await fetchFromTable(
+      'openvpn',
+      'tempovp',
+      `WHERE cli IN ('${project.mr3000instances
+        .concat(project.mr3000instances)
+        .join("','")}')`,
+    );
+
+    console.log('mr2000:', mr2000store);
 
     const devices = [];
 

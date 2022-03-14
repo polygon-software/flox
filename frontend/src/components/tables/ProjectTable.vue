@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, Ref, ref, defineProps} from 'vue';
+import {inject, Ref, ref, defineProps, onMounted, watch} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
@@ -117,6 +117,7 @@ import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
 import {Device} from 'src/data/types/Device';
 import {removeDeviceFromProject} from 'src/helpers/project-helpers';
+import {fetchProjectDevices} from 'src/helpers/api-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -185,6 +186,14 @@ const buttons = [
     label: i18n.global.t('projects.show_device_health'),
   },
 ]
+
+// Watch for initial Project UUID propagation
+const stop = watch(props, async () => {
+  if(props.uuid){
+    rows.value = await fetchProjectDevices(props.uuid)
+    stop()
+  }
+})
 
 /**
  * Routes to a new page where the graph of that project is shown
