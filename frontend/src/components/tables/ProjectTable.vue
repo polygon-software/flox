@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, Ref, ref, defineProps, onMounted, watch} from 'vue';
+import {inject, Ref, ref, defineProps, watch} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
