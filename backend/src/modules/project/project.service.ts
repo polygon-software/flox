@@ -150,8 +150,8 @@ export class ProjectService {
     const newProject = this.projectRepository.create({
       name: createProjectInput.name,
       user: user,
-      mr2000instances: createProjectInput.mr2000instances,
-      mr3000instances: createProjectInput.mr3000instances,
+      mr2000instances: createProjectInput.mr2000instances ?? [],
+      mr3000instances: createProjectInput.mr3000instances ?? [],
     });
     await this.projectRepository.save(newProject);
 
