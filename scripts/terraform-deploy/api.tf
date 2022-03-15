@@ -1,7 +1,7 @@
 // upload app.zip to bucket
 resource "aws_s3_bucket_object" "api_source_code_object" {
   bucket                = aws_s3_bucket.source_code_bucket.id
-  key                   = "${var.project}-${var.type}-${var.api}-beanstalk/backend.zip"
+  key                   = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-beanstalk/backend.zip"
   source                = "backend.zip"
   tags = {
     Project       = var.project
@@ -10,7 +10,7 @@ resource "aws_s3_bucket_object" "api_source_code_object" {
 
 // create elastic beanstalk resource
 resource "aws_elastic_beanstalk_application" "api_app" {
-  name                  = "${var.project}-${var.type}-${var.api}-app"
+  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-app"
   description           = var.eb_app_desc
   tags = {
     Project       = var.project
@@ -22,7 +22,7 @@ resource "aws_elastic_beanstalk_application_version" "api_app_version" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = aws_s3_bucket_object.api_source_code_object.id
   application           = aws_elastic_beanstalk_application.api_app.name
-  name                  = "${var.project}-${var.type}-${var.api}-app-version-label"
+  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-app-version-label"
   tags = {
     Project       = var.project
   }
@@ -31,7 +31,7 @@ resource "aws_elastic_beanstalk_application_version" "api_app_version" {
 // Create eb environment
 // for settings see https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
 resource "aws_elastic_beanstalk_environment" "api_env" {
-  name                  = "${var.project}-${var.type}-${var.api}-app-env"
+  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-app-env"
   application           = aws_elastic_beanstalk_application.api_app.name
   solution_stack_name   = "64bit Amazon Linux 2 v5.4.10 running Node.js 14"
   description           = "Environment for api"
@@ -203,12 +203,12 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PUBLIC_BUCKET_NAME"
-    value     = "soi-test-public-bucket"
+    value     = aws_s3_bucket.public_files.bucket
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PRIVATE_BUCKET_NAME"
-    value     = "soi-test-private-bucket"
+    value     = aws_s3_bucket.private_files.bucket
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
@@ -250,7 +250,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "BASE_URL"
-    value     = "https://soi-web.polygon-project.ch"
+    value     = "https://${aws_route53_record.web_record.name}"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
@@ -285,7 +285,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 }
 
 resource "aws_security_group" "api_security_group" {
-  name                  = "${var.project}-${var.type}-${var.api}-security-group"
+  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-security-group"
   vpc_id                = aws_vpc.vpc.id
   tags = {
     Project       = var.project

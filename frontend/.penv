@@ -1,5 +1,5 @@
-VUE_APP_GRAPHQL_ENDPOINT=https://soi-api.polygon-project.ch/graphql
-VUE_APP_WS_ENDPOINT=wss://soi-api.polygon-project.ch:443/graphql-websocket
+VUE_APP_GRAPHQL_ENDPOINT=https://soi-prod-api.polygon-project.ch/graphql
+VUE_APP_WS_ENDPOINT=wss://soi-prod-api.polygon-project.ch:443/graphql-websocket
 
-VUE_APP_BASE_URL=https://soi-web.polygon-project.ch
-VUE_APP_BACKEND_BASE_URL=https://soi-api.polygon-project.ch
+VUE_APP_BASE_URL=https://soi-prod-web.polygon-project.ch
+VUE_APP_BACKEND_BASE_URL=https://soi-prod-api.polygon-project.ch

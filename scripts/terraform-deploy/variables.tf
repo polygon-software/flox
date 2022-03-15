@@ -1,5 +1,19 @@
 variable "type" {
   description     = "live or test or testV2..."
+  type            = map
+  default         = {
+    Flox-dev      = "dev"
+    Flox-prod     = "prod"
+  }
+}
+
+variable "aws_access_key" {
+  description     = "aws_access_key_id"
+  type            = string
+}
+
+variable "aws_secret_access_key" {
+  description     = "aws_secret_access_key"
   type            = string
 }
 
