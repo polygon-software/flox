@@ -147,7 +147,6 @@ import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {REMOVE_FILES_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {PROPERTY_TYPE} from 'app/definitions/ENUMS';
-import {sleep} from 'src/helpers/general-helpers';
 
 const route = useRoute()
 const $routerService: RouterService|undefined = inject('$routerService')
