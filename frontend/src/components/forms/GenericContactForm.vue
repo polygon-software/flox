@@ -161,7 +161,7 @@ const isEditing = ref(!props.contact)
 watch(props, () => {
   if(props.copyContact){
     name.value = props.copyContact.name
-    phone.value = props.copyContact.phone
+    phone.value = props.copyContact?.phone.substring(3) ?? ''
     email.value = props.copyContact.email
     selection.value = buildPreSelection(props.copyContact)
   }
