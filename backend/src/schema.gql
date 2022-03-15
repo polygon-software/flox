@@ -814,6 +814,7 @@ type Query {
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
   levelWriting(clients: [String!]!, end: DateTime!, resolution: Int!, start: DateTime!): LevelWriting!
+  myContacts: [DeviceContact!]!
   myDevices(assigned: Boolean, unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!

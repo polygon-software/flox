@@ -31,7 +31,7 @@ import AddContactDialog from 'src/components/dialogs/AddContactDialog.vue'
 import {useQuasar} from 'quasar';
 import GenericContactForm from 'components/forms/GenericContactForm.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {ADD_CONTACT_TO_DEVICE} from 'src/data/mutations/DEVICE';
+import {ADD_CONTACT_TO_DEVICE} from 'src/data/mutations/CONTACT';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import {deviceContacts} from 'src/helpers/api-helpers';

@@ -97,7 +97,7 @@ import {DeviceContact} from 'src/data/types/DeviceContact';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {DELETE_CONTACT, EDIT_CONTACT} from 'src/data/mutations/DEVICE';
+import {DELETE_CONTACT, EDIT_CONTACT} from 'src/data/mutations/CONTACT';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {deviceType} from 'src/helpers/device-helpers';
 

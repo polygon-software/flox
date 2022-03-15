@@ -181,6 +181,27 @@ export class DeviceResolver {
   }
 
   @AnyRole()
+  @Query(() => [DeviceContact], { name: 'myContacts' })
+  async myContacts(@CurrentUser() user: Record<string, string>) {
+    const dbUser = await this.userService.getMyUser(user);
+
+    // Get user's devices
+    const devices = await this.getUserDevices({
+      uuid: dbUser.uuid,
+    } as GetUserDevicesArgs);
+    let contacts = [];
+
+    // Get contacts for all devices
+    for (const device of devices) {
+      contacts = contacts.concat(
+        await this.deviceService.getDeviceContacts(device.cli),
+      );
+    }
+
+    return contacts;
+  }
+
+  @AnyRole()
   @Mutation(() => Device)
   async editContact(
     @Args({
