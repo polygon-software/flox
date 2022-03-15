@@ -403,6 +403,31 @@ export class DeviceService {
   }
 
   /**
+   * Get a device (MR2000 or MR3000) by CLI
+   * @param {string} cli - Client ID
+   * @returns {Promise<Device>} - The device
+   */
+  async getDeviceByCli(cli: string) {
+    const type = deviceType(cli);
+    const instances = await fetchFromTable(
+      type,
+      'station',
+      `WHERE cli='${cli}'`,
+    );
+    const instance = instances[0];
+
+    if (!instance) {
+      throw new Error(`No device found for CLI ${cli}`);
+    }
+
+    if (type === 'MR2000') {
+      return mr2000fromDatabaseEntry(instance, this.projectRepository, null);
+    }
+
+    return mr3000fromDatabaseEntry(instance, this.projectRepository, null);
+  }
+
+  /**
    * Adds a contact to a given device (either on table 'alert' or 'para_alert')
    * @param {AddContactToDeviceInput} addContactToDeviceInput - input, containing all contact info
    * @returns {Promise<Record<string, unknown>>} - the new contact that was added
@@ -456,5 +481,8 @@ export class DeviceService {
 
     // Write to database
     await insertIntoTable(type, table, record);
+
+    // Get device where contact was added
+    return this.getDeviceByCli(input.cli);
   }
 }

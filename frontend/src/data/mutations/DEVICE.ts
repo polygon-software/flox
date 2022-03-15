@@ -14,6 +14,12 @@ export const ADD_CONTACT_TO_DEVICE = {
   mutation: gql`
     mutation addContactToDevice($cli: String!, $name: String!, $phone: String!, $email: String!, $event: Boolean!, $alarm1: Boolean!,  $alarm2: Boolean!, $smsLimit: Boolean!, $power: Boolean!, $memory: Boolean!, $daily: Boolean!){
       addContactToDevice (addContactToDeviceInput: {cli: $cli, name: $name, email: $email, phone: $phone, event: $event, alarm1: $alarm1, alarm2: $alarm2, smsLimit: $smsLimit, power: $power, memory: $memory, daily: $daily} ) {
+        ...on MR2000 {
+          name
+        }
+        ...on MR3000 {
+          name
+        }
         __typename
       }
     }`,
