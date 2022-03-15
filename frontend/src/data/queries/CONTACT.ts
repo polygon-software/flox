@@ -58,5 +58,6 @@ export const MY_CONTACTS = {
 
 
 export const CONTACT_QUERIES: QueryObject[] = [
-  DEVICE_CONTACTS
+  DEVICE_CONTACTS,
+  MY_CONTACTS
 ];

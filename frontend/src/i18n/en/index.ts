@@ -98,6 +98,7 @@ export default {
     number: 'Mobile Number',
     email: 'Email',
     add_new_contact: 'Add new contact',
+    copy_contact: 'Copy existing contact',
     event: 'Event',
     alarm1: 'Alarm 1',
     alarm2: 'Alarm 2',

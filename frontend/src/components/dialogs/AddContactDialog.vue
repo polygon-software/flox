@@ -39,9 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue';
-import { useDialogPluginComponent } from 'quasar';
+import {defineProps, PropType, ref} from 'vue';
+import {QVueGlobals, useDialogPluginComponent} from 'quasar';
 import GenericContactForm from 'components/forms/GenericContactForm.vue';
+import SelectContactDialog from 'components/dialogs/SelectContactDialog.vue';
+import {DeviceContact} from 'src/data/types/DeviceContact';
 
 const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 const contactForm = ref(null)
@@ -50,6 +52,10 @@ const contactForm = ref(null)
 const props = defineProps({
   cli: {
     type: String,
+    required: true
+  },
+  q: {
+    type: Object as PropType<QVueGlobals>,
     required: true
   }
 })
@@ -68,12 +74,16 @@ function onSubmit(){
 }
 
 /**
- * On load, .....
+ * On load, show dialog with list of the user's contacts
  * @returns {void}
  */
 function onLoad(){
-  //TODO: open dialog for copying contact from another device
-  onDialogCancel()
+  props.q.dialog({
+    component: SelectContactDialog,
+    componentProps: {}
+  }).onOk((contact: DeviceContact) => {
+    console.log('PREFILL WITH', contact) // TODO
+  })
 }
 
 </script>

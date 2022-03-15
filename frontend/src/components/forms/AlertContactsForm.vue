@@ -56,7 +56,8 @@ function newContact(){
   $q.dialog({
     component: AddContactDialog,
     componentProps: {
-      cli: props.cli
+      cli: props.cli,
+      q: $q
     }
   }).onOk(async (formValues: Record<string, string|string[]>) => {
     // Prepare mutation parameters

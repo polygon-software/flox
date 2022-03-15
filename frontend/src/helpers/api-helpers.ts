@@ -9,6 +9,7 @@ import {DEVICE_CONTACTS, MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEV
 import {Device} from 'src/data/types/Device';
 import {computed, Ref} from 'vue';
 import {DeviceContact} from 'src/data/types/DeviceContact';
+import {MY_CONTACTS} from 'src/data/queries/CONTACT';
 
 /**
  * Fetch all users.
@@ -104,13 +105,18 @@ export function myDevices(params?: Record<string, boolean>) {
 export function deviceContacts(cli: string) {
   const queryResult = subscribeToQuery(DEVICE_CONTACTS, {cli}) as Ref<Record<string, unknown>[]>;
   return computed(() => {
-    const contacts: DeviceContact[] = [];
-    if(queryResult.value){
-      for (const contact of queryResult.value ) {
-        contacts.push(contact as unknown as DeviceContact) // No conversion necessary
-      }
-    }
-    return contacts
+    return (queryResult.value ?? []).map((contact) => contact as unknown as DeviceContact)
+  });
+}
+
+/**
+ * Fetch all of a the user's devices' contacts
+ * @return {DeviceContact[]} - An array containing all the user's contacts
+ */
+export function myContacts() {
+  const queryResult = subscribeToQuery(MY_CONTACTS) as Ref<Record<string, unknown>[]>;
+  return computed(() => {
+    return (queryResult.value ?? []).map((contact) => contact as unknown as DeviceContact)
   });
 }
 
