@@ -1,3 +1,8 @@
+variable "type" {
+  description     = "live or test or testV2..."
+  type            = string
+}
+
 variable "aws_region" {
   default         = "eu-central-1"
   description     = "AWS Region"
@@ -12,12 +17,6 @@ variable "project" {
 variable "api" {
   default         = "api"
   description     = "api"
-  type            = string
-}
-
-variable "type" {
-  default         = "test"
-  description     = "live or test or testV2..."
   type            = string
 }
 
