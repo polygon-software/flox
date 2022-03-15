@@ -216,7 +216,7 @@ function onDelete(){
     }
   }).onOk(async () => {
     if(!props.contact?.id || !props.cli){
-      throw new Error('TODO error message invalid contact') // TODO
+      throw new Error('TODO error message invalid contact')
     }
 
     // Prepare mutation parameters
@@ -233,7 +233,7 @@ function onDelete(){
       // Show error notification
       showNotification(
         $q,
-        i18n.global.t('errors.error_deleting_contact'), // TODO
+        i18n.global.t('errors.error_deleting_contact'),
         'bottom',
         'negative',
       )

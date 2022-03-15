@@ -165,7 +165,8 @@ export default {
     incorrect_date_range: 'Please select a valid date range.',
     error_while_editing: 'An error occurred while editing the project.',
     error_adding_contact: 'An error occurred while adding the contact.',
-    error_editing_contact: 'An error occurred while editing the contact.'
+    error_editing_contact: 'An error occurred while editing the contact.',
+    error_deleting_contact: 'An error occurred while deleting the contact.'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -200,7 +201,8 @@ export default {
     project_renamed: 'Project renamed successfully',
     project_deleted: 'Project deleted successfully',
     contact_added: 'Contact added successfully',
-    contact_edited: 'Contact edited successfully'
+    contact_edited: 'Contact edited successfully',
+    contact_deleted: 'Contact deleted successfully'
   },
   status: {
     title: 'Status of',

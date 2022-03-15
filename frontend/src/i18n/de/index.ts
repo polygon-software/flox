@@ -168,7 +168,8 @@ export default {
     incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
     error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.',
     error_adding_contact: 'Beim Hinzufügen des Kontakts ist ein Fehler aufgetreten.',
-    error_editing_contact: 'Beim Bearbeiten des Kontakts ist ein Fehler aufgetreten.'
+    error_editing_contact: 'Beim Bearbeiten des Kontakts ist ein Fehler aufgetreten.',
+    error_deleting_contact: 'Beim Löschen des Kontakts ist ein Fehler aufgetreten.'
   },
   set_password: {
     description:
@@ -204,7 +205,8 @@ export default {
     project_renamed: 'Projekt erfolgreich umbenannt',
     project_deleted: 'Projekt erfolgreich gelöscht',
     contact_added: 'Kontakt erfolgreich hinzugefügt',
-    contact_edited: 'Kontakt erfolgreich bearbeitet'
+    contact_edited: 'Kontakt erfolgreich bearbeitet',
+    contact_deleted: 'Kontakt erfolgreich gelöscht'
   },
   status: {
     title: 'Status von',
