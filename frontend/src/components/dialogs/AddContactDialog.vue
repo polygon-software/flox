@@ -10,7 +10,6 @@
       >
         <GenericContactForm
           ref="contactForm"
-          :disabled="false"
         />
         <q-card-actions align="center">
           <q-btn

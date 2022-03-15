@@ -9,11 +9,11 @@
       class="text-grey"
       @click="newContact"
     />
-    <div style="display: flex;">
+
+    <div class="row">
       <GenericContactForm
         v-for="(contact, index) in contacts"
         :key="index"
-        style="width: 50%;"
         :contact="contact"
         :disabled="true"
       />
@@ -29,7 +29,6 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import {ADD_CONTACT_TO_DEVICE} from 'src/data/mutations/DEVICE';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
-import {ref} from 'vue';
 import {deviceContacts} from 'src/helpers/api-helpers';
 
 const $q = useQuasar()

@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="row flex flex-center">
-      <div style="width: 250px">
+  <div class="row q-pa-xl items-center" style="width: 50%">
+    <!-- Left column: basic info -->
+    <div class="column full-height">
         <p>{{ $t('edit_parameters.name') }}</p>
         <q-input
           v-model="name"
@@ -38,16 +38,20 @@
           :rules="[(val) => IS_EMAIL(val) || i18n.global.t('errors.invalid_email')]"
         />
       </div>
-      <div style="display: flex; flex-direction: column; margin-top: 35px; margin-left: 35px; color: #87858A">
-        <q-checkbox
-          v-for="checkbox in checkboxes"
-          :key="checkbox.val"
-          v-model="selection"
-          :val="checkbox.val"
-          :label="checkbox.label"
-          :disable="props.disabled"
-        />
-      </div>
+
+    <!-- Right column: selected toggles -->
+    <div
+      class="column full-height justify-between"
+      style="margin-left: 35px"
+    >
+      <q-checkbox
+        v-for="checkbox in checkboxes"
+        :key="checkbox.val"
+        v-model="selection"
+        :val="checkbox.val"
+        :label="checkbox.label"
+        :disable="props.disabled"
+      />
     </div>
   </div>
 </template>
@@ -69,6 +73,7 @@ const checkboxes = [
 ]
 
 const props = defineProps({
+  // Contact whose info to pre-fill (if any)
   contact: {
     required: false,
     type: Object as PropType<DeviceContact>,
@@ -76,8 +81,9 @@ const props = defineProps({
   },
   // Whether input is disabled
   disabled: {
-    required: true,
+    required: false,
     type: Boolean,
+    default: false
   },
 })
 
