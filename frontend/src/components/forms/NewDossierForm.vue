@@ -714,7 +714,7 @@ async function calculateValueEstimate(){
   const url = `${baseUrl}/getValueDevelopment?zipCode=${zipCode}&start=${startDateString}&end=${endDateString}`
 
   // Get value multiplier from backend
-  await axios.get(url, {headers}).then((multiplierRequest)=>{
+  await axios.get(url, {headers}).then((multiplierRequest) => {
     const multiplier = multiplierRequest?.data as number;
 
 
