@@ -3,7 +3,10 @@
     ref="dialogRef"
     :no-backdrop-dismiss="true"
   >
-    <q-card class="q-pa-sm">
+    <q-card
+      class="q-pa-sm"
+      style="min-width: 90%"
+    >
       <h5 style="text-align: center">
         {{ $t('edit_parameters.copy_contact') }}
       </h5>

@@ -1,41 +1,5 @@
 <template>
   <div class="row q-pa-xl items-center">
-    <!-- Edit/delete Button row (only for prefilled forms) -->
-    <div
-      v-if="contact"
-      class="full-width row justify-end"
-    >
-      <!-- Delete button (if editing) -->
-      <q-btn
-        v-if="isEditing"
-        icon="delete"
-        text-color="negative"
-        size="sm"
-        unelevated
-        round
-        @click="onDelete"
-      />
-      <!-- Save button (if editing) -->
-      <q-btn
-        v-if="isEditing"
-        icon="save"
-        text-color="positive"
-        size="sm"
-        unelevated
-        round
-        @click="onSave"
-      />
-
-      <!-- Edit button (if not editing) -->
-      <q-btn
-        :icon="isEditing ? 'close' : 'edit'"
-        text-color="primary"
-        size="sm"
-        unelevated
-        round
-        @click="toggleEditing"
-      />
-    </div>
     <!-- Left column: basic info -->
     <div class="column full-height">
         <p>{{ $t('edit_parameters.name') }}</p>
@@ -77,6 +41,44 @@
       class="column full-height justify-between"
       style="margin-left: 35px"
     >
+      <!-- Edit/delete Button row (only for prefilled forms) -->
+      <div
+        v-if="contact"
+        class="full-width row justify-end"
+      >
+        <!-- Delete button (if editing) -->
+        <q-btn
+          v-if="isEditing"
+          icon="delete"
+          text-color="negative"
+          size="12px"
+          unelevated
+          round
+          @click="onDelete"
+        />
+        <!-- Save button (if editing) -->
+        <q-btn
+          v-if="isEditing"
+          icon="save"
+          text-color="positive"
+          size="12px"
+          unelevated
+          round
+          @click="onSave"
+        />
+
+        <!-- Edit button (if not editing) -->
+        <q-btn
+          :icon="isEditing ? 'close' : 'edit'"
+          text-color="primary"
+          size="12px"
+          unelevated
+          round
+          @click="toggleEditing"
+        />
+      </div>
+
+      <!-- Checkboxes for each option -->
       <q-checkbox
         v-for="checkbox in checkboxes"
         :key="checkbox.val"
