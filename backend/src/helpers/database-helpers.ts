@@ -130,7 +130,11 @@ export async function updateInTable(
       SET
   `;
   Object.entries(record).forEach(([key, value]) => {
-    query += `${key} = ${value}, `;
+    if (typeof value === 'string') {
+      query += `${key}='${value}', `;
+    } else {
+      query += `${key}=${value}, `;
+    }
   });
   query = query.substring(0, query.lastIndexOf(','));
   query += `

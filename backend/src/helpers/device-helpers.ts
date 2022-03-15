@@ -129,6 +129,7 @@ export async function deviceContactFromDatabaseEntry(
 
   return new DeviceContact(
     (isMR2000 ? entry.uniq_id : entry.rec_id) as number,
+    entry.cli as string,
     entry.name as string,
     entry.email as string,
     entry.phone as string,

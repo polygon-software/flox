@@ -10,6 +10,9 @@ export class DeviceContact {
   id: number;
 
   @Field(() => String)
+  cli: string;
+
+  @Field(() => String)
   name: string;
 
   @Field(() => String)
@@ -41,6 +44,7 @@ export class DeviceContact {
 
   constructor(
     id: number,
+    cli: string,
     name: string,
     email: string,
     phone: string,
@@ -53,6 +57,7 @@ export class DeviceContact {
     daily: boolean,
   ) {
     this.id = id;
+    this.cli = cli;
     this.name = name;
     this.email = email;
     this.phone = phone;

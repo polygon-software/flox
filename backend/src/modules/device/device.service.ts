@@ -509,7 +509,6 @@ export class DeviceService {
             // cli: input.cli,
             // status: null,
             // timestamp: null,
-            id: editContactInput.id,
             // from_IP: null,
             name: input.name,
             email: input.email,
@@ -528,7 +527,6 @@ export class DeviceService {
         : {
             // MR3000
             // cli: input.cli,
-            id: editContactInput.id,
             status: 0, // TODO this should be correct from source code, but not sure
             name: input.name,
             email: input.email,
@@ -546,7 +544,7 @@ export class DeviceService {
     await updateInTable(
       type,
       table,
-      `WHERE cli='${editContactInput.cli}'`,
+      `WHERE uniq_id='${editContactInput.id}'`,
       record,
     );
 

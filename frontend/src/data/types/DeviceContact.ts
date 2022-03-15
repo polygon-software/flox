@@ -1,9 +1,9 @@
-
 /**
  * A class representing a device contact
  */
 export class DeviceContact {
   id: string;
+  cli: string;
   name: string;
   email: string;
   phone: string;
@@ -18,6 +18,7 @@ export class DeviceContact {
   // eslint-disable-next-line require-jsdoc
   constructor(
     id: string,
+    cli: string,
     name: string,
     email: string,
     phone: string,
@@ -30,6 +31,7 @@ export class DeviceContact {
     daily: boolean,
   ) {
     this.id = id;
+    this.cli = cli;
     this.name = name;
     this.email = email;
     this.phone = phone;

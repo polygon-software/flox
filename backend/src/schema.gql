@@ -224,6 +224,7 @@ union Device = MR2000 | MR3000
 type DeviceContact {
   alarm1: Boolean!
   alarm2: Boolean!
+  cli: String!
   daily: Boolean!
   email: String!
   event: Boolean!

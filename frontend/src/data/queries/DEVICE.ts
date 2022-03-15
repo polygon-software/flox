@@ -215,6 +215,7 @@ export const DEVICE_CONTACTS = {
     ){
       getDeviceContacts(cli: $cli){
         id
+        cli
         name
         email
         phone

@@ -97,7 +97,7 @@ import {DeviceContact} from 'src/data/types/DeviceContact';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {ADD_CONTACT_TO_DEVICE, EDIT_CONTACT} from 'src/data/mutations/DEVICE';
+import {EDIT_CONTACT} from 'src/data/mutations/DEVICE';
 import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q = useQuasar()
@@ -211,15 +211,16 @@ function onDelete(){
  * @returns {Promise<void>} -done
  */
 async function onSave(){
-  if(!props.contact?.id){
+  if(!props.contact?.id || !props.contact?.cli){
     throw new Error('TODO error message invalid contact') // TODO
   }
 
   // Prepare mutation parameters
   const params = {
     id: props.contact.id,
+    cli: props.contact.cli,
     name: name.value,
-    phone: phone.value.toString().replace(/\s/g, ''), // remove whitespace
+    phone: '+41' + phone.value.toString().replace(/\s/g, ''), // remove whitespace
     email: email.value,
     event: selection.value.includes('event'),
     alarm1: selection.value.includes('alarm1'),
@@ -251,6 +252,9 @@ async function onSave(){
     'bottom',
     'positive',
   )
+
+  // Disable edit mode
+  isEditing.value = false;
 }
 
 defineExpose({getData})
