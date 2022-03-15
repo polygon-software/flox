@@ -1,6 +1,7 @@
 <template>
   <q-dialog
     ref="dialogRef"
+    :no-backdrop-dismiss="true"
   >
     <q-card class="q-pa-sm" style="width: 600px; min-height: 250px">
       <h5 style="text-align: center">{{ $t('edit_parameters.add_new_contact') }}</h5>

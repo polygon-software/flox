@@ -30,9 +30,18 @@ import {ADD_CONTACT_TO_DEVICE} from 'src/data/mutations/DEVICE';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import {deviceContacts} from 'src/helpers/api-helpers';
+import {defineProps} from 'vue';
 
 const $q = useQuasar()
-const contacts = deviceContacts('39-11') // TODO from prop
+
+const props = defineProps({
+  cli: {
+    type: String,
+    required: true
+  }
+})
+
+const contacts = deviceContacts(props.cli)
 
 /**
  * Shows a dialog for creating new contacts
@@ -45,7 +54,7 @@ function newContact(){
   }).onOk(async (formValues: Record<string, string|string[]>) => {
     // Prepare mutation parameters
     const params = {
-      cli: '39-11', // TODO this should probably be a prop passed downwards
+      cli: props.cli,
       name: formValues.name,
       phone: formValues.phone.toString().replace(/\s/g, ''), // remove whitespace
       email: formValues.email,
