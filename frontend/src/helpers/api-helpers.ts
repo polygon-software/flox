@@ -76,7 +76,7 @@ export async function myProjectDevices(): Promise<Device[]> {
 }
 
 /**
- * Fetch all devices that are part of a given project project
+ * Fetch all devices that are part of a given project
  * @param {string} uuid - the project's uuid
  * @return {Promise<Device[]>} - An array containing all the user's projects
  */

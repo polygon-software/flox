@@ -9,20 +9,14 @@
       class="text-grey"
       @click="newContact"
     />
-    <!-- TODO: Replace mock data -->
     <div style="display: flex;">
       <GenericContactForm
+        v-for="(contact, index) in contacts"
+        :key="index"
         style="width: 50%;"
-        full-name="Marino Schneider"
-        phone-number="+49 78 563 66 22"
-        email-address="marino.schneider@polygon-software.ch"
-        :disabled="true"
-      />
-      <GenericContactForm
-        style="width: 50%;"
-        full-name="Marino Schneider"
-        phone-number="+49 78 563 66 22"
-        email-address="marino.schneider@polygon-software.ch"
+        :full-name="contact.name"
+        :phone-number="contact.phone"
+        :email-address="contact.email"
         :disabled="true"
       />
     </div>
@@ -37,12 +31,13 @@ import {executeMutation} from 'src/helpers/data-helpers';
 import {ADD_CONTACT_TO_DEVICE} from 'src/data/mutations/DEVICE';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
+import {ref} from 'vue';
 
 const $q = useQuasar()
+const contacts = ref([]) // TODO in helper
 
 /**
- * Routes to new Contact Dialog
- * @async
+ * Shows a dialog for creating new contacts
  * @returns {void}
  */
 function newContact(){
@@ -50,8 +45,6 @@ function newContact(){
     component: AddContactDialog,
     componentProps: {}
   }).onOk(async (formValues: Record<string, string|string[]>) => {
-    // On dialog OK, create contact
-
     // Prepare mutation parameters
     const params = {
       cli: '39-11', // TODO this should probably be a prop passed downwards
