@@ -1,12 +1,11 @@
 <template>
-  <div class="row q-pa-xl items-center" style="width: 50%">
+  <div class="row q-pa-xl items-center">
     <!-- Left column: basic info -->
     <div class="column full-height">
         <p>{{ $t('edit_parameters.name') }}</p>
         <q-input
           v-model="name"
           outlined
-          :label="props.fullName"
           :disable="props.disabled"
           dense
           type="text"
@@ -18,7 +17,6 @@
           v-model="phone"
           outlined
           prefix="+41"
-          :label="props.phoneNumber"
           :disable="props.disabled"
           dense
           type="tel"
@@ -30,7 +28,6 @@
         <q-input
           v-model="email"
           outlined
-          :label="props.emailAddress"
           :disable="props.disabled"
           dense
           type="email"
@@ -88,7 +85,7 @@ const props = defineProps({
 })
 
 const name = ref(props.contact?.name ?? '')
-const phone = ref(props.contact?.phone ?? '')
+const phone = ref(props.contact?.phone.substring(3) ?? '') // Remove prefix, since it is added again by QInput
 const email = ref(props.contact?.email ?? '')
 const selection = ref(buildPreSelection())
 
