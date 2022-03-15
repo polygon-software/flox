@@ -18,8 +18,6 @@ import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { ROLE } from '../../ENUM/ENUM';
-import { Project } from '../project/entities/project.entity';
-import { CreateProjectInput } from '../project/dto/input/create-project.input';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 import { GetDeviceContactsArgs } from './dto/args/get-device-contacts.args';
 import { DeviceContact } from '../../types/DeviceContact';
