@@ -92,7 +92,7 @@ export default {
   },
   edit_parameters: {
     user_data: 'Benutzerdaten und Schwellenwerte',
-    contacts: 'Alert-Kontakte',
+    contacts: 'Alarm-Kontakte',
     project_name: 'Projektname',
     station_name: 'Stationsname',
     name: 'Name',

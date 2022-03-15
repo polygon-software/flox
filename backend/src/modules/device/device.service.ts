@@ -485,4 +485,29 @@ export class DeviceService {
     // Get device where contact was added
     return this.getDeviceByCli(input.cli);
   }
+
+  /**
+   * Get s the contacts for a device by CLI
+   * @param {string} cli - Client ID
+   * @returns {Promise<DeviceContact[]>} - The device's contacts
+   */
+  async getDeviceContacts(cli: string) {
+    const type = deviceType(cli);
+    const instances = await fetchFromTable(
+      type,
+      'station',
+      `WHERE cli='${cli}'`,
+    );
+    const instance = instances[0];
+
+    if (!instance) {
+      throw new Error(`No device found for CLI ${cli}`);
+    }
+
+    if (type === 'MR2000') {
+      return mr2000fromDatabaseEntry(instance, this.projectRepository, null);
+    }
+
+    return mr3000fromDatabaseEntry(instance, this.projectRepository, null);
+  }
 }
