@@ -103,7 +103,6 @@ export async function insertIntoTable(
   `;
 
   // Execute
-  console.log(statement);
   await queryRunner.manager.query(statement);
   await queryRunner.release();
 }

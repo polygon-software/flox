@@ -207,11 +207,39 @@ export const EVENT_TABLE_ROWS = {
   cacheLocation: 'eventTable'
 }
 
+
+export const DEVICE_CONTACTS = {
+  query: gql`
+    query getDeviceContacts(
+      $cli: String!,
+    ){
+      getDeviceContacts(cli: $cli){
+        name
+        email
+        phone
+        event
+        alarm1
+        alarm2
+        smsLimit
+        power
+        memory
+        daily
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getDeviceContacts'
+}
+
+
+
 export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
   MY_DEVICES,
   PROJECT_DEVICES,
   LEVEL_WRITING,
   DEVICE_PARAMS,
-  EVENT_TABLE_ROWS
+  EVENT_TABLE_ROWS,
+  DEVICE_CONTACTS
 ];

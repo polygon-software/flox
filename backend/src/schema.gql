@@ -221,6 +221,19 @@ input DeleteProjectInput {
 
 union Device = MR2000 | MR3000
 
+type DeviceContact {
+  alarm1: Boolean!
+  alarm2: Boolean!
+  daily: Boolean!
+  email: String!
+  event: Boolean!
+  memory: Boolean!
+  name: String!
+  phone: String!
+  power: Boolean!
+  smsLimit: Boolean!
+}
+
 type DeviceParams {
   ala1X: Float!
   ala1Y: Float!
@@ -745,6 +758,7 @@ type Query {
   allUsers: [User!]!
   deviceParams(cli: String!): DeviceParams!
   eventTable(cli: String!, descending: Boolean, filter: String, orderBy: String, skip: Int!, take: Int!): EventsTable!
+  getDeviceContacts(cli: String!): [DeviceContact!]!
   getProjectDevices(name: String, uuid: ID): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!

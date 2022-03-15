@@ -7,6 +7,7 @@ import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
   deviceType,
+  deviceContactFromDatabaseEntry,
 } from '../../helpers/device-helpers';
 import { Project } from '../project/entities/project.entity';
 import { HttpService } from '@nestjs/axios';
@@ -493,21 +494,15 @@ export class DeviceService {
    */
   async getDeviceContacts(cli: string) {
     const type = deviceType(cli);
-    const instances = await fetchFromTable(
-      type,
-      'station',
-      `WHERE cli='${cli}'`,
+    const instances =
+      (await fetchFromTable(
+        type,
+        type === 'MR2000' ? 'alert' : 'para_alert',
+        `WHERE cli='${cli}'`,
+      )) ?? [];
+
+    return instances.map((instance) =>
+      deviceContactFromDatabaseEntry(instance),
     );
-    const instance = instances[0];
-
-    if (!instance) {
-      throw new Error(`No device found for CLI ${cli}`);
-    }
-
-    if (type === 'MR2000') {
-      return mr2000fromDatabaseEntry(instance, this.projectRepository, null);
-    }
-
-    return mr3000fromDatabaseEntry(instance, this.projectRepository, null);
   }
 }

@@ -51,7 +51,6 @@ function newContact(){
     componentProps: {}
   }).onOk(async (formValues: Record<string, string|string[]>) => {
     // On dialog OK, create contact
-    console.log(formValues)
 
     // Prepare mutation parameters
     const params = {
@@ -72,7 +71,6 @@ function newContact(){
     try{
       await executeMutation(ADD_CONTACT_TO_DEVICE, params)
     } catch (e){
-      console.log(e)
       // Show error notification
       showNotification(
         $q,

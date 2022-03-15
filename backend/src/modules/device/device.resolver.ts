@@ -21,6 +21,8 @@ import { ROLE } from '../../ENUM/ENUM';
 import { Project } from '../project/entities/project.entity';
 import { CreateProjectInput } from '../project/dto/input/create-project.input';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
+import { GetDeviceContactsArgs } from './dto/args/get-device-contacts.args';
+import { DeviceContact } from '../../types/DeviceContact';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -152,6 +154,27 @@ export class DeviceResolver {
 
     if (dbUser.role === ROLE.ADMIN || allowed) {
       return this.deviceService.addContactToDevice(addContactToDeviceInput);
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  @AnyRole()
+  @Query(() => [DeviceContact], { name: 'getDeviceContacts' })
+  async getDeviceContacts(
+    @Args() getDeviceContactsArgs: GetDeviceContactsArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+    let allowed = false;
+    if (dbUser.role === ROLE.USER) {
+      allowed =
+        dbUser.mr2000instances?.includes(getDeviceContactsArgs.cli) ||
+        dbUser.mr3000instances?.includes(getDeviceContactsArgs.cli);
+    }
+
+    if (dbUser.role === ROLE.ADMIN || allowed) {
+      return this.deviceService.getDeviceContacts(getDeviceContactsArgs.cli);
     }
 
     throw new UnauthorizedException();

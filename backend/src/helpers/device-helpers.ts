@@ -6,6 +6,7 @@ import { MR2000 } from '../types/MR2000';
 import { MR3000 } from '../types/MR3000';
 import { Repository } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
+import { DeviceContact } from '../types/DeviceContact';
 
 /**
  * Creates an MR2000 instance from a RowPacketData entry
@@ -113,4 +114,29 @@ function deviceNameFromComment(comment: string) {
  */
 export function deviceType(clientId: string) {
   return clientId.includes('-') ? 'MR2000' : 'MR3000';
+}
+
+/**
+ * Creates a DeviceContact instance from a RowPacketData entry
+ * @param {Record<string, string|number>} entry - database entry row
+ * @returns {Promise<DeviceContact>} - Device contact instance
+ */
+export async function deviceContactFromDatabaseEntry(
+  entry: Record<string, string | boolean>,
+) {
+  const type = deviceType(entry.cli as string);
+  const isMR2000 = type === 'MR2000';
+
+  return new DeviceContact(
+    entry.name as string,
+    entry.email as string,
+    entry.phone as string,
+    (isMR2000 ? entry.event : entry.event_all) as boolean,
+    (isMR2000 ? entry.alarm1 : entry.event_alarm1) as boolean,
+    (isMR2000 ? entry.alarm2 : entry.event_alarm2) as boolean,
+    entry.soh_sms_limit as boolean,
+    entry.soh_power as boolean,
+    null, // TODO memory?
+    entry.daily as boolean,
+  );
 }
