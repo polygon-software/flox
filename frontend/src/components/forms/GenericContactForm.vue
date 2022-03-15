@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref, defineExpose, PropType} from 'vue';
+import {defineProps, ref, defineExpose, PropType, watch} from 'vue';
 import {i18n} from 'boot/i18n';
 import { IS_VALID_STRING, IS_EMAIL } from 'src/data/RULES'
 import {DeviceContact} from 'src/data/types/DeviceContact';
@@ -122,6 +122,12 @@ const props = defineProps({
     type: String,
     default: null
   },
+  // Copied contact (applies only on AddContactDialog)
+  copyContact: {
+    required: false,
+    type: Object as PropType<DeviceContact>,
+    default: null,
+  },
 })
 
 const checkboxes = deviceType(props.cli) === 'MR2000' ? [
@@ -144,17 +150,29 @@ const checkboxes = deviceType(props.cli) === 'MR2000' ? [
 const name = ref(props.contact?.name ?? '')
 const phone = ref(props.contact?.phone.substring(3) ?? '') // Remove prefix, since it is added again by QInput
 const email = ref(props.contact?.email ?? '')
-const selection = ref(buildPreSelection())
+const selection = ref(buildPreSelection(props.contact))
 
 // Editing status (false if a pre-fill value if given, then edit must be enabled manually)
 const isEditing = ref(!props.contact)
 
+// Watch for when copied contact changes
+watch(props, () => {
+  if(props.copyContact){
+    name.value = props.copyContact.name
+    phone.value = props.copyContact.phone
+    email.value = props.copyContact.email
+    selection.value = buildPreSelection(props.copyContact)
+  }
+})
+
+
 /**
  * Builds array of preselected values, depending on prop input
+ * @param {DeviceContact} contact - the contact to pre-fill
  * @returns {string[]} - selected alarms
  */
-function buildPreSelection(){
-  if(!props.contact){
+function buildPreSelection(contact: DeviceContact){
+  if(!contact){
     return []
   }
 
@@ -162,7 +180,7 @@ function buildPreSelection(){
   const possibleKeys = ['event', 'alarm1', 'alarm2', 'smsLimit', 'power', 'memory', 'daily']
 
   possibleKeys.forEach((key: string) => {
-    if(props.contact[key]){
+    if(contact[key]){
       preSelection.push(key)
     }
   })
@@ -193,7 +211,7 @@ function toggleEditing() {
     name.value = props.contact?.name ?? ''
     phone.value = props.contact?.phone.substring(3) ?? ''
     email.value = props.contact?.email ?? ''
-    selection.value =buildPreSelection()
+    selection.value = buildPreSelection(props.contact)
   }
 
   // Toggle value

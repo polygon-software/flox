@@ -12,6 +12,7 @@
         <GenericContactForm
           ref="contactForm"
           :cli="cli"
+          :copy-contact="prefillContact"
         />
         <q-card-actions align="center">
           <q-btn
@@ -39,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, PropType, ref} from 'vue';
+import {defineProps, PropType, Ref, ref} from 'vue';
 import {QVueGlobals, useDialogPluginComponent} from 'quasar';
 import GenericContactForm from 'components/forms/GenericContactForm.vue';
 import SelectContactDialog from 'components/dialogs/SelectContactDialog.vue';
@@ -59,6 +60,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const prefillContact: Ref<DeviceContact|null> = ref(null)
 
 /**
  * On submit, it gets the form's data
@@ -82,7 +85,7 @@ function onLoad(){
     component: SelectContactDialog,
     componentProps: {}
   }).onOk((contact: DeviceContact) => {
-    console.log('PREFILL WITH', contact) // TODO
+    prefillContact.value = contact
   })
 }
 
