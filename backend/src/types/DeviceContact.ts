@@ -36,7 +36,7 @@ export class DeviceContact {
   @Field(() => Boolean)
   power: boolean;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   memory: boolean;
 
   @Field(() => Boolean)

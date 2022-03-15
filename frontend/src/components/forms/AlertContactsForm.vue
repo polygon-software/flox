@@ -17,6 +17,7 @@
         style="width: 50%"
       >
         <GenericContactForm
+          :cli="cli"
           :contact="contact"
           :disabled="true"
         />
@@ -54,7 +55,9 @@ const contacts = deviceContacts(props.cli)
 function newContact(){
   $q.dialog({
     component: AddContactDialog,
-    componentProps: {}
+    componentProps: {
+      cli: props.cli
+    }
   }).onOk(async (formValues: Record<string, string|string[]>) => {
     // Prepare mutation parameters
     const params = {

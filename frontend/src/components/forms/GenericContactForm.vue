@@ -99,18 +99,9 @@ import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {EDIT_CONTACT} from 'src/data/mutations/DEVICE';
 import {showNotification} from 'src/helpers/notification-helpers';
+import {deviceType} from 'src/helpers/device-helpers';
 
 const $q = useQuasar()
-
-const checkboxes = [
-  {val: 'event', label: i18n.global.t('edit_parameters.event'),},
-  {val: 'alarm1', label: i18n.global.t('edit_parameters.alarm1')},
-  {val: 'alarm2', label: i18n.global.t('edit_parameters.alarm2')},
-  {val: 'smsLimit', label: i18n.global.t('edit_parameters.sms_limit')},
-  {val: 'power', label: i18n.global.t('edit_parameters.battery')},
-  {val: 'memory', label: i18n.global.t('edit_parameters.memory')},
-  {val: 'daily', label: i18n.global.t('edit_parameters.daily')},
-]
 
 const props = defineProps({
   // Contact whose info to pre-fill (if any)
@@ -125,8 +116,30 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  // Device CLI
+  cli: {
+    required: false,
+    type: String,
+    default: null
+  },
 })
 
+const checkboxes = deviceType(props.cli) === 'MR2000' ? [
+  {val: 'event', label: i18n.global.t('edit_parameters.event'),},
+  {val: 'alarm1', label: i18n.global.t('edit_parameters.alarm1')},
+  {val: 'alarm2', label: i18n.global.t('edit_parameters.alarm2')},
+  {val: 'smsLimit', label: i18n.global.t('edit_parameters.sms_limit')},
+  {val: 'power', label: i18n.global.t('edit_parameters.battery')},
+  {val: 'daily', label: i18n.global.t('edit_parameters.daily')},
+] : [
+  {val: 'event', label: i18n.global.t('edit_parameters.event'),},
+  {val: 'alarm1', label: i18n.global.t('edit_parameters.alarm1')},
+  {val: 'alarm2', label: i18n.global.t('edit_parameters.alarm2')},
+  {val: 'smsLimit', label: i18n.global.t('edit_parameters.sms_limit')},
+  {val: 'power', label: i18n.global.t('edit_parameters.battery')},
+  {val: 'memory', label: i18n.global.t('edit_parameters.memory')},
+  {val: 'daily', label: i18n.global.t('edit_parameters.daily')},
+]
 // Form values
 const name = ref(props.contact?.name ?? '')
 const phone = ref(props.contact?.phone.substring(3) ?? '') // Remove prefix, since it is added again by QInput
@@ -211,20 +224,20 @@ function onDelete(){
  * @returns {Promise<void>} -done
  */
 async function onSave(){
-  if(!props.contact?.id || !props.contact?.cli){
+  if(!props.contact?.id || !props.cli){
     throw new Error('TODO error message invalid contact') // TODO
   }
 
   // Prepare mutation parameters
   const params = {
     id: props.contact.id,
-    cli: props.contact.cli,
+    cli: props.cli,
     name: name.value,
     phone: '+41' + phone.value.toString().replace(/\s/g, ''), // remove whitespace
     email: email.value,
     event: selection.value.includes('event'),
     alarm1: selection.value.includes('alarm1'),
-    alarm2: selection.value.includes('alarm1'),
+    alarm2: selection.value.includes('alarm2'),
     smsLimit: selection.value.includes('smsLimit'),
     power: selection.value.includes('power'),
     memory: selection.value.includes('memory'),
@@ -235,6 +248,7 @@ async function onSave(){
   try{
     await executeMutation(EDIT_CONTACT, params)
   } catch (e){
+    console.log('Error:', e)
     // Show error notification
     showNotification(
       $q,

@@ -96,7 +96,7 @@ export default {
     project_name: 'Projektname',
     station_name: 'Stationsname',
     name: 'Name',
-    number: 'Telefonnumer',
+    number: 'Telefonnummer',
     email: 'E-mail',
     add_new_contact: 'Füge neuen Kontakt hinzu',
     event: 'Ereignis',

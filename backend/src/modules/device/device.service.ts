@@ -519,10 +519,6 @@ export class DeviceService {
             daily: input.daily,
             soh_power: input.power,
             soh_sms_limit: input.smsLimit,
-            // soh_warning: null,
-            // soh_error: null,
-            // soh_err_warn: null,
-            // TODO: memory?
           }
         : {
             // MR3000
@@ -537,16 +533,16 @@ export class DeviceService {
             daily: input.daily,
             soh_power: input.power,
             soh_sms_limit: input.smsLimit,
-            // TODO: memory?
+            soh_sdcard: input.memory,
           };
 
+    const filterQuery =
+      type === 'MR2000'
+        ? `WHERE uniq_id='${editContactInput.id}'`
+        : `WHERE rec_id='${editContactInput.id}'`;
+
     // Write to database
-    await updateInTable(
-      type,
-      table,
-      `WHERE uniq_id='${editContactInput.id}'`,
-      record,
-    );
+    await updateInTable(type, table, filterQuery, record);
 
     // Get device where contact was edited
     return this.getDeviceByCli(input.cli);

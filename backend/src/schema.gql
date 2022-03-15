@@ -229,7 +229,7 @@ type DeviceContact {
   email: String!
   event: Boolean!
   id: Int!
-  memory: Boolean!
+  memory: Boolean
   name: String!
   phone: String!
   power: Boolean!

@@ -11,6 +11,7 @@
       >
         <GenericContactForm
           ref="contactForm"
+          :cli="cli"
         />
         <q-card-actions align="center">
           <q-btn
@@ -38,12 +39,20 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {defineProps, ref} from 'vue';
 import { useDialogPluginComponent } from 'quasar';
 import GenericContactForm from 'components/forms/GenericContactForm.vue';
 
 const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 const contactForm = ref(null)
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps({
+  cli: {
+    type: String,
+    required: true
+  }
+})
 
 /**
  * On submit, it gets the form's data

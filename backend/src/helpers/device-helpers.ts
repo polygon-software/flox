@@ -138,7 +138,7 @@ export async function deviceContactFromDatabaseEntry(
     (isMR2000 ? entry.alarm2 : entry.event_alarm2) as boolean,
     entry.soh_sms_limit as boolean,
     entry.soh_power as boolean,
-    true, // TODO where to get/store memory?
+    isMR2000 ? null : (entry.soh_sdcard as boolean),
     entry.daily as boolean,
   );
 }
