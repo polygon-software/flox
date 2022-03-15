@@ -229,7 +229,6 @@ function onDelete(){
     try{
       await executeMutation(DELETE_CONTACT, params)
     } catch (e){
-      console.log(e)
       // Show error notification
       showNotification(
         $q,
