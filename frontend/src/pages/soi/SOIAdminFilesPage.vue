@@ -105,7 +105,7 @@ const to = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1)
 const range: Ref<Record<string, string>|string> = ref({from: dateToInputString(start), to:dateToInputString(to)})
 const rangeDisplay = ref(`${(range.value as Record<string, string>).from} - ${(range.value as Record<string, string>).to}`)
 const links: Ref<Record<string, string>[]>  = ref([])
-watch(()=>range.value, ()=>{
+watch(() => range.value, () => {
   if(typeof range.value === 'string'){
     rangeDisplay.value = `${range.value} - ${range.value}`;
   } else {
