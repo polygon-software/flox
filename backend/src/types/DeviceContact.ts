@@ -7,6 +7,9 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class DeviceContact {
   @Field(() => String)
+  id: string;
+
+  @Field(() => String)
   name: string;
 
   @Field(() => String)
@@ -37,6 +40,7 @@ export class DeviceContact {
   daily: boolean;
 
   constructor(
+    id: string,
     name: string,
     email: string,
     phone: string,
@@ -48,6 +52,7 @@ export class DeviceContact {
     memory: boolean,
     daily: boolean,
   ) {
+    this.id = id;
     this.name = name;
     this.email = email;
     this.phone = phone;

@@ -128,6 +128,7 @@ export async function deviceContactFromDatabaseEntry(
   const isMR2000 = type === 'MR2000';
 
   return new DeviceContact(
+    (isMR2000 ? entry.uniq_id : entry.rec_id) as string,
     entry.name as string,
     entry.email as string,
     entry.phone as string,

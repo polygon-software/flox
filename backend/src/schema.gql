@@ -227,6 +227,7 @@ type DeviceContact {
   daily: Boolean!
   email: String!
   event: Boolean!
+  id: String!
   memory: Boolean!
   name: String!
   phone: String!
