@@ -444,6 +444,9 @@ input EditContactInput {
   """Whether to trigger on event"""
   event: Boolean!
 
+  """Unique database ID"""
+  id: String!
+
   """Whether to trigger on memory alert"""
   memory: Boolean!
 

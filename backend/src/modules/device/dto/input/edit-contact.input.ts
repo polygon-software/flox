@@ -7,6 +7,12 @@ import { IsBoolean, IsEmail, IsPhoneNumber, IsString } from 'class-validator';
  */
 export class EditContactInput {
   @Field(() => String, {
+    description: 'Unique database ID',
+  })
+  @IsString()
+  id: string;
+
+  @Field(() => String, {
     description: 'Device CLI',
   })
   @IsString()

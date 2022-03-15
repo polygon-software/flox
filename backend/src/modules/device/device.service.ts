@@ -21,6 +21,7 @@ import {
   fetchCountFromTable,
   fetchFromTable,
   insertIntoTable,
+  updateInTable,
 } from '../../helpers/database-helpers';
 import { EventsTableRow } from '../../types/EventsTableRow';
 import { GetEventTableArgs } from './dto/args/get-event-table.args';
@@ -432,7 +433,7 @@ export class DeviceService {
   /**
    * Adds a contact to a given device (either on table 'alert' or 'para_alert')
    * @param {AddContactToDeviceInput} addContactToDeviceInput - input, containing all contact info
-   * @returns {Promise<Record<string, unknown>>} - the new contact that was added
+   * @returns {Promise<Device>} - the device on which the new contact was added
    */
   async addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput) {
     // Determine device type for table name
@@ -490,8 +491,8 @@ export class DeviceService {
 
   /**
    * Edits a given device contact
-   * @param {AddContactToDeviceInput} addContactToDeviceInput - input, containing all contact info
-   * @returns {Promise<Record<string, unknown>>} - the new contact that was added
+   * @param {EditContactInput} editContactInput - input, containing all info to update
+   * @returns {Promise<Device>} - the device on which the contact was edited
    */
   async editContact(editContactInput: EditContactInput) {
     // Determine device type for table name
@@ -541,9 +542,14 @@ export class DeviceService {
           };
 
     // Write to database
-    await insertIntoTable(type, table, record);
+    await updateInTable(
+      type,
+      table,
+      `WHERE cli='${editContactInput.cli}'`,
+      record,
+    );
 
-    // Get device where contact was added
+    // Get device where contact was edited
     return this.getDeviceByCli(input.cli);
   }
 

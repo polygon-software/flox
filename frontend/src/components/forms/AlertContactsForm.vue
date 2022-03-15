@@ -12,8 +12,8 @@
 
     <div class="row">
       <div
-        v-for="(contact, index) in contacts"
-        :key="index"
+        v-for="contact in contacts"
+        :key="contact.id"
         style="width: 50%"
       >
         <GenericContactForm

@@ -106,3 +106,38 @@ export async function insertIntoTable(
   await queryRunner.manager.query(statement);
   await queryRunner.release();
 }
+
+/**
+ * Updates a given record in a database table
+ * @param {string} database - database name
+ * @param {string} table - table name
+ * @param {string} [filterQuery] - SQL filtering query
+ * @param {Record<string, unknown>} record - update Object with its parameters
+ * @returns {void}
+ */
+export async function updateInTable(
+  database: string,
+  table: string,
+  filterQuery: string,
+  record: Record<string, unknown>,
+) {
+  // Get query runner
+  const queryRunner = await getQueryRunner(database);
+
+  // Build query
+  let query = `
+      UPDATE ${table}
+      SET
+  `;
+  Object.entries(record).forEach(([key, value]) => {
+    query += `${key} = ${value}, `;
+  });
+  query = query.substring(0, query.lastIndexOf(','));
+  query += `
+      ${filterQuery ?? ''}
+  `;
+
+  // Execute
+  await queryRunner.manager.query(query);
+  await queryRunner.release();
+}
