@@ -228,7 +228,7 @@ export const DEVICE_CONTACTS = {
       }
     }
   `,
-  tables: [],
+  tables: ['contact'],
   cacheLocation: 'getDeviceContacts'
 }
 

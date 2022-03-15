@@ -23,7 +23,7 @@ export const ADD_CONTACT_TO_DEVICE = {
         __typename
       }
     }`,
-  tables: ['device'],
-  type: MutationTypes.UPDATE,
+  tables: ['contact'],
+  type: MutationTypes.DEVALIDATINGUPDATE,
   cacheLocation: undefined
 }

@@ -75,7 +75,7 @@ function newContact(){
     // Show success notification
     showNotification(
       $q,
-      i18n.global.t('messages.project_deleted'),
+      i18n.global.t('messages.contact_added'),
       'bottom',
       'positive',
     )
