@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 /**
  * A contact for a device.
@@ -6,8 +6,8 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class DeviceContact {
-  @Field(() => String)
-  id: string;
+  @Field(() => Int)
+  id: number;
 
   @Field(() => String)
   name: string;
@@ -40,7 +40,7 @@ export class DeviceContact {
   daily: boolean;
 
   constructor(
-    id: string,
+    id: number,
     name: string,
     email: string,
     phone: string,

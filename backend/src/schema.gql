@@ -227,7 +227,7 @@ type DeviceContact {
   daily: Boolean!
   email: String!
   event: Boolean!
-  id: String!
+  id: Int!
   memory: Boolean!
   name: String!
   phone: String!
@@ -445,7 +445,7 @@ input EditContactInput {
   event: Boolean!
 
   """Unique database ID"""
-  id: String!
+  id: Int!
 
   """Whether to trigger on memory alert"""
   memory: Boolean!

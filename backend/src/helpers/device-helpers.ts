@@ -122,13 +122,13 @@ export function deviceType(clientId: string) {
  * @returns {Promise<DeviceContact>} - Device contact instance
  */
 export async function deviceContactFromDatabaseEntry(
-  entry: Record<string, string | boolean>,
+  entry: Record<string, string | boolean | number>,
 ) {
   const type = deviceType(entry.cli as string);
   const isMR2000 = type === 'MR2000';
 
   return new DeviceContact(
-    (isMR2000 ? entry.uniq_id : entry.rec_id) as string,
+    (isMR2000 ? entry.uniq_id : entry.rec_id) as number,
     entry.name as string,
     entry.email as string,
     entry.phone as string,

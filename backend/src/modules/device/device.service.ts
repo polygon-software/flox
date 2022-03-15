@@ -506,10 +506,10 @@ export class DeviceService {
       type === 'MR2000'
         ? {
             // MR2000
-            cli: input.cli,
+            // cli: input.cli,
             // status: null,
             // timestamp: null,
-            id: 'no_id', // TODO??
+            id: editContactInput.id,
             // from_IP: null,
             name: input.name,
             email: input.email,
@@ -527,7 +527,8 @@ export class DeviceService {
           }
         : {
             // MR3000
-            cli: input.cli,
+            // cli: input.cli,
+            id: editContactInput.id,
             status: 0, // TODO this should be correct from source code, but not sure
             name: input.name,
             email: input.email,

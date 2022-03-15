@@ -19,6 +19,12 @@ export class EditContactInput {
   id: number;
 
   @Field(() => String, {
+    description: 'Device CLI',
+  })
+  @IsString()
+  cli: string;
+
+  @Field(() => String, {
     description: 'Name',
   })
   @IsString()
