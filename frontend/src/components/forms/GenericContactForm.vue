@@ -53,14 +53,10 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref, defineExpose} from 'vue';
+import {defineProps, ref, defineExpose, PropType} from 'vue';
 import {i18n} from 'boot/i18n';
 import { IS_VALID_STRING, IS_EMAIL } from 'src/data/RULES'
-
-const name = ref('')
-const phone = ref('')
-const email = ref('')
-const selection = ref([])
+import {DeviceContact} from 'src/data/types/DeviceContact';
 
 const checkboxes = [
   {val: 'event', label: i18n.global.t('edit_parameters.event'),},
@@ -73,26 +69,43 @@ const checkboxes = [
 ]
 
 const props = defineProps({
-  fullName: {
+  contact: {
     required: false,
-    type: String,
-    default: '',
+    type: Object as PropType<DeviceContact>,
+    default: null,
   },
-  phoneNumber: {
-    required: false,
-    type: String,
-    default: '',
-  },
-  emailAddress: {
-    required: false,
-    type: String,
-    default: '',
-  },
+  // Whether input is disabled
   disabled: {
     required: true,
     type: Boolean,
   },
 })
+
+const name = ref(props.contact?.name ?? '')
+const phone = ref(props.contact?.phone ?? '')
+const email = ref(props.contact?.email ?? '')
+const selection = ref(buildPreSelection())
+
+/**
+ * Builds array of preselected values, depending on prop input
+ * @returns {string[]} - selected alarms
+ */
+function buildPreSelection(){
+  if(!props.contact){
+    return []
+  }
+
+  const preSelection: string[] = []
+  const possibleKeys = ['event', 'alarm1', 'alarm2', 'smsLimit', 'power', 'memory', 'daily']
+
+  possibleKeys.forEach((key: string) => {
+    if(props.contact[key]){
+      preSelection.push(key)
+    }
+  })
+
+  return preSelection
+}
 
 /**
  * Return the entered and selected values of this form

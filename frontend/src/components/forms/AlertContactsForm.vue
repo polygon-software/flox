@@ -14,9 +14,7 @@
         v-for="(contact, index) in contacts"
         :key="index"
         style="width: 50%;"
-        :full-name="contact.name"
-        :phone-number="contact.phone"
-        :email-address="contact.email"
+        :contact="contact"
         :disabled="true"
       />
     </div>
