@@ -1,12 +1,48 @@
 <template>
   <div class="row q-pa-xl items-center">
+    <!-- Edit/delete Button row (only for prefilled forms) -->
+    <div
+      v-if="contact"
+      class="full-width row justify-end"
+    >
+      <!-- Edit button (if not editing) -->
+      <q-btn
+        icon="edit"
+        text-color="primary"
+        size="sm"
+        unelevated
+        round
+        @click="isEditing = !isEditing"
+      />
+
+      <!-- Delete button (if editing) -->
+      <q-btn
+        v-if="isEditing"
+        icon="delete"
+        text-color="negative"
+        size="sm"
+        unelevated
+        round
+        @click="onDelete"
+      />
+      <!-- Save button (if editing) -->
+      <q-btn
+        v-if="isEditing"
+        icon="save"
+        text-color="positive"
+        size="sm"
+        unelevated
+        round
+        @click="onSave"
+      />
+    </div>
     <!-- Left column: basic info -->
     <div class="column full-height">
         <p>{{ $t('edit_parameters.name') }}</p>
         <q-input
           v-model="name"
           outlined
-          :disable="props.disabled"
+          :disable="!isEditing"
           dense
           type="text"
           lazy-rules="true"
@@ -17,7 +53,7 @@
           v-model="phone"
           outlined
           prefix="+41"
-          :disable="props.disabled"
+          :disable="!isEditing"
           dense
           type="tel"
           lazy-rules="ondemand"
@@ -28,7 +64,7 @@
         <q-input
           v-model="email"
           outlined
-          :disable="props.disabled"
+          :disable="!isEditing"
           dense
           type="email"
           lazy-rules="ondemand"
@@ -84,10 +120,14 @@ const props = defineProps({
   },
 })
 
+// Form values
 const name = ref(props.contact?.name ?? '')
 const phone = ref(props.contact?.phone.substring(3) ?? '') // Remove prefix, since it is added again by QInput
 const email = ref(props.contact?.email ?? '')
 const selection = ref(buildPreSelection())
+
+// Editing status
+const isEditing = ref(!props.contact)
 
 /**
  * Builds array of preselected values, depending on prop input
@@ -121,6 +161,22 @@ function getData(): Record<string, unknown>{
     email: email.value,
     selection: selection.value
   }
+}
+
+/**
+ * Shows a deletion prompt dialog
+ * @returns {void}
+ */
+function onDelete(){
+ // TODO
+}
+
+/**
+ * Saves changed data
+ * @returns {void}
+ */
+function onSave(){
+ // TODO
 }
 
 defineExpose({getData})
