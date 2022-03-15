@@ -11,12 +11,16 @@
     />
 
     <div class="row">
-      <GenericContactForm
+      <div
         v-for="(contact, index) in contacts"
         :key="index"
-        :contact="contact"
-        :disabled="true"
-      />
+        style="width: 50%"
+      >
+        <GenericContactForm
+          :contact="contact"
+          :disabled="true"
+        />
+      </div>
     </div>
   </div>
 </template>

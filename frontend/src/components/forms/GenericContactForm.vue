@@ -5,16 +5,6 @@
       v-if="contact"
       class="full-width row justify-end"
     >
-      <!-- Edit button (if not editing) -->
-      <q-btn
-        icon="edit"
-        text-color="primary"
-        size="sm"
-        unelevated
-        round
-        @click="isEditing = !isEditing"
-      />
-
       <!-- Delete button (if editing) -->
       <q-btn
         v-if="isEditing"
@@ -34,6 +24,16 @@
         unelevated
         round
         @click="onSave"
+      />
+
+      <!-- Edit button (if not editing) -->
+      <q-btn
+        icon="edit"
+        text-color="primary"
+        size="sm"
+        unelevated
+        round
+        @click="toggleEditing"
       />
     </div>
     <!-- Left column: basic info -->
@@ -83,7 +83,7 @@
         v-model="selection"
         :val="checkbox.val"
         :label="checkbox.label"
-        :disable="props.disabled"
+        :disable="!isEditing"
       />
     </div>
   </div>
@@ -126,7 +126,7 @@ const phone = ref(props.contact?.phone.substring(3) ?? '') // Remove prefix, sin
 const email = ref(props.contact?.email ?? '')
 const selection = ref(buildPreSelection())
 
-// Editing status
+// Editing status (false if a pre-fill value if given, then edit must be enabled manually)
 const isEditing = ref(!props.contact)
 
 /**
@@ -161,6 +161,23 @@ function getData(): Record<string, unknown>{
     email: email.value,
     selection: selection.value
   }
+}
+
+/**
+ * Toggles editing and, if disabling, resets to default pre-fill values
+ * @returns {void}
+ */
+function toggleEditing() {
+  // If currently editing, reset to default data (discard changes)
+  if(isEditing.value){
+    name.value = props.contact?.name ?? ''
+    phone.value = props.contact?.phone.substring(3) ?? ''
+    email.value = props.contact?.email ?? ''
+    selection.value =buildPreSelection()
+  }
+
+  // Toggle value
+  isEditing.value = !isEditing.value
 }
 
 /**
