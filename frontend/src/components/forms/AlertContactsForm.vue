@@ -33,6 +33,8 @@
 import AddContactDialog from 'src/components/dialogs/AddContactDialog.vue'
 import {useQuasar} from 'quasar';
 import GenericContactForm from 'components/forms/GenericContactForm.vue';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {ADD_CONTACT_TO_DEVICE} from 'src/data/mutations/DEVICE';
 
 const $q = useQuasar()
 
@@ -42,10 +44,30 @@ const $q = useQuasar()
  * @returns {void}
  */
 function newContact(){
-  //TODO: onOk
   $q.dialog({
     component: AddContactDialog,
     componentProps: {}
+  }).onOk(async (formValues: Record<string, string|string[]>) => {
+    // On dialog OK, create contact
+    console.log(formValues)
+
+    // Prepare mutation parameters
+    const params = {
+      cli: '39-11', // TODO this should probably be a prop passed downwards
+      name: formValues.name,
+      phone: formValues.phone,
+      email: formValues.email,
+      event: formValues.selection.includes('event'),
+      alarm1: formValues.selection.includes('alarm1'),
+      alarm2: formValues.selection.includes('alarm1'),
+      smsLimit: formValues.selection.includes('smsLimit'),
+      power: formValues.selection.includes('power'),
+      memory: formValues.selection.includes('memory'),
+      daily: formValues.selection.includes('daily'),
+    }
+
+    // Execute mutation
+    await executeMutation(ADD_CONTACT_TO_DEVICE, params)
   })
 }
 

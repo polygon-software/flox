@@ -437,7 +437,7 @@ export class DeviceService {
             // soh_warning: null,
             // soh_error: null,
             // soh_err_warn: null,
-            // TODO: reminder?
+            // TODO: memory?
           }
         : {
             // MR3000
@@ -452,7 +452,7 @@ export class DeviceService {
             daily: input.daily ? 1 : 0,
             soh_power: input.power ? 1 : 0,
             soh_sms_limit: input.smsLimit ? 1 : 0,
-            // TODO: reminder?
+            // TODO: memory?
           };
 
     // Write to database

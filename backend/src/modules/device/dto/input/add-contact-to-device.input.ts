@@ -63,10 +63,10 @@ export class AddContactToDeviceInput {
   power: boolean;
 
   @Field(() => Boolean, {
-    description: 'Whether to trigger on reminders',
+    description: 'Whether to trigger on memory alert',
   })
   @IsBoolean()
-  reminder: boolean;
+  memory: boolean;
 
   @Field(() => Boolean, {
     description: 'Whether to trigger daily',

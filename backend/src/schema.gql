@@ -21,6 +21,9 @@ input AddContactToDeviceInput {
   """Whether to trigger on event"""
   event: Boolean!
 
+  """Whether to trigger on memory alert"""
+  memory: Boolean!
+
   """Name"""
   name: String!
 
@@ -29,9 +32,6 @@ input AddContactToDeviceInput {
 
   """Whether to trigger on power alert"""
   power: Boolean!
-
-  """Whether to trigger on reminders"""
-  reminder: Boolean!
 
   """Whether to trigger on SMS Limit"""
   smsLimit: Boolean!

@@ -63,7 +63,7 @@ function onSubmit(){
  * @returns {void}
  */
 function onLoad(){
-  //TODO: what does load button?
+  //TODO: open dialog for copying contact from another device
   onDialogCancel()
 }
 

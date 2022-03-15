@@ -66,8 +66,8 @@ const checkboxes = [
   {val: 'event', label: i18n.global.t('edit_parameters.event'),},
   {val: 'alarm1', label: i18n.global.t('edit_parameters.alarm1')},
   {val: 'alarm2', label: i18n.global.t('edit_parameters.alarm2')},
-  {val: 'sms', label: i18n.global.t('edit_parameters.sms_limit')},
-  {val: 'power_battery', label: i18n.global.t('edit_parameters.battery')},
+  {val: 'smsLimit', label: i18n.global.t('edit_parameters.sms_limit')},
+  {val: 'power', label: i18n.global.t('edit_parameters.battery')},
   {val: 'memory', label: i18n.global.t('edit_parameters.memory')},
   {val: 'daily', label: i18n.global.t('edit_parameters.daily')},
 ]
@@ -99,7 +99,12 @@ const props = defineProps({
  * @returns {object} - object which contains all values
  */
 function getData(): Record<string, unknown>{
-  return {fullName: name.value, phoneNumber: '+41 ' + phone.value, emailAddress: email.value, selection: selection.value}
+  return {
+    name: name.value,
+    phone: '+41 ' + phone.value,
+    email: email.value,
+    selection: selection.value
+  }
 }
 
 defineExpose({getData})

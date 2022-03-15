@@ -104,7 +104,7 @@ export default {
     alarm2: 'Alarm 2',
     sms_limit: 'SMS-Grenze',
     battery: 'Leistung/Batterie',
-    memory: 'Erinnerung',
+    memory: 'Speicher',
     daily: 'Täglich',
   },
   buttons: {
