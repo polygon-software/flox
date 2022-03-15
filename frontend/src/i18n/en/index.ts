@@ -266,6 +266,7 @@ export default {
   },
   warnings: {
     unassign_device: 'Are you sure? All data for this device will be deleted!',
-    delete_project: 'Are you sure? This will remove all devices from this project, and their data will be deleted!'
+    delete_project: 'Are you sure? This will remove all devices from this project, and their data will be deleted!',
+    delete_contact: 'Are you sure you want to delete this contact?'
   }
 };

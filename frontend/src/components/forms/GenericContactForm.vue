@@ -94,6 +94,10 @@ import {defineProps, ref, defineExpose, PropType} from 'vue';
 import {i18n} from 'boot/i18n';
 import { IS_VALID_STRING, IS_EMAIL } from 'src/data/RULES'
 import {DeviceContact} from 'src/data/types/DeviceContact';
+import {useQuasar} from 'quasar';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
+
+const $q = useQuasar()
 
 const checkboxes = [
   {val: 'event', label: i18n.global.t('edit_parameters.event'),},
@@ -185,7 +189,18 @@ function toggleEditing() {
  * @returns {void}
  */
 function onDelete(){
- // TODO
+  $q.dialog({
+    component: WarningDialog,
+    componentProps: {
+      description: i18n.global.t('warnings.delete_contact'),
+      showDiscard: true,
+      discardLabel: i18n.global.t('buttons.cancel'),
+      swapNegative: true,
+      okLabel: i18n.global.t('buttons.confirm')
+    }
+  }).onOk(() => {
+    // TODO delete contact
+  })
 }
 
 /**

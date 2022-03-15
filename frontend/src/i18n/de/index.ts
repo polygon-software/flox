@@ -270,6 +270,7 @@ export default {
   },
   warnings: {
     unassign_device: 'Sind Sie sicher? Dadurch werden alle Daten des Geräts gelöscht!',
-    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt, und ihre Daten gelöscht!'
+    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt, und ihre Daten gelöscht!',
+    delete_contact: 'Sind Sie sicher, dass Sie diesen Kontakt löschen möchten?'
   }
 };

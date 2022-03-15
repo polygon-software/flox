@@ -424,6 +424,41 @@ enum DossierStatus {
   SUBMITTED
 }
 
+input EditContactInput {
+  """Whether to trigger on alarm1"""
+  alarm1: Boolean!
+
+  """Whether to trigger on alarm2"""
+  alarm2: Boolean!
+
+  """Device CLI"""
+  cli: String!
+
+  """Whether to trigger daily"""
+  daily: Boolean!
+
+  """E-Mail address"""
+  email: String!
+
+  """Whether to trigger on event"""
+  event: Boolean!
+
+  """Whether to trigger on memory alert"""
+  memory: Boolean!
+
+  """Name"""
+  name: String!
+
+  """Phone number"""
+  phone: String!
+
+  """Whether to trigger on power alert"""
+  power: Boolean!
+
+  """Whether to trigger on SMS Limit"""
+  smsLimit: Boolean!
+}
+
 type Employee {
   """Date of account ban (if any)"""
   banned_at: ID
@@ -645,6 +680,7 @@ type Mutation {
   assignDeviceToProject(assignDeviceToProjectInput: AssignDeviceToProjectInput!): Project!
   createProject(createProjectInput: CreateProjectInput!): Project!
   deleteProject(deleteProjectInput: DeleteProjectInput!): Project!
+  editContact(editContactInput: EditContactInput!): Device!
   register(registerUserInput: RegisterUserInput!): User
   removeDeviceFromProject(removeDeviceFromProjectInput: RemoveDeviceFromProjectInput!): Project!
   updateProjectName(updateProjectInput: UpdateProjectInput!): Project!

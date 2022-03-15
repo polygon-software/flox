@@ -23,6 +23,7 @@ import { CreateProjectInput } from '../project/dto/input/create-project.input';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 import { GetDeviceContactsArgs } from './dto/args/get-device-contacts.args';
 import { DeviceContact } from '../../types/DeviceContact';
+import { EditContactInput } from './dto/input/edit-contact.input';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -175,6 +176,32 @@ export class DeviceResolver {
 
     if (dbUser.role === ROLE.ADMIN || allowed) {
       return this.deviceService.getDeviceContacts(getDeviceContactsArgs.cli);
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  @AnyRole()
+  @Mutation(() => Device)
+  async editContact(
+    @Args({
+      name: 'editContactInput',
+      type: () => EditContactInput, // TODO must include some identifier...
+    })
+    editContactInput: EditContactInput,
+    @CurrentUser()
+    user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+    let allowed = false;
+    if (dbUser.role === ROLE.USER) {
+      allowed =
+        dbUser.mr2000instances?.includes(editContactInput.cli) ||
+        dbUser.mr3000instances?.includes(editContactInput.cli);
+    }
+
+    if (dbUser.role === ROLE.ADMIN || allowed) {
+      return this.deviceService.editContact(editContactInput);
     }
 
     throw new UnauthorizedException();

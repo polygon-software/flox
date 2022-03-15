@@ -28,6 +28,7 @@ import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
+import { EditContactInput } from './dto/input/edit-contact.input';
 
 @Injectable()
 export class DeviceService {
@@ -439,6 +440,65 @@ export class DeviceService {
     const table = type === 'MR2000' ? 'alert' : 'para_alert';
 
     const input = addContactToDeviceInput;
+
+    // Record to insert in database (depending on type)
+    const record =
+      type === 'MR2000'
+        ? {
+            // MR2000
+            cli: input.cli,
+            // status: null,
+            // timestamp: null,
+            id: 'no_id', // TODO??
+            // from_IP: null,
+            name: input.name,
+            email: input.email,
+            phone: input.phone,
+            event: input.event,
+            alarm1: input.alarm1,
+            alarm2: input.alarm2,
+            daily: input.daily,
+            soh_power: input.power,
+            soh_sms_limit: input.smsLimit,
+            // soh_warning: null,
+            // soh_error: null,
+            // soh_err_warn: null,
+            // TODO: memory?
+          }
+        : {
+            // MR3000
+            cli: input.cli,
+            status: 0, // TODO this should be correct from source code, but not sure
+            name: input.name,
+            email: input.email,
+            phone: input.phone,
+            event_all: input.event,
+            event_alarm1: input.alarm1,
+            event_alarm2: input.alarm2,
+            daily: input.daily,
+            soh_power: input.power,
+            soh_sms_limit: input.smsLimit,
+            // TODO: memory?
+          };
+
+    // Write to database
+    await insertIntoTable(type, table, record);
+
+    // Get device where contact was added
+    return this.getDeviceByCli(input.cli);
+  }
+
+  /**
+   * Edits a given device contact
+   * @param {AddContactToDeviceInput} addContactToDeviceInput - input, containing all contact info
+   * @returns {Promise<Record<string, unknown>>} - the new contact that was added
+   */
+  async editContact(editContactInput: EditContactInput) {
+    // Determine device type for table name
+    const type = deviceType(editContactInput.cli);
+    const table = type === 'MR2000' ? 'alert' : 'para_alert';
+
+    const input = editContactInput;
 
     // Record to insert in database (depending on type)
     const record =
