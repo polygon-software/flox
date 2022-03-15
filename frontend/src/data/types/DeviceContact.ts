@@ -14,6 +14,7 @@ export class DeviceContact {
   memory: boolean;
   daily: boolean;
 
+  // eslint-disable-next-line require-jsdoc
   constructor(
     name: string,
     email: string,

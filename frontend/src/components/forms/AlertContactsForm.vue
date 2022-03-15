@@ -32,9 +32,10 @@ import {ADD_CONTACT_TO_DEVICE} from 'src/data/mutations/DEVICE';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import {ref} from 'vue';
+import {deviceContacts} from 'src/helpers/api-helpers';
 
 const $q = useQuasar()
-const contacts = ref([]) // TODO in helper
+const contacts = deviceContacts('39-11') // TODO from prop
 
 /**
  * Shows a dialog for creating new contacts
