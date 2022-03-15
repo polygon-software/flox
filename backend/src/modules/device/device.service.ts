@@ -407,7 +407,6 @@ export class DeviceService {
    * @param {AddContactToDeviceInput} addContactToDeviceInput - input, containing all contact info
    * @returns {Promise<Record<string, unknown>>} - the new contact that was added
    */
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   async addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput) {
     // Determine device type for table name
     const type = deviceType(addContactToDeviceInput.cli);
@@ -428,12 +427,12 @@ export class DeviceService {
             name: input.name,
             email: input.email,
             phone: input.phone,
-            event: input.event ? 1 : 0,
-            alarm1: input.alarm1 ? 1 : 0,
-            alarm2: input.alarm2 ? 1 : 0,
-            daily: input.daily ? 1 : 0,
-            soh_power: input.power ? 1 : 0,
-            soh_sms_limit: input.smsLimit ? 1 : 0,
+            event: input.event,
+            alarm1: input.alarm1,
+            alarm2: input.alarm2,
+            daily: input.daily,
+            soh_power: input.power,
+            soh_sms_limit: input.smsLimit,
             // soh_warning: null,
             // soh_error: null,
             // soh_err_warn: null,
@@ -446,12 +445,12 @@ export class DeviceService {
             name: input.name,
             email: input.email,
             phone: input.phone,
-            event_all: input.event ? 1 : 0,
-            event_alarm1: input.alarm1 ? 1 : 0,
-            event_alarm2: input.alarm2 ? 1 : 0,
-            daily: input.daily ? 1 : 0,
-            soh_power: input.power ? 1 : 0,
-            soh_sms_limit: input.smsLimit ? 1 : 0,
+            event_all: input.event,
+            event_alarm1: input.alarm1,
+            event_alarm2: input.alarm2,
+            daily: input.daily,
+            soh_power: input.power,
+            soh_sms_limit: input.smsLimit,
             // TODO: memory?
           };
 

@@ -71,8 +71,9 @@ function newContact(){
     // Execute mutation
     try{
       await executeMutation(ADD_CONTACT_TO_DEVICE, params)
-    } catch {
-      // Show success notification
+    } catch (e){
+      console.log(e)
+      // Show error notification
       showNotification(
         $q,
         i18n.global.t('errors.error_adding_contact'),
