@@ -164,9 +164,10 @@ export default {
     must_accept_condition_truthful:
       'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
-    missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    missing_user_type: 'Bitte wählen Sie eine Benutzerklasse.',
     incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
-    error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.'
+    error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.',
+    error_adding_contact: 'Beim Hinzufügen des Kontakts ist ein Fehler aufgetreten.'
   },
   set_password: {
     description:
@@ -200,7 +201,8 @@ export default {
     assigned_device: 'Gerät erfolgreich zugeordnet',
     removed_device: 'Gerät erfolgreich entfernt',
     project_renamed: 'Projekt erfolgreich umbenannt',
-    project_deleted: 'Projekt erfolgreich gelöscht'
+    project_deleted: 'Projekt erfolgreich gelöscht',
+    contact_added: 'Kontakt erfolgreich hinzugefügt'
   },
   status: {
     title: 'Status von',

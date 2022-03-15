@@ -161,9 +161,10 @@ export default {
     must_accept_condition_truthful:
       'You must have filled in all information truthfully.',
     missing_file: 'Missing file',
-    missing_user_type: 'Please select a user type',
-    incorrect_date_range: 'Please select a valid date range',
-    error_while_editing: 'An error occurred while editing the project.'
+    missing_user_type: 'Please select a user type.',
+    incorrect_date_range: 'Please select a valid date range.',
+    error_while_editing: 'An error occurred while editing the project.',
+    error_adding_contact: 'An error occurred while adding the contact.'
   },
   set_password: {
     description: 'Since this is your first login, please set a password.',
@@ -196,7 +197,8 @@ export default {
     assigned_device: 'Device assigned successfully',
     removed_device: 'Device removed successfully',
     project_renamed: 'Project renamed successfully',
-    project_deleted: 'Project deleted successfully'
+    project_deleted: 'Project deleted successfully',
+    contact_added: 'Contact added successfully'
   },
   status: {
     title: 'Status of',

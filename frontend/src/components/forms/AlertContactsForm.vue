@@ -35,6 +35,8 @@ import {useQuasar} from 'quasar';
 import GenericContactForm from 'components/forms/GenericContactForm.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
 import {ADD_CONTACT_TO_DEVICE} from 'src/data/mutations/DEVICE';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
 
 const $q = useQuasar()
 
@@ -55,7 +57,7 @@ function newContact(){
     const params = {
       cli: '39-11', // TODO this should probably be a prop passed downwards
       name: formValues.name,
-      phone: formValues.phone,
+      phone: formValues.phone.toString().replace(/\s/g, ''), // remove whitespace
       email: formValues.email,
       event: formValues.selection.includes('event'),
       alarm1: formValues.selection.includes('alarm1'),
@@ -67,7 +69,26 @@ function newContact(){
     }
 
     // Execute mutation
-    await executeMutation(ADD_CONTACT_TO_DEVICE, params)
+    try{
+      await executeMutation(ADD_CONTACT_TO_DEVICE, params)
+    } catch {
+      // Show success notification
+      showNotification(
+        $q,
+        i18n.global.t('errors.error_adding_contact'),
+        'bottom',
+        'negative',
+      )
+      return
+    }
+
+    // Show success notification
+    showNotification(
+      $q,
+      i18n.global.t('messages.project_deleted'),
+      'bottom',
+      'positive',
+    )
   })
 }
 
