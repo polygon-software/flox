@@ -96,6 +96,7 @@ import {dateToInputString} from 'src/helpers/date-helpers';
 import {executeQuery} from 'src/helpers/data-helpers';
 import {LOG_FILES} from 'src/data/queries/FILE';
 import {formatDate} from 'src/helpers/format-helpers'
+import {parse} from 'date-fns';
 
 const $q = useQuasar()
 
@@ -176,18 +177,17 @@ function onCsvUpload(){
  * @returns {Promise<void>} - done
  */
 async function getLogs() {
-  let fromDateSplit: string[] = []
-  let toDateSplit: string[] = []
+  let fromDate: Date
+  let toDate: Date
+  const dateFormat = 'dd.MM.yyyy'
   if(typeof range.value === 'object'){
-    fromDateSplit =  range.value.from.split('-')
-    toDateSplit = range.value.to.split('-')
+    fromDate =  parse(range.value.from, dateFormat, new Date())
+    toDate = parse(range.value.to, dateFormat, new Date())
   } else {
-    fromDateSplit = range.value.split('-')
-    toDateSplit = range.value.split('-')
+    fromDate = parse(range.value, dateFormat, new Date())
+    toDate = fromDate
   }
 
-  const fromDate = new Date(parseInt(fromDateSplit[0]), parseInt(fromDateSplit[1]) - 1, parseInt(fromDateSplit[2]))
-  const toDate = new Date(parseInt(toDateSplit[0]), parseInt(toDateSplit[1]) - 1, parseInt(toDateSplit[2]), 23,59)
   const res = await executeQuery(LOG_FILES, {start: fromDate, end: toDate})
   const files = res.data[LOG_FILES.cacheLocation] as Array<Record<string, string>>
   links.value = []

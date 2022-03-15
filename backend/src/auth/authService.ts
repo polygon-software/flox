@@ -1,5 +1,5 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import * as crypto from 'crypto';
+import { randomInt } from 'crypto';
 // Set up cognito admin provider
 const provider = new CognitoIdentityProvider({
   region: process.env.AWS_REGION ?? 'eu-central-1',
@@ -43,7 +43,7 @@ export async function createCognitoAccount(
  * @returns {number} - a random number
  */
 function randomNumber(min: number, max: number) {
-  return crypto.randomInt(max - min) + min;
+  return randomInt(max - min) + min;
 }
 /**
  * Generates a random password that is valid for AWS Cognito of at least the given length
@@ -64,7 +64,7 @@ export function randomPassword(minLength: number): string {
   });
   res = res
     .split('')
-    .map((value) => ({ value, sort: crypto.randomInt(10000) }))
+    .map((value) => ({ value, sort: randomInt(10000) }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value)
     .join('');

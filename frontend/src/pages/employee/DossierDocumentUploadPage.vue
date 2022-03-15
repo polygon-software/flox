@@ -134,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, onBeforeMount, Ref, ref} from 'vue';
+import {inject, nextTick, onBeforeMount, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import FileUploadField from 'pages/employee/FileUploadField.vue';
 import {QFile} from 'quasar';
@@ -429,7 +429,7 @@ async function uploadFile(section: string, field: string) {
   uploadFor.value.section = section;
   uploadFor.value.field = field;
   showQFile.value = true
-  await sleep(10)
+  await nextTick()
   filePicker.value?.pickFiles()
 }
 
