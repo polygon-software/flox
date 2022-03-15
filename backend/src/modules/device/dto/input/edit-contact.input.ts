@@ -1,22 +1,22 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsEmail, IsPhoneNumber, IsString } from 'class-validator';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import {
+  IsBoolean,
+  IsEmail,
+  IsInt,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 
 @InputType()
 /**
  * Input for editing a device contact
  */
 export class EditContactInput {
-  @Field(() => String, {
+  @Field(() => Int, {
     description: 'Unique database ID',
   })
-  @IsString()
-  id: string;
-
-  @Field(() => String, {
-    description: 'Device CLI',
-  })
-  @IsString()
-  cli: string;
+  @IsInt()
+  id: number;
 
   @Field(() => String, {
     description: 'Name',

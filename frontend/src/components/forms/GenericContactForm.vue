@@ -96,6 +96,9 @@ import { IS_VALID_STRING, IS_EMAIL } from 'src/data/RULES'
 import {DeviceContact} from 'src/data/types/DeviceContact';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {ADD_CONTACT_TO_DEVICE, EDIT_CONTACT} from 'src/data/mutations/DEVICE';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 const $q = useQuasar()
 
@@ -205,10 +208,49 @@ function onDelete(){
 
 /**
  * Saves changed data
- * @returns {void}
+ * @returns {Promise<void>} -done
  */
-function onSave(){
- // TODO
+async function onSave(){
+  if(!props.contact?.id){
+    throw new Error('TODO error message invalid contact') // TODO
+  }
+
+  // Prepare mutation parameters
+  const params = {
+    id: props.contact.id,
+    name: name.value,
+    phone: phone.value.toString().replace(/\s/g, ''), // remove whitespace
+    email: email.value,
+    event: selection.value.includes('event'),
+    alarm1: selection.value.includes('alarm1'),
+    alarm2: selection.value.includes('alarm1'),
+    smsLimit: selection.value.includes('smsLimit'),
+    power: selection.value.includes('power'),
+    memory: selection.value.includes('memory'),
+    daily: selection.value.includes('daily'),
+  }
+
+  // Execute mutation
+  try{
+    await executeMutation(EDIT_CONTACT, params)
+  } catch (e){
+    // Show error notification
+    showNotification(
+      $q,
+      i18n.global.t('errors.error_editing_contact'),
+      'bottom',
+      'negative',
+    )
+    return
+  }
+
+  // Show success notification
+  showNotification(
+    $q,
+    i18n.global.t('messages.contact_edited'),
+    'bottom',
+    'positive',
+  )
 }
 
 defineExpose({getData})

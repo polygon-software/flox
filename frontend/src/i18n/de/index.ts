@@ -167,7 +167,8 @@ export default {
     missing_user_type: 'Bitte wählen Sie eine Benutzerklasse.',
     incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
     error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.',
-    error_adding_contact: 'Beim Hinzufügen des Kontakts ist ein Fehler aufgetreten.'
+    error_adding_contact: 'Beim Hinzufügen des Kontakts ist ein Fehler aufgetreten.',
+    error_editing_contact: 'Beim Bearbeiten des Kontakts ist ein Fehler aufgetreten.'
   },
   set_password: {
     description:
@@ -202,7 +203,8 @@ export default {
     removed_device: 'Gerät erfolgreich entfernt',
     project_renamed: 'Projekt erfolgreich umbenannt',
     project_deleted: 'Projekt erfolgreich gelöscht',
-    contact_added: 'Kontakt erfolgreich hinzugefügt'
+    contact_added: 'Kontakt erfolgreich hinzugefügt',
+    contact_edited: 'Kontakt erfolgreich bearbeitet'
   },
   status: {
     title: 'Status von',

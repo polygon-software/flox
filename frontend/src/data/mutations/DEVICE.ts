@@ -27,3 +27,21 @@ export const ADD_CONTACT_TO_DEVICE = {
   type: MutationTypes.DEVALIDATINGUPDATE,
   cacheLocation: undefined
 }
+
+export const EDIT_CONTACT = {
+  mutation: gql`
+    mutation editContact($id: Int!, $name: String!, $phone: String!, $email: String!, $event: Boolean!, $alarm1: Boolean!,  $alarm2: Boolean!, $smsLimit: Boolean!, $power: Boolean!, $memory: Boolean!, $daily: Boolean!){
+      editContact (editContactInput: {id: $id, name: $name, email: $email, phone: $phone, event: $event, alarm1: $alarm1, alarm2: $alarm2, smsLimit: $smsLimit, power: $power, memory: $memory, daily: $daily} ) {
+        ...on MR2000 {
+          name
+        }
+        ...on MR3000 {
+          name
+        }
+        __typename
+      }
+    }`,
+  tables: ['contact'],
+  type: MutationTypes.DEVALIDATINGUPDATE,
+  cacheLocation: undefined
+}
