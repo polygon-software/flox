@@ -68,14 +68,8 @@ async function submitPassword(values: Record<string, string>) {
   const decodedPw = atob(password)
 
   // Log in
-  await $authService?.login(decodedEmail, decodedPw)
+  await $authService?.login(decodedEmail, decodedPw, values.password_repeat)
 
-  // Change password
-  $authStore.getters.getCognitoUser()?.changePassword(decodedPw, values.password_repeat, (err: Error|undefined)=>{
-    if(err){
-      $errorService?.showErrorDialog(err)
-    }
-  })
 
   let target;
   switch(type){

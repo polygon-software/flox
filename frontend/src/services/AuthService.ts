@@ -72,55 +72,65 @@ export class AuthenticationService {
      * Logs into the AWS authentication pool using the given data
      * @param {string} identifier - the authentication's identifier (usually E-mail or username)
      * @param {string} password - the authentication's password
+     * @param {string} newPassword - the new password if comming from set-password page
      * @returns {Promise<void>} - done
      */
-    async login(identifier: string, password: string): Promise<void>{
+    async login(identifier: string, password: string, newPassword=''): Promise<void>{
 
-        // Generate auth details
-        const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
-            Username: identifier,
-            Password: password
-        });
+      // Generate auth details
+      const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+          Username: identifier,
+          Password: password
+      });
 
-        const userPool = this.$authStore.getters.getUserPool()
+      const userPool = this.$authStore.getters.getUserPool()
 
-        if(userPool === undefined){
-          this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
-          return
-        }
-          // Actual Cognito authentication on given pool
-        const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
-            Username: identifier,
-            Pool: userPool,
-        });
+      if(userPool === undefined){
+        this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
+        return
+      }
+        // Actual Cognito authentication on given pool
+      const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
+          Username: identifier,
+          Pool: userPool,
+      });
 
-        // Execute auth function
+
+      // Execute auth function
         return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
           // Store in local variable
           this.$authStore.mutations.setCognitoUser(cognitoUser)
           cognitoUser.authenticateUser(authenticationDetails, {
-              onSuccess: (result)=>{ this.loginSuccess(result, resolve)},
-              onFailure: (err: Error)=>{this.onFailure(err) },
-              // Sets up MFA (only done once after signing up)
-              mfaSetup: () => {
-                this.setupMFA(cognitoUser, resolve)
-              },
+            onSuccess: (result)=>{ this.loginSuccess(result); resolve()},
+            onFailure: (err: Error)=>{this.onFailure(err) },
+            // Sets up MFA (only done once after signing up)
+            mfaSetup: () => {
+              this.setupMFA(cognitoUser, resolve)
+            },
 
-            // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-              selectMFAType: function () {
-                  cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
-              },
+          // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
+            selectMFAType: function () {
+              cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
+            },
 
-              // Called if time-limited one time password is required (only second login or later)
-              totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
+            newPasswordRequired: function (userAttributes) {
+              while (!newPassword) {
+                newPassword = prompt(i18n.global.t('messages.enter_new_password'), '') || '';
+              }
+              cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
+            },
 
-              //TODO check when/if this appears
-              mfaRequired: function () {
-                  const verificationCode = prompt('Please input verification code', '');
-                  if (typeof verificationCode === 'string') {
-                      cognitoUser.sendMFACode(verificationCode, this);
-                  }
-              },
+            // Called if time-limited one time password is required (only second login or later)
+            totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
+
+            //TODO check when/if this appears
+            mfaRequired: function () {
+                const verificationCode = prompt(i18n.global.t('messages.enter_verification_code', ''));
+                if (typeof verificationCode === 'string') {
+                    cognitoUser.sendMFACode(verificationCode, this);
+                }
+            },
+
 
 
           })
@@ -136,12 +146,12 @@ export class AuthenticationService {
    */
   setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
     cognitoUser.associateSoftwareToken({
-        associateSecretCode: (secret: string) => {
-          this.$authStore.mutations.setCognitoUser(cognitoUser)
-          this.showQRCodeDialog(secret, resolve, cognitoUser)},
-        onFailure: (err: Error) => {this.onFailure(err)}
-      })
-    }
+      associateSecretCode: (secret: string) => {
+        this.$authStore.mutations.setCognitoUser(cognitoUser)
+        this.showQRCodeDialog(secret, resolve, cognitoUser)},
+      onFailure: (err: Error) => {this.onFailure(err)}
+    })
+  }
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.
@@ -229,183 +239,140 @@ export class AuthenticationService {
   }
 
 
-    /**
-     * Shows a dialog for changing password
-     * @returns {void}
-     */
-    showChangePasswordDialog(): void{
-        this.$q.dialog({
-            component: ChangePasswordDialog,
-            componentProps: {},
-        }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
-            this.$authStore.getters.getCognitoUser()?.changePassword(passwordOld,passwordNew, (err: Error|undefined)=>{
-                if(err){
-                    this.$errorService.showErrorDialog(err)
-                }
-            })
-        })
+  /**
+   * Shows a dialog for changing password
+   * @returns {void}
+   */
+  showChangePasswordDialog(): void{
+      this.$q.dialog({
+          component: ChangePasswordDialog,
+          componentProps: {},
+      }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
+          this.$authStore.getters.getCognitoUser()?.changePassword(passwordOld,passwordNew, (err: Error|undefined)=>{
+              if(err){
+                  this.$errorService.showErrorDialog(err)
+              }
+          })
+      })
+  }
+
+  /**
+   * Shows a dialog for requesting password reset
+   * @returns {void}
+   */
+  showResetPasswordDialog(): void{
+    const userPool = this.$authStore.getters.getUserPool()
+
+    if(userPool === undefined){
+      this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
+      return
     }
 
-    /**
-     * Shows a dialog for requesting password reset
-     * @returns {void}
-     */
-    showResetPasswordDialog(): void{
-      const userPool = this.$authStore.getters.getUserPool()
+    this.$q.dialog({
+          title: i18n.global.t('messages.reset_password'),
+          message: i18n.global.t('messages.enter_username'),
+          cancel: true,
+          persistent: true,
+          prompt: {
+              model: '',
+              isValid: (val: string) => val.length >= 1,
+              type: 'text'
+          },
+      }).onOk((input: string) => {
+          // Set up cognitoUser first
+          this.$authStore.mutations.setCognitoUser(new CognitoUser({
+              Username: input,
+              Pool: userPool
+          }));
 
-      if(userPool === undefined){
-        this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
-        return
+          // Call forgotPassword on cognitoUser
+        this.$authStore.getters.getCognitoUser()?.forgotPassword({
+              onSuccess: function() {
+                // Do nothing
+              },
+              onFailure: (err: Error) => {
+                this.$authStore.mutations.setCognitoUser(undefined);
+                this.onFailure(err)
+              },
+              inputVerificationCode: () => {
+                this.showResetPasswordFormDialog()
+              }
+          });
+      })
+  }
+
+  /**
+   * Show actual password reset form dialog
+   * @returns {void}
+   */
+  showResetPasswordFormDialog(): void{
+      this.$q.dialog({
+          component: ResetPasswordDialog,
+          componentProps: {},
+      }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
+          this.$authStore.getters.getCognitoUser()?.confirmPassword(verificationCode,passwordNew,{
+              onSuccess: (result: unknown)=>{
+                console.log(result)
+              },
+              onFailure: (err: Error) => {
+                console.error(err)
+              }
+          })
+      })
+
+  }
+
+  /**
+   * Shows a dialog for verifying E-Mail
+   * @param {boolean} [renew] - whether to generate a new verification code
+   * @returns {void}
+   */
+  showEmailVerificationDialog(renew = false): void{
+      if(renew){
+          if(!this.$authStore.getters.getCognitoUser()){
+              this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
+              return
+          } else {
+            this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
+              // Do nothing
+            })
+          }
       }
 
       this.$q.dialog({
-            title: 'Reset Password',
-            message: 'Please enter your username',
-            cancel: true,
-            persistent: true,
-            prompt: {
-                model: '',
-                isValid: (val: string) => val.length >= 1,
-                type: 'text'
-            },
-        }).onOk((input: string) => {
-            // Set up cognitoUser first
-            this.$authStore.mutations.setCognitoUser(new CognitoUser({
-                Username: input,
-                Pool: userPool
-            }));
-
-            // Call forgotPassword on cognitoUser
-          this.$authStore.getters.getCognitoUser()?.forgotPassword({
-                onSuccess: function() {
-                    // TODO
-                },
-                onFailure: (err: Error) => {
-                  this.$authStore.mutations.setCognitoUser(undefined);
-                  this.onFailure(err)
-                },
-                inputVerificationCode: () => {this.showResetPasswordFormDialog()}
-            });
-        })
-    }
-
-    /**
-     * Show actual password reset form dialog
-     * @returns {void}
-     */
-    showResetPasswordFormDialog(): void{
-        this.$q.dialog({
-            component: ResetPasswordDialog,
-            componentProps: {},
-        }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
-            this.$authStore.getters.getCognitoUser()?.confirmPassword(verificationCode,passwordNew,{
-                onSuccess: (result: unknown)=>{console.log(result)},
-                onFailure: (err: Error) => {console.log(err)}
-            })
-        })
-
-    }
-
-    /**
-     * Shows a dialog for verifying E-Mail
-     * @param {boolean} [renew] - whether to generate a new verification code
-     * @returns {void}
-     */
-    showEmailVerificationDialog(renew = false): void{
-        if(renew){
-            if(!this.$authStore.getters.getCognitoUser()){
-                this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
-                return
-            } else {
-              this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
-                  // TODO
-                })
-            }
-        }
-
-        this.$q.dialog({
-            title: 'Verification',
-            message: 'Please enter your e-mail verification code',
-            cancel: true,
-            persistent: true,
-            prompt: {
-                model: '',
-                isValid: (val: string) => val.length >= 6,
-                type: 'text'
-            },
-        }).onOk((input: string) => {
-            void this.verifyEmail(input)
-        }).onCancel(() => {
-            // TODO
-        })
-    }
-
-    /**
-     * Shows a dialog containing a QR code for setting up two factor authentication
-     * @param {string} secretCode - the authenticator code to encode in QR code form
-     * @param {function} resolve - resolve function
-     * @param {CognitoUser} cognitoUser - the cognito user to show the dialog for
-     * @returns {void}
-     */
-    showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void, cognitoUser: CognitoUser): void{
-      const username = this.$authStore.getters.getUsername() ?? 'user'
-
-      const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
-      this.$q.dialog({
-          component: QrCodeDialog,
-          componentProps: {
-              value: codeUrl
+          title: i18n.global.t('messages.verification'),
+          message: i18n.global.t('messages.enter_verification_code'),
+          cancel: true,
+          persistent: true,
+          prompt: {
+              model: '',
+              isValid: (val: string) => val.length >= 6,
+              type: 'text'
           },
-      }).onOk(() => {
-          // Verify code
-          this.$q.dialog({
-              title: 'Verification',
-              message: 'Please enter your 2FA authenticator code',
-              cancel: true,
-              persistent: true,
-              prompt: {
-                  model: '',
-                  isValid: (val: string) => val.length >= 6,
-                  type: 'text'
-              },
-          }).onOk((code: string) => {
-              // TODO friendlyDeviceName
-            cognitoUser.verifySoftwareToken(code, 'My TOTP device', {
-                  onSuccess: (userSession: CognitoUserSession)=>{
-                    this.loginSuccess(userSession, resolve)
-                  },
-                  onFailure: (error: Error)=>{
-                    this.onFailure(error)
-                  },
-              });
-          })
+      }).onOk((input: string) => {
+          void this.verifyEmail(input)
+      }).onCancel(() => {
+          // Do nothing
       })
-    }
+  }
 
-    /**
-     * Confirm e-mail verification code
-     * @param {string} code -verification code
-     * @returns {Promise<void>} - done
-     */
-    async verifyEmail(code: string): Promise<void>{
-      return new Promise((resolve, reject)=>{
-        this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, (err: Error)=>{
-              if(err){
-                  console.error(err)
-                  reject()
-              }
-              resolve()
-          })
-      })
-    }
+  /**
+   * Shows a dialog containing a QR code for setting up two factor authentication
+   * @param {string} secretCode - the authenticator code to encode in QR code form
+   * @param {function} resolve - resolve function
+   * @param {CognitoUser} cognitoUser - the cognito user to show the dialog for
+   * @returns {void}
+   */
+  showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void, cognitoUser: CognitoUser): void{
+    const username = this.$authStore.getters.getUsername() ?? 'user'
 
-    /**
-     * Verifies a given 2FA code
-     * @param {string} tokenType - the type of token to verify
-     * @param {function} resolve - resolve function
-     * @returns {void}
-     */
-    verify2FACode (tokenType: string, resolve:  (value: (void | PromiseLike<void>)) => void): void {
+    const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
+    this.$q.dialog({
+        component: QrCodeDialog,
+        componentProps: {
+            value: codeUrl
+        },
+    }).onOk(() => {
         // Verify code
         this.$q.dialog({
             title: 'Verification',
@@ -418,45 +385,120 @@ export class AuthenticationService {
                 type: 'text'
             },
         }).onOk((code: string) => {
-          // Deep copy user so state object does not get altered
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
-          currentUser?.sendMFACode(code, {
-            onSuccess: (userSession: CognitoUserSession)=>{
-              this.$authStore.mutations.setCognitoUser(currentUser)
-              this.loginSuccess(userSession, resolve)
-            },
-            onFailure: (error: Error)=>{
-              this.onFailure(error)
-            },
-        }, tokenType);
-        });
-    }
+          cognitoUser.verifySoftwareToken(code, 'SOI TOTP device', {
+                onSuccess: (userSession: CognitoUserSession) => {
+                  this.loginSuccess(userSession)
+                  resolve()
+                },
+                onFailure: (error: Error)=>{
+                  this.onFailure(error)
+                },
+            });
+        })
+    })
+  }
 
-    /**
-     * When login succeeds
-     * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
-     * @param {function} resolve - resolve function
-     * @returns {void}
-     */
-    loginSuccess(userSession: CognitoUserSession, resolve:  (value: (void | PromiseLike<void>)) => void): void{
-      // Store locally
-      this.$authStore.mutations.setUserSession(userSession)
+  /**
+   * Confirm e-mail verification code
+   * @param {string} code -verification code
+   * @returns {Promise<void>} - done
+   */
+  async verifyEmail(code: string): Promise<void>{
+    return new Promise((resolve, reject)=>{
+      this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, (err: Error)=>{
+            if(err){
+                console.error(err)
+                reject()
+            }
+            resolve()
+        })
+    })
+  }
 
+  /**
+   * Verifies a given 2FA code
+   * @param {string} tokenType - the type of token to verify
+   * @param {function} resolve - resolve function
+   * @returns {void}
+   */
+  verify2FACode (tokenType: string, resolve:  (value: (void | PromiseLike<void>)) => void): void {
+      // Verify code
+      this.$q.dialog({
+          title: i18n.global.t('messages.verification'),
+          message: i18n.global.t('messages.enter_2fa'),
+          cancel: true,
+          persistent: true,
+          prompt: {
+              model: '',
+              isValid: (val: string) => val.length >= 6,
+              type: 'text'
+          },
+      }).onOk((code: string) => {
+        // Deep copy user so state object does not get altered
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
+        currentUser?.sendMFACode(code, {
+          onSuccess: (userSession: CognitoUserSession) => {
+            this.$authStore.mutations.setCognitoUser(currentUser)
+            this.loginSuccess(userSession)
+            resolve()
+          },
+          onFailure: (error: Error)=>{
+            this.onFailure(error)
+          },
+      }, tokenType);
+      });
+  }
+
+  /**
+   * When login succeeds
+   * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
+   * @returns {void}
+   */
+  loginSuccess(userSession: CognitoUserSession): void{
+    // Store locally
+    this.$authStore.mutations.setUserSession(userSession)
+  }
+
+  /**
+   * When any operation (mostly login) fails, verify whether it is due to the authentication not having verified their account
+   * @param {Error} error - the error that caused the failure
+   * @returns {void}
+   */
+  onFailure(error: Error): void{
+      if(error.name === 'UserNotConfirmedException'){
+          // Show the e-mail verification dialog and send a new code
+          this.showEmailVerificationDialog(true)
+      } else {
+        this.$errorService.showErrorDialog(error)
+      }
+  }
+
+  /**
+   * Refreshes the idToken if necessary
+   * @returns {Promise<void>} - done
+   */
+  refreshToken(): Promise<void>{
+    return new Promise((resolve, reject)=> {
+      const userSession =  this.$authStore.getters.getUserSession()
+      const idTokenExpiration = userSession?.getIdToken().getExpiration()
+      if(!idTokenExpiration){
+        resolve()
+      }
+      const refreshToken =userSession?.getRefreshToken()
+      if(refreshToken && (idTokenExpiration ||0 - Date.now() < 45 * 60)){   //15min before de-validation token is refreshed
+        const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser()) //refresh session mutates the state of store: illegal
+        currentUser?.refreshSession(refreshToken, (err, session )=> {
+          if (session) {
+            this.$authStore.mutations.setCognitoUser(currentUser)
+            this.$authStore.mutations.setUserSession(session as CognitoUserSession | undefined)
+            resolve()
+          } else {
+            reject(err)
+          }
+        })
+      }
       resolve()
-    }
-
-    /**
-     * When any operation (mostly login) fails, verify whether it is due to the authentication not having verified their account
-     * @param {Error} error - the error that caused the failure
-     * @returns {void}
-     */
-    onFailure(error: Error): void{
-        if(error.name === 'UserNotConfirmedException'){
-            // Show the e-mail verification dialog and send a new code
-            this.showEmailVerificationDialog(true)
-        } else {
-          this.$errorService.showErrorDialog(error)
-        }
-    }
+    })
+  }
 }

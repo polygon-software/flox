@@ -85,7 +85,7 @@ import * as CloudWatchTransport from 'winston-cloudwatch';
           logGroupName: process.env.CLOUDWATCH_GROUP_NAME,
           logStreamName: process.env.CLOUDWATCH_STREAM_NAME,
           awsAccessKeyId: process.env.CW_ACCESS_KEY,
-          awsSecretKey: process.env.CV_KEY_SECRET,
+          awsSecretKey: process.env.CW_KEY_SECRET,
           awsRegion: process.env.AWS_REGION,
           messageFormatter: function (item) {
             return (
@@ -105,7 +105,7 @@ import * as CloudWatchTransport from 'winston-cloudwatch';
         password: configService.get('database.password'),
         database: configService.get('database.database'),
         entities: [configService.get('entities')],
-        synchronize: true,
+        verboseRetryLog: true,
       }),
       inject: [ConfigService],
     }),

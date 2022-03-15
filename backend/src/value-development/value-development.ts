@@ -89,7 +89,6 @@ export async function getValueDevelopment(
   const connection: Connection = getConnection();
   const queryRunner: QueryRunner = connection.createQueryRunner();
   await queryRunner.connect();
-
   // Ensure both needed tables exist
   const valueTableExists = await queryRunner.hasTable(valueTableName);
   const zipTableExists = await queryRunner.hasTable(zipCodeTableName);
@@ -124,9 +123,8 @@ export async function getValueDevelopment(
     WHERE region='${regionCode}'
     LIMIT 1
     `);
-
-  if (!valueMappingQuery) {
-    await queryRunner.release();
+  await queryRunner.release();
+  if (!valueMappingQuery || valueMappingQuery.length === 0) {
     throw new Error(ERRORS.missing_database_data);
   }
   const valueMapping = valueMappingQuery[0];

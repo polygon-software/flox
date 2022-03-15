@@ -104,6 +104,12 @@ export default {
     account_disabled: 'Account disabled successfully',
     dossier_deleted: 'Successfully deleted dossier',
     dossier_delete_failed: 'Dossier delete failed',
+    enter_new_password: 'Please enter a new password',
+    enter_verification_code: 'Please enter verification code',
+    reset_password: 'Reset Password',
+    enter_username: 'Please enter your username',
+    verification: 'Verification',
+    enter_2fa:  'Enter your two-factor authentication code'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -250,6 +256,8 @@ export default {
     current_month: 'Current month',
     past_365_days: 'Past 365 days',
     date_filter: 'Date Filter',
+    no_prognosis: 'In the given Zip Code no prognosis is possible'
+
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',

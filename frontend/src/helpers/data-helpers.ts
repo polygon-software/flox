@@ -1,10 +1,11 @@
 import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {MutationObject, MutationTypes, QueryObject} from '../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
-import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
+import {inject, onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {useSSR} from 'src/store/ssr';
 import {i18n} from 'boot/i18n';
 import {QUERIES} from 'src/data/queries/QUERIES';
+import {AuthenticationService} from 'src/services/AuthService';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -17,6 +18,8 @@ import {QUERIES} from 'src/data/queries/QUERIES';
  * @returns {Promise<ApolloQueryResult<Record<string, unknown[] | unknown>>>} - the query's output
  */
 async function executeQuery(queryObject: QueryObject, variables?: Record<string, unknown>): Promise<ApolloQueryResult<Record<string, unknown[] | unknown>>> {
+  const $authService: AuthenticationService|undefined = inject('$authService')
+  await $authService?.refreshToken()
   const queryResult = useQuery(queryObject.query, variables ?? {})
 
   // If we have a cached result, return immediately
@@ -44,6 +47,8 @@ async function executeQuery(queryObject: QueryObject, variables?: Record<string,
  * @returns {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
  */
 async function executeMutation(mutationObject: MutationObject, variables: Record<string, unknown>): Promise<FetchResult | null> {
+  const $authService: AuthenticationService|undefined = inject('$authService')
+  await $authService?.refreshToken()
   const mutation =  mutationObject.mutation
   const tables =  mutationObject.tables
   const type =  mutationObject.type

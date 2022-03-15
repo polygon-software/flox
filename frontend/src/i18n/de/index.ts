@@ -105,6 +105,12 @@ export default {
     bank_created: 'Bank erfolgreich erstellt',
     dossier_deleted: 'Dossier erfolgreich gelöscht',
     dossier_delete_failed: 'Löschen des Dossiers fehlgeschlagen',
+    enter_new_password: 'Bitte geben Sie ein neues Passwort ein',
+    enter_verification_code: 'Bitte geben Sie ihren Bestätigungscode ein',
+    reset_password: 'Passwort zurücksetzen',
+    enter_username: 'Bitte geben Sie ihren Nutzernamen ein',
+    verification: 'Verifizierung',
+    enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -252,6 +258,7 @@ export default {
     current_month: 'Aktueller Monat',
     past_365_days: 'Letzte 365 Tage',
     date_filter: 'Datumsfilter',
+    no_prognosis: 'Für die angegebene Postleitzahl ist keine Prognose möglich'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',

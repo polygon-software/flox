@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Employee } from './entities/employee.entity';
 import { Company } from '../company/entities/company.entity';
-import { createCognitoAccount, randomPassword } from '../../auth/authService';
+import { createCognitoAccount } from '../../auth/authService';
 import { UserService } from '../user/user.service';
 import { ROLE } from '../../ENUM/ENUMS';
 import { sendPasswordChangeEmail } from '../../email/helper';
@@ -36,14 +36,10 @@ export class EmployeeService {
     createEmployeeInput: CreateEmployeeInput,
     company: Company,
   ): Promise<Employee> {
-    const password = randomPassword(8);
-    const cognitoId = await createCognitoAccount(
-      createEmployeeInput.email,
-      password,
-    );
+    const newAccount = await createCognitoAccount(createEmployeeInput.email);
     await sendPasswordChangeEmail(
       createEmployeeInput.email,
-      password,
+      newAccount.password,
       ROLE.EMPLOYEE,
     );
     const employee = this.employeeRepository.create({
@@ -54,7 +50,7 @@ export class EmployeeService {
     const newEmployee = await this.employeeRepository.save(employee);
     await this.userService.create({
       role: ROLE.EMPLOYEE,
-      uuid: cognitoId,
+      uuid: newAccount.cognitoId,
       fk: newEmployee.uuid,
     });
     this.logger.warn(`Employee created:\n${prettify(newEmployee)}`);

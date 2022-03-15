@@ -41,14 +41,14 @@ export class BankService {
     // If the abbreviation is taken by either a suggestion or a bank, throw error
     if (existingBank || existingSuggestion) {
       throw new Error(
-        `${ERRORS.bank_must_be_unique} (${
-          existingBank ? existingBank.name : existingSuggestion.name
-        })`,
+        `${ERRORS.bank_must_be_unique} (${prettify(
+          existingBank ? existingBank.name : existingSuggestion.name,
+        )})`,
       );
     }
 
     // Create a Cognito account with a random password
-    const cognitoId = await createCognitoAccount(
+    const newAccount = await createCognitoAccount(
       createBankInput.email,
       createBankInput.password,
     );
@@ -63,7 +63,7 @@ export class BankService {
     const savedBank = await this.bankRepository.save(bank);
     await this.userService.create({
       role: ROLE.BANK,
-      uuid: cognitoId,
+      uuid: newAccount.cognitoId,
       fk: bank.uuid,
     });
     this.logger.warn(`Bank created:\n${prettify(savedBank)}`);

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { SoiEmployee } from './entities/soi-employee.entity';
 import { CreateSoiEmployeeInput } from './dto/input/create-soi-employee.input';
-import { createCognitoAccount, randomPassword } from '../../auth/authService';
+import { createCognitoAccount } from '../../auth/authService';
 import { sendPasswordChangeEmail } from '../../email/helper';
 import { ROLE } from '../../ENUM/ENUMS';
 import { generateHumanReadableId } from '../../helpers';
@@ -30,16 +30,12 @@ export class SoiEmployeeService {
     createSoiEmployeeInput: CreateSoiEmployeeInput,
   ): Promise<SoiEmployee> {
     // Create a Cognito account with a random password
-    const password = randomPassword(8);
-    const cognitoId = await createCognitoAccount(
-      createSoiEmployeeInput.email,
-      password,
-    );
+    const newAccount = await createCognitoAccount(createSoiEmployeeInput.email);
 
     // Send password reset email with the current password embedded
     await sendPasswordChangeEmail(
       createSoiEmployeeInput.email,
-      password,
+      newAccount.password,
       ROLE.SOI_EMPLOYEE,
     );
 
@@ -67,7 +63,7 @@ export class SoiEmployeeService {
 
     await this.userService.create({
       role: ROLE.SOI_EMPLOYEE,
-      uuid: cognitoId,
+      uuid: newAccount.cognitoId,
       fk: soiEmployeeEntry.uuid,
     });
     this.logger.warn(`SOI Employee created:\n${prettify(soiEmployee)}`);

@@ -73,7 +73,6 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
-    this.logger.warn(`Requested user with ID: ${getUserArgs.uuid}`);
     return this.userRepository.findOne(getUserArgs.uuid);
   }
 

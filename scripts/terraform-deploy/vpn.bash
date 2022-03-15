@@ -1,0 +1,1 @@
+sudo openvpn --config downloaded-client-config.ovpn --cert /Users/johannschwabe/Documents/git/easy-rsa/easyrsa3/pki/issued/rdsserver.crt --key /Users/johannschwabe/Documents/git/easy-rsa/easyrsa3/pki/private/rdsserver.key

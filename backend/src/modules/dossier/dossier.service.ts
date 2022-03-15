@@ -224,7 +224,9 @@ export class DossierService {
       },
     );
     this.logger.warn(
-      `Offer ${savedOffer} for dossier created:\n${prettify(updatedDossier)}`,
+      `Offer ${prettify(savedOffer)} for dossier created:\n${prettify(
+        updatedDossier,
+      )}`,
     );
     return updatedDossier;
   }

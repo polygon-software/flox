@@ -52,6 +52,8 @@ export class FileController {
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
   ): Promise<any> {
+    res.headers({ 'access-control-allow-origin': '*' });
+
     // Verify that request is multipart
     if (!req.isMultipart()) {
       res.send(new BadRequestException(ERRORS.file_expected));
@@ -63,7 +65,6 @@ export class FileController {
       fileBuffer,
       file.filename,
     );
-    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 
@@ -73,6 +74,8 @@ export class FileController {
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
   ): Promise<any> {
+    res.headers({ 'access-control-allow-origin': '*' });
+
     // Verify that request is multipart
     if (!req.isMultipart()) {
       res.send(new BadRequestException(ERRORS.file_expected));
@@ -91,7 +94,6 @@ export class FileController {
       owner,
       {},
     );
-    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 
@@ -102,6 +104,9 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
     @Query() query: Record<string, string>, // Params
   ): Promise<any> {
+    // eslint-disable-next-line sonarjs/no-duplicate-string
+    res.header('access-control-allow-origin', '*');
+
     // Verify that request is multipart
     if (!req.isMultipart()) {
       res.send(new BadRequestException(ERRORS.file_expected));
@@ -143,7 +148,6 @@ export class FileController {
     );
     company.creation_state = CREATION_STATE.DOCUMENTS_UPLOADED;
     await this.companyRepository.save(company);
-    res.headers({ 'access-control-allow-origin': '*' });
     res.send(newFile);
   }
 
@@ -177,6 +181,8 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
     @Query() query: Record<string, string>, // Params
   ): Promise<any> {
+    res.header('access-control-allow-origin', '*');
+
     // Verify that request is multipart
     if (!req.isMultipart()) {
       res.send(new BadRequestException(ERRORS.file_expected));
@@ -199,7 +205,6 @@ export class FileController {
       req['user'].userId,
     );
 
-    res.header('access-control-allow-origin', '*');
     res.send(updatedOffer);
   }
 
@@ -210,6 +215,7 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
     @Query() query: Record<string, string>, // Params
   ): Promise<any> {
+    res.header('access-control-allow-origin', '*');
     // Verify that request is multipart
     if (!req.isMultipart()) {
       res.send(new BadRequestException(ERRORS.file_expected));
@@ -238,7 +244,6 @@ export class FileController {
         req['user'].userId,
       );
     }
-    res.header('access-control-allow-origin', '*');
     res.send(updatedDossier);
   }
 
@@ -249,6 +254,8 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
     @Query() query: Record<string, string>, // Params
   ): Promise<any> {
+    res.header('access-control-allow-origin', '*');
+
     // Verify that request is multipart
     if (!req.isMultipart()) {
       res.send(new BadRequestException(ERRORS.file_expected));
@@ -267,7 +274,6 @@ export class FileController {
       req['user'].userId,
     );
 
-    res.header('access-control-allow-origin', '*');
     res.send(updatedDossier);
   }
 
@@ -284,6 +290,8 @@ export class FileController {
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
   ): Promise<any> {
+    res.header('access-control-allow-origin', '*');
+
     // Verify that request is multipart
     if (!req.isMultipart()) {
       res.send(new BadRequestException(ERRORS.file_expected));
@@ -298,7 +306,6 @@ export class FileController {
 
     await this.fileService.uploadValueDevelopmentFile(file);
 
-    res.header('access-control-allow-origin', '*');
     res.send('OK');
   }
 
@@ -316,6 +323,8 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
     @Query() query: Record<string, string>, // Params
   ): Promise<any> {
+    res.header('access-control-allow-origin', '*');
+
     const zipCode = query.zipCode;
     const start = query.start; // start date in YYYY-MM-DD format
     const end = query.end; // end date in YYYY-MM-DD format
@@ -342,7 +351,6 @@ export class FileController {
     try {
       // Calculate value multiplier
       const multiplier = await getValueDevelopment(zipCode, startDate, endDate);
-      res.header('access-control-allow-origin', '*');
       res.send(multiplier);
     } catch (error) {
       // Return any calculation errors that occurred
