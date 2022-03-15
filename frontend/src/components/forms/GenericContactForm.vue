@@ -28,7 +28,7 @@
 
       <!-- Edit button (if not editing) -->
       <q-btn
-        icon="edit"
+        :icon="isEditing ? 'close' : 'edit'"
         text-color="primary"
         size="sm"
         unelevated

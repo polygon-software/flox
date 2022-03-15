@@ -24,6 +24,7 @@ import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input
 import { GetDeviceContactsArgs } from './dto/args/get-device-contacts.args';
 import { DeviceContact } from '../../types/DeviceContact';
 import { EditContactInput } from './dto/input/edit-contact.input';
+import { DeleteContactInput } from './dto/input/delete-contact.input';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -186,7 +187,7 @@ export class DeviceResolver {
   async editContact(
     @Args({
       name: 'editContactInput',
-      type: () => EditContactInput, // TODO must include some identifier...
+      type: () => EditContactInput,
     })
     editContactInput: EditContactInput,
     @CurrentUser()
@@ -202,6 +203,32 @@ export class DeviceResolver {
 
     if (dbUser.role === ROLE.ADMIN || allowed) {
       return this.deviceService.editContact(editContactInput);
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  @AnyRole()
+  @Mutation(() => Device)
+  async deleteContact(
+    @Args({
+      name: 'deleteContactInput',
+      type: () => DeleteContactInput,
+    })
+    deleteContactInput: DeleteContactInput,
+    @CurrentUser()
+    user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+    let allowed = false;
+    if (dbUser.role === ROLE.USER) {
+      allowed =
+        dbUser.mr2000instances?.includes(deleteContactInput.cli) ||
+        dbUser.mr3000instances?.includes(deleteContactInput.cli);
+    }
+
+    if (dbUser.role === ROLE.ADMIN || allowed) {
+      return this.deviceService.deleteContact(deleteContactInput);
     }
 
     throw new UnauthorizedException();

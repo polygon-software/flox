@@ -18,6 +18,7 @@ import { LevelWritingAxis } from '../../types/LevelWritingAxis';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { ConfigService } from '@nestjs/config';
 import {
+  deleteInTable,
   fetchCountFromTable,
   fetchFromTable,
   insertIntoTable,
@@ -30,6 +31,7 @@ import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 import { EditContactInput } from './dto/input/edit-contact.input';
+import { DeleteContactInput } from './dto/input/delete-contact.input';
 
 @Injectable()
 export class DeviceService {
@@ -546,6 +548,28 @@ export class DeviceService {
 
     // Get device where contact was edited
     return this.getDeviceByCli(input.cli);
+  }
+
+  /**
+   * Deletes a given device contact
+   * @param {DeleteContactInput} deleteContactInput - input, containing ID and CLI
+   * @returns {Promise<Device>} - the device on which the contact was deleted
+   */
+  async deleteContact(deleteContactInput: DeleteContactInput) {
+    // Determine device type for table name
+    const type = deviceType(deleteContactInput.cli);
+    const table = type === 'MR2000' ? 'alert' : 'para_alert';
+
+    const filterQuery =
+      type === 'MR2000'
+        ? `WHERE uniq_id='${deleteContactInput.id}'`
+        : `WHERE rec_id='${deleteContactInput.id}'`;
+
+    // Write to database
+    await deleteInTable(type, table, filterQuery);
+
+    // Get device where contact was deleted
+    return this.getDeviceByCli(deleteContactInput.cli);
   }
 
   /**

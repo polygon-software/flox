@@ -45,3 +45,21 @@ export const EDIT_CONTACT = {
   type: MutationTypes.DEVALIDATINGUPDATE,
   cacheLocation: undefined
 }
+
+export const DELETE_CONTACT = {
+  mutation: gql`
+    mutation deleteContact($id: Int!, $cli: String!){
+      deleteContact (deleteContactInput: {id: $id, cli: $cli} ) {
+        ...on MR2000 {
+          name
+        }
+        ...on MR3000 {
+          name
+        }
+        __typename
+      }
+    }`,
+  tables: ['contact'],
+  type: MutationTypes.DEVALIDATINGUPDATE,
+  cacheLocation: undefined
+}

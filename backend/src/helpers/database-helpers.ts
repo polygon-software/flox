@@ -145,3 +145,31 @@ export async function updateInTable(
   await queryRunner.manager.query(query);
   await queryRunner.release();
 }
+
+/**
+ * Deletes a given record in a database table
+ * @param {string} database - database name
+ * @param {string} table - table name
+ * @param {string} [filterQuery] - SQL filtering query for which object to delete
+ * @returns {void}
+ */
+export async function deleteInTable(
+  database: string,
+  table: string,
+  filterQuery: string,
+) {
+  // Get query runner
+  const queryRunner = await getQueryRunner(database);
+
+  // Build whole query
+  let query = `
+      UPDATE ${table}
+      SET ${filterQuery ?? ''}
+  `;
+
+  query = query.substring(0, query.lastIndexOf(','));
+
+  // Execute
+  await queryRunner.manager.query(query);
+  await queryRunner.release();
+}

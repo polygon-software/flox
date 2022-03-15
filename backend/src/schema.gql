@@ -214,6 +214,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteContactInput {
+  """Device CLI"""
+  cli: String!
+
+  """Unique database ID"""
+  id: Int!
+}
+
 input DeleteProjectInput {
   """Project UUID"""
   uuid: ID!
@@ -684,6 +692,7 @@ type Mutation {
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   assignDeviceToProject(assignDeviceToProjectInput: AssignDeviceToProjectInput!): Project!
   createProject(createProjectInput: CreateProjectInput!): Project!
+  deleteContact(deleteContactInput: DeleteContactInput!): Device!
   deleteProject(deleteProjectInput: DeleteProjectInput!): Project!
   editContact(editContactInput: EditContactInput!): Device!
   register(registerUserInput: RegisterUserInput!): User
