@@ -105,7 +105,6 @@ import * as CloudWatchTransport from 'winston-cloudwatch';
         password: configService.get('database.password'),
         database: configService.get('database.database'),
         entities: [configService.get('entities')],
-        keepConnectionAlive: true,
         verboseRetryLog: true,
       }),
       inject: [ConfigService],
