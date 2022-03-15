@@ -78,8 +78,7 @@ export class DeviceService {
     const client = getDeviceParamsArgs.cli;
     const filterQuery = `WHERE cli = "${client}"`;
     let instances: Record<string, string | number>[];
-    if (client.includes('_')) {
-      // TODO: Use helper function to distinguish between device types
+    if (deviceType(client) === 'MR3000') {
       // MR3000
       instances = await fetchFromTable('MR3000', 'para_trigala', filterQuery);
     } else {

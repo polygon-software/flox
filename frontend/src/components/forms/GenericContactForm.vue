@@ -216,7 +216,15 @@ function onDelete(){
     }
   }).onOk(async () => {
     if(!props.contact?.id || !props.cli){
-      throw new Error('TODO error message invalid contact')
+      // Show error notification
+      showNotification(
+        $q,
+        // eslint-disable-next-line sonarjs/no-duplicate-string
+        i18n.global.t('errors.error_editing_contact'),
+        'bottom',
+        'negative',
+      )
+      return
     }
 
     // Prepare mutation parameters
@@ -257,7 +265,14 @@ function onDelete(){
  */
 async function onSave(){
   if(!props.contact?.id || !props.cli){
-    throw new Error('TODO error message invalid contact') // TODO
+    // Show error notification
+    showNotification(
+      $q,
+      i18n.global.t('errors.error_editing_contact'),
+      'bottom',
+      'negative',
+    )
+    return
   }
 
   // Prepare mutation parameters
