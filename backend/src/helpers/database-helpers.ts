@@ -162,12 +162,10 @@ export async function deleteInTable(
   const queryRunner = await getQueryRunner(database);
 
   // Build whole query
-  let query = `
-      UPDATE ${table}
-      SET ${filterQuery ?? ''}
+  const query = `
+      DELETE FROM ${table}
+      ${filterQuery ?? ''}
   `;
-
-  query = query.substring(0, query.lastIndexOf(','));
 
   // Execute
   await queryRunner.manager.query(query);

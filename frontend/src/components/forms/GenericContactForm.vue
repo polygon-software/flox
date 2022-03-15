@@ -97,7 +97,7 @@ import {DeviceContact} from 'src/data/types/DeviceContact';
 import {useQuasar} from 'quasar';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {EDIT_CONTACT} from 'src/data/mutations/DEVICE';
+import {DELETE_CONTACT, EDIT_CONTACT} from 'src/data/mutations/DEVICE';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {deviceType} from 'src/helpers/device-helpers';
 
@@ -214,8 +214,41 @@ function onDelete(){
       swapNegative: true,
       okLabel: i18n.global.t('buttons.confirm')
     }
-  }).onOk(() => {
-    // TODO delete contact
+  }).onOk(async () => {
+    if(!props.contact?.id || !props.cli){
+      throw new Error('TODO error message invalid contact') // TODO
+    }
+
+    // Prepare mutation parameters
+    const params = {
+      id: props.contact.id,
+      cli: props.cli,
+    }
+
+    // Execute mutation
+    try{
+      await executeMutation(DELETE_CONTACT, params)
+    } catch (e){
+      console.log(e)
+      // Show error notification
+      showNotification(
+        $q,
+        i18n.global.t('errors.error_deleting_contact'), // TODO
+        'bottom',
+        'negative',
+      )
+      return
+    }
+
+    // Show success notification
+    showNotification(
+      $q,
+      i18n.global.t('messages.contact_deleted'), // TODO
+      'bottom',
+      'positive',
+    )
+
+    // Component will be auto-destroyed from refetch
   })
 }
 
@@ -248,7 +281,6 @@ async function onSave(){
   try{
     await executeMutation(EDIT_CONTACT, params)
   } catch (e){
-    console.log('Error:', e)
     // Show error notification
     showNotification(
       $q,
