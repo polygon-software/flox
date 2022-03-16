@@ -67,6 +67,7 @@ const props = defineProps({
 })
 
 const search = ref('')
+const take = ref(10) // Load first 10 entries by default
 
 // ----- Data -----
 const columns = [
@@ -81,8 +82,16 @@ const rows: Ref<ConnectionLogEntry[]> = ref([])
 
 // Fetch logs on mount
 onMounted(async () => {
-  rows.value = await connectionLogForDevice(props.cli)
+  await fetchLogs()
 })
+
+/**
+ * Fetches table contents
+ * @returns {Promise<void>} - done
+ */
+async function fetchLogs(){
+  rows.value = await connectionLogForDevice(props.cli, take.value)
+}
 
 </script>
 
