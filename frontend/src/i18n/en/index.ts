@@ -450,7 +450,7 @@ export default {
     retirement_warning: 'The acceptability of risks is different for people over the age of 60',
     warning_landlord: 'Only  mortgages with public building lease landlords are applicable',
     mortgage_too_short: 'The expiration date of the mortgage is to soon!',
-    mortgage_note: 'Attention: Mortgage note splitting may be required!',
+    mortgage_note: 'The expiration date is too far in the future (max. 12 months). Contact your contact person at a later time.',
     building_lease_warning: 'Based on the entered data, no mortgage can be offered through this platform!',
     prosecutions_loss_certificates: 'Attention: If prosecutions or loss certificates exist... TODO',
     affordability_impossible: 'Attention: Due to the affordability of more than 35%, this mortgage cannot be financed.',
