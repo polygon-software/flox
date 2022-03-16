@@ -7,6 +7,7 @@
       type="date"
       dense
       :label="props.label"
+      stack-label
       @update:model-value="emitValue"
     />
   </div>
