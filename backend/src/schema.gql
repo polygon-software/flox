@@ -423,6 +423,55 @@ type Employee {
   uuid: ID!
 }
 
+type EventsTable {
+  items: [EventsTableRow!]!
+  lengthAll: Int!
+  lengthEvt: Int!
+  lengthPk: Int!
+  lengthZip: Int!
+}
+
+type EventsTableRow {
+  """pk_frq.VSUM"""
+  VSUM: String
+
+  """events.rec_time"""
+  dateTime: DateTime!
+
+  """Download URL"""
+  downloadURL: String
+
+  """events.num"""
+  file: String!
+
+  """events.filenam end"""
+  fileName: String
+
+  """pk_frq.frqX"""
+  frequencyX: String
+
+  """pk_frq.frqY"""
+  frequencyY: String
+
+  """pk_frq.frqZ"""
+  frequencyZ: String
+
+  """events.peakX + events.unitX"""
+  peakX: String!
+
+  """events.peakY + events.unitY"""
+  peakY: String!
+
+  """events.peakZ + events.unitZ"""
+  peakZ: String!
+
+  """Preview URL"""
+  previewURL: String
+
+  """events.typ converted"""
+  type: String!
+}
+
 enum FileType {
   ADDITIONAL_DOCUMENTS
   BUILDING_DESCRIPTION
@@ -659,6 +708,7 @@ type Project {
 type Query {
   allUsers: [User!]!
   deviceParams(cli: String!): DeviceParams!
+  eventTable(cli: String!, descending: Boolean, filter: String, orderBy: String, skip: Int!, take: Int!): EventsTable!
   getProjectDevices(name: String, uuid: ID): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!

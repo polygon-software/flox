@@ -210,7 +210,7 @@ export default {
   client_connectivity: {
     title: 'Client-Konnektivität',
     date_time: 'Datum/Zeit',
-    real_ip: 'Echter IP',
+    real_ip: 'Echte IP',
     port: 'Port',
     vpn_ip: 'VPN IP',
     event: 'Ereignisse',
