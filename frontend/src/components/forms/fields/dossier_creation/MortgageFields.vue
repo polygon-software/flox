@@ -182,7 +182,7 @@ function checkMortgageExpirationDate(expirationDateString: string){
   const dateIn12Months = new Date(new Date().setMonth(new Date().getMonth() + 12))
   const dateIn24Months = new Date(new Date().setMonth(new Date().getMonth() + 24))
 
-  // Warning case 1: <12 months in the future
+  // Warning case 1: <1 month in the future
   if(expirationDate.getTime() < dateInAMonth.getTime()){
     if(!popupOpen.value){
       popupOpen.value = true
