@@ -207,6 +207,26 @@ export const EVENT_TABLE_ROWS = {
   cacheLocation: 'eventTable'
 }
 
+export const DEVICE_CONNECTION_LOGS = {
+  query: gql`
+    query getConnectionLogs($cli: String!, $take: Int!){
+      getConnectionLogs(cli: $cli, take: $take){
+        id
+        cli
+        timestamp
+        vpnIp
+        realIp
+        port
+        traffic
+        reason
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getConnecctionLogs'
+}
+
 export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
   MY_DEVICES,
