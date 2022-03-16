@@ -25,6 +25,7 @@ import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
+import { GetDeviceStatusArgs } from './dto/args/get-device-status.args';
 
 @Injectable()
 export class DeviceService {
@@ -398,5 +399,20 @@ export class DeviceService {
       frequencyZ,
       VSUM,
     );
+  }
+
+  /**
+   * count(*) Query with filter clause
+   * @param {GetDeviceStatusArgs} getDeviceStatusArgs - args, containing CLI and number of entries to get
+   * @returns {int} - number of entries
+   */
+  async getDeviceStatus(getDeviceStatusArgs: GetDeviceStatusArgs) {
+    const res = await fetchFromTable(
+      'openvpn',
+      'logovp',
+      `WHERE cli='${getDeviceStatusArgs.cli}'`,
+    );
+
+    // TODO map & return
   }
 }
