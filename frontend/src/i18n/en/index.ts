@@ -411,7 +411,8 @@ export default {
     enfeoffment_second_rank: '1. & 2. Rank',
     enfeoffment_too_high: 'Not financeable',
     discard_dossier: 'All entered data will be lost. Are you sure?',
-    formula: '(Mortgage Value * Interest Rate) + (0.01 * Market Value Estimate) + Amortization'
+    formula: '(Mortgage Value * Interest Rate) + (0.01 * Market Value Estimate) + Amortization',
+    preview: 'Preview'
   },
   dossier_status_enum: {
     OPEN: 'Open',

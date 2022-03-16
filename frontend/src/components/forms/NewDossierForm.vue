@@ -11,7 +11,7 @@
       class="column"
       active-color="primary"
       done-icon="done"
-      style="min-height: 870px"
+      style="min-height: 600px;"
       animated
       @update:model-value="onPageChange"
     >
@@ -26,7 +26,7 @@
       >
         <!-- Main form content (pages 1-4) -->
         <div
-          v-if="form.step.value < form.pages.value.length"
+          v-if="form.step.value < form.pages.value.length-1"
         >
           <div
             class="row">
@@ -131,8 +131,9 @@
 
         <!-- Summary page (final page before submit) -->
         <div
-          v-else
+          v-else-if="form.step.value === form.pages.value.length - 1"
           class="column"
+          style="margin-bottom: 80px"
         >
           <!-- Eligible salary -->
           <SummaryField
@@ -204,6 +205,11 @@
               {{ $t('warnings.non_arrangeable') }}
             </strong>
           </q-card>
+        </div>
+
+        <!-- PDF preview page -->
+        <div v-else>
+          TODO doc preview
         </div>
       </q-step>
 
@@ -433,6 +439,19 @@ const pages = [
       },
     ],
   },
+
+  // Sixth page: Preview
+  {
+    key: 'preview',
+    label: i18n.global.t('form_for_clients.preview'),
+    sections: [
+      {
+        key: 'preview',
+        title: i18n.global.t('form_for_clients.preview'),
+        fields: [],
+      },
+    ],
+  },
 ]
 
 // Form instance
@@ -626,8 +645,8 @@ onMounted(async () => {
  * @returns {Promise<void>} - done
  */
 async function onPageChange(){
-  // When going to final page, validate affordability
-  if(form.step.value === form.pages.value.length){
+  // When going to summary page, validate affordability
+  if(form.step.value === form.pages.value.length - 1){
     await calculateValueEstimate();
 
     let affordabilityWarning
