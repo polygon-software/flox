@@ -45,6 +45,8 @@ const emit = defineEmits(['change'])
 const acceptConditions: Ref<boolean> = ref(false)
 const acceptConditionTruthful: Ref<boolean> = ref(false)
 const showError: Ref<boolean> = ref(false)
+
+// TODO change once provided by SOI
 const pdfLink = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
 
 /**
