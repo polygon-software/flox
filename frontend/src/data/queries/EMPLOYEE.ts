@@ -10,6 +10,7 @@ export const EMPLOYEE = {
         function
         email
         phone
+        readable_id
         __typename
       }
     }
@@ -28,6 +29,7 @@ export const ALL_EMPLOYEES = {
         function
         email
         phone
+        readable_id
         __typename
       }
     }
@@ -48,6 +50,7 @@ export const MY_EMPLOYEES = {
         email
         phone
         banned_at
+        readable_id
         __typename
       }
     }
@@ -68,6 +71,7 @@ export const MY_EMPLOYEES_PROVISIONS = {
         email
         phone
         banned_at
+        readable_id
         dossiers {
           uuid
           created_at
