@@ -23,13 +23,11 @@ import {RouterService} from 'src/services/RouterService';
 import {inject} from 'vue';
 import { FIELDS } from 'src/data/FIELDS';
 import {i18n} from 'boot/i18n';
-import {useAuth} from 'src/store/authentication';
 import {useRoute} from 'vue-router';
 import {ErrorService} from 'src/services/ErrorService';
 import {AuthenticationService} from 'src/services/AuthService';
 import {ROLE} from 'src/data/ENUM/ENUM';
 
-const $authStore = useAuth()
 const $routerService: RouterService|undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
 const $authService: AuthenticationService|undefined = inject('$authService')
