@@ -224,7 +224,7 @@ export const DEVICE_CONNECTION_LOGS = {
     }
   `,
   tables: [],
-  cacheLocation: 'getConnecctionLogs'
+  cacheLocation: 'getConnectionLogs'
 }
 
 export const DEVICE_QUERIES: QueryObject[] = [

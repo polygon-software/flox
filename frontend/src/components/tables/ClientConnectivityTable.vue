@@ -26,24 +26,24 @@
       :rows-per-page-options="[10,20, 100]"
       separator="none"
     >
-      <template #body="props">
+      <template #body="_props">
         <q-tr
-          :props="props"
+          :props="_props"
         >
           <q-td key="date_time">
-            {{ props.row.date_time }}
+            {{ formatDateTime(_props.row.timestamp) }}
           </q-td>
           <q-td key="real_ip">
-            {{ props.row.real_ip }}
+            {{ _props.row.realIp }}
           </q-td>
           <q-td key="port">
-            {{ props.row.port }}
+            {{ _props.row.port }}
           </q-td>
           <q-td key="vpn_ip">
-            {{ props.row.vpn_ip }}
+            {{ _props.row.vpnIp }}
           </q-td>
           <q-td key="event">
-            {{ props.row.event }}
+            {{ _props.row.reason }}
           </q-td>
         </q-tr>
       </template>
@@ -57,6 +57,7 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
 import {connectionLogForDevice} from 'src/helpers/api-helpers';
+import {formatDateTime} from 'src/helpers/format-helpers';
 
 const props = defineProps({
   cli: {
@@ -69,10 +70,10 @@ const search = ref('')
 
 // ----- Data -----
 const columns = [
-  { name: 'date_time', label: i18n.global.t('client_connectivity.date_time'), field: 'date_time', sortable: true, align: 'center' },
-  { name: 'real_ip', label: i18n.global.t('client_connectivity.real_ip'), field: 'real_ip', sortable: true, align: 'center' },
+  { name: 'timestamp', label: i18n.global.t('client_connectivity.date_time'), field: 'timestamp', sortable: true, align: 'center' },
+  { name: 'realIp', label: i18n.global.t('client_connectivity.real_ip'), field: 'realIp', sortable: true, align: 'center' },
   { name: 'port', label: i18n.global.t('client_connectivity.port'), field: 'port', sortable: true, align: 'center' },
-  { name: 'vpn_ip', label: i18n.global.t('client_connectivity.vpn_ip'), field: 'vpn_ip', sortable: true, align: 'center' },
+  { name: 'vpnIp', label: i18n.global.t('client_connectivity.vpn_ip'), field: 'vpnIp', sortable: true, align: 'center' },
   { name: 'event', label: i18n.global.t('client_connectivity.event'), field: 'event', sortable: false, align: 'center' },
 ]
 

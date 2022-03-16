@@ -99,7 +99,7 @@ export default {
     number: 'Telefonnumer',
     email: 'E-mail',
     add_new_contact: 'Füge neuen Kontakt hinzu',
-    event: 'Ereigniss',
+    event: 'Ereignis',
     alarm1: 'Alarm 1',
     alarm2: 'Alarm 2',
     sms_limit: 'SMS-Grenze',
@@ -213,7 +213,7 @@ export default {
     real_ip: 'Echte IP',
     port: 'Port',
     vpn_ip: 'VPN IP',
-    event: 'Ereignisse',
+    event: 'Ereignis',
   },
   log_files: {
     log_file: 'LOG Datei',
