@@ -3,7 +3,7 @@
     <!-- Title -->
     <h5>{{ $t('status.title') }} {{ stationId }}</h5>
 
-    <ClientConnectivityTable/>
+    <ClientConnectivityTable :cli="stationId"/>
     <LogFilesTable/>
 
   </q-page>

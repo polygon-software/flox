@@ -52,9 +52,18 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {onMounted, Ref, ref, defineProps} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
+import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
+import {connectionLogForDevice} from 'src/helpers/api-helpers';
+
+const props = defineProps({
+  cli: {
+    type: String,
+    required: true
+  }
+})
 
 const search = ref('')
 
@@ -67,22 +76,13 @@ const columns = [
   { name: 'event', label: i18n.global.t('client_connectivity.event'), field: 'event', sortable: false, align: 'center' },
 ]
 
-const rows = [
-  {
-    date_time: '2022-01-25 00:29:02',
-    real_ip: '90.134.55.190',
-    port: '24662',
-    vpn_ip: '174',
-    event: 'disconnct',
-  },
-  {
-    date_time: '2022-01-25 00:39:01',
-    real_ip: '90.134.38.126',
-    port: '42803',
-    vpn_ip: '175',
-    event: 'new',
-  },
-]
+const rows: Ref<ConnectionLogEntry[]> = ref([])
+
+// Fetch logs on mount
+onMounted(async () => {
+  rows.value = await connectionLogForDevice(props.cli)
+})
+
 </script>
 
 <style scoped>

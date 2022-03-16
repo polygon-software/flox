@@ -5,8 +5,9 @@ import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
 import {MY_PROJECTS} from 'src/data/queries/PROJECT';
-import {MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
+import {DEVICE_CONNECTION_LOGS, MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
 import {Device} from 'src/data/types/Device';
+import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
 
 /**
  * Fetch all users.
@@ -187,4 +188,16 @@ export function mapDevice(record: Record<string, unknown>): Device {
     record.firmware as string,
     record.__typename as ('MR2000'|'MR3000')
   )
+}
+
+
+/**
+ * Fetch connection log entries for a given device
+ * @param {string} cli - device CLI
+ * @param {number} take - number of logs to get
+ * @return {Promise<ConnectionLogEntry[]>} - An array containing the requested number of connection log entries
+ */
+export async function connectionLogForDevice(cli: string, take = 20) {
+  const queryResult = await executeQuery(DEVICE_CONNECTION_LOGS, {cli, take});
+  return queryResult.data[DEVICE_CONNECTION_LOGS.cacheLocation] as ConnectionLogEntry[]
 }
