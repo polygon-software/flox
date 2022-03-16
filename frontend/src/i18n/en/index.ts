@@ -47,6 +47,7 @@ export default {
     street: 'Street',
     number: 'Number',
     zip_code: 'ZIP Code',
+    zip_code_short: 'ZIP',
     city: 'City',
     interests: 'Interests',
     company: 'Company',
@@ -85,6 +86,8 @@ export default {
     offer: 'offer',
     abbreviation: 'Abbreviation',
     bank: 'Bank | Banks',
+    usage_type: 'Usage Type',
+    usage_other: 'Not owner-occup.'
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',

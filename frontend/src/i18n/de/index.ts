@@ -48,6 +48,7 @@ export default {
     street: 'Strasse',
     number: 'Nummer',
     zip_code: 'Postleitzahl',
+    zip_code_short: 'PLZ',
     city: 'Ort',
     interests: 'Interessen',
     company: 'Firma',
@@ -86,6 +87,8 @@ export default {
     provision_soi: 'Provision SOI',
     provision_total: 'Totale Provision',
     bank: 'Bank | Banken',
+    usage_type: 'Art der Nutzung',
+    usage_other: 'Nicht Selbsbew.'
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
