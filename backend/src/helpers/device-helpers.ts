@@ -6,6 +6,7 @@ import { MR2000 } from '../types/MR2000';
 import { MR3000 } from '../types/MR3000';
 import { Repository } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
+import { ConnectionLogEntry } from '../types/ConnectionLogEntry';
 
 /**
  * Creates an MR2000 instance from a RowPacketData entry
@@ -113,4 +114,24 @@ function deviceNameFromComment(comment: string) {
  */
 export function deviceType(clientId: string) {
   return clientId.includes('-') ? 'MR2000' : 'MR3000';
+}
+
+/**
+ * Creates a connection log entry instance from a RowPacketData entry
+ * @param {Record<string, string|number>} entry - database entry row
+ * @returns {Promise<ConnectionLogEntry>} - log entry
+ */
+export async function connectionLogEntryFromDatabaseEntry(
+  entry: Record<string, unknown>,
+) {
+  return new ConnectionLogEntry(
+    entry.id as number,
+    entry.cli as string,
+    entry.timestamp as Date,
+    entry.vpn_ip as string,
+    entry.real_ip as string,
+    entry.port as string,
+    entry.traffic as number,
+    entry.reason as string,
+  );
 }

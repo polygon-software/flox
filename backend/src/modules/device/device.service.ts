@@ -7,6 +7,7 @@ import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
   deviceType,
+  connectionLogEntryFromDatabaseEntry,
 } from '../../helpers/device-helpers';
 import { Project } from '../project/entities/project.entity';
 import { HttpService } from '@nestjs/axios';
@@ -25,7 +26,7 @@ import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
-import { GetDeviceStatusArgs } from './dto/args/get-device-status.args';
+import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
 
 @Injectable()
 export class DeviceService {
@@ -402,17 +403,20 @@ export class DeviceService {
   }
 
   /**
-   * count(*) Query with filter clause
-   * @param {GetDeviceStatusArgs} getDeviceStatusArgs - args, containing CLI and number of entries to get
+   * Get the connection logs for a given device
+   * @param {GetConnectionLogsArgs} getConnectionLogsArgs - args, containing CLI and number of entries to get
    * @returns {int} - number of entries
    */
-  async getDeviceStatus(getDeviceStatusArgs: GetDeviceStatusArgs) {
-    const res = await fetchFromTable(
+  async getConnectionLogs(getConnectionLogsArgs: GetConnectionLogsArgs) {
+    const tableEntries = await fetchFromTable(
       'openvpn',
       'logovp',
-      `WHERE cli='${getDeviceStatusArgs.cli}'`,
+      `WHERE cli='${getConnectionLogsArgs.cli}' LIMIT ${getConnectionLogsArgs.take}`,
     );
 
-    // TODO map & return
+    // Map to actual type & return
+    return tableEntries.map((tableEntry) =>
+      connectionLogEntryFromDatabaseEntry(tableEntry),
+    );
   }
 }

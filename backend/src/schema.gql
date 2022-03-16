@@ -153,6 +153,17 @@ type Company {
   uuid: ID!
 }
 
+type ConnectionLogEntry {
+  cli: String!
+  id: Int!
+  port: String!
+  realIp: String!
+  reason: String!
+  timestamp: DateTime!
+  traffic: Int!
+  vpnIp: String!
+}
+
 input CreateAddressInput {
   city: String!
   number: String!
@@ -709,6 +720,7 @@ type Query {
   allUsers: [User!]!
   deviceParams(cli: String!): DeviceParams!
   eventTable(cli: String!, descending: Boolean, filter: String, orderBy: String, skip: Int!, take: Int!): EventsTable!
+  getConnectionLogs(cli: String!, take: Int!): [ConnectionLogEntry!]!
   getProjectDevices(name: String, uuid: ID): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
