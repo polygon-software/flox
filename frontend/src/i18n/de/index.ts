@@ -420,6 +420,8 @@ export default {
     COMPLETED: 'Abgeschlossen',
     IN_PROGRESS: 'Kreditvertrag in Bearbeitung',
     SENT: 'Kreditvertrag versendet',
+    CONTRACT_UPLOADED: 'Auftragsblatt hochgeladen',
+    PRODUCT_AGREEMENT_CONFIRMED: 'Produktvereinbarung bestätigt'
   },
   offer_status_enum: {
     INTERESTED: 'Interessiert',

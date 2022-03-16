@@ -30,12 +30,15 @@ export function dossierChipStyle(status: DOSSIER_STATUS){
       return color + '#A22736;'
     case DOSSIER_STATUS.SENT:
       return color + '#F829F3;'
+    case DOSSIER_STATUS.CONTRACT_UPLOADED:
+      return color + '#15B034;'
+    case DOSSIER_STATUS.PRODUCT_AGREEMENT_CONFIRMED:
+      return color + '#00DE2C;'
   }
   return color + '#000000;'
 }
 
 /**
- * ToDo Fix colors
  * Get style parameter for offer status chip
  * @param  {OFFER_STATUS} status - status of offer
  * @returns {string} - style

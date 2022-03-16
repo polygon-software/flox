@@ -420,6 +420,8 @@ export default {
     COMPLETED: 'Completed',
     IN_PROGRESS: 'Credit contract in process',
     SENT: 'Credit contract sent',
+    CONTRACT_UPLOADED: 'Order sheet uploaded',
+    PRODUCT_AGREEMENT_CONFIRMED: 'Product agreement confirmed'
   },
   offer_status_enum: {
     INTERESTED: 'Interested',
