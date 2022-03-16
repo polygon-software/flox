@@ -498,5 +498,7 @@ export default {
     team_leader: 'Teamleiter*in',
     sales_leader: 'Verkaufsleiter*in',
     branch_leader: 'Niederlassungsleiter*in',
+    regional_leader: 'Regionalleiter*in',
+    managing_director: 'Geschäftsführer*in'
   }
 };

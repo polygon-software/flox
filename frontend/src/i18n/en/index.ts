@@ -498,5 +498,7 @@ export default {
     team_leader: 'Team Leader',
     sales_leader: 'Sales Leader',
     branch_leader: 'Branch Leader',
+    regional_leader: 'Regional Leader',
+    managing_director: 'Managing Director'
   }
 };
