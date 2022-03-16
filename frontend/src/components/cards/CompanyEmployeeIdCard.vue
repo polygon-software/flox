@@ -23,46 +23,52 @@ import {User} from 'src/data/types/User';
 import {onMounted, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {MY_USER} from 'src/data/queries/USER';
-import {MY_EMPLOYEE} from 'src/data/queries/EMPLOYEE';
-import {MY_COMPANY} from 'src/data/queries/COMPANY';
+import {EMPLOYEE, MY_EMPLOYEE} from 'src/data/queries/EMPLOYEE';
+import {useRoute} from 'vue-router';
 
+const route = useRoute()
+
+// Employee ID from route (if any), only relevant if going from SOIAdmin -> Company -> Employee or Company -> Employee
+const employeeUuid = route.query.eid
 
 const employeeReadableId = ref('')
 const companyReadableId = ref('')
 const other = ref('')
 const errorString = i18n.global.t('authentication.unauthenticated')
 
-onMounted(() => {
-  executeQuery(MY_USER).then((userResp) => {
-    if (!userResp.data) {
-      other.value = errorString
-      return
-    }
-    const user = userResp.data[MY_USER.cacheLocation] as User
-    if (user.role === ROLE.EMPLOYEE) {
-      executeQuery(MY_EMPLOYEE).then((employeeResp) => {
-        const employee = employeeResp.data[MY_EMPLOYEE.cacheLocation] as Record<string, unknown>;
-        employeeReadableId.value = employee.readable_id as string
-        const company = employee.company as Record<string, string>
-        companyReadableId.value = company.readable_id;
-      }).catch((error) => {
-        other.value = user.role || errorString
-        console.error(error)
-      })
-    } else if (user.role === ROLE.COMPANY) {
-      executeQuery(MY_COMPANY).then((companyResp) => {
-        const company = companyResp.data[MY_COMPANY.cacheLocation] as Record<string, unknown>;
-        companyReadableId.value = company.readable_id as string
-      }).catch((error) => {
-        other.value = user.role || errorString
-        console.error(error)
-      })
-    } else {
-      other.value = user.role || errorString
-    }
-  }).catch((error) => {
+onMounted(async () => {
+  const myUser = await executeQuery(MY_USER)
+
+  if (!myUser.data) {
     other.value = errorString
-    console.error(error)
-  })
+    return
+  }
+
+  const user = myUser.data[MY_USER.cacheLocation] as User
+  // Employee: show only employee ID
+  if(user.role === ROLE.EMPLOYEE){
+    executeQuery(MY_EMPLOYEE).then((employeeResp) => {
+      const employee = employeeResp.data[MY_EMPLOYEE.cacheLocation] as Record<string, unknown>;
+      employeeReadableId.value = employee.readable_id as string
+      const company = employee.company as Record<string, string>
+      companyReadableId.value = company.readable_id;
+    }).catch((error) => {
+      other.value = user.role || errorString
+      console.error(error)
+    })
+  } else if(employeeUuid){
+    // Admin or company: Fetch employee from URL (if given)
+    executeQuery(EMPLOYEE, {uuid: employeeUuid}).then((employeeResp) => {
+      const employee = employeeResp.data[EMPLOYEE.cacheLocation] as Record<string, unknown>;
+      employeeReadableId.value = employee.readable_id as string
+      const company = employee.company as Record<string, string>
+      companyReadableId.value = company.readable_id;
+    }).catch((error) => {
+      other.value = user.role || errorString
+      console.error(error)
+    })
+  } else {
+    other.value = errorString
+  }
 })
 </script>

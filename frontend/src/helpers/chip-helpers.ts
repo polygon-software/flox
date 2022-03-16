@@ -5,7 +5,6 @@
 import {DOSSIER_STATUS, OFFER_STATUS} from 'src/data/ENUM/ENUM';
 
 /**
- * ToDo Fix colors
  * Get style parameter for dossier status chip
  * @param  {DOSSIER_STATUS} status - status of dossier
  * @returns {string} - style

@@ -12,11 +12,16 @@ export const EMPLOYEE = {
         phone
         readable_id
         __typename
+        company {
+          uuid
+          readable_id
+          __typename
+        }
       }
     }
   `,
   tables: ['employee'],
-  cacheLocation: 'allEmployees'
+  cacheLocation: 'getEmployee'
 }
 
 export const ALL_EMPLOYEES = {
