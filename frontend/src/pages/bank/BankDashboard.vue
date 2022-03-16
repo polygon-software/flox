@@ -3,6 +3,8 @@
     class="q-pa-lg q-ma-none"
     style="margin-top: 50px"
   >
+    <!-- Own info -->
+    <BankInfoCard/>
 
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
@@ -134,6 +136,7 @@ import {DOSSIERS_BANK} from 'src/data/queries/DOSSIER';
 import {MY_BANK} from 'src/data/queries/BANK';
 import {DOSSIER_FILE} from 'src/data/queries/FILE';
 import {useRoute} from 'vue-router';
+import BankInfoCard from 'components/cards/BankInfoCard.vue';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
