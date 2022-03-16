@@ -31,7 +31,9 @@ export default {
     redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
     back_to_login: 'Back to Login',
     change_password: 'Change password',
-    unauthenticated: 'Unauthenticated'
+    unauthenticated: 'Unauthenticated',
+    qr_title: 'Set up 2FA',
+    qr_description: 'Set up 2-factor authentication with your preferred mobile authenticator app:'
   },
   account_data: {
     employees: 'Employees',

@@ -31,7 +31,9 @@ export default {
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
     back_to_login: 'Zurück zum Login',
     change_password: 'Passwort ändern',
-    unauthenticated: 'Nicht Angemeldet'
+    unauthenticated: 'Nicht Angemeldet',
+    qr_title: '2FA einrichten',
+    qr_description: 'Richten Sie 2-Faktor-Authentifizierung mit ihrer bevorzugten Authenticator-App ein:'
   },
   account_data: {
     employees: 'Mitarbeitende',
