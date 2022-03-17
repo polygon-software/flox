@@ -894,6 +894,7 @@ async function calculateValueEstimate(){
       low: customerEstimate,
       high: highEstimate
     }
+    prognosisAvailable.value = true
 
     // Set loading status
     valueEstimateLoading.value = false
