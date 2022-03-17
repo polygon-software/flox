@@ -25,7 +25,6 @@ export const MY_DOSSIERS = {
         purchase_date
         purchase_price
         property_type
-        market_value_estimation
         mortgage_amount
         prosecutions
         loss_certificates
@@ -33,10 +32,10 @@ export const MY_DOSSIERS = {
         affordability
         eligible_income
         total_costs
-        value_estimate_low
-        value_estimate_high
-        enfeoffment_estimate_low
-        enfeoffment_estimate_high
+        value_estimate_customer
+        value_estimate_calculated
+        enfeoffment_estimate_customer
+        enfeoffment_estimate_calculated
         partition_amounts
         partition_dates
         assets
@@ -119,7 +118,6 @@ export const REJECTED_DOSSIERS = {
         purchase_date
         purchase_price
         property_type
-        market_value_estimation
         mortgage_amount
         prosecutions
         loss_certificates
@@ -127,10 +125,10 @@ export const REJECTED_DOSSIERS = {
         affordability
         eligible_income
         total_costs
-        value_estimate_low
-        value_estimate_high
-        enfeoffment_estimate_low
-        enfeoffment_estimate_high
+        value_estimate_customer
+        value_estimate_calculated
+        enfeoffment_estimate_customer
+        enfeoffment_estimate_calculated
         assets
         address {
           uuid
@@ -202,7 +200,6 @@ export const DOSSIERS_BANK = {
         purchase_date
         purchase_price
         property_type
-        market_value_estimation
         mortgage_amount
         prosecutions
         loss_certificates
@@ -210,10 +207,10 @@ export const DOSSIERS_BANK = {
         affordability
         eligible_income
         total_costs
-        value_estimate_low
-        value_estimate_high
-        enfeoffment_estimate_low
-        enfeoffment_estimate_high
+        value_estimate_customer
+        value_estimate_calculated
+        enfeoffment_estimate_customer
+        enfeoffment_estimate_calculated
         partition_dates
         partition_amounts
         assets
@@ -282,7 +279,6 @@ export const GET_DOSSIER = {
         purchase_date
         purchase_price
         property_type
-        market_value_estimation
         mortgage_amount
         prosecutions
         loss_certificates
@@ -290,10 +286,10 @@ export const GET_DOSSIER = {
         affordability
         eligible_income
         total_costs
-        value_estimate_low
-        value_estimate_high
-        enfeoffment_estimate_low
-        enfeoffment_estimate_high
+        value_estimate_customer
+        value_estimate_calculated
+        enfeoffment_estimate_customer
+        enfeoffment_estimate_calculated
         partition_dates
         partition_amounts
         assets
@@ -361,7 +357,6 @@ export const ALL_DOSSIERS = {
         purchase_date
         purchase_price
         property_type
-        market_value_estimation
         mortgage_amount
         prosecutions
         loss_certificates
@@ -369,10 +364,10 @@ export const ALL_DOSSIERS = {
         affordability
         eligible_income
         total_costs
-        value_estimate_low
-        value_estimate_high
-        enfeoffment_estimate_low
-        enfeoffment_estimate_high
+        value_estimate_customer
+        value_estimate_calculated
+        enfeoffment_estimate_customer
+        enfeoffment_estimate_calculated
         partition_amounts
         partition_dates
         assets

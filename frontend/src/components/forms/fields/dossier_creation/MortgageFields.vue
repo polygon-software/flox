@@ -20,6 +20,7 @@
       <q-input
         v-model="partition.date"
         type="date"
+        stack-label
         dense
         :label="$t('dossier.expiration_date')"
         @update:model-value="checkMortgageExpirationDate"

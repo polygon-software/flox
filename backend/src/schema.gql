@@ -185,7 +185,7 @@ input CreateCompanyInput {
 
 input CreateDossierInput {
   address: CreateAddressInput!
-  affordability: Float!
+  affordability: Float
   alimony: Float!
   amortisation_amount: Float
   assets: Float!
@@ -198,8 +198,8 @@ input CreateDossierInput {
   direct_amortisation: Boolean
   eligible_income: Float!
   email: String!
-  enfeoffment_estimate_high: Float!
-  enfeoffment_estimate_low: Float!
+  enfeoffment_estimate_calculated: Float
+  enfeoffment_estimate_customer: Float!
   first_name: String!
   has_amortisation: Boolean!
   has_building_lease: Boolean!
@@ -208,7 +208,6 @@ input CreateDossierInput {
   last_name: String!
   leasing: Float!
   loss_certificates: Boolean!
-  market_value_estimation: Float!
   mortgage_amount: Float!
   non_arrangeable: Boolean!
   original_bank_abbreviation: String!
@@ -224,9 +223,9 @@ input CreateDossierInput {
   purchase_price: Float!
   renovation_price: Float
   renovation_year: Float
-  total_costs: Float!
-  value_estimate_high: Float!
-  value_estimate_low: Float!
+  total_costs: Float
+  value_estimate_calculated: Float
+  value_estimate_customer: Float!
   various: Float!
 }
 
@@ -310,7 +309,7 @@ type Dossier {
   address: Address!
 
   """Calculated affordability"""
-  affordability: Float!
+  affordability: Float
 
   """Alimony cost"""
   alimony: Float!
@@ -363,11 +362,11 @@ type Dossier {
   """Employee who created the Dossier"""
   employee: Employee!
 
-  """Enfeoffment for higher value estimate"""
-  enfeoffment_estimate_high: Float!
+  """Enfeoffment based on calculated value estimate"""
+  enfeoffment_estimate_calculated: Float
 
-  """Enfeoffment for lower value estimate"""
-  enfeoffment_estimate_low: Float!
+  """Enfeoffment based on customer value estimate"""
+  enfeoffment_estimate_customer: Float!
 
   """Final summary document, to be signed by customer"""
   final_document: PrivateFile
@@ -398,9 +397,6 @@ type Dossier {
 
   """Whether loss certificates exist on the property"""
   loss_certificates: Boolean!
-
-  """Current market value estimate"""
-  market_value_estimation: Float!
 
   """Current mortgage amount"""
   mortgage_amount: Float!
@@ -454,16 +450,16 @@ type Dossier {
   status: DossierStatus!
 
   """Total calculated costs"""
-  total_costs: Float!
+  total_costs: Float
 
   """UUID"""
   uuid: ID!
 
-  """Higher market value estimate"""
-  value_estimate_high: Float!
+  """Calculated market value estimate"""
+  value_estimate_calculated: Float
 
-  """Lower market value estimate"""
-  value_estimate_low: Float!
+  """Customer market value estimate"""
+  value_estimate_customer: Float!
 
   """Various costs"""
   various: Float!

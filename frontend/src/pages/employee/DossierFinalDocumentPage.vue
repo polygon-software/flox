@@ -72,12 +72,14 @@ import {i18n} from 'boot/i18n';
 import {ErrorService} from 'src/services/ErrorService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {sleep} from 'src/helpers/general-helpers';
+import {AuthenticationService} from 'src/services/AuthService';
 import DossierFinalDocumentPreview from 'components/dossier/DossierFinalDocumentPreview.vue';
+import {sleep} from 'src/helpers/general-helpers';
 
 const $q = useQuasar()
 const route = useRoute()
 const $errorService: ErrorService|undefined = inject('$errorService')
+const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 
 const dossierUuid = route.query.did as string
@@ -107,7 +109,7 @@ onMounted(async () => {
     )
   }
 
-  await sleep(100)
+  await sleep(200)
 
   // Upload PDF document
   await uploadPdfDocument()
@@ -127,6 +129,7 @@ async function uploadPdfDocument(){
   const files = {
     finalDocument: pdfFile
   }
+  await $authService?.refreshToken()
 
   // Upload document (replaces existing finalDocument, if any)
   const uploadResponse: Record<string, unknown> = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')

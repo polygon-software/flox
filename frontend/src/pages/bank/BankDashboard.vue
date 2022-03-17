@@ -53,13 +53,13 @@
               {{ _props.row.owner_occupied ? $t('form_for_clients.owner_occupied') : $t('account_data.usage_other') }}
             </q-td>
             <q-td key="market_value" :props="_props">
-              CHF {{ _props.row.value_estimate_low.toLocaleString('de-ch') }} - CHF {{ _props.row.value_estimate_high.toLocaleString('de-ch') }}
+              CHF {{ _props.row.value_estimate_customer.toLocaleString('de-ch') }} - CHF {{ _props.row.value_estimate_calculated.toLocaleString('de-ch') }}
             </q-td>
             <q-td key="mortgage" :props="_props">
               CHF {{ _props.row.mortgage_amount.toLocaleString('de-ch') }}
             </q-td>
             <q-td key="enfeoffment" :props="_props">
-              {{ _props.row.enfeoffment_estimate_low }}% - {{ _props.row.enfeoffment_estimate_high }}%
+              {{ _props.row.enfeoffment_estimate_customer }}% - {{ _props.row.enfeoffment_estimate_calculated }}%
             </q-td>
             <q-td key="affordability" :props="_props">
               {{ _props.row.affordability }}%

@@ -17,6 +17,7 @@
       :label="$t('general.from')"
       outlined
       dense
+      stack-label
       style="margin: 0 10px 0 10px"
       @change="emitValues"
     />
@@ -26,6 +27,7 @@
       :label="$t('general.to')"
       outlined
       dense
+      stack-label
       style="margin: 0 10px 0 10px"
       @change="emitValues"
     />

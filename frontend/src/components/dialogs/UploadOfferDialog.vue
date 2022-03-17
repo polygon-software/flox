@@ -37,10 +37,11 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineEmits, ref, Ref} from 'vue';
+import {defineEmits, inject, ref, Ref} from 'vue';
 import OfferUploadFields from 'components/forms/fields/document_upload/OfferUploadFields.vue';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import { useDialogPluginComponent } from 'quasar'
+import {AuthenticationService} from 'src/services/AuthService';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
@@ -48,6 +49,7 @@ const emit = defineEmits(useDialogPluginComponent.emits)
 // REQUIRED; must be called inside of setup()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 
 const props = defineProps({
@@ -75,6 +77,7 @@ function onFilesChange(newFiles: Record<string, File>){
  * @returns {void}
  */
 async function onOk(): Promise<void> {
+  await $authService?.refreshToken()
   await uploadFiles(files.value, `/uploadOfferFile?oid=${props.offerUuid}`, 'allDossiersBank')
   onDialogOK()
 }

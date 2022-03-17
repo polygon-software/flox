@@ -6,12 +6,22 @@ terraform {
     }
   }
   required_version      = ">= 0.14.9"
+  backend "remote" {
+    organization        = "polygon-software"
+
+    workspaces {
+      name = "Flox-prod"
+    }
+  }
 }
+
 
 // define AWS as provider
 provider "aws" {
   profile               = "default"
   region                = var.aws_region
+  secret_key          = var.aws_secret_access_key
+  access_key          = var.aws_access_key
 }
 
 resource "aws_vpc" "vpc" {
@@ -20,7 +30,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_support    = true
 
   tags = {
-    Name          = "${var.project}-${var.type}-vpc"
+    Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-vpc"
     Project       = var.project
   }
 
@@ -30,7 +40,7 @@ resource "aws_internet_gateway" "internet_gateway" {
   vpc_id                = aws_vpc.vpc.id
 
   tags = {
-    Name          = "${var.project}-${var.type}-internet-gateway"
+    Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-internet-gateway"
     Project       = var.project
   }
 }
@@ -38,7 +48,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 resource "aws_route_table" "route_table_private" {
   vpc_id                = aws_vpc.vpc.id
   tags = {
-    Name          = "${var.project}-${var.type}-${var.web}-route-table-private"
+    Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-route-table-private"
     Project       = var.project
     SubnetType    = "private"
   }
@@ -52,7 +62,7 @@ resource "aws_route_table" "route_table_public" {
   vpc_id                = aws_vpc.vpc.id
 
   tags = {
-    Name          = "${var.project}-${var.type}-route-table-public"
+    Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-route-table-public"
     Project       = var.project
     SubnetType    = "public"
   }
@@ -63,7 +73,7 @@ resource "aws_route_table" "route_table_public" {
 resource "aws_eip" "web_nat_elastic_ip" {
   vpc                   = true
   tags = {
-    Name          = "${var.project}-${var.type}-${var.web}-nat-eip"
+    Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-nat-eip"
     Project       = var.project
   }
 
@@ -78,7 +88,7 @@ resource "aws_nat_gateway" "frontend_nat" {
   subnet_id             = aws_subnet.frontend_public_subnet[0].id
 
   tags = {
-    Name          = "${var.project}-${var.type}-${var.web}-nat"
+    Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-nat"
     Project       = var.project
   }
 
@@ -107,15 +117,32 @@ resource "aws_route" "frontend_route_public" {
 
 // create aws s3 bucket to Upload app to
 resource "aws_s3_bucket" "source_code_bucket" {
-  bucket                = "${var.project}-${var.type}-app-bucket"
+  bucket                = "${var.project}-${lookup(var.type, terraform.workspace)}-app-bucket"
   tags = {
     Name          = "${var.project}-source-code-bucket"
     Project       = var.project
   }
 }
+// create aws s3 bucket to Upload public files to
+resource "aws_s3_bucket" "public_files" {
+  bucket                = "${var.project}-${lookup(var.type, terraform.workspace)}-public-bucket"
+  tags = {
+    Name          = "${var.project}-public-bucket"
+    Project       = var.project
+  }
+}
+// create aws s3 bucket to Upload public files to
+resource "aws_s3_bucket" "private_files" {
+  bucket                = "${var.project}-${lookup(var.type, terraform.workspace)}-private-bucket"
+  acl                   = "private"
+  tags = {
+    Name          = "${var.project}-private-bucket"
+    Project       = var.project
+  }
+}
 
 resource "aws_route53_record" "api_record" {
-  name                  = "${var.project}-${var.api}.${var.superdomain}"
+  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}.${var.superdomain}"
   type                  = "CNAME"
   zone_id               = var.route53_zone_id
   ttl                   = "300"
@@ -123,7 +150,7 @@ resource "aws_route53_record" "api_record" {
 }
 
 resource "aws_route53_record" "web_record" {
-  name                  = "${var.project}-${var.web}.${var.superdomain}"
+  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}.${var.superdomain}"
   type                  = "CNAME"
   zone_id               = var.route53_zone_id
   ttl                   = "300"

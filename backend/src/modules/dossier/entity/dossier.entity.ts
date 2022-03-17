@@ -118,12 +118,6 @@ export class Dossier extends Person {
   purchase_price: number;
 
   @Field(() => Number, {
-    description: 'Current market value estimate',
-  })
-  @Column()
-  market_value_estimation: number;
-
-  @Field(() => Number, {
     description: 'Current mortgage amount',
   })
   @Column()
@@ -294,8 +288,9 @@ export class Dossier extends Person {
 
   @Field(() => Number, {
     description: 'Calculated affordability',
+    nullable: true,
   })
-  @Column('float')
+  @Column('float', { nullable: true })
   affordability: number;
 
   @Field(() => Number, {
@@ -306,31 +301,34 @@ export class Dossier extends Person {
 
   @Field(() => Number, {
     description: 'Total calculated costs',
+    nullable: true,
   })
-  @Column()
+  @Column({ nullable: true })
   total_costs: number;
 
   @Field(() => Number, {
-    description: 'Lower market value estimate',
+    description: 'Customer market value estimate',
   })
   @Column()
-  value_estimate_low: number;
+  value_estimate_customer: number;
 
   @Field(() => Number, {
-    description: 'Higher market value estimate',
+    description: 'Calculated market value estimate',
+    nullable: true,
   })
-  @Column()
-  value_estimate_high: number;
+  @Column({ nullable: true })
+  value_estimate_calculated: number;
 
   @Field(() => Number, {
-    description: 'Enfeoffment for lower value estimate',
-  })
-  @Column('float')
-  enfeoffment_estimate_low: number;
-
-  @Field(() => Number, {
-    description: 'Enfeoffment for higher value estimate',
+    description: 'Enfeoffment based on customer value estimate',
   })
   @Column('float')
-  enfeoffment_estimate_high: number;
+  enfeoffment_estimate_customer: number;
+
+  @Field(() => Number, {
+    description: 'Enfeoffment based on calculated value estimate',
+    nullable: true,
+  })
+  @Column('float', { nullable: true })
+  enfeoffment_estimate_calculated: number;
 }

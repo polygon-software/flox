@@ -23,9 +23,9 @@ export const CREATE_DOSSIER = {
         renovation_year
         readable_id
         purchase_date
+        assets
         purchase_price
         property_type
-        market_value_estimation
         last_modified_at
         mortgage_amount
         prosecutions
@@ -34,10 +34,10 @@ export const CREATE_DOSSIER = {
         affordability
         eligible_income
         total_costs
-        value_estimate_low
-        value_estimate_high
-        enfeoffment_estimate_low
-        enfeoffment_estimate_high
+        value_estimate_customer
+        value_estimate_calculated
+        enfeoffment_estimate_customer
+        enfeoffment_estimate_calculated
         partition_amounts
         partition_dates
         address {

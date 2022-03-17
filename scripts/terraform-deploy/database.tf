@@ -1,6 +1,6 @@
 //RDS database stuff
 resource "aws_db_subnet_group" "database_subnet_group" {
-  name                      = "${var.project}-${var.type}-database-subnet-group"
+  name                      = "${var.project}-${lookup(var.type, terraform.workspace)}-database-subnet-group"
   subnet_ids                = aws_subnet.database_subnets.*.id
   tags = {
     Project       = var.project
@@ -22,7 +22,7 @@ resource "aws_subnet" "database_subnets" {
 resource "aws_rds_cluster" "database_cluster" {
   engine                    = "aurora-postgresql"
   engine_version            = "12.7"
-  cluster_identifier        = "${var.project}-${var.type}-database-cluster"
+  cluster_identifier        = "${var.project}-${lookup(var.type, terraform.workspace)}-database-cluster"
   database_name             = var.database_name
   master_username           = var.database_master_username
   master_password           = var.database_master_password  // Mhm..
@@ -35,7 +35,7 @@ resource "aws_rds_cluster" "database_cluster" {
 }
 
 resource "aws_rds_cluster_instance" "database_cluster_instances" {
-  identifier                = "${var.project}-${var.type}-rds-${count.index}"
+  identifier                = "${var.project}-${lookup(var.type, terraform.workspace)}-rds-${count.index}"
   engine                    = "aurora-postgresql"
   engine_version            = "12.7"
   cluster_identifier        = aws_rds_cluster.database_cluster.id
@@ -48,7 +48,7 @@ resource "aws_rds_cluster_instance" "database_cluster_instances" {
 }
 
 resource "aws_security_group" "database_security_group" {
-  name                      = "${var.project}-${var.type}-database-security-group"
+  name                      = "${var.project}-${lookup(var.type, terraform.workspace)}-database-security-group"
   vpc_id                    = aws_vpc.vpc.id
   tags = {
     Project       = var.project
