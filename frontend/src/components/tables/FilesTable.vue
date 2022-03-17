@@ -31,53 +31,53 @@
       separator="none"
       @request="updatePagination"
     >
-      <template #body="props">
+      <template #body="_props">
         <q-tr
-          :props="props"
-          @click="() => onRowClick(props.row)"
+          :props="_props"
+          @click="() => onRowClick(_props.row)"
         >
           <q-td key="file">
-            {{ props.row.file }}
+            {{ _props.row.file }}
           </q-td>
           <q-td key="type">
-            {{ props.row.type }}
+            {{ _props.row.type }}
           </q-td>
           <q-td key="dateTime">
-            {{ formatDate(props.row.dateTime, 'DD.MM.YYYY') }}
+            {{ formatDate(_props.row.dateTime, 'DD.MM.YYYY') }}
           </q-td>
           <q-td key="peakX">
-            {{ props.row.peakX }}
+            {{ _props.row.peakX }}
           </q-td>
           <q-td key="peakY">
-            {{ props.row.peakY }}
+            {{ _props.row.peakY }}
           </q-td>
           <q-td key="peakZ">
-            {{ props.row.peakZ }}
+            {{ _props.row.peakZ }}
           </q-td>
           <q-td key="frequencyX">
-            {{ props.row.frequencyX }}
+            {{ _props.row.frequencyX }}
           </q-td>
           <q-td key="frequencyY">
-            {{ props.row.frequencyY }}
+            {{ _props.row.frequencyY }}
           </q-td>
           <q-td key="frequencyZ">
-            {{ props.row.frequencyZ }}
+            {{ _props.row.frequencyZ }}
           </q-td>
           <q-td key="VSUM">
-            {{ props.row.VSUM }}
+            {{ _props.row.VSUM }}
           </q-td>
           <q-td key="fileName">
             <a
               href="#"
-              @click.stop="()=>{downloadFile(props.row.downloadURL)}"
-              v-text="props.row.fileName"
+              @click.stop="()=>{downloadFile(_props.row.downloadURL)}"
+              v-text="_props.row.fileName"
             />
           </q-td>
           <q-td key="preview">
             <a
               href="#"
-              @click.stop="()=>{preview(props.row.previewURL)}"
-              v-text="props.row.previewURL ? 'show': ''"
+              @click.stop="()=>{preview(_props.row.previewURL)}"
+              v-text="_props.row.previewURL ? 'show': ''"
             />
           </q-td>
         </q-tr>
