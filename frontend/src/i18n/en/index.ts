@@ -261,8 +261,8 @@ export default {
     current_month: 'Current month',
     past_365_days: 'Past 365 days',
     date_filter: 'Date Filter',
-    no_prognosis: 'In the given Zip Code no prognosis is possible'
-
+    no_prognosis: 'In the given Zip Code no prognosis is possible',
+    no_prognosis_short: 'No prognosis possible'
   },
   errors: {
     nothing_here: 'Oops. Nothing here...',
@@ -410,6 +410,7 @@ export default {
     enfeoffment_first_rank: '1. Rank',
     enfeoffment_second_rank: '1. & 2. Rank',
     enfeoffment_too_high: 'Not financeable',
+    not_calculable: 'Not calculable',
     discard_dossier: 'All entered data will be lost. Are you sure?',
     formula: '(Mortgage Value * Interest Rate) + (0.01 * Market Value Estimate) + Amortization',
     preview: 'Preview'

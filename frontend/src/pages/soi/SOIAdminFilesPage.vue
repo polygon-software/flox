@@ -170,6 +170,7 @@ function onCsvUpload(){
             'negative'
           )
         })
+        // eslint-disable-next-line sonarjs/no-identical-functions
       }).catch(() => {
         // Show error message
         showNotification(

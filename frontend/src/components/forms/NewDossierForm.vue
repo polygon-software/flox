@@ -169,8 +169,8 @@
           <!-- Estimated value range -->
           <SummaryField
             :label="$t('form_for_clients.market_value_between')"
-            :content="valueEstimate && valueEstimate.low ? `CHF ${valueEstimate.low.toLocaleString('de-ch') }` : '-'"
-            :second-content="prognosisAvailable ? (valueEstimateLoading ? $t('general.loading') : valueEstimate && valueEstimate.high ? `CHF ${valueEstimate.high.toLocaleString('de-ch')}` : '-'): $t('dossier.no_prognosis') "
+            :content="valueEstimate && valueEstimate.customer ? `CHF ${valueEstimate.customer.toLocaleString('de-ch') }` : '-'"
+            :second-content="prognosisAvailable ? (valueEstimateLoading ? $t('general.loading') : valueEstimate && valueEstimate.calculated ? `CHF ${valueEstimate.calculated.toLocaleString('de-ch')}` : '-'): $t('dossier.no_prognosis') "
             :caption="$t('dossier.customer_value')"
             :second-caption="$t('dossier.estimated_market_value')"
             value-type="positive"
@@ -182,10 +182,10 @@
           <!-- Enfeoffment -->
           <SummaryField
             :label="$t('form_for_clients.enfeoffment_between')"
-            :content="enfeoffmentEstimate.low ? `${enfeoffmentEstimate.low}%` : '-' "
-            :second-content="enfeoffmentEstimate.high ? `${enfeoffmentEstimate.high}%` : '-' "
-            :caption="enfeoffmentRank(enfeoffmentEstimate.low)"
-            :second-caption="enfeoffmentRank(enfeoffmentEstimate.high)"
+            :content="enfeoffmentEstimate.customer ? `${enfeoffmentEstimate.customer}%` : '-' "
+            :second-content="enfeoffmentEstimate.calculated ? `${enfeoffmentEstimate.calculated}%` : '-' "
+            :caption="enfeoffmentRank(enfeoffmentEstimate.customer)"
+            :second-caption="enfeoffmentRank(enfeoffmentEstimate.calculated)"
             bold
           />
 
@@ -475,12 +475,12 @@ const nonArrangeable = computed(() => {
 const bankOptions: Ref<Record<string, unknown>[]> = ref([])
 
 // Value estimate high/low
-const valueEstimate: Ref<null|Record<string, number>> = ref(null)
+const valueEstimate: Ref<null|Record<string, number|null>> = ref(null)
 
 // Whether the value estimate is currently being loaded from the backend
 const valueEstimateLoading = ref(false)
 
-// Whether the from has been submitted (to prevent multi-submit)
+// Whether the form has been submitted (to prevent multi-submit)
 const hasSubmitted = ref(false)
 
 // Whether the region of the given zip code is in the value_development table
@@ -550,7 +550,7 @@ const totalCosts = computed(() => {
   }
 
   // Higher market value estimate
-  const marketValueEstimation = valueEstimate.value.high
+  const marketValueEstimation = valueEstimate.value.calculated
 
   // Yearly amortisation cost
   const amortisation = (form.values.value.amortisation as Record<string, number>|undefined)?.amortisationAmount ?? 0
@@ -573,7 +573,7 @@ const totalCostsAsString = computed(() => {
   }
 
   // Higher market value estimate
-  const marketValueEstimation = valueEstimate.value.high
+  const marketValueEstimation = valueEstimate.value.calculated
 
   // Yearly amortisation cost
   const amortisation = (form.values.value.amortisation as Record<string, number>|undefined)?.amortisationAmount ?? 0
@@ -609,18 +609,18 @@ const enfeoffmentEstimate = computed(() => {
   // Invalid, data missing
   if(!mortgage.value) {
     return {
-      low: null,
-      high: null
+      customer: null,
+      calculated: null
     }
   }
-  const low = valueEstimate.value?.low ? parseFloat((mortgage.value/valueEstimate.value.low * 100).toFixed(2)) : null
-  const high = valueEstimate.value?.high ? parseFloat((mortgage.value/valueEstimate.value.high * 100).toFixed(2)) : null
+  const customer = valueEstimate.value?.customer ? parseFloat((mortgage.value/valueEstimate.value.customer * 100).toFixed(2)) : null
+  const calculated = valueEstimate.value?.calculated ? parseFloat((mortgage.value/valueEstimate.value.calculated * 100).toFixed(2)) : null
 
 
-  // Return as array (low & high estimate)
+  // Return as array (customer & calculated estimate)
   return {
-    low,
-    high,
+    customer,
+    calculated,
   }
 
 })
@@ -649,7 +649,6 @@ const dossierObject = computed(() => {
   const ownerOccupied = formData.owner_occupied
   const purchaseDate = formData.date_of_purchase
   const purchasePrice = formData.enfeoffment?.price
-  const marketValueEstimation = formData.enfeoffment?.marketValueEstimation
   const mortgageAmount = formData.enfeoffment?.currentValueOfMortgage
 
   // Page 3
@@ -688,10 +687,10 @@ const dossierObject = computed(() => {
   // Verify all mandatory attributes are present
   if([
     firstName, lastName, address, email, phone, birthdate,
-    bankName, bankAbbreviation, propertyType, ownerOccupied, purchaseDate, purchasePrice, marketValueEstimation,
+    bankName, bankAbbreviation, propertyType, ownerOccupied, purchaseDate, purchasePrice,
     mortgageAmount, hasAmortisation, hasBuildingLease, hasRenovation, mortgagePartitions,
     incomes, childAllowances, bonus, assets, leasing, credit, alimony, various, lossCertificates, prosecutions,
-    affordability.value, eligibleIncome.value, totalCosts.value, valueEstimate.value, enfeoffmentEstimate.value
+    eligibleIncome.value, valueEstimate.value, enfeoffmentEstimate.value
   ].some((value) => value === null || value === undefined)){
     return null
   }
@@ -715,7 +714,6 @@ const dossierObject = computed(() => {
       owner_occupied: ownerOccupied,
       purchase_date: purchaseDate,
       purchase_price: parseInt(purchasePrice as string),
-      market_value_estimation: parseInt(marketValueEstimation as string),
       mortgage_amount: parseInt(mortgageAmount as string),
 
       // Amortisation information
@@ -757,10 +755,10 @@ const dossierObject = computed(() => {
       affordability: affordability.value,
       eligible_income: eligibleIncome.value,
       total_costs: totalCosts.value,
-      value_estimate_low: valueEstimate.value?.low,
-      value_estimate_high: valueEstimate.value?.high,
-      enfeoffment_estimate_low: enfeoffmentEstimate.value.low,
-      enfeoffment_estimate_high: enfeoffmentEstimate.value.high,
+      value_estimate_customer: valueEstimate.value?.customer,
+      value_estimate_calculated: valueEstimate.value?.calculated,
+      enfeoffment_estimate_customer: enfeoffmentEstimate.value.customer,
+      enfeoffment_estimate_calculated: enfeoffmentEstimate.value.calculated,
   }
 })
 
@@ -803,8 +801,8 @@ async function onPageChange(){
       affordabilityWarning = i18n.global.t('warnings.affordability_critical')
     }
 
-    // Trigger warning depending on enfeoffment ratio (if >80%), use low value because its enfeoffment is higher
-    if(enfeoffmentEstimate.value && enfeoffmentEstimate.value.low && enfeoffmentEstimate.value.low > 80){
+    // Trigger warning depending on enfeoffment ratio (if >80%)
+    if(enfeoffmentEstimate.value && enfeoffmentEstimate.value.calculated && enfeoffmentEstimate.value.calculated > 80){
       enfeoffmentWarning = i18n.global.t('warnings.enfeoffment_warning')
     }
 
@@ -891,8 +889,8 @@ async function calculateValueEstimate(){
 
     // Return as array (low & high estimate)
     valueEstimate.value = {
-      low: customerEstimate,
-      high: highEstimate
+      customer: customerEstimate,
+      calculated: highEstimate
     }
     prognosisAvailable.value = true
 
@@ -901,8 +899,8 @@ async function calculateValueEstimate(){
   }).catch(()=>{
     // Return as array (low & high estimate)
     valueEstimate.value = {
-      low: customerEstimate,
-      high: customerEstimate
+      customer: customerEstimate,
+      calculated: null
     }
     prognosisAvailable.value = false
     valueEstimateLoading.value = false
@@ -975,7 +973,6 @@ async function onSubmit() {
   const ownerOccupied = formData.owner_occupied
   const purchaseDate = formData.date_of_purchase
   const purchasePrice = formData.enfeoffment?.price
-  const marketValueEstimation = formData.enfeoffment?.marketValueEstimation
   const mortgageAmount = formData.enfeoffment?.currentValueOfMortgage
 
   // Page 3
@@ -1014,10 +1011,10 @@ async function onSubmit() {
   // Verify all mandatory attributes are present
   if([
     firstName, lastName, address, email, phone, birthdate,
-    bankName, bankAbbreviation, propertyType, ownerOccupied, purchaseDate, purchasePrice, marketValueEstimation,
+    bankName, bankAbbreviation, propertyType, ownerOccupied, purchaseDate, purchasePrice,
     mortgageAmount, hasAmortisation, hasBuildingLease, hasRenovation, mortgagePartitions,
     incomes, childAllowances, bonus, assets, leasing, credit, alimony, various, lossCertificates, prosecutions,
-    affordability.value, eligibleIncome.value, totalCosts.value, valueEstimate.value, enfeoffmentEstimate.value
+    eligibleIncome.value, valueEstimate.value, enfeoffmentEstimate.value
   ].some((value) => value === null || value === undefined)){
     // Show error
     $errorService?.showErrorDialog(
@@ -1045,7 +1042,6 @@ async function onSubmit() {
       owner_occupied: ownerOccupied,
       purchase_date: purchaseDate,
       purchase_price: parseInt(purchasePrice as string),
-      market_value_estimation: parseInt(marketValueEstimation as string),
       mortgage_amount: parseInt(mortgageAmount as string),
 
       // Amortisation information
@@ -1087,10 +1083,10 @@ async function onSubmit() {
       affordability: affordability.value,
       eligible_income: eligibleIncome.value,
       total_costs: totalCosts.value,
-      value_estimate_low: valueEstimate.value?.low,
-      value_estimate_high: valueEstimate.value?.high,
-      enfeoffment_estimate_low: enfeoffmentEstimate.value.low,
-      enfeoffment_estimate_high: enfeoffmentEstimate.value.high,
+      value_estimate_customer: valueEstimate.value?.customer,
+      value_estimate_calculated: valueEstimate.value?.calculated,
+      enfeoffment_estimate_customer: enfeoffmentEstimate.value.customer,
+      enfeoffment_estimate_calculated: enfeoffmentEstimate.value.calculated,
     }
   })
 
@@ -1121,8 +1117,10 @@ async function onSubmit() {
  * @param {number} rate - enfeoffment rate in percent
  * @returns {string} - rank string
  */
-function enfeoffmentRank(rate: number){
-  if(rate <= 66){
+function enfeoffmentRank(rate: number|null){
+  if(rate === null){
+    return i18n.global.t('form_for_clients.not_calculable')
+  } else if(rate <= 66){
     return i18n.global.t('form_for_clients.enfeoffment_first_rank')
   } else if(rate > 66 && rate <= 80){
     return i18n.global.t('form_for_clients.enfeoffment_second_rank')

@@ -20,6 +20,7 @@
       v-model="expirationDate"
       type="date"
       :label="$t('form_for_clients.expiration_date')"
+      stack-label
       @update:model-value="checkExpirationDate"
     />
 

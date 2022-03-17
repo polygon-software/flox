@@ -263,7 +263,8 @@ export default {
     current_month: 'Aktueller Monat',
     past_365_days: 'Letzte 365 Tage',
     date_filter: 'Datumsfilter',
-    no_prognosis: 'Für die angegebene Postleitzahl ist keine Prognose möglich'
+    no_prognosis: 'Für die angegebene Postleitzahl ist keine Prognose möglich',
+    no_prognosis_short: 'Nicht berechenbar'
   },
   errors: {
     nothing_here: 'Hoppla. Hier hat es nichts...',
@@ -410,6 +411,7 @@ export default {
     enfeoffment_first_rank: '1. Rang',
     enfeoffment_second_rank: '1. & 2. Rang',
     enfeoffment_too_high: 'Nicht finanzierbar',
+    not_calculable: 'Nicht berechenbar',
     discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?',
     formula: '(Hypothekenwert * Zinssatz) + (0,01 * Marktwertschätzung) + Amortisation',
     preview: 'Vorschau'
