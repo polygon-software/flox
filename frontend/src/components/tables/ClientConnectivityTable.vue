@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, Ref, ref, defineProps, reactive} from 'vue';
+import {onMounted, Ref, ref, defineProps} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
