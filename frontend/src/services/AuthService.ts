@@ -18,6 +18,9 @@ import {i18n} from 'boot/i18n';
 import {useApolloClient} from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {executeMutation} from 'src/helpers/data-helpers';
+import {VERIFY_EMAIL} from 'src/data/mutations/USER';
+import {sleep} from 'src/helpers/general-helpers';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -101,7 +104,10 @@ export class AuthenticationService {
           // Store in local variable
           this.$authStore.mutations.setCognitoUser(cognitoUser)
           cognitoUser.authenticateUser(authenticationDetails, {
-            onSuccess: (result)=>{ this.loginSuccess(result); resolve()},
+            onSuccess: (result) => {
+              this.loginSuccess(result);
+              resolve()
+            },
             onFailure: (err: Error)=>{this.onFailure(err) },
             // Sets up MFA (only done once after signing up)
             mfaSetup: () => {
@@ -455,9 +461,41 @@ export class AuthenticationService {
    * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
    * @returns {void}
    */
-  loginSuccess(userSession: CognitoUserSession): void{
+  loginSuccess(userSession: CognitoUserSession): void {
     // Store locally
     this.$authStore.mutations.setUserSession(userSession)
+    console.log('asdölf')
+    new Promise((resolve, reject) => {
+      this.$authStore.getters.getCognitoUser()?.getAttributeVerificationCode('email', {
+        onSuccess(success: string): void {
+          console.log(success)
+          resolve(null)
+        },
+        onFailure: (err: Error) => {
+          console.error(err)
+          reject()
+        }
+      })
+    }).then(async () => {
+      await sleep(10000)
+      const token = prompt('give me code')
+      await new Promise((resolve, reject) => {
+        this.$authStore.getters.getCognitoUser()?.verifyAttribute('email', token as string, {
+          onSuccess(success: string): void {
+            console.log(success)
+            resolve(null)
+          },
+          onFailure: (err: Error) => {
+            console.error(err)
+            reject()
+          }
+        })
+      })
+    }).catch((e)=>{
+      console.error(e)
+    })
+
+
   }
 
   /**

@@ -16,6 +16,7 @@ import { ERRORS } from '../../error/ERRORS';
 import { EmployeeService } from '../employee/employee.service';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -50,6 +51,22 @@ export class UserResolver {
       throw new Error('No User authenticated');
     }
 
+    return this.userService.getUser({ uuid: user.userId });
+  }
+
+  @AnyRole()
+  @Mutation(() => User, { name: 'verifyEmail' })
+  async verifyEmail(
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<User> {
+    const provider = new CognitoIdentityProvider({
+      region: process.env.AWS_REGION ?? 'eu-central-1',
+    });
+    const res = await provider.resendConfirmationCode({
+      Username: user.userId,
+      ClientId: process.env.USER_POOL_CLIENT_ID,
+    });
+    console.log(res);
     return this.userService.getUser({ uuid: user.userId });
   }
 
