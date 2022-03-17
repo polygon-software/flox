@@ -6,8 +6,8 @@ export default (): Config => ({
   database: {
     host: process.env.MR_HOST,
     port: process.env.MR_PORT,
-    username: process.env.MR_USER,
-    password: process.env.MR_PASSWORD,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
   },
   mr2000: {

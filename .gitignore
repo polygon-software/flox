@@ -1,3 +1,6 @@
+# GraphQL
+backend/src/schema.gql
+
 # Quasar
 frontend/.quasar
 

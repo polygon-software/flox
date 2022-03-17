@@ -29,11 +29,15 @@ import { ProjectModule } from './modules/project/project.module';
       isGlobal: true,
       load: [configuration],
       validationSchema: Joi.object({
+        // Database
+        DB_DATABASE: Joi.string().required(),
+        DB_USER: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+
         // Server
         SERVER_PORT: Joi.number().required(),
 
         // Maria DB
-        DB_DATABASE: Joi.string().required(),
         MR_PORT: Joi.number().required(),
         MR_2000: Joi.string().required(),
         MR_3000: Joi.string().required(),
