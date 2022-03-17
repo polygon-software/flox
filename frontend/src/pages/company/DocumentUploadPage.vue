@@ -31,7 +31,9 @@ import {useRoute} from 'vue-router';
 import axios from 'axios';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
+import {AuthenticationService} from 'src/services/AuthService';
 
+const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 
 // Upload loading status
@@ -77,6 +79,7 @@ async function onSubmit(values: Record<string, Record<string, File|null>>){
       }
       const cid: string = route.query.cid.toString()
       const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
+      await $authService?.refreshToken()
 
       await axios({
         method: 'post',

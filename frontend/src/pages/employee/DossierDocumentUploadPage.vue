@@ -147,9 +147,11 @@ import {GET_DOSSIER} from 'src/data/queries/DOSSIER';
 import {uploadFiles} from 'src/helpers/file-helpers';
 import {REMOVE_FILES_DOSSIER} from 'src/data/mutations/DOSSIER';
 import {PROPERTY_TYPE} from 'app/definitions/ENUMS';
+import {AuthenticationService} from 'src/services/AuthService';
 
 const route = useRoute()
 const $routerService: RouterService|undefined = inject('$routerService')
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 const showQFile = ref(false)
 
@@ -538,6 +540,8 @@ async function uploadAllFiles(){
       })
     })
   })
+  await $authService?.refreshToken()
+
   await uploadFiles(filesToUpload, `/uploadDossierFile?did=${dossierUuid.toString()}`, 'getMyDossiers')
 
   if(filesToDelete.value.length>0){

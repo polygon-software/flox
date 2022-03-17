@@ -276,9 +276,12 @@ import {DOSSIER_WARNING} from 'app/definitions/ENUMS';
 import axios from 'axios';
 import {dateToInputString} from 'src/helpers/date-helpers';
 import {getAuthToken} from 'src/helpers/cookie-helpers';
+import {AuthenticationService} from 'src/services/AuthService';
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
+const $authService: AuthenticationService|undefined = inject('$authService')
+
 const $q = useQuasar()
 
 
@@ -712,6 +715,7 @@ async function calculateValueEstimate(){
   }
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
   const url = `${baseUrl}/getValueDevelopment?zipCode=${zipCode}&start=${startDateString}&end=${endDateString}`
+  await $authService?.refreshToken()
 
   // Get value multiplier from backend
   await axios.get(url, {headers}).then((multiplierRequest) => {

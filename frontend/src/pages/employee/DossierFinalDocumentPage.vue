@@ -373,10 +373,12 @@ import {ErrorService} from 'src/services/ErrorService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {sleep} from 'src/helpers/general-helpers';
+import {AuthenticationService} from 'src/services/AuthService';
 
 const $q = useQuasar()
 const route = useRoute()
 const $errorService: ErrorService|undefined = inject('$errorService')
+const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 
 const dossierUuid = route.query.did as string
@@ -430,6 +432,7 @@ async function uploadPdfDocument(){
   const files = {
     finalDocument: pdfFile
   }
+  await $authService?.refreshToken()
 
   // Upload document (replaces existing finalDocument, if any)
   const uploadResponse: Record<string, unknown> = await uploadFiles(files, `/uploadDossierFinalDocument?did=${dossierUuid}`, 'getMyDossiers')

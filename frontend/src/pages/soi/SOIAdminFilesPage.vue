@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import ValueIncreaseUploadField from 'components/forms/fields/admin_file_upload/ValueIncreaseUploadField.vue';
-import { ref, Ref, watch} from 'vue';
+import {inject, ref, Ref, watch} from 'vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {i18n} from 'boot/i18n';
 import {openURL, useQuasar} from 'quasar';
@@ -97,6 +97,8 @@ import {executeQuery} from 'src/helpers/data-helpers';
 import {LOG_FILES} from 'src/data/queries/FILE';
 import {formatDate} from 'src/helpers/format-helpers'
 import {parse} from 'date-fns';
+import {AuthenticationService} from 'src/services/AuthService';
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 const $q = useQuasar()
 
@@ -146,19 +148,28 @@ function onCsvUpload(){
     }).onOk(() => {
       // Prepare file
       const files = {'value_development.csv': file.value}
-
-      // Upload actual file
-      uploadFiles(
-        files,
-        '/uploadValueDevelopmentFile'
-      ).then(() => {
-        // Show confirmation prompt
-        showNotification(
-          $q,
-          i18n.global.t('messages.file_uploaded'),
-          undefined,
-          'positive'
-        )
+      $authService?.refreshToken().then(()=>{
+        // Upload actual file
+        uploadFiles(
+          files,
+          '/uploadValueDevelopmentFile'
+        ).then(() => {
+          // Show confirmation prompt
+          showNotification(
+            $q,
+            i18n.global.t('messages.file_uploaded'),
+            undefined,
+            'positive'
+          )
+        }).catch(() => {
+          // Show error message
+          showNotification(
+            $q,
+            i18n.global.t('errors.file_upload_failed'),
+            undefined,
+            'negative'
+          )
+        })
       }).catch(() => {
         // Show error message
         showNotification(
@@ -168,6 +179,8 @@ function onCsvUpload(){
           'negative'
         )
       })
+
+
     })
   }
 }
