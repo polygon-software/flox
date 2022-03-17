@@ -38,7 +38,6 @@ const $q = useQuasar()
 
 /**
  * Routes to new Contact Dialog
- * @async
  * @returns {void}
  */
 function newContact(){

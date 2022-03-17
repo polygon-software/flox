@@ -106,12 +106,15 @@
 </template>
 
 <script setup lang="ts">
-import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {inject, ref, onMounted, defineProps, Ref} from 'vue';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import {DEVICE_PARAMS} from 'src/data/queries/DEVICE';
 import {UPDATE_PARAMS} from 'src/data/mutations/DEVICE';
+import LoadParameterDialog from 'components/dialogs/LoadParameterDialog.vue';
+import {useQuasar} from 'quasar';
+
+const $q = useQuasar()
 
 const routerService: RouterService|undefined = inject('$routerService')
 
@@ -172,12 +175,14 @@ onMounted(async () => {
 
 /**
  * Loads the parameters of that device pool which are selected
- * @async
  * @returns {void}
  */
-async function loadParameters(): Promise<void>{
-  //TODO: loads the parameters
-  await routerService?.routeTo(ROUTES.CUSTOMERS)
+function loadParameters() {
+  //TODO: onOK
+  $q.dialog({
+    component: LoadParameterDialog,
+    componentProps: {}
+  })
 }
 
 /**

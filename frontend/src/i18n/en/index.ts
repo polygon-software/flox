@@ -100,6 +100,7 @@ export default {
     battery: 'Power/Battery',
     memory: 'Memory',
     daily: 'Daily',
+    parameters_from_another: 'Get Alerting parameters from another MR',
   },
   buttons: {
     finish: 'Finish',

@@ -101,6 +101,7 @@ export default {
     battery: 'Leistung/Batterie',
     memory: 'Erinnerung',
     daily: 'Täglich',
+    parameters_from_another: 'Abrufen von Warnparametern von einem anderen MR',
   },
   buttons: {
     finish: 'Abschliessen',
