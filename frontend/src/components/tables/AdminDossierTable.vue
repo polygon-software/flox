@@ -25,7 +25,6 @@
     <q-table
       card-style="border-radius: 8px; background-color: transparent"
       table-header-class="bg-transparent"
-      color="transparent"
       :rows="rows"
       :columns="columns"
       row-key="uuid"

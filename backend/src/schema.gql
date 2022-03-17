@@ -471,9 +471,11 @@ type Dossier {
 
 enum DossierStatus {
   COMPLETED
+  CONTRACT_UPLOADED
   IN_PROGRESS
   OFFERED
   OPEN
+  PRODUCT_AGREEMENT_CONFIRMED
   REJECTED
   SENT
   SIGNED
@@ -590,7 +592,6 @@ type Mutation {
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
   updateOfferStatus(updateOfferStatusInput: UpdateOfferStatusInput!): Dossier!
-  verifyUser: String!
 }
 
 type Offer {

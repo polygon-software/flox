@@ -31,7 +31,9 @@ export default {
     redirect_to_login: 'Your registration is now being processed! You will now be automatically redirected to the login screen.',
     back_to_login: 'Back to Login',
     change_password: 'Change password',
-    unauthenticated: 'Unauthenticated'
+    unauthenticated: 'Unauthenticated',
+    qr_title: 'Set up 2FA',
+    qr_description: 'Set up 2-factor authentication with your preferred mobile authenticator app:'
   },
   account_data: {
     employees: 'Employees',
@@ -47,6 +49,7 @@ export default {
     street: 'Street',
     number: 'Number',
     zip_code: 'ZIP Code',
+    zip_code_short: 'ZIP',
     city: 'City',
     interests: 'Interests',
     company: 'Company',
@@ -85,6 +88,8 @@ export default {
     offer: 'offer',
     abbreviation: 'Abbreviation',
     bank: 'Bank | Banks',
+    usage_type: 'Usage Type',
+    usage_other: 'Not owner-occup.'
   },
   messages: {
     account_unlocked: 'Successfully unlocked account',
@@ -406,7 +411,8 @@ export default {
     enfeoffment_second_rank: '1. & 2. Rank',
     enfeoffment_too_high: 'Not financeable',
     discard_dossier: 'All entered data will be lost. Are you sure?',
-    formula: '(Mortgage Value * Interest Rate) + (0.01 * Market Value Estimate) + Amortization'
+    formula: '(Mortgage Value * Interest Rate) + (0.01 * Market Value Estimate) + Amortization',
+    preview: 'Preview'
   },
   dossier_status_enum: {
     OPEN: 'Open',
@@ -417,6 +423,8 @@ export default {
     COMPLETED: 'Completed',
     IN_PROGRESS: 'Credit contract in process',
     SENT: 'Credit contract sent',
+    CONTRACT_UPLOADED: 'Order sheet uploaded',
+    PRODUCT_AGREEMENT_CONFIRMED: 'Product agreement confirmed'
   },
   offer_status_enum: {
     INTERESTED: 'Interested',
@@ -442,7 +450,7 @@ export default {
     retirement_warning: 'The acceptability of risks is different for people over the age of 60',
     warning_landlord: 'Only  mortgages with public building lease landlords are applicable',
     mortgage_too_short: 'The expiration date of the mortgage is to soon!',
-    mortgage_note: 'Attention: Mortgage note splitting may be required!',
+    mortgage_note: 'The expiration date is too far in the future (max. 12 months). Contact your contact person at a later time.',
     building_lease_warning: 'Based on the entered data, no mortgage can be offered through this platform!',
     prosecutions_loss_certificates: 'Attention: If prosecutions or loss certificates exist... TODO',
     affordability_impossible: 'Attention: Due to the affordability of more than 35%, this mortgage cannot be financed.',
@@ -498,5 +506,7 @@ export default {
     team_leader: 'Team Leader',
     sales_leader: 'Sales Leader',
     branch_leader: 'Branch Leader',
+    regional_leader: 'Regional Leader',
+    managing_director: 'Managing Director'
   }
 };

@@ -300,7 +300,19 @@ export class FileController {
 
     const file = await req.file();
 
-    if (file.mimetype !== 'text/csv') {
+    // Check for valid Mimetype
+    if (
+      [
+        'text/plain',
+        'text/x-csv',
+        'application/vnd.ms-excel',
+        'application/csv',
+        'application/x-csv',
+        'text/csv',
+        'text/comma-separated-values',
+        'text/x-comma-separated-values',
+      ].includes(file.mimetype)
+    ) {
       res.send(new BadRequestException(ERRORS.no_valid_file));
     }
 

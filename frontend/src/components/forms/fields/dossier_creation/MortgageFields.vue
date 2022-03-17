@@ -180,9 +180,8 @@ function checkMortgageExpirationDate(expirationDateString: string){
   // Set up reference dates
   const dateInAMonth = new Date(new Date().setMonth(new Date().getMonth() + 1))
   const dateIn12Months = new Date(new Date().setMonth(new Date().getMonth() + 12))
-  const dateIn24Months = new Date(new Date().setMonth(new Date().getMonth() + 24))
 
-  // Warning case 1: <12 months in the future
+  // Warning case 1: <1 month in the future
   if(expirationDate.getTime() < dateInAMonth.getTime()){
     if(!popupOpen.value){
       popupOpen.value = true
@@ -200,8 +199,8 @@ function checkMortgageExpirationDate(expirationDateString: string){
       emit('warning', DOSSIER_WARNING.MORTGAGE_DURATION)
     }
   }
-  // Warning case 2: between 12 and 24 months in the future
-  else if(expirationDate.getTime() > dateIn12Months.getTime() && expirationDate.getTime() < dateIn24Months.getTime()){
+  // Warning case 2: more than 12 in the future
+  else if(expirationDate.getTime() > dateIn12Months.getTime()){
     if(!popupOpen.value){
       popupOpen.value = true
       $q.dialog({

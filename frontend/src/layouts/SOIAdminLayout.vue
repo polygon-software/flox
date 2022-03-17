@@ -36,7 +36,7 @@
     <q-page-container class="absolute-full">
       <q-scroll-area class="fit">
         <q-btn
-          v-if="route.query.cid"
+          v-if="route.query.cid && !route.query.eid"
           :label="$t('account_data.employees')"
           no-caps
           flat
@@ -45,7 +45,7 @@
           @click="() => onItemClick(ROUTES.MANAGEMENT_EMPLOYEE_DATA, route.query)"
         />
         <q-btn
-          v-if="route.query.cid"
+          v-if="route.query.cid && !route.query.eid"
           :label="$tc('dashboards.dossier', 2)"
           no-caps
           flat

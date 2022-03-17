@@ -18,304 +18,7 @@
       </div>
 
       <!-- Page Print Preview -->
-      <q-card
-        id="preview"
-        class="page shadow-6"
-      >
-        <div
-          v-if="dossier"
-          class="subpage"
-        >
-          <!-- Logo + address row -->
-          <div class="row justify-between">
-            <img
-              alt="S.O.I. AG"
-              :src="require('src/assets/soi-logo.png')"
-              style="height: 15mm"
-              class="q-ma-sm"
-            >
-            <p class="text-grey-5" style="margin-top: 5mm">
-              {{ infoString }}
-            </p>
-          </div>
-
-          <!-- Contact info card -->
-          <q-card
-            class="bg-grey-1 sub-card"
-            flat
-            style="margin-top: 5mm"
-          >
-            <strong style="margin-bottom: 1mm">
-              {{$t('dossier.contact')}}
-            </strong>
-
-            <div class="row">
-              <!-- Left column -->
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :content="`${dossier.first_name} ${dossier.last_name}`"
-                />
-                <DossierDocumentInfoField
-                  :content="`${dossier.address.street} ${dossier.address.number}`"
-                />
-                <DossierDocumentInfoField
-                  :content="`${dossier.address.zip_code} ${dossier.address.city}`"
-                />
-              </div>
-
-              <!-- Right column -->
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :label="$t('general.created_on')"
-                  :content="formatDate(dossier.created_at)"
-                />
-
-                <DossierDocumentInfoField
-                  :content="dossier.email"
-                />
-
-                <DossierDocumentInfoField
-                  :content="dossier.phone"
-                />
-              </div>
-            </div>
-          </q-card>
-
-          <!-- Application info card -->
-          <q-card
-            flat
-            class="bg-grey-1 sub-card"
-          >
-            <strong>
-              {{$t('dossier.application')}}
-            </strong>
-
-            <!-- First section: general info -->
-            <div class="row">
-              <!-- Left upper column -->
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :label="$t('dossier.original_bank')"
-                  :content="dossier.original_bank.name"
-                />
-
-                <DossierDocumentInfoField
-                  :label="$t('dossier.purchase_price')"
-                  :content="dossier.purchase_price.toLocaleString('de-ch') + currency"
-                />
-
-                <DossierDocumentInfoField
-                  :label="$t('dossier.calculated_market_value')"
-                  :content="dossier.value_estimate_high.toLocaleString('de-ch') + currency"
-                />
-
-                <DossierDocumentInfoField
-                  :label="$t('dossier.current_mortgage')"
-                  :content="dossier.mortgage_amount.toLocaleString('de-ch') + currency"
-                />
-
-              </div>
-
-              <!-- Right upper column -->
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentInfoField
-                  :label="$t('dossier.object_type')"
-                  :content="$t(`property_type_enum.${dossier.property_type}`)"
-                />
-
-                <DossierDocumentInfoField
-                  :label="$t('dossier.purchase_date')"
-                  :content="formatDate(dossier.purchase_date)"
-                />
-
-                <!-- Spacer -->
-                <div style="height: 11mm"/>
-
-                <DossierDocumentInfoField
-                  :label="$t('dossier.amortization_amount')"
-                  :content="dossier.has_amortisation ? dossier.amortisation_amount.toLocaleString('de-ch') + currency : '-'"
-                />
-              </div>
-            </div>
-
-            <div class="dotted-line"/>
-
-            <!-- Second section: mortgage installments -->
-            <div class="row">
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-                <!-- Partition amount -->
-                <DossierDocumentInfoField
-                  v-for='(amount, index) in dossier.partition_amounts'
-                  :key="'partition_'+index"
-                  :label="$t('dossier.installment') + ' ' + (index+1)"
-                  :content="amount.toLocaleString('de-ch') + currency"
-                />
-
-                <!-- Enfeoffment -->
-                <DossierDocumentInfoField
-                  :label="$t('dossier.lending_value')"
-                  :content="dossier.enfeoffment_estimate_low + '%'"
-                  bold
-                />
-              </div>
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <!-- Partition expiration date -->
-                <DossierDocumentInfoField
-                  v-for='(date, index) in dossier.partition_dates'
-                  :key="'partition_'+ index"
-                  :label="$t('dossier.expiration_date')"
-                  :content="formatDate(date)"
-                />
-
-                <DossierDocumentBooleanField
-                  v-if="dossier.has_amortisation"
-                  :value="dossier.direct_amortisation"
-                  :label="$t('dossier.amortization_type')"
-                  :true-label="$t('dossier.direct')"
-                  :false-label="$t('dossier.indirect')"
-                />
-              </div>
-            </div>
-
-            <q-separator
-              color="grey-6"
-              style="margin: 3mm 0 3mm 0"
-            />
-
-            <!-- Third section: renovation information -->
-            <div class="row">
-              <!-- Left column -->
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-
-                <DossierDocumentBooleanField
-                  :value="dossier.has_renovation"
-                  :label="$t('dossier.renovated')"
-                />
-
-                <DossierDocumentInfoField
-                  v-if="dossier.has_renovation"
-                  :label="$t('dossier.renovation_amount')"
-                  :content="dossier.renovation_price.toLocaleString('de-ch') + currency"
-                />
-              </div>
-
-              <!-- Right column -->
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentInfoField
-                  v-if="dossier.has_renovation"
-                  :label="$t('dossier.renovation_year')"
-                  :content="dossier.renovation_year"
-                />
-              </div>
-            </div>
-
-            <q-separator
-              color="grey-6"
-              style="margin: 3mm 0 3mm 0"
-            />
-
-            <!-- Fourth section: salary/general info -->
-            <div class="row">
-              <!-- Left column -->
-              <div
-                class="column col-6"
-                style="padding-right: 5mm"
-              >
-                <!-- Eligible income -->
-                <DossierDocumentInfoField
-                  :label="$t('dossier.salary')"
-                  :content="dossier.eligible_income.toLocaleString('de-ch') + currency"
-                  bold
-                />
-
-                <!-- Total costs -->
-                <DossierDocumentInfoField
-                  :label="$t('dossier.costs')"
-                  :content="dossier.total_costs.toLocaleString('de-ch') + currency"
-                />
-
-                <!-- Affordability -->
-                <DossierDocumentInfoField
-                  :label="$t('dossier.sustainability')"
-                  :content="dossier.affordability + '%'"
-                  bold
-                />
-
-                <!-- Assets -->
-                <DossierDocumentInfoField
-                  :label="$t('dossier.assets')"
-                  :content="dossier.assets.toLocaleString('de-ch') + currency"
-                />
-              </div>
-
-              <!-- Right column -->
-              <div
-                class="column col-6"
-                style="padding-left: 5mm"
-              >
-                <DossierDocumentBooleanField
-                  :value="dossier.has_building_lease"
-                  :label="$t('dossier.building_right')"
-                />
-
-                <DossierDocumentBooleanField
-                  :value="dossier.prosecutions"
-                  :label="$t('dossier.debt_enforcements')"
-                />
-
-                <DossierDocumentBooleanField
-                  :value="dossier.loss_certificates"
-                  :label="$t('dossier.loss_certificates')"
-                />
-              </div>
-            </div>
-
-
-
-          </q-card>
-
-          <!-- Signature line -->
-          <div
-            class="row justify-end"
-            style="margin-top: 10mm"
-          >
-            <div class="column">
-              <p>
-                {{ $t('dossier.customer_confirms') }}
-              </p>
-
-              <!-- Signature line -->
-              <div
-                style="border: none; border-bottom: 1px solid black; width: 90mm; margin-top: 12mm"
-              />
-            </div>
-          </div>
-        </div>
-      </q-card>
+      <DossierFinalDocumentPreview :dossier="dossier"/>
 
       <!-- Button row -->
       <div
@@ -357,9 +60,6 @@
 </template>
 
 <script setup lang="ts">
-import {formatDate} from 'src/helpers/format-helpers';
-import DossierDocumentInfoField from 'components/dossier/DossierDocumentInfoField.vue';
-import DossierDocumentBooleanField from 'components/dossier/DossierDocumentBooleanField.vue';
 import DossierDocumentEmailDialog from 'components/dialogs/DossierDocumentEmailDialog.vue';
 import {useQuasar} from 'quasar';
 import {uploadFiles} from 'src/helpers/file-helpers';
@@ -373,6 +73,7 @@ import {ErrorService} from 'src/services/ErrorService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {sleep} from 'src/helpers/general-helpers';
+import DossierFinalDocumentPreview from 'components/dossier/DossierFinalDocumentPreview.vue';
 
 const $q = useQuasar()
 const route = useRoute()
@@ -380,14 +81,10 @@ const $errorService: ErrorService|undefined = inject('$errorService')
 const $routerService: RouterService|undefined = inject('$routerService')
 
 const dossierUuid = route.query.did as string
-const dossier = ref(null)
+const dossier: Ref<Record<string, unknown>|null> = ref(null)
 
 const loading = ref(true)
 const fileUuid: Ref<string|null> = ref(null)
-
-// Info for top right-hand corner
-const infoString = 'Bahnhofstrasse 1 | 8001 Zürich | 043 222 22 22'
-const currency = ' CHF'
 
 //On mount, generate PDF
 onMounted(async () => {
@@ -395,7 +92,7 @@ onMounted(async () => {
   if(!dossierUuid){
     // Show error
     $errorService?.showErrorDialog(
-      new Error(i18n.global.t('errors.invalid_link', {error: (err as Error).message}))
+      new Error(i18n.global.t('errors.invalid_link'))
     )
   }
   const dossierQueryResult = await executeQuery(GET_DOSSIER, {uuid: dossierUuid})
@@ -406,7 +103,7 @@ onMounted(async () => {
   if(!dossier.value){
     // Show error
     $errorService?.showErrorDialog(
-      new Error(i18n.global.t('errors.invalid_link', {error: (err as Error).message}))
+      new Error(i18n.global.t('errors.invalid_link'))
     )
   }
 
