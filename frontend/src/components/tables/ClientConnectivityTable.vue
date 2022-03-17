@@ -1,21 +1,6 @@
 <template>
   <p>{{ $t('client_connectivity.title') }}</p>
   <div class="column">
-    <!-- Search input -->
-    <div class="row" style="justify-content: center">
-      <q-input
-        v-model="search"
-        :label="$t('general.filter')"
-        outlined
-        type="search"
-        dense
-        debounce="300"
-      >
-        <template #append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-    </div>
     <q-table
       v-model:pagination="pagination"
       class="q-mt-lg"
@@ -24,8 +9,6 @@
       :columns="columns"
       :loading="loading"
       row-key="id"
-      :filter="search"
-      :filter-method="tableFilter"
       :rows-per-page-options="[10]"
       separator="none"
       @request="onRequest"
@@ -57,7 +40,6 @@
 
 <script setup lang="ts">
 import {onMounted, Ref, ref, defineProps} from 'vue';
-import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
 import {connectionLogForDevice} from 'src/helpers/api-helpers';
@@ -71,8 +53,6 @@ const props = defineProps({
     required: true
   }
 })
-
-const search = ref('')
 
 // Pagination
 const skip = ref(0)
