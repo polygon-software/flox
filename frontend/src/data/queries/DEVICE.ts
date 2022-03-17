@@ -227,11 +227,23 @@ export const DEVICE_CONNECTION_LOGS = {
   cacheLocation: 'getConnectionLogs'
 }
 
+export const DEVICE_CONNECTION_LOG_COUNT = {
+  query: gql`
+    query getConnectionLogCount($cli: String!){
+      getConnectionLogCount(cli: $cli)
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getConnectionLogCount'
+}
+
 export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
   MY_DEVICES,
   PROJECT_DEVICES,
   LEVEL_WRITING,
   DEVICE_PARAMS,
-  EVENT_TABLE_ROWS
+  EVENT_TABLE_ROWS,
+  DEVICE_CONNECTION_LOGS,
+  DEVICE_CONNECTION_LOG_COUNT,
 ];

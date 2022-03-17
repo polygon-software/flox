@@ -58,6 +58,8 @@ import {i18n} from 'boot/i18n';
 import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
 import {connectionLogForDevice} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
+import {DEVICE_CONNECTION_LOG_COUNT, DEVICE_CONNECTION_LOGS} from 'src/data/queries/DEVICE';
+import {executeQuery} from 'src/helpers/data-helpers';
 
 const props = defineProps({
   cli: {
@@ -71,6 +73,7 @@ const search = ref('')
 // Pagination
 const skip = ref(0)
 const take = ref(10) // Load first 10 entries by default
+const totalRows: Ref<number|null> = ref(null)
 
 // ----- Data -----
 const columns = [
@@ -86,6 +89,10 @@ const rows: Ref<ConnectionLogEntry[]> = ref([])
 // Fetch logs on mount
 onMounted(async () => {
   await fetchLogs()
+
+  // Get total row count (for pagination)
+  const countQueryResult = await executeQuery(DEVICE_CONNECTION_LOG_COUNT, {cli: props.cli})
+  totalRows.value = countQueryResult.data[DEVICE_CONNECTION_LOG_COUNT.cacheLocation] as number
 })
 
 /**

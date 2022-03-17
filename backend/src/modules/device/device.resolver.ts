@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import { DeviceService } from './device.service';
 import {
@@ -20,6 +20,7 @@ import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
 import { ConnectionLogEntry } from '../../types/ConnectionLogEntry';
+import { GetConnectionLogCountArgs } from './dto/args/get-connection-log-count.args';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -131,7 +132,7 @@ export class DeviceResolver {
   }
 
   /**
-   * Get connection status for a device if the user has permission.
+   * Get connection status logs for a device if the user has permission.
    * @param {GetConnectionLogsArgs} getConnectionLogsArgs - contains station CLI & number of logs to take
    * @param {Record<string, string>} user - Cognito user from request.
    * @returns {Promise<LevelWriting>} - The level writings of the devices.
@@ -151,5 +152,33 @@ export class DeviceResolver {
     }
 
     return this.deviceService.getConnectionLogs(getConnectionLogsArgs);
+  }
+
+  /**
+   * Get the number of connection logs for a device
+   * @param {GetConnectionLogCountArgs} getConnectionLogCountArgs - contains device CLI
+   * @param {Record<string, string>} user - Cognito user from request.
+   * @returns {Promise<LevelWriting>} - The level writings of the devices.
+   */
+  @AnyRole()
+  @Query(() => Int, { name: 'getConnectionLogCount' })
+  async getConnectionLogCount(
+    @Args() getConnectionLogCountArgs: GetConnectionLogCountArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+
+    if (
+      !this.userService.isAuthorizedForDevice(
+        dbUser,
+        getConnectionLogCountArgs.cli,
+      )
+    ) {
+      throw new UnauthorizedException();
+    }
+
+    return this.deviceService.getConnectionLogCount(
+      getConnectionLogCountArgs.cli,
+    );
   }
 }

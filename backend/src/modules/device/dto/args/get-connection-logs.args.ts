@@ -1,5 +1,5 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { IsArray, IsDate, IsInt } from 'class-validator';
+import { IsArray, IsInt } from 'class-validator';
 
 @ArgsType()
 export class GetConnectionLogsArgs {

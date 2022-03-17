@@ -421,4 +421,19 @@ export class DeviceService {
       connectionLogEntryFromDatabaseEntry(tableEntry),
     );
   }
+
+  /**
+   * Get the total number of connection logs for a given device
+   * @param {string} cli - device CLI
+   * @returns {int} - number of entries
+   */
+  async getConnectionLogCount(cli: string) {
+    const numberOfLogs = await fetchCountFromTable(
+      'openvpn',
+      'logovp',
+      `WHERE cli='${cli}'`,
+    );
+
+    return numberOfLogs[0]['count(*)'];
+  }
 }

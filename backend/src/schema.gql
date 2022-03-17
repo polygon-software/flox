@@ -720,6 +720,7 @@ type Query {
   allUsers: [User!]!
   deviceParams(cli: String!): DeviceParams!
   eventTable(cli: String!, descending: Boolean, filter: String, orderBy: String, skip: Int!, take: Int!): EventsTable!
+  getConnectionLogCount(cli: String!): Int!
   getConnectionLogs(cli: String!, skip: Int!, take: Int!): [ConnectionLogEntry!]!
   getProjectDevices(name: String, uuid: ID): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
