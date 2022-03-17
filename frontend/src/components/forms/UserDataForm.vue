@@ -4,7 +4,7 @@
       {{ $t('edit_parameters.user_data') }}
     </h5>
     <div style="display: flex; flex-direction: row">
-      <div style="width: 50%">
+      <div style="width: 35%">
         <q-btn
           :label="$t('buttons.load_parameters')"
           outline
@@ -24,7 +24,7 @@
           </template>
         </q-field>
       </div>
-      <div style="width: 50%">
+      <div style="width: 65%">
         <q-btn
           style="float: right"
           :label="$t('buttons.save')"
