@@ -102,6 +102,7 @@ export default {
     memory: 'Erinnerung',
     daily: 'Täglich',
     parameters_from_another: 'Abrufen von Warnparametern von einem anderen MR',
+    contact_from_another: 'Abrufen von Kontakten von einem anderen MR',
   },
   buttons: {
     finish: 'Abschliessen',
@@ -118,6 +119,7 @@ export default {
     create_link: 'Link erzeugen',
     create_project: 'Projekt erstellen',
     new_contact: 'Neuer Kontakt',
+    load_contact: 'Kontakte laden',
     load: 'Laden',
     save: 'Speichern',
     show: 'Anzeigen',

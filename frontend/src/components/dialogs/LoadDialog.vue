@@ -4,13 +4,14 @@
       :persistent="true"
   >
     <q-card class="q-pa-sm" style="width: 600px; min-height: 250px">
-      <h5 style="text-align: center">{{ $t('buttons.load_parameters') }}</h5>
+      <h5 style="text-align: center">{{ props.title }}</h5>
       <q-form
           class="q-gutter-md"
           @submit="onSubmit"
       >
-        <LoadParameterForm
+        <LoadForm
           ref="contactForm"
+          :text="props.text"
         />
         <q-card-actions align="center">
           <q-btn
@@ -32,20 +33,30 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {defineProps, ref} from 'vue';
 import { useDialogPluginComponent } from 'quasar';
-import LoadParameterForm from 'components/forms/LoadParameterForm.vue';
+import LoadForm from 'components/forms/LoadForm.vue';
 
 const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent()
 const contactForm = ref(null)
 
+const props = defineProps({
+  title: {
+    required: true,
+    type: String,
+  },
+  text: {
+    required: true,
+    type: String,
+  }
+})
 /**
  * On submit, it gets the form's data
  * @returns {void}
  */
 function onSubmit(){
   if(contactForm.value){
-    const form: typeof LoadParameterForm = contactForm.value
+    const form: typeof LoadForm = contactForm.value
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const data: Record<string, unknown> = form.getData() as Record<string, unknown>
     onDialogOK(data)

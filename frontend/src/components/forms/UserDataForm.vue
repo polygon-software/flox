@@ -12,17 +12,9 @@
           @click="loadParameters"
         />
         <p>{{ $t('edit_parameters.project_name') }}</p>
-        <q-field outlined stack-label style="width: 250px">
-          <template #control>
-            <div class="self-center full-width no-outline" tabindex="0">{{ props.projectId }}</div>
-          </template>
-        </q-field>
+        <q-input v-model="projectName" outlined style="width: 250px"/>
         <p>{{ $t('edit_parameters.station_name') }}</p>
-        <q-field outlined stack-label style="width: 250px">
-          <template #control>
-            <div class="self-center full-width no-outline" tabindex="0">{{ props.stationId }}</div>
-          </template>
-        </q-field>
+        <q-input v-model="stationName" outlined style="width: 250px"/>
       </div>
       <div style="width: 65%">
         <q-btn
@@ -106,17 +98,15 @@
 </template>
 
 <script setup lang="ts">
-import {RouterService} from 'src/services/RouterService';
-import {inject, ref, onMounted, defineProps, Ref} from 'vue';
+import {ref, onMounted, defineProps, Ref} from 'vue';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import {DEVICE_PARAMS} from 'src/data/queries/DEVICE';
 import {UPDATE_PARAMS} from 'src/data/mutations/DEVICE';
-import LoadParameterDialog from 'components/dialogs/LoadParameterDialog.vue';
+import LoadDialog from 'components/dialogs/LoadDialog.vue';
 import {useQuasar} from 'quasar';
+import {i18n} from 'boot/i18n';
 
 const $q = useQuasar()
-
-const routerService: RouterService|undefined = inject('$routerService')
 
 const props = defineProps({
   projectId: {
@@ -128,6 +118,9 @@ const props = defineProps({
     type: String
   }
 })
+
+const projectName = ref(props.projectId)
+const stationName = ref(props.stationId)
 
 // TODO: remove mock data and replace it with real ones
 const stateTrigger = ref('Always active')
@@ -174,14 +167,17 @@ onMounted(async () => {
 });
 
 /**
- * Loads the parameters of that device pool which are selected
+ * Routes to Load Dialog
  * @returns {void}
  */
 function loadParameters() {
   //TODO: onOK
   $q.dialog({
-    component: LoadParameterDialog,
-    componentProps: {}
+    component: LoadDialog,
+    componentProps: {
+      title: i18n.global.t('buttons.load_parameters'),
+      text: i18n.global.t('edit_parameters.parameters_from_another')
+    }
   })
 }
 

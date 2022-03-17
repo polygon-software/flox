@@ -9,6 +9,13 @@
       class="text-grey"
       @click="newContact"
     />
+    <q-btn
+      :label="$t('buttons.load_contact')"
+      outline
+      class="text-grey"
+      style="margin-left: 10px"
+      @click="loadContact"
+    />
     <!-- TODO: Replace mock data -->
     <div style="display: flex;">
       <GenericContactForm
@@ -33,6 +40,8 @@
 import AddContactDialog from 'src/components/dialogs/AddContactDialog.vue'
 import {useQuasar} from 'quasar';
 import GenericContactForm from 'components/forms/GenericContactForm.vue';
+import LoadDialog from 'components/dialogs/LoadDialog.vue';
+import {i18n} from 'boot/i18n';
 
 const $q = useQuasar()
 
@@ -45,6 +54,21 @@ function newContact(){
   $q.dialog({
     component: AddContactDialog,
     componentProps: {}
+  })
+}
+
+/**
+ * Routes to Load Dialog
+ * @returns {void}
+ */
+function loadContact(){
+  //TODO: onOk
+  $q.dialog({
+    component: LoadDialog,
+    componentProps: {
+      title: i18n.global.t('buttons.load_contact'),
+      text: i18n.global.t('edit_parameters.contact_from_another')
+    }
   })
 }
 

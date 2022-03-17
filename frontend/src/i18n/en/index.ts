@@ -101,6 +101,7 @@ export default {
     memory: 'Memory',
     daily: 'Daily',
     parameters_from_another: 'Get Alerting parameters from another MR',
+    contact_from_another: 'Get Alerting contacts from another MR',
   },
   buttons: {
     finish: 'Finish',
@@ -117,6 +118,7 @@ export default {
     create_link: 'Create Link',
     create: 'Create project',
     new_contact: 'New Contakt',
+    load_contact: 'Load Contacts',
     load: 'Load',
     save: 'Save',
     show: 'Show',
