@@ -180,8 +180,6 @@ function onCsvUpload(){
           'negative'
         )
       })
-
-
     })
   }
 }
