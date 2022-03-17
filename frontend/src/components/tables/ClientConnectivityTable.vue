@@ -67,6 +67,9 @@ const props = defineProps({
 })
 
 const search = ref('')
+
+// Pagination
+const skip = ref(0)
 const take = ref(10) // Load first 10 entries by default
 
 // ----- Data -----
@@ -90,7 +93,7 @@ onMounted(async () => {
  * @returns {Promise<void>} - done
  */
 async function fetchLogs(){
-  rows.value = await connectionLogForDevice(props.cli, take.value)
+  rows.value = await connectionLogForDevice(props.cli, skip.value, take.value)
 }
 
 </script>

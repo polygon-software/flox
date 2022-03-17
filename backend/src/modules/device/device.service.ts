@@ -411,7 +411,9 @@ export class DeviceService {
     const tableEntries = await fetchFromTable(
       'openvpn',
       'logovp',
-      `WHERE cli='${getConnectionLogsArgs.cli}' LIMIT ${getConnectionLogsArgs.take}`,
+      `WHERE cli='${getConnectionLogsArgs.cli}'
+      ORDER BY timestamp DESC
+      LIMIT ${getConnectionLogsArgs.skip}, ${getConnectionLogsArgs.take}`,
     );
 
     // Map to actual type & return

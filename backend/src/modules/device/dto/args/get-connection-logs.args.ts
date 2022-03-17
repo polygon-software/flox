@@ -10,4 +10,8 @@ export class GetConnectionLogsArgs {
   @Field(() => Int)
   @IsInt()
   take: number;
+
+  @Field(() => Int)
+  @IsInt()
+  skip: number;
 }

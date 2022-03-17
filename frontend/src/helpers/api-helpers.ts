@@ -194,10 +194,11 @@ export function mapDevice(record: Record<string, unknown>): Device {
 /**
  * Fetch connection log entries for a given device
  * @param {string} cli - device CLI
+ * @param {number} skip - number of entries to skip (for pagination)
  * @param {number} take - number of logs to get
  * @return {Promise<ConnectionLogEntry[]>} - An array containing the requested number of connection log entries
  */
-export async function connectionLogForDevice(cli: string, take = 20) {
-  const queryResult = await executeQuery(DEVICE_CONNECTION_LOGS, {cli, take});
+export async function connectionLogForDevice(cli: string, skip = 0, take = 10) {
+  const queryResult = await executeQuery(DEVICE_CONNECTION_LOGS, {cli, take, skip});
   return queryResult.data[DEVICE_CONNECTION_LOGS.cacheLocation] as ConnectionLogEntry[]
 }

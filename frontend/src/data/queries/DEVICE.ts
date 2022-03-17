@@ -209,8 +209,8 @@ export const EVENT_TABLE_ROWS = {
 
 export const DEVICE_CONNECTION_LOGS = {
   query: gql`
-    query getConnectionLogs($cli: String!, $take: Int!){
-      getConnectionLogs(cli: $cli, take: $take){
+    query getConnectionLogs($cli: String!, $take: Int!, $skip: Int!){
+      getConnectionLogs(cli: $cli, take: $take, skip: $skip){
         id
         cli
         timestamp
