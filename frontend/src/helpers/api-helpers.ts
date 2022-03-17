@@ -82,7 +82,7 @@ export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
 /**
  * Fetch all of the current user's devices
  * @param {Record<string, string>} [params] - query parameters for filtering ('unassigned' / 'assigned')
- * @return {Device[]} - An array containing all the user's projects
+ * @return {ComputedRef<Device[]>} - An array containing all the user's projects
  */
 export function myDevices(params?: Record<string, boolean>) {
   const queryResult = subscribeToQuery(MY_DEVICES, params) as Ref<Record<string, unknown>[]>;

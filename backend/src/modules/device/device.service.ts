@@ -443,45 +443,37 @@ export class DeviceService {
 
     const input = addContactToDeviceInput;
 
-    // Record to insert in database (depending on type)
-    const record =
-      type === 'MR2000'
-        ? {
-            // MR2000
-            cli: input.cli,
-            // status: null,
-            // timestamp: null,
-            id: 'no_id', // TODO??
-            // from_IP: null,
-            name: input.name,
-            email: input.email,
-            phone: input.phone,
-            event: input.event,
-            alarm1: input.alarm1,
-            alarm2: input.alarm2,
-            daily: input.daily,
-            soh_power: input.power,
-            soh_sms_limit: input.smsLimit,
-            // soh_warning: null,
-            // soh_error: null,
-            // soh_err_warn: null,
-            // TODO: memory?
-          }
-        : {
-            // MR3000
-            cli: input.cli,
-            status: 0, // TODO this should be correct from source code, but not sure
-            name: input.name,
-            email: input.email,
-            phone: input.phone,
-            event_all: input.event,
-            event_alarm1: input.alarm1,
-            event_alarm2: input.alarm2,
-            daily: input.daily,
-            soh_power: input.power,
-            soh_sms_limit: input.smsLimit,
-            // TODO: memory?
-          };
+    // Base record (fields that are identical for MR2000 and MR3000
+    let record: Record<string, unknown> = {
+      cli: input.cli,
+      name: input.name,
+      email: input.email,
+      phone: input.phone,
+      daily: input.daily,
+      soh_power: input.power,
+      soh_sms_limit: input.smsLimit,
+    };
+
+    if (type === 'MR2000') {
+      // MR2000
+      record = {
+        ...record,
+        id: 'no_id',
+        event: input.event,
+        alarm1: input.alarm1,
+        alarm2: input.alarm2,
+      };
+    } else {
+      // MR3000
+      record = {
+        ...record,
+        status: 0,
+        event_all: input.event,
+        event_alarm1: input.alarm1,
+        event_alarm2: input.alarm2,
+        soh_sdcard: input.memory,
+      };
+    }
 
     // Write to database
     await insertIntoTable(type, table, record);
@@ -502,40 +494,35 @@ export class DeviceService {
 
     const input = editContactInput;
 
-    // Record to insert in database (depending on type)
-    const record =
-      type === 'MR2000'
-        ? {
-            // MR2000
-            // cli: input.cli,
-            // status: null,
-            // timestamp: null,
-            // from_IP: null,
-            name: input.name,
-            email: input.email,
-            phone: input.phone,
-            event: input.event,
-            alarm1: input.alarm1,
-            alarm2: input.alarm2,
-            daily: input.daily,
-            soh_power: input.power,
-            soh_sms_limit: input.smsLimit,
-          }
-        : {
-            // MR3000
-            // cli: input.cli,
-            status: 0, // TODO this should be correct from source code, but not sure
-            name: input.name,
-            email: input.email,
-            phone: input.phone,
-            event_all: input.event,
-            event_alarm1: input.alarm1,
-            event_alarm2: input.alarm2,
-            daily: input.daily,
-            soh_power: input.power,
-            soh_sms_limit: input.smsLimit,
-            soh_sdcard: input.memory,
-          };
+    // Base record (fields that are identical for MR2000 and MR3000)
+    let record: Record<string, unknown> = {
+      name: input.name,
+      email: input.email,
+      phone: input.phone,
+      daily: input.daily,
+      soh_power: input.power,
+      soh_sms_limit: input.smsLimit,
+    };
+
+    if (type === 'MR2000') {
+      // MR2000
+      record = {
+        ...record,
+        event: input.event,
+        alarm1: input.alarm1,
+        alarm2: input.alarm2,
+      };
+    } else {
+      // MR3000
+      record = {
+        ...record,
+        status: 0,
+        event_all: input.event,
+        event_alarm1: input.alarm1,
+        event_alarm2: input.alarm2,
+        soh_sdcard: input.memory,
+      };
+    }
 
     const filterQuery =
       type === 'MR2000'
@@ -572,7 +559,7 @@ export class DeviceService {
   }
 
   /**
-   * Get s the contacts for a device by CLI
+   * Gets the contacts for a device by CLI
    * @param {string} cli - Client ID
    * @returns {Promise<DeviceContact[]>} - The device's contacts
    */

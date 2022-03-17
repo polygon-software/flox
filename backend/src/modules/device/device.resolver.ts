@@ -119,14 +119,12 @@ export class DeviceResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<EventsTable> {
     const dbUser = await this.userService.getMyUser(user);
-    let allowed = false;
-    if (dbUser.role === ROLE.USER) {
-      allowed =
-        dbUser.mr2000instances?.includes(eventTableArgs.cli) ||
-        dbUser.mr3000instances?.includes(eventTableArgs.cli);
-    }
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      eventTableArgs.cli,
+    );
 
-    if (dbUser.role === ROLE.ADMIN || allowed) {
+    if (allowed) {
       return this.deviceService.getEvents(eventTableArgs);
     }
 
@@ -145,14 +143,12 @@ export class DeviceResolver {
     user: Record<string, string>,
   ) {
     const dbUser = await this.userService.getMyUser(user);
-    let allowed = false;
-    if (dbUser.role === ROLE.USER) {
-      allowed =
-        dbUser.mr2000instances?.includes(addContactToDeviceInput.cli) ||
-        dbUser.mr3000instances?.includes(addContactToDeviceInput.cli);
-    }
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      addContactToDeviceInput.cli,
+    );
 
-    if (dbUser.role === ROLE.ADMIN || allowed) {
+    if (allowed) {
       return this.deviceService.addContactToDevice(addContactToDeviceInput);
     }
 
@@ -166,14 +162,12 @@ export class DeviceResolver {
     @CurrentUser() user: Record<string, string>,
   ) {
     const dbUser = await this.userService.getMyUser(user);
-    let allowed = false;
-    if (dbUser.role === ROLE.USER) {
-      allowed =
-        dbUser.mr2000instances?.includes(getDeviceContactsArgs.cli) ||
-        dbUser.mr3000instances?.includes(getDeviceContactsArgs.cli);
-    }
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      getDeviceContactsArgs.cli,
+    );
 
-    if (dbUser.role === ROLE.ADMIN || allowed) {
+    if (allowed) {
       return this.deviceService.getDeviceContacts(getDeviceContactsArgs.cli);
     }
 
@@ -213,14 +207,12 @@ export class DeviceResolver {
     user: Record<string, string>,
   ) {
     const dbUser = await this.userService.getMyUser(user);
-    let allowed = false;
-    if (dbUser.role === ROLE.USER) {
-      allowed =
-        dbUser.mr2000instances?.includes(editContactInput.cli) ||
-        dbUser.mr3000instances?.includes(editContactInput.cli);
-    }
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      editContactInput.cli,
+    );
 
-    if (dbUser.role === ROLE.ADMIN || allowed) {
+    if (allowed) {
       return this.deviceService.editContact(editContactInput);
     }
 
@@ -239,14 +231,12 @@ export class DeviceResolver {
     user: Record<string, string>,
   ) {
     const dbUser = await this.userService.getMyUser(user);
-    let allowed = false;
-    if (dbUser.role === ROLE.USER) {
-      allowed =
-        dbUser.mr2000instances?.includes(deleteContactInput.cli) ||
-        dbUser.mr3000instances?.includes(deleteContactInput.cli);
-    }
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      deleteContactInput.cli,
+    );
 
-    if (dbUser.role === ROLE.ADMIN || allowed) {
+    if (allowed) {
       return this.deviceService.deleteContact(deleteContactInput);
     }
 
