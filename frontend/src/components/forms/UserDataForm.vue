@@ -115,8 +115,6 @@ const props = defineProps({
   }
 })
 
-const stationName = ref(props.stationId)
-
 // TODO: remove mock data and replace it with real ones
 const stateTrigger = ref('Always active')
 
@@ -133,9 +131,11 @@ const ala1Mode = ref('')
 const ala2Mode = ref('')
 const ala1Edit = ref(0)
 const ala2Edit = ref(0)
+const stationName = ref('')
 const comment = ref('')
 onMounted(async () => {
   const result = await executeQuery(DEVICE_PARAMS, {cli: props.stationId})
+  // TODO: get station name from station table
   const data = result.data.deviceParams as Record<string, string|number>
   trigX.value = data.trigX as number;
   trigY.value = data.trigY as number;
