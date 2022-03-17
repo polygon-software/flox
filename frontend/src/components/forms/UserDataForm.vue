@@ -140,10 +140,8 @@ const ala2Y: Ref<number> = ref(0)
 const ala2Z: Ref<number> = ref(0)
 const ala1Mode = ref('')
 const ala2Mode = ref('')
-const ala1Edit = ref(true)
-const ala2Edit = ref(true)
-const enabledYes = 'enabled: YES'
-const enabledNo = 'enabled: NO'
+const ala1Edit = ref(0)
+const ala2Edit = ref(0)
 onMounted(async () => {
   const result = await executeQuery(DEVICE_PARAMS, {cli: props.stationId})
   const data = result.data.deviceParams as Record<string, string|number>
@@ -156,29 +154,19 @@ onMounted(async () => {
   ala2X.value = data.ala2X as number;
   ala2Y.value = data.ala2Y as number;
   ala2Z.value = data.ala2Z as number;
-  if (data.ala1_mode === enabledYes) {
+  ala1Edit.value = data.ala1_edit as number;
+  ala2Edit.value = data.ala2_edit as number;
+  if (data.ala1_mode) {
     ala1Mode.value = 'Enabled'
   }
-  if (data.ala1_mode === enabledNo) {
+  if (!data.ala1_mode) {
     ala1Mode.value = 'Disabled'
   }
-  if (data.ala2_mode === enabledYes) {
+  if (data.ala2_mode) {
     ala2Mode.value = 'Enabled'
   }
-  if (data.ala2_mode === enabledNo) {
+  if (!data.ala2_mode) {
     ala2Mode.value = 'Disabled'
-  }
-  if (data.ala1_edit === 1) {
-    ala1Edit.value = true
-  }
-  if (data.ala1_edit === 0) {
-    ala1Edit.value = false
-  }
-  if (data.ala2_edit === 1) {
-    ala2Edit.value = true
-  }
-  if (data.ala2_edit === 0) {
-    ala2Edit.value = false
   }
 });
 
@@ -197,12 +185,8 @@ async function loadParameters(): Promise<void>{
  * @returns {void}
  */
 async function updateParams() {
-  if (ala1Mode.value === 'Enabled') {
-    ala1Mode.value = enabledYes
-  }
-  if (ala1Mode.value === 'Disabled') {
-    ala1Mode.value = enabledNo
-  }
+  const writeAla1Mode = ala1Mode.value === 'Enabled'
+  const writeAla2Mode = ala2Mode.value === 'Enabled'
   await executeMutation(UPDATE_PARAMS, {updateDeviceParamsInput: {cli: props.stationId,
       trigX: trigX.value,
       trigY: trigY.value,
@@ -213,8 +197,8 @@ async function updateParams() {
       ala2X: ala2X.value,
       ala2Y: ala2Y.value,
       ala2Z: ala2Z.value,
-      ala1_mode: ala1Mode.value,
-      ala2_mode: ala2Mode.value }})
+      ala1_mode: writeAla1Mode,
+      ala2_mode: writeAla2Mode }})
 }
 
 </script>

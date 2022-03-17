@@ -72,12 +72,12 @@ type DeviceParams {
   ala1Y: Float!
   ala1Z: Float!
   ala1_edit: Float!
-  ala1_mode: String!
+  ala1_mode: Boolean!
   ala2X: Float!
   ala2Y: Float!
   ala2Z: Float!
   ala2_edit: Float!
-  ala2_mode: String!
+  ala2_mode: Boolean!
   trigX: Float!
   trigY: Float!
   trigZ: Float!
@@ -255,11 +255,11 @@ input UpdateDeviceParamsInput {
   ala1X: Float
   ala1Y: Float
   ala1Z: Float
-  ala1_mode: String!
+  ala1_mode: Boolean!
   ala2X: Float
   ala2Y: Float
   ala2Z: Float
-  ala2_mode: String!
+  ala2_mode: Boolean!
   cli: String!
   trigX: Float
   trigY: Float

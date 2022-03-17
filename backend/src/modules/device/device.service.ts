@@ -3,7 +3,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
-import { fetchFromTable, writeToTable } from '../../helpers/database-helpers';
+import {
+  fetchFromTable,
+  writeToTable,
+  updateMode,
+} from '../../helpers/database-helpers';
 import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
@@ -50,35 +54,45 @@ export class DeviceService {
       // MR2000
       instances = await fetchFromTable('MR2000', 'param', filterQuery);
     }
-    const instance = instances[0];
-    const enabledYes = 'enabled: YES';
-    const enabledNo = 'enabled: NO';
-    if (
-      instance.ala1_mode === undefined ||
-      instance.ala2_mode === undefined ||
-      instance.ala1_edit === undefined ||
-      instance.ala2_edit === undefined
-    ) {
-      instance.ala1_mode = enabledYes;
-      instance.ala2_mode = enabledYes;
+    const instance: Record<string, string | number | boolean> = instances[0];
+    if (instance.ala1_mode === undefined) {
+      instance.ala1_mode = true;
+    } else {
+      if (
+        typeof instance.ala1_mode === 'string' &&
+        instance.ala1_mode.includes('enabled: YES')
+      ) {
+        instance.ala1_mode = true;
+      }
+      if (
+        typeof instance.ala1_mode === 'string' &&
+        instance.ala1_mode.includes('enabled: NO')
+      ) {
+        instance.ala1_mode = false;
+      }
+    }
+    if (instance.ala2_mode === undefined) {
+      instance.ala2_mode = true;
+    } else {
+      if (
+        typeof instance.ala2_mode === 'string' &&
+        instance.ala2_mode.includes('enabled: YES')
+      ) {
+        instance.ala2_mode = true;
+      }
+      if (
+        typeof instance.ala2_mode === 'string' &&
+        instance.ala2_mode.includes('enabled: NO')
+      ) {
+        instance.ala2_mode = false;
+      }
+    }
+    if (instance.ala1_edit === undefined) {
       instance.ala1_edit = 1;
+    }
+    if (instance.ala2_edit === undefined) {
       instance.ala2_edit = 1;
     }
-    const ala1_mode = instance.ala1_mode as string;
-    const ala2_mode = instance.ala2_mode as string;
-    if (ala1_mode.includes(enabledYes)) {
-      instance.ala1_mode = enabledYes;
-    }
-    if (ala1_mode.includes(enabledNo)) {
-      instance.ala1_mode = enabledNo;
-    }
-    if (ala2_mode.includes(enabledYes)) {
-      instance.ala2_mode = enabledYes;
-    }
-    if (ala2_mode.includes(enabledNo)) {
-      instance.ala2_mode = enabledNo;
-    }
-    // TODO: resolve it with the type
     return new DeviceParams(
       instance.trigX as number,
       instance.trigY as number,
@@ -92,8 +106,8 @@ export class DeviceService {
       instance.unitX as string,
       instance.unitY as string,
       instance.unitZ as string,
-      instance.ala1_mode as string,
-      instance.ala2_mode as string,
+      instance.ala1_mode as boolean,
+      instance.ala2_mode as boolean,
       instance.ala1_edit as number,
       instance.ala2_edit as number,
     );
@@ -109,15 +123,30 @@ export class DeviceService {
   ): Promise<void> {
     const client = updateDeviceParamsInput.cli;
     const filterQuery = `WHERE cli = "${client}"`;
-    const update = {};
+    const update: Record<string, unknown> = {};
     Object.entries(updateDeviceParamsInput).forEach(([key, value]) => {
       if (key !== 'cli' && value !== null) {
         update[key] = value;
       }
     });
+    delete update.ala1_mode;
+    delete update.ala2_mode;
+    let instances: Record<string, string | number>[];
     if (client.includes('_')) {
       // TODO: Use helper function to distinguish between device types
       // MR3000
+      instances = await fetchFromTable('MR3000', 'para_trigala', filterQuery);
+      const instance: Record<string, string | number | boolean> = instances[0];
+      const ala1_mode = instance.ala1_mode as string;
+      const ala2_mode = instance.ala2_mode as string;
+      updateMode(
+        ala1_mode,
+        ala2_mode,
+        updateDeviceParamsInput.ala1_mode,
+        updateDeviceParamsInput.ala2_mode,
+        update,
+      );
+
       await writeToTable('MR3000', 'para_trigala', filterQuery, update);
     } else {
       // MR2000

@@ -39,10 +39,10 @@ export class DeviceParams {
   unitZ: string;
 
   // Modes
-  @Field(() => String)
-  ala1_mode: string;
-  @Field(() => String)
-  ala2_mode: string;
+  @Field(() => Boolean)
+  ala1_mode: boolean;
+  @Field(() => Boolean)
+  ala2_mode: boolean;
 
   // Edits
   @Field(() => Number)
@@ -63,8 +63,8 @@ export class DeviceParams {
     unitX: string,
     unitY: string,
     unitZ: string,
-    ala1_mode: string,
-    ala2_mode: string,
+    ala1_mode: boolean,
+    ala2_mode: boolean,
     ala1_edit: number,
     ala2_edit: number,
   ) {
