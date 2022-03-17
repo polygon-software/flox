@@ -50,6 +50,10 @@ export class DeviceParams {
   @Field(() => Number)
   ala2_edit: number;
 
+  // Comment
+  @Field(() => String)
+  comment: string;
+
   constructor(
     trigX: number,
     trigY: number,
@@ -67,6 +71,7 @@ export class DeviceParams {
     ala2_mode: boolean,
     ala1_edit: number,
     ala2_edit: number,
+    comment: string,
   ) {
     this.trigX = trigX;
     this.trigY = trigY;
@@ -84,5 +89,6 @@ export class DeviceParams {
     this.ala2_mode = ala2_mode;
     this.ala1_edit = ala1_edit;
     this.ala2_edit = ala2_edit;
+    this.comment = comment;
   }
 }

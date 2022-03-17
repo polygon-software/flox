@@ -11,10 +11,10 @@
           class="text-grey"
           @click="loadParameters"
         />
-        <p>{{ $t('edit_parameters.project_name') }}</p>
-        <q-input v-model="projectName" outlined style="width: 250px"/>
         <p>{{ $t('edit_parameters.station_name') }}</p>
         <q-input v-model="stationName" outlined style="width: 250px"/>
+        <p>{{ $t('edit_parameters.comment') }}</p>
+        <q-input v-model="comment" outlined style="width: 250px"/>
       </div>
       <div style="width: 65%">
         <q-btn
@@ -109,17 +109,12 @@ import {i18n} from 'boot/i18n';
 const $q = useQuasar()
 
 const props = defineProps({
-  projectId: {
-    required: true,
-    type: String
-  },
   stationId: {
     required: true,
     type: String
   }
 })
 
-const projectName = ref(props.projectId)
 const stationName = ref(props.stationId)
 
 // TODO: remove mock data and replace it with real ones
@@ -138,6 +133,7 @@ const ala1Mode = ref('')
 const ala2Mode = ref('')
 const ala1Edit = ref(0)
 const ala2Edit = ref(0)
+const comment = ref('')
 onMounted(async () => {
   const result = await executeQuery(DEVICE_PARAMS, {cli: props.stationId})
   const data = result.data.deviceParams as Record<string, string|number>
@@ -152,6 +148,7 @@ onMounted(async () => {
   ala2Z.value = data.ala2Z as number;
   ala1Edit.value = data.ala1_edit as number;
   ala2Edit.value = data.ala2_edit as number;
+  comment.value = data.comment as string;
   if (data.ala1_mode) {
     ala1Mode.value = 'Enabled'
   }
@@ -199,7 +196,8 @@ async function updateParams() {
       ala2Y: ala2Y.value,
       ala2Z: ala2Z.value,
       ala1_mode: writeAla1Mode,
-      ala2_mode: writeAla2Mode }})
+      ala2_mode: writeAla2Mode,
+      comment: comment.value }})
 }
 
 </script>

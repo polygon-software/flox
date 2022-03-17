@@ -3,7 +3,6 @@
     <!-- Title: Project name -->
     <h5>{{ projectId }} - {{ stationId }}</h5>
     <UserDataForm
-      :project-id="projectId"
       :station-id="stationId"
     />
     <AlertContactsForm/>

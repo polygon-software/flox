@@ -110,6 +110,7 @@ export class DeviceService {
       instance.ala2_mode as boolean,
       instance.ala1_edit as number,
       instance.ala2_edit as number,
+      instance.comment as string,
     );
   }
 

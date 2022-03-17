@@ -29,7 +29,7 @@ export const CREATE_PROJECT = {
 export const UPDATE_PROJECT = {
   mutation: gql`
     mutation updateProject($projectUuid: String!, $projectName: String!, $updateProjectInput: UpdateProjectInput!){
-      update (projectUuid: $projectUuid, projectName: $projectName, updateProjectInput: $updateProjectInput) {
+      updateProjectName (projectUuid: $projectUuid, projectName: $projectName, updateProjectInput: $updateProjectInput) {
         uuid
         name
         mr2000instances

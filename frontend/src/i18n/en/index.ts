@@ -87,8 +87,8 @@ export default {
   edit_parameters: {
     user_data: 'User Data and Thresholds',
     contacts: 'Alert Contacts',
-    project_name: 'Project Name',
     station_name: 'Station Name',
+    comment: 'Comment',
     name: 'Name',
     number: 'Mobile Number',
     email: 'Email',

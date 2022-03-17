@@ -126,6 +126,7 @@ export const DEVICE_PARAMS = {
         ala2_mode
         ala1_edit
         ala2_edit
+        comment
       }
     }
   `,

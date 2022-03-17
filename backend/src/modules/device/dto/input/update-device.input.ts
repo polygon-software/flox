@@ -29,4 +29,6 @@ export class UpdateDeviceParamsInput {
   ala1_mode: boolean;
   @Field(() => Boolean)
   ala2_mode: boolean;
+  @Field(() => String)
+  comment: string;
 }

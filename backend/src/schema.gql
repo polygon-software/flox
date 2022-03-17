@@ -78,6 +78,7 @@ type DeviceParams {
   ala2Z: Float!
   ala2_edit: Float!
   ala2_mode: Boolean!
+  comment: String!
   trigX: Float!
   trigY: Float!
   trigZ: Float!
@@ -261,6 +262,7 @@ input UpdateDeviceParamsInput {
   ala2Z: Float
   ala2_mode: Boolean!
   cli: String!
+  comment: String!
   trigX: Float
   trigY: Float
   trigZ: Float
