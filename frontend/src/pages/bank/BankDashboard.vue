@@ -3,6 +3,8 @@
     class="q-pa-lg q-ma-none"
     style="margin-top: 50px"
   >
+    <!-- Own info -->
+    <BankInfoCard/>
 
     <!-- Container for search & adding -->
     <div class="row justify-between q-ma-none q-pb-lg">
@@ -43,6 +45,12 @@
             </q-td>
             <q-td key="city" :props="_props">
               {{ _props.row.address.city }}
+            </q-td>
+            <q-td key="zip_code" :props="_props">
+              {{ _props.row.address.zip_code }}
+            </q-td>
+            <q-td key="usage_type" :props="_props">
+              {{ _props.row.owner_occupied ? $t('form_for_clients.owner_occupied') : $t('account_data.usage_other') }}
             </q-td>
             <q-td key="market_value" :props="_props">
               CHF {{ _props.row.value_estimate_low.toLocaleString('de-ch') }} - CHF {{ _props.row.value_estimate_high.toLocaleString('de-ch') }}
@@ -134,6 +142,7 @@ import {DOSSIERS_BANK} from 'src/data/queries/DOSSIER';
 import {MY_BANK} from 'src/data/queries/BANK';
 import {DOSSIER_FILE} from 'src/data/queries/FILE';
 import {useRoute} from 'vue-router';
+import BankInfoCard from 'components/cards/BankInfoCard.vue';
 
 const $q: QVueGlobals = useQuasar()
 const $errorService: ErrorService|undefined = inject('$errorService')
@@ -154,7 +163,9 @@ const dossiers = subscribeToQuery(DOSSIERS_BANK, bankUuid ? { bankUuid: bankUuid
 const columns = [
   {name: 'date', label: i18n.global.t('account_data.date'), field: 'created_at', sortable: true, align: 'center'},
   {name: 'offer_id', label: i18n.global.t('dashboards.offer_id'), field: 'readable_id', sortable: false, align: 'center'},
-  {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: false, align: 'center'},
+  {name: 'city', label: i18n.global.t('account_data.city'), field: 'city', sortable: true, align: 'center'},
+  {name: 'zip_code', label: i18n.global.t('account_data.zip_code_short'), field: 'zip_code', sortable: true, align: 'center'},
+  {name: 'usage_type', label: i18n.global.t('account_data.usage_type'), field: 'owner_occupied', sortable: true, align: 'center'},
   {name: 'market_value', label: i18n.global.t('dashboards.market_value'), field: 'market_value', sortable: false, align: 'center'},
   {name: 'mortgage', label: i18n.global.t('dashboards.mortgage'), field: 'mortgage', sortable: true, align: 'center'},
   {name: 'enfeoffment', label: i18n.global.t('dashboards.enfeoffment'), field: 'enfeoffment', sortable: false, align: 'center'},

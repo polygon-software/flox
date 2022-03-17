@@ -31,7 +31,9 @@ export default {
     redirect_to_login: 'Ihre Registrierung wird nun bearbeitet! Sie werden nun automatisch zum Login-Screen zurückgeleitet.',
     back_to_login: 'Zurück zum Login',
     change_password: 'Passwort ändern',
-    unauthenticated: 'Nicht Angemeldet'
+    unauthenticated: 'Nicht Angemeldet',
+    qr_title: '2FA einrichten',
+    qr_description: 'Richten Sie 2-Faktor-Authentifizierung mit ihrer bevorzugten Authenticator-App ein:'
   },
   account_data: {
     employees: 'Mitarbeitende',
@@ -48,6 +50,7 @@ export default {
     street: 'Strasse',
     number: 'Nummer',
     zip_code: 'Postleitzahl',
+    zip_code_short: 'PLZ',
     city: 'Ort',
     interests: 'Interessen',
     company: 'Firma',
@@ -86,6 +89,8 @@ export default {
     provision_soi: 'Provision SOI',
     provision_total: 'Totale Provision',
     bank: 'Bank | Banken',
+    usage_type: 'Art der Nutzung',
+    usage_other: 'Nicht Selbsbew.'
   },
   messages: {
     account_unlocked: 'Account erfolgreich freigeschaltet',
@@ -406,7 +411,8 @@ export default {
     enfeoffment_second_rank: '1. & 2. Rang',
     enfeoffment_too_high: 'Nicht finanzierbar',
     discard_dossier: 'Es werden alle eingegebenen Daten verworfen. Sind Sie sicher?',
-    formula: '(Hypothekenwert * Zinssatz) + (0,01 * Marktwertschätzung) + Amortisation'
+    formula: '(Hypothekenwert * Zinssatz) + (0,01 * Marktwertschätzung) + Amortisation',
+    preview: 'Vorschau'
   },
   dossier_status_enum: {
     OPEN: 'Offen',
@@ -417,6 +423,8 @@ export default {
     COMPLETED: 'Abgeschlossen',
     IN_PROGRESS: 'Kreditvertrag in Bearbeitung',
     SENT: 'Kreditvertrag versendet',
+    CONTRACT_UPLOADED: 'Auftragsblatt hochgeladen',
+    PRODUCT_AGREEMENT_CONFIRMED: 'Produktvereinbarung bestätigt'
   },
   offer_status_enum: {
     INTERESTED: 'Interessiert',
@@ -442,7 +450,7 @@ export default {
     retirement_warning: 'Es gibt eine Tragbarkeit bei der Pension (über 60 Jahre)',
     warning_landlord: 'Nur Hypotheken mit öffentlich-rechtlichem Baurechtsgeber sind vermittelbar',
     mortgage_too_short: 'Die Ablauffrist der Hypothek ist zu kurz!',
-    mortgage_note: 'Achtung: eventuell Schuldbriefsplitting notwendig!',
+    mortgage_note: 'Das Ablaufdatum ist zu weit in der Zukunft (max. 12 Monate). Wenden Sie sich bei gegebener Zeit wieder an ihre Ansprechperson.',
     building_lease_warning: 'Auf Basis der von Ihnen erfassten Daten kann über diese Plattform keine Hypothek angeboten werden!',
     prosecutions_loss_certificates: 'Achtung: Wenn Betreibungen oder Verlustscheine vorliegen... TODO',
     affordability_impossible: 'Achtung: Aufgrund der Tragbarkeit von über 35% ist diese Hypothek nicht finanzierbar.',
@@ -498,5 +506,7 @@ export default {
     team_leader: 'Teamleiter*in',
     sales_leader: 'Verkaufsleiter*in',
     branch_leader: 'Niederlassungsleiter*in',
+    regional_leader: 'Regionalleiter*in',
+    managing_director: 'Geschäftsführer*in'
   }
 };

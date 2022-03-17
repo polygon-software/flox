@@ -11,7 +11,7 @@
       class="column"
       active-color="primary"
       done-icon="done"
-      style="min-height: 870px"
+      style="min-height: 600px;"
       animated
       @update:model-value="onPageChange"
     >
@@ -26,7 +26,7 @@
       >
         <!-- Main form content (pages 1-4) -->
         <div
-          v-if="form.step.value < form.pages.value.length"
+          v-if="form.step.value < form.pages.value.length-1"
         >
           <div
             class="row">
@@ -131,8 +131,9 @@
 
         <!-- Summary page (final page before submit) -->
         <div
-          v-else
+          v-else-if="form.step.value === form.pages.value.length - 1"
           class="column"
+          style="margin-bottom: 80px"
         >
           <!-- Eligible salary -->
           <SummaryField
@@ -205,6 +206,13 @@
             </strong>
           </q-card>
         </div>
+
+        <!-- PDF preview page -->
+        <div v-else>
+
+          <!-- Page Print Preview -->
+          <DossierFinalDocumentPreview :dossier="dossierObject"/>
+        </div>
       </q-step>
 
       <!-- Bottom navigation -->
@@ -276,6 +284,7 @@ import {DOSSIER_WARNING} from 'app/definitions/ENUMS';
 import axios from 'axios';
 import {dateToInputString} from 'src/helpers/date-helpers';
 import {getAuthToken} from 'src/helpers/cookie-helpers';
+import DossierFinalDocumentPreview from 'components/dossier/DossierFinalDocumentPreview.vue';
 import {AuthenticationService} from 'src/services/AuthService';
 
 const $routerService: RouterService | undefined = inject('$routerService')
@@ -432,6 +441,19 @@ const pages = [
       {
         key: 'summary',
         title: i18n.global.t('form_for_clients.summary'),
+        fields: [],
+      },
+    ],
+  },
+
+  // Sixth page: Preview
+  {
+    key: 'preview',
+    label: i18n.global.t('form_for_clients.preview'),
+    sections: [
+      {
+        key: 'preview',
+        title: i18n.global.t('form_for_clients.preview'),
         fields: [],
       },
     ],
@@ -603,6 +625,145 @@ const enfeoffmentEstimate = computed(() => {
 
 })
 
+/**
+ * Computed dossier object for PDF preview
+ * Note that this is NOT identical to the data passed to the actual dossier creation function,
+ * since we need to mock the entire dossier structure for the preview to work
+ */
+const dossierObject = computed(() => {
+
+  const formData = form.values.value as Record<string, Record<string,unknown>>
+
+  // Page 1
+  const firstName = formData.full_name?.firstName
+  const lastName = formData.full_name?.lastName
+  const address =  formData.address
+  const email = formData.email
+  const phone = formData.phone_number
+  const birthdate = formData.date_of_birth
+
+  // Page 2
+  const bankName =  (formData.bank as Record<string, string>).name as string|null
+  const bankAbbreviation =  (formData.bank as Record<string, string>).abbreviation as string|null
+  const propertyType = formData.property_type?.value
+  const ownerOccupied = formData.owner_occupied
+  const purchaseDate = formData.date_of_purchase
+  const purchasePrice = formData.enfeoffment?.price
+  const marketValueEstimation = formData.enfeoffment?.marketValueEstimation
+  const mortgageAmount = formData.enfeoffment?.currentValueOfMortgage
+
+  // Page 3
+  const hasAmortisation = formData.amortisation?.hasAmortisation
+  const directAmortisation = formData.amortisation?.directAmortisation         // may be null
+  const amortisationAmount = formData.amortisation?.amortisationAmount         // may be null
+  const hasBuildingLease = formData.building_lease?.hasBuildingLease
+  const publicLandlord = formData.building_lease?.publicLandlord               // may be null
+  const buildingLeaseExpirationDate = formData.building_lease?.expirationDate  // may be null
+  const buildingLeaseInterest = formData.building_lease?.interest              // may be null
+  const hasRenovation = formData.renovation?.hasRenovation
+  const renovationPrice = formData.renovation?.renovationPrice                 // may be null
+  const renovationYear = formData.renovation?.renovationYear                   // may be null
+
+  // Mortgage partitions
+  const mortgagePartitions = formData.mortgage as unknown as Record<string, number|Date>[]
+  const partitionAmounts: number[] = []
+  const partitionDates: Date[] = []
+  mortgagePartitions.forEach((partition: Record<string, number|Date>) => {
+    partitionAmounts.push(partition.amount as number)
+    partitionDates.push(partition.date as Date)
+  })
+
+  // Page 4
+  const incomes = formData.income
+  const childAllowances = formData.child_allowances
+  const bonus = formData.bonus
+  const assets = formData.assets
+  const leasing = formData.leasing
+  const credit = formData.credit
+  const alimony = formData.alimony
+  const various = formData.various
+  const prosecutions = formData.prosecutions
+  const lossCertificates = formData.loss_certificates
+
+  // Verify all mandatory attributes are present
+  if([
+    firstName, lastName, address, email, phone, birthdate,
+    bankName, bankAbbreviation, propertyType, ownerOccupied, purchaseDate, purchasePrice, marketValueEstimation,
+    mortgageAmount, hasAmortisation, hasBuildingLease, hasRenovation, mortgagePartitions,
+    incomes, childAllowances, bonus, assets, leasing, credit, alimony, various, lossCertificates, prosecutions,
+    affordability.value, eligibleIncome.value, totalCosts.value, valueEstimate.value, enfeoffmentEstimate.value
+  ].some((value) => value === null || value === undefined)){
+    return null
+  }
+
+  return {
+      created_at: new Date(),
+      // Basic information
+      first_name: firstName,
+      last_name: lastName,
+      address,
+      email,
+      phone,
+      birthdate,
+
+      // Value purchase information
+      original_bank: {
+        name: bankName,
+        abbreviation: bankAbbreviation
+      },
+      property_type: propertyType,
+      owner_occupied: ownerOccupied,
+      purchase_date: purchaseDate,
+      purchase_price: parseInt(purchasePrice as string),
+      market_value_estimation: parseInt(marketValueEstimation as string),
+      mortgage_amount: parseInt(mortgageAmount as string),
+
+      // Amortisation information
+      has_amortisation: hasAmortisation,
+      direct_amortisation: directAmortisation,
+      amortisation_amount: parseInt(amortisationAmount as string),
+
+      // Building lease information
+      has_building_lease: hasBuildingLease,
+      public_landlord: publicLandlord,
+      building_lease_expiration_date: buildingLeaseExpirationDate,
+      building_lease_interest: parseInt(buildingLeaseInterest as string),
+
+      // Renovation information
+      has_renovation: hasRenovation,
+      renovation_year: renovationYear,
+      renovation_price: parseInt(renovationPrice as string),
+
+      // Mortgage partitions
+      partition_amounts: partitionAmounts,
+      partition_dates: partitionDates,
+
+      // Income/cost information
+      incomes,
+      child_allowances: parseInt(childAllowances.toString()),
+      bonus: parseInt(bonus.toString()),
+      assets: parseInt(assets.toString()),
+      leasing: parseInt(leasing.toString()),
+      credit: parseInt(credit.toString()),
+      alimony: parseInt(alimony.toString()),
+      various: parseInt(various.toString()),
+      prosecutions,
+      loss_certificates: lossCertificates,
+
+      // Flag for dossier being non-arrangeable
+      non_arrangeable: nonArrangeable.value,
+
+      // Calculated totals
+      affordability: affordability.value,
+      eligible_income: eligibleIncome.value,
+      total_costs: totalCosts.value,
+      value_estimate_low: valueEstimate.value?.low,
+      value_estimate_high: valueEstimate.value?.high,
+      enfeoffment_estimate_low: enfeoffmentEstimate.value.low,
+      enfeoffment_estimate_high: enfeoffmentEstimate.value.high,
+  }
+})
+
 // Upon mounting, get list of banks
 onMounted(async () => {
   // Execute queries for existing & suggested banks
@@ -621,7 +782,6 @@ onMounted(async () => {
       value: bank
     }
   }) as Record<string, unknown>[]
-
 })
 
 /**
@@ -629,8 +789,8 @@ onMounted(async () => {
  * @returns {Promise<void>} - done
  */
 async function onPageChange(){
-  // When going to final page, validate affordability
-  if(form.step.value === form.pages.value.length){
+  // When going to summary page, validate affordability
+  if(form.step.value === form.pages.value.length - 1){
     await calculateValueEstimate();
 
     let affordabilityWarning

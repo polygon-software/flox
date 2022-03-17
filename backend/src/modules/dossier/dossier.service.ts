@@ -237,7 +237,13 @@ export class DossierService {
    */
   async getRejectedDossiers(): Promise<Dossier[]> {
     const allDossiers = await this.dossierRepository.find({
-      relations: ['offers', 'offers.bank', 'original_bank'],
+      relations: [
+        'offers',
+        'offers.bank',
+        'original_bank',
+        'documents',
+        'final_document',
+      ],
     });
 
     return allDossiers.filter((dossier: Dossier) => {
