@@ -18,9 +18,6 @@ import {i18n} from 'boot/i18n';
 import {useApolloClient} from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {executeMutation} from 'src/helpers/data-helpers';
-import {VERIFY_EMAIL} from 'src/data/mutations/USER';
-import {sleep} from 'src/helpers/general-helpers';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
