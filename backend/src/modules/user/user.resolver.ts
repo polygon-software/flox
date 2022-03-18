@@ -16,7 +16,6 @@ import { ERRORS } from '../../error/ERRORS';
 import { EmployeeService } from '../employee/employee.service';
 import { CompanyService } from '../company/company.service';
 import { GetCompanyArgs } from '../company/dto/args/get-company.args';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 @Resolver(() => User)
 export class UserResolver {
