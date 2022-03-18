@@ -4,7 +4,7 @@
 
 import { MR2000 } from '../types/MR2000';
 import { MR3000 } from '../types/MR3000';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
 
 /**
@@ -85,13 +85,11 @@ export async function findProjectForDevice(
   cli: string,
   isMr2000: boolean,
 ) {
-  return projectRepository
-    .createQueryBuilder('project')
-    .where(
-      `:cli=ANY(project.${isMr2000 ? 'mr2000instances' : 'mr3000instances'})`,
-      { cli },
-    )
-    .getOne();
+  const searchString = Like(`%${cli}%`);
+  const filterQuery = isMr2000
+    ? { mr2000instances: searchString }
+    : { mr3000instances: searchString };
+  return projectRepository.findOne({ where: filterQuery });
 }
 
 /**
