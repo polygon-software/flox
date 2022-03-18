@@ -1,8 +1,8 @@
 VUE_APP_USER_POOL_ID=eu-central-1_Fx5YjVdhK
 VUE_APP_USER_POOL_CLIENT_ID=5h4fcam55ktksdcd0cskqidcsj
 
-VUE_APP_GRAPHQL_ENDPOINT=https://soi-prod-api.polygon-project.ch/graphql
-VUE_APP_WS_ENDPOINT=wss://soi-prod-api.polygon-project.ch:443/graphql-websocket
+VUE_APP_GRAPHQL_ENDPOINT=https://soi-dev-api.polygon-project.ch/graphql
+VUE_APP_WS_ENDPOINT=wss://soi-dev-api.polygon-project.ch:443/graphql-websocket
 
-VUE_APP_BASE_URL=https://soi-prod-web.polygon-project.ch
-VUE_APP_BACKEND_BASE_URL=https://soi-prod-api.polygon-project.ch
+VUE_APP_BASE_URL=https://soi-dev-web.polygon-project.ch
+VUE_APP_BACKEND_BASE_URL=https://soi-dev-api.polygon-project.ch
