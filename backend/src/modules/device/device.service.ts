@@ -448,11 +448,24 @@ export class DeviceService {
     const type = deviceType(getLogFileArgs.cli);
 
     // File path & name, based on device type
-    const filePath = `/home/zc-ftp/${
-      type === 'MR2000' ? 'LOG_2000' : 'LOG_3K'
-    }`;
-    const fileName = `${getLogFileArgs.cli}-log.txt`;
+    const filePath = `${type === 'MR2000' ? 'LOG_2000' : 'LOG_3K'}`;
+    const fileName = `${getLogFileArgs.cli}-log`;
 
-    // TODO fetch from filesystem
+    // TODO fetch from filesystem via Python API
+    const host = this.configService.get('pyAPI.host');
+    const port = this.configService.get('pyAPI.port');
+    const url = `http://${host}:${port}/log?path=${filePath}&file=${fileName}&skip=0&take=10`;
+    try {
+      const response: Observable<unknown> = this.httpService
+        .get(url)
+        .pipe(map((axiosResponse) => axiosResponse.data));
+      const data = await firstValueFrom(response);
+      console.log('Got data:', data as string);
+    } catch (e) {
+      console.log(e);
+      console.error(
+        `Log files for station "${getLogFileArgs.cli}" not found! URL: ${url}`,
+      );
+    }
   }
 }

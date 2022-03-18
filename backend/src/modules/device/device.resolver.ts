@@ -190,7 +190,7 @@ export class DeviceResolver {
    * @returns {Promise<LevelWriting>} - The level writings of the devices.
    */
   @AnyRole()
-  @Query(() => [ConnectionLogEntry], { name: 'getLogFile' })
+  @Query(() => Device, { name: 'getLogFile' }) // TODO type
   async getLogFile(
     @Args() getLogFileArgs: GetLogFileArgs,
     @CurrentUser() user: Record<string, string>,
