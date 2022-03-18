@@ -454,7 +454,7 @@ export class DeviceService {
     // TODO fetch from filesystem via Python API
     const host = this.configService.get('pyAPI.host');
     const port = this.configService.get('pyAPI.port');
-    const url = `http://${host}:${port}/log?path=${filePath}&file=${fileName}&skip=0&take=10`;
+    const url = `http://${host}:${port}/log?path=${filePath}&file=${fileName}&skip=${getLogFileArgs.skip}&take=${getLogFileArgs.take}`;
     try {
       const response: Observable<unknown> = this.httpService
         .get(url)

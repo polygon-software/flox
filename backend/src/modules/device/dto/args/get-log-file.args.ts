@@ -6,4 +6,12 @@ export class GetLogFileArgs {
   @Field(() => String)
   @IsArray()
   cli: string;
+
+  @Field(() => Int)
+  @IsInt()
+  take: number;
+
+  @Field(() => Int)
+  @IsInt()
+  skip: number;
 }

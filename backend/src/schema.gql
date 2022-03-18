@@ -722,7 +722,7 @@ type Query {
   eventTable(cli: String!, descending: Boolean, filter: String, orderBy: String, skip: Int!, take: Int!): EventsTable!
   getConnectionLogCount(cli: String!): Int!
   getConnectionLogs(cli: String!, skip: Int!, take: Int!): [ConnectionLogEntry!]!
-  getLogFile(cli: String!): Device!
+  getLogFile(cli: String!, skip: Int!, take: Int!): Device!
   getProjectDevices(name: String, uuid: ID): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
