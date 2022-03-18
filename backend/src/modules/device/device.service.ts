@@ -8,6 +8,7 @@ import {
   mr3000fromDatabaseEntry,
   deviceType,
   connectionLogEntryFromDatabaseEntry,
+  mapDeviceLogEntry,
 } from '../../helpers/device-helpers';
 import { Project } from '../project/entities/project.entity';
 import { HttpService } from '@nestjs/axios';
@@ -442,7 +443,7 @@ export class DeviceService {
   /**
    * Get the log file entries for a given device
    * @param {GetLogFileArgs} getLogFileArgs - args, containing CLI
-   * @returns {TODO} - log entries
+   * @returns {Promise<DeviceLogEntry[]>} - log entries
    */
   async getLogFile(getLogFileArgs: GetLogFileArgs) {
     const type = deviceType(getLogFileArgs.cli);
@@ -451,7 +452,7 @@ export class DeviceService {
     const filePath = `${type === 'MR2000' ? 'LOG_2000' : 'LOG_3K'}`;
     const fileName = `${getLogFileArgs.cli}-log`;
 
-    // TODO fetch from filesystem via Python API
+    // Fetch from filesystem via Python API
     const host = this.configService.get('pyAPI.host');
     const port = this.configService.get('pyAPI.port');
     const url = `http://${host}:${port}/log?path=${filePath}&file=${fileName}&skip=${getLogFileArgs.skip}&take=${getLogFileArgs.take}`;
@@ -459,10 +460,10 @@ export class DeviceService {
       const response: Observable<unknown> = this.httpService
         .get(url)
         .pipe(map((axiosResponse) => axiosResponse.data));
-      const data = await firstValueFrom(response);
-      console.log('Got data:', data as string);
+      const data = (await firstValueFrom(response)) as string[];
+      console.log('got data', data);
+      return data.map((dataRow) => mapDeviceLogEntry(dataRow));
     } catch (e) {
-      console.log(e);
       console.error(
         `Log files for station "${getLogFileArgs.cli}" not found! URL: ${url}`,
       );

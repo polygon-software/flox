@@ -7,6 +7,7 @@ import { MR3000 } from '../types/MR3000';
 import { Repository } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
 import { ConnectionLogEntry } from '../types/ConnectionLogEntry';
+import { DeviceLogEntry } from '../types/DeviceLogEntry';
 
 /**
  * Creates an MR2000 instance from a RowPacketData entry
@@ -134,4 +135,14 @@ export async function connectionLogEntryFromDatabaseEntry(
     entry.traffic as number,
     entry.reason as string,
   );
+}
+
+/**
+ * Maps a device log entry string to a DeviceLogEntry instance
+ * @param {string} entry - a single log line
+ * @returns {DeviceLogEntry} - log entry instance
+ */
+export function mapDeviceLogEntry(entry: string) {
+  // const date =
+  return new DeviceLogEntry(new Date(), 'testmsg');
 }

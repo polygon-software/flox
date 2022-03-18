@@ -22,6 +22,7 @@ import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
 import { ConnectionLogEntry } from '../../types/ConnectionLogEntry';
 import { GetConnectionLogCountArgs } from './dto/args/get-connection-log-count.args';
 import { GetLogFileArgs } from './dto/args/get-log-file.args';
+import { DeviceLogEntry } from '../../types/DeviceLogEntry';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -190,7 +191,7 @@ export class DeviceResolver {
    * @returns {Promise<LevelWriting>} - The level writings of the devices.
    */
   @AnyRole()
-  @Query(() => Device, { name: 'getLogFile' }) // TODO type
+  @Query(() => [DeviceLogEntry], { name: 'getLogFile' })
   async getLogFile(
     @Args() getLogFileArgs: GetLogFileArgs,
     @CurrentUser() user: Record<string, string>,
