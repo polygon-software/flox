@@ -588,7 +588,6 @@ type Mutation {
   updateDossierStatus(updateDossierStatusInput: UpdateDossierStatusInput!): Dossier!
   updateEmployee(updateEmployeeInput: UpdateEmployeeInput!): Employee!
   updateOfferStatus(updateOfferStatusInput: UpdateOfferStatusInput!): Dossier!
-  verifyEmail: User!
 }
 
 type Offer {

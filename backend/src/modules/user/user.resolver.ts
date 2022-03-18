@@ -54,22 +54,6 @@ export class UserResolver {
     return this.userService.getUser({ uuid: user.userId });
   }
 
-  @AnyRole()
-  @Mutation(() => User, { name: 'verifyEmail' })
-  async verifyEmail(
-    @CurrentUser() user: Record<string, string>,
-  ): Promise<User> {
-    const provider = new CognitoIdentityProvider({
-      region: process.env.AWS_REGION ?? 'eu-central-1',
-    });
-    const res = await provider.resendConfirmationCode({
-      Username: user.userId,
-      ClientId: process.env.USER_POOL_CLIENT_ID,
-    });
-    console.log(res);
-    return this.userService.getUser({ uuid: user.userId });
-  }
-
   /**
    * Disables a given user's account
    * @param {DisableUserInput} disableUserInput - disabling input, including UUID & role
