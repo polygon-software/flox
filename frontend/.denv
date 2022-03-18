@@ -1,3 +1,6 @@
+VUE_APP_USER_POOL_ID=eu-central-1_Rc0IVsV8t
+VUE_APP_USER_POOL_CLIENT_ID=598oebnq0t2bb95c25867i4qbi
+
 VUE_APP_GRAPHQL_ENDPOINT=http://localhost:3000/graphql
 VUE_APP_WS_ENDPOINT=ws://localhost:3000/graphql-websocket
 

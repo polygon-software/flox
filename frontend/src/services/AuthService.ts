@@ -95,46 +95,48 @@ export class AuthenticationService {
           Pool: userPool,
       });
 
-
       // Execute auth function
-        return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
-          // Store in local variable
-          this.$authStore.mutations.setCognitoUser(cognitoUser)
-          cognitoUser.authenticateUser(authenticationDetails, {
-            onSuccess: (result)=>{ this.loginSuccess(result); resolve()},
-            onFailure: (err: Error)=>{this.onFailure(err) },
-            // Sets up MFA (only done once after signing up)
-            mfaSetup: () => {
-              this.setupMFA(cognitoUser, resolve)
-            },
+      return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
+        // Store in local variable
+        this.$authStore.mutations.setCognitoUser(cognitoUser)
+        cognitoUser.authenticateUser(authenticationDetails, {
+          onSuccess: (result) => {
+            this.loginSuccess(result);
+            resolve()
+          },
+          onFailure: (err: Error) => {
+            this.onFailure(err) 
+          },
+          // Sets up MFA (only done once after signing up)
+          mfaSetup: () => {
+            this.setupMFA(cognitoUser, resolve)
+          },
 
-          // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-            selectMFAType: function () {
-              cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
-            },
+        // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
+          selectMFAType: function () {
+            cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
+          },
 
-            newPasswordRequired: function (userAttributes) {
-              while (!newPassword) {
-                newPassword = prompt(i18n.global.t('messages.enter_new_password'), '') || '';
+          newPasswordRequired: function (userAttributes) {
+            while (!newPassword) {
+              newPassword = prompt(i18n.global.t('messages.enter_new_password'), '') || '';
+            }
+            cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
+
+          },
+
+          // Called if time-limited one time password is required (only second login or later)
+          totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
+
+          //TODO check when/if this appears
+          mfaRequired: function () {
+              const verificationCode = prompt(i18n.global.t('messages.enter_verification_code', ''));
+              if (typeof verificationCode === 'string') {
+                  cognitoUser.sendMFACode(verificationCode, this);
               }
-              cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, this);
-            },
-
-            // Called if time-limited one time password is required (only second login or later)
-            totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
-
-            //TODO check when/if this appears
-            mfaRequired: function () {
-                const verificationCode = prompt(i18n.global.t('messages.enter_verification_code', ''));
-                if (typeof verificationCode === 'string') {
-                    cognitoUser.sendMFACode(verificationCode, this);
-                }
-            },
-
-
-
-          })
+          },
         })
+      })
     }
 
 
@@ -146,9 +148,12 @@ export class AuthenticationService {
    */
   setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
     cognitoUser.associateSoftwareToken({
-      associateSecretCode: (secret: string) => {
+      associateSecretCode: async (secret: string) => {
         this.$authStore.mutations.setCognitoUser(cognitoUser)
-        this.showQRCodeDialog(secret, resolve, cognitoUser)},
+        await this.showQRCodeDialog(secret, cognitoUser)
+        await this.showEmailVerificationDialog()
+        resolve()
+      },
       onFailure: (err: Error) => {this.onFailure(err)}
     })
   }
@@ -178,9 +183,7 @@ export class AuthenticationService {
     })
 
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
-    this.showEmailVerificationDialog()
   }
-
 
   /**
    * TODO description, consolidate with signUp() function
@@ -206,7 +209,6 @@ export class AuthenticationService {
 
     return cognitoUserWrapper.userSub
   }
-
 
   /**
    * Logs out the currently logged in authentication (if any)
@@ -237,7 +239,6 @@ export class AuthenticationService {
       await apolloClient.client.clearStore()
     }
   }
-
 
   /**
    * Shows a dialog for changing password
@@ -324,77 +325,86 @@ export class AuthenticationService {
 
   /**
    * Shows a dialog for verifying E-Mail
-   * @param {boolean} [renew] - whether to generate a new verification code
    * @returns {void}
    */
-  showEmailVerificationDialog(renew = false): void{
-      if(renew){
-          if(!this.$authStore.getters.getCognitoUser()){
-              this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
-              return
-          } else {
-            this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
-              // Do nothing
-            })
-          }
-      }
-
-      this.$q.dialog({
-          title: i18n.global.t('messages.verification'),
-          message: i18n.global.t('messages.enter_verification_code'),
-          cancel: true,
-          persistent: true,
-          prompt: {
-              model: '',
-              isValid: (val: string) => val.length >= 6,
-              type: 'text'
-          },
-      }).onOk((input: string) => {
-          void this.verifyEmail(input)
-      }).onCancel(() => {
-          // Do nothing
+  async showEmailVerificationDialog(): Promise<void>{
+    await new Promise((resolve, reject) => {
+      this.$authStore.getters.getCognitoUser()?.getAttributeVerificationCode('email', {
+        onSuccess(): void {
+          resolve(null)
+        },
+        onFailure: (err: Error) => {
+          console.error(err)
+          reject()
+        }
       })
+    })
+    await new Promise((resolve, reject) => {
+      this.$q.dialog({
+        title: i18n.global.t('messages.verification'),
+        message: i18n.global.t('messages.enter_verification_code'),
+        cancel: true,
+        persistent: true,
+        prompt: {
+          model: '',
+          isValid: (val: string) => val.length === 6,
+          type: 'text'
+        },
+      }).onOk((input: string) => {
+          this.$authStore.getters.getCognitoUser()?.verifyAttribute('email', input, {
+            onSuccess(): void {
+              resolve(null)
+            },
+            onFailure: (err: Error) => {
+              console.error(err)
+              reject()
+            }
+          })
+        })
+      })
+
   }
 
   /**
    * Shows a dialog containing a QR code for setting up two factor authentication
    * @param {string} secretCode - the authenticator code to encode in QR code form
-   * @param {function} resolve - resolve function
    * @param {CognitoUser} cognitoUser - the cognito user to show the dialog for
    * @returns {void}
    */
-  showQRCodeDialog(secretCode: string, resolve: (value: (void | PromiseLike<void>)) => void, cognitoUser: CognitoUser): void{
-    const username = this.$authStore.getters.getUsername() ?? 'user'
+  showQRCodeDialog(secretCode: string, cognitoUser: CognitoUser): Promise<void>{
+    return new Promise((resolve)=>{
+      const username = this.$authStore.getters.getUsername() ?? 'user'
 
-    const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
-    this.$q.dialog({
+      const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
+      this.$q.dialog({
         component: QrCodeDialog,
         componentProps: {
-            value: codeUrl
+          value: codeUrl
         },
-    }).onOk(() => {
+      }).onOk(() => {
         // Verify code
         this.$q.dialog({
-            title: 'Verification',
-            message: 'Please enter your 2FA authenticator code',
-            cancel: true,
-            persistent: true,
-            prompt: {
-                model: '',
-                isValid: (val: string) => val.length >= 6,
-                type: 'text'
-            },
+          title: i18n.global.t('authentication.verification'),
+          message: i18n.global.t('authentication.verification_message'),
+          cancel: true,
+          persistent: true,
+          prompt: {
+            model: '',
+            isValid: (val: string) => val.length >= 6,
+            type: 'text'
+          },
         }).onOk((code: string) => {
           cognitoUser.verifySoftwareToken(code, 'SOI TOTP device', {
-                onSuccess: (userSession: CognitoUserSession) => {
-                  this.loginSuccess(userSession)
-                  resolve()
-                },
-                onFailure: (error: Error)=>{
-                  this.onFailure(error)
-                },
-            });
+            onSuccess: (userSession: CognitoUserSession) => {
+              this.loginSuccess(userSession)
+              resolve()
+            },
+            onFailure: (error: Error)=>{
+              this.onFailure(error)
+            },
+          });
         })
+      })
     })
   }
 
@@ -455,7 +465,7 @@ export class AuthenticationService {
    * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
    * @returns {void}
    */
-  loginSuccess(userSession: CognitoUserSession): void{
+  loginSuccess(userSession: CognitoUserSession): void {
     // Store locally
     this.$authStore.mutations.setUserSession(userSession)
   }
@@ -468,7 +478,7 @@ export class AuthenticationService {
   onFailure(error: Error): void{
       if(error.name === 'UserNotConfirmedException'){
           // Show the e-mail verification dialog and send a new code
-          this.showEmailVerificationDialog(true)
+          void this.showEmailVerificationDialog()
       } else {
         this.$errorService.showErrorDialog(error)
       }

@@ -33,7 +33,9 @@ export default {
     change_password: 'Change password',
     unauthenticated: 'Unauthenticated',
     qr_title: 'Set up 2FA',
-    qr_description: 'Set up 2-factor authentication with your preferred mobile authenticator app:'
+    qr_description: 'Set up 2-factor authentication with your preferred mobile authenticator app:',
+    verification: 'Verification',
+    verification_message: 'Please enter your 2FA authenticator code'
   },
   account_data: {
     employees: 'Employees',
