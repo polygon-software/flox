@@ -27,6 +27,8 @@ import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
+import { GetLogFileArgs } from './dto/args/get-log-file.args';
+import { MR2000 } from '../../types/MR2000';
 
 @Injectable()
 export class DeviceService {
@@ -435,5 +437,22 @@ export class DeviceService {
     );
 
     return numberOfLogs[0]['count(*)'];
+  }
+
+  /**
+   * Get the log file entries for a given device
+   * @param {GetLogFileArgs} getLogFileArgs - args, containing CLI
+   * @returns {TODO} - log entries
+   */
+  async getLogFile(getLogFileArgs: GetLogFileArgs) {
+    const type = deviceType(getLogFileArgs.cli);
+
+    // File path & name, based on device type
+    const filePath = `/home/zc-ftp/${
+      type === 'MR2000' ? 'LOG_2000' : 'LOG_3K'
+    }`;
+    const fileName = `${getLogFileArgs.cli}-log.txt`;
+
+    // TODO fetch from filesystem
   }
 }
