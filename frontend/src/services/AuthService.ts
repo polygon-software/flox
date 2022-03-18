@@ -408,7 +408,6 @@ export class AuthenticationService {
         })
       })
     })
-
   }
 
   /**
