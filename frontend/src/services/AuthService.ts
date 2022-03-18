@@ -136,9 +136,6 @@ export class AuthenticationService {
                     cognitoUser.sendMFACode(verificationCode, this);
                 }
             },
-
-
-
           })
         })
     }
@@ -184,7 +181,6 @@ export class AuthenticationService {
     })
 
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
-    this.showEmailVerificationDialog()
   }
 
 
@@ -330,36 +326,46 @@ export class AuthenticationService {
 
   /**
    * Shows a dialog for verifying E-Mail
-   * @param {boolean} [renew] - whether to generate a new verification code
    * @returns {void}
    */
-  showEmailVerificationDialog(renew = false): void{
-      if(renew){
-          if(!this.$authStore.getters.getCognitoUser()){
-              this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.error_occurred')))
-              return
-          } else {
-            this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(() => {
-              // Do nothing
-            })
-          }
-      }
-
-      this.$q.dialog({
-          title: i18n.global.t('messages.verification'),
-          message: i18n.global.t('messages.enter_verification_code'),
-          cancel: true,
-          persistent: true,
-          prompt: {
-              model: '',
-              isValid: (val: string) => val.length >= 6,
-              type: 'text'
-          },
-      }).onOk((input: string) => {
-          void this.verifyEmail(input)
-      }).onCancel(() => {
-          // Do nothing
+  async showEmailVerificationDialog(): Promise<void>{
+    await new Promise((resolve, reject) => {
+      this.$authStore.getters.getCognitoUser()?.getAttributeVerificationCode('email', {
+        onSuccess(success: string): void {
+          console.log(success)
+          resolve(null)
+        },
+        onFailure: (err: Error) => {
+          console.error(err)
+          reject()
+        }
       })
+    })
+    await new Promise((resolve, reject) => {
+      this.$q.dialog({
+        title: i18n.global.t('messages.verification'),
+        message: i18n.global.t('messages.enter_verification_code'),
+        cancel: true,
+        persistent: true,
+        prompt: {
+          model: '',
+          isValid: (val: string) => val.length >= 6,
+          type: 'text'
+        },
+      }).onOk((input: string) => {
+          this.$authStore.getters.getCognitoUser()?.verifyAttribute('email', input, {
+            onSuccess(success: string): void {
+              console.log(success)
+              resolve(null)
+            },
+            onFailure: (err: Error) => {
+              console.error(err)
+              reject()
+            }
+          })
+        })
+      })
+
   }
 
   /**
@@ -464,38 +470,6 @@ export class AuthenticationService {
   loginSuccess(userSession: CognitoUserSession): void {
     // Store locally
     this.$authStore.mutations.setUserSession(userSession)
-    console.log('asdölf')
-    new Promise((resolve, reject) => {
-      this.$authStore.getters.getCognitoUser()?.getAttributeVerificationCode('email', {
-        onSuccess(success: string): void {
-          console.log(success)
-          resolve(null)
-        },
-        onFailure: (err: Error) => {
-          console.error(err)
-          reject()
-        }
-      })
-    }).then(async () => {
-      await sleep(10000)
-      const token = prompt('give me code')
-      await new Promise((resolve, reject) => {
-        this.$authStore.getters.getCognitoUser()?.verifyAttribute('email', token as string, {
-          onSuccess(success: string): void {
-            console.log(success)
-            resolve(null)
-          },
-          onFailure: (err: Error) => {
-            console.error(err)
-            reject()
-          }
-        })
-      })
-    }).catch((e)=>{
-      console.error(e)
-    })
-
-
   }
 
   /**
@@ -506,7 +480,7 @@ export class AuthenticationService {
   onFailure(error: Error): void{
       if(error.name === 'UserNotConfirmedException'){
           // Show the e-mail verification dialog and send a new code
-          this.showEmailVerificationDialog(true)
+          this.showEmailVerificationDialog()
       } else {
         this.$errorService.showErrorDialog(error)
       }
