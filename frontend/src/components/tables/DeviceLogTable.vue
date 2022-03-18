@@ -1,7 +1,7 @@
 <template>
-  <p class="q-mt-lg">
+  <strong class="q-mt-lg">
     {{ $t('log_files.log_file') }}
-  </p>
+  </strong>
   <div class="column">
     <q-table
       v-model:pagination="pagination"
@@ -13,6 +13,7 @@
       row-key="id"
       :rows-per-page-options="[10, 20, 50]"
       separator="none"
+      style="width: 700px;"
       @request="onRequest"
     >
       <template #body="_props">

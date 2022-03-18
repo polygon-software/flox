@@ -1,5 +1,5 @@
 <template>
-  <p>{{ $t('client_connectivity.title') }}</p>
+  <strong>{{ $t('client_connectivity.title') }}</strong>
   <div class="column">
     <q-table
       v-model:pagination="pagination"
@@ -11,6 +11,7 @@
       row-key="id"
       :rows-per-page-options="[10]"
       separator="none"
+      style="width: 700px;"
       @request="onRequest"
     >
       <template #body="_props">

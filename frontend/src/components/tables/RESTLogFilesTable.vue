@@ -1,7 +1,7 @@
 <template>
-  <p class="q-ma-lg">
+  <strong class="q-ma-lg">
     {{ $t('log_files.rest_log_file') }}
-  </p>
+  </strong>
 
 </template>
 

@@ -468,10 +468,8 @@ export class DeviceService {
       );
       return new DeviceLog(total, entries);
     } catch (e) {
-      console.log(e);
-      console.error(
-        `Log files for station "${getDeviceLogArgs.cli}" not found! URL: ${url}`,
-      );
+      // No logs found; return empty
+      return new DeviceLog(0, []);
     }
   }
 }
