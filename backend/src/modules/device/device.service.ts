@@ -461,11 +461,14 @@ export class DeviceService {
       const response: Observable<unknown> = this.httpService
         .get(url)
         .pipe(map((axiosResponse) => axiosResponse.data));
-      const data = (await firstValueFrom(response)) as string[];
-      const total = 123; // TODO get from flask
-      const entries = data.map((dataRow) => mapDeviceLogEntry(dataRow));
+      const data = (await firstValueFrom(response)) as Record<string, unknown>;
+      const total = data.total as number;
+      const entries = (data.entries as string[]).map((dataRow) =>
+        mapDeviceLogEntry(dataRow),
+      );
       return new DeviceLog(total, entries);
     } catch (e) {
+      console.log(e);
       console.error(
         `Log files for station "${getDeviceLogArgs.cli}" not found! URL: ${url}`,
       );
