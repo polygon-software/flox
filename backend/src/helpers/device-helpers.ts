@@ -143,6 +143,19 @@ export async function connectionLogEntryFromDatabaseEntry(
  * @returns {DeviceLogEntry} - log entry instance
  */
 export function mapDeviceLogEntry(entry: string) {
+  // Sample input: '2021.4.7 15:48:40 Update 39-11 no of events: 0 no of peaks: 1 \n'
+  const splitEntry = entry.split(' ');
+
+  // Extract timestamp string (e.g. 2021.4.7 15:48:40)
+  const timestampString = `${splitEntry[0]} ${splitEntry[1]}`;
+  const timestamp = new Date(timestampString);
+
+  // Extract message
+  let message = splitEntry.slice(2, splitEntry.length).join(' ');
+
+  // Remove trailing ' \n'
+  message = message.substring(0, message.length - 3);
+
   // const date =
-  return new DeviceLogEntry(new Date(), 'testmsg');
+  return new DeviceLogEntry(timestamp, message);
 }
