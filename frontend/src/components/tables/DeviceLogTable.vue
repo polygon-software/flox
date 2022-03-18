@@ -11,7 +11,7 @@
       :columns="columns"
       :loading="loading"
       row-key="id"
-      :rows-per-page-options="[10]"
+      :rows-per-page-options="[10, 20, 50]"
       separator="none"
       @request="onRequest"
     >
@@ -85,7 +85,6 @@ onMounted(async () => {
 async function onRequest(reqProps: Record<string, Record<string, number|string|boolean>>){
   loading.value = true
 
-  console.log('onrequest', reqProps)
   const { page, rowsPerPage } = reqProps.pagination
 
   // Update pagination
