@@ -85,7 +85,6 @@ export class DossierService {
       owner_occupied: createDossierInput.owner_occupied,
       purchase_date: createDossierInput.purchase_date,
       purchase_price: createDossierInput.purchase_price,
-      market_value_estimation: createDossierInput.market_value_estimation,
       mortgage_amount: createDossierInput.mortgage_amount,
 
       // Amortisation information
@@ -128,10 +127,12 @@ export class DossierService {
       affordability: createDossierInput.affordability,
       eligible_income: createDossierInput.eligible_income,
       total_costs: createDossierInput.total_costs,
-      value_estimate_low: createDossierInput.value_estimate_low,
-      value_estimate_high: createDossierInput.value_estimate_high,
-      enfeoffment_estimate_low: createDossierInput.enfeoffment_estimate_low,
-      enfeoffment_estimate_high: createDossierInput.enfeoffment_estimate_high,
+      value_estimate_customer: createDossierInput.value_estimate_customer,
+      value_estimate_calculated: createDossierInput.value_estimate_calculated,
+      enfeoffment_estimate_customer:
+        createDossierInput.enfeoffment_estimate_customer,
+      enfeoffment_estimate_calculated:
+        createDossierInput.enfeoffment_estimate_calculated,
 
       // Prefilled field (not from input)
       offers: [],

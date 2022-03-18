@@ -2,6 +2,9 @@ import {EMAIL_REGEX, PASSWORD_REGEX} from 'src/helpers/REGEX';
 import {isEmpty} from 'lodash';
 import {getAuthToken} from 'src/helpers/cookie-helpers';
 import axios from 'axios';
+import {AuthenticationService} from 'src/services/AuthService';
+import {inject} from 'vue';
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 /**
  * This file contains rules that can be applied to input forms.
@@ -80,6 +83,7 @@ async function isZipCodeValid(zipCode: string){
   }
   const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ??  ''
   const url = `${baseUrl}/isZipCodeValid?zipCode=${zipCode}`
+  await $authService?.refreshToken()
 
   // Get value multiplier from backend
   const isValidRequest = await axios.get(url, {headers});

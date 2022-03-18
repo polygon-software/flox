@@ -73,10 +73,6 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
 
   @Field(() => Number)
   @IsNumber()
-  market_value_estimation: number;
-
-  @Field(() => Number)
-  @IsNumber()
   mortgage_amount: number;
 
   /**
@@ -196,7 +192,7 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
    * Calculated total numbers
    */
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   affordability: number;
 
@@ -204,23 +200,23 @@ export class CreateDossierInput extends PartialType(CreatePersonInput) {
   @IsNumber()
   eligible_income: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
   total_costs: number;
 
   @Field(() => Number)
   @IsNumber()
-  value_estimate_low: number;
+  value_estimate_customer: number;
+
+  @Field(() => Number, { nullable: true })
+  @IsNumber()
+  value_estimate_calculated: number;
 
   @Field(() => Number)
   @IsNumber()
-  value_estimate_high: number;
+  enfeoffment_estimate_customer: number;
 
-  @Field(() => Number)
+  @Field(() => Number, { nullable: true })
   @IsNumber()
-  enfeoffment_estimate_low: number;
-
-  @Field(() => Number)
-  @IsNumber()
-  enfeoffment_estimate_high: number;
+  enfeoffment_estimate_calculated: number;
 }

@@ -7,7 +7,7 @@ resource "aws_subnet" "frontend_public_subnet" {
   availability_zone       = var.azs[count.index]
 
   tags = {
-    Name          = "${var.project}-${var.type}-${var.web}-public-subnet-${var.azs[count.index]}"
+    Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-public-subnet-${var.azs[count.index]}"
     Project       = var.project
     SubnetType    = "public"
   }
@@ -24,7 +24,7 @@ resource "aws_subnet" "frontend_private_subnet" {
   availability_zone       = var.azs[count.index]
 
   tags = {
-    Name          = "${var.project}-${var.type}-${var.web}-private-subnet-${var.azs[count.index]}"
+    Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-private-subnet-${var.azs[count.index]}"
     Project       = var.project
     SubnetType    = "private"
   }

@@ -1,40 +1,22 @@
 //VPN config to directly connect to the Database for devs
 
-resource "aws_acm_certificate" "vpn_server" {
-  private_key           = file("${var.certificate_base_path}/private/server.key")
-  certificate_body      = file("${var.certificate_base_path}/issued/server.crt")
-  certificate_chain     = file("${var.certificate_base_path}/ca.crt")
-  tags = {
-    name          = "server"
-    Project       = var.project
-  }
-}
-
-resource "aws_acm_certificate" "vpn_client_root" {
-  private_key           = file("${var.certificate_base_path}/private/rdsserver.key")
-  certificate_body      = file("${var.certificate_base_path}/issued/rdsserver.crt")
-  certificate_chain     = file("${var.certificate_base_path}/ca.crt")
-  tags = {
-    name          = "client"
-    Project       = var.project
-  }
-}
 
 resource "aws_ec2_client_vpn_endpoint" "vpn" {
   description           = "VPN endpoint"
   client_cidr_block     = "10.20.0.0/22"
   split_tunnel          = true
-  server_certificate_arn = aws_acm_certificate.vpn_server.arn
+  server_certificate_arn = "arn:aws:acm:eu-central-1:923473058470:certificate/465c3771-85a3-4572-81fa-cab80b45907b"
 
   authentication_options {
     type                        = "certificate-authentication"
-    root_certificate_chain_arn  = aws_acm_certificate.vpn_client_root.arn
+    root_certificate_chain_arn  = "arn:aws:acm:eu-central-1:923473058470:certificate/bdf867a5-a169-4d67-a6e0-6cc52a0e55d8"
   }
   connection_log_options {
     enabled                     = false
   }
   tags = {
     Project       = var.project
+    Type          = lookup(var.type, terraform.workspace)
   }
 }
 
