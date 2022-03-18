@@ -21,8 +21,9 @@ import { ROLE } from '../../ENUM/ENUM';
 import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
 import { ConnectionLogEntry } from '../../types/ConnectionLogEntry';
 import { GetConnectionLogCountArgs } from './dto/args/get-connection-log-count.args';
-import { GetLogFileArgs } from './dto/args/get-log-file.args';
+import { GetDeviceLogArgs } from './dto/args/get-device-log.args';
 import { DeviceLogEntry } from '../../types/DeviceLogEntry';
+import { DeviceLog } from '../../types/DeviceLog';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -185,23 +186,23 @@ export class DeviceResolver {
   }
 
   /**
-   * Get the log file for a device
-   * @param {GetLogFileArgs} getLogFileArgs - contains station CLI
-   * @param {Record<string, string>} user - Cognito user from request.
-   * @returns {Promise<LevelWriting>} - The level writings of the devices.
+   * Get the device log entries for a device
+   * @param {GetDeviceLogArgs} getDeviceLogArgs - contains station CLI
+   * @param {Record<string, string>} user - Cognito user from request
+   * @returns {Promise<DeviceLog>} - The logs of the device
    */
   @AnyRole()
-  @Query(() => [DeviceLogEntry], { name: 'getLogFile' })
-  async getLogFile(
-    @Args() getLogFileArgs: GetLogFileArgs,
+  @Query(() => DeviceLog, { name: 'getDeviceLog' })
+  async getDeviceLog(
+    @Args() getDeviceLogArgs: GetDeviceLogArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
     const dbUser = await this.userService.getMyUser(user);
 
-    if (!this.userService.isAuthorizedForDevice(dbUser, getLogFileArgs.cli)) {
+    if (!this.userService.isAuthorizedForDevice(dbUser, getDeviceLogArgs.cli)) {
       throw new UnauthorizedException();
     }
 
-    return this.deviceService.getLogFile(getLogFileArgs);
+    return this.deviceService.getDeviceLog(getDeviceLogArgs);
   }
 }

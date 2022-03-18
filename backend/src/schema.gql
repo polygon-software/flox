@@ -197,6 +197,11 @@ input DeleteProjectInput {
 
 union Device = MR2000 | MR3000
 
+type DeviceLog {
+  entries: [DeviceLogEntry!]!
+  total: Int!
+}
+
 type DeviceLogEntry {
   message: String!
   timestamp: DateTime!
@@ -727,7 +732,7 @@ type Query {
   eventTable(cli: String!, descending: Boolean, filter: String, orderBy: String, skip: Int!, take: Int!): EventsTable!
   getConnectionLogCount(cli: String!): Int!
   getConnectionLogs(cli: String!, skip: Int!, take: Int!): [ConnectionLogEntry!]!
-  getLogFile(cli: String!, skip: Int!, take: Int!): [DeviceLogEntry!]!
+  getDeviceLog(cli: String!, skip: Int!, take: Int!): DeviceLog!
   getProjectDevices(name: String, uuid: ID): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!

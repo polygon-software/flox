@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import ClientConnectivityTable from 'components/tables/ClientConnectivityTable.vue';
-import LogFilesTable from 'components/tables/LogFilesTable.vue';
+import LogFilesTable from 'components/tables/DeviceLogTable.vue';
 import {defineProps} from 'vue';
 import FTPLogFilesTable from 'components/tables/FTPLogFilesTable.vue';
 import RESTLogFilesTable from 'components/tables/RESTLogFilesTable.vue';

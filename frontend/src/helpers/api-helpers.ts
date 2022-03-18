@@ -5,9 +5,15 @@ import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
 import {MY_PROJECTS} from 'src/data/queries/PROJECT';
-import {DEVICE_CONNECTION_LOGS, MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
+import {
+  DEVICE_CONNECTION_LOGS,
+  DEVICE_LOG,
+  MY_DEVICES,
+  PROJECT_DEVICES
+} from 'src/data/queries/DEVICE';
 import {Device} from 'src/data/types/Device';
 import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
+import {DeviceLog} from 'src/data/types/DeviceLog';
 
 /**
  * Fetch all users.
@@ -190,7 +196,6 @@ export function mapDevice(record: Record<string, unknown>): Device {
   )
 }
 
-
 /**
  * Fetch connection log entries for a given device
  * @param {string} cli - device CLI
@@ -201,4 +206,16 @@ export function mapDevice(record: Record<string, unknown>): Device {
 export async function connectionLogForDevice(cli: string, skip = 0, take = 10) {
   const queryResult = await executeQuery(DEVICE_CONNECTION_LOGS, {cli, take, skip});
   return queryResult.data[DEVICE_CONNECTION_LOGS.cacheLocation] as ConnectionLogEntry[]
+}
+
+/**
+ * Fetch log entries for a given device
+ * @param {string} cli - device CLI
+ * @param {number} skip - number of entries to skip (for pagination)
+ * @param {number} take - number of logs to get
+ * @return {Promise<DeviceLog>} - Device log, containing entries and total count
+ */
+export async function logEntriesForDevice(cli: string, skip = 0, take = 10) {
+  const queryResult = await executeQuery(DEVICE_LOG, {cli, take, skip});
+  return queryResult.data[DEVICE_LOG.cacheLocation] as DeviceLog
 }

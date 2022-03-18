@@ -237,6 +237,24 @@ export const DEVICE_CONNECTION_LOG_COUNT = {
   cacheLocation: 'getConnectionLogCount'
 }
 
+export const DEVICE_LOG = {
+  query: gql`
+    query getDeviceLog($cli: String!, $take: Int!, $skip: Int!){
+      getDeviceLog(cli: $cli, take: $take, skip: $skip){
+        entries {
+          message
+          timestamp
+          __typename
+        }
+        total
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getDeviceLog'
+}
+
 export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
   MY_DEVICES,
@@ -246,4 +264,5 @@ export const DEVICE_QUERIES: QueryObject[] = [
   EVENT_TABLE_ROWS,
   DEVICE_CONNECTION_LOGS,
   DEVICE_CONNECTION_LOG_COUNT,
+  DEVICE_LOG,
 ];

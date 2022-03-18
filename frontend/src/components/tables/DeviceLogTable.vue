@@ -1,5 +1,5 @@
 <template>
-  <p>{{ $t('client_connectivity.title') }}</p>
+  <p>{{ $t('log_files.log_file') }}</p>
   <div class="column">
     <q-table
       v-model:pagination="pagination"
@@ -20,17 +20,8 @@
           <q-td key="date_time">
             {{ formatDateTime(_props.row.timestamp) }}
           </q-td>
-          <q-td key="real_ip">
-            {{ _props.row.realIp }}
-          </q-td>
-          <q-td key="port">
-            {{ _props.row.port }}
-          </q-td>
-          <q-td key="vpn_ip">
-            {{ _props.row.vpnIp }}
-          </q-td>
-          <q-td key="event">
-            {{ _props.row.reason }}
+          <q-td key="message">
+            {{ _props.row.message }}
           </q-td>
         </q-tr>
       </template>
@@ -42,10 +33,11 @@
 import {onMounted, Ref, ref, defineProps} from 'vue';
 import {i18n} from 'boot/i18n';
 import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
-import {connectionLogForDevice} from 'src/helpers/api-helpers';
+import {connectionLogForDevice, logEntriesForDevice} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
-import {DEVICE_CONNECTION_LOG_COUNT} from 'src/data/queries/DEVICE';
+import {DEVICE_LOG_ENTRIES, DEVICE_LOG_ENTRY_COUNT} from 'src/data/queries/DEVICE';
 import {executeQuery} from 'src/helpers/data-helpers';
+import {DeviceLogEntry} from 'src/data/types/DeviceLogEntry';
 
 const props = defineProps({
   cli: {
@@ -73,20 +65,13 @@ const pagination = ref(
 // ----- Data -----
 const columns = [
   { name: 'timestamp', label: i18n.global.t('client_connectivity.date_time'), field: 'timestamp', sortable: false, align: 'center' },
-  { name: 'realIp', label: i18n.global.t('client_connectivity.real_ip'), field: 'realIp', sortable: false, align: 'center' },
-  { name: 'port', label: i18n.global.t('client_connectivity.port'), field: 'port', sortable: false, align: 'center' },
-  { name: 'vpnIp', label: i18n.global.t('client_connectivity.vpn_ip'), field: 'vpnIp', sortable: false, align: 'center' },
-  { name: 'event', label: i18n.global.t('client_connectivity.event'), field: 'event', sortable: false, align: 'center' },
+  { name: 'message', label: i18n.global.t('logs.message'), field: 'message', sortable: false, align: 'center' },
 ]
 
-const rows: Ref<ConnectionLogEntry[]> = ref([])
+const rows: Ref<DeviceLogEntry[]> = ref([])
 
 // Fetch logs on mount
 onMounted(async () => {
-  // Get total row count (for pagination)
-  const countQueryResult = await executeQuery(DEVICE_CONNECTION_LOG_COUNT, {cli: props.cli})
-  pagination.value.rowsNumber = countQueryResult.data[DEVICE_CONNECTION_LOG_COUNT.cacheLocation] as number
-
   // Fetch initial data
   await onRequest({
     pagination: pagination.value,
@@ -101,6 +86,7 @@ onMounted(async () => {
 async function onRequest(reqProps: Record<string, Record<string, number|string|boolean>>){
   loading.value = true
 
+  console.log('onrequest', reqProps)
   const { page, rowsPerPage } = reqProps.pagination
 
   // Update pagination
@@ -116,11 +102,14 @@ async function onRequest(reqProps: Record<string, Record<string, number|string|b
 }
 
 /**
- * Fetches table contents
+ * Fetches table contents and update rows and pagination
  * @returns {Promise<void>} - done
  */
 async function fetchLogs(){
-  rows.value = await connectionLogForDevice(props.cli, skip.value, take.value)
+  const log = await logEntriesForDevice(props.cli, skip.value, take.value)
+  rows.value = log.entries
+  pagination.value.rowsNumber = log.total
+
   loading.value = false
 }
 

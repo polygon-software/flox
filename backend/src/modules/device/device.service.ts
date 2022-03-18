@@ -28,8 +28,9 @@ import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
-import { GetLogFileArgs } from './dto/args/get-log-file.args';
+import { GetDeviceLogArgs } from './dto/args/get-device-log.args';
 import { MR2000 } from '../../types/MR2000';
+import { DeviceLog } from '../../types/DeviceLog';
 
 @Injectable()
 export class DeviceService {
@@ -442,30 +443,31 @@ export class DeviceService {
 
   /**
    * Get the log file entries for a given device
-   * @param {GetLogFileArgs} getLogFileArgs - args, containing CLI
-   * @returns {Promise<DeviceLogEntry[]>} - log entries
+   * @param {GetDeviceLogArgs} getDeviceLogArgs - args, containing CLI
+   * @returns {Promise<DeviceLog>} - log entries
    */
-  async getLogFile(getLogFileArgs: GetLogFileArgs) {
-    const type = deviceType(getLogFileArgs.cli);
+  async getDeviceLog(getDeviceLogArgs: GetDeviceLogArgs) {
+    const type = deviceType(getDeviceLogArgs.cli);
 
     // File path & name, based on device type
     const filePath = `${type === 'MR2000' ? 'LOG_2000' : 'LOG_3K'}`;
-    const fileName = `${getLogFileArgs.cli}-log`;
+    const fileName = `${getDeviceLogArgs.cli}-log`;
 
     // Fetch from filesystem via Python API
     const host = this.configService.get('pyAPI.host');
     const port = this.configService.get('pyAPI.port');
-    const url = `http://${host}:${port}/log?path=${filePath}&file=${fileName}&skip=${getLogFileArgs.skip}&take=${getLogFileArgs.take}`;
+    const url = `http://${host}:${port}/log?path=${filePath}&file=${fileName}&skip=${getDeviceLogArgs.skip}&take=${getDeviceLogArgs.take}`;
     try {
       const response: Observable<unknown> = this.httpService
         .get(url)
         .pipe(map((axiosResponse) => axiosResponse.data));
       const data = (await firstValueFrom(response)) as string[];
-      console.log('got data', data);
-      return data.map((dataRow) => mapDeviceLogEntry(dataRow));
+      const total = 123; // TODO get from flask
+      const entries = data.map((dataRow) => mapDeviceLogEntry(dataRow));
+      return new DeviceLog(total, entries);
     } catch (e) {
       console.error(
-        `Log files for station "${getLogFileArgs.cli}" not found! URL: ${url}`,
+        `Log files for station "${getDeviceLogArgs.cli}" not found! URL: ${url}`,
       );
     }
   }
