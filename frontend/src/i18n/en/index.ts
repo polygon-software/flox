@@ -215,6 +215,7 @@ export default {
     log_file: 'LOG File',
     ftp_log_file: 'FTP LOG File - recent uploads',
     rest_log_file: 'REST LOG File',
+    message: 'Message'
   },
   files: {
     events: '{events} events',

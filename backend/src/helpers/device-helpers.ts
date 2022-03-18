@@ -154,7 +154,7 @@ export function mapDeviceLogEntry(entry: string) {
   let message = splitEntry.slice(2, splitEntry.length).join(' ');
 
   // Remove trailing ' \n'
-  message = message.substring(0, message.length - 3);
+  message = message.substring(0, message.length - 2);
 
   // const date =
   return new DeviceLogEntry(timestamp, message);

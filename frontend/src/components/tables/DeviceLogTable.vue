@@ -1,5 +1,7 @@
 <template>
-  <p>{{ $t('log_files.log_file') }}</p>
+  <p class="q-mt-lg">
+    {{ $t('log_files.log_file') }}
+  </p>
   <div class="column">
     <q-table
       v-model:pagination="pagination"
@@ -32,11 +34,8 @@
 <script setup lang="ts">
 import {onMounted, Ref, ref, defineProps} from 'vue';
 import {i18n} from 'boot/i18n';
-import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
-import {connectionLogForDevice, logEntriesForDevice} from 'src/helpers/api-helpers';
+import {logEntriesForDevice} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
-import {DEVICE_LOG_ENTRIES, DEVICE_LOG_ENTRY_COUNT} from 'src/data/queries/DEVICE';
-import {executeQuery} from 'src/helpers/data-helpers';
 import {DeviceLogEntry} from 'src/data/types/DeviceLogEntry';
 
 const props = defineProps({
@@ -65,7 +64,7 @@ const pagination = ref(
 // ----- Data -----
 const columns = [
   { name: 'timestamp', label: i18n.global.t('client_connectivity.date_time'), field: 'timestamp', sortable: false, align: 'center' },
-  { name: 'message', label: i18n.global.t('logs.message'), field: 'message', sortable: false, align: 'center' },
+  { name: 'message', label: i18n.global.t('log_files.message'), field: 'message', sortable: false, align: 'center' },
 ]
 
 const rows: Ref<DeviceLogEntry[]> = ref([])
