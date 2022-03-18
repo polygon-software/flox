@@ -195,7 +195,6 @@ async function getLogs() {
   if(typeof range.value === 'object'){
     fromDate =  parse(range.value.from, dateFormat, new Date())
     toDate = parse(range.value.to, dateFormat, new Date())
-    console.log(fromDate)
   } else {
     fromDate = parse(range.value, dateFormat, new Date())
     toDate = fromDate
