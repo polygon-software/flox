@@ -30,6 +30,14 @@ cd ..
 
 cd ../frontend
 yarn
+
+if $1 -eq "prod"
+then
+  sed -i -e 's/dev/prod/g' .penv
+else
+  sed -i -e 's/prod/dev/g' .penv
+fi
+
 yarn build:ssr
 cp -a node_modules dist/ssr/
 
