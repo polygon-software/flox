@@ -1,6 +1,6 @@
 <template>
   <p class="q-ma-lg">
-    {{ $t('log_files.log_file') }}
+    {{ $t('log_files.rest_log_file') }}
   </p>
 
 </template>

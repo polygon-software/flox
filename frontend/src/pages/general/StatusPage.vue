@@ -4,8 +4,12 @@
     <h5>{{ $t('status.title') }} {{ stationId }}</h5>
 
     <ClientConnectivityTable :cli="stationId"/>
-    <LogFilesTable/>
 
+    <LogFilesTable :cli="stationId"/>
+
+    <FTPLogFilesTable :cli="stationId"/>
+
+    <RESTLogFilesTable :cli="stationId"/>
   </q-page>
 </template>
 
@@ -13,6 +17,8 @@
 import ClientConnectivityTable from 'components/tables/ClientConnectivityTable.vue';
 import LogFilesTable from 'components/tables/LogFilesTable.vue';
 import {defineProps} from 'vue';
+import FTPLogFilesTable from 'components/tables/FTPLogFilesTable.vue';
+import RESTLogFilesTable from 'components/tables/RESTLogFilesTable.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
