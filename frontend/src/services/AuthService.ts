@@ -328,8 +328,7 @@ export class AuthenticationService {
   async showEmailVerificationDialog(): Promise<void>{
     await new Promise((resolve, reject) => {
       this.$authStore.getters.getCognitoUser()?.getAttributeVerificationCode('email', {
-        onSuccess(success: string): void {
-          console.log(success)
+        onSuccess(): void {
           resolve(null)
         },
         onFailure: (err: Error) => {
@@ -351,8 +350,7 @@ export class AuthenticationService {
         },
       }).onOk((input: string) => {
           this.$authStore.getters.getCognitoUser()?.verifyAttribute('email', input, {
-            onSuccess(success: string): void {
-              console.log(success)
+            onSuccess(): void {
               resolve(null)
             },
             onFailure: (err: Error) => {
@@ -384,8 +382,8 @@ export class AuthenticationService {
       }).onOk(() => {
         // Verify code
         this.$q.dialog({
-          title: 'Verification',
-          message: 'Please enter your 2FA authenticator code',
+          title: i18n.global.t('authentication.verification'),
+          message: i18n.global.t('authentication.verification_message'),
           cancel: true,
           persistent: true,
           prompt: {

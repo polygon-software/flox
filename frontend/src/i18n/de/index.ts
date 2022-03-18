@@ -33,7 +33,9 @@ export default {
     change_password: 'Passwort ändern',
     unauthenticated: 'Nicht Angemeldet',
     qr_title: '2FA einrichten',
-    qr_description: 'Richten Sie 2-Faktor-Authentifizierung mit ihrer bevorzugten Authenticator-App ein:'
+    qr_description: 'Richten Sie 2-Faktor-Authentifizierung mit ihrer bevorzugten Authenticator-App ein:',
+    verification: 'Verifizieren',
+    verification_message: 'Bitte geben Sie den 2-Faktor-Authentifizierungs-Code ein'
   },
   account_data: {
     employees: 'Mitarbeitende',
