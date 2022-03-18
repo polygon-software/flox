@@ -20,7 +20,8 @@
     "test:unit:watch": "jest --watch",
     "test:unit:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:db": "docker-compose up"
+    "docker:db": "docker-compose up",
+    "deploy": "bash deploy.sh"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.45.0",
