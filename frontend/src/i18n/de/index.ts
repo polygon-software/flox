@@ -113,7 +113,7 @@ export default {
     dossier_deleted: 'Dossier erfolgreich gelöscht',
     dossier_delete_failed: 'Löschen des Dossiers fehlgeschlagen',
     enter_new_password: 'Bitte geben Sie ein neues Passwort ein',
-    enter_verification_code: 'Bitte geben Sie ihren Bestätigungscode ein',
+    enter_verification_code: 'Bitte geben Sie ihren Bestätigungscode ein, den Sie per Email erhalten haben',
     reset_password: 'Passwort zurücksetzen',
     enter_username: 'Bitte geben Sie ihren Nutzernamen ein',
     verification: 'Verifizierung',

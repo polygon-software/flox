@@ -10,7 +10,7 @@ terraform {
     organization        = "polygon-software"
 
     workspaces {
-      name = "Flox-prod"
+      name = "Flox-dev"
     }
   }
 }
