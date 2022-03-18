@@ -26,7 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         // TODO set via env variable
         jwksUri:
           //TODO set via env variable
-          'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_Fx5YjVdhK/.well-known/jwks.json',
+          'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_Rc0IVsV8t/.well-known/jwks.json',
       }),
     });
   }

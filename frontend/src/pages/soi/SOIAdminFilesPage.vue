@@ -191,10 +191,11 @@ function onCsvUpload(){
 async function getLogs() {
   let fromDate: Date
   let toDate: Date
-  const dateFormat = 'dd.MM.yyyy'
+  const dateFormat = 'yyyy-MM-dd'
   if(typeof range.value === 'object'){
     fromDate =  parse(range.value.from, dateFormat, new Date())
     toDate = parse(range.value.to, dateFormat, new Date())
+    console.log(fromDate)
   } else {
     fromDate = parse(range.value, dateFormat, new Date())
     toDate = fromDate
