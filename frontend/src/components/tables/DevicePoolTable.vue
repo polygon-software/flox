@@ -93,19 +93,18 @@
 </template>
 
 <script setup lang="ts">
-import {inject, onMounted, Ref, ref} from 'vue';
+import {inject, ref} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {myPoolDevices} from 'src/helpers/api-helpers';
-import {Device} from 'src/data/types/Device';
+import {myDevices} from 'src/helpers/api-helpers';
 import {useQuasar} from 'quasar';
 import {assignDeviceToProject} from 'src/helpers/project-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
-const rows: Ref<Device[]> = ref([])
+const rows = myDevices({unassigned: true})
 const $q = useQuasar()
 
 // ----- Data -----
@@ -139,11 +138,6 @@ const buttons = [
   },
 ]
 
-// Once mounted, fetch data
-onMounted(async () => {
-  rows.value = await myPoolDevices()
-})
-
 /**
  * Routes to different pages dependent which button is clicked
  * @param {string} device - the CLI of a device
@@ -154,7 +148,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'assign':
-      assignDeviceToProject($q, device)
+      await assignDeviceToProject($q, device)
       break
     case 'status':
       await routerService?.addToRoute(`pool/${device}/${key}`)

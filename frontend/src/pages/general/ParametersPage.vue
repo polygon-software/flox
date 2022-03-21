@@ -3,7 +3,9 @@
     <!-- Title: Project name -->
     <h5>{{ parametersId }}</h5>
     <UserDataForm/>
-    <AlertContactsForm/>
+    <AlertContactsForm
+      :cli="parametersId"
+    />
   </q-page>
 </template>
 

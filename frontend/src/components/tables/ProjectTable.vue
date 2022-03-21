@@ -201,7 +201,6 @@ const stop = watch(props, async () => {
  * @returns {void} - done
  */
 function showCustomGraph(devices: string[]): void{
-  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
   $q.dialog({
     component: CustomGraphDialog,
     componentProps: {},
