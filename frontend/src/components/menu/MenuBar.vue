@@ -1,6 +1,14 @@
 <template>
-  <q-header class="row bg-transparent full-width no-pointer-events">
+  <q-header
+    class="row full-width no-pointer-events"
+    style="background: rgba(250, 250, 250, .9); height: 85px"
+  >
     <div class="row justify-between full-width q-pa-sm">
+
+      <!-- Background overlay for navigation dropdown -->
+      <div
+        style="position: absolute; top: 0; left: 0; width: 120px; height: 160px; background: rgba(250, 250, 250, .9); border-bottom-right-radius: 10px"
+      />
 
       <!-- Navigation -->
       <div class="column justify-start items-start">

@@ -33,8 +33,6 @@ import { ProjectModule } from './modules/project/project.module';
         DB_DATABASE: Joi.string().required(),
         DB_USER: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
-        DB_HOST: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
 
         // Server
         SERVER_PORT: Joi.number().required(),
@@ -56,7 +54,7 @@ import { ProjectModule } from './modules/project/project.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        type: 'mariadb',
         host: configService.get('database.host'),
         port: configService.get('database.port'),
         username: configService.get('database.username'),

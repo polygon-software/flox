@@ -2,6 +2,7 @@ import {USER_QUERIES} from 'src/data/queries/USER';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {DEVICE_QUERIES} from 'src/data/queries/DEVICE';
 import {PROJECT_QUERIES} from 'src/data/queries/PROJECT';
+import {CONTACT_QUERIES} from 'src/data/queries/CONTACT';
 
 /**
  * This file contains all valid GraphQL queries. A query is structure as follows
@@ -10,7 +11,6 @@ import {PROJECT_QUERIES} from 'src/data/queries/PROJECT';
  * (auto-update on edit)
  * - tables: list of affected tables; when a mutation changes one of these tables, the query is re-fetched.
  * - cacheLocation: the actual GraphQL query's name (since cached data will be stored there)
- *
  */
 
 
@@ -18,5 +18,6 @@ import {PROJECT_QUERIES} from 'src/data/queries/PROJECT';
 export const QUERIES: QueryObject[] = [
   ...USER_QUERIES,
   ...DEVICE_QUERIES,
-  ...PROJECT_QUERIES
+  ...PROJECT_QUERIES,
+  ...CONTACT_QUERIES
 ];

@@ -44,29 +44,32 @@ export function removeDeviceFromProject(q: QVueGlobals, projectUuid: string, dev
  * Shows a dialog for assigning a device to a project
  * @param {QVueGlobals} q - quasar instance
  * @param {string} device - device CLI
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
-export function assignDeviceToProject(q: QVueGlobals, device: string){
-  q.dialog({
-    component: AssignToProjectDialog,
-    componentProps: {
-      cli: device
-    }
-  }).onOk(async (result: Record<string, string>) => {
-   await executeMutation(
-      ASSIGN_DEVICE_TO_PROJECT,
-      {
-        uuid: result.uuid,
-        cli: result.cli
+export async function assignDeviceToProject(q: QVueGlobals, device: string){
+  return new Promise((resolve) => {
+    q.dialog({
+      component: AssignToProjectDialog,
+      componentProps: {
+        cli: device
       }
-    )
+    }).onOk(async (result: Record<string, string>) => {
+      await executeMutation(
+        ASSIGN_DEVICE_TO_PROJECT,
+        {
+          uuid: result.uuid,
+          cli: result.cli
+        }
+      )
 
-    // Show success notification
-    showNotification(
-      q,
-      i18n.global.t('messages.assigned_device'),
-      'bottom',
-      'positive',
-    )
+      // Show success notification
+      showNotification(
+        q,
+        i18n.global.t('messages.assigned_device'),
+        'bottom',
+        'positive',
+      )
+      resolve(null)
+    })
   })
 }

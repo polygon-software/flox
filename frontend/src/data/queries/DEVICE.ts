@@ -255,6 +255,35 @@ export const DEVICE_LOG = {
   cacheLocation: 'getDeviceLog'
 }
 
+
+export const DEVICE_CONTACTS = {
+  query: gql`
+    query getDeviceContacts(
+      $cli: String!,
+    ){
+      getDeviceContacts(cli: $cli){
+        id
+        cli
+        name
+        email
+        phone
+        event
+        alarm1
+        alarm2
+        smsLimit
+        power
+        memory
+        daily
+        __typename
+      }
+    }
+  `,
+  tables: ['contact'],
+  cacheLocation: 'getDeviceContacts'
+}
+
+
+
 export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
   MY_DEVICES,
@@ -265,4 +294,6 @@ export const DEVICE_QUERIES: QueryObject[] = [
   DEVICE_CONNECTION_LOGS,
   DEVICE_CONNECTION_LOG_COUNT,
   DEVICE_LOG,
+  EVENT_TABLE_ROWS,
+  DEVICE_CONTACTS
 ];

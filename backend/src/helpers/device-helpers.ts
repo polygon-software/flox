@@ -4,10 +4,11 @@
 
 import { MR2000 } from '../types/MR2000';
 import { MR3000 } from '../types/MR3000';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
 import { ConnectionLogEntry } from '../types/ConnectionLogEntry';
 import { DeviceLogEntry } from '../types/DeviceLogEntry';
+import { DeviceContact } from '../types/DeviceContact';
 
 /**
  * Creates an MR2000 instance from a RowPacketData entry
@@ -87,13 +88,11 @@ export async function findProjectForDevice(
   cli: string,
   isMr2000: boolean,
 ) {
-  return projectRepository
-    .createQueryBuilder('project')
-    .where(
-      `:cli=ANY(project.${isMr2000 ? 'mr2000instances' : 'mr3000instances'})`,
-      { cli },
-    )
-    .getOne();
+  const searchString = Like(`%${cli}%`);
+  const filterQuery = isMr2000
+    ? { mr2000instances: searchString }
+    : { mr3000instances: searchString };
+  return projectRepository.findOne({ where: filterQuery });
 }
 
 /**
@@ -115,6 +114,33 @@ function deviceNameFromComment(comment: string) {
  */
 export function deviceType(clientId: string) {
   return clientId.includes('-') ? 'MR2000' : 'MR3000';
+}
+
+/**
+ * Creates a DeviceContact instance from a RowPacketData entry
+ * @param {Record<string, string|number>} entry - database entry row
+ * @returns {Promise<DeviceContact>} - Device contact instance
+ */
+export async function deviceContactFromDatabaseEntry(
+  entry: Record<string, string | boolean | number>,
+) {
+  const type = deviceType(entry.cli as string);
+  const isMR2000 = type === 'MR2000';
+
+  return new DeviceContact(
+    (isMR2000 ? entry.uniq_id : entry.rec_id) as number,
+    entry.cli as string,
+    entry.name as string,
+    entry.email as string,
+    entry.phone as string,
+    (isMR2000 ? entry.event : entry.event_all) as boolean,
+    (isMR2000 ? entry.alarm1 : entry.event_alarm1) as boolean,
+    (isMR2000 ? entry.alarm2 : entry.event_alarm2) as boolean,
+    entry.soh_sms_limit as boolean,
+    entry.soh_power as boolean,
+    isMR2000 ? null : (entry.soh_sdcard as boolean),
+    entry.daily as boolean,
+  );
 }
 
 /**
