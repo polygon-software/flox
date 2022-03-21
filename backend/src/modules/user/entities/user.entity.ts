@@ -11,15 +11,12 @@ import {
   Column,
   Entity,
   Index,
-  JoinColumn,
-  OneToOne,
   OneToMany,
   AfterInsert,
   AfterLoad,
   AfterUpdate,
 } from 'typeorm';
 import { ROLE } from '../../../ENUM/ENUM';
-import { Address } from '../../address/entities/address.entity';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { Project } from '../../project/entities/project.entity';
 
@@ -42,11 +39,6 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   @IsUUID()
   cognitoUuid: string;
-
-  @Field(() => Address, { description: 'Domicile address' })
-  @JoinColumn()
-  @OneToOne(() => Address, { cascade: true, eager: true })
-  address: Address;
 
   @Field(() => String, { description: 'Username' })
   @Index({ unique: true })
@@ -90,7 +82,7 @@ export class User extends BaseEntity {
     description: 'MR2000 instances that the user has access to',
     nullable: true,
   })
-  @Column('text', { array: true, nullable: true })
+  @Column('simple-array', { nullable: true })
   @IsArray()
   mr2000instances: string[];
 
@@ -98,7 +90,7 @@ export class User extends BaseEntity {
     description: 'MR3000 instances that the user has access to',
     nullable: true,
   })
-  @Column('text', { array: true, nullable: true })
+  @Column('simple-array', { nullable: true })
   @IsArray()
   mr3000instances: string[];
 

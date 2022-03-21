@@ -25,7 +25,7 @@ export class Project extends BaseEntity {
     description: 'MR2000 instances that the user has access to',
     nullable: true,
   })
-  @Column('text', { array: true })
+  @Column('simple-array')
   @IsArray()
   mr2000instances: string[];
 
@@ -33,7 +33,7 @@ export class Project extends BaseEntity {
     description: 'MR3000 instances that the user has access to',
     nullable: true,
   })
-  @Column('text', { array: true })
+  @Column('simple-array')
   @IsArray()
   mr3000instances: string[];
 }

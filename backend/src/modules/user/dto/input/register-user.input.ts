@@ -2,12 +2,10 @@ import { Field, ID, InputType } from '@nestjs/graphql';
 import {
   IsDate,
   IsEmail,
-  IsNotEmptyObject,
   IsPhoneNumber,
   IsString,
   IsUUID,
 } from 'class-validator';
-import { CreateAddressInput } from '../../../address/dto/input/create-address.input';
 
 @InputType()
 /**
@@ -40,11 +38,4 @@ export class RegisterUserInput {
   @IsString()
   @IsDate()
   birthdate: Date;
-
-  @Field(() => CreateAddressInput, {
-    description: 'User address',
-    nullable: true,
-  })
-  @IsNotEmptyObject()
-  address: CreateAddressInput;
 }
