@@ -5,7 +5,7 @@ import { IsArray, IsDate, IsInt } from 'class-validator';
 export class GetLevelWritingArgs {
   @Field(() => [String])
   @IsArray()
-  stationIds: string[];
+  clients: string[];
 
   @Field(() => Date)
   @IsDate()

@@ -30,10 +30,10 @@
           :props="props"
         >
           <q-td key="device">
-            {{ props.row.device }}
+            {{ props.row.type }}
           </q-td>
           <q-td key="client">
-            {{ props.row.client }}
+            {{ props.row.cli }}
           </q-td>
           <q-td key="ip">
             {{ props.row.ip }}
@@ -42,16 +42,16 @@
             {{ props.row.firmware }}
           </q-td>
           <q-td key="serial">
-            {{ props.row.serial }}
+            {{ props.row.serialNumber }}
           </q-td>
           <q-td key="sale_status">
             {{ props.row.sale_status }}
           </q-td>
           <q-td key="station">
-            {{ props.row.station }}
+            {{ props.row.name }}
           </q-td>
           <q-td key="vpn_status">
-            {{ props.row.vpn_status }}
+            {{ props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
           </q-td>
           <q-td key="pid">
             {{ props.row.pid }}
@@ -60,7 +60,7 @@
             {{ props.row.files }}
           </q-td>
           <q-td key="ftp">
-            {{ props.row.ftp }}
+            {{ $t(props.row.ftp ? 'general.yes' : 'general.no')}}
           </q-td>
           <q-td key="options">
             <q-btn-dropdown
@@ -77,11 +77,12 @@
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
-                  class="text-grey"
+                  class="text-grey full-width"
+                  align="left"
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(props.row.station, button.key)"
+                  @click="onOptionClick(props.row.cli, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -97,14 +98,18 @@ import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import {myDevices} from 'src/helpers/api-helpers';
+import {useQuasar} from 'quasar';
+import {assignDeviceToProject} from 'src/helpers/project-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
+const rows = myDevices({unassigned: true})
+const $q = useQuasar()
 
 // ----- Data -----
-// TODO: Remove this sample data
 const columns = [
-  { name: 'device', label: i18n.global.t('projects.device'), field: 'device', sortable: true, align: 'center' },
+  { name: 'device', label: i18n.global.t('projects.device_type'), field: 'device', sortable: true, align: 'center' },
   { name: 'client', label: i18n.global.t('projects.client'), field: 'client', sortable: true, align: 'center' },
   { name: 'ip', label: i18n.global.t('projects.ip'), field: 'ip', sortable: true, align: 'center' },
   { name: 'firmware', label: i18n.global.t('projects.firmware'), field: 'firmware', sortable: true, align: 'center' },
@@ -117,85 +122,11 @@ const columns = [
   { name: 'ftp', label: i18n.global.t('projects.ftp'), field: 'ftp', sortable: true, align: 'center' },
 ]
 
-const rows = [
-  {
-    device: 'MR3000',
-    client: '21_45',
-    ip: '10.8.13.182',
-    firmware: '2.08',
-    serial: '87654321',
-    sale_status: 'Rental',
-    station: 'P1A-A',
-    vpn_status: 'Down',
-    pid: '0ZAB-21',
-    files: '1489',
-    ftp: 'Active',
-  },
-  {
-    device: 'MR4000',
-    client: '25_16',
-    ip: '10.8.16.16',
-    firmware: '220.65',
-    serial: '856',
-    sale_status: 'Sold',
-    station: 'P1A-B',
-    vpn_status: 'Up',
-    pid: '01-PC-A1',
-    files: '27',
-    ftp: 'Active',
-  },
-  {
-    device: 'MR2000',
-    client: '45-13',
-    ip: '10.8.13.21',
-    firmware: '2.2.7',
-    serial: '355673',
-    sale_status: 'Sold',
-    station: 'P2A-A',
-    vpn_status: 'Up',
-    pid: '3012-21',
-    files: '68',
-    ftp: 'Active',
-  },
-  {
-    device: 'MR1000',
-    client: '39_21',
-    ip: '10.8.13.11',
-    firmware: '2.2.3',
-    serial: '112456',
-    sale_status: 'Sold',
-    station: 'P3-A',
-    vpn_status: 'Up',
-    pid: '3090-121',
-    files: '109',
-    ftp: 'Active',
-  },
-]
 
 const buttons = [
   {
-    key: 'remove',
-    label: i18n.global.t('projects.remove_from_project'),
-  },
-  {
-    key: 'compress',
-    label: i18n.global.t('projects.compress_vibration_data'),
-  },
-  {
-    key: 'download',
-    label: i18n.global.t('projects.download_compress_vibration_data'),
-  },
-  {
-    key: 'display',
-    label: i18n.global.t('projects.display_data'),
-  },
-  {
-    key: 'files',
-    label: i18n.global.t('projects.show_event'),
-  },
-  {
-    key: 'edit',
-    label: i18n.global.t('projects.edit_parameters'),
+    key: 'assign',
+    label: i18n.global.t('projects.assign_to_project'),
   },
   {
     key: 'status',
@@ -209,30 +140,15 @@ const buttons = [
 
 /**
  * Routes to different pages dependent which button is clicked
- * @param {string} device - the name of a device
+ * @param {string} device - the CLI of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
 async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
-    case 'remove':
-      await routerService?.routeTo(ROUTES.LOGIN)
-      break
-    case 'compress':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'download':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'display':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
-      break
-    case 'files':
-      await routerService?.addToRoute(`pool/${device}/${key}`)
-      break
-    case 'edit':
-      await routerService?.addToRoute(`pool/${device}/${key}`)
+    case 'assign':
+      await assignDeviceToProject($q, device)
       break
     case 'status':
       await routerService?.addToRoute(`pool/${device}/${key}`)
@@ -241,7 +157,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
       await routerService?.addToRoute(`pool/${device}/${key}`)
       break
     default:
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
   }
 }
 </script>

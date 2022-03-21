@@ -1,16 +1,44 @@
 <template>
   <q-page class="column items-center justify-start full-width">
     <!-- Title: Projects -->
-    <h5>{{ $t('dashboard.project') }} {{ projectId.toUpperCase() }}</h5>
+    <div class="row items-center">
+      <!-- Project name -->
+      <h5>{{ $t('dashboard.project') }} {{ projectId.toUpperCase() }}</h5>
 
-    <ProjectTable/>
+      <!-- Edit button -->
+      <q-btn
+        icon="edit"
+        text-color="primary"
+        round
+        unelevated
+        size="xs"
+        style="height: 30px; width: 30px; margin-left: 5px"
+        :disable="!projectUuid"
+        @click="editProject"
+      />
+    </div>
+
+    <ProjectTable
+    :uuid="projectUuid"
+    />
 
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
+import {defineProps, inject, onMounted, ref, Ref} from 'vue';
 import ProjectTable from 'components/tables/ProjectTable.vue';
+import {useQuasar} from 'quasar';
+import EditProjectDialog from 'components/dialogs/EditProjectDialog.vue';
+import {myProjects} from 'src/helpers/api-helpers';
+import {RouterService} from 'src/services/RouterService';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
+import {ErrorService} from 'src/services/ErrorService';
+
+const $q = useQuasar()
+const routerService: RouterService|undefined = inject('$routerService')
+const errorService: ErrorService|undefined = inject('$errorService')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -19,4 +47,45 @@ const props = defineProps({
     type: String
   }
 })
+
+const projectUuid: Ref<null|string> = ref(null)
+
+// Once mounted, determine actual project entry's UUID (for editing)
+onMounted(async () => {
+  const ownProjects = await myProjects()
+  const project = ownProjects.find((ownProject) => ownProject.name === props.projectId)
+
+  if(project){
+    projectUuid.value = project.uuid
+  }
+})
+
+/**
+ * Shows a dialog for editing a project's name
+ * @returns {void}
+ */
+function editProject(){
+  $q.dialog({
+    component: EditProjectDialog,
+    componentProps: {
+      name: props.projectId,
+      uuid: projectUuid.value,
+      q: $q,
+      routerService: routerService,
+      errorService: errorService
+    }
+  }).onOk(async (newName: string) => {
+    // After editing is finished, show success notification
+    showNotification(
+      $q,
+      i18n.global.t('messages.project_renamed'),
+      'bottom',
+      'positive',
+    )
+
+    // Navigate to project's new URL
+    await routerService?.goBack()
+    await routerService?.addToRoute(newName)
+  })
+}
 </script>

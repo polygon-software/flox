@@ -2,6 +2,41 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddContactToDeviceInput {
+  """Whether to trigger on alarm1"""
+  alarm1: Boolean!
+
+  """Whether to trigger on alarm2"""
+  alarm2: Boolean!
+
+  """Device CLI"""
+  cli: String!
+
+  """Whether to trigger daily"""
+  daily: Boolean!
+
+  """E-Mail address"""
+  email: String!
+
+  """Whether to trigger on event"""
+  event: Boolean!
+
+  """Whether to trigger on memory alert"""
+  memory: Boolean!
+
+  """Name"""
+  name: String!
+
+  """Phone number"""
+  phone: String!
+
+  """Whether to trigger on power alert"""
+  power: Boolean!
+
+  """Whether to trigger on SMS Limit"""
+  smsLimit: Boolean!
+}
+
 input AddUserPermissionInput {
   """Name of the permitted resource"""
   resource: String!
@@ -13,37 +48,26 @@ input AddUserPermissionInput {
   uuid: ID!
 }
 
-type Address {
-  """City"""
-  city: String!
+input AssignDeviceToProjectInput {
+  """Device CLI"""
+  cli: String
 
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
-
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
-  """Number"""
-  number: String!
-
-  """Street"""
-  street: String!
-
-  """UUID"""
+  """Project UUID"""
   uuid: ID!
-
-  """Zip Code"""
-  zipCode: String!
 }
 
-input CreateAddressInput {
-  city: String!
-  number: String!
-  street: String!
-  zipCode: String!
+input CreateProjectInput {
+  """Associated MR2000 instances"""
+  mr2000instances: [String!]
+
+  """Associated MR3000 instances"""
+  mr3000instances: [String!]
+
+  """Project name"""
+  name: String!
+
+  """Uuid of the user owning the project"""
+  userUuid: ID!
 }
 
 """
@@ -51,7 +75,137 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteContactInput {
+  """Device CLI"""
+  cli: String!
+
+  """Unique database ID"""
+  id: Int!
+}
+
+input DeleteProjectInput {
+  """Project UUID"""
+  uuid: ID!
+}
+
 union Device = MR2000 | MR3000
+
+type DeviceContact {
+  alarm1: Boolean!
+  alarm2: Boolean!
+  cli: String!
+  daily: Boolean!
+  email: String!
+  event: Boolean!
+  id: Int!
+  memory: Boolean
+  name: String!
+  phone: String!
+  power: Boolean!
+  smsLimit: Boolean!
+}
+
+type DeviceParams {
+  ala1X: Float!
+  ala1Y: Float!
+  ala1Z: Float!
+  ala2X: Float!
+  ala2Y: Float!
+  ala2Z: Float!
+  trigX: Float!
+  trigY: Float!
+  trigZ: Float!
+  unitX: String!
+  unitY: String!
+  unitZ: String!
+}
+
+input EditContactInput {
+  """Whether to trigger on alarm1"""
+  alarm1: Boolean!
+
+  """Whether to trigger on alarm2"""
+  alarm2: Boolean!
+
+  """Device CLI"""
+  cli: String!
+
+  """Whether to trigger daily"""
+  daily: Boolean!
+
+  """E-Mail address"""
+  email: String!
+
+  """Whether to trigger on event"""
+  event: Boolean!
+
+  """Unique database ID"""
+  id: Int!
+
+  """Whether to trigger on memory alert"""
+  memory: Boolean!
+
+  """Name"""
+  name: String!
+
+  """Phone number"""
+  phone: String!
+
+  """Whether to trigger on power alert"""
+  power: Boolean!
+
+  """Whether to trigger on SMS Limit"""
+  smsLimit: Boolean!
+}
+
+type EventsTable {
+  items: [EventsTableRow!]!
+  lengthAll: Int!
+  lengthEvt: Int!
+  lengthPk: Int!
+  lengthZip: Int!
+}
+
+type EventsTableRow {
+  """pk_frq.VSUM"""
+  VSUM: String
+
+  """events.rec_time"""
+  dateTime: DateTime!
+
+  """Download URL"""
+  downloadURL: String
+
+  """events.num"""
+  file: String!
+
+  """events.filenam end"""
+  fileName: String
+
+  """pk_frq.frqX"""
+  frequencyX: String
+
+  """pk_frq.frqY"""
+  frequencyY: String
+
+  """pk_frq.frqZ"""
+  frequencyZ: String
+
+  """events.peakX + events.unitX"""
+  peakX: String!
+
+  """events.peakY + events.unitY"""
+  peakY: String!
+
+  """events.peakZ + events.unitZ"""
+  peakZ: String!
+
+  """Preview URL"""
+  previewURL: String
+
+  """events.typ converted"""
+  type: String!
+}
 
 type LevelWriting {
   """Max value"""
@@ -87,11 +241,26 @@ type MR2000 {
   """CLI ID"""
   cli: String!
 
+  """Firmware version"""
+  firmware: String!
+
+  """FTP forward status"""
+  ftp: Boolean!
+
+  """IP address, if any"""
+  ip: String
+
+  """Device name"""
+  name: String!
+
   """Number of files"""
   numberOfFiles: Float!
 
   """PID"""
   pid: String!
+
+  """Project the device belongs to (if any)"""
+  project: Project
 
   """Serial number"""
   serialNumber: String!
@@ -101,13 +270,36 @@ type MR3000 {
   """CLI ID"""
   cli: String!
 
+  """Firmware version"""
+  firmware: String!
+
+  """FTP forward status"""
+  ftp: Boolean!
+
+  """IP address, if any"""
+  ip: String
+
+  """Device name"""
+  name: String!
+
+  """Project the device belongs to (if any)"""
+  project: Project
+
   """Serial number"""
   serialNumber: String!
 }
 
 type Mutation {
+  addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput!): Device!
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
+  assignDeviceToProject(assignDeviceToProjectInput: AssignDeviceToProjectInput!): Project!
+  createProject(createProjectInput: CreateProjectInput!): Project!
+  deleteContact(deleteContactInput: DeleteContactInput!): Device!
+  deleteProject(deleteProjectInput: DeleteProjectInput!): Project!
+  editContact(editContactInput: EditContactInput!): Device!
   register(registerUserInput: RegisterUserInput!): User
+  removeDeviceFromProject(removeDeviceFromProjectInput: RemoveDeviceFromProjectInput!): Project!
+  updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
@@ -118,33 +310,49 @@ enum Permission {
 }
 
 type Project {
-  """Associated MR2000 instances"""
-  mr2000instances: [MR2000!]!
+  """Creation date"""
+  createdAt: DateTime!
 
-  """Associated MR3000 instances"""
-  mr3000instances: [MR3000!]!
+  """Date of deletion"""
+  deletedAt: DateTime
 
-  """Project name"""
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """MR2000 instances that the user has access to"""
+  mr2000instances: [String!]
+
+  """MR3000 instances that the user has access to"""
+  mr3000instances: [String!]
+
+  """Project Name"""
   name: String!
+
+  """User that owns the project"""
+  user: User!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type Query {
   allUsers: [User!]!
-  getProjectDevices(name: String!): [Device!]!
-  getUserDevices(unassigned: Boolean, uuid: ID!): [Device!]!
+  deviceParams(cli: String!): DeviceParams!
+  eventTable(cli: String!, descending: Boolean, filter: String, orderBy: String, skip: Int!, take: Int!): EventsTable!
+  getDeviceContacts(cli: String!): [DeviceContact!]!
+  getProjectDevices(name: String, uuid: ID): [Device!]!
+  getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
-  levelWriting(end: DateTime!, resolution: Int!, start: DateTime!, stationIds: [String!]!): LevelWriting!
-  myDevices(unassigned: Boolean): [Device!]!
+  levelWriting(clients: [String!]!, end: DateTime!, resolution: Int!, start: DateTime!): LevelWriting!
+  myContacts: [DeviceContact!]!
+  myDevices(assigned: Boolean, unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!
   user(cognitoUuid: ID, uuid: ID): User!
 }
 
 input RegisterUserInput {
-  """User address"""
-  address: CreateAddressInput
-
   """Date of birth"""
   birthdate: DateTime
 
@@ -164,9 +372,25 @@ input RegisterUserInput {
   username: String!
 }
 
+input RemoveDeviceFromProjectInput {
+  """Device CLI"""
+  cli: String
+
+  """Project UUID"""
+  uuid: ID!
+}
+
 enum Role {
   ADMIN
   USER
+}
+
+input UpdateProjectInput {
+  """Project name"""
+  name: String!
+
+  """Project UUID"""
+  uuid: ID!
 }
 
 input UpdateUserInput {
@@ -174,9 +398,6 @@ input UpdateUserInput {
 }
 
 type User {
-  """Domicile address"""
-  address: Address!
-
   """Date of birth"""
   birthdate: DateTime!
 
@@ -208,7 +429,7 @@ type User {
   phone: String!
 
   """Projects that the user has access to"""
-  projects: [String!]
+  projects: [Project!]
 
   """Role of the User"""
   role: Role!

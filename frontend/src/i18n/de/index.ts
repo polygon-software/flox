@@ -13,6 +13,7 @@ export default {
     settings: 'Einstellungen',
     loading: 'Lädt',
     filter: 'Filter',
+    warning: 'Warnung'
   },
   authentication: {
     loggedIn: 'Angemeldet als {user}',
@@ -58,12 +59,14 @@ export default {
     device_pool: 'Gerätepool',
     account: 'Konto',
     share: 'Teilen',
-    files: 'Ereignisse vom Station',
+    files: 'Ereignisse von Station',
   },
   projects: {
     project: 'Projekt',
-    device: 'Gerät',
-    client: 'Kunde',
+    device: 'Gerät | Geräte',
+    new_project: 'Neues Projekt',
+    device_type: 'Gerätetyp',
+    client: 'Client',
     ip: 'IP',
     firmware: 'Firmware',
     serial: 'Serial',
@@ -73,6 +76,7 @@ export default {
     pid: 'PID',
     files: 'Dokumente',
     ftp: 'FTP',
+    assign_to_project: 'Zu Projekt zuordnen',
     remove_from_project: 'Aus Projekt entfernen',
     compress_vibration_data: 'Vibrationsdaten komprimieren',
     download_compress_vibration_data: 'Komprimierte Vibrationsdaten herunterladen',
@@ -82,23 +86,27 @@ export default {
     show_status_files: 'Statusdateien anzeigen',
     show_device_health: 'Gerätezustand anzeigen',
     name: 'Name',
+    project_name: 'Projektname',
+    edit_project: 'Projekt bearbeiten',
+    edit_project_name: 'Projektnamen bearbeiten',
     id: 'ID',
   },
   edit_parameters: {
     user_data: 'Benutzerdaten und Schwellenwerte',
-    contacts: 'Alert-Kontakte',
+    contacts: 'Alarm-Kontakte',
     project_name: 'Projektname',
     station_name: 'Stationsname',
     name: 'Name',
-    number: 'Telefonnumer',
+    number: 'Telefonnummer',
     email: 'E-mail',
-    add_new_contact: 'Füge neuen Kontakt hinzu',
-    event: 'Ereigniss',
+    add_new_contact: 'Kontakt hinzufügen',
+    copy_contact: 'Bestehenden Kontakt kopieren',
+    event: 'Ereignis',
     alarm1: 'Alarm 1',
     alarm2: 'Alarm 2',
     sms_limit: 'SMS-Grenze',
     battery: 'Leistung/Batterie',
-    memory: 'Erinnerung',
+    memory: 'Speicher',
     daily: 'Täglich',
   },
   buttons: {
@@ -114,11 +122,16 @@ export default {
     copy: 'Kopieren',
     send: 'Senden',
     create_link: 'Link erzeugen',
+    create_project: 'Projekt erstellen',
+    delete_project: 'Projekt löschen',
     new_contact: 'Neuer Kontakt',
     load: 'Laden',
     save: 'Speichern',
     show: 'Anzeigen',
     close: 'Schliessen',
+    confirm: 'Bestätigen',
+    rename: 'Umbenennen',
+    discard: 'Verwerfen',
     edit: 'Bearbeiten',
   },
   errors: {
@@ -154,8 +167,12 @@ export default {
     must_accept_condition_truthful:
       'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
-    missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    missing_user_type: 'Bitte wählen Sie eine Benutzerklasse.',
     incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
+    error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.',
+    error_adding_contact: 'Beim Hinzufügen des Kontakts ist ein Fehler aufgetreten.',
+    error_editing_contact: 'Beim Bearbeiten des Kontakts ist ein Fehler aufgetreten.',
+    error_deleting_contact: 'Beim Löschen des Kontakts ist ein Fehler aufgetreten.'
   },
   set_password: {
     description:
@@ -184,10 +201,20 @@ export default {
     custom: 'Eigene'
   },
   messages: {
-    copied: 'Kopiert'
+    copied: 'Kopiert',
+    project_created: 'Projekt erfolgreich erstellt',
+    assigned_device: 'Gerät erfolgreich zugeordnet',
+    removed_device: 'Gerät erfolgreich entfernt',
+    project_renamed: 'Projekt erfolgreich umbenannt',
+    project_deleted: 'Projekt erfolgreich gelöscht',
+    contact_added: 'Kontakt erfolgreich hinzugefügt',
+    contact_edited: 'Kontakt erfolgreich bearbeitet',
+    contact_deleted: 'Kontakt erfolgreich gelöscht'
   },
   status: {
     title: 'Status von',
+    up: 'Up',
+    down: 'Down'
   },
   client_connectivity: {
     title: 'Client-Konnektivität',
@@ -217,7 +244,14 @@ export default {
     frq_y: 'Frq Y',
     frq_z: 'Frq Z',
     vsum: 'VSUM',
-    download: 'Herunterladen',
+    downloadURL: 'Herunterladen',
+    previewURL: 'Vorschau',
+    filter: {
+      all: 'Alle',
+      evt: 'Events',
+      pk: 'Peaks',
+      zip: 'Zip'
+    }
   },
   dialog: {
     period: 'Periode',
@@ -240,6 +274,11 @@ export default {
     good: 'gut',
     fair: 'ausreichend',
     poor: 'schlecht',
+  },
+  warnings: {
+    unassign_device: 'Sind Sie sicher? Dadurch werden alle Daten des Geräts gelöscht!',
+    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt, und ihre Daten gelöscht!',
+    delete_contact: 'Sind Sie sicher, dass Sie diesen Kontakt löschen möchten?'
   },
   success: {
     saved_successfully: 'Erfolgreich gespeichert!',

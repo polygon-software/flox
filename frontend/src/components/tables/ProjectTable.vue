@@ -33,49 +33,49 @@
       :rows-per-page-options="[10,20, 100]"
       separator="none"
     >
-      <template #body="props">
+      <template #body="_props">
         <q-tr
-          :props="props"
-          @click="() => showCustomGraph([props.row.name])"
+          :props="_props"
+          @click="() => showCustomGraph([_props.row.cli])"
         >
           <q-td key="checkbox">
             <q-checkbox
               v-model="selectedRows"
-              :val="props.row.name"
+              :val="_props.row.cli"
             />
           </q-td>
           <q-td key="name">
-            {{ props.row.name }}
+            {{ _props.row.name }}
           </q-td>
           <q-td key="device">
-            {{ props.row.device }}
+            {{ _props.row.type }}
           </q-td>
           <q-td key="client">
-            {{ props.row.client }}
+            {{ _props.row.cli }}
           </q-td>
           <q-td key="ip">
-            {{ props.row.ip }}
+            {{ _props.row.ip }}
           </q-td>
           <q-td key="firmware">
-            {{ props.row.firmware }}
+            {{ _props.row.firmware }}
           </q-td>
           <q-td key="serial">
-            {{ props.row.serial }}
+            {{ _props.row.serialNumber }}
           </q-td>
           <q-td key="sale_status">
-            {{ props.row.sale_status }}
+            {{ _props.row.saleStatus }}
           </q-td>
           <q-td key="vpn_status">
-            {{ props.row.vpn_status }}
+            {{ _props.row.ip.length > 1 ? $t('status.up') : $t('status.down') }}
           </q-td>
           <q-td key="pid">
-            {{ props.row.pid }}
+            {{ _props.row.pid }}
           </q-td>
           <q-td key="files">
-            {{ props.row.files }}
+            {{ _props.row.files }}
           </q-td>
           <q-td key="ftp">
-            {{ props.row.ftp }}
+            {{ $t(_props.row.ftp ? 'general.yes' : 'general.no')}}
           </q-td>
           <q-td key="options">
             <q-btn-dropdown
@@ -92,11 +92,12 @@
                   v-for="button in buttons"
                   :key="button.key"
                   :label="button.label"
-                  class="text-grey"
+                  class="text-grey full-width"
+                  align="left"
                   style="display: flex; flex-direction: column"
                   flat
                   no-caps
-                  @click="onOptionClick(props.row.name, button.key)"
+                  @click="onOptionClick(_props.row.cli, button.key)"
                 />
             </q-btn-dropdown>
           </q-td>
@@ -107,13 +108,16 @@
 </template>
 
 <script setup lang="ts">
-import {inject, Ref, ref} from 'vue';
+import {inject, Ref, ref, defineProps, watch} from 'vue';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {i18n} from 'boot/i18n';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue'
 import {useQuasar} from 'quasar';
+import {Device} from 'src/data/types/Device';
+import {removeDeviceFromProject} from 'src/helpers/project-helpers';
+import {fetchProjectDevices} from 'src/helpers/api-helpers';
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -122,11 +126,18 @@ const selectedRows: Ref<string[]> = ref([])
 
 const $q = useQuasar()
 
+const props = defineProps({
+  uuid: {
+    type: String,
+    required: true,
+  },
+})
+
 // ----- Data -----
 const columns = [
   { name: 'checkbox', label: ' ', field: 'checkbox', sortable: false, align: 'center' },
   { name: 'name', label: i18n.global.t('projects.name'), field: 'name', sortable: true, align: 'center' },
-  { name: 'device', label: i18n.global.t('projects.device'), field: 'device', sortable: true, align: 'center' },
+  { name: 'device', label: i18n.global.t('projects.device_type'), field: 'device', sortable: true, align: 'center' },
   { name: 'client', label: i18n.global.t('projects.client'), field: 'client', sortable: true, align: 'center' },
   { name: 'ip', label: i18n.global.t('projects.ip'), field: 'ip', sortable: true, align: 'center' },
   { name: 'firmware', label: i18n.global.t('projects.firmware'), field: 'firmware', sortable: true, align: 'center' },
@@ -139,34 +150,7 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-const rows = [
-  {
-    name: 'P1A-A',
-    device: 'MR3000',
-    client: '21_45',
-    ip: '10.8.13.182',
-    firmware: '2.08',
-    serial: '87654321',
-    sale_status: 'Rental',
-    vpn_status: 'Down',
-    pid: '0ZAB-21',
-    files: '1489',
-    ftp: 'Active',
-  },
-  {
-    name: 'P1A-B',
-    device: 'MR2000',
-    client: '25_16',
-    ip: '10.8.16.16',
-    firmware: '220.65',
-    serial: '856',
-    sale_status: 'Sold',
-    vpn_status: 'Up',
-    pid: '01-PC-A1',
-    files: '27',
-    ftp: 'Active',
-  },
-]
+const rows: Ref<Device[]> = ref([])
 
 const buttons = [
   {
@@ -203,17 +187,24 @@ const buttons = [
   },
 ]
 
+// Watch for initial Project UUID propagation
+const stop = watch(props, async () => {
+  if(props.uuid){
+    rows.value = await fetchProjectDevices(props.uuid)
+    stop()
+  }
+})
+
 /**
  * Routes to a new page where the graph of that project is shown
  * @param {string[]} devices - names of devices to show the graph for
  * @returns {void} - done
  */
 function showCustomGraph(devices: string[]): void{
-  // TODO: once we have actual data, prepend a popup here for choosing timeframe/etc options (see Figma)
   $q.dialog({
     component: CustomGraphDialog,
     componentProps: {},
-  }).onOk(async () => {
+  }).onOk(async (settings: Record<string, string>) => {
     // Build string combination of device CLIs
     let pathSuffix = ''
     devices.forEach((device) => {
@@ -224,12 +215,13 @@ function showCustomGraph(devices: string[]): void{
     pathSuffix = pathSuffix.substring(0, pathSuffix.length-1)
 
     await routerService?.addToRoute(pathSuffix)
+    await routerService?.pushToQuery(settings)
   })
 }
 
 /**
  * Routes to different pages dependent which button is clicked
- * @param {string} device - the name of a device
+ * @param {string} device - the CLI of a device
  * @param {string} key - the button key
  * @returns {Promise<void>} - routes to correct page
  */
@@ -237,16 +229,16 @@ async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
-      await routerService?.routeTo(ROUTES.LOGIN)
+      removeDeviceFromProject($q, props.uuid, device)
       break
     case 'compress':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'download':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'display':
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
       break
     case 'files':
       await routerService?.addToRoute(`${device}/${key}`)
@@ -261,7 +253,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
       await routerService?.addToRoute(`${device}/${key}`)
       break
     default:
-      await routerService?.routeTo(ROUTES.CUSTOMER)
+      await routerService?.routeTo(ROUTES.CUSTOMERS)
   }
 }
 </script>

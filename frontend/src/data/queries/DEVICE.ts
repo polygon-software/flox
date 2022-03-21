@@ -7,16 +7,17 @@ import { QueryObject } from 'src/data/DATA-DEFINITIONS';
 
 export const USER_DEVICES = {
   query: gql`
-    query getUserDevices($uuid: ID!){
-      getUserDevices(uuid: $uuid){
-      ...on MR2000{
-        cli
+    query getUserDevices($uuid: ID!) {
+      getUserDevices(uuid: $uuid) {
+        ... on MR2000 {
+          cli
+        }
+        ... on MR3000 {
+          cli
+        }
+        __typename
       }
-      ...on MR3000{
-        cli
-      }
-      __typename
-    }}
+    }
   `,
   tables: ['user'],
   cacheLocation: 'getUserDevices',
@@ -24,40 +25,72 @@ export const USER_DEVICES = {
 
 export const MY_DEVICES = {
   query: gql`
-    query{
-      myDevices{
-      ...on MR2000{
-        cli
-      }
-      ...on MR3000{
-        cli
+    query myDevices($unassigned: Boolean, $assigned: Boolean) {
+      myDevices(unassigned: $unassigned, assigned: $assigned) {
+        ... on MR2000 {
+          cli
+          name
+          serialNumber
+          numberOfFiles
+          pid
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
+        }
+        ... on MR3000 {
+          cli
+          name
+          serialNumber
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
       }
       __typename
     }}
   `,
-  tables: ['user'],
-  cacheLocation: 'getUserDevices',
+  tables: ['device'],
+  cacheLocation: 'myDevices',
 };
 
 export const LEVEL_WRITING = {
   query: gql`
-    query getDeviceData($stationIds: [String!]!, $start: DateTime!, $end: DateTime!, $resolution: Int!){
-      levelWriting(stationIds: $stationIds, start: $start, end: $end, resolution: $resolution){
-        x{
+    query getLevelWriting(
+      $clients: [String!]!
+      $start: DateTime!
+      $end: DateTime!
+      $resolution: Int!
+    ) {
+      levelWriting(
+        clients: $clients
+        start: $start
+        end: $end
+        resolution: $resolution
+      ) {
+        x {
           name
           data {
             x
             y
           }
         }
-        y{
+        y {
           name
           data {
             x
             y
           }
         }
-        z{
+        z {
           name
           data {
             x
@@ -68,30 +101,147 @@ export const LEVEL_WRITING = {
       }
     }
   `,
-  tables: ['user'],
-  cacheLocation: 'getDeviceData',
+  tables: ['device'],
+  cacheLocation: 'getLevelWriting',
+};
+
+export const DEVICE_PARAMS = {
+  query: gql`
+    query getDeviceParams($cli: String!) {
+      deviceParams(cli: $cli) {
+        trigX
+        trigY
+        trigZ
+        ala1X
+        ala1Y
+        ala1Z
+        ala2X
+        ala2Y
+        ala2Z
+        unitX
+        unitY
+        unitZ
+      }
+    }
+  `,
+  tables: ['device'],
+  cacheLocation: 'deviceParams',
 };
 
 export const PROJECT_DEVICES = {
   query: gql`
-    query getProjectDevices($name: String!){
-      getProjectDevices(name: $name){
+    query getProjectDevices($uuid: ID, $name: String){
+      getProjectDevices(uuid: $uuid, name: $name){
         ...on MR2000{
           cli
+          name
+          serialNumber
+          numberOfFiles
+          pid
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
         }
-        ...on MR3000{
+        ... on MR3000 {
           cli
+          name
+          serialNumber
+          ftp
+          ip
+          firmware
+          project {
+            uuid
+            name
+            __typename
+          }
         }
         __typename
-      }}
+      }
+    }
   `,
-  tables: ['user'],
+  tables: ['device'],
   cacheLocation: 'getProjectDevices',
 };
+
+export const EVENT_TABLE_ROWS = {
+  query: gql`
+    query eventTable(
+      $stationId: String!,
+      $skip: Int!,
+      $take: Int!,
+      $filter: String,
+      $orderBy: String,
+      $descending: Boolean
+    ){
+      eventTable(cli: $stationId, skip: $skip, take: $take, filter: $filter, orderBy: $orderBy, descending: $descending){
+        items {
+          file
+          type
+          dateTime
+          peakX
+          peakY
+          peakZ
+          downloadURL
+          fileName
+          previewURL
+          frequencyX
+          frequencyY
+          frequencyZ
+          VSUM
+          __typename
+        }
+        lengthAll
+        lengthEvt
+        lengthPk
+        lengthZip
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'eventTable'
+}
+
+
+export const DEVICE_CONTACTS = {
+  query: gql`
+    query getDeviceContacts(
+      $cli: String!,
+    ){
+      getDeviceContacts(cli: $cli){
+        id
+        cli
+        name
+        email
+        phone
+        event
+        alarm1
+        alarm2
+        smsLimit
+        power
+        memory
+        daily
+        __typename
+      }
+    }
+  `,
+  tables: ['contact'],
+  cacheLocation: 'getDeviceContacts'
+}
+
+
 
 export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
   MY_DEVICES,
   PROJECT_DEVICES,
   LEVEL_WRITING,
+  DEVICE_PARAMS,
+  EVENT_TABLE_ROWS,
+  DEVICE_CONTACTS
 ];

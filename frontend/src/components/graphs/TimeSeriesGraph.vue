@@ -72,21 +72,21 @@ const annotations = computed(() => {
   const yaxis: Record<string, unknown>[] = []
   const markers = props.levelMarkers as Record<string, string|number>[]
   markers.forEach(marker => {
-    yaxis.push({
-      y: marker.value,
-      strokeDashArray: marker.dashSize,
-      borderColor: marker.color,
-      label: {
-        position: 'left',
-        offsetX: 80,
-        borderWidth: 0,
-        style: {
-          color: marker.color,
-          background: 'rgba(0,0,0,0)',
-        },
-        text: marker.showValue ? `${marker.label} ${i18n.global.t('visualisation.at')} ${marker.value}` : `${marker.label}`
-      }
-    })
+    if(marker.value < props.maxValue) {
+      yaxis.push({
+        y: marker.value,
+        strokeDashArray: marker.dashSize,
+        borderColor: marker.color,
+        label: {
+          borderWidth: 0,
+          style: {
+            color: marker.color,
+            background: 'transparent',
+          },
+          text: marker.showValue ? `${marker.label} ${i18n.global.t('visualisation.at')} ${marker.value}` : `${marker.label}`
+        }
+      })
+    }
   })
   return yaxis
 })
@@ -138,7 +138,7 @@ const options = computed(() => {
     yaxis: {
       type: 'numeric',
       min: 0,
-      max: Math.ceil(props.maxValue * 10) / 10,
+      max: props.maxValue,
       tickAmount: 10,
       decimalsInFloat: 2,
       title: {
