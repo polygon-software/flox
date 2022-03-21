@@ -96,7 +96,6 @@ import {executeQuery} from 'src/helpers/data-helpers';
 const authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
 const $authService: AuthenticationService|undefined = inject('$authService')
 
-// TODO: replace with data from database
 const username: Ref<string | undefined> = ref(authStore.getters.getUsername())
 const email = ref('')
 onMounted(async () => {
