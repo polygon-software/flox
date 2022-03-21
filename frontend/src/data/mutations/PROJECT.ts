@@ -54,8 +54,8 @@ export const REMOVE_DEVICE_FROM_PROJECT = {
         __typename
       }
     }`,
-  tables: ['project', 'device'], // TODO: how can we ensure this also updates the device-related queries?
-  type: MutationTypes.UPDATE,
+  tables: ['project', 'device'],
+  type: MutationTypes.DEVALIDATINGUPDATE,
   cacheLocation: undefined
 }
 
@@ -70,8 +70,8 @@ export const ASSIGN_DEVICE_TO_PROJECT = {
         __typename
       }
     }`,
-  tables: ['project', 'device'], // TODO: how can we ensure this also updates the device-related queries?
-  type: MutationTypes.UPDATE,
+  tables: ['project', 'device'],
+  type: MutationTypes.DEVALIDATINGUPDATE,
   cacheLocation: undefined
 }
 
