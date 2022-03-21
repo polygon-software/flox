@@ -7,6 +7,7 @@ import {
   mr2000fromDatabaseEntry,
   mr3000fromDatabaseEntry,
   deviceType,
+  deviceContactFromDatabaseEntry,
 } from '../../helpers/device-helpers';
 import { Project } from '../project/entities/project.entity';
 import { HttpService } from '@nestjs/axios';
@@ -17,14 +18,20 @@ import { LevelWritingAxis } from '../../types/LevelWritingAxis';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { ConfigService } from '@nestjs/config';
 import {
+  deleteInTable,
   fetchCountFromTable,
   fetchFromTable,
+  insertIntoTable,
+  updateInTable,
 } from '../../helpers/database-helpers';
 import { EventsTableRow } from '../../types/EventsTableRow';
 import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
+import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
+import { EditContactInput } from './dto/input/edit-contact.input';
+import { DeleteContactInput } from './dto/input/delete-contact.input';
 
 @Injectable()
 export class DeviceService {
@@ -71,8 +78,7 @@ export class DeviceService {
     const client = getDeviceParamsArgs.cli;
     const filterQuery = `WHERE cli = "${client}"`;
     let instances: Record<string, string | number>[];
-    if (client.includes('_')) {
-      // TODO: Use helper function to distinguish between device types
+    if (deviceType(client) === 'MR3000') {
       // MR3000
       instances = await fetchFromTable('MR3000', 'para_trigala', filterQuery);
     } else {
@@ -397,6 +403,177 @@ export class DeviceService {
       frequencyY,
       frequencyZ,
       VSUM,
+    );
+  }
+
+  /**
+   * Get a device (MR2000 or MR3000) by CLI
+   * @param {string} cli - Client ID
+   * @returns {Promise<Device>} - The device
+   */
+  async getDeviceByCli(cli: string) {
+    const type = deviceType(cli);
+    const instances = await fetchFromTable(
+      type,
+      'station',
+      `WHERE cli='${cli}'`,
+    );
+    const instance = instances[0];
+
+    if (!instance) {
+      throw new Error(`No device found for CLI ${cli}`);
+    }
+
+    if (type === 'MR2000') {
+      return mr2000fromDatabaseEntry(instance, this.projectRepository, null);
+    }
+
+    return mr3000fromDatabaseEntry(instance, this.projectRepository, null);
+  }
+
+  /**
+   * Adds a contact to a given device (either on table 'alert' or 'para_alert')
+   * @param {AddContactToDeviceInput} addContactToDeviceInput - input, containing all contact info
+   * @returns {Promise<Device>} - the device on which the new contact was added
+   */
+  async addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput) {
+    // Determine device type for table name
+    const type = deviceType(addContactToDeviceInput.cli);
+    const table = type === 'MR2000' ? 'alert' : 'para_alert';
+
+    const input = addContactToDeviceInput;
+
+    // Base record (fields that are identical for MR2000 and MR3000
+    let record: Record<string, unknown> = {
+      cli: input.cli,
+      name: input.name,
+      email: input.email,
+      phone: input.phone,
+      daily: input.daily,
+      soh_power: input.power,
+      soh_sms_limit: input.smsLimit,
+    };
+
+    if (type === 'MR2000') {
+      // MR2000
+      record = {
+        ...record,
+        id: 'no_id',
+        event: input.event,
+        alarm1: input.alarm1,
+        alarm2: input.alarm2,
+      };
+    } else {
+      // MR3000
+      record = {
+        ...record,
+        status: 0,
+        event_all: input.event,
+        event_alarm1: input.alarm1,
+        event_alarm2: input.alarm2,
+        soh_sdcard: input.memory,
+      };
+    }
+
+    // Write to database
+    await insertIntoTable(type, table, record);
+
+    // Get device where contact was added
+    return this.getDeviceByCli(input.cli);
+  }
+
+  /**
+   * Edits a given device contact
+   * @param {EditContactInput} editContactInput - input, containing all info to update
+   * @returns {Promise<Device>} - the device on which the contact was edited
+   */
+  async editContact(editContactInput: EditContactInput) {
+    // Determine device type for table name
+    const type = deviceType(editContactInput.cli);
+    const table = type === 'MR2000' ? 'alert' : 'para_alert';
+
+    const input = editContactInput;
+
+    // Base record (fields that are identical for MR2000 and MR3000)
+    let record: Record<string, unknown> = {
+      name: input.name,
+      email: input.email,
+      phone: input.phone,
+      daily: input.daily,
+      soh_power: input.power,
+      soh_sms_limit: input.smsLimit,
+    };
+
+    if (type === 'MR2000') {
+      // MR2000
+      record = {
+        ...record,
+        event: input.event,
+        alarm1: input.alarm1,
+        alarm2: input.alarm2,
+      };
+    } else {
+      // MR3000
+      record = {
+        ...record,
+        status: 0,
+        event_all: input.event,
+        event_alarm1: input.alarm1,
+        event_alarm2: input.alarm2,
+        soh_sdcard: input.memory,
+      };
+    }
+
+    const filterQuery =
+      type === 'MR2000'
+        ? `WHERE uniq_id='${editContactInput.id}'`
+        : `WHERE rec_id='${editContactInput.id}'`;
+
+    // Write to database
+    await updateInTable(type, table, filterQuery, record);
+
+    // Get device where contact was edited
+    return this.getDeviceByCli(input.cli);
+  }
+
+  /**
+   * Deletes a given device contact
+   * @param {DeleteContactInput} deleteContactInput - input, containing ID and CLI
+   * @returns {Promise<Device>} - the device on which the contact was deleted
+   */
+  async deleteContact(deleteContactInput: DeleteContactInput) {
+    // Determine device type for table name
+    const type = deviceType(deleteContactInput.cli);
+    const table = type === 'MR2000' ? 'alert' : 'para_alert';
+
+    const filterQuery =
+      type === 'MR2000'
+        ? `WHERE uniq_id='${deleteContactInput.id}'`
+        : `WHERE rec_id='${deleteContactInput.id}'`;
+
+    // Write to database
+    await deleteInTable(type, table, filterQuery);
+
+    // Get device where contact was deleted
+    return this.getDeviceByCli(deleteContactInput.cli);
+  }
+
+  /**
+   * Gets the contacts for a device by CLI
+   * @param {string} cli - Client ID
+   * @returns {Promise<DeviceContact[]>} - The device's contacts
+   */
+  async getDeviceContacts(cli: string) {
+    const type = deviceType(cli);
+    const instances =
+      (await fetchFromTable(
+        type,
+        type === 'MR2000' ? 'alert' : 'para_alert',
+        `WHERE cli='${cli}'`,
+      )) ?? [];
+
+    return instances.map((instance) =>
+      deviceContactFromDatabaseEntry(instance),
     );
   }
 }

@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import { DeviceService } from './device.service';
 import {
@@ -18,6 +18,11 @@ import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { ROLE } from '../../ENUM/ENUM';
+import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
+import { GetDeviceContactsArgs } from './dto/args/get-device-contacts.args';
+import { DeviceContact } from '../../types/DeviceContact';
+import { EditContactInput } from './dto/input/edit-contact.input';
+import { DeleteContactInput } from './dto/input/delete-contact.input';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -114,15 +119,125 @@ export class DeviceResolver {
     @CurrentUser() user: Record<string, string>,
   ): Promise<EventsTable> {
     const dbUser = await this.userService.getMyUser(user);
-    let allowed = false;
-    if (dbUser.role === ROLE.USER) {
-      allowed =
-        dbUser.mr2000instances?.includes(eventTableArgs.cli) ||
-        dbUser.mr3000instances?.includes(eventTableArgs.cli);
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      eventTableArgs.cli,
+    );
+
+    if (allowed) {
+      return this.deviceService.getEvents(eventTableArgs);
     }
 
-    if (dbUser.role === ROLE.ADMIN || allowed) {
-      return this.deviceService.getEvents(eventTableArgs);
+    throw new UnauthorizedException();
+  }
+
+  @AnyRole()
+  @Mutation(() => Device)
+  async addContactToDevice(
+    @Args({
+      name: 'addContactToDeviceInput',
+      type: () => AddContactToDeviceInput,
+    })
+    addContactToDeviceInput: AddContactToDeviceInput,
+    @CurrentUser()
+    user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      addContactToDeviceInput.cli,
+    );
+
+    if (allowed) {
+      return this.deviceService.addContactToDevice(addContactToDeviceInput);
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  @AnyRole()
+  @Query(() => [DeviceContact], { name: 'getDeviceContacts' })
+  async getDeviceContacts(
+    @Args() getDeviceContactsArgs: GetDeviceContactsArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      getDeviceContactsArgs.cli,
+    );
+
+    if (allowed) {
+      return this.deviceService.getDeviceContacts(getDeviceContactsArgs.cli);
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  @AnyRole()
+  @Query(() => [DeviceContact], { name: 'myContacts' })
+  async myContacts(@CurrentUser() user: Record<string, string>) {
+    const dbUser = await this.userService.getMyUser(user);
+
+    // Get user's devices
+    const devices = await this.getUserDevices({
+      uuid: dbUser.uuid,
+    } as GetUserDevicesArgs);
+    let contacts = [];
+
+    // Get contacts for all devices
+    for (const device of devices) {
+      contacts = contacts.concat(
+        await this.deviceService.getDeviceContacts(device.cli),
+      );
+    }
+
+    return contacts;
+  }
+
+  @AnyRole()
+  @Mutation(() => Device)
+  async editContact(
+    @Args({
+      name: 'editContactInput',
+      type: () => EditContactInput,
+    })
+    editContactInput: EditContactInput,
+    @CurrentUser()
+    user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      editContactInput.cli,
+    );
+
+    if (allowed) {
+      return this.deviceService.editContact(editContactInput);
+    }
+
+    throw new UnauthorizedException();
+  }
+
+  @AnyRole()
+  @Mutation(() => Device)
+  async deleteContact(
+    @Args({
+      name: 'deleteContactInput',
+      type: () => DeleteContactInput,
+    })
+    deleteContactInput: DeleteContactInput,
+    @CurrentUser()
+    user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+    const allowed = this.userService.isAuthorizedForDevice(
+      dbUser,
+      deleteContactInput.cli,
+    );
+
+    if (allowed) {
+      return this.deviceService.deleteContact(deleteContactInput);
     }
 
     throw new UnauthorizedException();

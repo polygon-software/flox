@@ -92,19 +92,20 @@ export default {
   },
   edit_parameters: {
     user_data: 'Benutzerdaten und Schwellenwerte',
-    contacts: 'Alert-Kontakte',
+    contacts: 'Alarm-Kontakte',
     project_name: 'Projektname',
     station_name: 'Stationsname',
     name: 'Name',
-    number: 'Telefonnumer',
+    number: 'Telefonnummer',
     email: 'E-mail',
-    add_new_contact: 'Füge neuen Kontakt hinzu',
-    event: 'Ereigniss',
+    add_new_contact: 'Kontakt hinzufügen',
+    copy_contact: 'Bestehenden Kontakt kopieren',
+    event: 'Ereignis',
     alarm1: 'Alarm 1',
     alarm2: 'Alarm 2',
     sms_limit: 'SMS-Grenze',
     battery: 'Leistung/Batterie',
-    memory: 'Erinnerung',
+    memory: 'Speicher',
     daily: 'Täglich',
   },
   buttons: {
@@ -164,9 +165,12 @@ export default {
     must_accept_condition_truthful:
       'Sie müssen alle Angaben wahrheitsgetreu aufgefüllt haben.',
     missing_file: 'Datei fehlt',
-    missing_user_type: 'Bitte wählen Sie eine Benutzerklasse',
+    missing_user_type: 'Bitte wählen Sie eine Benutzerklasse.',
     incorrect_date_range: 'Bitte wählen Sie einen gültigen Zeitraum aus',
-    error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.'
+    error_while_editing: 'Beim Bearbeiten des Projekts ist ein Fehler aufgetreten.',
+    error_adding_contact: 'Beim Hinzufügen des Kontakts ist ein Fehler aufgetreten.',
+    error_editing_contact: 'Beim Bearbeiten des Kontakts ist ein Fehler aufgetreten.',
+    error_deleting_contact: 'Beim Löschen des Kontakts ist ein Fehler aufgetreten.'
   },
   set_password: {
     description:
@@ -200,7 +204,10 @@ export default {
     assigned_device: 'Gerät erfolgreich zugeordnet',
     removed_device: 'Gerät erfolgreich entfernt',
     project_renamed: 'Projekt erfolgreich umbenannt',
-    project_deleted: 'Projekt erfolgreich gelöscht'
+    project_deleted: 'Projekt erfolgreich gelöscht',
+    contact_added: 'Kontakt erfolgreich hinzugefügt',
+    contact_edited: 'Kontakt erfolgreich bearbeitet',
+    contact_deleted: 'Kontakt erfolgreich gelöscht'
   },
   status: {
     title: 'Status von',
@@ -268,6 +275,7 @@ export default {
   },
   warnings: {
     unassign_device: 'Sind Sie sicher? Dadurch werden alle Daten des Geräts gelöscht!',
-    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt, und ihre Daten gelöscht!'
+    delete_project: 'Sind Sie sicher? Dadurch werden alle Geräte aus diesem Projekt entfernt, und ihre Daten gelöscht!',
+    delete_contact: 'Sind Sie sicher, dass Sie diesen Kontakt löschen möchten?'
   }
 };

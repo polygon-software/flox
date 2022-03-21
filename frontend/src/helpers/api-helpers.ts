@@ -5,9 +5,11 @@ import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
 import {MY_PROJECTS} from 'src/data/queries/PROJECT';
-import {MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
+import {DEVICE_CONTACTS, MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
 import {Device} from 'src/data/types/Device';
 import {computed, Ref} from 'vue';
+import {DeviceContact} from 'src/data/types/DeviceContact';
+import {MY_CONTACTS} from 'src/data/queries/CONTACT';
 
 /**
  * Fetch all users.
@@ -62,7 +64,7 @@ export async function myProjects(): Promise<Project[]> {
 }
 
 /**
- * Fetch all devices that are part of a given project project
+ * Fetch all devices that are part of a given project
  * @param {string} uuid - the project's uuid
  * @return {Promise<Device[]>} - An array containing all the user's projects
  */
@@ -80,7 +82,7 @@ export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
 /**
  * Fetch all of the current user's devices
  * @param {Record<string, string>} [params] - query parameters for filtering ('unassigned' / 'assigned')
- * @return {Device[]} - An array containing all the user's projects
+ * @return {ComputedRef<Device[]>} - An array containing all the user's projects
  */
 export function myDevices(params?: Record<string, boolean>) {
   const queryResult = subscribeToQuery(MY_DEVICES, params) as Ref<Record<string, unknown>[]>;
@@ -92,6 +94,29 @@ export function myDevices(params?: Record<string, boolean>) {
       }
     }
     return devices
+  });
+}
+
+/**
+ * Fetch all of a device's contacts
+ * @param {string} cli - device CLI
+ * @return {DeviceContact[]} - An array containing all the device's contacts
+ */
+export function deviceContacts(cli: string) {
+  const queryResult = subscribeToQuery(DEVICE_CONTACTS, {cli}) as Ref<Record<string, unknown>[]>;
+  return computed(() => {
+    return (queryResult.value ?? []).map((contact) => contact as unknown as DeviceContact)
+  });
+}
+
+/**
+ * Fetch all of a the user's devices' contacts
+ * @return {DeviceContact[]} - An array containing all the user's contacts
+ */
+export function myContacts() {
+  const queryResult = subscribeToQuery(MY_CONTACTS) as Ref<Record<string, unknown>[]>;
+  return computed(() => {
+    return (queryResult.value ?? []).map((contact) => contact as unknown as DeviceContact)
   });
 }
 
