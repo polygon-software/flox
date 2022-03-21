@@ -2,6 +2,41 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddContactToDeviceInput {
+  """Whether to trigger on alarm1"""
+  alarm1: Boolean!
+
+  """Whether to trigger on alarm2"""
+  alarm2: Boolean!
+
+  """Device CLI"""
+  cli: String!
+
+  """Whether to trigger daily"""
+  daily: Boolean!
+
+  """E-Mail address"""
+  email: String!
+
+  """Whether to trigger on event"""
+  event: Boolean!
+
+  """Whether to trigger on memory alert"""
+  memory: Boolean!
+
+  """Name"""
+  name: String!
+
+  """Phone number"""
+  phone: String!
+
+  """Whether to trigger on power alert"""
+  power: Boolean!
+
+  """Whether to trigger on SMS Limit"""
+  smsLimit: Boolean!
+}
+
 input AddUserPermissionInput {
   """Name of the permitted resource"""
   resource: String!
@@ -40,12 +75,35 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteContactInput {
+  """Device CLI"""
+  cli: String!
+
+  """Unique database ID"""
+  id: Int!
+}
+
 input DeleteProjectInput {
   """Project UUID"""
   uuid: ID!
 }
 
 union Device = MR2000 | MR3000
+
+type DeviceContact {
+  alarm1: Boolean!
+  alarm2: Boolean!
+  cli: String!
+  daily: Boolean!
+  email: String!
+  event: Boolean!
+  id: Int!
+  memory: Boolean
+  name: String!
+  phone: String!
+  power: Boolean!
+  smsLimit: Boolean!
+}
 
 type DeviceParams {
   ala1X: Float!
@@ -62,53 +120,42 @@ type DeviceParams {
   unitZ: String!
 }
 
-type EventsTable {
-  items: [EventsTableRow!]!
-  lengthAll: Int!
-  lengthEvt: Int!
-  lengthPk: Int!
-  lengthZip: Int!
-}
+input EditContactInput {
+  """Whether to trigger on alarm1"""
+  alarm1: Boolean!
 
-type EventsTableRow {
-  """pk_frq.VSUM"""
-  VSUM: String
+  """Whether to trigger on alarm2"""
+  alarm2: Boolean!
 
-  """events.rec_time"""
-  dateTime: DateTime!
+  """Device CLI"""
+  cli: String!
 
-  """Download URL"""
-  downloadURL: String
+  """Whether to trigger daily"""
+  daily: Boolean!
 
-  """events.num"""
-  file: String!
+  """E-Mail address"""
+  email: String!
 
-  """events.filenam end"""
-  fileName: String
+  """Whether to trigger on event"""
+  event: Boolean!
 
-  """pk_frq.frqX"""
-  frequencyX: String
+  """Unique database ID"""
+  id: Int!
 
-  """pk_frq.frqY"""
-  frequencyY: String
+  """Whether to trigger on memory alert"""
+  memory: Boolean!
 
-  """pk_frq.frqZ"""
-  frequencyZ: String
+  """Name"""
+  name: String!
 
-  """events.peakX + events.unitX"""
-  peakX: String!
+  """Phone number"""
+  phone: String!
 
-  """events.peakY + events.unitY"""
-  peakY: String!
+  """Whether to trigger on power alert"""
+  power: Boolean!
 
-  """events.peakZ + events.unitZ"""
-  peakZ: String!
-
-  """Preview URL"""
-  previewURL: String
-
-  """events.typ converted"""
-  type: String!
+  """Whether to trigger on SMS Limit"""
+  smsLimit: Boolean!
 }
 
 type EventsTable {
@@ -158,43 +205,6 @@ type EventsTableRow {
 
   """events.typ converted"""
   type: String!
-}
-
-enum FileType {
-  ADDITIONAL_DOCUMENTS
-  BUILDING_DESCRIPTION
-  BUILDING_INSURANCE
-  CREDIT_CONTRACT
-  DEBT_COLLECTION
-  DUMMY
-  FLOOR_PLANS
-  ID
-  LAND_REGISTER_EXTRACT
-  LAST_YEAR_SALARY
-  LAST_YEAR_TAX
-  LEASING_CONTRACT
-  LEGACY_CADASTER
-  LIFE_INSURANCE
-  LOG
-  MANAGEMENT_REGULATIONS
-  MARKET_VALUE_ESTIMATE
-  MARRIAGE_CONTRACT
-  MORTGAGE_CONTRACT
-  NONE
-  OWNER_REGULATIONS
-  OWN_FUNDS
-  PENSION
-  PENSION_ID
-  PICTURES
-  PRODUCT_AGREEMENT
-  PURCHASE_CONTRACT
-  RENOVATIONS
-  RESERVATION_CONTRACT
-  SALARY
-  SALES_DOCUMENTATION
-  SITUATION_PLAN
-  THREE_A
-  WORK_CONTRACT
 }
 
 type LevelWriting {
@@ -280,10 +290,13 @@ type MR3000 {
 }
 
 type Mutation {
+  addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput!): Device!
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
   assignDeviceToProject(assignDeviceToProjectInput: AssignDeviceToProjectInput!): Project!
   createProject(createProjectInput: CreateProjectInput!): Project!
+  deleteContact(deleteContactInput: DeleteContactInput!): Device!
   deleteProject(deleteProjectInput: DeleteProjectInput!): Project!
+  editContact(editContactInput: EditContactInput!): Device!
   register(registerUserInput: RegisterUserInput!): User
   removeDeviceFromProject(removeDeviceFromProjectInput: RemoveDeviceFromProjectInput!): Project!
   updateProjectName(updateProjectInput: UpdateProjectInput!): Project!
@@ -326,11 +339,13 @@ type Query {
   allUsers: [User!]!
   deviceParams(cli: String!): DeviceParams!
   eventTable(cli: String!, descending: Boolean, filter: String, orderBy: String, skip: Int!, take: Int!): EventsTable!
+  getDeviceContacts(cli: String!): [DeviceContact!]!
   getProjectDevices(name: String, uuid: ID): [Device!]!
   getUserDevices(assigned: Boolean, unassigned: Boolean, uuid: ID!): [Device!]!
   getUserProjects(uuid: ID!): [Project!]!
   isEmailAllowed(email: String!): Boolean!
   levelWriting(clients: [String!]!, end: DateTime!, resolution: Int!, start: DateTime!): LevelWriting!
+  myContacts: [DeviceContact!]!
   myDevices(assigned: Boolean, unassigned: Boolean): [Device!]!
   myProjects: [Project!]!
   myUser: User!

@@ -3,7 +3,7 @@ import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PERMISSION, ROLE } from '../../ENUM/ENUM';
@@ -80,7 +80,7 @@ export class UserService {
    */
   getAllUsers(): Promise<User[]> {
     return this.usersRepository.find({
-      where: { role: ROLE.USER },
+      where: { role: ROLE.USER, username: Not(IsNull()) },
     });
   }
 
