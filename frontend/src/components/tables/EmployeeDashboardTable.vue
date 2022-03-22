@@ -284,12 +284,12 @@ function expandOffers(uuid:string): void{
 
 /**
  * Routes to the page for editing an existing dossier
- * @param {Record<string, unknown>} row - the dossier to edit
+ * @param {Record<string, unknown>} dossier - the dossier to edit
  * @returns {Promise<void>} - done
  */
-async function onEditDossier(row: Record<string, unknown>){
+async function onEditDossier(dossier: Record<string, unknown>){
   // Check whether dossier is completed (which makes it non-editable)
-  const isCompleteQuery = await executeQuery(IS_DOSSIER_COMPLETE, {uuid: row.uuid})
+  const isCompleteQuery = await executeQuery(IS_DOSSIER_COMPLETE, {uuid: dossier.uuid})
   const isComplete = isCompleteQuery.data[IS_DOSSIER_COMPLETE.cacheLocation] as boolean
 
   // If dossier is complete (and therefore not editable), show dialog
@@ -301,9 +301,11 @@ async function onEditDossier(row: Record<string, unknown>){
         description: i18n.global.t('messages.dossier_not_editable')
       }
     })
+    return
   }
 
-
+  // Route to edit page
+  await $routerService?.routeTo(ROUTES.EDIT_DOSSIER, {did: dossier.uuid})
 }
 
 </script>
