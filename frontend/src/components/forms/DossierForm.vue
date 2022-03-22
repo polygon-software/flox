@@ -517,7 +517,7 @@ const totalIncome = computed(() => {
     let sumOfIncomes = 0
     grossIncomes.forEach((income) => sumOfIncomes += income)
 
-    return Math.round(sumOfIncomes + parseInt(bonus) + parseInt(childAllowances))
+    return Math.round(sumOfIncomes + (parseInt(bonus) * 0.5) + parseInt(childAllowances))
   }
 
   return null
