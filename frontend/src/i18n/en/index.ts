@@ -165,6 +165,7 @@ export default {
     save_and_print: 'Save & Print',
     back_to_dashboard: 'Back to dashboard',
     to_dashboard: 'To dashboard',
+    edit: 'Edit',
   },
   documents: {
     choose_file: 'Choose file',

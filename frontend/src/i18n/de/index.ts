@@ -166,7 +166,8 @@ export default {
     upload_documents: 'Dokumente hochladen',
     save_and_print: 'Speichern & Drucken',
     back_to_dashboard: 'Zurück zum dashboard',
-    to_dashboard: 'Zum Dashboard'
+    to_dashboard: 'Zum Dashboard',
+    edit: 'Bearbeiten'
   },
   documents: {
     choose_file: 'Datei wählen',

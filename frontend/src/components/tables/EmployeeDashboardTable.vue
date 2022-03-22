@@ -76,6 +76,31 @@
         <q-td key="non_arrangeable">
           <q-icon v-if="_props.row.non_arrangeable" name="warning" size="30px" color="red"/>
         </q-td>
+        <q-td key="options">
+          <!-- Dropdown options for editing -->
+          <q-btn-dropdown
+            dropdown-icon="more_vert"
+            auto-close
+            no-icon-animation
+            flat
+            round
+            dense
+            @click.stop=""
+          >
+            <div class="column">
+              <!-- 'Disable' button for active accounts -->
+              <q-btn
+                :label="$t('buttons.edit')"
+                icon="edit"
+                class="text-black"
+                flat
+                no-caps
+                @click="() => onEditDossier(_props.row)"
+              />
+            </div>
+          </q-btn-dropdown>
+        </q-td>
+
       </q-tr>
       <div v-if="expanded[_props.row.uuid]"
       >
@@ -256,6 +281,15 @@ function expandOffers(uuid:string): void{
   expanded.value[uuid]= !expanded.value[uuid]
 }
 
+/**
+ * Routes to the page for editing an existing dossier
+ * @param {Record<string, unknown>} row - the dossier to edit
+ * @returns {void}
+ */
+function onEditDossier(row: Record<string, unknown>){
+  // TODO
+  console.log('EDIT', row.uuid)
+}
 
 </script>
 
