@@ -1,6 +1,6 @@
 <template>
   <strong class="q-mt-lg">
-    {{ title }}
+    {{ $t('log_files.ftp_log_file') }}
   </strong>
   <div class="column">
     <q-table
@@ -23,8 +23,11 @@
           <q-td key="date_time">
             {{ formatDateTime(_props.row.timestamp) }}
           </q-td>
-          <q-td key="message">
-            {{ _props.row.message }}
+          <q-td key="ip">
+            {{ _props.row.ip }}
+          </q-td>
+          <q-td key="path">
+            {{ _props.row.path }}
           </q-td>
         </q-tr>
       </template>
@@ -35,26 +38,15 @@
 <script setup lang="ts">
 import {onMounted, Ref, ref, defineProps} from 'vue';
 import {i18n} from 'boot/i18n';
-import {logForDevice} from 'src/helpers/api-helpers';
+import {ftpLogForDevice} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
-import {DeviceLogEntry} from 'src/data/types/DeviceLogEntry';
+import {FTPLogEntry} from 'src/data/types/FTPLogEntry';
 
 const props = defineProps({
   cli: {
     type: String,
     required: true
   },
-  title: {
-    type: String,
-    required: false,
-    default: i18n.global.t('log_files.log_file')
-  },
-  // Log request type (e.g. 'REST)
-  type: {
-    type: String,
-    required: false,
-    default: null
-  }
 })
 
 // Pagination
@@ -76,10 +68,11 @@ const pagination = ref(
 // ----- Data -----
 const columns = [
   { name: 'timestamp', label: i18n.global.t('client_connectivity.date_time'), field: 'timestamp', sortable: false, align: 'center' },
-  { name: 'message', label: i18n.global.t('log_files.message'), field: 'message', sortable: false, align: 'center' },
+  { name: 'ip', label: i18n.global.t('log_files.ip'), field: 'ip', sortable: false, align: 'center' },
+  { name: 'path', label: i18n.global.t('log_files.path'), field: 'path', sortable: false, align: 'center' },
 ]
 
-const rows: Ref<DeviceLogEntry[]> = ref([])
+const rows: Ref<FTPLogEntry[]> = ref([])
 
 // Fetch logs on mount
 onMounted(async () => {
@@ -116,7 +109,7 @@ async function onRequest(reqProps: Record<string, Record<string, number|string|b
  * @returns {Promise<void>} - done
  */
 async function fetchLogs(){
-  const log = await logForDevice(props.cli, skip.value, take.value, props.type)
+  const log = await ftpLogForDevice(props.cli, skip.value, take.value)
   rows.value = log.entries
   pagination.value.rowsNumber = log.total
 

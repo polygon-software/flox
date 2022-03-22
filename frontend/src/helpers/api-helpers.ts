@@ -10,7 +10,7 @@ import {
   DEVICE_LOG,
   DEVICE_CONTACTS,
   MY_DEVICES,
-  PROJECT_DEVICES
+  PROJECT_DEVICES, FTP_LOG
 } from 'src/data/queries/DEVICE';
 import {Device} from 'src/data/types/Device';
 import {computed, Ref} from 'vue';
@@ -18,6 +18,7 @@ import {DeviceContact} from 'src/data/types/DeviceContact';
 import {MY_CONTACTS} from 'src/data/queries/CONTACT';
 import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
 import {DeviceLog} from 'src/data/types/DeviceLog';
+import {FTPLog} from 'src/data/types/FTPLog';
 
 /**
  * Fetch all users.
@@ -224,18 +225,32 @@ export async function connectionLogForDevice(cli: string, skip = 0, take = 10) {
 }
 
 /**
- * Fetch log entries for a given device
+ * Fetch log for a given device
  * @param {string} cli - device CLI
  * @param {number} skip - number of entries to skip (for pagination)
  * @param {number} take - number of logs to get
- * @param {string} [prefix] - optional file type prefix for fetching other log types
+ * @param {string} [type] - optional file type prefix for fetching other log types
  * @return {Promise<DeviceLog>} - Device log, containing entries and total count
  */
-export async function logEntriesForDevice(cli: string, skip = 0, take = 10, prefix: string|undefined) {
+export async function logForDevice(cli: string, skip = 0, take = 10, type: string|undefined) {
   const variables: Record<string, string|number> = {cli, take, skip}
-  if(prefix){
-    variables.prefix = prefix
+  if(type){
+    variables.prefix = type
   }
+
   const queryResult = await executeQuery(DEVICE_LOG, variables);
   return queryResult.data[DEVICE_LOG.cacheLocation] as DeviceLog
+}
+
+/**
+ * Fetch FTP log for a given device
+ * @param {string} cli - device CLI
+ * @param {number} skip - number of entries to skip (for pagination)
+ * @param {number} take - number of logs to get
+ * @return {Promise<FTPLog>} - Device log, containing entries and total count
+ */
+export async function ftpLogForDevice(cli: string, skip = 0, take = 10) {
+  const variables: Record<string, string|number> = {cli, take, skip}
+  const queryResult = await executeQuery(FTP_LOG, variables);
+  return queryResult.data[FTP_LOG.cacheLocation] as FTPLog
 }

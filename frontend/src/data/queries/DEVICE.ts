@@ -255,6 +255,24 @@ export const DEVICE_LOG = {
   cacheLocation: 'getDeviceLog'
 }
 
+export const FTP_LOG = {
+  query: gql`
+    query getFTPLog($cli: String!, $take: Int!, $skip: Int!){
+      getFTPLog(cli: $cli, take: $take, skip: $skip){
+        entries {
+          ip
+          path
+          timestamp
+          __typename
+        }
+        total
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getFTPLog'
+}
 
 export const DEVICE_CONTACTS = {
   query: gql`

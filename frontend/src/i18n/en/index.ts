@@ -222,7 +222,9 @@ export default {
     log_file: 'LOG File',
     ftp_log_file: 'FTP LOG File - recent uploads',
     rest_log_file: 'REST LOG File',
-    message: 'Message'
+    message: 'Message',
+    ip: 'IP',
+    path: 'Path'
   },
   files: {
     events: '{events} events',

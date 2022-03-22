@@ -27,6 +27,7 @@ import { GetDeviceContactsArgs } from './dto/args/get-device-contacts.args';
 import { DeviceContact } from '../../types/DeviceContact';
 import { EditContactInput } from './dto/input/edit-contact.input';
 import { DeleteContactInput } from './dto/input/delete-contact.input';
+import { FTPLog } from '../../types/FTPLog';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -323,10 +324,10 @@ export class DeviceResolver {
    * Get the FTP log entries for a device
    * @param {GetDeviceLogArgs} getDeviceLogArgs - contains station CLI
    * @param {Record<string, string>} user - Cognito user from request
-   * @returns {Promise<DeviceLog>} - The logs of the device
+   * @returns {Promise<FTPLog>} - The logs of the device
    */
   @AnyRole()
-  @Query(() => DeviceLog, { name: 'getFTPLog' })
+  @Query(() => FTPLog, { name: 'getFTPLog' })
   async getFTPLog(
     @Args() getDeviceLogArgs: GetDeviceLogArgs,
     @CurrentUser() user: Record<string, string>,

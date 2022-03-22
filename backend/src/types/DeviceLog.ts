@@ -2,7 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { DeviceLogEntry } from './DeviceLogEntry';
 
 /**
- * A device log entry from a log file
+ * A device log from a log file
  */
 @ObjectType()
 export class DeviceLog {

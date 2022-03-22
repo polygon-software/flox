@@ -7,7 +7,8 @@
 
     <DeviceLogTable :cli="stationId"/>
 
-    <FTPLogFilesTable
+    <!-- FTP Log (MR3000 only)-->
+    <FTPLogTable
       v-if="type === 'MR3000'"
       :cli="stationId"
     />
@@ -17,7 +18,7 @@
       v-if="type === 'MR3000'"
       :cli="stationId"
       :title="$t('log_files.rest_log_file')"
-      prefix="REST"
+      type="REST"
     />
   </q-page>
 </template>
@@ -26,7 +27,7 @@
 import ClientConnectivityTable from 'components/tables/ClientConnectivityTable.vue';
 import DeviceLogTable from 'components/tables/DeviceLogTable.vue';
 import {computed, defineProps} from 'vue';
-import FTPLogFilesTable from 'components/tables/FTPLogFilesTable.vue';
+import FTPLogTable from 'components/tables/FTPLogTable.vue';
 import {deviceType} from 'src/helpers/device-helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

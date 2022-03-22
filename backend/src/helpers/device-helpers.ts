@@ -9,6 +9,7 @@ import { Project } from '../modules/project/entities/project.entity';
 import { ConnectionLogEntry } from '../types/ConnectionLogEntry';
 import { DeviceLogEntry } from '../types/DeviceLogEntry';
 import { DeviceContact } from '../types/DeviceContact';
+import { FTPLogEntry } from '../types/FTPLogEntry';
 
 /**
  * Creates an MR2000 instance from a RowPacketData entry
@@ -189,7 +190,7 @@ export function mapDeviceLogEntry(entry: string) {
 /**
  * Maps a FP log entry string to a DeviceLogEntry instance
  * @param {string} entry - a single log line
- * @returns {DeviceLogEntry} - log entry instance
+ * @returns {FTPLogEntry} - log entry instance
  */
 export function mapFTPLogEntry(entry: string) {
   // Sample input: 'Tue Oct 06 17:29:21 2020 0 81.6.40.183 768 /var/data/measurements/44_08/44_08/background/2020/10/20280007.BMR b _ i r 44_08 ftp 0 * c\n'
@@ -205,8 +206,6 @@ export function mapFTPLogEntry(entry: string) {
   const ip = splitParams[6];
   const path = splitParams[8];
 
-  // Extract message
-  const message = `${ip} ..${path}`;
-
-  return new DeviceLogEntry(timestamp, message);
+  // Build entry object
+  return new FTPLogEntry(timestamp, ip, path);
 }

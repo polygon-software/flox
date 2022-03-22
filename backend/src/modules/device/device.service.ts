@@ -39,6 +39,7 @@ import { DeviceLog } from '../../types/DeviceLog';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 import { EditContactInput } from './dto/input/edit-contact.input';
 import { DeleteContactInput } from './dto/input/delete-contact.input';
+import { FTPLog } from '../../types/FTPLog';
 
 @Injectable()
 export class DeviceService {
@@ -677,16 +678,15 @@ export class DeviceService {
         .get(url)
         .pipe(map((axiosResponse) => axiosResponse.data));
       const data = (await firstValueFrom(response)) as Record<string, unknown>;
-      console.log('Got data:', data);
       const total = data.total as number;
       const entries = (data.entries as string[]).map((dataRow) =>
         mapFTPLogEntry(dataRow),
       );
-      return new DeviceLog(total, entries);
+      return new FTPLog(total, entries);
     } catch (e) {
       console.error(e);
       // No logs found; return empty
-      return new DeviceLog(0, []);
+      return new FTPLog(0, []);
     }
   }
 }
