@@ -566,6 +566,10 @@ input GetDossierInput {
   uuid: ID!
 }
 
+input IsDossierCompleteInput {
+  uuid: ID!
+}
+
 type Mutation {
   associateUserToCompany(associateUserInput: AssociateUserInput!): Company!
   createBank(createBankInput: CreateBankInput!): Bank!
@@ -722,6 +726,7 @@ type Query {
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   getRejectedDossiers: [Dossier!]
+  isDossierComplete(isDossierCompleteInput: IsDossierCompleteInput!): Boolean!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }

@@ -427,13 +427,23 @@ export const ALL_DOSSIERS = {
   cacheLocation: 'getAllDossiers'
 }
 
+export const DOSSIER_COMPLETE = {
+  query: gql`
+    query isDossierComplete($uuid: ID!) {
+      isDossierComplete(isDossierCompleteInput: {uuid: $uuid})
+    }
+  `,
+  tables: ['dossier'],
+  cacheLocation: 'isDossierComplete'
+}
 
 const DOSSIER_QUERIES = [
   MY_DOSSIERS,
   REJECTED_DOSSIERS,
   DOSSIERS_BANK,
   GET_DOSSIER,
-  ALL_DOSSIERS
+  ALL_DOSSIERS,
+  DOSSIER_COMPLETE
 ]
 
 

@@ -23,6 +23,9 @@ import { UserService } from '../user/user.service';
 import { EmployeeService } from '../employee/employee.service';
 import { GetBankArgs } from '../bank/dto/args/get-bank.args';
 import { DeleteDossierInput } from './dto/input/delete-dossier.input';
+import { isCompleted } from './dossier-helpers';
+import { IsDossierCompleteInput } from './dto/input/is-dossier-complete.input';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -262,5 +265,34 @@ export class DossierResolver {
     @Args('deleteDossierInput') deleteDossierInput: DeleteDossierInput,
   ): Promise<Dossier> {
     return this.dossierService.deleteDossier(deleteDossierInput);
+  }
+
+  /**
+   * Determines whether a dossier is completed
+   * @param {IsDossierCompleteInput} isDossierCompleteInput - input, containing dossier UUID
+   * @param {Record<string, string>} user - current user
+   * @returns {Promise<boolean>} - whether the dossier is completed
+   */
+  @EmployeeOnly()
+  @Query(() => Boolean)
+  async isDossierComplete(
+    @Args('isDossierCompleteInput')
+    isDossierCompleteInput: IsDossierCompleteInput,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    // Get database user
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+
+    const dossier = await this.dossierService.getDossier(
+      isDossierCompleteInput.uuid,
+      dbUser.uuid,
+    );
+
+    if (!dossier) {
+      throw new UnauthorizedException();
+    }
+
+    // TODO permission check
+    return isCompleted(dossier);
   }
 }
