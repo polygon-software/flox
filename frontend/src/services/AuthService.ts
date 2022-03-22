@@ -105,7 +105,7 @@ export class AuthenticationService {
             resolve()
           },
           onFailure: (err: Error) => {
-            this.onFailure(err) 
+            this.onFailure(err)
           },
           // Sets up MFA (only done once after signing up)
           mfaSetup: () => {
@@ -496,8 +496,8 @@ export class AuthenticationService {
         resolve()
       }
       const refreshToken =userSession?.getRefreshToken()
-      if(refreshToken && (idTokenExpiration ||0 - Date.now() < 45 * 60)){   //15min before de-validation token is refreshed
-        const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser()) //refresh session mutates the state of store: illegal
+      if(refreshToken && (idTokenExpiration || 0 - Date.now() < 45 * 60)){   // 15min before de-validation token is refreshed
+        const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser()) // refresh session mutates the state of store: illegal
         currentUser?.refreshSession(refreshToken, (err, session )=> {
           if (session) {
             this.$authStore.mutations.setCognitoUser(currentUser)
