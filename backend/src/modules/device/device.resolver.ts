@@ -318,4 +318,25 @@ export class DeviceResolver {
 
     return this.deviceService.getDeviceLog(getDeviceLogArgs);
   }
+
+  /**
+   * Get the FTP log entries for a device
+   * @param {GetDeviceLogArgs} getDeviceLogArgs - contains station CLI
+   * @param {Record<string, string>} user - Cognito user from request
+   * @returns {Promise<DeviceLog>} - The logs of the device
+   */
+  @AnyRole()
+  @Query(() => DeviceLog, { name: 'getFTPLog' })
+  async getFTPLog(
+    @Args() getDeviceLogArgs: GetDeviceLogArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+
+    if (!this.userService.isAuthorizedForDevice(dbUser, getDeviceLogArgs.cli)) {
+      throw new UnauthorizedException();
+    }
+
+    return this.deviceService.getFTPLog(getDeviceLogArgs);
+  }
 }

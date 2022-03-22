@@ -10,6 +10,7 @@ import {
   deviceContactFromDatabaseEntry,
   connectionLogEntryFromDatabaseEntry,
   mapDeviceLogEntry,
+  mapFTPLogEntry,
 } from '../../helpers/device-helpers';
 import { Project } from '../project/entities/project.entity';
 import { HttpService } from '@nestjs/axios';
@@ -652,6 +653,34 @@ export class DeviceService {
       const total = data.total as number;
       const entries = (data.entries as string[]).map((dataRow) =>
         mapDeviceLogEntry(dataRow),
+      );
+      return new DeviceLog(total, entries);
+    } catch (e) {
+      console.error(e);
+      // No logs found; return empty
+      return new DeviceLog(0, []);
+    }
+  }
+
+  /**
+   * Get the FTP log entries for a given device
+   * @param {GetDeviceLogArgs} getDeviceLogArgs - args, containing CLI
+   * @returns {Promise<DeviceLog>} - FTP log entries
+   */
+  async getFTPLog(getDeviceLogArgs: GetDeviceLogArgs) {
+    // Fetch from filesystem via Python API
+    const host = this.configService.get('pyAPI.host');
+    const port = this.configService.get('pyAPI.port');
+    const url = `http://${host}:${port}/ftplog?cli=${getDeviceLogArgs.cli}&skip=${getDeviceLogArgs.skip}&take=${getDeviceLogArgs.take}`;
+    try {
+      const response: Observable<unknown> = this.httpService
+        .get(url)
+        .pipe(map((axiosResponse) => axiosResponse.data));
+      const data = (await firstValueFrom(response)) as Record<string, unknown>;
+      console.log('Got data:', data);
+      const total = data.total as number;
+      const entries = (data.entries as string[]).map((dataRow) =>
+        mapFTPLogEntry(dataRow),
       );
       return new DeviceLog(total, entries);
     } catch (e) {

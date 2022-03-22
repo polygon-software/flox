@@ -185,3 +185,28 @@ export function mapDeviceLogEntry(entry: string) {
   // const date =
   return new DeviceLogEntry(timestamp, message);
 }
+
+/**
+ * Maps a FP log entry string to a DeviceLogEntry instance
+ * @param {string} entry - a single log line
+ * @returns {DeviceLogEntry} - log entry instance
+ */
+export function mapFTPLogEntry(entry: string) {
+  // Sample input: 'Tue Oct 06 17:29:21 2020 0 81.6.40.183 768 /var/data/measurements/44_08/44_08/background/2020/10/20280007.BMR b _ i r 44_08 ftp 0 * c\n'
+
+  // Split, e.g. ['Tue', 'Oct', '06', '17:29:21', '2020', '0', '81.5.40.183', '768', ...]
+  const splitParams = entry.split(' ');
+
+  // Build timestamp string (e.g. Tue Oct 06 17:29:21 2020)
+  const timestampString = splitParams.slice(0, 5).join(' ');
+  const timestamp = new Date(timestampString);
+
+  // Extract IP & path
+  const ip = splitParams[6];
+  const path = splitParams[8];
+
+  // Extract message
+  const message = `${ip} ..${path}`;
+
+  return new DeviceLogEntry(timestamp, message);
+}
