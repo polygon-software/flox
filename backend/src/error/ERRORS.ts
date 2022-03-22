@@ -20,4 +20,6 @@ export const ERRORS = {
   bank_must_be_unique: 'Bank abbreviation must be unique',
   account_exists_for_email:
     'There already exists an account for this e-mail address',
+  cannot_edit_completed_dossier:
+    'This dossier is completed and cannot be edited',
 };

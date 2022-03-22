@@ -26,6 +26,7 @@ import { DeleteDossierInput } from './dto/input/delete-dossier.input';
 import { isCompleted } from './dossier-helpers';
 import { IsDossierCompleteInput } from './dto/input/is-dossier-complete.input';
 import { UnauthorizedException } from '@nestjs/common';
+import { ERRORS } from '../../error/ERRORS';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -68,6 +69,11 @@ export class DossierResolver {
       updateDossierInput.uuid,
       dbUser.uuid,
     );
+
+    // Completed dossiers are not allowed to be edited
+    if (isCompleted(dossier)) {
+      throw new Error(ERRORS.cannot_edit_completed_dossier);
+    }
 
     if (dossier.employee.uuid !== dbUser.fk) {
       throw new UnauthorizedException();
