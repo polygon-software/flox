@@ -156,10 +156,27 @@ export class DossierService {
     updateDossierInput: UpdateDossierInput,
   ): Promise<Dossier> {
     await this.dossierRepository.findOneOrFail(updateDossierInput.uuid);
-    await this.dossierRepository.update(
-      updateDossierInput.uuid,
-      updateDossierInput,
+
+    let originalBank = await this.bankService.findBankByAbbreviation(
+      updateDossierInput.original_bank_abbreviation,
     );
+    if (!originalBank) {
+      originalBank = await this.bankService.createUserlessBank({
+        name: updateDossierInput.original_bank_name,
+        abbreviation: updateDossierInput.original_bank_abbreviation,
+      });
+    }
+
+    // TODO address still seems broken
+
+    // Delete illegal params
+    delete updateDossierInput.original_bank_abbreviation;
+    delete updateDossierInput.original_bank_name;
+
+    await this.dossierRepository.update(updateDossierInput.uuid, {
+      ...updateDossierInput,
+      original_bank: originalBank,
+    });
     return this.dossierRepository.findOne(updateDossierInput.uuid);
   }
 

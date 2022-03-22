@@ -819,6 +819,14 @@ type SoiEmployee {
   uuid: ID!
 }
 
+input UpdateAddressInput {
+  city: String
+  number: String
+  street: String
+  uuid: ID!
+  zip_code: String
+}
+
 input UpdateCompanyInput {
   branch_structure: Boolean
   company_name: String
@@ -835,50 +843,56 @@ input UpdateCompanyInput {
 }
 
 input UpdateDossierInput {
-  address: CreateAddressInput!
+  address: UpdateAddressInput!
   affordability: Float
-  alimony: Float!
+  alimony: Float
   amortisation_amount: Float
-  assets: Float!
-  birthdate: DateTime!
-  bonus: Float!
+  assets: Float
+  birthdate: DateTime
+  bonus: Float
   building_lease_expiration_date: DateTime
   building_lease_interest: Float
-  child_allowances: Float!
-  credit: Float!
+  child_allowances: Float
+  credit: Float
   direct_amortisation: Boolean
-  eligible_income: Float!
-  email: String!
+  eligible_income: Float
+
+  """E-mail"""
+  email: String
   enfeoffment_estimate_calculated: Float
-  enfeoffment_estimate_customer: Float!
-  first_name: String!
-  has_amortisation: Boolean!
-  has_building_lease: Boolean!
-  has_renovation: Boolean!
-  incomes: [Float!]!
-  last_name: String!
-  leasing: Float!
-  loss_certificates: Boolean!
-  mortgage_amount: Float!
-  non_arrangeable: Boolean!
-  original_bank_abbreviation: String!
-  original_bank_name: String!
-  owner_occupied: Boolean!
-  partition_amounts: [Float!]!
-  partition_dates: [DateTime!]!
-  phone: String!
-  property_type: propertyType!
-  prosecutions: Boolean!
+  enfeoffment_estimate_customer: Float
+
+  """First Name"""
+  first_name: String
+  has_amortisation: Boolean
+  has_building_lease: Boolean
+  has_renovation: Boolean
+  incomes: [Float!]
+
+  """Last Name"""
+  last_name: String
+  leasing: Float
+  loss_certificates: Boolean
+  mortgage_amount: Float
+  non_arrangeable: Boolean
+  original_bank_abbreviation: String
+  original_bank_name: String
+  owner_occupied: Boolean
+  partition_amounts: [Float!]
+  partition_dates: [DateTime!]
+  phone: String
+  property_type: propertyType
+  prosecutions: Boolean
   public_landlord: Boolean
-  purchase_date: DateTime!
-  purchase_price: Float!
+  purchase_date: DateTime
+  purchase_price: Float
   renovation_price: Float
   renovation_year: Float
   total_costs: Float
   uuid: ID!
   value_estimate_calculated: Float
-  value_estimate_customer: Float!
-  various: Float!
+  value_estimate_customer: Float
+  various: Float
 }
 
 input UpdateDossierStatusInput {

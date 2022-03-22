@@ -53,13 +53,14 @@ import {defineEmits, PropType, reactive, ref, Ref} from 'vue'
 import { IS_VALID_STRING, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP } from 'src/data/RULES';
 import {Address} from 'src/data/types/Address';
 import {QInput} from 'quasar';
+import _ from 'lodash';
 const emit = defineEmits(['change'])
 
 const props = defineProps({
   initialValue: {
     type: Object as PropType<Address>,
     required: false,
-    default: () => new Address()
+    default: null,
   },
   validateZip: {
     type: Boolean,
@@ -68,7 +69,12 @@ const props = defineProps({
   }
 })
 
-const address = reactive(props.initialValue)
+const address = reactive(props.initialValue ? new Address(
+  props.initialValue?.street as string,
+  props.initialValue?.number as string,
+  props.initialValue?.city as string,
+  props.initialValue?.zip_code as string,
+) : new Address())
 const zipRef: Ref<QInput|null> = ref(null)
 
 /**
