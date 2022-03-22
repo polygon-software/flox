@@ -286,6 +286,10 @@ export const GET_DOSSIER = {
         affordability
         eligible_income
         total_costs
+        public_landlord
+        building_lease_expiration_date
+        building_lease_interest
+        has_building_lease
         value_estimate_customer
         value_estimate_calculated
         enfeoffment_estimate_customer
@@ -293,6 +297,15 @@ export const GET_DOSSIER = {
         partition_dates
         partition_amounts
         assets
+        incomes
+        prosecutions
+        loss_certificates
+        child_allowances
+        bonus
+        leasing
+        credit
+        alimony
+        various
         address {
           uuid
           street

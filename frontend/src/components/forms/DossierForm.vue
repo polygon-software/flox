@@ -1155,7 +1155,7 @@ function prefillDossier(){
     console.log('Prefill:', props.prefillDossier)
     const initial = props.prefillDossier as Record<string, unknown>
 
-    const formData = form.values.value as Record<string, Record<string,unknown>|string|Date|number>
+    const formData = form.values.value as Record<string, unknown>
 
     // Page 1
     formData.full_name = {
@@ -1179,46 +1179,65 @@ function prefillDossier(){
       name: (initial.original_bank as Record<string, string>).name,
       abbreviation: (initial.original_bank as Record<string, string>).abbreviation
     }
-    // const bankAbbreviation =  (formData.bank as Record<string, string>).abbreviation as string|null
-    // const propertyType = formData.property_type?.value
-    // const ownerOccupied = formData.owner_occupied
-    // const purchaseDate = formData.date_of_purchase
-    // const purchasePrice = formData.enfeoffment?.price
-    // const mortgageAmount = formData.enfeoffment?.currentValueOfMortgage
-    //
-    // // Page 3
-    // const hasAmortisation = formData.amortisation?.hasAmortisation
-    // const directAmortisation = formData.amortisation?.directAmortisation         // may be null
-    // const amortisationAmount = formData.amortisation?.amortisationAmount         // may be null
-    // const hasBuildingLease = formData.building_lease?.hasBuildingLease
-    // const publicLandlord = formData.building_lease?.publicLandlord               // may be null
-    // const buildingLeaseExpirationDate = formData.building_lease?.expirationDate  // may be null
-    // const buildingLeaseInterest = formData.building_lease?.interest              // may be null
-    // const hasRenovation = formData.renovation?.hasRenovation
-    // const renovationPrice = formData.renovation?.renovationPrice                 // may be null
-    // const renovationYear = formData.renovation?.renovationYear                   // may be null
-    //
-    // // Mortgage partitions
-    // const mortgagePartitions = formData.mortgage as unknown as Record<string, number|Date>[]
-    // const partitionAmounts: number[] = []
-    // const partitionDates: Date[] = []
-    // mortgagePartitions.forEach((partition: Record<string, number|Date>) => {
-    //   partitionAmounts.push(partition.amount as number)
-    //   partitionDates.push(partition.date as Date)
-    // })
-    //
-    // // Page 4
-    // const incomes = formData.income
-    // const childAllowances = formData.child_allowances
-    // const bonus = formData.bonus
-    // const assets = formData.assets
-    // const leasing = formData.leasing
-    // const credit = formData.credit
-    // const alimony = formData.alimony
-    // const various = formData.various
-    // const prosecutions = formData.prosecutions
-    // const lossCertificates = formData.loss_certificates
 
+    formData.property_type = {
+      label: i18n.global.t(`property_type_enum.${initial.property_type as string}`),
+      value: initial.property_type as string
+    }
+    formData.owner_occupied = initial.owner_occupied as boolean
+
+    formData.date_of_purchase = initial.purchase_date as Date
+    formData.enfeoffment = {
+      price: initial.purchase_price as number,
+      currentValueOfMortgage: initial.mortgage_amount as number,
+      marketValueEstimation: initial.value_estimate_customer as number
+    }
+
+    // Page 3
+    formData.amortisation = {
+      hasAmortisation: initial.has_amortisation as boolean,
+      directAmortisation: initial.direct_amortisation as boolean|null,
+      amortisationAmount: initial.amortisation_amount as number|null
+    }
+
+    formData.buildingLease = {
+      hasBuildingLease: initial.has_building_lease as boolean,
+      publicLandlord: initial.public_landlord as boolean|null,
+      expirationDate: initial.building_lease_expiration_date as Date|null,
+      interest: initial.building_lease_interest as number|null
+    }
+
+    formData.renovation = {
+      hasRenovation: initial.has_renovation as boolean,
+      renovationPrice: initial.renovation_price as number|null,
+      renovationYear: initial.renovation_year as number|null
+    }
+
+    // Mortgage partitions
+    const mortgagePartitions = []
+    for(let i = 0; i < (initial.partition_amounts as number[]).length; i++){
+      // Reformat date to format expected by Q-Input
+      const date = new Date((initial.partition_dates as string[])[i])
+      const dateString = dateToInputString(date)
+      mortgagePartitions.push({
+        amount: (initial.partition_amounts as number[])[i],
+        date: dateString
+      })
+    }
+
+    formData.mortgage = mortgagePartitions
+
+    // Page 4
+    formData.income = initial.incomes as number
+    formData.child_allowances = initial.child_allowances as number
+    formData.bonus = initial.bonus as number
+    formData.assets = initial.assets as number
+    formData.leasing = initial.leasing as number
+    formData.credit = initial.credit as number
+    formData.alimony = initial.alimony as number
+    formData.various = initial.various as number
+    formData.prosecutions = initial.prosecutions as boolean
+    formData.loss_certificates = initial.loss_certificates as boolean
   }
 }
 </script>
