@@ -631,8 +631,8 @@ export class DeviceService {
     let fileName;
 
     if (type === 'MR2000') {
-      // MR2000: Only basic log files
-      fileName = `${getDeviceLogArgs.cli}-log`;
+      // MR2000: Only basic log files (.txt)
+      fileName = `${getDeviceLogArgs.cli}-log.txt`;
     } else {
       // MR3000: Log type with prefix (if any)
       fileName = getDeviceLogArgs.prefix
@@ -649,12 +649,14 @@ export class DeviceService {
         .get(url)
         .pipe(map((axiosResponse) => axiosResponse.data));
       const data = (await firstValueFrom(response)) as Record<string, unknown>;
+      console.log('got data', data);
       const total = data.total as number;
       const entries = (data.entries as string[]).map((dataRow) =>
         mapDeviceLogEntry(dataRow),
       );
       return new DeviceLog(total, entries);
     } catch (e) {
+      console.log(e);
       // No logs found; return empty
       return new DeviceLog(0, []);
     }
