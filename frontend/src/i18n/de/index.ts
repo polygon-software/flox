@@ -117,7 +117,8 @@ export default {
     reset_password: 'Passwort zurücksetzen',
     enter_username: 'Bitte geben Sie ihren Nutzernamen ein',
     verification: 'Verifizierung',
-    enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein'
+    enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein',
+    dossier_not_editable: 'Da dieses Dossier vollständig ist, ist es nicht mehr bearbeitbar.'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',

@@ -95,12 +95,12 @@
                 class="text-black"
                 flat
                 no-caps
+                :disable="employeeUuid"
                 @click="() => onEditDossier(_props.row)"
               />
             </div>
           </q-btn-dropdown>
         </q-td>
-
       </q-tr>
       <div v-if="expanded[_props.row.uuid]"
       >
@@ -153,6 +153,7 @@ import {DOSSIER_FILE, OFFER_FILE} from 'src/data/queries/FILE';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {useRoute} from 'vue-router';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
 
 const $q: QVueGlobals = useQuasar()
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -289,6 +290,15 @@ function expandOffers(uuid:string): void{
 function onEditDossier(row: Record<string, unknown>){
   // TODO
   console.log('EDIT', row.uuid)
+
+  // If dossier is not editable, show dialog
+  $q.dialog({
+    component: WarningDialog,
+    componentProps: {
+      discardLabel: i18n.global.t('buttons.cancel'),
+      description: i18n.global.t('messages.dossier_not_editable')
+    }
+  })
 }
 
 </script>

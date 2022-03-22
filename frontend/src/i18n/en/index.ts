@@ -116,7 +116,8 @@ export default {
     reset_password: 'Reset Password',
     enter_username: 'Please enter your username',
     verification: 'Verification',
-    enter_2fa:  'Enter your two-factor authentication code'
+    enter_2fa:  'Enter your two-factor authentication code',
+    dossier_not_editable: 'Since this dossier is complete, it is no longer editable.'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
