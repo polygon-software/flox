@@ -228,9 +228,14 @@ export async function connectionLogForDevice(cli: string, skip = 0, take = 10) {
  * @param {string} cli - device CLI
  * @param {number} skip - number of entries to skip (for pagination)
  * @param {number} take - number of logs to get
+ * @param {string} [prefix] - optional file type prefix for fetching other log types
  * @return {Promise<DeviceLog>} - Device log, containing entries and total count
  */
-export async function logEntriesForDevice(cli: string, skip = 0, take = 10) {
-  const queryResult = await executeQuery(DEVICE_LOG, {cli, take, skip});
+export async function logEntriesForDevice(cli: string, skip = 0, take = 10, prefix: string|undefined) {
+  const variables: Record<string, string|number> = {cli, take, skip}
+  if(prefix){
+    variables.prefix = prefix
+  }
+  const queryResult = await executeQuery(DEVICE_LOG, variables);
   return queryResult.data[DEVICE_LOG.cacheLocation] as DeviceLog
 }

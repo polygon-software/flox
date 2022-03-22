@@ -5,26 +5,28 @@
 
     <ClientConnectivityTable :cli="stationId"/>
 
-    <LogFilesTable :cli="stationId"/>
+    <DeviceLogTable :cli="stationId"/>
 
     <FTPLogFilesTable
-      v-if="deviceType === 'MR3000'"
+      v-if="type === 'MR3000'"
       :cli="stationId"
     />
 
-    <RESTLogFilesTable
-      v-if="deviceType === 'MR3000'"
+    <!-- REST Log (MR3000 only)-->
+    <DeviceLogTable
+      v-if="type === 'MR3000'"
       :cli="stationId"
+      :title="$t('log_files.rest_log_file')"
+      prefix="REST"
     />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import ClientConnectivityTable from 'components/tables/ClientConnectivityTable.vue';
-import LogFilesTable from 'components/tables/DeviceLogTable.vue';
+import DeviceLogTable from 'components/tables/DeviceLogTable.vue';
 import {computed, defineProps} from 'vue';
 import FTPLogFilesTable from 'components/tables/FTPLogFilesTable.vue';
-import RESTLogFilesTable from 'components/tables/RESTLogFilesTable.vue';
 import {deviceType} from 'src/helpers/device-helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

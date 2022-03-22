@@ -1,6 +1,6 @@
 <template>
   <strong class="q-mt-lg">
-    {{ $t('log_files.log_file') }}
+    {{ title }}
   </strong>
   <div class="column">
     <q-table
@@ -43,6 +43,17 @@ const props = defineProps({
   cli: {
     type: String,
     required: true
+  },
+  title: {
+    type: String,
+    required: false,
+    default: i18n.global.t('log_files.log_file')
+  },
+  // Log request filename prefix (e.g. 'REST')
+  prefix: {
+    type: String,
+    required: false,
+    default: null
   }
 })
 
@@ -105,11 +116,10 @@ async function onRequest(reqProps: Record<string, Record<string, number|string|b
  * @returns {Promise<void>} - done
  */
 async function fetchLogs(){
-  const log = await logEntriesForDevice(props.cli, skip.value, take.value)
+  const log = await logEntriesForDevice(props.cli, skip.value, take.value, props.prefix)
   rows.value = log.entries
   pagination.value.rowsNumber = log.total
 
   loading.value = false
 }
-
 </script>
