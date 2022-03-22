@@ -267,7 +267,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ComputedRef, inject, onMounted, Ref, ref} from 'vue';
+import {computed, ComputedRef, inject, onBeforeMount, onMounted, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm, useQuasar} from 'quasar';
@@ -287,12 +287,24 @@ import {getAuthToken} from 'src/helpers/cookie-helpers';
 import DossierFinalDocumentPreview from 'components/dossier/DossierFinalDocumentPreview.vue';
 import {AuthenticationService} from 'src/services/AuthService';
 
+/**
+ * This component is a form for creating a new dossier or editing an existing one. If a 'prefillDossier' is given
+ * via props, that dossier's data is pre-filled in the form.
+ */
+
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
 const $authService: AuthenticationService|undefined = inject('$authService')
 
 const $q = useQuasar()
 
+const props = defineProps({
+  prefillDossier: {
+    type: Object,
+    required: false,
+    default: null,
+  }
+})
 
 // Form component reference
 const formRef: Ref<QForm | null> = ref(null)
@@ -762,8 +774,14 @@ const dossierObject = computed(() => {
   }
 })
 
+onBeforeMount(() => {
+  // Pre-fill dossier, if applicable
+  prefillDossier()
+})
+
 // Upon mounting, get list of banks
 onMounted(async () => {
+
   // Execute queries for existing & suggested banks
   const banksQuery = await executeQuery(ALL_BANK_NAMES)
   let bankList = banksQuery.data.getBankList as Record<string, string>[]
@@ -1126,5 +1144,78 @@ function enfeoffmentRank(rate: number|null){
     return i18n.global.t('form_for_clients.enfeoffment_second_rank')
   }
   return i18n.global.t('form_for_clients.enfeoffment_too_high')
+}
+
+/**
+ * If given through props, applies the given dossier's properties to the form fields
+ * @returns {void}
+ */
+function prefillDossier(){
+  if(props.prefillDossier){
+    console.log('Prefill:', props.prefillDossier)
+    const initial = props.prefillDossier as Record<string, unknown>
+
+    const formData = form.values.value as Record<string, Record<string,unknown>>
+
+    // Page 1
+    formData.full_name = {
+      first_name: initial.first_name,
+      last_name: initial.last_name
+    }
+
+    formData.address = {
+      city: (initial.address as Record<string, string>).city,
+      number: (initial.address as Record<string, string>).number,
+      zip_code: (initial.address as Record<string, string>).zip_code,
+      street: (initial.address as Record<string, string>).street
+    }
+
+    formData.email = initial.email as string
+    formData.phone_number = initial.phone_number as string
+    // const birthdate = formData.date_of_birth
+    //
+    // // Page 2
+    // const bankName =  (formData.bank as Record<string, string>).name as string|null
+    // const bankAbbreviation =  (formData.bank as Record<string, string>).abbreviation as string|null
+    // const propertyType = formData.property_type?.value
+    // const ownerOccupied = formData.owner_occupied
+    // const purchaseDate = formData.date_of_purchase
+    // const purchasePrice = formData.enfeoffment?.price
+    // const mortgageAmount = formData.enfeoffment?.currentValueOfMortgage
+    //
+    // // Page 3
+    // const hasAmortisation = formData.amortisation?.hasAmortisation
+    // const directAmortisation = formData.amortisation?.directAmortisation         // may be null
+    // const amortisationAmount = formData.amortisation?.amortisationAmount         // may be null
+    // const hasBuildingLease = formData.building_lease?.hasBuildingLease
+    // const publicLandlord = formData.building_lease?.publicLandlord               // may be null
+    // const buildingLeaseExpirationDate = formData.building_lease?.expirationDate  // may be null
+    // const buildingLeaseInterest = formData.building_lease?.interest              // may be null
+    // const hasRenovation = formData.renovation?.hasRenovation
+    // const renovationPrice = formData.renovation?.renovationPrice                 // may be null
+    // const renovationYear = formData.renovation?.renovationYear                   // may be null
+    //
+    // // Mortgage partitions
+    // const mortgagePartitions = formData.mortgage as unknown as Record<string, number|Date>[]
+    // const partitionAmounts: number[] = []
+    // const partitionDates: Date[] = []
+    // mortgagePartitions.forEach((partition: Record<string, number|Date>) => {
+    //   partitionAmounts.push(partition.amount as number)
+    //   partitionDates.push(partition.date as Date)
+    // })
+    //
+    // // Page 4
+    // const incomes = formData.income
+    // const childAllowances = formData.child_allowances
+    // const bonus = formData.bonus
+    // const assets = formData.assets
+    // const leasing = formData.leasing
+    // const credit = formData.credit
+    // const alimony = formData.alimony
+    // const various = formData.various
+    // const prosecutions = formData.prosecutions
+    // const lossCertificates = formData.loss_certificates
+
+  }
 }
 </script>
