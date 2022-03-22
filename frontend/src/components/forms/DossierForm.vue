@@ -1228,14 +1228,14 @@ function prefillDossier(){
     formData.mortgage = mortgagePartitions
 
     // Page 4
-    formData.income = initial.incomes as number
-    formData.child_allowances = initial.child_allowances as number
-    formData.bonus = initial.bonus as number
-    formData.assets = initial.assets as number
-    formData.leasing = initial.leasing as number
-    formData.credit = initial.credit as number
-    formData.alimony = initial.alimony as number
-    formData.various = initial.various as number
+    formData.income = initial.incomes as number[]
+    formData.child_allowances = (initial.child_allowances as number).toString()
+    formData.bonus = (initial.bonus as number).toString()
+    formData.assets = (initial.assets as number).toString()
+    formData.leasing = (initial.leasing as number).toString()
+    formData.credit = (initial.credit as number).toString()
+    formData.alimony = (initial.alimony as number).toString()
+    formData.various = (initial.various as number).toString()
     formData.prosecutions = initial.prosecutions as boolean
     formData.loss_certificates = initial.loss_certificates as boolean
   }
