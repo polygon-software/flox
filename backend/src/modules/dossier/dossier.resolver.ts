@@ -54,13 +54,25 @@ export class DossierResolver {
   /**
    * Updates the data of a dossier
    * @param {UpdateDossierInput} updateDossierInput - input, containing new status
-   * @returns {Promise<Dossier[]>} - updated dossier
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier[]>} - the updated dossier
    */
   @EmployeeOnly()
   @Mutation(() => Dossier)
   async updateDossier(
     @Args('updateDossierInput') updateDossierInput: UpdateDossierInput,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier> {
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    const dossier = await this.dossierService.getDossier(
+      updateDossierInput.uuid,
+      dbUser.uuid,
+    );
+
+    if (dossier.employee.uuid !== dbUser.fk) {
+      throw new UnauthorizedException();
+    }
+
     return this.dossierService.updateDossier(updateDossierInput);
   }
 
