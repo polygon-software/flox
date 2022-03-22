@@ -28,6 +28,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { prettify } from '../../helpers/log-helper';
 import { isCompleted } from './dossier-helpers';
 import { DeleteDossierInput } from './dto/input/delete-dossier.input';
+import { Address } from '../address/entities/address.entity';
 
 @Injectable()
 export class DossierService {
@@ -38,6 +39,8 @@ export class DossierService {
     private readonly offerRepository: Repository<Offer>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Address)
+    private readonly addressRepository: Repository<Address>,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly employeeService: EmployeeService,
     private readonly bankService: BankService,
@@ -167,11 +170,16 @@ export class DossierService {
       });
     }
 
-    // TODO address still seems broken
+    // Update address
+    await this.addressRepository.update(
+      updateDossierInput.address.uuid,
+      updateDossierInput.address,
+    );
 
     // Delete illegal params
     delete updateDossierInput.original_bank_abbreviation;
     delete updateDossierInput.original_bank_name;
+    delete updateDossierInput.address;
 
     await this.dossierRepository.update(updateDossierInput.uuid, {
       ...updateDossierInput,

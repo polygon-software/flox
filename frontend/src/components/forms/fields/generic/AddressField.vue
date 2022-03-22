@@ -53,7 +53,6 @@ import {defineEmits, PropType, reactive, ref, Ref} from 'vue'
 import { IS_VALID_STRING, IS_VALID_HOUSE_NUMBER, IS_VALID_ZIP } from 'src/data/RULES';
 import {Address} from 'src/data/types/Address';
 import {QInput} from 'quasar';
-import _ from 'lodash';
 const emit = defineEmits(['change'])
 
 const props = defineProps({
