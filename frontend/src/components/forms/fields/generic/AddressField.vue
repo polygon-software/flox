@@ -23,16 +23,6 @@
   <!-- Bottom Row: City & ZIP code -->
   <div class="flex justify-between">
     <q-input
-      v-model="address.city"
-      dense
-      :label="$t('account_data.city')"
-      type="text"
-      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
-      style="width:65%"
-      @change="emitValue"
-    >
-    </q-input>
-    <q-input
       ref="zipRef"
       v-model="address.zip_code"
       dense
@@ -42,6 +32,16 @@
       style="width:30%"
       mask="######"
       :debounce="validateZip ? 200 : 0"
+      @change="emitValue"
+    >
+    </q-input>
+    <q-input
+      v-model="address.city"
+      dense
+      :label="$t('account_data.city')"
+      type="text"
+      :rules="[(val) => IS_VALID_STRING(val) || $t('errors.invalid_city')]"
+      style="width:65%"
       @change="emitValue"
     >
     </q-input>

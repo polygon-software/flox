@@ -222,6 +222,15 @@
           <div
             class="row full-width justify-between"
           >
+            <!-- Discard button -->
+            <q-btn
+              :label="$t('buttons.discard')"
+              color="negative"
+              class="q-ml-sm"
+              flat
+              @click="onDiscard"
+            />
+
             <!-- Left-side buttons (prev/next, print) -->
             <div>
               <q-btn
@@ -250,15 +259,6 @@
                 @click="onSubmit"
               />
             </div>
-
-            <!-- Discard button -->
-            <q-btn
-              :label="$t('buttons.discard')"
-              color="negative"
-              class="q-ml-sm"
-              flat
-              @click="onDiscard"
-            />
           </div>
         </q-stepper-navigation>
       </template>
