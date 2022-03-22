@@ -1155,12 +1155,12 @@ function prefillDossier(){
     console.log('Prefill:', props.prefillDossier)
     const initial = props.prefillDossier as Record<string, unknown>
 
-    const formData = form.values.value as Record<string, Record<string,unknown>>
+    const formData = form.values.value as Record<string, Record<string,unknown>|string|Date|number>
 
     // Page 1
     formData.full_name = {
-      first_name: initial.first_name,
-      last_name: initial.last_name
+      firstName: initial.first_name,
+      lastName: initial.last_name
     }
 
     formData.address = {
@@ -1171,11 +1171,14 @@ function prefillDossier(){
     }
 
     formData.email = initial.email as string
-    formData.phone_number = initial.phone_number as string
-    // const birthdate = formData.date_of_birth
-    //
-    // // Page 2
-    // const bankName =  (formData.bank as Record<string, string>).name as string|null
+    formData.phone_number = initial.phone as string
+    formData.date_of_birth = initial.birthdate as Date
+
+    // Page 2
+    formData.bank = {
+      name: (initial.original_bank as Record<string, string>).name,
+      abbreviation: (initial.original_bank as Record<string, string>).abbreviation
+    }
     // const bankAbbreviation =  (formData.bank as Record<string, string>).abbreviation as string|null
     // const propertyType = formData.property_type?.value
     // const ownerOccupied = formData.owner_occupied
