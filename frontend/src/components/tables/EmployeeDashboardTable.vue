@@ -138,7 +138,7 @@
 
 <script setup lang="ts">
 import {computed, inject, Ref, ref} from 'vue';
-import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
+import {executeMutation, executeQuery, subscribeToQuery} from 'src/helpers/data-helpers';
 import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
@@ -148,7 +148,7 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate, formatDateTime} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
-import {MY_DOSSIERS} from 'src/data/queries/DOSSIER';
+import {IS_DOSSIER_COMPLETE, MY_DOSSIERS} from 'src/data/queries/DOSSIER';
 import {DOSSIER_FILE, OFFER_FILE} from 'src/data/queries/FILE';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
@@ -285,20 +285,25 @@ function expandOffers(uuid:string): void{
 /**
  * Routes to the page for editing an existing dossier
  * @param {Record<string, unknown>} row - the dossier to edit
- * @returns {void}
+ * @returns {Promise<void>} - done
  */
-function onEditDossier(row: Record<string, unknown>){
-  // TODO
-  console.log('EDIT', row.uuid)
+async function onEditDossier(row: Record<string, unknown>){
+  // Check whether dossier is completed (which makes it non-editable)
+  const isCompleteQuery = await executeQuery(IS_DOSSIER_COMPLETE, {uuid: row.uuid})
+  const isComplete = isCompleteQuery.data[IS_DOSSIER_COMPLETE.cacheLocation] as boolean
 
-  // If dossier is not editable, show dialog
-  $q.dialog({
-    component: WarningDialog,
-    componentProps: {
-      discardLabel: i18n.global.t('buttons.cancel'),
-      description: i18n.global.t('messages.dossier_not_editable')
-    }
-  })
+  // If dossier is complete (and therefore not editable), show dialog
+  if(isComplete){
+    $q.dialog({
+      component: WarningDialog,
+      componentProps: {
+        discardLabel: i18n.global.t('buttons.cancel'),
+        description: i18n.global.t('messages.dossier_not_editable')
+      }
+    })
+  }
+
+
 }
 
 </script>

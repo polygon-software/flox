@@ -268,7 +268,7 @@ export class DossierResolver {
   }
 
   /**
-   * Determines whether a dossier is completed
+   * Determines whether a dossier is completed (all mandatory files uploaded)
    * @param {IsDossierCompleteInput} isDossierCompleteInput - input, containing dossier UUID
    * @param {Record<string, string>} user - current user
    * @returns {Promise<boolean>} - whether the dossier is completed
@@ -292,7 +292,6 @@ export class DossierResolver {
       throw new UnauthorizedException();
     }
 
-    // TODO permission check
     return isCompleted(dossier);
   }
 }
