@@ -34,7 +34,6 @@ import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
 import { GetDeviceLogArgs } from './dto/args/get-device-log.args';
-import { MR2000 } from '../../types/MR2000';
 import { DeviceLog } from '../../types/DeviceLog';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 import { EditContactInput } from './dto/input/edit-contact.input';
