@@ -70,7 +70,6 @@ const actionLabel = {
   [`${CREATION_STATE.APPLIED}`]: {text: i18n.global.t('dashboards.enable_upload'), action: showEnableUploadDialog},
   [`${CREATION_STATE.AWAITING_DOCUMENTS}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog},
   [`${CREATION_STATE.DOCUMENTS_UPLOADED}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog},
-  [`${CREATION_STATE.DONE}`]: {text: i18n.global.t('dashboards.view_documents'), action: showDocumentValidationDialog}, // TODO remove
 }
 
 const queryResult = subscribeToQuery(ALL_COMPANIES) as Ref<Record<string, Array<Record<string, unknown>>|string>[]>
@@ -79,9 +78,7 @@ const computedResult = computed(()=>{
   const companies = queryResult.value ?? []
   // Filter out completed applications by hiding those that have an account
   return companies.filter((company) => {
-    // TODO re-enable
-    return true
-    // return company.creation_state !== CREATION_STATE.DONE
+    return company.creation_state !== CREATION_STATE.DONE
   })
 })
 
