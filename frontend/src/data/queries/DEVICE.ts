@@ -239,8 +239,8 @@ export const DEVICE_CONNECTION_LOG_COUNT = {
 
 export const DEVICE_LOG = {
   query: gql`
-    query getDeviceLog($cli: String!, $take: Int!, $skip: Int!){
-      getDeviceLog(cli: $cli, take: $take, skip: $skip){
+    query getDeviceLog($cli: String!, $take: Int!, $skip: Int!, $prefix: String){
+      getDeviceLog(cli: $cli, take: $take, skip: $skip, prefix: $prefix){
         entries {
           message
           timestamp

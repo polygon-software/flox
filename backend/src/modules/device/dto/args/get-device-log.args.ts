@@ -1,10 +1,10 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { IsArray, IsInt } from 'class-validator';
+import { IsInt, IsString } from 'class-validator';
 
 @ArgsType()
 export class GetDeviceLogArgs {
   @Field(() => String)
-  @IsArray()
+  @IsString()
   cli: string;
 
   @Field(() => Int)
@@ -14,4 +14,12 @@ export class GetDeviceLogArgs {
   @Field(() => Int)
   @IsInt()
   skip: number;
+
+  @Field(() => String, {
+    nullable: true,
+    description:
+      "Optional file name prefix (e.g. 'REST' for REST logs), this applies only to MR3000 devices",
+  })
+  @IsString()
+  prefix: string;
 }

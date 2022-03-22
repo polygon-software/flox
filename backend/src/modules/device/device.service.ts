@@ -619,7 +619,7 @@ export class DeviceService {
   }
 
   /**
-   * Get the log file entries for a given device
+   * Get the log entries for a given device
    * @param {GetDeviceLogArgs} getDeviceLogArgs - args, containing CLI
    * @returns {Promise<DeviceLog>} - log entries
    */
@@ -628,7 +628,17 @@ export class DeviceService {
 
     // File path & name, based on device type
     const filePath = `${type === 'MR2000' ? 'LOG_2000' : 'LOG_3K'}`;
-    const fileName = `${getDeviceLogArgs.cli}-log`;
+    let fileName;
+
+    if (type === 'MR2000') {
+      // MR2000: Only basic log files
+      fileName = `${getDeviceLogArgs.cli}-log`;
+    } else {
+      // MR3000: Log type with prefix (if any)
+      fileName = getDeviceLogArgs.prefix
+        ? `${getDeviceLogArgs.prefix}_${getDeviceLogArgs.cli}`
+        : `${getDeviceLogArgs.cli}`;
+    }
 
     // Fetch from filesystem via Python API
     const host = this.configService.get('pyAPI.host');
