@@ -67,7 +67,7 @@
   </q-dialog>
 </template>
 <script setup lang="ts">
-import {defineEmits, PropType, ref} from 'vue'
+import {defineEmits, onMounted, PropType, ref} from 'vue'
 import {QVueGlobals, useQuasar, openURL} from 'quasar';
 import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Company} from 'src/data/types/Company';
@@ -108,18 +108,18 @@ const props = defineProps({
 // Clone prop so we can add URLs
 const _company = ref(_.cloneDeep(props.company))
 
-// Get URLs
-void getUrls()
+onMounted(async () => {
+  await getUrls()
+})
 
 /**
  * Load all URLs and add to local object
- * TODO: Verify why this works only once
  * @returns {Promise<void>} - done
  */
 async function getUrls(): Promise<void>{
   const documents = _company.value.documents ?? [];
   for(const document of documents) {
-    const queryResult = await executeQuery(PRIVATE_FILE, {uuid: document.uuid})
+    const queryResult = await executeQuery(PRIVATE_FILE, {uuid: document.uuid, contentType: 'application/pdf'})
     const file = queryResult.data.getPrivateFile as Record<string, string>
 
     // Add to copy

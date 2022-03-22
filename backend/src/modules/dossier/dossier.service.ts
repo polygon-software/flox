@@ -468,6 +468,7 @@ export class DossierService {
     const args: GetPrivateFileArgs = {
       uuid: sendDossierDocumentInput.fileUuid,
       expires: null,
+      contentType: null,
     };
 
     const pdf = await this.fileService.getPrivateFile(args, dbUser);
