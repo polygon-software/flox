@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
@@ -176,16 +176,29 @@ export class UserService {
 
   /**
    * Returns whether a user is authorized to view and update the given device.
-   * @param {User} user - The user.
-   * @param {string} cli - The device client.
-   * @returns {bool} - Whether the user is authorized.
+   * @param {Record<string, string>} user - The user.
+   * @param {string|string[]} clis - The device clients.
+   * @returns {Promise<boolean>} - Whether the user is authorized.
    */
-  isAuthorizedForDevice(user: User, cli: string): boolean {
-    return (
-      user.role === ROLE.ADMIN ||
-      (user.role === ROLE.USER &&
-        (user.mr2000instances?.includes(cli) ||
-          user.mr3000instances?.includes(cli)))
-    );
+  async isAuthorizedForDevices(
+    user: Record<string, string>,
+    clis: string | string[],
+  ): Promise<boolean> {
+    const dbUser = await this.getMyUser(user);
+    if (!Array.isArray(clis)) {
+      clis = [clis];
+    }
+    const allowed =
+      dbUser.role === ROLE.ADMIN ||
+      (dbUser.role === ROLE.USER &&
+        clis.every(
+          (cli) =>
+            dbUser.mr2000instances?.includes(cli) ||
+            dbUser.mr3000instances?.includes(cli),
+        ));
+    if (!allowed) {
+      throw new UnauthorizedException();
+    }
+    return allowed;
   }
 }

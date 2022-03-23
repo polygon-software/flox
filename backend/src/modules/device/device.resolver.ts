@@ -12,12 +12,10 @@ import { GetMyDevicesArgs } from './dto/args/get-my-devices.args';
 import { GetUserArgs } from '../user/dto/args/get-user.args';
 import { GetLevelWritingArgs } from './dto/args/get-level-writing.args';
 import { LevelWriting } from '../../types/LevelWriting';
-import { UnauthorizedException } from '@nestjs/common';
 import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
-import { ROLE } from '../../ENUM/ENUM';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 import { GetDeviceContactsArgs } from './dto/args/get-device-contacts.args';
 import { DeviceContact } from '../../types/DeviceContact';
@@ -43,14 +41,13 @@ export class DeviceResolver {
     @Args() getLevelWritingArgs: GetLevelWritingArgs,
     @CurrentUser() user: Record<string, string>,
   ): Promise<LevelWriting> {
-    const dbUser = await this.userService.getMyUser(user);
-    getLevelWritingArgs.clients.forEach((stationId) => {
-      if (!this.userService.isAuthorizedForDevice(dbUser, stationId)) {
-        throw new UnauthorizedException();
-      }
-    });
-
-    return this.deviceService.getLevelWriting(getLevelWritingArgs);
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
+      getLevelWritingArgs.clients,
+    );
+    if (allowed) {
+      return this.deviceService.getLevelWriting(getLevelWritingArgs);
+    }
   }
 
   /**
@@ -65,13 +62,13 @@ export class DeviceResolver {
     @Args() getDeviceParamsArgs: GetDeviceParamsArgs,
     @CurrentUser() user: Record<string, string>,
   ): Promise<DeviceParams> {
-    const dbUser = await this.userService.getMyUser(user);
-    if (
-      !this.userService.isAuthorizedForDevice(dbUser, getDeviceParamsArgs.cli)
-    ) {
-      throw new UnauthorizedException();
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
+      getDeviceParamsArgs.cli,
+    );
+    if (allowed) {
+      return this.deviceService.getDeviceParams(getDeviceParamsArgs);
     }
-    return this.deviceService.getDeviceParams(getDeviceParamsArgs);
   }
 
   /**
@@ -118,17 +115,13 @@ export class DeviceResolver {
     @Args() eventTableArgs: GetEventTableArgs,
     @CurrentUser() user: Record<string, string>,
   ): Promise<EventsTable> {
-    const dbUser = await this.userService.getMyUser(user);
-    const allowed = this.userService.isAuthorizedForDevice(
-      dbUser,
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
       eventTableArgs.cli,
     );
-
     if (allowed) {
       return this.deviceService.getEvents(eventTableArgs);
     }
-
-    throw new UnauthorizedException();
   }
 
   @AnyRole()
@@ -142,17 +135,13 @@ export class DeviceResolver {
     @CurrentUser()
     user: Record<string, string>,
   ) {
-    const dbUser = await this.userService.getMyUser(user);
-    const allowed = this.userService.isAuthorizedForDevice(
-      dbUser,
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
       addContactToDeviceInput.cli,
     );
-
     if (allowed) {
       return this.deviceService.addContactToDevice(addContactToDeviceInput);
     }
-
-    throw new UnauthorizedException();
   }
 
   @AnyRole()
@@ -161,17 +150,13 @@ export class DeviceResolver {
     @Args() getDeviceContactsArgs: GetDeviceContactsArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
-    const dbUser = await this.userService.getMyUser(user);
-    const allowed = this.userService.isAuthorizedForDevice(
-      dbUser,
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
       getDeviceContactsArgs.cli,
     );
-
     if (allowed) {
       return this.deviceService.getDeviceContacts(getDeviceContactsArgs.cli);
     }
-
-    throw new UnauthorizedException();
   }
 
   @AnyRole()
@@ -206,17 +191,13 @@ export class DeviceResolver {
     @CurrentUser()
     user: Record<string, string>,
   ) {
-    const dbUser = await this.userService.getMyUser(user);
-    const allowed = this.userService.isAuthorizedForDevice(
-      dbUser,
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
       editContactInput.cli,
     );
-
     if (allowed) {
       return this.deviceService.editContact(editContactInput);
     }
-
-    throw new UnauthorizedException();
   }
 
   @AnyRole()
@@ -230,16 +211,12 @@ export class DeviceResolver {
     @CurrentUser()
     user: Record<string, string>,
   ) {
-    const dbUser = await this.userService.getMyUser(user);
-    const allowed = this.userService.isAuthorizedForDevice(
-      dbUser,
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
       deleteContactInput.cli,
     );
-
     if (allowed) {
       return this.deviceService.deleteContact(deleteContactInput);
     }
-
-    throw new UnauthorizedException();
   }
 }
