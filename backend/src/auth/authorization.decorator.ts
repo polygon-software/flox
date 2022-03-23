@@ -3,7 +3,7 @@ import {
   CustomDecorator,
   SetMetadata,
 } from '@nestjs/common';
-import { getRequest } from '../helpers';
+import { getRequest } from './helpers';
 import { ROLE } from '../ENUM/ENUM';
 
 /**

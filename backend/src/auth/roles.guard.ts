@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
 import { ANY_ROLE_KEY } from './authorization.decorator';
-import { getRequest } from '../helpers';
+import { getRequest } from './helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
