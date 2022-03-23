@@ -3,24 +3,20 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetProjectDevicesArgs } from '../device/dto/args/get-project-devices.args';
-import {
-  findProjectForDevice,
-  mr2000fromDatabaseEntry,
-  mr3000fromDatabaseEntry,
-} from '../../helpers/device-helpers';
+import { findProjectForDevice } from '../../helpers/device-helpers';
 import { GetUserProjectsArgs } from './dto/args/get-user-projects.args';
 import { CreateProjectInput } from './dto/input/create-project.input';
 import { RemoveDeviceFromProjectInput } from './dto/input/remove-device-from-project.input';
 import { Project } from './entities/project.entity';
 import { UpdateProjectInput } from './dto/input/update-project-input';
 import { DeleteProjectInput } from './dto/input/delete-project.input';
-import { fetchFromTable } from '../../helpers/database-helpers';
 import { AssignDeviceToProjectInput } from './dto/input/assign-device-to-project.input';
 import { UserService } from '../user/user.service';
 import { GetUserArgs } from '../user/dto/args/get-user.args';
 import { ROLE } from '../../ENUM/ENUM';
 import { ERRORS } from '../../error/ERRORS';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { DeviceService } from '../device/device.service';
 
 @Injectable()
 export class ProjectService {
@@ -29,6 +25,7 @@ export class ProjectService {
     private readonly projectRepository: Repository<Project>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly userService: UserService,
+    private readonly deviceService: DeviceService,
   ) {}
 
   /**
@@ -45,64 +42,10 @@ export class ProjectService {
     if (!project) {
       throw new Error(`No project found for ${getProjectDevicesArgs.uuid}`);
     }
-    // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable(
-      'MR2000',
-      'station',
-      `WHERE cli IN ('${project.mr2000instances.join("','")}')`,
+
+    return this.deviceService.getDevices(
+      project.mr2000instances.concat(project.mr3000instances),
     );
-    const mr3000instances = await fetchFromTable(
-      'MR3000',
-      'station',
-      `WHERE cli IN ('${project.mr3000instances.join("','")}')`,
-    );
-
-    // Fetch stores for FTP info
-    const mr2000store = await fetchFromTable(
-      'MR2000',
-      'store',
-      `WHERE cli IN ('${project.mr2000instances.join("','")}')`,
-    );
-    const mr3000store = await fetchFromTable(
-      'MR3000',
-      'store',
-      `WHERE cli IN ('${project.mr3000instances.join("','")}')`,
-    );
-
-    // Fetch VPN table for FTP info
-    const vpnInfo = await fetchFromTable(
-      'openvpn',
-      'tempovp',
-      `WHERE cli IN ('${project.mr2000instances
-        .concat(project.mr3000instances)
-        .join("','")}')`,
-    );
-
-    const devices = [];
-
-    // Add all MR2000 instances that belong to the project
-    for (const instance of mr2000instances) {
-      const mr2000 = await mr2000fromDatabaseEntry(
-        instance,
-        this.projectRepository,
-        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
-        mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
-      );
-      devices.push(mr2000);
-    }
-
-    // Add all MR3000 instances that belong to the project
-    for (const instance of mr3000instances) {
-      const mr3000 = await mr3000fromDatabaseEntry(
-        instance,
-        this.projectRepository,
-        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
-        mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
-      );
-      devices.push(mr3000);
-    }
-
-    return devices;
   }
 
   /**

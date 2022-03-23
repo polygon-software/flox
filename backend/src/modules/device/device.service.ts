@@ -22,6 +22,7 @@ import {
   fetchCountFromTable,
   fetchFromTable,
   insertIntoTable,
+  QueryHelperOptions,
   updateInTable,
 } from '../../helpers/database-helpers';
 import { EventsTableRow } from '../../types/EventsTableRow';
@@ -76,14 +77,14 @@ export class DeviceService {
     getDeviceParamsArgs: GetDeviceParamsArgs,
   ): Promise<DeviceParams> {
     const client = getDeviceParamsArgs.cli;
-    const filterQuery = `WHERE cli = "${client}"`;
+    const options = { where: { cli: client } };
     let instances: Record<string, string | number>[];
     if (deviceType(client) === 'MR3000') {
       // MR3000
-      instances = await fetchFromTable('MR3000', 'para_trigala', filterQuery);
+      instances = await fetchFromTable('MR3000', 'para_trigala', options);
     } else {
       // MR2000
-      instances = await fetchFromTable('MR2000', 'param', filterQuery);
+      instances = await fetchFromTable('MR2000', 'param', options);
     }
     const instance = instances[0];
     return new DeviceParams(
@@ -154,6 +155,59 @@ export class DeviceService {
   }
 
   /**
+   * Returns a list of MR2000 & MR3000 devices
+   * @param {string []} clis - clients
+   * @returns {Promise<MR2000|MR3000[]>} - devices
+   */
+  async getDevices(clis: string[]) {
+    const queryOptions = { where: `cli IN ('${clis.join("','")}')` };
+    // Get all MR2000 & MR3000 instances
+    const mr2000instances = await fetchFromTable(
+      'MR2000',
+      'station',
+      queryOptions,
+    );
+    const mr3000instances = await fetchFromTable(
+      'MR3000',
+      'station',
+      queryOptions,
+    );
+
+    // Fetch stores for FTP info
+    const mr2000store = await fetchFromTable('MR2000', 'store', queryOptions);
+    const mr3000store = await fetchFromTable('MR3000', 'store', queryOptions);
+
+    // Fetch VPN table for FTP info
+    const vpnInfo = await fetchFromTable('openvpn', 'tempovp', queryOptions);
+
+    const devices = [];
+
+    // Add all MR2000 instances that belong to the project
+    for (const instance of mr2000instances) {
+      const mr2000 = await mr2000fromDatabaseEntry(
+        instance,
+        this.projectRepository,
+        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
+        mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
+      );
+      devices.push(mr2000);
+    }
+
+    // Add all MR3000 instances that belong to the project
+    for (const instance of mr3000instances) {
+      const mr3000 = await mr3000fromDatabaseEntry(
+        instance,
+        this.projectRepository,
+        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
+        mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
+      );
+      devices.push(mr3000);
+    }
+
+    return devices;
+  }
+
+  /**
    * Returns a list of the user's MR2000 & MR3000 devices
    * @param {GetUserDevicesArgs} getUserDevicesArgs - contains user's UUID
    * @returns {Promise<MR2000|MR3000[]>} - the user's devices
@@ -166,44 +220,9 @@ export class DeviceService {
       throw new Error(`No user found for ${getUserDevicesArgs.uuid}`);
     }
 
-    // Get all MR2000 & MR3000 instances
-    const mr2000instances = await fetchFromTable('MR2000', 'station');
-    const mr3000instances = await fetchFromTable('MR3000', 'station');
-
-    // Fetch stores for FTP info
-    const mr2000store = await fetchFromTable('MR2000', 'store');
-    const mr3000store = await fetchFromTable('MR3000', 'store');
-
-    // Fetch VPN table for FTP info
-    const vpnInfo = await fetchFromTable('openvpn', 'tempovp');
-
-    let devices = [];
-
-    // Add all allowed MR2000 instances
-    for (const instance of mr2000instances) {
-      if ((user.mr2000instances ?? []).includes(instance.cli)) {
-        const mr2000 = await mr2000fromDatabaseEntry(
-          instance,
-          this.projectRepository,
-          vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
-          mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
-        );
-        devices.push(mr2000);
-      }
-    }
-
-    // Add all allowed MR3000 instances
-    for (const instance of mr3000instances) {
-      if ((user.mr3000instances ?? []).includes(instance.cli)) {
-        const mr3000 = await mr3000fromDatabaseEntry(
-          instance,
-          this.projectRepository,
-          vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
-          mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
-        );
-        devices.push(mr3000);
-      }
-    }
+    let devices = await this.getDevices(
+      user.mr2000instances.concat(user.mr3000instances),
+    );
 
     // Filter based on unassigned/assigned setting
     if (getUserDevicesArgs.unassigned) {
@@ -230,17 +249,20 @@ export class DeviceService {
     const lengthPk = await this.getEventsLength(cli, 'Pk');
     const lengthZip = await this.getEventsLength(cli, 'ZIP');
 
-    // Where clause for filtering by cli and typ
-    let filterQuery = `WHERE events.cli='${cli}'`;
-    if (getEventArgs.filter && getEventArgs.filter !== 'All') {
-      filterQuery += ` AND events.typ='${
-        this.reverseTypeMapping[getEventArgs.filter]
-      }'`;
-    }
-
     // Order by clause
     let orderBy = this.columnMapping[getEventArgs.orderBy] || 'rec_time';
     orderBy += ` ${getEventArgs.descending ? 'DESC' : 'ASC'}`;
+
+    // Where clause for filtering by cli and typ
+    const queryOptions: QueryHelperOptions = {
+      where: { 'events.cli': cli },
+      limit: { skip: getEventArgs.skip, take: getEventArgs.take },
+      order_by: orderBy,
+    };
+    if (getEventArgs.filter && getEventArgs.filter !== 'All') {
+      queryOptions.where['events.typ'] =
+        this.reverseTypeMapping[getEventArgs.filter];
+    }
 
     // MR2000
     if (deviceType(cli) === 'MR2000') {
@@ -252,12 +274,8 @@ export class DeviceService {
       ) {
         orderBy = 'rec_time';
       }
-      const mr2000 = await fetchFromTable(
-        'MR2000',
-        'events',
-        `${filterQuery} ORDER BY ${orderBy}
-        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
-      );
+      queryOptions.order_by = orderBy;
+      const mr2000 = await fetchFromTable('MR2000', 'events', queryOptions);
       const res = mr2000.map((item) => {
         return this.mapMR2000(item, cli);
       });
@@ -265,26 +283,18 @@ export class DeviceService {
     }
 
     // MR3000
-    const frequencyAvailable = await fetchFromTable(
-      'MR3000',
-      'pk_frq',
-      `WHERE ident LIKE '${cli}.%'`,
-    );
-    let mr3000 = [];
+    const frequencyAvailable = await fetchFromTable('MR3000', 'pk_frq', {
+      where: "ident LIKE '${cli}.%'",
+    });
+    let mr3000: any[];
     if (frequencyAvailable.length > 0) {
       mr3000 = await fetchFromTable(
         'MR3000',
         'events JOIN pk_frq ON events.ident=pk_frq.ident ',
-        `${filterQuery} ORDER BY ${orderBy}
-        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
+        queryOptions,
       );
     } else {
-      mr3000 = await fetchFromTable(
-        'MR3000',
-        'events',
-        `${filterQuery} ORDER BY ${orderBy}
-        LIMIT ${getEventArgs.skip}, ${getEventArgs.take}`,
-      );
+      mr3000 = await fetchFromTable('MR3000', 'events', queryOptions);
     }
 
     const res = mr3000.map((item) => {
@@ -301,14 +311,11 @@ export class DeviceService {
    */
   async getEventsLength(clientId: string, type = ''): Promise<number> {
     const database = deviceType(clientId);
-    const typeClause =
-      type === '' ? '' : `AND typ='${this.reverseTypeMapping[type]}'`;
-    const res = await fetchCountFromTable(
-      database,
-      'events',
-      `WHERE cli='${clientId}' ${typeClause}`,
-    );
-    return res[0]['count(*)'];
+    const options = { where: { cli: clientId } };
+    if (type !== '') {
+      options.where['typ'] = this.reverseTypeMapping[type];
+    }
+    return await fetchCountFromTable(database, 'events', options);
   }
 
   /**
@@ -413,11 +420,9 @@ export class DeviceService {
    */
   async getDeviceByCli(cli: string) {
     const type = deviceType(cli);
-    const instances = await fetchFromTable(
-      type,
-      'station',
-      `WHERE cli='${cli}'`,
-    );
+    const instances = await fetchFromTable(type, 'station', {
+      where: { cli: cli },
+    });
     const instance = instances[0];
 
     if (!instance) {
@@ -526,8 +531,8 @@ export class DeviceService {
 
     const filterQuery =
       type === 'MR2000'
-        ? `WHERE uniq_id='${editContactInput.id}'`
-        : `WHERE rec_id='${editContactInput.id}'`;
+        ? { where: { uniq_id: editContactInput.id } }
+        : { where: { rec_id: editContactInput.id } };
 
     // Write to database
     await updateInTable(type, table, filterQuery, record);
@@ -546,13 +551,13 @@ export class DeviceService {
     const type = deviceType(deleteContactInput.cli);
     const table = type === 'MR2000' ? 'alert' : 'para_alert';
 
-    const filterQuery =
+    const queryOptions =
       type === 'MR2000'
-        ? `WHERE uniq_id='${deleteContactInput.id}'`
-        : `WHERE rec_id='${deleteContactInput.id}'`;
+        ? { where: { uniq_id: deleteContactInput.id } }
+        : { where: { rec_id: deleteContactInput.id } };
 
     // Write to database
-    await deleteInTable(type, table, filterQuery);
+    await deleteInTable(type, table, queryOptions);
 
     // Get device where contact was deleted
     return this.getDeviceByCli(deleteContactInput.cli);
@@ -566,11 +571,9 @@ export class DeviceService {
   async getDeviceContacts(cli: string) {
     const type = deviceType(cli);
     const instances =
-      (await fetchFromTable(
-        type,
-        type === 'MR2000' ? 'alert' : 'para_alert',
-        `WHERE cli='${cli}'`,
-      )) ?? [];
+      (await fetchFromTable(type, type === 'MR2000' ? 'alert' : 'para_alert', {
+        where: { cli: cli },
+      })) ?? [];
 
     return instances.map((instance) =>
       deviceContactFromDatabaseEntry(instance),

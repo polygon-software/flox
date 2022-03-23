@@ -29,15 +29,19 @@ module.exports = {
     quotes: ['warn', 'single', { avoidEscape: true }],
 
     '@typescript-eslint/no-explicit-any': 'off',
-    "require-jsdoc": ["error", {
-      "require": {
-        "FunctionDeclaration": true,
-        "MethodDefinition": false,
-        "ClassDeclaration": false,
-        "ArrowFunctionExpression": false,
-        "FunctionExpression": false
-      }
-    }],
-    'valid-jsdoc': 'error'
+    'require-jsdoc': [
+      'error',
+      {
+        require: {
+          FunctionDeclaration: true,
+          MethodDefinition: false,
+          ClassDeclaration: false,
+          ArrowFunctionExpression: false,
+          FunctionExpression: false,
+        },
+      },
+    ],
+    'valid-jsdoc': 'error',
+    eqeqeq: ['error', 'always'],
   },
 };

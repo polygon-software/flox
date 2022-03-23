@@ -1,4 +1,4 @@
-import { getConnection } from 'typeorm';
+import { getConnection, QueryRunner } from 'typeorm';
 
 /**
  * This file contains all helper functions for fetching data from databases
@@ -7,9 +7,9 @@ import { getConnection } from 'typeorm';
 /**
  * Gets a prepared query runner for a given database
  * @param {string} database - database name (usually MR2000 or MR3000)
- * @returns {QueryRunner} - the query runner
+ * @returns {Promise<QueryRunner>} - the query runner
  */
-export async function getQueryRunner(database: string) {
+export async function getQueryRunner(database: string): Promise<QueryRunner> {
   // Establish database connection
   const conn = getConnection(database);
   const queryRunner = conn.createQueryRunner();
@@ -18,31 +18,66 @@ export async function getQueryRunner(database: string) {
   return queryRunner;
 }
 
+export type QueryHelperOptions = {
+  where?: Record<string, string | number> | string;
+  order_by?: string;
+  limit?: {
+    skip: number;
+    take: number;
+  };
+};
+
+/**
+ * Build a query string from a where option in a TableQuery object
+ * @param {Record<string, string | number> | string} option - where option
+ * @returns {string} - WHERE query
+ */
+function buildWhereQuery(option: Record<string, string | number> | string) {
+  if (typeof option === 'string') {
+    return ` WHERE ${option}`;
+  } else {
+    let query = ' WHERE';
+    Object.entries(option).forEach(([key, value]) => {
+      query += ` ${key} =`;
+      query += typeof value === 'string' ? ` '${value}' AND` : ` ${value} AND`;
+    });
+    query = query.substring(0, query.length - 4); // remove trailing " AND"
+    return query;
+  }
+}
+
 /**
  * Gets an array of the objects within a given database table
  * @param {string} database - database name
  * @param {string} table - table name
- * @param {string} [filterQuery] - optional SQL filtering query
+ * @param {QueryHelperOptions} [options] - optional SQL filtering, ordering, limiting
  * @returns {Record<string, unknown>[]} - database table contents
  */
 export async function fetchFromTable(
   database: string,
   table: string,
-  filterQuery?: string,
+  options?: QueryHelperOptions,
 ) {
   // Get query runner
   const queryRunner = await getQueryRunner(database);
 
   // Build query
-  const query = `
-      SELECT * FROM ${table}
-      ${filterQuery ?? ''}
-  `;
+  let query = `SELECT * FROM ${table}`;
+  if (options) {
+    if (options.where) {
+      query += buildWhereQuery(options.where);
+    }
+    if (options.order_by) {
+      query += ` ORDER BY ${options.order_by}`;
+    }
+    if (options.limit) {
+      query += ` LIMIT ${options.limit.skip}, ${options.limit.take}`;
+    }
+  }
+
   // Execute
   const queryResult = await queryRunner.manager.query(query);
-
   await queryRunner.release();
-
   return queryResult;
 }
 
@@ -50,28 +85,27 @@ export async function fetchFromTable(
  * Gets number of objects within a given database table
  * @param {string} database - database name
  * @param {string} table - table name
- * @param {string} [filterQuery] - optional SQL filtering query
- * @returns {number} - database table contents
+ * @param {QueryHelperOptions} [options] - optional SQL filtering, ordering, limiting
+ * @returns {number} - database table content count
  */
 export async function fetchCountFromTable(
   database: string,
   table: string,
-  filterQuery?: string,
+  options?: QueryHelperOptions,
 ) {
   // Get query runner
   const queryRunner = await getQueryRunner(database);
 
   // Build query
-  const query = `
-      SELECT count(*) FROM ${table}
-      ${filterQuery ?? ''}
-  `;
+  let query = `SELECT count(*) FROM ${table}`;
+  if (options?.where) {
+    query += buildWhereQuery(options.where);
+  }
+
   // Execute
   const queryResult = await queryRunner.manager.query(query);
-
   await queryRunner.release();
-
-  return queryResult;
+  return queryResult[0]['count(*)'];
 }
 
 /**
@@ -79,7 +113,7 @@ export async function fetchCountFromTable(
  * @param {string} database - database name
  * @param {string} table - table name
  * @param {Record<string, unknown>} record - record to write to database
- * @returns {void}
+ * @returns {unknown} - query result
  */
 export async function insertIntoTable(
   database: string,
@@ -96,78 +130,79 @@ export async function insertIntoTable(
   });
   values = values.substring(0, values.lastIndexOf(','));
 
-  // Build statement
-  const statement = `
+  // Build query
+  const query = `
     INSERT INTO ${table} (${Object.keys(record).join(',')})
     VALUES (${values});
   `;
 
   // Execute
-  await queryRunner.manager.query(statement);
+  const queryResult = await queryRunner.manager.query(query);
   await queryRunner.release();
+  return queryResult;
 }
 
 /**
  * Updates a given record in a database table
  * @param {string} database - database name
  * @param {string} table - table name
- * @param {string} [filterQuery] - SQL filtering query
+ * @param {QueryHelperOptions} [options] - optional SQL filtering
  * @param {Record<string, unknown>} record - update Object with its parameters
- * @returns {void}
+ * @returns {unknown} - query result
  */
 export async function updateInTable(
   database: string,
   table: string,
-  filterQuery: string,
+  options: QueryHelperOptions,
   record: Record<string, unknown>,
 ) {
   // Get query runner
   const queryRunner = await getQueryRunner(database);
 
   // Build query
-  let query = `
-      UPDATE ${table}
-      SET
-  `;
+  let query = `UPDATE ${table}`;
+  query += ' SET';
   Object.entries(record).forEach(([key, value]) => {
     if (typeof value === 'string') {
-      query += `${key}='${value}', `;
+      query += ` ${key}='${value}',`;
     } else {
-      query += `${key}=${value}, `;
+      query += ` ${key}=${value},`;
     }
   });
-  query = query.substring(0, query.lastIndexOf(','));
-  query += `
-      ${filterQuery ?? ''}
-  `;
+  query = query.substring(0, query.length - 1); // remove trailing ","
+  if (options?.where) {
+    query += buildWhereQuery(options.where);
+  }
 
   // Execute
-  await queryRunner.manager.query(query);
+  const queryResult = await queryRunner.manager.query(query);
   await queryRunner.release();
+  return queryResult;
 }
 
 /**
  * Deletes a given record in a database table
  * @param {string} database - database name
  * @param {string} table - table name
- * @param {string} [filterQuery] - SQL filtering query for which object to delete
- * @returns {void}
+ * @param {QueryHelperOptions} [options] - optional SQL filtering
+ * @returns {unknown} - query result
  */
 export async function deleteInTable(
   database: string,
   table: string,
-  filterQuery: string,
+  options: QueryHelperOptions,
 ) {
   // Get query runner
   const queryRunner = await getQueryRunner(database);
 
   // Build whole query
-  const query = `
-      DELETE FROM ${table}
-      ${filterQuery ?? ''}
-  `;
+  let query = `DELETE FROM ${table}`;
+  if (options?.where) {
+    query += buildWhereQuery(options.where);
+  }
 
   // Execute
-  await queryRunner.manager.query(query);
+  const queryResult = await queryRunner.manager.query(query);
   await queryRunner.release();
+  return queryResult;
 }
