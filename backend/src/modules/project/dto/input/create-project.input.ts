@@ -15,16 +15,9 @@ export class CreateProjectInput {
   name: string;
 
   @Field(() => [String], {
-    description: 'Associated MR2000 instances',
+    description: 'Associated devices',
     nullable: true,
   })
   @IsArray()
-  mr2000instances: string[];
-
-  @Field(() => [String], {
-    description: 'Associated MR3000 instances',
-    nullable: true,
-  })
-  @IsArray()
-  mr3000instances: string[];
+  devices: string[];
 }

@@ -1,6 +1,13 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { IsArray, IsString } from 'class-validator';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import {
+  AfterInsert,
+  AfterLoad,
+  AfterUpdate,
+  Column,
+  Entity,
+  ManyToOne,
+} from 'typeorm';
 import { BaseEntity } from '../../base-entity/entities/base-entity.entity';
 import { User } from '../../user/entities/user.entity';
 
@@ -21,19 +28,17 @@ export class Project extends BaseEntity {
   })
   user: User;
 
-  @Field(() => [String], {
-    description: 'MR2000 instances that the user has access to',
-    nullable: true,
-  })
-  @Column('simple-array')
+  @Field(() => [String], { description: 'Devices that the user has access to' })
+  @Column('simple-array', { nullable: true })
   @IsArray()
-  mr2000instances: string[];
+  devices: string[];
 
-  @Field(() => [String], {
-    description: 'MR3000 instances that the user has access to',
-    nullable: true,
-  })
-  @Column('simple-array')
-  @IsArray()
-  mr3000instances: string[];
+  @AfterLoad()
+  @AfterInsert()
+  @AfterUpdate()
+  async nullChecks() {
+    if (!this.devices) {
+      this.devices = [];
+    }
+  }
 }

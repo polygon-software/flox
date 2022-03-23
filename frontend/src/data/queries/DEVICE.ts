@@ -9,12 +9,7 @@ export const USER_DEVICES = {
   query: gql`
     query getUserDevices($uuid: ID!) {
       getUserDevices(uuid: $uuid) {
-        ... on MR2000 {
-          cli
-        }
-        ... on MR3000 {
-          cli
-        }
+        cli
         __typename
       }
     }
@@ -27,36 +22,21 @@ export const MY_DEVICES = {
   query: gql`
     query myDevices($unassigned: Boolean, $assigned: Boolean) {
       myDevices(unassigned: $unassigned, assigned: $assigned) {
-        ... on MR2000 {
-          cli
+        cli
+        name
+        serialNumber
+        pid
+        ftp
+        ip
+        firmware
+        project {
+          uuid
           name
-          serialNumber
-          numberOfFiles
-          pid
-          ftp
-          ip
-          firmware
-          project {
-            uuid
-            name
-            __typename
-          }
+          __typename
         }
-        ... on MR3000 {
-          cli
-          name
-          serialNumber
-          ftp
-          ip
-          firmware
-          project {
-            uuid
-            name
-            __typename
-          }
+        __typename
       }
-      __typename
-    }}
+    }
   `,
   tables: ['device'],
   cacheLocation: 'myDevices',
@@ -130,35 +110,19 @@ export const DEVICE_PARAMS = {
 
 export const PROJECT_DEVICES = {
   query: gql`
-    query getProjectDevices($uuid: ID, $name: String){
-      getProjectDevices(uuid: $uuid, name: $name){
-        ...on MR2000{
-          cli
+    query getProjectDevices($uuid: ID, $name: String) {
+      getProjectDevices(uuid: $uuid, name: $name) {
+        cli
+        name
+        serialNumber
+        pid
+        ftp
+        ip
+        firmware
+        project {
+          uuid
           name
-          serialNumber
-          numberOfFiles
-          pid
-          ftp
-          ip
-          firmware
-          project {
-            uuid
-            name
-            __typename
-          }
-        }
-        ... on MR3000 {
-          cli
-          name
-          serialNumber
-          ftp
-          ip
-          firmware
-          project {
-            uuid
-            name
-            __typename
-          }
+          __typename
         }
         __typename
       }
@@ -171,14 +135,21 @@ export const PROJECT_DEVICES = {
 export const EVENT_TABLE_ROWS = {
   query: gql`
     query eventTable(
-      $stationId: String!,
-      $skip: Int!,
-      $take: Int!,
-      $filter: String,
-      $orderBy: String,
+      $stationId: String!
+      $skip: Int!
+      $take: Int!
+      $filter: String
+      $orderBy: String
       $descending: Boolean
-    ){
-      eventTable(cli: $stationId, skip: $skip, take: $take, filter: $filter, orderBy: $orderBy, descending: $descending){
+    ) {
+      eventTable(
+        cli: $stationId
+        skip: $skip
+        take: $take
+        filter: $filter
+        orderBy: $orderBy
+        descending: $descending
+      ) {
         items {
           file
           type
@@ -204,16 +175,13 @@ export const EVENT_TABLE_ROWS = {
     }
   `,
   tables: [],
-  cacheLocation: 'eventTable'
-}
-
+  cacheLocation: 'eventTable',
+};
 
 export const DEVICE_CONTACTS = {
   query: gql`
-    query getDeviceContacts(
-      $cli: String!,
-    ){
-      getDeviceContacts(cli: $cli){
+    query getDeviceContacts($cli: String!) {
+      getDeviceContacts(cli: $cli) {
         id
         cli
         name
@@ -231,10 +199,8 @@ export const DEVICE_CONTACTS = {
     }
   `,
   tables: ['contact'],
-  cacheLocation: 'getDeviceContacts'
-}
-
-
+  cacheLocation: 'getDeviceContacts',
+};
 
 export const DEVICE_QUERIES: QueryObject[] = [
   USER_DEVICES,
@@ -243,5 +209,5 @@ export const DEVICE_QUERIES: QueryObject[] = [
   LEVEL_WRITING,
   DEVICE_PARAMS,
   EVENT_TABLE_ROWS,
-  DEVICE_CONTACTS
+  DEVICE_CONTACTS,
 ];

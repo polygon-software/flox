@@ -4,8 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { GetUserDevicesArgs } from './dto/args/get-user-devices.args';
 import {
-  mr2000fromDatabaseEntry,
-  mr3000fromDatabaseEntry,
+  deviceFromDatabaseEntry,
   deviceType,
   deviceContactFromDatabaseEntry,
 } from '../../helpers/device-helpers';
@@ -172,36 +171,27 @@ export class DeviceService {
       'station',
       queryOptions,
     );
+    const deviceRecords = mr2000instances.concat(mr3000instances);
 
     // Fetch stores for FTP info
     const mr2000store = await fetchFromTable('MR2000', 'store', queryOptions);
     const mr3000store = await fetchFromTable('MR3000', 'store', queryOptions);
+    const storeRecords = mr2000store.concat(mr3000store);
 
     // Fetch VPN table for FTP info
     const vpnInfo = await fetchFromTable('openvpn', 'tempovp', queryOptions);
 
     const devices = [];
 
-    // Add all MR2000 instances that belong to the project
-    for (const instance of mr2000instances) {
-      const mr2000 = await mr2000fromDatabaseEntry(
-        instance,
+    // Add all devices that belong to the project
+    for (const deviceEntry of deviceRecords) {
+      const device = await deviceFromDatabaseEntry(
+        deviceEntry,
         this.projectRepository,
-        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
-        mr2000store.find((storeEntry) => storeEntry.cli === instance.cli),
+        vpnInfo.find((vpnEntry) => vpnEntry.cli === deviceEntry.cli),
+        storeRecords.find((storeEntry) => storeEntry.cli === deviceEntry.cli),
       );
-      devices.push(mr2000);
-    }
-
-    // Add all MR3000 instances that belong to the project
-    for (const instance of mr3000instances) {
-      const mr3000 = await mr3000fromDatabaseEntry(
-        instance,
-        this.projectRepository,
-        vpnInfo.find((vpnEntry) => vpnEntry.cli === instance.cli),
-        mr3000store.find((storeEntry) => storeEntry.cli === instance.cli),
-      );
-      devices.push(mr3000);
+      devices.push(device);
     }
 
     return devices;
@@ -220,9 +210,7 @@ export class DeviceService {
       throw new Error(`No user found for ${getUserDevicesArgs.uuid}`);
     }
 
-    let devices = await this.getDevices(
-      user.mr2000instances.concat(user.mr3000instances),
-    );
+    let devices = await this.getDevices(user.devices);
 
     // Filter based on unassigned/assigned setting
     if (getUserDevicesArgs.unassigned) {
@@ -429,11 +417,7 @@ export class DeviceService {
       throw new Error(`No device found for CLI ${cli}`);
     }
 
-    if (type === 'MR2000') {
-      return mr2000fromDatabaseEntry(instance, this.projectRepository, null);
-    }
-
-    return mr3000fromDatabaseEntry(instance, this.projectRepository, null);
+    return deviceFromDatabaseEntry(instance, this.projectRepository, null);
   }
 
   /**

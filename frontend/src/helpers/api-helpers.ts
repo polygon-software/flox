@@ -1,15 +1,18 @@
 import { executeQuery, subscribeToQuery } from 'src/helpers/data-helpers';
 import { ALL_USERS, MY_USER, USER } from 'src/data/queries/USER';
 import { User } from 'src/data/types/User';
-import { Address } from 'src/data/types/Address';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
-import {MY_PROJECTS} from 'src/data/queries/PROJECT';
-import {DEVICE_CONTACTS, MY_DEVICES, PROJECT_DEVICES} from 'src/data/queries/DEVICE';
-import {Device} from 'src/data/types/Device';
-import {computed, Ref} from 'vue';
-import {DeviceContact} from 'src/data/types/DeviceContact';
-import {MY_CONTACTS} from 'src/data/queries/CONTACT';
+import { MY_PROJECTS } from 'src/data/queries/PROJECT';
+import {
+  DEVICE_CONTACTS,
+  MY_DEVICES,
+  PROJECT_DEVICES,
+} from 'src/data/queries/DEVICE';
+import { Device } from 'src/data/types/Device';
+import { computed, ComputedRef, Ref } from 'vue';
+import { DeviceContact } from 'src/data/types/DeviceContact';
+import { MY_CONTACTS } from 'src/data/queries/CONTACT';
 
 /**
  * Fetch all users.
@@ -17,10 +20,12 @@ import {MY_CONTACTS} from 'src/data/queries/CONTACT';
  */
 export async function fetchAllUsers(): Promise<User[]> {
   const queryResult = await executeQuery(ALL_USERS);
-  if(!queryResult.data[ALL_USERS.cacheLocation]){
-    return []
+  if (!queryResult.data[ALL_USERS.cacheLocation]) {
+    return [];
   }
-  return mapUsers(queryResult.data[ALL_USERS.cacheLocation] as Record<string, unknown>[]);
+  return mapUsers(
+    queryResult.data[ALL_USERS.cacheLocation] as Record<string, unknown>[]
+  );
 }
 
 /**
@@ -30,10 +35,12 @@ export async function fetchAllUsers(): Promise<User[]> {
  */
 export async function fetchUser(userId: string): Promise<User | null> {
   const queryResult = await executeQuery(USER, { uuid: userId });
-  if(!queryResult.data[USER.cacheLocation]){
-    return null
+  if (!queryResult.data[USER.cacheLocation]) {
+    return null;
   }
-  return mapUser(queryResult.data[USER.cacheLocation] as Record<string, unknown>);
+  return mapUser(
+    queryResult.data[USER.cacheLocation] as Record<string, unknown>
+  );
 }
 
 /**
@@ -42,10 +49,12 @@ export async function fetchUser(userId: string): Promise<User | null> {
  */
 export async function myUser(): Promise<User | null> {
   const queryResult = await executeQuery(MY_USER);
-  if(!queryResult.data[MY_USER.cacheLocation]){
-    return null
+  if (!queryResult.data[MY_USER.cacheLocation]) {
+    return null;
   }
-  return mapUser(queryResult.data[MY_USER.cacheLocation] as Record<string, unknown>);
+  return mapUser(
+    queryResult.data[MY_USER.cacheLocation] as Record<string, unknown>
+  );
 }
 
 /**
@@ -55,12 +64,15 @@ export async function myUser(): Promise<User | null> {
 export async function myProjects(): Promise<Project[]> {
   const projects: Project[] = [];
   const queryResult = await executeQuery(MY_PROJECTS);
-  if(queryResult.data[MY_PROJECTS.cacheLocation]){
-    for (const project of queryResult.data[MY_PROJECTS.cacheLocation] as Record<string, unknown>[]) {
+  if (queryResult.data[MY_PROJECTS.cacheLocation]) {
+    for (const project of queryResult.data[MY_PROJECTS.cacheLocation] as Record<
+      string,
+      unknown
+    >[]) {
       projects.push(mapProject(project));
     }
   }
-  return projects
+  return projects;
 }
 
 /**
@@ -70,13 +82,15 @@ export async function myProjects(): Promise<Project[]> {
  */
 export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
   const devices: Device[] = [];
-  const queryResult = await executeQuery(PROJECT_DEVICES, {uuid});
-  if(queryResult.data[PROJECT_DEVICES.cacheLocation]){
-    for (const device of queryResult.data[PROJECT_DEVICES.cacheLocation] as Record<string, unknown>[]) {
+  const queryResult = await executeQuery(PROJECT_DEVICES, { uuid });
+  if (queryResult.data[PROJECT_DEVICES.cacheLocation]) {
+    for (const device of queryResult.data[
+      PROJECT_DEVICES.cacheLocation
+    ] as Record<string, unknown>[]) {
       devices.push(mapDevice(device));
     }
   }
-  return devices
+  return devices;
 }
 
 /**
@@ -84,40 +98,69 @@ export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
  * @param {Record<string, string>} [params] - query parameters for filtering ('unassigned' / 'assigned')
  * @return {ComputedRef<Device[]>} - An array containing all the user's projects
  */
-export function myDevices(params?: Record<string, boolean>) {
-  const queryResult = subscribeToQuery(MY_DEVICES, params) as Ref<Record<string, unknown>[]>;
-  return computed(() => {
-    const devices: Device[] = [];
-    if(queryResult.value){
-      for (const device of queryResult.value ) {
-        devices.push(mapDevice(device));
-      }
-    }
-    return devices
-  });
+export function myDevices(
+  params?: Record<string, boolean>
+): ComputedRef<Device[]> {
+  const queryResult = subscribeToQuery(MY_DEVICES, params) as Ref<
+    Record<string, unknown>[]
+  >;
+  return computed(() => mapDevices(queryResult.value ?? []));
 }
 
 /**
  * Fetch all of a device's contacts
  * @param {string} cli - device CLI
- * @return {DeviceContact[]} - An array containing all the device's contacts
+ * @return {ComputedRef<DeviceContact[]>} - An array containing all the device's contacts
  */
-export function deviceContacts(cli: string) {
-  const queryResult = subscribeToQuery(DEVICE_CONTACTS, {cli}) as Ref<Record<string, unknown>[]>;
-  return computed(() => {
-    return (queryResult.value ?? []).map((contact) => contact as unknown as DeviceContact)
-  });
+export function deviceContacts(cli: string): ComputedRef<DeviceContact[]> {
+  const queryResult = subscribeToQuery(DEVICE_CONTACTS, { cli }) as Ref<
+    Record<string, unknown>[]
+  >;
+  return computed(() => mapContacts(queryResult.value ?? []));
 }
 
 /**
- * Fetch all of a the user's devices' contacts
- * @return {DeviceContact[]} - An array containing all the user's contacts
+ * Fetch all the user's devices' contacts
+ * @return {ComputedRef<DeviceContact[]>} - An array containing all the user's contacts
  */
-export function myContacts() {
-  const queryResult = subscribeToQuery(MY_CONTACTS) as Ref<Record<string, unknown>[]>;
-  return computed(() => {
-    return (queryResult.value ?? []).map((contact) => contact as unknown as DeviceContact)
-  });
+export function myContacts(): ComputedRef<DeviceContact[]> {
+  const queryResult = subscribeToQuery(MY_CONTACTS) as Ref<
+    Record<string, unknown>[]
+  >;
+  return computed(() => mapContacts(queryResult.value ?? []));
+}
+
+/**
+ * Map contact records to contact instances.
+ * @param {Record<string, unknown>[]} records - contact records.
+ * @returns {DeviceContact[]} - contact instances.
+ */
+export function mapContacts(
+  records: Record<string, unknown>[]
+): DeviceContact[] {
+  return records.map((record) => mapContact(record));
+}
+
+/**
+ * Map contact record to contact instance.
+ * @param {Record<string, unknown>} record - contact record.
+ * @returns {DeviceContact} - contact instance.
+ */
+export function mapContact(record: Record<string, unknown>): DeviceContact {
+  return new DeviceContact(
+    record.id as string,
+    record.cli as string,
+    record.name as string,
+    record.email as string,
+    record.phone as string,
+    record.event as boolean,
+    record.alarm1 as boolean,
+    record.alarm2 as boolean,
+    record.smsLimit as boolean,
+    record.power as boolean,
+    record.memory as boolean,
+    record.daily as boolean
+  );
 }
 
 /**
@@ -142,31 +185,11 @@ export function mapUser(record: Record<string, unknown>): User {
     record.email as string,
     record.cognitoUuid as string,
     record.fullName as string,
-    mapAddress(record.address as Record<string, unknown>),
     record.phone as string,
     new Date(record.birthdate as string),
     record.projects as Project[],
-    record.mr2000instances as string[],
-    record.mr3000instances as string[],
-  )
-}
-
-/**
- * Map address record to address instance.
- * @param {Record<string, unknown>|undefined} record - address record.
- * @returns {Address|undefined} - address instance.
- */
-export function mapAddress(record: Record<string, unknown>|undefined): Address|undefined {
-  if(record !== undefined) {
-    return new Address(
-      record.street as string,
-      record.number as string,
-      record.city as string,
-      record.zipCode as string
-    );
-  } else {
-    return undefined;
-  }
+    record.devices as string[]
+  );
 }
 
 /**
@@ -179,9 +202,17 @@ export function mapProject(record: Record<string, unknown>): Project {
     record.name as string,
     record.uuid as string,
     record.user as User,
-    record.mr2000instances as string[],
-    record.mr3000instances as string[],
-  )
+    record.devices as string[]
+  );
+}
+
+/**
+ * Map device records to device instances.
+ * @param {Record<string, unknown>[]} records - device records.
+ * @returns {Device[]} - device instances.
+ */
+export function mapDevices(records: Record<string, unknown>[]): Device[] {
+  return records.map((record) => mapDevice(record));
 }
 
 /**
@@ -195,10 +226,10 @@ export function mapDevice(record: Record<string, unknown>): Device {
     record.name as string,
     record.serialNumber as string,
     record.project as Project,
-    record.pid as string ?? '-',
+    (record.pid as string) ?? '-',
     record.ftp as boolean,
-    record.ip as string ?? '-',
+    (record.ip as string) ?? '-',
     record.firmware as string,
-    record.__typename as ('MR2000'|'MR3000')
-  )
+    record.deviceType as 'MR2000' | 'MR3000'
+  );
 }

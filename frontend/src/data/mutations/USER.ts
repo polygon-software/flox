@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import {MutationTypes} from '../DATA-DEFINITIONS';
+import { MutationTypes } from '../DATA-DEFINITIONS';
 
 /**
  * This file contains all valid GraphQL mutations for users. A mutation is structure as follows
@@ -12,8 +12,8 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
  */
 export const REGISTER_USER = {
   mutation: gql`
-    mutation registerUser($registerUserInput: RegisterUserInput!){
-      register (registerUserInput: $registerUserInput) {
+    mutation registerUser($registerUserInput: RegisterUserInput!) {
+      register(registerUserInput: $registerUserInput) {
         uuid
         cognitoUuid
         username
@@ -21,29 +21,26 @@ export const REGISTER_USER = {
         role
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['user'],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'register'
-}
+  cacheLocation: 'register',
+};
 
 export const ADD_PERMISSION = {
   mutation: gql`
-    mutation addPermission($addUserPermissionInput: AddUserPermissionInput!){
-      addPermission (addUserPermissionInput: $addUserPermissionInput) {
+    mutation addPermission($addUserPermissionInput: AddUserPermissionInput!) {
+      addPermission(addUserPermissionInput: $addUserPermissionInput) {
         uuid
         username
-        fullName
         email
-        phone
-        birthdate
-        projects
-        mr2000instances
-        mr3000instances
+        devices
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['user'],
   type: MutationTypes.UPDATE,
-  cacheLocation: undefined
-}
+  cacheLocation: undefined,
+};

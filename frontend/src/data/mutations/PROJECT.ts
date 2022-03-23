@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import {MutationTypes} from '../DATA-DEFINITIONS';
+import { MutationTypes } from '../DATA-DEFINITIONS';
 
 /**
  * This file contains all valid GraphQL mutations for projects. A mutation is structure as follows
@@ -12,80 +12,87 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
 
 export const CREATE_PROJECT = {
   mutation: gql`
-    mutation createProject($userUuid: ID!, $name: String!){
-      createProject (createProjectInput: {userUuid: $userUuid, name: $name}) {
+    mutation createProject($userUuid: ID!, $name: String!) {
+      createProject(createProjectInput: { userUuid: $userUuid, name: $name }) {
         uuid
         name
-        mr2000instances
-        mr3000instances
+        devices
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['project'],
   type: MutationTypes.CREATE,
-  cacheLocation: 'createProject'
-}
+  cacheLocation: 'createProject',
+};
 
 export const DELETE_PROJECT = {
   mutation: gql`
-    mutation deleteProject($uuid: ID!){
-      deleteProject (deleteProjectInput: {uuid: $uuid}) {
+    mutation deleteProject($uuid: ID!) {
+      deleteProject(deleteProjectInput: { uuid: $uuid }) {
         uuid
         name
-        mr2000instances
-        mr3000instances
+        devices
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['project'],
   type: MutationTypes.DELETE,
-  cacheLocation: 'deleteProject'
-}
+  cacheLocation: 'deleteProject',
+};
 
 export const REMOVE_DEVICE_FROM_PROJECT = {
   mutation: gql`
-    mutation removeDeviceFromProject($uuid: ID!, $cli: String!){
-      removeDeviceFromProject (removeDeviceFromProjectInput: {uuid: $uuid, cli: $cli}) {
+    mutation removeDeviceFromProject($uuid: ID!, $cli: String!) {
+      removeDeviceFromProject(
+        removeDeviceFromProjectInput: { uuid: $uuid, cli: $cli }
+      ) {
         uuid
         name
-        mr2000instances
-        mr3000instances
+        devices
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['project', 'device'],
   type: MutationTypes.DEVALIDATINGUPDATE,
-  cacheLocation: undefined
-}
+  cacheLocation: undefined,
+};
 
 export const ASSIGN_DEVICE_TO_PROJECT = {
   mutation: gql`
-    mutation assignDeviceToProject($uuid: ID!, $cli: String!){
-      assignDeviceToProject (assignDeviceToProjectInput: {uuid: $uuid, cli: $cli}) {
+    mutation assignDeviceToProject($uuid: ID!, $cli: String!) {
+      assignDeviceToProject(
+        assignDeviceToProjectInput: { uuid: $uuid, cli: $cli }
+      ) {
         uuid
         name
-        mr2000instances
-        mr3000instances
+        devices
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['project', 'device'],
   type: MutationTypes.DEVALIDATINGUPDATE,
-  cacheLocation: undefined
-}
+  cacheLocation: undefined,
+};
 
 export const UPDATE_PROJECT_NAME = {
   mutation: gql`
-    mutation updateProjectName($uuid: ID!, $name: String!){
-      updateProjectName (updateProjectInput: {uuid: $uuid, name: $name}) {
+    mutation updateProjectName($uuid: ID!, $name: String!) {
+      updateProjectName(updateProjectInput: { uuid: $uuid, name: $name }) {
         uuid
         name
-        mr2000instances
-        mr3000instances
+        devices
+        user {
+          uuid
+        }
         __typename
       }
-    }`,
+    }
+  `,
   tables: ['project'],
   type: MutationTypes.UPDATE,
-  cacheLocation: undefined
-}
+  cacheLocation: undefined,
+};

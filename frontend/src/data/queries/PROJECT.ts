@@ -7,17 +7,17 @@ import { QueryObject } from 'src/data/DATA-DEFINITIONS';
 
 export const USER_PROJECTS = {
   query: gql`
-    query getUserProjects($uuid: ID!){
-      getUserProjects(uuid: $uuid){
+    query getUserProjects($uuid: ID!) {
+      getUserProjects(uuid: $uuid) {
         name
         uuid
         user {
           uuid
         }
-        mr2000instances
-        mr3000instances
-      __typename
-    }}
+        devices
+        __typename
+      }
+    }
   `,
   tables: ['project'],
   cacheLocation: 'getUserProjects',
@@ -25,23 +25,20 @@ export const USER_PROJECTS = {
 
 export const MY_PROJECTS = {
   query: gql`
-    query{
-      myProjects{
+    query {
+      myProjects {
         name
         uuid
         user {
           uuid
         }
-        mr2000instances
-        mr3000instances
+        devices
         __typename
-      }}
+      }
+    }
   `,
   tables: ['project'],
   cacheLocation: 'myProjects',
 };
 
-export const PROJECT_QUERIES: QueryObject[] = [
-  USER_PROJECTS,
-  MY_PROJECTS,
-];
+export const PROJECT_QUERIES: QueryObject[] = [USER_PROJECTS, MY_PROJECTS];

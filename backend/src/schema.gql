@@ -57,11 +57,8 @@ input AssignDeviceToProjectInput {
 }
 
 input CreateProjectInput {
-  """Associated MR2000 instances"""
-  mr2000instances: [String!]
-
-  """Associated MR3000 instances"""
-  mr3000instances: [String!]
+  """Associated devices"""
+  devices: [String!]
 
   """Project name"""
   name: String!
@@ -88,7 +85,34 @@ input DeleteProjectInput {
   uuid: ID!
 }
 
-union Device = MR2000 | MR3000
+type Device {
+  """CLI ID"""
+  cli: String!
+
+  """Device type (MR2000 or MR3000)"""
+  deviceType: String!
+
+  """Firmware version"""
+  firmware: String!
+
+  """FTP forward status"""
+  ftp: Boolean!
+
+  """IP address, if any"""
+  ip: String
+
+  """Device name"""
+  name: String!
+
+  """PID"""
+  pid: String
+
+  """Project the device belongs to (if any)"""
+  project: Project
+
+  """Serial number"""
+  serialNumber: String!
+}
 
 type DeviceContact {
   alarm1: Boolean!
@@ -237,58 +261,6 @@ type LevelWritingPoint {
   y: Float
 }
 
-type MR2000 {
-  """CLI ID"""
-  cli: String!
-
-  """Firmware version"""
-  firmware: String!
-
-  """FTP forward status"""
-  ftp: Boolean!
-
-  """IP address, if any"""
-  ip: String
-
-  """Device name"""
-  name: String!
-
-  """Number of files"""
-  numberOfFiles: Float!
-
-  """PID"""
-  pid: String!
-
-  """Project the device belongs to (if any)"""
-  project: Project
-
-  """Serial number"""
-  serialNumber: String!
-}
-
-type MR3000 {
-  """CLI ID"""
-  cli: String!
-
-  """Firmware version"""
-  firmware: String!
-
-  """FTP forward status"""
-  ftp: Boolean!
-
-  """IP address, if any"""
-  ip: String
-
-  """Device name"""
-  name: String!
-
-  """Project the device belongs to (if any)"""
-  project: Project
-
-  """Serial number"""
-  serialNumber: String!
-}
-
 type Mutation {
   addContactToDevice(addContactToDeviceInput: AddContactToDeviceInput!): Device!
   addPermission(addUserPermissionInput: AddUserPermissionInput!): User!
@@ -316,14 +288,11 @@ type Project {
   """Date of deletion"""
   deletedAt: DateTime
 
+  """Devices that the user has access to"""
+  devices: [String!]!
+
   """Last modification date"""
   lastModifiedAt: DateTime!
-
-  """MR2000 instances that the user has access to"""
-  mr2000instances: [String!]
-
-  """MR3000 instances that the user has access to"""
-  mr3000instances: [String!]
 
   """Project Name"""
   name: String!
@@ -398,9 +367,6 @@ input UpdateUserInput {
 }
 
 type User {
-  """Date of birth"""
-  birthdate: DateTime!
-
   """Cognito user UUID"""
   cognitoUuid: ID!
 
@@ -410,26 +376,17 @@ type User {
   """Date of deletion"""
   deletedAt: DateTime
 
+  """Devices that the user has access to"""
+  devices: [String!]!
+
   """E-mail"""
   email: String!
-
-  """Full name"""
-  fullName: String!
 
   """Last modification date"""
   lastModifiedAt: DateTime!
 
-  """MR2000 instances that the user has access to"""
-  mr2000instances: [String!]
-
-  """MR3000 instances that the user has access to"""
-  mr3000instances: [String!]
-
-  """Phone number"""
-  phone: String!
-
   """Projects that the user has access to"""
-  projects: [Project!]
+  projects: [Project!]!
 
   """Role of the User"""
   role: Role!

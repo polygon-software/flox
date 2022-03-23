@@ -191,11 +191,7 @@ export class UserService {
     const allowed =
       dbUser.role === ROLE.ADMIN ||
       (dbUser.role === ROLE.USER &&
-        clis.every(
-          (cli) =>
-            dbUser.mr2000instances?.includes(cli) ||
-            dbUser.mr3000instances?.includes(cli),
-        ));
+        clis.every((cli) => dbUser.devices?.includes(cli)));
     if (!allowed) {
       throw new UnauthorizedException();
     }

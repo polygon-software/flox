@@ -2,11 +2,10 @@
  * This file contains all device-related (MR2000/MR3000) helper functions
  */
 
-import { MR2000 } from '../types/MR2000';
-import { MR3000 } from '../types/MR3000';
 import { Repository, Like } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
 import { DeviceContact } from '../types/DeviceContact';
+import { Device } from '../types/Device';
 
 /**
  * Creates an MR2000 instance from a RowPacketData entry
@@ -14,9 +13,9 @@ import { DeviceContact } from '../types/DeviceContact';
  * @param {Repository<Project>} projectRepository - project repository to search in
  * @param {Record<string, unknown>} vpnEntry - entry in VPN table
  * @param {Record<string, unknown>} [storeEntry] - entry in store table, if any
- * @returns {Promise<MR2000>} - MR2000 instance
+ * @returns {Promise<Device>} - device
  */
-export async function mr2000fromDatabaseEntry(
+export async function deviceFromDatabaseEntry(
   entry: Record<string, unknown>,
   projectRepository: Repository<Project>,
   vpnEntry: Record<string, unknown>,
@@ -26,47 +25,13 @@ export async function mr2000fromDatabaseEntry(
   const project = await findProjectForDevice(
     projectRepository,
     entry.cli as string,
-    true,
   );
 
-  return new MR2000(
+  return new Device(
     entry.cli as string, // Device CLIs
     deviceNameFromComment(entry.comment as string), // Device name
     entry.mr_SN as string, // Serial number
     entry.PID as string, // PID
-    entry.last_file as number, // File number
-    project, // Project (if any)
-    !!storeEntry, // FTP forward status (true if an entry is present)
-    vpnEntry ? (vpnEntry.vpn_ip as string) : null,
-    entry.firmware as string,
-  );
-}
-
-/**
- * Creates an MR3000 instance from a RowPacketData entry
- * @param {Record<string, string|number>} entry - database entry row
- * @param {Repository<Project>} projectRepository - project repository to search in
- * @param {Record<string, unknown>} vpnEntry - entry in VPN table
- * @param {Record<string, unknown>} [storeEntry] - entry in store table, if any
- * @returns {Promise<MR3000>} - MR3000 instance
- */
-export async function mr3000fromDatabaseEntry(
-  entry: Record<string, unknown>,
-  projectRepository: Repository<Project>,
-  vpnEntry: Record<string, unknown>,
-  storeEntry?: Record<string, unknown>,
-) {
-  // Find project the instance belongs to project (if any)
-  const project = await findProjectForDevice(
-    projectRepository,
-    entry.cli as string,
-    false,
-  );
-
-  return new MR3000(
-    entry.cli as string, // Device CLI
-    deviceNameFromComment(entry.comment as string), // Device name
-    entry.mr_SN as string, // Serial Number
     project, // Project (if any)
     !!storeEntry, // FTP forward status (true if an entry is present)
     vpnEntry ? (vpnEntry.vpn_ip as string) : null,
@@ -78,19 +43,13 @@ export async function mr3000fromDatabaseEntry(
  * Find the project the given instance belongs to (if any)
  * @param {Repository<Project>} projectRepository - repository to search in
  * @param {string} cli - device name (CLI)
- * @param {boolean} isMr2000 - whether it's an MR2000 device
  * @returns {Promise<void|Project>} - project, if any
  */
 export async function findProjectForDevice(
   projectRepository: Repository<Project>,
   cli: string,
-  isMr2000: boolean,
 ) {
-  const searchString = Like(`%${cli}%`);
-  const filterQuery = isMr2000
-    ? { mr2000instances: searchString }
-    : { mr3000instances: searchString };
-  return projectRepository.findOne({ where: filterQuery });
+  return projectRepository.findOne({ where: { devices: Like(`%${cli}%`) } });
 }
 
 /**

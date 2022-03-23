@@ -43,9 +43,7 @@ export class ProjectService {
       throw new Error(`No project found for ${getProjectDevicesArgs.uuid}`);
     }
 
-    return this.deviceService.getDevices(
-      project.mr2000instances.concat(project.mr3000instances),
-    );
+    return this.deviceService.getDevices(project.devices);
   }
 
   /**
@@ -91,8 +89,7 @@ export class ProjectService {
     const newProject = this.projectRepository.create({
       name: createProjectInput.name,
       user: user,
-      mr2000instances: createProjectInput.mr2000instances ?? [],
-      mr3000instances: createProjectInput.mr3000instances ?? [],
+      devices: createProjectInput.devices ?? [],
     });
     await this.projectRepository.save(newProject);
 
@@ -163,28 +160,19 @@ export class ProjectService {
 
     const cli = removeDeviceFromProjectInput.cli;
 
-    const validMr2000 = project.mr2000instances.includes(cli);
-    const validMr3000 = project.mr3000instances.includes(cli);
+    const validDevice = project.devices.includes(cli);
 
     // Throw error if given device is not part of given project
-    if (!validMr2000 && !validMr3000) {
+    if (!validDevice) {
       throw new Error(
         `Device ${cli} is not assigned to project ${removeDeviceFromProjectInput.uuid}`,
       );
     }
 
     // Build partial entity, depending on type
-    const updateData = validMr2000
-      ? {
-          mr2000instances: project.mr2000instances.filter(
-            (instance) => instance !== cli,
-          ),
-        }
-      : {
-          mr3000instances: project.mr3000instances.filter(
-            (instance) => instance !== cli,
-          ),
-        };
+    const updateData = {
+      devices: project.devices.filter((instance) => instance !== cli),
+    };
 
     await this.projectRepository.update(
       removeDeviceFromProjectInput.uuid,
@@ -215,26 +203,20 @@ export class ProjectService {
 
     // Determine type
     const cli = assignDeviceToProjectInput.cli;
-    const isMr2000 = cli.includes('-'); // TODO use helper function once present
 
     // Throw error if device is already part of a project
     const existingProject = await findProjectForDevice(
       this.projectRepository,
       cli,
-      isMr2000,
     );
     if (existingProject) {
       throw new Error(`Device ${cli} is already assigned to a project`);
     }
 
     // Build partial entity, depending on type
-    const updateData = isMr2000
-      ? ({
-          mr2000instances: (project.mr2000instances ?? []).concat([cli]),
-        } as unknown as QueryDeepPartialEntity<Project>)
-      : ({
-          mr3000instances: (project.mr3000instances ?? []).concat([cli]),
-        } as unknown as QueryDeepPartialEntity<Project>);
+    const updateData = {
+      devices: (project.devices ?? []).concat([cli]),
+    } as unknown as QueryDeepPartialEntity<Project>;
 
     await this.projectRepository.update(
       assignDeviceToProjectInput.uuid,
@@ -295,8 +277,7 @@ export class ProjectService {
     // For non-admin users, check whether they have permissions to access the requested device
     if (
       dbUser.role !== ROLE.ADMIN &&
-      !dbUser.mr2000instances.some((device) => device === cli) &&
-      !dbUser.mr3000instances.some((device) => device === cli)
+      !dbUser.devices.some((device) => device === cli)
     ) {
       throw new Error(ERRORS.resource_not_allowed);
     }

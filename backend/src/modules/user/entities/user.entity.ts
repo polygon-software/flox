@@ -1,12 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import {
-  IsArray,
-  IsDate,
-  IsEmail,
-  IsPhoneNumber,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsArray, IsEmail, IsInt, IsString, IsUUID } from 'class-validator';
 import {
   Column,
   Entity,
@@ -46,53 +39,29 @@ export class User extends BaseEntity {
   @IsString()
   username: string;
 
-  @Field(() => String, { description: 'Full name' })
-  @Column({ nullable: true })
-  @IsString()
-  fullName: string;
-
   @Field(() => String, { description: 'E-mail' })
   @Column()
   @IsString()
   @IsEmail()
   email: string;
 
-  @Field(() => String, { description: 'Phone number' })
-  @Column({ nullable: true })
-  @IsString()
-  @IsPhoneNumber()
-  phone: string;
-
-  @Field(() => Date, { description: 'Date of birth' })
-  @Column({ nullable: true })
-  @IsString()
-  @IsDate()
-  birthdate: Date;
+  @Column('integer')
+  @IsInt()
+  ADID: number;
 
   @Field(() => [Project], {
     description: 'Projects that the user has access to',
-    nullable: true,
   })
   @OneToMany(() => Project, (project) => project.user, {
     cascade: true,
+    nullable: true,
   })
   projects: Project[];
 
-  @Field(() => [String], {
-    description: 'MR2000 instances that the user has access to',
-    nullable: true,
-  })
+  @Field(() => [String], { description: 'Devices that the user has access to' })
   @Column('simple-array', { nullable: true })
   @IsArray()
-  mr2000instances: string[];
-
-  @Field(() => [String], {
-    description: 'MR3000 instances that the user has access to',
-    nullable: true,
-  })
-  @Column('simple-array', { nullable: true })
-  @IsArray()
-  mr3000instances: string[];
+  devices: string[];
 
   @AfterLoad()
   @AfterInsert()
@@ -100,6 +69,9 @@ export class User extends BaseEntity {
   async nullChecks() {
     if (!this.projects) {
       this.projects = [];
+    }
+    if (!this.devices) {
+      this.devices = [];
     }
   }
 }
