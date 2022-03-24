@@ -64,7 +64,7 @@ import {useDialogPluginComponent} from 'quasar';
 import {defineEmits, defineProps, PropType, Ref, ref} from 'vue';
 import {CREATE_PROJECT} from 'src/data/mutations/PROJECT';
 import {executeMutation} from 'src/helpers/data-helpers';
-import {myUser} from 'src/helpers/api-helpers';
+import { loggedInUser } from 'src/helpers/api-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 
 const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginComponent()
@@ -86,7 +86,7 @@ const name: Ref<string|null|undefined> = ref()
  * @return {void}
  */
 async function createProject() {
-  const user = await myUser()
+  const user = await loggedInUser()
   const userUuid = user?.uuid
 
   try{

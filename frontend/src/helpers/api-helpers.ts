@@ -17,7 +17,7 @@ import {
   DEVICE_CONNECTION_LOG_COUNT,
 } from 'src/data/queries/DEVICE';
 import { Device } from 'src/data/types/Device';
-import { computed, ComputedRef, Ref } from 'vue';
+import { computed, ComputedRef, ref, Ref } from 'vue';
 import { DeviceContact } from 'src/data/types/DeviceContact';
 import { MY_CONTACTS } from 'src/data/queries/CONTACT';
 import { ConnectionLogEntry } from 'src/data/types/ConnectionLogEntry';
@@ -32,17 +32,13 @@ import { DeviceLog } from 'src/data/types/DeviceLog';
  * @returns {ComputedRef<LevelWritings>} - level writings
  */
 export function fetchLevelWritings(clients: string[], start: Date, end: Date) {
-  return computed(
-    () =>
-      (
-        subscribeToQuery(LEVEL_WRITING, {
-          clients: clients,
-          start: start,
-          end: end,
-          resolution: 1,
-        }) as Ref<Record<string, unknown>>
-      ).value as LevelWritings
-  );
+  const queryResult = subscribeToQuery(LEVEL_WRITING, {
+    clients: clients,
+    start: start,
+    end: end,
+    resolution: 1,
+  }) as Ref<Record<string, unknown>>;
+  return computed(() => queryResult.value as LevelWritings);
 }
 
 /**
@@ -51,18 +47,16 @@ export function fetchLevelWritings(clients: string[], start: Date, end: Date) {
  * @returns {ComputedRef<Record<string, Record<string, string|number>>>} - device params
  */
 export function fetchDeviceParams(clients: string[]) {
-  return computed(() => {
-    const params: Record<string, Record<string, string | number>> = {};
-    clients.forEach(
-      (cli: string) =>
-        (params[cli] = (
-          subscribeToQuery(DEVICE_PARAMS, { cli: cli }) as Ref<
-            Record<string, unknown>
-          >
-        ).value as Record<string, string | number>)
-    );
-    return params;
-  });
+  const params: Ref<Record<string, Record<string, string | number>>> = ref({});
+  clients.forEach(
+    (cli: string) =>
+      (params.value[cli] = (
+        subscribeToQuery(DEVICE_PARAMS, { cli: cli }) as Ref<
+          Record<string, unknown>
+        >
+      ).value as Record<string, string | number>)
+  );
+  return computed(() => params);
 }
 
 /**
@@ -101,21 +95,16 @@ export function fetchEventTableRows(
   pagination: Record<string, number | boolean | string>,
   search: string | null
 ): ComputedRef<Record<string, Record<string, unknown>[] | number> | null> {
-  return computed(
-    () =>
-      (
-        subscribeToQuery(EVENT_TABLE_ROWS, {
-          stationId: cli,
-          skip:
-            ((pagination.page as number) - 1) *
-            (pagination.rowsPerPage as number),
-          take: pagination.rowsPerPage as number,
-          filter: search,
-          orderBy: (pagination.sortBy as string) || 'date_time',
-          descending: (pagination.descending as boolean) || false,
-        }) as Ref<Record<string, Record<string, unknown>[] | number> | null>
-      ).value
-  );
+  const queryResult = subscribeToQuery(EVENT_TABLE_ROWS, {
+    stationId: cli,
+    skip:
+      ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
+    take: pagination.rowsPerPage as number,
+    filter: search,
+    orderBy: (pagination.sortBy as string) || 'date_time',
+    descending: (pagination.descending as boolean) || false,
+  }) as Ref<Record<string, Record<string, unknown>[] | number> | null>;
+  return computed(() => queryResult.value);
 }
 
 /**
@@ -153,23 +142,20 @@ export function fetchLogForDevice(
   pagination: Record<string, number | boolean | string>,
   type: string | undefined
 ): ComputedRef<DeviceLog | null> {
-  return computed(() => {
-    const variables: Record<string, string | number> = {
-      cli: cli,
-      skip:
-        ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
-      take: pagination.rowsPerPage as number,
-    };
-    if (type) {
-      variables.prefix = type;
-    }
-    return (
-      subscribeToQuery(DEVICE_LOG, variables) as Ref<Record<
-        string,
-        unknown
-      > | null>
-    ).value as DeviceLog | null;
+  const variables: Ref<Record<string, string | number>> = ref({
+    cli: cli,
+    skip:
+      ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
+    take: pagination.rowsPerPage as number,
   });
+  if (type) {
+    variables.value.prefix = type;
+  }
+  const queryResult = subscribeToQuery(
+    DEVICE_LOG,
+    variables.value
+  ) as Ref<Record<string, unknown> | null>;
+  return computed(() => queryResult.value as DeviceLog | null);
 }
 
 /**
@@ -182,18 +168,13 @@ export function fetchFtpLogForDevice(
   cli: string,
   pagination: Record<string, number | boolean | string>
 ) {
-  return computed(
-    () =>
-      (
-        subscribeToQuery(FTP_LOG, {
-          cli: cli,
-          skip:
-            ((pagination.page as number) - 1) *
-            (pagination.rowsPerPage as number),
-          take: pagination.rowsPerPage as number,
-        }) as Ref<Record<string, unknown> | null>
-      ).value as FTPLog | null
-  );
+  const queryResult = subscribeToQuery(FTP_LOG, {
+    cli: cli,
+    skip:
+      ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
+    take: pagination.rowsPerPage as number,
+  }) as Ref<Record<string, unknown> | null>;
+  return computed(() => queryResult.value as FTPLog | null);
 }
 
 /**
@@ -204,11 +185,8 @@ export function fetchFtpLogForDevice(
 export function fetchDeviceConnectionLogCount(
   cli: string
 ): ComputedRef<number> {
-  return computed(
-    () =>
-      (subscribeToQuery(DEVICE_CONNECTION_LOG_COUNT, { cli }).value ??
-        0) as number
-  );
+  const queryResult = subscribeToQuery(DEVICE_CONNECTION_LOG_COUNT, { cli });
+  return computed(() => (queryResult.value ?? 0) as number);
 }
 
 /**

@@ -20,7 +20,6 @@
         outlined
         dense
         style="width: 90px"
-        @update:model-value="refetch"
       />
     </div>
     <q-table

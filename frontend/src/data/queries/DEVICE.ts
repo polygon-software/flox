@@ -10,6 +10,18 @@ export const USER_DEVICES = {
     query getUserDevices($uuid: ID!) {
       getUserDevices(uuid: $uuid) {
         cli
+        name
+        serialNumber
+        pid
+        ftp
+        ip
+        firmware
+        deviceType
+        project {
+          uuid
+          name
+          __typename
+        }
         __typename
       }
     }
@@ -29,6 +41,7 @@ export const MY_DEVICES = {
         ftp
         ip
         firmware
+        deviceType
         project {
           uuid
           name
@@ -119,6 +132,7 @@ export const PROJECT_DEVICES = {
         ftp
         ip
         firmware
+        deviceType
         project {
           uuid
           name
@@ -180,8 +194,8 @@ export const EVENT_TABLE_ROWS = {
 
 export const DEVICE_CONNECTION_LOGS = {
   query: gql`
-    query getConnectionLogs($cli: String!, $take: Int!, $skip: Int!){
-      getConnectionLogs(cli: $cli, take: $take, skip: $skip){
+    query getConnectionLogs($cli: String!, $take: Int!, $skip: Int!) {
+      getConnectionLogs(cli: $cli, take: $take, skip: $skip) {
         id
         cli
         timestamp
@@ -195,23 +209,28 @@ export const DEVICE_CONNECTION_LOGS = {
     }
   `,
   tables: [],
-  cacheLocation: 'getConnectionLogs'
-}
+  cacheLocation: 'getConnectionLogs',
+};
 
 export const DEVICE_CONNECTION_LOG_COUNT = {
   query: gql`
-    query getConnectionLogCount($cli: String!){
+    query getConnectionLogCount($cli: String!) {
       getConnectionLogCount(cli: $cli)
     }
   `,
   tables: [],
-  cacheLocation: 'getConnectionLogCount'
-}
+  cacheLocation: 'getConnectionLogCount',
+};
 
 export const DEVICE_LOG = {
   query: gql`
-    query getDeviceLog($cli: String!, $take: Int!, $skip: Int!, $prefix: String){
-      getDeviceLog(cli: $cli, take: $take, skip: $skip, prefix: $prefix){
+    query getDeviceLog(
+      $cli: String!
+      $take: Int!
+      $skip: Int!
+      $prefix: String
+    ) {
+      getDeviceLog(cli: $cli, take: $take, skip: $skip, prefix: $prefix) {
         entries {
           message
           timestamp
@@ -223,13 +242,13 @@ export const DEVICE_LOG = {
     }
   `,
   tables: [],
-  cacheLocation: 'getDeviceLog'
-}
+  cacheLocation: 'getDeviceLog',
+};
 
 export const FTP_LOG = {
   query: gql`
-    query getFTPLog($cli: String!, $take: Int!, $skip: Int!){
-      getFTPLog(cli: $cli, take: $take, skip: $skip){
+    query getFTPLog($cli: String!, $take: Int!, $skip: Int!) {
+      getFTPLog(cli: $cli, take: $take, skip: $skip) {
         entries {
           ip
           path
@@ -242,8 +261,8 @@ export const FTP_LOG = {
     }
   `,
   tables: [],
-  cacheLocation: 'getFTPLog'
-}
+  cacheLocation: 'getFTPLog',
+};
 
 export const DEVICE_CONTACTS = {
   query: gql`
