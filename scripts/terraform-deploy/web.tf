@@ -20,7 +20,7 @@ resource "aws_elastic_beanstalk_application" "frontend_application" {
 
 // connect eb to the s3 bucket with the app in it
 resource "aws_elastic_beanstalk_application_version" "frontend_application_version" {
-  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-app-version"
+  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-v-${filemd5("frontend.zip")}"
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = aws_s3_object.frontend_source_code.id
   application           = aws_elastic_beanstalk_application.frontend_application.name
