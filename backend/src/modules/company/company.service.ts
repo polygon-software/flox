@@ -16,6 +16,7 @@ import {
 } from '../../auth/authService';
 import {
   sendCompanyRejectEmail,
+  sendDocumentUploadEmail,
   sendPasswordChangeEmail,
 } from '../../email/helper';
 import { UserService } from '../user/user.service';
@@ -174,6 +175,9 @@ export class CompanyService {
     await this.companyRepository.update(uuid, {
       creation_state: CREATION_STATE.AWAITING_DOCUMENTS,
     });
+
+    await sendDocumentUploadEmail(company.email, company.uuid);
+
     return this.companyRepository.findOne(uuid);
   }
 

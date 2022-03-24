@@ -302,7 +302,7 @@ export class FileController {
 
     // Check for valid Mimetype
     if (
-      [
+      ![
         'text/plain',
         'text/x-csv',
         'application/vnd.ms-excel',
