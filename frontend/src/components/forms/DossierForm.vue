@@ -286,6 +286,7 @@ import {dateToInputString} from 'src/helpers/date-helpers';
 import {getAuthToken} from 'src/helpers/cookie-helpers';
 import DossierFinalDocumentPreview from 'components/dossier/DossierFinalDocumentPreview.vue';
 import {AuthenticationService} from 'src/services/AuthService';
+import _ from 'lodash';
 
 /**
  * This component is a form for creating a new dossier or editing an existing one. If a 'prefillDossier' is given
@@ -781,7 +782,6 @@ onBeforeMount(() => {
 
 // Upon mounting, get list of banks
 onMounted(async () => {
-
   // Execute queries for existing & suggested banks
   const banksQuery = await executeQuery(ALL_BANK_NAMES)
   let bankList = banksQuery.data.getBankList as Record<string, string>[]
@@ -1231,7 +1231,7 @@ function enfeoffmentRank(rate: number|null){
  */
 function prefillDossier(){
   if(props.prefillDossier){
-    const initial = props.prefillDossier as Record<string, unknown>
+    const initial = _.cloneDeep(props.prefillDossier) as Record<string, unknown>
 
     const formData = form.values.value as Record<string, unknown>
 
