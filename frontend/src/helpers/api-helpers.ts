@@ -14,15 +14,15 @@ import {
   DEVICE_CONNECTION_LOGS,
   DEVICE_LOG,
   FTP_LOG,
-  DEVICE_CONNECTION_LOG_COUNT
+  DEVICE_CONNECTION_LOG_COUNT,
 } from 'src/data/queries/DEVICE';
 import { Device } from 'src/data/types/Device';
 import { computed, ComputedRef, Ref } from 'vue';
 import { DeviceContact } from 'src/data/types/DeviceContact';
 import { MY_CONTACTS } from 'src/data/queries/CONTACT';
-import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
-import {DeviceLog} from 'src/data/types/DeviceLog';
-import {FTPLog} from 'src/data/types/FTPLog';
+import { ConnectionLogEntry } from 'src/data/types/ConnectionLogEntry';
+import { FTPLog } from 'src/data/types/FTPLog';
+import { DeviceLog } from 'src/data/types/DeviceLog';
 
 /**
  * Fetch the level writings for all stations.
@@ -94,13 +94,13 @@ export async function loggedInUser() {
  * @param {string} cli - Client ID
  * @param {Record<string, number | boolean | string>} pagination - pagination object
  * @param {string|null} search - search string
- * @returns {ComputedRef<Record<string, Record<string, unknown>[]|number>>} - all rows plus metadata.
+ * @returns {ComputedRef<Record<string, Record<string, unknown>[]|number>|null>} - all rows plus metadata.
  */
 export function fetchEventTableRows(
   cli: string,
   pagination: Record<string, number | boolean | string>,
   search: string | null
-): ComputedRef<Record<string, Record<string, unknown>[] | number>> {
+): ComputedRef<Record<string, Record<string, unknown>[] | number> | null> {
   return computed(
     () =>
       (
@@ -113,8 +113,101 @@ export function fetchEventTableRows(
           filter: search,
           orderBy: (pagination.sortBy as string) || 'date_time',
           descending: (pagination.descending as boolean) || false,
-        }) as Ref<Record<string, Record<string, unknown>[] | number>>
+        }) as Ref<Record<string, Record<string, unknown>[] | number> | null>
       ).value
+  );
+}
+
+/**
+ * Fetch connection log entries for a given device
+ * @param {string} cli - device CLI
+ * @param {Record<string, number | boolean | string>} pagination - pagination object
+ * @return {ComputedRef<ConnectionLogEntry[]>} - An array containing the requested number of connection log entries
+ */
+export function fetchConnectionLogForDevice(
+  cli: string,
+  pagination: Record<string, number | boolean | string>
+) {
+  const queryResult = subscribeToQuery(DEVICE_CONNECTION_LOGS, {
+    cli: cli,
+    skip:
+      ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
+    take: pagination.rowsPerPage as number,
+  });
+  return computed(() =>
+    mapConnectionLogEntries(
+      (queryResult.value ?? []) as Record<string, unknown>[]
+    )
+  );
+}
+
+/**
+ * Fetch log for a given device
+ * @param {string} cli - device CLI
+ * @param {Record<string, number | boolean | string>} pagination - pagination object
+ * @param {string} [type] - optional file type prefix for fetching other log types
+ * @return {ComputedRef<DeviceLog|null>} - Device log, containing entries and total count
+ */
+export function fetchLogForDevice(
+  cli: string,
+  pagination: Record<string, number | boolean | string>,
+  type: string | undefined
+): ComputedRef<DeviceLog | null> {
+  return computed(() => {
+    const variables: Record<string, string | number> = {
+      cli: cli,
+      skip:
+        ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
+      take: pagination.rowsPerPage as number,
+    };
+    if (type) {
+      variables.prefix = type;
+    }
+    return (
+      subscribeToQuery(DEVICE_LOG, variables) as Ref<Record<
+        string,
+        unknown
+      > | null>
+    ).value as DeviceLog | null;
+  });
+}
+
+/**
+ * Fetch FTP log for a given device
+ * @param {string} cli - device CLI
+ * @param {Record<string, number | boolean | string>} pagination - pagination object
+ * @return {ComputedRef<FTPLog|null>} - Device log, containing entries and total count
+ */
+export function fetchFtpLogForDevice(
+  cli: string,
+  pagination: Record<string, number | boolean | string>
+) {
+  return computed(
+    () =>
+      (
+        subscribeToQuery(FTP_LOG, {
+          cli: cli,
+          skip:
+            ((pagination.page as number) - 1) *
+            (pagination.rowsPerPage as number),
+          take: pagination.rowsPerPage as number,
+        }) as Ref<Record<string, unknown> | null>
+      ).value as FTPLog | null
+  );
+}
+
+/**
+ * Fetch the number of device connection log entries
+ * @param {string} cli - device CLI
+ * @return {ComputedRef<number>} - amount of log entries
+ */
+export function fetchDeviceConnectionLogCount(
+  cli: string
+): ComputedRef<number> {
+  return computed(
+    () =>
+      (subscribeToQuery(DEVICE_CONNECTION_LOG_COUNT, { cli }).value ??
+        0) as number
   );
 }
 
@@ -216,7 +309,7 @@ export function myContacts(): ComputedRef<DeviceContact[]> {
 
 /*
  *
- * Mapping
+ * Mappings
  *
  */
 
@@ -277,7 +370,7 @@ export function mapProject(record: Record<string, unknown>): Project {
 }
 
 /**
- * Map device record (MR2000 or MR3000) to device instance.
+ * Map device record to device instance.
  * @param {Record<string, unknown>} record - project record.
  * @returns {Project} - project instance.
  */
@@ -292,6 +385,24 @@ export function mapDevice(record: Record<string, unknown>): Device {
     (record.ip as string) ?? '-',
     record.firmware as string,
     record.deviceType as 'MR2000' | 'MR3000'
+  );
+}
+
+/**
+ * Map connectionLogEntry record to connectionLogEntry instance.
+ * @param {Record<string, unknown>} record - project record.
+ * @returns {Project} - project instance.
+ */
+export function mapConnectionLogEntry(record: Record<string, unknown>) {
+  return new ConnectionLogEntry(
+    record.id as number,
+    record.cli as string,
+    record.timestamp as Date,
+    record.vpnIp as string,
+    record.realIp as string,
+    record.port as string,
+    record.traffic as number,
+    record.reason as string
   );
 }
 
@@ -333,6 +444,17 @@ export function mapContacts(
   return records.map((record) => mapContact(record));
 }
 
+/**
+ * Map connectionLogEntry records to connectionLogEntry instances.
+ * @param {Record<string, unknown>[]} records - connectionLogEntry records.
+ * @returns {ConnectionLogEntry[]} - connectionLogEntry instances.
+ */
+export function mapConnectionLogEntries(
+  records: Record<string, unknown>[]
+): ConnectionLogEntry[] {
+  return records.map((record) => mapConnectionLogEntry(record));
+}
+
 /*
  *
  * Types
@@ -345,58 +467,3 @@ type LevelWritings = {
   z: Record<string, unknown>[];
   max: number;
 };
-
-/**
- * Fetch connection log entries for a given device
- * @param {string} cli - device CLI
- * @param {number} skip - number of entries to skip (for pagination)
- * @param {number} take - number of logs to get
- * @return {Promise<ConnectionLogEntry[]>} - An array containing the requested number of connection log entries
- */
-export async function connectionLogForDevice(cli: string, skip = 0, take = 10) {
-  const queryResult = await executeQuery(DEVICE_CONNECTION_LOGS, {cli, take, skip});
-  return queryResult.data[DEVICE_CONNECTION_LOGS.cacheLocation] as ConnectionLogEntry[]
-}
-
-/**
- * Fetch log for a given device
- * @param {string} cli - device CLI
- * @param {number} skip - number of entries to skip (for pagination)
- * @param {number} take - number of logs to get
- * @param {string} [type] - optional file type prefix for fetching other log types
- * @return {Promise<DeviceLog>} - Device log, containing entries and total count
- */
-export async function logForDevice(cli: string, skip = 0, take = 10, type: string|undefined) {
-  const variables: Record<string, string|number> = {cli, take, skip}
-  if(type){
-    variables.prefix = type
-  }
-
-  const queryResult = await executeQuery(DEVICE_LOG, variables);
-  return queryResult.data[DEVICE_LOG.cacheLocation] as DeviceLog
-}
-
-/**
- * Fetch FTP log for a given device
- * @param {string} cli - device CLI
- * @param {number} skip - number of entries to skip (for pagination)
- * @param {number} take - number of logs to get
- * @return {Promise<FTPLog>} - Device log, containing entries and total count
- */
-export async function ftpLogForDevice(cli: string, skip = 0, take = 10) {
-  const variables: Record<string, string|number> = {cli, take, skip}
-  const queryResult = await executeQuery(FTP_LOG, variables);
-  return queryResult.data[FTP_LOG.cacheLocation] as FTPLog
-}
-
-/**
- * Fetch the number of device connection log entries
- * @param {string} cli - device CLI
- * @return {Promise<number>} - amount of log entries
- */
-export function deviceConnectionLogCount(cli: string) {
-  const queryResult = subscribeToQuery(DEVICE_CONNECTION_LOG_COUNT, {cli}) as Ref<number>;
-  return computed(() => {
-    return queryResult.value ?? 0
-  });
-}

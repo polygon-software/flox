@@ -9,12 +9,11 @@
       :rows="rows"
       flat
       :columns="columns"
-      :loading="loading"
       row-key="id"
       :rows-per-page-options="[10, 20, 50]"
       separator="none"
       style="width: 700px;"
-      @request="onRequest"
+      @request="updatePagination"
     >
       <template #body="_props">
         <q-tr
@@ -33,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, Ref, ref, defineProps} from 'vue';
+import {Ref, ref, defineProps, watchEffect} from 'vue';
 import {i18n} from 'boot/i18n';
-import {logForDevice} from 'src/helpers/api-helpers';
+import {fetchLogForDevice} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
 import {DeviceLogEntry} from 'src/data/types/DeviceLogEntry';
 
@@ -57,21 +56,23 @@ const props = defineProps({
   }
 })
 
-// Pagination
-const skip = ref(0)
-const take = ref(10) // Load first 10 entries by default
-const loading = ref(true)
+/**
+ * Updates the table based on user pagination inputs
+ * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
+ * @returns {void} - -
+ */
+function updatePagination(update: Record<string, string|Record<string, unknown>>){
+  pagination.value = update.pagination as Record<string, string|number|boolean>
+}
 
 // QTable pagination
-const pagination = ref(
-  {
-    sortBy: 'timestamp',
-    descending: false,
-    page: 1,
-    rowsNumber: 1, // initially assume at least 1 entry
-    rowsPerPage: take.value
-  }
-)
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 10,
+  rowsNumber: 0,
+  descending: false,
+  sortBy: 'timestamp'
+}) as Ref<Record<string, number|boolean|string>>
 
 // ----- Data -----
 const columns = [
@@ -79,47 +80,15 @@ const columns = [
   { name: 'message', label: i18n.global.t('log_files.message'), field: 'message', sortable: false, align: 'center' },
 ]
 
+const logs = fetchLogForDevice(props.cli, pagination.value, props.type)
 const rows: Ref<DeviceLogEntry[]> = ref([])
 
-// Fetch logs on mount
-onMounted(async () => {
-  // Fetch initial data
-  await onRequest({
-    pagination: pagination.value,
-  })
+watchEffect(() => {
+  if(logs.value){
+    pagination.value.rowsNumber = logs.value.total
+    rows.value = logs.value.entries
+  }
 })
 
-/**
- * Handle server-side pagination on new page request
- * @param {Record<string, Record<string, number>>} reqProps - new pagination data
- * @returns {Promise<void>} - done
- */
-async function onRequest(reqProps: Record<string, Record<string, number|string|boolean>>){
-  loading.value = true
 
-  const { page, rowsPerPage } = reqProps.pagination
-
-  // Update pagination
-  pagination.value.page = page as number
-  pagination.value.rowsPerPage = rowsPerPage as number
-
-  // Update fetching properties
-  take.value = rowsPerPage as number
-  skip.value = ((page as number)-1) * take.value
-
-  // Re-fetch
-  await fetchLogs()
-}
-
-/**
- * Fetches table contents and update rows and pagination
- * @returns {Promise<void>} - done
- */
-async function fetchLogs(){
-  const log = await logForDevice(props.cli, skip.value, take.value, props.type)
-  rows.value = log.entries
-  pagination.value.rowsNumber = log.total
-
-  loading.value = false
-}
 </script>

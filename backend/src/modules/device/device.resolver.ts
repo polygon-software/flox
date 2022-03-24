@@ -238,15 +238,13 @@ export class DeviceResolver {
     @Args() getConnectionLogsArgs: GetConnectionLogsArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
-    const dbUser = await this.userService.getMyUser(user);
-
-    if (
-      !this.userService.isAuthorizedForDevice(dbUser, getConnectionLogsArgs.cli)
-    ) {
-      throw new UnauthorizedException();
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
+      getConnectionLogsArgs.cli,
+    );
+    if (allowed) {
+      return this.deviceService.getConnectionLogs(getConnectionLogsArgs);
     }
-
-    return this.deviceService.getConnectionLogs(getConnectionLogsArgs);
   }
 
   /**
@@ -261,20 +259,15 @@ export class DeviceResolver {
     @Args() getConnectionLogCountArgs: GetConnectionLogCountArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
-    const dbUser = await this.userService.getMyUser(user);
-
-    if (
-      !this.userService.isAuthorizedForDevice(
-        dbUser,
-        getConnectionLogCountArgs.cli,
-      )
-    ) {
-      throw new UnauthorizedException();
-    }
-
-    return this.deviceService.getConnectionLogCount(
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
       getConnectionLogCountArgs.cli,
     );
+    if (allowed) {
+      return this.deviceService.getConnectionLogCount(
+        getConnectionLogCountArgs.cli,
+      );
+    }
   }
 
   /**
@@ -289,13 +282,13 @@ export class DeviceResolver {
     @Args() getDeviceLogArgs: GetDeviceLogArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
-    const dbUser = await this.userService.getMyUser(user);
-
-    if (!this.userService.isAuthorizedForDevice(dbUser, getDeviceLogArgs.cli)) {
-      throw new UnauthorizedException();
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
+      getDeviceLogArgs.cli,
+    );
+    if (allowed) {
+      return this.deviceService.getDeviceLog(getDeviceLogArgs);
     }
-
-    return this.deviceService.getDeviceLog(getDeviceLogArgs);
   }
 
   /**
@@ -310,12 +303,12 @@ export class DeviceResolver {
     @Args() getDeviceLogArgs: GetDeviceLogArgs,
     @CurrentUser() user: Record<string, string>,
   ) {
-    const dbUser = await this.userService.getMyUser(user);
-
-    if (!this.userService.isAuthorizedForDevice(dbUser, getDeviceLogArgs.cli)) {
-      throw new UnauthorizedException();
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
+      getDeviceLogArgs.cli,
+    );
+    if (allowed) {
+      return this.deviceService.getFTPLog(getDeviceLogArgs);
     }
-
-    return this.deviceService.getFTPLog(getDeviceLogArgs);
   }
 }

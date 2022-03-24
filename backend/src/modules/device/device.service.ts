@@ -124,7 +124,9 @@ export class DeviceService {
     const startTime = getLevelWritingArgs.start.getTime();
     const endTime = getLevelWritingArgs.end.getTime();
     const resolution = getLevelWritingArgs.resolution;
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     const host = this.configService.get('pyAPI.host');
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     const port = this.configService.get('pyAPI.port');
     const promiseList = getLevelWritingArgs.clients.map(async (cli) => {
       const url = `http://${host}:${port}/rrt?file=${cli}&start=${startTime}&end=${endTime}&step=${resolution}`;
@@ -577,13 +579,14 @@ export class DeviceService {
    * @returns {int} - number of entries
    */
   async getConnectionLogs(getConnectionLogsArgs: GetConnectionLogsArgs) {
-    const tableEntries = await fetchFromTable(
-      'openvpn',
-      'logovp',
-      `WHERE cli='${getConnectionLogsArgs.cli}'
-      ORDER BY timestamp DESC
-      LIMIT ${getConnectionLogsArgs.skip}, ${getConnectionLogsArgs.take}`,
-    );
+    const tableEntries = await fetchFromTable('openvpn', 'logovp', {
+      where: { cli: getConnectionLogsArgs.cli },
+      order_by: 'timestamp DESC',
+      limit: {
+        skip: getConnectionLogsArgs.skip,
+        take: getConnectionLogsArgs.take,
+      },
+    });
 
     // Map to actual type & return
     return tableEntries.map((tableEntry) =>
@@ -597,7 +600,7 @@ export class DeviceService {
    * @returns {Promise<number>} - number of entries
    */
   async getConnectionLogCount(cli: string) {
-    return fetchCountFromTable('openvpn', 'logovp', `WHERE cli='${cli}'`);
+    return fetchCountFromTable('openvpn', 'logovp', { where: { cli: cli } });
   }
 
   /**

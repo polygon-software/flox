@@ -7,12 +7,11 @@
       :rows="rows"
       flat
       :columns="columns"
-      :loading="loading"
       row-key="id"
       :rows-per-page-options="[10]"
       separator="none"
       style="width: 700px;"
-      @request="onRequest"
+      @request="updatePagination"
     >
       <template #body="_props">
         <q-tr
@@ -40,10 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, Ref, ref, defineProps, watch} from 'vue';
+import {Ref, ref, defineProps, watch} from 'vue';
 import {i18n} from 'boot/i18n';
-import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
-import {connectionLogForDevice, deviceConnectionLogCount} from 'src/helpers/api-helpers';
+import {fetchConnectionLogForDevice, fetchDeviceConnectionLogCount} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
 
 const props = defineProps({
@@ -53,21 +51,23 @@ const props = defineProps({
   }
 })
 
-// Pagination
-const skip = ref(0)
-const take = ref(10) // Load first 10 entries by default
-const loading = ref(true)
+/**
+ * Updates the table based on user pagination inputs
+ * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
+ * @returns {void} - -
+ */
+function updatePagination(update: Record<string, string|Record<string, unknown>>){
+  pagination.value = update.pagination as Record<string, string|number|boolean>
+}
 
 // QTable pagination
-const pagination = ref(
-  {
-    sortBy: 'timestamp',
-    descending: false,
-    page: 1,
-    rowsNumber: 1, // initially assume at least 1 entry
-    rowsPerPage: take.value
-  }
-)
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 10,
+  rowsNumber: 0,
+  descending: false,
+  sortBy: 'timestamp'
+}) as Ref<Record<string, number|boolean|string>>
 
 // ----- Data -----
 const columns = [
@@ -78,54 +78,15 @@ const columns = [
   { name: 'event', label: i18n.global.t('client_connectivity.event'), field: 'event', sortable: false, align: 'center' },
 ]
 
-const rows: Ref<ConnectionLogEntry[]> = ref([])
-
-// Fetch logs on mount
-onMounted(async () => {
-  // Fetch initial data
-  await onRequest({
-    pagination: pagination.value,
-  })
-})
+const rows = fetchConnectionLogForDevice(props.cli, pagination.value)
 
 // ComputedRef for total row count
-const rowsNumber = deviceConnectionLogCount(props.cli)
+const rowsNumber = fetchDeviceConnectionLogCount(props.cli)
 
 // Update if new number of rows detected
 watch(rowsNumber, (newVal) => {
   // Get total row count (for pagination)
   pagination.value.rowsNumber = newVal
 })
-
-/**
- * Handle server-side pagination on new page request
- * @param {Record<string, Record<string, number>>} reqProps - new pagination data
- * @returns {Promise<void>} - done
- */
-async function onRequest(reqProps: Record<string, Record<string, number|string|boolean>>){
-  loading.value = true
-
-  const { page, rowsPerPage } = reqProps.pagination
-
-  // Update pagination
-  pagination.value.page = page as number
-  pagination.value.rowsPerPage = rowsPerPage as number
-
-  // Update fetching properties
-  take.value = rowsPerPage as number
-  skip.value = ((page as number)-1) * take.value
-
-  // Re-fetch
-  await fetchLogs()
-}
-
-/**
- * Fetches table contents
- * @returns {Promise<void>} - done
- */
-async function fetchLogs(){
-  rows.value = await connectionLogForDevice(props.cli, skip.value, take.value)
-  loading.value = false
-}
 
 </script>

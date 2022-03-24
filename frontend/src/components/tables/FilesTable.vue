@@ -137,12 +137,14 @@ const search = ref(null)
 const events = fetchEventTableRows(props.stationId, pagination.value, search.value)
 
 watchEffect(() => {
-  pagination.value.rowsNumber = events.value.lengthAll as number
-  rows.value = events.value.items as Record<string, unknown>[]
-  lengths.value.total = events.value.lengthAll as number
-  lengths.value.Pk = events.value.lengthPk as number
-  lengths.value.Evt = events.value.lengthEvt as number
-  lengths.value.Zip = events.value.lengthZip as number
+  if(events.value){
+    pagination.value.rowsNumber = events.value.lengthAll as number
+    rows.value = events.value.items as Record<string, unknown>[]
+    lengths.value.total = events.value.lengthAll as number
+    lengths.value.Pk = events.value.lengthPk as number
+    lengths.value.Evt = events.value.lengthEvt as number
+    lengths.value.Zip = events.value.lengthZip as number
+  }
 })
 
 const formatDate = date.formatDate
