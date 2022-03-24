@@ -1,5 +1,7 @@
 <template>
-  <strong>{{ $t('client_connectivity.title') }}</strong>
+  <strong class="q-mt-lg">
+    {{ $t('log_files.ftp_log_file') }}
+  </strong>
   <div class="column">
     <q-table
       v-model:pagination="pagination"
@@ -9,7 +11,7 @@
       :columns="columns"
       :loading="loading"
       row-key="id"
-      :rows-per-page-options="[10]"
+      :rows-per-page-options="[10, 20, 50]"
       separator="none"
       style="width: 700px;"
       @request="onRequest"
@@ -21,17 +23,11 @@
           <q-td key="date_time">
             {{ formatDateTime(_props.row.timestamp) }}
           </q-td>
-          <q-td key="real_ip">
-            {{ _props.row.realIp }}
+          <q-td key="ip">
+            {{ _props.row.ip }}
           </q-td>
-          <q-td key="port">
-            {{ _props.row.port }}
-          </q-td>
-          <q-td key="vpn_ip">
-            {{ _props.row.vpnIp }}
-          </q-td>
-          <q-td key="event">
-            {{ _props.row.reason }}
+          <q-td key="path">
+            {{ _props.row.path }}
           </q-td>
         </q-tr>
       </template>
@@ -40,17 +36,17 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, Ref, ref, defineProps, watch} from 'vue';
+import {onMounted, Ref, ref, defineProps} from 'vue';
 import {i18n} from 'boot/i18n';
-import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
-import {connectionLogForDevice, deviceConnectionLogCount} from 'src/helpers/api-helpers';
+import {ftpLogForDevice} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
+import {FTPLogEntry} from 'src/data/types/FTPLogEntry';
 
 const props = defineProps({
   cli: {
     type: String,
     required: true
-  }
+  },
 })
 
 // Pagination
@@ -72,13 +68,11 @@ const pagination = ref(
 // ----- Data -----
 const columns = [
   { name: 'timestamp', label: i18n.global.t('client_connectivity.date_time'), field: 'timestamp', sortable: false, align: 'center' },
-  { name: 'realIp', label: i18n.global.t('client_connectivity.real_ip'), field: 'realIp', sortable: false, align: 'center' },
-  { name: 'port', label: i18n.global.t('client_connectivity.port'), field: 'port', sortable: false, align: 'center' },
-  { name: 'vpnIp', label: i18n.global.t('client_connectivity.vpn_ip'), field: 'vpnIp', sortable: false, align: 'center' },
-  { name: 'event', label: i18n.global.t('client_connectivity.event'), field: 'event', sortable: false, align: 'center' },
+  { name: 'ip', label: i18n.global.t('log_files.ip'), field: 'ip', sortable: false, align: 'center' },
+  { name: 'path', label: i18n.global.t('log_files.path'), field: 'path', sortable: false, align: 'center' },
 ]
 
-const rows: Ref<ConnectionLogEntry[]> = ref([])
+const rows: Ref<FTPLogEntry[]> = ref([])
 
 // Fetch logs on mount
 onMounted(async () => {
@@ -86,15 +80,6 @@ onMounted(async () => {
   await onRequest({
     pagination: pagination.value,
   })
-})
-
-// ComputedRef for total row count
-const rowsNumber = deviceConnectionLogCount(props.cli)
-
-// Update if new number of rows detected
-watch(rowsNumber, (newVal) => {
-  // Get total row count (for pagination)
-  pagination.value.rowsNumber = newVal
 })
 
 /**
@@ -120,12 +105,14 @@ async function onRequest(reqProps: Record<string, Record<string, number|string|b
 }
 
 /**
- * Fetches table contents
+ * Fetches table contents and update rows and pagination
  * @returns {Promise<void>} - done
  */
 async function fetchLogs(){
-  rows.value = await connectionLogForDevice(props.cli, skip.value, take.value)
+  const log = await ftpLogForDevice(props.cli, skip.value, take.value)
+  rows.value = log.entries
+  pagination.value.rowsNumber = log.total
+
   loading.value = false
 }
-
 </script>

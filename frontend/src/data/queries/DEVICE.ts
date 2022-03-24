@@ -207,6 +207,72 @@ export const EVENT_TABLE_ROWS = {
   cacheLocation: 'eventTable'
 }
 
+export const DEVICE_CONNECTION_LOGS = {
+  query: gql`
+    query getConnectionLogs($cli: String!, $take: Int!, $skip: Int!){
+      getConnectionLogs(cli: $cli, take: $take, skip: $skip){
+        id
+        cli
+        timestamp
+        vpnIp
+        realIp
+        port
+        traffic
+        reason
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getConnectionLogs'
+}
+
+export const DEVICE_CONNECTION_LOG_COUNT = {
+  query: gql`
+    query getConnectionLogCount($cli: String!){
+      getConnectionLogCount(cli: $cli)
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getConnectionLogCount'
+}
+
+export const DEVICE_LOG = {
+  query: gql`
+    query getDeviceLog($cli: String!, $take: Int!, $skip: Int!, $prefix: String){
+      getDeviceLog(cli: $cli, take: $take, skip: $skip, prefix: $prefix){
+        entries {
+          message
+          timestamp
+          __typename
+        }
+        total
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getDeviceLog'
+}
+
+export const FTP_LOG = {
+  query: gql`
+    query getFTPLog($cli: String!, $take: Int!, $skip: Int!){
+      getFTPLog(cli: $cli, take: $take, skip: $skip){
+        entries {
+          ip
+          path
+          timestamp
+          __typename
+        }
+        total
+        __typename
+      }
+    }
+  `,
+  tables: [],
+  cacheLocation: 'getFTPLog'
+}
 
 export const DEVICE_CONTACTS = {
   query: gql`
@@ -242,6 +308,11 @@ export const DEVICE_QUERIES: QueryObject[] = [
   PROJECT_DEVICES,
   LEVEL_WRITING,
   DEVICE_PARAMS,
+  EVENT_TABLE_ROWS,
+  DEVICE_CONNECTION_LOGS,
+  DEVICE_CONNECTION_LOG_COUNT,
+  DEVICE_LOG,
+  FTP_LOG,
   EVENT_TABLE_ROWS,
   DEVICE_CONTACTS
 ];

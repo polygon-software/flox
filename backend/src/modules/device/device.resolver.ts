@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import { DeviceService } from './device.service';
 import {
@@ -17,12 +17,17 @@ import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
-import { ROLE } from '../../ENUM/ENUM';
+import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
+import { ConnectionLogEntry } from '../../types/ConnectionLogEntry';
+import { GetConnectionLogCountArgs } from './dto/args/get-connection-log-count.args';
+import { GetDeviceLogArgs } from './dto/args/get-device-log.args';
+import { DeviceLog } from '../../types/DeviceLog';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 import { GetDeviceContactsArgs } from './dto/args/get-device-contacts.args';
 import { DeviceContact } from '../../types/DeviceContact';
 import { EditContactInput } from './dto/input/edit-contact.input';
 import { DeleteContactInput } from './dto/input/delete-contact.input';
+import { FTPLog } from '../../types/FTPLog';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -241,5 +246,98 @@ export class DeviceResolver {
     }
 
     throw new UnauthorizedException();
+  }
+
+  /**
+   * Get connection status logs for a device if the user has permission.
+   * @param {GetConnectionLogsArgs} getConnectionLogsArgs - contains station CLI & number of logs to fetch / skip
+   * @param {Record<string, string>} user - Cognito user from request.
+   * @returns {Promise<LevelWriting>} - The level writings of the devices.
+   */
+  @AnyRole()
+  @Query(() => [ConnectionLogEntry], { name: 'getConnectionLogs' })
+  async getConnectionLogs(
+    @Args() getConnectionLogsArgs: GetConnectionLogsArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+
+    if (
+      !this.userService.isAuthorizedForDevice(dbUser, getConnectionLogsArgs.cli)
+    ) {
+      throw new UnauthorizedException();
+    }
+
+    return this.deviceService.getConnectionLogs(getConnectionLogsArgs);
+  }
+
+  /**
+   * Get the number of connection logs for a device
+   * @param {GetConnectionLogCountArgs} getConnectionLogCountArgs - contains device CLI
+   * @param {Record<string, string>} user - Cognito user from request.
+   * @returns {Promise<LevelWriting>} - The level writings of the devices.
+   */
+  @AnyRole()
+  @Query(() => Int, { name: 'getConnectionLogCount' })
+  async getConnectionLogCount(
+    @Args() getConnectionLogCountArgs: GetConnectionLogCountArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+
+    if (
+      !this.userService.isAuthorizedForDevice(
+        dbUser,
+        getConnectionLogCountArgs.cli,
+      )
+    ) {
+      throw new UnauthorizedException();
+    }
+
+    return this.deviceService.getConnectionLogCount(
+      getConnectionLogCountArgs.cli,
+    );
+  }
+
+  /**
+   * Get the device log entries for a device
+   * @param {GetDeviceLogArgs} getDeviceLogArgs - contains station CLI
+   * @param {Record<string, string>} user - Cognito user from request
+   * @returns {Promise<DeviceLog>} - The logs of the device
+   */
+  @AnyRole()
+  @Query(() => DeviceLog, { name: 'getDeviceLog' })
+  async getDeviceLog(
+    @Args() getDeviceLogArgs: GetDeviceLogArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+
+    if (!this.userService.isAuthorizedForDevice(dbUser, getDeviceLogArgs.cli)) {
+      throw new UnauthorizedException();
+    }
+
+    return this.deviceService.getDeviceLog(getDeviceLogArgs);
+  }
+
+  /**
+   * Get the FTP log entries for a device
+   * @param {GetDeviceLogArgs} getDeviceLogArgs - contains station CLI
+   * @param {Record<string, string>} user - Cognito user from request
+   * @returns {Promise<FTPLog>} - The logs of the device
+   */
+  @AnyRole()
+  @Query(() => FTPLog, { name: 'getFTPLog' })
+  async getFTPLog(
+    @Args() getDeviceLogArgs: GetDeviceLogArgs,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    const dbUser = await this.userService.getMyUser(user);
+
+    if (!this.userService.isAuthorizedForDevice(dbUser, getDeviceLogArgs.cli)) {
+      throw new UnauthorizedException();
+    }
+
+    return this.deviceService.getFTPLog(getDeviceLogArgs);
   }
 }

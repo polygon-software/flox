@@ -219,15 +219,18 @@ export default {
   client_connectivity: {
     title: 'Client-Konnektivität',
     date_time: 'Datum/Zeit',
-    real_ip: 'Echter IP',
+    real_ip: 'Echte IP',
     port: 'Port',
     vpn_ip: 'VPN IP',
-    event: 'Ereignisse',
+    event: 'Ereignis',
   },
   log_files: {
     log_file: 'LOG Datei',
     ftp_log_file: 'FTP LOG Datei - aktuelle Uploads',
     rest_log_file: 'REST LOG Datei',
+    message: 'Nachricht',
+    ip: 'IP',
+    path: 'Pfad'
   },
   files: {
     events: '{events} Ereignisse',
