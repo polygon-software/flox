@@ -301,21 +301,20 @@ export class DeviceService {
   }
 
   /**
-   * count(*) Query with filter clause
+   * Get the number of events matching the given type
    * @param {string} clientId - client id
    * @param {string} type - Evt, Pk or Zip
-   * @returns {int} - number of entries
+   * @returns {Promise<number>} - number of entries
    */
   async getEventsLength(clientId: string, type = ''): Promise<number> {
     const database = deviceType(clientId);
     const typeClause =
       type === '' ? '' : `AND typ='${this.reverseTypeMapping[type]}'`;
-    const res = await fetchCountFromTable(
+    return fetchCountFromTable(
       database,
       'events',
       `WHERE cli='${clientId}' ${typeClause}`,
     );
-    return res[0]['count(*)'];
   }
 
   /**
@@ -607,16 +606,10 @@ export class DeviceService {
   /**
    * Get the total number of connection logs for a given device
    * @param {string} cli - device CLI
-   * @returns {int} - number of entries
+   * @returns {Promise<number>} - number of entries
    */
   async getConnectionLogCount(cli: string) {
-    const numberOfLogs = await fetchCountFromTable(
-      'openvpn',
-      'logovp',
-      `WHERE cli='${cli}'`,
-    );
-
-    return numberOfLogs[0]['count(*)'];
+    return fetchCountFromTable('openvpn', 'logovp', `WHERE cli='${cli}'`);
   }
 
   /**

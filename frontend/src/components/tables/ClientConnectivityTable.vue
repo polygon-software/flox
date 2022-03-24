@@ -40,13 +40,11 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, Ref, ref, defineProps} from 'vue';
+import {onMounted, Ref, ref, defineProps, watch} from 'vue';
 import {i18n} from 'boot/i18n';
 import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
-import {connectionLogForDevice} from 'src/helpers/api-helpers';
+import {connectionLogForDevice, deviceConnectionLogCount} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
-import {DEVICE_CONNECTION_LOG_COUNT} from 'src/data/queries/DEVICE';
-import {executeQuery} from 'src/helpers/data-helpers';
 
 const props = defineProps({
   cli: {
@@ -84,14 +82,19 @@ const rows: Ref<ConnectionLogEntry[]> = ref([])
 
 // Fetch logs on mount
 onMounted(async () => {
-  // Get total row count (for pagination)
-  const countQueryResult = await executeQuery(DEVICE_CONNECTION_LOG_COUNT, {cli: props.cli})
-  pagination.value.rowsNumber = countQueryResult.data[DEVICE_CONNECTION_LOG_COUNT.cacheLocation] as number
-
   // Fetch initial data
   await onRequest({
     pagination: pagination.value,
   })
+})
+
+// ComputedRef for total row count
+const rowsNumber = deviceConnectionLogCount(props.cli)
+
+// Update if new number of rows detected
+watch(rowsNumber, (newVal) => {
+  // Get total row count (for pagination)
+  pagination.value.rowsNumber = newVal
 })
 
 /**

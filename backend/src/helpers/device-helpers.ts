@@ -183,12 +183,11 @@ export function mapDeviceLogEntry(entry: string) {
   // Remove trailing ' \n'
   message = message.substring(0, message.length - 2);
 
-  // const date =
   return new DeviceLogEntry(timestamp, message);
 }
 
 /**
- * Maps a FP log entry string to a DeviceLogEntry instance
+ * Maps a FTP log entry string to a FTPLogEntry instance
  * @param {string} entry - a single log line
  * @returns {FTPLogEntry} - log entry instance
  */

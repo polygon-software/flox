@@ -10,7 +10,8 @@ import {
   DEVICE_LOG,
   DEVICE_CONTACTS,
   MY_DEVICES,
-  PROJECT_DEVICES, FTP_LOG
+  PROJECT_DEVICES,
+  FTP_LOG, DEVICE_CONNECTION_LOG_COUNT
 } from 'src/data/queries/DEVICE';
 import {Device} from 'src/data/types/Device';
 import {computed, Ref} from 'vue';
@@ -253,4 +254,16 @@ export async function ftpLogForDevice(cli: string, skip = 0, take = 10) {
   const variables: Record<string, string|number> = {cli, take, skip}
   const queryResult = await executeQuery(FTP_LOG, variables);
   return queryResult.data[FTP_LOG.cacheLocation] as FTPLog
+}
+
+/**
+ * Fetch the number of device connection log entries
+ * @param {string} cli - device CLI
+ * @return {Promise<number>} - amount of log entries
+ */
+export function deviceConnectionLogCount(cli: string) {
+  const queryResult = subscribeToQuery(DEVICE_CONNECTION_LOG_COUNT, {cli}) as Ref<number>;
+  return computed(() => {
+    return queryResult.value ?? 0
+  });
 }
