@@ -117,7 +117,8 @@ export default {
     reset_password: 'Passwort zurücksetzen',
     enter_username: 'Bitte geben Sie ihren Nutzernamen ein',
     verification: 'Verifizierung',
-    enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein'
+    enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein',
+    dossier_not_editable: 'Da dieses Dossier vollständig ist, ist es nicht mehr bearbeitbar.'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -166,7 +167,8 @@ export default {
     upload_documents: 'Dokumente hochladen',
     save_and_print: 'Speichern & Drucken',
     back_to_dashboard: 'Zurück zum dashboard',
-    to_dashboard: 'Zum Dashboard'
+    to_dashboard: 'Zum Dashboard',
+    edit: 'Bearbeiten'
   },
   documents: {
     choose_file: 'Datei wählen',
@@ -378,7 +380,7 @@ export default {
     calculations: 'Berechnungen',
     building_lease: 'Baurecht',
     building_lease_interest: 'Baurechtzins (pro Jahr in CHF)',
-    renovation: 'Renovation',
+    renovation: 'Getätigte Renovationen',
     portion: 'Tranche',
     type: 'Art',
     expiration_date: 'Ablaufdatum',
@@ -420,15 +422,17 @@ export default {
   },
   dossier_status_enum: {
     OPEN: 'Offen',
-    SIGNED: 'Kreditvertrag unterzeichnet zurück',
-    REJECTED: 'Offerte abgelehnt',
+    IN_PROGRESS: 'In Bearbeitung',
     SUBMITTED: 'Eingereicht',
     OFFERED: 'Offeriert',
-    COMPLETED: 'Abgeschlossen',
-    IN_PROGRESS: 'Kreditvertrag in Bearbeitung',
-    SENT: 'Kreditvertrag versendet',
+    REJECTED: 'Offerte abgelehnt',
     CONTRACT_UPLOADED: 'Auftragsblatt hochgeladen',
-    PRODUCT_AGREEMENT_CONFIRMED: 'Produktvereinbarung bestätigt'
+    CREDIT_CONTRACTS_IN_PROGRESS: 'Kreditverträge in Bearbeitung',
+    CREDIT_CONTRACTS_RECEIVED: 'Kreditverträge von Bank erhalten',
+    CREDIT_CONTRACTS_SIGNED: 'Kreditverträge unterzeichnet zurück',
+    PRODUCT_AGREEMENT_CONFIRMED: 'Produktvereinbarung bestätigt',
+    PROVISIONS_PAID: 'Provisionierung ausbezahlt',
+    COMPLETED: 'Dossier abgeschlossen',
   },
   offer_status_enum: {
     INTERESTED: 'Interessiert',

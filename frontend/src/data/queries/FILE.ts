@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 export const PRIVATE_FILE = {
   query: gql`
-    query getPrivateFile($uuid: ID!){
-      getPrivateFile(uuid: $uuid){
+    query getPrivateFile($uuid: ID!, $contentType: String){
+      getPrivateFile(uuid: $uuid, contentType: $contentType){
         uuid
         url
         key

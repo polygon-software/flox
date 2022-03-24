@@ -116,7 +116,8 @@ export default {
     reset_password: 'Reset Password',
     enter_username: 'Please enter your username',
     verification: 'Verification',
-    enter_2fa:  'Enter your two-factor authentication code'
+    enter_2fa:  'Enter your two-factor authentication code',
+    dossier_not_editable: 'Since this dossier is complete, it is no longer editable.'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -165,6 +166,7 @@ export default {
     save_and_print: 'Save & Print',
     back_to_dashboard: 'Back to dashboard',
     to_dashboard: 'To dashboard',
+    edit: 'Edit',
   },
   documents: {
     choose_file: 'Choose file',
@@ -378,7 +380,7 @@ export default {
     building_lease: 'Building lease',
     building_lease_interest: 'Building lease interest  (per year in CHF)',
     type: 'Type',
-    renovation: 'Renovation',
+    renovation: 'Completed Renovations',
     renovation_year: 'Year of Renovation',
     amount: 'Amount in CHF',
     portion: 'Portion',
@@ -419,15 +421,17 @@ export default {
   },
   dossier_status_enum: {
     OPEN: 'Open',
-    SIGNED: 'Credit contract signed',
-    REJECTED: 'Offer rejected',
+    IN_PROGRESS: 'In progress',
     SUBMITTED: 'Submitted',
     OFFERED: 'Offered',
-    COMPLETED: 'Completed',
-    IN_PROGRESS: 'Credit contract in process',
-    SENT: 'Credit contract sent',
+    REJECTED: 'Offer rejected',
     CONTRACT_UPLOADED: 'Order sheet uploaded',
-    PRODUCT_AGREEMENT_CONFIRMED: 'Product agreement confirmed'
+    CREDIT_CONTRACTS_IN_PROGRESS: 'Credit contracts in progress',
+    CREDIT_CONTRACTS_RECEIVED: 'Credit contracts received from bank',
+    CREDIT_CONTRACTS_SIGNED: 'Credit contracts signed',
+    PRODUCT_AGREEMENT_CONFIRMED: 'Product agreement confirmed',
+    PROVISIONS_PAID: 'Provisions paid',
+    COMPLETED: 'Dossier completed',
   },
   offer_status_enum: {
     INTERESTED: 'Interested',

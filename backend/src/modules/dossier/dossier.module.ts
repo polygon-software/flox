@@ -9,10 +9,11 @@ import { Offer } from '../offer/entities/offer.entity';
 import { EmployeeModule } from '../employee/employee.module';
 import { BankModule } from '../bank/bank.module';
 import { FileModule } from '../file/file.module';
+import { Address } from '../address/entities/address.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Dossier, User, Offer]),
+    TypeOrmModule.forFeature([Dossier, User, Offer, Address]),
     UserModule,
     EmployeeModule,
     BankModule,

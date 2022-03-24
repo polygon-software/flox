@@ -82,6 +82,87 @@ export const CREATE_DOSSIER = {
   cacheLocation: 'createDossier'
 }
 
+export const UPDATE_DOSSIER = {
+  mutation: gql`
+    mutation updateDossier($updateDossierInput: UpdateDossierInput!){
+      updateDossier(updateDossierInput: $updateDossierInput) {
+        uuid
+        status
+        non_arrangeable
+        created_at
+        first_name
+        last_name
+        email
+        phone
+        birthdate
+        has_amortisation
+        direct_amortisation
+        amortisation_amount
+        has_building_lease
+        has_renovation
+        renovation_price
+        renovation_year
+        readable_id
+        purchase_date
+        assets
+        purchase_price
+        property_type
+        last_modified_at
+        mortgage_amount
+        prosecutions
+        loss_certificates
+        amortisation_amount
+        affordability
+        eligible_income
+        total_costs
+        value_estimate_customer
+        value_estimate_calculated
+        enfeoffment_estimate_customer
+        enfeoffment_estimate_calculated
+        partition_amounts
+        partition_dates
+        address {
+          uuid
+          street
+          number
+          city
+          zip_code
+          __typename
+        }
+        original_bank {
+          uuid
+          abbreviation
+          name
+          __typename
+        }
+        employee {
+          uuid
+          email
+          __typename
+        }
+        documents{
+          uuid
+          key
+          __typename
+        }
+        final_document{
+          uuid
+          key
+          __typename
+        }
+        offers{
+          __typename
+          uuid
+          status
+        }
+        __typename
+      }
+    }`,
+  tables: ['dossier'],
+  type: MutationTypes.UPDATE,
+  cacheLocation: undefined
+}
+
 export const SET_DOSSIER_STATUS = {
   mutation: gql`
     mutation updateDossierStatus($uuid: ID!, $status: DossierStatus!){

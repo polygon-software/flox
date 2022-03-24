@@ -40,13 +40,21 @@ const props = defineProps({
     type: Array,
     required: true
   },
+  initialValue: {
+    type: Object,
+    required: false,
+    default: () => { return { firstName: null, lastName: null} }
+  }
 })
 
 const filteredOptions =  ref(props.options)
-const selectedOption: Ref<null|Record<string, unknown>> = ref(null)
+const selectedOption: Ref<null|Record<string, unknown>> = ref(props.initialValue ? {
+  label: props.initialValue.name as string,
+  value: props.initialValue
+} : null)
 
 const isNewBank = ref(false)
-const abbreviation: Ref<string|null> = ref(null)
+const abbreviation: Ref<string|null> = ref(props.initialValue?.abbreviation as string|null)
 
 /**
  * Rule for  validation of custom abbreviations

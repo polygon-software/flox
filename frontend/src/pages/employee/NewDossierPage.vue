@@ -4,11 +4,11 @@
       class="column q-pa-sm"
       style="width: 1000px"
     >
-      <new-dossier-form/>
+      <dossier-form/>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import NewDossierForm from 'components/forms/NewDossierForm.vue';
+import DossierForm from 'components/forms/DossierForm.vue';
 </script>

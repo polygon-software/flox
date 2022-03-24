@@ -158,3 +158,28 @@ export async function sendDossierDocumentEmail(
   // Send actual e-mail
   await sendEmail(sender, recipients, subject, body, [attachmentFile]);
 }
+
+/**
+ * Sends an e-mail for document upload
+ * @param {string} email - e-mail address
+ * @param {string} companyId - company UUID
+ * @returns {Promise<void>} - done
+ */
+export async function sendDocumentUploadEmail(
+  email: string,
+  companyId: string,
+): Promise<void> {
+  // Set up e-mail parameters
+  const encodedUuid = btoa(companyId); // Base64 encode UUID
+  const baseUrl = process.env.BASE_URL ?? '';
+  const url = `${baseUrl}/document-upload?cid=${encodedUuid}`;
+  const sender = process.env.EMAIL_SENDER ?? '';
+
+  // Send e-mail
+  await sendEmail(
+    sender,
+    email,
+    'Your account',
+    `Upload your documents at the following link: ${url}`,
+  );
+}

@@ -23,6 +23,10 @@ import { UserService } from '../user/user.service';
 import { EmployeeService } from '../employee/employee.service';
 import { GetBankArgs } from '../bank/dto/args/get-bank.args';
 import { DeleteDossierInput } from './dto/input/delete-dossier.input';
+import { isCompleted } from './dossier-helpers';
+import { IsDossierCompleteInput } from './dto/input/is-dossier-complete.input';
+import { UnauthorizedException } from '@nestjs/common';
+import { ERRORS } from '../../error/ERRORS';
 
 @Resolver(() => Dossier)
 export class DossierResolver {
@@ -51,13 +55,30 @@ export class DossierResolver {
   /**
    * Updates the data of a dossier
    * @param {UpdateDossierInput} updateDossierInput - input, containing new status
-   * @returns {Promise<Dossier[]>} - updated dossier
+   * @param {Record<string, string>} user - the current request's user
+   * @returns {Promise<Dossier[]>} - the updated dossier
    */
   @EmployeeOnly()
   @Mutation(() => Dossier)
   async updateDossier(
     @Args('updateDossierInput') updateDossierInput: UpdateDossierInput,
+    @CurrentUser() user: Record<string, string>,
   ): Promise<Dossier> {
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+    const dossier = await this.dossierService.getDossier(
+      updateDossierInput.uuid,
+      dbUser.uuid,
+    );
+
+    // Completed dossiers are not allowed to be edited
+    if (isCompleted(dossier)) {
+      throw new Error(ERRORS.cannot_edit_completed_dossier);
+    }
+
+    if (dossier.employee.uuid !== dbUser.fk) {
+      throw new UnauthorizedException();
+    }
+
     return this.dossierService.updateDossier(updateDossierInput);
   }
 
@@ -262,5 +283,33 @@ export class DossierResolver {
     @Args('deleteDossierInput') deleteDossierInput: DeleteDossierInput,
   ): Promise<Dossier> {
     return this.dossierService.deleteDossier(deleteDossierInput);
+  }
+
+  /**
+   * Determines whether a dossier is completed (all mandatory files uploaded)
+   * @param {IsDossierCompleteInput} isDossierCompleteInput - input, containing dossier UUID
+   * @param {Record<string, string>} user - current user
+   * @returns {Promise<boolean>} - whether the dossier is completed
+   */
+  @EmployeeOnly()
+  @Query(() => Boolean)
+  async isDossierComplete(
+    @Args('isDossierCompleteInput')
+    isDossierCompleteInput: IsDossierCompleteInput,
+    @CurrentUser() user: Record<string, string>,
+  ) {
+    // Get database user
+    const dbUser = await this.userService.getUser({ uuid: user.userId });
+
+    const dossier = await this.dossierService.getDossier(
+      isDossierCompleteInput.uuid,
+      dbUser.uuid,
+    );
+
+    if (!dossier) {
+      throw new UnauthorizedException();
+    }
+
+    return isCompleted(dossier);
   }
 }

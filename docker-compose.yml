@@ -10,9 +10,6 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4.0'
-          memory: 4096m
-        reservations:
           cpus: '2.0'
           memory: 2048m
     build:
@@ -30,9 +27,6 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4.0'
-          memory: 4096m
-        reservations:
           cpus: '2.0'
           memory: 2048m
     build:
@@ -49,9 +43,6 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '4.0'
-          memory: 4096m
-        reservations:
           cpus: '2.0'
           memory: 2048m
     networks:

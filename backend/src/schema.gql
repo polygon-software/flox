@@ -468,13 +468,15 @@ type Dossier {
 enum DossierStatus {
   COMPLETED
   CONTRACT_UPLOADED
+  CREDIT_CONTRACTS_IN_PROGRESS
+  CREDIT_CONTRACTS_RECEIVED
+  CREDIT_CONTRACTS_SIGNED
   IN_PROGRESS
   OFFERED
   OPEN
   PRODUCT_AGREEMENT_CONFIRMED
+  PROVISIONS_PAID
   REJECTED
-  SENT
-  SIGNED
   SUBMITTED
 }
 
@@ -563,6 +565,10 @@ enum FileType {
 }
 
 input GetDossierInput {
+  uuid: ID!
+}
+
+input IsDossierCompleteInput {
   uuid: ID!
 }
 
@@ -698,6 +704,9 @@ type Query {
   getBanks: [Bank!]!
   getDossier(getDossierInput: GetDossierInput!): Dossier!
   getDossierDocument(
+    """Content-type header to force (if any)"""
+    contentType: String
+
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!
@@ -711,17 +720,24 @@ type Query {
   getMyEmployees(companyUuid: String): [Employee!]!
   getMyUser: User!
   getOfferDocument(
+    """Content-type header to force (if any)"""
+    contentType: String
+
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
   getPrivateFile(
+    """Content-type header to force (if any)"""
+    contentType: String
+
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   getRejectedDossiers: [Dossier!]
+  isDossierComplete(isDossierCompleteInput: IsDossierCompleteInput!): Boolean!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
@@ -814,6 +830,14 @@ type SoiEmployee {
   uuid: ID!
 }
 
+input UpdateAddressInput {
+  city: String
+  number: String
+  street: String
+  uuid: ID!
+  zip_code: String
+}
+
 input UpdateCompanyInput {
   branch_structure: Boolean
   company_name: String
@@ -830,20 +854,56 @@ input UpdateCompanyInput {
 }
 
 input UpdateDossierInput {
-  born: DateTime
+  address: UpdateAddressInput!
+  affordability: Float
+  alimony: Float
+  amortisation_amount: Float
+  assets: Float
+  birthdate: DateTime
+  bonus: Float
+  building_lease_expiration_date: DateTime
+  building_lease_interest: Float
+  child_allowances: Float
+  credit: Float
+  direct_amortisation: Boolean
+  eligible_income: Float
 
   """E-mail"""
   email: String
+  enfeoffment_estimate_calculated: Float
+  enfeoffment_estimate_customer: Float
 
   """First Name"""
   first_name: String
+  has_amortisation: Boolean
+  has_building_lease: Boolean
+  has_renovation: Boolean
+  incomes: [Float!]
 
   """Last Name"""
   last_name: String
-  loan_sum: Float
+  leasing: Float
+  loss_certificates: Boolean
+  mortgage_amount: Float
   non_arrangeable: Boolean
-  status: DossierStatus
+  original_bank_abbreviation: String
+  original_bank_name: String
+  owner_occupied: Boolean
+  partition_amounts: [Float!]
+  partition_dates: [DateTime!]
+  phone: String
+  property_type: propertyType
+  prosecutions: Boolean
+  public_landlord: Boolean
+  purchase_date: DateTime
+  purchase_price: Float
+  renovation_price: Float
+  renovation_year: Float
+  total_costs: Float
   uuid: ID!
+  value_estimate_calculated: Float
+  value_estimate_customer: Float
+  various: Float
 }
 
 input UpdateDossierStatusInput {

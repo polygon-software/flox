@@ -1,5 +1,5 @@
 import { ArgsType, Field, ID } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 @ArgsType()
 export class GetPrivateFileArgs {
@@ -14,4 +14,12 @@ export class GetPrivateFileArgs {
   @IsOptional()
   @IsNumber()
   expires;
+
+  @Field(() => String, {
+    nullable: true,
+    description: 'Content-type header to force (if any)',
+  })
+  @IsOptional()
+  @IsString()
+  contentType;
 }
