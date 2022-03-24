@@ -303,13 +303,13 @@ export class DeviceService {
   /**
    * Get the number of events matching the given type
    * @param {string} clientId - client id
-   * @param {string} type - Evt, Pk or Zip
+   * @param {string} type - Evt, Pk or ZIP
    * @returns {Promise<number>} - number of entries
    */
   async getEventsLength(clientId: string, type = ''): Promise<number> {
     const database = deviceType(clientId);
     const options = { where: { cli: clientId } };
-    if (type !== '') {
+    if (type) {
       options.where['typ'] = this.reverseTypeMapping[type];
     }
     return await fetchCountFromTable(database, 'events', options);

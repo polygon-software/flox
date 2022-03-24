@@ -126,7 +126,7 @@ const selectedRows: Ref<string[]> = ref([])
 const $q = useQuasar()
 
 const props = defineProps({
-  uuid: {
+  name: {
     type: String,
     required: true,
   },
@@ -149,7 +149,7 @@ const columns = [
   { name: 'options', label: ' ', field: 'options', sortable: false, align: 'center' },
 ]
 
-const rows = fetchProjectDevices(props.uuid)
+const rows = fetchProjectDevices(props.name)
 
 const buttons = [
   {
@@ -220,7 +220,7 @@ async function onOptionClick(device: string, key: string): Promise<void>{
   //TODO: routes to different pages
   switch(key){
     case 'remove':
-      removeDeviceFromProject($q, props.uuid, device)
+      removeDeviceFromProject($q, props.name, device)
       break
     case 'compress':
       await routerService?.routeTo(ROUTES.CUSTOMERS)

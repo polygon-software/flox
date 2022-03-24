@@ -35,12 +35,21 @@ export class ProjectService {
    */
   async getProjectDevices(getProjectDevicesArgs: GetProjectDevicesArgs) {
     // Get project
-    const project = await this.projectRepository.findOne(
-      getProjectDevicesArgs.uuid,
-    );
+    let project;
+    if (getProjectDevicesArgs.uuid) {
+      project = await this.projectRepository.findOne(
+        getProjectDevicesArgs.uuid,
+      );
+    }
+
+    if (getProjectDevicesArgs.name) {
+      project = await this.projectRepository.findOne({
+        where: { name: getProjectDevicesArgs.name },
+      });
+    }
 
     if (!project) {
-      throw new Error(`No project found for ${getProjectDevicesArgs.uuid}`);
+      throw new Error(`No project found for ${getProjectDevicesArgs}`);
     }
 
     return this.deviceService.getDevices(project.devices);
@@ -148,13 +157,13 @@ export class ProjectService {
     removeDeviceFromProjectInput: RemoveDeviceFromProjectInput,
   ) {
     // Get project
-    const project = await this.projectRepository.findOne(
-      removeDeviceFromProjectInput.uuid,
-    );
+    const project = await this.projectRepository.findOne({
+      where: { name: removeDeviceFromProjectInput.name },
+    });
 
     if (!project) {
       throw new Error(
-        `No project found for ${removeDeviceFromProjectInput.uuid}`,
+        `No project found for ${removeDeviceFromProjectInput.name}`,
       );
     }
 
@@ -165,7 +174,7 @@ export class ProjectService {
     // Throw error if given device is not part of given project
     if (!validDevice) {
       throw new Error(
-        `Device ${cli} is not assigned to project ${removeDeviceFromProjectInput.uuid}`,
+        `Device ${cli} is not assigned to project ${removeDeviceFromProjectInput.name}`,
       );
     }
 
@@ -174,12 +183,9 @@ export class ProjectService {
       devices: project.devices.filter((instance) => instance !== cli),
     };
 
-    await this.projectRepository.update(
-      removeDeviceFromProjectInput.uuid,
-      updateData,
-    );
+    await this.projectRepository.update(project.uuid, updateData);
 
-    return this.projectRepository.findOne(removeDeviceFromProjectInput.uuid);
+    return this.projectRepository.findOne(project.uuid);
   }
 
   /**
@@ -229,13 +235,13 @@ export class ProjectService {
   /**
    * Validates if the given user has access to the given project
    * @param {Record<string, string>} user - User that demands access
-   * @param {string} projectUuid - UUID of the project which the user wants to access
+   * @param {string} projectName - name of the project which the user wants to access
    * @private
    * @return {boolean} - validation result
    */
   async validateAccessToProject(
     user: Record<string, string>,
-    projectUuid: string,
+    projectName: string,
   ): Promise<boolean> {
     // Get user
     const dbUser = await this.userService.getUser({
@@ -248,7 +254,7 @@ export class ProjectService {
     // For non-admin users, check whether they have permissions to access the requested project
     if (
       dbUser.role !== ROLE.ADMIN &&
-      !dbUser.projects.some((project) => project.uuid === projectUuid)
+      !dbUser.projects.some((project) => project.name === projectName)
     ) {
       throw new Error(ERRORS.resource_not_allowed);
     }

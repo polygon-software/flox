@@ -32,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import {Ref, ref, defineProps, watchEffect} from 'vue';
+import { Ref, ref, defineProps, onMounted } from 'vue';
 import {i18n} from 'boot/i18n';
-import {fetchLogForDevice} from 'src/helpers/api-helpers';
+import { logForDevice } from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
 import {DeviceLogEntry} from 'src/data/types/DeviceLogEntry';
 
@@ -59,10 +59,11 @@ const props = defineProps({
 /**
  * Updates the table based on user pagination inputs
  * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
- * @returns {void} - -
+ * @returns {Promise<void>} - async
  */
-function updatePagination(update: Record<string, string|Record<string, unknown>>){
+async function updatePagination(update: Record<string, string|Record<string, unknown>>){
   pagination.value = update.pagination as Record<string, string|number|boolean>
+  await fetchLogs()
 }
 
 // QTable pagination
@@ -80,15 +81,20 @@ const columns = [
   { name: 'message', label: i18n.global.t('log_files.message'), field: 'message', sortable: false, align: 'center' },
 ]
 
-const logs = fetchLogForDevice(props.cli, pagination.value, props.type)
 const rows: Ref<DeviceLogEntry[]> = ref([])
 
-watchEffect(() => {
-  if(logs.value){
-    pagination.value.rowsNumber = logs.value.total
-    rows.value = logs.value.entries
+/**
+ * Fetch log entries
+ * @returns {Promise<void>} - async
+ */
+async function fetchLogs(){
+  const logs = await logForDevice(props.cli, pagination.value, props.type)
+  if(logs){
+    pagination.value.rowsNumber = logs.total
+    rows.value = logs.entries
   }
-})
+}
 
+onMounted(() => fetchLogs())
 
 </script>

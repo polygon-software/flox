@@ -19,18 +19,17 @@
     </div>
 
     <ProjectTable
-    :uuid="projectUuid"
+      :name="props.projectId"
     />
 
   </q-page>
 </template>
 
 <script setup lang="ts">
-import {computed, defineProps, inject} from 'vue';
+import {defineProps, inject} from 'vue';
 import ProjectTable from 'components/tables/ProjectTable.vue';
 import {useQuasar} from 'quasar';
 import EditProjectDialog from 'components/dialogs/EditProjectDialog.vue';
-import {myProjects} from 'src/helpers/api-helpers';
 import {RouterService} from 'src/services/RouterService';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
@@ -48,10 +47,6 @@ const props = defineProps({
   }
 })
 
-const projectUuid = computed(() => {
-  const project = myProjects().value.find((project) => project.name === props.projectId)
-  return project ?? null
-})
 
 /**
  * Shows a dialog for editing a project's name
@@ -62,7 +57,6 @@ function editProject(){
     component: EditProjectDialog,
     componentProps: {
       name: props.projectId,
-      uuid: projectUuid.value,
       q: $q,
       routerService: routerService,
       errorService: errorService

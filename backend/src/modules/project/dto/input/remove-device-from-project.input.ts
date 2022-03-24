@@ -1,19 +1,19 @@
-import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsArray, IsString } from 'class-validator';
+import { Field, InputType } from '@nestjs/graphql';
+import { IsString } from 'class-validator';
 
 @InputType()
 /**
  * Input for removing a device from its associated project
  */
 export class RemoveDeviceFromProjectInput {
-  @Field(() => ID, {
-    description: 'Project UUID',
+  @Field(() => String, {
+    description: 'Project name',
   })
-  @IsArray()
-  uuid: string;
+  @IsString()
+  name: string;
 
   @Field(() => String, {
-    description: 'Device CLI',
+    description: 'Device client',
     nullable: true,
   })
   @IsString()

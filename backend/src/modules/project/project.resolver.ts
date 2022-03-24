@@ -123,7 +123,7 @@ export class ProjectResolver {
   ) {
     const hasProjectAccess = await this.projectService.validateAccessToProject(
       user,
-      removeDeviceFromProjectInput.uuid,
+      removeDeviceFromProjectInput.name,
     );
     if (hasProjectAccess) {
       return this.projectService.removeDeviceFromProject(

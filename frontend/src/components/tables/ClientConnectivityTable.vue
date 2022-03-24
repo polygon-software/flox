@@ -39,10 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import {Ref, ref, defineProps, watch} from 'vue';
+import { Ref, ref, defineProps, watch, onMounted } from 'vue';
 import {i18n} from 'boot/i18n';
-import {fetchConnectionLogForDevice, fetchDeviceConnectionLogCount} from 'src/helpers/api-helpers';
+import {connectionLogForDevice, fetchDeviceConnectionLogCount} from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
+import { ConnectionLogEntry } from 'src/data/types/ConnectionLogEntry';
 
 const props = defineProps({
   cli: {
@@ -54,10 +55,11 @@ const props = defineProps({
 /**
  * Updates the table based on user pagination inputs
  * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
- * @returns {void} - -
+ * @returns {Promise<void>} - async
  */
-function updatePagination(update: Record<string, string|Record<string, unknown>>){
+async function updatePagination(update: Record<string, string|Record<string, unknown>>){
   pagination.value = update.pagination as Record<string, string|number|boolean>
+  await fetchLogs()
 }
 
 // QTable pagination
@@ -78,7 +80,17 @@ const columns = [
   { name: 'event', label: i18n.global.t('client_connectivity.event'), field: 'event', sortable: false, align: 'center' },
 ]
 
-const rows = fetchConnectionLogForDevice(props.cli, pagination.value)
+const rows: Ref<ConnectionLogEntry[]> = ref([])
+
+/**
+ * Fetch log entries
+ * @returns {Promise<void>} - async
+ */
+async function fetchLogs(){
+  rows.value = await connectionLogForDevice(props.cli, pagination.value)
+}
+
+onMounted(() => fetchLogs())
 
 // ComputedRef for total row count
 const rowsNumber = fetchDeviceConnectionLogCount(props.cli)

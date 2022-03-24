@@ -26,7 +26,7 @@
       flat
       :rows="rows"
       :columns="columns"
-      row-key="uuid"
+      row-key="cli"
       :filter="search"
       :filter-method="tableFilter"
       :rows-per-page-options="[10,20, 100]"
@@ -118,7 +118,6 @@ import {removeDeviceFromProject} from 'src/helpers/project-helpers';
 import {ErrorService} from 'src/services/ErrorService';
 
 const $q = useQuasar()
-
 
 const search = ref('')
 const routerService: RouterService|undefined = inject('$routerService')
@@ -213,7 +212,7 @@ async function onOptionClick(project: Project, device: string, key: string): Pro
   switch(key){
     // Removing device from project: Show warning dialog
     case 'remove':
-      removeDeviceFromProject($q, project.uuid, device)
+      removeDeviceFromProject($q, project.name, device)
       break
     case 'compress':
       await routerService?.routeTo(ROUTES.CUSTOMERS)

@@ -88,14 +88,14 @@ export async function loggedInUser() {
  * @param {string} cli - Client ID
  * @param {Record<string, number | boolean | string>} pagination - pagination object
  * @param {string|null} search - search string
- * @returns {ComputedRef<Record<string, Record<string, unknown>[]|number>|null>} - all rows plus metadata.
+ * @returns {Promise<Record<string, Record<string, unknown>[]|number>|null>} - all rows plus metadata.
  */
-export function fetchEventTableRows(
+export async function eventTableRows(
   cli: string,
   pagination: Record<string, number | boolean | string>,
   search: string | null
-): ComputedRef<Record<string, Record<string, unknown>[] | number> | null> {
-  const queryResult = subscribeToQuery(EVENT_TABLE_ROWS, {
+): Promise<Record<string, Record<string, unknown>[] | number> | null> {
+  const queryResult = await executeQuery(EVENT_TABLE_ROWS, {
     stationId: cli,
     skip:
       ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
@@ -103,30 +103,32 @@ export function fetchEventTableRows(
     filter: search,
     orderBy: (pagination.sortBy as string) || 'date_time',
     descending: (pagination.descending as boolean) || false,
-  }) as Ref<Record<string, Record<string, unknown>[] | number> | null>;
-  return computed(() => queryResult.value);
+  });
+  return (
+    queryResult.data ? queryResult.data[EVENT_TABLE_ROWS.cacheLocation] : null
+  ) as Record<string, Record<string, unknown>[] | number> | null;
 }
 
 /**
  * Fetch connection log entries for a given device
  * @param {string} cli - device CLI
  * @param {Record<string, number | boolean | string>} pagination - pagination object
- * @return {ComputedRef<ConnectionLogEntry[]>} - An array containing the requested number of connection log entries
+ * @return {Promise<ConnectionLogEntry[]>} - An array containing the requested number of connection log entries
  */
-export function fetchConnectionLogForDevice(
+export async function connectionLogForDevice(
   cli: string,
   pagination: Record<string, number | boolean | string>
 ) {
-  const queryResult = subscribeToQuery(DEVICE_CONNECTION_LOGS, {
+  const queryResult = await executeQuery(DEVICE_CONNECTION_LOGS, {
     cli: cli,
     skip:
       ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
     take: pagination.rowsPerPage as number,
   });
-  return computed(() =>
-    mapConnectionLogEntries(
-      (queryResult.value ?? []) as Record<string, unknown>[]
-    )
+  return mapConnectionLogEntries(
+    (queryResult.data
+      ? queryResult.data[DEVICE_CONNECTION_LOGS.cacheLocation]
+      : []) as Record<string, unknown>[]
   );
 }
 
@@ -135,46 +137,47 @@ export function fetchConnectionLogForDevice(
  * @param {string} cli - device CLI
  * @param {Record<string, number | boolean | string>} pagination - pagination object
  * @param {string} [type] - optional file type prefix for fetching other log types
- * @return {ComputedRef<DeviceLog|null>} - Device log, containing entries and total count
+ * @return {Promise<DeviceLog|null>} - Device log, containing entries and total count
  */
-export function fetchLogForDevice(
+export async function logForDevice(
   cli: string,
   pagination: Record<string, number | boolean | string>,
   type: string | undefined
-): ComputedRef<DeviceLog | null> {
-  const variables: Ref<Record<string, string | number>> = ref({
+): Promise<DeviceLog | null> {
+  const variables: Record<string, string | number> = {
     cli: cli,
     skip:
       ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
     take: pagination.rowsPerPage as number,
-  });
+  };
   if (type) {
-    variables.value.prefix = type;
+    variables.prefix = type;
   }
-  const queryResult = subscribeToQuery(
-    DEVICE_LOG,
-    variables.value
-  ) as Ref<Record<string, unknown> | null>;
-  return computed(() => queryResult.value as DeviceLog | null);
+  const queryResult = await executeQuery(DEVICE_LOG, variables);
+  return queryResult.data
+    ? (queryResult.data[DEVICE_LOG.cacheLocation] as DeviceLog)
+    : null;
 }
 
 /**
  * Fetch FTP log for a given device
  * @param {string} cli - device CLI
  * @param {Record<string, number | boolean | string>} pagination - pagination object
- * @return {ComputedRef<FTPLog|null>} - Device log, containing entries and total count
+ * @return {Promise<FTPLog|null>} - Device log, containing entries and total count
  */
-export function fetchFtpLogForDevice(
+export async function ftpLogForDevice(
   cli: string,
   pagination: Record<string, number | boolean | string>
 ) {
-  const queryResult = subscribeToQuery(FTP_LOG, {
+  const queryResult = await executeQuery(FTP_LOG, {
     cli: cli,
     skip:
       ((pagination.page as number) - 1) * (pagination.rowsPerPage as number),
     take: pagination.rowsPerPage as number,
-  }) as Ref<Record<string, unknown> | null>;
-  return computed(() => queryResult.value as FTPLog | null);
+  });
+  return queryResult.data
+    ? (queryResult.data[FTP_LOG.cacheLocation] as FTPLog)
+    : null;
 }
 
 /**
@@ -238,11 +241,11 @@ export function myProjects(): ComputedRef<Project[]> {
 
 /**
  * Fetch all devices that are part of a given project
- * @param {string} uuid - the project's uuid
+ * @param {string} name - the project's name
  * @return {ComputedRef<Device[]>} - An array containing all the user's projects
  */
-export function fetchProjectDevices(uuid: string): ComputedRef<Device[]> {
-  const queryResult = subscribeToQuery(PROJECT_DEVICES, { uuid }) as Ref<
+export function fetchProjectDevices(name: string): ComputedRef<Device[]> {
+  const queryResult = subscribeToQuery(PROJECT_DEVICES, { name: name }) as Ref<
     Record<string, unknown>[]
   >;
   return computed(() => mapDevices(queryResult.value ?? []));

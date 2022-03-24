@@ -1,9 +1,12 @@
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
-import {i18n} from 'boot/i18n';
-import {executeMutation} from 'src/helpers/data-helpers';
-import {ASSIGN_DEVICE_TO_PROJECT, REMOVE_DEVICE_FROM_PROJECT} from 'src/data/mutations/PROJECT';
-import {showNotification} from 'src/helpers/notification-helpers';
-import {QVueGlobals} from 'quasar';
+import { i18n } from 'boot/i18n';
+import { executeMutation } from 'src/helpers/data-helpers';
+import {
+  ASSIGN_DEVICE_TO_PROJECT,
+  REMOVE_DEVICE_FROM_PROJECT,
+} from 'src/data/mutations/PROJECT';
+import { showNotification } from 'src/helpers/notification-helpers';
+import { QVueGlobals } from 'quasar';
 import AssignToProjectDialog from 'components/dialogs/AssignToProjectDialog.vue';
 
 /**
@@ -13,11 +16,15 @@ import AssignToProjectDialog from 'components/dialogs/AssignToProjectDialog.vue'
 /**
  * Shows a dialog for removing a device from a project
  * @param {QVueGlobals} q - quasar instance
- * @param {string} projectUuid - project UUID
+ * @param {string} projectName - project name
  * @param {string} device - device CLI
  * @returns {void}
  */
-export function removeDeviceFromProject(q: QVueGlobals, projectUuid: string, device: string){
+export function removeDeviceFromProject(
+  q: QVueGlobals,
+  projectName: string,
+  device: string
+) {
   q.dialog({
     component: WarningDialog,
     componentProps: {
@@ -25,19 +32,22 @@ export function removeDeviceFromProject(q: QVueGlobals, projectUuid: string, dev
       showDiscard: true,
       discardLabel: i18n.global.t('buttons.cancel'),
       swapNegative: true,
-      okLabel: i18n.global.t('buttons.confirm')
-    }
+      okLabel: i18n.global.t('buttons.confirm'),
+    },
   }).onOk(async () => {
-    await executeMutation(REMOVE_DEVICE_FROM_PROJECT, {uuid: projectUuid, cli: device})
+    await executeMutation(REMOVE_DEVICE_FROM_PROJECT, {
+      name: projectName,
+      cli: device,
+    });
 
     // Show success notification
     showNotification(
       q,
       i18n.global.t('messages.removed_device'),
       'bottom',
-      'positive',
-    )
-  })
+      'positive'
+    );
+  });
 }
 
 /**
@@ -46,30 +56,27 @@ export function removeDeviceFromProject(q: QVueGlobals, projectUuid: string, dev
  * @param {string} device - device CLI
  * @returns {Promise<void>} - done
  */
-export async function assignDeviceToProject(q: QVueGlobals, device: string){
+export async function assignDeviceToProject(q: QVueGlobals, device: string) {
   return new Promise((resolve) => {
     q.dialog({
       component: AssignToProjectDialog,
       componentProps: {
-        cli: device
-      }
+        cli: device,
+      },
     }).onOk(async (result: Record<string, string>) => {
-      await executeMutation(
-        ASSIGN_DEVICE_TO_PROJECT,
-        {
-          uuid: result.uuid,
-          cli: result.cli
-        }
-      )
+      await executeMutation(ASSIGN_DEVICE_TO_PROJECT, {
+        uuid: result.uuid,
+        cli: result.cli,
+      });
 
       // Show success notification
       showNotification(
         q,
         i18n.global.t('messages.assigned_device'),
         'bottom',
-        'positive',
-      )
-      resolve(null)
-    })
-  })
+        'positive'
+      );
+      resolve(null);
+    });
+  });
 }

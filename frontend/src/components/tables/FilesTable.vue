@@ -10,16 +10,19 @@
     </div>
     <div class="row" style="justify-content: center">
       <q-select
-        v-model="search"
+        v-model="filter"
         :label="$t('general.filter')"
         :options="[
           {label: $t('files.filter.all'), value: 'All'},
           {label: $t('files.filter.evt'), value: 'Evt'},
           {label: $t('files.filter.pk'), value: 'Pk'},
-          {label: $t('files.filter.zip'), value: 'Zip'}]"
+          {label: $t('files.filter.zip'), value: 'ZIP'}]"
         outlined
         dense
+        map-options
+        emit-value
         style="width: 90px"
+        @update:model-value="fetchFiles"
       />
     </div>
     <q-table
@@ -89,12 +92,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, inject, Ref, ref, watchEffect } from 'vue';
+import { defineProps, inject, onMounted, Ref, ref } from 'vue';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {date} from 'quasar';
-import { fetchEventTableRows } from 'src/helpers/api-helpers';
+import { eventTableRows } from 'src/helpers/api-helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -109,10 +112,11 @@ const routerService: RouterService|undefined = inject('$routerService')
 /**
  * Updates the table based on user pagination inputs
  * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
- * @returns {void} - -
+ * @returns {Promise<void>} - async
  */
-function updatePagination(update: Record<string, string|Record<string, unknown>>){
+async function updatePagination(update: Record<string, string|Record<string, unknown>>){
   pagination.value = update.pagination as Record<string, string|number|boolean>
+  await fetchFiles()
 }
 
 const lengths = ref({
@@ -131,20 +135,25 @@ const pagination = ref({
 }) as Ref<Record<string, number|boolean|string>>
 
 const rows = ref([]) as Ref<Record<string, unknown>[]>
-const search = ref(null)
+const filter = ref('All')
 
-const events = fetchEventTableRows(props.stationId, pagination.value, search.value)
-
-watchEffect(() => {
-  if(events.value){
-    pagination.value.rowsNumber = events.value.lengthAll as number
-    rows.value = events.value.items as Record<string, unknown>[]
-    lengths.value.total = events.value.lengthAll as number
-    lengths.value.Pk = events.value.lengthPk as number
-    lengths.value.Evt = events.value.lengthEvt as number
-    lengths.value.Zip = events.value.lengthZip as number
+/**
+ * Fetch file entries
+ * @returns {Promise<void>} - async
+ */
+async function fetchFiles(){
+  const events = await eventTableRows(props.stationId, pagination.value, filter.value)
+  if(events){
+    pagination.value.rowsNumber = events.lengthAll as number
+    rows.value = events.items as Record<string, unknown>[]
+    lengths.value.total = events.lengthAll as number
+    lengths.value.Pk = events.lengthPk as number
+    lengths.value.Evt = events.lengthEvt as number
+    lengths.value.Zip = events.lengthZip as number
   }
-})
+}
+
+onMounted(() => fetchFiles())
 
 const formatDate = date.formatDate
 // ----- Data -----

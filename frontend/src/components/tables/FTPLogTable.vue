@@ -35,9 +35,9 @@
 </template>
 
 <script setup lang="ts">
-import {Ref, ref, defineProps, watchEffect} from 'vue';
+import { Ref, ref, defineProps, onMounted } from 'vue';
 import {i18n} from 'boot/i18n';
-import {fetchFtpLogForDevice} from 'src/helpers/api-helpers';
+import { ftpLogForDevice } from 'src/helpers/api-helpers';
 import {formatDateTime} from 'src/helpers/format-helpers';
 import {FTPLogEntry} from 'src/data/types/FTPLogEntry';
 
@@ -51,10 +51,11 @@ const props = defineProps({
 /**
  * Updates the table based on user pagination inputs
  * @param {Record<string, string|Record<string, unknown>>} update - update object from quasar table
- * @returns {void} - -
+ * @returns {Promise<void>} - async
  */
-function updatePagination(update: Record<string, string|Record<string, unknown>>){
+async function updatePagination(update: Record<string, string|Record<string, unknown>>){
   pagination.value = update.pagination as Record<string, string|number|boolean>
+  await fetchLogs()
 }
 
 // QTable pagination
@@ -73,14 +74,21 @@ const columns = [
   { name: 'path', label: i18n.global.t('log_files.path'), field: 'path', sortable: false, align: 'center' },
 ]
 
-const logs = fetchFtpLogForDevice(props.cli, pagination.value)
+
 const rows: Ref<FTPLogEntry[]> = ref([])
 
-watchEffect(() => {
-  if(logs.value) {
-    pagination.value.rowsNumber = logs.value.total
-    rows.value = logs.value.entries
+/**
+ * Fetch log entries
+ * @returns {Promise<void>} - async
+ */
+async function fetchLogs(){
+  const logs = await ftpLogForDevice(props.cli, pagination.value)
+  if(logs){
+    pagination.value.rowsNumber = logs.total
+    rows.value = logs.entries
   }
-})
+}
+
+onMounted(() => fetchLogs())
 
 </script>

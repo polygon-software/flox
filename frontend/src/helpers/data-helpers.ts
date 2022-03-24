@@ -1,9 +1,13 @@
-import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
-import {MutationObject, MutationTypes, QueryObject,} from '../data/DATA-DEFINITIONS';
-import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
-import {i18n} from 'boot/i18n';
-import {QUERIES} from 'src/data/queries/QUERIES';
-import {onBeforeMount, ref, Ref} from 'vue';
+import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable';
+import {
+  MutationObject,
+  MutationTypes,
+  QueryObject,
+} from '../data/DATA-DEFINITIONS';
+import { ApolloCache, ApolloQueryResult, FetchResult } from '@apollo/client';
+import { i18n } from 'boot/i18n';
+import { QUERIES } from 'src/data/queries/QUERIES';
+import { ref, Ref } from 'vue';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -60,7 +64,11 @@ async function executeMutation(
   const affectedQueries: QueryObject[] = [];
 
   // Find affected queries based on tables for CREATE and DELETE operations
-  if (type === MutationTypes.CREATE || type === MutationTypes.DELETE || type === MutationTypes.DEVALIDATINGUPDATE) {
+  if (
+    type === MutationTypes.CREATE ||
+    type === MutationTypes.DELETE ||
+    type === MutationTypes.DEVALIDATINGUPDATE
+  ) {
     QUERIES.forEach((query) => {
       // If any of the mutation's affected tables are relevant to query, add to list of affected queries
       if (tables.some((t) => query.tables.indexOf(t) >= 0)) {
@@ -74,11 +82,8 @@ async function executeMutation(
     // Get cache and the new or deleted object
     update: (cache: ApolloCache<any>, { data: changeData }) => {
       // For devalidating updates, fully refetch all affected queries
-      if(type === MutationTypes.DEVALIDATINGUPDATE){
-        void refetchAffectedQueries(
-          affectedQueries,
-          mutationObject
-        );
+      if (type === MutationTypes.DEVALIDATINGUPDATE) {
+        void refetchAffectedQueries(affectedQueries, mutationObject);
       } else {
         updateAffectedQueries(
           cache,
@@ -163,25 +168,24 @@ function refetchAffectedQueries(
   affectedQueries: QueryObject[],
   mutationObject: MutationObject
 ) {
-  const apolloClient = useApolloClient()
-  const cache = apolloClient.client.cache
+  const apolloClient = useApolloClient();
+  const cache = apolloClient.client.cache;
 
   for (const queryObject of affectedQueries) {
     if (!mutationObject.tables) {
       throw new Error(
         i18n.global.t('errors.cache_location_missing') +
-        JSON.stringify(mutationObject)
+          JSON.stringify(mutationObject)
       );
     }
     // Evict query from cache
-    if (queryObject.cacheLocation){
+    if (queryObject.cacheLocation) {
       cache.evict({
-        fieldName: queryObject.cacheLocation
-      })
+        fieldName: queryObject.cacheLocation,
+      });
     }
   }
 }
-
 
 /**
  * Subscribes to a graphQL query
@@ -189,42 +193,56 @@ function refetchAffectedQueries(
  * @param {Record<string, unknown>} [variables] - any variables to pass to the query
  * @returns {Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>} - the query's output
  */
-function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | number | undefined>{
-  const res: Ref<Record<string, Record<string, unknown>[]>[] | number> = ref([])
+function subscribeToQuery(
+  query: QueryObject,
+  variables?: Record<string, unknown>
+): Ref<
+  | Record<string, Record<string, unknown>[]>[]
+  | Record<string, unknown[]>
+  | number
+  | undefined
+> {
+  const res: Ref<Record<string, Record<string, unknown>[]>[] | number> = ref(
+    []
+  );
 
-  // ----- Hooks -----
-  onBeforeMount( () => {
-    const apolloClient = useApolloClient().resolveClient()
-    const currentCacheState = apolloClient.readQuery({query: query.query, variables}) as Record<string, Record<string, unknown>[]>[] ?? []
-    // Test if the query is already in the cache
-    if(Object.values(currentCacheState).length === 0){
-      void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
-        if(fetchedRes.data){
-          const result = fetchedRes.data[query.cacheLocation]
-          if(typeof result === 'number'){
-            res.value = result
+  const apolloClient = useApolloClient().resolveClient();
+  const currentCacheState =
+    (apolloClient.readQuery({ query: query.query, variables }) as Record<
+      string,
+      Record<string, unknown>[]
+    >[]) ?? [];
+  // Test if the query is already in the cache
+  if (Object.values(currentCacheState).length === 0) {
+    void executeQuery(query, variables).then(
+      (fetchedRes: ApolloQueryResult<Record<string, unknown>>) => {
+        if (fetchedRes.data) {
+          const result = fetchedRes.data[query.cacheLocation];
+          if (typeof result === 'number') {
+            res.value = result;
           } else {
-            res.value = result as Record<string, Record<string, unknown>[]>[]
+            res.value = result as Record<string, Record<string, unknown>[]>[];
           }
         } else {
-          res.value = []
-        }
-      })
-    }
-
-    apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
-      next(value: ApolloQueryResult<Record<string, unknown>>) {
-        const result = value.data[query.cacheLocation]
-        if(typeof result === 'number'){
-          res.value = result
-        } else {
-          res.value = result as Record<string, Record<string, unknown>[]>[]
+          res.value = [];
         }
       }
-    })
-  })
+    );
+  }
+
+  apolloClient
+    .watchQuery({ query: query.query, variables: variables })
+    .subscribe({
+      next(value: ApolloQueryResult<Record<string, unknown>>) {
+        const result = value.data[query.cacheLocation];
+        if (typeof result === 'number') {
+          res.value = result;
+        } else {
+          res.value = result as Record<string, Record<string, unknown>[]>[];
+        }
+      },
+    });
   return res;
 }
-
 
 export { executeQuery, executeMutation, subscribeToQuery };

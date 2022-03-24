@@ -44,9 +44,9 @@ export const DELETE_PROJECT = {
 
 export const REMOVE_DEVICE_FROM_PROJECT = {
   mutation: gql`
-    mutation removeDeviceFromProject($uuid: ID!, $cli: String!) {
+    mutation removeDeviceFromProject($name: String!, $cli: String!) {
       removeDeviceFromProject(
-        removeDeviceFromProjectInput: { uuid: $uuid, cli: $cli }
+        removeDeviceFromProjectInput: { name: $name, cli: $cli }
       ) {
         uuid
         name
