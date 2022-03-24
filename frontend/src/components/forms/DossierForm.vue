@@ -286,6 +286,12 @@ import {dateToInputString} from 'src/helpers/date-helpers';
 import {getAuthToken} from 'src/helpers/cookie-helpers';
 import DossierFinalDocumentPreview from 'components/dossier/DossierFinalDocumentPreview.vue';
 import {AuthenticationService} from 'src/services/AuthService';
+import _ from 'lodash';
+
+/**
+ * This component is a form for creating a new dossier or editing an existing one. If a 'prefillDossier' is given
+ * via props, that dossier's data is pre-filled in the form.
+ */
 
 /**
  * This component is a form for creating a new dossier or editing an existing one. If a 'prefillDossier' is given
@@ -1231,7 +1237,7 @@ function enfeoffmentRank(rate: number|null){
  */
 function prefillDossier(){
   if(props.prefillDossier){
-    const initial = props.prefillDossier as Record<string, unknown>
+    const initial = _.cloneDeep(props.prefillDossier) as Record<string, unknown>
 
     const formData = form.values.value as Record<string, unknown>
 
