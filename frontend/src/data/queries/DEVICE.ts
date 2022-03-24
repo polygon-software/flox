@@ -95,7 +95,7 @@ export const LEVEL_WRITING = {
     }
   `,
   tables: ['device'],
-  cacheLocation: 'getLevelWriting',
+  cacheLocation: 'levelWriting',
 };
 
 export const DEVICE_PARAMS = {
@@ -119,6 +119,29 @@ export const DEVICE_PARAMS = {
   `,
   tables: ['device'],
   cacheLocation: 'deviceParams',
+};
+
+export const MULTI_DEVICE_PARAMS = {
+  query: gql`
+    query getMultipleDeviceParams($clis: [String!]!) {
+      multipleDeviceParams(clis: $clis) {
+        trigX
+        trigY
+        trigZ
+        ala1X
+        ala1Y
+        ala1Z
+        ala2X
+        ala2Y
+        ala2Z
+        unitX
+        unitY
+        unitZ
+      }
+    }
+  `,
+  tables: ['device'],
+  cacheLocation: 'multipleDeviceParams',
 };
 
 export const PROJECT_DEVICES = {

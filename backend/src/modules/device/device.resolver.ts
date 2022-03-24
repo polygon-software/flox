@@ -27,6 +27,7 @@ import { DeviceContact } from '../../types/DeviceContact';
 import { EditContactInput } from './dto/input/edit-contact.input';
 import { DeleteContactInput } from './dto/input/delete-contact.input';
 import { FTPLog } from '../../types/FTPLog';
+import { GetMultipleDeviceParamsArgs } from './dto/args/get-multiple-device-params.args';
 
 @Resolver(() => Device)
 export class DeviceResolver {
@@ -73,7 +74,30 @@ export class DeviceResolver {
       getDeviceParamsArgs.cli,
     );
     if (allowed) {
-      return this.deviceService.getDeviceParams(getDeviceParamsArgs);
+      return this.deviceService.getDeviceParams(getDeviceParamsArgs.cli);
+    }
+  }
+
+  /**
+   * Get the device parameters for multiple devices if the user has permission.
+   * @param {GetDeviceParamsArgs} getMultipleDeviceParamsArgs - StationId
+   * @param {Record<string, string>} user - Cognito user from request.
+   * @returns {Promise<DeviceParams[]>} - The parameters of the devices.
+   */
+  @AnyRole()
+  @Query(() => [DeviceParams], { name: 'multipleDeviceParams' })
+  async getMultipleDeviceParams(
+    @Args() getMultipleDeviceParamsArgs: GetMultipleDeviceParamsArgs,
+    @CurrentUser() user: Record<string, string>,
+  ): Promise<DeviceParams[]> {
+    const allowed = await this.userService.isAuthorizedForDevices(
+      user,
+      getMultipleDeviceParamsArgs.clis,
+    );
+    if (allowed) {
+      return this.deviceService.getMultipleDeviceParams(
+        getMultipleDeviceParamsArgs.clis,
+      );
     }
   }
 

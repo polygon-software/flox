@@ -6,7 +6,6 @@ import { Project } from 'src/data/types/Project';
 import { MY_PROJECTS } from 'src/data/queries/PROJECT';
 import {
   DEVICE_CONTACTS,
-  DEVICE_PARAMS,
   EVENT_TABLE_ROWS,
   LEVEL_WRITING,
   MY_DEVICES,
@@ -15,9 +14,10 @@ import {
   DEVICE_LOG,
   FTP_LOG,
   DEVICE_CONNECTION_LOG_COUNT,
+  MULTI_DEVICE_PARAMS,
 } from 'src/data/queries/DEVICE';
 import { Device } from 'src/data/types/Device';
-import { computed, ComputedRef, ref, Ref } from 'vue';
+import { computed, ComputedRef, Ref } from 'vue';
 import { DeviceContact } from 'src/data/types/DeviceContact';
 import { MY_CONTACTS } from 'src/data/queries/CONTACT';
 import { ConnectionLogEntry } from 'src/data/types/ConnectionLogEntry';
@@ -29,7 +29,7 @@ import { DeviceLog } from 'src/data/types/DeviceLog';
  * @param {string[]} clients - client IDs
  * @param {Date} start - start of period
  * @param {Date} end - end of period
- * @returns {ComputedRef<LevelWritings>} - level writings
+ * @returns {ComputedRef<LevelWritings | null>} - level writings
  */
 export function fetchLevelWritings(clients: string[], start: Date, end: Date) {
   const queryResult = subscribeToQuery(LEVEL_WRITING, {
@@ -37,26 +37,24 @@ export function fetchLevelWritings(clients: string[], start: Date, end: Date) {
     start: start,
     end: end,
     resolution: 1,
-  }) as Ref<Record<string, unknown>>;
-  return computed(() => queryResult.value as LevelWritings);
+  }) as Ref<Record<string, unknown> | null>;
+  return computed(() => queryResult.value as LevelWritings | null);
 }
 
 /**
  * Fetch the device parameters for all stations.
  * @param {string[]} clients - client IDs
- * @returns {ComputedRef<Record<string, Record<string, string|number>>>} - device params
+ * @returns {ComputedRef<Record<string, string|number>[]>} - device params
  */
-export function fetchDeviceParams(clients: string[]) {
-  const params: Ref<Record<string, Record<string, string | number>>> = ref({});
-  clients.forEach(
-    (cli: string) =>
-      (params.value[cli] = (
-        subscribeToQuery(DEVICE_PARAMS, { cli: cli }) as Ref<
-          Record<string, unknown>
-        >
-      ).value as Record<string, string | number>)
+export function fetchMultipleDeviceParams(
+  clients: string[]
+): ComputedRef<Record<string, string | number>[]> {
+  const queryResult = subscribeToQuery(MULTI_DEVICE_PARAMS, {
+    clis: clients,
+  }) as Ref<Record<string, unknown>[] | null>;
+  return computed(
+    () => (queryResult.value ?? []) as Record<string, string | number>[]
   );
-  return computed(() => params);
 }
 
 /**

@@ -32,6 +32,7 @@
     </h6>
 
     <TimeSeriesGraph
+      v-if="levelWritings"
       :datasets="levelWritings.x"
       :level-markers="xMarkers"
       :max-value="scale"
@@ -44,6 +45,7 @@
     </h6>
 
     <TimeSeriesGraph
+      v-if="levelWritings"
       :datasets="levelWritings.y"
       :level-markers="yMarkers"
       :max-value="scale"
@@ -55,6 +57,7 @@
     </h6>
 
     <TimeSeriesGraph
+      v-if="levelWritings"
       :datasets="levelWritings.z"
       :level-markers="zMarkers"
       :max-value="scale"
@@ -86,7 +89,7 @@ import {i18n} from 'boot/i18n';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue';
 import {date, useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
-import { fetchDeviceParams, fetchLevelWritings } from 'src/helpers/api-helpers';
+import { fetchMultipleDeviceParams, fetchLevelWritings } from 'src/helpers/api-helpers';
 
 const routerService: RouterService|undefined = inject('$routerService')
 
@@ -135,8 +138,7 @@ const levelMarkers = computed(() => [
 
 const maxAlarm = computed(() => {
   let max = 0
-  stations.forEach((station: string) => {
-    const params = deviceParams.value[station]
+  deviceParams.value.forEach((params) => {
     if (params) {
       max = updateMaxAlarm(max, params.ala1X as number)
       max = updateMaxAlarm(max, params.ala2X as number)
@@ -172,9 +174,8 @@ const invalidUnit2 = ref('')
 const units = computed(() => {
   const unitsRecord: Record<string, string> = {x: '', y: '', z: ''}
     // eslint-disable-next-line sonarjs/cognitive-complexity
-    stations.forEach((station: string) => {
+    deviceParams.value.forEach((params) => {
       // For each station, read out the units and compare them to the other stations units
-      const params = deviceParams.value[station]
       if (params) {
         const stationUnits: Record<string, string> = {
           x: (params.unitX as string).trim(),
@@ -202,8 +203,8 @@ const units = computed(() => {
  */
 const warningLevels = computed(() => {
   const markers: Record<string, Record<string, unknown>[]> = {x: [], y: [], z: []}
-  if(stations.length === 1){
-    const params = deviceParams.value[stations[0]]
+  if(stations.length === 1 && deviceParams.value.length === 1){
+    const params = deviceParams.value[0]
     if(params) {
       markers.x.push({
         label: 'Alarm 1',
@@ -287,7 +288,7 @@ const scale: ComputedRef<number> = computed(() => {
     case 'highest_peak':
     default:
       // The max writing level rounded up to one digit
-      return Math.ceil(levelWritings.value.max * 10) / 10
+      return Math.ceil((levelWritings.value?.max ?? 0) * 10) / 10
   }
 })
 
@@ -358,7 +359,7 @@ const stations = props.stationId.split('+')
 const levelWritings = fetchLevelWritings(stations, start.value, end.value)
 
 // Device parameters
-const deviceParams = fetchDeviceParams(stations)
+const deviceParams = fetchMultipleDeviceParams(stations)
 
 // Title containing station IDs
 let title = i18n.global.tc('dashboard.station', stations.length)

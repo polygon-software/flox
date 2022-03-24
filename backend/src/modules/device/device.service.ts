@@ -31,7 +31,6 @@ import { EventsTableRow } from '../../types/EventsTableRow';
 import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
-import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
 import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
 import { GetDeviceLogArgs } from './dto/args/get-device-log.args';
 import { DeviceLog } from '../../types/DeviceLog';
@@ -75,17 +74,24 @@ export class DeviceService {
   ) {}
 
   /**
+   * Get the parameters for multiple devices. The parameters are Trigger, Alarm1, Alarm2 and Unit for all three axes.
+   * @param {string} clis - clients.
+   * @returns {Promise<DeviceParams[]>} - the parameters for the device.
+   */
+  async getMultipleDeviceParams(clis: string[]): Promise<DeviceParams[]> {
+    const promiseList = clis.map((cli) => this.getDeviceParams(cli));
+    return Promise.all(promiseList);
+  }
+
+  /**
    * Get the parameters for a device. The parameters are Trigger, Alarm1, Alarm2 and Unit for all three axes.
-   * @param {GetDeviceParamsArgs} getDeviceParamsArgs - client.
+   * @param {string} cli - client.
    * @returns {Promise<DeviceParams>} - the parameters for the device.
    */
-  async getDeviceParams(
-    getDeviceParamsArgs: GetDeviceParamsArgs,
-  ): Promise<DeviceParams> {
-    const client = getDeviceParamsArgs.cli;
-    const options = { where: { cli: client } };
+  async getDeviceParams(cli: string): Promise<DeviceParams> {
+    const options = { where: { cli: cli } };
     let instances: Record<string, string | number>[];
-    if (deviceType(client) === 'MR3000') {
+    if (deviceType(cli) === 'MR3000') {
       // MR3000
       instances = await fetchFromTable('MR3000', 'para_trigala', options);
     } else {
