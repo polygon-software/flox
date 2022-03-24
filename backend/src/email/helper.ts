@@ -20,15 +20,9 @@ export async function sendEmail(
   body: string,
   attachments?: AttachmentFile[],
 ): Promise<void> {
-  // Credentials
-  const credentials = {
-    accessKeyId: process.env.AWS_KEY_ID ?? '',
-  };
-
   // Create SES service object
   const sesClient = new SES({
     region: process.env.SES_REGION,
-    credentials: credentials,
   });
 
   // Create Nodemailer SES transporter
