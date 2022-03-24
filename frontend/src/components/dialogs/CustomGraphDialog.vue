@@ -60,7 +60,7 @@
             outline
             class="text-grey"
             type="submit"
-            :disable="checkDate"
+            :disable="!checkDate()"
           />
           <q-btn
             :label="$t('buttons.cancel')"

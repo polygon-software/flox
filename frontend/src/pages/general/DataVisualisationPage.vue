@@ -32,7 +32,7 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="levelWritings"
+      v-if="levelWritings?.x"
       :datasets="levelWritings.x"
       :level-markers="xMarkers"
       :max-value="scale"
@@ -45,7 +45,7 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="levelWritings"
+      v-if="levelWritings?.y"
       :datasets="levelWritings.y"
       :level-markers="yMarkers"
       :max-value="scale"
@@ -57,7 +57,7 @@
     </h6>
 
     <TimeSeriesGraph
-      v-if="levelWritings"
+      v-if="levelWritings?.z"
       :datasets="levelWritings.z"
       :level-markers="zMarkers"
       :max-value="scale"
@@ -356,7 +356,7 @@ const start = computed(() => {
 const stations = props.stationId.split('+')
 
 // Level writings
-const levelWritings = fetchLevelWritings(stations, start.value, end.value)
+const levelWritings = fetchLevelWritings(stations, start.value, end.value) // TODO: reactive on start & end
 
 // Device parameters
 const deviceParams = fetchMultipleDeviceParams(stations)
