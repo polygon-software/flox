@@ -23,7 +23,6 @@ export async function sendEmail(
   // Credentials
   const credentials = {
     accessKeyId: process.env.AWS_KEY_ID ?? '',
-    secretAccessKey: process.env.AWS_SECRET_KEY ?? '',
   };
 
   // Create SES service object

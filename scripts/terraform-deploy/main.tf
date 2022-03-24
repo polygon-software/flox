@@ -179,22 +179,3 @@ resource "aws_s3_bucket" "private_files" {
   }
 }
 
-resource "aws_route53_zone" "subdomain" {
-    name = var.domain_name
-}
-
-resource "aws_route53_record" "api_record" {
-  name                  = "${var.api}.${var.domain_name}"
-  type                  = "CNAME"
-  zone_id               = aws_route53_zone.subdomain.id
-  ttl                   = "300"
-  records               = [aws_elastic_beanstalk_environment.api_env.endpoint_url]
-}
-
-resource "aws_route53_record" "web_record" {
-  name                  = "${var.web}.${var.domain_name}"
-  type                  = "CNAME"
-  zone_id               = aws_route53_zone.subdomain.id
-  ttl                   = "300"
-  records               = [aws_elastic_beanstalk_environment.frontend_env.endpoint_url]
-}

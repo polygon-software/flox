@@ -92,24 +92,14 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   }
   setting {
     namespace = "aws:elbv2:listener:443"
-    name      = "ListenerProtocol"
-    value     = "SSL"
+    name      = "Protocol"
+    value     = "HTTPS"
   }
 
   setting {
     namespace = "aws:elbv2:listener:443"
-    name      = "InstancePort"
-    value     = 3000    // Port the NestJS API listens on
-  }
-  setting {
-    namespace = "aws:elbv2:listener:443"
-    name      = "InstanceProtocol"
-    value     = "TCP"
-  }
-  setting {
-    namespace = "aws:elbv2:listener:443"
-    name      = "SSLCertificateId"
-    value     = var.SSL_certificate_id
+    name      = "SSLCertificateArns"
+    value     = aws_acm_certificate_validation.vali.certificate_arn
   }
   setting {
     name      = "ListenerEnabled"

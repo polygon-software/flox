@@ -88,23 +88,14 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   }
   setting {
     namespace     = "aws:elbv2:listener:443"    //TODO application load balancer ignores them
-    name          = "ListenerProtocol"
-    value         = "SSL"
+    name          = "Protocol"
+    value         = "HTTPS"
   }
+
   setting {
     namespace     = "aws:elbv2:listener:443"
-    name          = "InstancePort"
-    value         = 8080    // The Port Quasar listens on
-  }
-  setting {
-    namespace     = "aws:elbv2:listener:443"
-    name          = "InstanceProtocol"
-    value         = "TCP"
-  }
-  setting {
-    namespace     = "aws:elbv2:listener:443"
-    name          = "SSLCertificateId"
-    value         = var.SSL_certificate_id
+    name          = "SSLCertificateArns"
+    value         = aws_acm_certificate_validation.vali.certificate_arn
   }
   setting {
     name          = "ListenerEnabled"
