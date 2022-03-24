@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, inject, onMounted, ref, Ref} from 'vue';
+import {computed, defineProps, inject} from 'vue';
 import ProjectTable from 'components/tables/ProjectTable.vue';
 import {useQuasar} from 'quasar';
 import EditProjectDialog from 'components/dialogs/EditProjectDialog.vue';
@@ -48,16 +48,9 @@ const props = defineProps({
   }
 })
 
-const projectUuid: Ref<null|string> = ref(null)
-
-// Once mounted, determine actual project entry's UUID (for editing)
-onMounted(async () => {
-  const ownProjects = await myProjects()
-  const project = ownProjects.find((ownProject) => ownProject.name === props.projectId)
-
-  if(project){
-    projectUuid.value = project.uuid
-  }
+const projectUuid = computed(() => {
+  const project = myProjects().value.find((project) => project.name === props.projectId)
+  return project ?? null
 })
 
 /**

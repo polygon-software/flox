@@ -76,7 +76,7 @@
 <script setup lang="ts">
 // REQUIRED; must be called inside of setup()
 import {useDialogPluginComponent} from 'quasar';
-import {defineEmits, defineProps, onMounted, Ref, ref} from 'vue'
+import {defineEmits, defineProps, Ref, ref} from 'vue'
 import {myProjects} from 'src/helpers/api-helpers';
 import {Project} from 'src/data/types/Project';
 
@@ -85,7 +85,7 @@ const { dialogRef, onDialogHide, onDialogCancel, onDialogOK } = useDialogPluginC
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emits = defineEmits(useDialogPluginComponent.emits)
 
-const projects: Ref<Project[]> = ref([])
+const projects = myProjects()
 const selectedProject: Ref<Project|null> = ref(null)
 
 const props = defineProps({
@@ -93,11 +93,6 @@ const props = defineProps({
     type: String,
     required: true,
   }
-})
-
-// Load user's projects
-onMounted(async () => {
-  projects.value = await myProjects()
 })
 
 /**

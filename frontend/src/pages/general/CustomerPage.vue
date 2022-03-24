@@ -3,12 +3,12 @@
     <!-- Title: Projects -->
     <h5>{{ $tc('dashboard.project', 0) }}</h5>
 
-    <ProjectsTable/>
+    <ProjectsTable style="width: 90%"/>
 
     <!-- Title: Device pool -->
     <h5>{{ $t('dashboard.device_pool') }}</h5>
 
-    <DevicePoolTable/>
+    <DevicePoolTable style="width: 90%"/>
 
   </q-page>
 </template>

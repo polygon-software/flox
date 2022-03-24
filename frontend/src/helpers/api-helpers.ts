@@ -1,11 +1,14 @@
 import { executeQuery, subscribeToQuery } from 'src/helpers/data-helpers';
-import { ALL_USERS, MY_USER, USER } from 'src/data/queries/USER';
+import { ALL_USERS, EMAIL_ALLOWED, MY_USER, USER } from 'src/data/queries/USER';
 import { User } from 'src/data/types/User';
 import { ROLE } from 'src/data/ENUM';
 import { Project } from 'src/data/types/Project';
 import { MY_PROJECTS } from 'src/data/queries/PROJECT';
 import {
   DEVICE_CONTACTS,
+  DEVICE_PARAMS,
+  EVENT_TABLE_ROWS,
+  LEVEL_WRITING,
   MY_DEVICES,
   PROJECT_DEVICES,
 } from 'src/data/queries/DEVICE';
@@ -15,82 +18,156 @@ import { DeviceContact } from 'src/data/types/DeviceContact';
 import { MY_CONTACTS } from 'src/data/queries/CONTACT';
 
 /**
- * Fetch all users.
- * @returns {Promise<User[] | null>} - all users.
+ * Fetch the level writings for all stations.
+ * @param {string[]} clients - client IDs
+ * @param {Date} start - start of period
+ * @param {Date} end - end of period
+ * @returns {ComputedRef<LevelWritings>} - level writings
  */
-export async function fetchAllUsers(): Promise<User[]> {
-  const queryResult = await executeQuery(ALL_USERS);
-  if (!queryResult.data[ALL_USERS.cacheLocation]) {
-    return [];
-  }
-  return mapUsers(
-    queryResult.data[ALL_USERS.cacheLocation] as Record<string, unknown>[]
+export function fetchLevelWritings(clients: string[], start: Date, end: Date) {
+  return computed(
+    () =>
+      (
+        subscribeToQuery(LEVEL_WRITING, {
+          clients: clients,
+          start: start,
+          end: end,
+          resolution: 1,
+        }) as Ref<Record<string, unknown>>
+      ).value as LevelWritings
   );
+}
+
+/**
+ * Fetch the device parameters for all stations.
+ * @param {string[]} clients - client IDs
+ * @returns {ComputedRef<Record<string, Record<string, string|number>>>} - device params
+ */
+export function fetchDeviceParams(clients: string[]) {
+  return computed(() => {
+    const params: Record<string, Record<string, string | number>> = {};
+    clients.forEach(
+      (cli: string) =>
+        (params[cli] = (
+          subscribeToQuery(DEVICE_PARAMS, { cli: cli }) as Ref<
+            Record<string, unknown>
+          >
+        ).value as Record<string, string | number>)
+    );
+    return params;
+  });
+}
+
+/**
+ * Fetch if email is allowed.
+ * @param {string} email - the email to check
+ * @returns {Promise<boolean>} - if the email is allowed
+ */
+export async function emailAllowed(email: string) {
+  const queryResult = await executeQuery(EMAIL_ALLOWED, { email: email });
+  return queryResult.data
+    ? queryResult.data[EMAIL_ALLOWED.cacheLocation]
+    : false;
+}
+
+/**
+ * Fetch the logged-in user.
+ * @returns {Promise<User|null>} - the logged in user
+ */
+export async function loggedInUser() {
+  const queryResult = await executeQuery(MY_USER);
+  const user = (
+    queryResult.data ? queryResult.data[MY_USER.cacheLocation] : null
+  ) as Record<string, unknown> | null;
+  return user ? mapUser(user) : null;
+}
+
+/**
+ * Fetch event table rows with pagination.
+ * @param {string} cli - Client ID
+ * @param {Record<string, number | boolean | string>} pagination - pagination object
+ * @param {string|null} search - search string
+ * @returns {ComputedRef<Record<string, Record<string, unknown>[]|number>>} - all rows plus metadata.
+ */
+export function fetchEventTableRows(
+  cli: string,
+  pagination: Record<string, number | boolean | string>,
+  search: string | null
+): ComputedRef<Record<string, Record<string, unknown>[] | number>> {
+  return computed(
+    () =>
+      (
+        subscribeToQuery(EVENT_TABLE_ROWS, {
+          stationId: cli,
+          skip:
+            ((pagination.page as number) - 1) *
+            (pagination.rowsPerPage as number),
+          take: pagination.rowsPerPage as number,
+          filter: search,
+          orderBy: (pagination.sortBy as string) || 'date_time',
+          descending: (pagination.descending as boolean) || false,
+        }) as Ref<Record<string, Record<string, unknown>[] | number>>
+      ).value
+  );
+}
+
+/**
+ * Fetch all users.
+ * @returns {ComputedRef<User[]>} - all users.
+ */
+export function fetchAllUsers(): ComputedRef<User[]> {
+  const queryResult = subscribeToQuery(ALL_USERS) as Ref<
+    Record<string, unknown>[]
+  >;
+  return computed(() => mapUsers(queryResult.value ?? []));
 }
 
 /**
  * Fetch user.
  * @param {string} userId - user UUID.
- * @returns {Promise<User | null>} - user.
+ * @returns {ComputedRef<User | null>} - user.
  */
-export async function fetchUser(userId: string): Promise<User | null> {
-  const queryResult = await executeQuery(USER, { uuid: userId });
-  if (!queryResult.data[USER.cacheLocation]) {
-    return null;
-  }
-  return mapUser(
-    queryResult.data[USER.cacheLocation] as Record<string, unknown>
+export function fetchUser(userId: string): ComputedRef<User | null> {
+  const queryResult = subscribeToQuery(USER, { uuid: userId }) as Ref<
+    Record<string, unknown>
+  >;
+  return computed(() =>
+    queryResult.value ? mapUser(queryResult.value) : null
   );
 }
 
 /**
  * Fetch own user.
- * @returns {Promise<User | null>} - user.
+ * @returns {ComputedRef<User | null>} - user.
  */
-export async function myUser(): Promise<User | null> {
-  const queryResult = await executeQuery(MY_USER);
-  if (!queryResult.data[MY_USER.cacheLocation]) {
-    return null;
-  }
-  return mapUser(
-    queryResult.data[MY_USER.cacheLocation] as Record<string, unknown>
+export function myUser(): ComputedRef<User | null> {
+  const queryResult = subscribeToQuery(MY_USER) as Ref<Record<string, unknown>>;
+  return computed(() =>
+    queryResult.value ? mapUser(queryResult.value) : null
   );
 }
 
 /**
  * Fetch all projects belonging to current user
- * @return {Promise<Project[]>} - An array containing all the user's projects
+ * @return {ComputedRef<Project[]>} - An array containing all the user's projects
  */
-export async function myProjects(): Promise<Project[]> {
-  const projects: Project[] = [];
-  const queryResult = await executeQuery(MY_PROJECTS);
-  if (queryResult.data[MY_PROJECTS.cacheLocation]) {
-    for (const project of queryResult.data[MY_PROJECTS.cacheLocation] as Record<
-      string,
-      unknown
-    >[]) {
-      projects.push(mapProject(project));
-    }
-  }
-  return projects;
+export function myProjects(): ComputedRef<Project[]> {
+  const queryResult = subscribeToQuery(MY_PROJECTS) as Ref<
+    Record<string, unknown>[]
+  >;
+  return computed(() => mapProjects(queryResult.value ?? []));
 }
 
 /**
  * Fetch all devices that are part of a given project
  * @param {string} uuid - the project's uuid
- * @return {Promise<Device[]>} - An array containing all the user's projects
+ * @return {ComputedRef<Device[]>} - An array containing all the user's projects
  */
-export async function fetchProjectDevices(uuid: string): Promise<Device[]> {
-  const devices: Device[] = [];
-  const queryResult = await executeQuery(PROJECT_DEVICES, { uuid });
-  if (queryResult.data[PROJECT_DEVICES.cacheLocation]) {
-    for (const device of queryResult.data[
-      PROJECT_DEVICES.cacheLocation
-    ] as Record<string, unknown>[]) {
-      devices.push(mapDevice(device));
-    }
-  }
-  return devices;
+export function fetchProjectDevices(uuid: string): ComputedRef<Device[]> {
+  const queryResult = subscribeToQuery(PROJECT_DEVICES, { uuid }) as Ref<
+    Record<string, unknown>[]
+  >;
+  return computed(() => mapDevices(queryResult.value ?? []));
 }
 
 /**
@@ -130,16 +207,11 @@ export function myContacts(): ComputedRef<DeviceContact[]> {
   return computed(() => mapContacts(queryResult.value ?? []));
 }
 
-/**
- * Map contact records to contact instances.
- * @param {Record<string, unknown>[]} records - contact records.
- * @returns {DeviceContact[]} - contact instances.
+/*
+ *
+ * Mapping
+ *
  */
-export function mapContacts(
-  records: Record<string, unknown>[]
-): DeviceContact[] {
-  return records.map((record) => mapContact(record));
-}
 
 /**
  * Map contact record to contact instance.
@@ -161,15 +233,6 @@ export function mapContact(record: Record<string, unknown>): DeviceContact {
     record.memory as boolean,
     record.daily as boolean
   );
-}
-
-/**
- * Map user records to user instances.
- * @param {Record<string, unknown>[]} records - user records.
- * @returns {User[]} - user instances.
- */
-export function mapUsers(records: Record<string, unknown>[]): User[] {
-  return records.map((record) => mapUser(record));
 }
 
 /**
@@ -207,15 +270,6 @@ export function mapProject(record: Record<string, unknown>): Project {
 }
 
 /**
- * Map device records to device instances.
- * @param {Record<string, unknown>[]} records - device records.
- * @returns {Device[]} - device instances.
- */
-export function mapDevices(records: Record<string, unknown>[]): Device[] {
-  return records.map((record) => mapDevice(record));
-}
-
-/**
  * Map device record (MR2000 or MR3000) to device instance.
  * @param {Record<string, unknown>} record - project record.
  * @returns {Project} - project instance.
@@ -233,3 +287,54 @@ export function mapDevice(record: Record<string, unknown>): Device {
     record.deviceType as 'MR2000' | 'MR3000'
   );
 }
+
+/**
+ * Map user records to user instances.
+ * @param {Record<string, unknown>[]} records - user records.
+ * @returns {User[]} - user instances.
+ */
+export function mapUsers(records: Record<string, unknown>[]): User[] {
+  return records.map((record) => mapUser(record));
+}
+
+/**
+ * Map project records to project instances.
+ * @param {Record<string, unknown>[]} records - project records.
+ * @returns {Project[]} - project instances.
+ */
+export function mapProjects(records: Record<string, unknown>[]): Project[] {
+  return records.map((record) => mapProject(record));
+}
+
+/**
+ * Map device records to device instances.
+ * @param {Record<string, unknown>[]} records - device records.
+ * @returns {Device[]} - device instances.
+ */
+export function mapDevices(records: Record<string, unknown>[]): Device[] {
+  return records.map((record) => mapDevice(record));
+}
+
+/**
+ * Map contact records to contact instances.
+ * @param {Record<string, unknown>[]} records - contact records.
+ * @returns {DeviceContact[]} - contact instances.
+ */
+export function mapContacts(
+  records: Record<string, unknown>[]
+): DeviceContact[] {
+  return records.map((record) => mapContact(record));
+}
+
+/*
+ *
+ * Types
+ *
+ */
+
+type LevelWritings = {
+  x: Record<string, unknown>[];
+  y: Record<string, unknown>[];
+  z: Record<string, unknown>[];
+  max: number;
+};

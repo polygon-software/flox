@@ -80,18 +80,15 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ComputedRef, defineProps, inject, Ref, ref, watch} from 'vue';
+import {computed, ComputedRef, defineProps, inject, ref} from 'vue';
 import TimeSeriesGraph from 'components/graphs/TimeSeriesGraph.vue';
 import {i18n} from 'boot/i18n';
 import CustomGraphDialog from 'components/dialogs/CustomGraphDialog.vue';
 import {date, useQuasar} from 'quasar';
-import {executeQuery} from 'src/helpers/data-helpers';
-import {DEVICE_PARAMS, LEVEL_WRITING} from 'src/data/queries/DEVICE';
 import {RouterService} from 'src/services/RouterService';
-import { ErrorService } from 'src/services/ErrorService';
+import { fetchDeviceParams, fetchLevelWritings } from 'src/helpers/api-helpers';
 
 const routerService: RouterService|undefined = inject('$routerService')
-const errorService: ErrorService|undefined = inject('$errorService')
 
 const props = defineProps({
   stationId: {
@@ -354,26 +351,14 @@ const start = computed(() => {
   return startDate
 })
 
-// Watch for changes in time period and query new level writings
-watch(start, () => fetchLevelWritings())
-watch(end, () => fetchLevelWritings())
-
-// Level Writings type
-type LevelWritings = {
-  x: Record<string, unknown>[],
-  y: Record<string, unknown>[],
-  z: Record<string, unknown>[],
-  max: number
-}
-
-// Level writings
-const levelWritings: Ref<LevelWritings> = ref({ x: [], y: [], z: [], max: 0 })
-
-// Device parameters
-const deviceParams: Ref<Record<string, Record<string, string|number>>> = ref({})
-
 // Stations in URL
 const stations = props.stationId.split('+')
+
+// Level writings
+const levelWritings = fetchLevelWritings(stations, start.value, end.value)
+
+// Device parameters
+const deviceParams = fetchDeviceParams(stations)
 
 // Title containing station IDs
 let title = i18n.global.tc('dashboard.station', stations.length)
@@ -381,27 +366,6 @@ stations.forEach((station: string) => {
   title += ` ${station},`
 })
 const pageTitle = title.substring(0, title.length-1);
-
-/**
- * Fetch the level writings for all stations.
- * @returns {Promise<void>} - async
- */
-async function fetchLevelWritings(){
-  const response = await executeQuery(LEVEL_WRITING, {clients: stations, start: start.value, end: end.value, resolution: 1})
-  levelWritings.value = response.data.levelWriting as LevelWritings
-}
-
-/**
- * Fetch the device parameters for all stations.
- * @returns {Promise<void>} - async
- */
-async function fetchDeviceParams(){
-  const promiseList = stations.map(async (stationId: string) => {
-    const response = await executeQuery(DEVICE_PARAMS, {cli: stationId})
-    deviceParams.value[stationId] = response.data.deviceParams as Record<string, string|number>
-  })
-  await Promise.all(promiseList)
-}
 
 const $q = useQuasar()
 
@@ -422,8 +386,4 @@ function showCustomGraphDialog(): void{
     await routerService?.pushToQuery(settings)
   })
 }
-
-// Fetch initially
-fetchLevelWritings().catch(() => errorService?.showErrorDialog(new Error('Fetching level writings failed with an error.')))
-fetchDeviceParams().catch(() => errorService?.showErrorDialog(new Error('Fetching device parameters failed with an error.')))
 </script>

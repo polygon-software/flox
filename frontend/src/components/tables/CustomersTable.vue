@@ -43,10 +43,9 @@
 
 <script setup lang="ts">
 import {RouterService} from 'src/services/RouterService';
-import {inject, Ref, ref} from 'vue';
+import {inject, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {fetchAllUsers} from 'src/helpers/api-helpers';
-import {User} from 'src/data/types/User';
 
 const search = ref('')
 const routerService: RouterService | undefined = inject('$routerService')
@@ -58,7 +57,7 @@ const columns = [
   {name: 'email', label: i18n.global.t('account_data.email'), field: 'email', sortable: true, align: 'center'},
 ]
 
-const allUsers: Ref<User[]> = ref([])
+const allUsers = fetchAllUsers()
 
 
 /**
@@ -70,5 +69,4 @@ async function onRowClick(row: Record<string, unknown>): Promise<void> {
   await routerService?.addToRoute(row.username as string)
 }
 
-fetchAllUsers().then(users => allUsers.value = users).catch(e => console.error(e))
 </script>

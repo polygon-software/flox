@@ -34,8 +34,8 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import LoginForm from 'components/forms/LoginForm.vue';
 
-const $authService: AuthenticationService|undefined = inject('$authService')
-const $routerService: RouterService|undefined = inject('$routerService')
+const authService: AuthenticationService|undefined = inject('$authService')
+const routerService: RouterService|undefined = inject('$routerService')
 
 /**
  * Logs in the given authentication
@@ -45,8 +45,8 @@ const $routerService: RouterService|undefined = inject('$routerService')
  * @returns {void}
  */
 async function onLogin({username, password}: {username: string, password: string}): Promise<void>{
-  await $authService?.login(username, password)
-  await $routerService?.routeTo(ROUTES.HOME)
+  await authService?.login(username, password)
+  await routerService?.routeTo(ROUTES.HOME)
 }
 
 /**
@@ -54,7 +54,7 @@ async function onLogin({username, password}: {username: string, password: string
  * @returns {void}
  */
 function forgotPassword() {
-  $authService?.showResetPasswordDialog();
+  authService?.showResetPasswordDialog();
 }
 
 </script>

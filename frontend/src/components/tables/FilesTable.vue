@@ -2,8 +2,11 @@
   <div class="column">
     <!-- Search input -->
     <div class="row" style="justify-content: center">
-      <p>{{ $t('files.events', {events: lengths.Evt}) }}, {{ $t('files.peak_files', {peak_files: lengths.Pk}) }},
-        {{ $t('files.zip_files', {zip_files: lengths.Zip}) }}</p>
+      <p>
+        {{ $t('files.events', {events: lengths.Evt}) }},
+        {{ $t('files.peak_files', {peak_files: lengths.Pk}) }},
+        {{ $t('files.zip_files', {zip_files: lengths.Zip}) }}
+      </p>
     </div>
     <div class="row" style="justify-content: center">
       <q-select
@@ -76,7 +79,7 @@
           <q-td key="preview">
             <a
               href="#"
-              @click.stop="()=>{preview(_props.row.previewURL)}"
+              @click.stop="()=>{previewFile(_props.row.previewURL)}"
               v-text="_props.row.previewURL ? 'show': ''"
             />
           </q-td>
@@ -87,13 +90,12 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, inject, Ref, ref} from 'vue';
+import { defineProps, inject, Ref, ref, watchEffect } from 'vue';
 import {i18n} from 'boot/i18n';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {executeQuery} from 'src/helpers/data-helpers';
-import {EVENT_TABLE_ROWS} from 'src/data/queries/DEVICE';
 import {date} from 'quasar';
+import { fetchEventTableRows } from 'src/helpers/api-helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -111,32 +113,9 @@ const routerService: RouterService|undefined = inject('$routerService')
  * @returns {void} - -
  */
 function updatePagination(update: Record<string, string|Record<string, unknown>>){
-  pagination.value = update.pagination as Record<string, unknown>
-  return refetch()
+  pagination.value = update.pagination as Record<string, string|number|boolean>
 }
 
-/**
- * Fetch events
- * @returns {Promise<void>} - done
- */
-async function refetch(): Promise<void>{
-  const res = await executeQuery(EVENT_TABLE_ROWS, {
-    stationId: props.stationId,
-    skip: (pagination.value.page as number - 1) * (pagination.value.rowsPerPage as number),
-    take: pagination.value.rowsPerPage as number,
-    filter: search.value,
-    orderBy: (pagination.value.sortBy as string) || 'date_time',
-    descending: pagination.value.descending as boolean || false
-  });
-  const fetchRes = res.data[EVENT_TABLE_ROWS.cacheLocation] as Record<string, Record<string, unknown>[]|number>
-  pagination.value.rowsNumber = fetchRes.lengthAll
-  rows.value = fetchRes.items as Record<string, unknown>[]
-  lengths.value.total = fetchRes.lengthAll as number
-  lengths.value.Pk = fetchRes.lengthPk as number
-  lengths.value.Evt = fetchRes.lengthEvt as number
-  lengths.value.Zip = fetchRes.lengthZip as number
-
-}
 const lengths = ref({
   total: 0,
   Zip: 0,
@@ -150,12 +129,21 @@ const pagination = ref({
   rowsNumber: 0,
   descending: false,
   sortBy: ''
-}) as Ref<Record<string, unknown>>
+}) as Ref<Record<string, number|boolean|string>>
 
 const rows = ref([]) as Ref<Record<string, unknown>[]>
 const search = ref(null)
 
-void refetch()
+const events = fetchEventTableRows(props.stationId, pagination.value, search.value)
+
+watchEffect(() => {
+  pagination.value.rowsNumber = events.value.lengthAll as number
+  rows.value = events.value.items as Record<string, unknown>[]
+  lengths.value.total = events.value.lengthAll as number
+  lengths.value.Pk = events.value.lengthPk as number
+  lengths.value.Evt = events.value.lengthEvt as number
+  lengths.value.Zip = events.value.lengthZip as number
+})
 
 const formatDate = date.formatDate
 // ----- Data -----
@@ -181,16 +169,25 @@ const columns = [
  * @returns {Promise<void>} - done
  */
 async function onRowClick(row: Record<string, unknown>): Promise<void> {
-  await routerService?.addToRoute(row.file) // Todo
+  await routerService?.addToRoute(row.file as string) // Todo
 }
 
-// TODO: replace it to download the file
 /**
  * Downloads the file which is clicked
+ * @param {string} url - URL
  * @returns {void}
  */
-async function downloadFile () {
-  await routerService?.routeTo(ROUTES.CUSTOMERS) // ToDo
+async function downloadFile (url: string) {
+  await routerService?.routeTo(ROUTES.CUSTOMERS, {url: url}) // ToDo
+}
+
+/**
+ * Previews the file which is clicked
+ * @param {string} url - URL
+ * @returns {void}
+ */
+async function previewFile (url: string) {
+  await routerService?.routeTo(ROUTES.CUSTOMERS, {url: url}) // ToDo
 }
 </script>
 
