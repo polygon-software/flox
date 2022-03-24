@@ -1,33 +1,16 @@
 import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
-import {
-  IsBoolean,
-  IsDate,
-  IsNotEmpty,
-  IsNumber,
-  IsUUID,
-} from 'class-validator';
-import { DOSSIER_STATUS } from '../../../../ENUM/ENUMS';
-import { CreatePersonInput } from '../../../person/dto/create-person.input';
+import { IsNotEmpty, IsUUID } from 'class-validator';
+import { CreateDossierInput } from './create-dossier.input';
+import { Address } from '../../../address/entities/address.entity';
+import { UpdateAddressInput } from '../../../address/dto/input/update-address.input';
 
 @InputType()
-export class UpdateDossierInput extends PartialType(CreatePersonInput) {
+export class UpdateDossierInput extends PartialType(CreateDossierInput) {
   @Field(() => ID)
   @IsUUID()
   uuid: string;
 
-  @Field(() => Date, { nullable: true })
-  @IsDate()
-  born: Date;
-
-  @Field(() => Number, { nullable: true })
-  @IsNumber()
-  loan_sum: number;
-
-  @Field(() => Boolean, { nullable: true })
-  @IsBoolean()
-  non_arrangeable: boolean;
-
-  @Field(() => DOSSIER_STATUS, { nullable: true })
+  @Field(() => UpdateAddressInput)
   @IsNotEmpty()
-  status: DOSSIER_STATUS;
+  address: Address;
 }

@@ -59,7 +59,7 @@ const props = defineProps({
   initialValue: {
     type: Object as PropType<Address>,
     required: false,
-    default: () => new Address()
+    default: null,
   },
   validateZip: {
     type: Boolean,
@@ -68,7 +68,12 @@ const props = defineProps({
   }
 })
 
-const address = reactive(props.initialValue)
+const address = reactive(props.initialValue ? new Address(
+  props.initialValue?.street as string,
+  props.initialValue?.number as string,
+  props.initialValue?.city as string,
+  props.initialValue?.zip_code as string,
+) : new Address())
 const zipRef: Ref<QInput|null> = ref(null)
 
 /**

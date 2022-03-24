@@ -76,6 +76,31 @@
         <q-td key="non_arrangeable">
           <q-icon v-if="_props.row.non_arrangeable" name="warning" size="30px" color="red"/>
         </q-td>
+        <q-td key="options">
+          <!-- Dropdown options for editing -->
+          <q-btn-dropdown
+            dropdown-icon="more_vert"
+            auto-close
+            no-icon-animation
+            flat
+            round
+            dense
+            @click.stop=""
+          >
+            <div class="column">
+              <!-- 'Disable' button for active accounts -->
+              <q-btn
+                :label="$t('buttons.edit')"
+                icon="edit"
+                class="text-black"
+                flat
+                no-caps
+                :disable="employeeUuid"
+                @click="() => onEditDossier(_props.row)"
+              />
+            </div>
+          </q-btn-dropdown>
+        </q-td>
       </q-tr>
       <div v-if="expanded[_props.row.uuid]"
       >
@@ -113,7 +138,7 @@
 
 <script setup lang="ts">
 import {computed, inject, Ref, ref} from 'vue';
-import {executeMutation, subscribeToQuery} from 'src/helpers/data-helpers';
+import {executeMutation, executeQuery, subscribeToQuery} from 'src/helpers/data-helpers';
 import DocumentsDialog from 'components/dialogs/DocumentsDialog.vue';
 import {QVueGlobals, useQuasar} from 'quasar';
 import {SET_DOSSIER_STATUS} from 'src/data/mutations/DOSSIER';
@@ -123,11 +148,12 @@ import {showNotification} from 'src/helpers/notification-helpers';
 import {formatDate, formatDateTime} from 'src/helpers/format-helpers';
 import {tableFilter} from 'src/helpers/filter-helpers';
 import {dossierChipStyle, offerChipStyle} from 'src/helpers/chip-helpers';
-import {MY_DOSSIERS} from 'src/data/queries/DOSSIER';
+import {IS_DOSSIER_COMPLETE, MY_DOSSIERS} from 'src/data/queries/DOSSIER';
 import {DOSSIER_FILE, OFFER_FILE} from 'src/data/queries/FILE';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {useRoute} from 'vue-router';
+import WarningDialog from 'components/dialogs/WarningDialog.vue';
 
 const $q: QVueGlobals = useQuasar()
 const $routerService: RouterService|undefined = inject('$routerService')
@@ -256,6 +282,31 @@ function expandOffers(uuid:string): void{
   expanded.value[uuid]= !expanded.value[uuid]
 }
 
+/**
+ * Routes to the page for editing an existing dossier
+ * @param {Record<string, unknown>} dossier - the dossier to edit
+ * @returns {Promise<void>} - done
+ */
+async function onEditDossier(dossier: Record<string, unknown>){
+  // Check whether dossier is completed (which makes it non-editable)
+  const isCompleteQuery = await executeQuery(IS_DOSSIER_COMPLETE, {uuid: dossier.uuid})
+  const isComplete = isCompleteQuery.data[IS_DOSSIER_COMPLETE.cacheLocation] as boolean
+
+  // If dossier is complete (and therefore not editable), show dialog
+  if(isComplete){
+    $q.dialog({
+      component: WarningDialog,
+      componentProps: {
+        discardLabel: i18n.global.t('buttons.cancel'),
+        description: i18n.global.t('messages.dossier_not_editable')
+      }
+    })
+    return
+  }
+
+  // Route to edit page
+  await $routerService?.routeTo(ROUTES.EDIT_DOSSIER, {did: dossier.uuid})
+}
 
 </script>
 

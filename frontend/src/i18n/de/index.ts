@@ -117,7 +117,8 @@ export default {
     reset_password: 'Passwort zurücksetzen',
     enter_username: 'Bitte geben Sie ihren Nutzernamen ein',
     verification: 'Verifizierung',
-    enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein'
+    enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein',
+    dossier_not_editable: 'Da dieses Dossier vollständig ist, ist es nicht mehr bearbeitbar.'
   },
   dashboards: {
     management_dashboard: 'Chef Dashboard',
@@ -166,7 +167,8 @@ export default {
     upload_documents: 'Dokumente hochladen',
     save_and_print: 'Speichern & Drucken',
     back_to_dashboard: 'Zurück zum dashboard',
-    to_dashboard: 'Zum Dashboard'
+    to_dashboard: 'Zum Dashboard',
+    edit: 'Bearbeiten'
   },
   documents: {
     choose_file: 'Datei wählen',

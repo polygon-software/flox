@@ -20,6 +20,11 @@ const needed = [
  * @returns {boolean} - complete
  */
 export function isCompleted(dossier: Dossier): boolean {
+  // Dossiers with existing offers are by definition completed
+  if (dossier.offers && dossier.offers.length > 0) {
+    return true;
+  }
+
   const complete = needed.every((type) => {
     return !!dossier.documents.find((docu) => {
       return (docu.file_type as unknown as DOSSIER_FILE_TYPE) == type;

@@ -267,7 +267,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ComputedRef, inject, onMounted, Ref, ref} from 'vue';
+import {computed, ComputedRef, inject, onBeforeMount, onMounted, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
 import {Form} from 'src/helpers/form-helpers';
 import {QForm, useQuasar} from 'quasar';
@@ -275,7 +275,7 @@ import {FIELDS} from 'src/data/FIELDS';
 import {executeMutation, executeQuery} from 'src/helpers/data-helpers';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import {CREATE_DOSSIER} from 'src/data/mutations/DOSSIER';
+import {CREATE_DOSSIER, UPDATE_DOSSIER} from 'src/data/mutations/DOSSIER';
 import SummaryField from 'components/forms/fields/dossier_creation/SummaryField.vue';
 import WarningDialog from 'components/dialogs/WarningDialog.vue';
 import {ErrorService} from 'src/services/ErrorService';
@@ -286,6 +286,12 @@ import {dateToInputString} from 'src/helpers/date-helpers';
 import {getAuthToken} from 'src/helpers/cookie-helpers';
 import DossierFinalDocumentPreview from 'components/dossier/DossierFinalDocumentPreview.vue';
 import {AuthenticationService} from 'src/services/AuthService';
+import _ from 'lodash';
+
+/**
+ * This component is a form for creating a new dossier or editing an existing one. If a 'prefillDossier' is given
+ * via props, that dossier's data is pre-filled in the form.
+ */
 
 const $routerService: RouterService | undefined = inject('$routerService')
 const $errorService: ErrorService|undefined = inject('$errorService')
@@ -293,6 +299,13 @@ const $authService: AuthenticationService|undefined = inject('$authService')
 
 const $q = useQuasar()
 
+const props = defineProps({
+  prefillDossier: {
+    type: Object,
+    required: false,
+    default: null,
+  }
+})
 
 // Form component reference
 const formRef: Ref<QForm | null> = ref(null)
@@ -762,6 +775,11 @@ const dossierObject = computed(() => {
   }
 })
 
+onBeforeMount(() => {
+  // Pre-fill dossier, if applicable
+  prefillDossier()
+})
+
 // Upon mounting, get list of banks
 onMounted(async () => {
   // Execute queries for existing & suggested banks
@@ -1025,74 +1043,151 @@ async function onSubmit() {
 
   // Creates a dossier
   try{
-    const mutationResult = await executeMutation(CREATE_DOSSIER, {
-    createDossierInput: {
-      // Basic information
-      first_name: firstName,
-      last_name: lastName,
-      address,
-      email,
-      phone,
-      birthdate,
+    const isEditing = !!props.prefillDossier
 
-      // Value purchase information
-      original_bank_name: bankName,
-      original_bank_abbreviation: bankAbbreviation,
-      property_type: propertyType,
-      owner_occupied: ownerOccupied,
-      purchase_date: purchaseDate,
-      purchase_price: parseInt(purchasePrice as string),
-      mortgage_amount: parseInt(mortgageAmount as string),
+    // Mutation (CREATE or UPDATE)
+    const mutation = isEditing ? UPDATE_DOSSIER : CREATE_DOSSIER
 
-      // Amortisation information
-      has_amortisation: hasAmortisation,
-      direct_amortisation: directAmortisation,
-      amortisation_amount: parseInt(amortisationAmount as string),
+    // Variables for create or update
+    const variables = isEditing ? {
+      updateDossierInput: {
+        uuid: props.prefillDossier.uuid as string,
 
-      // Building lease information
-      has_building_lease: hasBuildingLease,
-      public_landlord: publicLandlord,
-      building_lease_expiration_date: buildingLeaseExpirationDate,
-      building_lease_interest: parseInt(buildingLeaseInterest as string),
+        // Basic information
+        first_name: firstName,
+        last_name: lastName,
+        address: {
+          uuid: (props.prefillDossier.address as Record<string, string>).uuid,
+          ...address
+        },
+        email,
+        phone,
+        birthdate,
 
-      // Renovation information
-      has_renovation: hasRenovation,
-      renovation_year: renovationYear,
-      renovation_price: parseInt(renovationPrice as string),
+        // Value purchase information
+        original_bank_name: bankName,
+        original_bank_abbreviation: bankAbbreviation,
+        property_type: propertyType,
+        owner_occupied: ownerOccupied,
+        purchase_date: purchaseDate,
+        purchase_price: parseInt(purchasePrice as string),
+        mortgage_amount: parseInt(mortgageAmount as string),
 
-      // Mortgage partitions
-      partition_amounts: partitionAmounts,
-      partition_dates: partitionDates,
+        // Amortisation information
+        has_amortisation: hasAmortisation,
+        direct_amortisation: directAmortisation,
+        amortisation_amount: parseInt(amortisationAmount as string),
 
-      // Income/cost information
-      incomes,
-      child_allowances: parseInt(childAllowances.toString()),
-      bonus: parseInt(bonus.toString()),
-      assets: parseInt(assets.toString()),
-      leasing: parseInt(leasing.toString()),
-      credit: parseInt(credit.toString()),
-      alimony: parseInt(alimony.toString()),
-      various: parseInt(various.toString()),
-      prosecutions,
-      loss_certificates: lossCertificates,
+        // Building lease information
+        has_building_lease: hasBuildingLease,
+        public_landlord: publicLandlord,
+        building_lease_expiration_date: buildingLeaseExpirationDate,
+        building_lease_interest: parseInt(buildingLeaseInterest as string),
 
-      // Flag for dossier being non-arrangeable
-      non_arrangeable: nonArrangeable.value,
+        // Renovation information
+        has_renovation: hasRenovation,
+        renovation_year: renovationYear,
+        renovation_price: parseInt(renovationPrice as string),
 
-      // Calculated totals
-      affordability: affordability.value,
-      eligible_income: eligibleIncome.value,
-      total_costs: totalCosts.value,
-      value_estimate_customer: valueEstimate.value?.customer,
-      value_estimate_calculated: valueEstimate.value?.calculated,
-      enfeoffment_estimate_customer: enfeoffmentEstimate.value.customer,
-      enfeoffment_estimate_calculated: enfeoffmentEstimate.value.calculated,
+        // Mortgage partitions
+        partition_amounts: partitionAmounts,
+        partition_dates: partitionDates,
+
+        // Income/cost information
+        incomes,
+        child_allowances: parseInt(childAllowances.toString()),
+        bonus: parseInt(bonus.toString()),
+        assets: parseInt(assets.toString()),
+        leasing: parseInt(leasing.toString()),
+        credit: parseInt(credit.toString()),
+        alimony: parseInt(alimony.toString()),
+        various: parseInt(various.toString()),
+        prosecutions,
+        loss_certificates: lossCertificates,
+
+        // Flag for dossier being non-arrangeable
+        non_arrangeable: nonArrangeable.value,
+
+        // Calculated totals
+        affordability: affordability.value,
+        eligible_income: eligibleIncome.value,
+        total_costs: totalCosts.value,
+        value_estimate_customer: valueEstimate.value?.customer,
+        value_estimate_calculated: valueEstimate.value?.calculated,
+        enfeoffment_estimate_customer: enfeoffmentEstimate.value.customer,
+        enfeoffment_estimate_calculated: enfeoffmentEstimate.value.calculated,
+      }
+    } : {
+      createDossierInput: {
+        // Basic information
+        first_name: firstName,
+        last_name: lastName,
+        address,
+        email,
+        phone,
+        birthdate,
+
+        // Value purchase information
+        original_bank_name: bankName,
+        original_bank_abbreviation: bankAbbreviation,
+        property_type: propertyType,
+        owner_occupied: ownerOccupied,
+        purchase_date: purchaseDate,
+        purchase_price: parseInt(purchasePrice as string),
+        mortgage_amount: parseInt(mortgageAmount as string),
+
+        // Amortisation information
+        has_amortisation: hasAmortisation,
+        direct_amortisation: directAmortisation,
+        amortisation_amount: parseInt(amortisationAmount as string),
+
+        // Building lease information
+        has_building_lease: hasBuildingLease,
+        public_landlord: publicLandlord,
+        building_lease_expiration_date: buildingLeaseExpirationDate,
+        building_lease_interest: parseInt(buildingLeaseInterest as string),
+
+        // Renovation information
+        has_renovation: hasRenovation,
+        renovation_year: renovationYear,
+        renovation_price: parseInt(renovationPrice as string),
+
+        // Mortgage partitions
+        partition_amounts: partitionAmounts,
+        partition_dates: partitionDates,
+
+        // Income/cost information
+        incomes,
+        child_allowances: parseInt(childAllowances.toString()),
+        bonus: parseInt(bonus.toString()),
+        assets: parseInt(assets.toString()),
+        leasing: parseInt(leasing.toString()),
+        credit: parseInt(credit.toString()),
+        alimony: parseInt(alimony.toString()),
+        various: parseInt(various.toString()),
+        prosecutions,
+        loss_certificates: lossCertificates,
+
+        // Flag for dossier being non-arrangeable
+        non_arrangeable: nonArrangeable.value,
+
+        // Calculated totals
+        affordability: affordability.value,
+        eligible_income: eligibleIncome.value,
+        total_costs: totalCosts.value,
+        value_estimate_customer: valueEstimate.value?.customer,
+        value_estimate_calculated: valueEstimate.value?.calculated,
+        enfeoffment_estimate_customer: enfeoffmentEstimate.value.customer,
+        enfeoffment_estimate_calculated: enfeoffmentEstimate.value.calculated,
+      }
     }
-  })
 
+    const mutationResult = await executeMutation(mutation, variables)
+
+    // New or updated dossier
     const newDossier = mutationResult?.data?.createDossier as Record<string, unknown>|null
 
-    if(!newDossier){
+    if(!newDossier && !isEditing){
       // Show error
       $errorService?.showErrorDialog(
         new Error(i18n.global.t('errors.dossier_upload_error'))
@@ -1101,7 +1196,9 @@ async function onSubmit() {
     }
 
     // Route to final document
-    await $routerService?.routeTo(ROUTES.DOSSIER_FINAL_DOCUMENT, {did: newDossier.uuid})
+    await $routerService?.routeTo(ROUTES.DOSSIER_FINAL_DOCUMENT, {
+      did: isEditing ? props.prefillDossier.uuid as string : newDossier?.uuid
+    })
   } catch(err){
     // Show error
     $errorService?.showErrorDialog(
@@ -1126,5 +1223,99 @@ function enfeoffmentRank(rate: number|null){
     return i18n.global.t('form_for_clients.enfeoffment_second_rank')
   }
   return i18n.global.t('form_for_clients.enfeoffment_too_high')
+}
+
+/**
+ * If given through props, applies the given dossier's properties to the form fields
+ * @returns {void}
+ */
+function prefillDossier(){
+  if(props.prefillDossier){
+    const initial = _.cloneDeep(props.prefillDossier) as Record<string, unknown>
+
+    const formData = form.values.value as Record<string, unknown>
+
+    // Page 1
+    formData.full_name = {
+      firstName: initial.first_name,
+      lastName: initial.last_name
+    }
+
+    formData.address = {
+      city: (initial.address as Record<string, string>).city,
+      number: (initial.address as Record<string, string>).number,
+      zip_code: (initial.address as Record<string, string>).zip_code,
+      street: (initial.address as Record<string, string>).street
+    }
+
+    formData.email = initial.email as string
+    formData.phone_number = initial.phone as string
+    formData.date_of_birth = initial.birthdate as Date
+
+    // Page 2
+    formData.bank = {
+      name: (initial.original_bank as Record<string, string>).name,
+      abbreviation: (initial.original_bank as Record<string, string>).abbreviation
+    }
+
+    formData.property_type = {
+      label: i18n.global.t(`property_type_enum.${initial.property_type as string}`),
+      value: initial.property_type as string
+    }
+    formData.owner_occupied = initial.owner_occupied as boolean
+
+    formData.date_of_purchase = initial.purchase_date as Date
+    formData.enfeoffment = {
+      price: initial.purchase_price as number,
+      currentValueOfMortgage: initial.mortgage_amount as number,
+      marketValueEstimation: initial.value_estimate_customer as number
+    }
+
+    // Page 3
+    formData.amortisation = {
+      hasAmortisation: initial.has_amortisation as boolean,
+      directAmortisation: initial.direct_amortisation as boolean|null,
+      amortisationAmount: initial.amortisation_amount as number|null
+    }
+
+    formData.buildingLease = {
+      hasBuildingLease: initial.has_building_lease as boolean,
+      publicLandlord: initial.public_landlord as boolean|null,
+      expirationDate: initial.building_lease_expiration_date as Date|null,
+      interest: initial.building_lease_interest as number|null
+    }
+
+    formData.renovation = {
+      hasRenovation: initial.has_renovation as boolean,
+      renovationPrice: initial.renovation_price as number|null,
+      renovationYear: initial.renovation_year as number|null
+    }
+
+    // Mortgage partitions
+    const mortgagePartitions = []
+    for(let i = 0; i < (initial.partition_amounts as number[]).length; i++){
+      // Reformat date to format expected by Q-Input
+      const date = new Date((initial.partition_dates as string[])[i])
+      const dateString = dateToInputString(date)
+      mortgagePartitions.push({
+        amount: (initial.partition_amounts as number[])[i],
+        date: dateString
+      })
+    }
+
+    formData.mortgage = mortgagePartitions
+
+    // Page 4
+    formData.income = initial.incomes as number[]
+    formData.child_allowances = (initial.child_allowances as number).toString()
+    formData.bonus = (initial.bonus as number).toString()
+    formData.assets = (initial.assets as number).toString()
+    formData.leasing = (initial.leasing as number).toString()
+    formData.credit = (initial.credit as number).toString()
+    formData.alimony = (initial.alimony as number).toString()
+    formData.various = (initial.various as number).toString()
+    formData.prosecutions = initial.prosecutions as boolean
+    formData.loss_certificates = initial.loss_certificates as boolean
+  }
 }
 </script>

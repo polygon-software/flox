@@ -142,6 +142,13 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/employee/NewDossierPage.vue') }],
   },
 
+  // Employee: Edit dossier
+  'EDIT_DOSSIER': {
+    path: '/edit-dossier',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/employee/EditDossierPage.vue') }],
+  },
+
   // Employee: Final page of new dossier creation
   'DOSSIER_FINAL_DOCUMENT': {
     path: '/new-dossier-document',

@@ -116,7 +116,8 @@ export default {
     reset_password: 'Reset Password',
     enter_username: 'Please enter your username',
     verification: 'Verification',
-    enter_2fa:  'Enter your two-factor authentication code'
+    enter_2fa:  'Enter your two-factor authentication code',
+    dossier_not_editable: 'Since this dossier is complete, it is no longer editable.'
   },
   dashboards: {
     management_dashboard: 'Management Dashboard',
@@ -165,6 +166,7 @@ export default {
     save_and_print: 'Save & Print',
     back_to_dashboard: 'Back to dashboard',
     to_dashboard: 'To dashboard',
+    edit: 'Edit',
   },
   documents: {
     choose_file: 'Choose file',
