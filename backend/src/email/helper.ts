@@ -179,7 +179,7 @@ export async function sendDocumentUploadEmail(
   // Set up e-mail parameters
   const encodedUuid = btoa(companyId); // Base64 encode UUID
   const baseUrl = process.env.BASE_URL ?? '';
-  const url = `${baseUrl}$/document-upload?cid=${encodedUuid}`;
+  const url = `${baseUrl}/document-upload?cid=${encodedUuid}`;
   const sender = process.env.VUE_APP_EMAIL_SENDER ?? '';
 
   // Send e-mail
