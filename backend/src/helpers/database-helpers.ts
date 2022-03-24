@@ -105,6 +105,11 @@ export async function fetchCountFromTable(
   // Execute
   const queryResult = await queryRunner.manager.query(query);
   await queryRunner.release();
+
+  if (!queryResult[0]['count(*)']) {
+    throw new Error(`Could not fetch count for table '${table}'`);
+  }
+
   return queryResult[0]['count(*)'];
 }
 

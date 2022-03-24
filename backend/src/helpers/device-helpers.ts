@@ -4,8 +4,11 @@
 
 import { Repository, Like } from 'typeorm';
 import { Project } from '../modules/project/entities/project.entity';
+import { ConnectionLogEntry } from '../types/ConnectionLogEntry';
+import { DeviceLogEntry } from '../types/DeviceLogEntry';
 import { DeviceContact } from '../types/DeviceContact';
 import { Device } from '../types/Device';
+import { FTPLogEntry } from '../types/FTPLogEntry';
 
 /**
  * Creates an MR2000 instance from a RowPacketData entry
@@ -98,4 +101,69 @@ export async function deviceContactFromDatabaseEntry(
     isMR2000 ? null : (entry.soh_sdcard as boolean),
     entry.daily as boolean,
   );
+}
+
+/**
+ * Creates a connection log entry instance from a RowPacketData entry
+ * @param {Record<string, string|number>} entry - database entry row
+ * @returns {Promise<ConnectionLogEntry>} - log entry
+ */
+export async function connectionLogEntryFromDatabaseEntry(
+  entry: Record<string, unknown>,
+) {
+  return new ConnectionLogEntry(
+    entry.id as number,
+    entry.cli as string,
+    entry.timestamp as Date,
+    entry.vpn_ip as string,
+    entry.real_ip as string,
+    entry.port as string,
+    entry.traffic as number,
+    entry.reason as string,
+  );
+}
+
+/**
+ * Maps a device log entry string to a DeviceLogEntry instance
+ * @param {string} entry - a single log line
+ * @returns {DeviceLogEntry} - log entry instance
+ */
+export function mapDeviceLogEntry(entry: string) {
+  // Sample input: '2021.4.7 15:48:40 Update 39-11 no of events: 0 no of peaks: 1 \n'
+  const splitEntry = entry.split(' ');
+
+  // Extract timestamp string (e.g. 2021.4.7 15:48:40)
+  const timestampString = `${splitEntry[0]} ${splitEntry[1]}`;
+  const timestamp = new Date(timestampString);
+
+  // Extract message
+  let message = splitEntry.slice(2, splitEntry.length).join(' ');
+
+  // Remove trailing ' \n'
+  message = message.substring(0, message.length - 2);
+
+  return new DeviceLogEntry(timestamp, message);
+}
+
+/**
+ * Maps a FTP log entry string to a FTPLogEntry instance
+ * @param {string} entry - a single log line
+ * @returns {FTPLogEntry} - log entry instance
+ */
+export function mapFTPLogEntry(entry: string) {
+  // Sample input: 'Tue Oct 06 17:29:21 2020 0 81.6.40.183 768 /var/data/measurements/44_08/44_08/background/2020/10/20280007.BMR b _ i r 44_08 ftp 0 * c\n'
+
+  // Split, e.g. ['Tue', 'Oct', '06', '17:29:21', '2020', '0', '81.5.40.183', '768', ...]
+  const splitParams = entry.split(' ');
+
+  // Build timestamp string (e.g. Tue Oct 06 17:29:21 2020)
+  const timestampString = splitParams.slice(0, 5).join(' ');
+  const timestamp = new Date(timestampString);
+
+  // Extract IP & path
+  const ip = splitParams[6];
+  const path = splitParams[8];
+
+  // Build entry object
+  return new FTPLogEntry(timestamp, ip, path);
 }

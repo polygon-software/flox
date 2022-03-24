@@ -11,11 +11,18 @@ import {
   LEVEL_WRITING,
   MY_DEVICES,
   PROJECT_DEVICES,
+  DEVICE_CONNECTION_LOGS,
+  DEVICE_LOG,
+  FTP_LOG,
+  DEVICE_CONNECTION_LOG_COUNT
 } from 'src/data/queries/DEVICE';
 import { Device } from 'src/data/types/Device';
 import { computed, ComputedRef, Ref } from 'vue';
 import { DeviceContact } from 'src/data/types/DeviceContact';
 import { MY_CONTACTS } from 'src/data/queries/CONTACT';
+import {ConnectionLogEntry} from 'src/data/types/ConnectionLogEntry';
+import {DeviceLog} from 'src/data/types/DeviceLog';
+import {FTPLog} from 'src/data/types/FTPLog';
 
 /**
  * Fetch the level writings for all stations.
@@ -338,3 +345,58 @@ type LevelWritings = {
   z: Record<string, unknown>[];
   max: number;
 };
+
+/**
+ * Fetch connection log entries for a given device
+ * @param {string} cli - device CLI
+ * @param {number} skip - number of entries to skip (for pagination)
+ * @param {number} take - number of logs to get
+ * @return {Promise<ConnectionLogEntry[]>} - An array containing the requested number of connection log entries
+ */
+export async function connectionLogForDevice(cli: string, skip = 0, take = 10) {
+  const queryResult = await executeQuery(DEVICE_CONNECTION_LOGS, {cli, take, skip});
+  return queryResult.data[DEVICE_CONNECTION_LOGS.cacheLocation] as ConnectionLogEntry[]
+}
+
+/**
+ * Fetch log for a given device
+ * @param {string} cli - device CLI
+ * @param {number} skip - number of entries to skip (for pagination)
+ * @param {number} take - number of logs to get
+ * @param {string} [type] - optional file type prefix for fetching other log types
+ * @return {Promise<DeviceLog>} - Device log, containing entries and total count
+ */
+export async function logForDevice(cli: string, skip = 0, take = 10, type: string|undefined) {
+  const variables: Record<string, string|number> = {cli, take, skip}
+  if(type){
+    variables.prefix = type
+  }
+
+  const queryResult = await executeQuery(DEVICE_LOG, variables);
+  return queryResult.data[DEVICE_LOG.cacheLocation] as DeviceLog
+}
+
+/**
+ * Fetch FTP log for a given device
+ * @param {string} cli - device CLI
+ * @param {number} skip - number of entries to skip (for pagination)
+ * @param {number} take - number of logs to get
+ * @return {Promise<FTPLog>} - Device log, containing entries and total count
+ */
+export async function ftpLogForDevice(cli: string, skip = 0, take = 10) {
+  const variables: Record<string, string|number> = {cli, take, skip}
+  const queryResult = await executeQuery(FTP_LOG, variables);
+  return queryResult.data[FTP_LOG.cacheLocation] as FTPLog
+}
+
+/**
+ * Fetch the number of device connection log entries
+ * @param {string} cli - device CLI
+ * @return {Promise<number>} - amount of log entries
+ */
+export function deviceConnectionLogCount(cli: string) {
+  const queryResult = subscribeToQuery(DEVICE_CONNECTION_LOG_COUNT, {cli}) as Ref<number>;
+  return computed(() => {
+    return queryResult.value ?? 0
+  });
+}

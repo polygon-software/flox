@@ -7,6 +7,9 @@ import {
   deviceFromDatabaseEntry,
   deviceType,
   deviceContactFromDatabaseEntry,
+  connectionLogEntryFromDatabaseEntry,
+  mapDeviceLogEntry,
+  mapFTPLogEntry,
 } from '../../helpers/device-helpers';
 import { Project } from '../project/entities/project.entity';
 import { HttpService } from '@nestjs/axios';
@@ -29,9 +32,13 @@ import { GetEventTableArgs } from './dto/args/get-event-table.args';
 import { EventsTable } from '../../types/EventsTable';
 import { DeviceParams } from '../../types/DeviceParams';
 import { GetDeviceParamsArgs } from './dto/args/get-device-params.args';
+import { GetConnectionLogsArgs } from './dto/args/get-connection-logs.args';
+import { GetDeviceLogArgs } from './dto/args/get-device-log.args';
+import { DeviceLog } from '../../types/DeviceLog';
 import { AddContactToDeviceInput } from './dto/input/add-contact-to-device.input';
 import { EditContactInput } from './dto/input/edit-contact.input';
 import { DeleteContactInput } from './dto/input/delete-contact.input';
+import { FTPLog } from '../../types/FTPLog';
 
 @Injectable()
 export class DeviceService {
@@ -292,10 +299,10 @@ export class DeviceService {
   }
 
   /**
-   * count(*) Query with filter clause
+   * Get the number of events matching the given type
    * @param {string} clientId - client id
    * @param {string} type - Evt, Pk or Zip
-   * @returns {int} - number of entries
+   * @returns {Promise<number>} - number of entries
    */
   async getEventsLength(clientId: string, type = ''): Promise<number> {
     const database = deviceType(clientId);
@@ -562,5 +569,104 @@ export class DeviceService {
     return instances.map((instance) =>
       deviceContactFromDatabaseEntry(instance),
     );
+  }
+
+  /**
+   * Get the connection logs for a given device
+   * @param {GetConnectionLogsArgs} getConnectionLogsArgs - args, containing CLI and number of entries to get
+   * @returns {int} - number of entries
+   */
+  async getConnectionLogs(getConnectionLogsArgs: GetConnectionLogsArgs) {
+    const tableEntries = await fetchFromTable(
+      'openvpn',
+      'logovp',
+      `WHERE cli='${getConnectionLogsArgs.cli}'
+      ORDER BY timestamp DESC
+      LIMIT ${getConnectionLogsArgs.skip}, ${getConnectionLogsArgs.take}`,
+    );
+
+    // Map to actual type & return
+    return tableEntries.map((tableEntry) =>
+      connectionLogEntryFromDatabaseEntry(tableEntry),
+    );
+  }
+
+  /**
+   * Get the total number of connection logs for a given device
+   * @param {string} cli - device CLI
+   * @returns {Promise<number>} - number of entries
+   */
+  async getConnectionLogCount(cli: string) {
+    return fetchCountFromTable('openvpn', 'logovp', `WHERE cli='${cli}'`);
+  }
+
+  /**
+   * Get the log entries for a given device
+   * @param {GetDeviceLogArgs} getDeviceLogArgs - args, containing CLI
+   * @returns {Promise<DeviceLog>} - log entries
+   */
+  async getDeviceLog(getDeviceLogArgs: GetDeviceLogArgs) {
+    const type = deviceType(getDeviceLogArgs.cli);
+
+    // File path & name, based on device type
+    const filePath = `${type === 'MR2000' ? 'LOG_2000' : 'LOG_3K'}`;
+    let fileName;
+
+    if (type === 'MR2000') {
+      // MR2000: Only basic log files (.txt)
+      fileName = `${getDeviceLogArgs.cli}-log.txt`;
+    } else {
+      // MR3000: Log type with prefix (if any)
+      fileName = getDeviceLogArgs.prefix
+        ? `${getDeviceLogArgs.prefix}_${getDeviceLogArgs.cli}`
+        : `${getDeviceLogArgs.cli}`;
+    }
+
+    // Fetch from filesystem via Python API
+    const host = this.configService.get('pyAPI.host');
+    const port = this.configService.get('pyAPI.port');
+    const url = `http://${host}:${port}/log?path=${filePath}&file=${fileName}&skip=${getDeviceLogArgs.skip}&take=${getDeviceLogArgs.take}`;
+    try {
+      const response: Observable<unknown> = this.httpService
+        .get(url)
+        .pipe(map((axiosResponse) => axiosResponse.data));
+      const data = (await firstValueFrom(response)) as Record<string, unknown>;
+      const total = data.total as number;
+      const entries = (data.entries as string[]).map((dataRow) =>
+        mapDeviceLogEntry(dataRow),
+      );
+      return new DeviceLog(total, entries);
+    } catch (e) {
+      console.error(e);
+      // No logs found; return empty
+      return new DeviceLog(0, []);
+    }
+  }
+
+  /**
+   * Get the FTP log entries for a given device
+   * @param {GetDeviceLogArgs} getDeviceLogArgs - args, containing CLI
+   * @returns {Promise<DeviceLog>} - FTP log entries
+   */
+  async getFTPLog(getDeviceLogArgs: GetDeviceLogArgs) {
+    // Fetch from filesystem via Python API
+    const host = this.configService.get('pyAPI.host');
+    const port = this.configService.get('pyAPI.port');
+    const url = `http://${host}:${port}/ftplog?cli=${getDeviceLogArgs.cli}&skip=${getDeviceLogArgs.skip}&take=${getDeviceLogArgs.take}`;
+    try {
+      const response: Observable<unknown> = this.httpService
+        .get(url)
+        .pipe(map((axiosResponse) => axiosResponse.data));
+      const data = (await firstValueFrom(response)) as Record<string, unknown>;
+      const total = data.total as number;
+      const entries = (data.entries as string[]).map((dataRow) =>
+        mapFTPLogEntry(dataRow),
+      );
+      return new FTPLog(total, entries);
+    } catch (e) {
+      console.error(e);
+      // No logs found; return empty
+      return new FTPLog(0, []);
+    }
   }
 }

@@ -1,18 +1,34 @@
 <template>
-  <q-page class="column items-center justify-start full-width">
+  <q-page class="column items-center justify-start full-width q-pb-xl">
     <!-- Title -->
     <h5>{{ $t('status.title') }} {{ stationId }}</h5>
 
-    <ClientConnectivityTable/>
-    <LogFilesTable/>
+    <ClientConnectivityTable :cli="stationId"/>
 
+    <DeviceLogTable :cli="stationId"/>
+
+    <!-- FTP Log (MR3000 only)-->
+    <FTPLogTable
+      v-if="type === 'MR3000'"
+      :cli="stationId"
+    />
+
+    <!-- REST Log (MR3000 only)-->
+    <DeviceLogTable
+      v-if="type === 'MR3000'"
+      :cli="stationId"
+      :title="$t('log_files.rest_log_file')"
+      type="REST"
+    />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import ClientConnectivityTable from 'components/tables/ClientConnectivityTable.vue';
-import LogFilesTable from 'components/tables/LogFilesTable.vue';
-import {defineProps} from 'vue';
+import DeviceLogTable from 'components/tables/DeviceLogTable.vue';
+import {computed, defineProps} from 'vue';
+import FTPLogTable from 'components/tables/FTPLogTable.vue';
+import {deviceType} from 'src/helpers/device-helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
@@ -20,6 +36,12 @@ const props = defineProps({
     required: true,
     type: String
   }
+})
+
+// Device type (MR2000 or MR3000)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const type = computed(() => {
+  return deviceType(props.stationId)
 })
 
 </script>

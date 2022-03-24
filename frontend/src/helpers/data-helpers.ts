@@ -189,8 +189,8 @@ function refetchAffectedQueries(
  * @param {Record<string, unknown>} [variables] - any variables to pass to the query
  * @returns {Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>} - the query's output
  */
-function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
-  const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
+function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | number | undefined>{
+  const res: Ref<Record<string, Record<string, unknown>[]>[] | number> = ref([])
 
   // ----- Hooks -----
   onBeforeMount( () => {
@@ -200,7 +200,12 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
     if(Object.values(currentCacheState).length === 0){
       void executeQuery(query, variables).then((fetchedRes: ApolloQueryResult<Record<string, unknown>>)=>{
         if(fetchedRes.data){
-          res.value = fetchedRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+          const result = fetchedRes.data[query.cacheLocation]
+          if(typeof result === 'number'){
+            res.value = result
+          } else {
+            res.value = result as Record<string, Record<string, unknown>[]>[]
+          }
         } else {
           res.value = []
         }
@@ -209,7 +214,12 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
 
     apolloClient.watchQuery({query: query.query, variables: variables}).subscribe({
       next(value: ApolloQueryResult<Record<string, unknown>>) {
-        res.value = value.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
+        const result = value.data[query.cacheLocation]
+        if(typeof result === 'number'){
+          res.value = result
+        } else {
+          res.value = result as Record<string, Record<string, unknown>[]>[]
+        }
       }
     })
   })
