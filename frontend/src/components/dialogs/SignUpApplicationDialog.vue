@@ -146,7 +146,6 @@ import {
 import { QVueGlobals, useQuasar, useDialogPluginComponent } from 'quasar';
 import RejectApplicationDialog from 'components/dialogs/RejectApplicationDialog.vue'
 import {Address} from 'src/data/types/Address';
-import {sendDocumentUploadEmail} from 'src/helpers/email-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
 import {ErrorService} from 'src/services/ErrorService';
@@ -202,9 +201,6 @@ async function onOk(): Promise<void> {
   try{
     // Enable on database
     await executeMutation(ENABLE_COMPANY_DOCUMENT_UPLOAD, {uuid: company.uuid})
-
-    // Send document upload e-mail
-    await sendDocumentUploadEmail(email.value ?? '', company.uuid ?? '')
 
     // Show confirmation prompt
     showNotification(
