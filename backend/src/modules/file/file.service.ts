@@ -183,13 +183,20 @@ export class FileService {
       options.expiresIn = getPrivateFileArgs.expires;
     }
 
+    const params = {
+      Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+      Key: fileInfo.key,
+    };
+
+    // Apply forced response type, if any (e.g. for inline preview)
+    if (getPrivateFileArgs.contentType) {
+      params['ResponseContentType'] = getPrivateFileArgs.contentType;
+    }
+
     // Generate pre-signed URL
     const url = await getSignedUrl(
       this.s3,
-      new GetObjectCommand({
-        Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
-        Key: fileInfo.key,
-      }),
+      new GetObjectCommand(params),
       options,
     );
     const result = await this.privateFilesRepository.findOne(

@@ -468,13 +468,15 @@ type Dossier {
 enum DossierStatus {
   COMPLETED
   CONTRACT_UPLOADED
+  CREDIT_CONTRACTS_IN_PROGRESS
+  CREDIT_CONTRACTS_RECEIVED
+  CREDIT_CONTRACTS_SIGNED
   IN_PROGRESS
   OFFERED
   OPEN
   PRODUCT_AGREEMENT_CONFIRMED
+  PROVISIONS_PAID
   REJECTED
-  SENT
-  SIGNED
   SUBMITTED
 }
 
@@ -702,6 +704,9 @@ type Query {
   getBanks: [Bank!]!
   getDossier(getDossierInput: GetDossierInput!): Dossier!
   getDossierDocument(
+    """Content-type header to force (if any)"""
+    contentType: String
+
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!
@@ -715,11 +720,17 @@ type Query {
   getMyEmployees(companyUuid: String): [Employee!]!
   getMyUser: User!
   getOfferDocument(
+    """Content-type header to force (if any)"""
+    contentType: String
+
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
   getPrivateFile(
+    """Content-type header to force (if any)"""
+    contentType: String
+
     """URL expiration duration (in seconds); defaults to 15min"""
     expires: [Float!]
     uuid: ID!

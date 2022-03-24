@@ -222,6 +222,15 @@
           <div
             class="row full-width justify-between"
           >
+            <!-- Discard button -->
+            <q-btn
+              :label="$t('buttons.discard')"
+              color="negative"
+              class="q-ml-sm"
+              flat
+              @click="onDiscard"
+            />
+
             <!-- Left-side buttons (prev/next, print) -->
             <div>
               <q-btn
@@ -250,15 +259,6 @@
                 @click="onSubmit"
               />
             </div>
-
-            <!-- Discard button -->
-            <q-btn
-              :label="$t('buttons.discard')"
-              color="negative"
-              class="q-ml-sm"
-              flat
-              @click="onDiscard"
-            />
           </div>
         </q-stepper-navigation>
       </template>
@@ -287,6 +287,11 @@ import {getAuthToken} from 'src/helpers/cookie-helpers';
 import DossierFinalDocumentPreview from 'components/dossier/DossierFinalDocumentPreview.vue';
 import {AuthenticationService} from 'src/services/AuthService';
 import _ from 'lodash';
+
+/**
+ * This component is a form for creating a new dossier or editing an existing one. If a 'prefillDossier' is given
+ * via props, that dossier's data is pre-filled in the form.
+ */
 
 /**
  * This component is a form for creating a new dossier or editing an existing one. If a 'prefillDossier' is given
@@ -518,7 +523,7 @@ const totalIncome = computed(() => {
     let sumOfIncomes = 0
     grossIncomes.forEach((income) => sumOfIncomes += income)
 
-    return Math.round(sumOfIncomes + parseInt(bonus) + parseInt(childAllowances))
+    return Math.round(sumOfIncomes + (parseInt(bonus) * 0.5) + parseInt(childAllowances))
   }
 
   return null
@@ -782,6 +787,7 @@ onBeforeMount(() => {
 
 // Upon mounting, get list of banks
 onMounted(async () => {
+
   // Execute queries for existing & suggested banks
   const banksQuery = await executeQuery(ALL_BANK_NAMES)
   let bankList = banksQuery.data.getBankList as Record<string, string>[]

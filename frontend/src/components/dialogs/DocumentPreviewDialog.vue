@@ -4,21 +4,29 @@
     title="Preview"
   >
     <q-card
-      class="flex content-center items-center bg-transparent"
-      flat
-      style="width: 1000px; max-width: 1500px; height: 1000px; max-height: 1500px;"
+      class="q-pa-sm text-center"
+      style="width: 700px; max-width: 700px; height: 100%; max-height: 1100px"
     >
-      <q-card-section>
-        <object
-          :data="props.url + '#page=1&zoom=80'"
-          type="application/pdf"
-          width="950"
-          height="950"
-        >
-          <embed :src="props.url" type="application/pdf" />
-        </object>
-
+      <q-card-section
+        class="full-width column"
+        style="height: calc(100% - 60px)"
+      >
+        <embed
+          :src="props.url"
+          class="q-pa-sm"
+          frameBorder="0"
+          scrolling="auto"
+          style="height: calc(100% - 50px); width: 100%; max-height: 900px"
+        />
       </q-card-section>
+      <q-separator dark/>
+      <q-card-actions align="center">
+        <q-btn
+          label="OK"
+          color="primary"
+          @click="onDialogOK"
+        />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
