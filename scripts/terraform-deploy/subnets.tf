@@ -1,14 +1,13 @@
 // Subnets public and private
 resource "aws_subnet" "frontend_public_subnet" {
   count                   = 3
-  cidr_block              = cidrsubnet(var.cidr_block, 4, count.index + var.web_pub_subnet_factor)
+  cidr_block              = cidrsubnet(var.cidr_block, 5, count.index + var.web_pub_subnet_factor)
   map_public_ip_on_launch = true
   vpc_id                  = aws_vpc.vpc.id
   availability_zone       = var.azs[count.index]
 
   tags = {
     Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-public-subnet-${var.azs[count.index]}"
-    Project       = var.project
     SubnetType    = "public"
   }
   lifecycle {
@@ -18,14 +17,13 @@ resource "aws_subnet" "frontend_public_subnet" {
 
 resource "aws_subnet" "frontend_private_subnet" {
   count = 3
-  cidr_block              = cidrsubnet(var.cidr_block, 4, count.index + var.web_pri_subnet_factor + var.web_pub_subnet_factor)
+  cidr_block              = cidrsubnet(var.cidr_block, 5, count.index + var.web_pri_subnet_factor + var.web_pub_subnet_factor)
   map_public_ip_on_launch = false
   vpc_id                  = aws_vpc.vpc.id
   availability_zone       = var.azs[count.index]
 
   tags = {
     Name          = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-private-subnet-${var.azs[count.index]}"
-    Project       = var.project
     SubnetType    = "private"
   }
 

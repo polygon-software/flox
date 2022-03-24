@@ -1,31 +1,23 @@
 // upload app.zip to bucket
-resource "aws_s3_bucket_object" "api_source_code_object" {
+resource "aws_s3_object" "api_source_code_object" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-beanstalk/backend.zip"
   source                = "backend.zip"
-  tags = {
-    Project       = var.project
-  }
+  source_hash           = filemd5("backend.zip")
 }
 
 // create elastic beanstalk resource
 resource "aws_elastic_beanstalk_application" "api_app" {
   name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-app"
   description           = var.eb_app_desc
-  tags = {
-    Project       = var.project
-  }
 }
 
 // connect eb to the s3 bucket with the app in it
 resource "aws_elastic_beanstalk_application_version" "api_app_version" {
   bucket                = aws_s3_bucket.source_code_bucket.id
-  key                   = aws_s3_bucket_object.api_source_code_object.id
+  key                   = aws_s3_object.api_source_code_object.id
   application           = aws_elastic_beanstalk_application.api_app.name
   name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-app-version-label"
-  tags = {
-    Project       = var.project
-  }
 }
 
 // Create eb environment
@@ -33,16 +25,20 @@ resource "aws_elastic_beanstalk_application_version" "api_app_version" {
 resource "aws_elastic_beanstalk_environment" "api_env" {
   name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-app-env"
   application           = aws_elastic_beanstalk_application.api_app.name
-  solution_stack_name   = "64bit Amazon Linux 2 v5.4.10 running Node.js 14"
+  solution_stack_name   = "64bit Amazon Linux 2 v5.5.0 running Node.js 14"
   description           = "Environment for api"
   version_label         = aws_elastic_beanstalk_application_version.api_app_version.name
-  tags = {
-    Project       = var.project
-  }
+
   setting {
     namespace           = "aws:autoscaling:launchconfiguration"
     name                = "IamInstanceProfile"
-    value               = "aws-elasticbeanstalk-ec2-role"
+    value               = aws_iam_instance_profile.api.name
+  }
+
+  setting {
+     namespace = "aws:elasticbeanstalk:environment"
+     name      = "LoadBalancerType"
+     value     = "application"
   }
 
   setting {
@@ -95,23 +91,23 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     value     = aws_security_group.api_security_group.id
   }
   setting {
-    namespace = "aws:elb:listener:443"
+    namespace = "aws:elbv2:listener:443"
     name      = "ListenerProtocol"
     value     = "SSL"
   }
 
   setting {
-    namespace = "aws:elb:listener:443"
+    namespace = "aws:elbv2:listener:443"
     name      = "InstancePort"
     value     = 3000    // Port the NestJS API listens on
   }
   setting {
-    namespace = "aws:elb:listener:443"
+    namespace = "aws:elbv2:listener:443"
     name      = "InstanceProtocol"
     value     = "TCP"
   }
   setting {
-    namespace = "aws:elb:listener:443"
+    namespace = "aws:elbv2:listener:443"
     name      = "SSLCertificateId"
     value     = var.SSL_certificate_id
   }
@@ -190,18 +186,6 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "AWS_ACCESS_KEY_ID"
-    value     = "AKIA5OA2ITKTNS52YK4I"
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "AWS_SECRET_ACCESS_KEY"
-    value     = "3EwzrvfBPB4Y9UdmVFcqkZn/wnBcabODmO6V/IB1"
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PUBLIC_BUCKET_NAME"
     value     = aws_s3_bucket.public_files.bucket
   }
@@ -224,28 +208,18 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "AWS_KEY_ID"
-    value     = "AKIA5OA2ITKTAGYPDOMD"
-  }
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "AWS_SECRET_KEY"
-    value     = "eCQso0xoXLWDVFwCVa461hc6MhBcoJ5y73/6Bkzf"
-  }
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
     name      = "SES_REGION"
     value     = "eu-west-1"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "USER_POOL_ID"
-    value     = "eu-central-1_Fx5YjVdhK"
+    value     = aws_cognito_user_pool.user_pool.id
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "USER_POOL_CLIENT_ID"
-    value     = "5h4fcam55ktksdcd0cskqidcsj"
+    value     = aws_cognito_user_pool_client.app_client.id
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
@@ -287,9 +261,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 resource "aws_security_group" "api_security_group" {
   name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}-security-group"
   vpc_id                = aws_vpc.vpc.id
-  tags = {
-    Project       = var.project
-  }
+
   ingress {
     from_port         = 3000
     protocol          = "TCP"

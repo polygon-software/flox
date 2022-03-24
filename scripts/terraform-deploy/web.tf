@@ -1,8 +1,9 @@
 // upload app.zip to bucket
-resource "aws_s3_bucket_object" "frontend_source_code" {
+resource "aws_s3_object" "frontend_source_code" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-beanstalk/frontend.zip"
   source                = "frontend.zip"
+  source_hash           = filemd5("frontend.zip")
   tags = {
     Project       = var.project
   }
@@ -21,7 +22,7 @@ resource "aws_elastic_beanstalk_application" "frontend_application" {
 resource "aws_elastic_beanstalk_application_version" "frontend_application_version" {
   name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-app-version"
   bucket                = aws_s3_bucket.source_code_bucket.id
-  key                   = aws_s3_bucket_object.frontend_source_code.id
+  key                   = aws_s3_object.frontend_source_code.id
   application           = aws_elastic_beanstalk_application.frontend_application.name
   tags = {
     Project       = var.project
@@ -33,7 +34,7 @@ resource "aws_elastic_beanstalk_application_version" "frontend_application_versi
 resource "aws_elastic_beanstalk_environment" "frontend_env" {
   name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}-env"
   application           = aws_elastic_beanstalk_application.frontend_application.name
-  solution_stack_name   = "64bit Amazon Linux 2 v5.4.10 running Node.js 14"
+  solution_stack_name   = "64bit Amazon Linux 2 v5.5.0 running Node.js 14"
   description           = "Elastic Beanstalk Environment for the Quasar Frontend"
   version_label         = aws_elastic_beanstalk_application_version.frontend_application_version.name
   tags = {
@@ -42,7 +43,13 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   setting {
     namespace     = "aws:autoscaling:launchconfiguration"
     name          = "IamInstanceProfile"
-    value         = "aws-elasticbeanstalk-ec2-role"
+    value         = aws_iam_instance_profile.web.name
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "LoadBalancerType"
+    value     = "application"
   }
 
   setting {
@@ -80,22 +87,22 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
     value         = 6
   }
   setting {
-    namespace     = "aws:elb:listener:443"
+    namespace     = "aws:elbv2:listener:443"    //TODO application load balancer ignores them
     name          = "ListenerProtocol"
     value         = "SSL"
   }
   setting {
-    namespace     = "aws:elb:listener:443"
+    namespace     = "aws:elbv2:listener:443"
     name          = "InstancePort"
     value         = 8080    // The Port Quasar listens on
   }
   setting {
-    namespace     = "aws:elb:listener:443"
+    namespace     = "aws:elbv2:listener:443"
     name          = "InstanceProtocol"
     value         = "TCP"
   }
   setting {
-    namespace     = "aws:elb:listener:443"
+    namespace     = "aws:elbv2:listener:443"
     name          = "SSLCertificateId"
     value         = var.SSL_certificate_id
   }

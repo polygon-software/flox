@@ -3,18 +3,16 @@ resource "aws_db_subnet_group" "database_subnet_group" {
   name                      = "${var.project}-${lookup(var.type, terraform.workspace)}-database-subnet-group"
   subnet_ids                = aws_subnet.database_subnets.*.id
   tags = {
-    Project       = var.project
     Name          = "Database Subnet Group"
   }
 }
 
 resource "aws_subnet" "database_subnets" {
   count                     = 3
-  cidr_block                = cidrsubnet(var.cidr_block, 4, count.index + 3)
+  cidr_block                = cidrsubnet(var.cidr_block, 5, count.index + 3)
   vpc_id                    = aws_vpc.vpc.id
   availability_zone         = var.azs[count.index]
   tags = {
-    Project       = var.project
     Name          = "Database Subnet ${var.azs[count.index]}"
   }
 }
@@ -29,9 +27,8 @@ resource "aws_rds_cluster" "database_cluster" {
   skip_final_snapshot       = false
   db_subnet_group_name      = aws_db_subnet_group.database_subnet_group.name
   vpc_security_group_ids    = [aws_security_group.database_security_group.id]
-  tags = {
-    Project       = var.project
-  }
+  kms_key_id                = aws_kms_key.rds_encryption_key.arn
+  storage_encrypted         = true
 }
 
 resource "aws_rds_cluster_instance" "database_cluster_instances" {
@@ -57,7 +54,7 @@ resource "aws_security_group" "database_security_group" {
     from_port           = 5432
     to_port             = 5432
     protocol            = "TCP"
-    security_groups     = [aws_security_group.api_security_group.id, aws_security_group.vpn_access.id]
+    security_groups     = [aws_security_group.api_security_group.id]
   }
   egress {
     from_port           = 0

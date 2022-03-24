@@ -2,26 +2,23 @@ terraform {
   required_providers {
     aws = {
       source            = "hashicorp/aws"
-      version           = "~> 3.27"
+      version           = "~> 4.00"
     }
   }
   required_version      = ">= 0.14.9"
-  backend "remote" {
-    organization        = "polygon-software"
-
-    workspaces {
-      name = "Flox-dev"
-    }
-  }
+#  backend "remote" {
+#    organization        = "polygon-software"
+#
+#    workspaces {
+#      name = "Flox-new-dev"
+#    }
+#  }
 }
-
 
 // define AWS as provider
 provider "aws" {
-  profile               = "default"
   region                = var.aws_region
-  secret_key          = var.aws_secret_access_key
-  access_key          = var.aws_access_key
+  allowed_account_ids   = [var.aws_account_id]
 }
 
 resource "aws_vpc" "vpc" {
@@ -115,44 +112,89 @@ resource "aws_route" "frontend_route_public" {
   }
 }
 
+resource "aws_s3_bucket_server_side_encryption_configuration" "source_code_bucket" {
+  bucket = aws_s3_bucket.source_code_bucket.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id            = aws_kms_key.s3_encryption_key.arn
+      sse_algorithm                = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "private_files" {
+  bucket = aws_s3_bucket.private_files.bucket
+  ignore_public_acls = true
+  block_public_acls = true
+  block_public_policy = true
+  restrict_public_buckets = true
+}
+resource "aws_s3_bucket_public_access_block" "source_code" {
+  bucket = aws_s3_bucket.source_code_bucket.bucket
+  ignore_public_acls = true
+  block_public_acls = true
+  block_public_policy = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "private_files" {
+  bucket = aws_s3_bucket.private_files.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id            = aws_kms_key.s3_encryption_key.arn
+      sse_algorithm                = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "public_files" {
+  bucket = aws_s3_bucket.public_files.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id            = aws_kms_key.s3_encryption_key.arn
+      sse_algorithm                = "aws:kms"
+    }
+  }
+}
+
 // create aws s3 bucket to Upload app to
 resource "aws_s3_bucket" "source_code_bucket" {
-  bucket                = "${var.project}-${lookup(var.type, terraform.workspace)}-app-bucket"
+  bucket_prefix                = "${var.project}-${lookup(var.type, terraform.workspace)}-app-bucket-"
   tags = {
     Name          = "${var.project}-source-code-bucket"
-    Project       = var.project
   }
 }
 // create aws s3 bucket to Upload public files to
 resource "aws_s3_bucket" "public_files" {
-  bucket                = "${var.project}-${lookup(var.type, terraform.workspace)}-public-bucket"
+  bucket_prefix                = "${var.project}-${lookup(var.type, terraform.workspace)}-public-bucket-"
   tags = {
     Name          = "${var.project}-public-bucket"
-    Project       = var.project
   }
 }
 // create aws s3 bucket to Upload public files to
 resource "aws_s3_bucket" "private_files" {
-  bucket                = "${var.project}-${lookup(var.type, terraform.workspace)}-private-bucket"
-  acl                   = "private"
+  bucket_prefix                = "${var.project}-${lookup(var.type, terraform.workspace)}-private-bucket-"
   tags = {
     Name          = "${var.project}-private-bucket"
-    Project       = var.project
   }
 }
 
+resource "aws_route53_zone" "subdomain" {
+    name = var.domain_name
+}
+
 resource "aws_route53_record" "api_record" {
-  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.api}.${var.superdomain}"
+  name                  = "${var.api}.${var.domain_name}"
   type                  = "CNAME"
-  zone_id               = var.route53_zone_id
+  zone_id               = aws_route53_zone.subdomain.id
   ttl                   = "300"
   records               = [aws_elastic_beanstalk_environment.api_env.endpoint_url]
 }
 
 resource "aws_route53_record" "web_record" {
-  name                  = "${var.project}-${lookup(var.type, terraform.workspace)}-${var.web}.${var.superdomain}"
+  name                  = "${var.web}.${var.domain_name}"
   type                  = "CNAME"
-  zone_id               = var.route53_zone_id
+  zone_id               = aws_route53_zone.subdomain.id
   ttl                   = "300"
   records               = [aws_elastic_beanstalk_environment.frontend_env.endpoint_url]
 }

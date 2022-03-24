@@ -2,19 +2,20 @@ variable "type" {
   description     = "live or test or testV2..."
   type            = map
   default         = {
-    Flox-dev      = "dev"
-    Flox-prod     = "prod"
+    Flox-new-dev      = "dev"
+    Flox-new-prod     = "prod"
   }
 }
 
-variable "aws_access_key" {
-  description     = "aws_access_key_id"
-  type            = string
+variable "domain_name" {
+  default = "soi-dev.polygon-project.ch"
+  type = string
 }
 
-variable "aws_secret_access_key" {
-  description     = "aws_secret_access_key"
-  type            = string
+variable "aws_account_id" {
+  default = "479836712535"
+  type = string
+  description = "AWS account"
 }
 
 variable "aws_region" {
@@ -83,7 +84,7 @@ variable "web_pri_subnet_factor" {
 }
 
 variable "cidr_block" {
-  default         = "10.0.0.0/23"
+  default         = "10.0.0.0/19"
   description     = "CIDR block for the VPC."
   type            = string
 }
