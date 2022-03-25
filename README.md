@@ -249,3 +249,10 @@ potential bugs, security vulnerabilities, code smells etc.
 If you open a file for the first time, give SonarQube some time to consult the server for a security analysis. You
 can see that sonarqube is running if on the bottom of WebStorm, you see a "Running SolarLint Analysis on XXX".
 This should not take more than a few seconds per file. 
+
+### 8: Automated Workflows (WIP)
+  
+In Flox projects, an automated deployment workflow is applied. The following graph briefly illustrates the various systems, as well as the interactions required to get to a releasable state on any of them.
+
+<img src="https://github.com/polygon-software/flox/blob/master/docs/Flox_Flow.png" width="700">
+  
