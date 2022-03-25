@@ -1,0 +1,68 @@
+name: Synchronize Fork Repos
+
+on:
+  push:
+    branches:
+      - master
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  sync-forks:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.FORK_TOKEN }}
+          fetch-depth: 0
+
+      - name: Sync Flox to Big-A-Big
+        env:
+          SOURCE_REPOSITORY: polygon-software/flox
+          SOURCE_BRANCH: master
+          TARGET_REPOSITORY: polygon-software/bigabig-app
+          TARGET_BRANCH: flox
+        run: |
+          if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
+          then
+            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$SOURCE_BRANCH"
+            git remote add forkrepo https://github.com/${{ env.TARGET_REPOSITORY }}.git
+            git push --set-upstream forkrepo ${{ env.SOURCE_BRANCH }}:${{ env.TARGET_BRANCH }}
+          else
+            echo "Condition did not match: ${{ github.repository }}!=$TARGET_REPOSITORY && ${{ github.ref_name }}==$SOURCE_BRANCH"
+          fi
+
+      - name: Sync Flox to SOI
+        env:
+          SOURCE_REPOSITORY: polygon-software/flox
+          SOURCE_BRANCH: master
+          TARGET_REPOSITORY: polygon-software/soi-chamaeleon
+          TARGET_BRANCH: flox
+        run: |
+          if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
+          then
+            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$SOURCE_BRANCH"
+            git remote add forkrepo https://github.com/${{ env.TARGET_REPOSITORY }}.git
+            git push --set-upstream forkrepo ${{ env.SOURCE_BRANCH }}:${{ env.TARGET_BRANCH }}
+          else
+            echo "Condition did not match: ${{ github.repository }}!=$TARGET_REPOSITORY && ${{ github.ref_name }}==$SOURCE_BRANCH"
+          fi
+
+      - name: Sync Flox to DataVis
+        env:
+          SOURCE_REPOSITORY: polygon-software/flox
+          SOURCE_BRANCH: master
+          TARGET_REPOSITORY: polygon-software/ziegler-datavis
+          TARGET_BRANCH: flox
+        run: |
+          if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
+          then
+            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$SOURCE_BRANCH"
+            git remote add forkrepo https://github.com/${{ env.TARGET_REPOSITORY }}.git
+            git push --set-upstream forkrepo ${{ env.SOURCE_BRANCH }}:${{ env.TARGET_BRANCH }}
+          else
+            echo "Condition did not match: ${{ github.repository }}!=$TARGET_REPOSITORY && ${{ github.ref_name }}==$SOURCE_BRANCH"
+          fi
