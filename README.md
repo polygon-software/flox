@@ -6,17 +6,15 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=polygon-software_full-stack-bootstrap&metric=sqale_index&token=b7aaf65bd78000c4e1006f5706ccf422fe08f2be)](https://sonarcloud.io/summary/new_code?id=polygon-software_full-stack-bootstrap)
 
 
-# Full Stack Bootstrap Repository
+# Polygon Flox
 
 
 ## 0. Introduction
 
-The full stack bootstrap repository is intended to provide a solid baseline for starting new projects; it is meant to provide a full, basic setup of all relevant services.
-It includes a Terraform file for setting up the related AWS infrastructure *(in progress)*, as well as a basic Backend, Frontend, Database, and preconfigured connections between them. Some basic examples for operations and components are included as well.
+The Flox repository is intended to provide a solid baseline for starting new projects; it is meant to provide a full, basic setup of all relevant services.
+It includes a Terraform file for setting up the related AWS infrastructure, as well as a basic Backend, Frontend, Database, and preconfigured connections between them. Some basic examples for operations and components are included as well.
 
 It makes sense to read through the entirety of this document before working with this repository, as it should cover the tech stack pretty well. :tada:
-
-**IMPORTANT: At the moment, customer projects will be created as branches within this repository, more info below. This will however change to Forks in the future. At the current stage, it is therefore vital to maintain a clean branch structure, following the conventions outlined below.**
 
 ## 1. Running the application
 
@@ -25,7 +23,7 @@ First, install the necessary packages in both the `backend` and the `frontend` f
 yarn
 ````
 
-To locally run a project built with the full stack bootstrap, the following commands are available (all needed commands are also located in the related `package.json`):
+To locally run a project built with Flox, the following commands are available (all needed commands are also located in the related `package.json`):
 
 - Running frontend locally (any of these) within `/frontend`:
 ````bash
@@ -36,7 +34,7 @@ yarn dev:ssr     // running with serverside rendering
 
 - Runnning backend + database locally within `/backend`:
 ````bash
-docker-compose up --build -V
+docker-compose up --build
 ````
 This will create one container each for backend, database and nocoDB. *Note:* you must have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running for this command to work. If you are running on a Windows machine, you may need to enable CPU virtualization in BIOS/UEFI.
 
@@ -49,11 +47,9 @@ For basic information about how branches work, see the [official GitHub Document
 
 | Name  | Description |
 | ------| ----------- |
-| `master`  | The Bootstrap repository's main branch. Should only contain generalized, well-tested code.  |
+| `master`  | The Flox repository's main branch. Should only contain double-reviewed, well-tested code.  |
 | `dev`  | Development branch, into which feature branches are merged.  |
-| `feature-[name]`  | An individual feature branch for the bootstrap repository  |
-| `project-[name]`  | Branch for an individual customer project (temporary solution). Should only be merged into from `master`, and never merged into another branch.|
-| `[project]-feature-[name]`  | An individual feature branch for a customer project. |
+| `feature-[name]`  | An individual feature branch for the Flox repository  |
 
 The branch structure may look as follows:
 
@@ -62,10 +58,6 @@ master
 ├── dev
 │   ├── feature-some
 │   └── feature-other
-│
-├── project-blubb
-│   ├── blubb-feature-some
-│   ├── blubb-feature-other
 ...
 ```
 
@@ -74,7 +66,7 @@ master
 Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon completing a feature, [creating a Pull Request](https://github.com/polygon-software/full-stack-bootstrap/compare) in order to merge the feature back into the development branch.
 
 Pull Request naming must adhere to the following schema:
-`type(scope): name`
+`type: name`
      
 | Name  | Description |
 | ------| ----------- | 
@@ -83,33 +75,13 @@ Pull Request naming must adhere to the following schema:
 | doc | Adds documentation |
 | test | Adds tests |
 
-The following Scopes are available:
-- `core`
-- `soi`
-- `bigabig`
-
-E.g. a valid PR name may be `feat(bigabig): Employee Dashboard`
+E.g. a valid PR name may be `feat: AWS S3 helpers`
 
 Once significant features have been merged into the `dev` branch, a Pull Request into `master` may be created in order to integrate well-tested features into the bootstrap repository.
 
-New project branches should always be created from `master`, and only merged into from `master`. Project branches should generally never be merged into any other branch.
+When creating a Pull Request, make sure to use the appropriate **labels** to identify code parts (frontend, backend, etc.) and functionalities the PR belongs to. Additionally, autolabeller will automatically add missing labels based on what files were altered.
 
-When creating a Pull Request, make sure to use the appropriate **labels** to identify what project and functionalities the PR belongs to. Additionally, autolabeller can automatically add missing labels.
-
-**If a project requires a basic functionality not covered by the bootstrap repository, the following workflow should be observed:**
-1. Create a new feature branch from `dev`
-2. Develop the feature on this branch, and create a PR into `dev` once it is finished.
-3. Once merged, create a PR from `dev` into `master`, which will include any other changes made on `dev`.
-4. Once merged into `master`, you may then merge `master` into the relevant `project-[name]` branch. This ensures that generalized functionality immediately becomes available to all projects that might make use of it.
-
-### 2.3 Developing content
-
-When developing project-specific content, you should keep the following points in mind:
-1. *Should this be covered by the Bootstrap repository?* If the functionality or component you need for a project is generic and could be relevant to other projects, it's most likely a good idea to develop it starting from the `dev` branch, such that the new feature can become part of the bootstrap repository.
-2. *Can this be generalized without high effort?* If you are creating e.g. a component that can be written in a generalized way that would make it adaptable to other projects (e.g. a statistics dashboard), consider developing your component in a customizable, parameter-based way, so that it can be reused without making many adjustments.
-3. *Keep inputs standardized*: if your component takes input parameters, it probably makes sense to use reusable, shared interfaces (that can be extended in order to make it project-specific).
-
-## 3. Tech Stack
+## 2. Tech Stack
 
 The technology stack within this repository should cover all aspects of a basic application. On a basic level, it is structured as follows:
 
@@ -121,11 +93,11 @@ The technology stack within this repository should cover all aspects of a basic 
 | Frontend  | [Vue 3](https://v3.vuejs.org/) + [Quasar CLI](https://quasar.dev/)  | User-facing part of the application |
 | Data Definitions  | [Joi](https://joi.dev/) | Data Definitions (schemas) shared between frontend and backend |
 
-## 4. Frontend
+## 3. Frontend
 
-### 4.1 Structure
+### 3.1 Structure
 
-The Frontend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
+The Frontend is built using the technologies outlined below. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
 
 | Name  | Description |
 | ------| ----------- |
@@ -170,7 +142,7 @@ The frontend file structure is as follows:
 └── src-ssr         // SSR-related files, see https://quasar.dev/quasar-cli/developing-ssr/introduction
 ````
 
-### 4.2 Working with Vue 3
+### 3.2 Working with Vue 3
 
 We use Vue 3 with typescript as the chosen language for developing the frontend. Instead of the Options API as used by Vue 3, we now use the newer 
 [Composition API](https://v3.vuejs.org/api/composition-api.html). Make sure to read and understand the Composition API documentation, as it is quite different to what you may be used to from Vue 2.
@@ -187,8 +159,8 @@ As oppposed to Vue 2, our `<script>` tag now usually looks as follows:
 
 Note that we specify `setup` and `lang='ts'`. The `setup` tag is because we use the [Script Setup](https://v3.vuejs.org/api/sfc-script-setup.html) functionality provided by Vue 3, and the `lang` tag is to specify that we use Typescript instead of Javascript.
 
-## 5. Backend
-The Backend is built using the following technologies. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
+## 4. Backend
+The Backend is built using the technologies outlined below. You don't necessarily need to read the full documentation of every technology, but it's a good idea to at least have a general understanding of what each technology is used for, and how it works.
 
 | Name  | Description |
 | ------| ----------- |
@@ -215,7 +187,7 @@ The backend file structure is as follows:
 └── test              // e2e tests
 ```
 
-## 6. Database
+## 5. Database
 
 The database uses [PostgreSQL](https://www.postgresql.org/) and is accessed directly from the backend, using TypeORM. Additionally, [NocoDB](https://www.nocodb.com/) can be used to directly perform operations and look at data on the database. Setting up a NocoDB container is part of the `docker-compose` file for running backend/database, described in (1).
 By default, NocoDB runs on `localhost:8080`. To use it, you will initially need to create an account as well as set up your project ("Create new project using an existing database"). Choose "Postgres" as the database type, and enter your database's details, as shown below:
@@ -230,7 +202,7 @@ docker inspect database
 Look for a field named "IPAddress", and use that value.
 You're now ready to start adding and inspecting data on your database using NocoDB!
 
-## 7. Server Infrastructure
+## 6. Server Infrastructure
 
 ### Setting up with Terraform
 
@@ -240,7 +212,7 @@ TODO once finished @johannschwabe
 
 ### Structure
 
-The Bootstrap project uses [AWS](https://aws.amazon.com/de/) server infrastructure to host the backend, database, and frontend. The following technologies and services are used throughout:
+Flox and projects derived from it use [AWS](https://aws.amazon.com/de/) server infrastructure to host the backend, database, and frontend. The following technologies and services are used throughout:
 
 | Name  | Description |
 | ------| ----------- |
@@ -248,7 +220,7 @@ The Bootstrap project uses [AWS](https://aws.amazon.com/de/) server infrastructu
 | [AWS S3](https://aws.amazon.com/de/s3/)  | File storage |
 | [AWS Elastic Beanstalk](https://aws.amazon.com/de/elasticbeanstalk/) | Auto-scaling backend deployment |
 
-### 8: SonarQube Quality Check
+### 7: SonarQube Quality Check
 
 We have a code quality tool enabled which gives feedback on your code quality on every Pull-Request.
 The same feedback can also be integrated into your IDE such that you don't have to correct these changes in post but
