@@ -28,7 +28,7 @@ jobs:
         run: |
           if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
           then
-            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$SOURCE_BRANCH"
+            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$TARGET_BRANCH"
             git remote add forkrepo https://github.com/${{ env.TARGET_REPOSITORY }}.git
             git push --set-upstream forkrepo ${{ env.SOURCE_BRANCH }}:${{ env.TARGET_BRANCH }}
           else
@@ -44,7 +44,7 @@ jobs:
         run: |
           if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
           then
-            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$SOURCE_BRANCH"
+            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$TARGET_BRANCH"
             git remote add forkrepo https://github.com/${{ env.TARGET_REPOSITORY }}.git
             git push --set-upstream forkrepo ${{ env.SOURCE_BRANCH }}:${{ env.TARGET_BRANCH }}
           else
@@ -60,7 +60,7 @@ jobs:
         run: |
           if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
           then
-            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$SOURCE_BRANCH"
+            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$TARGET_BRANCH"
             git remote add forkrepo https://github.com/${{ env.TARGET_REPOSITORY }}.git
             git push --set-upstream forkrepo ${{ env.SOURCE_BRANCH }}:${{ env.TARGET_BRANCH }}
           else
