@@ -63,7 +63,7 @@ master
 
 ### 2.2 Pull Requests & Merging
 
-Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon completing a feature, [creating a Pull Request](https://github.com/polygon-software/full-stack-bootstrap/compare) in order to merge the feature back into the development branch.
+Generally, proper merging and branching conventions should be followed within this repository. This means creating new feature branches from `dev`, and, upon completing a feature, [creating a Pull Request](https://github.com/polygon-software/flox/compare) in order to merge the feature back into the development branch.
 
 Pull Request naming must adhere to the following schema:
 `type: name`
