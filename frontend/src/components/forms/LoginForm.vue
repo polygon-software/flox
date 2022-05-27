@@ -1,5 +1,5 @@
 <template>
-  <div class="column q-pa-sm" style="width: 250px; height: 430px;">
+  <div class="column q-pa-sm text-center">
     <h5 class="q-ma-none" style="margin-bottom: 20px;">
       {{ $t('login') }}
     </h5>
