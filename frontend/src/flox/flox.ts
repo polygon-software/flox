@@ -27,7 +27,7 @@ export function floxModuleOptions() {
   const modules = floxModules();
 
   modules.forEach((module) => {
-    options[module] = flox.moduleOptions[module] as Record<string, unknown>
+    options[module] = (flox.moduleOptions[module] ?? {}) as Record<string, unknown>
   })
 
   return options;
