@@ -13,7 +13,7 @@
       :key="module"
     >
       <q-icon name="check" color="positive" size="20px"/>
-      <p>{{ module }}</p>
+      <p class="q-ma-none">{{ module }}</p>
       <div style="width: 20px"/>
     </q-item>
   </q-card>
