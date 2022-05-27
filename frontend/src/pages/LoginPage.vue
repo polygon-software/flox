@@ -1,17 +1,12 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center column">
 
     <!-- Active Flox modules -->
     <ModuleStatus/>
 
     <!-- Login Card -->
-    <q-card class="q-pa-md q-ma-md">
+    <q-card class="q-pa-md q-ma-md" style="width: 300px">
       <LoginForm @submit="onLogin"/>
-    </q-card>
-
-    <!-- Signup Card -->
-    <q-card class="q-pa-md q-ma-md">
-      <SignupForm @submit="onSignup"/>
     </q-card>
   </q-page>
 </template>
