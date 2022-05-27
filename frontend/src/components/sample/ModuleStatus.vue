@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 
-import {floxModuleOptions, floxModules} from '../flox/flox';
+import {floxModuleOptions, floxModules} from '../../flox/flox';
 
 // Active modules
 const modules = floxModules()

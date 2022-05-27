@@ -18,7 +18,7 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
-import ModuleStatus from 'components/ModuleStatus.vue';
+import ModuleStatus from 'components/sample/ModuleStatus.vue';
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 

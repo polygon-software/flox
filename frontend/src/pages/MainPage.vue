@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import SampleTable from 'components/SampleTable.vue'
-import SampleForm from 'components/SampleForm.vue'
-import SampleSubscriptionTable from 'components/SampleSubscriptionTable.vue'
+import SampleTable from 'components/sample/SampleTable.vue'
+import SampleForm from 'components/sample/SampleForm.vue'
+import SampleSubscriptionTable from 'components/sample/SampleSubscriptionTable.vue'
 </script>

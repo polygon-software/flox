@@ -37,23 +37,6 @@
               />
             </q-popup-edit>
           </q-td>
-          <q-td key="age" :props="props">
-            {{ props.row.age }}
-            <q-popup-edit
-                :auto-save="true"
-                :model-value="props.row.age"
-                @save="(value) => onUpdate(props.row.uuid, {age: Number(value)})"
-                v-slot="scope"
-            >
-              <q-input
-                  v-model="scope.value"
-                  dense
-                  autofocus
-                  counter
-                  @keyup.enter="scope.set"
-              />
-            </q-popup-edit>
-          </q-td>
         </q-tr>
       </template>
     </q-table>
@@ -67,10 +50,10 @@
 </template>
 
 <script setup lang="ts">
-import { ALL_USERS } from '../data/QUERIES';
-import {DELETE_USER, UPDATE_USER} from '../data/MUTATIONS';
+import { ALL_USERS } from '../../data/QUERIES';
+import {DELETE_USER, UPDATE_USER} from '../../data/MUTATIONS';
 import {ref, computed, Ref} from 'vue';
-import {executeMutation, subscribeToQuery} from '../helpers/data-helpers';
+import {executeMutation, subscribeToQuery} from '../../helpers/data-helpers';
 
 // ----- Data -----
 // Selection must be an array
@@ -78,7 +61,6 @@ let selected: Ref<Array<Record<string, unknown>>> = ref([])
 const columns = [
   { name: 'uuid', align: 'center', label: 'ID', field: 'uuid', sortable: false },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
-  { name: 'age', label: 'Age (years)', field: 'age', sortable: true },
 ]
 
 const queryResult = subscribeToQuery(ALL_USERS) as Ref<Record<string, Array<Record<string, unknown>>>>
