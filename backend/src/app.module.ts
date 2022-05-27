@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
+import { UserModule } from './flox-modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './config/configuration';
+import configuration from './flox-modules/config/configuration';
 import { Context } from 'vm';
-import { JwtAuthGuard } from './auth/auth.guard';
+import { JwtAuthGuard } from './flox-modules/auth/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtStrategy } from './auth/jwt.strategy';
-import { ItemModule } from './item/item.module';
+import { JwtStrategy } from './flox-modules/auth/jwt.strategy';
+import { ItemModule } from './flox-modules/item/item.module';
 import * as Joi from 'joi';
-import { FileModule } from './file/file.module';
-import { RolesGuard } from './auth/roles.guard';
+import { FileModule } from './flox-modules/file/file.module';
+import { RolesGuard } from './flox-modules/auth/roles.guard';
 
 @Module({
   imports: [
