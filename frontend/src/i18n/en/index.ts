@@ -15,6 +15,6 @@ export default {
     incorrect_password: 'Incorrect password',
     incorrect_email: 'Email address not found',
     incorrect_username: 'Username not found',
-    non_matching_password: 'Passwords not matching',
+    non_matching_password: "Passwords don't match",
   }
 };

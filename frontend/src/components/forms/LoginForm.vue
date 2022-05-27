@@ -1,7 +1,7 @@
 <template>
   <div class="column q-pa-sm text-center">
     <h5 class="q-ma-none" style="margin-bottom: 20px;">
-      {{ $t('login') }}
+      {{ $t('authentication.login') }}
     </h5>
     <q-form
         @submit="onSubmit"
