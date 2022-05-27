@@ -3,6 +3,10 @@ import {mapUser} from 'src/helpers/mapping-helpers';
 import {MY_USER} from 'src/data/queries/USER';
 
 /**
+ * This file contains all helper functions for fetching data using GraphQL queries
+ */
+
+/**
  * Fetch the logged-in user.
  * @returns {Promise<User|null>} - the logged in user
  */
