@@ -18,9 +18,16 @@
       <q-btn
           style="margin-top: 20px"
           color="primary"
-          :label="$t('login')"
+          :label="$t('authentication.login')"
           type="submit"
           :disable="!form.pageValid.value"
+      />
+
+      <q-btn
+        :label="$t('authentication.forgot_password')"
+        class="text-primary"
+        flat
+        @click="forgotPassword"
       />
     </q-form>
   </div>
@@ -29,7 +36,9 @@
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
-import {defineEmits} from 'vue';
+import {defineEmits, inject} from 'vue';
+import {AuthenticationService} from 'src/services/AuthService';
+const $authService: AuthenticationService|undefined = inject('$authService')
 
 const emit = defineEmits(['submit'])
 
@@ -50,5 +59,13 @@ form.pages.value = [
  */
 function onSubmit(): void {
   emit('submit', form.values.value)
+}
+
+/**
+ * Triggers a password change for a non-logged in authentication
+ * @returns {void}
+ */
+function forgotPassword() {
+  $authService?.showResetPasswordDialog();
 }
 </script>
