@@ -2,7 +2,6 @@ import { boot } from 'quasar/wrappers';
 import ROUTES, { CONSTRAINED_ROUTES, PUBLIC_ROUTES } from '../router/routes';
 import { Router } from 'vue-router';
 import { root } from 'src/store';
-import { ROLE } from 'src/data/ENUM';
 import { User } from 'src/data/types/User';
 import { Context, Module } from 'vuex-smart-module';
 import AuthState from 'src/store/authentication/state';
@@ -62,7 +61,8 @@ export default boot(({ router, store }) => {
       // TODO
     }
 
-    // Default case: allow access
+    // Default case: allow access if public
+    return PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)
   });
 });
 
