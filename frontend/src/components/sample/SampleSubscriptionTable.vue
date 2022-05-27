@@ -10,11 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import { USER_ADDED } from '../data/SUBSCRIPTIONS';
-import { ALL_USERS } from '../data/QUERIES';
+import { USER_ADDED } from '../../data/SUBSCRIPTIONS';
+import { ALL_USERS } from '../../data/QUERIES';
 import { useSubscription } from '@vue/apollo-composable';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
-import { executeQuery } from '../helpers/data-helpers';
+import { executeQuery } from '../../helpers/data-helpers';
 import {useSSR} from 'src/store/ssr';
 import {ApolloQueryResult, FetchResult} from '@apollo/client';
 import _ from 'lodash';
