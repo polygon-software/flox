@@ -25,20 +25,6 @@
         flat
         @click="logout"
     />
-    <q-btn
-        v-if="loggedIn"
-        label="Change Password"
-        class="text-primary"
-        flat
-        @click="changePassword"
-    />
-    <q-btn
-        v-if="!loggedIn"
-        label="Password Forgotten"
-        class="text-primary"
-        flat
-        @click="forgottenPassword"
-    />
   </div>
 
   </q-header>
@@ -79,21 +65,4 @@ async function logout(): Promise<void>{
   await $authService?.logout();
   await $routerService?.routeTo(ROUTES.LOGIN)
 }
-
-/**
- * Triggers a password change for the currently logged in authentication
- * @returns {void}
- */
-function changePassword() {
-  $authService?.showChangePasswordDialog()
-}
-
-/**
- * Triggers a password change for a non-logged in authentication
- * @returns {void}
- */
-function forgottenPassword() {
-  $authService?.showResetPasswordDialog();
-}
-
 </script>
