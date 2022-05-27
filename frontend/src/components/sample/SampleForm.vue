@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import {CREATE_USER}  from '../../data/MUTATIONS';
+import {CREATE_USER}  from '../../data/mutations/USER';
 import { ref } from 'vue'
 import {executeMutation} from '../../helpers/data-helpers';
 

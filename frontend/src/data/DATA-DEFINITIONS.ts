@@ -11,7 +11,7 @@ export enum MutationTypes {
     DELETE
 }
 
-// Interface definitions as used in constant files (e.g. QUERIES.ts, MUTATIONS.ts)
+// Interface definitions as used in constant files (e.g. QUERIES.ts, USER.ts)
 export interface QueryObject {
     query: DocumentNode,             // Actual GraphQL query
     tables: string[],       // Affected Tables

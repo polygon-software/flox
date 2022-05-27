@@ -107,7 +107,7 @@ export function getClientOptions(ssrContext: QSsrContext|null|undefined): Apollo
           return dataIdFromObject(responseObject)
         },
         addTypename: false, // We disable auto-adding of __typename property, as this breaks mutations expecting
-                            // an object variable. Instead, we manually add __typename in QUERIES/MUTATIONS.ts where
+                            // an object variable. Instead, we manually add __typename in QUERIES/USER.ts where
                             // appropriate. This can be changed in case Apollo implements better behavior for this.
       })
     },
