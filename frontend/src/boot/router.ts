@@ -58,6 +58,8 @@ export default boot(({ router, store }) => {
           return getUserRoleRoute(user, $authStore);
         }
       }
+    } else {
+      // TODO
     }
 
     // Default case: allow access

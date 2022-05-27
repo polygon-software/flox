@@ -6,20 +6,12 @@
 
     <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
     <div class="column">
-      <div class="row q-pa-md">
-        <SampleTable/>
-        <SampleForm/>
-      </div>
-
-      <div class="q-pa-md">
-        <SampleSubscriptionTable/>
-      </div>
+      <SampleForm/>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import SampleTable from 'components/sample/SampleTable.vue'
 import SampleForm from 'components/sample/SampleForm.vue'
-import SampleSubscriptionTable from 'components/sample/SampleSubscriptionTable.vue'
+import ModuleStatus from 'components/sample/ModuleStatus.vue';
 </script>

@@ -1,5 +1,5 @@
 /**
- * This file contains all valid GraphQL queries. A query is structure as follows
+ * This file contains all valid GraphQL queries. A query is structured as follows
  * (see also DATA-DEFINITIONS.ts):
  * - query: the actual GraphQL query. Add __typename to the variables in order for caching to work as expected
  * (auto-update on edit)

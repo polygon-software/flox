@@ -46,11 +46,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
  */
 export const CONSTRAINED_ROUTES = [
   {
-    path: ROUTES.CUSTOMERS.path,
-    allowedRoles: [ROLE.ADMIN],
-  },
-  {
-    path: ROUTES.DEVICES.path,
+    path: ROUTES.SAMPLE.path,
     allowedRoles: [ROLE.ADMIN],
   },
 ];
