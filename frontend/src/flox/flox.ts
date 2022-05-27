@@ -15,3 +15,20 @@ export function floxModules() {
 
   return modules;
 }
+
+/**
+ * Gets the active Flox modules' options (with proper typing, since config is .js)
+ * @returns {Record<string, Record<string, unknown>>} - options for active modules
+ */
+export function floxModuleOptions() {
+  const options: Record<string, Record<string, unknown>> = {}
+
+  // Get active modules
+  const modules = floxModules();
+
+  modules.forEach((module) => {
+    options[module] = flox.moduleOptions[module] as Record<string, unknown>
+  })
+
+  return options;
+}
