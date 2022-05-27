@@ -4,7 +4,7 @@ import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
 import {useSSR} from 'src/store/ssr';
 import {i18n} from 'boot/i18n';
-import {QUERIES} from 'src/data/QUERIES';
+import {QUERIES} from 'src/data/queries/QUERIES';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -39,7 +39,7 @@ async function executeQuery(queryObject: QueryObject, variables?: Record<string,
 
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
- * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
+ * @param {MutationObject} mutationObject - the mutation object constant (from USER.ts)
  * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutatio
  * @returns {Promise<FetchResult<any, Record<string, any>, Record<string, any>> | null>} Returns the values defined by the mutation
  */

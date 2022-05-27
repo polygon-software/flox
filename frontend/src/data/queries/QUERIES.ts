@@ -1,5 +1,3 @@
-import gql from 'graphql-tag';
-
 /**
  * This file contains all valid GraphQL queries. A query is structure as follows
  * (see also DATA-DEFINITIONS.ts):
@@ -7,24 +5,11 @@ import gql from 'graphql-tag';
  * (auto-update on edit)
  * - tables: list of affected tables; when a mutation changes one of these tables, the query is re-fetched.
  * - cacheLocation: the actual GraphQL query's name (since cached data will be stored there)
- *
- * When adding a new query, also add it to the QUERIES array at the bottom of this file.
  */
+import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {USER_QUERIES} from 'src/data/queries/USER';
 
-export const ALL_USERS = {
-    query: gql`
-        query{
-            allUsers{
-                uuid
-                name
-                age
-                __typename
-            }
-        }
-        `,
-    tables: ['user'],
-    cacheLocation: 'allUsers'
-}
-
-
-export const QUERIES = [ALL_USERS];
+// Queries for all modules
+export const QUERIES: QueryObject[] = [
+  ...USER_QUERIES,
+];
