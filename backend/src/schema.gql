@@ -2,46 +2,38 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateItemInput {
-  """Name"""
-  name: String!
-
-  """User UUID"""
-  userUUID: ID
-}
-
 input CreateUserInput {
   age: Int!
   name: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 input DeleteUserInput {
-  uuid: ID!
-}
-
-type Item {
-  """Name"""
-  name: String!
-
-  """User of the item"""
-  user: User
-
-  """UUID"""
   uuid: ID!
 }
 
 type Mutation {
   create(createUserInput: CreateUserInput!): User!
-  createItem(createItemInput: CreateItemInput!): Item!
   remove(deleteUserInput: DeleteUserInput!): User!
-  removeItem(uuid: ID!): Item!
   update(updateUserInput: UpdateUserInput!): User!
-  updateItem(updateItemInput: UpdateItemInput!): Item!
 }
 
 type PrivateFile {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """File owner"""
   owner: String!
@@ -54,8 +46,17 @@ type PrivateFile {
 }
 
 type PublicFile {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """Public download URL"""
   url: String!
@@ -72,25 +73,12 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
-  item(uuid: ID!): Item!
-  items: [Item!]!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
 
 type Subscription {
   userAdded: User!
-}
-
-input UpdateItemInput {
-  """Name"""
-  name: String
-
-  """User UUID"""
-  userUUID: ID
-
-  """Item UUID"""
-  uuid: ID!
 }
 
 input UpdateUserInput {
@@ -100,11 +88,14 @@ input UpdateUserInput {
 }
 
 type User {
-  """Age"""
-  age: Int!
+  """Creation date"""
+  createdAt: DateTime!
 
-  """Items of the user"""
-  items: [Item!]
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """Name"""
   name: String!

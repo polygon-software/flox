@@ -18,7 +18,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
-
   // Wildcard route for non-covered routes
   'WILDCARD': {
     path: '/:catchAll(.*)*',

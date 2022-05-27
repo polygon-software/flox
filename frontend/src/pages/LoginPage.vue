@@ -1,5 +1,9 @@
 <template>
   <q-page class="flex flex-center">
+
+    <!-- Active Flox modules -->
+    <ModuleStatus/>
+
     <!-- Login Card -->
     <q-card class="q-pa-md q-ma-md">
       <LoginForm @submit="onLogin"/>
@@ -19,6 +23,7 @@ import {inject} from 'vue'
 import {AuthenticationService} from '../services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
+import ModuleStatus from 'components/ModuleStatus.vue';
 const $authService: AuthenticationService = inject('$authService')
 const $routerService: RouterService = inject('$routerService')
 

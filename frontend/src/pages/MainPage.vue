@@ -1,5 +1,9 @@
 <template>
   <q-page class="flex flex-center">
+
+    <!-- Active Flox modules -->
+    <ModuleStatus/>
+
     <!-- Test table for visualizing data fetched via GraphQL/Apollo -->
     <div class="column">
       <div class="row q-pa-md">
