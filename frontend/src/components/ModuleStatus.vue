@@ -1,9 +1,10 @@
 <template>
-  <q-card class="q-column q-pa-md text-center" style="width: 300px">
+  <!-- This is a test component for showing Flox modules' status & options-->
+  <q-card class="q-column q-pa-md text-center q-ma-md" style="width: 300px">
     <h5
-      class="q-ma-none q-mb-md"
+      class="q-ma-none q-mb-md q-mt-sm"
     >
-      Active Flox Modules:
+      Flox Modules:
     </h5>
     <q-separator/>
 
@@ -13,7 +14,16 @@
       :key="module"
     >
       <q-icon name="check" color="positive" size="20px"/>
-      <p class="q-ma-none">{{ module }}</p>
+
+      <div class="column">
+
+        <q-item-label>
+          {{ module }}
+        </q-item-label>
+        <q-item-label caption>
+          {{ moduleOptions[module] }}
+        </q-item-label>
+      </div>
       <div style="width: 20px"/>
     </q-item>
   </q-card>
@@ -21,13 +31,11 @@
 
 <script setup lang="ts">
 
-import {floxModules} from '../flox/flox';
+import {floxModuleOptions, floxModules} from '../flox/flox';
 
+// Active modules
 const modules = floxModules()
-// TODO
 
+// Options of modules
+const moduleOptions = floxModuleOptions()
 </script>
-
-<style scoped>
-
-</style>
