@@ -3,19 +3,48 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from '../flox-modules/auth/roles.guard';
 import { JwtStrategy } from '../flox-modules/auth/jwt.strategy';
 import { JwtAuthGuard } from '../flox-modules/auth/auth.guard';
+import { FileModule } from '../flox-modules/file/file.module';
+import { UserModule } from '../flox-modules/user/user.module';
+
+/**
+ * Returns the active Flox modules based on flox.config.js
+ * @returns {any[]} - list of Modules
+ */
+export function floxModules() {
+  const modules = [];
+
+  // Get active modules from config
+  const moduleNames = getActiveFloxModuleNames();
+
+  moduleNames.forEach((moduleName) => {
+    switch (moduleName) {
+      case 'file':
+        modules.push(FileModule);
+        break;
+      case 'user':
+        modules.push(UserModule);
+        break;
+      // Some modules don't have to be added
+      default:
+        break;
+    }
+  });
+
+  return modules;
+}
 
 /**
  * Returns the providers to use based on flox.config.js
- * @returns {any[]} - provider list TODO
+ * @returns {any[]} - list of providers
  */
 export function floxProviders() {
   const providers = [];
 
   // Get active modules from config
-  const modules = getActiveFloxModules();
+  const moduleNames = getActiveFloxModuleNames();
 
   // Add providers for each module
-  modules.forEach((moduleName) => {
+  moduleNames.forEach((moduleName) => {
     if (flox.modules[moduleName] === true) {
       switch (moduleName) {
         // Authentication module (includes JSON web token validation)
@@ -33,9 +62,6 @@ export function floxProviders() {
             useClass: RolesGuard,
           });
           break;
-        case 'file':
-          // TODO
-          break;
         default:
           break;
       }
@@ -49,7 +75,7 @@ export function floxProviders() {
  * Gets the active Flox modules from config
  * @returns {string[]} - list of module names
  */
-function getActiveFloxModules() {
+function getActiveFloxModuleNames() {
   const modules = [];
 
   Object.keys(flox.modules).forEach((moduleName) => {

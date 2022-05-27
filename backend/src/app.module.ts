@@ -1,18 +1,12 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { UserModule } from './flox-modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { Context } from 'vm';
-import { JwtAuthGuard } from './flox-modules/auth/auth.guard';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtStrategy } from './flox-modules/auth/jwt.strategy';
-import { ItemModule } from './flox-modules/item/item.module';
 import * as Joi from 'joi';
-import { FileModule } from './flox-modules/file/file.module';
-import { RolesGuard } from './flox-modules/auth/roles.guard';
+import { floxModules, floxProviders } from './flox/flox';
 
 @Module({
   imports: [
@@ -68,20 +62,13 @@ import { RolesGuard } from './flox-modules/auth/roles.guard';
       }),
       inject: [ConfigService],
     }),
-    UserModule,
-    ItemModule,
-    FileModule,
+    // Flox modules
+    ...floxModules(),
   ],
   providers: [
-    JwtStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // Flox module Providers
+    ...floxProviders(),
+    // Add any other custom module providers here
   ],
 })
 export class AppModule {}
