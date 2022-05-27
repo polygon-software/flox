@@ -1,10 +1,10 @@
-import * as flox from '../flox.config.js';
+import * as flox from '../../flox.config.js';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from '../flox-modules/auth/roles.guard';
-import { JwtStrategy } from '../flox-modules/auth/jwt.strategy';
-import { JwtAuthGuard } from '../flox-modules/auth/auth.guard';
-import { FileModule } from '../flox-modules/file/file.module';
-import { UserModule } from '../flox-modules/user/user.module';
+import { RolesGuard } from './modules/auth/roles.guard';
+import { JwtStrategy } from './modules/auth/jwt.strategy';
+import { JwtAuthGuard } from './modules/auth/auth.guard';
+import { FileModule } from './modules/file/file.module';
+import { UserModule } from './modules/user/user.module';
 
 /**
  * Returns the active Flox modules based on flox.config.js
