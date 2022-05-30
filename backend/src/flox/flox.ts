@@ -19,13 +19,13 @@ export function floxModules() {
 
   moduleNames.forEach((moduleName) => {
     switch (moduleName) {
-      case 'file':
+      case MODULES.FILE:
         modules.push(FileModule);
         break;
-      case 'user':
+      case MODULES.AUTH:
         modules.push(UserModule);
         break;
-      // Some modules don't have to be added
+      // Some modules don't have to be added (e.g. 'roles')
       default:
         break;
     }
@@ -96,7 +96,7 @@ export function floxModulesOptions() {
   const options: Record<string, Record<string, unknown>> = {};
 
   // Get active modules
-  const modules = floxModules();
+  const modules = getActiveFloxModuleNames();
 
   modules.forEach((module) => {
     options[module] = (flox.moduleOptions[module] ?? {}) as Record<
