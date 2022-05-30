@@ -8,6 +8,10 @@ import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
 
+/**
+ * Bootstraps the nest application itself
+ * @returns {Promise<void>} - done
+ */
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -26,4 +30,6 @@ async function bootstrap() {
   await app.register(fmp);
   await app.listen(configService.get('server.port'), '::');
 }
-bootstrap();
+
+// Start application
+void bootstrap();

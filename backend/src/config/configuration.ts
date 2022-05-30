@@ -12,11 +12,11 @@ export default (): Config => ({
   },
 });
 
-export class serverConfig {
+export class ServerConfig {
   port: number;
 }
 
-export class databaseConfig {
+export class DatabaseConfig {
   host: string;
   port: string;
   username: string;
@@ -25,7 +25,7 @@ export class databaseConfig {
 }
 
 export class Config {
-  server: serverConfig;
+  server: ServerConfig;
   entities: string;
-  database: databaseConfig;
+  database: DatabaseConfig;
 }
