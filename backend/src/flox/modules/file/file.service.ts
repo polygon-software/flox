@@ -66,6 +66,7 @@ export class FileService {
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
    * @param {string} owner - the file owner's UUID
+   * @returns {Promise<PrivateFile>} - the newly uploaded file
    */
   async uploadPrivateFile(
     dataBuffer: Buffer,
@@ -89,8 +90,9 @@ export class FileService {
   }
 
   /**
-   * Gets a public file from the database
-   * @param {GetPublicFileArgs} getPublicFileArgs - arguments, containing UUID
+   * Gets a public file
+   * @param {GetPublicFileArgs} getPublicFileArgs - contains UUID
+   * @returns {Promise<PublicFile>} - the file
    */
   async getPublicFile(
     getPublicFileArgs: GetPublicFileArgs,
@@ -99,8 +101,9 @@ export class FileService {
   }
 
   /**
-   * Gets a private file from the database
-   * @param {GetPrivateFileArgs} getPrivateFileArgs - arguments, containing UUID
+   * Gets a private file
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - contains UUID and optionally, expiration time
+   * @returns {Promise<PrivateFile>} - the file
    */
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
@@ -108,7 +111,6 @@ export class FileService {
     const fileInfo = await this.privateFilesRepository.findOne(
       getPrivateFileArgs.uuid,
     );
-    // TODO Application specific: Verify file ownership or access rights
     if (fileInfo) {
       const options: Record<string, unknown> = {};
       // If expiration duration is set, apply

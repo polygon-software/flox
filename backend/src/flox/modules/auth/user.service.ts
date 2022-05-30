@@ -77,4 +77,20 @@ export class UserService {
     deletedUser.uuid = uuid;
     return deletedUser;
   }
+
+  /**
+   * Return current user given the Cognito user from the request
+   * @param {Record<string, string>} cognitoUser - cognito user from request
+   * @returns {Promise<User>} - user
+   */
+  async getMyUser(cognitoUser: Record<string, string>): Promise<User> {
+    const myUser = await this.usersRepository.findOne({
+      uuid: cognitoUser.userId, // TODO: application specific, use correct field that contains cognito ID
+    });
+
+    if (!myUser) {
+      throw new Error(`No user found for ${cognitoUser.userId}`);
+    }
+    return myUser;
+  }
 }

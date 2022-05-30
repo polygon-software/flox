@@ -11,19 +11,29 @@ import { Public } from '../auth/authentication.decorator';
 export class FileResolver {
   constructor(private readonly fileService: FileService) {}
 
+  /**
+   * Gets a public file
+   * @param {GetPublicFileArgs} getPublicFileArgs - contains UUID
+   * @returns {Promise<PublicFile>} - the file
+   */
   @Public()
   @Query(() => PublicFile, { name: 'getPublicFile' })
   async getPublicFile(
     @Args() getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return await this.fileService.getPublicFile(getPublicFileArgs);
+    return this.fileService.getPublicFile(getPublicFileArgs);
   }
 
+  /**
+   * Gets a private file
+   * @param {GetPrivateFileArgs} getPrivateFileArgs - contains UUID and optionally, expiration time
+   * @returns {Promise<PrivateFile>} - the file, if the user is allowed to access it
+   */
   @AnyRole() // TODO application specific: set appropriate guards here
   @Query(() => PrivateFile, { name: 'getPrivateFile' })
   async getPrivateFile(
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
   ): Promise<PrivateFile> {
-    return await this.fileService.getPrivateFile(getPrivateFileArgs);
+    return this.fileService.getPrivateFile(getPrivateFileArgs);
   }
 }
