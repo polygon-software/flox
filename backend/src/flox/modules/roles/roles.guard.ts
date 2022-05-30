@@ -1,7 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import { IS_PUBLIC_KEY } from '../auth/authentication.decorator';
 import { ANY_ROLE_KEY } from './authorization.decorator';
 import { getRequest } from '../../core/flox-helpers';
@@ -13,6 +12,11 @@ import { getRequest } from '../../core/flox-helpers';
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
+  /**
+   * Determines whether the user can access a given query/mutation
+   * @param {ExecutionContext} context - executionContext
+   * @returns {boolean | Promise<boolean> | Observable<boolean>} - whether the access is allowed
+   */
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
