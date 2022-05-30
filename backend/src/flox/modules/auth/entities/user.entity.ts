@@ -4,7 +4,7 @@ import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entit
 import { IsEmail, IsString } from 'class-validator';
 
 @ObjectType()
-@Entity({ name: 'user' })
+@Entity()
 export class User extends BaseEntity {
   @Field(() => String, { description: 'Name' })
   @Column()
@@ -16,4 +16,9 @@ export class User extends BaseEntity {
   @IsString()
   @IsEmail()
   email: string;
+
+  @Field(() => String, { description: 'Cognito UUID' })
+  @Column()
+  @IsString()
+  cognitoUuid: string;
 }

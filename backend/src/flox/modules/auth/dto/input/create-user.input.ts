@@ -4,6 +4,7 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 @InputType()
 export class CreateUserInput {
   @Field(() => String)
+  @IsString()
   @IsNotEmpty()
   name: string;
 
@@ -11,4 +12,9 @@ export class CreateUserInput {
   @IsString()
   @IsEmail()
   email: string;
+
+  @Field(() => String)
+  @IsString()
+  @IsNotEmpty()
+  cognitoUuid: string;
 }
