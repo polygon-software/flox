@@ -9,7 +9,7 @@ import {ErrorService} from './services/ErrorService';
 import {useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
 import {routerInstance} from 'boot/router';
-import {isModuleActive} from 'src/flox/flox';
+import {isModuleActive} from 'src/flox';
 import {MODULES} from 'src/flox/MODULES';
 
 // Quasar

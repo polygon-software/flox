@@ -4,9 +4,8 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
-import { Context } from 'vm';
 import * as Joi from 'joi';
-import { floxModules, floxProviders } from './flox/flox';
+import { floxModules, floxProviders } from './flox';
 
 @Module({
   imports: [
@@ -55,6 +54,7 @@ import { floxModules, floxProviders } from './flox/flox';
     }),
     // Flox modules
     ...floxModules(),
+    // Add any custom modules here
   ],
   providers: [
     // Flox module Providers
