@@ -7,6 +7,11 @@ import { floxModuleOptions } from '../..';
  * user types.
  */
 
+type RoleModuleConfig = {
+  roles: string[]; // Available roles
+  strict: boolean; // Set queries/mutations where no authorization decorators are given to be access-restricted by default
+};
+
 // Default roles
 export enum DEFAULT_ROLES {
   ADMIN = 'ADMIN',
@@ -14,15 +19,18 @@ export enum DEFAULT_ROLES {
 }
 
 // Default configuration set; will get merged with custom config from flox.config.js
-const defaultConfig = {
-  roles: Object.values(DEFAULT_ROLES), // Available roles
-  strict: true, // Set queries/mutations where no authorization decorators are given to be access-restricted by default
+const defaultConfig: RoleModuleConfig = {
+  roles: Object.values(DEFAULT_ROLES),
+  strict: true,
 };
 
 /**
  * Gets the module's actual configuration
- * @returns {Record<string, unknown>} - configuration
+ * @returns {RoleModuleConfig} - module configuration
  */
 export function moduleConfig() {
-  return mergeConfigurations(defaultConfig, floxModuleOptions(MODULES.ROLES));
+  return mergeConfigurations(
+    defaultConfig,
+    floxModuleOptions(MODULES.ROLES),
+  ) as RoleModuleConfig;
 }
