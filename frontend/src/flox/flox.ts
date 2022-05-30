@@ -17,7 +17,7 @@ export function floxModules() {
 }
 
 /**
- * Gets the active Flox modules' options (with proper typing, since config is .js)
+ * Gets the active Flox modules' options
  * @returns {Record<string, Record<string, unknown>>} - options for active modules
  */
 export function floxModulesOptions() {
@@ -34,7 +34,7 @@ export function floxModulesOptions() {
 }
 
 /**
- * Gets the options for a single Flox module (with proper typing, since config is .js)
+ * Gets the options for a single Flox module
  * @param {string} moduleName - name of the module to check
  * @returns {Record<string, Record<string, unknown>>} - options for the modules
  */
