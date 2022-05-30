@@ -1,5 +1,5 @@
 <template>
-  <FloxWrapper module="auth">
+  <FloxWrapper :module="MODULES.AUTH">
     <div class="q-pa-sm">
       <h5 class="q-ma-none" style="margin-bottom: 30px;">
         {{ $t('signup') }}
@@ -69,6 +69,7 @@ import { FIELDS } from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import {defineEmits} from 'vue';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
+import {MODULES} from 'src/flox/MODULES';
 
 /**
  * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different

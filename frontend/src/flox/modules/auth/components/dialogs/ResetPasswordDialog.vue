@@ -2,7 +2,6 @@
   <q-dialog
       ref="dialog"
       :persistent="true"
-      title="Blubb"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
       <q-form
