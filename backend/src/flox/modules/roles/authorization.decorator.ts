@@ -1,23 +1,20 @@
 import { CustomDecorator, SetMetadata } from '@nestjs/common';
+import { ROLES } from './ROLES';
 
 /**
  * Defines authorization-specific decorators
  */
 
-export const IS_MINE_KEY = 'isMine';
 export const ANY_ROLE_KEY = 'anyRole';
+export const ROLES_KEY = 'roles';
 
 // Restrict to specified roles
 export const Roles = (...roles: string[]): CustomDecorator =>
   SetMetadata('roles', roles);
 
 // Restrict to admin role
-export const AdminOnly = (): CustomDecorator => SetMetadata('roles', ['admin']);
+export const AdminOnly = (): CustomDecorator =>
+  SetMetadata(ROLES_KEY, [ROLES.ADMIN]); // TODO from enum
 
 // Allows access with any role
 export const AnyRole = (): CustomDecorator => SetMetadata(ANY_ROLE_KEY, true);
-
-// TODO: Application-specific role decorators go here
-
-// Restrict to resources owned by me (where 'owner' is the user's UUID)
-export const Mine = (): CustomDecorator => SetMetadata(IS_MINE_KEY, true);
