@@ -1,30 +1,14 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
 
 @Injectable()
 /**
- * JSON Web token auth guard
+ * JSON Web token authentication guard
  */
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  /**
-   * Gets the request from context
-   * @param {ExecutionContext} context - execution context of the request
-   * @returns {any} - the request
-   */
-  getRequest(context: ExecutionContext): any {
-    const ctx = GqlExecutionContext.create(context);
-    // If call is not from GraphQL, get req regularly
-    if (!ctx.getContext()) {
-      return context.switchToHttp().getRequest();
-    }
-    // Call is from GraphQL
-    return ctx.getContext().req;
-  }
-
   /**
    * Constructor
    * @param {Reflector} reflector - reflector
@@ -34,7 +18,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   /**
-   * Determines whether a user can activate the route
+   * Determines whether a user can activate the route based on the authentication status
    * @param {ExecutionContext} context - execution context
    * @returns {boolean} - whether the user can activate
    */
