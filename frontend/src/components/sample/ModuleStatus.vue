@@ -31,11 +31,11 @@
 
 <script setup lang="ts">
 
-import {floxModuleOptions, floxModules} from '../../flox/flox';
+import {floxModulesOptions, floxModules} from '../../flox/flox';
 
 // Active modules
 const modules = floxModules()
 
 // Options of modules
-const moduleOptions = floxModuleOptions()
+const moduleOptions = floxModulesOptions()
 </script>
