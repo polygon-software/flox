@@ -1,6 +1,6 @@
 import { mergeConfigurations } from '../../core/flox-helpers';
-import { floxModuleOptions } from '../../index';
 import { MODULES } from '../../MODULES';
+import { floxModuleOptions } from '../..';
 
 /**
  * The roles module includes role management functionalities and decorators for restricting certain resources to certain
@@ -19,8 +19,10 @@ const defaultConfig = {
   strict: true, // Set queries/mutations where no authorization decorators are given to be access-restricted by default
 };
 
-// Actual module configuration
-export const moduleConfig = mergeConfigurations(
-  defaultConfig,
-  floxModuleOptions(MODULES.ROLES),
-);
+/**
+ * Gets the module's actual configuration
+ * @returns {Record<string, unknown>} - configuration
+ */
+export function moduleConfig() {
+  return mergeConfigurations(defaultConfig, floxModuleOptions(MODULES.ROLES));
+}

@@ -72,34 +72,10 @@ export function getClientOptions(ssrContext: QSsrContext|null|undefined): Apollo
     uri: process.env.VUE_APP_GRAPHQL_ENDPOINT,
   })
 
-  let link = httpLink;
-
-  // Apply only clientside
-  if(!process.env.SERVER){
-    const wsLink = new WebSocketLink({
-      uri: process.env.VUE_APP_WS_ENDPOINT || '',
-      options: {
-        reconnect: true
-      }
-    })
-    link = split(
-      // split based on operation type
-      ({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-          definition.kind === 'OperationDefinition' &&
-          definition.operation === 'subscription'
-        );
-      },
-      wsLink,
-      httpLink
-    )
-  }
-
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
-      link: concat(authMiddleware, link),
+      link: concat(authMiddleware, httpLink),
       cache: new InMemoryCache({
         // Use UUID as default key in database. If any table needs different behaviour, this can be changed here,
         // see: https://www.apollographql.com/docs/react/caching/cache-configuration/

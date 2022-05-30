@@ -76,7 +76,7 @@ export function floxProviders() {
  * Gets the active Flox modules from config
  * @returns {string[]} - list of module names
  */
-function getActiveFloxModuleNames() {
+export function getActiveFloxModuleNames() {
   const modules = [];
 
   Object.keys(flox.modules).forEach((moduleName) => {
@@ -114,7 +114,7 @@ export function floxModulesOptions() {
  * @returns {Record<string, Record<string, unknown>>} - options for the modules
  */
 export function floxModuleOptions(moduleName: string) {
-  if (!Object.keys(MODULES).includes(moduleName)) {
+  if (!Object.values(MODULES).includes(moduleName as MODULES)) {
     throw new Error(`Invalid module '${moduleName}'`);
   }
 

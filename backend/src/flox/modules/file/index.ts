@@ -12,8 +12,10 @@ const defaultConfig = {
   // Add options here
 };
 
-// Actual module configuration
-export const moduleConfig = mergeConfigurations(
-  defaultConfig,
-  floxModuleOptions(MODULES.FILE),
-);
+/**
+ * Gets the module's actual configuration
+ * @returns {Record<string, unknown>} - configuration
+ */
+export function moduleConfig() {
+  return mergeConfigurations(defaultConfig, floxModuleOptions(MODULES.FILE));
+}
