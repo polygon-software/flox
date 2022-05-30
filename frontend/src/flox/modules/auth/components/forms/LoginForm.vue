@@ -1,5 +1,6 @@
 <template>
-  <div class="column q-pa-sm text-center">
+  <FloxWrapper :module="MODULES.AUTH">
+    <div class="column q-pa-sm text-center">
     <h5 class="q-ma-none" style="margin-bottom: 20px;">
       {{ $t('authentication.login') }}
     </h5>
@@ -31,6 +32,7 @@
       />
     </q-form>
   </div>
+  </FloxWrapper>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +40,7 @@ import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import {defineEmits, inject} from 'vue';
 import {AuthenticationService} from 'src/services/AuthService';
+import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 const $authService: AuthenticationService|undefined = inject('$authService')
 
 const emit = defineEmits(['submit'])
