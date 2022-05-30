@@ -85,7 +85,7 @@ export class UserService {
    */
   async getMyUser(cognitoUser: Record<string, string>): Promise<User> {
     const myUser = await this.usersRepository.findOne({
-      uuid: cognitoUser.userId, // TODO: application specific, use correct field that contains cognito ID
+      cognitoUuid: cognitoUser.userId,
     });
 
     if (!myUser) {
