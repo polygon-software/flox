@@ -3,8 +3,8 @@ import {CognitoUser, CognitoUserSession,
   ISignUpResult
 } from 'amazon-cognito-identity-js';
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
-import ChangePasswordDialog from 'components/dialogs/ChangePasswordDialog.vue'
-import ResetPasswordDialog from 'components/dialogs/ResetPasswordDialog.vue'
+import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue'
+import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue'
 import {QVueGlobals} from 'quasar';
 import {useAuth} from 'src/store/authentication';
 import _ from 'lodash';
@@ -41,7 +41,7 @@ export class AuthenticationService {
 
   /**
    * Constructor
-   * @param {QVueGlobals} quasar - quasar instance
+   * @param {QVueGlobals} quasar - Quasar instance
    * @param {ErrorService} errorService - error service instance
    * @param {RouterService} routerService - router service instance
    */
@@ -82,7 +82,7 @@ export class AuthenticationService {
    * Logs into the AWS authentication pool using the given data
    * @param {string} identifier - the authentication's identifier (usually E-mail or username)
    * @param {string} password - the authentication's password
-   * @param {string} newPassword - the new password if comming from set-password page
+   * @param {string} newPassword - the new password if this function is triggered from set-password page
    * @returns {Promise<void>} - done
    */
   async login(identifier: string, password: string, newPassword=''): Promise<void>{
@@ -127,8 +127,10 @@ export class AuthenticationService {
           cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
         },
 
+        // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
         newPasswordRequired: function (userAttributes) {
           const attrs = _.cloneDeep(userAttributes) as Record<string, unknown>
+          // TODO: use a proper dialog
           while (!newPassword) {
             newPassword = prompt(i18n.global.t('messages.enter_new_password'), '') || '';
           }
@@ -142,6 +144,7 @@ export class AuthenticationService {
 
         //TODO check when/if this appears
         mfaRequired: function () {
+          // TODO: Use a proper dialog
           const verificationCode = prompt(i18n.global.t('messages.enter_verification_code', ''));
           if (typeof verificationCode === 'string') {
             cognitoUser.sendMFACode(verificationCode, this);
