@@ -4,7 +4,6 @@ module.exports = {
     auth: true,
     roles: true,
     file: true,
-    user: true,
     sharing: false,
   },
   moduleOptions: {
