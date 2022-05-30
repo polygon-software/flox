@@ -14,7 +14,7 @@ export const Roles = (...roles: string[]): CustomDecorator =>
 
 // Restrict to admin role
 export const AdminOnly = (): CustomDecorator =>
-  SetMetadata(ROLES_KEY, [ROLES.ADMIN]); // TODO from enum
+  SetMetadata(ROLES_KEY, [ROLES.ADMIN]);
 
 // Allows access with any role
 export const AnyRole = (): CustomDecorator => SetMetadata(ANY_ROLE_KEY, true);
