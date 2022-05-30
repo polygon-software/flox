@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import {AuthenticationService} from './services/AuthService';
+import {AuthenticationService} from './flox/modules/auth/services/AuthService';
 import {provide, reactive} from 'vue';
 import {ErrorService} from './services/ErrorService';
 import {useQuasar} from 'quasar';

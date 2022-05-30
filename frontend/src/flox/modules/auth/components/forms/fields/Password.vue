@@ -6,7 +6,7 @@
       v-model="password"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
-      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('error.invalid_password')]"
+      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('errors.invalid_password')]"
     >
       <template v-slot:append>
         <q-icon
