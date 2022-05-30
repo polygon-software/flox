@@ -9,6 +9,9 @@ export default {
     login: 'Log in',
     signup: 'Sign up',
     forgot_password: 'Forgot password',
+  },
+  error: {
+    module_error: "Error: Module '{module}' is not active",
     invalid_password: 'Please enter a valid password',
     invalid_email: 'Please enter a valid e-mail address',
     invalid_username: 'Please enter a username',
@@ -16,8 +19,5 @@ export default {
     incorrect_email: 'Email address not found',
     incorrect_username: 'Username not found',
     non_matching_password: "Passwords don't match",
-  },
-  error: {
-    module_error: "Error: Module '{module}' is not active"
   }
 };
