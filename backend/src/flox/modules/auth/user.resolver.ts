@@ -7,10 +7,11 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { Public } from './authentication.decorator';
+import { CurrentUser } from '../roles/authorization.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly usersService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   /**
    * Gets a set of users by UUID
@@ -20,7 +21,7 @@ export class UserResolver {
   @Public()
   @Query(() => [User], { name: 'users' })
   async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
-    return this.usersService.getUsers(getUsersArgs);
+    return this.userService.getUsers(getUsersArgs);
   }
 
   /**
@@ -30,7 +31,7 @@ export class UserResolver {
   @Public()
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
-    return this.usersService.getAllUsers();
+    return this.userService.getAllUsers();
   }
 
   /**
@@ -41,7 +42,7 @@ export class UserResolver {
   @Public()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersService.getUser(getUserArgs);
+    return this.userService.getUser(getUserArgs);
   }
 
   /**
@@ -54,7 +55,7 @@ export class UserResolver {
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    return this.usersService.createUser(createUserInput);
+    return this.userService.createUser(createUserInput);
   }
 
   /**
@@ -67,7 +68,7 @@ export class UserResolver {
   async updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
-    return this.usersService.updateUser(updateUserInput);
+    return this.userService.updateUser(updateUserInput);
   }
 
   /**
@@ -80,6 +81,17 @@ export class UserResolver {
   async deleteUser(
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
   ): Promise<User> {
-    return this.usersService.deleteUser(deleteUserInput);
+    return this.userService.deleteUser(deleteUserInput);
+  }
+
+  /**
+   * Get the DB user for the currently logged in Cognito user
+   * @param {Record<string, string>}  user - currently logged-in user from request
+   * @returns {Promise<User>} - the user, if any
+   */
+  @Query(() => User, { name: 'myUser' })
+  async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
+    // Get user where user's UUID matches Cognito ID
+    return this.userService.getMyUser(user);
   }
 }
