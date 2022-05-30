@@ -2,25 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateUserInput {
-  age: Int!
-  name: String!
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-input DeleteUserInput {
-  uuid: ID!
-}
-
-type Mutation {
-  create(createUserInput: CreateUserInput!): User!
-  remove(deleteUserInput: DeleteUserInput!): User!
-  update(updateUserInput: UpdateUserInput!): User!
-}
 
 type PrivateFile {
   """Creation date"""
@@ -66,40 +51,10 @@ type PublicFile {
 }
 
 type Query {
-  allUsers: [User!]!
   getPrivateFile(
     """URL expiration duration (in seconds)"""
     expires: [Float!]
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
-  user(uuid: ID!): User!
-  users(uuids: [ID!]): [User!]!
-}
-
-type Subscription {
-  userAdded: User!
-}
-
-input UpdateUserInput {
-  age: Int
-  name: String
-  uuid: ID!
-}
-
-type User {
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
-
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
-  """Name"""
-  name: String!
-
-  """UUID"""
-  uuid: ID!
 }

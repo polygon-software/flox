@@ -12,8 +12,6 @@ import { Public } from './authentication.decorator';
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
-  // TODO how to handle without role mgmt active?
-
   /**
    * Gets a set of users by UUID
    * @param {GetUsersArgs} getUsersArgs - contains UUIDs of users
