@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { IS_PUBLIC_KEY } from '../auth/authentication.decorator';
-import { ANY_ROLE_KEY } from '../auth/authorization.decorator';
+import { ANY_ROLE_KEY } from './authorization.decorator';
 
 /**
  * Guard used for defining which roles can access a specific method

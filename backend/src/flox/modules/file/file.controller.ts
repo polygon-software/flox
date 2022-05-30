@@ -8,7 +8,7 @@ import {
 import { FileService } from './file.service';
 import fastify = require('fastify');
 import { Public } from '../auth/authentication.decorator';
-import { AnyRole } from '../auth/authorization.decorator';
+import { AnyRole } from '../roles/authorization.decorator';
 
 @Controller()
 export class FileController {
