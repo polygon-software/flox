@@ -2,9 +2,9 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import {CognitoUser, CognitoUserSession,
   ISignUpResult
 } from 'amazon-cognito-identity-js';
-import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
-import ChangePasswordDialog from 'components/dialogs/ChangePasswordDialog.vue'
-import ResetPasswordDialog from 'components/dialogs/ResetPasswordDialog.vue'
+import QrCodeDialog from '../flox/modules/auth/components/dialogs/QrCodeDialog.vue'
+import ChangePasswordDialog from 'components/../flox/modules/auth/components/dialogs/ChangePasswordDialog.vue'
+import ResetPasswordDialog from 'components/../flox/modules/auth/components/dialogs/ResetPasswordDialog.vue'
 import {ErrorService} from './ErrorService';
 import {QVueGlobals} from 'quasar';
 import {useAuth} from 'src/store/authentication';

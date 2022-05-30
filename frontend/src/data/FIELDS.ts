@@ -1,7 +1,7 @@
 import {IS_EMAIL, IS_VALID_PASSWORD, IS_VALID_STRING} from './RULES'
 import {QInput} from 'quasar'
-import PasswordRepeat from 'components/forms/fields/PasswordRepeat.vue'
-import Password from 'components/forms/fields/Password.vue'
+import PasswordRepeat from 'src/flox/modules/auth/components/forms/fields/PasswordRepeat.vue'
+import Password from 'src/flox/modules/auth/components/forms/fields/Password.vue'
 import {markRaw} from 'vue';
 
 /**

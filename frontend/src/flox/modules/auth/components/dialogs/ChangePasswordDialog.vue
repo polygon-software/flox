@@ -1,18 +1,19 @@
 <template>
   <q-dialog
       ref="dialog"
-      :persistent="true"
-      title="Blubb"
+      title="Change Password"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
+      <b>Change Password</b>
       <q-form
           @submit="onSubmit"
           class="q-gutter-md"
       >
-        <b>Reset Password</b>
         <q-input
-            label="Email Verification Code"
-            v-model="verificationCode"
+            label="Old Password"
+            v-model="passwordOld"
+            type="password"
+
         />
         <q-input
             label="New Password"
@@ -35,8 +36,8 @@
           <q-btn
               color="primary"
               label="Change"
-              :disable="password !== passwordRep || verificationCode.length !== 6"
-              type="submit"
+              :disable="password !== passwordRep"
+              @click="onSubmit"
           />
           <q-btn
               label="Cancel"
@@ -44,6 +45,7 @@
               @click="hide"
           />
         </q-card-actions>
+
       </q-form>
 
     </q-card>
@@ -54,24 +56,24 @@
 <script setup lang="ts">
 import {defineEmits, Ref} from 'vue';
 import {ref} from 'vue';
-import {PASSWORD_REGEX} from '../../helpers/REGEX'
+import {PASSWORD_REGEX} from '../../../../../helpers/REGEX'
 import {QDialog} from 'quasar';
 
-let verificationCode = ref('')
+let passwordOld = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
-let dialog: Ref<QDialog|null> = ref(null)
+const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 /**
- * On submit, emit data outwards
+ * Upon submit, pass entered values outwards
  * @returns {void}
  */
 function onSubmit(){
   emit('ok', {
     passwordNew: password.value,
-    verificationCode: verificationCode.value,
+    passwordOld: passwordOld.value,
   })
   hide()
 }
@@ -80,7 +82,7 @@ function onSubmit(){
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
- dialog.value?.show()
+  dialog.value?.show();
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -88,5 +90,6 @@ function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
+
 
 </script>
