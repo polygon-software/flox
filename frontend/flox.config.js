@@ -5,6 +5,7 @@ module.exports = {
     roles: true,
     file: true,
     user: true,
+    sharing: false,
   },
   moduleOptions: {
     roles: {
