@@ -9,6 +9,8 @@ import {ErrorService} from './services/ErrorService';
 import {useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
 import {routerInstance} from 'boot/router';
+import {isModuleActive} from 'src/flox/flox';
+import {MODULES} from 'src/flox/MODULES';
 
 const $q = useQuasar()
 
@@ -16,16 +18,17 @@ const $q = useQuasar()
 const $errorService: ErrorService = reactive(new ErrorService($q))
 provide('$errorService', $errorService)
 
-// Auth service
-const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService))
-provide<AuthenticationService>('$authService', $authService)
+// Auth service (if enabled in config)
+if(isModuleActive(MODULES.AUTH)){
+  const $authService = reactive(new AuthenticationService($q, $errorService))
+  provide<AuthenticationService>('$authService', $authService as AuthenticationService)
+}
 
 // Router service
-const $routerService: RouterService = reactive(new RouterService(routerInstance))
-provide<RouterService>('$routerService', $routerService)
+const $routerService = reactive(new RouterService(routerInstance))
+provide<RouterService>('$routerService', $routerService as unknown as RouterService)
 
 // Quasar
 provide('$q', $q)
-
 
 </script>
