@@ -4,28 +4,14 @@ import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { IS_PUBLIC_KEY } from '../auth/authentication.decorator';
 import { ANY_ROLE_KEY } from './authorization.decorator';
+import { getRequest } from '../../core/flox-helpers';
 
 /**
- * Guard used for defining which roles can access a specific method
+ * Role-based authorization guard
  */
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
-
-  /**
-   * Gets the request from context
-   * @param {ExecutionContext} context - request's execution context
-   * @returns {Request} - the request
-   */
-  getRequest(context: ExecutionContext): any {
-    const ctx = GqlExecutionContext.create(context);
-    // If call is not from GraphQL, get req regularly
-    if (!ctx.getContext()) {
-      return context.switchToHttp().getRequest();
-    }
-    // Call is from GraphQL
-    return ctx.getContext().req;
-  }
 
   canActivate(
     context: ExecutionContext,
@@ -50,7 +36,7 @@ export class RolesGuard implements CanActivate {
       // For publicly accessible resources, allow access by default
       return isPublic || anyRole;
     }
-    const req = this.getRequest(context);
+    const req = getRequest(context);
     const user = req.user;
     user.roles = []; // TODO Application-specific: Determine user's roles here
     return this.matchRoles(roles, user.roles);
