@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
@@ -6,64 +6,82 @@ import { GetUserArgs } from './dto/args/get-user.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
-import { PubSub } from 'graphql-subscriptions';
 import { Public } from './authentication.decorator';
-
-// Publish/subscribe handler TODO make global and inject/provide, according to https://docs.nestjs.com/graphql/subscriptions
-const pubSub = new PubSub();
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly usersService: UserService) {}
 
+  // TODO how to handle without role mgmt active?
+
+  /**
+   * Gets a set of users by UUID
+   * @param {GetUsersArgs} getUsersArgs - contains UUIDs of users
+   * @returns {Promise<User[]>} - the users
+   */
   @Public()
   @Query(() => [User], { name: 'users' })
   async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
-    return await this.usersService.getUsers(getUsersArgs);
+    return this.usersService.getUsers(getUsersArgs);
   }
 
+  /**
+   * Gets all users
+   * @returns {Promise<User[]>} - the users
+   */
   @Public()
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
-    return await this.usersService.getAllUsers();
+    return this.usersService.getAllUsers();
   }
 
+  /**
+   * Gets a user by UUID
+   * @param {GetUserArgs} getUserArgs - contains UUID
+   * @returns {Promise<User>} - the user
+   */
   @Public()
   @Query(() => User, { name: 'user' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
-    return await this.usersService.getUser(getUserArgs);
+    return this.usersService.getUser(getUserArgs);
   }
 
+  /**
+   * Creates a User
+   * @param {CreateUserInput} createUserInput - contains all user data
+   * @returns {Promise<User>} - the newly created user
+   */
   @Public()
   @Mutation(() => User)
-  async create(
+  async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    const newUser = await this.usersService.create(createUserInput);
-    // Publish authentication so subscriptions will auto-update
-    await pubSub.publish('userAdded', { userAdded: newUser });
-    return newUser;
+    return this.usersService.createUser(createUserInput);
   }
 
+  /**
+   * Updates a given user
+   * @param {UpdateUserInput} updateUserInput - contains UUID and any new user data
+   * @returns {Promise<User>} - the updated user
+   */
   @Public()
   @Mutation(() => User)
-  async update(
+  async updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
-    return await this.usersService.update(updateUserInput);
+    return this.usersService.updateUser(updateUserInput);
   }
 
+  /**
+   * Deletes a given user
+   * @param {DeleteUserInput} deleteUserInput - contains UUID
+   * @returns {Promise<User>} - the deleted user
+   */
   @Public()
   @Mutation(() => User)
-  async remove(
+  async deleteUser(
     @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
   ): Promise<User> {
-    return await this.usersService.remove(deleteUserInput);
-  }
-
-  @Public()
-  @Subscription(() => User)
-  userAdded(): AsyncIterator<unknown, any, undefined> {
-    return pubSub.asyncIterator('userAdded');
+    return this.usersService.deleteUser(deleteUserInput);
   }
 }
