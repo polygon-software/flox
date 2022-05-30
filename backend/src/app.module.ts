@@ -15,15 +15,6 @@ import { floxModules, floxProviders } from './flox/flox';
       debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      installSubscriptionHandlers: true,
-      subscriptions: {
-        'subscriptions-transport-ws': {
-          path: '/graphql-websocket',
-          onConnect: (context: Context) => {
-            console.log('Client connected to GraphQL Websocket!', context);
-          },
-        },
-      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
