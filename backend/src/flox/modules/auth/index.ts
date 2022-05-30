@@ -7,15 +7,22 @@ import { MODULES } from '../../MODULES';
  * status. It does NOT include any authorization/role management; this is a separate module ('roles').
  */
 
+type FileModuleConfig = {
+  // TODO
+};
+
 // Default configuration set; will get merged with custom config from flox.config.js
-const defaultConfig = {
+const defaultConfig: FileModuleConfig = {
   // Add options here
 };
 
 /**
  * Gets the module's actual configuration
- * @returns {Record<string, unknown>} - configuration
+ * @returns {FileModuleConfig} - configuration
  */
 export function moduleConfig() {
-  return mergeConfigurations(defaultConfig, floxModuleOptions(MODULES.AUTH));
+  return mergeConfigurations(
+    defaultConfig,
+    floxModuleOptions(MODULES.AUTH),
+  ) as FileModuleConfig;
 }

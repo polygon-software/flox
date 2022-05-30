@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import {computed, inject} from 'vue'
-import {AuthenticationService} from 'src/services/AuthService';
+import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {useAuth} from 'src/store/authentication';

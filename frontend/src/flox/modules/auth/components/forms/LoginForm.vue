@@ -39,7 +39,7 @@
 import {FIELDS} from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import {defineEmits, inject} from 'vue';
-import {AuthenticationService} from 'src/services/AuthService';
+import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES';
 

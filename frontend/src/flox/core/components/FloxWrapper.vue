@@ -39,7 +39,7 @@ const moduleValid = computed(() => {
 // On mounted, throws an error that the module is not active
 onMounted(() => {
   if(!moduleValid.value){
-    throw new Error(i18n.global.t('error.module_error', {module: props.module}))
+    throw new Error(i18n.global.t('errors.module_error', {module: props.module}))
   }
 })
 
