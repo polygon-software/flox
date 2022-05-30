@@ -2,6 +2,11 @@ import { mergeConfigurations } from '../../core/flox-helpers';
 import { floxModuleOptions } from '../../index';
 import { MODULES } from '../../MODULES';
 
+/**
+ * The roles module includes role management functionalities and decorators for restricting certain resources to certain
+ * user types.
+ */
+
 // Default roles
 export enum DEFAULT_ROLES {
   ADMIN = 'ADMIN',
