@@ -16,5 +16,8 @@ export default {
     incorrect_email: 'E-Mail-Adresse wurde nicht gefunden',
     incorrect_username: 'Benutzername wurde nicht gefunden',
     non_matching_password: 'Passwörter stimmen nicht überein',
+  },
+  error: {
+    module_error: "Fehler: Modul '{module}' ist nicht aktiv"
   }
 }

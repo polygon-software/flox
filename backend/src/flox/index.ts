@@ -114,6 +114,10 @@ export function floxModulesOptions() {
  * @returns {Record<string, Record<string, unknown>>} - options for the modules
  */
 export function floxModuleOptions(moduleName: string) {
+  if (!Object.keys(MODULES).includes(moduleName)) {
+    throw new Error(`Invalid module '${moduleName}'`);
+  }
+
   return (flox.moduleOptions[moduleName] ?? {}) as Record<string, unknown>;
 }
 

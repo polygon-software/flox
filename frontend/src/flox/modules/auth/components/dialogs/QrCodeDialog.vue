@@ -36,6 +36,7 @@
 import QrcodeVue from 'qrcode.vue';
 import {defineEmits, defineProps, ref, Ref} from 'vue';
 import {QDialog} from 'quasar'
+
 const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 const emit = defineEmits(['ok'])
 // Mandatory - do not remove!

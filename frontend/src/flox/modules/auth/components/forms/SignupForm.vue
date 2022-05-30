@@ -1,71 +1,74 @@
 <template>
-  <div class="q-pa-sm">
-    <h5 class="q-ma-none" style="margin-bottom: 30px;">
-      {{ $t('signup') }}
-    </h5>
-    <q-form
+  <FloxWrapper module="auth">
+    <div class="q-pa-sm">
+      <h5 class="q-ma-none" style="margin-bottom: 30px;">
+        {{ $t('signup') }}
+      </h5>
+      <q-form
         @submit="onSubmit"
         class="q-gutter-md"
-        >
-    <q-stepper
-        v-model="form.step.value"
-        ref="stepper"
-        animated
-        active-color="primary"
-        transition-duration="1000"
-        done-icon="done"
-    >
-      <q-step
-          v-for="(page, index) in form.pages.value"
-          :key="page.key"
-          :name="index+1"
-          :prefix="index+1"
-          :title="page.label"
-          :done="form.step.value > index"
       >
-        <component
+        <q-stepper
+          v-model="form.step.value"
+          ref="stepper"
+          animated
+          active-color="primary"
+          transition-duration="1000"
+          done-icon="done"
+        >
+          <q-step
+            v-for="(page, index) in form.pages.value"
+            :key="page.key"
+            :name="index+1"
+            :prefix="index+1"
+            :title="page.label"
+            :done="form.step.value > index"
+          >
+            <component
               v-for="field in page.fields"
               :key="field.key"
               :is="field.component"
               v-bind="field.attributes"
               v-model="form.values.value[field.key]"
               @change="(newValue) => form.updateValue(field.key, newValue)"
-          />
-      </q-step>
-      <template v-slot:navigation>
-        <q-stepper-navigation>
-          <q-btn
-              v-if="form.step.value > 1"
-              @click="$refs.stepper.previous()"
-              flat
-              style="margin-right: 30px"
-              color="primary"
-              :label="$t('back')"
-              class="q-ml-sm" />
-          <q-btn
-              v-if="form.step.value < form.pages.value.length"
-              @click="$refs.stepper.next()"
-              color="primary"
-              :label="$t('next_step')"
-              :disable="!form.pageValid.value"
-          />
-          <q-btn
-              v-if="form.step.value === form.pages.value.length"
-              color="primary"
-              :label="$t('finish_signup')"
-              type="submit"
-          />
-        </q-stepper-navigation>
-      </template>
-    </q-stepper>
-    </q-form>
-  </div>
+            />
+          </q-step>
+          <template v-slot:navigation>
+            <q-stepper-navigation>
+              <q-btn
+                v-if="form.step.value > 1"
+                @click="$refs.stepper.previous()"
+                flat
+                style="margin-right: 30px"
+                color="primary"
+                :label="$t('back')"
+                class="q-ml-sm" />
+              <q-btn
+                v-if="form.step.value < form.pages.value.length"
+                @click="$refs.stepper.next()"
+                color="primary"
+                :label="$t('next_step')"
+                :disable="!form.pageValid.value"
+              />
+              <q-btn
+                v-if="form.step.value === form.pages.value.length"
+                color="primary"
+                :label="$t('finish_signup')"
+                type="submit"
+              />
+            </q-stepper-navigation>
+          </template>
+        </q-stepper>
+      </q-form>
+    </div>
+  </FloxWrapper>
 </template>
 
 <script setup lang="ts">
 import { FIELDS } from 'src/data/FIELDS';
 import { Form } from 'src/helpers/form-helpers'
 import {defineEmits} from 'vue';
+import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 
 /**
  * This component enables a multi-step sign up form using Quasar's q-stepper. In "form.pages.value" the different

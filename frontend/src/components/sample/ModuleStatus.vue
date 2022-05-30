@@ -27,11 +27,13 @@
       <div style="width: 20px"/>
     </q-item>
   </q-card>
+  <SignupForm/>
 </template>
 
 <script setup lang="ts">
 
-import {floxModulesOptions, floxModules} from '../../flox/flox';
+import {floxModules, floxModulesOptions} from 'src/flox/index';
+import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
 
 // Active modules
 const modules = floxModules()
