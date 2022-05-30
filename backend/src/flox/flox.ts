@@ -86,3 +86,12 @@ function getActiveFloxModuleNames() {
 
   return modules;
 }
+
+/**
+ * Determines whether a Flox module is currently active from flox.config.js
+ * @param {string} moduleName - name of the module to check
+ * @returns {boolean} - whether the module is active
+ */
+export function isModuleActive(moduleName: string) {
+  return getActiveFloxModuleNames().includes(moduleName);
+}

@@ -45,7 +45,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
  * constrainedRoles must provide the specified query parameters to access the page
  */
 export const CONSTRAINED_ROUTES = [
-  {
+  { // TODO this is just an example
     path: ROUTES.SAMPLE.path,
     allowedRoles: [ROLE.ADMIN],
   },

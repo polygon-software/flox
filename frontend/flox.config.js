@@ -10,6 +10,7 @@ module.exports = {
   moduleOptions: {
     roles: {
       // Some options could go here
+      options: ['ADMIN', 'USER']
     },
     auth: {
       twoFactor: true // whether to use 2FA
