@@ -4,8 +4,8 @@ import {
   ExecutionContext,
   SetMetadata,
 } from '@nestjs/common';
-import { ROLES } from './ROLES';
 import { getRequest } from '../../core/flox-helpers';
+import { DEFAULT_ROLES } from './index';
 
 /**
  * Defines authorization-specific (roles) decorators
@@ -20,7 +20,7 @@ export const Roles = (...roles: string[]): CustomDecorator =>
 
 // Restrict to admin role
 export const AdminOnly = (): CustomDecorator =>
-  SetMetadata(ROLES_KEY, [ROLES.ADMIN]);
+  SetMetadata(ROLES_KEY, [DEFAULT_ROLES.ADMIN]);
 
 // Allows access with any role
 export const AnyRole = (): CustomDecorator => SetMetadata(ANY_ROLE_KEY, true);
