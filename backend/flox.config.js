@@ -4,10 +4,11 @@ module.exports = {
     auth: true,
     roles: true,
     file: true,
+    sharing: false,
   },
   moduleOptions: {
     roles: {
-      // Some options could go here
+      roles: ['CHUNGUS', 'YEETUS', 'ADMIN'],
     },
   },
 };
