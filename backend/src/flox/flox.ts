@@ -1,10 +1,11 @@
 import * as flox from '../../flox.config.js';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './modules/auth/roles.guard';
+import { RolesGuard } from './modules/roles/roles.guard';
 import { JwtStrategy } from './modules/auth/jwt.strategy';
 import { JwtAuthGuard } from './modules/auth/auth.guard';
 import { FileModule } from './modules/file/file.module';
-import { UserModule } from './modules/user/user.module';
+import { UserModule } from './modules/auth/user.module';
+import { MODULES } from './MODULES';
 
 /**
  * Returns the active Flox modules based on flox.config.js
@@ -48,7 +49,7 @@ export function floxProviders() {
     if (flox.modules[moduleName] === true) {
       switch (moduleName) {
         // Authentication module (includes JSON web token validation)
-        case 'auth':
+        case MODULES.AUTH:
           providers.push(JwtStrategy);
           providers.push({
             provide: APP_GUARD,
@@ -56,7 +57,7 @@ export function floxProviders() {
           });
           break;
         // Role management module
-        case 'roles':
+        case MODULES.ROLES:
           providers.push({
             provide: APP_GUARD,
             useClass: RolesGuard,

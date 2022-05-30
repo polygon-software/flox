@@ -2,8 +2,8 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { IS_PUBLIC_KEY } from './authentication.decorator';
-import { ANY_ROLE_KEY } from './authorization.decorator';
+import { IS_PUBLIC_KEY } from '../auth/authentication.decorator';
+import { ANY_ROLE_KEY } from '../auth/authorization.decorator';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -14,7 +14,8 @@ export class RolesGuard implements CanActivate {
 
   /**
    * Gets the request from context
-   * @param {ExecutionContext} context
+   * @param {ExecutionContext} context - request's execution context
+   * @returns {Request} - the request
    */
   getRequest(context: ExecutionContext): any {
     const ctx = GqlExecutionContext.create(context);
@@ -59,6 +60,7 @@ export class RolesGuard implements CanActivate {
    * Checks if any of the user's roles have access to the specified resource
    * @param {string[]} allowedRoles - the list of roles that have resource access
    * @param {string[]} userRoles - the list of the user's roles
+   * @returns {boolean} - whether access is allowed
    */
   matchRoles(allowedRoles: string[], userRoles: string[]) {
     return userRoles.some((userRole) => allowedRoles.includes(userRole));
