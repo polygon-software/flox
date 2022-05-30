@@ -16,7 +16,7 @@ export const ROLES_KEY = 'roles';
 
 // Restrict to specified roles
 export const Roles = (...roles: string[]): CustomDecorator =>
-  SetMetadata('roles', roles);
+  SetMetadata(ROLES_KEY, roles);
 
 // Restrict to admin role
 export const AdminOnly = (): CustomDecorator =>
