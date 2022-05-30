@@ -32,4 +32,4 @@ async function bootstrap() {
 }
 
 // Start application
-void bootstrap();
+bootstrap();
