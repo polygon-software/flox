@@ -34,6 +34,7 @@ export class RolesGuard implements CanActivate {
    */
   // eslint-disable-next-line sonarjs/cognitive-complexity
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('ROLEs canActivate');
     const isPublic = this.isPublic(context);
     if (isPublic) {
       return true;

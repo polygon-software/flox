@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import * as Joi from 'joi';
 import { floxEntities, floxModules, floxProviders } from './flox';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './flox/modules/roles/roles.guard';
 
 @Module({
   imports: [
@@ -55,7 +57,6 @@ import { floxEntities, floxModules, floxProviders } from './flox';
     TypeOrmModule.forFeature([
       // Entities for Flox modules
       ...floxEntities(),
-
       // Add any custom entities here
     ]),
     // Flox modules
@@ -68,4 +69,8 @@ import { floxEntities, floxModules, floxProviders } from './flox';
     // Add any other custom module providers here
   ],
 })
+
+/**
+ * Main Module
+ */
 export class AppModule {}
