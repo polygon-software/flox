@@ -30,7 +30,7 @@ async function onSignup({username, email, password}: {username: string, email: s
   await $authService?.signUp(username, email, password)
 
   // Redirect to success page
-  await $routerService?.routeTo(ROUTES.SUCCESS) // TODO
+  await $routerService?.routeTo(ROUTES.LOGIN)
 }
 
 /**
