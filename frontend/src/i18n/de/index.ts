@@ -24,7 +24,8 @@ export default {
     set_up_2fa: 'Zwei-Faktor-Authentifizierung einrichten',
     set_up_2fa_description: 'Verwenden Sie ihre bevorzugte Authenticator-App, um den QR-Code zu scannen:',
     verification: 'Verifikation',
-    verification_message: 'Geben Sie ihren Verifikations-Code ein:'
+    verification_message: 'Geben Sie ihren Verifikations-Code ein:',
+    resend_code: 'Ich habe keinen Code erhalten',
   },
   errors: {
     module_error: "Fehler: Modul '{module}' ist nicht aktiv",
@@ -55,7 +56,7 @@ export default {
     files_uploaded: 'Dateien erfolgreich hochgeladen',
     password_set: 'Passwort erfolgreich festgelegt',
     enter_new_password: 'Bitte geben Sie ein neues Passwort ein',
-    enter_verification_code: 'Bitte geben Sie ihren Bestätigungscode ein, den Sie per Email erhalten haben',
+    enter_verification_code: 'Bitte geben Sie den Verifizierungscode ein, den Sie per E-Mail erhalten haben',
     reset_password: 'Passwort zurücksetzen',
     enter_username: 'Bitte geben Sie ihren Nutzernamen ein',
     enter_email: 'Bitte geben Sie ihre E-Mail-Adresse ein',

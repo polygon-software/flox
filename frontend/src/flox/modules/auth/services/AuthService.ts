@@ -5,6 +5,7 @@ import {CognitoUser, CognitoUserSession,
 import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue'
 import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue'
+import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue'
 import {QVueGlobals} from 'quasar';
 import {useAuth} from 'src/store/authentication';
 import _ from 'lodash';
@@ -321,31 +322,30 @@ export class AuthenticationService {
   }
 
   /**
+   * Resends the e-mail configuration code for the current user
+   * @returns {Promise<void>} - done
+   */
+  async resendEmailVerificationCode(){
+    await new Promise((resolve, reject) => {
+      this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(function(err) {
+        if (!err) {
+          resolve(null)
+        }
+        reject()
+      })
+    })
+  }
+
+  /**
    * Shows a dialog for verifying E-Mail
    * @returns {void}
    */
   async showEmailVerificationDialog(): Promise<void>{
     await new Promise((resolve, reject) => {
-      this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(function(err) {
-        if (!err) {
-         resolve(null)
-        }
-        reject()
-      })
-    })
-    await new Promise((resolve, reject) => {
       this.$q.dialog({
-        title: i18n.global.t('messages.verification'),
-        message: i18n.global.t('messages.enter_verification_code'),
-        cancel: true,
-        persistent: true,
-        prompt: {
-          model: '',
-          isValid: (val: string) => val.length === 6,
-          type: 'text'
-        },
-      }).onOk((input: string) => {
-        this.$authStore.getters.getCognitoUser()?.confirmRegistration(input, true, function(err, result) {
+        component: EmailConfirmationDialog,
+      }).onOk((code: string) => {
+        this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, function(err, result) {
           if (!err) {
             resolve(result)
             // TODO: auto-login
