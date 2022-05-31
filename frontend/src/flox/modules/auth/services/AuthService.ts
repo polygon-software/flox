@@ -87,9 +87,6 @@ export class AuthenticationService {
    * @returns {Promise<void>} - done
    */
   async login(identifier: string, password: string, newPassword=''): Promise<void>{
-
-    console.log('Login with', identifier, password)
-
     // Generate auth details
     const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
       Username: identifier,
@@ -201,31 +198,6 @@ export class AuthenticationService {
     })
 
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
-  }
-
-  /**
-   * TODO description, consolidate with signUp() function
-   * TODO make adaptable to other parameters via direct handling of {attributes} param
-   * @param {string} username - the chosen username
-   * @param {string} email - the authentication's e-mail address -> TODO move to attributes
-   * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
-   * @returns {string} the user's cognito ID (sub)
-   */
-  async signUpNewUser(username: string, email: string, password: string): Promise<string> {
-    const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
-      const attributes = [];
-      attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-      this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
-        if (err) {
-          reject(err);
-        }
-        if(result){
-          resolve(result);
-        }
-      })
-    })
-
-    return cognitoUserWrapper.userSub
   }
 
   /**
@@ -349,14 +321,11 @@ export class AuthenticationService {
    */
   async showEmailVerificationDialog(): Promise<void>{
     await new Promise((resolve, reject) => {
-      this.$authStore.getters.getCognitoUser()?.getAttributeVerificationCode('email', {
-        onSuccess(): void {
-          resolve(null)
-        },
-        onFailure: (err: Error) => {
-          console.error(err)
-          reject()
+      this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(function(err) {
+        if (!err) {
+         resolve(null)
         }
+        reject()
       })
     })
     await new Promise((resolve, reject) => {
@@ -371,14 +340,11 @@ export class AuthenticationService {
           type: 'text'
         },
       }).onOk((input: string) => {
-        this.$authStore.getters.getCognitoUser()?.verifyAttribute('email', input, {
-          onSuccess(): void {
-            resolve(null)
-          },
-          onFailure: (err: Error) => {
-            console.error(err)
-            reject()
+        this.$authStore.getters.getCognitoUser()?.confirmRegistration(input, true, function(err, result) {
+          if (!err) {
+            resolve(result)
           }
+          reject()
         })
       })
     })

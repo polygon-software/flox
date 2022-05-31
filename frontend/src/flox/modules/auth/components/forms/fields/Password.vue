@@ -20,8 +20,6 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import {IS_VALID_PASSWORD} from 'src/data/RULES';
-import {MODULES} from 'src/flox/MODULES';
-import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 
 /**
  * This component contains field to enter a password.
