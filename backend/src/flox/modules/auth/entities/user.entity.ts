@@ -6,10 +6,10 @@ import { IsEmail, IsString } from 'class-validator';
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
-  @Field(() => String, { description: 'Name' })
+  @Field(() => String, { description: 'Username' })
   @Column()
   @IsString()
-  name: string;
+  username: string;
 
   @Field(() => String, { description: 'E-mail address' })
   @Column()

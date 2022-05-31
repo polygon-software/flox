@@ -50,3 +50,16 @@ export function floxModuleOptions(moduleName: string) {
 export function isModuleActive(moduleName: string){
   return floxModules().includes(moduleName)
 }
+
+/**
+ * Determines a module's actual configuration based on defaults and custom config
+ * @param {Record<string, unknown>} defaultConfig - The module's default configuration
+ * @param {Record<string, unknown>} customConfig - custom configuration from flox.config.js (may be empty if not given)
+ * @returns {Record<string, unknown>} - actual configuration to use
+ */
+export function mergeConfigurations(
+  defaultConfig: Record<string, unknown>,
+  customConfig?: Record<string, unknown>,
+) {
+  return { ...defaultConfig, ...customConfig };
+}

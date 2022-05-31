@@ -1,5 +1,4 @@
-import { mergeConfigurations } from '../../core/flox-helpers';
-import { floxModuleOptions } from '../../index';
+import {floxModuleOptions, mergeConfigurations} from '../../index';
 import { MODULES } from '../../MODULES';
 
 /**
@@ -7,13 +6,15 @@ import { MODULES } from '../../MODULES';
  * status. It does NOT include any authorization/role management; this is a separate module ('roles').
  */
 
-type AuthModuleConfig = {
-  // TODO
+type FileModuleConfig = {
+  twoFactor: boolean, // Whether to use 2FA
+  emailAsUsername: boolean, // Whether the Cognito user pool is set to use the e-mail address as username
 };
 
 // Default configuration set; will get merged with custom config from flox.config.js
-const defaultConfig: AuthModuleConfig = {
-  // Add options here
+const defaultConfig: FileModuleConfig = {
+  twoFactor: true,
+  emailAsUsername: false,
 };
 
 /**
@@ -24,5 +25,5 @@ export function moduleConfig() {
   return mergeConfigurations(
     defaultConfig,
     floxModuleOptions(MODULES.AUTH),
-  ) as AuthModuleConfig;
+  ) as FileModuleConfig;
 }

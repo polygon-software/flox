@@ -12,7 +12,8 @@ module.exports = {
       options: ['ADMIN', 'USER']
     },
     auth: {
-      twoFactor: true // whether to use 2FA
+      twoFactor: true,
+      emailAsUsername: true,
     }
   },
 };
