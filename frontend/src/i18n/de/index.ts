@@ -62,6 +62,6 @@ export default {
     enter_email: 'Bitte geben Sie ihre E-Mail-Adresse ein',
     verification: 'Verifizierung',
     enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein',
+    code_resent: 'Code erfolgreich versendet'
   }
 }
- // TODO errs / messages
