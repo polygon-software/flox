@@ -7,7 +7,7 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { Public } from './authentication.decorator';
-import { CurrentUser } from '../roles/authorization.decorator';
+import { AnyRole, CurrentUser } from '../roles/authorization.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -89,6 +89,7 @@ export class UserResolver {
    * @param {Record<string, string>}  user - currently logged-in user from request
    * @returns {Promise<User>} - the user, if any
    */
+  @AnyRole()
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
     // Get user where user's UUID matches Cognito ID

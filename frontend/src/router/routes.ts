@@ -43,7 +43,6 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
   ROUTES.SIGNUP,
-  ROUTES.SAMPLE,
 ];
 
 /*
