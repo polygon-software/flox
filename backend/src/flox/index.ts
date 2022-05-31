@@ -6,6 +6,9 @@ import { JwtAuthGuard } from './modules/auth/auth.guard';
 import { FileModule } from './modules/file/file.module';
 import { UserModule } from './modules/auth/user.module';
 import { MODULES } from './MODULES';
+import { User } from './modules/auth/entities/user.entity';
+import PrivateFile from './modules/file/entities/private_file.entity';
+import PublicFile from './modules/file/entities/public_file.entity';
 
 /**
  * Returns the active Flox modules based on flox.config.js
@@ -46,29 +49,28 @@ export function floxProviders() {
 
   // Add providers for each module
   moduleNames.forEach((moduleName) => {
-    if (flox.modules[moduleName] === true) {
-      switch (moduleName) {
-        // Authentication module (includes JSON web token validation)
-        case MODULES.AUTH:
-          providers.push(JwtStrategy);
-          providers.push({
-            provide: APP_GUARD,
-            useClass: JwtAuthGuard,
-          });
-          break;
-        // Role management module
-        case MODULES.ROLES:
-          providers.push({
-            provide: APP_GUARD,
-            useClass: RolesGuard,
-          });
-          break;
-        default:
-          break;
-      }
+    switch (moduleName) {
+      // Authentication module (includes JSON web token validation)
+      case MODULES.AUTH:
+        providers.push(JwtStrategy);
+        providers.push({
+          provide: APP_GUARD,
+          useClass: JwtAuthGuard,
+        });
+        break;
+      // Role management module
+      case MODULES.ROLES:
+        providers.push({
+          provide: APP_GUARD,
+          useClass: RolesGuard,
+        });
+        break;
+      default:
+        break;
     }
   });
 
+  console.log('PRoviders:', providers);
   return providers;
 }
 
@@ -128,4 +130,27 @@ export function floxModuleOptions(moduleName: string) {
  */
 export function isModuleActive(moduleName: string) {
   return getActiveFloxModuleNames().includes(moduleName);
+}
+
+/**
+ * Determines the GraphQL entities needed by Flox modules
+ * @returns {any[]} - entities
+ */
+export function floxEntities() {
+  const entities = [];
+
+  getActiveFloxModuleNames().forEach((module) => {
+    switch (module) {
+      case MODULES.AUTH:
+        entities.push(User);
+        break;
+      case MODULES.FILE:
+        entities.push(PrivateFile);
+        entities.push(PublicFile);
+      default:
+        break;
+    }
+  });
+
+  return entities;
 }

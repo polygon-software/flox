@@ -18,6 +18,7 @@ export default boot(({ router, store }) => {
   routerInstance = router;
   // eslint-disable-next-line sonarjs/cognitive-complexity
   router.beforeEach(async (to) => {
+    console.log('router goto', to.path)
     // Verify valid authentication
     const loggedIn = $authStore.getters.getLoggedInStatus();
 
@@ -41,8 +42,10 @@ export default boot(({ router, store }) => {
     if (loggedIn) {
       const user = await fetchMyUser();
 
+      console.log('yeet', user)
       // Case 2: going to login when logged in, or to default path '/'
       if (!user || to.path === ROUTES.LOGIN.path || to.path === '/') {
+        console.log('goto default')
         return getUserRoleRoute(user, $authStore);
       }
 
@@ -51,19 +54,21 @@ export default boot(({ router, store }) => {
         (constrainedRoute) => constrainedRoute.path === to.path
       );
       if (matchingConstrainedRoute) {
+        console.log('failure mgmt')
         const hasFullAccess = matchingConstrainedRoute.allowedRoles.includes(
           user.role
         );
         if (!hasFullAccess) {
+          console.log('blubb')
           return getUserRoleRoute(user, $authStore);
         }
       }
     } else {
-      // TODO
+      // Default case: disallow access if not public
+      if(!PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)){
+        return ROUTES.LOGIN
+      }
     }
-
-    // Default case: allow access if public
-    return PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)
   });
 });
 
