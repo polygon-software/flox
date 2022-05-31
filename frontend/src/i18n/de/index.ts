@@ -4,7 +4,8 @@ export default {
     back: 'Zurück',
     next: 'Weiter',
     cancel: 'Abbrechen',
-    confirm: 'Bestätigen'
+    confirm: 'Bestätigen',
+    ok: 'OK',
   },
   authentication: {
     authentication: 'Authentifizierung',
@@ -20,6 +21,10 @@ export default {
     old_password: 'Altes Passwort',
     new_password: 'Neues Passwort',
     new_password_repeat: 'Neues Passwort wiederholen',
+    set_up_2fa: 'Zwei-Faktor-Authentifizierung einrichten',
+    set_up_2fa_description: 'Verwenden Sie ihre bevorzugte Authenticator-App, um den QR-Code zu scannen:',
+    verification: 'Verifikation',
+    verification_message: 'Geben Sie ihren Verifikations-Code ein:'
   },
   errors: {
     module_error: "Fehler: Modul '{module}' ist nicht aktiv",
