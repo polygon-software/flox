@@ -230,7 +230,7 @@ export class AuthenticationService {
       // Redirect to login
       await this.$routerService.routeTo(ROUTES.LOGIN)
 
-      // Clear cache to prevent erroneous dashboard loading when changing roles
+      // Clear cache to prevent erroneous loading when changing roles
       const apolloClient = useApolloClient()
       await apolloClient.client.clearStore()
     }

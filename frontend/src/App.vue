@@ -21,7 +21,7 @@ const $errorService: ErrorService = reactive(new ErrorService($q))
 provide('$errorService', $errorService)
 
 // Router service
-const $routerService = reactive(new RouterService(routerInstance))
+const $routerService: RouterService = reactive(new RouterService(routerInstance)) as unknown as RouterService
 provide<RouterService>('$routerService', $routerService as unknown as RouterService)
 
 
@@ -31,8 +31,8 @@ provide<RouterService>('$routerService', $routerService as unknown as RouterServ
 
 // Auth service
 if(isModuleActive(MODULES.AUTH)){
-  const $authService = reactive(new AuthenticationService($q, $errorService))
-  provide<AuthenticationService>('$authService', $authService as AuthenticationService)
+  const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService, $routerService)) as unknown as AuthenticationService
+  provide<AuthenticationService>('$authService', $authService)
 }
 
 </script>
