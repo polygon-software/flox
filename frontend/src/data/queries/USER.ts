@@ -10,7 +10,8 @@ export const MY_USER = {
     query {
       myUser {
         uuid
-        name
+        username
+        cognitoUuid
         email
         __typename
       }

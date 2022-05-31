@@ -348,7 +348,7 @@ export class AuthenticationService {
           q: this.$q,
           authService: this,
         }
-      }).onOk((code: string) => {
+      }).onOk(({code}: { code: string }) => {
         this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, function(err, result) {
           if (!err) {
             resolve(result)
