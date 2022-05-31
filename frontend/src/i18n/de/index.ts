@@ -11,6 +11,7 @@ export default {
     login: 'Anmelden',
     signup: 'Registrieren',
     username: 'Benutzername',
+    email: 'E-Mail',
     change_password: 'Passwort ändern',
     forgot_password: 'Passwort vergessen',
     verification_code: 'Verifizierungscode',

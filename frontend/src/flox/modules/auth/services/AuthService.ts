@@ -88,6 +88,8 @@ export class AuthenticationService {
    */
   async login(identifier: string, password: string, newPassword=''): Promise<void>{
 
+    console.log('Login with', identifier, password)
+
     // Generate auth details
     const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
       Username: identifier,

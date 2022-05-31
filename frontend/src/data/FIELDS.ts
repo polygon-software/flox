@@ -36,7 +36,7 @@ const FIELDS: Record<string, Field> = {
             attributes: {
               dense: true,
               type: 'email',
-              label: 'E-Mail',
+              label: i18n.global.t('authentication.email'),
               lazy_rules: 'ondemand',
               rules: [(val: string): boolean|string  => IS_EMAIL(val) || i18n.global.t('errors.invalid_email')]
             },

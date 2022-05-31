@@ -21,7 +21,6 @@
           color="primary"
           :label="$t('authentication.login')"
           type="submit"
-          :disable="!form.pageValid.value"
       />
 
       <q-btn
@@ -67,7 +66,13 @@ form.pages.value = [
  * @returns {void}
  */
 function onSubmit(): void {
-  emit('submit', form.values.value)
+  const formValues: Record<string, unknown> = {
+    identifier: form.values.value[auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL.key : FIELDS.USERNAME.key],
+    password: form.values.value[FIELDS.PASSWORD.key],
+  }
+
+  console.log('yeet', formValues, form.values.value)
+  emit('submit', formValues)
 }
 
 /**
