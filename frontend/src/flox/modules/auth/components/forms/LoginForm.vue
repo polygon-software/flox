@@ -71,7 +71,6 @@ function onSubmit(): void {
     password: form.values.value[FIELDS.PASSWORD.key],
   }
 
-  console.log('yeet', formValues, form.values.value)
   emit('submit', formValues)
 }
 
