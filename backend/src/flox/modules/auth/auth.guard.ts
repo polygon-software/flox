@@ -2,6 +2,7 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
+import { getRequest } from 'src/flox/core/flox-helpers';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
 
 /**
@@ -15,6 +16,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
    */
   constructor(private reflector: Reflector) {
     super();
+  }
+
+  /**
+   * Gets the request from context
+   * @param {ExecutionContext} context - execution context of the request
+   * @returns {any} - the request
+   */
+  getRequest(context: ExecutionContext): any {
+    return getRequest(context);
   }
 
   /**
