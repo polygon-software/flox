@@ -42,12 +42,16 @@ import {defineEmits, inject} from 'vue';
 import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES';
+import * as auth from 'src/flox/modules/auth'
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 
 const emit = defineEmits(['submit'])
 
-const fields = [FIELDS.USERNAME, FIELDS.PASSWORD]
+const fields = [
+  auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME,
+  FIELDS.PASSWORD
+]
 
 const form = new Form()
 form.pages.value = [

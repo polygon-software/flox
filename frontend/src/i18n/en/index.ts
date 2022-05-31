@@ -3,12 +3,19 @@ export default {
     finish: 'Finish',
     back: 'Back',
     next: 'Next',
+    cancel: 'Cancel',
+    confirm: 'Confirm'
   },
   authentication: {
     authentication: 'Authentication',
     login: 'Log in',
     signup: 'Sign up',
+    change_password: 'Change password',
     forgot_password: 'Forgot password',
+    verification_code: 'Verification Code',
+    old_password: 'Old password',
+    new_password: 'New password',
+    new_password_repeat: 'Repeat new password',
   },
   errors: {
     module_error: "Error: Module '{module}' is not active",
@@ -41,6 +48,7 @@ export default {
     enter_verification_code: 'Please enter verification code, which you received via email',
     reset_password: 'Reset Password',
     enter_username: 'Please enter your username',
+    enter_email: 'Please enter your e-mail address',
     verification: 'Verification',
     enter_2fa:  'Enter your two-factor authentication code',
   },

@@ -8,39 +8,39 @@
           @submit="onSubmit"
           class="q-gutter-md"
       >
-        <b>Reset Password</b>
+        <b>{{ $t('authentication.forgot_password') }}</b>
         <q-input
-            label="Email Verification Code"
+            :label="$t('authentication.verification_code')"
             v-model="verificationCode"
         />
         <q-input
-            label="New Password"
+            :label="$t('authentication.new_password')"
             v-model="password"
             type="password"
             :rules="[
-              val => PASSWORD_REGEX.test(val) || 'Not ok'
+              val => PASSWORD_REGEX.test(val) || $t('errors.invalid_password')
             ]"
         />
         <q-input
-            label="New Password repeated"
-            v-model="passwordRep"
-            type="password"
-            :rules="[
-              val => val === password || 'Passwords must be identical',
-            ]"
+          :label="$t('authentication.new_password_repeat')"
+          v-model="passwordRep"
+          type="password"
+          :rules="[
+             val => val === password || $t('errors.non_matching_password'),
+          ]"
         />
         <q-card-actions align="right">
 
           <q-btn
-              color="primary"
-              label="Change"
-              :disable="password !== passwordRep || verificationCode.length !== 6"
-              type="submit"
+            color="primary"
+            :label="$t('general.confirm')"
+            :disable="password !== passwordRep || verificationCode.length !== 6"
+            type="submit"
           />
           <q-btn
-              label="Cancel"
-              color="primary"
-              @click="hide"
+            :label="$t('general.cancel')"
+            color="primary"
+            @click="hide"
           />
         </q-card-actions>
       </q-form>
@@ -55,6 +55,7 @@ import {defineEmits, Ref} from 'vue';
 import {ref} from 'vue';
 import {PASSWORD_REGEX} from '../../../../../helpers/REGEX'
 import {QDialog} from 'quasar';
+import * as auth from 'src/flox/modules/auth'
 
 let verificationCode = ref('')
 let password = ref('')
