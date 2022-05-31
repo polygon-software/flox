@@ -6,11 +6,13 @@ import {MutationTypes} from '../DATA-DEFINITIONS';
  */
 export const CREATE_USER = {
     mutation: gql`
-        mutation createUser($name: String!, $age: Int!){
-            createUser (createUserInput: {name: $name, age: $age}) {
-                uuid
-                name
-                __typename
+        mutation createUser($username: String!, $email: String!, $cognitoUuid: String!){
+            createUser (createUserInput: {username: $username, email: $email, cognitoUuid: $cognitoUuid}) {
+              uuid
+              username
+              email
+              cognitoUuid
+              __typename
             }
         }`,
     tables: ['user'],
@@ -20,11 +22,13 @@ export const CREATE_USER = {
 
 export const UPDATE_USER = {
     mutation: gql`
-        mutation updateUser($uuid: ID!, $name: String, $age: Int){
-            updateUser (updateUserInput: {uuid: $uuid, name: $name, age: $age}) {
-                uuid
-                name
-                __typename
+        mutation updateUser($uuid: ID!, $username: String, $email: String!){
+            updateUser (updateUserInput: {uuid: $uuid, username: $username, email: $email}) {
+              uuid
+              username
+              email
+              cognitoUuid
+              __typename
             }
         }`,
     tables: ['user'],

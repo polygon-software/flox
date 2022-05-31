@@ -27,7 +27,6 @@ const $routerService: RouterService|undefined = inject('$routerService')
  * @returns {void}
  */
 async function onSignup({username, email, password}: {username: string, email: string, password: string}){
-  console.log('got', username, email, password)
   await $authService?.signUp(username, email, password)
 
   // Redirect to success page

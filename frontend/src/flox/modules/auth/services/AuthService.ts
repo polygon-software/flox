@@ -19,6 +19,7 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {ErrorService} from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth'
+import {createUser} from 'src/helpers/api-helpers';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -199,6 +200,9 @@ export class AuthenticationService {
     })
 
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
+
+    // Register in database
+    await createUser(username, email, cognitoUserWrapper.userSub)
   }
 
   /**

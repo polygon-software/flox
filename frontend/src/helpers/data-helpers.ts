@@ -77,7 +77,7 @@ async function executeMutation(mutationObject: MutationObject, variables: Record
     },
   }))
   // Execute mutation
-  return await mutate(variables);
+  return mutate(variables);
 }
 
 /**
