@@ -10,8 +10,8 @@ export const MY_USER = {
     query {
       myUser {
         uuid
-        role
         name
+        email
         __typename
       }
     }
