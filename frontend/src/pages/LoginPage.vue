@@ -26,6 +26,6 @@ async function onLogin({identifier, password}: {identifier: string, password: st
   await $authService?.login(identifier, password)
 
   // Redirect to main page
-  await $routerService?.routeTo(ROUTES.MAIN)
+  await $routerService?.routeTo(ROUTES.SAMPLE)
 }
 </script>

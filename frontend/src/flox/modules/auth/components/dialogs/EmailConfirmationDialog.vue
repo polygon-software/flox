@@ -48,8 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, defineProps, inject, PropType, Ref, ref} from 'vue';
-import {QDialog, QVueGlobals, useQuasar} from 'quasar';
+import {defineEmits, defineProps, PropType, Ref, ref} from 'vue';
+import {QDialog, QVueGlobals} from 'quasar';
 import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
 import {showNotification} from 'src/helpers/notification-helpers';
 import {i18n} from 'boot/i18n';
