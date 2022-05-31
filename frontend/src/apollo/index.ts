@@ -1,7 +1,5 @@
 import type {ApolloClientOptions, StoreObject} from '@apollo/client/core'
-import {ApolloLink, concat, createHttpLink, defaultDataIdFromObject, InMemoryCache, split} from '@apollo/client/core'
-import {WebSocketLink} from '@apollo/client/link/ws';
-import {getMainDefinition} from '@apollo/client/utilities';
+import {ApolloLink, concat, createHttpLink, defaultDataIdFromObject, InMemoryCache} from '@apollo/client/core'
 import {Cookies} from 'quasar';
 import {QSsrContext} from '@quasar/app';
 

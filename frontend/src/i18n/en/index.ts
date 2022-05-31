@@ -11,6 +11,7 @@ export default {
     login: 'Log in',
     signup: 'Sign up',
     username: 'Username',
+    email: 'E-Mail',
     change_password: 'Change password',
     forgot_password: 'Forgot password',
     verification_code: 'Verification Code',
