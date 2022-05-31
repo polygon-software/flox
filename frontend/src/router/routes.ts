@@ -19,6 +19,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 
+  'SIGNUP': {
+    path: '/signup',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SignupPage.vue') }],
+  },
+
   'SAMPLE': {
     path: '/sample',
     component: () => import('layouts/MainLayout.vue'),
@@ -36,6 +42,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 // Routes that can be accessed without being logged in
 export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.LOGIN,
+  ROUTES.SIGNUP,
   ROUTES.SAMPLE,
 ];
 
@@ -43,6 +50,7 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
  * Routes that have additional access constraints
  * allowedRoles specifies roles that don't have to fulfill constraints to access these pages,
  * constrainedRoles must provide the specified query parameters to access the page
+ * TODO enable only with roles module active
  */
 export const CONSTRAINED_ROUTES = [
   { // TODO this is just an example

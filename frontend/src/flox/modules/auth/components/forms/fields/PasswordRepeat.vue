@@ -2,7 +2,7 @@
   <FloxWrapper :module="MODULES.AUTH">
     <q-input
       dense
-      label="Password"
+      :label="$t('authentication.password')"
       v-model="password"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
@@ -18,7 +18,7 @@
     </q-input>
     <q-input
       dense
-      label="Repeat Password"
+      :label="$t('authentication.password_repeat')"
       v-model="passwordRepeat"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"

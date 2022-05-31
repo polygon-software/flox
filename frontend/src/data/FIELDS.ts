@@ -47,8 +47,8 @@ const FIELDS: Record<string, Field> = {
             attributes: {
               dense: true,
               type: 'text',
-              label: 'Username',
-              lazy_rules: 'true',
+              label: i18n.global.t('authentication.username'),
+              lazy_rules: 'ondemand',
               rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_username')]
             },
         },
@@ -56,6 +56,7 @@ const FIELDS: Record<string, Field> = {
             key: 'password',
             component: markRaw(Password),
             attributes: {
+              lazy_rules: 'ondemand',
               rules: [(val: string): boolean|string => IS_VALID_STRING(val) ||  i18n.global.t('errors.invalid_password')]
             }
         },
@@ -63,6 +64,7 @@ const FIELDS: Record<string, Field> = {
             key: 'password_repeat',
             component: markRaw(PasswordRepeat),
             attributes: {
+              lazy_rules: 'ondemand',
               rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) ||  i18n.global.t('errors.invalid_password')]
             }
         },
