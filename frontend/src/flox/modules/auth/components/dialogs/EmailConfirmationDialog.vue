@@ -48,10 +48,22 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, inject, Ref, ref} from 'vue';
-import {QDialog} from 'quasar';
+import {defineEmits, defineProps, inject, PropType, Ref, ref} from 'vue';
+import {QDialog, QVueGlobals, useQuasar} from 'quasar';
 import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
-const $authService: AuthenticationService|undefined = inject('$authService')
+import {showNotification} from 'src/helpers/notification-helpers';
+import {i18n} from 'boot/i18n';
+
+const props = defineProps({
+  q : {
+    type: Object as PropType<QVueGlobals>,
+    required: true,
+  },
+  authService: {
+    type: Object as PropType<AuthenticationService>,
+    required: true
+  }
+})
 
 const verificationCode = ref('')
 const codeSent = ref(false)
@@ -88,10 +100,20 @@ function hide(): void{
  * @returns {Promise<void>} - done
  */
 async function resendCode(){
-  codeSent.value = true;
-  await $authService?.resendEmailVerificationCode()
+  if(!codeSent.value){
+    codeSent.value = true;
 
-  // TODO success message
+    // Re-send code
+    await props.authService?.resendEmailVerificationCode()
+
+    // Show success message
+    showNotification(
+      props.q,
+      i18n.global.t('messages.code_resent'),
+      'bottom',
+      'positive'
+    )
+  }
 }
 
 </script>

@@ -344,6 +344,10 @@ export class AuthenticationService {
     await new Promise((resolve, reject) => {
       this.$q.dialog({
         component: EmailConfirmationDialog,
+        componentProps: {
+          q: this.$q,
+          authService: this,
+        }
       }).onOk((code: string) => {
         this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, function(err, result) {
           if (!err) {
