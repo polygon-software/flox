@@ -3,6 +3,7 @@ import {QInput} from 'quasar'
 import PasswordRepeat from 'src/flox/modules/auth/components/forms/fields/PasswordRepeat.vue'
 import Password from 'src/flox/modules/auth/components/forms/fields/Password.vue'
 import {markRaw} from 'vue';
+import {i18n} from 'boot/i18n';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.
@@ -37,7 +38,7 @@ const FIELDS: Record<string, Field> = {
               type: 'email',
               label: 'E-Mail',
               lazy_rules: 'ondemand',
-              rules: [(val: string): boolean|string  => IS_EMAIL(val) || 'Please enter a valid e-mail address.']
+              rules: [(val: string): boolean|string  => IS_EMAIL(val) || i18n.global.t('errors.invalid_email')]
             },
         },
         USERNAME: {
@@ -48,34 +49,22 @@ const FIELDS: Record<string, Field> = {
               type: 'text',
               label: 'Username',
               lazy_rules: 'true',
-              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || i18n.global.t('errors.invalid_username')]
             },
         },
         PASSWORD: {
             key: 'password',
             component: markRaw(Password),
             attributes: {
-              rules: [(val: string): boolean|string => IS_VALID_STRING(val) || 'Please enter a username']
+              rules: [(val: string): boolean|string => IS_VALID_STRING(val) ||  i18n.global.t('errors.invalid_password')]
             }
         },
         PASSWORD_REPEAT: {
             key: 'password_repeat',
             component: markRaw(PasswordRepeat),
             attributes: {
-              rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) || 'Please enter a valid password']
+              rules: [(val: string): boolean|string  => IS_VALID_PASSWORD(val) ||  i18n.global.t('errors.invalid_password')]
             }
-        },
-        FULL_NAME: {
-          key: 'full_name',
-          component: markRaw(QInput),
-          attributes: {
-            dense: true,
-            type: 'text',
-            label: 'Full name',
-            lazy_rules: 'true',
-            rules: [(val: string): boolean|string  => IS_VALID_STRING(val) || 'Please enter your full name']
-          },
-
         },
     }
 

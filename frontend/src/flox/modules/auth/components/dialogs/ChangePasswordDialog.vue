@@ -1,55 +1,49 @@
 <template>
   <q-dialog
       ref="dialog"
-      title="Change Password"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
-      <b>Change Password</b>
+      <b>{{ $t('authentication.change_password') }}</b>
       <q-form
           @submit="onSubmit"
           class="q-gutter-md"
       >
         <q-input
-            label="Old Password"
-            v-model="passwordOld"
-            type="password"
-
+          :label="$t('authentication.old_password')"
+          v-model="passwordOld"
+          type="password"
         />
         <q-input
-            label="New Password"
-            v-model="password"
-            type="password"
-            :rules="[
-              val => PASSWORD_REGEX.test(val) || 'Not ok'
+          :label="$t('authentication.new_password')"
+          v-model="password"
+          type="password"
+          :rules="[
+              val => PASSWORD_REGEX.test(val) || $t('errors.invalid_password')
             ]"
         />
         <q-input
-            label="New Password repeated"
-            v-model="passwordRep"
-            type="password"
-            :rules="[
-              val => val === password || 'Passwords must be identical',
-            ]"
+          :label="$t('authentication.new_password_repeat')"
+          v-model="passwordRep"
+          type="password"
+          :rules="[
+             val => val === password || $t('errors.non_matching_password'),
+          ]"
         />
         <q-card-actions align="right">
-
           <q-btn
-              color="primary"
-              label="Change"
-              :disable="password !== passwordRep"
-              @click="onSubmit"
+            color="primary"
+            :label="$t('general.confirm')"
+            :disable="password !== passwordRep"
+            @click="onSubmit"
           />
           <q-btn
-              label="Cancel"
-              color="primary"
-              @click="hide"
+            :label="$t('general.cancel')"
+            color="primary"
+            @click="hide"
           />
         </q-card-actions>
-
       </q-form>
-
     </q-card>
-
   </q-dialog>
 </template>
 
@@ -90,6 +84,4 @@ function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
-
-
 </script>

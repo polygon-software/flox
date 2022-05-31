@@ -18,6 +18,7 @@ import {useApolloClient} from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {ErrorService} from 'src/services/ErrorService';
+import * as auth from 'src/flox/modules/auth'
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -284,9 +285,11 @@ export class AuthenticationService {
       return
     }
 
+    const isEmailUsername = auth.moduleConfig().emailAsUsername
+
     this.$q.dialog({
       title: i18n.global.t('messages.reset_password'),
-      message: i18n.global.t('messages.enter_username'),
+      message: i18n.global.t(`messages.enter_${isEmailUsername ? 'email' : 'username'}`),
       cancel: true,
       persistent: true,
       prompt: {

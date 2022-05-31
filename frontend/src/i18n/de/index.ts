@@ -3,12 +3,19 @@ export default {
     finish: 'Abschliessen',
     back: 'Zurück',
     next: 'Weiter',
+    cancel: 'Abbrechen',
+    confirm: 'Bestätigen'
   },
   authentication: {
     authentication: 'Authentifizierung',
     login: 'Anmelden',
     signup: 'Registrieren',
+    change_password: 'Passwort ändern',
     forgot_password: 'Passwort vergessen',
+    verification_code: 'Verifizierungscode',
+    old_password: 'Altes Passwort',
+    new_password: 'Neues Passwort',
+    new_password_repeat: 'Neues Passwort wiederholen',
   },
   errors: {
     module_error: "Fehler: Modul '{module}' ist nicht aktiv",
@@ -42,6 +49,7 @@ export default {
     enter_verification_code: 'Bitte geben Sie ihren Bestätigungscode ein, den Sie per Email erhalten haben',
     reset_password: 'Passwort zurücksetzen',
     enter_username: 'Bitte geben Sie ihren Nutzernamen ein',
+    enter_email: 'Bitte geben Sie ihre E-Mail-Adresse ein',
     verification: 'Verifizierung',
     enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein',
   }
