@@ -4,7 +4,8 @@ export default {
     back: 'Back',
     next: 'Next',
     cancel: 'Cancel',
-    confirm: 'Confirm'
+    confirm: 'Confirm',
+    ok: 'OK',
   },
   authentication: {
     authentication: 'Authentication',
@@ -20,6 +21,10 @@ export default {
     old_password: 'Old password',
     new_password: 'New password',
     new_password_repeat: 'Repeat new password',
+    set_up_2fa: 'Set up Two Factor Authentication',
+    set_up_2fa_description: 'Use your preferred authenticator app to scan the QR code:',
+    verification: 'Verification',
+    verification_message: 'Enter your verification code:'
   },
   errors: {
     module_error: "Error: Module '{module}' is not active",

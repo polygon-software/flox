@@ -2,13 +2,14 @@
   <q-dialog
     ref="dialog"
     :persistent="true"
-    title="QR"
   >
-    <q-card class="q-pa-sm" style="width: 400px; min-height: 300px">
+    <q-card class="q-pa-sm text-center" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
-        <h5 class="q-ma-sm">Set up 2FA</h5>
+        <h5 class="q-ma-sm">
+          {{  $t('authentication.set_up_2fa') }}
+        </h5>
         <p class="text-grey-8">
-          TODO a description of authenticator setup will go here. Lorem ipsum dolor sit amet bla
+          {{ $t('authentication.set_up_2fa_description') }}
         </p>
         <qrcode-vue
           :value="props.value"
@@ -16,14 +17,15 @@
         />
       </q-card-section>
       <q-separator dark/>
-      <q-card-actions align="right">
+      <q-card-actions align="center">
         <q-btn
-          label="Abbrechen"
+          :label="$t('general.cancel')"
           color="primary"
+          flat
           @click="hide"
         />
         <q-btn
-          label="OK"
+          :label="$t('general.ok')"
           color="primary"
           @click="onOk"
         />

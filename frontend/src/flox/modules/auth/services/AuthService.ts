@@ -119,7 +119,7 @@ export class AuthenticationService {
         },
         // Sets up MFA (only done once after signing up)
         mfaSetup: () => {
-          this.setupMFA(cognitoUser, resolve)
+          this.setupMFA(cognitoUser, resolve, identifier)
         },
 
         // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
@@ -159,13 +159,14 @@ export class AuthenticationService {
    * Sets up MFA for the given cognito user
    * @param {CognitoUser} cognitoUser - the user
    * @param {function} resolve - resolve function
+   * @param {string} identifier - identifier (username of email)
    * @returns {void}
    */
-  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void): void{
+  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void, identifier: string): void{
     cognitoUser.associateSoftwareToken({
       associateSecretCode: async (secret: string) => {
         this.$authStore.mutations.setCognitoUser(cognitoUser)
-        await this.showQRCodeDialog(secret, cognitoUser)
+        await this.showQRCodeDialog(secret, cognitoUser, identifier)
         await this.showEmailVerificationDialog()
         resolve()
       },
@@ -343,6 +344,7 @@ export class AuthenticationService {
         this.$authStore.getters.getCognitoUser()?.confirmRegistration(input, true, function(err, result) {
           if (!err) {
             resolve(result)
+            // TODO: auto-login
           }
           reject()
         })
@@ -355,13 +357,13 @@ export class AuthenticationService {
    * Shows a dialog containing a QR code for setting up two factor authentication
    * @param {string} secretCode - the authenticator code to encode in QR code form
    * @param {CognitoUser} cognitoUser - the cognito user to show the dialog for
+   * @param {string} identifier - identifier (username of email)
    * @returns {void}
    */
-  showQRCodeDialog(secretCode: string, cognitoUser: CognitoUser): Promise<void>{
+  showQRCodeDialog(secretCode: string, cognitoUser: CognitoUser, identifier: string): Promise<void>{
     return new Promise((resolve)=>{
-      const username = this.$authStore.getters.getUsername() ?? 'user'
 
-      const codeUrl = `otpauth://totp/${this.appName}:${username}?secret=${secretCode}&Issuer=${this.appName}`
+      const codeUrl = `otpauth://totp/${this.appName} (${identifier})?secret=${secretCode}&Issuer=${this.appName}`
       this.$q.dialog({
         component: QrCodeDialog,
         componentProps: {
@@ -380,7 +382,7 @@ export class AuthenticationService {
             type: 'text'
           },
         }).onOk((code: string) => {
-          cognitoUser.verifySoftwareToken(code, 'SOI TOTP device', {
+          cognitoUser.verifySoftwareToken(code, 'TOTP Device', {
             onSuccess: (userSession: CognitoUserSession) => {
               this.loginSuccess(userSession)
               resolve()
@@ -481,7 +483,6 @@ export class AuthenticationService {
       if(!idTokenExpiration){
         resolve()
       }
-      console.log(`idTokenExpiration: ${idTokenExpiration||''}`)
       const refreshToken = userSession?.getRefreshToken()
       if(refreshToken && idTokenExpiration && (idTokenExpiration - Date.now() / 1000 < 45 * 60)){   // 15min before de-validation token is refreshed
         const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser()) // refresh session mutates the state of store: illegal
