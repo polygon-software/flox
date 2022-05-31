@@ -7,6 +7,9 @@ module.exports = {
     sharing: false,
   },
   moduleOptions: {
+    auth: {
+      emailAsUsername: true,
+    },
     roles: {
       roles: ['CHUNGUS', 'YEETUS', 'ADMIN'],
     },

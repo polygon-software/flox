@@ -10,7 +10,7 @@ export class UpdateUserInput {
   @Field(() => String, { nullable: true })
   @IsNotEmpty()
   @IsString()
-  name: string;
+  username: string;
 
   @Field(() => String, { nullable: true })
   @IsNotEmpty()
