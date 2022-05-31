@@ -5,7 +5,7 @@
 input CreateUserInput {
   cognitoUuid: String!
   email: String!
-  name: String!
+  username: String!
 }
 
 """
@@ -81,7 +81,7 @@ type Query {
 
 input UpdateUserInput {
   email: String
-  name: String
+  username: String
   uuid: ID!
 }
 
@@ -101,8 +101,8 @@ type User {
   """Last modification date"""
   lastModifiedAt: DateTime!
 
-  """Name"""
-  name: String!
+  """Username"""
+  username: String!
 
   """UUID"""
   uuid: ID!
