@@ -3,6 +3,8 @@ import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { IsEmail, IsString } from 'class-validator';
 import { moduleConfig } from '../../roles';
+import { isModuleActive } from '../../../index';
+import { MODULES } from '../../../MODULES';
 
 @ObjectType()
 @Entity()
@@ -35,10 +37,12 @@ export class User extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   validateRole() {
-    console.log('Validating role!');
-    const allowedRoles = moduleConfig().roles;
-    if (!allowedRoles.includes(this.role)) {
-      throw new Error(`Invalid role '${this.role}'`);
+    if (isModuleActive(MODULES.ROLES)) {
+      // Determine roles from config
+      const allowedRoles = moduleConfig().roles;
+      if (!allowedRoles.includes(this.role)) {
+        throw new Error(`Invalid role '${this.role}'`);
+      }
     }
   }
 }
