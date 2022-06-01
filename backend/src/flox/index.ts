@@ -70,7 +70,6 @@ export function floxProviders() {
     }
   });
 
-  console.log('PRoviders:', providers);
   return providers;
 }
 

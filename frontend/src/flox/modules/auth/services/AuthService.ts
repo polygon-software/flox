@@ -312,6 +312,7 @@ export class AuthenticationService {
       this.$authStore.getters.getCognitoUser()?.confirmPassword(verificationCode,passwordNew,{
         onSuccess: (result: unknown)=>{
           console.log(result)
+          // TODO
         },
         onFailure: (err: Error) => {
           console.error(err)
