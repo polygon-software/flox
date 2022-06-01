@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from '../auth/entities/user.entity';
 import { getRequest } from 'src/flox/core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
+import { ROLE } from '../../../../../frontend/src/data/ENUM';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -49,10 +50,10 @@ export class RolesGuard implements CanActivate {
     if (user) {
       dbUser = await this.userRepository.findOne({ cognitoUuid: user.userId });
 
-      // Admin has access to everything TODO add with role field
-      // if (dbUser && dbUser.role === ROLE.ADMIN) {
-      //   return true;
-      // }
+      // Admin has access to everything
+      if (dbUser && dbUser.role === ROLE.ADMIN) {
+        return true;
+      }
     }
 
     // For generally accessible resources, allow access by default if user is logged in
@@ -77,13 +78,13 @@ export class RolesGuard implements CanActivate {
       }
       return false;
     }
-    const res = roles ? roles.includes('ADMIN') : false; // TODO const res = roles ? roles.includes(dbUser.role) : false;
+    const res = roles ? roles.includes(dbUser.role) : false;
     if (accessOverride && !res) {
-      // console.warn( TODO
-      //   `Debug override used to access resource : "${requestedFunction}" restricted to ${roles?.join(
-      //     ',',
-      //   )} as ${dbUser.role}!`,
-      // );
+      console.warn(
+        `Debug override used to access resource : "${requestedFunction}" restricted to ${roles?.join(
+          ',',
+        )} as ${dbUser.role}!`,
+      );
       return true;
     }
     return res;

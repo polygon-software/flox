@@ -2,7 +2,7 @@ module.exports = {
   // Flox modules to enable
   modules: {
     auth: true,
-    roles: false,
+    roles: true,
     file: true,
     sharing: false,
   },

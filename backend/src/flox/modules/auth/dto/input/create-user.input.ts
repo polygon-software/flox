@@ -17,4 +17,8 @@ export class CreateUserInput {
   @IsString()
   @IsNotEmpty()
   cognitoUuid: string;
+
+  @Field(() => String, { nullable: true })
+  @IsString()
+  role: string;
 }
