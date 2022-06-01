@@ -115,6 +115,7 @@ export class RolesGuard implements CanActivate {
    * @returns {boolean} - whether any user can activate
    */
   isAnyRole(context: ExecutionContext, roles: string[], dbUser) {
+    console.log('checking isAnyRole for', roles, dbUser);
     if (!roles || roles.length === 0) {
       // Determine if resource is accessible to any logged-in user
       return (
