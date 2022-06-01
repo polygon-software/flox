@@ -26,7 +26,6 @@ export const AdminOnly = (): CustomDecorator =>
 export const CurrentUser = createParamDecorator(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
   (data, req: ExecutionContext) => {
-    console.log('Getting currentUser from', getRequest(req).user);
     return getRequest(req).user;
   },
 );
