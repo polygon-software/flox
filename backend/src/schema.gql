@@ -5,6 +5,7 @@
 input CreateUserInput {
   cognitoUuid: String!
   email: String!
+  role: String
   username: String!
 }
 
@@ -100,6 +101,9 @@ type User {
 
   """Last modification date"""
   lastModifiedAt: DateTime!
+
+  """User role"""
+  role: String
 
   """Username"""
   username: String!
