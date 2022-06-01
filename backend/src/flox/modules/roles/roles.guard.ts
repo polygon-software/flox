@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from '../auth/entities/user.entity';
 import { getRequest } from 'src/flox/core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
-import { ROLE } from '../../../../../frontend/src/data/ENUM';
+import { DEFAULT_ROLES } from 'src/flox/modules/roles';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -51,7 +51,7 @@ export class RolesGuard implements CanActivate {
       dbUser = await this.userRepository.findOne({ cognitoUuid: user.userId });
 
       // Admin has access to everything
-      if (dbUser && dbUser.role === ROLE.ADMIN) {
+      if (dbUser && dbUser.role === DEFAULT_ROLES.ADMIN) {
         return true;
       }
     }
