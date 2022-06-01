@@ -7,8 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import fastify = require('fastify');
-import { Public } from '../auth/authentication.decorator';
-import { AnyRole } from '../roles/authorization.decorator';
+import { LoggedIn, Public } from '../auth/authentication.decorator';
 
 @Controller()
 export class FileController {
@@ -35,7 +34,7 @@ export class FileController {
   }
 
   @Post('/uploadPrivateFile')
-  @AnyRole()
+  @LoggedIn()
   async uploadPrivateFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
