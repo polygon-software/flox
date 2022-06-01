@@ -12,7 +12,9 @@ describe('UsersResolver', () => {
 
   beforeEach(async () => {
     userRepository = new Repository<User>();
+    console.log('repo:', userRepository);
     userService = new UserService(userRepository);
+    console.log('service:', userService);
     userResolver = new UserResolver(userService);
   });
 
