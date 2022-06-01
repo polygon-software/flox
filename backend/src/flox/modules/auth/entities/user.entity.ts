@@ -21,4 +21,9 @@ export class User extends BaseEntity {
   @Column()
   @IsString()
   cognitoUuid: string;
+
+  @Field(() => String, { description: 'User role', nullable: true })
+  @Column()
+  @IsString()
+  role: string;
 }
