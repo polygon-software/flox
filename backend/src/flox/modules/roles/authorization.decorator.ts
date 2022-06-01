@@ -29,5 +29,8 @@ export const AnyRole = (): CustomDecorator => SetMetadata(ANY_ROLE_KEY, true);
 // The user record has the form { userId: string, username: string }
 export const CurrentUser = createParamDecorator(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-  (data, req: ExecutionContext) => getRequest(req).user,
+  (data, req: ExecutionContext) => {
+    console.log('Getting currentUser from', getRequest(req).user);
+    return getRequest(req).user;
+  },
 );
