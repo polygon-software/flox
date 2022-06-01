@@ -1,11 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ANY_ROLE_KEY } from './authorization.decorator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../auth/entities/user.entity';
 import { getRequest } from 'src/flox/core/flox-helpers';
-import { IS_PUBLIC_KEY } from '../auth/authentication.decorator';
+import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -115,11 +114,10 @@ export class RolesGuard implements CanActivate {
    * @returns {boolean} - whether any user can activate
    */
   isAnyRole(context: ExecutionContext, roles: string[], dbUser) {
-    console.log('checking isAnyRole for', roles, dbUser);
     if (!roles || roles.length === 0) {
       // Determine if resource is accessible to any logged-in user
       return (
-        this.reflector.getAllAndOverride<boolean>(ANY_ROLE_KEY, [
+        this.reflector.getAllAndOverride<boolean>(LOGGED_IN_KEY, [
           context.getHandler(),
           context.getClass(),
         ]) && !!dbUser
