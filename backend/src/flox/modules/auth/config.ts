@@ -1,18 +1,18 @@
 import { mergeConfigurations } from '../../core/flox-helpers';
-import { floxModuleOptions } from '../../index';
+import { floxModuleOptions } from '../../flox';
 import { MODULES } from '../../MODULES';
 
 /**
- * The file module handles file up/download using a database table each for private and public files, as well as storing
- * the files in S3 and requesting corresponding URLs.
+ * The authentication module handles Cognito authentication and provides the related decorators for checking sign-in
+ * status. It does NOT include any authorization/role management; this is a separate module ('roles').
  */
 
-type FileModuleConfig = {
+type AuthModuleConfig = {
   // TODO
 };
 
 // Default configuration set; will get merged with custom config from flox.config.js
-const defaultConfig: FileModuleConfig = {
+const defaultConfig: AuthModuleConfig = {
   // Add options here
 };
 
@@ -23,6 +23,6 @@ const defaultConfig: FileModuleConfig = {
 export function moduleConfig() {
   return mergeConfigurations(
     defaultConfig,
-    floxModuleOptions(MODULES.FILE),
-  ) as FileModuleConfig;
+    floxModuleOptions(MODULES.AUTH),
+  ) as AuthModuleConfig;
 }

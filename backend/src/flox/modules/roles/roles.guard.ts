@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from '../auth/entities/user.entity';
 import { getRequest } from 'src/flox/core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
-import { DEFAULT_ROLES } from 'src/flox/modules/roles';
+import { DEFAULT_ROLES } from 'src/flox/modules/roles/config';
 
 /**
  * Guard used for defining which roles can access a specific method

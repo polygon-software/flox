@@ -1,6 +1,6 @@
 import { mergeConfigurations } from '../../core/flox-helpers';
 import { MODULES } from '../../MODULES';
-import { floxModuleOptions } from '../..';
+import { floxModuleOptions } from '../../flox';
 
 /**
  * The roles module includes role management functionalities and decorators for restricting certain resources to certain
