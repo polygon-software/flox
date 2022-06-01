@@ -7,11 +7,7 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { Public } from './authentication.decorator';
-import {
-  AdminOnly,
-  AnyRole,
-  CurrentUser,
-} from '../roles/authorization.decorator';
+import { AnyRole, CurrentUser } from '../roles/authorization.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
