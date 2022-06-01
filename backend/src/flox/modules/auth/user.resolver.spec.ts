@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
-import { DEFAULT_ROLES } from '../roles';
+import { DEFAULT_ROLES } from '../roles/config';
 
 describe('UsersResolver', () => {
   let userResolver: UserResolver;

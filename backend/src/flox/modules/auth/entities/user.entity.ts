@@ -2,8 +2,8 @@ import { ObjectType, Field } from '@nestjs/graphql';
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { IsEmail, IsString } from 'class-validator';
-import { moduleConfig } from '../../roles';
-import { isModuleActive } from '../../../index';
+import { moduleConfig } from '../../roles/config';
+import { isModuleActive } from '../../../flox';
 import { MODULES } from '../../../MODULES';
 
 @ObjectType()

@@ -5,7 +5,7 @@ import {
   SetMetadata,
 } from '@nestjs/common';
 import { getRequest } from '../../core/flox-helpers';
-import { DEFAULT_ROLES } from './index';
+import { DEFAULT_ROLES } from './config';
 
 /**
  * Defines authorization-specific (roles) decorators

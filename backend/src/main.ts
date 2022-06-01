@@ -7,7 +7,7 @@ import fmp = require('fastify-multipart');
 import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
-import { floxModuleOptions, getActiveFloxModuleNames } from './flox';
+import { floxModuleOptions, getActiveFloxModuleNames } from './flox/flox';
 
 /**
  * Bootstraps the nest application itself
