@@ -89,8 +89,7 @@ export class UserResolver {
    * @param {Record<string, string>}  user - currently logged-in user from request
    * @returns {Promise<User>} - the user, if any
    */
-  // @LoggedIn()
-  @AdminOnly()
+  @LoggedIn()
   @Query(() => User, { name: 'myUser' })
   async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
     // Get user where user's UUID matches Cognito ID
