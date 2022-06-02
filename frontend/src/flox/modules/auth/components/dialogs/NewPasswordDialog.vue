@@ -1,29 +1,20 @@
 <template>
   <q-dialog
-      ref="dialog"
-      :persistent="true"
+    ref="dialog"
   >
-    <q-card class="q-pa-lg q-pt-xl" style="width: 400px; min-height: 250px">
+    <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
+      <b>{{ $t('authentication.change_password') }}</b>
       <q-form
         @submit="onSubmit"
         class="q-gutter-md"
-        autocorrect="off"
-        autocapitalize="off"
-        autocomplete="off"
-        spellcheck="false"
       >
-        <b>{{ $t('authentication.forgot_password') }}</b>
-        <q-input
-          :label="$t('authentication.verification_code')"
-          v-model="verificationCode"
-        />
         <q-input
           :label="$t('authentication.new_password')"
           v-model="password"
           type="password"
           :rules="[
-            val => PASSWORD_REGEX.test(val) || $t('errors.invalid_password')
-          ]"
+              val => PASSWORD_REGEX.test(val) || $t('errors.invalid_password')
+            ]"
         />
         <q-input
           :label="$t('authentication.new_password_repeat')"
@@ -34,12 +25,11 @@
           ]"
         />
         <q-card-actions align="right">
-
           <q-btn
             color="primary"
             :label="$t('general.confirm')"
-            :disable="password !== passwordRep || verificationCode.length !== 6"
-            type="submit"
+            :disable="password !== passwordRep"
+            @click="onSubmit"
           />
           <q-btn
             :label="$t('general.cancel')"
@@ -48,32 +38,29 @@
           />
         </q-card-actions>
       </q-form>
-
     </q-card>
-
   </q-dialog>
 </template>
 
 <script setup lang="ts">
-import {defineEmits, Ref, ref} from 'vue';
+import {defineEmits, Ref} from 'vue';
+import {ref} from 'vue';
 import {PASSWORD_REGEX} from '../../../../../helpers/REGEX'
 import {QDialog} from 'quasar';
 
-let verificationCode = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
 const emit = defineEmits(['ok'])
-let dialog: Ref<QDialog|null> = ref(null)
+const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
 
 /**
- * On submit, emit data outwards
+ * Upon submit, pass entered values outwards
  * @returns {void}
  */
 function onSubmit(){
   emit('ok', {
-    passwordNew: password.value,
-    verificationCode: verificationCode.value,
+    password: password.value,
   })
   hide()
 }
@@ -82,7 +69,7 @@ function onSubmit(){
 // eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
 function show(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
- dialog.value?.show()
+  dialog.value?.show();
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -90,5 +77,4 @@ function hide(): void{
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   dialog.value?.hide()
 }
-
 </script>

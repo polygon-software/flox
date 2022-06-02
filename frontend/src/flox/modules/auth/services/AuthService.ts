@@ -6,7 +6,7 @@ import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue'
 import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue'
 import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue'
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue'
-import {QVueGlobals} from 'quasar';
+import {QVueGlobals, useQuasar} from 'quasar';
 import {useAuth} from 'src/store/authentication';
 import _ from 'lodash';
 import {Context, Module} from 'vuex-smart-module';
@@ -132,9 +132,16 @@ export class AuthenticationService {
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
         newPasswordRequired: function (userAttributes) {
           const attrs = _.cloneDeep(userAttributes) as Record<string, unknown>
-          // TODO: use a proper dialog
+
+          // Show password change dialog
           while (!newPassword) {
-            newPassword = prompt(i18n.global.t('messages.enter_new_password'), '') || '';
+            const $q = useQuasar();
+            $q.dialog({
+              component: ChangePasswordDialog,
+              componentProps: {},
+            }).onOk(({password}: {password: string}) => {
+              newPassword = password
+            })
           }
           // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
           delete attrs.email
@@ -473,11 +480,28 @@ export class AuthenticationService {
    * @returns {void}
    */
   onFailure(error: Error): void{
-    if(error.name === 'UserNotConfirmedException'){
-      // Show the e-mail verification dialog and send a new code
-      void this.showEmailVerificationDialog()
-    } else {
-      this.$errorService.showErrorDialog(error)
+    switch(error.name){
+      case 'UserNotConfirmedException':
+        void this.showEmailVerificationDialog()
+        break;
+      case 'PasswordResetRequiredException':
+        // Call forgotPassword on cognitoUser, since user must reset password
+        this.$authStore.getters.getCognitoUser()?.forgotPassword({
+          onSuccess: function() {
+            // Do nothing
+          },
+          onFailure: (err: Error) => {
+            this.$authStore.mutations.setCognitoUser(undefined);
+            this.onFailure(err)
+          },
+          inputVerificationCode: () => {
+            this.showResetPasswordFormDialog()
+          }
+        });
+        break;
+      default:
+        this.$errorService.showErrorDialog(error)
+        break;
     }
   }
 
