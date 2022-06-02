@@ -14,7 +14,6 @@ import {AuthenticationService} from '../flox/modules/auth/services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 const $authService: AuthenticationService|undefined = inject('$authService')
-const $routerService: RouterService|undefined = inject('$routerService')
 
 /**
  * Logs in the given authentication

@@ -9,6 +9,8 @@ import AuthGetters from 'src/store/authentication/getters';
 import AuthActions from 'src/store/authentication/actions';
 import AuthMutations from 'src/store/authentication/mutations';
 import { fetchMyUser } from 'src/helpers/data/fetch-helpers';
+import {isModuleActive} from 'src/flox';
+import {MODULES} from 'src/flox/MODULES';
 
 let routerInstance: Router;
 
@@ -46,16 +48,18 @@ export default boot(({ router, store }) => {
         return getUserRoleRoute(user, $authStore);
       }
 
-      // Case 3: route has some constraints
-      const matchingConstrainedRoute = CONSTRAINED_ROUTES.find(
-        (constrainedRoute) => constrainedRoute.path === to.path
-      );
-      if (matchingConstrainedRoute) {
-        const hasFullAccess = matchingConstrainedRoute.allowedRoles.includes(
-          user.role
+      // Case 3: role module is active and route has some constraints
+      if(isModuleActive(MODULES.ROLES)){
+        const matchingConstrainedRoute = CONSTRAINED_ROUTES.find(
+          (constrainedRoute) => constrainedRoute.path === to.path
         );
-        if (!hasFullAccess) {
-          return getUserRoleRoute(user, $authStore);
+        if (matchingConstrainedRoute) {
+          const hasFullAccess = matchingConstrainedRoute.allowedRoles.includes(
+            user.role
+          );
+          if (!hasFullAccess) {
+            return getUserRoleRoute(user, $authStore);
+          }
         }
       }
     } else {
@@ -96,7 +100,7 @@ function getUserRoleRoute(
   }
 
   return ROUTES.SAMPLE
-  // TODO: Add in user role module
+  // TODO application specific: add paths per role
   // switch (user.role) {
   //   case ROLE.ADMIN:
   //     return ROUTES.CUSTOMERS;

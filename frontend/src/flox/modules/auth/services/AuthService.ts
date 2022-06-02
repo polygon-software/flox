@@ -485,7 +485,7 @@ export class AuthenticationService {
     // Store locally
     this.$authStore.mutations.setUserSession(userSession)
 
-    // Redirect to main page TODO application dependent: choose correct route
+    // Redirect to main page TODO application specific: choose correct route
     await this.$routerService?.routeTo(ROUTES.SAMPLE)
   }
 

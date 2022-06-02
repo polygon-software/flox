@@ -41,7 +41,7 @@ function recursiveFilter(target:any, term:string, depthLimit=5):boolean{
     return formatDate(target) === term
   }
 
-  if(typeof target === 'boolean'){    //todo evt ja / nein
+  if(typeof target === 'boolean'){
     return String(target) === term
   }
 
