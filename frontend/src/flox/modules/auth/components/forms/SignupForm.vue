@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form-helpers'
+import { Form } from 'src/helpers/form/form-helpers'
 import {defineEmits} from 'vue';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES';

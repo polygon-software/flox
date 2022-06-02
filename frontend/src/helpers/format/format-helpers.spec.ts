@@ -1,4 +1,4 @@
-import {formatDate, formatDateTime} from 'src/helpers/format-helpers';
+import {formatDate, formatDateTime} from 'src/helpers/format/format-helpers';
 
 describe('Format Helpers', () => {
   let date_as_string: string

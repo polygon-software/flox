@@ -20,7 +20,7 @@ import {CREATE_USER} from "frontend/src/data/mutations/USER";
 Data functions are imported and used as follows within component's `<script setup>` tag:
 
 ```javascript
-import {executeMutation} from "src/helpers/data-helpers";
+import {executeMutation} from "frontend/src/helpers/data/data-helpers";
 
 executeMutation(
     CREATE_USER,

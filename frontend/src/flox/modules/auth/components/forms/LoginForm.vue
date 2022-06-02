@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form-helpers'
+import { Form } from 'src/helpers/form/form-helpers'
 import {defineEmits, inject} from 'vue';
 import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';

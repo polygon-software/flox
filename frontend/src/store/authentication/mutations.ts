@@ -1,6 +1,6 @@
 import AuthState  from './state';
 import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
-import {deleteCookies, persistToCookies} from 'src/helpers/cookie-helpers'
+import {deleteCookies, persistToCookies} from 'src/helpers/tools/cookie-helpers'
 import { Mutations } from 'vuex-smart-module'
 
 /**

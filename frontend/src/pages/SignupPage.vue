@@ -16,7 +16,7 @@ import {AuthenticationService} from '../flox/modules/auth/services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
-import {showNotification} from 'src/helpers/notification-helpers';
+import {showNotification} from 'src/helpers/tools/notification-helpers';
 import {useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
 

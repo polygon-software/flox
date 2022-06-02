@@ -1,4 +1,4 @@
-import {toBase64} from 'src/helpers/image-helpers';
+import {toBase64} from 'src/helpers/tools/image-helpers';
 
 describe('Image Helpers', () => {
   describe('converting image file', () => {

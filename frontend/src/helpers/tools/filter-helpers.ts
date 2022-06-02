@@ -1,4 +1,4 @@
-import {formatDate} from 'src/helpers/format-helpers';
+import {formatDate} from 'src/helpers/format/format-helpers';
 
 /**
  * Search Filter for Quasar <q-table>s

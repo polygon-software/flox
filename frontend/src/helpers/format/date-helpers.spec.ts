@@ -1,4 +1,4 @@
-import {calculateAge, dateToInputString} from 'src/helpers/date-helpers';
+import {calculateAge, dateToInputString} from 'src/helpers/format/date-helpers';
 
 describe('Date Helpers', () => {
   let birthday: Date

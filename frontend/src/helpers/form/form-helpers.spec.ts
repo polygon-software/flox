@@ -1,4 +1,4 @@
-import {Form} from 'src/helpers/form-helpers';
+import {Form} from 'src/helpers/form/form-helpers';
 import {FIELDS} from 'src/data/FIELDS';
 
 describe('Form Helpers', () => {

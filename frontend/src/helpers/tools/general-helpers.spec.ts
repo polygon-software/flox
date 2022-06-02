@@ -1,4 +1,4 @@
-import {sleep} from 'src/helpers/general-helpers';
+import {sleep} from 'src/helpers/tools/general-helpers';
 
 describe('General Helpers', () => {
   describe('time to wait', () => {

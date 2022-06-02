@@ -1,4 +1,4 @@
-import {deepFilter, tableFilter} from 'src/helpers/filter-helpers';
+import {deepFilter, tableFilter} from 'src/helpers/tools/filter-helpers';
 
 describe('Filter Helpers', () => {
   let sentence: string;

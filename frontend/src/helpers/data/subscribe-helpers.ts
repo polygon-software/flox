@@ -1,8 +1,8 @@
 import {computed, ComputedRef, Ref} from 'vue';
 import {User} from 'src/data/types/User';
-import {subscribeToQuery} from 'src/helpers/data-helpers';
+import {subscribeToQuery} from 'src/helpers/data/data-helpers';
 import {ALL_USERS} from 'src/data/queries/USER';
-import {mapUsers} from 'src/helpers/mapping-helpers';
+import {mapUsers} from 'src/helpers/data/mapping-helpers';
 
 /**
  * This file contains all helper functions for subscribing to data using GraphQL queries

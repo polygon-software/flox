@@ -111,7 +111,7 @@
  */
 import {defineEmits, defineProps, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
-import {Form} from 'src/helpers/form-helpers';
+import {Form} from 'src/helpers/form/form-helpers';
 import {QForm} from 'quasar';
 
 const emit = defineEmits(['submit'])

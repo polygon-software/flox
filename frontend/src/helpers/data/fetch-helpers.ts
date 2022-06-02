@@ -1,5 +1,5 @@
-import {executeQuery} from 'src/helpers/data-helpers';
-import {mapUser} from 'src/helpers/mapping-helpers';
+import {executeQuery} from 'src/helpers/data/data-helpers';
+import {mapUser} from 'src/helpers/data/mapping-helpers';
 import {MY_USER} from 'src/data/queries/USER';
 
 /**
