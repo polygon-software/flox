@@ -514,7 +514,7 @@ export class AuthenticationService {
           onSuccess: function() {
             const $q = useQuasar()
 
-            // Show success notification3
+            // Show success notification
             showNotification(
              $q,
              i18n.global.t('messages.password_changed'),

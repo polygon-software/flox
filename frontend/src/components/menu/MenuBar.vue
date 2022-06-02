@@ -10,17 +10,11 @@
       <h5 class="text-black q-pa-none q-ma-md">
         Flox Template
       </h5>
-      <p
-          class="text-grey-7"
-          v-if="loggedIn && username"
-      >
-        {{ $t('loggedIn', {user: username})}}
-      </p>
     </div>
   <div class="row">
     <q-btn
         v-if="loggedIn"
-        label="Logout"
+        :label="$t('authentication.logout')"
         class="text-primary"
         flat
         @click="logout"
