@@ -114,15 +114,15 @@ export class AuthenticationService {
       this.$authStore.mutations.setCognitoUser(cognitoUser)
       cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
-          this.loginSuccess(result);
+          void this.loginSuccess(result);
           resolve()
         },
         onFailure: (err: Error) => {
           this.onFailure(err, identifier, password)
         },
-        // Sets up MFA (only done once after signing up)
+        // Sets up MFA & logs in (only done once after signing up)
         mfaSetup: () => {
-          this.setupMFA(cognitoUser, resolve, identifier, password)
+          this.setupMFA(cognitoUser, resolve, identifier)
         },
 
         // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
@@ -169,20 +169,13 @@ export class AuthenticationService {
    * @param {CognitoUser} cognitoUser - the user
    * @param {function} resolve - resolve function
    * @param {string} identifier - identifier (username of email)
-   * @param {string} [password] - password for auto re-login
    * @returns {void}
    */
-  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void, identifier: string, password?: string): void{
+  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void, identifier: string): void{
     cognitoUser.associateSoftwareToken({
       associateSecretCode: async (secret: string) => {
         this.$authStore.mutations.setCognitoUser(cognitoUser)
         await this.showQRCodeDialog(secret, cognitoUser, identifier)
-
-        // Retry login
-        if(identifier && password){
-          await this.login(identifier, password)
-        }
-
         resolve()
       },
       onFailure: (err: Error) => {
@@ -224,9 +217,6 @@ export class AuthenticationService {
         }
       })
     })
-
-    // Save cognito user to store
-    this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
 
     // Register in database TODO application specific: apply any other attributes here as well
     await createUser(username, email, cognitoUserWrapper.userSub)
@@ -383,7 +373,6 @@ export class AuthenticationService {
         this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, function(err, result) {
           if (!err) {
             resolve(result)
-            // TODO: auto-login
           }
           reject()
         })
@@ -423,7 +412,7 @@ export class AuthenticationService {
         }).onOk((code: string) => {
           cognitoUser.verifySoftwareToken(code, 'TOTP Device', {
             onSuccess: (userSession: CognitoUserSession) => {
-              this.loginSuccess(userSession)
+              void this.loginSuccess(userSession)
               resolve()
             },
             onFailure: (error: Error)=>{
@@ -477,7 +466,7 @@ export class AuthenticationService {
       currentUser?.sendMFACode(code, {
         onSuccess: (userSession: CognitoUserSession) => {
           this.$authStore.mutations.setCognitoUser(currentUser)
-          this.loginSuccess(userSession)
+          void this.loginSuccess(userSession)
           resolve()
         },
         onFailure: (error: Error)=>{
@@ -490,11 +479,14 @@ export class AuthenticationService {
   /**
    * When login succeeds
    * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
-   * @returns {void}
+   * @returns {Promise<void>} - done
    */
-  loginSuccess(userSession: CognitoUserSession): void {
+  async loginSuccess(userSession: CognitoUserSession) {
     // Store locally
     this.$authStore.mutations.setUserSession(userSession)
+
+    // Redirect to main page TODO application dependent: choose correct route
+    await this.$routerService?.routeTo(ROUTES.SAMPLE)
   }
 
   /**
