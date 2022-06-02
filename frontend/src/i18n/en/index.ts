@@ -61,6 +61,7 @@ export default {
     enter_email: 'Please enter your e-mail address:',
     verification: 'Verification',
     enter_2fa:  'Enter your two-factor authentication code',
-    code_resent: 'Successfully re-sent code'
+    code_resent: 'Successfully re-sent code',
+    password_changed: 'Successfully changed password. Please log in using the new password.'
   },
 };
