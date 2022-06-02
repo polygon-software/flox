@@ -6,6 +6,7 @@ export default {
     cancel: 'Abbrechen',
     confirm: 'Bestätigen',
     ok: 'OK',
+    loading: 'Lädt'
   },
   authentication: {
     authentication: 'Authentifizierung',
