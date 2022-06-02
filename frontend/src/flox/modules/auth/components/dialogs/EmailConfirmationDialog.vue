@@ -51,7 +51,7 @@
 import {defineEmits, defineProps, PropType, Ref, ref} from 'vue';
 import {QDialog, QVueGlobals} from 'quasar';
 import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
-import {showNotification} from 'src/helpers/notification-helpers';
+import {showNotification} from 'src/helpers/tools/notification-helpers';
 import {i18n} from 'boot/i18n';
 
 const props = defineProps({

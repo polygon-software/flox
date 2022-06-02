@@ -1,5 +1,5 @@
-import {executeMutation} from 'src/helpers/data-helpers';
-import {mapUser} from 'src/helpers/mapping-helpers';
+import {executeMutation} from 'src/helpers/data/data-helpers';
+import {mapUser} from 'src/helpers/data/mapping-helpers';
 import {CREATE_USER} from 'src/data/mutations/USER';
 
 /**

@@ -20,8 +20,8 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {ErrorService} from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth'
-import {createUser} from 'src/helpers/mutation-helpers';
-import {showNotification} from 'src/helpers/notification-helpers';
+import {createUser} from 'src/helpers/data/mutation-helpers';
+import {showNotification} from 'src/helpers/tools/notification-helpers';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as

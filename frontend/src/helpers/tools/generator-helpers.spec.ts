@@ -1,4 +1,4 @@
-import {randomNumber, randomPassword} from 'src/helpers/generator-helpers';
+import {randomNumber, randomPassword} from 'src/helpers/tools/generator-helpers';
 
 describe('Generator Helpers', () => {
   describe('randomNumber', () => {
