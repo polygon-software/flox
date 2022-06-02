@@ -8,7 +8,7 @@ import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
 import AuthActions from 'src/store/authentication/actions';
 import AuthMutations from 'src/store/authentication/mutations';
-import { fetchMyUser } from 'src/helpers/api-helpers';
+import { fetchMyUser } from 'src/helpers/fetch-helpers';
 
 let routerInstance: Router;
 

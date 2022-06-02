@@ -17,3 +17,12 @@ export function mapUser(record: Record<string, unknown>): User {
     record.name as string,
   );
 }
+
+/**
+ * Map multiple user record to user instances.
+ * @param {Record<string, unknown>[]} records - user records.
+ * @returns {User[]} - user instances.
+ */
+export function mapUsers(records: Record<string, unknown>[]): User[] {
+  return records.map((user) => mapUser(user))
+}

@@ -20,7 +20,7 @@ import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import {ErrorService} from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth'
-import {createUser} from 'src/helpers/api-helpers';
+import {createUser} from 'src/helpers/fetch-helpers';
 import {showNotification} from 'src/helpers/notification-helpers';
 
 /**
