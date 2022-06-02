@@ -24,8 +24,5 @@ const $routerService: RouterService|undefined = inject('$routerService')
  */
 async function onLogin({identifier, password}: {identifier: string, password: string}){
   await $authService?.login(identifier, password)
-
-  // Redirect to main page
-  await $routerService?.routeTo(ROUTES.SAMPLE)
 }
 </script>
