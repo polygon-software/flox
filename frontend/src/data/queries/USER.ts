@@ -21,4 +21,20 @@ export const MY_USER = {
   cacheLocation: 'myUser',
 };
 
-export const USER_QUERIES: QueryObject[] = [MY_USER];
+export const ALL_USERS = {
+  query: gql`
+    query {
+      allUsers {
+        uuid
+        username
+        cognitoUuid
+        email
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'allUsers',
+};
+
+export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_USERS];
