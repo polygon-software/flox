@@ -21,6 +21,7 @@ import {RouterService} from 'src/services/RouterService';
 import {ErrorService} from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth'
 import {createUser} from 'src/helpers/api-helpers';
+import {showNotification} from 'src/helpers/notification-helpers';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -151,12 +152,11 @@ export class AuthenticationService {
         // Called if time-limited one time password is required (only second login or later)
         totpRequired: (tokenType: string) => {this.verify2FACode(tokenType, resolve)},
 
-        //TODO check when/if this appears
+        // MFA code required (NOT part of normal flow)
         mfaRequired: function () {
-          // TODO: Use a proper dialog
           const verificationCode = prompt(i18n.global.t('messages.enter_verification_code', ''));
           if (typeof verificationCode === 'string') {
-            cognitoUser.sendMFACode(verificationCode, this);
+            cognitoUser.sendMFACode(verificationCode, this)
           }
         },
       })
@@ -185,20 +185,30 @@ export class AuthenticationService {
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.
-   * TODO make adaptable to other parameters via direct handling of {attributes} param
    * @param {string} username - the chosen username
-   * @param {string} email - the authentication's e-mail address -> TODO move to attributes
+   * @param {string} email - the authentication's e-mail address
    * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
+   * @param {Record<string, string>}  [attributes] - custom attributes to add (if any)
    * @returns {Promise<void>} - done
    */
-  async signUp(username: string, email: string, password: string): Promise<void> {
+  async signUp(username: string, email: string, password: string, attributes?: Record<string, string>): Promise<void> {
     const cognitoUserWrapper:ISignUpResult = await new Promise((resolve, reject) => {
-      const attributes = [];
-      attributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
-      this.$authStore.getters.getUserPool()?.signUp(username, password, attributes, [], (err?: Error, result?: ISignUpResult) => {
+      const userAttributes = [];
+
+      // Add e-mail to attributes
+      userAttributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: 'email', Value: email}))
+
+      // Handle custom attributes
+      if(attributes){
+        Object.keys(attributes).forEach((attributeKey) => {
+          userAttributes.push(new AmazonCognitoIdentity.CognitoUserAttribute({Name: attributeKey, Value: attributes[attributeKey]}))
+        })
+      }
+
+      // Trigger signup
+      this.$authStore.getters.getUserPool()?.signUp(username, password, userAttributes, [], (err?: Error, result?: ISignUpResult) => {
         if (err) {
-          // TODO
-          console.error(err)
+          this.$errorService.showErrorDialog(err)
           reject();
         }
         if(result){
@@ -207,9 +217,10 @@ export class AuthenticationService {
       })
     })
 
+    // Save cognito user to store
     this.$authStore.mutations.setCognitoUser(cognitoUserWrapper.user)
 
-    // Register in database
+    // Register in database TODO application specific: apply any other attributes here as well
     await createUser(username, email, cognitoUserWrapper.userSub)
   }
 
@@ -317,12 +328,16 @@ export class AuthenticationService {
       componentProps: {},
     }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
       this.$authStore.getters.getCognitoUser()?.confirmPassword(verificationCode,passwordNew,{
-        onSuccess: (result: unknown)=>{
-          console.log(result)
-          // TODO
+        onSuccess: ()=>{
+          showNotification(
+            this.$q,
+            i18n.global.t('messages.password_changed'),
+            'bottom',
+            'positive'
+          )
         },
         onFailure: (err: Error) => {
-          console.error(err)
+          this.$errorService.showErrorDialog(err)
         }
       })
     })
@@ -481,14 +496,24 @@ export class AuthenticationService {
    */
   onFailure(error: Error): void{
     switch(error.name){
+      // Case 1: User has not verified their e-mail yet
       case 'UserNotConfirmedException':
         void this.showEmailVerificationDialog()
         break;
+      // Case 2: User must reset password (e.g. if forced via AWS console)
       case 'PasswordResetRequiredException':
         // Call forgotPassword on cognitoUser, since user must reset password
         this.$authStore.getters.getCognitoUser()?.forgotPassword({
           onSuccess: function() {
-            // Do nothing
+            const $q = useQuasar()
+
+            // Show success notification3
+            showNotification(
+             $q,
+             i18n.global.t('messages.password_changed'),
+             'bottom',
+             'positive'
+            )
           },
           onFailure: (err: Error) => {
             this.$authStore.mutations.setCognitoUser(undefined);
@@ -499,6 +524,7 @@ export class AuthenticationService {
           }
         });
         break;
+      // Default: any other error
       default:
         this.$errorService.showErrorDialog(error)
         break;

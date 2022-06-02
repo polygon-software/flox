@@ -62,6 +62,7 @@ export default {
     enter_email: 'Bitte geben Sie ihre E-Mail-Adresse ein:',
     verification: 'Verifizierung',
     enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein',
-    code_resent: 'Code erfolgreich versendet'
+    code_resent: 'Code erfolgreich versendet',
+    password_changed: 'Passwort erfolgreich geändert. Bitte melden Sie sich mit dem neuen Passwort an.'
   }
 }
