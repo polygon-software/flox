@@ -10,6 +10,7 @@ export default {
   authentication: {
     authentication: 'Authentifizierung',
     login: 'Anmelden',
+    logout: 'Abmelden',
     signup: 'Registrieren',
     username: 'Benutzername',
     email: 'E-Mail',
