@@ -63,6 +63,7 @@ export default {
     verification: 'Verifizierung',
     enter_2fa:  'Geben sie ihren 2-Faktor-Authentifizierungscode ein',
     code_resent: 'Code erfolgreich versendet',
-    password_changed: 'Passwort erfolgreich geändert. Bitte melden Sie sich mit dem neuen Passwort an.'
+    password_changed: 'Passwort erfolgreich geändert. Bitte melden Sie sich mit dem neuen Passwort an.',
+    account_created: 'Konto erfolgreich erstellt',
   }
 }
