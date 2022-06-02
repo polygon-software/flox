@@ -7,13 +7,11 @@ import { MODULES } from '../../MODULES';
  */
 
 type FileModuleConfig = {
-  twoFactor: boolean, // Whether to use 2FA
   emailAsUsername: boolean, // Whether the Cognito user pool is set to use the e-mail address as username
 };
 
 // Default configuration set; will get merged with custom config from flox.config.js
 const defaultConfig: FileModuleConfig = {
-  twoFactor: true,
   emailAsUsername: false,
 };
 
