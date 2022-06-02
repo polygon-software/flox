@@ -122,7 +122,7 @@ export class AuthenticationService {
         },
         // Sets up MFA (only done once after signing up)
         mfaSetup: () => {
-          this.setupMFA(cognitoUser, resolve, identifier)
+          this.setupMFA(cognitoUser, resolve, identifier, password)
         },
 
         // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
@@ -169,17 +169,25 @@ export class AuthenticationService {
    * @param {CognitoUser} cognitoUser - the user
    * @param {function} resolve - resolve function
    * @param {string} identifier - identifier (username of email)
+   * @param {string} [password] - password for auto re-login
    * @returns {void}
    */
-  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void, identifier: string): void{
+  setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void, identifier: string, password?: string): void{
     cognitoUser.associateSoftwareToken({
       associateSecretCode: async (secret: string) => {
         this.$authStore.mutations.setCognitoUser(cognitoUser)
         await this.showQRCodeDialog(secret, cognitoUser, identifier)
-        await this.showEmailVerificationDialog()
+
+        // Retry login
+        if(identifier && password){
+          await this.login(identifier, password)
+        }
+
         resolve()
       },
-      onFailure: (err: Error) => {this.onFailure(err)}
+      onFailure: (err: Error) => {
+        this.onFailure(err)
+      }
     })
   }
 
