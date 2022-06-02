@@ -8,7 +8,7 @@ import { MODULES } from '../../MODULES';
  */
 
 type AuthModuleConfig = {
-  // TODO
+  // No configuration needed
 };
 
 // Default configuration set; will get merged with custom config from flox.config.js

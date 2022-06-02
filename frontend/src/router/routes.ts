@@ -45,17 +45,18 @@ export const PUBLIC_ROUTES: RouteRecordRaw[] = [
   ROUTES.SIGNUP,
 ];
 
+// Type for constrained route
+type ConstrainedRoute = {
+  path: string, // URL path
+  allowedRoles: string[] // Roles that are allowed to access the path
+}
+
 /*
  * Routes that have additional access constraints
  * allowedRoles specifies roles that don't have to fulfill constraints to access these pages,
  * constrainedRoles must provide the specified query parameters to access the page
- * TODO enable only with roles module active
+ * TODO Application specific: Add routes here
  */
-export const CONSTRAINED_ROUTES = [
-  { // TODO this is just an example
-    path: ROUTES.MAIN.path,
-    allowedRoles: [ROLE.ADMIN],
-  },
-];
+export const CONSTRAINED_ROUTES: ConstrainedRoute[] = [];
 
 export default ROUTES
