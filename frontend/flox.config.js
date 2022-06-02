@@ -9,7 +9,7 @@ module.exports = {
   moduleOptions: {
     roles: {
       // Some options could go here
-      options: ['ADMIN', 'USER']
+      options: ['ADMIN', 'SUPERUSER', 'USER']
     },
     auth: {
       emailAsUsername: true,

@@ -11,7 +11,7 @@ module.exports = {
       emailAsUsername: true,
     },
     roles: {
-      roles: ['CHUNGUS', 'YEETUS', 'ADMIN'],
+      roles: ['ADMIN', 'SUPERUSER', 'USER'],
     },
   },
 };
