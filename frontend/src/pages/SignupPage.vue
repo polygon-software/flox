@@ -16,6 +16,11 @@ import {AuthenticationService} from '../flox/modules/auth/services/AuthService';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
+import {showNotification} from 'src/helpers/notification-helpers';
+import {useQuasar} from 'quasar';
+import {i18n} from 'boot/i18n';
+
+const $q = useQuasar()
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
 
@@ -29,7 +34,15 @@ const $routerService: RouterService|undefined = inject('$routerService')
 async function onSignup({username, email, password}: {username: string, email: string, password: string}){
   await $authService?.signUp(username, email, password)
 
-  // Redirect to success page
+  // Show success notification
+  showNotification(
+    $q,
+    i18n.global.t('messages.account_created'),
+    'bottom',
+    'positive'
+  )
+
+  // Redirect to login page
   await $routerService?.routeTo(ROUTES.LOGIN)
 }
 

@@ -118,7 +118,7 @@ export class AuthenticationService {
           resolve()
         },
         onFailure: (err: Error) => {
-          this.onFailure(err)
+          this.onFailure(err, identifier, password)
         },
         // Sets up MFA (only done once after signing up)
         mfaSetup: () => {
@@ -492,13 +492,20 @@ export class AuthenticationService {
   /**
    * When any operation (mostly login) fails, verify whether it is due to the authentication not having verified their account
    * @param {Error} error - the error that caused the failure
+   * @param {string} [identifier] - the authentication's identifier (usually E-mail or username) for re-login
+   * @param {string} [password] - the authentication's password for re-login
    * @returns {void}
    */
-  onFailure(error: Error): void{
+  onFailure(error: Error, identifier?: string, password?: string): void{
     switch(error.name){
       // Case 1: User has not verified their e-mail yet
       case 'UserNotConfirmedException':
-        void this.showEmailVerificationDialog()
+        void this.showEmailVerificationDialog().then(() => {
+          if(identifier && password){
+            // Retry login
+            void this.login(identifier, password)
+          }
+        })
         break;
       // Case 2: User must reset password (e.g. if forced via AWS console)
       case 'PasswordResetRequiredException':

@@ -40,7 +40,7 @@ export class User extends BaseEntity {
     if (isModuleActive(MODULES.ROLES)) {
       // Determine roles from config
       const allowedRoles = moduleConfig().roles;
-      if (!allowedRoles.includes(this.role)) {
+      if (this.role && !allowedRoles.includes(this.role)) {
         throw new Error(`Invalid role '${this.role}'`);
       }
     }
