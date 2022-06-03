@@ -1,5 +1,4 @@
 import {RouteRecordRaw} from 'vue-router';
-import {ROLE} from 'src/data/ENUM';
 
 /**
  * This file defines the routes available within the application
