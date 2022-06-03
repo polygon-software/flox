@@ -11,8 +11,6 @@
 import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue'
 import {inject} from 'vue'
 import {AuthenticationService} from '../flox/modules/auth/services/AuthService';
-import ROUTES from 'src/router/routes';
-import {RouterService} from 'src/services/RouterService';
 const $authService: AuthenticationService|undefined = inject('$authService')
 
 /**
