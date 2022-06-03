@@ -47,9 +47,6 @@ const loggedIn = computed(() => {
   return result;
 })
 
-// Username does not need to be reactive, since it won't change between logins
-const username = $authStore.getters.getUsername()
-
 /**
  * Logs out the current authentication
  * @async
