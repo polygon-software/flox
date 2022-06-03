@@ -8,7 +8,7 @@ export function floxModules() {
   const modules: string[] = [];
 
   Object.keys(flox.modules).forEach((moduleName) => {
-    if (flox.modules[moduleName] === true) {
+    if ((flox.modules as Record<string, boolean>)[moduleName]) {
       modules.push(moduleName);
     }
   });
@@ -27,7 +27,7 @@ export function floxModulesOptions() {
   const modules = floxModules();
 
   modules.forEach((module) => {
-    options[module] = (flox.moduleOptions[module] ?? {}) as Record<string, unknown>
+    options[module] = ((flox.moduleOptions as Record<string, Record<string, unknown>>)[module] ?? {})
   })
 
   return options;
@@ -39,7 +39,7 @@ export function floxModulesOptions() {
  * @returns {Record<string, Record<string, unknown>>} - options for the modules
  */
 export function floxModuleOptions(moduleName: string) {
-  return (flox.moduleOptions[moduleName] ?? {}) as Record<string, unknown>
+  return ((flox.moduleOptions as Record<string, Record<string, unknown>>)[moduleName] ?? {})
 }
 
 /**
