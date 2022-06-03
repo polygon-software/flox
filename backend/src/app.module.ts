@@ -6,8 +6,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import * as Joi from 'joi';
 import { floxEntities, floxModules, floxProviders } from './flox/flox';
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './flox/modules/roles/roles.guard';
 
 @Module({
   imports: [
