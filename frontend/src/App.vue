@@ -20,7 +20,7 @@ provide('$q', $q)
 const $errorService: ErrorService = reactive(new ErrorService($q))
 provide('$errorService', $errorService)
 
-// Router service
+// Router service ('as unknown' is needed, since linter doesn't seem to understand router instance as parameter)
 const $routerService: RouterService = reactive(new RouterService(routerInstance)) as unknown as RouterService
 provide<RouterService>('$routerService', $routerService as unknown as RouterService)
 
