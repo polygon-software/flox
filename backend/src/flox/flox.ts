@@ -90,26 +90,6 @@ export function getActiveFloxModuleNames() {
 }
 
 /**
- * Gets the active Flox modules' options (with proper typing, since config is .js)
- * @returns {Record<string, Record<string, unknown>>} - options for active modules
- */
-export function floxModulesOptions() {
-  const options: Record<string, Record<string, unknown>> = {};
-
-  // Get active modules
-  const modules = getActiveFloxModuleNames();
-
-  modules.forEach((module) => {
-    options[module] = (flox.moduleOptions[module] ?? {}) as Record<
-      string,
-      unknown
-    >;
-  });
-
-  return options;
-}
-
-/**
  * Gets the options for a single Flox module (with proper typing, since config is .js)
  * @param {string} moduleName - name of the module to check
  * @returns {Record<string, Record<string, unknown>>} - options for the modules
@@ -120,6 +100,23 @@ export function floxModuleOptions(moduleName: string) {
   }
 
   return (flox.moduleOptions[moduleName] ?? {}) as Record<string, unknown>;
+}
+
+/**
+ * Gets the active Flox modules' options (with proper typing, since config is .js)
+ * @returns {Record<string, Record<string, unknown>>} - options for active modules
+ */
+export function floxModulesOptions() {
+  const options: Record<string, Record<string, unknown>> = {};
+
+  // Get active modules
+  const modules = getActiveFloxModuleNames();
+
+  modules.forEach((module) => {
+    options[module] = floxModuleOptions(module);
+  });
+
+  return options;
 }
 
 /**

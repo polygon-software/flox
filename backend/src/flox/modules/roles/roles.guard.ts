@@ -57,11 +57,12 @@ export class RolesGuard implements CanActivate {
     }
 
     // For generally accessible resources, allow access by default if user is logged in
-    const anyRole = this.isAnyRole(context, roles, dbUser);
-    if (anyRole) {
+    const anyUserAccess = this.isLoggedIn(context, roles, dbUser);
+    if (anyUserAccess) {
       return true;
     }
 
+    // Development override for private resources
     if (accessOverride && !roles) {
       console.warn(
         `Debug override used to access private resource: "${requestedFunction}"!`,
@@ -69,6 +70,7 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
+    // Development override for restricted resources without being logged in
     if (!dbUser) {
       if (accessOverride) {
         console.warn(
@@ -106,13 +108,13 @@ export class RolesGuard implements CanActivate {
   }
 
   /**
-   * Checks if the user is logged in and the access control is "anyRole"
+   * Checks if the user is logged in and the access control is "loggedIn", allowing access to all logged in users
    * @param {ExecutionContext} context - context
    * @param {string[]} roles - whitelisted roles
    * @param {User} dbUser - the requesting user
    * @returns {boolean} - whether any user can activate
    */
-  isAnyRole(context: ExecutionContext, roles: string[], dbUser) {
+  isLoggedIn(context: ExecutionContext, roles: string[], dbUser) {
     if (!roles || roles.length === 0) {
       // Determine if resource is accessible to any logged-in user
       return (

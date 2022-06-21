@@ -8,12 +8,12 @@ import { MODULES } from '../../MODULES';
  */
 
 type FileModuleConfig = {
-  // TODO
+  // TODO: once file module is set up, add options here
 };
 
 // Default configuration set; will get merged with custom config from flox.config.js
 const defaultConfig: FileModuleConfig = {
-  // Add options here
+  // TODO: once file module is set up, add options here
 };
 
 /**
