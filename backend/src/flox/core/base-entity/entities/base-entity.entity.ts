@@ -7,6 +7,10 @@ import {
 } from 'typeorm';
 import { IsUUID } from 'class-validator';
 
+/**
+ * Base entity class that others inherit from.
+ * Includes unique UUID, as well as creation/modification/deletion timestamps
+ */
 @ObjectType()
 export class BaseEntity {
   @Field(() => ID, { description: 'UUID' })

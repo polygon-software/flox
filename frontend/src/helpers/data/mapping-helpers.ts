@@ -12,8 +12,11 @@ import {User} from 'src/data/types/User';
  */
 export function mapUser(record: Record<string, unknown>): User {
   return new User(
-    record.role as ROLE,
     record.uuid as string,
+    record.createdAt as Date,
+    record.lastModifiedAt as Date,
+    record.deletedAt as Date|null,
+    record.role as ROLE,
     record.name as string,
   );
 }

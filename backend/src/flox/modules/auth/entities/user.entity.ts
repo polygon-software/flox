@@ -6,6 +6,9 @@ import { moduleConfig } from '../../roles/config';
 import { isModuleActive } from '../../../flox';
 import { MODULES } from '../../../MODULES';
 
+/**
+ * A user registered within cognito, having a role and contact information
+ */
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
