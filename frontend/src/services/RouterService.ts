@@ -15,11 +15,9 @@ export class RouterService {
   router: Router;
   route: RouteLocationNormalizedLoaded;
 
-  /**
-   * Constructor
-   */
-  constructor() {
-    this.router = useRouter();
+  // eslint-disable-next-line require-jsdoc
+  constructor(router: Router) {
+    this.router = router;
     this.route = useRoute();
   }
 
@@ -102,10 +100,10 @@ export class RouterService {
   }
 
   /**
-   * Go back one step.
+   * Removes the last URL part
    * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
    */
-  goBack() {
+  pop() {
     return this.router.push({
       path: this.route.path.substring(0, this.route.path.lastIndexOf('/')),
     });
