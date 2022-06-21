@@ -4,7 +4,6 @@ import {
   Router,
   RouteRecordRaw,
   useRoute,
-  useRouter,
 } from 'vue-router';
 
 /**
