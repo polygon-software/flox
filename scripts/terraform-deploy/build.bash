@@ -1,4 +1,4 @@
-# Connects to the production / test RDS PostgreSQL database instance via SSH, allowing you to access the database at localhost:5432
+# Builds & zips both front- and backend in the correct modes
 # Necessary variables:
 # - Deployment mode ('live' or 'test')
 # - Project name
