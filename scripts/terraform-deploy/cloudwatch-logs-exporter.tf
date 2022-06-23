@@ -109,7 +109,7 @@ resource "aws_lambda_function" "log_exporter" {
     variables = {
       S3_BUCKET = aws_s3_bucket.log_files.bucket,
       AWS_ACCOUNT = data.aws_caller_identity.current.account_id
-      LOG_GROUP_NAME = "SOI-${var.type}"
+      LOG_GROUP_NAME = "Flox-${var.type}"
     }
   }
 }
