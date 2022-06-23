@@ -198,7 +198,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "COMPOSE_PROJECT_NAME"
-    value     = "soi"
+    value     = "soi" # TODO: Based on .env
   }
 
   setting {

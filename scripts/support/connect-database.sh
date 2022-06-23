@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Connects to the RDS PostgreSQL database instance via SSH, allowing you to access the database at localhost:5432
+# Connects to the production / test RDS PostgreSQL database instance via SSH, allowing you to access the database at localhost:5432
 # Necessary variables:
 # - EC2_ID:         Backend EC2 Instance ID
 # - RDS_ENDPOINT:   RDS Endpoint (NOT read-only!)
