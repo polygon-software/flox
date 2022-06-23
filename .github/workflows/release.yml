@@ -19,9 +19,16 @@ jobs:
       - name: Make build.bash executable
         run: sudo chmod +x ./scripts/terraform-deploy/build.bash
 
+      - name: Create tf.env
+        working-directory: ./scripts/support
+        run: sudo bash create-tf-env.sh
+
       - name: execute build.bash
         working-directory: ./scripts/terraform-deploy
-        run: sudo bash build.bash live
+        run: sudo bash build.bash live $PROJECT $MODE
+        env:
+          PROJECT_NAME: flox # TODO from .env
+          MODE: SPA # TODO from .env
 
       - name: terraform
         uses: hashicorp/setup-terraform@v1
@@ -33,13 +40,18 @@ jobs:
         working-directory: ./scripts/terraform-deploy
         run: terraform init
 
-      - name: Parse .env file
+      - name: Parse main .env file
         id: dotenv
         uses: falti/dotenv-action@master
         with:
           path: frontend/live.env
 
-      # TODO run create-tf-env.sh somewhere around here
+      # TODO applied correctly?
+      - name: Parse terraform .env file
+        id: dotenv
+        uses: falti/dotenv-action@master
+        with:
+          path: scripts/support/tf.env
 
       - name: Terraform Apply
         working-directory: ./scripts/terraform-deploy
