@@ -7,7 +7,6 @@ class AuthState{
   userSession?: CognitoUserSession = undefined
   userPool?: CognitoUserPool = undefined
   cognitoUser?: CognitoUser = undefined
-
 }
 
 export default AuthState

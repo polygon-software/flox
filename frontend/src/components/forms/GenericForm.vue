@@ -66,12 +66,12 @@
     >
       <q-card-section>
         <div class="row flex flex-center">
-          <strong class="text-primary">
+          <h5 class="q-ma-none">
             {{ form.pages.value[0].label }}
-          </strong>
+          </h5>
         </div>
       </q-card-section>
-      <q-separator class="q-ma-lg"/>
+      <q-separator/>
       <q-card-section>
         <component
           :is="field.component"
@@ -105,26 +105,28 @@
  * This component defines a generic form that can have a single or multiple pages.
  * It takes the following properties:
  * @param {Object[]} pages - the pages to show, each containing fields, label and key
- * @param {string} [finishLabel] - the label to show on the 'finish' button (will default to 'Finish' in correct language)
+ * @param {string} [finishLabel] - the label to show on the 'finish' button
+ * @param {string} [loadingLabel] - the label to show when loading
  * @param {boolean} [loading] - loading status to show on the finish button
  */
 import {defineEmits, defineProps, Ref, ref} from 'vue';
 import {i18n} from 'boot/i18n';
-import {Form} from 'src/helpers/form-helpers';
+import {Form} from 'src/helpers/form/form-helpers';
 import {QForm} from 'quasar';
 
 const emit = defineEmits(['submit'])
 const formRef: Ref<QForm|null> = ref(null)
+
 const props = defineProps({
   finishLabel: {
     required: false,
     type: String,
-    default: i18n.global.t('buttons.finish'),
+    default: i18n.global.t('general.finish'),
   },
   loadingLabel: {
     required: false,
     type: String,
-    default: i18n.global.t('status.loading') + '...',
+    default: i18n.global.t('general.loading') + '...',
   },
   pages: {
     required: true,
@@ -138,8 +140,9 @@ const props = defineProps({
   }
 })
 
-// Get copy of prop form
+// Create Form instance with pages from props
 const form: Form = new Form(props.pages as Record<string, unknown>[])
+
 /**
  * Validates and, if valid, submits the form with all entered values
  * @returns {Promise<void>} - done
