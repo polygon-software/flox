@@ -1,7 +1,7 @@
 import {moduleConfig} from './modules/auth';
 
 /**
- * Exports all frontend Flox configuration that is relevant to Terraform to a .env file
+ * This script is used for exporting all frontend Flox configuration that is relevant to Terraform to a .env file
  * (used by apply-flox-config.sh)
  */
 
@@ -20,6 +20,3 @@ console.log(`TF_VAR_mfa_configuration=${authOptions?.useTwoFactor ? 'ON' : 'OFF'
 // E-mail as username settings
 console.log(`TF_VAR_auto_verified_attributes=${authOptions?.emailAsUsername ? '["email"]' : '[]'}`)
 console.log(`TF_VAR_username_attributes=${authOptions?.emailAsUsername ? '["email"]' : '[]'}`)
-
-console.log()
-console.log('# ======== General project options ========');

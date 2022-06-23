@@ -99,7 +99,7 @@ variable "cidr_block" {
 }
 
 variable "database_name" {
-  default         = "app_db" # TODO .env based
+  default         = "app_db"
   description     = "Name of database"
   type            = string
 }
