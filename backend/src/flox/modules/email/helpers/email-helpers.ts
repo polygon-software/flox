@@ -3,7 +3,7 @@ import * as nodemailer from 'nodemailer';
 import { AttachmentFile } from './AttachmentFile';
 
 /**
- * Sends an e-mail with, optionally with attachment(s) using Nodemailer
+ * Sends an e-mail, optionally with attachment(s) using SES and Nodemailer
  * @param {string} from - the sender's e-mail address
  * @param {string|string[]} to - list of recipient's email addresses
  * @param {string} subject - E-mail subject

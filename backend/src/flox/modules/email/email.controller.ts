@@ -16,8 +16,7 @@ export class EmailController {
     // Get user, as determined by JWT Strategy
     const triggeredBy = req['user'].userId;
 
-    // TODO
-    // await this.emailService.sendEmail();
+    await this.emailService.sendEmail();
     res.send('OK'); // TODO
   }
 }

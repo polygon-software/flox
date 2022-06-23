@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { sendEmail } from './helpers/email-helpers';
 
 @Injectable()
 export class EmailService {
@@ -10,8 +10,9 @@ export class EmailService {
    * Sends an e-mail
    * @returns {Promise<void>} - done
    */
-  async sendEmail(dataBuffer: Buffer, filename: string): Promise<void> {
+  async sendEmail(): Promise<void> {
     // TODO
     console.log('Blubb send');
+    await sendEmail('yeet@failure.com', 'blubb@blubb.co', 'test', 'oof oof');
   }
 }
