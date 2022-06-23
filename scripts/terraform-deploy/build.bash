@@ -61,7 +61,7 @@ cp "$1.env" running.env
 if [[ $3 == "spa" ]]
 then
   yarn build
-  cd dist/spa || exit # TODO correct?
+  cd dist/spa || exit
 # SSR Mode
 elif [[ $3 == "ssr" ]]
 then
