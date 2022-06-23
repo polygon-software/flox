@@ -1,4 +1,3 @@
-
 resource "aws_s3_bucket_server_side_encryption_configuration" "source_code_bucket" {
   bucket = aws_s3_bucket.source_code_bucket.bucket
   rule {
@@ -44,6 +43,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "public_files" {
   }
 }
 
+# TODO? @johannschwabe
 #resource "aws_s3_bucket_server_side_encryption_configuration" "log_files" {
 #  bucket = aws_s3_bucket.log_files.bucket
 #  rule {
@@ -53,7 +53,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "public_files" {
 #    }
 #  }
 #}
-// create aws s3 bucket to Upload app to
+
+// Create AWS S3 bucket to upload app to
 resource "aws_s3_bucket" "source_code_bucket" {
   bucket_prefix                = "${var.project}-${var.type}-app-bucket-"
   tags = {
@@ -64,7 +65,8 @@ resource "aws_s3_bucket" "source_code_bucket" {
     prevent_destroy = true
   }
 }
-// create aws s3 bucket to Upload public files to
+
+// Create AWS S3 bucket to upload public files to
 resource "aws_s3_bucket" "public_files" {
   bucket_prefix                = "${var.project}-${var.type}-public-bucket-"
   tags = {
@@ -76,7 +78,8 @@ resource "aws_s3_bucket" "public_files" {
     prevent_destroy = true
   }
 }
-// create aws s3 bucket to Upload private files to
+
+// Create AWS S3 bucket to upload private files to
 resource "aws_s3_bucket" "private_files" {
   bucket_prefix                = "${var.project}-${var.type}-private-bucket-"
   tags = {
@@ -88,7 +91,8 @@ resource "aws_s3_bucket" "private_files" {
     prevent_destroy = true
   }
 }
-// create aws s3 bucket to Upload log files to
+
+// Create AWS S3 bucket to upload log files to
 resource "aws_s3_bucket" "log_files" {
   bucket_prefix                = "${var.project}-${var.type}-log-"
   tags = {
@@ -100,6 +104,8 @@ resource "aws_s3_bucket" "log_files" {
     prevent_destroy = true
   }
 }
+
+# Bucket configurations
 
 resource "aws_s3_bucket_policy" "log_group" {
   bucket = aws_s3_bucket.log_files.bucket

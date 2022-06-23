@@ -1,4 +1,4 @@
-// upload app.zip to bucket
+// Upload app.zip to bucket
 resource "aws_s3_object" "api_source_code_object" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = "${var.project}-${var.type}-api-beanstalk/backend.zip"
@@ -6,13 +6,13 @@ resource "aws_s3_object" "api_source_code_object" {
   source_hash           = filemd5("backend.zip")
 }
 
-// create elastic beanstalk resource
+// Create elastic beanstalk resource
 resource "aws_elastic_beanstalk_application" "api_app" {
   name                  = "${var.project}-${var.type}-api-app"
   description           = var.eb_app_desc
 }
 
-// connect eb to the s3 bucket with the app in it
+// Connect eb to the s3 bucket with the app in it
 resource "aws_elastic_beanstalk_application_version" "api_app_version" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = aws_s3_object.api_source_code_object.id
@@ -34,6 +34,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     name                = "IamInstanceProfile"
     value               = aws_iam_instance_profile.api.name
   }
+
   setting {
     namespace = "aws:elasticbeanstalk:environment"
     name      = "LoadBalancerType"
@@ -84,11 +85,13 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     name      = "MaxSize"
     value     = 6
   }
+
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "SecurityGroups"
     value     = aws_security_group.api_security_group.id
   }
+
   setting {
     namespace = "aws:elbv2:listener:443"
     name      = "Protocol"
@@ -112,11 +115,13 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     namespace = "aws:elasticbeanstalk:environment:process:default"
     value     = 3000
   }
+
   setting {
     name      = "HealthCheckPath"
     namespace = "aws:elasticbeanstalk:environment:process:default"
     value     = "/graphql"
   }
+
   setting {
     name      = "StickinessEnabled"
     namespace = "aws:elasticbeanstalk:environment:process:default"

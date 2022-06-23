@@ -1,3 +1,5 @@
+# CloudWatch Log Exporter to S3 bucket
+
 data "archive_file" "log_exporter" {
   type        = "zip"
   source_file = "${path.module}/lambda/cloudwatch-to-s3.py"
@@ -109,7 +111,7 @@ resource "aws_lambda_function" "log_exporter" {
     variables = {
       S3_BUCKET = aws_s3_bucket.log_files.bucket,
       AWS_ACCOUNT = data.aws_caller_identity.current.account_id
-      LOG_GROUP_NAME = "Flox-${var.type}"
+      LOG_GROUP_NAME = "${var.project}-${var.type}"
     }
   }
 }

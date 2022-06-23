@@ -1,4 +1,4 @@
-//RDS database stuff
+// RDS Database setup
 resource "aws_db_subnet_group" "database_subnet_group" {
   name                      = "${var.project}-${var.type}-database-subnet-group"
   subnet_ids                = aws_subnet.database_subnets.*.id
