@@ -20,20 +20,25 @@ variable "base_domain" {
   description = "Frontend base domain, e.g. flox.polygon-project.ch"
   type    = string
 }
+
 variable "backend_base_domain" {
   description = "Backend base domain, e.g. api.flox.polygon-project.ch"
   type    = string
 }
+
 variable "email_sender" {
   description = "Default e-mail sending address"
   type    = string
 }
+
 variable "user_pool_id" {
   type    = string
 }
+
 variable "user_pool_client_id" {
   type    = string
 }
+
 variable "aws_access_key" {
   description     = "aws_access_key_id"
   type            = string
@@ -51,13 +56,13 @@ variable "aws_region" {
 }
 
 variable "project" {
-  default         = "flox" # TODO .env based
+  default         = "flox"
   description     = "prefix used for all resources in the Project"
   type            = string
 }
 
 variable "eb_app_desc" {
-  default         = "Flox EBS app" # TODO .env based
+  default         = "EBS app"
   description     = "Description for the elastic Beanstalk app"
   type            = string
 }
