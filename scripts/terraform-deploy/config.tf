@@ -10,13 +10,12 @@ terraform {
     organization        = "polygonsoftware" # TODO application specific: Change to customer account
 
     workspaces {
-      name = "${var.project}-##TYPE##" ## TODO why not var.type?
-    }
+      name = "##PROJECT##-##TYPE##" # will be replaced in preprocessing
   }
 }
 // define AWS as provider
 provider "aws" {
-  region                = var.aws_region
+  region              = var.aws_region
   secret_key          = var.aws_secret_access_key
   access_key          = var.aws_access_key
 }
