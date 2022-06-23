@@ -7,7 +7,7 @@ variable "project" {
 }
 
 variable "mfa_configuration" {
-  default         = "ON"
+  default         = "ON"              # Alternatives: 'OFF', 'OPTIONAL'
   description     = "Cognito MFA mode"
   type            = string
 }
