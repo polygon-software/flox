@@ -17,16 +17,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          types: |
+          scopes: |
             fix
             feat
             doc
             test
-          scopes: |
-            core
-            soi
-            bigabig
-            datavis
           wip: false
           validateSingleCommit: true
 

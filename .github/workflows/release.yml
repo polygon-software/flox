@@ -1,0 +1,58 @@
+name: "Stage 4: Overwrite Live-Environment with content from Test-Environment"
+
+on:
+  release:
+    types:
+    - published
+
+jobs:
+  release:
+    name: "Release new LIVE Application"
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Make build.bash executable
+        run: sudo chmod +x ./scripts/terraform-deploy/build.bash
+
+      - name: execute build.bash
+        working-directory: ./scripts/terraform-deploy
+        run: sudo bash build.bash live
+
+      - name: terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        id: init
+        working-directory: ./scripts/terraform-deploy
+        run: terraform init
+
+      - name: Parse .env file
+        id: dotenv
+        uses: falti/dotenv-action@master
+        with:
+          path: frontend/live.env
+
+      # TODO run create-tf-env.sh somewhere around here
+
+      - name: Terraform Apply
+        working-directory: ./scripts/terraform-deploy
+        run: terraform apply -auto-approve -var type="live" -var user_pool_id="${{ steps.dotenv.outputs.VUE_APP_USER_POOL_ID }}" -var user_pool_client_id="${{ steps.dotenv.outputs.VUE_APP_USER_POOL_CLIENT_ID }}" -var base_domain="${{ steps.dotenv.outputs.VUE_APP_BASE_DOMAIN }}" -var backend_base_domain="${{ steps.dotenv.outputs.VUE_APP_BACKEND_BASE_DOMAIN }}" -var email_sender="${{ steps.dotenv.outputs.VUE_APP_EMAIL_SENDER }}" -var hosted_zone_id="${{ steps.dotenv.outputs.VUE_APP_HOSTED_ZONE_ID }}" -var cognito_arn="${{ steps.dotenv.outputs.COGNITO_ARN }}"
+
+      - name: "Update state of monday.com items to 'Stage 4: Production'"
+        uses: polygon-software/action-monday-state@main
+#        if: ${{ github.event.release.draft != 'true' }}
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          multiple: true
+          text: ${{ github.event.release.body }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'Stage 4: Production'
+          allow-no-item-id: true
