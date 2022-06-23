@@ -49,6 +49,7 @@ variable "aws_region" {
   description     = "AWS Region"
   type            = string
 }
+
 variable "project" {
   default         = "flox" # TODO .env based
   description     = "prefix used for all resources in the Project"
