@@ -198,7 +198,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "COMPOSE_PROJECT_NAME"
-    value     = "soi" # TODO: Based on .env
+    value     = "flox" # TODO: Based on .env
   }
 
   setting {
@@ -231,7 +231,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "CLOUDWATCH_GROUP_NAME"
-    value     = "SOI-${var.type}"
+    value     = "FLOX-${var.type}"  # TODO .env based
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"

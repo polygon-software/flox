@@ -67,17 +67,17 @@ resource "aws_iam_role_policy_attachment" "api_ssm" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
-resource "aws_iam_role_policy_attachment" "api_soi" {
+resource "aws_iam_role_policy_attachment" "api_flox" {  # TODO .env based
   role   = aws_iam_role.eb_api_role.name
-  policy_arn = aws_iam_policy.soi.arn
+  policy_arn = aws_iam_policy.flox.arn  # TODO .env based
 }
 
-resource "aws_iam_policy" "soi" {
-  name = "soi-manager-${var.type}"
-  policy = data.aws_iam_policy_document.soi_manager_document.json
+resource "aws_iam_policy" "flox" { # TODO .env based
+  name = "flox-manager-${var.type}" # TODO .env based
+  policy = data.aws_iam_policy_document.flox_manager_document.json
 }
 
-data aws_iam_policy_document soi_manager_document {
+data aws_iam_policy_document flox_manager_document {
   statement {
     effect = "Allow"
     actions = [

@@ -17,11 +17,11 @@ variable "gcb_backup_user_name" {
 }
 
 variable "base_domain" {
-  description = "Frontend base domain, e.g. soi.polygon-project.ch"
+  description = "Frontend base domain, e.g. flox.polygon-project.ch"
   type    = string
 }
 variable "backend_base_domain" {
-  description = "Backend base domain, e.g. api.soi.polygon-project.ch"
+  description = "Backend base domain, e.g. api.flox.polygon-project.ch"
   type    = string
 }
 variable "email_sender" {
@@ -50,13 +50,13 @@ variable "aws_region" {
   type            = string
 }
 variable "project" {
-  default         = "soi"
+  default         = "flox" # TODO .env based
   description     = "prefix used for all resources in the Project"
   type            = string
 }
 
 variable "eb_app_desc" {
-  default         = "SOI EBS app"
+  default         = "Flox EBS app" # TODO .env based
   description     = "Description for the elastic Beanstalk app"
   type            = string
 }
@@ -98,7 +98,7 @@ variable "cidr_block" {
 }
 
 variable "database_name" {
-  default         = "soi_db"
+  default         = "app_db" # TODO .env based
   description     = "Name of database"
   type            = string
 }

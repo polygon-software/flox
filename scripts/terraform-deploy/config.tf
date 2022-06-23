@@ -7,10 +7,10 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        = "polygon-software"
+    organization        = "polygonsoftware" # TODO application specific: Change to customer account
 
     workspaces {
-      name = "SOI-##TYPE##"
+      name = "Flox-##TYPE##"  # TODO .env based
     }
   }
 }
