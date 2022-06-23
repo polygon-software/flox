@@ -1,4 +1,4 @@
-// upload app.zip to bucket
+// Upload app.zip to bucket
 resource "aws_s3_object" "frontend_source_code" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = "${var.project}-${var.type}-web-beanstalk/frontend.zip"
@@ -9,7 +9,7 @@ resource "aws_s3_object" "frontend_source_code" {
   }
 }
 
-// create elastic beanstalk resource
+// Create Elastic Beanstalk resource
 resource "aws_elastic_beanstalk_application" "frontend_application" {
   name                  = "${var.project}-${var.type}-web-app"
   description           = var.eb_app_desc
@@ -18,7 +18,7 @@ resource "aws_elastic_beanstalk_application" "frontend_application" {
   }
 }
 
-// connect eb to the s3 bucket with the app in it
+// Connect EBS to the S3 bucket containing the app
 resource "aws_elastic_beanstalk_application_version" "frontend_application_version" {
   name                  = "${var.project}-${var.type}-web-v-v-${filemd5("frontend.zip")}"
   bucket                = aws_s3_bucket.source_code_bucket.id
@@ -29,8 +29,8 @@ resource "aws_elastic_beanstalk_application_version" "frontend_application_versi
   }
 }
 
-// Create eb environment
-// for settings see https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
+// Create EBS environment
+// For settings, see https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
 resource "aws_elastic_beanstalk_environment" "frontend_env" {
   name                  = "${var.project}-${var.type}-web-env"
   application           = aws_elastic_beanstalk_application.frontend_application.name

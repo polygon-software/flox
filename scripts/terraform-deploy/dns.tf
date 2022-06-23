@@ -1,3 +1,4 @@
+# DNS Setup
 
 resource "aws_acm_certificate" "frontend_cert" {
   domain_name = var.base_domain
@@ -17,11 +18,11 @@ resource "aws_acm_certificate" "backend_cert" {
 
 resource "aws_route53_record" "ssl_frontend" {
   for_each = {
-  for dvo in aws_acm_certificate.frontend_cert.domain_validation_options : dvo.domain_name => {
-    name   = dvo.resource_record_name
-    record = dvo.resource_record_value
-    type   = dvo.resource_record_type
-  }
+    for dvo in aws_acm_certificate.frontend_cert.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
   }
   allow_overwrite = true
   name            = each.value.name
@@ -91,3 +92,5 @@ resource "aws_route53_record" "web_record_alias_AAAA" {
     zone_id                = data.aws_elastic_beanstalk_hosted_zone.hosted_zone.id
   }
 }
+
+# TODO: also automatically set up www.example.com -> example.com redirect

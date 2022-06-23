@@ -7,7 +7,6 @@ resource "aws_vpc" "vpc" {
     Name          = "${var.project}-${var.type}-vpc"
     Project       = var.project
   }
-
 }
 
 resource "aws_internet_gateway" "internet_gateway" {
@@ -43,7 +42,7 @@ resource "aws_route_table" "route_table_public" {
 }
 
 // Create new elastic IP for the NAT
-// @Cloudmates: needed?
+// TODO @Cloudmates: Is that needed?
 resource "aws_eip" "web_nat_elastic_ip" {
   vpc                   = true
   tags = {
@@ -56,7 +55,8 @@ resource "aws_eip" "web_nat_elastic_ip" {
   }
 }
 
-// Create nat gateway. @Cloudmates: Is that needed?
+// Create nat gateway.
+// TODO @Cloudmates: Is that needed?
 resource "aws_nat_gateway" "frontend_nat" {
   allocation_id         = aws_eip.web_nat_elastic_ip.id
   subnet_id             = aws_subnet.frontend_public_subnet[0].id

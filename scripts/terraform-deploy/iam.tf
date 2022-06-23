@@ -1,3 +1,4 @@
+# IAM Roles setup
 resource "aws_iam_role" "eb_api_role" {
   name = "aws-elasticbeanstalk-ec2-api-role-${var.type}"
   assume_role_policy = data.aws_iam_policy_document.eb_role_assume.json
@@ -12,10 +13,12 @@ resource "aws_iam_instance_profile" "web" {
   name = "web_profile-${var.type}"
   role = aws_iam_role.eb_web_role.name
 }
+
 resource "aws_iam_instance_profile" "api" {
   name = "api_profile-${var.type}"
   role = aws_iam_role.eb_api_role.name
 }
+
 data aws_iam_policy_document eb_role_assume {
   statement {
     actions = ["sts:AssumeRole"]
@@ -26,18 +29,22 @@ data aws_iam_policy_document eb_role_assume {
     }
   }
 }
+
 resource "aws_iam_role_policy_attachment" "web_web_tier" {
   role   = aws_iam_role.eb_web_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
+
 resource "aws_iam_role_policy_attachment" "web_multi_docker" {
   role   = aws_iam_role.eb_web_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker"
 }
+
 resource "aws_iam_role_policy_attachment" "web_worker_tier" {
   role       = aws_iam_role.eb_web_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
 }
+
 resource "aws_iam_role_policy_attachment" "web_ssm" {
   role   = aws_iam_role.eb_web_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
@@ -47,26 +54,32 @@ resource "aws_iam_role_policy_attachment" "api_web_tier" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
+
 resource "aws_iam_role_policy_attachment" "api_multi_docker" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker"
 }
+
 resource "aws_iam_role_policy_attachment" "api_worker_tier" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
 }
+
 resource "aws_iam_role_policy_attachment" "api_cloudwatch" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
+
 resource "aws_iam_role_policy_attachment" "api_ses" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"    // ToDo reduce
 }
+
 resource "aws_iam_role_policy_attachment" "api_ssm" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+
 resource "aws_iam_role_policy_attachment" "api_role" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = aws_iam_policy.iamPolicy.arn
@@ -118,19 +131,25 @@ data aws_iam_policy_document flox_manager_document {
   }
 }
 
-data "aws_iam_user" "backupper" {
+# User
+data "aws_iam_user" "backup_creator" {
   user_name = var.gcb_backup_user_name
 }
-resource "aws_iam_policy" "backupper" {
+
+# Policy
+resource "aws_iam_policy" "backup_creator_policy" {
   name = "backupper-${var.type}"
-  policy = data.aws_iam_policy_document.gcp_backupper.json
-}
-resource "aws_iam_user_policy_attachment" "backupper" {
-  policy_arn = aws_iam_policy.backupper.arn
-  user       = data.aws_iam_user.backupper.user_name
+  policy = data.aws_iam_policy_document.gcp_backup_creator_policy_document.json
 }
 
-data aws_iam_policy_document gcp_backupper {
+# Policy Attachment
+resource "aws_iam_user_policy_attachment" "backup_creator_policy_attachment" {
+  policy_arn = aws_iam_policy.backup_creator_policy.arn
+  user       = data.aws_iam_user.backup_creator.user_name
+}
+
+# Policy Document
+data aws_iam_policy_document gcp_backup_creator_policy_document {
   statement {
     effect = "Allow"
     actions = [

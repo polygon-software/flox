@@ -1,4 +1,4 @@
-// Subnets public and private
+// Subnets (public and private)
 resource "aws_subnet" "frontend_public_subnet" {
   count                   = 3
   cidr_block              = cidrsubnet(var.cidr_block, 5, count.index + var.web_pub_subnet_factor)
