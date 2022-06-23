@@ -1,17 +1,32 @@
-# Check valid mode
+# Connects to the production / test RDS PostgreSQL database instance via SSH, allowing you to access the database at localhost:5432
+# Necessary variables:
+# - Deployment mode ('live' or 'test')
+# - Project name
+# - Frontend mode ('spa', 'pwa' or 'ssr')
+
+# Check valid deployment mode
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]
 then
-  echo "Invalid mode $1"
+  echo "Invalid deployment mode $1"
   exit
 fi
 
-echo "Generating for: $1"
+# Check valid frontend mode
+if [[ $3 != "spa" ]] && [[ $3 != "pwa" ]] && [[ $3 != "ssr" ]]
+then
+  echo "Invalid frontend mode $3"
+  exit
+fi
 
+echo "Generating for project $2 in mode $1 ($3)"
+
+# Build backend
 cd ../../backend || exit
 yarn
 yarn build
 cp -a node_modules dist/
 
+# Build package.json
 echo '{
    "name": "flox",
    "version": "0.0.1",
@@ -37,13 +52,36 @@ cd dist || exit
 zip -r ../../scripts/terraform-deploy/backend.zip * -q
 cd ..
 
+# Use appropriate .env file as 'running.env'
 cd ../frontend || exit
 yarn
 cp "$1.env" running.env
-yarn build:ssr # TODO handle non-ssr, ideally based on flox.config
-cd dist/ssr || exit
+
+# SPA Mode
+if [[ $3 == "spa" ]]
+then
+  yarn build
+  cd dist/spa || exit # TODO correct?
+# SSR Mode
+elif [[ $3 == "ssr" ]]
+then
+  yarn build:ssr
+  cd dist/ssr || exit
+# PWA Mode
+elif [[ $3 == "pwa" ]]
+then
+  yarn build:pwa
+  cd dist/pwa || exit
+fi
+
+# Install modules & zip
 yarn
 zip -r ../../../scripts/terraform-deploy/frontend.zip * -q
 
 cd ../../../scripts/terraform-deploy || exit
+
+# Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$3/g" config.tf

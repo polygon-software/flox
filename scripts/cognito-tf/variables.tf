@@ -1,13 +1,14 @@
-# Cognito configuration TODO: adapt based on flox.config
+# Cognito configuration
+# (gets overwritten by tf.env)
 
 variable "project" {
-  default         = "flox" # TODO: set based on .env?
+  default         = "flox"
   description     = "prefix used for all resources in the Project"
   type            = string
 }
 
 variable "mfa_configuration" {
-  default         = "ON"              # Alternatives: 'OFF', 'OPTIONAL'
+  default         = "ON" # Alternatives: 'OFF', 'OPTIONAL'
   description     = "Cognito MFA mode"
   type            = string
 }
