@@ -13,7 +13,7 @@ resource "aws_cognito_user_pool" "user_pool" {
 }
 
 resource "aws_cognito_user_pool_client" "app_client" {
-  name         = "FloxClient" # TODO: based on .env
+  name         = "${var.project}Client" # TODO: based on .env
   user_pool_id = aws_cognito_user_pool.user_pool.id
   access_token_validity = 1
   token_validity_units {

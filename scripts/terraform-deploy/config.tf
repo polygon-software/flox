@@ -10,7 +10,7 @@ terraform {
     organization        = "polygonsoftware" # TODO application specific: Change to customer account
 
     workspaces {
-      name = "Flox-##TYPE##"  # TODO .env based
+      name = "${var.project}-##TYPE##" ## TODO why not var.type?
     }
   }
 }

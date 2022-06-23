@@ -13,7 +13,7 @@ yarn build
 cp -a node_modules dist/
 
 echo '{
-   "name": "nest-test",
+   "name": "flox",
    "version": "0.0.1",
    "description": "",
    "author": "",
@@ -40,7 +40,7 @@ cd ..
 cd ../frontend || exit
 yarn
 cp "$1.env" running.env
-yarn build:ssr
+yarn build:ssr # TODO handle non-ssr, ideally based on flox.config
 cd dist/ssr || exit
 yarn
 zip -r ../../../scripts/terraform-deploy/frontend.zip * -q

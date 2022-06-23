@@ -3,6 +3,8 @@ import os
 from pprint import pprint
 import time
 
+# Sets up backup/export of CloudWatch logs to S3 Bucket
+
 logs = boto3.client('logs')
 ssm = boto3.client('ssm')
 

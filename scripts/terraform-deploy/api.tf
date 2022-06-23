@@ -198,7 +198,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "COMPOSE_PROJECT_NAME"
-    value     = "flox" # TODO: Based on .env
+    value     = var.project
   }
 
   setting {
@@ -231,7 +231,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "CLOUDWATCH_GROUP_NAME"
-    value     = "FLOX-${var.type}"  # TODO .env based
+    value     = "${var.project}-${var.type}"  # TODO does this possibly have to be uppercase?
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"

@@ -67,13 +67,13 @@ resource "aws_iam_role_policy_attachment" "api_ssm" {
   role   = aws_iam_role.eb_api_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
-resource "aws_iam_role_policy_attachment" "api_flox" {  # TODO .env based
+resource "aws_iam_role_policy_attachment" "api_role" {
   role   = aws_iam_role.eb_api_role.name
-  policy_arn = aws_iam_policy.flox.arn  # TODO .env based
+  policy_arn = aws_iam_policy.iamPolicy.arn
 }
 
-resource "aws_iam_policy" "flox" { # TODO .env based
-  name = "flox-manager-${var.type}" # TODO .env based
+resource "aws_iam_policy" "iamPolicy" {
+  name = "${var.project}-manager-${var.type}"
   policy = data.aws_iam_policy_document.flox_manager_document.json
 }
 
