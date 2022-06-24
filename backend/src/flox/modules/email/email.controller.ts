@@ -1,6 +1,6 @@
 import { Controller, Post, Query, Req, Res } from '@nestjs/common';
 import fastify = require('fastify');
-import { LoggedIn, Public } from '../auth/authentication.decorator';
+import { Public } from '../auth/authentication.decorator';
 import { EmailService } from './email.service';
 
 @Controller()
@@ -25,7 +25,7 @@ export class EmailController {
     // Access to triggering user's Cognito UUID (if needed)
     //const triggeredBy = req['user'].userId;
 
-    const recipient = query.recipient;
+    const recipient = query.recipient as string;
 
     if (!recipient) {
       throw new Error('No recipient given!');
@@ -33,7 +33,7 @@ export class EmailController {
 
     // Send e-mail
     try {
-      await this.emailService.sendEmail();
+      await this.emailService.sendTestEmail(recipient);
       res.code(200);
       res.send();
     } catch (e) {
