@@ -27,7 +27,6 @@ export class EmailController {
    * @returns {Promise<void>} - done
    */
   @Post('/sendTestEmail')
-  // @LoggedIn()
   @Public()
   async sendTestEmail(
     @Req() req: fastify.FastifyRequest,
@@ -50,7 +49,7 @@ export class EmailController {
       res.send();
     } catch (e) {
       res.code(500);
-      res.send(`An error occurred: ${e.message}`);
+      res.send(`Error occurred while sending e-mail: ${e.message}`);
     }
   }
 }

@@ -5,7 +5,7 @@ import { moduleConfig } from './config';
 @Injectable()
 export class EmailService {
   /**
-   * Sends an e-mail
+   * Sends a test e-mail
    * @param {string} recipient - e-mail recipient
    * @param {Credentials} credentials - SES auth credentials
    * @returns {Promise<void>} - done
