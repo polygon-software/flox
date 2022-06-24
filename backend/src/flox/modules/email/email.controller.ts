@@ -2,10 +2,22 @@ import { Controller, Post, Query, Req, Res } from '@nestjs/common';
 import fastify = require('fastify');
 import { Public } from '../auth/authentication.decorator';
 import { EmailService } from './email.service';
+import { ConfigService } from '@nestjs/config';
+import { Credentials } from './helpers/email-helpers';
 
 @Controller()
 export class EmailController {
-  constructor(private readonly emailService: EmailService) {}
+  constructor(
+    private readonly emailService: EmailService,
+    private readonly configService: ConfigService,
+  ) {}
+
+  // SES credentials
+  private readonly credentials: Credentials = {
+    region: this.configService.get('AWS_REGION'),
+    accessKeyId: this.configService.get('AWS_SES_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.get('AWS_SES_SECRET_ACCESS_KEY'),
+  };
 
   /**
    * Sends a test e-mail to the given address (in 'recipient' param of query)
@@ -33,7 +45,7 @@ export class EmailController {
 
     // Send e-mail
     try {
-      await this.emailService.sendTestEmail(recipient);
+      await this.emailService.sendTestEmail(recipient, this.credentials);
       res.code(200);
       res.send();
     } catch (e) {
