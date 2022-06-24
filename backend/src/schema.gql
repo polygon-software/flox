@@ -2,46 +2,40 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateItemInput {
-  """Name"""
-  name: String!
-
-  """User UUID"""
-  userUUID: ID
-}
-
 input CreateUserInput {
-  age: Int!
-  name: String!
+  cognitoUuid: String!
+  email: String!
+  role: String
+  username: String!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 input DeleteUserInput {
   uuid: ID!
 }
 
-type Item {
-  """Name"""
-  name: String!
-
-  """User of the item"""
-  user: User
-
-  """UUID"""
-  uuid: ID!
-}
-
 type Mutation {
-  create(createUserInput: CreateUserInput!): User!
-  createItem(createItemInput: CreateItemInput!): Item!
-  remove(deleteUserInput: DeleteUserInput!): User!
-  removeItem(uuid: ID!): Item!
-  update(updateUserInput: UpdateUserInput!): User!
-  updateItem(updateItemInput: UpdateItemInput!): Item!
+  createUser(createUserInput: CreateUserInput!): User!
+  deleteUser(deleteUserInput: DeleteUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type PrivateFile {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """File owner"""
   owner: String!
@@ -54,8 +48,17 @@ type PrivateFile {
 }
 
 type PublicFile {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
   """S3 File Key"""
   key: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
 
   """Public download URL"""
   url: String!
@@ -72,42 +75,38 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
-  item(uuid: ID!): Item!
-  items: [Item!]!
+  myUser: User!
   user(uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
 
-type Subscription {
-  userAdded: User!
-}
-
-input UpdateItemInput {
-  """Name"""
-  name: String
-
-  """User UUID"""
-  userUUID: ID
-
-  """Item UUID"""
-  uuid: ID!
-}
-
 input UpdateUserInput {
-  age: Int
-  name: String
+  email: String
+  username: String
   uuid: ID!
 }
 
 type User {
-  """Age"""
-  age: Int!
+  """Cognito UUID"""
+  cognitoUuid: String!
 
-  """Items of the user"""
-  items: [Item!]
+  """Creation date"""
+  createdAt: DateTime!
 
-  """Name"""
-  name: String!
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """E-mail address"""
+  email: String!
+
+  """Last modification date"""
+  lastModifiedAt: DateTime!
+
+  """User role"""
+  role: String
+
+  """Username"""
+  username: String!
 
   """UUID"""
   uuid: ID!

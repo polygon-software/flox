@@ -29,11 +29,13 @@ export default boot(async ({ store, ssrContext}) => {
 
     //Tokens
     const accessToken = cookies.get('authentication.accessToken')
-    const idToken = cookies.get('authentication.accessToken')
-    const refreshToken = cookies.get('authentication.accessToken')
+    const idToken = cookies.get('authentication.idToken')
+    const refreshToken = cookies.get('authentication.refreshToken')
 
-    if(!accessToken){return}
-    await axios.post('https://cognito-idp.eu-central-1.amazonaws.com/', {
+    if(!accessToken){
+      return
+    }
+    await axios.post(`https://cognito-idp.${process.env.VUE_APP_AWS_REGION ?? 'eu-central-1'}.amazonaws.com/`, {
       'AccessToken':accessToken
     }, {headers: {
         'X-Amz-Target': 'AWSCognitoIdentityProviderService.GetUser',
@@ -67,9 +69,6 @@ export default boot(async ({ store, ssrContext}) => {
     }).catch((err)=>{
       console.error("Authentication error:", err)
     })
-
-
-
   } else {
     cognitoUser = userPool.getCurrentUser() || undefined
     if(cognitoUser){
@@ -80,9 +79,5 @@ export default boot(async ({ store, ssrContext}) => {
         }
       })
     }
-
   }
-
-
 })
-
