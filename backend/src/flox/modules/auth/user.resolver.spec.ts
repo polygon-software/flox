@@ -4,6 +4,13 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { DEFAULT_ROLES } from '../roles/config';
+import { CanActivate } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { floxProviders } from '../../flox';
+import { RolesGuard } from '../roles/roles.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth.guard';
+import { JwtStrategy } from './jwt.strategy';
 
 describe('UsersResolver', () => {
   let userResolver: UserResolver;
@@ -14,6 +21,30 @@ describe('UsersResolver', () => {
     userRepository = new Repository<User>();
     userService = new UserService(userRepository);
     userResolver = new UserResolver(userService);
+    // TODO...
+    // // Mock RolesGuard so we don't get dependency failures
+    // const mockRoleGuard: CanActivate = {
+    //   canActivate: jest.fn(() => true),
+    // };
+    //
+    // const app: TestingModule = await Test.createTestingModule({
+    //   providers: [
+    //     JwtStrategy,
+    //     {
+    //       provide: APP_GUARD,
+    //       useClass: JwtAuthGuard,
+    //     },
+    //     {
+    //       provide: APP_GUARD,
+    //       useClass: RolesGuard,
+    //     },
+    //   ],
+    // })
+    //   .overrideGuard(RolesGuard)
+    //   .useValue(mockRoleGuard)
+    //   .compile();
+    //
+    // userService = app.get<UserService>(UserService);
   });
 
   it('should be defined', () => {

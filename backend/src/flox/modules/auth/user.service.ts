@@ -51,7 +51,21 @@ export class UserService {
    * @returns {Promise<User>} - the user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersRepository.findOne(getUserArgs.uuid);
+    if (getUserArgs.uuid) {
+      return this.usersRepository.findOne(getUserArgs.uuid);
+    }
+
+    if (getUserArgs.cognitoUuid) {
+      return this.usersRepository.findOne({
+        where: {
+          cognitoUuid: getUserArgs.cognitoUuid,
+        },
+      });
+    }
+
+    throw new Error(
+      'getUser must be called with either uuid or cognitoUuid parameter',
+    );
   }
 
   /**

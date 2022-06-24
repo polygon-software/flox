@@ -6,6 +6,8 @@ import { User } from '../auth/entities/user.entity';
 import { getRequest } from 'src/flox/core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
 import { DEFAULT_ROLES } from 'src/flox/modules/roles/config';
+import { UserService } from '../auth/user.service';
+import { GetUserArgs } from '../auth/dto/args/get-user.args';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -14,8 +16,8 @@ import { DEFAULT_ROLES } from 'src/flox/modules/roles/config';
 export class RolesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+
+    private readonly userService: UserService, // @InjectRepository(User) // private readonly userRepository: Repository<User>,
   ) {}
 
   /**
@@ -48,7 +50,9 @@ export class RolesGuard implements CanActivate {
     const user = req.user as Record<string, string>;
     let dbUser: User | undefined = undefined;
     if (user) {
-      dbUser = await this.userRepository.findOne({ cognitoUuid: user.userId });
+      dbUser = await this.userService.getUser({
+        cognitoUuid: user.userId,
+      } as GetUserArgs);
 
       // Admin has access to everything
       if (dbUser && dbUser.role === DEFAULT_ROLES.ADMIN) {
