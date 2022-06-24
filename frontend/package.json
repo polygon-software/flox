@@ -21,7 +21,8 @@
     "serve:test:report": "quasar serve reports/coverage/lcov-report/ --port 8787",
     "test:unit:watch": "jest --watch",
     "test:unit:watchAll": "jest --watchAll",
-    "concurrently:dev:test": "concurrently \"yarn dev\" \"yarn test:unit:watch\""
+    "concurrently:dev:test": "concurrently \"yarn dev\" \"yarn test:unit:watch\"",
+    "cypress": "cypress open"
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",
@@ -37,6 +38,7 @@
     "amazon-cognito-identity-js": "^5.2.9",
     "axios": "^0.24.0",
     "core-js": "3.19.1",
+    "cypress": "^10.2.0",
     "date-fns": "^2.25.0",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
