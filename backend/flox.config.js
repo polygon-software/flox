@@ -5,6 +5,7 @@ module.exports = {
     roles: true,
     file: true,
     sharing: false,
+    email: true,
   },
   moduleOptions: {
     auth: {
@@ -12,6 +13,9 @@ module.exports = {
     },
     roles: {
       roles: ['ADMIN', 'SUPERUSER', 'USER'],
+    },
+    email: {
+      emailSender: 'david.wyss@polygon-software.ch',
     },
   },
 };

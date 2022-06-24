@@ -25,12 +25,12 @@ export class FileController {
       return;
     }
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPublicFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.taskService.uploadPublicFile(
+      fileBuffer,
       file.filename,
     );
-    res.send(new_file);
+    res.send(newFile);
   }
 
   @Post('/uploadPrivateFile')
@@ -49,12 +49,12 @@ export class FileController {
     const owner = req['user'].userId;
 
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPrivateFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.taskService.uploadPrivateFile(
+      fileBuffer,
       file.filename,
       owner,
     );
-    res.send(new_file);
+    res.send(newFile);
   }
 }
