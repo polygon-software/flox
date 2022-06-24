@@ -34,9 +34,9 @@ export class EmailController {
     // Send e-mail
     try {
       await this.emailService.sendEmail();
-      res.send('OK'); // TODO
+      res.code(200);
+      res.send();
     } catch (e) {
-      console.log('error:', e);
       res.code(500);
       res.send(`An error occurred: ${e.message}`);
     }
