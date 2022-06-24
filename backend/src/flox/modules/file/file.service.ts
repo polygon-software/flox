@@ -15,8 +15,8 @@ export class FileService {
   // S3 credentials
   private readonly credentials = {
     region: this.configService.get('AWS_REGION'),
-    accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+    accessKeyId: this.configService.get('AWS_S3_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.get('AWS_S3_SECRET_ACCESS_KEY'),
   };
 
   // AWS S3 instance
@@ -37,6 +37,7 @@ export class FileService {
    * Uploads a file to the public S3 bucket
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
+   * @returns {Promise<PublicFile>} - the newly uploaded file
    */
   async uploadPublicFile(
     dataBuffer: Buffer,
