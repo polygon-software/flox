@@ -8,36 +8,16 @@
           class="q-ma-sm"
       >
       <h5 class="text-black q-pa-none q-ma-md">
-        PolygonSoftware Template
+        Flox Template
       </h5>
-      <p
-          class="text-grey-7"
-          v-if="loggedIn && username"
-      >
-        {{ $t('loggedIn', {user: username})}}
-      </p>
     </div>
   <div class="row">
     <q-btn
         v-if="loggedIn"
-        label="Logout"
+        :label="$t('authentication.logout')"
         class="text-primary"
         flat
         @click="logout"
-    />
-    <q-btn
-        v-if="loggedIn"
-        label="Change Password"
-        class="text-primary"
-        flat
-        @click="changePassword"
-    />
-    <q-btn
-        v-if="!loggedIn"
-        label="Password Forgotten"
-        class="text-primary"
-        flat
-        @click="forgottenPassword"
     />
   </div>
 
@@ -46,7 +26,7 @@
 
 <script setup lang="ts">
 import {computed, inject} from 'vue'
-import {AuthenticationService} from 'src/services/AuthService';
+import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import {useAuth} from 'src/store/authentication';
@@ -67,9 +47,6 @@ const loggedIn = computed(() => {
   return result;
 })
 
-// Username does not need to be reactive, since it won't change between logins
-const username = $authStore.getters.getUsername()
-
 /**
  * Logs out the current authentication
  * @async
@@ -79,21 +56,4 @@ async function logout(): Promise<void>{
   await $authService?.logout();
   await $routerService?.routeTo(ROUTES.LOGIN)
 }
-
-/**
- * Triggers a password change for the currently logged in authentication
- * @returns {void}
- */
-function changePassword() {
-  $authService?.showChangePasswordDialog()
-}
-
-/**
- * Triggers a password change for a non-logged in authentication
- * @returns {void}
- */
-function forgottenPassword() {
-  $authService?.showResetPasswordDialog();
-}
-
 </script>
