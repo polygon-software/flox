@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import * as Joi from 'joi';
-import { floxEntities, floxModules, floxProviders } from './flox/flox';
+import { floxModules, floxProviders } from './flox/flox';
 
 @Module({
   imports: [
