@@ -51,7 +51,7 @@ resource "aws_route53_record" "ssl_backend" {
 resource "aws_route53_record" "api_record" {
   name                  = "api.${var.base_domain}"
   type                  = "CNAME"
-  zone_id               = data.aws_route53_zone.zone.id
+  zone_id               = aws_route53_zone.zone.id
   ttl                   = "300"
   records               = [aws_elastic_beanstalk_environment.api_env.endpoint_url]
 }
@@ -66,7 +66,7 @@ resource "aws_acm_certificate_validation" "cert_validation_backend" {
   validation_record_fqdns = [for record in aws_route53_record.ssl_backend : record.fqdn]
 }
 
-data "aws_route53_zone" "zone" {
+resource "aws_route53_zone" "zone" {
   name    = var.base_domain
 }
 
