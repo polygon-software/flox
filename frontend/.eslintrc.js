@@ -35,6 +35,7 @@ module.exports = {
     // consider disabling this class of rules if linting takes too long
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
 
+
     // Uncomment any of the lines below to choose desired strictness,
     // but leave only one uncommented!
     // See https://eslint.vuejs.org/rules/#available-rules
@@ -49,6 +50,7 @@ module.exports = {
     // https://github.com/SonarSource/eslint-plugin-sonarjs
     // linting rules that sonarqube considers for code quality checks
     'plugin:sonarjs/recommended',
+    "plugin:cypress/recommended",
   ],
 
   plugins: [
