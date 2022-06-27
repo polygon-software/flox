@@ -1,10 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { IsEmail, IsString } from 'class-validator';
-import { moduleConfig } from '../../roles/config';
-import { isModuleActive } from '../../../flox';
-import { MODULES } from '../../../MODULES';
 
 /**
  * A user registered within cognito, having a role and contact information
@@ -33,6 +30,7 @@ export class User extends BaseEntity {
   @IsString()
   role: string;
 
+  // TODO
   // /**
   //  * Before inserting or updating data, ensures the role matches one given in config
   //  * @returns {void}
