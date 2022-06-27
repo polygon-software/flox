@@ -11,7 +11,7 @@ type FileModuleConfig = {
   // TODO: once file module is set up, add options here
 };
 
-// Default configuration set; will get merged with custom config from flox.config.js
+// Default configuration set; will get merged with custom config from flox.config.json
 const defaultConfig: FileModuleConfig = {
   // TODO: once file module is set up, add options here
 };

@@ -1,4 +1,4 @@
-import * as flox from '../../flox.config.js';
+import * as flox from '../../flox.config.json';
 
 /**
  * Gets the active Flox modules from config
@@ -43,7 +43,7 @@ export function floxModuleOptions(moduleName: string) {
 }
 
 /**
- * Determines whether a Flox module is currently active from flox.config.js
+ * Determines whether a Flox module is currently active from flox.config.json
  * @param {string} moduleName - name of the module to check
  * @returns {boolean} - whether the module is active
  */
@@ -54,7 +54,7 @@ export function isModuleActive(moduleName: string){
 /**
  * Determines a module's actual configuration based on defaults and custom config
  * @param {Record<string, unknown>} defaultConfig - The module's default configuration
- * @param {Record<string, unknown>} customConfig - custom configuration from flox.config.js (may be empty if not given)
+ * @param {Record<string, unknown>} customConfig - custom configuration from flox.config.json (may be empty if not given)
  * @returns {Record<string, unknown>} - actual configuration to use
  */
 export function mergeConfigurations(

@@ -24,3 +24,18 @@ variable "username_attributes"{
   description     = "Cognito username attributes"
   type            = set(string)
 }
+
+variable "aws_region" {
+  description     = "AWS region"
+  type            = string
+}
+
+variable "aws_secret_access_key" {
+  description     = "Secret access key of organisation admin"
+  type            = string
+}
+
+variable "aws_access_key" {
+  description     = "access key of organisation admin"
+  type            = string
+}

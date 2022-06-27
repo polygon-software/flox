@@ -1,4 +1,4 @@
-import * as flox from '../../flox.config.js';
+import * as flox from '../../flox.config.json';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './modules/roles/roles.guard';
 import { JwtStrategy } from './modules/auth/jwt.strategy';
@@ -11,7 +11,7 @@ import PrivateFile from './modules/file/entities/private_file.entity';
 import PublicFile from './modules/file/entities/public_file.entity';
 
 /**
- * Returns the active Flox modules based on flox.config.js
+ * Returns the active Flox modules based on flox.config.json
  * @returns {any[]} - list of Modules
  */
 export function floxModules() {
@@ -38,7 +38,7 @@ export function floxModules() {
 }
 
 /**
- * Returns the providers to use based on flox.config.js
+ * Returns the providers to use based on flox.config.json
  * @returns {any[]} - list of providers
  */
 export function floxProviders() {
@@ -120,7 +120,7 @@ export function floxModulesOptions() {
 }
 
 /**
- * Determines whether a Flox module is currently active from flox.config.js
+ * Determines whether a Flox module is currently active from flox.config.json
  * @param {string} moduleName - name of the module to check
  * @returns {boolean} - whether the module is active
  */
