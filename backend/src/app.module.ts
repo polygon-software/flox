@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import * as Joi from 'joi';
 import { floxEntities, floxModules, floxProviders } from './flox/flox';
+import { UserModule } from './flox/modules/auth/user.module';
 
 @Module({
   imports: [
@@ -52,11 +53,11 @@ import { floxEntities, floxModules, floxProviders } from './flox/flox';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([
-      // Entities for Flox modules
-      ...floxEntities(),
-      // Add any custom entities here
-    ]),
+    // TypeOrmModule.forFeature([ TODO check if needed
+    //   // Entities for Flox modules
+    //   ...floxEntities(),
+    //   // Add any custom entities here
+    // ]),
     // Flox modules
     ...floxModules(),
     // Add any custom modules here

@@ -17,6 +17,15 @@ describe('UsersResolver', () => {
   let userService: UserService;
   let userRepository: Repository<User>;
 
+  // beforeEach(async () => {
+  //   const moduleRef = await Test.createTestingModule({
+  //     providers: [UserService, UserResolver],
+  //   }).compile();
+  //   // userRepository = new Repository<User>();
+  //   userService = moduleRef.get<UserService>(UserService);
+  //   userResolver = moduleRef.get<UserResolver>(UserResolver);
+  // });
+
   beforeEach(async () => {
     userRepository = new Repository<User>();
     userService = new UserService(userRepository);

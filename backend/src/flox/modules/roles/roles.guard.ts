@@ -1,11 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from '../auth/entities/user.entity';
-import { getRequest } from 'src/flox/core/flox-helpers';
+import { getRequest } from '../../core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
-import { DEFAULT_ROLES } from 'src/flox/modules/roles/config';
+import { DEFAULT_ROLES } from './config';
 import { UserService } from '../auth/user.service';
 import { GetUserArgs } from '../auth/dto/args/get-user.args';
 
@@ -17,7 +15,7 @@ export class RolesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
 
-    private readonly userService: UserService, // @InjectRepository(User) // private readonly userRepository: Repository<User>,
+    private readonly userService: UserService,
   ) {}
 
   /**
