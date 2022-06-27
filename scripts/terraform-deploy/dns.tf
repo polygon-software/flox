@@ -9,7 +9,7 @@ resource "aws_acm_certificate" "frontend_cert" {
 }
 
 resource "aws_acm_certificate" "backend_cert" {
-  domain_name = var.backend_base_domain
+  domain_name = "api.${var.base_domain}"
   validation_method = "DNS"
   lifecycle {
     create_before_destroy = true
@@ -49,7 +49,7 @@ resource "aws_route53_record" "ssl_backend" {
 }
 
 resource "aws_route53_record" "api_record" {
-  name                  = var.backend_base_domain
+  name                  = "api.${var.base_domain}"
   type                  = "CNAME"
   zone_id               = data.aws_route53_zone.zone.id
   ttl                   = "300"

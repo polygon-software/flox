@@ -6,6 +6,8 @@ fi
 
 
 zsh create-flox-tfvars.sh
+echo "type=\"$1\"" >> flox.tfvars
+
 cd ../cognito-tf || exit
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
@@ -25,9 +27,9 @@ organisation=${organisation:1:-1}
 
 if [[ $1 == "test" ]]
 then
-  url=$(jq '.general.test_url' ../../backend/flox.config.json)
+  url=$(jq '.general.test_base_domain' ../../backend/flox.config.json)
 else
-  url=$(jq '.general.live_url' ../../backend/flox.config.json)
+  url=$(jq '.general.live_base_domain' ../../backend/flox.config.json)
 fi
 url=${url:1:-1}
 
@@ -46,10 +48,18 @@ user_pool_id=${user_pool_id:1:-1}
 app_client_id=$(terraform output app_client_id)
 app_client_id=${app_client_id:1:-1}
 
+user_pool_arn=$(terraform output user_pool_arn)
+user_pool_arn=${user_pool_arn:1:-1}
+
+echo "cognito_arn=\"$user_pool_arn\"" >> ../support/flox.tfvars
+echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
+echo "user_pool_client_id=\"$app_client_id\"" >> ../support/flox.tfvars
+echo "base_domain=\"$url\"" >> ../support/flox.tfvars
+
 cd ../../frontend || exit
 rm .env
 
-echo "VUE_APP_GRAPHQL_ENDPOINT=$url" >> .env
+echo "VUE_APP_GRAPHQL_ENDPOINT=https://api.$url/graphql" >> .env
 echo "VUE_APP_NAME=$project-$1" >> .env
 echo "VUE_APP_AWS_REGION=$aws_region" >> .env
 echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env

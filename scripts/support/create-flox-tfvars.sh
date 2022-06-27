@@ -11,7 +11,7 @@ rm -f flox.tfvars
 # ===== Flox config variables =====
 
 # Apply flox.config.js via helper .ts file
-ts-node --compiler-options '{"module": "commonjs"}' ./export-variables.ts >> flox.tfvars
+ts-node --compiler-options '{"module": "commonjs"}' ./export-variables.ts  >> flox.tfvars
 
 
 echo "flox.tfvars created successfully!"

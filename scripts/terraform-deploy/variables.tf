@@ -21,11 +21,6 @@ variable "base_domain" {
   type    = string
 }
 
-variable "backend_base_domain" {
-  description = "Backend base domain, e.g. api.flox.polygon-project.ch"
-  type    = string
-}
-
 variable "email_sender" {
   description = "Default e-mail sending address"
   type    = string
