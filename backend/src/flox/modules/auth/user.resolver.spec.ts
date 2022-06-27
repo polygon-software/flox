@@ -10,7 +10,7 @@ describe('UserResolver', () => {
   let userService: UserService;
   let userResolver: UserResolver;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     userRepository = new Repository<User>();
     userService = new UserService(userRepository);
     userResolver = new UserResolver(userService);
