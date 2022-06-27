@@ -1,7 +1,10 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { IsEmail, IsString } from 'class-validator';
+import { moduleConfig } from '../../roles/config';
+import { MODULES } from '../../../MODULES';
+import { isModuleActive } from '../../../core/flox-helpers';
 
 /**
  * A user registered within cognito, having a role and contact information
@@ -29,4 +32,20 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   @IsString()
   role: string;
+
+  /**
+   * Before inserting or updating data, ensures the role matches one given in config
+   * @returns {void}
+   */
+  @BeforeInsert()
+  @BeforeUpdate()
+  validateRole() {
+    if (isModuleActive(MODULES.ROLES)) {
+      // Determine roles from config
+      const allowedRoles = moduleConfig().roles;
+      if (this.role && !allowedRoles.includes(this.role)) {
+        throw new Error(`Invalid role '${this.role}'`);
+      }
+    }
+  }
 }

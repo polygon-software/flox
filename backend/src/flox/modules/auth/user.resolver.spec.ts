@@ -43,6 +43,7 @@ describe('UserResolver', () => {
       createdAt: date,
       lastModifiedAt: date,
       deletedAt: null,
+      validateRole: jest.fn(),
       ...input,
     };
 
@@ -50,9 +51,5 @@ describe('UserResolver', () => {
 
     // Create user
     expect(await userResolver.createUser(input)).toBe(user);
-  });
-
-  it('should throw an error when creating a user with a disallowed role', () => {
-    expect(userResolver).toBeDefined();
   });
 });
