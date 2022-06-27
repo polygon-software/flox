@@ -20,6 +20,8 @@
     "database_master_username": "db_user",
     "project": "flox",
     "organisation": "polygonsoftware",
-    "aws_region": "eu-central-1"
+    "aws_region": "eu-central-1",
+    "test_url": "https://test.polygonsoftware.polygon-project.ch:3000",
+    "live_url": "https://live.polygonsoftware.polygon-project.ch:3000"
   }
 }
