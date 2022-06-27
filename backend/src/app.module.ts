@@ -52,11 +52,11 @@ import { floxEntities, floxModules, floxProviders } from './flox/flox';
       }),
       inject: [ConfigService],
     }),
-    // TypeOrmModule.forFeature([ TODO check if needed
-    //   // Entities for Flox modules
-    //   ...floxEntities(),
-    //   // Add any custom entities here
-    // ]),
+    TypeOrmModule.forFeature([
+      // Entities for Flox modules
+      ...floxEntities(),
+      // Add any custom entities here
+    ]),
     // Flox modules
     ...floxModules(),
     // Add any custom modules here

@@ -9,7 +9,7 @@ import { PrivateFile } from './entities/private_file.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PublicFile, PrivateFile])],
-  providers: [FileService, ConfigService, FileResolver],
+  providers: [FileService, FileResolver],
   controllers: [FileController],
 })
 export class FileModule {}

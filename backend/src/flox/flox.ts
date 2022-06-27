@@ -143,6 +143,7 @@ export function floxEntities() {
       case MODULES.FILE:
         entities.push(PrivateFile);
         entities.push(PublicFile);
+        break;
       default:
         break;
     }

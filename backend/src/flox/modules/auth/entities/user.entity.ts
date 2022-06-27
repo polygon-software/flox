@@ -33,19 +33,19 @@ export class User extends BaseEntity {
   @IsString()
   role: string;
 
-  /**
-   * Before inserting or updating data, ensures the role matches one given in config
-   * @returns {void}
-   */
-  @BeforeInsert()
-  @BeforeUpdate()
-  validateRole() {
-    if (isModuleActive(MODULES.ROLES)) {
-      // Determine roles from config
-      const allowedRoles = moduleConfig().roles;
-      if (this.role && !allowedRoles.includes(this.role)) {
-        throw new Error(`Invalid role '${this.role}'`);
-      }
-    }
-  }
+  // /**
+  //  * Before inserting or updating data, ensures the role matches one given in config
+  //  * @returns {void}
+  //  */
+  // @BeforeInsert()
+  // @BeforeUpdate()
+  // validateRole() {
+  //   if (isModuleActive(MODULES.ROLES)) {
+  //     // Determine roles from config
+  //     const allowedRoles = moduleConfig().roles;
+  //     if (this.role && !allowedRoles.includes(this.role)) {
+  //       throw new Error(`Invalid role '${this.role}'`);
+  //     }
+  //   }
+  // }
 }

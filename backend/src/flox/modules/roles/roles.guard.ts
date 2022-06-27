@@ -1,4 +1,10 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { User } from '../auth/entities/user.entity';
 import { getRequest } from '../../core/flox-helpers';
@@ -14,7 +20,7 @@ import { GetUserArgs } from '../auth/dto/args/get-user.args';
 export class RolesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
 
