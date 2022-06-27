@@ -4,15 +4,8 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { DEFAULT_ROLES } from '../roles/config';
-import { CanActivate } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { floxProviders } from '../../flox';
-import { RolesGuard } from '../roles/roles.guard';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth.guard';
-import { JwtStrategy } from './jwt.strategy';
 
-describe('UsersResolver', () => {
+describe('UserResolver', () => {
   let userResolver: UserResolver;
   let userService: UserService;
   let userRepository: Repository<User>;
@@ -26,7 +19,7 @@ describe('UsersResolver', () => {
   //   userResolver = moduleRef.get<UserResolver>(UserResolver);
   // });
 
-  beforeEach(async () => {
+  beforeEach(() => {
     userRepository = new Repository<User>();
     userService = new UserService(userRepository);
     userResolver = new UserResolver(userService);
