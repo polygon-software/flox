@@ -18,7 +18,7 @@ export enum DEFAULT_ROLES {
   USER = 'USER',
 }
 
-// Default configuration set; will get merged with custom config from flox.config.js
+// Default configuration set; will get merged with custom config from flox.config.json
 const defaultConfig: RoleModuleConfig = {
   roles: Object.values(DEFAULT_ROLES),
   strict: true,

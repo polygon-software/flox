@@ -1,0 +1,25 @@
+{
+  "modules": {
+    "auth": true,
+    "roles": true,
+    "file": true,
+    "sharing": false
+  },
+  "moduleOptions": {
+    "auth": {
+      "emailAsUsername": true
+    },
+    "roles": {
+      "roles": [
+        "ADMIN", "SUPERUSER", "USER"
+      ]
+    }
+  },
+  "general": {
+    "database_name": "floxdb",
+    "database_master_username": "db_user",
+    "project": "flox",
+    "organisation": "polygonsoftware",
+    "aws_region": "eu-central-1"
+  }
+}

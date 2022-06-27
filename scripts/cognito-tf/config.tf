@@ -7,10 +7,10 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        = "##ORGANISATION##" # TODO application specific: Change to customer account
+    organization        ="polygonsoftware"
 
     workspaces {
-      name = "##PROJECT##-##TYPE##" # will be replaced in preprocessing from build.bash
+      name = "flox-dev-cognito" # will be replaced in preprocessing from build.bash
     }
   }
 }

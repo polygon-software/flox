@@ -11,7 +11,7 @@ type AuthModuleConfig = {
   // No configuration needed
 };
 
-// Default configuration set; will get merged with custom config from flox.config.js
+// Default configuration set; will get merged with custom config from flox.config.json
 const defaultConfig: AuthModuleConfig = {
   // Add options here
 };
