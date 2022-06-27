@@ -7,10 +7,10 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        = "##ORGANISATION##" # TODO application specific: Change to customer account
+    organization        = "polygonsoftware" # TODO application specific: Change to customer account
 
     workspaces {
-      name = "##PROJECT##-##TYPE##" # will be replaced in preprocessing from build.bash
+      name = "spa-test" # will be replaced in preprocessing from build.bash
     }
   }
 }
