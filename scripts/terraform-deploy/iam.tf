@@ -132,8 +132,8 @@ data aws_iam_policy_document flox_manager_document {
 }
 
 # User
-data "aws_iam_user" "backup_creator" {
-  user_name = var.gcb_backup_user_name
+resource "aws_iam_user" "backup_creator" {
+  name      = var.gcb_backup_user_name
 }
 
 # Policy
@@ -145,7 +145,7 @@ resource "aws_iam_policy" "backup_creator_policy" {
 # Policy Attachment
 resource "aws_iam_user_policy_attachment" "backup_creator_policy_attachment" {
   policy_arn = aws_iam_policy.backup_creator_policy.arn
-  user       = data.aws_iam_user.backup_creator.user_name
+  user       = aws_iam_user.backup_creator.name
 }
 
 # Policy Document
