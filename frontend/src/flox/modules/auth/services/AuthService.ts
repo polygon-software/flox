@@ -8,7 +8,7 @@ import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue'
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue'
 import {QVueGlobals, useQuasar} from 'quasar';
 import {useAuth} from 'src/store/authentication';
-import _ from 'lodash';
+import _ from 'lodash-es';
 import {Context, Module} from 'vuex-smart-module';
 import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';

@@ -1,6 +1,6 @@
 import {computed, Ref, ref} from 'vue';
 import {Field, FIELDS} from 'src/data/FIELDS';
-import _ from 'lodash';
+import _ from 'lodash-es';
 
 /**
  * The Form class is meant to be used by any form components.
