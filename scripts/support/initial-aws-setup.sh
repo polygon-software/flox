@@ -4,7 +4,7 @@ then
   exit
 fi
 
-
+# Create flox.tfvars file from flox.config.json in frontend & backend
 zsh create-flox-tfvars.sh
 echo "type=\"$1\"" >> flox.tfvars
 
@@ -40,6 +40,7 @@ sed -i -e "s/##PROJECT##/${project}/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/${organisation}/g" config.tf
 
+# Apply Cognito Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
 user_pool_id=$(terraform output user_pool_id)
@@ -51,6 +52,7 @@ app_client_id=${app_client_id:1:-1}
 user_pool_arn=$(terraform output user_pool_arn)
 user_pool_arn=${user_pool_arn:1:-1}
 
+# Add Cognito outputs to flox.tfvars
 echo "# ======== Cognito Config ========" >> ../support/flox.tfvars
 echo "cognito_arn=\"$user_pool_arn\"" >> ../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
@@ -58,6 +60,7 @@ echo "user_pool_client_id=\"$app_client_id\"" >> ../support/flox.tfvars
 echo "# ======== Domain Config ========" >> ../support/flox.tfvars
 echo "base_domain=\"$url\"" >> ../support/flox.tfvars
 
+# Generate frontend .env file from outputs
 cd ../../frontend || exit
 rm -f .env
 echo "# ======== Frontend AWS variables ========" >> .env
@@ -71,7 +74,9 @@ echo "VUE_APP_USER_POOL_CLIENT_ID=$app_client_id" >> .env
 
 cd ../scripts/terraform-deploy || exit
 
+# Build & zip frontend and backend
 zsh build.bash "$1" "$project" "$build_mode" "$organisation"
 
+# Apply main Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
