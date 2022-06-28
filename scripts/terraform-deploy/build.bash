@@ -22,6 +22,10 @@ echo "Generating for project $2 in mode $1 ($3)"
 
 # Build backend
 cd ../../backend || exit
+
+# Delete existing dist
+rm -rf dist
+
 yarn
 yarn build
 cp -a node_modules dist/
@@ -35,7 +39,7 @@ echo "{
    \"private\": true,
    \"license\": \"UNLICENSED\",
    \"scripts\":{
-        \"start\": \"node main.js\"
+        \"start\": \"node src/main.js\"
    },
    \"dependencies\":
  " >> dist/package.json
@@ -53,6 +57,7 @@ zip -r ../../scripts/terraform-deploy/backend.zip * -q
 cd ..
 
 cd ../frontend || exit
+
 # Delete existing dist
 rm -rf dist
 

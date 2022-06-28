@@ -1,16 +1,9 @@
 import {SESClient, SendEmailCommand, SendEmailCommandOutput} from '@aws-sdk/client-ses';
 
-// Credentials
-const credentials = {
-  accessKeyId: process.env.VUE_APP_AWS_KEY_ID ??  '',
-  secretAccessKey: process.env.VUE_APP_AWS_SECRET_KEY ?? ''
-}
-
 // Create SES service object (seems to be unrecognized by eslint)
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const sesClient = new SESClient({
   region: process.env.VUE_APP_AWS_REGION,
-  credentials: credentials,
 });
 
 /**
