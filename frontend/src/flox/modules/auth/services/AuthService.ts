@@ -21,7 +21,7 @@ import {ErrorService} from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth'
 import {createUser} from 'src/helpers/data/mutation-helpers';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
-import {cloneDeep} from 'lodash-es';
+import {cloneDeep} from 'lodash';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
