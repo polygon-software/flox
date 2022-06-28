@@ -13,16 +13,14 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 @Injectable()
 export class FileService {
   // S3 credentials
-  private readonly credentials = {
-    region: this.configService.get('AWS_REGION'),
-    accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
-  };
+  // private readonly credentials = {
+  //   region: this.configService.get('AWS_REGION'),
+  //   accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+  //   secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+  // };
 
   // AWS S3 instance
-  private s3: S3 = new S3({
-    credentials: this.credentials,
-  });
+  private s3: S3 = new S3({});
   constructor(
     @InjectRepository(PublicFile)
     private publicFilesRepository: Repository<PublicFile>,

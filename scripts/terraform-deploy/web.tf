@@ -20,7 +20,7 @@ resource "aws_elastic_beanstalk_application" "frontend_application" {
 
 // Connect EBS to the S3 bucket containing the app
 resource "aws_elastic_beanstalk_application_version" "frontend_application_version" {
-  name                  = "${var.project}-${var.type}-web-v-v-${filemd5("frontend.zip")}" # TODO what's this name
+  name                  = "${var.project}-${var.type}-web-v-${filemd5("frontend.zip")}" # TODO what's this name
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = aws_s3_object.frontend_source_code.id
   application           = aws_elastic_beanstalk_application.frontend_application.name
