@@ -20,7 +20,7 @@ resource "aws_elastic_beanstalk_application" "frontend_application" {
 
 // Connect EBS to the S3 bucket containing the app
 resource "aws_elastic_beanstalk_application_version" "frontend_application_version" {
-  name                  = "${var.project}-${var.type}-web-v-v-${filemd5("frontend.zip")}"
+  name                  = "${var.project}-${var.type}-web-v-v-${filemd5("frontend.zip")}" # TODO what's this name
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = aws_s3_object.frontend_source_code.id
   application           = aws_elastic_beanstalk_application.frontend_application.name
@@ -71,26 +71,31 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
     name          = "ELBSubnets"
     value         = join(",", aws_subnet.frontend_public_subnet.*.id)
   }
+
   setting {
     namespace     = "aws:autoscaling:launchconfiguration"
     name          = "InstanceType"
     value         = "t4g.small"
   }
+
   setting {
     namespace     = "aws:autoscaling:asg"
     name          = "MinSize"
     value         = 1
   }
+
   setting {
     namespace     = "aws:autoscaling:asg"
     name          = "MaxSize"
     value         = 6
   }
+
   setting {
     namespace     = "aws:elbv2:listener:443"
     name          = "Protocol"
     value         = "HTTPS"
   }
+
   setting {
     namespace     = "aws:elbv2:listener:443"
     name          = "SSLCertificateArns"

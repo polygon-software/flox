@@ -27,18 +27,18 @@ yarn build
 cp -a node_modules dist/
 
 # Build package.json
-echo '{
-   "name": "flox",
-   "version": "0.0.1",
-   "description": "",
-   "author": "",
-   "private": true,
-   "license": "UNLICENSED",
-   "scripts":{
-        "start": "node main.js"
+echo "{
+   \"name\": \"$2\",
+   \"version\": \"0.0.1\",
+   \"description\": \"\",
+   \"author\": \"\",
+   \"private\": true,
+   \"license\": \"UNLICENSED\",
+   \"scripts\":{
+        \"start\": \"node main.js\"
    },
-   "dependencies":
- ' >> dist/package.json
+   \"dependencies\":
+ " >> dist/package.json
 
 echo "$(<package.json)" | jq '.dependencies' >> dist/package.json
 echo ',   "devDependencies":' >> dist/package.json
@@ -52,10 +52,14 @@ cd dist || exit
 zip -r ../../scripts/terraform-deploy/backend.zip * -q
 cd ..
 
-# Use appropriate .env file as 'running.env'
 cd ../frontend || exit
+# Delete existing dist
+rm -rf dist
+
 yarn
-cp "$1.env" running.env
+
+# Copy package.json to dist
+#cp package.json "dist/$3/package.json"
 
 # SPA Mode
 if [[ $3 == "spa" ]]
