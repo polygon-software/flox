@@ -8,7 +8,6 @@ import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue'
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue'
 import {QVueGlobals, useQuasar} from 'quasar';
 import {useAuth} from 'src/store/authentication';
-import _ from 'lodash-es';
 import {Context, Module} from 'vuex-smart-module';
 import AuthState from 'src/store/authentication/state';
 import AuthGetters from 'src/store/authentication/getters';
@@ -22,6 +21,7 @@ import {ErrorService} from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth'
 import {createUser} from 'src/helpers/data/mutation-helpers';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
+import {cloneDeep} from 'lodash-es';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -132,7 +132,7 @@ export class AuthenticationService {
 
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
         newPasswordRequired: function (userAttributes) {
-          const attrs = _.cloneDeep(userAttributes) as Record<string, unknown>
+          const attrs = cloneDeep(userAttributes) as Record<string, unknown>
 
           // Show password change dialog
           while (!newPassword) {
@@ -228,7 +228,7 @@ export class AuthenticationService {
    */
   async logout(): Promise<void>{
     // Deep copy to avoid mutating store state
-    const cognitoUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
+    const cognitoUser: CognitoUser|undefined = cloneDeep(this.$authStore.getters.getCognitoUser())
 
     if(!cognitoUser){
       this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.not_logged_in')))
@@ -462,7 +462,7 @@ export class AuthenticationService {
     }).onOk((code: string) => {
       // Deep copy user so state object does not get altered
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
+      const currentUser: CognitoUser|undefined = cloneDeep(this.$authStore.getters.getCognitoUser())
       currentUser?.sendMFACode(code, {
         onSuccess: (userSession: CognitoUserSession) => {
           this.$authStore.mutations.setCognitoUser(currentUser)
@@ -551,7 +551,7 @@ export class AuthenticationService {
       }
       const refreshToken = userSession?.getRefreshToken()
       if(refreshToken && idTokenExpiration && (idTokenExpiration - Date.now() / 1000 < 45 * 60)){   // 15min before de-validation token is refreshed
-        const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser()) // refresh session mutates the state of store: illegal
+        const currentUser: CognitoUser|undefined = cloneDeep(this.$authStore.getters.getCognitoUser()) // refresh session mutates the state of store: illegal
         currentUser?.refreshSession(refreshToken, (err, session )=> {
           if (session) {
             this.$authStore.mutations.setCognitoUser(currentUser)
