@@ -29,7 +29,7 @@ resource "aws_route53_record" "ssl_frontend" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = var.hosted_zone_id
+  zone_id         = aws_route53_zone.zone.id
 }
 
 resource "aws_route53_record" "ssl_backend" {
@@ -45,7 +45,7 @@ resource "aws_route53_record" "ssl_backend" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = var.hosted_zone_id
+  zone_id         = aws_route53_zone.zone.id
 }
 
 resource "aws_route53_record" "api_record" {
@@ -75,7 +75,7 @@ data "aws_elastic_beanstalk_hosted_zone" "hosted_zone" {}
 resource "aws_route53_record" "web_record_alias" {
   name                  = var.base_domain
   type                  = "A"
-  zone_id               = var.hosted_zone_id
+  zone_id               = aws_route53_zone.zone.id
   alias {
     evaluate_target_health = true
     name                   = aws_elastic_beanstalk_environment.frontend_env.cname
@@ -85,7 +85,7 @@ resource "aws_route53_record" "web_record_alias" {
 resource "aws_route53_record" "web_record_alias_AAAA" {
   name                  = var.base_domain
   type                  = "AAAA"
-  zone_id               = var.hosted_zone_id
+  zone_id               = aws_route53_zone.zone.id
   alias {
     evaluate_target_health = true
     name                   = aws_elastic_beanstalk_environment.frontend_env.cname

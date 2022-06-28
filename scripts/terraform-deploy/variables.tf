@@ -3,10 +3,6 @@ variable "type" {
   type            = string
 }
 
-variable "hosted_zone_id" {
-  type = string
-}
-
 variable "cognito_arn" {
   type = string
 }

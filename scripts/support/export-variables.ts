@@ -18,7 +18,6 @@ const backendConfig = backendFloxConfig.general
 
 console.log('# ======== General Config options ========');
 console.log(`aws_region="${backendConfig.aws_region}"`)
-console.log(`hosted_zone_id="${backendConfig.hosted_zone_id}"`)
 console.log(`email_sender="${backendConfig.email_sender}"`)
 
 console.log('# ======== Frontend Config options ========');
