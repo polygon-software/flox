@@ -7,7 +7,7 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        = "polygonsoftware" # TODO application specific: Change to customer account
+    organization        = "##ORGANISATION##"
 
     workspaces {
       name = "##PROJECT##-##TYPE##" # will be replaced in preprocessing from build.bash

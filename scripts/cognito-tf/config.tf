@@ -7,7 +7,7 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        ="polygonsoftware"
+    organization        ="##ORGANISATION##"
 
     workspaces {
       name = "##PROJECT##-##TYPE##-cognito" # will be replaced in preprocessing from build.bash # TODO

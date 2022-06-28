@@ -23,7 +23,6 @@
     "aws_region": "eu-central-1",
     "test_base_domain": "flox.polygon-project.ch",
     "live_base_domain": "flox.banano.ch",
-    "hosted_zone_id": "Z095791315VP7D61MDYIL",
     "email_sender": "david.wyss@polygon-project.ch"
   }
 }
