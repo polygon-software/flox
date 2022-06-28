@@ -53,7 +53,7 @@ echo ',   "engines":' >> dist/package.json
 echo "$(<package.json)" | jq '.engines' >> dist/package.json
 echo '}' >> dist/package.json
 cd dist || exit
-zip -r ../../scripts/terraform-deploy/backend.zip * -q
+zip -r ../../scripts/2_main-setup/backend.zip * -q
 cd ..
 
 cd ../frontend || exit
@@ -85,9 +85,9 @@ fi
 
 # Install modules & zip
 yarn
-zip -r ../../../scripts/terraform-deploy/frontend.zip * -q
+zip -r ../../../scripts/2_main-setup/frontend.zip * -q
 
-cd ../../../scripts/terraform-deploy || exit
+cd ../../../scripts/2_main-setup || exit
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf

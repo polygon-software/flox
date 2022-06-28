@@ -13,7 +13,7 @@ variable "gcb_backup_user_name" {
 }
 
 variable "base_domain" {
-  description = "Frontend base domain, e.g. flox.polygon-project.ch"
+  description = "Project base domain, e.g. flox.polygon-project.ch"
   type    = string
 }
 
