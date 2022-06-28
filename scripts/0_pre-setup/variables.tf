@@ -1,5 +1,5 @@
 # Cognito configuration
-# (gets overwritten by tf.env)
+# (gets overwritten by flox.tfvars)
 
 variable "project" {
   default         = "flox"

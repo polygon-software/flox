@@ -8,7 +8,7 @@ fi
 zsh create-flox-tfvars.sh
 echo "type=\"$1\"" >> flox.tfvars
 
-cd ../cognito-tf || exit
+cd ../0_pre-setup || exit
 
 project=$(jq '.general.project' ../../backend/flox.config.json)
 project=${project:1:-1}
@@ -78,7 +78,7 @@ echo "VUE_APP_AWS_REGION=$aws_region" >> .env
 echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
 echo "VUE_APP_USER_POOL_CLIENT_ID=$app_client_id" >> .env
 
-cd ../scripts/terraform-deploy || exit
+cd ../scripts/2_main-setup || exit
 
 # Build & zip frontend and backend
 zsh build.bash "$1" "$project" "$build_mode" "$organisation"

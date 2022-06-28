@@ -17,14 +17,14 @@ jobs:
           fetch-depth: 0
 
       - name: Make build.bash executable
-        run: sudo chmod +x ./scripts/terraform-deploy/build.bash
+        run: sudo chmod +x ./scripts/2_main-setup/build.bash
 
       - name: Create tf.env
         working-directory: ./scripts/support
         run: sudo bash create-tf-env.sh
 
       - name: execute build.bash
-        working-directory: ./scripts/terraform-deploy
+        working-directory: ./scripts/2_main-setup
         run: sudo bash build.bash live $PROJECT $MODE
         env:
           PROJECT_NAME: flox # TODO from .env
@@ -37,7 +37,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        working-directory: ./scripts/terraform-deploy
+        working-directory: ./scripts/2_main-setup
         run: terraform init
 
       - name: Parse main .env file
@@ -54,7 +54,7 @@ jobs:
           path: scripts/support/tf.env
 
       - name: Terraform Apply
-        working-directory: ./scripts/terraform-deploy
+        working-directory: ./scripts/2_main-setup
         run: terraform apply -auto-approve -var type="live" -var user_pool_id="${{ steps.dotenv.outputs.VUE_APP_USER_POOL_ID }}" -var user_pool_client_id="${{ steps.dotenv.outputs.VUE_APP_USER_POOL_CLIENT_ID }}" -var base_domain="${{ steps.dotenv.outputs.VUE_APP_BASE_DOMAIN }}" -var backend_base_domain="${{ steps.dotenv.outputs.VUE_APP_BACKEND_BASE_DOMAIN }}" -var email_sender="${{ steps.dotenv.outputs.VUE_APP_EMAIL_SENDER }}" -var hosted_zone_id="${{ steps.dotenv.outputs.VUE_APP_HOSTED_ZONE_ID }}" -var cognito_arn="${{ steps.dotenv.outputs.COGNITO_ARN }}"
 
       - name: "Update state of monday.com items to 'Stage 4: Production'"
