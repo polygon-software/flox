@@ -10,9 +10,6 @@ echo "type=\"$1\"" >> flox.tfvars
 
 cd ../cognito-tf || exit
 
-# Replace 'TYPE' in config.tf with actual type (live, test)
-sed -i -e "s/##TYPE##/$1/g" config.tf
-
 project=$(jq '.general.project' ../../backend/flox.config.json)
 project=${project:1:-1}
 
@@ -24,6 +21,15 @@ aws_region=${aws_region:1:-1}
 
 organisation=$(jq '.general.organisation' ../../backend/flox.config.json)
 organisation=${organisation:1:-1}
+
+# Replace 'TYPE' in config.tf with actual type (live, test)
+sed -i -e "s/##TYPE##/$1/g" config.tf
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
+
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 if [[ $1 == "test" ]]
 then
