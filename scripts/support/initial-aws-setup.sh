@@ -43,6 +43,9 @@ else
 fi
 url=${url:1:-1}
 
+# Add domain config to flox.tfvars
+echo "# ======== Domain Config ========" >> ../support/flox.tfvars
+echo "base_domain=\"$url\"" >> ../support/flox.tfvars
 
 # Replace 'PROJECT' in config.tf with actual project name
 sed -i -e "s/##PROJECT##/${project}/g" config.tf
@@ -71,8 +74,6 @@ echo "# ======== Cognito Config ========" >> ../support/flox.tfvars
 echo "cognito_arn=\"$user_pool_arn\"" >> ../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
 echo "user_pool_client_id=\"$app_client_id\"" >> ../support/flox.tfvars
-echo "# ======== Domain Config ========" >> ../support/flox.tfvars
-echo "base_domain=\"$url\"" >> ../support/flox.tfvars
 
 # Add NS records to flox.tfvars
 echo "ns_records=$ns_records" >> ../support/flox.tfvars
