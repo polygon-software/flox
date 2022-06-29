@@ -20,7 +20,7 @@ variable "root_domain" {
   type            = string
 }
 
-variable "hosted_zone_id" {
+variable "root_hosted_zone_id" {
   description     = "Base URL hosted zone ID"
   type            = string
   default         = "Z095791315VP7D61MDYIL" # polygon-project.ch hosted zone
