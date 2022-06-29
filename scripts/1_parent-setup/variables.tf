@@ -15,16 +15,23 @@ variable "domain_manager_aws_access_key" {
 }
 
 variable "base_domain" {
-  description = "Base URL for project pages, e.g. polygon-project.ch"
+  description     = "Base URL for project pages, e.g. polygon-project.ch"
+  default         = "polygon-project.ch"
   type            = string
 }
 
 variable "hosted_zone_id" {
-  description = "Base URL hosted zone ID"
+  description     = "Base URL hosted zone ID"
   type            = string
 }
 
 variable "ns_records" {
-  description = "Nameserver records for customer hosted zone"
+  description     = "Nameserver records for customer hosted zone"
   type            = list(string)
+}
+
+variable "aws_region" {
+  default         = "eu-central-1"
+  description     = "AWS Region"
+  type            = string
 }
