@@ -13,3 +13,8 @@ output "ns_records" {
     aws_route53_zone.zone.name_servers[3],
   ]
 }
+
+output "hosted_zone_id" {
+  description = "Subdomain hosted zone ID"
+  value       = aws_route53_zone.zone.zone_id
+}

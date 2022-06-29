@@ -52,6 +52,11 @@ variable "project" {
   type            = string
 }
 
+variable "hosted_zone_id" {
+  description     = "Route53 hosted zone ID"
+  type            = string
+}
+
 variable "eb_app_desc" {
   default         = "EBS app"
   description     = "Description for the elastic Beanstalk app"

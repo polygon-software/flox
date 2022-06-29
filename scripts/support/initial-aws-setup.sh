@@ -14,6 +14,7 @@ echo "type=\"$1\"" >> flox.tfvars
 
 cd ../0_pre-setup || exit
 
+# Get additional flox.config variables
 project=$(jq '.general.project' ../../backend/flox.config.json)
 project=${project:1:-1}
 
@@ -77,17 +78,19 @@ user_pool_arn=${user_pool_arn:1:-1}
 
 # Nameserver records for next step
 ns_records=$(terraform output ns_records)
+# Hosted zone ID for last step
+hosted_zone_id=$(terraform output ns_records)
+hosted_zone_id=${hosted_zone_id:1:-1}
 
+# Add NS records & hosted zone ID to flox.tfvars
+echo "ns_records=$ns_records" >> ../support/flox.tfvars
+echo "hosted_zone_id=\"$hosted_zone_id\"" >> ../support/flox.tfvars
 
 # Add Cognito outputs to flox.tfvars
 echo "# ======== Cognito Config ========" >> ../support/flox.tfvars
 echo "cognito_arn=\"$user_pool_arn\"" >> ../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
 echo "user_pool_client_id=\"$app_client_id\"" >> ../support/flox.tfvars
-
-# Add NS records to flox.tfvars
-echo "ns_records=$ns_records" >> ../support/flox.tfvars
-
 
 # Generate frontend .env file from outputs
 cd ../../frontend || exit
