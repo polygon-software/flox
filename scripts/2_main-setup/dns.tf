@@ -29,7 +29,7 @@ resource "aws_route53_record" "ssl_frontend" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = aws_route53_zone.zone.id
+  zone_id         = var.hosted_zone_id
 }
 
 resource "aws_route53_record" "ssl_backend" {
@@ -45,7 +45,7 @@ resource "aws_route53_record" "ssl_backend" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = aws_route53_zone.zone.id
+  zone_id         = var.hosted_zone_id
 }
 
 resource "aws_route53_record" "api_record" {
