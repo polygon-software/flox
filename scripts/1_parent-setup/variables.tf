@@ -14,7 +14,7 @@ variable "domain_manager_aws_access_key" {
   type            = string
 }
 
-variable "base_domain" {
+variable "root_domain" {
   description     = "Base URL for project pages, e.g. polygon-project.ch"
   default         = "polygon-project.ch"
   type            = string
@@ -23,6 +23,7 @@ variable "base_domain" {
 variable "hosted_zone_id" {
   description     = "Base URL hosted zone ID"
   type            = string
+  default         = "Z095791315VP7D61MDYIL" # polygon-project.ch hosted zone
 }
 
 variable "ns_records" {
