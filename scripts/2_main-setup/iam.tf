@@ -138,7 +138,7 @@ resource "aws_iam_user" "backup_creator" {
 
 # Policy
 resource "aws_iam_policy" "backup_creator_policy" {
-  name = "backupper-${var.type}"
+  name = "backup-creator-${var.type}"
   policy = data.aws_iam_policy_document.gcp_backup_creator_policy_document.json
 }
 
