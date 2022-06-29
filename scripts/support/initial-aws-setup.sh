@@ -79,7 +79,7 @@ user_pool_arn=${user_pool_arn:1:-1}
 # Nameserver records for next step
 ns_records=$(terraform output ns_records)
 # Hosted zone ID for last step
-hosted_zone_id=$(terraform output ns_records)
+hosted_zone_id=$(terraform output hosted_zone_id)
 hosted_zone_id=${hosted_zone_id:1:-1}
 
 # Add NS records & hosted zone ID to flox.tfvars
