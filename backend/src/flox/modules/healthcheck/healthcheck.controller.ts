@@ -13,14 +13,13 @@ export class HealthcheckController {
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
   ): Promise<any> {
-    const healthcheckResult = await this.healthcheckService.healthcheck();
-
-    if (healthcheckResult) {
+    try {
+      await this.healthcheckService.healthcheck();
       res.code(200);
       res.send();
+    } catch (e) {
+      res.code(500);
+      res.send(`Health check failed. Error message: ${e.message}`);
     }
-
-    res.code(500);
-    res.send('Something is down lol');
   }
 }
