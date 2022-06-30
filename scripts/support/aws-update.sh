@@ -10,12 +10,12 @@ then
 fi
 
 # ==========================================
-# ==  Step 0: Preparation (get variables) ==
+# ===  Step 0: Preparation (get params)  ===
 # ==========================================
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
 cd ../support || exit
-zsh /create-flox-tfvars.sh
+zsh create-flox-tfvars.sh
 echo "type=\"$1\"" >> flox.tfvars
 
 # Get additional flox.config variables
@@ -39,21 +39,23 @@ else
 fi
 url=${url:1:-1}
 
+
+cd ../3_pre-update || exit
+
+# Apply terraform for getting SSM parameters
+terraform init
+terraform apply -auto-approve -var-file="../support/flox.tfvars"
+
+# Get variables from outputs
+user_pool_id=$(terraform output user_pool_id)
+user_pool_id=${user_pool_id:1:-1}
+user_pool_client_id=$(terraform output user_pool_client_id)
+user_pool_client_id=${user_pool_client_id:1:-1}
+
+
 # ==========================================
 # ====       Step 1: Main Update        ====
 # ==========================================
-
-cd ../4_update || exit
-
-# Replace 'TYPE' in config.tf with actual type (live, test)
-sed -i -e "s/##TYPE##/$1/g" config.tf
-
-# Replace 'PROJECT' in config.tf with actual project name
-sed -i -e "s/##PROJECT##/$project/g" config.tf
-
-# Replace 'ORGANISATION' in config.tf with actual organisation name
-sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
-
 
 # Generate frontend .env file from outputs
 cd ../../frontend || exit
@@ -64,10 +66,21 @@ echo "# ==========================================" >> .env
 echo "VUE_APP_GRAPHQL_ENDPOINT=https://api.$url/graphql" >> .env
 echo "VUE_APP_NAME=$project-$1" >> .env
 echo "VUE_APP_AWS_REGION=$aws_region" >> .env
-# TODO GET from SSM parameter store: aws ssm get-parameter --name test --profile flox
-#echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
-#echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
+echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
+echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
+
+# Go to update folder
 cd ../scripts/4_update || exit
+
+# Replace 'TYPE' in config.tf with actual type (live, test)
+sed -i -e "s/##TYPE##/$1/g" config.tf
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
+
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
 
 # Build & zip frontend and backend
 zsh ../support/build.bash "$1" "$project" "$build_mode"
