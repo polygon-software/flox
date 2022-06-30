@@ -25,3 +25,8 @@ variable "project" {
   type            = string
 }
 
+variable "source_code_bucket" {
+  description     = "source code bucket name"
+  type            = string
+}
+
