@@ -9,6 +9,7 @@ fi
 # ==========================================
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
+cd ../support || exit
 zsh create-flox-tfvars.sh
 echo "type=\"$1\"" >> flox.tfvars
 
@@ -70,8 +71,8 @@ terraform apply -auto-approve -var-file="../support/flox.tfvars"
 user_pool_id=$(terraform output user_pool_id)
 user_pool_id=${user_pool_id:1:-1}
 
-app_client_id=$(terraform output app_client_id)
-app_client_id=${app_client_id:1:-1}
+user_pool_client_id=$(terraform output user_pool_client_id)
+user_pool_client_id=${user_pool_client_id:1:-1}
 
 user_pool_arn=$(terraform output user_pool_arn)
 user_pool_arn=${user_pool_arn:1:-1}
@@ -90,7 +91,7 @@ echo "hosted_zone_id=\"$hosted_zone_id\"" >> ../support/flox.tfvars
 echo "# ======== Cognito Config ========" >> ../support/flox.tfvars
 echo "cognito_arn=\"$user_pool_arn\"" >> ../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
-echo "user_pool_client_id=\"$app_client_id\"" >> ../support/flox.tfvars
+echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../support/flox.tfvars
 
 # Generate frontend .env file from outputs
 cd ../../frontend || exit
@@ -102,7 +103,7 @@ echo "VUE_APP_GRAPHQL_ENDPOINT=https://api.$url/graphql" >> .env
 echo "VUE_APP_NAME=$project-$1" >> .env
 echo "VUE_APP_AWS_REGION=$aws_region" >> .env
 echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
-echo "VUE_APP_USER_POOL_CLIENT_ID=$app_client_id" >> .env
+echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
 
 # ==========================================
 # =====   Step 1: Parent DNS setup    ======
@@ -142,10 +143,7 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 # Build & zip frontend and backend
-zsh build.bash "$1" "$project" "$build_mode"
-
-# Go back to this folder
-cd scripts/2_main-setup || exit
+zsh ../support/build.bash "$1" "$project" "$build_mode"
 
 # Apply main Terraform
 terraform init
