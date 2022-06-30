@@ -1,27 +1,28 @@
 import { Controller, Get, Req, Res } from '@nestjs/common';
 import fastify = require('fastify');
 import { Public } from '../auth/authentication.decorator';
-import { HealthcheckService } from './healthcheck.service';
-import { HealthCheck } from '@nestjs/terminus';
+import {
+  HealthCheck,
+  HealthCheckService,
+  HttpHealthIndicator,
+} from '@nestjs/terminus';
 
-@Controller()
+@Controller('health')
 export class HealthcheckController {
-  constructor(private readonly healthcheckService: HealthcheckService) {}
+  constructor(
+    private readonly healthcheckService: HealthCheckService,
+    private readonly http: HttpHealthIndicator,
+  ) {}
 
   @Public()
   @HealthCheck()
   @Get()
-  async uploadPublicFile(
+  async checkHealth(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
   ): Promise<any> {
-    try {
-      await this.healthcheckService.healthcheck();
-      res.code(200);
-      res.send();
-    } catch (e) {
-      res.code(500);
-      res.send(`Health check failed. Error message: ${e.message}`);
-    }
+    return this.healthcheckService.check([
+      () => this.http.pingCheck('Basic Check', 'http://localhost:3000'),
+    ]);
   }
 }
