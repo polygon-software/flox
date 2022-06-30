@@ -104,8 +104,8 @@ cp ../outputs/backend.zip backend.zip
 
 echo "TODO, we are done here"
 ## Apply update Terraform
-#terraform init
-#terraform apply -auto-approve -var-file="../support/flox.tfvars"
+terraform init
+terraform apply -auto-approve -var-file="../support/flox.tfvars"
 
 # ==========================================
 # ====         Step 2: Cleanup         =====
