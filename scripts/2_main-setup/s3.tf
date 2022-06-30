@@ -62,7 +62,7 @@ resource "aws_s3_bucket" "source_code_bucket" {
   }
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
@@ -75,7 +75,7 @@ resource "aws_s3_bucket" "public_files" {
   }
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
@@ -88,7 +88,7 @@ resource "aws_s3_bucket" "private_files" {
   }
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
@@ -101,7 +101,7 @@ resource "aws_s3_bucket" "log_files" {
   }
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 

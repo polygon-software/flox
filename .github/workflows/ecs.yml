@@ -1,132 +1,133 @@
-name: "PR: Push Branch to Docker Hub & deploy to AWS ECS"
-
-on:
-  push:
-    branches: [master, dev, stage-*]
-
-env:
-  PROJECT_NAME: flox # TODO from .env
-  AWS_REGION: eu-central-1 # TODO from .env
-  AWS_DOCKERHUB_TOKEN: ${{ secrets.AWS_DOCKERHUB_TOKEN }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ECS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ECS_KEY_SECRET }}
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  SERVER_PORT: 3000
-
-jobs:
-  deploy:
-    name: Deploy Test Environment to ECS
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-        # Combine project and branch name for AWS infrastructure name (e.g. flox-dev, flox-stage-1)
-      - name: Generate Infrastructure name
-        id: infrastructure_name
-        run: |
-          GITHUB_REF=${{github.ref_name}}
-          GITHUB_REF=${GITHUB_REF,,}
-          INF_NAME="${{ env.PROJECT_NAME }}-$GITHUB_REF"
-          echo ${INF_NAME}
-          echo "::set-output name=INFRASTRUCTURE_NAME::${INF_NAME}"
-
-        # Build image tag names
-      - name: Generate Tag name
-        id: tag_name
-        run: |
-          GITHUB_REF=${{github.ref_name}}
-          GITHUB_REF=${GITHUB_REF,,}
-          echo ${GITHUB_REF}
-          echo "::set-output name=TAG_NAME::${GITHUB_REF}"
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up Load Balancer & set Environment Variable
-        run: |
-          VPCID=`aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query 'Vpcs[0].VpcId'`
-          SUBNETS=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPCID --query 'Subnets[*].SubnetId' --output text`
-          LOADBALANCER=`aws elbv2 create-load-balancer --name ${{ steps.infrastructure_name.outputs.INFRASTRUCTURE_NAME }} --type network --subnets $SUBNETS --query 'LoadBalancers[0].LoadBalancerArn' --output text`
-          echo "AWS_LOADBALANCER=${{ steps.infrastructure_name.outputs.INFRASTRUCTURE_NAME }}" >> $GITHUB_ENV
-          echo "AWS_LOADBALANCER_ARN=$LOADBALANCER" >> $GITHUB_ENV
-
-      - name: Set up DNS/URL Environment variables
-        run: |
-          URL=`aws elbv2 describe-load-balancers --names ${{ steps.infrastructure_name.outputs.INFRASTRUCTURE_NAME }} --query 'LoadBalancers[*].DNSName' --output text`
-          echo "AWS_LOADBALANCER_URL=$URL" >> $GITHUB_ENV
-          echo "FRONTEND_IMAGE_NAME=${{ env.PROJECT_NAME }}-frontend" >> $GITHUB_ENV
-          echo "BACKEND_IMAGE_NAME=${{ env.PROJECT_NAME }}-backend" >> $GITHUB_ENV
-          echo "VUE_APP_BASE_URL=http://${{ steps.tag_name.outputs.TAG_NAME }}.${{ env.PROJECT_NAME }}.${{ secrets.PROJECT_BASE_DOMAIN }}" >> $GITHUB_ENV
-          echo "VUE_APP_BACKEND_BASE_DOMAIN=$URL:${{ env.SERVER_PORT }}" >> $GITHUB_ENV
-          echo "IMAGE_TAG=${{ steps.tag_name.outputs.TAG_NAME }}" >> $GITHUB_ENV
-
-      - name: Edit frontend and backend .env files
-        run: |
-          cd frontend
-          echo VUE_APP_BASE_URL="${{ env.VUE_APP_BASE_URL }}" >> .env
-          echo VUE_APP_BACKEND_BASE_DOMAIN="${{ env.VUE_APP_BACKEND_BASE_DOMAIN }}" >> .env
-          cat .env
-          cd ..
-          cd backend
-          echo BASE_URL="${{ env.VUE_APP_BASE_URL }}" >> .env
-          cat .env
-
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v2
-        with:
-          context: frontend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}-frontend:${{ steps.tag_name.outputs.TAG_NAME }}
-
-      - name: Build and push Backend
-        uses: docker/build-push-action@v2
-        with:
-          context: backend
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}-backend:${{ steps.tag_name.outputs.TAG_NAME }}
-
-      - name: Deploy to ECS
-        run: |
-          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
-          docker context create ecs ecscontext --from-env
-          docker login
-          docker compose pull
-          docker context use ecscontext
-          docker compose -p ${{ steps.infrastructure_name.outputs.INFRASTRUCTURE_NAME }} up
-          docker context use default
-          docker context rm ecscontext
-
-      - name: Set up listener on port 80 for Frontend
-        run: |
-          TARGET_GROUPS=`aws elbv2 describe-target-groups --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --query 'TargetGroups[*].TargetGroupArn' --output text`
-          for arn in ${TARGET_GROUPS}; do
-            if [ -z ${arn##*Front*} ] ;then
-              TARGET_GROUP_ARN=$arn
-            fi
-          done
-          aws elbv2 create-listener --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --protocol TCP --port 80 --default-actions Type=forward,TargetGroupArn=$TARGET_GROUP_ARN
-
-
-      # Create Route 53 record at e.g. dev.flox.polygon-project.ch
-      - name: Create Route 53 record
-        uses: Roosterfish/aws-route53-record-set-action@master
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ECS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_ECS_KEY_SECRET }}
-          aws_route53_hosted_zone_id: ${{ secrets.AWS_HOSTED_ZONE_ID }}
-          aws_route53_rr_action: "UPSERT"
-          aws_route53_rr_name: "${{ steps.tag_name.outputs.TAG_NAME }}.${{ env.PROJECT_NAME }}.${{ secrets.PROJECT_BASE_DOMAIN }}"
-          aws_route53_rr_type: "CNAME"
-          aws_route53_rr_ttl: "300"
-          aws_route53_rr_value: "${{ env.AWS_LOADBALANCER_URL }}"
+# TODO: Replace with serverless
+#name: "PR: Push Branch to Docker Hub & deploy to AWS ECS"
+#
+#on:
+#  push:
+#    branches: [master, dev, stage-*]
+#
+#env:
+#  PROJECT_NAME: flox # TODO from .env
+#  AWS_REGION: eu-central-1 # TODO from .env
+#  AWS_DOCKERHUB_TOKEN: ${{ secrets.AWS_DOCKERHUB_TOKEN }}
+#  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ECS_KEY_ID }}
+#  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ECS_KEY_SECRET }}
+#  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+#  SERVER_PORT: 3000
+#
+#jobs:
+#  deploy:
+#    name: Deploy Test Environment to ECS
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v2
+#
+#        # Combine project and branch name for AWS infrastructure name (e.g. flox-dev, flox-stage-1)
+#      - name: Generate Infrastructure name
+#        id: infrastructure_name
+#        run: |
+#          GITHUB_REF=${{github.ref_name}}
+#          GITHUB_REF=${GITHUB_REF,,}
+#          INF_NAME="${{ env.PROJECT_NAME }}-$GITHUB_REF"
+#          echo ${INF_NAME}
+#          echo "::set-output name=INFRASTRUCTURE_NAME::${INF_NAME}"
+#
+#        # Build image tag names
+#      - name: Generate Tag name
+#        id: tag_name
+#        run: |
+#          GITHUB_REF=${{github.ref_name}}
+#          GITHUB_REF=${GITHUB_REF,,}
+#          echo ${GITHUB_REF}
+#          echo "::set-output name=TAG_NAME::${GITHUB_REF}"
+#
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v1
+#
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v1
+#
+#      - name: Login to DockerHub
+#        uses: docker/login-action@v1
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#
+#      - name: Set up Load Balancer & set Environment Variable
+#        run: |
+#          VPCID=`aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query 'Vpcs[0].VpcId'`
+#          SUBNETS=`aws ec2 describe-subnets --filters Name=vpc-id,Values=$VPCID --query 'Subnets[*].SubnetId' --output text`
+#          LOADBALANCER=`aws elbv2 create-load-balancer --name ${{ steps.infrastructure_name.outputs.INFRASTRUCTURE_NAME }} --type network --subnets $SUBNETS --query 'LoadBalancers[0].LoadBalancerArn' --output text`
+#          echo "AWS_LOADBALANCER=${{ steps.infrastructure_name.outputs.INFRASTRUCTURE_NAME }}" >> $GITHUB_ENV
+#          echo "AWS_LOADBALANCER_ARN=$LOADBALANCER" >> $GITHUB_ENV
+#
+#      - name: Set up DNS/URL Environment variables
+#        run: |
+#          URL=`aws elbv2 describe-load-balancers --names ${{ steps.infrastructure_name.outputs.INFRASTRUCTURE_NAME }} --query 'LoadBalancers[*].DNSName' --output text`
+#          echo "AWS_LOADBALANCER_URL=$URL" >> $GITHUB_ENV
+#          echo "FRONTEND_IMAGE_NAME=${{ env.PROJECT_NAME }}-frontend" >> $GITHUB_ENV
+#          echo "BACKEND_IMAGE_NAME=${{ env.PROJECT_NAME }}-backend" >> $GITHUB_ENV
+#          echo "VUE_APP_BASE_URL=http://${{ steps.tag_name.outputs.TAG_NAME }}.${{ env.PROJECT_NAME }}.${{ secrets.PROJECT_BASE_DOMAIN }}" >> $GITHUB_ENV
+#          echo "VUE_APP_BACKEND_BASE_DOMAIN=$URL:${{ env.SERVER_PORT }}" >> $GITHUB_ENV
+#          echo "IMAGE_TAG=${{ steps.tag_name.outputs.TAG_NAME }}" >> $GITHUB_ENV
+#
+#      - name: Edit frontend and backend .env files
+#        run: |
+#          cd frontend
+#          echo VUE_APP_BASE_URL="${{ env.VUE_APP_BASE_URL }}" >> .env
+#          echo VUE_APP_BACKEND_BASE_DOMAIN="${{ env.VUE_APP_BACKEND_BASE_DOMAIN }}" >> .env
+#          cat .env
+#          cd ..
+#          cd backend
+#          echo BASE_URL="${{ env.VUE_APP_BASE_URL }}" >> .env
+#          cat .env
+#
+#      - name: Build and push Frontend
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: frontend
+#          push: true
+#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}-frontend:${{ steps.tag_name.outputs.TAG_NAME }}
+#
+#      - name: Build and push Backend
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: backend
+#          push: true
+#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}-backend:${{ steps.tag_name.outputs.TAG_NAME }}
+#
+#      - name: Deploy to ECS
+#        run: |
+#          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+#          docker context create ecs ecscontext --from-env
+#          docker login
+#          docker compose pull
+#          docker context use ecscontext
+#          docker compose -p ${{ steps.infrastructure_name.outputs.INFRASTRUCTURE_NAME }} up
+#          docker context use default
+#          docker context rm ecscontext
+#
+#      - name: Set up listener on port 80 for Frontend
+#        run: |
+#          TARGET_GROUPS=`aws elbv2 describe-target-groups --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --query 'TargetGroups[*].TargetGroupArn' --output text`
+#          for arn in ${TARGET_GROUPS}; do
+#            if [ -z ${arn##*Front*} ] ;then
+#              TARGET_GROUP_ARN=$arn
+#            fi
+#          done
+#          aws elbv2 create-listener --load-balancer-arn ${{ env.AWS_LOADBALANCER_ARN }} --protocol TCP --port 80 --default-actions Type=forward,TargetGroupArn=$TARGET_GROUP_ARN
+#
+#
+#      # Create Route 53 record at e.g. dev.flox.polygon-project.ch
+#      - name: Create Route 53 record
+#        uses: Roosterfish/aws-route53-record-set-action@master
+#        with:
+#          aws_access_key_id: ${{ secrets.AWS_ECS_KEY_ID }}
+#          aws_secret_access_key: ${{ secrets.AWS_ECS_KEY_SECRET }}
+#          aws_route53_hosted_zone_id: ${{ secrets.AWS_HOSTED_ZONE_ID }}
+#          aws_route53_rr_action: "UPSERT"
+#          aws_route53_rr_name: "${{ steps.tag_name.outputs.TAG_NAME }}.${{ env.PROJECT_NAME }}.${{ secrets.PROJECT_BASE_DOMAIN }}"
+#          aws_route53_rr_type: "CNAME"
+#          aws_route53_rr_ttl: "300"
+#          aws_route53_rr_value: "${{ env.AWS_LOADBALANCER_URL }}"

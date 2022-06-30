@@ -9,7 +9,7 @@ resource "aws_cognito_user_pool" "user_pool" {
     enabled = true
   }
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
@@ -22,16 +22,4 @@ resource "aws_cognito_user_pool_client" "app_client" {
     id_token      = "days"
     refresh_token = "days"
   }
-}
-
-output "app_client_id" {
-  value = aws_cognito_user_pool_client.app_client.id
-}
-
-output "user_pool_id" {
-  value = aws_cognito_user_pool.user_pool.id
-}
-
-output "user_pool_arn" {
-  value = aws_cognito_user_pool.user_pool.arn
 }
