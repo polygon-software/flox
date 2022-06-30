@@ -17,11 +17,6 @@ variable "base_domain" {
   type    = string
 }
 
-variable "email_sender" {
-  description = "Default e-mail sending address"
-  type    = string
-}
-
 variable "user_pool_id" {
   type    = string
 }
