@@ -105,31 +105,26 @@ echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
 echo "VUE_APP_USER_POOL_CLIENT_ID=$app_client_id" >> .env
 
 # ==========================================
-# ======  Step 1: Parent DNS setup  ========
+# =====   Step 1: Parent DNS setup    ======
+# =====  (Applies only in TEST mode)  ======
 # ==========================================
+if [[ $1 == "test" ]]
+then
+  cd ../scripts/1_parent-setup || exit
 
-cd ../scripts/1_parent-setup || exit
+  # Replace 'TYPE' in config.tf with actual type (live, test)
+  sed -i -e "s/##TYPE##/$1/g" config.tf
 
-# Replace 'TYPE' in config.tf with actual type (live, test)
-sed -i -e "s/##TYPE##/$1/g" config.tf
+  # Replace 'PROJECT' in config.tf with actual project name
+  sed -i -e "s/##PROJECT##/$project/g" config.tf
 
-# Replace 'PROJECT' in config.tf with actual project name
-sed -i -e "s/##PROJECT##/$project/g" config.tf
+  # Replace 'ORGANISATION' in config.tf with actual organisation name
+  sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-# Replace 'ORGANISATION' in config.tf with actual organisation name
-sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
-
-# Apply Parent DNS Terraform
-terraform init
-terraform apply -auto-approve -var-file="../support/flox.tfvars"
-user_pool_id=$(terraform output user_pool_id)
-user_pool_id=${user_pool_id:1:-1}
-
-app_client_id=$(terraform output app_client_id)
-app_client_id=${app_client_id:1:-1}
-
-user_pool_arn=$(terraform output user_pool_arn)
-user_pool_arn=${user_pool_arn:1:-1}
+  # Apply Parent DNS Terraform
+  terraform init
+  terraform apply -auto-approve -var-file="../support/flox.tfvars"
+fi
 
 # ==========================================
 # ======     Step 2: Main setup     ========
