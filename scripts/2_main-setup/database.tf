@@ -32,7 +32,7 @@ resource "aws_rds_cluster" "database_cluster" {
   backup_retention_period   = 30
   deletion_protection       = true
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
   }
 }
 
