@@ -9,7 +9,7 @@ import {
 } from '@nestjs/terminus';
 import { ConfigService } from '@nestjs/config';
 
-@Controller('health')
+@Controller('healthcheck')
 export class HealthcheckController {
   constructor(
     private readonly configService: ConfigService,

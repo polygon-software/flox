@@ -116,3 +116,9 @@ variable "database_master_password" {
   description     = "Database user password"
   type            = string
 }
+
+variable "healthcheck_url" {
+  default         = "healthcheck"
+  description     = "Healthcheck URL path"
+  type            = string
+}
