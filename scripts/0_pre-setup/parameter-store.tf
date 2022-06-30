@@ -11,4 +11,3 @@ resource "aws_ssm_parameter" "user_pool_client_id" {
   type  = "String"
   value = aws_cognito_user_pool_client.app_client.id
 }
-

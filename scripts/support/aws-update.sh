@@ -60,12 +60,14 @@ user_pool_id=$(terraform output user_pool_id)
 user_pool_id=${user_pool_id:1:-1}
 user_pool_client_id=$(terraform output user_pool_client_id)
 user_pool_client_id=${user_pool_client_id:1:-1}
+source_code_bucket=$(terraform output source_code_bucket)
+source_code_bucket=${source_code_bucket:1:-1}
 
 # Add Cognito outputs to flox.tfvars
 echo "# ======== Cognito Config ========" >> ../support/flox.tfvars
-#echo "cognito_arn=\"$user_pool_arn\"" >> ../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
-# TODO: Do we maybe need cognito ARN as well?
+echo "source_code_bucket=\"$source_code_bucket\"" >> ../support/flox.tfvars
+# NOTE: as opposed to initial setup, cognito_arn is no longer needed here
 
 # ==========================================
 # ====       Step 1: Main Update        ====
