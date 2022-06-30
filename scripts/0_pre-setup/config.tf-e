@@ -7,10 +7,10 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        ="polygonsoftware"
+    organization        = "polygonsoftware"
 
     workspaces {
-      name = "flox-test-cognito" # will be replaced in preprocessing from build.bash # TODO
+      name = "flox-test-cognito" # will be replaced in preprocessing from build.bash
     }
   }
 }

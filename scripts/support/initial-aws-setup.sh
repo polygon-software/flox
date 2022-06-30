@@ -144,6 +144,9 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 # Build & zip frontend and backend
 zsh ../support/build.bash "$1" "$project" "$build_mode"
+cp ../outputs/frontend.zip frontend.zip
+cp ../outputs/backend.zip backend.zip
+
 
 # Apply main Terraform
 terraform init
