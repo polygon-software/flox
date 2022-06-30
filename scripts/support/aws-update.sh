@@ -31,6 +31,14 @@ aws_region=${aws_region:1:-1}
 organisation=$(jq '.general.organisation' ../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
+if [[ $1 == "test" ]]
+then
+  url=$(jq '.general.test_base_domain' ../../backend/flox.config.json)
+else
+  url=$(jq '.general.live_base_domain' ../../backend/flox.config.json)
+fi
+url=${url:1:-1}
+
 # ==========================================
 # ====       Step 1: Main Update        ====
 # ==========================================
@@ -63,6 +71,8 @@ cd ../scripts/3_update
 
 # Build & zip frontend and backend
 zsh ../support/build.bash "$1" "$project" "$build_mode"
+cp ../outputs/frontend.zip frontend.zip
+cp ../outputs/backend.zip backend.zip
 
 # Apply update Terraform
 terraform init
