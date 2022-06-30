@@ -12,12 +12,12 @@ export class User extends BaseEntity{
   constructor(
     uuid: string,
     createdAt: Date,
-    lastModifiedAt: Date,
+    updatedAt: Date,
     deletedAt: Date|null,
     role: ROLE,
     username: string,
   ) {
-    super(uuid, createdAt, lastModifiedAt, deletedAt)
+    super(uuid, createdAt, updatedAt, deletedAt)
     this.role = role;
     this.uuid = uuid;
     this.username = username;
