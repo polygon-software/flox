@@ -5,24 +5,35 @@ import {
   HealthCheck,
   HealthCheckService,
   HttpHealthIndicator,
+  TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('health')
 export class HealthcheckController {
   constructor(
+    private readonly configService: ConfigService,
     private readonly healthcheckService: HealthCheckService,
     private readonly http: HttpHealthIndicator,
+    private readonly database: TypeOrmHealthIndicator,
   ) {}
 
   @Public()
   @HealthCheck()
   @Get()
-  async checkHealth(
-    @Req() req: fastify.FastifyRequest,
-    @Res() res: fastify.FastifyReply<any>,
-  ): Promise<any> {
+  async checkHealth(): Promise<any> {
     return this.healthcheckService.check([
-      () => this.http.pingCheck('Basic Check', 'http://localhost:3000'),
+      // TODO: add more health checks?
+      // See: https://progressivecoder.com/nestjs-health-check-terminus/
+      // () =>
+      // this.http.pingCheck(
+      //   'Basic Check',
+      //   `http://localhost:${this.configService.get('server.port')}`,
+      // ),
+
+      // Database connectivity
+      () =>
+        this.database.pingCheck(this.configService.get('database.database')),
     ]);
   }
 }
