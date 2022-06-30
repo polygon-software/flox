@@ -10,7 +10,7 @@ terraform {
     organization        = "##ORGANISATION##"
 
     workspaces {
-      name = "##PROJECT##-##TYPE##-hosted-zone" # will be replaced in preprocessing from build.bash
+      name = "##PROJECT##-##TYPE##-hosted-zone" # will be replaced in preprocessing
     }
   }
 }
