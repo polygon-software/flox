@@ -208,12 +208,6 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "EMAIL_SENDER"
-    value     = var.email_sender
-  }
-
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
     name      = "USER_POOL_ID"
     value     = var.user_pool_id
   }
@@ -236,7 +230,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "CLOUDWATCH_GROUP_NAME"
-    value     = "${var.project}-${var.type}"  # TODO does this possibly have to be uppercase?
+    value     = "${var.project}-${var.type}"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"

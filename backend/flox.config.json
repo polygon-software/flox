@@ -13,6 +13,9 @@
       "roles": [
         "ADMIN", "SUPERUSER", "USER"
       ]
+    },
+    "email": {
+      "email_sender": "david.wyss@polygon-project.ch"
     }
   },
   "general": {
@@ -23,6 +26,5 @@
     "aws_region": "eu-central-1",
     "test_base_domain": "flox.polygon-project.ch",
     "live_base_domain": "floxbanano.ch",
-    "email_sender": "david.wyss@polygon-project.ch"
   }
 }
