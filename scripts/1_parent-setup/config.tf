@@ -7,10 +7,10 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        = "polygonsoftware"
+    organization        = "##ORGANISATION##"
 
     workspaces {
-      name = "flox-test-hosted-zone" # will be replaced in preprocessing from build.bash
+      name = "##PROJECT##-##TYPE##-hosted-zone" # will be replaced in preprocessing from build.bash
     }
   }
 }

@@ -43,7 +43,7 @@ url=${url:1:-1}
 # ====       Step 1: Main Update        ====
 # ==========================================
 
-cd ../3_update || exit
+cd ../4_update || exit
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
@@ -67,7 +67,7 @@ echo "VUE_APP_AWS_REGION=$aws_region" >> .env
 # TODO GET from SSM parameter store: aws ssm get-parameter --name test --profile flox
 #echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
 #echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
-cd ../scripts/3_update
+cd ../scripts/4_update || exit
 
 # Build & zip frontend and backend
 zsh ../support/build.bash "$1" "$project" "$build_mode"
