@@ -2,13 +2,15 @@ import { Controller, Get, Req, Res } from '@nestjs/common';
 import fastify = require('fastify');
 import { Public } from '../auth/authentication.decorator';
 import { HealthcheckService } from './healthcheck.service';
+import { HealthCheck } from '@nestjs/terminus';
 
 @Controller()
 export class HealthcheckController {
   constructor(private readonly healthcheckService: HealthcheckService) {}
 
   @Public()
-  @Get('/healthcheck')
+  @HealthCheck()
+  @Get()
   async uploadPublicFile(
     @Req() req: fastify.FastifyRequest,
     @Res() res: fastify.FastifyReply<any>,
