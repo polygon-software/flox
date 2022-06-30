@@ -45,6 +45,13 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
+# TODO generate frontend .env
+# GET from SSM parameter store: aws ssm get-parameter --name test --profile flox
+
+# Build & zip frontend and backend
+zsh build.bash "$1" "$project" "$build_mode"
+
+
 # Apply update Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"

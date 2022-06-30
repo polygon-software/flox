@@ -132,8 +132,20 @@ fi
 
 cd ../2_main-setup || exit
 
+# Replace 'TYPE' in config.tf with actual type (live, test)
+sed -i -e "s/##TYPE##/$1/g" config.tf
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
+
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
 # Build & zip frontend and backend
-zsh build.bash "$1" "$project" "$build_mode" "$organisation"
+zsh build.bash "$1" "$project" "$build_mode"
+
+# Go back to this folder
+cd scripts/2_main-setup || exit
 
 # Apply main Terraform
 terraform init
