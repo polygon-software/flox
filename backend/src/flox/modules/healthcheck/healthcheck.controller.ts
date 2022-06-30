@@ -23,7 +23,7 @@ export class HealthcheckController {
   @Get()
   async checkHealth(): Promise<any> {
     return this.healthcheckService.check([
-      // TODO: add more health checks?
+      // TODO application specific: add more health checks
       // See: https://progressivecoder.com/nestjs-health-check-terminus/
       // () =>
       // this.http.pingCheck(
