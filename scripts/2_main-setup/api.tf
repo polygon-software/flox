@@ -119,7 +119,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     name      = "HealthCheckPath"
     namespace = "aws:elasticbeanstalk:environment:process:default"
-    value     = "/graphql"
+    value     = "/healthcheck"
   }
 
   setting {
