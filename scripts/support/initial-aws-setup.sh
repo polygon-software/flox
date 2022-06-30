@@ -138,3 +138,12 @@ zsh build.bash "$1" "$project" "$build_mode" "$organisation"
 # Apply main Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
+
+# ==========================================
+# ======      Step 3: Cleanup       ========
+# ==========================================
+
+# Reset all config.tf files to their respective template files
+cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
+cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
+cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf

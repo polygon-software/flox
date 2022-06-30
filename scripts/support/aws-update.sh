@@ -45,4 +45,13 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-# TODO
+# Apply update Terraform
+terraform init
+terraform apply -auto-approve -var-file="../support/flox.tfvars"
+
+# ==========================================
+# ====         Step 2: Cleanup         =====
+# ==========================================
+
+# Reset config.tf file to its respective template files
+cp config.tftemplate config.tf
