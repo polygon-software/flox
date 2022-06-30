@@ -2,7 +2,7 @@
 resource "aws_s3_object" "frontend_source_code" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = "${var.project}-${var.type}-web-beanstalk/frontend.zip"
-  source                = "frontend.zip"
+  source                = "../outputs/frontend.zip"
   source_hash           = filemd5("frontend.zip")
   tags = {
     Project       = var.project

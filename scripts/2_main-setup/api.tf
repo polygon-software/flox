@@ -2,7 +2,7 @@
 resource "aws_s3_object" "api_source_code_object" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = "${var.project}-${var.type}-api-beanstalk/backend.zip"
-  source                = "backend.zip"
+  source                = "../outputs/backend.zip"
   source_hash           = filemd5("backend.zip")
 }
 

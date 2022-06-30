@@ -53,7 +53,7 @@ echo ',   "engines":' >> dist/package.json
 echo "$(<package.json)" | jq '.engines' >> dist/package.json
 echo '}' >> dist/package.json
 cd dist || exit
-zip -r ../../scripts/2_main-setup/backend.zip * -q
+zip -r ../../scripts/outputs/backend.zip * -q
 cd ..
 
 cd ../frontend || exit
@@ -62,9 +62,6 @@ cd ../frontend || exit
 rm -rf dist
 
 yarn
-
-# Copy package.json to dist
-#cp package.json "dist/$3/package.json"
 
 # SPA Mode
 if [[ $3 == "spa" ]]
@@ -85,15 +82,6 @@ fi
 
 # Install modules & zip
 yarn
-zip -r ../../../scripts/2_main-setup/frontend.zip * -q
+zip -r ../../../scripts/outputs/frontend.zip * -q
 
-cd ../../../scripts/2_main-setup || exit
-
-# Replace 'TYPE' in config.tf with actual type (live, test)
-sed -i -e "s/##TYPE##/$1/g" config.tf
-
-# Replace 'PROJECT' in config.tf with actual project name
-sed -i -e "s/##PROJECT##/$2/g" config.tf
-
-# Replace 'ORGANISATION' in config.tf with actual organisation name
-sed -i -e "s/##ORGANISATION##/${4}/g" config.tf
+cd ../ || exit
