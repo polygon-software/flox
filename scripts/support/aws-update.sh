@@ -39,10 +39,19 @@ else
 fi
 url=${url:1:-1}
 
-
+# Go to pre-update folder
 cd ../3_pre-update || exit
 
-# Apply terraform for getting SSM parameters
+# Replace 'TYPE' in config.tf with actual type (live, test)
+sed -i -e "s/##TYPE##/$1/g" config.tf
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
+
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
+# Apply pre-update terraform for getting SSM parameters
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
 
@@ -52,6 +61,11 @@ user_pool_id=${user_pool_id:1:-1}
 user_pool_client_id=$(terraform output user_pool_client_id)
 user_pool_client_id=${user_pool_client_id:1:-1}
 
+# Add Cognito outputs to flox.tfvars
+echo "# ======== Cognito Config ========" >> ../support/flox.tfvars
+#echo "cognito_arn=\"$user_pool_arn\"" >> ../support/flox.tfvars
+echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
+# TODO: Do we maybe need cognito ARN as well?
 
 # ==========================================
 # ====       Step 1: Main Update        ====
@@ -81,15 +95,15 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-
 # Build & zip frontend and backend
 zsh ../support/build.bash "$1" "$project" "$build_mode"
 cp ../outputs/frontend.zip frontend.zip
 cp ../outputs/backend.zip backend.zip
 
-# Apply update Terraform
-terraform init
-terraform apply -auto-approve -var-file="../support/flox.tfvars"
+echo "TODO, we are done here"
+## Apply update Terraform
+#terraform init
+#terraform apply -auto-approve -var-file="../support/flox.tfvars"
 
 # ==========================================
 # ====         Step 2: Cleanup         =====
