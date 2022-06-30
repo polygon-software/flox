@@ -61,7 +61,7 @@ let verificationCode = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent() // TODO in other dialogs as well!
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(useDialogPluginComponent.emits)
