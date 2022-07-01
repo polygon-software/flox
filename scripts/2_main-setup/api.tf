@@ -27,7 +27,8 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   application           = aws_elastic_beanstalk_application.api_app.name
   solution_stack_name   = "64bit Amazon Linux 2 v5.5.4 running Node.js 14"
   description           = "Environment for API"
-  version_label         = aws_elastic_beanstalk_application_version.api_app_version.name
+  # Version override (used for update workflow)
+  version_label         = var.api_version != "" ? var.api_version : aws_elastic_beanstalk_application_version.api_app_version.name
 
   setting {
     namespace           = "aws:autoscaling:launchconfiguration"

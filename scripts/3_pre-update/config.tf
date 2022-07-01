@@ -10,7 +10,7 @@ terraform {
     organization        = "polygonsoftware"
 
     workspaces {
-      name = "flox-test-pre-update" # will be replaced in preprocessing
+      name = "flox-test-pre-update" # will be replaced in preprocessing from build.bash
     }
   }
 }

@@ -111,3 +111,9 @@ variable "database_master_password" {
   description     = "Database user password"
   type            = string
 }
+
+variable "api_version" {
+  default         = ""
+  description     = "API Version override to use (used from update workflow)"
+  type            = string
+}
