@@ -2,11 +2,16 @@
 /dist
 /node_modules
 
-# Generated .env files
-/scripts/support/tf.env
+# Generated script outputs
+/scripts/support/flox.tfvars
+/scripts/outputs
+/scripts/**/*.zip
 
 # Terraform
-*/.terraform
+/scripts/**/.terraform
+/scripts/**/.terraform.lock.hcl
+/scripts/**/config.tf-e
+/scripts/**/terraform.tfstate
 
 # Logs
 logs
