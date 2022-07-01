@@ -116,10 +116,16 @@ cp ../outputs/backend.zip backend.zip
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
 
-# ==========================================
-# ====    Step 2: Resource re-deploy   =====
-# ==========================================
+# Get update API version & apply to flox.tfvars
+api_version=$(terraform output api_version)
+api_version=${api_version:1:-1}
+echo "api_version=\"$api_version\"" >> ../support/flox.tfvars
 
+#
+## ==========================================
+## ====    Step 2: Resource re-deploy   =====
+## ==========================================
+#
 # Go to main Terraform workspace to re-apply Terraform (since EBS Env state is held there)
 cd ../2_main-setup || exit
 
@@ -135,7 +141,7 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 #terraform plan -target=aws_elastic_beanstalk_environment.api_env
 terraform init
 terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve -var-file="../support/flox.tfvars"
-
+# TODO handle frontend as well
 
 # ==========================================
 # ====         Step 3: Cleanup         =====
