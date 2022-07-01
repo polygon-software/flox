@@ -1,4 +1,5 @@
 # TODO only relevant things
+# TODO handle SPA / PWA distinction
 #// Upload app.zip to bucket
 #resource "aws_s3_object" "frontend_source_code" {
 #  bucket                = aws_s3_bucket.source_code_bucket.id
