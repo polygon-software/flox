@@ -10,7 +10,7 @@ terraform {
     organization        = "polygonsoftware"
 
     workspaces {
-      name = "flox-test-cognito" # will be replaced in preprocessing from build.bash
+      name = "flox-test-cognito" # will be replaced in preprocessing
     }
   }
 }
