@@ -9,7 +9,7 @@ resource "aws_cognito_user_pool" "user_pool" {
     enabled = true
   }
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
