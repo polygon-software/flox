@@ -62,10 +62,20 @@ user_pool_client_id=$(terraform output user_pool_client_id)
 user_pool_client_id=${user_pool_client_id:1:-1}
 source_code_bucket=$(terraform output source_code_bucket)
 source_code_bucket=${source_code_bucket:1:-1}
+cognito_arn=$(terraform output cognito_arn)
+cognito_arn=${cognito_arn:1:-1}
+hosted_zone_id=$(terraform output hosted_zone_id)
+hosted_zone_id=${hosted_zone_id:1:-1}
 
-# Add Cognito outputs to flox.tfvars
+# Add Domain & Cognito outputs to flox.tfvars
+echo "# ======== Domain Config ========" >> ../support/flox.tfvars
+echo "base_domain=\"$url\"" >> ../support/flox.tfvars
+echo "hosted_zone_id=\"$hosted_zone_id\"" >> ../support/flox.tfvars
 echo "# ======== Cognito Config ========" >> ../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
+echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../support/flox.tfvars
+echo "cognito_arn=\"$cognito_arnt\"" >> ../support/flox.tfvars
+echo "# ======== S3 Config ========" >> ../support/flox.tfvars
 echo "source_code_bucket=\"$source_code_bucket\"" >> ../support/flox.tfvars
 # NOTE: as opposed to initial setup, cognito_arn is no longer needed here
 
@@ -132,7 +142,6 @@ terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve 
 # ==========================================
 
 # Reset config.tf file to its respective template files
-cd ../
 cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
 cp ../3_pre-update/config.tftemplate ../3_pre-update/config.tf
 cp ../4_update/config.tftemplate ../4_update/config.tf
