@@ -1,6 +1,6 @@
 # --------------------------------------------------------------
+# Updates existing AWS infrastructure without recreating everything
 # Used for new releases in GitHub Actions (draft or live)
-# Updates existing infrastructure without recreating everything
 # --------------------------------------------------------------
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]

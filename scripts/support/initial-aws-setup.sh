@@ -1,3 +1,10 @@
+# --------------------------------------------------------------
+# Sets up the initial infrastructure for a new Flox project on AWS.
+# This script should only be ran once!
+# Takes one parameter: 'live' or 'test'
+# --------------------------------------------------------------
+
+
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]
 then
   echo "Invalid deployment mode $1"
