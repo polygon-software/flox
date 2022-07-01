@@ -102,13 +102,37 @@ zsh ../support/build.bash "$1" "$project" "$build_mode"
 cp ../outputs/frontend.zip frontend.zip
 cp ../outputs/backend.zip backend.zip
 
-## Apply update Terraform
+# Apply update Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
 
 # ==========================================
-# ====         Step 2: Cleanup         =====
+# ====    Step 2: Resource re-deploy   =====
+# ==========================================
+
+# Go to main Terraform workspace to re-apply Terraform (since EBS Env state is held there)
+cd ../2_main-setup || exit
+
+# Replace 'TYPE' in config.tf with actual type (live, test)
+sed -i -e "s/##TYPE##/$1/g" config.tf
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
+
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
+#terraform plan -target=aws_elastic_beanstalk_environment.api_env
+terraform init
+terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve -var-file="../support/flox.tfvars"
+
+
+# ==========================================
+# ====         Step 3: Cleanup         =====
 # ==========================================
 
 # Reset config.tf file to its respective template files
-cp config.tftemplate config.tf
+cd ../
+cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
+cp ../3_pre-update/config.tftemplate ../3_pre-update/config.tf
+cp ../4_update/config.tftemplate ../4_update/config.tf

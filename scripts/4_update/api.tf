@@ -18,12 +18,12 @@ resource "aws_elastic_beanstalk_application_version" "api_app_version" {
   application           = data.aws_elastic_beanstalk_application.api_app.name
   name                  = "${var.project}-${var.type}-api-v-${filemd5("backend.zip")}"
 }
-
-// Apply to eb environment
-resource "aws_elastic_beanstalk_environment" "api_env" {
-  name                = "${var.project}-${var.type}-api-app-env"
-  application         = data.aws_elastic_beanstalk_application.api_app.name
-  solution_stack_name = "64bit Amazon Linux 2 v5.5.4 running Node.js 14"
-  description         = "Environment for API"
-  version_label       = aws_elastic_beanstalk_application_version.api_app_version.name
-}
+#
+#// Apply to eb environment
+#data "aws_elastic_beanstalk_environment" "api_env" {
+#  name                = "${var.project}-${var.type}-api-app-env"
+#  application         = data.aws_elastic_beanstalk_application.api_app.name
+#  solution_stack_name = "64bit Amazon Linux 2 v5.5.4 running Node.js 14"
+#  description         = "Environment for API"
+#  version_label       = aws_elastic_beanstalk_application_version.api_app_version.name
+#}
