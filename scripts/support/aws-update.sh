@@ -102,7 +102,6 @@ zsh ../support/build.bash "$1" "$project" "$build_mode"
 cp ../outputs/frontend.zip frontend.zip
 cp ../outputs/backend.zip backend.zip
 
-echo "TODO, we are done here"
 ## Apply update Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
