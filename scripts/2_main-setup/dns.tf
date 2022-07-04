@@ -74,7 +74,7 @@ resource "aws_route53_record" "web_record_alias" {
   zone_id               = var.hosted_zone_id
   alias {
     evaluate_target_health = true
-    name                   = var.frontend_build_mode == "ssr" ? module.web_ssr.frontend_env_cname : "" // TODO with non-ssr module
+    name                   = var.frontend_build_mode == "ssr" ? module.web_ssr[0].frontend_env_cname : "" // TODO with non-ssr module
     zone_id                = data.aws_elastic_beanstalk_hosted_zone.hosted_zone.id
   }
 }
@@ -84,7 +84,7 @@ resource "aws_route53_record" "web_record_alias_AAAA" {
   zone_id               = var.hosted_zone_id
   alias {
     evaluate_target_health = true
-    name                   = var.frontend_build_mode == "ssr" ? module.web_ssr.frontend_env_cname : "" // TODO with non-ssr module
+    name                   = var.frontend_build_mode == "ssr" ? module.web_ssr[0].frontend_env_cname : "" // TODO with non-ssr module
     zone_id                = data.aws_elastic_beanstalk_hosted_zone.hosted_zone.id
   }
 }
