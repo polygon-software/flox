@@ -4,7 +4,6 @@
 # Takes one parameter: 'live' or 'test'
 # --------------------------------------------------------------
 
-
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]
 then
   echo "Invalid deployment mode $1"

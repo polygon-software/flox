@@ -49,3 +49,8 @@ variable "web_pri_subnet_factor" {
   description     = "web_pri_subnet_factor"
   type            = number
 }
+
+variable "source_code_bucket_id" {
+  description     = "Source code bucket ID"
+  type            = string
+}
