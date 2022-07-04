@@ -78,6 +78,7 @@ resource "aws_route53_record" "web_record_alias" {
     zone_id                = data.aws_elastic_beanstalk_hosted_zone.hosted_zone.id
   }
 }
+
 resource "aws_route53_record" "web_record_alias_AAAA" {
   name                  = var.base_domain
   type                  = "AAAA"
