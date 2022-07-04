@@ -1,4 +1,4 @@
-# TODO handle SPA / PWA distinction
+# Deploy frontend in SSR mode (elastic beanstalk)
 
 // Upload app.zip to bucket
 resource "aws_s3_object" "frontend_source_code" {
@@ -14,7 +14,6 @@ resource "aws_s3_object" "frontend_source_code" {
 // Create Elastic Beanstalk resource
 resource "aws_elastic_beanstalk_application" "frontend_application" {
   name                  = "${var.project}-${var.type}-web-app"
-  description           = var.eb_app_desc
   tags = {
     Project       = var.project
   }
@@ -22,7 +21,7 @@ resource "aws_elastic_beanstalk_application" "frontend_application" {
 
 // Connect EBS to the S3 bucket containing the app
 resource "aws_elastic_beanstalk_application_version" "frontend_application_version" {
-  name                  = "${var.project}-${var.type}-web-v-${filemd5("frontend.zip")}" # TODO what's this name
+  name                  = "${var.project}-${var.type}-web-v-${filemd5("frontend.zip")}"
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = aws_s3_object.frontend_source_code.id
   application           = aws_elastic_beanstalk_application.frontend_application.name
@@ -57,7 +56,7 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   setting {
     namespace     = "aws:ec2:vpc"
     name          = "VPCId"
-    value         = aws_vpc.vpc.id
+    value         = var.vpc_id
   }
 
   // Assign available (private) subnets to spawn EC2 instances within
@@ -101,7 +100,7 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   setting {
     namespace     = "aws:elbv2:listener:443"
     name          = "SSLCertificateArns"
-    value         = aws_acm_certificate_validation.cert_validation_frontend.certificate_arn
+    value         = var.ssl_certificate_arn
   }
 
   setting {

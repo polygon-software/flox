@@ -76,18 +76,6 @@ variable "api_pri_subnet_factor" {
   type            = number
 }
 
-variable "web_pub_subnet_factor" {
-  default         = 6
-  description     = "web_pub_subnet_factor"
-  type            = number
-}
-
-variable "web_pri_subnet_factor" {
-  default         = 3
-  description     = "web_pri_subnet_factor"
-  type            = number
-}
-
 variable "cidr_block" {
   default         = "10.0.0.0/19"
   description     = "CIDR block for the VPC."
@@ -115,5 +103,10 @@ variable "database_master_password" {
 variable "api_version" {
   default         = ""
   description     = "API Version override to use (used from update workflow)"
+  type            = string
+}
+
+variable "frontend_build_mode" {
+  description     = "Build mode to use for frontend ('spa', 'pwa' or 'ssr')"
   type            = string
 }
