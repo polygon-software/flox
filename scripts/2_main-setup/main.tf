@@ -26,10 +26,10 @@ module "web_ssr" {
   cidr_block = var.cidr_block
   azs = var.azs
   vpc_id = aws_vpc.vpc.id
-  internet_gateway_id = aws_internet_gateway.internet_gateway.id
-  s3_encryption_key_arn = aws_kms_key.s3_encryption_key.arn
   ssl_certificate_arn = aws_acm_certificate.frontend_cert.arn
   source_code_bucket_id = aws_s3_bucket.source_code_bucket.id
+  private_subnet_ids = aws_subnet.private_subnet.*.id
+  public_subnet_ids = aws_subnet.public_subnet.*.id
 }
 
 module "web_spa_pwa" {

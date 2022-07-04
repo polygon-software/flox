@@ -63,14 +63,14 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   setting {
     namespace     = "aws:ec2:vpc"
     name          = "Subnets"
-    value         = join(",", aws_subnet.frontend_private_subnet.*.id)
+    value         = join(",", var.private_subnet_ids)
   }
 
   // Assign available (public) subnets to spawn the load-balancer within
   setting {
     namespace     = "aws:ec2:vpc"
     name          = "ELBSubnets"
-    value         = join(",", aws_subnet.frontend_public_subnet.*.id)
+    value         = join(",", var.public_subnet_ids)
   }
 
   setting {

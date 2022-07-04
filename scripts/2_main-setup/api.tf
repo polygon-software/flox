@@ -52,14 +52,14 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "Subnets"
-    value     = join(",", aws_subnet.frontend_private_subnet.*.id)
+    value     = join(",", aws_subnet.private_subnet.*.id)
   }
 
   // Assign available (public) subnets to spawn the load-balancer within
   setting {
     namespace = "aws:ec2:vpc"
     name      = "ELBSubnets"
-    value     = join(",", aws_subnet.frontend_public_subnet.*.id)
+    value     = join(",", aws_subnet.public_subnet.*.id)
   }
 
   // Subnets of database
