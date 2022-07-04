@@ -13,7 +13,6 @@ variable "s3_encryption_key_arn" {
   type = string
 }
 
-
 variable "ssl_certificate_arn" {
   description = "SSL certificate ARN"
   type = string
