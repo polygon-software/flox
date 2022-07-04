@@ -3,8 +3,8 @@ import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { IsEmail, IsString } from 'class-validator';
 import { moduleConfig } from '../../roles/config';
-import { isModuleActive } from '../../../flox';
 import { MODULES } from '../../../MODULES';
+import { isModuleActive } from '../../../core/flox-helpers';
 
 /**
  * A user registered within cognito, having a role and contact information
