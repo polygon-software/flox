@@ -19,8 +19,3 @@ output "api_endpoint" {
   description = "Public IP address of the EC2 instance"
   value       = aws_elastic_beanstalk_environment.api_env.endpoint_url
 }
-
-output "web_endpoint" {
-  description = "Public IP address of the EC2 instance"
-  value       = aws_elastic_beanstalk_environment.frontend_env.endpoint_url
-}
