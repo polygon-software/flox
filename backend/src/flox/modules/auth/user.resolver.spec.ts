@@ -41,7 +41,7 @@ describe('UserResolver', () => {
     const user: User = {
       uuid: 'test-UUID-1234',
       createdAt: date,
-      lastModifiedAt: date,
+      updatedAt: date,
       deletedAt: null,
       validateRole: jest.fn(),
       ...input,
