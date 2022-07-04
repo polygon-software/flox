@@ -18,74 +18,16 @@ resource "aws_internet_gateway" "internet_gateway" {
   }
 }
 
-resource "aws_route_table" "route_table_private" {
-  vpc_id                = aws_vpc.vpc.id
-  tags = {
-    Name          = "${var.project}-${var.type}-web-route-table-private"
-    Project       = var.project
-    SubnetType    = "private"
-  }
+# Frontend modules (depending on mode)
 
-  lifecycle {
-    create_before_destroy = true
-  }
+module "web_ssr" {
+  source = "./web-ssr"
+  count  = var.frontend_build_mode == 'ssr' ? 1 : 0
+  project = var.project
 }
 
-resource "aws_route_table" "route_table_public" {
-  vpc_id                = aws_vpc.vpc.id
-
-  tags = {
-    Name          = "${var.project}-${var.type}-route-table-public"
-    Project       = var.project
-    SubnetType    = "public"
-  }
-}
-
-// Create new elastic IP for the NAT
-// TODO @Cloudmates: Is that needed?
-resource "aws_eip" "web_nat_elastic_ip" {
-  vpc                   = true
-  tags = {
-    Name          = "${var.project}-${var.type}-web-nat-eip"
-    Project       = var.project
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-// Create nat gateway.
-// TODO @Cloudmates: Is that needed?
-resource "aws_nat_gateway" "frontend_nat" {
-  allocation_id         = aws_eip.web_nat_elastic_ip.id
-  subnet_id             = aws_subnet.frontend_public_subnet[0].id
-
-  tags = {
-    Name          = "${var.project}-${var.type}-web-nat"
-    Project       = var.project
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_route" "frontend_route_private" {
-  route_table_id        = aws_route_table.route_table_private.id
-  destination_cidr_block= "0.0.0.0/0"
-  nat_gateway_id        = aws_nat_gateway.frontend_nat.id
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_route" "frontend_route_public" {
-  route_table_id        = aws_route_table.route_table_public.id
-  destination_cidr_block= "0.0.0.0/0"
-  gateway_id            = aws_internet_gateway.internet_gateway.id
-  lifecycle {
-    create_before_destroy = true
-  }
+module "web_spa_pwa" {
+  source = "./web-spa-pwa"
+  count  = var.frontend_build_mode != 'ssr' ? 1 : 0
 }
 
