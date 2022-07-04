@@ -8,11 +8,6 @@ variable "type" {
   type = string
 }
 
-variable "s3_encryption_key_arn" {
-  description = "S3 encryption key ARN"
-  type = string
-}
-
 variable "ssl_certificate_arn" {
   description = "SSL certificate ARN"
   type = string
@@ -33,24 +28,17 @@ variable "azs" {
   type = list(string)
 }
 
-variable "internet_gateway_id" {
-  description = "Internet gateway ID"
-  type = string
-}
-
-variable "web_pub_subnet_factor" {
-  default         = 6
-  description     = "web_pub_subnet_factor"
-  type            = number
-}
-
-variable "web_pri_subnet_factor" {
-  default         = 3
-  description     = "web_pri_subnet_factor"
-  type            = number
-}
-
 variable "source_code_bucket_id" {
   description     = "Source code bucket ID"
   type            = string
+}
+
+variable "private_subnet_ids" {
+  description = "Ids of the private Subnets"
+  type = list(string)
+}
+
+variable "public_subnet_ids" {
+  description = "Ids of the private Subnets"
+  type = list(string)
 }
