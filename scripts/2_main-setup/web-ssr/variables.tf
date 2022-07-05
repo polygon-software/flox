@@ -34,11 +34,11 @@ variable "source_code_bucket_id" {
 }
 
 variable "private_subnet_ids" {
-  description = "Ids of the private Subnets"
+  description = "IDs of the private Subnets"
   type = list(string)
 }
 
 variable "public_subnet_ids" {
-  description = "Ids of the private Subnets"
+  description = "IDs of the public Subnets"
   type = list(string)
 }

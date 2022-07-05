@@ -35,5 +35,10 @@ module "web_ssr" {
 module "web_spa_pwa" {
   source = "./web-spa-pwa"
   count  = var.frontend_build_mode != "ssr" ? 1 : 0
+  project = var.project
+  type = var.type
+  domain = var.base_domain
+  hosted_zone_id = var.hosted_zone_id
+  ssl_certificate_arn = aws_acm_certificate.frontend_cert.arn
 }
 
