@@ -114,6 +114,12 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 # Destroy main Terraform
 terraform refresh -var-file="../support/flox.tfvars"
 
+
+# Build & zip frontend and backend
+zsh ../support/build.bash "test" "$project" "$build_mode"
+cp ../outputs/frontend.zip frontend.zip
+cp ../outputs/backend.zip backend.zip
+
 # ==========================================
 # ======    Step 3: Destroy all     ========
 # ==========================================
@@ -127,6 +133,10 @@ terraform destroy -auto-approve -var-file="../support/flox.tfvars"
 # ==========================================
 # ======      Step 4: Cleanup       ========
 # ==========================================
+
+# Remove .zip files
+rm -f ../2_main-setup/frontend.zip
+rm -f ../2_main-setup/backend.zip
 
 # Reset all config.tf files to their respective template files
 cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf

@@ -17,7 +17,7 @@ resource "aws_elastic_beanstalk_application_version" "api_app_version" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = aws_s3_object.api_source_code_object.id
   application           = aws_elastic_beanstalk_application.api_app.name
-  name                  = "${var.project}-${var.type}-api-v-${filemd5("backend.zip")}"
+  name                  = "${var.project}-${var.type}-api-v-${aws_s3_object.api_source_code_object.source_hash}"
 }
 
 // Create eb environment
