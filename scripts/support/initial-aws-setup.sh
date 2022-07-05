@@ -154,7 +154,15 @@ zsh ../support/build.bash "$1" "$project" "$build_mode"
 cp ../outputs/frontend.zip frontend.zip
 cp ../outputs/backend.zip backend.zip
 
+# If non-ssr: unzip file for direct S3 upload
+if [[ $build_mode != "ssr" ]]
+then
+  mkdir -p outputs/frontend
+  unzip outputs/frontend.zip -d outputs/frontend
 
+  mkdir -p outputs/backend
+  unzip outputs/backend.zip -d outputs/backend
+fi
 # Apply main Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
