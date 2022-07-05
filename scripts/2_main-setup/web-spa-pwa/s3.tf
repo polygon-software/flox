@@ -34,3 +34,15 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
   bucket = aws_s3_bucket.website_bucket.id
   policy = data.aws_iam_policy_document.website_bucket_policy.json
 }
+
+
+#TODO probably still bogo banane
+resource "aws_s3_bucket_object" "file" {
+  for_each = fileset(var.domain, "**")
+
+  bucket      = aws_s3_bucket.website_bucket.id
+  key         = each.key
+  source      = "${var.domain}/${each.key}"
+  source_hash = filemd5("${var.domain}/${each.key}")
+  acl         = "public-read"
+}
