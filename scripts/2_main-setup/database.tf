@@ -30,7 +30,7 @@ resource "aws_rds_cluster" "database_cluster" {
   kms_key_id                = aws_kms_key.rds_encryption_key.arn
   storage_encrypted         = true
   backup_retention_period   = 30
-  deletion_protection       = true
+  deletion_protection       = var.type == "test" ? false : true
   lifecycle {
     prevent_destroy = false
   }
