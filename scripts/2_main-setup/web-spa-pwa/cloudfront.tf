@@ -1,4 +1,4 @@
-resource "aws_cloudfront_distribution" "my_cloudfront" {
+resource "aws_cloudfront_distribution" "website_distribution" {
   depends_on = [
     aws_s3_bucket.website_bucket
   ]
