@@ -23,8 +23,8 @@ resource "aws_rds_cluster" "database_cluster" {
   cluster_identifier        = "${var.project}-${var.type}-database-cluster"
   database_name             = var.database_name
   master_username           = var.database_master_username
-  master_password           = var.database_master_password  // Mhm..
-  skip_final_snapshot       = false
+  master_password           = var.database_master_password
+  skip_final_snapshot       = var.type == "test" ? true : false
   db_subnet_group_name      = aws_db_subnet_group.database_subnet_group.name
   vpc_security_group_ids    = [aws_security_group.database_security_group.id]
   kms_key_id                = aws_kms_key.rds_encryption_key.arn
