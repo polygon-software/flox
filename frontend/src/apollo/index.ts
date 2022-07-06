@@ -1,7 +1,5 @@
 import type {ApolloClientOptions, StoreObject} from '@apollo/client/core'
-import {ApolloLink, concat, createHttpLink, defaultDataIdFromObject, InMemoryCache, split} from '@apollo/client/core'
-import {WebSocketLink} from '@apollo/client/link/ws';
-import {getMainDefinition} from '@apollo/client/utilities';
+import {ApolloLink, concat, createHttpLink, defaultDataIdFromObject, InMemoryCache} from '@apollo/client/core'
 import {Cookies} from 'quasar';
 import {QSsrContext} from '@quasar/app';
 
@@ -72,34 +70,10 @@ export function getClientOptions(ssrContext: QSsrContext|null|undefined): Apollo
     uri: process.env.VUE_APP_GRAPHQL_ENDPOINT,
   })
 
-  let link = httpLink;
-
-  // Apply only clientside
-  if(!process.env.SERVER){
-    const wsLink = new WebSocketLink({
-      uri: process.env.VUE_APP_WS_ENDPOINT || '',
-      options: {
-        reconnect: true
-      }
-    })
-    link = split(
-      // split based on operation type
-      ({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-          definition.kind === 'OperationDefinition' &&
-          definition.operation === 'subscription'
-        );
-      },
-      wsLink,
-      httpLink
-    )
-  }
-
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
-      link: concat(authMiddleware, link),
+      link: concat(authMiddleware, httpLink),
       cache: new InMemoryCache({
         // Use UUID as default key in database. If any table needs different behaviour, this can be changed here,
         // see: https://www.apollographql.com/docs/react/caching/cache-configuration/
@@ -107,7 +81,7 @@ export function getClientOptions(ssrContext: QSsrContext|null|undefined): Apollo
           return dataIdFromObject(responseObject)
         },
         addTypename: false, // We disable auto-adding of __typename property, as this breaks mutations expecting
-                            // an object variable. Instead, we manually add __typename in QUERIES/MUTATIONS.ts where
+                            // an object variable. Instead, we manually add __typename in QUERIES/USER.ts where
                             // appropriate. This can be changed in case Apollo implements better behavior for this.
       })
     },

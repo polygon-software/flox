@@ -1,38 +1,19 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
-import { Context } from 'vm';
-import { JwtAuthGuard } from './auth/auth.guard';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtStrategy } from './auth/jwt.strategy';
-import { ItemModule } from './item/item.module';
 import * as Joi from 'joi';
-import { FileModule } from './file/file.module';
-import { RolesGuard } from './auth/roles.guard';
+import { floxModules, floxProviders } from './flox/flox';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       playground: true,
-      //services: [ApolloServerPluginLandingPageLocalDefault()], // Use Apollo Sandbox instead of graphql-playground
       debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      //disableHealthCheck: true //set true if using multiple GraphQL endpoints in a single application with fastify
-      installSubscriptionHandlers: true,
-      subscriptions: {
-        // Could also use graphql-ws instead of default (subscriptions-transport-ws)
-        'subscriptions-transport-ws': {
-          path: '/graphql-websocket',
-          onConnect: (context: Context) => {
-            console.log('Client connected to GraphQL Websocket!', context);
-          },
-        },
-      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -71,20 +52,23 @@ import { RolesGuard } from './auth/roles.guard';
       }),
       inject: [ConfigService],
     }),
-    UserModule,
-    ItemModule,
-    FileModule,
+    // TypeOrmModule.forFeature([ TODO check if needed
+    //   // Entities for Flox modules
+    //   ...floxEntities(),
+    //   // Add any custom entities here
+    // ]),
+    // Flox modules
+    ...floxModules(),
+    // Add any custom modules here
   ],
   providers: [
-    JwtStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // Flox module Providers
+    ...floxProviders(),
+    // Add any other custom module providers here
   ],
 })
+
+/**
+ * Main Module
+ */
 export class AppModule {}
