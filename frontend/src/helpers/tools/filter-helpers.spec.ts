@@ -1,4 +1,5 @@
 import {deepFilter, tableFilter} from 'src/helpers/tools/filter-helpers';
+import { expect } from '@jest/globals';
 
 describe('Filter Helpers', () => {
   let sentence: string;
