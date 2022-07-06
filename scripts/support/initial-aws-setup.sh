@@ -157,8 +157,8 @@ cp ../outputs/backend.zip backend.zip
 # If non-ssr: unzip dist files for direct S3 upload
 if [[ $build_mode != "ssr" ]]
 then
-  mkdir -p outputs/frontend
-  unzip outputs/frontend.zip -d outputs/frontend
+  mkdir -p ../outputs/frontend
+  unzip outputs/frontend -d outputs/frontend/
 fi
 # Apply main Terraform
 terraform init
