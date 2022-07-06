@@ -7,12 +7,6 @@ variable "type" {
   description = "Deploy type (live or test)"
   type = string
 }
-
-variable "ssl_certificate_arn" {
-  description = "SSL certificate ARN"
-  type = string
-}
-
 variable "vpc_id" {
   description = "VPC ID"
   type = string
@@ -41,4 +35,9 @@ variable "private_subnet_ids" {
 variable "public_subnet_ids" {
   description = "IDs of the public Subnets"
   type = list(string)
+}
+
+variable "hosted_zone_id" {
+  description = "Domain hosted zone ID"
+  type        = string
 }

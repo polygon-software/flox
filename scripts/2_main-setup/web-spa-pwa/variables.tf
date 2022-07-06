@@ -18,8 +18,7 @@ variable "hosted_zone_id" {
   type        = string
 }
 
-
-variable "ssl_certificate_arn" {
-  description = "Frontend certificate ARN"
-  type = string
+variable "provider_alias"{
+  description = "AWS Provider alias for multi-regional deployment"
+  type        = string
 }
