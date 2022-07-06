@@ -100,7 +100,7 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   setting {
     namespace     = "aws:elbv2:listener:443"
     name          = "SSLCertificateArns"
-    value         = var.ssl_certificate_arn
+    value         = aws_acm_certificate.frontend_cert.arn
   }
 
   setting {
