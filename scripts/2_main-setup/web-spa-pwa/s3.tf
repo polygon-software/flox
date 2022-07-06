@@ -38,7 +38,7 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
 
 #TODO probably still bogo banane
 resource "aws_s3_bucket_object" "file" {
-  for_each = fileset(var.domain, "**")
+  for_each = fileset("../outputs/frontend", "**")
 
   bucket      = aws_s3_bucket.website_bucket.id
   key         = each.key
