@@ -19,7 +19,7 @@ variable "hosted_zone_id" {
 }
 
 
-variable "ssl_cert_arn" {
+variable "ssl_certificate_arn" {
   description = "Frontend certificate ARN"
   type = string
 }
