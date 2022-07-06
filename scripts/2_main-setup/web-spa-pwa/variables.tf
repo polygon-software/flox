@@ -18,7 +18,13 @@ variable "hosted_zone_id" {
   type        = string
 }
 
-variable "provider_alias"{
-  description = "AWS Provider alias for multi-regional deployment"
-  type        = string
+variable "aws_access_key" {
+  description     = "aws_access_key_id"
+  type            = string
 }
+
+variable "aws_secret_access_key" {
+  description     = "aws_secret_access_key"
+  type            = string
+}
+

@@ -39,6 +39,7 @@ module "web_spa_pwa" {
   type = var.type
   domain = var.base_domain
   hosted_zone_id = var.hosted_zone_id
-  provider_alias = "us-east-1"
+  aws_access_key = var.aws_access_key
+  aws_secret_access_key = var.aws_secret_access_key
 }
 
