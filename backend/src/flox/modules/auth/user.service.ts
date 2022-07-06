@@ -11,7 +11,8 @@ import { User } from './entities/user.entity';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   /**
@@ -20,8 +21,8 @@ export class UserService {
    * @returns {Promise<User>} - the newly created user
    */
   async createUser(createUserInput: CreateUserInput): Promise<User> {
-    const user = this.usersRepository.create(createUserInput);
-    return this.usersRepository.save(user);
+    const user = this.userRepository.create(createUserInput);
+    return this.userRepository.save(user);
   }
 
   /**
@@ -31,9 +32,9 @@ export class UserService {
    */
   getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
     if (getUsersArgs.uuids !== undefined) {
-      return this.usersRepository.findByIds(getUsersArgs.uuids);
+      return this.userRepository.findByIds(getUsersArgs.uuids);
     } else {
-      return this.usersRepository.find();
+      return this.userRepository.find();
     }
   }
 
@@ -42,7 +43,7 @@ export class UserService {
    * @returns {Promise<User[]>} - the users
    */
   getAllUsers(): Promise<User[]> {
-    return this.usersRepository.find();
+    return this.userRepository.find();
   }
 
   /**
@@ -51,7 +52,21 @@ export class UserService {
    * @returns {Promise<User>} - the user
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
-    return this.usersRepository.findOne(getUserArgs.uuid);
+    if (getUserArgs.uuid) {
+      return this.userRepository.findOne(getUserArgs.uuid);
+    }
+
+    if (getUserArgs.cognitoUuid) {
+      return this.userRepository.findOne({
+        where: {
+          cognitoUuid: getUserArgs.cognitoUuid,
+        },
+      });
+    }
+
+    throw new Error(
+      'getUser must be called with either uuid or cognitoUuid parameter',
+    );
   }
 
   /**
@@ -60,9 +75,9 @@ export class UserService {
    * @returns {Promise<User>} - the updated user
    */
   async updateUser(updateUserInput: UpdateUserInput): Promise<User> {
-    const user = this.usersRepository.create(updateUserInput);
-    await this.usersRepository.update(updateUserInput.uuid, user);
-    return this.usersRepository.findOne(updateUserInput.uuid);
+    const user = this.userRepository.create(updateUserInput);
+    await this.userRepository.update(updateUserInput.uuid, user);
+    return this.userRepository.findOne(updateUserInput.uuid);
   }
 
   /**
@@ -71,9 +86,9 @@ export class UserService {
    * @returns {Promise<User>} - the deleted user
    */
   async deleteUser(deleteUserInput: DeleteUserInput): Promise<User> {
-    const user = await this.usersRepository.findOne(deleteUserInput.uuid);
+    const user = await this.userRepository.findOne(deleteUserInput.uuid);
     const uuid = user.uuid;
-    const deletedUser = await this.usersRepository.remove(user);
+    const deletedUser = await this.userRepository.remove(user);
     deletedUser.uuid = uuid;
     return deletedUser;
   }
@@ -84,7 +99,7 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   async getMyUser(cognitoUser: Record<string, string>): Promise<User> {
-    const myUser = await this.usersRepository.findOne({
+    const myUser = await this.userRepository.findOne({
       cognitoUuid: cognitoUser.userId,
     });
 

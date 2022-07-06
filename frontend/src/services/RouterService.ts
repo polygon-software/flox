@@ -110,6 +110,7 @@ export class RouterService {
 
   /**
    * Replaces the last URL part with the given new part.
+   * Removes all Query parameter
    * @param {string} path - path to route to
    * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
    */
@@ -123,6 +124,7 @@ export class RouterService {
 
   /**
    * Reload page by routing to current route
+   * Removes all Query parameter
    * @returns {void} - void
    */
   reload() {
