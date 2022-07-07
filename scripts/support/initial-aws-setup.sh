@@ -172,6 +172,9 @@ terraform apply -auto-approve -var-file="../support/flox.tfvars"
 rm -f ../2_main-setup/frontend.zip
 rm -f ../2_main-setup/backend.zip
 
+# Remove unzipped frontend dist (if any)
+rm -rf ../outputs/frontend
+
 # Reset all config.tf files to their respective template files
 cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
 cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
