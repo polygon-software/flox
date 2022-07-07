@@ -24,7 +24,7 @@ resource "aws_cloudfront_distribution" "website_distribution" {
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods   = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "s3-cloudfront"
 
     forwarded_values {
@@ -40,7 +40,7 @@ resource "aws_cloudfront_distribution" "website_distribution" {
     default_ttl            = 3600
     max_ttl                = 86400
   }
-  price_class = "PriceClass_200"
+  price_class = "PriceClass_100"
 
   viewer_certificate {
     cloudfront_default_certificate = true

@@ -42,7 +42,7 @@ resource "aws_s3_bucket_object" "file" {
 
   bucket      = aws_s3_bucket.website_bucket.id
   key         = each.key
-  source      = "${var.domain}/${each.key}"
-  source_hash = filemd5("${var.domain}/${each.key}")
+  source      = "../outputs/frontend/${each.key}"
+  source_hash = filemd5("../outputs/frontend/${each.key}")
   acl         = "public-read"
 }
