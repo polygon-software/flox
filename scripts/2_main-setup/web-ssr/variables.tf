@@ -41,3 +41,8 @@ variable "hosted_zone_id" {
   description = "Domain hosted zone ID"
   type        = string
 }
+
+variable "domain" {
+  description = "Deployment domain (e.g. flox.polygon-project.ch)"
+  type        = string
+}

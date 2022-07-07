@@ -30,6 +30,7 @@ module "web_ssr" {
   private_subnet_ids = aws_subnet.private_subnet.*.id
   public_subnet_ids = aws_subnet.public_subnet.*.id
   hosted_zone_id = var.hosted_zone_id
+  domain = var.base_domain
 }
 
 module "web_spa_pwa" {
@@ -41,5 +42,8 @@ module "web_spa_pwa" {
   hosted_zone_id = var.hosted_zone_id
   aws_access_key = var.aws_access_key
   aws_secret_access_key = var.aws_secret_access_key
+  providers = {
+    aws = aws.us-east-1
+  }
 }
 

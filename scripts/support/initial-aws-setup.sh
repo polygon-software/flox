@@ -158,7 +158,7 @@ cp ../outputs/backend.zip backend.zip
 if [[ $build_mode != "ssr" ]]
 then
   mkdir -p ../outputs/frontend
-  unzip outputs/frontend -d outputs/frontend/
+  unzip ../outputs/frontend -d ../outputs/frontend/
 fi
 # Apply main Terraform
 terraform init
