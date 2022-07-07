@@ -157,8 +157,8 @@ cp ../outputs/backend.zip backend.zip
 # If non-ssr: unzip dist files for direct S3 upload
 if [[ $build_mode != "ssr" ]]
 then
-  mkdir -p ../outputs/frontend
-  unzip ../outputs/frontend -d ../outputs/frontend/
+  mkdir -p web-spa-pwa/frontend/
+  unzip ../outputs/frontend -d web-spa-pwa/frontend/
 fi
 # Apply main Terraform
 terraform init
@@ -173,7 +173,7 @@ rm -f ../2_main-setup/frontend.zip
 rm -f ../2_main-setup/backend.zip
 
 # Remove unzipped frontend dist (if any)
-rm -rf ../outputs/frontend
+rm -rf ../outputs/frontend # TODO lol
 
 # Reset all config.tf files to their respective template files
 cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf

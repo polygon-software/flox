@@ -14,35 +14,47 @@ resource "aws_s3_bucket" "website_bucket" {
   }
 }
 
+#resource "aws_s3_bucket_website_configuration" "website_bucket_config"{
+#  TODO instead of website param
+#}
+
 # Bucket configuration
 resource "aws_s3_bucket_versioning" "website" {
   bucket = aws_s3_bucket.website_bucket.id
   versioning_configuration {
-    status = "Enabled"
+    status = "Disabled"
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "website" {
-  bucket = aws_s3_bucket.website_bucket.bucket
-  ignore_public_acls = true
-  block_public_acls = true
-  block_public_policy = true
-  restrict_public_buckets = true
-}
+# TODO enable
+#resource "aws_s3_bucket_public_access_block" "website" {
+#  bucket = aws_s3_bucket.website_bucket.bucket
+#  ignore_public_acls = true
+#  block_public_acls = true
+#  block_public_policy = true
+#  restrict_public_buckets = true
+#}
 
-resource "aws_s3_bucket_policy" "website_bucket_policy" {
-  bucket = aws_s3_bucket.website_bucket.id
-  policy = data.aws_iam_policy_document.website_bucket_policy.json
-}
+#resource "aws_s3_bucket_policy" "website_bucket_policy" {
+#  bucket = aws_s3_bucket.website_bucket.id
+#  policy = data.aws_iam_policy_document.website_bucket_policy.json
+#}
 
+#TODO TEST
+#resource "aws_s3_bucket_object" "test_file" {
+#  bucket      = aws_s3_bucket.website_bucket.id
+#  key         = "test/index.html"
+#  source       = "flox.polygon-project.ch/frontend/index.html"
+#  source_hash = filemd5("${path.module}/frontend/index.html")
+#  acl         = "public-read"
+#}
 
 #TODO probably still bogo banane
 resource "aws_s3_bucket_object" "file" {
-  for_each = fileset("../outputs/frontend", "**")
-
-  bucket      = aws_s3_bucket.website_bucket.id
-  key         = each.key
-  source      = "../outputs/frontend/${each.key}"
-  source_hash = filemd5("../outputs/frontend/${each.key}")
+  for_each = fileset("${path.module}/frontend", "**")
+  bucket      = aws_s3_bucket.website_bucket.bucket
+  key         = each.value
+  source       = "${path.module}/frontend/${each.value}"
+  source_hash = filemd5("${path.module}/frontend/${each.value}")
   acl         = "public-read"
 }
