@@ -49,7 +49,7 @@ resource "aws_s3_bucket_versioning" "website" {
 #  acl         = "public-read"
 #}
 
-#TODO probably still bogo banane
+##TODO probably still bogo banane
 resource "aws_s3_bucket_object" "file" {
   for_each = fileset("${path.module}/frontend", "**")
   bucket      = aws_s3_bucket.website_bucket.bucket
