@@ -73,6 +73,8 @@ elif [[ $3 == "ssr" ]]
 then
   yarn build:ssr
   cd dist/ssr || exit
+  # Install modules
+  yarn
 # PWA Mode
 elif [[ $3 == "pwa" ]]
 then
@@ -80,8 +82,7 @@ then
   cd dist/pwa || exit
 fi
 
-# Install modules & zip
-yarn
+# Zip files
 zip -r ../../../scripts/outputs/frontend.zip * -q
 
 cd ../ || exit
