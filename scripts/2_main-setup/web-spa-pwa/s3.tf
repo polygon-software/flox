@@ -1,22 +1,29 @@
-// Create AWS S3 bucket to upload app to
+// S3 bucket for uploading dist to
 resource "aws_s3_bucket" "website_bucket" {
   bucket = var.domain
   acl = "public-read"
   tags = {
     Name          = "${var.project}-${var.type}-website-bucket"
   }
-  website {
-    index_document = "index.html"
-    error_document = "index.html"
-  }
+
   lifecycle {
     prevent_destroy = false
   }
 }
 
-#resource "aws_s3_bucket_website_configuration" "website_bucket_config"{
-#  TODO instead of website param
-#}
+// Website S3 config
+resource "aws_s3_bucket_website_configuration" "example" {
+  bucket = aws_s3_bucket.website_bucket.bucket
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
 
 # Bucket configuration
 resource "aws_s3_bucket_versioning" "website" {
@@ -40,21 +47,26 @@ resource "aws_s3_bucket_versioning" "website" {
 #  policy = data.aws_iam_policy_document.website_bucket_policy.json
 #}
 
-#TODO TEST
-#resource "aws_s3_bucket_object" "test_file" {
-#  bucket      = aws_s3_bucket.website_bucket.id
-#  key         = "test/index.html"
-#  source       = "flox.polygon-project.ch/frontend/index.html"
-#  source_hash = filemd5("${path.module}/frontend/index.html")
-#  acl         = "public-read"
-#}
+// Modularize files with proper types
+module "dist_files" {
+  source = "hashicorp/dir/template"
 
-##TODO probably still bogo banane
+  base_dir = "${path.module}/frontend"
+}
+
+// Upload all dist resources to S3 Bucket
 resource "aws_s3_bucket_object" "file" {
-  for_each = fileset("${path.module}/frontend", "**")
+  for_each = module.dist_files.files
+  #  for_each = fileset("${path.module}/frontend", "**")
   bucket      = aws_s3_bucket.website_bucket.bucket
-  key         = each.value
-  source       = "${path.module}/frontend/${each.value}"
-  source_hash = filemd5("${path.module}/frontend/${each.value}")
+  key          = each.key
+  content_type = each.value.content_type
+
+#  source  = each.value.source_path
+  content = each.value.content
+#  key         = each.value
+#  source       = "${path.module}/frontend/${each.value}"
+#  source_hash = filemd5("${path.module}/frontend/${each.value}")
+#  content_type = each.value.content_type
   acl         = "public-read"
 }
