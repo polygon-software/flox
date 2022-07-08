@@ -174,7 +174,7 @@ rm -f ../2_main-setup/frontend.zip
 rm -f ../2_main-setup/backend.zip
 
 # Remove unzipped frontend dist (if any)
-rm -rf ../outputs/frontend # TODO lol
+rm -rf ../2_main-setup/web-spa-pwa/frontend
 
 # Reset all config.tf files to their respective template files
 cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
