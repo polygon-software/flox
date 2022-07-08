@@ -159,7 +159,6 @@ if [[ $build_mode != "ssr" ]]
 then
   mkdir -p web-spa-pwa/frontend/
   unzip ../outputs/frontend -d web-spa-pwa/frontend/
-#  rm -rf web-spa-pwa/frontend/node_modules
 fi
 # Apply main Terraform
 terraform init
