@@ -61,6 +61,7 @@ resource "aws_s3_bucket_object" "file" {
   bucket      = aws_s3_bucket.website_bucket.bucket
   key          = each.key
   content_type = each.value.content_type
+#  content_disposition = each.value.content_disposition
 
 #  source  = each.value.source_path
   content = each.value.content
