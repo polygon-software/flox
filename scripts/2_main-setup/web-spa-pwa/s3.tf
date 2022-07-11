@@ -50,24 +50,15 @@ resource "aws_s3_bucket_versioning" "website" {
 // Modularize files with proper types
 module "dist_files" {
   source = "hashicorp/dir/template"
-
   base_dir = "${path.module}/frontend"
 }
 
 // Upload all dist resources to S3 Bucket
 resource "aws_s3_bucket_object" "file" {
   for_each = module.dist_files.files
-  #  for_each = fileset("${path.module}/frontend", "**")
   bucket      = aws_s3_bucket.website_bucket.bucket
   key          = each.key
   content_type = each.value.content_type
-#  content_disposition = each.value.content_disposition
-
-#  source  = each.value.source_path
-  content = each.value.content
-#  key         = each.value
-#  source       = "${path.module}/frontend/${each.value}"
-#  source_hash = filemd5("${path.module}/frontend/${each.value}")
-#  content_type = each.value.content_type
+  source  = each.value.source_path
   acl         = "public-read"
 }
