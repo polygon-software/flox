@@ -119,23 +119,12 @@ then
 
   # Remove node_modules (if any)
   rm -rf web-spa-pwa/frontend/node_modules
-else
-  # SSR Mode: get new frontend version number
-  frontend_version=$(terraform output frontend_version)
-  frontend_version=${frontend_version:1:-1}
-  echo "# ======== Frontend Config ========" >> ../support/flox.tfvars
-  echo "frontend_version=\"$frontend_version\"" >> ../support/flox.tfvars
 fi
 
 # Apply update Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
 
-# Get updated API version & apply to flox.tfvars (used as override in main-redeploy)
-api_version=$(terraform output api_version)
-api_version=${api_version:1:-1}
-echo "# ======== API Config ========" >> ../support/flox.tfvars
-echo "api_version=\"$api_version\"" >> ../support/flox.tfvars
 
 # ==========================================
 # ====    Step 2: Resource re-deploy   =====
@@ -143,6 +132,10 @@ echo "api_version=\"$api_version\"" >> ../support/flox.tfvars
 
 # Go to main Terraform workspace to re-apply Terraform (since EBS Env state is held there)
 cd ../2_main-setup || exit
+
+# Copy .zips, so terraform can handle resources
+cp ../outputs/frontend.zip frontend.zip
+cp ../outputs/backend.zip backend.zip
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
@@ -153,10 +146,15 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-# TODO: for SSR mode, also redeploy SSR frontend
 terraform init
-terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve -var-file="../support/flox.tfvars"
 
+if [[ $build_mode != "ssr" ]]
+then
+  terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve -var-file="../support/flox.tfvars"
+else
+  # For SSR mode, also redeploy SSR frontend
+  terraform apply -target=aws_elastic_beanstalk_environment.api_env -target=module.web_ssr.aws_elastic_beanstalk_environment.frontend_env -auto-approve -var-file="../support/flox.tfvars"
+fi
 # ==========================================
 # ====         Step 3: Cleanup         =====
 # ==========================================
@@ -164,6 +162,8 @@ terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve 
 # Remove .zip files
 rm -f ../4_update/frontend.zip
 rm -f ../4_update/backend.zip
+rm -f ../2_main-setup/frontend.zip
+rm -f ../2_main-setup/backend.zip
 
 # Remove unzipped frontend dist (if any)
 rm -rf ../4_update/web-spa-pwa/frontend

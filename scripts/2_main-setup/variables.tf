@@ -112,12 +112,6 @@ variable "database_master_password" {
   type            = string
 }
 
-variable "api_version" {
-  default         = ""
-  description     = "API Version override to use (used from update workflow)"
-  type            = string
-}
-
 variable "frontend_build_mode" {
   description     = "Build mode to use for frontend ('spa', 'pwa' or 'ssr')"
   type            = string
