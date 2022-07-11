@@ -6,13 +6,13 @@ resource "aws_s3_object" "api_source_code_object" {
   source_hash           = filemd5("backend.zip")
 }
 
-// Create elastic beanstalk resource
+// Create Elastic Beanstalk resource
 resource "aws_elastic_beanstalk_application" "api_app" {
   name                  = "${var.project}-${var.type}-api-app"
   description           = var.eb_app_desc
 }
 
-// Connect eb to the s3 bucket with the app in it
+// Connect EBS to the S3 bucket with the app in it
 resource "aws_elastic_beanstalk_application_version" "api_app_version" {
   bucket                = aws_s3_bucket.source_code_bucket.id
   key                   = aws_s3_object.api_source_code_object.id
@@ -20,7 +20,7 @@ resource "aws_elastic_beanstalk_application_version" "api_app_version" {
   name                  = "${var.project}-${var.type}-api-v-${aws_s3_object.api_source_code_object.source_hash}"
 }
 
-// Create eb environment
+// Create EBS environment
 // for settings see https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
 resource "aws_elastic_beanstalk_environment" "api_env" {
   name                  = "${var.project}-${var.type}-api-app-env"
@@ -28,7 +28,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   solution_stack_name   = "64bit Amazon Linux 2 v5.5.4 running Node.js 14"
   description           = "Environment for API"
   # Version override (used for update workflow)
-  version_label         = var.api_version != "" ? var.api_version : aws_elastic_beanstalk_application_version.api_app_version.name
+  version_label         = aws_elastic_beanstalk_application_version.api_app_version.name
 
   setting {
     namespace           = "aws:autoscaling:launchconfiguration"
