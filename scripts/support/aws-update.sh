@@ -121,8 +121,8 @@ then
   rm -rf web-spa-pwa/frontend/node_modules
 else
   # SSR Mode: get new frontend version number
-  api_version=$(terraform output frontend_version)
-  api_version=${api_version:1:-1}
+  frontend_version=$(terraform output frontend_version)
+  frontend_version=${frontend_version:1:-1}
   echo "# ======== Frontend Config ========" >> ../support/flox.tfvars
   echo "frontend_version=\"$frontend_version\"" >> ../support/flox.tfvars
 fi
