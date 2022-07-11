@@ -30,3 +30,12 @@ variable "source_code_bucket" {
   type            = string
 }
 
+variable "base_domain" {
+  description = "Project base domain, e.g. flox.polygon-project.ch"
+  type    = string
+}
+
+variable "frontend_build_mode" {
+  description     = "Build mode to use for frontend ('spa', 'pwa' or 'ssr')"
+  type            = string
+}
