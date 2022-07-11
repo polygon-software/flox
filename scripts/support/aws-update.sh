@@ -74,10 +74,9 @@ echo "hosted_zone_id=\"$hosted_zone_id\"" >> ../support/flox.tfvars
 echo "# ======== Cognito Config ========" >> ../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../support/flox.tfvars
 echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../support/flox.tfvars
-echo "cognito_arn=\"$cognito_arnt\"" >> ../support/flox.tfvars
+echo "cognito_arn=\"$cognito_arn\"" >> ../support/flox.tfvars
 echo "# ======== S3 Config ========" >> ../support/flox.tfvars
 echo "source_code_bucket=\"$source_code_bucket\"" >> ../support/flox.tfvars
-# NOTE: as opposed to initial setup, cognito_arn is no longer needed here
 
 # ==========================================
 # ====       Step 1: Main Update        ====
@@ -112,6 +111,22 @@ zsh ../support/build.bash "$1" "$project" "$build_mode"
 cp ../outputs/frontend.zip frontend.zip
 cp ../outputs/backend.zip backend.zip
 
+# If non-ssr: unzip dist files for direct S3 upload
+if [[ $build_mode != "ssr" ]]
+then
+  mkdir -p web-spa-pwa/frontend/
+  unzip ../outputs/frontend -d web-spa-pwa/frontend/
+
+  # Remove node_modules (if any)
+  rm -rf web-spa-pwa/frontend/node_modules
+else
+  # SSR Mode: get new frontend version number
+  api_version=$(terraform output frontend_version)
+  api_version=${api_version:1:-1}
+  echo "# ======== Frontend Config ========" >> ../support/flox.tfvars
+  echo "frontend_version=\"$frontend_version\"" >> ../support/flox.tfvars
+fi
+
 # Apply update Terraform
 terraform init
 terraform apply -auto-approve -var-file="../support/flox.tfvars"
@@ -121,7 +136,6 @@ api_version=$(terraform output api_version)
 api_version=${api_version:1:-1}
 echo "# ======== API Config ========" >> ../support/flox.tfvars
 echo "api_version=\"$api_version\"" >> ../support/flox.tfvars
-
 
 # ==========================================
 # ====    Step 2: Resource re-deploy   =====
@@ -139,11 +153,9 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-#terraform plan -target=aws_elastic_beanstalk_environment.api_env
+# TODO: for SSR mode, also redeploy SSR frontend
 terraform init
 terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve -var-file="../support/flox.tfvars"
-
-# TODO handle frontend as well
 
 # ==========================================
 # ====         Step 3: Cleanup         =====
@@ -152,6 +164,9 @@ terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve 
 # Remove .zip files
 rm -f ../4_update/frontend.zip
 rm -f ../4_update/backend.zip
+
+# Remove unzipped frontend dist (if any)
+rm -rf ../4_update/web-spa-pwa/frontend
 
 # Reset config.tf file to its respective template files
 cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf

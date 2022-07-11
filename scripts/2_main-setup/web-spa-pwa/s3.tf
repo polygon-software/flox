@@ -10,6 +10,8 @@ resource "aws_s3_bucket" "website_bucket" {
   }
 }
 
+// TODO: bucket with www. -> redirect to main bucket
+
 // Website S3 config
 resource "aws_s3_bucket_website_configuration" "example" {
   bucket = aws_s3_bucket.website_bucket.bucket
@@ -22,7 +24,6 @@ resource "aws_s3_bucket_website_configuration" "example" {
     key = "error.html"
   }
 }
-
 
 # Bucket configuration
 resource "aws_s3_bucket_versioning" "website" {
@@ -52,6 +53,7 @@ module "dist_files" {
 }
 
 // Upload all dist resources to S3 Bucket
+// TODO hash?
 resource "aws_s3_bucket_object" "file" {
   for_each = module.dist_files.files
   bucket      = aws_s3_bucket.website_bucket.bucket
