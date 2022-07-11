@@ -73,6 +73,7 @@ elif [[ $3 == "ssr" ]]
 then
   yarn build:ssr
   cd dist/ssr || exit
+
   # Install modules
   yarn
 # PWA Mode
