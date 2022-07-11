@@ -5,9 +5,7 @@ data "aws_iam_policy_document" "website_bucket_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = ["*"]
+      identifiers = [aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn]
     }
   }
 }
-
-#TODO aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn

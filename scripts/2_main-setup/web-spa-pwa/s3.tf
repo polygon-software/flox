@@ -1,7 +1,6 @@
 // S3 bucket for uploading dist to
 resource "aws_s3_bucket" "website_bucket" {
   bucket = var.domain
-  acl = "public-read"
   tags = {
     Name          = "${var.project}-${var.type}-website-bucket"
   }
@@ -33,19 +32,18 @@ resource "aws_s3_bucket_versioning" "website" {
   }
 }
 
-# TODO enable
-#resource "aws_s3_bucket_public_access_block" "website" {
-#  bucket = aws_s3_bucket.website_bucket.bucket
-#  ignore_public_acls = true
-#  block_public_acls = true
-#  block_public_policy = true
-#  restrict_public_buckets = true
-#}
+resource "aws_s3_bucket_public_access_block" "website" {
+  bucket = aws_s3_bucket.website_bucket.bucket
+  ignore_public_acls = true
+  block_public_acls = true
+  block_public_policy = true
+  restrict_public_buckets = true
+}
 
-#resource "aws_s3_bucket_policy" "website_bucket_policy" {
-#  bucket = aws_s3_bucket.website_bucket.id
-#  policy = data.aws_iam_policy_document.website_bucket_policy.json
-#}
+resource "aws_s3_bucket_policy" "website_bucket_policy" {
+  bucket = aws_s3_bucket.website_bucket.id
+  policy = data.aws_iam_policy_document.website_bucket_policy.json
+}
 
 // Modularize files with proper types
 module "dist_files" {
@@ -60,5 +58,4 @@ resource "aws_s3_bucket_object" "file" {
   key          = each.key
   content_type = each.value.content_type
   source  = each.value.source_path
-  acl         = "public-read"
 }
