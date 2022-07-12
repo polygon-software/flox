@@ -9,7 +9,7 @@ module "dist_files" {
   base_dir = "${path.module}/frontend"
 }
 
-// Upload all dist resources to S3 Bucket TODO hash?
+// Upload all dist resources to S3 Bucket
 resource "aws_s3_bucket_object" "file" {
   for_each = module.dist_files.files
   bucket      = data.aws_s3_bucket.website_bucket.bucket
@@ -17,5 +17,3 @@ resource "aws_s3_bucket_object" "file" {
   content_type = each.value.content_type
   source  = each.value.source_path
 }
-
-// TODO finish, do we need region?

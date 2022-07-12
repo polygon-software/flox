@@ -76,7 +76,6 @@ module "dist_files" {
 }
 
 // Upload all dist resources to S3 Bucket
-// TODO hash?
 resource "aws_s3_bucket_object" "file" {
   for_each = module.dist_files.files
   bucket      = aws_s3_bucket.website_bucket.bucket
