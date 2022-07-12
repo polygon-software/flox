@@ -60,5 +60,3 @@ resource "aws_route53_record" "web_record_alias_AAAA" {
     zone_id                = var.frontend_build_mode == "ssr" ? data.aws_elastic_beanstalk_hosted_zone.hosted_zone.id : module.web_spa_pwa[0].cloudfront_zone_id
   }
 }
-
-# TODO: also automatically set up www.example.com -> example.com redirect

@@ -26,3 +26,14 @@ resource "aws_acm_certificate_validation" "cert_validation_frontend" {
   certificate_arn         = aws_acm_certificate.frontend_cert.arn
   validation_record_fqdns = [for record in aws_route53_record.ssl_frontend : record.fqdn]
 }
+
+# Redirect for www. -> non-www
+# TODO Test
+resource "aws_route53_record" "redirect_record" {
+  name                  = "www.${var.domain}"
+  type                  = "CNAME"
+  zone_id               = var.hosted_zone_id
+  ttl                   = "300"
+  records               = [aws_elastic_beanstalk_environment.frontend_env.endpoint_url]
+}
+
