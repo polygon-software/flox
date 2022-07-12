@@ -1,5 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
-import fastify = require('fastify');
+import { Controller, Get } from '@nestjs/common';
 import { Public } from '../auth/authentication.decorator';
 import {
   HealthCheck,
