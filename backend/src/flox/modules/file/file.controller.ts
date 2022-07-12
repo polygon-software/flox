@@ -6,8 +6,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { FileService } from './file.service';
-import fastify = require('fastify');
 import { LoggedIn, Public } from '../auth/authentication.decorator';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Controller()
 export class FileController {
@@ -16,8 +16,8 @@ export class FileController {
   @Public()
   @Post('/uploadPublicFile')
   async uploadPublicFile(
-    @Req() req: fastify.FastifyRequest,
-    @Res() res: fastify.FastifyReply<any>,
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply<any>,
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
@@ -36,8 +36,8 @@ export class FileController {
   @Post('/uploadPrivateFile')
   @LoggedIn()
   async uploadPrivateFile(
-    @Req() req: fastify.FastifyRequest,
-    @Res() res: fastify.FastifyReply<any>,
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply<any>,
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
