@@ -8,7 +8,7 @@
           class="q-ma-sm"
       >
       <h5 class="text-black q-pa-none q-ma-md">
-        Yeet Template TODO change
+        Flox Template TEST UPDATE
       </h5>
     </div>
   <div class="row">

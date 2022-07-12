@@ -153,7 +153,7 @@ then
   terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve -var-file="../support/flox.tfvars"
 else
   # For SSR mode, also redeploy SSR frontend
-  terraform apply -target=aws_elastic_beanstalk_environment.api_env -target=module.web_ssr.aws_elastic_beanstalk_environment.frontend_env -auto-approve -var-file="../support/flox.tfvars"
+  terraform apply -target=aws_elastic_beanstalk_environment.api_env -target="module.web_ssr[0].aws_elastic_beanstalk_environment.frontend_env" -auto-approve -var-file="../support/flox.tfvars"
 fi
 # ==========================================
 # ====         Step 3: Cleanup         =====
