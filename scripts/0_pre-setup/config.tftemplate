@@ -10,7 +10,7 @@ terraform {
     organization        = "##ORGANISATION##"
 
     workspaces {
-      name = "##PROJECT##-##TYPE##-cognito" # will be replaced in preprocessing from build.bash
+      name = "##PROJECT##-##TYPE##-cognito" # will be replaced in preprocessing
     }
   }
 }
