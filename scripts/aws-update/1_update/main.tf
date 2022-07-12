@@ -1,6 +1,6 @@
 # Frontend modules (depending on mode)
 module "web_ssr" {
-  source = "./web-ssr"
+  source = "web-ssr"
   count  = var.frontend_build_mode == "ssr" ? 1 : 0
   project = var.project
   type = var.type
@@ -8,7 +8,7 @@ module "web_ssr" {
 }
 
 module "web_spa_pwa" {
-  source = "./web-spa-pwa"
+  source = "web-spa-pwa"
   count  = var.frontend_build_mode != "ssr" ? 1 : 0
   domain = var.base_domain
   providers = {
