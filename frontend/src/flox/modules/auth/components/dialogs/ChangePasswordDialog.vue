@@ -3,7 +3,7 @@
       ref="dialogRef"
   >
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
-      <b>{{ $t('authentication.change_password') }}</b>
+      <strong>{{ $t('authentication.change_password') }}</strong>
       <q-form
           @submit="onSubmit"
           class="q-gutter-md"
