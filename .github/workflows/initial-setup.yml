@@ -1,7 +1,7 @@
 name: Initial AWS setup
 
 on:
-  # Should only be run manually from the Actions tab (only once!)
+  # Should only be run manually from the Actions tab (only once for 'test' and 'live', respectively!)
   workflow_dispatch:
     inputs:
       mode:
