@@ -1,4 +1,3 @@
-import * as flox from '../../flox.config.json';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './modules/roles/roles.guard';
 import { JwtStrategy } from './modules/auth/jwt.strategy';
@@ -6,12 +5,13 @@ import { JwtAuthGuard } from './modules/auth/auth.guard';
 import { FileModule } from './modules/file/file.module';
 import { UserModule } from './modules/auth/user.module';
 import { MODULES } from './MODULES';
-import { User } from './modules/auth/entities/user.entity';
-import PrivateFile from './modules/file/entities/private_file.entity';
 import PublicFile from './modules/file/entities/public_file.entity';
+import PrivateFile from './modules/file/entities/private_file.entity';
+import { User } from './modules/auth/entities/user.entity';
+import { getActiveFloxModuleNames } from './core/flox-helpers';
 
 /**
- * Returns the active Flox modules based on flox.config.json
+ * Returns the active Flox modules based on flox.config.js
  * @returns {any[]} - list of Modules
  */
 export function floxModules() {
@@ -74,61 +74,6 @@ export function floxProviders() {
 }
 
 /**
- * Gets the active Flox modules from config
- * @returns {string[]} - list of module names
- */
-export function getActiveFloxModuleNames() {
-  const modules = [];
-
-  Object.keys(flox.modules).forEach((moduleName) => {
-    if (flox.modules[moduleName] === true) {
-      modules.push(moduleName);
-    }
-  });
-
-  return modules;
-}
-
-/**
- * Gets the options for a single Flox module (with proper typing, since config is .js)
- * @param {string} moduleName - name of the module to check
- * @returns {Record<string, Record<string, unknown>>} - options for the modules
- */
-export function floxModuleOptions(moduleName: string) {
-  if (!Object.values(MODULES).includes(moduleName as MODULES)) {
-    throw new Error(`Invalid module '${moduleName}'`);
-  }
-
-  return (flox.moduleOptions[moduleName] ?? {}) as Record<string, unknown>;
-}
-
-/**
- * Gets the active Flox modules' options (with proper typing, since config is .js)
- * @returns {Record<string, Record<string, unknown>>} - options for active modules
- */
-export function floxModulesOptions() {
-  const options: Record<string, Record<string, unknown>> = {};
-
-  // Get active modules
-  const modules = getActiveFloxModuleNames();
-
-  modules.forEach((module) => {
-    options[module] = floxModuleOptions(module);
-  });
-
-  return options;
-}
-
-/**
- * Determines whether a Flox module is currently active from flox.config.json
- * @param {string} moduleName - name of the module to check
- * @returns {boolean} - whether the module is active
- */
-export function isModuleActive(moduleName: string) {
-  return getActiveFloxModuleNames().includes(moduleName);
-}
-
-/**
  * Determines the GraphQL entities needed by Flox modules
  * @returns {any[]} - entities
  */
@@ -143,6 +88,7 @@ export function floxEntities() {
       case MODULES.FILE:
         entities.push(PrivateFile);
         entities.push(PublicFile);
+        break;
       default:
         break;
     }

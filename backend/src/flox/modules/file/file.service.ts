@@ -35,6 +35,7 @@ export class FileService {
    * Uploads a file to the public S3 bucket
    * @param {Buffer} dataBuffer - data buffer representation of the file to upload
    * @param {string} filename - the file's name
+   * @returns {Promise<PublicFile>} - the newly uploaded file
    */
   async uploadPublicFile(
     dataBuffer: Buffer,

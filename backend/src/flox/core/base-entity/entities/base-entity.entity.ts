@@ -24,7 +24,7 @@ export class BaseEntity {
 
   @Field(() => Date, { description: 'Last modification date' })
   @UpdateDateColumn()
-  lastModifiedAt: Date;
+  updatedAt: Date;
 
   @Field(() => Date, { description: 'Date of deletion', nullable: true })
   @DeleteDateColumn()
