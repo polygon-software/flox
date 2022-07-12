@@ -12,7 +12,7 @@
         autocomplete="off"
         spellcheck="false"
       >
-        <b>{{ $t('authentication.forgot_password') }}</b>
+        <strong>{{ $t('authentication.forgot_password') }}</strong>
         <q-input
           :label="$t('authentication.verification_code')"
           v-model="verificationCode"
