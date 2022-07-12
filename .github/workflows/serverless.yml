@@ -1,0 +1,6 @@
+# TODO: Add serverless auto-deployment
+#name: "PR: Deploy to AWS Serverless"
+#
+#on:
+#  push:
+#    branches: [master, dev, stage-*]
