@@ -5,15 +5,29 @@ resource "aws_s3_bucket" "website_bucket" {
     Name          = "${var.project}-${var.type}-website-bucket"
   }
 
+  force_destroy = var.type == "test" ? true : false
+
   lifecycle {
     prevent_destroy = false
   }
 }
 
-// TODO: bucket with www. -> redirect to main bucket
+// Bucket with www. that redirects to main bucket
+resource "aws_s3_bucket" "redirect_bucket" {
+  bucket = "www.${var.domain}"
+  tags = {
+    Name          = "${var.project}-${var.type}-website-bucket-redirect"
+  }
 
-// Website S3 config
-resource "aws_s3_bucket_website_configuration" "example" {
+  force_destroy = var.type == "test" ? true : false
+
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+// Website S3 bucket config
+resource "aws_s3_bucket_website_configuration" "website_bucket_config" {
   bucket = aws_s3_bucket.website_bucket.bucket
 
   index_document {
@@ -25,7 +39,16 @@ resource "aws_s3_bucket_website_configuration" "example" {
   }
 }
 
-# Bucket configuration
+// Redirect S3 bucket config
+resource "aws_s3_bucket_website_configuration" "redirect_bucket_config" {
+  bucket = aws_s3_bucket.redirect_bucket.bucket
+  redirect_all_requests_to {
+    host_name = var.domain
+    protocol = "https"
+  }
+}
+
+# Website bucket configuration
 resource "aws_s3_bucket_versioning" "website" {
   bucket = aws_s3_bucket.website_bucket.id
   versioning_configuration {

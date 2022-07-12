@@ -142,3 +142,5 @@ rm -f ../2_main-setup/backend.zip
 cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
 cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
 cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
+
+# TODO: S3 destroy fails if bucket is not empty!
