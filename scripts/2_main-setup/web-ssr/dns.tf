@@ -28,7 +28,6 @@ resource "aws_acm_certificate_validation" "cert_validation_frontend" {
 }
 
 # Redirect for www. -> non-www
-# TODO Test
 resource "aws_route53_record" "redirect_record" {
   name                  = "www.${var.domain}"
   type                  = "CNAME"
