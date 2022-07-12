@@ -5,19 +5,19 @@
 export class BaseEntity {
   uuid: string;
   createdAt: Date;
-  lastModifiedAt: Date;
+  updatedAt: Date;
   deletedAt: Date|null;
 
   // eslint-disable-next-line require-jsdoc
   constructor(
     uuid: string,
     createdAt: Date,
-    lastModifiedAt: Date,
+    updatedAt: Date,
     deletedAt: Date|null,
   ) {
     this.uuid = uuid;
     this.createdAt = createdAt;
-    this.lastModifiedAt = lastModifiedAt;
+    this.updatedAt = updatedAt;
     this.deletedAt = deletedAt
   }
 }

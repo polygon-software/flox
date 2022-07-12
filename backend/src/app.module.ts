@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import * as Joi from 'joi';
-import { floxEntities, floxModules, floxProviders } from './flox/flox';
+import { floxModules, floxProviders } from './flox/flox';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
 import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
@@ -53,11 +53,6 @@ import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.co
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([
-      // Entities for Flox modules
-      ...floxEntities(),
-      // Add any custom entities here
-    ]),
 
     // Healthcheck modules
     TerminusModule,

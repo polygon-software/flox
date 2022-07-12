@@ -1,5 +1,7 @@
 import { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import * as flox from '../../../flox.config';
+import { MODULES } from '../MODULES';
 
 /**
  * This file contains all Flox helper functions for the backend
@@ -31,4 +33,59 @@ export function mergeConfigurations(
   customConfig?: Record<string, unknown>,
 ) {
   return { ...defaultConfig, ...customConfig };
+}
+
+/**
+ * Gets the active Flox modules from config
+ * @returns {string[]} - list of module names
+ */
+export function getActiveFloxModuleNames() {
+  const modules = [];
+
+  Object.keys(flox.modules).forEach((moduleName) => {
+    if (flox.modules[moduleName] === true) {
+      modules.push(moduleName);
+    }
+  });
+
+  return modules;
+}
+
+/**
+ * Gets the options for a single Flox module (with proper typing, since config is .js)
+ * @param {string} moduleName - name of the module to check
+ * @returns {Record<string, Record<string, unknown>>} - options for the modules
+ */
+export function floxModuleOptions(moduleName: string) {
+  if (!Object.values(MODULES).includes(moduleName as MODULES)) {
+    throw new Error(`Invalid module '${moduleName}'`);
+  }
+
+  return (flox.moduleOptions[moduleName] ?? {}) as Record<string, unknown>;
+}
+
+/**
+ * Gets the active Flox modules' options (with proper typing, since config is .js)
+ * @returns {Record<string, Record<string, unknown>>} - options for active modules
+ */
+export function floxModulesOptions() {
+  const options: Record<string, Record<string, unknown>> = {};
+
+  // Get active modules
+  const modules = getActiveFloxModuleNames();
+
+  modules.forEach((module) => {
+    options[module] = floxModuleOptions(module);
+  });
+
+  return options;
+}
+
+/**
+ * Determines whether a Flox module is currently active from flox.config.js
+ * @param {string} moduleName - name of the module to check
+ * @returns {boolean} - whether the module is active
+ */
+export function isModuleActive(moduleName: string) {
+  return getActiveFloxModuleNames().includes(moduleName);
 }
