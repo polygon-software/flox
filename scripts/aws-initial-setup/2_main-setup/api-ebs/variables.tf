@@ -75,12 +75,17 @@ variable "vpc_id" {
 }
 
 variable "private_subnet_ids" {
-  description     = "Private subnet ID"
+  description     = "Private subnet IDs"
   type            = list(string)
 }
 
 variable "public_subnet_ids" {
-  description     = "Public subnet ID"
+  description     = "Public subnet IDs"
+  type            = list(string)
+}
+
+variable "database_subnet_ids" {
+  description     = "Database subnet IDs"
   type            = list(string)
 }
 
@@ -106,5 +111,20 @@ variable "database_master_username" {
 
 variable "database_master_password" {
   description     = "Database user password"
+  type            = string
+}
+
+variable "database_cluster_endpoint" {
+  description     = "Database cluster endpoint"
+  type            = string
+}
+
+variable "database_cluster_port" {
+  description     = "Database cluster port"
+  type            = string
+}
+
+variable "api_security_group_id" {
+  description     = "API security group ID"
   type            = string
 }

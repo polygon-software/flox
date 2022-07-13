@@ -73,6 +73,10 @@ module "api-ebs" {
   database_name = var.database_name
   database_master_username = var.database_master_username
   database_master_password = var.database_master_password
+  database_subnet_ids = aws_subnet.database_subnets.*.id
+  database_cluster_endpoint = aws_rds_cluster.database_cluster.endpoint
+  database_cluster_port = aws_rds_cluster.database_cluster.port
+  api_security_group_id = aws_security_group.api_security_group.id
 }
 
 # Backend module (Serverless) TODO variables
