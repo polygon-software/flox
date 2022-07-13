@@ -1,6 +1,6 @@
 // Upload app.zip to bucket
 resource "aws_s3_object" "api_source_code_object" {
-  bucket                = aws_s3_bucket.source_code_bucket.id
+  bucket                = var.source_code_bucket_id
   key                   = "${var.project}-${var.type}-api-beanstalk/backend.zip"
   source                = "backend.zip"
   source_hash           = filemd5("backend.zip")
@@ -14,7 +14,7 @@ resource "aws_elastic_beanstalk_application" "api_app" {
 
 // Connect EBS to the S3 bucket with the app in it
 resource "aws_elastic_beanstalk_application_version" "api_app_version" {
-  bucket                = aws_s3_bucket.source_code_bucket.id
+  bucket                = var.source_code_bucket_id
   key                   = aws_s3_object.api_source_code_object.id
   application           = aws_elastic_beanstalk_application.api_app.name
   name                  = "${var.project}-${var.type}-api-v-${aws_s3_object.api_source_code_object.source_hash}"
@@ -33,7 +33,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace           = "aws:autoscaling:launchconfiguration"
     name                = "IamInstanceProfile"
-    value               = aws_iam_instance_profile.api.name
+    value               = var.api_iam_instance_profile_name
   }
 
   setting {
@@ -45,21 +45,21 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "VPCId"
-    value     = aws_vpc.vpc.id
+    value     = var.vpc_id
   }
 
   // Assign available (private) subnets to spawn EC2 instances within
   setting {
     namespace = "aws:ec2:vpc"
     name      = "Subnets"
-    value     = join(",", aws_subnet.private_subnet.*.id)
+    value     = join(",", var.private_subnet_ids)
   }
 
   // Assign available (public) subnets to spawn the load-balancer within
   setting {
     namespace = "aws:ec2:vpc"
     name      = "ELBSubnets"
-    value     = join(",", aws_subnet.public_subnet.*.id)
+    value     = join(",", var.private_subnet_ids)
   }
 
   // Subnets of database
@@ -102,7 +102,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elbv2:listener:443"
     name      = "SSLCertificateArns"
-    value     = aws_acm_certificate_validation.cert_validation_backend.certificate_arn
+    value     = var.backend_certificate_arn
   }
 
   setting {
@@ -166,7 +166,6 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     value     = aws_rds_cluster.database_cluster.endpoint
   }
 
-  // Not yet implemented
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "NOCODB_PORT"
@@ -194,12 +193,12 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PUBLIC_BUCKET_NAME"
-    value     = aws_s3_bucket.public_files.bucket
+    value     = var.public_bucket_id
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_PRIVATE_BUCKET_NAME"
-    value     = aws_s3_bucket.private_files.bucket
+    value     = var.private_bucket_id
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
@@ -221,7 +220,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "BASE_URL"
-    value     = "https://${var.base_domain}"
+    value     = "https://${var.domain}"
   }
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
@@ -242,13 +241,13 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_LOG_BUCKET_NAME"
-    value     = aws_s3_bucket.log_files.bucket
+    value     = var.log_bucket_id
   }
 }
 
 resource "aws_security_group" "api_security_group" {
   name                  = "${var.project}-${var.type}-api-security-group"
-  vpc_id                = aws_vpc.vpc.id
+  vpc_id                = var.vpc_id
 
   ingress {
     from_port         = 3000
