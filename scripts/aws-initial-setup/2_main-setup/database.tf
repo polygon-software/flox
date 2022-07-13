@@ -37,7 +37,7 @@ resource "aws_rds_cluster" "database_cluster" {
   dynamic "serverlessv2_scaling_configuration" {
     for_each = var.serverless == true ? [1] : []
     content {
-      max_capacity = 1.0
+      max_capacity = 2.0 // TODO application specific: Change scaling factor
       min_capacity = 0.5
     }
   }
