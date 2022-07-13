@@ -31,6 +31,16 @@ resource "aws_rds_cluster" "database_cluster" {
   storage_encrypted         = true
   backup_retention_period   = 30
   deletion_protection       = var.type == "test" ? false : true
+
+
+  // If 'serverless' is set to true, apply serverless config
+  dynamic "serverlessv2_scaling_configuration" {
+    for_each = var.serverless == true ? [1] : []
+    content {
+      max_capacity = 1.0
+      min_capacity = 0.5
+    }
+  }
   lifecycle {
     prevent_destroy = false
   }
@@ -41,7 +51,7 @@ resource "aws_rds_cluster_instance" "database_cluster_instances" {
   engine                    = "aurora-postgresql"
   engine_version            = "13.6"
   cluster_identifier        = aws_rds_cluster.database_cluster.id
-  instance_class            = "db.t4g.medium"
+  instance_class            = var.serverless == true ? "db.serverless" : "db.t4g.medium"
   db_subnet_group_name      = aws_db_subnet_group.database_subnet_group.name
   count                     = 2
   tags = {
