@@ -34,6 +34,8 @@ aws_region=${aws_region:1:-1}
 organisation=$(jq '.general.organisation' ../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
+serverless=$(jq '.general.serverless' ../../backend/flox.config.json)
+
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
