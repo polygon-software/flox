@@ -48,19 +48,25 @@ module "web_spa_pwa" {
   }
 }
 
-# Backend module (EBS)
+# Backend module (EBS) TODO variables
 module "api-ebs" {
   source = "api-ebs"
+  count  = var.serverless == true ? 0 : 1
+  project = var.project
+  type = var.type
+  domain = var.base_domain
+  hosted_zone_id = var.hosted_zone_id
+  eb_app_desc = var.eb_app_desc
+  private_subnet_ids = aws_subnet.private_subnet.*.id
+  public_subnet_ids = aws_subnet.public_subnet.*.id
+}
+
+# Backend module (Serverless) TODO variables
+module "api-serverless" {
+  source = "api-serverless"
   count  = var.serverless == true ? 1 : 0
   project = var.project
   type = var.type
   domain = var.base_domain
   hosted_zone_id = var.hosted_zone_id
-  aws_access_key = var.aws_access_key
-  aws_secret_access_key = var.aws_secret_access_key
-  providers = {
-    aws = aws.us-east-1
-  }
 }
-
-# Backend module (Serverless)
