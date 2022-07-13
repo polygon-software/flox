@@ -96,7 +96,11 @@ export class FileService {
   async getPublicFile(
     getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return this.publicFilesRepository.findOne(getPublicFileArgs.uuid);
+    return this.publicFilesRepository.findOne({
+      where: {
+        uuid: getPublicFileArgs.uuid,
+      },
+    });
   }
 
   /**
@@ -107,9 +111,11 @@ export class FileService {
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
   ): Promise<PrivateFile> {
-    const fileInfo = await this.privateFilesRepository.findOne(
-      getPrivateFileArgs.uuid,
-    );
+    const fileInfo = await this.privateFilesRepository.findOne({
+      where: {
+        uuid: getPrivateFileArgs.uuid,
+      },
+    });
     if (fileInfo) {
       const options: Record<string, unknown> = {};
       // If expiration duration is set, apply
@@ -126,9 +132,11 @@ export class FileService {
         }),
         options,
       );
-      const result = await this.privateFilesRepository.findOne(
-        getPrivateFileArgs.uuid,
-      );
+      const result = await this.privateFilesRepository.findOne({
+        where: {
+          uuid: getPrivateFileArgs.uuid,
+        },
+      });
 
       // Add URL to result
       return { ...result, url };
