@@ -10,7 +10,7 @@ resource "aws_db_subnet_group" "database_subnet_group" {
 resource "aws_subnet" "database_subnets" {
   count                     = 3
   cidr_block                = cidrsubnet(var.cidr_block, 5, count.index + 3)
-  vpc_id                    = var.vpc_id
+  vpc_id                    = aws_vpc.vpc.id
   availability_zone         = var.azs[count.index]
   tags = {
     Name          = "Database Subnet ${var.azs[count.index]}"
@@ -19,7 +19,7 @@ resource "aws_subnet" "database_subnets" {
 
 resource "aws_rds_cluster" "database_cluster" {
   engine                    = "aurora-postgresql"
-  engine_version            = "12.7"
+  engine_version            = "13.6"
   cluster_identifier        = "${var.project}-${var.type}-database-cluster"
   database_name             = var.database_name
   master_username           = var.database_master_username
@@ -39,7 +39,7 @@ resource "aws_rds_cluster" "database_cluster" {
 resource "aws_rds_cluster_instance" "database_cluster_instances" {
   identifier                = "${var.project}-${var.type}-rds-${count.index}"
   engine                    = "aurora-postgresql"
-  engine_version            = "12.7"
+  engine_version            = "13.6"
   cluster_identifier        = aws_rds_cluster.database_cluster.id
   instance_class            = "db.t4g.medium"
   db_subnet_group_name      = aws_db_subnet_group.database_subnet_group.name
@@ -51,7 +51,7 @@ resource "aws_rds_cluster_instance" "database_cluster_instances" {
 
 resource "aws_security_group" "database_security_group" {
   name                      = "${var.project}-${var.type}-database-security-group"
-  vpc_id                    = var.vpc_id
+  vpc_id                    = aws_vpc.vpc.id
   tags = {
     Project       = var.project
   }

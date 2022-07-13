@@ -60,3 +60,24 @@ resource "aws_route53_record" "web_record_alias_AAAA" {
     zone_id                = var.frontend_build_mode == "ssr" ? data.aws_elastic_beanstalk_hosted_zone.hosted_zone.id : module.web_spa_pwa[0].cloudfront_zone_id
   }
 }
+
+resource "aws_security_group" "api_security_group" {
+  name                  = "${var.project}-${var.type}-api-security-group"
+  vpc_id                = aws_vpc.vpc.id
+
+  ingress {
+    from_port         = 3000
+    protocol          = "TCP"
+    to_port           = 3000
+    cidr_blocks       = ["0.0.0.0/0"]
+    ipv6_cidr_blocks  = ["::/0"]
+  }
+  egress {
+    from_port         = 0
+    to_port           = 0
+    protocol          = "-1"
+    cidr_blocks       = ["0.0.0.0/0"]
+    ipv6_cidr_blocks  = ["::/0"]
+  }
+}
+

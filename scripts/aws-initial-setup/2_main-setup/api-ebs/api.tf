@@ -66,7 +66,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "DBSubnets"
-    value     = join(",", aws_subnet.database_subnets.*.id)
+    value     = join(",", var.database_subnet_ids)
   }
 
   setting {
@@ -90,7 +90,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
     name      = "SecurityGroups"
-    value     = aws_security_group.api_security_group.id
+    value     = var.api_security_group_id
   }
 
   setting {
@@ -139,31 +139,31 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_DATABASE"
-    value     = aws_rds_cluster.database_cluster.database_name
+    value     = var.database_name
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_USER"
-    value     = aws_rds_cluster.database_cluster.master_username
+    value     = var.database_master_username
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_PASSWORD"
-    value     = aws_rds_cluster.database_cluster.master_password
+    value     = var.database_master_password
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_PORT"
-    value     = aws_rds_cluster.database_cluster.port
+    value     = var.database_cluster_port
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_HOST"
-    value     = aws_rds_cluster.database_cluster.endpoint
+    value     = var.database_cluster_endpoint
   }
 
   setting {
@@ -181,7 +181,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DATABASE_URL"
-    value     = "pg://${aws_rds_cluster.database_cluster.master_username}:${aws_rds_cluster.database_cluster.master_password}@${aws_rds_cluster.database_cluster.endpoint}:${aws_rds_cluster.database_cluster.port}/${aws_rds_cluster.database_cluster.database_name}"
+    value     = "pg://${var.database_master_username}:${var.database_master_password}@${var.database_cluster_endpoint}:${var.database_cluster_port}/${var.database_name}"
   }
 
   setting {
@@ -242,25 +242,5 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "AWS_LOG_BUCKET_NAME"
     value     = var.log_bucket_id
-  }
-}
-
-resource "aws_security_group" "api_security_group" {
-  name                  = "${var.project}-${var.type}-api-security-group"
-  vpc_id                = var.vpc_id
-
-  ingress {
-    from_port         = 3000
-    protocol          = "TCP"
-    to_port           = 3000
-    cidr_blocks       = ["0.0.0.0/0"]
-    ipv6_cidr_blocks  = ["::/0"]
-  }
-  egress {
-    from_port         = 0
-    to_port           = 0
-    protocol          = "-1"
-    cidr_blocks       = ["0.0.0.0/0"]
-    ipv6_cidr_blocks  = ["::/0"]
   }
 }
