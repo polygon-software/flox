@@ -48,7 +48,7 @@ module "web_spa_pwa" {
   }
 }
 
-# Backend module (EBS)
+# Backend module (EBS + RDS)
 module "api-ebs" {
   source = "api-ebs"
   count  = var.serverless == true ? 0 : 1
