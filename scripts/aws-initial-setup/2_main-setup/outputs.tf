@@ -1,21 +1,23 @@
 output "api_eb_env_id" {
   description = "ID of the EB environment"
-  value       = aws_elastic_beanstalk_environment.api_env.id
+  value       = module.api-ebs[0].api_eb_env_id
 }
+
 output "api_instance_instances" {
   description = "Public IP address of the EC2 instance"
-  value       = aws_elastic_beanstalk_environment.api_env.instances
+  value       = module.api-ebs[0].api_instance_instances
 }
 output "cluster_members" {
   description = "Public IP address of the EC2 instance"
-  value       = aws_rds_cluster.database_cluster.cluster_members
+  value       = module.api-ebs[0].cluster_members
 }
+
 output "cluster_end" {
   description = "Public IP address of the EC2 instance"
-  value       = aws_rds_cluster.database_cluster.endpoint
+  value       = module.api-ebs[0].cluster_end
 }
 
 output "api_endpoint" {
   description = "Public IP address of the EC2 instance"
-  value       = aws_elastic_beanstalk_environment.api_env.endpoint_url
+  value       = module.api-ebs[0].api_endpoint
 }
