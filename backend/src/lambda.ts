@@ -32,7 +32,7 @@ async function bootstrapServer(): Promise<NestApp> {
     new FastifyAdapter(instance),
     { logger: !process.env.AWS_EXECUTION_ENV ? new Logger() : console },
   );
-  app.setGlobalPrefix(process.env.API_PREFIX);
+  // app.setGlobalPrefix('dev'); // TODO...
   await app.init();
   return { app, instance };
 }

@@ -13,7 +13,6 @@ import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.co
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      playground: true,
       debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,

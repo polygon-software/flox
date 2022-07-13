@@ -20,10 +20,14 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
   ): Promise<any> {
     // Verify that request is multipart
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (!req.isMultipart()) {
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const file = await req.file();
     const file_buffer = await file.toBuffer();
     const new_file = await this.taskService.uploadPublicFile(
@@ -40,6 +44,8 @@ export class FileController {
     @Res() res: fastify.FastifyReply<any>,
   ): Promise<any> {
     // Verify that request is multipart
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (!req.isMultipart()) {
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
@@ -48,6 +54,8 @@ export class FileController {
     // Get user, as determined by JWT Strategy
     const owner = req['user'].userId;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const file = await req.file();
     const file_buffer = await file.toBuffer();
     const new_file = await this.taskService.uploadPrivateFile(
