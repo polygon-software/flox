@@ -82,7 +82,7 @@ export function floxModulesOptions() {
 }
 
 /**
- * Determines whether a Flox module is currently active from flox.config.js
+ * Determines whether a Flox module is currently active from flox.config.json
  * @param {string} moduleName - name of the module to check
  * @returns {boolean} - whether the module is active
  */

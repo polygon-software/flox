@@ -11,7 +11,7 @@ import { User } from './modules/auth/entities/user.entity';
 import { getActiveFloxModuleNames } from './core/flox-helpers';
 
 /**
- * Returns the active Flox modules based on flox.config.js
+ * Returns the active Flox modules based on flox.config.json
  * @returns {any[]} - list of Modules
  */
 export function floxModules() {

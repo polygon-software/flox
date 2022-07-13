@@ -25,6 +25,7 @@
     "organisation": "polygonsoftware",
     "aws_region": "eu-central-1",
     "test_base_domain": "flox.polygon-project.ch",
-    "live_base_domain": "floxbanano.ch"
+    "live_base_domain": "floxbanano.ch",
+    "serverless": true
   }
 }
