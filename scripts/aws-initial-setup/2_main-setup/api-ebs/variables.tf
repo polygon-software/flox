@@ -83,3 +83,28 @@ variable "public_subnet_ids" {
   description     = "Public subnet ID"
   type            = list(string)
 }
+
+variable "azs" {
+  description = "Availability zones"
+  type = list(string)
+}
+
+variable "cidr_block" {
+  description = "CIDR block"
+  type = string
+}
+
+variable "database_name" {
+  description     = "Name of database"
+  type            = string
+}
+
+variable "database_master_username" {
+  description     = "Database user name"
+  type            = string
+}
+
+variable "database_master_password" {
+  description     = "Database user password"
+  type            = string
+}

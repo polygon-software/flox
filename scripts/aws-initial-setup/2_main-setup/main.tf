@@ -48,7 +48,7 @@ module "web_spa_pwa" {
   }
 }
 
-# Backend module (EBS) TODO variables
+# Backend module (EBS)
 module "api-ebs" {
   source = "api-ebs"
   count  = var.serverless == true ? 0 : 1
@@ -59,6 +59,20 @@ module "api-ebs" {
   eb_app_desc = var.eb_app_desc
   private_subnet_ids = aws_subnet.private_subnet.*.id
   public_subnet_ids = aws_subnet.public_subnet.*.id
+  api_iam_instance_profile_name = aws_iam_instance_profile.api.name
+  backend_certificate_arn = aws_acm_certificate.backend_cert.arn
+  source_code_bucket_id = aws_s3_bucket.source_code_bucket.id
+  private_bucket_id = aws_s3_bucket.private_files.id
+  public_bucket_id = aws_s3_bucket.public_files.id
+  log_bucket_id = aws_s3_bucket.log_files.id
+  user_pool_id = var.user_pool_id
+  user_pool_client_id = var.user_pool_client_id
+  vpc_id = aws_vpc.vpc.id
+  azs = var.azs
+  cidr_block = var.cidr_block
+  database_name = var.database_name
+  database_master_username = var.database_master_username
+  database_master_password = var.database_master_password
 }
 
 # Backend module (Serverless) TODO variables
