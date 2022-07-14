@@ -9,13 +9,15 @@ import { floxModules, floxProviders } from './flox/flox';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
 import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
+    GraphQLModule.forRoot<ApolloDriverConfig>({
       debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      driver: ApolloDriver,
     }),
     ConfigModule.forRoot({
       isGlobal: true,

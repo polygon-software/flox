@@ -34,11 +34,11 @@ type PrivateFile {
   """S3 File Key"""
   key: String!
 
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
   """File owner"""
   owner: String!
+
+  """Last modification date"""
+  updatedAt: DateTime!
 
   """Pre-signed download URL"""
   url: String
@@ -58,7 +58,7 @@ type PublicFile {
   key: String!
 
   """Last modification date"""
-  lastModifiedAt: DateTime!
+  updatedAt: DateTime!
 
   """Public download URL"""
   url: String!
@@ -76,7 +76,7 @@ type Query {
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   myUser: User!
-  user(uuid: ID!): User!
+  user(cognitoUuid: ID, uuid: ID): User!
   users(uuids: [ID!]): [User!]!
 }
 
@@ -99,11 +99,11 @@ type User {
   """E-mail address"""
   email: String!
 
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
   """User role"""
   role: String
+
+  """Last modification date"""
+  updatedAt: DateTime!
 
   """Username"""
   username: String!
