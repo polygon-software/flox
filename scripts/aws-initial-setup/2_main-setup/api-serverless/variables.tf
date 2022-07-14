@@ -14,7 +14,12 @@ variable "domain" {
   type    = string
 }
 
-variable "backend_zip_url" {
-  description = "S3 URL to backend source .zip file"
+variable "api_source_code_object_id" {
+  description = "S3 source code .zip ID"
+  type    = string
+}
+
+variable "api_source_code_object_hash" {
+  description = "S3 source code object hash"
   type    = string
 }
