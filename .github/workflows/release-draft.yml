@@ -14,8 +14,8 @@ jobs:
       - name: Checkout 🛎
         uses: actions/checkout@v3
 
-      - name: Make build.bash executable
-        run: sudo chmod +x ./scripts/2_main-setup/build.bash
+      - name: Make build.sh executable
+        run: sudo chmod +x ./scripts/2_main-setup/build.sh
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
