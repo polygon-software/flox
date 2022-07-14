@@ -152,7 +152,14 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 # Build & zip frontend and backend
-zsh ../../support/build.bash "$1" "$project" "$build_mode"
+if [[ $serverless == true ]]
+then
+  # Build in serverless mode for AWS lambda
+  zsh ../../support/build.sh "$project" "$build_mode" true
+else
+  # Regular build
+  zsh ../../support/build.sh "$project" "$build_mode"
+fi
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 

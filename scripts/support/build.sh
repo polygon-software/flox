@@ -1,25 +1,24 @@
 # Builds & zips both front- and backend in the correct modes
 # Necessary variables:
-# - Deployment mode ('live' or 'test')
 # - Project name
 # - Frontend mode ('spa', 'pwa' or 'ssr')
-
-# Check valid deployment mode
-if [[ $1 != "live" ]] && [[ $1 != "test" ]]
-then
-  echo "Invalid deployment mode $1"
-  exit
-fi
+# Optional variables:
+# - Serverless build mode (setting 'true' will use lambda build mode for minimal output)
 
 # Check valid frontend mode
-if [[ $3 != "spa" ]] && [[ $3 != "pwa" ]] && [[ $3 != "ssr" ]]
+if [[ $2 != "spa" ]] && [[ $2 != "pwa" ]] && [[ $2 != "ssr" ]]
 then
-  echo "Invalid frontend mode $3"
+  echo "Invalid frontend mode $2"
   exit
 fi
 
-echo "Generating for project $2 in mode $1 ($3)"
-
+# Depending on serverless status, log
+if [[ $3 == "true" ]]
+then
+  echo "Generating for project $1 (Frontend: $2, Backend: serverless)"
+else
+  echo "Generating for project $1 (Frontend: $2)"
+fi
 # Build backend
 cd ../../backend || exit
 
@@ -27,12 +26,20 @@ cd ../../backend || exit
 rm -rf dist
 
 yarn
-yarn build
+if [[ $3 == "true" ]]
+then
+  yarn build
+else
+  # Build for AWS lambda (includes minifying node_modules)
+  yarn build:lambda
+fi
+
+# Copy node_modules to output directory
 cp -a node_modules dist/
 
 # Build package.json
 echo "{
-   \"name\": \"$2\",
+   \"name\": \"$1\",
    \"version\": \"0.0.1\",
    \"description\": \"\",
    \"author\": \"\",
@@ -64,12 +71,12 @@ rm -rf dist
 yarn
 
 # SPA Mode
-if [[ $3 == "spa" ]]
+if [[ $2 == "spa" ]]
 then
   yarn build
   cd dist/spa || exit
 # SSR Mode
-elif [[ $3 == "ssr" ]]
+elif [[ $2 == "ssr" ]]
 then
   yarn build:ssr
   cd dist/ssr || exit
@@ -77,7 +84,7 @@ then
   # Install modules
   yarn
 # PWA Mode
-elif [[ $3 == "pwa" ]]
+elif [[ $2 == "pwa" ]]
 then
   yarn build:pwa
   cd dist/pwa || exit
