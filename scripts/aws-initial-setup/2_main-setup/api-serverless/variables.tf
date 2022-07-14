@@ -13,3 +13,8 @@ variable "domain" {
   description = "Project base domain, e.g. flox.polygon-project.ch"
   type    = string
 }
+
+variable "backend_zip_url" {
+  description = "S3 URL to backend source .zip file"
+  type    = string
+}

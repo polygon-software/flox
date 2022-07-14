@@ -128,3 +128,14 @@ variable "api_security_group_id" {
   description     = "API security group ID"
   type            = string
 }
+
+variable "api_source_code_object_id" {
+  description = "S3 source code .zip ID"
+  type    = string
+}
+
+variable "api_source_code_object_hash" {
+  description = "S3 source code object hash"
+  type    = string
+}
+

@@ -1,10 +1,3 @@
-// Upload app.zip to bucket
-resource "aws_s3_object" "api_source_code_object" {
-  bucket                = var.source_code_bucket_id
-  key                   = "${var.project}-${var.type}-api-beanstalk/backend.zip"
-  source                = "backend.zip"
-  source_hash           = filemd5("backend.zip")
-}
 
 // Create Elastic Beanstalk resource
 resource "aws_elastic_beanstalk_application" "api_app" {
@@ -15,9 +8,9 @@ resource "aws_elastic_beanstalk_application" "api_app" {
 // Connect EBS to the S3 bucket with the app in it
 resource "aws_elastic_beanstalk_application_version" "api_app_version" {
   bucket                = var.source_code_bucket_id
-  key                   = aws_s3_object.api_source_code_object.id
+  key                   = var.api_source_code_object_id
   application           = aws_elastic_beanstalk_application.api_app.name
-  name                  = "${var.project}-${var.type}-api-v-${aws_s3_object.api_source_code_object.source_hash}"
+  name                  = "${var.project}-${var.type}-api-v-${var.api_source_code_object_hash}"
 }
 
 // Create EBS environment
