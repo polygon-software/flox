@@ -89,5 +89,6 @@ module "api-serverless" {
   type = var.type
   domain = var.base_domain
   hosted_zone_id = var.hosted_zone_id
-  backend_zip_url = aws_s3_object.api_source_code_object.id // TODO...
+  api_source_code_object_id = aws_s3_object.api_source_code_object.id
+  api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
 }
