@@ -139,3 +139,11 @@ resource "aws_s3_bucket_public_access_block" "source_code" {
   block_public_policy = true
   restrict_public_buckets = true
 }
+
+// Upload app.zip to bucket
+resource "aws_s3_object" "api_source_code_object" {
+  bucket                = aws_s3_bucket.source_code_bucket.bucket
+  key                   = "${var.project}-${var.type}-api/backend.zip"
+  source                = "backend.zip"
+  source_hash           = filemd5("backend.zip")
+}

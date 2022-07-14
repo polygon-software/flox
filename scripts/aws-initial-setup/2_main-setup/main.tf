@@ -77,6 +77,8 @@ module "api-ebs" {
   database_cluster_endpoint = aws_rds_cluster.database_cluster.endpoint
   database_cluster_port = aws_rds_cluster.database_cluster.port
   api_security_group_id = aws_security_group.api_security_group.id
+  api_source_code_object_id = aws_s3_object.api_source_code_object.id
+  api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
 }
 
 # Backend module (Serverless) TODO variables
@@ -87,4 +89,5 @@ module "api-serverless" {
   type = var.type
   domain = var.base_domain
   hosted_zone_id = var.hosted_zone_id
+  backend_zip_url = aws_s3_object.api_source_code_object.id // TODO...
 }
