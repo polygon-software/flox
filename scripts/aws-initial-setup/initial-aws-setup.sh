@@ -156,7 +156,7 @@ if [[ $serverless == "true" ]]
 then
   # Build in serverless mode for AWS lambda
   echo "Building for serverless deployment..."
-  zsh ../../support/build.sh "$project" "$build_mode" "true"
+  zsh ../../support/build.sh "$project" "$build_mode" true
 else
   # Regular build
   zsh ../../support/build.sh "$project" "$build_mode"
