@@ -152,10 +152,11 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 # Build & zip frontend and backend
-if [[ $serverless == true ]]
+if [[ $serverless == "true" ]]
 then
   # Build in serverless mode for AWS lambda
-  zsh ../../support/build.sh "$project" "$build_mode" true
+  echo "Building for serverless deployment..."
+  zsh ../../support/build.sh "$project" "$build_mode" "true"
 else
   # Regular build
   zsh ../../support/build.sh "$project" "$build_mode"
