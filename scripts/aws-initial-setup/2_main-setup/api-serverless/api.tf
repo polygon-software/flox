@@ -4,9 +4,11 @@
 resource "aws_lambda_function" "api_lambda" {
   function_name = "${var.project}-${var.type}-api-lambda"
 
+  timeout     = 15
   s3_key      = var.api_source_code_object_key
-  s3_bucket = var.source_code_bucket_id
-  role          = aws_iam_role.lambda_iam.arn
+  s3_bucket   = var.source_code_bucket_id
+  role        = aws_iam_role.lambda_iam.arn
+  memory_size = 2049
 
   # Lambda handler function location; since this is in src/lambda.ts -> handler(), we use AWS' lambda syntax below
   handler       = "src/lambda.handler"
@@ -14,6 +16,10 @@ resource "aws_lambda_function" "api_lambda" {
 
   runtime = "nodejs16.x"
 
+  vpc_config {
+    security_group_ids = [var.api_security_group_id]
+    subnet_ids         = var.public_subnet_ids
+  }
   // Env Variables for NestJS
   environment {
     variables = {

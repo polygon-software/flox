@@ -83,3 +83,23 @@ variable "user_pool_id" {
 variable "user_pool_client_id" {
   type    = string
 }
+
+variable "api_security_group_id" {
+  description     = "API security group ID"
+  type            = string
+}
+
+variable "private_subnet_ids" {
+  description     = "Private subnet IDs"
+  type            = list(string)
+}
+
+variable "public_subnet_ids" {
+  description     = "Public subnet IDs"
+  type            = list(string)
+}
+
+variable "database_subnet_ids" {
+  description     = "Database subnet IDs"
+  type            = list(string)
+}
