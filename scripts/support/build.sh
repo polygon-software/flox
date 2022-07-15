@@ -28,10 +28,10 @@ rm -rf dist
 yarn
 if [[ $3 == "true" ]]
 then
-  yarn build
-else
   # Build for AWS lambda (includes minifying node_modules)
   yarn build:lambda
+else
+  yarn build
 fi
 
 # Copy node_modules to output directory
