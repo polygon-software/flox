@@ -14,8 +14,8 @@ variable "domain" {
   type    = string
 }
 
-variable "api_source_code_object_id" {
-  description = "S3 source code .zip ID"
+variable "api_source_code_object_key" {
+  description = "S3 source code .zip key"
   type    = string
 }
 
@@ -23,6 +23,7 @@ variable "api_source_code_object_hash" {
   description = "S3 source code object hash"
   type    = string
 }
+
 variable "database_name" {
   description     = "Name of database"
   type            = string
@@ -61,6 +62,11 @@ variable "private_bucket_id" {
 variable "log_bucket_id" {
   description = "Log files bucket ID"
   type    = string
+}
+
+variable "source_code_bucket_id" {
+  description     = "Source code bucket ID"
+  type            = string
 }
 
 variable "aws_region" {

@@ -90,7 +90,7 @@ module "api-serverless" {
   type = var.type
   domain = var.base_domain
   hosted_zone_id = var.hosted_zone_id
-  api_source_code_object_id = aws_s3_object.api_source_code_object.id
+  api_source_code_object_key = aws_s3_object.api_source_code_object.key
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
   aws_region = var.aws_region
   database_name = var.database_name
