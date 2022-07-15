@@ -19,7 +19,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 
 # Frontend module (SSR)
 module "web_ssr" {
-  source = "web-ssr"
+  source = "./web-ssr"
   count  = var.frontend_build_mode == "ssr" ? 1 : 0
   project = var.project
   type = var.type
@@ -35,7 +35,7 @@ module "web_ssr" {
 
 # Frontend module (PWA/SPA)
 module "web_spa_pwa" {
-  source = "web-spa-pwa"
+  source = "./web-spa-pwa"
   count  = var.frontend_build_mode != "ssr" ? 1 : 0
   project = var.project
   type = var.type
@@ -50,7 +50,7 @@ module "web_spa_pwa" {
 
 # Backend module (EBS + RDS)
 module "api-ebs" {
-  source = "api-ebs"
+  source = "./api-ebs"
   count  = var.serverless == true ? 0 : 1
   project = var.project
   type = var.type
@@ -84,7 +84,7 @@ module "api-ebs" {
 
 # Backend module (Serverless) TODO variables
 module "api-serverless" {
-  source = "api-serverless"
+  source = "./api-serverless"
   count  = var.serverless == true ? 1 : 0
   project = var.project
   type = var.type

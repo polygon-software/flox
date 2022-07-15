@@ -22,19 +22,19 @@ echo "type=\"$1\"" >> flox.tfvars
 cd ../aws-initial-setup/0_pre-setup || exit
 
 # Get additional flox.config variables
-project=$(jq '.general.project' ../../backend/flox.config.json)
+project=$(jq '.general.project' ../../../backend/flox.config.json)
 project=${project:1:-1}
 
-build_mode=$(jq '.general.mode' ../../frontend/flox.config.json)
+build_mode=$(jq '.general.mode' ../../../frontend/flox.config.json)
 build_mode=${build_mode:1:-1}
 
-aws_region=$(jq '.general.aws_region' ../../backend/flox.config.json)
+aws_region=$(jq '.general.aws_region' ../../../backend/flox.config.json)
 aws_region=${aws_region:1:-1}
 
-organisation=$(jq '.general.organisation' ../../backend/flox.config.json)
+organisation=$(jq '.general.organisation' ../../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
-serverless=$(jq '.general.serverless' ../../backend/flox.config.json)
+serverless=$(jq '.general.serverless' ../../../backend/flox.config.json)
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
