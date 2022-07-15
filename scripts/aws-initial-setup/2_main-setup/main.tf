@@ -97,10 +97,14 @@ module "api-serverless" {
   database_master_password = var.database_master_password
   database_cluster_endpoint = aws_rds_cluster.database_cluster.endpoint
   database_cluster_port = aws_rds_cluster.database_cluster.port
+  database_subnet_ids = aws_subnet.database_subnets.*.id
   source_code_bucket_id = aws_s3_bucket.source_code_bucket.id
   private_bucket_id = aws_s3_bucket.private_files.id
   public_bucket_id = aws_s3_bucket.public_files.id
   log_bucket_id = aws_s3_bucket.log_files.id
   user_pool_id = var.user_pool_id
   user_pool_client_id = var.user_pool_client_id
+  api_security_group_id = aws_security_group.api_security_group.id
+  private_subnet_ids = aws_subnet.private_subnet.*.id
+  public_subnet_ids = aws_subnet.public_subnet.*.id
 }

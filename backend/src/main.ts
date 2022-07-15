@@ -3,7 +3,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import fmp = require('fastify-multipart');
+import fmp = require('@fastify/multipart');
 import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
@@ -16,7 +16,7 @@ import {
  * Bootstraps the nest application itself
  * @returns {Promise<void>} - done
  */
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
@@ -30,6 +30,7 @@ async function bootstrap() {
   // @ts-ignore
   await app.register(fmp);
   await app.listen(configService.get('server.port'), '::');
+  return app
 }
 
 // Start application
