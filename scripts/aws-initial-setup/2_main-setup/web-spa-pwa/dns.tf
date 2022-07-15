@@ -29,12 +29,15 @@ resource "aws_acm_certificate_validation" "cert_validation_frontend" {
 }
 
 resource "aws_route53_record" "redirect_record" {
+  depends_on = [
+    aws_s3_bucket.redirect_bucket
+  ]
   name                  = "www.${var.domain}"
   type                  = "A"
   zone_id               = var.hosted_zone_id
   alias {
     evaluate_target_health = false
-    name                   = aws_s3_bucket.redirect_bucket.website_domain
+    name                   = aws_s3_bucket.redirect_bucket.website_endpoint
     zone_id                = aws_s3_bucket.redirect_bucket.hosted_zone_id
   }
 }
