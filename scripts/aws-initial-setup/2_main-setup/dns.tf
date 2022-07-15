@@ -24,13 +24,6 @@ resource "aws_route53_record" "ssl_backend" {
   zone_id         = var.hosted_zone_id
 }
 
-resource "aws_route53_record" "api_record" {
-  name                  = "api.${var.base_domain}"
-  type                  = "CNAME"
-  zone_id               = var.hosted_zone_id
-  ttl                   = "300"
-  records               = [aws_elastic_beanstalk_environment.api_env.endpoint_url]
-}
 
 resource "aws_acm_certificate_validation" "cert_validation_backend" {
   certificate_arn         = aws_acm_certificate.backend_cert.arn

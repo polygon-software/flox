@@ -31,7 +31,7 @@ resource "aws_lambda_function" "api_lambda" {
       NOCODB_PORT= 8000,
 
       // AWS
-      AWS_REGION= var.aws_region,
+#      AWS_REGION= var.aws_region, // TODO can't be set via terraform...
       AWS_PUBLIC_BUCKET_NAME = var.public_bucket_id,
       AWS_PRIVATE_BUCKET_NAME = var.private_bucket_id,
       COMPOSE_PROJECT_NAME = var.project,
