@@ -59,7 +59,13 @@ echo "$(<package.json)" | jq '.babel' >> dist/package.json
 echo ',   "engines":' >> dist/package.json
 echo "$(<package.json)" | jq '.engines' >> dist/package.json
 echo '}' >> dist/package.json
+
 cd dist || exit
+
+# Remove old .zip (if any)
+rm -f ../../scripts/outputs/backend.zip
+
+# Zip contents of dist folder
 zip -r ../../scripts/outputs/backend.zip * -q
 cd ..
 
