@@ -79,6 +79,7 @@ module "api-ebs" {
   api_security_group_id = aws_security_group.api_security_group.id
   api_source_code_object_id = aws_s3_object.api_source_code_object.id
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
+  aws_region = var.aws_region
 }
 
 # Backend module (Serverless) TODO variables
@@ -91,4 +92,16 @@ module "api-serverless" {
   hosted_zone_id = var.hosted_zone_id
   api_source_code_object_id = aws_s3_object.api_source_code_object.id
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
+  aws_region = var.aws_region
+  database_name = var.database_name
+  database_master_username = var.database_master_username
+  database_master_password = var.database_master_password
+  database_cluster_endpoint = aws_rds_cluster.database_cluster.endpoint
+  database_cluster_port = aws_rds_cluster.database_cluster.port
+  source_code_bucket_id = aws_s3_bucket.source_code_bucket.id
+  private_bucket_id = aws_s3_bucket.private_files.id
+  public_bucket_id = aws_s3_bucket.public_files.id
+  log_bucket_id = aws_s3_bucket.log_files.id
+  user_pool_id = var.user_pool_id
+  user_pool_client_id = var.user_pool_client_id
 }

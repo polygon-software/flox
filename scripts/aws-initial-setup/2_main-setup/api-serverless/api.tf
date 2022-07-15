@@ -13,10 +13,33 @@ resource "aws_lambda_function" "api_lambda" {
 
   runtime = "nodejs16.x"
 
-  #TODO from .env file
+  // Env Variables for NestJS
   environment {
     variables = {
-      foo = "bar"
+      // Database-related
+      "DB_DATABASE" = var.database_name,
+      "DB_USER" = var.database_master_username,
+      "DB_PASSWORD" = var.database_master_password,
+      "DB_PORT" = var.database_cluster_port,
+      "DB_HOST" = var.database_cluster_endpoint,
+      "DATABASE_URL" = "pg://${var.database_master_username}:${var.database_master_password}@${var.database_cluster_endpoint}:${var.database_cluster_port}/${var.database_name}",
+      "ENTITIES" = "**/**.entity.js",
+
+      // Ports
+      "SERVER_PORT" = 3000
+      "NOCODB_PORT"= 8000,
+
+      // AWS
+      "AWS_REGION"= var.aws_region,
+      "AWS_PUBLIC_BUCKET_NAME" = var.public_bucket_id,
+      "AWS_PRIVATE_BUCKET_NAME" = var.private_bucket_id,
+      "COMPOSE_PROJECT_NAME" = var.project,
+      "USER_POOL_ID"= var.user_pool_id,
+      "USER_POOL_CLIENT_ID" = var.user_pool_client_id,
+      "BASE_URL" = "https://${var.domain}""DEV" = "false"
+      "CLOUDWATCH_GROUP_NAME" = "${var.project}-${var.type}"
+      "CLOUDWATCH_STREAM_NAME" = "API", // TODO with project & type?
+      "AWS_LOG_BUCKET_NAME" = var.log_bucket_id
     }
   }
 }
