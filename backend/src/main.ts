@@ -6,12 +6,14 @@ import {
   floxModuleOptions,
   getActiveFloxModuleNames,
 } from './flox/core/flox-helpers';
+import serverlessExpress from '@vendia/serverless-express';
 
 /**
  * Bootstraps the nest application itself
- * @returns {Promise<Handler>} - application handler
+ * @param {boolean} [serverless] - whether to run in serverless mode
+ * @returns {Promise<serverlessExpress|NestApplication>} - application handler
  */
-export async function bootstrap() {
+export async function bootstrap(serverless = false) {
   const app = await NestFactory.create(AppModule);
   await app.init();
 
@@ -20,7 +22,9 @@ export async function bootstrap() {
 
   const configService: ConfigService = app.get(ConfigService);
   await app.listen(configService.get('server.port'), '::');
-  return app;
+  const expressApp = app.getHttpAdapter().getInstance();
+
+  return serverless ? serverlessExpress({ app: expressApp }) : app;
 }
 
 // Start application
