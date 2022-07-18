@@ -75,7 +75,6 @@ variable "aws_region" {
   type            = string
 }
 
-
 variable "user_pool_id" {
   type    = string
 }
@@ -102,4 +101,9 @@ variable "public_subnet_ids" {
 variable "database_subnet_ids" {
   description     = "Database subnet IDs"
   type            = list(string)
+}
+
+variable "hosted_zone_id" {
+  description     = "Route53 hosted zone ID"
+  type            = string
 }
