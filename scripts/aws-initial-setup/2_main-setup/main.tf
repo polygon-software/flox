@@ -82,7 +82,7 @@ module "api-ebs" {
   aws_region = var.aws_region
 }
 
-# Backend module (Serverless) TODO variables
+# Backend module (Serverless)
 module "api-serverless" {
   source = "./api-serverless"
   count  = var.serverless == true ? 1 : 0
@@ -108,4 +108,5 @@ module "api-serverless" {
   api_security_group_id = aws_security_group.api_security_group.id
   private_subnet_ids = aws_subnet.private_subnet.*.id
   public_subnet_ids = aws_subnet.public_subnet.*.id
+  backend_certificate_arn = aws_acm_certificate.backend_cert.arn
 }

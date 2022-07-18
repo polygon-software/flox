@@ -1,6 +1,6 @@
 // API Gateway entry TODO
 resource "aws_api_gateway_domain_name" "api_domain" {
-  certificate_arn = var.backend_certificate_arn // TODO
+  certificate_arn = var.backend_certificate_arn # TODO: in US-east-1.....
   domain_name     = "api.${var.domain}"
 }
 
