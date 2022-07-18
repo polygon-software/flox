@@ -10,12 +10,14 @@ import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
 import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import {isServerless} from "./flox/core/flox-helpers";
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       debug: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      // In serverless mode, use in-memory schema
+      autoSchemaFile: isServerless() ? true : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       driver: ApolloDriver,
     }),

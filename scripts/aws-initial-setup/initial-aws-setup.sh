@@ -168,7 +168,7 @@ cp ../../outputs/backend.zip backend.zip
 if [[ $build_mode != "ssr" ]]
 then
   mkdir -p web-spa-pwa/frontend/
-  unzip ../../outputs/frontend -d web-spa-pwa/frontend/
+  unzip ../../outputs/frontend -d web-spa-pwa/frontend/ -q
   # Remove node_modules (if any)
   rm -rf web-spa-pwa/frontend/node_modules
 fi
