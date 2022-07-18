@@ -89,3 +89,11 @@ export function floxModulesOptions() {
 export function isModuleActive(moduleName: string) {
   return getActiveFloxModuleNames().includes(moduleName);
 }
+
+/**
+ * Determines whether Flox is set to serverless mode in flox.config
+ * @returns {boolean} - whether the config is set to serverless mode
+ */
+export function isServerless() {
+  return !!flox.general.serverless
+}

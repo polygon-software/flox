@@ -21,7 +21,7 @@ export async function bootstrap(serverless = false) {
   app.use('/schema', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
   const configService: ConfigService = app.get(ConfigService);
-  await app.listen(configService.get('server.port'), '::');
+  await app.listen(configService.get('server.port')); // TODO hostname '::' ?
   const expressApp = app.getHttpAdapter().getInstance();
 
   return serverless ? serverlessExpress({ app: expressApp }) : app;
