@@ -1,9 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import fmp = require('@fastify/multipart');
 import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
@@ -14,23 +9,18 @@ import {
 
 /**
  * Bootstraps the nest application itself
- * @returns {Promise<void>} - done
+ * @returns {Promise<Handler>} - application handler
  */
 export async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(),
-  );
+  const app = await NestFactory.create(AppModule);
+  await app.init();
 
-  // Add GraphQL Voyager as middleware (intended for express, but seems to work on fastify as well)
+  // Add GraphQL Voyager as middleware
   app.use('/schema', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
   const configService: ConfigService = app.get(ConfigService);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  await app.register(fmp);
   await app.listen(configService.get('server.port'), '::');
-  return app
+  return app;
 }
 
 // Start application
