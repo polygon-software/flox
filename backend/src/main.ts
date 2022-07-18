@@ -22,7 +22,7 @@ export async function bootstrap(serverless = false) {
 
   const configService: ConfigService = app.get(ConfigService);
   if(!serverless){
-    await app.listen(configService.get('server.port'), '::');
+    await app.listen(configService.get('server.port')); // TODO hostname?
   }
   const expressApp = app.getHttpAdapter().getInstance();
 
