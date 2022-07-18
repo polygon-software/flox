@@ -13,6 +13,6 @@ export const handler: Handler = async (
   context: Context,
   callback: Callback,
 ) => {
-  const server: Handler = await bootstrap();
+  const server: Handler = await bootstrap(true);
   return server(event, context, callback);
 };
