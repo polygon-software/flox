@@ -6,7 +6,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { FileService } from './file.service';
-import fastify = require('fastify');
 import { LoggedIn, Public } from '../auth/authentication.decorator';
 
 @Controller()
@@ -16,14 +15,16 @@ export class FileController {
   @Public()
   @Post('/uploadPublicFile')
   async uploadPublicFile(
-    @Req() req: fastify.FastifyRequest,
-    @Res() res: fastify.FastifyReply<any>,
+    @Req() req: Express.Request,
+    @Res() res: unknown,
   ): Promise<any> {
     // Verify that request is multipart
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (!req.isMultipart()) {
-      res.send(new BadRequestException('File expected on this endpoint'));
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      res.send(new BadRequestException('File expected on this endpoint')); // TODO
       return;
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -34,19 +35,23 @@ export class FileController {
       file_buffer,
       file.filename,
     );
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     res.send(new_file);
   }
 
   @Post('/uploadPrivateFile')
   @LoggedIn()
   async uploadPrivateFile(
-    @Req() req: fastify.FastifyRequest,
-    @Res() res: fastify.FastifyReply<any>,
+    @Req() req: Express.Request,
+    @Res() res: unknown, // TODO....
   ): Promise<any> {
     // Verify that request is multipart
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (!req.isMultipart()) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
@@ -63,6 +68,8 @@ export class FileController {
       file.filename,
       owner,
     );
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     res.send(new_file);
   }
 }

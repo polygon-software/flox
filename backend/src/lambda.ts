@@ -1,31 +1,18 @@
-import awsLambdaFastify from '@fastify/aws-lambda';
 import { bootstrap } from './main';
-import { FastifyInstance } from 'fastify';
+import { Handler, Context, Callback } from 'aws-lambda';
 
-// interface NestApp {
-//   app: NestFastifyApplication;
-//   instance: FastifyInstance;
-// }
-//
-// let cachedNestApp: NestApp;
-
-// /**
-//  * Bootstraps for Lambda deployment
-//  * @returns {Promise<NestApp>} - bootstrapped Nest application
-//  */
-// async function bootstrapServer(): Promise<NestApp> {
-//   const serverOptions: FastifyServerOptions = { logger: true };
-//   const instance: FastifyInstance = fastify(serverOptions);
-//   const app = await NestFactory.create<NestFastifyApplication>(
-//     AppModule,
-//     new FastifyAdapter(instance),
-//     { logger: !process.env.AWS_EXECUTION_ENV ? new Logger() : console },
-//   );
-//   await app.init();
-//   return { app, instance };
-// }
-
-export const handler = async (): Promise<unknown> => {
-  const app = await bootstrap();
-  return awsLambdaFastify(app as unknown as FastifyInstance);
+/**
+ * Bootstraps for Lambda deployment
+ * @param {any} event - trigger event
+ * @param {Context} context - execution context
+ * @param {Callback} callback - callback
+ * @returns {Promise<unknown>} - bootstrapped Nest application
+ */
+export const handler: Handler = async (
+  event: any,
+  context: Context,
+  callback: Callback,
+) => {
+  const server: Handler = await bootstrap(true);
+  return server(event, context, callback);
 };
