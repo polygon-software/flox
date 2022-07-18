@@ -50,7 +50,7 @@ echo "base_domain=\"$url\"" >> ../../support/flox.tfvars
 echo "root_domain=\"$root_domain\"" >> ../../support/flox.tfvars
 
 # Destroy Cognito via Terraform
-terraform refresh -var-file="../support/flox.tfvars"
+terraform refresh -var-file="../../support/flox.tfvars"
 user_pool_id=$(terraform output user_pool_id)
 user_pool_id=${user_pool_id:1:-1}
 
@@ -81,7 +81,7 @@ echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
 # =====   Step 1: Parent DNS setup    ======
 # =====  (Applies only in TEST mode)  ======
 # ==========================================
-cd ../aws-initial-setup/1_parent-setup || exit
+cd ../1_parent-setup || exit
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/test/g" config.tf
@@ -98,6 +98,7 @@ terraform refresh -var-file="../../support/flox.tfvars"
 # ==========================================
 # ======     Step 2: Main setup     ========
 # ==========================================
+echo "main destroy"
 
 cd ../2_main-setup || exit
 
