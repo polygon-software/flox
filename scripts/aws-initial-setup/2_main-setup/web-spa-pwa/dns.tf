@@ -30,7 +30,8 @@ resource "aws_acm_certificate_validation" "cert_validation_frontend" {
 
 resource "aws_route53_record" "redirect_record" {
   depends_on = [
-    aws_s3_bucket.redirect_bucket
+    aws_s3_bucket.redirect_bucket,
+    aws_s3_bucket_website_configuration.redirect_bucket_config
   ]
   name                  = "www.${var.domain}"
   type                  = "A"
