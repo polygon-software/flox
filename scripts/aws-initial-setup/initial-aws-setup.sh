@@ -151,16 +151,23 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
+cd ../../support || exit
+
 # Build & zip frontend and backend
 if [[ $serverless == "true" ]]
 then
   # Build in serverless mode for AWS lambda
-  echo "Building for serverless deployment..." # TODO broken, fix this
-  zsh ../../support/build.sh "$project" "$build_mode" true
+  echo "Building for serverless deployment..."
+  zsh build.sh "$project" "$build_mode" true
 else
   # Regular build
-  zsh ../../support/build.sh "$project" "$build_mode"
+  echo "Building for regular deployment"
+  zsh build.sh "$project" "$build_mode"
 fi
+
+cd ../aws-initial-setup/2_main-setup || exit
+
+# Copy .zip files
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 
@@ -168,7 +175,8 @@ cp ../../outputs/backend.zip backend.zip
 if [[ $build_mode != "ssr" ]]
 then
   mkdir -p web-spa-pwa/frontend/
-  unzip ../../outputs/frontend -d web-spa-pwa/frontend/ -q
+  unzip -q ./frontend -d web-spa-pwa/frontend/
+
   # Remove node_modules (if any)
   rm -rf web-spa-pwa/frontend/node_modules
 fi
