@@ -37,7 +37,6 @@ resource "aws_lambda_function" "api_lambda" {
       NOCODB_PORT= 8000,
 
       // AWS
-#      AWS_REGION= var.aws_region, // TODO can't be set via terraform...
       AWS_PUBLIC_BUCKET_NAME = var.public_bucket_id,
       AWS_PRIVATE_BUCKET_NAME = var.private_bucket_id,
       COMPOSE_PROJECT_NAME = var.project,
@@ -46,8 +45,23 @@ resource "aws_lambda_function" "api_lambda" {
       BASE_URL = "https://${var.domain}",
       "DEV" = "false",
       CLOUDWATCH_GROUP_NAME = "${var.project}-${var.type}",
-      CLOUDWATCH_STREAM_NAME = "API", // TODO with project & type?
+      CLOUDWATCH_STREAM_NAME = "API",
       AWS_LOG_BUCKET_NAME = var.log_bucket_id
     }
+  }
+}
+
+// Lambda function access URL
+resource "aws_lambda_function_url" "api_lambda_url" {
+  function_name      = aws_lambda_function.api_lambda.function_name
+  authorization_type = "NONE" // No IAM authorization on lambda
+
+  cors {
+    allow_credentials = true
+    allow_origins     = ["*"] // TODO: Restrict to frontend?
+    allow_methods     = ["*"]
+    allow_headers     = ["date", "keep-alive"]
+    expose_headers    = ["keep-alive", "date"]
+    max_age           = 86400
   }
 }
