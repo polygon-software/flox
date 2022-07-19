@@ -51,17 +51,17 @@ resource "aws_lambda_function" "api_lambda" {
   }
 }
 
-// Lambda function access URL
-resource "aws_lambda_function_url" "api_lambda_url" {
-  function_name      = aws_lambda_function.api_lambda.function_name
-  authorization_type = "NONE" // No IAM authorization on lambda
-
-  cors {
-    allow_credentials = true
-    allow_origins     = ["*"] // TODO: Restrict to frontend?
-    allow_methods     = ["*"]
-    allow_headers     = ["date", "keep-alive"]
-    expose_headers    = ["keep-alive", "date"]
-    max_age           = 86400
-  }
-}
+// Lambda function access URL TODO possibly not needed, adapt outputs as well?
+#resource "aws_lambda_function_url" "api_lambda_url" {
+#  function_name      = aws_lambda_function.api_lambda.function_name
+#  authorization_type = "NONE" // No IAM authorization on lambda
+#
+#  cors {
+#    allow_credentials = true
+#    allow_origins     = ["*"] // TODO: Restrict to frontend?
+#    allow_methods     = ["*"]
+#    allow_headers     = ["date", "keep-alive"]
+#    expose_headers    = ["keep-alive", "date"]
+#    max_age           = 86400
+#  }
+#}
