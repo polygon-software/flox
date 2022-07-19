@@ -2,10 +2,9 @@
 resource "aws_api_gateway_method" "options" {
   depends_on = [
     aws_api_gateway_rest_api.api_gateway,
-    aws_api_gateway_resource.proxy
   ]
   rest_api_id      = aws_api_gateway_rest_api.api_gateway.id
-  resource_id      = aws_api_gateway_resource.proxy.id
+  resource_id      = aws_api_gateway_rest_api.api_gateway.root_resource_id
   http_method      = "OPTIONS"
   authorization    = "NONE"
   api_key_required = false
@@ -17,11 +16,10 @@ resource "aws_api_gateway_method" "options" {
 resource "aws_api_gateway_method_response" "options" {
   depends_on = [
     aws_api_gateway_rest_api.api_gateway,
-    aws_api_gateway_resource.proxy,
     aws_api_gateway_method.options
   ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.proxy.id
+  resource_id = aws_api_gateway_rest_api.api_gateway.root_resource_id
   http_method = aws_api_gateway_method.options.http_method
   status_code = "200"
   response_models = {
@@ -38,10 +36,9 @@ resource "aws_api_gateway_method_response" "options" {
 resource "aws_api_gateway_integration" "options" {
   depends_on = [
     aws_api_gateway_rest_api.api_gateway,
-    aws_api_gateway_resource.proxy
   ]
   rest_api_id          = aws_api_gateway_rest_api.api_gateway.id
-  resource_id          = aws_api_gateway_resource.proxy.id
+  resource_id          = aws_api_gateway_rest_api.api_gateway.root_resource_id
   http_method          = "OPTIONS"
   type                 = "MOCK"
   passthrough_behavior = "WHEN_NO_MATCH"
@@ -54,11 +51,10 @@ resource "aws_api_gateway_integration" "options" {
 resource "aws_api_gateway_integration_response" "options" {
   depends_on = [
     aws_api_gateway_rest_api.api_gateway,
-    aws_api_gateway_resource.proxy,
     aws_api_gateway_integration.options
   ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.proxy.id
+  resource_id = aws_api_gateway_rest_api.api_gateway.root_resource_id
   http_method = aws_api_gateway_integration.options.http_method
   status_code = "200"
   response_parameters = {
