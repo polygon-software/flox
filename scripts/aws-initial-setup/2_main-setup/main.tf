@@ -94,6 +94,7 @@ module "api-serverless-certificate" {
 module "api-serverless" {
   source = "./api-serverless"
   count  = var.serverless == true ? 1 : 0
+  depends_on = [module.api-serverless-certificate]
   project = var.project
   type = var.type
   domain = var.base_domain
