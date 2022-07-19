@@ -1,5 +1,9 @@
-# OPTIONS HTTP method.
+# OPTIONS HTTP method for CORS
 resource "aws_api_gateway_method" "options" {
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_resource.proxy
+  ]
   rest_api_id      = aws_api_gateway_rest_api.api_gateway.id
   resource_id      = aws_api_gateway_resource.proxy.id
   http_method      = "OPTIONS"
@@ -7,8 +11,15 @@ resource "aws_api_gateway_method" "options" {
   api_key_required = false
 }
 
-# OPTIONS method response.
+// TODO all for root as well as proxy?
+
+# OPTIONS method response
 resource "aws_api_gateway_method_response" "options" {
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_resource.proxy,
+    aws_api_gateway_method.options
+  ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   resource_id = aws_api_gateway_resource.proxy.id
   http_method = aws_api_gateway_method.options.http_method
@@ -23,8 +34,12 @@ resource "aws_api_gateway_method_response" "options" {
   }
 }
 
-# OPTIONS integration.
+# OPTIONS integration
 resource "aws_api_gateway_integration" "options" {
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_resource.proxy
+  ]
   rest_api_id          = aws_api_gateway_rest_api.api_gateway.id
   resource_id          = aws_api_gateway_resource.proxy.id
   http_method          = "OPTIONS"
@@ -35,8 +50,13 @@ resource "aws_api_gateway_integration" "options" {
   }
 }
 
-# OPTIONS integration response.
+# OPTIONS integration response
 resource "aws_api_gateway_integration_response" "options" {
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_resource.proxy,
+    aws_api_gateway_integration.options
+  ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   resource_id = aws_api_gateway_resource.proxy.id
   http_method = aws_api_gateway_integration.options.http_method
@@ -44,6 +64,6 @@ resource "aws_api_gateway_integration_response" "options" {
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
     "method.response.header.Access-Control-Allow-Methods" = "'POST,OPTIONS'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'" // TODO: only from var.domain
   }
 }
