@@ -107,8 +107,3 @@ variable "hosted_zone_id" {
   description     = "Route53 hosted zone ID"
   type            = string
 }
-
-variable "backend_certificate_arn" {
-  description     = "Backend SSL certificate ARN"
-  type            = string
-}
