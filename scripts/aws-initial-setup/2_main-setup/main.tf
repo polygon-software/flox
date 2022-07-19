@@ -68,15 +68,12 @@ module "api-ebs" {
   user_pool_id = var.user_pool_id
   user_pool_client_id = var.user_pool_client_id
   vpc_id = aws_vpc.vpc.id
-  azs = var.azs
-  cidr_block = var.cidr_block
   database_name = var.database_name
   database_master_username = var.database_master_username
   database_master_password = var.database_master_password
   database_subnet_ids = aws_subnet.database_subnets.*.id
   database_cluster_endpoint = aws_rds_cluster.database_cluster.endpoint
   database_cluster_port = aws_rds_cluster.database_cluster.port
-  api_security_group_id = aws_security_group.api_security_group.id
   api_source_code_object_id = aws_s3_object.api_source_code_object.id
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
   aws_region = var.aws_region
@@ -105,9 +102,9 @@ module "api-serverless" {
   log_bucket_id = aws_s3_bucket.log_files.id
   user_pool_id = var.user_pool_id
   user_pool_client_id = var.user_pool_client_id
-  api_security_group_id = aws_security_group.api_security_group.id
   private_subnet_ids = aws_subnet.private_subnet.*.id
   public_subnet_ids = aws_subnet.public_subnet.*.id
+  cidr_block = var.cidr_block
   // Must be in us-east-1 due to SSL certificate rules
   providers = {
     aws = aws.us-east-1
