@@ -17,7 +17,7 @@ resource "aws_lambda_function" "api_lambda" {
   runtime = "nodejs16.x"
 
   vpc_config {
-    security_group_ids = [aws_security_group.api_security_group.id]
+    security_group_ids = [var.api_security_group_id]
     subnet_ids         = var.public_subnet_ids
   }
   // Env Variables for NestJS

@@ -200,6 +200,6 @@ cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
 cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
 cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
 
-# Reinstall node modules
+# Quietly reinstall node modules
 cd ../../../backend || exit
-yarn install --silent
+yarn install --silent 2> >(grep -v warning 1>&2)

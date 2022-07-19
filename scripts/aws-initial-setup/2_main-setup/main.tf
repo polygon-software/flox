@@ -79,6 +79,17 @@ module "api-ebs" {
   aws_region = var.aws_region
 }
 
+# Certificate for serverless mode backend
+module "api-serverless-certificate" {
+  source = "./api-serverless-certificate"
+  count  = var.serverless == true ? 1 : 0
+  domain = var.base_domain
+  hosted_zone_id = var.hosted_zone_id
+  providers = {
+    aws = aws.us-east-1
+  }
+}
+
 # Backend module (Serverless)
 module "api-serverless" {
   source = "./api-serverless"
@@ -104,9 +115,7 @@ module "api-serverless" {
   user_pool_client_id = var.user_pool_client_id
   private_subnet_ids = aws_subnet.private_subnet.*.id
   public_subnet_ids = aws_subnet.public_subnet.*.id
-  cidr_block = var.cidr_block
-  // Must be in us-east-1 due to SSL certificate rules
-  providers = {
-    aws = aws.us-east-1
-  }
+  vpc_id = aws_vpc.vpc.id
+  backend_certificate_arn = module.api-serverless-certificate[0].backend_certificate_arn
+  api_security_group_id = aws_security_group.api_security_group.id
 }
