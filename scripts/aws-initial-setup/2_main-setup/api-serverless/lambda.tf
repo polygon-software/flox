@@ -1,5 +1,3 @@
-# AWS Lambda deployment
-
 // Lambda function using backend.zip
 resource "aws_lambda_function" "api_lambda" {
   function_name = "${var.project}-${var.type}-api-lambda"

@@ -19,7 +19,7 @@ resource "aws_api_gateway_method" "proxy" {
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "lambda" {
+resource "aws_api_gateway_integration" "api_gateway_integration" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   resource_id = aws_api_gateway_method.proxy.resource_id
   http_method = aws_api_gateway_method.proxy.http_method
@@ -50,7 +50,7 @@ resource "aws_api_gateway_integration" "lambda_root" {
 // Actual public deployment
 resource "aws_api_gateway_deployment" "api_gateway_deployment" {
   depends_on = [
-    aws_api_gateway_integration.lambda,
+    aws_api_gateway_integration.api_gateway_integration,
     aws_api_gateway_integration.lambda_root,
   ]
 
