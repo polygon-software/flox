@@ -108,7 +108,6 @@ module "api-serverless" {
   api_security_group_id = aws_security_group.api_security_group.id
   private_subnet_ids = aws_subnet.private_subnet.*.id
   public_subnet_ids = aws_subnet.public_subnet.*.id
-  backend_certificate_arn = aws_acm_certificate.backend_cert.arn // TODO remove
   // Must be in us-east-1 due to SSL certificate rules
   providers = {
     aws = aws.us-east-1

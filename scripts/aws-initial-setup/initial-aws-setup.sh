@@ -199,3 +199,7 @@ rm -rf ../2_main-setup/web-spa-pwa/frontend
 cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
 cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
 cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
+
+# Reinstall node modules
+cd ../../../backend || exit
+yarn
