@@ -2,6 +2,8 @@
 
 resource "aws_api_gateway_rest_api" "api_gateway" {
   name          = "${var.project}-${var.type}-api-gateway"
+  // Disable default execution endpoint, only accessed via custom domain
+  disable_execute_api_endpoint = true
 }
 
 resource "aws_api_gateway_resource" "proxy" {
@@ -45,7 +47,6 @@ resource "aws_api_gateway_integration" "lambda_root" {
   uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
 
-// TODO disable default endpoint, only access via given domain
 // Actual public deployment
 resource "aws_api_gateway_deployment" "api_gateway_deployment" {
   depends_on = [
@@ -54,7 +55,13 @@ resource "aws_api_gateway_deployment" "api_gateway_deployment" {
   ]
 
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  stage_name  = var.type
+}
+
+// Deploy stage
+resource "aws_api_gateway_stage" "api_stage" {
+  deployment_id = aws_api_gateway_deployment.api_gateway_deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  stage_name    = var.type
 }
 
 // Access to Lambda function
@@ -69,7 +76,6 @@ resource "aws_lambda_permission" "api_lambda_access" {
   source_arn = "${aws_api_gateway_rest_api.api_gateway.execution_arn}/*/*"
 }
 
-
 // API Gateway domain name
 resource "aws_api_gateway_domain_name" "api_domain" {
   certificate_arn = var.backend_certificate_arn
@@ -79,6 +85,6 @@ resource "aws_api_gateway_domain_name" "api_domain" {
 // Link between API gateway and custom domain
 resource "aws_api_gateway_base_path_mapping" "api_link" {
   api_id      = aws_api_gateway_rest_api.api_gateway.id
-  stage_name  = var.type
+  stage_name  = aws_api_gateway_stage.api_stage.stage_name
   domain_name = aws_api_gateway_domain_name.api_domain.domain_name
 }
