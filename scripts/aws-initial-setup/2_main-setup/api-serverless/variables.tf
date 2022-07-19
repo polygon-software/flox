@@ -103,7 +103,17 @@ variable "hosted_zone_id" {
   type            = string
 }
 
-variable "cidr_block" {
-  description = "CIDR block"
-  type = string
+variable "vpc_id" {
+  description     = "VPC ID"
+  type            = string
+}
+
+variable "backend_certificate_arn" {
+  description     = "Backend SSL certificate ARN"
+  type            = string
+}
+
+variable "api_security_group_id" {
+  description     = "API security group ID"
+  type            = string
 }
