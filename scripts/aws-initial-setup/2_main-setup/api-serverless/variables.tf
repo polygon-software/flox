@@ -83,11 +83,6 @@ variable "user_pool_client_id" {
   type    = string
 }
 
-variable "api_security_group_id" {
-  description     = "API security group ID"
-  type            = string
-}
-
 variable "private_subnet_ids" {
   description     = "Private subnet IDs"
   type            = list(string)
@@ -106,4 +101,9 @@ variable "database_subnet_ids" {
 variable "hosted_zone_id" {
   description     = "Route53 hosted zone ID"
   type            = string
+}
+
+variable "cidr_block" {
+  description = "CIDR block"
+  type = string
 }

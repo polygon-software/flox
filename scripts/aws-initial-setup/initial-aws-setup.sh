@@ -202,4 +202,4 @@ cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
 
 # Reinstall node modules
 cd ../../../backend || exit
-yarn
+yarn install --silent

@@ -89,16 +89,6 @@ variable "database_subnet_ids" {
   type            = list(string)
 }
 
-variable "azs" {
-  description = "Availability zones"
-  type = list(string)
-}
-
-variable "cidr_block" {
-  description = "CIDR block"
-  type = string
-}
-
 variable "database_name" {
   description     = "Name of database"
   type            = string
@@ -121,11 +111,6 @@ variable "database_cluster_endpoint" {
 
 variable "database_cluster_port" {
   description     = "Database cluster port"
-  type            = string
-}
-
-variable "api_security_group_id" {
-  description     = "API security group ID"
   type            = string
 }
 
