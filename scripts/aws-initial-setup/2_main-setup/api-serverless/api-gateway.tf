@@ -55,7 +55,8 @@ resource "aws_api_gateway_deployment" "api_gateway_deployment" {
   depends_on = [
     aws_api_gateway_integration.api_gateway_integration,
     aws_api_gateway_integration.lambda_root,
-    aws_api_gateway_integration.options
+    aws_api_gateway_integration.options,
+    aws_api_gateway_account.api_gateway_account
   ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
 }
@@ -97,4 +98,77 @@ resource "aws_api_gateway_base_path_mapping" "api_link" {
   api_id      = aws_api_gateway_rest_api.api_gateway.id
   stage_name  = aws_api_gateway_stage.api_stage.stage_name
   domain_name = aws_api_gateway_domain_name.api_domain.domain_name
+}
+
+// API Gateway method settings
+resource "aws_api_gateway_method_settings" "general_settings" {
+  depends_on = [
+    aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_stage.api_stage
+  ]
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  stage_name  = aws_api_gateway_stage.api_stage.stage_name
+  method_path = "*/*"
+
+  settings {
+    # Enable CloudWatch logging and metrics
+    metrics_enabled        = true
+    data_trace_enabled     = true
+    logging_level          = "INFO"
+
+    # Limit the rate of calls to prevent abuse and unwanted charges
+    throttling_rate_limit  = 100
+    throttling_burst_limit = 50
+  }
+}
+
+// Account for Cloudwatch logging
+resource "aws_api_gateway_account" "api_gateway_account" {
+  cloudwatch_role_arn = aws_iam_role.api_cloudwatch_role.arn
+}
+
+resource "aws_iam_role" "api_cloudwatch_role" {
+  name = "${var.project}-${var.type}-api_gateway_cloudwatch"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "api_cloudwatch_policy" {
+  name = "default"
+  role = aws_iam_role.api_cloudwatch_role.id
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams",
+                "logs:PutLogEvents",
+                "logs:GetLogEvents",
+                "logs:FilterLogEvents"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 }
