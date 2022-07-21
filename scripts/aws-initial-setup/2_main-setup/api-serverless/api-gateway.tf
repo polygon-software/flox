@@ -38,6 +38,9 @@ resource "aws_api_gateway_method" "proxy_root" {
 }
 
 resource "aws_api_gateway_integration" "lambda_root" {
+  depends_on = [
+    aws_api_gateway_method.proxy_root
+  ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   resource_id = aws_api_gateway_method.proxy_root.resource_id
   http_method = aws_api_gateway_method.proxy_root.http_method
@@ -52,8 +55,8 @@ resource "aws_api_gateway_deployment" "api_gateway_deployment" {
   depends_on = [
     aws_api_gateway_integration.api_gateway_integration,
     aws_api_gateway_integration.lambda_root,
+    aws_api_gateway_integration.options
   ]
-
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
 }
 
