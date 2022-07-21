@@ -36,10 +36,11 @@ resource "aws_api_gateway_method_response" "options" {
 resource "aws_api_gateway_integration" "options" {
   depends_on = [
     aws_api_gateway_rest_api.api_gateway,
+    aws_api_gateway_method.options
   ]
   rest_api_id          = aws_api_gateway_rest_api.api_gateway.id
   resource_id          = aws_api_gateway_rest_api.api_gateway.root_resource_id
-  http_method          = "OPTIONS"
+  http_method          = aws_api_gateway_method.options.http_method
   type                 = "MOCK"
   passthrough_behavior = "WHEN_NO_MATCH"
   request_templates = {
