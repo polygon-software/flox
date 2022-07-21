@@ -62,7 +62,7 @@ resource "aws_api_gateway_deployment" "api_gateway_deployment" {
 
 // Logging for API gateway
 resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
-  name = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.api_gateway.id}/${aws_api_gateway_stage.api_stage.stage_name}"
+  name = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.api_gateway.id}/${var.type}"
   retention_in_days = 7
 }
 
