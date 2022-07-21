@@ -60,8 +60,15 @@ resource "aws_api_gateway_deployment" "api_gateway_deployment" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
 }
 
+// Logging for API gateway
+resource "aws_cloudwatch_log_group" "api_gateway_log_group" {
+  name = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.api_gateway.id}/${aws_api_gateway_stage.api_stage.stage_name}"
+  retention_in_days = 7
+}
+
 // Deploy stage
 resource "aws_api_gateway_stage" "api_stage" {
+  depends_on = [aws_cloudwatch_log_group.api_gateway_log_group]
   deployment_id = aws_api_gateway_deployment.api_gateway_deployment.id
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   stage_name    = var.type
