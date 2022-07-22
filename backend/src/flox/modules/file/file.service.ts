@@ -14,7 +14,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 export class FileService {
   // S3 credentials
   // private readonly credentials = {
-  //   region: this.configService.get('AWS_REGION'),
+  //   region: this.configService.get('AWS_MAIN_REGION'),
   //   accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
   //   secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
   // };
@@ -54,7 +54,7 @@ export class FileService {
       key: key,
       url: `https://${configService.get(
         'AWS_PUBLIC_BUCKET_NAME',
-      )}.s3.${configService.get('AWS_REGION')}.amazonaws.com/${key}`,
+      )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;

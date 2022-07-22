@@ -1,5 +1,4 @@
-// TODO: this could be done with api gateway V2, maybe better?
-
+// API Gateway
 resource "aws_api_gateway_rest_api" "api_gateway" {
   name          = "${var.project}-${var.type}-api-gateway"
   // Disable default execution endpoint, only accessed via custom domain

@@ -179,7 +179,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "AWS_REGION"
+    name      = "AWS_MAIN_REGION"
     value     = var.aws_region
   }
 
