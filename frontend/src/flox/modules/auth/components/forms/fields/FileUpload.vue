@@ -12,7 +12,8 @@
     :max-files="props.maxFiles"
     :accept="props.acceptedFiles"
     :send-raw="props.sendRaw"
-    :batch="props.batch"
+    :target="props.target"
+    :query-name="props.queryName"
   >
     <template v-slot:list="scope">
       <q-list separator>
@@ -79,7 +80,7 @@ const props = defineProps({
   },
   maxFiles: {
     type: Number,
-    default: 10
+    default: 100
   },
   multiple: {
     type: Boolean,
@@ -101,21 +102,25 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  batch: {
-    type: Boolean,
-    default: true
-  },
   url: {
     type: String,
-    default: ''
+    default: process.env.VUE_APP_BACKEND_BASE_URL ?? ''
+  },
+  target: {
+    type: String,
+    required: true,
+  },
+  queryName: {
+    type: String,
+    required: true,
   }
 })
 /**
- * reject
- * @param {any} rejectedEntries - rej
+ * if files were rejected notify the user
+ * @param {Array<File>} rejectedEntries - rejected entries
  * @return {none} none
  */
-function onRejected (rejectedEntries: Array<any>) {
+function onRejected (rejectedEntries: Array<File>) {
   $q.notify({
     type: 'negative',
     message: `${rejectedEntries.length} file(s) did not pass validation constraints`
@@ -123,14 +128,14 @@ function onRejected (rejectedEntries: Array<any>) {
 }
 
 /**
- * failed
- * @param {any} failedEntries - failed
+ * if the upload has failed notify the user
+ * @param {{files: Array<File>, error: Error}} failedEntries - failed entries
  * @return {void} void
  */
-function onFailed (failedEntries: Array<Array<File>|any>) {
+function onFailed (failedEntries: {files: Array<File>, error: Error}) {
   $q.notify({
     type: 'negative',
-    message: `${failedEntries.files.length} file(s) could not be uploaded`
+    message: `${failedEntries.files.length} file(s) could not be uploaded. ${failedEntries.error.message}`
   })
 }
 
