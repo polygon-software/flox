@@ -27,6 +27,6 @@
     "test_base_domain": "flox.polygon-project.ch",
     "live_base_domain": "floxbanano.ch",
     "serverless": true,
-    "serverless_version": "v2"
+    "serverless_version": "v1"
   }
 }
