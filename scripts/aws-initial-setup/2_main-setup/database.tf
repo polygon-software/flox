@@ -20,13 +20,13 @@ resource "aws_subnet" "database_subnets" {
 resource "aws_rds_cluster" "database_cluster" {
   engine                    = "aurora-postgresql"
   /**
-    Not all versions are supported by serverless! To get currently supported versions:
+    Not all versions are supported by serverless v1! To get currently supported versions:
     aws rds describe-db-engine-versions |
       jq -r '.DBEngineVersions[] |
       select(.SupportedEngineModes[]?=="serverless") |
       "\(.Engine): \(.EngineVersion)"'
   **/
-  engine_version            = "10.18"
+  engine_version            = var.serverless == true && var.serverless_version == "v1" ? "10.18" : "13.6"
   cluster_identifier        = "${var.project}-${var.type}-database-cluster"
   database_name             = var.database_name
   master_username           = var.database_master_username
@@ -38,34 +38,36 @@ resource "aws_rds_cluster" "database_cluster" {
   storage_encrypted         = true
   backup_retention_period   = 30
   deletion_protection       = var.type == "test" ? false : true
-  engine_mode = var.serverless == true ? "serverless" : "provisioned"
+  // Serverless v1 is non-provisioned
+  engine_mode = var.serverless == true && var.serverless_version == "v1" ? "serverless" : "provisioned"
 
+  // Serverless v1 scaling configuration
   dynamic scaling_configuration {
-    for_each = var.serverless == true ? [1] : []
+    for_each = var.serverless == true && var.serverless_version == "v1" ? [1] : []
     content {
       auto_pause               = true
       max_capacity             = 4 // TODO application specific: Change scaling factor
-      min_capacity             = 2 // 2 is the minimum for PostgreSQL
+      min_capacity             = 2 // 2 is the minimum for PostgreSQL with v1
       seconds_until_auto_pause = 300
       timeout_action           = "ForceApplyCapacityChange"
     }
   }
 
-#  // If 'serverless' is set to true, apply serverless config
-#  dynamic "serverlessv2_scaling_configuration" {
-#    for_each = var.serverless == true ? [1] : []
-#    content {
-#      max_capacity = 2.0 // TODO application specific: Change scaling factor
-#      min_capacity = 0.5
-#    }
-#  }
+  // Serverless v2 scaling configuration
+  dynamic "serverlessv2_scaling_configuration" {
+    for_each = var.serverless == true && var.serverless_version == "v2" ? [1] : []
+    content {
+      max_capacity = 2.0 // TODO application specific: Change scaling factor
+      min_capacity = 0.5
+    }
+  }
 
   lifecycle {
     prevent_destroy = false
   }
 }
 
-// Cluster instances (only in non-serverless mode)
+// Cluster instances (only in non-serverless-v1 mode)
 resource "aws_rds_cluster_instance" "database_cluster_instances" {
   identifier                = "${var.project}-${var.type}-rds-${count.index}"
   engine                    = "aurora-postgresql"
@@ -73,7 +75,7 @@ resource "aws_rds_cluster_instance" "database_cluster_instances" {
   cluster_identifier        = aws_rds_cluster.database_cluster.id
   instance_class            = var.serverless == true ? "db.serverless" : "db.t4g.medium"
   db_subnet_group_name      = aws_db_subnet_group.database_subnet_group.name
-  count                     = var.serverless == true ? 0 : 2
+  count                     = var.serverless == true && var.serverless_version == "v1"  ? 0 : 2
   tags = {
     Project       = var.project
   }

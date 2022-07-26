@@ -26,6 +26,7 @@
     "aws_region": "eu-central-1",
     "test_base_domain": "flox.polygon-project.ch",
     "live_base_domain": "floxbanano.ch",
-    "serverless": true
+    "serverless": true,
+    "serverless_version": "v1"
   }
 }

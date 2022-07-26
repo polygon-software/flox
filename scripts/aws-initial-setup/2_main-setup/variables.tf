@@ -122,3 +122,9 @@ variable "serverless" {
   default         = false
   type            = bool
 }
+
+variable "serverless_version" {
+  description     = "Serverless version to use (v1 can scale to zero, v2 cannot)"
+  default         = "v1"
+  type            = string
+}
