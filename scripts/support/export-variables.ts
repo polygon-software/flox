@@ -19,7 +19,7 @@ const backendConfig = backendFloxConfig.general
 console.log('# ======== General Config options ========');
 console.log(`aws_region="${backendConfig.aws_region}"`)
 console.log(`serverless="${backendConfig.serverless}"`)
-console.log(`serverless_mode="${backendConfig.serverless_version}"`)
+console.log(`serverless_version="${backendConfig.serverless_version}"`)
 
 console.log('# ======== Frontend Config options ========');
 console.log(`frontend_build_mode="${frontendConfig.mode}"`)
