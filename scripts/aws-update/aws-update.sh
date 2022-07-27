@@ -31,6 +31,8 @@ aws_region=${aws_region:1:-1}
 organisation=$(jq '.general.organisation' ../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
+serverless=$(jq '.general.serverless' ../../../backend/flox.config.json)
+
 if [[ $1 == "test" ]]
 then
   url=$(jq '.general.test_base_domain' ../../backend/flox.config.json)
@@ -106,8 +108,22 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
+cd ../../support || exit
+
 # Build & zip frontend and backend
-zsh ../../support/build.bash "$1" "$project" "$build_mode"
+if [[ $serverless == "true" ]]
+then
+  # Build in serverless mode for AWS lambda
+  echo "Building for serverless deployment..."
+  zsh build.sh "$project" "$build_mode" true
+else
+  # Regular build
+  echo "Building for regular deployment"
+  zsh build.sh "$project" "$build_mode"
+fi
+
+cd ../aws-update/1_update || exit
+
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 

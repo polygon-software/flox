@@ -26,6 +26,7 @@ export async function bootstrap(serverless = false) {
   }
   const expressApp = app.getHttpAdapter().getInstance();
 
+  // Return in serverless or non-serverless mode
   return serverless ? serverlessExpress({ app: expressApp }) : app;
 }
 
