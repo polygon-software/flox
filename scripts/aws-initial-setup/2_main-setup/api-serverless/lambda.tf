@@ -16,7 +16,7 @@ resource "aws_lambda_function" "api_lambda" {
 
   vpc_config {
     security_group_ids = [var.api_security_group_id]
-    subnet_ids         = var.public_subnet_ids
+    subnet_ids         = var.private_subnet_ids
   }
   // Env Variables for NestJS
   environment {
