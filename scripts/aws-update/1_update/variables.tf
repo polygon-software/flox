@@ -39,9 +39,3 @@ variable "frontend_build_mode" {
   description     = "Build mode to use for frontend ('spa', 'pwa' or 'ssr')"
   type            = string
 }
-
-variable "serverless" {
-  description     = "Whether to deploy the backend in serverless mode"
-  default         = false
-  type            = bool
-}
