@@ -54,7 +54,6 @@ resource "aws_api_gateway_deployment" "api_gateway_deployment" {
   depends_on = [
     aws_api_gateway_integration.api_gateway_integration,
     aws_api_gateway_integration.lambda_root,
-    aws_api_gateway_integration.options,
     aws_api_gateway_account.api_gateway_account
   ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
