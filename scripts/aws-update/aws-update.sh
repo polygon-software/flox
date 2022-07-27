@@ -31,7 +31,7 @@ aws_region=${aws_region:1:-1}
 organisation=$(jq '.general.organisation' ../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
-serverless=$(jq '.general.serverless' ../../../backend/flox.config.json)
+serverless=$(jq '.general.serverless' ../../backend/flox.config.json)
 
 if [[ $1 == "test" ]]
 then
@@ -131,7 +131,7 @@ cp ../../outputs/backend.zip backend.zip
 if [[ $build_mode != "ssr" ]]
 then
   mkdir -p web-spa-pwa/frontend/
-  unzip ../../outputs/frontend -d web-spa-pwa/frontend/
+  unzip -q ../../outputs/frontend -d web-spa-pwa/frontend/
 
   # Remove node_modules (if any)
   rm -rf web-spa-pwa/frontend/node_modules
