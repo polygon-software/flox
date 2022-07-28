@@ -6,7 +6,7 @@ resource "aws_lambda_function" "api_lambda" {
   s3_key      = var.api_source_code_object_key
   s3_bucket   = var.source_code_bucket_id
   role        = aws_iam_role.lambda_iam.arn
-  memory_size = 1024
+  memory_size = 2048
 
   # Lambda handler function location; since this is in src/lambda.ts -> handler(), we use AWS' lambda syntax below
   handler       = "src/lambda.handler"
