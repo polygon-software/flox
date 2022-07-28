@@ -2,7 +2,7 @@
 resource "aws_lambda_function" "api_lambda" {
   function_name = "${var.project}-${var.type}-api-lambda"
 
-  timeout     = 45 // TODO: set proper timeout level after optimization
+  timeout     = 29 // Maximum for API gateway is 29s, so increasing beyond that won't change anything
   s3_key      = var.api_source_code_object_key
   s3_bucket   = var.source_code_bucket_id
   role        = aws_iam_role.lambda_iam.arn

@@ -19,10 +19,20 @@ resource "aws_s3_bucket" "redirect_bucket" {
     Name          = "${var.project}-${var.type}-website-bucket-redirect"
   }
 
+  acl = "public-read"
   force_destroy = var.type == "test" ? true : false
 
   lifecycle {
     prevent_destroy = false
+  }
+}
+
+// Redirect S3 bucket config
+resource "aws_s3_bucket_website_configuration" "redirect_bucket_config" {
+  bucket = aws_s3_bucket.redirect_bucket.bucket
+  redirect_all_requests_to {
+    host_name = var.domain
+    protocol = "https"
   }
 }
 
@@ -36,15 +46,6 @@ resource "aws_s3_bucket_website_configuration" "website_bucket_config" {
 
   error_document {
     key = "error.html"
-  }
-}
-
-// Redirect S3 bucket config
-resource "aws_s3_bucket_website_configuration" "redirect_bucket_config" {
-  bucket = aws_s3_bucket.redirect_bucket.bucket
-  redirect_all_requests_to {
-    host_name = var.domain
-    protocol = "https"
   }
 }
 

@@ -27,7 +27,7 @@ resource "aws_acm_certificate_validation" "cert_validation_frontend" {
   validation_record_fqdns = [for record in aws_route53_record.ssl_frontend : record.fqdn]
 }
 
-// TODO: Will fail on first run, why?
+// TODO: Determine why this fails to create on first run ("Missing Arguments")
 resource "aws_route53_record" "redirect_record" {
   depends_on = [
     aws_s3_bucket.redirect_bucket,
