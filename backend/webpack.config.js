@@ -1,18 +1,12 @@
 const webpack = require('webpack');
 const path = require('path');
-const nodeExternals = require('webpack-node-externals');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const isProduction =
-  typeof process.env.NODE_ENV !== 'undefined' &&
-  process.env.NODE_ENV === 'production';
-const mode = isProduction ? 'production' : 'development';
-const devtool = isProduction ? false : 'inline-source-map';
 
 const lazyImports = [
   '@nestjs/microservices/microservices-module',
   '@nestjs/websockets/socket-module',
   'ts-loader',
-  'aws-lambda'
+  'aws-lambda',
 ];
 
 module.exports = {
@@ -21,8 +15,8 @@ module.exports = {
     minimize: false,
   },
   target: 'node',
-  mode,
-  devtool,
+  mode: 'production',
+  devtool: false,
 
   module: {
     rules: [
