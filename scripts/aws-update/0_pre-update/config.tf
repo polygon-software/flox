@@ -7,10 +7,10 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        = "polygonsoftware"
+    organization        = "##ORGANISATION##"
 
     workspaces {
-      name = "flox-test-pre-update" # will be replaced in preprocessing
+      name = "##PROJECT##-##TYPE##-pre-update" # will be replaced in preprocessing
     }
   }
 }
