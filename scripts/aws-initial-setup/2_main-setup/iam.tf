@@ -42,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "api_cloudwatch" {
 
 resource "aws_iam_role_policy_attachment" "api_ses" {
   role   = aws_iam_role.eb_api_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"    // ToDo reduce
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "api_ssm" {

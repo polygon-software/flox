@@ -108,8 +108,7 @@ resource "aws_route_table" "route_table_public" {
   }
 }
 
-// Create new elastic IP for the NAT
-// TODO @Cloudmates: Is that needed?
+// Create new Elastic IP for the NAT
 resource "aws_eip" "web_nat_elastic_ip" {
   vpc                   = true
   tags = {
