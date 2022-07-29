@@ -52,8 +52,8 @@ echo "{
  " >> dist/package.json
 
 echo "$(<package.json)" | jq '.dependencies' >> dist/package.json
-echo ',   "devDependencies":' >> dist/package.json
-echo "$(<package.json)" | jq '.devDependencies' >> dist/package.json
+#echo ',   "devDependencies":' >> dist/package.json
+#echo "$(<package.json)" | jq '.devDependencies' >> dist/package.json
 echo ',   "babel":' >> dist/package.json
 echo "$(<package.json)" | jq '.babel' >> dist/package.json
 echo ',   "engines":' >> dist/package.json
