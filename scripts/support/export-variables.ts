@@ -20,13 +20,14 @@ const authOptions = frontendAuth.moduleConfig()
 const frontendConfig = frontendFloxConfig.general
 
 // Backend infrastructure configuration (mode-dependent)
-const backendConfig = backendFloxConfig[`infrastructure_${mode}`]
+const backendConfig = backendFloxConfig.general
+const infrastructureConfig = backendFloxConfig[`infrastructure_${mode}`]
 
 console.log('# ======== General Config options ========');
-console.log(`aws_region="${backendConfig.aws_region}"`)
-console.log(`serverless_api="${backendConfig.serverless_api}"`)
-console.log(`serverless_db="${backendConfig.serverless_db}"`)
-console.log(`serverless_db_version="${backendConfig.serverless_db_version}"`)
+console.log(`aws_region="${infrastructureConfig.aws_region}"`)
+console.log(`serverless_api="${infrastructureConfig.serverless_api}"`)
+console.log(`serverless_db="${infrastructureConfig.serverless_db}"`)
+console.log(`serverless_db_version="${infrastructureConfig.serverless_db_version}"`)
 
 console.log('# ======== Frontend Config options ========');
 console.log(`frontend_build_mode="${frontendConfig.mode}"`)
