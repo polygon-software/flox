@@ -1,7 +1,7 @@
 # --------------------------------------------------------------
 # Sets up the initial infrastructure for a new Flox project on AWS.
 # This script should only be ran once!
-# Takes one parameter: 'live' or 'test'
+# Takes one parameter: 'live', 'test' or 'dev'
 # --------------------------------------------------------------
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]
@@ -16,7 +16,7 @@ fi
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
 cd ../support || exit
-zsh create-flox-tfvars.sh
+zsh create-flox-tfvars.sh "$1"
 echo "type=\"$1\"" >> flox.tfvars
 
 cd ../aws-initial-setup/0_pre-setup || exit
@@ -28,13 +28,14 @@ project=${project:1:-1}
 build_mode=$(jq '.general.mode' ../../../frontend/flox.config.json)
 build_mode=${build_mode:1:-1}
 
-aws_region=$(jq '.general.aws_region' ../../../backend/flox.config.json)
+aws_region=$(jq ".infrastructure_$1.aws_region" ../../../backend/flox.config.json)
 aws_region=${aws_region:1:-1}
 
 organisation=$(jq '.general.organisation' ../../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
-serverless=$(jq '.general.serverless' ../../../backend/flox.config.json)
+# Serverless mode (API only)
+serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.config.json)
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
@@ -154,9 +155,9 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 cd ../../support || exit
 
 # Build & zip frontend and backend
-if [[ $serverless == "true" ]]
+if [[ $serverless_api == "true" ]]
 then
-  # Build in serverless mode for AWS lambda
+  # Build in API & frontend in serverless mode for AWS lambda
   echo "Building for serverless deployment..."
   zsh build.sh "$project" "$build_mode" true
 else
