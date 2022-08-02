@@ -1,12 +1,12 @@
 # --------------------------------------------------------------
 # Sets up the initial infrastructure for a new Flox project on AWS.
-# This script should only be ran once!
+# This script should only be ran once per mode!
 # Takes two parameters:
 # $1 - deployment mode: 'live', 'test' or 'dev'
 # $2 - local mode (will perform cleanup): true or not set
 # --------------------------------------------------------------
 
-if [[ $1 != "live" ]] && [[ $1 != "test" ]]
+if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
 then
   echo "Invalid deployment mode $1"
   exit
@@ -39,7 +39,7 @@ organisation=${organisation:1:-1}
 # Serverless mode (API only)
 serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.config.json)
 
-# Replace 'TYPE' in config.tf with actual type (live, test, dev)
+# Replace 'TYPE' in config.tf with actual type (live, test or dev)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -156,7 +156,7 @@ then
   zsh build.sh "$project" "$frontend_build_mode" true
 else
   # Regular build
-  echo "Building for regular deployment"
+  echo "Building for regular deployment..."
   zsh build.sh "$project" "$frontend_build_mode"
 fi
 
