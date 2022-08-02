@@ -35,6 +35,7 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
+# TODO geez
 url=$(jq '.general.test_base_domain' ../../../backend/flox.config.json)
 url=${url:1:-1}
 

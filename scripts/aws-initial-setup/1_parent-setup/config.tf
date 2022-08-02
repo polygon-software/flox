@@ -10,10 +10,10 @@ terraform {
   }
   required_version      = ">= 0.14.9"
   cloud {
-    organization        = "##ORGANISATION##"
+    organization        = "polygonsoftware"
 
     workspaces {
-      name = "##PROJECT##-##TYPE##-parent-setup" # will be replaced in preprocessing
+      name = "flox-test-parent-setup" # will be replaced in preprocessing
     }
   }
 }
