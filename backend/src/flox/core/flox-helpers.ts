@@ -95,5 +95,5 @@ export function isModuleActive(moduleName: string) {
  * @returns {boolean} - whether the config is set to serverless mode
  */
 export function isServerless() {
-  return !!process.env.SERVERLESS; // TODO set for runtime
+  return !!process.env.SERVERLESS;
 }
