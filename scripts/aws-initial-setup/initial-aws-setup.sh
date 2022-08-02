@@ -25,7 +25,7 @@ cd ../aws-initial-setup/0_pre-setup || exit
 project=$(jq '.general.project' ../../../backend/flox.config.json)
 project=${project:1:-1}
 
-build_mode=$(jq '.general.mode' ../../../frontend/flox.config.json)
+build_mode=$(jq ".general.mode_$1" ../../../frontend/flox.config.json)
 build_mode=${build_mode:1:-1}
 
 aws_region=$(jq ".infrastructure_$1.aws_region" ../../../backend/flox.config.json)
