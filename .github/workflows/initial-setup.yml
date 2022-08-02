@@ -11,6 +11,7 @@ on:
         options:
           - test
           - live
+          - dev
 jobs:
   setup-aws:
     runs-on: ubuntu-latest

@@ -1,7 +1,9 @@
 # --------------------------------------------------------------
 # Sets up the initial infrastructure for a new Flox project on AWS.
 # This script should only be ran once!
-# Takes one parameter: 'live', 'test' or 'dev'
+# Takes two parameters:
+# $1 - deployment mode: 'live', 'test' or 'dev'
+# $2 - local mode (will perform cleanup): true or not set
 # --------------------------------------------------------------
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]
@@ -25,8 +27,8 @@ cd ../aws-initial-setup/0_pre-setup || exit
 project=$(jq '.general.project' ../../../backend/flox.config.json)
 project=${project:1:-1}
 
-build_mode=$(jq ".general.mode_$1" ../../../frontend/flox.config.json)
-build_mode=${build_mode:1:-1}
+frontend_build_mode=$(jq ".general.mode_$1" ../../../frontend/flox.config.json)
+frontend_build_mode=${frontend_build_mode:1:-1}
 
 aws_region=$(jq ".infrastructure_$1.aws_region" ../../../backend/flox.config.json)
 aws_region=${aws_region:1:-1}
@@ -46,27 +48,19 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-if [[ $1 == "test" ]]
+# Get mode-dependent base URL
+if [[ $1 == "live" ]]
 then
-  url=$(jq '.general.test_base_domain' ../../../backend/flox.config.json)
+  url=$(jq ".general.live_domain" ../../../backend/flox.config.json)
+  url=${url:1:-1}
 else
-  url=$(jq '.general.live_base_domain' ../../../backend/flox.config.json)
-fi
-url=${url:1:-1}
-
-root_domain=$url
-
-# In 'test' mode, extract root domain, since it will be owned by parent organization
-# (e.g. flox.polygon-project.ch -> polygon-project.ch)
-if [[ $1 == "test" ]]
-then
-  IFS='.' read -r pid root_domain <<< "$url" # split at first occurrence of '.', PID is project id, remains unused
+  # E.g. test.flox.polygon-project.ch
+  url="$1.$project.polygon-project.ch"
 fi
 
 # Add domain config to flox.tfvars
 echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
 echo "base_domain=\"$url\"" >> ../../support/flox.tfvars
-echo "root_domain=\"$root_domain\"" >> ../../support/flox.tfvars
 
 # Replace 'PROJECT' in config.tf with actual project name
 sed -i -e "s/##PROJECT##/${project}/g" config.tf
@@ -74,7 +68,7 @@ sed -i -e "s/##PROJECT##/${project}/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/${organisation}/g" config.tf
 
-# Apply Cognito Terraform
+# Apply pre-setup Terraform (Cognito & hosted zone)
 terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 user_pool_id=$(terraform output user_pool_id)
@@ -116,8 +110,8 @@ echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
 echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
 
 # ==========================================
-# =====   Step 1: Parent DNS setup    ======
-# =====  (Applies only in TEST mode)  ======
+# ==      Step 1: Parent DNS setup        ==
+# ==  (Applies only in TEST and DEV mode) ==
 # ==========================================
 if [[ $1 == "test" ]]
 then
@@ -159,11 +153,11 @@ if [[ $serverless_api == "true" ]]
 then
   # Build in API & frontend in serverless mode for AWS lambda
   echo "Building for serverless deployment..."
-  zsh build.sh "$project" "$build_mode" true
+  zsh build.sh "$project" "$frontend_build_mode" true
 else
   # Regular build
   echo "Building for regular deployment"
-  zsh build.sh "$project" "$build_mode"
+  zsh build.sh "$project" "$frontend_build_mode"
 fi
 
 cd ../aws-initial-setup/2_main-setup || exit
@@ -173,7 +167,7 @@ cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 
 # If non-ssr: unzip dist files for direct S3 upload
-if [[ $build_mode != "ssr" ]]
+if [[ $frontend_build_mode != "ssr" ]]
 then
   mkdir -p web-spa-pwa/frontend/
   unzip -q ./frontend -d web-spa-pwa/frontend/
@@ -181,26 +175,33 @@ then
   # Remove node_modules (if any)
   rm -rf web-spa-pwa/frontend/node_modules
 fi
+
 # Apply main Terraform
 terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 
 # ==========================================
 # ======      Step 3: Cleanup       ========
+# ======    (only in local mode)    ========
 # ==========================================
 
-# Remove .zip files
-rm -f ../2_main-setup/frontend.zip
-rm -f ../2_main-setup/backend.zip
+if [[ $2 == 'true' ]]
+then
+  # Remove .zip files
+  rm -f ../2_main-setup/frontend.zip
+  rm -f ../2_main-setup/backend.zip
 
-# Remove unzipped frontend dist (if any)
-rm -rf ../2_main-setup/web-spa-pwa/frontend
+  # Remove unzipped frontend dist (if any)
+  rm -rf ../2_main-setup/web-spa-pwa/frontend
 
-# Reset all config.tf files to their respective template files
-cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
-cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
-cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
+  # Reset all config.tf files to their respective template files
+  cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
+  cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
+  cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
 
-# Quietly reinstall node modules
-cd ../../../backend || exit
-yarn install --silent 2> >(grep -v warning 1>&2)
+  # Quietly reinstall node modules
+  cd ../../../backend || exit
+  yarn install --silent 2> >(grep -v warning 1>&2)
+  cd ../frontend || exit
+  yarn install --silent 2> >(grep -v warning 1>&2)
+fi

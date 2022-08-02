@@ -32,7 +32,10 @@ resource "aws_lambda_function" "api_lambda" {
 
       // Ports
       SERVER_PORT = 3000
-      NOCODB_PORT= 8000,
+      NOCODB_PORT = 8000,
+
+      // Run mode
+      SERVERLESS = true,
 
       // AWS
       AWS_MAIN_REGION = var.aws_region

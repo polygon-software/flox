@@ -236,4 +236,10 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     name      = "AWS_LOG_BUCKET_NAME"
     value     = var.log_bucket_id
   }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "SERVERLESS"
+    value     = false
+  }
 }

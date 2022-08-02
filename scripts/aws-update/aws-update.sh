@@ -110,7 +110,7 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 cd ../../support || exit
 
-# Build & zip frontend and backend
+# Build & zip frontend and backend TODO api vs. db distinction
 if [[ $serverless == "true" ]]
 then
   # Build in serverless mode for AWS lambda
