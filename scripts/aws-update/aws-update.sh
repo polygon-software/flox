@@ -22,7 +22,7 @@ echo "type=\"$1\"" >> flox.tfvars
 project=$(jq '.general.project' ../../backend/flox.config.json)
 project=${project:1:-1}
 
-build_mode=$(jq '.general.mode' ../../frontend/flox.config.json)
+build_mode=$(jq ".general.mode_$1" ../../frontend/flox.config.json)
 build_mode=${build_mode:1:-1}
 
 aws_region=$(jq '.general.aws_region' ../../backend/flox.config.json)
@@ -31,7 +31,7 @@ aws_region=${aws_region:1:-1}
 organisation=$(jq '.general.organisation' ../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
-serverless=$(jq '.general.serverless' ../../backend/flox.config.json)
+serverless=$(jq '.general.serverless' ../../backend/flox.config.json) # TODO
 
 if [[ $1 == "test" ]]
 then
