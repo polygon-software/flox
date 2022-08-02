@@ -39,7 +39,7 @@ organisation=${organisation:1:-1}
 # Serverless mode (API only)
 serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.config.json)
 
-# Replace 'TYPE' in config.tf with actual type (live, test)
+# Replace 'TYPE' in config.tf with actual type (live, test, dev)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -60,7 +60,7 @@ fi
 
 # Add domain config to flox.tfvars
 echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
-echo "base_domain=\"$url\"" >> ../../support/flox.tfvars
+echo "domain=\"$url\"" >> ../../support/flox.tfvars
 
 # Replace 'PROJECT' in config.tf with actual project name
 sed -i -e "s/##PROJECT##/${project}/g" config.tf
