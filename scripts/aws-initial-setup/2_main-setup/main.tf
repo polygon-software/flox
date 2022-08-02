@@ -29,7 +29,7 @@ module "web_ssr" {
   private_subnet_ids = aws_subnet.private_subnet.*.id
   public_subnet_ids = aws_subnet.public_subnet.*.id
   hosted_zone_id = var.hosted_zone_id
-  domain = var.base_domain
+  domain = var.domain
 }
 
 # Frontend module (PWA/SPA)
@@ -38,7 +38,7 @@ module "web_spa_pwa" {
   count  = var.frontend_build_mode != "ssr" ? 1 : 0
   project = var.project
   type = var.type
-  domain = var.base_domain
+  domain = var.domain
   hosted_zone_id = var.hosted_zone_id
   aws_access_key = var.aws_access_key
   aws_secret_access_key = var.aws_secret_access_key
@@ -50,10 +50,10 @@ module "web_spa_pwa" {
 # Backend module (EBS + RDS)
 module "api-ebs" {
   source = "./api-ebs"
-  count  = var.serverless == true ? 0 : 1
+  count  = var.serverless_api == true ? 0 : 1
   project = var.project
   type = var.type
-  domain = var.base_domain
+  domain = var.domain
   hosted_zone_id = var.hosted_zone_id
   eb_app_desc = var.eb_app_desc
   private_subnet_ids = aws_subnet.private_subnet.*.id
@@ -81,8 +81,8 @@ module "api-ebs" {
 # Certificate for serverless mode backend
 module "api-serverless-certificate" {
   source = "./api-serverless-certificate"
-  count  = var.serverless == true ? 1 : 0
-  domain = var.base_domain
+  count  = var.serverless_api == true ? 1 : 0
+  domain = var.domain
   hosted_zone_id = var.hosted_zone_id
   providers = {
     aws = aws.us-east-1
@@ -92,11 +92,11 @@ module "api-serverless-certificate" {
 # Backend module (Serverless)
 module "api-serverless" {
   source = "./api-serverless"
-  count  = var.serverless == true ? 1 : 0
+  count  = var.serverless_api == true ? 1 : 0
   depends_on = [module.api-serverless-certificate]
   project = var.project
   type = var.type
-  domain = var.base_domain
+  domain = var.domain
   hosted_zone_id = var.hosted_zone_id
   api_source_code_object_key = aws_s3_object.api_source_code_object.key
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash

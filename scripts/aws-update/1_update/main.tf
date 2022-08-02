@@ -10,7 +10,7 @@ module "web_ssr" {
 module "web_spa_pwa" {
   source = "./web-spa-pwa"
   count  = var.frontend_build_mode != "ssr" ? 1 : 0
-  domain = var.base_domain
+  domain = var.domain
   providers = {
     aws = aws.us-east-1
   }

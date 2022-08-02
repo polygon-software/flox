@@ -30,7 +30,7 @@ console.log(`serverless_db="${infrastructureConfig.serverless_db}"`)
 console.log(`serverless_db_version="${infrastructureConfig.serverless_db_version}"`)
 
 console.log('# ======== Frontend Config options ========');
-console.log(`frontend_build_mode="${frontendConfig.mode}"`)
+console.log(`frontend_build_mode="${frontendConfig[`mode_${mode}`]}"`)
 
 console.log('# ======== Auth module options ========');
 // 2FA settings
