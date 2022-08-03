@@ -48,8 +48,10 @@ resource "aws_cloudfront_distribution" "website_distribution" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1"
   }
+}
 
-  // Cache invalidation (used for updates)
+// Cache invalidation (used for updates)
+resource "null_resource" "cache_invalidation" {
   provisioner "local-exec" {
     command = "aws cloudfront create-invalidation --distribution-id ${self.id} --paths '/*'"
   }
