@@ -8,7 +8,7 @@
           class="q-ma-sm"
       >
       <h5 class="text-black q-pa-none q-ma-md">
-        Flox Failure
+        Flox Testeroni Peperoni
       </h5>
     </div>
   <div class="row">
