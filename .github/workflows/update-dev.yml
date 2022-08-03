@@ -1,0 +1,28 @@
+name: "Stage 0: Overwrite Dev-Environment with newest version"
+
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  release:
+    name: "Update DEV application"
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Make build.sh executable
+        run: sudo chmod +x ./scripts/2_main-setup/build.sh
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Build & update AWS infrastructure
+        working-directory: ./scripts/support
+        run: sudo bash aws-update.sh dev
