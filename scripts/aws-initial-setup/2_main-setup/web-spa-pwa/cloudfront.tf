@@ -52,8 +52,17 @@ resource "aws_cloudfront_distribution" "website_distribution" {
 
 // Cache invalidation (used for updates)
 resource "null_resource" "cache_invalidation" {
+  triggers = {
+    timestamp = timestamp()
+  }
   provisioner "local-exec" {
-    command = "aws cloudfront create-invalidation --distribution-id ${self.id} --paths '/*'"
+    command = <<EOF
+export AWS_DEFAULT_REGION=${var.aws_region}
+export AWS_ACCESS_KEY_ID="${var.aws_access_key}"
+export AWS_SECRET_ACCESS_KEY="${var.aws_secret_access_key}"
+aws sts get-caller-identity
+aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.website_distribution.id} --paths '/*'
+EOF
   }
 }
 

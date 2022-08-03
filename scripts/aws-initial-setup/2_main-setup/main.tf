@@ -42,6 +42,7 @@ module "web_spa_pwa" {
   hosted_zone_id = var.hosted_zone_id
   aws_access_key = var.aws_access_key
   aws_secret_access_key = var.aws_secret_access_key
+  aws_region = "us-east-1"
   providers = {
     aws = aws.us-east-1
   }
