@@ -177,9 +177,9 @@ then
   if [[ $serverless_api == true ]]
   then
     # In serverless API mode, also renew lambda
-    terraform apply -replace="module.web-spa-pwa[0].null_resource.cache_invalidation" -target="module.api-serverless[0].aws_lambda_function.api_lambda" -auto-approve -var-file="../../support/flox.tfvars"
+    terraform apply -target="module.web-spa-pwa[0].null_resource.cache_invalidation" -target="module.api-serverless[0].aws_lambda_function.api_lambda" -auto-approve -var-file="../../support/flox.tfvars"
   else
-    terraform apply -replace="module.web-spa-pwa[0].null_resource.cache_invalidation" -target="module.api-ebs[0].aws_elastic_beanstalk_environment.api_env" -auto-approve -var-file="../../support/flox.tfvars"
+    terraform apply -target="module.web-spa-pwa[0].null_resource.cache_invalidation" -target="module.api-ebs[0].aws_elastic_beanstalk_environment.api_env" -auto-approve -var-file="../../support/flox.tfvars"
   fi
 # For SSR mode, also redeploy SSR frontend
 else
