@@ -113,7 +113,7 @@ echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
 # ==      Step 1: Parent DNS setup        ==
 # ==  (Applies only in TEST and DEV mode) ==
 # ==========================================
-if [[ $1 == "test" ]]
+if [[ $1 == "test" ]] || [[ $1 == "dev" ]]
 then
   cd ../scripts/aws-initial-setup/1_parent-setup || exit
 
