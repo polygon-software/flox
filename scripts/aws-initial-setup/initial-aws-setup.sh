@@ -62,12 +62,6 @@ fi
 echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
 echo "domain=\"$url\"" >> ../../support/flox.tfvars
 
-# Replace 'PROJECT' in config.tf with actual project name
-sed -i -e "s/##PROJECT##/${project}/g" config.tf
-
-# Replace 'ORGANISATION' in config.tf with actual organisation name
-sed -i -e "s/##ORGANISATION##/${organisation}/g" config.tf
-
 # Apply pre-setup Terraform (Cognito & hosted zone)
 terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
