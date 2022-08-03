@@ -37,8 +37,8 @@ resource "aws_cloudfront_distribution" "website_distribution" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 600
-    max_ttl                = 3600
+    default_ttl            = 3600
+    max_ttl                = 86400
   }
   price_class = "PriceClass_100"
 
@@ -49,6 +49,10 @@ resource "aws_cloudfront_distribution" "website_distribution" {
     minimum_protocol_version = "TLSv1"
   }
 
+  // Cache invalidation (used for updates)
+  provisioner "local-exec" {
+    command = "aws cloudfront create-invalidation --distribution-id ${self.id} --paths '/*'"
+  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
