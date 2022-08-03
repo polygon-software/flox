@@ -58,6 +58,10 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
+# Add Domain to flox.tfvars
+echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
+echo "domain=\"$url\"" >> ../../support/flox.tfvars
+
 # Apply pre-update terraform for getting SSM parameters
 terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
@@ -78,9 +82,7 @@ cognito_arn=${cognito_arn:1:-1}
 hosted_zone_id=$(terraform output hosted_zone_id)
 hosted_zone_id=${hosted_zone_id:1:-1}
 
-# Add Domain & Cognito outputs to flox.tfvars
-echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
-echo "domain=\"$url\"" >> ../../support/flox.tfvars
+# Add hosted zone & Cognito outputs to flox.tfvars
 echo "hosted_zone_id=\"$hosted_zone_id\"" >> ../../support/flox.tfvars
 echo "# ======== Cognito Config ========" >> ../../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../../support/flox.tfvars
