@@ -56,4 +56,4 @@ jobs:
         run: |
           echo "FILE LOCATION 1"
           echo "$TF_CLI_CONFIG_FILE"
-          sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
+          bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
