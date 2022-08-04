@@ -27,6 +27,10 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+      - name: Terraform login
+        working-directory: ./scripts/aws-initial-setup
+        run: terraform login
+
       - name: Validate Terraform
         working-directory: ./scripts/aws-initial-setup
         run: terraform validate
