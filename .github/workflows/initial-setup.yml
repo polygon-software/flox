@@ -39,11 +39,13 @@ jobs:
         working-directory: ./scripts/aws-initial-setup/0_pre-setup
         run: terraform init
 
-      - name: test file existence
-        run: |
-          ls
-          cat ~/.terraform.d/credentials.tfrc.json
+#      - name: test file existence
+#        run: |
+#          ls
+#          cat ~/.terraform.d/credentials.tfrc.json
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
-        run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
+        run: |
+          export TF_LOG=debug
+          sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
