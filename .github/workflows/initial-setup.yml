@@ -52,5 +52,6 @@ jobs:
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
         run: |
+          echo "FILE LOCATION 1"
           echo "$TF_CLI_CONFIG_FILE"
           sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}

@@ -64,6 +64,7 @@ echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
 echo "domain=\"$url\"" >> ../../support/flox.tfvars
 
 # Apply pre-setup Terraform (Cognito & hosted zone)
+echo "FILE LOCATION 2"
 echo "$TF_CLI_CONFIG_FILE"
 terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
