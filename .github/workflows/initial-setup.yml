@@ -40,7 +40,7 @@ jobs:
       - name: test file existence
         run: |
           ls
-          cat credentials.tfrc.json
+          cat ~/.terraform.d/credentials.tfrc.json
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
