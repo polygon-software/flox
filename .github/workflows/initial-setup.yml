@@ -51,9 +51,6 @@ jobs:
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
-#        env:
-#          TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
         run: |
-#          echo "token is $TF_TOKEN_app_terraform_io"
           ls /root
           sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
