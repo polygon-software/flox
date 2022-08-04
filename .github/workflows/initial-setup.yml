@@ -27,9 +27,6 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Log in to Terraform
-        run: terraform login
-
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
         run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
