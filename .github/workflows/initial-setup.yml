@@ -39,6 +39,7 @@ jobs:
         working-directory: ./scripts/aws-initial-setup/0_pre-setup
         run: |
           echo "token is $TF_TOKEN_app_terraform_io"
+          export TF_LOG=debug
           terraform init
           cd ~/.terraform.d
           ls
