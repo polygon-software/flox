@@ -32,28 +32,9 @@ jobs:
       - name: Validate Terraform
         working-directory: ./scripts/aws-initial-setup
         run: |
-          export TF_LOG=debug
           terraform validate
-
-      - name: TEST init
-        working-directory: ./scripts/aws-initial-setup/0_pre-setup
-        run: |
-          echo "token is $TF_TOKEN_app_terraform_io"
-          export TF_LOG=debug
-          terraform init
-          cd ~/.terraform.d
-          ls
-
-#      - name: test file existence
-#        run: |
-#          ls
-#          cat ~/.terraform.d/credentials.tfrc.json
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
-        env:
-          TF_CLI_CONFIG_FILE: /home/runner/.terraformrc
         run: |
-          echo "FILE LOCATION 1"
-          echo "$TF_CLI_CONFIG_FILE"
           bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
