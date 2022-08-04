@@ -48,4 +48,6 @@ jobs:
         working-directory: ./scripts/aws-initial-setup
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
-        run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
+        run: |
+          echo "token is $TF_TOKEN_app_terraform_io"
+          sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
