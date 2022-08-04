@@ -55,4 +55,7 @@ jobs:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
         run: |
           echo "token is $TF_TOKEN_app_terraform_io"
+          cd ./0_pre-setup
+          terraform init
+          cd ..
           sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
