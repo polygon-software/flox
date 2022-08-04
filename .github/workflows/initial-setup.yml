@@ -28,5 +28,5 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Build & set up AWS infrastructure
-        working-directory: ./scripts/support
+        working-directory: ./scripts/aws-initial-setup
         run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
