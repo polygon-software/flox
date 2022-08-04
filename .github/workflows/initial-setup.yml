@@ -51,6 +51,8 @@ jobs:
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
+        env:
+          TF_CLI_CONFIG_FILE: "/home/runner/.terraformrc"
         run: |
           echo "FILE LOCATION 1"
           echo "$TF_CLI_CONFIG_FILE"
