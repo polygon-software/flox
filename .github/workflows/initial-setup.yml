@@ -33,7 +33,10 @@ jobs:
         working-directory: ./scripts/aws-initial-setup
         run: terraform validate
 
+      - name: TEST init
+        working-directory: ./scripts/aws-initial-setup/0_pre-setup
+        run: terraform init
+
       - name: Build & set up AWS infrastructure
-        uses: hashicorp/setup-terraform@v2
         working-directory: ./scripts/aws-initial-setup
         run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
