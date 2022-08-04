@@ -39,5 +39,4 @@ jobs:
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
-        shell: bash
         run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
