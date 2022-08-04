@@ -5,6 +5,7 @@
 # $1 - deployment mode: 'live', 'test' or 'dev'
 # $2 - local mode (will perform cleanup): true or not set
 # --------------------------------------------------------------
+export TF_LOG=debug
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
 then
