@@ -29,9 +29,9 @@ yarn
 if [[ $3 == "true" ]]
 then
   # Build for AWS lambda (includes minifying node_modules)
-  yarn build:lambda
+  sudo yarn build:lambda
 else
-  yarn build
+  sudo yarn build
 fi
 
 # Copy node_modules to output directory
