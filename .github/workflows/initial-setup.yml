@@ -1,7 +1,7 @@
 name: Initial AWS setup
 
+# Should only be run manually from the Actions tab (only once!)
 on:
-  # Should only be run manually from the Actions tab (only once!)
   workflow_dispatch:
     inputs:
       mode:
@@ -52,7 +52,7 @@ jobs:
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
         env:
-          TF_CLI_CONFIG_FILE: "/home/runner/.terraformrc"
+          TF_CLI_CONFIG_FILE: /home/runner/.terraformrc
         run: |
           echo "FILE LOCATION 1"
           echo "$TF_CLI_CONFIG_FILE"
