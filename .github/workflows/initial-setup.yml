@@ -27,6 +27,21 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+      - name: Terraform Init for pre-setup
+        id: init
+        working-directory: ./scripts/aws-initial-setup/0_pre-setup
+        run: terraform init
+
+      - name: Terraform Init for parent setup
+        id: init
+        working-directory: ./scripts/aws-initial-setup/1_parent-setup
+        run: terraform init
+
+      - name: Terraform Init for main setup
+        id: init
+        working-directory: ./scripts/aws-initial-setup/2_main-setup
+        run: terraform init
+
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
         run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
