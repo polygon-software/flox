@@ -37,6 +37,10 @@ jobs:
         working-directory: ./scripts/aws-initial-setup/0_pre-setup
         run: terraform init
 
+      - name: test file existence
+        run: |
+          ls | grep credentials
+
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
         run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
