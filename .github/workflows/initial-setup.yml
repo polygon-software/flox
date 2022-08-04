@@ -39,7 +39,8 @@ jobs:
 
       - name: test file existence
         run: |
-          ls | grep credentials
+          ls
+          cat credentials.tfrc.json
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
