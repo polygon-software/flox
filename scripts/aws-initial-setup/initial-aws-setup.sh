@@ -12,9 +12,6 @@ then
   exit
 fi
 
-echo "Logging in to terraform..."
-terraform login
-
 # ==========================================
 # ===  Step 0: Pre-setup (Cognito, DNS)  ===
 # ==========================================
