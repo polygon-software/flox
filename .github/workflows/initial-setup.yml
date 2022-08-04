@@ -31,7 +31,9 @@ jobs:
 
       - name: Validate Terraform
         working-directory: ./scripts/aws-initial-setup
-        run: terraform validate
+        run: |
+          export TF_LOG=debug
+          terraform validate
 
       - name: TEST init
         working-directory: ./scripts/aws-initial-setup/0_pre-setup
