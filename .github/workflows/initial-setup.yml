@@ -19,8 +19,10 @@ jobs:
       - name: Checkout 🛎
         uses: actions/checkout@v3
 
-      - name: Make build.sh executable
-        run: sudo chmod +x ./scripts/support/build.sh
+      - name: Make scripts executable
+        run: |
+          sudo chmod +x ./scripts/support/build.sh
+          sudo chmod +x ./scripts/aws-initial-setup/initial-aws-setup.sh
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
@@ -32,5 +34,6 @@ jobs:
         run: terraform validate
 
       - name: Build & set up AWS infrastructure
+        uses: hashicorp/setup-terraform@v2
         working-directory: ./scripts/aws-initial-setup
         run: sudo bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
