@@ -37,7 +37,11 @@ jobs:
 
       - name: TEST init
         working-directory: ./scripts/aws-initial-setup/0_pre-setup
-        run: terraform init
+        run: |
+          echo "token is $TF_TOKEN_app_terraform_io"
+          terraform init
+          cd ~/.terraform.d
+          ls
 
 #      - name: test file existence
 #        run: |
