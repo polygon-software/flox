@@ -13,17 +13,6 @@ then
   exit 1
 fi
 
-# Get system URL, e.g. test.flox.polygon-project.ch
-url="$1.$project.polygon-project.ch"
-
-# Check whether selected deployment is online (otherwise fail if 'force' is not set to true)
-online_status=$(curl -s --head "https://$url" | grep '200')
-if [[ ! ($online_status) && $3 != "true" ]]
-then
-  echo "Deployment in mode $1 is not online at URL '$url'! Use 'force' to force destruction anyways."
-  exit 1
-fi
-
 # ==========================================
 # ===  Step 0: Pre-setup (Cognito, DNS)  ===
 # ==========================================
@@ -49,6 +38,17 @@ organisation=${organisation:1:-1}
 
 # Serverless mode (API only)
 serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.config.json)
+
+# Get system URL, e.g. test.flox.polygon-project.ch
+url="$1.$project.polygon-project.ch"
+
+# Check whether selected deployment is online (otherwise fail if 'force' is not set to true)
+online_status=$(curl -s --head "https://$url" | grep '200')
+if [[ ! ($online_status) && $3 != "true" ]]
+then
+  echo "Deployment in mode $1 is not online at URL '$url'! Use 'force' to force destruction anyways."
+  exit 1
+fi
 
 # Replace 'TYPE' in config.tf with actual type (dev, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
