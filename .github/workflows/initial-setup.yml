@@ -15,7 +15,7 @@ on:
       force:
         required: false
         type: boolean
-        description: Force deployment even if selected environment already exists
+        description: Force deployment
         default: false
 jobs:
   setup-aws:
