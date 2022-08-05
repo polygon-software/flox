@@ -18,7 +18,7 @@ fi
 # ==========================================
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
-zsh create-flox-tfvars.sh "$1"
+bash create-flox-tfvars.sh "$1"
 echo "type=\"$1\"" >> flox.tfvars
 
 cd ../aws-initial-setup/0_pre-setup || exit
@@ -63,7 +63,7 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
 echo "domain=\"$url\"" >> ../../support/flox.tfvars
 
-# Destroy Cognito via Terraform
+# Refresh Cognito Terraform state
 terraform refresh -var-file="../../support/flox.tfvars"
 user_pool_id=$(terraform output user_pool_id)
 user_pool_id=${user_pool_id:1:-1}
@@ -105,7 +105,7 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-# Destroy Parent DNS Terraform
+# Refresh Parent DNS Terraform state
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # ==========================================
@@ -123,7 +123,7 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-# Destroy main Terraform
+# Refresh main Terraform state
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # Build & zip frontend and backend
@@ -131,13 +131,14 @@ if [[ $serverless_api == "true" ]]
 then
   # Build in API & frontend in serverless mode for AWS lambda
   echo "Building for serverless deployment..."
-  zsh build.sh "$project" "$frontend_build_mode" true
+  bash build.sh "$project" "$frontend_build_mode" true
 else
   # Regular build
   echo "Building for regular deployment..."
-  zsh build.sh "$project" "$frontend_build_mode"
+  bash build.sh "$project" "$frontend_build_mode"
 fi
 
+# Copy .zip files
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 
