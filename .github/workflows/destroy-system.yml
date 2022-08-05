@@ -1,6 +1,7 @@
-name: Set up AWS infrastructure
+name: Destroy AWS infrastructure
 
-# Should only be run manually from the Actions tab (only once!)
+# Should only be run manually from the Actions tab
+# ATTENTION: this system may destroy infrastructure seen by customers!
 on:
   workflow_dispatch:
     inputs:
@@ -10,12 +11,11 @@ on:
         description: System deployment mode
         options:
           - test
-          - live
           - dev
       force:
         required: false
         type: boolean
-        description: Force deployment
+        description: Force desctruction
         default: false
 jobs:
   setup-aws:
@@ -27,7 +27,7 @@ jobs:
       - name: Make scripts executable
         run: |
           sudo chmod +x ./scripts/support/build.sh
-          sudo chmod +x ./scripts/aws-initial-setup/initial-aws-setup.sh
+          sudo chmod +x ./scripts/support/destroy-system.sh
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
@@ -36,11 +36,11 @@ jobs:
           terraform_wrapper: false
 
       - name: Validate Terraform
-        working-directory: ./scripts/aws-initial-setup
+        working-directory: ./scripts/support
         run: |
           terraform validate
 
-      - name: Build & set up AWS infrastructure
-        working-directory: ./scripts/aws-initial-setup
+      - name: Destroy AWS infrastructure
+        working-directory: ./scripts/support
         run: |
-          bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }}
+          bash destroy-system.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }}
