@@ -2,11 +2,21 @@
 # Sets up the initial infrastructure for a new Flox project on AWS.
 # This script should only be ran once!
 # Takes one parameter: 'live', 'test' or 'dev'
+# Optionally, with second parameter set to 'true', will force deployment
 # --------------------------------------------------------------
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]
 then
   echo "Invalid deployment mode $1"
+  exit
+fi
+
+
+# Check whether selected deployment is already online
+online_status=$(curl -s --head https://dev.flox.polygon-project.ch | grep '200')
+if [[ $online_status && $2 != "true" ]]
+then
+  echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways."
   exit
 fi
 
