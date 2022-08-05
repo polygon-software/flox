@@ -1,0 +1,19 @@
+name: Destroy AWS
+
+on:
+  # Testing only
+  workflow_dispatch:
+    inputs:
+      mode:
+        required: true
+        type: choice
+        description: System deployment mode
+        options:
+          - test
+          - dev
+jobs:
+  setup-aws:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: echo "Testing!"
