@@ -6,7 +6,7 @@
     "update:dev": "/bin/zsh ../aws-update/aws-update.sh dev true",
     "update:test": "/bin/zsh ../aws-update/aws-update.sh test true",
     "update:live": "/bin/zsh ../aws-update/aws-update.sh live true",
-    "destroy:test": "/bin/zsh destroy-test-system.sh"
+    "destroy:test": "/bin/zsh destroy-system.sh"
   },
   "devDependencies": {
     "@types/node": "^18.6.3",

@@ -4,9 +4,9 @@
 # Takes two parameters:
 # $1 - deployment mode: 'live', 'test' or 'dev'
 # $2 - local mode (will perform cleanup): true or not set
-# Optionally, with third parameter set to 'true', will force deployment
+# Optionally, with third parameter set to 'true', will force redeployment
+# even if the environment is already online
 # --------------------------------------------------------------
-export TF_LOG=debug
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
 then
