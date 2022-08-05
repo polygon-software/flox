@@ -61,7 +61,7 @@ else
 fi
 
 # Check whether selected deployment is already online
-online_status=$(curl -s --head "$url" | grep '200')
+online_status=$(curl -s --head "https://$url" | grep '200')
 if [[ $online_status && $3 != "true" ]]
 then
   echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways."
