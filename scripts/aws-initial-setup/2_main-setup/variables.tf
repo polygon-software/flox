@@ -7,11 +7,6 @@ variable "cognito_arn" {
   type = string
 }
 
-variable "gcb_backup_user_name" {
-  type = string
-  default = "gcp-backup-manager"
-}
-
 variable "domain" {
   description = "Project base domain, e.g. flox.polygon-project.ch"
   type    = string
