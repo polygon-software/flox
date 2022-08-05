@@ -18,6 +18,8 @@
     }
   },
   "general": {
-    "mode": "spa"
+    "mode_live": "ssr",
+    "mode_test": "spa",
+    "mode_dev": "spa"
   }
 }

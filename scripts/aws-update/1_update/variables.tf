@@ -30,7 +30,7 @@ variable "source_code_bucket" {
   type            = string
 }
 
-variable "base_domain" {
+variable "domain" {
   description = "Project base domain, e.g. flox.polygon-project.ch"
   type    = string
 }

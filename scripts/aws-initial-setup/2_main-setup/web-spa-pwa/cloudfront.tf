@@ -48,7 +48,21 @@ resource "aws_cloudfront_distribution" "website_distribution" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1"
   }
+}
 
+// Cache invalidation (used for updates)
+resource "null_resource" "cache_invalidation" {
+  triggers = {
+    timestamp = timestamp()
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+export AWS_DEFAULT_REGION=${var.aws_region}
+export AWS_ACCESS_KEY_ID="${var.aws_access_key}"
+export AWS_SECRET_ACCESS_KEY="${var.aws_secret_access_key}"
+aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.website_distribution.id} --paths '/*'
+EOF
+  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {

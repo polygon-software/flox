@@ -1,5 +1,5 @@
 variable "type" {
-  description     = "live or test"
+  description     = "live, test or dev"
   type            = string
 }
 
@@ -12,7 +12,7 @@ variable "gcb_backup_user_name" {
   default = "gcp-backup-manager"
 }
 
-variable "base_domain" {
+variable "domain" {
   description = "Project base domain, e.g. flox.polygon-project.ch"
   type    = string
 }
@@ -117,8 +117,14 @@ variable "frontend_build_mode" {
   type            = string
 }
 
-variable "serverless" {
+variable "serverless_api" {
   description     = "Whether to deploy the backend in serverless mode"
+  default         = false
+  type            = bool
+}
+
+variable "serverless_db" {
+  description     = "Whether to deploy the database in serverless mode"
   default         = false
   type            = bool
 }

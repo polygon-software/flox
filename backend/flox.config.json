@@ -23,8 +23,7 @@
     "database_master_username": "db_user",
     "project": "flox",
     "organisation": "polygonsoftware",
-    "test_base_domain": "flox.polygon-project.ch",
-    "live_base_domain": "floxbanano.ch"
+    "live_domain": "floxbanano.ch"
   },
   "infrastructure_live": {
     "aws_region": "eu-central-1",
@@ -35,7 +34,7 @@
     "aws_region": "eu-central-1",
     "serverless_api": true,
     "serverless_db": true,
-    "serverless_db_version": "v2"
+    "serverless_db_version": "v1"
   },
   "infrastructure_dev": {
     "aws_region": "eu-central-1",

@@ -29,9 +29,9 @@ yarn
 if [[ $3 == "true" ]]
 then
   # Build for AWS lambda (includes minifying node_modules)
-  yarn build:lambda
+  sudo yarn build:lambda
 else
-  yarn build
+  sudo yarn build
 fi
 
 # Copy node_modules to output directory
@@ -52,8 +52,8 @@ echo "{
  " >> dist/package.json
 
 echo "$(<package.json)" | jq '.dependencies' >> dist/package.json
-#echo ',   "devDependencies":' >> dist/package.json
-#echo "$(<package.json)" | jq '.devDependencies' >> dist/package.json
+echo ',   "devDependencies":' >> dist/package.json
+echo "$(<package.json)" | jq '.devDependencies' >> dist/package.json
 echo ',   "babel":' >> dist/package.json
 echo "$(<package.json)" | jq '.babel' >> dist/package.json
 echo ',   "engines":' >> dist/package.json

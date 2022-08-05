@@ -10,5 +10,5 @@ output "cluster_end" {
 
 output "api_endpoint" {
   description = "Public IP address of the EC2 instance"
-  value       = var.serverless == false ? module.api-ebs[0].api_endpoint : module.api-serverless[0].api_endpoint
+  value       = var.serverless_api == false ? module.api-ebs[0].api_endpoint : module.api-serverless[0].api_endpoint
 }

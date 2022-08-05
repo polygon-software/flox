@@ -1,9 +1,11 @@
 # --------------------------------------------------------------
 # Updates existing AWS infrastructure without recreating everything
-# Used for new releases in GitHub Actions (draft or live)
+# Takes two parameters:
+# $1 - deployment mode: 'live', 'test' or 'dev'
+# $2 - local mode (will perform cleanup): true or not set
 # --------------------------------------------------------------
 
-if [[ $1 != "live" ]] && [[ $1 != "test" ]]
+if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
 then
   echo "Invalid deployment mode $1"
   exit
@@ -15,36 +17,39 @@ fi
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
 cd ../support || exit
-zsh create-flox-tfvars.sh
+zsh create-flox-tfvars.sh "$1"
 echo "type=\"$1\"" >> flox.tfvars
 
 # Get additional flox.config variables
 project=$(jq '.general.project' ../../backend/flox.config.json)
 project=${project:1:-1}
 
-build_mode=$(jq '.general.mode' ../../frontend/flox.config.json)
-build_mode=${build_mode:1:-1}
+frontend_build_mode=$(jq ".general.mode_$1" ../../frontend/flox.config.json)
+frontend_build_mode=${frontend_build_mode:1:-1}
 
-aws_region=$(jq '.general.aws_region' ../../backend/flox.config.json)
+aws_region=$(jq ".infrastructure_$1.aws_region" ../../backend/flox.config.json)
 aws_region=${aws_region:1:-1}
 
 organisation=$(jq '.general.organisation' ../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
-serverless=$(jq '.general.serverless' ../../backend/flox.config.json)
+# Serverless mode (API only)
+serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../backend/flox.config.json)
 
-if [[ $1 == "test" ]]
+# Get mode-dependent base URL
+if [[ $1 == "live" ]]
 then
-  url=$(jq '.general.test_base_domain' ../../backend/flox.config.json)
+  url=$(jq ".general.live_domain" ../../../backend/flox.config.json)
+  url=${url:1:-1}
 else
-  url=$(jq '.general.live_base_domain' ../../backend/flox.config.json)
+  # E.g. test.flox.polygon-project.ch
+  url="$1.$project.polygon-project.ch"
 fi
-url=${url:1:-1}
 
 # Go to pre-update folder
 cd ../aws-update/0_pre-update || exit
 
-# Replace 'TYPE' in config.tf with actual type (live, test)
+# Replace 'TYPE' in config.tf with actual type (live, test or dev)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -53,6 +58,10 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
+# Add Domain to flox.tfvars
+echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
+echo "domain=\"$url\"" >> ../../support/flox.tfvars
+
 # Apply pre-update terraform for getting SSM parameters
 terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
@@ -60,18 +69,20 @@ terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 # Get variables from outputs
 user_pool_id=$(terraform output user_pool_id)
 user_pool_id=${user_pool_id:1:-1}
+
 user_pool_client_id=$(terraform output user_pool_client_id)
 user_pool_client_id=${user_pool_client_id:1:-1}
+
 source_code_bucket=$(terraform output source_code_bucket)
 source_code_bucket=${source_code_bucket:1:-1}
+
 cognito_arn=$(terraform output cognito_arn)
 cognito_arn=${cognito_arn:1:-1}
+
 hosted_zone_id=$(terraform output hosted_zone_id)
 hosted_zone_id=${hosted_zone_id:1:-1}
 
-# Add Domain & Cognito outputs to flox.tfvars
-echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
-echo "base_domain=\"$url\"" >> ../../support/flox.tfvars
+# Add hosted zone & Cognito outputs to flox.tfvars
 echo "hosted_zone_id=\"$hosted_zone_id\"" >> ../../support/flox.tfvars
 echo "# ======== Cognito Config ========" >> ../../support/flox.tfvars
 echo "user_pool_id=\"$user_pool_id\"" >> ../../support/flox.tfvars
@@ -111,15 +122,15 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 cd ../../support || exit
 
 # Build & zip frontend and backend
-if [[ $serverless == "true" ]]
+if [[ $serverless_api == "true" ]]
 then
   # Build in serverless mode for AWS lambda
   echo "Building for serverless deployment..."
-  zsh build.sh "$project" "$build_mode" true
+  zsh build.sh "$project" "$frontend_build_mode" true
 else
   # Regular build
-  echo "Building for regular deployment"
-  zsh build.sh "$project" "$build_mode"
+  echo "Building for regular deployment..."
+  zsh build.sh "$project" "$frontend_build_mode"
 fi
 
 cd ../aws-update/1_update || exit
@@ -128,7 +139,7 @@ cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 
 # If non-ssr: unzip dist files for direct S3 upload
-if [[ $build_mode != "ssr" ]]
+if [[ $frontend_build_mode != "ssr" ]]
 then
   mkdir -p web-spa-pwa/frontend/
   unzip -q ../../outputs/frontend -d web-spa-pwa/frontend/
@@ -163,41 +174,50 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 terraform init
 
-if [[ $build_mode != "ssr" ]]
+if [[ $frontend_build_mode != "ssr" ]]
 then
-  if [[ $serverless == true ]]
+  if [[ $serverless_api == true ]]
   then
-    # In serverless mode, also renew lambda
-    terraform apply -target=aws_elastic_beanstalk_environment.api_env -target="module.api-serverless[0].aws_lambda_function.api_lambda" -auto-approve -var-file="../../support/flox.tfvars"
+    # In serverless API mode, also renew lambda
+    terraform apply -target="module.web_spa_pwa[0].null_resource.cache_invalidation" -target="module.api_serverless[0].aws_lambda_function.api_lambda" -auto-approve -var-file="../../support/flox.tfvars"
   else
-    terraform apply -target=aws_elastic_beanstalk_environment.api_env -auto-approve -var-file="../../support/flox.tfvars"
+    terraform apply -target="module.web_spa_pwa[0].null_resource.cache_invalidation" -target="module.api_ebs[0].aws_elastic_beanstalk_environment.api_env" -auto-approve -var-file="../../support/flox.tfvars"
   fi
 # For SSR mode, also redeploy SSR frontend
 else
-  if [[ $serverless == true ]]
+  if [[ $serverless_api == true ]]
     then
-      # In serverless mode, also renew lambda
-      terraform apply -target=aws_elastic_beanstalk_environment.api_env -target="module.web_ssr[0].aws_elastic_beanstalk_environment.frontend_env" -target="module.api-serverless[0].aws_lambda_function.api_lambda" -auto-approve -var-file="../../support/flox.tfvars"
+      # In serverless API mode, also renew lambda
+      terraform apply -target="module.web_ssr[0].aws_elastic_beanstalk_environment.frontend_env" -target="module.api_serverless[0].aws_lambda_function.api_lambda" -auto-approve -var-file="../../support/flox.tfvars"
     else
-      terraform apply -target=aws_elastic_beanstalk_environment.api_env -target="module.web_ssr[0].aws_elastic_beanstalk_environment.frontend_env" -auto-approve -var-file="../../support/flox.tfvars"
+      terraform apply -target="module.api_ebs[0].aws_elastic_beanstalk_environment.api_env" -target="module.web_ssr[0].aws_elastic_beanstalk_environment.frontend_env" -auto-approve -var-file="../../support/flox.tfvars"
     fi
-
 fi
 
 # ==========================================
-# ====         Step 3: Cleanup         =====
+# ======      Step 3: Cleanup       ========
+# ======    (only in local mode)    ========
 # ==========================================
 
-# Remove .zip files
-rm -f ../../aws-update/1_update/frontend.zip
-rm -f ../../aws-update/1_update/backend.zip
-rm -f frontend.zip
-rm -f backend.zip
+if [[ $2 == 'true' ]]
+then
+  # Remove .zip files
+  rm -f ../../aws-update/1_update/frontend.zip
+  rm -f ../../aws-update/1_update/backend.zip
+  rm -f frontend.zip
+  rm -f backend.zip
 
-# Remove unzipped frontend dist (if any)
-rm -rf ../../aws-update/1_update/web-spa-pwa/frontend
+  # Remove unzipped frontend dist (if any)
+  rm -rf ../../aws-update/1_update/web-spa-pwa/frontend
 
-# Reset config.tf file to its respective template files
-cp config.tftemplate config.tf
-cp ../../aws-update/0_pre-update/config.tftemplate ../../aws-update/0_pre-update/config.tf
-cp ../../aws-update/1_update/config.tftemplate ../../aws-update/1_update/config.tf
+  # Reset config.tf file to its respective template files
+  cp config.tftemplate config.tf
+  cp ../../aws-update/0_pre-update/config.tftemplate ../../aws-update/0_pre-update/config.tf
+  cp ../../aws-update/1_update/config.tftemplate ../../aws-update/1_update/config.tf
+
+  # Quietly reinstall node modules
+  cd ../../../backend || exit
+  yarn install --silent 2> >(grep -v warning 1>&2)
+  cd ../frontend || exit
+  yarn install --silent 2> >(grep -v warning 1>&2)
+fi
