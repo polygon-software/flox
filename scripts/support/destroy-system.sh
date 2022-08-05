@@ -64,6 +64,7 @@ echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
 echo "domain=\"$url\"" >> ../../support/flox.tfvars
 
 # Refresh Cognito Terraform state
+terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 user_pool_id=$(terraform output user_pool_id)
 user_pool_id=${user_pool_id:1:-1}
@@ -106,6 +107,7 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 # Refresh Parent DNS Terraform state
+terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # ==========================================
@@ -124,6 +126,7 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 # Refresh main Terraform state
+terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # Build & zip frontend and backend
