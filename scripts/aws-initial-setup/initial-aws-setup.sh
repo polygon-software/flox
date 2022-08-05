@@ -14,15 +14,6 @@ then
   exit
 fi
 
-
-# Check whether selected deployment is already online
-online_status=$(curl -s --head https://dev.flox.polygon-project.ch | grep '200')
-if [[ $online_status && $3 != "true" ]]
-then
-  echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways."
-  exit
-fi
-
 # ==========================================
 # ===  Step 0: Pre-setup (Cognito, DNS)  ===
 # ==========================================
@@ -67,6 +58,14 @@ then
 else
   # E.g. test.flox.polygon-project.ch
   url="$1.$project.polygon-project.ch"
+fi
+
+# Check whether selected deployment is already online
+online_status=$(curl -s --head "$url" | grep '200')
+if [[ $online_status && $3 != "true" ]]
+then
+  echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways."
+  exit
 fi
 
 # Add domain config to flox.tfvars
