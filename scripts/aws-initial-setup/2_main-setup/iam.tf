@@ -103,7 +103,7 @@ data aws_iam_policy_document flox_manager_document {
 
 # User
 resource "aws_iam_user" "backup_creator" {
-  name      = var.gcb_backup_user_name
+  name      = "${var.type}-gcp-backup-manager"
 }
 
 # Policy
