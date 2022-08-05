@@ -11,7 +11,7 @@ export TF_LOG=debug
 if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
 then
   echo "Invalid deployment mode $1"
-  exit
+  exit 1
 fi
 
 # ==========================================
@@ -65,7 +65,7 @@ online_status=$(curl -s --head "https://$url" | grep '200')
 if [[ $online_status && $3 != "true" ]]
 then
   echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways."
-  exit
+  exit 1
 fi
 
 # Add domain config to flox.tfvars
