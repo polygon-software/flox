@@ -11,6 +11,11 @@ on:
         options:
           - test
           - live
+      force:
+        required: false
+        type: boolean
+        description: Force deployment even if environment already exists
+        default: false
 jobs:
   setup-aws:
     runs-on: ubuntu-latest
