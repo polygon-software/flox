@@ -20,7 +20,7 @@ url="$1.$project.polygon-project.ch"
 online_status=$(curl -s --head "https://$url" | grep '200')
 if ! [[ $online_status || $3 == "true" ]]
 then
-  echo "Deployment in mode $1 is not online! Use 'force' to force destruction anyways."
+  echo "Deployment in mode $1 is not online at URL '$url'! Use 'force' to force destruction anyways."
   exit 1
 fi
 
