@@ -142,8 +142,8 @@ else
 fi
 
 # Copy .zip files
-cp ../../outputs/frontend.zip frontend.zip
-cp ../../outputs/backend.zip backend.zip
+cp ../outputs/frontend.zip frontend.zip
+cp ../outputs/backend.zip backend.zip
 
 # ==========================================
 # ======    Step 3: Destroy all     ========
