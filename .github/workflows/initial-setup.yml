@@ -15,7 +15,7 @@ on:
       force:
         required: false
         type: boolean
-        description: Force deployment even if environment already exists
+        description: Force deployment even if selected environment already exists
         default: false
 jobs:
   setup-aws:
@@ -43,4 +43,4 @@ jobs:
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
         run: |
-          bash initial-aws-setup.sh ${{ github.event.inputs.mode }}
+          bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }}
