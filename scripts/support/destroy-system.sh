@@ -129,6 +129,8 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 
+cd ../../support || exit
+
 # Build & zip frontend and backend
 if [[ $serverless_api == "true" ]]
 then
@@ -141,9 +143,11 @@ else
   bash build.sh "$project" "$frontend_build_mode"
 fi
 
+cd ../aws-initial-setup/2_main-setup || exit
+
 # Copy .zip files
-cp ../outputs/frontend.zip frontend.zip
-cp ../outputs/backend.zip backend.zip
+cp ../../outputs/frontend.zip frontend.zip
+cp ../../outputs/backend.zip backend.zip
 
 # ==========================================
 # ======    Step 3: Destroy all     ========
