@@ -1,7 +1,7 @@
 # DNS Setup
 
 resource "aws_acm_certificate" "backend_cert" {
-  domain_name = "api.${var.base_domain}"
+  domain_name = "api.${var.domain}"
   validation_method = "DNS"
   lifecycle {
     create_before_destroy = true
@@ -33,7 +33,7 @@ resource "aws_acm_certificate_validation" "cert_validation_backend" {
 data "aws_elastic_beanstalk_hosted_zone" "hosted_zone" {}
 
 resource "aws_route53_record" "web_record_alias" {
-  name                  = var.base_domain
+  name                  = var.domain
   type                  = "A"
   zone_id               = var.hosted_zone_id
   alias {
@@ -44,7 +44,7 @@ resource "aws_route53_record" "web_record_alias" {
 }
 
 resource "aws_route53_record" "web_record_alias_AAAA" {
-  name                  = var.base_domain
+  name                  = var.domain
   type                  = "AAAA"
   zone_id               = var.hosted_zone_id
   alias {

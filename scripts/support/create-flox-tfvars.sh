@@ -11,6 +11,10 @@ rm -f flox.tfvars
 
 # ===== Flox config variables =====
 
+# Install dependencies
+yarn
+yarn global add ts-node
+
 # Apply flox.config.json via helper .ts file
 ts-node --compiler-options '{"module": "commonjs"}' ./export-variables.ts "$1"  >> flox.tfvars
 

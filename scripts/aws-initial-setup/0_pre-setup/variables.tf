@@ -44,7 +44,7 @@ variable "aws_access_key" {
   type            = string
 }
 
-variable "base_domain" {
+variable "domain" {
   description = "Project base domain, e.g. flox.polygon-project.ch"
   type    = string
 }

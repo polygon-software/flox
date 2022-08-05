@@ -58,10 +58,10 @@ resource "aws_s3_bucket_versioning" "website" {
 }
 
 resource "aws_s3_bucket_public_access_block" "website" {
-  bucket = aws_s3_bucket.website_bucket.bucket
-  ignore_public_acls = true
-  block_public_acls = true
-  block_public_policy = true
+  bucket                  = aws_s3_bucket.website_bucket.bucket
+  ignore_public_acls      = true
+  block_public_acls       = true
+  block_public_policy     = true
   restrict_public_buckets = true
 }
 
@@ -78,9 +78,9 @@ module "dist_files" {
 
 // Upload all dist resources to S3 Bucket
 resource "aws_s3_bucket_object" "file" {
-  for_each = module.dist_files.files
-  bucket      = aws_s3_bucket.website_bucket.bucket
-  key          = each.key
-  content_type = each.value.content_type
-  source  = each.value.source_path
+  for_each      = module.dist_files.files
+  bucket        = aws_s3_bucket.website_bucket.bucket
+  key           = each.key
+  content_type  = each.value.content_type
+  source        = each.value.source_path
 }

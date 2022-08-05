@@ -8,7 +8,7 @@
 # ==========================================
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
-zsh create-flox-tfvars.sh
+zsh create-flox-tfvars.sh "test"
 echo "type=\"test\"" >> flox.tfvars
 
 cd ../aws-initial-setup/0_pre-setup || exit
@@ -17,14 +17,17 @@ cd ../aws-initial-setup/0_pre-setup || exit
 project=$(jq '.general.project' ../../../backend/flox.config.json)
 project=${project:1:-1}
 
-build_mode=$(jq '.general.mode' ../../../frontend/flox.config.json)
-build_mode=${build_mode:1:-1}
+frontend_build_mode=$(jq ".general.mode_test" ../../../frontend/flox.config.json)
+frontend_build_mode=${frontend_build_mode:1:-1}
 
 aws_region=$(jq '.general.aws_region' ../../../backend/flox.config.json)
 aws_region=${aws_region:1:-1}
 
 organisation=$(jq '.general.organisation' ../../../backend/flox.config.json)
 organisation=${organisation:1:-1}
+
+# Serverless mode (API only)
+serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.config.json)
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/test/g" config.tf
@@ -35,19 +38,19 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-url=$(jq '.general.test_base_domain' ../../../backend/flox.config.json)
-url=${url:1:-1}
-
-root_domain=$url
-
-# Extract root domain, since it will be owned by parent organization
-# (e.g. flox.polygon-project.ch -> polygon-project.ch)
-IFS='.' read -r pid root_domain <<< "$url" # split at first occurrence of '.', PID is project id, remains unused
+# Get mode-dependent base URL
+if [[ $1 == "live" ]]
+then
+  url=$(jq ".general.live_domain" ../../../backend/flox.config.json)
+  url=${url:1:-1}
+else
+  # E.g. test.flox.polygon-project.ch
+  url="$1.$project.polygon-project.ch"
+fi
 
 # Add domain config to flox.tfvars
 echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
-echo "base_domain=\"$url\"" >> ../../support/flox.tfvars
-echo "root_domain=\"$root_domain\"" >> ../../support/flox.tfvars
+echo "domain=\"$url\"" >> ../../support/flox.tfvars
 
 # Destroy Cognito via Terraform
 terraform refresh -var-file="../../support/flox.tfvars"
@@ -98,7 +101,6 @@ terraform refresh -var-file="../../support/flox.tfvars"
 # ==========================================
 # ======     Step 2: Main setup     ========
 # ==========================================
-echo "main destroy"
 
 cd ../2_main-setup || exit
 
@@ -115,7 +117,17 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # Build & zip frontend and backend
-zsh ../../support/build.bash "test" "$project" "$build_mode"
+if [[ $serverless_api == "true" ]]
+then
+  # Build in API & frontend in serverless mode for AWS lambda
+  echo "Building for serverless deployment..."
+  zsh build.sh "$project" "$frontend_build_mode" true
+else
+  # Regular build
+  echo "Building for regular deployment..."
+  zsh build.sh "$project" "$frontend_build_mode"
+fi
+
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 
