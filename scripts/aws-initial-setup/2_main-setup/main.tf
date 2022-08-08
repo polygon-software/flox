@@ -8,14 +8,6 @@ resource "aws_vpc" "vpc" {
   }
 }
 
-resource "aws_internet_gateway" "internet_gateway" {
-  vpc_id                = aws_vpc.vpc.id
-  tags = {
-    Name          = "${var.project}-${var.type}-internet-gateway"
-    Project       = var.project
-  }
-}
-
 # Frontend module (SSR)
 module "web_ssr" {
   source = "./web-ssr"
@@ -27,9 +19,10 @@ module "web_ssr" {
   vpc_id = aws_vpc.vpc.id
   source_code_bucket_id = aws_s3_bucket.source_code_bucket.id
   private_subnet_ids = aws_subnet.private_subnet.*.id
-  public_subnet_ids = aws_subnet.public_subnet.*.id
   hosted_zone_id = var.hosted_zone_id
   domain = var.domain
+  web_pub_subnet_factor = var.web_pub_subnet_factor
+  private_route_table_id = aws_route_table.route_table_private.id
 }
 
 # Frontend module (PWA/SPA)
@@ -58,7 +51,6 @@ module "api-ebs" {
   hosted_zone_id = var.hosted_zone_id
   eb_app_desc = var.eb_app_desc
   private_subnet_ids = aws_subnet.private_subnet.*.id
-  public_subnet_ids = aws_subnet.public_subnet.*.id
   api_iam_instance_profile_name = aws_iam_instance_profile.api.name
   backend_certificate_arn = aws_acm_certificate.backend_cert.arn
   source_code_bucket_id = aws_s3_bucket.source_code_bucket.id
@@ -115,7 +107,6 @@ module "api-serverless" {
   user_pool_id = var.user_pool_id
   user_pool_client_id = var.user_pool_client_id
   private_subnet_ids = aws_subnet.private_subnet.*.id
-  public_subnet_ids = aws_subnet.public_subnet.*.id
   vpc_id = aws_vpc.vpc.id
   backend_certificate_arn = module.api-serverless-certificate[0].backend_certificate_arn
   api_security_group_id = aws_security_group.api_security_group.id
