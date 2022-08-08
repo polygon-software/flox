@@ -56,6 +56,7 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'server.js',
+    filename: 'main.js',
+    libraryTarget: 'commonjs'
   },
 };
