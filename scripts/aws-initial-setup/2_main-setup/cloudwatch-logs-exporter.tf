@@ -10,15 +10,8 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-resource "random_string" "random" {
-  length  = 8
-  special = false
-  upper   = false
-  numeric  = false
-}
-
 resource "aws_iam_role" "log_exporter" {
-  name = "log-exporter-${random_string.random.result}"
+  name = "${var.project}-${var.type}-log-exporter"
 
   assume_role_policy = <<EOF
 {
@@ -38,7 +31,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "log_exporter" {
-  name = "log-exporter-${random_string.random.result}"
+  name = "${var.project}-${var.type}-log-exporter"
   role = aws_iam_role.log_exporter.id
 
   policy = <<EOF
@@ -99,7 +92,7 @@ EOF
 
 resource "aws_lambda_function" "log_exporter" {
   filename         = data.archive_file.log_exporter.output_path
-  function_name    = "log-exporter-${random_string.random.result}"
+  function_name    = "${var.project}-${var.type}-log-exporter"
   role             = aws_iam_role.log_exporter.arn
   handler          = "cloudwatch-to-s3.lambda_handler"
   source_code_hash = data.archive_file.log_exporter.output_base64sha256
@@ -117,14 +110,14 @@ resource "aws_lambda_function" "log_exporter" {
 }
 
 resource "aws_cloudwatch_event_rule" "log_exporter" {
-  name                = "log-exporter-${random_string.random.result}"
+  name                = "${var.project}-${var.type}-log-exporter"
   description         = "Fires periodically to export logs to S3"
   schedule_expression = "rate(4 hours)"
 }
 
 resource "aws_cloudwatch_event_target" "log_exporter" {
   rule      = aws_cloudwatch_event_rule.log_exporter.name
-  target_id = "log-exporter-${random_string.random.result}"
+  target_id = "${var.project}-${var.type}-log-exporter"
   arn       = aws_lambda_function.log_exporter.arn
 }
 
