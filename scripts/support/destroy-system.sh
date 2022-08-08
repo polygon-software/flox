@@ -132,11 +132,11 @@ if [[ $serverless_api == "true" ]]
 then
   # Build in API & frontend in serverless mode for AWS lambda
   echo "Building for serverless deployment..."
-  bash build.sh "$project" "$frontend_build_mode" true
+  sudo bash build.sh "$project" "$frontend_build_mode" true
 else
   # Regular build
   echo "Building for regular deployment..."
-  bash build.sh "$project" "$frontend_build_mode"
+  sudo bash build.sh "$project" "$frontend_build_mode"
 fi
 
 cd ../aws-initial-setup/2_main-setup || exit
