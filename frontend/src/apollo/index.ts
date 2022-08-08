@@ -11,8 +11,11 @@ import {QSsrContext} from '@quasar/app-webpack';
 function getAuthMiddleware(ssrContext: QSsrContext|null|undefined){
   return new ApolloLink((operation, forward) => {
     const cookies = process.env.SERVER && ssrContext? Cookies.parseSSR(ssrContext) : Cookies
-    const token = cookies.get('authentication.idToken')
+    let token = cookies.get('authentication.idToken')
     if(token){
+      // If token contains quotes, remove them
+      token = token.replace(/"/g, '')
+
       // Add the authorization to the headers
       operation.setContext({
         headers: {
