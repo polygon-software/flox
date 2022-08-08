@@ -27,18 +27,18 @@ resource "aws_acm_certificate_validation" "cert_validation_frontend" {
   validation_record_fqdns = [for record in aws_route53_record.ssl_frontend : record.fqdn]
 }
 
-// TODO: Determine why this fails to create on first run ("Missing Arguments")
 resource "aws_route53_record" "redirect_record" {
   depends_on = [
     aws_s3_bucket.redirect_bucket,
-    aws_s3_bucket_website_configuration.redirect_bucket_config
+    aws_s3_bucket_website_configuration.redirect_bucket_config,
+    aws_s3_bucket.redirect_bucket.website_endpoint
   ]
   name                  = "www.${var.domain}"
   type                  = "A"
   zone_id               = var.hosted_zone_id
   alias {
     evaluate_target_health = false
-    name                   = aws_s3_bucket.redirect_bucket.website_endpoint
+    name                   = aws_s3_bucket_website_configuration.redirect_bucket_config.website_domain
     zone_id                = aws_s3_bucket.redirect_bucket.hosted_zone_id
   }
 }

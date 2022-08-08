@@ -37,7 +37,7 @@ resource "aws_rds_cluster" "database_cluster" {
   kms_key_id                = aws_kms_key.rds_encryption_key.arn
   storage_encrypted         = true
   backup_retention_period   = 30
-  deletion_protection       = var.type == "test" ? false : true
+  deletion_protection       = var.type == "live" ? true : false
   // Serverless v1 is non-provisioned
   engine_mode = var.serverless_db == true && var.serverless_version == "v1" ? "serverless" : "provisioned"
 
