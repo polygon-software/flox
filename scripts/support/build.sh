@@ -28,6 +28,9 @@ rm -rf dist
 yarn
 if [[ $3 == "true" ]]
 then
+  # Install node-prune for serverless build
+  yarn global add node-prune
+
   # Build for AWS lambda (includes minifying node_modules)
   sudo yarn build:lambda
 else
