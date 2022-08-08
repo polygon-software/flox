@@ -1,0 +1,5 @@
+/*.zip
+*.ovpn
+
+.terraform
+.terraform.lock.hcl

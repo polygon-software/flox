@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - master
-      - project-soi
-      - project-bigabig
   pull_request:
     types:
       - opened

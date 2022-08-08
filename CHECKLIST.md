@@ -9,7 +9,7 @@ application-specific:
 
 ## Frontend
 - [ ] Adapt `frontend/.env` with app name, AWS user pool & e-mail sender
-- [ ] Set up `frontend/flox.config.js` according to your application's needs
+- [ ] Set up `frontend/flox.config.json` according to your application's needs
 - [ ] In `frontend/src/data/ENUM.ts`, add the list of user roles within your application.
 - [ ] In `frontend/src/boot/router.ts`, add the application specific paths for each user role's default view
 - [ ] In `frontend/src/router/routes.ts`, add the application's routes
@@ -19,5 +19,5 @@ application-specific:
 
 ## Backend
 - [ ] Adapt `backend/.env` with database name, AWS keys & buckets
-- [ ] Set up `backend/flox.config.js` according to your application's needs
+- [ ] Set up `backend/flox.config.json` according to your application's needs
 - [ ] In `backend/src/flox/modules/file/file.resolver.ts`, add appropriate guards for private files depending on your application

@@ -1,9 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import fmp = require('fastify-multipart');
 import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
@@ -11,25 +6,28 @@ import {
   floxModuleOptions,
   getActiveFloxModuleNames,
 } from './flox/core/flox-helpers';
+import serverlessExpress from '@vendia/serverless-express';
 
 /**
  * Bootstraps the nest application itself
- * @returns {Promise<void>} - done
+ * @param {boolean} [serverless] - whether to run in serverless mode
+ * @returns {Promise<serverlessExpress|NestApplication>} - application handler
  */
-async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(),
-  );
+export async function bootstrap(serverless = false) {
+  const app = await NestFactory.create(AppModule);
+  await app.init();
 
-  // Add GraphQL Voyager as middleware (intended for express, but seems to work on fastify as well)
+  // Add GraphQL Voyager as middleware
   app.use('/schema', voyagerMiddleware({ endpointUrl: '/graphql' }));
 
   const configService: ConfigService = app.get(ConfigService);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  await app.register(fmp);
-  await app.listen(configService.get('server.port'), '::');
+  if (!serverless) {
+    await app.listen(configService.get('server.port'));
+  }
+  const expressApp = app.getHttpAdapter().getInstance();
+
+  // Return in serverless or non-serverless mode
+  return serverless ? serverlessExpress({ app: expressApp }) : app;
 }
 
 // Start application

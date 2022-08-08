@@ -1,7 +1,7 @@
-name: Initial AWS setup
+name: Set up AWS infrastructure
 
+# Should only be run manually from the Actions tab (only once!)
 on:
-  # Testing only
   workflow_dispatch:
     inputs:
       mode:
@@ -12,9 +12,35 @@ on:
           - test
           - live
           - dev
+      force:
+        required: false
+        type: boolean
+        description: Force deployment
+        default: false
 jobs:
   setup-aws:
     runs-on: ubuntu-latest
     steps:
-      - name: Test
-        run: echo "Testing!"
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Make scripts executable
+        run: |
+          sudo chmod +x ./scripts/support/build.sh
+          sudo chmod +x ./scripts/aws-initial-setup/initial-aws-setup.sh
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Validate Terraform
+        working-directory: ./scripts/aws-initial-setup
+        run: |
+          terraform validate
+
+      - name: Build & set up AWS infrastructure
+        working-directory: ./scripts/aws-initial-setup
+        run: |
+          bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }}

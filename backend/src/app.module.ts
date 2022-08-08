@@ -6,14 +6,22 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import * as Joi from 'joi';
 import { floxModules, floxProviders } from './flox/flox';
+import { TerminusModule } from '@nestjs/terminus';
+import { HttpModule } from '@nestjs/axios';
+import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { isServerless } from './flox/core/flox-helpers';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
-      playground: true,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
       debug: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      // In serverless mode, use in-memory schema
+      autoSchemaFile: isServerless()
+        ? true
+        : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      driver: ApolloDriver,
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -31,9 +39,7 @@ import { floxModules, floxProviders } from './flox/flox';
         DB_PORT: Joi.number().required(),
 
         // AWS
-        AWS_REGION: Joi.string().required(),
-        AWS_ACCESS_KEY_ID: Joi.string().required(),
-        AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+        AWS_MAIN_REGION: Joi.string().required(),
         AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
         AWS_PRIVATE_BUCKET_NAME: Joi.string().required(),
       }),
@@ -52,15 +58,16 @@ import { floxModules, floxProviders } from './flox/flox';
       }),
       inject: [ConfigService],
     }),
-    // TypeOrmModule.forFeature([ TODO check if needed
-    //   // Entities for Flox modules
-    //   ...floxEntities(),
-    //   // Add any custom entities here
-    // ]),
+
+    // Healthcheck modules
+    TerminusModule,
+    HttpModule,
+
     // Flox modules
     ...floxModules(),
     // Add any custom modules here
   ],
+  controllers: [HealthcheckController],
   providers: [
     // Flox module Providers
     ...floxProviders(),
