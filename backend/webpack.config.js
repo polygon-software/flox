@@ -10,7 +10,7 @@ const lazyImports = [
 ];
 
 module.exports = {
-  entry: ['./src/main.ts', './src/lambda.ts'],
+  entry: './src/main.ts',
   optimization: {
     minimize: false,
   },
