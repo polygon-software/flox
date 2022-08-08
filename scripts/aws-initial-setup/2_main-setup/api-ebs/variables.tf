@@ -79,11 +79,6 @@ variable "private_subnet_ids" {
   type            = list(string)
 }
 
-variable "public_subnet_ids" {
-  description     = "Public subnet IDs"
-  type            = list(string)
-}
-
 variable "database_subnet_ids" {
   description     = "Database subnet IDs"
   type            = list(string)

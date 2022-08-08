@@ -31,6 +31,9 @@ then
   # Install node-prune for serverless build
   yarn global add node-prune
 
+  # Make node_modules accessible, so node_prune can delete files
+  sudo chmod -R 777 ./node_modules
+
   # Build for AWS lambda (includes minifying node_modules)
   sudo yarn build:lambda
 else

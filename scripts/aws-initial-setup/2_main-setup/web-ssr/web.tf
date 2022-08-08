@@ -70,7 +70,7 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   setting {
     namespace     = "aws:ec2:vpc"
     name          = "ELBSubnets"
-    value         = join(",", var.public_subnet_ids)
+    value         = join(",", aws_subnet.public_subnet.*.id)
   }
 
   setting {
