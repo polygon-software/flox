@@ -7,12 +7,12 @@ import {Cookies} from 'quasar';
 
 /**
  * Persists a given payload to one or multiple cookies
- * @param {string} category - sub-category to store the cookie to
+ * @param {string} category - sub-category to stores the cookie to
  * @param {Record<string, any>} payload - the data to persist (in stringified form)
  * @returns {void}
  */
 export function persistToCookies (category: string, payload: Record<string, any>): void{
-  // Set cookie when SSR fetch is done (ie. only browser can set a cookie)
+  // Set cookie when SSR fetch is done (i.e. only browser can set a cookie)
   if (!process.env.SERVER) {
     // Set 'secure' to true for production
     Object.keys(payload).forEach((key: string) => {
@@ -32,7 +32,8 @@ export function persistToCookies (category: string, payload: Record<string, any>
  * @returns {void}
  */
 export function deleteCookies(category: string): void{
-  const allCookies = Cookies.getAll()
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const allCookies: Set<unknown> = Cookies.getAll()
 
   Object.keys(allCookies).forEach((cookieKey: string) => {
     if(cookieKey.startsWith(`${category}.`)){

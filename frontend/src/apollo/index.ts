@@ -1,7 +1,7 @@
 import type {ApolloClientOptions, StoreObject} from '@apollo/client/core'
 import {ApolloLink, concat, createHttpLink, defaultDataIdFromObject, InMemoryCache} from '@apollo/client/core'
 import {Cookies} from 'quasar';
-import {QSsrContext} from '@quasar/app';
+import {QSsrContext} from '@quasar/app-webpack';
 
 /**
  * Sets up auth middleware
