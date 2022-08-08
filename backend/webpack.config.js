@@ -7,11 +7,10 @@ const lazyImports = [
   '@nestjs/websockets/socket-module',
   'ts-loader',
   'aws-lambda',
-  'lambda',
 ];
 
 module.exports = {
-  entry: './src/main.ts',
+  entry: ['./src/main.ts', './src/lambda.ts'],
   optimization: {
     minimize: false,
   },
