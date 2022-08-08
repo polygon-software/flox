@@ -125,10 +125,6 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-# Refresh main Terraform state
-terraform init
-terraform refresh -var-file="../../support/flox.tfvars"
-
 cd ../../support || exit
 
 # Build & zip frontend and backend
@@ -148,6 +144,10 @@ cd ../aws-initial-setup/2_main-setup || exit
 # Copy .zip files
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
+
+# Refresh main Terraform state
+terraform init
+terraform refresh -var-file="../../support/flox.tfvars"
 
 # ==========================================
 # ======    Step 3: Destroy all     ========

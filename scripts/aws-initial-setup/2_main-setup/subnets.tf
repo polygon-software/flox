@@ -32,6 +32,7 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 
+# TODO needed?
 resource "aws_nat_gateway" "frontend_nat" {
   allocation_id         = aws_eip.web_nat_elastic_ip.id
   subnet_id             = aws_subnet.public_subnet[0].id
