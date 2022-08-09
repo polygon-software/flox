@@ -18,7 +18,7 @@ on:
         description: Force desctruction
         default: false
 jobs:
-  destroy-aws:
+  setup-aws:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎
