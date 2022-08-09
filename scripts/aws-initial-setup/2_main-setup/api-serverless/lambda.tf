@@ -9,7 +9,7 @@ resource "aws_lambda_function" "api_lambda" {
   memory_size = 2048
 
   # Lambda handler function location; since this is in src/lambda.ts -> handler(), we use AWS' lambda syntax below
-  handler       = "src/main.handler"
+  handler       = "main.handler"
   source_code_hash = var.api_source_code_object_hash
 
   runtime = "nodejs16.x"
