@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "build:lambda": "nest build --webpack && rm -rf node_modules && yarn --production --no-lockfile && sudo npx node-prune && rimraf node_modules/rxjs/src && rimraf node_modules/rxjs/bundles && rimraf node_modules/rxjs/_esm* && rimraf node_modules/typescript",
+    "build:lambda": "nest build && rm -rf node_modules && yarn --production --no-lockfile && sudo npx node-prune && rimraf node_modules/rxjs/src && rimraf node_modules/rxjs/bundles && rimraf node_modules/rxjs/_esm* && rimraf node_modules/typescript",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
