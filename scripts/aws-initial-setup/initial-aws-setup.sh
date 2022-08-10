@@ -134,13 +134,15 @@ then
   # Apply Parent DNS Terraform
   terraform init
   terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+
+  cd ../2_main-setup || exit
+else
+  cd ../scripts/aws-initial-setup/2_main_setup || exit
 fi
 
 # ==========================================
 # ======     Step 2: Main setup     ========
 # ==========================================
-
-cd ../2_main-setup || exit
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
