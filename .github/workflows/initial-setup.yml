@@ -20,7 +20,7 @@ on:
       confirm:
         required: false
         type: string
-        description: Enter "I confirm" to confirm you are aware that DATA LOSS, INCLUDING ACCOUNTS, may occur when forcing deployment!
+        description: Enter "confirm" to confirm you are aware that DATA LOSS, INCLUDING ACCOUNTS, may occur when forcing deployment!
 jobs:
   setup-aws:
     runs-on: ubuntu-latest
