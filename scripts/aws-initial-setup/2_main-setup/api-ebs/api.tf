@@ -52,7 +52,7 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
   setting {
     namespace = "aws:ec2:vpc"
     name      = "ELBSubnets"
-    value     = join(",", var.private_subnet_ids)
+    value     = join(",", var.public_subnet_ids)
   }
 
   // Subnets of database
