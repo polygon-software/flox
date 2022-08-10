@@ -17,6 +17,10 @@ on:
         type: boolean
         description: Force deployment
         default: false
+      confirm:
+        required: true
+        type: string
+        description: Enter "I confirm" to confirm you are aware that DATA LOSS, INCLUDING ACCOUNTS, may occur when forcing deployment!
 jobs:
   setup-aws:
     runs-on: ubuntu-latest
@@ -43,4 +47,4 @@ jobs:
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
         run: |
-          bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }}
+          bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }}
