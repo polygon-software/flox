@@ -63,6 +63,9 @@ fi
 
 # Check whether selected deployment is already online
 online_status=$(curl -s --head "https://$url" | grep '200')
+
+echo "Online status: $online_status, override arguments: $3, $4"
+
 if [[ $online_status && ( $3 != "true"  || $4 != "I confirm")]]
 then
   echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways (CAUTION: This may destroy existing infrastructure if configuration has changed!)."
