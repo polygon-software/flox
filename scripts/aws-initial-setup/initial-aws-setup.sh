@@ -6,6 +6,7 @@
 # $2 - local mode (will perform cleanup): true or not set
 # Optionally, with third parameter set to 'true', will force redeployment
 # even if the environment is already online
+# If deployment is forced, user must enter 'I confirm' as fourth parameter
 # --------------------------------------------------------------
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
@@ -62,9 +63,12 @@ fi
 
 # Check whether selected deployment is already online
 online_status=$(curl -s --head "https://$url" | grep '200')
-if [[ $online_status && $3 != "true" ]]
+
+echo "Online status: $online_status, override arguments: $3, $4"
+
+if [[ $online_status && ( $3 != "true"  || $4 != "confirm")]]
 then
-  echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways (Caution: This may destroy existing infrastructure if configuration has changed!)."
+  echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways (CAUTION: This may destroy existing infrastructure if configuration has changed!)."
   exit 1
 fi
 
@@ -133,13 +137,15 @@ then
   # Apply Parent DNS Terraform
   terraform init
   terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+
+  cd ../2_main-setup || exit
+else
+  cd ../scripts/aws-initial-setup/2_main-setup || exit
 fi
 
 # ==========================================
 # ======     Step 2: Main setup     ========
 # ==========================================
-
-cd ../2_main-setup || exit
 
 # Replace 'TYPE' in config.tf with actual type (live, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf
