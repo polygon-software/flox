@@ -66,7 +66,7 @@ online_status=$(curl -s --head "https://$url" | grep '200')
 
 echo "Online status: $online_status, override arguments: $3, $4"
 
-if [[ $online_status && ( $3 != "true"  || $4 != "I confirm")]]
+if [[ $online_status && ( $3 != "true"  || $4 != "confirm")]]
 then
   echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways (CAUTION: This may destroy existing infrastructure if configuration has changed!)."
   exit 1
