@@ -18,7 +18,7 @@ on:
         description: Force deployment
         default: false
       confirm:
-        required: true
+        required: false
         type: string
         description: Enter "I confirm" to confirm you are aware that DATA LOSS, INCLUDING ACCOUNTS, may occur when forcing deployment!
 jobs:
