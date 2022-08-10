@@ -77,6 +77,7 @@ module "api-ebs" {
   api_source_code_object_id = aws_s3_object.api_source_code_object.id
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
   aws_region = var.aws_region
+  api_security_group_id = aws_security_group.api_security_group.id
 }
 
 # Certificate for serverless mode backend

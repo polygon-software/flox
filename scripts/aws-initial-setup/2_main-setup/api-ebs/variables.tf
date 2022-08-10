@@ -124,3 +124,7 @@ variable "api_source_code_object_hash" {
   type    = string
 }
 
+variable "api_security_group_id" {
+  description     = "API security group ID"
+  type            = string
+}
