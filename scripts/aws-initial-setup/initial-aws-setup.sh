@@ -137,7 +137,7 @@ then
 
   cd ../2_main-setup || exit
 else
-  cd ../scripts/aws-initial-setup/2_main_setup || exit
+  cd ../scripts/aws-initial-setup/2_main-setup || exit
 fi
 
 # ==========================================
