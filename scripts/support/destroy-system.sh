@@ -5,9 +5,10 @@
 # $2 - local mode (will perform cleanup): true or not set
 # Optionally, with third parameter set to 'true', will force destruction
 # Be careful: this script may destroy infrastructure seen by customers!
+# If destruction is forced, user must enter 'confirm' as fourth parameter
 # --------------------------------------------------------------
 
-if [[ $1 != "test" ]] && [[ $1 != "dev" ]]
+if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
 then
   echo "Invalid deployment mode $1"
   exit 1
@@ -42,13 +43,17 @@ serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.co
 # Get system URL, e.g. test.flox.polygon-project.ch
 url="$1.$project.polygon-project.ch"
 
-# Check whether selected deployment is online (otherwise fail if 'force' is not set to true)
+# Check whether selected deployment is online (if online, fail if 'force' is not set to true)
 online_status=$(curl -s --head "https://$url" | grep '200')
-if [[ ! ($online_status) && $3 != "true" ]]
+if [[ $online_status && ( $3 != "true"  || $4 != "confirm")]]
 then
-  echo "Deployment in mode $1 is not online at URL '$url'! Use 'force' to force destruction anyways."
+  echo "Deployment in mode $1 is online at URL '$url'! Use 'force' to force destruction anyways. (CAUTION: This may destroy live infrastructure!)"
   exit 1
 fi
+
+echo "=============================================="
+echo "===  DESTROYING AWS INFRASTRUCTURE ($1)  ==="
+echo "=============================================="
 
 # Replace 'TYPE' in config.tf with actual type (dev, test)
 sed -i -e "s/##TYPE##/$1/g" config.tf

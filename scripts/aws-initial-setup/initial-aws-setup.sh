@@ -6,7 +6,7 @@
 # $2 - local mode (will perform cleanup): true or not set
 # Optionally, with third parameter set to 'true', will force redeployment
 # even if the environment is already online
-# If deployment is forced, user must enter 'I confirm' as fourth parameter
+# If deployment is forced, user must enter 'confirm' as fourth parameter
 # --------------------------------------------------------------
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
@@ -64,13 +64,16 @@ fi
 # Check whether selected deployment is already online
 online_status=$(curl -s --head "https://$url" | grep '200')
 
-echo "Online status: $online_status, override arguments: $3, $4"
 
 if [[ $online_status && ( $3 != "true"  || $4 != "confirm")]]
 then
   echo "Deployment in mode $1 is already online! Use 'force' to force deployment anyways (CAUTION: This may destroy existing infrastructure if configuration has changed!)."
   exit 1
 fi
+
+echo "=============================================="
+echo "===  SETTING UP AWS INFRASTRUCTURE ($1)  ==="
+echo "=============================================="
 
 # Add domain config to flox.tfvars
 echo "# ======== Domain Config ========" >> ../../support/flox.tfvars
