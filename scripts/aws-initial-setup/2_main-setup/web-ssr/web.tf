@@ -30,9 +30,9 @@ resource "aws_elastic_beanstalk_application_version" "frontend_application_versi
   }
 }
 
+// Link to data object instead of actual resource in order not to break update flow (which may attempt recreation)
 data "aws_acm_certificate" "frontend_cert" {
   domain = var.domain
-  validation_method = "DNS"
 }
 
 // Create EBS environment
