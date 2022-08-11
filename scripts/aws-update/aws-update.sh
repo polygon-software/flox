@@ -39,9 +39,8 @@ serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../backend/flox.confi
 # Get mode-dependent base URL
 if [[ $1 == "live" ]]
 then
-  url=$(jq ".general.live_domain" ../../../backend/flox.config.json)
+  url=$(jq ".general.live_domain" ../../backend/flox.config.json)
   url=${url:1:-1}
-  echo "Live URL is $url"
 else
   # E.g. test.flox.polygon-project.ch
   url="$1.$project.polygon-project.ch"
