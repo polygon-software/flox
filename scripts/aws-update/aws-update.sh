@@ -17,7 +17,7 @@ fi
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
 cd ../support || exit
-zsh create-flox-tfvars.sh "$1"
+bash create-flox-tfvars.sh "$1"
 echo "type=\"$1\"" >> flox.tfvars
 
 # Get additional flox.config variables
@@ -126,11 +126,11 @@ if [[ $serverless_api == "true" ]]
 then
   # Build in serverless mode for AWS lambda
   echo "Building for serverless deployment..."
-  zsh build.sh "$project" "$frontend_build_mode" true
+  sudo bash build.sh "$project" "$frontend_build_mode" true
 else
   # Regular build
   echo "Building for regular deployment..."
-  zsh build.sh "$project" "$frontend_build_mode"
+  sudo bash build.sh "$project" "$frontend_build_mode"
 fi
 
 cd ../aws-update/1_update || exit
