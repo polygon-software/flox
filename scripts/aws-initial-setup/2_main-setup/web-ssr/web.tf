@@ -30,11 +30,6 @@ resource "aws_elastic_beanstalk_application_version" "frontend_application_versi
   }
 }
 
-// Link to data object instead of actual resource in order not to break update flow (which may attempt recreation)
-data "aws_acm_certificate" "frontend_cert" {
-  domain = var.domain
-}
-
 // Create EBS environment
 // For settings, see https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
 resource "aws_elastic_beanstalk_environment" "frontend_env" {
@@ -105,7 +100,7 @@ resource "aws_elastic_beanstalk_environment" "frontend_env" {
   setting {
     namespace     = "aws:elbv2:listener:443"
     name          = "SSLCertificateArns"
-    value         = data.aws_acm_certificate.frontend_cert.arn
+    value         = aws_acm_certificate.frontend_cert.arn
   }
 
   setting {
