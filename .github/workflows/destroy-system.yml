@@ -12,11 +12,17 @@ on:
         options:
           - test
           - dev
+          - live
       force:
         required: false
         type: boolean
         description: Force desctruction
         default: false
+      confirm:
+        required: false
+        type: string
+        description: Enter "confirm" to confirm you are aware that DATA LOSS, INCLUDING ACCOUNTS, will occur when forcing destruction!
+
 jobs:
   destroy-aws:
     runs-on: ubuntu-latest
