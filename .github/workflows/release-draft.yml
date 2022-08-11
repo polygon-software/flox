@@ -27,7 +27,7 @@ jobs:
 
       - name: Build & update AWS infrastructure
         working-directory: ./scripts/aws-update
-        run: sudo bash aws-update.sh test
+        run: bash aws-update.sh test
 
       - name: Archive Frontend Release Files
         uses: polygon-software/action-zip@master

@@ -29,7 +29,7 @@ jobs:
 
       - name: Build & update AWS infrastructure
         working-directory: ./scripts/aws-update
-        run: sudo bash aws-update.sh live
+        run: bash aws-update.sh live
 
       - name: "Update state of monday.com items to 'Stage 4: Production'"
         uses: polygon-software/action-monday-state@main
