@@ -456,7 +456,6 @@ export class AuthenticationService {
       },
     }).onOk((code: string) => {
       // Deep copy user so state object does not get altered
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.cognitoUser)
       currentUser?.sendMFACode(code, {
         onSuccess: (userSession: CognitoUserSession) => {

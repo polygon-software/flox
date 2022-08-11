@@ -32,8 +32,7 @@ export function persistToCookies (category: string, payload: Record<string, any>
  * @returns {void}
  */
 export function deleteCookies(category: string): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const allCookies: Set<unknown> = Cookies.getAll()
+  const allCookies: Set<unknown> = Cookies.getAll() as Set<unknown>
 
   Object.keys(allCookies).forEach((cookieKey: string) => {
     if(cookieKey.startsWith(`${category}.`)){

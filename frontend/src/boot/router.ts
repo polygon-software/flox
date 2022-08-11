@@ -10,7 +10,6 @@ import {useAuthStore} from 'stores/authentication';
 let routerInstance: Router;
 
 export default boot(({ router, store }) => {
-  // Get auth store within stores (useAuth not working here)
   const $authStore = useAuthStore()
   routerInstance = router;
   // eslint-disable-next-line sonarjs/cognitive-complexity
