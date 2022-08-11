@@ -45,9 +45,9 @@ url="$1.$project.polygon-project.ch"
 
 # Check whether selected deployment is online (if online, fail if 'force' is not set to true)
 online_status=$(curl -s --head "https://$url" | grep '200')
-if [[ $online_status && ( $3 != "true"  || $4 != "confirm")]]
+if [[ ($online_status || $1 == "live" || $1 == "test") && ( $3 != "true"  || $4 != "confirm")]]
 then
-  echo "Deployment in mode $1 is online at URL '$url'! Use 'force' to force destruction anyways. (CAUTION: This may destroy live infrastructure!)"
+  echo "Deployment in mode $1 is online at URL '$url', or is customer-facing! Use 'force' to force destruction anyways. (CAUTION: This may destroy live infrastructure!)"
   exit 1
 fi
 
