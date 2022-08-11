@@ -27,5 +27,5 @@ jobs:
           terraform_wrapper: false
 
       - name: Build & update AWS infrastructure
-        working-directory: ./scripts/support
+        working-directory: ./scripts/aws-update
         run: sudo bash aws-update.sh dev
