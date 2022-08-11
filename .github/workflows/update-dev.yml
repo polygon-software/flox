@@ -2,10 +2,8 @@ name: "Stage 0: Overwrite Dev-Environment with newest version"
 
 on:
   push:
-    # TODO remove terraform branch
     branches:
       - dev
-      - feature-terraformServerless
 jobs:
   release:
     name: "Update DEV application"
