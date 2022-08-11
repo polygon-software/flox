@@ -41,6 +41,7 @@ if [[ $1 == "live" ]]
 then
   url=$(jq ".general.live_domain" ../../../backend/flox.config.json)
   url=${url:1:-1}
+  echo "Live URL is $url"
 else
   # E.g. test.flox.polygon-project.ch
   url="$1.$project.polygon-project.ch"
