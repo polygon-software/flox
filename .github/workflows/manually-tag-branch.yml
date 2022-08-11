@@ -1,0 +1,11 @@
+name: Create draft release
+
+on:
+  # Testing only
+  workflow_dispatch:
+jobs:
+  setup-aws:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: echo "Testing!"
