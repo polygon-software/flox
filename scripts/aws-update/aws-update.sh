@@ -220,4 +220,8 @@ then
   yarn install --silent 2> >(grep -v warning 1>&2)
   cd ../frontend || exit
   yarn install --silent 2> >(grep -v warning 1>&2)
+else
+  # Remove node_modules in preparation of release file generation
+  rm -rf "../../../frontend/dist/$frontend_build_mode/node_modules"
+  rm -rf "../../../backend/dist/node_modules"
 fi
