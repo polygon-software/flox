@@ -49,4 +49,4 @@ jobs:
       - name: Destroy AWS infrastructure
         working-directory: ./scripts/support
         run: |
-          bash destroy-system.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }}
+          bash destroy-system.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }}
