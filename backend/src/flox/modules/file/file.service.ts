@@ -12,6 +12,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
 export class FileService {
+  // TODO: When implementing file module, solve via .env / Terraform
   // S3 credentials
   // private readonly credentials = {
   //   region: this.configService.get('AWS_MAIN_REGION'),
