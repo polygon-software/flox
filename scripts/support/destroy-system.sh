@@ -102,7 +102,7 @@ echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
 # ==========================================
 cd ../1_parent-setup || exit
 
-# Replace 'TYPE' in config.tf with actual type (live, test)
+# Replace 'TYPE' in config.tf with actual type (dev, test or live)
 sed -i -e "s/##TYPE##/test/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
