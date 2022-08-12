@@ -29,21 +29,16 @@ import {computed, inject} from 'vue'
 import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {useAuth} from 'src/store/authentication';
-import {Context, Module} from 'vuex-smart-module';
-import AuthState from 'src/store/authentication/state';
-import AuthGetters from 'src/store/authentication/getters';
-import AuthMutations from 'src/store/authentication/mutations';
-import AuthActions from 'src/store/authentication/actions';
+import {useAuthStore} from 'stores/authentication';
 
 
 const $authService: AuthenticationService|undefined = inject('$authService')
 const $routerService: RouterService|undefined = inject('$routerService')
-const $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>> = useAuth()
+const $authStore: ReturnType<typeof useAuthStore> = useAuthStore()
 
 const loggedIn = computed(() => {
   // Explicit type
-  const result: boolean = $authStore.getters.getLoggedInStatus()
+  const result: boolean = $authStore.getLoggedInStatus
   return result;
 })
 
