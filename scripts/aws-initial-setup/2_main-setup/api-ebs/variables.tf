@@ -15,12 +15,12 @@ variable "domain" {
 }
 
 variable "public_bucket_id" {
-  description = "Log files bucket ID"
+  description = "Public bucket ID"
   type    = string
 }
 
 variable "private_bucket_id" {
-  description = "Log files bucket ID"
+  description = "Private bucket ID"
   type    = string
 }
 
