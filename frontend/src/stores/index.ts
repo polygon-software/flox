@@ -8,6 +8,6 @@ declare module 'pinia' {
   }
 }
 
-export default store((/* { ssrContext } */) => {
+export default store(() => {
   return createPinia()
 })
