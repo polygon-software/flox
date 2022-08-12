@@ -55,7 +55,7 @@ variable "public_bucket_id" {
 }
 
 variable "private_bucket_id" {
-  description = "Log files bucket ID"
+  description = "Private bucket ID"
   type    = string
 }
 
