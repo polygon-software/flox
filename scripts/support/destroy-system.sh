@@ -121,7 +121,7 @@ terraform refresh -var-file="../../support/flox.tfvars"
 
 cd ../2_main-setup || exit
 
-# Replace 'TYPE' in config.tf with actual type (dev, test)
+# Replace 'TYPE' in config.tf with actual type (dev, test or live)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
