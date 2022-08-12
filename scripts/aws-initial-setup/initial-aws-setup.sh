@@ -127,7 +127,7 @@ if [[ $1 == "test" ]] || [[ $1 == "dev" ]]
 then
   cd ../scripts/aws-initial-setup/1_parent-setup || exit
 
-  # Replace 'TYPE' in config.tf with actual type (live, test)
+  # Replace 'TYPE' in config.tf with actual type (dev, test)
   sed -i -e "s/##TYPE##/$1/g" config.tf
 
   # Replace 'PROJECT' in config.tf with actual project name
