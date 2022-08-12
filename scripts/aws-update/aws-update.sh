@@ -163,7 +163,7 @@ cd ../../aws-initial-setup/2_main-setup || exit
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 
-# Replace 'TYPE' in config.tf with actual type (live, test)
+# Replace 'TYPE' in config.tf with actual type (dev, test or live)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
