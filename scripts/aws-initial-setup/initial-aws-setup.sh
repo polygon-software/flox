@@ -149,7 +149,7 @@ fi
 # ======     Step 2: Main setup     ========
 # ==========================================
 
-# Replace 'TYPE' in config.tf with actual type (live, test)
+# Replace 'TYPE' in config.tf with actual type (dev, test, live)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
