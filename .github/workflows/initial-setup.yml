@@ -10,8 +10,9 @@ on:
         description: System deployment mode
         options:
           - test
-          - live
           - dev
+          - stage
+          - live
       force:
         required: false
         type: boolean

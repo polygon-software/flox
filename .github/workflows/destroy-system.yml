@@ -16,7 +16,7 @@ on:
       force:
         required: false
         type: boolean
-        description: Force desctruction
+        description: Force destruction
         default: false
       confirm:
         required: false

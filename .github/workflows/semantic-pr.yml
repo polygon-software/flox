@@ -35,4 +35,5 @@ jobs:
           allowed: |
             master
             dev
-            /^([A-Za-z]+-){0,1}(feature|doc|fix|test)-([A-Za-z-_0-9])+$/
+            /^(feature|doc|fix|test|)-([A-Za-z-_0-9])+$/
+            /^stage-(\d{2}-\d{2}-\d{4}-\d{2}-\d{2}-\d{2})$/

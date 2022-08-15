@@ -1,0 +1,54 @@
+name: "Opens the staging branch from dev and opens a PR on master"
+
+# Should only be run manually from the Actions tab
+on:
+  workflow_dispatch:
+    inputs:
+      reviewer:
+        required: false
+        type: string
+        description: GitHub name of the reviewer (if needed)
+        default: ''
+
+jobs:
+  create-stage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Make scripts executable
+        run: |
+          sudo chmod +x ./scripts/support/build.sh
+          sudo chmod +x ./scripts/aws-initial-setup/initial-aws-setup.sh
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Validate Terraform
+        working-directory: ./scripts/aws-initial-setup
+        run: |
+          terraform validate
+
+      - name: Build & set up AWS infrastructure
+        working-directory: ./scripts/aws-initial-setup
+        run: |
+          bash initial-aws-setup.sh stage false
+
+      - name: Open PR with reviewer
+        if: github.event.inputs.reviewer != ''
+        run: |
+          gh pr create -B "master" -t ${{ env.action_state.branch_name }} -b "Automatic staging branch PR" -r ${{ github.event.inputs.reviewer }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Open PR without reviewer
+        if: github.event.inputs.reviewer == ''
+        run: |
+          gh pr create -B "master" -t ${{ env.action_state.branch_name }} -b "Automatic staging branch PR"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

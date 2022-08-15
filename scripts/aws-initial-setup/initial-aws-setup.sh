@@ -2,14 +2,14 @@
 # Sets up the initial infrastructure for a new Flox project on AWS.
 # This script should only be ran once per mode!
 # Takes two parameters:
-# $1 - deployment mode: 'live', 'test' or 'dev'
+# $1 - deployment mode: 'live', 'test', 'stage' or 'dev'
 # $2 - local mode (will perform cleanup): true or not set
 # Optionally, with third parameter set to 'true', will force redeployment
 # even if the environment is already online
 # If deployment is forced, user must enter 'confirm' as fourth parameter
 # --------------------------------------------------------------
 
-if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
+if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "stage" ]] && [[ $1 != "dev" ]]
 then
   echo "Invalid deployment mode $1"
   exit 1
@@ -19,11 +19,23 @@ fi
 # ===  Step 0: Pre-setup (Cognito, DNS)  ===
 # ==========================================
 
+# If mode is stage, create branch name and save it to the GitHub action env file
+if [[ $1 == "stage" ]]
+then
+  branch_name="stage-$(date + '%d-%m-%Y-%H-%M-%S')"
+  echo "{branch_name}={$branch_name}" >> "$GITHUB_ENV"
+fi
+
 # Create flox.tfvars file from flox.config.json in frontend & backend
 cd ../support || exit
-bash create-flox-tfvars.sh "$1"
-echo "type=\"$1\"" >> flox.tfvars
-
+if [[ $1 == "stage" ]]
+then
+  bash create-flox-tfvars.sh "$branch_name"
+  echo "type=\"$branch_name\"" >> flox.tfvars
+else
+  bash create-flox-tfvars.sh "$1"
+  echo "type=\"$1\"" >> flox.tfvars
+fi
 cd ../aws-initial-setup/0_pre-setup || exit
 
 # Get additional flox.config variables
@@ -42,7 +54,7 @@ organisation=${organisation:1:-1}
 # Serverless mode (API only)
 serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.config.json)
 
-# Replace 'TYPE' in config.tf with actual type (live, test or dev)
+# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -56,6 +68,11 @@ if [[ $1 == "live" ]]
 then
   url=$(jq ".general.live_domain" ../../../backend/flox.config.json)
   url=${url:1:-1}
+elif [[ $1 == "stage" ]];
+then
+  # Since there might be multiple staging infrastructures at the same time
+  url="$branch_name.$project.polygon-project.ch"
+
 else
   # E.g. test.flox.polygon-project.ch
   url="$1.$project.polygon-project.ch"
@@ -149,7 +166,7 @@ fi
 # ======     Step 2: Main setup     ========
 # ==========================================
 
-# Replace 'TYPE' in config.tf with actual type (dev, test, live)
+# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
