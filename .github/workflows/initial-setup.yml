@@ -12,6 +12,7 @@ on:
           - test
           - dev
           - live
+          - stage
       force:
         required: false
         type: boolean
