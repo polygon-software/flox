@@ -19,6 +19,10 @@ fi
 # ===  Step 0: Pre-setup (Cognito, DNS)  ===
 # ==========================================
 
+# Create flox.tfvars file from flox.config.json in frontend & backend
+cd ../support || exit
+bash create-flox-tfvars.sh "$1"
+
 # If mode is stage, create branch name and save it to the GitHub action env file
 if [[ $1 == "stage" ]]
 then
@@ -29,10 +33,6 @@ then
 else
   echo "type=\"$1\"" >> flox.tfvars
 fi
-
-# Create flox.tfvars file from flox.config.json in frontend & backend
-cd ../support || exit
-bash create-flox-tfvars.sh "$1"
 
 cd ../aws-initial-setup/0_pre-setup || exit
 
