@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout 🛎
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Make scripts executable
         run:  sudo chmod +x ./scripts/support/merge-master-into-dev.sh
