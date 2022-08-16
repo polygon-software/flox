@@ -40,6 +40,7 @@ jobs:
       - name: Open PR
         run: |
           git checkout -b ${{ steps.setup.outputs.branch_name }}
+          git push --set-upstream origin ${{ steps.setup.outputs.branch_name }}
           'gh pr create -B "master" -t "stage: Automatic PR for ${{ steps.setup.outputs.branch_name }}" -b "Automatic staging branch PR" -r ${{ github.event.inputs.reviewer }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
