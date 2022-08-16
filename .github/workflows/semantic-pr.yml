@@ -17,16 +17,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          types: |
+          scopes: |
             fix
             feat
             doc
             test
-          scopes: |
-            core
-            soi
-            bigabig
-            datavis
+            stage
           wip: false
           validateSingleCommit: true
 
@@ -40,4 +36,5 @@ jobs:
           allowed: |
             master
             dev
-            /^([A-Za-z]+-){0,1}(feature|doc|fix|test)-([A-Za-z-_0-9])+$/
+            /^(feature|doc|fix|test|)-([A-Za-z-_0-9])+$/
+            /^stage-(\d{6})$/

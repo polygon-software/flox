@@ -3,6 +3,17 @@
 /node_modules
 /backend/src/schema.gql
 
+# Generated script outputs
+/scripts/support/flox.tfvars
+/scripts/outputs
+/scripts/**/*.zip
+
+# Terraform
+/scripts/**/.terraform
+/scripts/**/.terraform.lock.hcl
+/scripts/**/config.tf-e
+/scripts/**/terraform.tfstate
+
 # Logs
 logs
 *.log
@@ -41,3 +52,5 @@ lerna-debug.log*
 !.vscode/extensions.json
 /backend/node_modules/
 /backend/dist/
+
+*.tfvars

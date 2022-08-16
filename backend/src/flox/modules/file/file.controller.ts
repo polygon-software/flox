@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
-import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Controller()
 export class FileController {
@@ -16,31 +15,43 @@ export class FileController {
   @Public()
   @Post('/uploadPublicFile')
   async uploadPublicFile(
-    @Req() req: FastifyRequest,
-    @Res() res: FastifyReply<any>,
+    @Req() req: Express.Request,
+    @Res() res: unknown,
   ): Promise<any> {
     // Verify that request is multipart
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (!req.isMultipart()) {
-      res.send(new BadRequestException('File expected on this endpoint'));
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      res.send(new BadRequestException('File expected on this endpoint')); // TODO
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const file = await req.file();
     const fileBuffer = await file.toBuffer();
     const newFile = await this.taskService.uploadPublicFile(
       fileBuffer,
       file.filename,
     );
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     res.send(newFile);
   }
 
   @Post('/uploadPrivateFile')
   @LoggedIn()
   async uploadPrivateFile(
-    @Req() req: FastifyRequest,
-    @Res() res: FastifyReply<any>,
+    @Req() req: Express.Request,
+    @Res() res: unknown,
   ): Promise<any> {
     // Verify that request is multipart
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (!req.isMultipart()) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
@@ -48,6 +59,8 @@ export class FileController {
     // Get user, as determined by JWT Strategy
     const owner = req['user'].userId;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const file = await req.file();
     const fileBuffer = await file.toBuffer();
     const newFile = await this.taskService.uploadPrivateFile(
@@ -55,6 +68,8 @@ export class FileController {
       file.filename,
       owner,
     );
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     res.send(newFile);
   }
 }

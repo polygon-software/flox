@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-      ref="dialog"
+      ref="dialogRef"
       :persistent="true"
   >
     <q-card class="q-pa-lg q-pt-xl" style="width: 400px; min-height: 250px">
@@ -44,51 +44,36 @@
           <q-btn
             :label="$t('general.cancel')"
             color="primary"
-            @click="hide"
+            @click="onDialogHide"
           />
         </q-card-actions>
       </q-form>
-
     </q-card>
-
   </q-dialog>
 </template>
 
 <script setup lang="ts">
-import {defineEmits, Ref, ref} from 'vue';
+import {defineEmits, ref} from 'vue';
 import {PASSWORD_REGEX} from '../../../../../helpers/REGEX'
-import {QDialog} from 'quasar';
+import {useDialogPluginComponent} from 'quasar';
 
 let verificationCode = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
-const emit = defineEmits(['ok'])
-let dialog: Ref<QDialog|null> = ref(null)
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emit = defineEmits(useDialogPluginComponent.emits)
 
 /**
  * On submit, emit data outwards
  * @returns {void}
  */
 function onSubmit(){
-  emit('ok', {
+  onDialogOK({
     passwordNew: password.value,
     verificationCode: verificationCode.value,
   })
-  hide()
 }
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
- dialog.value?.show()
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
-
 </script>

@@ -1,5 +1,7 @@
-import { mergeConfigurations } from '../../core/flox-helpers';
-import { floxModuleOptions } from '../../flox';
+import {
+  floxModuleOptions,
+  mergeConfigurations,
+} from '../../core/flox-helpers';
 import { MODULES } from '../../MODULES';
 
 /**

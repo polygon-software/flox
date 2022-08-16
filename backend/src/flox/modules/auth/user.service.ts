@@ -53,7 +53,7 @@ export class UserService {
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
     if (getUserArgs.uuid) {
-      return this.userRepository.findOne(getUserArgs.uuid);
+      return this.userRepository.findOne({ where: { uuid: getUserArgs.uuid } });
     }
 
     if (getUserArgs.cognitoUuid) {
@@ -77,7 +77,9 @@ export class UserService {
   async updateUser(updateUserInput: UpdateUserInput): Promise<User> {
     const user = this.userRepository.create(updateUserInput);
     await this.userRepository.update(updateUserInput.uuid, user);
-    return this.userRepository.findOne(updateUserInput.uuid);
+    return this.userRepository.findOne({
+      where: { uuid: updateUserInput.uuid },
+    });
   }
 
   /**
@@ -86,7 +88,9 @@ export class UserService {
    * @returns {Promise<User>} - the deleted user
    */
   async deleteUser(deleteUserInput: DeleteUserInput): Promise<User> {
-    const user = await this.userRepository.findOne(deleteUserInput.uuid);
+    const user = await this.userRepository.findOne({
+      where: { uuid: deleteUserInput.uuid },
+    });
     const uuid = user.uuid;
     const deletedUser = await this.userRepository.remove(user);
     deletedUser.uuid = uuid;
@@ -100,7 +104,9 @@ export class UserService {
    */
   async getMyUser(cognitoUser: Record<string, string>): Promise<User> {
     const myUser = await this.userRepository.findOne({
-      cognitoUuid: cognitoUser.userId,
+      where: {
+        cognitoUuid: cognitoUser.userId,
+      },
     });
 
     if (!myUser) {

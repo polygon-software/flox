@@ -12,17 +12,16 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
 export class FileService {
+  // TODO: When implementing file module, solve via .env / Terraform
   // S3 credentials
-  private readonly credentials = {
-    region: this.configService.get('AWS_REGION'),
-    accessKeyId: this.configService.get('AWS_S3_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('AWS_S3_SECRET_ACCESS_KEY'),
-  };
+  // private readonly credentials = {
+  //   region: this.configService.get('AWS_MAIN_REGION'),
+  //   accessKeyId: this.configService.get('AWS_S3_ACCESS_KEY_ID'),
+  //   secretAccessKey: this.configService.get('AWS_S3_SECRET_ACCESS_KEY'),
+  // };
 
   // AWS S3 instance
-  private s3: S3 = new S3({
-    credentials: this.credentials,
-  });
+  private s3: S3 = new S3({});
   constructor(
     @InjectRepository(PublicFile)
     private publicFilesRepository: Repository<PublicFile>,
@@ -56,7 +55,7 @@ export class FileService {
       key: key,
       url: `https://${configService.get(
         'AWS_PUBLIC_BUCKET_NAME',
-      )}.s3.${configService.get('AWS_REGION')}.amazonaws.com/${key}`,
+      )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
@@ -98,7 +97,11 @@ export class FileService {
   async getPublicFile(
     getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return this.publicFilesRepository.findOne(getPublicFileArgs.uuid);
+    return this.publicFilesRepository.findOne({
+      where: {
+        uuid: getPublicFileArgs.uuid,
+      },
+    });
   }
 
   /**
@@ -109,9 +112,11 @@ export class FileService {
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
   ): Promise<PrivateFile> {
-    const fileInfo = await this.privateFilesRepository.findOne(
-      getPrivateFileArgs.uuid,
-    );
+    const fileInfo = await this.privateFilesRepository.findOne({
+      where: {
+        uuid: getPrivateFileArgs.uuid,
+      },
+    });
     if (fileInfo) {
       const options: Record<string, unknown> = {};
       // If expiration duration is set, apply
@@ -128,9 +133,11 @@ export class FileService {
         }),
         options,
       );
-      const result = await this.privateFilesRepository.findOne(
-        getPrivateFileArgs.uuid,
-      );
+      const result = await this.privateFilesRepository.findOne({
+        where: {
+          uuid: getPrivateFileArgs.uuid,
+        },
+      });
 
       // Add URL to result
       return { ...result, url };

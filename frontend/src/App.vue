@@ -26,7 +26,7 @@ provide<RouterService>('$routerService', $routerService as unknown as RouterServ
 
 
 /**
- * Enabled Flox modules (depending on flox.config.js)
+ * Enabled Flox modules (depending on flox.config.json)
  */
 
 // Auth service

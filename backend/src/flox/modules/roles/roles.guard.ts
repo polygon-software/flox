@@ -14,7 +14,6 @@ import { GetUserArgs } from '../auth/dto/args/get-user.args';
 export class RolesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-
     private readonly userService: UserService,
   ) {}
 
@@ -47,11 +46,11 @@ export class RolesGuard implements CanActivate {
     const req = this.getRequest(context) as Record<string, unknown>;
     const user = req.user as Record<string, string>;
     let dbUser: User | undefined = undefined;
+
     if (user) {
       dbUser = await this.userService.getUser({
         cognitoUuid: user.userId,
       } as GetUserArgs);
-
       // Admin has access to everything
       if (dbUser && dbUser.role === DEFAULT_ROLES.ADMIN) {
         return true;
