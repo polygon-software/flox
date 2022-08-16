@@ -31,7 +31,7 @@ jobs:
       - name: Merge successful
         id: push
         if: steps.merge.conclusion == 'success'
-        run: git push
+        run: git push --force
 
       - name: Merge conflict
         id: solve_conflict

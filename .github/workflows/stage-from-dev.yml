@@ -33,12 +33,13 @@ jobs:
         run: terraform validate
 
       - name: Build & set up AWS infrastructure
+        id: setup
         working-directory: ./scripts/aws-initial-setup
         run: bash initial-aws-setup.sh stage false
 
       - name: Open PR
-        run: 'gh pr create -B "master" -t stage: Automatic PR for ${{ env.action_state.branch_name }} -b "Automatic staging branch PR" -r ${{ github.event.inputs.reviewer }}'
+        run: |
+          git checkout -b ${{ steps.setup.outputs.branch_name }}
+          'gh pr create -B "master" -t "stage: Automatic PR for ${{ steps.setup.outputs.branch_name }}" -b "Automatic staging branch PR" -r ${{ github.event.inputs.reviewer }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
