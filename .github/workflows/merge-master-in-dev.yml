@@ -24,6 +24,7 @@ jobs:
 
       - name: Merge master back to dev
         id: merge
+        working-directory: ./scripts/support
         continue-on-error: true
         run: bash merge-master-into-dev.sh
 
