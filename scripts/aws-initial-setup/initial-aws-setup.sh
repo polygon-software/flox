@@ -22,20 +22,16 @@ fi
 # If mode is stage, create branch name and save it to the GitHub action env file
 if [[ $1 == "stage" ]]
 then
-  branch_name="stage-$(date + '%d-%m-%Y-%H-%M-%S')"
+  # The date will look like this:161-08-2022-09-05-21
+  branch_name="stage-$(date +'%d-%m-%Y-%H-%M-%S')"
   echo "{branch_name}={$branch_name}" >> "$GITHUB_ENV"
 fi
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
 cd ../support || exit
-if [[ $1 == "stage" ]]
-then
-  bash create-flox-tfvars.sh "$branch_name"
-  echo "type=\"$branch_name\"" >> flox.tfvars
-else
-  bash create-flox-tfvars.sh "$1"
-  echo "type=\"$1\"" >> flox.tfvars
-fi
+bash create-flox-tfvars.sh "$1"
+echo "type=\"$1\"" >> flox.tfvars
+
 cd ../aws-initial-setup/0_pre-setup || exit
 
 # Get additional flox.config variables

@@ -6,6 +6,9 @@ on:
       - closed
     branches:
       - master
+  delete:
+    branches:
+      - stage-**
 
 jobs:
   destroy-aws:

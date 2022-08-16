@@ -1,4 +1,4 @@
-# Merges the master branch back into dev. Opens a PR if a merge conflict exists.
+# Merges the master branch back into dev.
 
 echo "Merging master into dev"
 git fetch --unshallow
