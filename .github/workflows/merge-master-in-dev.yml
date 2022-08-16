@@ -1,4 +1,4 @@
-name: "Merges Master into Dev on update, will open a PR if a merge conflict exists"
+name: Merges Master into Dev on update, will open a PR if a merge conflict exists
 
 on:
   push:
