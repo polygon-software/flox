@@ -4,6 +4,6 @@ output "cloudfront_url" {
 }
 
 output "cloudfront_zone_id" {
-  description = "Cloudfront URL"
+  description = "Cloudfront hosted zone ID"
   value       = aws_cloudfront_distribution.website_distribution.hosted_zone_id
 }
