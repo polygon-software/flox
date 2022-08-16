@@ -11,6 +11,9 @@ import {RouterService} from 'src/services/RouterService';
 import {routerInstance} from 'boot/router';
 import {isModuleActive} from 'src/flox';
 import {MODULES} from 'src/flox/MODULES';
+import LogRocket from 'logrocket';
+
+LogRocket.init('md69mq/flox');
 
 // Quasar
 const $q = useQuasar()
