@@ -4,4 +4,5 @@ export enum MODULES {
   ROLES = 'roles',
   FILE = 'file',
   SHARING = 'sharing',
+  EMAIL = 'email',
 }

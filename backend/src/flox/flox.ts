@@ -8,6 +8,7 @@ import { MODULES } from './MODULES';
 import PublicFile from './modules/file/entities/public_file.entity';
 import PrivateFile from './modules/file/entities/private_file.entity';
 import { User } from './modules/auth/entities/user.entity';
+import { EmailModule } from './modules/email/email.module';
 import { getActiveFloxModuleNames } from './core/flox-helpers';
 
 /**
@@ -27,6 +28,9 @@ export function floxModules() {
         break;
       case MODULES.AUTH:
         modules.push(UserModule);
+        break;
+      case MODULES.EMAIL:
+        modules.push(EmailModule);
         break;
       // Some modules don't have to be added (e.g. 'roles')
       default:
