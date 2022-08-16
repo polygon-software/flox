@@ -12,7 +12,7 @@ export type Credentials = {
  * Sends an e-mail, optionally with attachment(s) using SES and Nodemailer
  * @param {Record<string, string>} credentials - SES credentials object
  * @param {string} from - the sender's e-mail address
- * @param {string|string[]} to - list of recipient's email addresses
+ * @param {string|string[]} to - list of recipient's e-mail addresses
  * @param {string} subject - E-mail subject
  * @param {string} body - E-mail's HTML body
  * @param {AttachmentFile[]} attachments - file attachments
