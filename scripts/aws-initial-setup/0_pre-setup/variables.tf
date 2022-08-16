@@ -1,7 +1,7 @@
 # Cognito configuration
 # (gets overwritten by flox.tfvars)
 variable "type" {
-  description     = "live or test"
+  description     = "live, test, dev or stage-x"
   type            = string
 }
 

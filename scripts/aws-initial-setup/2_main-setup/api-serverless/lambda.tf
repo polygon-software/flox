@@ -45,7 +45,7 @@ resource "aws_lambda_function" "api_lambda" {
       USER_POOL_ID= var.user_pool_id,
       USER_POOL_CLIENT_ID = var.user_pool_client_id,
       BASE_URL = "https://${var.domain}",
-      "DEV" = "false",
+      DEV = "false",
       CLOUDWATCH_GROUP_NAME = "${var.project}-${var.type}",
       CLOUDWATCH_STREAM_NAME = "API",
       AWS_LOG_BUCKET_NAME = var.log_bucket_id

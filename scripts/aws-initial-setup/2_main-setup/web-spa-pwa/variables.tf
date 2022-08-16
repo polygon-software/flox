@@ -4,7 +4,7 @@ variable "project" {
 }
 
 variable "type" {
-  description = "Deploy type (live or test)"
+  description = "Deploy type; live, test, dev or stage-x"
   type        = string
 }
 

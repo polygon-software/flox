@@ -1,5 +1,5 @@
 variable "type" {
-  description     = "live or test"
+  description     = "live, test, dev or stage-x"
   type            = string
 }
 

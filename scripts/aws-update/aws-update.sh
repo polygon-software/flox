@@ -1,15 +1,22 @@
 # --------------------------------------------------------------
 # Updates existing AWS infrastructure without recreating everything
 # Takes two parameters:
-# $1 - deployment mode: 'live', 'test', 'dev' or 'stage-ddmmHH'
+# $1 - deployment mode: 'live', 'test', 'dev' or 'stage'
 # $2 - local mode (will perform cleanup): true or not set
+# $3 - (optional) - staging branch name (e.g. stage-123412)
 # --------------------------------------------------------------
 
-REGEX_STAGE="^stage-(\d{6})$"
 
-if [[ $1 != "live" ]] && [[ $1 != "test" ]]  && [[ $1 != "dev" ]] && ! [[ $1 =~ $REGEX_STAGE ]]
+if [[ $1 != "live" ]] && [[ $1 != "test" ]]  && [[ $1 != "dev" ]] && [[ $1 != "stage" ]]
 then
   echo "Invalid deployment mode $1"
+  exit
+fi
+
+REGEX_STAGE="^stage-(\d{6})$"
+if [[ $1 == "stage" ]] && ! [[ $3 =~ $REGEX_STAGE ]]
+then
+  echo "Invalid staging branch name $3"
   exit
 fi
 
@@ -20,7 +27,13 @@ fi
 # Create flox.tfvars file from flox.config.json in frontend & backend
 cd ../support || exit
 bash create-flox-tfvars.sh "$1"
-echo "type=\"$1\"" >> flox.tfvars
+
+if [[ $1 == "stage" ]]
+then
+  echo "type=\"$3\"" >> flox.tfvars
+else
+  echo "type=\"$1\"" >> flox.tfvars
+fi
 
 # Get additional flox.config variables
 project=$(jq '.general.project' ../../backend/flox.config.json)
@@ -44,15 +57,26 @@ then
   url=$(jq ".general.live_domain" ../../backend/flox.config.json)
   url=${url:1:-1}
 else
-  # E.g. test.flox.polygon-project.ch
-  url="$1.$project.polygon-project.ch"
+  if [[ $1 == "stage" ]]
+  then
+    # E.g. stage-123412.flox.polygon-project.ch
+    url="$3.$project.polygon-project.ch"
+  else
+    # E.g. test.flox.polygon-project.ch
+    url="$1.$project.polygon-project.ch"
+  fi
 fi
 
 # Go to pre-update folder
 cd ../aws-update/0_pre-update || exit
 
-# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
-sed -i -e "s/##TYPE##/$1/g" config.tf
+# Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
+if [[ $1 == "stage" ]]
+then
+    sed -i -e "s/##TYPE##/$3/g" config.tf
+else
+    sed -i -e "s/##TYPE##/$1/g" config.tf
+fi
 
 # Replace 'PROJECT' in config.tf with actual project name
 sed -i -e "s/##PROJECT##/$project/g" config.tf
@@ -112,8 +136,13 @@ echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
 # Go to update folder
 cd ../scripts/aws-update/1_update || exit
 
-# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
-sed -i -e "s/##TYPE##/$1/g" config.tf
+# Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
+if [[ $1 == "stage" ]]
+then
+    sed -i -e "s/##TYPE##/$3/g" config.tf
+else
+    sed -i -e "s/##TYPE##/$1/g" config.tf
+fi
 
 # Replace 'PROJECT' in config.tf with actual project name
 sed -i -e "s/##PROJECT##/$project/g" config.tf
@@ -165,8 +194,13 @@ cd ../../aws-initial-setup/2_main-setup || exit
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 
-# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
-sed -i -e "s/##TYPE##/$1/g" config.tf
+# Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
+if [[ $1 == "stage" ]]
+then
+    sed -i -e "s/##TYPE##/$3/g" config.tf
+else
+    sed -i -e "s/##TYPE##/$1/g" config.tf
+fi
 
 # Replace 'PROJECT' in config.tf with actual project name
 sed -i -e "s/##PROJECT##/$project/g" config.tf
