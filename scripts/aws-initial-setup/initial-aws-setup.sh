@@ -1,10 +1,11 @@
 # --------------------------------------------------------------
 # Sets up the initial infrastructure for a new Flox project on AWS.
 # This script should only be ran once per mode!
-# Takes two parameters:
+# Takes two or four parameters:
 # $1 - deployment mode: 'live', 'test', 'stage' or 'dev'
 # $2 - local mode (will perform cleanup): true or not set
-# Optionally, with third parameter set to 'true', will force redeployment
+# $3 - (optional) - with third parameter set to 'true', will force redeployment
+# $4 - (optional) - 'confirm' for forcing destruction
 # even if the environment is already online
 # If deployment is forced, user must enter 'confirm' as fourth parameter
 # --------------------------------------------------------------

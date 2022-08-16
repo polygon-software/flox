@@ -1,6 +1,6 @@
 # --------------------------------------------------------------
 # Updates existing AWS infrastructure without recreating everything
-# Takes two parameters:
+# Takes two or three parameters:
 # $1 - deployment mode: 'live', 'test', 'dev' or 'stage'
 # $2 - local mode (will perform cleanup): true or not set
 # $3 - (optional) - staging branch name (e.g. stage-123412)

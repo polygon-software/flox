@@ -1,6 +1,6 @@
 # --------------------------------------------------------------
 # Destroys the given system
-# Takes two parameters:
+# Takes four or five parameters:
 # $1 - deployment mode: 'live', 'test', 'dev' or 'stage'
 # $2 - local mode (will perform cleanup): true or not set
 # $3 - force destruction
