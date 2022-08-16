@@ -6,21 +6,12 @@ import { DEFAULT_ROLES } from '../roles/config';
 import { Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { MockType, repositoryMockFactory } from '../../testing/testUtils';
 
 describe('UserResolver', () => {
   let userService: UserService;
   let userResolver: UserResolver;
   let userRepository: MockType<Repository<User>>;
-  type MockType<T> = {
-    [P in keyof T]?: jest.Mock<{}>;
-  };
-
-  const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
-    () => ({
-      findOne: jest.fn((entity) => entity),
-      // ...
-    }),
-  );
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
