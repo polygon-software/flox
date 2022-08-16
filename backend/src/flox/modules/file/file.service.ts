@@ -16,8 +16,8 @@ export class FileService {
   // S3 credentials
   // private readonly credentials = {
   //   region: this.configService.get('AWS_MAIN_REGION'),
-  //   accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-  //   secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+  //   accessKeyId: this.configService.get('AWS_S3_ACCESS_KEY_ID'),
+  //   secretAccessKey: this.configService.get('AWS_S3_SECRET_ACCESS_KEY'),
   // };
 
   // AWS S3 instance

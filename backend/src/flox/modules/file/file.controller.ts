@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Controller()
 export class FileController {
@@ -30,21 +31,21 @@ export class FileController {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPublicFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.taskService.uploadPublicFile(
+      fileBuffer,
       file.filename,
     );
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    res.send(new_file);
+    res.send(newFile);
   }
 
   @Post('/uploadPrivateFile')
   @LoggedIn()
   async uploadPrivateFile(
     @Req() req: Express.Request,
-    @Res() res: unknown, // TODO....
+    @Res() res: unknown,
   ): Promise<any> {
     // Verify that request is multipart
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -62,14 +63,14 @@ export class FileController {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPrivateFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.taskService.uploadPrivateFile(
+      fileBuffer,
       file.filename,
       owner,
     );
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    res.send(new_file);
+    res.send(newFile);
   }
 }
