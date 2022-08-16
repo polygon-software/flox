@@ -25,12 +25,14 @@ then
   # The date will look like this: 16-08-2022-09-05-21
   branch_name="stage-$(date +'%d-%m-%Y-%H-%M-%S')"
   echo "{branch_name}={$branch_name}" >> "$GITHUB_ENV"
+  echo "type=\"$branch_name\"" >> flox.tfvars
+else
+  echo "type=\"$1\"" >> flox.tfvars
 fi
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
 cd ../support || exit
 bash create-flox-tfvars.sh "$1"
-echo "type=\"$1\"" >> flox.tfvars
 
 cd ../aws-initial-setup/0_pre-setup || exit
 
@@ -50,8 +52,13 @@ organisation=${organisation:1:-1}
 # Serverless mode (API only)
 serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.config.json)
 
-# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
-sed -i -e "s/##TYPE##/$1/g" config.tf
+# Replace 'TYPE' in config.tf with actual type (live, test, stage-xx or dev)
+if [[ $1 == "stage" ]]
+then
+  sed -i -e "s/##TYPE##/$branch_name/g" config.tf
+else
+  sed -i -e "s/##TYPE##/$1/g" config.tf
+fi
 
 # Replace 'PROJECT' in config.tf with actual project name
 sed -i -e "s/##PROJECT##/$project/g" config.tf
@@ -68,7 +75,6 @@ elif [[ $1 == "stage" ]];
 then
   # Since there might be multiple staging infrastructures at the same time
   url="$branch_name.$project.polygon-project.ch"
-
 else
   # E.g. test.flox.polygon-project.ch
   url="$1.$project.polygon-project.ch"
@@ -136,12 +142,17 @@ echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
 # ==      Step 1: Parent DNS setup        ==
 # ==  (Applies only in TEST and DEV mode) ==
 # ==========================================
-if [[ $1 == "test" ]] || [[ $1 == "dev" ]]
+if [[ $1 == "test" ]] || [[ $1 == "dev" ]] || [[ $1 == "stage" ]]
 then
   cd ../scripts/aws-initial-setup/1_parent-setup || exit
 
-  # Replace 'TYPE' in config.tf with actual type (dev, test)
-  sed -i -e "s/##TYPE##/$1/g" config.tf
+  # Replace 'TYPE' in config.tf with actual type (live, test, stage-xx or dev)
+  if [[ $1 == "stage" ]]
+  then
+    sed -i -e "s/##TYPE##/$branch_name/g" config.tf
+  else
+    sed -i -e "s/##TYPE##/$1/g" config.tf
+  fi
 
   # Replace 'PROJECT' in config.tf with actual project name
   sed -i -e "s/##PROJECT##/$project/g" config.tf
@@ -162,8 +173,13 @@ fi
 # ======     Step 2: Main setup     ========
 # ==========================================
 
-# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
-sed -i -e "s/##TYPE##/$1/g" config.tf
+# Replace 'TYPE' in config.tf with actual type (live, test, stage-xx or dev)
+if [[ $1 == "stage" ]]
+then
+  sed -i -e "s/##TYPE##/$branch_name/g" config.tf
+else
+  sed -i -e "s/##TYPE##/$1/g" config.tf
+fi
 
 # Replace 'PROJECT' in config.tf with actual project name
 sed -i -e "s/##PROJECT##/$project/g" config.tf
