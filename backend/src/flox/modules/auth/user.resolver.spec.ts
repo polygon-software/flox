@@ -4,15 +4,37 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { DEFAULT_ROLES } from '../roles/config';
 import { Repository } from 'typeorm';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('UserResolver', () => {
-  let userRepository: Repository<User>;
   let userService: UserService;
   let userResolver: UserResolver;
+  let userRepository: MockType<Repository<User>>;
+  type MockType<T> = {
+    [P in keyof T]?: jest.Mock<{}>;
+  };
 
-  beforeEach(() => {
-    userRepository = new Repository<User>();
-    userService = new UserService(userRepository);
+  const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
+    () => ({
+      findOne: jest.fn((entity) => entity),
+      // ...
+    }),
+  );
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UserService,
+        // Provide your mock instead of the actual repository
+        {
+          provide: getRepositoryToken(User),
+          useFactory: repositoryMockFactory,
+        },
+      ],
+    }).compile();
+    userService = module.get<UserService>(UserService);
+    userRepository = module.get(getRepositoryToken(User));
     userResolver = new UserResolver(userService);
   });
 
