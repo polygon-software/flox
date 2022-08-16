@@ -2,7 +2,7 @@ import { Controller, Post, Query, Req, Res } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { ConfigService } from '@nestjs/config';
 import { Credentials } from './helpers/email-helpers';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { Request, Response } from 'express';
 
 @Controller()
 export class EmailController {
@@ -21,15 +21,15 @@ export class EmailController {
   /**
    * Sends a test e-mail to the given address (in 'recipient' param of query)
    * NOTE: This is just an example endpoint. Since it is not marked @Public / @LoggedIn, it will not be accessible by default.
-   * @param {FastifyRequest} req - the request
-   * @param {FastifyReply} res - reply to send on
+   * @param {Request} req - the request
+   * @param {unknown} res - reply to send on
    * @param {Record<string, unknown>} query - request query
    * @returns {Promise<void>} - done
    */
   @Post('/sendTestEmail')
   async sendTestEmail(
-    @Req() req: FastifyRequest,
-    @Res() res: FastifyReply<any>,
+    @Req() req: Request,
+    @Res() res: Response,
     @Query() query: Record<string, unknown>,
   ): Promise<void> {
     // Access to triggering user's Cognito UUID (if needed)
@@ -44,10 +44,10 @@ export class EmailController {
     // Send e-mail
     try {
       await this.emailService.sendTestEmail(recipient, this.credentials);
-      res.code(200);
+      res.status(200);
       res.send();
     } catch (e) {
-      res.code(500);
+      res.status(500);
       res.send(`Error occurred while sending e-mail: ${e.message}`);
     }
   }
