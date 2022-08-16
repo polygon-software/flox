@@ -42,5 +42,5 @@ jobs:
 
       - name: PR already exists
         id: error
-        if: steps.solve_conflict.conclusion != 'skipped'
+        if: steps.solve_conflict.conclusion == 'failure'
         run: echo A PR from master to dev already exists!
