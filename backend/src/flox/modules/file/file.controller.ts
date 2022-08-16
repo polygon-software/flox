@@ -6,8 +6,8 @@ import {
   Res,
 } from '@nestjs/common';
 import { FileService } from './file.service';
-import fastify = require('fastify');
 import { LoggedIn, Public } from '../auth/authentication.decorator';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Controller()
 export class FileController {
@@ -16,8 +16,8 @@ export class FileController {
   @Public()
   @Post('/uploadPublicFile')
   async uploadPublicFile(
-    @Req() req: fastify.FastifyRequest,
-    @Res() res: fastify.FastifyReply<any>,
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply<any>,
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
@@ -25,19 +25,19 @@ export class FileController {
       return;
     }
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPublicFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.taskService.uploadPublicFile(
+      fileBuffer,
       file.filename,
     );
-    res.send(new_file);
+    res.send(newFile);
   }
 
   @Post('/uploadPrivateFile')
   @LoggedIn()
   async uploadPrivateFile(
-    @Req() req: fastify.FastifyRequest,
-    @Res() res: fastify.FastifyReply<any>,
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply<any>,
   ): Promise<any> {
     // Verify that request is multipart
     if (!req.isMultipart()) {
@@ -49,12 +49,12 @@ export class FileController {
     const owner = req['user'].userId;
 
     const file = await req.file();
-    const file_buffer = await file.toBuffer();
-    const new_file = await this.taskService.uploadPrivateFile(
-      file_buffer,
+    const fileBuffer = await file.toBuffer();
+    const newFile = await this.taskService.uploadPrivateFile(
+      fileBuffer,
       file.filename,
       owner,
     );
-    res.send(new_file);
+    res.send(newFile);
   }
 }
