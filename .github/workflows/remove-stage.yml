@@ -34,10 +34,8 @@ jobs:
 
       - name: Validate Terraform
         working-directory: ./scripts/support
-        run: |
-          terraform validate
+        run: terraform validate
 
       - name: Destroy AWS infrastructure
         working-directory: ./scripts/support
-        run: |
-          bash destroy-system.sh ${{ steps.get_branch.outputs.branch }} false true confirm
+        run: bash destroy-system.sh ${{ steps.get_branch.outputs.branch }} false true confirm

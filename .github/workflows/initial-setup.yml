@@ -41,10 +41,8 @@ jobs:
 
       - name: Validate Terraform
         working-directory: ./scripts/aws-initial-setup
-        run: |
-          terraform validate
+        run: terraform validate
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
-        run: |
-          bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }}
+        run: bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }}

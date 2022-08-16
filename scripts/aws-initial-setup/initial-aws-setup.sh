@@ -22,7 +22,7 @@ fi
 # If mode is stage, create branch name and save it to the GitHub action env file
 if [[ $1 == "stage" ]]
 then
-  # The date will look like this:161-08-2022-09-05-21
+  # The date will look like this: 16-08-2022-09-05-21
   branch_name="stage-$(date +'%d-%m-%Y-%H-%M-%S')"
   echo "{branch_name}={$branch_name}" >> "$GITHUB_ENV"
 fi

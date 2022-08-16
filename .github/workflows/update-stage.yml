@@ -3,7 +3,7 @@ name: "Stage 1: Overwrite Stage-Environment when it receives a fix"
 on:
   push:
     branches:
-      - stage-*
+      - stage-**
 
 jobs:
   stage-fix:
@@ -18,8 +18,7 @@ jobs:
 
       - name: Get branch name
         id: get_branch
-        run: |
-          run: echo "##[set-output name=branch_name;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "##[set-output name=branch_name;]$(echo ${GITHUB_REF#refs/heads/})"
 
       - name: Make scripts executable
         run: |
