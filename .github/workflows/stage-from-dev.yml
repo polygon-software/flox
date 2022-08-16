@@ -36,15 +36,9 @@ jobs:
         working-directory: ./scripts/aws-initial-setup
         run: bash initial-aws-setup.sh stage false
 
-      - name: Open PR with reviewer
-        if: github.event.inputs.reviewer != ''
+      - name: Open PR
         run: 'gh pr create -B "master" -t stage: Automatic PR for ${{ env.action_state.branch_name }} -b "Automatic staging branch PR" -r ${{ github.event.inputs.reviewer }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Open PR without reviewer
-        if: github.event.inputs.reviewer == ''
-        run: 'gh pr create -B "master" -t stage: Automatic PR for ${{ env.action_state.branch_name }} -b "Automatic staging branch PR"'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
