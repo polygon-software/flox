@@ -29,12 +29,12 @@ jobs:
 
       - name: Merge successful
         id: push
-        if: steps.merge.conclusion == success
+        if: steps.merge.conclusion == 'success'
         run: git push
 
       - name: Merge conflict
         id: solve_conflict
-        if: steps.merge.conclusion != success
+        if: steps.merge.conclusion != 'success'
         run: 'gh pr create -B "dev" -t "stage: Auto-update dev from master" -b "Resolve merge conflict" -r polygon-software/team/developers'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
