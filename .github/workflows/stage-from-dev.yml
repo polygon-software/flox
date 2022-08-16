@@ -9,6 +9,11 @@ on:
         type: string
         description: GitHub name of the reviewer (if needed)
         default: ''
+      PM:
+        required: false
+        type: string
+        description: Github name of the project's PM
+        default: ''
 
 jobs:
   create-stage:
@@ -38,9 +43,13 @@ jobs:
         run: bash initial-aws-setup.sh stage false
 
       - name: Open PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git checkout -b ${{ steps.setup.outputs.branch_name }}
           git push --set-upstream origin ${{ steps.setup.outputs.branch_name }}
-          'gh pr create -B "master" -t "stage: Automatic PR for ${{ steps.setup.outputs.branch_name }}" -b "Automatic staging branch PR" -r ${{ github.event.inputs.reviewer }}'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          'gh pr create -B "master" -t "stage: Automatic PR for ${{ steps.setup.outputs.branch_name }}" \
+          -b "@{{ github.event.inputs.PM }} Automatic staging branch PR for ${{ steps.setup.outputs.url }}" \
+          -r ${{ github.event.inputs.reviewer }}'
+
