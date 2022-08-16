@@ -40,7 +40,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "public_files" {
 
 // Create AWS S3 bucket to upload public files to
 resource "aws_s3_bucket" "public_files" {
-  bucket_prefix      = "${var.project}-${var.type}-public-bucket-"
+  bucket_prefix      = "${var.project}-${var.type}-public-"
   tags = {
     Name             = "${var.project}-public-bucket"
     gcp_backup       = "true"
@@ -53,7 +53,7 @@ resource "aws_s3_bucket" "public_files" {
 
 // Create AWS S3 bucket to upload private files to
 resource "aws_s3_bucket" "private_files" {
-  bucket_prefix                = "${var.project}-${var.type}-private-bucket-"
+  bucket_prefix                = "${var.project}-${var.type}-private-"
   tags = {
     Name          = "${var.project}-private-bucket"
     gcp_backup       = "true"
@@ -105,7 +105,7 @@ resource "aws_s3_bucket_versioning" "log" {
 
 // Create AWS S3 bucket to upload app to
 resource "aws_s3_bucket" "source_code_bucket" {
-  bucket_prefix   = "${var.project}-${var.type}-app-bucket-"
+  bucket_prefix   = "${var.project}-${var.type}-app-"
   tags = {
     Name          = "${var.project}-source-code-bucket"
   }
