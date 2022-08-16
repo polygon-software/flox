@@ -1,7 +1,7 @@
 # ========================
 # Creates flox.tfvars file (Terraform environment variables) from
 # .env and flox.config.json where relevant to Terraform variables
-# Takes one parameter: 'live', 'test' or 'dev'
+# Takes one parameter: 'live', 'test', 'stage' or 'dev'
 # ========================
 
 echo "Creating flox.tfvars from configurations for $1 mode..."

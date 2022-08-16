@@ -20,6 +20,7 @@
   "general": {
     "mode_live": "ssr",
     "mode_test": "spa",
-    "mode_dev": "spa"
+    "mode_dev": "spa",
+    "mode_stage": "spa"
   }
 }

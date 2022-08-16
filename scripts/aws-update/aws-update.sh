@@ -1,11 +1,13 @@
 # --------------------------------------------------------------
 # Updates existing AWS infrastructure without recreating everything
 # Takes two parameters:
-# $1 - deployment mode: 'live', 'test' or 'dev'
+# $1 - deployment mode: 'live', 'test', 'dev' or 'stage-dd-mm-yyyy-HH-MM-SS'
 # $2 - local mode (will perform cleanup): true or not set
 # --------------------------------------------------------------
 
-if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]]
+REGEX_STAGE="^stage-(\d{2}-\d{2}-\d{4}-\d{2}-\d{2}-\d{2})$"
+
+if [[ $1 != "live" ]] && [[ $1 != "test" ]]  && [[ $1 != "dev" ]] && ! [[ $1 =~ $REGEX_STAGE ]]
 then
   echo "Invalid deployment mode $1"
   exit
@@ -49,7 +51,7 @@ fi
 # Go to pre-update folder
 cd ../aws-update/0_pre-update || exit
 
-# Replace 'TYPE' in config.tf with actual type (live, test or dev)
+# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -110,7 +112,7 @@ echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
 # Go to update folder
 cd ../scripts/aws-update/1_update || exit
 
-# Replace 'TYPE' in config.tf with actual type (dev, test or live)
+# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -163,7 +165,7 @@ cd ../../aws-initial-setup/2_main-setup || exit
 cp ../../outputs/frontend.zip frontend.zip
 cp ../../outputs/backend.zip backend.zip
 
-# Replace 'TYPE' in config.tf with actual type (dev, test or live)
+# Replace 'TYPE' in config.tf with actual type (live, test, stage or dev)
 sed -i -e "s/##TYPE##/$1/g" config.tf
 
 # Replace 'PROJECT' in config.tf with actual project name
