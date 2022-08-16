@@ -1,14 +1,14 @@
 # --------------------------------------------------------------
 # Destroys the given system
 # Takes two parameters:
-# $1 - deployment mode: 'live', 'test', 'dev' or 'stage-dd-mm-yyyy-HH-MM-SS'
+# $1 - deployment mode: 'live', 'test', 'dev' or 'stage-ddmmHH'
 # $2 - local mode (will perform cleanup): true or not set
 # Optionally, with third parameter set to 'true', will force destruction
 # Be careful: this script may destroy infrastructure seen by customers!
 # If destruction is forced, user must enter 'confirm' as fourth parameter
 # --------------------------------------------------------------
 
-REGEX_STAGE="^stage-(\d{2}-\d{2}-\d{4}-\d{2}-\d{2}-\d{2})$"
+REGEX_STAGE="^stage-(\d{2}\d{2}\d{2})$"
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]] && [[ $1 != "dev" ]] && ! [[ $1 =~ $REGEX_STAGE ]]
 then

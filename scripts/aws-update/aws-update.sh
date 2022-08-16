@@ -1,11 +1,11 @@
 # --------------------------------------------------------------
 # Updates existing AWS infrastructure without recreating everything
 # Takes two parameters:
-# $1 - deployment mode: 'live', 'test', 'dev' or 'stage-dd-mm-yyyy-HH-MM-SS'
+# $1 - deployment mode: 'live', 'test', 'dev' or 'stage-ddmmHH'
 # $2 - local mode (will perform cleanup): true or not set
 # --------------------------------------------------------------
 
-REGEX_STAGE="^stage-(\d{2}-\d{2}-\d{4}-\d{2}-\d{2}-\d{2})$"
+REGEX_STAGE="^stage-(\d{2}\d{2}\d{2})$"
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]  && [[ $1 != "dev" ]] && ! [[ $1 =~ $REGEX_STAGE ]]
 then

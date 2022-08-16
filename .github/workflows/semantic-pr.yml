@@ -37,4 +37,4 @@ jobs:
             master
             dev
             /^(feature|doc|fix|test|)-([A-Za-z-_0-9])+$/
-            /^stage-(\d{2}-\d{2}-\d{4}-\d{2}-\d{2}-\d{2})$/
+            /^stage-(\d{2}\d{2}\d{2})$/
