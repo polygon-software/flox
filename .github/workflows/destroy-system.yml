@@ -13,6 +13,7 @@ on:
           - test
           - dev
           - live
+          - stage
       force:
         required: false
         type: boolean
@@ -22,6 +23,10 @@ on:
         required: false
         type: string
         description: Enter "confirm" to confirm you are aware that DATA LOSS, INCLUDING ACCOUNTS, will occur when forcing destruction!
+      stage-branch-name:
+        required: false
+        type: string
+        description: Name of the staging branch to destroy in 'stage' mode
 
 jobs:
   destroy-aws:
@@ -47,4 +52,4 @@ jobs:
 
       - name: Destroy AWS infrastructure
         working-directory: ./scripts/support
-        run: bash destroy-system.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }}
+        run: bash destroy-system.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }} ${{ github.event.inputs.stage-branch-name }}

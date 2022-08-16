@@ -3,7 +3,9 @@
 # Takes two parameters:
 # $1 - deployment mode: 'live', 'test', 'dev' or 'stage'
 # $2 - local mode (will perform cleanup): true or not set
-# $3 - (optional) - staging branch name (e.g. stage-123412)
+# $3 - force destruction
+# $4 - 'confirm' for forcing destruction
+# $5 - (optional) - staging branch name (e.g. stage-123412)
 # Optionally, with third parameter set to 'true', will force destruction
 # Be careful: this script may destroy infrastructure seen by customers!
 # If destruction is forced, user must enter 'confirm' as fourth parameter
@@ -17,9 +19,9 @@ then
 fi
 
 REGEX_STAGE="^stage-(\d{6})$"
-if [[ $1 == "stage" ]] && ! [[ $3 =~ $REGEX_STAGE ]]
+if [[ $1 == "stage" ]] && ! [[ $5 =~ $REGEX_STAGE ]]
 then
-  echo "Invalid staging branch name $3"
+  echo "Invalid staging branch name $5"
   exit
 fi
 
@@ -32,7 +34,7 @@ bash create-flox-tfvars.sh "$1"
 
 if [[ $1 == "stage" ]]
 then
-  echo "type=\"$3\"" >> flox.tfvars
+  echo "type=\"$5\"" >> flox.tfvars
 else
   echo "type=\"$1\"" >> flox.tfvars
 fi
@@ -64,7 +66,7 @@ else
   if [[ $1 == "stage" ]]
   then
     # E.g. stage-123412.flox.polygon-project.ch
-    url="$3.$project.polygon-project.ch"
+    url="$5.$project.polygon-project.ch"
   else
     # E.g. test.flox.polygon-project.ch
     url="$1.$project.polygon-project.ch"
@@ -86,7 +88,7 @@ echo "=============================================="
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $1 == "stage" ]]
 then
-    sed -i -e "s/##TYPE##/$3/g" config.tf
+    sed -i -e "s/##TYPE##/$5/g" config.tf
 else
     sed -i -e "s/##TYPE##/$1/g" config.tf
 fi
@@ -138,7 +140,7 @@ cd ../1_parent-setup || exit
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $1 == "stage" ]]
 then
-    sed -i -e "s/##TYPE##/$3/g" config.tf
+    sed -i -e "s/##TYPE##/$5/g" config.tf
 else
     sed -i -e "s/##TYPE##/$1/g" config.tf
 fi
@@ -162,7 +164,7 @@ cd ../2_main-setup || exit
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $1 == "stage" ]]
 then
-    sed -i -e "s/##TYPE##/$3/g" config.tf
+    sed -i -e "s/##TYPE##/$5/g" config.tf
 else
     sed -i -e "s/##TYPE##/$1/g" config.tf
 fi

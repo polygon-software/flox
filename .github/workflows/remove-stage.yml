@@ -38,4 +38,4 @@ jobs:
 
       - name: Destroy AWS infrastructure
         working-directory: ./scripts/support
-        run: bash destroy-system.sh ${{ steps.get_branch.outputs.branch }} false true confirm
+        run: bash destroy-system.sh stage false true confirm ${{ steps.get_branch.outputs.branch }}
