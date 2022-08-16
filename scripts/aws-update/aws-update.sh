@@ -5,7 +5,7 @@
 # $2 - local mode (will perform cleanup): true or not set
 # --------------------------------------------------------------
 
-REGEX_STAGE="^stage-(\d{2}\d{2}\d{2})$"
+REGEX_STAGE="^stage-(\d{6})$"
 
 if [[ $1 != "live" ]] && [[ $1 != "test" ]]  && [[ $1 != "dev" ]] && ! [[ $1 =~ $REGEX_STAGE ]]
 then
