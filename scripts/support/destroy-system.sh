@@ -23,8 +23,8 @@ then
   exit
 fi
 
-REGEX_STAGE="^stage-(\d{6})$"
-if [[ $mode == "stage" ]] && ! [[ $staging_branch_name =~ $REGEX_STAGE ]]
+REGEX_STAGE='^stage-(\d{6})$'
+if [[ $mode == "stage" ]] &&  [[ ! $staging_branch_name =~ $REGEX_STAGE ]]
 then
   echo "Invalid staging branch name $staging_branch_name"
   exit
