@@ -50,4 +50,3 @@ jobs:
           git checkout -b ${{ steps.setup.outputs.branch_name }}
           git push --set-upstream origin ${{ steps.setup.outputs.branch_name }}
           gh pr create -B "master" -t "stage: Automatic PR for ${{ steps.setup.outputs.branch_name }}" -b "@{{ github.event.inputs.PM }} Automatic staging branch PR for ${{ steps.setup.outputs.url }}" -r ${{ github.event.inputs.reviewer }}
-
