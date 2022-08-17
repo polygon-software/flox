@@ -40,7 +40,7 @@ jobs:
       - name: Build & set up AWS infrastructure
         id: setup
         working-directory: ./scripts/aws-initial-setup
-        run: bash initial-aws-setup.sh stage false
+        run: bash initial-aws-setup.sh stage false true confirm
 
       - name: Open PR
         env:
