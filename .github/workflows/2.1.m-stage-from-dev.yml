@@ -1,4 +1,4 @@
-name: "Opens the staging branch from dev and opens a PR on master"
+name: "2.1.m: Opens staging branch from dev and opens a PR on master"
 
 # Should only be run manually from the Actions tab
 on:

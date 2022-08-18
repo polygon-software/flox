@@ -1,31 +1,29 @@
-name: "PR: Label monday.com items in a dev PR as 'PR: In Review'"
+name: "Auto: Label monday.com items in a master PR as 'Stage 1: Staged'"
 
 on:
   pull_request:
-    branches: [dev]
-
+    branches:
+      - master
 jobs:
   set-status:
     runs-on: ubuntu-latest
     steps:
-      # Set status to 'PR: In Review' if base branch is not 'master' branch
-      - name: "Update state of monday.com items to 'PR: In Review'"
+      # The monday.com item IDs must appear in the Pull-Requests Body / Description. Take the commit messages
+      - name: "Update state of monday.com items to 'Stage 1: Staged'"
         id: monday-state
         uses: polygon-software/action-monday-state@main
-        if: ${{ github.base_ref != 'master' }}
         with:
           monday-token: ${{ secrets.MONDAY_TOKEN }}
-          multiple: true
           allow-no-item-id: true
+          multiple: true
           monday-organization: polygonsoftware
-          text: ${{ github.event.pull_request.title }}
+          text: ${{ github.event.pull_request.body }}
           prefix: '#'
           status-column-title: 'Item Status!'
-          set-status: 'PR: In Review'
+          set-status: 'Stage 1: Staged'
 
       - name: Comment PR
         uses: polygon-software/actions-comment-pull-request@v1
-        if: ${{ github.base_ref != 'master' }}
         with:
           message: ${{ steps.monday-state.outputs.message }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

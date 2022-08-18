@@ -1,4 +1,4 @@
-name: Merges Master into Dev on update, will open a PR if a merge conflict exists
+name: "3.1.a: Creates PR from Master into Dev on update"
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  merge-master-to-dev:
+  pr-master-to-dev:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,20 +19,14 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Action"
 
-      - name: Merge master back to dev
+      - name: Create master PR to dev
         id: merge
         run: |
           git fetch --unshallow
           git checkout master
           git pull
           pr=$(gh pr create -B "dev" -t "stage: Auto-update dev from master" -b "Automatic master merge")
-          pr_number=$(echo "${pr##*/}")
-          echo "PR is $pr, number is $pr_number"
-          gh api \
-            --method PUT \
-            -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/pulls/$pr_number/merge \
-            -f merge_method='squash'
+          echo "PR was created: $pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

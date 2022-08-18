@@ -1,12 +1,13 @@
-name: "Stage 0: Overwrite Dev-Environment with newest version"
+name: "2.2.a: Overwrite Stage-Environment when it receives a fix"
 
 on:
   push:
     branches:
-      - dev
+      - stage-**
+
 jobs:
-  release:
-    name: "Update DEV application"
+  stage-fix:
+    name: Update Stage application
     runs-on: ubuntu-latest
     steps:
 
@@ -14,6 +15,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Get branch name
+        id: get_branch
+        run: echo "##[set-output name=branch_name;]$(echo ${GITHUB_REF#refs/heads/})"
 
       - name: Make scripts executable
         run: |
@@ -28,4 +33,5 @@ jobs:
 
       - name: Build & update AWS infrastructure
         working-directory: ./scripts/aws-update
-        run: bash aws-update.sh dev
+        run: bash aws-update.sh stage false ${{ steps.get_branch.outputs.branch }}
+
