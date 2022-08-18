@@ -26,7 +26,6 @@ jobs:
           git fetch --unshallow
           git checkout dev
           git pull
-          echo "Merge to /repos/${{ github.repository }}/merges"
           gh api \
           --method POST \
           -H "Accept: application/vnd.github+json" \
@@ -35,6 +34,8 @@ jobs:
           -f head='dev' \
           -f commit_message='Automatic dev merge'
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge conflict
         id: solve_conflict
