@@ -1,0 +1,59 @@
+name: "Auto: Reviewdog"
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+jobs:
+  lint-code:
+    name: Lint Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup node env
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 16.x
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Node Modules
+        uses: actions/cache@v2.1.4
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install frontend dependencies
+        run: yarn
+        working-directory: frontend
+
+      - name: Install backend dependencies
+        run: yarn
+        working-directory: backend
+
+      - name: Lint frontend
+        uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-review
+          fail_on_error: true
+          eslint_flags: "--ext .js,.ts,.vue ./"
+          workdir: frontend
+
+      - name: Lint backend
+        uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-review
+          eslint_flags: "{src,apps,libs,test}/**/*.ts"
+          workdir: backend

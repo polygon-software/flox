@@ -1,0 +1,46 @@
+name: "5.1.a: Overwrite Live-Environment with content from Test-Environment"
+
+on:
+  release:
+    types:
+    - published
+
+jobs:
+  release:
+    name: "Release new LIVE Application"
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Make scripts executable
+        run: |
+          sudo chmod +x ./scripts/support/build.sh
+          sudo chmod +x ./scripts/aws-update/aws-update.sh
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Build & update AWS infrastructure
+        working-directory: ./scripts/aws-update
+        run: bash aws-update.sh live
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+
+      - name: "Update state of monday.com items to 'Stage 4: Production'"
+        uses: polygon-software/action-monday-state@main
+#        if: ${{ github.event.release.draft != 'true' }}
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          multiple: true
+          text: ${{ github.event.release.body }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'Stage 4: Production'
+          allow-no-item-id: true

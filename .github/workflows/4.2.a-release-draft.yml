@@ -1,0 +1,115 @@
+name: "4.2.a: Create a release-draft and deploy to TEST Environment"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: "Build Applications for production Environment"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Make scripts executable
+        run: |
+          sudo chmod +x ./scripts/support/build.sh
+          sudo chmod +x ./scripts/aws-update/aws-update.sh
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Build & update AWS infrastructure
+        working-directory: ./scripts/aws-update
+        run: bash aws-update.sh test
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Archive Frontend Release Files
+        uses: polygon-software/action-zip@master
+        with:
+          files: frontend/dist
+          dest: frontend-release.zip
+
+      - name: Archive Backend Release Files
+        uses: polygon-software/action-zip@master
+        with:
+          files: backend/dist
+          dest: backend-release.zip
+
+      - name: Upload Frontend Release ZIP
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-release-zip
+          path: frontend-release.zip
+
+      - name: Upload Backend Release ZIP
+        uses: actions/upload-artifact@v2
+        with:
+          name: backend-release-zip
+          path: backend-release.zip
+
+  release-draft:
+    name: "Create Release Draft"
+    runs-on: ubuntu-latest
+    needs:
+      - build
+
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Build Changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v2.9.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          configuration: ".github/changelog-config.json"
+
+      # Set status on monday.com for items that appear in a PR Title of a PR that has never been released before
+      - name: "Update state of monday.com items to 'Stage 3: Testing'"
+        uses: polygon-software/action-monday-state@main
+        id: monday-state
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          multiple: true
+          monday-organization: polygonsoftware
+          text: ${{ steps.changelog.outputs.changelog }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'Stage 3: Testing'
+          allow-no-item-id: true
+
+      - name: Download Frontend Release ZIP
+        uses: actions/download-artifact@v2
+        with:
+          name: frontend-release-zip
+          path: release/frontend-release.zip
+
+      - name: Download Backend Release ZIP
+        uses: actions/download-artifact@v2
+        with:
+          name: backend-release-zip
+          path: release/backend-release.zip
+
+      - name: Release
+        uses: polygon-software/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          draft: true
+          files: |
+            release/backend-release.zip
+            release/frontend-release.zip
+          body: |
+            ${{ steps.changelog.outputs.changelog }}
+            ---
+            ${{ steps.monday-state.outputs.message }}
