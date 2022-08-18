@@ -26,6 +26,7 @@ jobs:
           git fetch --unshallow
           git checkout dev
           git pull
+          echo "Merge to /repos/{{github.repository}}/merges"
           gh api \
           --method POST \
           -H "Accept: application/vnd.github+json" \
