@@ -1,4 +1,4 @@
-name: "Destroy staging infrastructure on merging or deletion of a staging branch"
+name: "2.3.a: Destroy staging infrastructure on merging or deletion of a staging branch"
 
 on:
   pull_request:

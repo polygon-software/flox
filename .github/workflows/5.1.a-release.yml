@@ -1,4 +1,4 @@
-name: "Stage 4: Overwrite Live-Environment with content from Test-Environment"
+name: "5.1.a: Overwrite Live-Environment with content from Test-Environment"
 
 on:
   release:

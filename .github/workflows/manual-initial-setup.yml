@@ -1,4 +1,4 @@
-name: Set up AWS infrastructure
+name: "Manual: Set up AWS"
 
 # Should only be run manually from the Actions tab (only once!)
 on:

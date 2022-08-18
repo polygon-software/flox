@@ -1,4 +1,4 @@
-name: Synchronize Fork Repos
+name: "Auto: Synchronize Fork Repos"
 
 on:
   push:

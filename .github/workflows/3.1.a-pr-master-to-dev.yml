@@ -1,4 +1,4 @@
-name: Creates PR from Master into Dev on update, will open a PR if a merge conflict exists
+name: "3.1.a: Creates PR from Master into Dev on update"
 
 on:
   push:

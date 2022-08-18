@@ -1,4 +1,4 @@
-name: Destroy AWS infrastructure
+name: "Manual: Destroy AWS"
 
 # Should only be run manually from the Actions tab
 # ATTENTION: this system may destroy infrastructure seen by customers!
