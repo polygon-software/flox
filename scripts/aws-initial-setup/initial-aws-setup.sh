@@ -147,6 +147,16 @@ echo "VUE_APP_AWS_REGION=$aws_region" >> .env
 echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
 echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
 
+# Add production flag for actual live deployments so LogRocket is enabled
+# (applies only to 'test' & 'live' system; building in production mode does
+# NOT imply a production system where we need the logger to be active)
+if [[ $mode == "live" ]] || [[ $mode == "test" ]]
+then
+  echo "VUE_APP_PRODUCTION=true" >> .env
+else
+    echo "VUE_APP_PRODUCTION=false" >> .env
+fi
+
 # ==========================================
 # ==      Step 1: Parent DNS setup        ==
 # ==  (Applies only in TEST and DEV mode) ==
