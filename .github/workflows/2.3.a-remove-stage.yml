@@ -41,4 +41,3 @@ jobs:
           terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-setup
           terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-parent-setup
           terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}
-
