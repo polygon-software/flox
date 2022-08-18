@@ -26,7 +26,13 @@ jobs:
           git fetch --unshallow
           git checkout dev
           git pull
-          gh api --method POST -H "Accept: application/vnd.github+json" /repos/{{ github.repository }}/merges -f base='master' -f head='dev' -f commit_message='Automatic dev merge'
+          gh api \
+          --method POST \
+          -H "Accept: application/vnd.github+json" \
+          /repos/{{ github.repository }}/merges \
+          -f base='master' \
+          -f head='dev' \
+          -f commit_message='Automatic dev merge'
           git push
 
       - name: Merge conflict
