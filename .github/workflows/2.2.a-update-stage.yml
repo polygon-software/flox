@@ -1,4 +1,4 @@
-name: "2.2.a: Overwrite Stage-Environment when it receives a fix"
+name: "2.2.a: Update Stage-Environment when it receives a fix"
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
 
       - name: Get branch name
         id: get_branch
-        run: echo "##[set-output name=branch_name;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
 
       - name: Make scripts executable
         run: |
@@ -34,4 +34,3 @@ jobs:
       - name: Build & update AWS infrastructure
         working-directory: ./scripts/aws-update
         run: bash aws-update.sh stage false ${{ steps.get_branch.outputs.branch }}
-

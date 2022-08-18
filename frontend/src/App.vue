@@ -30,7 +30,6 @@ provide('$errorService', $errorService)
 const $routerService: RouterService = reactive(new RouterService(routerInstance)) as unknown as RouterService
 provide<RouterService>('$routerService', $routerService as unknown as RouterService)
 
-
 /**
  * Enabled Flox modules (depending on flox.config.json)
  */
