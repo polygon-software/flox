@@ -40,5 +40,4 @@ if(isModuleActive(MODULES.AUTH)){
   const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService, $routerService)) as unknown as AuthenticationService
   provide<AuthenticationService>('$authService', $authService)
 }
-
 </script>
