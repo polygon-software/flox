@@ -27,7 +27,7 @@ jobs:
           git checkout master
           git pull
           pr=$(gh pr create -B "dev" -t "stage: Auto-update dev from master" -b "Automatic master merge")
-          echo "PR was created: $pr
+          echo "PR was created: $pr"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
