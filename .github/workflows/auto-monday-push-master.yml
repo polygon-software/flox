@@ -1,4 +1,4 @@
-name: "Stage 2: Label monday.com items arriving in DEV as 'Stage 2: Master'"
+name: "Auto: Label monday.com items arriving in DEV as 'Stage 2: Master'"
 
 on:
   push:

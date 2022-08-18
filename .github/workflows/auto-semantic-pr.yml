@@ -1,4 +1,4 @@
-name: "Semantic Pull-Request"
+name: "Auto: Semantic Pull-Request"
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          scopes: |
+          types: |
             fix
             feat
             doc
@@ -37,4 +37,4 @@ jobs:
             master
             dev
             /^(feature|doc|fix|test|)-([A-Za-z-_0-9])+$/
-            /^stage-(\d{6})$/
+            /^stage-[0-9]{6}$/

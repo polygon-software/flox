@@ -1,0 +1,36 @@
+name: "3.1.a: Creates PR from Master into Dev on update"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  pr-master-to-dev:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Set Git config
+        id: setup
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Create master PR to dev
+        id: merge
+        continue-on-error: true
+        run: |
+          git fetch --unshallow
+          git checkout master
+          git pull
+          pr=$(gh pr create -B "dev" -t "stage: Auto-update dev from master" -b "Automatic master merge")
+          echo "PR was created: $pr"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: PR already exists
+        if: steps.merge.conclusion == 'failure'
+        run: echo A PR from master to dev already exists or dev is already up-to-date

@@ -1,4 +1,4 @@
-name: "PR: Update Label on monday.com items based on PR Status"
+name: "Auto: Update Label on monday.com items based on PR Status"
 
 on:
   pull_request_review:

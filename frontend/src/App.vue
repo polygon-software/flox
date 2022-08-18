@@ -11,6 +11,12 @@ import {RouterService} from 'src/services/RouterService';
 import {routerInstance} from 'boot/router';
 import {isModuleActive} from 'src/flox';
 import {MODULES} from 'src/flox/MODULES';
+import LogRocket from 'logrocket';
+
+// Add LogRocket to production deployments / builds
+if(process.env.VUE_APP_PRODUCTION === 'true'){
+  LogRocket.init('md69mq/flox'); // TODO application specific: Change LogRocket ID
+}
 
 // Quasar
 const $q = useQuasar()
@@ -34,5 +40,4 @@ if(isModuleActive(MODULES.AUTH)){
   const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService, $routerService)) as unknown as AuthenticationService
   provide<AuthenticationService>('$authService', $authService)
 }
-
 </script>

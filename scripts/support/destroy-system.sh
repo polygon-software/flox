@@ -1,6 +1,6 @@
 # --------------------------------------------------------------
 # Destroys the given system
-# Takes two parameters:
+# Takes four or five parameters:
 # $1 - deployment mode: 'live', 'test', 'dev' or 'stage'
 # $2 - local mode (will perform cleanup): true or not set
 # $3 - force destruction
@@ -11,17 +11,22 @@
 # If destruction is forced, user must enter 'confirm' as fourth parameter
 # --------------------------------------------------------------
 
+mode=$1
+local_mode=$2
+force_deployment=$3
+confirm_force_deployment=$4
+staging_branch_name=$5
 
-if [[ $1 != "live" ]] && [[ $1 != "test" ]]  && [[ $1 != "dev" ]] && [[ $1 != "stage" ]]
+if [[ $mode != "live" ]] && [[ $mode != "test" ]]  && [[ $mode != "dev" ]] && [[ $mode != "stage" ]]
 then
-  echo "Invalid deployment mode $1"
+  echo "Invalid deployment mode $mode"
   exit
 fi
 
-REGEX_STAGE="^stage-(\d{6})$"
-if [[ $1 == "stage" ]] && ! [[ $5 =~ $REGEX_STAGE ]]
+REGEX_STAGE="^stage-[0-9]{6}$"
+if [[ $mode == "stage" ]] &&  [[ ! $staging_branch_name =~ $REGEX_STAGE ]]
 then
-  echo "Invalid staging branch name $5"
+  echo "Invalid staging branch name $staging_branch_name"
   exit
 fi
 
@@ -30,13 +35,13 @@ fi
 # ==========================================
 
 # Create flox.tfvars file from flox.config.json in frontend & backend
-bash create-flox-tfvars.sh "$1"
+bash create-flox-tfvars.sh "$mode"
 
-if [[ $1 == "stage" ]]
+if [[ $mode == "stage" ]]
 then
-  echo "type=\"$5\"" >> flox.tfvars
+  echo "type=\"$staging_branch_name\"" >> flox.tfvars
 else
-  echo "type=\"$1\"" >> flox.tfvars
+  echo "type=\"$mode\"" >> flox.tfvars
 fi
 
 cd ../aws-initial-setup/0_pre-setup || exit
@@ -45,7 +50,7 @@ cd ../aws-initial-setup/0_pre-setup || exit
 project=$(jq '.general.project' ../../../backend/flox.config.json)
 project=${project:1:-1}
 
-frontend_build_mode=$(jq ".general.mode_$1" ../../../frontend/flox.config.json)
+frontend_build_mode=$(jq ".general.mode_$mode" ../../../frontend/flox.config.json)
 frontend_build_mode=${frontend_build_mode:1:-1}
 
 aws_region=$(jq '.general.aws_region' ../../../backend/flox.config.json)
@@ -55,42 +60,42 @@ organisation=$(jq '.general.organisation' ../../../backend/flox.config.json)
 organisation=${organisation:1:-1}
 
 # Serverless mode (API only)
-serverless_api=$(jq ".infrastructure_$1.serverless_api" ../../../backend/flox.config.json)
+serverless_api=$(jq ".infrastructure_$mode.serverless_api" ../../../backend/flox.config.json)
 
 # Get mode-dependent base URL
-if [[ $1 == "live" ]]
+if [[ $mode == "live" ]]
 then
   url=$(jq ".general.live_domain" ../../backend/flox.config.json)
   url=${url:1:-1}
 else
-  if [[ $1 == "stage" ]]
+  if [[ $mode == "stage" ]]
   then
     # E.g. stage-123412.flox.polygon-project.ch
-    url="$5.$project.polygon-project.ch"
+    url="$staging_branch_name.$project.polygon-project.ch"
   else
     # E.g. test.flox.polygon-project.ch
-    url="$1.$project.polygon-project.ch"
+    url="$mode.$project.polygon-project.ch"
   fi
 fi
 
 # Check whether selected deployment is online (if online, fail if 'force' is not set to true)
 online_status=$(curl -s --head "https://$url" | grep '200')
-if [[ ($online_status || $1 == "live" || $1 == "test") && ( $3 != "true"  || $4 != "confirm")]]
+if [[ ($online_status || $mode == "live" || $mode == "test") && ( $force_deployment != "true"  || $confirm_force_deployment != "confirm")]]
 then
-  echo "Deployment in mode $1 is online at URL '$url', or is customer-facing! Use 'force' to force destruction anyways. (CAUTION: This may destroy live infrastructure!)"
+  echo "Deployment in mode $mode is online at URL '$url', or is customer-facing! Use 'force' to force destruction anyways. (CAUTION: This may destroy live infrastructure!)"
   exit 1
 fi
 
 echo "=============================================="
-echo "===  DESTROYING AWS INFRASTRUCTURE ($1)  ==="
+echo "===  DESTROYING AWS INFRASTRUCTURE ($mode)  ==="
 echo "=============================================="
 
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
-if [[ $1 == "stage" ]]
+if [[ $mode == "stage" ]]
 then
-    sed -i -e "s/##TYPE##/$5/g" config.tf
+    sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
 else
-    sed -i -e "s/##TYPE##/$1/g" config.tf
+    sed -i -e "s/##TYPE##/$mode/g" config.tf
 fi
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -138,11 +143,14 @@ echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
 cd ../1_parent-setup || exit
 
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
-if [[ $1 == "stage" ]]
+if [[ $mode == "stage" ]]
 then
-    sed -i -e "s/##TYPE##/$5/g" config.tf
+    sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
+
+    # Return main workspace name (e.g. flox-stage-170809) so workspaces can be destroyed later
+    echo ::set-output name=workspace_name::"$project-$staging_branch_name"
 else
-    sed -i -e "s/##TYPE##/$1/g" config.tf
+    sed -i -e "s/##TYPE##/$mode/g" config.tf
 fi
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -162,11 +170,11 @@ terraform refresh -var-file="../../support/flox.tfvars"
 cd ../2_main-setup || exit
 
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
-if [[ $1 == "stage" ]]
+if [[ $mode == "stage" ]]
 then
-    sed -i -e "s/##TYPE##/$5/g" config.tf
+    sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
 else
-    sed -i -e "s/##TYPE##/$1/g" config.tf
+    sed -i -e "s/##TYPE##/$mode/g" config.tf
 fi
 
 # Replace 'PROJECT' in config.tf with actual project name
@@ -213,7 +221,7 @@ terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 # ======      Step 4: Cleanup       ========
 # ======    (only in local mode)    ========
 # ==========================================
-if [[ $2 == 'true' ]]
+if [[ $local_mode == 'true' ]]
 then
   # Remove .zip files
   rm -f ../2_main-setup/frontend.zip
