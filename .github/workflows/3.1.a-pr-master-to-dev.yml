@@ -21,6 +21,7 @@ jobs:
 
       - name: Create master PR to dev
         id: merge
+        continue-on-error: true
         run: |
           git fetch --unshallow
           git checkout master
@@ -31,6 +32,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: PR already exists
-        id: error
         if: steps.merge.conclusion == 'failure'
-        run: echo A PR from master to dev already exists!
+        run: echo A PR from master to dev already exists or dev is already up-to-date
