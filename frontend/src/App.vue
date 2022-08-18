@@ -13,7 +13,10 @@ import {isModuleActive} from 'src/flox';
 import {MODULES} from 'src/flox/MODULES';
 import LogRocket from 'logrocket';
 
-LogRocket.init('md69mq/flox');
+// Add LogRocket to production deployments / builds
+if(process.env.VUE_APP_PRODUCTION === 'true'){
+  LogRocket.init('md69mq/flox');
+}
 
 // Quasar
 const $q = useQuasar()
