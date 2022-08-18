@@ -33,4 +33,4 @@ jobs:
 
       - name: PR already exists
         if: steps.merge.conclusion == 'failure'
-        run: echo A PR from master to dev already exists or dev is already up-to-date!
+        run: echo A PR from master to dev already exists or dev is already up-to-date
