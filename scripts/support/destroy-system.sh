@@ -146,6 +146,9 @@ cd ../1_parent-setup || exit
 if [[ $mode == "stage" ]]
 then
     sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
+
+    # Return main workspace name (e.g. flox-stage-170809) so workspaces can be destroyed later
+    echo ::set-output name=workspace_name::"$project-$staging_branch_name"
 else
     sed -i -e "s/##TYPE##/$mode/g" config.tf
 fi
