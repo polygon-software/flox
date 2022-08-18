@@ -31,8 +31,8 @@ jobs:
           gh api \
             --method PUT \
             -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/pulls/$pr_number/merge
-          -f merge_method='squash'
+            /repos/${{ github.repository }}/pulls/$pr_number/merge \
+            -f merge_method='squash'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
