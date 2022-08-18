@@ -13,9 +13,6 @@ jobs:
       - name: Checkout 🛎
         uses: actions/checkout@v3
 
-      - name: Make scripts executable
-        run:  sudo chmod +x ./scripts/support/merge-master-into-dev.sh
-
       - name: Set Git config
         id: setup
         run: |
@@ -24,14 +21,13 @@ jobs:
 
       - name: Merge master back to dev
         id: merge
-        working-directory: ./scripts/support
         continue-on-error: true
-        run: bash merge-master-into-dev.sh
-
-      - name: Merge successful
-        id: push
-        if: steps.merge.conclusion == 'success'
-        run: git push --force
+        run: |
+          git fetch --unshallow
+          git checkout dev
+          git pull
+          gh api --method POST -H "Accept: application/vnd.github+json" /repos/{{ github.repository }}/merges -f base='master' -f head='dev' -f commit_message='Automatic dev merge'
+          git push
 
       - name: Merge conflict
         id: solve_conflict
