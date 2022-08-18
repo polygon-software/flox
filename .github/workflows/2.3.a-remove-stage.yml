@@ -2,19 +2,29 @@ name: "2.3.a: Destroy staging infrastructure on merging or deletion of a staging
 
 on:
   delete:
+  pull_request:
     branches:
-      - stage-**
+      - master
+    types:
+      - closed
 
 jobs:
+  get-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.get.outputs.branch }}
+    steps:
+      - name: Get branch name
+        id: get
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
   destroy-aws:
+    needs: get-branch
+    if: [[ ${{ get-branch.outputs.branch  }} =~ /^stage-[0-9]{6}$/ ]];
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v3
-
-      - name: Get branch name
-        id: get_branch
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
 
       - name: Make scripts executable
         run: |
@@ -38,8 +48,8 @@ jobs:
 
       - name: Delete Terraform workspaces
         run: |
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-setup -force
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-parent-setup -force
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-update -force
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-update -force
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }} -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-setup -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }}-parent-setup -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-update -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }}-update -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }} -force
