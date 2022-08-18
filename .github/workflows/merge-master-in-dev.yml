@@ -23,7 +23,7 @@ jobs:
         id: merge
         run: |
           git fetch --unshallow
-          git checkout dev
+          git checkout master
           git pull
           pr=$(gh pr create -B "dev" -t "stage: Auto-update dev from master" -b "Automatic master merge")
           pr_number=$(jq '.number' << $pr)
