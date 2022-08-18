@@ -30,8 +30,8 @@ jobs:
           --method POST \
           -H "Accept: application/vnd.github+json" \
           /repos/${{ github.repository }}/merges \
-          -f base='master' \
-          -f head='dev' \
+          -f base='dev' \
+          -f head='master' \
           -f commit_message='Automatic dev merge'
           git push
         env:
