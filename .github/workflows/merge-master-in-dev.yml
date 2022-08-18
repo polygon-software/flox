@@ -26,7 +26,7 @@ jobs:
           git checkout master
           git pull
           pr=$(gh pr create -B "dev" -t "stage: Auto-update dev from master" -b "Automatic master merge")
-          pr_number=$(jq '.number' << $pr)
+          pr_number=$(echo "${pr##*/}")
           echo "PR is $pr, number is $pr_number"
           gh api \
             --method PUT \
