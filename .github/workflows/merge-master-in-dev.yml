@@ -25,7 +25,7 @@ jobs:
           git fetch --unshallow
           git checkout dev
           git pull
-          pr=gh pr create -B "dev" -t "stage: Auto-update dev from master" -b "Automatic master merge"
+          pr=$(gh pr create -B "dev" -t "stage: Auto-update dev from master" -b "Automatic master merge")
           pr_number=$(jq '.number' << $pr)
           echo "PR is $pr, number is $pr_number"
           gh api \
