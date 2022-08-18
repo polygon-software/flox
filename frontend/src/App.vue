@@ -15,7 +15,7 @@ import LogRocket from 'logrocket';
 
 // Add LogRocket to production deployments / builds
 if(process.env.VUE_APP_PRODUCTION === 'true'){
-  LogRocket.init('md69mq/flox');
+  LogRocket.init('md69mq/flox'); // TODO application specific: Change LogRocket ID
 }
 
 // Quasar
