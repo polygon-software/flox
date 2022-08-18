@@ -38,8 +38,8 @@ jobs:
 
       - name: Delete Terraform workspaces
         run: |
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-setup -force
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-parent-setup -force
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-update -force
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }}-update -force
-          terraform workspace delete {{ steps.destroy_infrastructure.outputs.workspace_name }} -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-setup -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }}-parent-setup -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-update -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }}-update -force
+          terraform workspace delete ${{ steps.destroy_infrastructure.outputs.workspace_name }} -force
