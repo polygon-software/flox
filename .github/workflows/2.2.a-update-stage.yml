@@ -34,4 +34,3 @@ jobs:
       - name: Build & update AWS infrastructure
         working-directory: ./scripts/aws-update
         run: bash aws-update.sh stage false ${{ steps.get_branch.outputs.branch }}
-
