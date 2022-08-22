@@ -42,14 +42,5 @@ jobs:
         run: terraform validate
 
       - name: Destroy AWS infrastructure
-        id: destroy_infrastructure
         working-directory: ./scripts/support
         run: bash destroy-system.sh stage false true confirm ${{ needs.get-branch.outputs.branch }}
-
-      - name: Delete Terraform workspaces
-        run: |
-          terraform workspace delete -force ${{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-setup
-          terraform workspace delete -force ${{ steps.destroy_infrastructure.outputs.workspace_name }}-parent-setup
-          terraform workspace delete -force ${{ steps.destroy_infrastructure.outputs.workspace_name }}-pre-update
-          terraform workspace delete -force ${{ steps.destroy_infrastructure.outputs.workspace_name }}-update
-          terraform workspace delete -force ${{ steps.destroy_infrastructure.outputs.workspace_name }}

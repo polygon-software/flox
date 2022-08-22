@@ -148,7 +148,7 @@ then
     sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
 
     # Return main workspace name (e.g. flox-stage-170809) so workspaces can be destroyed later
-    echo ::set-output name=workspace_name::"$project-$staging_branch_name"
+    workspace_name="$project-$staging_branch_name"
 else
     sed -i -e "s/##TYPE##/$mode/g" config.tf
 fi
@@ -208,14 +208,32 @@ terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ======    Step 3: Destroy all     ========
+# ==        Step 3: Destroy all           ==
+# == (If staging, also destroy workspaces ==
 # ==========================================
 
+# Main Setup
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
+if [[ $mode == "stage" ]]
+then
+  terraform workspace delete -force "$workspace_name"
+fi
+
+# Parent setup
 cd ../1_parent-setup || exit
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
+if [[ $mode == "stage" ]]
+then
+  terraform workspace delete -force "$workspace_name-parent-setup"
+fi
+
+# Pre-setup
 cd ../0_pre-setup || exit
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
+if [[ $mode == "stage" ]]
+then
+  terraform workspace delete -force "$workspace_name-pre-setup"
+fi
 
 # ==========================================
 # ======      Step 4: Cleanup       ========
