@@ -87,7 +87,7 @@ else
 fi
 
 # Save url to output
-echo ::set-output name=url::"$url"
+echo ::set-output name=stage_url::"$url"
 
 # Check whether selected deployment is already online
 online_status=$(curl -s --head "https://$url" | grep '200')
