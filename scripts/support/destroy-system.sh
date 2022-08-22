@@ -216,6 +216,7 @@ terraform refresh -var-file="../../support/flox.tfvars"
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 if [[ $mode == "stage" ]]
 then
+  terraform workspace select default
   terraform workspace delete -force "$workspace_name"
 fi
 
@@ -224,6 +225,7 @@ cd ../1_parent-setup || exit
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 if [[ $mode == "stage" ]]
 then
+  terraform workspace select default
   terraform workspace delete -force "$workspace_name-parent-setup"
 fi
 
@@ -232,6 +234,7 @@ cd ../0_pre-setup || exit
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 if [[ $mode == "stage" ]]
 then
+  terraform workspace select default
   terraform workspace delete -force "$workspace_name-pre-setup"
 fi
 
