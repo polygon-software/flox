@@ -14,7 +14,6 @@ terraform {
 
     workspaces {
       name = "##PROJECT##-##TYPE##-pre-setup" # will be replaced in preprocessing
-      tags = ["##TYPE##"]
     }
   }
 }
