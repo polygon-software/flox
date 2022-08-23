@@ -70,6 +70,17 @@ else
   fi
 fi
 
+# Check online status
+online_status=$(curl -s --head "https://$url" | grep '200')
+
+# If deployment is not currently online, don't continue with update
+if [[ ! $online_status ]]
+then
+  echo "Deployment in mode '$mode' is not online at URL: $url!"
+  exit 1
+fi
+
+
 # Go to pre-update folder
 cd ../aws-update/0_pre-update || exit
 
