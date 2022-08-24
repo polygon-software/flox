@@ -1,4 +1,4 @@
-name: "Stage 3: Manually Tag a branch as release, which will result in an automated draft Release"
+name: "4.1.m: Tag a branch as release, which will result in an automated draft Release"
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: "Convert todos to issues"
+name: "Auto: Convert todos to issues"
 on:
   push:
     branches:

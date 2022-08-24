@@ -1,4 +1,4 @@
-name: "Stage 0: Overwrite Dev-Environment with newest version"
+name: "1.1.a: Update Dev-Environment with newest version"
 
 on:
   push:

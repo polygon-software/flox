@@ -34,7 +34,7 @@ if [[ $mode == "stage" ]]
 then
   # The date will look like this: 160809 for the timestamp 16/08/2022 - 09:32:52
   branch_name="stage-$(date +'%d%m%H')"
-  echo "{branch_name}={$branch_name}" >> "$GITHUB_ENV"
+  echo ::set-output name=branch_name::"$branch_name"
   echo "type=\"$branch_name\"" >> flox.tfvars
 else
   echo "type=\"$mode\"" >> flox.tfvars
@@ -85,6 +85,9 @@ else
   # E.g. test.flox.polygon-project.ch
   url="$mode.$project.polygon-project.ch"
 fi
+
+# Save url to output
+echo ::set-output name=stage_url::"$url"
 
 # Check whether selected deployment is already online
 online_status=$(curl -s --head "https://$url" | grep '200')

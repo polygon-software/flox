@@ -1,4 +1,4 @@
-name: "Semantic Pull-Request"
+name: "Auto: Semantic Pull-Request"
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          scopes: |
+          types: |
             fix
             feat
             doc

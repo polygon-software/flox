@@ -30,7 +30,6 @@ provide('$errorService', $errorService)
 const $routerService: RouterService = reactive(new RouterService(routerInstance)) as unknown as RouterService
 provide<RouterService>('$routerService', $routerService as unknown as RouterService)
 
-
 /**
  * Enabled Flox modules (depending on flox.config.json)
  */
@@ -40,5 +39,4 @@ if(isModuleActive(MODULES.AUTH)){
   const $authService: AuthenticationService = reactive(new AuthenticationService($q, $errorService, $routerService)) as unknown as AuthenticationService
   provide<AuthenticationService>('$authService', $authService)
 }
-
 </script>

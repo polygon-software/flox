@@ -1,4 +1,4 @@
-name: Reviewdog
+name: "Auto: Reviewdog"
 on:
   push:
     branches:

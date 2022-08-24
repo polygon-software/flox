@@ -1,25 +1,19 @@
-name: "Destroy staging infrastructure on merging or deletion of a staging branch"
+name: "2.3.a: Destroy staging infrastructure on merging or deletion of a staging branch"
 
 on:
   pull_request:
-    types:
-      - closed
     branches:
       - master
-  delete:
-    branches:
-      - stage-**
+    types:
+      - closed
 
 jobs:
   destroy-aws:
+    if: ${{ github.head_ref  }} =~ /^stage-[0-9]{6}$/
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v3
-
-      - name: Get branch name
-        id: get_branch
-        run: echo "##[set-output name=branch_name;]$(echo ${GITHUB_REF#refs/heads/})"
 
       - name: Make scripts executable
         run: |
@@ -38,4 +32,4 @@ jobs:
 
       - name: Destroy AWS infrastructure
         working-directory: ./scripts/support
-        run: bash destroy-system.sh stage false true confirm ${{ steps.get_branch.outputs.branch }}
+        run: bash destroy-system.sh stage false true confirm ${{ github.head_ref }}

@@ -13,14 +13,14 @@ staging_branch_name=$3
 if [[ $mode != "live" ]] && [[ $mode != "test" ]]  && [[ $mode != "dev" ]] && [[ $mode != "stage" ]]
 then
   echo "Invalid deployment mode $mode"
-  exit
+  exit 1
 fi
 
 REGEX_STAGE="^stage-[0-9]{6}$"
 if [[ $mode == "stage" ]] && [[ ! $staging_branch_name =~ $REGEX_STAGE ]]
 then
   echo "Invalid staging branch name $staging_branch_name"
-  exit
+  exit 1
 fi
 
 # ==========================================
@@ -69,6 +69,17 @@ else
     url="$mode.$project.polygon-project.ch"
   fi
 fi
+
+# Check online status
+online_status=$(curl -s --head "https://$url" | grep '200')
+
+# If deployment is not currently online, don't continue with update
+if [[ ! $online_status ]]
+then
+  echo "Deployment in mode '$mode' is not online at URL: $url!"
+  exit 1
+fi
+
 
 # Go to pre-update folder
 cd ../aws-update/0_pre-update || exit
@@ -135,6 +146,16 @@ echo "VUE_APP_NAME=$project-$mode" >> .env
 echo "VUE_APP_AWS_REGION=$aws_region" >> .env
 echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
 echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
+
+# Add production flag for actual live deployments so LogRocket is enabled
+# (applies only to 'test' & 'live' system; building in production mode does
+# NOT imply a production system where we need the logger to be active)
+if [[ $mode == "live" ]] || [[ $mode == "test" ]]
+then
+  echo "VUE_APP_PRODUCTION=true" >> .env
+else
+    echo "VUE_APP_PRODUCTION=false" >> .env
+fi
 
 # Go to update folder
 cd ../scripts/aws-update/1_update || exit
