@@ -208,41 +208,47 @@ terraform init
 terraform refresh -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ==        Step 3: Destroy all           ==
-# == (If staging, also destroy workspaces ==
+# ==        Step 3: Empty Bucket          ==
+# ==========================================
+
+cd ../../aws-update/0_pre-update|| exit
+
+# Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
+if [[ $mode == "stage" ]]
+then
+    sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
+else
+    sed -i -e "s/##TYPE##/$mode/g" config.tf
+fi
+
+# Replace 'PROJECT' in config.tf with actual project name
+sed -i -e "s/##PROJECT##/$project/g" config.tf
+
+# Replace 'ORGANISATION' in config.tf with actual organisation name
+sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
+# Apply pre-update Terraform state
+terraform init
+terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+
+# ==========================================
+# ==        Step 4: Destroy all           ==
 # ==========================================
 
 # Main Setup
+cd ../../aws-initial-setup/2_main-setup || exit
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
-if [[ $mode == "stage" ]]
-then
-  terraform workspace new default
-  terraform workspace select default
-  terraform workspace delete -force "$workspace_name"
-fi
 
 # Parent setup
 cd ../1_parent-setup || exit
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
-if [[ $mode == "stage" ]]
-then
-  terraform workspace new default
-  terraform workspace select default
-  terraform workspace delete -force "$workspace_name-parent-setup"
-fi
 
 # Pre-setup
 cd ../0_pre-setup || exit
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
-if [[ $mode == "stage" ]]
-then
-  terraform workspace new default
-  terraform workspace select default
-  terraform workspace delete -force "$workspace_name-pre-setup"
-fi
 
 # ==========================================
-# ======      Step 4: Cleanup       ========
+# ======      Step 5: Cleanup       ========
 # ======    (only in local mode)    ========
 # ==========================================
 if [[ $local_mode == 'true' ]]
