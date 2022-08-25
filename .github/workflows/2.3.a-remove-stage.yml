@@ -12,6 +12,9 @@ jobs:
     if: ${{ github.head_ref  }} =~ /^stage-[0-9]{6}$/
     runs-on: ubuntu-latest
     steps:
+      - name: Change owner
+        run: sudo chown -R $USER:$USER /home/github/actions-runner/_work/${{ github.event.repository.name }}
+
       - name: Checkout 🛎
         uses: actions/checkout@v3
 
