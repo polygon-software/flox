@@ -8,7 +8,7 @@
           class="q-ma-sm"
       >
       <h5 class="text-black q-pa-none q-ma-md">
-        Flox Template Banano
+        Flox Template Test
       </h5>
     </div>
   <div class="row">
