@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Change owner
-        run: sudo chown -R $USER:$USER /home/github/actions-runner/_work/${{ github.event.repo.name }}
+        run: sudo chown -R $USER:$USER /home/github/actions-runner/_work/${{ github.event.repository }}
 
       - name: Checkout 🛎
         uses: actions/checkout@v3
