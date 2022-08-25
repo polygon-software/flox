@@ -9,10 +9,6 @@ jobs:
     name: "Update DEV application"
     runs-on: ubuntu-latest
     steps:
-
-      - name: Change owner
-        run: sudo chown -R $USER:$USER ${{ github.workspace }}
-
       - name: Checkout 🛎
         uses: actions/checkout@v3
         with:
