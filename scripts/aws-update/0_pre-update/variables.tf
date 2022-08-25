@@ -1,5 +1,10 @@
+variable "tf_api_token" {
+  description     = "Terraform API token"
+  type            = string
+}
+
 variable "type" {
-  description     = "live or test"
+  description     = "live, test, dev or stage-x"
   type            = string
 }
 
@@ -20,7 +25,6 @@ variable "aws_region" {
 }
 
 variable "project" {
-  default         = "flox"
   description     = "prefix used for all resources in the Project"
   type            = string
 }
