@@ -229,7 +229,7 @@ sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
 # Apply pre-update Terraform state
 terraform init
-terraform apply -var-file="../../support/flox.tfvars"
+terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 
 # ==========================================
 # ==        Step 4: Destroy all           ==
