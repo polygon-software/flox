@@ -252,13 +252,13 @@ terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 # ==       (only in stage mode)           ==
 # ==========================================
 
-# Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $mode == "stage" ]]
 then
   cd ../../support/destroy-staging-workspaces || exit 1
 
   # Replace 'ORGANISATION' in config.tf with actual organisation name
   sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+  # Replace 'TYPE' in config.tf with actual branch name (e.g. stage-123412)
   sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
 
   # Destroy workspaces
