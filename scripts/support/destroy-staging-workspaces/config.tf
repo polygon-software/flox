@@ -13,7 +13,7 @@ terraform {
     organization        = "##ORGANISATION##"
 
     workspaces {
-      tags = ["stage"]
+      tags = ["##TYPE##"]
     }
   }
 }

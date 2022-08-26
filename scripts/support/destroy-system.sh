@@ -259,6 +259,7 @@ then
 
   # Replace 'ORGANISATION' in config.tf with actual organisation name
   sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+  sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
 
   # Destroy workspaces
   sudo bash destroy-staging-workspaces.sh "$staging_branch_name"
