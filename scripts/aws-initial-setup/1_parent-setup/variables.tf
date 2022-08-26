@@ -1,3 +1,8 @@
+variable "tf_api_token" {
+  description     = "Terraform API token"
+  type            = string
+}
+
 variable "type" {
   description     = "live, test or dev"
   type            = string
