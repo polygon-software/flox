@@ -2,7 +2,6 @@
 # Destroys all staging Terraform cloud workspaces for a given staging system
 # Takes one parameter: the staging branch name (e.g. 'stage-250813')
 # ==========================================================================
-# TODO: ensure 'stage' tag on creation...
 
 stage_branch=$1
 
@@ -12,8 +11,6 @@ then
   echo "Invalid staging branch '$stage_branch'"
   exit 1
 fi
-
-cd destroy-staging-workspaces || exit 1
 
 # Initialize & select first workspace (since default may not exist)
 terraform init | echo 1
