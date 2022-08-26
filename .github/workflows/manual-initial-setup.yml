@@ -46,4 +46,6 @@ jobs:
 
       - name: Build & set up AWS infrastructure
         working-directory: ./scripts/aws-initial-setup
-        run: bash initial-aws-setup.sh ${{ github.event.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }}
+        run: bash initial-aws-setup.sh ${{ github.e vent.inputs.mode }} false ${{ github.event.inputs.force }} ${{ github.event.inputs.confirm }}
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}

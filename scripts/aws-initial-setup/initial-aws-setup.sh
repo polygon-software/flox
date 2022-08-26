@@ -40,6 +40,9 @@ else
   echo "type=\"$mode\"" >> flox.tfvars
 fi
 
+# Add TF API token (given from .env) to flox.tfvars
+echo "tf_api_token=\"$TF_API_TOKEN\"" >> flox.tfvars
+
 cd ../aws-initial-setup/0_pre-setup || exit
 
 # Get additional flox.config variables

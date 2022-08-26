@@ -39,7 +39,7 @@ data "tfe_workspace" "workspace" {
   organization = "##ORGANISATION##"
 }
 
-// Add tag to workspace TODO api token
+// Add tag to workspace
 resource "null_resource" "tag_workspace" {
   triggers = {
     timestamp = timestamp()
@@ -49,10 +49,10 @@ resource "null_resource" "tag_workspace" {
 export WORKSPACE_ID=${data.tfe_workspace.workspace.id}
 export TF_API_TOKEN=${var.tf_api_token}
 curl -X POST \
+https://app.terraform.io/api/v2/workspaces/$WORKSPACE_ID/relationships/tags \
 -H "Content-Type: application/vnd.api+json" \
 -H "Authorization: Bearer $TF_API_TOKEN" \
 -d '{"data": [{"type": "tags","attributes": {"name": "##TYPE##"}}]}'
-"https://app.terraform.io/api/v2/workspaces/$WORKSPACE_ID/relationships/tags"
 EOF
   }
 }
