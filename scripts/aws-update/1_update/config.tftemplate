@@ -32,7 +32,7 @@ provider "aws" {
 
 # Get workspace ID
 data "tfe_workspace" "workspace" {
-  name         = "##PROJECT##-##TYPE##"
+  name         = "##PROJECT##-##TYPE##-update"
   organization = "##ORGANISATION##"
 }
 
