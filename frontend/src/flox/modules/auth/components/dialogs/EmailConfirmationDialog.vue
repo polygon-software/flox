@@ -4,15 +4,15 @@
   >
     <q-card class="q-pa-md" style="width: 400px; min-height: 250px">
       <q-form
-        @submit="onSubmit"
         class="q-gutter-md"
+        @submit="onSubmit"
       >
         <h5 class="q-ma-none q-mt-lg text-center">{{ $t('messages.verification') }}</h5>
         <p> {{ $t('messages.enter_verification_code')}} </p>
         <q-input
+          v-model="verificationCode"
           :label="$t('authentication.verification_code')"
           maxlength="6"
-          v-model="verificationCode"
         />
 
         <!-- Code resend button -->

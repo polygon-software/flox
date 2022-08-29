@@ -5,13 +5,13 @@
       {{ $t('authentication.login') }}
     </h5>
     <q-form
-        @submit="onSubmit"
         class="q-gutter-md"
+        @submit="onSubmit"
     >
       <component
+          :is="field.component"
           v-for="field in fields"
           :key="field.key"
-          :is="field.component"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
