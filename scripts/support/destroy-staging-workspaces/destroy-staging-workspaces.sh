@@ -1,9 +1,12 @@
 # ==========================================================================
 # Destroys all staging Terraform cloud workspaces for a given staging system
-# Takes one parameter: the staging branch name (e.g. 'stage-250813')
+# Takes two parameters:
+# $1: the staging branch name (e.g. 'stage-250813')
+# $2: project name (e.g. 'flox')
 # ==========================================================================
 
 stage_branch=$1
+project=$2
 
 REGEX_STAGE="^stage-[0-9]{6}$"
 if [[ ! $stage_branch =~ $REGEX_STAGE ]]
@@ -12,8 +15,11 @@ then
   exit 1
 fi
 
-# Initialize & select first workspace (since default may not exist)
-/bin/bash -c "printf 1 | terraform init"
+# Select base workspace (e.g. 'stage-123004', since default may not exist)
+export TF_WORKSPACE="$project-$stage_branch"
+
+# Initialize
+terraform init
 
 # Create temp workspace & switch to it, so we can delete all staging workspaces
 terraform workspace new temp
