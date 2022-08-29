@@ -13,7 +13,7 @@ then
 fi
 
 # Initialize & select first workspace (since default may not exist)
-printf 1 | terraform init
+/bin/bash -c "printf 1 | terraform init"
 
 # Create temp workspace & switch to it, so we can delete all staging workspaces
 terraform workspace new temp
