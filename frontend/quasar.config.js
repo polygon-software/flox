@@ -8,9 +8,10 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-import { configure } from 'quasar/wrappers';
-import * as path from 'path'
-import * as dotenv from 'dotenv'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { configure } = require('quasar/wrappers');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const path = require('path');
 
 module.exports = configure(function (ctx) {
   return {
@@ -61,8 +62,8 @@ module.exports = configure(function (ctx) {
       // vueDevtools,
       // vueOptionsAPI: false,
 
-
-      env: dotenv.config().parsed,
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      env: require('dotenv').config().parsed,
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
@@ -76,7 +77,7 @@ module.exports = configure(function (ctx) {
       // distDir
 
       extendViteConf(viteConf) {
-        viteConf.define.global = {};
+        viteConf.define.global = 'global';
       },
       // viteVuePluginOptions: {},
 
