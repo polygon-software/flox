@@ -24,6 +24,8 @@ terraform init
 # Create temp workspace & switch to it, so we can delete all staging workspaces
 terraform workspace new temp
 terraform workspace select temp
+export TF_WORKSPACE="temp"
+
 terraform init
 workspaces=$(terraform workspace list)
 
