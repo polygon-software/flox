@@ -8,8 +8,9 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const { configure } = require('quasar/wrappers');
-const path = require('path');
+import { configure } from 'quasar/wrappers';
+import * as path from 'path'
+import * as dotenv from 'dotenv'
 
 module.exports = configure(function (ctx) {
   return {
@@ -60,7 +61,8 @@ module.exports = configure(function (ctx) {
       // vueDevtools,
       // vueOptionsAPI: false,
 
-      env: require('dotenv').config().parsed,
+
+      env: dotenv.config().parsed,
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 

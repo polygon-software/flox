@@ -14,7 +14,8 @@ import {
 } from 'workbox-precaching';
 import { registerRoute, NavigationRoute } from 'workbox-routing';
 
-self.skipWaiting();
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+void self.skipWaiting();
 clientsClaim();
 
 // Use with precache injection
