@@ -265,7 +265,7 @@ then
   sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
 
   # Destroy workspaces
-  sudo bash destroy-staging-workspaces.sh "$staging_branch_name"
+  bash destroy-staging-workspaces.sh "$staging_branch_name"
 
   # Go back to previous folder
   cd ../../aws-initial-setup/0_pre-setup || exit 1
