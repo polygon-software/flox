@@ -12,6 +12,8 @@
 const { configure } = require('quasar/wrappers');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+const globalsPollyFill = require('@esbuild-plugins/node-globals-polyfill');
+const modulesPollyFill = require('@esbuild-plugins/node-modules-polyfill');
 
 module.exports = configure(function (ctx) {
   return {
@@ -77,7 +79,14 @@ module.exports = configure(function (ctx) {
       // distDir
 
       extendViteConf(viteConf) {
-        viteConf.define.global = 'global';
+        viteConf.plugins = [
+          modulesPollyFill.NodeModulesPolyfillPlugin(),
+          globalsPollyFill.NodeGlobalsPolyfillPlugin({
+            process: true,
+            buffer: true,
+          }),
+        ];
+        viteConf.define.global = 'globalThis';
       },
       // viteVuePluginOptions: {},
 
