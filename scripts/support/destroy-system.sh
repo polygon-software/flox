@@ -44,7 +44,10 @@ else
   echo "type=\"$mode\"" >> flox.tfvars
 fi
 
-cd ../aws-initial-setup/0_pre-setup || exit
+# Add TF API token (given from .env) to flox.tfvars
+echo "tf_api_token=\"$TF_API_TOKEN\"" >> flox.tfvars
+
+cd ../aws-initial-setup/0_pre-setup || exit 1
 
 # Get additional flox.config variables
 project=$(jq '.general.project' ../../../backend/flox.config.json)
@@ -140,7 +143,7 @@ echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
 # ==========================================
 # =====   Step 1: Parent DNS state    ======
 # ==========================================
-cd ../1_parent-setup || exit
+cd ../1_parent-setup || exit 1
 
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $mode == "stage" ]]
@@ -167,7 +170,7 @@ terraform refresh -var-file="../../support/flox.tfvars"
 # ======     Step 2: Main state     ========
 # ==========================================
 
-cd ../2_main-setup || exit
+cd ../2_main-setup || exit 1
 
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $mode == "stage" ]]
@@ -183,7 +186,7 @@ sed -i -e "s/##PROJECT##/$project/g" config.tf
 # Replace 'ORGANISATION' in config.tf with actual organisation name
 sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
 
-cd ../../support || exit
+cd ../../support || exit 1
 
 # Build & zip frontend and backend
 if [[ $serverless_api == "true" ]]
@@ -197,7 +200,7 @@ else
   sudo bash build.sh "$project" "$frontend_build_mode"
 fi
 
-cd ../aws-initial-setup/2_main-setup || exit
+cd ../aws-initial-setup/2_main-setup || exit 1
 
 # Copy .zip files
 cp ../../outputs/frontend.zip frontend.zip
@@ -236,19 +239,40 @@ terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 # ==========================================
 
 # Main Setup
-cd ../../aws-initial-setup/2_main-setup || exit
+cd ../../aws-initial-setup/2_main-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # Parent setup
-cd ../1_parent-setup || exit
+cd ../1_parent-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # Pre-setup
-cd ../0_pre-setup || exit
+cd ../0_pre-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # ==========================================
-# ======      Step 5: Cleanup       ========
+# ==     Step 5: Destroy workspace        ==
+# ==       (only in stage mode)           ==
+# ==========================================
+
+if [[ $mode == "stage" ]]
+then
+  cd ../../support/destroy-staging-workspaces || exit 1
+
+  # Replace 'ORGANISATION' in config.tf with actual organisation name
+  sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+  # Replace 'TYPE' in config.tf with actual branch name (e.g. stage-123412)
+  sed -i -e "s/##TYPE##/$staging_branch_name/g" config.tf
+
+  # Destroy workspaces
+  bash destroy-staging-workspaces.sh "$staging_branch_name" "$project"
+
+  # Go back to previous folder
+  cd ../../aws-initial-setup/0_pre-setup || exit 1
+fi
+
+# ==========================================
+# ======      Step 6: Cleanup       ========
 # ======    (only in local mode)    ========
 # ==========================================
 if [[ $local_mode == 'true' ]]
@@ -261,4 +285,5 @@ then
   cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
   cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
   cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
+  cp ../../support/destroy-staging-workspaces/config.tftemplate ../../support/destroy-staging-workspaces/config.tf
 fi
