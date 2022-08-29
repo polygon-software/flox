@@ -29,3 +29,27 @@ provider "aws" {
   access_key          = var.aws_access_key
   alias               = "us-east-1"
 }
+
+# Get workspace ID
+data "tfe_workspace" "workspace" {
+  name         = "##PROJECT##-##TYPE##-update"
+  organization = "##ORGANISATION##"
+}
+
+// Add tag to workspace
+resource "null_resource" "tag_workspace" {
+  triggers = {
+    timestamp = timestamp()
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+export WORKSPACE_ID=${data.tfe_workspace.workspace.id}
+export TF_API_TOKEN=${var.tf_api_token}
+curl -X POST \
+https://app.terraform.io/api/v2/workspaces/$WORKSPACE_ID/relationships/tags \
+-H "Content-Type: application/vnd.api+json" \
+-H "Authorization: Bearer $TF_API_TOKEN" \
+-d '{"data": [{"type": "tags","attributes": {"name": "##TYPE##"}}]}'
+EOF
+  }
+}

@@ -33,3 +33,5 @@ jobs:
       - name: Destroy AWS infrastructure
         working-directory: ./scripts/support
         run: bash destroy-system.sh stage false true confirm ${{ github.head_ref }}
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
