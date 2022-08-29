@@ -21,10 +21,12 @@ export TF_WORKSPACE="$project-$stage_branch"
 # Initialize
 terraform init
 
+# Unset workspace, so we can freely switch again
+unset TF_WORKSPACE
+
 # Create temp workspace & switch to it, so we can delete all staging workspaces
 terraform workspace new temp
 terraform workspace select temp
-export TF_WORKSPACE="temp"
 
 terraform init
 workspaces=$(terraform workspace list)
