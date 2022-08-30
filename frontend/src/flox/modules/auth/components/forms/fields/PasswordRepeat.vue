@@ -1,14 +1,14 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
     <q-input
+      v-model="password"
       dense
       :label="$t('authentication.password')"
-      v-model="password"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
       :rules="[(val) => IS_VALID_PASSWORD(val) || $t('errors.invalid_password')]"
     >
-      <template v-slot:append>
+      <template #append>
         <q-icon
           :name="isPwd ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"
@@ -17,14 +17,14 @@
       </template>
     </q-input>
     <q-input
+      v-model="passwordRepeat"
       dense
       :label="$t('authentication.password_repeat')"
-      v-model="passwordRepeat"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
       :rules="[val => val === password || $t('errors.non_matching_password')]"
     >
-      <template v-slot:append>
+      <template #append>
         <q-icon
           :name="isPwdRepeat ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"

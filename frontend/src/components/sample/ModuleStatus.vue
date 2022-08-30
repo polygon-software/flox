@@ -9,9 +9,9 @@
     <q-separator/>
 
     <q-item
-      class="row justify-between items-center"
       v-for="module in modules"
       :key="module"
+      class="row justify-between items-center"
     >
       <q-icon name="check" color="positive" size="20px"/>
 

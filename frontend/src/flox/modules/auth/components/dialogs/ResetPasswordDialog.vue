@@ -5,29 +5,29 @@
   >
     <q-card class="q-pa-lg q-pt-xl" style="width: 400px; min-height: 250px">
       <q-form
-        @submit="onSubmit"
         class="q-gutter-md"
         autocorrect="off"
         autocapitalize="off"
         autocomplete="off"
         spellcheck="false"
+        @submit="onSubmit"
       >
         <strong>{{ $t('authentication.forgot_password') }}</strong>
         <q-input
-          :label="$t('authentication.verification_code')"
           v-model="verificationCode"
+          :label="$t('authentication.verification_code')"
         />
         <q-input
-          :label="$t('authentication.new_password')"
           v-model="password"
+          :label="$t('authentication.new_password')"
           type="password"
           :rules="[
             val => PASSWORD_REGEX.test(val) || $t('errors.invalid_password')
           ]"
         />
         <q-input
-          :label="$t('authentication.new_password_repeat')"
           v-model="passwordRep"
+          :label="$t('authentication.new_password_repeat')"
           type="password"
           :rules="[
              val => val === password || $t('errors.non_matching_password'),
