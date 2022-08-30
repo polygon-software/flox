@@ -39,7 +39,7 @@
     "amazon-cognito-identity-js": "^5.2.9",
     "autoprefixer": "^10.4.8",
     "axios": "^0.24.0",
-    "core-js": "3.19.1",
+    "core-js": "^3.25.0",
     "date-fns": "^2.25.0",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",

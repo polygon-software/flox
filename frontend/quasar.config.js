@@ -81,8 +81,6 @@ module.exports = configure(function (ctx) {
         viteConf.define.global = 'globalThis';
       },
 
-      // viteVuePluginOptions: {},
-
       vitePlugins: [
         [
           '@intlify/vite-plugin-vue-i18n',
