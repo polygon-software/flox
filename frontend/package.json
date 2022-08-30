@@ -30,6 +30,8 @@
     "@capacitor/cli": "^3.2.5",
     "@capacitor/core": "^3.2.5",
     "@capacitor/ios": "^3.2.5",
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@quasar/extras": "^1.15.1",
     "@vue/apollo-composable": "^4.0.0-alpha.15",
     "@vue/test-utils": "^2.0.0-rc.17",
