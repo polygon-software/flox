@@ -30,6 +30,8 @@ jobs:
       - name: Build & update AWS infrastructure
         working-directory: ./scripts/aws-update
         run: bash aws-update.sh live
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
       - name: "Update state of monday.com items to 'Stage 4: Production'"
         uses: polygon-software/action-monday-state@main

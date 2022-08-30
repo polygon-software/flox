@@ -38,6 +38,9 @@ else
   echo "type=\"$mode\"" >> flox.tfvars
 fi
 
+# Add TF API token (given from .env) to flox.tfvars
+echo "tf_api_token=\"$TF_API_TOKEN\"" >> flox.tfvars
+
 # Get additional flox.config variables
 project=$(jq '.general.project' ../../backend/flox.config.json)
 project=${project:1:-1}

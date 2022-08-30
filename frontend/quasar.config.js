@@ -76,9 +76,11 @@ module.exports = configure(function (ctx) {
       // polyfillModulePreload: true,
       // distDir
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      extendViteConf(viteConf, { isClient, isServer }) {
-        viteConf.define.global = 'globalThis';
+      polyfillModulePreload: true,
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-var
+      extendViteConf(viteConf, { isServer, isClient }) {
+        viteConf.global = {};
       },
 
       vitePlugins: [
@@ -91,14 +93,6 @@ module.exports = configure(function (ctx) {
             // you need to set i18n resource including paths !
             include: path.resolve(__dirname, './src/i18n/**'),
           },
-
-          '@esbuild-plugins/node-globals-polyfill'.default,
-          {
-            process: true,
-            buffer: true,
-          },
-          '@esbuild-plugins/node-modules-polyfill'.default,
-          {},
         ],
       ],
     },
