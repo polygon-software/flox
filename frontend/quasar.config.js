@@ -78,6 +78,11 @@ module.exports = configure(function (ctx) {
 
       polyfillModulePreload: true,
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-var
+      extendViteConf(viteConf, { isServer, isClient }) {
+        viteConf.global = {};
+      },
+
       vitePlugins: [
         [
           '@intlify/vite-plugin-vue-i18n',
