@@ -1,12 +1,12 @@
 {
-  "name": "frontend",
+  "name": "my-app",
   "version": "0.0.1",
-  "description": "A Quasar Project",
+  "description": "A Quasar Framework app",
   "productName": "Quasar App",
-  "author": "marino.schneider@polygon-software.ch",
+  "author": "davwys <david.wyss@hotmail.ch",
   "private": true,
   "scripts": {
-    "lint": "eslint --fix --ext .js,.ts,.vue ./",
+    "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
     "dev": "quasar dev",
     "dev:ssr": "quasar dev -m ssr",
