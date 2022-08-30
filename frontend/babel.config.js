@@ -1,7 +1,8 @@
 /* eslint-env node */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires,import/no-extraneous-dependencies
 const fs = require('fs-extra');
-let extend = undefined;
+
+let extend;
 
 /**
  * The .babelrc file has been created to assist Jest for transpiling.
@@ -13,6 +14,10 @@ if (fs.existsSync('./.babelrc')) {
 }
 
 module.exports = {
-  presets: ['@quasar/babel-preset-app'],
+  presets: [
+    ['@babel/preset-env', { targets: { node: 'current' } }],
+    '@quasar/babel-preset-app',
+    '@babel/preset-typescript',
+  ],
   extends: extend,
 };
