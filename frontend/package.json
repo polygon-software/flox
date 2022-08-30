@@ -99,7 +99,7 @@
     "vue-cli-plugin-quasar": "~4.0.2"
   },
   "engines": {
-    "node": ">= 12.22.1",
+    "node": ">= 14.20.0",
     "yarn": ">= 1.21.1"
   },
   "jestSonar": {
