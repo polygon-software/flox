@@ -125,7 +125,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['Cookies', 'Dialog', 'Notify'],
     },
 
     // https://v2.quasar.dev/options/animations
