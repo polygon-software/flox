@@ -28,7 +28,7 @@ export async function sendEmail(
 ): Promise<void> {
   // Create SES service object
   const sesClient = new SES({
-    region: process.env.AWS_REGION,
+    region: process.env.AWS_MAIN_REGION,
     credentials: credentials,
   });
 
