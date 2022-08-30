@@ -92,12 +92,13 @@ module.exports = configure(function (ctx) {
             // you need to set i18n resource including paths !
             include: path.resolve(__dirname, './src/i18n/**'),
           },
-          require('@esbuild-plugins/node-globals-polyfill').default,
+
+          '@esbuild-plugins/node-globals-polyfill'.default,
           {
             process: true,
             buffer: true,
           },
-          require('@esbuild-plugins/node-modules-polyfill').default,
+          '@esbuild-plugins/node-modules-polyfill'.default,
           {},
         ],
       ],
