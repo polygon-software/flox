@@ -36,7 +36,7 @@ export class FileService {
 
   /**
    * Uploads a file to the public S3 bucket
-   * @param {File} file - the file to upload
+   * @param {Express.Multer.File} file - the file to upload
    * @returns {Promise<PublicFile>} - the newly uploaded file
    */
   async uploadPublicFile(file: Express.Multer.File): Promise<PublicFile> {
@@ -46,6 +46,7 @@ export class FileService {
       Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
       Key: key,
       Body: file.buffer,
+      ContentType: file.mimetype,
     };
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
@@ -65,22 +66,20 @@ export class FileService {
 
   /**
    * Uploads a file to the private S3 bucket
-   * @param {Buffer} dataBuffer - data buffer representation of the file to upload
-   * @param {string} filename - the file's name
+   * @param {Express.Multer.File} file - the file to upload
    * @param {string} owner - the file owner's UUID
    * @returns {Promise<PrivateFile>} - the newly uploaded file
    */
   async uploadPrivateFile(
-    dataBuffer: Buffer,
-    filename: string,
+    file: Express.Multer.File,
     owner: string,
   ): Promise<PrivateFile> {
     //File upload
-    const key = `${uuid()}-${filename}`;
+    const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
       Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
       Key: key,
-      Body: dataBuffer,
+      Body: file.buffer,
     };
     await this.s3.send(new PutObjectCommand(uploadParams));
     const newFile = this.privateFilesRepository.create({

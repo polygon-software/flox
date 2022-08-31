@@ -11,6 +11,8 @@ import { FileService } from './file.service';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
 import { Response, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
+import PrivateFile from './entities/private_file.entity';
+import PublicFile from './entities/public_file.entity';
 
 @Controller()
 export class FileController {
@@ -23,8 +25,8 @@ export class FileController {
     @Req() req: Request,
     @Res() res: Response,
     @UploadedFile() file: Express.Multer.File,
-  ): Promise<any> {
-    // Verify that request is multipart
+  ): Promise<void> {
+    // Verify that request contains file
     if (!file) {
       res.send(new BadRequestException('File expected on this endpoint'));
     }
@@ -40,22 +42,17 @@ export class FileController {
   async uploadPrivateFile(
     @Req() req: Request,
     @Res() res: Response,
-  ): Promise<any> {
-    // Verify that request is multipart
-    if (!req.file) {
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<void> {
+    // Verify that request contains file
+    if (file) {
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
 
     // Get user, as determined by JWT Strategy
     const owner = req['user'].userId;
-    const file = req.file;
-    const fileBuffer = file.buffer;
-    const newFile = await this.fileService.uploadPrivateFile(
-      fileBuffer,
-      file.filename,
-      owner,
-    );
+    const newFile = await this.fileService.uploadPrivateFile(file, owner);
     res.send(newFile);
   }
 }
