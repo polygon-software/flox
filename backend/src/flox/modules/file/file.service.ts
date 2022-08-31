@@ -14,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 import { GetPublicFileArgs } from './dto/args/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { DeletePrivateFileInput } from './dto/input/delete-private-file.input';
+import { DeleteFileInput } from './dto/input/delete-file.input';
 
 @Injectable()
 export class FileService {
@@ -61,7 +61,6 @@ export class FileService {
       'AWS_PUBLIC_BUCKET_NAME',
     )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
 
-    console.log('uploading to ', url);
     const newFile = this.publicFilesRepository.create({
       key: key,
       url: url,
@@ -155,37 +154,41 @@ export class FileService {
   }
 
   /**
-   * Deletes a private file
-   * @param {DeletePrivateFileInput} deletePrivateFileInput - contains UUID
-   * @returns {Promise<PrivateFile>} - the file that was deleted
+   * Deletes a private or public file
+   * @param {DeleteFileInput} deleteFileInput - contains UUID
+   * @param {boolean} isPublic - whether the file is public (otherwise, is private)
+   * @returns {Promise<PrivateFile|PublicFile>} - the file that was deleted
    */
-  async deletePrivateFile(
-    deletePrivateFileInput: DeletePrivateFileInput,
-  ): Promise<PrivateFile> {
-    const fileInfo = await this.privateFilesRepository.findOne({
+  async deleteFile(
+    deleteFileInput: DeleteFileInput,
+    isPublic: boolean,
+  ): Promise<PrivateFile | PublicFile> {
+    const repository = isPublic
+      ? this.publicFilesRepository
+      : this.privateFilesRepository;
+
+    const file: PrivateFile | PublicFile = await repository.findOne({
       where: {
-        uuid: deletePrivateFileInput.uuid,
+        uuid: deleteFileInput.uuid,
       },
     });
-    if (fileInfo) {
+
+    if (file) {
       // Delete on S3
       await this.s3.send(
         new DeleteObjectCommand({
-          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
-          Key: fileInfo.key,
+          Bucket: this.configService.get(
+            isPublic ? 'AWS_PUBLIC_BUCKET_NAME' : 'AWS_PRIVATE_BUCKET_NAME',
+          ),
+          Key: file.key,
         }),
       );
 
-      // Find in database
-      const file = await this.privateFilesRepository.findOne({
-        where: {
-          uuid: deletePrivateFileInput.uuid,
-        },
-      });
-
-      // Delete in database
-      const deletedFile = await this.privateFilesRepository.remove(file);
-      deletedFile.uuid = uuid;
+      // Delete in database (TypeScript does not understand variable typing here)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const deletedFile = await repository.remove(file);
+      deletedFile.uuid = deleteFileInput.uuid;
       return deletedFile;
     }
 

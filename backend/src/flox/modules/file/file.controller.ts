@@ -4,6 +4,7 @@ import {
   Post,
   Req,
   Res,
+  UnauthorizedException,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -27,6 +28,7 @@ export class FileController {
     // Verify that request contains file
     if (!file) {
       res.send(new BadRequestException('File expected on this endpoint'));
+      return;
     }
 
     // Actually upload via FileService
@@ -37,19 +39,25 @@ export class FileController {
 
   @Post('/uploadPrivateFile')
   @LoggedIn()
+  @UseInterceptors(FileInterceptor('file'))
   async uploadPrivateFile(
     @Req() req: Request,
     @Res() res: Response,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<void> {
     // Verify that request contains file
-    if (file) {
+    if (!file) {
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
 
+    // Ensure userID is given
+    if (!req['user']?.userId) {
+      res.send(new UnauthorizedException());
+    }
+
     // Get user, as determined by JWT Strategy
-    const owner = req['user'].userId;
+    const owner = req['user']?.userId;
     const newFile = await this.fileService.uploadPrivateFile(file, owner);
     res.send(newFile);
   }

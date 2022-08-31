@@ -6,8 +6,7 @@ import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
 import { User } from '../auth/entities/user.entity';
-import { CreateUserInput } from '../auth/dto/input/create-user.input';
-import { DeletePrivateFileInput } from './dto/input/delete-private-file.input';
+import { DeleteFileInput } from './dto/input/delete-file.input';
 
 @Resolver(() => PublicFile)
 export class FileResolver {
@@ -41,15 +40,37 @@ export class FileResolver {
 
   /**
    * Deletes a private file
-   * @param {DeletePrivateFileInput} deletePrivateFileInput - contains UUID
+   * @param {DeleteFileInput} deleteFileInput - contains UUID
    * @returns {Promise<PrivateFile>} - the file that was deleted
    */
   @LoggedIn() // TODO application specific: set appropriate guards here
   @Mutation(() => User)
   async deletePrivateFile(
-    @Args('deletePrivateFileInput')
-    deletePrivateFileInput: DeletePrivateFileInput,
+    @Args('deleteFileInput')
+    deleteFileInput: DeleteFileInput,
   ): Promise<PrivateFile> {
-    return this.fileService.deletePrivateFile(deletePrivateFileInput);
+    // TODO application specific: Ensure only allowed person (usually admin or file owner) is allowed to delete
+    return this.fileService.deleteFile(
+      deleteFileInput,
+      false,
+    ) as unknown as PrivateFile;
+  }
+
+  /**
+   * Deletes a public file
+   * @param {DeleteFileInput} deleteFileInput - contains UUID
+   * @returns {Promise<PrivateFile>} - the file that was deleted
+   */
+  @LoggedIn() // TODO application specific: set appropriate guards here
+  @Mutation(() => User)
+  async deletePublicFile(
+    @Args('deleteFileInput')
+    deleteFileInput: DeleteFileInput,
+  ): Promise<PublicFile> {
+    // TODO application specific: Ensure only allowed person (usually admin ) is allowed to delete
+    return this.fileService.deleteFile(
+      deleteFileInput,
+      true,
+    ) as unknown as PublicFile;
   }
 }
