@@ -11,8 +11,6 @@ import { FileService } from './file.service';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
 import { Response, Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import PrivateFile from './entities/private_file.entity';
-import PublicFile from './entities/public_file.entity';
 
 @Controller()
 export class FileController {
