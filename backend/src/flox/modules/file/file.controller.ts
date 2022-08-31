@@ -29,11 +29,8 @@ export class FileController {
       res.send(new BadRequestException('File expected on this endpoint'));
     }
 
-    const fileBuffer = await file.buffer;
-    const newFile = await this.fileService.uploadPublicFile(
-      fileBuffer,
-      file.filename,
-    );
+    // Actually upload via FileService
+    const newFile = await this.fileService.uploadPublicFile(file);
 
     res.send(newFile);
   }

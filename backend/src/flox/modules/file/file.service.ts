@@ -36,20 +36,16 @@ export class FileService {
 
   /**
    * Uploads a file to the public S3 bucket
-   * @param {Buffer} dataBuffer - data buffer representation of the file to upload
-   * @param {string} filename - the file's name
+   * @param {File} file - the file to upload
    * @returns {Promise<PublicFile>} - the newly uploaded file
    */
-  async uploadPublicFile(
-    dataBuffer: Buffer,
-    filename: string,
-  ): Promise<PublicFile> {
+  async uploadPublicFile(file: Express.Multer.File): Promise<PublicFile> {
     // File upload
-    const key = `${uuid()}-${filename}`;
+    const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
       Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
       Key: key,
-      Body: dataBuffer,
+      Body: file.buffer,
     };
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
