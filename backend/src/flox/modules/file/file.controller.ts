@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
+import { Response, Request } from 'express';
 
 @Controller()
 export class FileController {
@@ -15,16 +16,12 @@ export class FileController {
   @Public()
   @Post('/uploadPublicFile')
   async uploadPublicFile(
-    @Req() req: Express.Request,
-    @Res() res: unknown,
+    @Req() req: Request,
+    @Res() res: Response,
   ): Promise<any> {
     // Verify that request is multipart
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (!req.isMultipart()) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      res.send(new BadRequestException('File expected on this endpoint')); // TODO
+    if (!req.file) {
+      res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -43,33 +40,24 @@ export class FileController {
   @Post('/uploadPrivateFile')
   @LoggedIn()
   async uploadPrivateFile(
-    @Req() req: Express.Request,
-    @Res() res: unknown,
+    @Req() req: Request,
+    @Res() res: Response,
   ): Promise<any> {
     // Verify that request is multipart
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (!req.isMultipart()) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+    if (!req.file) {
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
 
     // Get user, as determined by JWT Strategy
     const owner = req['user'].userId;
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const file = await req.file();
-    const fileBuffer = await file.toBuffer();
+    const file = req.file;
+    const fileBuffer = file.buffer;
     const newFile = await this.taskService.uploadPrivateFile(
       fileBuffer,
       file.filename,
       owner,
     );
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     res.send(newFile);
   }
 }
