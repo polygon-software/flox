@@ -12,16 +12,18 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
 export class FileService {
-  // TODO: When implementing file module, solve via .env / Terraform
   // S3 credentials
-  // private readonly credentials = {
-  //   region: this.configService.get('AWS_MAIN_REGION'),
-  //   accessKeyId: this.configService.get('AWS_S3_ACCESS_KEY_ID'),
-  //   secretAccessKey: this.configService.get('AWS_S3_SECRET_ACCESS_KEY'),
-  // };
+  private readonly credentials = {
+    region: this.configService.get('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+  };
 
   // AWS S3 instance
-  private s3: S3 = new S3({});
+  private s3: S3 = new S3({
+    credentials: this.credentials,
+    region: this.credentials.region,
+  });
   constructor(
     @InjectRepository(PublicFile)
     private publicFilesRepository: Repository<PublicFile>,
@@ -51,11 +53,15 @@ export class FileService {
     };
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
+
+    const url = `https://${configService.get(
+      'AWS_PUBLIC_BUCKET_NAME',
+    )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
+
+    console.log('uploading to ', url);
     const newFile = this.publicFilesRepository.create({
       key: key,
-      url: `https://${configService.get(
-        'AWS_PUBLIC_BUCKET_NAME',
-      )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`,
+      url: url,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
