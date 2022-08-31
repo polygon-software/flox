@@ -3,12 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import PublicFile from './entities/public_file.entity';
 import PrivateFile from './entities/private_file.entity';
-import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+  S3,
+} from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
-import { GetPublicFileArgs } from './dto/get-public-file.args';
-import { GetPrivateFileArgs } from './dto/get-private-file.args';
+import { GetPublicFileArgs } from './dto/args/get-public-file.args';
+import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { DeletePrivateFileInput } from './dto/input/delete-private-file.input';
 
 @Injectable()
 export class FileService {
@@ -144,6 +150,46 @@ export class FileService {
       return { ...result, url };
     }
 
+    // File not found: throw error
+    throw new NotFoundException();
+  }
+
+  /**
+   * Deletes a private file
+   * @param {DeletePrivateFileInput} deletePrivateFileInput - contains UUID
+   * @returns {Promise<PrivateFile>} - the file that was deleted
+   */
+  async deletePrivateFile(
+    deletePrivateFileInput: DeletePrivateFileInput,
+  ): Promise<PrivateFile> {
+    const fileInfo = await this.privateFilesRepository.findOne({
+      where: {
+        uuid: deletePrivateFileInput.uuid,
+      },
+    });
+    if (fileInfo) {
+      // Delete on S3
+      await this.s3.send(
+        new DeleteObjectCommand({
+          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+          Key: fileInfo.key,
+        }),
+      );
+
+      // Find in database
+      const file = await this.privateFilesRepository.findOne({
+        where: {
+          uuid: deletePrivateFileInput.uuid,
+        },
+      });
+
+      // Delete in database
+      const deletedFile = await this.privateFilesRepository.remove(file);
+      deletedFile.uuid = uuid;
+      return deletedFile;
+    }
+
+    // File not found: throw error
     throw new NotFoundException();
   }
 }

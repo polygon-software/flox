@@ -1,10 +1,13 @@
-import { Args, Resolver, Query } from '@nestjs/graphql';
+import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import PublicFile from './entities/public_file.entity';
 import { FileService } from './file.service';
-import { GetPublicFileArgs } from './dto/get-public-file.args';
-import { GetPrivateFileArgs } from './dto/get-private-file.args';
+import { GetPublicFileArgs } from './dto/args/get-public-file.args';
+import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
+import { User } from '../auth/entities/user.entity';
+import { CreateUserInput } from '../auth/dto/input/create-user.input';
+import { DeletePrivateFileInput } from './dto/input/delete-private-file.input';
 
 @Resolver(() => PublicFile)
 export class FileResolver {
@@ -34,5 +37,19 @@ export class FileResolver {
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
   ): Promise<PrivateFile> {
     return this.fileService.getPrivateFile(getPrivateFileArgs);
+  }
+
+  /**
+   * Deletes a private file
+   * @param {DeletePrivateFileInput} deletePrivateFileInput - contains UUID
+   * @returns {Promise<PrivateFile>} - the file that was deleted
+   */
+  @LoggedIn() // TODO application specific: set appropriate guards here
+  @Mutation(() => User)
+  async deletePrivateFile(
+    @Args('deletePrivateFileInput')
+    deletePrivateFileInput: DeletePrivateFileInput,
+  ): Promise<PrivateFile> {
+    return this.fileService.deletePrivateFile(deletePrivateFileInput);
   }
 }
