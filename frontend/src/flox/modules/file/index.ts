@@ -1,12 +1,9 @@
-import {
-  floxModuleOptions,
-  mergeConfigurations,
-} from '../../core/flox-helpers';
-import { MODULES } from '../../MODULES';
+import { floxModuleOptions, mergeConfigurations } from 'src/flox';
+
+import { MODULES } from '../../enum/MODULES';
 
 /**
- * The file module handles file up/download using a database table each for private and public files, as well as storing
- * the files in S3 and requesting corresponding URLs.
+ * The file module handles file upload and management.
  */
 
 type FileModuleConfig = {
@@ -26,7 +23,8 @@ const defaultConfig: FileModuleConfig = {
 export function moduleConfig(): FileModuleConfig {
   return mergeConfigurations(
     defaultConfig,
-    floxModuleOptions(MODULES.FILE),
+    floxModuleOptions(MODULES.FILE)
   ) as FileModuleConfig;
 }
-export default moduleConfig;
+
+export default moduleConfig();
