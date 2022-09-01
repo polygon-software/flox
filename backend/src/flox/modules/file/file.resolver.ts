@@ -1,10 +1,12 @@
-import { Args, Resolver, Query } from '@nestjs/graphql';
+import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import PublicFile from './entities/public_file.entity';
 import { FileService } from './file.service';
-import { GetPublicFileArgs } from './dto/get-public-file.args';
-import { GetPrivateFileArgs } from './dto/get-private-file.args';
+import { GetPublicFileArgs } from './dto/args/get-public-file.args';
+import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
+import { User } from '../auth/entities/user.entity';
+import { DeleteFileInput } from './dto/input/delete-file.input';
 
 @Resolver(() => PublicFile)
 export class FileResolver {
@@ -34,5 +36,41 @@ export class FileResolver {
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
   ): Promise<PrivateFile> {
     return this.fileService.getPrivateFile(getPrivateFileArgs);
+  }
+
+  /**
+   * Deletes a private file
+   * @param {DeleteFileInput} deleteFileInput - contains UUID
+   * @returns {Promise<PrivateFile>} - the file that was deleted
+   */
+  @LoggedIn() // TODO application specific: set appropriate guards here
+  @Mutation(() => User)
+  async deletePrivateFile(
+    @Args('deleteFileInput')
+    deleteFileInput: DeleteFileInput,
+  ): Promise<PrivateFile> {
+    // TODO application specific: Ensure only allowed person (usually admin or file owner) is allowed to delete
+    return this.fileService.deleteFile(
+      deleteFileInput,
+      false,
+    ) as unknown as PrivateFile;
+  }
+
+  /**
+   * Deletes a public file
+   * @param {DeleteFileInput} deleteFileInput - contains UUID
+   * @returns {Promise<PrivateFile>} - the file that was deleted
+   */
+  @LoggedIn() // TODO application specific: set appropriate guards here
+  @Mutation(() => User)
+  async deletePublicFile(
+    @Args('deleteFileInput')
+    deleteFileInput: DeleteFileInput,
+  ): Promise<PublicFile> {
+    // TODO application specific: Ensure only allowed person (usually admin ) is allowed to delete
+    return this.fileService.deleteFile(
+      deleteFileInput,
+      true,
+    ) as unknown as PublicFile;
   }
 }
