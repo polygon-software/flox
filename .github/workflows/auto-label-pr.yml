@@ -1,0 +1,14 @@
+name: "Auto: PR Labeler"
+on:
+  - pull_request
+
+jobs:
+  add-labels:
+    name: Add labels to PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v3
+        with:
+          sync-labels: true
+          configuration-path: .github/labeler.yml
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"

@@ -14,12 +14,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteFileInput {
+  uuid: ID!
+}
+
 input DeleteUserInput {
   uuid: ID!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  deletePrivateFile(deleteFileInput: DeleteFileInput!): User!
+  deletePublicFile(deleteFileInput: DeleteFileInput!): User!
   deleteUser(deleteUserInput: DeleteUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
@@ -34,11 +40,11 @@ type PrivateFile {
   """S3 File Key"""
   key: String!
 
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
   """File owner"""
   owner: String!
+
+  """Last modification date"""
+  updatedAt: DateTime!
 
   """Pre-signed download URL"""
   url: String
@@ -58,7 +64,7 @@ type PublicFile {
   key: String!
 
   """Last modification date"""
-  lastModifiedAt: DateTime!
+  updatedAt: DateTime!
 
   """Public download URL"""
   url: String!
@@ -76,7 +82,7 @@ type Query {
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   myUser: User!
-  user(uuid: ID!): User!
+  user(cognitoUuid: ID, uuid: ID): User!
   users(uuids: [ID!]): [User!]!
 }
 
@@ -99,11 +105,11 @@ type User {
   """E-mail address"""
   email: String!
 
-  """Last modification date"""
-  lastModifiedAt: DateTime!
-
   """User role"""
   role: String
+
+  """Last modification date"""
+  updatedAt: DateTime!
 
   """Username"""
   username: String!

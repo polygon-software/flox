@@ -7,13 +7,7 @@ import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue
 import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue'
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue'
 import {QVueGlobals, useQuasar} from 'quasar';
-import {useAuth} from 'src/store/authentication';
 import _ from 'lodash';
-import {Context, Module} from 'vuex-smart-module';
-import AuthState from 'src/store/authentication/state';
-import AuthGetters from 'src/store/authentication/getters';
-import AuthMutations from 'src/store/authentication/mutations';
-import AuthActions from 'src/store/authentication/actions';
 import {i18n} from 'boot/i18n';
 import {useApolloClient} from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
@@ -22,6 +16,7 @@ import {ErrorService} from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth'
 import {createUser} from 'src/helpers/data/mutation-helpers';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
+import {useAuthStore} from 'stores/authentication';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -40,7 +35,7 @@ export class AuthenticationService {
   // Router service
   $routerService: RouterService
 
-  $authStore: Context<Module<AuthState, AuthGetters, AuthMutations, AuthActions>>
+  $authStore: ReturnType<typeof useAuthStore>
   interval: ReturnType<typeof setInterval>| null;
 
   /**
@@ -51,7 +46,7 @@ export class AuthenticationService {
    */
   constructor(quasar: QVueGlobals, errorService: ErrorService, routerService: RouterService) {
     // Store
-    this.$authStore = useAuth()
+    this.$authStore = useAuthStore()
 
     // Set up authentication user pool
     const poolSettings = {
@@ -59,7 +54,7 @@ export class AuthenticationService {
       ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? ''
     };
     const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings)
-    this.$authStore.mutations.setUserPool(userPool)
+    this.$authStore.setUserPool(userPool)
 
 
     // Quasar & environment variables
@@ -96,7 +91,7 @@ export class AuthenticationService {
       Password: password
     });
 
-    const userPool = this.$authStore.getters.getUserPool()
+    const userPool = this.$authStore.userPool
 
     if(userPool === undefined){
       this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
@@ -111,7 +106,7 @@ export class AuthenticationService {
     // Execute auth function
     return new Promise((resolve:  (value: (void | PromiseLike<void>)) => void) => {
       // Store in local variable
-      this.$authStore.mutations.setCognitoUser(cognitoUser)
+      this.$authStore.setCognitoUser(cognitoUser)
       cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
           void this.loginSuccess(result);
@@ -173,8 +168,9 @@ export class AuthenticationService {
    */
   setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void, identifier: string): void{
     cognitoUser.associateSoftwareToken({
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       associateSecretCode: async (secret: string) => {
-        this.$authStore.mutations.setCognitoUser(cognitoUser)
+        this.$authStore.setCognitoUser(cognitoUser)
         await this.showQRCodeDialog(secret, cognitoUser, identifier)
         resolve()
       },
@@ -207,7 +203,7 @@ export class AuthenticationService {
       }
 
       // Trigger signup
-      this.$authStore.getters.getUserPool()?.signUp(username, password, userAttributes, [], (err?: Error, result?: ISignUpResult) => {
+      this.$authStore.userPool?.signUp(username, password, userAttributes, [], (err?: Error, result?: ISignUpResult) => {
         if (err) {
           this.$errorService.showErrorDialog(err)
           reject();
@@ -227,8 +223,8 @@ export class AuthenticationService {
    * @returns {void}
    */
   async logout(): Promise<void>{
-    // Deep copy to avoid mutating store state
-    const cognitoUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
+    // Deep copy to avoid mutating stores state
+    const cognitoUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.cognitoUser)
 
     if(!cognitoUser){
       this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.not_logged_in')))
@@ -236,8 +232,8 @@ export class AuthenticationService {
       // Sign out
       await new Promise<void>((resolve) => {
         cognitoUser.signOut(() => {
-          this.$authStore.mutations.setCognitoUser(undefined)
-          this.$authStore.mutations.setUserSession(undefined)
+          this.$authStore.setCognitoUser(undefined)
+          this.$authStore.setUserSession(undefined)
           localStorage.clear() // Needed to remove session,id,... tokens
           resolve()
         })
@@ -261,7 +257,7 @@ export class AuthenticationService {
       component: ChangePasswordDialog,
       componentProps: {},
     }).onOk(({passwordNew, passwordOld}: {passwordNew: string, passwordOld: string}) => {
-      this.$authStore.getters.getCognitoUser()?.changePassword(passwordOld,passwordNew, (err: Error|undefined)=>{
+      this.$authStore.cognitoUser?.changePassword(passwordOld,passwordNew, (err: Error|undefined)=>{
         if(err){
           this.$errorService.showErrorDialog(err)
         }
@@ -274,7 +270,7 @@ export class AuthenticationService {
    * @returns {void}
    */
   showResetPasswordDialog(): void{
-    const userPool = this.$authStore.getters.getUserPool()
+    const userPool = this.$authStore.userPool
 
     if(userPool === undefined){
       this.$errorService.showErrorDialog(new Error(i18n.global.t('errors.user_not_defined')))
@@ -295,18 +291,18 @@ export class AuthenticationService {
       },
     }).onOk((input: string) => {
       // Set up cognitoUser first
-      this.$authStore.mutations.setCognitoUser(new CognitoUser({
+      this.$authStore.setCognitoUser(new CognitoUser({
         Username: input,
         Pool: userPool
       }));
 
       // Call forgotPassword on cognitoUser
-      this.$authStore.getters.getCognitoUser()?.forgotPassword({
+      this.$authStore.cognitoUser?.forgotPassword({
         onSuccess: function() {
           // Do nothing
         },
         onFailure: (err: Error) => {
-          this.$authStore.mutations.setCognitoUser(undefined);
+          this.$authStore.setCognitoUser(undefined);
           this.onFailure(err)
         },
         inputVerificationCode: () => {
@@ -325,7 +321,7 @@ export class AuthenticationService {
       component: ResetPasswordDialog,
       componentProps: {},
     }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
-      this.$authStore.getters.getCognitoUser()?.confirmPassword(verificationCode,passwordNew,{
+      this.$authStore.cognitoUser?.confirmPassword(verificationCode,passwordNew,{
         onSuccess: ()=>{
           showNotification(
             this.$q,
@@ -348,7 +344,7 @@ export class AuthenticationService {
    */
   async resendEmailVerificationCode(){
     await new Promise((resolve, reject) => {
-      this.$authStore.getters.getCognitoUser()?.resendConfirmationCode(function(err) {
+      this.$authStore.cognitoUser?.resendConfirmationCode(function(err) {
         if (!err) {
           resolve(null)
         }
@@ -370,7 +366,7 @@ export class AuthenticationService {
           authService: this,
         }
       }).onOk(({code}: { code: string }) => {
-        this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, function(err, result) {
+        this.$authStore.cognitoUser?.confirmRegistration(code, true, function(err, result) {
           if (!err) {
             resolve(result)
           }
@@ -431,7 +427,7 @@ export class AuthenticationService {
    */
   async verifyEmail(code: string): Promise<void>{
     return new Promise((resolve, reject)=>{
-      this.$authStore.getters.getCognitoUser()?.confirmRegistration(code, true, (err: Error)=>{
+      this.$authStore.cognitoUser?.confirmRegistration(code, true, (err: Error)=>{
         if(err){
           console.error(err)
           reject()
@@ -461,11 +457,10 @@ export class AuthenticationService {
       },
     }).onOk((code: string) => {
       // Deep copy user so state object does not get altered
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser())
+      const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.cognitoUser)
       currentUser?.sendMFACode(code, {
         onSuccess: (userSession: CognitoUserSession) => {
-          this.$authStore.mutations.setCognitoUser(currentUser)
+          this.$authStore.setCognitoUser(currentUser)
           void this.loginSuccess(userSession)
           resolve()
         },
@@ -483,7 +478,7 @@ export class AuthenticationService {
    */
   async loginSuccess(userSession: CognitoUserSession) {
     // Store locally
-    this.$authStore.mutations.setUserSession(userSession)
+    this.$authStore.setUserSession(userSession)
 
     // Redirect to main page TODO application specific: choose correct route
     await this.$routerService?.routeTo(ROUTES.SAMPLE)
@@ -510,7 +505,7 @@ export class AuthenticationService {
       // Case 2: User must reset password (e.g. if forced via AWS console)
       case 'PasswordResetRequiredException':
         // Call forgotPassword on cognitoUser, since user must reset password
-        this.$authStore.getters.getCognitoUser()?.forgotPassword({
+        this.$authStore.cognitoUser?.forgotPassword({
           onSuccess: function() {
             const $q = useQuasar()
 
@@ -523,7 +518,7 @@ export class AuthenticationService {
             )
           },
           onFailure: (err: Error) => {
-            this.$authStore.mutations.setCognitoUser(undefined);
+            this.$authStore.setCognitoUser(undefined);
             this.onFailure(err)
           },
           inputVerificationCode: () => {
@@ -544,18 +539,18 @@ export class AuthenticationService {
    */
   refreshToken(): Promise<void>{
     return new Promise((resolve, reject)=> {
-      const userSession =  this.$authStore.getters.getUserSession()
+      const userSession =  this.$authStore.userSession
       const idTokenExpiration = userSession?.getIdToken().getExpiration()
       if(!idTokenExpiration){
         resolve()
       }
       const refreshToken = userSession?.getRefreshToken()
       if(refreshToken && idTokenExpiration && (idTokenExpiration - Date.now() / 1000 < 45 * 60)){   // 15min before de-validation token is refreshed
-        const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.getters.getCognitoUser()) // refresh session mutates the state of store: illegal
+        const currentUser: CognitoUser|undefined = _.cloneDeep(this.$authStore.cognitoUser) // refresh session mutates the state of stores: illegal
         currentUser?.refreshSession(refreshToken, (err, session )=> {
           if (session) {
-            this.$authStore.mutations.setCognitoUser(currentUser)
-            this.$authStore.mutations.setUserSession(session as CognitoUserSession | undefined)
+            this.$authStore.setCognitoUser(currentUser)
+            this.$authStore.setUserSession(session as CognitoUserSession | undefined)
             resolve()
           } else {
             reject(err)

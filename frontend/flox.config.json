@@ -1,0 +1,26 @@
+{
+  "modules": {
+    "auth": true,
+    "roles": true,
+    "file": true,
+    "sharing": false
+  },
+  "moduleOptions": {
+    "roles": {
+      "options": [
+        "ADMIN",
+        "SUPERUSER",
+        "USER"
+      ]
+    },
+    "auth": {
+      "emailAsUsername": true
+    }
+  },
+  "general": {
+    "mode_live": "ssr",
+    "mode_test": "spa",
+    "mode_dev": "spa",
+    "mode_stage": "spa"
+  }
+}

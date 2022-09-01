@@ -2,9 +2,9 @@ import {useApolloClient, useMutation, useQuery} from '@vue/apollo-composable';
 import {MutationObject, MutationTypes, QueryObject} from '../../data/DATA-DEFINITIONS';
 import {ApolloCache, ApolloQueryResult, FetchResult} from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
-import {useSSR} from 'src/store/ssr';
 import {i18n} from 'boot/i18n';
 import {QUERIES} from 'src/data/queries/QUERIES';
+import {useSsrStore} from 'stores/ssr';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -134,7 +134,7 @@ function updateAffectedQueries(cache: ApolloCache<any>, affectedQueries: QueryOb
  * @returns {Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>} - the query's output
  */
 function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown>): Ref<Record<string, Record<string, unknown>[]>[] | Record<string, unknown[]> | undefined>{
-  const $ssrStore = useSSR();
+  const $ssrStore = useSsrStore();
   const res: Ref<Record<string, Record<string, unknown>[]>[]> = ref([])
 
   // ----- Hooks -----
@@ -142,7 +142,7 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
     const tempRes: ApolloQueryResult<Record<string, any>> = await executeQuery(query, variables)
     if(!tempRes.data){ return}
     res.value = tempRes.data[query.cacheLocation] as Record<string, Record<string, unknown>[]>[]
-    $ssrStore.mutations.setPrefetchedData({key: query.cacheLocation, value: res.value})
+    $ssrStore.setPrefetchedData({key: query.cacheLocation, value: res.value})
   })
 
   onBeforeMount( () => {
@@ -150,7 +150,7 @@ function subscribeToQuery(query: QueryObject, variables?: Record<string, unknown
     const current_cache_state = apolloClient.readQuery({query: query.query, variables}) as Record<string, Record<string, unknown>[]>[] ?? []
     // Test if the query is already in the cache
     if(Object.values(current_cache_state).length === 0){
-      res.value = $ssrStore.getters.getPrefetchedData()(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
+      res.value = $ssrStore.getPrefetchedData(query.cacheLocation) as Record<string, Record<string, unknown>[]>[] ?? []
 
       // SPA
       if(res.value.length <= 0){

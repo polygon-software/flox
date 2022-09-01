@@ -1,0 +1,24 @@
+name: "Auto: Label monday.com items arriving in stage as 'Stage 1: Staged'"
+
+on:
+  push:
+    branches:
+      - stage
+
+jobs:
+  set-status:
+    name: Set monday.com Item Status
+    runs-on: ubuntu-latest
+    steps:
+      # Set status on-stage for items that appear in a commit message in stage
+      - name: "Update state of monday.com items to 'State 1: Staged'"
+        uses: polygon-software/action-monday-state@main
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          allow-no-item-id: true
+          multiple: true
+          text: ${{ join(github.event.commits.*.message, ', ') }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'State 1: Staged'
+

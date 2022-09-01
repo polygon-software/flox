@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
     :persistent="true"
   >
     <q-card class="q-pa-sm text-center" style="width: 400px; min-height: 300px">
@@ -22,12 +22,12 @@
           :label="$t('general.cancel')"
           color="primary"
           flat
-          @click="hide"
+          @click="onDialogHide"
         />
         <q-btn
           :label="$t('general.ok')"
           color="primary"
-          @click="onOk"
+          @click="onDialogOK"
         />
       </q-card-actions>
     </q-card>
@@ -36,31 +36,14 @@
 
 <script setup lang="ts">
 import QrcodeVue from 'qrcode.vue';
-import {defineEmits, defineProps, ref, Ref} from 'vue';
-import {QDialog} from 'quasar'
+import {defineEmits, defineProps} from 'vue';
+import {useDialogPluginComponent} from 'quasar'
 
-const dialog: Ref<QDialog|null> = ref<QDialog|null>(null)
-const emit = defineEmits(['ok'])
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.show();
-}
-// eslint-disable-next-line require-jsdoc
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
-}
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
 
-/**
- * On Ok, emit ok event
- * @returns {void}
- */
-function onOk(): void {
-  emit('ok')
-  hide()
-}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emit = defineEmits(useDialogPluginComponent.emits)
+
 const props = defineProps({
   value: {
     type: String,

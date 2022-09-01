@@ -27,13 +27,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `https://cognito-idp.${process.env.AWS_REGION}.amazonaws.com/${process.env.USER_POOL_ID}/.well-known/jwks.json`,
+        jwksUri: `https://cognito-idp.${process.env.AWS_MAIN_REGION}.amazonaws.com/${process.env.USER_POOL_ID}/.well-known/jwks.json`,
       }),
     });
   }
 
   /**
    * Validates the JWT token and appends the user to the Request
+   * Note: This is only triggered once the JWT's validity (from-url and expiration) has been checked successfully!
    * @param {JwtStrategyValidationPayload} payload - decoded JSON Web Token (JWT)
    * @returns {JwtStrategyValidationResult} - object with Cognito userId and username
    */

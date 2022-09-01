@@ -18,7 +18,7 @@ import {RouterService} from 'src/services/RouterService';
 import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
 import {useQuasar} from 'quasar';
-import {i18n} from 'boot/i18n';
+import {i18n} from 'src/boot/i18n';
 
 const $q = useQuasar()
 const $authService: AuthenticationService|undefined = inject('$authService')

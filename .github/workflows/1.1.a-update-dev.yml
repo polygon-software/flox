@@ -1,0 +1,32 @@
+name: "1.1.a: Update Dev-Environment with newest version"
+
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  release:
+    name: "Update DEV application"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Make scripts executable
+        run: |
+          sudo chmod +x ./scripts/support/build.sh
+          sudo chmod +x ./scripts/aws-update/aws-update.sh
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Build & update AWS infrastructure
+        working-directory: ./scripts/aws-update
+        run: bash aws-update.sh dev
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}

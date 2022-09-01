@@ -8,10 +8,11 @@ import { MODULES } from './MODULES';
 import PublicFile from './modules/file/entities/public_file.entity';
 import PrivateFile from './modules/file/entities/private_file.entity';
 import { User } from './modules/auth/entities/user.entity';
+import { EmailModule } from './modules/email/email.module';
 import { getActiveFloxModuleNames } from './core/flox-helpers';
 
 /**
- * Returns the active Flox modules based on flox.config.js
+ * Returns the active Flox modules based on flox.config.json
  * @returns {any[]} - list of Modules
  */
 export function floxModules() {
@@ -28,6 +29,9 @@ export function floxModules() {
       case MODULES.AUTH:
         modules.push(UserModule);
         break;
+      case MODULES.EMAIL:
+        modules.push(EmailModule);
+        break;
       // Some modules don't have to be added (e.g. 'roles')
       default:
         break;
@@ -38,7 +42,7 @@ export function floxModules() {
 }
 
 /**
- * Returns the providers to use based on flox.config.js
+ * Returns the providers to use based on flox.config.json
  * @returns {any[]} - list of providers
  */
 export function floxProviders() {

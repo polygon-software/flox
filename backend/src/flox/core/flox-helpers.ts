@@ -1,6 +1,6 @@
 import { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import * as flox from '../../../flox.config';
+import * as flox from '../../../flox.config.json';
 import { MODULES } from '../MODULES';
 
 /**
@@ -25,7 +25,7 @@ export function getRequest(context: ExecutionContext): any {
 /**
  * Determines a module's actual configuration based on defaults and custom config
  * @param {Record<string, unknown>} defaultConfig - The module's default configuration
- * @param {Record<string, unknown>} customConfig - custom configuration from flox.config.js (may be empty if not given)
+ * @param {Record<string, unknown>} customConfig - custom configuration from flox.config.json (may be empty if not given)
  * @returns {Record<string, unknown>} - actual configuration to use
  */
 export function mergeConfigurations(
@@ -82,10 +82,18 @@ export function floxModulesOptions() {
 }
 
 /**
- * Determines whether a Flox module is currently active from flox.config.js
+ * Determines whether a Flox module is currently active from flox.config.json
  * @param {string} moduleName - name of the module to check
  * @returns {boolean} - whether the module is active
  */
 export function isModuleActive(moduleName: string) {
   return getActiveFloxModuleNames().includes(moduleName);
+}
+
+/**
+ * Determines whether Flox is set to serverless mode in flox.config
+ * @returns {boolean} - whether the config is set to serverless mode
+ */
+export function isServerless() {
+  return !!process.env.SERVERLESS;
 }

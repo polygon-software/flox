@@ -1,0 +1,50 @@
+name: "Auto: Update Label on monday.com items based on PR Status"
+
+on:
+  pull_request_review:
+    types: [submitted, edited]
+
+jobs:
+  set-status:
+    name: "Update monday.com Labels to 'PR: Commented' / 'PR: Approved' / 'PR: Rejected'"
+    runs-on: ubuntu-latest
+    steps:
+      # If PR was 'COMMENTED'
+      - name: "Update state of monday.com items to 'PR: Commented'"
+        uses: polygon-software/action-monday-state@main
+        if: ${{ github.event.review.state == 'commented' && github.base_ref != 'master' }}
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          allow-no-item-id: true
+          multiple: true
+          text: ${{ github.event.pull_request.title }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'PR: Commented'
+
+      # If PR was 'APPROVED'
+      - name: "Update state of monday.com items to 'PR: Approved'"
+        uses: polygon-software/action-monday-state@main
+        if: ${{ github.event.review.state == 'approved' && github.base_ref != 'master' }}
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          multiple: true
+          allow-no-item-id: true
+          text: ${{ github.event.pull_request.title }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'PR: Approved'
+
+      # If PR was 'REJECTED'
+      - name: "Update state of monday.com items to 'PR: Rejected'"
+        uses: polygon-software/action-monday-state@main
+        if: ${{ github.event.review.state == 'rejected' && github.base_ref != 'master' }}
+        with:
+          monday-token: ${{ secrets.MONDAY_TOKEN }}
+          multiple: true
+          allow-no-item-id: true
+          text: ${{ github.event.pull_request.title }}
+          prefix: '#'
+          status-column-title: 'Item Status!'
+          set-status: 'PR: Rejected'
+

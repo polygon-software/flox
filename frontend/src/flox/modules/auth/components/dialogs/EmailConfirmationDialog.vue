@@ -1,18 +1,18 @@
 <template>
   <q-dialog
-    ref="dialog"
+    ref="dialogRef"
   >
     <q-card class="q-pa-md" style="width: 400px; min-height: 250px">
       <q-form
-        @submit="onSubmit"
         class="q-gutter-md"
+        @submit="onSubmit"
       >
         <h5 class="q-ma-none q-mt-lg text-center">{{ $t('messages.verification') }}</h5>
         <p> {{ $t('messages.enter_verification_code')}} </p>
         <q-input
+          v-model="verificationCode"
           :label="$t('authentication.verification_code')"
           maxlength="6"
-          v-model="verificationCode"
         />
 
         <!-- Code resend button -->
@@ -33,7 +33,7 @@
             :label="$t('general.cancel')"
             flat
             color="primary"
-            @click="hide"
+            @click="onDialogHide"
           />
           <q-btn
             color="primary"
@@ -48,11 +48,16 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, defineProps, PropType, Ref, ref} from 'vue';
-import {QDialog, QVueGlobals} from 'quasar';
+import {defineProps, defineEmits, PropType, ref} from 'vue';
+import {QVueGlobals, useDialogPluginComponent} from 'quasar';
 import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
 import {i18n} from 'boot/i18n';
+
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emit = defineEmits(useDialogPluginComponent.emits)
 
 const props = defineProps({
   q : {
@@ -68,31 +73,12 @@ const props = defineProps({
 const verificationCode = ref('')
 const codeSent = ref(false)
 
-const emit = defineEmits(['ok'])
-let dialog: Ref<QDialog|null> = ref(null)
-
 /**
  * On submit, emit data outwards
  * @returns {void}
  */
 function onSubmit(){
-  emit('ok', {
-    code: verificationCode.value,
-  })
-  hide()
-}
-
-// Mandatory - do not remove!
-// eslint-disable-next-line @typescript-eslint/no-unused-vars,require-jsdoc
-function show(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
- dialog.value?.show()
-}
-
-// eslint-disable-next-line require-jsdoc
-function hide(): void{
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  dialog.value?.hide()
+  onDialogOK({code: verificationCode.value,})
 }
 
 /**

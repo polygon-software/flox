@@ -1,0 +1,57 @@
+name: "2.1.m: Opens staging branch from dev and opens a PR on master"
+
+# Should only be run manually from the Actions tab
+on:
+  workflow_dispatch:
+    inputs:
+      reviewer:
+        required: false
+        type: string
+        description: GitHub name of the reviewer (if needed)
+        default: ''
+      PM:
+        required: false
+        type: string
+        description: Github name of the project's PM
+        default: ''
+
+jobs:
+  create-stage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+
+      - name: Make scripts executable
+        run: |
+          sudo chmod +x ./scripts/support/build.sh
+          sudo chmod +x ./scripts/aws-initial-setup/initial-aws-setup.sh
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Validate Terraform
+        working-directory: ./scripts/aws-initial-setup
+        run: terraform validate
+
+      - name: Build & set up AWS infrastructure
+        id: setup
+        working-directory: ./scripts/aws-initial-setup
+        run: bash initial-aws-setup.sh stage false true confirm
+        env:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Open PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git pull
+          git checkout dev
+          git checkout -b ${{ steps.setup.outputs.branch_name }}
+          git push --set-upstream origin ${{ steps.setup.outputs.branch_name }}
+          gh pr create -B "master" -t "stage: Automatic PR for ${{ steps.setup.outputs.branch_name }}" -b "@${{ github.event.inputs.PM }} Automatic staging branch PR for Staging System: ${{steps.setup.outputs.stage_url}}" -r ${{ github.event.inputs.reviewer }}
