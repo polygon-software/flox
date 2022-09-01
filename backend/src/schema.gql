@@ -14,12 +14,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteFileInput {
+  uuid: ID!
+}
+
 input DeleteUserInput {
   uuid: ID!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  deletePrivateFile(deleteFileInput: DeleteFileInput!): User!
+  deletePublicFile(deleteFileInput: DeleteFileInput!): User!
   deleteUser(deleteUserInput: DeleteUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
