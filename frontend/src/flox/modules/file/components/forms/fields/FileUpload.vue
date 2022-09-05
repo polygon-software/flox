@@ -5,7 +5,7 @@
       style="width: 600px;"
     >
 
-      <!--- Header --->
+      <!-- Header -->
       <q-card-section>
         <div class="row flex-center justify-between">
           <h5 class="q-mx-md col-auto">
@@ -58,7 +58,7 @@
 
       <q-separator inset/>
 
-      <!--- Files --->
+      <!-- Files -->
       <q-card-section>
         <q-list separator>
           <q-item
@@ -77,7 +77,7 @@
 
             </q-item-section>
 
-            <!--- Preview --->
+            <!-- Preview -->
             <q-item-section class="row flex-center col-grow">
               <q-img
                 v-if="file.content.type.includes('image/')"
