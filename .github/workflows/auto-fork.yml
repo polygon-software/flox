@@ -66,3 +66,19 @@ jobs:
           else
             echo "Condition did not match: ${{ github.repository }}!=$TARGET_REPOSITORY && ${{ github.ref_name }}==$SOURCE_BRANCH"
           fi
+
+      - name: Sync Flox to GetFinance
+        env:
+          SOURCE_REPOSITORY: polygon-software/flox
+          SOURCE_BRANCH: master
+          TARGET_REPOSITORY: polygon-software/getfinance
+          TARGET_BRANCH: flox
+        run: |
+          if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
+          then
+            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to $TARGET_REPOSITORY:$TARGET_BRANCH"
+            git remote add getfinance https://github.com/${{ env.TARGET_REPOSITORY }}.git
+            git push --set-upstream getfinance ${{ env.SOURCE_BRANCH }}:${{ env.TARGET_BRANCH }}
+          else
+            echo "Condition did not match: ${{ github.repository }}!=$TARGET_REPOSITORY && ${{ github.ref_name }}==$SOURCE_BRANCH"
+          fi
