@@ -189,19 +189,6 @@ const showQFile = ref(false)
 const filePicker: Ref<QFile|null> = ref(null)
 const selectedFiles: Ref<Array<SelectedFile>> = ref([])
 
-
-/**
- * if files were rejected notify the user
- * @param {Array<File>} rejectedEntries - rejected entries
- * @return {none} none
- */
-function onRejected (rejectedEntries: Array<File>) {
-  $q.notify({
-    type: 'negative',
-    message: `${rejectedEntries.length} file(s) did not pass validation constraints`
-  })
-}
-
 /**
  * if the upload has failed notify the user
  * @param {Array<SelectedFile>} failedEntries - failed entries
