@@ -3,10 +3,10 @@ import * as frontendFloxConfig from '../../frontend/flox.config.json'
 import * as backendFloxConfig from '../../backend/flox.config.json'
 /**
  * This script is used for exporting all Flox configuration that is relevant to Terraform to a .tfvars file
- * Takes one parameter: 'live', 'test' or 'dev'
+ * Takes one parameter: 'live', 'test', 'stage' or 'dev'
  */
 
-// Mode (live, test or dev)
+// Mode (live, test, stage or dev)
 const mode = process.argv[2]
 
 console.log('# ======== Terraform Flox variables ========');
@@ -24,6 +24,7 @@ const backendConfig = backendFloxConfig.general
 const infrastructureConfig = backendFloxConfig[`infrastructure_${mode}`]
 
 console.log('# ======== General Config options ========');
+console.log(`project="${backendConfig.project}"`)
 console.log(`aws_region="${infrastructureConfig.aws_region}"`)
 console.log(`serverless_api="${infrastructureConfig.serverless_api}"`)
 console.log(`serverless_db="${infrastructureConfig.serverless_db}"`)

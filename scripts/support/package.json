@@ -5,8 +5,7 @@
     "setup:live": "/bin/zsh ../aws-initial-setup/initial-aws-setup.sh live true",
     "update:dev": "/bin/zsh ../aws-update/aws-update.sh dev true",
     "update:test": "/bin/zsh ../aws-update/aws-update.sh test true",
-    "update:live": "/bin/zsh ../aws-update/aws-update.sh live true",
-    "destroy:test": "/bin/zsh destroy-system.sh"
+    "update:live": "/bin/zsh ../aws-update/aws-update.sh live true"
   },
   "devDependencies": {
     "@types/node": "^18.6.3",

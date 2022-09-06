@@ -13,7 +13,7 @@ terraform {
     organization        = "##ORGANISATION##"
 
     workspaces {
-      name = "##PROJECT##-##TYPE##-parent-setup" # will be replaced in preprocessing
+      name = "##PROJECT##-##TYPE##" # will be replaced in preprocessing
     }
   }
 }
@@ -21,13 +21,21 @@ terraform {
 // Define AWS as provider
 provider "aws" {
   region              = var.aws_region
-  secret_key          = var.domain_manager_aws_secret_access_key
-  access_key          = var.domain_manager_aws_access_key
+  secret_key          = var.aws_secret_access_key
+  access_key          = var.aws_access_key
+}
+
+// Define alternate region AWS as provider
+provider "aws" {
+  region              = "us-east-1"
+  secret_key          = var.aws_secret_access_key
+  access_key          = var.aws_access_key
+  alias               = "us-east-1"
 }
 
 # Get workspace ID
 data "tfe_workspace" "workspace" {
-  name         = "##PROJECT##-##TYPE##-parent-setup"
+  name         = "##PROJECT##-##TYPE##"
   organization = "##ORGANISATION##"
 }
 
