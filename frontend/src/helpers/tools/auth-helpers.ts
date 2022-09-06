@@ -18,7 +18,7 @@ export function getBearerToken() {
     iter++;
   } while (res);
   if (!token) {
-    throw new Error('Authentication Failure');
+    throw new Error('No Cognito bearer token found in localStorage');
   }
   return `Bearer ${token}`;
 }
