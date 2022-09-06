@@ -289,6 +289,3 @@ async function uploadFiles() {
 }
 </script>
 
-<style scoped>
-
-</style>
