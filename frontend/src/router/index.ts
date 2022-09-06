@@ -3,7 +3,8 @@ import {
   createMemoryHistory,
   createRouter,
   createWebHashHistory,
-  createWebHistory, RouteRecordRaw,
+  createWebHistory,
+  RouteRecordRaw,
 } from 'vue-router';
 import routes from './routes';
 
@@ -17,11 +18,13 @@ import routes from './routes';
  */
 
 export default route(function (/* { stores, ssrContext } */) {
-  const createHistory = process.env.SERVER
-    ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
+  const historyType =
+    process.env.VUE_ROUTER_MODE === 'history'
+      ? createWebHistory
+      : createWebHashHistory;
+  const createHistory = process.env.SERVER ? createMemoryHistory : historyType;
 
-  const routeArray: RouteRecordRaw[] = Object.values(routes)
+  const routeArray: RouteRecordRaw[] = Object.values(routes);
 
   return createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),

@@ -14,7 +14,9 @@ import serverlessExpress from '@vendia/serverless-express';
  * @returns {Promise<serverlessExpress|NestApplication>} - application handler
  */
 export async function bootstrap(serverless = false) {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: process.env.DEV === 'true',
+  });
   await app.init();
 
   // Add GraphQL Voyager as middleware

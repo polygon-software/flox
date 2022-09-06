@@ -78,7 +78,7 @@ module.exports = configure(function (ctx) {
 
       polyfillModulePreload: true,
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-var
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       extendViteConf(viteConf, { isServer, isClient }) {
         viteConf.global = {};
       },
