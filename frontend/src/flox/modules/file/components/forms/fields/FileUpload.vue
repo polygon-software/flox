@@ -72,7 +72,7 @@
               </q-item-label>
 
               <q-item-label caption>
-                {{ $t('file.status') }}: {{ $t(`file_${file.status}`) }}
+                {{ $t('file.status') }}: {{ $t(`files.status_${file.status}`) }}
               </q-item-label>
 
             </q-item-section>
