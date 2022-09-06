@@ -1,6 +1,6 @@
 /**
  * Fetch bearer token to allow file upload
- * @return {string} token - The generated token
+ * @return {string} token - The user's Cognito ID token
  */
 export function getBearerToken() {
   let iter = 0;
@@ -18,7 +18,7 @@ export function getBearerToken() {
     iter++;
   } while (res);
   if (!token) {
-    throw new Error('Authentication Failure');
+    throw new Error('No Cognito bearer token found in localStorage');
   }
   return `Bearer ${token}`;
 }
