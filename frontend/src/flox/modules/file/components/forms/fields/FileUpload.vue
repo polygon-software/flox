@@ -191,7 +191,7 @@ const filePicker: Ref<QFile|null> = ref(null)
 const selectedFiles: Ref<Array<SelectedFile>> = ref([])
 
 /**
- * if the upload has failed notify the user
+ * Notify the user that the upload failed
  * @param {Array<SelectedFile>} failedEntries - failed entries
  * @return {void} void
  */
@@ -203,7 +203,7 @@ function onFailed (failedEntries: Array<SelectedFile>) {
 }
 
 /**
- * if the upload was successful notify the user
+ * Notify the user that the upload succeeded
  * @param {Array<SelectedFile>} successfulEntries - successful entries
  * @return {void} void
  */
