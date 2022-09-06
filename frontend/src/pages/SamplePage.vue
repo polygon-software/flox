@@ -6,7 +6,7 @@
     <!-- Form example -->
     <SampleForm/>
 
-    <FileUpload :query-name="'upload'" :target="'/uploadPrivateFile'"/>
+    <FileUpload :accepted-files="'image/*, .pdf' " :query-name="'upload'" :target="'/uploadPrivateFile'"/>
   </q-page>
 </template>
 

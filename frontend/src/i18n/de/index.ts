@@ -60,6 +60,7 @@ export default {
     no_preview: 'Keine Vorschau verfügbar',
     remove: 'Entfernen',
     remove_all: 'Alle Dateien entfernen',
+    status: 'Status',
     status_ready: 'Bereit',
     status_loading: 'Laden',
     status_done: 'Erledigt',

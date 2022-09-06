@@ -58,6 +58,7 @@ export default {
     no_preview: 'No preview available',
     remove: 'Remove',
     remove_all: 'Remove all files',
+    status: 'Status',
     status_ready: 'Ready',
     status_loading: 'Loading',
     status_done: 'Done',
