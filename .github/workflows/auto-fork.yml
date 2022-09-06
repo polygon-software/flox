@@ -71,7 +71,7 @@ jobs:
         env:
           SOURCE_REPOSITORY: polygon-software/flox
           SOURCE_BRANCH: master
-          TARGET_REPOSITORY: polygon-software/getfinance
+          TARGET_REPOSITORY: polygon-software/getfinance-application
           TARGET_BRANCH: flox
         run: |
           if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
