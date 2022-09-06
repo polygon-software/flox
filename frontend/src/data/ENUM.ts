@@ -4,7 +4,7 @@ export enum ROLE {
   ADMIN = 'ADMIN',
 }
 
-export enum FILEUPLOADSTATUS {
+export enum FILE_UPLOAD_STATUS {
   READY = 'ready',
   LOADING = 'loading',
   DONE = 'done',

@@ -72,7 +72,7 @@
               </q-item-label>
 
               <q-item-label caption>
-                {{ $t('file.status') }}: {{ file.status }}
+                {{ $t('file.status') }}: {{ $t(`file_${file.status}`) }}
               </q-item-label>
 
             </q-item-section>
@@ -125,7 +125,7 @@ import {
 } from 'quasar';
 import {defineProps, Ref, ref} from 'vue';
 import { AxiosResponse } from 'axios';
-import { FILEUPLOADSTATUS } from 'src/data/ENUM';
+import { FILE_UPLOAD_STATUS } from 'src/data/ENUM';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES'
 import {uploadFile} from 'src/helpers/tools/file-helpers'
@@ -251,7 +251,7 @@ function onFilePicked(newFiles: File[]){
     const newSelectedFile: SelectedFile = {
       content: file,
       url: URL.createObjectURL(file),
-      status: i18n.global.t(`files.status_${FILEUPLOADSTATUS.READY}`),
+      status: FILE_UPLOAD_STATUS.READY,
     }
     selectedFiles.value = selectedFiles.value.concat(newSelectedFile)
   }
@@ -264,25 +264,25 @@ function onFilePicked(newFiles: File[]){
 async function uploadFiles() {
   const url = `${props.url}${props.target}`
   for (const file of selectedFiles.value) {
-    if (file.status !== i18n.global.t(`files.status_${FILEUPLOADSTATUS.DONE}`)) {
-      file.status = i18n.global.t(`files.status_${FILEUPLOADSTATUS.LOADING}`)
+    if (file.status !== FILE_UPLOAD_STATUS.DONE) {
+      file.status = FILE_UPLOAD_STATUS.LOADING
       const res: AxiosResponse = await uploadFile(file.content, url, props.queryName)
       if (res.status === 201) {
-        file.status = i18n.global.t(`files.status_${FILEUPLOADSTATUS.DONE}`)
+        file.status = FILE_UPLOAD_STATUS.DONE
       }
       else {
-        file.status = i18n.global.t(`files.status_${FILEUPLOADSTATUS.FAILED}`)
+        file.status = FILE_UPLOAD_STATUS.FAILED
       }
     }
   }
   // Check for successful uploads
-  const successfulUploads = selectedFiles.value.filter((file) => file.status === i18n.global.t(`files.status_${FILEUPLOADSTATUS.DONE}`))
+  const successfulUploads = selectedFiles.value.filter((file) => file.status === FILE_UPLOAD_STATUS.DONE)
   if (successfulUploads.length > 0) {
     onSuccess(successfulUploads)
   }
 
   // Check for failed uploads
-  const failedUploads = selectedFiles.value.filter((file) => file.status === i18n.global.t(`files.status_${FILEUPLOADSTATUS.FAILED}`))
+  const failedUploads = selectedFiles.value.filter((file) => file.status === FILE_UPLOAD_STATUS.FAILED)
   if (failedUploads.length > 0) {
     onFailed(failedUploads)
   }
