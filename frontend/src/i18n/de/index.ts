@@ -63,7 +63,7 @@ export default {
     status: 'Status',
     status_ready: 'Bereit',
     status_loading: 'Laden',
-    status_done: 'Erledigt',
+    status_done: 'Hochgeladen',
     status_failed: 'Fehler',
     successfully_uploaded: '{value} Datei(en) wurden erfolgreich hochgeladen',
     upload: 'Hochladen',
