@@ -202,7 +202,7 @@ function onFailed (failedEntries: Array<SelectedFile>) {
 }
 
 /**
- * if the upload was successful notify the user
+ * Notify the user that the upload succeeded
  * @param {Array<SelectedFile>} successfulEntries - successful entries
  * @return {void} void
  */
