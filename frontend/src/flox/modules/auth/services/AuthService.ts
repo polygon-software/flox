@@ -168,6 +168,7 @@ export class AuthenticationService {
    */
   setupMFA(cognitoUser: CognitoUser, resolve: (value: (void | PromiseLike<void>)) => void, identifier: string): void{
     cognitoUser.associateSoftwareToken({
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       associateSecretCode: async (secret: string) => {
         this.$authStore.setCognitoUser(cognitoUser)
         await this.showQRCodeDialog(secret, cognitoUser, identifier)

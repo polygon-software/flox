@@ -5,9 +5,6 @@ import { JwtAuthGuard } from './modules/auth/auth.guard';
 import { FileModule } from './modules/file/file.module';
 import { UserModule } from './modules/auth/user.module';
 import { MODULES } from './MODULES';
-import PublicFile from './modules/file/entities/public_file.entity';
-import PrivateFile from './modules/file/entities/private_file.entity';
-import { User } from './modules/auth/entities/user.entity';
 import { EmailModule } from './modules/email/email.module';
 import { getActiveFloxModuleNames } from './core/flox-helpers';
 
@@ -75,28 +72,4 @@ export function floxProviders() {
   });
 
   return providers;
-}
-
-/**
- * Determines the GraphQL entities needed by Flox modules
- * @returns {any[]} - entities
- */
-export function floxEntities() {
-  const entities = [];
-
-  getActiveFloxModuleNames().forEach((module) => {
-    switch (module) {
-      case MODULES.AUTH:
-        entities.push(User);
-        break;
-      case MODULES.FILE:
-        entities.push(PrivateFile);
-        entities.push(PublicFile);
-        break;
-      default:
-        break;
-    }
-  });
-
-  return entities;
 }

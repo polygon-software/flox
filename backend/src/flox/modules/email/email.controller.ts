@@ -13,7 +13,7 @@ export class EmailController {
 
   // SES credentials
   private readonly credentials: Credentials = {
-    region: this.configService.get('AWS_REGION'),
+    region: this.configService.get('AWS_MAIN_REGION'),
     accessKeyId: this.configService.get('AWS_SES_ACCESS_KEY_ID'),
     secretAccessKey: this.configService.get('AWS_SES_SECRET_ACCESS_KEY'),
   };

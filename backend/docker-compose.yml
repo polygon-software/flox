@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   main:
-    container_name: main
+    container_name: flox_main # TODO application specific
     build:
       context: .
     volumes:
@@ -19,7 +19,7 @@ services:
       - database
 
   database:
-    container_name: database
+    container_name: flox_database # TODO application specific
     image: postgres:14
     networks:
       - webnet
