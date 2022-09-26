@@ -1,55 +1,47 @@
-import axios from 'axios';
-import {useApolloClient} from '@vue/apollo-composable';
+import axios, { AxiosResponse } from 'axios';
+import { useApolloClient } from '@vue/apollo-composable';
+import { getBearerToken } from 'src/helpers/tools/auth-helpers';
 
 /**
- * Upload a list of files to given Endpoint
- * @param {Record<string, unknown>} files - dictionary file filenames vs file
- * @param {string} target - url to upload to
- * @param {string} queryname - Name of the query that got invalidated by request
- * @return {Promise<Record<string, unknown>>} - Updated related files
+ * Uploads a single file to a given endpoint
+ * @param {File} file - File that should be uploaded
+ * @param {string} url - The url to upload to
+ * @param {string} [queryName] - Name of the query that got invalidated by request
+ * @return {Promise<AxiosResponse>} - Whether the upload was successful or not
  */
-export async function uploadFiles(files: Record<string, unknown>, target: string, queryname: string) {
-  const apolloClient = useApolloClient().resolveClient()
-  let iter = 0
-  let res:string|null = ''
-  let token:string|null = ''
-  do {
-    res = localStorage.key(iter)
-    if(res?.endsWith('.idToken') && res?.startsWith('CognitoIdentityServiceProvider.')){
-      token = localStorage.getItem(res)
-      break
-    }
-    iter++;
-  } while (res)
-  if(!token){
-    throw new Error('Authentication Failure')
+export async function uploadFile(
+  file: File,
+  url: string,
+  queryName?: string
+): Promise<AxiosResponse> {
+  const formData = new FormData();
+  formData.append('file', file as Blob);
+
+  let apolloClient;
+  if (queryName) {
+    apolloClient = useApolloClient().resolveClient();
   }
 
   const headers = {
     'Content-Type': 'multipart/form-data',
-    Authorization: `Bearer ${token}`
-  }
+    Authorization: getBearerToken(),
+  };
 
-  const formData = new FormData();
-  for (const fileKey of Object.keys(files)) {
-    if (files[fileKey]) {
-      // Convert to Blob and append
-      const blob = files[fileKey] as Blob
-      formData.set(fileKey, blob)
-    }
-  }
-  const baseUrl = process.env.VUE_APP_BACKEND_BASE_URL ?? ''
   const uploadResult = await axios({
     method: 'post',
-    url: `${baseUrl}${target}`,
+    url: url,
     data: formData,
     headers: headers,
   }).catch((e: Error) => {
-    throw new Error(`File upload error: ${e.message}`)
-  })
+    throw new Error(`File upload error: ${e.message}`);
+  });
 
-  await apolloClient.refetchQueries({include: [queryname]})
+  if (queryName) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await apolloClient.refetchQueries({ include: [queryName] });
+  }
 
   // Return updated objects
-  return uploadResult.data as Record<string, unknown>;
+  return uploadResult;
 }

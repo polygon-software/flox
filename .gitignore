@@ -5,7 +5,7 @@
 
 # Generated script outputs
 /scripts/support/flox.tfvars
-/scripts/outputs
+/scripts/outputs/*.zip
 /scripts/**/*.zip
 
 # Terraform

@@ -26,7 +26,7 @@ resource "aws_rds_cluster" "database_cluster" {
       select(.SupportedEngineModes[]?=="serverless") |
       "\(.Engine): \(.EngineVersion)"'
   **/
-  engine_version            = var.serverless_db == true && var.serverless_version == "v1" ? "10.18" : "13.6"
+  engine_version            = var.serverless_db == true && var.serverless_db_version == "v1" ? "10.18" : "13.6"
   cluster_identifier        = "${var.project}-${var.type}-database-cluster"
   database_name             = var.database_name
   master_username           = var.database_master_username
@@ -39,11 +39,11 @@ resource "aws_rds_cluster" "database_cluster" {
   backup_retention_period   = 30
   deletion_protection       = var.type == "live" ? true : false
   // Serverless v1 is non-provisioned
-  engine_mode = var.serverless_db == true && var.serverless_version == "v1" ? "serverless" : "provisioned"
+  engine_mode = var.serverless_db == true && var.serverless_db_version == "v1" ? "serverless" : "provisioned"
 
   // Serverless v1 scaling configuration
   dynamic scaling_configuration {
-    for_each = var.serverless_db == true && var.serverless_version == "v1" ? [1] : []
+    for_each = var.serverless_db == true && var.serverless_db_version == "v1" ? [1] : []
     content {
       auto_pause               = true
       max_capacity             = 4 // TODO application specific: Change scaling factor
@@ -55,7 +55,7 @@ resource "aws_rds_cluster" "database_cluster" {
 
   // Serverless v2 scaling configuration
   dynamic "serverlessv2_scaling_configuration" {
-    for_each = var.serverless_db == true && var.serverless_version == "v2" ? [1] : []
+    for_each = var.serverless_db == true && var.serverless_db_version == "v2" ? [1] : []
     content {
       max_capacity = 2.0 // TODO application specific: Change scaling factor
       min_capacity = 0.5
@@ -75,7 +75,7 @@ resource "aws_rds_cluster_instance" "database_cluster_instances" {
   cluster_identifier        = aws_rds_cluster.database_cluster.id
   instance_class            = var.serverless_db == true ? "db.serverless" : "db.t4g.medium"
   db_subnet_group_name      = aws_db_subnet_group.database_subnet_group.name
-  count                     = var.serverless_db == true && var.serverless_version == "v1"  ? 0 : 2
+  count                     = var.serverless_db == true && var.serverless_db_version == "v1"  ? 0 : 2
   tags = {
     Project       = var.project
   }

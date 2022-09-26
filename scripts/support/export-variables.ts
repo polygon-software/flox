@@ -24,6 +24,7 @@ const backendConfig = backendFloxConfig.general
 const infrastructureConfig = backendFloxConfig[`infrastructure_${mode}`]
 
 console.log('# ======== General Config options ========');
+console.log(`project="${backendConfig.project}"`)
 console.log(`aws_region="${infrastructureConfig.aws_region}"`)
 console.log(`serverless_api="${infrastructureConfig.serverless_api}"`)
 console.log(`serverless_db="${infrastructureConfig.serverless_db}"`)

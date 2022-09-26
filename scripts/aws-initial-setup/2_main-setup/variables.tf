@@ -129,7 +129,7 @@ variable "serverless_db" {
   type            = bool
 }
 
-variable "serverless_version" {
+variable "serverless_db_version" {
   description     = "Serverless version to use (v1 can scale to zero, v2 cannot)"
   default         = "v1"
   type            = string
