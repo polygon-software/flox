@@ -21,7 +21,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.FORK_TOKEN }}
           TARGET_ORGANIZATION: polygon-software
-        run: gh repo create ${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }} --private --description ${{ github.event.inputs.description }} --team flox
+        run: | 
+          gh repo create ${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }} --private --description ${{ github.event.inputs.description }} --team flox
+          echo '### Repository Created! :rocket:' >> $GITHUB_STEP_SUMMARY
+          echo 'New repository with name **${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }}** was created!' >> $GITHUB_STEP_SUMMARY
+          echo 'Check it out [here](https://github.com/${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }}) on Github!' >> $GITHUB_STEP_SUMMARY
 
   sync-git-history:
     name: Sync Flox to new Repository
@@ -52,4 +56,6 @@ jobs:
           else
             echo "Condition did not match: ${{ github.repository }}!=$TARGET_REPOSITORY && ${{ github.ref_name }}==$SOURCE_BRANCH"
           fi
+          echo '### Commits synched! :relieved:' >> $GITHUB_STEP_SUMMARY
+          echo 'All commits from **${{ github.repository }}:${{ github.ref_name }}** were brought over into the **${{ env.TARGET_BRANCH }}** branch as well!' >> $GITHUB_STEP_SUMMARY
 
