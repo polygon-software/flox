@@ -1,7 +1,7 @@
-import { Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
-import S3File from '../../file/entities/file.entity';
+import { IsUUID } from 'class-validator';
 
 /**
  * Defines an image that wraps an S3 File
@@ -10,10 +10,10 @@ import S3File from '../../file/entities/file.entity';
 @Entity()
 @ObjectType()
 export abstract class Image extends BaseEntity {
-  @Field(() => S3File, { description: 'File corresponding to image' })
-  @JoinColumn()
-  @OneToOne(() => S3File, { cascade: true })
-  public file: S3File;
+  @Field(() => String, { description: 'File UUID' })
+  @Column()
+  @IsUUID()
+  public file: string;
 }
 
 export default Image;

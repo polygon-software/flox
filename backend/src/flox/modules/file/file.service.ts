@@ -159,6 +159,20 @@ export class FileService {
     throw new NotFoundException();
   }
 
+  async fileExists(fileUuid: string): Promise<boolean> {
+    const privateFile = await this.privateFilesRepository.findOne({
+      where: {
+        uuid: fileUuid,
+      },
+    });
+    const publicFile = await this.publicFilesRepository.findOne({
+      where: {
+        uuid: fileUuid,
+      },
+    });
+    return !!privateFile || !!publicFile;
+  }
+
   /**
    * Deletes a private or public file
    * @param {DeleteFileInput} deleteFileInput - contains UUID
