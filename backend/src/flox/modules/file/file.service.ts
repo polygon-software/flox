@@ -66,7 +66,7 @@ export class FileService {
       url,
       mimetype: file.mimetype,
       size: file.size,
-      filename: file.filename,
+      filename: file.filename || file.originalname,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
@@ -94,7 +94,7 @@ export class FileService {
       key,
       mimetype: file.mimetype,
       size: file.size,
-      filename: file.filename,
+      filename: file.filename || file.originalname,
       owner: owner,
     });
     await this.privateFilesRepository.save(newFile);
