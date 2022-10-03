@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Image from './entities/image.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import { GetImageForFileArgs } from './dto/args/get-image-for-file.args';
 import { CreateImageInput } from './dto/input/create-image.input';
 import { FileService } from '../file/file.service';
 import { DeleteImageInput } from './dto/input/delete-image.input';
+import { GetPrivateFileArgs } from '../file/dto/args/get-private-file.args';
 
 @Injectable()
 export class ImageService {
@@ -30,19 +31,19 @@ export class ImageService {
   ): Promise<Image> {
     return this.imageRepository.findOne({
       where: {
-        file: getImageForFileARgs.file,
+        file: {
+          uuid: getImageForFileARgs.file,
+        },
       },
     });
   }
 
   async createImage(createImageInput: CreateImageInput): Promise<Image> {
-    if (!this.fileService.fileExists(createImageInput.file)) {
-      throw new NotFoundException(
-        `File with uuid ${createImageInput.file} does not exist`,
-      );
-    }
+    const file = await this.fileService.getPrivateFile({
+      uuid: createImageInput.file,
+    } as GetPrivateFileArgs);
     return this.imageRepository.create({
-      file: createImageInput.file,
+      file,
     });
   }
 
