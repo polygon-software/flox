@@ -37,11 +37,20 @@ type PrivateFile {
   """Date of deletion"""
   deletedAt: DateTime
 
+  """Name of File"""
+  filename: String
+
   """S3 File Key"""
   key: String!
 
+  """Files mime type"""
+  mimetype: String!
+
   """File owner"""
   owner: String!
+
+  """Filesize in bytes"""
+  size: Float!
 
   """Last modification date"""
   updatedAt: DateTime!
@@ -60,8 +69,17 @@ type PublicFile {
   """Date of deletion"""
   deletedAt: DateTime
 
+  """Name of File"""
+  filename: String
+
   """S3 File Key"""
   key: String!
+
+  """Files mime type"""
+  mimetype: String!
+
+  """Filesize in bytes"""
+  size: Float!
 
   """Last modification date"""
   updatedAt: DateTime!

@@ -62,8 +62,11 @@ export class FileService {
     )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
 
     const newFile = this.publicFilesRepository.create({
-      key: key,
-      url: url,
+      key,
+      url,
+      mimetype: file.mimetype,
+      size: file.size,
+      filename: file.filename,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
@@ -88,7 +91,10 @@ export class FileService {
     };
     await this.s3.send(new PutObjectCommand(uploadParams));
     const newFile = this.privateFilesRepository.create({
-      key: key,
+      key,
+      mimetype: file.mimetype,
+      size: file.size,
+      filename: file.filename,
       owner: owner,
     });
     await this.privateFilesRepository.save(newFile);
