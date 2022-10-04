@@ -120,6 +120,20 @@ type PublicFile {
 
 type Query {
   allUsers: [User!]!
+  getAllMyFiles(
+    """Number of images to load"""
+    limit: Float = 500
+
+    """How many images to skip"""
+    skip: Float = 0
+  ): [PrivateFile!]!
+  getAllPublicFiles(
+    """Number of images to load"""
+    limit: Float = 500
+
+    """How many images to skip"""
+    skip: Float = 0
+  ): [PublicFile!]!
   getPrivateFile(
     """URL expiration duration (in seconds)"""
     expires: [Float!]
