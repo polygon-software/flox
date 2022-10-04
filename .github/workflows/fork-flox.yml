@@ -43,7 +43,7 @@ jobs:
 
       - name: Sync Base to Fork
         env:
-          SOURCE_REPOSITORY: polygon-software/fork-base
+          SOURCE_REPOSITORY: polygon-software/flox
           SOURCE_BRANCH: master
           TARGET_ORGANIZATION: polygon-software
           TARGET_BRANCH: master
