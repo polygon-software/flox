@@ -1,0 +1,61 @@
+name: Create new Flox Fork
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'New Repository Name'
+        required: true
+      description:
+        description: 'New Repository Description'
+        required: true
+
+jobs:
+  create-repository:
+    name: Create new Repository
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Create new Repository on Github
+        env:
+          GH_TOKEN: ${{ secrets.FORK_TOKEN }}
+          TARGET_ORGANIZATION: polygon-software
+        run: | 
+          gh repo create ${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }} --private --description ${{ github.event.inputs.description }} --team flox
+          echo '### Repository Created! :rocket:' >> $GITHUB_STEP_SUMMARY
+          echo 'New repository with name **${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }}** was created!' >> $GITHUB_STEP_SUMMARY
+          echo 'Check it out [here](https://github.com/${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }}) on Github!' >> $GITHUB_STEP_SUMMARY
+
+  sync-git-history:
+    name: Sync Flox to new Repository
+    runs-on: ubuntu-latest
+
+    needs:
+      - create-repository
+
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.FORK_TOKEN }}
+          fetch-depth: 0
+
+      - name: Sync Base to Fork
+        env:
+          SOURCE_REPOSITORY: polygon-software/flox
+          SOURCE_BRANCH: master
+          TARGET_ORGANIZATION: polygon-software
+          TARGET_BRANCH: master
+        run: |
+          if [[ "${{ github.repository }}" == $SOURCE_REPOSITORY  && "${{ github.ref_name }}" == $SOURCE_BRANCH ]]
+          then
+            echo "Synchronize ${{ github.repository }}:${{ github.ref_name }} to ${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }}:$TARGET_BRANCH"
+            git remote add forkrepo https://github.com/${{ env.TARGET_ORGANIZATION }}/${{ github.event.inputs.name }}.git
+            git push --set-upstream forkrepo ${{ env.SOURCE_BRANCH }}:${{ env.TARGET_BRANCH }}
+          else
+            echo "Condition did not match: ${{ github.repository }}!=$TARGET_REPOSITORY && ${{ github.ref_name }}==$SOURCE_BRANCH"
+          fi
+          echo '### Commits synched! :relieved:' >> $GITHUB_STEP_SUMMARY
+          echo 'All commits from **${{ github.repository }}:${{ github.ref_name }}** were brought over into the **${{ env.TARGET_BRANCH }}** branch as well!' >> $GITHUB_STEP_SUMMARY
+
