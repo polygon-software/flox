@@ -1,4 +1,4 @@
-import { Column } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
@@ -7,6 +7,7 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
  * Defines a file within an AWS S3 bucket
  */
 
+@Entity()
 @ObjectType()
 export abstract class S3File extends BaseEntity {
   @Field(() => String, { description: 'S3 File Key' })

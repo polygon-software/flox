@@ -17,10 +17,7 @@ export async function uploadFile(
   const formData = new FormData();
   formData.append('file', file as Blob);
 
-  let apolloClient;
-  if (queryName) {
-    apolloClient = useApolloClient().resolveClient();
-  }
+  const apolloClient = useApolloClient().resolveClient();
 
   const headers = {
     'Content-Type': 'multipart/form-data',
@@ -35,6 +32,10 @@ export async function uploadFile(
   }).catch((e: Error) => {
     throw new Error(`File upload error: ${e.message}`);
   });
+
+  if (file.type.split('/')[0] === 'image') {
+    // TODO Wrap file as image
+  }
 
   if (queryName) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

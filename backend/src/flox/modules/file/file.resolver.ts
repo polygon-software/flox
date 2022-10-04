@@ -5,12 +5,31 @@ import { GetPublicFileArgs } from './dto/args/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import PrivateFile from './entities/private_file.entity';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
-import { User } from '../auth/entities/user.entity';
 import { DeleteFileInput } from './dto/input/delete-file.input';
+import { GetAllFilesArgs } from './dto/args/get-all-files.args';
+import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
+import { User } from '../auth/entities/user.entity';
 
 @Resolver(() => PublicFile)
 export class FileResolver {
   constructor(private readonly fileService: FileService) {}
+
+  @AdminOnly()
+  @Query(() => [PublicFile], { name: 'getAllPublicFiles' })
+  async getAllPublicFiles(
+    @Args() getAllFilesArgs: GetAllFilesArgs,
+  ): Promise<Array<PublicFile>> {
+    return this.fileService.getAllPublicFiles(getAllFilesArgs);
+  }
+
+  @LoggedIn() // TODO application specific: set appropriate guards here
+  @Query(() => [PrivateFile], { name: 'getAllMyFiles' })
+  async getAllMyFiles(
+    @Args() getAllFilesArgs: GetAllFilesArgs,
+    @CurrentUser() user: User,
+  ): Promise<Array<PrivateFile>> {
+    return this.fileService.getAllMyFiles(getAllFilesArgs, user.uuid);
+  }
 
   /**
    * Gets a public file
@@ -44,7 +63,7 @@ export class FileResolver {
    * @returns {Promise<PrivateFile>} - the file that was deleted
    */
   @LoggedIn() // TODO application specific: set appropriate guards here
-  @Mutation(() => User)
+  @Mutation(() => PrivateFile)
   async deletePrivateFile(
     @Args('deleteFileInput')
     deleteFileInput: DeleteFileInput,
@@ -62,7 +81,7 @@ export class FileResolver {
    * @returns {Promise<PrivateFile>} - the file that was deleted
    */
   @LoggedIn() // TODO application specific: set appropriate guards here
-  @Mutation(() => User)
+  @Mutation(() => PublicFile)
   async deletePublicFile(
     @Args('deleteFileInput')
     deleteFileInput: DeleteFileInput,

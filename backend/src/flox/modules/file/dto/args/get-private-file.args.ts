@@ -13,5 +13,5 @@ export class GetPrivateFileArgs {
   })
   @IsOptional()
   @IsNumber()
-  expires;
+  expires?: number;
 }

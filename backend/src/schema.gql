@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateImageInput {
+  file: String!
+}
+
 input CreateUserInput {
   cognitoUuid: String!
   email: String!
@@ -18,14 +22,37 @@ input DeleteFileInput {
   uuid: ID!
 }
 
+input DeleteImageInput {
+  uuid: ID!
+}
+
 input DeleteUserInput {
   uuid: ID!
 }
 
+type Image {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """File"""
+  file: S3File!
+
+  """Last modification date"""
+  updatedAt: DateTime!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Mutation {
+  createImage(createImageInput: CreateImageInput!): Image!
   createUser(createUserInput: CreateUserInput!): User!
-  deletePrivateFile(deleteFileInput: DeleteFileInput!): User!
-  deletePublicFile(deleteFileInput: DeleteFileInput!): User!
+  deleteImage(deleteImageInput: DeleteImageInput!): Image!
+  deletePrivateFile(deleteFileInput: DeleteFileInput!): PrivateFile!
+  deletePublicFile(deleteFileInput: DeleteFileInput!): PublicFile!
   deleteUser(deleteUserInput: DeleteUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
@@ -99,9 +126,45 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
+  image(
+    """URL expiration duration (in seconds)"""
+    expires: [Float!]
+    uuid: ID!
+  ): Image!
+  imageForFile(
+    """URL expiration duration (in seconds)"""
+    expires: [Float!]
+    file: ID!
+  ): Image!
   myUser: User!
   user(cognitoUuid: ID, uuid: ID): User!
   users(uuids: [ID!]): [User!]!
+}
+
+type S3File {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Name of File"""
+  filename: String
+
+  """S3 File Key"""
+  key: String!
+
+  """Files mime type"""
+  mimetype: String!
+
+  """Filesize in bytes"""
+  size: Float!
+
+  """Last modification date"""
+  updatedAt: DateTime!
+
+  """UUID"""
+  uuid: ID!
 }
 
 input UpdateUserInput {

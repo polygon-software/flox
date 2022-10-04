@@ -3,6 +3,7 @@ import { RolesGuard } from './modules/roles/roles.guard';
 import { JwtStrategy } from './modules/auth/jwt.strategy';
 import { JwtAuthGuard } from './modules/auth/auth.guard';
 import { FileModule } from './modules/file/file.module';
+import { ImageModule } from './modules/image/image.module';
 import { UserModule } from './modules/auth/user.module';
 import { MODULES } from './MODULES';
 import { EmailModule } from './modules/email/email.module';
@@ -22,6 +23,9 @@ export function floxModules() {
     switch (moduleName) {
       case MODULES.FILE:
         modules.push(FileModule);
+        break;
+      case MODULES.IMAGE:
+        modules.push(ImageModule);
         break;
       case MODULES.AUTH:
         modules.push(UserModule);

@@ -15,6 +15,7 @@ import { GetPublicFileArgs } from './dto/args/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { DeleteFileInput } from './dto/input/delete-file.input';
+import { GetAllFilesArgs } from './dto/args/get-all-files.args';
 
 @Injectable()
 export class FileService {
@@ -116,6 +117,29 @@ export class FileService {
     });
   }
 
+  async getAllPublicFiles(
+    getAllFilesArgs: GetAllFilesArgs,
+  ): Promise<Array<PublicFile>> {
+    return this.publicFilesRepository.find({
+      take: getAllFilesArgs.limit,
+      skip: getAllFilesArgs.skip,
+    });
+  }
+
+  async getAllMyFiles(
+    getAllFilesArgs: GetAllFilesArgs,
+    userUuid: string,
+  ): Promise<Array<PrivateFile>> {
+    const usersFileUUIDs = await this.privateFilesRepository.find({
+      where: {
+        owner: userUuid,
+      },
+    });
+    return Promise.all(
+      usersFileUUIDs.map((file) => this.getPrivateFile({ uuid: file.uuid })),
+    );
+  }
+
   /**
    * Gets a private file
    * @param {GetPrivateFileArgs} getPrivateFileArgs - contains UUID and optionally, expiration time
@@ -157,20 +181,6 @@ export class FileService {
 
     // File not found: throw error
     throw new NotFoundException();
-  }
-
-  async fileExists(fileUuid: string): Promise<boolean> {
-    const privateFile = await this.privateFilesRepository.findOne({
-      where: {
-        uuid: fileUuid,
-      },
-    });
-    const publicFile = await this.publicFilesRepository.findOne({
-      where: {
-        uuid: fileUuid,
-      },
-    });
-    return !!privateFile || !!publicFile;
   }
 
   /**
