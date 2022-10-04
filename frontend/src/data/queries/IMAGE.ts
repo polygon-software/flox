@@ -11,8 +11,8 @@ export const GET_IMAGE = {
       }
     }
   `,
-  tables: ['dealership'],
-  cacheLocation: 'dealership',
+  tables: ['image'],
+  cacheLocation: 'image',
 };
 
 export const GET_IMAGE_FOR_FILE = {
@@ -24,8 +24,8 @@ export const GET_IMAGE_FOR_FILE = {
       }
     }
   `,
-  tables: ['dealership'],
-  cacheLocation: 'dealership',
+  tables: ['image'],
+  cacheLocation: 'image',
 };
 
 
