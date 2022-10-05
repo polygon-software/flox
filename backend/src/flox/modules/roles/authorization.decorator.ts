@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { getRequest } from '../../core/flox-helpers';
 import { DEFAULT_ROLES } from './config';
+import { User } from '../auth/entities/user.entity';
 
 /**
  * Defines authorization-specific (roles) decorators
@@ -26,6 +27,6 @@ export const AdminOnly = (): CustomDecorator =>
 export const CurrentUser = createParamDecorator(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
   (data, req: ExecutionContext) => {
-    return getRequest(req).user;
+    return getRequest(req).principal as User;
   },
 );

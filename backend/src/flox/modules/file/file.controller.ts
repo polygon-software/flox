@@ -10,8 +10,10 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
-import { Response, Request } from 'express';
+import { Request, Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CurrentUser } from '../roles/authorization.decorator';
+import { User } from '../auth/entities/user.entity';
 
 @Controller()
 export class FileController {
@@ -44,10 +46,11 @@ export class FileController {
     @Req() req: Request,
     @Res() res: Response,
     @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: User,
   ): Promise<void> {
     // Verify that request contains file
     if (!file) {
-      res.send(new BadRequestException('S3File expected on this endpoint'));
+      res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
 
@@ -57,8 +60,7 @@ export class FileController {
     }
 
     // Get user, as determined by JWT Strategy
-    const owner = req['user']?.userId;
-    const newFile = await this.fileService.uploadPrivateFile(file, owner);
+    const newFile = await this.fileService.uploadPrivateFile(file, user);
     res.send(newFile);
   }
 }

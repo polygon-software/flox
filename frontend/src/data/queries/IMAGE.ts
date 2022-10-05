@@ -7,6 +7,9 @@ export const GET_IMAGE = {
     query image($uuid: ID!) {
       image(uuid: $uuid) {
         uuid
+        file {
+          url
+        }
         __typename
       }
     }
@@ -20,12 +23,15 @@ export const GET_IMAGE_FOR_FILE = {
     query image($file: ID!) {
       imageForFile(file: $file) {
         uuid
+        file {
+          url
+        }
         __typename
       }
     }
   `,
   tables: ['image'],
-  cacheLocation: 'image',
+  cacheLocation: 'imageForFile',
 };
 
 

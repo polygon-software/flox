@@ -4,7 +4,7 @@ import {S3File} from 'src/data/types/S3File';
 /**
  * Class representing an image data object
  */
-export class Image extends BaseEntity {
+export class ImageFile extends BaseEntity {
   // eslint-disable-next-line require-jsdoc
   constructor(
     uuid: string,

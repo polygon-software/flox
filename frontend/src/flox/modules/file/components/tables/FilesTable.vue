@@ -1,11 +1,22 @@
 <template>
   <div class="q-pa-md">
     <q-table
+      v-model:selected="selected"
       title="Files"
       :rows="files"
       :columns="columns"
       row-key="uuid"
+      selection="single"
     >
+      <template #top>
+        <q-btn
+          v-if="selected.length > 0"
+          color="red"
+          icon="delete"
+          label="Delete"
+          @click="deleteSelected"
+        />
+      </template>
       <template #body-cell-url="slotProps">
         <q-td :props="slotProps">
           <q-img
@@ -25,10 +36,11 @@
 import {defineProps, ref, watchEffect} from 'vue';
 import {S3File} from 'src/data/types/S3File';
 import {Ref} from '@vue/reactivity';
-import {ALL_MY_FILES, ALL_PUBLIC_FILES} from 'src/data/queries/FILES';
-import {executeQuery} from 'src/helpers/data/data-helpers';
-import {date} from 'quasar';
+import {date, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
+import {fetchMyFiles, fetchPublicFiles} from 'src/helpers/data/fetch-helpers';
+import {deletePrivateFile, deletePublicFile} from 'src/helpers/data/mutation-helpers';
+import {showNotification} from 'src/helpers/tools/notification-helpers';
 
 const props = defineProps({
   private: {
@@ -37,6 +49,8 @@ const props = defineProps({
     default: false,
   },
 })
+
+const $q = useQuasar()
 
 const columns = [
   { name: 'url', label: 'Image', field: 'url' },
@@ -48,15 +62,13 @@ const columns = [
 
 /**
  * Fetches all files for displaying in table
- * @returns {S3File[]} List of Files
+ * @returns {Promise<S3File[]>} List of Files
  */
-async function fetchAllFiles(): Promise<Array<S3File>> {
-  const queryObject = props.private ? ALL_MY_FILES : ALL_PUBLIC_FILES;
-  const queryResult = await executeQuery(queryObject);
-  const files = (
-    queryResult.data ? queryResult.data[queryObject.cacheLocation] : null
-  ) as S3File[] | null;
-  return files ?? [];
+function fetchAllFiles(): Promise<Array<S3File>> {
+  if (props.private) {
+    return fetchMyFiles();
+  }
+  return fetchPublicFiles();
 }
 
 const files: Ref<S3File[]> = ref([]);
@@ -66,6 +78,24 @@ watchEffect(async () => {
   files.value = await fetchAllFiles();
 })
 
+const selected: Ref<S3File[]> = ref([]);
+
+/**
+ * Deletes the selected file
+ * @returns {void}
+ */
+async function deleteSelected() {
+  const selectedFile = selected.value[0]
+  if (props.private) {
+    await deletePrivateFile(selectedFile.uuid);
+
+  } else {
+    await deletePublicFile(selectedFile.uuid);
+  }
+  files.value = files.value.filter((f) => f !== selectedFile);
+  selected.value = [];
+  showNotification($q, 'Deletion successful', 'top-right', 'green')
+}
 </script>
 
 <style scoped>

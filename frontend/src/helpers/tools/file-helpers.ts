@@ -1,6 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
-import { useApolloClient } from '@vue/apollo-composable';
-import { getBearerToken } from 'src/helpers/tools/auth-helpers';
+import axios, {AxiosResponse} from 'axios';
+import {useApolloClient} from '@vue/apollo-composable';
+import {getBearerToken} from 'src/helpers/tools/auth-helpers';
+import {S3File} from 'src/data/types/S3File';
 
 /**
  * Uploads a single file to a given endpoint
@@ -32,9 +33,10 @@ export async function uploadFile(
   }).catch((e: Error) => {
     throw new Error(`File upload error: ${e.message}`);
   });
+  const imageDetails = uploadResult.data as S3File;
 
   if (file.type.split('/')[0] === 'image') {
-    // TODO Wrap file as image
+    const uuid = imageDetails.uuid;
   }
 
   if (queryName) {

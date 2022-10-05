@@ -8,6 +8,10 @@ import { CreateImageInput } from './dto/input/create-image.input';
 import { FileService } from '../file/file.service';
 import { DeleteImageInput } from './dto/input/delete-image.input';
 import { GetPrivateFileArgs } from '../file/dto/args/get-private-file.args';
+import { GetAllImagesArgs } from './dto/args/get-all-images.args';
+import { User } from '../auth/entities/user.entity';
+import { DEFAULT_ROLES } from '../roles/config';
+import { ForbiddenError } from 'apollo-server-express';
 
 @Injectable()
 export class ImageService {
@@ -17,6 +21,13 @@ export class ImageService {
 
     private readonly fileService: FileService,
   ) {}
+
+  async getAllImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
+    return this.imageRepository.find({
+      take: getAllImagesArgs.limit,
+      skip: getAllImagesArgs.skip,
+    });
+  }
 
   async getImage(getImageArgs: GetImageArgs): Promise<Image> {
     return this.imageRepository.findOne({
@@ -28,20 +39,33 @@ export class ImageService {
 
   async getImageForFile(
     getImageForFileARgs: GetImageForFileArgs,
+    user: User,
   ): Promise<Image> {
-    return this.imageRepository.findOne({
+    const image = await this.imageRepository.findOne({
       where: {
         file: {
           uuid: getImageForFileARgs.file,
         },
       },
     });
+    if (user.role !== DEFAULT_ROLES.ADMIN && image.file.owner !== user.uuid) {
+      throw new ForbiddenError('File does not belong to logged in user');
+    }
+    return image;
   }
 
-  async createImage(createImageInput: CreateImageInput): Promise<Image> {
+  async createImage(
+    createImageInput: CreateImageInput,
+    user: User,
+  ): Promise<Image> {
     const file = await this.fileService.getPrivateFile({
       uuid: createImageInput.file,
     } as GetPrivateFileArgs);
+    if (file.owner !== user.uuid) {
+      throw new ForbiddenError(
+        'Cannot create image for file that belongs to someone else.',
+      );
+    }
     return this.imageRepository.create({
       file,
     });
@@ -53,6 +77,7 @@ export class ImageService {
         uuid: deleteImageInput.uuid,
       },
     });
+    // TODO delete linked file as well?
     return this.imageRepository.remove(image);
   }
 }

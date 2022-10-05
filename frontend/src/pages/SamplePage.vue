@@ -18,5 +18,5 @@
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import SampleForm from 'components/sample/SampleForm.vue';
 import FileUpload from 'src/flox/modules/file/components/forms/fields/FileUpload.vue';
-import FilesTable from "src/flox/modules/file/components/tables/FilesTable.vue";
+import FilesTable from 'src/flox/modules/file/components/tables/FilesTable.vue';
 </script>

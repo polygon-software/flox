@@ -38,7 +38,7 @@ type Image {
   deletedAt: DateTime
 
   """File"""
-  file: S3File!
+  file: PrivateFile!
 
   """Last modification date"""
   updatedAt: DateTime!
@@ -120,17 +120,17 @@ type PublicFile {
 
 type Query {
   allMyFiles(
-    """Number of images to load"""
+    """Number of files to load"""
     limit: Int = 500
 
-    """How many images to skip"""
+    """How many files to skip"""
     skip: Int = 0
   ): [PrivateFile!]!
   allPublicFiles(
-    """Number of images to load"""
+    """Number of files to load"""
     limit: Int = 500
 
-    """How many images to skip"""
+    """How many files to skip"""
     skip: Int = 0
   ): [PublicFile!]!
   allUsers: [User!]!
@@ -153,32 +153,6 @@ type Query {
   publicFile(uuid: ID!): PublicFile!
   user(cognitoUuid: ID, uuid: ID): User!
   users(uuids: [ID!]): [User!]!
-}
-
-type S3File {
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
-
-  """Name of S3File"""
-  filename: String
-
-  """S3 S3File Key"""
-  key: String!
-
-  """Files mime type"""
-  mimetype: String!
-
-  """Filesize in bytes"""
-  size: Float!
-
-  """Last modification date"""
-  updatedAt: DateTime!
-
-  """UUID"""
-  uuid: ID!
 }
 
 input UpdateUserInput {
