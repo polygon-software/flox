@@ -38,12 +38,9 @@ export class ImageResolver {
     @Args() getImageForFileArgs: GetImageForFileArgs,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    const image = await this.imageService.getImageForFile(
-      getImageForFileArgs,
-      user,
-    );
+    const image = await this.imageService.getImageForFile(getImageForFileArgs);
     if (user.role !== DEFAULT_ROLES.ADMIN && image.file.owner !== user.uuid) {
-      throw new ForbiddenError('Image does not belong to logged in user');
+      throw new ForbiddenError('File does not belong to logged in user');
     }
     return image;
   }
@@ -58,7 +55,9 @@ export class ImageResolver {
       uuid: createImageInput.file,
     });
     if (user.role !== DEFAULT_ROLES.ADMIN && file.owner !== user.uuid) {
-      throw new ForbiddenError('Image does not belong to logged in user');
+      throw new ForbiddenError(
+        'User cannot create image for file that does not belong to him',
+      );
     }
     return this.imageService.createImage(createImageInput, user);
   }

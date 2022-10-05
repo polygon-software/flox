@@ -58,7 +58,7 @@ export async function deletePrivateFile(uuid: string): Promise<PrivateFile|null>
 /**
  * Creates an image from a file
  * @param {string} file - uuid of public/private file
- * @returns {Promise<ImageFile|null>}
+ * @returns {Promise<ImageFile|null>} Created image
  */
 export async function createImage(file: string): Promise<ImageFile|null> {
   const mutationResult = await executeMutation(CREATE_IMAGE, { file });
@@ -68,7 +68,7 @@ export async function createImage(file: string): Promise<ImageFile|null> {
 /**
  * Deletes an image including its file
  * @param {string} uuid - uuid of image
- * @returns {Promise<ImageFile|null>}
+ * @returns {Promise<ImageFile|null>} Deleted Image
  */
 export async function deleteImage(uuid: string): Promise<ImageFile|null> {
   const mutationResult = await executeMutation(DELETE_IMAGE, { uuid });

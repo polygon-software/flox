@@ -16,6 +16,13 @@
           label="Delete"
           @click="deleteSelected"
         />
+        <q-btn
+          v-if="selected.length > 0"
+          color="green"
+          icon="arrow-up"
+          label="Open as image"
+          @click="openSelectedAsImage"
+        />
       </template>
       <template #body-cell-url="slotProps">
         <q-td :props="slotProps">
@@ -38,7 +45,7 @@ import {S3File} from 'src/data/types/S3File';
 import {Ref} from '@vue/reactivity';
 import {date, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
-import {fetchMyFiles, fetchPublicFiles} from 'src/helpers/data/fetch-helpers';
+import {fetchMyFiles, fetchPublicFiles, getImageForFile} from 'src/helpers/data/fetch-helpers';
 import {deletePrivateFile, deletePublicFile} from 'src/helpers/data/mutation-helpers';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
 
@@ -88,13 +95,22 @@ async function deleteSelected() {
   const selectedFile = selected.value[0]
   if (props.private) {
     await deletePrivateFile(selectedFile.uuid);
-
   } else {
     await deletePublicFile(selectedFile.uuid);
   }
   files.value = files.value.filter((f) => f !== selectedFile);
   selected.value = [];
   showNotification($q, 'Deletion successful', 'top-right', 'green')
+}
+
+/**
+ * Loads an image for a given file
+ * @returns {void}
+ */
+async function openSelectedAsImage() {
+  const selectedFile = selected.value[0];
+  const image = await getImageForFile(selectedFile.uuid);
+  console.log(image);
 }
 </script>
 

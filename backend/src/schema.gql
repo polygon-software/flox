@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 input CreateImageInput {
-  file: String!
+  file: ID!
 }
 
 input CreateUserInput {

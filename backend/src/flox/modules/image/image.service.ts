@@ -10,8 +10,8 @@ import { DeleteImageInput } from './dto/input/delete-image.input';
 import { GetPrivateFileArgs } from '../file/dto/args/get-private-file.args';
 import { GetAllImagesArgs } from './dto/args/get-all-images.args';
 import { User } from '../auth/entities/user.entity';
-import { DEFAULT_ROLES } from '../roles/config';
 import { ForbiddenError } from 'apollo-server-express';
+import { DeleteFileInput } from '../file/dto/input/delete-file.input';
 
 @Injectable()
 export class ImageService {
@@ -30,16 +30,25 @@ export class ImageService {
   }
 
   async getImage(getImageArgs: GetImageArgs): Promise<Image> {
-    return this.imageRepository.findOne({
+    const image = await this.imageRepository.findOne({
       where: {
         uuid: getImageArgs.uuid,
       },
+      relations: {
+        file: true,
+      },
     });
+    const file = await this.fileService.getPrivateFile({
+      uuid: image.file.uuid,
+    } as GetPrivateFileArgs);
+    return {
+      ...image,
+      file,
+    };
   }
 
   async getImageForFile(
     getImageForFileARgs: GetImageForFileArgs,
-    user: User,
   ): Promise<Image> {
     const image = await this.imageRepository.findOne({
       where: {
@@ -48,10 +57,7 @@ export class ImageService {
         },
       },
     });
-    if (user.role !== DEFAULT_ROLES.ADMIN && image.file.owner !== user.uuid) {
-      throw new ForbiddenError('File does not belong to logged in user');
-    }
-    return image;
+    return this.getImage({ uuid: image.uuid } as GetImageArgs);
   }
 
   async createImage(
@@ -66,9 +72,12 @@ export class ImageService {
         'Cannot create image for file that belongs to someone else.',
       );
     }
-    return this.imageRepository.create({
+    const newImage = this.imageRepository.create({
       file,
     });
+    console.log(newImage);
+    await this.imageRepository.save(newImage);
+    return this.getImage({ uuid: newImage.uuid } as GetImageArgs);
   }
 
   async deleteImage(deleteImageInput: DeleteImageInput): Promise<Image> {
@@ -76,8 +85,15 @@ export class ImageService {
       where: {
         uuid: deleteImageInput.uuid,
       },
+      relations: {
+        file: true,
+      },
     });
-    // TODO delete linked file as well?
-    return this.imageRepository.remove(image);
+    const removedImage = await this.imageRepository.remove(image);
+    await this.fileService.deleteFile(
+      { uuid: image.file.uuid } as DeleteFileInput,
+      true,
+    );
+    return removedImage;
   }
 }

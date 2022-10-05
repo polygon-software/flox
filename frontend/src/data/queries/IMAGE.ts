@@ -20,7 +20,7 @@ export const GET_IMAGE = {
 
 export const GET_IMAGE_FOR_FILE = {
   query: gql`
-    query image($file: ID!) {
+    query imageForFile($file: ID!) {
       imageForFile(file: $file) {
         uuid
         file {

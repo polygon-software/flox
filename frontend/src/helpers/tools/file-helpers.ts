@@ -2,6 +2,7 @@ import axios, {AxiosResponse} from 'axios';
 import {useApolloClient} from '@vue/apollo-composable';
 import {getBearerToken} from 'src/helpers/tools/auth-helpers';
 import {S3File} from 'src/data/types/S3File';
+import {createImage} from 'src/helpers/data/mutation-helpers';
 
 /**
  * Uploads a single file to a given endpoint
@@ -36,7 +37,7 @@ export async function uploadFile(
   const imageDetails = uploadResult.data as S3File;
 
   if (file.type.split('/')[0] === 'image') {
-    const uuid = imageDetails.uuid;
+    await createImage(imageDetails.uuid);
   }
 
   if (queryName) {
