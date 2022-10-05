@@ -1,14 +1,14 @@
-import { ArgsType, Field } from '@nestjs/graphql';
+import { ArgsType, Field, Int } from '@nestjs/graphql';
 
 @ArgsType()
 export class GetAllFilesArgs {
-  @Field(() => Number, {
+  @Field(() => Int, {
     defaultValue: 500,
     description: 'Number of images to load',
   })
   limit = 500;
 
-  @Field(() => Number, {
+  @Field(() => Int, {
     defaultValue: 0,
     description: 'How many images to skip',
   })

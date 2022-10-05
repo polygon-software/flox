@@ -1,5 +1,5 @@
 import {BaseEntity} from 'src/data/types/BaseEntity';
-import {File} from 'src/data/types/File';
+import {S3File} from 'src/data/types/S3File';
 
 /**
  * Class representing an image data object
@@ -11,7 +11,7 @@ export class Image extends BaseEntity {
     createdAt: Date,
     updatedAt: Date,
     deletedAt: Date | null,
-    public file: File,
+    public file: S3File,
   ) {
     super(uuid, createdAt, updatedAt, deletedAt);
   }

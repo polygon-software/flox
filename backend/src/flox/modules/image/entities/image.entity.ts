@@ -4,7 +4,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import S3File from '../../file/entities/file.entity';
 
 /**
- * Defines an image that wraps an S3 File
+ * Defines an image that wraps an S3 S3File
  */
 
 @Entity()

@@ -54,7 +54,7 @@ export default {
   files: {
     add: 'Add',
     failed_upload: '{value} file(s) could not be uploaded',
-    file_upload: 'File Upload',
+    file_upload: 'S3File Upload',
     no_preview: 'No preview available',
     remove: 'Remove',
     remove_all: 'Remove all files',
@@ -86,4 +86,7 @@ export default {
       'Successfully changed password. Please log in using the new password.',
     account_created: 'Successfully created account',
   },
+  date: {
+    date_format: 'MM.DD.YYYY'
+  }
 };

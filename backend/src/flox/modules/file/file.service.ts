@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import PublicFile from './entities/public_file.entity';
-import PrivateFile from './entities/private_file.entity';
+import PublicFile from './entities/publicFile.entity';
+import PrivateFile from './entities/privateFile.entity';
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -47,7 +47,7 @@ export class FileService {
    * @returns {Promise<PublicFile>} - the newly uploaded file
    */
   async uploadPublicFile(file: Express.Multer.File): Promise<PublicFile> {
-    // File upload
+    // S3File upload
     const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
       Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
@@ -83,7 +83,7 @@ export class FileService {
     file: Express.Multer.File,
     owner: string,
   ): Promise<PrivateFile> {
-    //File upload
+    //S3File upload
     const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
       Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
@@ -179,7 +179,7 @@ export class FileService {
       return { ...result, url };
     }
 
-    // File not found: throw error
+    // S3File not found: throw error
     throw new NotFoundException();
   }
 
@@ -222,7 +222,7 @@ export class FileService {
       return deletedFile;
     }
 
-    // File not found: throw error
+    // S3File not found: throw error
     throw new NotFoundException();
   }
 }

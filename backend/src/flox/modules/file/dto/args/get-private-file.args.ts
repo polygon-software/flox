@@ -1,4 +1,4 @@
-import { ArgsType, Field, ID } from '@nestjs/graphql';
+import { ArgsType, Field, ID, Int } from '@nestjs/graphql';
 import { IsNumber, IsOptional, IsUUID } from 'class-validator';
 
 @ArgsType()
@@ -7,7 +7,7 @@ export class GetPrivateFileArgs {
   @IsUUID()
   uuid: string;
 
-  @Field(() => [Number], {
+  @Field(() => Int, {
     nullable: true,
     description: 'URL expiration duration (in seconds)',
   })

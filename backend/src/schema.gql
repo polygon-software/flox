@@ -64,16 +64,16 @@ type PrivateFile {
   """Date of deletion"""
   deletedAt: DateTime
 
-  """Name of File"""
+  """Name of S3File"""
   filename: String
 
-  """S3 File Key"""
+  """S3 S3File Key"""
   key: String!
 
   """Files mime type"""
   mimetype: String!
 
-  """File owner"""
+  """S3File owner"""
   owner: String!
 
   """Filesize in bytes"""
@@ -96,10 +96,10 @@ type PublicFile {
   """Date of deletion"""
   deletedAt: DateTime
 
-  """Name of File"""
+  """Name of S3File"""
   filename: String
 
-  """S3 File Key"""
+  """S3 S3File Key"""
   key: String!
 
   """Files mime type"""
@@ -119,27 +119,21 @@ type PublicFile {
 }
 
 type Query {
-  allUsers: [User!]!
-  getAllMyFiles(
+  allMyFiles(
     """Number of images to load"""
-    limit: Float = 500
+    limit: Int = 500
 
     """How many images to skip"""
-    skip: Float = 0
+    skip: Int = 0
   ): [PrivateFile!]!
-  getAllPublicFiles(
+  allPublicFiles(
     """Number of images to load"""
-    limit: Float = 500
+    limit: Int = 500
 
     """How many images to skip"""
-    skip: Float = 0
+    skip: Int = 0
   ): [PublicFile!]!
-  getPrivateFile(
-    """URL expiration duration (in seconds)"""
-    expires: [Float!]
-    uuid: ID!
-  ): PrivateFile!
-  getPublicFile(uuid: ID!): PublicFile!
+  allUsers: [User!]!
   image(
     """URL expiration duration (in seconds)"""
     expires: [Float!]
@@ -151,6 +145,12 @@ type Query {
     file: ID!
   ): Image!
   myUser: User!
+  privateFile(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuid: ID!
+  ): PrivateFile!
+  publicFile(uuid: ID!): PublicFile!
   user(cognitoUuid: ID, uuid: ID): User!
   users(uuids: [ID!]): [User!]!
 }
@@ -162,10 +162,10 @@ type S3File {
   """Date of deletion"""
   deletedAt: DateTime
 
-  """Name of File"""
+  """Name of S3File"""
   filename: String
 
-  """S3 File Key"""
+  """S3 S3File Key"""
   key: String!
 
   """Files mime type"""

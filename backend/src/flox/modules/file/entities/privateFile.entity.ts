@@ -11,7 +11,7 @@ import S3File from './file.entity';
 @Entity()
 @ObjectType()
 export class PrivateFile extends S3File {
-  @Field(() => String, { description: 'File owner' })
+  @Field(() => String, { description: 'S3File owner' })
   @Column()
   @IsUUID()
   public owner: string;

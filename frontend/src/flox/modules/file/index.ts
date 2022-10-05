@@ -6,12 +6,12 @@ import { MODULES } from '../../MODULES';
  */
 
 type FileModuleConfig = {
-  // File module has no options
+  // S3File module has no options
 };
 
 // Default configuration set; will get merged with custom config from flox.config.json
 const defaultConfig: FileModuleConfig = {
-  // File module has no options
+  // S3File module has no options
 };
 
 /**

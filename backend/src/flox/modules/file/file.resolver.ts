@@ -1,9 +1,9 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
-import PublicFile from './entities/public_file.entity';
+import PublicFile from './entities/publicFile.entity';
 import { FileService } from './file.service';
 import { GetPublicFileArgs } from './dto/args/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
-import PrivateFile from './entities/private_file.entity';
+import PrivateFile from './entities/privateFile.entity';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
 import { DeleteFileInput } from './dto/input/delete-file.input';
 import { GetAllFilesArgs } from './dto/args/get-all-files.args';
@@ -14,8 +14,8 @@ import { User } from '../auth/entities/user.entity';
 export class FileResolver {
   constructor(private readonly fileService: FileService) {}
 
-  @AdminOnly()
-  @Query(() => [PublicFile], { name: 'getAllPublicFiles' })
+  @Public() // TODO Change to Public
+  @Query(() => [PublicFile], { name: 'allPublicFiles' })
   async getAllPublicFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
   ): Promise<Array<PublicFile>> {
@@ -23,7 +23,7 @@ export class FileResolver {
   }
 
   @LoggedIn() // TODO application specific: set appropriate guards here
-  @Query(() => [PrivateFile], { name: 'getAllMyFiles' })
+  @Query(() => [PrivateFile], { name: 'allMyFiles' })
   async getAllMyFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @CurrentUser() user: User,
@@ -37,7 +37,7 @@ export class FileResolver {
    * @returns {Promise<PublicFile>} - the file
    */
   @Public()
-  @Query(() => PublicFile, { name: 'getPublicFile' })
+  @Query(() => PublicFile, { name: 'publicFile' })
   async getPublicFile(
     @Args() getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
@@ -50,7 +50,7 @@ export class FileResolver {
    * @returns {Promise<PrivateFile>} - the file, if the user is allowed to access it
    */
   @LoggedIn() // TODO application specific: set appropriate guards here
-  @Query(() => PrivateFile, { name: 'getPrivateFile' })
+  @Query(() => PrivateFile, { name: 'privateFile' })
   async getPrivateFile(
     @Args() getPrivateFileArgs: GetPrivateFileArgs,
   ): Promise<PrivateFile> {

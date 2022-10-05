@@ -4,7 +4,7 @@ import { getBearerToken } from 'src/helpers/tools/auth-helpers';
 
 /**
  * Uploads a single file to a given endpoint
- * @param {File} file - File that should be uploaded
+ * @param {File} file - S3File that should be uploaded
  * @param {string} url - The url to upload to
  * @param {string} [queryName] - Name of the query that got invalidated by request
  * @return {Promise<AxiosResponse>} - Whether the upload was successful or not

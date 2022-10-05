@@ -9,7 +9,7 @@ export const DELETE_PUBLIC_FILE = {
       }
     }
   `,
-  tables: ['public_files'],
+  tables: ['publicFiles'],
   type: MutationTypes.DELETE,
   cacheLocation: 'deletePublicFile'
 }

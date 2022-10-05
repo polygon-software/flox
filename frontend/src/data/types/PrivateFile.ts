@@ -1,9 +1,9 @@
-import {File} from 'src/data/types/File';
+import {S3File} from 'src/data/types/S3File';
 
 /**
  * A class representing a file
  */
-export class PrivateFile extends File {
+export class PrivateFile extends S3File {
 
   // eslint-disable-next-line require-jsdoc
   constructor(

@@ -3,7 +3,7 @@ import { BaseEntity } from 'src/data/types/BaseEntity';
 /**
  * A class representing a user data object
  */
-export class File extends BaseEntity {
+export class S3File extends BaseEntity {
 
   // eslint-disable-next-line require-jsdoc
   constructor(

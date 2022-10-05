@@ -1,7 +1,7 @@
 import {formatDate} from 'src/helpers/format/format-helpers';
 
 /**
- * Search Filter for Quasar <q-table>s
+ * Search Filter for Quasar <q-tables>s
  * @param {Record<string, unknown>[]} rows - rows
  * @param {string} terms - search key
  * @returns {Record<string, unknown>[]} - filtered rows
