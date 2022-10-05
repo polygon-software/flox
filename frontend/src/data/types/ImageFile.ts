@@ -12,6 +12,11 @@ export class ImageFile extends BaseEntity {
     updatedAt: Date,
     deletedAt: Date | null,
     public file: S3File,
+    public width?: number,
+    public height?: number,
+    public latitude?: number,
+    public longitude?: number,
+    public capturedAt?: Date,
   ) {
     super(uuid, createdAt, updatedAt, deletedAt);
   }

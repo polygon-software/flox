@@ -7,6 +7,11 @@ export const GET_IMAGE = {
     query image($uuid: ID!) {
       image(uuid: $uuid) {
         uuid
+        height
+        width
+        latitude
+        longitude
+        capturedAt
         file {
           url
         }
@@ -23,6 +28,11 @@ export const GET_IMAGE_FOR_FILE = {
     query imageForFile($file: ID!) {
       imageForFile(file: $file) {
         uuid
+        height
+        width
+        latitude
+        longitude
+        capturedAt
         file {
           url
         }

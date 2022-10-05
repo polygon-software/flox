@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import exifr from 'exifr';
 import Image from './entities/image.entity';
 import { Repository } from 'typeorm';
 import { GetImageArgs } from './dto/args/get-image.args';
@@ -72,8 +73,15 @@ export class ImageService {
         'Cannot create image for file that belongs to someone else.',
       );
     }
+    const imageMetaData = await exifr.parse(file.url);
+    console.log(imageMetaData);
     const newImage = this.imageRepository.create({
       file,
+      width: imageMetaData.ExifImageWidth,
+      height: imageMetaData.ExifImageHeight,
+      latitude: imageMetaData.latitude,
+      longitude: imageMetaData.longitude,
+      capturedAt: imageMetaData.DateTimeOriginal,
     });
     console.log(newImage);
     await this.imageRepository.save(newImage);

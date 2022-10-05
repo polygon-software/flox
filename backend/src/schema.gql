@@ -31,6 +31,9 @@ input DeleteUserInput {
 }
 
 type Image {
+  """Capture Date"""
+  capturedAt: DateTime
+
   """Creation date"""
   createdAt: DateTime!
 
@@ -40,11 +43,23 @@ type Image {
   """File"""
   file: PrivateFile!
 
+  """Image Height in Pixels"""
+  height: Float
+
+  """GPS Latitude"""
+  latitude: Float
+
+  """GPS Longitude"""
+  longitude: Float
+
   """Last modification date"""
   updatedAt: DateTime!
 
   """UUID"""
   uuid: ID!
+
+  """Image Width in Pixels"""
+  width: Float
 }
 
 type Mutation {
