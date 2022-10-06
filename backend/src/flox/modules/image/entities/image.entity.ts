@@ -18,50 +18,55 @@ export abstract class Image extends BaseEntity {
 
   @Field(() => Number, {
     nullable: true,
-    defaultValue: null,
     description: 'Image Width in Pixels',
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsOptional()
   @IsNumber()
   public width?: number;
 
   @Field(() => Number, {
     nullable: true,
-    defaultValue: null,
     description: 'Image Height in Pixels',
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsOptional()
   @IsNumber()
   public height?: number;
 
   @Field(() => Number, {
     nullable: true,
-    defaultValue: null,
     description: 'GPS Latitude',
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsOptional()
   @IsNumber()
   public latitude?: string;
 
   @Field(() => Number, {
     nullable: true,
-    defaultValue: null,
     description: 'GPS Longitude',
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsOptional()
   @IsNumber()
   public longitude?: string;
 
   @Field(() => Date, {
     nullable: true,
-    defaultValue: null,
     description: 'Capture Date',
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsOptional()
   @IsDate()
   public capturedAt?: Date;

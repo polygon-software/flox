@@ -73,15 +73,15 @@ export class ImageService {
         'Cannot create image for file that belongs to someone else.',
       );
     }
-    const imageMetaData = await exifr.parse(file.url);
+    const imageMetaData = (await exifr.parse(file.url)) || {};
     console.log(imageMetaData);
     const newImage = this.imageRepository.create({
       file,
-      width: imageMetaData.ExifImageWidth,
-      height: imageMetaData.ExifImageHeight,
-      latitude: imageMetaData.latitude,
-      longitude: imageMetaData.longitude,
-      capturedAt: imageMetaData.DateTimeOriginal,
+      width: imageMetaData.ExifImageWidth ?? imageMetaData.ImageWidth,
+      height: imageMetaData.ExifImageHeight ?? imageMetaData.ImageHeight,
+      latitude: imageMetaData.latitude ?? null,
+      longitude: imageMetaData.longitude ?? null,
+      capturedAt: imageMetaData.DateTimeOriginal ?? null,
     });
     console.log(newImage);
     await this.imageRepository.save(newImage);
