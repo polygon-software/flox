@@ -3,10 +3,16 @@ import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
 
 export const CREATE_IMAGE = {
   mutation: gql`
-        mutation createImage($file: ID!){
-            createImage (createImageInput: {file: $file}) {
+        mutation createImage($file: ID!, $objectRecognition: Boolean){
+            createImage (createImageInput: {file: $file, objectRecognition: $objectRecognition}) {
               uuid
+              height
+              width
+              latitude
+              longitude
+              capturedAt
               file {
+                uuid
                 url
               }
               __typename

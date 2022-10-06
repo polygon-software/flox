@@ -37,7 +37,7 @@ export async function uploadFile(
   const imageDetails = uploadResult.data as S3File;
 
   if (file.type.split('/')[0] === 'image') {
-    await createImage(imageDetails.uuid);
+    await createImage(imageDetails.uuid, true);
   }
 
   if (queryName) {

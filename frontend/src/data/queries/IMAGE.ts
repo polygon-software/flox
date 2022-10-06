@@ -15,6 +15,16 @@ export const GET_IMAGE = {
         file {
           url
         }
+        labels {
+          name
+          confidence
+          boundingBox {
+            width
+            height
+            top
+            left
+          }
+        }
         __typename
       }
     }

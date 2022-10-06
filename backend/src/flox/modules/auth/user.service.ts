@@ -103,7 +103,7 @@ export class UserService {
    * @returns {Promise<User>} - user
    */
   async getMyUser(user: User): Promise<User> {
-    return this.userRepository.findOne({
+    return this.userRepository.findOneOrFail({
       where: {
         uuid: user.uuid,
       },

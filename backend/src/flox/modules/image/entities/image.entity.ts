@@ -1,8 +1,9 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
 import PrivateFile from '../../file/entities/privateFile.entity';
 import { IsDate, IsNumber, IsOptional } from 'class-validator';
+import { Label } from './label.entity';
 
 /**
  * Defines an image that wraps an S3 S3File
@@ -10,7 +11,7 @@ import { IsDate, IsNumber, IsOptional } from 'class-validator';
 
 @Entity()
 @ObjectType()
-export abstract class Image extends BaseEntity {
+export class Image extends BaseEntity {
   @Field(() => PrivateFile, { description: 'File' })
   @OneToOne(() => PrivateFile)
   @JoinColumn()
@@ -43,6 +44,7 @@ export abstract class Image extends BaseEntity {
     description: 'GPS Latitude',
   })
   @Column({
+    type: 'float8',
     nullable: true,
   })
   @IsOptional()
@@ -54,6 +56,7 @@ export abstract class Image extends BaseEntity {
     description: 'GPS Longitude',
   })
   @Column({
+    type: 'float8',
     nullable: true,
   })
   @IsOptional()
@@ -70,6 +73,12 @@ export abstract class Image extends BaseEntity {
   @IsOptional()
   @IsDate()
   public capturedAt?: Date;
+
+  @Field(() => [Label], {
+    description: 'Labels of detected objects on image',
+  })
+  @OneToMany(() => Label, (label) => label.image)
+  public labels: Label[];
 }
 
 export default Image;

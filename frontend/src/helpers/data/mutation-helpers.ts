@@ -58,10 +58,11 @@ export async function deletePrivateFile(uuid: string): Promise<PrivateFile|null>
 /**
  * Creates an image from a file
  * @param {string} file - uuid of public/private file
+ * @param {Boolean} objectRecognition - perform object recognition on image
  * @returns {Promise<ImageFile|null>} Created image
  */
-export async function createImage(file: string): Promise<ImageFile|null> {
-  const mutationResult = await executeMutation(CREATE_IMAGE, { file });
+export async function createImage(file: string, objectRecognition=false): Promise<ImageFile|null> {
+  const mutationResult = await executeMutation(CREATE_IMAGE, { file, objectRecognition });
   return (mutationResult?.data ? (mutationResult as Record<string, Record<string, unknown>>).data[CREATE_IMAGE.cacheLocation] : null) as ImageFile | null;
 }
 

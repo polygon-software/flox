@@ -2,8 +2,35 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type BoundingBox {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Bounding-Box height in percentage of image height"""
+  height: Float!
+
+  """Bounding-Box position from the left side of the image, in percentage"""
+  left: Float!
+
+  """Bounding-Box position from the top side of the image, in percentage"""
+  top: Float!
+
+  """Last modification date"""
+  updatedAt: DateTime!
+
+  """UUID"""
+  uuid: ID!
+
+  """Bounding-Box width in percentage of image width"""
+  width: Float!
+}
+
 input CreateImageInput {
   file: ID!
+  objectRecognition: Boolean = false
 }
 
 input CreateUserInput {
@@ -46,6 +73,9 @@ type Image {
   """Image Height in Pixels"""
   height: Float
 
+  """Labels of detected objects on image"""
+  labels: [Label!]!
+
   """GPS Latitude"""
   latitude: Float
 
@@ -60,6 +90,35 @@ type Image {
 
   """Image Width in Pixels"""
   width: Float
+}
+
+type Label {
+  """Bounding box for every instance of this label on image"""
+  boundingBox: BoundingBox!
+
+  """Confidence between 0 and 100"""
+  confidence: Float!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Image on which this label was detected"""
+  image: Image!
+
+  """Label Name"""
+  name: String!
+
+  """Parent labels"""
+  parents: [String!]!
+
+  """Last modification date"""
+  updatedAt: DateTime!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type Mutation {
