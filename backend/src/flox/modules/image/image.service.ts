@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DetectLabelsCommand } from '@aws-sdk/client-rekognition';
+import { RekognitionClient } from '@aws-sdk/client-rekognition';
 import exifr from 'exifr';
 import Image from './entities/image.entity';
 import { Repository } from 'typeorm';
@@ -13,14 +15,30 @@ import { GetAllImagesArgs } from './dto/args/get-all-images.args';
 import { User } from '../auth/entities/user.entity';
 import { ForbiddenError } from 'apollo-server-express';
 import { DeleteFileInput } from '../file/dto/input/delete-file.input';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ImageService {
+  // Rekognition credentials
+  private readonly credentials = {
+    region: this.configService.get('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+  };
+
+  // Rekognition instance
+  private rekognition: RekognitionClient = new RekognitionClient({
+    credentials: this.credentials,
+    region: this.credentials.region,
+  });
+
   constructor(
     @InjectRepository(Image)
     private imageRepository: Repository<Image>,
 
     private readonly fileService: FileService,
+
+    private readonly configService: ConfigService,
   ) {}
 
   async getAllImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
@@ -74,7 +92,17 @@ export class ImageService {
       );
     }
     const imageMetaData = (await exifr.parse(file.url)) || {};
-    console.log(imageMetaData);
+    const rekognitionData = await this.rekognition.send(
+      new DetectLabelsCommand({
+        Image: {
+          S3Object: {
+            Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+            Name: file.key,
+          },
+        },
+      }),
+    );
+    console.log(rekognitionData);
     const newImage = this.imageRepository.create({
       file,
       width: imageMetaData.ExifImageWidth ?? imageMetaData.ImageWidth,
@@ -83,7 +111,6 @@ export class ImageService {
       longitude: imageMetaData.longitude ?? null,
       capturedAt: imageMetaData.DateTimeOriginal ?? null,
     });
-    console.log(newImage);
     await this.imageRepository.save(newImage);
     return this.getImage({ uuid: newImage.uuid } as GetImageArgs);
   }

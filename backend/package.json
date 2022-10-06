@@ -24,6 +24,7 @@
     "docker:dev": "docker-compose up --build -V"
   },
   "dependencies": {
+    "@aws-sdk/client-rekognition": "^3.185.0",
     "@aws-sdk/client-s3": "^3.41.0",
     "@aws-sdk/client-ses": "^3.112.0",
     "@aws-sdk/s3-request-presigner": "^3.42.0",
