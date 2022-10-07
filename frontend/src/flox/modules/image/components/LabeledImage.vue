@@ -14,27 +14,31 @@
       style="max-width: 100%; max-height: 100%"
       @load="updateImageProperties"
     >
-    <div
-      v-for="label in image.labels"
-      :key="label.name + label.confidence"
-      class="bbox"
-      :style="{
+    <template
+      v-if="image"
+    >
+      <div
+        v-for="label in image.labels"
+        :key="label.name + label.confidence"
+        class="bbox"
+        :style="{
         top: `${label.boundingBox.top * height}px`,
         left: `${label.boundingBox.left * width}px`,
         width: `${label.boundingBox.width * width}px`,
         height: `${label.boundingBox.height * height}px`,
       }"
-    >
-      <span>{{ label.name }}</span>
-    </div>
+      >
+        <span>{{ label.name }}</span>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref, watchEffect} from 'vue';
+import {defineProps, ref, watch} from 'vue';
 import {ImageFile} from 'src/data/types/ImageFile';
 import {Ref} from '@vue/reactivity';
-import { dom } from 'quasar'
+import {dom} from 'quasar'
 
 import {getImage} from 'src/helpers/data/fetch-helpers';
 
@@ -70,9 +74,9 @@ function updateImageProperties() {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-watchEffect(async () => {
+watch(() => props.uuid, async () => {
   image.value = await getImage(props.uuid);
+  console.log(image.value);
 })
 </script>
 

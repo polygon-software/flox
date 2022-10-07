@@ -218,6 +218,7 @@ type Query {
     expires: [Float!]
     file: ID!
   ): Image!
+  images: [Image!]!
   myUser: User!
   privateFile(
     """URL expiration duration (in seconds)"""

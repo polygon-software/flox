@@ -20,7 +20,7 @@
           v-if="selected.length > 0"
           color="green"
           icon="arrow-up"
-          label="Open as image"
+          label="Convert to Image"
           @click="openSelectedAsImage"
         />
       </template>
