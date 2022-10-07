@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DetectLabelsCommand } from '@aws-sdk/client-rekognition';
-import { RekognitionClient } from '@aws-sdk/client-rekognition';
+import {
+  DetectLabelsCommand,
+  RekognitionClient,
+} from '@aws-sdk/client-rekognition';
 import exifr from 'exifr';
 import Image from './entities/image.entity';
 import { Repository } from 'typeorm';
@@ -50,6 +52,11 @@ export class ImageService {
     private readonly configService: ConfigService,
   ) {}
 
+  /**
+   * Returns all images stored within the database
+   * @param {GetAllImagesArgs} getAllImagesArgs - contains limits and skip parameters
+   * @returns {Promise<Image[]>} Images
+   */
   async getAllImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
     return this.imageRepository.find({
       take: getAllImagesArgs.limit,
@@ -57,6 +64,11 @@ export class ImageService {
     });
   }
 
+  /**
+   * Queries for one Image
+   * @param {GetImageArgs} getImageArgs - contains image uuid
+   * @returns {Promise<Image>} Queried image
+   */
   async getImage(getImageArgs: GetImageArgs): Promise<Image> {
     const image = await this.imageRepository.findOneOrFail({
       where: {
@@ -78,19 +90,30 @@ export class ImageService {
     };
   }
 
+  /**
+   * Queries for an image given the file uuid
+   * @param {GetImageForFileArgs} getImageForFileArgs - contains uuid of file
+   * @returns {Promise<Image>} Queried image
+   */
   async getImageForFile(
-    getImageForFileARgs: GetImageForFileArgs,
+    getImageForFileArgs: GetImageForFileArgs,
   ): Promise<Image> {
     const image = await this.imageRepository.findOneOrFail({
       where: {
         file: {
-          uuid: getImageForFileARgs.file,
+          uuid: getImageForFileArgs.file,
         },
       },
     });
     return this.getImage({ uuid: image.uuid } as GetImageArgs);
   }
 
+  /**
+   * Creates a new image given a file
+   * @param {CreateImageInput} createImageInput - contains file uuid
+   * @param {User} user - corrently logged-in user
+   * @returns {Promise<Image>} Created Image
+   */
   async createImage(
     createImageInput: CreateImageInput,
     user: User,
@@ -123,6 +146,11 @@ export class ImageService {
     return this.getImage({ uuid: newImage.uuid } as GetImageArgs);
   }
 
+  /**
+   * Performs object recognition on image and stores appropriate labels to database
+   * @param {CreateLabelsInput} createLabelsInput - contains uuid of image to perform object recognition
+   * @returns {Promise<Image>} Image wit labels
+   */
   async createLabelsForImage(
     createLabelsInput: CreateLabelsInput,
   ): Promise<Image> {
@@ -140,7 +168,6 @@ export class ImageService {
         },
       }),
     );
-    console.log('rekognitionData', rekognitionData);
 
     const rekognizedLabels = rekognitionData.Labels.map((label) => {
       return label.Instances.map((instance) => ({
@@ -157,12 +184,8 @@ export class ImageService {
       }));
     }).flat();
 
-    console.log('rekognizedLabels', rekognizedLabels);
-
     const labelPromises = rekognizedLabels.map(async (label) => {
-      console.log('before', label.boundingBox);
       const boundingBox = this.boundingBoxRepository.create(label.boundingBox);
-      console.log('created bbox', boundingBox);
       await this.boundingBoxRepository.save(boundingBox);
       const newLabel = this.labelRepository.create({
         ...label,
@@ -175,6 +198,11 @@ export class ImageService {
     return this.imageRepository.save(image);
   }
 
+  /**
+   * Removes the database entry of a given image without deleting the file
+   * @param {DeleteImageInput} deleteImageInput - contains the uuid of the image to delete
+   * @returns {Promise<Image>} Deleted Image
+   */
   async deleteImage(deleteImageInput: DeleteImageInput): Promise<Image> {
     const image = await this.imageRepository.findOne({
       where: {

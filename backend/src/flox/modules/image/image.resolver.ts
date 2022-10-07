@@ -6,11 +6,12 @@ import { GetImageArgs } from './dto/args/get-image.args';
 import { GetImageForFileArgs } from './dto/args/get-image-for-file.args';
 import { DeleteImageInput } from './dto/input/delete-image.input';
 import { CreateImageInput } from './dto/input/create-image.input';
-import { CurrentUser } from '../roles/authorization.decorator';
+import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import { User } from '../auth/entities/user.entity';
 import { DEFAULT_ROLES } from '../roles/config';
 import { ForbiddenError } from 'apollo-server-express';
 import { FileService } from '../file/file.service';
+import { GetAllImagesArgs } from './dto/args/get-all-images.args';
 
 @Resolver(() => Image)
 export class ImageResolver {
@@ -19,6 +20,23 @@ export class ImageResolver {
     private readonly fileService: FileService,
   ) {}
 
+  /**
+   * Returns all images stoerd in database. Only accessible to admins
+   * @param {GetAllImagesArgs} getAllImagesArgs - limit and skip parameters
+   * @returns {Promise<Image[]>} All Images
+   */
+  @AdminOnly()
+  @Query(() => [Image], { name: 'images' })
+  async getImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
+    return this.imageService.getAllImages(getAllImagesArgs);
+  }
+
+  /**
+   * Returns an Image that wraps an s3 bucket file
+   * @param {GetImageArgs }getImageArgs - contains uuid of image
+   * @param {User} user - Currently logged-in user
+   * @returns {Promise<Image>} Requested image
+   */
   @LoggedIn()
   @Query(() => Image, { name: 'image' })
   async getImage(
@@ -32,6 +50,13 @@ export class ImageResolver {
     return image;
   }
 
+  /**
+   * Gets the image wrapper for a specified file. Useful if you know the file but not the
+   * corresponding image wrapper
+   * @param {GetImageForFileArgs} getImageForFileArgs - contains the uuid of the file
+   * @param {User} user - Currently logged-in user
+   * @returns {Promise<Image>} Requested image
+   */
   @LoggedIn()
   @Query(() => Image, { name: 'imageForFile' })
   async getImageForFile(
@@ -45,7 +70,13 @@ export class ImageResolver {
     return image;
   }
 
-  @LoggedIn() // TODO application specific: set appropriate guards here
+  /**
+   * Creates a new image for an already existing file
+   * @param {CreateImageInput} createImageInput - contains uuid of file to wrap
+   * @param {User} user - Currently logged-in user
+   * @returns {Promise<Image>} Requested image
+   */
+  @LoggedIn()
   @Mutation(() => Image)
   async createImage(
     @Args('createImageInput') createImageInput: CreateImageInput,
@@ -62,7 +93,13 @@ export class ImageResolver {
     return this.imageService.createImage(createImageInput, user);
   }
 
-  @LoggedIn() // TODO application specific: set appropriate guards here
+  /**
+   * Deletes an image (without deleting the corresponding file)
+   * @param {DeleteImageInput} deleteImageInput - contains uuid of image
+   * @param {User} user - Currently logged-in user
+   * @returns {Promise<Image>} Requested image
+   */
+  @LoggedIn()
   @Mutation(() => Image)
   async deleteImage(
     @Args('deleteImageInput') deleteImageInput: DeleteImageInput,

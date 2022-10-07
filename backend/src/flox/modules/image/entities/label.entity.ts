@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { IsNumber, IsString } from 'class-validator';

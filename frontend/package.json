@@ -6,7 +6,7 @@
   "author": "davwys <david.wyss@hotmail.ch",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.ts,.vue ./",
+    "lint": "eslint --ext .js,.ts,.vue ./ --fix",
     "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
     "dev": "quasar dev",
     "dev:ssr": "quasar dev -m ssr",
