@@ -49,7 +49,7 @@ export class Image extends BaseEntity {
   })
   @IsOptional()
   @IsNumber()
-  public latitude?: string;
+  public latitude?: number;
 
   @Field(() => Number, {
     nullable: true,
@@ -61,7 +61,7 @@ export class Image extends BaseEntity {
   })
   @IsOptional()
   @IsNumber()
-  public longitude?: string;
+  public longitude?: number;
 
   @Field(() => Date, {
     nullable: true,
