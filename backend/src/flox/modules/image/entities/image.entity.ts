@@ -6,7 +6,7 @@ import { IsDate, IsNumber, IsOptional } from 'class-validator';
 import { Label } from './label.entity';
 
 /**
- * Defines an image that wraps an S3 S3File
+ * Defines an image that wraps an S3 File
  */
 
 @Entity()

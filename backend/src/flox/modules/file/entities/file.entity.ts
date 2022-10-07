@@ -10,7 +10,7 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 @Entity()
 @ObjectType()
 export abstract class S3File extends BaseEntity {
-  @Field(() => String, { description: 'S3 S3File Key' })
+  @Field(() => String, { description: 'S3 File Key' })
   @Column()
   @IsString()
   public key: string;
@@ -22,7 +22,7 @@ export abstract class S3File extends BaseEntity {
 
   @Field(() => String, {
     nullable: true,
-    description: 'Name of S3File',
+    description: 'Name of File',
   })
   @Column()
   @IsOptional()

@@ -54,7 +54,7 @@ export default {
   files: {
     add: 'Add',
     failed_upload: '{value} file(s) could not be uploaded',
-    file_upload: 'S3File Upload',
+    file_upload: 'File Upload',
     no_preview: 'No preview available',
     remove: 'Remove',
     remove_all: 'Remove all files',

@@ -48,7 +48,7 @@ export class FileService {
    * @returns {Promise<PublicFile>} - the newly uploaded file
    */
   async uploadPublicFile(file: Express.Multer.File): Promise<PublicFile> {
-    // S3File upload
+    // File upload
     const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
       Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
@@ -84,7 +84,7 @@ export class FileService {
     file: Express.Multer.File,
     owner: User,
   ): Promise<PrivateFile> {
-    //S3File upload
+    //File upload
     const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
       Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
@@ -191,7 +191,7 @@ export class FileService {
       return { ...result, url };
     }
 
-    // S3File not found: throw error
+    // File not found: throw error
     throw new NotFoundException();
   }
 
@@ -234,7 +234,7 @@ export class FileService {
       return deletedFile;
     }
 
-    // S3File not found: throw error
+    // File not found: throw error
     throw new NotFoundException();
   }
 }

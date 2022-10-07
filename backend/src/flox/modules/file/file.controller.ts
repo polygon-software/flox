@@ -29,7 +29,7 @@ export class FileController {
   ): Promise<void> {
     // Verify that request contains file
     if (!file) {
-      res.send(new BadRequestException('S3File expected on this endpoint'));
+      res.send(new BadRequestException('File expected on this endpoint'));
       return;
     }
 

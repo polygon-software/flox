@@ -9,13 +9,13 @@ import { MODULES } from '../../MODULES';
  * the files in S3 and requesting corresponding URLs.
  */
 
-type FileModuleConfig = {
-  // File module has no options
+type ImageModuleConfig = {
+  // Image module has no options
 };
 
 // Default configuration set; will get merged with custom config from flox.config.json
-const defaultConfig: FileModuleConfig = {
-  // File module has no options
+const defaultConfig: ImageModuleConfig = {
+  // Image module has no options
 };
 
 /**
@@ -25,6 +25,6 @@ const defaultConfig: FileModuleConfig = {
 export function moduleConfig() {
   return mergeConfigurations(
     defaultConfig,
-    floxModuleOptions(MODULES.FILE),
-  ) as FileModuleConfig;
+    floxModuleOptions(MODULES.IMAGE),
+  ) as ImageModuleConfig;
 }

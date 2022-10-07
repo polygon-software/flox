@@ -93,7 +93,7 @@ export async function getImage(uuid: string): Promise<ImageFile | null> {
 /**
  * Returns an image for a given file uuid
  * @param {string} file - uuid of image
- * @returns {Promise<ImageFile|null>} Image file belonging to S3File
+ * @returns {Promise<ImageFile|null>} Image file belonging to File
  */
 export async function getImageForFile(file: string): Promise<ImageFile | null> {
   const queryResult = await executeQuery(GET_IMAGE_FOR_FILE, { file });

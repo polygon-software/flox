@@ -1,17 +1,17 @@
-import { floxModuleOptions, mergeConfigurations } from '../../index';
-import { MODULES } from '../../MODULES';
+import {floxModuleOptions, mergeConfigurations} from '../../index';
+import {MODULES} from '../../MODULES';
 
 /**
  * The file module handles file upload and management.
  */
 
 type FileModuleConfig = {
-  // S3File module has no options
+  // File module has no options
 };
 
 // Default configuration set; will get merged with custom config from flox.config.json
 const defaultConfig: FileModuleConfig = {
-  // S3File module has no options
+  // File module has no options
 };
 
 /**

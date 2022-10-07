@@ -6,7 +6,7 @@
     <!-- Form example -->
     <SampleForm/>
 
-    <!-- Private S3File Upload -->
+    <!-- Private File Upload -->
     <FileUpload :accepted-files="'image/*, .pdf' " :query-name="'upload'" :target="'/uploadPrivateFile'"/>
 
     <!-- Private Files Table -->
