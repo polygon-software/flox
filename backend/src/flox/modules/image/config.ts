@@ -5,8 +5,8 @@ import {
 import { MODULES } from '../../MODULES';
 
 /**
- * The file module handles file up/download using a database tables each for private and public files, as well as storing
- * the files in S3 and requesting corresponding URLs.
+ * The image module handles files that contain images and contains functionality to extract information from these
+ * images, such as object recognition.
  */
 
 type ImageModuleConfig = {
