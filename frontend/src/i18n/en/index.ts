@@ -64,6 +64,7 @@ export default {
     status_done: 'Done',
     status_failed: 'Failed',
     successfully_uploaded: '{value} file(s) were successfully uploaded',
+    successfully_deleted: '{value} file(s) were successfully deleted',
     upload: 'Upload',
   },
   messages: {

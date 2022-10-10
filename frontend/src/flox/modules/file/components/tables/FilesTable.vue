@@ -100,7 +100,7 @@ async function deleteSelected() {
   }
   files.value = files.value.filter((f) => f !== selectedFile);
   selected.value = [];
-  showNotification($q, 'Deletion successful', 'top-right', 'green')
+  showNotification($q, i18n.global.t('successfully_deleted', { value: 1 }), 'top-right', 'green')
 }
 
 /**

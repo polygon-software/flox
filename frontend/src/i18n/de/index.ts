@@ -66,6 +66,7 @@ export default {
     status_done: 'Hochgeladen',
     status_failed: 'Fehler',
     successfully_uploaded: '{value} Datei(en) wurden erfolgreich hochgeladen',
+    successfully_deleted: '{value} Datei(en) wurden erfolgreich gelöscht',
     upload: 'Hochladen',
   },
   messages: {
