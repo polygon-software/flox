@@ -5,7 +5,7 @@ import {
 import { MODULES } from '../../MODULES';
 
 /**
- * The file module handles file up/download using a database tables each for private and public files, as well as storing
+ * The file module handles file up/download using a database table each for private and public files, as well as storing
  * the files in S3 and requesting corresponding URLs.
  */
 

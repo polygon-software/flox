@@ -111,21 +111,12 @@ export class ImageService {
   /**
    * Creates a new image given a file
    * @param {CreateImageInput} createImageInput - contains file uuid
-   * @param {User} user - corrently logged-in user
    * @returns {Promise<Image>} Created Image
    */
-  async createImage(
-    createImageInput: CreateImageInput,
-    user: User,
-  ): Promise<Image> {
+  async createImage(createImageInput: CreateImageInput): Promise<Image> {
     const file = await this.fileService.getPrivateFile({
       uuid: createImageInput.file,
     } as GetPrivateFileArgs);
-    if (file.owner !== user.uuid) {
-      throw new ForbiddenError(
-        'Cannot create image for file that belongs to someone else.',
-      );
-    }
     const imageMetaData = (await exifr.parse(file.url)) || {};
     const newImage = this.imageRepository.create({
       file,

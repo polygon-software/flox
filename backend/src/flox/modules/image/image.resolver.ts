@@ -87,10 +87,10 @@ export class ImageResolver {
     });
     if (user.role !== DEFAULT_ROLES.ADMIN && file.owner !== user.uuid) {
       throw new ForbiddenError(
-        'User cannot create image for file that does not belong to him',
+        'Cannot create image for file that belongs to someone else',
       );
     }
-    return this.imageService.createImage(createImageInput, user);
+    return this.imageService.createImage(createImageInput);
   }
 
   /**
