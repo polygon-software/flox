@@ -82,6 +82,22 @@ type Query {
   ): PrivateFile!
   getPublicFile(uuid: ID!): PublicFile!
   myUser: User!
+  queryUsers(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Search for text withinn items"""
+    filter: String
+
+    """Number of images to take"""
+    limit: Float = 10
+
+    """Number of items to skip"""
+    skip: Float = 0
+
+    """Sort by property"""
+    sortBy: String
+  ): UserQueryOutput!
   user(cognitoUuid: ID, uuid: ID): User!
   users(uuids: [ID!]): [User!]!
 }
@@ -116,4 +132,12 @@ type User {
 
   """UUID"""
   uuid: ID!
+}
+
+type UserQueryOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """Users that fit query"""
+  data: [User!]!
 }

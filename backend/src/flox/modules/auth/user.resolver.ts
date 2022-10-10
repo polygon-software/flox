@@ -8,9 +8,12 @@ import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { LoggedIn, Public } from './authentication.decorator';
 import { CurrentUser } from '../roles/authorization.decorator';
+import { SearchQueryInterfaceResolver } from '../interfaces/search-query-interface.resolver';
+import { SearchQueryArgs } from '../interfaces/dto/args/search-query.args';
+import { UserQueryOutput } from './output/user-query.output';
 
 @Resolver(() => User)
-export class UserResolver {
+export class UserResolver implements SearchQueryInterfaceResolver {
   constructor(private readonly userService: UserService) {}
 
   /**
@@ -32,6 +35,17 @@ export class UserResolver {
   @Query(() => [User], { name: 'allUsers' })
   async getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();
+  }
+
+  /**
+   * Queries for all rows that fit query criteria, best used in combination with the DataTable
+   * @param {SearchQueryArgs} queryArgs - contain table filtering rules
+   * @returns {Promise<UserQueryOutput>} data that fit criteria
+   */
+  @Public()
+  @Query(() => UserQueryOutput, { name: 'queryUsers' })
+  queryAll(@Args() queryArgs: SearchQueryArgs): Promise<UserQueryOutput> {
+    return this.userService.queryAll(queryArgs);
   }
 
   /**

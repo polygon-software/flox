@@ -37,4 +37,23 @@ export const ALL_USERS = {
   cacheLocation: 'allUsers',
 };
 
+export const QUERY_USERS = {
+  query: gql`
+    query queryUsers($skip: Float, $limit: Float, $filter: String, $sortBy: String, $descending: Boolean) {
+      queryUsers(skip: $skip, limit: $limit, filter: $filter, sortBy: $sortBy, descending: $descending) {
+        count
+        data {
+          uuid
+          username
+          email
+          role
+         }
+        __typename
+      }
+    }
+  `,
+  tables: ['user'],
+  cacheLocation: 'queryUsers',
+};
+
 export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_USERS];
