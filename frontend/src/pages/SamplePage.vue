@@ -7,7 +7,7 @@
     <SampleForm/>
 
     <!-- Private File Upload -->
-    <FileUpload :accepted-files="'image/*, .pdf' " :query-name="'upload'" :target="'/uploadPrivateFile'"/>
+    <FileUpload :accepted-files="'image/*, .pdf' " query-name="upload" target="/uploadPrivateFile"/>
 
     <!-- Private Files Table -->
     <FilesTable private />
@@ -22,8 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
-import {Ref} from '@vue/reactivity';
+import {ref, Ref} from 'vue';
 
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import SampleForm from 'components/sample/SampleForm.vue';

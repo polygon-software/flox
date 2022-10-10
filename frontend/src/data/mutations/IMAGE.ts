@@ -14,6 +14,7 @@ export const CREATE_IMAGE = {
               file {
                 uuid
                 url
+                __typename
               }
               __typename
             }
@@ -29,7 +30,9 @@ export const DELETE_IMAGE = {
             deleteImage (deleteImageInput: {uuid: $uuid}) {
               uuid
               file {
+                uuid
                 url
+                __typename
               }
               __typename
             }

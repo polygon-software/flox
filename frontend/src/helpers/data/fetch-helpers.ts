@@ -51,8 +51,8 @@ export async function fetchPublicFile(uuid: string): Promise<PublicFile|null> {
 
 /**
  * Fetches a number of public files
- * @param {number} limit - maximum number of files to load
- * @param {number} skip - number of files to skip before loading next bunch, used for pagination
+ * @param {number} [limit] - maximum number of files to load
+ * @param {number} [skip] - number of files to skip before loading next bunch, used for pagination
  * @returns {Promise<PublicFile[]>} List of public Files
  */
 export async function fetchPublicFiles(limit?: number, skip?: number): Promise<PublicFile[]> {
@@ -65,8 +65,8 @@ export async function fetchPublicFiles(limit?: number, skip?: number): Promise<P
 
 /**
  * Fetches files of logged-in user
- * @param {number} limit - maximum number of files to load
- * @param {number} skip - number of files to skip before loading next bunch, used for pagination
+ * @param {number} [limit] - maximum number of files to load
+ * @param {number} [skip] - number of files to skip before loading next bunch, used for pagination
  * @returns {Promise<PrivateFile[]>} List of private Files
  */
 export async function fetchMyFiles(limit?: number, skip?: number ): Promise<PrivateFile[]> {

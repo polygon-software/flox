@@ -78,7 +78,7 @@ export function getClientOptions(ssrContext: QSsrContext|null|undefined): Apollo
     <ApolloClientOptions<unknown>>{
       link: concat(authMiddleware, httpLink),
       cache: new InMemoryCache({
-        // Use UUID as default key in database. If any tables needs different behaviour, this can be changed here,
+        // Use UUID as default key in database. If any table needs different behaviour, this can be changed here,
         // see: https://www.apollographql.com/docs/react/caching/cache-configuration/
         dataIdFromObject(responseObject): string|undefined {
           return dataIdFromObject(responseObject)
