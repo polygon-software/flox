@@ -11,10 +11,24 @@
     :filter="filter"
     binary-state-sort
     selection="multiple"
-    :visible-columns="visibleColumns"
+    :visible-columns="visibleColumnNames"
     @request="onRequest"
     @selection="handleSelection"
   >
+    <template #body-cell="props">
+      <q-td :props="props">
+        {{ props.row[props.col.field] }}
+        <q-popup-edit
+          v-if="props.col.edit"
+          v-slot="scope"
+          :model-value="props.row[props.col.field]"
+          buttons
+          @save="updateRow(props.row, props.col.field, $event)"
+        >
+          <q-input v-model="scope.value" v-bind="props.col.editProps" dense autofocus counter />
+        </q-popup-edit>
+      </q-td>
+    </template>
     <template #header-selection="scope">
       <q-checkbox v-model="scope.selected" />
     </template>
@@ -39,7 +53,7 @@
         </template>
       </q-input>
       <q-select
-        v-model="visibleColumns"
+        v-model="visibleColumnNames"
         borderless
         multiple
         dense
@@ -85,13 +99,13 @@ import { QUERY_USERS } from 'src/data/queries/USER';
 const title = 'User Table';
 
 const tableRef: Ref<QTable|null> = ref(null)
-const { rows, columns, selected, visibleColumns, filter, loading, pagination, onRequest, exportTable, handleSelection } = useDataTable<User>(QUERY_USERS);
+const { rows, columns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow } = useDataTable<User>(QUERY_USERS);
 
 columns.value = [
   { name: 'uuid', label: 'UUID', field: 'uuid', sortable: true },
-  { name: 'username', label: 'Username', field: (user: User) => user.username, sortable: true },
-  { name: 'email', label: 'E-Mail', field: (user: User) => user.email, sortable: true },
-  { name: 'role', label: 'Role', field: (user: User) => user.role, sortable: true },
+  { name: 'username', label: 'Username', field: 'username', sortable: true, edit: true },
+  { name: 'email', label: 'E-Mail', field: 'email', sortable: true, edit: true },
+  { name: 'role', label: 'Role', field: 'role', sortable: true },
 ]
 
 onMounted(() => {

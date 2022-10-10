@@ -1,7 +1,9 @@
-import {ref, Ref, nextTick, toRaw, watch} from 'vue';
-import {executeQuery} from 'src/helpers/data/data-helpers';
+import {ref, Ref, nextTick, toRaw, watch, ComputedRef, computed} from 'vue';
+import {executeMutation, executeQuery} from 'src/helpers/data/data-helpers';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {exportFile, useQuasar} from 'quasar';
+import {cloneDeep} from 'lodash-es';
+import {UPDATE_USER} from "src/data/mutations/USER";
 
 /**
  * Composable to create a data table
@@ -17,7 +19,10 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
   const rows: Ref<T[]> = ref([])
   const selected: Ref<T[]> = ref([]);
   const columns: Ref<{name: string, label: string, field: string | ((row: T) => string), format?: (val: any, row?: T) => string, sortable?: boolean}[]> = ref([]);
-  const visibleColumns: Ref<string[]> = ref([]);
+  const visibleColumnNames: Ref<string[]> = ref([]);
+  const visibleColumns: ComputedRef<{name: string, label: string, field: string | ((row: T) => string), format?: (val: any, row?: T) => string, sortable?: boolean}[]> = computed(() => {
+    return columns.value.filter((column) => visibleColumnNames.value.includes(column.name));
+  })
   const filter: Ref<string> = ref('')
   const loading: Ref<boolean> = ref(false)
   const pagination: Ref<{sortBy: string, descending: boolean, page: number, rowsPerPage: number, rowsNumber: number}> = ref({
@@ -29,7 +34,7 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
   })
 
   watch(columns, () => {
-    visibleColumns.value = columns.value.map((column) => column.name);
+    visibleColumnNames.value = columns.value.map((column) => column.name);
   })
 
   /**
@@ -102,8 +107,8 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
    */
   function exportTable () {
     // naive encoding to csv format
-    const content = [visibleColumns.value.map(name => wrapCsvValue(name))].concat(
-      selected.value.map(row => visibleColumns.value.map(name => {
+    const content = [visibleColumnNames.value.map(name => wrapCsvValue(name))].concat(
+      selected.value.map(row => visibleColumnNames.value.map(name => {
         const col = columns.value.find((col) => col.name === name);
         if (!col) { return; }
         let fieldVal: string;
@@ -175,7 +180,24 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
     }
   }
 
+  async function updateRow(row: T, path: string, value: any) {
+    const correctRowIndex = rows.value.findIndex((r) => row.uuid === r.uuid);
+    if(correctRowIndex > -1) {
+      const rowCopy = cloneDeep(toRaw(rows.value[correctRowIndex]));
+      rowCopy[path] = value;
+      rows.value.splice(correctRowIndex, 1, rowCopy);
+      await executeMutation(UPDATE_USER, rowCopy as Record<string, unknown>);
+      $q.notify({
+        message: 'Saved',
+        color: 'positive',
+        icon: 'save',
+        position: 'top-right',
+        timeout: 500,
+      })
+    }
+  }
+
   return {
-    rows, columns, selected, visibleColumns, filter, loading, pagination, onRequest, exportTable, handleSelection,
+    rows, columns, visibleColumns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow,
   }
 }
