@@ -6,7 +6,7 @@
     <!-- Form example -->
     <SampleForm/>
 
-    <DataTable/>
+    <UserDataTable />
 
     <FileUpload :accepted-files="'image/*, .pdf' " :query-name="'upload'" :target="'/uploadPrivateFile'"/>
   </q-page>
@@ -16,8 +16,6 @@
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import SampleForm from 'components/sample/SampleForm.vue';
 import FileUpload from 'src/flox/modules/file/components/forms/fields/FileUpload.vue';
-import DataTable from 'components/tables/DataTable.vue';
-import {User} from 'src/data/types/User';
-import { QUERY_USERS } from 'src/data/queries/USER';
+import UserDataTable from 'components/tables/UserDataTable.vue';
 
 </script>

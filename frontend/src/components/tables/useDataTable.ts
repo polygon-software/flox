@@ -1,4 +1,4 @@
-import {ref, Ref} from 'vue';
+import {ref, Ref, nextTick, toRaw, watch} from 'vue';
 import {executeQuery} from 'src/helpers/data/data-helpers';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {exportFile, useQuasar} from 'quasar';
@@ -12,9 +12,12 @@ import {exportFile, useQuasar} from 'quasar';
  */
 export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=false, rowsPerPage=10) {
   const $q = useQuasar();
+  let storedSelectedRow: T;
 
   const rows: Ref<T[]> = ref([])
+  const selected: Ref<T[]> = ref([]);
   const columns: Ref<{name: string, label: string, field: string | ((row: T) => string), format?: (val: any, row?: T) => string, sortable?: boolean}[]> = ref([]);
+  const visibleColumns: Ref<string[]> = ref([]);
   const filter: Ref<string> = ref('')
   const loading: Ref<boolean> = ref(false)
   const pagination: Ref<{sortBy: string, descending: boolean, page: number, rowsPerPage: number, rowsNumber: number}> = ref({
@@ -23,6 +26,10 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
     page: 1,
     rowsPerPage,
     rowsNumber: 0
+  })
+
+  watch(columns, () => {
+    visibleColumns.value = columns.value.map((column) => column.name);
   })
 
   /**
@@ -95,18 +102,24 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
    */
   function exportTable () {
     // naive encoding to csv format
-    const content = [columns.value.map(col => wrapCsvValue(col.label))].concat(
-      rows.value.map(row => columns.value.map(col => wrapCsvValue(
-        typeof col.field === 'function'
-          ? col.field(row)
-          : (row as Record<string, any>)[ col.field === void 0 ? col.name : col.field ],
-        col.format,
-        row
-      )).join(','))
+    const content = [visibleColumns.value.map(name => wrapCsvValue(name))].concat(
+      selected.value.map(row => visibleColumns.value.map(name => {
+        const col = columns.value.find((col) => col.name === name);
+        if (!col) { return; }
+        let fieldVal: string;
+        if (typeof col.field === 'function') {
+          fieldVal = col.field(row);
+        } else {
+          const colHasField = col.field === void 0;
+          const colKey: string = colHasField ? col.name : col.field;
+          fieldVal = (row as Record<string, string>)[colKey];
+        }
+        return wrapCsvValue(fieldVal, col.format, row)
+      }).join(','))
     ).join('\r\n')
 
     const status = exportFile(
-      'table-export.csv',
+      'export.csv',
       content,
       'text/csv'
     )
@@ -120,7 +133,49 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
     }
   }
 
+  async function handleSelection ({ rows: newlySelected, added, evt }: { rows: T[], added: boolean, evt: Event}) {
+    // ignore selection change from header of not from a direct click event
+    if (newlySelected.length !== 1 || evt === void 0) {
+      return
+    }
+
+    const oldSelectedRow = storedSelectedRow
+    const newSelectedRow = newlySelected[0];
+    const { ctrlKey, shiftKey } = evt
+
+    if (shiftKey !== true) {
+      storedSelectedRow = newSelectedRow
+    }
+
+    // wait for the default selection to be performed
+    await nextTick();
+    if (shiftKey === true) {
+      const tableRows = rows.value;
+      let firstIndex = tableRows.indexOf(oldSelectedRow)
+      let lastIndex = tableRows.indexOf(newSelectedRow)
+
+      if (firstIndex < 0) {
+        firstIndex = 0
+      }
+
+      if (firstIndex > lastIndex) {
+        [ firstIndex, lastIndex ] = [ lastIndex, firstIndex ]
+      }
+
+      const rangeRows = tableRows.slice(firstIndex, lastIndex + 1)
+      // we need the original row object so we can match them against the rows in range
+      const selectedRows = selected.value.map(toRaw)
+
+      selected.value = added
+        ? selectedRows.concat(rangeRows.filter((row: T) => !(selectedRows.includes(row))))
+        : selectedRows.filter((row: T) => !(rangeRows.includes(row)))
+    }
+    else if (ctrlKey !== true && added) {
+      selected.value = [newSelectedRow]
+    }
+  }
+
   return {
-    rows, columns, filter, loading, pagination, onRequest, exportTable,
+    rows, columns, selected, visibleColumns, filter, loading, pagination, onRequest, exportTable, handleSelection,
   }
 }

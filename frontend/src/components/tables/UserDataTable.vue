@@ -1,0 +1,118 @@
+<template>
+  <q-table
+    ref="tableRef"
+    v-model:pagination="pagination"
+    v-model:selected="selected"
+    :title="title"
+    :rows="rows"
+    :columns="columns"
+    row-key="uuid"
+    :loading="loading"
+    :filter="filter"
+    binary-state-sort
+    selection="multiple"
+    :visible-columns="visibleColumns"
+    @request="onRequest"
+    @selection="handleSelection"
+  >
+    <template #header-selection="scope">
+      <q-checkbox v-model="scope.selected" />
+    </template>
+
+    <template #body-selection="scope">
+      <q-checkbox :model-value="scope.selected" @update:model-value="(val, evt) => { Object.getOwnPropertyDescriptor(scope, 'selected').set(val, evt) }" />
+    </template>
+    <template #top-left>
+      <q-btn
+        v-if="selected.length > 0"
+        color="primary"
+        icon-right="archive"
+        label="Export to csv"
+        no-caps
+        @click="exportTable"
+      />
+    </template>
+    <template #top-right="props">
+      <q-input v-model="filter" borderless hide-bottom-space dense debounce="300" placeholder="Search">
+        <template #append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+      <q-select
+        v-model="visibleColumns"
+        borderless
+        multiple
+        dense
+        hide-bottom-space
+        :display-value="$q.lang.table.columns"
+        emit-value
+        map-options
+        :options="columns"
+        option-value="name"
+        class="q-mx-lg"
+      >
+        <template #option="{ itemProps, opt, selected, toggleOption }">
+          <q-item v-bind="itemProps">
+            <q-item-section>
+              <q-item-label v-html="opt.label" />
+            </q-item-section>
+            <q-item-section side>
+              <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+      <q-btn
+        flat round dense
+        :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+        class="q-ml-md"
+        @click="props.toggleFullscreen"
+      />
+    </template>
+    <template #bottom>
+      <div class="text-subtitle2 q-pa-sm">Use <kbd>SHIFT</kbd> to select / deselect a range and <kbd>CTRL</kbd> to add to selection</div>
+    </template>
+  </q-table>
+</template>
+
+<script setup lang="ts">
+import {ref, onMounted, Ref} from 'vue';
+import {QTable} from 'quasar';
+import {useDataTable} from 'components/tables/useDataTable';
+import {User} from 'src/data/types/User';
+import { QUERY_USERS } from 'src/data/queries/USER';
+
+const title = 'User Table';
+
+const tableRef: Ref<QTable|null> = ref(null)
+const { rows, columns, selected, visibleColumns, filter, loading, pagination, onRequest, exportTable, handleSelection } = useDataTable<User>(QUERY_USERS);
+
+columns.value = [
+  { name: 'uuid', label: 'UUID', field: 'uuid', sortable: true },
+  { name: 'username', label: 'Username', field: (user: User) => user.username, sortable: true },
+  { name: 'email', label: 'E-Mail', field: (user: User) => user.email, sortable: true },
+  { name: 'role', label: 'Role', field: (user: User) => user.role, sortable: true },
+]
+
+onMounted(() => {
+  if (tableRef.value) {
+    tableRef.value.requestServerInteraction()
+  }
+})
+
+</script>
+
+<style scoped>
+kbd {
+  white-space: nowrap;
+  display: inline-block;
+  padding: 2px 4px 4px;
+  line-height: 1;
+  font-size: .8em;
+  color: #616161;
+  background: linear-gradient(-225deg,#d5dbe4,#f8f8f8);
+  border-radius: 4px;
+  box-shadow: inset 0 -2px #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px #1e235a66;
+  margin: 0 0.2em;
+}
+</style>
