@@ -14,8 +14,6 @@ import { FileService } from '../file/file.service';
 import { DeleteImageInput } from './dto/input/delete-image.input';
 import { GetPrivateFileArgs } from '../file/dto/args/get-private-file.args';
 import { GetAllImagesArgs } from './dto/args/get-all-images.args';
-import { User } from '../auth/entities/user.entity';
-import { ForbiddenError } from 'apollo-server-express';
 import { DeleteFileInput } from '../file/dto/input/delete-file.input';
 import { ConfigService } from '@nestjs/config';
 import { CreateLabelsInput } from './dto/input/create-labels.input';
