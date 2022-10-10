@@ -23,10 +23,17 @@ export const AdminOnly = (): CustomDecorator =>
   SetMetadata(ROLES_KEY, [DEFAULT_ROLES.ADMIN]);
 
 // Access to current user from request
-// The user record has the form { userId: string, username: string }
 export const CurrentUser = createParamDecorator(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
   (data, req: ExecutionContext) => {
     return getRequest(req).principal as User;
+  },
+);
+
+// Access to cognito user from request in the form { userId: string, username: string }
+export const CognitoUser = createParamDecorator(
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
+  (data, req: ExecutionContext) => {
+    return getRequest(req).user as { userId: string; username: string };
   },
 );
