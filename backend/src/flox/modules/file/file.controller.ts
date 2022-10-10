@@ -59,7 +59,6 @@ export class FileController {
       res.send(new UnauthorizedException());
     }
 
-    // Get user, as determined by JWT Strategy
     const newFile = await this.fileService.uploadPrivateFile(file, user);
     res.send(newFile);
   }

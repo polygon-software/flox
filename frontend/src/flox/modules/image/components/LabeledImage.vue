@@ -76,7 +76,6 @@ function updateImageProperties() {
 
 watch(() => props.uuid, async () => {
   image.value = await getImage(props.uuid);
-  console.log(image.value);
 })
 </script>
 

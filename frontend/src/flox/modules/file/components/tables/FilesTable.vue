@@ -114,6 +114,3 @@ async function openSelectedAsImage() {
 }
 </script>
 
-<style scoped>
-
-</style>

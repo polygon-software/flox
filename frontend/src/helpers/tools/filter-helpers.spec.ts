@@ -61,7 +61,7 @@ describe('Filter Helpers', () => {
   });
 
   describe('tableFilter', () => {
-    it('should return row of a tables in which a string is present in that tables', () => {
+    it('should return row of a table in which a string is present in that table', () => {
       const table = [
         { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
         { age: 21, first_name: 'Larsen', last_name: 'Shaw' },

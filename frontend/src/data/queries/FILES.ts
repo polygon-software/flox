@@ -35,7 +35,7 @@ export const ALL_MY_FILES = {
       }
     }
   `,
-  tables: ['private_file'],
+  tables: ['privateFile'],
   cacheLocation: 'allMyFiles',
 }
 
@@ -71,7 +71,7 @@ export const GET_PRIVATE_FILE = {
       }
     }
   `,
-  tables: ['private_file'],
+  tables: ['privateFile'],
   cacheLocation: 'privateFile',
 };
 
