@@ -2,7 +2,7 @@
  * Base entity class that others inherit from.
  * Includes unique UUID, as well as creation/modification/deletion timestamps
  */
-export class BaseEntity {
+export abstract class BaseEntity {
   uuid: string;
   createdAt: Date;
   updatedAt: Date;

@@ -50,6 +50,8 @@ export default {
     cache_location_missing: 'Cache Location is missing in mutationObject: ',
     missing_attributes: 'Missing attributes',
     unknown: 'Unknown Error',
+    entry_edit_failed: 'Edit could not be saved',
+    entry_delete_failed: 'Entry could not be deleted',
   },
   files: {
     add: 'Add',
@@ -85,5 +87,7 @@ export default {
     password_changed:
       'Successfully changed password. Please log in using the new password.',
     account_created: 'Successfully created account',
+    entry_edited: 'Edit saved',
+    entry_deleted: 'Entry deleted',
   },
 };

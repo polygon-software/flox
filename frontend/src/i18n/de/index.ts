@@ -52,6 +52,8 @@ export default {
     cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
     missing_attributes: 'Fehlende Attribute',
     unknown: 'Unbekannter Fehler',
+    entry_edit_failed: 'Die Änderung konnte nicht gespeichert werden',
+    entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
   },
   files: {
     add: 'Hinzufügen',
@@ -88,5 +90,7 @@ export default {
     password_changed:
       'Passwort erfolgreich geändert. Bitte melden Sie sich mit dem neuen Passwort an.',
     account_created: 'Konto erfolgreich erstellt',
+    entry_edited: 'Änderung gespeichert',
+    entry_deleted: 'Eintrag gelöscht',
   },
 };

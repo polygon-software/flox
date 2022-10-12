@@ -1,26 +1,47 @@
 import {ref, Ref, nextTick, toRaw, watch, ComputedRef, computed} from 'vue';
 import {executeMutation, executeQuery} from 'src/helpers/data/data-helpers';
-import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {exportFile, useQuasar} from 'quasar';
 import {cloneDeep} from 'lodash-es';
-import {UPDATE_USER} from "src/data/mutations/USER";
+import {showNotification} from 'src/helpers/tools/notification-helpers';
+import {i18n} from 'boot/i18n';
+import {BaseEntity} from "src/data/types/BaseEntity";
+
+export interface ColumnInterface<T> {
+  name: string,
+  label: string,
+  field: string | ((row: T) => string),
+  required?: boolean,
+  align?: string,
+  sortable?: boolean,
+  sort?: ((a: any, b: any, rowA: T, rowB: T) => number),
+  sortOrder?: string,
+  format?: (val: any, row?: T) => string,
+  style?: string | ((row: T) => string),
+  classes?: string | ((row: T) => string),
+  headerStyle?: string,
+  edit?: boolean,
+  editProps?: Record<string, any>
+}
 
 /**
  * Composable to create a data table
- * @param {QueryObject} query - query to perform to fetch data
+ * @param {QueryObject} queryObject - query to perform to fetch data
+ * @param {MutationObject} mutationObject - mutation to change a row entry
+ * @param {MutationObject} deletionObject - mutation to delete a row entry
  * @param {string} sortBy - key to sort by
  * @param {boolean} descending - sort order
  * @param {number} rowsPerPage - Default number of rows per page
  */
-export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=false, rowsPerPage=10) {
+export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mutationObject: MutationObject, deletionObject: MutationObject, sortBy='uuid', descending=false, rowsPerPage=10) {
   const $q = useQuasar();
   let storedSelectedRow: T;
 
   const rows: Ref<T[]> = ref([])
   const selected: Ref<T[]> = ref([]);
-  const columns: Ref<{name: string, label: string, field: string | ((row: T) => string), format?: (val: any, row?: T) => string, sortable?: boolean}[]> = ref([]);
+  const columns: Ref<ColumnInterface<T>[]> = ref([]);
   const visibleColumnNames: Ref<string[]> = ref([]);
-  const visibleColumns: ComputedRef<{name: string, label: string, field: string | ((row: T) => string), format?: (val: any, row?: T) => string, sortable?: boolean}[]> = computed(() => {
+  const visibleColumns: ComputedRef<ColumnInterface<T>[]> = computed(() => {
     return columns.value.filter((column) => visibleColumnNames.value.includes(column.name));
   })
   const filter: Ref<string> = ref('')
@@ -47,8 +68,8 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
    * @returns {Promise<{ data: T[], count: number }>} rows from server and count of total rows fitting criteria
    */
   async function fetchFromServer (skip: number, limit: number, filter: string, sortBy: string, descending: boolean): Promise<{ data: T[], count: number }> {
-    const queryResult = await executeQuery(query, { skip, limit, filter, sortBy, descending });
-    const data = queryResult.data[query.cacheLocation] as unknown as { data: T[], count: number };
+    const queryResult = await executeQuery(queryObject, { skip, limit, filter, sortBy, descending });
+    const data = queryResult.data[queryObject.cacheLocation] as unknown as { data: T[], count: number };
     return {
       data: data.data ,
       count: data.count,
@@ -58,7 +79,7 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
   /**
    * Loads new data from server
    * @param {{ pagination: { page: number, rowsPerPage: number, sortBy: string, descending: boolean }, filter: string }} dataProps - props input
-   * @returns {Promise<void>}
+   * @returns {Promise<void>} nothing
    */
   async function onRequest(dataProps: { pagination: { page: number, rowsPerPage: number, sortBy: string, descending: boolean }, filter: string }) {
     const { filter } = dataProps;
@@ -86,10 +107,11 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
   /**
    * Wraps a row entry in preparation for the CSV export
    * @param {string} val - Value to be exported
-   * @param {val: string, row?: T[]) => string} formatFn - optional format function
+   * @param {function} formatFn - optional format function
    * @param {Object<string, any>[]} row - Row in which value is stored
+   * @returns {string} CSV as string
    */
-  function wrapCsvValue (val: any, formatFn?: (val: any, row?: T) => string, row?: T) {
+  function wrapCsvValue (val: any, formatFn?: (val: any, row?: T) => string, row?: T): string {
     let formatted = formatFn !== void 0
       ? formatFn(val, row)
       : String(val)
@@ -104,6 +126,7 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
 
   /**
    * Exports a table as a CSV-File
+   * @returns {void} nothing
    */
   function exportTable () {
     // naive encoding to csv format
@@ -111,13 +134,14 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
       selected.value.map(row => visibleColumnNames.value.map(name => {
         const col = columns.value.find((col) => col.name === name);
         if (!col) { return; }
-        let fieldVal: string;
+        let fieldVal: any;
         if (typeof col.field === 'function') {
           fieldVal = col.field(row);
         } else {
           const colHasField = col.field === void 0;
           const colKey: string = colHasField ? col.name : col.field;
-          fieldVal = (row as Record<string, string>)[colKey];
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          fieldVal = (row as Record<string, any>)[colKey];
         }
         return wrapCsvValue(fieldVal, col.format, row)
       }).join(','))
@@ -138,7 +162,14 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
     }
   }
 
-  async function handleSelection ({ rows: newlySelected, added, evt }: { rows: T[], added: boolean, evt: Event}) {
+  /**
+   * Function that handles selections using CTRL and SHIFT keys
+   * @param {T[]} newlySelected - rows that were newly selected
+   * @param {boolean} added - whether the rows were selected or de-selected
+   * @param {KeyboardEvent} evt - Javascript event that contains keys
+   * @returns {Promise<void>} nothing
+   */
+  async function handleSelection ({ rows: newlySelected, added, evt }: { rows: T[], added: boolean, evt: KeyboardEvent}) {
     // ignore selection change from header of not from a direct click event
     if (newlySelected.length !== 1 || evt === void 0) {
       return
@@ -146,15 +177,16 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
 
     const oldSelectedRow = storedSelectedRow
     const newSelectedRow = newlySelected[0];
+
     const { ctrlKey, shiftKey } = evt
 
-    if (shiftKey !== true) {
+    if (!shiftKey) {
       storedSelectedRow = newSelectedRow
     }
 
     // wait for the default selection to be performed
     await nextTick();
-    if (shiftKey === true) {
+    if (shiftKey) {
       const tableRows = rows.value;
       let firstIndex = tableRows.indexOf(oldSelectedRow)
       let lastIndex = tableRows.indexOf(newSelectedRow)
@@ -175,29 +207,93 @@ export function useDataTable<T>(query: QueryObject, sortBy='uuid', descending=fa
         ? selectedRows.concat(rangeRows.filter((row: T) => !(selectedRows.includes(row))))
         : selectedRows.filter((row: T) => !(rangeRows.includes(row)))
     }
-    else if (ctrlKey !== true && added) {
+    else if (!ctrlKey && added) {
       selected.value = [newSelectedRow]
     }
   }
 
-  async function updateRow(row: T, path: string, value: any) {
-    const correctRowIndex = rows.value.findIndex((r) => row.uuid === r.uuid);
+  /**
+   * Handles sending row updates to database
+   * @param {T} row - row to be updated
+   * @param {string} path - path to key that must be updated
+   * @param {any} value - new value at key location
+   * @returns {Promise<void>} nothing
+   */
+  async function updateRow(row: T, path: string, value: any): Promise<void> {
+    const correctRowIndex = rows.value.findIndex((r) => {
+      if ('uuid' in row && 'uuid' in r) {
+        return row.uuid === r.uuid;
+      }
+      return false;
+    });
     if(correctRowIndex > -1) {
       const rowCopy = cloneDeep(toRaw(rows.value[correctRowIndex]));
       rowCopy[path] = value;
       rows.value.splice(correctRowIndex, 1, rowCopy);
-      await executeMutation(UPDATE_USER, rowCopy as Record<string, unknown>);
-      $q.notify({
-        message: 'Saved',
-        color: 'positive',
-        icon: 'save',
-        position: 'top-right',
-        timeout: 500,
-      })
+      try {
+        await executeMutation(mutationObject, rowCopy as Record<string, unknown>);
+        showNotification(
+          $q,
+          i18n.global.t('messages.entry_edited'),
+          'top-right',
+          'positive',
+          'white',
+          'done',
+          false,
+          500,
+        );
+      } catch (e) {
+        showNotification(
+          $q,
+          i18n.global.t('errors.entry_edit_failed'),
+          'top-right',
+          'negative',
+          'white',
+          'clear',
+          false,
+          500,
+        );
+      }
     }
   }
 
+  /**
+   * Deletes all selected rows
+   * @returns {Promise<T[]>} updated rows
+   */
+  function deleteActiveRows(): Promise<T[]> {
+    const deletionRequests = selected.value.map((selectedRow: T) => {
+      return executeMutation(deletionObject, toRaw(selectedRow) as Record<string, unknown>)
+        .then(() => {
+          showNotification(
+            $q,
+            i18n.global.t('messages.entry_deleted'),
+            'top-right',
+            'positive',
+            'white',
+            'done',
+            false,
+            500,
+          );
+        })
+        .catch((e) => {
+          console.error(e);
+          showNotification(
+            $q,
+            i18n.global.t('errors.entry_delete_failed'),
+            'top-right',
+            'negative',
+            'white',
+            'clear',
+            false,
+            500,
+          );
+        });
+    })
+    return Promise.allSettled(deletionRequests);
+  }
+
   return {
-    rows, columns, visibleColumns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow,
+    rows, columns, visibleColumns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow, deleteActiveRows,
   }
 }
