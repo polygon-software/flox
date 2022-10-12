@@ -5,7 +5,8 @@ import {exportFile, useQuasar} from 'quasar';
 import {cloneDeep} from 'lodash-es';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
 import {i18n} from 'boot/i18n';
-import {BaseEntity} from "src/data/types/BaseEntity";
+import {BaseEntity} from 'src/data/types/BaseEntity';
+import CountQuery from 'src/data/types/CountEntity';
 
 export interface ColumnInterface<T> {
   name: string,
@@ -65,15 +66,11 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
    * @param {string} filter - search input
    * @param {string} sortBy - attribute name
    * @param {boolean} descending - sort order
-   * @returns {Promise<{ data: T[], count: number }>} rows from server and count of total rows fitting criteria
+   * @returns {Promise<CountQuery<T>>} rows from server and count of total rows fitting criteria
    */
   async function fetchFromServer (skip: number, limit: number, filter: string, sortBy: string, descending: boolean): Promise<{ data: T[], count: number }> {
-    const queryResult = await executeQuery(queryObject, { skip, limit, filter, sortBy, descending });
-    const data = queryResult.data[queryObject.cacheLocation] as unknown as { data: T[], count: number };
-    return {
-      data: data.data ,
-      count: data.count,
-    };
+    const queryResult = await executeQuery<CountQuery<T>>(queryObject, { skip, limit, filter, sortBy, descending });
+    return queryResult.data;
   }
 
   /**
