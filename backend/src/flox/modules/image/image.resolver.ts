@@ -21,7 +21,7 @@ export class ImageResolver {
   ) {}
 
   /**
-   * Returns all images stoerd in database. Only accessible to admins
+   * Returns all images stored in database. Only accessible to admins
    * @param {GetAllImagesArgs} getAllImagesArgs - limit and skip parameters
    * @returns {Promise<Image[]>} All Images
    */
