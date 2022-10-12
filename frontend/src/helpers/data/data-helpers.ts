@@ -88,8 +88,7 @@ async function executeMutation<T extends BaseEntity>(
   variables: OperationVariables
 ): Promise<FetchResult<T | null>> {
   const mutation = mutationObject.mutation;
-
-
+  
   // Actually execute mutation and handle cache
   const { mutate } = useMutation<Record<string, T> | null>(mutation, () => ({
     // Get cache and the new or deleted object

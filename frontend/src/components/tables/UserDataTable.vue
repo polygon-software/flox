@@ -109,7 +109,7 @@ import {QTable} from 'quasar';
 import {useDataTable} from 'components/tables/useDataTable';
 import {User} from 'src/data/types/User';
 import { QUERY_USERS } from 'src/data/queries/USER';
-import {DELETE_USER, UPDATE_USER} from "src/data/mutations/USER";
+import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';
 
 const title = 'User Table';
 
