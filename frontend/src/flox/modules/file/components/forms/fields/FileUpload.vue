@@ -168,10 +168,6 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  queryName: {
-    type: String,
-    required: true,
-  },
   sendRaw: {
     type: Boolean,
     default: true
@@ -266,7 +262,7 @@ async function uploadFiles() {
   for (const file of selectedFiles.value) {
     if (file.status !== FILE_UPLOAD_STATUS.DONE) {
       file.status = FILE_UPLOAD_STATUS.LOADING
-      const res: AxiosResponse = await uploadFile(file.content, url, props.queryName)
+      const res: AxiosResponse = await uploadFile(file.content, url)
       if (res.status === 201) {
         file.status = FILE_UPLOAD_STATUS.DONE
       }

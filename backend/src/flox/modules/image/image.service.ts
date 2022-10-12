@@ -201,11 +201,10 @@ export class ImageService {
         file: true,
       },
     });
-    const removedImage = await this.imageRepository.remove(image);
     await this.fileService.deleteFile(
       { uuid: image.file.uuid } as DeleteFileInput,
       true,
     );
-    return removedImage;
+    return image;
   }
 }

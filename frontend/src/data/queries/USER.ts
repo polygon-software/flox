@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { QueryObject } from 'src/data/DATA-DEFINITIONS';
+import {TABLES} from 'src/data/TABLES';
 
 /**
  * User-related queries
@@ -17,7 +18,7 @@ export const MY_USER = {
       }
     }
   `,
-  tables: ['user'],
+  tables: [TABLES.USER],
   cacheLocation: 'myUser',
 };
 
@@ -33,7 +34,7 @@ export const ALL_USERS = {
       }
     }
   `,
-  tables: ['user'],
+  tables: [TABLES.USER],
   cacheLocation: 'allUsers',
 };
 
@@ -52,8 +53,8 @@ export const QUERY_USERS = {
       }
     }
   `,
-  tables: ['user'],
+  tables: [TABLES.USER],
   cacheLocation: 'queryUsers',
 };
 
-export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_USERS];
+export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_USERS, QUERY_USERS];

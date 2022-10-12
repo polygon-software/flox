@@ -33,6 +33,7 @@ export interface ColumnInterface<T> {
  * @param {string} sortBy - key to sort by
  * @param {boolean} descending - sort order
  * @param {number} rowsPerPage - Default number of rows per page
+ * @returns {}
  */
 export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mutationObject: MutationObject, deletionObject: MutationObject, sortBy='uuid', descending=false, rowsPerPage=10) {
   const $q = useQuasar();
@@ -216,7 +217,7 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
    * @param {any} value - new value at key location
    * @returns {Promise<void>} nothing
    */
-  async function updateRow(row: T, path: string, value: any): Promise<void> {
+  async function updateRow(row: T, path: keyof T, value: any): Promise<void> {
     const correctRowIndex = rows.value.findIndex((r) => {
       if ('uuid' in row && 'uuid' in r) {
         return row.uuid === r.uuid;
@@ -224,7 +225,8 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
       return false;
     });
     if(correctRowIndex > -1) {
-      const rowCopy = cloneDeep(toRaw(rows.value[correctRowIndex]));
+      const rowCopy = cloneDeep(toRaw(rows.value[correctRowIndex]))
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       rowCopy[path] = value;
       rows.value.splice(correctRowIndex, 1, rowCopy);
       try {
@@ -258,10 +260,10 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
    * Deletes all selected rows
    * @returns {Promise<T[]>} updated rows
    */
-  function deleteActiveRows(): Promise<T[]> {
+  function deleteActiveRows(): Promise<PromiseSettledResult<(Awaited<T>|void|null|undefined)>[]> {
     const deletionRequests = selected.value.map((selectedRow: T) => {
-      return executeMutation(deletionObject, toRaw(selectedRow) as Record<string, unknown>)
-        .then(() => {
+      return executeMutation<T>(deletionObject, toRaw(selectedRow) as Record<string, unknown>)
+        .then((data) => {
           showNotification(
             $q,
             i18n.global.t('messages.entry_deleted'),
@@ -272,6 +274,7 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
             false,
             500,
           );
+          return data.data;
         })
         .catch((e) => {
           console.error(e);

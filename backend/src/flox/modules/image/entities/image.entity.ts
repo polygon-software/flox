@@ -13,7 +13,7 @@ import { Label } from './label.entity';
 @ObjectType()
 export class Image extends BaseEntity {
   @Field(() => PrivateFile, { description: 'File' })
-  @OneToOne(() => PrivateFile)
+  @OneToOne(() => PrivateFile, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn()
   public file: PrivateFile;
 

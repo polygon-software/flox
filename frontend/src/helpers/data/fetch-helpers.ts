@@ -1,4 +1,4 @@
-import {executeQuery} from 'src/helpers/data/data-helpers';
+import {executeQuery, subscribeToQuery} from 'src/helpers/data/data-helpers';
 import {mapUser} from 'src/helpers/data/mapping-helpers';
 import {MY_USER} from 'src/data/queries/USER';
 import {User} from 'src/data/types/User';
@@ -7,6 +7,7 @@ import {PrivateFile} from 'src/data/types/PrivateFile';
 import {PublicFile} from 'src/data/types/PublicFile';
 import {ImageFile} from 'src/data/types/ImageFile';
 import {GET_IMAGE, GET_IMAGE_FOR_FILE} from 'src/data/queries/IMAGE';
+import {Ref} from 'vue';
 
 /**
  * This file contains all helper functions for fetching data using GraphQL queries
@@ -44,10 +45,10 @@ export async function fetchPublicFile(uuid: string): Promise<PublicFile|null> {
  * Fetches a number of public files
  * @param {number} [limit] - maximum number of files to load
  * @param {number} [skip] - number of files to skip before loading next bunch, used for pagination
- * @returns {Promise<PublicFile[]>} List of public Files
+ * @returns {Ref<PublicFile[]>} List of public Files
  */
-export async function fetchPublicFiles(limit?: number, skip?: number): Promise<PublicFile[]> {
-  const { data } = await executeQuery<PublicFile[]>(ALL_PUBLIC_FILES, { limit, skip });
+export function fetchPublicFiles(limit?: number, skip?: number): Ref<PublicFile[]> {
+  const { data } = subscribeToQuery<PublicFile[]>(ALL_PUBLIC_FILES, { limit, skip });
   return data;
 }
 
@@ -55,10 +56,10 @@ export async function fetchPublicFiles(limit?: number, skip?: number): Promise<P
  * Fetches files of logged-in user
  * @param {number} [limit] - maximum number of files to load
  * @param {number} [skip] - number of files to skip before loading next bunch, used for pagination
- * @returns {Promise<PrivateFile[]>} List of private Files
+ * @returns {Ref<PrivateFile[]>} List of private Files
  */
-export async function fetchMyFiles(limit?: number, skip?: number ): Promise<PrivateFile[]> {
-  const { data } = await executeQuery<PrivateFile[]>(ALL_MY_FILES, { limit, skip });
+export function fetchMyFiles(limit?: number, skip?: number ): Ref<PrivateFile[]> {
+  const { data } = subscribeToQuery<PrivateFile[]>(ALL_MY_FILES, { limit, skip });
   return data;
 }
 

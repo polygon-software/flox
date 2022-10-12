@@ -7,7 +7,7 @@
     <SampleForm/>
 
     <!-- Private File Upload -->
-    <FileUpload :accepted-files="'image/*, .pdf' " query-name="upload" target="/uploadPrivateFile"/>
+    <FileUpload :accepted-files="'image/*, .pdf' " target="/uploadPrivateFile"/>
 
     <!-- Private Files Table -->
     <FilesTable private />

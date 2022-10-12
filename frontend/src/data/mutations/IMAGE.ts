@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import {MutationTypes} from 'src/data/DATA-DEFINITIONS';
+import {TABLES} from 'src/data/TABLES';
 
 export const CREATE_IMAGE = {
   mutation: gql`
@@ -19,7 +20,7 @@ export const CREATE_IMAGE = {
               __typename
             }
         }`,
-  tables: ['image'],
+  tables: [TABLES.IMAGE],
   type: MutationTypes.CREATE,
   cacheLocation: 'createImage'
 }
@@ -37,7 +38,7 @@ export const DELETE_IMAGE = {
               __typename
             }
         }`,
-  tables: ['image'],
+  tables: [TABLES.IMAGE],
   type: MutationTypes.DELETE,
   cacheLocation: 'deleteImage'
 }

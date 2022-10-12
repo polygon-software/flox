@@ -44,7 +44,6 @@ export class UserService implements SearchQueryInterfaceService {
         username: Like(`%${queryArgs.filter}%`),
       },
     });
-    console.log(data, count);
     return { data, count };
   }
 

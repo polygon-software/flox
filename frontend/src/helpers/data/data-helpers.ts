@@ -51,71 +51,23 @@ async function executeQuery<T extends CountQuery<any> | BaseEntity | BaseEntity[
 }
 
 /**
- * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
- * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
- * @param {OperationVariables} variables - any variables that shall be passed to the mutation
- * @returns {Promise<FetchResult<Record<string, any>> | null>} Returns the values defined by the mutation
- */
-async function executeMutation<T extends BaseEntity>(
-  mutationObject: MutationObject,
-  variables: OperationVariables
-): Promise<FetchResult<T | null> | null> {
-  const mutation = mutationObject.mutation;
-  const tables = mutationObject.tables;
-  const type = mutationObject.type;
-
-  if ([mutation, tables, type].some((item) => item === undefined)) {
-    throw new Error(i18n.global.t('errors.missing_properties'));
-  }
-  const affectedQueries: QueryObject[] = [];
-
-  // Find affected queries based on tables for CREATE and DELETE operations
-  if (
-    type === MutationTypes.CREATE ||
-    type === MutationTypes.DELETE ||
-    type === MutationTypes.DEVALIDATINGUPDATE
-  ) {
-    QUERIES.forEach((query) => {
-      // If any of the mutation's affected tables are relevant to query, add to list of affected queries
-      if (tables.some((t) => query.tables.indexOf(t) >= 0)) {
-        affectedQueries.push(query);
-      }
-    });
-  }
-
-  // Actually execute mutation and handle cache
-  const { mutate } = useMutation<T | null>(mutation, () => ({
-    // Get cache and the new or deleted object
-    update: () => {
-      // Re-fetch all affected queries
-      refetchAffectedQueries(affectedQueries, mutationObject);
-    },
-  }));
-  // Execute mutation
-  return mutate(variables);
-}
-
-/**
  * Forces a full re-fetch all queries affected by a mutation by removing them from cache
- * @param {QueryObject[]} affectedQueries - all affected queries
- * @param {MutationObject} mutationObject - the mutation that triggered the change
+ * @param {string[]} tables - tables that should be invalidated
  * @returns {void}
  */
-function refetchAffectedQueries(
-  affectedQueries: QueryObject[],
-  mutationObject: MutationObject
-) {
+function invalidateTables(tables: string[]) {
+  const affectedQueries: QueryObject[] = [];
+
+  QUERIES.forEach((query) => {
+    // If any of the mutation's affected tables are relevant to query, add to list of affected queries
+    if (tables.some((t) => query.tables.indexOf(t) >= 0)) {
+      affectedQueries.push(query);
+    }
+  });
   const apolloClient = useApolloClient();
   const cache = apolloClient.client.cache;
 
   for (const queryObject of affectedQueries) {
-    if (!mutationObject.tables) {
-      throw new Error(
-        `${i18n.global.t('errors.cache_location_missing')} ${JSON.stringify(
-          mutationObject
-        )}`
-      );
-    }
     // Evict query from cache
     if (queryObject.cacheLocation) {
       cache.evict({
@@ -123,6 +75,39 @@ function refetchAffectedQueries(
       });
     }
   }
+}
+
+/**
+ * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
+ * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
+ * @param {OperationVariables} variables - any variables that shall be passed to the mutation
+ * @returns {Promise<FetchResult<T | null> | null>} Returns the values defined by the mutation
+ */
+async function executeMutation<T extends BaseEntity>(
+  mutationObject: MutationObject,
+  variables: OperationVariables
+): Promise<FetchResult<T | null>> {
+  const mutation = mutationObject.mutation;
+
+
+  // Actually execute mutation and handle cache
+  const { mutate } = useMutation<Record<string, T> | null>(mutation, () => ({
+    // Get cache and the new or deleted object
+    update: () => {
+      // Re-fetch all affected queries
+      invalidateTables(mutationObject.tables);
+    },
+  }));
+  // Execute mutation
+  const mutationResult = await mutate(variables);
+  if (mutationResult && mutationResult.data) {
+    return {
+      data: mutationResult.data[mutationObject.cacheLocation],
+    } as FetchResult<T>;
+  }
+  return {
+    data: null,
+  };
 }
 
 /**
@@ -134,7 +119,7 @@ function refetchAffectedQueries(
 function subscribeToQuery<T extends CountQuery<any> | BaseEntity | BaseEntity[]>(
   query: QueryObject,
   variables?: OperationVariables
-): ApolloQueryResult<Ref<T|null>> {
+): ApolloQueryResult<Ref<T>> {
   const $ssrStore = useSsrStore();
   const cachedResult: Ref<T|null> = ref(null);
 
@@ -182,8 +167,8 @@ function subscribeToQuery<T extends CountQuery<any> | BaseEntity | BaseEntity[]>
     apolloClient
       .watchQuery({ query: query.query, variables: variables })
       .subscribe({
-        next(value: ApolloQueryResult<T>) {
-          cachedResult.value = value.data;
+        next(value: ApolloQueryResult<Record<string, T>>) {
+          cachedResult.value = value.data[query.cacheLocation];
         },
       });
   });
@@ -193,4 +178,4 @@ function subscribeToQuery<T extends CountQuery<any> | BaseEntity | BaseEntity[]>
   } as ApolloQueryResult<Ref<T>>;
 }
 
-export { executeQuery, executeMutation, subscribeToQuery };
+export { executeQuery, executeMutation, subscribeToQuery, invalidateTables };

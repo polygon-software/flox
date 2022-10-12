@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {TABLES} from 'src/data/TABLES';
 
 
 export const GET_IMAGE = {
@@ -29,7 +30,7 @@ export const GET_IMAGE = {
       }
     }
   `,
-  tables: ['image'],
+  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
   cacheLocation: 'image',
 };
 
@@ -50,7 +51,7 @@ export const GET_IMAGE_FOR_FILE = {
       }
     }
   `,
-  tables: ['image'],
+  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
   cacheLocation: 'imageForFile',
 };
 

@@ -41,7 +41,6 @@ export class FileResolver {
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @CurrentUser() user: User,
   ): Promise<PrivateFile[]> {
-    console.log(user);
     return this.fileService.getAllMyFiles(getAllFilesArgs, user);
   }
 
