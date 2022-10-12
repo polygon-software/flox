@@ -11,6 +11,7 @@ import { QUERIES } from 'src/data/queries/QUERIES';
 import { useSsrStore } from 'stores/ssr';
 import {BaseEntity} from 'src/data/types/BaseEntity';
 import CountQuery from 'src/data/types/CountEntity';
+import {OperationVariables} from '@apollo/client/core/types';
 
 /**
  * This file contains a collection of helper functions for querying and mutating data using GraphQL/Apollo.
@@ -19,12 +20,12 @@ import CountQuery from 'src/data/types/CountEntity';
 /**
  * Executes a given GraphQL query object
  * @param {QueryObject} queryObject - the query object constant (from QUERIES.ts)
- * @param {Record<string, unknown>} [variables] - variables to pass to the query, if any
+ * @param {OperationVariables} [variables] - variables to pass to the query, if any
  * @returns {ApolloQueryResult<Record<string, unknown[]>>} - the query's output
  */
 async function executeQuery<T extends CountQuery<any> | BaseEntity | BaseEntity[]>(
   queryObject: QueryObject,
-  variables?: Record<string, unknown>
+  variables?: OperationVariables
 ): Promise<ApolloQueryResult<T>> {
   const queryResult = useQuery<Record<string, T>>(queryObject.query, variables ?? {});
 
@@ -52,13 +53,13 @@ async function executeQuery<T extends CountQuery<any> | BaseEntity | BaseEntity[
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
  * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
- * @param {Record<string, unknown>} variables - any variables that shall be passed to the mutation
+ * @param {OperationVariables} variables - any variables that shall be passed to the mutation
  * @returns {Promise<FetchResult<Record<string, any>> | null>} Returns the values defined by the mutation
  */
-async function executeMutation(
+async function executeMutation<T extends BaseEntity>(
   mutationObject: MutationObject,
-  variables: Record<string, unknown>
-): Promise<FetchResult<Record<string, any>> | null> {
+  variables: OperationVariables
+): Promise<FetchResult<T | null> | null> {
   const mutation = mutationObject.mutation;
   const tables = mutationObject.tables;
   const type = mutationObject.type;
@@ -83,7 +84,7 @@ async function executeMutation(
   }
 
   // Actually execute mutation and handle cache
-  const { mutate } = useMutation(mutation, () => ({
+  const { mutate } = useMutation<T | null>(mutation, () => ({
     // Get cache and the new or deleted object
     update: () => {
       // Re-fetch all affected queries
@@ -127,12 +128,12 @@ function refetchAffectedQueries(
 /**
  * Subscribes to a graphQL query
  * @param {QueryObject} query - the graphQL query object
- * @param {Record<string, unknown>} [variables] - any variables to pass to the query
+ * @param {OperationVariables} [variables] - any variables to pass to the query
  * @returns {ApolloQueryResult<Ref<T|null>>} - the query's output
  */
 function subscribeToQuery<T extends CountQuery<any> | BaseEntity | BaseEntity[]>(
   query: QueryObject,
-  variables?: Record<string, unknown>
+  variables?: OperationVariables
 ): ApolloQueryResult<Ref<T|null>> {
   const $ssrStore = useSsrStore();
   const cachedResult: Ref<T|null> = ref(null);
