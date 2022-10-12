@@ -99,19 +99,14 @@ export class UserService {
 
   /**
    * Return current user given the Cognito user from the request
-   * @param {Record<string, string>} cognitoUser - cognito user from request
+   * @param {User} user - database user from request
    * @returns {Promise<User>} - user
    */
-  async getMyUser(cognitoUser: Record<string, string>): Promise<User> {
-    const myUser = await this.userRepository.findOne({
+  async getMyUser(user: User): Promise<User> {
+    return this.userRepository.findOneOrFail({
       where: {
-        cognitoUuid: cognitoUser.userId,
+        uuid: user.uuid,
       },
     });
-
-    if (!myUser) {
-      throw new Error(`No user found for ${cognitoUser.userId}`);
-    }
-    return myUser;
   }
 }

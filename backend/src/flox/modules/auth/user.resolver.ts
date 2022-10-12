@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
@@ -91,7 +91,7 @@ export class UserResolver {
    */
   @LoggedIn()
   @Query(() => User, { name: 'myUser' })
-  async myUser(@CurrentUser() user: Record<string, string>): Promise<User> {
+  async myUser(@CurrentUser() user: User): Promise<User> {
     // Get user where user's UUID matches Cognito ID
     return this.userService.getMyUser(user);
   }

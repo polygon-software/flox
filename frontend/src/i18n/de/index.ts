@@ -66,6 +66,7 @@ export default {
     status_done: 'Hochgeladen',
     status_failed: 'Fehler',
     successfully_uploaded: '{value} Datei(en) wurden erfolgreich hochgeladen',
+    successfully_deleted: '{value} Datei(en) wurden erfolgreich gelöscht',
     upload: 'Hochladen',
   },
   messages: {
@@ -89,4 +90,7 @@ export default {
       'Passwort erfolgreich geändert. Bitte melden Sie sich mit dem neuen Passwort an.',
     account_created: 'Konto erfolgreich erstellt',
   },
+  date: {
+    date_format: 'DD.MM.YYYY'
+  }
 };

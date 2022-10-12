@@ -5,17 +5,17 @@ import {
 import { MODULES } from '../../MODULES';
 
 /**
- * The file module handles file up/download using a database table each for private and public files, as well as storing
- * the files in S3 and requesting corresponding URLs.
+ * The image module handles files that contain images and contains functionality to extract information from these
+ * images, such as object recognition.
  */
 
-type FileModuleConfig = {
-  // File module has no options
+type ImageModuleConfig = {
+  // Image module has no options
 };
 
 // Default configuration set; will get merged with custom config from flox.config.json
-const defaultConfig: FileModuleConfig = {
-  // File module has no options
+const defaultConfig: ImageModuleConfig = {
+  // Image module has no options
 };
 
 /**
@@ -25,6 +25,6 @@ const defaultConfig: FileModuleConfig = {
 export function moduleConfig() {
   return mergeConfigurations(
     defaultConfig,
-    floxModuleOptions(MODULES.FILE),
-  ) as FileModuleConfig;
+    floxModuleOptions(MODULES.IMAGE),
+  ) as ImageModuleConfig;
 }

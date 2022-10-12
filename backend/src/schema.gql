@@ -2,6 +2,37 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type BoundingBox {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Bounding-Box height in percentage of image height"""
+  height: Float!
+
+  """Bounding-Box position from the left side of the image, in percentage"""
+  left: Float!
+
+  """Bounding-Box position from the top side of the image, in percentage"""
+  top: Float!
+
+  """Last modification date"""
+  updatedAt: DateTime!
+
+  """UUID"""
+  uuid: ID!
+
+  """Bounding-Box width in percentage of image width"""
+  width: Float!
+}
+
+input CreateImageInput {
+  file: ID!
+  objectRecognition: Boolean = false
+}
+
 input CreateUserInput {
   cognitoUuid: String!
   email: String!
@@ -18,14 +49,84 @@ input DeleteFileInput {
   uuid: ID!
 }
 
+input DeleteImageInput {
+  uuid: ID!
+}
+
 input DeleteUserInput {
   uuid: ID!
 }
 
+type Image {
+  """Capture Date"""
+  capturedAt: DateTime
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """File"""
+  file: PrivateFile!
+
+  """Image Height in Pixels"""
+  height: Float
+
+  """Labels of detected objects on image"""
+  labels: [Label!]!
+
+  """GPS Latitude"""
+  latitude: Float
+
+  """GPS Longitude"""
+  longitude: Float
+
+  """Last modification date"""
+  updatedAt: DateTime!
+
+  """UUID"""
+  uuid: ID!
+
+  """Image Width in Pixels"""
+  width: Float
+}
+
+type Label {
+  """Bounding box for every instance of this label on image"""
+  boundingBox: BoundingBox!
+
+  """Confidence between 0 and 100"""
+  confidence: Float!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Image on which this label was detected"""
+  image: Image!
+
+  """Label Name"""
+  name: String!
+
+  """Parent labels"""
+  parents: [String!]!
+
+  """Last modification date"""
+  updatedAt: DateTime!
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Mutation {
+  createImage(createImageInput: CreateImageInput!): Image!
   createUser(createUserInput: CreateUserInput!): User!
-  deletePrivateFile(deleteFileInput: DeleteFileInput!): User!
-  deletePublicFile(deleteFileInput: DeleteFileInput!): User!
+  deleteImage(deleteImageInput: DeleteImageInput!): Image!
+  deletePrivateFile(deleteFileInput: DeleteFileInput!): PrivateFile!
+  deletePublicFile(deleteFileInput: DeleteFileInput!): PublicFile!
   deleteUser(deleteUserInput: DeleteUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
@@ -37,11 +138,20 @@ type PrivateFile {
   """Date of deletion"""
   deletedAt: DateTime
 
+  """Name of File"""
+  filename: String
+
   """S3 File Key"""
   key: String!
 
+  """Files mime type"""
+  mimetype: String!
+
   """File owner"""
   owner: String!
+
+  """Filesize in bytes"""
+  size: Float!
 
   """Last modification date"""
   updatedAt: DateTime!
@@ -60,8 +170,17 @@ type PublicFile {
   """Date of deletion"""
   deletedAt: DateTime
 
+  """Name of File"""
+  filename: String
+
   """S3 File Key"""
   key: String!
+
+  """Files mime type"""
+  mimetype: String!
+
+  """Filesize in bytes"""
+  size: Float!
 
   """Last modification date"""
   updatedAt: DateTime!
@@ -74,14 +193,39 @@ type PublicFile {
 }
 
 type Query {
+  allMyFiles(
+    """Number of files to load"""
+    limit: Int = 500
+
+    """How many files to skip"""
+    skip: Int = 0
+  ): [PrivateFile!]!
+  allPublicFiles(
+    """Number of files to load"""
+    limit: Int = 500
+
+    """How many files to skip"""
+    skip: Int = 0
+  ): [PublicFile!]!
   allUsers: [User!]!
-  getPrivateFile(
+  image(
     """URL expiration duration (in seconds)"""
     expires: [Float!]
     uuid: ID!
-  ): PrivateFile!
-  getPublicFile(uuid: ID!): PublicFile!
+  ): Image!
+  imageForFile(
+    """URL expiration duration (in seconds)"""
+    expires: [Float!]
+    file: ID!
+  ): Image!
+  images: [Image!]!
   myUser: User!
+  privateFile(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuid: ID!
+  ): PrivateFile!
+  publicFile(uuid: ID!): PublicFile!
   user(cognitoUuid: ID, uuid: ID): User!
   users(uuids: [ID!]): [User!]!
 }

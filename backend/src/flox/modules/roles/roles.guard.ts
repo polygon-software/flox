@@ -51,6 +51,7 @@ export class RolesGuard implements CanActivate {
       dbUser = await this.userService.getUser({
         cognitoUuid: user.userId,
       } as GetUserArgs);
+      req.principal = dbUser;
       // Admin has access to everything
       if (dbUser && dbUser.role === DEFAULT_ROLES.ADMIN) {
         return true;
