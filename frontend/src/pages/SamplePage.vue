@@ -20,7 +20,13 @@
 
     <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />
 
-    <UserDataTable />
+    <DataTable
+      title="User Table"
+      :columns="columns"
+      :query="QUERY_USERS"
+      :update-mutation="UPDATE_USER"
+      :delete-mutation="DELETE_USER"
+    />
   </q-page>
 </template>
 
@@ -32,7 +38,20 @@ import SampleForm from 'components/sample/SampleForm.vue';
 import FileUpload from 'src/flox/modules/file/components/forms/fields/FileUpload.vue';
 import FilesTable from 'src/flox/modules/file/components/tables/FilesTable.vue';
 import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
-import UserDataTable from 'components/tables/UserDataTable.vue';
+import DataTable from 'components/tables/DataTable.vue';
+
+import { QUERY_USERS } from 'src/data/queries/USER';
+import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';
+import {ColumnInterface} from 'components/tables/useDataTable';
+import {User} from 'src/data/types/User';
+import {isEmail, isRequried} from 'src/helpers/validation/validation-helpers';
 
 const imageUuid: Ref<string> = ref('');
+
+const columns: Ref<ColumnInterface<User>[]> = ref([
+  { name: 'uuid', label: 'UUID', field: 'uuid', sortable: true },
+  { name: 'username', label: 'Username', field: 'username', sortable: true, edit: true },
+  { name: 'email', label: 'E-Mail', field: 'email', sortable: true, edit: true, qInputProps: { rules: [ isEmail() ] } },
+  { name: 'role', label: 'Role', field: 'role', sortable: true },
+])
 </script>

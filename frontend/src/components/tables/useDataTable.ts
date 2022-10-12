@@ -1,14 +1,14 @@
 import {ref, Ref, nextTick, toRaw, watch, ComputedRef, computed} from 'vue';
 import {executeMutation, executeQuery} from 'src/helpers/data/data-helpers';
 import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
-import {exportFile, useQuasar} from 'quasar';
+import {exportFile, QInputProps, useQuasar} from 'quasar';
 import {cloneDeep} from 'lodash-es';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
 import {i18n} from 'boot/i18n';
 import {BaseEntity} from 'src/data/types/BaseEntity';
 import CountQuery from 'src/data/types/CountEntity';
 
-export interface ColumnInterface<T> {
+export interface ColumnInterface<T = any> {
   name: string,
   label: string,
   field: string | ((row: T) => string),
@@ -22,7 +22,7 @@ export interface ColumnInterface<T> {
   classes?: string | ((row: T) => string),
   headerStyle?: string,
   edit?: boolean,
-  editProps?: Record<string, any>
+  qInputProps?: QInputProps
 }
 
 /**

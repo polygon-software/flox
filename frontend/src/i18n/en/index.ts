@@ -7,6 +7,7 @@ export default {
     confirm: 'Confirm',
     ok: 'OK',
     loading: 'Loading',
+    save: 'Save',
   },
   authentication: {
     authentication: 'Authentication',
@@ -93,5 +94,8 @@ export default {
   },
   date: {
     date_format: 'MM.DD.YYYY'
+  },
+  validation: {
+    email: 'E-Mail invalid'
   }
 };

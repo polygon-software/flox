@@ -22,11 +22,14 @@
           <q-popup-edit
             v-if="props.col.edit"
             v-slot="scope"
-            :model-value="props.row[props.col.field]"
             buttons
+            :validate="validateInput(props.col, $event)"
+            :model-value="props.row[props.col.field]"
+            :label-set="i18n.global.t('general.save')"
+            :label-cancel="i18n.global.t('general.cancel')"
             @save="updateRow(props.row, props.col.field, $event)"
           >
-            <q-input v-model="scope.value" v-bind="props.col.editProps" dense autofocus counter />
+            <q-input v-model="scope.value" v-bind="props.col.qInputProps" dense autofocus counter />
           </q-popup-edit>
         </q-td>
       </template>
@@ -56,13 +59,13 @@
           option-value="name"
           class="q-mx-lg"
         >
-          <template #option="{ itemProps, opt, selected, toggleOption }">
+          <template #option="{ itemProps, opt, isSelected, toggleOption }">
             <q-item v-bind="itemProps">
               <q-item-section>
-                <q-item-label v-html="opt.label" />
+                <q-item-label v-text="opt.label" />
               </q-item-section>
               <q-item-section side>
-                <q-toggle :model-value="selected" @update:model-value="toggleOption(opt)" />
+                <q-toggle :model-value="isSelected" @update:model-value="toggleOption(opt)" />
               </q-item-section>
             </q-item>
           </template>
@@ -103,25 +106,46 @@
   </q-card>
 </template>
 
-<script setup lang="ts">
-import {ref, onMounted, Ref} from 'vue';
+<script setup lang="ts" generic="T extends BaseEntity">
+import {ref, onMounted, Ref, defineProps, watchEffect} from 'vue';
 import {QTable} from 'quasar';
-import {useDataTable} from 'components/tables/useDataTable';
-import {User} from 'src/data/types/User';
-import { QUERY_USERS } from 'src/data/queries/USER';
-import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';
+import {ColumnInterface, useDataTable} from 'components/tables/useDataTable';
+import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {BaseEntity} from 'src/data/types/BaseEntity';
+import {i18n} from 'boot/i18n';
 
-const title = 'User Table';
+const props = defineProps<{
+  title: string,
+  query: QueryObject,
+  updateMutation: MutationObject,
+  deleteMutation: MutationObject,
+  columns: ColumnInterface<T>[],
+}>()
 
 const tableRef: Ref<QTable|null> = ref(null)
-const { rows, columns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow, deleteActiveRows } = useDataTable<User>(QUERY_USERS, UPDATE_USER, DELETE_USER);
+const { rows, columns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow, deleteActiveRows } = useDataTable<T>(props.query, props.updateMutation, props.deleteMutation);
 
-columns.value = [
-  { name: 'uuid', label: 'UUID', field: 'uuid', sortable: true, edit: true },
-  { name: 'username', label: 'Username', field: 'username', sortable: true, edit: true },
-  { name: 'email', label: 'E-Mail', field: 'email', sortable: true, edit: true },
-  { name: 'role', label: 'Role', field: 'role', sortable: true },
-]
+/**
+ * Validates an input for qPopupEdit
+ * @param {ColumnInterface} column - currently edited column
+ * @returns {function} function that validates input
+ */
+function validateInput(column: ColumnInterface): (value: any) => boolean {
+  return (value: any) => {
+    if (!column?.qInputProps?.rules) { return true; }
+    return column?.qInputProps?.rules.every((rule) => {
+      if (typeof rule === 'function') {
+        return rule(value) === true;
+      } else {
+        return true;
+      }
+    })
+  }
+}
+
+watchEffect(() => {
+  columns.value = props.columns;
+})
 
 onMounted(() => {
   if (tableRef.value) {
