@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsString, IsUrl } from 'class-validator';
+import { IsUrl } from 'class-validator';
+import S3File from './file.entity';
 
 /**
  * Defines a public file within a public AWS S3 bucket
@@ -9,16 +9,11 @@ import { IsString, IsUrl } from 'class-validator';
 
 @Entity()
 @ObjectType()
-export class PublicFile extends BaseEntity {
+export class PublicFile extends S3File {
   @Field(() => String, { description: 'Public download URL' })
   @Column()
   @IsUrl()
   public url: string;
-
-  @Field(() => String, { description: 'S3 File Key' })
-  @Column()
-  @IsString()
-  public key: string;
 }
 
 export default PublicFile;

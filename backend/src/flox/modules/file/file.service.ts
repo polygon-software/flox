@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import PublicFile from './entities/public_file.entity';
-import PrivateFile from './entities/private_file.entity';
+import PublicFile from './entities/publicFile.entity';
+import PrivateFile from './entities/privateFile.entity';
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -15,6 +15,8 @@ import { GetPublicFileArgs } from './dto/args/get-public-file.args';
 import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { DeleteFileInput } from './dto/input/delete-file.input';
+import { GetAllFilesArgs } from './dto/args/get-all-files.args';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class FileService {
@@ -62,8 +64,11 @@ export class FileService {
     )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
 
     const newFile = this.publicFilesRepository.create({
-      key: key,
-      url: url,
+      key,
+      url,
+      mimetype: file.mimetype,
+      size: file.size,
+      filename: file.filename || file.originalname,
     });
     await this.publicFilesRepository.save(newFile);
     return newFile;
@@ -72,12 +77,12 @@ export class FileService {
   /**
    * Uploads a file to the private S3 bucket
    * @param {Express.Multer.File} file - the file to upload
-   * @param {string} owner - the file owner's UUID
+   * @param {User} owner - the file owner
    * @returns {Promise<PrivateFile>} - the newly uploaded file
    */
   async uploadPrivateFile(
     file: Express.Multer.File,
-    owner: string,
+    owner: User,
   ): Promise<PrivateFile> {
     //File upload
     const key = `${uuid()}-${file.originalname}`;
@@ -88,8 +93,11 @@ export class FileService {
     };
     await this.s3.send(new PutObjectCommand(uploadParams));
     const newFile = this.privateFilesRepository.create({
-      key: key,
-      owner: owner,
+      key,
+      owner: owner.uuid,
+      mimetype: file.mimetype,
+      size: file.size,
+      filename: file.filename || file.originalname,
     });
     await this.privateFilesRepository.save(newFile);
     return newFile;
@@ -108,6 +116,40 @@ export class FileService {
         uuid: getPublicFileArgs.uuid,
       },
     });
+  }
+
+  /**
+   * Returns all public files stored within database
+   * @param {GetAllFilesArgs} getAllFilesArgs - contains limit and skip parameters
+   * @returns {Promise<PublicFile[]>} List of public files
+   */
+  async getAllPublicFiles(
+    getAllFilesArgs: GetAllFilesArgs,
+  ): Promise<Array<PublicFile>> {
+    return this.publicFilesRepository.find({
+      take: getAllFilesArgs.limit,
+      skip: getAllFilesArgs.skip,
+    });
+  }
+
+  /**
+   * Returns private files of logged in user
+   * @param {GetAllFilesArgs} getAllFilesArgs - contains limit and skip parameters
+   * @param {User} user - currently logged in user
+   * @returns {Promise<PrivateFile[]>} Users private files
+   */
+  async getAllMyFiles(
+    getAllFilesArgs: GetAllFilesArgs,
+    user: User,
+  ): Promise<Array<PrivateFile>> {
+    const usersFileUUIDs = await this.privateFilesRepository.find({
+      where: {
+        owner: user.uuid,
+      },
+    });
+    return Promise.all(
+      usersFileUUIDs.map((file) => this.getPrivateFile({ uuid: file.uuid })),
+    );
   }
 
   /**

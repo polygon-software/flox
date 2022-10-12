@@ -68,6 +68,7 @@ export default {
     status_done: 'Hochgeladen',
     status_failed: 'Fehler',
     successfully_uploaded: '{value} Datei(en) wurden erfolgreich hochgeladen',
+    successfully_deleted: '{value} Datei(en) wurden erfolgreich gelöscht',
     upload: 'Hochladen',
   },
   messages: {
@@ -93,4 +94,7 @@ export default {
     entry_edited: 'Änderung gespeichert',
     entry_deleted: 'Eintrag gelöscht',
   },
+  date: {
+    date_format: 'DD.MM.YYYY'
+  }
 };

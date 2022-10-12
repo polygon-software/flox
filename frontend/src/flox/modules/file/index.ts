@@ -1,5 +1,5 @@
-import { floxModuleOptions, mergeConfigurations } from '../../index';
-import { MODULES } from '../../MODULES';
+import {floxModuleOptions, mergeConfigurations} from '../../index';
+import {MODULES} from '../../MODULES';
 
 /**
  * The file module handles file upload and management.

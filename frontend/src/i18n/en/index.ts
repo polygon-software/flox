@@ -66,6 +66,7 @@ export default {
     status_done: 'Done',
     status_failed: 'Failed',
     successfully_uploaded: '{value} file(s) were successfully uploaded',
+    successfully_deleted: '{value} file(s) were successfully deleted',
     upload: 'Upload',
   },
   messages: {
@@ -90,4 +91,7 @@ export default {
     entry_edited: 'Edit saved',
     entry_deleted: 'Entry deleted',
   },
+  date: {
+    date_format: 'MM.DD.YYYY'
+  }
 };

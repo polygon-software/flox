@@ -242,7 +242,7 @@ function clearFileList() {
 
 /**
  * Triggered when a file is picked from the file picker dialog
- * @param {File[]} newFiles - the newly picked files
+ * @param {S3File[]} newFiles - the newly picked files
  * @returns {void}
  */
 function onFilePicked(newFiles: File[]){
