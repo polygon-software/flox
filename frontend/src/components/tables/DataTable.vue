@@ -16,20 +16,20 @@
       @request="onRequest"
       @selection="handleSelection"
     >
-      <template #body-cell="props">
-        <q-td :props="props">
-          {{ props.row[props.col.field] }}
+      <template #body-cell="cellProps">
+        <q-td :props="cellProps">
+          {{ cellProps.row[cellProps.col.field] }}
           <q-popup-edit
-            v-if="props.col.edit"
+            v-if="cellProps.col.edit"
             v-slot="scope"
             buttons
-            :validate="validateInput(props.col, $event)"
-            :model-value="props.row[props.col.field]"
+            :validate="validateInput(cellProps.col, $event)"
+            :model-value="cellProps.row[cellProps.col.field]"
             :label-set="i18n.global.t('general.save')"
             :label-cancel="i18n.global.t('general.cancel')"
-            @save="updateRow(props.row, props.col.field, $event)"
+            @save="updateRow(cellProps.row, cellProps.col.field, $event)"
           >
-            <q-input v-model="scope.value" v-bind="props.col.qInputProps" dense autofocus counter />
+            <q-input v-model="scope.value" v-bind="cellProps.col.qInputProps" dense autofocus counter />
           </q-popup-edit>
         </q-td>
       </template>
@@ -119,11 +119,11 @@ const props = defineProps<{
   query: QueryObject,
   updateMutation: MutationObject,
   deleteMutation: MutationObject,
-  columns: ColumnInterface<T>[],
+  columns: ColumnInterface<BaseEntity>[],
 }>()
 
 const tableRef: Ref<QTable|null> = ref(null)
-const { rows, columns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow, deleteActiveRows } = useDataTable<T>(props.query, props.updateMutation, props.deleteMutation);
+const { rows, columns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow, deleteActiveRows } = useDataTable<BaseEntity>(props.query, props.updateMutation, props.deleteMutation);
 
 /**
  * Validates an input for qPopupEdit

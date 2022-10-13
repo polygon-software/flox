@@ -44,7 +44,7 @@ import { QUERY_USERS } from 'src/data/queries/USER';
 import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';
 import {ColumnInterface} from 'components/tables/useDataTable';
 import {User} from 'src/data/types/User';
-import {isEmail, isRequried} from 'src/helpers/validation/validation-helpers';
+import {isEmail} from 'src/helpers/validation/validation-helpers';
 
 const imageUuid: Ref<string> = ref('');
 
