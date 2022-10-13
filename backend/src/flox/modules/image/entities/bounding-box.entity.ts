@@ -37,7 +37,6 @@ export class BoundingBox extends BaseEntity {
   @IsNumber()
   public top: number;
 
-
   @Field(() => Label, {
     description: 'Label to which the bounding box belongs',
   })
