@@ -1,16 +1,22 @@
+import { join } from 'path';
+
+import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './config/configuration';
-import * as Joi from 'joi';
-import { floxModules, floxProviders } from './flox/flox';
 import { TerminusModule } from '@nestjs/terminus';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+
+import * as Joi from 'joi';
+
+import configuration from './config/configuration';
+import { floxModules, floxProviders } from './flox/flox';
+import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
 import { isServerless } from './flox/core/flox-helpers';
+import { GqlThrottlerGuard } from './flox/modules/GqlThrottlerGuard';
 
 @Module({
   imports: [
@@ -22,6 +28,7 @@ import { isServerless } from './flox/core/flox-helpers';
         : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       driver: ApolloDriver,
+      context: ({ req, res }) => ({ req, res }),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -63,6 +70,10 @@ import { isServerless } from './flox/core/flox-helpers';
       }),
       inject: [ConfigService],
     }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
 
     // Healthcheck modules
     TerminusModule,
@@ -74,6 +85,11 @@ import { isServerless } from './flox/core/flox-helpers';
   ],
   controllers: [HealthcheckController],
   providers: [
+    // Provider for throttler rate limiting
+    {
+      provide: APP_GUARD,
+      useClass: GqlThrottlerGuard,
+    },
     // Flox module Providers
     ...floxProviders(),
     // Add any other custom module providers here

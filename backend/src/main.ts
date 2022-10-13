@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 import {
   floxModuleOptions,
   getActiveFloxModuleNames,
@@ -21,6 +22,9 @@ export async function bootstrap(serverless = false) {
 
   // Add GraphQL Voyager as middleware
   app.use('/schema', voyagerMiddleware({ endpointUrl: '/graphql' }));
+
+  // Collection of smaller middleware functions that set security-related HTTP headers
+  app.use(helmet());
 
   const configService: ConfigService = app.get(ConfigService);
   if (!serverless) {
