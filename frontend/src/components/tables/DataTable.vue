@@ -40,7 +40,7 @@
       <template #body-selection="scope">
         <q-checkbox :model-value="scope.selected" @update:model-value="(val, evt) => { Object.getOwnPropertyDescriptor(scope, 'selected').set(val, evt) }" />
       </template>
-      <template #top-right="props">
+      <template #top-right="headerProps">
         <q-input v-model="filter" borderless hide-bottom-space dense debounce="300" placeholder="Search">
           <template #append>
             <q-icon name="search" />
@@ -72,9 +72,9 @@
         </q-select>
         <q-btn
           flat round dense
-          :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+          :icon="headerProps.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
           class="q-ml-md"
-          @click="props.toggleFullscreen"
+          @click="headerProps.toggleFullscreen"
         />
       </template>
     </q-table>
@@ -106,7 +106,7 @@
   </q-card>
 </template>
 
-<script setup lang="ts" generic="T extends BaseEntity">
+<script setup lang="ts">
 import {ref, onMounted, Ref, defineProps, watchEffect} from 'vue';
 import {QTable} from 'quasar';
 import {ColumnInterface, useDataTable} from 'components/tables/useDataTable';
@@ -123,7 +123,20 @@ const props = defineProps<{
 }>()
 
 const tableRef: Ref<QTable|null> = ref(null)
-const { rows, columns, selected, visibleColumnNames, filter, loading, pagination, onRequest, exportTable, handleSelection, updateRow, deleteActiveRows } = useDataTable<BaseEntity>(props.query, props.updateMutation, props.deleteMutation);
+const {
+  rows,
+  columns,
+  selected,
+  visibleColumnNames,
+  filter,
+  loading,
+  pagination,
+  onRequest,
+  exportTable,
+  handleSelection,
+  updateRow,
+  deleteActiveRows,
+} = useDataTable<BaseEntity>(props.query, props.updateMutation, props.deleteMutation);
 
 /**
  * Validates an input for qPopupEdit

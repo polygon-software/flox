@@ -33,7 +33,7 @@ export interface ColumnInterface<T = any> {
  * @param {string} sortBy - key to sort by
  * @param {boolean} descending - sort order
  * @param {number} rowsPerPage - Default number of rows per page
- * @returns {}
+ * @returns {Record<string, any>} - complete setup for a data table
  */
 export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mutationObject: MutationObject, deletionObject: MutationObject, sortBy='uuid', descending=false, rowsPerPage=10) {
   const $q = useQuasar();

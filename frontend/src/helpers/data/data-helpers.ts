@@ -1,12 +1,10 @@
 import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable';
 import {
   MutationObject,
-  MutationTypes,
   QueryObject,
 } from 'src/data/DATA-DEFINITIONS';
 import { ApolloQueryResult, FetchResult } from '@apollo/client';
 import {onBeforeMount, onServerPrefetch, Ref, ref} from 'vue';
-import { i18n } from 'boot/i18n';
 import { QUERIES } from 'src/data/queries/QUERIES';
 import { useSsrStore } from 'stores/ssr';
 import {BaseEntity} from 'src/data/types/BaseEntity';
@@ -88,7 +86,7 @@ async function executeMutation<T extends BaseEntity>(
   variables: OperationVariables
 ): Promise<FetchResult<T | null>> {
   const mutation = mutationObject.mutation;
-  
+
   // Actually execute mutation and handle cache
   const { mutate } = useMutation<Record<string, T> | null>(mutation, () => ({
     // Get cache and the new or deleted object

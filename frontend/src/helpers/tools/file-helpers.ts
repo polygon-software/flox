@@ -1,5 +1,4 @@
 import axios, {AxiosResponse} from 'axios';
-import {useApolloClient} from '@vue/apollo-composable';
 import {getBearerToken} from 'src/helpers/tools/auth-helpers';
 import {S3File} from 'src/data/types/S3File';
 import {createImage} from 'src/helpers/data/mutation-helpers';

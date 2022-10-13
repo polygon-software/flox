@@ -38,7 +38,7 @@ import {S3File} from 'src/data/types/S3File';
 import {Ref} from '@vue/reactivity';
 import {date, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
-import {fetchMyFiles, fetchPublicFiles, getImageForFile} from 'src/helpers/data/fetch-helpers';
+import {fetchMyFiles, fetchPublicFiles} from 'src/helpers/data/fetch-helpers';
 import {deletePrivateFile, deletePublicFile} from 'src/helpers/data/mutation-helpers';
 import {showNotification} from 'src/helpers/tools/notification-helpers';
 
