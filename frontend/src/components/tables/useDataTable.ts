@@ -98,7 +98,7 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
     pagination.value.sortBy = sortBy;
     pagination.value.descending = descending;
 
-    // ...and turn of loading indicator
+    // ...and turn off loading indicator
     loading.value = false;
   }
 
