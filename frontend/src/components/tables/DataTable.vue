@@ -145,7 +145,9 @@ const {
  */
 function validateInput(column: ColumnInterface): (value: any) => boolean {
   return (value: any) => {
-    if (!column?.qInputProps?.rules) { return true; }
+    if (!column?.qInputProps?.rules) { 
+      return true; 
+    }
     return column?.qInputProps?.rules.every((rule) => {
       if (typeof rule === 'function') {
         return rule(value) === true;

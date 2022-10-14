@@ -2,6 +2,7 @@ import { Column, Entity } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { IsNumber } from 'class-validator';
+import { Label } from './label.entity';
 
 @Entity()
 @ObjectType()
@@ -35,4 +36,10 @@ export class BoundingBox extends BaseEntity {
   @Column('float8')
   @IsNumber()
   public top: number;
+
+  @Field(() => Label, {
+    description: 'Label to which the bounding box belongs',
+  })
+  @OneToOne(() => Label, { cascade: true, onDelete: 'CASCADE' })
+  public label: Label;
 }
