@@ -100,5 +100,8 @@ export default {
   },
   validation: {
     email: 'E-Mail ungültig'
+  },
+  table: {
+    ctrl_shift_hint: 'Hinweis: Verwende <kbd>SHIFT</kbd> um einen Bereich auszuwählen und <kbd>CTRL</kbd> um einzelne Elemente zu selektieren'
   }
 };

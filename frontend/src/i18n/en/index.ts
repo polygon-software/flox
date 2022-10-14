@@ -97,5 +97,8 @@ export default {
   },
   validation: {
     email: 'E-Mail invalid'
+  },
+  table: {
+    ctrl_shift_hint: 'Hint: Use <kbd>SHIFT</kbd> to select / deselect a range and <kbd>CTRL</kbd> to add to selection'
   }
 };

@@ -80,7 +80,7 @@
     </q-table>
     <div class="row">
       <div class="col">
-        <div class="text-subtitle2 q-pa-sm">Hint: Use <kbd>SHIFT</kbd> to select / deselect a range and <kbd>CTRL</kbd> to add to selection</div>
+        <div class="text-subtitle2 q-pa-sm" v-html="i18n.global.t('table.ctrl_shift_hint')"/>
       </div>
       <div class="col">
         <div class="row justify-end" style="gap: 10px">
