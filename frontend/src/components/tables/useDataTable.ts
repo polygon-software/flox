@@ -1,12 +1,14 @@
 import {ref, Ref, nextTick, toRaw, watch, ComputedRef, computed} from 'vue';
-import {executeMutation, executeQuery} from 'src/helpers/data/data-helpers';
-import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {exportFile, QInputProps, useQuasar} from 'quasar';
-import {cloneDeep} from 'lodash-es';
-import {showNotification} from 'src/helpers/tools/notification-helpers';
+import {cloneDeep, set} from 'lodash-es';
+
 import {i18n} from 'boot/i18n';
+import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {executeMutation, executeQuery} from 'src/helpers/data/data-helpers';
+import {showErrorNotification, showSuccessNotification} from 'src/helpers/tools/notification-helpers';
 import {BaseEntity} from 'src/data/types/BaseEntity';
 import CountQuery from 'src/data/types/CountEntity';
+import {entityToMutationVariables} from 'src/helpers/tools/graphql-helpers';
 
 export interface ColumnInterface<T = any> {
   name: string,
@@ -28,14 +30,14 @@ export interface ColumnInterface<T = any> {
 /**
  * Composable to create a data table
  * @param {QueryObject} queryObject - query to perform to fetch data
- * @param {MutationObject} mutationObject - mutation to change a row entry
+ * @param {MutationObject} updateObject - mutation to change a row entry
  * @param {MutationObject} deletionObject - mutation to delete a row entry
  * @param {string} sortBy - key to sort by
  * @param {boolean} descending - sort order
  * @param {number} rowsPerPage - Default number of rows per page
  * @returns {Record<string, any>} - complete setup for a data table
  */
-export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mutationObject: MutationObject, deletionObject: MutationObject, sortBy='uuid', descending=false, rowsPerPage=10) {
+export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, updateObject: MutationObject, deletionObject: MutationObject, sortBy='uuid', descending=false, rowsPerPage=10) {
   const $q = useQuasar();
   let storedSelectedRow: T;
 
@@ -218,41 +220,28 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
    * @returns {Promise<void>} nothing
    */
   async function updateRow(row: T, path: keyof T, value: any): Promise<void> {
-    const correctRowIndex = rows.value.findIndex((r) => {
-      if ('uuid' in row && 'uuid' in r) {
-        return row.uuid === r.uuid;
-      }
-      return false;
-    });
+    const correctRowIndex = rows.value.findIndex((r) => row.uuid === r.uuid);
     if(correctRowIndex > -1) {
-      const rowCopy = cloneDeep(toRaw(rows.value[correctRowIndex]))
+      const rawRow = toRaw(rows.value[correctRowIndex]);
+      const rowCopy = cloneDeep(rawRow)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      rowCopy[path] = value;
+      set(rowCopy, path, value);
       rows.value.splice(correctRowIndex, 1, rowCopy);
       try {
-        await executeMutation(mutationObject, rowCopy as Record<string, unknown>);
-        showNotification(
-          $q,
-          i18n.global.t('messages.entry_edited'),
-          'top-right',
-          'positive',
-          'white',
-          'done',
-          false,
-          500,
-        );
+        const mutationVariables = entityToMutationVariables(rawRow, updateObject);
+        await executeMutation(updateObject, mutationVariables);
+        showSuccessNotification($q, i18n.global.t('messages.entry_edited'), {
+          position: 'top-right',
+          timeout: 500,
+        });
       } catch (e) {
-        showNotification(
-          $q,
-          i18n.global.t('errors.entry_edit_failed'),
-          'top-right',
-          'negative',
-          'white',
-          'clear',
-          false,
-          500,
-        );
+        showErrorNotification($q, i18n.global.t('errors.entry_edit_failed'), {
+          position: 'top-right',
+          timeout: 500,
+        });
       }
+    } else {
+      throw new Error('Row to be updated could not be identified')
     }
   }
 
@@ -264,30 +253,18 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
     const deletionRequests = selected.value.map((selectedRow: T) => {
       return executeMutation<T>(deletionObject, toRaw(selectedRow) as Record<string, unknown>)
         .then((data) => {
-          showNotification(
-            $q,
-            i18n.global.t('messages.entry_deleted'),
-            'top-right',
-            'positive',
-            'white',
-            'done',
-            false,
-            500,
-          );
+          showSuccessNotification($q, i18n.global.t('messages.entry_deleted'), {
+            position: 'top-right',
+            timeout: 500,
+          });
           return data.data;
         })
         .catch((e) => {
           console.error(e);
-          showNotification(
-            $q,
-            i18n.global.t('errors.entry_delete_failed'),
-            'top-right',
-            'negative',
-            'white',
-            'clear',
-            false,
-            500,
-          );
+          showErrorNotification($q, i18n.global.t('errors.entry_delete_failed'), {
+            position: 'top-right',
+            timeout: 500,
+          });
         });
     })
     return Promise.allSettled(deletionRequests);

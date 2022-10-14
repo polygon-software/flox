@@ -43,6 +43,7 @@
     "axios": "^0.24.0",
     "core-js": "^3.25.0",
     "date-fns": "^2.25.0",
+    "flat": "^5.0.2",
     "graphql": "^15.6.1",
     "graphql-tag": "^2.12.5",
     "jest-sonar": "^0.2.12",

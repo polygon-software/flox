@@ -51,7 +51,7 @@
 import {defineProps, defineEmits, PropType, ref} from 'vue';
 import {QVueGlobals, useDialogPluginComponent} from 'quasar';
 import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
-import {showNotification} from 'src/helpers/tools/notification-helpers';
+import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
 import {i18n} from 'boot/i18n';
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
@@ -93,12 +93,7 @@ async function resendCode(){
     await props.authService?.resendEmailVerificationCode()
 
     // Show success message
-    showNotification(
-      props.q,
-      i18n.global.t('messages.code_resent'),
-      'bottom',
-      'positive'
-    )
+    showSuccessNotification(props.q, i18n.global.t('messages.code_resent'))
   }
 }
 

@@ -40,7 +40,7 @@ import {date, useQuasar} from 'quasar';
 import {i18n} from 'boot/i18n';
 import {fetchMyFiles, fetchPublicFiles} from 'src/helpers/data/fetch-helpers';
 import {deletePrivateFile, deletePublicFile} from 'src/helpers/data/mutation-helpers';
-import {showNotification} from 'src/helpers/tools/notification-helpers';
+import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
 
 const props = defineProps({
   private: {
@@ -88,7 +88,7 @@ async function deleteSelected() {
     await deletePublicFile(selectedFile.uuid);
   }
   selected.value = [];
-  showNotification($q, i18n.global.t('files.successfully_deleted', { value: 1 }), 'top-right', 'green')
+  showSuccessNotification($q, i18n.global.t('files.successfully_deleted', { value: 1 }))
 }
 </script>
 

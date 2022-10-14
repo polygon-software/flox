@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import {FIELDS} from 'src/data/FIELDS';
 import GenericForm from 'components/forms/GenericForm.vue';
-import {showNotification} from 'src/helpers/tools/notification-helpers';
+import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
 import {useQuasar} from 'quasar';
 
 /**
@@ -36,11 +36,9 @@ const pages = [
  * @returns {void}
  */
 function onSubmit(formValues: Record<string, string>): void {
-  showNotification(
+  showSuccessNotification(
     $q,
     `You entered e-mail  '${formValues.email}', and username '${formValues.username}'`,
-    'bottom',
-    'positive'
   )
 }
 </script>

@@ -169,7 +169,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-kbd {
+:deep(kbd) {
   white-space: nowrap;
   display: inline-block;
   padding: 2px 4px 4px;

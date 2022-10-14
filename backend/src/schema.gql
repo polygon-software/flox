@@ -194,18 +194,18 @@ type PublicFile {
 
 type Query {
   allMyFiles(
-    """Number of files to load"""
-    take: Int = 500
-
     """How many files to skip"""
     skip: Int = 0
+
+    """Number of files to load"""
+    take: Int = 500
   ): [PrivateFile!]!
   allPublicFiles(
-    """Number of files to load"""
-    take: Int = 500
-
     """How many files to skip"""
     skip: Int = 0
+
+    """Number of files to load"""
+    take: Int = 500
   ): [PublicFile!]!
   allUsers: [User!]!
   image(
@@ -233,14 +233,14 @@ type Query {
     """Search for text withinn items"""
     filter: String
 
-    """Number of images to take"""
-    take: Float = 10
-
     """Number of items to skip"""
     skip: Float = 0
 
     """Sort by property"""
     sortBy: String
+
+    """Number of images to take"""
+    take: Float = 10
   ): UserQueryOutput!
   user(cognitoUuid: ID, uuid: ID): User!
   users(uuids: [ID!]): [User!]!

@@ -77,29 +77,29 @@ function invalidateTables(tables: string[]) {
 
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
- * @param {MutationObject} mutationObject - the mutation object constant (from MUTATIONS.ts)
+ * @param {MutationObject} updateObject - the mutation object constant (from MUTATIONS.ts)
  * @param {OperationVariables} variables - any variables that shall be passed to the mutation
  * @returns {Promise<FetchResult<T | null> | null>} Returns the values defined by the mutation
  */
 async function executeMutation<T extends BaseEntity>(
-  mutationObject: MutationObject,
+  updateObject: MutationObject,
   variables: OperationVariables
 ): Promise<FetchResult<T | null>> {
-  const mutation = mutationObject.mutation;
+  const mutation = updateObject.mutation;
 
   // Actually execute mutation and handle cache
   const { mutate } = useMutation<Record<string, T> | null>(mutation, () => ({
     // Get cache and the new or deleted object
     update: () => {
       // Re-fetch all affected queries
-      invalidateTables(mutationObject.tables);
+      invalidateTables(updateObject.tables);
     },
   }));
   // Execute mutation
   const mutationResult = await mutate(variables);
   if (mutationResult && mutationResult.data) {
     return {
-      data: mutationResult.data[mutationObject.cacheLocation],
+      data: mutationResult.data[updateObject.cacheLocation],
     } as FetchResult<T>;
   }
   return {
