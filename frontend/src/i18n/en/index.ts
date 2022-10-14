@@ -7,6 +7,8 @@ export default {
     confirm: 'Confirm',
     ok: 'OK',
     loading: 'Loading',
+    failed: 'Failed',
+    successful: 'Successful',
   },
   authentication: {
     authentication: 'Authentication',
