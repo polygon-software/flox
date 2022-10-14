@@ -7,6 +7,7 @@ import {
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 import { ConfigService } from '@nestjs/config';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @Controller('healthcheck')
 export class HealthcheckController {
@@ -19,6 +20,7 @@ export class HealthcheckController {
 
   @Public()
   @HealthCheck()
+  @SkipThrottle()
   @Get()
   async checkHealth(): Promise<any> {
     return this.healthcheckService.check([

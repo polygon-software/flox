@@ -3,6 +3,9 @@
     <!-- Active Flox modules -->
     <ModuleStatus/>
 
+    <!-- DOS own backend -->
+    <DosChecker />
+
     <!-- Form example -->
     <SampleForm/>
 
@@ -11,6 +14,7 @@
 
     <!-- Private Files Table -->
     <FilesTable private />
+
 
     <!-- Labeled Images -->
     <q-input
@@ -29,6 +33,7 @@ import SampleForm from 'components/sample/SampleForm.vue';
 import FileUpload from 'src/flox/modules/file/components/forms/fields/FileUpload.vue';
 import FilesTable from 'src/flox/modules/file/components/tables/FilesTable.vue';
 import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
+import DosChecker from 'components/sample/DosChecker.vue';
 
 const imageUuid: Ref<string> = ref('');
 </script>
