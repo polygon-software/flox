@@ -4,7 +4,6 @@ variable "type" {
 }
 
 variable "project" {
-  default         = "flox"
   description     = "prefix used for all resources in the Project"
   type            = string
 }
@@ -126,5 +125,15 @@ variable "api_source_code_object_hash" {
 
 variable "api_security_group_id" {
   description     = "API security group ID"
+  type            = string
+}
+
+variable "admin_key_id" {
+  description     = "ID of admin user programmatic access key"
+  type            = string
+}
+
+variable "admin_key_secret" {
+  description     = "Secret of admin user programmatic access key"
   type            = string
 }

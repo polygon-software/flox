@@ -43,13 +43,8 @@ do
     echo "Deleting workspace '$workspace'..."
 
     # Destroy workspace
-      if [[ $workspace == *"-update"* ]]; then
-        # Update workspaces must be force-deleted
-        terraform workspace delete -force "$workspace"
-      else
-        # Other workspaces get regular deleted (prevents deletion if resources still present)
-        terraform workspace delete "$workspace"
-      fi
+    terraform workspace delete -force "$workspace"
+
     # Increment counter
     ((destroyed_workspaces+=1))
   fi
