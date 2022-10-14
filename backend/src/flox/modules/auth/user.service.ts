@@ -39,7 +39,7 @@ export class UserService implements SearchQueryInterfaceService {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
       },
       skip: queryArgs.skip,
-      take: queryArgs.limit,
+      take: queryArgs.take,
       where: {
         username: Like(`%${queryArgs.filter}%`),
       },

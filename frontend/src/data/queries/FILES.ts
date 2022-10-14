@@ -4,8 +4,8 @@ import {TABLES} from 'src/data/TABLES';
 
 export const ALL_PUBLIC_FILES = {
   query: gql`
-    query allPublicFiles($limit: Int, $skip: Int) {
-      allPublicFiles(limit: $limit, skip: $skip) {
+    query allPublicFiles($take: Int, $skip: Int) {
+      allPublicFiles(take: $take, skip: $skip) {
         uuid
         key
         createdAt
@@ -23,8 +23,8 @@ export const ALL_PUBLIC_FILES = {
 
 export const ALL_MY_FILES = {
   query: gql`
-    query allMyFiles($limit: Int, $skip: Int) {
-      allMyFiles(limit: $limit, skip: $skip) {
+    query allMyFiles($take: Int, $skip: Int) {
+      allMyFiles(take: $take, skip: $skip) {
         uuid
         key
         createdAt

@@ -195,14 +195,14 @@ type PublicFile {
 type Query {
   allMyFiles(
     """Number of files to load"""
-    limit: Int = 500
+    take: Int = 500
 
     """How many files to skip"""
     skip: Int = 0
   ): [PrivateFile!]!
   allPublicFiles(
     """Number of files to load"""
-    limit: Int = 500
+    take: Int = 500
 
     """How many files to skip"""
     skip: Int = 0
@@ -234,7 +234,7 @@ type Query {
     filter: String
 
     """Number of images to take"""
-    limit: Float = 10
+    take: Float = 10
 
     """Number of items to skip"""
     skip: Float = 0

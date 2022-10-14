@@ -15,7 +15,7 @@ export abstract class SearchQueryArgs {
     description: 'Number of images to take',
   })
   @IsNumber()
-  limit: number;
+  take: number;
 
   @Field(() => String, {
     nullable: true,

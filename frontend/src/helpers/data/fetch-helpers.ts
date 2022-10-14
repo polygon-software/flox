@@ -43,23 +43,23 @@ export async function fetchPublicFile(uuid: string): Promise<PublicFile|null> {
 
 /**
  * Fetches a number of public files
- * @param {number} [limit] - maximum number of files to load
+ * @param {number} [take] - maximum number of files to load
  * @param {number} [skip] - number of files to skip before loading next bunch, used for pagination
  * @returns {Ref<PublicFile[]>} List of public Files
  */
-export function fetchPublicFiles(limit?: number, skip?: number): Ref<PublicFile[]> {
-  const { data } = subscribeToQuery<PublicFile[]>(ALL_PUBLIC_FILES, { limit, skip });
+export function fetchPublicFiles(take?: number, skip?: number): Ref<PublicFile[]> {
+  const { data } = subscribeToQuery<PublicFile[]>(ALL_PUBLIC_FILES, { take, skip });
   return data;
 }
 
 /**
  * Fetches files of logged-in user
- * @param {number} [limit] - maximum number of files to load
+ * @param {number} [take] - maximum number of files to load
  * @param {number} [skip] - number of files to skip before loading next bunch, used for pagination
  * @returns {Ref<PrivateFile[]>} List of private Files
  */
-export function fetchMyFiles(limit?: number, skip?: number ): Ref<PrivateFile[]> {
-  const { data } = subscribeToQuery<PrivateFile[]>(ALL_MY_FILES, { limit, skip });
+export function fetchMyFiles(take?: number, skip?: number ): Ref<PrivateFile[]> {
+  const { data } = subscribeToQuery<PrivateFile[]>(ALL_MY_FILES, { take, skip });
   return data;
 }
 

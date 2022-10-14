@@ -63,14 +63,14 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, mut
   /**
    * Fetches Data from the Server
    * @param {number} skip - how many items to skip
-   * @param {number} limit - how many items to take
+   * @param {number} take - how many items to take
    * @param {string} filter - search input
    * @param {string} sortBy - attribute name
    * @param {boolean} descending - sort order
    * @returns {Promise<CountQuery<T>>} rows from server and count of total rows fitting criteria
    */
-  async function fetchFromServer (skip: number, limit: number, filter: string, sortBy: string, descending: boolean): Promise<{ data: T[], count: number }> {
-    const queryResult = await executeQuery<CountQuery<T>>(queryObject, { skip, limit, filter, sortBy, descending });
+  async function fetchFromServer (skip: number, take: number, filter: string, sortBy: string, descending: boolean): Promise<{ data: T[], count: number }> {
+    const queryResult = await executeQuery<CountQuery<T>>(queryObject, { skip, take, filter, sortBy, descending });
     return queryResult.data;
   }
 

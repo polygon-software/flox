@@ -40,8 +40,8 @@ export const ALL_USERS = {
 
 export const QUERY_USERS = {
   query: gql`
-    query queryUsers($skip: Float, $limit: Float, $filter: String, $sortBy: String, $descending: Boolean) {
-      queryUsers(skip: $skip, limit: $limit, filter: $filter, sortBy: $sortBy, descending: $descending) {
+    query queryUsers($skip: Float, $take: Float, $filter: String, $sortBy: String, $descending: Boolean) {
+      queryUsers(skip: $skip, take: $take, filter: $filter, sortBy: $sortBy, descending: $descending) {
         count
         data {
           uuid

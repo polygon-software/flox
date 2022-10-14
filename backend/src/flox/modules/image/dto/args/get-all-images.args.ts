@@ -6,7 +6,7 @@ export class GetAllImagesArgs {
     defaultValue: 500,
     description: 'Number of images to load',
   })
-  limit = 500;
+  take = 500;
 
   @Field(() => Int, {
     defaultValue: 0,
