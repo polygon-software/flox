@@ -11,7 +11,10 @@ export class Label extends BaseEntity {
   @Field(() => Image, {
     description: 'Image on which this label was detected',
   })
-  @ManyToOne(() => Image, (image) => image.labels)
+  @ManyToOne(() => Image, (image) => image.labels, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   public image: Image;
 
   @Field(() => String, {
@@ -36,7 +39,7 @@ export class Label extends BaseEntity {
   @Field(() => BoundingBox, {
     description: 'Bounding box for every instance of this label on image',
   })
-  @OneToOne(() => BoundingBox)
+  @OneToOne(() => BoundingBox, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn()
   public boundingBox: BoundingBox;
 }

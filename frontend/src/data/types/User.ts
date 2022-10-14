@@ -13,6 +13,7 @@ export class User extends BaseEntity{
     deletedAt: Date|null,
     public role: ROLE,
     public username: string,
+    public email: string,
   ) {
     super(uuid, createdAt, updatedAt, deletedAt)
   }

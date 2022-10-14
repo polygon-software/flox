@@ -8,8 +8,12 @@
  */
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {USER_QUERIES} from 'src/data/queries/USER';
+import {FILE_QUERIES} from 'src/data/queries/FILES';
+import {IMAGE_QUERIES} from 'src/data/queries/IMAGE';
 
 // Queries for all modules
 export const QUERIES: QueryObject[] = [
   ...USER_QUERIES,
+  ...FILE_QUERIES,
+  ...IMAGE_QUERIES
 ];

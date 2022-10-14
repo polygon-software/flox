@@ -6,7 +6,7 @@ export class GetAllFilesArgs {
     defaultValue: 500,
     description: 'Number of files to load',
   })
-  limit = 500;
+  take = 500;
 
   @Field(() => Int, {
     defaultValue: 0,

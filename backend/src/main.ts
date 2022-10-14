@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
+import { ValidationPipe } from '@nestjs/common';
 import {
   floxModuleOptions,
   getActiveFloxModuleNames,
@@ -18,6 +19,11 @@ export async function bootstrap(serverless = false) {
   const app = await NestFactory.create(AppModule, {
     cors: process.env.DEV === 'true',
   });
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+    }),
+  );
   await app.init();
 
   // Add GraphQL Voyager as middleware

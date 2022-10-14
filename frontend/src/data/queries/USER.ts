@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { QueryObject } from 'src/data/DATA-DEFINITIONS';
+import {TABLES} from 'src/data/TABLES';
 
 /**
  * User-related queries
@@ -17,7 +18,7 @@ export const MY_USER = {
       }
     }
   `,
-  tables: ['user'],
+  tables: [TABLES.USER],
   cacheLocation: 'myUser',
 };
 
@@ -33,8 +34,27 @@ export const ALL_USERS = {
       }
     }
   `,
-  tables: ['user'],
+  tables: [TABLES.USER],
   cacheLocation: 'allUsers',
 };
 
-export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_USERS];
+export const QUERY_USERS = {
+  query: gql`
+    query queryUsers($skip: Float, $take: Float, $filter: String, $sortBy: String, $descending: Boolean) {
+      queryUsers(skip: $skip, take: $take, filter: $filter, sortBy: $sortBy, descending: $descending) {
+        count
+        data {
+          uuid
+          username
+          email
+          role
+         }
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.USER],
+  cacheLocation: 'queryUsers',
+};
+
+export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_USERS, QUERY_USERS];

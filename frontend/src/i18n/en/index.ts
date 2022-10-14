@@ -7,6 +7,7 @@ export default {
     confirm: 'Confirm',
     ok: 'OK',
     loading: 'Loading',
+    save: 'Save',
     failed: 'Failed',
     successful: 'Successful',
   },
@@ -52,6 +53,8 @@ export default {
     cache_location_missing: 'Cache Location is missing in mutationObject: ',
     missing_attributes: 'Missing attributes',
     unknown: 'Unknown Error',
+    entry_edit_failed: 'Edit could not be saved',
+    entry_delete_failed: 'Entry could not be deleted',
   },
   files: {
     add: 'Add',
@@ -88,8 +91,16 @@ export default {
     password_changed:
       'Successfully changed password. Please log in using the new password.',
     account_created: 'Successfully created account',
+    entry_edited: 'Edit saved',
+    entry_deleted: 'Entry deleted',
   },
   date: {
     date_format: 'MM.DD.YYYY'
+  },
+  validation: {
+    email: 'E-Mail invalid'
+  },
+  table: {
+    ctrl_shift_hint: 'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection'
   }
 };

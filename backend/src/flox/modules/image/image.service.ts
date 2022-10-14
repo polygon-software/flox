@@ -52,12 +52,12 @@ export class ImageService {
 
   /**
    * Returns all images stored within the database
-   * @param {GetAllImagesArgs} getAllImagesArgs - contains limits and skip parameters
+   * @param {GetAllImagesArgs} getAllImagesArgs - contains take and skip parameters
    * @returns {Promise<Image[]>} Images
    */
   async getAllImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
     return this.imageRepository.find({
-      take: getAllImagesArgs.limit,
+      take: getAllImagesArgs.take,
       skip: getAllImagesArgs.skip,
     });
   }
@@ -201,11 +201,10 @@ export class ImageService {
         file: true,
       },
     });
-    const removedImage = await this.imageRepository.remove(image);
     await this.fileService.deleteFile(
       { uuid: image.file.uuid } as DeleteFileInput,
       true,
     );
-    return removedImage;
+    return image;
   }
 }

@@ -120,21 +120,21 @@ export class FileService {
 
   /**
    * Returns all public files stored within database
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains limit and skip parameters
+   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
    * @returns {Promise<PublicFile[]>} List of public files
    */
   async getAllPublicFiles(
     getAllFilesArgs: GetAllFilesArgs,
   ): Promise<Array<PublicFile>> {
     return this.publicFilesRepository.find({
-      take: getAllFilesArgs.limit,
+      take: getAllFilesArgs.take,
       skip: getAllFilesArgs.skip,
     });
   }
 
   /**
    * Returns private files of logged in user
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains limit and skip parameters
+   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
    * @param {User} user - currently logged in user
    * @returns {Promise<PrivateFile[]>} Users private files
    */

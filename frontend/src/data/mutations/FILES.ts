@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import {MutationTypes} from '../DATA-DEFINITIONS';
+import {TABLES} from 'src/data/TABLES';
 
 export const DELETE_PUBLIC_FILE = {
   mutation: gql`
@@ -9,7 +10,7 @@ export const DELETE_PUBLIC_FILE = {
       }
     }
   `,
-  tables: ['publicFile'],
+  tables: [TABLES.PUBLIC_FILE],
   type: MutationTypes.DELETE,
   cacheLocation: 'deletePublicFile'
 }
@@ -22,7 +23,7 @@ export const DELETE_PRIVATE_FILE = {
       }
     }
   `,
-  tables: ['privateFile'],
+  tables: [TABLES.PRIVATE_FILE],
   type: MutationTypes.DELETE,
   cacheLocation: 'deletePrivateFile'
 }

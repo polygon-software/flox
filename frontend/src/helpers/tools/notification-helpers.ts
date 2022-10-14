@@ -1,38 +1,68 @@
-import {QVueGlobals} from 'quasar';
+import { QVueGlobals } from 'quasar';
 
 /**
  * This file contains functions related to showing notifications
  */
 
+type NotificationOptions = {
+  position?:
+    | 'top'
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right'
+    | 'bottom'
+    | 'left'
+    | 'right'
+    | 'center';
+  color?: string;
+  textColor?: string;
+  icon?: string;
+  multiLine?: boolean;
+  timeout?: number;
+};
+
+/**
+ * Shows a default success notification
+ * @param {QVueGlobals} q - Quasar instance
+ * @param {string} message - message text
+ * @param {NotificationOptions} options - options
+ * @returns {void} - void
+ */
+export function showSuccessNotification(q: QVueGlobals, message: string, options: NotificationOptions = {}): void {
+  showNotification(q, message, { color: 'positive', icon: 'done', ...options });
+}
+
+/**
+ * Shows a default error notification
+ * @param {QVueGlobals} q - Quasar instance
+ * @param {string} message - message text
+ * @param {NotificationOptions} options - options
+ * @returns {void} - void
+ */
+export function showErrorNotification(q: QVueGlobals, message: string, options: NotificationOptions = {}): void {
+  showNotification(q, message, { color: 'negative', icon: 'clear', ...options });
+}
+
 /**
  * Shows a notification with the given parameters
  * @param {QVueGlobals} q - Quasar instance
  * @param {string} message - message text
- * @param {'top' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'bottom' | 'left' | 'right' | 'center' | undefined} [position] - position of the notification
- * @param {string} [color] - background color
- * @param {string} [textColor] - color of text
- * @param {string} [icon] - the icon to show, if any
- * @param {boolean} [multiLine] - whether the message spans multiple lines
- * @param {number} [timeout] - amount of time (in ms) to display the notification
- * @returns {void}
+ * @param {NotificationOptions} options - options
+ * @returns {void} - void
  */
 export function showNotification(
   q: QVueGlobals,
   message: string,
-  position: 'top' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'bottom' | 'left' | 'right' | 'center' | undefined = 'bottom',
-  color = 'primary',
-  textColor = 'white',
-  icon: string|undefined = undefined,
-  multiLine = false,
-  timeout = 3000
+  options: NotificationOptions
 ): void {
   q.notify({
-    color,
-    textColor,
-    icon,
-    message,
-    position,
-    multiLine,
-    timeout
-  })
+    message: message,
+    position: options.position ?? 'bottom',
+    color: options.color ?? 'primary',
+    textColor: options.textColor ?? 'white',
+    icon: options.icon,
+    multiLine: options.multiLine ?? false,
+    timeout: options.timeout ?? 3000,
+  });
 }

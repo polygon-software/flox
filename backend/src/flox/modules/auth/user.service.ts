@@ -4,16 +4,48 @@ import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { SearchQueryInterfaceService } from '../interfaces/search-query-interface.service';
+import { SearchQueryArgs } from '../interfaces/dto/args/search-query.args';
+import { UserQueryOutput } from './output/user-query.output';
 
 @Injectable()
-export class UserService {
+export class UserService implements SearchQueryInterfaceService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
+
+  /**
+   * Query for users
+   * @param {SearchQueryArgs} queryArgs - query arguments including limit, etc.
+   * @returns {Promise<UserQueryOutput>} users that fit query
+   */
+  async queryAll(queryArgs: SearchQueryArgs): Promise<UserQueryOutput> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, count] = await this.userRepository.findAndCount({
+      order: {
+        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
+      },
+      where: {
+        username: Like(`%${queryArgs.filter}%`),
+      },
+    });
+
+    const data = await this.userRepository.find({
+      order: {
+        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
+      },
+      skip: queryArgs.skip,
+      take: queryArgs.take,
+      where: {
+        username: Like(`%${queryArgs.filter}%`),
+      },
+    });
+    return { data, count };
+  }
 
   /**
    * Creates a User

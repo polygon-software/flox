@@ -1,10 +1,11 @@
 import gql from 'graphql-tag';
 import {QueryObject} from 'src/data/DATA-DEFINITIONS';
+import {TABLES} from 'src/data/TABLES';
 
 export const ALL_PUBLIC_FILES = {
   query: gql`
-    query allPublicFiles($limit: Int, $skip: Int) {
-      allPublicFiles(limit: $limit, skip: $skip) {
+    query allPublicFiles($take: Int, $skip: Int) {
+      allPublicFiles(take: $take, skip: $skip) {
         uuid
         key
         createdAt
@@ -16,14 +17,14 @@ export const ALL_PUBLIC_FILES = {
       }
     }
   `,
-  tables: ['publicFile'],
+  tables: [TABLES.PUBLIC_FILE],
   cacheLocation: 'allPublicFiles',
 }
 
 export const ALL_MY_FILES = {
   query: gql`
-    query allMyFiles($limit: Int, $skip: Int) {
-      allMyFiles(limit: $limit, skip: $skip) {
+    query allMyFiles($take: Int, $skip: Int) {
+      allMyFiles(take: $take, skip: $skip) {
         uuid
         key
         createdAt
@@ -35,7 +36,7 @@ export const ALL_MY_FILES = {
       }
     }
   `,
-  tables: ['privateFile'],
+  tables: [TABLES.PRIVATE_FILE],
   cacheLocation: 'allMyFiles',
 }
 
@@ -53,7 +54,7 @@ export const GET_PUBLIC_FILE = {
       }
     }
   `,
-  tables: ['publicFile'],
+  tables: [TABLES.PUBLIC_FILE],
   cacheLocation: 'publicFile',
 };
 
@@ -71,8 +72,8 @@ export const GET_PRIVATE_FILE = {
       }
     }
   `,
-  tables: ['privateFile'],
+  tables: [TABLES.PRIVATE_FILE],
   cacheLocation: 'privateFile',
 };
 
-export const FILE_QUERIES: QueryObject[] = [GET_PUBLIC_FILE, GET_PRIVATE_FILE, ALL_PUBLIC_FILES, ALL_MY_FILES]
+export const FILE_QUERIES: QueryObject[] = [ALL_PUBLIC_FILES, ALL_MY_FILES, GET_PUBLIC_FILE, GET_PRIVATE_FILE]

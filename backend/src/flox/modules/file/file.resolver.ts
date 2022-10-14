@@ -18,7 +18,7 @@ export class FileResolver {
 
   /**
    * Returns all public files stored within database
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains limit and skip parameters
+   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
    * @returns {Promise<PublicFile[]>} List of public files
    */
   @AdminOnly()
@@ -31,7 +31,7 @@ export class FileResolver {
 
   /**
    * Returns private files of logged in user
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains limit and skip parameters
+   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
    * @param {User} user - currently logged in user
    * @returns {Promise<PrivateFile[]>} Users private files
    */
@@ -41,7 +41,6 @@ export class FileResolver {
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @CurrentUser() user: User,
   ): Promise<PrivateFile[]> {
-    console.log(user);
     return this.fileService.getAllMyFiles(getAllFilesArgs, user);
   }
 

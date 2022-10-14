@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import {MutationTypes} from '../DATA-DEFINITIONS';
+import {TABLES} from 'src/data/TABLES';
 
 /**
  * User-related mutations
@@ -15,7 +16,7 @@ export const CREATE_USER = {
               __typename
             }
         }`,
-    tables: ['user'],
+    tables: [TABLES.USER],
     type: MutationTypes.CREATE,
     cacheLocation: 'createUser'
 }
@@ -31,7 +32,7 @@ export const UPDATE_USER = {
               __typename
             }
         }`,
-    tables: ['user'],
+    tables: [TABLES.USER],
     type: MutationTypes.UPDATE,
     cacheLocation: 'updateUser'
 }
@@ -43,7 +44,7 @@ export const DELETE_USER = {
                 uuid
             }
         }`,
-    tables: ['user'],
+    tables: [TABLES.USER],
     type: MutationTypes.DELETE,
     cacheLocation: 'deleteUser'
 }

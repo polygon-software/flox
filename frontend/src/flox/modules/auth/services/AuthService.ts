@@ -15,7 +15,7 @@ import {RouterService} from 'src/services/RouterService';
 import {ErrorService} from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth'
 import {createUser} from 'src/helpers/data/mutation-helpers';
-import {showNotification} from 'src/helpers/tools/notification-helpers';
+import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
 import {useAuthStore} from 'stores/authentication';
 
 /**
@@ -323,12 +323,7 @@ export class AuthenticationService {
     }).onOk(({passwordNew, verificationCode}: {passwordNew: string, verificationCode: string}) => {
       this.$authStore.cognitoUser?.confirmPassword(verificationCode,passwordNew,{
         onSuccess: ()=>{
-          showNotification(
-            this.$q,
-            i18n.global.t('messages.password_changed'),
-            'bottom',
-            'positive'
-          )
+          showSuccessNotification(this.$q, i18n.global.t('messages.password_changed'))
         },
         onFailure: (err: Error) => {
           this.$errorService.showErrorDialog(err)
@@ -510,12 +505,7 @@ export class AuthenticationService {
             const $q = useQuasar()
 
             // Show success notification
-            showNotification(
-             $q,
-             i18n.global.t('messages.password_changed'),
-             'bottom',
-             'positive'
-            )
+            showSuccessNotification($q, i18n.global.t('messages.password_changed'))
           },
           onFailure: (err: Error) => {
             this.$authStore.setCognitoUser(undefined);

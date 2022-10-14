@@ -9,6 +9,7 @@ export default {
     loading: 'Lädt',
     failed: 'Fehlgeschlagen',
     successful: 'Erfolgreich',
+    save: 'Speichern',
   },
   authentication: {
     authentication: 'Authentifizierung',
@@ -54,6 +55,8 @@ export default {
     cache_location_missing: 'Cache-Speicherort fehlt in mutationObject: ',
     missing_attributes: 'Fehlende Attribute',
     unknown: 'Unbekannter Fehler',
+    entry_edit_failed: 'Die Änderung konnte nicht gespeichert werden',
+    entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
   },
   files: {
     add: 'Hinzufügen',
@@ -91,8 +94,16 @@ export default {
     password_changed:
       'Passwort erfolgreich geändert. Bitte melden Sie sich mit dem neuen Passwort an.',
     account_created: 'Konto erfolgreich erstellt',
+    entry_edited: 'Änderung gespeichert',
+    entry_deleted: 'Eintrag gelöscht',
   },
   date: {
     date_format: 'DD.MM.YYYY'
+  },
+  validation: {
+    email: 'E-Mail ungültig'
+  },
+  table: {
+    ctrl_shift_hint: 'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren'
   }
 };
