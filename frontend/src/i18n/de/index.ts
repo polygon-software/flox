@@ -7,6 +7,8 @@ export default {
     confirm: 'Bestätigen',
     ok: 'OK',
     loading: 'Lädt',
+    failed: 'Fehlgeschlagen',
+    successful: 'Erfolgreich',
     save: 'Speichern',
   },
   authentication: {

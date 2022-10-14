@@ -3,6 +3,9 @@
     <!-- Active Flox modules -->
     <ModuleStatus/>
 
+    <!-- DOS own backend -->
+    <DosChecker />
+
     <!-- Form example -->
     <SampleForm/>
 
@@ -41,6 +44,7 @@ import FileUpload from 'src/flox/modules/file/components/forms/fields/FileUpload
 import FilesTable from 'src/flox/modules/file/components/tables/FilesTable.vue';
 import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
 import DataTable from 'components/tables/DataTable.vue';
+import DosChecker from 'components/sample/DosChecker.vue';
 
 import { QUERY_USERS } from 'src/data/queries/USER';
 import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';

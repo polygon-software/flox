@@ -8,6 +8,8 @@ export default {
     ok: 'OK',
     loading: 'Loading',
     save: 'Save',
+    failed: 'Failed',
+    successful: 'Successful',
   },
   authentication: {
     authentication: 'Authentication',
