@@ -12,6 +12,9 @@ type BoundingBox {
   """Bounding-Box height in percentage of image height"""
   height: Float!
 
+  """Label to which the bounding box belongs"""
+  label: Label!
+
   """Bounding-Box position from the left side of the image, in percentage"""
   left: Float!
 

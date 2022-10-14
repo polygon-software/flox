@@ -35,7 +35,7 @@ async function onSignup({username, email, password}: {username: string, email: s
   await $authService?.signUp(username, email, password)
 
   // Show success notification
-  showSuccessNotification($q, i18n.global.t('messages.account_created');
+  showSuccessNotification($q, i18n.global.t('messages.account_created'));
 
   // Redirect to login page
   await $routerService?.routeTo(ROUTES.LOGIN)

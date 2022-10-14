@@ -1,7 +1,7 @@
 import { flatten, unflatten } from 'flat';
 import {isEqual, pick} from 'lodash-es';
-import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
-import {ExecutableDefinitionNode, OperationDefinitionNode} from 'graphql/language/ast';
+import {MutationObject} from 'src/data/DATA-DEFINITIONS';
+import {ExecutableDefinitionNode} from 'graphql/language/ast';
 import {BaseEntity} from 'src/data/types/BaseEntity';
 
 type primitive = number|string|boolean|null|undefined;
@@ -47,9 +47,9 @@ export function extractMutationVariableNames(mutation: MutationObject): string[]
 
 /**
  * Returns the subset of an object that is required for a mutation
- * @param {BaseEntity} entity
- * @param {MutationObject} mutation
- * @returns {Record<string, any>}
+ * @param {BaseEntity} entity - modified entity that should be saved
+ * @param {MutationObject} mutation - update mutation containing variables that define update keys
+ * @returns {Record<string, any>} - Subset of entity with only the keys relevant for the mutation
  */
 export function entityToMutationVariables(entity: BaseEntity, mutation: MutationObject): Record<string, any> {
   const variables = extractMutationVariableNames(mutation);

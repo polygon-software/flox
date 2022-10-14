@@ -21,12 +21,14 @@
           {{ cellProps.row[cellProps.col.field] }}
           <q-popup-edit
             v-if="cellProps.col.edit"
+            :ref="el => { popupRefs[getPopupEditKey(cellProps.row, cellProps.col)] = el }"
             v-slot="scope"
             buttons
             :validate="validateInput(cellProps.col, $event)"
             :model-value="cellProps.row[cellProps.col.field]"
             :label-set="i18n.global.t('general.save')"
             :label-cancel="i18n.global.t('general.cancel')"
+            @keyup.enter="popupRefs[getPopupEditKey(cellProps.row, cellProps.col)].set()"
             @save="updateRow(cellProps.row, cellProps.col.field, $event)"
           >
             <q-input v-model="scope.value" v-bind="cellProps.col.qInputProps" dense autofocus counter />
@@ -59,7 +61,7 @@
           option-value="name"
           class="q-mx-lg"
         >
-          <template #option="{ itemProps, opt, isSelected, toggleOption }">
+          <template #option="{ itemProps, opt, selected: isSelected, toggleOption }">
             <q-item v-bind="itemProps">
               <q-item-section>
                 <q-item-label v-text="opt.label" />
@@ -108,7 +110,7 @@
 
 <script setup lang="ts">
 import {ref, onMounted, Ref, defineProps, watchEffect} from 'vue';
-import {QTable} from 'quasar';
+import {QPopupEdit, QTable} from 'quasar';
 import {ColumnInterface, useDataTable} from 'components/tables/useDataTable';
 import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
 import {BaseEntity} from 'src/data/types/BaseEntity';
@@ -121,6 +123,18 @@ const props = defineProps<{
   deleteMutation: MutationObject,
   columns: ColumnInterface<BaseEntity>[],
 }>()
+
+const popupRefs: Ref<Record<string, QPopupEdit>> = ref({});
+
+/**
+ * Generates an index key for a popup referenec
+ * @param {BaseEntity} row - row of data in which popup edit occurs
+ * @param {ColumnInterface<BaseEntity>} col column in which popup edit occurs
+ * @returns {void}
+ */
+function getPopupEditKey(row: BaseEntity, col: ColumnInterface<BaseEntity>) {
+  return `${row.uuid}-${col.name}`
+}
 
 const tableRef: Ref<QTable|null> = ref(null)
 const {
@@ -145,8 +159,8 @@ const {
  */
 function validateInput(column: ColumnInterface): (value: any) => boolean {
   return (value: any) => {
-    if (!column?.qInputProps?.rules) { 
-      return true; 
+    if (!column?.qInputProps?.rules) {
+      return true;
     }
     return column?.qInputProps?.rules.every((rule) => {
       if (typeof rule === 'function') {

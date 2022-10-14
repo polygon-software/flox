@@ -32,6 +32,8 @@
 
 <script setup lang="ts">
 import {ref, Ref} from 'vue';
+import Joi from 'joi';
+import {ValidationRule} from 'quasar';
 
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import SampleForm from 'components/sample/SampleForm.vue';
@@ -44,14 +46,18 @@ import { QUERY_USERS } from 'src/data/queries/USER';
 import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';
 import {ColumnInterface} from 'components/tables/useDataTable';
 import {User} from 'src/data/types/User';
-import {isEmail} from 'src/helpers/validation/validation-helpers';
+import { joiRule } from 'src/helpers/validation/validation-helpers';
 
 const imageUuid: Ref<string> = ref('');
+
+const emailRules: ValidationRule[] = [
+  joiRule(Joi.string().email({ tlds: { allow: false }}), 'validation.email'),
+];
 
 const columns: Ref<ColumnInterface<User>[]> = ref([
   { name: 'uuid', label: 'UUID', field: 'uuid', sortable: true },
   { name: 'username', label: 'Username', field: 'username', sortable: true, edit: true },
-  { name: 'email', label: 'E-Mail', field: 'email', sortable: true, edit: true, qInputProps: { rules: [ isEmail() ] } },
+  { name: 'email', label: 'E-Mail', field: 'email', sortable: true, edit: true, qInputProps: { rules: emailRules } },
   { name: 'role', label: 'Role', field: 'role', sortable: true },
 ])
 </script>

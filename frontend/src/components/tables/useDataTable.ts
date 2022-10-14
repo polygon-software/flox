@@ -228,7 +228,7 @@ export function useDataTable<T extends BaseEntity>(queryObject: QueryObject, upd
       set(rowCopy, path, value);
       rows.value.splice(correctRowIndex, 1, rowCopy);
       try {
-        const mutationVariables = entityToMutationVariables(rawRow, updateObject);
+        const mutationVariables = entityToMutationVariables(rowCopy, updateObject);
         await executeMutation(updateObject, mutationVariables);
         showSuccessNotification($q, i18n.global.t('messages.entry_edited'), {
           position: 'top-right',
