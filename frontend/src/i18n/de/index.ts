@@ -104,6 +104,6 @@ export default {
     email: 'E-Mail ungültig'
   },
   table: {
-    ctrl_shift_hint: 'Hinweis: Verwende <kbd>SHIFT</kbd> um einen Bereich auszuwählen und <kbd>CTRL</kbd> um einzelne Elemente zu selektieren'
+    ctrl_shift_hint: 'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren'
   }
 };

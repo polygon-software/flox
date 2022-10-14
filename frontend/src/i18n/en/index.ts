@@ -101,6 +101,6 @@ export default {
     email: 'E-Mail invalid'
   },
   table: {
-    ctrl_shift_hint: 'Hint: Use <kbd>SHIFT</kbd> to select / deselect a range and <kbd>CTRL</kbd> to add to selection'
+    ctrl_shift_hint: 'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection'
   }
 };

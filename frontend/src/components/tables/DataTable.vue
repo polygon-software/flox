@@ -82,7 +82,7 @@
     </q-table>
     <div class="row">
       <div class="col">
-        <div class="text-subtitle2 q-pa-sm" v-html="i18n.global.t('table.ctrl_shift_hint')"/>
+        <div class="text-subtitle2 q-pa-sm" v-text="i18n.global.t('table.ctrl_shift_hint')"/>
       </div>
       <div class="col">
         <div class="row justify-end" style="gap: 10px">
@@ -183,18 +183,3 @@ onMounted(() => {
 })
 
 </script>
-
-<style scoped>
-:deep(kbd) {
-  white-space: nowrap;
-  display: inline-block;
-  padding: 2px 4px 4px;
-  line-height: 1;
-  font-size: .8em;
-  color: #616161;
-  background: linear-gradient(-225deg,#d5dbe4,#f8f8f8);
-  border-radius: 4px;
-  box-shadow: inset 0 -2px #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px #1e235a66;
-  margin: 0 0.2em;
-}
-</style>
