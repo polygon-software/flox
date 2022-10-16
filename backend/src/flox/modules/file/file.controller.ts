@@ -12,7 +12,7 @@ import { FileService } from './file.service';
 import { LoggedIn } from '../auth/authentication.decorator';
 import { Request, Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import {AdminOnly, CurrentUser} from '../roles/authorization.decorator';
+import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import { User } from '../auth/entities/user.entity';
 
 @Controller()
