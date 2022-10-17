@@ -9,17 +9,17 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileService } from './file.service';
-import { LoggedIn, Public } from '../auth/authentication.decorator';
+import { LoggedIn } from '../auth/authentication.decorator';
 import { Request, Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CurrentUser } from '../roles/authorization.decorator';
+import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import { User } from '../auth/entities/user.entity';
 
 @Controller()
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
-  @Public()
+  @AdminOnly()
   @Post('/uploadPublicFile')
   @UseInterceptors(FileInterceptor('file'))
   async uploadPublicFile(
