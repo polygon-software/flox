@@ -10,5 +10,17 @@ output "cluster_end" {
 
 output "api_endpoint" {
   description = "Public IP address of the EC2 instance"
-  value       = var.serverless_api == false ? module.api-ebs[0].api_endpoint : module.api-serverless[0].api_endpoint
+  value       = var.serverless_api == false ? module.api_ebs[0].api_endpoint : module.api_serverless[0].api_endpoint
+}
+
+output "admin_key_id" {
+  description = "ID of the admin user's key (so it can be used locally in backend.env)"
+  value       = aws_iam_access_key.backend_admin_key.id
+  sensitive   = true
+}
+
+output "admin_key_secret" {
+  description = "Secret of the admin user's key (so it can be used locally in backend.env)"
+  value       = aws_iam_access_key.backend_admin_key.secret
+  sensitive   = true
 }
