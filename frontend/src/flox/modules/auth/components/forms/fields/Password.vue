@@ -14,8 +14,8 @@
       <q-icon
         :name="isPwd ? 'visibility_off' : 'visibility'"
         class="cursor-pointer"
-        @click="isPwd = !isPwd"
         color="grey"
+        @click="isPwd = !isPwd"
       />
     </template>
   </q-input>
