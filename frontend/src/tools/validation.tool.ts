@@ -47,10 +47,10 @@ export function joiPasswordSchema(): AnySchema {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
   return joiPassword
     .string()
-    .minOfSpecialCharacters(2)
-    .minOfLowercase(2)
-    .minOfUppercase(2)
-    .minOfNumeric(2)
+    .minOfSpecialCharacters(1)
+    .minOfLowercase(1)
+    .minOfUppercase(1)
+    .minOfNumeric(1)
     .noWhiteSpaces()
     .required();
 }
