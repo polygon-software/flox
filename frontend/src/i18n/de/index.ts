@@ -13,6 +13,8 @@ export default {
   },
   authentication: {
     authentication: 'Authentifizierung',
+    welcome_back: 'Willkommen zurück!',
+    welcome_text: 'Du kannst dich mit deinem existierenden Account einloggen',
     login: 'Anmelden',
     logout: 'Abmelden',
     signup: 'Registrieren',

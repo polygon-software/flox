@@ -7,11 +7,15 @@
     :type="isPwd ? 'password' : 'text'"
     :rules="passwordRules"
   >
+    <template #prepend>
+      <q-icon name="lock" size="xs" color="grey" />
+    </template>
     <template #append>
       <q-icon
         :name="isPwd ? 'visibility_off' : 'visibility'"
         class="cursor-pointer"
         @click="isPwd = !isPwd"
+        color="grey"
       />
     </template>
   </q-input>

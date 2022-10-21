@@ -1,36 +1,48 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
-    <div class="column q-pa-sm text-center">
-    <h5 class="q-ma-none" style="margin-bottom: 20px;">
-      {{ $t('authentication.login') }}
-    </h5>
-    <q-form
-        class="q-gutter-md"
+    <div class="flex justify-center" style="gap: 20px">
+      <h5 class="q-ma-none" style="margin-bottom: 20px;">
+        {{ $t('authentication.login') }}
+      </h5>
+      <q-form
+        class="flex flex-center q-gutter-none"
         @submit="onSubmit"
-    >
-      <component
+      >
+        <component
           :is="field.component"
           v-for="field in fields"
           :key="field.key"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
+          class="full-width"
           @change="(newValue) => form.updateValue(field.key, newValue)"
-      />
-      <q-btn
-          style="margin-top: 20px"
-          color="primary"
-          :label="$t('authentication.login')"
-          type="submit"
-      />
+        >
+          <template #prepend>
+            <q-icon v-if="field.prependIcon" :name="field.prependIcon" size="xs" color="grey" />
+          </template>
+          <template #append>
+            <q-icon v-if="field.appendIcon" :name="field.appendIcon" size="xs" color="grey" />
+          </template>
+        </component>
+        <div class="q-mt-md">
+          <q-btn
+            color="primary"
+            class="full-width"
+            rounded
+            :label="$t('authentication.login')"
+            type="submit"
+          />
 
-      <q-btn
-        :label="$t('authentication.forgot_password')"
-        class="text-primary"
-        flat
-        @click="forgotPassword"
-      />
-    </q-form>
-  </div>
+          <q-btn
+            :label="$t('authentication.forgot_password')"
+            class="text-primary full-width q-mt-sm"
+            rounded
+            flat
+            @click="forgotPassword"
+          />
+        </div>
+      </q-form>
+    </div>
   </FloxWrapper>
 </template>
 
@@ -82,3 +94,8 @@ function forgotPassword() {
   $authService?.showResetPasswordDialog();
 }
 </script>
+<style scoped>
+h5 {
+  margin-bottom: 10px;
+}
+</style>

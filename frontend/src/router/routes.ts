@@ -14,7 +14,7 @@ const ROUTES: Record<string, RouteRecordRaw> = {
 
   LOGIN: {
     path: '/login',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/ClearLayout.vue'),
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
 

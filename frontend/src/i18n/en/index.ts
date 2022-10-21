@@ -13,6 +13,8 @@ export default {
   },
   authentication: {
     authentication: 'Authentication',
+    welcome_back: 'Welcome back!',
+    welcome_text: 'You can sign in to access your existing account',
     login: 'Log in',
     logout: 'Log out',
     signup: 'Sign up',

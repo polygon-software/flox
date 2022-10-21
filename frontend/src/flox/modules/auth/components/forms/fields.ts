@@ -26,14 +26,19 @@ import {
 export interface Field<ComponentProps = any> {
   key: string,
   component: any,
+  prependIcon?: string,
+  appendIcon?: string,
   attributes: { rules: ValidationRule[] } & (Omit<ComponentProps, 'modelValue'>),
 }
 
 const EMAIL: Field<QInputProps> = {
   key: 'email',
   component: markRaw(QInput),
+  prependIcon: 'email',
   attributes: {
     dense: true,
+    rounded: true,
+    outlined: true,
     type: 'email',
     label: i18n.global.t('authentication.email'),
     lazyRules: 'ondemand',
@@ -44,8 +49,11 @@ const EMAIL: Field<QInputProps> = {
 const USERNAME: Field<QInputProps> = {
   key: 'username',
   component: markRaw(QInput),
+  prependIcon: 'account',
   attributes: {
     dense: true,
+    rounded: true,
+    outlined: true,
     type: 'text',
     label: i18n.global.t('authentication.username'),
     lazyRules: 'ondemand',
@@ -57,6 +65,8 @@ const PASSWORD: Field = {
   key: 'password',
   component: markRaw(Password),
   attributes: {
+    rounded: true,
+    outlined: true,
     rules: [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))],
   }
 }
@@ -69,11 +79,10 @@ const PASSWORD_REPEAT: Field = {
   }
 }
 
-const FIELDS: Record<string, Field<any>> = {
-        EMAIL,
-        USERNAME,
-        PASSWORD,
-        PASSWORD_REPEAT,
-    }
+export const FIELDS = {
+    EMAIL,
+    USERNAME,
+    PASSWORD,
+    PASSWORD_REPEAT,
+}
 
-export {FIELDS}
