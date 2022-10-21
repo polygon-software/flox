@@ -110,7 +110,7 @@
  * @param {boolean} [loading] - loading status to show on the finish button
  */
 import {defineEmits, defineProps, Ref, ref} from 'vue';
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 import {MultiPageForm} from 'components/forms/MultiPageForm';
 import {QForm} from 'quasar';
 

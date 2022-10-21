@@ -1,6 +1,6 @@
 import Joi, {AnySchema} from 'joi';
 import { joiPasswordExtendCore } from 'joi-password';
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 import {ValidationRule} from 'quasar';
 
 /**

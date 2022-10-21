@@ -129,7 +129,7 @@ import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES'
 import {uploadFile} from 'src/flox/modules/file/tools/upload.tools'
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 
 interface SelectedFile {
   content: File,

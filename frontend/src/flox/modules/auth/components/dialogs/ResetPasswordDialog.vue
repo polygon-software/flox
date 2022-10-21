@@ -52,7 +52,7 @@
 import {defineEmits, ref} from 'vue';
 import {useDialogPluginComponent} from 'quasar';
 import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 
 let verificationCode = ref('')
 let password = ref('')

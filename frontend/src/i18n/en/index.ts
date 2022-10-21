@@ -7,9 +7,9 @@ export default {
     confirm: 'Confirm',
     ok: 'OK',
     loading: 'Loading',
-    save: 'Save',
     failed: 'Failed',
     successful: 'Successful',
+    save: 'Save',
   },
   authentication: {
     authentication: 'Authentication',
@@ -75,6 +75,7 @@ export default {
   messages: {
     success: 'Success',
     failure: 'Failure',
+    login_failed: 'Login failed',
     email_sent: 'E-Mail(s) sent',
     file_uploaded: 'Successfully uploaded file',
     files_uploaded: 'Successfully uploaded files',

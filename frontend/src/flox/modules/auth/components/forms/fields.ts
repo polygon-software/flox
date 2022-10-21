@@ -2,7 +2,7 @@ import {QInput, QInputProps, ValidationRule} from 'quasar'
 import PasswordRepeat from 'src/flox/modules/auth/components/forms/fields/PasswordRepeat.vue'
 import Password from 'src/flox/modules/auth/components/forms/fields/Password.vue'
 import {markRaw} from 'vue';
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 import {
   joiEmailSchema, joiPasswordSchema,
   joiSchemaToValidationRule,

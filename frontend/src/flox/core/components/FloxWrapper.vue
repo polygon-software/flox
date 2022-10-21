@@ -9,7 +9,7 @@
     style="min-width: 300px; height: 100px"
   >
     <strong>
-      {{ i18n.global.t('error.module_error', { module }) }}
+      {{ $t('error.module_error', { module }) }}
     </strong>
   </q-card>
 </template>
@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import {computed, defineProps, onMounted} from 'vue';
 import {isModuleActive} from 'src/flox';
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 
 /**
  * This is a wrapper component to be used with Flox module components. It prevents the module's components from being

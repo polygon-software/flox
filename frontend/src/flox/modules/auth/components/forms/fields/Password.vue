@@ -20,8 +20,7 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
-import {i18n} from 'boot/i18n.boot';
-
+import { useI18n } from 'vue-i18n';
 /**
  * This component contains field to enter a password.
  */
@@ -29,7 +28,9 @@ import {i18n} from 'boot/i18n.boot';
 const password = ref('')
 const isPwd = ref(true)
 
-const passwordRules = [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))]
+const { t } = useI18n();
+
+const passwordRules = [joiSchemaToValidationRule(joiPasswordSchema(), t('errors.invalid_password'))]
 
 
 </script>

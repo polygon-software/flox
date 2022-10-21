@@ -8,7 +8,7 @@ import {provide, reactive} from 'vue';
 import {ErrorService} from './services/ErrorService';
 import {useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
-import {routerInstance} from 'boot/router.boot';
+import {routerInstance} from 'boot/router';
 import {isModuleActive} from 'src/flox';
 import {MODULES} from 'src/flox/MODULES';
 import LogRocket from 'logrocket';

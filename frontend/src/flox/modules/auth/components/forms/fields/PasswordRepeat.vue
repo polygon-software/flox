@@ -40,7 +40,7 @@ import {ref, watch, defineProps, defineEmits} from 'vue';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES';
 import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 
 /**
  * This component contains field to enter a new password, as well as another field to repeat the new password. Both entries need to match.

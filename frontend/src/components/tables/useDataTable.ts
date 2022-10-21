@@ -2,7 +2,7 @@ import {ref, Ref, nextTick, toRaw, watch, ComputedRef, computed} from 'vue';
 import {exportFile, QInputProps, useQuasar} from 'quasar';
 import {cloneDeep, set} from 'lodash-es';
 
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 import {MutationObject} from 'src/apollo/mutation';
 import {showErrorNotification, showSuccessNotification} from 'src/tools/notification.tool';
 import {BaseEntity} from 'src/flox/core/base-entity/entities/BaseEntity';

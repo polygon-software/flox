@@ -26,8 +26,8 @@
             buttons
             :validate="validateInput(cellProps.col, $event)"
             :model-value="cellProps.row[cellProps.col.field]"
-            :label-set="i18n.global.t('general.save')"
-            :label-cancel="i18n.global.t('general.cancel')"
+            :label-set="$t('general.save')"
+            :label-cancel="$t('general.cancel')"
             @keyup.enter="popupRefs[getPopupEditKey(cellProps.row, cellProps.col)].set()"
             @save="updateRow(cellProps.row, cellProps.col.field, $event)"
           >
@@ -82,7 +82,7 @@
     </q-table>
     <div class="row">
       <div class="col">
-        <div class="text-subtitle2 q-pa-sm" v-text="i18n.global.t('table.ctrl_shift_hint')"/>
+        <div class="text-subtitle2 q-pa-sm" v-text="$t('table.ctrl_shift_hint')"/>
       </div>
       <div class="col">
         <div class="row justify-end" style="gap: 10px">
@@ -114,7 +114,6 @@ import {QPopupEdit, QTable} from 'quasar';
 import {ColumnInterface, useDataTable} from 'components/tables/useDataTable';
 import {MutationObject} from 'src/apollo/mutation';
 import {BaseEntity} from 'src/flox/core/base-entity/entities/BaseEntity';
-import {i18n} from 'boot/i18n.boot';
 import {QueryObject} from 'src/apollo/query';
 
 const props = defineProps<{

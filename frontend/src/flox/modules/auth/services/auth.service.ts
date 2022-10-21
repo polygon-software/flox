@@ -8,7 +8,7 @@ import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue'
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue'
 import {QVueGlobals, useQuasar} from 'quasar';
 import _ from 'lodash';
-import {i18n} from 'boot/i18n.boot';
+import {i18n} from 'boot/i18n';
 import {useApolloClient} from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
