@@ -49,7 +49,7 @@ module "web_spa_pwa" {
 }
 
 # Backend module (EBS + RDS)
-module "api-ebs" {
+module "api_ebs" {
   source = "./api-ebs"
   count  = var.serverless_api == true ? 0 : 1
   project = var.project
@@ -78,10 +78,12 @@ module "api-ebs" {
   api_source_code_object_hash = aws_s3_object.api_source_code_object.source_hash
   aws_region = var.aws_region
   api_security_group_id = aws_security_group.api_security_group.id
+  admin_key_id = aws_iam_access_key.backend_admin_key.id
+  admin_key_secret = aws_iam_access_key.backend_admin_key.secret
 }
 
 # Certificate for serverless mode backend
-module "api-serverless-certificate" {
+module "api_serverless_certificate" {
   source = "./api-serverless-certificate"
   count  = var.serverless_api == true ? 1 : 0
   domain = var.domain
@@ -92,10 +94,10 @@ module "api-serverless-certificate" {
 }
 
 # Backend module (Serverless)
-module "api-serverless" {
+module "api_serverless" {
   source = "./api-serverless"
   count  = var.serverless_api == true ? 1 : 0
-  depends_on = [module.api-serverless-certificate]
+  depends_on = [module.api_serverless_certificate]
   project = var.project
   type = var.type
   domain = var.domain
@@ -118,6 +120,9 @@ module "api-serverless" {
   private_subnet_ids = aws_subnet.private_subnet.*.id
   public_subnet_ids = aws_subnet.public_subnet.*.id
   vpc_id = aws_vpc.vpc.id
-  backend_certificate_arn = module.api-serverless-certificate[0].backend_certificate_arn
+  backend_certificate_arn = module.api_serverless_certificate[0].backend_certificate_arn
   api_security_group_id = aws_security_group.api_security_group.id
+  database_ec2_to_rds_security_group_id = aws_security_group.database_ec2_to_rds_security_group[0].id
+  admin_key_id = aws_iam_access_key.backend_admin_key.id
+  admin_key_secret = aws_iam_access_key.backend_admin_key.secret // TODO actually use on EBS & lambda
 }

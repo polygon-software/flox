@@ -42,7 +42,6 @@ variable "aws_region" {
 }
 
 variable "project" {
-  default         = "flox"
   description     = "prefix used for all resources in the Project"
   type            = string
 }
@@ -130,7 +129,7 @@ variable "serverless_db" {
 }
 
 variable "serverless_db_version" {
-  description     = "Serverless version to use (v1 can scale to zero, v2 cannot)"
+  description     = "Serverless Database version to use (v1 can scale to zero, v2 cannot)"
   default         = "v1"
   type            = string
 }

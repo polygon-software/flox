@@ -242,4 +242,16 @@ resource "aws_elastic_beanstalk_environment" "api_env" {
     name      = "SERVERLESS"
     value     = false
   }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "ADMIN_AWS_ACCESS_KEY_ID"
+    value     = var.admin_key_id
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "ADMIN_AWS_SECRET_ACCESS_KEY"
+    value     = var.admin_key_secret
+  }
 }

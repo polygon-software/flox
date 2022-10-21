@@ -4,7 +4,6 @@ variable "type" {
 }
 
 variable "project" {
-  default         = "flox"
   description     = "prefix used for all resources in the Project"
   type            = string
 }
@@ -115,5 +114,20 @@ variable "backend_certificate_arn" {
 
 variable "api_security_group_id" {
   description     = "API security group ID"
+  type            = string
+}
+
+variable "database_ec2_to_rds_security_group_id" {
+  description     = "EC2->RDS access security group ID"
+  type            = string
+}
+
+variable "admin_key_id" {
+  description     = "ID of admin user programmatic access key"
+  type            = string
+}
+
+variable "admin_key_secret" {
+  description     = "Secret of admin user programmatic access key"
   type            = string
 }
