@@ -9,7 +9,6 @@ variable "type" {
 }
 
 variable "project" {
-  default         = "flox"
   description     = "prefix used for all resources in the Project"
   type            = string
 }

@@ -101,9 +101,36 @@ data aws_iam_policy_document flox_manager_document {
   }
 }
 
-# UserEntity
+// Backend Admin User (full permissions on relevant systems)
+resource "aws_iam_user" "backend_admin" {
+  name      = "${var.project}-${var.type}-backend-admin"
+}
+
+// S3 Access
+resource "aws_iam_user_policy_attachment" "backend_admin_s3" {
+  user      = aws_iam_user.backend_admin.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+// SES Access
+resource "aws_iam_user_policy_attachment" "backend_admin_ses" {
+  user      = aws_iam_user.backend_admin.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"
+}
+// Cognito Access
+resource "aws_iam_user_policy_attachment" "backend_admin_cognito" {
+  user      = aws_iam_user.backend_admin.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+}
+
+// Programmatic access key
+resource "aws_iam_access_key" "backend_admin_key" {
+  user    = aws_iam_user.backend_admin.name
+}
+
+// Backup Creator User
+
 resource "aws_iam_user" "backup_creator" {
-  name      = "${var.type}-gcp-backup-manager"
+  name      = "${var.project}-${var.type}-gcp-backup-manager"
 }
 
 # Policy

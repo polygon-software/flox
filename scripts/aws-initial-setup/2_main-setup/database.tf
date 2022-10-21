@@ -17,6 +17,55 @@ resource "aws_subnet" "database_subnets" {
   }
 }
 
+/**
+  ====================
+  Serverless mode only
+  ====================
+**/
+
+// Security group for DB access in serverless mode (egress; EC2 to RDS)
+resource "aws_security_group" "database_ec2_to_rds_security_group" {
+  depends_on = [aws_security_group.database_rds_to_ec2_security_group]
+  count = var.serverless_api == true ? 1 : 0
+  name                      = "${var.project}-${var.type}-rds-ec2-egress-security-group"
+  vpc_id                    = aws_vpc.vpc.id
+  tags = {
+    Project       = var.project
+  }
+  egress {
+    from_port           = 5432
+    to_port             = 5432
+    protocol            = "TCP"
+    security_groups     = [aws_security_group.database_rds_to_ec2_security_group[0].id] // Allow to ingress group
+  }
+}
+
+// Security group for DB access (ingress; RDS to EC2), must be attached to instances in RDS cluster
+resource "aws_security_group" "database_rds_to_ec2_security_group" {
+  count = var.serverless_api == true ? 1 : 0
+  name                      = "${var.project}-${var.type}-rds-ec2-ingress-security-group"
+  vpc_id                    = aws_vpc.vpc.id
+  tags = {
+    Project       = var.project
+  }
+}
+
+// Rule for RDS -> EC2 security group must be added later to prevent cyclic dependency between the two groups
+resource "aws_security_group_rule" "rds_to_ec2_rule" {
+  count = var.serverless_api == true ? 1 : 0
+  depends_on = [
+    aws_security_group.database_ec2_to_rds_security_group,
+    aws_security_group.database_rds_to_ec2_security_group
+  ]
+  security_group_id = aws_security_group.database_rds_to_ec2_security_group[0].id
+  type = "ingress"
+  from_port           = 5432
+  to_port             = 5432
+  protocol            = "TCP"
+  source_security_group_id     = aws_security_group.database_ec2_to_rds_security_group[0].id // Allow to egress (EC2->RDS) group
+}
+
+// Actual database cluster
 resource "aws_rds_cluster" "database_cluster" {
   engine                    = "aurora-postgresql"
   /**
@@ -33,7 +82,10 @@ resource "aws_rds_cluster" "database_cluster" {
   master_password           = var.database_master_password
   skip_final_snapshot       = var.type == "live" ? false : true
   db_subnet_group_name      = aws_db_subnet_group.database_subnet_group.name
-  vpc_security_group_ids    = [aws_security_group.database_security_group.id]
+  vpc_security_group_ids    = var.serverless_api ? [
+    aws_security_group.database_security_group.id,
+    aws_security_group.database_rds_to_ec2_security_group[0].id,
+  ] : [aws_security_group.database_security_group.id]
   kms_key_id                = aws_kms_key.rds_encryption_key.arn
   storage_encrypted         = true
   backup_retention_period   = 30
@@ -58,7 +110,7 @@ resource "aws_rds_cluster" "database_cluster" {
     for_each = var.serverless_db == true && var.serverless_db_version == "v2" ? [1] : []
     content {
       max_capacity = 2.0 // TODO application specific: Change scaling factor
-      min_capacity = 0.5
+      min_capacity = 0.5 // 0.5 is the minimum for PostgreSQL with v2
     }
   }
 

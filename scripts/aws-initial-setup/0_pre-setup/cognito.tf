@@ -5,8 +5,11 @@ resource "aws_cognito_user_pool" "user_pool" {
   auto_verified_attributes   = var.auto_verified_attributes
   username_attributes        = var.username_attributes
   mfa_configuration = var.mfa_configuration
-  software_token_mfa_configuration {
-    enabled = true
+  dynamic "software_token_mfa_configuration" {
+    for_each = var.mfa_configuration == "OFF" ? [] : [1]
+    content {
+      enabled = true
+    }
   }
   lifecycle {
     prevent_destroy = false
