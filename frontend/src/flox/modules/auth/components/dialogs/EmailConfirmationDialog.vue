@@ -50,9 +50,9 @@
 <script setup lang="ts">
 import {defineProps, defineEmits, PropType, ref} from 'vue';
 import {QVueGlobals, useDialogPluginComponent} from 'quasar';
-import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
-import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
-import {i18n} from 'boot/i18n';
+import {AuthenticationService} from 'src/flox/modules/auth/services/auth.service';
+import {showSuccessNotification} from 'src/tools/notification.tool';
+import {i18n} from 'boot/i18n.boot';
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
 

@@ -112,9 +112,10 @@
 import {ref, onMounted, Ref, defineProps, watchEffect} from 'vue';
 import {QPopupEdit, QTable} from 'quasar';
 import {ColumnInterface, useDataTable} from 'components/tables/useDataTable';
-import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
-import {BaseEntity} from 'src/data/types/BaseEntity';
-import {i18n} from 'boot/i18n';
+import {MutationObject} from 'src/apollo/mutation';
+import {BaseEntity} from 'src/flox/core/base-entity/entities/BaseEntity';
+import {i18n} from 'boot/i18n.boot';
+import {QueryObject} from 'src/apollo/query';
 
 const props = defineProps<{
   title: string,

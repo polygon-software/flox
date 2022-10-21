@@ -5,7 +5,7 @@
     :label="$t('authentication.password')"
     lazy-rules="ondemand"
     :type="isPwd ? 'password' : 'text'"
-    :rules="[(val) => IS_VALID_PASSWORD(val) || $t('errors.invalid_password')]"
+    :rules="passwordRules"
   >
     <template #append>
       <q-icon
@@ -19,7 +19,8 @@
 
 <script setup lang="ts">
 import {ref} from 'vue';
-import {IS_VALID_PASSWORD} from 'src/data/RULES';
+import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
+import {i18n} from 'boot/i18n.boot';
 
 /**
  * This component contains field to enter a password.
@@ -27,5 +28,8 @@ import {IS_VALID_PASSWORD} from 'src/data/RULES';
 
 const password = ref('')
 const isPwd = ref(true)
+
+const passwordRules = [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))]
+
 
 </script>

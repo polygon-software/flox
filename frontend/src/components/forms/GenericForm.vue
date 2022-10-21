@@ -110,8 +110,8 @@
  * @param {boolean} [loading] - loading status to show on the finish button
  */
 import {defineEmits, defineProps, Ref, ref} from 'vue';
-import {i18n} from 'boot/i18n';
-import {Form} from 'src/helpers/form/form-helpers';
+import {i18n} from 'boot/i18n.boot';
+import {MultiPageForm} from 'components/forms/MultiPageForm';
 import {QForm} from 'quasar';
 
 const emit = defineEmits(['submit'])
@@ -141,7 +141,7 @@ const props = defineProps({
 })
 
 // Create Form instance with pages from props
-const form: Form = new Form(props.pages as Record<string, unknown>[])
+const form: MultiPageForm = new MultiPageForm(props.pages as Record<string, unknown>[])
 
 /**
  * Validates and, if valid, submits the form with all entered values

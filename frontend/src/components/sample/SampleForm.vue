@@ -6,9 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import {FIELDS} from 'src/data/FIELDS';
+import {FIELDS} from 'src/flox/modules/auth/components/forms/fields';
 import GenericForm from 'components/forms/GenericForm.vue';
-import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
+import {showSuccessNotification} from 'src/tools/notification.tool';
 import {useQuasar} from 'quasar';
 
 /**

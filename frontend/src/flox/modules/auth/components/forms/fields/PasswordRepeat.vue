@@ -6,7 +6,7 @@
       :label="$t('authentication.password')"
       lazy-rules="ondemand"
       :type="isPwd ? 'password' : 'text'"
-      :rules="[(val) => IS_VALID_PASSWORD(val) || $t('errors.invalid_password')]"
+      :rules="passwordRules"
     >
       <template #append>
         <q-icon
@@ -22,7 +22,7 @@
       :label="$t('authentication.password_repeat')"
       lazy-rules="ondemand"
       :type="isPwdRepeat ? 'password' : 'text'"
-      :rules="[val => val === password || $t('errors.non_matching_password')]"
+      :rules="matchingRules"
     >
       <template #append>
         <q-icon
@@ -37,9 +37,10 @@
 
 <script setup lang="ts">
 import {ref, watch, defineProps, defineEmits} from 'vue';
-import {IS_VALID_PASSWORD} from 'src/data/RULES';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES';
+import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
+import {i18n} from 'boot/i18n.boot';
 
 /**
  * This component contains field to enter a new password, as well as another field to repeat the new password. Both entries need to match.
@@ -47,18 +48,19 @@ import {MODULES} from 'src/flox/MODULES';
 
 const props = defineProps({
   modelValue: {
-    required: false,
+    required: true,
     type: String
   },
-  rules: {
-    required: false,
-  }
 });
 
 let password = ref(props.modelValue ?? '')
 let passwordRepeat = ref(props.modelValue ?? '')
 const isPwd = ref(true)
 const isPwdRepeat = ref(true)
+
+const passwordRules = [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))]
+const matchingRules = [(val: string) => val === password.value || i18n.global.t('errors.non_matching_password')]
+
 
 const emit = defineEmits(['change'])
 

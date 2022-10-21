@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue'
 import {inject} from 'vue'
-import {AuthenticationService} from '../flox/modules/auth/services/AuthService';
+import {AuthenticationService} from '../flox/modules/auth/services/auth.service';
 const $authService: AuthenticationService|undefined = inject('$authService')
 
 /**

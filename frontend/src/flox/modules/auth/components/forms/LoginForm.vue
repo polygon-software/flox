@@ -35,10 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import {FIELDS} from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form/form-helpers'
+import {FIELDS} from 'src/flox/modules/auth/components/forms/fields';
+import { MultiPageForm } from 'components/forms/MultiPageForm'
 import {defineEmits, inject} from 'vue';
-import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
+import {AuthenticationService} from 'src/flox/modules/auth/services/auth.service';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES';
 import * as auth from 'src/flox/modules/auth'
@@ -52,7 +52,7 @@ const fields = [
   FIELDS.PASSWORD
 ]
 
-const form = new Form()
+const form = new MultiPageForm()
 form.pages.value = [
   {
     key: 'login',

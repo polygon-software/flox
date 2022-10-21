@@ -3,12 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import {AuthenticationService} from './flox/modules/auth/services/AuthService';
+import {AuthenticationService} from './flox/modules/auth/services/auth.service';
 import {provide, reactive} from 'vue';
 import {ErrorService} from './services/ErrorService';
 import {useQuasar} from 'quasar';
 import {RouterService} from 'src/services/RouterService';
-import {routerInstance} from 'boot/router';
+import {routerInstance} from 'boot/router.boot';
 import {isModuleActive} from 'src/flox';
 import {MODULES} from 'src/flox/MODULES';
 import LogRocket from 'logrocket';

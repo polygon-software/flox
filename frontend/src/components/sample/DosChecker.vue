@@ -28,8 +28,8 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
 import axios from 'axios';
-import {MY_USER} from 'src/data/queries/USER';
-import {getBearerToken} from 'src/helpers/tools/auth-helpers';
+import {MY_USER} from 'src/flox/modules/auth/user.query';
+import {getBearerToken} from 'src/flox/modules/auth/tools/auth.tools';
 import {print} from 'graphql';
 
 const requestsPerSecond: Ref<number> = ref(10);

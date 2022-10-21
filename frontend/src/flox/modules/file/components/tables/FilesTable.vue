@@ -34,13 +34,12 @@
 
 <script setup lang="ts">
 import {defineProps, ref} from 'vue';
-import {S3File} from 'src/data/types/S3File';
+import {FileEntity} from 'src/flox/modules/file/entities/file.entity';
 import {Ref} from '@vue/reactivity';
 import {date, useQuasar} from 'quasar';
-import {i18n} from 'boot/i18n';
-import {fetchMyFiles, fetchPublicFiles} from 'src/helpers/data/fetch-helpers';
-import {deletePrivateFile, deletePublicFile} from 'src/helpers/data/mutation-helpers';
-import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
+import {i18n} from 'boot/i18n.boot';
+import {showSuccessNotification} from 'src/tools/notification.tool';
+import {deletePrivateFile, deletePublicFile, fetchMyFiles, fetchPublicFiles} from 'src/flox/modules/file/services/file.service';
 
 const props = defineProps({
   private: {
@@ -62,19 +61,19 @@ const columns = [
 
 /**
  * Fetches all files for displaying in table
- * @returns {Promise<S3File[]>} List of Files
+ * @returns {Promise<FileEntity[]>} List of Files
  */
-function fetchAllFiles(): Ref<S3File[]> {
+function fetchAllFiles(): Ref<FileEntity[]> {
   if (props.private) {
     return fetchMyFiles();
   }
   return fetchPublicFiles();
 }
 
-const files: Ref<S3File[]> = fetchAllFiles();
+const files: Ref<FileEntity[]> = fetchAllFiles();
 
 
-const selected: Ref<S3File[]> = ref([]);
+const selected: Ref<FileEntity[]> = ref([]);
 
 /**
  * Deletes the selected file

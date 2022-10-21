@@ -36,11 +36,10 @@
 
 <script setup lang="ts">
 import {defineProps, ref, watch} from 'vue';
-import {ImageFile} from 'src/data/types/ImageFile';
+import {ImageEntity} from 'src/flox/modules/image/entities/image.entity';
 import {Ref} from '@vue/reactivity';
 import {dom} from 'quasar'
-
-import {getImage} from 'src/helpers/data/fetch-helpers';
+import {getImage} from 'src/flox/modules/image/services/image.service';
 
 const props = defineProps({
   uuid: {
@@ -57,7 +56,7 @@ const props = defineProps({
   }
 })
 
-const image: Ref<ImageFile|null> = ref(null);
+const image: Ref<ImageEntity|null> = ref(null);
 
 const imgRef: Ref<HTMLImageElement|null> = ref(null);
 const width: Ref<number> = ref(0);

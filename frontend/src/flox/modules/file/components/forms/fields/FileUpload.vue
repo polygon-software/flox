@@ -125,11 +125,11 @@ import {
 } from 'quasar';
 import {defineProps, Ref, ref} from 'vue';
 import { AxiosResponse } from 'axios';
-import { FILE_UPLOAD_STATUS } from 'src/data/ENUM';
+import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES'
-import {uploadFile} from 'src/helpers/tools/file-helpers'
-import {i18n} from 'boot/i18n';
+import {uploadFile} from 'src/flox/modules/file/tools/upload.tools'
+import {i18n} from 'boot/i18n.boot';
 
 interface SelectedFile {
   content: File,
@@ -238,7 +238,7 @@ function clearFileList() {
 
 /**
  * Triggered when a file is picked from the file picker dialog
- * @param {S3File[]} newFiles - the newly picked files
+ * @param {FileEntity[]} newFiles - the newly picked files
  * @returns {void}
  */
 function onFilePicked(newFiles: File[]){
@@ -247,7 +247,7 @@ function onFilePicked(newFiles: File[]){
     const newSelectedFile: SelectedFile = {
       content: file,
       url: URL.createObjectURL(file),
-      status: FILE_UPLOAD_STATUS.READY,
+      status: UPLOAD_STATUS.READY,
     }
     selectedFiles.value = selectedFiles.value.concat(newSelectedFile)
   }
@@ -260,25 +260,25 @@ function onFilePicked(newFiles: File[]){
 async function uploadFiles() {
   const url = `${props.url}${props.target}`
   for (const file of selectedFiles.value) {
-    if (file.status !== FILE_UPLOAD_STATUS.DONE) {
-      file.status = FILE_UPLOAD_STATUS.LOADING
+    if (file.status !== UPLOAD_STATUS.DONE) {
+      file.status = UPLOAD_STATUS.LOADING
       const res: AxiosResponse = await uploadFile(file.content, url)
       if (res.status === 201) {
-        file.status = FILE_UPLOAD_STATUS.DONE
+        file.status = UPLOAD_STATUS.DONE
       }
       else {
-        file.status = FILE_UPLOAD_STATUS.FAILED
+        file.status = UPLOAD_STATUS.FAILED
       }
     }
   }
   // Check for successful uploads
-  const successfulUploads = selectedFiles.value.filter((file) => file.status === FILE_UPLOAD_STATUS.DONE)
+  const successfulUploads = selectedFiles.value.filter((file) => file.status === UPLOAD_STATUS.DONE)
   if (successfulUploads.length > 0) {
     onSuccess(successfulUploads)
   }
 
   // Check for failed uploads
-  const failedUploads = selectedFiles.value.filter((file) => file.status === FILE_UPLOAD_STATUS.FAILED)
+  const failedUploads = selectedFiles.value.filter((file) => file.status === UPLOAD_STATUS.FAILED)
   if (failedUploads.length > 0) {
     onFailed(failedUploads)
   }

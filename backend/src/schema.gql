@@ -268,7 +268,7 @@ type User {
   """E-mail address"""
   email: String!
 
-  """User role"""
+  """UserEntity role"""
   role: String
 
   """Last modification date"""

@@ -17,17 +17,13 @@
           v-model="password"
           :label="$t('authentication.new_password')"
           type="password"
-          :rules="[
-              val => PASSWORD_REGEX.test(val) || $t('errors.invalid_password')
-            ]"
+          :rules="passwordRules"
         />
         <q-input
           v-model="passwordRep"
           :label="$t('authentication.new_password_repeat')"
           type="password"
-          :rules="[
-             val => val === password || $t('errors.non_matching_password'),
-          ]"
+          :rules="matchingRules"
         />
         <q-card-actions align="right">
           <q-btn
@@ -48,15 +44,17 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits} from 'vue';
-import {ref} from 'vue';
-import {PASSWORD_REGEX} from '../../../../../helpers/REGEX'
+import {defineEmits, ref} from 'vue';
 import {useDialogPluginComponent} from 'quasar';
+import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
+import {i18n} from 'boot/i18n.boot';
 
 let passwordOld = ref('')
 let password = ref('')
 let passwordRep = ref('')
 
+const passwordRules = [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))]
+const matchingRules = [(val: string) => val === password.value || i18n.global.t('errors.non_matching_password')]
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
 

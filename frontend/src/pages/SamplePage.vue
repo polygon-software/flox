@@ -24,7 +24,7 @@
     <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />
 
     <DataTable
-      title="User Table"
+      title="UserEntity Table"
       :columns="columns"
       :query="QUERY_USERS"
       :update-mutation="UPDATE_USER"
@@ -46,19 +46,19 @@ import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
 import DataTable from 'components/tables/DataTable.vue';
 import DosChecker from 'components/sample/DosChecker.vue';
 
-import { QUERY_USERS } from 'src/data/queries/USER';
-import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';
+import { QUERY_USERS } from 'src/flox/modules/auth/user.query';
+import {DELETE_USER, UPDATE_USER} from 'src/flox/modules/auth/user.mutation';
 import {ColumnInterface} from 'components/tables/useDataTable';
-import {User} from 'src/data/types/User';
-import { joiRule } from 'src/helpers/validation/validation-helpers';
+import {UserEntity} from 'src/flox/modules/auth/entities/user.entity';
+import { joiSchemaToValidationRule } from 'src/tools/validation.tool';
 
 const imageUuid: Ref<string> = ref('');
 
 const emailRules: ValidationRule[] = [
-  joiRule(Joi.string().email({ tlds: { allow: false }}), 'validation.email'),
+  joiSchemaToValidationRule(Joi.string().email({ tlds: { allow: false }}), 'validation.email'),
 ];
 
-const columns: Ref<ColumnInterface<User>[]> = ref([
+const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   { name: 'uuid', label: 'UUID', field: 'uuid', sortable: true },
   { name: 'username', label: 'Username', field: 'username', sortable: true, edit: true },
   { name: 'email', label: 'E-Mail', field: 'email', sortable: true, edit: true, qInputProps: { rules: emailRules } },

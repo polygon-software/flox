@@ -12,13 +12,13 @@
 
 <script setup lang="ts">
 import {inject} from 'vue'
-import {AuthenticationService} from '../flox/modules/auth/services/AuthService';
+import {AuthenticationService} from '../flox/modules/auth/services/auth.service';
 import ROUTES from 'src/router/routes';
 import {RouterService} from 'src/services/RouterService';
 import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
-import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
+import {showSuccessNotification} from 'src/tools/notification.tool';
 import {useQuasar} from 'quasar';
-import {i18n} from 'src/boot/i18n';
+import {i18n} from 'boot/i18n.boot';
 
 const $q = useQuasar()
 const $authService: AuthenticationService|undefined = inject('$authService')

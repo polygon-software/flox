@@ -36,8 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import {FIELDS} from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form/form-helpers'
+import {FIELDS} from 'src/flox/modules/auth/components/forms/fields';
+import { MultiPageForm } from 'components/forms/MultiPageForm'
 import {defineEmits} from 'vue';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import {MODULES} from 'src/flox/MODULES';
@@ -55,7 +55,7 @@ const fields = auth.moduleConfig().emailAsUsername ?
     FIELDS.PASSWORD_REPEAT
   ]
 
-const form = new Form()
+const form = new MultiPageForm()
 form.pages.value = [
   {
     key: 'login',

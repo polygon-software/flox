@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import {floxModules, floxModulesOptions} from 'src/flox/index';
+import {floxModules, floxModulesOptions} from 'src/flox';
 
 // Active modules
 const modules = floxModules()

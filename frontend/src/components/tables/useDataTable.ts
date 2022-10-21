@@ -2,13 +2,14 @@ import {ref, Ref, nextTick, toRaw, watch, ComputedRef, computed} from 'vue';
 import {exportFile, QInputProps, useQuasar} from 'quasar';
 import {cloneDeep, set} from 'lodash-es';
 
-import {i18n} from 'boot/i18n';
-import {MutationObject, QueryObject} from 'src/data/DATA-DEFINITIONS';
-import {executeMutation, executeQuery} from 'src/helpers/data/data-helpers';
-import {showErrorNotification, showSuccessNotification} from 'src/helpers/tools/notification-helpers';
-import {BaseEntity} from 'src/data/types/BaseEntity';
-import CountQuery from 'src/data/types/CountEntity';
-import {entityToMutationVariables} from 'src/helpers/tools/graphql-helpers';
+import {i18n} from 'boot/i18n.boot';
+import {MutationObject} from 'src/apollo/mutation';
+import {showErrorNotification, showSuccessNotification} from 'src/tools/notification.tool';
+import {BaseEntity} from 'src/flox/core/base-entity/entities/BaseEntity';
+import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
+import {entityToMutationVariables} from 'src/tools/graphql.tool';
+import {executeQuery, QueryObject} from 'src/apollo/query';
+import {executeMutation} from 'src/apollo/mutation';
 
 export interface ColumnInterface<T = any> {
   name: string,

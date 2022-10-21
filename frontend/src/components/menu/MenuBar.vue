@@ -26,10 +26,10 @@
 
 <script setup lang="ts">
 import {computed, inject} from 'vue'
-import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
+import {AuthenticationService} from 'src/flox/modules/auth/services/auth.service';
 import {RouterService} from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import {useAuthStore} from 'stores/authentication';
+import {useAuthStore} from 'src/flox/modules/auth/stores/authentication.store';
 
 
 const $authService: AuthenticationService|undefined = inject('$authService')
