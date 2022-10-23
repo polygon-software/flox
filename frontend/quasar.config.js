@@ -8,10 +8,9 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { configure } = require('quasar/wrappers');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+const checker = require('vite-plugin-checker').default;
 
 module.exports = configure(function (ctx) {
   return {
@@ -75,6 +74,7 @@ module.exports = configure(function (ctx) {
       },
 
       vitePlugins: [
+        checker({ typescript: true }),
         [
           '@intlify/vite-plugin-vue-i18n',
           {

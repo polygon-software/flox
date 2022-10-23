@@ -54,11 +54,6 @@ export class FileController {
       return;
     }
 
-    // Ensure userID is given
-    if (!req['user']?.userId) {
-      res.send(new UnauthorizedException());
-    }
-
     const newFile = await this.fileService.uploadPrivateFile(file, user);
     res.send(newFile);
   }

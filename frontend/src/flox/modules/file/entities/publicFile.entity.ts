@@ -1,4 +1,4 @@
-import {FileEntity} from 'src/flox/modules/file/entities/file.entity';
+import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
 
 /**
  * A class representing a file
@@ -13,7 +13,7 @@ export class PublicFileEntity extends FileEntity {
     key: string,
     mimetype: string,
     filename: string | null,
-    size: number,
+    size: number
   ) {
     super(uuid, createdAt, updatedAt, deletedAt, key, mimetype, filename, size);
   }

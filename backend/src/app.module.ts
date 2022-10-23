@@ -17,6 +17,7 @@ import { floxModules, floxProviders } from './flox/flox';
 import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
 import { isServerless } from './flox/core/flox-helpers';
 import { GqlThrottlerGuard } from './flox/modules/GqlThrottlerGuard';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 @Module({
   imports: [
@@ -58,16 +59,17 @@ import { GqlThrottlerGuard } from './flox/modules/GqlThrottlerGuard';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('database.host'),
-        port: configService.get('database.port'),
-        username: configService.get('database.username'),
-        password: configService.get('database.password'),
-        database: configService.get('database.database'),
-        entities: [configService.get('entities')],
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) =>
+        ({
+          type: 'postgres',
+          host: configService.getOrThrow('database.host'),
+          port: configService.getOrThrow('database.port'),
+          username: configService.getOrThrow('database.username'),
+          password: configService.getOrThrow('database.password'),
+          database: configService.getOrThrow('database.database'),
+          entities: [configService.getOrThrow('entities')],
+          synchronize: true,
+        } as PostgresConnectionOptions),
       inject: [ConfigService],
     }),
     ThrottlerModule.forRoot({

@@ -8,6 +8,6 @@ export abstract class BaseEntity {
     public uuid: string,
     public createdAt: Date,
     public updatedAt: Date,
-    public deletedAt: Date|null,
-  ) { }
+    public deletedAt: Date | null
+  ) {}
 }

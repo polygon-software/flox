@@ -1,15 +1,15 @@
-import {BaseEntity} from 'src/flox/core/base-entity/entities/BaseEntity';
-import {OperationVariables} from '@apollo/client/core/types';
-import {FetchResult} from '@apollo/client';
-import {useMutation} from '@vue/apollo-composable';
-import {invalidateTables} from 'src/apollo/invalidation';
-import {DocumentNode} from 'graphql';
+import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import { OperationVariables } from '@apollo/client/core/types';
+import { FetchResult } from '@apollo/client';
+import { useMutation } from '@vue/apollo-composable';
+import { invalidateTables } from 'src/apollo/invalidation';
+import { DocumentNode } from 'graphql';
 
 export interface MutationObject {
-  mutation: DocumentNode,          // Actual GraphQL mutation
-  tables: string[],       // Affected Tables
-  cacheLocation: string,  // Location in cache (actual GraphQL query name)
-  type: MutationTypes     // Type of mutation
+  mutation: DocumentNode; // Actual GraphQL mutation
+  tables: string[]; // Affected Tables
+  cacheLocation: string; // Location in cache (actual GraphQL query name)
+  type: MutationTypes; // Type of mutation
 }
 
 export enum MutationTypes {
@@ -34,7 +34,7 @@ export async function executeMutation<T extends BaseEntity>(
   // Actually execute mutation and handle cache
   const { mutate } = useMutation<Record<string, T> | null>(mutation, () => ({
     // Get cache and the new or deleted object
-    update: () => {
+    update: (): void => {
       // Re-fetch all affected queries
       invalidateTables(updateObject.tables);
     },

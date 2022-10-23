@@ -1,9 +1,9 @@
-import axios, {AxiosResponse} from 'axios';
-import {getBearerToken} from 'src/flox/modules/auth/tools/auth.tools';
-import {FileEntity} from 'src/flox/modules/file/entities/file.entity';
-import {TABLES} from 'src/flox/TABLES';
-import {createImage} from 'src/flox/modules/image/services/image.service';
-import {invalidateTables} from 'src/apollo/invalidation';
+import axios, { AxiosResponse } from 'axios';
+import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
+import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import { TABLES } from 'src/flox/TABLES';
+import { createImage } from 'src/flox/modules/image/services/image.service';
+import { invalidateTables } from 'src/apollo/invalidation';
 
 /**
  * Uploads a single file to a given endpoint
@@ -13,7 +13,7 @@ import {invalidateTables} from 'src/apollo/invalidation';
  */
 export async function uploadFile(
   file: File,
-  url: string,
+  url: string
 ): Promise<AxiosResponse> {
   const formData = new FormData();
   formData.append('file', file as Blob);

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import {MutationTypes} from 'src/apollo/mutation';
-import {TABLES} from 'src/flox/TABLES';
+import { MutationTypes } from 'src/apollo/mutation';
+import { TABLES } from 'src/flox/TABLES';
 
 export const DELETE_PUBLIC_FILE = {
   mutation: gql`
@@ -12,8 +12,8 @@ export const DELETE_PUBLIC_FILE = {
   `,
   tables: [TABLES.PUBLIC_FILE],
   type: MutationTypes.DELETE,
-  cacheLocation: 'deletePublicFile'
-}
+  cacheLocation: 'deletePublicFile',
+};
 
 export const DELETE_PRIVATE_FILE = {
   mutation: gql`
@@ -25,5 +25,5 @@ export const DELETE_PRIVATE_FILE = {
   `,
   tables: [TABLES.PRIVATE_FILE],
   type: MutationTypes.DELETE,
-  cacheLocation: 'deletePrivateFile'
-}
+  cacheLocation: 'deletePrivateFile',
+};

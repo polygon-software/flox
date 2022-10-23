@@ -1,4 +1,9 @@
 module.exports = {
+  root: true,
+  env: {
+    node: true,
+    jest: true,
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
@@ -18,17 +23,12 @@ module.exports = {
     // linting rules that sonarqube considers for code quality checks
     'plugin:sonarjs/recommended',
   ],
-  root: true,
-  env: {
-    node: true,
-    jest: true,
-  },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    // TypeScript
     quotes: ['warn', 'single', { avoidEscape: true }],
 
-    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'error',
+
     "require-jsdoc": ["error", {
       "require": {
         "FunctionDeclaration": true,
@@ -38,6 +38,10 @@ module.exports = {
         "FunctionExpression": false
       }
     }],
-    'valid-jsdoc': 'error'
+    'valid-jsdoc': ['error', {
+      "requireReturn": false,
+      "requireReturnType": false,
+      "requireParamType": false,
+    }],
   },
 };

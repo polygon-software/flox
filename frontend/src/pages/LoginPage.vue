@@ -1,18 +1,20 @@
 <template>
-  <div class="blurred-background">
-  </div>
+  <div class="blurred-background"></div>
   <q-page class="flex flex-center column bg-gradient">
     <!-- Login Card -->
     <q-card class="login-container" flat>
       <div class="row" style="height: 100%; align-items: stretch">
         <div class="col-7 color-container gt-sm">
           <!-- https://undraw.co/search make sure to change color on webpage to primary -->
-          <img src="../assets/images/undraw_working_re_ddwy.svg" alt="welcome graphics">
+          <img
+            src="../assets/images/undraw_working_re_ddwy.svg"
+            alt="welcome graphics"
+          />
           <h4>{{ $t('authentication.welcome_back') }}</h4>
           <p>{{ $t('authentication.welcome_text') }}</p>
         </div>
         <div class="col-12 col-md-5 form-container q-px-lg">
-          <LoginForm @submit="onLogin"/>
+          <LoginForm @submit="onLogin" />
         </div>
       </div>
     </q-card>
@@ -20,11 +22,11 @@
 </template>
 
 <script setup lang="ts">
-import {inject} from 'vue'
-import {AuthenticationService} from '../flox/modules/auth/services/auth.service';
-import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue'
+import { inject } from 'vue';
+import { AuthenticationService } from '../flox/modules/auth/services/auth.service';
+import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue';
 
-const $authService: AuthenticationService|undefined = inject('$authService')
+const $authService: AuthenticationService | undefined = inject('$authService');
 
 /**
  * Logs in the given authentication
@@ -32,8 +34,14 @@ const $authService: AuthenticationService|undefined = inject('$authService')
  * @param {string} password - the authentication's password
  * @returns {void}
  */
-async function onLogin({identifier, password}: {identifier: string, password: string}){
-  await $authService?.login(identifier, password)
+async function onLogin({
+  identifier,
+  password,
+}: {
+  identifier: string;
+  password: string;
+}): Promise<void> {
+  await $authService?.login(identifier, password);
 }
 </script>
 <style scoped lang="scss">
@@ -43,7 +51,7 @@ async function onLogin({identifier, password}: {identifier: string, password: st
   height: 100vh;
   top: 0;
   left: 0;
-  background-image: url("../assets/images/zurich.jpg");
+  background-image: url('../assets/images/zurich.jpg');
   filter: blur(64px);
   -webkit-filter: blur(64px);
   background-position: center;
@@ -51,9 +59,17 @@ async function onLogin({identifier, password}: {identifier: string, password: st
   background-size: cover;
 }
 .bg-gradient {
-  background: #388087;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to left, rgba(56, 128, 135, 0.5), rgba(194, 237, 206, 0.5));
-  background: linear-gradient(to left, rgba(56, 128, 135, 0.5), rgba(194, 237, 206, 0.5));
+  background: #388087; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to left,
+    rgba(56, 128, 135, 0.5),
+    rgba(194, 237, 206, 0.5)
+  );
+  background: linear-gradient(
+    to left,
+    rgba(56, 128, 135, 0.5),
+    rgba(194, 237, 206, 0.5)
+  );
 }
 .login-container {
   width: 800px;

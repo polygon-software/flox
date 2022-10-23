@@ -13,20 +13,18 @@
       alt="image"
       style="max-width: 100%; max-height: 100%"
       @load="updateImageProperties"
-    >
-    <template
-      v-if="image"
-    >
+    />
+    <template v-if="image">
       <div
         v-for="label in image.labels"
         :key="label.name + label.confidence"
         class="bbox"
         :style="{
-        top: `${label.boundingBox.top * height}px`,
-        left: `${label.boundingBox.left * width}px`,
-        width: `${label.boundingBox.width * width}px`,
-        height: `${label.boundingBox.height * height}px`,
-      }"
+          top: `${label.boundingBox.top * height}px`,
+          left: `${label.boundingBox.left * width}px`,
+          width: `${label.boundingBox.width * width}px`,
+          height: `${label.boundingBox.height * height}px`,
+        }"
       >
         <span>{{ label.name }}</span>
       </div>
@@ -35,11 +33,11 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref, watch} from 'vue';
-import {ImageEntity} from 'src/flox/modules/image/entities/image.entity';
-import {Ref} from '@vue/reactivity';
-import {dom} from 'quasar'
-import {getImage} from 'src/flox/modules/image/services/image.service';
+import { defineProps, ref, watch } from 'vue';
+import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
+import { Ref } from 'vue';
+import { dom } from 'quasar';
+import { getImage } from 'src/flox/modules/image/services/image.service';
 
 const props = defineProps({
   uuid: {
@@ -53,29 +51,31 @@ const props = defineProps({
   maxHeight: {
     type: Number,
     required: true,
-  }
-})
+  },
+});
 
-const image: Ref<ImageEntity|null> = ref(null);
+const image: Ref<ImageEntity | null> = ref(null);
 
-const imgRef: Ref<HTMLImageElement|null> = ref(null);
+const imgRef: Ref<HTMLImageElement | null> = ref(null);
 const width: Ref<number> = ref(0);
 const height: Ref<number> = ref(0);
 
 /**
  * Updates image width and height
- * @returns {void}
  */
-function updateImageProperties() {
+function updateImageProperties(): void {
   if (imgRef.value) {
     width.value = dom.width(imgRef.value);
     height.value = dom.height(imgRef.value);
   }
 }
 
-watch(() => props.uuid, async () => {
-  image.value = await getImage(props.uuid);
-})
+watch(
+  () => props.uuid,
+  async () => {
+    image.value = await getImage(props.uuid);
+  }
+);
 </script>
 
 <style scoped>
@@ -85,15 +85,9 @@ watch(() => props.uuid, async () => {
 .bbox {
   position: absolute;
   border: 2px solid rgba(255, 255, 255, 0.69);
-  box-shadow:
-   0 0 1px #687078,
-   0 0 2px #687078,
-   0 0 2px #687078,
-   0 0 2px #687078,
-   inset 0 0 2px #687078,
-   inset 0 0 2px #687078,
-   inset 0 0 2px #687078,
-   inset 0 0 2px #687078;
+  box-shadow: 0 0 1px #687078, 0 0 2px #687078, 0 0 2px #687078, 0 0 2px #687078,
+    inset 0 0 2px #687078, inset 0 0 2px #687078, inset 0 0 2px #687078,
+    inset 0 0 2px #687078;
   border-radius: 5px;
 }
 .bbox:hover {

@@ -1,5 +1,5 @@
-import {floxModuleOptions, mergeConfigurations} from '../../index';
-import {MODULES} from '../../MODULES';
+import { floxModuleOptions, mergeConfigurations } from 'src/flox';
+import { MODULES } from '../../MODULES';
 
 /**
  * The file module handles file upload and management.
@@ -16,9 +16,9 @@ const defaultConfig: FileModuleConfig = {
 
 /**
  * Gets the module's actual configuration
- * @returns {FileModuleConfig} - configuration
+ * @returns configuration
  */
-export function moduleConfig() {
+export function moduleConfig(): FileModuleConfig {
   return mergeConfigurations(
     defaultConfig,
     floxModuleOptions(MODULES.FILE)

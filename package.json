@@ -1,6 +1,4 @@
 {
   "dependencies": {},
-  "devDependencies": {
-    "@types/hapi__joi": "^17.1.8"
-  }
+  "devDependencies": {}
 }

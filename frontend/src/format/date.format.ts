@@ -25,7 +25,7 @@ export function calculateAge(birthDate: Date): number {
  * @returns {string} - date input string
  */
 export function dateToInputString(inputDate: Date): string {
-  return date.formatDate(inputDate, 'YYYY-MM-DD')
+  return date.formatDate(inputDate, 'YYYY-MM-DD');
 }
 
 /**
@@ -33,16 +33,16 @@ export function dateToInputString(inputDate: Date): string {
  * @param {Date|string} inputDate - the date or date string to format
  * @returns {string} - the formatted date
  */
-export function formatDate(inputDate: Date|string): string{
-  let actualDate
+export function formatDate(inputDate: Date | string): string {
+  let actualDate;
 
-  if(typeof inputDate === 'string'){
-    actualDate = new Date(inputDate)
-  } else{
-    actualDate = inputDate
+  if (typeof inputDate === 'string') {
+    actualDate = new Date(inputDate);
+  } else {
+    actualDate = inputDate;
   }
 
-  return date.formatDate(actualDate, 'DD.MM.YYYY')
+  return date.formatDate(actualDate, 'DD.MM.YYYY');
 }
 
 /**
@@ -50,14 +50,14 @@ export function formatDate(inputDate: Date|string): string{
  * @param {Date|string} inputDate - the date or date string to format
  * @returns {string} - the formatted date
  */
-export function formatDateTime(inputDate: Date|string): string{
-  let actualDate
+export function formatDateTime(inputDate: Date | string): string {
+  let actualDate;
 
-  if(typeof inputDate === 'string'){
-    actualDate = new Date(inputDate)
-  } else{
-    actualDate = inputDate
+  if (typeof inputDate === 'string') {
+    actualDate = new Date(inputDate);
+  } else {
+    actualDate = inputDate;
   }
 
-  return date.formatDate(actualDate, 'DD.MM.YYYY hh:mm')
+  return date.formatDate(actualDate, 'DD.MM.YYYY hh:mm');
 }

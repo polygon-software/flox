@@ -1,10 +1,14 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class GqlThrottlerGuard extends ThrottlerGuard {
-  getRequestResponse(context: ExecutionContext) {
+  getRequestResponse(context: ExecutionContext): {
+    req: Request;
+    res: Response;
+  } {
     if (context.getType() === 'http') {
       return {
         req: context.switchToHttp().getRequest(),

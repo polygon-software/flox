@@ -1,5 +1,5 @@
-import {BaseEntity} from 'src/flox/core/base-entity/entities/BaseEntity';
-import {FileEntity} from 'src/flox/modules/file/entities/file.entity';
+import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
 
 /**
  * Class representing an image data object
@@ -16,7 +16,7 @@ export class ImageEntity extends BaseEntity {
     public height?: number,
     public latitude?: number,
     public longitude?: number,
-    public capturedAt?: Date,
+    public capturedAt?: Date
   ) {
     super(uuid, createdAt, updatedAt, deletedAt);
   }

@@ -1,12 +1,13 @@
-import {QInput, QInputProps, ValidationRule} from 'quasar'
-import PasswordRepeat from 'src/flox/modules/auth/components/forms/fields/PasswordRepeat.vue'
-import Password from 'src/flox/modules/auth/components/forms/fields/Password.vue'
-import {markRaw} from 'vue';
-import {i18n} from 'boot/i18n';
+import { QInput, QInputProps, ValidationRule } from 'quasar';
+import PasswordRepeat from 'src/flox/modules/auth/components/forms/fields/PasswordRepeat.vue';
+import Password from 'src/flox/modules/auth/components/forms/fields/Password.vue';
+import { markRaw } from 'vue';
+import { i18n } from 'boot/i18n';
 import {
-  joiEmailSchema, joiPasswordSchema,
+  joiEmailSchema,
+  joiPasswordSchema,
   joiSchemaToValidationRule,
-  joiUsernameSchema
+  joiUsernameSchema,
 } from 'src/tools/validation.tool';
 
 /**
@@ -24,14 +25,14 @@ import {
  */
 
 export interface Field<ComponentProps = any> {
-  key: string,
-  component: any,
-  prependIcon?: string,
-  appendIcon?: string,
-  attributes: { rules: ValidationRule[] } & (Omit<ComponentProps, 'modelValue'>),
+  key: string;
+  component: any;
+  prependIcon?: string;
+  appendIcon?: string;
+  attributes: { rules: ValidationRule[] } & Omit<ComponentProps, 'modelValue'>;
 }
 
-const EMAIL: Field<QInputProps> = {
+export const EMAIL: Field<QInputProps> = {
   key: 'email',
   component: markRaw(QInput),
   prependIcon: 'email',
@@ -42,11 +43,13 @@ const EMAIL: Field<QInputProps> = {
     type: 'email',
     label: i18n.global.t('authentication.email'),
     lazyRules: 'ondemand',
-    rules: [joiSchemaToValidationRule(joiEmailSchema(),'errors.invalid_email')]
+    rules: [
+      joiSchemaToValidationRule(joiEmailSchema(), 'errors.invalid_email'),
+    ],
   },
-}
+};
 
-const USERNAME: Field<QInputProps> = {
+export const USERNAME: Field<QInputProps> = {
   key: 'username',
   component: markRaw(QInput),
   prependIcon: 'account',
@@ -57,32 +60,43 @@ const USERNAME: Field<QInputProps> = {
     type: 'text',
     label: i18n.global.t('authentication.username'),
     lazyRules: 'ondemand',
-    rules: [joiSchemaToValidationRule(joiUsernameSchema(), 'errors.invalid_username')]
+    rules: [
+      joiSchemaToValidationRule(joiUsernameSchema(), 'errors.invalid_username'),
+    ],
   },
-}
+};
 
-const PASSWORD: Field = {
+export const PASSWORD: Field = {
   key: 'password',
   component: markRaw(Password),
   attributes: {
     rounded: true,
     outlined: true,
-    rules: [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))],
-  }
-}
+    rules: [
+      joiSchemaToValidationRule(
+        joiPasswordSchema(),
+        i18n.global.t('errors.invalid_password')
+      ),
+    ],
+  },
+};
 
-const PASSWORD_REPEAT: Field = {
+export const PASSWORD_REPEAT: Field = {
   key: 'password_repeat',
   component: markRaw(PasswordRepeat),
   attributes: {
-    rules: [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))]
-  }
-}
+    rules: [
+      joiSchemaToValidationRule(
+        joiPasswordSchema(),
+        i18n.global.t('errors.invalid_password')
+      ),
+    ],
+  },
+};
 
 export const FIELDS = {
-    EMAIL,
-    USERNAME,
-    PASSWORD,
-    PASSWORD_REPEAT,
-}
-
+  EMAIL,
+  USERNAME,
+  PASSWORD,
+  PASSWORD_REPEAT,
+};

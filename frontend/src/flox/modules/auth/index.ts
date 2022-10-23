@@ -1,4 +1,4 @@
-import {floxModuleOptions, mergeConfigurations} from '../../index';
+import { floxModuleOptions, mergeConfigurations } from 'src/flox';
 import { MODULES } from '../../MODULES';
 
 /**
@@ -7,8 +7,8 @@ import { MODULES } from '../../MODULES';
  */
 
 type AuthModuleConfig = {
-  emailAsUsername: boolean, // Whether the Cognito user pool is set to use the e-mail address as username
-  useTwoFactor: boolean,
+  emailAsUsername: boolean; // Whether the Cognito user pool is set to use the e-mail address as username
+  useTwoFactor: boolean;
 };
 
 // Default configuration set; will get merged with custom config from flox.config.json
@@ -19,13 +19,13 @@ const defaultConfig: AuthModuleConfig = {
 
 /**
  * Gets the module's actual configuration
- * @returns {FileModuleConfig} - configuration
+ * @returns configuration
  */
-export function moduleConfig() {
+export function moduleConfig(): AuthModuleConfig {
   return mergeConfigurations(
     defaultConfig,
-    floxModuleOptions(MODULES.AUTH),
+    floxModuleOptions(MODULES.AUTH)
   ) as AuthModuleConfig;
 }
 
-export default moduleConfig()
+export default moduleConfig();

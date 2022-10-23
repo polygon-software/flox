@@ -1,18 +1,25 @@
 import { defineStore } from 'pinia';
-import {CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
-import {deleteCookies, persistToCookies} from 'src/flox/modules/auth/tools/cookie.helpers';
+import {
+  CognitoUser,
+  CognitoUserPool,
+  CognitoUserSession,
+} from 'amazon-cognito-identity-js';
+import {
+  deleteCookies,
+  persistToCookies,
+} from 'src/flox/modules/auth/tools/cookie.helpers';
 
 export interface AuthState {
-  userSession: CognitoUserSession | undefined
-  userPool: CognitoUserPool | undefined
-  cognitoUser: CognitoUser | undefined
+  userSession: CognitoUserSession | undefined;
+  userPool: CognitoUserPool | undefined;
+  cognitoUser: CognitoUser | undefined;
 }
 
 export const useAuthStore = defineStore('authStore', {
   state: (): AuthState => ({
     userSession: undefined,
     userPool: undefined,
-    cognitoUser: undefined
+    cognitoUser: undefined,
   }),
 
   getters: {
@@ -37,24 +44,21 @@ export const useAuthStore = defineStore('authStore', {
      * @param {CognitoUserSession|undefined} payload - value to set
      * @returns {void}
      */
-    setUserSession(payload: CognitoUserSession|undefined): void {
-      this.userSession = payload
+    setUserSession(payload: CognitoUserSession | undefined): void {
+      this.userSession = payload;
 
-      if(this.userSession) {
+      if (this.userSession) {
         // Persist tokens to cookies
-        const idToken = this.userSession.getIdToken().getJwtToken()
-        const refreshToken = this.userSession.getRefreshToken().getToken()
-        const accessToken = this.userSession.getAccessToken().getJwtToken()
-        persistToCookies(
-          'authentication',
-          {
-            idToken,
-            refreshToken,
-            accessToken
-          }
-        )
+        const idToken = this.userSession.getIdToken().getJwtToken();
+        const refreshToken = this.userSession.getRefreshToken().getToken();
+        const accessToken = this.userSession.getAccessToken().getJwtToken();
+        persistToCookies('authentication', {
+          idToken,
+          refreshToken,
+          accessToken,
+        });
       } else {
-        deleteCookies('authentication')
+        deleteCookies('authentication');
       }
     },
 
@@ -63,8 +67,8 @@ export const useAuthStore = defineStore('authStore', {
      * @param {CognitoUserPool|undefined} payload - value to set
      * @returns {void}
      */
-    setUserPool(payload: CognitoUserPool|undefined): void {
-      this.userPool = payload
+    setUserPool(payload: CognitoUserPool | undefined): void {
+      this.userPool = payload;
     },
 
     /**
@@ -72,8 +76,8 @@ export const useAuthStore = defineStore('authStore', {
      * @param {CognitoUser|undefined} payload - value to set
      * @returns {void}
      */
-    setCognitoUser(payload: CognitoUser|undefined): void {
-      this.cognitoUser = payload
-    }
-  }
+    setCognitoUser(payload: CognitoUser | undefined): void {
+      this.cognitoUser = payload;
+    },
+  },
 });

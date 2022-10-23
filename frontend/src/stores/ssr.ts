@@ -1,23 +1,23 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 interface SsrState {
-  prefetchedData: Record<string, unknown>
+  prefetchedData: Record<string, unknown>;
 }
 
 export const useSsrStore = defineStore('ssrState', {
   state: (): SsrState => ({
-    prefetchedData: {}
+    prefetchedData: {},
   }),
 
   getters: {
     /**
      * Gets prefetched data for a key
-     * @param {authState} state - the current state of the store
-     * @param {string} key - Key for which to retrieve data
-     * @returns {unknown|undefined} - any result
+     * @param state - the current state of the store
+     * @param key - Key for which to retrieve data
+     * @returns any result
      */
-    getPrefetchedData: (state) => {
-      return (key: string) => state.prefetchedData[key]
+    getPrefetchedData(state) {
+      return (key: string) => state.prefetchedData[key];
     },
   },
 
@@ -27,8 +27,8 @@ export const useSsrStore = defineStore('ssrState', {
      * @param {{key: string, value: unknown}} payload - value to set
      * @returns {void}
      */
-    setPrefetchedData(payload: {key: string, value: unknown}): void{
+    setPrefetchedData(payload: { key: string; value: unknown }): void {
       this.prefetchedData[payload.key] = payload.value;
-    }
-  }
+    },
+  },
 });

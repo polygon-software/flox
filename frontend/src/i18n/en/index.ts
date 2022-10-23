@@ -98,12 +98,13 @@ export default {
     entry_deleted: 'Entry deleted',
   },
   date: {
-    date_format: 'MM.DD.YYYY'
+    date_format: 'MM.DD.YYYY',
   },
   validation: {
-    email: 'E-Mail invalid'
+    email: 'E-Mail invalid',
   },
   table: {
-    ctrl_shift_hint: 'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection'
-  }
+    ctrl_shift_hint:
+      'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection',
+  },
 };

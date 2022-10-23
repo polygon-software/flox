@@ -8,6 +8,7 @@ import { passportJwtSecret } from 'jwks-rsa';
  */
 
 export class JwtStrategyValidationPayload {
+  'cognito:username': string;
   sub: string;
   username: string;
 }
@@ -35,8 +36,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   /**
    * Validates the JWT token and appends the user to the Request
    * Note: This is only triggered once the JWT's validity (from-url and expiration) has been checked successfully!
-   * @param {JwtStrategyValidationPayload} payload - decoded JSON Web Token (JWT)
-   * @returns {JwtStrategyValidationResult} - object with Cognito userId and username
+   * @param payload - decoded JSON Web Token (JWT)
+   * @returns object with Cognito userId and username
    */
   validate(payload: JwtStrategyValidationPayload): JwtStrategyValidationResult {
     const username = payload['cognito:username'];

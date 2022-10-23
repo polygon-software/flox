@@ -8,6 +8,6 @@
  * @async
  * @returns {void}
  */
-export async function sleep(milliseconds = 100): Promise<void>{
-  await new Promise(resolve => setTimeout(resolve, milliseconds));
+export async function sleep(milliseconds = 100): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, milliseconds));
 }

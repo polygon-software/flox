@@ -1,9 +1,5 @@
 <template>
-  <q-form
-    ref="formRef"
-    greedy
-    class="q-gutter-md"
-  >
+  <q-form ref="formRef" greedy class="q-gutter-md">
     <!-- Stepper (for multi-page forms) -->
     <q-stepper
       v-if="form.pages.value.length > 1"
@@ -16,8 +12,8 @@
       <q-step
         v-for="(page, index) in form.pages.value"
         :key="page.key"
-        :name="index+1"
-        :prefix="index+1"
+        :name="index + 1"
+        :prefix="index + 1"
         :title="page.label"
         :done="form.step.value > index"
       >
@@ -29,7 +25,9 @@
           v-model="form.values.value[field.key]"
           :initial-value="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
-          @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+          @update:model-value="
+            (newValue) => form.updateValue(field.key, newValue)
+          "
         />
       </q-step>
       <template #navigation>
@@ -37,7 +35,7 @@
           <q-btn
             v-if="form.step.value > 1"
             color="primary"
-            :label="$t('buttons.back')"
+            :label="$t('general.back')"
             flat
             style="margin-right: 30px"
             class="q-ml-sm"
@@ -46,7 +44,7 @@
           <q-btn
             v-if="form.step.value < form.pages.value.length"
             color="primary"
-            :label="$t('buttons.next_step')"
+            :label="$t('general.next')"
             :disable="!form.pageValid.value"
             @click="$refs.stepper.next()"
           />
@@ -60,10 +58,7 @@
       </template>
     </q-stepper>
     <!-- Single card (for single-page forms -->
-    <q-card
-      v-else
-      class="q-pa-md"
-    >
+    <q-card v-else class="q-pa-md">
       <q-card-section>
         <div class="row flex flex-center">
           <h5 class="q-ma-none">
@@ -71,7 +66,7 @@
           </h5>
         </div>
       </q-card-section>
-      <q-separator/>
+      <q-separator />
       <q-card-section>
         <component
           :is="field.component"
@@ -81,7 +76,9 @@
           v-model="form.values.value[field.key]"
           :initial-value="form.values.value[field.key]"
           @change="(newValue) => form.updateValue(field.key, newValue)"
-          @update:model-value="(newValue) => form.updateValue(field.key, newValue)"
+          @update:model-value="
+            (newValue) => form.updateValue(field.key, newValue)
+          "
         />
       </q-card-section>
       <q-card-actions align="center">
@@ -91,9 +88,7 @@
           :disable="loading"
           @click="onSubmit"
         >
-          <q-inner-loading
-            :showing="loading"
-          />
+          <q-inner-loading :showing="loading" />
         </q-btn>
       </q-card-actions>
     </q-card>
@@ -109,48 +104,38 @@
  * @param {string} [loadingLabel] - the label to show when loading
  * @param {boolean} [loading] - loading status to show on the finish button
  */
-import {defineEmits, defineProps, Ref, ref} from 'vue';
-import {i18n} from 'boot/i18n';
-import {MultiPageForm} from 'components/forms/MultiPageForm';
-import {QForm} from 'quasar';
+import { defineEmits, defineProps, Ref, ref } from 'vue';
+import { i18n } from 'boot/i18n';
+import { FormPage, MultiPageForm } from 'components/forms/MultiPageForm';
+import { QForm } from 'quasar';
 
-const emit = defineEmits(['submit'])
-const formRef: Ref<QForm|null> = ref(null)
+const emit = defineEmits(['submit']);
+const formRef: Ref<QForm | null> = ref(null);
 
-const props = defineProps({
-  finishLabel: {
-    required: false,
-    type: String,
-    default: i18n.global.t('general.finish'),
-  },
-  loadingLabel: {
-    required: false,
-    type: String,
-    default: i18n.global.t('general.loading') + '...',
-  },
-  pages: {
-    required: true,
-    type: Array,
-    default: () => [],
-  },
-  loading: {
-    required: false,
-    type: Boolean,
-    default: false
+const props = withDefaults(
+  defineProps<{
+    pages: FormPage[];
+    finishLabel?: string;
+    loadingLabel?: string;
+    loading?: boolean;
+  }>(),
+  {
+    finishLabel: i18n.global.t('general.finish'),
+    loadingLabel: `${i18n.global.t('general.loading')}...`,
+    loading: false,
   }
-})
+);
 
 // Create Form instance with pages from props
-const form: MultiPageForm = new MultiPageForm(props.pages as Record<string, unknown>[])
+const form: MultiPageForm = new MultiPageForm(props.pages);
 
 /**
  * Validates and, if valid, submits the form with all entered values
- * @returns {Promise<void>} - done
  */
-async function onSubmit(){
-  const isValid = await formRef.value?.validate()
-  if(isValid){
-    emit('submit', form.values.value)
+async function onSubmit(): Promise<void> {
+  const isValid = await formRef.value?.validate();
+  if (isValid) {
+    emit('submit', form.values.value);
   }
 }
 </script>

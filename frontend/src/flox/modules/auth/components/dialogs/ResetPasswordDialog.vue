@@ -1,8 +1,5 @@
 <template>
-  <q-dialog
-      ref="dialogRef"
-      :persistent="true"
-  >
+  <q-dialog ref="dialogRef" :persistent="true">
     <q-card class="q-pa-lg q-pt-xl" style="width: 400px; min-height: 250px">
       <q-form
         class="q-gutter-md"
@@ -30,7 +27,6 @@
           :rules="matchingRules"
         />
         <q-card-actions align="right">
-
           <q-btn
             color="primary"
             :label="$t('general.confirm')"
@@ -49,32 +45,40 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, ref} from 'vue';
-import {useDialogPluginComponent} from 'quasar';
-import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
-import {i18n} from 'boot/i18n';
+import { defineEmits, ref } from 'vue';
+import { useDialogPluginComponent } from 'quasar';
+import {
+  joiPasswordSchema,
+  joiSchemaToValidationRule,
+} from 'src/tools/validation.tool';
+import { i18n } from 'boot/i18n';
 
-let verificationCode = ref('')
-let password = ref('')
-let passwordRep = ref('')
+const verificationCode = ref('');
+const password = ref('');
+const passwordRep = ref('');
 
-const passwordRules = [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))]
-const matchingRules = [(val: string) => val === password.value || i18n.global.t('errors.non_matching_password')]
+const passwordRules = [
+  joiSchemaToValidationRule(
+    joiPasswordSchema(),
+    i18n.global.t('errors.invalid_password')
+  ),
+];
+const matchingRules = [
+  (val: string): true | string =>
+    val === password.value || i18n.global.t('errors.non_matching_password'),
+];
 
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emit = defineEmits(useDialogPluginComponent.emits)
+defineEmits(useDialogPluginComponent.emits);
 
 /**
  * On submit, emit data outwards
- * @returns {void}
  */
-function onSubmit(){
+function onSubmit(): void {
   onDialogOK({
     passwordNew: password.value,
     verificationCode: verificationCode.value,
-  })
+  });
 }
 </script>

@@ -22,11 +22,14 @@ export class RouterService {
 
   /**
    * Adds the given string to the URl path
-   * @param {string} path - path to route to
-   * @param {Record<string,string>} [query] - query
-   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
+   * @param path - path to route to
+   * @param query - query
+   * @returns the navigation result.
    */
-  addToRoute(path: string, query: Record<string, string> = {}) {
+  addToRoute(
+    path: string,
+    query: Record<string, string> = {}
+  ): ReturnType<typeof this.router.push> {
     let currentRoute = this.route.path;
     if (currentRoute.endsWith('/')) {
       currentRoute = currentRoute.substring(0, currentRoute.length - 1);
@@ -39,16 +42,16 @@ export class RouterService {
 
   /**
    * Routes to a given route, as defined in ROUTES constant.
-   * @param {RouteRecordRaw} to - the route to go to.
-   * @param {Record<string, string>} [query] - props to pass to the component, if any.
-   * @param {boolean} keepQuery - keep the current query and add new query parameters if given.
-   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
+   * @param to - the route to go to.
+   * @param query - props to pass to the component, if any.
+   * @param keepQuery - keep the current query and add new query parameters if given.
+   * @returns the navigation result.
    */
   async routeTo(
     to: RouteRecordRaw,
     query?: Record<string, string>,
     keepQuery = false
-  ): Promise<void | NavigationFailure | undefined> {
+  ): ReturnType<typeof this.router.push> {
     if (keepQuery) {
       if (query) {
         return this.router.push({
@@ -65,7 +68,7 @@ export class RouterService {
       if (query) {
         return this.router.push({
           path: to.path,
-          query: query
+          query: query,
         });
       } else {
         return this.router.push({
@@ -77,12 +80,12 @@ export class RouterService {
 
   /**
    * Adds given parameters to the URL query.
-   * @param {Record<string, string>} params - query parameters.
-   * @returns {void|NavigationFailure|undefined} - the navigation result.
+   * @param params - query parameters.
+   * @returns the navigation result.
    */
   async pushToQuery(
     params: Record<string, string>
-  ): Promise<void | NavigationFailure | undefined> {
+  ): ReturnType<typeof this.router.push> {
     return this.router.push({
       path: this.route.path,
       query: { ...this.route.query, ...params },
@@ -100,9 +103,9 @@ export class RouterService {
 
   /**
    * Removes the last URL part
-   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
+   * @returns the navigation result.
    */
-  pop() {
+  pop(): ReturnType<typeof this.router.push> {
     return this.router.push({
       path: this.route.path.substring(0, this.route.path.lastIndexOf('/')),
     });
@@ -114,7 +117,7 @@ export class RouterService {
    * @param {string} path - path to route to
    * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
    */
-  replaceLastPart(path: string) {
+  replaceLastPart(path: string): ReturnType<typeof this.router.push> {
     return this.router.push({
       path:
         this.route.path.substring(0, this.route.path.lastIndexOf('/') + 1) +
@@ -127,7 +130,7 @@ export class RouterService {
    * Removes all Query parameter
    * @returns {void} - void
    */
-  reload() {
+  reload(): void {
     this.router.go(0);
   }
 }

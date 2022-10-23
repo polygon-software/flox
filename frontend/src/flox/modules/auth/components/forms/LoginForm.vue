@@ -1,13 +1,10 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
     <div class="flex justify-center" style="gap: 20px">
-      <h5 class="q-ma-none" style="margin-bottom: 20px;">
+      <h5 class="q-ma-none" style="margin-bottom: 20px">
         {{ $t('authentication.login') }}
       </h5>
-      <q-form
-        class="flex flex-center q-gutter-none"
-        @submit="onSubmit"
-      >
+      <q-form class="flex flex-center q-gutter-none" @submit="onSubmit">
         <component
           :is="field.component"
           v-for="field in fields"
@@ -18,10 +15,20 @@
           @change="(newValue) => form.updateValue(field.key, newValue)"
         >
           <template #prepend>
-            <q-icon v-if="field.prependIcon" :name="field.prependIcon" size="xs" color="grey" />
+            <q-icon
+              v-if="field.prependIcon"
+              :name="field.prependIcon"
+              size="xs"
+              color="grey"
+            />
           </template>
           <template #append>
-            <q-icon v-if="field.appendIcon" :name="field.appendIcon" size="xs" color="grey" />
+            <q-icon
+              v-if="field.appendIcon"
+              :name="field.appendIcon"
+              size="xs"
+              color="grey"
+            />
           </template>
         </component>
         <div class="q-mt-md">
@@ -47,31 +54,31 @@
 </template>
 
 <script setup lang="ts">
-import {FIELDS} from 'src/flox/modules/auth/components/forms/fields';
-import { MultiPageForm } from 'components/forms/MultiPageForm'
-import {defineEmits, inject} from 'vue';
-import {AuthenticationService} from 'src/flox/modules/auth/services/auth.service';
+import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
+import { MultiPageForm } from 'components/forms/MultiPageForm';
+import { defineEmits, inject } from 'vue';
+import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
-import {MODULES} from 'src/flox/MODULES';
-import * as auth from 'src/flox/modules/auth'
+import { MODULES } from 'src/flox/MODULES';
+import * as auth from 'src/flox/modules/auth';
 
-const $authService: AuthenticationService|undefined = inject('$authService')
+const $authService: AuthenticationService | undefined = inject('$authService');
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit']);
 
 const fields = [
   auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME,
-  FIELDS.PASSWORD
-]
+  FIELDS.PASSWORD,
+];
 
-const form = new MultiPageForm()
+const form = new MultiPageForm();
 form.pages.value = [
   {
     key: 'login',
     label: 'Login',
-    fields: fields
-  }
-]
+    fields: fields,
+  },
+];
 
 /**
  * Emits the 'submit' event, containing the form's data
@@ -79,18 +86,22 @@ form.pages.value = [
  */
 function onSubmit(): void {
   const formValues: Record<string, unknown> = {
-    identifier: form.values.value[auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL.key : FIELDS.USERNAME.key],
+    identifier:
+      form.values.value[
+        auth.moduleConfig().emailAsUsername
+          ? FIELDS.EMAIL.key
+          : FIELDS.USERNAME.key
+      ],
     password: form.values.value[FIELDS.PASSWORD.key],
-  }
+  };
 
-  emit('submit', formValues)
+  emit('submit', formValues);
 }
 
 /**
  * Triggers a password change for a non-logged in authentication
- * @returns {void}
  */
-function forgotPassword() {
+function forgotPassword(): void {
   $authService?.showResetPasswordDialog();
 }
 </script>

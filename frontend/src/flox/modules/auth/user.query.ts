@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import {QueryObject} from 'src/apollo/query';
-import {TABLES} from 'src/flox/TABLES';
+import { QueryObject } from 'src/apollo/query';
+import { TABLES } from 'src/flox/TABLES';
 
 /**
  * User-related queries
@@ -40,15 +40,27 @@ export const ALL_USERS = {
 
 export const QUERY_USERS = {
   query: gql`
-    query queryUsers($skip: Float, $take: Float, $filter: String, $sortBy: String, $descending: Boolean) {
-      queryUsers(skip: $skip, take: $take, filter: $filter, sortBy: $sortBy, descending: $descending) {
+    query queryUsers(
+      $skip: Float
+      $take: Float
+      $filter: String
+      $sortBy: String
+      $descending: Boolean
+    ) {
+      queryUsers(
+        skip: $skip
+        take: $take
+        filter: $filter
+        sortBy: $sortBy
+        descending: $descending
+      ) {
         count
         data {
           uuid
           username
           email
           role
-         }
+        }
         __typename
       }
     }

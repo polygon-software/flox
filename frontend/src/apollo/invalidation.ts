@@ -1,13 +1,12 @@
-import {QueryObject} from 'src/apollo/query';
-import {AllQuery} from 'src/flox/modules/all.query';
-import {useApolloClient} from '@vue/apollo-composable';
+import { QueryObject } from 'src/apollo/query';
+import { AllQuery } from 'src/flox/modules/all.query';
+import { useApolloClient } from '@vue/apollo-composable';
 
 /**
  * Forces a full re-fetch all queries affected by a mutation by removing them from cache
  * @param {string[]} tables - tables that should be invalidated
- * @returns {void}
  */
-export function invalidateTables(tables: string[]) {
+export function invalidateTables(tables: string[]): void {
   const affectedQueries: QueryObject[] = [];
 
   AllQuery.forEach((query) => {

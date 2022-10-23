@@ -28,9 +28,9 @@ const defaultConfig: RoleModuleConfig = {
 
 /**
  * Gets the module's actual configuration
- * @returns {RoleModuleConfig} - module configuration
+ * @returns module configuration
  */
-export function moduleConfig() {
+export function moduleConfig(): RoleModuleConfig {
   return mergeConfigurations(
     defaultConfig,
     floxModuleOptions(MODULES.ROLES),

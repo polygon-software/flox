@@ -13,5 +13,5 @@ export class GetImageArgs {
   })
   @IsOptional()
   @IsNumber()
-  expires;
+  expires: number;
 }

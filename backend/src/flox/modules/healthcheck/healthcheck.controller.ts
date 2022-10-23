@@ -8,6 +8,7 @@ import {
 } from '@nestjs/terminus';
 import { ConfigService } from '@nestjs/config';
 import { SkipThrottle } from '@nestjs/throttler';
+import { HealthCheckResult } from '@nestjs/terminus/dist/health-check/health-check-result.interface';
 
 @Controller('healthcheck')
 export class HealthcheckController {
@@ -22,19 +23,21 @@ export class HealthcheckController {
   @HealthCheck()
   @SkipThrottle()
   @Get()
-  async checkHealth(): Promise<any> {
+  async checkHealth(): Promise<HealthCheckResult> {
     return this.healthcheckService.check([
       // TODO application specific: add more health checks
       // See: https://progressivecoder.com/nestjs-health-check-terminus/
       // () =>
       // this.http.pingCheck(
       //   'Basic Check',
-      //   `http://localhost:${this.configService.get('server.port')}`,
+      //   `http://localhost:${this.configService.getOrThrow('server.port')}`,
       // ),
 
       // Database connectivity
-      () =>
-        this.database.pingCheck(this.configService.get('database.database')),
+      (): ReturnType<typeof this.database.pingCheck> =>
+        this.database.pingCheck(
+          this.configService.getOrThrow('database.database'),
+        ),
     ]);
   }
 }

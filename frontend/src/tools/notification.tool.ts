@@ -29,7 +29,11 @@ type NotificationOptions = {
  * @param {NotificationOptions} options - options
  * @returns {void} - void
  */
-export function showSuccessNotification(q: QVueGlobals, message: string, options: NotificationOptions = {}): void {
+export function showSuccessNotification(
+  q: QVueGlobals,
+  message: string,
+  options: NotificationOptions = {}
+): void {
   showNotification(q, message, { color: 'positive', icon: 'done', ...options });
 }
 
@@ -40,8 +44,16 @@ export function showSuccessNotification(q: QVueGlobals, message: string, options
  * @param {NotificationOptions} options - options
  * @returns {void} - void
  */
-export function showErrorNotification(q: QVueGlobals, message: string, options: NotificationOptions = {}): void {
-  showNotification(q, message, { color: 'negative', icon: 'clear', ...options });
+export function showErrorNotification(
+  q: QVueGlobals,
+  message: string,
+  options: NotificationOptions = {}
+): void {
+  showNotification(q, message, {
+    color: 'negative',
+    icon: 'clear',
+    ...options,
+  });
 }
 
 /**

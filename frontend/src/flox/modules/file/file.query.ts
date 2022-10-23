@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import {QueryObject} from 'src/apollo/query';
-import {TABLES} from 'src/flox/TABLES';
+import { QueryObject } from 'src/apollo/query';
+import { TABLES } from 'src/flox/TABLES';
 
 export const ALL_PUBLIC_FILES = {
   query: gql`
@@ -19,7 +19,7 @@ export const ALL_PUBLIC_FILES = {
   `,
   tables: [TABLES.PUBLIC_FILE],
   cacheLocation: 'allPublicFiles',
-}
+};
 
 export const ALL_MY_FILES = {
   query: gql`
@@ -38,7 +38,7 @@ export const ALL_MY_FILES = {
   `,
   tables: [TABLES.PRIVATE_FILE],
   cacheLocation: 'allMyFiles',
-}
+};
 
 export const GET_PUBLIC_FILE = {
   query: gql`
@@ -76,4 +76,9 @@ export const GET_PRIVATE_FILE = {
   cacheLocation: 'privateFile',
 };
 
-export const FILE_QUERIES: QueryObject[] = [ALL_PUBLIC_FILES, ALL_MY_FILES, GET_PUBLIC_FILE, GET_PRIVATE_FILE]
+export const FILE_QUERIES: QueryObject[] = [
+  ALL_PUBLIC_FILES,
+  ALL_MY_FILES,
+  GET_PUBLIC_FILE,
+  GET_PRIVATE_FILE,
+];

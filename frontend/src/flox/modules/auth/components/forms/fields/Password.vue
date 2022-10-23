@@ -22,19 +22,22 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
-import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
+import { ref } from 'vue';
+import {
+  joiPasswordSchema,
+  joiSchemaToValidationRule,
+} from 'src/tools/validation.tool';
 import { useI18n } from 'vue-i18n';
 /**
  * This component contains field to enter a password.
  */
 
-const password = ref('')
-const isPwd = ref(true)
+const password = ref('');
+const isPwd = ref(true);
 
 const { t } = useI18n();
 
-const passwordRules = [joiSchemaToValidationRule(joiPasswordSchema(), t('errors.invalid_password'))]
-
-
+const passwordRules = [
+  joiSchemaToValidationRule(joiPasswordSchema(), t('errors.invalid_password')),
+];
 </script>

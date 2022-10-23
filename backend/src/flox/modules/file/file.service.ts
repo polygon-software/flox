@@ -22,9 +22,11 @@ import { User } from '../auth/entities/user.entity';
 export class FileService {
   // S3 credentials
   private readonly credentials = {
-    region: this.configService.get('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.get('ADMIN_AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('ADMIN_AWS_SECRET_ACCESS_KEY'),
+    region: this.configService.getOrThrow('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow('ADMIN_AWS_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.getOrThrow(
+      'ADMIN_AWS_SECRET_ACCESS_KEY',
+    ),
   };
 
   // AWS S3 instance
@@ -51,7 +53,7 @@ export class FileService {
     // File upload
     const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
-      Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
+      Bucket: this.configService.getOrThrow('AWS_PUBLIC_BUCKET_NAME'),
       Key: key,
       Body: file.buffer,
       ContentType: file.mimetype,
@@ -59,9 +61,9 @@ export class FileService {
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
 
-    const url = `https://${configService.get(
+    const url = `https://${configService.getOrThrow(
       'AWS_PUBLIC_BUCKET_NAME',
-    )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
+    )}.s3.${configService.getOrThrow('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
 
     const newFile = this.publicFilesRepository.create({
       key,
@@ -87,7 +89,7 @@ export class FileService {
     //File upload
     const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
-      Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+      Bucket: this.configService.getOrThrow('AWS_PRIVATE_BUCKET_NAME'),
       Key: key,
       Body: file.buffer,
     };
@@ -111,7 +113,7 @@ export class FileService {
   async getPublicFile(
     getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return this.publicFilesRepository.findOne({
+    return this.publicFilesRepository.findOneOrFail({
       where: {
         uuid: getPublicFileArgs.uuid,
       },
@@ -176,12 +178,12 @@ export class FileService {
       const url = await getSignedUrl(
         this.s3,
         new GetObjectCommand({
-          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+          Bucket: this.configService.getOrThrow('AWS_PRIVATE_BUCKET_NAME'),
           Key: fileInfo.key,
         }),
         options,
       );
-      const result = await this.privateFilesRepository.findOne({
+      const result = await this.privateFilesRepository.findOneOrFail({
         where: {
           uuid: getPrivateFileArgs.uuid,
         },
@@ -209,7 +211,7 @@ export class FileService {
       ? this.publicFilesRepository
       : this.privateFilesRepository;
 
-    const file: PrivateFile | PublicFile = await repository.findOne({
+    const file: PrivateFile | PublicFile | null = await repository.findOne({
       where: {
         uuid: deleteFileInput.uuid,
       },
@@ -219,7 +221,7 @@ export class FileService {
       // Delete on S3
       await this.s3.send(
         new DeleteObjectCommand({
-          Bucket: this.configService.get(
+          Bucket: this.configService.getOrThrow(
             isPublic ? 'AWS_PUBLIC_BUCKET_NAME' : 'AWS_PRIVATE_BUCKET_NAME',
           ),
           Key: file.key,

@@ -33,13 +33,18 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, ref} from 'vue';
-import {FileEntity} from 'src/flox/modules/file/entities/file.entity';
-import {Ref} from '@vue/reactivity';
-import {date, useQuasar} from 'quasar';
-import {i18n} from 'boot/i18n';
-import {showSuccessNotification} from 'src/tools/notification.tool';
-import {deletePrivateFile, deletePublicFile, fetchMyFiles, fetchPublicFiles} from 'src/flox/modules/file/services/file.service';
+import { defineProps, ref } from 'vue';
+import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import { Ref } from 'vue';
+import { date, useQuasar } from 'quasar';
+import { i18n } from 'boot/i18n';
+import { showSuccessNotification } from 'src/tools/notification.tool';
+import {
+  deletePrivateFile,
+  deletePublicFile,
+  fetchMyFiles,
+  fetchPublicFiles,
+} from 'src/flox/modules/file/services/file.service';
 
 const props = defineProps({
   private: {
@@ -47,17 +52,30 @@ const props = defineProps({
     required: false,
     default: false,
   },
-})
+});
 
-const $q = useQuasar()
+const $q = useQuasar();
 
 const columns = [
   { name: 'url', label: 'URL', field: 'url' },
-  { name: 'UUID', align: 'center', label: 'UUID', field: 'uuid', sortable: false },
-  { name: 'Created', label: 'Created (Date)', field: 'createdAt', sortable: true, format: (val: Date) => date.formatDate(val, i18n.global.t('date.date_format')) },
+  {
+    name: 'UUID',
+    align: 'center',
+    label: 'UUID',
+    field: 'uuid',
+    sortable: false,
+  },
+  {
+    name: 'Created',
+    label: 'Created (Date)',
+    field: 'createdAt',
+    sortable: true,
+    format: (val: Date): string =>
+      date.formatDate(val, i18n.global.t('date.date_format')),
+  },
   { name: 'Type', label: 'Type', field: 'mimetype' },
   { name: 'Size', label: 'Size (Bytes)', field: 'size', sortable: true },
-]
+];
 
 /**
  * Fetches all files for displaying in table
@@ -72,22 +90,22 @@ function fetchAllFiles(): Ref<FileEntity[]> {
 
 const files: Ref<FileEntity[]> = fetchAllFiles();
 
-
 const selected: Ref<FileEntity[]> = ref([]);
 
 /**
  * Deletes the selected file
- * @returns {void}
  */
-async function deleteSelected() {
-  const selectedFile = selected.value[0]
+async function deleteSelected(): Promise<void> {
+  const selectedFile = selected.value[0];
   if (props.private) {
     await deletePrivateFile(selectedFile.uuid);
   } else {
     await deletePublicFile(selectedFile.uuid);
   }
   selected.value = [];
-  showSuccessNotification($q, i18n.global.t('files.successfully_deleted', { value: 1 }))
+  showSuccessNotification(
+    $q,
+    i18n.global.t('files.successfully_deleted', { value: 1 })
+  );
 }
 </script>
-

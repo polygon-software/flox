@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { User } from '../auth/entities/user.entity';
-import { getRequest } from '../../core/flox-helpers';
+import { FrontendRequest, getRequest } from '../../core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
 import { DEFAULT_ROLES } from './config';
 import { UserService } from '../auth/user.service';
@@ -19,17 +19,17 @@ export class RolesGuard implements CanActivate {
 
   /**
    * Gets the request from context
-   * @param {ExecutionContext} context - request execution context
-   * @returns {any} - the request
+   * @param context - request execution context
+   * @returns request
    */
-  getRequest(context: ExecutionContext): any {
+  getRequest(context: ExecutionContext): FrontendRequest {
     return getRequest(context);
   }
 
   /**
    * Validate that the user has appropriate rights to activate API endpoint.
-   * @param {ExecutionContext} context - context
-   * @returns {boolean | Promise<boolean>} - can activate
+   * @param context - context
+   * @returns can activate
    */
   // eslint-disable-next-line sonarjs/cognitive-complexity
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -43,8 +43,8 @@ export class RolesGuard implements CanActivate {
     const requestedFunction = context.getHandler().name;
 
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    const req = this.getRequest(context) as Record<string, unknown>;
-    const user = req.user as Record<string, string>;
+    const req = this.getRequest(context);
+    const user = req.user;
     let dbUser: User | undefined = undefined;
 
     if (user) {
@@ -96,10 +96,10 @@ export class RolesGuard implements CanActivate {
 
   /**
    * whether endpoint is Public
-   * @param {ExecutionContext} context - context
-   * @returns {boolean} - is public
+   * @param context - context
+   * @returns  is public
    */
-  isPublic(context: ExecutionContext) {
+  isPublic(context: ExecutionContext): boolean {
     // Determine if resource is public
     return (
       this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -111,19 +111,24 @@ export class RolesGuard implements CanActivate {
 
   /**
    * Checks if the user is logged in and the access control is "loggedIn", allowing access to all logged in users
-   * @param {ExecutionContext} context - context
-   * @param {string[]} roles - whitelisted roles
-   * @param {User} dbUser - the requesting user
-   * @returns {boolean} - whether any user can activate
+   * @param context - context
+   * @param roles - whitelisted roles
+   * @param dbUser - the requesting user
+   * @returns whether any user can activate
    */
-  isLoggedIn(context: ExecutionContext, roles: string[], dbUser) {
+  isLoggedIn(
+    context: ExecutionContext,
+    roles: string[],
+    dbUser: User | undefined,
+  ): boolean {
     if (!roles || roles.length === 0) {
       // Determine if resource is accessible to any logged-in user
       return (
+        !!dbUser &&
         this.reflector.getAllAndOverride<boolean>(LOGGED_IN_KEY, [
           context.getHandler(),
           context.getClass(),
-        ]) && !!dbUser
+        ])
       );
     }
     return false;

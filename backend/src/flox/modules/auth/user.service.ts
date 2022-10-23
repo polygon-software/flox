@@ -4,7 +4,7 @@ import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { DeleteUserInput } from './dto/input/delete-user.input';
-import { Like, Repository } from 'typeorm';
+import { Like, Repository, In } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { SearchQueryInterfaceService } from '../interfaces/search-query-interface.service';
@@ -20,12 +20,11 @@ export class UserService implements SearchQueryInterfaceService {
 
   /**
    * Query for users
-   * @param {SearchQueryArgs} queryArgs - query arguments including limit, etc.
-   * @returns {Promise<UserQueryOutput>} users that fit query
+   * @param queryArgs - query arguments including limit, etc.
+   * @returns users that fit query
    */
   async queryAll(queryArgs: SearchQueryArgs): Promise<UserQueryOutput> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, count] = await this.userRepository.findAndCount({
+    const count = await this.userRepository.count({
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
       },
@@ -64,7 +63,9 @@ export class UserService implements SearchQueryInterfaceService {
    */
   getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
     if (getUsersArgs.uuids !== undefined) {
-      return this.userRepository.findByIds(getUsersArgs.uuids);
+      return this.userRepository.findBy({
+        uuid: In(getUsersArgs.uuids),
+      });
     } else {
       return this.userRepository.find();
     }
@@ -85,11 +86,13 @@ export class UserService implements SearchQueryInterfaceService {
    */
   getUser(getUserArgs: GetUserArgs): Promise<User> {
     if (getUserArgs.uuid) {
-      return this.userRepository.findOne({ where: { uuid: getUserArgs.uuid } });
+      return this.userRepository.findOneOrFail({
+        where: { uuid: getUserArgs.uuid },
+      });
     }
 
     if (getUserArgs.cognitoUuid) {
-      return this.userRepository.findOne({
+      return this.userRepository.findOneOrFail({
         where: {
           cognitoUuid: getUserArgs.cognitoUuid,
         },
@@ -109,7 +112,7 @@ export class UserService implements SearchQueryInterfaceService {
   async updateUser(updateUserInput: UpdateUserInput): Promise<User> {
     const user = this.userRepository.create(updateUserInput);
     await this.userRepository.update(updateUserInput.uuid, user);
-    return this.userRepository.findOne({
+    return this.userRepository.findOneOrFail({
       where: { uuid: updateUserInput.uuid },
     });
   }
@@ -120,7 +123,7 @@ export class UserService implements SearchQueryInterfaceService {
    * @returns {Promise<User>} - the deleted user
    */
   async deleteUser(deleteUserInput: DeleteUserInput): Promise<User> {
-    const user = await this.userRepository.findOne({
+    const user = await this.userRepository.findOneOrFail({
       where: { uuid: deleteUserInput.uuid },
     });
     const uuid = user.uuid;

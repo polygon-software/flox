@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
-import {QueryObject} from 'src/apollo/query';
-import {TABLES} from 'src/flox/TABLES';
-
+import { QueryObject } from 'src/apollo/query';
+import { TABLES } from 'src/flox/TABLES';
 
 export const GET_IMAGE = {
   query: gql`
@@ -54,6 +53,5 @@ export const GET_IMAGE_FOR_FILE = {
   tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
   cacheLocation: 'imageForFile',
 };
-
 
 export const IMAGE_QUERIES: QueryObject[] = [GET_IMAGE, GET_IMAGE_FOR_FILE];

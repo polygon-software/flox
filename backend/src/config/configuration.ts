@@ -1,19 +1,21 @@
+import { ENV, extractNumberEnvVar, extractStringEnvVar } from '../env';
+
 export default (): Config => ({
   server: {
-    port: parseInt(process.env.SERVER_PORT, 10) || 3000,
+    port: extractNumberEnvVar(ENV.SERVER_PORT) || 3000,
   },
-  entities: process.env.ENTITIES,
+  entities: extractStringEnvVar(ENV.ENTITIES),
   database: {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
+    host: extractStringEnvVar(ENV.DB_HOST),
+    port: extractStringEnvVar(ENV.DB_PORT),
+    username: extractStringEnvVar(ENV.DB_USER),
+    password: extractStringEnvVar(ENV.DB_PASSWORD),
+    database: extractStringEnvVar(ENV.DB_DATABASE),
   },
 });
 
 export class ServerConfig {
-  port: number;
+  port: number | undefined;
 }
 
 export class DatabaseConfig {

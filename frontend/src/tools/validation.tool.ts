@@ -1,7 +1,7 @@
-import Joi, {AnySchema} from 'joi';
+import Joi, { AnySchema } from 'joi';
 import { joiPasswordExtendCore } from 'joi-password';
-import {i18n} from 'boot/i18n';
-import {ValidationRule} from 'quasar';
+import { i18n } from 'boot/i18n';
+import { ValidationRule } from 'quasar';
 
 /**
  * Uses joi syntax for generating rules with error messages from i18n
@@ -9,7 +9,10 @@ import {ValidationRule} from 'quasar';
  * @param {string} messagePath - i18n message to display in case of error
  * @returns {function} error message
  */
-export function joiSchemaToValidationRule(schema: AnySchema, messagePath: string): ValidationRule {
+export function joiSchemaToValidationRule(
+  schema: AnySchema,
+  messagePath: string
+): ValidationRule {
   return (val: any) => {
     try {
       Joi.assert(val, schema);
@@ -18,7 +21,7 @@ export function joiSchemaToValidationRule(schema: AnySchema, messagePath: string
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       return i18n.global.t(messagePath, { val });
     }
-  }
+  };
 }
 
 /**
@@ -26,7 +29,7 @@ export function joiSchemaToValidationRule(schema: AnySchema, messagePath: string
  * @returns {AnySchema} Joi schema fitting emails
  */
 export function joiEmailSchema(): AnySchema {
-  return Joi.string().email({ tlds: { allow: false }})
+  return Joi.string().email({ tlds: { allow: false } });
 }
 
 /**

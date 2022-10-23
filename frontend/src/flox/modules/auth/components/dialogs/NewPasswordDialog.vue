@@ -1,13 +1,8 @@
 <template>
-  <q-dialog
-    ref="dialogRef"
-  >
+  <q-dialog ref="dialogRef">
     <q-card class="q-pa-sm" style="width: 400px; min-height: 250px">
       <strong>{{ $t('authentication.change_password') }}</strong>
-      <q-form
-        class="q-gutter-md"
-        @submit="onSubmit"
-      >
+      <q-form class="q-gutter-md" @submit="onSubmit">
         <q-input
           v-model="password"
           :label="$t('authentication.new_password')"
@@ -39,30 +34,38 @@
 </template>
 
 <script setup lang="ts">
-import {defineEmits, ref} from 'vue';
-import {useDialogPluginComponent} from 'quasar';
-import {joiPasswordSchema, joiSchemaToValidationRule} from 'src/tools/validation.tool';
-import {i18n} from 'boot/i18n';
+import { defineEmits, ref } from 'vue';
+import { useDialogPluginComponent } from 'quasar';
+import {
+  joiPasswordSchema,
+  joiSchemaToValidationRule,
+} from 'src/tools/validation.tool';
+import { i18n } from 'boot/i18n';
 
-let password = ref('')
-let passwordRep = ref('')
+let password = ref('');
+let passwordRep = ref('');
 
-const passwordRules = [joiSchemaToValidationRule(joiPasswordSchema(), i18n.global.t('errors.invalid_password'))]
-const matchingRules = [(val: string) => val === password.value || i18n.global.t('errors.non_matching_password')]
+const passwordRules = [
+  joiSchemaToValidationRule(
+    joiPasswordSchema(),
+    i18n.global.t('errors.invalid_password')
+  ),
+];
+const matchingRules = [
+  (val: string) =>
+    val === password.value || i18n.global.t('errors.non_matching_password'),
+];
 
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emit = defineEmits(useDialogPluginComponent.emits)
+defineEmits(useDialogPluginComponent.emits);
 
 /**
  * Upon submit, pass entered values outwards
- * @returns {void}
  */
-function onSubmit(){
-  onDialogOK( {
+function onSubmit(): void {
+  onDialogOK({
     password: password.value,
-  })
+  });
 }
 </script>

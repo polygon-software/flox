@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { getRequest } from '../../core/flox-helpers';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
+import { Request } from 'express';
 
 /**
  * JSON Web token authentication guard
@@ -23,14 +24,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
    * @param {ExecutionContext} context - execution context of the request
    * @returns {any} - the request
    */
-  getRequest(context: ExecutionContext): any {
+  getRequest(context: ExecutionContext): ReturnType<typeof getRequest> {
     return getRequest(context);
   }
 
   /**
    * Determines whether a user can activate the route based on the authentication status
-   * @param {ExecutionContext} context - execution context
-   * @returns {boolean} - whether the user can activate
+   * @param context - execution context
+   * @returns whether the user can activate
    */
   public canActivate(
     context: ExecutionContext,

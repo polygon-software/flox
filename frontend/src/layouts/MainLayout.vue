@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="dimmed-background">
-    <MenuBar/>
+    <MenuBar />
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import MenuBar from '../components/menu/MenuBar.vue'
+import MenuBar from '../components/menu/MenuBar.vue';
 </script>
 
 <style lang="scss">

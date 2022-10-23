@@ -1,9 +1,8 @@
-import {Cookies} from 'quasar';
+import { Cookies } from 'quasar';
 
 /**
  * This file contains all cookie-related helper functions
  */
-
 
 /**
  * Persists a given payload to one or multiple cookies
@@ -11,7 +10,10 @@ import {Cookies} from 'quasar';
  * @param {Record<string, any>} payload - the data to persist (in stringified form)
  * @returns {void}
  */
-export function persistToCookies (category: string, payload: Record<string, any>): void{
+export function persistToCookies(
+  category: string,
+  payload: Record<string, any>
+): void {
   // Set cookie when SSR fetch is done (i.e. only browser can set a cookie)
   if (!process.env.SERVER) {
     // Set 'secure' to true for production
@@ -19,11 +21,10 @@ export function persistToCookies (category: string, payload: Record<string, any>
       Cookies.set(
         `${category}.${key}`,
         JSON.stringify(payload[key]),
-        {expires: 1, secure: false} // TODO secure: true for production
-      )
-    })
+        { expires: 1, secure: false } // TODO secure: true for production
+      );
+    });
   }
-
 }
 
 /**
@@ -31,12 +32,12 @@ export function persistToCookies (category: string, payload: Record<string, any>
  * @param {string} category - the category within which to delete (e.g. "authentication")
  * @returns {void}
  */
-export function deleteCookies(category: string): void{
-  const allCookies: Set<unknown> = Cookies.getAll() as Set<unknown>
+export function deleteCookies(category: string): void {
+  const allCookies: Set<unknown> = Cookies.getAll() as Set<unknown>;
 
   Object.keys(allCookies).forEach((cookieKey: string) => {
-    if(cookieKey.startsWith(`${category}.`)){
-      Cookies.remove(cookieKey)
+    if (cookieKey.startsWith(`${category}.`)) {
+      Cookies.remove(cookieKey);
     }
-  })
+  });
 }
