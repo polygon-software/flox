@@ -153,6 +153,7 @@ export class AuthenticationService {
           }
           // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
           delete attrs.email;
+          delete attrs.email_verified;
           cognitoUser.completeNewPasswordChallenge(newPassword, attrs, this);
         },
 
