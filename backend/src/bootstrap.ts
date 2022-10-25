@@ -5,7 +5,7 @@ import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import helmet from 'helmet';
 import { ConfigService } from '@nestjs/config';
 import serverlessExpress from '@vendia/serverless-express';
-import { ENV, extractBoolEnvVar } from './env';
+import Env from './env';
 
 /**
  * Creates nest application based on GraphQL
@@ -13,7 +13,7 @@ import { ENV, extractBoolEnvVar } from './env';
  */
 async function createNestApp(): Promise<NestApplication> {
   const app = await NestFactory.create<NestApplication>(AppModule, {
-    cors: extractBoolEnvVar(ENV.DEV),
+    cors: Env.DEV,
   });
   app.useGlobalPipes(
     new ValidationPipe({

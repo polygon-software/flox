@@ -1,7 +1,7 @@
 import { SES, SendRawEmailCommand } from '@aws-sdk/client-ses';
 import { createTransport } from 'nodemailer';
 import { AttachmentFile } from './AttachmentFile';
-import { ENV, extractStringEnvVar } from '../../../../env';
+import Env from '../../../../env';
 
 export type Credentials = {
   accessKeyId: string;
@@ -28,7 +28,7 @@ export async function sendEmail(
 ): Promise<void> {
   // Create SES service object
   const sesClient = new SES({
-    region: extractStringEnvVar(ENV.AWS_MAIN_REGION),
+    region: Env.AWS_MAIN_REGION,
     credentials: credentials,
   });
 

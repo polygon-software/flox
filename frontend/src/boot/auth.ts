@@ -1,39 +1,17 @@
 import { boot } from 'quasar/wrappers';
 import {
   CognitoUser,
-  ICognitoUserData,
-  CognitoUserSession,
   CognitoIdToken,
   CognitoAccessToken,
   CognitoRefreshToken,
   CognitoUserPool,
+  CognitoUserSession,
+  UserData,
 } from 'amazon-cognito-identity-js';
-import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { Cookies } from 'quasar';
-import axios, { AxiosResponse } from 'axios';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { BootFileParams, QSsrContext } from '@quasar/app-vite';
-import { ENV, extractBoolEnvVar, extractStringEnvVar } from 'src/env';
-
-/**
- * Makes request to cognito with access token, returns cognito user data
- * @param accessToken - cognito access token, stored in frontend cookie
- * @returns Cognito User Data
- */
-function cognitoRequest(
-  accessToken: string
-): Promise<AxiosResponse<ICognitoUserData>> {
-  const url = `https://cognito-idp.${
-    extractStringEnvVar(ENV.VUE_APP_AWS_REGION) ?? 'eu-central-1'
-  }.amazonaws.com/`;
-  const headers = {
-    AccessToken: accessToken,
-    'X-Amz-Target': 'AWSCognitoIdentityProviderService.GetUser',
-    Accept: 'application/json',
-    'Content-Type': 'application/x-amz-json-1.1',
-  };
-  return axios.post<ICognitoUserData>(url, headers);
-}
+import Env from 'src/env';
 
 /**
  * Performs authentication on server side
@@ -55,30 +33,54 @@ async function serverSideAuth(
   if (!accessToken) {
     return;
   }
-  const cognitoResponse = await cognitoRequest(accessToken);
-  const cognitoUser = new CognitoUser({
-    Pool: userPool,
-    Username: cognitoResponse.data.Username,
-  });
-  $authStore.setCognitoUser(cognitoUser);
 
-  const _idToken = new CognitoIdToken({
-    IdToken: idToken ?? '',
+  const IdToken = new CognitoIdToken({
+    IdToken: JSON.parse(idToken ?? '') as string,
   });
-  const _accessToken = new CognitoAccessToken({
-    AccessToken: accessToken,
+  const AccessToken = new CognitoAccessToken({
+    AccessToken: JSON.parse(accessToken) as string,
   });
-  const _refreshToken = new CognitoRefreshToken({
-    RefreshToken: refreshToken ?? '',
+  const RefreshToken = new CognitoRefreshToken({
+    RefreshToken: JSON.parse(refreshToken ?? '') as string,
   });
-  const sessionData = {
-    IdToken: _idToken,
-    AccessToken: _accessToken,
-    RefreshToken: _refreshToken,
-    ClockDrift: 0,
-  };
-  const cachedSession = new CognitoUserSession(sessionData);
-  $authStore.setUserSession(cachedSession);
+
+  const userSession = new CognitoUserSession({
+    IdToken,
+    AccessToken,
+    RefreshToken,
+  });
+
+  const incompleteCognitoUser: CognitoUser = new CognitoUser({
+    Pool: userPool,
+    Username: 'unknown',
+  });
+
+  incompleteCognitoUser.setSignInUserSession(userSession);
+  const userData: UserData = await new Promise((resolve, reject) => {
+    incompleteCognitoUser.getUserData((err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (data) {
+          resolve(data);
+        } else {
+          throw new Error('User data undefined');
+        }
+      }
+    });
+  });
+
+  const cognitoUser: CognitoUser = new CognitoUser({
+    Pool: userPool,
+    Username: userData.Username,
+  });
+
+  if (!userSession.isValid()) {
+    throw Error('User authentication failed');
+  }
+
+  $authStore.setCognitoUser(cognitoUser);
+  $authStore.setUserSession(userSession);
 }
 
 /**
@@ -109,13 +111,13 @@ export default boot(async (bootContext: FloxBootFileParams) => {
 
   // Set up authentication user pool
   const poolSettings = {
-    UserPoolId: extractStringEnvVar(ENV.VUE_APP_USER_POOL_ID),
-    ClientId: extractStringEnvVar(ENV.VUE_APP_USER_POOL_CLIENT_ID),
+    UserPoolId: Env.VUE_APP_USER_POOL_ID,
+    ClientId: Env.VUE_APP_USER_POOL_CLIENT_ID,
   };
-  const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings);
+  const userPool = new CognitoUserPool(poolSettings);
   $authStore.setUserPool(userPool);
 
-  if (extractBoolEnvVar(ENV.SERVER) && bootContext.ssrContext) {
+  if (Env.SERVER && bootContext.ssrContext) {
     await serverSideAuth(bootContext.ssrContext, userPool);
   } else {
     clientSideAuth(userPool);

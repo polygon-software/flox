@@ -1,33 +1,28 @@
 /**
- * Extract environment variable as string from environment
- * @param key - process env key
+ * Ensures extracted environment variable is a string
+ * @param value - extracted environment variable
  * @returns environment variable as string
  */
-export function extractStringEnvVar(key: keyof NodeJS.ProcessEnv): string {
-  const value = process.env[key];
-
+function asString(value: string | undefined): string {
   if (value === undefined) {
-    const message = `The environment variable "${key}" cannot be "undefined".`;
-
+    const message = 'The environment variable cannot be "undefined".';
     throw new Error(message);
   }
 
-  return value;
+  return `${value}`;
 }
 
 /**
- * Extract environment variable as integer from environment
- * @param key - process env key
+ * Ensures extracted environment variable is a number
+ * @param value - extracted environment variable
  * @returns environment variable as integer
  */
-export function extractNumberEnvVar(key: keyof NodeJS.ProcessEnv): number {
-  const stringValue = extractStringEnvVar(key);
-
+function asNumber(value: string | undefined): number {
+  const stringValue = asString(value);
   const numberValue = parseFloat(stringValue);
 
   if (Number.isNaN(numberValue)) {
-    const message = `The environment variable "${key}" has to hold a stringified number value - not ${stringValue}`;
-
+    const message = `The environment variable has to hold a stringified number value - not ${stringValue}`;
     throw new Error(message);
   }
 
@@ -35,29 +30,86 @@ export function extractNumberEnvVar(key: keyof NodeJS.ProcessEnv): number {
 }
 
 /**
- * Extract environment variable as boolean from environment
- * @param key - process env key
+ * Ensures extracted environment variable is a boolean
+ * @param value - extracted environment variable
  * @returns environment variable as boolean
  */
-export function extractBoolEnvVar(key: keyof NodeJS.ProcessEnv): boolean {
-  const strVar = extractStringEnvVar(key);
+function asBoolean(value: string | undefined): boolean {
+  const strVar = asString(value);
   if (!(strVar === 'true' || strVar === 'false')) {
-    const message = `The environment variable "${key}" has to hold a stringified boolean value - not ${strVar}`;
+    const message = `The environment variable has to hold a stringified boolean value - not ${strVar}`;
     throw new Error(message);
   }
   return strVar === 'true';
 }
 
-export enum ENV {
-  SERVERLESS = 'SERVERLESS',
-  SERVER_PORT = 'SERVER_PORT',
-  ENTITIES = 'ENTITIES',
-  USER_POOL_ID = 'USER_POOL_ID',
-  DB_HOST = 'DB_HOST',
-  DB_PORT = 'DB_PORT',
-  DB_USER = 'DB_USER',
-  DB_PASSWORD = 'DB_PASSWORD',
-  DB_DATABASE = 'DB_DATABASE',
-  AWS_MAIN_REGION = 'AWS_MAIN_REGION',
-  DEV = 'DEV',
-}
+export default {
+  /**
+   * @returns Region in which AWS services are hosted, especially cognito
+   */
+  get AWS_MAIN_REGION(): string {
+    return asString(process.env.AWS_MAIN_REGION);
+  },
+  /**
+   * @returns database name
+   */
+  get DB_DATABASE(): string {
+    return asString(process.env.DB_DATABASE);
+  },
+  /**
+   * @returns database admin user
+   */
+  get DB_USER(): string {
+    return asString(process.env.DB_USER);
+  },
+  /**
+   * @returns database admin password
+   */
+  get DB_PASSWORD(): string {
+    return asString(process.env.DB_PASSWORD);
+  },
+  /**
+   * @returns database port
+   */
+  get DB_PORT(): string {
+    return asString(process.env.DB_PORT);
+  },
+  /**
+   * @returns database host name
+   * @example database
+   */
+  get DB_HOST(): string {
+    return asString(process.env.DB_HOST);
+  },
+  /**
+   * @returns cognito user pool ID
+   */
+  get USER_POOL_ID(): string {
+    return asString(process.env.USER_POOL_ID);
+  },
+  /**
+   * @returns glob describing where typeorm entities are found
+   * @example dist/entities/*.entity.js
+   */
+  get ENTITIES(): string {
+    return asString(process.env.ENTITIES);
+  },
+  /**
+   * @returns backend port for lambda functions
+   */
+  get SERVER_PORT(): number {
+    return asNumber(process.env.SERVER_PORT);
+  },
+  /**
+   * @returns whether application runs on a lambda function
+   */
+  get SERVERLESS(): boolean {
+    return asBoolean(process.env.SERVERLESS);
+  },
+  /**
+   * @returns whether application runs in development mode
+   */
+  get DEV(): boolean {
+    return asBoolean(process.env.DEV);
+  },
+};

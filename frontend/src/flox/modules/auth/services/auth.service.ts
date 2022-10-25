@@ -9,7 +9,7 @@ import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue
 import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
 import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
 import { QVueGlobals, useQuasar } from 'quasar';
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { i18n } from 'boot/i18n';
 import { useApolloClient } from '@vue/apollo-composable';
 import ROUTES from 'src/router/routes';
@@ -19,7 +19,7 @@ import * as auth from 'src/flox/modules/auth';
 import { showSuccessNotification } from 'src/tools/notification.tool';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { createUser } from 'src/flox/modules/auth/services/user.service';
-import { ENV, extractBoolEnvVar, extractStringEnvVar } from 'src/env';
+import Env from 'src/env';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -57,15 +57,15 @@ export class AuthenticationService {
 
     // Set up authentication user pool
     const poolSettings = {
-      UserPoolId: extractStringEnvVar(ENV.VUE_APP_USER_POOL_ID) ?? '',
-      ClientId: extractStringEnvVar(ENV.VUE_APP_USER_POOL_CLIENT_ID),
+      UserPoolId: Env.VUE_APP_USER_POOL_ID,
+      ClientId: Env.VUE_APP_USER_POOL_CLIENT_ID,
     };
     const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings);
     this.$authStore.setUserPool(userPool);
 
     // Quasar & environment variables
     this.$q = quasar;
-    this.appName = extractStringEnvVar(ENV.VUE_APP_NAME) ?? 'App';
+    this.appName = Env.VUE_APP_NAME;
 
     // Error service
     this.$errorService = errorService;
@@ -74,7 +74,7 @@ export class AuthenticationService {
     this.$routerService = routerService;
 
     // Every 5 minutes, check whether token is still valid
-    if (!extractBoolEnvVar(ENV.SERVER)) {
+    if (!Env.SERVER) {
       this.interval = setInterval(() => {
         void this.refreshToken();
       }, 1000 * 60 * 5);
@@ -116,7 +116,7 @@ export class AuthenticationService {
     });
 
     // Execute auth function
-    return new Promise((resolve: (value: void | PromiseLike<void>) => void) => {
+    return new Promise((resolve) => {
       // Store in local variable
       this.$authStore.setCognitoUser(cognitoUser);
       cognitoUser.authenticateUser(authenticationDetails, {
@@ -139,7 +139,7 @@ export class AuthenticationService {
 
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
         newPasswordRequired: function (userAttributes) {
-          const attrs = _.cloneDeep(userAttributes) as Record<string, unknown>;
+          const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
 
           // Show password change dialog
           while (!newPassword) {
@@ -264,7 +264,7 @@ export class AuthenticationService {
    */
   async logout(): Promise<void> {
     // Deep copy to avoid mutating stores state
-    const cognitoUser: CognitoUser | undefined = _.cloneDeep(
+    const cognitoUser: CognitoUser | undefined = cloneDeep(
       this.$authStore.cognitoUser
     );
 
@@ -548,7 +548,7 @@ export class AuthenticationService {
       })
       .onOk((code: string) => {
         // Deep copy user so state object does not get altered
-        const currentUser: CognitoUser | undefined = _.cloneDeep(
+        const currentUser: CognitoUser | undefined = cloneDeep(
           this.$authStore.cognitoUser
         );
         currentUser?.sendMFACode(
@@ -644,7 +644,7 @@ export class AuthenticationService {
         idTokenExpiration - Date.now() / 1000 < 45 * 60
       ) {
         // 15min before de-validation token is refreshed
-        const currentUser: CognitoUser | undefined = _.cloneDeep(
+        const currentUser: CognitoUser | undefined = cloneDeep(
           this.$authStore.cognitoUser
         ); // refresh session mutates the state of stores: illegal
         currentUser?.refreshSession(refreshToken, (err, session) => {

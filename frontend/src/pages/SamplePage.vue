@@ -4,7 +4,9 @@
     <ModuleStatus />
 
     <!-- DOS own backend -->
-    <DosChecker />
+    <q-no-ssr>
+      <DosChecker />
+    </q-no-ssr>
 
     <!-- Form example -->
     <SampleForm />

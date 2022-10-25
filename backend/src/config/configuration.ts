@@ -1,16 +1,16 @@
-import { ENV, extractNumberEnvVar, extractStringEnvVar } from '../env';
+import Env from '../env';
 
 export default (): Config => ({
   server: {
-    port: extractNumberEnvVar(ENV.SERVER_PORT) || 3000,
+    port: Env.SERVER_PORT || 3000,
   },
-  entities: extractStringEnvVar(ENV.ENTITIES),
+  entities: Env.ENTITIES,
   database: {
-    host: extractStringEnvVar(ENV.DB_HOST),
-    port: extractStringEnvVar(ENV.DB_PORT),
-    username: extractStringEnvVar(ENV.DB_USER),
-    password: extractStringEnvVar(ENV.DB_PASSWORD),
-    database: extractStringEnvVar(ENV.DB_DATABASE),
+    host: Env.DB_HOST,
+    port: Env.DB_PORT,
+    username: Env.DB_USER,
+    password: Env.DB_PASSWORD,
+    database: Env.DB_DATABASE,
   },
 });
 

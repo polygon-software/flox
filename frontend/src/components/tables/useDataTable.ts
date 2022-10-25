@@ -1,6 +1,7 @@
 import { ref, Ref, nextTick, toRaw, watch, ComputedRef, computed } from 'vue';
 import { exportFile, QInputProps, useQuasar } from 'quasar';
-import { cloneDeep, set } from 'lodash-es';
+import set from 'lodash/set';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { i18n } from 'boot/i18n';
 import { MutationObject } from 'src/apollo/mutation';

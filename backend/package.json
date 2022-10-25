@@ -1,10 +1,10 @@
 {
-  "name": "nest-test",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "name": "flox-backend",
+  "version": "0.1.0",
+  "description": "Flox Backend Boilerplate",
+  "author": "PolygonSolutions GmbH <kontakt@polygon-software.ch>",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "Copyright 2022 PolygonSolutions GmbH",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

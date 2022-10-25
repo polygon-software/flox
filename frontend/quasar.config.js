@@ -12,7 +12,7 @@ const { configure } = require('quasar/wrappers');
 const path = require('path');
 const checker = require('vite-plugin-checker').default;
 
-module.exports = configure(function (ctx) {
+module.exports = configure(function ({ prod }) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: {
@@ -145,7 +145,7 @@ module.exports = configure(function (ctx) {
       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
-        ctx.prod ? 'compression' : '',
+        prod ? 'compression' : '',
         'render', // keep this as last one
       ],
     },

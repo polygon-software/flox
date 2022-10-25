@@ -1,5 +1,5 @@
 import { Cookies } from 'quasar';
-import { ENV, extractBoolEnvVar } from 'src/env';
+import Env from 'src/env';
 
 /**
  * This file contains all cookie-related helper functions
@@ -15,7 +15,7 @@ export function persistToCookies(
   payload: Record<string, any>
 ): void {
   // Set cookie when SSR fetch is done (i.e. only browser can set a cookie)
-  if (!extractBoolEnvVar(ENV.SERVER)) {
+  if (!Env.SERVER) {
     // Set 'secure' to true for production
     Object.keys(payload).forEach((key: string) => {
       Cookies.set(

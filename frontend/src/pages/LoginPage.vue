@@ -60,7 +60,7 @@ async function onLogin({
 .bg-gradient {
   background: #388087; /* fallback for old browsers */
   background: -webkit-linear-gradient(
-    to left,
+    left,
     rgba(56, 128, 135, 0.5),
     rgba(194, 237, 206, 0.5)
   );

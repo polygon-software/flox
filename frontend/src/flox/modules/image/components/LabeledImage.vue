@@ -33,9 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, watch } from 'vue';
+import { defineProps, ref, watch, Ref } from 'vue';
 import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
-import { Ref } from 'vue';
 import { dom } from 'quasar';
 import { getImage } from 'src/flox/modules/image/services/image.service';
 

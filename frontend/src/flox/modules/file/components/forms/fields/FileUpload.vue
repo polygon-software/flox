@@ -113,7 +113,7 @@ import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import { uploadFile } from 'src/flox/modules/file/tools/upload.tools';
 import { i18n } from 'boot/i18n';
-import { ENV, extractStringEnvVar } from 'src/env';
+import Env from 'src/env';
 
 interface SelectedFile {
   content: File;
@@ -162,7 +162,7 @@ const props = defineProps({
   },
   url: {
     type: String,
-    default: extractStringEnvVar(ENV.VUE_APP_BACKEND_URL),
+    default: Env.VUE_APP_BACKEND_URL,
   },
 });
 

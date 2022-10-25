@@ -229,9 +229,7 @@ export class FileService {
       );
 
       // Delete in database (TypeScript does not understand variable typing between PrivateFile / PublicFile here)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const deletedFile = await repository.remove(file);
+      const deletedFile = await repository.remove(file as PrivateFile);
       deletedFile.uuid = deleteFileInput.uuid;
       return deletedFile;
     }

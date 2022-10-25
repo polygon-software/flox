@@ -1,5 +1,6 @@
 import { flatten, unflatten } from 'flat';
-import { isEqual, pick } from 'lodash-es';
+import isEqual from 'lodash/isEqual';
+import pick from 'lodash/pick';
 import { ExecutableDefinitionNode } from 'graphql/language/ast';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 import { MutationObject } from 'src/apollo/mutation';

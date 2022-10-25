@@ -33,7 +33,7 @@ import axios from 'axios';
 import { MY_USER } from 'src/flox/modules/auth/user.query';
 import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
 import { print } from 'graphql';
-import { ENV, extractStringEnvVar } from 'src/env';
+import Env from 'src/env';
 
 const requestsPerSecond: Ref<number> = ref(10);
 const positiveRequest: Ref<number> = ref(0);
@@ -43,7 +43,7 @@ let dosInterval: ReturnType<typeof setInterval> | null;
 
 const headers = {
   Authorization: getBearerToken(),
-  'content-type': 'application/json',
+  'Content-Type': 'application/json',
 };
 
 /**
@@ -57,17 +57,12 @@ function toggleDos(): void {
     positiveRequest.value = 0;
     negativeRequest.value = 0;
     dosInterval = setInterval(() => {
-      console.log('Fetch my user');
       const query = {
         query: print(MY_USER.query),
       };
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      console.log(query);
       axios
-        .post(
-          `${extractStringEnvVar(ENV.VUE_APP_BACKEND_URL)}/graphql`,
-          query,
-          { headers }
-        )
+        .post(Env.VUE_APP_GRAPHQL_ENDPOINT, query, { headers })
         .then(({ data }) => {
           if ((data as Record<string, unknown>).errors) {
             negativeRequest.value += 1;

@@ -1,13 +1,11 @@
 /**
- * Extract environment variable as string from environment
- * @param key - process env key
+ * Ensures extracted environment variable is a string
+ * @param value - extracted environment variable
  * @returns environment variable as string
  */
-export function extractStringEnvVar(key: keyof NodeJS.ProcessEnv): string {
-  const value = process.env[key];
-
+function asString(value: string | undefined): string {
   if (value === undefined) {
-    const message = `The environment variable "${key}" cannot be "undefined".`;
+    const message = 'The environment variable cannot be "undefined".';
     throw new Error(message);
   }
 
@@ -15,17 +13,16 @@ export function extractStringEnvVar(key: keyof NodeJS.ProcessEnv): string {
 }
 
 /**
- * Extract environment variable as integer from environment
- * @param key - process env key
+ * Ensures extracted environment variable is a number
+ * @param value - extracted environment variable
  * @returns environment variable as integer
  */
-export function extractNumberEnvVar(key: keyof NodeJS.ProcessEnv): number {
-  const stringValue = extractStringEnvVar(key);
-
+function asNumber(value: string | undefined): number {
+  const stringValue = asString(value);
   const numberValue = parseFloat(stringValue);
 
   if (Number.isNaN(numberValue)) {
-    const message = `The environment variable "${key}" has to hold a stringified number value - not ${stringValue}`;
+    const message = `The environment variable has to hold a stringified number value - not ${stringValue}`;
     throw new Error(message);
   }
 
@@ -33,52 +30,154 @@ export function extractNumberEnvVar(key: keyof NodeJS.ProcessEnv): number {
 }
 
 /**
- * Extract environment variable as boolean from environment
- * @param key - process env key
+ * Ensures extracted environment variable is a boolean
+ * @param value - extracted environment variable
  * @returns environment variable as boolean
  */
-export function extractBoolEnvVar(key: keyof NodeJS.ProcessEnv): boolean {
-  const strVar = extractStringEnvVar(key);
+function asBoolean(value: string | undefined): boolean {
+  const strVar = asString(value);
   if (!(strVar === 'true' || strVar === 'false')) {
-    const message = `The environment variable "${key}" has to hold a stringified boolean value - not ${strVar}`;
+    const message = `The environment variable has to hold a stringified boolean value - not ${strVar}`;
     throw new Error(message);
   }
   return strVar === 'true';
 }
 
-declare namespace NodeJS {
-  interface ProcessEnv {
-    NODE_ENV: string;
-    VUE_APP_NAME: string;
-    VUE_APP_AWS_REGION: string;
-    SERVICE_WORKER_FILE: string;
-    VUE_APP_BACKEND_URL: string;
-    VUE_ROUTER_MODE: 'hash' | 'history' | 'abstract' | undefined;
-    VUE_APP_PRODUCTION: 'true' | 'false';
-    VUE_APP_USER_POOL_ID: string;
-    VUE_APP_USER_POOL_CLIENT_ID: string;
-    MODE: string;
-    DEV: 'true' | 'false';
-    SERVER: 'true' | 'false';
-    CLIENT: 'true' | 'false';
-    VUE_APP_GRAPHQL_ENDPOINT: string;
-    VUE_ROUTER_BASE: string;
+/**
+ * Ensures extracted environment variable is one of the provided values
+ * @param value - extracted environment variable
+ * @param valueList - list of possible values
+ * @returns environment variable
+ */
+function asOneOf<T extends string | number>(value: T, valueList: T[]): T {
+  if (!valueList.includes(value)) {
+    const message = `The environment variable must be one of the following: ${valueList.join(
+      ','
+    )} - not ${value}`;
+    throw new Error(message);
   }
+  return value;
 }
 
-export enum ENV {
-  VUE_APP_NAME = 'VUE_APP_NAME',
-  VUE_APP_GRAPHQL_ENDPOINT = 'VUE_APP_GRAPHQL_ENDPOINT',
-  VUE_APP_AWS_REGION = 'VUE_APP_AWS_REGION',
-  SERVICE_WORKER_FILE = 'SERVICE_WORKER_FILE',
-  VUE_APP_BACKEND_URL = 'VUE_APP_BACKEND_URL',
-  VUE_ROUTER_MODE = 'VUE_ROUTER_MODE',
-  VUE_APP_PRODUCTION = 'VUE_APP_PRODUCTION',
-  VUE_APP_USER_POOL_ID = 'VUE_APP_USER_POOL_ID',
-  VUE_APP_USER_POOL_CLIENT_ID = 'VUE_APP_USER_POOL_CLIENT_ID',
-  MODE = 'MODE',
-  DEV = 'DEV',
-  SERVER = 'SERVER',
-  CLIENT = 'CLIENT',
-  VUE_ROUTER_BASE = 'VUE_ROUTER_BASE',
-}
+export default {
+  /**
+   * @returns Vue App Name
+   * @example flox-test
+   */
+  get VUE_APP_NAME(): string {
+    return asString(process.env.VUE_APP_NAME);
+  },
+  /**
+   * @returns Url of graphql backend endpoint
+   * @example http://localhost:3000/graphql
+   */
+  get VUE_APP_GRAPHQL_ENDPOINT(): string {
+    return asString(process.env.VUE_APP_GRAPHQL_ENDPOINT);
+  },
+  /**
+   * @returns Region in which AWS services are hosted, especially cognito
+   */
+  get VUE_APP_AWS_REGION(): string {
+    return asString(process.env.VUE_APP_AWS_REGION);
+  },
+  /**
+   * @returns Url of backend (without graphql)
+   * @example http://localhost:3000
+   */
+  get VUE_APP_BACKEND_URL(): string {
+    return asString(process.env.VUE_APP_BACKEND_URL);
+  },
+  /**
+   * @returns router mode
+   */
+  get VUE_ROUTER_MODE(): 'hash' | 'history' | 'abstract' {
+    return asOneOf<string>(asString(process.env.VUE_ROUTER_MODE), [
+      'hash',
+      'history',
+      'abstract',
+    ]) as unknown as 'hash' | 'history' | 'abstract';
+  },
+  /**
+   * @returns Returns vue router base path
+   */
+  get VUE_ROUTER_BASE(): string {
+    return asString(process.env.VUE_ROUTER_BASE);
+  },
+  /**
+   * @returns whether this build is a production build
+   */
+  get VUE_APP_PRODUCTION(): boolean {
+    return asBoolean(process.env.VUE_APP_PRODUCTION);
+  },
+  /**
+   * @returns cognito user pool ID
+   */
+  get VUE_APP_USER_POOL_ID(): string {
+    return asString(process.env.VUE_APP_USER_POOL_ID);
+  },
+  /**
+   * @returns cognito user pool ID
+   */
+  get VUE_APP_USER_POOL_CLIENT_ID(): string {
+    return asString(process.env.VUE_APP_USER_POOL_CLIENT_ID);
+  },
+  /**
+   * @returns quasar mode: dev, spa, pwa, ssr etc.
+   */
+  get MODE(): 'pwa' | 'ssr' | 'bex' | 'cordova' | 'capacitor' | 'electron' {
+    return asOneOf<string>(asString(process.env.MODE), [
+      'spa',
+      'pwa',
+      'ssr',
+      'bex',
+      'cordova',
+      'capacitor',
+      'electron',
+    ]) as unknown as
+      | 'pwa'
+      | 'ssr'
+      | 'bex'
+      | 'cordova'
+      | 'capacitor'
+      | 'electron';
+  },
+  /**
+   * @returns node mode: production, development
+   */
+  get NODE_ENV(): 'production' | 'development' {
+    return asOneOf<string>(asString(process.env.NODE_ENV), [
+      'production',
+      'development',
+    ]) as unknown as 'production' | 'development';
+  },
+  /**
+   * @returns whether application is in DEV mode
+   */
+  get DEV(): boolean {
+    return asBoolean(process.env.DEV);
+  },
+  /**
+   * @returns whether application is in PROD mode
+   */
+  get PROD(): boolean {
+    return asBoolean(process.env.PROD);
+  },
+  /**
+   * @returns whether application is in DEBUGGING mode
+   */
+  get DEBUGGING(): boolean {
+    return asBoolean(process.env.DEBUGGING);
+  },
+  /**
+   * @returns whether application runs on client
+   */
+  get CLIENT(): boolean {
+    return asBoolean(process.env.CLIENT);
+  },
+  /**
+   * @returns whether application runs on server
+   */
+  get SERVER(): boolean {
+    return asBoolean(process.env.SERVER);
+  },
+};
