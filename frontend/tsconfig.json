@@ -5,7 +5,7 @@
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "exclude": ["src-capacitor", "src-pwa", "src-ssr", "public"]
 }
