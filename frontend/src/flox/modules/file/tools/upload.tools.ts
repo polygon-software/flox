@@ -7,9 +7,9 @@ import { invalidateTables } from 'src/apollo/invalidation';
 
 /**
  * Uploads a single file to a given endpoint
- * @param {File} file - File that should be uploaded
- * @param {string} url - The url to upload to
- * @return {Promise<AxiosResponse>} - Whether the upload was successful or not
+ * @param file - File that should be uploaded
+ * @param url - The url to upload to
+ * @return Whether the upload was successful or not
  */
 export async function uploadFile(
   file: File,

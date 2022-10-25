@@ -46,8 +46,8 @@ export class FileService {
 
   /**
    * Uploads a file to the public S3 bucket
-   * @param {Express.Multer.File} file - the file to upload
-   * @returns {Promise<PublicFile>} - the newly uploaded file
+   * @param file - the file to upload
+   * @returns the newly uploaded file
    */
   async uploadPublicFile(file: Express.Multer.File): Promise<PublicFile> {
     // File upload
@@ -78,9 +78,9 @@ export class FileService {
 
   /**
    * Uploads a file to the private S3 bucket
-   * @param {Express.Multer.File} file - the file to upload
-   * @param {User} owner - the file owner
-   * @returns {Promise<PrivateFile>} - the newly uploaded file
+   * @param file - the file to upload
+   * @param owner - the file owner
+   * @returns the newly uploaded file
    */
   async uploadPrivateFile(
     file: Express.Multer.File,
@@ -107,8 +107,8 @@ export class FileService {
 
   /**
    * Gets a public file
-   * @param {GetPublicFileArgs} getPublicFileArgs - contains UUID
-   * @returns {Promise<PublicFile>} - the file
+   * @param getPublicFileArgs - contains UUID
+   * @returns the file
    */
   async getPublicFile(
     getPublicFileArgs: GetPublicFileArgs,
@@ -122,8 +122,8 @@ export class FileService {
 
   /**
    * Returns all public files stored within database
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
-   * @returns {Promise<PublicFile[]>} List of public files
+   * @param getAllFilesArgs - contains take and skip parameters
+   * @returns List of public files
    */
   async getAllPublicFiles(
     getAllFilesArgs: GetAllFilesArgs,
@@ -135,10 +135,10 @@ export class FileService {
   }
 
   /**
-   * Returns private files of logged in user
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
-   * @param {User} user - currently logged in user
-   * @returns {Promise<PrivateFile[]>} Users private files
+   * Returns private files of logged-in user
+   * @param getAllFilesArgs - contains take and skip parameters
+   * @param user - currently logged-in user
+   * @returns Users private files
    */
   async getAllMyFiles(
     getAllFilesArgs: GetAllFilesArgs,
@@ -156,8 +156,8 @@ export class FileService {
 
   /**
    * Gets a private file
-   * @param {GetPrivateFileArgs} getPrivateFileArgs - contains UUID and optionally, expiration time
-   * @returns {Promise<PrivateFile>} - the file
+   * @param getPrivateFileArgs - contains UUID and optionally, expiration time
+   * @returns the file
    */
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
@@ -199,9 +199,9 @@ export class FileService {
 
   /**
    * Deletes a private or public file
-   * @param {DeleteFileInput} deleteFileInput - contains UUID
-   * @param {boolean} isPublic - whether the file is public (otherwise, is private)
-   * @returns {Promise<PrivateFile|PublicFile>} - the file that was deleted
+   * @param deleteFileInput - contains UUID
+   * @param isPublic - whether the file is public (otherwise, is private)
+   * @returns the file that was deleted
    */
   async deleteFile(
     deleteFileInput: DeleteFileInput,

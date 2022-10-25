@@ -4,7 +4,7 @@ import { Router, RouteRecordRaw } from 'vue-router';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
 import { isModuleActive } from 'src/flox';
 import { MODULES } from 'src/flox/MODULES';
-import { useAuthStore } from 'src/flox/modules/auth/stores/authentication.store';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { fetchMyUser } from 'src/flox/modules/auth/services/user.service';
 
 let routerInstance: Router;

@@ -16,8 +16,8 @@ import { executeMutation } from 'src/apollo/mutation';
 
 /**
  * Fetches a private file
- * @param {string} uuid - uuid of private file
- * @returns {Promise<PrivateFileEntity|null>} Private File
+ * @param uuid - uuid of private file
+ * @returns Private File
  */
 export async function fetchPrivateFile(
   uuid: string
@@ -29,8 +29,8 @@ export async function fetchPrivateFile(
 }
 /**
  * Fetches a public file
- * @param {string} uuid - uuid of public file
- * @returns {Promise<PublicFileEntity|null>} Public File
+ * @param uuid - uuid of public file
+ * @returns Public File
  */
 export async function fetchPublicFile(
   uuid: string
@@ -43,9 +43,9 @@ export async function fetchPublicFile(
 
 /**
  * Fetches a number of public files
- * @param {number} [take] - maximum number of files to load
- * @param {number} [skip] - number of files to skip before loading next bunch, used for pagination
- * @returns {Ref<PublicFileEntity[]>} List of public Files
+ * @param take - maximum number of files to load
+ * @param skip - number of files to skip before loading next bunch, used for pagination
+ * @returns List of public Files
  */
 export function fetchPublicFiles(
   take?: number,
@@ -60,9 +60,9 @@ export function fetchPublicFiles(
 
 /**
  * Fetches files of logged-in user
- * @param {number} [take] - maximum number of files to load
- * @param {number} [skip] - number of files to skip before loading next bunch, used for pagination
- * @returns {Ref<PrivateFileEntity[]>} List of private Files
+ * @param take - maximum number of files to load
+ * @param skip - number of files to skip before loading next bunch, used for pagination
+ * @returns List of private Files
  */
 export function fetchMyFiles(
   take?: number,
@@ -77,8 +77,8 @@ export function fetchMyFiles(
 
 /**
  * Deletes a public File
- * @param {string} uuid - uuid of public file
- * @returns {Promise<PublicFileEntity|null>} Deleted File
+ * @param uuid - uuid of public file
+ * @returns Deleted File
  */
 export async function deletePublicFile(
   uuid: string
@@ -91,8 +91,8 @@ export async function deletePublicFile(
 
 /**
  * Deletes a private File
- * @param {string} uuid - uuid of private file
- * @returns {Promise<PrivateFileEntity|null>} Deleted File
+ * @param uuid - uuid of private file
+ * @returns Deleted File
  */
 export async function deletePrivateFile(
   uuid: string

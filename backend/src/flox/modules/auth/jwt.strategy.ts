@@ -2,6 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { passportJwtSecret } from 'jwks-rsa';
+import { ENV, extractStringEnvVar } from '../../../env';
 
 /**
  * Validation strategy for JSON web tokens from Cognito
@@ -28,7 +29,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `https://cognito-idp.${process.env.AWS_MAIN_REGION}.amazonaws.com/${process.env.USER_POOL_ID}/.well-known/jwks.json`,
+        jwksUri: `https://cognito-idp.${extractStringEnvVar(
+          ENV.AWS_MAIN_REGION,
+        )}.amazonaws.com/${extractStringEnvVar(
+          ENV.USER_POOL_ID,
+        )}/.well-known/jwks.json`,
       }),
     });
   }

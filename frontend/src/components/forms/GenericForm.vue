@@ -99,10 +99,10 @@
 /**
  * This component defines a generic form that can have a single or multiple pages.
  * It takes the following properties:
- * @param {Object[]} pages - the pages to show, each containing fields, label and key
- * @param {string} [finishLabel] - the label to show on the 'finish' button
- * @param {string} [loadingLabel] - the label to show when loading
- * @param {boolean} [loading] - loading status to show on the finish button
+ * @param pages - the pages to show, each containing fields, label and key
+ * @param finishLabel - the label to show on the 'finish' button
+ * @param loadingLabel - the label to show when loading
+ * @param loading - loading status to show on the finish button
  */
 import { defineEmits, defineProps, Ref, ref } from 'vue';
 import { i18n } from 'boot/i18n';

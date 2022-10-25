@@ -1,4 +1,5 @@
 import { Cookies } from 'quasar';
+import { ENV, extractBoolEnvVar } from 'src/env';
 
 /**
  * This file contains all cookie-related helper functions
@@ -6,16 +7,15 @@ import { Cookies } from 'quasar';
 
 /**
  * Persists a given payload to one or multiple cookies
- * @param {string} category - sub-category to stores the cookie to
- * @param {Record<string, any>} payload - the data to persist (in stringified form)
- * @returns {void}
+ * @param category - sub-category to stores the cookie to
+ * @param payload - the data to persist (in stringified form)
  */
 export function persistToCookies(
   category: string,
   payload: Record<string, any>
 ): void {
   // Set cookie when SSR fetch is done (i.e. only browser can set a cookie)
-  if (!process.env.SERVER) {
+  if (!extractBoolEnvVar(ENV.SERVER)) {
     // Set 'secure' to true for production
     Object.keys(payload).forEach((key: string) => {
       Cookies.set(
@@ -29,8 +29,7 @@ export function persistToCookies(
 
 /**
  * Deletes all cookies within a given category
- * @param {string} category - the category within which to delete (e.g. "authentication")
- * @returns {void}
+ * @param category - the category within which to delete (e.g. "authentication")
  */
 export function deleteCookies(category: string): void {
   const allCookies: Set<unknown> = Cookies.getAll() as Set<unknown>;

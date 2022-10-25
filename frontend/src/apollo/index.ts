@@ -9,6 +9,7 @@ import {
 import { Cookies } from 'quasar';
 import { QSsrContext } from '@quasar/app-vite';
 import { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types';
+import { ENV, extractBoolEnvVar, extractStringEnvVar } from 'src/env';
 
 /**
  * Sets up auth middleware
@@ -20,7 +21,9 @@ function getAuthMiddleware(
 ): ApolloLink {
   return new ApolloLink((operation, forward) => {
     const cookies =
-      process.env.SERVER && ssrContext ? Cookies.parseSSR(ssrContext) : Cookies;
+      extractBoolEnvVar(ENV.SERVER) && ssrContext
+        ? Cookies.parseSSR(ssrContext)
+        : Cookies;
     let token = cookies.get('authentication.idToken');
     if (token) {
       // If token contains quotes, remove them
@@ -86,7 +89,7 @@ export function getClientOptions(
   // HTTP link for GraphQL (Queries/Mutations)
   const httpLink = createHttpLink({
     // GraphQL API Link
-    uri: process.env.VUE_APP_GRAPHQL_ENDPOINT,
+    uri: extractStringEnvVar(ENV.VUE_APP_GRAPHQL_ENDPOINT),
   });
 
   return <ApolloClientOptions<NormalizedCacheObject>>Object.assign(
@@ -106,13 +109,13 @@ export function getClientOptions(
     },
 
     // For ssr mode, when on server.
-    process.env.MODE === 'ssr' && process.env.SERVER
+    extractStringEnvVar(ENV.MODE) === 'ssr' && extractBoolEnvVar(ENV.SERVER)
       ? {
           ssrMode: true,
         }
       : {},
     // For ssr mode, when on client.
-    process.env.MODE === 'ssr' && process.env.CLIENT
+    extractStringEnvVar(ENV.MODE) === 'ssr' && extractBoolEnvVar(ENV.CLIENT)
       ? {
           ssrForceFetchDelay: 100,
         }

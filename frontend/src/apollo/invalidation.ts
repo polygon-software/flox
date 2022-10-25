@@ -4,7 +4,7 @@ import { useApolloClient } from '@vue/apollo-composable';
 
 /**
  * Forces a full re-fetch all queries affected by a mutation by removing them from cache
- * @param {string[]} tables - tables that should be invalidated
+ * @param tables - tables that should be invalidated
  */
 export function invalidateTables(tables: string[]): void {
   const affectedQueries: QueryObject[] = [];

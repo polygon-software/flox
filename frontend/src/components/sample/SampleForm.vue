@@ -27,8 +27,7 @@ const pages = [
 
 /**
  * Emits the 'submit' event, containing the form's data
- * @param {Record<string, string>} formValues - form inputs
- * @returns {void}
+ * @param formValues - form inputs
  */
 function onSubmit(formValues: Record<string, string>): void {
   showSuccessNotification(

@@ -113,6 +113,7 @@ import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import { uploadFile } from 'src/flox/modules/file/tools/upload.tools';
 import { i18n } from 'boot/i18n';
+import { ENV, extractStringEnvVar } from 'src/env';
 
 interface SelectedFile {
   content: File;
@@ -161,7 +162,7 @@ const props = defineProps({
   },
   url: {
     type: String,
-    default: process.env.VUE_APP_BACKEND_URL ?? '',
+    default: extractStringEnvVar(ENV.VUE_APP_BACKEND_URL),
   },
 });
 
@@ -205,7 +206,7 @@ function addFile(): void {
 
 /**
  * Removes a file from the file list
- * @param {int} index - The index of file to remove
+ * @param index - The index of file to remove
  */
 function removeFile(index: number): void {
   selectedFiles.value.splice(index);

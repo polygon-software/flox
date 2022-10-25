@@ -2,9 +2,9 @@ import { formatDate } from 'src/format/date.format';
 
 /**
  * Search Filter for Quasar <q-table>s
- * @param {Record<string, unknown>[]} rows - rows
- * @param {string} terms - search key
- * @returns {Record<string, unknown>[]} - filtered rows
+ * @param rows - rows
+ * @param terms - search key
+ * @returns filtered rows
  */
 export function tableFilter(
   rows: Record<string, unknown>[],
@@ -15,10 +15,10 @@ export function tableFilter(
 
 /**
  * Preprocessor for search, to be used in q-tables as :filter-method
- * @param {unknown} target - where to search
- * @param {string} term - what to search
- * @param {number} depthLimit - search limit
- * @returns {boolean} - found
+ * @param target - where to search
+ * @param term - what to search
+ * @param depthLimit - search limit
+ * @returns found
  */
 export function deepFilter(target: any, term: string, depthLimit = 5): boolean {
   const cleanTerm = term.trim();
@@ -29,10 +29,10 @@ export function deepFilter(target: any, term: string, depthLimit = 5): boolean {
 
 /**
  * Recursive search
- * @param {unknown} target - where to search
- * @param {string} term - what to search
- * @param {number} depthLimit - search limit
- * @returns {boolean} - found
+ * @param target - where to search
+ * @param term - what to search
+ * @param depthLimit - search limit
+ * @returns found
  */
 function recursiveFilter(target: any, term: string, depthLimit = 5): boolean {
   if (target === term) {

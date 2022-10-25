@@ -84,7 +84,7 @@ watch(passwordRepeat, (newVal) => {
 
 /**
  * Emits an update with new value
- * @param {string} value - the password
+ * @param value - the password
  */
 function emitUpdate(value: string): void {
   if (password.value.length > 0 && password.value === passwordRepeat.value) {

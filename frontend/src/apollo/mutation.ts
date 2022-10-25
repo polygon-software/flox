@@ -21,9 +21,9 @@ export enum MutationTypes {
 
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
- * @param {MutationObject} updateObject - the mutation object constant (from MUTATIONS.ts)
- * @param {OperationVariables} variables - any variables that shall be passed to the mutation
- * @returns {Promise<FetchResult<T | null> | null>} Returns the values defined by the mutation
+ * @param updateObject - the mutation object constant (from MUTATIONS.ts)
+ * @param variables - any variables that shall be passed to the mutation
+ * @returns Returns the values defined by the mutation
  */
 export async function executeMutation<T extends BaseEntity>(
   updateObject: MutationObject,
@@ -48,5 +48,5 @@ export async function executeMutation<T extends BaseEntity>(
   }
   return {
     data: null,
-  };
+  } as FetchResult<T>;
 }

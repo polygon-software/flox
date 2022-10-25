@@ -5,9 +5,9 @@ import { date } from 'quasar';
  */
 
 /**
- * Calculates the age of a person with a given birth date
- * @param {date} birthDate - birthday to calculate from
- * @returns {number} - age in full years
+ * Calculates the age of a person with a given birthdate
+ * @param birthDate - birthday to calculate from
+ * @returns age in full years
  */
 export function calculateAge(birthDate: Date): number {
   const today = new Date();
@@ -21,8 +21,8 @@ export function calculateAge(birthDate: Date): number {
 
 /**
  * Converts a date to the input string format (YYYY-MM-DD)
- * @param {date} inputDate - date to convert
- * @returns {string} - date input string
+ * @param inputDate - date to convert
+ * @returns date input string
  */
 export function dateToInputString(inputDate: Date): string {
   return date.formatDate(inputDate, 'YYYY-MM-DD');
@@ -30,8 +30,8 @@ export function dateToInputString(inputDate: Date): string {
 
 /**
  * Formats a date to a string in 01.12.2020 format. Internally, uses Quasar's date formatters
- * @param {Date|string} inputDate - the date or date string to format
- * @returns {string} - the formatted date
+ * @param inputDate - the date or date string to format
+ * @returns the formatted date
  */
 export function formatDate(inputDate: Date | string): string {
   let actualDate;
@@ -47,8 +47,8 @@ export function formatDate(inputDate: Date | string): string {
 
 /**
  * Formats a date to a string in 01.12.2020, 14:23 format
- * @param {Date|string} inputDate - the date or date string to format
- * @returns {string} - the formatted date
+ * @param inputDate - the date or date string to format
+ * @returns the formatted date
  */
 export function formatDateTime(inputDate: Date | string): string {
   let actualDate;

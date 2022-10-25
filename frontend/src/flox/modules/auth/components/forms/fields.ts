@@ -1,4 +1,4 @@
-import { QInput, QInputProps, ValidationRule } from 'quasar';
+import { QInput, QInputProps } from 'quasar';
 import PasswordRepeat from 'src/flox/modules/auth/components/forms/fields/PasswordRepeat.vue';
 import Password from 'src/flox/modules/auth/components/forms/fields/Password.vue';
 import { markRaw } from 'vue';
@@ -8,6 +8,7 @@ import {
   joiPasswordSchema,
   joiSchemaToValidationRule,
   joiUsernameSchema,
+  ValidationRule,
 } from 'src/tools/validation.tool';
 
 /**
@@ -24,15 +25,15 @@ import {
  * @rules: Rules that get applied to the input field, e.g. to check if a password is valid.
  */
 
-export interface Field<ComponentProps = any> {
+export interface Field<ComponentType = any, ComponentProps = any> {
   key: string;
-  component: any;
+  component: ComponentType;
   prependIcon?: string;
   appendIcon?: string;
   attributes: { rules: ValidationRule[] } & Omit<ComponentProps, 'modelValue'>;
 }
 
-export const EMAIL: Field<QInputProps> = {
+export const EMAIL: Field<typeof QInput, QInputProps> = {
   key: 'email',
   component: markRaw(QInput),
   prependIcon: 'email',
@@ -49,7 +50,7 @@ export const EMAIL: Field<QInputProps> = {
   },
 };
 
-export const USERNAME: Field<QInputProps> = {
+export const USERNAME: Field<typeof QInput, QInputProps> = {
   key: 'username',
   component: markRaw(QInput),
   prependIcon: 'account',
@@ -66,7 +67,7 @@ export const USERNAME: Field<QInputProps> = {
   },
 };
 
-export const PASSWORD: Field = {
+export const PASSWORD: Field<typeof Password, QInputProps> = {
   key: 'password',
   component: markRaw(Password),
   attributes: {
@@ -81,7 +82,7 @@ export const PASSWORD: Field = {
   },
 };
 
-export const PASSWORD_REPEAT: Field = {
+export const PASSWORD_REPEAT: Field<typeof PasswordRepeat, QInputProps> = {
   key: 'password_repeat',
   component: markRaw(PasswordRepeat),
   attributes: {

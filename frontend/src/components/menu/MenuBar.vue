@@ -26,7 +26,7 @@ import { computed, inject } from 'vue';
 import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
 import { RouterService } from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
-import { useAuthStore } from 'src/flox/modules/auth/stores/authentication.store';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 const $routerService: RouterService | undefined = inject('$routerService');
@@ -41,7 +41,6 @@ const loggedIn = computed(() => {
 /**
  * Logs out the current authentication
  * @async
- * @returns {void}
  */
 async function logout(): Promise<void> {
   await $authService?.logout();

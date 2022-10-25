@@ -8,7 +8,6 @@ export function extractStringEnvVar(key: keyof NodeJS.ProcessEnv): string {
 
   if (value === undefined) {
     const message = `The environment variable "${key}" cannot be "undefined".`;
-
     throw new Error(message);
   }
 
@@ -27,7 +26,6 @@ export function extractNumberEnvVar(key: keyof NodeJS.ProcessEnv): number {
 
   if (Number.isNaN(numberValue)) {
     const message = `The environment variable "${key}" has to hold a stringified number value - not ${stringValue}`;
-
     throw new Error(message);
   }
 
@@ -48,16 +46,39 @@ export function extractBoolEnvVar(key: keyof NodeJS.ProcessEnv): boolean {
   return strVar === 'true';
 }
 
+declare namespace NodeJS {
+  interface ProcessEnv {
+    NODE_ENV: string;
+    VUE_APP_NAME: string;
+    VUE_APP_AWS_REGION: string;
+    SERVICE_WORKER_FILE: string;
+    VUE_APP_BACKEND_URL: string;
+    VUE_ROUTER_MODE: 'hash' | 'history' | 'abstract' | undefined;
+    VUE_APP_PRODUCTION: 'true' | 'false';
+    VUE_APP_USER_POOL_ID: string;
+    VUE_APP_USER_POOL_CLIENT_ID: string;
+    MODE: string;
+    DEV: 'true' | 'false';
+    SERVER: 'true' | 'false';
+    CLIENT: 'true' | 'false';
+    VUE_APP_GRAPHQL_ENDPOINT: string;
+    VUE_ROUTER_BASE: string;
+  }
+}
+
 export enum ENV {
-  SERVERLESS = 'SERVERLESS',
-  SERVER_PORT = 'SERVER_PORT',
-  ENTITIES = 'ENTITIES',
-  USER_POOL_ID = 'USER_POOL_ID',
-  DB_HOST = 'DB_HOST',
-  DB_PORT = 'DB_PORT',
-  DB_USER = 'DB_USER',
-  DB_PASSWORD = 'DB_PASSWORD',
-  DB_DATABASE = 'DB_DATABASE',
-  AWS_MAIN_REGION = 'AWS_MAIN_REGION',
+  VUE_APP_NAME = 'VUE_APP_NAME',
+  VUE_APP_GRAPHQL_ENDPOINT = 'VUE_APP_GRAPHQL_ENDPOINT',
+  VUE_APP_AWS_REGION = 'VUE_APP_AWS_REGION',
+  SERVICE_WORKER_FILE = 'SERVICE_WORKER_FILE',
+  VUE_APP_BACKEND_URL = 'VUE_APP_BACKEND_URL',
+  VUE_ROUTER_MODE = 'VUE_ROUTER_MODE',
+  VUE_APP_PRODUCTION = 'VUE_APP_PRODUCTION',
+  VUE_APP_USER_POOL_ID = 'VUE_APP_USER_POOL_ID',
+  VUE_APP_USER_POOL_CLIENT_ID = 'VUE_APP_USER_POOL_CLIENT_ID',
+  MODE = 'MODE',
   DEV = 'DEV',
+  SERVER = 'SERVER',
+  CLIENT = 'CLIENT',
+  VUE_ROUTER_BASE = 'VUE_ROUTER_BASE',
 }

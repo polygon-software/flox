@@ -57,7 +57,6 @@ form.pages.value = [
 
 /**
  * Emits the 'submit' event, containing the form's data
- * @returns {void}
  */
 function onSubmit(): void {
   const formValues: Record<string, unknown> = {

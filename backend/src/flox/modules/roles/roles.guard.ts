@@ -6,6 +6,7 @@ import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
 import { DEFAULT_ROLES } from './config';
 import { UserService } from '../auth/user.service';
 import { GetUserArgs } from '../auth/dto/args/get-user.args';
+import { ENV, extractBoolEnvVar } from '../../../env';
 
 /**
  * Guard used for defining which roles can access a specific method
@@ -39,7 +40,7 @@ export class RolesGuard implements CanActivate {
     }
 
     // Dev mode: overrides user management:
-    const accessOverride = process.env.DEV === 'true';
+    const accessOverride = extractBoolEnvVar(ENV.DEV);
     const requestedFunction = context.getHandler().name;
 
     const roles = this.reflector.get<string[]>('roles', context.getHandler());

@@ -6,9 +6,8 @@ import { moduleConfig } from './config';
 export class EmailService {
   /**
    * Sends a test e-mail
-   * @param {string} recipient - e-mail recipient
-   * @param {Credentials} credentials - SES auth credentials
-   * @returns {Promise<void>} - done
+   * @param recipient - e-mail recipient
+   * @param credentials - SES auth credentials
    */
   async sendTestEmail(
     recipient: string,

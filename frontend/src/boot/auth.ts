@@ -11,8 +11,9 @@ import {
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import { Cookies } from 'quasar';
 import axios, { AxiosResponse } from 'axios';
-import { useAuthStore } from 'src/flox/modules/auth/stores/authentication.store';
-import { QSsrContext } from '@quasar/app-vite';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import { BootFileParams, QSsrContext } from '@quasar/app-vite';
+import { ENV, extractBoolEnvVar, extractStringEnvVar } from 'src/env';
 
 /**
  * Makes request to cognito with access token, returns cognito user data
@@ -23,7 +24,7 @@ function cognitoRequest(
   accessToken: string
 ): Promise<AxiosResponse<ICognitoUserData>> {
   const url = `https://cognito-idp.${
-    process.env.VUE_APP_AWS_REGION ?? 'eu-central-1'
+    extractStringEnvVar(ENV.VUE_APP_AWS_REGION) ?? 'eu-central-1'
   }.amazonaws.com/`;
   const headers = {
     AccessToken: accessToken,
@@ -99,20 +100,22 @@ function clientSideAuth(userPool: CognitoUserPool): void {
   }
 }
 
-export default boot(async (bootContext) => {
+interface FloxBootFileParams<T = any> extends BootFileParams<T> {
+  ssrContext?: QSsrContext;
+}
+
+export default boot(async (bootContext: FloxBootFileParams) => {
   const $authStore = useAuthStore();
 
   // Set up authentication user pool
   const poolSettings = {
-    UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
-    ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? '',
+    UserPoolId: extractStringEnvVar(ENV.VUE_APP_USER_POOL_ID),
+    ClientId: extractStringEnvVar(ENV.VUE_APP_USER_POOL_CLIENT_ID),
   };
   const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings);
   $authStore.setUserPool(userPool);
 
-  // @ts-ignore
-  if (process.env.SERVER && bootContext.ssrContext) {
-    // @ts-ignore
+  if (extractBoolEnvVar(ENV.SERVER) && bootContext.ssrContext) {
     await serverSideAuth(bootContext.ssrContext, userPool);
   } else {
     clientSideAuth(userPool);

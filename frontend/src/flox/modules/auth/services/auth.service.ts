@@ -17,8 +17,9 @@ import { RouterService } from 'src/services/RouterService';
 import { ErrorService } from 'src/services/ErrorService';
 import * as auth from 'src/flox/modules/auth';
 import { showSuccessNotification } from 'src/tools/notification.tool';
-import { useAuthStore } from 'src/flox/modules/auth/stores/authentication.store';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { createUser } from 'src/flox/modules/auth/services/user.service';
+import { ENV, extractBoolEnvVar, extractStringEnvVar } from 'src/env';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
@@ -42,9 +43,9 @@ export class AuthenticationService {
 
   /**
    * Constructor
-   * @param {QVueGlobals} quasar - Quasar instance
-   * @param {ErrorService} errorService - error service instance
-   * @param {RouterService} routerService - router service instance
+   * @param quasar - Quasar instance
+   * @param errorService - error service instance
+   * @param routerService - router service instance
    */
   constructor(
     quasar: QVueGlobals,
@@ -56,15 +57,15 @@ export class AuthenticationService {
 
     // Set up authentication user pool
     const poolSettings = {
-      UserPoolId: process.env.VUE_APP_USER_POOL_ID ?? '',
-      ClientId: process.env.VUE_APP_USER_POOL_CLIENT_ID ?? '',
+      UserPoolId: extractStringEnvVar(ENV.VUE_APP_USER_POOL_ID) ?? '',
+      ClientId: extractStringEnvVar(ENV.VUE_APP_USER_POOL_CLIENT_ID),
     };
     const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolSettings);
     this.$authStore.setUserPool(userPool);
 
     // Quasar & environment variables
     this.$q = quasar;
-    this.appName = process.env.VUE_APP_NAME ?? 'App';
+    this.appName = extractStringEnvVar(ENV.VUE_APP_NAME) ?? 'App';
 
     // Error service
     this.$errorService = errorService;
@@ -73,7 +74,7 @@ export class AuthenticationService {
     this.$routerService = routerService;
 
     // Every 5 minutes, check whether token is still valid
-    if (!process.env.SERVER) {
+    if (!extractBoolEnvVar(ENV.SERVER)) {
       this.interval = setInterval(() => {
         void this.refreshToken();
       }, 1000 * 60 * 5);
@@ -84,10 +85,9 @@ export class AuthenticationService {
 
   /**
    * Logs into the AWS authentication pool using the given data
-   * @param {string} identifier - the authentication's identifier (usually E-mail or username)
-   * @param {string} password - the authentication's password
-   * @param {string} newPassword - the new password if this function is triggered from set-password page
-   * @returns {Promise<void>} - done
+   * @param identifier - the authentication's identifier (usually E-mail or username)
+   * @param password - the authentication's password
+   * @param newPassword - the new password if this function is triggered from set-password page
    */
   async login(
     identifier: string,
@@ -176,10 +176,9 @@ export class AuthenticationService {
 
   /**
    * Sets up MFA for the given cognito user
-   * @param {CognitoUser} cognitoUser - the user
-   * @param {function} resolve - resolve function
-   * @param {string} identifier - identifier (username of email)
-   * @returns {void}
+   * @param cognitoUser - the user
+   * @param resolve - resolve function
+   * @param identifier - identifier (username of email)
    */
   setupMFA(
     cognitoUser: CognitoUser,
@@ -201,11 +200,10 @@ export class AuthenticationService {
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.
-   * @param {string} username - the chosen username
-   * @param {string} email - the authentication's e-mail address
-   * @param {string} password - the new authentication's chosen password. Must fulfill the set password conditions
-   * @param {Record<string, string>}  [attributes] - custom attributes to add (if any)
-   * @returns {Promise<void>} - done
+   * @param username - the chosen username
+   * @param email - the authentication's e-mail address
+   * @param password - the new authentication's chosen password. Must fulfill the set password conditions
+   * @param attributes - custom attributes to add (if any)
    */
   async signUp(
     username: string,
@@ -262,7 +260,6 @@ export class AuthenticationService {
 
   /**
    * Logs out the currently logged in authentication (if any)
-   * @returns {void}
    */
   async logout(): Promise<void> {
     // Deep copy to avoid mutating stores state
@@ -296,7 +293,6 @@ export class AuthenticationService {
 
   /**
    * Shows a dialog for changing password
-   * @returns {void}
    */
   showChangePasswordDialog(): void {
     this.$q
@@ -327,7 +323,6 @@ export class AuthenticationService {
 
   /**
    * Shows a dialog for requesting password reset
-   * @returns {void}
    */
   showResetPasswordDialog(): void {
     const userPool = this.$authStore.userPool;
@@ -351,7 +346,7 @@ export class AuthenticationService {
         persistent: true,
         prompt: {
           model: '',
-          isValid: (val: string) => val.length >= 1,
+          isValid: (val: string): boolean => val.length >= 1,
           type: 'text',
         },
       })
@@ -382,7 +377,6 @@ export class AuthenticationService {
 
   /**
    * Show actual password reset form dialog
-   * @returns {void}
    */
   showResetPasswordFormDialog(): void {
     this.$q
@@ -433,7 +427,6 @@ export class AuthenticationService {
 
   /**
    * Shows a dialog for verifying E-Mail
-   * @returns {void}
    */
   async showEmailVerificationDialog(): Promise<void> {
     await new Promise((resolve, reject) => {
@@ -462,10 +455,10 @@ export class AuthenticationService {
 
   /**
    * Shows a dialog containing a QR code for setting up two factor authentication
-   * @param {string} secretCode - the authenticator code to encode in QR code form
-   * @param {CognitoUser} cognitoUser - the cognito user to show the dialog for
-   * @param {string} identifier - identifier (username of email)
-   * @returns {void}
+   * @param secretCode - the authenticator code to encode in QR code form
+   * @param cognitoUser - the cognito user to show the dialog for
+   * @param identifier - identifier (username of email)
+   * @returns void
    */
   showQRCodeDialog(
     secretCode: string,
@@ -491,7 +484,7 @@ export class AuthenticationService {
               persistent: true,
               prompt: {
                 model: '',
-                isValid: (val: string) => val.length >= 6,
+                isValid: (val: string): boolean => val.length >= 6,
                 type: 'text',
               },
             })
@@ -512,8 +505,7 @@ export class AuthenticationService {
 
   /**
    * Confirm e-mail verification code
-   * @param {string} code -verification code
-   * @returns {Promise<void>} - done
+   * @param code -verification code
    */
   async verifyEmail(code: string): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -533,9 +525,8 @@ export class AuthenticationService {
 
   /**
    * Verifies a given 2FA code
-   * @param {string} tokenType - the type of token to verify
-   * @param {function} resolve - resolve function
-   * @returns {void}
+   * @param tokenType - the type of token to verify
+   * @param resolve - resolve function
    */
   verify2FACode(
     tokenType: string,
@@ -550,7 +541,7 @@ export class AuthenticationService {
         persistent: true,
         prompt: {
           model: '',
-          isValid: (val: string) => val.length >= 6,
+          isValid: (val: string): boolean => val.length >= 6,
           type: 'text',
         },
       })
@@ -578,7 +569,7 @@ export class AuthenticationService {
 
   /**
    * When login succeeds
-   * @param {CognitoUserSession} userSession - the currently active Cognito authentication session
+   * @param userSession - the currently active Cognito authentication session
    */
   async loginSuccess(userSession: CognitoUserSession): Promise<void> {
     // Store locally
@@ -590,10 +581,9 @@ export class AuthenticationService {
 
   /**
    * When any operation (mostly login) fails, verify whether it is due to the authentication not having verified their account
-   * @param {Error} error - the error that caused the failure
-   * @param {string} [identifier] - the authentication's identifier (usually E-mail or username) for re-login
-   * @param {string} [password] - the authentication's password for re-login
-   * @returns {void}
+   * @param error - the error that caused the failure
+   * @param identifier - the authentication's identifier (usually E-mail or username) for re-login
+   * @param password - the authentication's password for re-login
    */
   onFailure(error: Error, identifier?: string, password?: string): void {
     switch (error.name) {
@@ -637,7 +627,7 @@ export class AuthenticationService {
 
   /**
    * Refreshes the idToken if necessary
-   * @returns {Promise<void>} - done
+   * @returns void
    */
   refreshToken(): Promise<void> {
     return new Promise((resolve, reject) => {

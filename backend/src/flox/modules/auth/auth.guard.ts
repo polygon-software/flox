@@ -4,7 +4,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { getRequest } from '../../core/flox-helpers';
 import { IS_PUBLIC_KEY } from './authentication.decorator';
-import { Request } from 'express';
 
 /**
  * JSON Web token authentication guard
@@ -13,7 +12,7 @@ import { Request } from 'express';
 export class JwtAuthGuard extends AuthGuard('jwt') {
   /**
    * Constructor
-   * @param {Reflector} reflector - reflector
+   * @param reflector - reflector
    */
   constructor(private reflector: Reflector) {
     super();
@@ -21,8 +20,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   /**
    * Gets the request from context
-   * @param {ExecutionContext} context - execution context of the request
-   * @returns {any} - the request
+   * @param context - execution context of the request
+   * @returns the request
    */
   getRequest(context: ExecutionContext): ReturnType<typeof getRequest> {
     return getRequest(context);

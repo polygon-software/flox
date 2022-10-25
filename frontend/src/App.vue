@@ -12,9 +12,10 @@ import { routerInstance } from 'boot/router';
 import { isModuleActive } from 'src/flox';
 import { MODULES } from 'src/flox/MODULES';
 import LogRocket from 'logrocket';
+import { ENV, extractBoolEnvVar } from 'src/env';
 
 // Add LogRocket to production deployments / builds
-if (process.env.VUE_APP_PRODUCTION === 'true') {
+if (extractBoolEnvVar(ENV.VUE_APP_PRODUCTION)) {
   LogRocket.init('md69mq/flox'); // TODO application specific: Change LogRocket ID
 }
 

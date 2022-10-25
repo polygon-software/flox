@@ -174,10 +174,10 @@ export function useDataTable<T extends BaseEntity>(
 
   /**
    * Wraps a row entry in preparation for the CSV export
-   * @param {string} val - Value to be exported
-   * @param {function} formatFn - optional format function
-   * @param {Object<string, any>[]} row - Row in which value is stored
-   * @returns {string} CSV as string
+   * @param val - Value to be exported
+   * @param formatFn - optional format function
+   * @param row - Row in which value is stored
+   * @returns CSV as string
    */
   function wrapCsvValue(
     val: any,

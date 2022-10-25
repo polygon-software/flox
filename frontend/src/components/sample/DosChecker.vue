@@ -33,6 +33,7 @@ import axios from 'axios';
 import { MY_USER } from 'src/flox/modules/auth/user.query';
 import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
 import { print } from 'graphql';
+import { ENV, extractStringEnvVar } from 'src/env';
 
 const requestsPerSecond: Ref<number> = ref(10);
 const positiveRequest: Ref<number> = ref(0);
@@ -47,9 +48,8 @@ const headers = {
 
 /**
  * Starts/Stops a DOS attack on our own backend
- * @returns {void} nothing
  */
-function toggleDos() {
+function toggleDos(): void {
   if (dosInterval) {
     clearInterval(dosInterval);
     dosInterval = null;
@@ -63,7 +63,11 @@ function toggleDos() {
       };
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       axios
-        .post(`${process.env.VUE_APP_BACKEND_URL}/graphql`, query, { headers })
+        .post(
+          `${extractStringEnvVar(ENV.VUE_APP_BACKEND_URL)}/graphql`,
+          query,
+          { headers }
+        )
         .then(({ data }) => {
           if ((data as Record<string, unknown>).errors) {
             negativeRequest.value += 1;
@@ -78,5 +82,3 @@ function toggleDos() {
   }
 }
 </script>
-
-<style scoped></style>

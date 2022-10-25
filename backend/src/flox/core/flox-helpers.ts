@@ -4,6 +4,7 @@ import * as flox from '../../../flox.config.json';
 import { MODULES } from '../MODULES';
 import { Request } from 'express';
 import { User } from '../modules/auth/entities/user.entity';
+import { ENV, extractBoolEnvVar } from '../../env';
 
 export interface FrontendRequest extends Request {
   user?: {
@@ -111,5 +112,5 @@ export function isModuleActive(moduleName: FloxModuleName): boolean {
  * @returns whether the config is set to serverless mode
  */
 export function isServerless(): boolean {
-  return !!process.env.SERVERLESS;
+  return extractBoolEnvVar(ENV.SERVERLESS);
 }

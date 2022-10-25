@@ -168,6 +168,7 @@ const popupRefs: Ref<Record<string, QPopupEdit>> = ref({});
  * Generates an index key for a popup referenec
  * @param row - row of data in which popup edit occurs
  * @param col column in which popup edit occurs
+ * @returns popup key
  */
 function getPopupEditKey(
   row: BaseEntity,
@@ -198,8 +199,8 @@ const {
 
 /**
  * Validates an input for qPopupEdit
- * @param {ColumnInterface} column - currently edited column
- * @returns {function} function that validates input
+ * @param column - currently edited column
+ * @returns function that validates input
  */
 function validateInput(column: ColumnInterface): (value: any) => boolean {
   return (value: any) => {

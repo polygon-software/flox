@@ -52,7 +52,7 @@ const passwordRules = [
   ),
 ];
 const matchingRules = [
-  (val: string) =>
+  (val: string): true | string =>
     val === password.value || i18n.global.t('errors.non_matching_password'),
 ];
 

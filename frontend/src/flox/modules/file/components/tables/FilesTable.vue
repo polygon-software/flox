@@ -79,7 +79,7 @@ const columns = [
 
 /**
  * Fetches all files for displaying in table
- * @returns {Promise<FileEntity[]>} List of Files
+ * @returns List of Files
  */
 function fetchAllFiles(): Ref<FileEntity[]> {
   if (props.private) {

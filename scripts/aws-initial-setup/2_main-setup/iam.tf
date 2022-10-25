@@ -128,7 +128,6 @@ resource "aws_iam_access_key" "backend_admin_key" {
 }
 
 // Backup Creator User
-
 resource "aws_iam_user" "backup_creator" {
   name      = "${var.project}-${var.type}-gcp-backup-manager"
 }

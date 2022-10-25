@@ -28,7 +28,7 @@ export class MultiPageForm {
 
   /**
    * Constructor
-   * @param {Array<Record<string, unknown>>} pages - the form's pages
+   * @param pages - the form's pages
    */
   constructor(pages?: FormPage[]) {
     this.step = ref(1);

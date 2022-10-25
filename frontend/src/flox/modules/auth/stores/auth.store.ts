@@ -25,15 +25,15 @@ export const useAuthStore = defineStore('authStore', {
   getters: {
     /**
      * Gets logged in status
-     * @param {AuthState} state - the current state of the store
-     * @returns {boolean} - whether the user is logged in
+     * @param state - the current state of the store
+     * @returns whether the user is logged in
      */
     getLoggedInStatus: (state) => state.userSession?.isValid() ?? false,
 
     /**
      * Gets the current user's username, if any
-     * @param {AuthState} state - the current state of the store
-     * @returns {string|undefined} - username, if any
+     * @param state - the current state of the store
+     * @returns username, if any
      */
     getUserName: (state) => state.cognitoUser?.getUsername(),
   },
@@ -41,8 +41,7 @@ export const useAuthStore = defineStore('authStore', {
   actions: {
     /**
      * Sets the current user session
-     * @param {CognitoUserSession|undefined} payload - value to set
-     * @returns {void}
+     * @param payload - value to set
      */
     setUserSession(payload: CognitoUserSession | undefined): void {
       this.userSession = payload;
@@ -64,8 +63,7 @@ export const useAuthStore = defineStore('authStore', {
 
     /**
      * Sets the user pool
-     * @param {CognitoUserPool|undefined} payload - value to set
-     * @returns {void}
+     * @param payload - value to set
      */
     setUserPool(payload: CognitoUserPool | undefined): void {
       this.userPool = payload;
@@ -73,8 +71,7 @@ export const useAuthStore = defineStore('authStore', {
 
     /**
      * Sets the cognito user
-     * @param {CognitoUser|undefined} payload - value to set
-     * @returns {void}
+     * @param payload - value to set
      */
     setCognitoUser(payload: CognitoUser | undefined): void {
       this.cognitoUser = payload;

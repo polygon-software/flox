@@ -4,9 +4,7 @@
 
 /**
  * Waits for a given time
- * @param {number} [milliseconds] - time to wait in ms (defaults to 100)
- * @async
- * @returns {void}
+ * @param milliseconds - time to wait in ms (defaults to 100)
  */
 export async function sleep(milliseconds = 100): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, milliseconds));

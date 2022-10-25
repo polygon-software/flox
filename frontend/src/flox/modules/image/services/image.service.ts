@@ -12,8 +12,8 @@ import { executeMutation } from 'src/apollo/mutation';
 
 /**
  * Returns an image for a given uuid
- * @param {string} uuid - uuid of image
- * @returns {Promise<ImageEntity|null>} Image File
+ * @param uuid - uuid of image
+ * @returns Image File
  */
 export async function getImage(uuid: string): Promise<ImageEntity | null> {
   const { data } = await executeQuery<ImageEntity>(GET_IMAGE, { uuid });
@@ -22,8 +22,8 @@ export async function getImage(uuid: string): Promise<ImageEntity | null> {
 
 /**
  * Returns an image for a given file uuid
- * @param {string} file - uuid of image
- * @returns {Promise<ImageEntity|null>} Image file belonging to File
+ * @param file - uuid of image
+ * @returns Image file belonging to File
  */
 export async function getImageForFile(
   file: string
@@ -36,9 +36,9 @@ export async function getImageForFile(
 
 /**
  * Creates an image from a file
- * @param {string} file - uuid of public/private file
- * @param {Boolean} objectRecognition - perform object recognition on image
- * @returns {Promise<ImageEntity|null>} Created image
+ * @param file - uuid of public/private file
+ * @param objectRecognition - perform object recognition on image
+ * @returns Created image
  */
 export async function createImage(
   file: string,
@@ -53,8 +53,8 @@ export async function createImage(
 
 /**
  * Deletes an image including its file
- * @param {string} uuid - uuid of image
- * @returns {Promise<ImageEntity|null>} Deleted Image
+ * @param uuid - uuid of image
+ * @returns Deleted Image
  */
 export async function deleteImage(uuid: string): Promise<ImageEntity | null> {
   const { data } = await executeMutation<ImageEntity>(DELETE_IMAGE, {

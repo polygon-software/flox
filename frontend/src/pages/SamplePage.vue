@@ -21,7 +21,7 @@
     <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />
 
     <DataTable
-      title="UserEntity Table"
+      title="User Table"
       :columns="columns"
       :query="QUERY_USERS"
       :update-mutation="UPDATE_USER"
@@ -33,7 +33,6 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
 import Joi from 'joi';
-import { ValidationRule } from 'quasar';
 
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import SampleForm from 'components/sample/SampleForm.vue';
@@ -47,7 +46,10 @@ import { QUERY_USERS } from 'src/flox/modules/auth/user.query';
 import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
 import { ColumnInterface } from 'components/tables/useDataTable';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
-import { joiSchemaToValidationRule } from 'src/tools/validation.tool';
+import {
+  joiSchemaToValidationRule,
+  ValidationRule,
+} from 'src/tools/validation.tool';
 
 const imageUuid: Ref<string> = ref('');
 

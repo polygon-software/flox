@@ -1,7 +1,7 @@
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 
 /**
- * A class representing a user data object
+ * A class representing a file
  */
 export class FileEntity extends BaseEntity {
   // eslint-disable-next-line require-jsdoc

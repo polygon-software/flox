@@ -94,8 +94,8 @@ export class RouterService {
 
   /**
    * Returns the requested query parameter.
-   * @param {string} key - parameter name
-   * @returns {string | null} key - requested parameter
+   * @param key - parameter name
+   * @returns key - requested parameter
    */
   getQueryParam(key: string): string | null {
     return (this.route.query[key] as string) ?? null;
@@ -114,8 +114,8 @@ export class RouterService {
   /**
    * Replaces the last URL part with the given new part.
    * Removes all Query parameter
-   * @param {string} path - path to route to
-   * @returns {Promise<void|NavigationFailure|undefined>} - the navigation result.
+   * @param path - path to route to
+   * @returns the navigation result.
    */
   replaceLastPart(path: string): ReturnType<typeof this.router.push> {
     return this.router.push({
@@ -128,7 +128,6 @@ export class RouterService {
   /**
    * Reload page by routing to current route
    * Removes all Query parameter
-   * @returns {void} - void
    */
   reload(): void {
     this.router.go(0);

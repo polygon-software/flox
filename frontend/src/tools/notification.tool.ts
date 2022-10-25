@@ -24,10 +24,9 @@ type NotificationOptions = {
 
 /**
  * Shows a default success notification
- * @param {QVueGlobals} q - Quasar instance
- * @param {string} message - message text
- * @param {NotificationOptions} options - options
- * @returns {void} - void
+ * @param q - Quasar instance
+ * @param message - message text
+ * @param options - options
  */
 export function showSuccessNotification(
   q: QVueGlobals,
@@ -39,10 +38,9 @@ export function showSuccessNotification(
 
 /**
  * Shows a default error notification
- * @param {QVueGlobals} q - Quasar instance
- * @param {string} message - message text
- * @param {NotificationOptions} options - options
- * @returns {void} - void
+ * @param q - Quasar instance
+ * @param message - message text
+ * @param options - options
  */
 export function showErrorNotification(
   q: QVueGlobals,
@@ -58,10 +56,9 @@ export function showErrorNotification(
 
 /**
  * Shows a notification with the given parameters
- * @param {QVueGlobals} q - Quasar instance
- * @param {string} message - message text
- * @param {NotificationOptions} options - options
- * @returns {void} - void
+ * @param q - Quasar instance
+ * @param message - message text
+ * @param options - options
  */
 export function showNotification(
   q: QVueGlobals,

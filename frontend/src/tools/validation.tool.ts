@@ -1,13 +1,16 @@
 import Joi, { AnySchema } from 'joi';
 import { joiPasswordExtendCore } from 'joi-password';
 import { i18n } from 'boot/i18n';
-import { ValidationRule } from 'quasar';
+
+export type ValidationRule<T = any> = (
+  value: T
+) => boolean | string | Promise<boolean | string>;
 
 /**
  * Uses joi syntax for generating rules with error messages from i18n
- * @param {AnySchema} schema - joi validation schema
- * @param {string} messagePath - i18n message to display in case of error
- * @returns {function} error message
+ * @param schema - joi validation schema
+ * @param messagePath - i18n message to display in case of error
+ * @returns error message
  */
 export function joiSchemaToValidationRule(
   schema: AnySchema,
@@ -26,7 +29,7 @@ export function joiSchemaToValidationRule(
 
 /**
  * Returns a joi email schema
- * @returns {AnySchema} Joi schema fitting emails
+ * @returns Joi schema fitting emails
  */
 export function joiEmailSchema(): AnySchema {
   return Joi.string().email({ tlds: { allow: false } });
@@ -34,7 +37,7 @@ export function joiEmailSchema(): AnySchema {
 
 /**
  * Returns Joi schema for username
- * @returns {AnySchema} Joi schema fitting usernames
+ * @returns Joi schema fitting usernames
  */
 export function joiUsernameSchema(): AnySchema {
   return Joi.string().alphanum().min(10).max(15);
@@ -42,7 +45,7 @@ export function joiUsernameSchema(): AnySchema {
 
 /**
  * Returns Joi schema for passwords
- * @returns {AnySchema} Joi schema fitting passwords
+ * @returns Joi schema fitting passwords
  */
 export function joiPasswordSchema(): AnySchema {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

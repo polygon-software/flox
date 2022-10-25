@@ -40,8 +40,8 @@ export function objectChange(
 
 /**
  * Extracts the name of all variables from a mutation query
- * @param {MutationObject} mutation - object defining mutation
- * @returns {string[]} list of variable names
+ * @param mutation - object defining mutation
+ * @returns list of variable names
  */
 export function extractMutationVariableNames(
   mutation: MutationObject
@@ -55,9 +55,9 @@ export function extractMutationVariableNames(
 
 /**
  * Returns the subset of an object that is required for a mutation
- * @param {BaseEntity} entity - modified entity that should be saved
- * @param {MutationObject} mutation - update mutation containing variables that define update keys
- * @returns {Record<string, any>} - Subset of entity with only the keys relevant for the mutation
+ * @param entity - modified entity that should be saved
+ * @param mutation - update mutation containing variables that define update keys
+ * @returns Subset of entity with only the keys relevant for the mutation
  */
 export function entityToMutationVariables(
   entity: BaseEntity,
