@@ -5,7 +5,7 @@
     "file": true,
     "image": true,
     "sharing": false,
-    "email": false,
+    "email": false
   },
   "moduleOptions": {
     "auth": {

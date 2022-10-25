@@ -50,6 +50,8 @@ import {
   joiSchemaToValidationRule,
   ValidationRule,
 } from 'src/tools/validation.tool';
+import { useMeta } from 'quasar';
+import { i18n } from 'boot/i18n';
 
 const imageUuid: Ref<string> = ref('');
 
@@ -84,4 +86,18 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     sortable: true,
   },
 ]);
+
+useMeta({
+  title: i18n.global.t('pages.sample.meta.title'),
+  meta: {
+    description: {
+      name: 'description',
+      content: i18n.global.t('pages.sample.meta.description'),
+    },
+    keywords: {
+      name: 'keywords',
+      content: i18n.global.t('pages.sample.meta.keywords'),
+    },
+  },
+});
 </script>

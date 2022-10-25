@@ -110,7 +110,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Cookies', 'Dialog', 'Notify'],
+      plugins: ['Cookies', 'Dialog', 'Notify', 'Meta'],
     },
 
     // https://v2.quasar.dev/options/animations

@@ -107,4 +107,13 @@ export default {
     ctrl_shift_hint:
       'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection',
   },
+  pages: {
+    sample: {
+      meta: {
+        title: 'Flox',
+        description: 'This is a flox sample page',
+        keywords: 'flox,sample,polygon',
+      },
+    },
+  },
 };

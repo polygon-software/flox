@@ -109,4 +109,13 @@ export default {
     ctrl_shift_hint:
       'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren',
   },
+  pages: {
+    sample: {
+      meta: {
+        title: 'Flox',
+        description: 'Dies ist eine flox demo-seite',
+        keywords: 'flox,demo,polygon',
+      },
+    },
+  },
 };
