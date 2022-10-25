@@ -22,7 +22,7 @@ type BoundingBox {
   top: Float!
 
   """Last modification date"""
-  updatedAt: DateTime!
+  updatedAt: DateTime
 
   """UUID"""
   uuid: ID!
@@ -86,7 +86,7 @@ type Image {
   longitude: Float
 
   """Last modification date"""
-  updatedAt: DateTime!
+  updatedAt: DateTime
 
   """UUID"""
   uuid: ID!
@@ -118,7 +118,7 @@ type Label {
   parents: [String!]!
 
   """Last modification date"""
-  updatedAt: DateTime!
+  updatedAt: DateTime
 
   """UUID"""
   uuid: ID!
@@ -157,7 +157,7 @@ type PrivateFile {
   size: Float!
 
   """Last modification date"""
-  updatedAt: DateTime!
+  updatedAt: DateTime
 
   """Pre-signed download URL"""
   url: String
@@ -186,7 +186,7 @@ type PublicFile {
   size: Float!
 
   """Last modification date"""
-  updatedAt: DateTime!
+  updatedAt: DateTime
 
   """Public download URL"""
   url: String!
@@ -272,7 +272,7 @@ type User {
   role: String
 
   """Last modification date"""
-  updatedAt: DateTime!
+  updatedAt: DateTime
 
   """Username"""
   username: String!

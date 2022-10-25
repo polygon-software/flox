@@ -1,6 +1,6 @@
 import { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import * as flox from '../../../flox.config.json';
+import flox from '../../../flox.config.json';
 import { MODULES } from '../MODULES';
 import { Request } from 'express';
 import { User } from '../modules/auth/entities/user.entity';

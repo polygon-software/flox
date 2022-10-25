@@ -11,7 +11,7 @@ export function extractStringEnvVar(key: keyof NodeJS.ProcessEnv): string {
     throw new Error(message);
   }
 
-  return value;
+  return `${value}`;
 }
 
 /**
