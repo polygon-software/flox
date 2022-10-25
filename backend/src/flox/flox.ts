@@ -9,12 +9,14 @@ import { MODULES } from './MODULES';
 import { EmailModule } from './modules/email/email.module';
 import { getActiveFloxModuleNames } from './core/flox-helpers';
 
+export type FloxModules = FileModule | ImageModule | UserModule | EmailModule;
+
 /**
  * Returns the active Flox modules based on flox.config.json
  * @returns list of Modules
  */
-export function floxModules(): any[] {
-  const modules: any[] = [];
+export function floxModules(): FloxModules[] {
+  const modules: FloxModules[] = [];
 
   // Get active modules from config
   const moduleNames = getActiveFloxModuleNames();

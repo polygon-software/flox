@@ -91,7 +91,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
     HttpModule,
 
     // Flox modules
-    ...floxModules(),
+    ...(floxModules() as any[]),
     // Add any custom modules here
   ],
   controllers: [HealthcheckController],

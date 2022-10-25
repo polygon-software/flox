@@ -28,6 +28,7 @@ module.exports = {
     quotes: ['warn', 'single', { avoidEscape: true }],
 
     '@typescript-eslint/explicit-function-return-type': 'error',
+    '@typescript-eslint/no-explicit-any': 'warn',
 
     "require-jsdoc": ["error", {
       "require": {
