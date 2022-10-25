@@ -6,6 +6,7 @@ module.exports = {
   client: {
     service: {
       name: 'my-service',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       url: Env.VUE_APP_GRAPHQL_ENDPOINT,
     },
     // Files processed by the extension
