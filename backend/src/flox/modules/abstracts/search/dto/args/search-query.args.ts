@@ -2,7 +2,7 @@ import { ArgsType, Field } from '@nestjs/graphql';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 @ArgsType()
-export abstract class SearchQueryArgs {
+export class SearchQueryArgs {
   @Field(() => Number, {
     defaultValue: 0,
     description: 'Number of items to skip',

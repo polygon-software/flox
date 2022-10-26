@@ -1,4 +1,4 @@
-import SearchQueryOutputInterface from '../../interfaces/outputs/search-query-interface.output';
+import SearchQueryOutputInterface from '../../abstracts/search/outputs/search-query-interface.output';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from '../entities/user.entity';
 
