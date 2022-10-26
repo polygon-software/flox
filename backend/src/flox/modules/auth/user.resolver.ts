@@ -8,13 +8,22 @@ import { User } from './entities/user.entity';
 import { GetUsersArgs } from './dto/args/get-users.args';
 import { LoggedIn, Public } from './authentication.decorator';
 import { CurrentUser } from '../roles/authorization.decorator';
-import { SearchQueryInterfaceResolver } from '../interfaces/search-query-interface.resolver';
+import { AbstractSearchQueryResolver } from '../interfaces/abstract-search-query.resolver';
 import { SearchQueryArgs } from '../interfaces/dto/args/search-query.args';
 import { UserQueryOutput } from './output/user-query.output';
 
 @Resolver(() => User)
-export class UserResolver implements SearchQueryInterfaceResolver {
-  constructor(private readonly userService: UserService) {}
+export class UserResolver extends AbstractSearchQueryResolver<
+  User,
+  UserService
+> {
+  constructor(private readonly userService: UserService) {
+    super('username');
+  }
+
+  get service(): UserService {
+    return this.userService;
+  }
 
   /**
    * Gets a set of users by UUID

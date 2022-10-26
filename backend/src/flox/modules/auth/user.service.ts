@@ -7,16 +7,22 @@ import { DeleteUserInput } from './dto/input/delete-user.input';
 import { Like, Repository, In } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { SearchQueryInterfaceService } from '../interfaces/search-query-interface.service';
+import { AbstractSearchQueryService } from '../interfaces/abstract-search-query.service';
 import { SearchQueryArgs } from '../interfaces/dto/args/search-query.args';
 import { UserQueryOutput } from './output/user-query.output';
 
 @Injectable()
-export class UserService implements SearchQueryInterfaceService {
+export class UserService extends AbstractSearchQueryService<User> {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) {
+    super();
+  }
+
+  get repository(): Repository<User> {
+    return this.userRepository;
+  }
 
   /**
    * Query for users
@@ -24,26 +30,7 @@ export class UserService implements SearchQueryInterfaceService {
    * @returns users that fit query
    */
   async queryAll(queryArgs: SearchQueryArgs): Promise<UserQueryOutput> {
-    const count = await this.userRepository.count({
-      order: {
-        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
-      },
-      where: {
-        username: Like(`%${queryArgs.filter}%`),
-      },
-    });
-
-    const data = await this.userRepository.find({
-      order: {
-        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
-      },
-      skip: queryArgs.skip,
-      take: queryArgs.take,
-      where: {
-        username: Like(`%${queryArgs.filter}%`),
-      },
-    });
-    return { data, count };
+    return super.queryAll(queryArgs, 'username');
   }
 
   /**
