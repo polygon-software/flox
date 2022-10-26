@@ -80,9 +80,7 @@ export class UserResolver extends AbstractSearchQueryResolver<
    */
   @Public()
   @Query(() => UserQueryOutput, { name: 'queryUsers' })
-  queryAllUsers(
-    @Args('searchUsersQuery') queryArgs: SearchQueryArgs,
-  ): Promise<UserQueryOutput> {
+  queryAllUsers(@Args() queryArgs: SearchQueryArgs): Promise<UserQueryOutput> {
     return super.queryAll(queryArgs);
   }
 
