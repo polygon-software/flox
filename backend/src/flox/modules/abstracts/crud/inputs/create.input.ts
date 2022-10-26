@@ -1,17 +1,4 @@
-import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsBoolean, IsUUID } from 'class-validator';
+import { InputType } from '@nestjs/graphql';
 
 @InputType()
-export class CreateInput {
-  @Field(() => Boolean)
-  @IsBoolean()
-  publicReadAccess = false;
-
-  @Field(() => [ID])
-  @IsUUID(4, { each: true })
-  readAccess: string[] = [];
-
-  @Field(() => [ID])
-  @IsUUID(4, { each: true })
-  writeAccess: string[] = [];
-}
+export class CreateInput {}

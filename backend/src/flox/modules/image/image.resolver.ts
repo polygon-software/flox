@@ -13,6 +13,7 @@ import { ForbiddenError } from 'apollo-server-express';
 import { FileService } from '../file/file.service';
 import { GetAllImagesArgs } from './dto/args/get-all-images.args';
 import { AbstractSearchQueryResolver } from '../abstracts/search/abstract-search-query.resolver';
+import { GetOneArgs } from '../abstracts/crud/dto/get-one.args';
 
 @Resolver(() => Image)
 export class ImageResolver extends AbstractSearchQueryResolver<
@@ -40,7 +41,6 @@ export class ImageResolver extends AbstractSearchQueryResolver<
   @Query(() => Image, { name: 'image' })
   async getImage(
     @Args() getImageArgs: GetImageArgs,
-    @CurrentUser() user: User,
   ): Promise<Image> {
     return this.imageService.getImage(getImageArgs);
   }
@@ -91,9 +91,12 @@ export class ImageResolver extends AbstractSearchQueryResolver<
     @Args('createImageInput') createImageInput: CreateImageInput,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    const file = await this.fileService.getPrivateFile({
-      uuid: createImageInput.file,
-    });
+    const file = await this.fileService.getOneForUser(
+      {
+        uuid: createImageInput.file,
+      } as GetOneArgs,
+      user,
+    );
     if (user.role !== DEFAULT_ROLES.ADMIN && file.owner.uuid !== user.uuid) {
       throw new ForbiddenError(
         'Cannot create image for file that belongs to someone else',
