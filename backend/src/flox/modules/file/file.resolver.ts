@@ -14,6 +14,7 @@ import S3File from './entities/file.entity';
 import { GetMultipleFilesArgs } from './dto/args/get-multiple-files.args';
 import { UpdateFileInput } from './dto/input/update-file.input';
 import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
+import { CreateFileInput } from './dto/input/create-file.input';
 
 @Resolver(() => S3File)
 export class FileResolver extends AbstractCrudAccessControlResolver<
@@ -105,6 +106,22 @@ export class FileResolver extends AbstractCrudAccessControlResolver<
   ): Promise<S3File[]> {
     const files = await super.getAllPublic(getAllFilesArgs);
     return this.fileService.addFileUrls(files, getAllFilesArgs);
+  }
+
+  /**
+   * Creates a new file and returns a presigned url
+   * @param createFileInputs - new file specifications
+   * @param user - logged-in user
+   * @returns updated file
+   */
+  @LoggedIn()
+  @Mutation(() => String)
+  async createFile(
+    @Args() createFileInputs: CreateFileInput,
+    @CurrentUser() user: User,
+  ): Promise<string> {
+    const file = await super.create(createFileInputs, user);
+    return this.fileService.createSignedUploadUrl(file);
   }
 
   /**

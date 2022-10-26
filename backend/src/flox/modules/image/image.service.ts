@@ -14,12 +14,13 @@ import { FileService } from '../file/file.service';
 import { DeleteImageInput } from './dto/input/delete-image.input';
 import { GetFileArgs } from '../file/dto/args/get-file.args';
 import { GetAllImagesArgs } from './dto/args/get-all-images.args';
-import { DeleteFileInput } from '../file/dto/input/delete-file.input';
 import { ConfigService } from '@nestjs/config';
 import { CreateLabelsInput } from './dto/input/create-labels.input';
 import { Label } from './entities/label.entity';
 import { BoundingBox } from './entities/bounding-box.entity';
 import { AbstractSearchQueryService } from '../abstracts/search/abstract-search-query.service';
+import { GetOneArgs } from '../abstracts/crud/dto/get-one.args';
+import { User } from "../auth/entities/user.entity";
 
 @Injectable()
 export class ImageService extends AbstractSearchQueryService<Image> {
@@ -74,9 +75,10 @@ export class ImageService extends AbstractSearchQueryService<Image> {
   /**
    * Queries for one Image
    * @param getImageArgs - contains image uuid
+   * @param user - user that owns image
    * @returns Queried image
    */
-  async getImage(getImageArgs: GetImageArgs): Promise<Image> {
+  async getImage(getImageArgs: GetImageArgs, user: User): Promise<Image> {
     const image = await this.imageRepository.findOneOrFail({
       where: {
         uuid: getImageArgs.uuid,
@@ -88,9 +90,12 @@ export class ImageService extends AbstractSearchQueryService<Image> {
         },
       },
     });
-    const file = await this.fileService.getPrivateFile({
-      uuid: image.file.uuid,
-    } as GetFileArgs);
+    const file = await this.fileService.getOneForUser(
+      {
+        uuid: image.file.uuid,
+      } as GetOneArgs,
+      user,
+    );
     return {
       ...image,
       file,

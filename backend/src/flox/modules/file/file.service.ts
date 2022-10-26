@@ -8,15 +8,9 @@ import {
   S3,
 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
-import { v4 as uuid } from 'uuid';
-import { GetFileArgs } from './dto/args/get-file.args';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { User } from '../auth/entities/user.entity';
 import { AbstractCrudAccessControlService } from '../abstracts/crud-access-control/abstract-crud-access-control.service';
 import S3File from './entities/file.entity';
-import { GetMultipleArgs } from '../abstracts/crud/dto/get-multiple.args';
-import { GetMultipleFilesArgs } from './dto/args/get-multiple-files.args';
-import { GetAllFilesArgs } from './dto/args/get-all-files.args';
 
 @Injectable()
 export class FileService extends AbstractCrudAccessControlService<S3File> {
@@ -47,16 +41,11 @@ export class FileService extends AbstractCrudAccessControlService<S3File> {
   }
 
   /**
-   * Uploads a file to the private or public S3 bucket
-   * @param content - file content as uploaded by the user
+   * Creates a presigned URL for uploading a file
    * @param file - database entry of file
-   * @returns file including access url
+   * @returns pre-signed URL for upload
    */
-  async uploadS3File(
-    content: Express.Multer.File,
-    file: S3File,
-  ): Promise<S3File> {
-    //File upload
+  async createSignedUploadUrl(file: S3File): Promise<string> {
     const uploadParams = {
       Bucket: this.configService.getOrThrow(
         file.publicReadAccess
@@ -64,26 +53,12 @@ export class FileService extends AbstractCrudAccessControlService<S3File> {
           : 'AWS_PRIVATE_BUCKET_NAME',
       ),
       Key: file.key,
-      Body: content.buffer,
-      ContentType: content.mimetype,
+      Body: 'BODY',
     };
-    await this.s3.send(new PutObjectCommand(uploadParams));
-    await this.fileRepository.update(file.uuid, {
-      mimetype: content.mimetype,
-      size: content.size,
-      filename: content.filename || content.originalname,
+    const command = new PutObjectCommand(uploadParams);
+    return getSignedUrl(this.s3, command, {
+      expiresIn: 60 * 60,
     });
-    if (file.publicReadAccess) {
-      const url = `https://${this.configService.getOrThrow(
-        'AWS_PUBLIC_BUCKET_NAME',
-      )}.s3.${this.configService.getOrThrow('AWS_MAIN_REGION')}.amazonaws.com/${
-        file.key
-      }`;
-      await this.fileRepository.update(file.uuid, { url });
-    } else {
-      return this.addFileUrl(file, { expires: 60 * 60 * 24 } as GetFileArgs);
-    }
-    return file;
   }
 
   /**
