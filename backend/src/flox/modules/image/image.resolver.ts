@@ -22,8 +22,8 @@ export class ImageResolver {
 
   /**
    * Returns all images stored in database. Only accessible to admins
-   * @param {GetAllImagesArgs} getAllImagesArgs - take and skip parameters
-   * @returns {Promise<Image[]>} All Images
+   * @param getAllImagesArgs - take and skip parameters
+   * @returns All Images
    */
   @AdminOnly()
   @Query(() => [Image], { name: 'images' })
@@ -32,10 +32,10 @@ export class ImageResolver {
   }
 
   /**
-   * Returns an Image that wraps an s3 bucket file
-   * @param {GetImageArgs }getImageArgs - contains uuid of image
-   * @param {User} user - Currently logged-in user
-   * @returns {Promise<Image>} Requested image
+   * Returns an Image that wraps a s3 bucket file
+   * @param getImageArgs - contains uuid of image
+   * @param user - Currently logged-in user
+   * @returns Requested image
    */
   @LoggedIn()
   @Query(() => Image, { name: 'image' })
@@ -53,9 +53,9 @@ export class ImageResolver {
   /**
    * Gets the image wrapper for a specified file. Useful if you know the file but not the
    * corresponding image wrapper
-   * @param {GetImageForFileArgs} getImageForFileArgs - contains the uuid of the file
-   * @param {User} user - Currently logged-in user
-   * @returns {Promise<Image>} Requested image
+   * @param getImageForFileArgs - contains the uuid of the file
+   * @param user - Currently logged-in user
+   * @returns Requested image
    */
   @LoggedIn()
   @Query(() => Image, { name: 'imageForFile' })
@@ -72,9 +72,9 @@ export class ImageResolver {
 
   /**
    * Creates a new image for an already existing file
-   * @param {CreateImageInput} createImageInput - contains uuid of file to wrap
-   * @param {User} user - Currently logged-in user
-   * @returns {Promise<Image>} Requested image
+   * @param createImageInput - contains uuid of file to wrap
+   * @param user - Currently logged-in user
+   * @returns Requested image
    */
   @LoggedIn()
   @Mutation(() => Image)
@@ -95,9 +95,9 @@ export class ImageResolver {
 
   /**
    * Deletes an image (without deleting the corresponding file)
-   * @param {DeleteImageInput} deleteImageInput - contains uuid of image
-   * @param {User} user - Currently logged-in user
-   * @returns {Promise<Image>} Requested image
+   * @param deleteImageInput - contains uuid of image
+   * @param user - Currently logged-in user
+   * @returns Requested image
    */
   @LoggedIn()
   @Mutation(() => Image)

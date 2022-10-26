@@ -1,25 +1,24 @@
 <template>
   <q-page class="flex flex-center">
     <!-- Active Flox modules -->
-    <ModuleStatus/>
+    <ModuleStatus />
 
     <!-- DOS own backend -->
-    <DosChecker />
+    <q-no-ssr>
+      <DosChecker />
+    </q-no-ssr>
 
     <!-- Form example -->
-    <SampleForm/>
+    <SampleForm />
 
     <!-- Private File Upload -->
-    <FileUpload :accepted-files="'image/*, .pdf' " target="/uploadPrivateFile"/>
+    <FileUpload :accepted-files="'image/*, .pdf'" target="/uploadPrivateFile" />
 
     <!-- Private Files Table -->
     <FilesTable private />
 
     <!-- Labeled Images -->
-    <q-input
-      v-model="imageUuid"
-      label="Image UUID containing labels"
-    />
+    <q-input v-model="imageUuid" label="Image UUID containing labels" />
 
     <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />
 
@@ -34,9 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref} from 'vue';
+import { ref, Ref } from 'vue';
 import Joi from 'joi';
-import {ValidationRule} from 'quasar';
 
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import SampleForm from 'components/sample/SampleForm.vue';
@@ -46,22 +44,62 @@ import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
 import DataTable from 'components/tables/DataTable.vue';
 import DosChecker from 'components/sample/DosChecker.vue';
 
-import { QUERY_USERS } from 'src/data/queries/USER';
-import {DELETE_USER, UPDATE_USER} from 'src/data/mutations/USER';
-import {ColumnInterface} from 'components/tables/useDataTable';
-import {User} from 'src/data/types/User';
-import { joiRule } from 'src/helpers/validation/validation-helpers';
+import { QUERY_USERS } from 'src/flox/modules/auth/user.query';
+import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
+import { ColumnInterface } from 'components/tables/useDataTable';
+import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import {
+  joiSchemaToValidationRule,
+  ValidationRule,
+} from 'src/tools/validation.tool';
+import { useMeta } from 'quasar';
+import { i18n } from 'boot/i18n';
 
 const imageUuid: Ref<string> = ref('');
 
 const emailRules: ValidationRule[] = [
-  joiRule(Joi.string().email({ tlds: { allow: false }}), 'validation.email'),
+  joiSchemaToValidationRule(
+    Joi.string().email({ tlds: { allow: false } }),
+    'validation.email'
+  ),
 ];
 
-const columns: Ref<ColumnInterface<User>[]> = ref([
+const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   { name: 'uuid', label: 'UUID', field: 'uuid', sortable: true },
-  { name: 'username', label: 'Username', field: 'username', sortable: true, edit: true },
-  { name: 'email', label: 'E-Mail', field: 'email', sortable: true, edit: true, qInputProps: { rules: emailRules } },
-  { name: 'role', label: 'Role', field: 'role', sortable: true },
-])
+  {
+    name: 'username',
+    label: 'Username',
+    field: 'username',
+    sortable: true,
+    edit: true,
+  },
+  {
+    name: 'email',
+    label: 'E-Mail',
+    field: 'email',
+    sortable: true,
+    edit: true,
+    qInputProps: { rules: emailRules },
+  },
+  {
+    name: 'role',
+    label: 'Role',
+    field: 'role',
+    sortable: true,
+  },
+]);
+
+useMeta({
+  title: i18n.global.t('pages.sample.meta.title'),
+  meta: {
+    description: {
+      name: 'description',
+      content: i18n.global.t('pages.sample.meta.description'),
+    },
+    keywords: {
+      name: 'keywords',
+      content: i18n.global.t('pages.sample.meta.keywords'),
+    },
+  },
+});
 </script>

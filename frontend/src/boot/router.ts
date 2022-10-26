@@ -1,16 +1,16 @@
 import { boot } from 'quasar/wrappers';
 import ROUTES, { CONSTRAINED_ROUTES, PUBLIC_ROUTES } from '../router/routes';
-import { Router } from 'vue-router';
-import { User } from 'src/data/types/User';
-import { fetchMyUser } from 'src/helpers/data/fetch-helpers';
-import {isModuleActive} from 'src/flox';
-import {MODULES} from 'src/flox/MODULES';
-import {useAuthStore} from 'stores/authentication';
+import { Router, RouteRecordRaw } from 'vue-router';
+import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import { isModuleActive } from 'src/flox';
+import { MODULES } from 'src/flox/MODULES';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import { fetchMyUser } from 'src/flox/modules/auth/services/user.service';
 
 let routerInstance: Router;
 
-export default boot(({ router, store }) => {
-  const $authStore = useAuthStore()
+export default boot(({ router }) => {
+  const $authStore = useAuthStore();
   routerInstance = router;
   // eslint-disable-next-line sonarjs/cognitive-complexity
   router.beforeEach(async (to) => {
@@ -43,7 +43,7 @@ export default boot(({ router, store }) => {
       }
 
       // Case 3: role module is active and route has some constraints
-      if(isModuleActive(MODULES.ROLES)){
+      if (isModuleActive(MODULES.ROLES)) {
         const matchingConstrainedRoute = CONSTRAINED_ROUTES.find(
           (constrainedRoute) => constrainedRoute.path === to.path
         );
@@ -58,8 +58,8 @@ export default boot(({ router, store }) => {
       }
     } else {
       // Default case: disallow access if not public
-      if(!PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)){
-        return ROUTES.LOGIN
+      if (!PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)) {
+        return ROUTES.LOGIN;
       }
     }
   });
@@ -70,14 +70,14 @@ export { routerInstance };
 
 /**
  * Returns the component of the dashboard for the currently logged-in user
- * @param {User|null} user - the user, if any
- * @param {useAuthStore} $authStore - authentication store
- * @returns {any} - the layout component
+ * @param user - the user, if any
+ * @param $authStore - authentication store
+ * @returns the layout component
  */
 function getUserRoleRoute(
-  user: User | null,
+  user: UserEntity | null,
   $authStore: ReturnType<typeof useAuthStore>
-) {
+): RouteRecordRaw {
   // Non-logged in: Redirect to log in
   if (!user) {
     $authStore.setCognitoUser(undefined);
@@ -85,7 +85,7 @@ function getUserRoleRoute(
     return ROUTES.LOGIN;
   }
 
-  return ROUTES.SAMPLE
+  return ROUTES.SAMPLE;
   // TODO application specific: add paths per role
   // switch (user.role) {
   //   case ROLE.ADMIN:

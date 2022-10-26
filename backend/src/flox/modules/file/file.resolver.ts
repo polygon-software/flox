@@ -18,8 +18,8 @@ export class FileResolver {
 
   /**
    * Returns all public files stored within database
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
-   * @returns {Promise<PublicFile[]>} List of public files
+   * @param getAllFilesArgs - contains take and skip parameters
+   * @returns List of public files
    */
   @AdminOnly()
   @Query(() => [PublicFile], { name: 'allPublicFiles' })
@@ -30,10 +30,10 @@ export class FileResolver {
   }
 
   /**
-   * Returns private files of logged in user
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
-   * @param {User} user - currently logged in user
-   * @returns {Promise<PrivateFile[]>} Users private files
+   * Returns private files of logged-in user
+   * @param getAllFilesArgs - contains take and skip parameters
+   * @param user - currently logged-in user
+   * @returns Users private files
    */
   @LoggedIn() // TODO application specific: set appropriate guards here
   @Query(() => [PrivateFile], { name: 'allMyFiles' })
@@ -46,8 +46,8 @@ export class FileResolver {
 
   /**
    * Gets a public file
-   * @param {GetPublicFileArgs} getPublicFileArgs - contains UUID
-   * @returns {Promise<PublicFile>} - the file
+   * @param getPublicFileArgs - contains UUID
+   * @returns the file
    */
   @Public()
   @Query(() => PublicFile, { name: 'publicFile' })
@@ -59,9 +59,9 @@ export class FileResolver {
 
   /**
    * Gets a private file
-   * @param {GetPrivateFileArgs} getPrivateFileArgs - contains UUID and optionally, expiration time
-   * @param {User} user - logged-in user
-   * @returns {Promise<PrivateFile>} - the file, if the user is allowed to access it
+   * @param getPrivateFileArgs - contains UUID and optionally, expiration time
+   * @param user - logged-in user
+   * @returns the file, if the user is allowed to access it
    */
   @LoggedIn() // TODO application specific: set appropriate guards here
   @Query(() => PrivateFile, { name: 'privateFile' })
@@ -78,9 +78,9 @@ export class FileResolver {
 
   /**
    * Deletes a private file
-   * @param {DeleteFileInput} deleteFileInput - contains UUID
-   * @param {User} user - logged-in user
-   * @returns {Promise<PrivateFile>} - the file that was deleted
+   * @param deleteFileInput - contains UUID
+   * @param user - logged-in user
+   * @returns the file that was deleted
    */
   @LoggedIn() // TODO application specific: set appropriate guards here
   @Mutation(() => PrivateFile)
@@ -104,8 +104,8 @@ export class FileResolver {
 
   /**
    * Deletes a public file
-   * @param {DeleteFileInput} deleteFileInput - contains UUID
-   * @returns {Promise<PrivateFile>} - the file that was deleted
+   * @param deleteFileInput - contains UUID
+   * @returns the file that was deleted
    */
   @AdminOnly() // TODO application specific: set appropriate guards here
   @Mutation(() => PublicFile)

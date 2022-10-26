@@ -1,10 +1,6 @@
 <template>
   <FloxWrapper :module="MODULES.FILE">
-    <q-card
-      class="q-ma-md"
-      style="width: 600px;"
-    >
-
+    <q-card class="q-ma-md" style="width: 600px">
       <!-- Header -->
       <q-card-section>
         <div class="row flex-center justify-between">
@@ -22,11 +18,7 @@
               :multiple="props.multiple"
               @update:model-value="onFilePicked"
             />
-            <q-btn
-              icon="add"
-              flat
-              @click="addFile()"
-            >
+            <q-btn icon="add" flat @click="addFile()">
               <q-tooltip>
                 {{ $t('files.add') }}
               </q-tooltip>
@@ -56,7 +48,7 @@
         </div>
       </q-card-section>
 
-      <q-separator inset/>
+      <q-separator inset />
 
       <!-- Files -->
       <q-card-section>
@@ -72,9 +64,9 @@
               </q-item-label>
 
               <q-item-label caption>
-                {{ $t('files.status') }}: {{ $t(`files.status_${file.status}`) }}
+                {{ $t('files.status') }}:
+                {{ $t(`files.status_${file.status}`) }}
               </q-item-label>
-
             </q-item-section>
 
             <!-- Preview -->
@@ -83,19 +75,14 @@
                 v-if="file.content.type.includes('image/')"
                 :src="file.url"
                 spinner-color="primary"
-                style="max-width: 75%;"
+                style="max-width: 75%"
               />
-              <q-item-label
-                v-else
-              >
+              <q-item-label v-else>
                 {{ $t('files.no_preview') }}
               </q-item-label>
             </q-item-section>
 
-            <q-item-section
-              top
-              side
-            >
+            <q-item-section top side>
               <q-btn
                 class="gt-xs"
                 size="12px"
@@ -118,59 +105,56 @@
 </template>
 
 <script setup lang="ts">
-import {
-  QFile,
-  QVueGlobals,
-  useQuasar,
-} from 'quasar';
-import {defineProps, Ref, ref} from 'vue';
+import { QFile, QVueGlobals, useQuasar } from 'quasar';
+import { defineProps, Ref, ref } from 'vue';
 import { AxiosResponse } from 'axios';
-import { FILE_UPLOAD_STATUS } from 'src/data/ENUM';
+import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
-import {MODULES} from 'src/flox/MODULES'
-import {uploadFile} from 'src/helpers/tools/file-helpers'
-import {i18n} from 'boot/i18n';
+import { MODULES } from 'src/flox/MODULES';
+import { uploadFile } from 'src/flox/modules/file/tools/upload.tools';
+import { i18n } from 'boot/i18n';
+import Env from 'src/env';
 
 interface SelectedFile {
-  content: File,
-  url: string,
-  status: string,
+  content: File;
+  url: string;
+  status: string;
 }
 
-const $q: QVueGlobals = useQuasar()
+const $q: QVueGlobals = useQuasar();
 
 const props = defineProps({
   acceptedFiles: {
     type: String,
-    default: '.jpg, .pdf, image/*'
+    default: '.jpg, .pdf, image/*',
   },
   autoUpload: {
     type: Boolean,
-    default: false
+    default: false,
   },
   hideUploadButton: {
     type: Boolean,
-    default: false
+    default: false,
   },
   maxFiles: {
     type: Number,
-    default: 100
+    default: 100,
   },
   maxFileSize: {
     type: Number,
-    default: 5e7
+    default: 5e7,
   },
   maxTotalSize: {
     type: Number,
-    default: 5e7
+    default: 5e7,
   },
   multiple: {
     type: Boolean,
-    default: true
+    default: true,
   },
   sendRaw: {
     type: Boolean,
-    default: true
+    default: true,
   },
   target: {
     type: String,
@@ -178,109 +162,109 @@ const props = defineProps({
   },
   url: {
     type: String,
-    default: process.env.VUE_APP_BACKEND_URL ?? ''
-  }
-})
+    default: Env.VUE_APP_BACKEND_URL,
+  },
+});
 
-const showQFile = ref(false)
-const filePicker: Ref<QFile|null> = ref(null)
-const selectedFiles: Ref<Array<SelectedFile>> = ref([])
+const showQFile = ref(false);
+const filePicker: Ref<QFile | null> = ref(null);
+const selectedFiles: Ref<Array<SelectedFile>> = ref([]);
 
 /**
  * Notify the user that the upload failed
- * @param {Array<SelectedFile>} failedEntries - failed entries
- * @return {void} void
+ * @param failedEntries - failed entries
  */
-function onFailed (failedEntries: Array<SelectedFile>) {
+function onFailed(failedEntries: Array<SelectedFile>): void {
   $q.notify({
     type: 'negative',
-    message: i18n.global.t('files.failed_upload', {value: failedEntries.length})
-  })
+    message: i18n.global.t('files.failed_upload', {
+      value: failedEntries.length,
+    }),
+  });
 }
 
 /**
  * Notify the user that the upload succeeded
- * @param {Array<SelectedFile>} successfulEntries - successful entries
- * @return {void} void
+ * @param successfulEntries - successful entries
  */
-function onSuccess (successfulEntries: Array<SelectedFile>) {
+function onSuccess(successfulEntries: Array<SelectedFile>): void {
   $q.notify({
     type: 'positive',
-    message: i18n.global.t('files.successfully_uploaded', {value: successfulEntries.length})
-  })
+    message: i18n.global.t('files.successfully_uploaded', {
+      value: successfulEntries.length,
+    }),
+  });
 }
 
 /**
  * Open the dialog to select files for upload
- * @returns {void} - done
  */
-function addFile() {
-  showQFile.value = true
-  filePicker.value?.pickFiles()
+function addFile(): void {
+  showQFile.value = true;
+  filePicker.value?.pickFiles();
 }
 
 /**
  * Removes a file from the file list
- * @param {int} index - The index of file to remove
- * @return {void} void
+ * @param index - The index of file to remove
  */
-function removeFile(index: number) {
-  selectedFiles.value.splice(index)
+function removeFile(index: number): void {
+  selectedFiles.value.splice(index);
 }
 
 /**
  * Removes all files that have been selected so far
- * @return {void} void
  */
-function clearFileList() {
-  selectedFiles.value = []
+function clearFileList(): void {
+  selectedFiles.value = [];
 }
 
 /**
  * Triggered when a file is picked from the file picker dialog
- * @param {S3File[]} newFiles - the newly picked files
- * @returns {void}
+ * @param newFiles - the newly picked files
  */
-function onFilePicked(newFiles: File[]){
-  showQFile.value = false
+function onFilePicked(newFiles: File[]): void {
+  showQFile.value = false;
   for (const file of newFiles) {
     const newSelectedFile: SelectedFile = {
       content: file,
       url: URL.createObjectURL(file),
-      status: FILE_UPLOAD_STATUS.READY,
-    }
-    selectedFiles.value = selectedFiles.value.concat(newSelectedFile)
+      status: UPLOAD_STATUS.READY,
+    };
+    selectedFiles.value = selectedFiles.value.concat(newSelectedFile);
   }
 }
 
 /**
  * Triggers a separate upload for each file. Only uploads files that haven't been successfully uploaded before.
- * @return {void} void
  */
-async function uploadFiles() {
-  const url = `${props.url}${props.target}`
+async function uploadFiles(): Promise<void> {
+  const url = `${props.url}${props.target}`;
   for (const file of selectedFiles.value) {
-    if (file.status !== FILE_UPLOAD_STATUS.DONE) {
-      file.status = FILE_UPLOAD_STATUS.LOADING
-      const res: AxiosResponse = await uploadFile(file.content, url)
+    if (file.status !== UPLOAD_STATUS.DONE) {
+      file.status = UPLOAD_STATUS.LOADING;
+      const res: AxiosResponse = await uploadFile(file.content, url);
       if (res.status === 201) {
-        file.status = FILE_UPLOAD_STATUS.DONE
-      }
-      else {
-        file.status = FILE_UPLOAD_STATUS.FAILED
+        file.status = UPLOAD_STATUS.DONE;
+      } else {
+        file.status = UPLOAD_STATUS.FAILED;
       }
     }
   }
   // Check for successful uploads
-  const successfulUploads = selectedFiles.value.filter((file) => file.status === FILE_UPLOAD_STATUS.DONE)
+  const successfulUploads = selectedFiles.value.filter(
+    (file) => file.status === UPLOAD_STATUS.DONE
+  );
   if (successfulUploads.length > 0) {
-    onSuccess(successfulUploads)
+    onSuccess(successfulUploads);
   }
 
   // Check for failed uploads
-  const failedUploads = selectedFiles.value.filter((file) => file.status === FILE_UPLOAD_STATUS.FAILED)
+  const failedUploads = selectedFiles.value.filter(
+    (file) => file.status === UPLOAD_STATUS.FAILED
+  );
   if (failedUploads.length > 0) {
-    onFailed(failedUploads)
+    onFailed(failedUploads);
   }
 }
 </script>

@@ -22,9 +22,11 @@ import { User } from '../auth/entities/user.entity';
 export class FileService {
   // S3 credentials
   private readonly credentials = {
-    region: this.configService.get('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.get('ADMIN_AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('ADMIN_AWS_SECRET_ACCESS_KEY'),
+    region: this.configService.getOrThrow('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow('ADMIN_AWS_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.getOrThrow(
+      'ADMIN_AWS_SECRET_ACCESS_KEY',
+    ),
   };
 
   // AWS S3 instance
@@ -44,14 +46,14 @@ export class FileService {
 
   /**
    * Uploads a file to the public S3 bucket
-   * @param {Express.Multer.File} file - the file to upload
-   * @returns {Promise<PublicFile>} - the newly uploaded file
+   * @param file - the file to upload
+   * @returns the newly uploaded file
    */
   async uploadPublicFile(file: Express.Multer.File): Promise<PublicFile> {
     // File upload
     const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
-      Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
+      Bucket: this.configService.getOrThrow('AWS_PUBLIC_BUCKET_NAME'),
       Key: key,
       Body: file.buffer,
       ContentType: file.mimetype,
@@ -59,9 +61,9 @@ export class FileService {
     await this.s3.send(new PutObjectCommand(uploadParams));
     const configService = new ConfigService();
 
-    const url = `https://${configService.get(
+    const url = `https://${configService.getOrThrow(
       'AWS_PUBLIC_BUCKET_NAME',
-    )}.s3.${configService.get('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
+    )}.s3.${configService.getOrThrow('AWS_MAIN_REGION')}.amazonaws.com/${key}`;
 
     const newFile = this.publicFilesRepository.create({
       key,
@@ -76,9 +78,9 @@ export class FileService {
 
   /**
    * Uploads a file to the private S3 bucket
-   * @param {Express.Multer.File} file - the file to upload
-   * @param {User} owner - the file owner
-   * @returns {Promise<PrivateFile>} - the newly uploaded file
+   * @param file - the file to upload
+   * @param owner - the file owner
+   * @returns the newly uploaded file
    */
   async uploadPrivateFile(
     file: Express.Multer.File,
@@ -87,7 +89,7 @@ export class FileService {
     //File upload
     const key = `${uuid()}-${file.originalname}`;
     const uploadParams = {
-      Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+      Bucket: this.configService.getOrThrow('AWS_PRIVATE_BUCKET_NAME'),
       Key: key,
       Body: file.buffer,
     };
@@ -105,13 +107,13 @@ export class FileService {
 
   /**
    * Gets a public file
-   * @param {GetPublicFileArgs} getPublicFileArgs - contains UUID
-   * @returns {Promise<PublicFile>} - the file
+   * @param getPublicFileArgs - contains UUID
+   * @returns the file
    */
   async getPublicFile(
     getPublicFileArgs: GetPublicFileArgs,
   ): Promise<PublicFile> {
-    return this.publicFilesRepository.findOne({
+    return this.publicFilesRepository.findOneOrFail({
       where: {
         uuid: getPublicFileArgs.uuid,
       },
@@ -120,8 +122,8 @@ export class FileService {
 
   /**
    * Returns all public files stored within database
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
-   * @returns {Promise<PublicFile[]>} List of public files
+   * @param getAllFilesArgs - contains take and skip parameters
+   * @returns List of public files
    */
   async getAllPublicFiles(
     getAllFilesArgs: GetAllFilesArgs,
@@ -133,10 +135,10 @@ export class FileService {
   }
 
   /**
-   * Returns private files of logged in user
-   * @param {GetAllFilesArgs} getAllFilesArgs - contains take and skip parameters
-   * @param {User} user - currently logged in user
-   * @returns {Promise<PrivateFile[]>} Users private files
+   * Returns private files of logged-in user
+   * @param getAllFilesArgs - contains take and skip parameters
+   * @param user - currently logged-in user
+   * @returns Users private files
    */
   async getAllMyFiles(
     getAllFilesArgs: GetAllFilesArgs,
@@ -154,8 +156,8 @@ export class FileService {
 
   /**
    * Gets a private file
-   * @param {GetPrivateFileArgs} getPrivateFileArgs - contains UUID and optionally, expiration time
-   * @returns {Promise<PrivateFile>} - the file
+   * @param getPrivateFileArgs - contains UUID and optionally, expiration time
+   * @returns the file
    */
   async getPrivateFile(
     getPrivateFileArgs: GetPrivateFileArgs,
@@ -176,12 +178,12 @@ export class FileService {
       const url = await getSignedUrl(
         this.s3,
         new GetObjectCommand({
-          Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+          Bucket: this.configService.getOrThrow('AWS_PRIVATE_BUCKET_NAME'),
           Key: fileInfo.key,
         }),
         options,
       );
-      const result = await this.privateFilesRepository.findOne({
+      const result = await this.privateFilesRepository.findOneOrFail({
         where: {
           uuid: getPrivateFileArgs.uuid,
         },
@@ -197,9 +199,9 @@ export class FileService {
 
   /**
    * Deletes a private or public file
-   * @param {DeleteFileInput} deleteFileInput - contains UUID
-   * @param {boolean} isPublic - whether the file is public (otherwise, is private)
-   * @returns {Promise<PrivateFile|PublicFile>} - the file that was deleted
+   * @param deleteFileInput - contains UUID
+   * @param isPublic - whether the file is public (otherwise, is private)
+   * @returns the file that was deleted
    */
   async deleteFile(
     deleteFileInput: DeleteFileInput,
@@ -209,7 +211,7 @@ export class FileService {
       ? this.publicFilesRepository
       : this.privateFilesRepository;
 
-    const file: PrivateFile | PublicFile = await repository.findOne({
+    const file: PrivateFile | PublicFile | null = await repository.findOne({
       where: {
         uuid: deleteFileInput.uuid,
       },
@@ -219,7 +221,7 @@ export class FileService {
       // Delete on S3
       await this.s3.send(
         new DeleteObjectCommand({
-          Bucket: this.configService.get(
+          Bucket: this.configService.getOrThrow(
             isPublic ? 'AWS_PUBLIC_BUCKET_NAME' : 'AWS_PRIVATE_BUCKET_NAME',
           ),
           Key: file.key,
@@ -227,9 +229,7 @@ export class FileService {
       );
 
       // Delete in database (TypeScript does not understand variable typing between PrivateFile / PublicFile here)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const deletedFile = await repository.remove(file);
+      const deletedFile = await repository.remove(file as PrivateFile);
       deletedFile.uuid = deleteFileInput.uuid;
       return deletedFile;
     }

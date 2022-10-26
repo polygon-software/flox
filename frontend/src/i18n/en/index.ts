@@ -7,12 +7,14 @@ export default {
     confirm: 'Confirm',
     ok: 'OK',
     loading: 'Loading',
-    save: 'Save',
     failed: 'Failed',
     successful: 'Successful',
+    save: 'Save',
   },
   authentication: {
     authentication: 'Authentication',
+    welcome_back: 'Welcome back!',
+    welcome_text: 'You can sign in to access your existing account',
     login: 'Log in',
     logout: 'Log out',
     signup: 'Sign up',
@@ -75,6 +77,7 @@ export default {
   messages: {
     success: 'Success',
     failure: 'Failure',
+    login_failed: 'Login failed',
     email_sent: 'E-Mail(s) sent',
     file_uploaded: 'Successfully uploaded file',
     files_uploaded: 'Successfully uploaded files',
@@ -95,12 +98,22 @@ export default {
     entry_deleted: 'Entry deleted',
   },
   date: {
-    date_format: 'MM.DD.YYYY'
+    date_format: 'MM.DD.YYYY',
   },
   validation: {
-    email: 'E-Mail invalid'
+    email: 'E-Mail invalid',
   },
   table: {
-    ctrl_shift_hint: 'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection'
-  }
+    ctrl_shift_hint:
+      'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection',
+  },
+  pages: {
+    sample: {
+      meta: {
+        title: 'Flox',
+        description: 'This is a flox sample page',
+        keywords: 'flox,sample,polygon',
+      },
+    },
+  },
 };

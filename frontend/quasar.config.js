@@ -8,12 +8,11 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { configure } = require('quasar/wrappers');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+const checker = require('vite-plugin-checker').default;
 
-module.exports = configure(function (ctx) {
+module.exports = configure(function ({ prod }) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: {
@@ -38,15 +37,6 @@ module.exports = configure(function (ctx) {
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
-      // "ionicons-v4",
-      // "mdi-v5",
-      // "fontawesome-v5",
-      // "eva-icons",
-      // "themify",
-      // "line-awesome",
-      // "roboto-font-latin-ext", // this or either "roboto-font", NEVER both!
-
-      'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
     ],
 
@@ -84,6 +74,7 @@ module.exports = configure(function (ctx) {
       },
 
       vitePlugins: [
+        checker({ typescript: true }),
         [
           '@intlify/vite-plugin-vue-i18n',
           {
@@ -119,7 +110,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Cookies', 'Dialog', 'Notify'],
+      plugins: ['Cookies', 'Dialog', 'Notify', 'Meta'],
     },
 
     // https://v2.quasar.dev/options/animations
@@ -154,7 +145,7 @@ module.exports = configure(function (ctx) {
       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
-        ctx.prod ? 'compression' : '',
+        prod ? 'compression' : '',
         'render', // keep this as last one
       ],
     },
@@ -188,9 +179,6 @@ module.exports = configure(function (ctx) {
 
       // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
       electron: {
-        // extendElectronMainConf (esbuildConf)
-        // extendElectronPreloadConf (esbuildConf)
-
         inspectPort: 5858,
 
         bundler: 'packager', // "packager" or "builder"

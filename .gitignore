@@ -54,3 +54,4 @@ lerna-debug.log*
 /backend/dist/
 
 *.tfvars
+/**/.env

@@ -4,7 +4,6 @@ import {
   Post,
   Req,
   Res,
-  UnauthorizedException,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -52,11 +51,6 @@ export class FileController {
     if (!file) {
       res.send(new BadRequestException('File expected on this endpoint'));
       return;
-    }
-
-    // Ensure userID is given
-    if (!req['user']?.userId) {
-      res.send(new UnauthorizedException());
     }
 
     const newFile = await this.fileService.uploadPrivateFile(file, user);

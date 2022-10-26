@@ -7,6 +7,7 @@ import {
   RouteRecordRaw,
 } from 'vue-router';
 import routes from './routes';
+import Env from 'src/env';
 
 /*
  * If not building with SSR mode, you can
@@ -17,12 +18,10 @@ import routes from './routes';
  * with the Router instance.
  */
 
-export default route(function (/* { stores, ssrContext } */) {
+export default route(function () {
   const historyType =
-    process.env.VUE_ROUTER_MODE === 'history'
-      ? createWebHistory
-      : createWebHashHistory;
-  const createHistory = process.env.SERVER ? createMemoryHistory : historyType;
+    Env.MODE === 'ssr' ? createWebHistory : createWebHashHistory;
+  const createHistory = Env.SERVER ? createMemoryHistory : historyType;
 
   const routeArray: RouteRecordRaw[] = Object.values(routes);
 
@@ -33,6 +32,6 @@ export default route(function (/* { stores, ssrContext } */) {
     // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
-    history: createHistory(process.env.VUE_ROUTER_BASE),
+    history: createHistory('/'),
   });
 });

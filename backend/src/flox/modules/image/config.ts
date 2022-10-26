@@ -20,9 +20,9 @@ const defaultConfig: ImageModuleConfig = {
 
 /**
  * Gets the module's actual configuration
- * @returns {FileModuleConfig} - configuration
+ * @returns configuration
  */
-export function moduleConfig() {
+export function moduleConfig(): ImageModuleConfig {
   return mergeConfigurations(
     defaultConfig,
     floxModuleOptions(MODULES.IMAGE),

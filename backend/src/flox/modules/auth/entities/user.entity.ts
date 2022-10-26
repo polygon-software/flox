@@ -35,11 +35,10 @@ export class User extends BaseEntity {
 
   /**
    * Before inserting or updating data, ensures the role matches one given in config
-   * @returns {void}
    */
   @BeforeInsert()
   @BeforeUpdate()
-  validateRole() {
+  validateRole(): void {
     if (isModuleActive(MODULES.ROLES)) {
       // Determine roles from config
       const allowedRoles = moduleConfig().roles;

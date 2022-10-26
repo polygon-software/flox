@@ -12,7 +12,7 @@ import { IS_PUBLIC_KEY } from './authentication.decorator';
 export class JwtAuthGuard extends AuthGuard('jwt') {
   /**
    * Constructor
-   * @param {Reflector} reflector - reflector
+   * @param reflector - reflector
    */
   constructor(private reflector: Reflector) {
     super();
@@ -20,17 +20,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   /**
    * Gets the request from context
-   * @param {ExecutionContext} context - execution context of the request
-   * @returns {any} - the request
+   * @param context - execution context of the request
+   * @returns the request
    */
-  getRequest(context: ExecutionContext): any {
+  getRequest(context: ExecutionContext): ReturnType<typeof getRequest> {
     return getRequest(context);
   }
 
   /**
    * Determines whether a user can activate the route based on the authentication status
-   * @param {ExecutionContext} context - execution context
-   * @returns {boolean} - whether the user can activate
+   * @param context - execution context
+   * @returns whether the user can activate
    */
   public canActivate(
     context: ExecutionContext,

@@ -9,12 +9,14 @@ import { MODULES } from './MODULES';
 import { EmailModule } from './modules/email/email.module';
 import { getActiveFloxModuleNames } from './core/flox-helpers';
 
+export type FloxModules = FileModule | ImageModule | UserModule | EmailModule;
+
 /**
  * Returns the active Flox modules based on flox.config.json
- * @returns {any[]} - list of Modules
+ * @returns list of Modules
  */
-export function floxModules() {
-  const modules = [];
+export function floxModules(): FloxModules[] {
+  const modules: FloxModules[] = [];
 
   // Get active modules from config
   const moduleNames = getActiveFloxModuleNames();
@@ -44,10 +46,10 @@ export function floxModules() {
 
 /**
  * Returns the providers to use based on flox.config.json
- * @returns {any[]} - list of providers
+ * @returns list of providers
  */
-export function floxProviders() {
-  const providers = [];
+export function floxProviders(): any[] {
+  const providers: any[] = [];
 
   // Get active modules from config
   const moduleNames = getActiveFloxModuleNames();

@@ -1,14 +1,11 @@
 <template>
-  <q-dialog
-    ref="dialogRef"
-  >
+  <q-dialog ref="dialogRef">
     <q-card class="q-pa-md" style="width: 400px; min-height: 250px">
-      <q-form
-        class="q-gutter-md"
-        @submit="onSubmit"
-      >
-        <h5 class="q-ma-none q-mt-lg text-center">{{ $t('messages.verification') }}</h5>
-        <p> {{ $t('messages.enter_verification_code')}} </p>
+      <q-form class="q-gutter-md" @submit="onSubmit">
+        <h5 class="q-ma-none q-mt-lg text-center">
+          {{ $t('messages.verification') }}
+        </h5>
+        <p>{{ $t('messages.enter_verification_code') }}</p>
         <q-input
           v-model="verificationCode"
           :label="$t('authentication.verification_code')"
@@ -48,53 +45,49 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, defineEmits, PropType, ref} from 'vue';
-import {QVueGlobals, useDialogPluginComponent} from 'quasar';
-import {AuthenticationService} from 'src/flox/modules/auth/services/AuthService';
-import {showSuccessNotification} from 'src/helpers/tools/notification-helpers';
-import {i18n} from 'boot/i18n';
+import { defineProps, defineEmits, PropType, ref } from 'vue';
+import { QVueGlobals, useDialogPluginComponent } from 'quasar';
+import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
+import { showSuccessNotification } from 'src/tools/notification.tool';
+import { i18n } from 'boot/i18n';
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emit = defineEmits(useDialogPluginComponent.emits)
+defineEmits(useDialogPluginComponent.emits);
 
 const props = defineProps({
-  q : {
+  q: {
     type: Object as PropType<QVueGlobals>,
     required: true,
   },
   authService: {
     type: Object as PropType<AuthenticationService>,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const verificationCode = ref('')
-const codeSent = ref(false)
+const verificationCode = ref('');
+const codeSent = ref(false);
 
 /**
  * On submit, emit data outwards
- * @returns {void}
  */
-function onSubmit(){
-  onDialogOK({code: verificationCode.value,})
+function onSubmit(): void {
+  onDialogOK({ code: verificationCode.value });
 }
 
 /**
  * Resends the e-mail confirmation code
- * @returns {Promise<void>} - done
  */
-async function resendCode(){
-  if(!codeSent.value){
+async function resendCode(): Promise<void> {
+  if (!codeSent.value) {
     codeSent.value = true;
 
     // Re-send code
-    await props.authService?.resendEmailVerificationCode()
+    await props.authService?.resendEmailVerificationCode();
 
     // Show success message
-    showSuccessNotification(props.q, i18n.global.t('messages.code_resent'))
+    showSuccessNotification(props.q, i18n.global.t('messages.code_resent'));
   }
 }
-
 </script>

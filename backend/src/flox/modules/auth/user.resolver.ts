@@ -18,8 +18,8 @@ export class UserResolver implements SearchQueryInterfaceResolver {
 
   /**
    * Gets a set of users by UUID
-   * @param {GetUsersArgs} getUsersArgs - contains UUIDs of users
-   * @returns {Promise<User[]>} - the users
+   * @param getUsersArgs - contains UUIDs of users
+   * @returns the users
    */
   @Public()
   @Query(() => [User], { name: 'users' })
@@ -29,7 +29,7 @@ export class UserResolver implements SearchQueryInterfaceResolver {
 
   /**
    * Gets all users
-   * @returns {Promise<User[]>} - the users
+   * @returns the users
    */
   @Public()
   @Query(() => [User], { name: 'allUsers' })
@@ -39,8 +39,8 @@ export class UserResolver implements SearchQueryInterfaceResolver {
 
   /**
    * Queries for all rows that fit query criteria, best used in combination with the DataTable
-   * @param {SearchQueryArgs} queryArgs - contain table filtering rules
-   * @returns {Promise<UserQueryOutput>} data that fit criteria
+   * @param queryArgs - contain table filtering rules
+   * @returns data that fit criteria
    */
   @Public()
   @Query(() => UserQueryOutput, { name: 'queryUsers' })
@@ -50,8 +50,8 @@ export class UserResolver implements SearchQueryInterfaceResolver {
 
   /**
    * Gets a user by UUID
-   * @param {GetUserArgs} getUserArgs - contains UUID
-   * @returns {Promise<User>} - the user
+   * @param getUserArgs - contains UUID
+   * @returns the user
    */
   @Public()
   @Query(() => User, { name: 'user' })
@@ -61,8 +61,8 @@ export class UserResolver implements SearchQueryInterfaceResolver {
 
   /**
    * Creates a User
-   * @param {CreateUserInput} createUserInput - contains all user data
-   * @returns {Promise<User>} - the newly created user
+   * @param createUserInput - contains all user data
+   * @returns the newly created user
    */
   @Public()
   @Mutation(() => User)
@@ -74,8 +74,8 @@ export class UserResolver implements SearchQueryInterfaceResolver {
 
   /**
    * Updates a given user
-   * @param {UpdateUserInput} updateUserInput - contains UUID and any new user data
-   * @returns {Promise<User>} - the updated user
+   * @param updateUserInput - contains UUID and any new user data
+   * @returns the updated user
    */
   @Public()
   @Mutation(() => User)
@@ -87,8 +87,8 @@ export class UserResolver implements SearchQueryInterfaceResolver {
 
   /**
    * Deletes a given user
-   * @param {DeleteUserInput} deleteUserInput - contains UUID
-   * @returns {Promise<User>} - the deleted user
+   * @param deleteUserInput - contains UUID
+   * @returns the deleted user
    */
   @Public()
   @Mutation(() => User)
@@ -100,8 +100,8 @@ export class UserResolver implements SearchQueryInterfaceResolver {
 
   /**
    * Get the DB user for the currently logged in Cognito user
-   * @param {Record<string, string>}  user - currently logged-in user from request
-   * @returns {Promise<User>} - the user, if any
+   * @param user - currently logged-in user from request
+   * @returns the user, if any
    */
   @LoggedIn()
   @Query(() => User, { name: 'myUser' })

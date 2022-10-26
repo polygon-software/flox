@@ -13,18 +13,18 @@ export class EmailController {
 
   // SES credentials
   private readonly credentials: Credentials = {
-    region: this.configService.get('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.get('AWS_SES_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('AWS_SES_SECRET_ACCESS_KEY'),
+    region: this.configService.getOrThrow('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow('AWS_SES_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.getOrThrow('AWS_SES_SECRET_ACCESS_KEY'),
   };
 
   /**
    * Sends a test e-mail to the given address (in 'recipient' param of query)
    * NOTE: This is just an example endpoint. Since it is not marked @Public / @LoggedIn, it will not be accessible by default.
-   * @param {Request} req - the request
-   * @param {unknown} res - reply to send on
-   * @param {Record<string, unknown>} query - request query
-   * @returns {Promise<void>} - done
+   * @param req - the request
+   * @param res - reply to send on
+   * @param query - request query
+   * @returns done
    */
   @Post('/sendTestEmail')
   async sendTestEmail(
@@ -46,7 +46,7 @@ export class EmailController {
       await this.emailService.sendTestEmail(recipient, this.credentials);
       res.status(200);
       res.send();
-    } catch (e) {
+    } catch (e: any) {
       res.status(500);
       res.send(`Error occurred while sending e-mail: ${e.message}`);
     }

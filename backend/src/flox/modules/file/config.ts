@@ -20,9 +20,9 @@ const defaultConfig: FileModuleConfig = {
 
 /**
  * Gets the module's actual configuration
- * @returns {FileModuleConfig} - configuration
+ * @returns configuration
  */
-export function moduleConfig() {
+export function moduleConfig(): FileModuleConfig {
   return mergeConfigurations(
     defaultConfig,
     floxModuleOptions(MODULES.FILE),

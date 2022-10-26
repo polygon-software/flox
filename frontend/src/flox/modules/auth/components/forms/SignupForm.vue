@@ -1,13 +1,10 @@
 <template>
   <FloxWrapper :module="MODULES.AUTH">
     <div class="column q-pa-sm text-center">
-      <h5 class="q-ma-none" style="margin-bottom: 20px;">
+      <h5 class="q-ma-none" style="margin-bottom: 20px">
         {{ $t('authentication.signup') }}
       </h5>
-      <q-form
-        class="q-gutter-md"
-        @submit="onSubmit"
-      >
+      <q-form class="q-gutter-md" @submit="onSubmit">
         <component
           :is="field.component"
           v-for="field in fields"
@@ -36,59 +33,51 @@
 </template>
 
 <script setup lang="ts">
-import {FIELDS} from 'src/data/FIELDS';
-import { Form } from 'src/helpers/form/form-helpers'
-import {defineEmits} from 'vue';
+import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
+import { MultiPageForm } from 'components/forms/MultiPageForm';
+import { defineEmits } from 'vue';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
-import {MODULES} from 'src/flox/MODULES';
-import * as auth from 'src/flox/modules/auth'
+import { MODULES } from 'src/flox/MODULES';
+import * as auth from 'src/flox/modules/auth';
 
-const emit = defineEmits(['submit', 'cancel'])
+const emit = defineEmits(['submit', 'cancel']);
 
-const fields = auth.moduleConfig().emailAsUsername ?
-[
-  FIELDS.EMAIL,
-  FIELDS.PASSWORD_REPEAT
-] : [
-    FIELDS.USERNAME,
-    FIELDS.EMAIL,
-    FIELDS.PASSWORD_REPEAT
-  ]
+const fields = auth.moduleConfig().emailAsUsername
+  ? [FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT]
+  : [FIELDS.USERNAME, FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT];
 
-const form = new Form()
+const form = new MultiPageForm();
 form.pages.value = [
   {
     key: 'login',
     label: 'Login',
-    fields: fields
-  }
-]
+    fields: fields,
+  },
+];
 
 /**
  * Emits the 'submit' event, containing the form's data
- * @returns {void}
  */
 function onSubmit(): void {
   const formValues: Record<string, unknown> = {
     email: form.values.value[FIELDS.EMAIL.key],
     password: form.values.value[FIELDS.PASSWORD_REPEAT.key],
-  }
+  };
 
   // If e-mail is also username, add 'username' field directly (identical to e-mail)
-  if( auth.moduleConfig().emailAsUsername){
-    formValues.username = form.values.value[FIELDS.EMAIL.key]
+  if (auth.moduleConfig().emailAsUsername) {
+    formValues.username = form.values.value[FIELDS.EMAIL.key];
   } else {
-    formValues.username = form.values.value[FIELDS.USERNAME.key]
+    formValues.username = form.values.value[FIELDS.USERNAME.key];
   }
 
-  emit('submit', formValues)
+  emit('submit', formValues);
 }
 
 /**
  * On cancel, emit 'cancel' event
- * @returns {Promise<void>} - done
  */
-function onCancel() {
-  emit('cancel')
+function onCancel(): void {
+  emit('cancel');
 }
 </script>

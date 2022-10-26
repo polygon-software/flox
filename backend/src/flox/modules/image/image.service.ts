@@ -24,9 +24,11 @@ import { BoundingBox } from './entities/bounding-box.entity';
 export class ImageService {
   // Rekognition credentials
   private readonly credentials = {
-    region: this.configService.get('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+    region: this.configService.getOrThrow('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow('ADMIN_AWS_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.getOrThrow(
+      'ADMIN_AWS_SECRET_ACCESS_KEY',
+    ),
   };
 
   // Rekognition instance
@@ -52,8 +54,8 @@ export class ImageService {
 
   /**
    * Returns all images stored within the database
-   * @param {GetAllImagesArgs} getAllImagesArgs - contains take and skip parameters
-   * @returns {Promise<Image[]>} Images
+   * @param getAllImagesArgs - contains take and skip parameters
+   * @returns Images
    */
   async getAllImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
     return this.imageRepository.find({
@@ -64,8 +66,8 @@ export class ImageService {
 
   /**
    * Queries for one Image
-   * @param {GetImageArgs} getImageArgs - contains image uuid
-   * @returns {Promise<Image>} Queried image
+   * @param getImageArgs - contains image uuid
+   * @returns Queried image
    */
   async getImage(getImageArgs: GetImageArgs): Promise<Image> {
     const image = await this.imageRepository.findOneOrFail({
@@ -90,8 +92,8 @@ export class ImageService {
 
   /**
    * Queries for an image given the file uuid
-   * @param {GetImageForFileArgs} getImageForFileArgs - contains uuid of file
-   * @returns {Promise<Image>} Queried image
+   * @param getImageForFileArgs - contains uuid of file
+   * @returns Queried image
    */
   async getImageForFile(
     getImageForFileArgs: GetImageForFileArgs,
@@ -108,8 +110,8 @@ export class ImageService {
 
   /**
    * Creates a new image given a file
-   * @param {CreateImageInput} createImageInput - contains file uuid
-   * @returns {Promise<Image>} Created Image
+   * @param createImageInput - contains file uuid
+   * @returns Created Image
    */
   async createImage(createImageInput: CreateImageInput): Promise<Image> {
     const file = await this.fileService.getPrivateFile({
@@ -137,8 +139,8 @@ export class ImageService {
 
   /**
    * Performs object recognition on image and stores appropriate labels to database
-   * @param {CreateLabelsInput} createLabelsInput - contains uuid of image to perform object recognition
-   * @returns {Promise<Image>} Image wit labels
+   * @param createLabelsInput - contains uuid of image to perform object recognition
+   * @returns Image wit labels
    */
   async createLabelsForImage(
     createLabelsInput: CreateLabelsInput,
@@ -151,24 +153,32 @@ export class ImageService {
       new DetectLabelsCommand({
         Image: {
           S3Object: {
-            Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+            Bucket: this.configService.getOrThrow('AWS_PRIVATE_BUCKET_NAME'),
             Name: image.file.key,
           },
         },
       }),
     );
 
+    if (!rekognitionData.Labels) {
+      throw new Error('No labels detected on provided image');
+    }
     const rekognizedLabels = rekognitionData.Labels.map((label) => {
+      if (!label.Instances) {
+        return [];
+      }
       return label.Instances.map((instance) => ({
         image: image,
         name: label.Name,
         confidence: instance.Confidence,
-        parents: label.Parents.map((parent) => parent.Name),
+        parents: label.Parents
+          ? label.Parents.map((parent) => parent.Name ?? '')
+          : ([] as string[]),
         boundingBox: {
-          width: instance.BoundingBox.Width,
-          height: instance.BoundingBox.Height,
-          left: instance.BoundingBox.Left,
-          top: instance.BoundingBox.Top,
+          width: instance?.BoundingBox?.Width,
+          height: instance?.BoundingBox?.Height,
+          left: instance?.BoundingBox?.Left,
+          top: instance?.BoundingBox?.Top,
         },
       }));
     }).flat();
@@ -189,11 +199,11 @@ export class ImageService {
 
   /**
    * Removes the database entry of a given image without deleting the file
-   * @param {DeleteImageInput} deleteImageInput - contains the uuid of the image to delete
-   * @returns {Promise<Image>} Deleted Image
+   * @param deleteImageInput - contains the uuid of the image to delete
+   * @returns Deleted Image
    */
   async deleteImage(deleteImageInput: DeleteImageInput): Promise<Image> {
-    const image = await this.imageRepository.findOne({
+    const image = await this.imageRepository.findOneOrFail({
       where: {
         uuid: deleteImageInput.uuid,
       },

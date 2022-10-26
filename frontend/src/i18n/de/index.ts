@@ -13,6 +13,8 @@ export default {
   },
   authentication: {
     authentication: 'Authentifizierung',
+    welcome_back: 'Willkommen zurück!',
+    welcome_text: 'Du kannst dich mit deinem existierenden Account einloggen',
     login: 'Anmelden',
     logout: 'Abmelden',
     signup: 'Registrieren',
@@ -98,12 +100,22 @@ export default {
     entry_deleted: 'Eintrag gelöscht',
   },
   date: {
-    date_format: 'DD.MM.YYYY'
+    date_format: 'DD.MM.YYYY',
   },
   validation: {
-    email: 'E-Mail ungültig'
+    email: 'E-Mail ungültig',
   },
   table: {
-    ctrl_shift_hint: 'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren'
-  }
+    ctrl_shift_hint:
+      'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren',
+  },
+  pages: {
+    sample: {
+      meta: {
+        title: 'Flox',
+        description: 'Dies ist eine flox demo-seite',
+        keywords: 'flox,demo,polygon',
+      },
+    },
+  },
 };

@@ -55,7 +55,6 @@ describe('UserResolver', () => {
       uuid: 'test-UUID-1234',
       createdAt: date,
       updatedAt: date,
-      deletedAt: null,
       validateRole: jest.fn(),
       ...input,
     };
