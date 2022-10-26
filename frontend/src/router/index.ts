@@ -18,9 +18,9 @@ import Env from 'src/env';
  * with the Router instance.
  */
 
-export default route(function (/* { stores, ssrContext } */) {
+export default route(function () {
   const historyType =
-    Env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory;
+    Env.MODE === 'ssr' ? createWebHistory : createWebHashHistory;
   const createHistory = Env.SERVER ? createMemoryHistory : historyType;
 
   const routeArray: RouteRecordRaw[] = Object.values(routes);
@@ -32,6 +32,6 @@ export default route(function (/* { stores, ssrContext } */) {
     // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
-    history: createHistory(Env.VUE_ROUTER_BASE),
+    history: createHistory('/'),
   });
 });

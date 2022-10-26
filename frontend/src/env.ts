@@ -88,22 +88,6 @@ export default {
     return asString(process.env.VUE_APP_BACKEND_URL);
   },
   /**
-   * @returns router mode
-   */
-  get VUE_ROUTER_MODE(): 'hash' | 'history' | 'abstract' {
-    return asOneOf<string>(asString(process.env.VUE_ROUTER_MODE), [
-      'hash',
-      'history',
-      'abstract',
-    ]) as unknown as 'hash' | 'history' | 'abstract';
-  },
-  /**
-   * @returns Returns vue router base path
-   */
-  get VUE_ROUTER_BASE(): string {
-    return asString(process.env.VUE_ROUTER_BASE);
-  },
-  /**
    * @returns whether this build is a production build
    */
   get VUE_APP_PRODUCTION(): boolean {
