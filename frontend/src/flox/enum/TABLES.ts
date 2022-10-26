@@ -1,0 +1,11 @@
+export enum TABLES {
+  FILE = 'FILE',
+  IMAGE = 'IMAGE',
+  LABEL = 'LABEL',
+  BOUNDING_BOX = 'BOUNDING_BOX',
+  USER = 'USER',
+  USER_GROUP = 'USER_GROUP',
+  NOTIFICATION = 'NOTIFICATION',
+  PAYMENT = 'PAYMENT',
+}
+export const ALL_TABLES = Object.values(TABLES);
