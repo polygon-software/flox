@@ -1,32 +1,80 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import PublicFile from './entities/publicFile.entity';
 import { FileService } from './file.service';
-import { GetPublicFileArgs } from './dto/args/get-public-file.args';
-import { GetPrivateFileArgs } from './dto/args/get-private-file.args';
-import PrivateFile from './entities/privateFile.entity';
+import { GetFileArgs } from './dto/args/get-file.args';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
-import { DeleteFileInput } from './dto/input/delete-file.input';
 import { GetAllFilesArgs } from './dto/args/get-all-files.args';
-import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
+import {
+  AdminOnly,
+  CurrentUser,
+  OptionalUser,
+} from '../roles/authorization.decorator';
 import { User } from '../auth/entities/user.entity';
-import { DEFAULT_ROLES } from '../roles/config';
-import { ForbiddenError } from 'apollo-server-express';
+import { AbstractCrudAccessControlResolver } from '../abstracts/crud-access-control/abstract-crud-access-control.resolver';
+import S3File from './entities/file.entity';
+import { GetMultipleFilesArgs } from './dto/args/get-multiple-files.args';
+import { UpdateFileInput } from './dto/input/update-file.input';
+import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
 
-@Resolver(() => PublicFile)
-export class FileResolver {
-  constructor(private readonly fileService: FileService) {}
+@Resolver(() => S3File)
+export class FileResolver extends AbstractCrudAccessControlResolver<
+  S3File,
+  FileService
+> {
+  constructor(private readonly fileService: FileService) {
+    super();
+  }
 
-  /**
-   * Returns all public files stored within database
-   * @param getAllFilesArgs - contains take and skip parameters
-   * @returns List of public files
-   */
-  @AdminOnly()
-  @Query(() => [PublicFile], { name: 'allPublicFiles' })
-  async getAllPublicFiles(
+  get service(): FileService {
+    return this.fileService;
+  }
+
+  @Public()
+  @Query(() => S3File, { name: 'file' })
+  async getFile(
+    @Args() getFileArgs: GetFileArgs,
+    @OptionalUser() user?: User,
+  ): Promise<S3File> {
+    const file = await super.getOne(getFileArgs, user);
+    return this.fileService.addFileUrl(file, getFileArgs);
+  }
+
+  @Public()
+  @Query(() => [S3File], { name: 'files' })
+  async getFiles(
+    @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
+    @OptionalUser() user?: User,
+  ): Promise<S3File[]> {
+    const files = await super.getMultiple(getMultipleFilesArgs, user);
+    return this.fileService.addFileUrls(files, getMultipleFilesArgs);
+  }
+
+  @LoggedIn()
+  @Query(() => [S3File], { name: 'myFiles' })
+  async getMyFiles(
+    @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
+    @CurrentUser() user: User,
+  ): Promise<S3File[]> {
+    const files = await super.getMultipleOfMine(getMultipleFilesArgs, user);
+    return this.fileService.addFileUrls(files, getMultipleFilesArgs);
+  }
+
+  @LoggedIn()
+  @Query(() => [S3File], { name: 'publicFiles' })
+  async getPublicFiles(
+    @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
+  ): Promise<S3File[]> {
+    const files = await super.getMultiplePublic(getMultipleFilesArgs);
+    return this.fileService.addFileUrls(files, getMultipleFilesArgs);
+  }
+
+  @LoggedIn()
+  @Query(() => [S3File], { name: 'allFiles' })
+  async getAllFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
-  ): Promise<PublicFile[]> {
-    return this.fileService.getAllPublicFiles(getAllFilesArgs);
+    @OptionalUser() user?: User,
+  ): Promise<S3File[]> {
+    const files = await super.getAll(getAllFilesArgs, user);
+    return this.fileService.addFileUrls(files, getAllFilesArgs);
   }
 
   /**
@@ -35,87 +83,59 @@ export class FileResolver {
    * @param user - currently logged-in user
    * @returns Users private files
    */
-  @LoggedIn() // TODO application specific: set appropriate guards here
-  @Query(() => [PrivateFile], { name: 'allMyFiles' })
+  @LoggedIn()
+  @Query(() => [S3File], { name: 'allMyFiles' })
   async getAllMyFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @CurrentUser() user: User,
-  ): Promise<PrivateFile[]> {
-    return this.fileService.getAllMyFiles(getAllFilesArgs, user);
+  ): Promise<S3File[]> {
+    const files = await super.getAllOfMine(getAllFilesArgs, user);
+    return this.fileService.addFileUrls(files, getAllFilesArgs);
   }
 
   /**
-   * Gets a public file
-   * @param getPublicFileArgs - contains UUID
-   * @returns the file
+   * Returns all public files stored within database
+   * @param getAllFilesArgs - contains take and skip parameters
+   * @returns List of public files
    */
-  @Public()
-  @Query(() => PublicFile, { name: 'publicFile' })
-  async getPublicFile(
-    @Args() getPublicFileArgs: GetPublicFileArgs,
-  ): Promise<PublicFile> {
-    return this.fileService.getPublicFile(getPublicFileArgs);
+  @AdminOnly()
+  @Query(() => [S3File], { name: 'allPublicFiles' })
+  async getAllPublicFiles(
+    @Args() getAllFilesArgs: GetAllFilesArgs,
+  ): Promise<S3File[]> {
+    const files = await super.getAllPublic(getAllFilesArgs);
+    return this.fileService.addFileUrls(files, getAllFilesArgs);
   }
 
   /**
-   * Gets a private file
-   * @param getPrivateFileArgs - contains UUID and optionally, expiration time
+   * Updates a file
+   * @param updateFileInput - new file content
    * @param user - logged-in user
-   * @returns the file, if the user is allowed to access it
+   * @returns updated file
    */
-  @LoggedIn() // TODO application specific: set appropriate guards here
-  @Query(() => PrivateFile, { name: 'privateFile' })
-  async getPrivateFile(
-    @Args() getPrivateFileArgs: GetPrivateFileArgs,
+  @LoggedIn()
+  @Mutation(() => S3File)
+  async updateFile(
+    @Args() updateFileInput: UpdateFileInput,
     @CurrentUser() user: User,
-  ): Promise<PrivateFile> {
-    const file = await this.fileService.getPrivateFile(getPrivateFileArgs);
-    if (user.role !== DEFAULT_ROLES.ADMIN || file.owner !== user.uuid) {
-      throw new ForbiddenError('File does not belong to logged in user');
-    }
-    return file;
+  ): Promise<S3File> {
+    const file = await super.update(updateFileInput, user);
+    return this.fileService.addFileUrl(file, updateFileInput);
   }
 
   /**
-   * Deletes a private file
-   * @param deleteFileInput - contains UUID
+   * Deletes a file
+   * @param deleteInput - contains UUID of file
    * @param user - logged-in user
    * @returns the file that was deleted
    */
-  @LoggedIn() // TODO application specific: set appropriate guards here
-  @Mutation(() => PrivateFile)
-  async deletePrivateFile(
-    @Args('deleteFileInput') deleteFileInput: DeleteFileInput,
+  @LoggedIn()
+  @Mutation(() => S3File)
+  async deleteFile(
+    @Args() deleteInput: DeleteInput,
     @CurrentUser() user: User,
-  ): Promise<PrivateFile> {
-    const file = await this.fileService.getPrivateFile({
-      uuid: deleteFileInput.uuid,
-    } as GetPrivateFileArgs);
-    if (user.role !== DEFAULT_ROLES.ADMIN || file.owner !== user.uuid) {
-      throw new ForbiddenError(
-        'Cannot delete file that does not belong to user',
-      );
-    }
-    return this.fileService.deleteFile(
-      deleteFileInput,
-      false,
-    ) as unknown as PrivateFile;
-  }
-
-  /**
-   * Deletes a public file
-   * @param deleteFileInput - contains UUID
-   * @returns the file that was deleted
-   */
-  @AdminOnly() // TODO application specific: set appropriate guards here
-  @Mutation(() => PublicFile)
-  async deletePublicFile(
-    @Args('deleteFileInput')
-    deleteFileInput: DeleteFileInput,
-  ): Promise<PublicFile> {
-    return this.fileService.deleteFile(
-      deleteFileInput,
-      true,
-    ) as unknown as PublicFile;
+  ): Promise<S3File> {
+    const file = await super.delete(deleteInput, user);
+    return this.fileService.deleteFileFromS3(file);
   }
 }

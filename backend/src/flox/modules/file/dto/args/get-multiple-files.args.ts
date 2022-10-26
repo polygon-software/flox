@@ -1,9 +1,8 @@
-import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { Field, Int } from '@nestjs/graphql';
 import { IsNumber, IsOptional } from 'class-validator';
-import { GetAllArgs } from '../../../abstracts/crud/dto/get-all.args';
+import { GetMultipleArgs } from '../../../abstracts/crud/dto/get-multiple.args';
 
-@ArgsType()
-export class GetAllFilesArgs extends GetAllArgs {
+export class GetMultipleFilesArgs extends GetMultipleArgs {
   @Field(() => Int, {
     nullable: true,
     description: 'URL expiration duration (in seconds)',

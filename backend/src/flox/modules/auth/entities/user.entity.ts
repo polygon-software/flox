@@ -1,10 +1,17 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  ManyToMany,
+} from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { IsEmail, IsString } from 'class-validator';
 import { moduleConfig } from '../../roles/config';
 import { MODULES } from '../../../MODULES';
 import { isModuleActive } from '../../../core/flox-helpers';
+import { UserGroup } from '../../access-control/entities/user-group.entity';
 
 /**
  * A user registered within cognito, having a role and contact information
@@ -32,6 +39,12 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   @IsString()
   role: string;
+
+  @Field(() => [UserGroup], {
+    description: 'User groups this user belongs to',
+  })
+  @ManyToMany(() => UserGroup, (userGroup) => userGroup.users)
+  public groups: UserGroup[];
 
   /**
    * Before inserting or updating data, ensures the role matches one given in config
