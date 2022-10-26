@@ -3,14 +3,15 @@ import { UserService } from './user.service';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
-import { DeleteUserInput } from './dto/input/delete-user.input';
 import { User } from './entities/user.entity';
-import { GetUsersArgs } from './dto/args/get-users.args';
 import { LoggedIn, Public } from './authentication.decorator';
 import { CurrentUser } from '../roles/authorization.decorator';
-import { AbstractSearchQueryResolver } from '../interfaces/abstract-search-query.resolver';
-import { SearchQueryArgs } from '../interfaces/dto/args/search-query.args';
+import { AbstractSearchQueryResolver } from '../abstracts/search/abstract-search-query.resolver';
+import { SearchQueryArgs } from '../abstracts/search/dto/args/search-query.args';
 import { UserQueryOutput } from './output/user-query.output';
+import { GetAllArgs } from '../abstracts/crud/dto/get-all.args';
+import { GetMultipleArgs } from '../abstracts/crud/dto/get-multiple.args';
+import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
 
 @Resolver(() => User)
 export class UserResolver extends AbstractSearchQueryResolver<
@@ -26,35 +27,15 @@ export class UserResolver extends AbstractSearchQueryResolver<
   }
 
   /**
-   * Gets a set of users by UUID
-   * @param getUsersArgs - contains UUIDs of users
-   * @returns the users
+   * Get the DB user for the currently logged in Cognito user
+   * @param user - currently logged-in user from request
+   * @returns the user, if any
    */
-  @Public()
-  @Query(() => [User], { name: 'users' })
-  async getUsers(@Args() getUsersArgs: GetUsersArgs): Promise<User[]> {
-    return this.userService.getUsers(getUsersArgs);
-  }
-
-  /**
-   * Gets all users
-   * @returns the users
-   */
-  @Public()
-  @Query(() => [User], { name: 'allUsers' })
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.getAllUsers();
-  }
-
-  /**
-   * Queries for all rows that fit query criteria, best used in combination with the DataTable
-   * @param queryArgs - contain table filtering rules
-   * @returns data that fit criteria
-   */
-  @Public()
-  @Query(() => UserQueryOutput, { name: 'queryUsers' })
-  queryAll(@Args() queryArgs: SearchQueryArgs): Promise<UserQueryOutput> {
-    return this.userService.queryAll(queryArgs);
+  @LoggedIn()
+  @Query(() => User, { name: 'myUser' })
+  async myUser(@CurrentUser() user: User): Promise<User> {
+    // Get user where user's UUID matches Cognito ID
+    return this.userService.getMyUser(user);
   }
 
   /**
@@ -69,6 +50,43 @@ export class UserResolver extends AbstractSearchQueryResolver<
   }
 
   /**
+   * Gets a set of users by UUID
+   * @param getMultiple - contains UUIDs of users
+   * @returns the users
+   */
+  @Public()
+  @Query(() => [User], { name: 'users' })
+  async getMultipleUsers(
+    @Args() getMultiple: GetMultipleArgs,
+  ): Promise<User[]> {
+    return super.getMultiple(getMultiple);
+  }
+
+  /**
+   * Gets all users
+   * @param getAll - contains take and skip
+   * @returns the users
+   */
+  @Public()
+  @Query(() => [User], { name: 'allUsers' })
+  async getAllUsers(@Args() getAll: GetAllArgs): Promise<User[]> {
+    return super.getAll(getAll);
+  }
+
+  /**
+   * Queries for all rows that fit query criteria, best used in combination with the DataTable
+   * @param queryArgs - contain table filtering rules
+   * @returns data that fit criteria
+   */
+  @Public()
+  @Query(() => UserQueryOutput, { name: 'queryUsers' })
+  queryAllUsers(
+    @Args('searchUsersQuery') queryArgs: SearchQueryArgs,
+  ): Promise<UserQueryOutput> {
+    return super.queryAll(queryArgs);
+  }
+
+  /**
    * Creates a User
    * @param createUserInput - contains all user data
    * @returns the newly created user
@@ -78,7 +96,7 @@ export class UserResolver extends AbstractSearchQueryResolver<
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
-    return this.userService.createUser(createUserInput);
+    return super.create(createUserInput);
   }
 
   /**
@@ -91,31 +109,19 @@ export class UserResolver extends AbstractSearchQueryResolver<
   async updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
-    return this.userService.updateUser(updateUserInput);
+    return super.update(updateUserInput);
   }
 
   /**
    * Deletes a given user
-   * @param deleteUserInput - contains UUID
+   * @param deleteInput - contains UUID
    * @returns the deleted user
    */
   @Public()
   @Mutation(() => User)
   async deleteUser(
-    @Args('deleteUserInput') deleteUserInput: DeleteUserInput,
+    @Args('deleteUserInput') deleteInput: DeleteInput,
   ): Promise<User> {
-    return this.userService.deleteUser(deleteUserInput);
-  }
-
-  /**
-   * Get the DB user for the currently logged in Cognito user
-   * @param user - currently logged-in user from request
-   * @returns the user, if any
-   */
-  @LoggedIn()
-  @Query(() => User, { name: 'myUser' })
-  async myUser(@CurrentUser() user: User): Promise<User> {
-    // Get user where user's UUID matches Cognito ID
-    return this.userService.getMyUser(user);
+    return super.delete(deleteInput);
   }
 }

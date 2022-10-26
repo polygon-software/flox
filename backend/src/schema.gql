@@ -56,7 +56,7 @@ input DeleteImageInput {
   uuid: ID!
 }
 
-input DeleteUserInput {
+input DeleteInput {
   uuid: ID!
 }
 
@@ -130,7 +130,7 @@ type Mutation {
   deleteImage(deleteImageInput: DeleteImageInput!): Image!
   deletePrivateFile(deleteFileInput: DeleteFileInput!): PrivateFile!
   deletePublicFile(deleteFileInput: DeleteFileInput!): PublicFile!
-  deleteUser(deleteUserInput: DeleteUserInput!): User!
+  deleteUser(deleteUserInput: DeleteInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
@@ -210,7 +210,13 @@ type Query {
     """Number of files to load"""
     take: Int = 500
   ): [PublicFile!]!
-  allUsers: [User!]!
+  allUsers(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [User!]!
   image(
     """URL expiration duration (in seconds)"""
     expires: [Float!]
@@ -229,23 +235,7 @@ type Query {
     uuid: ID!
   ): PrivateFile!
   publicFile(uuid: ID!): PublicFile!
-  queryUsers(
-    """Sort descending"""
-    descending: Boolean = false
-
-    """Search for text withinn items"""
-    filter: String
-
-    """Number of items to skip"""
-    skip: Float = 0
-
-    """Sort by property"""
-    sortBy: String
-
-    """Number of images to take"""
-    take: Float = 10
-  ): UserQueryOutput!
-  user(cognitoUuid: ID, uuid: ID): User!
+  user(cognitoUuid: ID, uuid: ID!): User!
   users(uuids: [ID!]): [User!]!
 }
 
@@ -279,12 +269,4 @@ type User {
 
   """UUID"""
   uuid: ID!
-}
-
-type UserQueryOutput {
-  """How many items are found within database"""
-  count: String!
-
-  """Users that fit query"""
-  data: [User!]!
 }

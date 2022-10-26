@@ -1,15 +1,18 @@
 import { SearchQueryArgs } from './dto/args/search-query.args';
 import SearchQueryOutputInterface from './outputs/search-query-interface.output';
+import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+import { AbstractCrudResolver } from '../crud/abstract-crud.resolver';
 import { AbstractSearchQueryService } from './abstract-search-query.service';
-import { BaseEntity } from '../../core/base-entity/entities/base-entity.entity';
 
 export abstract class AbstractSearchQueryResolver<
   Entity extends BaseEntity,
   Service extends AbstractSearchQueryService<Entity>,
-> {
+> extends AbstractCrudResolver<Entity, Service> {
   abstract get service(): Service;
 
-  protected constructor(private searchKey: keyof Entity) {}
+  protected constructor(private searchKey: keyof Entity) {
+    super();
+  }
 
   /**
    * Queries for all rows that fit query criteria, best used in combination with the DataTable

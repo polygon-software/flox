@@ -1,15 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput } from './dto/input/create-user.input';
-import { UpdateUserInput } from './dto/input/update-user.input';
 import { GetUserArgs } from './dto/args/get-user.args';
-import { GetUsersArgs } from './dto/args/get-users.args';
-import { DeleteUserInput } from './dto/input/delete-user.input';
-import { Repository, In } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { AbstractSearchQueryService } from '../interfaces/abstract-search-query.service';
-import { SearchQueryArgs } from '../interfaces/dto/args/search-query.args';
-import { UserQueryOutput } from './output/user-query.output';
+import { AbstractSearchQueryService } from '../abstracts/search/abstract-search-query.service';
 
 @Injectable()
 export class UserService extends AbstractSearchQueryService<User> {
@@ -22,48 +16,6 @@ export class UserService extends AbstractSearchQueryService<User> {
 
   get repository(): Repository<User> {
     return this.userRepository;
-  }
-
-  /**
-   * Query for users
-   * @param queryArgs - query arguments including limit, etc.
-   * @returns users that fit query
-   */
-  async queryAll(queryArgs: SearchQueryArgs): Promise<UserQueryOutput> {
-    return super.queryAll(queryArgs, 'username');
-  }
-
-  /**
-   * Creates a User
-   * @param createUserInput - contains all user data
-   * @returns the newly created user
-   */
-  async createUser(createUserInput: CreateUserInput): Promise<User> {
-    const user = this.userRepository.create(createUserInput);
-    return this.userRepository.save(user);
-  }
-
-  /**
-   * Gets a set of users by UUID
-   * @param getUsersArgs - contains UUIDs of users
-   * @returns the users
-   */
-  getUsers(getUsersArgs: GetUsersArgs): Promise<User[]> {
-    if (getUsersArgs.uuids !== undefined) {
-      return this.userRepository.findBy({
-        uuid: In(getUsersArgs.uuids),
-      });
-    } else {
-      return this.userRepository.find();
-    }
-  }
-
-  /**
-   * Gets all users
-   * @returns the users
-   */
-  getAllUsers(): Promise<User[]> {
-    return this.userRepository.find();
   }
 
   /**
@@ -92,39 +44,12 @@ export class UserService extends AbstractSearchQueryService<User> {
   }
 
   /**
-   * Updates a given user
-   * @param updateUserInput - contains UUID and any new user data
-   * @returns the updated user
-   */
-  async updateUser(updateUserInput: UpdateUserInput): Promise<User> {
-    const user = this.userRepository.create(updateUserInput);
-    await this.userRepository.update(updateUserInput.uuid, user);
-    return this.userRepository.findOneOrFail({
-      where: { uuid: updateUserInput.uuid },
-    });
-  }
-
-  /**
-   * Deletes a given user
-   * @param deleteUserInput - contains UUID
-   * @returns the deleted user
-   */
-  async deleteUser(deleteUserInput: DeleteUserInput): Promise<User> {
-    const user = await this.userRepository.findOneOrFail({
-      where: { uuid: deleteUserInput.uuid },
-    });
-    const uuid = user.uuid;
-    const deletedUser = await this.userRepository.remove(user);
-    deletedUser.uuid = uuid;
-    return deletedUser;
-  }
-
-  /**
    * Return current user given the Cognito user from the request
    * @param user - database user from request
    * @returns user
    */
   async getMyUser(user: User): Promise<User> {
+    console.log(user);
     return this.userRepository.findOneOrFail({
       where: {
         uuid: user.uuid,

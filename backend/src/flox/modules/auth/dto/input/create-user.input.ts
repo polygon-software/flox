@@ -1,8 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { CreateInput } from '../../../abstracts/crud/inputs/create.input';
 
 @InputType()
-export class CreateUserInput {
+export class CreateUserInput extends CreateInput {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
