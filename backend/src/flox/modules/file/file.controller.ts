@@ -25,6 +25,7 @@ export class FileController {
     @Req() req: Request,
     @Res() res: Response,
     @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: User,
   ): Promise<void> {
     // Verify that request contains file
     if (!file) {
@@ -33,7 +34,7 @@ export class FileController {
     }
 
     // Actually upload via FileService
-    const newFile = await this.fileService.uploadPublicFile(file);
+    const newFile = await this.fileService.uploadPublicFile(file, user);
 
     res.send(newFile);
   }

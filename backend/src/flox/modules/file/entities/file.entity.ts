@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
+import { AccessControlledEntity } from '../../access-control/entities/access-controlled.entity';
 
 /**
  * Defines a file within an AWS S3 bucket
@@ -9,11 +9,19 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 @Entity()
 @ObjectType()
-export abstract class S3File extends BaseEntity {
+export abstract class S3File extends AccessControlledEntity {
   @Field(() => String, { description: 'S3 File Key' })
   @Column()
   @IsString()
   public key: string;
+
+  @Field(() => String, {
+    nullable: true,
+    description: 'Pre-signed download URL',
+  })
+  @IsOptional()
+  @IsUrl()
+  public url?: string;
 
   @Field(() => String, { description: 'Files mime type' })
   @Column()

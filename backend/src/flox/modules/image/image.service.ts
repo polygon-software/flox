@@ -12,16 +12,17 @@ import { GetImageForFileArgs } from './dto/args/get-image-for-file.args';
 import { CreateImageInput } from './dto/input/create-image.input';
 import { FileService } from '../file/file.service';
 import { DeleteImageInput } from './dto/input/delete-image.input';
-import { GetPrivateFileArgs } from '../file/dto/args/get-private-file.args';
+import { GetFileArgs } from '../file/dto/args/get-file.args';
 import { GetAllImagesArgs } from './dto/args/get-all-images.args';
 import { DeleteFileInput } from '../file/dto/input/delete-file.input';
 import { ConfigService } from '@nestjs/config';
 import { CreateLabelsInput } from './dto/input/create-labels.input';
 import { Label } from './entities/label.entity';
 import { BoundingBox } from './entities/bounding-box.entity';
+import { AbstractSearchQueryService } from '../abstracts/search/abstract-search-query.service';
 
 @Injectable()
-export class ImageService {
+export class ImageService extends AbstractSearchQueryService<Image> {
   // Rekognition credentials
   private readonly credentials = {
     region: this.configService.getOrThrow('AWS_MAIN_REGION'),
@@ -50,7 +51,13 @@ export class ImageService {
     private readonly fileService: FileService,
 
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    super();
+  }
+
+  get repository(): Repository<Image> {
+    return this.imageRepository;
+  }
 
   /**
    * Returns all images stored within the database
@@ -83,7 +90,7 @@ export class ImageService {
     });
     const file = await this.fileService.getPrivateFile({
       uuid: image.file.uuid,
-    } as GetPrivateFileArgs);
+    } as GetFileArgs);
     return {
       ...image,
       file,
@@ -116,7 +123,7 @@ export class ImageService {
   async createImage(createImageInput: CreateImageInput): Promise<Image> {
     const file = await this.fileService.getPrivateFile({
       uuid: createImageInput.file,
-    } as GetPrivateFileArgs);
+    } as GetFileArgs);
     const imageMetaData = (await exifr.parse(file.url)) || {};
     const newImage = this.imageRepository.create({
       file,

@@ -12,23 +12,22 @@ import { DEFAULT_ROLES } from '../roles/config';
 import { ForbiddenError } from 'apollo-server-express';
 import { FileService } from '../file/file.service';
 import { GetAllImagesArgs } from './dto/args/get-all-images.args';
+import { AbstractSearchQueryResolver } from '../abstracts/search/abstract-search-query.resolver';
 
 @Resolver(() => Image)
-export class ImageResolver {
+export class ImageResolver extends AbstractSearchQueryResolver<
+  Image,
+  ImageService
+> {
   constructor(
     private readonly imageService: ImageService,
     private readonly fileService: FileService,
-  ) {}
+  ) {
+    super('capturedAt');
+  }
 
-  /**
-   * Returns all images stored in database. Only accessible to admins
-   * @param getAllImagesArgs - take and skip parameters
-   * @returns All Images
-   */
-  @AdminOnly()
-  @Query(() => [Image], { name: 'images' })
-  async getImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
-    return this.imageService.getAllImages(getAllImagesArgs);
+  get service(): ImageService {
+    return this.imageService;
   }
 
   /**
@@ -43,11 +42,18 @@ export class ImageResolver {
     @Args() getImageArgs: GetImageArgs,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    const image = await this.imageService.getImage(getImageArgs);
-    if (user.role !== DEFAULT_ROLES.ADMIN && image.file.owner !== user.uuid) {
-      throw new ForbiddenError('Image does not belong to logged in user');
-    }
-    return image;
+    return this.imageService.getImage(getImageArgs);
+  }
+
+  /**
+   * Returns all images stored in database. Only accessible to admins
+   * @param getAllImagesArgs - take and skip parameters
+   * @returns All Images
+   */
+  @AdminOnly()
+  @Query(() => [Image], { name: 'images' })
+  async getImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
+    return this.imageService.getAllImages(getAllImagesArgs);
   }
 
   /**
@@ -64,7 +70,10 @@ export class ImageResolver {
     @CurrentUser() user: User,
   ): Promise<Image> {
     const image = await this.imageService.getImageForFile(getImageForFileArgs);
-    if (user.role !== DEFAULT_ROLES.ADMIN && image.file.owner !== user.uuid) {
+    if (
+      user.role !== DEFAULT_ROLES.ADMIN &&
+      image.file.owner.uuid !== user.uuid
+    ) {
       throw new ForbiddenError('File does not belong to logged in user');
     }
     return image;
@@ -85,7 +94,7 @@ export class ImageResolver {
     const file = await this.fileService.getPrivateFile({
       uuid: createImageInput.file,
     });
-    if (user.role !== DEFAULT_ROLES.ADMIN && file.owner !== user.uuid) {
+    if (user.role !== DEFAULT_ROLES.ADMIN && file.owner.uuid !== user.uuid) {
       throw new ForbiddenError(
         'Cannot create image for file that belongs to someone else',
       );
@@ -108,7 +117,10 @@ export class ImageResolver {
     const image = await this.imageService.getImage({
       uuid: deleteImageInput.uuid,
     } as GetImageArgs);
-    if (user.role !== DEFAULT_ROLES.ADMIN && image.file.owner !== user.uuid) {
+    if (
+      user.role !== DEFAULT_ROLES.ADMIN &&
+      image.file.owner.uuid !== user.uuid
+    ) {
       throw new ForbiddenError('Image does not belong to logged in user');
     }
     return this.imageService.deleteImage(deleteImageInput);

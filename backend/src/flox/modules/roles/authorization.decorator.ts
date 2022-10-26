@@ -24,8 +24,16 @@ export const AdminOnly = (): CustomDecorator =>
 
 // Access to current user from request
 export const CurrentUser = createParamDecorator(
-  (data, req: ExecutionContext) => {
+  (data, req: ExecutionContext): User => {
     return getRequest(req).principal as User;
+  },
+);
+
+// Access to current user from request if available
+export const OptionalUser = createParamDecorator(
+  (data, req: ExecutionContext): User | null => {
+    const principal = getRequest(req).principal;
+    return principal ? (principal as User) : null;
   },
 );
 
