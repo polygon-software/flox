@@ -6,8 +6,8 @@ import {
   CognitoRefreshToken,
   CognitoUserPool,
   CognitoUserSession,
-  UserData,
 } from 'amazon-cognito-identity-js';
+import jwt_decode from 'jwt-decode';
 import { Cookies } from 'quasar';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { BootFileParams, QSsrContext } from '@quasar/app-vite';
@@ -18,10 +18,10 @@ import Env from 'src/env';
  * @param ssrContext - Serverside rendering context
  * @param userPool - cognito user pool
  */
-async function serverSideAuth(
+function serverSideAuth(
   ssrContext: QSsrContext,
   userPool: CognitoUserPool
-): Promise<void> {
+): void {
   const $authStore = useAuthStore();
   const cookies = Cookies.parseSSR(ssrContext);
 
@@ -50,29 +50,13 @@ async function serverSideAuth(
     RefreshToken,
   });
 
-  const incompleteCognitoUser: CognitoUser = new CognitoUser({
-    Pool: userPool,
-    Username: 'unknown',
-  });
-
-  incompleteCognitoUser.setSignInUserSession(userSession);
-  const userData: UserData = await new Promise((resolve, reject) => {
-    incompleteCognitoUser.getUserData((err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (data) {
-          resolve(data);
-        } else {
-          throw new Error('User data undefined');
-        }
-      }
-    });
-  });
+  const userData = jwt_decode<{ username: string }>(
+    JSON.parse(accessToken) as string
+  );
 
   const cognitoUser: CognitoUser = new CognitoUser({
     Pool: userPool,
-    Username: userData.Username,
+    Username: userData.username,
   });
 
   if (!userSession.isValid()) {
@@ -106,7 +90,7 @@ interface FloxBootFileParams<T = any> extends BootFileParams<T> {
   ssrContext?: QSsrContext;
 }
 
-export default boot(async (bootContext: FloxBootFileParams) => {
+export default boot((bootContext: FloxBootFileParams) => {
   const $authStore = useAuthStore();
 
   // Set up authentication user pool
@@ -118,7 +102,7 @@ export default boot(async (bootContext: FloxBootFileParams) => {
   $authStore.setUserPool(userPool);
 
   if (Env.SERVER && bootContext.ssrContext) {
-    await serverSideAuth(bootContext.ssrContext, userPool);
+    serverSideAuth(bootContext.ssrContext, userPool);
   } else {
     clientSideAuth(userPool);
   }
