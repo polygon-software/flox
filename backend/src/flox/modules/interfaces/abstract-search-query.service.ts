@@ -1,6 +1,6 @@
 import { SearchQueryArgs } from './dto/args/search-query.args';
 import SearchQueryOutputInterface from './outputs/search-query-interface.output';
-import { Like, Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, Like, Repository } from 'typeorm';
 import { BaseEntity } from '../../core/base-entity/entities/base-entity.entity';
 
 export abstract class AbstractSearchQueryService<Entity extends BaseEntity> {
@@ -17,23 +17,20 @@ export abstract class AbstractSearchQueryService<Entity extends BaseEntity> {
     searchKey: keyof Entity,
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const count = await this.repository.count({
-      order: {
-        [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
-      },
       where: {
         [searchKey]: Like(`%${queryArgs.filter}%`),
-      },
+      } as FindOptionsWhere<Entity>,
     });
 
     const data = await this.repository.find({
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
-      },
+      } as FindOptionsOrder<Entity>,
       skip: queryArgs.skip,
       take: queryArgs.take,
       where: {
         [searchKey]: Like(`%${queryArgs.filter}%`),
-      },
+      } as FindOptionsWhere<Entity>,
     });
     return { data, count };
   }

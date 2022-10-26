@@ -18,7 +18,7 @@ export abstract class AbstractSearchQueryResolver<
    */
   queryAll(
     queryArgs: SearchQueryArgs,
-  ): Promise<SearchQueryOutputInterface<Record<string, any>>> {
+  ): Promise<SearchQueryOutputInterface<Entity>> {
     return this.service.queryAll(queryArgs, this.searchKey);
   }
 }
