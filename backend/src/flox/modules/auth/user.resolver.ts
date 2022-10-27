@@ -6,18 +6,15 @@ import { GetUserArgs } from './dto/args/get-user.args';
 import { User } from './entities/user.entity';
 import { LoggedIn, Public } from './authentication.decorator';
 import { CurrentUser } from '../roles/authorization.decorator';
-import { AbstractSearchQueryResolver } from '../abstracts/search/abstract-search-query.resolver';
-import { SearchQueryArgs } from '../abstracts/search/dto/args/search-query.args';
+import { AbstractSearchResolver } from '../abstracts/search/abstract-search.resolver';
+import { SearchArgs } from '../abstracts/search/dto/args/search.args';
 import { UserQueryOutput } from './output/user-query.output';
 import { GetAllArgs } from '../abstracts/crud/dto/get-all.args';
 import { GetMultipleArgs } from '../abstracts/crud/dto/get-multiple.args';
 import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
 
 @Resolver(() => User)
-export class UserResolver extends AbstractSearchQueryResolver<
-  User,
-  UserService
-> {
+export class UserResolver extends AbstractSearchResolver<User, UserService> {
   constructor(private readonly userService: UserService) {
     super('username');
   }
@@ -80,7 +77,7 @@ export class UserResolver extends AbstractSearchQueryResolver<
    */
   @Public()
   @Query(() => UserQueryOutput, { name: 'queryUsers' })
-  queryAllUsers(@Args() queryArgs: SearchQueryArgs): Promise<UserQueryOutput> {
+  queryAllUsers(@Args() queryArgs: SearchArgs): Promise<UserQueryOutput> {
     return super.queryAll(queryArgs);
   }
 

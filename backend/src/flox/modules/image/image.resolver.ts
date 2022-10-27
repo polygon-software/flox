@@ -12,14 +12,11 @@ import { DEFAULT_ROLES } from '../roles/config';
 import { ForbiddenError } from 'apollo-server-express';
 import { FileService } from '../file/file.service';
 import { GetAllImagesArgs } from './dto/args/get-all-images.args';
-import { AbstractSearchQueryResolver } from '../abstracts/search/abstract-search-query.resolver';
+import { AbstractSearchResolver } from '../abstracts/search/abstract-search.resolver';
 import { GetOneArgs } from '../abstracts/crud/dto/get-one.args';
 
 @Resolver(() => Image)
-export class ImageResolver extends AbstractSearchQueryResolver<
-  Image,
-  ImageService
-> {
+export class ImageResolver extends AbstractSearchResolver<Image, ImageService> {
   constructor(
     private readonly imageService: ImageService,
     private readonly fileService: FileService,
@@ -39,9 +36,7 @@ export class ImageResolver extends AbstractSearchQueryResolver<
    */
   @LoggedIn()
   @Query(() => Image, { name: 'image' })
-  async getImage(
-    @Args() getImageArgs: GetImageArgs,
-  ): Promise<Image> {
+  async getImage(@Args() getImageArgs: GetImageArgs): Promise<Image> {
     return this.imageService.getImage(getImageArgs);
   }
 
@@ -91,7 +86,7 @@ export class ImageResolver extends AbstractSearchQueryResolver<
     @Args('createImageInput') createImageInput: CreateImageInput,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    const file = await this.fileService.getOneForUser(
+    const file = await this.fileService.getOneAsUser(
       {
         uuid: createImageInput.file,
       } as GetOneArgs,

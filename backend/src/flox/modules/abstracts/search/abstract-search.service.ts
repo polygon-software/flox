@@ -1,10 +1,10 @@
-import { SearchQueryArgs } from './dto/args/search-query.args';
-import SearchQueryOutputInterface from './outputs/search-query-interface.output';
+import { SearchArgs } from './dto/args/search.args';
+import SearchQueryOutputInterface from './outputs/search-interface.output';
 import { FindOptionsOrder, FindOptionsWhere, Like, Repository } from 'typeorm';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { AbstractCrudService } from '../crud/abstract-crud.service';
 
-export abstract class AbstractSearchQueryService<
+export abstract class AbstractSearchService<
   Entity extends BaseEntity,
 > extends AbstractCrudService<Entity> {
   abstract get repository(): Repository<Entity>;
@@ -15,8 +15,8 @@ export abstract class AbstractSearchQueryService<
    * @param searchKey - key on which search string value is being searched
    * @returns data that fit criteria
    */
-  async queryAll(
-    queryArgs: SearchQueryArgs,
+  async search(
+    queryArgs: SearchArgs,
     searchKey: keyof Entity,
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const count = await this.repository.count({

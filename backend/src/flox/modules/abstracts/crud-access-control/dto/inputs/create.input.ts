@@ -7,6 +7,10 @@ export class CreateInput {
   @IsBoolean()
   publicReadAccess = false;
 
+  @Field(() => Boolean)
+  @IsBoolean()
+  loggedInReadAccess = false;
+
   @Field(() => [ID])
   @IsUUID(4, { each: true })
   readAccess: string[] = [];

@@ -12,6 +12,11 @@ export class AccessControlledEntity extends BaseEntity {
   })
   public publicReadAccess = false;
 
+  @Field(() => Boolean, {
+    description: 'Marks this object as readable for all logged in users',
+  })
+  public loggedInReadAccess = false;
+
   @Field(() => User, {
     description: 'Owner of this object, has full control over it',
   })

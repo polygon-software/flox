@@ -9,20 +9,22 @@ import {
   OptionalUser,
 } from '../roles/authorization.decorator';
 import { User } from '../auth/entities/user.entity';
-import { AbstractCrudAccessControlResolver } from '../abstracts/crud-access-control/abstract-crud-access-control.resolver';
 import S3File from './entities/file.entity';
 import { GetMultipleFilesArgs } from './dto/args/get-multiple-files.args';
 import { UpdateFileInput } from './dto/input/update-file.input';
 import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
 import { CreateFileInput } from './dto/input/create-file.input';
+import { AbstractSearchAccessControlResolver } from '../abstracts/search-access-control/abstract-search-access-control.resolver';
+import { SearchFilesArgs } from './dto/args/search-files.args';
+import SearchQueryOutputInterface from '../abstracts/search/outputs/search-interface.output';
 
 @Resolver(() => S3File)
-export class FileResolver extends AbstractCrudAccessControlResolver<
+export class FileResolver extends AbstractSearchAccessControlResolver<
   S3File,
   FileService
 > {
   constructor(private readonly fileService: FileService) {
-    super();
+    super('filename');
   }
 
   get service(): FileService {
@@ -36,6 +38,13 @@ export class FileResolver extends AbstractCrudAccessControlResolver<
     @OptionalUser() user?: User,
   ): Promise<S3File> {
     const file = await super.getOne(getFileArgs, user);
+    return this.fileService.addFileUrl(file, getFileArgs);
+  }
+
+  @AdminOnly()
+  @Query(() => S3File, { name: 'adminFile' })
+  async getFileAsAdmin(@Args() getFileArgs: GetFileArgs): Promise<S3File> {
+    const file = await super.getOneAsAdmin(getFileArgs);
     return this.fileService.addFileUrl(file, getFileArgs);
   }
 
@@ -65,6 +74,15 @@ export class FileResolver extends AbstractCrudAccessControlResolver<
     @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
   ): Promise<S3File[]> {
     const files = await super.getMultiplePublic(getMultipleFilesArgs);
+    return this.fileService.addFileUrls(files, getMultipleFilesArgs);
+  }
+
+  @AdminOnly()
+  @Query(() => [S3File], { name: 'adminFiles' })
+  async getFilesAsAdmin(
+    @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
+  ): Promise<S3File[]> {
+    const files = await super.getMultipleAsAdmin(getMultipleFilesArgs);
     return this.fileService.addFileUrls(files, getMultipleFilesArgs);
   }
 
@@ -106,6 +124,72 @@ export class FileResolver extends AbstractCrudAccessControlResolver<
   ): Promise<S3File[]> {
     const files = await super.getAllPublic(getAllFilesArgs);
     return this.fileService.addFileUrls(files, getAllFilesArgs);
+  }
+
+  @Public()
+  @Query(() => [S3File], { name: 'searchFiles' })
+  async searchFiles(
+    @Args() searchFilesArgs: SearchFilesArgs,
+    @OptionalUser() user?: User,
+  ): Promise<SearchQueryOutputInterface<S3File>> {
+    const searchOutput = await super.search(searchFilesArgs, user);
+    const data = await this.fileService.addFileUrls(
+      searchOutput.data,
+      searchFilesArgs,
+    );
+    return {
+      ...searchOutput,
+      data,
+    };
+  }
+
+  @Public()
+  @Query(() => [S3File], { name: 'searchPublicFiles' })
+  async searchPublicFiles(
+    @Args() searchFilesArgs: SearchFilesArgs,
+  ): Promise<SearchQueryOutputInterface<S3File>> {
+    const searchOutput = await super.searchPublic(searchFilesArgs);
+    const data = await this.fileService.addFileUrls(
+      searchOutput.data,
+      searchFilesArgs,
+    );
+    return {
+      ...searchOutput,
+      data,
+    };
+  }
+
+  @LoggedIn()
+  @Query(() => [S3File], { name: 'searchMyFiles' })
+  async searchMyFiles(
+    @Args() searchFilesArgs: SearchFilesArgs,
+    @CurrentUser() user: User,
+  ): Promise<SearchQueryOutputInterface<S3File>> {
+    const searchOutput = await super.searchOfUser(searchFilesArgs, user);
+    const data = await this.fileService.addFileUrls(
+      searchOutput.data,
+      searchFilesArgs,
+    );
+    return {
+      ...searchOutput,
+      data,
+    };
+  }
+
+  @AdminOnly()
+  @Query(() => [S3File], { name: 'searchAdminFiles' })
+  async searchFilesAsAdmin(
+    @Args() searchFilesArgs: SearchFilesArgs,
+  ): Promise<SearchQueryOutputInterface<S3File>> {
+    const searchOutput = await super.searchAsAdmin(searchFilesArgs);
+    const data = await this.fileService.addFileUrls(
+      searchOutput.data,
+      searchFilesArgs,
+    );
+    return {
+      ...searchOutput,
+      data,
+    };
   }
 
   /**

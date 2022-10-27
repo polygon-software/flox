@@ -9,18 +9,16 @@ import {
 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { AbstractCrudAccessControlService } from '../abstracts/crud-access-control/abstract-crud-access-control.service';
 import S3File from './entities/file.entity';
+import { AbstractSearchAccessControlService } from '../abstracts/search-access-control/abstract-search-access-control.service';
 
 @Injectable()
-export class FileService extends AbstractCrudAccessControlService<S3File> {
+export class FileService extends AbstractSearchAccessControlService<S3File> {
   // S3 credentials
   private readonly credentials = {
-    region: this.configService.getOrThrow('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.getOrThrow('ADMIN_AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.getOrThrow(
-      'ADMIN_AWS_SECRET_ACCESS_KEY',
-    ),
+    region: this.configService.get('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.get('ADMIN_AWS_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.get('ADMIN_AWS_SECRET_ACCESS_KEY'),
   };
 
   get repository(): Repository<S3File> {
@@ -47,7 +45,7 @@ export class FileService extends AbstractCrudAccessControlService<S3File> {
    */
   async createSignedUploadUrl(file: S3File): Promise<string> {
     const uploadParams = {
-      Bucket: this.configService.getOrThrow(
+      Bucket: this.configService.get(
         file.publicReadAccess
           ? 'AWS_PUBLIC_BUCKET_NAME'
           : 'AWS_PRIVATE_BUCKET_NAME',
@@ -78,7 +76,7 @@ export class FileService extends AbstractCrudAccessControlService<S3File> {
     const url = await getSignedUrl(
       this.s3,
       new GetObjectCommand({
-        Bucket: this.configService.getOrThrow('AWS_PRIVATE_BUCKET_NAME'),
+        Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
         Key: file.key,
       }),
       options,
@@ -109,7 +107,7 @@ export class FileService extends AbstractCrudAccessControlService<S3File> {
     // Delete on S3
     await this.s3.send(
       new DeleteObjectCommand({
-        Bucket: this.configService.getOrThrow(
+        Bucket: this.configService.get(
           file.publicReadAccess
             ? 'AWS_PUBLIC_BUCKET_NAME'
             : 'AWS_PRIVATE_BUCKET_NAME',
