@@ -7,7 +7,7 @@ import { GetMultipleArgs } from '../crud/dto/get-multiple.args';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { User } from '../../auth/entities/user.entity';
 import { AccessControlledEntity } from '../../access-control/entities/access-controlled.entity';
-import { CreateInput } from "./dto/inputs/create.input";
+import { CreateInput } from './dto/inputs/create.input';
 
 export abstract class AbstractCrudAccessControlService<
   Entity extends AccessControlledEntity,
@@ -25,12 +25,16 @@ export abstract class AbstractCrudAccessControlService<
     });
   }
 
-  getOneForUser(getOneArgs: GetOneArgs, user: User): Promise<Entity> {
+  getOneAsUser(getOneArgs: GetOneArgs, user: User): Promise<Entity> {
     return this.repository.findOneOrFail({
       where: [
         {
           uuid: getOneArgs.uuid,
           publicReadAccess: true,
+        },
+        {
+          uuid: getOneArgs.uuid,
+          loggedInReadAccess: true,
         },
         {
           uuid: getOneArgs.uuid,
@@ -72,12 +76,36 @@ export abstract class AbstractCrudAccessControlService<
     });
   }
 
-  getAllForUser(getAll: GetAllArgs, user: User): Promise<Entity[]> {
+  getAllAsUser(getAll: GetAllArgs, user: User): Promise<Entity[]> {
     return this.repository.find({
       where: [
         {
           publicReadAccess: true,
         },
+        {
+          loggedInReadAccess: true,
+        },
+        {
+          owner: {
+            uuid: user.uuid,
+          },
+        },
+        {
+          readAccess: {
+            users: {
+              uuid: user.uuid,
+            },
+          },
+        },
+      ] as FindOptionsWhere<Entity>[],
+      take: getAll.take,
+      skip: getAll.skip,
+    });
+  }
+
+  getAllOfUser(getAll: GetAllArgs, user: User): Promise<Entity[]> {
+    return this.repository.find({
+      where: [
         {
           owner: {
             uuid: user.uuid,
@@ -107,7 +135,7 @@ export abstract class AbstractCrudAccessControlService<
     });
   }
 
-  getMultipleForUser(
+  getMultipleAsUser(
     getMultiple: GetMultipleArgs,
     user: User,
   ): Promise<Entity[]> {
@@ -117,6 +145,34 @@ export abstract class AbstractCrudAccessControlService<
           uuid: In(getMultiple.uuids),
           publicReadAccess: true,
         },
+        {
+          uuid: In(getMultiple.uuids),
+          loggedInReadAccess: true,
+        },
+        {
+          uuid: In(getMultiple.uuids),
+          owner: {
+            uuid: user.uuid,
+          },
+        },
+        {
+          uuid: In(getMultiple.uuids),
+          readAccess: {
+            users: {
+              uuid: user.uuid,
+            },
+          },
+        },
+      ] as FindOptionsWhere<Entity>[],
+    });
+  }
+
+  getMultipleOfUser(
+    getMultiple: GetMultipleArgs,
+    user: User,
+  ): Promise<Entity[]> {
+    return this.repository.find({
+      where: [
         {
           uuid: In(getMultiple.uuids),
           owner: {

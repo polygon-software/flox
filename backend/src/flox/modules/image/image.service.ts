@@ -18,12 +18,12 @@ import { ConfigService } from '@nestjs/config';
 import { CreateLabelsInput } from './dto/input/create-labels.input';
 import { Label } from './entities/label.entity';
 import { BoundingBox } from './entities/bounding-box.entity';
-import { AbstractSearchQueryService } from '../abstracts/search/abstract-search-query.service';
+import { AbstractSearchService } from '../abstracts/search/abstract-search.service';
 import { GetOneArgs } from '../abstracts/crud/dto/get-one.args';
-import { User } from "../auth/entities/user.entity";
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
-export class ImageService extends AbstractSearchQueryService<Image> {
+export class ImageService extends AbstractSearchService<Image> {
   // Rekognition credentials
   private readonly credentials = {
     region: this.configService.getOrThrow('AWS_MAIN_REGION'),
@@ -90,7 +90,7 @@ export class ImageService extends AbstractSearchQueryService<Image> {
         },
       },
     });
-    const file = await this.fileService.getOneForUser(
+    const file = await this.fileService.getOneAsUser(
       {
         uuid: image.file.uuid,
       } as GetOneArgs,

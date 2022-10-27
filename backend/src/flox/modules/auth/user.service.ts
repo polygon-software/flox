@@ -3,10 +3,10 @@ import { GetUserArgs } from './dto/args/get-user.args';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { AbstractSearchQueryService } from '../abstracts/search/abstract-search-query.service';
+import { AbstractSearchService } from '../abstracts/search/abstract-search.service';
 
 @Injectable()
-export class UserService extends AbstractSearchQueryService<User> {
+export class UserService extends AbstractSearchService<User> {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,

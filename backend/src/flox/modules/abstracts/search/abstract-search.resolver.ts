@@ -1,12 +1,12 @@
-import { SearchQueryArgs } from './dto/args/search-query.args';
-import SearchQueryOutputInterface from './outputs/search-query-interface.output';
+import { SearchArgs } from './dto/args/search.args';
+import SearchQueryOutputInterface from './outputs/search-interface.output';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { AbstractCrudResolver } from '../crud/abstract-crud.resolver';
-import { AbstractSearchQueryService } from './abstract-search-query.service';
+import { AbstractSearchService } from './abstract-search.service';
 
-export abstract class AbstractSearchQueryResolver<
+export abstract class AbstractSearchResolver<
   Entity extends BaseEntity,
-  Service extends AbstractSearchQueryService<Entity>,
+  Service extends AbstractSearchService<Entity>,
 > extends AbstractCrudResolver<Entity, Service> {
   abstract get service(): Service;
 
@@ -19,9 +19,7 @@ export abstract class AbstractSearchQueryResolver<
    * @param queryArgs - contain table filtering rules
    * @returns data that fit criteria
    */
-  queryAll(
-    queryArgs: SearchQueryArgs,
-  ): Promise<SearchQueryOutputInterface<Entity>> {
-    return this.service.queryAll(queryArgs, this.searchKey);
+  search(queryArgs: SearchArgs): Promise<SearchQueryOutputInterface<Entity>> {
+    return this.service.search(queryArgs, this.searchKey);
   }
 }
