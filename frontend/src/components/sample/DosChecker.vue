@@ -28,12 +28,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
 import axios from 'axios';
-import { MY_USER } from 'src/flox/modules/auth/user.query';
-import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
 import { print } from 'graphql';
 import Env from 'src/env';
+import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
+import { MY_USER } from 'src/flox/modules/auth/user.query';
+import { Ref, ref } from 'vue';
 
 const requestsPerSecond: Ref<number> = ref(10);
 const positiveRequest: Ref<number> = ref(0);

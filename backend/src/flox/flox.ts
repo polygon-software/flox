@@ -1,13 +1,14 @@
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './modules/roles/roles.guard';
-import { JwtStrategy } from './modules/auth/jwt.strategy';
+
+import { getActiveFloxModuleNames } from './core/flox-helpers';
 import { JwtAuthGuard } from './modules/auth/auth.guard';
+import { JwtStrategy } from './modules/auth/jwt.strategy';
+import { UserModule } from './modules/auth/user.module';
+import { EmailModule } from './modules/email/email.module';
 import { FileModule } from './modules/file/file.module';
 import { ImageModule } from './modules/image/image.module';
-import { UserModule } from './modules/auth/user.module';
+import { RolesGuard } from './modules/roles/roles.guard';
 import { MODULES } from './MODULES';
-import { EmailModule } from './modules/email/email.module';
-import { getActiveFloxModuleNames } from './core/flox-helpers';
 
 export type FloxModules = FileModule | ImageModule | UserModule | EmailModule;
 

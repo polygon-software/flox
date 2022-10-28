@@ -1,5 +1,7 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
+
 import { IsNumber, IsOptional } from 'class-validator';
+
 import { GetOneArgs } from '../../../abstracts/crud/dto/get-one.args';
 
 @ArgsType()

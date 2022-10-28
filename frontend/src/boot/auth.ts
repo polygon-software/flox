@@ -1,17 +1,17 @@
-import { boot } from 'quasar/wrappers';
+import { BootFileParams, QSsrContext } from '@quasar/app-vite';
 import {
-  CognitoUser,
-  CognitoIdToken,
   CognitoAccessToken,
+  CognitoIdToken,
   CognitoRefreshToken,
+  CognitoUser,
   CognitoUserPool,
   CognitoUserSession,
 } from 'amazon-cognito-identity-js';
 import jwt_decode from 'jwt-decode';
 import { Cookies } from 'quasar';
-import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
-import { BootFileParams, QSsrContext } from '@quasar/app-vite';
+import { boot } from 'quasar/wrappers';
 import Env from 'src/env';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 
 /**
  * Performs authentication on server side

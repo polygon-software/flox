@@ -4,9 +4,11 @@ import {
   ExecutionContext,
   SetMetadata,
 } from '@nestjs/common';
+
 import { getRequest } from '../../core/flox-helpers';
-import { DEFAULT_ROLES } from './config';
 import { User } from '../auth/entities/user.entity';
+
+import { DEFAULT_ROLES } from './config';
 
 /**
  * Defines authorization-specific (roles) decorators

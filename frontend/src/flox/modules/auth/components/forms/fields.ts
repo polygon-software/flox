@@ -1,8 +1,7 @@
-import { QInput, QInputProps } from 'quasar';
-import PasswordRepeat from 'src/flox/modules/auth/components/forms/fields/PasswordRepeat.vue';
-import Password from 'src/flox/modules/auth/components/forms/fields/Password.vue';
-import { markRaw } from 'vue';
 import { i18n } from 'boot/i18n';
+import { QInput, QInputProps } from 'quasar';
+import Password from 'src/flox/modules/auth/components/forms/fields/Password.vue';
+import PasswordRepeat from 'src/flox/modules/auth/components/forms/fields/PasswordRepeat.vue';
 import {
   joiEmailSchema,
   joiPasswordSchema,
@@ -10,6 +9,7 @@ import {
   joiUsernameSchema,
   ValidationRule,
 } from 'src/tools/validation.tool';
+import { markRaw } from 'vue';
 
 /**
  * This file contains bootstrap configurations for sign up and sign in input fields. With these, the corresponding forms can be built modularly.

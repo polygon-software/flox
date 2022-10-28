@@ -1,25 +1,26 @@
+import { useApolloClient } from '@vue/apollo-composable';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import {
   CognitoUser,
   CognitoUserSession,
   ISignUpResult,
 } from 'amazon-cognito-identity-js';
-import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue';
-import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
-import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
-import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
-import { QVueGlobals, useQuasar } from 'quasar';
-import cloneDeep from 'lodash/cloneDeep';
 import { i18n } from 'boot/i18n';
-import { useApolloClient } from '@vue/apollo-composable';
-import ROUTES from 'src/router/routes';
-import { RouterService } from 'src/services/RouterService';
-import { ErrorService } from 'src/services/ErrorService';
-import * as auth from 'src/flox/modules/auth';
-import { showSuccessNotification } from 'src/tools/notification.tool';
-import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
-import { createUser } from 'src/flox/modules/auth/services/user.service';
+import cloneDeep from 'lodash/cloneDeep';
+import { QVueGlobals, useQuasar } from 'quasar';
 import Env from 'src/env';
+import * as auth from 'src/flox/modules/auth';
+import { createUser } from 'src/flox/modules/auth/services/user.service';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import ROUTES from 'src/router/routes';
+import { ErrorService } from 'src/services/ErrorService';
+import { RouterService } from 'src/services/RouterService';
+import { showSuccessNotification } from 'src/tools/notification.tool';
+
+import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
+import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
+import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue';
+import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as

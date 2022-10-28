@@ -1,6 +1,9 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+
 import { Column } from 'typeorm';
+
+import { IsNumber, IsOptional, IsString } from 'class-validator';
+
 import { UpdateInput } from '../../../abstracts/crud/inputs/update.input';
 
 @InputType()

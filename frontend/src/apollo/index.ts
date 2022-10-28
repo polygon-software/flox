@@ -1,3 +1,4 @@
+import { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types';
 import type { ApolloClientOptions, StoreObject } from '@apollo/client/core';
 import {
   ApolloLink,
@@ -6,9 +7,8 @@ import {
   defaultDataIdFromObject,
   InMemoryCache,
 } from '@apollo/client/core';
-import { Cookies } from 'quasar';
 import { QSsrContext } from '@quasar/app-vite';
-import { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types';
+import { Cookies } from 'quasar';
 import Env from 'src/env';
 
 /**

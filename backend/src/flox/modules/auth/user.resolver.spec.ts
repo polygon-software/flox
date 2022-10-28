@@ -1,12 +1,15 @@
-import { UserResolver } from './user.resolver';
-import { UserService } from './user.service';
-import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/input/create-user.input';
-import { DEFAULT_ROLES } from '../roles/config';
-import { Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+
+import { Repository } from 'typeorm';
+
 import { MockType, repositoryMockFactory } from '../../testing/testUtils';
+import { DEFAULT_ROLES } from '../roles/config';
+
+import { CreateUserInput } from './dto/input/create-user.input';
+import { User } from './entities/user.entity';
+import { UserResolver } from './user.resolver';
+import { UserService } from './user.service';
 
 describe('UserResolver', () => {
   let userService: UserService;

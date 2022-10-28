@@ -1,6 +1,9 @@
-import { Column, Entity } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
+
+import { Column, Entity } from 'typeorm';
+
 import { IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
+
 import { AccessControlledEntity } from '../../access-control/entities/access-controlled.entity';
 
 /**

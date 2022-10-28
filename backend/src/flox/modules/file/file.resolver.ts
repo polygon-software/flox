@@ -1,22 +1,24 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { FileService } from './file.service';
-import { GetFileArgs } from './dto/args/get-file.args';
+
+import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
+import SearchQueryOutputInterface from '../abstracts/search/outputs/search-interface.output';
+import { AbstractSearchAccessControlResolver } from '../abstracts/search-access-control/abstract-search-access-control.resolver';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
-import { GetAllFilesArgs } from './dto/args/get-all-files.args';
+import { User } from '../auth/entities/user.entity';
 import {
   AdminOnly,
   CurrentUser,
   OptionalUser,
 } from '../roles/authorization.decorator';
-import { User } from '../auth/entities/user.entity';
-import S3File from './entities/file.entity';
+
+import { GetAllFilesArgs } from './dto/args/get-all-files.args';
+import { GetFileArgs } from './dto/args/get-file.args';
 import { GetMultipleFilesArgs } from './dto/args/get-multiple-files.args';
-import { UpdateFileInput } from './dto/input/update-file.input';
-import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
-import { CreateFileInput } from './dto/input/create-file.input';
-import { AbstractSearchAccessControlResolver } from '../abstracts/search-access-control/abstract-search-access-control.resolver';
 import { SearchFilesArgs } from './dto/args/search-files.args';
-import SearchQueryOutputInterface from '../abstracts/search/outputs/search-interface.output';
+import { CreateFileInput } from './dto/input/create-file.input';
+import { UpdateFileInput } from './dto/input/update-file.input';
+import S3File from './entities/file.entity';
+import { FileService } from './file.service';
 
 @Resolver(() => S3File)
 export class FileResolver extends AbstractSearchAccessControlResolver<

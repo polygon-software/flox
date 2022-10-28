@@ -1,14 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
-import { Public } from '../auth/authentication.decorator';
+import { ConfigService } from '@nestjs/config';
 import {
   HealthCheck,
   HealthCheckService,
   HttpHealthIndicator,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-import { ConfigService } from '@nestjs/config';
-import { SkipThrottle } from '@nestjs/throttler';
 import { HealthCheckResult } from '@nestjs/terminus/dist/health-check/health-check-result.interface';
+import { SkipThrottle } from '@nestjs/throttler';
+
+import { Public } from '../auth/authentication.decorator';
 
 @Controller('healthcheck')
 export class HealthcheckController {

@@ -1,6 +1,6 @@
 import {
-  mergeConfigurations,
   floxModuleOptions,
+  mergeConfigurations,
 } from '../../core/flox-helpers';
 import { MODULES } from '../../MODULES';
 

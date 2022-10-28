@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia';
 import {
   CognitoUser,
   CognitoUserPool,
   CognitoUserSession,
 } from 'amazon-cognito-identity-js';
+import { defineStore } from 'pinia';
 import {
   deleteCookies,
   persistToCookies,

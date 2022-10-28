@@ -1,9 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+
 import { BeforeRemove, Column, Entity, ManyToMany } from 'typeorm';
-import { User } from '../../auth/entities/user.entity';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
-import { AccessControlledEntity } from './access-controlled.entity';
+
 import { IsString } from 'class-validator';
+
+import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+import { User } from '../../auth/entities/user.entity';
+
+import { AccessControlledEntity } from './access-controlled.entity';
 
 @ObjectType()
 @Entity()

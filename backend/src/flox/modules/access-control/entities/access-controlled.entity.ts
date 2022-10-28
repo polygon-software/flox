@@ -1,7 +1,10 @@
-import { Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
+
+import { Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
+
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { User } from '../../auth/entities/user.entity';
+
 import { UserGroup } from './user-group.entity';
 
 @Entity()

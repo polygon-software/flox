@@ -1,7 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+
 import { IsNumber, IsString } from 'class-validator';
+
+import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+
 import { BoundingBox } from './bounding-box.entity';
 import Image from './image.entity';
 

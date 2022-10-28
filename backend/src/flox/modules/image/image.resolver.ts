@@ -1,22 +1,24 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ImageService } from './image.service';
+
+import { AbstractSearchAccessControlResolver } from '../abstracts/search-access-control/abstract-search-access-control.resolver';
 import { LoggedIn } from '../auth/authentication.decorator';
-import Image from './entities/image.entity';
+import { User } from '../auth/entities/user.entity';
+import { FileService } from '../file/file.service';
+import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
+
+import { GetAllImagesArgs } from './dto/args/get-all-images.args';
 import { GetImageArgs } from './dto/args/get-image.args';
 import { GetImageForFileArgs } from './dto/args/get-image-for-file.args';
-import { DeleteImageInput } from './dto/input/delete-image.input';
 import { CreateImageInput } from './dto/input/create-image.input';
-import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
-import { User } from '../auth/entities/user.entity';
-import { DEFAULT_ROLES } from '../roles/config';
-import { ForbiddenError } from 'apollo-server-express';
-import { FileService } from '../file/file.service';
-import { GetAllImagesArgs } from './dto/args/get-all-images.args';
-import { AbstractSearchResolver } from '../abstracts/search/abstract-search.resolver';
-import { GetOneArgs } from '../abstracts/crud/dto/get-one.args';
+import { DeleteImageInput } from './dto/input/delete-image.input';
+import Image from './entities/image.entity';
+import { ImageService } from './image.service';
 
 @Resolver(() => Image)
-export class ImageResolver extends AbstractSearchResolver<Image, ImageService> {
+export class ImageResolver extends AbstractSearchAccessControlResolver<
+  Image,
+  ImageService
+> {
   constructor(
     private readonly imageService: ImageService,
     private readonly fileService: FileService,
@@ -36,19 +38,26 @@ export class ImageResolver extends AbstractSearchResolver<Image, ImageService> {
    */
   @LoggedIn()
   @Query(() => Image, { name: 'image' })
-  async getImage(@Args() getImageArgs: GetImageArgs): Promise<Image> {
-    return this.imageService.getImage(getImageArgs);
+  async getImage(
+    @Args() getImageArgs: GetImageArgs,
+    @CurrentUser() user: User,
+  ): Promise<Image> {
+    return this.imageService.getImage(getImageArgs, user);
   }
 
   /**
    * Returns all images stored in database. Only accessible to admins
    * @param getAllImagesArgs - take and skip parameters
+   * @param user - Currently logged-in user
    * @returns All Images
    */
   @AdminOnly()
   @Query(() => [Image], { name: 'images' })
-  async getImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
-    return this.imageService.getAllImages(getAllImagesArgs);
+  async getImages(
+    getAllImagesArgs: GetAllImagesArgs,
+    @CurrentUser() user: User,
+  ): Promise<Image[]> {
+    return this.imageService.getAllImages(getAllImagesArgs, user);
   }
 
   /**
@@ -64,14 +73,7 @@ export class ImageResolver extends AbstractSearchResolver<Image, ImageService> {
     @Args() getImageForFileArgs: GetImageForFileArgs,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    const image = await this.imageService.getImageForFile(getImageForFileArgs);
-    if (
-      user.role !== DEFAULT_ROLES.ADMIN &&
-      image.file.owner.uuid !== user.uuid
-    ) {
-      throw new ForbiddenError('File does not belong to logged in user');
-    }
-    return image;
+    return await this.imageService.getImageForFile(getImageForFileArgs, user);
   }
 
   /**
@@ -86,18 +88,7 @@ export class ImageResolver extends AbstractSearchResolver<Image, ImageService> {
     @Args('createImageInput') createImageInput: CreateImageInput,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    const file = await this.fileService.getOneAsUser(
-      {
-        uuid: createImageInput.file,
-      } as GetOneArgs,
-      user,
-    );
-    if (user.role !== DEFAULT_ROLES.ADMIN && file.owner.uuid !== user.uuid) {
-      throw new ForbiddenError(
-        'Cannot create image for file that belongs to someone else',
-      );
-    }
-    return this.imageService.createImage(createImageInput);
+    return this.imageService.createImage(createImageInput, user);
   }
 
   /**
@@ -112,15 +103,6 @@ export class ImageResolver extends AbstractSearchResolver<Image, ImageService> {
     @Args('deleteImageInput') deleteImageInput: DeleteImageInput,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    const image = await this.imageService.getImage({
-      uuid: deleteImageInput.uuid,
-    } as GetImageArgs);
-    if (
-      user.role !== DEFAULT_ROLES.ADMIN &&
-      image.file.owner.uuid !== user.uuid
-    ) {
-      throw new ForbiddenError('Image does not belong to logged in user');
-    }
-    return this.imageService.deleteImage(deleteImageInput);
+    return this.imageService.deleteImage(deleteImageInput, user);
   }
 }

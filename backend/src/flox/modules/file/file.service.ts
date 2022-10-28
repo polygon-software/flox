@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import {
   DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3,
 } from '@aws-sdk/client-s3';
-import { ConfigService } from '@nestjs/config';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import S3File from './entities/file.entity';
+
+import { Repository } from 'typeorm';
+
 import { AbstractSearchAccessControlService } from '../abstracts/search-access-control/abstract-search-access-control.service';
+
+import S3File from './entities/file.entity';
 
 @Injectable()
 export class FileService extends AbstractSearchAccessControlService<S3File> {

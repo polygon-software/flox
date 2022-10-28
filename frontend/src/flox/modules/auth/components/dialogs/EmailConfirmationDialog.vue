@@ -45,11 +45,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, PropType, ref } from 'vue';
+import { i18n } from 'boot/i18n';
 import { QVueGlobals, useDialogPluginComponent } from 'quasar';
 import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
 import { showSuccessNotification } from 'src/tools/notification.tool';
-import { i18n } from 'boot/i18n';
+import { defineEmits, defineProps, PropType, ref } from 'vue';
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
 

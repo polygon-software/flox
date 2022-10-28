@@ -1,23 +1,22 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { HttpModule } from '@nestjs/axios';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TerminusModule } from '@nestjs/terminus';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as Joi from 'joi';
 import { join } from 'path';
 
-import { APP_GUARD } from '@nestjs/core';
-import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { TerminusModule } from '@nestjs/terminus';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { HttpModule } from '@nestjs/axios';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-
-import * as Joi from 'joi';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 import configuration from './config/configuration';
-import { floxModules, floxProviders } from './flox/flox';
-import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
 import { isServerless } from './flox/core/flox-helpers';
+import { floxModules, floxProviders } from './flox/flox';
 import { GqlThrottlerGuard } from './flox/modules/GqlThrottlerGuard';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
 
 @Module({
   imports: [

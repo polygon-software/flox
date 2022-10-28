@@ -1,7 +1,8 @@
-import { SearchArgs } from './dto/args/search.args';
-import SearchQueryOutputInterface from './outputs/search-interface.output';
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { AbstractCrudResolver } from '../crud/abstract-crud.resolver';
+
+import { SearchArgs } from './dto/args/search.args';
+import SearchQueryOutputInterface from './outputs/search-interface.output';
 import { AbstractSearchService } from './abstract-search.service';
 
 export abstract class AbstractSearchResolver<

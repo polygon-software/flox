@@ -1,11 +1,12 @@
 import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
-import { GetOneArgs } from './dto/get-one.args';
+
 import { GetAllArgs } from './dto/get-all.args';
-import { CreateInput } from './inputs/create.input';
-import { UpdateInput } from './inputs/update.input';
-import { DeleteInput } from './inputs/delete.input';
-import { AbstractCrudService } from './abstract-crud.service';
 import { GetMultipleArgs } from './dto/get-multiple.args';
+import { GetOneArgs } from './dto/get-one.args';
+import { CreateInput } from './inputs/create.input';
+import { DeleteInput } from './inputs/delete.input';
+import { UpdateInput } from './inputs/update.input';
+import { AbstractCrudService } from './abstract-crud.service';
 
 export abstract class AbstractCrudResolver<
   Entity extends BaseEntity,
