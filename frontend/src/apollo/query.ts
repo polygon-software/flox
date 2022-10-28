@@ -1,11 +1,11 @@
-import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
-import { OperationVariables } from '@apollo/client/core/types';
 import { ApolloQueryResult } from '@apollo/client';
+import { OperationVariables } from '@apollo/client/core/types';
 import { useApolloClient, useQuery } from '@vue/apollo-composable';
-import { onBeforeMount, onServerPrefetch, ref, Ref } from 'vue';
-import { useSsrStore } from 'stores/ssr';
 import { DocumentNode } from 'graphql';
+import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
+import { useSsrStore } from 'stores/ssr';
+import { onBeforeMount, onServerPrefetch, Ref, ref } from 'vue';
 
 // Interface definitions as used in constant files (e.g. QUERIES.ts, DEALERSHIP.ts)
 export interface QueryObject {

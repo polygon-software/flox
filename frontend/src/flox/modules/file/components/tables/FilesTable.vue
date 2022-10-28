@@ -33,17 +33,17 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, Ref } from 'vue';
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
-import { date, useQuasar } from 'quasar';
 import { i18n } from 'boot/i18n';
-import { showSuccessNotification } from 'src/tools/notification.tool';
+import { date, useQuasar } from 'quasar';
+import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
 import {
   deletePrivateFile,
   deletePublicFile,
   fetchMyFiles,
   fetchPublicFiles,
 } from 'src/flox/modules/file/services/file.service';
+import { showSuccessNotification } from 'src/tools/notification.tool';
+import { defineProps, Ref, ref } from 'vue';
 
 const props = defineProps({
   private: {

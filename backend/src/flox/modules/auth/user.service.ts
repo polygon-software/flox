@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { GetUserArgs } from './dto/args/get-user.args';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+
+import { Repository } from 'typeorm';
+
 import { AbstractSearchService } from '../abstracts/search/abstract-search.service';
+
+import { GetUserArgs } from './dto/args/get-user.args';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService extends AbstractSearchService<User> {

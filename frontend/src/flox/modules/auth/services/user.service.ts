@@ -1,8 +1,8 @@
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
-import { MY_USER } from 'src/flox/modules/auth/user.query';
-import { CREATE_USER } from 'src/flox/modules/auth/user.mutation';
-import { executeQuery } from 'src/apollo/query';
 import { executeMutation } from 'src/apollo/mutation';
+import { executeQuery } from 'src/apollo/query';
+import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import { CREATE_USER } from 'src/flox/modules/auth/user.mutation';
+import { MY_USER } from 'src/flox/modules/auth/user.query';
 
 /**
  * Fetch the logged-in user

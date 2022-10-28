@@ -1,4 +1,5 @@
-import { Handler, Context, Callback } from 'aws-lambda';
+import { Callback, Context, Handler } from 'aws-lambda';
+
 import { bootstrapServerless } from './bootstrap';
 
 /**

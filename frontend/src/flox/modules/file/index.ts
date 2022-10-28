@@ -1,4 +1,5 @@
 import { floxModuleOptions, mergeConfigurations } from 'src/flox';
+
 import { MODULES } from '../../MODULES';
 
 /**

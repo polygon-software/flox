@@ -1,12 +1,14 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { User } from '../auth/entities/user.entity';
+
+import Env from '../../../env';
 import { FrontendRequest, getRequest } from '../../core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
-import { DEFAULT_ROLES } from './config';
-import { UserService } from '../auth/user.service';
 import { GetUserArgs } from '../auth/dto/args/get-user.args';
-import Env from '../../../env';
+import { User } from '../auth/entities/user.entity';
+import { UserService } from '../auth/user.service';
+
+import { DEFAULT_ROLES } from './config';
 
 /**
  * Guard used for defining which roles can access a specific method

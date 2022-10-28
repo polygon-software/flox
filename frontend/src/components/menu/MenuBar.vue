@@ -22,11 +22,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue';
 import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
-import { RouterService } from 'src/services/RouterService';
-import ROUTES from 'src/router/routes';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import ROUTES from 'src/router/routes';
+import { RouterService } from 'src/services/RouterService';
+import { computed, inject } from 'vue';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 const $routerService: RouterService | undefined = inject('$routerService');

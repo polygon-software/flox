@@ -1,4 +1,5 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
+
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -6,12 +7,14 @@ import {
   Entity,
   ManyToMany,
 } from 'typeorm';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+
 import { IsEmail, IsString } from 'class-validator';
-import { moduleConfig } from '../../roles/config';
-import { MODULES } from '../../../MODULES';
+
+import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { isModuleActive } from '../../../core/flox-helpers';
+import { MODULES } from '../../../MODULES';
 import { UserGroup } from '../../access-control/entities/user-group.entity';
+import { moduleConfig } from '../../roles/config';
 
 /**
  * A user registered within cognito, having a role and contact information

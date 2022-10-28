@@ -1,5 +1,5 @@
-import en from './en';
 import de from './de';
+import en from './en';
 
 export default {
   en: en,

@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, onMounted } from 'vue';
-import { isModuleActive } from 'src/flox';
 import { i18n } from 'boot/i18n';
+import { isModuleActive } from 'src/flox';
+import { computed, defineProps, onMounted } from 'vue';
 
 /**
  * This is a wrapper component to be used with Flox module components. It prevents the module's components from being

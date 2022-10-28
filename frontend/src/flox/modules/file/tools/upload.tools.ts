@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
+import { invalidateTables } from 'src/apollo/invalidation';
 import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
 import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
-import { TABLES } from 'src/flox/TABLES';
 import { createImage } from 'src/flox/modules/image/services/image.service';
-import { invalidateTables } from 'src/apollo/invalidation';
+import { TABLES } from 'src/flox/TABLES';
 
 /**
  * Uploads a single file to a given endpoint

@@ -1,7 +1,11 @@
-import { Column, Entity, OneToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+
+import { Column, Entity, OneToOne } from 'typeorm';
+
 import { IsNumber } from 'class-validator';
+
+import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+
 import { Label } from './label.entity';
 
 @Entity()

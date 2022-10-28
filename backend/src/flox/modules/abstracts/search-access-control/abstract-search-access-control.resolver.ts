@@ -1,9 +1,10 @@
 import { AccessControlledEntity } from '../../access-control/entities/access-controlled.entity';
-import { AbstractSearchAccessControlService } from './abstract-search-access-control.service';
+import { User } from '../../auth/entities/user.entity';
 import { AbstractCrudAccessControlResolver } from '../crud-access-control/abstract-crud-access-control.resolver';
 import { SearchArgs } from '../search/dto/args/search.args';
 import SearchQueryOutputInterface from '../search/outputs/search-interface.output';
-import { User } from '../../auth/entities/user.entity';
+
+import { AbstractSearchAccessControlService } from './abstract-search-access-control.service';
 
 export abstract class AbstractSearchAccessControlResolver<
   Entity extends AccessControlledEntity,

@@ -1,10 +1,11 @@
-import { NestApplication, NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestApplication, NestFactory } from '@nestjs/core';
+import serverlessExpress from '@vendia/serverless-express';
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 import helmet from 'helmet';
-import { ConfigService } from '@nestjs/config';
-import serverlessExpress from '@vendia/serverless-express';
+
+import { AppModule } from './app.module';
 import Env from './env';
 
 /**

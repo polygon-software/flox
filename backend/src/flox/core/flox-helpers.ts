@@ -1,10 +1,11 @@
 import { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import flox from '../../../flox.config.json';
-import { MODULES } from '../MODULES';
 import { Request } from 'express';
-import { User } from '../modules/auth/entities/user.entity';
+
+import flox from '../../../flox.config.json';
 import Env from '../../env';
+import { MODULES } from '../MODULES';
+import { User } from '../modules/auth/entities/user.entity';
 
 export interface FrontendRequest extends Request {
   user?: {

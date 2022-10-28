@@ -1,8 +1,9 @@
 import { Controller, Post, Query, Req, Res } from '@nestjs/common';
-import { EmailService } from './email.service';
 import { ConfigService } from '@nestjs/config';
-import { Credentials } from './helpers/email-helpers';
 import { Request, Response } from 'express';
+
+import { Credentials } from './helpers/email-helpers';
+import { EmailService } from './email.service';
 
 @Controller()
 export class EmailController {

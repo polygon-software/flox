@@ -3,11 +3,11 @@
 </template>
 
 <script setup lang="ts">
-import { EMAIL, USERNAME } from 'src/flox/modules/auth/components/forms/fields';
 import GenericForm from 'components/forms/GenericForm.vue';
-import { showSuccessNotification } from 'src/tools/notification.tool';
-import { useQuasar } from 'quasar';
 import { FormPage } from 'components/forms/MultiPageForm';
+import { useQuasar } from 'quasar';
+import { EMAIL, USERNAME } from 'src/flox/modules/auth/components/forms/fields';
+import { showSuccessNotification } from 'src/tools/notification.tool';
 
 /**
  * This is a sample form component that uses the GenericForm helper component.

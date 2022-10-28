@@ -8,14 +8,15 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
-import { AuthenticationService } from '../flox/modules/auth/services/auth.service';
+import { i18n } from 'boot/i18n';
+import { useQuasar } from 'quasar';
+import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
 import ROUTES from 'src/router/routes';
 import { RouterService } from 'src/services/RouterService';
-import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
 import { showSuccessNotification } from 'src/tools/notification.tool';
-import { useQuasar } from 'quasar';
-import { i18n } from 'boot/i18n';
+import { inject } from 'vue';
+
+import { AuthenticationService } from '../flox/modules/auth/services/auth.service';
 
 const $q = useQuasar();
 const $authService: AuthenticationService | undefined = inject('$authService');

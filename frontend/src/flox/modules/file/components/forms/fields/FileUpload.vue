@@ -105,15 +105,15 @@
 </template>
 
 <script setup lang="ts">
-import { QFile, QVueGlobals, useQuasar } from 'quasar';
-import { defineProps, Ref, ref } from 'vue';
 import { AxiosResponse } from 'axios';
-import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
+import { i18n } from 'boot/i18n';
+import { QFile, QVueGlobals, useQuasar } from 'quasar';
+import Env from 'src/env';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
+import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
 import { uploadFile } from 'src/flox/modules/file/tools/upload.tools';
-import { i18n } from 'boot/i18n';
-import Env from 'src/env';
+import { defineProps, Ref, ref } from 'vue';
 
 interface SelectedFile {
   content: File;

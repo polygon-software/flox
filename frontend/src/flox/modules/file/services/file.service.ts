@@ -1,18 +1,18 @@
+import { executeMutation } from 'src/apollo/mutation';
+import { executeQuery, subscribeToQuery } from 'src/apollo/query';
 import { PrivateFileEntity } from 'src/flox/modules/file/entities/privateFile.entity';
+import { PublicFileEntity } from 'src/flox/modules/file/entities/publicFile.entity';
+import {
+  DELETE_PRIVATE_FILE,
+  DELETE_PUBLIC_FILE,
+} from 'src/flox/modules/file/file.mutation';
 import {
   ALL_MY_FILES,
   ALL_PUBLIC_FILES,
   GET_PRIVATE_FILE,
   GET_PUBLIC_FILE,
 } from 'src/flox/modules/file/file.query';
-import { PublicFileEntity } from 'src/flox/modules/file/entities/publicFile.entity';
 import { Ref } from 'vue';
-import {
-  DELETE_PRIVATE_FILE,
-  DELETE_PUBLIC_FILE,
-} from 'src/flox/modules/file/file.mutation';
-import { executeQuery, subscribeToQuery } from 'src/apollo/query';
-import { executeMutation } from 'src/apollo/mutation';
 
 /**
  * Fetches a private file

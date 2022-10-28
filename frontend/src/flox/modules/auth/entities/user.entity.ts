@@ -1,5 +1,6 @@
-import { ROLE } from '../enums/role.enum';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+
+import { ROLE } from '../enums/role.enum';
 
 /**
  * A class representing a user data object

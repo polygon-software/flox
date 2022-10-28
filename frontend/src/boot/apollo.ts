@@ -1,9 +1,9 @@
 import { ApolloClient } from '@apollo/client/core';
+import { BootFileParams } from '@quasar/app-vite';
+import { QSsrContext } from '@quasar/app-vite/types/ssr';
 import { provideApolloClient } from '@vue/apollo-composable';
 import { boot } from 'quasar/wrappers';
 import { getClientOptions } from 'src/apollo';
-import { BootFileParams } from '@quasar/app-vite';
-import { QSsrContext } from '@quasar/app-vite/types/ssr';
 
 interface FloxBootFileParams<T = any> extends BootFileParams<T> {
   ssrContext?: QSsrContext;

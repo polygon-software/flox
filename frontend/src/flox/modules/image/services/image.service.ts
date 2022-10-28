@@ -1,14 +1,14 @@
+import { executeMutation } from 'src/apollo/mutation';
+import { executeQuery } from 'src/apollo/query';
 import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
-import {
-  GET_IMAGE,
-  GET_IMAGE_FOR_FILE,
-} from 'src/flox/modules/image/image.query';
 import {
   CREATE_IMAGE,
   DELETE_IMAGE,
 } from 'src/flox/modules/image/image.mutation';
-import { executeQuery } from 'src/apollo/query';
-import { executeMutation } from 'src/apollo/mutation';
+import {
+  GET_IMAGE,
+  GET_IMAGE_FOR_FILE,
+} from 'src/flox/modules/image/image.query';
 
 /**
  * Returns an image for a given uuid

@@ -1,7 +1,9 @@
-import { SES, SendRawEmailCommand } from '@aws-sdk/client-ses';
+import { SendRawEmailCommand, SES } from '@aws-sdk/client-ses';
 import { createTransport } from 'nodemailer';
-import { AttachmentFile } from './AttachmentFile';
+
 import Env from '../../../../env';
+
+import { AttachmentFile } from './AttachmentFile';
 
 export type Credentials = {
   accessKeyId: string;
