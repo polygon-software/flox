@@ -1,7 +1,7 @@
 import { APP_GUARD } from '@nestjs/core';
 
 import { getActiveFloxModuleNames } from './core/flox-helpers';
-import { JwtAuthGuard } from './modules/auth/auth.guard';
+import JwtAuthGuard from './modules/auth/auth.guard';
 import { JwtStrategy } from './modules/auth/jwt.strategy';
 import { UserModule } from './modules/auth/user.module';
 import { EmailModule } from './modules/email/email.module';

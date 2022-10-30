@@ -11,7 +11,7 @@ import { IS_PUBLIC_KEY } from './authentication.decorator';
  * JSON Web token authentication guard
  */
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export default class JwtAuthGuard extends AuthGuard('jwt') {
   /**
    * Constructor
    * @param reflector - reflector

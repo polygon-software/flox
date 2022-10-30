@@ -1,17 +1,15 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-
 import { IsNumber, IsString } from 'class-validator';
 
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 
-import { BoundingBox } from './bounding-box.entity';
+import BoundingBox from './bounding-box.entity';
 import Image from './image.entity';
 
 @Entity()
 @ObjectType()
-export class Label extends BaseEntity {
+export default class Label extends BaseEntity {
   @Field(() => Image, {
     description: 'Image on which this label was detected',
   })

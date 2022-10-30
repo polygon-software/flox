@@ -54,13 +54,14 @@
 </template>
 
 <script setup lang="ts">
+import { defineEmits, inject } from 'vue';
+
 import { MultiPageForm } from 'components/forms/MultiPageForm';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import * as auth from 'src/flox/modules/auth';
 import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
 import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
-import { defineEmits, inject } from 'vue';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 

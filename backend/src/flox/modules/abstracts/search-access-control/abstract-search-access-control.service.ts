@@ -1,5 +1,4 @@
 import { unflatten } from 'flat';
-
 import {
   FindOneOptions,
   FindOptionsOrder,
@@ -8,19 +7,21 @@ import {
   Repository,
 } from 'typeorm';
 
-import { AccessControlledEntity } from '../../access-control/entities/access-controlled.entity';
-import { User } from '../../auth/entities/user.entity';
-import { AbstractCrudAccessControlService } from '../crud-access-control/abstract-crud-access-control.service';
-import { SearchArgs } from '../search/dto/args/search.args';
+import AccessControlledEntity from '../../access-control/entities/access-controlled.entity';
+import User from '../../auth/entities/user.entity';
+import AbstractCrudAccessControlService from '../crud-access-control/abstract-crud-access-control.service';
+import SearchArgs from '../search/dto/args/search.args';
 import SearchQueryOutputInterface from '../search/outputs/search-interface.output';
 
-export abstract class AbstractSearchAccessControlService<
+import type { NestedKeyOf } from 'src/types/NestedKeyOf';
+
+export default abstract class AbstractSearchAccessControlService<
   Entity extends AccessControlledEntity,
 > extends AbstractCrudAccessControlService<Entity> {
   abstract get repository(): Repository<Entity>;
 
   private nestedSearch(
-    searchKey: keyof Entity,
+    searchKey: NestedKeyOf<Entity>,
     filter: string,
   ): FindOptionsWhere<Entity> {
     return unflatten({
@@ -37,7 +38,7 @@ export abstract class AbstractSearchAccessControlService<
    */
   async searchPublic(
     queryArgs: SearchArgs,
-    searchKey: keyof Entity,
+    searchKey: NestedKeyOf<Entity>,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const where = this.mixWhere(
@@ -69,7 +70,7 @@ export abstract class AbstractSearchAccessControlService<
 
   async searchAsUser(
     queryArgs: SearchArgs,
-    searchKey: keyof Entity,
+    searchKey: NestedKeyOf<Entity>,
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
@@ -119,7 +120,7 @@ export abstract class AbstractSearchAccessControlService<
 
   async searchOfUser(
     queryArgs: SearchArgs,
-    searchKey: keyof Entity,
+    searchKey: NestedKeyOf<Entity>,
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
@@ -161,7 +162,7 @@ export abstract class AbstractSearchAccessControlService<
 
   async searchAsAdmin(
     queryArgs: SearchArgs,
-    searchKey: keyof Entity,
+    searchKey: NestedKeyOf<Entity>,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const where = this.mixWhere(

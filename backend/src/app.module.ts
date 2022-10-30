@@ -1,3 +1,5 @@
+import { join } from 'path';
+
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
@@ -8,15 +10,13 @@ import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
-import { join } from 'path';
-
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 import configuration from './config/configuration';
 import { isServerless } from './flox/core/flox-helpers';
 import { floxModules, floxProviders } from './flox/flox';
 import { GqlThrottlerGuard } from './flox/modules/GqlThrottlerGuard';
-import { HealthcheckController } from './flox/modules/healthcheck/healthcheck.controller';
+import HealthcheckController from './flox/modules/healthcheck/healthcheck.controller';
 
 @Module({
   imports: [

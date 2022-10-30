@@ -4,6 +4,7 @@ import {
   CognitoUserSession,
 } from 'amazon-cognito-identity-js';
 import { defineStore } from 'pinia';
+
 import {
   deleteCookies,
   persistToCookies,

@@ -1,15 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Entity, ManyToMany, ManyToOne, JoinColumn, JoinTable } from 'typeorm';
 
-import { Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
+import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
+import User from '../../auth/entities/user.entity';
 
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
-import { User } from '../../auth/entities/user.entity';
-
-import { UserGroup } from './user-group.entity';
+import UserGroup from './user-group.entity';
 
 @Entity()
 @ObjectType()
-export class AccessControlledEntity extends BaseEntity {
+export default class AccessControlledEntity extends BaseEntity {
   @Field(() => Boolean, {
     description: 'Marks this object as publicly readable',
   })
@@ -31,11 +30,12 @@ export class AccessControlledEntity extends BaseEntity {
     description: 'People with read access to this resource',
   })
   @ManyToMany(() => UserGroup, (userGroup) => userGroup.readAccess)
-  public readAccess: UserGroup[] = [];
+  @JoinTable()
+  public readAccess: UserGroup[];
 
   @Field(() => [User], {
     description: 'People with write access to this resource',
   })
   @ManyToMany(() => UserGroup, (userGroup) => userGroup.writeAccess)
-  public writeAccess: UserGroup[] = [];
+  public writeAccess: UserGroup[];
 }

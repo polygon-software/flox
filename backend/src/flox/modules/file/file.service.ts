@@ -8,15 +8,14 @@ import {
   S3,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-
 import { Repository } from 'typeorm';
 
-import { AbstractSearchAccessControlService } from '../abstracts/search-access-control/abstract-search-access-control.service';
+import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
 
 import S3File from './entities/file.entity';
 
 @Injectable()
-export class FileService extends AbstractSearchAccessControlService<S3File> {
+export default class FileService extends AbstractSearchAccessControlService<S3File> {
   // S3 credentials
   private readonly credentials = {
     region: this.configService.get('AWS_MAIN_REGION'),
@@ -53,8 +52,8 @@ export class FileService extends AbstractSearchAccessControlService<S3File> {
           ? 'AWS_PUBLIC_BUCKET_NAME'
           : 'AWS_PRIVATE_BUCKET_NAME',
       ),
-      Key: file.key,
-      Body: 'BODY',
+      Key: file.filename,
+      'Content-Type': file.mimetype,
     };
     const command = new PutObjectCommand(uploadParams);
     return getSignedUrl(this.s3, command, {
@@ -80,7 +79,7 @@ export class FileService extends AbstractSearchAccessControlService<S3File> {
       this.s3,
       new GetObjectCommand({
         Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
-        Key: file.key,
+        Key: file.uuid,
       }),
       options,
     );
@@ -115,7 +114,7 @@ export class FileService extends AbstractSearchAccessControlService<S3File> {
             ? 'AWS_PUBLIC_BUCKET_NAME'
             : 'AWS_PRIVATE_BUCKET_NAME',
         ),
-        Key: file.key,
+        Key: file.uuid,
       }),
     );
     file.url = undefined;

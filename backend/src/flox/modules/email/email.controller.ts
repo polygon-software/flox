@@ -3,10 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 
 import { Credentials } from './helpers/email-helpers';
-import { EmailService } from './email.service';
+import EmailService from './email.service';
 
 @Controller()
-export class EmailController {
+export default class EmailController {
   constructor(
     private readonly emailService: EmailService,
     private readonly configService: ConfigService,

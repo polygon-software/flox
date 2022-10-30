@@ -2,6 +2,7 @@ import { FetchResult } from '@apollo/client';
 import { OperationVariables } from '@apollo/client/core/types';
 import { useMutation } from '@vue/apollo-composable';
 import { DocumentNode } from 'graphql';
+
 import { invalidateTables } from 'src/apollo/invalidation';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 

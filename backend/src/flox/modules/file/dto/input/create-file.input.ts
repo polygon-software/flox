@@ -1,21 +1,36 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
-import { Column } from 'typeorm';
-
-import { IsNumber, IsOptional, IsString } from 'class-validator';
-
-import { CreateInput } from '../../../abstracts/crud-access-control/dto/inputs/create.input';
+import CreateAccessControlledInput from '../../../abstracts/crud-access-control/dto/inputs/create-access-controlled.input';
 
 @InputType()
-export class CreateFileInput extends CreateInput {
+export default class CreateFileInput extends CreateAccessControlledInput {
   @Field(() => String, {
-    nullable: true,
     description: 'Name of File',
   })
-  @Column()
-  @IsOptional()
   @IsString()
-  public filename: string;
+  @IsNotEmpty()
+  filename: string;
+
+  @Field(() => String, {
+    description: 'File mimetype',
+  })
+  @IsString()
+  @IsNotEmpty()
+  mimetype: string;
+
+  @Field(() => Int, {
+    description: 'Size of file in bytes',
+  })
+  @IsInt()
+  @IsNotEmpty()
+  size: number;
 
   @Field(() => Int, {
     nullable: true,

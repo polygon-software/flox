@@ -1,29 +1,28 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { AbstractSearchAccessControlResolver } from '../abstracts/search-access-control/abstract-search-access-control.resolver';
+import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import AbstractSearchAccessControlResolver from '../abstracts/search-access-control/abstract-search-access-control.resolver';
 import { LoggedIn } from '../auth/authentication.decorator';
-import { User } from '../auth/entities/user.entity';
-import { FileService } from '../file/file.service';
-import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
+import User from '../auth/entities/user.entity';
+import { CurrentUser } from '../roles/authorization.decorator';
 
-import { GetAllImagesArgs } from './dto/args/get-all-images.args';
-import { GetImageArgs } from './dto/args/get-image.args';
-import { GetImageForFileArgs } from './dto/args/get-image-for-file.args';
-import { CreateImageInput } from './dto/input/create-image.input';
-import { DeleteImageInput } from './dto/input/delete-image.input';
+import GetAllImagesArgs from './dto/args/get-all-images.args';
+import GetImageArgs from './dto/args/get-image.args';
+import GetImageForFileArgs from './dto/args/get-image-for-file.args';
+import CreateImageInput from './dto/input/create-image.input';
 import Image from './entities/image.entity';
-import { ImageService } from './image.service';
+import ImageService from './image.service';
+import GetMultipleImagesArgs from './dto/args/get-multiple-images.args';
+import SearchImagesArgs from './dto/args/search-images.args';
+import ImageSearchOutput from './outputs/image-search.output';
 
 @Resolver(() => Image)
-export class ImageResolver extends AbstractSearchAccessControlResolver<
+export default class ImageResolver extends AbstractSearchAccessControlResolver<
   Image,
   ImageService
 > {
-  constructor(
-    private readonly imageService: ImageService,
-    private readonly fileService: FileService,
-  ) {
-    super('capturedAt');
+  constructor(private readonly imageService: ImageService) {
+    super('file.filename');
   }
 
   get service(): ImageService {
@@ -37,12 +36,33 @@ export class ImageResolver extends AbstractSearchAccessControlResolver<
    * @returns Requested image
    */
   @LoggedIn()
-  @Query(() => Image, { name: 'image' })
+  @Query(() => Image, { name: 'Image' })
   async getImage(
     @Args() getImageArgs: GetImageArgs,
     @CurrentUser() user: User,
   ): Promise<Image> {
     return this.imageService.getImage(getImageArgs, user);
+  }
+
+  @LoggedIn()
+  @Query(() => [Image], { name: 'Images' })
+  async getImages(
+    @Args() getMultipleImagesArgs: GetMultipleImagesArgs,
+    @CurrentUser() user: User,
+  ): Promise<Image[]> {
+    return this.imageService.getMultipleImages(getMultipleImagesArgs, user);
+  }
+
+  @LoggedIn()
+  @Query(() => [Image], { name: 'MyImages' })
+  async getMyImages(
+    @Args() getMultipleImagesArgs: GetMultipleImagesArgs,
+    @CurrentUser() user: User,
+  ): Promise<Image[]> {
+    return this.imageService.getMultipleImagesOfUser(
+      getMultipleImagesArgs,
+      user,
+    );
   }
 
   /**
@@ -51,13 +71,22 @@ export class ImageResolver extends AbstractSearchAccessControlResolver<
    * @param user - Currently logged-in user
    * @returns All Images
    */
-  @AdminOnly()
-  @Query(() => [Image], { name: 'images' })
-  async getImages(
-    getAllImagesArgs: GetAllImagesArgs,
+  @LoggedIn()
+  @Query(() => [Image], { name: 'AllImages' })
+  async getAllImages(
+    @Args() getAllImagesArgs: GetAllImagesArgs,
     @CurrentUser() user: User,
   ): Promise<Image[]> {
     return this.imageService.getAllImages(getAllImagesArgs, user);
+  }
+
+  @LoggedIn()
+  @Query(() => [Image], { name: 'AllMyImages' })
+  async getAllMyImages(
+    @Args() getAllImagesArgs: GetAllImagesArgs,
+    @CurrentUser() user: User,
+  ): Promise<Image[]> {
+    return this.imageService.getAllImagesOfUser(getAllImagesArgs, user);
   }
 
   /**
@@ -68,12 +97,38 @@ export class ImageResolver extends AbstractSearchAccessControlResolver<
    * @returns Requested image
    */
   @LoggedIn()
-  @Query(() => Image, { name: 'imageForFile' })
+  @Query(() => Image, { name: 'ImageForFile' })
   async getImageForFile(
     @Args() getImageForFileArgs: GetImageForFileArgs,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    return await this.imageService.getImageForFile(getImageForFileArgs, user);
+    return this.imageService.getImageForFile(getImageForFileArgs, user);
+  }
+
+  @LoggedIn()
+  @Query(() => [Image], { name: 'SearchImages' })
+  async searchImages(
+    @Args() searchImageArgs: SearchImagesArgs,
+    @CurrentUser() user: User,
+  ): Promise<ImageSearchOutput> {
+    return this.imageService.searchImages(
+      searchImageArgs,
+      this.searchKey,
+      user,
+    );
+  }
+
+  @LoggedIn()
+  @Query(() => [Image], { name: 'SearchMyImages' })
+  async searchMyImages(
+    @Args() searchImageArgs: SearchImagesArgs,
+    @CurrentUser() user: User,
+  ): Promise<ImageSearchOutput> {
+    return this.imageService.searchMyImages(
+      searchImageArgs,
+      this.searchKey,
+      user,
+    );
   }
 
   /**
@@ -83,7 +138,7 @@ export class ImageResolver extends AbstractSearchAccessControlResolver<
    * @returns Requested image
    */
   @LoggedIn()
-  @Mutation(() => Image)
+  @Mutation(() => Image, { name: 'CreateImage' })
   async createImage(
     @Args('createImageInput') createImageInput: CreateImageInput,
     @CurrentUser() user: User,
@@ -93,16 +148,16 @@ export class ImageResolver extends AbstractSearchAccessControlResolver<
 
   /**
    * Deletes an image (without deleting the corresponding file)
-   * @param deleteImageInput - contains uuid of image
+   * @param deleteInput - contains uuid of image
    * @param user - Currently logged-in user
    * @returns Requested image
    */
   @LoggedIn()
-  @Mutation(() => Image)
+  @Mutation(() => Image, { name: 'DeleteImage' })
   async deleteImage(
-    @Args('deleteImageInput') deleteImageInput: DeleteImageInput,
+    @Args('deleteImageInput') deleteInput: DeleteInput,
     @CurrentUser() user: User,
   ): Promise<Image> {
-    return this.imageService.deleteImage(deleteImageInput, user);
+    return this.imageService.deleteImage(deleteInput, user);
   }
 }

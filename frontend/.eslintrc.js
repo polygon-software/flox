@@ -1,4 +1,5 @@
-const path = require("path");
+const path = require('path');
+
 module.exports = {
   // https://eslint.org/docs/user-guide/configuring#configuration-cascading-and-hierarchy
   // This option interrupts the configuration hierarchy at this file
@@ -6,7 +7,7 @@ module.exports = {
   root: true,
 
   // https://eslint.vuejs.org/user-guide/#how-to-use-custom-parser
-  // Must use parserOptions instead of "parser" to allow vue-eslint-parser to keep working
+  // Must use parserOptions instead of 'parser' to allow vue-eslint-parser to keep working
   // `parser: 'vue-eslint-parser'` is already included with any 'plugin:vue/**' config and should be omitted
   parserOptions: {
     // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/parser#configuration
@@ -28,6 +29,9 @@ module.exports = {
     // consider disabling this class of rules if linting takes too long
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
 
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+
     // See https://eslint.vuejs.org/rules/#available-rules
     'plugin:vue/vue3-recommended',
 
@@ -41,7 +45,8 @@ module.exports = {
   ],
 
   plugins: [
-    'simple-import-sort',
+    'import',
+    'eslint-plugin-graphql',
     // required to apply rules which need type information
     '@typescript-eslint/eslint-plugin',
 
@@ -74,48 +79,38 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'off',
 
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
+    'import/order': ['error', {
+      'newlines-between': 'always',
+      'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type']
+    }],
 
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
-    "require-jsdoc": ["error", {
-      "require": {
-        "FunctionDeclaration": true,
-        "MethodDefinition": true,
-        "ClassDeclaration": true,
-        "ArrowFunctionExpression": false,
-        "FunctionExpression": false
+    'require-jsdoc': ['error', {
+      'require': {
+        'FunctionDeclaration': true,
+        'MethodDefinition': true,
+        'ClassDeclaration': true,
+        'ArrowFunctionExpression': false,
+        'FunctionExpression': false
       }
     }],
     'valid-jsdoc': ['error', {
-      "requireReturn": false,
-      "requireReturnType": false,
-      "requireParamType": false,
+      'requireReturn': false,
+      'requireReturnType': false,
+      'requireParamType': false,
     }],
+    'graphql/template-strings': ['error', {
+      // Import default settings for your GraphQL client. Supported values:
+      // 'apollo', 'relay', 'lokka', 'fraql', 'literal'
+      env: 'apollo',
+    }]
   },
-  overrides: [
-    // override "simple-import-sort" config
-    {
-      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
-      "rules": {
-        "simple-import-sort/imports": [
-          "error",
-          {
-            "groups": [
-              // Packages `react` related packages come first.
-              ["^@nestjs", "^@?\\w"],
-              ["^typeorm", "^@?\\w"],
-              ["^class-validator", "^@?\\w"],
-              // Parent imports. Put `..` last.
-              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
-              // Other relative imports. Put same-folder imports and `.` last.
-              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
-            ]
-          }
-        ]
-      }
+  settings: {
+    'import/resolver': {
+      typescript: true,
+      node: true,
     }
-  ]
+  }
 }

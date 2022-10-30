@@ -1,5 +1,4 @@
 import { route } from 'quasar/wrappers';
-import Env from 'src/env';
 import {
   createMemoryHistory,
   createRouter,
@@ -7,6 +6,8 @@ import {
   createWebHistory,
   RouteRecordRaw,
 } from 'vue-router';
+
+import Env from 'src/env';
 
 import routes from './routes';
 

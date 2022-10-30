@@ -6,29 +6,30 @@ import {
   RekognitionClient,
 } from '@aws-sdk/client-rekognition';
 import exifr from 'exifr';
-
 import { FindOneOptions, Repository } from 'typeorm';
 
-import { GetOneArgs } from '../abstracts/crud/dto/get-one.args';
-import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
+import GetOneArgs from '../abstracts/crud/dto/get-one.args';
+import DeleteInput from '../abstracts/crud/inputs/delete.input';
 import { userHasWriteAccess } from '../abstracts/crud-access-control/helpers/access-control.helper';
-import { AbstractSearchAccessControlService } from '../abstracts/search-access-control/abstract-search-access-control.service';
-import { User } from '../auth/entities/user.entity';
-import { FileService } from '../file/file.service';
+import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
+import User from '../auth/entities/user.entity';
+import FileService from '../file/file.service';
+import { NestedKeyOf } from '../../../types/NestedKeyOf';
 
-import { GetAllImagesArgs } from './dto/args/get-all-images.args';
-import { GetImageArgs } from './dto/args/get-image.args';
-import { GetImageForFileArgs } from './dto/args/get-image-for-file.args';
+import GetAllImagesArgs from './dto/args/get-all-images.args';
+import GetImageArgs from './dto/args/get-image.args';
+import GetImageForFileArgs from './dto/args/get-image-for-file.args';
 import GetMultipleImagesArgs from './dto/args/get-multiple-images.args';
-import { CreateImageInput } from './dto/input/create-image.input';
-import { CreateLabelsInput } from './dto/input/create-labels.input';
-import { DeleteImageInput } from './dto/input/delete-image.input';
-import { BoundingBox } from './entities/bounding-box.entity';
+import CreateImageInput from './dto/input/create-image.input';
+import CreateLabelsInput from './dto/input/create-labels.input';
+import BoundingBox from './entities/bounding-box.entity';
 import Image from './entities/image.entity';
-import { Label } from './entities/label.entity';
+import Label from './entities/label.entity';
+import SearchImagesArgs from './dto/args/search-images.args';
+import ImageSearchOutput from './outputs/image-search.output';
 
 @Injectable()
-export class ImageService extends AbstractSearchAccessControlService<Image> {
+export default class ImageService extends AbstractSearchAccessControlService<Image> {
   // Rekognition credentials
   private readonly credentials = {
     region: this.configService.getOrThrow('AWS_MAIN_REGION'),
@@ -147,6 +148,42 @@ export class ImageService extends AbstractSearchAccessControlService<Image> {
     );
   }
 
+  async getMultipleImagesOfUser(
+    getMultipleImagesArgs: GetMultipleImagesArgs,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<Image[]> {
+    const images = await super.getMultipleOfUser(
+      getMultipleImagesArgs,
+      user,
+      this.mergeOptions(
+        {
+          relations: {
+            file: true,
+            labels: {
+              boundingBox: true,
+            },
+          },
+        },
+        options,
+      ),
+    );
+    return Promise.all(
+      images.map(async (image) => {
+        const file = await this.fileService.getOneAsUser(
+          {
+            uuid: image.file.uuid,
+          } as GetOneArgs,
+          user,
+        );
+        return {
+          ...image,
+          file,
+        };
+      }),
+    );
+  }
+
   /**
    * Returns all images stored within the database
    * @param getAllImagesArgs - contains take and skip parameters
@@ -160,6 +197,42 @@ export class ImageService extends AbstractSearchAccessControlService<Image> {
     options?: FindOneOptions<Image>,
   ): Promise<Image[]> {
     const images = await super.getAllAsUser(
+      getAllImagesArgs,
+      user,
+      this.mergeOptions(
+        {
+          relations: {
+            file: true,
+            labels: {
+              boundingBox: true,
+            },
+          },
+        },
+        options,
+      ),
+    );
+    return Promise.all(
+      images.map(async (image) => {
+        const file = await this.fileService.getOneAsUser(
+          {
+            uuid: image.file.uuid,
+          } as GetOneArgs,
+          user,
+        );
+        return {
+          ...image,
+          file,
+        };
+      }),
+    );
+  }
+
+  async getAllImagesOfUser(
+    getAllImagesArgs: GetAllImagesArgs,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<Image[]> {
+    const images = await super.getAllOfUser(
       getAllImagesArgs,
       user,
       this.mergeOptions(
@@ -249,6 +322,56 @@ export class ImageService extends AbstractSearchAccessControlService<Image> {
     );
   }
 
+  async searchImages(
+    searchImageArgs: SearchImagesArgs,
+    searchKey: NestedKeyOf<Image>,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<ImageSearchOutput> {
+    const { count, data } = await super.searchAsUser(
+      searchImageArgs,
+      searchKey,
+      user,
+      options,
+    );
+    const images = await this.getMultipleImages(
+      {
+        uuids: data.map((image) => image.uuid),
+        expires: searchImageArgs.expires,
+      } as GetMultipleImagesArgs,
+      user,
+    );
+    return {
+      count,
+      data: images,
+    };
+  }
+
+  async searchMyImages(
+    searchImageArgs: SearchImagesArgs,
+    searchKey: NestedKeyOf<Image>,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<ImageSearchOutput> {
+    const { count, data } = await super.searchOfUser(
+      searchImageArgs,
+      searchKey,
+      user,
+      options,
+    );
+    const images = await this.getMultipleImages(
+      {
+        uuids: data.map((image) => image.uuid),
+        expires: searchImageArgs.expires,
+      } as GetMultipleImagesArgs,
+      user,
+    );
+    return {
+      count,
+      data: images,
+    };
+  }
+
   /**
    * Creates a new image given a file
    * @param createImageInput - contains file uuid
@@ -318,7 +441,7 @@ export class ImageService extends AbstractSearchAccessControlService<Image> {
         Image: {
           S3Object: {
             Bucket: this.configService.getOrThrow('AWS_PRIVATE_BUCKET_NAME'),
-            Name: image.file.key,
+            Name: image.file.uuid,
           },
         },
       }),
@@ -363,15 +486,12 @@ export class ImageService extends AbstractSearchAccessControlService<Image> {
 
   /**
    * Removes the database entry of a given image without deleting the file
-   * @param deleteImageInput - contains the uuid of the image to delete
+   * @param deleteInput - contains the uuid of the image to delete
    * @param user - user that needs to have the right to access the image
    * @returns Deleted Image
    */
-  async deleteImage(
-    deleteImageInput: DeleteImageInput,
-    user: User,
-  ): Promise<Image> {
-    const image = await this.getOneAsUser(deleteImageInput, user, {
+  async deleteImage(deleteInput: DeleteInput, user: User): Promise<Image> {
+    const image = await this.getOneAsUser(deleteInput, user, {
       relations: {
         file: true,
       },

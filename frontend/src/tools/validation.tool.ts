@@ -1,6 +1,7 @@
-import { i18n } from 'boot/i18n';
 import Joi, { AnySchema } from 'joi';
 import { joiPasswordExtendCore } from 'joi-password';
+
+import { i18n } from 'boot/i18n';
 
 export type ValidationRule<T = any> = (
   value: T

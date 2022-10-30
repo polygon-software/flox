@@ -1,10 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-
 import { Column, Entity } from 'typeorm';
-
 import { IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
 
-import { AccessControlledEntity } from '../../access-control/entities/access-controlled.entity';
+import AccessControlledEntity from '../../access-control/entities/access-controlled.entity';
 
 /**
  * Defines a file within an AWS S3 bucket
@@ -12,12 +10,7 @@ import { AccessControlledEntity } from '../../access-control/entities/access-con
 
 @Entity()
 @ObjectType()
-export abstract class S3File extends AccessControlledEntity {
-  @Field(() => String, { description: 'S3 File Key' })
-  @Column()
-  @IsString()
-  public key: string;
-
+export default abstract class S3File extends AccessControlledEntity {
   @Field(() => String, {
     nullable: true,
     description: 'Pre-signed download URL',
@@ -44,6 +37,15 @@ export abstract class S3File extends AccessControlledEntity {
   @Column()
   @IsNumber()
   public size: number;
-}
 
-export default S3File;
+  @Field(() => String, {
+    nullable: true,
+    description: 'Signed URL to upload object. Only works 1 time',
+  })
+  @Column({
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  public signedUrl?: string;
+}

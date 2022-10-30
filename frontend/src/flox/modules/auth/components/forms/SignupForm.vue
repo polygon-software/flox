@@ -33,12 +33,13 @@
 </template>
 
 <script setup lang="ts">
+import { defineEmits } from 'vue';
+
 import { MultiPageForm } from 'components/forms/MultiPageForm';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import * as auth from 'src/flox/modules/auth';
 import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
-import { defineEmits } from 'vue';
 
 const emit = defineEmits(['submit', 'cancel']);
 

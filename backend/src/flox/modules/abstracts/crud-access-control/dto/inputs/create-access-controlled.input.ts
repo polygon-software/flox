@@ -1,9 +1,8 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-
 import { IsBoolean, IsUUID } from 'class-validator';
 
 @InputType()
-export class CreateInput {
+export default class CreateAccessControlledInput {
   @Field(() => Boolean)
   @IsBoolean()
   publicReadAccess = false;

@@ -104,10 +104,11 @@
  * @param loadingLabel - the label to show when loading
  * @param loading - loading status to show on the finish button
  */
-import { i18n } from 'boot/i18n';
-import { FormPage, MultiPageForm } from 'components/forms/MultiPageForm';
 import { QForm } from 'quasar';
 import { defineEmits, defineProps, Ref, ref } from 'vue';
+
+import { i18n } from 'boot/i18n';
+import { FormPage, MultiPageForm } from 'components/forms/MultiPageForm';
 
 const emit = defineEmits(['submit']);
 const formRef: Ref<QForm | null> = ref(null);

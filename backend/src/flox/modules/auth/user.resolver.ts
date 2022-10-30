@@ -1,22 +1,25 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { GetAllArgs } from '../abstracts/crud/dto/get-all.args';
-import { GetMultipleArgs } from '../abstracts/crud/dto/get-multiple.args';
-import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
-import { AbstractSearchResolver } from '../abstracts/search/abstract-search.resolver';
-import { SearchArgs } from '../abstracts/search/dto/args/search.args';
+import GetAllArgs from '../abstracts/crud/dto/get-all.args';
+import GetMultipleArgs from '../abstracts/crud/dto/get-multiple.args';
+import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
+import SearchArgs from '../abstracts/search/dto/args/search.args';
 import { CurrentUser } from '../roles/authorization.decorator';
 
-import { GetUserArgs } from './dto/args/get-user.args';
-import { CreateUserInput } from './dto/input/create-user.input';
-import { UpdateUserInput } from './dto/input/update-user.input';
-import { User } from './entities/user.entity';
-import { UserQueryOutput } from './output/user-query.output';
+import GetUserArgs from './dto/args/get-user.args';
+import CreateUserInput from './dto/input/create-user.input';
+import UpdateUserInput from './dto/input/update-user.input';
+import User from './entities/user.entity';
+import UserSearchOutput from './output/user-search.output';
 import { LoggedIn, Public } from './authentication.decorator';
-import { UserService } from './user.service';
+import UserService from './user.service';
 
 @Resolver(() => User)
-export class UserResolver extends AbstractSearchResolver<User, UserService> {
+export default class UserResolver extends AbstractSearchResolver<
+  User,
+  UserService
+> {
   constructor(private readonly userService: UserService) {
     super('username');
   }
@@ -31,7 +34,7 @@ export class UserResolver extends AbstractSearchResolver<User, UserService> {
    * @returns the user, if any
    */
   @LoggedIn()
-  @Query(() => User, { name: 'myUser' })
+  @Query(() => User, { name: 'MyUser' })
   async myUser(@CurrentUser() user: User): Promise<User> {
     // Get user where user's UUID matches Cognito ID
     return this.userService.getMyUser(user);
@@ -43,7 +46,7 @@ export class UserResolver extends AbstractSearchResolver<User, UserService> {
    * @returns the user
    */
   @Public()
-  @Query(() => User, { name: 'user' })
+  @Query(() => User, { name: 'User' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return this.userService.getUser(getUserArgs);
   }
@@ -54,7 +57,7 @@ export class UserResolver extends AbstractSearchResolver<User, UserService> {
    * @returns the users
    */
   @Public()
-  @Query(() => [User], { name: 'users' })
+  @Query(() => [User], { name: 'Users' })
   async getMultipleUsers(
     @Args() getMultiple: GetMultipleArgs,
   ): Promise<User[]> {
@@ -67,7 +70,7 @@ export class UserResolver extends AbstractSearchResolver<User, UserService> {
    * @returns the users
    */
   @Public()
-  @Query(() => [User], { name: 'allUsers' })
+  @Query(() => [User], { name: 'AllUsers' })
   async getAllUsers(@Args() getAll: GetAllArgs): Promise<User[]> {
     return super.getAll(getAll);
   }
@@ -78,9 +81,9 @@ export class UserResolver extends AbstractSearchResolver<User, UserService> {
    * @returns data that fit criteria
    */
   @Public()
-  @Query(() => UserQueryOutput, { name: 'queryUsers' })
-  queryAllUsers(@Args() queryArgs: SearchArgs): Promise<UserQueryOutput> {
-    return super.queryAll(queryArgs);
+  @Query(() => UserSearchOutput, { name: 'SearchUsers' })
+  searchUsers(@Args() queryArgs: SearchArgs): Promise<UserSearchOutput> {
+    return super.search(queryArgs);
   }
 
   /**
@@ -89,7 +92,7 @@ export class UserResolver extends AbstractSearchResolver<User, UserService> {
    * @returns the newly created user
    */
   @Public()
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'CreateUser' })
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
   ): Promise<User> {
@@ -102,7 +105,7 @@ export class UserResolver extends AbstractSearchResolver<User, UserService> {
    * @returns the updated user
    */
   @Public()
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'UpdateUser' })
   async updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
   ): Promise<User> {
@@ -115,7 +118,7 @@ export class UserResolver extends AbstractSearchResolver<User, UserService> {
    * @returns the deleted user
    */
   @Public()
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'DeleteUser' })
   async deleteUser(
     @Args('deleteUserInput') deleteInput: DeleteInput,
   ): Promise<User> {

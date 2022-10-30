@@ -2,6 +2,35 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AccessControlledEntity {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Marks this object as readable for all logged in users"""
+  loggedInReadAccess: Boolean!
+
+  """Owner of this object, has full control over it"""
+  owner: User!
+
+  """Marks this object as publicly readable"""
+  publicReadAccess: Boolean!
+
+  """People with read access to this resource"""
+  readAccess: [User!]!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+
+  """People with write access to this resource"""
+  writeAccess: [User!]!
+}
+
 type BoundingBox {
   """Creation date"""
   createdAt: DateTime!
@@ -31,9 +60,31 @@ type BoundingBox {
   width: Float!
 }
 
+input CreateFileInput {
+  """URL expiration duration (in seconds)"""
+  expires: Int
+
+  """Name of File"""
+  filename: String!
+  loggedInReadAccess: Boolean = false
+
+  """File mimetype"""
+  mimetype: String!
+  publicReadAccess: Boolean = false
+  readAccess: [ID!] = []
+
+  """Size of file in bytes"""
+  size: Int!
+  writeAccess: [ID!] = []
+}
+
 input CreateImageInput {
   file: ID!
+  loggedInReadAccess: Boolean = false
   objectRecognition: Boolean = false
+  publicReadAccess: Boolean = false
+  readAccess: [ID!] = []
+  writeAccess: [ID!] = []
 }
 
 input CreateUserInput {
@@ -48,16 +99,16 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-input DeleteFileInput {
-  uuid: ID!
-}
-
-input DeleteImageInput {
-  uuid: ID!
-}
-
 input DeleteInput {
   uuid: ID!
+}
+
+type FileSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """Files that fit query"""
+  data: [S3File!]!
 }
 
 type Image {
@@ -71,7 +122,7 @@ type Image {
   deletedAt: DateTime
 
   """File"""
-  file: PrivateFile!
+  file: S3File!
 
   """Image Height in Pixels"""
   height: Float
@@ -82,8 +133,20 @@ type Image {
   """GPS Latitude"""
   latitude: Float
 
+  """Marks this object as readable for all logged in users"""
+  loggedInReadAccess: Boolean!
+
   """GPS Longitude"""
   longitude: Float
+
+  """Owner of this object, has full control over it"""
+  owner: User!
+
+  """Marks this object as publicly readable"""
+  publicReadAccess: Boolean!
+
+  """People with read access to this resource"""
+  readAccess: [User!]!
 
   """Last modification date"""
   updatedAt: DateTime
@@ -93,6 +156,9 @@ type Image {
 
   """Image Width in Pixels"""
   width: Float
+
+  """People with write access to this resource"""
+  writeAccess: [User!]!
 }
 
 type Label {
@@ -125,16 +191,250 @@ type Label {
 }
 
 type Mutation {
-  createImage(createImageInput: CreateImageInput!): Image!
-  createUser(createUserInput: CreateUserInput!): User!
-  deleteImage(deleteImageInput: DeleteImageInput!): Image!
-  deletePrivateFile(deleteFileInput: DeleteFileInput!): PrivateFile!
-  deletePublicFile(deleteFileInput: DeleteFileInput!): PublicFile!
-  deleteUser(deleteUserInput: DeleteInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
+  CreateFile(createFileInputs: CreateFileInput!): S3File!
+  CreateImage(createImageInput: CreateImageInput!): Image!
+  CreateUser(createUserInput: CreateUserInput!): User!
+  DeleteFile(deleteInput: DeleteInput!): S3File!
+  DeleteImage(deleteImageInput: DeleteInput!): Image!
+  DeleteUser(deleteUserInput: DeleteInput!): User!
+  UpdateFile(updateFileInput: UpdateFileInput!): S3File!
+  UpdateUser(updateUserInput: UpdateUserInput!): User!
 }
 
-type PrivateFile {
+type Query {
+  AllFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [S3File!]!
+  AllImages(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """How many images to skip"""
+    skip: Int = 0
+
+    """Number of images to load"""
+    take: Int = 500
+  ): [Image!]!
+  AllMyFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [S3File!]!
+  AllMyImages(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """How many images to skip"""
+    skip: Int = 0
+
+    """Number of images to load"""
+    take: Int = 500
+  ): [Image!]!
+  AllPublicFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [S3File!]!
+  AllUsers(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [User!]!
+  File(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuid: ID!
+  ): S3File!
+  Files(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [S3File!]!
+  Image(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuid: ID!
+  ): Image!
+  ImageForFile(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    file: ID!
+  ): Image!
+  Images(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [Image!]!
+  MyFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [S3File!]!
+  MyImages(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [Image!]!
+  MyUser: User!
+  PublicFiles(
+    """URL expiration duration (in seconds)"""
+    expires: Int
+    uuids: [ID!] = []
+  ): [S3File!]!
+  SearchAdminFiles(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [FileSearchOutput!]!
+  SearchFiles(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [FileSearchOutput!]!
+  SearchImages(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [Image!]!
+  SearchMyFiles(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [FileSearchOutput!]!
+  SearchMyImages(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [Image!]!
+  SearchPublicFiles(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """URL expiration duration (in seconds)"""
+    expires: Int
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [FileSearchOutput!]!
+  SearchUsers(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): UserSearchOutput!
+  User(cognitoUuid: ID, uuid: ID!): User!
+  Users(uuids: [ID!] = []): [User!]!
+}
+
+type S3File {
   """Creation date"""
   createdAt: DateTime!
 
@@ -144,14 +444,23 @@ type PrivateFile {
   """Name of File"""
   filename: String
 
-  """S3 File Key"""
-  key: String!
+  """Marks this object as readable for all logged in users"""
+  loggedInReadAccess: Boolean!
 
   """Files mime type"""
   mimetype: String!
 
-  """File owner"""
-  owner: String!
+  """Owner of this object, has full control over it"""
+  owner: User!
+
+  """Marks this object as publicly readable"""
+  publicReadAccess: Boolean!
+
+  """People with read access to this resource"""
+  readAccess: [User!]!
+
+  """Signed URL to upload object. Only works 1 time"""
+  signedUrl: String
 
   """Filesize in bytes"""
   size: Float!
@@ -164,95 +473,18 @@ type PrivateFile {
 
   """UUID"""
   uuid: ID!
+
+  """People with write access to this resource"""
+  writeAccess: [User!]!
 }
 
-type PublicFile {
-  """Creation date"""
-  createdAt: DateTime!
-
-  """Date of deletion"""
-  deletedAt: DateTime
+input UpdateFileInput {
+  """URL expiration duration (in seconds)"""
+  expires: Int
 
   """Name of File"""
   filename: String
-
-  """S3 File Key"""
-  key: String!
-
-  """Files mime type"""
-  mimetype: String!
-
-  """Filesize in bytes"""
-  size: Float!
-
-  """Last modification date"""
-  updatedAt: DateTime
-
-  """Public download URL"""
-  url: String!
-
-  """UUID"""
   uuid: ID!
-}
-
-type Query {
-  allMyFiles(
-    """How many files to skip"""
-    skip: Int = 0
-
-    """Number of files to load"""
-    take: Int = 500
-  ): [PrivateFile!]!
-  allPublicFiles(
-    """How many files to skip"""
-    skip: Int = 0
-
-    """Number of files to load"""
-    take: Int = 500
-  ): [PublicFile!]!
-  allUsers(
-    """How many items to skip"""
-    skip: Int = 0
-
-    """Number of items to load"""
-    take: Int = 500
-  ): [User!]!
-  image(
-    """URL expiration duration (in seconds)"""
-    expires: [Float!]
-    uuid: ID!
-  ): Image!
-  imageForFile(
-    """URL expiration duration (in seconds)"""
-    expires: [Float!]
-    file: ID!
-  ): Image!
-  images: [Image!]!
-  myUser: User!
-  privateFile(
-    """URL expiration duration (in seconds)"""
-    expires: Int
-    uuid: ID!
-  ): PrivateFile!
-  publicFile(uuid: ID!): PublicFile!
-  queryUsers(
-    """Sort descending"""
-    descending: Boolean = false
-
-    """Search for text withinn items"""
-    filter: String
-
-    """Number of items to skip"""
-    skip: Float = 0
-
-    """Sort by property"""
-    sortBy: String
-
-    """Number of images to take"""
-    take: Float = 10
-  ): UserQueryOutput!
-  user(cognitoUuid: ID, uuid: ID!): User!
-  users(uuids: [ID!]): [User!]!
 }
 
 input UpdateUserInput {
@@ -274,6 +506,9 @@ type User {
   """E-mail address"""
   email: String!
 
+  """User groups this user belongs to"""
+  groups: [UserGroup!]!
+
   """User role"""
   role: String
 
@@ -287,7 +522,33 @@ type User {
   uuid: ID!
 }
 
-type UserQueryOutput {
+type UserGroup {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Username"""
+  name: String!
+
+  """Resources this user group has read access to"""
+  readAccess: AccessControlledEntity!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """Users belonging to this user group"""
+  users: [User!]!
+
+  """UUID"""
+  uuid: ID!
+
+  """Resources this user group has write access to"""
+  writeAccess: AccessControlledEntity!
+}
+
+type UserSearchOutput {
   """How many items are found within database"""
   count: String!
 

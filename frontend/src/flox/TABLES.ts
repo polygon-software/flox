@@ -1,6 +1,5 @@
 export enum TABLES {
-  PRIVATE_FILE = 'privateFile',
-  PUBLIC_FILE = 'publicFile',
+  FILE = 'file',
   IMAGE = 'image',
   LABELS = 'labels',
   BOUNDING_BOX = 'boundingBox',

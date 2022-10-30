@@ -1,18 +1,14 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-
-import { Column } from 'typeorm';
-
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-import { UpdateInput } from '../../../abstracts/crud/inputs/update.input';
+import UpdateInput from '../../../abstracts/crud/inputs/update.input';
 
 @InputType()
-export class UpdateFileInput extends UpdateInput {
+export default class UpdateFileInput extends UpdateInput {
   @Field(() => String, {
     nullable: true,
     description: 'Name of File',
   })
-  @Column()
   @IsOptional()
   @IsString()
   public filename: string;

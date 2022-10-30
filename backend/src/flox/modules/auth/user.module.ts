@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { User } from './entities/user.entity';
-import { UserQueryOutput } from './output/user-query.output';
-import { UserResolver } from './user.resolver';
-import { UserService } from './user.service';
+import User from './entities/user.entity';
+import UserSearchOutput from './output/user-search.output';
+import UserResolver from './user.resolver';
+import UserService from './user.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserQueryOutput])],
+  imports: [TypeOrmModule.forFeature([User, UserSearchOutput])],
   providers: [UserResolver, UserService],
   exports: [UserService],
 })
