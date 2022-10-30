@@ -2,6 +2,7 @@ import { flatten, unflatten } from 'flat';
 import { ExecutableDefinitionNode } from 'graphql/language/ast';
 import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
+
 import { MutationObject } from 'src/apollo/mutation';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 

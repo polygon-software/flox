@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { Repository } from 'typeorm';
 
-import { AbstractSearchService } from '../abstracts/search/abstract-search.service';
+import AbstractSearchService from '../abstracts/search/abstract-search.service';
 
-import { GetUserArgs } from './dto/args/get-user.args';
-import { User } from './entities/user.entity';
+import GetUserArgs from './dto/args/get-user.args';
+import User from './entities/user.entity';
 
 @Injectable()
-export class UserService extends AbstractSearchService<User> {
+export default class UserService extends AbstractSearchService<User> {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,

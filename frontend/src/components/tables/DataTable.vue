@@ -147,12 +147,13 @@
 </template>
 
 <script setup lang="ts">
-import { ColumnInterface, useDataTable } from 'components/tables/useDataTable';
 import { QPopupEdit, QTable } from 'quasar';
+import { defineProps, onMounted, Ref, ref, watchEffect } from 'vue';
+
+import { ColumnInterface, useDataTable } from 'components/tables/useDataTable';
 import { MutationObject } from 'src/apollo/mutation';
 import { QueryObject } from 'src/apollo/query';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
-import { defineProps, onMounted, Ref, ref, watchEffect } from 'vue';
 
 const props = defineProps<{
   title: string;

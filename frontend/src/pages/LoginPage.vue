@@ -22,8 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue';
 import { inject } from 'vue';
+
+import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue';
 
 import { AuthenticationService } from '../flox/modules/auth/services/auth.service';
 

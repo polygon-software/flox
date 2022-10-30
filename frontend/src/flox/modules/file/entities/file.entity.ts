@@ -10,10 +10,10 @@ export class FileEntity extends BaseEntity {
     createdAt: Date,
     updatedAt: Date,
     deletedAt: Date | null,
-    public key: string,
     public mimetype: string,
     public filename: string | null,
-    public size: number
+    public size: number,
+    public signedUrl: string | null
   ) {
     super(uuid, createdAt, updatedAt, deletedAt);
   }

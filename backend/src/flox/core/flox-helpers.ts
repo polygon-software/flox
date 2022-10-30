@@ -5,7 +5,7 @@ import { Request } from 'express';
 import flox from '../../../flox.config.json';
 import Env from '../../env';
 import { MODULES } from '../MODULES';
-import { User } from '../modules/auth/entities/user.entity';
+import User from '../modules/auth/entities/user.entity';
 
 export interface FrontendRequest extends Request {
   user?: {

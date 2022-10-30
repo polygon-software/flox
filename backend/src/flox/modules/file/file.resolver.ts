@@ -1,27 +1,27 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { DeleteInput } from '../abstracts/crud/inputs/delete.input';
-import SearchQueryOutputInterface from '../abstracts/search/outputs/search-interface.output';
-import { AbstractSearchAccessControlResolver } from '../abstracts/search-access-control/abstract-search-access-control.resolver';
-import { LoggedIn, Public } from '../auth/authentication.decorator';
-import { User } from '../auth/entities/user.entity';
 import {
   AdminOnly,
   CurrentUser,
   OptionalUser,
 } from '../roles/authorization.decorator';
+import User from '../auth/entities/user.entity';
+import { LoggedIn, Public } from '../auth/authentication.decorator';
+import AbstractSearchAccessControlResolver from '../abstracts/search-access-control/abstract-search-access-control.resolver';
+import DeleteInput from '../abstracts/crud/inputs/delete.input';
 
-import { GetAllFilesArgs } from './dto/args/get-all-files.args';
-import { GetFileArgs } from './dto/args/get-file.args';
-import { GetMultipleFilesArgs } from './dto/args/get-multiple-files.args';
-import { SearchFilesArgs } from './dto/args/search-files.args';
-import { CreateFileInput } from './dto/input/create-file.input';
-import { UpdateFileInput } from './dto/input/update-file.input';
+import GetAllFilesArgs from './dto/args/get-all-files.args';
+import GetFileArgs from './dto/args/get-file.args';
+import GetMultipleFilesArgs from './dto/args/get-multiple-files.args';
+import SearchFilesArgs from './dto/args/search-files.args';
+import CreateFileInput from './dto/input/create-file.input';
+import UpdateFileInput from './dto/input/update-file.input';
 import S3File from './entities/file.entity';
-import { FileService } from './file.service';
+import FileService from './file.service';
+import FileSearchOutput from './dto/outputs/file-search.output';
 
 @Resolver(() => S3File)
-export class FileResolver extends AbstractSearchAccessControlResolver<
+export default class FileResolver extends AbstractSearchAccessControlResolver<
   S3File,
   FileService
 > {
@@ -34,7 +34,7 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   @Public()
-  @Query(() => S3File, { name: 'file' })
+  @Query(() => S3File, { name: 'File' })
   async getFile(
     @Args() getFileArgs: GetFileArgs,
     @OptionalUser() user?: User,
@@ -43,15 +43,8 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
     return this.fileService.addFileUrl(file, getFileArgs);
   }
 
-  @AdminOnly()
-  @Query(() => S3File, { name: 'adminFile' })
-  async getFileAsAdmin(@Args() getFileArgs: GetFileArgs): Promise<S3File> {
-    const file = await super.getOneAsAdmin(getFileArgs);
-    return this.fileService.addFileUrl(file, getFileArgs);
-  }
-
   @Public()
-  @Query(() => [S3File], { name: 'files' })
+  @Query(() => [S3File], { name: 'Files' })
   async getFiles(
     @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
     @OptionalUser() user?: User,
@@ -61,7 +54,7 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   @LoggedIn()
-  @Query(() => [S3File], { name: 'myFiles' })
+  @Query(() => [S3File], { name: 'MyFiles' })
   async getMyFiles(
     @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
     @CurrentUser() user: User,
@@ -71,7 +64,7 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   @LoggedIn()
-  @Query(() => [S3File], { name: 'publicFiles' })
+  @Query(() => [S3File], { name: 'PublicFiles' })
   async getPublicFiles(
     @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
   ): Promise<S3File[]> {
@@ -79,17 +72,8 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
     return this.fileService.addFileUrls(files, getMultipleFilesArgs);
   }
 
-  @AdminOnly()
-  @Query(() => [S3File], { name: 'adminFiles' })
-  async getFilesAsAdmin(
-    @Args() getMultipleFilesArgs: GetMultipleFilesArgs,
-  ): Promise<S3File[]> {
-    const files = await super.getMultipleAsAdmin(getMultipleFilesArgs);
-    return this.fileService.addFileUrls(files, getMultipleFilesArgs);
-  }
-
   @LoggedIn()
-  @Query(() => [S3File], { name: 'allFiles' })
+  @Query(() => [S3File], { name: 'AllFiles' })
   async getAllFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @OptionalUser() user?: User,
@@ -105,7 +89,7 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns Users private files
    */
   @LoggedIn()
-  @Query(() => [S3File], { name: 'allMyFiles' })
+  @Query(() => [S3File], { name: 'AllMyFiles' })
   async getAllMyFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @CurrentUser() user: User,
@@ -120,7 +104,7 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns List of public files
    */
   @AdminOnly()
-  @Query(() => [S3File], { name: 'allPublicFiles' })
+  @Query(() => [S3File], { name: 'AllPublicFiles' })
   async getAllPublicFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
   ): Promise<S3File[]> {
@@ -129,11 +113,11 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   @Public()
-  @Query(() => [S3File], { name: 'searchFiles' })
+  @Query(() => [FileSearchOutput], { name: 'SearchFiles' })
   async searchFiles(
     @Args() searchFilesArgs: SearchFilesArgs,
     @OptionalUser() user?: User,
-  ): Promise<SearchQueryOutputInterface<S3File>> {
+  ): Promise<FileSearchOutput> {
     const searchOutput = await super.search(searchFilesArgs, user);
     const data = await this.fileService.addFileUrls(
       searchOutput.data,
@@ -146,10 +130,10 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   @Public()
-  @Query(() => [S3File], { name: 'searchPublicFiles' })
+  @Query(() => [FileSearchOutput], { name: 'SearchPublicFiles' })
   async searchPublicFiles(
     @Args() searchFilesArgs: SearchFilesArgs,
-  ): Promise<SearchQueryOutputInterface<S3File>> {
+  ): Promise<FileSearchOutput> {
     const searchOutput = await super.searchPublic(searchFilesArgs);
     const data = await this.fileService.addFileUrls(
       searchOutput.data,
@@ -162,11 +146,11 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   @LoggedIn()
-  @Query(() => [S3File], { name: 'searchMyFiles' })
+  @Query(() => [FileSearchOutput], { name: 'SearchMyFiles' })
   async searchMyFiles(
     @Args() searchFilesArgs: SearchFilesArgs,
     @CurrentUser() user: User,
-  ): Promise<SearchQueryOutputInterface<S3File>> {
+  ): Promise<FileSearchOutput> {
     const searchOutput = await super.searchOfUser(searchFilesArgs, user);
     const data = await this.fileService.addFileUrls(
       searchOutput.data,
@@ -179,10 +163,10 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   @AdminOnly()
-  @Query(() => [S3File], { name: 'searchAdminFiles' })
+  @Query(() => [FileSearchOutput], { name: 'SearchAdminFiles' })
   async searchFilesAsAdmin(
     @Args() searchFilesArgs: SearchFilesArgs,
-  ): Promise<SearchQueryOutputInterface<S3File>> {
+  ): Promise<FileSearchOutput> {
     const searchOutput = await super.searchAsAdmin(searchFilesArgs);
     const data = await this.fileService.addFileUrls(
       searchOutput.data,
@@ -201,13 +185,17 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns updated file
    */
   @LoggedIn()
-  @Mutation(() => String)
+  @Mutation(() => S3File, { name: 'CreateFile' })
   async createFile(
-    @Args() createFileInputs: CreateFileInput,
+    @Args('createFileInputs') createFileInputs: CreateFileInput,
     @CurrentUser() user: User,
-  ): Promise<string> {
+  ): Promise<S3File> {
     const file = await super.create(createFileInputs, user);
-    return this.fileService.createSignedUploadUrl(file);
+    const signedUrl = await this.fileService.createSignedUploadUrl(file);
+    return {
+      ...file,
+      signedUrl,
+    } as S3File;
   }
 
   /**
@@ -217,9 +205,9 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns updated file
    */
   @LoggedIn()
-  @Mutation(() => S3File)
+  @Mutation(() => S3File, { name: 'UpdateFile' })
   async updateFile(
-    @Args() updateFileInput: UpdateFileInput,
+    @Args('updateFileInput') updateFileInput: UpdateFileInput,
     @CurrentUser() user: User,
   ): Promise<S3File> {
     const file = await super.update(updateFileInput, user);
@@ -233,9 +221,9 @@ export class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns the file that was deleted
    */
   @LoggedIn()
-  @Mutation(() => S3File)
+  @Mutation(() => S3File, { name: 'DeleteFile' })
   async deleteFile(
-    @Args() deleteInput: DeleteInput,
+    @Args('deleteInput') deleteInput: DeleteInput,
     @CurrentUser() user: User,
   ): Promise<S3File> {
     const file = await super.delete(deleteInput, user);

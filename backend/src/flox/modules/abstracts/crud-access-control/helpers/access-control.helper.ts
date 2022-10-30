@@ -1,5 +1,5 @@
-import { AccessControlledEntity } from '../../../access-control/entities/access-controlled.entity';
-import { User } from '../../../auth/entities/user.entity';
+import AccessControlledEntity from '../../../access-control/entities/access-controlled.entity';
+import User from '../../../auth/entities/user.entity';
 
 export function userHasReadAccess(entity: AccessControlledEntity, user: User) {
   return entity.readAccess.some((userGroup) => {

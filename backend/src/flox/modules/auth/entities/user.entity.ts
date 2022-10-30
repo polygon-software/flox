@@ -1,19 +1,18 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
 } from 'typeorm';
-
 import { IsEmail, IsString } from 'class-validator';
 
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 import { isModuleActive } from '../../../core/flox-helpers';
 import { MODULES } from '../../../MODULES';
-import { UserGroup } from '../../access-control/entities/user-group.entity';
+import UserGroup from '../../access-control/entities/user-group.entity';
 import { moduleConfig } from '../../roles/config';
 
 /**
@@ -21,7 +20,7 @@ import { moduleConfig } from '../../roles/config';
  */
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export default class User extends BaseEntity {
   @Field(() => String, { description: 'Username' })
   @Column()
   @IsString()
@@ -47,6 +46,7 @@ export class User extends BaseEntity {
     description: 'User groups this user belongs to',
   })
   @ManyToMany(() => UserGroup, (userGroup) => userGroup.users)
+  @JoinTable()
   public groups: UserGroup[];
 
   /**

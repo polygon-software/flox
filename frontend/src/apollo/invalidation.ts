@@ -1,4 +1,5 @@
 import { useApolloClient } from '@vue/apollo-composable';
+
 import { QueryObject } from 'src/apollo/query';
 import { AllQuery } from 'src/flox/modules/all.query';
 

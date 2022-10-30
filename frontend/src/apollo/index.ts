@@ -1,5 +1,4 @@
 import { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types';
-import type { ApolloClientOptions, StoreObject } from '@apollo/client/core';
 import {
   ApolloLink,
   concat,
@@ -9,7 +8,10 @@ import {
 } from '@apollo/client/core';
 import { QSsrContext } from '@quasar/app-vite';
 import { Cookies } from 'quasar';
+
 import Env from 'src/env';
+
+import type { ApolloClientOptions, StoreObject } from '@apollo/client/core';
 
 /**
  * Sets up auth middleware

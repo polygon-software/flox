@@ -30,10 +30,11 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { print } from 'graphql';
+import { Ref, ref } from 'vue';
+
 import Env from 'src/env';
 import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
-import { MY_USER } from 'src/flox/modules/auth/user.query';
-import { Ref, ref } from 'vue';
+import { GET_MY_USER } from 'src/flox/modules/auth/user.query';
 
 const requestsPerSecond: Ref<number> = ref(10);
 const positiveRequest: Ref<number> = ref(0);
@@ -58,7 +59,7 @@ function toggleDos(): void {
     negativeRequest.value = 0;
     dosInterval = setInterval(() => {
       const query = {
-        query: print(MY_USER.query),
+        query: print(GET_MY_USER.query),
       };
       console.log(query);
       axios

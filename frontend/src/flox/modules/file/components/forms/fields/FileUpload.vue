@@ -106,20 +106,18 @@
 
 <script setup lang="ts">
 import { AxiosResponse } from 'axios';
-import { i18n } from 'boot/i18n';
 import { QFile, QVueGlobals, useQuasar } from 'quasar';
+import { defineProps, Ref, ref } from 'vue';
+
+import { i18n } from 'boot/i18n';
 import Env from 'src/env';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
-import { uploadFile } from 'src/flox/modules/file/tools/upload.tools';
-import { defineProps, Ref, ref } from 'vue';
-
-interface SelectedFile {
-  content: File;
-  url: string;
-  status: string;
-}
+import {
+  SelectedFile,
+  uploadFile,
+} from 'src/flox/modules/file/tools/upload.tools';
 
 const $q: QVueGlobals = useQuasar();
 
@@ -156,10 +154,6 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  target: {
-    type: String,
-    required: true,
-  },
   url: {
     type: String,
     default: Env.VUE_APP_BACKEND_URL,
@@ -168,7 +162,7 @@ const props = defineProps({
 
 const showQFile = ref(false);
 const filePicker: Ref<QFile | null> = ref(null);
-const selectedFiles: Ref<Array<SelectedFile>> = ref([]);
+const selectedFiles: Ref<SelectedFile[]> = ref([]);
 
 /**
  * Notify the user that the upload failed
@@ -239,11 +233,10 @@ function onFilePicked(newFiles: File[]): void {
  * Triggers a separate upload for each file. Only uploads files that haven't been successfully uploaded before.
  */
 async function uploadFiles(): Promise<void> {
-  const url = `${props.url}${props.target}`;
   for (const file of selectedFiles.value) {
     if (file.status !== UPLOAD_STATUS.DONE) {
       file.status = UPLOAD_STATUS.LOADING;
-      const res: AxiosResponse = await uploadFile(file.content, url);
+      const res: AxiosResponse = await uploadFile(file);
       if (res.status === 201) {
         file.status = UPLOAD_STATUS.DONE;
       } else {

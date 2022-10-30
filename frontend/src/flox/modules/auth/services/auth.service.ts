@@ -5,9 +5,10 @@ import {
   CognitoUserSession,
   ISignUpResult,
 } from 'amazon-cognito-identity-js';
-import { i18n } from 'boot/i18n';
 import cloneDeep from 'lodash/cloneDeep';
 import { QVueGlobals, useQuasar } from 'quasar';
+
+import { i18n } from 'boot/i18n';
 import Env from 'src/env';
 import * as auth from 'src/flox/modules/auth';
 import { createUser } from 'src/flox/modules/auth/services/user.service';

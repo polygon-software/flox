@@ -12,7 +12,7 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { Public } from '../auth/authentication.decorator';
 
 @Controller('healthcheck')
-export class HealthcheckController {
+export default class HealthcheckController {
   constructor(
     private readonly configService: ConfigService,
     private readonly healthcheckService: HealthCheckService,

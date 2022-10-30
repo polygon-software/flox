@@ -34,9 +34,10 @@
 
 <script setup lang="ts">
 import { dom } from 'quasar';
+import { defineProps, Ref, ref, watch } from 'vue';
+
 import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
 import { getImage } from 'src/flox/modules/image/services/image.service';
-import { defineProps, Ref, ref, watch } from 'vue';
 
 const props = defineProps({
   uuid: {

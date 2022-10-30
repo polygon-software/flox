@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
-import { Field } from 'src/flox/modules/auth/components/forms/fields';
 import { computed, Ref, ref } from 'vue';
+
+import { Field } from 'src/flox/modules/auth/components/forms/fields';
 
 export interface FormPage {
   key: string;

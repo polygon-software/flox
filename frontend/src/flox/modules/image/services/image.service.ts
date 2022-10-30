@@ -6,17 +6,78 @@ import {
   DELETE_IMAGE,
 } from 'src/flox/modules/image/image.mutation';
 import {
+  GET_ALL_IMAGES,
+  GET_ALL_MY_IMAGES,
   GET_IMAGE,
   GET_IMAGE_FOR_FILE,
+  GET_IMAGES,
+  GET_MY_IMAGES,
+  SEARCH_IMAGES,
+  SEARCH_MY_IMAGES,
 } from 'src/flox/modules/image/image.query';
+import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
 
 /**
  * Returns an image for a given uuid
  * @param uuid - uuid of image
  * @returns Image File
  */
-export async function getImage(uuid: string): Promise<ImageEntity | null> {
-  const { data } = await executeQuery<ImageEntity>(GET_IMAGE, { uuid });
+export async function getImage(
+  uuid: string,
+  expires?: number
+): Promise<ImageEntity> {
+  const { data } = await executeQuery<ImageEntity>(GET_IMAGE, {
+    uuid,
+    expires,
+  });
+  return data;
+}
+
+export async function getImages(
+  uuids: string[],
+  expires?: number
+): Promise<ImageEntity[]> {
+  const { data } = await executeQuery<ImageEntity[]>(GET_IMAGES, {
+    uuids,
+    expires,
+  });
+  return data;
+}
+
+export async function getMyImages(
+  uuids: string[],
+  expires?: number
+): Promise<ImageEntity[]> {
+  const { data } = await executeQuery<ImageEntity[]>(GET_MY_IMAGES, {
+    uuids,
+    expires,
+  });
+  return data;
+}
+
+export async function getAllImages(
+  skip: number,
+  take: number,
+  expires?: number
+): Promise<ImageEntity[]> {
+  const { data } = await executeQuery<ImageEntity[]>(GET_ALL_IMAGES, {
+    skip,
+    take,
+    expires,
+  });
+  return data;
+}
+
+export async function getAllMyImages(
+  skip: number,
+  take: number,
+  expires?: number
+): Promise<ImageEntity[]> {
+  const { data } = await executeQuery<ImageEntity[]>(GET_ALL_MY_IMAGES, {
+    skip,
+    take,
+    expires,
+  });
   return data;
 }
 
@@ -26,11 +87,54 @@ export async function getImage(uuid: string): Promise<ImageEntity | null> {
  * @returns Image file belonging to File
  */
 export async function getImageForFile(
-  file: string
-): Promise<ImageEntity | null> {
+  file: string,
+  expires?: number
+): Promise<ImageEntity> {
   const { data } = await executeQuery<ImageEntity>(GET_IMAGE_FOR_FILE, {
     file,
+    expires,
   });
+  return data;
+}
+
+export async function searchImages(
+  skip: number,
+  take: number,
+  filter: string,
+  sortBy: string,
+  descending: boolean,
+  expires?: number
+): Promise<CountQuery<ImageEntity>> {
+  const { data } = await executeQuery<CountQuery<ImageEntity>>(SEARCH_IMAGES, {
+    skip,
+    take,
+    filter,
+    sortBy,
+    descending,
+    expires,
+  });
+  return data;
+}
+
+export async function searchMyImages(
+  skip: number,
+  take: number,
+  filter: string,
+  sortBy: string,
+  descending: boolean,
+  expires?: number
+): Promise<CountQuery<ImageEntity>> {
+  const { data } = await executeQuery<CountQuery<ImageEntity>>(
+    SEARCH_MY_IMAGES,
+    {
+      skip,
+      take,
+      filter,
+      sortBy,
+      descending,
+      expires,
+    }
+  );
   return data;
 }
 

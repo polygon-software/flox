@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+
 import { MutationTypes } from 'src/apollo/mutation';
 import { TABLES } from 'src/flox/TABLES';
 
@@ -7,12 +8,12 @@ import { TABLES } from 'src/flox/TABLES';
  */
 export const CREATE_USER = {
   mutation: gql`
-    mutation createUser(
+    mutation CreateUser(
       $username: String!
       $email: String!
       $cognitoUuid: String!
     ) {
-      createUser(
+      CreateUser(
         createUserInput: {
           username: $username
           email: $email
@@ -29,13 +30,13 @@ export const CREATE_USER = {
   `,
   tables: [TABLES.USER],
   type: MutationTypes.CREATE,
-  cacheLocation: 'createUser',
+  cacheLocation: 'CreateUser',
 };
 
 export const UPDATE_USER = {
   mutation: gql`
-    mutation updateUser($uuid: ID!, $username: String, $email: String!) {
-      updateUser(
+    mutation UpdateUser($uuid: ID!, $username: String, $email: String!) {
+      UpdateUser(
         updateUserInput: { uuid: $uuid, username: $username, email: $email }
       ) {
         uuid
@@ -48,13 +49,13 @@ export const UPDATE_USER = {
   `,
   tables: [TABLES.USER],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'updateUser',
+  cacheLocation: 'UpdateUser',
 };
 
 export const DELETE_USER = {
   mutation: gql`
-    mutation deleteUser($uuid: ID!) {
-      deleteUser(deleteUserInput: { uuid: $uuid }) {
+    mutation DeleteUser($uuid: ID!) {
+      DeleteUser(deleteUserInput: { uuid: $uuid }) {
         uuid
       }
     }

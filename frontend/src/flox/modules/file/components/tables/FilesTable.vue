@@ -33,17 +33,17 @@
 </template>
 
 <script setup lang="ts">
-import { i18n } from 'boot/i18n';
 import { date, useQuasar } from 'quasar';
+import { defineProps, Ref, ref } from 'vue';
+
+import { i18n } from 'boot/i18n';
 import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
 import {
-  deletePrivateFile,
-  deletePublicFile,
-  fetchMyFiles,
-  fetchPublicFiles,
+  deleteFile,
+  getAllMyFiles,
+  getAllPublicFiles,
 } from 'src/flox/modules/file/services/file.service';
 import { showSuccessNotification } from 'src/tools/notification.tool';
-import { defineProps, Ref, ref } from 'vue';
 
 const props = defineProps({
   private: {
@@ -80,27 +80,30 @@ const columns = [
  * Fetches all files for displaying in table
  * @returns List of Files
  */
-function fetchAllFiles(): Ref<FileEntity[]> {
+function fetchAllFiles(): Promise<FileEntity[]> {
   if (props.private) {
-    return fetchMyFiles();
+    return getAllMyFiles(10, 0, 360);
   }
-  return fetchPublicFiles();
+  return getAllPublicFiles(10, 0, 360);
 }
 
-const files: Ref<FileEntity[]> = fetchAllFiles();
-
+const files: Ref<FileEntity[]> = ref([]);
 const selected: Ref<FileEntity[]> = ref([]);
+
+fetchAllFiles()
+  .then((fetchedFiles) => {
+    files.value = fetchedFiles;
+  })
+  .catch((e) => {
+    console.error(e);
+  });
 
 /**
  * Deletes the selected file
  */
 async function deleteSelected(): Promise<void> {
   const selectedFile = selected.value[0];
-  if (props.private) {
-    await deletePrivateFile(selectedFile.uuid);
-  } else {
-    await deletePublicFile(selectedFile.uuid);
-  }
+  await deleteFile(selectedFile.uuid);
   selected.value = [];
   showSuccessNotification(
     $q,

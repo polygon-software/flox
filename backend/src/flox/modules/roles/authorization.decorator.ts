@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 
 import { getRequest } from '../../core/flox-helpers';
-import { User } from '../auth/entities/user.entity';
+import User from '../auth/entities/user.entity';
 
 import { DEFAULT_ROLES } from './config';
 

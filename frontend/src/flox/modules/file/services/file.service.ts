@@ -1,107 +1,212 @@
 import { executeMutation } from 'src/apollo/mutation';
-import { executeQuery, subscribeToQuery } from 'src/apollo/query';
-import { PrivateFileEntity } from 'src/flox/modules/file/entities/privateFile.entity';
-import { PublicFileEntity } from 'src/flox/modules/file/entities/publicFile.entity';
-import {
-  DELETE_PRIVATE_FILE,
-  DELETE_PUBLIC_FILE,
-} from 'src/flox/modules/file/file.mutation';
+import { executeQuery } from 'src/apollo/query';
 import {
   ALL_MY_FILES,
   ALL_PUBLIC_FILES,
-  GET_PRIVATE_FILE,
-  GET_PUBLIC_FILE,
+  GET_ALL_FILES,
+  GET_FILE,
+  GET_FILES,
+  GET_MY_FILES,
+  GET_PUBLIC_FILES,
+  SEARCH_FILES,
+  SEARCH_MY_FILES,
+  SEARCH_PUBLIC_FILES,
 } from 'src/flox/modules/file/file.query';
-import { Ref } from 'vue';
+import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
+import {
+  CREATE_FILE,
+  DELETE_FILE,
+  UPDATE_FILE,
+} from 'src/flox/modules/file/file.mutation';
 
 /**
  * Fetches a private file
  * @param uuid - uuid of private file
  * @returns Private File
  */
-export async function fetchPrivateFile(
-  uuid: string
-): Promise<PrivateFileEntity | null> {
-  const { data } = await executeQuery<PrivateFileEntity>(GET_PRIVATE_FILE, {
+export async function getFile(
+  uuid: string,
+  expires?: number
+): Promise<FileEntity> {
+  const { data } = await executeQuery<FileEntity>(GET_FILE, {
     uuid,
-  });
-  return data;
-}
-/**
- * Fetches a public file
- * @param uuid - uuid of public file
- * @returns Public File
- */
-export async function fetchPublicFile(
-  uuid: string
-): Promise<PublicFileEntity | null> {
-  const { data } = await executeQuery<PublicFileEntity>(GET_PUBLIC_FILE, {
-    uuid,
+    expires,
   });
   return data;
 }
 
-/**
- * Fetches a number of public files
- * @param take - maximum number of files to load
- * @param skip - number of files to skip before loading next bunch, used for pagination
- * @returns List of public Files
- */
-export function fetchPublicFiles(
-  take?: number,
-  skip?: number
-): Ref<PublicFileEntity[]> {
-  const { data } = subscribeToQuery<PublicFileEntity[]>(ALL_PUBLIC_FILES, {
-    take,
+export async function getFiles(
+  uuids: string[],
+  expires?: number
+): Promise<FileEntity[]> {
+  const { data } = await executeQuery<FileEntity[]>(GET_FILES, {
+    uuids,
+    expires,
+  });
+  return data;
+}
+
+export async function getMyFiles(
+  uuids: string[],
+  expires?: number
+): Promise<FileEntity[]> {
+  const { data } = await executeQuery<FileEntity[]>(GET_MY_FILES, {
+    uuids,
+    expires,
+  });
+  return data;
+}
+
+export async function getPublicFiles(
+  uuids: string[],
+  expires?: number
+): Promise<FileEntity[]> {
+  const { data } = await executeQuery<FileEntity[]>(GET_PUBLIC_FILES, {
+    uuids,
+    expires,
+  });
+  return data;
+}
+
+export async function getAllFiles(
+  take: number,
+  skip: number,
+  expires?: number
+): Promise<FileEntity[]> {
+  const { data } = await executeQuery<FileEntity[]>(GET_ALL_FILES, {
     skip,
-  });
-  return data;
-}
-
-/**
- * Fetches files of logged-in user
- * @param take - maximum number of files to load
- * @param skip - number of files to skip before loading next bunch, used for pagination
- * @returns List of private Files
- */
-export function fetchMyFiles(
-  take?: number,
-  skip?: number
-): Ref<PrivateFileEntity[]> {
-  const { data } = subscribeToQuery<PrivateFileEntity[]>(ALL_MY_FILES, {
     take,
-    skip,
+    expires,
   });
   return data;
 }
 
-/**
- * Deletes a public File
- * @param uuid - uuid of public file
- * @returns Deleted File
- */
-export async function deletePublicFile(
-  uuid: string
-): Promise<PublicFileEntity | null> {
-  const { data } = await executeMutation<PublicFileEntity>(DELETE_PUBLIC_FILE, {
-    uuid,
+export async function getAllMyFiles(
+  take: number,
+  skip: number,
+  expires?: number
+): Promise<FileEntity[]> {
+  const { data } = await executeQuery<FileEntity[]>(ALL_MY_FILES, {
+    skip,
+    take,
+    expires,
+  });
+  return data;
+}
+
+export async function getAllPublicFiles(
+  take: number,
+  skip: number,
+  expires?: number
+): Promise<FileEntity[]> {
+  const { data } = await executeQuery<FileEntity[]>(ALL_PUBLIC_FILES, {
+    skip,
+    take,
+    expires,
+  });
+  return data;
+}
+
+export async function searchFiles(
+  take: number,
+  skip: number,
+  filter: string,
+  sortBy: string,
+  descending = false,
+  expires?: number
+): Promise<CountQuery<FileEntity>> {
+  const { data } = await executeQuery<CountQuery<FileEntity>>(SEARCH_FILES, {
+    skip,
+    take,
+    filter,
+    sortBy,
+    descending,
+    expires,
+  });
+  return data;
+}
+
+export async function searchMyFiles(
+  take: number,
+  skip: number,
+  filter: string,
+  sortBy: string,
+  descending = false,
+  expires?: number
+): Promise<CountQuery<FileEntity>> {
+  const { data } = await executeQuery<CountQuery<FileEntity>>(SEARCH_MY_FILES, {
+    skip,
+    take,
+    filter,
+    sortBy,
+    descending,
+    expires,
+  });
+  return data;
+}
+
+export async function searchPublicFiles(
+  take: number,
+  skip: number,
+  filter: string,
+  sortBy: string,
+  descending = false,
+  expires?: number
+): Promise<CountQuery<FileEntity>> {
+  const { data } = await executeQuery<CountQuery<FileEntity>>(
+    SEARCH_PUBLIC_FILES,
+    {
+      skip,
+      take,
+      filter,
+      sortBy,
+      descending,
+      expires,
+    }
+  );
+  return data;
+}
+
+export async function createFile(
+  filename: string,
+  mimetype: string,
+  size: number,
+  loggedInReadAccess = false,
+  publicReadAccess = false,
+  readAccess: string[] = [],
+  writeAccess: string[] = [],
+  expires = 360
+): Promise<FileEntity | null> {
+  const { data } = await executeMutation<FileEntity>(CREATE_FILE, {
+    filename,
+    mimetype,
+    size,
+    loggedInReadAccess,
+    publicReadAccess,
+    readAccess,
+    writeAccess,
+    expires,
   });
   return data ?? null;
 }
 
-/**
- * Deletes a private File
- * @param uuid - uuid of private file
- * @returns Deleted File
- */
-export async function deletePrivateFile(
-  uuid: string
-): Promise<PrivateFileEntity | null> {
-  const { data } = await executeMutation<PrivateFileEntity>(
-    DELETE_PRIVATE_FILE,
-    {
-      uuid,
-    }
-  );
+export async function updateFile(
+  uuid: string,
+  filename: string,
+  expires?: number
+): Promise<FileEntity | null> {
+  const { data } = await executeMutation<FileEntity>(UPDATE_FILE, {
+    uuid,
+    filename,
+    expires,
+  });
+  return data ?? null;
+}
+
+export async function deleteFile(uuid: String): Promise<FileEntity | null> {
+  const { data } = await executeMutation<FileEntity>(DELETE_FILE, {
+    uuid,
+  });
   return data ?? null;
 }

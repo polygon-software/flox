@@ -12,38 +12,40 @@
     <SampleForm />
 
     <!-- Private File Upload -->
-    <FileUpload :accepted-files="'image/*, .pdf'" target="/uploadPrivateFile" />
+    <FileUpload :accepted-files="'image/*, .pdf'" />
 
     <!-- Private Files Table -->
     <FilesTable private />
 
     <!-- Labeled Images -->
-    <q-input v-model="imageUuid" label="Image UUID containing labels" />
+<!--    <q-input v-model="imageUuid" label="Image UUID containing labels" />-->
 
-    <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />
+<!--    <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />-->
 
-    <DataTable
-      title="User Table"
-      :columns="columns"
-      :query="QUERY_USERS"
-      :update-mutation="UPDATE_USER"
-      :delete-mutation="DELETE_USER"
-    />
+<!--    <DataTable-->
+<!--      title="User Table"-->
+<!--      :columns="columns"-->
+<!--      :query="SEARCH_USERS"-->
+<!--      :update-mutation="UPDATE_USER"-->
+<!--      :delete-mutation="DELETE_USER"-->
+<!--    />-->
   </q-page>
 </template>
 
 <script setup lang="ts">
+import Joi from 'joi';
+import { useMeta } from 'quasar';
+import { Ref, ref } from 'vue';
+
 import { i18n } from 'boot/i18n';
 import DosChecker from 'components/sample/DosChecker.vue';
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import SampleForm from 'components/sample/SampleForm.vue';
 import DataTable from 'components/tables/DataTable.vue';
 import { ColumnInterface } from 'components/tables/useDataTable';
-import Joi from 'joi';
-import { useMeta } from 'quasar';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
 import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
-import { QUERY_USERS } from 'src/flox/modules/auth/user.query';
+import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
 import FileUpload from 'src/flox/modules/file/components/forms/fields/FileUpload.vue';
 import FilesTable from 'src/flox/modules/file/components/tables/FilesTable.vue';
 import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
@@ -51,7 +53,6 @@ import {
   joiSchemaToValidationRule,
   ValidationRule,
 } from 'src/tools/validation.tool';
-import { Ref, ref } from 'vue';
 
 const imageUuid: Ref<string> = ref('');
 

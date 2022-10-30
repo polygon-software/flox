@@ -10,6 +10,7 @@ import {
 import jwt_decode from 'jwt-decode';
 import { Cookies } from 'quasar';
 import { boot } from 'quasar/wrappers';
+
 import Env from 'src/env';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 

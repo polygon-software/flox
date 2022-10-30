@@ -34,13 +34,14 @@
 </template>
 
 <script setup lang="ts">
-import { i18n } from 'boot/i18n';
 import { useDialogPluginComponent } from 'quasar';
+import { defineEmits, ref } from 'vue';
+
+import { i18n } from 'boot/i18n';
 import {
   joiPasswordSchema,
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
-import { defineEmits, ref } from 'vue';
 
 let password = ref('');
 let passwordRep = ref('');

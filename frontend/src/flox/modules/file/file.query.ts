@@ -1,11 +1,30 @@
 import gql from 'graphql-tag';
+
 import { QueryObject } from 'src/apollo/query';
 import { TABLES } from 'src/flox/TABLES';
 
-export const ALL_PUBLIC_FILES = {
+export const GET_FILE = {
   query: gql`
-    query allPublicFiles($take: Int, $skip: Int) {
-      allPublicFiles(take: $take, skip: $skip) {
+    query File($uuid: ID!, $expires: Int) {
+      File(uuid: $uuid, expires: $expires) {
+        uuid
+        key
+        mimetype
+        filename
+        size
+        url
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'File',
+};
+
+export const GET_FILES = {
+  query: gql`
+    query Files($uuids: [ID!], $expires: Int) {
+      Files(uuids: $uuids, expires: $expires) {
         uuid
         key
         createdAt
@@ -17,16 +36,71 @@ export const ALL_PUBLIC_FILES = {
       }
     }
   `,
-  tables: [TABLES.PUBLIC_FILE],
-  cacheLocation: 'allPublicFiles',
+  tables: [TABLES.FILE],
+  cacheLocation: 'Files',
+};
+
+export const GET_MY_FILES = {
+  query: gql`
+    query MyFiles($uuids: [ID!], $expires: Int) {
+      MyFiles(uuids: $uuids, expires: $expires) {
+        uuid
+        key
+        createdAt
+        mimetype
+        filename
+        size
+        url
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'MyFiles',
+};
+
+export const GET_PUBLIC_FILES = {
+  query: gql`
+    query PublicFiles($uuids: [ID!], $expires: Int) {
+      PublicFiles(uuids: $uuids, expires: $expires) {
+        uuid
+        key
+        createdAt
+        mimetype
+        filename
+        size
+        url
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'PublicFiles',
+};
+
+export const GET_ALL_FILES = {
+  query: gql`
+    query AllFiles($skip: Int, $take: Int, $expires: Int) {
+      AllFiles(skip: $skip, take: $take, expires: $expires) {
+        uuid
+        createdAt
+        mimetype
+        filename
+        size
+        url
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'AllFiles',
 };
 
 export const ALL_MY_FILES = {
   query: gql`
-    query allMyFiles($take: Int, $skip: Int) {
-      allMyFiles(take: $take, skip: $skip) {
+    query AllMyFiles($skip: Int, $take: Int, $expires: Int) {
+      AllMyFiles(skip: $skip, take: $take, expires: $expires) {
         uuid
-        key
         createdAt
         mimetype
         filename
@@ -36,16 +110,16 @@ export const ALL_MY_FILES = {
       }
     }
   `,
-  tables: [TABLES.PRIVATE_FILE],
-  cacheLocation: 'allMyFiles',
+  tables: [TABLES.FILE],
+  cacheLocation: 'AllMyFiles',
 };
 
-export const GET_PUBLIC_FILE = {
+export const ALL_PUBLIC_FILES = {
   query: gql`
-    query publicFile($uuid: ID!) {
-      publicFile(uuid: $uuid) {
+    query AllPublicFiles($skip: Int, $take: Int, $expires: Int) {
+      AllPublicFiles(skip: $skip, take: $take, expires: $expires) {
         uuid
-        key
+        createdAt
         mimetype
         filename
         size
@@ -54,31 +128,122 @@ export const GET_PUBLIC_FILE = {
       }
     }
   `,
-  tables: [TABLES.PUBLIC_FILE],
-  cacheLocation: 'publicFile',
+  tables: [TABLES.FILE],
+  cacheLocation: 'AllPublicFiles',
 };
 
-export const GET_PRIVATE_FILE = {
+export const SEARCH_FILES = {
   query: gql`
-    query privateFile($uuid: ID!, $expires: Int) {
-      privateFile(uuid: $uuid, expires: $expires) {
-        uuid
-        key
-        mimetype
-        filename
-        size
-        url
+    query SearchFiles(
+      $take: Int
+      $skip: Int
+      $filter: String
+      $sortBy: String
+      $descending: Boolean
+      $expires: Int
+    ) {
+      SearchFiles(
+        take: $take
+        skip: $skip
+        filter: $filter
+        sortBy: $sortBy
+        descending: $descending
+        expires: $expires
+      ) {
+        count
+        data {
+          uuid
+          createdAt
+          mimetype
+          filename
+          size
+          url
+        }
         __typename
       }
     }
   `,
-  tables: [TABLES.PRIVATE_FILE],
-  cacheLocation: 'privateFile',
+  tables: [TABLES.FILE],
+  cacheLocation: 'SearchFiles',
+};
+
+export const SEARCH_MY_FILES = {
+  query: gql`
+    query SearchMyFiles(
+      $take: Int
+      $skip: Int
+      $filter: String
+      $sortBy: String
+      $descending: Boolean
+      $expires: Int
+    ) {
+      SearchMyFiles(
+        take: $take
+        skip: $skip
+        filter: $filter
+        sortBy: $sortBy
+        descending: $descending
+        expires: $expires
+      ) {
+        count
+        data {
+          uuid
+          createdAt
+          mimetype
+          filename
+          size
+          url
+        }
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'SearchMyFiles',
+};
+
+export const SEARCH_PUBLIC_FILES = {
+  query: gql`
+    query SearchPublicFiles(
+      $take: Int
+      $skip: Int
+      $filter: String
+      $sortBy: String
+      $descending: Boolean
+      $expires: Int
+    ) {
+      SearchPublicFiles(
+        take: $take
+        skip: $skip
+        filter: $filter
+        sortBy: $sortBy
+        descending: $descending
+        expires: $expires
+      ) {
+        count
+        data {
+          uuid
+          createdAt
+          mimetype
+          filename
+          size
+          url
+        }
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'SearchPublicFiles',
 };
 
 export const FILE_QUERIES: QueryObject[] = [
-  ALL_PUBLIC_FILES,
-  ALL_MY_FILES,
-  GET_PUBLIC_FILE,
-  GET_PRIVATE_FILE,
+  GET_FILE,
+  GET_FILES,
+  GET_MY_FILES,
+  GET_PUBLIC_FILES,
+  GET_ALL_FILES,
+  SEARCH_FILES,
+  SEARCH_MY_FILES,
+  SEARCH_PUBLIC_FILES,
 ];

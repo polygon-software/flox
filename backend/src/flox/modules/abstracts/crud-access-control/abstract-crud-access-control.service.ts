@@ -1,5 +1,4 @@
 import merge from 'lodash/merge';
-
 import {
   DeepPartial,
   FindOneOptions,
@@ -10,17 +9,17 @@ import {
 import { FindOptionsRelations } from 'typeorm/find-options/FindOptionsRelations';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-import { AccessControlledEntity } from '../../access-control/entities/access-controlled.entity';
-import { User } from '../../auth/entities/user.entity';
-import { GetAllArgs } from '../crud/dto/get-all.args';
-import { GetMultipleArgs } from '../crud/dto/get-multiple.args';
-import { GetOneArgs } from '../crud/dto/get-one.args';
-import { DeleteInput } from '../crud/inputs/delete.input';
-import { UpdateInput } from '../crud/inputs/update.input';
+import AccessControlledEntity from '../../access-control/entities/access-controlled.entity';
+import User from '../../auth/entities/user.entity';
+import GetAllArgs from '../crud/dto/get-all.args';
+import GetMultipleArgs from '../crud/dto/get-multiple.args';
+import GetOneArgs from '../crud/dto/get-one.args';
+import DeleteInput from '../crud/inputs/delete.input';
+import UpdateInput from '../crud/inputs/update.input';
 
-import { CreateInput } from './dto/inputs/create.input';
+import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
 
-export abstract class AbstractCrudAccessControlService<
+export default abstract class AbstractCrudAccessControlService<
   Entity extends AccessControlledEntity,
 > {
   abstract get repository(): Repository<Entity>;
@@ -76,6 +75,12 @@ export abstract class AbstractCrudAccessControlService<
     securityWhere: FindOptionsWhere<Entity>[],
     customWhere: FindOptionsWhere<Entity>[],
   ): FindOptionsWhere<Entity>[] {
+    if (securityWhere.length === 0) {
+      return customWhere;
+    }
+    if (customWhere.length === 0) {
+      return securityWhere;
+    }
     return securityWhere
       .map((securityClause) => {
         return customWhere.map((customClause) => {
@@ -227,30 +232,48 @@ export abstract class AbstractCrudAccessControlService<
     });
   }
 
-  getAllOfUser(
+  getAllAsAdmin(
     getAll: GetAllArgs,
-    user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
     return this.repository.find({
       ...options,
       where: this.mixWhere(
-        [
-          {
-            owner: {
+        [] as FindOptionsWhere<Entity>[],
+        this.extractWhere(options),
+      ),
+      take: getAll.take,
+      skip: getAll.skip,
+    });
+  }
+
+  getAllOfUser(
+    getAll: GetAllArgs,
+    user: User,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity[]> {
+    const where = this.mixWhere(
+      [
+        {
+          owner: {
+            uuid: user.uuid,
+          },
+        },
+        {
+          readAccess: {
+            users: {
               uuid: user.uuid,
             },
           },
-          {
-            readAccess: {
-              users: {
-                uuid: user.uuid,
-              },
-            },
-          },
-        ] as FindOptionsWhere<Entity>[],
-        this.extractWhere(options),
-      ),
+        },
+      ] as FindOptionsWhere<Entity>[],
+      this.extractWhere(options),
+    );
+    console.log('where', JSON.stringify(where));
+    console.log('options', options);
+    return this.repository.find({
+      ...options,
+      where,
       take: getAll.take,
       skip: getAll.skip,
     });
@@ -358,7 +381,7 @@ export abstract class AbstractCrudAccessControlService<
   }
 
   async create(
-    createInput: CreateInput,
+    createInput: CreateAccessControlledInput,
     user: User,
     entity?: DeepPartial<Entity>,
   ): Promise<Entity> {

@@ -1,16 +1,14 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-
 import { Column, Entity, OneToOne } from 'typeorm';
-
 import { IsNumber } from 'class-validator';
 
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
+import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 
-import { Label } from './label.entity';
+import Label from './label.entity';
 
 @Entity()
 @ObjectType()
-export class BoundingBox extends BaseEntity {
+export default class BoundingBox extends BaseEntity {
   @Field(() => Number, {
     description: 'Bounding-Box width in percentage of image width',
   })

@@ -1,12 +1,12 @@
 import { FindOptionsOrder, FindOptionsWhere, Like, Repository } from 'typeorm';
 
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
-import { AbstractCrudService } from '../crud/abstract-crud.service';
+import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
+import AbstractCrudService from '../crud/abstract-crud.service';
 
-import { SearchArgs } from './dto/args/search.args';
+import SearchArgs from './dto/args/search.args';
 import SearchQueryOutputInterface from './outputs/search-interface.output';
 
-export abstract class AbstractSearchService<
+export default abstract class AbstractSearchService<
   Entity extends BaseEntity,
 > extends AbstractCrudService<Entity> {
   abstract get repository(): Repository<Entity>;
