@@ -192,8 +192,16 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   ): Promise<S3File> {
     const file = await super.create(createFileInputs, user);
     const signedUrl = await this.fileService.createSignedUploadUrl(file);
+    const fileWithUrl = await this.fileService.addFileUrl(file, {
+      expires: createFileInputs.expires,
+    });
+    const updatedFile = await this.fileService.update(
+      { uuid: file.uuid },
+      user,
+      fileWithUrl,
+    );
     return {
-      ...file,
+      ...updatedFile,
       signedUrl,
     } as S3File;
   }
