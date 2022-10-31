@@ -68,6 +68,7 @@ import HealthcheckController from './flox/modules/healthcheck/healthcheck.contro
           database: configService.getOrThrow('database.database'),
           entities: [configService.getOrThrow('entities')],
           synchronize: true,
+          logging: ['query', 'error'],
         } as PostgresConnectionOptions),
       inject: [ConfigService],
     }),
