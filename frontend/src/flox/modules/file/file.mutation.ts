@@ -28,6 +28,11 @@ export const CREATE_FILE = {
         }
       ) {
         uuid
+        createdAt
+        mimetype
+        filename
+        size
+        url
         signedUrl
       }
     }

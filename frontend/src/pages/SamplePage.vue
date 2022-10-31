@@ -18,17 +18,17 @@
     <FilesTable private />
 
     <!-- Labeled Images -->
-<!--    <q-input v-model="imageUuid" label="Image UUID containing labels" />-->
+    <!--    <q-input v-model="imageUuid" label="Image UUID containing labels" />-->
 
-<!--    <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />-->
+    <!--    <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />-->
 
-<!--    <DataTable-->
-<!--      title="User Table"-->
-<!--      :columns="columns"-->
-<!--      :query="SEARCH_USERS"-->
-<!--      :update-mutation="UPDATE_USER"-->
-<!--      :delete-mutation="DELETE_USER"-->
-<!--    />-->
+    <!--    <DataTable-->
+    <!--      title="User Table"-->
+    <!--      :columns="columns"-->
+    <!--      :query="SEARCH_USERS"-->
+    <!--      :update-mutation="UPDATE_USER"-->
+    <!--      :delete-mutation="DELETE_USER"-->
+    <!--    />-->
   </q-page>
 </template>
 

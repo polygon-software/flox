@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 import { invalidateTables } from 'src/apollo/invalidation';
 import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
@@ -17,7 +17,7 @@ export type SelectedFile = {
  * @param file - File that should be uploaded
  * @return Whether the upload was successful or not
  */
-export async function uploadFile(file: SelectedFile): Promise<AxiosResponse> {
+export async function uploadFile(file: SelectedFile): Promise<FileEntity> {
   const headers = {
     'Content-Type': file.content.type,
   };
@@ -33,21 +33,22 @@ export async function uploadFile(file: SelectedFile): Promise<AxiosResponse> {
 
   console.log('GOT SIGNED URL', createdFile.signedUrl);
 
-  const uploadResult = await axios
+  await axios
     .put(createdFile.signedUrl, file.content, {
       headers,
     })
     .catch((e: Error) => {
       throw new Error(`File upload error: ${e.message}`);
     });
-  const imageDetails = uploadResult.data as FileEntity;
 
-  if (createdFile.mimetype.split('/')[0] === 'image') {
-    await createImage(imageDetails.uuid, true);
+  console.log({ createdFile });
+
+  if (file.content.type.split('/')[0] === 'image') {
+    await createImage(createdFile.uuid, true);
   }
 
   invalidateTables([TABLES.FILE, TABLES.IMAGE]);
 
   // Return updated objects
-  return uploadResult;
+  return createdFile;
 }

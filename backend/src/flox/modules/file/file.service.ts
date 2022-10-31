@@ -69,6 +69,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
    */
   async addFileUrl(file: S3File, args: { expires?: number }): Promise<S3File> {
     if (file.publicReadAccess) {
+      console.log('Returning file with existing URL', file.url);
       return file;
     }
     const options = {
@@ -83,6 +84,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
       }),
       options,
     );
+    console.log('Created new URL', url);
     // Add URL to result
     return { ...file, url };
   }

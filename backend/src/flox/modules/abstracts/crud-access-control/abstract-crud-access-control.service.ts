@@ -17,6 +17,7 @@ import GetMultipleArgs from '../crud/dto/get-multiple.args';
 import GetOneArgs from '../crud/dto/get-one.args';
 import DeleteInput from '../crud/inputs/delete.input';
 import UpdateInput from '../crud/inputs/update.input';
+import { assertReadAccess } from '../../access-control/helpers/access-control.helper';
 
 import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
 
@@ -28,6 +29,7 @@ export default abstract class AbstractCrudAccessControlService<
   get accessControlRelationOptions(): FindOneOptions<Entity> {
     return {
       relations: {
+        owner: true,
         readAccess: {
           users: true,
         },
@@ -41,6 +43,7 @@ export default abstract class AbstractCrudAccessControlService<
   get readAccessControlRelationOptions(): FindOneOptions<Entity> {
     return {
       relations: {
+        owner: true,
         readAccess: {
           users: true,
         },
@@ -51,6 +54,7 @@ export default abstract class AbstractCrudAccessControlService<
   get writeAccessControlRelationOptions(): FindOneOptions<Entity> {
     return {
       relations: {
+        owner: true,
         writeAccess: {
           users: true,
         },
@@ -110,6 +114,123 @@ export default abstract class AbstractCrudAccessControlService<
     return {};
   }
 
+  protected async findUuidsForPublicReadAccess(
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: this.mixWhere(
+        [
+          {
+            publicReadAccess: true,
+          } as FindOptionsWhere<Entity>,
+        ],
+        this.extractWhere(options),
+      ),
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
+  protected async findUuidsForLoggedInReadAccess(
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: this.mixWhere(
+        [
+          {
+            loggedInReadAccess: true,
+          } as FindOptionsWhere<Entity>,
+        ],
+        this.extractWhere(options),
+      ),
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
+  protected async findUuidsForOwner(
+    user: User,
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: this.mixWhere(
+        [
+          {
+            owner: {
+              uuid: user.uuid,
+            },
+          } as FindOptionsWhere<Entity>,
+        ],
+        this.extractWhere(options),
+      ),
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
+  protected async findUuidsWithReadAccess(
+    user: User,
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: this.mixWhere(
+        [
+          {
+            readAccess: {
+              users: {
+                uuid: user.uuid,
+              },
+            },
+          } as FindOptionsWhere<Entity>,
+        ],
+        this.extractWhere(options),
+      ),
+      take: undefined,
+      skip: undefined,
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
+  protected async findUuidsWithWriteAccess(
+    user: User,
+    options?: FindOneOptions<Entity>,
+  ): Promise<string[]> {
+    const entities = await this.repository.find({
+      ...options,
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: this.mixWhere(
+        [
+          {
+            writeAccess: {
+              users: {
+                uuid: user.uuid,
+              },
+            },
+          } as FindOptionsWhere<Entity>,
+        ],
+        this.extractWhere(options),
+      ),
+      take: undefined,
+      skip: undefined,
+    });
+    return entities.map((entity) => entity.uuid);
+  }
+
   getOnePublic(
     getOneArgs: GetOneArgs,
     options?: FindOneOptions<Entity>,
@@ -128,41 +249,21 @@ export default abstract class AbstractCrudAccessControlService<
     });
   }
 
-  getOneAsUser(
+  async getOneAsUser(
     getOneArgs: GetOneArgs,
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
-    return this.repository.findOneOrFail({
+    const entity = await this.repository.findOneOrFail({
       ...options,
-      where: this.mixWhere(
-        [
-          {
-            uuid: getOneArgs.uuid,
-            publicReadAccess: true,
-          },
-          {
-            uuid: getOneArgs.uuid,
-            loggedInReadAccess: true,
-          },
-          {
-            uuid: getOneArgs.uuid,
-            owner: {
-              uuid: user.uuid,
-            },
-          },
-          {
-            uuid: getOneArgs.uuid,
-            readAccess: {
-              users: {
-                uuid: user.uuid,
-              },
-            },
-          },
-        ] as FindOptionsWhere<Entity>[],
-        this.extractWhere(options),
-      ),
+      where: {
+        uuid: getOneArgs.uuid,
+      } as FindOptionsWhere<Entity>,
+      ...this.readAccessControlRelationOptions,
     });
+    console.log('entity', JSON.stringify(entity));
+    assertReadAccess(entity, user);
+    return entity;
   }
 
   getOneAsAdmin(
@@ -179,7 +280,7 @@ export default abstract class AbstractCrudAccessControlService<
     });
   }
 
-  getAllPublic(
+  async getAllPublic(
     getAll: GetAllArgs,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
@@ -189,8 +290,8 @@ export default abstract class AbstractCrudAccessControlService<
         [
           {
             publicReadAccess: true,
-          },
-        ] as FindOptionsWhere<Entity>[],
+          } as FindOptionsWhere<Entity>,
+        ],
         this.extractWhere(options),
       ),
       take: getAll.take,
@@ -198,36 +299,28 @@ export default abstract class AbstractCrudAccessControlService<
     });
   }
 
-  getAllAsUser(
+  async getAllAsUser(
     getAll: GetAllArgs,
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
+    const [publicReadUuids, loggedInReadUuids, ownerUuids, readUuids] =
+      await Promise.all([
+        this.findUuidsForPublicReadAccess(options),
+        this.findUuidsForLoggedInReadAccess(options),
+        this.findUuidsForOwner(user, options),
+        this.findUuidsWithReadAccess(user, options),
+      ]);
     return this.repository.find({
       ...options,
-      where: this.mixWhere(
-        [
-          {
-            publicReadAccess: true,
-          },
-          {
-            loggedInReadAccess: true,
-          },
-          {
-            owner: {
-              uuid: user.uuid,
-            },
-          },
-          {
-            readAccess: {
-              users: {
-                uuid: user.uuid,
-              },
-            },
-          },
-        ] as FindOptionsWhere<Entity>[],
-        this.extractWhere(options),
-      ),
+      where: {
+        uuid: In([
+          ...publicReadUuids,
+          ...loggedInReadUuids,
+          ...ownerUuids,
+          ...readUuids,
+        ]),
+      } as FindOptionsWhere<Entity>,
       take: getAll.take,
       skip: getAll.skip,
     });
@@ -239,10 +332,6 @@ export default abstract class AbstractCrudAccessControlService<
   ): Promise<Entity[]> {
     return this.repository.find({
       ...options,
-      where: this.mixWhere(
-        [] as FindOptionsWhere<Entity>[],
-        this.extractWhere(options),
-      ),
       take: getAll.take,
       skip: getAll.skip,
     });
@@ -253,40 +342,19 @@ export default abstract class AbstractCrudAccessControlService<
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
-    const find1 = await this.repository.find({
-      select: {
-        uuid: true,
-      } as FindOptionsSelect<Entity>,
-      where: {
-        owner: {
-          uuid: user.uuid,
-        },
-      } as FindOptionsWhere<Entity>,
-    });
-    const find2 = await this.repository.find({
-      select: {
-        uuid: true,
-      } as FindOptionsSelect<Entity>,
-      where: {
-        readAccess: {
-          users: {
-            uuid: user.uuid,
-          },
-        },
-      } as FindOptionsWhere<Entity>,
-    });
-    console.log(find1, find2);
+    const owner = await this.findUuidsForOwner(user, options);
+    const access = await this.findUuidsWithReadAccess(user, options);
     return this.repository.find({
       ...options,
       where: {
-        uuid: In([...find1.map((e) => e.uuid), ...find2.map((e) => e.uuid)]),
+        uuid: In([...owner, ...access]),
       } as FindOptionsWhere<Entity>,
       take: getAll.take,
       skip: getAll.skip,
     });
   }
 
-  getMultiplePublic(
+  async getMultiplePublic(
     getMultiple: GetMultipleArgs,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
@@ -295,78 +363,63 @@ export default abstract class AbstractCrudAccessControlService<
       where: this.mixWhere(
         [
           {
-            uuid: In(getMultiple.uuids),
             publicReadAccess: true,
-          },
-        ] as FindOptionsWhere<Entity>[],
+          } as FindOptionsWhere<Entity>,
+        ],
         this.extractWhere(options),
       ),
     });
   }
 
-  getMultipleAsUser(
+  async getMultipleAsUser(
     getMultiple: GetMultipleArgs,
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
+    const [publicReadUuids, loggedInReadUuids, ownerUuids, readUuids] =
+      await Promise.all([
+        this.findUuidsForPublicReadAccess(options),
+        this.findUuidsForLoggedInReadAccess(options),
+        this.findUuidsForOwner(user, options),
+        this.findUuidsWithReadAccess(user, options),
+      ]);
     return this.repository.find({
       ...options,
-      where: this.mixWhere(
-        [
-          {
-            uuid: In(getMultiple.uuids),
-            publicReadAccess: true,
-          },
-          {
-            uuid: In(getMultiple.uuids),
-            loggedInReadAccess: true,
-          },
-          {
-            uuid: In(getMultiple.uuids),
-            owner: {
-              uuid: user.uuid,
-            },
-          },
-          {
-            uuid: In(getMultiple.uuids),
-            readAccess: {
-              users: {
-                uuid: user.uuid,
-              },
-            },
-          },
-        ] as FindOptionsWhere<Entity>[],
-        this.extractWhere(options),
-      ),
+      where: [
+        {
+          uuid: In(getMultiple.uuids),
+        },
+        {
+          uuid: In([
+            ...publicReadUuids,
+            ...loggedInReadUuids,
+            ...ownerUuids,
+            ...readUuids,
+          ]),
+        },
+      ] as FindOptionsWhere<Entity>[],
     });
   }
 
-  getMultipleOfUser(
+  async getMultipleOfUser(
     getMultiple: GetMultipleArgs,
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
+    const [ownerUuids, readUuids] = await Promise.all([
+      this.findUuidsForOwner(user, options),
+      this.findUuidsWithReadAccess(user, options),
+    ]);
     return this.repository.find({
       ...options,
-      where: this.mixWhere(
-        [
-          {
-            uuid: In(getMultiple.uuids),
-            owner: {
-              uuid: user.uuid,
-            },
-          },
-          {
-            uuid: In(getMultiple.uuids),
-            readAccess: {
-              users: {
-                uuid: user.uuid,
-              },
-            },
-          },
-        ] as FindOptionsWhere<Entity>[],
-        this.extractWhere(options),
-      ),
+      where: [
+        {
+          uuid: In(getMultiple.uuids),
+        },
+        {
+          uuid: In([...ownerUuids, ...readUuids]),
+        },
+      ] as FindOptionsWhere<Entity>[],
     });
   }
 
@@ -408,25 +461,12 @@ export default abstract class AbstractCrudAccessControlService<
     user: User,
     entity?: DeepPartial<Entity>,
   ): Promise<Entity> {
-    await this.repository.findOneOrFail({
-      where: [
-        {
-          uuid: updateInput.uuid,
-          owner: {
-            uuid: user.uuid,
-          },
-        },
-        {
-          uuid: updateInput.uuid,
-          writeAccess: {
-            users: {
-              uuid: user.uuid,
-            },
-          },
-        },
-      ] as FindOptionsWhere<Entity>[],
-    });
+    const storedEntity = await this.getOneAsUser(
+      { uuid: updateInput.uuid },
+      user,
+    );
     const updatedEntity = this.repository.create({
+      ...storedEntity,
       ...(updateInput as DeepPartial<Entity>),
       ...entity,
     });

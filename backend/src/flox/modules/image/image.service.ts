@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -10,7 +10,7 @@ import { FindOneOptions, Repository } from 'typeorm';
 
 import GetOneArgs from '../abstracts/crud/dto/get-one.args';
 import DeleteInput from '../abstracts/crud/inputs/delete.input';
-import { userHasWriteAccess } from '../abstracts/crud-access-control/helpers/access-control.helper';
+import { assertReadAccess } from '../access-control/helpers/access-control.helper';
 import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
 import User from '../auth/entities/user.entity';
 import FileService from '../file/file.service';
@@ -389,10 +389,9 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       user,
       this.fileService.writeAccessControlRelationOptions,
     );
-    if (!userHasWriteAccess(file, user)) {
-      throw new ForbiddenException();
-    }
+    assertReadAccess(file, user);
     file = await this.fileService.addFileUrl(file, { expires: 60 });
+    console.log(JSON.stringify(file), user.uuid);
     const imageMetaData = (await exifr.parse(file.url ?? '')) || {};
     const newImage = await super.create(createImageInput, user, {
       file,
@@ -432,9 +431,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       user,
       this.writeAccessControlRelationOptions,
     );
-    if (!userHasWriteAccess(image, user)) {
-      throw new ForbiddenException();
-    }
+    assertReadAccess(image, user);
 
     const rekognitionData = await this.rekognition.send(
       new DetectLabelsCommand({
