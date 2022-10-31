@@ -37,5 +37,6 @@ export default class AccessControlledEntity extends BaseEntity {
     description: 'People with write access to this resource',
   })
   @ManyToMany(() => UserGroup, (userGroup) => userGroup.writeAccess)
+  @JoinTable()
   public writeAccess: UserGroup[];
 }

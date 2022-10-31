@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { FindOptionsRelations } from 'typeorm/find-options/FindOptionsRelations';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { FindOptionsSelect } from 'typeorm/find-options/FindOptionsSelect';
 
 import AccessControlledEntity from '../../access-control/entities/access-controlled.entity';
 import User from '../../auth/entities/user.entity';
@@ -247,33 +248,39 @@ export default abstract class AbstractCrudAccessControlService<
     });
   }
 
-  getAllOfUser(
+  async getAllOfUser(
     getAll: GetAllArgs,
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
-    const where = this.mixWhere(
-      [
-        {
-          owner: {
+    const find1 = await this.repository.find({
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: {
+        owner: {
+          uuid: user.uuid,
+        },
+      } as FindOptionsWhere<Entity>,
+    });
+    const find2 = await this.repository.find({
+      select: {
+        uuid: true,
+      } as FindOptionsSelect<Entity>,
+      where: {
+        readAccess: {
+          users: {
             uuid: user.uuid,
           },
         },
-        {
-          readAccess: {
-            users: {
-              uuid: user.uuid,
-            },
-          },
-        },
-      ] as FindOptionsWhere<Entity>[],
-      this.extractWhere(options),
-    );
-    console.log('where', JSON.stringify(where));
-    console.log('options', options);
+      } as FindOptionsWhere<Entity>,
+    });
+    console.log(find1, find2);
     return this.repository.find({
       ...options,
-      where,
+      where: {
+        uuid: In([...find1.map((e) => e.uuid), ...find2.map((e) => e.uuid)]),
+      } as FindOptionsWhere<Entity>,
       take: getAll.take,
       skip: getAll.skip,
     });
