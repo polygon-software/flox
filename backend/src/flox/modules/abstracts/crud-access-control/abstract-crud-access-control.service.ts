@@ -18,6 +18,7 @@ import GetOneArgs from '../crud/dto/get-one.args';
 import DeleteInput from '../crud/inputs/delete.input';
 import UpdateInput from '../crud/inputs/update.input';
 import { assertReadAccess } from '../../access-control/helpers/access-control.helper';
+import AccessControlService from '../../access-control/access-control.service';
 
 import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
 
@@ -25,6 +26,7 @@ export default abstract class AbstractCrudAccessControlService<
   Entity extends AccessControlledEntity,
 > {
   abstract get repository(): Repository<Entity>;
+  private readonly accessControlService: AccessControlService;
 
   get accessControlRelationOptions(): FindOneOptions<Entity> {
     return {
@@ -181,6 +183,8 @@ export default abstract class AbstractCrudAccessControlService<
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<string[]> {
+    const userGroupsOfUser =
+      await this.accessControlService.getUserGroupsForUser(user);
     const entities = await this.repository.find({
       ...options,
       select: {
@@ -190,9 +194,7 @@ export default abstract class AbstractCrudAccessControlService<
         [
           {
             readAccess: {
-              users: {
-                uuid: user.uuid,
-              },
+              uuid: In(userGroupsOfUser.map((group) => group.uuid)),
             },
           } as FindOptionsWhere<Entity>,
         ],
@@ -208,6 +210,8 @@ export default abstract class AbstractCrudAccessControlService<
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<string[]> {
+    const userGroupsOfUser =
+      await this.accessControlService.getUserGroupsForUser(user);
     const entities = await this.repository.find({
       ...options,
       select: {
@@ -217,9 +221,7 @@ export default abstract class AbstractCrudAccessControlService<
         [
           {
             writeAccess: {
-              users: {
-                uuid: user.uuid,
-              },
+              uuid: In(userGroupsOfUser.map((group) => group.uuid)),
             },
           } as FindOptionsWhere<Entity>,
         ],
