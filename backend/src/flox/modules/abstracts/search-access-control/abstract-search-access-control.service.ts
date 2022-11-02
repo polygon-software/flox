@@ -3,6 +3,7 @@ import {
   FindOneOptions,
   FindOptionsOrder,
   FindOptionsWhere,
+  In,
   Like,
   Repository,
 } from 'typeorm';
@@ -51,12 +52,7 @@ export default abstract class AbstractSearchAccessControlService<
       this.extractWhere(options),
     );
 
-    const count = await this.repository.count({
-      ...options,
-      where,
-    });
-
-    const data = await this.repository.find({
+    const [data, count] = await this.repository.findAndCount({
       ...options,
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
@@ -74,46 +70,37 @@ export default abstract class AbstractSearchAccessControlService<
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    const where = this.mixWhere(
-      [
-        {
-          publicReadAccess: true,
-          ...this.nestedSearch(searchKey, queryArgs.filter),
-        } as FindOptionsWhere<Entity>,
-        {
-          loggedInReadAccess: true,
-          ...this.nestedSearch(searchKey, queryArgs.filter),
-        } as FindOptionsWhere<Entity>,
-        {
-          owner: {
-            uuid: user.uuid,
-          },
-          ...this.nestedSearch(searchKey, queryArgs.filter),
-        } as FindOptionsWhere<Entity>,
-        {
-          readAccess: {
-            users: {
-              uuid: user.uuid,
-            },
-          },
-          ...this.nestedSearch(searchKey, queryArgs.filter),
-        } as FindOptionsWhere<Entity>,
-      ],
-      this.extractWhere(options),
-    );
-    const count = await this.repository.count({
+    const combinedOptions = {
       ...options,
-      where,
-    });
+      where: this.mixWhere(
+        [this.nestedSearch(searchKey, queryArgs.filter)],
+        this.extractWhere(options),
+      ),
+    };
+    const [publicReadUuids, loggedInReadUuids, ownerUuids, readUuids] =
+      await Promise.all([
+        this.findUuidsForPublicReadAccess(combinedOptions),
+        this.findUuidsForLoggedInReadAccess(combinedOptions),
+        this.findUuidsForOwner(user, combinedOptions),
+        this.findUuidsWithReadAccess(user, combinedOptions),
+      ]);
+    const where = {
+      uuid: In([
+        ...publicReadUuids,
+        ...loggedInReadUuids,
+        ...ownerUuids,
+        ...readUuids,
+      ]),
+    } as FindOptionsWhere<Entity>;
 
-    const data = await this.repository.find({
-      ...options,
+    const [data, count] = await this.repository.findAndCount({
+      ...combinedOptions,
+      where,
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
       } as FindOptionsOrder<Entity>,
       skip: queryArgs.skip,
       take: queryArgs.take,
-      where,
     });
     return { data, count };
   }
@@ -124,38 +111,29 @@ export default abstract class AbstractSearchAccessControlService<
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    const where = this.mixWhere(
-      [
-        {
-          owner: {
-            uuid: user.uuid,
-          },
-          ...this.nestedSearch(searchKey, queryArgs.filter),
-        } as FindOptionsWhere<Entity>,
-        {
-          readAccess: {
-            users: {
-              uuid: user.uuid,
-            },
-          },
-          ...this.nestedSearch(searchKey, queryArgs.filter),
-        } as FindOptionsWhere<Entity>,
-      ],
-      this.extractWhere(options),
-    );
-    const count = await this.repository.count({
+    const combinedOptions = {
       ...options,
-      where,
-    });
+      where: this.mixWhere(
+        [this.nestedSearch(searchKey, queryArgs.filter)],
+        this.extractWhere(options),
+      ),
+    };
+    const [ownerUuids, readUuids] = await Promise.all([
+      this.findUuidsForOwner(user, combinedOptions),
+      this.findUuidsWithReadAccess(user, combinedOptions),
+    ]);
+    const where = {
+      uuid: In([...ownerUuids, ...readUuids]),
+    } as FindOptionsWhere<Entity>;
 
-    const data = await this.repository.find({
-      ...options,
+    const [data, count] = await this.repository.findAndCount({
+      ...combinedOptions,
+      where,
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
       } as FindOptionsOrder<Entity>,
       skip: queryArgs.skip,
       take: queryArgs.take,
-      where,
     });
     return { data, count };
   }
@@ -167,18 +145,12 @@ export default abstract class AbstractSearchAccessControlService<
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const where = this.mixWhere(
       [
-        {
-          ...this.nestedSearch(searchKey, queryArgs.filter),
-        },
+        this.nestedSearch(searchKey, queryArgs.filter),
       ] as FindOptionsWhere<Entity>[],
       this.extractWhere(options),
     );
-    const count = await this.repository.count({
-      ...options,
-      where,
-    });
 
-    const data = await this.repository.find({
+    const [data, count] = await this.repository.findAndCount({
       ...options,
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
