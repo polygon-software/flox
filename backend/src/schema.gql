@@ -191,7 +191,7 @@ type Label {
 }
 
 type Mutation {
-  CreateFile(createFileInputs: CreateFileInput!): S3File!
+  CreateFile(createFileInput: CreateFileInput!): S3File!
   CreateImage(createImageInput: CreateImageInput!): Image!
   CreateUser(createUserInput: CreateUserInput!): User!
   DeleteFile(deleteInput: DeleteInput!): S3File!
