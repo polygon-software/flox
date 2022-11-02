@@ -10,7 +10,7 @@ export default class RemoveUserFromUserGroupInput {
   userGroupUuid: string;
 
   @Field(() => ID, {
-    name: 'Uuid of user that shall be added to group',
+    description: 'Uuid of user that shall be removed from group',
   })
   @IsUUID()
   userUuid: string;

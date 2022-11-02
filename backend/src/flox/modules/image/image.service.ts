@@ -15,6 +15,7 @@ import AbstractSearchAccessControlService from '../abstracts/search-access-contr
 import User from '../auth/entities/user.entity';
 import FileService from '../file/file.service';
 import { NestedKeyOf } from '../../../types/NestedKeyOf';
+import AccessControlService from '../access-control/access-control.service';
 
 import GetAllImagesArgs from './dto/args/get-all-images.args';
 import GetImageArgs from './dto/args/get-image.args';
@@ -27,7 +28,6 @@ import Image from './entities/image.entity';
 import Label from './entities/label.entity';
 import SearchImagesArgs from './dto/args/search-images.args';
 import ImageSearchOutput from './outputs/image-search.output';
-import AccessControlService from "../access-control/access-control.service";
 
 @Injectable()
 export default class ImageService extends AbstractSearchAccessControlService<Image> {
@@ -55,12 +55,9 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
 
     @InjectRepository(BoundingBox)
     private boundingBoxRepository: Repository<BoundingBox>,
-
     private readonly fileService: FileService,
-
     private readonly configService: ConfigService,
-
-    private readonly accessControlService: AccessControlService,
+    protected readonly accessControlService: AccessControlService,
   ) {
     super();
   }

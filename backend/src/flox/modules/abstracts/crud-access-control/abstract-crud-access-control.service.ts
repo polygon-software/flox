@@ -26,7 +26,7 @@ export default abstract class AbstractCrudAccessControlService<
   Entity extends AccessControlledEntity,
 > {
   abstract get repository(): Repository<Entity>;
-  private readonly accessControlService: AccessControlService;
+  protected abstract readonly accessControlService: AccessControlService;
 
   get accessControlRelationOptions(): FindOneOptions<Entity> {
     return {

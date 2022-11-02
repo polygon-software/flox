@@ -24,7 +24,7 @@ export default class AccessControlResolver extends AbstractCrudResolver<
   AccessControlService
 > {
   constructor(
-    private readonly accessControlService: AccessControlService,
+    protected readonly accessControlService: AccessControlService,
     private readonly userService: UserService,
   ) {
     super();

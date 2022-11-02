@@ -37,7 +37,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     @InjectRepository(S3File)
     private fileRepository: Repository<S3File>,
     private readonly configService: ConfigService,
-    private readonly accessControlService: AccessControlService,
+    protected readonly accessControlService: AccessControlService,
   ) {
     super();
   }
