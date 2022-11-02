@@ -27,6 +27,7 @@ import Image from './entities/image.entity';
 import Label from './entities/label.entity';
 import SearchImagesArgs from './dto/args/search-images.args';
 import ImageSearchOutput from './outputs/image-search.output';
+import AccessControlService from "../access-control/access-control.service";
 
 @Injectable()
 export default class ImageService extends AbstractSearchAccessControlService<Image> {
@@ -58,6 +59,8 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     private readonly fileService: FileService,
 
     private readonly configService: ConfigService,
+
+    private readonly accessControlService: AccessControlService,
   ) {
     super();
   }

@@ -193,7 +193,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     const file = await super.create(createFileInput, user);
     const signedUrl = await this.fileService.createSignedUploadUrl(file);
     const fileWithUrl = await this.fileService.addFileUrl(file, {
-      expires: createFileInputs.expires,
+      expires: createFileInput.expires,
     });
     const updatedFile = await this.fileService.update(
       { uuid: file.uuid },

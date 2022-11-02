@@ -11,6 +11,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Repository } from 'typeorm';
 
 import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
+import AccessControlService from '../access-control/access-control.service';
 
 import S3File from './entities/file.entity';
 
@@ -36,6 +37,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     @InjectRepository(S3File)
     private fileRepository: Repository<S3File>,
     private readonly configService: ConfigService,
+    private readonly accessControlService: AccessControlService,
   ) {
     super();
   }
