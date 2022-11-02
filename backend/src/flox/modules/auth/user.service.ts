@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
 
-import GetUserArgs from './dto/args/get-user.args';
 import User from './entities/user.entity';
 
 @Injectable()
@@ -22,20 +21,27 @@ export default class UserService extends AbstractSearchService<User> {
 
   /**
    * Gets a user by UUID
-   * @param getUserArgs - contains UUID
+   * @param uuid - uuid of user
+   * @param cognitoUuid - cognito user ID of user
    * @returns the user
    */
-  getUser(getUserArgs: GetUserArgs): Promise<User> {
-    if (getUserArgs.uuid) {
+  getUser({
+    uuid,
+    cognitoUuid,
+  }: {
+    uuid?: string;
+    cognitoUuid?: string;
+  }): Promise<User> {
+    if (uuid) {
       return this.userRepository.findOneOrFail({
-        where: { uuid: getUserArgs.uuid },
+        where: { uuid },
       });
     }
 
-    if (getUserArgs.cognitoUuid) {
+    if (cognitoUuid) {
       return this.userRepository.findOneOrFail({
         where: {
-          cognitoUuid: getUserArgs.cognitoUuid,
+          cognitoUuid,
         },
       });
     }

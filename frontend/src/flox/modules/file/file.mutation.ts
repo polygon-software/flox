@@ -16,7 +16,7 @@ export const CREATE_FILE = {
       $expires: Int
     ) {
       CreateFile(
-        createFileInputs: {
+        createFileInput: {
           filename: $filename
           mimetype: $mimetype
           size: $size

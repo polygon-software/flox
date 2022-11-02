@@ -18,12 +18,12 @@ export default abstract class AbstractCrudResolver<
     return this.service.getOne(getOneArgs);
   }
 
-  getMultiple(getMultiple: GetMultipleArgs): Promise<Entity[]> {
-    return this.service.getMultiple(getMultiple);
+  getMultiple(getMultipleArgs: GetMultipleArgs): Promise<Entity[]> {
+    return this.service.getMultiple(getMultipleArgs);
   }
 
-  getAll(getAll: GetAllArgs): Promise<Entity[]> {
-    return this.service.getAll(getAll);
+  getAll(getAllArgs: GetAllArgs): Promise<Entity[]> {
+    return this.service.getAll(getAllArgs);
   }
 
   async create(createInput: CreateInput): Promise<Entity> {

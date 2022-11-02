@@ -180,17 +180,17 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
 
   /**
    * Creates a new file and returns a presigned url
-   * @param createFileInputs - new file specifications
+   * @param createFileInput - new file specifications
    * @param user - logged-in user
    * @returns updated file
    */
   @LoggedIn()
   @Mutation(() => S3File, { name: 'CreateFile' })
   async createFile(
-    @Args('createFileInputs') createFileInputs: CreateFileInput,
+    @Args('createFileInput') createFileInput: CreateFileInput,
     @CurrentUser() user: User,
   ): Promise<S3File> {
-    const file = await super.create(createFileInputs, user);
+    const file = await super.create(createFileInput, user);
     const signedUrl = await this.fileService.createSignedUploadUrl(file);
     const fileWithUrl = await this.fileService.addFileUrl(file, {
       expires: createFileInputs.expires,
