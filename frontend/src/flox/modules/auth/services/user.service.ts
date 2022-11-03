@@ -103,3 +103,8 @@ export async function deleteUser(uuid: string): Promise<UserEntity | null> {
   });
   return data ?? null;
 }
+
+export function avatarForUser(uuid: string): string {
+  const base = 'https://source.boringavatars.com/beam/52/';
+  return `${base}${uuid}?colors=388087,6fb3b8,c2edce`;
+}

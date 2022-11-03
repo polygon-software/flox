@@ -336,6 +336,7 @@ export function useDataTable<T extends BaseEntity>(
   function deleteActiveRows(): Promise<
     PromiseSettledResult<Awaited<T> | void | null | undefined>[]
   > {
+    const deletionUuids = selected.value.map((val) => val.uuid);
     const deletionRequests = selected.value.map((selectedRow: T) => {
       return executeMutation<T>(
         deletionObject,
@@ -360,6 +361,8 @@ export function useDataTable<T extends BaseEntity>(
           );
         });
     });
+    rows.value = rows.value.filter((row) => !deletionUuids.includes(row.uuid));
+    selected.value = [];
     return Promise.allSettled(deletionRequests);
   }
 

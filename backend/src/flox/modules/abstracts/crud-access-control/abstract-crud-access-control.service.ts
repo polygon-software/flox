@@ -184,7 +184,10 @@ export default abstract class AbstractCrudAccessControlService<
     options?: FindOneOptions<Entity>,
   ): Promise<string[]> {
     const userGroupsOfUser =
-      await this.accessControlService.getUserGroupsForUser(user);
+      await this.accessControlService.getUserGroupsForUser(user.uuid, {
+        take: 5000,
+        skip: 0,
+      } as GetAllArgs);
     const entities = await this.repository.find({
       ...options,
       select: {
@@ -211,7 +214,10 @@ export default abstract class AbstractCrudAccessControlService<
     options?: FindOneOptions<Entity>,
   ): Promise<string[]> {
     const userGroupsOfUser =
-      await this.accessControlService.getUserGroupsForUser(user);
+      await this.accessControlService.getUserGroupsForUser(user.uuid, {
+        take: 5000,
+        skip: 0,
+      } as GetAllArgs);
     const entities = await this.repository.find({
       ...options,
       select: {

@@ -35,7 +35,7 @@ const $authStore: ReturnType<typeof useAuthStore> = useAuthStore();
 
 const loggedIn = computed(() => {
   // Explicit type
-  const result: boolean = $authStore.getLoggedInStatus;
+  const result: boolean = $authStore.loggedIn;
   return result;
 });
 

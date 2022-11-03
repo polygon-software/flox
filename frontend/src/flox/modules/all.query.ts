@@ -10,10 +10,12 @@ import { QueryObject } from 'src/apollo/query';
 import { USER_QUERIES } from 'src/flox/modules/auth/user.query';
 import { FILE_QUERIES } from 'src/flox/modules/file/file.query';
 import { IMAGE_QUERIES } from 'src/flox/modules/image/image.query';
+import { ACCESS_CONTROL_QUERIES } from 'src/flox/modules/access-control/access-control.query';
 
 // Queries for all modules
 export const AllQuery: QueryObject[] = [
   ...USER_QUERIES,
   ...FILE_QUERIES,
   ...IMAGE_QUERIES,
+  ...ACCESS_CONTROL_QUERIES,
 ];

@@ -7,5 +7,5 @@ export default class GetAllOfUserArgs extends GetAllArgs {
   @Field(() => ID, {
     description: 'User UUID',
   })
-  userUuids: string;
+  userUuid: string;
 }

@@ -1,4 +1,10 @@
-import { DeepPartial, FindOptionsWhere, In, Repository } from 'typeorm';
+import {
+  DeepPartial,
+  FindOneOptions,
+  FindOptionsWhere,
+  In,
+  Repository,
+} from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
@@ -13,23 +19,35 @@ import UpdateInput from './inputs/update.input';
 export default abstract class AbstractCrudService<Entity extends BaseEntity> {
   abstract get repository(): Repository<Entity>;
 
-  getOne(getOneArgs: GetOneArgs): Promise<Entity> {
+  getOne(
+    getOneArgs: GetOneArgs,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity> {
     return this.repository.findOneOrFail({
+      ...options,
       where: {
         uuid: getOneArgs.uuid,
       } as FindOptionsWhere<Entity>,
     });
   }
 
-  getAll(getAll: GetAllArgs): Promise<Entity[]> {
+  getAll(
+    getAll: GetAllArgs,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity[]> {
     return this.repository.find({
+      ...options,
       take: getAll.take,
       skip: getAll.skip,
     });
   }
 
-  getMultiple(getMultiple: GetMultipleArgs): Promise<Entity[]> {
+  getMultiple(
+    getMultiple: GetMultipleArgs,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity[]> {
     return this.repository.findBy({
+      ...options,
       uuid: In(getMultiple.uuids),
     } as FindOptionsWhere<Entity>);
   }
@@ -40,20 +58,26 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
     return entity;
   }
 
-  async update(updateInput: UpdateInput): Promise<Entity> {
+  async update(
+    updateInput: UpdateInput,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity> {
     const entity = this.repository.create(updateInput as DeepPartial<Entity>);
     await this.repository.update(
       updateInput.uuid,
       entity as QueryDeepPartialEntity<Entity>,
     );
     return this.repository.findOneOrFail({
+      ...options,
       where: {
         uuid: updateInput.uuid,
       } as FindOptionsWhere<Entity>,
     });
   }
 
-  async delete(deleteInput: DeleteInput): Promise<Entity> {
+  async delete(
+    deleteInput: DeleteInput,
+  ): Promise<Entity> {
     const entity = await this.repository.findOneOrFail({
       where: {
         uuid: deleteInput.uuid,

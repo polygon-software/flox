@@ -69,7 +69,7 @@
           </q-btn>
           <q-btn round flat>
             <q-avatar size="26px">
-              <img :src="avatar" />
+              <img :src="$authStore.avatar" />
             </q-avatar>
             <q-tooltip>Account</q-tooltip>
           </q-btn>
@@ -159,12 +159,6 @@ function toggleLeftDrawer(): void {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
-const avatar: ComputedRef<string> = computed(() => {
-  const username: string = $authStore.getUserName || '';
-  const base = 'https://source.boringavatars.com/beam/26/';
-  return `${base}${username}?colors=388087,6fb3b8,c2edce`;
-});
-
 const sideMenu = [
   {
     title: '',
@@ -174,7 +168,13 @@ const sideMenu = [
         text: 'Home',
       },
       { icon: 'group', text: 'Users' },
-      { icon: 'lock', text: 'Access Rights' },
+      {
+        icon: 'lock',
+        text: 'Access Rights',
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.ACCESS_CONTROL);
+        },
+      },
       {
         icon: 'preview',
         text: 'Alias',

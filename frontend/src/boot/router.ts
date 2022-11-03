@@ -17,7 +17,7 @@ export default boot(({ router }) => {
   // eslint-disable-next-line sonarjs/cognitive-complexity
   router.beforeEach(async (to) => {
     // Verify valid authentication
-    const loggedIn = $authStore.getLoggedInStatus;
+    const loggedIn = $authStore.loggedIn;
 
     // TODO: Add as part of sharing module
     // Case 1: trying to access non-public route while not logged in
