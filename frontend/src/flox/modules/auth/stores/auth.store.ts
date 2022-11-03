@@ -9,11 +9,14 @@ import {
   deleteCookies,
   persistToCookies,
 } from 'src/flox/modules/auth/tools/cookie.helpers';
+import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import { fetchMyUser } from 'src/flox/modules/auth/services/user.service';
 
 export interface AuthState {
-  userSession: CognitoUserSession | undefined;
-  userPool: CognitoUserPool | undefined;
-  cognitoUser: CognitoUser | undefined;
+  userSession?: CognitoUserSession;
+  userPool?: CognitoUserPool;
+  cognitoUser?: CognitoUser;
+  loggedInUser?: UserEntity;
 }
 
 export const useAuthStore = defineStore('authStore', {
@@ -21,6 +24,7 @@ export const useAuthStore = defineStore('authStore', {
     userSession: undefined,
     userPool: undefined,
     cognitoUser: undefined,
+    loggedInUser: undefined,
   }),
 
   getters: {
@@ -29,14 +33,14 @@ export const useAuthStore = defineStore('authStore', {
      * @param state - the current state of the store
      * @returns whether the user is logged in
      */
-    getLoggedInStatus: (state) => state.userSession?.isValid() ?? false,
+    getLoggedInStatus: (state): boolean => state.userSession?.isValid() ?? false,
 
     /**
      * Gets the current user's username, if any
      * @param state - the current state of the store
      * @returns username, if any
      */
-    getUserName: (state) => state.cognitoUser?.getUsername(),
+    getUserName: (state) => state.loggedInUser?.username,
   },
 
   actions: {
@@ -77,5 +81,8 @@ export const useAuthStore = defineStore('authStore', {
     setCognitoUser(payload: CognitoUser | undefined): void {
       this.cognitoUser = payload;
     },
+    setLoggedInUser(payload: UserEntity | undefined): void {
+      this.loggedInUser = payload;
+    }
   },
 });

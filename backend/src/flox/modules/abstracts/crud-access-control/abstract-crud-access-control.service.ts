@@ -263,7 +263,6 @@ export default abstract class AbstractCrudAccessControlService<
       } as FindOptionsWhere<Entity>,
       ...this.readAccessControlRelationOptions,
     });
-    console.log('entity', JSON.stringify(entity));
     assertReadAccess(entity, user);
     return entity;
   }

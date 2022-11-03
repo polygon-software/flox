@@ -24,9 +24,21 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/SignupPage.vue') }],
   },
 
+  ACCOUNT: {
+    path: '/account',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AccountPage.vue') }],
+  },
+
+  ALIAS: {
+    path: '/alias',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AliasPage.vue') }],
+  },
+
   SAMPLE: {
     path: '/sample',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/DashboardLayout.vue'),
     children: [{ path: '', component: () => import('pages/SamplePage.vue') }],
   },
 

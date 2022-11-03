@@ -13,6 +13,7 @@ import { boot } from 'quasar/wrappers';
 
 import Env from 'src/env';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import { fetchMyUser } from 'src/flox/modules/auth/services/user.service';
 
 /**
  * Performs authentication on server side
@@ -91,7 +92,7 @@ interface FloxBootFileParams<T = any> extends BootFileParams<T> {
   ssrContext?: QSsrContext;
 }
 
-export default boot((bootContext: FloxBootFileParams) => {
+export default boot(async (bootContext: FloxBootFileParams) => {
   const $authStore = useAuthStore();
 
   // Set up authentication user pool
@@ -106,5 +107,9 @@ export default boot((bootContext: FloxBootFileParams) => {
     serverSideAuth(bootContext.ssrContext, userPool);
   } else {
     clientSideAuth(userPool);
+  }
+  if ($authStore.getLoggedInStatus) {
+    const user = await fetchMyUser();
+    $authStore.setLoggedInUser(user);
   }
 });

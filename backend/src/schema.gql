@@ -31,6 +31,14 @@ type AccessControlledEntity {
   writeAccess: [User!]!
 }
 
+input AddUserToUserGroupInput {
+  """Uuid of group to which user shall be added"""
+  userGroupUuid: ID!
+
+  """Uuid of user that shall be added to group"""
+  userUuid: ID!
+}
+
 type BoundingBox {
   """Creation date"""
   createdAt: DateTime!
@@ -85,6 +93,11 @@ input CreateImageInput {
   publicReadAccess: Boolean = false
   readAccess: [ID!] = []
   writeAccess: [ID!] = []
+}
+
+input CreateUserGroupInput {
+  """Name of group"""
+  name: String!
 }
 
 input CreateUserInput {
@@ -191,14 +204,19 @@ type Label {
 }
 
 type Mutation {
+  AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
   CreateFile(createFileInput: CreateFileInput!): S3File!
   CreateImage(createImageInput: CreateImageInput!): Image!
   CreateUser(createUserInput: CreateUserInput!): User!
+  CreateUserGroup(createUserGroupInput: CreateUserGroupInput!): UserGroup!
   DeleteFile(deleteInput: DeleteInput!): S3File!
   DeleteImage(deleteImageInput: DeleteInput!): Image!
   DeleteUser(deleteUserInput: DeleteInput!): User!
+  DeleteUserGroup(deleteInput: DeleteInput!): UserGroup!
+  RemoveUserFromUserGroup(removeUserFromUserGroupInput: RemoveUserFromUserGroupInput!): UserGroup!
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
+  UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
 }
 
 type Query {
@@ -212,6 +230,13 @@ type Query {
     """Number of items to load"""
     take: Int = 500
   ): [S3File!]!
+  AllGroups(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [UserGroup!]!
   AllImages(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -431,7 +456,27 @@ type Query {
     take: Int = 500
   ): UserSearchOutput!
   User(cognitoUuid: ID, uuid: ID!): User!
+  UserGroup(uuid: ID!): UserGroup!
+  UserGroups(uuids: [ID!] = []): [UserGroup!]!
+  UserGroupsOfUser(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+
+    """User UUID"""
+    userUuids: ID!
+  ): [UserGroup!]!
   Users(uuids: [ID!] = []): [User!]!
+}
+
+input RemoveUserFromUserGroupInput {
+  """Uuid of group to which user shall be added"""
+  userGroupUuid: ID!
+
+  """Uuid of user that shall be removed from group"""
+  userUuid: ID!
 }
 
 type S3File {
@@ -484,6 +529,12 @@ input UpdateFileInput {
 
   """Name of File"""
   filename: String
+  uuid: ID!
+}
+
+input UpdateUserGroupInput {
+  """Name of group"""
+  name: String!
   uuid: ID!
 }
 

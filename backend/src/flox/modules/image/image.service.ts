@@ -391,7 +391,6 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     );
     assertReadAccess(file, user);
     file = await this.fileService.addFileUrl(file, { expires: 60 });
-    console.log(JSON.stringify(file), user.uuid);
     const imageMetaData = (await exifr.parse(file.url ?? '')) || {};
     const newImage = await super.create(createImageInput, user, {
       file,

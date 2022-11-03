@@ -50,11 +50,24 @@ export class RolesGuard implements CanActivate {
     const user = req.user;
     let dbUser: User | undefined = undefined;
 
+    console.log(user, 'user');
     if (user) {
       dbUser = await this.userService.getUser({
         cognitoUuid: user.userId,
       } as GetUserArgs);
+
+      // Handle the case in which an alias is provided in header
+      const alias = req.headers['user-alias'];
+      console.log('alias', alias);
+      if (dbUser.role === DEFAULT_ROLES.ADMIN && alias) {
+        dbUser = await this.userService.getUser({
+          uuid: alias,
+        } as GetUserArgs);
+      }
+
+      // Set either cognito user or alias user as principal to request
       req.principal = dbUser;
+
       // Admin has access to everything
       if (dbUser && dbUser.role === DEFAULT_ROLES.ADMIN) {
         return true;
