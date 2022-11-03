@@ -10,6 +10,7 @@ import { QSsrContext } from '@quasar/app-vite';
 import { Cookies } from 'quasar';
 
 import Env from 'src/env';
+import { ALIAS_COOKIE_NAME } from 'src/flox/modules/alias/services/alias.service';
 
 import type { ApolloClientOptions, StoreObject } from '@apollo/client/core';
 
@@ -24,18 +25,21 @@ function getAuthMiddleware(
   return new ApolloLink((operation, forward) => {
     const cookies =
       Env.SERVER && ssrContext ? Cookies.parseSSR(ssrContext) : Cookies;
-    let token = cookies.get('authentication.idToken');
+    const headers: Record<string, string> = {};
+    const token = cookies.get('authentication.idToken');
     if (token) {
       // If token contains quotes, remove them
-      token = token.replace(/"/g, '');
-
-      // Add the authorization to the headers
-      operation.setContext({
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
+      const cleanedToken = token.replace(/"/g, '');
+      headers.authorization = `Bearer ${cleanedToken}`;
     }
+    const alias = cookies.get(ALIAS_COOKIE_NAME);
+    if (alias) {
+      headers['user-alias'] = alias;
+    }
+    // Add the authorization to the headers
+    operation.setContext({
+      headers,
+    });
     return forward(operation);
   });
 }

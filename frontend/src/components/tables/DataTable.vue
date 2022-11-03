@@ -11,7 +11,7 @@
       :loading="loading"
       :filter="filter"
       binary-state-sort
-      selection="multiple"
+      :selection="multi ? 'multiple' : 'single'"
       :visible-columns="visibleColumnNames"
       @request="onRequest"
       @selection="handleSelection"
@@ -118,6 +118,7 @@
     <div class="row">
       <div class="col">
         <div
+          v-if="multi"
           class="text-subtitle2 q-pa-sm"
           v-text="$t('table.ctrl_shift_hint')"
         />
@@ -125,7 +126,7 @@
       <div class="col">
         <div class="row justify-end" style="gap: 10px">
           <q-btn
-            v-if="selected.length > 0"
+            v-if="selected.length > 0 && exportSelection"
             color="primary"
             icon-right="file_download"
             label="Export"
@@ -133,13 +134,14 @@
             @click="exportTable"
           />
           <q-btn
-            v-if="selected.length > 0"
+            v-if="selected.length > 0 && deleteSelection"
             color="negative"
             icon-right="delete"
             label="Delete"
             no-caps
             @click="deleteActiveRows"
           />
+          <slot name="actions" :selected="selected" />
         </div>
       </div>
     </div>
@@ -155,13 +157,23 @@ import { MutationObject } from 'src/apollo/mutation';
 import { QueryObject } from 'src/apollo/query';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 
-const props = defineProps<{
-  title: string;
-  query: QueryObject;
-  updateMutation: MutationObject;
-  deleteMutation: MutationObject;
-  columns: ColumnInterface<BaseEntity>[];
-}>();
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    exportSelection: boolean;
+    deleteSelection: boolean;
+    multi: boolean;
+    query: QueryObject;
+    updateMutation: MutationObject;
+    deleteMutation: MutationObject;
+    columns: ColumnInterface<BaseEntity>[];
+  }>(),
+  {
+    exportSelection: false,
+    deleteSelection: false,
+    multi: false,
+  }
+);
 
 const popupRefs: Ref<Record<string, QPopupEdit>> = ref({});
 

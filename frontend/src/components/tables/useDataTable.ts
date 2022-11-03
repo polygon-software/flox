@@ -47,6 +47,7 @@ export interface ColumnInterface<T = any> {
  * @param sortBy - key to sort by
  * @param descending - sort order
  * @param rowsPerPage - Default number of rows per page
+ * @param multi - Whether multi-selection of rows is allowed
  * @returns complete setup for a data table
  */
 export function useDataTable<T extends BaseEntity>(
@@ -55,7 +56,8 @@ export function useDataTable<T extends BaseEntity>(
   deletionObject: MutationObject,
   sortBy = 'uuid',
   descending = false,
-  rowsPerPage = 10
+  rowsPerPage = 10,
+  multi = false
 ): {
   rows: Ref<T[]>;
   columns: Ref<ColumnInterface<T>[]>;
@@ -250,7 +252,7 @@ export function useDataTable<T extends BaseEntity>(
     evt: KeyboardEvent;
   }): Promise<void> {
     // ignore selection change from header of not from a direct click event
-    if (newlySelected.length !== 1 || evt === void 0) {
+    if (newlySelected.length !== 1 || evt === void 0 || !multi) {
       return;
     }
 

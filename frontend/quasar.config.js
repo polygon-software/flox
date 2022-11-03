@@ -31,7 +31,7 @@ module.exports = configure(function ({ prod }) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['auth', 'i18n', 'apollo', 'router'],
+    boot: ['apollo', 'auth', 'i18n', 'router'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
