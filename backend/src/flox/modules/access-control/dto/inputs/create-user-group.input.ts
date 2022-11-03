@@ -1,5 +1,5 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Field, ID, InputType } from '@nestjs/graphql';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 import CreateInput from '../../../abstracts/crud/inputs/create.input';
 
@@ -11,4 +11,9 @@ export default class CreateUserGroupInput extends CreateInput {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @Field(() => [ID], { nullable: true, defaultValue: [] })
+  @IsArray()
+  @IsOptional()
+  users: string[];
 }

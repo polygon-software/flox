@@ -38,11 +38,4 @@ export default class UserGroup extends BaseEntity {
     (accessControl) => accessControl.writeAccess,
   )
   public writeAccess: AccessControlledEntity[];
-
-  @BeforeRemove()
-  ensureNoUsersInGroup(): void {
-    if (this.users.length > 0) {
-      throw new Error('Can not delete user group that still has members');
-    }
-  }
 }

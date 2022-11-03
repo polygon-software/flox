@@ -1,6 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import AbstractCrudResolver from '../abstracts/crud/abstract-crud.resolver';
 import { LoggedIn } from '../auth/authentication.decorator';
 import GetOneArgs from '../abstracts/crud/dto/get-one.args';
 import GetMultipleArgs from '../abstracts/crud/dto/get-multiple.args';
@@ -9,6 +8,8 @@ import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import User from '../auth/entities/user.entity';
 import DeleteInput from '../abstracts/crud/inputs/delete.input';
 import UserService from '../auth/user.service';
+import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
+import SearchArgs from '../abstracts/search/dto/args/search.args';
 
 import UserGroup from './entities/user-group.entity';
 import AccessControlService from './access-control.service';
@@ -17,9 +18,10 @@ import CreateUserGroupInput from './dto/inputs/create-user-group.input';
 import UpdateUserGroupInput from './dto/inputs/update-user-group.input';
 import AddUserToUserGroupInput from './dto/inputs/add-user-to-user-group-input';
 import RemoveUserFromUserGroupInput from './dto/inputs/remove-user-from-user-group.input';
+import UserGroupSearchOutput from './outputs/user-group-search.output';
 
 @Resolver(() => UserGroup)
-export default class AccessControlResolver extends AbstractCrudResolver<
+export default class AccessControlResolver extends AbstractSearchResolver<
   UserGroup,
   AccessControlService
 > {
@@ -27,7 +29,7 @@ export default class AccessControlResolver extends AbstractCrudResolver<
     protected readonly accessControlService: AccessControlService,
     private readonly userService: UserService,
   ) {
-    super();
+    super('name');
   }
 
   get service(): AccessControlService {
@@ -37,16 +39,27 @@ export default class AccessControlResolver extends AbstractCrudResolver<
   @LoggedIn()
   @Query(() => UserGroup, { name: 'UserGroup' })
   async getUserGroup(@Args() getOneArgs: GetOneArgs): Promise<UserGroup> {
-    return super.getOne(getOneArgs);
+    return super.getOne(getOneArgs, { relations: { users: true } });
   }
 
   @LoggedIn()
   @Query(() => [UserGroup], { name: 'UserGroupsOfUser' })
   async getUserGroupsOfUser(
     @Args() getAllOfUserArgs: GetAllOfUserArgs,
+  ): Promise<UserGroup[]> {
+    return this.accessControlService.getUserGroupsForUser(
+      getAllOfUserArgs.userUuid,
+      getAllOfUserArgs,
+    );
+  }
+
+  @LoggedIn()
+  @Query(() => [UserGroup], { name: 'MyUserGroups' })
+  async getMyUserGroups(
+    @Args() getAll: GetAllArgs,
     @CurrentUser() user: User,
   ): Promise<UserGroup[]> {
-    return this.accessControlService.getUserGroupsForUser(user);
+    return this.accessControlService.getUserGroupsForUser(user.uuid, getAll);
   }
 
   @LoggedIn()
@@ -54,13 +67,21 @@ export default class AccessControlResolver extends AbstractCrudResolver<
   async getUserGroups(
     @Args() getMultipleArgs: GetMultipleArgs,
   ): Promise<UserGroup[]> {
-    return super.getMultiple(getMultipleArgs);
+    return super.getMultiple(getMultipleArgs, { relations: { users: true } });
   }
 
   @LoggedIn()
-  @Query(() => [UserGroup], { name: 'AllGroups' })
+  @Query(() => [UserGroup], { name: 'AllUserGroups' })
   async getAllUserGroups(@Args() getAllArgs: GetAllArgs): Promise<UserGroup[]> {
-    return super.getAll(getAllArgs);
+    return super.getAll(getAllArgs, { relations: { users: true } });
+  }
+
+  @LoggedIn()
+  @Query(() => UserGroupSearchOutput, { name: 'SearchUserGroups' })
+  async searchUserGroups(
+    @Args() searchQueryArgs: SearchArgs,
+  ): Promise<UserGroupSearchOutput> {
+    return super.search(searchQueryArgs, { relations: { users: true } });
   }
 
   @AdminOnly()
@@ -68,7 +89,15 @@ export default class AccessControlResolver extends AbstractCrudResolver<
   async createUserGroup(
     @Args('createUserGroupInput') createUserGroupInput: CreateUserGroupInput,
   ): Promise<UserGroup> {
-    return super.create(createUserGroupInput);
+    const created = await super.create(createUserGroupInput);
+    const userAdditionPromises = createUserGroupInput?.users.map((userUuid) => {
+      return this.addUserToUserGroup({
+        userUuid,
+        userGroupUuid: created.uuid,
+      });
+    });
+    await Promise.all(userAdditionPromises);
+    return this.getOne({ uuid: created.uuid }, { relations: { users: true } });
   }
 
   @AdminOnly()
@@ -76,7 +105,7 @@ export default class AccessControlResolver extends AbstractCrudResolver<
   async updateUserGroup(
     @Args('updateUserGroupInput') updateUserGroupInput: UpdateUserGroupInput,
   ): Promise<UserGroup> {
-    return super.update(updateUserGroupInput);
+    return super.update(updateUserGroupInput, { relations: { users: true } });
   }
 
   @AdminOnly()

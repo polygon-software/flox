@@ -108,7 +108,7 @@ export default boot(async (bootContext: FloxBootFileParams) => {
   } else {
     clientSideAuth(userPool);
   }
-  if ($authStore.getLoggedInStatus) {
+  if ($authStore.loggedIn) {
     const user = await fetchMyUser();
     $authStore.setLoggedInUser(user);
   }

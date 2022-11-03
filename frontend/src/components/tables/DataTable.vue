@@ -1,7 +1,8 @@
 <template>
-  <q-card class="q-pa-md">
+  <q-card class="q-pa-md" flat bordered>
     <q-table
       ref="tableRef"
+      v-bind="tableProps"
       v-model:pagination="pagination"
       v-model:selected="selected"
       :title="title"
@@ -63,6 +64,7 @@
       </template>
       <template #top-right="headerProps">
         <q-input
+          v-if="!hideSearch"
           v-model="filter"
           borderless
           hide-bottom-space
@@ -75,6 +77,7 @@
           </template>
         </q-input>
         <q-select
+          v-if="!hideColumnSelector"
           v-model="visibleColumnNames"
           borderless
           multiple
@@ -106,6 +109,7 @@
           </template>
         </q-select>
         <q-btn
+          v-if="!hideFullscreen"
           flat
           round
           dense
@@ -149,8 +153,8 @@
 </template>
 
 <script setup lang="ts">
-import { QPopupEdit, QTable } from 'quasar';
-import { defineProps, onMounted, Ref, ref, watchEffect } from 'vue';
+import { QPopupEdit, QTable, QTableProps } from 'quasar';
+import { defineProps, onMounted, Ref, ref, watch, watchEffect } from 'vue';
 
 import { ColumnInterface, useDataTable } from 'components/tables/useDataTable';
 import { MutationObject } from 'src/apollo/mutation';
@@ -159,21 +163,34 @@ import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 
 const props = withDefaults(
   defineProps<{
-    title: string;
+    title?: string;
     exportSelection: boolean;
     deleteSelection: boolean;
+    hideFullscreen: boolean;
+    hideSearch: boolean;
+    hideColumnSelector: boolean;
     multi: boolean;
     query: QueryObject;
     updateMutation: MutationObject;
     deleteMutation: MutationObject;
     columns: ColumnInterface<BaseEntity>[];
+    tableProps: QTableProps;
   }>(),
   {
+    title: undefined,
     exportSelection: false,
     deleteSelection: false,
     multi: false,
+    hideFullscreen: false,
+    hideSearch: false,
+    hideColumnSelector: false,
+    tableProps: () => ({}),
   }
 );
+
+const emit = defineEmits<{
+  (e: 'update:selected', selected: BaseEntity[]): void;
+}>();
 
 const popupRefs: Ref<Record<string, QPopupEdit>> = ref({});
 
@@ -230,6 +247,10 @@ function validateInput(column: ColumnInterface): (value: any) => boolean {
   };
 }
 
+watch(selected, (val) => {
+  emit('update:selected', val);
+});
+
 watchEffect(() => {
   columns.value = props.columns;
 });
@@ -238,5 +259,15 @@ onMounted(() => {
   if (tableRef.value) {
     tableRef.value.requestServerInteraction();
   }
+});
+
+function refresh() {
+  if (tableRef.value) {
+    tableRef.value.requestServerInteraction();
+  }
+}
+
+defineExpose({
+  refresh,
 });
 </script>

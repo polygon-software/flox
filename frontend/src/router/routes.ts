@@ -36,6 +36,14 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/AliasPage.vue') }],
   },
 
+  ACCESS_CONTROL: {
+    path: '/access-control',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/AccessControlPage.vue') },
+    ],
+  },
+
   SAMPLE: {
     path: '/sample',
     component: () => import('layouts/DashboardLayout.vue'),

@@ -10,7 +10,10 @@ import {
   persistToCookies,
 } from 'src/flox/modules/auth/tools/cookie.helpers';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
-import { fetchMyUser } from 'src/flox/modules/auth/services/user.service';
+import {
+  avatarForUser,
+  fetchMyUser,
+} from 'src/flox/modules/auth/services/user.service';
 
 export interface AuthState {
   userSession?: CognitoUserSession;
@@ -33,14 +36,17 @@ export const useAuthStore = defineStore('authStore', {
      * @param state - the current state of the store
      * @returns whether the user is logged in
      */
-    getLoggedInStatus: (state): boolean => state.userSession?.isValid() ?? false,
+    loggedIn: (state): boolean => state.userSession?.isValid() ?? false,
 
     /**
      * Gets the current user's username, if any
      * @param state - the current state of the store
      * @returns username, if any
      */
-    getUserName: (state) => state.loggedInUser?.username,
+    username: (state) => state.loggedInUser?.username,
+    avatar: (state) => {
+      return avatarForUser(state.loggedInUser?.uuid ?? 'default');
+    },
   },
 
   actions: {
@@ -83,6 +89,6 @@ export const useAuthStore = defineStore('authStore', {
     },
     setLoggedInUser(payload: UserEntity | undefined): void {
       this.loggedInUser = payload;
-    }
+    },
   },
 });

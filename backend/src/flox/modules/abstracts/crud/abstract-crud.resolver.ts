@@ -1,3 +1,5 @@
+import { FindOneOptions } from 'typeorm';
+
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 
 import GetAllArgs from './dto/get-all.args';
@@ -14,24 +16,36 @@ export default abstract class AbstractCrudResolver<
 > {
   abstract get service(): Service;
 
-  getOne(getOneArgs: GetOneArgs): Promise<Entity> {
-    return this.service.getOne(getOneArgs);
+  getOne(
+    getOneArgs: GetOneArgs,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity> {
+    return this.service.getOne(getOneArgs, options);
   }
 
-  getMultiple(getMultipleArgs: GetMultipleArgs): Promise<Entity[]> {
-    return this.service.getMultiple(getMultipleArgs);
+  getMultiple(
+    getMultipleArgs: GetMultipleArgs,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity[]> {
+    return this.service.getMultiple(getMultipleArgs, options);
   }
 
-  getAll(getAllArgs: GetAllArgs): Promise<Entity[]> {
-    return this.service.getAll(getAllArgs);
+  getAll(
+    getAllArgs: GetAllArgs,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity[]> {
+    return this.service.getAll(getAllArgs, options);
   }
 
   async create(createInput: CreateInput): Promise<Entity> {
     return this.service.create(createInput);
   }
 
-  async update(updateInput: UpdateInput): Promise<Entity> {
-    return this.service.update(updateInput);
+  async update(
+    updateInput: UpdateInput,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity> {
+    return this.service.update(updateInput, options);
   }
 
   async delete(deleteInput: DeleteInput): Promise<Entity> {

@@ -98,6 +98,7 @@ input CreateImageInput {
 input CreateUserGroupInput {
   """Name of group"""
   name: String!
+  users: [ID!] = []
 }
 
 input CreateUserInput {
@@ -230,13 +231,6 @@ type Query {
     """Number of items to load"""
     take: Int = 500
   ): [S3File!]!
-  AllGroups(
-    """How many items to skip"""
-    skip: Int = 0
-
-    """Number of items to load"""
-    take: Int = 500
-  ): [UserGroup!]!
   AllImages(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -277,6 +271,13 @@ type Query {
     """Number of items to load"""
     take: Int = 500
   ): [S3File!]!
+  AllUserGroups(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [UserGroup!]!
   AllUsers(
     """How many items to skip"""
     skip: Int = 0
@@ -320,6 +321,13 @@ type Query {
     uuids: [ID!] = []
   ): [Image!]!
   MyUser: User!
+  MyUserGroups(
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Number of items to load"""
+    take: Int = 500
+  ): [UserGroup!]!
   PublicFiles(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -439,6 +447,22 @@ type Query {
     """Number of items to load"""
     take: Int = 500
   ): [FileSearchOutput!]!
+  SearchUserGroups(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): UserGroupSearchOutput!
   SearchUsers(
     """Sort descending"""
     descending: Boolean = false
@@ -466,7 +490,7 @@ type Query {
     take: Int = 500
 
     """User UUID"""
-    userUuids: ID!
+    userUuid: ID!
   ): [UserGroup!]!
   Users(uuids: [ID!] = []): [User!]!
 }
@@ -597,6 +621,14 @@ type UserGroup {
 
   """Resources this user group has write access to"""
   writeAccess: AccessControlledEntity!
+}
+
+type UserGroupSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """User Groups that fit query"""
+  data: [UserGroup!]!
 }
 
 type UserSearchOutput {

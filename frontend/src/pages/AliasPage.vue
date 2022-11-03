@@ -6,7 +6,7 @@
       another user. This functionality is only available for admin accounts.
     </p>
     <p v-if="$authStore.getLoggedInStatus">
-      You are currently logged in as: <b>{{ $authStore.getUserName }}</b>
+      You are currently logged in as: <b>{{ $authStore.username }}</b>
     </p>
     <p v-if="currentAlias">
       You are currently browsing with an active alias for the user with ID
@@ -59,7 +59,7 @@ import {
   setAlias,
   unsetAlias,
 } from 'src/flox/modules/alias/services/alias.service';
-import {useAuthStore} from "src/flox/modules/auth/stores/auth.store";
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 
 const $authStore = useAuthStore();
 const currentAlias: Ref<string> = ref('');
