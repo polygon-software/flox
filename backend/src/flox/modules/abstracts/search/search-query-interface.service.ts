@@ -1,5 +1,5 @@
-import { SearchQueryArgs } from './dto/args/search-query.args';
-import SearchQueryOutputInterface from './outputs/search-query-interface.output';
+import SearchQueryArgs from './dto/args/search.args';
+import SearchQueryOutputInterface from './outputs/search-interface.output';
 
 export interface SearchQueryInterfaceService {
   /**
