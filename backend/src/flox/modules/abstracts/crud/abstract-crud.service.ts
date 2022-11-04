@@ -75,9 +75,7 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
     });
   }
 
-  async delete(
-    deleteInput: DeleteInput,
-  ): Promise<Entity> {
+  async delete(deleteInput: DeleteInput): Promise<Entity> {
     const entity = await this.repository.findOneOrFail({
       where: {
         uuid: deleteInput.uuid,

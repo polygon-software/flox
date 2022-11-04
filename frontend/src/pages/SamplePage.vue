@@ -46,8 +46,6 @@ import AliasIndicator from 'src/flox/modules/alias/AliasIndicator.vue';
 
 const imageUuid: Ref<string> = ref('');
 
-
-
 useMeta({
   title: i18n.global.t('pages.sample.meta.title'),
   meta: {
