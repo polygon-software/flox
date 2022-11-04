@@ -39,6 +39,14 @@ input AddUserToUserGroupInput {
   userUuid: ID!
 }
 
+input AddUsersToUserGroupInput {
+  """Uuid of group to which user shall be added"""
+  userGroupUuid: ID!
+
+  """Uuids of users that shall be added to group"""
+  userUuids: [ID!]!
+}
+
 type BoundingBox {
   """Creation date"""
   createdAt: DateTime!
@@ -206,6 +214,7 @@ type Label {
 
 type Mutation {
   AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
+  AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
   CreateFile(createFileInput: CreateFileInput!): S3File!
   CreateImage(createImageInput: CreateImageInput!): Image!
   CreateUser(createUserInput: CreateUserInput!): User!

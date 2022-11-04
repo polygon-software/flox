@@ -10,6 +10,7 @@ import {
 import { executeMutation } from 'src/apollo/mutation';
 import {
   ADD_USER_TO_USER_GROUP,
+  ADD_USERS_TO_USER_GROUP,
   CREATE_USER_GROUP,
   DELETE_USER_GROUP,
   REMOVE_USER_FROM_USER_GROUP,
@@ -110,6 +111,20 @@ export async function addUserToUserGroup(
     {
       userGroupUuid,
       userUuid,
+    }
+  );
+  return data ?? null;
+}
+
+export async function addUsersToUserGroup(
+  userGroupUuid: string,
+  userUuids: string[]
+): Promise<UserGroupEntity | null> {
+  const { data } = await executeMutation<UserGroupEntity>(
+    ADD_USERS_TO_USER_GROUP,
+    {
+      userGroupUuid,
+      userUuids,
     }
   );
   return data ?? null;

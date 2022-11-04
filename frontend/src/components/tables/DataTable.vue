@@ -7,16 +7,22 @@
       v-model:selected="selected"
       :title="title"
       :rows="rows"
-      :columns="columns"
+      :columns="extendedColumns"
       row-key="uuid"
       :loading="loading"
       :filter="filter"
       binary-state-sort
       :selection="multi ? 'multiple' : 'single'"
-      :visible-columns="visibleColumnNames"
+      :visible-columns="extendedVisibleColumnNames"
       @request="onRequest"
       @selection="handleSelection"
     >
+      <template #body-cell-prepend="cellProps">
+        <slot name="append" v-bind="cellProps" />
+      </template>
+      <template #body-cell-append="cellProps">
+        <slot name="append" v-bind="cellProps" />
+      </template>
       <template #body-cell="cellProps">
         <q-td :props="cellProps">
           {{ cellProps.row[cellProps.col.field] }}
@@ -154,7 +160,16 @@
 
 <script setup lang="ts">
 import { QPopupEdit, QTable, QTableProps } from 'quasar';
-import { defineProps, onMounted, Ref, ref, watch, watchEffect } from 'vue';
+import {
+  computed,
+  ComputedRef,
+  defineProps,
+  onMounted,
+  Ref,
+  ref,
+  watch,
+  watchEffect,
+} from 'vue';
 
 import { ColumnInterface, useDataTable } from 'components/tables/useDataTable';
 import { MutationObject } from 'src/apollo/mutation';
@@ -169,6 +184,10 @@ const props = withDefaults(
     hideFullscreen: boolean;
     hideSearch: boolean;
     hideColumnSelector: boolean;
+    prependSlot: boolean;
+    prependName?: string,
+    appendSlot: boolean;
+    appendName?: string;
     multi: boolean;
     query: QueryObject;
     updateMutation: MutationObject;
@@ -183,6 +202,8 @@ const props = withDefaults(
     multi: false,
     hideFullscreen: false,
     hideSearch: false,
+    prependSlot: false,
+    appendSlot: false,
     hideColumnSelector: false,
     tableProps: () => ({}),
   }
@@ -253,6 +274,37 @@ watch(selected, (val) => {
 
 watchEffect(() => {
   columns.value = props.columns;
+});
+
+const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
+  () => {
+    return [
+      ...(props.prependSlot
+        ? [
+            {
+              name: 'prepend',
+              label: props.prependName ?? '',
+            },
+          ]
+        : []),
+      ...props.columns,
+      ...(props.appendSlot
+        ? [
+            {
+              name: 'append',
+              label: props.appendName ?? '',
+            },
+          ]
+        : []),
+    ];
+  }
+);
+const extendedVisibleColumnNames: ComputedRef<string[]> = computed(() => {
+  return [
+    ...(props.prependSlot ? ['prepend'] : []),
+    ...visibleColumnNames.value,
+    ...(props.appendSlot ? ['append'] : []),
+  ];
 });
 
 onMounted(() => {

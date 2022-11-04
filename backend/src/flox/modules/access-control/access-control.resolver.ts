@@ -19,6 +19,7 @@ import UpdateUserGroupInput from './dto/inputs/update-user-group.input';
 import AddUserToUserGroupInput from './dto/inputs/add-user-to-user-group-input';
 import RemoveUserFromUserGroupInput from './dto/inputs/remove-user-from-user-group.input';
 import UserGroupSearchOutput from './outputs/user-group-search.output';
+import AddUsersToUserGroupInput from './dto/inputs/add-users-to-user-group.input';
 
 @Resolver(() => UserGroup)
 export default class AccessControlResolver extends AbstractSearchResolver<
@@ -90,13 +91,10 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     @Args('createUserGroupInput') createUserGroupInput: CreateUserGroupInput,
   ): Promise<UserGroup> {
     const created = await super.create(createUserGroupInput);
-    const userAdditionPromises = createUserGroupInput?.users.map((userUuid) => {
-      return this.addUserToUserGroup({
-        userUuid,
-        userGroupUuid: created.uuid,
-      });
-    });
-    await Promise.all(userAdditionPromises);
+    await this.accessControlService.addUsersToUserGroup(
+      created.uuid,
+      createUserGroupInput.users,
+    );
     return this.getOne({ uuid: created.uuid }, { relations: { users: true } });
   }
 
@@ -128,6 +126,18 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     return this.accessControlService.addUserToUserGroup(
       addUserToUserGroupInput.userGroupUuid,
       user,
+    );
+  }
+
+  @AdminOnly()
+  @Mutation(() => UserGroup, { name: 'AddUsersToUserGroup' })
+  async addUsersToUserGroup(
+    @Args('addUsersToUserGroupInput')
+    addUsersToUserGroupInput: AddUsersToUserGroupInput,
+  ): Promise<UserGroup> {
+    return this.accessControlService.addUsersToUserGroup(
+      addUsersToUserGroupInput.userGroupUuid,
+      addUsersToUserGroupInput.userUuids,
     );
   }
 
