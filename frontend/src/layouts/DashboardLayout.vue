@@ -186,7 +186,13 @@ const sideMenu = [
   },
   {
     links: [
-      { icon: 'folder', text: 'Files' },
+      {
+        icon: 'folder',
+        text: 'Files',
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.FILES);
+        },
+      },
       { icon: 'image', text: 'Images' },
     ],
   },

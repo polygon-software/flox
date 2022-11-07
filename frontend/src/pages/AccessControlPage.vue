@@ -121,7 +121,7 @@ import {
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
 import { SEARCH_USER_GROUPS } from 'src/flox/modules/access-control/access-control.query';
 import DataTable from 'components/tables/DataTable.vue';
-import CreateAccessControlGroup from 'src/flox/modules/access-control/components/Dialogs/CreateAccessControlGroupDialog.vue';
+import CreateAccessControlGroup from 'src/flox/modules/access-control/components/dialogs/CreateAccessControlGroupDialog.vue';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 import UserTable from 'src/flox/modules/auth/components/tables/UserTable.vue';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
