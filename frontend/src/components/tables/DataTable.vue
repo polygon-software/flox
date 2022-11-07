@@ -18,7 +18,7 @@
       @selection="handleSelection"
     >
       <template #body-cell-prepend="cellProps">
-        <slot name="append" v-bind="cellProps" />
+        <slot name="prepend" v-bind="cellProps" />
       </template>
       <template #body-cell-append="cellProps">
         <slot name="append" v-bind="cellProps" />
@@ -143,12 +143,15 @@
             no-caps
             @click="exportTable"
           />
-          <q-btn
+          <ConfirmButton
             v-if="selected.length > 0 && deleteSelection"
-            color="negative"
-            icon-right="delete"
-            label="Delete"
-            no-caps
+            :label="removeLabel"
+            confirm-label="Confirm Deletion"
+            :button-props="{
+              color: 'negative',
+              iconRight: removeIcon,
+              noCaps: true,
+            }"
             @click="deleteActiveRows"
           />
           <slot name="actions" :selected="selected" />
@@ -175,6 +178,7 @@ import { ColumnInterface, useDataTable } from 'components/tables/useDataTable';
 import { MutationObject } from 'src/apollo/mutation';
 import { QueryObject } from 'src/apollo/query';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import ConfirmButton from 'components/buttons/ConfirmButton.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -185,10 +189,12 @@ const props = withDefaults(
     hideSearch: boolean;
     hideColumnSelector: boolean;
     prependSlot: boolean;
-    prependName?: string,
+    prependName?: string;
     appendSlot: boolean;
     appendName?: string;
     multi: boolean;
+    removeIcon: string;
+    removeLabel: string;
     query: QueryObject;
     updateMutation: MutationObject;
     deleteMutation: MutationObject;
@@ -205,6 +211,8 @@ const props = withDefaults(
     prependSlot: false,
     appendSlot: false,
     hideColumnSelector: false,
+    removeIcon: 'delete',
+    removeLabel: 'Remove',
     tableProps: () => ({}),
   }
 );
@@ -321,5 +329,6 @@ function refresh() {
 
 defineExpose({
   refresh,
+  rows,
 });
 </script>

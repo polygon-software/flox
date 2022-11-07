@@ -57,9 +57,7 @@ import {
   ValidationRule,
 } from 'src/tools/validation.tool';
 
-defineEmits([
-  ...useDialogPluginComponent.emits,
-]);
+defineEmits([...useDialogPluginComponent.emits]);
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
   useDialogPluginComponent();
