@@ -136,6 +136,26 @@ type FileSearchOutput {
   data: [S3File!]!
 }
 
+type FolderOutput {
+  """Creation date of oldest file in folder"""
+  createdAt: DateTime!
+
+  """Number of files"""
+  files: Float!
+
+  """Name of the folder"""
+  name: String!
+
+  """Summed of size of all files in folder, in bytes"""
+  size: Float!
+
+  """Last modification of any file in folder"""
+  updatedAt: DateTime
+
+  """Name of the folder"""
+  uuid: ID!
+}
+
 type Image {
   """Capture Date"""
   capturedAt: DateTime
@@ -316,6 +336,10 @@ type Query {
     expires: Int
     uuids: [ID!] = []
   ): [S3File!]!
+  Folders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
   Image(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -336,6 +360,10 @@ type Query {
     expires: Int
     uuids: [ID!] = []
   ): [S3File!]!
+  MyFolders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
   MyImages(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -354,6 +382,10 @@ type Query {
     expires: Int
     uuids: [ID!] = []
   ): [S3File!]!
+  PublicFolders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
   SearchAdminFiles(
     """Sort descending"""
     descending: Boolean = false

@@ -4,10 +4,13 @@ import {
   ALL_MY_FILES,
   ALL_PUBLIC_FILES,
   GET_ALL_FILES,
+  GET_ALL_FOLDERS,
   GET_FILE,
   GET_FILES,
   GET_MY_FILES,
+  GET_MY_FOLDERS,
   GET_PUBLIC_FILES,
+  GET_PUBLIC_FOLDERS,
   SEARCH_FILES,
   SEARCH_MY_FILES,
   SEARCH_PUBLIC_FILES,
@@ -19,6 +22,7 @@ import {
   DELETE_FILE,
   UPDATE_FILE,
 } from 'src/flox/modules/file/file.mutation';
+import FolderEntity from 'src/flox/modules/file/entities/folder.entity';
 
 /**
  * Fetches a private file
@@ -171,6 +175,27 @@ export async function searchPublicFiles(
       expires,
     }
   );
+  return data;
+}
+
+export async function getFolders(path: string): Promise<FolderEntity[]> {
+  const { data } = await executeQuery<FolderEntity[]>(GET_ALL_FOLDERS, {
+    path,
+  });
+  return data;
+}
+
+export async function getMyFolders(path: string): Promise<FolderEntity[]> {
+  const { data } = await executeQuery<FolderEntity[]>(GET_MY_FOLDERS, {
+    path,
+  });
+  return data;
+}
+
+export async function getPublicFolders(path: string): Promise<FolderEntity[]> {
+  const { data } = await executeQuery<FolderEntity[]>(GET_PUBLIC_FOLDERS, {
+    path,
+  });
   return data;
 }
 

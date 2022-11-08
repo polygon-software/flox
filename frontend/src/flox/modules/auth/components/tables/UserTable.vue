@@ -71,18 +71,21 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     name: 'avatar',
     label: 'Avatar',
     field: 'avatar',
+    align: 'left',
     sortable: false,
   },
   {
     name: 'username',
     label: 'Username',
     field: 'username',
+    align: 'left',
     sortable: true,
   },
   {
     name: 'email',
     label: 'E-Mail',
     field: 'email',
+    align: 'left',
     sortable: true,
   },
   {

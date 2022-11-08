@@ -291,6 +291,7 @@ const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
         ? [
             {
               name: 'prepend',
+              align: 'left',
               label: props.prependName ?? '',
             },
           ]

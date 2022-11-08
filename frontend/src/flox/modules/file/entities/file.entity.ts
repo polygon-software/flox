@@ -11,7 +11,7 @@ export class FileEntity extends BaseEntity {
     updatedAt: Date,
     deletedAt: Date | null,
     public mimetype: string,
-    public filename: string | null,
+    public filename: string,
     public path: string | null,
     public size: number,
     public signedUrl: string | null

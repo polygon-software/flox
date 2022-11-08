@@ -97,6 +97,24 @@ export const GET_ALL_FILES = {
   cacheLocation: 'AllFiles',
 };
 
+export const GET_ALL_FOLDERS = {
+  query: gql`
+    query Folders($path: String!) {
+      Folders(path: $path) {
+        uuid
+        name
+        files
+        size
+        createdAt
+        updatedAt
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'Folders',
+};
+
 export const ALL_MY_FILES = {
   query: gql`
     query AllMyFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
@@ -116,6 +134,24 @@ export const ALL_MY_FILES = {
   cacheLocation: 'AllMyFiles',
 };
 
+export const GET_MY_FOLDERS = {
+  query: gql`
+    query MyFolders($path: String!) {
+      MyFolders(path: $path) {
+        uuid
+        name
+        files
+        size
+        createdAt
+        updatedAt
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'MyFolders',
+};
+
 export const ALL_PUBLIC_FILES = {
   query: gql`
     query AllPublicFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
@@ -133,6 +169,24 @@ export const ALL_PUBLIC_FILES = {
   `,
   tables: [TABLES.FILE],
   cacheLocation: 'AllPublicFiles',
+};
+
+export const GET_PUBLIC_FOLDERS = {
+  query: gql`
+    query PublicFolders($path: String!) {
+      PublicFolders(path: $path) {
+        uuid
+        name
+        files
+        size
+        createdAt
+        updatedAt
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'PublicFolders',
 };
 
 export const SEARCH_FILES = {
@@ -252,4 +306,7 @@ export const FILE_QUERIES: QueryObject[] = [
   SEARCH_FILES,
   SEARCH_MY_FILES,
   SEARCH_PUBLIC_FILES,
+  GET_ALL_FOLDERS,
+  GET_MY_FOLDERS,
+  GET_PUBLIC_FOLDERS,
 ];

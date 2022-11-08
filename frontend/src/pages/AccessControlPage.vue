@@ -41,7 +41,7 @@
                   v-if="n < 5"
                   size="26px"
                   class="absolute"
-                  :style="`right: ${(5 - n) * 15}px`"
+                  :style="`left: ${n * 15}px`"
                 >
                   <img
                     :src="avatarForUser(user.uuid)"
@@ -193,6 +193,7 @@ function openCreateDialog(): void {
 const columns: Ref<ColumnInterface<UserGroupEntity>[]> = ref([
   {
     name: 'name',
+    align: 'left',
     label: 'Group Name',
     field: 'name',
     sortable: true,

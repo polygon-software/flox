@@ -1,25 +1,6 @@
 <template>
   <div>
-    <h4>Alias</h4>
-    <p>
-      This module can be used to see and use the application as if you were
-      another user. This functionality is only available for admin accounts.
-    </p>
-    <p v-if="$authStore.getLoggedInStatus">
-      You are currently logged in as: <b>{{ $authStore.username }}</b>
-    </p>
-    <p v-if="currentAlias">
-      You are currently browsing with an active alias for the user with ID
-      <b>{{ currentAlias }}.</b>
-    </p>
-    <q-btn
-      v-if="currentAlias"
-      class="q-mb-lg"
-      color="primary"
-      icon-right="visibility_off"
-      label="Remove Alias"
-      @click="removeAlias"
-    />
+    <h4>Users</h4>
     <DataTable
       title="User Table"
       prepend-slot
@@ -36,23 +17,13 @@
           </q-avatar>
         </q-td>
       </template>
-      <template #actions="{ selected }">
-        <q-btn
-          v-if="selected.length > 0"
-          color="primary"
-          icon-right="visibility"
-          label="Set Alias"
-          no-caps
-          @click="setAliasTo(selected)"
-        />
-      </template>
     </DataTable>
   </div>
 </template>
 
 <script setup lang="ts">
 import Joi from 'joi';
-import { onMounted, ref, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 
 import {
   joiSchemaToValidationRule,
@@ -63,11 +34,6 @@ import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
 import DataTable from 'components/tables/DataTable.vue';
 import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
-import {
-  getAlias,
-  setAlias,
-  unsetAlias,
-} from 'src/flox/modules/alias/services/alias.service';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 
@@ -80,20 +46,6 @@ const emailRules: ValidationRule[] = [
     'validation.email'
   ),
 ];
-
-function setAliasTo(users: UserEntity[]): void {
-  setAlias(users[0].uuid);
-  location.reload();
-}
-
-function removeAlias(): void {
-  unsetAlias();
-  location.reload();
-}
-
-onMounted(() => {
-  currentAlias.value = getAlias();
-});
 
 const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {

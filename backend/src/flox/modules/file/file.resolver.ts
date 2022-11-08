@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Like } from 'typeorm';
 
 import {
   AdminOnly,
@@ -19,6 +20,8 @@ import UpdateFileInput from './dto/input/update-file.input';
 import S3File from './entities/file.entity';
 import FileService from './file.service';
 import FileSearchOutput from './dto/outputs/file-search.output';
+import FolderOutput from './outputs/folder.output';
+import GetAllFoldersArgs from './dto/args/get-all-folders.args';
 
 @Resolver(() => S3File)
 export default class FileResolver extends AbstractSearchAccessControlResolver<
@@ -89,6 +92,23 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     return this.fileService.addFileUrls(files, getAllFilesArgs);
   }
 
+  @LoggedIn()
+  @Query(() => [FolderOutput], { name: 'Folders' })
+  async getAllFolders(
+    @Args() getAllFoldersArgs: GetAllFoldersArgs,
+    @OptionalUser() user?: User,
+  ): Promise<FolderOutput[]> {
+    const options = getAllFoldersArgs.path
+      ? {
+          where: {
+            path: Like(`${getAllFoldersArgs.path}/%`),
+          },
+        }
+      : {};
+    const files = await super.getAll({ take: 5000, skip: 0 }, user, options);
+    return this.fileService.filesToFolders(files, getAllFoldersArgs.path);
+  }
+
   /**
    * Returns private files of logged-in user
    * @param getAllFilesArgs - contains take and skip parameters
@@ -112,6 +132,27 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     return this.fileService.addFileUrls(files, getAllFilesArgs);
   }
 
+  @LoggedIn()
+  @Query(() => [FolderOutput], { name: 'MyFolders' })
+  async getMyAllFolders(
+    @Args() getAllFoldersArgs: GetAllFoldersArgs,
+    @CurrentUser() user: User,
+  ): Promise<FolderOutput[]> {
+    const options = getAllFoldersArgs.path
+      ? {
+          where: {
+            path: Like(`%${getAllFoldersArgs.path}/`),
+          },
+        }
+      : {};
+    const files = await super.getAllOfMine(
+      { take: 5000, skip: 0 },
+      user,
+      options,
+    );
+    return this.fileService.filesToFolders(files, getAllFoldersArgs.path);
+  }
+
   /**
    * Returns all public files stored within database
    * @param getAllFilesArgs - contains take and skip parameters
@@ -131,6 +172,22 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
       : {};
     const files = await super.getAllPublic(getAllFilesArgs, options);
     return this.fileService.addFileUrls(files, getAllFilesArgs);
+  }
+
+  @AdminOnly()
+  @Query(() => [FolderOutput], { name: 'PublicFolders' })
+  async getAllPublicFolders(
+    @Args() getAllFoldersArgs: GetAllFoldersArgs,
+  ): Promise<FolderOutput[]> {
+    const options = getAllFoldersArgs.path
+      ? {
+          where: {
+            path: Like(`%${getAllFoldersArgs.path}/`),
+          },
+        }
+      : {};
+    const files = await super.getAllPublic({ take: 5000, skip: 0 }, options);
+    return this.fileService.filesToFolders(files, getAllFoldersArgs.path);
   }
 
   @Public()

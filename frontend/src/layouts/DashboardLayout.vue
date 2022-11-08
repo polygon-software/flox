@@ -27,17 +27,14 @@
             v-model="search"
             dense
             outlined
-            square
+            rounded
             placeholder="Search"
             class="bg-white col"
-          />
-          <q-btn
-            class="YL__toolbar-input-btn"
-            color="grey-3"
-            text-color="grey-8"
-            icon="search"
-            unelevated
-          />
+          >
+            <template #append>
+              <q-icon name="search" class="cursor-pointer" color="primary" />
+            </template>
+          </q-input>
         </div>
 
         <q-space />
