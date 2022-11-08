@@ -263,11 +263,10 @@ export default abstract class AbstractCrudAccessControlService<
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
     const entity = await this.repository.findOneOrFail({
-      ...options,
       where: {
         uuid: getOneArgs.uuid,
       } as FindOptionsWhere<Entity>,
-      ...this.readAccessControlRelationOptions,
+      ...this.mergeOptions(options, this.readAccessControlRelationOptions),
     });
     assertReadAccess(entity, user);
     return entity;
@@ -476,7 +475,10 @@ export default abstract class AbstractCrudAccessControlService<
       ...storedEntity,
       ...(updateInput as DeepPartial<Entity>),
       ...entity,
+      readAccess: undefined,
+      writeAccess: undefined,
     });
+    console.log(updatedEntity);
     await this.repository.update(
       updateInput.uuid,
       updatedEntity as QueryDeepPartialEntity<Entity>,

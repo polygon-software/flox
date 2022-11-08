@@ -78,7 +78,14 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @OptionalUser() user?: User,
   ): Promise<S3File[]> {
-    const files = await super.getAll(getAllFilesArgs, user);
+    const options = getAllFilesArgs.path
+      ? {
+          where: {
+            path: getAllFilesArgs.path,
+          },
+        }
+      : {};
+    const files = await super.getAll(getAllFilesArgs, user, options);
     return this.fileService.addFileUrls(files, getAllFilesArgs);
   }
 
@@ -94,7 +101,14 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @CurrentUser() user: User,
   ): Promise<S3File[]> {
-    const files = await super.getAllOfMine(getAllFilesArgs, user);
+    const options = getAllFilesArgs.path
+      ? {
+          where: {
+            path: getAllFilesArgs.path,
+          },
+        }
+      : {};
+    const files = await super.getAllOfMine(getAllFilesArgs, user, options);
     return this.fileService.addFileUrls(files, getAllFilesArgs);
   }
 
@@ -108,7 +122,14 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   async getAllPublicFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
   ): Promise<S3File[]> {
-    const files = await super.getAllPublic(getAllFilesArgs);
+    const options = getAllFilesArgs.path
+      ? {
+          where: {
+            path: getAllFilesArgs.path,
+          },
+        }
+      : {};
+    const files = await super.getAllPublic(getAllFilesArgs, options);
     return this.fileService.addFileUrls(files, getAllFilesArgs);
   }
 

@@ -14,6 +14,7 @@ export const CREATE_FILE = {
       $readAccess: [ID!]
       $writeAccess: [ID!]
       $expires: Int
+      $path: String!
     ) {
       CreateFile(
         createFileInput: {
@@ -25,9 +26,11 @@ export const CREATE_FILE = {
           readAccess: $readAccess
           writeAccess: $writeAccess
           expires: $expires
+          path: $path
         }
       ) {
         uuid
+        path
         createdAt
         mimetype
         filename
@@ -44,11 +47,12 @@ export const CREATE_FILE = {
 
 export const UPDATE_FILE = {
   mutation: gql`
-    mutation UpdateFile($uuid: ID!, $filename: String, $expires: Int) {
+    mutation UpdateFile($uuid: ID!, $filename: String, $expires: Int, $path: String!) {
       UpdateFile(
-        updateFileInput: { uuid: $uuid, filename: $filename, expires: $expires }
+        updateFileInput: { uuid: $uuid, filename: $filename, expires: $expires, path: $path}
       ) {
         uuid
+        path
         createdAt
         mimetype
         filename
@@ -67,6 +71,7 @@ export const DELETE_FILE = {
     mutation DeleteFile($uuid: ID!) {
       DeleteFile(deleteInput: { uuid: $uuid }) {
         uuid
+        path
         createdAt
         mimetype
         filename

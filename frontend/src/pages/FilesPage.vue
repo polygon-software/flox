@@ -9,16 +9,21 @@
       @click="openCreateDialog"
     />
   </div>
-  <FilesTable private />
+  <FileExplorer ref="fileExplorerRef" v-model:path="path" />
 </template>
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
+import { ref, Ref } from 'vue';
 
-import FilesTable from 'src/flox/modules/file/components/tables/FilesTable.vue';
 import FileUploadDialog from 'src/flox/modules/file/components/dialogs/FileUploadDialog.vue';
+import FileExplorer from 'src/flox/modules/file/components/tables/FileExplorer.vue';
 
 const $q = useQuasar();
+
+const path: Ref<string> = ref('/bla/blu/as/sdf');
+const fileExplorerRef: Ref<InstanceType<typeof FileExplorer> | null> =
+  ref(null);
 
 function openCreateDialog(): void {
   $q.dialog({
@@ -26,10 +31,15 @@ function openCreateDialog(): void {
 
     // props forwarded to your custom component
     componentProps: {
-      text: 'something',
-      // ...more..props...
+      acceptedFiles: 'image/*',
+      multiple: true,
+      path,
     },
-  }).onOk(() => {});
+  }).onOk(() => {
+    if (fileExplorerRef.value) {
+      fileExplorerRef.value.refresh();
+    }
+  });
 }
 </script>
 

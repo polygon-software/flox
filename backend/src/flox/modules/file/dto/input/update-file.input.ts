@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 import UpdateInput from '../../../abstracts/crud/inputs/update.input';
 
@@ -12,6 +12,13 @@ export default class UpdateFileInput extends UpdateInput {
   @IsOptional()
   @IsString()
   public filename: string;
+
+  @Field(() => String, {
+    description: 'Path to file',
+  })
+  @IsString()
+  @IsNotEmpty()
+  path: string;
 
   @Field(() => Int, {
     nullable: true,

@@ -78,21 +78,20 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     user: User,
     options?: FindOneOptions<Image>,
   ): Promise<Image> {
-    const image = await super.getOneAsUser(
-      getImageArgs,
-      user,
-      this.mergeOptions(
-        {
-          relations: {
-            file: true,
-            labels: {
-              boundingBox: true,
-            },
+    const mergedOptions = this.mergeOptions(
+      {
+        relations: {
+          file: true,
+          labels: {
+            boundingBox: true,
           },
         },
-        options,
-      ),
+      },
+      options,
     );
+    console.log(JSON.stringify(mergedOptions, null, 4));
+    const image = await super.getOneAsUser(getImageArgs, user, mergedOptions);
+    console.log(image);
     const file = await this.fileService.getOneAsUser(
       {
         uuid: image.file.uuid,
@@ -391,14 +390,27 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     );
     assertReadAccess(file, user);
     file = await this.fileService.addFileUrl(file, { expires: 60 });
-    const imageMetaData = (await exifr.parse(file.url ?? '')) || {};
+    let imageMetaData = {
+      ImageWidth: undefined,
+      ImageHeight: undefined,
+      ExifImageWidth: undefined,
+      ExifImageHeight: undefined,
+      latitude: undefined,
+      longitude: undefined,
+      DateTimeOriginal: undefined,
+    };
+    try {
+      imageMetaData = (await exifr.parse(file.url ?? '')) || {};
+    } catch (e: any) {
+      console.error(e);
+    }
     const newImage = await super.create(createImageInput, user, {
       file,
       width: imageMetaData.ExifImageWidth ?? imageMetaData.ImageWidth,
       height: imageMetaData.ExifImageHeight ?? imageMetaData.ImageHeight,
-      latitude: imageMetaData.latitude ?? null,
-      longitude: imageMetaData.longitude ?? null,
-      capturedAt: imageMetaData.DateTimeOriginal ?? null,
+      latitude: imageMetaData.latitude,
+      longitude: imageMetaData.longitude,
+      capturedAt: imageMetaData.DateTimeOriginal,
     });
 
     if (createImageInput.objectRecognition) {
@@ -431,6 +443,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       this.writeAccessControlRelationOptions,
     );
     assertReadAccess(image, user);
+    console.log('image file uuid', image.file.uuid);
 
     const rekognitionData = await this.rekognition.send(
       new DetectLabelsCommand({

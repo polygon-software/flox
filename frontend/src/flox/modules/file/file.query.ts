@@ -8,7 +8,7 @@ export const GET_FILE = {
     query File($uuid: ID!, $expires: Int) {
       File(uuid: $uuid, expires: $expires) {
         uuid
-        key
+        path
         mimetype
         filename
         size
@@ -26,7 +26,7 @@ export const GET_FILES = {
     query Files($uuids: [ID!], $expires: Int) {
       Files(uuids: $uuids, expires: $expires) {
         uuid
-        key
+        path
         createdAt
         mimetype
         filename
@@ -45,7 +45,7 @@ export const GET_MY_FILES = {
     query MyFiles($uuids: [ID!], $expires: Int) {
       MyFiles(uuids: $uuids, expires: $expires) {
         uuid
-        key
+        path
         createdAt
         mimetype
         filename
@@ -64,7 +64,7 @@ export const GET_PUBLIC_FILES = {
     query PublicFiles($uuids: [ID!], $expires: Int) {
       PublicFiles(uuids: $uuids, expires: $expires) {
         uuid
-        key
+        path
         createdAt
         mimetype
         filename
@@ -80,9 +80,10 @@ export const GET_PUBLIC_FILES = {
 
 export const GET_ALL_FILES = {
   query: gql`
-    query AllFiles($skip: Int, $take: Int, $expires: Int) {
-      AllFiles(skip: $skip, take: $take, expires: $expires) {
+    query AllFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
+      AllFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
         uuid
+        path
         createdAt
         mimetype
         filename
@@ -98,9 +99,10 @@ export const GET_ALL_FILES = {
 
 export const ALL_MY_FILES = {
   query: gql`
-    query AllMyFiles($skip: Int, $take: Int, $expires: Int) {
-      AllMyFiles(skip: $skip, take: $take, expires: $expires) {
+    query AllMyFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
+      AllMyFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
         uuid
+        path
         createdAt
         mimetype
         filename
@@ -116,9 +118,10 @@ export const ALL_MY_FILES = {
 
 export const ALL_PUBLIC_FILES = {
   query: gql`
-    query AllPublicFiles($skip: Int, $take: Int, $expires: Int) {
-      AllPublicFiles(skip: $skip, take: $take, expires: $expires) {
+    query AllPublicFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
+      AllPublicFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
         uuid
+        path
         createdAt
         mimetype
         filename
@@ -153,6 +156,7 @@ export const SEARCH_FILES = {
         count
         data {
           uuid
+          path
           createdAt
           mimetype
           filename
@@ -188,6 +192,7 @@ export const SEARCH_MY_FILES = {
         count
         data {
           uuid
+          path
           createdAt
           mimetype
           filename
@@ -223,6 +228,7 @@ export const SEARCH_PUBLIC_FILES = {
         count
         data {
           uuid
+          path
           createdAt
           mimetype
           filename

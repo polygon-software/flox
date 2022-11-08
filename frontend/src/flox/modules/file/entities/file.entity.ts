@@ -12,6 +12,7 @@ export class FileEntity extends BaseEntity {
     deletedAt: Date | null,
     public mimetype: string,
     public filename: string | null,
+    public path: string | null,
     public size: number,
     public signedUrl: string | null
   ) {

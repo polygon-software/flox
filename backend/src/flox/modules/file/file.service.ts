@@ -54,7 +54,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
           ? 'AWS_PUBLIC_BUCKET_NAME'
           : 'AWS_PRIVATE_BUCKET_NAME',
       ),
-      Key: file.filename,
+      Key: file.uuid,
       'Content-Type': file.mimetype,
     };
     const command = new PutObjectCommand(uploadParams);

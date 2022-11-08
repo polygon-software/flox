@@ -19,6 +19,13 @@ export default class CreateFileInput extends CreateAccessControlledInput {
   filename: string;
 
   @Field(() => String, {
+    description: 'Path to file',
+  })
+  @IsString()
+  @IsNotEmpty()
+  path: string;
+
+  @Field(() => String, {
     description: 'File mimetype',
   })
   @IsString()

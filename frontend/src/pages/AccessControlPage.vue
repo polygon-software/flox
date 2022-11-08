@@ -135,7 +135,7 @@ import LazySearchField from 'components/forms/LazySearchField.vue';
 
 const $q = useQuasar();
 
-const userGroupTable: Ref<typeof DataTable | null> = ref(null);
+const userGroupTable: Ref<InstanceType<typeof DataTable> | null> = ref(null);
 const selectedGroups: Ref<UserGroupEntity[]> = ref([]);
 const selectedUsers: Ref<UserEntity[]> = ref([]);
 const addUsers: Ref<UserEntity[]> = ref([]);

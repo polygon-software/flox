@@ -86,6 +86,9 @@ input CreateFileInput {
 
   """File mimetype"""
   mimetype: String!
+
+  """Path to file"""
+  path: String!
   publicReadAccess: Boolean = false
   readAccess: [ID!] = []
 
@@ -234,6 +237,9 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
+    """Path in which file must be located"""
+    path: String
+
     """How many items to skip"""
     skip: Int = 0
 
@@ -254,6 +260,9 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
+    """Path in which file must be located"""
+    path: String
+
     """How many items to skip"""
     skip: Int = 0
 
@@ -273,6 +282,9 @@ type Query {
   AllPublicFiles(
     """URL expiration duration (in seconds)"""
     expires: Int
+
+    """Path in which file must be located"""
+    path: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -531,6 +543,9 @@ type S3File {
   """Owner of this object, has full control over it"""
   owner: User!
 
+  """Path that leads to file"""
+  path: String
+
   """Marks this object as publicly readable"""
   publicReadAccess: Boolean!
 
@@ -562,6 +577,9 @@ input UpdateFileInput {
 
   """Name of File"""
   filename: String
+
+  """Path to file"""
+  path: String!
   uuid: ID!
 }
 

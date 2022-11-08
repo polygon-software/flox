@@ -1,5 +1,5 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 import GetAllArgs from '../../../abstracts/crud/dto/get-all.args';
 
@@ -12,4 +12,12 @@ export default class GetAllFilesArgs extends GetAllArgs {
   @IsOptional()
   @IsNumber()
   expires?: number;
+
+  @Field(() => String, {
+    nullable: true,
+    description: 'Path in which file must be located',
+  })
+  @IsOptional()
+  @IsString()
+  path?: string;
 }

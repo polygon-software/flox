@@ -51,75 +51,20 @@
       <q-separator inset />
 
       <!-- Files -->
-      <q-card-section>
-        <q-list separator>
-          <q-item
-            v-for="(file, index) in selectedFiles"
-            :key="file.content.name"
-            class="row justify-between flex-center"
-          >
-            <q-item-section class="col-auto">
-              <q-item-label>
-                {{ file.content.name }}
-              </q-item-label>
-
-              <q-item-label caption>
-                {{ $t('files.status') }}:
-                {{ $t(`files.status_${file.status}`) }}
-              </q-item-label>
-            </q-item-section>
-
-            <!-- Preview -->
-            <q-item-section class="row flex-center col-grow">
-              <q-img
-                v-if="file.content.type.includes('image/')"
-                :src="file.url"
-                spinner-color="primary"
-                style="max-width: 75%"
-              />
-              <q-item-label v-else>
-                {{ $t('files.no_preview') }}
-              </q-item-label>
-            </q-item-section>
-
-            <q-item-section top side>
-              <q-btn
-                class="gt-xs"
-                size="12px"
-                flat
-                dense
-                round
-                icon="delete"
-                @click="removeFile(index)"
-              >
-                <q-tooltip>
-                  {{ $t('files.remove') }}
-                </q-tooltip>
-              </q-btn>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
+      <FileList :files="selectedFiles" @remove-file="removeFile($event)" />
     </q-card>
   </FloxWrapper>
 </template>
 
 <script setup lang="ts">
-import { AxiosResponse } from 'axios';
-import { QFile, QVueGlobals, useQuasar } from 'quasar';
+import { QFile } from 'quasar';
 import { defineProps, Ref, ref } from 'vue';
 
-import { i18n } from 'boot/i18n';
 import Env from 'src/env';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
-import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
-import {
-  SelectedFile,
-  uploadFile,
-} from 'src/flox/modules/file/tools/upload.tools';
-
-const $q: QVueGlobals = useQuasar();
+import useFileUpload from 'src/flox/modules/file/useFileUpload';
+import FileList from 'src/flox/modules/file/components/forms/fields/FileList.vue';
 
 const props = defineProps({
   acceptedFiles: {
@@ -136,11 +81,11 @@ const props = defineProps({
   },
   maxFiles: {
     type: Number,
-    default: 100,
+    default: 10,
   },
   maxFileSize: {
     type: Number,
-    default: 5e7,
+    default: 5e7, // ca. 50 MB
   },
   maxTotalSize: {
     type: Number,
@@ -160,104 +105,14 @@ const props = defineProps({
   },
 });
 
-const showQFile = ref(false);
 const filePicker: Ref<QFile | null> = ref(null);
-const selectedFiles: Ref<SelectedFile[]> = ref([]);
 
-/**
- * Notify the user that the upload failed
- * @param failedEntries - failed entries
- */
-function onFailed(failedEntries: Array<SelectedFile>): void {
-  $q.notify({
-    type: 'negative',
-    message: i18n.global.t('files.failed_upload', {
-      value: failedEntries.length,
-    }),
-  });
-}
-
-/**
- * Notify the user that the upload succeeded
- * @param successfulEntries - successful entries
- */
-function onSuccess(successfulEntries: Array<SelectedFile>): void {
-  $q.notify({
-    type: 'positive',
-    message: i18n.global.t('files.successfully_uploaded', {
-      value: successfulEntries.length,
-    }),
-  });
-}
-
-/**
- * Open the dialog to select files for upload
- */
-function addFile(): void {
-  showQFile.value = true;
-  filePicker.value?.pickFiles();
-}
-
-/**
- * Removes a file from the file list
- * @param index - The index of file to remove
- */
-function removeFile(index: number): void {
-  selectedFiles.value.splice(index);
-}
-
-/**
- * Removes all files that have been selected so far
- */
-function clearFileList(): void {
-  selectedFiles.value = [];
-}
-
-/**
- * Triggered when a file is picked from the file picker dialog
- * @param newFiles - the newly picked files
- */
-function onFilePicked(newFiles: File[]): void {
-  showQFile.value = false;
-  for (const file of newFiles) {
-    const newSelectedFile: SelectedFile = {
-      content: file,
-      url: URL.createObjectURL(file),
-      status: UPLOAD_STATUS.READY,
-    };
-    selectedFiles.value = selectedFiles.value.concat(newSelectedFile);
-  }
-}
-
-/**
- * Triggers a separate upload for each file. Only uploads files that haven't been successfully uploaded before.
- */
-async function uploadFiles(): Promise<void> {
-  for (const file of selectedFiles.value) {
-    if (file.status !== UPLOAD_STATUS.DONE) {
-      file.status = UPLOAD_STATUS.LOADING;
-      const res: AxiosResponse = await uploadFile(file);
-      if (res.status === 201) {
-        file.status = UPLOAD_STATUS.DONE;
-      } else {
-        file.status = UPLOAD_STATUS.FAILED;
-      }
-    }
-  }
-  // Check for successful uploads
-  const successfulUploads = selectedFiles.value.filter(
-    (file) => file.status === UPLOAD_STATUS.DONE
-  );
-  if (successfulUploads.length > 0) {
-    onSuccess(successfulUploads);
-  }
-
-  // Check for failed uploads
-  const failedUploads = selectedFiles.value.filter(
-    (file) => file.status === UPLOAD_STATUS.FAILED
-  );
-  if (failedUploads.length > 0) {
-    onFailed(failedUploads);
-  }
-}
+const {
+  selectedFiles,
+  addFile,
+  removeFile,
+  clearFileList,
+  onFilePicked,
+  uploadFiles,
+} = useFileUpload(filePicker);
 </script>
