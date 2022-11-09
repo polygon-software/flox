@@ -31,13 +31,14 @@
 
       <!-- buttons example -->
       <q-card-actions align="right">
+        <q-btn unelevated label="Cancel" @click="onDialogCancel" />
         <q-btn
+          unelevated
           color="primary"
           label="Create"
           icon-right="add"
           @click="onOKClick"
         />
-        <q-btn label="Cancel" @click="onDialogCancel" />
       </q-card-actions>
     </q-card>
   </q-dialog>

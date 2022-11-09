@@ -128,7 +128,10 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
   async filesToFolders(files: S3File[], path: string): Promise<FolderOutput[]> {
     const folders: Record<string, FolderOutput> = {};
     files.forEach((file) => {
-      const root = file.path.replace(`${path}/`, '').split('/')[0];
+      const root = file.path.replace(path, '').split('/')[0];
+      if (!root) {
+        return;
+      }
       if (!(root in folders)) {
         const folder = new FolderOutput();
         folder.uuid = uuidv4();

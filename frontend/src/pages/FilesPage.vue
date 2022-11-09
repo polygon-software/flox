@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-between items-center">
-    <h4>Alias</h4>
+    <h4>Files</h4>
     <div class="row">
       <q-btn
         v-if="!folderCreation"
@@ -47,19 +47,32 @@
 
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import { ref, Ref } from 'vue';
+import { computed, inject, ref, Ref, WritableComputedRef } from 'vue';
 import { OnClickOutside } from '@vueuse/components';
 
 import FileUploadDialog from 'src/flox/modules/file/components/dialogs/FileUploadDialog.vue';
 import FileExplorer from 'src/flox/modules/file/components/tables/FileExplorer.vue';
+import { RouterService } from 'src/services/RouterService';
 
 const $q = useQuasar();
 
-const path: Ref<string> = ref('');
 const folderCreation: Ref<boolean> = ref(false);
 const folderName: Ref<string> = ref('');
 const fileExplorerRef: Ref<InstanceType<typeof FileExplorer> | null> =
   ref(null);
+
+const $routerService: RouterService | undefined = inject('$routerService');
+
+const path: WritableComputedRef<string> = computed({
+  get(): string {
+    return $routerService?.getQueryParam('path') ?? '/';
+  },
+  set(value: string) {
+    void $routerService?.pushToQuery({
+      path: value,
+    });
+  },
+});
 
 function createFolder(): void {
   path.value = `${path.value}/${folderName.value}`;

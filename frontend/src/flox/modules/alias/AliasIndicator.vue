@@ -1,38 +1,63 @@
 <template>
   <Teleport to="body">
-    <div class="alias flex">
-      <p>{{ aliasName }}</p>
-      <q-input v-model="newAlias" label="New Alias" />
-      <q-btn label="Set Alias" @click="setNewAlias" />
+    <div
+      v-if="hasAlias"
+      class="alias row items-center justify-between shadow-6 rounded-borders"
+    >
+      <p>Active Alias</p>
+      <q-btn
+        outline
+        no-caps
+        icon-right="visibility_off"
+        color="primary"
+        label="Remove"
+        @click="removeAlias"
+      />
     </div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, ref, Ref } from 'vue';
-import { Cookies } from 'quasar';
+import { computed, ComputedRef } from 'vue';
 
 import {
-  ALIAS_COOKIE_NAME,
-  setAlias,
+  getAlias,
+  unsetAlias,
 } from 'src/flox/modules/alias/services/alias.service';
 
-const newAlias: Ref<string> = ref('');
-const aliasName: ComputedRef<string> = computed(() => {
-  return Cookies.get(ALIAS_COOKIE_NAME) || '';
+const hasAlias: ComputedRef<boolean> = computed(() => {
+  return !!getAlias();
 });
-function setNewAlias() {
-  setAlias(newAlias.value);
+
+function removeAlias() {
+  unsetAlias();
+  location.reload();
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .alias {
   position: fixed;
   height: 50px;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
+  width: 220px;
+  bottom: 75px;
+  right: -160px;
   z-index: 100000;
+  transition: 0.5s;
+  padding-right: 30px;
+  border: 1px solid $primary;
+
+  p {
+    color: $primary;
+    margin: 0;
+    padding: 4px;
+    font-weight: 600;
+    text-align: center;
+    width: 55px;
+  }
+}
+.alias:hover {
+  right: -20px;
+  transition: 0.5s;
 }
 </style>

@@ -21,6 +21,42 @@ export const GET_FILE = {
   cacheLocation: 'File',
 };
 
+export const GET_FILE_READ_ACCESS_GROUPS = {
+  query: gql`
+    query FileReadAccessUserGroups($uuid: ID!) {
+      FileReadAccessUserGroups(uuid: $uuid) {
+        uuid
+        name
+        users {
+          uuid
+          username
+        }
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'FileReadAccessUserGroups',
+};
+
+export const GET_FILE_WRITE_ACCESS_GROUPS = {
+  query: gql`
+    query FileWriteAccessUserGroups($uuid: ID!) {
+      FileWriteAccessUserGroups(uuid: $uuid) {
+        uuid
+        name
+        users {
+          uuid
+          username
+        }
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'FileWriteAccessUserGroups',
+};
+
 export const GET_FILES = {
   query: gql`
     query Files($uuids: [ID!], $expires: Int) {
@@ -28,6 +64,7 @@ export const GET_FILES = {
         uuid
         path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -47,6 +84,7 @@ export const GET_MY_FILES = {
         uuid
         path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -66,6 +104,7 @@ export const GET_PUBLIC_FILES = {
         uuid
         path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -85,6 +124,7 @@ export const GET_ALL_FILES = {
         uuid
         path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -122,6 +162,7 @@ export const ALL_MY_FILES = {
         uuid
         path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -159,6 +200,7 @@ export const ALL_PUBLIC_FILES = {
         uuid
         path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -212,6 +254,7 @@ export const SEARCH_FILES = {
           uuid
           path
           createdAt
+          updatedAt
           mimetype
           filename
           size
@@ -248,6 +291,7 @@ export const SEARCH_MY_FILES = {
           uuid
           path
           createdAt
+          updatedAt
           mimetype
           filename
           size
@@ -284,6 +328,7 @@ export const SEARCH_PUBLIC_FILES = {
           uuid
           path
           createdAt
+          updatedAt
           mimetype
           filename
           size
@@ -309,4 +354,6 @@ export const FILE_QUERIES: QueryObject[] = [
   GET_ALL_FOLDERS,
   GET_MY_FOLDERS,
   GET_PUBLIC_FOLDERS,
+  GET_FILE_READ_ACCESS_GROUPS,
+  GET_FILE_WRITE_ACCESS_GROUPS,
 ];

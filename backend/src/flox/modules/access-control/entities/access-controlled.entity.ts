@@ -35,16 +35,10 @@ export default class AccessControlledEntity extends BaseEntity {
   @JoinColumn()
   public owner: User;
 
-  @Field(() => [User], {
-    description: 'People with read access to this resource',
-  })
   @ManyToMany(() => UserGroup, (userGroup) => userGroup.readAccess)
   @JoinTable()
   public readAccess: UserGroup[];
 
-  @Field(() => [User], {
-    description: 'People with write access to this resource',
-  })
   @ManyToMany(() => UserGroup, (userGroup) => userGroup.writeAccess)
   @JoinTable()
   public writeAccess: UserGroup[];

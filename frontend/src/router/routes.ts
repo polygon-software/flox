@@ -50,6 +50,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     ],
   },
 
+  USERS: {
+    path: '/users',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/UsersPage.vue') }],
+  },
+
   SAMPLE: {
     path: '/sample',
     component: () => import('layouts/DashboardLayout.vue'),

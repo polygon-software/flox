@@ -47,6 +47,12 @@ export const useAuthStore = defineStore('authStore', {
     avatar: (state) => {
       return avatarForUser(state.loggedInUser?.uuid ?? 'default');
     },
+    role: (state) => {
+      return state.loggedInUser?.role;
+    },
+    isAdmin: (state) => {
+      return state.loggedInUser?.role === 'ADMIN';
+    },
   },
 
   actions: {

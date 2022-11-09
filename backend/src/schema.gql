@@ -18,17 +18,11 @@ type AccessControlledEntity {
   """Marks this object as publicly readable"""
   publicReadAccess: Boolean!
 
-  """People with read access to this resource"""
-  readAccess: [User!]!
-
   """Last modification date"""
   updatedAt: DateTime
 
   """UUID"""
   uuid: ID!
-
-  """People with write access to this resource"""
-  writeAccess: [User!]!
 }
 
 input AddUserToUserGroupInput {
@@ -77,9 +71,6 @@ type BoundingBox {
 }
 
 input CreateFileInput {
-  """URL expiration duration (in seconds)"""
-  expires: Int
-
   """Name of File"""
   filename: String!
   loggedInReadAccess: Boolean = false
@@ -190,9 +181,6 @@ type Image {
   """Marks this object as publicly readable"""
   publicReadAccess: Boolean!
 
-  """People with read access to this resource"""
-  readAccess: [User!]!
-
   """Last modification date"""
   updatedAt: DateTime
 
@@ -201,9 +189,6 @@ type Image {
 
   """Image Width in Pixels"""
   width: Float
-
-  """People with write access to this resource"""
-  writeAccess: [User!]!
 }
 
 type Label {
@@ -235,6 +220,14 @@ type Label {
   uuid: ID!
 }
 
+input ManipulateAccessGroupsInput {
+  addReadAccess: [ID!] = []
+  addWriteAccess: [ID!] = []
+  removeReadAccess: [ID!] = []
+  removeWriteAccess: [ID!] = []
+  uuid: ID!
+}
+
 type Mutation {
   AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
   AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
@@ -246,6 +239,7 @@ type Mutation {
   DeleteImage(deleteImageInput: DeleteInput!): Image!
   DeleteUser(deleteUserInput: DeleteInput!): User!
   DeleteUserGroup(deleteInput: DeleteInput!): UserGroup!
+  ManipulateFileAccessUserGroups(manipulateAccessGroups: ManipulateAccessGroupsInput!): S3File!
   RemoveUserFromUserGroup(removeUserFromUserGroupInput: RemoveUserFromUserGroupInput!): UserGroup!
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
@@ -331,6 +325,8 @@ type Query {
     expires: Int
     uuid: ID!
   ): S3File!
+  FileReadAccessUserGroups(uuid: ID!): [UserGroup!]!
+  FileWriteAccessUserGroups(uuid: ID!): [UserGroup!]!
   Files(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -581,9 +577,6 @@ type S3File {
   """Marks this object as publicly readable"""
   publicReadAccess: Boolean!
 
-  """People with read access to this resource"""
-  readAccess: [User!]!
-
   """Signed URL to upload object. Only works 1 time"""
   signedUrl: String
 
@@ -598,15 +591,9 @@ type S3File {
 
   """UUID"""
   uuid: ID!
-
-  """People with write access to this resource"""
-  writeAccess: [User!]!
 }
 
 input UpdateFileInput {
-  """URL expiration duration (in seconds)"""
-  expires: Int
-
   """Name of File"""
   filename: String
 

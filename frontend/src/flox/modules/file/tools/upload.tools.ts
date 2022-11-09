@@ -34,7 +34,7 @@ export async function uploadFile(
     file.content.size,
     fileInputs
   );
-  if (createdFile === null || createdFile.signedUrl === null) {
+  if (!createdFile || !createdFile.signedUrl) {
     throw new Error('Unable to create file');
   }
 

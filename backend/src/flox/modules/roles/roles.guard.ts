@@ -34,23 +34,14 @@ export class RolesGuard implements CanActivate {
    * @param context - context
    * @returns can activate
    */
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.isPublic(context);
-    if (isPublic) {
-      return true;
-    }
-
-    // Dev mode: overrides user management:
-    const accessOverride = Env.DEV;
-    const requestedFunction = context.getHandler().name;
-
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
     const req = this.getRequest(context);
     const user = req.user;
     let dbUser: User | undefined = undefined;
 
-    console.log(user, 'user');
+    console.log('---user', user);
+
+    // Set user in request object
     if (user) {
       dbUser = await this.userService.getUser({
         cognitoUuid: user.userId,
@@ -58,7 +49,6 @@ export class RolesGuard implements CanActivate {
 
       // Handle the case in which an alias is provided in header
       const alias = req.headers['user-alias'];
-      console.log('alias', alias);
       if (dbUser.role === DEFAULT_ROLES.ADMIN && alias) {
         dbUser = await this.userService.getUser({
           uuid: alias,
@@ -67,47 +57,32 @@ export class RolesGuard implements CanActivate {
 
       // Set either cognito user or alias user as principal to request
       req.principal = dbUser;
-
-      // Admin has access to everything
-      if (dbUser && dbUser.role === DEFAULT_ROLES.ADMIN) {
-        return true;
-      }
+      console.log('Setting principal', dbUser);
     }
+
+    // Public endpoints are generally accessible
+    if (this.isPublic(context)) {
+      return true;
+    }
+
+    // If endpoint is not public, user must always be authenticated
+    if (!dbUser) {
+      return false;
+    }
+
+    // Admin has access to everything
+    if (dbUser && dbUser.role === DEFAULT_ROLES.ADMIN) {
+      return true;
+    }
+
+    const roles = this.reflector.get<string[]>('roles', context.getHandler());
 
     // For generally accessible resources, allow access by default if user is logged in
     const anyUserAccess = this.isLoggedIn(context, roles, dbUser);
     if (anyUserAccess) {
       return true;
     }
-
-    // Development override for private resources
-    if (accessOverride && !roles) {
-      console.warn(
-        `Debug override used to access private resource: "${requestedFunction}"!`,
-      );
-      return true;
-    }
-
-    // Development override for restricted resources without being logged in
-    if (!dbUser) {
-      if (accessOverride) {
-        console.warn(
-          `Debug override used to access restricted resource: "${requestedFunction}" without authentication!`,
-        );
-        return true;
-      }
-      return false;
-    }
-    const res = roles ? roles.includes(dbUser.role) : false;
-    if (accessOverride && !res) {
-      console.warn(
-        `Debug override used to access resource : "${requestedFunction}" restricted to ${roles?.join(
-          ',',
-        )} as ${dbUser.role}!`,
-      );
-      return true;
-    }
-    return res;
+    return roles ? roles.includes(dbUser.role) : false;
   }
 
   /**

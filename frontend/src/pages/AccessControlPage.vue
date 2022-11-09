@@ -1,11 +1,12 @@
 <template>
   <div class="row justify-between items-center">
-    <h4>Alias</h4>
+    <h4>Access Control</h4>
     <q-btn
       color="primary"
       label="Create User Group"
       icon-right="group_add"
       no-caps
+      unelevated
       @click="openCreateDialog"
     />
   </div>
@@ -33,29 +34,7 @@
             <div
               class="row items-center justify-end relative-position full-height"
             >
-              <template
-                v-for="(user, n) in slotProps.row.users"
-                :key="user.uuid"
-              >
-                <q-avatar
-                  v-if="n < 5"
-                  size="26px"
-                  class="absolute"
-                  :style="`left: ${n * 15}px`"
-                >
-                  <img
-                    :src="avatarForUser(user.uuid)"
-                    style="border: 2px solid white"
-                  />
-                </q-avatar>
-              </template>
-              <span
-                v-if="slotProps.row.users.length > 5"
-                style="margin-left: 90px"
-                class="text-weight-bolder"
-              >
-                +{{ slotProps.row.users.length - 5 }}
-              </span>
+              <MultiUserAvatars :users="slotProps.row.users" />
             </div>
           </q-td>
         </template>
@@ -132,6 +111,7 @@ import {
 } from 'src/flox/modules/access-control/services/access-control.service';
 import { sleep } from 'src/tools/general.tool';
 import LazySearchField from 'components/forms/LazySearchField.vue';
+import MultiUserAvatars from "src/flox/modules/auth/components/avatar/MultiUserAvatars.vue";
 
 const $q = useQuasar();
 
@@ -163,6 +143,7 @@ async function removeUserFromGroup(): Promise<void> {
       selectedGroup.value.uuid,
       selectedUsers.value[0].uuid
     );
+    selectedUsers.value = [];
     refresh();
   }
 }

@@ -14,6 +14,7 @@
     </p>
     <q-btn
       v-if="currentAlias"
+      unelevated
       class="q-mb-lg"
       color="primary"
       icon-right="visibility_off"

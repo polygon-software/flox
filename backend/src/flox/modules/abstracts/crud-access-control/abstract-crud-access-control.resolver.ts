@@ -8,15 +8,37 @@ import GetOneArgs from '../crud/dto/get-one.args';
 import DeleteInput from '../crud/inputs/delete.input';
 import UpdateInput from '../crud/inputs/update.input';
 import { DEFAULT_ROLES } from '../../roles/config';
+import UserGroup from '../../access-control/entities/user-group.entity';
 
 import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
 import AbstractCrudAccessControlService from './abstract-crud-access-control.service';
+import ManipulateAccessGroupsInput from './dto/inputs/manipulate-access-groups.input';
 
 export default abstract class AbstractCrudAccessControlResolver<
   Entity extends AccessControlledEntity,
   Service extends AbstractCrudAccessControlService<Entity>,
 > {
   abstract get service(): Service;
+
+  async getReadAccessUserGroups(getOneArgs: GetOneArgs): Promise<UserGroup[]> {
+    return this.service.getReadAccessGroups(getOneArgs);
+  }
+
+  async getWriteAccessUserGroups(getOneArgs: GetOneArgs): Promise<UserGroup[]> {
+    return this.service.getWriteAccessGroups(getOneArgs);
+  }
+
+  async manipulateAccessUserGroups(
+    manipulateAccessGroups: ManipulateAccessGroupsInput,
+    user?: User,
+    sudo?: false,
+  ): Promise<Entity> {
+    return this.service.manipulateAccessUserGroups(
+      manipulateAccessGroups,
+      user,
+      sudo,
+    );
+  }
 
   getOne(
     getOneArgs: GetOneArgs,
