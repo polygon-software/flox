@@ -4,6 +4,9 @@
     <DataTable
       title="User Table"
       prepend-slot
+      export-selection
+      delete-selection
+      multi
       prepend-name="Avatar"
       :columns="columns"
       :query="SEARCH_USERS"
