@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Like } from 'typeorm';
 
 import {
   AdminOnly,
@@ -9,6 +10,9 @@ import User from '../auth/entities/user.entity';
 import { LoggedIn, Public } from '../auth/authentication.decorator';
 import AbstractSearchAccessControlResolver from '../abstracts/search-access-control/abstract-search-access-control.resolver';
 import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import UserGroup from '../access-control/entities/user-group.entity';
+import GetOneArgs from '../abstracts/crud/dto/get-one.args';
+import ManipulateAccessGroupsInput from '../abstracts/crud-access-control/dto/inputs/manipulate-access-groups.input';
 
 import GetAllFilesArgs from './dto/args/get-all-files.args';
 import GetFileArgs from './dto/args/get-file.args';
@@ -19,6 +23,8 @@ import UpdateFileInput from './dto/input/update-file.input';
 import S3File from './entities/file.entity';
 import FileService from './file.service';
 import FileSearchOutput from './dto/outputs/file-search.output';
+import FolderOutput from './outputs/folder.output';
+import GetAllFoldersArgs from './dto/args/get-all-folders.args';
 
 @Resolver(() => S3File)
 export default class FileResolver extends AbstractSearchAccessControlResolver<
@@ -33,12 +39,29 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     return this.fileService;
   }
 
+  @AdminOnly()
+  @Query(() => [UserGroup], { name: 'FileReadAccessUserGroups' })
+  async getFileReadAccessUserGroups(
+    @Args() getOneArgs: GetOneArgs,
+  ): Promise<UserGroup[]> {
+    return super.getReadAccessUserGroups(getOneArgs);
+  }
+
+  @AdminOnly()
+  @Query(() => [UserGroup], { name: 'FileWriteAccessUserGroups' })
+  async getFileWriteAccessUserGroups(
+    @Args() getOneArgs: GetOneArgs,
+  ): Promise<UserGroup[]> {
+    return super.getWriteAccessUserGroups(getOneArgs);
+  }
+
   @Public()
   @Query(() => S3File, { name: 'File' })
   async getFile(
     @Args() getFileArgs: GetFileArgs,
     @OptionalUser() user?: User,
   ): Promise<S3File> {
+    console.log('**user', user);
     const file = await super.getOne(getFileArgs, user);
     return this.fileService.addFileUrl(file, getFileArgs);
   }
@@ -78,8 +101,33 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @OptionalUser() user?: User,
   ): Promise<S3File[]> {
-    const files = await super.getAll(getAllFilesArgs, user);
-    return this.fileService.addFileUrls(files, getAllFilesArgs);
+    const options = getAllFilesArgs.path
+      ? {
+          where: {
+            path: getAllFilesArgs.path,
+          },
+        }
+      : {};
+    return super.getAll(getAllFilesArgs, user, options);
+  }
+
+  @LoggedIn()
+  @Query(() => [FolderOutput], { name: 'Folders' })
+  async getAllFolders(
+    @Args() getAllFoldersArgs: GetAllFoldersArgs,
+    @OptionalUser() user?: User,
+  ): Promise<FolderOutput[]> {
+    const path = getAllFoldersArgs.path;
+    const searchPath = path !== '/' ? `${path}/` : path;
+    const options = getAllFoldersArgs.path
+      ? {
+          where: {
+            path: Like(`${searchPath}%`),
+          },
+        }
+      : {};
+    const files = await super.getAll({ take: 5000, skip: 0 }, user, options);
+    return this.fileService.filesToFolders(files, searchPath);
   }
 
   /**
@@ -94,8 +142,37 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() getAllFilesArgs: GetAllFilesArgs,
     @CurrentUser() user: User,
   ): Promise<S3File[]> {
-    const files = await super.getAllOfMine(getAllFilesArgs, user);
-    return this.fileService.addFileUrls(files, getAllFilesArgs);
+    const options = getAllFilesArgs.path
+      ? {
+          where: {
+            path: getAllFilesArgs.path,
+          },
+        }
+      : {};
+    return super.getAllOfMine(getAllFilesArgs, user, options);
+  }
+
+  @LoggedIn()
+  @Query(() => [FolderOutput], { name: 'MyFolders' })
+  async getMyAllFolders(
+    @Args() getAllFoldersArgs: GetAllFoldersArgs,
+    @CurrentUser() user: User,
+  ): Promise<FolderOutput[]> {
+    const path = getAllFoldersArgs.path;
+    const searchPath = path !== '/' ? `${path}/` : path;
+    const options = getAllFoldersArgs.path
+      ? {
+          where: {
+            path: Like(`%${searchPath}`),
+          },
+        }
+      : {};
+    const files = await super.getAllOfMine(
+      { take: 5000, skip: 0 },
+      user,
+      options,
+    );
+    return this.fileService.filesToFolders(files, searchPath);
   }
 
   /**
@@ -108,8 +185,32 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   async getAllPublicFiles(
     @Args() getAllFilesArgs: GetAllFilesArgs,
   ): Promise<S3File[]> {
-    const files = await super.getAllPublic(getAllFilesArgs);
-    return this.fileService.addFileUrls(files, getAllFilesArgs);
+    const options = getAllFilesArgs.path
+      ? {
+          where: {
+            path: getAllFilesArgs.path,
+          },
+        }
+      : {};
+    return super.getAllPublic(getAllFilesArgs, options);
+  }
+
+  @AdminOnly()
+  @Query(() => [FolderOutput], { name: 'PublicFolders' })
+  async getAllPublicFolders(
+    @Args() getAllFoldersArgs: GetAllFoldersArgs,
+  ): Promise<FolderOutput[]> {
+    const path = getAllFoldersArgs.path;
+    const searchPath = path !== '/' ? `${path}/` : path;
+    const options = getAllFoldersArgs.path
+      ? {
+          where: {
+            path: Like(`%${searchPath}`),
+          },
+        }
+      : {};
+    const files = await super.getAllPublic({ take: 5000, skip: 0 }, options);
+    return this.fileService.filesToFolders(files, searchPath);
   }
 
   @Public()
@@ -118,15 +219,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() searchFilesArgs: SearchFilesArgs,
     @OptionalUser() user?: User,
   ): Promise<FileSearchOutput> {
-    const searchOutput = await super.search(searchFilesArgs, user);
-    const data = await this.fileService.addFileUrls(
-      searchOutput.data,
-      searchFilesArgs,
-    );
-    return {
-      ...searchOutput,
-      data,
-    };
+    return super.search(searchFilesArgs, user);
   }
 
   @Public()
@@ -134,15 +227,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   async searchPublicFiles(
     @Args() searchFilesArgs: SearchFilesArgs,
   ): Promise<FileSearchOutput> {
-    const searchOutput = await super.searchPublic(searchFilesArgs);
-    const data = await this.fileService.addFileUrls(
-      searchOutput.data,
-      searchFilesArgs,
-    );
-    return {
-      ...searchOutput,
-      data,
-    };
+    return super.searchPublic(searchFilesArgs);
   }
 
   @LoggedIn()
@@ -151,15 +236,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() searchFilesArgs: SearchFilesArgs,
     @CurrentUser() user: User,
   ): Promise<FileSearchOutput> {
-    const searchOutput = await super.searchOfUser(searchFilesArgs, user);
-    const data = await this.fileService.addFileUrls(
-      searchOutput.data,
-      searchFilesArgs,
-    );
-    return {
-      ...searchOutput,
-      data,
-    };
+    return await super.searchOfUser(searchFilesArgs, user);
   }
 
   @AdminOnly()
@@ -167,15 +244,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   async searchFilesAsAdmin(
     @Args() searchFilesArgs: SearchFilesArgs,
   ): Promise<FileSearchOutput> {
-    const searchOutput = await super.searchAsAdmin(searchFilesArgs);
-    const data = await this.fileService.addFileUrls(
-      searchOutput.data,
-      searchFilesArgs,
-    );
-    return {
-      ...searchOutput,
-      data,
-    };
+    return super.searchAsAdmin(searchFilesArgs);
   }
 
   /**
@@ -193,7 +262,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     const file = await super.create(createFileInput, user);
     const signedUrl = await this.fileService.createSignedUploadUrl(file);
     const fileWithUrl = await this.fileService.addFileUrl(file, {
-      expires: createFileInput.expires,
+      expires: 360,
     });
     const updatedFile = await this.fileService.update(
       { uuid: file.uuid },
@@ -219,7 +288,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @CurrentUser() user: User,
   ): Promise<S3File> {
     const file = await super.update(updateFileInput, user);
-    return this.fileService.addFileUrl(file, updateFileInput);
+    return this.fileService.addFileUrl(file, { expires: 360 });
   }
 
   /**
@@ -236,5 +305,15 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   ): Promise<S3File> {
     const file = await super.delete(deleteInput, user);
     return this.fileService.deleteFileFromS3(file);
+  }
+
+  @LoggedIn()
+  @Mutation(() => S3File, { name: 'ManipulateFileAccessUserGroups' })
+  async manipulateFileAccessUserGroups(
+    @Args('manipulateAccessGroups')
+    manipulateAccessGroups: ManipulateAccessGroupsInput,
+    @CurrentUser() user: User,
+  ): Promise<S3File> {
+    return super.manipulateAccessUserGroups(manipulateAccessGroups, user);
   }
 }

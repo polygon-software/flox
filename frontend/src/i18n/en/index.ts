@@ -116,4 +116,7 @@ export default {
       },
     },
   },
+  access_control: {
+    invalid_group_name: 'Invalid group name',
+  },
 };

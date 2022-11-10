@@ -2,8 +2,6 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 import {
   IsInt,
   IsNotEmpty,
-  IsNumber,
-  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -19,6 +17,12 @@ export default class CreateFileInput extends CreateAccessControlledInput {
   filename: string;
 
   @Field(() => String, {
+    description: 'Path to file',
+  })
+  @IsString()
+  path: string;
+
+  @Field(() => String, {
     description: 'File mimetype',
   })
   @IsString()
@@ -31,12 +35,4 @@ export default class CreateFileInput extends CreateAccessControlledInput {
   @IsInt()
   @IsNotEmpty()
   size: number;
-
-  @Field(() => Int, {
-    nullable: true,
-    description: 'URL expiration duration (in seconds)',
-  })
-  @IsOptional()
-  @IsNumber()
-  expires?: number;
 }

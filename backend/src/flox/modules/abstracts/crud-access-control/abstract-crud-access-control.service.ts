@@ -17,10 +17,15 @@ import GetMultipleArgs from '../crud/dto/get-multiple.args';
 import GetOneArgs from '../crud/dto/get-one.args';
 import DeleteInput from '../crud/inputs/delete.input';
 import UpdateInput from '../crud/inputs/update.input';
-import { assertReadAccess } from '../../access-control/helpers/access-control.helper';
+import {
+  assertReadAccess,
+  assertWriteAccess,
+} from '../../access-control/helpers/access-control.helper';
 import AccessControlService from '../../access-control/access-control.service';
+import UserGroup from '../../access-control/entities/user-group.entity';
 
 import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
+import ManipulateAccessGroupsInput from './dto/inputs/manipulate-access-groups.input';
 
 export default abstract class AbstractCrudAccessControlService<
   Entity extends AccessControlledEntity,
@@ -239,6 +244,34 @@ export default abstract class AbstractCrudAccessControlService<
     return entities.map((entity) => entity.uuid);
   }
 
+  async getReadAccessGroups(getOneArgs: GetOneArgs): Promise<UserGroup[]> {
+    const item = await this.repository.findOneOrFail({
+      where: {
+        uuid: getOneArgs.uuid,
+      } as FindOptionsWhere<Entity>,
+      relations: {
+        readAccess: {
+          users: true,
+        },
+      } as FindOptionsRelations<Entity>,
+    });
+    return item.readAccess;
+  }
+
+  async getWriteAccessGroups(getOneArgs: GetOneArgs): Promise<UserGroup[]> {
+    const item = await this.repository.findOneOrFail({
+      where: {
+        uuid: getOneArgs.uuid,
+      } as FindOptionsWhere<Entity>,
+      relations: {
+        writeAccess: {
+          users: true,
+        },
+      } as FindOptionsRelations<Entity>,
+    });
+    return item.writeAccess;
+  }
+
   getOnePublic(
     getOneArgs: GetOneArgs,
     options?: FindOneOptions<Entity>,
@@ -263,13 +296,27 @@ export default abstract class AbstractCrudAccessControlService<
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
     const entity = await this.repository.findOneOrFail({
-      ...options,
       where: {
         uuid: getOneArgs.uuid,
       } as FindOptionsWhere<Entity>,
-      ...this.readAccessControlRelationOptions,
+      ...this.mergeOptions(options, this.readAccessControlRelationOptions),
     });
     assertReadAccess(entity, user);
+    return entity;
+  }
+
+  async getOneAsUserToWrite(
+    getOneArgs: GetOneArgs,
+    user: User,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity> {
+    const entity = await this.repository.findOneOrFail({
+      where: {
+        uuid: getOneArgs.uuid,
+      } as FindOptionsWhere<Entity>,
+      ...this.mergeOptions(options, this.writeAccessControlRelationOptions),
+    });
+    assertWriteAccess(entity, user);
     return entity;
   }
 
@@ -468,15 +515,17 @@ export default abstract class AbstractCrudAccessControlService<
     user: User,
     entity?: DeepPartial<Entity>,
   ): Promise<Entity> {
-    const storedEntity = await this.getOneAsUser(
+    const storedEntity = await this.getOneAsUserToWrite(
       { uuid: updateInput.uuid },
       user,
     );
-    const updatedEntity = this.repository.create({
+    const updatedEntity = {
       ...storedEntity,
       ...(updateInput as DeepPartial<Entity>),
       ...entity,
-    });
+      readAccess: undefined,
+      writeAccess: undefined,
+    };
     await this.repository.update(
       updateInput.uuid,
       updatedEntity as QueryDeepPartialEntity<Entity>,
@@ -489,27 +538,60 @@ export default abstract class AbstractCrudAccessControlService<
   }
 
   async delete(deleteInput: DeleteInput, user: User): Promise<Entity> {
-    const entity = await this.repository.findOneOrFail({
-      where: [
-        {
-          uuid: deleteInput.uuid,
-          owner: {
-            uuid: user.uuid,
-          },
-        },
-        {
-          uuid: deleteInput.uuid,
-          writeAccess: {
-            users: {
-              uuid: user.uuid,
-            },
-          },
-        },
-      ] as FindOptionsWhere<Entity>[],
-    });
+    const entity = await this.getOneAsUserToWrite(
+      { uuid: deleteInput.uuid },
+      user,
+    );
     const uuid = entity.uuid;
     const deletedEntity = await this.repository.remove(entity);
     deletedEntity.uuid = uuid;
     return deletedEntity;
+  }
+
+  async manipulateAccessUserGroups(
+    manipulateAccessGroups: ManipulateAccessGroupsInput,
+    user?: User,
+    sudo?: false,
+  ): Promise<Entity> {
+    const entity = await this.repository.findOneOrFail({
+      where: {
+        uuid: manipulateAccessGroups.uuid,
+      } as FindOptionsWhere<Entity>,
+      ...this.accessControlRelationOptions,
+    });
+    console.log('user', user);
+    console.log('entity', entity);
+    sudo || assertWriteAccess(entity, user);
+
+    console.log('Has access');
+
+    const readAccess = [
+      ...new Set([
+        ...entity.readAccess.map((group) => group.uuid),
+        ...manipulateAccessGroups.addReadAccess,
+      ]),
+    ]
+      .filter((uuid) => !manipulateAccessGroups.removeReadAccess.includes(uuid))
+      .map((uuid) => ({ uuid }));
+
+    const writeAccess = [
+      ...new Set([
+        ...entity.writeAccess.map((group) => group.uuid),
+        ...manipulateAccessGroups.addWriteAccess,
+      ]),
+    ]
+      .filter(
+        (uuid) => !manipulateAccessGroups.removeWriteAccess.includes(uuid),
+      )
+      .map((uuid) => ({ uuid }));
+
+    const updatedEntity = {
+      ...entity,
+      readAccess,
+      writeAccess,
+    } as Entity;
+    console.log(updatedEntity);
+    await this.repository.save(updatedEntity);
+    return this.getOneAsAdmin({ uuid: manipulateAccessGroups.uuid });
   }
 }

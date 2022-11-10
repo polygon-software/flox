@@ -2,6 +2,7 @@ import { ForbiddenException } from '@nestjs/common';
 
 import AccessControlledEntity from '../entities/access-controlled.entity';
 import User from '../../auth/entities/user.entity';
+import { DEFAULT_ROLES } from "../../roles/config";
 
 export function hasReadAccess(entity: AccessControlledEntity, user?: User) {
   if (entity.publicReadAccess) {
@@ -9,6 +10,9 @@ export function hasReadAccess(entity: AccessControlledEntity, user?: User) {
   }
   if (!user) {
     return false;
+  }
+  if (user.role === DEFAULT_ROLES.ADMIN) {
+    return true;
   }
   if (entity.loggedInReadAccess || entity.owner.uuid === user.uuid) {
     return true;
@@ -31,6 +35,12 @@ export function hasWriteAccess(
 ): boolean {
   if (!user) {
     return false;
+  }
+  if (user.role === DEFAULT_ROLES.ADMIN) {
+    return true;
+  }
+  if (user && entity.owner.uuid === user.uuid) {
+    return true;
   }
   return entity.writeAccess.some((userGroup) => {
     return userGroup.users.some((groupUser) => groupUser.uuid === user.uuid);

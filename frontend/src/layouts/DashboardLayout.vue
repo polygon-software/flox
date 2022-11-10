@@ -27,17 +27,14 @@
             v-model="search"
             dense
             outlined
-            square
+            rounded
             placeholder="Search"
             class="bg-white col"
-          />
-          <q-btn
-            class="YL__toolbar-input-btn"
-            color="grey-3"
-            text-color="grey-8"
-            icon="search"
-            unelevated
-          />
+          >
+            <template #append>
+              <q-icon name="search" class="cursor-pointer" color="primary" />
+            </template>
+          </q-input>
         </div>
 
         <q-space />
@@ -140,14 +137,17 @@
       </div>
     </q-page-container>
   </q-layout>
+
+  <AliasIndicator />
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, inject, Ref, ref } from 'vue';
+import { inject, Ref, ref } from 'vue';
 
 import { RouterService } from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import AliasIndicator from 'src/flox/modules/alias/AliasIndicator.vue';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authStore = useAuthStore();
@@ -167,7 +167,13 @@ const sideMenu = [
         icon: 'home',
         text: 'Home',
       },
-      { icon: 'group', text: 'Users' },
+      {
+        icon: 'group',
+        text: 'Users',
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.USERS);
+        },
+      },
       {
         icon: 'lock',
         text: 'Access Rights',
@@ -186,7 +192,13 @@ const sideMenu = [
   },
   {
     links: [
-      { icon: 'folder', text: 'Files' },
+      {
+        icon: 'folder',
+        text: 'Files',
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.FILES);
+        },
+      },
       { icon: 'image', text: 'Images' },
     ],
   },

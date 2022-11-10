@@ -8,7 +8,7 @@ export const GET_FILE = {
     query File($uuid: ID!, $expires: Int) {
       File(uuid: $uuid, expires: $expires) {
         uuid
-        key
+        path
         mimetype
         filename
         size
@@ -21,13 +21,50 @@ export const GET_FILE = {
   cacheLocation: 'File',
 };
 
+export const GET_FILE_READ_ACCESS_GROUPS = {
+  query: gql`
+    query FileReadAccessUserGroups($uuid: ID!) {
+      FileReadAccessUserGroups(uuid: $uuid) {
+        uuid
+        name
+        users {
+          uuid
+          username
+        }
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'FileReadAccessUserGroups',
+};
+
+export const GET_FILE_WRITE_ACCESS_GROUPS = {
+  query: gql`
+    query FileWriteAccessUserGroups($uuid: ID!) {
+      FileWriteAccessUserGroups(uuid: $uuid) {
+        uuid
+        name
+        users {
+          uuid
+          username
+        }
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'FileWriteAccessUserGroups',
+};
+
 export const GET_FILES = {
   query: gql`
     query Files($uuids: [ID!], $expires: Int) {
       Files(uuids: $uuids, expires: $expires) {
         uuid
-        key
+        path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -45,8 +82,9 @@ export const GET_MY_FILES = {
     query MyFiles($uuids: [ID!], $expires: Int) {
       MyFiles(uuids: $uuids, expires: $expires) {
         uuid
-        key
+        path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -64,8 +102,9 @@ export const GET_PUBLIC_FILES = {
     query PublicFiles($uuids: [ID!], $expires: Int) {
       PublicFiles(uuids: $uuids, expires: $expires) {
         uuid
-        key
+        path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -80,10 +119,12 @@ export const GET_PUBLIC_FILES = {
 
 export const GET_ALL_FILES = {
   query: gql`
-    query AllFiles($skip: Int, $take: Int, $expires: Int) {
-      AllFiles(skip: $skip, take: $take, expires: $expires) {
+    query AllFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
+      AllFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
         uuid
+        path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -96,12 +137,32 @@ export const GET_ALL_FILES = {
   cacheLocation: 'AllFiles',
 };
 
+export const GET_ALL_FOLDERS = {
+  query: gql`
+    query Folders($path: String!) {
+      Folders(path: $path) {
+        uuid
+        name
+        files
+        size
+        createdAt
+        updatedAt
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'Folders',
+};
+
 export const ALL_MY_FILES = {
   query: gql`
-    query AllMyFiles($skip: Int, $take: Int, $expires: Int) {
-      AllMyFiles(skip: $skip, take: $take, expires: $expires) {
+    query AllMyFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
+      AllMyFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
         uuid
+        path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -114,12 +175,32 @@ export const ALL_MY_FILES = {
   cacheLocation: 'AllMyFiles',
 };
 
+export const GET_MY_FOLDERS = {
+  query: gql`
+    query MyFolders($path: String!) {
+      MyFolders(path: $path) {
+        uuid
+        name
+        files
+        size
+        createdAt
+        updatedAt
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'MyFolders',
+};
+
 export const ALL_PUBLIC_FILES = {
   query: gql`
-    query AllPublicFiles($skip: Int, $take: Int, $expires: Int) {
-      AllPublicFiles(skip: $skip, take: $take, expires: $expires) {
+    query AllPublicFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
+      AllPublicFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
         uuid
+        path
         createdAt
+        updatedAt
         mimetype
         filename
         size
@@ -130,6 +211,24 @@ export const ALL_PUBLIC_FILES = {
   `,
   tables: [TABLES.FILE],
   cacheLocation: 'AllPublicFiles',
+};
+
+export const GET_PUBLIC_FOLDERS = {
+  query: gql`
+    query PublicFolders($path: String!) {
+      PublicFolders(path: $path) {
+        uuid
+        name
+        files
+        size
+        createdAt
+        updatedAt
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  cacheLocation: 'PublicFolders',
 };
 
 export const SEARCH_FILES = {
@@ -153,7 +252,9 @@ export const SEARCH_FILES = {
         count
         data {
           uuid
+          path
           createdAt
+          updatedAt
           mimetype
           filename
           size
@@ -188,7 +289,9 @@ export const SEARCH_MY_FILES = {
         count
         data {
           uuid
+          path
           createdAt
+          updatedAt
           mimetype
           filename
           size
@@ -223,7 +326,9 @@ export const SEARCH_PUBLIC_FILES = {
         count
         data {
           uuid
+          path
           createdAt
+          updatedAt
           mimetype
           filename
           size
@@ -246,4 +351,9 @@ export const FILE_QUERIES: QueryObject[] = [
   SEARCH_FILES,
   SEARCH_MY_FILES,
   SEARCH_PUBLIC_FILES,
+  GET_ALL_FOLDERS,
+  GET_MY_FOLDERS,
+  GET_PUBLIC_FOLDERS,
+  GET_FILE_READ_ACCESS_GROUPS,
+  GET_FILE_WRITE_ACCESS_GROUPS,
 ];

@@ -33,6 +33,15 @@ export default abstract class S3File extends AccessControlledEntity {
   @IsString()
   public filename: string;
 
+  @Field(() => String, {
+    nullable: true,
+    description: 'Path that leads to file',
+  })
+  @Column()
+  @IsOptional()
+  @IsString()
+  public path: string;
+
   @Field(() => Number, { description: 'Filesize in bytes' })
   @Column()
   @IsNumber()

@@ -18,17 +18,11 @@ type AccessControlledEntity {
   """Marks this object as publicly readable"""
   publicReadAccess: Boolean!
 
-  """People with read access to this resource"""
-  readAccess: [User!]!
-
   """Last modification date"""
   updatedAt: DateTime
 
   """UUID"""
   uuid: ID!
-
-  """People with write access to this resource"""
-  writeAccess: [User!]!
 }
 
 input AddUserToUserGroupInput {
@@ -37,6 +31,14 @@ input AddUserToUserGroupInput {
 
   """Uuid of user that shall be added to group"""
   userUuid: ID!
+}
+
+input AddUsersToUserGroupInput {
+  """Uuid of group to which user shall be added"""
+  userGroupUuid: ID!
+
+  """Uuids of users that shall be added to group"""
+  userUuids: [ID!]!
 }
 
 type BoundingBox {
@@ -69,15 +71,15 @@ type BoundingBox {
 }
 
 input CreateFileInput {
-  """URL expiration duration (in seconds)"""
-  expires: Int
-
   """Name of File"""
   filename: String!
   loggedInReadAccess: Boolean = false
 
   """File mimetype"""
   mimetype: String!
+
+  """Path to file"""
+  path: String!
   publicReadAccess: Boolean = false
   readAccess: [ID!] = []
 
@@ -125,6 +127,26 @@ type FileSearchOutput {
   data: [S3File!]!
 }
 
+type FolderOutput {
+  """Creation date of oldest file in folder"""
+  createdAt: DateTime!
+
+  """Number of files"""
+  files: Float!
+
+  """Name of the folder"""
+  name: String!
+
+  """Summed of size of all files in folder, in bytes"""
+  size: Float!
+
+  """Last modification of any file in folder"""
+  updatedAt: DateTime
+
+  """Name of the folder"""
+  uuid: ID!
+}
+
 type Image {
   """Capture Date"""
   capturedAt: DateTime
@@ -159,9 +181,6 @@ type Image {
   """Marks this object as publicly readable"""
   publicReadAccess: Boolean!
 
-  """People with read access to this resource"""
-  readAccess: [User!]!
-
   """Last modification date"""
   updatedAt: DateTime
 
@@ -170,9 +189,6 @@ type Image {
 
   """Image Width in Pixels"""
   width: Float
-
-  """People with write access to this resource"""
-  writeAccess: [User!]!
 }
 
 type Label {
@@ -204,8 +220,17 @@ type Label {
   uuid: ID!
 }
 
+input ManipulateAccessGroupsInput {
+  addReadAccess: [ID!] = []
+  addWriteAccess: [ID!] = []
+  removeReadAccess: [ID!] = []
+  removeWriteAccess: [ID!] = []
+  uuid: ID!
+}
+
 type Mutation {
   AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
+  AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
   CreateFile(createFileInput: CreateFileInput!): S3File!
   CreateImage(createImageInput: CreateImageInput!): Image!
   CreateUser(createUserInput: CreateUserInput!): User!
@@ -214,6 +239,7 @@ type Mutation {
   DeleteImage(deleteImageInput: DeleteInput!): Image!
   DeleteUser(deleteUserInput: DeleteInput!): User!
   DeleteUserGroup(deleteInput: DeleteInput!): UserGroup!
+  ManipulateFileAccessUserGroups(manipulateAccessGroups: ManipulateAccessGroupsInput!): S3File!
   RemoveUserFromUserGroup(removeUserFromUserGroupInput: RemoveUserFromUserGroupInput!): UserGroup!
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
@@ -224,6 +250,9 @@ type Query {
   AllFiles(
     """URL expiration duration (in seconds)"""
     expires: Int
+
+    """Path in which file must be located"""
+    path: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -245,6 +274,9 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
+    """Path in which file must be located"""
+    path: String
+
     """How many items to skip"""
     skip: Int = 0
 
@@ -264,6 +296,9 @@ type Query {
   AllPublicFiles(
     """URL expiration duration (in seconds)"""
     expires: Int
+
+    """Path in which file must be located"""
+    path: String
 
     """How many items to skip"""
     skip: Int = 0
@@ -290,11 +325,17 @@ type Query {
     expires: Int
     uuid: ID!
   ): S3File!
+  FileReadAccessUserGroups(uuid: ID!): [UserGroup!]!
+  FileWriteAccessUserGroups(uuid: ID!): [UserGroup!]!
   Files(
     """URL expiration duration (in seconds)"""
     expires: Int
     uuids: [ID!] = []
   ): [S3File!]!
+  Folders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
   Image(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -315,6 +356,10 @@ type Query {
     expires: Int
     uuids: [ID!] = []
   ): [S3File!]!
+  MyFolders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
   MyImages(
     """URL expiration duration (in seconds)"""
     expires: Int
@@ -333,6 +378,10 @@ type Query {
     expires: Int
     uuids: [ID!] = []
   ): [S3File!]!
+  PublicFolders(
+    """Path at start of folder"""
+    path: String!
+  ): [FolderOutput!]!
   SearchAdminFiles(
     """Sort descending"""
     descending: Boolean = false
@@ -522,11 +571,11 @@ type S3File {
   """Owner of this object, has full control over it"""
   owner: User!
 
+  """Path that leads to file"""
+  path: String
+
   """Marks this object as publicly readable"""
   publicReadAccess: Boolean!
-
-  """People with read access to this resource"""
-  readAccess: [User!]!
 
   """Signed URL to upload object. Only works 1 time"""
   signedUrl: String
@@ -542,17 +591,14 @@ type S3File {
 
   """UUID"""
   uuid: ID!
-
-  """People with write access to this resource"""
-  writeAccess: [User!]!
 }
 
 input UpdateFileInput {
-  """URL expiration duration (in seconds)"""
-  expires: Int
-
   """Name of File"""
   filename: String
+
+  """Path to file"""
+  path: String!
   uuid: ID!
 }
 

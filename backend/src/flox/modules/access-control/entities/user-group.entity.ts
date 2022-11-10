@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BeforeRemove, Column, Entity, ManyToMany } from 'typeorm';
+import { Column, Entity, ManyToMany } from 'typeorm';
 import { IsString } from 'class-validator';
 
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
@@ -18,7 +18,9 @@ export default class UserGroup extends BaseEntity {
   @Field(() => [User], {
     description: 'Users belonging to this user group',
   })
-  @ManyToMany(() => User, (user) => user.groups)
+  @ManyToMany(() => User, (user) => user.groups, {
+    cascade: true,
+  })
   public users: User[];
 
   @Field(() => AccessControlledEntity, {
@@ -27,6 +29,9 @@ export default class UserGroup extends BaseEntity {
   @ManyToMany(
     () => AccessControlledEntity,
     (accessControl) => accessControl.readAccess,
+    {
+      cascade: true,
+    },
   )
   public readAccess: AccessControlledEntity[];
 
@@ -36,6 +41,9 @@ export default class UserGroup extends BaseEntity {
   @ManyToMany(
     () => AccessControlledEntity,
     (accessControl) => accessControl.writeAccess,
+    {
+      cascade: true,
+    },
   )
   public writeAccess: AccessControlledEntity[];
 }

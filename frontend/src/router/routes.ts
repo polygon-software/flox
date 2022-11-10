@@ -36,12 +36,24 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/AliasPage.vue') }],
   },
 
+  FILES: {
+    path: '/files',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/FilesPage.vue') }],
+  },
+
   ACCESS_CONTROL: {
     path: '/access-control',
     component: () => import('layouts/DashboardLayout.vue'),
     children: [
       { path: '', component: () => import('pages/AccessControlPage.vue') },
     ],
+  },
+
+  USERS: {
+    path: '/users',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/UsersPage.vue') }],
   },
 
   SAMPLE: {

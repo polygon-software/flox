@@ -4,7 +4,10 @@ import { invalidateTables } from 'src/apollo/invalidation';
 import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
 import { createImage } from 'src/flox/modules/image/services/image.service';
 import { TABLES } from 'src/flox/TABLES';
-import { createFile } from 'src/flox/modules/file/services/file.service';
+import {
+  createFile,
+  FileInputs,
+} from 'src/flox/modules/file/services/file.service';
 
 export type SelectedFile = {
   content: File;
@@ -17,7 +20,10 @@ export type SelectedFile = {
  * @param file - File that should be uploaded
  * @return Whether the upload was successful or not
  */
-export async function uploadFile(file: SelectedFile): Promise<FileEntity> {
+export async function uploadFile(
+  file: SelectedFile,
+  fileInputs: FileInputs
+): Promise<FileEntity> {
   const headers = {
     'Content-Type': file.content.type,
   };
@@ -25,9 +31,10 @@ export async function uploadFile(file: SelectedFile): Promise<FileEntity> {
   const createdFile = await createFile(
     file.content.name,
     file.content.type,
-    file.content.size
+    file.content.size,
+    fileInputs
   );
-  if (createdFile === null || createdFile.signedUrl === null) {
+  if (!createdFile || !createdFile.signedUrl) {
     throw new Error('Unable to create file');
   }
 

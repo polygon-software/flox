@@ -118,4 +118,7 @@ export default {
       },
     },
   },
+  access_control: {
+    invalid_group_name: 'Gruppenname nicht erlaubt',
+  },
 };

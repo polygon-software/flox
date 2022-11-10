@@ -52,6 +52,8 @@ export default abstract class AbstractSearchAccessControlService<
       this.extractWhere(options),
     );
 
+    console.log(where);
+
     const [data, count] = await this.repository.findAndCount({
       ...options,
       order: {

@@ -13,7 +13,7 @@ export const CREATE_FILE = {
       $publicReadAccess: Boolean
       $readAccess: [ID!]
       $writeAccess: [ID!]
-      $expires: Int
+      $path: String!
     ) {
       CreateFile(
         createFileInput: {
@@ -24,10 +24,11 @@ export const CREATE_FILE = {
           publicReadAccess: $publicReadAccess
           readAccess: $readAccess
           writeAccess: $writeAccess
-          expires: $expires
+          path: $path
         }
       ) {
         uuid
+        path
         createdAt
         mimetype
         filename
@@ -44,11 +45,12 @@ export const CREATE_FILE = {
 
 export const UPDATE_FILE = {
   mutation: gql`
-    mutation UpdateFile($uuid: ID!, $filename: String, $expires: Int) {
+    mutation UpdateFile($uuid: ID!, $filename: String, $path: String!) {
       UpdateFile(
-        updateFileInput: { uuid: $uuid, filename: $filename, expires: $expires }
+        updateFileInput: { uuid: $uuid, filename: $filename, path: $path }
       ) {
         uuid
+        path
         createdAt
         mimetype
         filename
@@ -67,6 +69,7 @@ export const DELETE_FILE = {
     mutation DeleteFile($uuid: ID!) {
       DeleteFile(deleteInput: { uuid: $uuid }) {
         uuid
+        path
         createdAt
         mimetype
         filename
@@ -80,8 +83,36 @@ export const DELETE_FILE = {
   cacheLocation: 'DeleteFile',
 };
 
+export const MANIPULATE_FILE_ACCESS_USER_GROUPS = {
+  mutation: gql`
+    mutation ManipulateFileAccessUserGroups(
+      $addReadAccess: [ID!]
+      $addWriteAccess: [ID!]
+      $removeReadAccess: [ID!]
+      $removeWriteAccess: [ID!]
+      $uuid: ID!
+    ) {
+      ManipulateFileAccessUserGroups(
+        manipulateAccessGroups: {
+          uuid: $uuid
+          addReadAccess: $addReadAccess
+          addWriteAccess: $addWriteAccess
+          removeReadAccess: $removeReadAccess
+          removeWriteAccess: $removeWriteAccess
+        }
+      ) {
+        uuid
+      }
+    }
+  `,
+  tables: [TABLES.FILE],
+  type: MutationTypes.DEVALIDATINGUPDATE,
+  cacheLocation: 'ManipulateFileAccessUserGroups',
+};
+
 export const FILE_MUTATIONS: MutationObject[] = [
   CREATE_FILE,
   UPDATE_FILE,
   DELETE_FILE,
+  MANIPULATE_FILE_ACCESS_USER_GROUPS,
 ];

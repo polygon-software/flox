@@ -86,6 +86,32 @@ export const ADD_USER_TO_USER_GROUP = {
   cacheLocation: 'AddUserToUserGroup',
 };
 
+export const ADD_USERS_TO_USER_GROUP = {
+  mutation: gql`
+    mutation AddUsersToUserGroup($userUuids: [ID!]!, $userGroupUuid: ID!) {
+      AddUsersToUserGroup(
+        addUsersToUserGroupInput: {
+          userGroupUuid: $userGroupUuid
+          userUuids: $userUuids
+        }
+      ) {
+        uuid
+        name
+        users {
+          uuid
+          username
+          email
+          role
+        }
+        __typename
+      }
+    }
+  `,
+  tables: ALL_TABLES,
+  type: MutationTypes.DEVALIDATINGUPDATE,
+  cacheLocation: 'AddUsersToUserGroup',
+};
+
 export const REMOVE_USER_FROM_USER_GROUP = {
   mutation: gql`
     mutation RemoveUserFromUserGroup($userUuid: ID!, $userGroupUuid: ID!) {

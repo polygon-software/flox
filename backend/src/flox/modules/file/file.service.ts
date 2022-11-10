@@ -9,11 +9,13 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
 import AccessControlService from '../access-control/access-control.service';
 
 import S3File from './entities/file.entity';
+import FolderOutput from './outputs/folder.output';
 
 @Injectable()
 export default class FileService extends AbstractSearchAccessControlService<S3File> {
@@ -54,7 +56,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
           ? 'AWS_PUBLIC_BUCKET_NAME'
           : 'AWS_PRIVATE_BUCKET_NAME',
       ),
-      Key: file.filename,
+      Key: file.uuid,
       'Content-Type': file.mimetype,
     };
     const command = new PutObjectCommand(uploadParams);
@@ -121,5 +123,38 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     );
     file.url = undefined;
     return file;
+  }
+
+  async filesToFolders(files: S3File[], path: string): Promise<FolderOutput[]> {
+    const folders: Record<string, FolderOutput> = {};
+    files.forEach((file) => {
+      const root = file.path.replace(path, '').split('/')[0];
+      if (!root) {
+        return;
+      }
+      if (!(root in folders)) {
+        const folder = new FolderOutput();
+        folder.uuid = uuidv4();
+        folder.name = root;
+        folder.files = 0;
+        folder.size = 0;
+        folder.createdAt = file.createdAt;
+        folder.updatedAt = file.updatedAt;
+        folders[root] = folder;
+      }
+      const folder = folders[root];
+      folder.files += 1;
+      folder.size += file.size;
+      folder.createdAt =
+        folder.createdAt > file.createdAt ? file.createdAt : folder.createdAt;
+      if (file.updatedAt && !folder.updatedAt) {
+        folder.updatedAt = file.updatedAt;
+      }
+      if (file.updatedAt && folder.updatedAt) {
+        folder.updatedAt =
+          folder.updatedAt < file.updatedAt ? file.updatedAt : folder.updatedAt;
+      }
+    });
+    return Object.values(folders);
   }
 }

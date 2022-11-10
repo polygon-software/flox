@@ -11,9 +11,11 @@ export class FileEntity extends BaseEntity {
     updatedAt: Date,
     deletedAt: Date | null,
     public mimetype: string,
-    public filename: string | null,
+    public filename: string,
     public size: number,
-    public signedUrl: string | null
+    public path: string,
+    public signedUrl?: string,
+    public url?: string
   ) {
     super(uuid, createdAt, updatedAt, deletedAt);
   }
