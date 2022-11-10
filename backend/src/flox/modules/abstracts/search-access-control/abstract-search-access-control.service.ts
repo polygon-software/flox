@@ -171,21 +171,24 @@ export default abstract class AbstractSearchAccessControlService<
     searchKey: NestedKeyOf<Entity>,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    const where = this.mixWhere(
-      [
-        this.nestedSearch(searchKey, queryArgs.filter),
-      ] as FindOptionsWhere<Entity>[],
-      this.extractWhere(options),
-    );
+    const combinedOptions = {
+      ...options,
+      where: this.mixWhere(
+        [this.nestedSearch(searchKey, queryArgs.filter)],
+        this.extractWhere(options),
+      ),
+    };
+
+    console.log(combinedOptions);
+    console.log(combinedOptions.where);
 
     const [data, count] = await this.repository.findAndCount({
-      ...options,
+      ...combinedOptions,
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
       } as FindOptionsOrder<Entity>,
       skip: queryArgs.skip,
       take: queryArgs.take,
-      where,
     });
     return { data, count };
   }

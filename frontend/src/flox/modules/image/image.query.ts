@@ -14,6 +14,8 @@ export const GET_IMAGE: QueryObject = {
         longitude
         capturedAt
         file {
+          filename
+          path
           url
         }
         labels {
@@ -46,6 +48,8 @@ export const GET_IMAGES: QueryObject = {
         longitude
         capturedAt
         file {
+          filename
+          path
           url
         }
         labels {
@@ -78,6 +82,8 @@ export const GET_MY_IMAGES: QueryObject = {
         longitude
         capturedAt
         file {
+          filename
+          path
           url
         }
         labels {
@@ -110,6 +116,8 @@ export const GET_ALL_IMAGES: QueryObject = {
         longitude
         capturedAt
         file {
+          filename
+          path
           url
         }
         labels {
@@ -142,6 +150,8 @@ export const GET_ALL_MY_IMAGES: QueryObject = {
         longitude
         capturedAt
         file {
+          filename
+          path
           url
         }
         labels {

@@ -132,7 +132,7 @@
     </q-drawer>
 
     <q-page-container>
-      <div class="q-pa-lg">
+      <div class="q-pa-lg relative-position">
         <router-view />
       </div>
     </q-page-container>

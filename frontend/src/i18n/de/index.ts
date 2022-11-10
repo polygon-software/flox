@@ -100,6 +100,8 @@ export default {
     role: 'Rolle',
   },
   object_recognition: {
+    import_images: 'Bilder importieren',
+    search_files: 'Dateien suchen',
     object_recognition: 'Object Recognition',
   },
   messages: {

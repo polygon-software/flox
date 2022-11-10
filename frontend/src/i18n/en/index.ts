@@ -98,6 +98,8 @@ export default {
     role: 'Role',
   },
   object_recognition: {
+    import_images: 'Import Images',
+    search_files: 'Search Files',
     object_recognition: 'Object Recognition',
   },
   messages: {
