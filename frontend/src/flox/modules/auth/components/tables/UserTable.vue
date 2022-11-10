@@ -36,6 +36,7 @@ import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
 import { ColumnInterface } from 'components/tables/useDataTable';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import { i18n } from 'boot/i18n';
 
 const props = withDefaults(
   defineProps<{
@@ -72,28 +73,28 @@ onBeforeUnmount(() => {
 const userTableColumns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
     name: 'avatar',
-    label: 'Avatar',
+    label: i18n.global.t('users.avatar'),
     field: 'avatar',
     align: 'left',
     sortable: false,
   },
   {
     name: 'username',
-    label: 'Username',
+    label: i18n.global.t('users.username'),
     field: 'username',
     align: 'left',
     sortable: true,
   },
   {
     name: 'email',
-    label: 'E-Mail',
+    label: i18n.global.t('users.email'),
     field: 'email',
     align: 'left',
     sortable: true,
   },
   {
     name: 'role',
-    label: 'Role',
+    label: i18n.global.t('users.role'),
     field: 'role',
     sortable: true,
   },

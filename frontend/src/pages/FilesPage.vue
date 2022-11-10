@@ -35,7 +35,7 @@
       <q-btn
         unelevated
         color="primary"
-        :label="$t('file.upload')"
+        :label="$t('files.upload')"
         icon-right="file_upload"
         no-caps
         @click="openFileUploadDialog"

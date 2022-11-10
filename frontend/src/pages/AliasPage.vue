@@ -69,6 +69,7 @@ import {
 } from 'src/flox/modules/alias/services/alias.service';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
+import { i18n } from "boot/i18n";
 
 const $authStore = useAuthStore();
 const currentAlias: Ref<string> = ref('');
@@ -104,7 +105,7 @@ onMounted(() => {
 const userColumns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
     name: 'username',
-    label: 'Username',
+    label: i18n.global.t('users.username'),
     field: 'username',
     align: 'left',
     sortable: true,
@@ -112,7 +113,7 @@ const userColumns: Ref<ColumnInterface<UserEntity>[]> = ref([
   },
   {
     name: 'email',
-    label: 'E-Mail',
+    label: i18n.global.t('users.email'),
     field: 'email',
     align: 'left',
     sortable: true,
@@ -121,7 +122,7 @@ const userColumns: Ref<ColumnInterface<UserEntity>[]> = ref([
   },
   {
     name: 'role',
-    label: 'Role',
+    label: i18n.global.t('users.role'),
     field: 'role',
     sortable: true,
   },

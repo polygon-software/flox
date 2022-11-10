@@ -111,6 +111,7 @@ import {
 import { sleep } from 'src/tools/general.tool';
 import LazySearchField from 'components/forms/LazySearchField.vue';
 import MultiUserAvatars from 'src/flox/modules/auth/components/avatar/MultiUserAvatars.vue';
+import { i18n } from "boot/i18n";
 
 const $q = useQuasar();
 
@@ -185,7 +186,7 @@ const userGroupColumns: Ref<ColumnInterface<UserGroupEntity>[]> = ref([
   {
     name: 'name',
     align: 'left',
-    label: 'Group Name',
+    label: i18n.global.t('access_control.group_name'),
     field: 'name',
     sortable: true,
     edit: true,

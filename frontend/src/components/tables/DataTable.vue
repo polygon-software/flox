@@ -76,7 +76,7 @@
           hide-bottom-space
           dense
           debounce="300"
-          placeholder="Search"
+          :placeholder="$t('general.search')"
         >
           <template #append>
             <q-icon name="search" />
@@ -89,7 +89,7 @@
           multiple
           dense
           hide-bottom-space
-          :display-value="$q.lang.table.columns"
+          :display-value="$t('general.display')"
           emit-value
           map-options
           :options="columns"

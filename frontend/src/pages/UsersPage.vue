@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h4>Users</h4>
+    <h4>{{ $t('users.users') }}</h4>
     <DataTable
-      title="User Table"
+      :title="$t('users.users')"
       prepend-slot
       export-selection
       delete-selection
       multi
-      prepend-name="Avatar"
+      :prepend-name="$t('users.avatar')"
       :columns="columns"
       :query="SEARCH_USERS"
       :update-mutation="UPDATE_USER"
@@ -39,6 +39,7 @@ import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
+import { i18n } from 'boot/i18n';
 
 const $authStore = useAuthStore();
 const currentAlias: Ref<string> = ref('');
@@ -53,7 +54,7 @@ const emailRules: ValidationRule[] = [
 const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
     name: 'username',
-    label: 'Username',
+    label: i18n.global.t('users.username'),
     field: 'username',
     align: 'left',
     sortable: true,
@@ -61,7 +62,7 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   },
   {
     name: 'email',
-    label: 'E-Mail',
+    label: i18n.global.t('users.email'),
     field: 'email',
     align: 'left',
     sortable: true,
@@ -70,7 +71,7 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   },
   {
     name: 'role',
-    label: 'Role',
+    label: i18n.global.t('users.role'),
     field: 'role',
     sortable: true,
   },

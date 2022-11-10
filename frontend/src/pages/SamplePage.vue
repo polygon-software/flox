@@ -30,7 +30,7 @@ import { i18n } from 'boot/i18n';
 import DosChecker from 'components/sample/DosChecker.vue';
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import SampleForm from 'components/sample/SampleForm.vue';
-import AliasIndicator from 'src/flox/modules/alias/AliasIndicator.vue';
+import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';
 
 const imageUuid: Ref<string> = ref('');
 

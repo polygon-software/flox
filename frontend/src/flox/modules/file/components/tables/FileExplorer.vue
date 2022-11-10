@@ -3,7 +3,7 @@
     <div>
       <q-breadcrumbs>
         <q-breadcrumbs-el
-          label="Home"
+          :label="$t('files.root')"
           icon="home"
           class="cursor-pointer"
           @click="setPathToRoot"
@@ -171,16 +171,18 @@
                       />
                     </q-item-section>
                   </q-item>
-                  <q-item
-                    v-close-popup
-                    clickable
-                    @click="openAccessControlGroupDialog(bodyProps.row.uuid)"
-                  >
-                    <q-item-section>Access Rights</q-item-section>
-                    <q-item-section avatar>
-                      <q-icon name="lock" color="grey" size="large" />
-                    </q-item-section>
-                  </q-item>
+                  <AdminOnly>
+                    <q-item
+                      v-close-popup
+                      clickable
+                      @click="openAccessControlGroupDialog(bodyProps.row.uuid)"
+                    >
+                      <q-item-section>Access Rights</q-item-section>
+                      <q-item-section avatar>
+                        <q-icon name="lock" color="grey" size="large" />
+                      </q-item-section>
+                    </q-item>
+                  </AdminOnly>
                 </q-list>
               </q-menu>
             </q-btn>
@@ -220,6 +222,7 @@ import { i18n } from 'boot/i18n';
 import FolderEntity from 'src/flox/modules/file/entities/folder.entity';
 import { ColumnInterface } from 'components/tables/useDataTable';
 import ManageItemAccessControlGroups from 'src/flox/modules/access-control/components/dialogs/ManageItemAccessControlGroupsDialog.vue';
+import AdminOnly from 'src/flox/modules/auth/components/roles/AdminOnly.vue';
 
 const $q = useQuasar();
 
@@ -250,6 +253,22 @@ type FileOrFolder = {
 const files: Ref<FileEntity[]> = ref([]);
 const folders: Ref<FolderEntity[]> = ref([]);
 const isLoading: Ref<boolean> = ref(false);
+
+/**
+ * Users search input, used to search for file names indepenently of folder
+ */
+const searchInput: Ref<string> = ref('');
+
+/**
+ * Holds file being moved
+ */
+const fileBeingMoved: Ref<FileEntity | null> = ref(null);
+
+/**
+ * Handles renaming of files
+ */
+const fileBeingRenamed: Ref<FileEntity | null> = ref(null);
+const newFileNameInput: Ref<string> = ref('');
 
 /**
  * Refresh loads all new files and folders according to the current path
@@ -300,11 +319,6 @@ const filesAndFolders: ComputedRef<FileOrFolder[]> = computed(() => {
   });
   return joint;
 });
-
-/**
- * Users search input, used to search for file names indepenently of folder
- */
-const searchInput: Ref<string> = ref('');
 
 /**
  * Function that searches for files according to a user search input independently of current folder
@@ -390,8 +404,6 @@ function setPathToRoot(): void {
   emit(EMIT_UPDATE_PAT, '/');
 }
 
-const fileBeingMoved: Ref<FileEntity | null> = ref(null);
-
 /**
  * Handles click on any file or folder on the list
  * @param row - content of the row, which is either a file or a folder
@@ -432,9 +444,6 @@ async function moveFileToPath(): Promise<void> {
   }
   await refresh();
 }
-
-const fileBeingRenamed: Ref<FileEntity | null> = ref(null);
-const newFileNameInput: Ref<string> = ref('');
 
 /**
  * Initiates renaming of a file
@@ -560,7 +569,7 @@ const fileOrFolderColumns: ColumnInterface<FileOrFolder>[] = [
   },
   {
     name: 'name',
-    label: 'Name',
+    label: i18n.global.t('files.filename'),
     field: 'name',
     required: true,
     align: 'left',
@@ -569,7 +578,7 @@ const fileOrFolderColumns: ColumnInterface<FileOrFolder>[] = [
   },
   {
     name: 'updatedAt',
-    label: 'Last Updated',
+    label: i18n.global.t('files.last_updated'),
     field: 'updatedAt',
     required: true,
     align: 'left',
@@ -578,7 +587,7 @@ const fileOrFolderColumns: ColumnInterface<FileOrFolder>[] = [
   },
   {
     name: 'size',
-    label: 'Size',
+    label: i18n.global.t('files.size'),
     field: 'size',
     required: true,
     sortable: true,

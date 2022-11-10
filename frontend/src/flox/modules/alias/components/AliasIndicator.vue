@@ -42,9 +42,9 @@ function removeAlias(): void {
 .alias {
   position: fixed;
   height: 50px;
-  width: 220px;
-  bottom: 75px;
-  right: -160px;
+  width: 250px;
+  bottom: 55px;
+  right: -180px;
   z-index: 100000;
   transition: 0.5s;
   padding-right: 30px;
@@ -56,7 +56,7 @@ function removeAlias(): void {
     padding: 4px;
     font-weight: 600;
     text-align: center;
-    width: 55px;
+    width: 65px;
   }
 }
 .alias:hover {

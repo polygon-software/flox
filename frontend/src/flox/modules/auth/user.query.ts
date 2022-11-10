@@ -15,6 +15,7 @@ export const GET_MY_USER: QueryObject = {
         username
         cognitoUuid
         email
+        role
         __typename
       }
     }
@@ -31,6 +32,7 @@ export const GET_USER: QueryObject = {
         username
         cognitoUuid
         email
+        role
         __typename
       }
     }
@@ -47,6 +49,7 @@ export const GET_MULTIPLE_USERS: QueryObject = {
         username
         cognitoUuid
         email
+        role
         __typename
       }
     }
@@ -63,6 +66,7 @@ export const GET_ALL_USERS: QueryObject = {
         username
         cognitoUuid
         email
+        role
         __typename
       }
     }

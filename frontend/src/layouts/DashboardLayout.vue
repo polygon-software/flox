@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-grey-1">
-    <q-header elevated class="bg-white text-grey-8 q-py-xs" height-hint="58">
+    <q-header class="bg-white text-grey-8 q-py-xs" height-hint="58" bordered>
       <q-toolbar>
         <q-btn
           flat
@@ -147,7 +147,8 @@ import { inject, Ref, ref } from 'vue';
 import { RouterService } from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
-import AliasIndicator from 'src/flox/modules/alias/AliasIndicator.vue';
+import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';
+import { i18n } from 'boot/i18n';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authStore = useAuthStore();
@@ -161,25 +162,25 @@ const sideMenu = [
     links: [
       {
         icon: 'home',
-        text: 'Home',
+        text: i18n.global.t('menu.home'),
       },
       {
         icon: 'group',
-        text: 'Users',
+        text: i18n.global.t('menu.users'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.USERS);
         },
       },
       {
         icon: 'lock',
-        text: 'Access Rights',
+        text: i18n.global.t('menu.access_rights'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.ACCESS_CONTROL);
         },
       },
       {
         icon: 'preview',
-        text: 'Alias',
+        text: i18n.global.t('menu.alias'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.ALIAS);
         },
@@ -190,27 +191,26 @@ const sideMenu = [
     links: [
       {
         icon: 'folder',
-        text: 'Files',
+        text: i18n.global.t('menu.files'),
         click: (): void => {
           void $routerService?.routeTo(ROUTES.FILES);
         },
       },
-      { icon: 'image', text: 'Images' },
     ],
   },
   {
     links: [
-      { icon: 'data_object', text: 'Object Recognition' },
-      { icon: 'face', text: 'Face Recognition' },
-      { icon: 'manage_search', text: 'Text Extraction' },
+      { icon: 'data_object', text: i18n.global.t('menu.object_recognition') },
+      { icon: 'face', text: i18n.global.t('menu.face_recognition') },
+      { icon: 'manage_search', text: i18n.global.t('menu.text_extraction') },
     ],
   },
   {
     links: [
-      { icon: 'data_object', text: 'Settings' },
-      { icon: 'dns', text: 'Server Health' },
-      { icon: 'mail', text: 'Mail' },
-      { icon: 'feedback', text: 'Send feedback' },
+      { icon: 'data_object', text: i18n.global.t('menu.settings') },
+      { icon: 'dns', text: i18n.global.t('menu.server_health') },
+      { icon: 'mail', text: i18n.global.t('menu.mail') },
+      { icon: 'feedback', text: i18n.global.t('menu.feedback') },
     ],
   },
 ];
@@ -218,21 +218,9 @@ const sideMenu = [
 const bottomLinks = [
   {
     links: [
-      { text: 'About' },
-      { text: 'Press' },
-      { text: 'Copyright' },
-      { text: 'Contact us' },
-      { text: 'Creators' },
-      { text: 'Advertise' },
-      { text: 'Developers' },
-    ],
-  },
-  {
-    links: [
-      { text: 'Terms' },
-      { text: 'Privacy' },
-      { text: 'Policy & Safety' },
-      { text: 'Test new features' },
+      { text: i18n.global.t('footer.developers') },
+      { text: i18n.global.t('footer.privacy') },
+      { text: i18n.global.t('footer.terms') },
     ],
   },
 ];

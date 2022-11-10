@@ -1,5 +1,5 @@
 <template>
-  <template v-if="!$authStore.loggedIn && $authStore.isAdmin">
+  <template v-if="$authStore.loggedIn && $authStore.isAdmin">
     <slot />
   </template>
 </template>
