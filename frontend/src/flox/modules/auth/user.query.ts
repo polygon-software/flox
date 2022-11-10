@@ -7,7 +7,7 @@ import { TABLES } from 'src/flox/TABLES';
  * User-related queries
  */
 
-export const GET_MY_USER = {
+export const GET_MY_USER: QueryObject = {
   query: gql`
     query MyUser {
       MyUser {
@@ -23,7 +23,7 @@ export const GET_MY_USER = {
   cacheLocation: 'MyUser',
 };
 
-export const GET_USER = {
+export const GET_USER: QueryObject = {
   query: gql`
     query User($uuid: ID!) {
       User(uuid: $uuid) {
@@ -39,7 +39,7 @@ export const GET_USER = {
   cacheLocation: 'User',
 };
 
-export const GET_MULTIPLE_USERS = {
+export const GET_MULTIPLE_USERS: QueryObject = {
   query: gql`
     query Users($uuids: [ID!]) {
       Users(uuids: $uuids) {
@@ -55,7 +55,7 @@ export const GET_MULTIPLE_USERS = {
   cacheLocation: 'allUsers',
 };
 
-export const GET_ALL_USERS = {
+export const GET_ALL_USERS: QueryObject = {
   query: gql`
     query AllUsers($take: Int, $skip: Int) {
       AllUsers(take: $take, skip: $skip) {
@@ -71,7 +71,7 @@ export const GET_ALL_USERS = {
   cacheLocation: 'allUsers',
 };
 
-export const SEARCH_USERS = {
+export const SEARCH_USERS: QueryObject = {
   query: gql`
     query SearchUsers(
       $take: Int

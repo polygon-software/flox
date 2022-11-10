@@ -2,15 +2,15 @@
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card style="width: 600px; max-width: 80vw">
       <q-card-section class="row items-center q-pb-none">
-        <div class="text-h6">Create new File</div>
+        <div class="text-h6">{{ $t('files.add') }}</div>
         <q-space />
         <q-btn v-close-popup icon="close" flat round dense />
       </q-card-section>
       <q-card-section>
         <q-file
-          ref="filePicker"
+          ref="filePickerRef"
           outlined
-          label="Select Files"
+          :label="$t('files.selected_files')"
           :accept="props.acceptedFiles"
           :max-file-size="props.maxFileSize"
           :max-files="props.maxFiles"
@@ -24,15 +24,14 @@
         <FileList :files="selectedFiles" @remove-file="removeFile($event)" />
       </q-card-section>
 
-      <!-- buttons example -->
       <q-card-actions align="right">
-        <q-btn label="Cancel" outline @click="onDialogCancel" />
+        <q-btn :label="$t('general.cancel')" outline @click="onDialogCancel" />
         <q-btn
           :disable="selectedFiles.length === 0"
           color="primary"
-          label="Upload"
+          :label="$t('files.upload')"
           icon-right="upload"
-          @click="onOKClick"
+          @click="uploadSelectedFiles"
         />
       </q-card-actions>
     </q-card>
@@ -41,7 +40,7 @@
 
 <script setup lang="ts">
 import { QFile, useDialogPluginComponent } from 'quasar';
-import { defineProps, ref, Ref } from 'vue';
+import { defineProps, ref, Ref, toRaw } from 'vue';
 
 import useFileUpload from 'src/flox/modules/file/useFileUpload';
 import FileList from 'src/flox/modules/file/components/forms/fields/FileList.vue';
@@ -62,21 +61,18 @@ const props = withDefaults(
 
 defineEmits([...useDialogPluginComponent.emits]);
 
-const filePicker: Ref<QFile | null> = ref(null);
+const filePickerRef: Ref<QFile | null> = ref(null);
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
   useDialogPluginComponent();
-const {
-  selectedFiles,
-  addFile,
-  removeFile,
-  clearFileList,
-  onFilePicked,
-  uploadFiles,
-} = useFileUpload(filePicker);
+const { selectedFiles, removeFile, onFilePicked, uploadFiles } =
+  useFileUpload(filePickerRef);
 
-async function onOKClick() {
-  await uploadFiles(props.path.value);
+/**
+ * Uploads selected files to server
+ */
+async function uploadSelectedFiles(): Promise<void> {
+  await uploadFiles(toRaw(props.path));
   onDialogOK();
 }
 </script>

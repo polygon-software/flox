@@ -1,5 +1,5 @@
 import { ArgsType, Field, ID } from '@nestjs/graphql';
-import {IsUUID} from 'class-validator';
+import { IsUUID } from 'class-validator';
 
 @ArgsType()
 export default class GetMultipleArgs {

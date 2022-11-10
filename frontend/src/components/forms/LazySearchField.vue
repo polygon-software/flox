@@ -16,7 +16,9 @@
   >
     <template #no-option>
       <q-item>
-        <q-item-section class="text-grey"> No results </q-item-section>
+        <q-item-section class="text-grey">
+          {{ $t('general.no_results') }}
+        </q-item-section>
       </q-item>
     </template>
   </q-select>
@@ -35,7 +37,7 @@ const props = withDefaults(
     modelValue: BaseEntity[];
     optionsLabel: string;
     query: QueryObject;
-    selectProps: QSelectProps;
+    selectProps: Omit<QSelectProps, 'modelValue'>;
   }>(),
   {
     selectProps: () => ({}),
@@ -48,11 +50,19 @@ const emit = defineEmits<{
 
 const options: Ref<BaseEntity[]> = ref([]);
 
-async function filterFn(val, update, abort) {
+/**
+ * Filter function that dynamically calls backend for new data depending on input
+ * @param userInputValue - value that the user inputted
+ * @param update - function that updates field options
+ */
+async function filterFn(
+  userInputValue: string,
+  update: (cbk: () => void) => void
+): Promise<void> {
   const { data } = await executeQuery<CountQuery<BaseEntity>>(props.query, {
     skip: 0,
     take: 5,
-    filter: val,
+    filter: userInputValue,
     sortBy: 'uuid',
     descending: false,
   });

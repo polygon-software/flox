@@ -18,6 +18,7 @@ export type SelectedFile = {
 /**
  * Uploads a single file to a given endpoint
  * @param file - File that should be uploaded
+ * @param fileInputs - additional inputs that are passed to the file creation API call
  * @return Whether the upload was successful or not
  */
 export async function uploadFile(
@@ -38,8 +39,6 @@ export async function uploadFile(
     throw new Error('Unable to create file');
   }
 
-  console.log('GOT SIGNED URL', createdFile.signedUrl);
-
   await axios
     .put(createdFile.signedUrl, file.content, {
       headers,
@@ -47,8 +46,6 @@ export async function uploadFile(
     .catch((e: Error) => {
       throw new Error(`File upload error: ${e.message}`);
     });
-
-  console.log({ createdFile });
 
   if (file.content.type.split('/')[0] === 'image') {
     await createImage(createdFile.uuid, true);

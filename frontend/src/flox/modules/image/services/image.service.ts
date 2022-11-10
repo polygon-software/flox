@@ -18,9 +18,10 @@ import {
 import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
 
 /**
- * Returns an image for a given uuid
- * @param uuid - uuid of image
- * @returns Image File
+ * Fetches a private image
+ * @param uuid - uuid of private image
+ * @param expires - number of seconds in which the image link shall expire
+ * @returns Private image
  */
 export async function getImage(
   uuid: string,
@@ -33,6 +34,12 @@ export async function getImage(
   return data;
 }
 
+/**
+ * Fetches list of images given their uuids
+ * @param uuids - uuids of images to fetch
+ * @param expires - number of seconds in which the image link shall expire
+ * @returns images
+ */
 export async function getImages(
   uuids: string[],
   expires?: number
@@ -44,6 +51,12 @@ export async function getImages(
   return data;
 }
 
+/**
+ * Fetch images that belong to the user
+ * @param uuids - uids of images to fetch
+ * @param expires - number of seconds in which the image link shall expire
+ * @returns users fils
+ */
 export async function getMyImages(
   uuids: string[],
   expires?: number
@@ -55,9 +68,16 @@ export async function getMyImages(
   return data;
 }
 
+/**
+ * Fetches all images with pagination
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param expires - number of seconds in which the image link shall expire
+ * @returns images matching the path
+ */
 export async function getAllImages(
-  skip: number,
   take: number,
+  skip: number,
   expires?: number
 ): Promise<ImageEntity[]> {
   const { data } = await executeQuery<ImageEntity[]>(GET_ALL_IMAGES, {
@@ -68,9 +88,16 @@ export async function getAllImages(
   return data;
 }
 
+/**
+ * Fetches all images of user with pagination
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param expires - number of seconds in which the image link shall expire
+ * @returns users images matching the path
+ */
 export async function getAllMyImages(
-  skip: number,
   take: number,
+  skip: number,
   expires?: number
 ): Promise<ImageEntity[]> {
   const { data } = await executeQuery<ImageEntity[]>(GET_ALL_MY_IMAGES, {
@@ -82,8 +109,9 @@ export async function getAllMyImages(
 }
 
 /**
- * Returns an image for a given file uuid
+ * Returns an image for a given image uuid
  * @param file - uuid of image
+ * @param expires - number of seconds in which the file link shall expire
  * @returns Image file belonging to File
  */
 export async function getImageForFile(
@@ -97,17 +125,27 @@ export async function getImageForFile(
   return data;
 }
 
+/**
+ * Searches for image
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param filter - search term for imagename
+ * @param sortBy - column name to sort by
+ * @param descending - sort ascending or descending
+ * @param expires - number of seconds in which the image link shall expire
+ * @returns search output object
+ */
 export async function searchImages(
-  skip: number,
   take: number,
+  skip: number,
   filter: string,
   sortBy: string,
   descending: boolean,
   expires?: number
 ): Promise<CountQuery<ImageEntity>> {
   const { data } = await executeQuery<CountQuery<ImageEntity>>(SEARCH_IMAGES, {
-    skip,
     take,
+    skip,
     filter,
     sortBy,
     descending,
@@ -116,9 +154,19 @@ export async function searchImages(
   return data;
 }
 
+/**
+ * Searches for users images
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param filter - search term for imagename
+ * @param sortBy - column name to sort by
+ * @param descending - sort ascending or descending
+ * @param expires - number of seconds in which the image link shall expire
+ * @returns search output object
+ */
 export async function searchMyImages(
-  skip: number,
   take: number,
+  skip: number,
   filter: string,
   sortBy: string,
   descending: boolean,
@@ -127,8 +175,8 @@ export async function searchMyImages(
   const { data } = await executeQuery<CountQuery<ImageEntity>>(
     SEARCH_MY_IMAGES,
     {
-      skip,
       take,
+      skip,
       filter,
       sortBy,
       descending,

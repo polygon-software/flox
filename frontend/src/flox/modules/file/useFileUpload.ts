@@ -91,6 +91,7 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
 
   /**
    * Triggers a separate upload for each file. Only uploads files that haven't been successfully uploaded before.
+   * @param path - path to which file shall be uploaded to
    */
   async function uploadFiles(path: string): Promise<void> {
     const uploads = selectedFiles.value.map(async (file) => {

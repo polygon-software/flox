@@ -24,11 +24,21 @@ export async function fetchMyUser(): Promise<UserEntity> {
   return data;
 }
 
+/**
+ * Get a certain user by its uuid
+ * @param uuid - uuid of user to fetch
+ * @returns user
+ */
 export async function getUser(uuid: String): Promise<UserEntity> {
   const { data } = await executeQuery<UserEntity>(GET_USER, { uuid });
   return data;
 }
 
+/**
+ * Get multiple users by their uuids
+ * @param uuids - uuids of users
+ * @returns users
+ */
 export async function getUsers(uuids: String[]): Promise<UserEntity[]> {
   const { data } = await executeQuery<UserEntity[]>(GET_MULTIPLE_USERS, {
     uuids,
@@ -36,6 +46,12 @@ export async function getUsers(uuids: String[]): Promise<UserEntity[]> {
   return data;
 }
 
+/**
+ * Get all users with pagination
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @returns page of users
+ */
 export async function getAllUsers(
   take: number,
   skip: number
@@ -47,6 +63,15 @@ export async function getAllUsers(
   return data;
 }
 
+/**
+ * Search users
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param filter - search input for username
+ * @param sortBy - column to sort results by
+ * @param descending - sort ascending or descending
+ * @returns search results
+ */
 export async function searchUsers(
   take: number,
   skip: number,
@@ -84,6 +109,13 @@ export async function createUser(
   return data ?? null;
 }
 
+/**
+ * Update an existing user
+ * @param uuid - users uuid
+ * @param username - users username
+ * @param email - users email
+ * @returns updated user
+ */
 export async function updateUser(
   uuid: string,
   username: string,
@@ -97,6 +129,11 @@ export async function updateUser(
   return data ?? null;
 }
 
+/**
+ * Delete a user by its uuid
+ * @param uuid - uuid of user to delete
+ * @returns deleted user
+ */
 export async function deleteUser(uuid: string): Promise<UserEntity | null> {
   const { data } = await executeMutation<UserEntity>(DELETE_USER, {
     uuid,
@@ -104,6 +141,11 @@ export async function deleteUser(uuid: string): Promise<UserEntity | null> {
   return data ?? null;
 }
 
+/**
+ * Generates an avatar image for a user given its uuid
+ * @param uuid - uuid of user
+ * @returns url that can be used as an image source for an avatar
+ */
 export function avatarForUser(uuid: string): string {
   const base = 'https://source.boringavatars.com/beam/52/';
   return `${base}${uuid}?colors=388087,00a0b0,6fb3b8,326e73,388087,c2edce`;

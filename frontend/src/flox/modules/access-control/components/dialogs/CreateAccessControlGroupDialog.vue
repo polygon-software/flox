@@ -2,42 +2,44 @@
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card style="width: 600px; max-width: 80vw">
       <q-card-section class="row items-center q-pb-none">
-        <div class="text-h6">Create new Access Group</div>
+        <div class="text-h6">{{ $t('access_control.create_group') }}</div>
         <q-space />
         <q-btn v-close-popup icon="close" flat round dense />
       </q-card-section>
+
       <q-card-section>
-        <q-form ref="creationForm" class="q-gutter-md">
+        <q-form ref="accessGroupCreationForm" class="q-gutter-md">
           <p>
-            Create a new access group by providing a group name and specifying
-            users that belong to this group. You can always add/remove users
-            later on.
+            {{ $t('access_control.create_description') }}
           </p>
           <q-input
-            v-model="newGroupName"
+            v-model="accessGroupNameInput"
             outlined
             dense
-            label="New Group Name"
+            :label="$t('access_control.group_name_label')"
             :rules="nameRules"
           />
           <LazySearchField
-            v-model="selectedUsers"
+            v-model="selectedUsersForAccessGroup"
             :query="SEARCH_USERS"
             options-label="username"
-            :select-props="{ label: 'Select Users' }"
+            :select-props="{ label: $t('access_control.select_users') }"
           />
         </q-form>
       </q-card-section>
 
-      <!-- buttons example -->
       <q-card-actions align="right">
-        <q-btn unelevated label="Cancel" @click="onDialogCancel" />
+        <q-btn
+          unelevated
+          :label="$t('general.cancel')"
+          @click="onDialogCancel"
+        />
         <q-btn
           unelevated
           color="primary"
-          label="Create"
+          :label="$t('general.create')"
           icon-right="add"
-          @click="onOKClick"
+          @click="createAccessGroup"
         />
       </q-card-actions>
     </q-card>
@@ -63,9 +65,9 @@ defineEmits([...useDialogPluginComponent.emits]);
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
   useDialogPluginComponent();
 
-const newGroupName: Ref<string> = ref('');
-const selectedUsers: Ref<UserEntity[]> = ref([]);
-const creationForm: Ref<QForm | null> = ref(null);
+const accessGroupNameInput: Ref<string> = ref('');
+const selectedUsersForAccessGroup: Ref<UserEntity[]> = ref([]);
+const accessGroupCreationForm: Ref<QForm | null> = ref(null);
 
 const nameRules: ValidationRule[] = [
   joiSchemaToValidationRule(
@@ -74,13 +76,16 @@ const nameRules: ValidationRule[] = [
   ),
 ];
 
-async function onOKClick() {
-  if (creationForm.value) {
-    const valid = await creationForm.value.validate();
+/**
+ * Creates user access group with selected users and closes popup
+ */
+async function createAccessGroup(): Promise<void> {
+  if (accessGroupCreationForm.value) {
+    const valid = await accessGroupCreationForm.value.validate();
     if (valid) {
       await createUserGroup(
-        newGroupName.value,
-        selectedUsers.value.map((user) => user.uuid)
+        accessGroupNameInput.value,
+        selectedUsersForAccessGroup.value.map((user) => user.uuid)
       );
       onDialogOK();
     }

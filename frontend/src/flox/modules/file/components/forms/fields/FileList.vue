@@ -23,7 +23,7 @@
             v-if="file.content.type.includes('image/')"
             :src="file.url"
             spinner-color="primary"
-            style="max-width: 250px; max-height: 100px;"
+            style="max-width: 250px; max-height: 100px"
             fit="contain"
           />
           <q-item-label v-else>

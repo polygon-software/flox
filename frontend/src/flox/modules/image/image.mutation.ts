@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
-import { MutationTypes } from 'src/apollo/mutation';
+import { MutationObject, MutationTypes } from 'src/apollo/mutation';
 import { TABLES } from 'src/flox/TABLES';
 
-export const CREATE_IMAGE = {
+export const CREATE_IMAGE: MutationObject = {
   mutation: gql`
     mutation CreateImage($file: ID!, $objectRecognition: Boolean) {
       CreateImage(
@@ -29,7 +29,7 @@ export const CREATE_IMAGE = {
   cacheLocation: 'CreateImage',
 };
 
-export const DELETE_IMAGE = {
+export const DELETE_IMAGE: MutationObject = {
   mutation: gql`
     mutation DeleteImage($uuid: ID!) {
       DeleteImage(deleteImageInput: { uuid: $uuid }) {

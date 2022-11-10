@@ -1,12 +1,12 @@
 import gql from 'graphql-tag';
 
-import { MutationTypes } from 'src/apollo/mutation';
+import { MutationObject, MutationTypes } from 'src/apollo/mutation';
 import { TABLES } from 'src/flox/TABLES';
 
 /**
  * User-related mutations
  */
-export const CREATE_USER = {
+export const CREATE_USER: MutationObject = {
   mutation: gql`
     mutation CreateUser(
       $username: String!
@@ -33,7 +33,7 @@ export const CREATE_USER = {
   cacheLocation: 'CreateUser',
 };
 
-export const UPDATE_USER = {
+export const UPDATE_USER: MutationObject = {
   mutation: gql`
     mutation UpdateUser($uuid: ID!, $username: String, $email: String!) {
       UpdateUser(
@@ -52,7 +52,7 @@ export const UPDATE_USER = {
   cacheLocation: 'UpdateUser',
 };
 
-export const DELETE_USER = {
+export const DELETE_USER: MutationObject = {
   mutation: gql`
     mutation DeleteUser($uuid: ID!) {
       DeleteUser(deleteUserInput: { uuid: $uuid }) {

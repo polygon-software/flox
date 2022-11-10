@@ -6,7 +6,11 @@
       class="absolute"
       :style="`left: ${n * 15}px`"
     >
-      <img :src="avatarForUser(user.uuid)" style="border: 2px solid white" />
+      <img
+        :src="avatarForUser(user.uuid)"
+        style="border: 2px solid white"
+        alt="User Avatar"
+      />
     </q-avatar>
   </template>
   <span

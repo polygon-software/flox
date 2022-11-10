@@ -7,16 +7,17 @@
       flat
       hide-bottom
       :rows="users"
-      :columns="columns"
+      :columns="userTableColumns"
       row-key="uuid"
       :pagination="initialPagination"
       selection="single"
     >
-      <template #body-cell-avatar="props">
-        <q-td :props="props">
+      <template #body-cell-avatar="bodyProps">
+        <q-td :props="bodyProps">
           <q-avatar size="26px">
             <img
-              :src="avatarForUser(props.row.uuid)"
+              alt="avatar"
+              :src="avatarForUser(bodyProps.row.uuid)"
               style="border: 2px solid white"
             />
           </q-avatar>
@@ -47,8 +48,10 @@ const props = withDefaults(
   }
 );
 
+const EMIT_UPDATE_SELECTED = 'update:selected';
+
 const emit = defineEmits<{
-  (e: 'update:selected', selected: BaseEntity[]): void;
+  (e: typeof EMIT_UPDATE_SELECTED, selected: BaseEntity[]): void;
 }>();
 
 const initialPagination = {
@@ -60,13 +63,13 @@ const initialPagination = {
 
 const selected: Ref<UserEntity[]> = ref([]);
 watch(selected, (val) => {
-  emit('update:selected', val);
+  emit(EMIT_UPDATE_SELECTED, val);
 });
 onBeforeUnmount(() => {
-  emit('update:selected', []);
+  emit(EMIT_UPDATE_SELECTED, []);
 });
 
-const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
+const userTableColumns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
     name: 'avatar',
     label: 'Avatar',
@@ -96,5 +99,3 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   },
 ]);
 </script>
-
-<style scoped></style>

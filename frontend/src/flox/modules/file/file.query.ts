@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { QueryObject } from 'src/apollo/query';
 import { TABLES } from 'src/flox/TABLES';
 
-export const GET_FILE = {
+export const GET_FILE: QueryObject = {
   query: gql`
     query File($uuid: ID!, $expires: Int) {
       File(uuid: $uuid, expires: $expires) {
@@ -21,7 +21,7 @@ export const GET_FILE = {
   cacheLocation: 'File',
 };
 
-export const GET_FILE_READ_ACCESS_GROUPS = {
+export const GET_FILE_READ_ACCESS_GROUPS: QueryObject = {
   query: gql`
     query FileReadAccessUserGroups($uuid: ID!) {
       FileReadAccessUserGroups(uuid: $uuid) {
@@ -39,7 +39,7 @@ export const GET_FILE_READ_ACCESS_GROUPS = {
   cacheLocation: 'FileReadAccessUserGroups',
 };
 
-export const GET_FILE_WRITE_ACCESS_GROUPS = {
+export const GET_FILE_WRITE_ACCESS_GROUPS: QueryObject = {
   query: gql`
     query FileWriteAccessUserGroups($uuid: ID!) {
       FileWriteAccessUserGroups(uuid: $uuid) {
@@ -57,7 +57,7 @@ export const GET_FILE_WRITE_ACCESS_GROUPS = {
   cacheLocation: 'FileWriteAccessUserGroups',
 };
 
-export const GET_FILES = {
+export const GET_FILES: QueryObject = {
   query: gql`
     query Files($uuids: [ID!], $expires: Int) {
       Files(uuids: $uuids, expires: $expires) {
@@ -77,7 +77,7 @@ export const GET_FILES = {
   cacheLocation: 'Files',
 };
 
-export const GET_MY_FILES = {
+export const GET_MY_FILES: QueryObject = {
   query: gql`
     query MyFiles($uuids: [ID!], $expires: Int) {
       MyFiles(uuids: $uuids, expires: $expires) {
@@ -97,7 +97,7 @@ export const GET_MY_FILES = {
   cacheLocation: 'MyFiles',
 };
 
-export const GET_PUBLIC_FILES = {
+export const GET_PUBLIC_FILES: QueryObject = {
   query: gql`
     query PublicFiles($uuids: [ID!], $expires: Int) {
       PublicFiles(uuids: $uuids, expires: $expires) {
@@ -117,7 +117,7 @@ export const GET_PUBLIC_FILES = {
   cacheLocation: 'PublicFiles',
 };
 
-export const GET_ALL_FILES = {
+export const GET_ALL_FILES: QueryObject = {
   query: gql`
     query AllFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
       AllFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
@@ -137,7 +137,7 @@ export const GET_ALL_FILES = {
   cacheLocation: 'AllFiles',
 };
 
-export const GET_ALL_FOLDERS = {
+export const GET_ALL_FOLDERS: QueryObject = {
   query: gql`
     query Folders($path: String!) {
       Folders(path: $path) {
@@ -155,7 +155,7 @@ export const GET_ALL_FOLDERS = {
   cacheLocation: 'Folders',
 };
 
-export const ALL_MY_FILES = {
+export const ALL_MY_FILES: QueryObject = {
   query: gql`
     query AllMyFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
       AllMyFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
@@ -175,7 +175,7 @@ export const ALL_MY_FILES = {
   cacheLocation: 'AllMyFiles',
 };
 
-export const GET_MY_FOLDERS = {
+export const GET_MY_FOLDERS: QueryObject = {
   query: gql`
     query MyFolders($path: String!) {
       MyFolders(path: $path) {
@@ -193,7 +193,7 @@ export const GET_MY_FOLDERS = {
   cacheLocation: 'MyFolders',
 };
 
-export const ALL_PUBLIC_FILES = {
+export const ALL_PUBLIC_FILES: QueryObject = {
   query: gql`
     query AllPublicFiles($skip: Int, $take: Int, $expires: Int, $path: String) {
       AllPublicFiles(skip: $skip, take: $take, expires: $expires, path: $path) {
@@ -213,7 +213,7 @@ export const ALL_PUBLIC_FILES = {
   cacheLocation: 'AllPublicFiles',
 };
 
-export const GET_PUBLIC_FOLDERS = {
+export const GET_PUBLIC_FOLDERS: QueryObject = {
   query: gql`
     query PublicFolders($path: String!) {
       PublicFolders(path: $path) {
@@ -231,7 +231,7 @@ export const GET_PUBLIC_FOLDERS = {
   cacheLocation: 'PublicFolders',
 };
 
-export const SEARCH_FILES = {
+export const SEARCH_FILES: QueryObject = {
   query: gql`
     query SearchFiles(
       $take: Int
@@ -268,7 +268,7 @@ export const SEARCH_FILES = {
   cacheLocation: 'SearchFiles',
 };
 
-export const SEARCH_MY_FILES = {
+export const SEARCH_MY_FILES: QueryObject = {
   query: gql`
     query SearchMyFiles(
       $take: Int
@@ -305,7 +305,7 @@ export const SEARCH_MY_FILES = {
   cacheLocation: 'SearchMyFiles',
 };
 
-export const SEARCH_PUBLIC_FILES = {
+export const SEARCH_PUBLIC_FILES: QueryObject = {
   query: gql`
     query SearchPublicFiles(
       $take: Int

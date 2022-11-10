@@ -10,10 +10,7 @@ import {
   persistToCookies,
 } from 'src/flox/modules/auth/tools/cookie.helpers';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
-import {
-  avatarForUser,
-  fetchMyUser,
-} from 'src/flox/modules/auth/services/user.service';
+import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 
 export interface AuthState {
   userSession?: CognitoUserSession;

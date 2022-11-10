@@ -1,16 +1,14 @@
 <template>
   <div>
-    <h4>Alias</h4>
+    <h4>{{ $t('alias.alias') }}</h4>
     <p>
-      This module can be used to see and use the application as if you were
-      another user. This functionality is only available for admin accounts.
+      {{ $t('alias.description') }}
     </p>
     <p v-if="$authStore.getLoggedInStatus">
-      You are currently logged in as: <b>{{ $authStore.username }}</b>
+      {{ $t('alias.logged_in_as') }} : <b>{{ $authStore.username }}</b>
     </p>
     <p v-if="currentAlias">
-      You are currently browsing with an active alias for the user with ID
-      <b>{{ currentAlias }}.</b>
+      {{ $t('alias.alias_on_user') }}: <b>{{ currentAlias }}.</b>
     </p>
     <q-btn
       v-if="currentAlias"
@@ -18,14 +16,14 @@
       class="q-mb-lg"
       color="primary"
       icon-right="visibility_off"
-      label="Remove Alias"
+      :label="$t('alias.remove_alias')"
       @click="removeAlias"
     />
     <DataTable
-      title="User Table"
+      :title="$t('alias.users')"
       prepend-slot
-      prepend-name="Avatar"
-      :columns="columns"
+      :prepend-name="$t('alias.avatar')"
+      :columns="userColumns"
       :query="SEARCH_USERS"
       :update-mutation="UPDATE_USER"
       :delete-mutation="DELETE_USER"
@@ -33,7 +31,7 @@
       <template #prepend="slotProps">
         <q-td :props="slotProps">
           <q-avatar size="26px">
-            <img :src="avatarForUser(slotProps.row.uuid)" />
+            <img :src="avatarForUser(slotProps.row.uuid)" alt="Avatar" />
           </q-avatar>
         </q-td>
       </template>
@@ -42,7 +40,7 @@
           v-if="selected.length > 0"
           color="primary"
           icon-right="visibility"
-          label="Set Alias"
+          :label="$t('alias.set_alias')"
           no-caps
           @click="setAliasTo(selected)"
         />
@@ -82,11 +80,18 @@ const emailRules: ValidationRule[] = [
   ),
 ];
 
+/**
+ * Set an alias to the selected user and reload
+ * @param users - user to be set as alias
+ */
 function setAliasTo(users: UserEntity[]): void {
   setAlias(users[0].uuid);
   location.reload();
 }
 
+/**
+ * Removes alias and reload window
+ */
 function removeAlias(): void {
   unsetAlias();
   location.reload();
@@ -96,7 +101,7 @@ onMounted(() => {
   currentAlias.value = getAlias();
 });
 
-const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
+const userColumns: Ref<ColumnInterface<UserEntity>[]> = ref([
   {
     name: 'username',
     label: 'Username',

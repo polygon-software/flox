@@ -1,8 +1,8 @@
+import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+
 /**
  * A class representing a folder
  */
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
-
 export default class FolderEntity extends BaseEntity {
   // eslint-disable-next-line require-jsdoc
   constructor(

@@ -1,29 +1,29 @@
 <template>
   <div class="row justify-between items-center">
-    <h4>Access Control</h4>
+    <h4>{{ $t('access_control.access_control') }}</h4>
     <q-btn
       color="primary"
-      label="Create User Group"
+      :label="$t('access_control.create_group')"
       icon-right="group_add"
       no-caps
       unelevated
-      @click="openCreateDialog"
+      @click="openCreateAccessGroupDialog"
     />
   </div>
   <div class="row">
     <div class="col-12 col-lg-4 q-pa-sm">
       <DataTable
-        ref="userGroupTable"
-        title="User Groups"
-        prepend-name="Users"
+        ref="userGroupTableRef"
+        :title="$t('access_control.access_groups')"
+        :prepend-name="$t('access_control.users')"
         remove-icon="group_remove"
-        remove-label="Delete Group"
+        :remove-label="$t('access_control.delete_group')"
         prepend-slot
         delete-selection
         hide-column-selector
         hide-fullscreen
         hide-search
-        :columns="columns"
+        :columns="userGroupColumns"
         :query="SEARCH_USER_GROUPS"
         :update-mutation="UPDATE_USER_GROUP"
         :delete-mutation="DELETE_USER_GROUP"
@@ -44,7 +44,7 @@
       <UserTable
         v-if="selectedGroup"
         :users="selectedGroup.users"
-        title="Users"
+        :title="$t('access_control.users')"
         @update:selected="selectedUsers = $event"
       >
         <template #bottom>
@@ -53,25 +53,25 @@
             class="row full-width justify-end q-pt-md"
           >
             <LazySearchField
-              v-model="addUsers"
+              v-model="usersToAdd"
               class="q-mr-md"
               :query="SEARCH_USERS"
               options-label="username"
-              :select-props="{ label: 'Add Users' }"
+              :select-props="{ label: $t('access_control.add_users') }"
             />
             <q-btn
-              :disable="addUsers.length === 0"
+              :disable="usersToAdd.length === 0"
               outline
               no-caps
               color="primary"
-              label="Add to Group"
+              :label="$t('access_control.add_to_group')"
               icon-right="person_add"
               @click="addUsersToGroup"
             />
           </div>
           <div v-else class="row full-width justify-end q-pt-md">
             <ConfirmButton
-              label="Remove User"
+              :label="$t('access_control.remove_user')"
               confirm-label="Confirm removal"
               :button-props="{
                 color: 'negative',
@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, nextTick, ref, Ref } from 'vue';
+import { computed, ComputedRef, ref, Ref } from 'vue';
 import { useQuasar } from 'quasar';
 
 import { ColumnInterface } from 'components/tables/useDataTable';
@@ -100,8 +100,7 @@ import {
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
 import { SEARCH_USER_GROUPS } from 'src/flox/modules/access-control/access-control.query';
 import DataTable from 'components/tables/DataTable.vue';
-import CreateAccessControlGroup from 'src/flox/modules/access-control/components/dialogs/CreateAccessControlGroupDialog.vue';
-import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
+import CreateAccessControlGroupDialog from 'src/flox/modules/access-control/components/dialogs/CreateAccessControlGroupDialog.vue';
 import UserTable from 'src/flox/modules/auth/components/tables/UserTable.vue';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
 import ConfirmButton from 'components/buttons/ConfirmButton.vue';
@@ -111,14 +110,17 @@ import {
 } from 'src/flox/modules/access-control/services/access-control.service';
 import { sleep } from 'src/tools/general.tool';
 import LazySearchField from 'components/forms/LazySearchField.vue';
-import MultiUserAvatars from "src/flox/modules/auth/components/avatar/MultiUserAvatars.vue";
+import MultiUserAvatars from 'src/flox/modules/auth/components/avatar/MultiUserAvatars.vue';
 
 const $q = useQuasar();
 
-const userGroupTable: Ref<InstanceType<typeof DataTable> | null> = ref(null);
+const userGroupTableRef: Ref<InstanceType<typeof DataTable> | null> = ref(null);
+
 const selectedGroups: Ref<UserGroupEntity[]> = ref([]);
 const selectedUsers: Ref<UserEntity[]> = ref([]);
-const addUsers: Ref<UserEntity[]> = ref([]);
+
+const usersToAdd: Ref<UserEntity[]> = ref([]);
+
 const selectedGroup: ComputedRef<UserGroupEntity | null> = computed(() => {
   if (selectedGroups.value.length > 0) {
     return selectedGroups.value[0];
@@ -126,17 +128,23 @@ const selectedGroup: ComputedRef<UserGroupEntity | null> = computed(() => {
   return null;
 });
 
-async function refresh(): void {
-  if (userGroupTable.value) {
-    userGroupTable.value.refresh();
+/**
+ * Reloads the access groups and their members
+ */
+async function refresh(): Promise<void> {
+  if (userGroupTableRef.value) {
+    userGroupTableRef.value.refresh();
   }
   const selectedGroupUuid = selectedGroup.value?.uuid;
   await sleep(500);
-  selectedGroups.value = userGroupTable.value.rows.filter(
+  selectedGroups.value = userGroupTableRef.value.rows.filter(
     (r: UserGroupEntity): boolean => r.uuid === selectedGroupUuid
   );
 }
 
+/**
+ * Removes selected user from access group
+ */
 async function removeUserFromGroup(): Promise<void> {
   if (selectedGroup.value && selectedUsers.value.length > 0) {
     await removeUserFromUserGroup(
@@ -144,34 +152,36 @@ async function removeUserFromGroup(): Promise<void> {
       selectedUsers.value[0].uuid
     );
     selectedUsers.value = [];
-    refresh();
+    await refresh();
   }
 }
-async function addUsersToGroup(): void {
-  if (selectedGroup.value && addUsers.value.length > 0) {
+
+/**
+ * Add selected users to access group
+ */
+async function addUsersToGroup(): Promise<void> {
+  if (selectedGroup.value && usersToAdd.value.length > 0) {
     await addUsersToUserGroup(
       selectedGroup.value.uuid,
-      addUsers.value.map((user: UserEntity): string => user.uuid)
+      usersToAdd.value.map((user: UserEntity): string => user.uuid)
     );
-    refresh();
+    await refresh();
   }
 }
 
-function openCreateDialog(): void {
+/**
+ * Opens the access group creation dialog
+ */
+function openCreateAccessGroupDialog(): void {
   $q.dialog({
-    component: CreateAccessControlGroup,
-
-    // props forwarded to your custom component
-    componentProps: {
-      text: 'something',
-      // ...more..props...
-    },
+    component: CreateAccessControlGroupDialog,
+    componentProps: {},
   }).onOk(() => {
-    refresh();
+    void refresh();
   });
 }
 
-const columns: Ref<ColumnInterface<UserGroupEntity>[]> = ref([
+const userGroupColumns: Ref<ColumnInterface<UserGroupEntity>[]> = ref([
   {
     name: 'name',
     align: 'left',

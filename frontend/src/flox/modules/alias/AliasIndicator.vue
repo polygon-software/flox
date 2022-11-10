@@ -1,16 +1,16 @@
 <template>
   <Teleport to="body">
     <div
-      v-if="hasAlias"
+      v-if="isAliasSet"
       class="alias row items-center justify-between shadow-6 rounded-borders"
     >
-      <p>Active Alias</p>
+      <p>{{ $t('alias.active') }}</p>
       <q-btn
         outline
         no-caps
         icon-right="visibility_off"
         color="primary"
-        label="Remove"
+        :label="$t('general.remove')"
         @click="removeAlias"
       />
     </div>
@@ -25,11 +25,14 @@ import {
   unsetAlias,
 } from 'src/flox/modules/alias/services/alias.service';
 
-const hasAlias: ComputedRef<boolean> = computed(() => {
+const isAliasSet: ComputedRef<boolean> = computed(() => {
   return !!getAlias();
 });
 
-function removeAlias() {
+/**
+ * Removes alias and reloads window
+ */
+function removeAlias(): void {
   unsetAlias();
   location.reload();
 }

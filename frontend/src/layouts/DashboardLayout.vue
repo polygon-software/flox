@@ -8,7 +8,7 @@
           round
           aria-label="Menu"
           icon="menu"
-          @click="toggleLeftDrawer"
+          @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
         <q-btn v-if="$q.screen.gt.xs" flat no-caps no-wrap class="q-ml-xs">
@@ -154,10 +154,6 @@ const $authStore = useAuthStore();
 
 const leftDrawerOpen: Ref<boolean> = ref(false);
 const search: Ref<string> = ref('');
-
-function toggleLeftDrawer(): void {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
 
 const sideMenu = [
   {

@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { MutationObject, MutationTypes } from 'src/apollo/mutation';
 import { TABLES } from 'src/flox/TABLES';
 
-export const CREATE_FILE = {
+export const CREATE_FILE: MutationObject = {
   mutation: gql`
     mutation CreateFile(
       $filename: String!
@@ -43,7 +43,7 @@ export const CREATE_FILE = {
   cacheLocation: 'CreateFile',
 };
 
-export const UPDATE_FILE = {
+export const UPDATE_FILE: MutationObject = {
   mutation: gql`
     mutation UpdateFile($uuid: ID!, $filename: String, $path: String!) {
       UpdateFile(
@@ -64,7 +64,7 @@ export const UPDATE_FILE = {
   cacheLocation: 'UpdateFile',
 };
 
-export const DELETE_FILE = {
+export const DELETE_FILE: MutationObject = {
   mutation: gql`
     mutation DeleteFile($uuid: ID!) {
       DeleteFile(deleteInput: { uuid: $uuid }) {
@@ -83,7 +83,7 @@ export const DELETE_FILE = {
   cacheLocation: 'DeleteFile',
 };
 
-export const MANIPULATE_FILE_ACCESS_USER_GROUPS = {
+export const MANIPULATE_FILE_ACCESS_USER_GROUPS: MutationObject = {
   mutation: gql`
     mutation ManipulateFileAccessUserGroups(
       $addReadAccess: [ID!]

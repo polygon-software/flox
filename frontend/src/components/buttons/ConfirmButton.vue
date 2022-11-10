@@ -5,8 +5,8 @@
       :outline="!confirmed"
       :label="confirmed ? confirmLabel : label"
       no-caps
-      @click="confirmAction"
       v-bind="buttonProps"
+      @click="confirmAction"
     />
   </OnClickOutside>
 </template>
@@ -17,8 +17,8 @@ import { QBtnProps } from 'quasar';
 import { ref, Ref } from 'vue';
 
 const props = defineProps<{
-  label: string,
-  confirmLabel: string,
+  label: string;
+  confirmLabel: string;
   buttonProps: QBtnProps;
 }>();
 
@@ -27,8 +27,12 @@ const emit = defineEmits<{
 }>();
 
 const confirmed: Ref<boolean> = ref(false);
-function confirmAction() {
-  if (confirmed.value == false) {
+
+/**
+ * On button click, change state or emit
+ */
+function confirmAction(): void {
+  if (!confirmed.value) {
     confirmed.value = true;
   } else {
     confirmed.value = false;

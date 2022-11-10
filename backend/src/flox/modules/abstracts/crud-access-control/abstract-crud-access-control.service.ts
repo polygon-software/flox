@@ -214,7 +214,7 @@ export default abstract class AbstractCrudAccessControlService<
    * @returns list of uuids
    */
   protected async findUuidsForOwner(
-    user: User,
+    owner: User,
     options?: FindOneOptions<Entity>,
   ): Promise<string[]> {
     const entities = await this.repository.find({
@@ -226,7 +226,7 @@ export default abstract class AbstractCrudAccessControlService<
         [
           {
             owner: {
-              uuid: user.uuid,
+              uuid: owner.uuid,
             },
           } as FindOptionsWhere<Entity>,
         ],

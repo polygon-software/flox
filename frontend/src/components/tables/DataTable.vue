@@ -179,6 +179,7 @@ import { MutationObject } from 'src/apollo/mutation';
 import { QueryObject } from 'src/apollo/query';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 import ConfirmButton from 'components/buttons/ConfirmButton.vue';
+import { ValidationRule } from 'src/tools/validation.tool';
 
 const props = withDefaults(
   defineProps<{
@@ -268,7 +269,7 @@ function validateInput(column: ColumnInterface): (value: any) => boolean {
     }
     return column?.qInputProps?.rules.every((rule) => {
       if (typeof rule === 'function') {
-        return rule(value) === true;
+        return (rule as ValidationRule)(value) === true;
       } else {
         return true;
       }
@@ -292,6 +293,7 @@ const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
             {
               name: 'prepend',
               align: 'left',
+              field: 'prepend',
               label: props.prependName ?? '',
             },
           ]
@@ -301,6 +303,7 @@ const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
         ? [
             {
               name: 'append',
+              field: 'append',
               label: props.appendName ?? '',
             },
           ]
@@ -322,7 +325,10 @@ onMounted(() => {
   }
 });
 
-function refresh() {
+/**
+ * Refreshes the content of the table by requesting a server interaction
+ */
+function refresh(): void {
   if (tableRef.value) {
     tableRef.value.requestServerInteraction();
   }

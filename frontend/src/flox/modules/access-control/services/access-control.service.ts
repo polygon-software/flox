@@ -17,6 +17,11 @@ import {
   UPDATE_USER_GROUP,
 } from 'src/flox/modules/access-control/access-control.mutation';
 
+/**
+ * Fetches the user groups given its uuid
+ * @param uuid - uuid of group
+ * @returns user group
+ */
 export async function fetchUserGroup(uuid: string): Promise<UserGroupEntity> {
   const { data } = await executeQuery<UserGroupEntity>(GET_USER_GROUP, {
     uuid,
@@ -24,6 +29,13 @@ export async function fetchUserGroup(uuid: string): Promise<UserGroupEntity> {
   return data;
 }
 
+/**
+ * Fetches all user groups a given user belongs to
+ * @param userUuid - uuid of user
+ * @param skip - pagination skip
+ * @param take - pagination take
+ * @returns user groups of given user
+ */
 export async function fetchUserGroupsForUser(
   userUuid: string,
   skip?: number,
@@ -40,6 +52,12 @@ export async function fetchUserGroupsForUser(
   return data;
 }
 
+/**
+ * Fetch user groups of logged in user
+ * @param skip - pagination skip
+ * @param take - pagination take
+ * @returns user groups of logged in user
+ */
 export async function fetchMyUserGroups(
   skip?: number,
   take?: number
@@ -51,6 +69,11 @@ export async function fetchMyUserGroups(
   return data;
 }
 
+/**
+ * Fetch multiple user groups given their uuids
+ * @param uuids - uuids of user groups
+ * @returns user groups for the given uuids
+ */
 export async function fetchUserGroups(
   uuids?: string[]
 ): Promise<UserGroupEntity[]> {
@@ -60,6 +83,12 @@ export async function fetchUserGroups(
   return data;
 }
 
+/**
+ * Fetches all user groups
+ * @param skip - pagination skip
+ * @param take - pagination take
+ * @returns page of user groups
+ */
 export async function fetchAllUserGroups(
   skip?: number,
   take?: number
@@ -71,6 +100,12 @@ export async function fetchAllUserGroups(
   return data;
 }
 
+/**
+ * Creates a new user group and populates it with given users
+ * @param name - name of user group
+ * @param users - list of user uuids to populate group with
+ * @returns created user group
+ */
 export async function createUserGroup(
   name: string,
   users: string[]
@@ -82,6 +117,12 @@ export async function createUserGroup(
   return data ?? null;
 }
 
+/**
+ * Updates the name of a given user group
+ * @param uuid - uuid of user group
+ * @param name - new name of user group
+ * @returns updated user group
+ */
 export async function updateUserGroup(
   uuid: string,
   name: string
@@ -93,6 +134,11 @@ export async function updateUserGroup(
   return data ?? null;
 }
 
+/**
+ * Deletes a user group
+ * @param uuid - uuid of user group
+ * @returns deleted user group
+ */
 export async function deleteUserGroup(
   uuid: string
 ): Promise<UserGroupEntity | null> {
@@ -102,6 +148,12 @@ export async function deleteUserGroup(
   return data ?? null;
 }
 
+/**
+ * Adds a user to a user group
+ * @param userGroupUuid - uuid of group
+ * @param userUuid - uuid of user to be added
+ * @returns group with user now in it
+ */
 export async function addUserToUserGroup(
   userGroupUuid: string,
   userUuid: string
@@ -116,6 +168,12 @@ export async function addUserToUserGroup(
   return data ?? null;
 }
 
+/**
+ * Adds multiple users to a user group
+ * @param userGroupUuid - uuid of group
+ * @param userUuids - uuids of users to be added
+ * @returns group with users now in it
+ */
 export async function addUsersToUserGroup(
   userGroupUuid: string,
   userUuids: string[]
@@ -130,6 +188,12 @@ export async function addUsersToUserGroup(
   return data ?? null;
 }
 
+/**
+ * Removes user from a user group
+ * @param userGroupUuid - uuid of group
+ * @param userUuid - uuid of user to be removed
+ * @returns group with user no longer in it
+ */
 export async function removeUserFromUserGroup(
   userGroupUuid: string,
   userUuid: string

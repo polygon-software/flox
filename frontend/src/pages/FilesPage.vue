@@ -1,26 +1,26 @@
 <template>
   <div class="row justify-between items-center">
-    <h4>Files</h4>
+    <h4>{{ $t('files.files') }}</h4>
     <div class="row">
       <q-btn
-        v-if="!folderCreation"
+        v-if="!inFolderCreationMode"
         unelevated
         outline
         color="primary"
-        label="Create Folder"
+        :label="$t('files.create_folder')"
         class="q-mr-sm"
         icon-right="create_new_folder"
         no-caps
         style="width: 200px"
-        @click="folderCreation = true"
+        @click="inFolderCreationMode = true"
       />
-      <OnClickOutside v-else @trigger="folderCreation = false">
+      <OnClickOutside v-else @trigger="inFolderCreationMode = false">
         <q-input
-          v-model="folderName"
+          v-model="newFolderNameInput"
           outlined
           autofocus
           dense
-          label="Folder Name"
+          :label="$t('files.folder_name')"
           class="q-mr-sm"
           color="primary"
           icon-right="create_new_folder"
@@ -35,10 +35,10 @@
       <q-btn
         unelevated
         color="primary"
-        label="Upload File"
+        :label="$t('file.upload')"
         icon-right="file_upload"
         no-caps
-        @click="openCreateDialog"
+        @click="openFileUploadDialog"
       />
     </div>
   </div>
@@ -56,8 +56,8 @@ import { RouterService } from 'src/services/RouterService';
 
 const $q = useQuasar();
 
-const folderCreation: Ref<boolean> = ref(false);
-const folderName: Ref<string> = ref('');
+const inFolderCreationMode: Ref<boolean> = ref(false);
+const newFolderNameInput: Ref<string> = ref('');
 const fileExplorerRef: Ref<InstanceType<typeof FileExplorer> | null> =
   ref(null);
 
@@ -74,12 +74,18 @@ const path: WritableComputedRef<string> = computed({
   },
 });
 
+/**
+ * Creates a new folder in the frontend only. A folder is only active in the backend when a file exists within it.
+ */
 function createFolder(): void {
-  path.value = `${path.value}/${folderName.value}`;
-  folderName.value = '';
+  path.value = `${path.value}/${newFolderNameInput.value}`;
+  newFolderNameInput.value = '';
 }
 
-function openCreateDialog(): void {
+/**
+ * Opens the file upload dialog and refreshes the explorer on close
+ */
+function openFileUploadDialog(): void {
   $q.dialog({
     component: FileUploadDialog,
 

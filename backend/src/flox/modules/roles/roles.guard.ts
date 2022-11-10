@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import Env from '../../../env';
 import { FrontendRequest, getRequest } from '../../core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
 import GetUserArgs from '../auth/dto/args/get-user.args';

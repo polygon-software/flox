@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
 import { ALL_TABLES } from 'src/flox/TABLES';
-import { MutationTypes } from 'src/apollo/mutation';
+import { MutationObject, MutationTypes } from 'src/apollo/mutation';
 
-export const CREATE_USER_GROUP = {
+export const CREATE_USER_GROUP: MutationObject = {
   mutation: gql`
     mutation CreateUserGroup($name: String!, $users: [ID!]) {
       CreateUserGroup(createUserGroupInput: { name: $name, users: $users }) {
@@ -24,7 +24,7 @@ export const CREATE_USER_GROUP = {
   cacheLocation: 'CreateUserGroup',
 };
 
-export const UPDATE_USER_GROUP = {
+export const UPDATE_USER_GROUP: MutationObject = {
   mutation: gql`
     mutation UpdateUserGroup($uuid: ID!, $name: String!) {
       UpdateUserGroup(updateUserGroupInput: { name: $name, uuid: $uuid }) {
@@ -45,7 +45,7 @@ export const UPDATE_USER_GROUP = {
   cacheLocation: 'UpdateUserGroup',
 };
 
-export const DELETE_USER_GROUP = {
+export const DELETE_USER_GROUP: MutationObject = {
   mutation: gql`
     mutation DeleteUserGroup($uuid: ID!) {
       DeleteUserGroup(deleteInput: { uuid: $uuid }) {
@@ -60,7 +60,7 @@ export const DELETE_USER_GROUP = {
   cacheLocation: 'UpdateUserGroup',
 };
 
-export const ADD_USER_TO_USER_GROUP = {
+export const ADD_USER_TO_USER_GROUP: MutationObject = {
   mutation: gql`
     mutation AddUserToUserGroup($userUuid: ID!, $userGroupUuid: ID!) {
       AddUserToUserGroup(
@@ -86,7 +86,7 @@ export const ADD_USER_TO_USER_GROUP = {
   cacheLocation: 'AddUserToUserGroup',
 };
 
-export const ADD_USERS_TO_USER_GROUP = {
+export const ADD_USERS_TO_USER_GROUP: MutationObject = {
   mutation: gql`
     mutation AddUsersToUserGroup($userUuids: [ID!]!, $userGroupUuid: ID!) {
       AddUsersToUserGroup(
@@ -112,7 +112,7 @@ export const ADD_USERS_TO_USER_GROUP = {
   cacheLocation: 'AddUsersToUserGroup',
 };
 
-export const REMOVE_USER_FROM_USER_GROUP = {
+export const REMOVE_USER_FROM_USER_GROUP: MutationObject = {
   mutation: gql`
     mutation RemoveUserFromUserGroup($userUuid: ID!, $userGroupUuid: ID!) {
       RemoveUserFromUserGroup(

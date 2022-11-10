@@ -28,9 +28,19 @@ import {
 import FolderEntity from 'src/flox/modules/file/entities/folder.entity';
 import UserGroupEntity from 'src/flox/modules/access-control/entities/user-group.entity';
 
+export type FileInputs = {
+  loggedInReadAccess?: boolean;
+  publicReadAccess?: boolean;
+  readAccess?: string[];
+  writeAccess?: string[];
+  path?: string;
+  expires?: number;
+};
+
 /**
  * Fetches a private file
  * @param uuid - uuid of private file
+ * @param expires - number of seconds in which the file link shall expire
  * @returns Private File
  */
 export async function getFile(
@@ -44,6 +54,11 @@ export async function getFile(
   return data;
 }
 
+/**
+ * Returns all user groups that have read access to the file with the given uuid
+ * @param uuid - uuid of file
+ * @returns list of user groups
+ */
 export async function getFileReadAccessUserGroups(
   uuid: string
 ): Promise<UserGroupEntity[]> {
@@ -56,6 +71,11 @@ export async function getFileReadAccessUserGroups(
   return data;
 }
 
+/**
+ * Returns all user groups that have write access to the file with the given uuid
+ * @param uuid - uuid of file
+ * @returns list of user groups
+ */
 export async function getFileWriteAccessUserGroups(
   uuid: string
 ): Promise<UserGroupEntity[]> {
@@ -68,6 +88,12 @@ export async function getFileWriteAccessUserGroups(
   return data;
 }
 
+/**
+ * Fetches list of files given their uuids
+ * @param uuids - uuids of files to fetch
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns files
+ */
 export async function getFiles(
   uuids: string[],
   expires?: number
@@ -79,6 +105,12 @@ export async function getFiles(
   return data;
 }
 
+/**
+ * Fetch files that belong to the user
+ * @param uuids - uids of files to fetch
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns users fils
+ */
 export async function getMyFiles(
   uuids: string[],
   expires?: number
@@ -90,6 +122,12 @@ export async function getMyFiles(
   return data;
 }
 
+/**
+ * Fetches list of public files
+ * @param uuids - uuids of public files
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns public files
+ */
 export async function getPublicFiles(
   uuids: string[],
   expires?: number
@@ -101,6 +139,14 @@ export async function getPublicFiles(
   return data;
 }
 
+/**
+ * Fetches all files with pagination
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param path - path from which on files shall be fetched
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns files matching the path
+ */
 export async function getAllFiles(
   take: number,
   skip: number,
@@ -116,6 +162,14 @@ export async function getAllFiles(
   return data;
 }
 
+/**
+ * Fetches all files of user with pagination
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param path - path from which on files shall be fetched
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns users files matching the path
+ */
 export async function getAllMyFiles(
   take: number,
   skip: number,
@@ -131,6 +185,14 @@ export async function getAllMyFiles(
   return data;
 }
 
+/**
+ * Fetches all public files with pagination
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param path - path from which on files shall be fetched
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns public files matching the path
+ */
 export async function getAllPublicFiles(
   take: number,
   skip: number,
@@ -146,6 +208,16 @@ export async function getAllPublicFiles(
   return data;
 }
 
+/**
+ * Searches for files
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param filter - search term for filename
+ * @param sortBy - column name to sort by
+ * @param descending - sort ascending or descending
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns search output object
+ */
 export async function searchFiles(
   take: number,
   skip: number,
@@ -165,6 +237,16 @@ export async function searchFiles(
   return data;
 }
 
+/**
+ * Searches for users files
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param filter - search term for filename
+ * @param sortBy - column name to sort by
+ * @param descending - sort ascending or descending
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns search output object
+ */
 export async function searchMyFiles(
   take: number,
   skip: number,
@@ -184,6 +266,16 @@ export async function searchMyFiles(
   return data;
 }
 
+/**
+ * Searches for public files
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param filter - search term for filename
+ * @param sortBy - column name to sort by
+ * @param descending - sort ascending or descending
+ * @param expires - number of seconds in which the file link shall expire
+ * @returns search output object
+ */
 export async function searchPublicFiles(
   take: number,
   skip: number,
@@ -206,6 +298,11 @@ export async function searchPublicFiles(
   return data;
 }
 
+/**
+ * Returns folders within a given path
+ * @param path - path in which folders must be located
+ * @returns folders
+ */
 export async function getFolders(path: string): Promise<FolderEntity[]> {
   const { data } = await executeQuery<FolderEntity[]>(GET_ALL_FOLDERS, {
     path,
@@ -213,6 +310,11 @@ export async function getFolders(path: string): Promise<FolderEntity[]> {
   return data;
 }
 
+/**
+ * Returns folders within a given path that contain files of user
+ * @param path - path in which folders must be located
+ * @returns folders
+ */
 export async function getMyFolders(path: string): Promise<FolderEntity[]> {
   const { data } = await executeQuery<FolderEntity[]>(GET_MY_FOLDERS, {
     path,
@@ -220,6 +322,11 @@ export async function getMyFolders(path: string): Promise<FolderEntity[]> {
   return data;
 }
 
+/**
+ * Returns folders within a given path that contain only public files
+ * @param path - path in which folders must be located
+ * @returns folders
+ */
 export async function getPublicFolders(path: string): Promise<FolderEntity[]> {
   const { data } = await executeQuery<FolderEntity[]>(GET_PUBLIC_FOLDERS, {
     path,
@@ -227,15 +334,18 @@ export async function getPublicFolders(path: string): Promise<FolderEntity[]> {
   return data;
 }
 
-export type FileInputs = {
-  loggedInReadAccess?: boolean;
-  publicReadAccess?: boolean;
-  readAccess?: string[];
-  writeAccess?: string[];
-  path?: string;
-  expires?: number;
-};
-
+/**
+ * Creates a new file
+ * @param filename - name of file
+ * @param mimetype - mimetype like application/pdf
+ * @param size - size of file in bytes
+ * @param loggedInReadAccess - whether logged in users shall be able to read the file
+ * @param publicReadAccess - whether everyone publicly shall be able to read the file
+ * @param readAccess - user groups that are granted read access
+ * @param writeAccess - user groups that are granted write access
+ * @param path - path in which file shall be located
+ * @returns created file
+ */
 export async function createFile(
   filename: string,
   mimetype: string,
@@ -261,10 +371,17 @@ export async function createFile(
   return data ?? null;
 }
 
+/**
+ * Updates an existing file
+ * @param uuid - uuid of file to be updated
+ * @param filename - new name of file
+ * @param path - new file path
+ * @returns updated file
+ */
 export async function updateFile(
   uuid: string,
   filename: string,
-  path: string,
+  path: string
 ): Promise<FileEntity | null> {
   const { data } = await executeMutation<FileEntity>(UPDATE_FILE, {
     uuid,
@@ -274,15 +391,29 @@ export async function updateFile(
   return data ?? null;
 }
 
-export async function deleteFile(uuid: String): Promise<FileEntity | null> {
+/**
+ * Deletes a file
+ * @param uuid - uuid of file to be deleted
+ * @returns deleted file
+ */
+export async function deleteFile(uuid: string): Promise<FileEntity | null> {
   const { data } = await executeMutation<FileEntity>(DELETE_FILE, {
     uuid,
   });
   return data ?? null;
 }
 
+/**
+ * Updates access groups for a file, granting/removing read/write acecss
+ * @param uuid - uuid of file for which access groups shall be manipulated
+ * @param addReadAccess - access groups that shall be granted read access to the file
+ * @param removeReadAccess - access groups for which read access shall be removed
+ * @param addWriteAccess - access groups that shall be granted write access to the file
+ * @param removeWriteAccess - access groups for which write access shall be removed
+ * @returns updated file
+ */
 export async function manipulateFileAccessUserGroups(
-  uuid: String,
+  uuid: string,
   {
     addReadAccess = [],
     removeReadAccess = [],

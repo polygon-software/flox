@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { QueryObject } from 'src/apollo/query';
 import { TABLES } from 'src/flox/TABLES';
 
-export const GET_IMAGE = {
+export const GET_IMAGE: QueryObject = {
   query: gql`
     query Image($uuid: ID!, $expires: Int) {
       Image(uuid: $uuid, expires: $expires) {
@@ -34,7 +34,7 @@ export const GET_IMAGE = {
   cacheLocation: 'Image',
 };
 
-export const GET_IMAGES = {
+export const GET_IMAGES: QueryObject = {
   query: gql`
     query Images($uuids: [ID!], $expires: Int) {
       Images(uuids: $uuids, expires: $expires) {
@@ -65,7 +65,7 @@ export const GET_IMAGES = {
   cacheLocation: 'Images',
 };
 
-export const GET_MY_IMAGES = {
+export const GET_MY_IMAGES: QueryObject = {
   query: gql`
     query MyImages($uuids: [ID!], $expires: Int) {
       MyImages(uuids: $uuids, expires: $expires) {
@@ -96,7 +96,7 @@ export const GET_MY_IMAGES = {
   cacheLocation: 'MyImages',
 };
 
-export const GET_ALL_IMAGES = {
+export const GET_ALL_IMAGES: QueryObject = {
   query: gql`
     query AllImages($skip: Int, $take: Int, $expires: Int) {
       AllImages(skip: $skip, take: $take, expires: $expires) {
@@ -127,7 +127,7 @@ export const GET_ALL_IMAGES = {
   cacheLocation: 'AllImages',
 };
 
-export const GET_ALL_MY_IMAGES = {
+export const GET_ALL_MY_IMAGES: QueryObject = {
   query: gql`
     query AllMyImages($skip: Int, $take: Int, $expires: Int) {
       AllMyImages(skip: $skip, take: $take, expires: $expires) {
@@ -158,7 +158,7 @@ export const GET_ALL_MY_IMAGES = {
   cacheLocation: 'AllMyImages',
 };
 
-export const GET_IMAGE_FOR_FILE = {
+export const GET_IMAGE_FOR_FILE: QueryObject = {
   query: gql`
     query ImageForFile($file: ID!, $expires: Int) {
       ImageForFile(file: $file, expires: $expires) {
@@ -179,7 +179,7 @@ export const GET_IMAGE_FOR_FILE = {
   cacheLocation: 'ImageForFile',
 };
 
-export const SEARCH_IMAGES = {
+export const SEARCH_IMAGES: QueryObject = {
   query: gql`
     query SearchImages(
       $take: Int
@@ -217,7 +217,7 @@ export const SEARCH_IMAGES = {
   cacheLocation: 'SearchImages',
 };
 
-export const SEARCH_MY_IMAGES = {
+export const SEARCH_MY_IMAGES: QueryObject = {
   query: gql`
     query SearchMyImages(
       $take: Int

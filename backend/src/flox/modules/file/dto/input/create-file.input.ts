@@ -1,9 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import {
-  IsInt,
-  IsNotEmpty,
-  IsString,
-} from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 import CreateAccessControlledInput from '../../../abstracts/crud-access-control/dto/inputs/create-access-controlled.input';
 

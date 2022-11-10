@@ -53,50 +53,51 @@
     <q-table
       flat
       hide-bottom
-      :loading="loading"
+      :loading="isLoading"
       :rows="filesAndFolders"
-      :columns="columns"
+      :columns="fileOrFolderColumns"
       row-key="uuid"
       :pagination="initialPagination"
     >
-      <template #body="props">
+      <template #body="bodyProps">
         <q-tr
-          :props="props"
+          :props="bodyProps"
           :class="{
-            fileRow: props.row.type === 'file',
-            folderRow: props.row.type === 'folder',
+            fileRow: bodyProps.row.type === 'file',
+            folderRow: bodyProps.row.type === 'folder',
           }"
           class="cursor-pointer"
           :style="{
-            opacity: !!fileBeingMoved && props.row.type === 'file' ? 0.5 : 1,
+            opacity:
+              !!fileBeingMoved && bodyProps.row.type === 'file' ? 0.5 : 1,
           }"
-          @click="clickRow(props.row)"
+          @click="clickOnFileOrFolder(bodyProps.row)"
         >
-          <q-td key="mimetype" :props="props">
+          <q-td key="mimetype" :props="bodyProps">
             <div class="relative-position" style="text-align: center">
               <q-icon
-                :name="mimetypeToIcon(props.row.mimetype)"
+                :name="mimetypeToIcon(bodyProps.row.mimetype)"
                 color="primary"
-                :style="{ opacity: props.row.type === 'folder' ? 1 : 0.7 }"
-                :size="props.row.type === 'folder' ? '32px' : '24px'"
+                :style="{ opacity: bodyProps.row.type === 'folder' ? 1 : 0.7 }"
+                :size="bodyProps.row.type === 'folder' ? '32px' : '24px'"
               />
               <span
-                v-if="props.row.type === 'folder'"
+                v-if="bodyProps.row.type === 'folder'"
                 class="absolute-left text-white n-files"
               >
-                {{ props.row.files }}
+                {{ bodyProps.row.files }}
               </span>
             </div>
           </q-td>
-          <q-td key="name" :props="props" style="font-weight: 500">
+          <q-td key="name" :props="bodyProps" style="font-weight: 500">
             <template
               v-if="
-                fileBeingRenamed && props.row.uuid === fileBeingRenamed.uuid
+                fileBeingRenamed && bodyProps.row.uuid === fileBeingRenamed.uuid
               "
             >
               <OnClickOutside @trigger="fileBeingRenamed = null">
                 <q-input
-                  v-model="newFileName"
+                  v-model="newFileNameInput"
                   :suffix="fileNameSuffix"
                   autofocus
                   filled
@@ -107,22 +108,22 @@
               </OnClickOutside>
             </template>
             <template v-else>
-              {{ props.row.name }}
+              {{ bodyProps.row.name }}
             </template>
           </q-td>
-          <q-td key="updatedAt" :props="props">
+          <q-td key="updatedAt" :props="bodyProps">
             {{
-              props.row.updatedAt
-                ? format(new Date(props.row.updatedAt), 'dd.MM.yyyy')
+              bodyProps.row.updatedAt
+                ? format(new Date(bodyProps.row.updatedAt), 'dd.MM.yyyy')
                 : ''
             }}
           </q-td>
-          <q-td key="size" :props="props">
-            {{ formatBytes(props.row.size) }}
+          <q-td key="size" :props="bodyProps">
+            {{ formatBytes(bodyProps.row.size) }}
           </q-td>
-          <q-td key="options" :props="props">
+          <q-td key="options" :props="bodyProps">
             <q-btn
-              v-if="props.row.type === 'file'"
+              v-if="bodyProps.row.type === 'file'"
               :disable="!!fileBeingMoved"
               flat
               square
@@ -135,7 +136,7 @@
                   <q-item
                     v-close-popup
                     clickable
-                    @click.stop="removeFile(props.row.uuid)"
+                    @click.stop="removeFile(bodyProps.row.uuid)"
                   >
                     <q-item-section>Delete</q-item-section>
                     <q-item-section avatar>
@@ -145,7 +146,7 @@
                   <q-item
                     v-close-popup
                     clickable
-                    @click.stop="startMovingFile(props.row)"
+                    @click.stop="startMovingFile(bodyProps.row)"
                   >
                     <q-item-section>Move</q-item-section>
                     <q-item-section avatar>
@@ -159,7 +160,7 @@
                   <q-item
                     v-close-popup
                     clickable
-                    @click.stop="startFileRenaming(props.row)"
+                    @click.stop="startFileRenaming(bodyProps.row)"
                   >
                     <q-item-section> Rename </q-item-section>
                     <q-item-section avatar>
@@ -173,7 +174,7 @@
                   <q-item
                     v-close-popup
                     clickable
-                    @click="openAccessControlGroupPopup(props.row.uuid)"
+                    @click="openAccessControlGroupDialog(bodyProps.row.uuid)"
                   >
                     <q-item-section>Access Rights</q-item-section>
                     <q-item-section avatar>
@@ -197,6 +198,8 @@ import { format } from 'date-fns';
 import debounce from 'lodash/debounce';
 import { OnClickOutside } from '@vueuse/components';
 
+import { formatBytes } from 'src/format/number.format';
+import { mimetypeToIcon } from 'src/format/icon.format';
 import {
   deleteFile,
   getAllFiles,
@@ -224,11 +227,127 @@ const props = defineProps<{
   path: string;
 }>();
 
+const EMIT_UPDATE_PAT = 'update:path';
 const emit = defineEmits<{
-  (e: 'update:path', path: string): void;
+  (e: typeof EMIT_UPDATE_PAT, path: string): void;
 }>();
 
+type FileOrFolder = {
+  uuid: string;
+  type: 'file' | 'folder';
+  name: string;
+  size: number;
+  files?: number;
+  mimetype?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  url?: string;
+};
+
+/**
+ * Files and folders are updated whenever path is changed
+ */
+const files: Ref<FileEntity[]> = ref([]);
+const folders: Ref<FolderEntity[]> = ref([]);
+const isLoading: Ref<boolean> = ref(false);
+
+/**
+ * Refresh loads all new files and folders according to the current path
+ */
+async function refresh(): Promise<void> {
+  searchInput.value = '';
+  isLoading.value = true;
+  const [newFolders, newFiles] = await Promise.all([
+    getFolders(props.path),
+    getAllFiles(100, 0, props.path, 360),
+  ]);
+  folders.value = newFolders;
+  files.value = newFiles;
+  isLoading.value = false;
+}
+
+/**
+ * Whenever path changes, new files should be fetched
+ * Apollo handles the caching of already fetched files already
+ */
+watch(
+  () => props.path,
+  () => {
+    void refresh();
+  },
+  {
+    immediate: true,
+  }
+);
+
+/**
+ * Computed is used to unite files and folders
+ */
+const filesAndFolders: ComputedRef<FileOrFolder[]> = computed(() => {
+  const joint: FileOrFolder[] = [];
+  files.value.forEach((file) => {
+    joint.push({
+      type: 'file',
+      name: file.filename,
+      ...file,
+    });
+  });
+  folders.value.forEach((folder) => {
+    joint.push({
+      type: 'folder',
+      ...folder,
+    });
+  });
+  return joint;
+});
+
+/**
+ * Users search input, used to search for file names indepenently of folder
+ */
 const searchInput: Ref<string> = ref('');
+
+/**
+ * Function that searches for files according to a user search input independently of current folder
+ */
+async function searchForFiles(): Promise<void> {
+  if (searchInput.value === '') {
+    await refresh();
+  } else {
+    isLoading.value = true;
+    const { data } = await searchFiles(
+      100,
+      0,
+      searchInput.value,
+      'filename',
+      false,
+      360
+    );
+    files.value = data;
+    folders.value = [];
+    isLoading.value = false;
+  }
+}
+const debounceSearch = debounce<typeof searchForFiles>(searchForFiles, 250, {
+  leading: false,
+  trailing: true,
+});
+/**
+ * Search debauced when search input changes
+ */
+watch(searchInput, async () => {
+  await debounceSearch();
+});
+
+/**
+ * Extracts the suffix from the file that is renamed to ensure that the user can not change the file extension
+ */
+const fileNameSuffix: ComputedRef<string> = computed(() => {
+  if (!fileBeingRenamed.value) {
+    return '';
+  }
+  const name = fileBeingRenamed.value.filename;
+  return name.substr(name?.lastIndexOf('.'));
+});
 
 const initialPagination = {
   sortBy: 'name',
@@ -237,60 +356,47 @@ const initialPagination = {
   rowsPerPage: 500,
 };
 
+/**
+ * Computed that resolves an array of path segments: /root/folder1/folderA -> [root, folder1, folderA]
+ */
 const pathSegments: ComputedRef<string[]> = computed(() => {
   return props.path.substring(1).split('/');
 });
 
+/**
+ * Extends path by an additional folder name
+ * @param folderName - folder name that shall be extended
+ */
 function extendPath(folderName: string): void {
   if (props.path === '/') {
-    emit('update:path', `${props.path}${folderName}`);
+    emit(EMIT_UPDATE_PAT, `${props.path}${folderName}`);
   } else {
-    emit('update:path', `${props.path}/${folderName}`);
+    emit(EMIT_UPDATE_PAT, `${props.path}/${folderName}`);
   }
 }
+
+/**
+ * Strips path down to a certain path index segment
+ * @param index - index of segment. 0 is index of first folder, not Root! Root is handled seperately.
+ */
 function stripPathTo(index: number): void {
-  emit('update:path', `/${pathSegments.value.slice(0, index + 1).join('/')}`);
+  emit(EMIT_UPDATE_PAT, `/${pathSegments.value.slice(0, index + 1).join('/')}`);
 }
+
+/**
+ * Sets path to root, which is represented by just a slash /
+ */
 function setPathToRoot(): void {
-  emit('update:path', '/');
-}
-watch(searchInput, async () => {
-  await debounceSearch();
-});
-
-function mimetypeToIcon(mimetype: string) {
-  if (!mimetype) {
-    return 'folder';
-  }
-  if (mimetype.startsWith('image')) {
-    return 'image';
-  }
-  if (mimetype.startsWith('audio')) {
-    return 'library_music';
-  }
-  if (mimetype.startsWith('video')) {
-    return 'videocam';
-  }
-  if (mimetype.startsWith('text')) {
-    return 'text_fields';
-  }
-  return 'attach_file';
+  emit(EMIT_UPDATE_PAT, '/');
 }
 
-function formatBytes(bytes: number) {
-  const decimals = 1;
-  if (!+bytes) return '0 Bytes';
+const fileBeingMoved: Ref<FileEntity | null> = ref(null);
 
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
-}
-
-async function clickRow(row: FileOrFolder) {
+/**
+ * Handles click on any file or folder on the list
+ * @param row - content of the row, which is either a file or a folder
+ */
+async function clickOnFileOrFolder(row: FileOrFolder): Promise<void> {
   if (row.type === 'folder') {
     extendPath(row.name);
   } else {
@@ -304,10 +410,69 @@ async function clickRow(row: FileOrFolder) {
   }
 }
 
-async function openAccessControlGroupPopup(uuid: string) {
-  const readAccess = await getFileReadAccessUserGroups(uuid);
-  const writeAccess = await getFileWriteAccessUserGroups(uuid);
-  console.log({ readAccess, writeAccess });
+/**
+ * Initiates moving of a file
+ * @param file - file to be moved
+ */
+function startMovingFile(file: FileEntity): void {
+  fileBeingMoved.value = file;
+}
+
+/**
+ * Performs move operation on a file through the API
+ */
+async function moveFileToPath(): Promise<void> {
+  if (fileBeingMoved.value) {
+    await updateFile(
+      fileBeingMoved.value.uuid,
+      fileBeingMoved.value.filename,
+      props.path
+    );
+    fileBeingMoved.value = null;
+  }
+  await refresh();
+}
+
+const fileBeingRenamed: Ref<FileEntity | null> = ref(null);
+const newFileNameInput: Ref<string> = ref('');
+
+/**
+ * Initiates renaming of a file
+ * @param file - file to be renamed
+ */
+function startFileRenaming(file: FileEntity): void {
+  newFileNameInput.value = file.filename.substring(
+    0,
+    file.filename.indexOf('.')
+  );
+  fileBeingRenamed.value = file;
+}
+
+/**
+ * Renames a file by calling the API
+ */
+async function renameFile(): Promise<void> {
+  if (fileBeingRenamed.value) {
+    await updateFile(
+      fileBeingRenamed.value.uuid,
+      newFileNameInput.value + fileNameSuffix.value,
+      fileBeingRenamed.value.path
+    );
+    fileBeingRenamed.value = null;
+    newFileNameInput.value = '';
+  }
+  await refresh();
+}
+
+/**
+ * Opens a new dialog containing access groups, saves changes to access groups on close.
+ * @param uuid - uuid of file for which access groups shall be manipulated
+ */
+async function openAccessControlGroupDialog(uuid: string): Promise<void> {
+  const [readAccess, writeAccess] = await Promise.all([
+    getFileReadAccessUserGroups(uuid),
+    getFileWriteAccessUserGroups(uuid),
+  ]);
   $q.dialog({
     component: ManageItemAccessControlGroups,
     componentProps: {
@@ -344,153 +509,36 @@ async function openAccessControlGroupPopup(uuid: string) {
   );
 }
 
-const files: Ref<FileEntity[]> = ref([]);
-const folders: Ref<FolderEntity[]> = ref([]);
-const loading: Ref<boolean> = ref(false);
-const fileBeingMoved: Ref<FileEntity | null> = ref(null);
-const fileBeingRenamed: Ref<FileEntity | null> = ref(null);
-const newFileName: Ref<string> = ref('');
-const fileNameSuffix: ComputedRef<string> = computed(() => {
-  if (!fileBeingRenamed.value) {
-    return '';
-  }
-  const name = fileBeingRenamed.value.filename;
-  return name.substr(name?.lastIndexOf('.'));
-});
-
-type FileOrFolder = {
-  uuid: string;
-  type: 'file' | 'folder';
-  name: string;
-  size: number;
-  files?: number;
-  mimetype?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  url?: string;
-};
-const filesAndFolders: ComputedRef<FileOrFolder[]> = computed(() => {
-  const joint: FileOrFolder[] = [];
-  files.value.forEach((file) => {
-    joint.push({
-      type: 'file',
-      name: file.filename,
-      ...file,
-    });
-  });
-  folders.value.forEach((folder) => {
-    joint.push({
-      type: 'folder',
-      ...folder,
-    });
-  });
-  return joint;
-});
-
-function fileFolderSort(
-  val1: any,
-  val2: any,
-  a: FileOrFolder,
-  b: FileOrFolder
+/**
+ * Sort function that ensures folders are always displayed above files
+ * @param value1 - First comparison value
+ * @param value2 - Second comparison value
+ * @param fileFolder1 - File or folder to which first value belongs
+ * @param fileFolder2 - File or folder to which second value belongs
+ * @returns number indicating sort order
+ */
+function fileOrFolderSortFunction(
+  value1: any,
+  value2: any,
+  fileFolder1: FileOrFolder,
+  fileFolder2: FileOrFolder
 ): number {
-  if (a.type === 'file' && b.type === 'folder') {
+  if (fileFolder1.type === 'file' && fileFolder2.type === 'folder') {
     return 1;
   }
-  if (a.type === 'folder' && b.type === 'file') {
+  if (fileFolder1.type === 'folder' && fileFolder2.type === 'file') {
     return -1;
   }
-  if (val1 === val2) {
+  if (value1 === value2) {
     return 0;
   }
-  return val1 < val2 ? -1 : 1;
+  return value1 < value2 ? -1 : 1;
 }
 
-const columns: ColumnInterface<File | FolderEntity> = [
-  {
-    name: 'mimetype',
-    key: 'mimetype',
-    required: true,
-    align: 'left',
-    label: '',
-    field: 'mimetype',
-    sortable: false,
-    style: 'width: 50px',
-  },
-  {
-    name: 'name',
-    required: true,
-    align: 'left',
-    label: 'Name',
-    field: 'name',
-    sortable: true,
-    sort: fileFolderSort,
-  },
-  {
-    name: 'updatedAt',
-    required: true,
-    align: 'left',
-    label: 'Last Updated',
-    field: 'updatedAt',
-    sortable: true,
-    sort: fileFolderSort,
-  },
-  {
-    name: 'size',
-    required: true,
-    label: 'Size',
-    field: 'size',
-    sortable: true,
-    sort: fileFolderSort,
-  },
-  {
-    name: 'options',
-    label: '',
-    field: 'options',
-  },
-];
-
-async function searchForFiles(): Promise<void> {
-  const { count, data } = await searchFiles(
-    100,
-    0,
-    searchInput.value,
-    'filename',
-    false,
-    360
-  );
-  files.value = data;
-}
-const debounceSearch = debounce<typeof searchForFiles>(searchForFiles, 250, {
-  leading: false,
-  trailing: true,
-});
-
-async function refresh(): Promise<void> {
-  searchInput.value = '';
-  loading.value = true;
-  const [newFolders, newFiles] = await Promise.all([
-    getFolders(props.path),
-    getAllFiles(100, 0, props.path, 360),
-  ]);
-  folders.value = newFolders;
-  files.value = newFiles;
-  loading.value = false;
-}
-
-watch(
-  () => props.path,
-  async () => {
-    await refresh();
-  },
-  {
-    immediate: true,
-  }
-);
-
-defineExpose({
-  refresh,
-});
-
+/**
+ * Removes a file form the database
+ * @param uuid - uuid of file to be removed
+ */
 async function removeFile(uuid: string): Promise<void> {
   await deleteFile(uuid);
   showSuccessNotification(
@@ -499,36 +547,53 @@ async function removeFile(uuid: string): Promise<void> {
   );
   await refresh();
 }
-function startMovingFile(file: FileEntity): void {
-  fileBeingMoved.value = file;
-}
-async function moveFileToPath(): Promise<void> {
-  if (fileBeingMoved.value) {
-    await updateFile(
-      fileBeingMoved.value.uuid,
-      fileBeingMoved.value.filename,
-      props.path
-    );
-    fileBeingMoved.value = null;
-  }
-  await refresh();
-}
-function startFileRenaming(file: FileEntity): void {
-  newFileName.value = file.filename.substring(0, file.filename.indexOf('.'));
-  fileBeingRenamed.value = file;
-}
-async function renameFile(): Promise<void> {
-  if (fileBeingRenamed.value) {
-    await updateFile(
-      fileBeingRenamed.value.uuid,
-      newFileName.value + fileNameSuffix.value,
-      fileBeingRenamed.value.path
-    );
-    fileBeingRenamed.value = null;
-    newFileName.value = '';
-  }
-  await refresh();
-}
+
+const fileOrFolderColumns: ColumnInterface<FileOrFolder>[] = [
+  {
+    name: 'mimetype',
+    label: '',
+    field: 'mimetype',
+    required: true,
+    align: 'left',
+    sortable: false,
+    style: 'width: 50px',
+  },
+  {
+    name: 'name',
+    label: 'Name',
+    field: 'name',
+    required: true,
+    align: 'left',
+    sortable: true,
+    sort: fileOrFolderSortFunction,
+  },
+  {
+    name: 'updatedAt',
+    label: 'Last Updated',
+    field: 'updatedAt',
+    required: true,
+    align: 'left',
+    sortable: true,
+    sort: fileOrFolderSortFunction,
+  },
+  {
+    name: 'size',
+    label: 'Size',
+    field: 'size',
+    required: true,
+    sortable: true,
+    sort: fileOrFolderSortFunction,
+  },
+  {
+    name: 'options',
+    label: '',
+    field: 'options',
+  },
+];
+
+defineExpose({
+  refresh,
+});
 </script>
 
 <style scoped>
