@@ -30,10 +30,11 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   }
 
   /**
-   * Returns an Image that wraps a s3 bucket file
-   * @param getImageArgs - contains uuid of image
-   * @param user - Currently logged-in user
-   * @returns Requested image
+   * Retrieves a single image from the database, ensuring the provided user has access to it by either being owner or
+   * allowed reader of the image. Alternatively, the image can be public, then the user has also access to it.
+   * @param getImageArgs - contains uuid of image to be retrieved
+   * @param user - the user that retrieves the image
+   * @returns the one image that was received
    */
   @LoggedIn()
   @Query(() => Image, { name: 'Image' })
@@ -44,6 +45,13 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
     return this.imageService.getImage(getImageArgs, user);
   }
 
+  /**
+   * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
+   * @param user - the user that retrieves the image
+   * @returns the list of found entities
+   */
   @LoggedIn()
   @Query(() => [Image], { name: 'Images' })
   async getImages(
@@ -53,6 +61,14 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
     return this.imageService.getMultipleImages(getMultipleImagesArgs, user);
   }
 
+  /**
+   * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
+   * @param user - the user that retrieves the image
+   * @returns the list of found entities
+   */
   @LoggedIn()
   @Query(() => [Image], { name: 'MyImages' })
   async getMyImages(
@@ -66,10 +82,11 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   }
 
   /**
-   * Returns all images stored in database. Only accessible to admins
-   * @param getAllImagesArgs - take and skip parameters
-   * @param user - Currently logged-in user
-   * @returns All Images
+   * Retrieves all images from a database with applying pagination. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   * @param getAllImagesArgs - contains pagination parameters (skip, take)
+   * @param user - the user that retrieves the image
+   * @returns page of entities
    */
   @LoggedIn()
   @Query(() => [Image], { name: 'AllImages' })
@@ -80,6 +97,14 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
     return this.imageService.getAllImages(getAllImagesArgs, user);
   }
 
+  /**
+   * Retrieves all images from a database with applying pagination. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   * @param getAllImagesArgs - contains pagination parameters (skip, take)
+   * @param user - the user that retrieves the image
+   * @returns page of entities
+   */
   @LoggedIn()
   @Query(() => [Image], { name: 'AllMyImages' })
   async getAllMyImages(
@@ -90,11 +115,10 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   }
 
   /**
-   * Gets the image wrapper for a specified file. Useful if you know the file but not the
-   * corresponding image wrapper
-   * @param getImageForFileArgs - contains the uuid of the file
-   * @param user - Currently logged-in user
-   * @returns Requested image
+   * Queries for an image given the file uuid
+   * @param getImageForFileArgs - contains uuid of file
+   * @param user - user that needs to have the right to access the image
+   * @returns Queried image
    */
   @LoggedIn()
   @Query(() => Image, { name: 'ImageForFile' })
@@ -105,6 +129,13 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
     return this.imageService.getImageForFile(getImageForFileArgs, user);
   }
 
+  /**
+   * Queries for all entities that fit query criteria. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   * @param searchImageArgs - contain table filtering rules
+   * @param user - user that retrieves entities
+   * @returns images that fit criteria
+   */
   @LoggedIn()
   @Query(() => [Image], { name: 'SearchImages' })
   async searchImages(
@@ -118,6 +149,14 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
     );
   }
 
+  /**
+   * Queries for all entities that fit query criteria. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   * @param searchImageArgs - contain table filtering rules
+   * @param user - user that retrieves entities
+   * @returns images that fit criteria
+   */
   @LoggedIn()
   @Query(() => [Image], { name: 'SearchMyImages' })
   async searchMyImages(
@@ -147,10 +186,11 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   }
 
   /**
-   * Deletes an image (without deleting the corresponding file)
-   * @param deleteInput - contains uuid of image
-   * @param user - Currently logged-in user
-   * @returns Requested image
+   * Removes the database entry of a given image without deleting the file
+   * This endpoint does not delete the corresponding file!
+   * @param deleteInput - contains the uuid of the image to delete
+   * @param user - user that needs to have the right to access the image
+   * @returns Deleted Image
    */
   @LoggedIn()
   @Mutation(() => Image, { name: 'DeleteImage' })

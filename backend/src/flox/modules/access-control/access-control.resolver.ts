@@ -37,12 +37,22 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     return this.accessControlService;
   }
 
+  /**
+   * Retrieves a user group
+   * @param getOneArgs - contains uuid of user group
+   * @returns user group
+   */
   @LoggedIn()
   @Query(() => UserGroup, { name: 'UserGroup' })
   async getUserGroup(@Args() getOneArgs: GetOneArgs): Promise<UserGroup> {
     return super.getOne(getOneArgs, { relations: { users: true } });
   }
 
+  /**
+   * Retrieves all user groups in which a provided user is part of
+   * @param getAllOfUserArgs - contains uuid of user for which groups shall be retrieved
+   * @returns list of user groups
+   */
   @LoggedIn()
   @Query(() => [UserGroup], { name: 'UserGroupsOfUser' })
   async getUserGroupsOfUser(
@@ -54,6 +64,12 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     );
   }
 
+  /**
+   * Retrieves user groups of the logged in user
+   * @param getAll - contains skip and take info for pagination
+   * @param user - logged in user
+   * @returns list of user groups
+   */
   @LoggedIn()
   @Query(() => [UserGroup], { name: 'MyUserGroups' })
   async getMyUserGroups(
@@ -63,6 +79,11 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     return this.accessControlService.getUserGroupsForUser(user.uuid, getAll);
   }
 
+  /**
+   * Retrieves multiple user groups explicitely specified by their uuid
+   * @param getMultipleArgs - contains a list of uuids of the user groups to retrieve
+   * @returns the list of found user groups
+   */
   @LoggedIn()
   @Query(() => [UserGroup], { name: 'UserGroups' })
   async getUserGroups(
@@ -71,12 +92,22 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     return super.getMultiple(getMultipleArgs, { relations: { users: true } });
   }
 
+  /**
+   * Retrieves all user groups from a database with applying pagination
+   * @param getAllArgs - contains pagination parameters (skip, take)
+   * @returns page of user groups
+   */
   @LoggedIn()
   @Query(() => [UserGroup], { name: 'AllUserGroups' })
   async getAllUserGroups(@Args() getAllArgs: GetAllArgs): Promise<UserGroup[]> {
     return super.getAll(getAllArgs, { relations: { users: true } });
   }
 
+  /**
+   * Queries for all user groups that fit query criteria, best used in combination with the DataTable
+   * @param searchQueryArgs - contain table filtering rules
+   * @returns user groups that fit criteria
+   */
   @LoggedIn()
   @Query(() => UserGroupSearchOutput, { name: 'SearchUserGroups' })
   async searchUserGroups(
@@ -85,6 +116,11 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     return super.search(searchQueryArgs, { relations: { users: true } });
   }
 
+  /**
+   * Creates a new user group based on the create input
+   * @param createUserGroupInput - specifications of user group
+   * @returns the created user group
+   */
   @AdminOnly()
   @Mutation(() => UserGroup, { name: 'CreateUserGroup' })
   async createUserGroup(
@@ -98,6 +134,11 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     return this.getOne({ uuid: created.uuid }, { relations: { users: true } });
   }
 
+  /**
+   * Updates an existing user group within the database according to the update input
+   * @param updateUserGroupInput - specification of update
+   * @returns the updated user group, freshly retrieved from the database
+   */
   @AdminOnly()
   @Mutation(() => UserGroup, { name: 'UpdateUserGroup' })
   async updateUserGroup(
@@ -106,6 +147,11 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     return super.update(updateUserGroupInput, { relations: { users: true } });
   }
 
+  /**
+   * Removes a user group from the database
+   * @param deleteInput - contains the uuid of the user group to remove
+   * @returns the deleted user group
+   */
   @AdminOnly()
   @Mutation(() => UserGroup, { name: 'DeleteUserGroup' })
   async deleteUserGroup(
@@ -114,6 +160,11 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     return super.delete(deleteInput);
   }
 
+  /**
+   * Adds the provided user to a user group
+   * @param addUserToUserGroupInput - contains uuid of user and uer group
+   * @returns User group including the newly added user
+   */
   @AdminOnly()
   @Mutation(() => UserGroup, { name: 'AddUserToUserGroup' })
   async addUserToUserGroup(
@@ -129,6 +180,11 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     );
   }
 
+  /**
+   * Add multiple users to a user group
+   * @param addUsersToUserGroupInput - contains uuid of users and uer group
+   * @returns User group including the newly added users
+   */
   @AdminOnly()
   @Mutation(() => UserGroup, { name: 'AddUsersToUserGroup' })
   async addUsersToUserGroup(
@@ -141,6 +197,11 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     );
   }
 
+  /**
+   * Removes the provided user from a user group
+   * @param removeUserFromUserGroupInput - contains uuid of user and user group
+   * @returns User group without the removed user
+   */
   @AdminOnly()
   @Mutation(() => UserGroup, { name: 'RemoveUserFromUserGroup' })
   async removeUserFromGroup(

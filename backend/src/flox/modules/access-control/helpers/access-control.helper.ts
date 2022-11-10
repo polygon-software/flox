@@ -4,7 +4,16 @@ import AccessControlledEntity from '../entities/access-controlled.entity';
 import User from '../../auth/entities/user.entity';
 import { DEFAULT_ROLES } from '../../roles/config';
 
-export function hasReadAccess(entity: AccessControlledEntity, user?: User) {
+/**
+ * Determines whether the provided user had read access to the provided entity
+ * @param entity - access controlled entity
+ * @param user - user
+ * @returns whether the user had read access to the entity
+ */
+export function hasReadAccess(
+  entity: AccessControlledEntity,
+  user?: User,
+): boolean {
   if (entity.publicReadAccess) {
     return true;
   }
@@ -22,13 +31,28 @@ export function hasReadAccess(entity: AccessControlledEntity, user?: User) {
   });
 }
 
-export function assertReadAccess(entity: AccessControlledEntity, user?: User) {
+/**
+ * Determines whether the provided user had read access to the provided entity.
+ * If the access rights are insufficient, throws error
+ * @param entity - access controlled entity
+ * @param user - user
+ */
+export function assertReadAccess(
+  entity: AccessControlledEntity,
+  user?: User,
+): void {
   const hasAccess = hasReadAccess(entity, user);
   if (!hasAccess) {
     throw new ForbiddenException();
   }
 }
 
+/**
+ * Determines whether the provided user had write access to the provided entity
+ * @param entity - access controlled entity
+ * @param user - user
+ * @returns whether the user had write access to the entity
+ */
 export function hasWriteAccess(
   entity: AccessControlledEntity,
   user?: User,
@@ -47,6 +71,12 @@ export function hasWriteAccess(
   });
 }
 
+/**
+ * Determines whether the provided user had write access to the provided entity.
+ * If the access rights are insufficient, throws error
+ * @param entity - access controlled entity
+ * @param user - user
+ */
 export function assertWriteAccess(
   entity: AccessControlledEntity,
   user?: User,

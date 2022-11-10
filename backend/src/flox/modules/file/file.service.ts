@@ -125,6 +125,15 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     return file;
   }
 
+  /**
+   * Determines, for a list of files, the part of the files paths that immediately follow a provided base path
+   * @param files - files for which folders should be extracted
+   * @param path - base path from which on folder names should be determined
+   * @returns list of folder outputs
+   * @example Assume the file paths to be the following: [/root/folderA/folder1, /root/folderB, /root/folderB/folder2]
+   *          The function is called with a base path of /root would result in folder names /folderA and /folder2
+   *          since these are the immediate successors for the /root path
+   */
   async filesToFolders(files: S3File[], path: string): Promise<FolderOutput[]> {
     const folders: Record<string, FolderOutput> = {};
     files.forEach((file) => {

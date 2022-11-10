@@ -67,11 +67,12 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   }
 
   /**
-   * Queries for one Image
-   * @param getImageArgs - contains image uuid
-   * @param user - user that owns image
-   * @param options - additional options to get an image
-   * @returns Queried image
+   * Retrieves a single image from the database, ensuring the provided user has access to it by either being owner or
+   * allowed reader of the image. Alternatively, the image can be public, then the user has also access to it.
+   * @param getImageArgs - contains uuid of image to be retrieved
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the one image that was received
    */
   async getImage(
     getImageArgs: GetImageArgs,
@@ -89,9 +90,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       },
       options,
     );
-    console.log(JSON.stringify(mergedOptions, null, 4));
     const image = await super.getOneAsUser(getImageArgs, user, mergedOptions);
-    console.log(image);
     const file = await this.fileService.getOneAsUser(
       {
         uuid: image.file.uuid,
@@ -105,11 +104,12 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   }
 
   /**
-   * Returns all images stored within the database
-   * @param getMultipleImagesArgs - contains uuids of images
-   * @param user - user that owns images
-   * @param options - additional options to get an image
-   * @returns Images
+   * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the list of found entities
    */
   async getMultipleImages(
     getMultipleImagesArgs: GetMultipleImagesArgs,
@@ -147,6 +147,15 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     );
   }
 
+  /**
+   * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the list of found entities
+   */
   async getMultipleImagesOfUser(
     getMultipleImagesArgs: GetMultipleImagesArgs,
     user: User,
@@ -184,11 +193,12 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   }
 
   /**
-   * Returns all images stored within the database
-   * @param getAllImagesArgs - contains take and skip parameters
-   * @param user - user that owns images
-   * @param options - additional options to get an image
-   * @returns Images
+   * Retrieves all images from a database with applying pagination. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   * @param getAllImagesArgs - contains pagination parameters (skip, take)
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns page of entities
    */
   async getAllImages(
     getAllImagesArgs: GetAllImagesArgs,
@@ -226,6 +236,15 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     );
   }
 
+  /**
+   * Retrieves all images from a database with applying pagination. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   * @param getAllImagesArgs - contains pagination parameters (skip, take)
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns page of entities
+   */
   async getAllImagesOfUser(
     getAllImagesArgs: GetAllImagesArgs,
     user: User,
@@ -321,6 +340,15 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     );
   }
 
+  /**
+   * Queries for all entities that fit query criteria. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   * @param searchImageArgs - contain table filtering rules
+   * @param searchKey - key on which search string value is being searched
+   * @param user - user that retrieves entities
+   * @param options - query options to extend search
+   * @returns images that fit criteria
+   */
   async searchImages(
     searchImageArgs: SearchImagesArgs,
     searchKey: NestedKeyOf<Image>,
@@ -346,6 +374,16 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     };
   }
 
+  /**
+   * Queries for all entities that fit query criteria. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   * @param searchImageArgs - contain table filtering rules
+   * @param searchKey - key on which search string value is being searched
+   * @param user - user that retrieves entities
+   * @param options - query options to extend search
+   * @returns images that fit criteria
+   */
   async searchMyImages(
     searchImageArgs: SearchImagesArgs,
     searchKey: NestedKeyOf<Image>,
@@ -372,10 +410,10 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   }
 
   /**
-   * Creates a new image given a file
-   * @param createImageInput - contains file uuid
-   * @param user - user that needs to have the right to access the image
-   * @returns Created Image
+   * Creates a new image based on the create input and sets the user as the images owner.
+   * @param createImageInput - specifications of image, must be deep partial of image
+   * @param user - the user that creates the image
+   * @returns the created image
    */
   async createImage(
     createImageInput: CreateImageInput,

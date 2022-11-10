@@ -23,6 +23,12 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     return this.userGroupRepository;
   }
 
+  /**
+   * Retrieves list of user groups in which the user with the provided uuid is part of
+   * @param userUuid - uuid of user
+   * @param getAll - contains take and limit parameters
+   * @returns list of user groups
+   */
   async getUserGroupsForUser(
     userUuid: string,
     getAll: GetAllArgs,
@@ -41,6 +47,12 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     });
   }
 
+  /**
+   * Adds the provided user to a user group
+   * @param userGroupUuid - uuid of user group
+   * @param user - user that shall be added to user group
+   * @returns User group including the newly added user
+   */
   async addUserToUserGroup(
     userGroupUuid: string,
     user: User,
@@ -64,6 +76,12 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     );
   }
 
+  /**
+   * Add multiple users to a user group
+   * @param userGroupUuid - uuid of user group
+   * @param userUuids - uuids of users to be added
+   * @returns User group including the newly added users
+   */
   async addUsersToUserGroup(
     userGroupUuid: string,
     userUuids: string[],
@@ -89,6 +107,12 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     );
   }
 
+  /**
+   * Removes the provided user from a user group
+   * @param userGroupUuid - uuid of user group
+   * @param user - user that shall be removed from user group
+   * @returns User group without the removed user
+   */
   async removeUserFromGroup(
     userGroupUuid: string,
     user: User,
