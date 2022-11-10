@@ -97,9 +97,10 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       } as GetOneArgs,
       user,
     );
+    const fileWithUrl = await this.fileService.addFileUrl(file, getImageArgs);
     return {
       ...image,
-      file,
+      file: fileWithUrl,
     };
   }
 
@@ -139,9 +140,13 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
           } as GetOneArgs,
           user,
         );
+        const fileWithUrl = await this.fileService.addFileUrl(
+          file,
+          getMultipleImagesArgs,
+        );
         return {
           ...image,
-          file,
+          file: fileWithUrl,
         };
       }),
     );
@@ -184,9 +189,13 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
           } as GetOneArgs,
           user,
         );
+        const fileWithUrl = await this.fileService.addFileUrl(
+          file,
+          getMultipleImagesArgs,
+        );
         return {
           ...image,
-          file,
+          file: fileWithUrl,
         };
       }),
     );
@@ -228,9 +237,13 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
           } as GetOneArgs,
           user,
         );
+        const fileWithUrl = await this.fileService.addFileUrl(
+          file,
+          getAllImagesArgs,
+        );
         return {
           ...image,
-          file,
+          file: fileWithUrl,
         };
       }),
     );
@@ -273,9 +286,13 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
           } as GetOneArgs,
           user,
         );
+        const fileWithUrl = await this.fileService.addFileUrl(
+          file,
+          getAllImagesArgs,
+        );
         return {
           ...image,
-          file,
+          file: fileWithUrl,
         };
       }),
     );

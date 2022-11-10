@@ -17,6 +17,7 @@ export const GET_IMAGE: QueryObject = {
           url
         }
         labels {
+          uuid
           name
           confidence
           boundingBox {
@@ -48,6 +49,7 @@ export const GET_IMAGES: QueryObject = {
           url
         }
         labels {
+          uuid
           name
           confidence
           boundingBox {
@@ -79,6 +81,7 @@ export const GET_MY_IMAGES: QueryObject = {
           url
         }
         labels {
+          uuid
           name
           confidence
           boundingBox {
@@ -110,6 +113,7 @@ export const GET_ALL_IMAGES: QueryObject = {
           url
         }
         labels {
+          uuid
           name
           confidence
           boundingBox {
@@ -141,6 +145,7 @@ export const GET_ALL_MY_IMAGES: QueryObject = {
           url
         }
         labels {
+          uuid
           name
           confidence
           boundingBox {

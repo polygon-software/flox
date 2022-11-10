@@ -200,7 +200,13 @@ const sideMenu = [
   },
   {
     links: [
-      { icon: 'data_object', text: i18n.global.t('menu.object_recognition') },
+      {
+        icon: 'data_object',
+        text: i18n.global.t('menu.object_recognition'),
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.OBJECT_RECOGNITION);
+        },
+      },
       { icon: 'face', text: i18n.global.t('menu.face_recognition') },
       { icon: 'manage_search', text: i18n.global.t('menu.text_extraction') },
     ],

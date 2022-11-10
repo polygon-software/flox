@@ -97,6 +97,9 @@ export default {
     email: 'E-Mail',
     role: 'Role',
   },
+  object_recognition: {
+    object_recognition: 'Object Recognition',
+  },
   messages: {
     success: 'Success',
     failure: 'Failure',

@@ -62,6 +62,14 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/SamplePage.vue') }],
   },
 
+  OBJECT_RECOGNITION: {
+    path: '/object-recognition',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/ObjectRecognitionPage.vue') },
+    ],
+  },
+
   // Wildcard route for non-covered routes
   WILDCARD: {
     path: '/:catchAll(.*)*',

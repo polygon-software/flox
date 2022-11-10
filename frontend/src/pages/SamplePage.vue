@@ -18,7 +18,7 @@
     <!-- Labeled Images -->
     <!--    <q-input v-model="imageUuid" label="Image UUID containing labels" />-->
 
-    <!--    <LabeledImage :uuid="imageUuid" :max-width="500" :max-height="500" />-->
+    <!--    -->
   </q-page>
 </template>
 

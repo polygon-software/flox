@@ -50,9 +50,9 @@ export default boot(({ router }) => {
           (constrainedRoute) => constrainedRoute.path === to.path
         );
         if (matchingConstrainedRoute) {
-          const hasFullAccess = matchingConstrainedRoute.allowedRoles.includes(
-            user.role
-          );
+          const hasFullAccess =
+            user.role &&
+            matchingConstrainedRoute.allowedRoles.includes(user.role);
           if (!hasFullAccess) {
             return getUserRoleRoute(user, $authStore);
           }

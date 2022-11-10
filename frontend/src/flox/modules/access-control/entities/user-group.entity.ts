@@ -1,3 +1,5 @@
+import { IsOptional, IsString } from 'class-validator';
+
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
 
@@ -5,15 +7,10 @@ import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
  * Class that represents a user group
  */
 export default class UserGroupEntity extends BaseEntity {
-  // eslint-disable-next-line require-jsdoc
-  constructor(
-    uuid: string,
-    createdAt: Date,
-    updatedAt: Date,
-    deletedAt: Date | null,
-    public name: string,
-    public users: UserEntity[]
-  ) {
-    super(uuid, createdAt, updatedAt, deletedAt);
-  }
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  users?: UserEntity[];
 }

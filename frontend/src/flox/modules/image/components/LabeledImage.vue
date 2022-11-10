@@ -19,6 +19,7 @@
         v-for="label in image.labels"
         :key="label.name + label.confidence"
         class="bbox"
+        :class="{ focus: focusLabel && focusLabel.uuid === label.uuid }"
         :style="{
           top: `${label.boundingBox.top * height}px`,
           left: `${label.boundingBox.left * width}px`,
@@ -34,27 +35,17 @@
 
 <script setup lang="ts">
 import { dom } from 'quasar';
-import { defineProps, Ref, ref, watch } from 'vue';
+import { defineProps, Ref, ref } from 'vue';
 
 import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
-import { getImage } from 'src/flox/modules/image/services/image.service';
+import { LabelEntity } from 'src/flox/modules/image/entities/label.entity';
 
-const props = defineProps({
-  uuid: {
-    type: String,
-    required: true,
-  },
-  maxWidth: {
-    type: Number,
-    required: true,
-  },
-  maxHeight: {
-    type: Number,
-    required: true,
-  },
-});
-
-const image: Ref<ImageEntity | null> = ref(null);
+const props = defineProps<{
+  image: ImageEntity;
+  focusLabel?: LabelEntity;
+  maxWidth: number;
+  maxHeight: number;
+}>();
 
 const imgRef: Ref<HTMLImageElement | null> = ref(null);
 const width: Ref<number> = ref(0);
@@ -69,29 +60,23 @@ function updateImageProperties(): void {
     height.value = dom.height(imgRef.value);
   }
 }
-
-watch(
-  () => props.uuid,
-  async () => {
-    image.value = await getImage(props.uuid);
-  }
-);
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .img-container {
   position: relative;
 }
 .bbox {
   position: absolute;
   border: 2px solid rgba(255, 255, 255, 0.69);
-  box-shadow: 0 0 1px #687078, 0 0 2px #687078, 0 0 2px #687078, 0 0 2px #687078,
-    inset 0 0 2px #687078, inset 0 0 2px #687078, inset 0 0 2px #687078,
-    inset 0 0 2px #687078;
+  box-shadow: 0 0 1px $primary, 0 0 2px $primary, 0 0 2px $primary, 0 0 2px $primary,
+    inset 0 0 2px $primary, inset 0 0 2px $primary, inset 0 0 2px $primary,
+    inset 0 0 2px $primary;
   border-radius: 5px;
 }
-.bbox:hover {
-  border: 2px solid #687078;
+.bbox:hover,
+.bbox.focus {
+  border: 2px solid $primary;
 }
 .bbox span {
   position: absolute;
@@ -104,8 +89,9 @@ watch(
   line-height: 0.8rem;
   padding: 3px;
 }
-.bbox:hover span {
+.bbox:hover span,
+.bbox.focus span {
   color: white;
-  background-color: #687078;
+  background-color: $primary;
 }
 </style>

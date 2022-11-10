@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { IsNumber, IsString } from 'class-validator';
+import { IsDecimal, IsString } from 'class-validator';
 
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 
@@ -28,7 +28,7 @@ export default class Label extends BaseEntity {
 
   @Field(() => Number, { description: 'Confidence between 0 and 100' })
   @Column('float8')
-  @IsNumber()
+  @IsDecimal()
   public confidence: number;
 
   @Field(() => [String], {
