@@ -31,7 +31,8 @@ export default abstract class AbstractSearchAccessControlService<
   }
 
   /**
-   * Queries for all rows that fit query criteria, best used in combination with the DataTable
+   * Queries for all entities that fit query criteria. It only returns the entities that are marked with
+   * public read access.
    * @param queryArgs - contain table filtering rules
    * @param searchKey - key on which search string value is being searched
    * @param options - query options to extend search
@@ -52,8 +53,6 @@ export default abstract class AbstractSearchAccessControlService<
       this.extractWhere(options),
     );
 
-    console.log(where);
-
     const [data, count] = await this.repository.findAndCount({
       ...options,
       order: {
@@ -66,6 +65,15 @@ export default abstract class AbstractSearchAccessControlService<
     return { data, count };
   }
 
+  /**
+   * Queries for all entities that fit query criteria. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these items.
+   * @param queryArgs - contain table filtering rules
+   * @param searchKey - key on which search string value is being searched
+   * @param user - user that retrieves entities
+   * @param options - query options to extend search
+   * @returns data that fit criteria
+   */
   async searchAsUser(
     queryArgs: SearchArgs,
     searchKey: NestedKeyOf<Entity>,
@@ -107,6 +115,16 @@ export default abstract class AbstractSearchAccessControlService<
     return { data, count };
   }
 
+  /**
+   * Queries for all entities that fit query criteria. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these items. This
+   * endpoint does not return public items, though, since they do not explicitely belong to the user.
+   * @param queryArgs - contain table filtering rules
+   * @param searchKey - key on which search string value is being searched
+   * @param user - user that retrieves entities
+   * @param options - query options to extend search
+   * @returns data that fit criteria
+   */
   async searchOfUser(
     queryArgs: SearchArgs,
     searchKey: NestedKeyOf<Entity>,
@@ -140,6 +158,14 @@ export default abstract class AbstractSearchAccessControlService<
     return { data, count };
   }
 
+  /**
+   * Queries for all entities that fit query criteria. This service function must be
+   * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   * @param queryArgs - contain table filtering rules
+   * @param searchKey - key on which search string value is being searched
+   * @param options - query options to extend search
+   * @returns data that fit criteria
+   */
   async searchAsAdmin(
     queryArgs: SearchArgs,
     searchKey: NestedKeyOf<Entity>,

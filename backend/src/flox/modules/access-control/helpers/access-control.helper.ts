@@ -2,7 +2,7 @@ import { ForbiddenException } from '@nestjs/common';
 
 import AccessControlledEntity from '../entities/access-controlled.entity';
 import User from '../../auth/entities/user.entity';
-import { DEFAULT_ROLES } from "../../roles/config";
+import { DEFAULT_ROLES } from '../../roles/config';
 
 export function hasReadAccess(entity: AccessControlledEntity, user?: User) {
   if (entity.publicReadAccess) {

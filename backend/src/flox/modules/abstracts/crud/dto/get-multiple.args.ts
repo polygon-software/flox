@@ -1,9 +1,9 @@
 import { ArgsType, Field, ID } from '@nestjs/graphql';
-import { IsArray } from 'class-validator';
+import {IsUUID} from 'class-validator';
 
 @ArgsType()
 export default class GetMultipleArgs {
-  @Field(() => [ID], { nullable: true })
-  @IsArray()
+  @Field(() => [ID])
+  @IsUUID(4, { each: true })
   uuids: string[] = [];
 }

@@ -19,6 +19,12 @@ import UpdateInput from './inputs/update.input';
 export default abstract class AbstractCrudService<Entity extends BaseEntity> {
   abstract get repository(): Repository<Entity>;
 
+  /**
+   * Retrieves a single item from the database
+   * @param getOneArgs - contains uuid of item to be retrieved
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the one item that was received
+   */
   getOne(
     getOneArgs: GetOneArgs,
     options?: FindOneOptions<Entity>,
@@ -31,33 +37,56 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
     });
   }
 
-  getAll(
-    getAll: GetAllArgs,
-    options?: FindOneOptions<Entity>,
-  ): Promise<Entity[]> {
-    return this.repository.find({
-      ...options,
-      take: getAll.take,
-      skip: getAll.skip,
-    });
-  }
-
+  /**
+   * Retrieves multiple items explicitely specified by their uuid
+   * @param getMultipleArgs - contains a list of uuids of the items to retrieve
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the list of found entities
+   */
   getMultiple(
-    getMultiple: GetMultipleArgs,
+    getMultipleArgs: GetMultipleArgs,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
     return this.repository.findBy({
       ...options,
-      uuid: In(getMultiple.uuids),
+      uuid: In(getMultipleArgs.uuids),
     } as FindOptionsWhere<Entity>);
   }
 
+  /**
+   * Retrieves all items from a database with applying pagination
+   * @param getAllArgs - contains pagination parameters (skip, take)
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns page of entities
+   */
+  getAll(
+    getAllArgs: GetAllArgs,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity[]> {
+    return this.repository.find({
+      ...options,
+      take: getAllArgs.take,
+      skip: getAllArgs.skip,
+    });
+  }
+
+  /**
+   * Creates a new item based on the create input
+   * @param createInput - specifications of item, must be deep partial of entity
+   * @returns the created entity
+   */
   async create(createInput: CreateInput): Promise<Entity> {
     const entity = this.repository.create(createInput as DeepPartial<Entity>);
     await this.repository.save(entity);
     return entity;
   }
 
+  /**
+   * Updates an existing entity within the database according to the update input
+   * @param updateInput - specification of update, must be deep partial of entity
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the updated entity, freshly retrieved from the database
+   */
   async update(
     updateInput: UpdateInput,
     options?: FindOneOptions<Entity>,
@@ -75,6 +104,11 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
     });
   }
 
+  /**
+   * Removes an entity from the database
+   * @param deleteInput - contains the uuid of the item to remove
+   * @returns the deleted entity
+   */
   async delete(deleteInput: DeleteInput): Promise<Entity> {
     const entity = await this.repository.findOneOrFail({
       where: {
@@ -82,7 +116,7 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
       } as FindOptionsWhere<Entity>,
     });
     const uuid = entity.uuid;
-    const deletedEntity = await this.repository.remove(entity);
+    const deletedEntity = await this.repository.softRemove(entity);
     deletedEntity.uuid = uuid;
     return deletedEntity;
   }

@@ -4,6 +4,6 @@ import { IsUUID } from 'class-validator';
 @ArgsType()
 export default class GetOneArgs {
   @Field(() => ID)
-  @IsUUID()
+  @IsUUID(4)
   uuid: string;
 }
