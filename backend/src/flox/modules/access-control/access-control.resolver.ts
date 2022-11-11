@@ -126,7 +126,10 @@ export default class AccessControlResolver extends AbstractSearchResolver<
   async createUserGroup(
     @Args('createUserGroupInput') createUserGroupInput: CreateUserGroupInput,
   ): Promise<UserGroup> {
-    const created = await super.create(createUserGroupInput);
+    const created = await super.create({
+      name: createUserGroupInput.name,
+      users: createUserGroupInput.users.map((uuid) => ({ uuid })),
+    });
     await this.accessControlService.addUsersToUserGroup(
       created.uuid,
       createUserGroupInput.users,
