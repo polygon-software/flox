@@ -415,7 +415,7 @@ async function clickOnFileOrFolder(row: FileOrFolder): Promise<void> {
     if (fileBeingMoved.value) {
       return;
     }
-    const fileDetails = await getFile(row.uuid);
+    const fileDetails = await getFile(row.uuid, 360);
     if (fileDetails.url) {
       window.open(fileDetails.url, '_blank');
     }

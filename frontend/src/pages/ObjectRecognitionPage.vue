@@ -35,13 +35,14 @@
     <p>
       {{ $t('object_recognition.description') }}
     </p>
-    <div style="height: calc(100vh - 400px)">
+    <div>
       <div class="row justify-center q-mt-lg">
-        <div class="col-12 col-md-6 q-px-sm">
+        <div class="col-12 col-md-6 q-px-sm" style="height: fit-content">
           <LabeledImage
             :image="focusImage"
             :focus-label="focusLabel"
             class="rounded-borders"
+            @focus="focusOn($event)"
           />
         </div>
         <div class="col-12 col-md-6 q-px-sm">
@@ -53,7 +54,7 @@
             v-if="focusImage"
             bordered
             separator
-            style="min-width: 250px"
+            style="min-width: 250px; height: 400px; overflow-y: scroll"
             class="rounded-borders full-width"
           >
             <q-item
@@ -63,11 +64,7 @@
               clickable
               :active="label === focusLabel"
               active-class="bg-accent"
-              @click="
-                focusLabel && focusLabel === label
-                  ? (focusLabel = null)
-                  : (focusLabel = label)
-              "
+              @click="focusOn(label)"
             >
               <q-item-section class="full-width">
                 <q-item-label class="text-weight-bold">
@@ -228,6 +225,18 @@ async function onImportButtonClick(): Promise<void> {
     importImageMode.value = false;
     await Promise.allSettled(newImagesPromises);
     await loadImages();
+  }
+}
+
+/**
+ * Shifts a new label into focus
+ * @param label - label to focus on
+ */
+function focusOn(label: LabelEntity): void {
+  if (focusLabel.value && focusLabel.value === label) {
+    focusLabel.value = null;
+  } else {
+    focusLabel.value = label;
   }
 }
 

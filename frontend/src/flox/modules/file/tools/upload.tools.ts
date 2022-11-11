@@ -47,11 +47,7 @@ export async function uploadFile(
       throw new Error(`File upload error: ${e.message}`);
     });
 
-  if (file.content.type.split('/')[0] === 'image') {
-    await createImage(createdFile.uuid, true);
-  }
-
-  invalidateTables([TABLES.FILE, TABLES.IMAGE]);
+  invalidateTables([TABLES.FILE]);
 
   // Return updated objects
   return createdFile;

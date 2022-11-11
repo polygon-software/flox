@@ -11,14 +11,18 @@
       <div
         v-for="label in image.labels"
         :key="label.name + label.confidence"
-        class="bbox"
-        :class="{ focus: focusLabel && focusLabel.uuid === label.uuid }"
+        class="bbox cursor-pointer"
+        :class="{
+          focus: focusLabel && focusLabel.uuid === label.uuid,
+          defocus: focusLabel && focusLabel.uuid !== label.uuid,
+        }"
         :style="{
           top: `${label.boundingBox.top * 100}%`,
           left: `${label.boundingBox.left * 100}%`,
           width: `${label.boundingBox.width * 100}%`,
           height: `${label.boundingBox.height * 100}%`,
         }"
+        @click="emit('focus', label)"
       >
         <span>{{ label.name }}</span>
       </div>
@@ -37,6 +41,10 @@ const props = defineProps<{
   focusLabel?: LabelEntity;
   maxWidth: number;
   maxHeight: number;
+}>();
+
+const emit = defineEmits<{
+  (e: 'focus', label: LabelEntity): void;
 }>();
 
 const imgRef: Ref<HTMLImageElement | null> = ref(null);
@@ -74,14 +82,20 @@ const imgRef: Ref<HTMLImageElement | null> = ref(null);
     font-size: 0.8rem;
     line-height: 0.8rem;
     padding: 3px;
+    opacity: 1;
   }
 }
 .bbox:hover,
 .bbox.focus {
   border: 2px solid $primary;
+  background-color: rgba($primary, 0.35);
+}
+.bbox.defocus {
+  opacity: 0.3;
 }
 .bbox .bbox:hover span,
 .bbox.focus span {
+  opacity: 0;
   color: white;
   background-color: $primary;
 }

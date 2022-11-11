@@ -78,7 +78,11 @@ const path: WritableComputedRef<string> = computed({
  * Creates a new folder in the frontend only. A folder is only active in the backend when a file exists within it.
  */
 function createFolder(): void {
-  path.value = `${path.value}/${newFolderNameInput.value}`;
+  if (path.value === '/') {
+    path.value = `/${newFolderNameInput.value}`;
+  } else {
+    path.value = `${path.value}/${newFolderNameInput.value}`;
+  }
   newFolderNameInput.value = '';
 }
 

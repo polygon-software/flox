@@ -364,11 +364,11 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     const updatedFile = await this.fileService.update(
       { uuid: file.uuid },
       user,
-      fileWithUrl,
     );
     return {
       ...updatedFile,
       signedUrl,
+      url: fileWithUrl.url,
     } as S3File;
   }
 

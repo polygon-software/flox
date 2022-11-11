@@ -128,7 +128,6 @@ export const GET_ALL_FILES: QueryObject = {
         mimetype
         filename
         size
-        url
         __typename
       }
     }
@@ -166,7 +165,6 @@ export const ALL_MY_FILES: QueryObject = {
         mimetype
         filename
         size
-        url
         __typename
       }
     }
@@ -204,7 +202,6 @@ export const ALL_PUBLIC_FILES: QueryObject = {
         mimetype
         filename
         size
-        url
         __typename
       }
     }
@@ -258,7 +255,6 @@ export const SEARCH_FILES: QueryObject = {
           mimetype
           filename
           size
-          url
         }
         __typename
       }
@@ -295,7 +291,6 @@ export const SEARCH_MY_FILES: QueryObject = {
           mimetype
           filename
           size
-          url
         }
         __typename
       }
@@ -332,7 +327,6 @@ export const SEARCH_PUBLIC_FILES: QueryObject = {
           mimetype
           filename
           size
-          url
         }
         __typename
       }
