@@ -111,7 +111,7 @@ import {
 import { sleep } from 'src/tools/general.tool';
 import LazySearchField from 'components/forms/LazySearchField.vue';
 import MultiUserAvatars from 'src/flox/modules/auth/components/avatar/MultiUserAvatars.vue';
-import { i18n } from "boot/i18n";
+import { i18n } from 'boot/i18n';
 
 const $q = useQuasar();
 
@@ -134,10 +134,12 @@ const selectedGroup: ComputedRef<UserGroupEntity | null> = computed(() => {
  */
 async function refresh(): Promise<void> {
   if (userGroupTableRef.value) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
     userGroupTableRef.value.refresh();
   }
   const selectedGroupUuid = selectedGroup.value?.uuid;
   await sleep(500);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
   selectedGroups.value = userGroupTableRef.value.rows.filter(
     (r: UserGroupEntity): boolean => r.uuid === selectedGroupUuid
   );

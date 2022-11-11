@@ -7,8 +7,6 @@ import { DEFAULT_ROLES } from '../../roles/config';
 
 import AbstractSearchAccessControlService from './abstract-search-access-control.service';
 
-import type { NestedKeyOf } from '../../../../types/NestedKeyOf';
-
 export default abstract class AbstractSearchAccessControlResolver<
   Entity extends AccessControlledEntity,
   Service extends AbstractSearchAccessControlService<Entity>,

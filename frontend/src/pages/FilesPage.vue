@@ -101,6 +101,7 @@ function openFileUploadDialog(): void {
     },
   }).onOk(() => {
     if (fileExplorerRef.value) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       fileExplorerRef.value.refresh();
     }
   });

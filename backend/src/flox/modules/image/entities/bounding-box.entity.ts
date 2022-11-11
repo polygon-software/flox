@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, OneToOne } from 'typeorm';
-import { IsDecimal } from "class-validator";
+import { IsDecimal } from 'class-validator';
 
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 

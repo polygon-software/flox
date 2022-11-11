@@ -87,7 +87,7 @@ function getUserRoleRoute(
     return ROUTES.LOGIN;
   }
 
-  return ROUTES.SAMPLE;
+  return ROUTES.HOME;
   // TODO application specific: add paths per role
   // switch (user.role) {
   //   case ROLE.ADMIN:

@@ -191,6 +191,14 @@ type Image {
   width: Float
 }
 
+type ImageSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """Image that fit query"""
+  data: [Image!]!
+}
+
 type Label {
   """Bounding box for every instance of this label on image"""
   boundingBox: BoundingBox!
@@ -438,7 +446,7 @@ type Query {
 
     """Number of items to load"""
     take: Int = 500
-  ): [Image!]!
+  ): ImageSearchOutput!
   SearchMyFiles(
     """Sort descending"""
     descending: Boolean = false
@@ -476,7 +484,7 @@ type Query {
 
     """Number of items to load"""
     take: Int = 500
-  ): [Image!]!
+  ): ImageSearchOutput!
   SearchPublicFiles(
     """Sort descending"""
     descending: Boolean = false

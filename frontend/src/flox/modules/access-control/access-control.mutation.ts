@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from 'graphql-tag';
 
 import { ALL_TABLES } from 'src/flox/TABLES';
 import { MutationObject, MutationTypes } from 'src/apollo/mutation';

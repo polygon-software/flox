@@ -14,7 +14,6 @@ import { assertReadAccess } from '../access-control/helpers/access-control.helpe
 import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
 import User from '../auth/entities/user.entity';
 import FileService from '../file/file.service';
-import { NestedKeyOf } from '../../../types/NestedKeyOf';
 import AccessControlService from '../access-control/access-control.service';
 
 import GetAllImagesArgs from './dto/args/get-all-images.args';

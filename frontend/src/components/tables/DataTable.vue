@@ -214,6 +214,8 @@ const props = withDefaults(
     hideColumnSelector: false,
     removeIcon: 'delete',
     removeLabel: 'Remove',
+    appendName: '',
+    prependName: '',
     tableProps: () => ({}),
   }
 );

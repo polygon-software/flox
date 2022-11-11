@@ -11,7 +11,14 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-btn v-if="$q.screen.gt.xs" flat no-caps no-wrap class="q-ml-xs">
+        <q-btn
+          v-if="$q.screen.gt.xs"
+          flat
+          no-caps
+          no-wrap
+          class="q-ml-xs"
+          @click="$routerService?.routeTo(ROUTES.HOME)"
+        >
           <q-avatar size="28px">
             <img src="/icon.svg" />
           </q-avatar>
@@ -163,6 +170,9 @@ const sideMenu = [
       {
         icon: 'home',
         text: i18n.global.t('menu.home'),
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.HOME);
+        },
       },
       {
         icon: 'group',

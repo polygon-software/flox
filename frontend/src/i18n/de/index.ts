@@ -140,7 +140,8 @@ export default {
       'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren',
   },
   pages: {
-    sample: {
+    home: {
+      title: 'Home',
       meta: {
         title: 'Flox',
         description: 'Dies ist eine flox demo-seite',

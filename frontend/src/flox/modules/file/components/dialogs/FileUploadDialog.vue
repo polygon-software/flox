@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { QFile, useDialogPluginComponent } from 'quasar';
-import { defineProps, ref, Ref } from 'vue';
+import { defineProps, ref, Ref, unref } from 'vue';
 
 import useFileUpload from 'src/flox/modules/file/useFileUpload';
 import FileList from 'src/flox/modules/file/components/forms/fields/FileList.vue';
@@ -72,7 +72,7 @@ const { selectedFiles, removeFile, onFilePicked, uploadFiles } =
  * Uploads selected files to server
  */
 async function uploadSelectedFiles(): Promise<void> {
-  await uploadFiles(props.path.value);
+  await uploadFiles(unref(props.path));
   onDialogOK();
 }
 </script>

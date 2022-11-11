@@ -137,7 +137,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
    * @returns images that fit criteria
    */
   @LoggedIn()
-  @Query(() => [Image], { name: 'SearchImages' })
+  @Query(() => ImageSearchOutput, { name: 'SearchImages' })
   async searchImages(
     @Args() searchImageArgs: SearchImagesArgs,
     @CurrentUser() user: User,
@@ -158,7 +158,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
    * @returns images that fit criteria
    */
   @LoggedIn()
-  @Query(() => [Image], { name: 'SearchMyImages' })
+  @Query(() => ImageSearchOutput, { name: 'SearchMyImages' })
   async searchMyImages(
     @Args() searchImageArgs: SearchImagesArgs,
     @CurrentUser() user: User,

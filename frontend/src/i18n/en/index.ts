@@ -98,7 +98,8 @@ export default {
     role: 'Role',
   },
   object_recognition: {
-    description: 'Object recognition analyzes any given image and detect over 5000 different labels.',
+    description:
+      'Object recognition analyzes any given image and detect over 5000 different labels.',
     import_images: 'Import Images',
     search_files: 'Search Files',
     object_recognition: 'Object Recognition',
@@ -137,7 +138,8 @@ export default {
       'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection',
   },
   pages: {
-    sample: {
+    home: {
+      title: 'Home',
       meta: {
         title: 'Flox',
         description: 'This is a flox sample page',

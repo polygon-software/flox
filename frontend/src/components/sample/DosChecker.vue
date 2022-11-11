@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-column q-pa-md text-center q-ma-md" style="width: 300px">
+  <q-card class="q-column q-pa-md text-center" style="width: 300px">
     <h5 class="q-ma-none q-mb-md q-mt-sm">Flox Modules:</h5>
     <q-separator />
     <div class="row">

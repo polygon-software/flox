@@ -580,7 +580,7 @@ export class AuthenticationService {
     this.$authStore.setUserSession(userSession);
 
     // Redirect to main page TODO application specific: choose correct route
-    await this.$routerService?.routeTo(ROUTES.SAMPLE);
+    await this.$routerService?.routeTo(ROUTES.HOME);
   }
 
   /**
