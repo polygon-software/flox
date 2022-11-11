@@ -13,6 +13,10 @@ if (fs.existsSync('./.babelrc')) {
 }
 
 module.exports = {
-  presets: ['@quasar/babel-preset-app'],
+  presets: [
+    ['@babel/preset-env', { targets: { node: 'current' } }],
+    '@quasar/babel-preset-app',
+    '@babel/preset-typescript',
+  ],
   extends: extend,
 };

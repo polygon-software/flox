@@ -46,7 +46,10 @@ export const EMAIL: Field<typeof QInput, QInputProps> = {
     label: i18n.global.t('authentication.email'),
     lazyRules: 'ondemand',
     rules: [
-      joiSchemaToValidationRule(joiEmailSchema(), 'errors.invalid_email'),
+      joiSchemaToValidationRule(
+        joiEmailSchema(),
+        i18n.global.t('errors.invalid_email')
+      ),
     ],
   },
 };
@@ -63,7 +66,10 @@ export const USERNAME: Field<typeof QInput, QInputProps> = {
     label: i18n.global.t('authentication.username'),
     lazyRules: 'ondemand',
     rules: [
-      joiSchemaToValidationRule(joiUsernameSchema(), 'errors.invalid_username'),
+      joiSchemaToValidationRule(
+        joiUsernameSchema(),
+        i18n.global.t('errors.invalid_username')
+      ),
     ],
   },
 };

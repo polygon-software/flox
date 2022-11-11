@@ -47,7 +47,7 @@ const currentAlias: Ref<string> = ref('');
 const emailRules: ValidationRule[] = [
   joiSchemaToValidationRule(
     Joi.string().email({ tlds: { allow: false } }),
-    'validation.email'
+    i18n.global.t('validation.email')
   ),
 ];
 

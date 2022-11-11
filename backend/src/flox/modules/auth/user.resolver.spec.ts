@@ -58,10 +58,11 @@ describe('UserResolver', () => {
       createdAt: date,
       updatedAt: date,
       validateRole: jest.fn(),
+      groups: [],
       ...input,
     };
 
-    jest.spyOn(userService, 'createUser').mockImplementation(async () => user);
+    jest.spyOn(userService, 'create').mockImplementation(async () => user);
 
     // Create user
     expect(await userResolver.createUser(input)).toBe(user);

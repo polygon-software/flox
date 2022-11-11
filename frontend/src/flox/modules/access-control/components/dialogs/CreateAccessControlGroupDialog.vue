@@ -59,6 +59,7 @@ import {
   joiSchemaToValidationRule,
   ValidationRule,
 } from 'src/tools/validation.tool';
+import { i18n } from 'boot/i18n';
 
 defineEmits([...useDialogPluginComponent.emits]);
 
@@ -72,7 +73,7 @@ const accessGroupCreationForm: Ref<QForm | null> = ref(null);
 const nameRules: ValidationRule[] = [
   joiSchemaToValidationRule(
     Joi.string().min(5).max(20),
-    'access_control.invalid_group_name'
+    i18n.global.t('access_control.invalid_group_name')
   ),
 ];
 
