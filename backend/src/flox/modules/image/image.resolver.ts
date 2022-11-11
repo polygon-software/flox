@@ -22,7 +22,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   ImageService
 > {
   constructor(private readonly imageService: ImageService) {
-    super('file.filename');
+    super(['uuid']);
   }
 
   get service(): ImageService {
@@ -144,7 +144,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   ): Promise<ImageSearchOutput> {
     return this.imageService.searchImages(
       searchImageArgs,
-      this.searchKey,
+      this.searchKeys,
       user,
     );
   }
@@ -165,7 +165,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   ): Promise<ImageSearchOutput> {
     return this.imageService.searchMyImages(
       searchImageArgs,
-      this.searchKey,
+      this.searchKeys,
       user,
     );
   }

@@ -100,6 +100,8 @@ export default {
     role: 'Rolle',
   },
   object_recognition: {
+    description:
+      'Unsere Objekt-Erkennung analysiert Bilder und kann bis zu 5000 verschiedene Objekte identifizieren.',
     import_images: 'Bilder importieren',
     search_files: 'Dateien suchen',
     object_recognition: 'Object Recognition',

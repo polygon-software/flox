@@ -13,7 +13,7 @@ export default abstract class AbstractSearchResolver<
 > extends AbstractCrudResolver<Entity, Service> {
   abstract get service(): Service;
 
-  protected constructor(private searchKey: keyof Entity) {
+  protected constructor(private searchKeys: (keyof Entity)[]) {
     super();
   }
 
@@ -27,6 +27,6 @@ export default abstract class AbstractSearchResolver<
     searchQueryArgs: SearchArgs,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    return this.service.search(searchQueryArgs, this.searchKey, options);
+    return this.service.search(searchQueryArgs, this.searchKeys, options);
   }
 }

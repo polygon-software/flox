@@ -22,6 +22,7 @@ export const GET_IMAGE: QueryObject = {
           uuid
           name
           confidence
+          parents
           boundingBox {
             width
             height
@@ -56,6 +57,7 @@ export const GET_IMAGES: QueryObject = {
           uuid
           name
           confidence
+          parents
           boundingBox {
             width
             height
@@ -90,6 +92,7 @@ export const GET_MY_IMAGES: QueryObject = {
           uuid
           name
           confidence
+          parents
           boundingBox {
             width
             height
@@ -124,6 +127,7 @@ export const GET_ALL_IMAGES: QueryObject = {
           uuid
           name
           confidence
+          parents
           boundingBox {
             width
             height
@@ -158,6 +162,7 @@ export const GET_ALL_MY_IMAGES: QueryObject = {
           uuid
           name
           confidence
+          parents
           boundingBox {
             width
             height

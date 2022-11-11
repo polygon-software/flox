@@ -312,42 +312,14 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   ): Promise<Image> {
     const image = await this.imageRepository.findOneOrFail({
       ...options,
-      where: this.mixWhere(
-        [
-          {
-            file: {
-              uuid: getImageForFileArgs.file,
-            },
-            publicReadAccess: true,
-          },
-          {
-            file: {
-              uuid: getImageForFileArgs.file,
-            },
-            loggedInReadAccess: true,
-          },
-          {
-            file: {
-              uuid: getImageForFileArgs.file,
-            },
-            owner: {
-              uuid: user.uuid,
-            },
-          },
-          {
-            file: {
-              uuid: getImageForFileArgs.file,
-            },
-            readAccess: {
-              users: {
-                uuid: user.uuid,
-              },
-            },
-          },
-        ],
-        this.extractWhere(options),
-      ),
+      ...this.readAccessControlRelationOptions,
+      where: {
+        file: {
+          uuid: getImageForFileArgs.file,
+        },
+      },
     });
+    assertReadAccess(image, user);
     return this.getImage(
       {
         uuid: image.uuid,
@@ -361,20 +333,20 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
    * Queries for all entities that fit query criteria. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these images.
    * @param searchImageArgs - contain table filtering rules
-   * @param searchKey - key on which search string value is being searched
+   * @param searchKeys - key on which search string value is being searched
    * @param user - user that retrieves entities
    * @param options - query options to extend search
    * @returns images that fit criteria
    */
   async searchImages(
     searchImageArgs: SearchImagesArgs,
-    searchKey: NestedKeyOf<Image>,
+    searchKeys: (keyof Image)[],
     user: User,
     options?: FindOneOptions<Image>,
   ): Promise<ImageSearchOutput> {
     const { count, data } = await super.searchAsUser(
       searchImageArgs,
-      searchKey,
+      searchKeys,
       user,
       options,
     );
@@ -396,20 +368,20 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
    * user is the owner or the user is part of an access group that has read access to these images. This
    * endpoint does not return public images, though, since they do not explicitely belong to the user.
    * @param searchImageArgs - contain table filtering rules
-   * @param searchKey - key on which search string value is being searched
+   * @param searchKeys - key on which search string value is being searched
    * @param user - user that retrieves entities
    * @param options - query options to extend search
    * @returns images that fit criteria
    */
   async searchMyImages(
     searchImageArgs: SearchImagesArgs,
-    searchKey: NestedKeyOf<Image>,
+    searchKeys: (keyof Image)[],
     user: User,
     options?: FindOneOptions<Image>,
   ): Promise<ImageSearchOutput> {
     const { count, data } = await super.searchOfUser(
       searchImageArgs,
-      searchKey,
+      searchKeys,
       user,
       options,
     );

@@ -13,7 +13,7 @@ export default abstract class AbstractSearchAccessControlResolver<
   Entity extends AccessControlledEntity,
   Service extends AbstractSearchAccessControlService<Entity>,
 > extends AbstractCrudAccessControlResolver<Entity, Service> {
-  protected constructor(protected searchKey: NestedKeyOf<Entity>) {
+  protected constructor(protected searchKeys: (keyof Entity)[]) {
     super();
   }
 
@@ -31,11 +31,11 @@ export default abstract class AbstractSearchAccessControlResolver<
   ): Promise<SearchQueryOutputInterface<Entity>> {
     if (user) {
       if (user.role === DEFAULT_ROLES.ADMIN) {
-        return this.service.searchAsAdmin(queryArgs, this.searchKey);
+        return this.service.searchAsAdmin(queryArgs, this.searchKeys);
       }
-      return this.service.searchAsUser(queryArgs, this.searchKey, user);
+      return this.service.searchAsUser(queryArgs, this.searchKeys, user);
     }
-    return this.service.searchPublic(queryArgs, this.searchKey);
+    return this.service.searchPublic(queryArgs, this.searchKeys);
   }
 
   /**
@@ -47,7 +47,7 @@ export default abstract class AbstractSearchAccessControlResolver<
   searchPublic(
     queryArgs: SearchArgs,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    return this.service.searchPublic(queryArgs, this.searchKey);
+    return this.service.searchPublic(queryArgs, this.searchKeys);
   }
 
   /**
@@ -62,7 +62,7 @@ export default abstract class AbstractSearchAccessControlResolver<
     queryArgs: SearchArgs,
     user: User,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    return this.service.searchOfUser(queryArgs, this.searchKey, user);
+    return this.service.searchOfUser(queryArgs, this.searchKeys, user);
   }
 
   /**
@@ -74,6 +74,6 @@ export default abstract class AbstractSearchAccessControlResolver<
   searchAsAdmin(
     queryArgs: SearchArgs,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    return this.service.searchAsAdmin(queryArgs, this.searchKey);
+    return this.service.searchAsAdmin(queryArgs, this.searchKeys);
   }
 }

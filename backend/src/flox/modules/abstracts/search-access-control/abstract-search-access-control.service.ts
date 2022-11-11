@@ -1,4 +1,3 @@
-import { unflatten } from 'flat';
 import {
   FindOneOptions,
   FindOptionsOrder,
@@ -14,43 +13,43 @@ import AbstractCrudAccessControlService from '../crud-access-control/abstract-cr
 import SearchArgs from '../search/dto/args/search.args';
 import SearchQueryOutputInterface from '../search/outputs/search-interface.output';
 
-import type { NestedKeyOf } from 'src/types/NestedKeyOf';
-
 export default abstract class AbstractSearchAccessControlService<
   Entity extends AccessControlledEntity,
 > extends AbstractCrudAccessControlService<Entity> {
   abstract get repository(): Repository<Entity>;
 
   private nestedSearch(
-    searchKey: NestedKeyOf<Entity>,
+    searchKeys: (keyof Entity)[],
     filter: string,
-  ): FindOptionsWhere<Entity> {
-    return unflatten({
-      [searchKey]: Like(`%${filter}%`),
-    });
+  ): FindOptionsWhere<Entity>[] {
+    return searchKeys.map(
+      (key) =>
+        ({
+          [key]: Like(`%${filter}%`),
+        } as FindOptionsWhere<Entity>),
+    );
   }
 
   /**
    * Queries for all entities that fit query criteria. It only returns the entities that are marked with
    * public read access.
    * @param queryArgs - contain table filtering rules
-   * @param searchKey - key on which search string value is being searched
+   * @param searchKeys - key on which search string value is being searched
    * @param options - query options to extend search
    * @returns data that fit criteria
    */
   async searchPublic(
     queryArgs: SearchArgs,
-    searchKey: NestedKeyOf<Entity>,
+    searchKeys: (keyof Entity)[],
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const where = this.mixWhere(
       [
         {
           publicReadAccess: true,
-          ...this.nestedSearch(searchKey, queryArgs.filter),
-        },
-      ] as FindOptionsWhere<Entity>[],
-      this.extractWhere(options),
+        } as FindOptionsWhere<Entity>,
+      ],
+      this.nestedSearch(searchKeys, queryArgs.filter),
     );
 
     const [data, count] = await this.repository.findAndCount({
@@ -69,42 +68,41 @@ export default abstract class AbstractSearchAccessControlService<
    * Queries for all entities that fit query criteria. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these items.
    * @param queryArgs - contain table filtering rules
-   * @param searchKey - key on which search string value is being searched
+   * @param searchKeys - key on which search string value is being searched
    * @param user - user that retrieves entities
    * @param options - query options to extend search
    * @returns data that fit criteria
    */
   async searchAsUser(
     queryArgs: SearchArgs,
-    searchKey: NestedKeyOf<Entity>,
+    searchKeys: (keyof Entity)[],
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    const combinedOptions = {
-      ...options,
-      where: this.mixWhere(
-        [this.nestedSearch(searchKey, queryArgs.filter)],
-        this.extractWhere(options),
-      ),
-    };
     const [publicReadUuids, loggedInReadUuids, ownerUuids, readUuids] =
       await Promise.all([
-        this.findUuidsForPublicReadAccess(combinedOptions),
-        this.findUuidsForLoggedInReadAccess(combinedOptions),
-        this.findUuidsForOwner(user, combinedOptions),
-        this.findUuidsWithReadAccess(user, combinedOptions),
+        this.findUuidsForPublicReadAccess(options),
+        this.findUuidsForLoggedInReadAccess(options),
+        this.findUuidsForOwner(user, options),
+        this.findUuidsWithReadAccess(user, options),
       ]);
-    const where = {
-      uuid: In([
-        ...publicReadUuids,
-        ...loggedInReadUuids,
-        ...ownerUuids,
-        ...readUuids,
-      ]),
-    } as FindOptionsWhere<Entity>;
+
+    const where = this.mixWhere(
+      [
+        {
+          uuid: In([
+            ...publicReadUuids,
+            ...loggedInReadUuids,
+            ...ownerUuids,
+            ...readUuids,
+          ]),
+        } as FindOptionsWhere<Entity>,
+      ],
+      this.nestedSearch(searchKeys, queryArgs.filter),
+    );
 
     const [data, count] = await this.repository.findAndCount({
-      ...combinedOptions,
+      ...options,
       where,
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
@@ -120,34 +118,33 @@ export default abstract class AbstractSearchAccessControlService<
    * user is the owner or the user is part of an access group that has read access to these items. This
    * endpoint does not return public items, though, since they do not explicitely belong to the user.
    * @param queryArgs - contain table filtering rules
-   * @param searchKey - key on which search string value is being searched
+   * @param searchKeys - key on which search string value is being searched
    * @param user - user that retrieves entities
    * @param options - query options to extend search
    * @returns data that fit criteria
    */
   async searchOfUser(
     queryArgs: SearchArgs,
-    searchKey: NestedKeyOf<Entity>,
+    searchKeys: (keyof Entity)[],
     user: User,
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    const combinedOptions = {
-      ...options,
-      where: this.mixWhere(
-        [this.nestedSearch(searchKey, queryArgs.filter)],
-        this.extractWhere(options),
-      ),
-    };
     const [ownerUuids, readUuids] = await Promise.all([
-      this.findUuidsForOwner(user, combinedOptions),
-      this.findUuidsWithReadAccess(user, combinedOptions),
+      this.findUuidsForOwner(user, options),
+      this.findUuidsWithReadAccess(user, options),
     ]);
-    const where = {
-      uuid: In([...ownerUuids, ...readUuids]),
-    } as FindOptionsWhere<Entity>;
+
+    const where = this.mixWhere(
+      [
+        {
+          uuid: In([...ownerUuids, ...readUuids]),
+        } as FindOptionsWhere<Entity>,
+      ],
+      this.nestedSearch(searchKeys, queryArgs.filter),
+    );
 
     const [data, count] = await this.repository.findAndCount({
-      ...combinedOptions,
+      ...options,
       where,
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
@@ -162,28 +159,21 @@ export default abstract class AbstractSearchAccessControlService<
    * Queries for all entities that fit query criteria. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
    * @param queryArgs - contain table filtering rules
-   * @param searchKey - key on which search string value is being searched
+   * @param searchKeys - key on which search string value is being searched
    * @param options - query options to extend search
    * @returns data that fit criteria
    */
   async searchAsAdmin(
     queryArgs: SearchArgs,
-    searchKey: NestedKeyOf<Entity>,
+    searchKeys: (keyof Entity)[],
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    const combinedOptions = {
-      ...options,
-      where: this.mixWhere(
-        [this.nestedSearch(searchKey, queryArgs.filter)],
-        this.extractWhere(options),
-      ),
-    };
-
-    console.log(combinedOptions);
-    console.log(combinedOptions.where);
-
     const [data, count] = await this.repository.findAndCount({
-      ...combinedOptions,
+      ...options,
+      where: this.nestedSearch(
+        searchKeys,
+        queryArgs.filter,
+      ) as FindOptionsWhere<Entity>[],
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
       } as FindOptionsOrder<Entity>,

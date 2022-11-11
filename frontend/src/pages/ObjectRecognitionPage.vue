@@ -2,24 +2,14 @@
   <div>
     <div class="row justify-between items-center">
       <h4>{{ $t('object_recognition.object_recognition') }}</h4>
-      <q-btn
-        v-if="!importImageMode"
-        unelevated
-        color="primary"
-        :label="$t('object_recognition.import_images')"
-        class="q-mr-sm"
-        icon-right="file_copy"
-        no-caps
-        style="width: 300px"
-        @click="importImageMode = true"
-      />
-      <OnClickOutside v-else @trigger="importImageMode = false">
+      <div class="row">
         <LazySearchField
+          v-if="importImageMode"
           v-model="filesToImport"
-          class="q-mr-md"
+          class="q-mr-md file-search-field"
+          :class="{ active: importImageMode }"
           :query="SEARCH_FILES"
-          options-label="filename"
-          style="width: 300px"
+          :options-label="fullPathFormat"
           :select-props="{
             outlined: true,
             autofocus: true,
@@ -29,20 +19,23 @@
             label: $t('object_recognition.search_files'),
           }"
         />
-      </OnClickOutside>
+        <q-btn
+          unelevated
+          color="primary"
+          :label="importImageMode ? '' : $t('object_recognition.import_images')"
+          class="q-mr-sm file-search-btn"
+          :class="{ active: importImageMode }"
+          :icon-right="importImageMode ? 'check' : 'file_copy'"
+          no-caps
+          :disable="importImageMode && filesToImport.length === 0"
+          @click="onImportButtonClick"
+        />
+      </div>
     </div>
     <p>
-      Object recognition analyzes any given image and detect over 5000 different
-      labels.
+      {{ $t('object_recognition.description') }}
     </p>
     <div style="height: calc(100vh - 400px)">
-      <div
-        v-if="!focusImage"
-        class="row justify-center items-center bg-accent rounded-borders"
-        style="height: 400px; width: 500px"
-      >
-        <p>Select an Image</p>
-      </div>
       <div class="row justify-center q-mt-lg">
         <div class="col-12 col-md-6 q-px-sm">
           <LabeledImage
@@ -81,6 +74,7 @@
                   {{ label.name }}
                 </q-item-label>
                 <q-item-label caption>
+                  {{ label.parents.join(', ') }}
                   <q-linear-progress
                     :value="label.confidence / 100"
                     class="q-mt-md"
@@ -136,16 +130,26 @@
 
 <script setup lang="ts">
 import { computed, ComputedRef, onMounted, ref, Ref, watch } from 'vue';
-import { dom } from 'quasar';
-import { OnClickOutside } from '@vueuse/components';
+import { dom, useQuasar } from 'quasar';
 
 import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
-import { getAllMyImages } from 'src/flox/modules/image/services/image.service';
+import {
+  createImage,
+  getAllMyImages,
+  getImageForFile,
+} from 'src/flox/modules/image/services/image.service';
 import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
 import { LabelEntity } from 'src/flox/modules/image/entities/label.entity';
 import LazySearchField from 'components/forms/LazySearchField.vue';
 import { SEARCH_FILES } from 'src/flox/modules/file/file.query';
 import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import {
+  showErrorNotification,
+  showNotification,
+  showSuccessNotification,
+} from 'src/tools/notification.tool';
+
+const $q = useQuasar();
 
 const take: Ref<number> = ref(0);
 const skip: Ref<number> = ref(0);
@@ -194,6 +198,51 @@ function next(): void {
   skip.value += take.value;
 }
 
+/**
+ * Function that handles import of files as images
+ */
+async function onImportButtonClick(): Promise<void> {
+  if (!importImageMode.value) {
+    importImageMode.value = true;
+  } else {
+    const newImagesPromises = filesToImport.value.map(async (file) => {
+      try {
+        const importedImage = await getImageForFile(file.uuid, 360);
+        showNotification($q, 'Image already exists', {});
+        return importedImage;
+      } catch (e) {
+        console.log('Creating new image');
+        try {
+          const createdImage = await createImage(file.uuid, true);
+          showSuccessNotification($q, 'Created new Image!');
+          return createdImage;
+        } catch (e) {
+          showErrorNotification($q, 'Could not create Image from File!');
+        }
+      }
+    });
+    filesToImport.value = [];
+    importImageMode.value = false;
+    await Promise.allSettled(newImagesPromises);
+    await loadImages();
+  }
+}
+
+/**
+ * Concatenate file path and name
+ * @param file - input file
+ * @returns concatenation of path and name
+ */
+function fullPathFormat(file: FileEntity): string | undefined {
+  if (!file.path || file.path === '/') {
+    return file.filename;
+  }
+  if (!file.filename) {
+    return file.path;
+  }
+  return `${file.path}/${file.filename}`;
+}
+
 onMounted(async () => {
   if (thumbContainerRef.value) {
     const width = dom.width(thumbContainerRef.value);
@@ -228,5 +277,17 @@ onMounted(async () => {
 .active:deep(img) {
   border: 2px solid $primary;
   opacity: 0.8;
+}
+.file-search-field {
+  width: 0;
+}
+.file-search-field.active {
+  width: 300px;
+}
+.file-search-btn {
+  width: 350px;
+}
+.file-search-btn.active {
+  width: 50px;
 }
 </style>

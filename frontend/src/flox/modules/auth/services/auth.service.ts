@@ -143,9 +143,10 @@ export class AuthenticationService {
         newPasswordRequired: function (userAttributes) {
           const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
 
+          const $q = useQuasar();
+
           // Show password change dialog
           while (!newPassword) {
-            const $q = useQuasar();
             $q.dialog({
               component: ChangePasswordDialog,
               componentProps: {},

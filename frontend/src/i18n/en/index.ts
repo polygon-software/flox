@@ -98,6 +98,7 @@ export default {
     role: 'Role',
   },
   object_recognition: {
+    description: 'Object recognition analyzes any given image and detect over 5000 different labels.',
     import_images: 'Import Images',
     search_files: 'Search Files',
     object_recognition: 'Object Recognition',

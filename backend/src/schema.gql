@@ -400,7 +400,7 @@ type Query {
 
     """Number of items to load"""
     take: Int = 500
-  ): [FileSearchOutput!]!
+  ): FileSearchOutput!
   SearchFiles(
     """Sort descending"""
     descending: Boolean = false
@@ -419,7 +419,7 @@ type Query {
 
     """Number of items to load"""
     take: Int = 500
-  ): [FileSearchOutput!]!
+  ): FileSearchOutput!
   SearchImages(
     """Sort descending"""
     descending: Boolean = false
@@ -457,7 +457,7 @@ type Query {
 
     """Number of items to load"""
     take: Int = 500
-  ): [FileSearchOutput!]!
+  ): FileSearchOutput!
   SearchMyImages(
     """Sort descending"""
     descending: Boolean = false
@@ -495,7 +495,7 @@ type Query {
 
     """Number of items to load"""
     take: Int = 500
-  ): [FileSearchOutput!]!
+  ): FileSearchOutput!
   SearchUserGroups(
     """Sort descending"""
     descending: Boolean = false

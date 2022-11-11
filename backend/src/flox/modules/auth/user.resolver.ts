@@ -21,7 +21,7 @@ export default class UserResolver extends AbstractSearchResolver<
   UserService
 > {
   constructor(private readonly userService: UserService) {
-    super('username');
+    super(['username', 'email', 'role']);
   }
 
   get service(): UserService {

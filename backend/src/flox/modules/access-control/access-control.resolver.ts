@@ -30,7 +30,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     protected readonly accessControlService: AccessControlService,
     private readonly userService: UserService,
   ) {
-    super('name');
+    super(['name']);
   }
 
   get service(): AccessControlService {

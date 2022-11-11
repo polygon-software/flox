@@ -1,6 +1,12 @@
 <template>
   <div class="img-container">
-    <img v-if="image" ref="imgRef" :src="image.file.url" alt="image" />
+    <img
+      v-if="image"
+      ref="imgRef"
+      :src="image.file.url"
+      alt="image"
+      class="full-width"
+    />
     <template v-if="image">
       <div
         v-for="label in image.labels"
@@ -69,14 +75,12 @@ const imgRef: Ref<HTMLImageElement | null> = ref(null);
     line-height: 0.8rem;
     padding: 3px;
   }
-
 }
 .bbox:hover,
 .bbox.focus {
   border: 2px solid $primary;
 }
-.bbox
-.bbox:hover span,
+.bbox .bbox:hover span,
 .bbox.focus span {
   color: white;
   background-color: $primary;

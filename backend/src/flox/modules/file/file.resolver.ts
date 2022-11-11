@@ -32,7 +32,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   FileService
 > {
   constructor(private readonly fileService: FileService) {
-    super('filename');
+    super(['filename', 'path']);
   }
 
   get service(): FileService {
@@ -291,7 +291,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns files that fit criteria
    */
   @Public()
-  @Query(() => [FileSearchOutput], { name: 'SearchFiles' })
+  @Query(() => FileSearchOutput, { name: 'SearchFiles' })
   async searchFiles(
     @Args() searchFilesArgs: SearchFilesArgs,
     @OptionalUser() user?: User,
@@ -306,7 +306,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns files that fit criteria
    */
   @Public()
-  @Query(() => [FileSearchOutput], { name: 'SearchPublicFiles' })
+  @Query(() => FileSearchOutput, { name: 'SearchPublicFiles' })
   async searchPublicFiles(
     @Args() searchFilesArgs: SearchFilesArgs,
   ): Promise<FileSearchOutput> {
@@ -322,7 +322,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns files that fit criteria
    */
   @LoggedIn()
-  @Query(() => [FileSearchOutput], { name: 'SearchMyFiles' })
+  @Query(() => FileSearchOutput, { name: 'SearchMyFiles' })
   async searchMyFiles(
     @Args() searchFilesArgs: SearchFilesArgs,
     @CurrentUser() user: User,
@@ -337,7 +337,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
    * @returns files that fit criteria
    */
   @AdminOnly()
-  @Query(() => [FileSearchOutput], { name: 'SearchAdminFiles' })
+  @Query(() => FileSearchOutput, { name: 'SearchAdminFiles' })
   async searchFilesAsAdmin(
     @Args() searchFilesArgs: SearchFilesArgs,
   ): Promise<FileSearchOutput> {

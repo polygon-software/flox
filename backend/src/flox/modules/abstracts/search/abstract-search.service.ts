@@ -17,16 +17,28 @@ export default abstract class AbstractSearchService<
 > extends AbstractCrudService<Entity> {
   abstract get repository(): Repository<Entity>;
 
+  private nestedSearch(
+    searchKeys: (keyof Entity)[],
+    filter: string,
+  ): FindOptionsWhere<Entity>[] {
+    return searchKeys.map(
+      (key) =>
+        ({
+          [key]: Like(`%${filter}%`),
+        } as FindOptionsWhere<Entity>),
+    );
+  }
+
   /**
    * Queries for all rows that fit query criteria, best used in combination with the DataTable
    * @param searchQueryArgs - contain table filtering rules
-   * @param searchKey - key on which search string value is being searched
+   * @param searchKeys - key on which search string value is being searched
    * @param options - options to extend search query
    * @returns data that fit criteria
    */
   async search(
     searchQueryArgs: SearchArgs,
-    searchKey: keyof Entity,
+    searchKeys: (keyof Entity)[],
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const [data, count] = await this.repository.findAndCount({
@@ -36,9 +48,7 @@ export default abstract class AbstractSearchService<
       } as FindOptionsOrder<Entity>,
       skip: searchQueryArgs.skip,
       take: searchQueryArgs.take,
-      where: {
-        [searchKey]: Like(`%${searchQueryArgs.filter}%`),
-      } as FindOptionsWhere<Entity>,
+      where: this.nestedSearch(searchKeys, searchQueryArgs.filter),
     });
     return { data, count };
   }

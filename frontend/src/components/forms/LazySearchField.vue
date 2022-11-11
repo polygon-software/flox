@@ -35,7 +35,7 @@ import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
 const props = withDefaults(
   defineProps<{
     modelValue: BaseEntity[];
-    optionsLabel: string;
+    optionsLabel: ((option: string | any) => string) | string;
     query: QueryObject;
     selectProps: Omit<QSelectProps, 'modelValue'>;
   }>(),
