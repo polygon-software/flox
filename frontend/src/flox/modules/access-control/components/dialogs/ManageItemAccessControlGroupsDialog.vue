@@ -169,5 +169,3 @@ function resolveAddRemoveReadWriteGroups(): void {
   });
 }
 </script>
-
-<style scoped></style>

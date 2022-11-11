@@ -40,5 +40,3 @@ function confirmAction(): void {
   }
 }
 </script>
-
-<style scoped></style>

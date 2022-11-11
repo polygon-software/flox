@@ -63,5 +63,3 @@ const emit = defineEmits<{
   (e: 'removeFile', index: number): void;
 }>();
 </script>
-
-<style scoped></style>

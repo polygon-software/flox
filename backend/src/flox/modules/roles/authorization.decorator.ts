@@ -35,7 +35,7 @@ export const CurrentUser = createParamDecorator(
 export const OptionalUser = createParamDecorator(
   (data, req: ExecutionContext): User | null => {
     const principal = getRequest(req).principal;
-    return principal ? (principal as User) : null;
+    return principal ?? null;
   },
 );
 

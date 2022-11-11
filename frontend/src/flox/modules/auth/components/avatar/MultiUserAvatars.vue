@@ -32,5 +32,3 @@ const props = defineProps<{
   users: UserEntity[];
 }>();
 </script>
-
-<style scoped></style>

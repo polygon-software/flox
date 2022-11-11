@@ -5,10 +5,11 @@
       {{ $t('alias.description') }}
     </p>
     <p v-if="$authStore.getLoggedInStatus">
-      {{ $t('alias.logged_in_as') }} : <b>{{ $authStore.username }}</b>
+      {{ $t('alias.logged_in_as') }} :
+      <strong>{{ $authStore.username }}</strong>
     </p>
     <p v-if="currentAlias">
-      {{ $t('alias.alias_on_user') }}: <b>{{ currentAlias }}.</b>
+      {{ $t('alias.alias_on_user') }}: <strong>{{ currentAlias }}.</strong>
     </p>
     <q-btn
       v-if="currentAlias"
@@ -128,5 +129,3 @@ const userColumns: Ref<ColumnInterface<UserEntity>[]> = ref([
   },
 ]);
 </script>
-
-<style scoped></style>

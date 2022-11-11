@@ -16,7 +16,7 @@
       <template #prepend="slotProps">
         <q-td :props="slotProps">
           <q-avatar size="26px">
-            <img :src="avatarForUser(slotProps.row.uuid)" />
+            <img :src="avatarForUser(slotProps.row.uuid)" alt="avatar" />
           </q-avatar>
         </q-td>
       </template>
@@ -77,5 +77,3 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
   },
 ]);
 </script>
-
-<style scoped></style>

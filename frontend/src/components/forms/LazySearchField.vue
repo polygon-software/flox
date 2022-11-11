@@ -71,5 +71,3 @@ async function filterFn(
   });
 }
 </script>
-
-<style scoped></style>

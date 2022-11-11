@@ -195,5 +195,3 @@ const userGroupColumns: Ref<ColumnInterface<UserGroupEntity>[]> = ref([
   },
 ]);
 </script>
-
-<style scoped></style>

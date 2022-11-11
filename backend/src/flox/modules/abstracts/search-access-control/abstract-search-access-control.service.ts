@@ -170,10 +170,7 @@ export default abstract class AbstractSearchAccessControlService<
   ): Promise<SearchQueryOutputInterface<Entity>> {
     const [data, count] = await this.repository.findAndCount({
       ...options,
-      where: this.nestedSearch(
-        searchKeys,
-        queryArgs.filter,
-      ) as FindOptionsWhere<Entity>[],
+      where: this.nestedSearch(searchKeys, queryArgs.filter),
       order: {
         [queryArgs.sortBy]: queryArgs.descending ? 'DESC' : 'ASC',
       } as FindOptionsOrder<Entity>,

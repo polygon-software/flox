@@ -107,5 +107,3 @@ function openFileUploadDialog(): void {
   });
 }
 </script>
-
-<style scoped></style>

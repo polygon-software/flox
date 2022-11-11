@@ -9,5 +9,3 @@ import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 
 const $authStore = useAuthStore();
 </script>
-
-<style scoped></style>

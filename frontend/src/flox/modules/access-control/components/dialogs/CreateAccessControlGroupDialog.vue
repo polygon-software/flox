@@ -93,5 +93,3 @@ async function createAccessGroup(): Promise<void> {
   }
 }
 </script>
-
-<style scoped></style>

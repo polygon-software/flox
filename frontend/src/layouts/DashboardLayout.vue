@@ -20,7 +20,7 @@
           @click="$routerService?.routeTo(ROUTES.HOME)"
         >
           <q-avatar size="28px">
-            <img src="/icon.svg" />
+            <img src="/icon.svg" alt="avatar" />
           </q-avatar>
           <q-toolbar-title shrink class="text-weight-bold">
             Dashboard
@@ -73,7 +73,7 @@
           </q-btn>
           <q-btn round flat>
             <q-avatar size="26px">
-              <img :src="$authStore.avatar" />
+              <img :src="$authStore.avatar" alt="avatar" />
             </q-avatar>
             <q-tooltip>Account</q-tooltip>
           </q-btn>

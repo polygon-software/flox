@@ -76,5 +76,3 @@ async function uploadSelectedFiles(): Promise<void> {
   onDialogOK();
 }
 </script>
-
-<style scoped></style>
