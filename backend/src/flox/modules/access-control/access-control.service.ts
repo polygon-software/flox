@@ -6,6 +6,8 @@ import User from '../auth/entities/user.entity';
 import GetAllArgs from '../abstracts/crud/dto/get-all.args';
 import AbstractSearchService from '../abstracts/search/abstract-search.service';
 import UserService from '../auth/user.service';
+import NotificationService from '../notifications/notification.service';
+import Notification from '../notifications/entities/notification.entity';
 
 import UserGroup from './entities/user-group.entity';
 
@@ -15,12 +17,26 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     @InjectRepository(UserGroup)
     private userGroupRepository: Repository<UserGroup>,
     private readonly userService: UserService,
+    private readonly notificationService: NotificationService,
   ) {
     super();
   }
 
   get repository(): Repository<UserGroup> {
     return this.userGroupRepository;
+  }
+
+  async notifyUsersForBeingAdded(
+    userUuids: string[],
+    userGroup: UserGroup,
+  ): Promise<Notification[]> {
+    return this.notificationService.notifyUsers({
+      receivers: userUuids,
+      deTitle: 'Du wurdest einer Benutzergruppe hinzugefügt!',
+      deContent: `Du bist nun Mitglied der Benutzergruppe '${userGroup.name}' und hast dadurch womöglich neue Lese- und Schreibrechte erhalten!`,
+      enTitle: 'You have just been added to a new user group!',
+      enContent: `You are now now a member of the group '${userGroup.name}' and have therefore possibly gained new read- and write access rights!`,
+    });
   }
 
   /**
@@ -70,6 +86,7 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     }
     userGroup.users.push(user);
     await this.userGroupRepository.save(userGroup);
+    void this.notifyUsersForBeingAdded([user.uuid], userGroup);
     return this.getOne(
       { uuid: userGroup.uuid },
       { relations: { users: true } },
@@ -101,6 +118,10 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     );
     userGroup.users.push(...uniqueUsers);
     await this.userGroupRepository.save(userGroup);
+    void this.notifyUsersForBeingAdded(
+      uniqueUsers.map((u) => u.uuid),
+      userGroup,
+    );
     return this.getOne(
       { uuid: userGroup.uuid },
       { relations: { users: true } },

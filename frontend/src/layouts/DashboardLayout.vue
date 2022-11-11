@@ -67,10 +67,7 @@
           >
             <q-tooltip>Messages</q-tooltip>
           </q-btn>
-          <q-btn round dense flat color="grey-8" icon="notifications">
-            <q-badge color="red" text-color="white" floating> 2 </q-badge>
-            <q-tooltip>Notifications</q-tooltip>
-          </q-btn>
+          <NotificationBell />
           <q-btn round flat>
             <q-avatar size="26px">
               <img :src="$authStore.avatar" alt="avatar" />
@@ -156,6 +153,7 @@ import ROUTES from 'src/router/routes';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';
 import { i18n } from 'boot/i18n';
+import NotificationBell from "src/flox/modules/notification/components/NotificationBell.vue";
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authStore = useAuthStore();

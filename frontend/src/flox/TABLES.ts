@@ -5,6 +5,7 @@ export enum TABLES {
   BOUNDING_BOX = 'boundingBox',
   USER = 'user',
   USER_GROUP = 'usergroup',
+  NOTIFICATIONS = 'notifications',
 }
 export const ALL_TABLES = [
   TABLES.FILE,
@@ -13,4 +14,5 @@ export const ALL_TABLES = [
   TABLES.BOUNDING_BOX,
   TABLES.USER,
   TABLES.USER_GROUP,
+  TABLES.NOTIFICATIONS,
 ];

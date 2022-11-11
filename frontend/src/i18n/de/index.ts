@@ -139,6 +139,10 @@ export default {
     ctrl_shift_hint:
       'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren',
   },
+  notification: {
+    notifications: 'Benachrichtigungen',
+    no_notifications: 'Keine neuen Benachrichtigungen',
+  },
   pages: {
     home: {
       title: 'Home',

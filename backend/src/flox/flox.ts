@@ -8,6 +8,7 @@ import { EmailModule } from './modules/email/email.module';
 import { FileModule } from './modules/file/file.module';
 import { ImageModule } from './modules/image/image.module';
 import { RolesGuard } from './modules/roles/roles.guard';
+import { NotificationModule } from './modules/notifications/notification.module';
 import { MODULES } from './MODULES';
 
 export type FloxModules = FileModule | ImageModule | UserModule | EmailModule;
@@ -35,6 +36,9 @@ export function floxModules(): FloxModules[] {
         break;
       case MODULES.EMAIL:
         modules.push(EmailModule);
+        break;
+      case MODULES.NOTIFICATION:
+        modules.push(NotificationModule);
         break;
       // Some modules don't have to be added (e.g. 'roles')
       default:

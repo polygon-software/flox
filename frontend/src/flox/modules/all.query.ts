@@ -11,6 +11,7 @@ import { USER_QUERIES } from 'src/flox/modules/auth/user.query';
 import { FILE_QUERIES } from 'src/flox/modules/file/file.query';
 import { IMAGE_QUERIES } from 'src/flox/modules/image/image.query';
 import { ACCESS_CONTROL_QUERIES } from 'src/flox/modules/access-control/access-control.query';
+import { NOTIFICATION_QUERIES } from 'src/flox/modules/notification/notification.query';
 
 // Queries for all modules
 export const AllQuery: QueryObject[] = [
@@ -18,4 +19,5 @@ export const AllQuery: QueryObject[] = [
   ...FILE_QUERIES,
   ...IMAGE_QUERIES,
   ...ACCESS_CONTROL_QUERIES,
+  ...NOTIFICATION_QUERIES,
 ];

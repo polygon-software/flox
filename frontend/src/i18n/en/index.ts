@@ -137,6 +137,10 @@ export default {
     ctrl_shift_hint:
       'Hint: Use SHIFT to select / deselect a range and CTRL to add to selection',
   },
+  notification: {
+    notifications: 'Notifications',
+    no_notifications: 'No new notifications',
+  },
   pages: {
     home: {
       title: 'Home',
