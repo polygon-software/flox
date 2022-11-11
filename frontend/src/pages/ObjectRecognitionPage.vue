@@ -181,6 +181,9 @@ const sortedFocusLabels: ComputedRef<LabelEntity[]> = computed(() => {
 async function loadImages(): Promise<void> {
   console.log('Loadingimages');
   images.value = await getAllMyImages(take.value, skip.value, 60 * 60);
+  if (images.value.length === 0 && skip.value > 0) {
+    skip.value = skip.value - take.value;
+  }
 }
 watch(skip, loadImages);
 
