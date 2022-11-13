@@ -6,7 +6,7 @@
     "image": true,
     "sharing": false,
     "email": false,
-    "notification": true,
+    "notification": true
   },
   "moduleOptions": {
     "auth": {
@@ -23,7 +23,7 @@
     "email": {
       "email_sender": "test@polygon-project.ch"
     },
-    "notification": {},
+    "notification": {}
   },
   "general": {
     "database_name": "floxdb",
