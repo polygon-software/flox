@@ -22,6 +22,7 @@ export default class EmailController {
   /**
    * Sends a test e-mail to the given address (in 'recipient' param of query)
    * NOTE: This is just an example endpoint. Since it is not marked @Public / @LoggedIn, it will not be accessible by default.
+   *
    * @param req - the request
    * @param res - reply to send on
    * @param query - request query

@@ -45,6 +45,7 @@ export class AuthenticationService {
 
   /**
    * Constructor
+   *
    * @param quasar - Quasar instance
    * @param errorService - error service instance
    * @param routerService - router service instance
@@ -87,6 +88,7 @@ export class AuthenticationService {
 
   /**
    * Logs into the AWS authentication pool using the given data
+   *
    * @param identifier - the authentication's identifier (usually E-mail or username)
    * @param password - the authentication's password
    * @param newPassword - the new password if this function is triggered from set-password page
@@ -180,6 +182,7 @@ export class AuthenticationService {
 
   /**
    * Sets up MFA for the given cognito user
+   *
    * @param cognitoUser - the user
    * @param resolve - resolve function
    * @param identifier - identifier (username of email)
@@ -204,6 +207,7 @@ export class AuthenticationService {
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.
+   *
    * @param username - the chosen username
    * @param email - the authentication's e-mail address
    * @param password - the new authentication's chosen password. Must fulfill the set password conditions
@@ -459,6 +463,7 @@ export class AuthenticationService {
 
   /**
    * Shows a dialog containing a QR code for setting up two factor authentication
+   *
    * @param secretCode - the authenticator code to encode in QR code form
    * @param cognitoUser - the cognito user to show the dialog for
    * @param identifier - identifier (username of email)
@@ -509,6 +514,7 @@ export class AuthenticationService {
 
   /**
    * Confirm e-mail verification code
+   *
    * @param code -verification code
    */
   async verifyEmail(code: string): Promise<void> {
@@ -529,6 +535,7 @@ export class AuthenticationService {
 
   /**
    * Verifies a given 2FA code
+   *
    * @param tokenType - the type of token to verify
    * @param resolve - resolve function
    */
@@ -573,6 +580,7 @@ export class AuthenticationService {
 
   /**
    * When login succeeds
+   *
    * @param userSession - the currently active Cognito authentication session
    */
   async loginSuccess(userSession: CognitoUserSession): Promise<void> {
@@ -585,6 +593,7 @@ export class AuthenticationService {
 
   /**
    * When any operation (mostly login) fails, verify whether it is due to the authentication not having verified their account
+   *
    * @param error - the error that caused the failure
    * @param identifier - the authentication's identifier (usually E-mail or username) for re-login
    * @param password - the authentication's password for re-login
@@ -631,6 +640,7 @@ export class AuthenticationService {
 
   /**
    * Refreshes the idToken if necessary
+   *
    * @returns void
    */
   refreshToken(): Promise<void> {

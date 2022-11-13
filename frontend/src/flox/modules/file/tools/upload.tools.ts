@@ -17,9 +17,10 @@ export type SelectedFile = {
 
 /**
  * Uploads a single file to a given endpoint
+ *
  * @param file - File that should be uploaded
  * @param fileInputs - additional inputs that are passed to the file creation API call
- * @return Whether the upload was successful or not
+ * @returns Whether the upload was successful or not
  */
 export async function uploadFile(
   file: SelectedFile,

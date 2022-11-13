@@ -22,10 +22,19 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     super();
   }
 
+  /**
+   * @returns user group repository
+   */
   get repository(): Repository<UserGroup> {
     return this.userGroupRepository;
   }
 
+  /**
+   * Sends notifications to users that they were added to user group
+   *
+   * @param userUuids - uuids of users that shall receive notification
+   * @param userGroup - user group to which user was added
+   */
   async notifyUsersForBeingAdded(
     userUuids: string[],
     userGroup: UserGroup,
@@ -41,6 +50,7 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
 
   /**
    * Retrieves list of user groups in which the user with the provided uuid is part of
+   *
    * @param userUuid - uuid of user
    * @param getAll - contains take and limit parameters
    * @returns list of user groups
@@ -65,6 +75,7 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
 
   /**
    * Adds the provided user to a user group
+   *
    * @param userGroupUuid - uuid of user group
    * @param user - user that shall be added to user group
    * @returns User group including the newly added user
@@ -95,6 +106,7 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
 
   /**
    * Add multiple users to a user group
+   *
    * @param userGroupUuid - uuid of user group
    * @param userUuids - uuids of users to be added
    * @returns User group including the newly added users
@@ -130,6 +142,7 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
 
   /**
    * Removes the provided user from a user group
+   *
    * @param userGroupUuid - uuid of user group
    * @param user - user that shall be removed from user group
    * @returns User group without the removed user

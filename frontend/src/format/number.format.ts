@@ -1,5 +1,6 @@
 /**
  * Formats a number of bytes into a readable format
+ *
  * @param bytes - number of bytes
  * @example 32768 -> 23.0 KB
  * @returns nicely format number of bytes (KB, MB, GB etc.)

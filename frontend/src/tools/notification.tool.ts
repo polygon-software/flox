@@ -24,6 +24,7 @@ type NotificationOptions = {
 
 /**
  * Shows a default success notification
+ *
  * @param q - Quasar instance
  * @param message - message text
  * @param options - options
@@ -38,6 +39,7 @@ export function showSuccessNotification(
 
 /**
  * Shows a default error notification
+ *
  * @param q - Quasar instance
  * @param message - message text
  * @param options - options
@@ -56,6 +58,7 @@ export function showErrorNotification(
 
 /**
  * Shows a notification with the given parameters
+ *
  * @param q - Quasar instance
  * @param message - message text
  * @param options - options

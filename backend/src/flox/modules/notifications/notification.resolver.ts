@@ -14,11 +14,21 @@ import NotifyInput from './dto/inputs/notify.input';
 
 @Resolver(() => Notification)
 export default class NotificationResolver {
+  /**
+   * @param notificationService - notification service
+   * @param userService - user service
+   */
   constructor(
     private readonly notificationService: NotificationService,
     private readonly userService: UserService,
   ) {}
 
+  /**
+   * Returns all unread notifications for a user
+   *
+   * @param user - user from which notifications are retrieved
+   * @returns list of unread notifications
+   */
   @LoggedIn()
   @Query(() => [Notification], { name: 'UnreadNotifications' })
   async unreadNotifications(
@@ -27,6 +37,13 @@ export default class NotificationResolver {
     return this.notificationService.getUnreadNotifications(user);
   }
 
+  /**
+   * Marks a notification as read by the user
+   *
+   * @param markAsReadInput - contains notification uuid
+   * @param user - the logged in user
+   * @returns the updated notification
+   */
   @LoggedIn()
   @Mutation(() => Notification, { name: 'MarkNotificationAsRead' })
   async markNotificationAsRead(
@@ -42,6 +59,12 @@ export default class NotificationResolver {
     return this.notificationService.markNotificationAsRead(notification);
   }
 
+  /**
+   * Sends a notification to all users of users
+   *
+   * @param notifyUsersInput - contains notification data and list of user uuids
+   * @returns list of sent out notifications
+   */
   @AdminOnly()
   @Mutation(() => [Notification], { name: 'NotifyUsers' })
   async notifyUsers(
@@ -50,6 +73,12 @@ export default class NotificationResolver {
     return this.notificationService.notifyUsers(notifyUsersInput);
   }
 
+  /**
+   * Sends a notification to all users of users
+   *
+   * @param notifyInput - contains notification data
+   * @returns list of sent out notifications
+   */
   @AdminOnly()
   @Mutation(() => [Notification], { name: 'NotifyAllUsers' })
   async notifyAllUsers(
@@ -60,6 +89,7 @@ export default class NotificationResolver {
       { select: { uuid: true } },
     );
     const userUuids = users.map((user) => user.uuid);
+    console.log('notifyInput', notifyInput);
     return this.notificationService.notifyUsers({
       receivers: userUuids,
       ...notifyInput,

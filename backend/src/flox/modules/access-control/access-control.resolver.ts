@@ -33,12 +33,16 @@ export default class AccessControlResolver extends AbstractSearchResolver<
     super(['name']);
   }
 
+  /**
+   * @returns access control service
+   */
   get service(): AccessControlService {
     return this.accessControlService;
   }
 
   /**
    * Retrieves a user group
+   *
    * @param getOneArgs - contains uuid of user group
    * @returns user group
    */
@@ -50,6 +54,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Retrieves all user groups in which a provided user is part of
+   *
    * @param getAllOfUserArgs - contains uuid of user for which groups shall be retrieved
    * @returns list of user groups
    */
@@ -66,6 +71,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Retrieves user groups of the logged in user
+   *
    * @param getAll - contains skip and take info for pagination
    * @param user - logged in user
    * @returns list of user groups
@@ -81,6 +87,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Retrieves multiple user groups explicitely specified by their uuid
+   *
    * @param getMultipleArgs - contains a list of uuids of the user groups to retrieve
    * @returns the list of found user groups
    */
@@ -94,6 +101,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Retrieves all user groups from a database with applying pagination
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @returns page of user groups
    */
@@ -105,6 +113,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Queries for all user groups that fit query criteria, best used in combination with the DataTable
+   *
    * @param searchQueryArgs - contain table filtering rules
    * @returns user groups that fit criteria
    */
@@ -118,6 +127,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Creates a new user group based on the create input
+   *
    * @param createUserGroupInput - specifications of user group
    * @returns the created user group
    */
@@ -139,6 +149,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Updates an existing user group within the database according to the update input
+   *
    * @param updateUserGroupInput - specification of update
    * @returns the updated user group, freshly retrieved from the database
    */
@@ -152,6 +163,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Removes a user group from the database
+   *
    * @param deleteInput - contains the uuid of the user group to remove
    * @returns the deleted user group
    */
@@ -165,6 +177,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Adds the provided user to a user group
+   *
    * @param addUserToUserGroupInput - contains uuid of user and uer group
    * @returns User group including the newly added user
    */
@@ -185,6 +198,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Add multiple users to a user group
+   *
    * @param addUsersToUserGroupInput - contains uuid of users and uer group
    * @returns User group including the newly added users
    */
@@ -202,6 +216,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
 
   /**
    * Removes the provided user from a user group
+   *
    * @param removeUserFromUserGroupInput - contains uuid of user and user group
    * @returns User group without the removed user
    */

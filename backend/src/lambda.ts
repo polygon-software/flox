@@ -4,6 +4,7 @@ import { bootstrapServerless } from './bootstrap';
 
 /**
  * Bootstraps for Lambda deployment
+ *
  * @param event - trigger event
  * @param context - execution context
  * @param callback - callback

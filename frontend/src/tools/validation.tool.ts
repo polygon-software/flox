@@ -7,6 +7,7 @@ export type ValidationRule<T = any> = (
 
 /**
  * Uses joi syntax for generating rules with error messages from i18n
+ *
  * @param schema - joi validation schema
  * @param message - i18n message to display in case of error
  * @returns error message
@@ -27,6 +28,7 @@ export function joiSchemaToValidationRule(
 
 /**
  * Returns a joi email schema
+ *
  * @returns Joi schema fitting emails
  */
 export function joiEmailSchema(): AnySchema {
@@ -35,6 +37,7 @@ export function joiEmailSchema(): AnySchema {
 
 /**
  * Returns Joi schema for username
+ *
  * @returns Joi schema fitting usernames
  */
 export function joiUsernameSchema(): AnySchema {
@@ -43,6 +46,7 @@ export function joiUsernameSchema(): AnySchema {
 
 /**
  * Returns Joi schema for passwords
+ *
  * @returns Joi schema fitting passwords
  */
 export function joiPasswordSchema(): AnySchema {

@@ -15,14 +15,19 @@ export default class UserService extends AbstractSearchService<User> {
     super();
   }
 
+  /**
+   * @returns user repository
+   */
   get repository(): Repository<User> {
     return this.userRepository;
   }
 
   /**
    * Gets a user by UUID
-   * @param uuid - uuid of user
-   * @param cognitoUuid - cognito user ID of user
+   *
+   * @param args - input arguments
+   * @param args.uuid - uuid of user
+   * @param args.cognitoUuid - cognito id of user
    * @returns the user
    */
   getUser({
@@ -53,6 +58,7 @@ export default class UserService extends AbstractSearchService<User> {
 
   /**
    * Return current user given the Cognito user from the request
+   *
    * @param user - database user from request
    * @returns user
    */

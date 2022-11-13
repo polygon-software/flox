@@ -140,6 +140,11 @@ export default {
   notification: {
     notifications: 'Notifications',
     no_notifications: 'No new notifications',
+    invalid_title: 'Length of title invalid',
+    invalid_content: 'Length of content invalid',
+    send_notificaton: 'Send notification',
+    notification_title: 'Notification Title',
+    notification_content: 'Notification Content',
   },
   pages: {
     home: {
@@ -161,9 +166,7 @@ export default {
     face_recognition: 'Face Recognition',
     text_extraction: 'Text Extraction',
     settings: 'Settings',
-    server_health: 'Server Health',
-    mail: 'Mail',
-    feedback: 'Feedback',
+    admin_panel: 'Admin Panel',
   },
   footer: {
     developers: 'Developers',
@@ -183,6 +186,12 @@ export default {
       'You are currently browsing with an active alias for the user with ID',
     description:
       'This module can be used to see and use the application as if you were another user. This functionality is only available for admin accounts.',
+  },
+  admin_panel: {
+    admin_panel: 'Admin Panel',
+    system_notification: 'System Notifications',
+    broadcast_message:
+      'Notify your systems users about updates, downtime and new features. Warning: these messages will be immediately visible for all users in your system and should hence only be sent with care.',
   },
   access_control: {
     users: 'Users',

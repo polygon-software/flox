@@ -24,13 +24,32 @@ module.exports = {
     browser: true
   },
 
+  plugins: [
+    'eslint-plugin-graphql',
+    'import',
+    'jsdoc',
+
+    // required to apply rules which need type information
+    '@typescript-eslint/eslint-plugin',
+
+    // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
+    // required to lint *.vue files
+    'vue',
+
+    // https://github.com/SonarSource/eslint-plugin-sonarjs
+    // linting rules that sonarqube considers for code quality checks
+    'sonarjs',
+  ],
+
   // Rules order is important, please avoid shuffling them
   extends: [
     // consider disabling this class of rules if linting takes too long
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
 
-    'plugin:import/recommended',
     'plugin:import/typescript',
+    'plugin:import/recommended',
+
+    'plugin:jsdoc/recommended',
 
     // See https://eslint.vuejs.org/rules/#available-rules
     'plugin:vue/vue3-recommended',
@@ -42,21 +61,6 @@ module.exports = {
     // https://github.com/SonarSource/eslint-plugin-sonarjs
     // linting rules that sonarqube considers for code quality checks
     'plugin:sonarjs/recommended',
-  ],
-
-  plugins: [
-    'import',
-    'eslint-plugin-graphql',
-    // required to apply rules which need type information
-    '@typescript-eslint/eslint-plugin',
-
-    // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
-    // required to lint *.vue files
-    'vue',
-
-    // https://github.com/SonarSource/eslint-plugin-sonarjs
-    // linting rules that sonarqube considers for code quality checks
-    'sonarjs',
   ],
 
   globals: {
@@ -87,20 +91,19 @@ module.exports = {
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
-    'require-jsdoc': ['error', {
+    'jsdoc/require-param-type': 0,
+    'jsdoc/require-returns-type': 0,
+    'jsdoc/require-jsdoc': ['error', {
       'require': {
         'FunctionDeclaration': true,
         'MethodDefinition': true,
-        'ClassDeclaration': true,
+        'ClassDeclaration': false,
         'ArrowFunctionExpression': false,
         'FunctionExpression': false
-      }
+      },
+      'checkConstructors': false,
     }],
-    'valid-jsdoc': ['error', {
-      'requireReturn': false,
-      'requireReturnType': false,
-      'requireParamType': false,
-    }],
+
     'graphql/template-strings': ['error', {
       // Import default settings for your GraphQL client. Supported values:
       // 'apollo', 'relay', 'lokka', 'fraql', 'literal'
@@ -112,5 +115,5 @@ module.exports = {
       typescript: true,
       node: true,
     }
-  }
+  },
 }

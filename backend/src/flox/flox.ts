@@ -15,6 +15,7 @@ export type FloxModules = FileModule | ImageModule | UserModule | EmailModule;
 
 /**
  * Returns the active Flox modules based on flox.config.json
+ *
  * @returns list of Modules
  */
 export function floxModules(): FloxModules[] {
@@ -51,6 +52,7 @@ export function floxModules(): FloxModules[] {
 
 /**
  * Returns the providers to use based on flox.config.json
+ *
  * @returns list of providers
  */
 export function floxProviders(): any[] {

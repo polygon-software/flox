@@ -29,6 +29,7 @@ export class MultiPageForm {
 
   /**
    * Constructor
+   *
    * @param pages - the form's pages
    */
   constructor(pages?: FormPage[]) {
@@ -71,6 +72,7 @@ export class MultiPageForm {
 
   /**
    * Updates a value within the form's values
+   *
    * @param key - the value's name
    * @param value - the actual value to add
    */

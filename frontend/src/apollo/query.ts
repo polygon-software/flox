@@ -17,6 +17,7 @@ export interface QueryObject {
 
 /**
  * Executes a given GraphQL query object
+ *
  * @param queryObject - the query object constant (from QUERIES.ts)
  * @param [variables] - variables to pass to the query, if any
  * @returns the query's output
@@ -55,6 +56,7 @@ export async function executeQuery<
 
 /**
  * Subscribes to a graphQL query
+ *
  * @param query - the graphQL query object
  * @param [variables] - any variables to pass to the query
  * @returns the query's output
@@ -64,7 +66,7 @@ export function subscribeToQuery<
 >(
   query: QueryObject,
   variables?: OperationVariables
-): ApolloQueryResult<Ref<T>> {
+): ApolloQueryResult<Ref<T | null>> {
   const $ssrStore = useSsrStore();
   const cachedResult: Ref<T | null> = ref(null);
 
@@ -133,5 +135,5 @@ export function subscribeToQuery<
   return {
     loading: false,
     data: cachedResult,
-  } as ApolloQueryResult<Ref<T>>;
+  } as ApolloQueryResult<Ref<T | null>>;
 }

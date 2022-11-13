@@ -153,7 +153,7 @@ import ROUTES from 'src/router/routes';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';
 import { i18n } from 'boot/i18n';
-import NotificationBell from "src/flox/modules/notification/components/NotificationBell.vue";
+import NotificationBell from 'src/flox/modules/notification/components/NotificationBell.vue';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authStore = useAuthStore();
@@ -221,10 +221,14 @@ const sideMenu = [
   },
   {
     links: [
+      {
+        icon: 'dns',
+        text: i18n.global.t('menu.admin_panel'),
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.ADMIN_PANEL);
+        },
+      },
       { icon: 'data_object', text: i18n.global.t('menu.settings') },
-      { icon: 'dns', text: i18n.global.t('menu.server_health') },
-      { icon: 'mail', text: i18n.global.t('menu.mail') },
-      { icon: 'feedback', text: i18n.global.t('menu.feedback') },
     ],
   },
 ];

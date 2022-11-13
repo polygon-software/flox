@@ -1,6 +1,7 @@
 /**
  * Fetch bearer token to allow file upload
- * @return {string} token - The user's Cognito ID token
+ *
+ * @returns {string} token - The user's Cognito ID token
  */
 export function getBearerToken(): string {
   let iter = 0;

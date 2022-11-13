@@ -30,6 +30,7 @@ export const useAuthStore = defineStore('authStore', {
   getters: {
     /**
      * Gets logged in status
+     *
      * @param state - the current state of the store
      * @returns whether the user is logged in
      */
@@ -37,6 +38,7 @@ export const useAuthStore = defineStore('authStore', {
 
     /**
      * Gets the current user's username, if any
+     *
      * @param state - the current state of the store
      * @returns username, if any
      */
@@ -55,6 +57,7 @@ export const useAuthStore = defineStore('authStore', {
   actions: {
     /**
      * Sets the current user session
+     *
      * @param payload - value to set
      */
     setUserSession(payload: CognitoUserSession | undefined): void {
@@ -77,6 +80,7 @@ export const useAuthStore = defineStore('authStore', {
 
     /**
      * Sets the user pool
+     *
      * @param payload - value to set
      */
     setUserPool(payload: CognitoUserPool | undefined): void {
@@ -85,6 +89,7 @@ export const useAuthStore = defineStore('authStore', {
 
     /**
      * Sets the cognito user
+     *
      * @param payload - value to set
      */
     setCognitoUser(payload: CognitoUser | undefined): void {

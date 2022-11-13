@@ -13,10 +13,6 @@ export const MARK_NOTIFICATION_AS_READ: MutationObject = {
         deContent
         enTitle
         enContent
-        receiver {
-          uuid
-          username
-        }
       }
     }
   `,
@@ -51,10 +47,6 @@ export const NOTIFY_USERS: MutationObject = {
         deContent
         enTitle
         enContent
-        receiver {
-          uuid
-          username
-        }
       }
     }
   `,
@@ -87,10 +79,6 @@ export const NOTIFY_ALL_USERS: MutationObject = {
         deContent
         enTitle
         enContent
-        receiver {
-          uuid
-          username
-        }
       }
     }
   `,

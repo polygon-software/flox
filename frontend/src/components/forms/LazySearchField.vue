@@ -52,6 +52,7 @@ const options: Ref<BaseEntity[]> = ref([]);
 
 /**
  * Filter function that dynamically calls backend for new data depending on input
+ *
  * @param userInputValue - value that the user inputted
  * @param update - function that updates field options
  */

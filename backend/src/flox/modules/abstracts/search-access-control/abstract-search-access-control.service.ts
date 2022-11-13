@@ -18,6 +18,13 @@ export default abstract class AbstractSearchAccessControlService<
 > extends AbstractCrudAccessControlService<Entity> {
   abstract get repository(): Repository<Entity>;
 
+  /**
+   * Assembles options to search provided filter on given keys
+   *
+   * @param searchKeys - list of search  keys that are scanned
+   * @param filter - value that is searched on keys
+   * @returns where options including Like-searches
+   */
   private nestedSearch(
     searchKeys: (keyof Entity)[],
     filter: string,
@@ -33,6 +40,7 @@ export default abstract class AbstractSearchAccessControlService<
   /**
    * Queries for all entities that fit query criteria. It only returns the entities that are marked with
    * public read access.
+   *
    * @param queryArgs - contain table filtering rules
    * @param searchKeys - key on which search string value is being searched
    * @param options - query options to extend search
@@ -67,6 +75,7 @@ export default abstract class AbstractSearchAccessControlService<
   /**
    * Queries for all entities that fit query criteria. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these items.
+   *
    * @param queryArgs - contain table filtering rules
    * @param searchKeys - key on which search string value is being searched
    * @param user - user that retrieves entities
@@ -117,6 +126,7 @@ export default abstract class AbstractSearchAccessControlService<
    * Queries for all entities that fit query criteria. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these items. This
    * endpoint does not return public items, though, since they do not explicitely belong to the user.
+   *
    * @param queryArgs - contain table filtering rules
    * @param searchKeys - key on which search string value is being searched
    * @param user - user that retrieves entities
@@ -158,6 +168,7 @@ export default abstract class AbstractSearchAccessControlService<
   /**
    * Queries for all entities that fit query criteria. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   *
    * @param queryArgs - contain table filtering rules
    * @param searchKeys - key on which search string value is being searched
    * @param options - query options to extend search

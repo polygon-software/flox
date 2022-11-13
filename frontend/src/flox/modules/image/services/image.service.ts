@@ -19,6 +19,7 @@ import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
 
 /**
  * Fetches a private image
+ *
  * @param uuid - uuid of private image
  * @param expires - number of seconds in which the image link shall expire
  * @returns Private image
@@ -36,6 +37,7 @@ export async function getImage(
 
 /**
  * Fetches list of images given their uuids
+ *
  * @param uuids - uuids of images to fetch
  * @param expires - number of seconds in which the image link shall expire
  * @returns images
@@ -53,6 +55,7 @@ export async function getImages(
 
 /**
  * Fetch images that belong to the user
+ *
  * @param uuids - uids of images to fetch
  * @param expires - number of seconds in which the image link shall expire
  * @returns users fils
@@ -70,6 +73,7 @@ export async function getMyImages(
 
 /**
  * Fetches all images with pagination
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param expires - number of seconds in which the image link shall expire
@@ -90,6 +94,7 @@ export async function getAllImages(
 
 /**
  * Fetches all images of user with pagination
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param expires - number of seconds in which the image link shall expire
@@ -110,6 +115,7 @@ export async function getAllMyImages(
 
 /**
  * Returns an image for a given image uuid
+ *
  * @param file - uuid of image
  * @param expires - number of seconds in which the file link shall expire
  * @returns Image file belonging to File
@@ -127,6 +133,7 @@ export async function getImageForFile(
 
 /**
  * Searches for image
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param filter - search term for imagename
@@ -156,6 +163,7 @@ export async function searchImages(
 
 /**
  * Searches for users images
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param filter - search term for imagename
@@ -188,6 +196,7 @@ export async function searchMyImages(
 
 /**
  * Creates an image from a file
+ *
  * @param file - uuid of public/private file
  * @param objectRecognition - perform object recognition on image
  * @returns Created image
@@ -205,6 +214,7 @@ export async function createImage(
 
 /**
  * Deletes an image including its file
+ *
  * @param uuid - uuid of image
  * @returns Deleted Image
  */

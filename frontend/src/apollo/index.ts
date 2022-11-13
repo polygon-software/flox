@@ -6,16 +6,17 @@ import {
   defaultDataIdFromObject,
   InMemoryCache,
 } from '@apollo/client/core';
-import { QSsrContext } from '@quasar/app-vite';
 import { Cookies } from 'quasar';
 
 import Env from 'src/env';
 import { ALIAS_COOKIE_NAME } from 'src/flox/modules/alias/services/alias.service';
 
+import type { QSsrContext } from '@quasar/app-vite';
 import type { ApolloClientOptions, StoreObject } from '@apollo/client/core';
 
 /**
  * Sets up auth middleware
+ *
  * @param ssrContext - SSR context
  * @returns the auth middleware
  */
@@ -46,6 +47,7 @@ function getAuthMiddleware(
 
 /**
  * ID Builder function for caching
+ *
  * @param responseObject - the object received by apollo
  * @returns a cache key, e.g. 'User:ab12-cd34-xyz' or nothing
  */
@@ -81,6 +83,7 @@ function dataIdFromObject(
 
 /**
  * Get Apollo client options
+ *
  * @param ssrContext - quasar ssr context
  * @returns  config options
  */

@@ -5,6 +5,12 @@ import { Request, Response } from 'express';
 
 @Injectable()
 export class GqlThrottlerGuard extends ThrottlerGuard {
+  /**
+   * Extracts request response eihter from http or graphQl context
+   *
+   * @param context - execution context
+   * @returns request and response objects
+   */
   getRequestResponse(context: ExecutionContext): {
     req: Request;
     res: Response;

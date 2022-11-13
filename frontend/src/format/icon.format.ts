@@ -1,5 +1,6 @@
 /**
  * Resolves a material design icon from a mime type
+ *
  * @param mimetype - like application/pdf or image/png
  * @returns name of fitting material icon
  */

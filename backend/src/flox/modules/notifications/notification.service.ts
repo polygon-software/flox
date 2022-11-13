@@ -9,11 +9,20 @@ import NotifyUsersInput from './dto/inputs/notify-users.input';
 
 @Injectable()
 export default class NotificationService {
+  /**
+   * @param notificationRepository - notification repository
+   */
   constructor(
     @InjectRepository(Notification)
     private readonly notificationRepository: Repository<Notification>,
   ) {}
 
+  /**
+   * Returns all unread notifications for a user
+   *
+   * @param user - user from which notifications are retrieved
+   * @returns list of unread notifications
+   */
   getUnreadNotifications(user: User): Promise<Notification[]> {
     console.log(user);
     return this.notificationRepository.find({
@@ -29,6 +38,12 @@ export default class NotificationService {
     });
   }
 
+  /**
+   * Gets one specific notifications
+   *
+   * @param notificationUuid - uuid of notification
+   * @returns notification
+   */
   getNotification(notificationUuid: string): Promise<Notification> {
     return this.notificationRepository.findOneOrFail({
       relations: {
@@ -40,6 +55,12 @@ export default class NotificationService {
     });
   }
 
+  /**
+   * Marks a notification as read by the user
+   *
+   * @param notification - notification that is marked as read
+   * @returns the updated notification
+   */
   async markNotificationAsRead(
     notification: Notification,
   ): Promise<Notification> {
@@ -49,6 +70,12 @@ export default class NotificationService {
     return this.getNotification(notification.uuid);
   }
 
+  /**
+   * Sends a notification to a set of users
+   *
+   * @param notifyUsersInput - contains notification data and list of user uuids
+   * @returns list of sent out notifications
+   */
   async notifyUsers(
     notifyUsersInput: NotifyUsersInput,
   ): Promise<Notification[]> {

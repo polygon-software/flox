@@ -5,7 +5,7 @@ import {
   DetectLabelsCommand,
   RekognitionClient,
 } from '@aws-sdk/client-rekognition';
-import exifr from 'exifr';
+import { parse } from 'exifr';
 import { FindOneOptions, Repository } from 'typeorm';
 
 import GetOneArgs from '../abstracts/crud/dto/get-one.args';
@@ -61,6 +61,9 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     super();
   }
 
+  /**
+   * @returns image repository
+   */
   get repository(): Repository<Image> {
     return this.imageRepository;
   }
@@ -68,6 +71,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   /**
    * Retrieves a single image from the database, ensuring the provided user has access to it by either being owner or
    * allowed reader of the image. Alternatively, the image can be public, then the user has also access to it.
+   *
    * @param getImageArgs - contains uuid of image to be retrieved
    * @param user - the user that retrieves the image
    * @param options - additional type ORM find options that are applied to find query
@@ -106,6 +110,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   /**
    * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these images.
+   *
    * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
    * @param user - the user that retrieves the image
    * @param options - additional type ORM find options that are applied to find query
@@ -155,6 +160,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
    * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these images. This
    * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
    * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
    * @param user - the user that retrieves the image
    * @param options - additional type ORM find options that are applied to find query
@@ -203,6 +209,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   /**
    * Retrieves all images from a database with applying pagination. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these images.
+   *
    * @param getAllImagesArgs - contains pagination parameters (skip, take)
    * @param user - the user that retrieves the image
    * @param options - additional type ORM find options that are applied to find query
@@ -252,6 +259,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
    * Retrieves all images from a database with applying pagination. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these images. This
    * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
    * @param getAllImagesArgs - contains pagination parameters (skip, take)
    * @param user - the user that retrieves the image
    * @param options - additional type ORM find options that are applied to find query
@@ -299,6 +307,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
 
   /**
    * Queries for an image given the file uuid
+   *
    * @param getImageForFileArgs - contains uuid of file
    * @param user - user that needs to have the right to access the image
    * @param options - additional options to get an image
@@ -331,6 +340,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
   /**
    * Queries for all entities that fit query criteria. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these images.
+   *
    * @param searchImageArgs - contain table filtering rules
    * @param searchKeys - key on which search string value is being searched
    * @param user - user that retrieves entities
@@ -366,6 +376,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
    * Queries for all entities that fit query criteria. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these images. This
    * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
    * @param searchImageArgs - contain table filtering rules
    * @param searchKeys - key on which search string value is being searched
    * @param user - user that retrieves entities
@@ -399,6 +410,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
 
   /**
    * Creates a new image based on the create input and sets the user as the images owner.
+   *
    * @param createImageInput - specifications of image, must be deep partial of image
    * @param user - the user that creates the image
    * @returns the created image
@@ -426,7 +438,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       DateTimeOriginal: undefined,
     };
     try {
-      imageMetaData = (await exifr.parse(file.url ?? '')) || {};
+      imageMetaData = (await parse(file.url ?? '')) || {};
     } catch (e: any) {
       console.error(e);
     }
@@ -453,6 +465,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
 
   /**
    * Performs object recognition on image and stores appropriate labels to database
+   *
    * @param createLabelsInput - contains uuid of image to perform object recognition
    * @param user - user that needs to have the right to access the image
    * @returns Image wit labels
@@ -521,6 +534,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
 
   /**
    * Removes the database entry of a given image without deleting the file
+   *
    * @param deleteInput - contains the uuid of the image to delete
    * @param user - user that needs to have the right to access the image
    * @returns Deleted Image

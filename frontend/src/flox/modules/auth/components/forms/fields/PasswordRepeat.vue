@@ -85,6 +85,7 @@ watch(passwordRepeat, (newVal) => {
 
 /**
  * Emits an update with new value
+ *
  * @param value - the password
  */
 function emitUpdate(value: string): void {

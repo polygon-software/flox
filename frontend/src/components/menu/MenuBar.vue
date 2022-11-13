@@ -41,6 +41,7 @@ const loggedIn = computed(() => {
 
 /**
  * Logs out the current authentication
+ *
  * @async
  */
 async function logout(): Promise<void> {

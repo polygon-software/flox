@@ -1,26 +1,33 @@
+const path = require("path");
+
 module.exports = {
   root: true,
   env: {
     node: true,
     jest: true,
   },
-  parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.json',
+    parser: '@typescript-eslint/parser',
+    project: path.resolve(__dirname, './tsconfig.json'),
+    ecmaVersion: 2018,
     sourceType: 'module',
   },
   plugins: [
     '@typescript-eslint/eslint-plugin',
     'import',
-
+    'jsdoc',
     // https://github.com/SonarSource/eslint-plugin-sonarjs
     // linting rules that sonarqube considers for code quality checks
     'sonarjs',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',
+
     'plugin:import/recommended',
-    'plugin:import/recommended',
+    'plugin:import/typescript',
+
+    'plugin:jsdoc/recommended',
+
     'plugin:prettier/recommended',
     // https://github.com/SonarSource/eslint-plugin-sonarjs
     // linting rules that sonarqube considers for code quality checks
@@ -38,19 +45,17 @@ module.exports = {
       'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type']
     }],
 
-    'require-jsdoc': ['error', {
+    'jsdoc/require-param-type': 0,
+    'jsdoc/require-returns-type': 0,
+    'jsdoc/require-jsdoc': ['error', {
       'require': {
         'FunctionDeclaration': true,
-        'MethodDefinition': false,
+        'MethodDefinition': true,
         'ClassDeclaration': false,
         'ArrowFunctionExpression': false,
         'FunctionExpression': false
-      }
-    }],
-    'valid-jsdoc': ['error', {
-      'requireReturn': false,
-      'requireReturnType': false,
-      'requireParamType': false,
+      },
+      'checkConstructors': false,
     }],
   },
   settings: {

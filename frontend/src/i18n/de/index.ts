@@ -142,6 +142,11 @@ export default {
   notification: {
     notifications: 'Benachrichtigungen',
     no_notifications: 'Keine neuen Benachrichtigungen',
+    invalid_title: 'Die länge des Titels ist ungültig',
+    invalid_content: 'Die länge des Inhalts ist ungültig',
+    send_notificaton: 'Benachrichtigungen absenden',
+    notification_title: 'Nachricht Titel',
+    notification_content: 'Nachricht Inhalt',
   },
   pages: {
     home: {
@@ -163,9 +168,7 @@ export default {
     face_recognition: 'Gesichtserkennung',
     text_extraction: 'Text Extraktion',
     settings: 'Einstellungen',
-    server_health: 'Server Zustand',
-    mail: 'E-Mail',
-    feedback: 'Feedback',
+    admin_panel: 'Administrator Sektion',
   },
   footer: {
     developers: 'Entwickler',
@@ -184,6 +187,12 @@ export default {
       'Du siehst die Applikation momentan mit einem aktiven Alias auf den User mit der ID',
     description:
       'Dieses Modul kann verwendet werden um die Applikation aus der Sicht eines anderen Benutzers zu erleben. Diese Funktion ist nur für Administratoren freigeschaltet.',
+  },
+  admin_panel: {
+    admin_panel: 'Administrator Sektion',
+    system_notification: 'System Benachrichtigungen',
+    broadcast_message:
+      'Benachrichtige Benutzer in deinem System über Updates, Downtime oder Neuerungen. Achtung: Diese Nachrichten werden an alle Benutzer versendet und sollten daher nur in Ausnahmefällen verschickt werden.',
   },
   access_control: {
     users: 'Benutzer',

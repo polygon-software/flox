@@ -12,6 +12,7 @@ type primitive = number | string | boolean | null | undefined;
  * Returns an object containing only keys that have changed between the original and modified object. The contained
  * values are the ones from the modified object. This method works on deeply nested objects.
  * Note that added or removed keys are ignored.
+ *
  * @param original - original object
  * @param modified - copy of original that does contain some changes
  * @returns changes within object from original to modified
@@ -42,6 +43,7 @@ export function objectChange(
 
 /**
  * Extracts the name of all variables from a mutation query
+ *
  * @param mutation - object defining mutation
  * @returns list of variable names
  */
@@ -57,6 +59,7 @@ export function extractMutationVariableNames(
 
 /**
  * Returns the subset of an object that is required for a mutation
+ *
  * @param entity - modified entity that should be saved
  * @param mutation - update mutation containing variables that define update keys
  * @returns Subset of entity with only the keys relevant for the mutation

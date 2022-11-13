@@ -5,6 +5,7 @@ import { AllQuery } from 'src/flox/modules/all.query';
 
 /**
  * Forces a full re-fetch all queries affected by a mutation by removing them from cache
+ *
  * @param tables - tables that should be invalidated
  */
 export function invalidateTables(tables: string[]): void {

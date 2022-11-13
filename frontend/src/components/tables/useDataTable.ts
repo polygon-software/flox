@@ -41,6 +41,7 @@ export interface ColumnInterface<T = any> {
 
 /**
  * Composable to create a data table
+ *
  * @param queryObject - query to perform to fetch data
  * @param updateObject - mutation to change a row entry
  * @param deletionObject - mutation to delete a row entry
@@ -114,6 +115,7 @@ export function useDataTable<T extends BaseEntity>(
 
   /**
    * Fetches Data from the Server
+   *
    * @param skip - how many items to skip
    * @param take - how many items to take
    * @param filter - search input
@@ -140,7 +142,10 @@ export function useDataTable<T extends BaseEntity>(
 
   /**
    * Loads new data from server
+   *
    * @param dataProps - props input
+   * @param dataProps.pagination - includes skip, take etc.
+   * @param dataProps.filter - user specified input for filtering the table
    */
   async function onRequest(dataProps: {
     pagination: Pagination;
@@ -176,6 +181,7 @@ export function useDataTable<T extends BaseEntity>(
 
   /**
    * Wraps a row entry in preparation for the CSV export
+   *
    * @param val - Value to be exported
    * @param formatFn - optional format function
    * @param row - Row in which value is stored
@@ -238,9 +244,11 @@ export function useDataTable<T extends BaseEntity>(
 
   /**
    * Function that handles selections using CTRL and SHIFT keys
-   * @param newlySelected - rows that were newly selected
-   * @param added - whether the rows were selected or de-selected
-   * @param evt - Javascript event that contains keys
+   *
+   * @param selection - new selection from table
+   * @param selection.rows - rows that were newly selected
+   * @param selection.added - whether the rows were selected or de-selected
+   * @param selection.evt - Javascript event that contains keys
    */
   async function handleSelection({
     rows: newlySelected,
@@ -296,6 +304,7 @@ export function useDataTable<T extends BaseEntity>(
 
   /**
    * Handles sending row updates to database
+   *
    * @param row - row to be updated
    * @param path - path to key that must be updated
    * @param value - new value at key location
@@ -331,6 +340,7 @@ export function useDataTable<T extends BaseEntity>(
 
   /**
    * Deletes all selected rows
+   *
    * @returns updated rows
    */
   function deleteActiveRows(): Promise<

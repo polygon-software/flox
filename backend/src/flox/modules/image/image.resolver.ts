@@ -25,6 +25,9 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
     super(['uuid']);
   }
 
+  /**
+   * @returns image service
+   */
   get service(): ImageService {
     return this.imageService;
   }
@@ -32,6 +35,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   /**
    * Retrieves a single image from the database, ensuring the provided user has access to it by either being owner or
    * allowed reader of the image. Alternatively, the image can be public, then the user has also access to it.
+   *
    * @param getImageArgs - contains uuid of image to be retrieved
    * @param user - the user that retrieves the image
    * @returns the one image that was received
@@ -48,6 +52,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   /**
    * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these images.
+   *
    * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
    * @param user - the user that retrieves the image
    * @returns the list of found entities
@@ -65,6 +70,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
    * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these images. This
    * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
    * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
    * @param user - the user that retrieves the image
    * @returns the list of found entities
@@ -84,6 +90,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   /**
    * Retrieves all images from a database with applying pagination. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these images.
+   *
    * @param getAllImagesArgs - contains pagination parameters (skip, take)
    * @param user - the user that retrieves the image
    * @returns page of entities
@@ -101,6 +108,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
    * Retrieves all images from a database with applying pagination. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these images. This
    * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
    * @param getAllImagesArgs - contains pagination parameters (skip, take)
    * @param user - the user that retrieves the image
    * @returns page of entities
@@ -116,6 +124,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
 
   /**
    * Queries for an image given the file uuid
+   *
    * @param getImageForFileArgs - contains uuid of file
    * @param user - user that needs to have the right to access the image
    * @returns Queried image
@@ -132,6 +141,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   /**
    * Queries for all entities that fit query criteria. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these images.
+   *
    * @param searchImageArgs - contain table filtering rules
    * @param user - user that retrieves entities
    * @returns images that fit criteria
@@ -153,6 +163,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
    * Queries for all entities that fit query criteria. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these images. This
    * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
    * @param searchImageArgs - contain table filtering rules
    * @param user - user that retrieves entities
    * @returns images that fit criteria
@@ -172,6 +183,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
 
   /**
    * Creates a new image for an already existing file
+   *
    * @param createImageInput - contains uuid of file to wrap
    * @param user - Currently logged-in user
    * @returns Requested image
@@ -188,6 +200,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
   /**
    * Removes the database entry of a given image without deleting the file
    * This endpoint does not delete the corresponding file!
+   *
    * @param deleteInput - contains the uuid of the image to delete
    * @param user - user that needs to have the right to access the image
    * @returns Deleted Image

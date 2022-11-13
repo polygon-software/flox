@@ -20,6 +20,9 @@ export default class HealthcheckController {
     private readonly database: TypeOrmHealthIndicator,
   ) {}
 
+  /**
+   *
+   */
   @Public()
   @HealthCheck()
   @SkipThrottle()
