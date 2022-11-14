@@ -9,14 +9,14 @@ import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 @ObjectType()
 export default class Notification extends BaseEntity {
   @Field(() => User, {
-    description: 'Receiver of the notification',
+    description: 'Recipient of the notification',
   })
   @ManyToOne(() => User)
   @JoinColumn()
   public receiver: User;
 
   @Field(() => Boolean, {
-    description: 'Whether the receiver has seen the notification',
+    description: 'Whether the recipient has seen the notification',
   })
   @Column('boolean', { default: false })
   public read = false;

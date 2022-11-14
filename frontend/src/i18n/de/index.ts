@@ -142,8 +142,8 @@ export default {
   notification: {
     notifications: 'Benachrichtigungen',
     no_notifications: 'Keine neuen Benachrichtigungen',
-    invalid_title: 'Die länge des Titels ist ungültig',
-    invalid_content: 'Die länge des Inhalts ist ungültig',
+    invalid_title: 'Die Länge des Titels ist ungültig',
+    invalid_content: 'Die Länge des Inhalts ist ungültig',
     send_notificaton: 'Benachrichtigungen absenden',
     notification_title: 'Nachricht Titel',
     notification_content: 'Nachricht Inhalt',
@@ -168,7 +168,7 @@ export default {
     face_recognition: 'Gesichtserkennung',
     text_extraction: 'Text Extraktion',
     settings: 'Einstellungen',
-    admin_panel: 'Administrator Sektion',
+    admin_panel: 'Administrator-Sektion',
   },
   footer: {
     developers: 'Entwickler',
@@ -189,8 +189,8 @@ export default {
       'Dieses Modul kann verwendet werden um die Applikation aus der Sicht eines anderen Benutzers zu erleben. Diese Funktion ist nur für Administratoren freigeschaltet.',
   },
   admin_panel: {
-    admin_panel: 'Administrator Sektion',
-    system_notification: 'System Benachrichtigungen',
+    admin_panel: 'Administrator-Sektion',
+    system_notification: 'Systembenachrichtigungen',
     broadcast_message:
       'Benachrichtige Benutzer in deinem System über Updates, Downtime oder Neuerungen. Achtung: Diese Nachrichten werden an alle Benutzer versendet und sollten daher nur in Ausnahmefällen verschickt werden.',
   },

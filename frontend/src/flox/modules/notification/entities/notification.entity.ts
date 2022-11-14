@@ -4,7 +4,7 @@ import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
 
 /**
- * A class representing a file
+ * A class representing a notification
  */
 export class NotificationEntity extends BaseEntity {
   @IsOptional()

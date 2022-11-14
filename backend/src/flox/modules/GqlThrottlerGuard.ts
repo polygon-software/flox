@@ -6,7 +6,7 @@ import { Request, Response } from 'express';
 @Injectable()
 export class GqlThrottlerGuard extends ThrottlerGuard {
   /**
-   * Extracts request response eihter from http or graphQl context
+   * Extracts request response either from http or GraphQL context
    *
    * @param context - execution context
    * @returns request and response objects

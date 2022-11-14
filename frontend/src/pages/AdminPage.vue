@@ -19,4 +19,3 @@
 import NotificationCreator from 'src/flox/modules/notification/components/NotificationCreator.vue';
 </script>
 
-<style scoped></style>

@@ -24,7 +24,6 @@ export default class NotificationService {
    * @returns list of unread notifications
    */
   getUnreadNotifications(user: User): Promise<Notification[]> {
-    console.log(user);
     return this.notificationRepository.find({
       relations: {
         receiver: true,

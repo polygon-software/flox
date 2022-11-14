@@ -21,7 +21,7 @@ export default class HealthcheckController {
   ) {}
 
   /**
-   *
+   *  Checks the application's status (database, connectivity etc.)
    */
   @Public()
   @HealthCheck()

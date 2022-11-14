@@ -149,4 +149,3 @@ async function submitNotificationBroadcast(): Promise<void> {
 }
 </script>
 
-<style scoped></style>

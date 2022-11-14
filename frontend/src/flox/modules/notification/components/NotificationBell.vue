@@ -112,4 +112,3 @@ async function markAsRead(notification: NotificationEntity): Promise<void> {
 }
 </script>
 
-<style scoped></style>

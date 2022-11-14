@@ -60,7 +60,7 @@ export default class NotificationResolver {
   }
 
   /**
-   * Sends a notification to all users of users
+   * Sends a notification to a set of users
    *
    * @param notifyUsersInput - contains notification data and list of user uuids
    * @returns list of sent out notifications
@@ -74,7 +74,7 @@ export default class NotificationResolver {
   }
 
   /**
-   * Sends a notification to all users of users
+   * Sends a notification to all users
    *
    * @param notifyInput - contains notification data
    * @returns list of sent out notifications
