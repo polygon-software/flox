@@ -15,16 +15,33 @@ type EmailModuleConfig = {
 
 // Default configuration set; will get merged with custom config from flox.config.js
 const defaultConfig: EmailModuleConfig = {
-  emailSender: 'noreply@polygon-software.ch',
+  emailSender: 'noreply',
 };
 
 /**
  * Gets the module's actual configuration
  * @returns configuration
  */
-export function moduleConfig(): EmailModuleConfig {
+export function moduleConfig() {
+  if (!process.env.BASE_URL) {
+    throw Error('Required env variable BASE_URL is missing');
+  }
+  // The domain the emails are sent from
+  const domain = process.env.BASE_URL.split('//')[1];
+  const correctedDefaultEmail = `${defaultConfig.emailSender}@${domain}`;
+  const correctedDefaultConfig = {
+    ...defaultConfig,
+    emailSender: correctedDefaultEmail, // the default sender name appended to the domain
+  };
+  const floxModuleConfig = floxModuleOptions(MODULES.EMAIL);
+  if (floxModuleConfig.emailSender) {
+    floxModuleConfig.emailSender = `${
+      floxModuleOptions(MODULES.EMAIL).emailSender // the configured sender name appended to the domain
+    }@${domain}`;
+  }
+
   return mergeConfigurations(
-    defaultConfig,
-    floxModuleOptions(MODULES.EMAIL),
+    correctedDefaultConfig,
+    floxModuleConfig,
   ) as EmailModuleConfig;
 }

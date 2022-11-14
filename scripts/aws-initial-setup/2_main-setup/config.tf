@@ -13,7 +13,7 @@ terraform {
     organization        = "##ORGANISATION##"
 
     workspaces {
-      name = "##PROJECT##-##TYPE##" # will be replaced in preprocessing
+      name = "#fds#PROJECT##-##TYPE##" # will be replaced in preprocessing
     }
   }
 }
