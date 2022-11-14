@@ -10,5 +10,5 @@ export default class NotifyUsersInput extends NotifyInput {
   })
   @IsUUID(4, { each: true })
   @IsNotEmpty()
-  receivers: string[];
+  recipients: string[];
 }

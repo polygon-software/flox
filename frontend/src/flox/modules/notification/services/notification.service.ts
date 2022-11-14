@@ -65,7 +65,7 @@ export async function markNotificationAsRead(
 /**
  * Sends a notification to certain users
  *
- * @param receivers - uuids of users that shall receive notificatoin
+ * @param recipients - uuids of users that shall receive notificatoin
  * @param notification - notification to be sent
  * @param notification.deTitle - title of notification in german
  * @param notification.deContent - content of notification in german
@@ -75,11 +75,11 @@ export async function markNotificationAsRead(
  * @returns sent out notifications
  */
 export async function sendNotificationToUsers(
-  receivers: string[],
+  recipients: string[],
   { deTitle, deContent, enTitle, enContent, link }: NewNotification
 ): Promise<NotificationEntity | null> {
   const { data } = await executeMutation<NotificationEntity>(NOTIFY_USERS, {
-    receivers,
+    recipients,
     deTitle,
     deContent,
     enTitle,

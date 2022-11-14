@@ -145,6 +145,7 @@ export default {
     send_notificaton: 'Send notification',
     notification_title: 'Notification Title',
     notification_content: 'Notification Content',
+    sent: 'Notification sent!',
   },
   pages: {
     home: {

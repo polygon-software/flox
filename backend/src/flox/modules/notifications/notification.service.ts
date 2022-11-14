@@ -79,7 +79,7 @@ export default class NotificationService {
     notifyUsersInput: NotifyUsersInput,
   ): Promise<Notification[]> {
     return Promise.all(
-      notifyUsersInput.receivers.map((uuid) => {
+      notifyUsersInput.recipients.map((uuid) => {
         const notification = this.notificationRepository.create({
           receiver: { uuid },
           ...notifyUsersInput,

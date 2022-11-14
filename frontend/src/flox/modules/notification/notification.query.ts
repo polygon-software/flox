@@ -22,7 +22,7 @@ export const GET_UNREAD_NOTIFICATIONS: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.NOTIFICATIONS],
+  tables: [TABLES.NOTIFICATION],
   cacheLocation: 'UnreadNotifications',
 };
 

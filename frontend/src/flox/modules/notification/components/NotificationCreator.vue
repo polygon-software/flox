@@ -137,7 +137,7 @@ async function submitNotificationBroadcast(): Promise<void> {
     return;
   }
   await sendNotificationToEveryone(notification.value);
-  showSuccessNotification($q, 'Notification set!');
+  showSuccessNotification($q, i18n.global.t('notification.sent'));
   notification.value = {
     deTitle: '',
     deContent: '',

@@ -331,7 +331,7 @@ input NotifyUsersInput {
   link: String
 
   """Uuids of users that shall receive notifications"""
-  receivers: [ID!]!
+  recipients: [ID!]!
 }
 
 type Query {

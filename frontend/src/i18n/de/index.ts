@@ -147,6 +147,7 @@ export default {
     send_notificaton: 'Benachrichtigungen absenden',
     notification_title: 'Nachricht Titel',
     notification_content: 'Nachricht Inhalt',
+    sent: 'Benachrichtigung gesendet!',
   },
   pages: {
     home: {

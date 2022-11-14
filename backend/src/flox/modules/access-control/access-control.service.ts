@@ -40,7 +40,7 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     userGroup: UserGroup,
   ): Promise<Notification[]> {
     return this.notificationService.notifyUsers({
-      receivers: userUuids,
+      recipients: userUuids,
       deTitle: 'Du wurdest einer Benutzergruppe hinzugefügt!',
       deContent: `Du bist nun Mitglied der Benutzergruppe '${userGroup.name}' und hast dadurch womöglich neue Lese- und Schreibrechte erhalten!`,
       enTitle: 'You have just been added to a new user group!',

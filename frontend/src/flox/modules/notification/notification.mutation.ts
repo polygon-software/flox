@@ -16,7 +16,7 @@ export const MARK_NOTIFICATION_AS_READ: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.NOTIFICATIONS],
+  tables: [TABLES.NOTIFICATION],
   type: MutationTypes.UPDATE,
   cacheLocation: 'MarkNotificationAsRead',
 };
@@ -24,7 +24,7 @@ export const MARK_NOTIFICATION_AS_READ: MutationObject = {
 export const NOTIFY_USERS: MutationObject = {
   mutation: gql`
     mutation NotifyUsers(
-      $receivers: [ID!]!
+      $recipients: [ID!]!
       $deContent: String!
       $deTitle: String!
       $enContent: String!
@@ -33,7 +33,7 @@ export const NOTIFY_USERS: MutationObject = {
     ) {
       NotifyUsers(
         notifyUsersInput: {
-          receivers: $receivers
+          recipients: $recipients
           deContent: $deContent
           deTitle: $deTitle
           enContent: $enContent
@@ -50,7 +50,7 @@ export const NOTIFY_USERS: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.NOTIFICATIONS],
+  tables: [TABLES.NOTIFICATION],
   type: MutationTypes.UPDATE,
   cacheLocation: 'NotifyUsers',
 };
@@ -82,7 +82,7 @@ export const NOTIFY_ALL_USERS: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.NOTIFICATIONS],
+  tables: [TABLES.NOTIFICATION],
   type: MutationTypes.UPDATE,
   cacheLocation: 'NotifyAllUsers',
 };
