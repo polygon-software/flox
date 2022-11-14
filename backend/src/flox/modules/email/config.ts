@@ -31,12 +31,12 @@ export function moduleConfig() {
   const correctedDefaultEmail = `${defaultConfig.emailSender}@${domain}`;
   const correctedDefaultConfig = {
     ...defaultConfig,
-    emailSender: correctedDefaultEmail, // the default sender name appended to the domain
+    emailSender: correctedDefaultEmail, // The default sender name appended to the domain
   };
   const floxModuleConfig = floxModuleOptions(MODULES.EMAIL);
   if (floxModuleConfig.emailSender) {
     floxModuleConfig.emailSender = `${
-      floxModuleOptions(MODULES.EMAIL).emailSender // the configured sender name appended to the domain
+      floxModuleOptions(MODULES.EMAIL).emailSender // The configured sender name appended to the domain
     }@${domain}`;
   }
 
