@@ -9,7 +9,6 @@ import {
   IsString,
   MaxLength,
   MinLength,
-  ValidateNested,
 } from 'class-validator';
 
 @InputType()

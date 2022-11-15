@@ -3,7 +3,6 @@ import {
   IsEmail,
   IsLocale,
   IsLowercase,
-  IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,

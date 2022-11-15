@@ -18,4 +18,3 @@
 <script setup lang="ts">
 import NotificationCreator from 'src/flox/modules/notification/components/NotificationCreator.vue';
 </script>
-

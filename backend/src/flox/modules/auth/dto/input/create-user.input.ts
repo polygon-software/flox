@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsLocale, IsLowercase, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
 
 import CreateInput from '../../../abstracts/crud/inputs/create.input';
 
@@ -14,6 +14,14 @@ export default class CreateUserInput extends CreateInput {
   @IsString()
   @IsEmail()
   email: string;
+
+  @Field(() => String)
+  @IsString()
+  @MinLength(2)
+  @MaxLength(2)
+  @IsLowercase()
+  @IsLocale()
+  lang: string;
 
   @Field(() => String)
   @IsString()

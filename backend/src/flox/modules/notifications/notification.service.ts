@@ -11,8 +11,7 @@ import Message from './entities/message.entity';
 @Injectable()
 export default class NotificationService {
   /**
-   * @param messageRepository
-   * @param messageRepository
+   * @param messageRepository - message repository
    * @param notificationRepository - notification repository
    */
   constructor(
