@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -415,6 +415,12 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       this.fileService.writeAccessControlRelationOptions,
     );
     assertReadAccess(file, user);
+    if (!file.mimetype.startsWith('image/')) {
+      throw new HttpException(
+        'File is not an image',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
     file = await this.fileService.addFileUrl(file, { expires: 60 });
     let imageMetaData = {
       ImageWidth: undefined,
@@ -469,7 +475,6 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       this.writeAccessControlRelationOptions,
     );
     assertReadAccess(image, user);
-    console.log('image file uuid', image.file.uuid);
 
     const rekognitionData = await this.rekognition.send(
       new DetectLabelsCommand({

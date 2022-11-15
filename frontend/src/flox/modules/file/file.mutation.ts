@@ -59,7 +59,7 @@ export const UPDATE_FILE: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.FILE],
+  tables: [TABLES.FILE, TABLES.IMAGE],
   type: MutationTypes.UPDATE,
   cacheLocation: 'UpdateFile',
 };
@@ -78,7 +78,7 @@ export const DELETE_FILE: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.FILE],
+  tables: [TABLES.FILE, TABLES.IMAGE],
   type: MutationTypes.DELETE,
   cacheLocation: 'DeleteFile',
 };
@@ -105,7 +105,7 @@ export const MANIPULATE_FILE_ACCESS_USER_GROUPS: MutationObject = {
       }
     }
   `,
-  tables: [TABLES.FILE],
+  tables: [TABLES.FILE, TABLES.IMAGE],
   type: MutationTypes.DEVALIDATINGUPDATE,
   cacheLocation: 'ManipulateFileAccessUserGroups',
 };

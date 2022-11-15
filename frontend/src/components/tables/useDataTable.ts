@@ -149,13 +149,15 @@ export function useDataTable<T extends BaseEntity>(
     const { filter } = dataProps;
     const { page, rowsPerPage, sortBy, descending } = dataProps.pagination;
 
+    const take = rowsPerPage || 500;
+
     loading.value = true;
 
-    const startRow = (page - 1) * rowsPerPage;
+    const skip = (page - 1) * take;
 
     const { count, data } = await fetchFromServer(
-      startRow,
-      rowsPerPage,
+      skip,
+      take,
       filter,
       sortBy,
       descending
