@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
   IsLocale,
@@ -48,6 +48,6 @@ export default class Message extends BaseEntity {
   @Field(() => Notification, {
     description: 'Notification on which this message appears',
   })
-  @OneToOne(() => Notification, { cascade: true, onDelete: 'CASCADE' })
+  @ManyToOne(() => Notification)
   notification: Notification;
 }

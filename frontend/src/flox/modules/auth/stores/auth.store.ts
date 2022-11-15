@@ -5,6 +5,7 @@ import {
 } from 'amazon-cognito-identity-js';
 import { defineStore } from 'pinia';
 
+import { i18n } from 'boot/i18n';
 import {
   deleteCookies,
   persistToCookies,
@@ -97,6 +98,9 @@ export const useAuthStore = defineStore('authStore', {
     },
     setLoggedInUser(payload: UserEntity | undefined): void {
       this.loggedInUser = payload;
+      if (payload && payload.lang) {
+        i18n.global.locale.value = payload.lang;
+      }
     },
   },
 });

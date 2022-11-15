@@ -6,13 +6,18 @@ import User from '../auth/entities/user.entity';
 
 import Notification from './entities/notification.entity';
 import NotifyUsersInput from './dto/inputs/notify-users.input';
+import Message from './entities/message.entity';
 
 @Injectable()
 export default class NotificationService {
   /**
+   * @param messageRepository
+   * @param messageRepository
    * @param notificationRepository - notification repository
    */
   constructor(
+    @InjectRepository(Message)
+    private readonly messageRepository: Repository<Message>,
     @InjectRepository(Notification)
     private readonly notificationRepository: Repository<Notification>,
   ) {}
@@ -26,11 +31,12 @@ export default class NotificationService {
   getUnreadNotifications(user: User): Promise<Notification[]> {
     return this.notificationRepository.find({
       relations: {
-        receiver: true,
+        recipient: true,
+        messages: true,
       },
       where: {
         read: false,
-        receiver: {
+        recipient: {
           uuid: user.uuid,
         },
       },
@@ -46,7 +52,8 @@ export default class NotificationService {
   getNotification(notificationUuid: string): Promise<Notification> {
     return this.notificationRepository.findOneOrFail({
       relations: {
-        receiver: true,
+        recipient: true,
+        messages: true,
       },
       where: {
         uuid: notificationUuid,
@@ -79,9 +86,9 @@ export default class NotificationService {
     notifyUsersInput: NotifyUsersInput,
   ): Promise<Notification[]> {
     return Promise.all(
-      notifyUsersInput.recipients.map((uuid) => {
+      notifyUsersInput.recipients.map(async (uuid) => {
         const notification = this.notificationRepository.create({
-          receiver: { uuid },
+          recipient: { uuid },
           ...notifyUsersInput,
         });
         return this.notificationRepository.save(notification);

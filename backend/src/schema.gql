@@ -270,6 +270,20 @@ type Message {
   uuid: ID!
 }
 
+input MessageInput {
+  """Content of message"""
+  content: String!
+
+  """Language of message"""
+  lang: String!
+
+  """Link to which the user is lead on click of the notification"""
+  link: String
+
+  """Title of message"""
+  title: String!
+}
+
 type Mutation {
   AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
   AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
@@ -305,7 +319,7 @@ type Notification {
   read: Boolean!
 
   """Recipient of the notification"""
-  receiver: User!
+  recipient: User!
 
   """Last modification date"""
   updatedAt: DateTime
@@ -315,37 +329,13 @@ type Notification {
 }
 
 input NotifyInput {
-  """Content of notification in german"""
-  deContent: String!
-
-  """Title of notification in german"""
-  deTitle: String!
-
-  """Content of notification in english"""
-  enContent: String!
-
-  """Title of notification in english"""
-  enTitle: String!
-
-  """Link to which the user is lead on click of the notification"""
-  link: String
+  """Messages in different languages"""
+  messages: [MessageInput!]!
 }
 
 input NotifyUsersInput {
-  """Content of notification in german"""
-  deContent: String!
-
-  """Title of notification in german"""
-  deTitle: String!
-
-  """Content of notification in english"""
-  enContent: String!
-
-  """Title of notification in english"""
-  enTitle: String!
-
-  """Link to which the user is lead on click of the notification"""
-  link: String
+  """Messages in different languages"""
+  messages: [MessageInput!]!
 
   """Uuids of users that shall receive notifications"""
   recipients: [ID!]!
@@ -716,7 +706,7 @@ input UpdateUserGroupInput {
 
 input UpdateUserInput {
   email: String
-  lang: String!
+  lang: String
   username: String
   uuid: ID!
 }

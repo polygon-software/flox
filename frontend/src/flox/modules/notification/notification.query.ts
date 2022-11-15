@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { gql } from '@apollo/client/core';
 
 import { QueryObject } from 'src/apollo/query';
 import { TABLES } from 'src/flox/TABLES';
@@ -9,14 +9,11 @@ export const GET_UNREAD_NOTIFICATIONS: QueryObject = {
       UnreadNotifications {
         createdAt
         uuid
-        link
-        deTitle
-        deContent
-        enTitle
-        enContent
-        receiver {
-          uuid
-          username
+        messages {
+          title
+          content
+          lang
+          link
         }
         __typename
       }

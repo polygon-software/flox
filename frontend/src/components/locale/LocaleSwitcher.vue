@@ -22,9 +22,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, onMounted } from 'vue';
+import { computed, ComputedRef } from 'vue';
 
 import { i18n } from 'boot/i18n';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import { updateUser } from 'src/flox/modules/auth/services/user.service';
+
+const $authStore = useAuthStore();
 
 const localeOptions: ComputedRef<{ code: string; label: string }[]> = computed(
   () => {
@@ -35,17 +39,18 @@ const localeOptions: ComputedRef<{ code: string; label: string }[]> = computed(
   }
 );
 
-onMounted(() => {
-  console.log('loale', i18n.global.locale.value);
-});
-
 /**
  * Sets a locale according to the provided code
  *
  * @param code - locale code like 'de' or 'en'
  */
-function setLocale(code: string): void {
+async function setLocale(code: string): Promise<void> {
   i18n.global.locale.value = code;
+  if ($authStore.loggedIn && $authStore.loggedInUser?.uuid) {
+    await updateUser($authStore.loggedInUser.uuid, {
+      lang: code,
+    });
+  }
 }
 </script>
 

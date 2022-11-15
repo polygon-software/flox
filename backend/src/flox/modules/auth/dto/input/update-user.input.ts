@@ -20,13 +20,13 @@ export default class UpdateUserInput extends UpdateInput {
   uuid: string;
 
   @Field(() => String, { nullable: true })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @MinLength(6)
   @MaxLength(25)
   username: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsOptional()
   @IsString()
   @MinLength(2)
@@ -36,7 +36,7 @@ export default class UpdateUserInput extends UpdateInput {
   lang: string;
 
   @Field(() => String, { nullable: true })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @IsEmail()
   email: string;

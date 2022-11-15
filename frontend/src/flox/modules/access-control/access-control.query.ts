@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { gql } from '@apollo/client/core';
 
 import { TABLES } from 'src/flox/TABLES';
 import { QueryObject } from 'src/apollo/query';

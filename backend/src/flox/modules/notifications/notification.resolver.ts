@@ -53,7 +53,7 @@ export default class NotificationResolver {
     const notification = await this.notificationService.getNotification(
       markAsReadInput.uuid,
     );
-    if (notification.receiver.uuid !== user.uuid) {
+    if (notification.recipient.uuid !== user.uuid) {
       throw new ForbiddenException();
     }
     return this.notificationService.markNotificationAsRead(notification);

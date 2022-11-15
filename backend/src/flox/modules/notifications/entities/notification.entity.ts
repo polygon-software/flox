@@ -14,7 +14,7 @@ export default class Notification extends BaseEntity {
   })
   @ManyToOne(() => User)
   @JoinColumn()
-  receiver: User;
+  recipient: User;
 
   @Field(() => Boolean, {
     description: 'Whether the recipient has seen the notification',
@@ -25,6 +25,10 @@ export default class Notification extends BaseEntity {
   @Field(() => [Message], {
     description: 'Messages in different languages related to this notification',
   })
-  @OneToMany(() => Message, (message) => message.notification)
+  @OneToMany(() => Message, (message) => message.notification, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
   messages: Message[];
 }

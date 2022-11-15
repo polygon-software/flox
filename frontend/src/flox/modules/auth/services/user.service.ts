@@ -119,19 +119,29 @@ export async function createUser(
  * Update an existing user
  *
  * @param uuid - users uuid
- * @param username - users username
- * @param email - users email
+ * @param user - contains updated info about user
+ * @param user.username - update username
+ * @param user.email - update email
+ * @param user.lang - update default locale
  * @returns updated user
  */
 export async function updateUser(
   uuid: string,
-  username: string,
-  email: string
+  {
+    username,
+    email,
+    lang,
+  }: {
+    username?: string;
+    email?: string;
+    lang?: string;
+  }
 ): Promise<UserEntity | null> {
   const { data } = await executeMutation<UserEntity>(UPDATE_USER, {
     uuid,
     username,
     email,
+    lang,
   });
   return data ?? null;
 }

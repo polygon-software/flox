@@ -12,16 +12,11 @@
             align="justify"
           >
             <q-tab
-              v-for="locale in locales"
-              :key="locale"
-              :name="locale"
-              :label="locale"
-              :alert="
-                !(
-                  notification[`${locale}Title`] &&
-                  notification[`${locale}Content`]
-                )
-              "
+              v-for="message in messages"
+              :key="message.lang"
+              :name="message.lang"
+              :label="message.lang"
+              :alert="!(message.title && message.content)"
               alert-icon="priority_high"
             />
           </q-tabs>
@@ -37,18 +32,18 @@
               transition-next="jump-up"
             >
               <q-tab-panel
-                v-for="locale in locales"
-                :key="locale"
-                :name="locale"
+                v-for="message in messages"
+                :key="message.lang"
+                :name="message.lang"
               >
                 <q-input
-                  v-model="notification[`${locale}Title`]"
+                  v-model="message.title"
                   outlined
                   :label="$t('notification.notification_title')"
                   :rules="titleRules"
                 />
                 <q-input
-                  v-model="notification[`${locale}Content`]"
+                  v-model="message.content"
                   outlined
                   type="textarea"
                   :label="$t('notification.notification_content')"
@@ -83,7 +78,7 @@ import {
   showSuccessNotification,
 } from 'src/tools/notification.tool';
 import {
-  NewNotification,
+  Message,
   sendNotificationToEveryone,
 } from 'src/flox/modules/notification/services/notification.service';
 import {
@@ -113,13 +108,14 @@ const contentRules: ValidationRule[] = [
   ),
 ];
 
-const notification: Ref<NewNotification> = ref({
-  deTitle: '',
-  deContent: '',
-  enTitle: '',
-  enContent: '',
-  link: '',
-});
+const messages: Ref<Message[]> = ref(
+  locales.value.map((lang) => ({
+    lang,
+    title: '',
+    content: '',
+    link: '',
+  }))
+);
 
 /**
  * Submits new notification to all users
@@ -129,23 +125,19 @@ async function submitNotificationBroadcast(): Promise<void> {
   if (!form) {
     return;
   }
-  const allValid = await form.validate();
-  const n = notification.value;
-  const allFilledIn = n.deTitle && n.deContent && n.enTitle && n.enContent;
-  if (!(allValid && allFilledIn)) {
+  const formValid = await form.validate();
+  const allFilledIn = messages.value.every((msg) => msg.title && msg.content);
+  if (!(formValid && allFilledIn)) {
     showErrorNotification($q, i18n.global.t('errors.missing_attributes'));
     return;
   }
-  await sendNotificationToEveryone(notification.value);
+  await sendNotificationToEveryone(messages.value);
   showSuccessNotification($q, i18n.global.t('notification.sent'));
-  notification.value = {
-    deTitle: '',
-    deContent: '',
-    enTitle: '',
-    enContent: '',
-    link: '',
-  };
+  messages.value.forEach((msg) => {
+    msg.title = '';
+    msg.content = '';
+    msg.link = '';
+  });
   form.reset();
 }
 </script>
-

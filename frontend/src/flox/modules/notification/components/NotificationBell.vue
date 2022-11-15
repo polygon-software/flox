@@ -9,13 +9,15 @@
           <q-item
             v-for="notification in sortedNotifications"
             :key="notification.uuid"
+            :class="{ 'cursor-pointer': extractLangContent(notification)?.link }"
+            @click="clickLink(extractLangContent(notification)?.link)"
           >
             <q-item-section>
               <q-item-label>
-                <strong>{{ extractTitle(notification) }}</strong>
+                <strong>{{ extractLangContent(notification)?.title }}</strong>
               </q-item-label>
               <q-item-label caption>
-                {{ extractContent(notification) }}
+                {{ extractLangContent(notification)?.content }}
               </q-item-label>
             </q-item-section>
 
@@ -46,6 +48,7 @@
 <script setup lang="ts">
 import { computed, ComputedRef, Ref } from 'vue';
 import { format } from 'date-fns';
+import { useRouter } from 'vue-router';
 
 import {
   markNotificationAsRead,
@@ -53,6 +56,9 @@ import {
 } from 'src/flox/modules/notification/services/notification.service';
 import { NotificationEntity } from 'src/flox/modules/notification/entities/notification.entity';
 import { i18n } from 'boot/i18n';
+import MessageEntity from 'src/flox/modules/notification/entities/message.entity';
+
+const $router = useRouter();
 
 const notifications: Ref<NotificationEntity[] | null> =
   subscribeToUnreadNotifications();
@@ -73,33 +79,33 @@ const sortedNotifications: ComputedRef<NotificationEntity[]> = computed(() => {
 });
 
 /**
- * Extracts the title of the notification in the currently set language
+ * Extracts the message in the correct lang (or fallback locale) from the notification
  *
- * @param notification - the notification
- * @returns notification title
+ * @param notification - notification
+ * @returns message in correct language
  */
-function extractTitle(notification: NotificationEntity): string {
-  type notificationKey = keyof NotificationEntity;
-  const titleKey = `${i18n.global.locale.value}Title` as notificationKey;
-  if (titleKey in notification) {
-    return notification[titleKey] as string;
+function extractLangContent(
+  notification: NotificationEntity
+): MessageEntity | undefined {
+  const messages = notification?.messages ?? [];
+  const correctLang = messages.find(
+    (msg) => msg.lang === i18n.global.locale.value
+  );
+  if (correctLang) {
+    return correctLang;
   }
-  return notification.enTitle ?? '-';
+  return messages.find((msg) => msg.lang === i18n.global.fallbackLocale.value);
 }
 
 /**
- * Extracts the title of the notification in the currently set language
+ * Routes to the location specified by link
  *
- * @param notification - the notification
- * @returns notification title
+ * @param link - link included within message
  */
-function extractContent(notification: NotificationEntity): string {
-  type notificationKey = keyof NotificationEntity;
-  const titleKey = `${i18n.global.locale.value}Content` as notificationKey;
-  if (titleKey in notification) {
-    return notification[titleKey] as string;
+async function clickLink(link: string | undefined): Promise<void> {
+  if (link) {
+    await $router.push(link);
   }
-  return notification.enContent ?? '-';
 }
 
 /**
@@ -111,4 +117,3 @@ async function markAsRead(notification: NotificationEntity): Promise<void> {
   await markNotificationAsRead(notification.uuid);
 }
 </script>
-

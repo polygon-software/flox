@@ -10,11 +10,10 @@ import {
   NOTIFY_USERS,
 } from 'src/flox/modules/notification/notification.mutation';
 
-export type NewNotification = {
-  deTitle: string;
-  deContent: string;
-  enTitle: string;
-  enContent: string;
+export type Message = {
+  lang: string;
+  title: string;
+  content: string;
   link?: string;
 };
 
@@ -66,25 +65,17 @@ export async function markNotificationAsRead(
  * Sends a notification to certain users
  *
  * @param recipients - uuids of users that shall receive notificatoin
- * @param notification - notification to be sent
- * @param notification.deTitle - title of notification in german
- * @param notification.deContent - content of notification in german
- * @param notification.enTitle - title of notification in english
- * @param notification.enContent - content of notification in english
- * @param notification.link - link to which user is being directed on notification click
+ * @param messages - messages to be sent out to users
+ * @param messages
  * @returns sent out notifications
  */
 export async function sendNotificationToUsers(
   recipients: string[],
-  { deTitle, deContent, enTitle, enContent, link }: NewNotification
+  messages: Message[]
 ): Promise<NotificationEntity | null> {
   const { data } = await executeMutation<NotificationEntity>(NOTIFY_USERS, {
     recipients,
-    deTitle,
-    deContent,
-    enTitle,
-    enContent,
-    link,
+    messages,
   });
   return data ?? null;
 }
@@ -92,27 +83,14 @@ export async function sendNotificationToUsers(
 /**
  * Sends out a notification to every user within the system
  *
- * @param notification - notification
- * @param notification.deTitle - title of notification in german
- * @param notification.deContent - content of notification in german
- * @param notification.enTitle - title of notification in english
- * @param notification.enContent - content of notification in english
- * @param notification.link - link to which user is being directed on notification click
+ * @param messages - messages to be sent out to users
  * @returns sent out notifications
  */
-export async function sendNotificationToEveryone({
-  deTitle,
-  deContent,
-  enTitle,
-  enContent,
-  link,
-}: NewNotification): Promise<NotificationEntity | null> {
+export async function sendNotificationToEveryone(
+  messages: Message[]
+): Promise<NotificationEntity | null> {
   const { data } = await executeMutation<NotificationEntity>(NOTIFY_ALL_USERS, {
-    deTitle,
-    deContent,
-    enTitle,
-    enContent,
-    link,
+    messages,
   });
   return data ?? null;
 }

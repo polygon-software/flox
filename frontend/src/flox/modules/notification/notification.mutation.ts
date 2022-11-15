@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { gql } from '@apollo/client/core';
 
 import { MutationObject, MutationTypes } from 'src/apollo/mutation';
 import { TABLES } from 'src/flox/TABLES';
@@ -8,11 +8,6 @@ export const MARK_NOTIFICATION_AS_READ: MutationObject = {
     mutation MarkNotificationAsRead($uuid: ID!) {
       MarkNotificationAsRead(markAsReadInput: { uuid: $uuid }) {
         uuid
-        link
-        deTitle
-        deContent
-        enTitle
-        enContent
       }
     }
   `,
@@ -23,30 +18,12 @@ export const MARK_NOTIFICATION_AS_READ: MutationObject = {
 
 export const NOTIFY_USERS: MutationObject = {
   mutation: gql`
-    mutation NotifyUsers(
-      $recipients: [ID!]!
-      $deContent: String!
-      $deTitle: String!
-      $enContent: String!
-      $enTitle: String!
-      $link: String
-    ) {
+    mutation NotifyUsers($recipients: [ID!]!, $messages: [MessageInput!]!) {
       NotifyUsers(
-        notifyUsersInput: {
-          recipients: $recipients
-          deContent: $deContent
-          deTitle: $deTitle
-          enContent: $enContent
-          enTitle: $enTitle
-          link: $link
-        }
+        notifyUsersInput: { recipients: $recipients, messages: $messages }
       ) {
         uuid
-        link
-        deTitle
-        deContent
-        enTitle
-        enContent
+        createdAt
       }
     }
   `,
@@ -57,28 +34,10 @@ export const NOTIFY_USERS: MutationObject = {
 
 export const NOTIFY_ALL_USERS: MutationObject = {
   mutation: gql`
-    mutation NotifyAllUsers(
-      $deContent: String!
-      $deTitle: String!
-      $enContent: String!
-      $enTitle: String!
-      $link: String
-    ) {
-      NotifyAllUsers(
-        notifyInput: {
-          deContent: $deContent
-          deTitle: $deTitle
-          enContent: $enContent
-          enTitle: $enTitle
-          link: $link
-        }
-      ) {
+    mutation NotifyAllUsers($messages: [MessageInput!]!) {
+      NotifyAllUsers(notifyInput: { messages: $messages }) {
         uuid
-        link
-        deTitle
-        deContent
-        enTitle
-        enContent
+        createdAt
       }
     }
   `,
