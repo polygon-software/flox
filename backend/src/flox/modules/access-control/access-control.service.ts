@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { I18nService } from 'nestjs-i18n';
 
 import User from '../auth/entities/user.entity';
 import GetAllArgs from '../abstracts/crud/dto/get-all.args';
@@ -16,6 +17,7 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
   constructor(
     @InjectRepository(UserGroup)
     private userGroupRepository: Repository<UserGroup>,
+    private readonly i18nService: I18nService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationService,
   ) {
@@ -41,18 +43,53 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
   ): Promise<Notification[]> {
     return this.notificationService.notifyUsers({
       recipients: userUuids,
-      messages: [
-        {
-          lang: 'de',
-          title: 'DE test',
-          content: 'DE This is some content',
-        },
-        {
-          lang: 'en',
-          title: 'EN test',
-          content: 'EN This is some content',
-        },
-      ],
+      messages: ['de', 'en'].map((lang) => ({
+        lang,
+        title: this.i18nService.t(
+          'notifications.user_added_to_user_group.title',
+          {
+            lang,
+          },
+        ),
+        content: this.i18nService.t(
+          'notifications.user_added_to_user_group.content',
+          {
+            lang,
+            args: { name: userGroup.name },
+          },
+        ),
+      })),
+    });
+  }
+
+  /**
+   * Sends notifications to users that they were removed from a user group
+   *
+   * @param userUuids - uuids of users that shall receive notification
+   * @param userGroup - user group to which user was removed
+   */
+  async notifyUsersForBeingRemoved(
+    userUuids: string[],
+    userGroup: UserGroup,
+  ): Promise<Notification[]> {
+    return this.notificationService.notifyUsers({
+      recipients: userUuids,
+      messages: ['de', 'en'].map((lang) => ({
+        lang,
+        title: this.i18nService.t(
+          'notifications.user_removed_from_user_group.title',
+          {
+            lang,
+          },
+        ),
+        content: this.i18nService.t(
+          'notifications.user_removed_from_user_group.content',
+          {
+            lang,
+            args: { name: userGroup.name },
+          },
+        ),
+      })),
     });
   }
 
@@ -169,6 +206,7 @@ export default class AccessControlService extends AbstractSearchService<UserGrou
     });
     userGroup.users = userGroup.users.filter((u) => u.uuid !== user.uuid);
     await this.userGroupRepository.save(userGroup);
+    void this.notifyUsersForBeingRemoved([user.uuid], userGroup);
     return this.getOne(
       { uuid: userGroup.uuid },
       { relations: { users: true } },
