@@ -57,15 +57,6 @@
           >
             <q-tooltip>Apps</q-tooltip>
           </q-btn>
-          <!--          <q-btn-->
-          <!--            round-->
-          <!--            dense-->
-          <!--            flat-->
-          <!--            color="grey-8"-->
-          <!--            icon="message"-->
-          <!--          >-->
-          <!--            <q-tooltip>Messages</q-tooltip>-->
-          <!--          </q-btn>-->
           <LocaleSwitcher />
           <NotificationBell />
           <q-btn round flat>

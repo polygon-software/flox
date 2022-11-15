@@ -54,4 +54,3 @@ async function setLocale(code: string): Promise<void> {
 }
 </script>
 
-<style scoped></style>
