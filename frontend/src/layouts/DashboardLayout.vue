@@ -139,9 +139,11 @@
     </q-drawer>
 
     <q-page-container>
-      <div class="q-pa-lg relative-position">
-        <router-view />
-      </div>
+      <q-pull-to-refresh @refresh="refresh">
+        <div :key="key" class="q-pa-lg relative-position">
+          <router-view />
+        </div>
+      </q-pull-to-refresh>
     </q-page-container>
   </q-layout>
 
@@ -156,12 +158,28 @@ import ROUTES from 'src/router/routes';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';
 import { i18n } from 'boot/i18n';
+import { invalidateTables } from 'src/apollo/invalidation';
+import { ALL_TABLES, TABLES } from 'src/flox/TABLES';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authStore = useAuthStore();
 
 const leftDrawerOpen: Ref<boolean> = ref(false);
 const search: Ref<string> = ref('');
+const key: Ref<number> = ref(0.0);
+
+/**
+ * Reloads the entire page and devalidates all queries
+ *
+ * @param done - callback function to stop loading indication
+ */
+function refresh(done: () => void): void {
+  invalidateTables(ALL_TABLES);
+  key.value += 1;
+  setTimeout(() => {
+    done();
+  }, 500);
+}
 
 const sideMenu = [
   {

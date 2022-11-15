@@ -201,7 +201,11 @@ import debounce from 'lodash/debounce';
 import { OnClickOutside } from '@vueuse/components';
 
 import { formatBytes } from 'src/format/number.format';
-import { mimetypeToIcon } from 'src/format/icon.format';
+import {
+  isAudio,
+  isImage, isPdf,
+  mimetypeToIcon
+} from "src/flox/modules/file/tools/mimetype.tools";
 import {
   deleteFile,
   getAllFiles,
@@ -223,6 +227,9 @@ import FolderEntity from 'src/flox/modules/file/entities/folder.entity';
 import { ColumnInterface } from 'components/tables/useDataTable';
 import ManageItemAccessControlGroups from 'src/flox/modules/access-control/components/dialogs/ManageItemAccessControlGroupsDialog.vue';
 import AdminOnly from 'src/flox/modules/auth/components/roles/AdminOnly.vue';
+import ImageDialog from 'src/flox/modules/file/components/dialogs/ImageDialog.vue';
+import MusicPlayerDialog from 'src/flox/modules/file/components/dialogs/MusicPlayerDialog.vue';
+import PdfDialog from 'src/flox/modules/file/components/dialogs/PdfDialog.vue';
 
 const $q = useQuasar();
 
@@ -416,8 +423,32 @@ async function clickOnFileOrFolder(row: FileOrFolder): Promise<void> {
       return;
     }
     const fileDetails = await getFile(row.uuid, 360);
-    if (fileDetails.url) {
-      window.open(fileDetails.url, '_blank');
+    if (isAudio(row.mimetype)) {
+      $q.dialog({
+        component: MusicPlayerDialog,
+        componentProps: {
+          file: fileDetails,
+          autoplay: true,
+        },
+      });
+    } else if (isImage(row.mimetype)) {
+      $q.dialog({
+        component: ImageDialog,
+        componentProps: {
+          image: fileDetails,
+        },
+      });
+    } else if (isPdf(row.mimetype)) {
+      $q.dialog({
+        component: PdfDialog,
+        componentProps: {
+          pdf: fileDetails,
+        },
+      });
+    } else {
+      if (fileDetails.url) {
+        window.open(fileDetails.url, '_blank');
+      }
     }
   }
 }
