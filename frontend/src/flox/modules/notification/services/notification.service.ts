@@ -64,9 +64,8 @@ export async function markNotificationAsRead(
 /**
  * Sends a notification to certain users
  *
- * @param recipients - uuids of users that shall receive notificatoin
+ * @param recipients - uuids of users that shall receive notification
  * @param messages - messages to be sent out to users
- * @param messages
  * @returns sent out notifications
  */
 export async function sendNotificationToUsers(

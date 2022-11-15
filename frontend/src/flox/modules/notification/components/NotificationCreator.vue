@@ -49,6 +49,11 @@
                   :label="$t('notification.notification_content')"
                   :rules="contentRules"
                 />
+                <q-input
+                  v-model="message.link"
+                  outlined
+                  :label="$t('notification.notification_link')"
+                />
               </q-tab-panel>
             </q-tab-panels>
           </q-form>

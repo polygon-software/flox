@@ -149,6 +149,7 @@ export default {
     send_notificaton: 'Send notification',
     notification_title: 'Notification Title',
     notification_content: 'Notification Content',
+    notification_link: 'Notification Link (optional)',
     sent: 'Notification sent!',
   },
   pages: {

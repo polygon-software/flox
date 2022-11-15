@@ -9,7 +9,7 @@
           <q-item
             v-for="notification in sortedNotifications"
             :key="notification.uuid"
-            :class="{ 'cursor-pointer': extractLangContent(notification)?.link }"
+            :clickable="!!extractLangContent(notification)?.link"
             @click="clickLink(extractLangContent(notification)?.link)"
           >
             <q-item-section>
@@ -30,7 +30,7 @@
                 flat
                 color="primary"
                 icon="check"
-                @click="markAsRead(notification)"
+                @click.stop="markAsRead(notification)"
               />
             </q-item-section>
           </q-item>
@@ -103,6 +103,7 @@ function extractLangContent(
  * @param link - link included within message
  */
 async function clickLink(link: string | undefined): Promise<void> {
+  console.log('link', { link });
   if (link) {
     await $router.push(link);
   }
