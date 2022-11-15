@@ -18,6 +18,10 @@ export default {
     search: 'Suchen',
     display: 'Anzeigen',
   },
+  locales: {
+    de: 'Deutsch',
+    en: 'Englisch',
+  },
   authentication: {
     authentication: 'Authentifizierung',
     welcome_back: 'Willkommen zurück!',

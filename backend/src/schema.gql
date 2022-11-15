@@ -241,6 +241,35 @@ input MarkAsReadInput {
   uuid: ID!
 }
 
+type Message {
+  """Content of message"""
+  content: String!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Language of message"""
+  lang: String!
+
+  """Link to which the user is lead on click of the notification"""
+  link: String
+
+  """Notification on which this message appears"""
+  notification: Notification!
+
+  """Title of message"""
+  title: String!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
 type Mutation {
   AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
   AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
@@ -266,28 +295,16 @@ type Notification {
   """Creation date"""
   createdAt: DateTime!
 
-  """Content of notification in german"""
-  deContent: String!
-
-  """Title of notification in german"""
-  deTitle: String!
-
   """Date of deletion"""
   deletedAt: DateTime
 
-  """Content of notification in english"""
-  enContent: String!
+  """Messages in different languages related to this notification"""
+  messages: [Message!]!
 
-  """Title of notification in english"""
-  enTitle: String!
-
-  """Link to which the user is lead on click of the notification"""
-  link: String
-
-  """Whether the receiver has seen the notification"""
+  """Whether the recipient has seen the notification"""
   read: Boolean!
 
-  """Receiver of the notification"""
+  """Recipient of the notification"""
   receiver: User!
 
   """Last modification date"""
@@ -699,6 +716,7 @@ input UpdateUserGroupInput {
 
 input UpdateUserInput {
   email: String
+  lang: String!
   username: String
   uuid: ID!
 }
@@ -718,6 +736,9 @@ type User {
 
   """User groups this user belongs to"""
   groups: [UserGroup!]!
+
+  """Preferred language of user"""
+  lang: String!
 
   """User role"""
   role: String
