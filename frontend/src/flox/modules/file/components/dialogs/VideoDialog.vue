@@ -32,15 +32,20 @@ const props = withDefaults(
   }
 );
 
-const sources: ComputedRef<{ src: string; type: string }[]> = computed(() => [
-  {
-    src: props.video.url,
-    type: props.video.mimetype,
-  },
-]);
+const sources: ComputedRef<{ src: string; type: string }[]> = computed(() => {
+  if (props.video.url && props.video.mimetype) {
+    return [
+      {
+        src: props.video.url,
+        type: props.video.mimetype,
+      },
+    ];
+  } else {
+    throw new Error('Unable to play video without url or mimetype');
+  }
+});
 
 defineEmits([...useDialogPluginComponent.emits]);
 
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
-  useDialogPluginComponent();
+const { dialogRef, onDialogHide } = useDialogPluginComponent();
 </script>

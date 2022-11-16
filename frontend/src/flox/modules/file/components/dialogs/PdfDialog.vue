@@ -4,7 +4,7 @@
       class="relative-position"
       style="min-width: 80vw; width: 80vw; min-height: 90vh; height: 90vh"
     >
-      <q-pdfviewer v-model="visible" :src="pdf.url" type="html5" />
+      <q-pdfviewer v-model="visible" :src="props.pdf.url" type="html5" />
     </q-card>
   </q-dialog>
 </template>
@@ -17,17 +17,11 @@ import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
 
 const visible: Ref<boolean> = ref(true);
 
-const props = withDefaults(
-  defineProps<{
-    pdf: FileEntity;
-    fullscreen?: boolean;
-  }>(),
-  {
-    fullscreen: false,
-  }
-);
+const props = defineProps<{
+  pdf: FileEntity;
+}>();
 
 defineEmits([...useDialogPluginComponent.emits]);
 
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+const { dialogRef, onDialogHide } = useDialogPluginComponent();
 </script>

@@ -10,20 +10,21 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: [
-    '@typescript-eslint/eslint-plugin',
+    '@typescript-eslint',
     'import',
-
-    // https://github.com/SonarSource/eslint-plugin-sonarjs
-    // linting rules that sonarqube considers for code quality checks
     'sonarjs',
   ],
   extends: [
+    'eslint:recommended',
+
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+
     'plugin:import/recommended',
-    'plugin:import/recommended',
+    'plugin:import/typescript',
+
     'plugin:prettier/recommended',
-    // https://github.com/SonarSource/eslint-plugin-sonarjs
-    // linting rules that sonarqube considers for code quality checks
+
     'plugin:sonarjs/recommended',
   ],
   ignorePatterns: ['.eslintrc.js'],

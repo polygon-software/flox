@@ -29,7 +29,7 @@ export async function fetchMyUser(): Promise<UserEntity> {
  * @param uuid - uuid of user to fetch
  * @returns user
  */
-export async function getUser(uuid: String): Promise<UserEntity> {
+export async function getUser(uuid: string): Promise<UserEntity> {
   const { data } = await executeQuery<UserEntity>(GET_USER, { uuid });
   return data;
 }
@@ -39,7 +39,7 @@ export async function getUser(uuid: String): Promise<UserEntity> {
  * @param uuids - uuids of users
  * @returns users
  */
-export async function getUsers(uuids: String[]): Promise<UserEntity[]> {
+export async function getUsers(uuids: string[]): Promise<UserEntity[]> {
   const { data } = await executeQuery<UserEntity[]>(GET_MULTIPLE_USERS, {
     uuids,
   });

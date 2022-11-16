@@ -1,5 +1,6 @@
 <template>
   <h4>{{ $t('pages.home.title') }}</h4>
+  <p>{{ desc }}</p>
   <div class="row" style="gap: 25px">
     <ModuleStatus />
     <q-no-ssr>
@@ -15,6 +16,8 @@ import SampleForm from 'components/sample/SampleForm.vue';
 import DosChecker from 'components/sample/DosChecker.vue';
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import { i18n } from 'boot/i18n';
+
+const desc: number = 'test';
 
 useMeta({
   title: i18n.global.t('pages.sample.meta.title'),

@@ -159,7 +159,7 @@ import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';
 import { i18n } from 'boot/i18n';
 import { invalidateTables } from 'src/apollo/invalidation';
-import { ALL_TABLES, TABLES } from 'src/flox/TABLES';
+import { ALL_TABLES } from 'src/flox/TABLES';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authStore = useAuthStore();

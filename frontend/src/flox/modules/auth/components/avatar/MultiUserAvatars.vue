@@ -18,7 +18,7 @@
     style="margin-left: 90px"
     class="text-weight-bolder"
   >
-    +{{ users.length - 5 }}
+    +{{ props.users.length - 5 }}
   </span>
 </template>
 

@@ -3,14 +3,15 @@
     <slot name="top" />
     <q-table
       v-model:selected="selected"
-      :title="title"
+      :title="props.title"
       flat
       hide-bottom
-      :rows="users"
+      :rows="props.users"
       :columns="userTableColumns"
       row-key="uuid"
       :pagination="initialPagination"
       selection="single"
+      v-bind="props.tableProps"
     >
       <template #body-cell-avatar="bodyProps">
         <q-td :props="bodyProps">

@@ -1,5 +1,4 @@
 import {
-  NavigationFailure,
   RouteLocationNormalizedLoaded,
   Router,
   RouteRecordRaw,

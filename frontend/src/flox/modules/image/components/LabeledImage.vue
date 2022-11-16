@@ -1,20 +1,20 @@
 <template>
   <div class="img-container">
     <img
-      v-if="image"
+      v-if="props.image"
       ref="imgRef"
-      :src="image.file.url"
+      :src="props.image.file.url"
       alt="image"
       class="full-width"
     />
-    <template v-if="image">
+    <template v-if="props.image">
       <div
-        v-for="label in image.labels"
+        v-for="label in props.image.labels"
         :key="label.name + label.confidence"
         class="bbox cursor-pointer"
         :class="{
-          focus: focusLabel && focusLabel.uuid === label.uuid,
-          defocus: focusLabel && focusLabel.uuid !== label.uuid,
+          focus: props.focusLabel && props.focusLabel.uuid === label.uuid,
+          defocus: props.focusLabel && props.focusLabel.uuid !== label.uuid,
         }"
         :style="{
           top: `${label.boundingBox.top * 100}%`,
@@ -39,8 +39,6 @@ import { LabelEntity } from 'src/flox/modules/image/entities/label.entity';
 const props = defineProps<{
   image: ImageEntity;
   focusLabel?: LabelEntity;
-  maxWidth: number;
-  maxHeight: number;
 }>();
 
 const emit = defineEmits<{

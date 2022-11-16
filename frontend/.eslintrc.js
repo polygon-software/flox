@@ -24,39 +24,33 @@ module.exports = {
     browser: true
   },
 
+  plugins: [
+    // required to apply rules which need type information
+    '@typescript-eslint',
+
+    'import',
+    'eslint-plugin-graphql',
+
+    'vue',
+
+    'sonarjs',
+  ],
+
   // Rules order is important, please avoid shuffling them
   extends: [
-    // consider disabling this class of rules if linting takes too long
+    'eslint:recommended',
+
+    'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
 
     'plugin:import/recommended',
     'plugin:import/typescript',
 
-    // See https://eslint.vuejs.org/rules/#available-rules
     'plugin:vue/vue3-recommended',
 
-    // https://github.com/prettier/eslint-config-prettier#installation
-    // usage with Prettier, provided by 'eslint-config-prettier'.
     'plugin:prettier/recommended',
 
-    // https://github.com/SonarSource/eslint-plugin-sonarjs
-    // linting rules that sonarqube considers for code quality checks
     'plugin:sonarjs/recommended',
-  ],
-
-  plugins: [
-    'import',
-    'eslint-plugin-graphql',
-    // required to apply rules which need type information
-    '@typescript-eslint/eslint-plugin',
-
-    // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
-    // required to lint *.vue files
-    'vue',
-
-    // https://github.com/SonarSource/eslint-plugin-sonarjs
-    // linting rules that sonarqube considers for code quality checks
-    'sonarjs',
   ],
 
   globals: {

@@ -2,7 +2,6 @@ import axios from 'axios';
 
 import { invalidateTables } from 'src/apollo/invalidation';
 import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
-import { createImage } from 'src/flox/modules/image/services/image.service';
 import { TABLES } from 'src/flox/TABLES';
 import {
   createFile,

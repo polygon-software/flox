@@ -2,7 +2,7 @@
   <q-card-section>
     <q-list separator>
       <q-item
-        v-for="(file, index) in files"
+        v-for="(file, index) in props.files"
         :key="file.content.name"
         class="row justify-between flex-center"
       >

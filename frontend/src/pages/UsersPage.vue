@@ -37,12 +37,8 @@ import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
 import DataTable from 'components/tables/DataTable.vue';
 import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
-import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 import { i18n } from 'boot/i18n';
-
-const $authStore = useAuthStore();
-const currentAlias: Ref<string> = ref('');
 
 const emailRules: ValidationRule[] = [
   joiSchemaToValidationRule(

@@ -142,6 +142,6 @@ onMounted(() => {
   }
 });
 
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
+const { dialogRef, onDialogHide, onDialogOK } =
   useDialogPluginComponent();
 </script>
