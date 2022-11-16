@@ -55,7 +55,7 @@ const props = withDefaults(
   }>(),
   {
     maxFiles: 10,
-    maxFileSize: 5e7, // ca. 50 MB
+    maxFileSize: 5e8, // ca. 500 MB
   }
 );
 

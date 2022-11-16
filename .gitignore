@@ -55,3 +55,6 @@ lerna-debug.log*
 
 *.tfvars
 /**/.env
+
+# Pdf.js
+/frontend/public/pdfjs

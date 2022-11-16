@@ -16,6 +16,7 @@ export function isAudio(mimetype: string): boolean {
   return mimetype.startsWith('audio');
 }
 
+
 /**
  * Decides whether the given mimetype is video
  * @param mimetype - file mimetype
@@ -51,6 +52,9 @@ export function mimetypeToIcon(mimetype: string): string {
   }
   if (isVideo(mimetype)) {
     return 'videocam';
+  }
+  if (isPdf(mimetype)) {
+    return 'picture_as_pdf';
   }
   if (mimetype.startsWith('text')) {
     return 'text_fields';

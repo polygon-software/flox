@@ -203,9 +203,11 @@ import { OnClickOutside } from '@vueuse/components';
 import { formatBytes } from 'src/format/number.format';
 import {
   isAudio,
-  isImage, isPdf,
-  mimetypeToIcon
-} from "src/flox/modules/file/tools/mimetype.tools";
+  isImage,
+  isPdf,
+  isVideo,
+  mimetypeToIcon,
+} from 'src/flox/modules/file/tools/mimetype.tools';
 import {
   deleteFile,
   getAllFiles,
@@ -227,9 +229,12 @@ import FolderEntity from 'src/flox/modules/file/entities/folder.entity';
 import { ColumnInterface } from 'components/tables/useDataTable';
 import ManageItemAccessControlGroups from 'src/flox/modules/access-control/components/dialogs/ManageItemAccessControlGroupsDialog.vue';
 import AdminOnly from 'src/flox/modules/auth/components/roles/AdminOnly.vue';
-import ImageDialog from 'src/flox/modules/file/components/dialogs/ImageDialog.vue';
-import MusicPlayerDialog from 'src/flox/modules/file/components/dialogs/MusicPlayerDialog.vue';
-import PdfDialog from 'src/flox/modules/file/components/dialogs/PdfDialog.vue';
+import {
+  previewAudio,
+  previewImage,
+  previewPdf,
+  previewUnknownfile, previewVideo
+} from "src/flox/modules/file/tools/preview.tools";
 
 const $q = useQuasar();
 
@@ -244,9 +249,9 @@ const emit = defineEmits<{
 
 type FileOrFolder = {
   uuid: string;
-  type: 'file' | 'folder';
-  name: string;
-  size: number;
+  type?: 'file' | 'folder';
+  name?: string;
+  size?: number;
   files?: number;
   mimetype?: string;
   createdAt?: Date;
@@ -363,7 +368,7 @@ watch(searchInput, async () => {
  * Extracts the suffix from the file that is renamed to ensure that the user can not change the file extension
  */
 const fileNameSuffix: ComputedRef<string> = computed(() => {
-  if (!fileBeingRenamed.value) {
+  if (!(fileBeingRenamed.value && fileBeingRenamed.value.filename)) {
     return '';
   }
   const name = fileBeingRenamed.value.filename;
@@ -416,39 +421,23 @@ function setPathToRoot(): void {
  * @param row - content of the row, which is either a file or a folder
  */
 async function clickOnFileOrFolder(row: FileOrFolder): Promise<void> {
-  if (row.type === 'folder') {
+  if (row.type === 'folder' && row.name) {
     extendPath(row.name);
   } else {
     if (fileBeingMoved.value) {
       return;
     }
-    const fileDetails = await getFile(row.uuid, 360);
-    if (isAudio(row.mimetype)) {
-      $q.dialog({
-        component: MusicPlayerDialog,
-        componentProps: {
-          file: fileDetails,
-          autoplay: true,
-        },
-      });
-    } else if (isImage(row.mimetype)) {
-      $q.dialog({
-        component: ImageDialog,
-        componentProps: {
-          image: fileDetails,
-        },
-      });
-    } else if (isPdf(row.mimetype)) {
-      $q.dialog({
-        component: PdfDialog,
-        componentProps: {
-          pdf: fileDetails,
-        },
-      });
+    const file = await getFile(row.uuid, 360);
+    if (file.mimetype && isAudio(file.mimetype)) {
+      previewAudio($q, file);
+    } else if (file.mimetype && isVideo(file.mimetype)) {
+      previewVideo($q, file);
+    } else if (file.mimetype && isImage(file.mimetype)) {
+      previewImage($q, file);
+    } else if (file.mimetype && isPdf(file.mimetype)) {
+      previewPdf($q, file);
     } else {
-      if (fileDetails.url) {
-        window.open(fileDetails.url, '_blank');
-      }
+      previewUnknownfile(file);
     }
   }
 }
@@ -481,6 +470,10 @@ async function moveFileToPath(): Promise<void> {
  * @param file - file to be renamed
  */
 function startFileRenaming(file: FileEntity): void {
+  if (!file.filename) {
+    newFileNameInput.value = '';
+    return;
+  }
   newFileNameInput.value = file.filename.substring(
     0,
     file.filename.indexOf('.')

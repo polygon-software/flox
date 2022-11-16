@@ -380,8 +380,8 @@ export async function createFile(
  */
 export async function updateFile(
   uuid: string,
-  filename: string,
-  path: string
+  filename?: string,
+  path?: string
 ): Promise<FileEntity | null> {
   const { data } = await executeMutation<FileEntity>(UPDATE_FILE, {
     uuid,

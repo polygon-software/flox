@@ -1,7 +1,11 @@
 <template>
   <q-dialog ref="dialogRef" seamless position="bottom" @hide="onDialogHide">
     <q-card style="width: 350px">
-      <q-linear-progress :value="progress" color="primary" animation-speed="250"/>
+      <q-linear-progress
+        :value="progress"
+        color="primary"
+        animation-speed="250"
+      />
 
       <q-card-section class="row items-center no-wrap">
         <div>
