@@ -57,8 +57,8 @@ const props = defineProps({
   },
 });
 
-let password = ref(props.modelValue ?? '');
-let passwordRepeat = ref(props.modelValue ?? '');
+const password = ref(props.modelValue ?? '');
+const passwordRepeat = ref(props.modelValue ?? '');
 const isPwd = ref(true);
 const isPwdRepeat = ref(true);
 

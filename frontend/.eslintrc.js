@@ -42,6 +42,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
 
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
 
@@ -49,6 +50,7 @@ module.exports = {
     'plugin:import/typescript',
 
     'plugin:vue/vue3-recommended',
+    '@vue/eslint-config-typescript/recommended',
 
     'plugin:prettier/recommended',
 

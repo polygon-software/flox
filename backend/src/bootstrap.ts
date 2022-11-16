@@ -38,7 +38,7 @@ async function createNestApp(): Promise<NestApplication> {
 export async function bootstrapNest(): Promise<NestApplication> {
   const app = await createNestApp();
   const configService: ConfigService = app.get(ConfigService);
-  const serverPort = configService.getOrThrow('server.port');
+  const serverPort: string = configService.getOrThrow('server.port');
   if (serverPort == undefined) {
     throw new Error('Server port can not be undefined');
   }

@@ -46,7 +46,7 @@ module.exports = configure(function ({ prod }) {
       transpileDependencies: [],
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
-        node: 'node16',
+        node: 'node14',
       },
 
       vueRouterMode: 'hash', // available values: "hash", "history"
@@ -76,7 +76,7 @@ module.exports = configure(function ({ prod }) {
       },
 
       vitePlugins: [
-        checker({ typescript: true }),
+        checker({ vueTsc: true }),
         [
           '@intlify/vite-plugin-vue-i18n',
           {

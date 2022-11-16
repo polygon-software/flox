@@ -43,8 +43,8 @@ import {
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
 
-let password = ref('');
-let passwordRep = ref('');
+const password = ref('');
+const passwordRep = ref('');
 
 const passwordRules = [
   joiSchemaToValidationRule(

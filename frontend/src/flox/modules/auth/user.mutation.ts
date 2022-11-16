@@ -12,12 +12,14 @@ export const CREATE_USER: MutationObject = {
       $username: String!
       $email: String!
       $cognitoUuid: String!
+      $lang: String!
     ) {
       CreateUser(
         createUserInput: {
           username: $username
           email: $email
           cognitoUuid: $cognitoUuid
+          lang: $lang
         }
       ) {
         uuid
