@@ -233,8 +233,9 @@ import {
   previewAudio,
   previewImage,
   previewPdf,
-  previewUnknownfile, previewVideo
-} from "src/flox/modules/file/tools/preview.tools";
+  previewUnknownfile,
+  previewVideo,
+} from 'src/flox/modules/file/tools/preview.tools';
 
 const $q = useQuasar();
 

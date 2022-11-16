@@ -16,7 +16,6 @@ export function isAudio(mimetype: string): boolean {
   return mimetype.startsWith('audio');
 }
 
-
 /**
  * Decides whether the given mimetype is video
  * @param mimetype - file mimetype

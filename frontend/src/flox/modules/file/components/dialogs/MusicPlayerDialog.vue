@@ -116,6 +116,9 @@ function playPause(): void {
   }
 }
 
+/**
+ * Restarts the audio file
+ */
 function restart(): void {
   audio.currentTime = 0;
 }
