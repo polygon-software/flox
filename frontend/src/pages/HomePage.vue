@@ -9,6 +9,7 @@
     <SampleForm />
   </div>
 </template>
+
 <script setup lang="ts">
 import { useMeta } from 'quasar';
 
@@ -17,7 +18,7 @@ import DosChecker from 'components/sample/DosChecker.vue';
 import ModuleStatus from 'components/sample/ModuleStatus.vue';
 import { i18n } from 'boot/i18n';
 
-const desc: number = 'test';
+const desc_cription = 'test';
 
 useMeta({
   title: i18n.global.t('pages.home.meta.title'),

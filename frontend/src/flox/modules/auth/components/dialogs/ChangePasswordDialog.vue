@@ -48,6 +48,8 @@ import {
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emit = defineEmits(useDialogPluginComponent.emits);
 const passwordOld = ref('');
 const password = ref('');
 const passwordRep = ref('');
@@ -64,9 +66,6 @@ const matchingRules = [
 ];
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const emit = defineEmits(useDialogPluginComponent.emits);
 
 /**
  * Upon submit, pass entered values outwards

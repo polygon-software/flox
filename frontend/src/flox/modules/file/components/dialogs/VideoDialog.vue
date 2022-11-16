@@ -32,6 +32,8 @@ const props = withDefaults(
   }
 );
 
+defineEmits([...useDialogPluginComponent.emits]);
+
 const sources: ComputedRef<{ src: string; type: string }[]> = computed(() => {
   if (props.video.url && props.video.mimetype) {
     return [
@@ -40,12 +42,9 @@ const sources: ComputedRef<{ src: string; type: string }[]> = computed(() => {
         type: props.video.mimetype,
       },
     ];
-  } else {
-    throw new Error('Unable to play video without url or mimetype');
   }
+  throw new Error('Unable to play video without url or mimetype');
 });
-
-defineEmits([...useDialogPluginComponent.emits]);
 
 const { dialogRef, onDialogHide } = useDialogPluginComponent();
 </script>

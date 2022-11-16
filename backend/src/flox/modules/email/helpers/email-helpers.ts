@@ -32,7 +32,7 @@ export async function sendEmail(
   // Create SES service object
   const sesClient = new SES({
     region: Env.AWS_MAIN_REGION,
-    credentials: credentials,
+    credentials,
   });
 
   // Create Nodemailer SES transporter

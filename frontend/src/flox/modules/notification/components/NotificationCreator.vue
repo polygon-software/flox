@@ -22,7 +22,7 @@
           </q-tabs>
         </template>
         <template #after>
-          <q-form ref="formRef" class="q-gutter-md">
+          <QForm ref="formRef" class="q-gutter-md">
             <q-tab-panels
               v-model="tab"
               animated
@@ -56,7 +56,7 @@
                 />
               </q-tab-panel>
             </q-tab-panels>
-          </q-form>
+          </QForm>
         </template>
       </q-splitter>
       <div class="row justify-end q-mr-md">

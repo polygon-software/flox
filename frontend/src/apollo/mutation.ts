@@ -31,7 +31,7 @@ export async function executeMutation<T extends BaseEntity>(
   updateObject: MutationObject,
   variables: OperationVariables
 ): Promise<FetchResult<T | null>> {
-  const mutation = updateObject.mutation;
+  const { mutation } = updateObject;
 
   // Actually execute mutation and handle cache
   const { mutate } = useMutation<Record<string, T> | null>(mutation, () => ({

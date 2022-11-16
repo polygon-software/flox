@@ -52,7 +52,7 @@ form.pages.value = [
   {
     key: 'login',
     label: 'Login',
-    fields: fields,
+    fields,
   },
 ];
 

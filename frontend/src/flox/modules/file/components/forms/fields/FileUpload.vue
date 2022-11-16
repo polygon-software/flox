@@ -9,7 +9,7 @@
           </h5>
           <div class="row justify-around col-shrink">
             <!-- Invisible file picker (does not need a model-value, since upload is handled via event) -->
-            <q-file
+            <QFile
               v-show="false"
               ref="filePicker"
               :accept="props.acceptedFiles"
@@ -18,7 +18,7 @@
               :multiple="props.multiple"
               @update:model-value="onFilePicked"
             />
-            <q-btn icon="add" flat @click="addFile()">
+            <q-btn icon="add" flat @click="addFile">
               <q-tooltip>
                 {{ $t('files.add') }}
               </q-tooltip>
@@ -28,7 +28,7 @@
               class="col-auto"
               icon="restart_alt"
               flat
-              @click="clearFileList()"
+              @click="clearFileList"
             >
               <q-tooltip>
                 {{ $t('files.remove_all') }}

@@ -29,7 +29,7 @@ function serverSideAuth(
   const $authStore = useAuthStore();
   const cookies = Cookies.parseSSR(ssrContext);
 
-  //Tokens
+  // Tokens
   const accessToken = cookies.get('authentication.accessToken');
   const idToken = cookies.get('authentication.idToken');
   const refreshToken = cookies.get('authentication.refreshToken');

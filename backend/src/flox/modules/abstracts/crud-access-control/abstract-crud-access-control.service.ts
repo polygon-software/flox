@@ -756,7 +756,7 @@ export default abstract class AbstractCrudAccessControlService<
       { uuid: deleteInput.uuid },
       user,
     );
-    const uuid = entity.uuid;
+    const { uuid } = entity;
     const deletedEntity = await this.repository.remove(entity);
     deletedEntity.uuid = uuid;
     return deletedEntity;

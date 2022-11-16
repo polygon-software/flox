@@ -121,7 +121,7 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
         uuid: deleteInput.uuid,
       } as FindOptionsWhere<Entity>,
     });
-    const uuid = entity.uuid;
+    const { uuid } = entity;
     const deletedEntity = await this.repository.softRemove(entity);
     deletedEntity.uuid = uuid;
     return deletedEntity;

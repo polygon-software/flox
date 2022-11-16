@@ -57,6 +57,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['change']);
+
 const password = ref(props.modelValue ?? '');
 const passwordRepeat = ref(props.modelValue ?? '');
 const isPwd = ref(true);
@@ -72,8 +74,6 @@ const matchingRules = [
   (val: string): true | string =>
     val === password.value || i18n.global.t('errors.non_matching_password'),
 ];
-
-const emit = defineEmits(['change']);
 
 watch(password, (newVal) => {
   emitUpdate(newVal);

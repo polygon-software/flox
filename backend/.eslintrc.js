@@ -14,12 +14,17 @@ module.exports = {
   },
   plugins: [
     '@typescript-eslint',
+
     'import',
     'jsdoc',
+
     'sonarjs',
   ],
   extends: [
     'eslint:recommended',
+
+    'airbnb-base',
+    'airbnb-typescript/base',
 
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -37,6 +42,9 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     quotes: ['warn', 'single', { avoidEscape: true }],
+    camelcase: ['error', {
+      properties: 'always',
+    }],
 
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'off',

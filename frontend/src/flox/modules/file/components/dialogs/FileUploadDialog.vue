@@ -7,20 +7,20 @@
         <q-btn v-close-popup icon="close" flat round dense />
       </q-card-section>
       <q-card-section>
-        <q-file
+        <QFile
           ref="filePickerRef"
           outlined
           :label="$t('files.selected_files')"
-          :accept="props.acceptedFiles"
-          :max-file-size="props.maxFileSize"
-          :max-files="props.maxFiles"
-          :multiple="props.multiple"
+          :accept="acceptedFiles"
+          :max-file-size="maxFileSize"
+          :max-files="maxFiles"
+          :multiple="multiple"
           @update:model-value="onFilePicked"
         >
           <template #append>
             <q-icon name="attach_file" />
           </template>
-        </q-file>
+        </QFile>
         <FileList :files="selectedFiles" @remove-file="removeFile($event)" />
       </q-card-section>
 

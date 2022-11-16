@@ -41,6 +41,7 @@ export class AuthenticationService {
   $routerService: RouterService;
 
   $authStore: ReturnType<typeof useAuthStore>;
+
   interval: ReturnType<typeof setInterval> | null;
 
   /**
@@ -105,7 +106,7 @@ export class AuthenticationService {
         Password: password,
       });
 
-    const userPool = this.$authStore.userPool;
+    const { userPool } = this.$authStore;
 
     if (userPool === undefined) {
       this.$errorService.showErrorDialog(
@@ -137,12 +138,12 @@ export class AuthenticationService {
         },
 
         // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-        selectMFAType: function () {
+        selectMFAType() {
           cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
         },
 
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
-        newPasswordRequired: function (userAttributes) {
+        newPasswordRequired(userAttributes) {
           const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
 
           const $q = useQuasar();
@@ -168,7 +169,7 @@ export class AuthenticationService {
         },
 
         // MFA code required (NOT part of normal flow)
-        mfaRequired: function () {
+        mfaRequired() {
           const verificationCode = prompt(
             i18n.global.t('messages.enter_verification_code', '')
           );
@@ -333,7 +334,7 @@ export class AuthenticationService {
    * Shows a dialog for requesting password reset
    */
   showResetPasswordDialog(): void {
-    const userPool = this.$authStore.userPool;
+    const { userPool } = this.$authStore;
 
     if (userPool === undefined) {
       this.$errorService.showErrorDialog(
@@ -369,7 +370,7 @@ export class AuthenticationService {
 
         // Call forgotPassword on cognitoUser
         this.$authStore.cognitoUser?.forgotPassword({
-          onSuccess: function () {
+          onSuccess() {
             // Do nothing
           },
           onFailure: (err: Error) => {
@@ -613,7 +614,7 @@ export class AuthenticationService {
       case 'PasswordResetRequiredException':
         // Call forgotPassword on cognitoUser, since user must reset password
         this.$authStore.cognitoUser?.forgotPassword({
-          onSuccess: function () {
+          onSuccess() {
             const $q = useQuasar();
 
             // Show success notification
@@ -645,7 +646,7 @@ export class AuthenticationService {
    */
   refreshToken(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const userSession = this.$authStore.userSession;
+      const { userSession } = this.$authStore;
       const idTokenExpiration = userSession?.getIdToken().getExpiration();
       if (!idTokenExpiration) {
         resolve();

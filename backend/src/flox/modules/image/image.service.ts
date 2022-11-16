@@ -508,7 +508,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
         return [];
       }
       return label.Instances.map((instance) => ({
-        image: image,
+        image,
         name: label.Name,
         confidence: instance.Confidence,
         parents: label.Parents

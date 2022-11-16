@@ -41,8 +41,8 @@ export class RolesGuard implements CanActivate {
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = this.getRequest(context);
-    const user = req.user;
-    let dbUser: User | undefined = undefined;
+    const { user } = req;
+    let dbUser: User | undefined;
 
     console.log('---user', user);
 

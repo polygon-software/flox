@@ -133,10 +133,11 @@ const selectedGroup: ComputedRef<UserGroupEntity | null> = computed(() => {
  * Reloads the access groups and their members
  */
 async function refresh(): Promise<void> {
-  if (userGroupTableRef.value) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    userGroupTableRef.value.refresh();
+  if (!userGroupTableRef.value) {
+    return;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+  userGroupTableRef.value.refresh();
   const selectedGroupUuid = selectedGroup.value?.uuid;
   await sleep(500);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment

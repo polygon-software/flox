@@ -1,5 +1,5 @@
 <template>
-  <q-form ref="formRef" greedy class="q-gutter-md">
+  <QForm ref="formRef" greedy class="q-gutter-md">
     <!-- Stepper (for multi-page forms) -->
     <q-stepper
       v-if="form.pages.value.length > 1"
@@ -92,7 +92,7 @@
         </q-btn>
       </q-card-actions>
     </q-card>
-  </q-form>
+  </QForm>
 </template>
 
 <script setup lang="ts">
@@ -111,9 +111,6 @@ import { defineEmits, defineProps, Ref, ref } from 'vue';
 import { i18n } from 'boot/i18n';
 import { FormPage, MultiPageForm } from 'components/forms/MultiPageForm';
 
-const emit = defineEmits(['submit']);
-const formRef: Ref<QForm | null> = ref(null);
-
 const props = withDefaults(
   defineProps<{
     pages: FormPage[];
@@ -127,6 +124,8 @@ const props = withDefaults(
     loading: false,
   }
 );
+const emit = defineEmits(['submit']);
+const formRef: Ref<QForm | null> = ref(null);
 
 // Create Form instance with pages from props
 const form: MultiPageForm = new MultiPageForm(props.pages);

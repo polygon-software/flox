@@ -6,7 +6,7 @@ import pick from 'lodash/pick';
 import { MutationObject } from 'src/apollo/mutation';
 import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
 
-type primitive = number | string | boolean | null | undefined;
+type Primitive = number | string | boolean | null | undefined;
 
 /**
  * Returns an object containing only keys that have changed between the original and modified object. The contained
@@ -23,15 +23,15 @@ export function objectChange(
 ): Record<string, any> {
   const flattenFunc = flatten as (
     obj: Record<string, any>
-  ) => Record<string, primitive>;
+  ) => Record<string, Primitive>;
   const unflattenFunc = unflatten as (
-    obj: Record<string, primitive>
+    obj: Record<string, Primitive>
   ) => Record<string, any>;
 
   const originalFlat = flattenFunc(original);
   const modifiedFlat = flattenFunc(modified);
 
-  const diffFlat: Record<string, primitive> = {};
+  const diffFlat: Record<string, Primitive> = {};
 
   Object.entries(originalFlat).forEach(([key, value1]) => {
     if (key in modifiedFlat && !isEqual(value1, modifiedFlat[key])) {

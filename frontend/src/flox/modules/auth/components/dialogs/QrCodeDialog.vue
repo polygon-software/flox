@@ -8,7 +8,7 @@
         <p class="text-grey-8">
           {{ $t('authentication.set_up_2fa_description') }}
         </p>
-        <qrcode-vue :value="props.value" :size="180" />
+        <QrcodeVue :value="props.value" :size="180" />
       </q-card-section>
       <q-separator dark />
       <q-card-actions align="center">
@@ -29,10 +29,6 @@ import QrcodeVue from 'qrcode.vue';
 import { useDialogPluginComponent } from 'quasar';
 import { defineEmits, defineProps } from 'vue';
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
-
-defineEmits(useDialogPluginComponent.emits);
-
 const props = defineProps({
   value: {
     type: String,
@@ -40,4 +36,8 @@ const props = defineProps({
     default: '',
   },
 });
+
+defineEmits(useDialogPluginComponent.emits);
+
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
 </script>

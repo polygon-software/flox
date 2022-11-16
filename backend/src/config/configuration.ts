@@ -20,14 +20,20 @@ export class ServerConfig {
 
 export class DatabaseConfig {
   host: string;
+
   port: string;
+
   username: string;
+
   password: string;
+
   database: string;
 }
 
 export class Config {
   server: ServerConfig;
+
   entities: string;
+
   database: DatabaseConfig;
 }

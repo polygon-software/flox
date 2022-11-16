@@ -1,6 +1,6 @@
 <template>
   <q-card class="q-pa-md" flat bordered>
-    <q-table
+    <QTable
       ref="tableRef"
       v-bind="tableProps"
       v-model:pagination="pagination"
@@ -26,7 +26,7 @@
       <template #body-cell="cellProps">
         <q-td :props="cellProps">
           {{ cellProps.row[cellProps.col.field] }}
-          <q-popup-edit
+          <QPopupEdit
             v-if="cellProps.col.edit"
             :ref="
               (el) => {
@@ -51,7 +51,7 @@
               autofocus
               counter
             />
-          </q-popup-edit>
+          </QPopupEdit>
         </q-td>
       </template>
       <template #header-selection="scope">
@@ -124,7 +124,7 @@
           @click="headerProps.toggleFullscreen"
         />
       </template>
-    </q-table>
+    </QTable>
     <div class="row">
       <div class="col">
         <div
@@ -274,9 +274,8 @@ function validateInput(column: ColumnInterface): (value: any) => boolean {
     return column?.qInputProps?.rules.every((rule) => {
       if (typeof rule === 'function') {
         return (rule as ValidationRule)(value) === true;
-      } else {
-        return true;
       }
+      return true;
     });
   };
 }

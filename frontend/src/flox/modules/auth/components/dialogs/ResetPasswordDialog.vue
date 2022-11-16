@@ -54,6 +54,7 @@ import {
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
 
+defineEmits(useDialogPluginComponent.emits);
 const verificationCode = ref('');
 const password = ref('');
 const passwordRep = ref('');
@@ -70,8 +71,6 @@ const matchingRules = [
 ];
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
-
-defineEmits(useDialogPluginComponent.emits);
 
 /**
  * On submit, emit data outwards

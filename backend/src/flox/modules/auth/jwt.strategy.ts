@@ -11,12 +11,15 @@ import Env from '../../../env';
 
 export class JwtStrategyValidationPayload {
   'cognito:username': string;
+
   sub: string;
+
   username: string;
 }
 
 export class JwtStrategyValidationResult {
   userId: string;
+
   username: string;
 }
 
@@ -46,7 +49,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const username = payload['cognito:username'];
     return {
       userId: payload.sub,
-      username: username,
+      username,
     } as JwtStrategyValidationResult;
   }
 }

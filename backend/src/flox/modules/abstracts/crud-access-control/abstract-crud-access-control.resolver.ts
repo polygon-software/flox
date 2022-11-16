@@ -57,9 +57,8 @@ export default abstract class AbstractCrudAccessControlResolver<
     if (user) {
       if (user.role === DEFAULT_ROLES.ADMIN) {
         return this.service.getOneAsAdmin(getOneArgs, options);
-      } else {
-        return this.service.getOneAsUser(getOneArgs, user, options);
       }
+      return this.service.getOneAsUser(getOneArgs, user, options);
     }
     return this.service.getOnePublic(getOneArgs, options);
   }

@@ -43,6 +43,7 @@ import {
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
 
+defineEmits(useDialogPluginComponent.emits);
 const password = ref('');
 const passwordRep = ref('');
 
@@ -58,8 +59,6 @@ const matchingRules = [
 ];
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
-
-defineEmits(useDialogPluginComponent.emits);
 
 /**
  * Upon submit, pass entered values outwards

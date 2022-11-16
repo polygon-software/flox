@@ -23,6 +23,29 @@ type NotificationOptions = {
 };
 
 /**
+ * Shows a notification with the given parameters
+ *
+ * @param q - Quasar instance
+ * @param message - message text
+ * @param options - options
+ */
+export function showNotification(
+  q: QVueGlobals,
+  message: string,
+  options: NotificationOptions
+): void {
+  q.notify({
+    message,
+    position: options.position ?? 'bottom',
+    color: options.color ?? 'primary',
+    textColor: options.textColor ?? 'white',
+    icon: options.icon,
+    multiLine: options.multiLine ?? false,
+    timeout: options.timeout ?? 3000,
+  });
+}
+
+/**
  * Shows a default success notification
  *
  * @param q - Quasar instance
@@ -53,28 +76,5 @@ export function showErrorNotification(
     color: 'negative',
     icon: 'clear',
     ...options,
-  });
-}
-
-/**
- * Shows a notification with the given parameters
- *
- * @param q - Quasar instance
- * @param message - message text
- * @param options - options
- */
-export function showNotification(
-  q: QVueGlobals,
-  message: string,
-  options: NotificationOptions
-): void {
-  q.notify({
-    message: message,
-    position: options.position ?? 'bottom',
-    color: options.color ?? 'primary',
-    textColor: options.textColor ?? 'white',
-    icon: options.icon,
-    multiLine: options.multiLine ?? false,
-    timeout: options.timeout ?? 3000,
   });
 }

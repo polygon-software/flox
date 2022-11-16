@@ -52,10 +52,6 @@ import { i18n } from 'boot/i18n';
 import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
 import { showSuccessNotification } from 'src/tools/notification.tool';
 
-const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
-
-defineEmits(useDialogPluginComponent.emits);
-
 const props = defineProps({
   q: {
     type: Object as PropType<QVueGlobals>,
@@ -66,6 +62,10 @@ const props = defineProps({
     required: true,
   },
 });
+
+defineEmits(useDialogPluginComponent.emits);
+
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
 
 const verificationCode = ref('');
 const codeSent = ref(false);

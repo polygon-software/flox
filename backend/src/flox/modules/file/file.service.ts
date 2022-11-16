@@ -38,6 +38,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     credentials: this.credentials,
     region: this.credentials.region,
   });
+
   constructor(
     @InjectRepository(S3File)
     private fileRepository: Repository<S3File>,

@@ -22,7 +22,7 @@ const pages = [
   {
     key: 'sample',
     label: 'Sample',
-    fields: fields,
+    fields,
   },
 ] as FormPage[];
 

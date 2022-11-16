@@ -55,7 +55,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value['password_repeat'] = validPassword;
+      form.values.value.password_repeat = validPassword;
       expect(form.pageValid.value).toBe(false);
     });
 
@@ -72,7 +72,7 @@ describe('Form Helpers', () => {
           fields: account_fields,
         },
       ];
-      form.values.value['password_repeat'] = validPassword;
+      form.values.value.password_repeat = validPassword;
       expect(form.pageValid.value).toBe(true);
     });
 
@@ -84,7 +84,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value['password_repeat'] = validPassword;
+      form.values.value.password_repeat = validPassword;
       expect(form.pageValid.value).toBe(true);
     });
 
@@ -96,7 +96,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value['pw'] = validPassword;
+      form.values.value.pw = validPassword;
       expect(form.pageValid.value).toBe(false);
     });
 
@@ -108,7 +108,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value['password_repeat'] = 2737827;
+      form.values.value.password_repeat = 2737827;
       expect(form.pageValid.value).toBe(false);
     });
 
@@ -120,7 +120,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value['password_repeat'] = invalidPassword;
+      form.values.value.password_repeat = invalidPassword;
       expect(form.pageValid.value).toBe(false);
     });
   });

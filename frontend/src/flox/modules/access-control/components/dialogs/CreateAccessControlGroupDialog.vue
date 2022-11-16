@@ -8,7 +8,7 @@
       </q-card-section>
 
       <q-card-section>
-        <q-form ref="accessGroupCreationForm" class="q-gutter-md">
+        <QForm ref="accessGroupCreationForm" class="q-gutter-md">
           <p>
             {{ $t('access_control.create_description') }}
           </p>
@@ -25,7 +25,7 @@
             options-label="username"
             :select-props="{ label: $t('access_control.select_users') }"
           />
-        </q-form>
+        </QForm>
       </q-card-section>
 
       <q-card-actions align="right">

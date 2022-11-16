@@ -116,7 +116,7 @@ export function subscribeToQuery<
         // SSR
         apolloClient.writeQuery({
           query: query.query,
-          variables: variables,
+          variables,
           data: {
             [query.cacheLocation]: cachedResult.value,
           },
@@ -124,13 +124,11 @@ export function subscribeToQuery<
       }
     }
 
-    apolloClient
-      .watchQuery({ query: query.query, variables: variables })
-      .subscribe({
-        next(value: ApolloQueryResult<Record<string, T>>) {
-          cachedResult.value = value.data[query.cacheLocation];
-        },
-      });
+    apolloClient.watchQuery({ query: query.query, variables }).subscribe({
+      next(value: ApolloQueryResult<Record<string, T>>) {
+        cachedResult.value = value.data[query.cacheLocation];
+      },
+    });
   });
   return {
     loading: false,

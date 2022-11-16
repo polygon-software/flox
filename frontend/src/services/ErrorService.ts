@@ -24,7 +24,7 @@ export class ErrorService {
   showErrorDialog(error: Error): void {
     console.error(error);
     this.$q.dialog({
-      title: 'Error: ' + error.name,
+      title: `Error: ${error.name}`,
       message: error.message,
       cancel: false,
     });

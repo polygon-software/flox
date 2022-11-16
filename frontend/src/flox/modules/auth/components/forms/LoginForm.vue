@@ -63,9 +63,9 @@ import * as auth from 'src/flox/modules/auth';
 import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
 import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
 
-const $authService: AuthenticationService | undefined = inject('$authService');
-
 const emit = defineEmits(['submit']);
+
+const $authService: AuthenticationService | undefined = inject('$authService');
 
 const fields = [
   auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME,
@@ -77,7 +77,7 @@ form.pages.value = [
   {
     key: 'login',
     label: 'Login',
-    fields: fields,
+    fields,
   },
 ];
 
@@ -105,6 +105,7 @@ function forgotPassword(): void {
   $authService?.showResetPasswordDialog();
 }
 </script>
+
 <style scoped>
 h5 {
   margin-bottom: 10px;

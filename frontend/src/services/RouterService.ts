@@ -11,6 +11,7 @@ import {
 export class RouterService {
   // Router instance
   router: Router;
+
   route: RouteLocationNormalizedLoaded;
 
   // eslint-disable-next-line require-jsdoc
@@ -36,7 +37,7 @@ export class RouterService {
     }
     return this.router.push({
       path: `${currentRoute}/${path}`,
-      query: query,
+      query,
     });
   }
 
@@ -59,24 +60,21 @@ export class RouterService {
           path: to.path,
           query: { ...this.route.query, ...query },
         });
-      } else {
-        return this.router.push({
-          path: to.path,
-          query: this.route.query,
-        });
       }
-    } else {
-      if (query) {
-        return this.router.push({
-          path: to.path,
-          query: query,
-        });
-      } else {
-        return this.router.push({
-          path: to.path,
-        });
-      }
+      return this.router.push({
+        path: to.path,
+        query: this.route.query,
+      });
     }
+    if (query) {
+      return this.router.push({
+        path: to.path,
+        query,
+      });
+    }
+    return this.router.push({
+      path: to.path,
+    });
   }
 
   /**

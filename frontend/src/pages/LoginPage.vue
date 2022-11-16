@@ -47,6 +47,7 @@ async function onLogin({
   await $authService?.login(identifier, password);
 }
 </script>
+
 <style scoped lang="scss">
 .blurred-background {
   position: fixed;

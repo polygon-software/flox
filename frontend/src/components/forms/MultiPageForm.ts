@@ -58,14 +58,13 @@ export class MultiPageForm {
         return false;
       }
 
-      const rules = field.attributes.rules;
+      const { rules } = field.attributes;
       return rules.every((rule) => {
         // If the rule returns true, it is fulfilled (otherwise, it will return an error message)
         if (typeof rule === 'function') {
           return rule(this.values.value[field.key]) === true;
-        } else {
-          return true;
         }
+        return true;
       });
     });
   });

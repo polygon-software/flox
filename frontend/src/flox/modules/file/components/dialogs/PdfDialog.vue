@@ -15,13 +15,13 @@ import { defineProps, Ref, ref } from 'vue';
 
 import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
 
-const visible: Ref<boolean> = ref(true);
-
 const props = defineProps<{
   pdf: FileEntity;
 }>();
 
 defineEmits([...useDialogPluginComponent.emits]);
+
+const visible: Ref<boolean> = ref(true);
 
 const { dialogRef, onDialogHide } = useDialogPluginComponent();
 </script>

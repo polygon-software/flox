@@ -3,15 +3,15 @@
     <slot name="top" />
     <q-table
       v-model:selected="selected"
-      :title="props.title"
+      :title="title"
       flat
       hide-bottom
-      :rows="props.users"
+      :rows="users"
       :columns="userTableColumns"
       row-key="uuid"
       :pagination="initialPagination"
       selection="single"
-      v-bind="props.tableProps"
+      v-bind="tableProps"
     >
       <template #body-cell-avatar="bodyProps">
         <q-td :props="bodyProps">
@@ -50,11 +50,11 @@ const props = withDefaults(
   }
 );
 
-const EMIT_UPDATE_SELECTED = 'update:selected';
-
 const emit = defineEmits<{
   (e: typeof EMIT_UPDATE_SELECTED, selected: BaseEntity[]): void;
 }>();
+
+const EMIT_UPDATE_SELECTED = 'update:selected';
 
 const initialPagination = {
   sortBy: 'username',

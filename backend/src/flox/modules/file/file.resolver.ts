@@ -181,7 +181,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() getAllFoldersArgs: GetAllFoldersArgs,
     @OptionalUser() user?: User,
   ): Promise<FolderOutput[]> {
-    const path = getAllFoldersArgs.path;
+    const { path } = getAllFoldersArgs;
     const searchPath = path !== '/' ? `${path}/` : path;
     const options = getAllFoldersArgs.path
       ? {
@@ -233,7 +233,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() getAllFoldersArgs: GetAllFoldersArgs,
     @CurrentUser() user: User,
   ): Promise<FolderOutput[]> {
-    const path = getAllFoldersArgs.path;
+    const { path } = getAllFoldersArgs;
     const searchPath = path !== '/' ? `${path}/` : path;
     const options = getAllFoldersArgs.path
       ? {
@@ -284,7 +284,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   async getAllPublicFolders(
     @Args() getAllFoldersArgs: GetAllFoldersArgs,
   ): Promise<FolderOutput[]> {
-    const path = getAllFoldersArgs.path;
+    const { path } = getAllFoldersArgs;
     const searchPath = path !== '/' ? `${path}/` : path;
     const options = getAllFoldersArgs.path
       ? {
@@ -345,7 +345,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() searchFilesArgs: SearchFilesArgs,
     @CurrentUser() user: User,
   ): Promise<FileSearchOutput> {
-    return await super.searchOfUser(searchFilesArgs, user);
+    return super.searchOfUser(searchFilesArgs, user);
   }
 
   /**
@@ -441,6 +441,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     manipulateAccessGroups: ManipulateAccessGroupsInput,
     @CurrentUser() user: User,
   ): Promise<S3File> {
+    const bla_blu: number = 'test';
     return super.manipulateAccessUserGroups(manipulateAccessGroups, user);
   }
 }

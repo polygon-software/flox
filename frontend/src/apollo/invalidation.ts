@@ -18,7 +18,7 @@ export function invalidateTables(tables: string[]): void {
     }
   });
   const apolloClient = useApolloClient();
-  const cache = apolloClient.client.cache;
+  const { cache } = apolloClient.client;
 
   for (const queryObject of affectedQueries) {
     // Evict query from cache

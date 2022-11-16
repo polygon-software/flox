@@ -35,7 +35,7 @@ export default class EmailController {
     @Query() query: Record<string, unknown>,
   ): Promise<void> {
     // Access to triggering user's Cognito UUID (if needed)
-    //const triggeredBy = req['user'].userId;
+    // const triggeredBy = req['user'].userId;
 
     const recipient = query.recipient as string;
 

@@ -237,17 +237,17 @@ import {
   previewVideo,
 } from 'src/flox/modules/file/tools/preview.tools';
 
-const $q = useQuasar();
-
 const props = defineProps<{
   path: string;
 }>();
 
-const EMIT_UPDATE_PAT = 'update:path';
 const emit = defineEmits<{
   (e: typeof EMIT_UPDATE_PAT, path: string): void;
 }>();
 
+const $q = useQuasar();
+
+const EMIT_UPDATE_PAT = 'update:path';
 type FileOrFolder = {
   uuid: string;
   type?: 'file' | 'folder';
