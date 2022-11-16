@@ -7,7 +7,14 @@ import {
   JoinTable,
   ManyToMany,
 } from 'typeorm';
-import { IsEmail, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsLocale,
+  IsLowercase,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 import { isModuleActive } from '../../../core/flox-helpers';
@@ -24,7 +31,18 @@ export default class User extends BaseEntity {
   @Field(() => String, { description: 'Username' })
   @Column()
   @IsString()
+  @MinLength(6)
+  @MaxLength(25)
   username: string;
+
+  @Field(() => String, { description: 'Preferred language of user' })
+  @Column({ type: 'text', default: 'en' })
+  @IsString()
+  @MinLength(2)
+  @MaxLength(2)
+  @IsLowercase()
+  @IsLocale()
+  lang = 'en';
 
   @Field(() => String, { description: 'E-mail address' })
   @Column()

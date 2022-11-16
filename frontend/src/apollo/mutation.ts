@@ -22,6 +22,7 @@ export enum MutationTypes {
 
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
+ *
  * @param updateObject - the mutation object constant (from MUTATIONS.ts)
  * @param variables - any variables that shall be passed to the mutation
  * @returns Returns the values defined by the mutation

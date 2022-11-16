@@ -228,6 +228,7 @@ const popupRefs: Ref<Record<string, QPopupEdit>> = ref({});
 
 /**
  * Generates an index key for a popup referenec
+ *
  * @param row - row of data in which popup edit occurs
  * @param col column in which popup edit occurs
  * @returns popup key
@@ -261,6 +262,7 @@ const {
 
 /**
  * Validates an input for qPopupEdit
+ *
  * @param column - currently edited column
  * @returns function that validates input
  */

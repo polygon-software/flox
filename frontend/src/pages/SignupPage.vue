@@ -25,9 +25,11 @@ const $routerService: RouterService | undefined = inject('$routerService');
 
 /**
  * Logs in the given authentication
- * @param username - the authentication's username (might be identical to the e-mail)
- * @param email - the authentication's email
- * @param password - the authentication's password
+ *
+ * @param user - user signup args
+ * @param user.username - the authentication's username (might be identical to the e-mail)
+ * @param user.email - the authentication's email
+ * @param user.password - the authentication's password
  */
 async function onSignup({
   username,

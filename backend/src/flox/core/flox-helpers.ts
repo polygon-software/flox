@@ -23,6 +23,7 @@ export type FloxModuleName = keyof typeof flox.modules;
 
 /**
  * Gets the request from context
+ *
  * @param context - execution context of the request
  * @returns the request
  */
@@ -38,6 +39,7 @@ export function getRequest(context: ExecutionContext): FrontendRequest {
 
 /**
  * Determines a module's actual configuration based on defaults and custom config
+ *
  * @param defaultConfig - The module's default configuration
  * @param customConfig - custom configuration from flox.config.json (might be empty if not given)
  * @returns - actual configuration to use
@@ -51,6 +53,7 @@ export function mergeConfigurations(
 
 /**
  * Gets the active Flox modules from config
+ *
  * @returns - list of module names
  */
 export function getActiveFloxModuleNames(): FloxModuleName[] {
@@ -67,6 +70,7 @@ export function getActiveFloxModuleNames(): FloxModuleName[] {
 
 /**
  * Gets the options for a single Flox module (with proper typing, since config is .js)
+ *
  * @param moduleName - name of the module to check
  * @returns options for the modules
  */
@@ -81,6 +85,7 @@ export function floxModuleOptions(
 
 /**
  * Gets the active Flox modules' options (with proper typing, since config is .js)
+ *
  * @returns options for active modules
  */
 export function floxModulesOptions(): Record<
@@ -101,6 +106,7 @@ export function floxModulesOptions(): Record<
 
 /**
  * Determines whether a Flox module is currently active from flox.config.json
+ *
  * @param moduleName - name of the module to check
  * @returns whether the module is active
  */
@@ -110,6 +116,7 @@ export function isModuleActive(moduleName: FloxModuleName): boolean {
 
 /**
  * Determines whether Flox is set to serverless mode in flox.config
+ *
  * @returns whether the config is set to serverless mode
  */
 export function isServerless(): boolean {

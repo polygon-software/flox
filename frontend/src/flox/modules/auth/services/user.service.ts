@@ -17,6 +17,7 @@ import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
 
 /**
  * Fetch the logged-in user
+ *
  * @returns the logged-in user
  */
 export async function fetchMyUser(): Promise<UserEntity> {
@@ -26,6 +27,7 @@ export async function fetchMyUser(): Promise<UserEntity> {
 
 /**
  * Get a certain user by its uuid
+ *
  * @param uuid - uuid of user to fetch
  * @returns user
  */
@@ -36,6 +38,7 @@ export async function getUser(uuid: string): Promise<UserEntity> {
 
 /**
  * Get multiple users by their uuids
+ *
  * @param uuids - uuids of users
  * @returns users
  */
@@ -48,6 +51,7 @@ export async function getUsers(uuids: string[]): Promise<UserEntity[]> {
 
 /**
  * Get all users with pagination
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @returns page of users
@@ -65,6 +69,7 @@ export async function getAllUsers(
 
 /**
  * Search users
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param filter - search input for username
@@ -91,6 +96,7 @@ export async function searchUsers(
 
 /**
  * Creates a user
+ *
  * @param username - user's username (may be identical to e-mail)
  * @param email - user's e-mail address
  * @param cognitoUuid - user's Cognito UUID
@@ -111,26 +117,38 @@ export async function createUser(
 
 /**
  * Update an existing user
+ *
  * @param uuid - users uuid
- * @param username - users username
- * @param email - users email
+ * @param user - contains updated info about user
+ * @param user.username - update username
+ * @param user.email - update email
+ * @param user.lang - update default locale
  * @returns updated user
  */
 export async function updateUser(
   uuid: string,
-  username: string,
-  email: string
+  {
+    username,
+    email,
+    lang,
+  }: {
+    username?: string;
+    email?: string;
+    lang?: string;
+  }
 ): Promise<UserEntity | null> {
   const { data } = await executeMutation<UserEntity>(UPDATE_USER, {
     uuid,
     username,
     email,
+    lang,
   });
   return data ?? null;
 }
 
 /**
  * Delete a user by its uuid
+ *
  * @param uuid - uuid of user to delete
  * @returns deleted user
  */
@@ -143,6 +161,7 @@ export async function deleteUser(uuid: string): Promise<UserEntity | null> {
 
 /**
  * Generates an avatar image for a user given its uuid
+ *
  * @param uuid - uuid of user
  * @returns url that can be used as an image source for an avatar
  */

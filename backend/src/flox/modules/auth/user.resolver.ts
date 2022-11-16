@@ -24,12 +24,16 @@ export default class UserResolver extends AbstractSearchResolver<
     super(['username', 'email', 'role']);
   }
 
+  /**
+   * @returns user service
+   */
   get service(): UserService {
     return this.userService;
   }
 
   /**
    * Get the DB user for the currently logged in Cognito user
+   *
    * @param user - currently logged-in user from request
    * @returns the user, if any
    */
@@ -42,6 +46,7 @@ export default class UserResolver extends AbstractSearchResolver<
 
   /**
    * Gets a user by UUID
+   *
    * @param getUserArgs - contains UUID
    * @returns the user
    */
@@ -53,6 +58,7 @@ export default class UserResolver extends AbstractSearchResolver<
 
   /**
    * Gets a set of users by UUID
+   *
    * @param getMultiple - contains UUIDs of users
    * @returns the users
    */
@@ -66,6 +72,7 @@ export default class UserResolver extends AbstractSearchResolver<
 
   /**
    * Gets all users
+   *
    * @param getAll - contains take and skip
    * @returns the users
    */
@@ -77,6 +84,7 @@ export default class UserResolver extends AbstractSearchResolver<
 
   /**
    * Queries for all rows that fit query criteria, best used in combination with the DataTable
+   *
    * @param queryArgs - contain table filtering rules
    * @returns data that fit criteria
    */
@@ -88,6 +96,7 @@ export default class UserResolver extends AbstractSearchResolver<
 
   /**
    * Creates a User
+   *
    * @param createUserInput - contains all user data
    * @returns the newly created user
    */
@@ -101,6 +110,7 @@ export default class UserResolver extends AbstractSearchResolver<
 
   /**
    * Updates a given user
+   *
    * @param updateUserInput - contains UUID and any new user data
    * @returns the updated user
    */
@@ -114,6 +124,7 @@ export default class UserResolver extends AbstractSearchResolver<
 
   /**
    * Deletes a given user
+   *
    * @param deleteInput - contains UUID
    * @returns the deleted user
    */

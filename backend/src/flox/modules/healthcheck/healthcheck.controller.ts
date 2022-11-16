@@ -20,6 +20,9 @@ export default class HealthcheckController {
     private readonly database: TypeOrmHealthIndicator,
   ) {}
 
+  /**
+   *  Checks the application's status (database, connectivity etc.)
+   */
   @Public()
   @HealthCheck()
   @SkipThrottle()

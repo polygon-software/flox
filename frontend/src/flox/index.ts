@@ -2,6 +2,7 @@ import * as flox from '../../flox.config.json';
 
 /**
  * Gets the active Flox modules from config
+ *
  * @returns list of module names
  */
 export function floxModules(): string[] {
@@ -18,6 +19,7 @@ export function floxModules(): string[] {
 
 /**
  * Gets the active Flox modules' options
+ *
  * @returns options for active modules
  */
 export function floxModulesOptions(): Record<string, Record<string, unknown>> {
@@ -37,6 +39,7 @@ export function floxModulesOptions(): Record<string, Record<string, unknown>> {
 
 /**
  * Gets the options for a single Flox module
+ *
  * @param moduleName - name of the module to check
  * @returns options for the modules
  */
@@ -50,6 +53,7 @@ export function floxModuleOptions(moduleName: string): Record<string, unknown> {
 
 /**
  * Determines whether a Flox module is currently active from flox.config.json
+ *
  * @param moduleName - name of the module to check
  * @returns whether the module is active
  */
@@ -59,6 +63,7 @@ export function isModuleActive(moduleName: string): boolean {
 
 /**
  * Determines a module's actual configuration based on defaults and custom config
+ *
  * @param defaultConfig - The module's default configuration
  * @param customConfig - custom configuration from flox.config.json (may be empty if not given)
  * @returns actual configuration to use

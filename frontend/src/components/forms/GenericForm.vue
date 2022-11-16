@@ -99,6 +99,7 @@
 /**
  * This component defines a generic form that can have a single or multiple pages.
  * It takes the following properties:
+ *
  * @param pages - the pages to show, each containing fields, label and key
  * @param finishLabel - the label to show on the 'finish' button
  * @param loadingLabel - the label to show when loading

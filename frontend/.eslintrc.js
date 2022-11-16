@@ -24,11 +24,13 @@ module.exports = {
     browser: true
   },
 
+  // Rules order is important, please avoid shuffling them
   plugins: [
     // required to apply rules which need type information
     '@typescript-eslint',
 
     'import',
+    'jsdoc',
     'eslint-plugin-graphql',
 
     'vue',
@@ -81,20 +83,19 @@ module.exports = {
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
-    'require-jsdoc': ['error', {
+    'jsdoc/require-param-type': 0,
+    'jsdoc/require-returns-type': 0,
+    'jsdoc/require-jsdoc': ['error', {
       'require': {
         'FunctionDeclaration': true,
         'MethodDefinition': true,
-        'ClassDeclaration': true,
+        'ClassDeclaration': false,
         'ArrowFunctionExpression': false,
         'FunctionExpression': false
-      }
+      },
+      'checkConstructors': false,
     }],
-    'valid-jsdoc': ['error', {
-      'requireReturn': false,
-      'requireReturnType': false,
-      'requireParamType': false,
-    }],
+
     'graphql/template-strings': ['error', {
       // Import default settings for your GraphQL client. Supported values:
       // 'apollo', 'relay', 'lokka', 'fraql', 'literal'
@@ -106,5 +107,5 @@ module.exports = {
       typescript: true,
       node: true,
     }
-  }
+  },
 }

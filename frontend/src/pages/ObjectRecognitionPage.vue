@@ -230,6 +230,7 @@ async function onImportButtonClick(): Promise<void> {
 
 /**
  * Shifts a new label into focus
+ *
  * @param label - label to focus on
  */
 function focusOn(label: LabelEntity): void {
@@ -242,6 +243,7 @@ function focusOn(label: LabelEntity): void {
 
 /**
  * Concatenate file path and name
+ *
  * @param file - input file
  * @returns concatenation of path and name
  */

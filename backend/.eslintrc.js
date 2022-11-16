@@ -1,17 +1,21 @@
+const path = require("path");
+
 module.exports = {
   root: true,
   env: {
     node: true,
     jest: true,
   },
-  parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.json',
+    parser: '@typescript-eslint/parser',
+    project: path.resolve(__dirname, './tsconfig.json'),
+    ecmaVersion: 2018,
     sourceType: 'module',
   },
   plugins: [
     '@typescript-eslint',
     'import',
+    'jsdoc',
     'sonarjs',
   ],
   extends: [
@@ -22,6 +26,8 @@ module.exports = {
 
     'plugin:import/recommended',
     'plugin:import/typescript',
+
+    'plugin:jsdoc/recommended',
 
     'plugin:prettier/recommended',
 
@@ -39,19 +45,17 @@ module.exports = {
       'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type']
     }],
 
-    'require-jsdoc': ['error', {
+    'jsdoc/require-param-type': 0,
+    'jsdoc/require-returns-type': 0,
+    'jsdoc/require-jsdoc': ['error', {
       'require': {
         'FunctionDeclaration': true,
-        'MethodDefinition': false,
+        'MethodDefinition': true,
         'ClassDeclaration': false,
         'ArrowFunctionExpression': false,
         'FunctionExpression': false
-      }
-    }],
-    'valid-jsdoc': ['error', {
-      'requireReturn': false,
-      'requireReturnType': false,
-      'requireParamType': false,
+      },
+      'checkConstructors': false,
     }],
   },
   settings: {

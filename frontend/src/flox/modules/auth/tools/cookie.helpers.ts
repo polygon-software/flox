@@ -8,6 +8,7 @@ import Env from 'src/env';
 
 /**
  * Persists a given payload to one or multiple cookies
+ *
  * @param category - sub-category to stores the cookie to
  * @param payload - the data to persist (in stringified form)
  */
@@ -30,6 +31,7 @@ export function persistToCookies(
 
 /**
  * Deletes all cookies within a given category
+ *
  * @param category - the category within which to delete (e.g. "authentication")
  */
 export function deleteCookies(category: string): void {

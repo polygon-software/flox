@@ -19,6 +19,7 @@ import {
 
 /**
  * Fetches the user groups given its uuid
+ *
  * @param uuid - uuid of group
  * @returns user group
  */
@@ -31,6 +32,7 @@ export async function fetchUserGroup(uuid: string): Promise<UserGroupEntity> {
 
 /**
  * Fetches all user groups a given user belongs to
+ *
  * @param userUuid - uuid of user
  * @param skip - pagination skip
  * @param take - pagination take
@@ -54,6 +56,7 @@ export async function fetchUserGroupsForUser(
 
 /**
  * Fetch user groups of logged in user
+ *
  * @param skip - pagination skip
  * @param take - pagination take
  * @returns user groups of logged in user
@@ -71,6 +74,7 @@ export async function fetchMyUserGroups(
 
 /**
  * Fetch multiple user groups given their uuids
+ *
  * @param uuids - uuids of user groups
  * @returns user groups for the given uuids
  */
@@ -85,6 +89,7 @@ export async function fetchUserGroups(
 
 /**
  * Fetches all user groups
+ *
  * @param skip - pagination skip
  * @param take - pagination take
  * @returns page of user groups
@@ -102,6 +107,7 @@ export async function fetchAllUserGroups(
 
 /**
  * Creates a new user group and populates it with given users
+ *
  * @param name - name of user group
  * @param users - list of user uuids to populate group with
  * @returns created user group
@@ -119,6 +125,7 @@ export async function createUserGroup(
 
 /**
  * Updates the name of a given user group
+ *
  * @param uuid - uuid of user group
  * @param name - new name of user group
  * @returns updated user group
@@ -136,6 +143,7 @@ export async function updateUserGroup(
 
 /**
  * Deletes a user group
+ *
  * @param uuid - uuid of user group
  * @returns deleted user group
  */
@@ -150,6 +158,7 @@ export async function deleteUserGroup(
 
 /**
  * Adds a user to a user group
+ *
  * @param userGroupUuid - uuid of group
  * @param userUuid - uuid of user to be added
  * @returns group with user now in it
@@ -170,6 +179,7 @@ export async function addUserToUserGroup(
 
 /**
  * Adds multiple users to a user group
+ *
  * @param userGroupUuid - uuid of group
  * @param userUuids - uuids of users to be added
  * @returns group with users now in it
@@ -190,6 +200,7 @@ export async function addUsersToUserGroup(
 
 /**
  * Removes user from a user group
+ *
  * @param userGroupUuid - uuid of group
  * @param userUuid - uuid of user to be removed
  * @returns group with user no longer in it

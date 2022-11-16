@@ -6,4 +6,5 @@ export enum MODULES {
   IMAGE = 'image',
   SHARING = 'sharing',
   EMAIL = 'email',
+  NOTIFICATION = 'notification',
 }

@@ -20,15 +20,15 @@ import { i18n } from 'boot/i18n';
 const desc: number = 'test';
 
 useMeta({
-  title: i18n.global.t('pages.sample.meta.title'),
+  title: i18n.global.t('pages.home.meta.title'),
   meta: {
     description: {
       name: 'description',
-      content: i18n.global.t('pages.sample.meta.description'),
+      content: i18n.global.t('pages.home.meta.description'),
     },
     keywords: {
       name: 'keywords',
-      content: i18n.global.t('pages.sample.meta.keywords'),
+      content: i18n.global.t('pages.home.meta.keywords'),
     },
   },
 });

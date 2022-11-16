@@ -236,6 +236,54 @@ input ManipulateAccessGroupsInput {
   uuid: ID!
 }
 
+input MarkAsReadInput {
+  """Uuid of notification"""
+  uuid: ID!
+}
+
+type Message {
+  """Content of message"""
+  content: String!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Language of message"""
+  lang: String!
+
+  """Link to which the user is lead on click of the notification"""
+  link: String
+
+  """Notification on which this message appears"""
+  notification: Notification!
+
+  """Title of message"""
+  title: String!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+input MessageInput {
+  """Content of message"""
+  content: String!
+
+  """Language of message"""
+  lang: String!
+
+  """Link to which the user is lead on click of the notification"""
+  link: String
+
+  """Title of message"""
+  title: String!
+}
+
 type Mutation {
   AddUserToUserGroup(addUserToUserGroupInput: AddUserToUserGroupInput!): UserGroup!
   AddUsersToUserGroup(addUsersToUserGroupInput: AddUsersToUserGroupInput!): UserGroup!
@@ -248,10 +296,49 @@ type Mutation {
   DeleteUser(deleteUserInput: DeleteInput!): User!
   DeleteUserGroup(deleteInput: DeleteInput!): UserGroup!
   ManipulateFileAccessUserGroups(manipulateAccessGroups: ManipulateAccessGroupsInput!): S3File!
+  MarkNotificationAsRead(markAsReadInput: MarkAsReadInput!): Notification!
+  NotifyAllUsers(notifyInput: NotifyInput!): [Notification!]!
+  NotifyUsers(notifyUsersInput: NotifyUsersInput!): [Notification!]!
   RemoveUserFromUserGroup(removeUserFromUserGroupInput: RemoveUserFromUserGroupInput!): UserGroup!
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
+}
+
+type Notification {
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Messages in different languages related to this notification"""
+  messages: [Message!]!
+
+  """Whether the recipient has seen the notification"""
+  read: Boolean!
+
+  """Recipient of the notification"""
+  recipient: User!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+input NotifyInput {
+  """Messages in different languages"""
+  messages: [MessageInput!]!
+}
+
+input NotifyUsersInput {
+  """Messages in different languages"""
+  messages: [MessageInput!]!
+
+  """Uuids of users that shall receive notifications"""
+  recipients: [ID!]!
 }
 
 type Query {
@@ -536,6 +623,7 @@ type Query {
     """Number of items to load"""
     take: Int = 500
   ): UserSearchOutput!
+  UnreadNotifications: [Notification!]!
   User(cognitoUuid: ID, uuid: ID!): User!
   UserGroup(uuid: ID!): UserGroup!
   UserGroups(uuids: [ID!] = []): [UserGroup!]!
@@ -618,6 +706,7 @@ input UpdateUserGroupInput {
 
 input UpdateUserInput {
   email: String
+  lang: String
   username: String
   uuid: ID!
 }
@@ -637,6 +726,9 @@ type User {
 
   """User groups this user belongs to"""
   groups: [UserGroup!]!
+
+  """Preferred language of user"""
+  lang: String!
 
   """User role"""
   role: String

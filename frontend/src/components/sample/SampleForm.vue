@@ -28,6 +28,7 @@ const pages = [
 
 /**
  * Emits the 'submit' event, containing the form's data
+ *
  * @param formValues - form inputs
  */
 function onSubmit(formValues: Record<string, string>): void {

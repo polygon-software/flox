@@ -80,6 +80,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Extracts the 'where' part of a typeorm find query and returns it as an array of wheres
+   *
    * @param options - from where the 'where' should be extractet lol
    * @protected
    * @returns array of where queries
@@ -103,6 +104,7 @@ export default abstract class AbstractCrudAccessControlService<
    * where query with each other, like a zip. This is helpful when you have a list of where clauses provided by the
    * user / developer and a set of security where clauses that shall be applied to each of them - like ensuring only
    * items are retrieved for which the current user has appropriate read access.
+   *
    * @param securityWhere - The where clauses that ensure access rights - but could be any list of where clauses
    * @param customWhere - User provided where clauses
    * @example [{w1}, {w2}] x [{w3, w4}] -> [{w1 & w3}, {w1 & w4}, {w2 & w3}, {w2 & w4}]
@@ -133,6 +135,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Deeply merges two typeorm find queries
+   *
    * @param options1 - Any typeorm query option
    * @param options2 - Any other typeorm query option
    * @protected
@@ -156,6 +159,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Finds uuids of all entities that are marked for public read access
+   *
    * @param options - typeorm find options that are mixed applied, can be used for pagination and such
    * @protected
    * @returns list of uuids
@@ -182,6 +186,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Finds uuids of all entities that are marked for read access by any logged-in users
+   *
    * @param options - typeorm find options that are mixed applied, can be used for pagination and such
    * @protected
    * @returns list of uuids
@@ -208,6 +213,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Finds uuids of all entities for which the provided user is set as the entity owner
+   *
    * @param owner - the owner of the entities
    * @param options - typeorm find options that are mixed applied, can be used for pagination and such
    * @protected
@@ -238,6 +244,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Finds uuids of all entities for which the provided user is part of a user group that has read access to the item
+   *
    * @param user - the user that must be part of the read access user group
    * @param options - typeorm find options that are mixed applied
    * @protected
@@ -275,6 +282,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Finds uuids of all entities for which the provided user is part of a user group that has write access to the item
+   *
    * @param user - the user that must be part of the write access user group
    * @param options - typeorm find options that are mixed applied
    * @protected
@@ -312,6 +320,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Finds all user groups with read access to an entity
+   *
    * @param getOneArgs - contains uuid of entity
    * @returns list of user groups with read access to the entity
    */
@@ -331,6 +340,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Finds all user groups with write access to an entity
+   *
    * @param getOneArgs - contains uuid of entity
    * @returns list of user groups with write access to the entity
    */
@@ -350,6 +360,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Retrieves a single item from the database, iff it is marked for public read access
+   *
    * @param getOneArgs - contains uuid of item to be retrieved
    * @param options - additional type ORM find options that are applied to find query
    * @returns the one item that was received
@@ -375,6 +386,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves a single entity from the database, ensuring the provided user has access to it by either being owner or
    * allowed reader of the item. Alternatively, the item can be public, then the user has also access to it.
+   *
    * @param getOneArgs - contains uuid of item to be retrieved
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -398,6 +410,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves a single entity from the database, ensuring the provided user has access to it by either being owner or
    * allowed writer of the item
+   *
    * @param getOneArgs - contains uuid of item to be retrieved
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -421,6 +434,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves a single entity from the database, but ignores any access right settings. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   *
    * @param getOneArgs - contains uuid of item to be retrieved
    * @param options - additional type ORM find options that are applied to find query
    * @returns the one item that was received
@@ -442,6 +456,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves multiple items explicitely specified by their uuid. It only returns the entities that are marked with
    * public read access.
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param options - additional type ORM find options that are applied to find query
    * @returns the list of found entities
@@ -467,6 +482,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves multiple items explicitely specified by their uuid. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these items.
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -506,6 +522,7 @@ export default abstract class AbstractCrudAccessControlService<
    * Retrieves multiple items explicitely specified by their uuid. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these items. This
    * endpoint does not return public items, though, since they do not explicitely belong to the user.
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -536,6 +553,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves multiple items explicitely specified by their uuid. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param options - additional type ORM find options that are applied to find query
    * @returns the list of found entities
@@ -560,6 +578,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves all items from a database with applying pagination. It only returns the entities that are marked with
    * public read access.
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param options - additional type ORM find options that are applied to find query
    * @returns page of entities
@@ -586,6 +605,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves all items from a database with applying pagination. It only returns the entities that are public, the
    * user is the owner or the user is part of an access group that has read access to these items.
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -622,6 +642,7 @@ export default abstract class AbstractCrudAccessControlService<
    * Retrieves all items from a database with applying pagination. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these items. This
    * endpoint does not return public items, though, since they do not explicitely belong to the user.
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -647,6 +668,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Retrieves all items from a database with applying pagination. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param options - additional type ORM find options that are applied to find query
    * @returns page of entities
@@ -664,6 +686,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Creates a new item based on the create input and sets the user as the items owner.
+   *
    * @param createInput - specifications of item, must be deep partial of entity
    * @param user - the user that creates the entity
    * @param entity - additional information about the entity that is not provided by the create input
@@ -688,6 +711,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Updates an existing entity within the database according to the update input with ensuring the
    * user has appropriate write access to the item.
+   *
    * @param updateInput - specification of update, must be deep partial of entity
    * @param user - the user that updates the entity
    * @param entity - additional information about the entity that is not provided by the create input
@@ -722,6 +746,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Removes an entity from the database with ensuring the user has appropriate write access to the item.
+   *
    * @param deleteInput - contains the uuid of the item to remove
    * @param user - the user that deletes the entity
    * @returns the deleted entity
@@ -739,6 +764,7 @@ export default abstract class AbstractCrudAccessControlService<
 
   /**
    * Adds/Removes user groups from the read/write access groups of an entity.
+   *
    * @param manipulateAccessGroups - contains the adds/removes for the read/write groups.
    * @param user - user that tries to perform the manipulation, must have write access to the entity
    * @param sudo - perform action in sudo mode, means ignoring whether the user has appropriate rights to perform

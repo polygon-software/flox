@@ -39,6 +39,7 @@ export type FileInputs = {
 
 /**
  * Fetches a private file
+ *
  * @param uuid - uuid of private file
  * @param expires - number of seconds in which the file link shall expire
  * @returns Private File
@@ -56,6 +57,7 @@ export async function getFile(
 
 /**
  * Returns all user groups that have read access to the file with the given uuid
+ *
  * @param uuid - uuid of file
  * @returns list of user groups
  */
@@ -73,6 +75,7 @@ export async function getFileReadAccessUserGroups(
 
 /**
  * Returns all user groups that have write access to the file with the given uuid
+ *
  * @param uuid - uuid of file
  * @returns list of user groups
  */
@@ -90,6 +93,7 @@ export async function getFileWriteAccessUserGroups(
 
 /**
  * Fetches list of files given their uuids
+ *
  * @param uuids - uuids of files to fetch
  * @param expires - number of seconds in which the file link shall expire
  * @returns files
@@ -107,6 +111,7 @@ export async function getFiles(
 
 /**
  * Fetch files that belong to the user
+ *
  * @param uuids - uids of files to fetch
  * @param expires - number of seconds in which the file link shall expire
  * @returns users fils
@@ -124,6 +129,7 @@ export async function getMyFiles(
 
 /**
  * Fetches list of public files
+ *
  * @param uuids - uuids of public files
  * @param expires - number of seconds in which the file link shall expire
  * @returns public files
@@ -141,6 +147,7 @@ export async function getPublicFiles(
 
 /**
  * Fetches all files with pagination
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param path - path from which on files shall be fetched
@@ -164,6 +171,7 @@ export async function getAllFiles(
 
 /**
  * Fetches all files of user with pagination
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param path - path from which on files shall be fetched
@@ -187,6 +195,7 @@ export async function getAllMyFiles(
 
 /**
  * Fetches all public files with pagination
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param path - path from which on files shall be fetched
@@ -210,6 +219,7 @@ export async function getAllPublicFiles(
 
 /**
  * Searches for files
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param filter - search term for filename
@@ -239,6 +249,7 @@ export async function searchFiles(
 
 /**
  * Searches for users files
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param filter - search term for filename
@@ -268,6 +279,7 @@ export async function searchMyFiles(
 
 /**
  * Searches for public files
+ *
  * @param take - pagination take
  * @param skip - pagination skip
  * @param filter - search term for filename
@@ -300,6 +312,7 @@ export async function searchPublicFiles(
 
 /**
  * Returns folders within a given path
+ *
  * @param path - path in which folders must be located
  * @returns folders
  */
@@ -312,6 +325,7 @@ export async function getFolders(path: string): Promise<FolderEntity[]> {
 
 /**
  * Returns folders within a given path that contain files of user
+ *
  * @param path - path in which folders must be located
  * @returns folders
  */
@@ -324,6 +338,7 @@ export async function getMyFolders(path: string): Promise<FolderEntity[]> {
 
 /**
  * Returns folders within a given path that contain only public files
+ *
  * @param path - path in which folders must be located
  * @returns folders
  */
@@ -336,14 +351,16 @@ export async function getPublicFolders(path: string): Promise<FolderEntity[]> {
 
 /**
  * Creates a new file
+ *
  * @param filename - name of file
  * @param mimetype - mimetype like application/pdf
  * @param size - size of file in bytes
- * @param loggedInReadAccess - whether logged in users shall be able to read the file
- * @param publicReadAccess - whether everyone publicly shall be able to read the file
- * @param readAccess - user groups that are granted read access
- * @param writeAccess - user groups that are granted write access
- * @param path - path in which file shall be located
+ * @param file - properties of file to be created
+ * @param file.loggedInReadAccess - whether logged in users shall be able to read the file
+ * @param file.publicReadAccess - whether everyone publicly shall be able to read the file
+ * @param file.readAccess - user groups that are granted read access
+ * @param file.writeAccess - user groups that are granted write access
+ * @param file.path - path in which file shall be located
  * @returns created file
  */
 export async function createFile(
@@ -373,6 +390,7 @@ export async function createFile(
 
 /**
  * Updates an existing file
+ *
  * @param uuid - uuid of file to be updated
  * @param filename - new name of file
  * @param path - new file path
@@ -393,6 +411,7 @@ export async function updateFile(
 
 /**
  * Deletes a file
+ *
  * @param uuid - uuid of file to be deleted
  * @returns deleted file
  */
@@ -405,11 +424,13 @@ export async function deleteFile(uuid: string): Promise<FileEntity | null> {
 
 /**
  * Updates access groups for a file, granting/removing read/write acecss
+ *
  * @param uuid - uuid of file for which access groups shall be manipulated
- * @param addReadAccess - access groups that shall be granted read access to the file
- * @param removeReadAccess - access groups for which read access shall be removed
- * @param addWriteAccess - access groups that shall be granted write access to the file
- * @param removeWriteAccess - access groups for which write access shall be removed
+ * @param groupManipulation - manipulation object
+ * @param groupManipulation.addReadAccess - access groups that shall be granted read access to the file
+ * @param groupManipulation.removeReadAccess - access groups for which read access shall be removed
+ * @param groupManipulation.addWriteAccess - access groups that shall be granted write access to the file
+ * @param groupManipulation.removeWriteAccess - access groups for which write access shall be removed
  * @returns updated file
  */
 export async function manipulateFileAccessUserGroups(

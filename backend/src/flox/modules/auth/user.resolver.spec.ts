@@ -48,6 +48,7 @@ describe('UserResolver', () => {
       username: 'Test User',
       email: 'test@test.com',
       cognitoUuid: '1234-abcd-4567',
+      lang: 'en',
       role: DEFAULT_ROLES.ADMIN,
     };
 

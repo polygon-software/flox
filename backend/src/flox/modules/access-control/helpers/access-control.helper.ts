@@ -6,6 +6,7 @@ import { DEFAULT_ROLES } from '../../roles/config';
 
 /**
  * Determines whether the provided user had read access to the provided entity
+ *
  * @param entity - access controlled entity
  * @param user - user
  * @returns whether the user had read access to the entity
@@ -34,6 +35,7 @@ export function hasReadAccess(
 /**
  * Determines whether the provided user had read access to the provided entity.
  * If the access rights are insufficient, throws error
+ *
  * @param entity - access controlled entity
  * @param user - user
  */
@@ -49,6 +51,7 @@ export function assertReadAccess(
 
 /**
  * Determines whether the provided user had write access to the provided entity
+ *
  * @param entity - access controlled entity
  * @param user - user
  * @returns whether the user had write access to the entity
@@ -74,6 +77,7 @@ export function hasWriteAccess(
 /**
  * Determines whether the provided user had write access to the provided entity.
  * If the access rights are insufficient, throws error
+ *
  * @param entity - access controlled entity
  * @param user - user
  */

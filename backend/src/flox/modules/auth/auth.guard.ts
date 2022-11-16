@@ -11,6 +11,7 @@ import { getRequest } from '../../core/flox-helpers';
 export default class JwtAuthGuard extends AuthGuard('jwt') {
   /**
    * Constructor
+   *
    * @param reflector - reflector
    */
   constructor(private reflector: Reflector) {
@@ -19,6 +20,7 @@ export default class JwtAuthGuard extends AuthGuard('jwt') {
 
   /**
    * Gets the request from context
+   *
    * @param context - execution context of the request
    * @returns the request
    */

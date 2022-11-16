@@ -2,6 +2,7 @@ import { formatDate } from 'src/format/date.format';
 
 /**
  * Search Filter for Quasar <q-table>s
+ *
  * @param rows - rows
  * @param terms - search key
  * @returns filtered rows
@@ -15,6 +16,7 @@ export function tableFilter(
 
 /**
  * Preprocessor for search, to be used in q-tables as :filter-method
+ *
  * @param target - where to search
  * @param term - what to search
  * @param depthLimit - search limit
@@ -29,6 +31,7 @@ export function deepFilter(target: any, term: string, depthLimit = 5): boolean {
 
 /**
  * Recursive search
+ *
  * @param target - where to search
  * @param term - what to search
  * @param depthLimit - search limit

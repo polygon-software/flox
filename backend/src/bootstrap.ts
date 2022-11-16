@@ -10,6 +10,7 @@ import Env from './env';
 
 /**
  * Creates nest application based on GraphQL
+ *
  * @returns Nest Application
  */
 async function createNestApp(): Promise<NestApplication> {

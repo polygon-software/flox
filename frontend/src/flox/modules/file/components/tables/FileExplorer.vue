@@ -392,6 +392,7 @@ const pathSegments: ComputedRef<string[]> = computed(() => {
 
 /**
  * Extends path by an additional folder name
+ *
  * @param folderName - folder name that shall be extended
  */
 function extendPath(folderName: string): void {
@@ -404,6 +405,7 @@ function extendPath(folderName: string): void {
 
 /**
  * Strips path down to a certain path index segment
+ *
  * @param index - index of segment. 0 is index of first folder, not Root! Root is handled seperately.
  */
 function stripPathTo(index: number): void {
@@ -419,6 +421,7 @@ function setPathToRoot(): void {
 
 /**
  * Handles click on any file or folder on the list
+ *
  * @param row - content of the row, which is either a file or a folder
  */
 async function clickOnFileOrFolder(row: FileOrFolder): Promise<void> {
@@ -445,6 +448,7 @@ async function clickOnFileOrFolder(row: FileOrFolder): Promise<void> {
 
 /**
  * Initiates moving of a file
+ *
  * @param file - file to be moved
  */
 function startMovingFile(file: FileEntity): void {
@@ -468,6 +472,7 @@ async function moveFileToPath(): Promise<void> {
 
 /**
  * Initiates renaming of a file
+ *
  * @param file - file to be renamed
  */
 function startFileRenaming(file: FileEntity): void {
@@ -500,6 +505,7 @@ async function renameFile(): Promise<void> {
 
 /**
  * Opens a new dialog containing access groups, saves changes to access groups on close.
+ *
  * @param uuid - uuid of file for which access groups shall be manipulated
  */
 async function openAccessControlGroupDialog(uuid: string): Promise<void> {
@@ -545,6 +551,7 @@ async function openAccessControlGroupDialog(uuid: string): Promise<void> {
 
 /**
  * Sort function that ensures folders are always displayed above files
+ *
  * @param value1 - First comparison value
  * @param value2 - Second comparison value
  * @param fileFolder1 - File or folder to which first value belongs
@@ -571,6 +578,7 @@ function fileOrFolderSortFunction(
 
 /**
  * Removes a file form the database
+ *
  * @param uuid - uuid of file to be removed
  */
 async function removeFile(uuid: string): Promise<void> {

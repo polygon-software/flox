@@ -84,6 +84,7 @@ const emailRules: ValidationRule[] = [
 
 /**
  * Set an alias to the selected user and reload
+ *
  * @param users - user to be set as alias
  */
 function setAliasTo(users: UserEntity[]): void {
