@@ -50,6 +50,7 @@ module.exports = {
     'no-param-reassign': 0, // Reason: We often pass around database object and extend their content
     'import/no-cycle': 0, // Reason: Simply not possible with TypeORM relations (since both entities know each other)
     'class-methods-use-this': 0, // Reason: Breaks many nest interface implementations
+    'no-console': ["error", { allow: ["warn", "error"] }],
 
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'off',

@@ -176,7 +176,6 @@ const sortedFocusLabels: ComputedRef<LabelEntity[]> = computed(() => {
  * Load page of images
  */
 async function loadImages(): Promise<void> {
-  console.log('Loadingimages');
   images.value = await getAllMyImages(take.value, skip.value, 60 * 60);
   if (images.value.length === 0 && skip.value > 0) {
     skip.value -= take.value;
@@ -211,7 +210,6 @@ async function onImportButtonClick(): Promise<void> {
         showNotification($q, 'Image already exists', {});
         return importedImage;
       } catch (importError) {
-        console.log('Creating new image');
         try {
           const createdImage = await createImage(file.uuid, true);
           showSuccessNotification($q, 'Created new Image!');

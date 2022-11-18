@@ -29,7 +29,7 @@ describe('Form Helpers', () => {
     it('should return that two empty pages are not valid', () => {
       form.pages.value = [
         {
-          key: 'account_data',
+          key: 'accountData',
           label: 'Account',
           fields: accountFields,
         },
@@ -45,7 +45,7 @@ describe('Form Helpers', () => {
     it('should return that one empty page as a first page and one filled page as a second page, both together are not valid', () => {
       form.pages.value = [
         {
-          key: 'account_data',
+          key: 'accountData',
           label: 'Account',
           fields: accountFields,
         },
@@ -67,7 +67,7 @@ describe('Form Helpers', () => {
           fields: [FIELDS.PASSWORD_REPEAT],
         },
         {
-          key: 'account_data',
+          key: 'accountData',
           label: 'Account',
           fields: accountFields,
         },

@@ -61,7 +61,6 @@ function toggleDos(): void {
       const query = {
         query: print(GET_MY_USER.query),
       };
-      console.log(query);
       axios
         .post(Env.VUE_APP_GRAPHQL_ENDPOINT, query, { headers })
         .then(({ data }) => {

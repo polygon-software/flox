@@ -90,7 +90,7 @@ export const PASSWORD: Field<typeof Password, QInputProps> = {
 };
 
 export const PASSWORD_REPEAT: Field<typeof PasswordRepeat, QInputProps> = {
-  key: 'password_repeat',
+  key: 'passwordRepeat',
   component: markRaw(PasswordRepeat),
   attributes: {
     rules: [

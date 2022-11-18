@@ -82,6 +82,10 @@ module.exports = {
 
     'no-void': 0, // Reason: Otherwise, we are forced to await promises and can't skip it using 'void asyncCall()'
     'import/no-cycle': 0, // Reason: Router is needed in pages, but pages also need router
+    'no-unused-vars': ['error', { "varsIgnorePattern": '(props|emit)' }],
+    '@typescript-eslint/no-unused-vars': ['error', { "varsIgnorePattern": '(props|emit)' }],
+
+    'no-console': ["error", { allow: ["warn", "error"] }],
 
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'off',
