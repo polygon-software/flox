@@ -21,9 +21,13 @@ import FolderOutput from './outputs/folder.output';
 export default class FileService extends AbstractSearchAccessControlService<S3File> {
   // S3 credentials
   private readonly credentials = {
-    region: this.configService.get('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.get('ADMIN_AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.get('ADMIN_AWS_SECRET_ACCESS_KEY'),
+    region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow<string>(
+      'ADMIN_AWS_ACCESS_KEY_ID',
+    ),
+    secretAccessKey: this.configService.getOrThrow<string>(
+      'ADMIN_AWS_SECRET_ACCESS_KEY',
+    ),
   };
 
   /**
@@ -56,7 +60,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
    */
   async createSignedUploadUrl(file: S3File): Promise<string> {
     const uploadParams = {
-      Bucket: this.configService.get(
+      Bucket: this.configService.get<string>(
         file.publicReadAccess
           ? 'AWS_PUBLIC_BUCKET_NAME'
           : 'AWS_PRIVATE_BUCKET_NAME',
@@ -89,7 +93,9 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     const url = await getSignedUrl(
       this.s3,
       new GetObjectCommand({
-        Bucket: this.configService.get('AWS_PRIVATE_BUCKET_NAME'),
+        Bucket: this.configService.getOrThrow<string>(
+          'AWS_PRIVATE_BUCKET_NAME',
+        ),
         Key: file.uuid,
       }),
       options,
@@ -123,7 +129,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     // Delete on S3
     await this.s3.send(
       new DeleteObjectCommand({
-        Bucket: this.configService.get(
+        Bucket: this.configService.getOrThrow<string>(
           file.publicReadAccess
             ? 'AWS_PUBLIC_BUCKET_NAME'
             : 'AWS_PRIVATE_BUCKET_NAME',
@@ -145,7 +151,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
    *          The function is called with a base path of /root would result in folder names /folderA and /folder2
    *          since these are the immediate successors for the /root path
    */
-  async filesToFolders(files: S3File[], path: string): Promise<FolderOutput[]> {
+  filesToFolders(files: S3File[], path: string): FolderOutput[] {
     const folders: Record<string, FolderOutput> = {};
     files.forEach((file) => {
       const root = file.path.replace(path, '').split('/')[0];

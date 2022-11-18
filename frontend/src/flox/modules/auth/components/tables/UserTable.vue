@@ -33,17 +33,17 @@
 import { defineProps, onBeforeUnmount, ref, Ref, watch } from 'vue';
 import { QTableProps } from 'quasar';
 
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
-import { ColumnInterface } from 'components/tables/useDataTable';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
+import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import { i18n } from 'boot/i18n';
 
 const props = withDefaults(
   defineProps<{
     users: UserEntity[];
     title: string;
-    tableProps: QTableProps;
+    tableProps?: QTableProps;
   }>(),
   {
     tableProps: () => ({}),
@@ -76,21 +76,21 @@ const userTableColumns: Ref<ColumnInterface<UserEntity>[]> = ref([
     name: 'avatar',
     label: i18n.global.t('users.avatar'),
     field: 'avatar',
-    align: 'left',
+    align: ColumnAlign.left,
     sortable: false,
   },
   {
     name: 'username',
     label: i18n.global.t('users.username'),
     field: 'username',
-    align: 'left',
+    align: ColumnAlign.left,
     sortable: true,
   },
   {
     name: 'email',
     label: i18n.global.t('users.email'),
     field: 'email',
-    align: 'left',
+    align: ColumnAlign.left,
     sortable: true,
   },
   {

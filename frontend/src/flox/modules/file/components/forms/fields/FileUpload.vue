@@ -12,10 +12,11 @@
             <QFile
               v-show="false"
               ref="filePicker"
-              :accept="props.acceptedFiles"
-              :max-file-size="props.maxFileSize"
-              :max-files="props.maxFiles"
-              :multiple="props.multiple"
+              :accept="acceptedFiles"
+              :max-file-size="maxFileSize"
+              :max-files="maxFiles"
+              :multiple="multiple"
+              :model-value="selectedFiles"
               @update:model-value="onFilePicked"
             />
             <q-btn icon="add" flat @click="addFile">
@@ -60,50 +61,24 @@
 import { QFile } from 'quasar';
 import { defineProps, Ref, ref } from 'vue';
 
-import Env from 'src/env';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import useFileUpload from 'src/flox/modules/file/useFileUpload';
 import FileList from 'src/flox/modules/file/components/forms/fields/FileList.vue';
 
-const props = defineProps({
-  acceptedFiles: {
-    type: String,
-    default: '.jpg, .pdf, image/*',
-  },
-  autoUpload: {
-    type: Boolean,
-    default: false,
-  },
-  hideUploadButton: {
-    type: Boolean,
-    default: false,
-  },
-  maxFiles: {
-    type: Number,
-    default: 10,
-  },
-  maxFileSize: {
-    type: Number,
-    default: 5e7, // ca. 50 MB
-  },
-  maxTotalSize: {
-    type: Number,
-    default: 5e7,
-  },
-  multiple: {
-    type: Boolean,
-    default: true,
-  },
-  sendRaw: {
-    type: Boolean,
-    default: true,
-  },
-  url: {
-    type: String,
-    default: Env.VUE_APP_BACKEND_URL,
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    acceptedFiles: string;
+    multiple?: boolean;
+    maxFiles?: number;
+    maxFileSize?: number;
+  }>(),
+  {
+    multiple: false,
+    maxFiles: 10,
+    maxFileSize: 5e7, // ca. 50 MB
+  }
+);
 
 const filePicker: Ref<QFile | null> = ref(null);
 

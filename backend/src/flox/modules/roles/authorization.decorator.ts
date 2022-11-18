@@ -8,7 +8,7 @@ import {
 import { getRequest } from '../../core/flox-helpers';
 import User from '../auth/entities/user.entity';
 
-import { DEFAULT_ROLES } from './config';
+import { DefaultRoles } from './config';
 
 /**
  * Defines authorization-specific (roles) decorators
@@ -22,7 +22,7 @@ export const Roles = (...roles: string[]): CustomDecorator =>
 
 // Restrict to admin role
 export const AdminOnly = (): CustomDecorator =>
-  SetMetadata(ROLES_KEY, [DEFAULT_ROLES.ADMIN]);
+  SetMetadata(ROLES_KEY, [DefaultRoles.ADMIN]);
 
 // Access to current user from request
 export const CurrentUser = createParamDecorator(

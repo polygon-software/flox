@@ -54,13 +54,14 @@ import Joi from 'joi';
 import LazySearchField from 'components/forms/LazySearchField.vue';
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
 import { createUserGroup } from 'src/flox/modules/access-control/services/access-control.service';
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import {
   joiSchemaToValidationRule,
   ValidationRule,
 } from 'src/tools/validation.tool';
 import { i18n } from 'boot/i18n';
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits([...useDialogPluginComponent.emits]);
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =

@@ -29,3 +29,4 @@ export function moduleConfig(): FileModuleConfig {
     floxModuleOptions(MODULES.FILE),
   ) as FileModuleConfig;
 }
+export default moduleConfig;

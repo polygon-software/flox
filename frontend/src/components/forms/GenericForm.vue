@@ -1,9 +1,9 @@
 <template>
   <QForm ref="formRef" greedy class="q-gutter-md">
     <!-- Stepper (for multi-page forms) -->
-    <q-stepper
+    <QStepper
       v-if="form.pages.value.length > 1"
-      ref="stepper"
+      ref="stepperRef"
       v-model="form.step.value"
       active-color="primary"
       done-icon="done"
@@ -24,10 +24,8 @@
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
           :initial-value="form.values.value[field.key]"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
-          @update:model-value="
-            (newValue) => form.updateValue(field.key, newValue)
-          "
+          @change="form.updateValue(field.key, $event)"
+          @update:model-value="form.updateValue(field.key, $event)"
         />
       </q-step>
       <template #navigation>
@@ -39,14 +37,14 @@
             flat
             style="margin-right: 30px"
             class="q-ml-sm"
-            @click="$refs.stepper.previous()"
+            @click="stepperRef?.previous()"
           />
           <q-btn
             v-if="form.step.value < form.pages.value.length"
             color="primary"
             :label="$t('general.next')"
             :disable="!form.pageValid.value"
-            @click="$refs.stepper.next()"
+            @click="stepperRef?.next()"
           />
           <q-btn
             v-if="form.step.value === form.pages.value.length"
@@ -56,7 +54,7 @@
           />
         </q-stepper-navigation>
       </template>
-    </q-stepper>
+    </QStepper>
     <!-- Single card (for single-page forms -->
     <q-card v-else class="q-pa-md">
       <q-card-section>
@@ -75,10 +73,8 @@
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
           :initial-value="form.values.value[field.key]"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
-          @update:model-value="
-            (newValue) => form.updateValue(field.key, newValue)
-          "
+          @change="form.updateValue(field.key, $event)"
+          @update:model-value="form.updateValue(field.key, $event)"
         />
       </q-card-section>
       <q-card-actions align="center">
@@ -105,7 +101,7 @@
  * @param loadingLabel - the label to show when loading
  * @param loading - loading status to show on the finish button
  */
-import { QForm } from 'quasar';
+import { QForm, QStepper } from 'quasar';
 import { defineEmits, defineProps, Ref, ref } from 'vue';
 
 import { i18n } from 'boot/i18n';
@@ -124,8 +120,11 @@ const props = withDefaults(
     loading: false,
   }
 );
-const emit = defineEmits(['submit']);
+const emit = defineEmits<{
+  (e: 'submit', form: Record<string, any>): void;
+}>();
 const formRef: Ref<QForm | null> = ref(null);
+const stepperRef: Ref<QStepper | null> = ref(null);
 
 // Create Form instance with pages from props
 const form: MultiPageForm = new MultiPageForm(props.pages);

@@ -80,6 +80,9 @@ module.exports = {
       properties: 'always',
     }],
 
+    'no-void': 0, // Reason: Otherwise, we are forced to await promises and can't skip it using 'void asyncCall()'
+    'import/no-cycle': 0, // Reason: Router is needed in pages, but pages also need router
+
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'off',
 

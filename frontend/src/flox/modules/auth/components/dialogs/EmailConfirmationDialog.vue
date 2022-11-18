@@ -49,20 +49,15 @@ import { QVueGlobals, useDialogPluginComponent } from 'quasar';
 import { defineEmits, defineProps, PropType, ref } from 'vue';
 
 import { i18n } from 'boot/i18n';
-import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
+import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
 import { showSuccessNotification } from 'src/tools/notification.tool';
 
-const props = defineProps({
-  q: {
-    type: Object as PropType<QVueGlobals>,
-    required: true,
-  },
-  authService: {
-    type: Object as PropType<AuthenticationService>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  q: QVueGlobals;
+  authService: AuthenticationService;
+}>();
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits(useDialogPluginComponent.emits);
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();

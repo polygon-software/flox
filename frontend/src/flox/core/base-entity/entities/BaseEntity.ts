@@ -4,7 +4,7 @@ import { IsDate, IsOptional, IsUUID } from 'class-validator';
  * Base entity class that others inherit from.
  * Includes unique UUID, as well as creation/modification/deletion timestamps
  */
-export class BaseEntity {
+export default class BaseEntity {
   @IsUUID()
   uuid: string;
 

@@ -7,8 +7,8 @@
       bottom-controls
       big-play-button-color="primary"
       radius="1rem"
-      :autoplay="props.autoplay"
-      :show-big-play-button="true"
+      :autoplay="autoplay"
+      show-big-play-button
       :sources="sources"
     />
   </q-dialog>
@@ -18,20 +18,19 @@
 import { useDialogPluginComponent } from 'quasar';
 import { computed, ComputedRef, defineProps } from 'vue';
 
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 
 const props = withDefaults(
   defineProps<{
     video: FileEntity;
     autoplay?: boolean;
-    fullscreen?: boolean;
   }>(),
   {
     autoplay: false,
-    fullscreen: false,
   }
 );
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits([...useDialogPluginComponent.emits]);
 
 const sources: ComputedRef<{ src: string; type: string }[]> = computed(() => {

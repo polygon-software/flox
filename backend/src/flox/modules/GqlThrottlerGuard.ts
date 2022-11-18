@@ -4,7 +4,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { Request, Response } from 'express';
 
 @Injectable()
-export class GqlThrottlerGuard extends ThrottlerGuard {
+export default class GqlThrottlerGuard extends ThrottlerGuard {
   /**
    * Extracts request response either from http or GraphQL context
    *
@@ -22,7 +22,7 @@ export class GqlThrottlerGuard extends ThrottlerGuard {
       };
     }
     const gqlCtx = GqlExecutionContext.create(context);
-    const ctx = gqlCtx.getContext();
+    const ctx: { req: Request; res: Response } = gqlCtx.getContext();
     return { req: ctx.req, res: ctx.res }; // ctx.request and ctx.reply for fastify
   }
 }

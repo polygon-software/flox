@@ -59,6 +59,7 @@ function dataIdFromObject(
   }
 
   const uuid: string | undefined = responseObject.uuid?.toString();
+  // eslint-disable-next-line no-underscore-dangle
   const typename: string | undefined = responseObject.__typename as string;
   let result;
 
@@ -72,10 +73,12 @@ function dataIdFromObject(
     ] as Record<string, string>;
 
     // Cases that we cannot handle (e.g. arrays): use default function
+    // eslint-disable-next-line no-underscore-dangle
     if (!innerObject || !innerObject.__typename || !innerObject.uuid) {
       return defaultDataIdFromObject(responseObject);
     }
 
+    // eslint-disable-next-line no-underscore-dangle
     result = `${innerObject.__typename ?? ''}:${innerObject.uuid ?? ''}`;
   }
   return result;
@@ -87,6 +90,7 @@ function dataIdFromObject(
  * @param ssrContext - quasar ssr context
  * @returns  config options
  */
+// eslint-disable-next-line import/prefer-default-export
 export function getClientOptions(
   ssrContext: QSsrContext | null | undefined
 ): ApolloClientOptions<NormalizedCacheObject> {

@@ -141,7 +141,7 @@
 <script setup lang="ts">
 import { computed, ComputedRef, inject, Ref, ref } from 'vue';
 
-import { RouterService } from 'src/services/RouterService';
+import RouterService from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';

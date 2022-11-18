@@ -48,8 +48,9 @@ import {
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,vue/define-emits-declaration
 const emit = defineEmits(useDialogPluginComponent.emits);
+
 const passwordOld = ref('');
 const password = ref('');
 const passwordRep = ref('');

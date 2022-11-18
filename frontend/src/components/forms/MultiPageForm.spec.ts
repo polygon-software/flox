@@ -5,15 +5,15 @@ describe('Form Helpers', () => {
   describe('updateValue', () => {
     it('should update the value', () => {
       const form = new MultiPageForm();
-      form.updateValue('test_key', 'test_value');
-      expect(form.values.value).toStrictEqual({ test_key: 'test_value' });
+      form.updateValue('testKey', 'test_value');
+      expect(form.values.value).toStrictEqual({ testKey: 'test_value' });
     });
   });
 
   describe('forms', () => {
     let form: MultiPageForm;
 
-    const account_fields = [FIELDS.EMAIL, FIELDS.USERNAME];
+    const accountFields = [FIELDS.EMAIL, FIELDS.USERNAME];
     const invalidPassword = 'Schnabeltier';
     const validPassword = 'Schnabeltier1234?';
 
@@ -31,10 +31,10 @@ describe('Form Helpers', () => {
         {
           key: 'account_data',
           label: 'Account',
-          fields: account_fields,
+          fields: accountFields,
         },
         {
-          key: 'password_repeat',
+          key: 'passwordRepeat',
           label: 'Password',
           fields: [FIELDS.PASSWORD_REPEAT],
         },
@@ -47,51 +47,51 @@ describe('Form Helpers', () => {
         {
           key: 'account_data',
           label: 'Account',
-          fields: account_fields,
+          fields: accountFields,
         },
         {
-          key: 'password_repeat',
+          key: 'passwordRepeat',
           label: 'Password',
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value.password_repeat = validPassword;
+      form.values.value.passwordRepeat = validPassword;
       expect(form.pageValid.value).toBe(false);
     });
 
     it('should return that one filled page as a first page and one empty page as a second page, both together are valid', () => {
       form.pages.value = [
         {
-          key: 'password_repeat',
+          key: 'passwordRepeat',
           label: 'Password',
           fields: [FIELDS.PASSWORD_REPEAT],
         },
         {
           key: 'account_data',
           label: 'Account',
-          fields: account_fields,
+          fields: accountFields,
         },
       ];
-      form.values.value.password_repeat = validPassword;
+      form.values.value.passwordRepeat = validPassword;
       expect(form.pageValid.value).toBe(true);
     });
 
     it('should return that one filled page is valid', () => {
       form.pages.value = [
         {
-          key: 'password_repeat',
+          key: 'passwordRepeat',
           label: 'Password',
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value.password_repeat = validPassword;
+      form.values.value.passwordRepeat = validPassword;
       expect(form.pageValid.value).toBe(true);
     });
 
     it('should return that one filled page with wrong key is not valid', () => {
       form.pages.value = [
         {
-          key: 'password_repeat',
+          key: 'passwordRepeat',
           label: 'Password',
           fields: [FIELDS.PASSWORD_REPEAT],
         },
@@ -103,24 +103,24 @@ describe('Form Helpers', () => {
     it('should return that one filled page with invalid type is not valid', () => {
       form.pages.value = [
         {
-          key: 'password_repeat',
+          key: 'passwordRepeat',
           label: 'Password',
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value.password_repeat = 2737827;
+      form.values.value.passwordRepeat = 2737827;
       expect(form.pageValid.value).toBe(false);
     });
 
     it('should return that an invalid input is not valid', () => {
       form.pages.value = [
         {
-          key: 'password_repeat',
+          key: 'passwordRepeat',
           label: 'Password',
           fields: [FIELDS.PASSWORD_REPEAT],
         },
       ];
-      form.values.value.password_repeat = invalidPassword;
+      form.values.value.passwordRepeat = invalidPassword;
       expect(form.pageValid.value).toBe(false);
     });
   });

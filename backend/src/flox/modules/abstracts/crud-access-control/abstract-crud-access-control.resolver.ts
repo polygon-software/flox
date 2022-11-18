@@ -7,7 +7,7 @@ import GetMultipleArgs from '../crud/dto/get-multiple.args';
 import GetOneArgs from '../crud/dto/get-one.args';
 import DeleteInput from '../crud/inputs/delete.input';
 import UpdateInput from '../crud/inputs/update.input';
-import { DEFAULT_ROLES } from '../../roles/config';
+import { DefaultRoles } from '../../roles/config';
 import UserGroup from '../../access-control/entities/user-group.entity';
 
 import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
@@ -55,7 +55,7 @@ export default abstract class AbstractCrudAccessControlResolver<
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
     if (user) {
-      if (user.role === DEFAULT_ROLES.ADMIN) {
+      if (user.role === DefaultRoles.ADMIN) {
         return this.service.getOneAsAdmin(getOneArgs, options);
       }
       return this.service.getOneAsUser(getOneArgs, user, options);
@@ -93,7 +93,7 @@ export default abstract class AbstractCrudAccessControlResolver<
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
     if (user) {
-      if (user.role === DEFAULT_ROLES.ADMIN) {
+      if (user.role === DefaultRoles.ADMIN) {
         return this.service.getMultipleAsAdmin(getMultipleArgs, options);
       }
       return this.service.getMultipleAsUser(getMultipleArgs, user, options);
@@ -164,7 +164,7 @@ export default abstract class AbstractCrudAccessControlResolver<
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
     if (user) {
-      if (user.role === DEFAULT_ROLES.ADMIN) {
+      if (user.role === DefaultRoles.ADMIN) {
         return this.service.getAllAsAdmin(getAllArgs, options);
       }
       return this.service.getAllAsUser(getAllArgs, user, options);

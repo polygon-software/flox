@@ -14,9 +14,11 @@ export default class EmailController {
 
   // SES credentials
   private readonly credentials: Credentials = {
-    region: this.configService.getOrThrow('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.getOrThrow('AWS_SES_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.getOrThrow('AWS_SES_SECRET_ACCESS_KEY'),
+    region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow<string>('AWS_SES_ACCESS_KEY_ID'),
+    secretAccessKey: this.configService.getOrThrow<string>(
+      'AWS_SES_SECRET_ACCESS_KEY',
+    ),
   };
 
   /**
@@ -48,9 +50,10 @@ export default class EmailController {
       await this.emailService.sendTestEmail(recipient, this.credentials);
       res.status(200);
       res.send();
-    } catch (e: any) {
+    } catch (e: unknown) {
       res.status(500);
-      res.send(`Error occurred while sending e-mail: ${e.message}`);
+      console.error(e);
+      res.send('Error occurred while sending e-mail');
     }
   }
 }

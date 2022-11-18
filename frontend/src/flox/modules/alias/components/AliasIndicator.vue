@@ -34,6 +34,7 @@ const isAliasSet: ComputedRef<boolean> = computed(() => {
  */
 function removeAlias(): void {
   unsetAlias();
+  // eslint-disable-next-line no-restricted-globals
   location.reload();
 }
 </script>

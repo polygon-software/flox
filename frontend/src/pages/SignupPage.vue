@@ -14,10 +14,10 @@ import { inject } from 'vue';
 import { i18n } from 'boot/i18n';
 import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
 import ROUTES from 'src/router/routes';
-import { RouterService } from 'src/services/RouterService';
+import RouterService from 'src/services/RouterService';
 import { showSuccessNotification } from 'src/tools/notification.tool';
 
-import { AuthenticationService } from '../flox/modules/auth/services/auth.service';
+import AuthenticationService from '../flox/modules/auth/services/auth.service';
 
 const $q = useQuasar();
 const $authService: AuthenticationService | undefined = inject('$authService');

@@ -4,7 +4,7 @@ interface SsrState {
   prefetchedData: Record<string, unknown>;
 }
 
-export const useSsrStore = defineStore('ssrState', {
+export default defineStore('ssrState', {
   state: (): SsrState => ({
     prefetchedData: {},
   }),

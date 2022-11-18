@@ -3,7 +3,7 @@ import { QVueGlobals } from 'quasar';
 /**
  * This is a service that is used globally throughout the application for error handling
  */
-export class ErrorService {
+export default class ErrorService {
   // Quasar instance
   $q: QVueGlobals;
 

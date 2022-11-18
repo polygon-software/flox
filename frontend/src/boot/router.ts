@@ -3,18 +3,49 @@ import { Router, RouteRecordRaw } from 'vue-router';
 
 import { isModuleActive } from 'src/flox';
 import { MODULES } from 'src/flox/MODULES';
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import { fetchMyUser } from 'src/flox/modules/auth/services/user.service';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 
 import ROUTES, { CONSTRAINED_ROUTES, PUBLIC_ROUTES } from '../router/routes';
 
+// eslint-disable-next-line import/no-mutable-exports
 let routerInstance: Router;
+
+/**
+ * Returns the component of the dashboard for the currently logged-in user
+ *
+ * @param user - the user, if any
+ * @param $authStore - authentication store
+ * @returns the layout component
+ */
+function getUserRoleRoute(
+  user: UserEntity | null,
+  $authStore: ReturnType<typeof useAuthStore>
+): RouteRecordRaw {
+  // Non-logged in: Redirect to log in
+  if (!user) {
+    $authStore.setCognitoUser(undefined);
+    $authStore.setUserSession(undefined);
+    return ROUTES.LOGIN;
+  }
+
+  return ROUTES.HOME;
+  // TODO application specific: add paths per role
+  // switch (user.role) {
+  //   case ROLE.ADMIN:
+  //     return ROUTES.CUSTOMERS;
+  //   case ROLE.USER:
+  //     return ROUTES.CUSTOMERS.path + '/' + user.username;
+  //   default:
+  //     return ROUTES.LOGIN;
+  // }
+}
 
 export default boot(({ router }) => {
   const $authStore = useAuthStore();
   routerInstance = router;
-  // eslint-disable-next-line sonarjs/cognitive-complexity
+  // eslint-disable-next-line sonarjs/cognitive-complexity,consistent-return
   router.beforeEach(async (to) => {
     // Verify valid authentication
     const { loggedIn } = $authStore;
@@ -60,6 +91,7 @@ export default boot(({ router }) => {
       }
     } else {
       // Default case: disallow access if not public
+      // eslint-disable-next-line no-lonely-if
       if (!PUBLIC_ROUTES.some((publicRoute) => publicRoute.path === to.path)) {
         return ROUTES.LOGIN;
       }
@@ -69,33 +101,3 @@ export default boot(({ router }) => {
 
 // Router instance for use in Vue components
 export { routerInstance };
-
-/**
- * Returns the component of the dashboard for the currently logged-in user
- *
- * @param user - the user, if any
- * @param $authStore - authentication store
- * @returns the layout component
- */
-function getUserRoleRoute(
-  user: UserEntity | null,
-  $authStore: ReturnType<typeof useAuthStore>
-): RouteRecordRaw {
-  // Non-logged in: Redirect to log in
-  if (!user) {
-    $authStore.setCognitoUser(undefined);
-    $authStore.setUserSession(undefined);
-    return ROUTES.LOGIN;
-  }
-
-  return ROUTES.HOME;
-  // TODO application specific: add paths per role
-  // switch (user.role) {
-  //   case ROLE.ADMIN:
-  //     return ROUTES.CUSTOMERS;
-  //   case ROLE.USER:
-  //     return ROUTES.CUSTOMERS.path + '/' + user.username;
-  //   default:
-  //     return ROUTES.LOGIN;
-  // }
-}

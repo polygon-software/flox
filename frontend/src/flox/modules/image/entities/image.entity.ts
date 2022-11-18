@@ -1,13 +1,13 @@
 import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
-import { LabelEntity } from 'src/flox/modules/image/entities/label.entity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
+import LabelEntity from 'src/flox/modules/image/entities/label.entity';
 
 /**
  * Class representing an image data object
  */
-export class ImageEntity extends BaseEntity {
+export default class ImageEntity extends BaseEntity {
   @IsOptional()
   file?: FileEntity;
 

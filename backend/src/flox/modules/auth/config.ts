@@ -29,3 +29,4 @@ export function moduleConfig(): AuthModuleConfig {
     floxModuleOptions(MODULES.AUTH),
   ) as AuthModuleConfig;
 }
+export default moduleConfig;

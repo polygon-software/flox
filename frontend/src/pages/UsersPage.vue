@@ -32,8 +32,8 @@ import {
   joiSchemaToValidationRule,
   ValidationRule,
 } from 'src/tools/validation.tool';
-import { ColumnInterface } from 'components/tables/useDataTable';
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import DataTable from 'components/tables/DataTable.vue';
 import { DELETE_USER, UPDATE_USER } from 'src/flox/modules/auth/user.mutation';
 import { SEARCH_USERS } from 'src/flox/modules/auth/user.query';
@@ -52,7 +52,7 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     name: 'username',
     label: i18n.global.t('users.username'),
     field: 'username',
-    align: 'left',
+    align: ColumnAlign.left,
     sortable: true,
     edit: true,
   },
@@ -60,7 +60,7 @@ const columns: Ref<ColumnInterface<UserEntity>[]> = ref([
     name: 'email',
     label: i18n.global.t('users.email'),
     field: 'email',
-    align: 'left',
+    align: ColumnAlign.left,
     sortable: true,
     edit: true,
     qInputProps: { rules: emailRules },

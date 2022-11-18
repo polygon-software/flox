@@ -28,3 +28,4 @@ export function moduleConfig(): NotificationModuleConfig {
     floxModuleOptions(MODULES.NOTIFICATION),
   ) as NotificationModuleConfig;
 }
+export default moduleConfig;

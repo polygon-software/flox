@@ -3,7 +3,7 @@
     <q-btn
       color="negative"
       :outline="!confirmed"
-      :label="confirmed ? props.confirmLabel : props.label"
+      :label="confirmed ? confirmLabel : label"
       no-caps
       v-bind="buttonProps"
       @click="confirmAction"

@@ -2,7 +2,7 @@ import { ForbiddenException } from '@nestjs/common';
 
 import AccessControlledEntity from '../entities/access-controlled.entity';
 import User from '../../auth/entities/user.entity';
-import { DEFAULT_ROLES } from '../../roles/config';
+import { DefaultRoles } from '../../roles/config';
 
 /**
  * Determines whether the provided user had read access to the provided entity
@@ -21,7 +21,7 @@ export function hasReadAccess(
   if (!user) {
     return false;
   }
-  if (user.role === DEFAULT_ROLES.ADMIN) {
+  if (user.role === DefaultRoles.ADMIN) {
     return true;
   }
   if (entity.loggedInReadAccess || entity.owner.uuid === user.uuid) {
@@ -63,7 +63,7 @@ export function hasWriteAccess(
   if (!user) {
     return false;
   }
-  if (user.role === DEFAULT_ROLES.ADMIN) {
+  if (user.role === DefaultRoles.ADMIN) {
     return true;
   }
   if (user && entity.owner.uuid === user.uuid) {

@@ -12,7 +12,7 @@
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
           class="full-width"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
+          @change="form.updateValue(field.key, $event)"
         >
           <template #prepend>
             <q-icon
@@ -61,9 +61,16 @@ import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import * as auth from 'src/flox/modules/auth';
 import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
-import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
+import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
 
-const emit = defineEmits(['submit']);
+type PasswordInput = {
+  identifier: string;
+  password: string;
+};
+
+const emit = defineEmits<{
+  (e: 'submit', form: PasswordInput): void;
+}>();
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 
@@ -85,14 +92,13 @@ form.pages.value = [
  * Emits the 'submit' event, containing the form's data
  */
 function onSubmit(): void {
-  const formValues: Record<string, unknown> = {
-    identifier:
-      form.values.value[
-        auth.moduleConfig().emailAsUsername
-          ? FIELDS.EMAIL.key
-          : FIELDS.USERNAME.key
-      ],
-    password: form.values.value[FIELDS.PASSWORD.key],
+  const formValues: PasswordInput = {
+    identifier: form.values.value[
+      auth.moduleConfig().emailAsUsername
+        ? FIELDS.EMAIL.key
+        : FIELDS.USERNAME.key
+    ] as string,
+    password: form.values.value[FIELDS.PASSWORD.key] as string,
   };
 
   emit('submit', formValues);

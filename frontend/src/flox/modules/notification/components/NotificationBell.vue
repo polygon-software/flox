@@ -1,7 +1,7 @@
 <template>
   <q-btn round dense flat color="grey-8" icon="notifications">
     <q-badge v-if="hasNotifications" color="red" text-color="white" floating>
-      {{ notifications.length }}
+      {{ notifications?.length }}
     </q-badge>
     <q-menu v-if="hasNotifications">
       <div class="row no-wrap">
@@ -22,9 +22,11 @@
             </q-item-section>
 
             <q-item-section side top>
-              <q-item-label caption>{{
-                format(new Date(notification.createdAt), 'dd.mm.yyyy hh:mm')
-              }}</q-item-label>
+              <q-item-label v-if="notification?.createdAt" caption>
+                {{
+                  format(new Date(notification?.createdAt), 'dd.mm.yyyy hh:mm')
+                }}
+              </q-item-label>
               <q-btn
                 round
                 flat
@@ -54,7 +56,7 @@ import {
   markNotificationAsRead,
   subscribeToUnreadNotifications,
 } from 'src/flox/modules/notification/services/notification.service';
-import { NotificationEntity } from 'src/flox/modules/notification/entities/notification.entity';
+import NotificationEntity from 'src/flox/modules/notification/entities/notification.entity';
 import { i18n } from 'boot/i18n';
 import MessageEntity from 'src/flox/modules/notification/entities/message.entity';
 

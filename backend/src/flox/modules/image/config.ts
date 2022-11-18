@@ -29,3 +29,4 @@ export function moduleConfig(): ImageModuleConfig {
     floxModuleOptions(MODULES.IMAGE),
   ) as ImageModuleConfig;
 }
+export default moduleConfig;

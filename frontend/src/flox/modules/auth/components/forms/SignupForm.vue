@@ -11,7 +11,7 @@
           :key="field.key"
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
+          @change="form.updateValue(field.key, $event)"
         />
         <q-btn
           style="margin-top: 20px"
@@ -41,7 +41,16 @@ import { MODULES } from 'src/flox/MODULES';
 import * as auth from 'src/flox/modules/auth';
 import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
 
-const emit = defineEmits(['submit', 'cancel']);
+type SignUp = {
+  username: string;
+  email: string;
+  password: string;
+};
+
+const emit = defineEmits<{
+  (e: 'submit', formValues: SignUp): void;
+  (e: 'cancel'): void;
+}>();
 
 const fields = auth.moduleConfig().emailAsUsername
   ? [FIELDS.EMAIL, FIELDS.PASSWORD_REPEAT]
@@ -60,16 +69,17 @@ form.pages.value = [
  * Emits the 'submit' event, containing the form's data
  */
 function onSubmit(): void {
-  const formValues: Record<string, unknown> = {
-    email: form.values.value[FIELDS.EMAIL.key],
-    password: form.values.value[FIELDS.PASSWORD_REPEAT.key],
+  const formValues: SignUp = {
+    username: '',
+    email: form.values.value[FIELDS.EMAIL.key] as string,
+    password: form.values.value[FIELDS.PASSWORD_REPEAT.key] as string,
   };
 
   // If e-mail is also username, add 'username' field directly (identical to e-mail)
   if (auth.moduleConfig().emailAsUsername) {
-    formValues.username = form.values.value[FIELDS.EMAIL.key];
+    formValues.username = form.values.value[FIELDS.EMAIL.key] as string;
   } else {
-    formValues.username = form.values.value[FIELDS.USERNAME.key];
+    formValues.username = form.values.value[FIELDS.USERNAME.key] as string;
   }
 
   emit('submit', formValues);

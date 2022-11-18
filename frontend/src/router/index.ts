@@ -20,7 +20,7 @@ import routes from './routes';
  * with the Router instance.
  */
 
-export default route(function () {
+export default route(() => {
   const historyType =
     Env.MODE === 'ssr' ? createWebHistory : createWebHashHistory;
   const createHistory = Env.SERVER ? createMemoryHistory : historyType;

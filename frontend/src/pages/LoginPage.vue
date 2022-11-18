@@ -26,7 +26,7 @@ import { inject } from 'vue';
 
 import LoginForm from 'src/flox/modules/auth/components/forms/LoginForm.vue';
 
-import { AuthenticationService } from '../flox/modules/auth/services/auth.service';
+import AuthenticationService from '../flox/modules/auth/services/auth.service';
 
 const $authService: AuthenticationService | undefined = inject('$authService');
 

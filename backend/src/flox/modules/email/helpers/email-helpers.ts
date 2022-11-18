@@ -51,9 +51,5 @@ export async function sendEmail(
     attachments: attachments ?? [],
   };
 
-  try {
-    await transporter.sendMail(emailParams);
-  } catch (e: any) {
-    throw new Error(`Error while sending e-mail: ${e.name}: ${e.message}`);
-  }
+  await transporter.sendMail(emailParams);
 }

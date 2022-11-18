@@ -1,5 +1,5 @@
 <template>
-  <template v-if="$authStore.loggedIn && $authStore.role === props.role">
+  <template v-if="$authStore.loggedIn && $authStore.role === role">
     <slot />
   </template>
 </template>

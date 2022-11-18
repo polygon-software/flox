@@ -8,7 +8,7 @@ import {
 /**
  * This is a service that is used globally throughout the application for routing
  */
-export class RouterService {
+export default class RouterService {
   // Router instance
   router: Router;
 

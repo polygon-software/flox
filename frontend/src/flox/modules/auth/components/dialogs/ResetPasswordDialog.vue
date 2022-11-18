@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialogRef" :persistent="true">
+  <q-dialog ref="dialogRef" persistent>
     <q-card class="q-pa-lg q-pt-xl" style="width: 400px; min-height: 250px">
       <q-form
         class="q-gutter-md"
@@ -54,7 +54,9 @@ import {
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits(useDialogPluginComponent.emits);
+
 const verificationCode = ref('');
 const password = ref('');
 const passwordRep = ref('');

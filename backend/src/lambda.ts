@@ -18,3 +18,5 @@ export const handler: Handler = async (
   const server = await bootstrapServerless();
   return server(event, context, callback);
 };
+
+export default handler;

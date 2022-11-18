@@ -14,8 +14,8 @@ import * as auth from 'src/flox/modules/auth';
 import { createUser } from 'src/flox/modules/auth/services/user.service';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import ROUTES from 'src/router/routes';
-import { ErrorService } from 'src/services/ErrorService';
-import { RouterService } from 'src/services/RouterService';
+import ErrorService from 'src/services/ErrorService';
+import RouterService from 'src/services/RouterService';
 import { showSuccessNotification } from 'src/tools/notification.tool';
 
 import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
@@ -27,7 +27,7 @@ import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
  * signing up, logging in, logging out, changing passwords, and more.
  */
-export class AuthenticationService {
+export default class AuthenticationService {
   // Application info
   appName: string;
 
@@ -112,7 +112,7 @@ export class AuthenticationService {
       this.$errorService.showErrorDialog(
         new Error(i18n.global.t('errors.user_not_defined'))
       );
-      return;
+      return undefined;
     }
     // Actual Cognito authentication on given pool
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
@@ -148,19 +148,20 @@ export class AuthenticationService {
 
           const $q = useQuasar();
 
+          let dialogPassword = newPassword;
           // Show password change dialog
-          while (!newPassword) {
-            $q.dialog({
-              component: ChangePasswordDialog,
-              componentProps: {},
-            }).onOk(({ password }: { password: string }) => {
-              newPassword = password;
-            });
-          }
+          $q.dialog({
+            component: ChangePasswordDialog,
+            componentProps: {},
+          }).onOk(
+            ({ userEnteredPassword }: { userEnteredPassword: string }) => {
+              dialogPassword = userEnteredPassword;
+            }
+          );
           // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
           delete attrs.email;
           delete attrs.email_verified;
-          cognitoUser.completeNewPasswordChallenge(newPassword, attrs, this);
+          cognitoUser.completeNewPasswordChallenge(dialogPassword, attrs, this);
         },
 
         // Called if time-limited one time password is required (only second login or later)
@@ -425,7 +426,7 @@ export class AuthenticationService {
    */
   async resendEmailVerificationCode(): Promise<void> {
     await new Promise((resolve, reject) => {
-      this.$authStore.cognitoUser?.resendConfirmationCode(function (err) {
+      this.$authStore.cognitoUser?.resendConfirmationCode((err) => {
         if (!err) {
           resolve(null);
         }
@@ -451,7 +452,7 @@ export class AuthenticationService {
           this.$authStore.cognitoUser?.confirmRegistration(
             code,
             true,
-            function (err, result) {
+            (err, result) => {
               if (!err) {
                 resolve(result);
               }

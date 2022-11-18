@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, Ref, ref } from 'vue';
+import { computed, ComputedRef, Ref, ref, unref } from 'vue';
 import { QForm, useQuasar } from 'quasar';
 import Joi from 'joi';
 
@@ -114,7 +114,7 @@ const contentRules: ValidationRule[] = [
 ];
 
 const messages: Ref<Message[]> = ref(
-  locales.value.map((lang) => ({
+  unref(locales).map((lang) => ({
     lang,
     title: '',
     content: '',
@@ -138,11 +138,12 @@ async function submitNotificationBroadcast(): Promise<void> {
   }
   await sendNotificationToEveryone(messages.value);
   showSuccessNotification($q, i18n.global.t('notification.sent'));
-  messages.value.forEach((msg) => {
-    msg.title = '';
-    msg.content = '';
-    msg.link = '';
-  });
+  messages.value = messages.value.map((msg) => ({
+    ...msg,
+    title: '',
+    content: '',
+    link: '',
+  }));
   form.reset();
 }
 </script>

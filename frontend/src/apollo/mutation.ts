@@ -4,7 +4,7 @@ import { useMutation } from '@vue/apollo-composable';
 import { DocumentNode } from 'graphql';
 
 import { invalidateTables } from 'src/apollo/invalidation';
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
 export interface MutationObject {
   mutation: DocumentNode; // Actual GraphQL mutation

@@ -6,7 +6,7 @@ import {
   SelectedFile,
   uploadFile,
 } from 'src/flox/modules/file/tools/upload.tools';
-import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
+import { UploadStatus } from 'src/flox/modules/file/enums/uploadStatus.enum';
 
 /**
  * Composable to get all functions needed to handle file upload
@@ -84,14 +84,14 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
    * @param newFiles - the newly picked files
    */
   function onFilePicked(newFiles: File[]): void {
-    for (const file of newFiles) {
+    newFiles.forEach((file) => {
       const newSelectedFile: SelectedFile = {
         content: file,
         url: URL.createObjectURL(file),
-        status: UPLOAD_STATUS.READY,
+        status: UploadStatus.READY,
       };
       selectedFiles.value = selectedFiles.value.concat(newSelectedFile);
-    }
+    });
   }
 
   /**
@@ -101,14 +101,17 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
    */
   async function uploadFiles(path: string): Promise<void> {
     const uploads = selectedFiles.value.map(async (file) => {
-      if (file.status !== UPLOAD_STATUS.DONE) {
-        file.status = UPLOAD_STATUS.LOADING;
+      if (file.status !== UploadStatus.DONE) {
+        // eslint-disable-next-line no-param-reassign
+        file.status = UploadStatus.LOADING;
         try {
           await uploadFile(file, { path });
-          file.status = UPLOAD_STATUS.DONE;
+          // eslint-disable-next-line no-param-reassign
+          file.status = UploadStatus.DONE;
         } catch (e: any) {
           console.error(e);
-          file.status = UPLOAD_STATUS.FAILED;
+          // eslint-disable-next-line no-param-reassign
+          file.status = UploadStatus.FAILED;
         }
       }
     });
@@ -116,7 +119,7 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
 
     // Check for successful uploads
     const successfulUploads = selectedFiles.value.filter(
-      (file) => file.status === UPLOAD_STATUS.DONE
+      (file) => file.status === UploadStatus.DONE
     );
     if (successfulUploads.length > 0) {
       onSuccess(successfulUploads);
@@ -124,7 +127,7 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
 
     // Check for failed uploads
     const failedUploads = selectedFiles.value.filter(
-      (file) => file.status === UPLOAD_STATUS.FAILED
+      (file) => file.status === UploadStatus.FAILED
     );
     if (failedUploads.length > 0) {
       onFailed(failedUploads);

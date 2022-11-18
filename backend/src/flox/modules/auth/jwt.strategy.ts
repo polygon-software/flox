@@ -9,22 +9,19 @@ import Env from '../../../env';
  * Validation strategy for JSON web tokens from Cognito
  */
 
-export class JwtStrategyValidationPayload {
+export type JwtStrategyValidationPayload = {
   'cognito:username': string;
-
   sub: string;
-
   username: string;
-}
+};
 
-export class JwtStrategyValidationResult {
+export type JwtStrategyValidationResult = {
   userId: string;
-
   username: string;
-}
+};
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export default class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { FileModule } from '../file/file.module';
+import FileModule from '../file/file.module';
 import AccessControlModule from '../access-control/access-control.module';
 
 import BoundingBox from './entities/bounding-box.entity';
@@ -18,4 +18,4 @@ import ImageService from './image.service';
   ],
   providers: [ImageService, ImageResolver],
 })
-export class ImageModule {}
+export default class ImageModule {}

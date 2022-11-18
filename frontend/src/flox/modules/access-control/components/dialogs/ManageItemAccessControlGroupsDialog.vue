@@ -22,7 +22,7 @@
             "
           >
             <q-item-section avatar class="items-start relative-position">
-              <MultiUserAvatars :users="group.users" />
+              <MultiUserAvatars :users="group?.users ?? []" />
             </q-item-section>
             <q-item-section>{{ group.name }}</q-item-section>
             <q-item-section side>
@@ -94,6 +94,7 @@ const props = defineProps<{
   writeAccess: UserGroupEntity[];
 }>();
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits([...useDialogPluginComponent.emits]);
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =

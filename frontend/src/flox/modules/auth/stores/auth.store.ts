@@ -10,7 +10,7 @@ import {
   deleteCookies,
   persistToCookies,
 } from 'src/flox/modules/auth/tools/cookie.helpers';
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 
 export interface AuthState {

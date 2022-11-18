@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { MockType, repositoryMockFactory } from '../../testing/testUtils';
-import { DEFAULT_ROLES } from '../roles/config';
+import { DefaultRoles } from '../roles/config';
 
 import CreateUserInput from './dto/input/create-user.input';
 import User from './entities/user.entity';
@@ -49,7 +49,7 @@ describe('UserResolver', () => {
       email: 'test@test.com',
       cognitoUuid: '1234-abcd-4567',
       lang: 'en',
-      role: DEFAULT_ROLES.ADMIN,
+      role: DefaultRoles.ADMIN,
     };
 
     const date = new Date();
@@ -64,6 +64,7 @@ describe('UserResolver', () => {
       ...input,
     };
 
+    // eslint-disable-next-line @typescript-eslint/require-await
     jest.spyOn(userService, 'create').mockImplementation(async () => user);
 
     // Create user

@@ -29,3 +29,4 @@ export function moduleConfig(): EmailModuleConfig {
     floxModuleOptions(MODULES.EMAIL),
   ) as EmailModuleConfig;
 }
+export default moduleConfig;

@@ -8,4 +8,4 @@ import EmailService from './email.service';
   providers: [EmailService, ConfigService],
   controllers: [EmailController],
 })
-export class EmailModule {}
+export default class EmailModule {}

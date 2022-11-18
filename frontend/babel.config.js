@@ -1,5 +1,5 @@
 /* eslint-env node */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires,import/no-extraneous-dependencies
 const fs = require('fs-extra');
 
 let extend;

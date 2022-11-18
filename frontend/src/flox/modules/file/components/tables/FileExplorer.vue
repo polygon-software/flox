@@ -219,14 +219,14 @@ import {
   searchFiles,
   updateFile,
 } from 'src/flox/modules/file/services/file.service';
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 import {
   showErrorNotification,
   showSuccessNotification,
 } from 'src/tools/notification.tool';
 import { i18n } from 'boot/i18n';
 import FolderEntity from 'src/flox/modules/file/entities/folder.entity';
-import { ColumnInterface } from 'components/tables/useDataTable';
+import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
 import ManageItemAccessControlGroups from 'src/flox/modules/access-control/components/dialogs/ManageItemAccessControlGroupsDialog.vue';
 import AdminOnly from 'src/flox/modules/auth/components/roles/AdminOnly.vue';
 import {
@@ -596,7 +596,7 @@ const fileOrFolderColumns: ColumnInterface<FileOrFolder>[] = [
     label: '',
     field: 'mimetype',
     required: true,
-    align: 'left',
+    align: ColumnAlign.left,
     sortable: false,
     style: 'width: 50px',
   },
@@ -605,7 +605,7 @@ const fileOrFolderColumns: ColumnInterface<FileOrFolder>[] = [
     label: i18n.global.t('files.filename'),
     field: 'name',
     required: true,
-    align: 'left',
+    align: ColumnAlign.left,
     sortable: true,
     sort: fileOrFolderSortFunction,
   },
@@ -614,7 +614,7 @@ const fileOrFolderColumns: ColumnInterface<FileOrFolder>[] = [
     label: i18n.global.t('files.last_updated'),
     field: 'updatedAt',
     required: true,
-    align: 'left',
+    align: ColumnAlign.left,
     sortable: true,
     sort: fileOrFolderSortFunction,
   },

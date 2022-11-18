@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialogRef" auto-close maximized @hide="onDialogHide">
-    <q-img :src="props.image.url" fit="scale-down" style="overflow: hidden" />
+    <q-img :src="image.url" fit="scale-down" style="overflow: hidden" />
   </q-dialog>
 </template>
 
@@ -8,18 +8,13 @@
 import { useDialogPluginComponent } from 'quasar';
 import { defineProps } from 'vue';
 
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 
-const props = withDefaults(
-  defineProps<{
-    image: FileEntity;
-    fullscreen?: boolean;
-  }>(),
-  {
-    fullscreen: false,
-  }
-);
+const props = defineProps<{
+  image: FileEntity;
+}>();
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits([...useDialogPluginComponent.emits]);
 
 const { dialogRef, onDialogHide } = useDialogPluginComponent();

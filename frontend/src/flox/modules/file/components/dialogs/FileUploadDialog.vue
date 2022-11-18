@@ -15,6 +15,7 @@
           :max-file-size="maxFileSize"
           :max-files="maxFiles"
           :multiple="multiple"
+          :model-value="selectedFiles"
           @update:model-value="onFilePicked"
         >
           <template #append>
@@ -48,10 +49,10 @@ import FileList from 'src/flox/modules/file/components/forms/fields/FileList.vue
 const props = withDefaults(
   defineProps<{
     acceptedFiles: string;
-    maxFiles: number;
-    maxFileSize: number;
     multiple: boolean;
     path: string;
+    maxFiles?: number;
+    maxFileSize?: number;
   }>(),
   {
     maxFiles: 10,
@@ -59,6 +60,7 @@ const props = withDefaults(
   }
 );
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits([...useDialogPluginComponent.emits]);
 
 const filePickerRef: Ref<QFile | null> = ref(null);

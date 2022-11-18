@@ -84,7 +84,6 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     @Args() getFileArgs: GetFileArgs,
     @OptionalUser() user?: User,
   ): Promise<S3File> {
-    console.log('**user', user);
     const file = await super.getOne(getFileArgs, user);
     return this.fileService.addFileUrl(file, getFileArgs);
   }
@@ -441,7 +440,6 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     manipulateAccessGroups: ManipulateAccessGroupsInput,
     @CurrentUser() user: User,
   ): Promise<S3File> {
-    const bla_blu: number = 'test';
     return super.manipulateAccessUserGroups(manipulateAccessGroups, user);
   }
 }

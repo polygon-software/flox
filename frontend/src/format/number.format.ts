@@ -5,6 +5,7 @@
  * @example 32768 -> 23.0 KB
  * @returns nicely format number of bytes (KB, MB, GB etc.)
  */
+// eslint-disable-next-line import/prefer-default-export
 export function formatBytes(bytes: number): string {
   const decimals = 1;
   if (!+bytes) return '0 Bytes';

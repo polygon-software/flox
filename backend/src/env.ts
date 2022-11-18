@@ -74,8 +74,8 @@ export default {
   /**
    * @returns database port
    */
-  get DB_PORT(): string {
-    return asString(process.env.DB_PORT);
+  get DB_PORT(): number {
+    return asNumber(process.env.DB_PORT);
   },
   /**
    * @returns database host name

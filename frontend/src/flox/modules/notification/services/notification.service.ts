@@ -1,7 +1,7 @@
 import { Ref } from 'vue';
 
 import { executeQuery, subscribeToQuery } from 'src/apollo/query';
-import { NotificationEntity } from 'src/flox/modules/notification/entities/notification.entity';
+import NotificationEntity from 'src/flox/modules/notification/entities/notification.entity';
 import { GET_UNREAD_NOTIFICATIONS } from 'src/flox/modules/notification/notification.query';
 import { executeMutation } from 'src/apollo/mutation';
 import {

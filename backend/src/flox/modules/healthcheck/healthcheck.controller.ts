@@ -40,7 +40,7 @@ export default class HealthcheckController {
       // Database connectivity
       (): ReturnType<typeof this.database.pingCheck> =>
         this.database.pingCheck(
-          this.configService.getOrThrow('database.database'),
+          this.configService.getOrThrow<string>('database.database'),
         ),
     ]);
   }

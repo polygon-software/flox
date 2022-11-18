@@ -1,5 +1,6 @@
 /* eslint-env node */
 // See https://www.apollographql.com/docs/devtools/apollo-config/
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const Env = require('src/env');
 
 module.exports = {

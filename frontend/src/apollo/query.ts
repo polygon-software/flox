@@ -4,9 +4,9 @@ import { useApolloClient, useQuery } from '@vue/apollo-composable';
 import { DocumentNode } from 'graphql';
 import { onBeforeMount, onServerPrefetch, Ref, ref } from 'vue';
 
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
-import { useSsrStore } from 'stores/ssr';
+import useSsrStore from 'stores/ssr';
 
 // Interface definitions as used in constant files (e.g. QUERIES.ts, DEALERSHIP.ts)
 export interface QueryObject {

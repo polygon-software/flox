@@ -1,26 +1,26 @@
 <template>
   <div class="img-container">
     <img
-      v-if="props.image"
+      v-if="image"
       ref="imgRef"
-      :src="props.image.file.url"
+      :src="image.file?.url"
       alt="image"
       class="full-width"
     />
-    <template v-if="props.image">
+    <template v-if="image">
       <div
-        v-for="label in props.image.labels"
-        :key="label.name + label.confidence"
+        v-for="label in image.labels"
+        :key="`${label?.name} ${label?.confidence}`"
         class="bbox cursor-pointer"
         :class="{
-          focus: props.focusLabel && props.focusLabel.uuid === label.uuid,
-          defocus: props.focusLabel && props.focusLabel.uuid !== label.uuid,
+          focus: focusLabel && focusLabel.uuid === label.uuid,
+          defocus: focusLabel && focusLabel.uuid !== label.uuid,
         }"
         :style="{
-          top: `${label.boundingBox.top * 100}%`,
-          left: `${label.boundingBox.left * 100}%`,
-          width: `${label.boundingBox.width * 100}%`,
-          height: `${label.boundingBox.height * 100}%`,
+          top: `${(label.boundingBox?.top ?? 0) * 100}%`,
+          left: `${(label.boundingBox?.left ?? 0) * 100}%`,
+          width: `${(label.boundingBox?.width ?? 0) * 100}%`,
+          height: `${(label.boundingBox?.height ?? 0) * 100}%`,
         }"
         @click="emit('focus', label)"
       >
@@ -33,12 +33,12 @@
 <script setup lang="ts">
 import { defineProps, Ref, ref } from 'vue';
 
-import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
-import { LabelEntity } from 'src/flox/modules/image/entities/label.entity';
+import ImageEntity from 'src/flox/modules/image/entities/image.entity';
+import LabelEntity from 'src/flox/modules/image/entities/label.entity';
 
 const props = defineProps<{
-  image: ImageEntity;
-  focusLabel?: LabelEntity;
+  image?: ImageEntity | null;
+  focusLabel?: LabelEntity | null;
 }>();
 
 const emit = defineEmits<{

@@ -12,4 +12,4 @@ import FileService from './file.service';
   providers: [FileService, FileResolver],
   exports: [FileService],
 })
-export class FileModule {}
+export default class FileModule {}

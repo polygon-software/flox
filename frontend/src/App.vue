@@ -11,10 +11,10 @@ import { routerInstance } from 'boot/router';
 import Env from 'src/env';
 import { isModuleActive } from 'src/flox';
 import { MODULES } from 'src/flox/MODULES';
-import { RouterService } from 'src/services/RouterService';
+import RouterService from 'src/services/RouterService';
 
-import { AuthenticationService } from './flox/modules/auth/services/auth.service';
-import { ErrorService } from './services/ErrorService';
+import AuthenticationService from './flox/modules/auth/services/auth.service';
+import ErrorService from './services/ErrorService';
 
 // Add LogRocket to production deployments / builds
 if (Env.VUE_APP_PRODUCTION) {

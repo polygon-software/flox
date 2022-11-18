@@ -25,12 +25,9 @@ import { isModuleActive } from 'src/flox';
  * used without the corresponding module being active, since this could lead to erroneous behaviour.
  */
 
-const props = defineProps({
-  module: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  module: string;
+}>();
 
 // Determines whether the given module is active (and shows an error otherwise)
 const moduleValid = computed(() => {

@@ -14,10 +14,10 @@ import { ACCESS_CONTROL_QUERIES } from 'src/flox/modules/access-control/access-c
 import { NOTIFICATION_QUERIES } from 'src/flox/modules/notification/notification.query';
 
 // Queries for all modules
-export const AllQuery: QueryObject[] = [
+export default [
   ...USER_QUERIES,
   ...FILE_QUERIES,
   ...IMAGE_QUERIES,
   ...ACCESS_CONTROL_QUERIES,
   ...NOTIFICATION_QUERIES,
-];
+] as QueryObject[];

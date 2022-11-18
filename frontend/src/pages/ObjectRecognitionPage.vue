@@ -14,7 +14,6 @@
             outlined: true,
             autofocus: true,
             dense: true,
-            class: 'q-mr-sm',
             color: 'primary',
             label: $t('object_recognition.search_files'),
           }"
@@ -47,8 +46,8 @@
         </div>
         <div class="col-12 col-md-6 q-px-sm">
           <div v-if="focusImage" class="q-px-sm">
-            <h5 class="q-my-none">{{ focusImage.file.filename }}</h5>
-            <p class="text-grey">Path: {{ focusImage.file.path }}</p>
+            <h5 class="q-my-none">{{ focusImage.file?.filename }}</h5>
+            <p class="text-grey">Path: {{ focusImage.file?.path }}</p>
           </div>
           <q-list
             v-if="focusImage"
@@ -68,19 +67,19 @@
             >
               <q-item-section class="full-width">
                 <q-item-label class="text-weight-bold">
-                  {{ label.name }}
+                  {{ label?.name }}
                 </q-item-label>
                 <q-item-label caption>
-                  {{ label.parents.join(', ') }}
+                  {{ label?.parents?.join(', ') }}
                   <q-linear-progress
-                    :value="label.confidence / 100"
+                    :value="(label?.confidence ?? 0) / 100"
                     class="q-mt-md"
                   />
                 </q-item-label>
               </q-item-section>
               <q-item-section side top>
                 <q-item-label caption>
-                  {{ Math.round(label.confidence) }}%
+                  {{ Math.round(label?.confidence ?? 0.0) }}%
                 </q-item-label>
               </q-item-section>
             </q-item>
@@ -100,20 +99,21 @@
         class="cursor-pointer"
         @click="prev"
       />
-      <q-img
-        v-for="image in images"
-        :key="image.uuid"
-        :ratio="1.2"
-        width="150px"
-        :src="image.file.url"
-        class="image q-ma-sm cursor-pointer"
-        :class="{ active: focusImage && focusImage.uuid === image.uuid }"
-        @click="
-          focusImage && focusImage.uuid === image.uuid
-            ? (focusImage = null)
-            : (focusImage = image)
-        "
-      />
+      <template v-for="image in images" :key="image.uuid">
+        <q-img
+          v-if="image.file?.url"
+          :ratio="1.2"
+          width="150px"
+          :src="image.file?.url"
+          class="image q-ma-sm cursor-pointer"
+          :class="{ active: focusImage && focusImage.uuid === image.uuid }"
+          @click="
+            focusImage && focusImage.uuid === image.uuid
+              ? (focusImage = null)
+              : (focusImage = image)
+          "
+        />
+      </template>
       <q-icon
         name="arrow_forward_ios"
         size="md"
@@ -129,17 +129,17 @@
 import { computed, ComputedRef, onMounted, ref, Ref, watch } from 'vue';
 import { dom, useQuasar } from 'quasar';
 
-import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
+import ImageEntity from 'src/flox/modules/image/entities/image.entity';
 import {
   createImage,
   getAllMyImages,
   getImageForFile,
 } from 'src/flox/modules/image/services/image.service';
 import LabeledImage from 'src/flox/modules/image/components/LabeledImage.vue';
-import { LabelEntity } from 'src/flox/modules/image/entities/label.entity';
+import LabelEntity from 'src/flox/modules/image/entities/label.entity';
 import LazySearchField from 'components/forms/LazySearchField.vue';
 import { SEARCH_FILES } from 'src/flox/modules/file/file.query';
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 import {
   showErrorNotification,
   showNotification,
@@ -210,16 +210,17 @@ async function onImportButtonClick(): Promise<void> {
         const importedImage = await getImageForFile(file.uuid, 360);
         showNotification($q, 'Image already exists', {});
         return importedImage;
-      } catch (e) {
+      } catch (importError) {
         console.log('Creating new image');
         try {
           const createdImage = await createImage(file.uuid, true);
           showSuccessNotification($q, 'Created new Image!');
           return createdImage;
-        } catch (e) {
+        } catch (createError) {
           showErrorNotification($q, 'Could not create Image from File!');
         }
       }
+      return undefined;
     });
     filesToImport.value = [];
     importImageMode.value = false;
@@ -247,9 +248,9 @@ function focusOn(label: LabelEntity): void {
  * @param file - input file
  * @returns concatenation of path and name
  */
-function fullPathFormat(file: FileEntity): string | undefined {
+function fullPathFormat(file: FileEntity): string {
   if (!file.path || file.path === '/') {
-    return file.filename;
+    return file.filename ?? '';
   }
   if (!file.filename) {
     return file.path;

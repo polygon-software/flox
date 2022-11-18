@@ -43,7 +43,9 @@ import {
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits(useDialogPluginComponent.emits);
+
 const password = ref('');
 const passwordRep = ref('');
 

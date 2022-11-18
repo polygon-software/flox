@@ -2,13 +2,13 @@ import { deepFilter, tableFilter } from 'src/tools/filter.tool';
 
 describe('Filter Helpers', () => {
   let sentence: string;
-  let sentence_with_one_uppercase: string;
-  let sentence_uppercase: string;
+  let sentenceWithOneUppercase: string;
+  let sentenceUppercase: string;
   let hallo: string;
   beforeEach(() => {
     sentence = 'hallo ich bin';
-    sentence_with_one_uppercase = 'Hallo ich bin';
-    sentence_uppercase = 'HALLO ICH BIN';
+    sentenceWithOneUppercase = 'Hallo ich bin';
+    sentenceUppercase = 'HALLO ICH BIN';
     hallo = 'hallo';
   });
   describe('string is present in a given sentence', () => {
@@ -31,10 +31,10 @@ describe('Filter Helpers', () => {
     });
     it('should return whether a string is present in a sentence of type String with different upper-lowercase', () => {
       expect(deepFilter(sentence, 'hallo')).toBe(true);
-      expect(deepFilter(sentence_with_one_uppercase, 'Hallo')).toBe(true);
-      expect(deepFilter(sentence_with_one_uppercase, 'hallo')).toBe(true);
-      expect(deepFilter(sentence_uppercase, 'hallo')).toBe(true);
-      expect(deepFilter(sentence_with_one_uppercase, 'Hello')).toBe(false);
+      expect(deepFilter(sentenceWithOneUppercase, 'Hallo')).toBe(true);
+      expect(deepFilter(sentenceWithOneUppercase, 'hallo')).toBe(true);
+      expect(deepFilter(sentenceUppercase, 'hallo')).toBe(true);
+      expect(deepFilter(sentenceWithOneUppercase, 'Hello')).toBe(false);
       expect(deepFilter(sentence, 'hello')).toBe(false);
     });
     it('should return whether a string is present in a sentence with different depthLimits', () => {
@@ -43,7 +43,7 @@ describe('Filter Helpers', () => {
     });
     it('should return whether a string is present in a sentence of type Array', () => {
       expect(deepFilter([sentence], 'hallo')).toBe(true);
-      expect(deepFilter([sentence_uppercase], 'hallo')).toBe(true);
+      expect(deepFilter([sentenceUppercase], 'hallo')).toBe(true);
       expect(deepFilter(['monday', 'tuesday', sentence], 'hallo')).toBe(true);
       expect(deepFilter([sentence], 'hello')).toBe(false);
       expect(deepFilter(['monday', 'tuesday', sentence], 'hello')).toBe(false);
@@ -51,25 +51,25 @@ describe('Filter Helpers', () => {
     it('should return whether a string is present in a sentence of type Object', () => {
       expect(
         deepFilter(
-          { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+          { age: 40, firstName: 'Dickerson', lastName: 'Macdonald' },
           'Macdonald'
         )
       ).toBe(true);
       expect(
         deepFilter(
-          { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+          { age: 40, firstName: 'Dickerson', lastName: 'Macdonald' },
           'kerson'
         )
       ).toBe(true);
       expect(
         deepFilter(
-          { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+          { age: 40, firstName: 'Dickerson', lastName: 'Macdonald' },
           'Mcdonald'
         )
       ).toBe(false);
       expect(
         deepFilter(
-          { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+          { age: 40, firstName: 'Dickerson', lastName: 'Macdonald' },
           'karson'
         )
       ).toBe(false);
@@ -83,16 +83,16 @@ describe('Filter Helpers', () => {
   describe('tableFilter', () => {
     it('should return row of a table in which a string is present in that table', () => {
       const table = [
-        { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-        { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-        { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-        { age: 38, first_name: 'Jami', last_name: 'Carney' },
+        { age: 40, firstName: 'Dickerson', lastName: 'Macdonald' },
+        { age: 21, firstName: 'Larsen', lastName: 'Shaw' },
+        { age: 89, firstName: 'Geneva', lastName: 'Wilson' },
+        { age: 38, firstName: 'Jami', lastName: 'Carney' },
       ];
       expect(tableFilter(table, 'Dickerson')).toStrictEqual([
-        { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+        { age: 40, firstName: 'Dickerson', lastName: 'Macdonald' },
       ]);
       expect(tableFilter(table, 'Geneva')).toStrictEqual([
-        { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
+        { age: 89, firstName: 'Geneva', lastName: 'Wilson' },
       ]);
       expect(tableFilter(table, 'hallo')).toStrictEqual([]);
     });

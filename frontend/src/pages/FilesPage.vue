@@ -52,7 +52,7 @@ import { OnClickOutside } from '@vueuse/components';
 
 import FileUploadDialog from 'src/flox/modules/file/components/dialogs/FileUploadDialog.vue';
 import FileExplorer from 'src/flox/modules/file/components/tables/FileExplorer.vue';
-import { RouterService } from 'src/services/RouterService';
+import RouterService from 'src/services/RouterService';
 
 const $q = useQuasar();
 

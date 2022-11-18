@@ -3,7 +3,7 @@ import User from '../../auth/entities/user.entity';
 import AbstractCrudAccessControlResolver from '../crud-access-control/abstract-crud-access-control.resolver';
 import SearchArgs from '../search/dto/args/search.args';
 import SearchQueryOutputInterface from '../search/outputs/search-interface.output';
-import { DEFAULT_ROLES } from '../../roles/config';
+import { DefaultRoles } from '../../roles/config';
 
 import AbstractSearchAccessControlService from './abstract-search-access-control.service';
 
@@ -29,7 +29,7 @@ export default abstract class AbstractSearchAccessControlResolver<
     user?: User,
   ): Promise<SearchQueryOutputInterface<Entity>> {
     if (user) {
-      if (user.role === DEFAULT_ROLES.ADMIN) {
+      if (user.role === DefaultRoles.ADMIN) {
         return this.service.searchAsAdmin(queryArgs, this.searchKeys);
       }
       return this.service.searchAsUser(queryArgs, this.searchKeys, user);

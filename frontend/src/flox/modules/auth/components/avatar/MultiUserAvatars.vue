@@ -18,14 +18,14 @@
     style="margin-left: 90px"
     class="text-weight-bolder"
   >
-    +{{ props.users.length - 5 }}
+    +{{ users.length - 5 }}
   </span>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
 
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import { avatarForUser } from 'src/flox/modules/auth/services/user.service';
 
 const props = defineProps<{

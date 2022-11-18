@@ -1,6 +1,6 @@
 import { executeMutation } from 'src/apollo/mutation';
 import { executeQuery } from 'src/apollo/query';
-import { ImageEntity } from 'src/flox/modules/image/entities/image.entity';
+import ImageEntity from 'src/flox/modules/image/entities/image.entity';
 import {
   CREATE_IMAGE,
   DELETE_IMAGE,

@@ -17,7 +17,7 @@ import {
   SEARCH_MY_FILES,
   SEARCH_PUBLIC_FILES,
 } from 'src/flox/modules/file/file.query';
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
 import {
   CREATE_FILE,

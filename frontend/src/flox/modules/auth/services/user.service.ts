@@ -1,6 +1,6 @@
 import { executeMutation } from 'src/apollo/mutation';
 import { executeQuery } from 'src/apollo/query';
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import {
   CREATE_USER,
   DELETE_USER,

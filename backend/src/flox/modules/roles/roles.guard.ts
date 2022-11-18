@@ -7,13 +7,13 @@ import GetUserArgs from '../auth/dto/args/get-user.args';
 import User from '../auth/entities/user.entity';
 import UserService from '../auth/user.service';
 
-import { DEFAULT_ROLES } from './config';
+import { DefaultRoles } from './config';
 
 /**
  * Guard used for defining which roles can access a specific method
  */
 @Injectable()
-export class RolesGuard implements CanActivate {
+export default class RolesGuard implements CanActivate {
   /**
    * @param reflector - nest reflector
    * @param userService - user service, needed to retrieve user from database
@@ -44,8 +44,6 @@ export class RolesGuard implements CanActivate {
     const { user } = req;
     let dbUser: User | undefined;
 
-    console.log('---user', user);
-
     // Set user in request object
     if (user) {
       dbUser = await this.userService.getUser({
@@ -54,7 +52,7 @@ export class RolesGuard implements CanActivate {
 
       // Handle the case in which an alias is provided in header
       const alias = req.headers['user-alias'];
-      if (dbUser.role === DEFAULT_ROLES.ADMIN && alias) {
+      if (dbUser.role === DefaultRoles.ADMIN && alias) {
         dbUser = await this.userService.getUser({
           uuid: alias,
         } as GetUserArgs);
@@ -62,7 +60,6 @@ export class RolesGuard implements CanActivate {
 
       // Set either cognito user or alias user as principal to request
       req.principal = dbUser;
-      console.log('Setting principal', dbUser);
     }
 
     // Public endpoints are generally accessible
@@ -76,7 +73,7 @@ export class RolesGuard implements CanActivate {
     }
 
     // Admin has access to everything
-    if (dbUser && dbUser.role === DEFAULT_ROLES.ADMIN) {
+    if (dbUser && dbUser.role === DefaultRoles.ADMIN) {
       return true;
     }
 

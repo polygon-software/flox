@@ -50,14 +50,13 @@ import {
  * This component contains field to enter a new password, as well as another field to repeat the new password. Both entries need to match.
  */
 
-const props = defineProps({
-  modelValue: {
-    required: true,
-    type: String,
-  },
-});
+const props = defineProps<{
+  modelValue: string;
+}>();
 
-const emit = defineEmits(['change']);
+const emit = defineEmits<{
+  (e: 'change', value: string): void;
+}>();
 
 const password = ref(props.modelValue ?? '');
 const passwordRepeat = ref(props.modelValue ?? '');
@@ -75,14 +74,6 @@ const matchingRules = [
     val === password.value || i18n.global.t('errors.non_matching_password'),
 ];
 
-watch(password, (newVal) => {
-  emitUpdate(newVal);
-});
-
-watch(passwordRepeat, (newVal) => {
-  emitUpdate(newVal);
-});
-
 /**
  * Emits an update with new value
  *
@@ -96,4 +87,12 @@ function emitUpdate(value: string): void {
     emit('change', '');
   }
 }
+
+watch(password, (newVal) => {
+  emitUpdate(newVal);
+});
+
+watch(passwordRepeat, (newVal) => {
+  emitUpdate(newVal);
+});
 </script>

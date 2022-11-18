@@ -1,6 +1,6 @@
 import { QVueGlobals } from 'quasar';
 
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 import MusicPlayerDialog from 'src/flox/modules/file/components/dialogs/MusicPlayerDialog.vue';
 import ImageDialog from 'src/flox/modules/file/components/dialogs/ImageDialog.vue';
 import PdfDialog from 'src/flox/modules/file/components/dialogs/PdfDialog.vue';

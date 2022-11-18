@@ -6,7 +6,7 @@ import {
   CognitoUserPool,
   CognitoUserSession,
 } from 'amazon-cognito-identity-js';
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { Cookies } from 'quasar';
 import { boot } from 'quasar/wrappers';
 
@@ -54,7 +54,7 @@ function serverSideAuth(
     RefreshToken,
   });
 
-  const userData = jwt_decode<{ username: string }>(
+  const userData = jwtDecode<{ username: string }>(
     JSON.parse(accessToken) as string
   );
 

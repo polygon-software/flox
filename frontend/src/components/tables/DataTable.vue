@@ -29,13 +29,13 @@
           <QPopupEdit
             v-if="cellProps.col.edit"
             :ref="
-              (el) => {
+              (el: any) => {
                 popupRefs[getPopupEditKey(cellProps.row, cellProps.col)] = el;
               }
             "
             v-slot="scope"
             buttons
-            :validate="validateInput(cellProps.col, $event)"
+            :validate="validateInput(cellProps.col)"
             :model-value="cellProps.row[cellProps.col.field]"
             :label-set="$t('general.save')"
             :label-cancel="$t('general.cancel')"
@@ -61,11 +61,7 @@
       <template #body-selection="scope">
         <q-checkbox
           :model-value="scope.selected"
-          @update:model-value="
-            (val, evt) => {
-              Object.getOwnPropertyDescriptor(scope, 'selected').set(val, evt);
-            }
-          "
+          @update:model-value="scope.selected = $event"
         />
       </template>
       <template #top-right="headerProps">
@@ -174,33 +170,37 @@ import {
   watchEffect,
 } from 'vue';
 
-import { ColumnInterface, useDataTable } from 'components/tables/useDataTable';
+import {
+  ColumnAlign,
+  ColumnInterface,
+  useDataTable,
+} from 'components/tables/useDataTable';
 import { MutationObject } from 'src/apollo/mutation';
 import { QueryObject } from 'src/apollo/query';
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import ConfirmButton from 'components/buttons/ConfirmButton.vue';
 import { ValidationRule } from 'src/tools/validation.tool';
 
 const props = withDefaults(
   defineProps<{
-    title?: string;
-    exportSelection: boolean;
-    deleteSelection: boolean;
-    hideFullscreen: boolean;
-    hideSearch: boolean;
-    hideColumnSelector: boolean;
-    prependSlot: boolean;
-    prependName?: string;
-    appendSlot: boolean;
-    appendName?: string;
-    multi: boolean;
-    removeIcon: string;
-    removeLabel: string;
     query: QueryObject;
     updateMutation: MutationObject;
     deleteMutation: MutationObject;
     columns: ColumnInterface<BaseEntity>[];
-    tableProps: QTableProps;
+    tableProps?: QTableProps;
+    title?: string;
+    exportSelection?: boolean;
+    deleteSelection?: boolean;
+    hideFullscreen?: boolean;
+    hideSearch?: boolean;
+    hideColumnSelector?: boolean;
+    prependSlot?: boolean;
+    prependName?: string;
+    appendSlot?: boolean;
+    appendName?: string;
+    multi?: boolean;
+    removeIcon?: string;
+    removeLabel?: string;
   }>(),
   {
     title: undefined,
@@ -290,27 +290,21 @@ watchEffect(() => {
 
 const extendedColumns: ComputedRef<ColumnInterface<BaseEntity>[]> = computed(
   () => {
+    const prependContent = {
+      name: 'prepend',
+      align: ColumnAlign.left,
+      field: 'prepend',
+      label: props.prependName ?? '',
+    };
+    const appendContent = {
+      name: 'append',
+      field: 'append',
+      label: props.appendName ?? '',
+    };
     return [
-      ...(props.prependSlot
-        ? [
-            {
-              name: 'prepend',
-              align: 'left',
-              field: 'prepend',
-              label: props.prependName ?? '',
-            },
-          ]
-        : []),
+      ...(props.prependSlot ? [prependContent] : []),
       ...props.columns,
-      ...(props.appendSlot
-        ? [
-            {
-              name: 'append',
-              field: 'append',
-              label: props.appendName ?? '',
-            },
-          ]
-        : []),
+      ...(props.appendSlot ? [appendContent] : []),
     ];
   }
 );

@@ -32,9 +32,11 @@ import ImageSearchOutput from './outputs/image-search.output';
 export default class ImageService extends AbstractSearchAccessControlService<Image> {
   // Rekognition credentials
   private readonly credentials = {
-    region: this.configService.getOrThrow('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.getOrThrow('ADMIN_AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.getOrThrow(
+    region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow<string>(
+      'ADMIN_AWS_ACCESS_KEY_ID',
+    ),
+    secretAccessKey: this.configService.getOrThrow<string>(
       'ADMIN_AWS_SECRET_ACCESS_KEY',
     ),
   };
@@ -444,7 +446,12 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
       DateTimeOriginal: undefined,
     };
     try {
-      imageMetaData = (await parse(file.url ?? '')) || {};
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const parsed: Record<string, unknown> = await parse(file.url ?? '');
+      imageMetaData = {
+        ...imageMetaData,
+        ...parsed,
+      };
     } catch (e: any) {
       console.error(e);
     }

@@ -22,7 +22,7 @@ import flox from '../flox.config.json';
 import configuration from './config/configuration';
 import { isServerless } from './flox/core/flox-helpers';
 import { floxModules, floxProviders } from './flox/flox';
-import { GqlThrottlerGuard } from './flox/modules/GqlThrottlerGuard';
+import GqlThrottlerGuard from './flox/modules/GqlThrottlerGuard';
 import HealthcheckController from './flox/modules/healthcheck/healthcheck.controller';
 import env from './env';
 
@@ -36,7 +36,10 @@ import env from './env';
         : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       driver: ApolloDriver,
-      context: ({ req, res }) => ({ req, res }),
+      context: ({ req, res }: { req: Request; res: Response }) => ({
+        req,
+        res,
+      }),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -69,12 +72,12 @@ import env from './env';
       useFactory: (configService: ConfigService) =>
         ({
           type: 'postgres',
-          host: configService.getOrThrow('database.host'),
-          port: configService.getOrThrow('database.port'),
-          username: configService.getOrThrow('database.username'),
-          password: configService.getOrThrow('database.password'),
-          database: configService.getOrThrow('database.database'),
-          entities: [configService.getOrThrow('entities')],
+          host: configService.getOrThrow<string>('database.host'),
+          port: configService.getOrThrow<number>('database.port'),
+          username: configService.getOrThrow<string>('database.username'),
+          password: configService.getOrThrow<string>('database.password'),
+          database: configService.getOrThrow<string>('database.database'),
+          entities: [configService.getOrThrow<string>('entities')],
           synchronize: env.DEV,
           logging: ['query', 'error'],
         } as PostgresConnectionOptions),
@@ -110,6 +113,7 @@ import env from './env';
     HttpModule,
 
     // Flox modules
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...(floxModules() as any[]),
     // Add any custom modules here
   ],
@@ -121,6 +125,7 @@ import env from './env';
       useClass: GqlThrottlerGuard,
     },
     // Flox module Providers
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     ...floxProviders(),
     // Add any other custom module providers here
   ],
@@ -129,4 +134,4 @@ import env from './env';
 /**
  * Main Module
  */
-export class AppModule {}
+export default class AppModule {}

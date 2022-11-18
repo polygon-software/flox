@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UserModule } from '../auth/user.module';
+import UserModule from '../auth/user.module';
 import User from '../auth/entities/user.entity';
-import { NotificationModule } from '../notifications/notification.module';
+import NotificationModule from '../notifications/notification.module';
 
 import UserGroup from './entities/user-group.entity';
 import AccessControlService from './access-control.service';

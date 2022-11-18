@@ -2,7 +2,7 @@
   <q-card-section>
     <q-list separator>
       <q-item
-        v-for="(file, index) in props.files"
+        v-for="(file, index) in files"
         :key="file.content.name"
         class="row justify-between flex-center"
       >
@@ -53,10 +53,11 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import { QFile } from 'quasar';
+
+import { SelectedFile } from 'src/flox/modules/file/tools/upload.tools';
 
 const props = defineProps<{
-  files: QFile[];
+  files: SelectedFile[];
 }>();
 
 const emit = defineEmits<{

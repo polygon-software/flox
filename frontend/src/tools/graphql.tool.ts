@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual';
 import pick from 'lodash/pick';
 
 import { MutationObject } from 'src/apollo/mutation';
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
 type Primitive = number | string | boolean | null | undefined;
 

@@ -40,7 +40,7 @@ import {
   ref,
 } from 'vue';
 
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 
 const props = withDefaults(
   defineProps<{
@@ -52,7 +52,10 @@ const props = withDefaults(
   }
 );
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits([...useDialogPluginComponent.emits]);
+
+const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 
 const audio = new Audio(props.file.url);
 
@@ -76,6 +79,7 @@ const updateInterval = setInterval(() => {
 const songInfo: ComputedRef<{ artist: string; song: string }> = computed(() => {
   const splitters = ['-', ':'];
   if (props.file.filename) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const splitter of splitters) {
       if (props.file.filename.includes(splitter)) {
         const split = props.file.filename.split(splitter);
@@ -141,6 +145,4 @@ onMounted(() => {
     playing.value = true;
   }
 });
-
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 </script>

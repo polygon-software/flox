@@ -7,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
 export default class MessageEntity extends BaseEntity {
   @IsOptional()

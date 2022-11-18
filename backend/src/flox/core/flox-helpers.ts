@@ -5,7 +5,8 @@ import { Request } from 'express';
 import flox from '../../../flox.config.json';
 import Env from '../../env';
 import { MODULES } from '../MODULES';
-import User from '../modules/auth/entities/user.entity';
+
+import type User from '../modules/auth/entities/user.entity';
 
 export interface FrontendRequest extends Request {
   user?: {
@@ -28,13 +29,14 @@ export type FloxModuleName = keyof typeof flox.modules;
  * @returns the request
  */
 export function getRequest(context: ExecutionContext): FrontendRequest {
-  const ctx = GqlExecutionContext.create(context);
+  const ctx: GqlExecutionContext = GqlExecutionContext.create(context);
   // If call is not from GraphQL, get req regularly
   if (!ctx.getContext()) {
     return context.switchToHttp().getRequest();
   }
   // Call is from GraphQL
-  return ctx.getContext().req;
+  const graphQlContext: { req: FrontendRequest } = ctx.getContext();
+  return graphQlContext.req;
 }
 
 /**

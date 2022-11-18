@@ -1,12 +1,12 @@
 import { IsDecimal, IsOptional, IsString } from 'class-validator';
 
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
-import { BoundingboxEntity } from 'src/flox/modules/image/entities/boundingbox.entity';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
+import BoundingboxEntity from 'src/flox/modules/image/entities/boundingbox.entity';
 
 /**
  * Class representing an image data object
  */
-export class LabelEntity extends BaseEntity {
+export default class LabelEntity extends BaseEntity {
   @IsOptional()
   @IsString()
   name?: string;
@@ -17,8 +17,8 @@ export class LabelEntity extends BaseEntity {
 
   @IsOptional()
   @IsString({ each: true })
-  parents?: string;
+  parents?: string[];
 
   @IsOptional()
-  boundingBox?: BoundingboxEntity[];
+  boundingBox?: BoundingboxEntity;
 }

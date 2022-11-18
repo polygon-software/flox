@@ -783,7 +783,9 @@ export default abstract class AbstractCrudAccessControlService<
       ...this.accessControlRelationOptions,
     });
 
-    sudo || assertWriteAccess(entity, user);
+    if (!sudo) {
+      assertWriteAccess(entity, user);
+    }
 
     const readAccess = [
       ...new Set([

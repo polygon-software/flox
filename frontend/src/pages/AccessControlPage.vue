@@ -43,7 +43,7 @@
     <div class="col-12 col-lg-8 q-pa-sm">
       <UserTable
         v-if="selectedGroup"
-        :users="selectedGroup.users"
+        :users="selectedGroup?.users ?? []"
         :title="$t('access_control.users')"
         @update:selected="selectedUsers = $event"
       >
@@ -91,7 +91,7 @@
 import { computed, ComputedRef, ref, Ref } from 'vue';
 import { useQuasar } from 'quasar';
 
-import { ColumnInterface } from 'components/tables/useDataTable';
+import { ColumnAlign, ColumnInterface } from 'components/tables/useDataTable';
 import UserGroupEntity from 'src/flox/modules/access-control/entities/user-group.entity';
 import {
   UPDATE_USER_GROUP,
@@ -102,7 +102,7 @@ import { SEARCH_USER_GROUPS } from 'src/flox/modules/access-control/access-contr
 import DataTable from 'components/tables/DataTable.vue';
 import CreateAccessControlGroupDialog from 'src/flox/modules/access-control/components/dialogs/CreateAccessControlGroupDialog.vue';
 import UserTable from 'src/flox/modules/auth/components/tables/UserTable.vue';
-import { UserEntity } from 'src/flox/modules/auth/entities/user.entity';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 import ConfirmButton from 'components/buttons/ConfirmButton.vue';
 import {
   addUsersToUserGroup,
@@ -188,7 +188,7 @@ function openCreateAccessGroupDialog(): void {
 const userGroupColumns: Ref<ColumnInterface<UserGroupEntity>[]> = ref([
   {
     name: 'name',
-    align: 'left',
+    align: ColumnAlign.left,
     label: i18n.global.t('access_control.group_name'),
     field: 'name',
     sortable: true,

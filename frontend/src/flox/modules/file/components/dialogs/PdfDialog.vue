@@ -4,7 +4,7 @@
       class="relative-position"
       style="min-width: 80vw; width: 80vw; min-height: 90vh; height: 90vh"
     >
-      <q-pdfviewer v-model="visible" :src="props.pdf.url" type="html5" />
+      <q-pdfviewer v-model="visible" :src="pdf.url" type="html5" />
     </q-card>
   </q-dialog>
 </template>
@@ -13,12 +13,13 @@
 import { useDialogPluginComponent } from 'quasar';
 import { defineProps, Ref, ref } from 'vue';
 
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
 
 const props = defineProps<{
   pdf: FileEntity;
 }>();
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits([...useDialogPluginComponent.emits]);
 
 const visible: Ref<boolean> = ref(true);

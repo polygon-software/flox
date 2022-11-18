@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialogRef" :persistent="true">
+  <q-dialog ref="dialogRef" persistent>
     <q-card class="q-pa-sm text-center" style="width: 400px; min-height: 300px">
       <q-card-section class="flex flex-center column">
         <h5 class="q-ma-sm">
@@ -8,7 +8,7 @@
         <p class="text-grey-8">
           {{ $t('authentication.set_up_2fa_description') }}
         </p>
-        <QrcodeVue :value="props.value" :size="180" />
+        <QrcodeVue :value="value" :size="180" />
       </q-card-section>
       <q-separator dark />
       <q-card-actions align="center">
@@ -29,14 +29,11 @@ import QrcodeVue from 'qrcode.vue';
 import { useDialogPluginComponent } from 'quasar';
 import { defineEmits, defineProps } from 'vue';
 
-const props = defineProps({
-  value: {
-    type: String,
-    required: true,
-    default: '',
-  },
-});
+const props = defineProps<{
+  value: string;
+}>();
 
+// eslint-disable-next-line vue/define-emits-declaration
 defineEmits(useDialogPluginComponent.emits);
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
