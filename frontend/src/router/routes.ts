@@ -64,6 +64,12 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     ],
   },
 
+  ADMIN_PANEL: {
+    path: '/admin-panel',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AdminPage.vue') }],
+  },
+
   // Wildcard route for non-covered routes
   WILDCARD: {
     path: '/:catchAll(.*)*',

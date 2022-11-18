@@ -7,8 +7,16 @@ import {
   JoinTable,
   ManyToMany,
 } from 'typeorm';
-import { IsEmail, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsLocale,
+  IsLowercase,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
+import flox from '../../../../../flox.config.json';
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 import { isModuleActive } from '../../../core/flox-helpers';
 import { MODULES } from '../../../MODULES';
@@ -24,7 +32,18 @@ export default class User extends BaseEntity {
   @Field(() => String, { description: 'Username' })
   @Column()
   @IsString()
+  @MinLength(6)
+  @MaxLength(25)
   username: string;
+
+  @Field(() => String, { description: 'Preferred language of user' })
+  @Column({ type: 'text', default: 'en' })
+  @IsString()
+  @MinLength(2)
+  @MaxLength(2)
+  @IsLowercase()
+  @IsLocale()
+  lang = 'en';
 
   @Field(() => String, { description: 'E-mail address' })
   @Column()
@@ -61,6 +80,17 @@ export default class User extends BaseEntity {
       if (this.role && !allowedRoles.includes(this.role)) {
         throw new Error(`Invalid role '${this.role}'`);
       }
+    }
+  }
+
+  /**
+   * Before inserting or updating data, ensures the language is available
+   */
+  @BeforeInsert()
+  @BeforeUpdate()
+  validateLang(): void {
+    if (!flox.i18n.availableLocales.includes(this.lang)) {
+      throw new Error(`Invalid language '${this.lang}'`);
     }
   }
 }

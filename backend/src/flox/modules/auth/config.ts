@@ -20,6 +20,7 @@ const defaultConfig: AuthModuleConfig = {
 
 /**
  * Gets the module's actual configuration
+ *
  * @returns configuration
  */
 export function moduleConfig(): AuthModuleConfig {

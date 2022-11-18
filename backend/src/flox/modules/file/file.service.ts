@@ -26,6 +26,9 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
     secretAccessKey: this.configService.get('ADMIN_AWS_SECRET_ACCESS_KEY'),
   };
 
+  /**
+   * @returns file repository
+   */
   get repository(): Repository<S3File> {
     return this.fileRepository;
   }
@@ -46,6 +49,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
 
   /**
    * Creates a presigned URL for uploading a file
+   *
    * @param file - database entry of file
    * @returns pre-signed URL for upload
    */
@@ -67,8 +71,10 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
 
   /**
    * Add url to file objects for private files
+   *
    * @param file - S3 File from Database
    * @param args - contains UUID and optionally, expiration time
+   * @param args.expires - number in seconds, defines when file url expires
    * @returns the file including an url from which it can be accessed
    */
   async addFileUrl(file: S3File, args: { expires?: number }): Promise<S3File> {
@@ -93,8 +99,10 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
 
   /**
    * Adds urls to an array of files
+   *
    * @param files - files on which url shall be added
    * @param args - contains expiry
+   * @param args.expires - number in seconds, defines when file url expires
    * @returns files with url
    */
   async addFileUrls(
@@ -106,6 +114,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
 
   /**
    * Deletes an S3 from S3. Be sure to have the database entry deleted manually as well.
+   *
    * @param file - database entry that was already deleted
    * @returns the file that was deleted
    */
@@ -127,6 +136,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
 
   /**
    * Determines, for a list of files, the part of the files paths that immediately follow a provided base path
+   *
    * @param files - files for which folders should be extracted
    * @param path - base path from which on folder names should be determined
    * @returns list of folder outputs

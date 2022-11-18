@@ -38,6 +38,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   /**
    * Validates the JWT token and appends the user to the Request
    * Note: This is only triggered once the JWT's validity (from-url and expiration) has been checked successfully!
+   *
    * @param payload - decoded JSON Web Token (JWT)
    * @returns object with Cognito userId and username
    */

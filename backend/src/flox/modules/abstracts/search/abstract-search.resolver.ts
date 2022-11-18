@@ -19,6 +19,7 @@ export default abstract class AbstractSearchResolver<
 
   /**
    * Queries for all rows that fit query criteria, best used in combination with the DataTable
+   *
    * @param searchQueryArgs - contain table filtering rules
    * @param options - options to extend search query
    * @returns data that fit criteria

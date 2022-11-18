@@ -5,7 +5,8 @@
     "file": true,
     "image": true,
     "sharing": false,
-    "email": false
+    "email": false,
+    "notification": true
   },
   "moduleOptions": {
     "auth": {
@@ -21,7 +22,12 @@
     "sharing": {},
     "email": {
       "email_sender": "test@polygon-project.ch"
-    }
+    },
+    "notification": {}
+  },
+  "i18n": {
+    "defaultLocale": "en",
+    "availableLocales": ["de", "en"]
   },
   "general": {
     "database_name": "floxdb",

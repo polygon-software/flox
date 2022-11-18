@@ -10,6 +10,7 @@ import { UPLOAD_STATUS } from 'src/flox/modules/file/enums/uploadStatus.enum';
 
 /**
  * Composable to get all functions needed to handle file upload
+ *
  * @param filePicker - Vue ref to a quasar file picker component
  * @returns composition
  */
@@ -28,6 +29,7 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
 
   /**
    * Notify the user that the upload failed
+   *
    * @param failedEntries - failed entries
    */
   function onFailed(failedEntries: SelectedFile[]): void {
@@ -41,6 +43,7 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
 
   /**
    * Notify the user that the upload succeeded
+   *
    * @param successfulEntries - successful entries
    */
   function onSuccess(successfulEntries: SelectedFile[]): void {
@@ -61,6 +64,7 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
 
   /**
    * Removes a file from the file list
+   *
    * @param index - The index of file to remove
    */
   function removeFile(index: number): void {
@@ -76,6 +80,7 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
 
   /**
    * Triggered when a file is picked from the file picker dialog
+   *
    * @param newFiles - the newly picked files
    */
   function onFilePicked(newFiles: File[]): void {
@@ -91,6 +96,7 @@ export default function useFileUpload(filePicker: Ref<QFile | null>): {
 
   /**
    * Triggers a separate upload for each file. Only uploads files that haven't been successfully uploaded before.
+   *
    * @param path - path to which file shall be uploaded to
    */
   async function uploadFiles(path: string): Promise<void> {

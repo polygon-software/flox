@@ -7,6 +7,7 @@ import { moduleConfig } from './config';
 export default class EmailService {
   /**
    * Sends a test e-mail
+   *
    * @param recipient - e-mail recipient
    * @param credentials - SES auth credentials
    */

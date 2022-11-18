@@ -72,6 +72,7 @@ export { routerInstance };
 
 /**
  * Returns the component of the dashboard for the currently logged-in user
+ *
  * @param user - the user, if any
  * @param $authStore - authentication store
  * @returns the layout component

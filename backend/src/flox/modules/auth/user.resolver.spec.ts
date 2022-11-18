@@ -48,6 +48,7 @@ describe('UserResolver', () => {
       username: 'Test User',
       email: 'test@test.com',
       cognitoUuid: '1234-abcd-4567',
+      lang: 'en',
       role: DEFAULT_ROLES.ADMIN,
     };
 
@@ -58,6 +59,7 @@ describe('UserResolver', () => {
       createdAt: date,
       updatedAt: date,
       validateRole: jest.fn(),
+      validateLang: jest.fn(),
       groups: [],
       ...input,
     };

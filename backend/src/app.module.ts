@@ -11,12 +11,20 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import {
+  AcceptLanguageResolver,
+  CookieResolver,
+  I18nModule,
+} from 'nestjs-i18n';
+
+import flox from '../flox.config.json';
 
 import configuration from './config/configuration';
 import { isServerless } from './flox/core/flox-helpers';
 import { floxModules, floxProviders } from './flox/flox';
 import { GqlThrottlerGuard } from './flox/modules/GqlThrottlerGuard';
 import HealthcheckController from './flox/modules/healthcheck/healthcheck.controller';
+import env from './env';
 
 @Module({
   imports: [
@@ -67,7 +75,7 @@ import HealthcheckController from './flox/modules/healthcheck/healthcheck.contro
           password: configService.getOrThrow('database.password'),
           database: configService.getOrThrow('database.database'),
           entities: [configService.getOrThrow('entities')],
-          synchronize: true,
+          synchronize: env.DEV,
           logging: ['query', 'error'],
         } as PostgresConnectionOptions),
       inject: [ConfigService],
@@ -83,6 +91,17 @@ import HealthcheckController from './flox/modules/healthcheck/healthcheck.contro
         // Don't throttle request that have 'bingbot' defined in them.
         // Example user agent: Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)
         /'bingbot'/gi,
+      ],
+    }),
+    I18nModule.forRoot({
+      fallbackLanguage: flox.i18n.defaultLocale,
+      loaderOptions: {
+        path: join(__dirname, '/i18n/'),
+        watch: env.DEV,
+      },
+      resolvers: [
+        { use: CookieResolver, options: 'lang' },
+        AcceptLanguageResolver,
       ],
     }),
 

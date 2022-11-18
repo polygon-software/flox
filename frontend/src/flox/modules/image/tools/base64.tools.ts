@@ -4,6 +4,7 @@
 
 /**
  * Convert a file to a data base64
+ *
  * @param file - The file you want to convert.
  * @returns the data URL for the file
  */
@@ -19,8 +20,9 @@ export async function toBase64(file: File): Promise<string> {
 
 /**
  * Converts a file to a data URL using file reader
+ *
  * @param file - The file to convert
- * @return Data URL of the file
+ * @returns Data URL of the file
  */
 export async function toDataUrl(
   file: File

@@ -4,6 +4,7 @@ export const ALIAS_COOKIE_NAME = 'authentication.alias';
 
 /**
  * Returns the currently set alias
+ *
  * @returns uuid of currently set alias or empty string
  */
 export function getAlias(): string {
@@ -12,6 +13,7 @@ export function getAlias(): string {
 
 /**
  * Sets a new alias as a cookie
+ *
  * @param aliasUuid - uuid of user that shall be aliased
  */
 export function setAlias(aliasUuid: string): void {

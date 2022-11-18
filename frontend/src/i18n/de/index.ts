@@ -18,6 +18,10 @@ export default {
     search: 'Suchen',
     display: 'Anzeigen',
   },
+  locales: {
+    de: 'Deutsch',
+    en: 'Englisch',
+  },
   authentication: {
     authentication: 'Authentifizierung',
     welcome_back: 'Willkommen zurück!',
@@ -139,6 +143,17 @@ export default {
     ctrl_shift_hint:
       'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren',
   },
+  notification: {
+    notifications: 'Benachrichtigungen',
+    no_notifications: 'Keine neuen Benachrichtigungen',
+    invalid_title: 'Die Länge des Titels ist ungültig',
+    invalid_content: 'Die Länge des Inhalts ist ungültig',
+    send_notificaton: 'Benachrichtigungen absenden',
+    notification_title: 'Nachricht Titel',
+    notification_content: 'Nachricht Inhalt',
+    notification_link: 'Nachricht Link (optional)',
+    sent: 'Benachrichtigung gesendet!',
+  },
   pages: {
     home: {
       title: 'Home',
@@ -159,9 +174,7 @@ export default {
     face_recognition: 'Gesichtserkennung',
     text_extraction: 'Text Extraktion',
     settings: 'Einstellungen',
-    server_health: 'Server Zustand',
-    mail: 'E-Mail',
-    feedback: 'Feedback',
+    admin_panel: 'Administrator-Sektion',
   },
   footer: {
     developers: 'Entwickler',
@@ -180,6 +193,12 @@ export default {
       'Du siehst die Applikation momentan mit einem aktiven Alias auf den User mit der ID',
     description:
       'Dieses Modul kann verwendet werden um die Applikation aus der Sicht eines anderen Benutzers zu erleben. Diese Funktion ist nur für Administratoren freigeschaltet.',
+  },
+  admin_panel: {
+    admin_panel: 'Administrator-Sektion',
+    system_notification: 'Systembenachrichtigungen',
+    broadcast_message:
+      'Benachrichtige Benutzer in deinem System über Updates, Downtime oder Neuerungen. Achtung: Diese Nachrichten werden an alle Benutzer versendet und sollten daher nur in Ausnahmefällen verschickt werden.',
   },
   access_control: {
     users: 'Benutzer',

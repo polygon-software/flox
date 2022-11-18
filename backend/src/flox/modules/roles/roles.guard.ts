@@ -14,6 +14,10 @@ import { DEFAULT_ROLES } from './config';
  */
 @Injectable()
 export class RolesGuard implements CanActivate {
+  /**
+   * @param reflector - nest reflector
+   * @param userService - user service, needed to retrieve user from database
+   */
   constructor(
     private readonly reflector: Reflector,
     private readonly userService: UserService,
@@ -21,6 +25,7 @@ export class RolesGuard implements CanActivate {
 
   /**
    * Gets the request from context
+   *
    * @param context - request execution context
    * @returns request
    */
@@ -30,6 +35,7 @@ export class RolesGuard implements CanActivate {
 
   /**
    * Validate that the user has appropriate rights to activate API endpoint.
+   *
    * @param context - context
    * @returns can activate
    */
@@ -86,6 +92,7 @@ export class RolesGuard implements CanActivate {
 
   /**
    * whether endpoint is Public
+   *
    * @param context - context
    * @returns  is public
    */
@@ -101,6 +108,7 @@ export class RolesGuard implements CanActivate {
 
   /**
    * Checks if the user is logged in and the access control is "loggedIn", allowing access to all logged in users
+   *
    * @param context - context
    * @param roles - whitelisted roles
    * @param dbUser - the requesting user

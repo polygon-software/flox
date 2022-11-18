@@ -17,6 +17,13 @@ export default abstract class AbstractSearchService<
 > extends AbstractCrudService<Entity> {
   abstract get repository(): Repository<Entity>;
 
+  /**
+   * Assembles options to search provided filter on given keys
+   *
+   * @param searchKeys - list of search  keys that are scanned
+   * @param filter - value that is searched on keys
+   * @returns where options including Like-searches
+   */
   private nestedSearch(
     searchKeys: (keyof Entity)[],
     filter: string,
@@ -31,6 +38,7 @@ export default abstract class AbstractSearchService<
 
   /**
    * Queries for all rows that fit query criteria, best used in combination with the DataTable
+   *
    * @param searchQueryArgs - contain table filtering rules
    * @param searchKeys - key on which search string value is being searched
    * @param options - options to extend search query

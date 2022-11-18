@@ -13,6 +13,7 @@ export type Credentials = {
 
 /**
  * Sends an e-mail, optionally with attachment(s) using SES and Nodemailer
+ *
  * @param credentials - SES credentials object
  * @param from - the sender's e-mail address
  * @param to - list of recipient's e-mail addresses

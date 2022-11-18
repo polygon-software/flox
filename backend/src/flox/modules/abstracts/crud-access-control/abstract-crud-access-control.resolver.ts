@@ -22,6 +22,7 @@ export default abstract class AbstractCrudAccessControlResolver<
 
   /**
    * Finds all user groups with read access to an entity
+   *
    * @param getOneArgs - contains uuid of entity
    * @returns list of user groups with read access to the entity
    */
@@ -31,6 +32,7 @@ export default abstract class AbstractCrudAccessControlResolver<
 
   /**
    * Finds all user groups with write access to an entity
+   *
    * @param getOneArgs - contains uuid of entity
    * @returns list of user groups with write access to the entity
    */
@@ -41,6 +43,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Retrieves a single item from the database. Depending on whether a user is logged in and whether
    * the user has an admin role, returns public/users/admin entry only.
+   *
    * @param getOneArgs - contains uuid of item to be retrieved
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -64,6 +67,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Retrieves a single entity from the database, but ignores any access right settings. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   *
    * @param getOneArgs - contains uuid of item to be retrieved
    * @param options - additional type ORM find options that are applied to find query
    * @returns the one item that was received
@@ -78,6 +82,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Retrieves multiple items explicitely specified by their uuid. Depending on whether a user is logged in and whether
    * the user has an admin role, returns public/users/admin entities only.
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -101,6 +106,7 @@ export default abstract class AbstractCrudAccessControlResolver<
    * Retrieves multiple items explicitely specified by their uuid. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these items. This
    * endpoint does not return public items, though, since they do not explicitely belong to the user.
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -117,6 +123,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Retrieves multiple items explicitely specified by their uuid. It only returns the entities that are marked with
    * public read access.
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param options - additional type ORM find options that are applied to find query
    * @returns the list of found entities
@@ -131,6 +138,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Retrieves multiple items explicitely specified by their uuid. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param options - additional type ORM find options that are applied to find query
    * @returns the list of found entities
@@ -145,6 +153,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Retrieves all items from a database with applying pagination. Depending on whether a user is logged in and whether
    * the user has an admin role, returns public/users/admin entities only.
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -168,6 +177,7 @@ export default abstract class AbstractCrudAccessControlResolver<
    * Retrieves all items from a database with applying pagination. It only returns the entities that the
    * user is the owner or the user is part of an access group that has read access to these items. This
    * endpoint does not return public items, though, since they do not explicitely belong to the user.
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param user - the user that retrieves the entity
    * @param options - additional type ORM find options that are applied to find query
@@ -184,6 +194,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Retrieves all items from a database with applying pagination. It only returns the entities that are marked with
    * public read access.
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param options - additional type ORM find options that are applied to find query
    * @returns page of entities
@@ -198,6 +209,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Retrieves all items from a database with applying pagination. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param options - additional type ORM find options that are applied to find query
    * @returns page of entities
@@ -211,6 +223,7 @@ export default abstract class AbstractCrudAccessControlResolver<
 
   /**
    * Creates a new item based on the create input and sets the user as the items owner.
+   *
    * @param createInput - specifications of item, must be deep partial of entity
    * @param user - the user that creates the entity
    * @param entity - additional information about the entity that is not provided by the create input
@@ -227,6 +240,7 @@ export default abstract class AbstractCrudAccessControlResolver<
   /**
    * Updates an existing entity within the database according to the update input with ensuring the
    * user has appropriate write access to the item.
+   *
    * @param updateInput - specification of update, must be deep partial of entity
    * @param user - the user that updates the entity
    * @param entity - additional information about the entity that is not provided by the create input
@@ -242,6 +256,7 @@ export default abstract class AbstractCrudAccessControlResolver<
 
   /**
    * Removes an entity from the database with ensuring the user has appropriate write access to the item.
+   *
    * @param deleteInput - contains the uuid of the item to remove
    * @param user - the user that deletes the entity
    * @returns the deleted entity
@@ -252,6 +267,7 @@ export default abstract class AbstractCrudAccessControlResolver<
 
   /**
    * Adds/Removes user groups from the read/write access groups of an entity.
+   *
    * @param manipulateAccessGroups - contains the adds/removes for the read/write groups.
    * @param user - user that tries to perform the manipulation, must have write access to the entity
    * @param sudo - perform action in sudo mode, means ignoring whether the user has appropriate rights to perform

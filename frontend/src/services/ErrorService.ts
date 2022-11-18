@@ -9,6 +9,7 @@ export class ErrorService {
 
   /**
    * Constructor
+   *
    * @param quasar - quasar instance
    */
   constructor(quasar: QVueGlobals) {
@@ -17,6 +18,7 @@ export class ErrorService {
 
   /**
    * Shows a dialog for the given error
+   *
    * @param error - the error that triggered this dialog
    */
   showErrorDialog(error: Error): void {

@@ -57,20 +57,8 @@
           >
             <q-tooltip>Apps</q-tooltip>
           </q-btn>
-          <q-btn
-            v-if="$q.screen.gt.sm"
-            round
-            dense
-            flat
-            color="grey-8"
-            icon="message"
-          >
-            <q-tooltip>Messages</q-tooltip>
-          </q-btn>
-          <q-btn round dense flat color="grey-8" icon="notifications">
-            <q-badge color="red" text-color="white" floating> 2 </q-badge>
-            <q-tooltip>Notifications</q-tooltip>
-          </q-btn>
+          <LocaleSwitcher />
+          <NotificationBell />
           <q-btn round flat>
             <q-avatar size="26px">
               <img :src="$authStore.avatar" alt="avatar" />
@@ -149,13 +137,15 @@
 </template>
 
 <script setup lang="ts">
-import { inject, Ref, ref } from 'vue';
+import { computed, ComputedRef, inject, Ref, ref } from 'vue';
 
 import { RouterService } from 'src/services/RouterService';
 import ROUTES from 'src/router/routes';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import AliasIndicator from 'src/flox/modules/alias/components/AliasIndicator.vue';
 import { i18n } from 'boot/i18n';
+import NotificationBell from 'src/flox/modules/notification/components/NotificationBell.vue';
+import LocaleSwitcher from 'components/locale/LocaleSwitcher.vue';
 
 const $routerService: RouterService | undefined = inject('$routerService');
 const $authStore = useAuthStore();
@@ -163,7 +153,16 @@ const $authStore = useAuthStore();
 const leftDrawerOpen: Ref<boolean> = ref(false);
 const search: Ref<string> = ref('');
 
-const sideMenu = [
+type MenuType = {
+  title?: string;
+  links: {
+    icon: string;
+    text: string;
+    click?: () => void;
+  }[];
+};
+
+const sideMenu: ComputedRef<MenuType[]> = computed(() => [
   {
     title: '',
     links: [
@@ -223,15 +222,26 @@ const sideMenu = [
   },
   {
     links: [
+      {
+        icon: 'dns',
+        text: i18n.global.t('menu.admin_panel'),
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.ADMIN_PANEL);
+        },
+      },
       { icon: 'data_object', text: i18n.global.t('menu.settings') },
-      { icon: 'dns', text: i18n.global.t('menu.server_health') },
-      { icon: 'mail', text: i18n.global.t('menu.mail') },
-      { icon: 'feedback', text: i18n.global.t('menu.feedback') },
     ],
   },
-];
+]);
 
-const bottomLinks = [
+type LinkType = {
+  title?: string;
+  links: {
+    text: string;
+    click?: () => void;
+  }[];
+};
+const bottomLinks: ComputedRef<LinkType[]> = computed(() => [
   {
     links: [
       { text: i18n.global.t('footer.developers') },
@@ -239,7 +249,7 @@ const bottomLinks = [
       { text: i18n.global.t('footer.terms') },
     ],
   },
-];
+]);
 </script>
 
 <style lang="sass">

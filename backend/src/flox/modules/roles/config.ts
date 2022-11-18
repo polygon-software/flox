@@ -28,6 +28,7 @@ const defaultConfig: RoleModuleConfig = {
 
 /**
  * Gets the module's actual configuration
+ *
  * @returns module configuration
  */
 export function moduleConfig(): RoleModuleConfig {

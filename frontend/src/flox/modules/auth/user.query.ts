@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { gql } from '@apollo/client/core';
 
 import { QueryObject } from 'src/apollo/query';
 import { TABLES } from 'src/flox/TABLES';
@@ -13,6 +13,7 @@ export const GET_MY_USER: QueryObject = {
       MyUser {
         uuid
         username
+        lang
         cognitoUuid
         email
         role
@@ -30,6 +31,7 @@ export const GET_USER: QueryObject = {
       User(uuid: $uuid) {
         uuid
         username
+        lang
         cognitoUuid
         email
         role
@@ -47,6 +49,7 @@ export const GET_MULTIPLE_USERS: QueryObject = {
       Users(uuids: $uuids) {
         uuid
         username
+        lang
         cognitoUuid
         email
         role
@@ -64,6 +67,7 @@ export const GET_ALL_USERS: QueryObject = {
       AllUsers(take: $take, skip: $skip) {
         uuid
         username
+        lang
         cognitoUuid
         email
         role
@@ -95,6 +99,7 @@ export const SEARCH_USERS: QueryObject = {
         data {
           uuid
           username
+          lang
           email
           role
         }

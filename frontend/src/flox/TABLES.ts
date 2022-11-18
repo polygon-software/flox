@@ -1,16 +1,18 @@
 export enum TABLES {
-  FILE = 'file',
-  IMAGE = 'image',
-  LABELS = 'labels',
-  BOUNDING_BOX = 'boundingBox',
-  USER = 'user',
-  USER_GROUP = 'usergroup',
+  FILE = 'FILE',
+  IMAGE = 'IMAGE',
+  LABEL = 'LABEL',
+  BOUNDING_BOX = 'BOUNDING_BOX',
+  USER = 'USER',
+  USER_GROUP = 'USER_GROUP',
+  NOTIFICATION = 'NOTIFICATION',
 }
 export const ALL_TABLES = [
   TABLES.FILE,
   TABLES.IMAGE,
-  TABLES.LABELS,
+  TABLES.LABEL,
   TABLES.BOUNDING_BOX,
   TABLES.USER,
   TABLES.USER_GROUP,
+  TABLES.NOTIFICATION,
 ];

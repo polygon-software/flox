@@ -18,6 +18,7 @@ export default abstract class AbstractCrudResolver<
 
   /**
    * Retrieves a single item from the database
+   *
    * @param getOneArgs - contains uuid of item to be retrieved
    * @param options - additional type ORM find options that are applied to find query
    * @returns the one item that was received
@@ -31,6 +32,7 @@ export default abstract class AbstractCrudResolver<
 
   /**
    * Retrieves multiple items explicitely specified by their uuid
+   *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
    * @param options - additional type ORM find options that are applied to find query
    * @returns the list of found entities
@@ -44,6 +46,7 @@ export default abstract class AbstractCrudResolver<
 
   /**
    * Retrieves all items from a database with applying pagination
+   *
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @param options - additional type ORM find options that are applied to find query
    * @returns page of entities
@@ -57,6 +60,7 @@ export default abstract class AbstractCrudResolver<
 
   /**
    * Creates a new item based on the create input
+   *
    * @param createInput - specifications of item, must be deep partial of entity
    * @returns the created entity
    */
@@ -66,6 +70,7 @@ export default abstract class AbstractCrudResolver<
 
   /**
    * Updates an existing entity within the database according to the update input
+   *
    * @param updateInput - specification of update, must be deep partial of entity
    * @param options - additional type ORM find options that are applied to find query
    * @returns the updated entity, freshly retrieved from the database
@@ -79,6 +84,7 @@ export default abstract class AbstractCrudResolver<
 
   /**
    * Removes an entity from the database
+   *
    * @param deleteInput - contains the uuid of the item to remove
    * @returns the deleted entity
    */

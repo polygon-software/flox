@@ -17,5 +17,9 @@ export class UserEntity extends BaseEntity {
 
   @IsOptional()
   @IsString()
+  lang?: string;
+
+  @IsOptional()
+  @IsString()
   email?: string;
 }

@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { gql } from '@apollo/client/core';
 
 import { QueryObject } from 'src/apollo/query';
 import { TABLES } from 'src/flox/TABLES';
@@ -34,7 +34,7 @@ export const GET_IMAGE: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
+  tables: [TABLES.IMAGE, TABLES.LABEL, TABLES.BOUNDING_BOX],
   cacheLocation: 'Image',
 };
 
@@ -69,7 +69,7 @@ export const GET_IMAGES: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
+  tables: [TABLES.IMAGE, TABLES.LABEL, TABLES.BOUNDING_BOX],
   cacheLocation: 'Images',
 };
 
@@ -104,7 +104,7 @@ export const GET_MY_IMAGES: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
+  tables: [TABLES.IMAGE, TABLES.LABEL, TABLES.BOUNDING_BOX],
   cacheLocation: 'MyImages',
 };
 
@@ -139,7 +139,7 @@ export const GET_ALL_IMAGES: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
+  tables: [TABLES.IMAGE, TABLES.LABEL, TABLES.BOUNDING_BOX],
   cacheLocation: 'AllImages',
 };
 
@@ -174,7 +174,7 @@ export const GET_ALL_MY_IMAGES: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
+  tables: [TABLES.IMAGE, TABLES.LABEL, TABLES.BOUNDING_BOX],
   cacheLocation: 'AllMyImages',
 };
 
@@ -195,7 +195,7 @@ export const GET_IMAGE_FOR_FILE: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
+  tables: [TABLES.IMAGE, TABLES.LABEL, TABLES.BOUNDING_BOX],
   cacheLocation: 'ImageForFile',
 };
 
@@ -233,7 +233,7 @@ export const SEARCH_IMAGES: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
+  tables: [TABLES.IMAGE, TABLES.LABEL, TABLES.BOUNDING_BOX],
   cacheLocation: 'SearchImages',
 };
 
@@ -271,7 +271,7 @@ export const SEARCH_MY_IMAGES: QueryObject = {
       }
     }
   `,
-  tables: [TABLES.IMAGE, TABLES.LABELS, TABLES.BOUNDING_BOX],
+  tables: [TABLES.IMAGE, TABLES.LABEL, TABLES.BOUNDING_BOX],
   cacheLocation: 'SearchMyImages',
 };
 

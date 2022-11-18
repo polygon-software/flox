@@ -1,4 +1,3 @@
-import { BootFileParams, QSsrContext } from '@quasar/app-vite';
 import {
   CognitoAccessToken,
   CognitoIdToken,
@@ -15,8 +14,11 @@ import Env from 'src/env';
 import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
 import { fetchMyUser } from 'src/flox/modules/auth/services/user.service';
 
+import type { BootFileParams, QSsrContext } from '@quasar/app-vite';
+
 /**
  * Performs authentication on server side
+ *
  * @param ssrContext - Serverside rendering context
  * @param userPool - cognito user pool
  */
@@ -71,6 +73,7 @@ function serverSideAuth(
 
 /**
  * Performs authentication client side
+ *
  * @param userPool - cognito user pool
  */
 function clientSideAuth(userPool: CognitoUserPool): void {

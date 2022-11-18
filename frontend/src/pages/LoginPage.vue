@@ -32,8 +32,10 @@ const $authService: AuthenticationService | undefined = inject('$authService');
 
 /**
  * Logs in the given authentication
- * @param identifier - the authentication's username or e-mail
- * @param password - the authentication's password
+ *
+ * @param user - user args
+ * @param user.identifier - the authentication's username or e-mail
+ * @param user.password - the authentication's password
  */
 async function onLogin({
   identifier,
