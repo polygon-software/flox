@@ -1,4 +1,4 @@
-import * as flox from '../../flox.config.json';
+import flox from '../../flox.config.json';
 
 /**
  * Gets the active Flox modules from config

@@ -17,6 +17,8 @@ import {
   I18nModule,
 } from 'nestjs-i18n';
 
+import flox from '../flox.config.json';
+
 import configuration from './config/configuration';
 import { isServerless } from './flox/core/flox-helpers';
 import { floxModules, floxProviders } from './flox/flox';
@@ -92,7 +94,7 @@ import env from './env';
       ],
     }),
     I18nModule.forRoot({
-      fallbackLanguage: 'en',
+      fallbackLanguage: flox.i18n.defaultLocale,
       loaderOptions: {
         path: join(__dirname, '/i18n/'),
         watch: env.DEV,

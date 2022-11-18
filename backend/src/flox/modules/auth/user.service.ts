@@ -63,7 +63,6 @@ export default class UserService extends AbstractSearchService<User> {
    * @returns user
    */
   async getMyUser(user: User): Promise<User> {
-    console.log(user);
     return this.userRepository.findOneOrFail({
       where: {
         uuid: user.uuid,

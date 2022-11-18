@@ -89,7 +89,6 @@ export default class NotificationResolver {
       { select: { uuid: true } },
     );
     const userUuids = users.map((user) => user.uuid);
-    console.log('notifyInput', notifyInput);
     return this.notificationService.notifyUsers({
       recipients: userUuids,
       ...notifyInput,
