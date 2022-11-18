@@ -59,6 +59,7 @@ describe('UserResolver', () => {
       createdAt: date,
       updatedAt: date,
       validateRole: jest.fn(),
+      validateLang: jest.fn(),
       groups: [],
       ...input,
     };
