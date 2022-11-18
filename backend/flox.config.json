@@ -25,6 +25,10 @@
     },
     "notification": {}
   },
+  "i18n": {
+    "defaultLocale": "en",
+    "availableLocales": ["de", "en"]
+  },
   "general": {
     "database_name": "floxdb",
     "database_master_username": "db_user",

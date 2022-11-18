@@ -10,7 +10,7 @@
             v-for="notification in sortedNotifications"
             :key="notification.uuid"
             :clickable="!!extractLangContent(notification)?.link"
-            @click="clickLink(extractLangContent(notification)?.link)"
+            @click="clickLink(notification)"
           >
             <q-item-section>
               <q-item-label>
@@ -100,12 +100,13 @@ function extractLangContent(
 /**
  * Routes to the location specified by link
  *
- * @param link - link included within message
+ * @param notification - notification of which to follow link
  */
-async function clickLink(link: string | undefined): Promise<void> {
-  console.log('link', { link });
-  if (link) {
-    await $router.push(link);
+async function clickLink(notification: NotificationEntity): Promise<void> {
+  const message = extractLangContent(notification);
+  if (message?.link) {
+    await $router.push(message.link);
+    await markNotificationAsRead(notification.uuid);
   }
 }
 
