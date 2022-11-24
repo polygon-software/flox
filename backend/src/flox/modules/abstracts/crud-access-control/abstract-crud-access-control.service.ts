@@ -22,7 +22,11 @@ import {
 } from '../../access-control/helpers/access-control.helper';
 import AccessControlService from '../../access-control/access-control.service';
 import UserGroup from '../../access-control/entities/user-group.entity';
-import { extractWhere, mergeOptions, mixWhere } from '../crud/helpers/crud.helper';
+import {
+  extractWhere,
+  mergeOptions,
+  mixWhere,
+} from '../crud/helpers/crud.helper';
 
 import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
 import ManipulateAccessGroupsInput from './dto/inputs/manipulate-access-groups.input';
