@@ -1,7 +1,7 @@
 import { FindOneOptions, FindOptionsWhere } from 'typeorm';
 import merge from 'lodash/merge';
 
-import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
+import BaseEntity from '../../../../core/base-entity/entities/base-entity.entity';
 
 /**
  * Extracts the 'where' part of a typeorm find query and returns it as an array of wheres

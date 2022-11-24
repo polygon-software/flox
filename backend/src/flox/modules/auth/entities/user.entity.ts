@@ -33,7 +33,7 @@ export default class User extends BaseEntity {
   @Column()
   @IsString()
   @MinLength(6)
-  @MaxLength(25)
+  @MaxLength(50)
   username: string;
 
   @Field(() => String, { description: 'Preferred language of user' })

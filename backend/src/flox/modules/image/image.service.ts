@@ -15,7 +15,7 @@ import AbstractSearchAccessControlService from '../abstracts/search-access-contr
 import User from '../auth/entities/user.entity';
 import FileService from '../file/file.service';
 import AccessControlService from '../access-control/access-control.service';
-import { mergeOptions } from '../abstracts/crud/crud.helper';
+import { mergeOptions } from '../abstracts/crud/helpers/crud.helper';
 
 import GetAllImagesArgs from './dto/args/get-all-images.args';
 import GetImageArgs from './dto/args/get-image.args';

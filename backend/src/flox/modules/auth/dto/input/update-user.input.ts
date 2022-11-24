@@ -22,7 +22,7 @@ export default class UpdateUserInput extends UpdateInput {
   @IsOptional()
   @IsString()
   @MinLength(6)
-  @MaxLength(25)
+  @MaxLength(50)
   username: string;
 
   @Field(() => String, { nullable: true })

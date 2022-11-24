@@ -12,7 +12,7 @@ import User from '../../auth/entities/user.entity';
 import AbstractCrudAccessControlService from '../crud-access-control/abstract-crud-access-control.service';
 import SearchArgs from '../search/dto/args/search.args';
 import SearchQueryOutputInterface from '../search/outputs/search-interface.output';
-import { mixWhere } from '../crud/crud.helper';
+import { mixWhere } from '../crud/helpers/crud.helper';
 
 export default abstract class AbstractSearchAccessControlService<
   Entity extends AccessControlledEntity,

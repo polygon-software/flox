@@ -5,15 +5,16 @@ import GetMultipleArgs from '../abstracts/crud/dto/get-multiple.args';
 import DeleteInput from '../abstracts/crud/inputs/delete.input';
 import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
 import SearchArgs from '../abstracts/search/dto/args/search.args';
-import { CurrentUser } from '../roles/authorization.decorator';
+import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 
 import GetUserArgs from './dto/args/get-user.args';
 import CreateUserInput from './dto/input/create-user.input';
 import UpdateUserInput from './dto/input/update-user.input';
 import User from './entities/user.entity';
 import UserSearchOutput from './output/user-search.output';
-import { LoggedIn, Public } from './authentication.decorator';
+import { LoggedIn } from './authentication.decorator';
 import UserService from './user.service';
+import { assertIsAllowedToManipulate } from './helpers/auth.helper';
 
 @Resolver(() => User)
 export default class UserResolver extends AbstractSearchResolver<
@@ -32,7 +33,7 @@ export default class UserResolver extends AbstractSearchResolver<
   }
 
   /**
-   * Get the DB user for the currently logged in Cognito user
+   * Get the DB user for the currently logged in user
    *
    * @param user - currently logged-in user from request
    * @returns the user, if any
@@ -40,7 +41,6 @@ export default class UserResolver extends AbstractSearchResolver<
   @LoggedIn()
   @Query(() => User, { name: 'MyUser' })
   async myUser(@CurrentUser() user: User): Promise<User> {
-    // Get user where user's UUID matches Cognito ID
     return this.userService.getMyUser(user);
   }
 
@@ -50,7 +50,7 @@ export default class UserResolver extends AbstractSearchResolver<
    * @param getUserArgs - contains UUID
    * @returns the user
    */
-  @Public()
+  @LoggedIn()
   @Query(() => User, { name: 'User' })
   async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
     return this.userService.getUser(getUserArgs);
@@ -62,7 +62,7 @@ export default class UserResolver extends AbstractSearchResolver<
    * @param getMultiple - contains UUIDs of users
    * @returns the users
    */
-  @Public()
+  @LoggedIn()
   @Query(() => [User], { name: 'Users' })
   async getMultipleUsers(
     @Args() getMultiple: GetMultipleArgs,
@@ -76,7 +76,7 @@ export default class UserResolver extends AbstractSearchResolver<
    * @param getAll - contains take and skip
    * @returns the users
    */
-  @Public()
+  @AdminOnly()
   @Query(() => [User], { name: 'AllUsers' })
   async getAllUsers(@Args() getAll: GetAllArgs): Promise<User[]> {
     return super.getAll(getAll);
@@ -88,7 +88,7 @@ export default class UserResolver extends AbstractSearchResolver<
    * @param queryArgs - contain table filtering rules
    * @returns data that fit criteria
    */
-  @Public()
+  @AdminOnly()
   @Query(() => UserSearchOutput, { name: 'SearchUsers' })
   searchUsers(@Args() queryArgs: SearchArgs): Promise<UserSearchOutput> {
     return super.search(queryArgs);
@@ -100,7 +100,7 @@ export default class UserResolver extends AbstractSearchResolver<
    * @param createUserInput - contains all user data
    * @returns the newly created user
    */
-  @Public()
+  @AdminOnly()
   @Mutation(() => User, { name: 'CreateUser' })
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
@@ -112,13 +112,16 @@ export default class UserResolver extends AbstractSearchResolver<
    * Updates a given user
    *
    * @param updateUserInput - contains UUID and any new user data
+   * @param user - currently logged in user
    * @returns the updated user
    */
-  @Public()
+  @LoggedIn()
   @Mutation(() => User, { name: 'UpdateUser' })
   async updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @CurrentUser() user: User,
   ): Promise<User> {
+    assertIsAllowedToManipulate(user, updateUserInput.uuid);
     return super.update(updateUserInput);
   }
 
@@ -128,7 +131,7 @@ export default class UserResolver extends AbstractSearchResolver<
    * @param deleteInput - contains UUID
    * @returns the deleted user
    */
-  @Public()
+  @AdminOnly()
   @Mutation(() => User, { name: 'DeleteUser' })
   async deleteUser(
     @Args('deleteUserInput') deleteInput: DeleteInput,
