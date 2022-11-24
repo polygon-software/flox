@@ -15,6 +15,7 @@ import GetOneArgs from './dto/get-one.args';
 import CreateInput from './inputs/create.input';
 import DeleteInput from './inputs/delete.input';
 import UpdateInput from './inputs/update.input';
+import { extractWhere, mixWhere } from './crud.helper';
 
 export default abstract class AbstractCrudService<Entity extends BaseEntity> {
   abstract get repository(): Repository<Entity>;
@@ -32,9 +33,14 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
   ): Promise<Entity> {
     return this.repository.findOneOrFail({
       ...options,
-      where: {
-        uuid: getOneArgs.uuid,
-      } as FindOptionsWhere<Entity>,
+      where: mixWhere<Entity>(
+        [
+          {
+            uuid: getOneArgs.uuid,
+          },
+        ] as FindOptionsWhere<Entity>[],
+        extractWhere<Entity>(options),
+      ),
     });
   }
 

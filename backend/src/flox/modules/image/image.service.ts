@@ -15,6 +15,7 @@ import AbstractSearchAccessControlService from '../abstracts/search-access-contr
 import User from '../auth/entities/user.entity';
 import FileService from '../file/file.service';
 import AccessControlService from '../access-control/access-control.service';
+import { mergeOptions } from '../abstracts/crud/crud.helper';
 
 import GetAllImagesArgs from './dto/args/get-all-images.args';
 import GetImageArgs from './dto/args/get-image.args';
@@ -84,7 +85,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     user: User,
     options?: FindOneOptions<Image>,
   ): Promise<Image> {
-    const mergedOptions = this.mergeOptions(
+    const mergedOptions = mergeOptions<Image>(
       {
         relations: {
           file: true,
@@ -126,7 +127,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     const images = await super.getMultipleAsUser(
       getMultipleImagesArgs,
       user,
-      this.mergeOptions(
+      mergeOptions<Image>(
         {
           relations: {
             file: true,
@@ -176,7 +177,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     const images = await super.getMultipleOfUser(
       getMultipleImagesArgs,
       user,
-      this.mergeOptions(
+      mergeOptions<Image>(
         {
           relations: {
             file: true,
@@ -225,7 +226,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     const images = await super.getAllAsUser(
       getAllImagesArgs,
       user,
-      this.mergeOptions(
+      mergeOptions<Image>(
         {
           relations: {
             file: true,
@@ -275,7 +276,7 @@ export default class ImageService extends AbstractSearchAccessControlService<Ima
     const images = await super.getAllOfUser(
       getAllImagesArgs,
       user,
-      this.mergeOptions(
+      mergeOptions<Image>(
         {
           relations: {
             file: true,

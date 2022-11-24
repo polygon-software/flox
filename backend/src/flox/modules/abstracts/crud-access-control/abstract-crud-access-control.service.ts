@@ -1,4 +1,3 @@
-import merge from 'lodash/merge';
 import {
   DeepPartial,
   FindOneOptions,
@@ -23,6 +22,7 @@ import {
 } from '../../access-control/helpers/access-control.helper';
 import AccessControlService from '../../access-control/access-control.service';
 import UserGroup from '../../access-control/entities/user-group.entity';
+import { extractWhere, mergeOptions, mixWhere } from '../crud/crud.helper';
 
 import CreateAccessControlledInput from './dto/inputs/create-access-controlled.input';
 import ManipulateAccessGroupsInput from './dto/inputs/manipulate-access-groups.input';
@@ -79,85 +79,6 @@ export default abstract class AbstractCrudAccessControlService<
   }
 
   /**
-   * Extracts the 'where' part of a typeorm find query and returns it as an array of wheres
-   *
-   * @param options - from where the 'where' should be extractet
-   * @protected
-   * @returns array of where queries
-   */
-  protected extractWhere(
-    options?: FindOneOptions<Entity>,
-  ): FindOptionsWhere<Entity>[] {
-    const whereOptions: FindOptionsWhere<Entity>[] = [];
-    if (options?.where) {
-      if (Array.isArray(options.where)) {
-        whereOptions.push(...options.where);
-      } else {
-        whereOptions.push(options.where);
-      }
-    }
-    return whereOptions;
-  }
-
-  /**
-   * Mixes two where arrays together. If you have two arrays containing where queries, this method combines each
-   * where query with each other, like a zip. This is helpful when you have a list of where clauses provided by the
-   * user / developer and a set of security where clauses that shall be applied to each of them - like ensuring only
-   * items are retrieved for which the current user has appropriate read access.
-   *
-   * @param securityWhere - The where clauses that ensure access rights - but could be any list of where clauses
-   * @param customWhere - User provided where clauses
-   * @example [{w1}, {w2}] x [{w3, w4}] -> [{w1 & w3}, {w1 & w4}, {w2 & w3}, {w2 & w4}]
-   * @protected
-   * @returns zip of all possible combinations of the two where clauses
-   */
-  protected mixWhere(
-    securityWhere: FindOptionsWhere<Entity>[],
-    customWhere: FindOptionsWhere<Entity>[],
-  ): FindOptionsWhere<Entity>[] {
-    if (securityWhere.length === 0) {
-      return customWhere;
-    }
-    if (customWhere.length === 0) {
-      return securityWhere;
-    }
-    return securityWhere
-      .map((securityClause) => {
-        return customWhere.map((customClause) => {
-          return {
-            ...securityClause,
-            ...customClause,
-          };
-        });
-      })
-      .flat();
-  }
-
-  /**
-   * Deeply merges two typeorm find queries
-   *
-   * @param options1 - Any typeorm query option
-   * @param options2 - Any other typeorm query option
-   * @protected
-   * @returns deep merge of the two options
-   */
-  protected mergeOptions(
-    options1?: FindOneOptions<Entity>,
-    options2?: FindOneOptions<Entity>,
-  ): FindOneOptions<Entity> {
-    if (!options1 && options2) {
-      return options2;
-    }
-    if (!options2 && options1) {
-      return options1;
-    }
-    if (options1 && options2) {
-      return merge(options1, options2);
-    }
-    return {};
-  }
-
-  /**
    * Finds uuids of all entities that are marked for public read access
    *
    * @param options - typeorm find options that are mixed applied, can be used for pagination and such
@@ -172,13 +93,13 @@ export default abstract class AbstractCrudAccessControlService<
       select: {
         uuid: true,
       } as FindOptionsSelect<Entity>,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             publicReadAccess: true,
           } as FindOptionsWhere<Entity>,
         ],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
     });
     return entities.map((entity) => entity.uuid);
@@ -199,13 +120,13 @@ export default abstract class AbstractCrudAccessControlService<
       select: {
         uuid: true,
       } as FindOptionsSelect<Entity>,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             loggedInReadAccess: true,
           } as FindOptionsWhere<Entity>,
         ],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
     });
     return entities.map((entity) => entity.uuid);
@@ -228,7 +149,7 @@ export default abstract class AbstractCrudAccessControlService<
       select: {
         uuid: true,
       } as FindOptionsSelect<Entity>,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             owner: {
@@ -236,7 +157,7 @@ export default abstract class AbstractCrudAccessControlService<
             },
           } as FindOptionsWhere<Entity>,
         ],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
     });
     return entities.map((entity) => entity.uuid);
@@ -264,7 +185,7 @@ export default abstract class AbstractCrudAccessControlService<
       select: {
         uuid: true,
       } as FindOptionsSelect<Entity>,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             readAccess: {
@@ -272,7 +193,7 @@ export default abstract class AbstractCrudAccessControlService<
             },
           } as FindOptionsWhere<Entity>,
         ],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
       take: undefined,
       skip: undefined,
@@ -302,7 +223,7 @@ export default abstract class AbstractCrudAccessControlService<
       select: {
         uuid: true,
       } as FindOptionsSelect<Entity>,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             writeAccess: {
@@ -310,7 +231,7 @@ export default abstract class AbstractCrudAccessControlService<
             },
           } as FindOptionsWhere<Entity>,
         ],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
       take: undefined,
       skip: undefined,
@@ -371,14 +292,14 @@ export default abstract class AbstractCrudAccessControlService<
   ): Promise<Entity> {
     return this.repository.findOneOrFail({
       ...options,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             uuid: getOneArgs.uuid,
             publicReadAccess: true,
           },
         ] as FindOptionsWhere<Entity>[],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
     });
   }
@@ -401,7 +322,7 @@ export default abstract class AbstractCrudAccessControlService<
       where: {
         uuid: getOneArgs.uuid,
       } as FindOptionsWhere<Entity>,
-      ...this.mergeOptions(options, this.readAccessControlRelationOptions),
+      ...mergeOptions<Entity>(options, this.readAccessControlRelationOptions),
     });
     assertReadAccess(entity, user);
     return entity;
@@ -425,7 +346,7 @@ export default abstract class AbstractCrudAccessControlService<
       where: {
         uuid: getOneArgs.uuid,
       } as FindOptionsWhere<Entity>,
-      ...this.mergeOptions(options, this.writeAccessControlRelationOptions),
+      ...mergeOptions<Entity>(options, this.writeAccessControlRelationOptions),
     });
     assertWriteAccess(entity, user);
     return entity;
@@ -467,14 +388,14 @@ export default abstract class AbstractCrudAccessControlService<
   ): Promise<Entity[]> {
     return this.repository.find({
       ...options,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             publicReadAccess: true,
             uuid: In(getMultipleArgs.uuids),
           } as FindOptionsWhere<Entity>,
         ],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
     });
   }
@@ -564,13 +485,13 @@ export default abstract class AbstractCrudAccessControlService<
   ): Promise<Entity[]> {
     return this.repository.find({
       ...options,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             uuid: In(getMultipleArgs.uuids),
           },
         ] as FindOptionsWhere<Entity>[],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
     });
   }
@@ -589,13 +510,13 @@ export default abstract class AbstractCrudAccessControlService<
   ): Promise<Entity[]> {
     return this.repository.find({
       ...options,
-      where: this.mixWhere(
+      where: mixWhere<Entity>(
         [
           {
             publicReadAccess: true,
           } as FindOptionsWhere<Entity>,
         ],
-        this.extractWhere(options),
+        extractWhere<Entity>(options),
       ),
       take: getAllArgs.take,
       skip: getAllArgs.skip,

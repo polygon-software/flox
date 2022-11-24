@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 import UpdateInput from '../../../abstracts/crud/inputs/update.input';
 
@@ -9,6 +9,8 @@ export default class UpdateUserGroupInput extends UpdateInput {
     description: 'Name of group',
   })
   @IsString()
+  @MinLength(6)
+  @MaxLength(30)
   @IsNotEmpty()
   name: string;
 }

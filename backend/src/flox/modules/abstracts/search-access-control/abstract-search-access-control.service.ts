@@ -12,6 +12,7 @@ import User from '../../auth/entities/user.entity';
 import AbstractCrudAccessControlService from '../crud-access-control/abstract-crud-access-control.service';
 import SearchArgs from '../search/dto/args/search.args';
 import SearchQueryOutputInterface from '../search/outputs/search-interface.output';
+import { mixWhere } from '../crud/crud.helper';
 
 export default abstract class AbstractSearchAccessControlService<
   Entity extends AccessControlledEntity,
@@ -51,7 +52,7 @@ export default abstract class AbstractSearchAccessControlService<
     searchKeys: (keyof Entity)[],
     options?: FindOneOptions<Entity>,
   ): Promise<SearchQueryOutputInterface<Entity>> {
-    const where = this.mixWhere(
+    const where = mixWhere<Entity>(
       [
         {
           publicReadAccess: true,
@@ -96,7 +97,7 @@ export default abstract class AbstractSearchAccessControlService<
         this.findUuidsWithReadAccess(user, options),
       ]);
 
-    const where = this.mixWhere(
+    const where = mixWhere<Entity>(
       [
         {
           uuid: In([
@@ -144,7 +145,7 @@ export default abstract class AbstractSearchAccessControlService<
       this.findUuidsWithReadAccess(user, options),
     ]);
 
-    const where = this.mixWhere(
+    const where = mixWhere<Entity>(
       [
         {
           uuid: In([...ownerUuids, ...readUuids]),
