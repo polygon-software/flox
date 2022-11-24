@@ -51,9 +51,6 @@ export default abstract class S3File extends AccessControlledEntity {
     nullable: true,
     description: 'Signed URL to upload object. Only works 1 time',
   })
-  @Column({
-    nullable: true,
-  })
   @IsString()
   @IsOptional()
   public signedUrl?: string;

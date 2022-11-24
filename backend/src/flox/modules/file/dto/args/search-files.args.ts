@@ -1,5 +1,5 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 import SearchArgs from '../../../abstracts/search/dto/args/search.args';
 
@@ -11,5 +11,7 @@ export default class SearchFilesArgs extends SearchArgs {
   })
   @IsOptional()
   @IsNumber()
+  @Min(60)
+  @Max(60 * 60 * 24)
   expires?: number;
 }
