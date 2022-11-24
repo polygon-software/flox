@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { QFile, useDialogPluginComponent } from 'quasar';
+import {QFile, useDialogPluginComponent, useQuasar} from 'quasar';
 import { defineProps, ref, Ref, unref } from 'vue';
 
 import useFileUpload from 'src/flox/modules/file/useFileUpload';
@@ -62,6 +62,8 @@ const props = withDefaults(
 
 // eslint-disable-next-line vue/define-emits-declaration
 defineEmits([...useDialogPluginComponent.emits]);
+
+const $q = useQuasar();
 
 const filePickerRef: Ref<QFile | null> = ref(null);
 

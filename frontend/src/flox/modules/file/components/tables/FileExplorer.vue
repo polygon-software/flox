@@ -242,12 +242,12 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: typeof EMIT_UPDATE_PAT, path: string): void;
+  (e: typeof EMIT_UPDATE_PATH, path: string): void;
 }>();
 
 const $q = useQuasar();
 
-const EMIT_UPDATE_PAT = 'update:path';
+const EMIT_UPDATE_PATH = 'update:path';
 type FileOrFolder = {
   uuid: string;
   type?: 'file' | 'folder';
@@ -397,9 +397,9 @@ const pathSegments: ComputedRef<string[]> = computed(() => {
  */
 function extendPath(folderName: string): void {
   if (props.path === '/') {
-    emit(EMIT_UPDATE_PAT, `${props.path}${folderName}`);
+    emit(EMIT_UPDATE_PATH, `${props.path}${folderName}`);
   } else {
-    emit(EMIT_UPDATE_PAT, `${props.path}/${folderName}`);
+    emit(EMIT_UPDATE_PATH, `${props.path}/${folderName}`);
   }
 }
 
@@ -409,14 +409,17 @@ function extendPath(folderName: string): void {
  * @param index - index of segment. 0 is index of first folder, not Root! Root is handled seperately.
  */
 function stripPathTo(index: number): void {
-  emit(EMIT_UPDATE_PAT, `/${pathSegments.value.slice(0, index + 1).join('/')}`);
+  emit(
+    EMIT_UPDATE_PATH,
+    `/${pathSegments.value.slice(0, index + 1).join('/')}`
+  );
 }
 
 /**
  * Sets path to root, which is represented by just a slash /
  */
 function setPathToRoot(): void {
-  emit(EMIT_UPDATE_PAT, '/');
+  emit(EMIT_UPDATE_PATH, '/');
 }
 
 /**
@@ -441,7 +444,7 @@ async function clickOnFileOrFolder(row: FileOrFolder): Promise<void> {
     } else if (file.mimetype && isPdf(file.mimetype)) {
       previewPdf($q, file);
     } else {
-      previewUnknownfile(file);
+      previewUnknownfile($q, file);
     }
   }
 }
@@ -538,12 +541,18 @@ async function openAccessControlGroupDialog(uuid: string): Promise<void> {
         removeWriteAccess,
       })
         .then(async (): Promise<void> => {
-          showSuccessNotification($q, 'Access rights edited');
+          showSuccessNotification(
+            $q,
+            i18n.global.t('files.access_rights_edited')
+          );
           await refresh();
         })
         .catch((e: any) => {
           console.error(e);
-          showErrorNotification($q, 'Access rights update failed');
+          showErrorNotification(
+            $q,
+            i18n.global.t('files.access_rights_edit_failed')
+          );
         });
     }
   );
@@ -577,7 +586,7 @@ function fileOrFolderSortFunction(
 }
 
 /**
- * Removes a file form the database
+ * Removes a file from the database
  *
  * @param uuid - uuid of file to be removed
  */

@@ -11,16 +11,21 @@ import {
   isPdf,
   isVideo,
 } from 'src/flox/modules/file/tools/mimetype.tools';
+import { showErrorNotification } from 'src/tools/notification.tool';
+import { i18n } from 'boot/i18n';
 
 /**
- * Previews an unkown file by opening it in a new browser tab and let the
+ * Previews an unknown file by opening it in a new browser tab and let the
  * browser decide how to display it
+ * @param $q - quasar globals to handle dialog
  * @param file - file to be previewed
  */
-export function previewUnknownfile(file: FileEntity): void {
+export function previewUnknownfile($q: QVueGlobals, file: FileEntity): void {
   if (!file.url) {
+    showErrorNotification($q, i18n.global.t('file.preview_error_no_file'));
     throw new Error('Cannot preview file without an URL');
   }
+  window.open(file.url, '_blank');
 }
 
 /**
@@ -30,6 +35,7 @@ export function previewUnknownfile(file: FileEntity): void {
  */
 export function previewAudio($q: QVueGlobals, file: FileEntity): void {
   if (!(file.mimetype && isAudio(file.mimetype))) {
+    showErrorNotification($q, i18n.global.t('file.preview_error_no_audio'));
     throw new Error('File is not audio, unable to render preview');
   }
   $q.dialog({
@@ -48,6 +54,7 @@ export function previewAudio($q: QVueGlobals, file: FileEntity): void {
  */
 export function previewVideo($q: QVueGlobals, file: FileEntity): void {
   if (!(file.mimetype && isVideo(file.mimetype))) {
+    showErrorNotification($q, i18n.global.t('file.preview_error_no_video'));
     throw new Error('File is not video, unable to render preview');
   }
   $q.dialog({
@@ -66,6 +73,7 @@ export function previewVideo($q: QVueGlobals, file: FileEntity): void {
  */
 export function previewImage($q: QVueGlobals, file: FileEntity): void {
   if (!(file.mimetype && isImage(file.mimetype))) {
+    showErrorNotification($q, i18n.global.t('file.preview_error_no_image'));
     throw new Error('File is not image, unable to render preview');
   }
   $q.dialog({
@@ -83,6 +91,7 @@ export function previewImage($q: QVueGlobals, file: FileEntity): void {
  */
 export function previewPdf($q: QVueGlobals, file: FileEntity): void {
   if (!(file.mimetype && isPdf(file.mimetype))) {
+    showErrorNotification($q, i18n.global.t('file.preview_error_no_pdf'));
     throw new Error('File is not pdf, unable to render preview');
   }
   $q.dialog({

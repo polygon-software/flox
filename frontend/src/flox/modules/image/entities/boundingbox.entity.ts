@@ -3,7 +3,7 @@ import { IsDecimal, IsOptional } from 'class-validator';
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
 /**
- * Class representing an image data object
+ * Class representing a bounding box around a labeled entity on the image
  */
 export default class BoundingboxEntity extends BaseEntity {
   @IsOptional()

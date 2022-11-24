@@ -57,7 +57,7 @@ export const DELETE_USER_GROUP: MutationObject = {
   `,
   tables: ALL_TABLES,
   type: MutationTypes.DELETE,
-  cacheLocation: 'UpdateUserGroup',
+  cacheLocation: 'DeleteUserGroup',
 };
 
 export const ADD_USER_TO_USER_GROUP: MutationObject = {

@@ -96,6 +96,18 @@ export default {
     last_updated: 'Zuletzt geändert',
     size: 'Grösse',
     root: 'Home',
+    access_rights_edited: 'Zugriffsrechte geändert',
+    access_rights_edit_failed: 'Zugriffsrechte konnten nicht geändert werden',
+    preview_error_no_file:
+      'Die Datei kann nicht angezeigt werden, da keine URL vorhanden ist',
+    preview_error_no_audio:
+      'Audio kann nicht abgespielt werden. Fehlende URL oder keine Audio-Datei.',
+    preview_error_no_video:
+      'Video kann nicht abgespielt werden. Fehlende URL oder keine Video-Datei.',
+    preview_error_no_image:
+      'Bild kann nicht geöffnet werden. Fehlende URL oder keine Bild-Datei.',
+    preview_error_no_pdf:
+      'PDF kann nicht geöffnet werden. Fehlende URL oder keine PDF-Datei.',
   },
   users: {
     users: 'Benutzer',
@@ -110,6 +122,9 @@ export default {
     import_images: 'Bilder importieren',
     search_files: 'Dateien suchen',
     object_recognition: 'Object Recognition',
+    image_already_imported: 'Bild wurde bereits importiert',
+    image_imported: 'Import erfolgreich',
+    not_image: 'Import fehlgeschlagen - Datei ist kein Bild',
   },
   messages: {
     success: 'Erfolgreich',
@@ -210,7 +225,7 @@ export default {
     create_group: 'Neue Zugriffsgruppe erstellen',
     access_groups: 'Zugriffsgruppen',
     add_group: 'Gruppe hinzufügen',
-    group_name: 'Gruppen Name',
+    group_name: 'Gruppenname',
     delete_group: 'Gruppe löschen',
     add_to_group: 'Zu Gruppe hinzufügen',
     group_name_label: 'Neuer Gruppenname',

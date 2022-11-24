@@ -23,7 +23,7 @@ import {
  * Optional attributes
  * @param  type - A quasar type
  * @param  label - The fields displayed name
- * @param  lazy_rules - Check at https://quasar.dev/vue-components/input
+ * @param  lazyRules - Check at https://quasar.dev/vue-components/input
  * @param  rules - Rules that get applied to the input field, e.g. to check if a password is valid.
  */
 export interface Field<ComponentType = any, ComponentProps = any> {

@@ -94,6 +94,17 @@ export default {
     last_updated: 'Last Updated',
     size: 'Size',
     root: 'Home',
+    access_rights_edited: 'Access rights edited',
+    access_rights_edit_failed: 'Access rights could not be edited',
+    preview_error_no_file: 'Unable to open file, no URL present',
+    preview_error_no_audio:
+      'Unable to play audio. File URL missing or not an audio file.',
+    preview_error_no_video:
+      'Unable to play video. File URL missing or not a video file.',
+    preview_error_no_image:
+      'Unable to open image. File URL missing or not an image file.',
+    preview_error_no_pdf:
+      'Unable to preview pdf. File URL missing or not a pdf file.',
   },
   users: {
     users: 'Users',
@@ -108,6 +119,9 @@ export default {
     import_images: 'Import Images',
     search_files: 'Search Files',
     object_recognition: 'Object Recognition',
+    image_already_imported: 'Image was already imported',
+    image_imported: 'Import successful',
+    not_image: 'Import failed - file is not an image',
   },
   messages: {
     success: 'Success',

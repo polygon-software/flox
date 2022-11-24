@@ -145,6 +145,7 @@ import {
   showNotification,
   showSuccessNotification,
 } from 'src/tools/notification.tool';
+import { i18n } from 'boot/i18n';
 
 const $q = useQuasar();
 
@@ -207,15 +208,25 @@ async function onImportButtonClick(): Promise<void> {
     const newImagesPromises = filesToImport.value.map(async (file) => {
       try {
         const importedImage = await getImageForFile(file.uuid, 360);
-        showNotification($q, 'Image already exists', {});
+        showNotification(
+          $q,
+          i18n.global.t('object_recognition.image_already_imported'),
+          {}
+        );
         return importedImage;
       } catch (importError) {
         try {
           const createdImage = await createImage(file.uuid, true);
-          showSuccessNotification($q, 'Created new Image!');
+          showSuccessNotification(
+            $q,
+            i18n.global.t('object_recognition.image_imported')
+          );
           return createdImage;
         } catch (createError) {
-          showErrorNotification($q, 'Could not create Image from File!');
+          showErrorNotification(
+            $q,
+            i18n.global.t('object_recognition.not_image')
+          );
         }
       }
       return undefined;
