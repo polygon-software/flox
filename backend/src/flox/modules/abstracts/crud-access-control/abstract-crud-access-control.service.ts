@@ -81,7 +81,7 @@ export default abstract class AbstractCrudAccessControlService<
   /**
    * Extracts the 'where' part of a typeorm find query and returns it as an array of wheres
    *
-   * @param options - from where the 'where' should be extractet lol
+   * @param options - from where the 'where' should be extractet
    * @protected
    * @returns array of where queries
    */
@@ -551,7 +551,7 @@ export default abstract class AbstractCrudAccessControlService<
   }
 
   /**
-   * Retrieves multiple items explicitely specified by their uuid. This service function must be
+   * Retrieves multiple items explicitly specified by their uuid. This service function must be
    * used with caution and should only be used for resolvers that are marked as @AdminOnly
    *
    * @param getMultipleArgs - contains a list of uuids of the items to retrieve
@@ -763,18 +763,14 @@ export default abstract class AbstractCrudAccessControlService<
   }
 
   /**
-   * Adds/Removes user groups from the read/write access groups of an entity.
+   * Adds/Removes user groups from the read/write access groups of an entity. Warning: This method does not take
+   * access control into consideration.
    *
    * @param manipulateAccessGroups - contains the adds/removes for the read/write groups.
-   * @param user - user that tries to perform the manipulation, must have write access to the entity
-   * @param sudo - perform action in sudo mode, means ignoring whether the user has appropriate rights to perform
-   *               the action
    * @returns Updated entity
    */
-  async manipulateAccessUserGroups(
+  async manipulateAccessUserGroupsAsAdmin(
     manipulateAccessGroups: ManipulateAccessGroupsInput,
-    user?: User,
-    sudo?: false,
   ): Promise<Entity> {
     const entity = await this.repository.findOneOrFail({
       where: {
@@ -782,10 +778,6 @@ export default abstract class AbstractCrudAccessControlService<
       } as FindOptionsWhere<Entity>,
       ...this.accessControlRelationOptions,
     });
-
-    if (!sudo) {
-      assertWriteAccess(entity, user);
-    }
 
     const readAccess = [
       ...new Set([
@@ -814,5 +806,26 @@ export default abstract class AbstractCrudAccessControlService<
     } as Entity;
     await this.repository.save(updatedEntity);
     return this.getOneAsAdmin({ uuid: manipulateAccessGroups.uuid });
+  }
+
+  /**
+   * Adds/Removes user groups from the read/write access groups of an entity.
+   *
+   * @param manipulateAccessGroups - contains the adds/removes for the read/write groups.
+   * @param user - user that tries to perform the manipulation, must have write access to the entity
+   * @returns Updated entity
+   */
+  async manipulateAccessUserGroupsAsUser(
+    manipulateAccessGroups: ManipulateAccessGroupsInput,
+    user?: User,
+  ): Promise<Entity> {
+    const entity = await this.repository.findOneOrFail({
+      where: {
+        uuid: manipulateAccessGroups.uuid,
+      } as FindOptionsWhere<Entity>,
+      ...this.accessControlRelationOptions,
+    });
+    assertWriteAccess(entity, user);
+    return this.manipulateAccessUserGroupsAsAdmin(manipulateAccessGroups);
   }
 }

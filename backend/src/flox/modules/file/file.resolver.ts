@@ -440,6 +440,6 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
     manipulateAccessGroups: ManipulateAccessGroupsInput,
     @CurrentUser() user: User,
   ): Promise<S3File> {
-    return super.manipulateAccessUserGroups(manipulateAccessGroups, user);
+    return super.manipulateAccessUserGroupsAsUser(manipulateAccessGroups, user);
   }
 }
