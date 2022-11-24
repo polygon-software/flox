@@ -32,6 +32,12 @@ import { executeQuery, QueryObject } from 'src/apollo/query';
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
 
+/**
+ * The lazy search field is a generic input field that searches items
+ * in the databased based onthe input and shows them as selections.
+ * This item is useful to let the user search for database entities and select
+ * one or more of them.
+ */
 const props = withDefaults(
   defineProps<{
     modelValue: BaseEntity[];

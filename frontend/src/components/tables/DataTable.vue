@@ -142,7 +142,7 @@
           <ConfirmButton
             v-if="selected.length > 0 && deleteSelection"
             :label="removeLabel"
-            confirm-label="Confirm Deletion"
+            :confirm-label="$t('general.confirm')"
             :button-props="{
               color: 'negative',
               iconRight: removeIcon,
