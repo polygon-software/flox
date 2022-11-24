@@ -55,10 +55,17 @@ export default abstract class AbstractCrudService<Entity extends BaseEntity> {
     getMultipleArgs: GetMultipleArgs,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity[]> {
-    return this.repository.findBy({
+    return this.repository.find({
       ...options,
-      uuid: In(getMultipleArgs.uuids),
-    } as FindOptionsWhere<Entity>);
+      where: mixWhere<Entity>(
+        [
+          {
+            uuid: In(getMultipleArgs.uuids),
+          },
+        ] as FindOptionsWhere<Entity>[],
+        extractWhere<Entity>(options),
+      ),
+    });
   }
 
   /**
