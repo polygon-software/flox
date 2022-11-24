@@ -166,7 +166,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   /**
-   * Generates all folders from a given base path based on the files that are located within the provided path.
+   * Retrieves all folders from a given base path based on the files that are located within the provided path.
    * Depending on whether a user is logged in and whether the user has an admin role,
    * returns public/users/admin folders only.
    *
@@ -217,7 +217,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   /**
-   * Generates all folders from a given base path based on the files that are located within the provided path.
+   * Retrieves all folders from a given base path based on the files that are located within the provided path.
    * It only returns the folders that the user is the owner or the user is part of an access group
    * that has read access to these files. This endpoint does not return public files, though,
    * since they do not explicitely belong to the user.
@@ -272,7 +272,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   /**
-   * Generates all folders from a given base path based on the files that are located within the provided path.
+   * Retrieves all folders from a given base path based on the files that are located within the provided path.
    * It only returns the folders that are marked with  public read access.
    *
    * @param getAllFoldersArgs - contains pagination parameters (skip, take)
@@ -299,7 +299,6 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   /**
    * Queries for all files that fit query criteria. Depending on whether a user is logged in and whether
    * the user has an admin role, returns public/users/admin files only.
-   * all of them are returned without checking for access rights.
    *
    * @param searchFilesArgs - contain table filtering rules
    * @param user - user that retrieves entities
@@ -348,8 +347,7 @@ export default class FileResolver extends AbstractSearchAccessControlResolver<
   }
 
   /**
-   * Queries for all files that fit query criteria. This service function must be
-   * used with caution and should only be used for resolvers that are marked as @AdminOnly
+   * Queries for all files that fit query criteria.
    *
    * @param searchFilesArgs - contain table filtering rules
    * @returns files that fit criteria

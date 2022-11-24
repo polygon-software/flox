@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { FrontendRequest, getRequest } from '../../core/flox-helpers';
@@ -53,9 +58,13 @@ export default class RolesGuard implements CanActivate {
       // Handle the case in which an alias is provided in header
       const alias = req.headers['user-alias'];
       if (dbUser.role === DefaultRoles.ADMIN && alias) {
-        dbUser = await this.userService.getUser({
-          uuid: alias,
-        } as GetUserArgs);
+        try {
+          dbUser = await this.userService.getUser({
+            uuid: alias,
+          } as GetUserArgs);
+        } catch (e) {
+          throw new BadRequestException('Inalid alias');
+        }
       }
 
       // Set either cognito user or alias user as principal to request

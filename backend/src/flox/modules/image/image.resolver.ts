@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import DeleteInput from '../abstracts/crud/inputs/delete.input';
 import AbstractSearchAccessControlResolver from '../abstracts/search-access-control/abstract-search-access-control.resolver';
-import { LoggedIn } from '../auth/authentication.decorator';
+import { LoggedIn, Public } from '../auth/authentication.decorator';
 import User from '../auth/entities/user.entity';
 import { CurrentUser } from '../roles/authorization.decorator';
 
@@ -95,7 +95,7 @@ export default class ImageResolver extends AbstractSearchAccessControlResolver<
    * @param user - the user that retrieves the image
    * @returns page of entities
    */
-  @LoggedIn()
+  @Public()
   @Query(() => [Image], { name: 'AllImages' })
   async getAllImages(
     @Args() getAllImagesArgs: GetAllImagesArgs,

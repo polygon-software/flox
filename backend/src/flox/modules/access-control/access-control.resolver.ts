@@ -58,7 +58,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
    * @param getAllOfUserArgs - contains uuid of user for which groups shall be retrieved
    * @returns list of user groups
    */
-  @LoggedIn()
+  @AdminOnly()
   @Query(() => [UserGroup], { name: 'UserGroupsOfUser' })
   async getUserGroupsOfUser(
     @Args() getAllOfUserArgs: GetAllOfUserArgs,
@@ -105,7 +105,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
    * @param getAllArgs - contains pagination parameters (skip, take)
    * @returns page of user groups
    */
-  @LoggedIn()
+  @AdminOnly()
   @Query(() => [UserGroup], { name: 'AllUserGroups' })
   async getAllUserGroups(@Args() getAllArgs: GetAllArgs): Promise<UserGroup[]> {
     return super.getAll(getAllArgs, { relations: { users: true } });
@@ -117,7 +117,7 @@ export default class AccessControlResolver extends AbstractSearchResolver<
    * @param searchQueryArgs - contain table filtering rules
    * @returns user groups that fit criteria
    */
-  @LoggedIn()
+  @AdminOnly()
   @Query(() => UserGroupSearchOutput, { name: 'SearchUserGroups' })
   async searchUserGroups(
     @Args() searchQueryArgs: SearchArgs,

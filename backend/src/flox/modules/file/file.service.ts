@@ -120,7 +120,7 @@ export default class FileService extends AbstractSearchAccessControlService<S3Fi
   }
 
   /**
-   * Deletes an S3 from S3. Be sure to have the database entry deleted manually as well.
+   * Deletes a File from S3. Be sure to have the database entry deleted manually as well.
    *
    * @param file - database entry that was already deleted
    * @returns the file that was deleted
