@@ -301,6 +301,7 @@ type Mutation {
   NotifyAllUsers(notifyInput: NotifyInput!): [Notification!]!
   NotifyUsers(notifyUsersInput: NotifyUsersInput!): [Notification!]!
   RemoveUserFromUserGroup(removeUserFromUserGroupInput: RemoveUserFromUserGroupInput!): UserGroup!
+  TestPayment: PaymentIntentOutput!
   UpdateFile(updateFileInput: UpdateFileInput!): S3File!
   UpdateUser(updateUserInput: UpdateUserInput!): User!
   UpdateUserGroup(updateUserGroupInput: UpdateUserGroupInput!): UserGroup!
@@ -340,6 +341,52 @@ input NotifyUsersInput {
 
   """Uuids of users that shall receive notifications"""
   recipients: [ID!]!
+}
+
+type Payment {
+  """Amount payed in this transaction"""
+  amount: Float!
+
+  """Author of this article"""
+  buyer: User!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """transaction currency"""
+  currency: String!
+
+  """Date of deletion"""
+  deletedAt: DateTime
+
+  """Description of purchase"""
+  description: String!
+
+  """Whether the payment is completed"""
+  paid: Boolean!
+
+  """Last modification date"""
+  updatedAt: DateTime
+
+  """UUID"""
+  uuid: ID!
+}
+
+type PaymentIntentOutput {
+  """Amount payed in this transaction"""
+  amount: Float!
+
+  """transaction currency"""
+  currency: String!
+
+  """Description of purchase"""
+  description: String!
+
+  """Stripe payment intent client secret"""
+  secret: String!
+
+  """UUID"""
+  uuid: ID!
 }
 
 type Query {
@@ -469,6 +516,7 @@ type Query {
     """Number of items to load"""
     take: Int = 500
   ): [UserGroup!]!
+  Payment(uuid: ID!): Payment!
   PublicFiles(
     """URL expiration duration (in seconds)"""
     expires: Int

@@ -123,6 +123,14 @@ export default {
     image_imported: 'Import successful',
     not_image: 'Import failed - file is not an image',
   },
+  payment: {
+    payment: 'Bezahlung',
+    test_payment: 'Testzahlung tätigen',
+    pay: 'Bezahlen',
+    pay_amount: 'Bezahlen ({amount})',
+    succeeded: 'Bezahlung erfolgreich',
+    failed: 'Bezahlung fehlgeschlagen',
+  },
   messages: {
     success: 'Success',
     failure: 'Failure',
@@ -188,6 +196,7 @@ export default {
     text_extraction: 'Text Extraction',
     settings: 'Settings',
     admin_panel: 'Admin Panel',
+    payment: 'Payment',
   },
   footer: {
     developers: 'Developers',

@@ -3436,6 +3436,11 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
+"@stripe/stripe-js@^1.44.1":
+  version "1.44.1"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-1.44.1.tgz#376fdbed2b394c84deaa2041b8029b97e7eab3a7"
+  integrity sha512-DKj3U6tS+sCNsSXsoZbOl5gDrAVD3cAZ9QCiVSykLC3iJo085kkmw/3BAACRH54Bq2bN34yySuH6G1SLh2xHXA==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"

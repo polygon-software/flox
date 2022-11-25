@@ -247,6 +247,13 @@ const sideMenu: ComputedRef<MenuType[]> = computed(() => [
           void $routerService?.routeTo(ROUTES.ADMIN_PANEL);
         },
       },
+      {
+        icon: 'credit_card',
+        text: i18n.global.t('menu.payment'),
+        click: (): void => {
+          void $routerService?.routeTo(ROUTES.PAYMENT);
+        },
+      },
       { icon: 'data_object', text: i18n.global.t('menu.settings') },
     ],
   },

@@ -126,6 +126,14 @@ export default {
     image_imported: 'Import erfolgreich',
     not_image: 'Import fehlgeschlagen - Datei ist kein Bild',
   },
+  payment: {
+    payment: 'Payment',
+    test_payment: 'Do Test payment',
+    pay: 'Pay',
+    pay_amount: 'Pay ({amount})',
+    succeeded: 'Payment succeeded',
+    failed: 'Payment failed',
+  },
   messages: {
     success: 'Erfolgreich',
     failure: 'Fehlgeschlagen',
@@ -191,6 +199,7 @@ export default {
     text_extraction: 'Text Extraktion',
     settings: 'Einstellungen',
     admin_panel: 'Administrator-Sektion',
+    payment: 'Bezahlungen',
   },
   footer: {
     developers: 'Entwickler',
