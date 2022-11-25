@@ -347,7 +347,7 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Path in which file must be located"""
+    """Path in which files must be located"""
     path: String
 
     """How many items to skip"""
@@ -370,7 +370,7 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Path in which file must be located"""
+    """Path in which files must be located"""
     path: String
 
     """How many items to skip"""
@@ -393,7 +393,7 @@ type Query {
     """URL expiration duration (in seconds)"""
     expires: Int
 
-    """Path in which file must be located"""
+    """Path in which files must be located"""
     path: String
 
     """How many items to skip"""

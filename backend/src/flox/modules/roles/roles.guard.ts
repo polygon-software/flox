@@ -1,14 +1,8 @@
-import {
-  BadRequestException,
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { FrontendRequest, getRequest } from '../../core/flox-helpers';
+import { getRequest } from '../../core/flox-helpers';
 import { IS_PUBLIC_KEY, LOGGED_IN_KEY } from '../auth/authentication.decorator';
-import GetUserArgs from '../auth/dto/args/get-user.args';
 import User from '../auth/entities/user.entity';
 import UserService from '../auth/user.service';
 
@@ -31,10 +25,10 @@ export default class RolesGuard implements CanActivate {
   /**
    * Gets the request from context
    *
-   * @param context - request execution context
-   * @returns request
+   * @param context - execution context of the request
+   * @returns the request
    */
-  getRequest(context: ExecutionContext): FrontendRequest {
+  getRequest(context: ExecutionContext): ReturnType<typeof getRequest> {
     return getRequest(context);
   }
 
@@ -44,32 +38,9 @@ export default class RolesGuard implements CanActivate {
    * @param context - context
    * @returns can activate
    */
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const req = this.getRequest(context);
-    const { user } = req;
-    let dbUser: User | undefined;
-
-    // Set user in request object
-    if (user) {
-      dbUser = await this.userService.getUser({
-        cognitoUuid: user.userId,
-      } as GetUserArgs);
-
-      // Handle the case in which an alias is provided in header
-      const alias = req.headers['user-alias'];
-      if (dbUser.role === DefaultRoles.ADMIN && alias) {
-        try {
-          dbUser = await this.userService.getUser({
-            uuid: alias,
-          } as GetUserArgs);
-        } catch (e) {
-          throw new BadRequestException('Inalid alias');
-        }
-      }
-
-      // Set either cognito user or alias user as principal to request
-      req.principal = dbUser;
-    }
+    const { principal } = req;
 
     // Public endpoints are generally accessible
     if (this.isPublic(context)) {
@@ -77,23 +48,23 @@ export default class RolesGuard implements CanActivate {
     }
 
     // If endpoint is not public, user must always be authenticated
-    if (!dbUser) {
+    if (!principal) {
       return false;
     }
 
     // Admin has access to everything
-    if (dbUser && dbUser.role === DefaultRoles.ADMIN) {
+    if (principal && principal.role === DefaultRoles.ADMIN) {
       return true;
     }
 
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
 
     // For generally accessible resources, allow access by default if user is logged in
-    const anyUserAccess = this.isLoggedIn(context, roles, dbUser);
+    const anyUserAccess = this.isLoggedIn(context, roles, principal);
     if (anyUserAccess) {
       return true;
     }
-    return roles ? roles.includes(dbUser.role) : false;
+    return roles ? roles.includes(principal.role) : false;
   }
 
   /**

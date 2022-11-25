@@ -10,6 +10,8 @@ import ImageModule from './modules/image/image.module';
 import RolesGuard from './modules/roles/roles.guard';
 import NotificationModule from './modules/notifications/notification.module';
 import { MODULES } from './MODULES';
+import CurrentUserInterceptor from './modules/auth/current-user.guard';
+import LoginGuard from './modules/auth/login.guard';
 
 export type FloxModules = FileModule | ImageModule | UserModule | EmailModule;
 
@@ -70,6 +72,14 @@ export function floxProviders(): any[] {
         providers.push({
           provide: APP_GUARD,
           useClass: JwtAuthGuard,
+        });
+        providers.push({
+          provide: APP_GUARD,
+          useClass: CurrentUserInterceptor,
+        });
+        providers.push({
+          provide: APP_GUARD,
+          useClass: LoginGuard,
         });
         break;
       // Role management module
