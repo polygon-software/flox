@@ -7,7 +7,7 @@
     "sharing": false,
     "email": false,
     "notification": true,
-    "payment": true,
+    "payment": true
   },
   "moduleOptions": {
     "auth": {
