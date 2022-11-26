@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 
 import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
+import UserEntity from 'src/flox/modules/auth/entities/user.entity';
 
 export default class PaymentEntity extends BaseEntity {
   @IsString()
@@ -17,6 +18,10 @@ export default class PaymentEntity extends BaseEntity {
   @MaxLength(60)
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsString()
+  status?: string;
 
   @IsOptional()
   @IsString()
@@ -33,4 +38,7 @@ export default class PaymentEntity extends BaseEntity {
   @IsCurrency()
   @IsNotEmpty()
   currency?: string;
+
+  @IsOptional()
+  buyer?: UserEntity;
 }

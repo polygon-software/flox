@@ -1,19 +1,35 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ForbiddenError } from 'apollo-server-express';
+import { FindOneOptions } from 'typeorm';
 
 import { AdminOnly, CurrentUser } from '../roles/authorization.decorator';
 import User from '../auth/entities/user.entity';
 import { LoggedIn } from '../auth/authentication.decorator';
 import GetOneArgs from '../abstracts/crud/dto/get-one.args';
 import { DefaultRoles } from '../roles/config';
+import AbstractSearchResolver from '../abstracts/search/abstract-search.resolver';
+import SearchArgs from '../abstracts/search/dto/args/search.args';
 
 import Payment from './entities/payment.entity';
 import PaymentService from './payment.service';
 import PaymentIntentOutput from './dto/outputs/payment-intent.output';
+import PaymentSearchOutput from './dto/outputs/payment-search.output';
 
 @Resolver(() => Payment)
-export default class PaymentResolver {
-  constructor(private readonly paymentService: PaymentService) {}
+export default class PaymentResolver extends AbstractSearchResolver<
+  Payment,
+  PaymentService
+> {
+  constructor(private readonly paymentService: PaymentService) {
+    super(['status', 'description', 'buyer.username']);
+  }
+
+  /**
+   * @returns payment service
+   */
+  get service(): PaymentService {
+    return this.paymentService;
+  }
 
   /**
    * Returns a payment object
@@ -47,5 +63,33 @@ export default class PaymentResolver {
   @Mutation(() => PaymentIntentOutput, { name: 'TestPayment' })
   createTestPayment(@CurrentUser() user: User): Promise<PaymentIntentOutput> {
     return this.paymentService.initiatePayment(user, 1, 'Test Payment');
+  }
+
+  /**
+   * Queries for all rows that fit query criteria, best used in combination with the DataTable
+   *
+   * @param queryArgs - contain table filtering rules
+   * @param user - logged in user
+   * @returns data that fit criteria
+   */
+  @LoggedIn()
+  @Query(() => PaymentSearchOutput, { name: 'SearchPayments' })
+  searchPayments(
+    @Args() queryArgs: SearchArgs,
+    @CurrentUser() user: User,
+  ): Promise<PaymentSearchOutput> {
+    const options: FindOneOptions<Payment> = {
+      relations: {
+        buyer: true,
+      },
+    };
+    if (user.role !== DefaultRoles.ADMIN) {
+      options.where = {
+        buyer: {
+          uuid: user.uuid,
+        },
+      };
+    }
+    return super.search(queryArgs, options);
   }
 }

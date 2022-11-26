@@ -2,16 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InjectStripe } from 'nestjs-stripe';
-import { Stripe } from 'stripe';
 
-import AbstractCrudService from '../abstracts/crud/abstract-crud.service';
 import User from '../auth/entities/user.entity';
+import AbstractSearchService from '../abstracts/search/abstract-search.service';
 
 import Payment from './entities/payment.entity';
 import PaymentIntentOutput from './dto/outputs/payment-intent.output';
 
+import type { Stripe } from 'stripe';
+
 @Injectable()
-export default class PaymentService extends AbstractCrudService<Payment> {
+export default class PaymentService extends AbstractSearchService<Payment> {
   /**
    * @returns article repository
    */
@@ -35,12 +36,57 @@ export default class PaymentService extends AbstractCrudService<Payment> {
    * @returns payment
    */
   async getPayment(uuid: string): Promise<Payment> {
-    return this.paymentRepository.findOneOrFail({
+    const paymentEntity = await this.paymentRepository.findOneOrFail({
       where: {
         uuid,
       },
       relations: {
         buyer: true,
+      },
+    });
+    const paymentIntent = await this.stripe.paymentIntents.retrieve(
+      paymentEntity.intentId,
+    );
+    return this.update(
+      {
+        ...paymentEntity,
+        ...{
+          status: paymentIntent.status,
+          paid: paymentIntent.status === 'succeeded',
+        },
+      },
+      {
+        relations: {
+          buyer: true,
+        },
+      },
+    );
+  }
+
+  /**
+   * Returns a stripe customer based on a user object
+   *
+   * @param user - user object
+   * @returns stripe customer object
+   */
+  async getCustomer(user: User): Promise<Stripe.Customer | undefined> {
+    const { data: customers } = await this.stripe.customers.search({
+      query: `metadata['uuid']:'${user.uuid}'`,
+    });
+    return customers[0];
+  }
+
+  /**
+   * Creates a stripe customer based on a user object
+   *
+   * @param user - user object
+   * @returns stripe customer object
+   */
+  async createCustomer(user: User): Promise<Stripe.Customer> {
+    return this.stripe.customers.create({
+      email: user.email,
+      metadata: {
+        uuid: user.uuid,
       },
     });
   }
@@ -60,17 +106,15 @@ export default class PaymentService extends AbstractCrudService<Payment> {
     description: string,
     currency = 'chf',
   ): Promise<PaymentIntentOutput> {
-    const paymentEntity = await super.create({
-      paid: false,
-      description,
-      amount,
-      currency,
-      buyer,
-    });
+    let customer: Stripe.Customer | undefined = await this.getCustomer(buyer);
+    if (!customer) {
+      customer = await this.createCustomer(buyer);
+    }
     const intent = await this.stripe.paymentIntents.create({
       amount: amount * 100,
       currency,
       description,
+      customer: customer.id,
       // eslint-disable-next-line camelcase
       automatic_payment_methods: {
         enabled: true,
@@ -79,12 +123,28 @@ export default class PaymentService extends AbstractCrudService<Payment> {
     if (!intent.client_secret) {
       throw new Error('Invalid payment intent');
     }
+    const paymentEntity = await super.create({
+      paid: false,
+      status: 'requires_payment_method',
+      secret: intent.client_secret,
+      intentId: intent.id,
+      description,
+      amount,
+      currency,
+      buyer,
+    });
+    await this.stripe.paymentIntents.update(intent.id, {
+      metadata: {
+        uuid: paymentEntity.uuid,
+      },
+    });
     return {
       uuid: paymentEntity.uuid,
       amount,
       currency,
       description,
       secret: intent.client_secret,
+      status: intent.status,
     };
   }
 }

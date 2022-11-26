@@ -31,6 +31,7 @@ import { StripePaymentElementOptions } from '@stripe/stripe-js/types/stripe-js/e
 import env from 'src/env';
 import { showErrorNotification } from 'src/tools/notification.tool';
 import { i18n } from 'boot/i18n';
+import { formatCurrency } from 'src/format/currency.format';
 
 import type { Appearance, Stripe } from '@stripe/stripe-js';
 import type { StripeElements } from '@stripe/stripe-js/types/stripe-js/elements-group';
@@ -52,10 +53,7 @@ const stripeLoaded: Ref<boolean> = ref(true);
 const isSending: Ref<boolean> = ref(false);
 
 const amountStr = computed(() => {
-  return new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: props.currency.toUpperCase(),
-  }).format(props.amount);
+  return formatCurrency(props.amount, props.currency);
 });
 
 const paymentElementOptions: StripePaymentElementOptions = {};
@@ -84,7 +82,6 @@ async function handleSubmit(): Promise<void> {
     `${window.location.origin}${env.MODE === 'spa' ? '/#' : ''}/payment/${
       props.uuid
     }`;
-  console.log(returnUrl);
   const confirmation = await stripe.confirmPayment({
     elements,
     confirmParams: {

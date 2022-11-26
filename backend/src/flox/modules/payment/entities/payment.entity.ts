@@ -14,9 +14,32 @@ import {
 import User from '../../auth/entities/user.entity';
 import BaseEntity from '../../../core/base-entity/entities/base-entity.entity';
 
+import type { Stripe } from 'stripe';
+
 @Entity()
 @ObjectType()
 export default class Payment extends BaseEntity {
+  @Field(() => String, {
+    description: 'Stripe payment intent client secret',
+  })
+  @Column()
+  @IsString()
+  secret: string;
+
+  @Field(() => String, {
+    description: 'Stripe payment id',
+  })
+  @Column()
+  @IsString()
+  intentId: string;
+
+  @Field(() => String, {
+    description: 'Payment status',
+  })
+  @Column()
+  @IsString()
+  status: Stripe.PaymentIntent.Status;
+
   @Field(() => Boolean, {
     description: 'Whether the payment is completed',
   })

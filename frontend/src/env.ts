@@ -112,7 +112,14 @@ export default {
   /**
    * @returns quasar mode: dev, spa, pwa, ssr etc.
    */
-  get MODE(): 'spa' | 'pwa' | 'ssr' | 'bex' | 'cordova' | 'capacitor' | 'electron' {
+  get MODE():
+    | 'spa'
+    | 'pwa'
+    | 'ssr'
+    | 'bex'
+    | 'cordova'
+    | 'capacitor'
+    | 'electron' {
     return asOneOf<string>(asString(process.env.MODE), [
       'spa',
       'pwa',

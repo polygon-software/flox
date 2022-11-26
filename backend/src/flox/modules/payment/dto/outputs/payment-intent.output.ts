@@ -9,6 +9,8 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
+import { Column } from 'typeorm';
+import { Stripe } from 'stripe';
 
 @ObjectType()
 export default class PaymentIntentOutput {
@@ -29,6 +31,13 @@ export default class PaymentIntentOutput {
   })
   @IsString()
   secret: string;
+
+  @Field(() => String, {
+    description: 'Payment status',
+  })
+  @Column()
+  @IsString()
+  status: Stripe.PaymentIntent.Status;
 
   @Field(() => Float, {
     description: 'Amount payed in this transaction',

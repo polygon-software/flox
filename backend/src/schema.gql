@@ -362,8 +362,17 @@ type Payment {
   """Description of purchase"""
   description: String!
 
+  """Stripe payment id"""
+  intentId: String!
+
   """Whether the payment is completed"""
   paid: Boolean!
+
+  """Stripe payment intent client secret"""
+  secret: String!
+
+  """Payment status"""
+  status: String!
 
   """Last modification date"""
   updatedAt: DateTime
@@ -385,8 +394,19 @@ type PaymentIntentOutput {
   """Stripe payment intent client secret"""
   secret: String!
 
+  """Payment status"""
+  status: String!
+
   """UUID"""
   uuid: ID!
+}
+
+type PaymentSearchOutput {
+  """How many items are found within database"""
+  count: String!
+
+  """Payments that fit query"""
+  data: [Payment!]!
 }
 
 type Query {
@@ -621,6 +641,22 @@ type Query {
     """Number of items to load"""
     take: Int = 500
   ): ImageSearchOutput!
+  SearchPayments(
+    """Sort descending"""
+    descending: Boolean = false
+
+    """Search for text within items"""
+    filter: String
+
+    """How many items to skip"""
+    skip: Int = 0
+
+    """Sort by property"""
+    sortBy: String
+
+    """Number of items to load"""
+    take: Int = 500
+  ): PaymentSearchOutput!
   SearchPublicFiles(
     """Sort descending"""
     descending: Boolean = false

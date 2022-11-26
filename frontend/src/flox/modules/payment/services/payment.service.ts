@@ -2,7 +2,11 @@ import { executeMutation } from 'src/apollo/mutation';
 import { TEST_PAYMENT } from 'src/flox/modules/payment/payment.mutations';
 import PaymentEntity from 'src/flox/modules/payment/entities/payment.enttity';
 import { executeQuery } from 'src/apollo/query';
-import { GET_PAYMENT } from 'src/flox/modules/payment/payment.query';
+import {
+  GET_PAYMENT,
+  SEARCH_PAYMENT,
+} from 'src/flox/modules/payment/payment.query';
+import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
 
 /**
  * Fetches a payment
@@ -23,4 +27,34 @@ export async function getPayment(uuid: string): Promise<PaymentEntity> {
 export async function createTestPayment(): Promise<PaymentEntity | null> {
   const { data } = await executeMutation<PaymentEntity>(TEST_PAYMENT, {});
   return data ?? null;
+}
+
+/**
+ * Search payment
+ *
+ * @param take - pagination take
+ * @param skip - pagination skip
+ * @param filter - search input for username
+ * @param sortBy - column to sort results by
+ * @param descending - sort ascending or descending
+ * @returns search results
+ */
+export async function searchPayment(
+  take: number,
+  skip: number,
+  filter: string,
+  sortBy: string,
+  descending = false
+): Promise<CountQuery<PaymentEntity>> {
+  const { data } = await executeQuery<CountQuery<PaymentEntity>>(
+    SEARCH_PAYMENT,
+    {
+      take,
+      skip,
+      filter,
+      sortBy,
+      descending,
+    }
+  );
+  return data;
 }
