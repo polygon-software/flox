@@ -1,5 +1,6 @@
 /**
  * Ensures extracted environment variable is a string
+ *
  * @param value - extracted environment variable
  * @returns environment variable as string
  */
@@ -14,6 +15,7 @@ function asString(value: string | undefined): string {
 
 /**
  * Ensures extracted environment variable is a number
+ *
  * @param value - extracted environment variable
  * @returns environment variable as integer
  */
@@ -31,6 +33,7 @@ function asNumber(value: string | undefined): number {
 
 /**
  * Ensures extracted environment variable is a boolean
+ *
  * @param value - extracted environment variable
  * @returns environment variable as boolean
  */
@@ -45,6 +48,7 @@ function asBoolean(value: string | undefined): boolean {
 
 /**
  * Ensures extracted environment variable is one of the provided values
+ *
  * @param value - extracted environment variable
  * @param valueList - list of possible values
  * @returns environment variable

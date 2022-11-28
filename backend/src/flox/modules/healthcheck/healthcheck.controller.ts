@@ -1,17 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
-import { Public } from '../auth/authentication.decorator';
+import { ConfigService } from '@nestjs/config';
 import {
   HealthCheck,
   HealthCheckService,
   HttpHealthIndicator,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
-import { ConfigService } from '@nestjs/config';
-import { SkipThrottle } from '@nestjs/throttler';
 import { HealthCheckResult } from '@nestjs/terminus/dist/health-check/health-check-result.interface';
+import { SkipThrottle } from '@nestjs/throttler';
+
+import { Public } from '../auth/authentication.decorator';
 
 @Controller('healthcheck')
-export class HealthcheckController {
+export default class HealthcheckController {
   constructor(
     private readonly configService: ConfigService,
     private readonly healthcheckService: HealthCheckService,
@@ -19,6 +20,9 @@ export class HealthcheckController {
     private readonly database: TypeOrmHealthIndicator,
   ) {}
 
+  /**
+   *  Checks the application's status (database, connectivity etc.)
+   */
   @Public()
   @HealthCheck()
   @SkipThrottle()
@@ -36,7 +40,7 @@ export class HealthcheckController {
       // Database connectivity
       (): ReturnType<typeof this.database.pingCheck> =>
         this.database.pingCheck(
-          this.configService.getOrThrow('database.database'),
+          this.configService.getOrThrow<string>('database.database'),
         ),
     ]);
   }

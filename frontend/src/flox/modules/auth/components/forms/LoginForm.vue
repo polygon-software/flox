@@ -12,7 +12,7 @@
           v-bind="field.attributes"
           v-model="form.values.value[field.key]"
           class="full-width"
-          @change="(newValue) => form.updateValue(field.key, newValue)"
+          @change="form.updateValue(field.key, $event)"
         >
           <template #prepend>
             <q-icon
@@ -54,17 +54,25 @@
 </template>
 
 <script setup lang="ts">
-import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
-import { MultiPageForm } from 'components/forms/MultiPageForm';
 import { defineEmits, inject } from 'vue';
-import { AuthenticationService } from 'src/flox/modules/auth/services/auth.service';
+
+import { MultiPageForm } from 'components/forms/MultiPageForm';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import * as auth from 'src/flox/modules/auth';
+import { FIELDS } from 'src/flox/modules/auth/components/forms/fields';
+import AuthenticationService from 'src/flox/modules/auth/services/auth.service';
+
+type PasswordInput = {
+  identifier: string;
+  password: string;
+};
+
+const emit = defineEmits<{
+  (e: 'submit', form: PasswordInput): void;
+}>();
 
 const $authService: AuthenticationService | undefined = inject('$authService');
-
-const emit = defineEmits(['submit']);
 
 const fields = [
   auth.moduleConfig().emailAsUsername ? FIELDS.EMAIL : FIELDS.USERNAME,
@@ -76,7 +84,7 @@ form.pages.value = [
   {
     key: 'login',
     label: 'Login',
-    fields: fields,
+    fields,
   },
 ];
 
@@ -84,14 +92,13 @@ form.pages.value = [
  * Emits the 'submit' event, containing the form's data
  */
 function onSubmit(): void {
-  const formValues: Record<string, unknown> = {
-    identifier:
-      form.values.value[
-        auth.moduleConfig().emailAsUsername
-          ? FIELDS.EMAIL.key
-          : FIELDS.USERNAME.key
-      ],
-    password: form.values.value[FIELDS.PASSWORD.key],
+  const formValues: PasswordInput = {
+    identifier: form.values.value[
+      auth.moduleConfig().emailAsUsername
+        ? FIELDS.EMAIL.key
+        : FIELDS.USERNAME.key
+    ] as string,
+    password: form.values.value[FIELDS.PASSWORD.key] as string,
   };
 
   emit('submit', formValues);
@@ -104,6 +111,7 @@ function forgotPassword(): void {
   $authService?.showResetPasswordDialog();
 }
 </script>
+
 <style scoped>
 h5 {
   margin-bottom: 10px;

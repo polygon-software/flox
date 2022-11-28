@@ -1,44 +1,54 @@
-import axios, { AxiosResponse } from 'axios';
-import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
-import { FileEntity } from 'src/flox/modules/file/entities/file.entity';
-import { TABLES } from 'src/flox/TABLES';
-import { createImage } from 'src/flox/modules/image/services/image.service';
+import axios from 'axios';
+
 import { invalidateTables } from 'src/apollo/invalidation';
+import FileEntity from 'src/flox/modules/file/entities/file.entity';
+import { TABLES } from 'src/flox/TABLES';
+import {
+  createFile,
+  FileInputs,
+} from 'src/flox/modules/file/services/file.service';
+
+export type SelectedFile = {
+  content: File;
+  url: string;
+  status: string;
+};
 
 /**
  * Uploads a single file to a given endpoint
+ *
  * @param file - File that should be uploaded
- * @param url - The url to upload to
- * @return Whether the upload was successful or not
+ * @param fileInputs - additional inputs that are passed to the file creation API call
+ * @returns Whether the upload was successful or not
  */
 export async function uploadFile(
-  file: File,
-  url: string
-): Promise<AxiosResponse> {
-  const formData = new FormData();
-  formData.append('file', file as Blob);
-
+  file: SelectedFile,
+  fileInputs: FileInputs
+): Promise<FileEntity> {
   const headers = {
-    'Content-Type': 'multipart/form-data',
-    Authorization: getBearerToken(),
+    'Content-Type': file.content.type,
   };
 
-  const uploadResult = await axios({
-    method: 'post',
-    url: url,
-    data: formData,
-    headers: headers,
-  }).catch((e: Error) => {
-    throw new Error(`File upload error: ${e.message}`);
-  });
-  const imageDetails = uploadResult.data as FileEntity;
-
-  if (file.type.split('/')[0] === 'image') {
-    await createImage(imageDetails.uuid, true);
+  const createdFile = await createFile(
+    file.content.name,
+    file.content.type,
+    file.content.size,
+    fileInputs
+  );
+  if (!createdFile || !createdFile.signedUrl) {
+    throw new Error('Unable to create file');
   }
 
-  invalidateTables([TABLES.PRIVATE_FILE, TABLES.PUBLIC_FILE, TABLES.IMAGE]);
+  await axios
+    .put(createdFile.signedUrl, file.content, {
+      headers,
+    })
+    .catch((e: Error) => {
+      throw new Error(`File upload error: ${e.message}`);
+    });
+
+  invalidateTables([TABLES.FILE]);
 
   // Return updated objects
-  return uploadResult;
+  return createdFile;
 }

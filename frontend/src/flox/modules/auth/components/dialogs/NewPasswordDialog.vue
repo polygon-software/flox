@@ -34,16 +34,20 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, ref } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
+import { defineEmits, ref } from 'vue';
+
+import { i18n } from 'boot/i18n';
 import {
   joiPasswordSchema,
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
-import { i18n } from 'boot/i18n';
 
-let password = ref('');
-let passwordRep = ref('');
+// eslint-disable-next-line vue/define-emits-declaration
+defineEmits(useDialogPluginComponent.emits);
+
+const password = ref('');
+const passwordRep = ref('');
 
 const passwordRules = [
   joiSchemaToValidationRule(
@@ -57,8 +61,6 @@ const matchingRules = [
 ];
 
 const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent();
-
-defineEmits(useDialogPluginComponent.emits);
 
 /**
  * Upon submit, pass entered values outwards

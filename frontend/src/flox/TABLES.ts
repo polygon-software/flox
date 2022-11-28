@@ -1,8 +1,10 @@
 export enum TABLES {
-  PRIVATE_FILE = 'privateFile',
-  PUBLIC_FILE = 'publicFile',
-  IMAGE = 'image',
-  LABELS = 'labels',
-  BOUNDING_BOX = 'boundingBox',
-  USER = 'user',
+  FILE = 'FILE',
+  IMAGE = 'IMAGE',
+  LABEL = 'LABEL',
+  BOUNDING_BOX = 'BOUNDING_BOX',
+  USER = 'USER',
+  USER_GROUP = 'USER_GROUP',
+  NOTIFICATION = 'NOTIFICATION',
 }
+export const ALL_TABLES = Object.values(TABLES);

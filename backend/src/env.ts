@@ -1,5 +1,6 @@
 /**
  * Ensures extracted environment variable is a string
+ *
  * @param value - extracted environment variable
  * @returns environment variable as string
  */
@@ -14,6 +15,7 @@ function asString(value: string | undefined): string {
 
 /**
  * Ensures extracted environment variable is a number
+ *
  * @param value - extracted environment variable
  * @returns environment variable as integer
  */
@@ -31,6 +33,7 @@ function asNumber(value: string | undefined): number {
 
 /**
  * Ensures extracted environment variable is a boolean
+ *
  * @param value - extracted environment variable
  * @returns environment variable as boolean
  */
@@ -71,8 +74,8 @@ export default {
   /**
    * @returns database port
    */
-  get DB_PORT(): string {
-    return asString(process.env.DB_PORT);
+  get DB_PORT(): number {
+    return asNumber(process.env.DB_PORT);
   },
   /**
    * @returns database host name

@@ -1,9 +1,11 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
-import { BaseEntity } from '../../../core/base-entity/entities/base-entity.entity';
 import { Field, ObjectType } from '@nestjs/graphql';
-import PrivateFile from '../../file/entities/privateFile.entity';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { IsDate, IsNumber, IsOptional } from 'class-validator';
-import { Label } from './label.entity';
+
+import AccessControlledEntity from '../../access-control/entities/access-controlled.entity';
+import S3File from '../../file/entities/file.entity';
+
+import Label from './label.entity';
 
 /**
  * Defines an image that wraps an S3 File
@@ -11,11 +13,11 @@ import { Label } from './label.entity';
 
 @Entity()
 @ObjectType()
-export class Image extends BaseEntity {
-  @Field(() => PrivateFile, { description: 'File' })
-  @OneToOne(() => PrivateFile, { cascade: true, onDelete: 'CASCADE' })
+export default class Image extends AccessControlledEntity {
+  @Field(() => S3File, { description: 'File' })
+  @OneToOne(() => S3File, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn()
-  public file: PrivateFile;
+  public file: S3File;
 
   @Field(() => Number, {
     nullable: true,
@@ -80,5 +82,3 @@ export class Image extends BaseEntity {
   @OneToMany(() => Label, (label) => label.image)
   public labels: Label[];
 }
-
-export default Image;

@@ -4,7 +4,7 @@ interface SsrState {
   prefetchedData: Record<string, unknown>;
 }
 
-export const useSsrStore = defineStore('ssrState', {
+export default defineStore('ssrState', {
   state: (): SsrState => ({
     prefetchedData: {},
   }),
@@ -12,6 +12,7 @@ export const useSsrStore = defineStore('ssrState', {
   getters: {
     /**
      * Gets prefetched data for a key
+     *
      * @param state - the current state of the store
      * @returns any result
      */
@@ -27,7 +28,10 @@ export const useSsrStore = defineStore('ssrState', {
   actions: {
     /**
      * Sets prefetched data state
-     * @param payload - value to set
+     *
+     * @param payload - payload to be set in prefetched data store
+     * @param payload.key - key to be set in prefetched data
+     * @param payload.value - value to be set
      */
     setPrefetchedData(payload: { key: string; value: unknown }): void {
       this.prefetchedData[payload.key] = payload.value;

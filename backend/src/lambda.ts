@@ -1,8 +1,10 @@
-import { Handler, Context, Callback } from 'aws-lambda';
+import { Callback, Context, Handler } from 'aws-lambda';
+
 import { bootstrapServerless } from './bootstrap';
 
 /**
  * Bootstraps for Lambda deployment
+ *
  * @param event - trigger event
  * @param context - execution context
  * @param callback - callback
@@ -16,3 +18,5 @@ export const handler: Handler = async (
   const server = await bootstrapServerless();
   return server(event, context, callback);
 };
+
+export default handler;

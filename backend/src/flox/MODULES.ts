@@ -1,4 +1,5 @@
 // Flox Modules
+// eslint-disable-next-line import/prefer-default-export
 export enum MODULES {
   AUTH = 'auth',
   ROLES = 'roles',
@@ -6,4 +7,5 @@ export enum MODULES {
   IMAGE = 'image',
   SHARING = 'sharing',
   EMAIL = 'email',
+  NOTIFICATION = 'notification',
 }

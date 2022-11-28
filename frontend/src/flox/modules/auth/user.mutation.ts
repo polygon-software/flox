@@ -1,26 +1,30 @@
-import gql from 'graphql-tag';
-import { MutationTypes } from 'src/apollo/mutation';
+import { gql } from '@apollo/client/core';
+
+import { MutationObject, MutationTypes } from 'src/apollo/mutation';
 import { TABLES } from 'src/flox/TABLES';
 
 /**
  * User-related mutations
  */
-export const CREATE_USER = {
+export const CREATE_USER: MutationObject = {
   mutation: gql`
-    mutation createUser(
+    mutation CreateUser(
       $username: String!
       $email: String!
       $cognitoUuid: String!
+      $lang: String!
     ) {
-      createUser(
+      CreateUser(
         createUserInput: {
           username: $username
           email: $email
           cognitoUuid: $cognitoUuid
+          lang: $lang
         }
       ) {
         uuid
         username
+        lang
         email
         cognitoUuid
         __typename
@@ -29,17 +33,28 @@ export const CREATE_USER = {
   `,
   tables: [TABLES.USER],
   type: MutationTypes.CREATE,
-  cacheLocation: 'createUser',
+  cacheLocation: 'CreateUser',
 };
 
-export const UPDATE_USER = {
+export const UPDATE_USER: MutationObject = {
   mutation: gql`
-    mutation updateUser($uuid: ID!, $username: String, $email: String!) {
-      updateUser(
-        updateUserInput: { uuid: $uuid, username: $username, email: $email }
+    mutation UpdateUser(
+      $uuid: ID!
+      $username: String
+      $email: String
+      $lang: String
+    ) {
+      UpdateUser(
+        updateUserInput: {
+          uuid: $uuid
+          username: $username
+          email: $email
+          lang: $lang
+        }
       ) {
         uuid
         username
+        lang
         email
         cognitoUuid
         __typename
@@ -48,13 +63,13 @@ export const UPDATE_USER = {
   `,
   tables: [TABLES.USER],
   type: MutationTypes.UPDATE,
-  cacheLocation: 'updateUser',
+  cacheLocation: 'UpdateUser',
 };
 
-export const DELETE_USER = {
+export const DELETE_USER: MutationObject = {
   mutation: gql`
-    mutation deleteUser($uuid: ID!) {
-      deleteUser(deleteUserInput: { uuid: $uuid }) {
+    mutation DeleteUser($uuid: ID!) {
+      DeleteUser(deleteUserInput: { uuid: $uuid }) {
         uuid
       }
     }

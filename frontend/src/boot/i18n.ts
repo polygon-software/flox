@@ -2,6 +2,7 @@ import { boot } from 'quasar/wrappers';
 import { createI18n } from 'vue-i18n';
 
 import messages from 'src/i18n';
+
 export type MessageSchema = typeof messages.de;
 
 const i18n = createI18n<[MessageSchema], 'de' | 'en', false>({

@@ -1,10 +1,12 @@
 import { ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import flox from '../../../flox.config.json';
-import { MODULES } from '../MODULES';
 import { Request } from 'express';
-import { User } from '../modules/auth/entities/user.entity';
+
+import flox from '../../../flox.config.json';
 import Env from '../../env';
+import { MODULES } from '../MODULES';
+
+import type User from '../modules/auth/entities/user.entity';
 
 export interface FrontendRequest extends Request {
   user?: {
@@ -22,21 +24,24 @@ export type FloxModuleName = keyof typeof flox.modules;
 
 /**
  * Gets the request from context
+ *
  * @param context - execution context of the request
  * @returns the request
  */
 export function getRequest(context: ExecutionContext): FrontendRequest {
-  const ctx = GqlExecutionContext.create(context);
+  const ctx: GqlExecutionContext = GqlExecutionContext.create(context);
   // If call is not from GraphQL, get req regularly
   if (!ctx.getContext()) {
     return context.switchToHttp().getRequest();
   }
   // Call is from GraphQL
-  return ctx.getContext().req;
+  const graphQlContext: { req: FrontendRequest } = ctx.getContext();
+  return graphQlContext.req;
 }
 
 /**
  * Determines a module's actual configuration based on defaults and custom config
+ *
  * @param defaultConfig - The module's default configuration
  * @param customConfig - custom configuration from flox.config.json (might be empty if not given)
  * @returns - actual configuration to use
@@ -50,6 +55,7 @@ export function mergeConfigurations(
 
 /**
  * Gets the active Flox modules from config
+ *
  * @returns - list of module names
  */
 export function getActiveFloxModuleNames(): FloxModuleName[] {
@@ -66,6 +72,7 @@ export function getActiveFloxModuleNames(): FloxModuleName[] {
 
 /**
  * Gets the options for a single Flox module (with proper typing, since config is .js)
+ *
  * @param moduleName - name of the module to check
  * @returns options for the modules
  */
@@ -80,6 +87,7 @@ export function floxModuleOptions(
 
 /**
  * Gets the active Flox modules' options (with proper typing, since config is .js)
+ *
  * @returns options for active modules
  */
 export function floxModulesOptions(): Record<
@@ -100,6 +108,7 @@ export function floxModulesOptions(): Record<
 
 /**
  * Determines whether a Flox module is currently active from flox.config.json
+ *
  * @param moduleName - name of the module to check
  * @returns whether the module is active
  */
@@ -109,6 +118,7 @@ export function isModuleActive(moduleName: FloxModuleName): boolean {
 
 /**
  * Determines whether Flox is set to serverless mode in flox.config
+ *
  * @returns whether the config is set to serverless mode
  */
 export function isServerless(): boolean {

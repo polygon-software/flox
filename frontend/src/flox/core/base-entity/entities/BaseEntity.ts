@@ -1,13 +1,27 @@
+import { IsDate, IsOptional, IsUUID } from 'class-validator';
+
 /**
  * Base entity class that others inherit from.
  * Includes unique UUID, as well as creation/modification/deletion timestamps
  */
-export abstract class BaseEntity {
+export default class BaseEntity {
+  @IsUUID()
+  uuid: string;
+
+  @IsDate()
+  @IsOptional()
+  createdAt?: Date;
+
+  @IsDate()
+  @IsOptional()
+  updatedAt?: Date;
+
+  @IsDate()
+  @IsOptional()
+  deletedAt?: Date;
+
   // eslint-disable-next-line require-jsdoc
-  constructor(
-    public uuid: string,
-    public createdAt: Date,
-    public updatedAt: Date,
-    public deletedAt: Date | null
-  ) {}
+  constructor(uuid: string) {
+    this.uuid = uuid;
+  }
 }

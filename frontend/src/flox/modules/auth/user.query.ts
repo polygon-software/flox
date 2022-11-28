@@ -1,4 +1,5 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client/core';
+
 import { QueryObject } from 'src/apollo/query';
 import { TABLES } from 'src/flox/TABLES';
 
@@ -6,30 +7,52 @@ import { TABLES } from 'src/flox/TABLES';
  * User-related queries
  */
 
-export const MY_USER = {
+export const GET_MY_USER: QueryObject = {
   query: gql`
-    query {
-      myUser {
+    query MyUser {
+      MyUser {
         uuid
         username
+        lang
         cognitoUuid
         email
+        role
         __typename
       }
     }
   `,
   tables: [TABLES.USER],
-  cacheLocation: 'myUser',
+  cacheLocation: 'MyUser',
 };
 
-export const ALL_USERS = {
+export const GET_USER: QueryObject = {
   query: gql`
-    query {
-      allUsers {
+    query User($uuid: ID!) {
+      User(uuid: $uuid) {
         uuid
         username
+        lang
         cognitoUuid
         email
+        role
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.USER],
+  cacheLocation: 'User',
+};
+
+export const GET_MULTIPLE_USERS: QueryObject = {
+  query: gql`
+    query Users($uuids: [ID!]) {
+      Users(uuids: $uuids) {
+        uuid
+        username
+        lang
+        cognitoUuid
+        email
+        role
         __typename
       }
     }
@@ -38,18 +61,36 @@ export const ALL_USERS = {
   cacheLocation: 'allUsers',
 };
 
-export const QUERY_USERS = {
+export const GET_ALL_USERS: QueryObject = {
   query: gql`
-    query queryUsers(
-      $skip: Float
-      $take: Float
+    query AllUsers($take: Int, $skip: Int) {
+      AllUsers(take: $take, skip: $skip) {
+        uuid
+        username
+        lang
+        cognitoUuid
+        email
+        role
+        __typename
+      }
+    }
+  `,
+  tables: [TABLES.USER],
+  cacheLocation: 'allUsers',
+};
+
+export const SEARCH_USERS: QueryObject = {
+  query: gql`
+    query SearchUsers(
+      $take: Int
+      $skip: Int
       $filter: String
       $sortBy: String
       $descending: Boolean
     ) {
-      queryUsers(
-        skip: $skip
+      SearchUsers(
         take: $take
+        skip: $skip
         filter: $filter
         sortBy: $sortBy
         descending: $descending
@@ -58,6 +99,7 @@ export const QUERY_USERS = {
         data {
           uuid
           username
+          lang
           email
           role
         }
@@ -66,7 +108,13 @@ export const QUERY_USERS = {
     }
   `,
   tables: [TABLES.USER],
-  cacheLocation: 'queryUsers',
+  cacheLocation: 'SearchUsers',
 };
 
-export const USER_QUERIES: QueryObject[] = [MY_USER, ALL_USERS, QUERY_USERS];
+export const USER_QUERIES: QueryObject[] = [
+  GET_MY_USER,
+  GET_USER,
+  GET_MULTIPLE_USERS,
+  GET_ALL_USERS,
+  SEARCH_USERS,
+];

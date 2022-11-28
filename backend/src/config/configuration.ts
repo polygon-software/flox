@@ -1,5 +1,23 @@
 import Env from '../env';
 
+type DatabaseConfig = {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+};
+
+type ServerConfig = {
+  port: number | undefined;
+};
+
+type Config = {
+  server: ServerConfig;
+  entities: string;
+  database: DatabaseConfig;
+};
+
 export default (): Config => ({
   server: {
     port: Env.SERVER_PORT || 3000,
@@ -13,21 +31,3 @@ export default (): Config => ({
     database: Env.DB_DATABASE,
   },
 });
-
-export class ServerConfig {
-  port: number | undefined;
-}
-
-export class DatabaseConfig {
-  host: string;
-  port: string;
-  username: string;
-  password: string;
-  database: string;
-}
-
-export class Config {
-  server: ServerConfig;
-  entities: string;
-  database: DatabaseConfig;
-}

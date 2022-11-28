@@ -36,28 +36,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { defineEmits, defineProps, ref, watch } from 'vue';
+
+import { i18n } from 'boot/i18n';
 import FloxWrapper from 'src/flox/core/components/FloxWrapper.vue';
 import { MODULES } from 'src/flox/MODULES';
 import {
   joiPasswordSchema,
   joiSchemaToValidationRule,
 } from 'src/tools/validation.tool';
-import { i18n } from 'boot/i18n';
 
 /**
  * This component contains field to enter a new password, as well as another field to repeat the new password. Both entries need to match.
  */
 
-const props = defineProps({
-  modelValue: {
-    required: true,
-    type: String,
-  },
-});
+const props = defineProps<{
+  modelValue: string;
+}>();
 
-let password = ref(props.modelValue ?? '');
-let passwordRepeat = ref(props.modelValue ?? '');
+const emit = defineEmits<{
+  (e: 'change', value: string): void;
+}>();
+
+const password = ref(props.modelValue ?? '');
+const passwordRepeat = ref(props.modelValue ?? '');
 const isPwd = ref(true);
 const isPwdRepeat = ref(true);
 
@@ -72,18 +74,9 @@ const matchingRules = [
     val === password.value || i18n.global.t('errors.non_matching_password'),
 ];
 
-const emit = defineEmits(['change']);
-
-watch(password, (newVal) => {
-  emitUpdate(newVal);
-});
-
-watch(passwordRepeat, (newVal) => {
-  emitUpdate(newVal);
-});
-
 /**
  * Emits an update with new value
+ *
  * @param value - the password
  */
 function emitUpdate(value: string): void {
@@ -94,4 +87,12 @@ function emitUpdate(value: string): void {
     emit('change', '');
   }
 }
+
+watch(password, (newVal) => {
+  emitUpdate(newVal);
+});
+
+watch(passwordRepeat, (newVal) => {
+  emitUpdate(newVal);
+});
 </script>

@@ -3,16 +3,18 @@
 </template>
 
 <script setup lang="ts">
-import { AuthenticationService } from './flox/modules/auth/services/auth.service';
-import { provide, reactive } from 'vue';
-import { ErrorService } from './services/ErrorService';
+import LogRocket from 'logrocket';
 import { useQuasar } from 'quasar';
-import { RouterService } from 'src/services/RouterService';
+import { provide, reactive } from 'vue';
+
 import { routerInstance } from 'boot/router';
+import Env from 'src/env';
 import { isModuleActive } from 'src/flox';
 import { MODULES } from 'src/flox/MODULES';
-import LogRocket from 'logrocket';
-import Env from 'src/env';
+import RouterService from 'src/services/RouterService';
+
+import AuthenticationService from './flox/modules/auth/services/auth.service';
+import ErrorService from './services/ErrorService';
 
 // Add LogRocket to production deployments / builds
 if (Env.VUE_APP_PRODUCTION) {

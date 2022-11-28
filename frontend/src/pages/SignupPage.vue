@@ -8,14 +8,16 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
-import { AuthenticationService } from '../flox/modules/auth/services/auth.service';
-import ROUTES from 'src/router/routes';
-import { RouterService } from 'src/services/RouterService';
-import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
-import { showSuccessNotification } from 'src/tools/notification.tool';
 import { useQuasar } from 'quasar';
+import { inject } from 'vue';
+
 import { i18n } from 'boot/i18n';
+import SignupForm from 'src/flox/modules/auth/components/forms/SignupForm.vue';
+import ROUTES from 'src/router/routes';
+import RouterService from 'src/services/RouterService';
+import { showSuccessNotification } from 'src/tools/notification.tool';
+
+import AuthenticationService from '../flox/modules/auth/services/auth.service';
 
 const $q = useQuasar();
 const $authService: AuthenticationService | undefined = inject('$authService');
@@ -23,9 +25,11 @@ const $routerService: RouterService | undefined = inject('$routerService');
 
 /**
  * Logs in the given authentication
- * @param username - the authentication's username (might be identical to the e-mail)
- * @param email - the authentication's email
- * @param password - the authentication's password
+ *
+ * @param user - user signup args
+ * @param user.username - the authentication's username (might be identical to the e-mail)
+ * @param user.email - the authentication's email
+ * @param user.password - the authentication's password
  */
 async function onSignup({
   username,

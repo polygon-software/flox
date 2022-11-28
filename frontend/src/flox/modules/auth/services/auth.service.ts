@@ -1,31 +1,33 @@
+import { useApolloClient } from '@vue/apollo-composable';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import {
   CognitoUser,
   CognitoUserSession,
   ISignUpResult,
 } from 'amazon-cognito-identity-js';
-import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue';
-import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
-import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
-import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
-import { QVueGlobals, useQuasar } from 'quasar';
 import cloneDeep from 'lodash/cloneDeep';
+import { QVueGlobals, useQuasar } from 'quasar';
+
 import { i18n } from 'boot/i18n';
-import { useApolloClient } from '@vue/apollo-composable';
-import ROUTES from 'src/router/routes';
-import { RouterService } from 'src/services/RouterService';
-import { ErrorService } from 'src/services/ErrorService';
-import * as auth from 'src/flox/modules/auth';
-import { showSuccessNotification } from 'src/tools/notification.tool';
-import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
-import { createUser } from 'src/flox/modules/auth/services/user.service';
 import Env from 'src/env';
+import * as auth from 'src/flox/modules/auth';
+import { createUser } from 'src/flox/modules/auth/services/user.service';
+import { useAuthStore } from 'src/flox/modules/auth/stores/auth.store';
+import ROUTES from 'src/router/routes';
+import ErrorService from 'src/services/ErrorService';
+import RouterService from 'src/services/RouterService';
+import { showSuccessNotification } from 'src/tools/notification.tool';
+
+import ChangePasswordDialog from '../components/dialogs/ChangePasswordDialog.vue';
+import EmailConfirmationDialog from '../components/dialogs/EmailConfirmationDialog.vue';
+import QrCodeDialog from '../components/dialogs/QrCodeDialog.vue';
+import ResetPasswordDialog from '../components/dialogs/ResetPasswordDialog.vue';
 
 /**
  * This is a service that is used globally throughout the application for maintaining authentication state as well as
  * signing up, logging in, logging out, changing passwords, and more.
  */
-export class AuthenticationService {
+export default class AuthenticationService {
   // Application info
   appName: string;
 
@@ -39,10 +41,12 @@ export class AuthenticationService {
   $routerService: RouterService;
 
   $authStore: ReturnType<typeof useAuthStore>;
+
   interval: ReturnType<typeof setInterval> | null;
 
   /**
    * Constructor
+   *
    * @param quasar - Quasar instance
    * @param errorService - error service instance
    * @param routerService - router service instance
@@ -85,6 +89,7 @@ export class AuthenticationService {
 
   /**
    * Logs into the AWS authentication pool using the given data
+   *
    * @param identifier - the authentication's identifier (usually E-mail or username)
    * @param password - the authentication's password
    * @param newPassword - the new password if this function is triggered from set-password page
@@ -101,13 +106,13 @@ export class AuthenticationService {
         Password: password,
       });
 
-    const userPool = this.$authStore.userPool;
+    const { userPool } = this.$authStore;
 
     if (userPool === undefined) {
       this.$errorService.showErrorDialog(
         new Error(i18n.global.t('errors.user_not_defined'))
       );
-      return;
+      return undefined;
     }
     // Actual Cognito authentication on given pool
     const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
@@ -133,28 +138,30 @@ export class AuthenticationService {
         },
 
         // Called in order to select the MFA token type (SOFTWARE_TOKEN_MFA or SMS_TOKEN_MFA)
-        selectMFAType: function () {
+        selectMFAType() {
           cognitoUser.sendMFASelectionAnswer('SOFTWARE_TOKEN_MFA', this);
         },
 
         // Called when user is in FORCE_PASSWORD_CHANGE state and must thus set a new password
-        newPasswordRequired: function (userAttributes) {
+        newPasswordRequired(userAttributes) {
           const attrs = cloneDeep(userAttributes) as Record<string, unknown>;
 
+          const $q = useQuasar();
+
+          let dialogPassword = newPassword;
           // Show password change dialog
-          while (!newPassword) {
-            const $q = useQuasar();
-            $q.dialog({
-              component: ChangePasswordDialog,
-              componentProps: {},
-            }).onOk(({ password }: { password: string }) => {
-              newPassword = password;
-            });
-          }
+          $q.dialog({
+            component: ChangePasswordDialog,
+            componentProps: {},
+          }).onOk(
+            ({ userEnteredPassword }: { userEnteredPassword: string }) => {
+              dialogPassword = userEnteredPassword;
+            }
+          );
           // Ensure e-mail doesn't get passed, so cognito doesn't recognize it as change
           delete attrs.email;
           delete attrs.email_verified;
-          cognitoUser.completeNewPasswordChallenge(newPassword, attrs, this);
+          cognitoUser.completeNewPasswordChallenge(dialogPassword, attrs, this);
         },
 
         // Called if time-limited one time password is required (only second login or later)
@@ -163,7 +170,7 @@ export class AuthenticationService {
         },
 
         // MFA code required (NOT part of normal flow)
-        mfaRequired: function () {
+        mfaRequired() {
           const verificationCode = prompt(
             i18n.global.t('messages.enter_verification_code', '')
           );
@@ -177,6 +184,7 @@ export class AuthenticationService {
 
   /**
    * Sets up MFA for the given cognito user
+   *
    * @param cognitoUser - the user
    * @param resolve - resolve function
    * @param identifier - identifier (username of email)
@@ -201,6 +209,7 @@ export class AuthenticationService {
 
   /**
    * Signs up by creating a new authentication using the given Username, e-mail and password.
+   *
    * @param username - the chosen username
    * @param email - the authentication's e-mail address
    * @param password - the new authentication's chosen password. Must fulfill the set password conditions
@@ -326,7 +335,7 @@ export class AuthenticationService {
    * Shows a dialog for requesting password reset
    */
   showResetPasswordDialog(): void {
-    const userPool = this.$authStore.userPool;
+    const { userPool } = this.$authStore;
 
     if (userPool === undefined) {
       this.$errorService.showErrorDialog(
@@ -362,7 +371,7 @@ export class AuthenticationService {
 
         // Call forgotPassword on cognitoUser
         this.$authStore.cognitoUser?.forgotPassword({
-          onSuccess: function () {
+          onSuccess() {
             // Do nothing
           },
           onFailure: (err: Error) => {
@@ -417,7 +426,7 @@ export class AuthenticationService {
    */
   async resendEmailVerificationCode(): Promise<void> {
     await new Promise((resolve, reject) => {
-      this.$authStore.cognitoUser?.resendConfirmationCode(function (err) {
+      this.$authStore.cognitoUser?.resendConfirmationCode((err) => {
         if (!err) {
           resolve(null);
         }
@@ -443,7 +452,7 @@ export class AuthenticationService {
           this.$authStore.cognitoUser?.confirmRegistration(
             code,
             true,
-            function (err, result) {
+            (err, result) => {
               if (!err) {
                 resolve(result);
               }
@@ -456,6 +465,7 @@ export class AuthenticationService {
 
   /**
    * Shows a dialog containing a QR code for setting up two factor authentication
+   *
    * @param secretCode - the authenticator code to encode in QR code form
    * @param cognitoUser - the cognito user to show the dialog for
    * @param identifier - identifier (username of email)
@@ -506,6 +516,7 @@ export class AuthenticationService {
 
   /**
    * Confirm e-mail verification code
+   *
    * @param code -verification code
    */
   async verifyEmail(code: string): Promise<void> {
@@ -526,6 +537,7 @@ export class AuthenticationService {
 
   /**
    * Verifies a given 2FA code
+   *
    * @param tokenType - the type of token to verify
    * @param resolve - resolve function
    */
@@ -570,6 +582,7 @@ export class AuthenticationService {
 
   /**
    * When login succeeds
+   *
    * @param userSession - the currently active Cognito authentication session
    */
   async loginSuccess(userSession: CognitoUserSession): Promise<void> {
@@ -577,11 +590,12 @@ export class AuthenticationService {
     this.$authStore.setUserSession(userSession);
 
     // Redirect to main page TODO application specific: choose correct route
-    await this.$routerService?.routeTo(ROUTES.SAMPLE);
+    await this.$routerService?.routeTo(ROUTES.HOME);
   }
 
   /**
    * When any operation (mostly login) fails, verify whether it is due to the authentication not having verified their account
+   *
    * @param error - the error that caused the failure
    * @param identifier - the authentication's identifier (usually E-mail or username) for re-login
    * @param password - the authentication's password for re-login
@@ -601,7 +615,7 @@ export class AuthenticationService {
       case 'PasswordResetRequiredException':
         // Call forgotPassword on cognitoUser, since user must reset password
         this.$authStore.cognitoUser?.forgotPassword({
-          onSuccess: function () {
+          onSuccess() {
             const $q = useQuasar();
 
             // Show success notification
@@ -628,11 +642,12 @@ export class AuthenticationService {
 
   /**
    * Refreshes the idToken if necessary
+   *
    * @returns void
    */
   refreshToken(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const userSession = this.$authStore.userSession;
+      const { userSession } = this.$authStore;
       const idTokenExpiration = userSession?.getIdToken().getExpiration();
       if (!idTokenExpiration) {
         resolve();

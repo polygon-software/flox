@@ -6,10 +6,10 @@ import { RouteRecordRaw } from 'vue-router';
 
 // All routes available within the application
 const ROUTES: Record<string, RouteRecordRaw> = {
-  MAIN: {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/MainPage.vue') }],
+  HOME: {
+    path: '/home',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/HomePage.vue') }],
   },
 
   LOGIN: {
@@ -24,16 +24,56 @@ const ROUTES: Record<string, RouteRecordRaw> = {
     children: [{ path: '', component: () => import('pages/SignupPage.vue') }],
   },
 
-  SAMPLE: {
-    path: '/sample',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/SamplePage.vue') }],
+  ACCOUNT: {
+    path: '/account',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AccountPage.vue') }],
+  },
+
+  ALIAS: {
+    path: '/alias',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AliasPage.vue') }],
+  },
+
+  FILES: {
+    path: '/files',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/FilesPage.vue') }],
+  },
+
+  ACCESS_CONTROL: {
+    path: '/access-control',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/AccessControlPage.vue') },
+    ],
+  },
+
+  USERS: {
+    path: '/users',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/UsersPage.vue') }],
+  },
+
+  OBJECT_RECOGNITION: {
+    path: '/object-recognition',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/ObjectRecognitionPage.vue') },
+    ],
+  },
+
+  ADMIN_PANEL: {
+    path: '/admin-panel',
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AdminPage.vue') }],
   },
 
   // Wildcard route for non-covered routes
   WILDCARD: {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue'),
+    component: () => import('pages/Error404Page.vue'),
   },
 };
 

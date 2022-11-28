@@ -1,18 +1,23 @@
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './modules/roles/roles.guard';
-import { JwtStrategy } from './modules/auth/jwt.strategy';
-import { JwtAuthGuard } from './modules/auth/auth.guard';
-import { FileModule } from './modules/file/file.module';
-import { ImageModule } from './modules/image/image.module';
-import { UserModule } from './modules/auth/user.module';
-import { MODULES } from './MODULES';
-import { EmailModule } from './modules/email/email.module';
+
 import { getActiveFloxModuleNames } from './core/flox-helpers';
+import JwtAuthGuard from './modules/auth/auth.guard';
+import JwtStrategy from './modules/auth/jwt.strategy';
+import UserModule from './modules/auth/user.module';
+import EmailModule from './modules/email/email.module';
+import FileModule from './modules/file/file.module';
+import ImageModule from './modules/image/image.module';
+import RolesGuard from './modules/roles/roles.guard';
+import NotificationModule from './modules/notifications/notification.module';
+import { MODULES } from './MODULES';
+import CurrentUserInterceptor from './modules/auth/current-user.guard';
+import LoginGuard from './modules/auth/login.guard';
 
 export type FloxModules = FileModule | ImageModule | UserModule | EmailModule;
 
 /**
  * Returns the active Flox modules based on flox.config.json
+ *
  * @returns list of Modules
  */
 export function floxModules(): FloxModules[] {
@@ -35,6 +40,9 @@ export function floxModules(): FloxModules[] {
       case MODULES.EMAIL:
         modules.push(EmailModule);
         break;
+      case MODULES.NOTIFICATION:
+        modules.push(NotificationModule);
+        break;
       // Some modules don't have to be added (e.g. 'roles')
       default:
         break;
@@ -46,6 +54,7 @@ export function floxModules(): FloxModules[] {
 
 /**
  * Returns the providers to use based on flox.config.json
+ *
  * @returns list of providers
  */
 export function floxProviders(): any[] {
@@ -63,6 +72,14 @@ export function floxProviders(): any[] {
         providers.push({
           provide: APP_GUARD,
           useClass: JwtAuthGuard,
+        });
+        providers.push({
+          provide: APP_GUARD,
+          useClass: CurrentUserInterceptor,
+        });
+        providers.push({
+          provide: APP_GUARD,
+          useClass: LoginGuard,
         });
         break;
       // Role management module

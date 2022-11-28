@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-column q-pa-md text-center q-ma-md" style="width: 300px">
+  <q-card class="q-column q-pa-md text-center" style="width: 300px">
     <h5 class="q-ma-none q-mb-md q-mt-sm">Flox Modules:</h5>
     <q-separator />
     <div class="row">
@@ -28,12 +28,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
 import axios from 'axios';
-import { MY_USER } from 'src/flox/modules/auth/user.query';
-import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
 import { print } from 'graphql';
+import { Ref, ref } from 'vue';
+
 import Env from 'src/env';
+import { getBearerToken } from 'src/flox/modules/auth/tools/auth.tools';
+import { GET_MY_USER } from 'src/flox/modules/auth/user.query';
 
 const requestsPerSecond: Ref<number> = ref(10);
 const positiveRequest: Ref<number> = ref(0);
@@ -58,9 +59,8 @@ function toggleDos(): void {
     negativeRequest.value = 0;
     dosInterval = setInterval(() => {
       const query = {
-        query: print(MY_USER.query),
+        query: print(GET_MY_USER.query),
       };
-      console.log(query);
       axios
         .post(Env.VUE_APP_GRAPHQL_ENDPOINT, query, { headers })
         .then(({ data }) => {

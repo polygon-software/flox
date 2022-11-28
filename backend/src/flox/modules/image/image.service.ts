@@ -1,32 +1,43 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   DetectLabelsCommand,
   RekognitionClient,
 } from '@aws-sdk/client-rekognition';
-import exifr from 'exifr';
+import { parse } from 'exifr';
+import { FindOneOptions, Repository } from 'typeorm';
+
+import GetOneArgs from '../abstracts/crud/dto/get-one.args';
+import DeleteInput from '../abstracts/crud/inputs/delete.input';
+import { assertReadAccess } from '../access-control/helpers/access-control.helper';
+import AbstractSearchAccessControlService from '../abstracts/search-access-control/abstract-search-access-control.service';
+import User from '../auth/entities/user.entity';
+import FileService from '../file/file.service';
+import AccessControlService from '../access-control/access-control.service';
+import { mergeOptions } from '../abstracts/crud/helpers/crud.helper';
+
+import GetAllImagesArgs from './dto/args/get-all-images.args';
+import GetImageArgs from './dto/args/get-image.args';
+import GetImageForFileArgs from './dto/args/get-image-for-file.args';
+import GetMultipleImagesArgs from './dto/args/get-multiple-images.args';
+import CreateImageInput from './dto/input/create-image.input';
+import CreateLabelsInput from './dto/input/create-labels.input';
+import BoundingBox from './entities/bounding-box.entity';
 import Image from './entities/image.entity';
-import { Repository } from 'typeorm';
-import { GetImageArgs } from './dto/args/get-image.args';
-import { GetImageForFileArgs } from './dto/args/get-image-for-file.args';
-import { CreateImageInput } from './dto/input/create-image.input';
-import { FileService } from '../file/file.service';
-import { DeleteImageInput } from './dto/input/delete-image.input';
-import { GetPrivateFileArgs } from '../file/dto/args/get-private-file.args';
-import { GetAllImagesArgs } from './dto/args/get-all-images.args';
-import { DeleteFileInput } from '../file/dto/input/delete-file.input';
-import { ConfigService } from '@nestjs/config';
-import { CreateLabelsInput } from './dto/input/create-labels.input';
-import { Label } from './entities/label.entity';
-import { BoundingBox } from './entities/bounding-box.entity';
+import Label from './entities/label.entity';
+import SearchImagesArgs from './dto/args/search-images.args';
+import ImageSearchOutput from './outputs/image-search.output';
 
 @Injectable()
-export class ImageService {
+export default class ImageService extends AbstractSearchAccessControlService<Image> {
   // Rekognition credentials
   private readonly credentials = {
-    region: this.configService.getOrThrow('AWS_MAIN_REGION'),
-    accessKeyId: this.configService.getOrThrow('ADMIN_AWS_ACCESS_KEY_ID'),
-    secretAccessKey: this.configService.getOrThrow(
+    region: this.configService.getOrThrow<string>('AWS_MAIN_REGION'),
+    accessKeyId: this.configService.getOrThrow<string>(
+      'ADMIN_AWS_ACCESS_KEY_ID',
+    ),
+    secretAccessKey: this.configService.getOrThrow<string>(
       'ADMIN_AWS_SECRET_ACCESS_KEY',
     ),
   };
@@ -46,115 +57,452 @@ export class ImageService {
 
     @InjectRepository(BoundingBox)
     private boundingBoxRepository: Repository<BoundingBox>,
-
     private readonly fileService: FileService,
-
     private readonly configService: ConfigService,
-  ) {}
-
-  /**
-   * Returns all images stored within the database
-   * @param getAllImagesArgs - contains take and skip parameters
-   * @returns Images
-   */
-  async getAllImages(getAllImagesArgs: GetAllImagesArgs): Promise<Image[]> {
-    return this.imageRepository.find({
-      take: getAllImagesArgs.take,
-      skip: getAllImagesArgs.skip,
-    });
+    protected readonly accessControlService: AccessControlService,
+  ) {
+    super();
   }
 
   /**
-   * Queries for one Image
-   * @param getImageArgs - contains image uuid
-   * @returns Queried image
+   * @returns image repository
    */
-  async getImage(getImageArgs: GetImageArgs): Promise<Image> {
-    const image = await this.imageRepository.findOneOrFail({
-      where: {
-        uuid: getImageArgs.uuid,
-      },
-      relations: {
-        file: true,
-        labels: {
-          boundingBox: true,
+  get repository(): Repository<Image> {
+    return this.imageRepository;
+  }
+
+  /**
+   * Retrieves a single image from the database, ensuring the provided user has access to it by either being owner or
+   * allowed reader of the image. Alternatively, the image can be public, then the user has also access to it.
+   *
+   * @param getImageArgs - contains uuid of image to be retrieved
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the one image that was received
+   */
+  async getImage(
+    getImageArgs: GetImageArgs,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<Image> {
+    const mergedOptions = mergeOptions<Image>(
+      {
+        relations: {
+          file: true,
+          labels: {
+            boundingBox: true,
+          },
         },
       },
-    });
-    const file = await this.fileService.getPrivateFile({
-      uuid: image.file.uuid,
-    } as GetPrivateFileArgs);
+      options,
+    );
+    const image = await super.getOneAsUser(getImageArgs, user, mergedOptions);
+    const file = await this.fileService.getOneAsUser(
+      {
+        uuid: image.file.uuid,
+      } as GetOneArgs,
+      user,
+    );
+    const fileWithUrl = await this.fileService.addFileUrl(file, getImageArgs);
     return {
       ...image,
-      file,
+      file: fileWithUrl,
     };
   }
 
   /**
+   * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   *
+   * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the list of found entities
+   */
+  async getMultipleImages(
+    getMultipleImagesArgs: GetMultipleImagesArgs,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<Image[]> {
+    const images = await super.getMultipleAsUser(
+      getMultipleImagesArgs,
+      user,
+      mergeOptions<Image>(
+        {
+          relations: {
+            file: true,
+            labels: {
+              boundingBox: true,
+            },
+          },
+        },
+        options,
+      ),
+    );
+    return Promise.all(
+      images.map(async (image) => {
+        const file = await this.fileService.getOneAsUser(
+          {
+            uuid: image.file.uuid,
+          } as GetOneArgs,
+          user,
+        );
+        const fileWithUrl = await this.fileService.addFileUrl(
+          file,
+          getMultipleImagesArgs,
+        );
+        return {
+          ...image,
+          file: fileWithUrl,
+        };
+      }),
+    );
+  }
+
+  /**
+   * Retrieves multiple images explicitely specified by their uuid. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
+   * @param getMultipleImagesArgs - contains a list of uuids of the images to retrieve
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns the list of found entities
+   */
+  async getMultipleImagesOfUser(
+    getMultipleImagesArgs: GetMultipleImagesArgs,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<Image[]> {
+    const images = await super.getMultipleOfUser(
+      getMultipleImagesArgs,
+      user,
+      mergeOptions<Image>(
+        {
+          relations: {
+            file: true,
+            labels: {
+              boundingBox: true,
+            },
+          },
+        },
+        options,
+      ),
+    );
+    return Promise.all(
+      images.map(async (image) => {
+        const file = await this.fileService.getOneAsUser(
+          {
+            uuid: image.file.uuid,
+          } as GetOneArgs,
+          user,
+        );
+        const fileWithUrl = await this.fileService.addFileUrl(
+          file,
+          getMultipleImagesArgs,
+        );
+        return {
+          ...image,
+          file: fileWithUrl,
+        };
+      }),
+    );
+  }
+
+  /**
+   * Retrieves all images from a database with applying pagination. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   *
+   * @param getAllImagesArgs - contains pagination parameters (skip, take)
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns page of entities
+   */
+  async getAllImages(
+    getAllImagesArgs: GetAllImagesArgs,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<Image[]> {
+    const images = await super.getAllAsUser(
+      getAllImagesArgs,
+      user,
+      mergeOptions<Image>(
+        {
+          relations: {
+            file: true,
+            labels: {
+              boundingBox: true,
+            },
+          },
+        },
+        options,
+      ),
+    );
+    return Promise.all(
+      images.map(async (image) => {
+        const file = await this.fileService.getOneAsUser(
+          {
+            uuid: image.file.uuid,
+          } as GetOneArgs,
+          user,
+        );
+        const fileWithUrl = await this.fileService.addFileUrl(
+          file,
+          getAllImagesArgs,
+        );
+        return {
+          ...image,
+          file: fileWithUrl,
+        };
+      }),
+    );
+  }
+
+  /**
+   * Retrieves all images from a database with applying pagination. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
+   * @param getAllImagesArgs - contains pagination parameters (skip, take)
+   * @param user - the user that retrieves the image
+   * @param options - additional type ORM find options that are applied to find query
+   * @returns page of entities
+   */
+  async getAllImagesOfUser(
+    getAllImagesArgs: GetAllImagesArgs,
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<Image[]> {
+    const images = await super.getAllOfUser(
+      getAllImagesArgs,
+      user,
+      mergeOptions<Image>(
+        {
+          relations: {
+            file: true,
+            labels: {
+              boundingBox: true,
+            },
+          },
+        },
+        options,
+      ),
+    );
+    return Promise.all(
+      images.map(async (image) => {
+        const file = await this.fileService.getOneAsUser(
+          {
+            uuid: image.file.uuid,
+          } as GetOneArgs,
+          user,
+        );
+        const fileWithUrl = await this.fileService.addFileUrl(
+          file,
+          getAllImagesArgs,
+        );
+        return {
+          ...image,
+          file: fileWithUrl,
+        };
+      }),
+    );
+  }
+
+  /**
    * Queries for an image given the file uuid
+   *
    * @param getImageForFileArgs - contains uuid of file
+   * @param user - user that needs to have the right to access the image
+   * @param options - additional options to get an image
    * @returns Queried image
    */
   async getImageForFile(
     getImageForFileArgs: GetImageForFileArgs,
+    user: User,
+    options?: FindOneOptions<Image>,
   ): Promise<Image> {
     const image = await this.imageRepository.findOneOrFail({
+      ...options,
+      ...this.readAccessControlRelationOptions,
       where: {
         file: {
           uuid: getImageForFileArgs.file,
         },
       },
     });
-    return this.getImage({ uuid: image.uuid } as GetImageArgs);
+    assertReadAccess(image, user);
+    return this.getImage(
+      {
+        uuid: image.uuid,
+        expires: getImageForFileArgs.expires,
+      } as GetImageArgs,
+      user,
+    );
   }
 
   /**
-   * Creates a new image given a file
-   * @param createImageInput - contains file uuid
-   * @returns Created Image
+   * Queries for all entities that fit query criteria. It only returns the entities that are public, the
+   * user is the owner or the user is part of an access group that has read access to these images.
+   *
+   * @param searchImageArgs - contain table filtering rules
+   * @param searchKeys - key on which search string value is being searched
+   * @param user - user that retrieves entities
+   * @param options - query options to extend search
+   * @returns images that fit criteria
    */
-  async createImage(createImageInput: CreateImageInput): Promise<Image> {
-    const file = await this.fileService.getPrivateFile({
-      uuid: createImageInput.file,
-    } as GetPrivateFileArgs);
-    const imageMetaData = (await exifr.parse(file.url)) || {};
-    const newImage = this.imageRepository.create({
+  async searchImages(
+    searchImageArgs: SearchImagesArgs,
+    searchKeys: (keyof Image)[],
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<ImageSearchOutput> {
+    const { count, data } = await super.searchAsUser(
+      searchImageArgs,
+      searchKeys,
+      user,
+      options,
+    );
+    const images = await this.getMultipleImages(
+      {
+        uuids: data.map((image) => image.uuid),
+        expires: searchImageArgs.expires,
+      } as GetMultipleImagesArgs,
+      user,
+    );
+    return {
+      count,
+      data: images,
+    };
+  }
+
+  /**
+   * Queries for all entities that fit query criteria. It only returns the entities that the
+   * user is the owner or the user is part of an access group that has read access to these images. This
+   * endpoint does not return public images, though, since they do not explicitely belong to the user.
+   *
+   * @param searchImageArgs - contain table filtering rules
+   * @param searchKeys - key on which search string value is being searched
+   * @param user - user that retrieves entities
+   * @param options - query options to extend search
+   * @returns images that fit criteria
+   */
+  async searchMyImages(
+    searchImageArgs: SearchImagesArgs,
+    searchKeys: (keyof Image)[],
+    user: User,
+    options?: FindOneOptions<Image>,
+  ): Promise<ImageSearchOutput> {
+    const { count, data } = await super.searchOfUser(
+      searchImageArgs,
+      searchKeys,
+      user,
+      options,
+    );
+    const images = await this.getMultipleImages(
+      {
+        uuids: data.map((image) => image.uuid),
+        expires: searchImageArgs.expires,
+      } as GetMultipleImagesArgs,
+      user,
+    );
+    return {
+      count,
+      data: images,
+    };
+  }
+
+  /**
+   * Creates a new image based on the create input and sets the user as the images owner.
+   *
+   * @param createImageInput - specifications of image, must be deep partial of image
+   * @param user - the user that creates the image
+   * @returns the created image
+   */
+  async createImage(
+    createImageInput: CreateImageInput,
+    user: User,
+  ): Promise<Image> {
+    let file = await this.fileService.getOneAsUser(
+      {
+        uuid: createImageInput.file,
+      } as GetOneArgs,
+      user,
+      this.fileService.writeAccessControlRelationOptions,
+    );
+    assertReadAccess(file, user);
+    if (!file.mimetype.startsWith('image/')) {
+      throw new HttpException(
+        'File is not an image',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
+    file = await this.fileService.addFileUrl(file, { expires: 60 });
+    let imageMetaData = {
+      ImageWidth: undefined,
+      ImageHeight: undefined,
+      ExifImageWidth: undefined,
+      ExifImageHeight: undefined,
+      latitude: undefined,
+      longitude: undefined,
+      DateTimeOriginal: undefined,
+    };
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const parsed: Record<string, unknown> = await parse(file.url ?? '');
+      imageMetaData = {
+        ...imageMetaData,
+        ...parsed,
+      };
+    } catch (e: any) {
+      console.error(e);
+    }
+    const newImage = await super.create(createImageInput, user, {
       file,
       width: imageMetaData.ExifImageWidth ?? imageMetaData.ImageWidth,
       height: imageMetaData.ExifImageHeight ?? imageMetaData.ImageHeight,
-      latitude: imageMetaData.latitude ?? null,
-      longitude: imageMetaData.longitude ?? null,
-      capturedAt: imageMetaData.DateTimeOriginal ?? null,
+      latitude: imageMetaData.latitude,
+      longitude: imageMetaData.longitude,
+      capturedAt: imageMetaData.DateTimeOriginal,
     });
-    await this.imageRepository.save(newImage);
 
     if (createImageInput.objectRecognition) {
-      await this.createLabelsForImage({
-        image: newImage.uuid,
-      } as CreateLabelsInput);
+      await this.createLabelsForImage(
+        {
+          image: newImage.uuid,
+        } as CreateLabelsInput,
+        user,
+      );
     }
 
-    return this.getImage({ uuid: newImage.uuid } as GetImageArgs);
+    return this.getImage({ uuid: newImage.uuid } as GetImageArgs, user);
   }
 
   /**
    * Performs object recognition on image and stores appropriate labels to database
+   *
    * @param createLabelsInput - contains uuid of image to perform object recognition
+   * @param user - user that needs to have the right to access the image
    * @returns Image wit labels
    */
   async createLabelsForImage(
     createLabelsInput: CreateLabelsInput,
+    user: User,
   ): Promise<Image> {
-    const image = await this.getImage({
-      uuid: createLabelsInput.image,
-    } as GetImageArgs);
+    const image = await this.getImage(
+      {
+        uuid: createLabelsInput.image,
+      } as GetImageArgs,
+      user,
+      this.writeAccessControlRelationOptions,
+    );
+    assertReadAccess(image, user);
 
     const rekognitionData = await this.rekognition.send(
       new DetectLabelsCommand({
         Image: {
           S3Object: {
             Bucket: this.configService.getOrThrow('AWS_PRIVATE_BUCKET_NAME'),
-            Name: image.file.key,
+            Name: image.file.uuid,
           },
         },
       }),
@@ -168,7 +516,7 @@ export class ImageService {
         return [];
       }
       return label.Instances.map((instance) => ({
-        image: image,
+        image,
         name: label.Name,
         confidence: instance.Confidence,
         parents: label.Parents
@@ -199,21 +547,20 @@ export class ImageService {
 
   /**
    * Removes the database entry of a given image without deleting the file
-   * @param deleteImageInput - contains the uuid of the image to delete
+   *
+   * @param deleteInput - contains the uuid of the image to delete
+   * @param user - user that needs to have the right to access the image
    * @returns Deleted Image
    */
-  async deleteImage(deleteImageInput: DeleteImageInput): Promise<Image> {
-    const image = await this.imageRepository.findOneOrFail({
-      where: {
-        uuid: deleteImageInput.uuid,
-      },
+  async deleteImage(deleteInput: DeleteInput, user: User): Promise<Image> {
+    const image = await this.getOneAsUser(deleteInput, user, {
       relations: {
         file: true,
       },
     });
-    await this.fileService.deleteFile(
-      { uuid: image.file.uuid } as DeleteFileInput,
-      true,
+    await this.fileService.delete(
+      { uuid: image.file.uuid } as DeleteInput,
+      user,
     );
     return image;
   }

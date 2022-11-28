@@ -1,9 +1,10 @@
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
-import { OperationVariables } from '@apollo/client/core/types';
 import { FetchResult } from '@apollo/client';
+import { OperationVariables } from '@apollo/client/core/types';
 import { useMutation } from '@vue/apollo-composable';
-import { invalidateTables } from 'src/apollo/invalidation';
 import { DocumentNode } from 'graphql';
+
+import { invalidateTables } from 'src/apollo/invalidation';
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
 
 export interface MutationObject {
   mutation: DocumentNode; // Actual GraphQL mutation
@@ -21,6 +22,7 @@ export enum MutationTypes {
 
 /**
  * Executes a given GraphQL mutation object, automatically handling cache by re-fetching affected queries
+ *
  * @param updateObject - the mutation object constant (from MUTATIONS.ts)
  * @param variables - any variables that shall be passed to the mutation
  * @returns Returns the values defined by the mutation
@@ -29,7 +31,7 @@ export async function executeMutation<T extends BaseEntity>(
   updateObject: MutationObject,
   variables: OperationVariables
 ): Promise<FetchResult<T | null>> {
-  const mutation = updateObject.mutation;
+  const { mutation } = updateObject;
 
   // Actually execute mutation and handle cache
   const { mutate } = useMutation<Record<string, T> | null>(mutation, () => ({

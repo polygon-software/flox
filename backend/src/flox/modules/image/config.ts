@@ -20,6 +20,7 @@ const defaultConfig: ImageModuleConfig = {
 
 /**
  * Gets the module's actual configuration
+ *
  * @returns configuration
  */
 export function moduleConfig(): ImageModuleConfig {
@@ -28,3 +29,4 @@ export function moduleConfig(): ImageModuleConfig {
     floxModuleOptions(MODULES.IMAGE),
   ) as ImageModuleConfig;
 }
+export default moduleConfig;

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export default {
   general: {
     finish: 'Abschliessen',
@@ -10,6 +11,17 @@ export default {
     failed: 'Fehlgeschlagen',
     successful: 'Erfolgreich',
     save: 'Speichern',
+    create: 'Erstellen',
+    apply: 'Anwenden',
+    remove: 'Entfernen',
+    results: 'Resultate',
+    no_results: 'Keine Resultate',
+    search: 'Suchen',
+    display: 'Anzeigen',
+  },
+  locales: {
+    de: 'Deutsch',
+    en: 'Englisch',
   },
   authentication: {
     authentication: 'Authentifizierung',
@@ -61,12 +73,16 @@ export default {
     entry_delete_failed: 'Eintrag konnte nicht gelöscht werden',
   },
   files: {
+    files: 'Dateien',
+    create_folder: 'Ordner erstellen',
+    folder_name: 'Ordner Name',
     add: 'Hinzufügen',
     failed_upload: '{value} Datei(en) konnten nicht hochgeladen werden',
     file_upload: 'File Upload',
     no_preview: 'Keine Vorschau verfügbar',
     remove: 'Entfernen',
     remove_all: 'Alle Dateien entfernen',
+    selected_files: 'Ausgewählte Files',
     status: 'Status',
     status_ready: 'Bereit',
     status_loading: 'Laden',
@@ -75,6 +91,40 @@ export default {
     successfully_uploaded: '{value} Datei(en) wurden erfolgreich hochgeladen',
     successfully_deleted: '{value} Datei(en) wurden erfolgreich gelöscht',
     upload: 'Hochladen',
+    file_type: 'Datei Typ',
+    filename: 'Datei Name',
+    last_updated: 'Zuletzt geändert',
+    size: 'Grösse',
+    root: 'Home',
+    access_rights_edited: 'Zugriffsrechte geändert',
+    access_rights_edit_failed: 'Zugriffsrechte konnten nicht geändert werden',
+    preview_error_no_file:
+      'Die Datei kann nicht angezeigt werden, da keine URL vorhanden ist',
+    preview_error_no_audio:
+      'Audio kann nicht abgespielt werden. Fehlende URL oder keine Audio-Datei.',
+    preview_error_no_video:
+      'Video kann nicht abgespielt werden. Fehlende URL oder keine Video-Datei.',
+    preview_error_no_image:
+      'Bild kann nicht geöffnet werden. Fehlende URL oder keine Bild-Datei.',
+    preview_error_no_pdf:
+      'PDF kann nicht geöffnet werden. Fehlende URL oder keine PDF-Datei.',
+  },
+  users: {
+    users: 'Benutzer',
+    avatar: 'Avatar',
+    username: 'Benutzername',
+    email: 'E-Mail',
+    role: 'Rolle',
+  },
+  object_recognition: {
+    description:
+      'Unsere Objekt-Erkennung analysiert Bilder und kann bis zu 5000 verschiedene Objekte identifizieren.',
+    import_images: 'Bilder importieren',
+    search_files: 'Dateien suchen',
+    object_recognition: 'Object Recognition',
+    image_already_imported: 'Bild wurde bereits importiert',
+    image_imported: 'Import erfolgreich',
+    not_image: 'Import fehlgeschlagen - Datei ist kein Bild',
   },
   messages: {
     success: 'Erfolgreich',
@@ -109,13 +159,83 @@ export default {
     ctrl_shift_hint:
       'Hinweis: Verwende SHIFT um einen Bereich auszuwählen und CTRL um einzelne Elemente zu selektieren',
   },
+  notification: {
+    notifications: 'Benachrichtigungen',
+    no_notifications: 'Keine neuen Benachrichtigungen',
+    invalid_title: 'Die Länge des Titels ist ungültig',
+    invalid_content: 'Die Länge des Inhalts ist ungültig',
+    send_notificaton: 'Benachrichtigungen absenden',
+    notification_title: 'Nachricht Titel',
+    notification_content: 'Nachricht Inhalt',
+    notification_link: 'Nachricht Link (optional)',
+    sent: 'Benachrichtigung gesendet!',
+  },
   pages: {
-    sample: {
+    home: {
+      title: 'Home',
       meta: {
         title: 'Flox',
         description: 'Dies ist eine flox demo-seite',
         keywords: 'flox,demo,polygon',
       },
     },
+  },
+  menu: {
+    home: 'Home',
+    users: 'Benutzer',
+    access_rights: 'Zugriffsrechte',
+    alias: 'Alias',
+    files: 'Dateien',
+    object_recognition: 'Objekterkennung',
+    face_recognition: 'Gesichtserkennung',
+    text_extraction: 'Text Extraktion',
+    settings: 'Einstellungen',
+    admin_panel: 'Administrator-Sektion',
+  },
+  footer: {
+    developers: 'Entwickler',
+    privacy: 'Privatsphäre',
+    terms: 'AGBs',
+  },
+  alias: {
+    alias: 'Alias',
+    active: 'Aktiver Alias',
+    set_alias: 'Alias setzen',
+    remove_alias: 'Alias entfernen',
+    users: 'Benutzer',
+    avatar: 'Avatar',
+    logged_in_as: 'Momentan eingeloggt als',
+    alias_on_user:
+      'Du siehst die Applikation momentan mit einem aktiven Alias auf den User mit der ID',
+    description:
+      'Dieses Modul kann verwendet werden um die Applikation aus der Sicht eines anderen Benutzers zu erleben. Diese Funktion ist nur für Administratoren freigeschaltet.',
+  },
+  admin_panel: {
+    admin_panel: 'Administrator-Sektion',
+    system_notification: 'Systembenachrichtigungen',
+    broadcast_message:
+      'Benachrichtige Benutzer in deinem System über Updates, Downtime oder Neuerungen. Achtung: Diese Nachrichten werden an alle Benutzer versendet und sollten daher nur in Ausnahmefällen verschickt werden.',
+  },
+  access_control: {
+    users: 'Benutzer',
+    remove_user: 'Benutzer entfernen',
+    add_users: 'Benutzer hinzufügen',
+    access_control: 'Zugriffs-Kontrolle',
+    invalid_group_name: 'Gruppenname nicht erlaubt',
+    create_group: 'Neue Zugriffsgruppe erstellen',
+    access_groups: 'Zugriffsgruppen',
+    add_group: 'Gruppe hinzufügen',
+    group_name: 'Gruppenname',
+    delete_group: 'Gruppe löschen',
+    add_to_group: 'Zu Gruppe hinzufügen',
+    group_name_label: 'Neuer Gruppenname',
+    select_users: 'Benutzer auswählen',
+    manage_groups: 'Zugriffsgruppen verwalten',
+    search_groups: 'Zugriffsgruppe suchen',
+    no_access_groups: 'Noch keine Zugriffsgruppen definiert',
+    read: 'Lesen',
+    write: 'Schreiben',
+    create_description:
+      'Erstelle eine neue Zugriffsgruppe indem du ihr einen Namen gibst und Benutzer als Mitglieder definierst. Du kannst später jederzeit Mitglieder hinzufügen/entfernen.',
   },
 };

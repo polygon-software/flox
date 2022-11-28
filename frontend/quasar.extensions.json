@@ -1,0 +1,19 @@
+{
+  "@quasar/qmediaplayer": {},
+  "@quasar/qpdfviewer": {},
+  "@quasar/apollo": {
+    "typescript": true
+  },
+  "@quasar/testing": {
+    "harnesses": [
+      "unit-jest@alpha"
+    ]
+  },
+  "@quasar/testing-unit-jest": {
+    "babel": "babelrc",
+    "options": [
+      "scripts",
+      "typescript"
+    ]
+  }
+}

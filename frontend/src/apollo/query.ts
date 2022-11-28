@@ -1,11 +1,12 @@
-import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
-import { BaseEntity } from 'src/flox/core/base-entity/entities/BaseEntity';
-import { OperationVariables } from '@apollo/client/core/types';
 import { ApolloQueryResult } from '@apollo/client';
+import { OperationVariables } from '@apollo/client/core/types';
 import { useApolloClient, useQuery } from '@vue/apollo-composable';
-import { onBeforeMount, onServerPrefetch, ref, Ref } from 'vue';
-import { useSsrStore } from 'stores/ssr';
 import { DocumentNode } from 'graphql';
+import { onBeforeMount, onServerPrefetch, Ref, ref } from 'vue';
+
+import BaseEntity from 'src/flox/core/base-entity/entities/BaseEntity';
+import CountQuery from 'src/flox/modules/interfaces/entities/count.entity';
+import useSsrStore from 'stores/ssr';
 
 // Interface definitions as used in constant files (e.g. QUERIES.ts, DEALERSHIP.ts)
 export interface QueryObject {
@@ -16,6 +17,7 @@ export interface QueryObject {
 
 /**
  * Executes a given GraphQL query object
+ *
  * @param queryObject - the query object constant (from QUERIES.ts)
  * @param [variables] - variables to pass to the query, if any
  * @returns the query's output
@@ -54,6 +56,7 @@ export async function executeQuery<
 
 /**
  * Subscribes to a graphQL query
+ *
  * @param query - the graphQL query object
  * @param [variables] - any variables to pass to the query
  * @returns the query's output
@@ -63,7 +66,7 @@ export function subscribeToQuery<
 >(
   query: QueryObject,
   variables?: OperationVariables
-): ApolloQueryResult<Ref<T>> {
+): ApolloQueryResult<Ref<T | null>> {
   const $ssrStore = useSsrStore();
   const cachedResult: Ref<T | null> = ref(null);
 
@@ -113,7 +116,7 @@ export function subscribeToQuery<
         // SSR
         apolloClient.writeQuery({
           query: query.query,
-          variables: variables,
+          variables,
           data: {
             [query.cacheLocation]: cachedResult.value,
           },
@@ -121,16 +124,14 @@ export function subscribeToQuery<
       }
     }
 
-    apolloClient
-      .watchQuery({ query: query.query, variables: variables })
-      .subscribe({
-        next(value: ApolloQueryResult<Record<string, T>>) {
-          cachedResult.value = value.data[query.cacheLocation];
-        },
-      });
+    apolloClient.watchQuery({ query: query.query, variables }).subscribe({
+      next(value: ApolloQueryResult<Record<string, T>>) {
+        cachedResult.value = value.data[query.cacheLocation];
+      },
+    });
   });
   return {
     loading: false,
     data: cachedResult,
-  } as ApolloQueryResult<Ref<T>>;
+  } as ApolloQueryResult<Ref<T | null>>;
 }

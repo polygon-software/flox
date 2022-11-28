@@ -1,34 +1,8 @@
 import { formatDate } from 'src/format/date.format';
 
 /**
- * Search Filter for Quasar <q-table>s
- * @param rows - rows
- * @param terms - search key
- * @returns filtered rows
- */
-export function tableFilter(
-  rows: Record<string, unknown>[],
-  terms: string
-): Record<string, unknown>[] {
-  return rows.filter((row) => deepFilter(row, terms));
-}
-
-/**
- * Preprocessor for search, to be used in q-tables as :filter-method
- * @param target - where to search
- * @param term - what to search
- * @param depthLimit - search limit
- * @returns found
- */
-export function deepFilter(target: any, term: string, depthLimit = 5): boolean {
-  const cleanTerm = term.trim();
-  return cleanTerm.split(' ').every((part) => {
-    return recursiveFilter(target, part.toLowerCase(), depthLimit);
-  });
-}
-
-/**
  * Recursive search
+ *
  * @param target - where to search
  * @param term - what to search
  * @param depthLimit - search limit
@@ -48,10 +22,10 @@ function recursiveFilter(target: any, term: string, depthLimit = 5): boolean {
   }
 
   if (typeof target === 'number') {
-    const numeric_comparison =
-      !isNaN(Number(term)) && Math.abs(Number(term) - target) < 0.1;
-    const string_comparison = target.toString().includes(term);
-    return numeric_comparison || string_comparison;
+    const numericComparison =
+      !Number.isNaN(Number(term)) && Math.abs(Number(term) - target) < 0.1;
+    const stringComparison = target.toString().includes(term);
+    return numericComparison || stringComparison;
   }
 
   if (typeof target === 'string') {
@@ -76,4 +50,33 @@ function recursiveFilter(target: any, term: string, depthLimit = 5): boolean {
     });
   }
   return false;
+}
+
+/**
+ * Preprocessor for search, to be used in q-tables as :filter-method
+ *
+ * @param target - where to search
+ * @param term - what to search
+ * @param depthLimit - search limit
+ * @returns found
+ */
+export function deepFilter(target: any, term: string, depthLimit = 5): boolean {
+  const cleanTerm = term.trim();
+  return cleanTerm.split(' ').every((part) => {
+    return recursiveFilter(target, part.toLowerCase(), depthLimit);
+  });
+}
+
+/**
+ * Search Filter for Quasar <q-table>s
+ *
+ * @param rows - rows
+ * @param terms - search key
+ * @returns filtered rows
+ */
+export function tableFilter(
+  rows: Record<string, unknown>[],
+  terms: string
+): Record<string, unknown>[] {
+  return rows.filter((row) => deepFilter(row, terms));
 }
