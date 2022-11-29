@@ -112,14 +112,6 @@ echo "domain=\"$url\"" >> ../../support/flox.tfvars
 # Apply pre-setup Terraform (Cognito & hosted zone)
 terraform init
 terraform apply -auto-approve -var-file="../../support/flox.tfvars"
-user_pool_id=$(terraform output user_pool_id)
-user_pool_id=${user_pool_id:1:-1}
-
-user_pool_client_id=$(terraform output user_pool_client_id)
-user_pool_client_id=${user_pool_client_id:1:-1}
-
-user_pool_arn=$(terraform output user_pool_arn)
-user_pool_arn=${user_pool_arn:1:-1}
 
 # Nameserver records for next step
 ns_records=$(terraform output ns_records)
@@ -132,12 +124,6 @@ hosted_zone_id=${hosted_zone_id:1:-1}
 echo "ns_records=$ns_records" >> ../../support/flox.tfvars
 echo "hosted_zone_id=\"$hosted_zone_id\"" >> ../../support/flox.tfvars
 
-# Add Cognito outputs to flox.tfvars
-echo "# ======== Cognito Config ========" >> ../../support/flox.tfvars
-echo "cognito_arn=\"$user_pool_arn\"" >> ../../support/flox.tfvars
-echo "user_pool_id=\"$user_pool_id\"" >> ../../support/flox.tfvars
-echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
-
 # Generate frontend .env file from outputs
 cd ../../../frontend || exit
 rm -f .env
@@ -148,8 +134,6 @@ echo "VUE_APP_BACKEND_URL=https://api.$url" >> .env
 echo "VUE_APP_GRAPHQL_ENDPOINT=https://api.$url/graphql" >> .env
 echo "VUE_APP_NAME=$project-$mode" >> .env
 echo "VUE_APP_AWS_REGION=$aws_region" >> .env
-echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> .env
-echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> .env
 
 # Add production flag for actual live deployments so LogRocket is enabled
 # (applies only to 'test' & 'live' system; building in production mode does
@@ -187,15 +171,53 @@ then
   terraform init
   terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 
-  cd ../2_main-setup || exit
-else
-  cd ../scripts/aws-initial-setup/2_main-setup || exit
-fi
+  cd ../2_cognito-setup || exit
+  else
+    cd ../scripts/aws-initial-setup/2_cognito-setup || exit
+  fi
+  # ==========================================
+  # ======     Step 2: Cognito & SES setup     ========
+  # ==========================================
+  if [[ $mode == "stage" ]]
+  then
+    sed -i -e "s/##TYPE##/$branch_name/g" config.tf
+  else
+    sed -i -e "s/##TYPE##/$mode/g" config.tf
+  fi
 
-# ==========================================
-# ======     Step 2: Main setup     ========
-# ==========================================
+  # Replace 'PROJECT' in config.tf with actual project name
+  sed -i -e "s/##PROJECT##/$project/g" config.tf
 
+  # Replace 'ORGANISATION' in config.tf with actual organisation name
+  sed -i -e "s/##ORGANISATION##/$organisation/g" config.tf
+
+  terraform init
+  terraform apply -auto-approve -var-file="../../support/flox.tfvars"
+
+  user_pool_id=$(terraform output user_pool_id)
+  user_pool_id=${user_pool_id:1:-1}
+
+  user_pool_client_id=$(terraform output user_pool_client_id)
+  user_pool_client_id=${user_pool_client_id:1:-1}
+
+  user_pool_arn=$(terraform output user_pool_arn)
+  user_pool_arn=${user_pool_arn:1:-1}
+
+  echo "VUE_APP_USER_POOL_ID=$user_pool_id" >> ../../../frontend/.env
+  echo "VUE_APP_USER_POOL_CLIENT_ID=$user_pool_client_id" >> ../../../frontend/.env
+
+  # Add Cognito outputs to flox.tfvars
+  echo "# ======== Cognito Config ========" >> ../../support/flox.tfvars
+  echo "cognito_arn=\"$user_pool_arn\"" >> ../../support/flox.tfvars
+  echo "user_pool_id=\"$user_pool_id\"" >> ../../support/flox.tfvars
+  echo "user_pool_client_id=\"$user_pool_client_id\"" >> ../../support/flox.tfvars
+
+
+  cd ../3_main-setup || exit
+
+  # ==========================================
+  # ======     Step 3: Main setup     ========
+  # ==========================================
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-xx or dev)
 if [[ $mode == "stage" ]]
 then
@@ -224,7 +246,7 @@ else
   sudo bash build.sh "$project" "$frontend_build_mode"
 fi
 
-cd ../aws-initial-setup/2_main-setup || exit
+cd ../aws-initial-setup/3_main-setup || exit
 
 # Copy .zip files
 cp ../../outputs/frontend.zip frontend.zip
@@ -252,16 +274,17 @@ terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 if [[ $local_mode == 'true' ]]
 then
   # Remove .zip files
-  rm -f ../2_main-setup/frontend.zip
-  rm -f ../2_main-setup/backend.zip
+  rm -f ../3_main-setup/frontend.zip
+  rm -f ../3_main-setup/backend.zip
 
   # Remove unzipped frontend dist (if any)
-  rm -rf ../2_main-setup/web-spa-pwa/frontend
+  rm -rf ../3_main-setup/web-spa-pwa/frontend
 
   # Reset all config.tf files to their respective template files
   cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
   cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
-  cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
+  cp ../2_cognito-setup/config.tftemplate ../2_cognito-setup/config.tf
+  cp ../3_main-setup/config.tftemplate ../3_main-setup/config.tf
 
   # Quietly reinstall node modules
   cd ../../../backend || exit

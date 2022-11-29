@@ -170,7 +170,7 @@ terraform refresh -var-file="../../support/flox.tfvars"
 # ======     Step 2: Main state     ========
 # ==========================================
 
-cd ../2_main-setup || exit 1
+cd ../3_main-setup || exit 1
 
 # Replace 'TYPE' in config.tf with actual type (live, test, stage-123412 or dev)
 if [[ $mode == "stage" ]]
@@ -200,7 +200,7 @@ else
   sudo bash build.sh "$project" "$frontend_build_mode"
 fi
 
-cd ../aws-initial-setup/2_main-setup || exit 1
+cd ../aws-initial-setup/3_main-setup || exit 1
 
 # Copy .zip files
 cp ../../outputs/frontend.zip frontend.zip
@@ -239,7 +239,7 @@ terraform apply -auto-approve -var-file="../../support/flox.tfvars"
 # ==========================================
 
 # Main Setup
-cd ../../aws-initial-setup/2_main-setup || exit 1
+cd ../../aws-initial-setup/3_main-setup || exit 1
 terraform destroy -auto-approve -var-file="../../support/flox.tfvars"
 
 # Parent setup
@@ -278,12 +278,12 @@ fi
 if [[ $local_mode == 'true' ]]
 then
   # Remove .zip files
-  rm -f ../2_main-setup/frontend.zip
-  rm -f ../2_main-setup/backend.zip
+  rm -f ../3_main-setup/frontend.zip
+  rm -f ../3_main-setup/backend.zip
 
   # Reset all config.tf files to their respective template files
   cp ../0_pre-setup/config.tftemplate ../0_pre-setup/config.tf
   cp ../1_parent-setup/config.tftemplate ../1_parent-setup/config.tf
-  cp ../2_main-setup/config.tftemplate ../2_main-setup/config.tf
+  cp ../3_main-setup/config.tftemplate ../3_main-setup/config.tf
   cp ../../support/destroy-staging-workspaces/config.tftemplate ../../support/destroy-staging-workspaces/config.tf
 fi

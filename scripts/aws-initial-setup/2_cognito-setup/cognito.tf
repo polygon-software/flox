@@ -8,6 +8,7 @@ resource "aws_cognito_user_pool" "user_pool" {
   email_configuration {
     email_sending_account = "DEVELOPER"
     source_arn = aws_ses_domain_identity.ses_domain.arn
+    from_email_address = "noreply@${var.domain}"
   }
   dynamic "software_token_mfa_configuration" {
     for_each = var.mfa_configuration == "OFF" ? [] : [1]
