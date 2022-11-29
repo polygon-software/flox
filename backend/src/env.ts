@@ -121,4 +121,11 @@ export default {
   get BASE_URL(): string {
     return asString(process.env.BASE_URL);
   },
+
+  /**
+   * @returns name of project
+   */
+  get PROJECT_NAME(): string {
+    return asString(process.env.PROJECT_NAME);
+  },
 };
